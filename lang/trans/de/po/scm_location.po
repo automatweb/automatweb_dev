@@ -56,3 +56,7 @@ msgstr ""
 #: classes/applications/scm/scm_location.aw:rel_RELTYPE_PHOTO
 msgid "Seose Foto (RELTYPE_PHOTO) tekst"
 msgstr ""
+
+#: classes/applications/scm/scm_location.aw:rel_RELTYPE_ADDRESS
+msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
+msgstr ""

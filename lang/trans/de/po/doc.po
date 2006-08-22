@@ -122,15 +122,15 @@ msgid "Omaduse Fotode autor (photos) help"
 msgstr ""
 
 #: classes/doc.aw:prop_keywords
-msgid "Omaduse V&amp;otilde;tmes&amp;otilde;nad (keywords) caption"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_keywords_comment
-msgid "Omaduse V&amp;otilde;tmes&amp;otilde;nad (keywords) kommentaar"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_keywords_help
-msgid "Omaduse V&amp;otilde;tmes&amp;otilde;nad (keywords) help"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords) help"
 msgstr ""
 
 #: classes/doc.aw:prop_names
@@ -206,29 +206,27 @@ msgid "Omaduse Foorum (is_forum) help"
 msgstr ""
 
 #: classes/doc.aw:prop_showlead
-msgid "Omaduse N&amp;auml;ita leadi (showlead) caption"
+msgid "Omaduse N&auml;ita leadi (showlead) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_showlead_comment
-msgid "Omaduse N&amp;auml;ita leadi (showlead) kommentaar"
+msgid "Omaduse N&auml;ita leadi (showlead) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_showlead_help
-msgid "Omaduse N&amp;auml;ita leadi (showlead) help"
+msgid "Omaduse N&auml;ita leadi (showlead) help"
 msgstr ""
 
 #: classes/doc.aw:prop_show_modified
-msgid ""
-"Omaduse N&amp;auml;ita muutmise kuup&amp;auml;eva (show_modified) caption"
+msgid "Omaduse N&auml;ita muutmise kuup&auml;eva (show_modified) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_show_modified_comment
-msgid ""
-"Omaduse N&amp;auml;ita muutmise kuup&amp;auml;eva (show_modified) kommentaar"
+msgid "Omaduse N&auml;ita muutmise kuup&auml;eva (show_modified) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_show_modified_help
-msgid "Omaduse N&amp;auml;ita muutmise kuup&amp;auml;eva (show_modified) help"
+msgid "Omaduse N&auml;ita muutmise kuup&auml;eva (show_modified) help"
 msgstr ""
 
 #: classes/doc.aw:prop_doc_modified
@@ -244,42 +242,39 @@ msgid "Omaduse Dok. modified (doc_modified) help"
 msgstr ""
 
 #: classes/doc.aw:prop_clear_styles
-msgid "Omaduse T&amp;uuml;hista stiilid (clear_styles) caption"
+msgid "Omaduse T&uuml;hista stiilid (clear_styles) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_clear_styles_comment
-msgid "Omaduse T&amp;uuml;hista stiilid (clear_styles) kommentaar"
+msgid "Omaduse T&uuml;hista stiilid (clear_styles) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_clear_styles_help
-msgid "Omaduse T&amp;uuml;hista stiilid (clear_styles) help"
+msgid "Omaduse T&uuml;hista stiilid (clear_styles) help"
 msgstr ""
 
 #: classes/doc.aw:prop_link_keywords
-msgid "Omaduse Lingi v&amp;otilde;tmes&amp;otilde;nad (link_keywords) caption"
+msgid "Omaduse Lingi v&otilde;tmes&otilde;nad (link_keywords) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_link_keywords_comment
-msgid ""
-"Omaduse Lingi v&amp;otilde;tmes&amp;otilde;nad (link_keywords) kommentaar"
+msgid "Omaduse Lingi v&otilde;tmes&otilde;nad (link_keywords) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_link_keywords_help
-msgid "Omaduse Lingi v&amp;otilde;tmes&amp;otilde;nad (link_keywords) help"
+msgid "Omaduse Lingi v&otilde;tmes&otilde;nad (link_keywords) help"
 msgstr ""
 
 #: classes/doc.aw:prop_link_keywords2
-msgid ""
-"Omaduse V&amp;otilde;tmes&amp;otilde;nad lingina (link_keywords2) caption"
+msgid "Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_link_keywords2_comment
-msgid ""
-"Omaduse V&amp;otilde;tmes&amp;otilde;nad lingina (link_keywords2) kommentaar"
+msgid "Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_link_keywords2_help
-msgid "Omaduse V&amp;otilde;tmes&amp;otilde;nad lingina (link_keywords2) help"
+msgid "Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) help"
 msgstr ""
 
 #: classes/doc.aw:prop_frontpage_left
@@ -292,6 +287,18 @@ msgstr ""
 
 #: classes/doc.aw:prop_frontpage_left_help
 msgid "Omaduse Esilehel tulbas (frontpage_left) help"
+msgstr ""
+
+#: classes/doc.aw:prop_frontpage_right
+msgid "Omaduse Esilehel tulbas paremal (frontpage_right) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_frontpage_right_comment
+msgid "Omaduse Esilehel tulbas paremal (frontpage_right) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_frontpage_right_help
+msgid "Omaduse Esilehel tulbas paremal (frontpage_right) help"
 msgstr ""
 
 #: classes/doc.aw:prop_dcache
@@ -343,27 +350,27 @@ msgid "Omaduse  (num_ratings) help"
 msgstr ""
 
 #: classes/doc.aw:prop_show_title
-msgid "Omaduse N&amp;auml;ita pealkirja (show_title) caption"
+msgid "Omaduse N&auml;ita pealkirja (show_title) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_show_title_comment
-msgid "Omaduse N&amp;auml;ita pealkirja (show_title) kommentaar"
+msgid "Omaduse N&auml;ita pealkirja (show_title) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_show_title_help
-msgid "Omaduse N&amp;auml;ita pealkirja (show_title) help"
+msgid "Omaduse N&auml;ita pealkirja (show_title) help"
 msgstr ""
 
 #: classes/doc.aw:prop_no_search
-msgid "Omaduse J&amp;auml;ta otsingust v&amp;auml;lja (no_search) caption"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_no_search_comment
-msgid "Omaduse J&amp;auml;ta otsingust v&amp;auml;lja (no_search) kommentaar"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_no_search_help
-msgid "Omaduse J&amp;auml;ta otsingust v&amp;auml;lja (no_search) help"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) help"
 msgstr ""
 
 #: classes/doc.aw:prop_cite
@@ -379,15 +386,15 @@ msgid "Omaduse Tsitaat (cite) help"
 msgstr ""
 
 #: classes/doc.aw:prop_tm
-msgid "Omaduse Kuup&amp;auml;ev (tm) caption"
+msgid "Omaduse Kuup&auml;ev (tm) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_tm_comment
-msgid "Omaduse Kuup&amp;auml;ev (tm) kommentaar"
+msgid "Omaduse Kuup&auml;ev (tm) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_tm_help
-msgid "Omaduse Kuup&amp;auml;ev (tm) help"
+msgid "Omaduse Kuup&auml;ev (tm) help"
 msgstr ""
 
 #: classes/doc.aw:prop_show_print
@@ -667,15 +674,15 @@ msgid "Omaduse Keel (language) help"
 msgstr ""
 
 #: classes/doc.aw:prop_calendar_relation
-msgid "Omaduse P&amp;otilde;hikalender (calendar_relation) caption"
+msgid "Omaduse P&otilde;hikalender (calendar_relation) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_calendar_relation_comment
-msgid "Omaduse P&amp;otilde;hikalender (calendar_relation) kommentaar"
+msgid "Omaduse P&otilde;hikalender (calendar_relation) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_calendar_relation_help
-msgid "Omaduse P&amp;otilde;hikalender (calendar_relation) help"
+msgid "Omaduse P&otilde;hikalender (calendar_relation) help"
 msgstr ""
 
 #: classes/doc.aw:prop_gen_static
@@ -727,15 +734,15 @@ msgid "Omaduse  (nobreaks) help"
 msgstr ""
 
 #: classes/doc.aw:prop_no_topic_links
-msgid "Omaduse &amp;Auml;ra tee Samal teemal linke (no_topic_links) caption"
+msgid "Omaduse &Auml;ra tee Samal teemal linke (no_topic_links) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_no_topic_links_comment
-msgid "Omaduse &amp;Auml;ra tee Samal teemal linke (no_topic_links) kommentaar"
+msgid "Omaduse &Auml;ra tee Samal teemal linke (no_topic_links) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_no_topic_links_help
-msgid "Omaduse &amp;Auml;ra tee Samal teemal linke (no_topic_links) help"
+msgid "Omaduse &Auml;ra tee Samal teemal linke (no_topic_links) help"
 msgstr ""
 
 #: classes/doc.aw:prop_create_new_version
@@ -823,15 +830,15 @@ msgid "Omaduse Cache otsingu jaoks (salvestub) (dcache_save) help"
 msgstr ""
 
 #: classes/doc.aw:prop_no_last
-msgid "Omaduse &amp;Auml;ra arvesta muutmist (no_last) caption"
+msgid "Omaduse &Auml;ra arvesta muutmist (no_last) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_no_last_comment
-msgid "Omaduse &amp;Auml;ra arvesta muutmist (no_last) kommentaar"
+msgid "Omaduse &Auml;ra arvesta muutmist (no_last) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_no_last_help
-msgid "Omaduse &amp;Auml;ra arvesta muutmist (no_last) help"
+msgid "Omaduse &Auml;ra arvesta muutmist (no_last) help"
 msgstr ""
 
 #: classes/doc.aw:prop_show_last_changed
@@ -847,17 +854,15 @@ msgid "Omaduse Muutmise kuupaev dokumendi sees (show_last_changed) help"
 msgstr ""
 
 #: classes/doc.aw:prop_no_show_in_promo
-msgid ""
-"Omaduse &amp;Auml;ra n&amp;auml;ita konteineris (no_show_in_promo) caption"
+msgid "Omaduse &Auml;ra n&auml;ita konteineris (no_show_in_promo) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_no_show_in_promo_comment
-msgid ""
-"Omaduse &amp;Auml;ra n&amp;auml;ita konteineris (no_show_in_promo) kommentaar"
+msgid "Omaduse &Auml;ra n&auml;ita konteineris (no_show_in_promo) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_no_show_in_promo_help
-msgid "Omaduse &amp;Auml;ra n&amp;auml;ita konteineris (no_show_in_promo) help"
+msgid "Omaduse &Auml;ra n&auml;ita konteineris (no_show_in_promo) help"
 msgstr ""
 
 #: classes/doc.aw:prop_show_in_iframe
@@ -873,29 +878,27 @@ msgid "Omaduse Kasuta siseraami (show_in_iframe) help"
 msgstr ""
 
 #: classes/doc.aw:prop_target_audience
-msgid "Omaduse Sihtr&amp;uuml;hm (target_audience) caption"
+msgid "Omaduse Sihtr&uuml;hm (target_audience) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_target_audience_comment
-msgid "Omaduse Sihtr&amp;uuml;hm (target_audience) kommentaar"
+msgid "Omaduse Sihtr&uuml;hm (target_audience) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_target_audience_help
-msgid "Omaduse Sihtr&amp;uuml;hm (target_audience) help"
+msgid "Omaduse Sihtr&uuml;hm (target_audience) help"
 msgstr ""
 
 #: classes/doc.aw:prop_doc_content_type
-msgid ""
-"Omaduse Dokumendi sisu t&amp;uuml;&amp;uuml;p (doc_content_type) caption"
+msgid "Omaduse Dokumendi sisu t&uuml;&uuml;p (doc_content_type) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_doc_content_type_comment
-msgid ""
-"Omaduse Dokumendi sisu t&amp;uuml;&amp;uuml;p (doc_content_type) kommentaar"
+msgid "Omaduse Dokumendi sisu t&uuml;&uuml;p (doc_content_type) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_doc_content_type_help
-msgid "Omaduse Dokumendi sisu t&amp;uuml;&amp;uuml;p (doc_content_type) help"
+msgid "Omaduse Dokumendi sisu t&uuml;&uuml;p (doc_content_type) help"
 msgstr ""
 
 #: classes/doc.aw:prop_sections
@@ -971,15 +974,15 @@ msgid "Omaduse  (kw_tb) help"
 msgstr ""
 
 #: classes/doc.aw:prop_kws
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) caption"
+msgid "Omaduse M&auml;rks&otilde;nad (kws) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_kws_comment
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) kommentaar"
+msgid "Omaduse M&auml;rks&otilde;nad (kws) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_kws_help
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) help"
+msgid "Omaduse M&auml;rks&otilde;nad (kws) help"
 msgstr ""
 
 #: classes/doc.aw:prop_versions_tb
@@ -1031,11 +1034,11 @@ msgid "Grupi Seadistused (settings) help"
 msgstr ""
 
 #: classes/doc.aw:group_kws
-msgid "Grupi M&amp;auml;rks&amp;otilde;nad (kws) pealkiri"
+msgid "Grupi M&auml;rks&otilde;nad (kws) pealkiri"
 msgstr ""
 
 #: classes/doc.aw:group_kws_help
-msgid "Grupi M&amp;auml;rks&amp;otilde;nad (kws) help"
+msgid "Grupi M&auml;rks&otilde;nad (kws) help"
 msgstr ""
 
 #: classes/doc.aw:group_versions
@@ -1087,75 +1090,74 @@ msgid "Seose kasutajadefineeritud muutuja 3 (RELTYPE_VARUSER3) tekst"
 msgstr ""
 
 #: classes/doc.aw:rel_RELTYPE_TARGET_AUDIENCE
-msgid "Seose Sihtr&amp;amp;uuml;hm (RELTYPE_TARGET_AUDIENCE) tekst"
+msgid "Seose Sihtr&amp;uuml;hm (RELTYPE_TARGET_AUDIENCE) tekst"
 msgstr ""
 
 #: classes/doc.aw:rel_RELTYPE_DOC_CONTENT_TYPE
 msgid ""
-"Seose Dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;p "
-"(RELTYPE_DOC_CONTENT_TYPE) tekst"
+"Seose Dokumendi sisu t&amp;uuml;&amp;uuml;p (RELTYPE_DOC_CONTENT_TYPE) tekst"
 msgstr ""
 
 #: classes/doc.aw:rel_RELTYPE_KEYWORD
-msgid "Seose V&amp;amp;otilde;tmes&amp;amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/doc.aw:413
+#: classes/doc.aw:416
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:769
+#: classes/doc.aw:772
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:784
+#: classes/doc.aw:787
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:946
+#: classes/doc.aw:949
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:959
+#: classes/doc.aw:962
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/doc.aw:1231 classes/doc.aw:1326 classes/doc.aw:1330
+#: classes/doc.aw:1234 classes/doc.aw:1329 classes/doc.aw:1333
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/doc.aw:1278
+#: classes/doc.aw:1281
 msgid "Versioon"
 msgstr ""
 
-#: classes/doc.aw:1284 classes/doc.aw:1344 classes/doc.aw:1372
+#: classes/doc.aw:1287 classes/doc.aw:1347 classes/doc.aw:1375
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc.aw:1290
+#: classes/doc.aw:1293
 msgid "Hinne"
 msgstr ""
 
-#: classes/doc.aw:1296
+#: classes/doc.aw:1299
 msgid "Hinda"
 msgstr ""
 
-#: classes/doc.aw:1302
-msgid "M&amp;auml;&amp;auml;ra aktiivseks"
+#: classes/doc.aw:1305
+msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/doc.aw:1308
+#: classes/doc.aw:1311
 msgid "Vali"
 msgstr ""
 
-#: classes/doc.aw:1339 classes/doc.aw:1367
+#: classes/doc.aw:1342 classes/doc.aw:1370
 msgid "--Vali--"
 msgstr ""
 
-#: classes/doc.aw:1464
+#: classes/doc.aw:1467
 msgid "Kustuta"
 msgstr ""
 
-#: classes/doc.aw:1501
-msgid "M&amp;auml;rks&amp;otilde;na"
+#: classes/doc.aw:1504
+msgid "M&auml;rks&otilde;na"
 msgstr ""

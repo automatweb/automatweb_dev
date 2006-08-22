@@ -71,7 +71,7 @@ msgid "Vali"
 msgstr ""
 
 #: classes/vcl/popup_search.aw:596
-msgid "&lt;a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\\&quot;sel\\&quot;)'&gt;Vali&lt;/a&gt;"
+msgid "<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\"sel\")'>Vali</a>"
 msgstr ""
 
 #: classes/vcl/popup_search.aw:658

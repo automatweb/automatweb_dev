@@ -10,25 +10,127 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/applications/scm/scm_score_calc.aw:class_1097_help
-msgid "Klassi Punktis&amp;uuml;steem help"
+msgid "Klassi Punktis&uuml;steem help"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_score_calculator
-msgid "Omaduse Punktis&amp;uuml;steem (score_calculator) caption"
+msgid "Omaduse Punktis&uuml;steem (score_calculator) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_score_calculator_comment
-msgid "Omaduse Punktis&amp;uuml;steem (score_calculator) kommentaar"
+msgid "Omaduse Punktis&uuml;steem (score_calculator) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_score_calculator_help
-msgid "Omaduse Punktis&amp;uuml;steem (score_calculator) help"
+msgid "Omaduse Punktis&uuml;steem (score_calculator) help"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:68
-msgid "100 meetri k&auml;imine"
+#: classes/applications/scm/scm_score_calc.aw:prop_max_points
+msgid "Omaduse Maksimumpunktid (max_points) caption"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:69
-msgid "Pistongip&uuml;stoli laskmine"
+#: classes/applications/scm/scm_score_calc.aw:prop_max_points_comment
+msgid "Omaduse Maksimumpunktid (max_points) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_max_points_help
+msgid "Omaduse Maksimumpunktid (max_points) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_step
+msgid "Omaduse Samm (points_step) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_step_comment
+msgid "Omaduse Samm (points_step) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_step_help
+msgid "Omaduse Samm (points_step) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_exception
+msgid "Omaduse Erandid (points_exception) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_exception_comment
+msgid "Omaduse Erandid (points_exception) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_exception_help
+msgid "Omaduse Erandid (points_exception) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_others
+msgid ""
+"Omaduse &Uuml;lej&auml;&auml;nud v&otilde;istlejad (points_others) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_others_comment
+msgid ""
+"Omaduse &Uuml;lej&auml;&auml;nud v&otilde;istlejad (points_others) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_points_others_help
+msgid "Omaduse &Uuml;lej&auml;&auml;nud v&otilde;istlejad (points_others) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_man_count
+msgid "Omaduse Punkte saavad x esimest (man_count) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_man_count_comment
+msgid "Omaduse Punkte saavad x esimest (man_count) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_man_count_help
+msgid "Omaduse Punkte saavad x esimest (man_count) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_man_points
+msgid "Omaduse Punktid (man_points) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_man_points_comment
+msgid "Omaduse Punktid (man_points) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_man_points_help
+msgid "Omaduse Punktid (man_points) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:group_algorithm
+msgid "Grupi Algoritm (algorithm) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:group_algorithm_help
+msgid "Grupi Algoritm (algorithm) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:group_manual_points
+msgid "Grupi Kohapunktid (manual_points) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:group_manual_points_help
+msgid "Grupi Kohapunktid (manual_points) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:79
+msgid "Koht nr %s:"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:81
+msgid "&Uuml;lej&auml;&auml;nud:"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:200
+msgid "Esimesed 5(10p alates)"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:201
+msgid "Esimesed 3 saavad(15/4)"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:202
+msgid "Esimesed kolm saavad punktid (laskmine)"
 msgstr ""

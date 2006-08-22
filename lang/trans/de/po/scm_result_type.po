@@ -10,19 +10,19 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/applications/scm/scm_result_type.aw:class_1093_help
-msgid "Klassi Paremusj&amp;auml;rjestuse t&amp;uuml;&amp;uuml;p help"
+msgid "Klassi Paremusj&auml;rjestuse t&uuml;&uuml;p help"
 msgstr ""
 
 #: classes/applications/scm/scm_result_type.aw:prop_unit
-msgid "Omaduse &amp;Uuml;hik (unit) caption"
+msgid "Omaduse &Uuml;hik (unit) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_result_type.aw:prop_unit_comment
-msgid "Omaduse &amp;Uuml;hik (unit) kommentaar"
+msgid "Omaduse &Uuml;hik (unit) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_result_type.aw:prop_unit_help
-msgid "Omaduse &amp;Uuml;hik (unit) help"
+msgid "Omaduse &Uuml;hik (unit) help"
 msgstr ""
 
 #: classes/applications/scm/scm_result_type.aw:prop_sort
@@ -45,51 +45,51 @@ msgstr ""
 msgid "Kahanev"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:167
+#: classes/applications/scm/scm_result_type.aw:196
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:169
+#: classes/applications/scm/scm_result_type.aw:198
 msgid "p"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:170
+#: classes/applications/scm/scm_result_type.aw:199
 msgid "t"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:171
-#: classes/applications/scm/scm_result_type.aw:188
+#: classes/applications/scm/scm_result_type.aw:200
+#: classes/applications/scm/scm_result_type.aw:217
 msgid "m"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:172
+#: classes/applications/scm/scm_result_type.aw:201
 msgid "s"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:173
+#: classes/applications/scm/scm_result_type.aw:202
 msgid "ms"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:178
+#: classes/applications/scm/scm_result_type.aw:207
 msgid "Punktid"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:180
+#: classes/applications/scm/scm_result_type.aw:209
 msgid "punkti"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:185
+#: classes/applications/scm/scm_result_type.aw:214
 msgid "Pikkus/Kaugus"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:187
+#: classes/applications/scm/scm_result_type.aw:216
 msgid "km"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:189
+#: classes/applications/scm/scm_result_type.aw:218
 msgid "cm"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:190
+#: classes/applications/scm/scm_result_type.aw:219
 msgid "mm"
 msgstr ""

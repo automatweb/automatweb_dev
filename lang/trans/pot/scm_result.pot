@@ -27,34 +27,46 @@ msgid "Omaduse Tulemus (result) help"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:prop_competition
-msgid "Omaduse V&amp;otilde;istlus (competition) caption"
+msgid "Omaduse V&otilde;istlus (competition) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:prop_competition_comment
-msgid "Omaduse V&amp;otilde;istlus (competition) kommentaar"
+msgid "Omaduse V&otilde;istlus (competition) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:prop_competition_help
-msgid "Omaduse V&amp;otilde;istlus (competition) help"
+msgid "Omaduse V&otilde;istlus (competition) help"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:prop_contestant
-msgid "Omaduse V&amp;otilde;istleja (contestant) caption"
+msgid "Omaduse V&otilde;istleja (contestant) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:prop_contestant_comment
-msgid "Omaduse V&amp;otilde;istleja (contestant) kommentaar"
+msgid "Omaduse V&otilde;istleja (contestant) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:prop_contestant_help
-msgid "Omaduse V&amp;otilde;istleja (contestant) help"
+msgid "Omaduse V&otilde;istleja (contestant) help"
+msgstr ""
+
+#: classes/applications/scm/scm_result.aw:prop_team
+msgid "Omaduse Meeskond (team) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_result.aw:prop_team_comment
+msgid "Omaduse Meeskond (team) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_result.aw:prop_team_help
+msgid "Omaduse Meeskond (team) help"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:rel_RELTYPE_CONTESTANT
-msgid "Seose V&amp;amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
+msgid "Seose V&amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:rel_RELTYPE_COMPETITION
-msgid "Seose V&amp;amp;otilde;istlus (RELTYPE_COMPETITION) tekst"
+msgid "Seose V&amp;otilde;istlus (RELTYPE_COMPETITION) tekst"
 msgstr ""
 

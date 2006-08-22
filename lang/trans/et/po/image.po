@@ -74,22 +74,16 @@ msgstr ""
 "k‰ttesaadavalt andmekandjalt soovitud pildifail"
 
 #: classes/image.aw:prop_dimensions
-msgid "Omaduse Mııtmed (dimensions) caption"
+msgid "Omaduse M&otilde;&otilde;tmed (dimensions) caption"
 msgstr ""
 
-# classes/image.aw:prop_dimensions_comment
 #: classes/image.aw:prop_dimensions_comment
-msgid "Omaduse Mııtmed (dimensions) kommentaar"
+msgid "Omaduse M&otilde;&otilde;tmed (dimensions) kommentaar"
 msgstr ""
-"siin kuvatakse sisestatud pildi suurust pixlites (laius X kırgus). V‰li "
-"ilmub peale pildi esmakordset salvestamist"
 
-# classes/image.aw:prop_dimensions_help
 #: classes/image.aw:prop_dimensions_help
-msgid "Omaduse Mııtmed (dimensions) help"
+msgid "Omaduse M&otilde;&otilde;tmed (dimensions) help"
 msgstr ""
-"siin kuvatakse sisestatud pildi suurust pixlites (laius X kırgus). V‰li "
-"ilmub peale pildi esmakordset salvestamist"
 
 # classes/image.aw:prop_comment
 #: classes/image.aw:prop_comment
@@ -329,38 +323,29 @@ msgstr "vıimaldab m‰‰rata ‹ldine vaates sisestatud pildi uue kırguse"
 msgid "Omaduse Uus k&otilde;rgus (new_h) help"
 msgstr "vıimaldab m‰‰rata ‹ldine vaates sisestatud pildi uue kırguse"
 
-# classes/image.aw:prop_do_resize
 #: classes/image.aw:prop_do_resize
-msgid "Omaduse  (do_resize) caption"
+msgid "Omaduse Muuda (do_resize) caption"
 msgstr ""
 
-# classes/image.aw:prop_do_resize_comment
 #: classes/image.aw:prop_do_resize_comment
-msgid "Omaduse  (do_resize) kommentaar"
+msgid "Omaduse Muuda (do_resize) kommentaar"
 msgstr ""
 
-# classes/image.aw:prop_do_resize_help
 #: classes/image.aw:prop_do_resize_help
-msgid "Omaduse  (do_resize) help"
+msgid "Omaduse Muuda (do_resize) help"
 msgstr ""
 
 #: classes/image.aw:prop_dimensions_big
-msgid "Omaduse Mııtmed (dimensions_big) caption"
+msgid "Omaduse M&otilde;&otilde;tmed (dimensions_big) caption"
 msgstr ""
 
-# classes/image.aw:prop_dimensions_big_comment
 #: classes/image.aw:prop_dimensions_big_comment
-msgid "Omaduse Mııtmed (dimensions_big) kommentaar"
+msgid "Omaduse M&otilde;&otilde;tmed (dimensions_big) kommentaar"
 msgstr ""
-"siin kuvatakse ‹ldine vaates sisestatud pildi suurust pixlites (laius X "
-"kırgus)"
 
-# classes/image.aw:prop_dimensions_big_help
 #: classes/image.aw:prop_dimensions_big_help
-msgid "Omaduse Mııtmed (dimensions_big) help"
+msgid "Omaduse M&otilde;&otilde;tmed (dimensions_big) help"
 msgstr ""
-"siin kuvatakse ‹ldine vaates sisestatud pildi suurust pixlites (laius X "
-"kırgus)"
 
 # classes/image.aw:prop_new_w_big
 #: classes/image.aw:prop_new_w_big
@@ -419,11 +404,11 @@ msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/image.aw:group_show
-msgid "Grupi N‰itamine (show) pealkiri"
+msgid "Grupi N&auml;itamine (show) pealkiri"
 msgstr ""
 
 #: classes/image.aw:group_show_help
-msgid "Grupi N‰itamine (show) help"
+msgid "Grupi N&auml;itamine (show) help"
 msgstr ""
 
 # classes/image.aw:group_img2
@@ -469,26 +454,50 @@ msgstr ""
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr ""
 
-#: classes/image.aw:304
+#: classes/image.aw:305
 msgid "kommentaar"
 msgstr ""
 
-#: classes/image.aw:304
+#: classes/image.aw:305
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:880
+#: classes/image.aw:881
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/image.aw:881
+#: classes/image.aw:882
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/image.aw:894
+#: classes/image.aw:895
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
 
-#: classes/image.aw:1415
+#: classes/image.aw:1416
 msgid "Lisa"
 msgstr ""
+
+# classes/image.aw:prop_dimensions_comment
+#~ msgid "Omaduse Mııtmed (dimensions) kommentaar"
+#~ msgstr ""
+#~ "siin kuvatakse sisestatud pildi suurust pixlites (laius X kırgus). V‰li "
+#~ "ilmub peale pildi esmakordset salvestamist"
+
+# classes/image.aw:prop_dimensions_help
+#~ msgid "Omaduse Mııtmed (dimensions) help"
+#~ msgstr ""
+#~ "siin kuvatakse sisestatud pildi suurust pixlites (laius X kırgus). V‰li "
+#~ "ilmub peale pildi esmakordset salvestamist"
+
+# classes/image.aw:prop_dimensions_big_comment
+#~ msgid "Omaduse Mııtmed (dimensions_big) kommentaar"
+#~ msgstr ""
+#~ "siin kuvatakse ‹ldine vaates sisestatud pildi suurust pixlites (laius X "
+#~ "kırgus)"
+
+# classes/image.aw:prop_dimensions_big_help
+#~ msgid "Omaduse Mııtmed (dimensions_big) help"
+#~ msgstr ""
+#~ "siin kuvatakse ‹ldine vaates sisestatud pildi suurust pixlites (laius X "
+#~ "kırgus)"

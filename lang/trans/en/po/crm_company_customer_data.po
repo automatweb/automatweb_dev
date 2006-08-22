@@ -38,6 +38,78 @@ msgstr ""
 msgid "Omaduse M&uuml;&uuml;ja (seller) help"
 msgstr ""
 
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contract_creator
+msgid "Omaduse Hankijasuhte looja (buyer_contract_creator) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contract_creator_comment
+msgid "Omaduse Hankijasuhte looja (buyer_contract_creator) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contract_creator_help
+msgid "Omaduse Hankijasuhte looja (buyer_contract_creator) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contract_date
+msgid "Omaduse Hankijasuhte alguskuup&auml;ev (buyer_contract_date) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contract_date_comment
+msgid "Omaduse Hankijasuhte alguskuup&auml;ev (buyer_contract_date) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contract_date_help
+msgid "Omaduse Hankijasuhte alguskuup&auml;ev (buyer_contract_date) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person
+msgid "Omaduse Ostja kontaktisik 1 (buyer_contact_person) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person_comment
+msgid "Omaduse Ostja kontaktisik 1 (buyer_contact_person) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person_help
+msgid "Omaduse Ostja kontaktisik 1 (buyer_contact_person) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person2
+msgid "Omaduse Ostja kontaktisik 2 (buyer_contact_person2) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person2_comment
+msgid "Omaduse Ostja kontaktisik 2 (buyer_contact_person2) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person2_help
+msgid "Omaduse Ostja kontaktisik 2 (buyer_contact_person2) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person3
+msgid "Omaduse Ostja kontaktisik 3 (buyer_contact_person3) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person3_comment
+msgid "Omaduse Ostja kontaktisik 3 (buyer_contact_person3) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_contact_person3_help
+msgid "Omaduse Ostja kontaktisik 3 (buyer_contact_person3) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_priority
+msgid "Omaduse Ostja Prioriteet (buyer_priority) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_priority_comment
+msgid "Omaduse Ostja Prioriteet (buyer_priority) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_buyer_priority_help
+msgid "Omaduse Ostja Prioriteet (buyer_priority) help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_customer_data.aw:prop_cust_contract_creator
 msgid "Omaduse Kliendisuhte looja (cust_contract_creator) caption"
 msgstr ""
@@ -62,6 +134,54 @@ msgstr ""
 msgid "Omaduse Kliendisuhte alguskuup&auml;ev (cust_contract_date) help"
 msgstr ""
 
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person
+msgid "Omaduse Kliendi kontaktisik 1 (contact_person) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person_comment
+msgid "Omaduse Kliendi kontaktisik 1 (contact_person) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person_help
+msgid "Omaduse Kliendi kontaktisik 1 (contact_person) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person2
+msgid "Omaduse Kliendi kontaktisik 2 (contact_person2) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person2_comment
+msgid "Omaduse Kliendi kontaktisik 2 (contact_person2) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person2_help
+msgid "Omaduse Kliendi kontaktisik 2 (contact_person2) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person3
+msgid "Omaduse Kliendi kontaktisik 3 (contact_person3) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person3_comment
+msgid "Omaduse Kliendi kontaktisik 3 (contact_person3) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person3_help
+msgid "Omaduse Kliendi kontaktisik 3 (contact_person3) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_priority
+msgid "Omaduse Kliendi Prioriteet (priority) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_priority_comment
+msgid "Omaduse Kliendi Prioriteet (priority) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_priority_help
+msgid "Omaduse Kliendi Prioriteet (priority) help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_customer_data.aw:prop_referal_type
 msgid "Omaduse Sissetuleku meetod (referal_type) caption"
 msgstr ""
@@ -72,54 +192,6 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_referal_type_help
 msgid "Omaduse Sissetuleku meetod (referal_type) help"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person
-msgid "Omaduse Kontaktisik 1 (contact_person) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person_comment
-msgid "Omaduse Kontaktisik 1 (contact_person) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person_help
-msgid "Omaduse Kontaktisik 1 (contact_person) help"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person2
-msgid "Omaduse Kontaktisik 2 (contact_person2) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person2_comment
-msgid "Omaduse Kontaktisik 2 (contact_person2) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person2_help
-msgid "Omaduse Kontaktisik 2 (contact_person2) help"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person3
-msgid "Omaduse Kontaktisik 3 (contact_person3) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person3_comment
-msgid "Omaduse Kontaktisik 3 (contact_person3) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_contact_person3_help
-msgid "Omaduse Kontaktisik 3 (contact_person3) help"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_priority
-msgid "Omaduse Prioriteet (priority) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_priority_comment
-msgid "Omaduse Prioriteet (priority) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_company_customer_data.aw:prop_priority_help
-msgid "Omaduse Prioriteet (priority) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_client_manager
@@ -135,29 +207,43 @@ msgid "Omaduse Kliendihaldur (client_manager) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_bill_due_date_days
-msgid ""
-"Omaduse Arve makset&auml;htaeg (p&auml;evi) (bill_due_date_days) caption"
+msgid "Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_bill_due_date_days_comment
-msgid ""
-"Omaduse Arve makset&auml;htaeg (p&auml;evi) (bill_due_date_days) kommentaar"
+msgid "Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_bill_due_date_days_help
-msgid "Omaduse Arve makset&auml;htaeg (p&auml;evi) (bill_due_date_days) help"
+msgid "Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_bill_penalty_pct
-msgid "Omaduse Arve viivise % (bill_penalty_pct) caption"
+msgid "Omaduse Viivise % (bill_penalty_pct) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_bill_penalty_pct_comment
-msgid "Omaduse Arve viivise % (bill_penalty_pct) kommentaar"
+msgid "Omaduse Viivise % (bill_penalty_pct) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:prop_bill_penalty_pct_help
-msgid "Omaduse Arve viivise % (bill_penalty_pct) help"
+msgid "Omaduse Viivise % (bill_penalty_pct) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:group_buyer
+msgid "Grupi Ostja (buyer) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:group_buyer_help
+msgid "Grupi Ostja (buyer) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:group_seller
+msgid "Grupi M&uuml;&uuml;ja (seller) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:group_seller_help
+msgid "Grupi M&uuml;&uuml;ja (seller) help"
 msgstr ""
 
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_BUYER
@@ -184,7 +270,7 @@ msgstr ""
 msgid "Seose Siduss&amp;uuml;steemi sisestus (RELTYPE_EXT_SYS_ENTRY) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:96
+#: classes/applications/crm/crm_company_customer_data.aw:124
 msgid "--vali--"
 msgstr ""
 

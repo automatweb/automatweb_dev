@@ -131,15 +131,15 @@ msgstr ""
 "lahtris, siis URLina viitamine ei toimi."
 
 #: classes/file.aw:prop_showal
-msgid "Omaduse Nita kohe (showal) caption"
+msgid "Omaduse N&auml;ita kohe (showal) caption"
 msgstr ""
 
 #: classes/file.aw:prop_showal_comment
-msgid "Omaduse Nita kohe (showal) kommentaar"
+msgid "Omaduse N&auml;ita kohe (showal) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_showal_help
-msgid "Omaduse Nita kohe (showal) help"
+msgid "Omaduse N&auml;ita kohe (showal) help"
 msgstr ""
 
 # classes/file.aw:prop_newwindow
@@ -158,15 +158,15 @@ msgid "Omaduse Uues aknas (newwindow) help"
 msgstr "faili uues aknas."
 
 #: classes/file.aw:prop_show_framed
-msgid "Omaduse Nita saidi raamis (show_framed) caption"
+msgid "Omaduse N&auml;ita saidi raamis (show_framed) caption"
 msgstr ""
 
 #: classes/file.aw:prop_show_framed_comment
-msgid "Omaduse Nita saidi raamis (show_framed) kommentaar"
+msgid "Omaduse N&auml;ita saidi raamis (show_framed) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_show_framed_help
-msgid "Omaduse Nita saidi raamis (show_framed) help"
+msgid "Omaduse N&auml;ita saidi raamis (show_framed) help"
 msgstr ""
 
 #: classes/file.aw:prop_show_icon
@@ -182,27 +182,27 @@ msgid "Omaduse N&auml;ita ikooni (show_icon) help"
 msgstr ""
 
 #: classes/file.aw:prop_j_time
-msgid "Omaduse Justumise kuupev (j_time) caption"
+msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) caption"
 msgstr ""
 
 #: classes/file.aw:prop_j_time_comment
-msgid "Omaduse Justumise kuupev (j_time) kommentaar"
+msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_j_time_help
-msgid "Omaduse Justumise kuupev (j_time) help"
+msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) help"
 msgstr ""
 
 #: classes/file.aw:prop_act_date
-msgid "Omaduse Avaldamise kuupev (act_date) caption"
+msgid "Omaduse Avaldamise kuup&auml;ev (act_date) caption"
 msgstr ""
 
 #: classes/file.aw:prop_act_date_comment
-msgid "Omaduse Avaldamise kuupev (act_date) kommentaar"
+msgid "Omaduse Avaldamise kuup&auml;ev (act_date) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_act_date_help
-msgid "Omaduse Avaldamise kuupev (act_date) help"
+msgid "Omaduse Avaldamise kuup&auml;ev (act_date) help"
 msgstr ""
 
 #: classes/file.aw:prop_udef1
@@ -270,7 +270,7 @@ msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/file.aw:rel_RELTYPE_KEYWORD
-msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
+msgid "Seose M&amp;auml;rks&amp;otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
 #: classes/file.aw:152

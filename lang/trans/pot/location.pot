@@ -1,0 +1,64 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/scm/location.aw:class_1116_help
+msgid "Klassi Asukoht help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_address
+msgid "Omaduse Aadress (address) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_address_comment
+msgid "Omaduse Aadress (address) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_address_help
+msgid "Omaduse Aadress (address) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_map
+msgid "Omaduse Asukohakaart (map) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_map_comment
+msgid "Omaduse Asukohakaart (map) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_map_help
+msgid "Omaduse Asukohakaart (map) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_photo
+msgid "Omaduse Foto kohast (photo) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_photo_comment
+msgid "Omaduse Foto kohast (photo) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_photo_help
+msgid "Omaduse Foto kohast (photo) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_MAP
+msgid "Seose Kaart (RELTYPE_MAP) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_PHOTO
+msgid "Seose Foto (RELTYPE_PHOTO) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_ADDRESS
+msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
+msgstr ""
+

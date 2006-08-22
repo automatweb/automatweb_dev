@@ -26,15 +26,15 @@ msgid "Omaduse  (bug_tb) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_name
-msgid "Omaduse L&uuml;hikirjeldus (name) caption"
+msgid "Omaduse Lühikirjeldus (name) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_name_comment
-msgid "Omaduse L&uuml;hikirjeldus (name) kommentaar"
+msgid "Omaduse Lühikirjeldus (name) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_name_help
-msgid "Omaduse L&uuml;hikirjeldus (name) help"
+msgid "Omaduse Lühikirjeldus (name) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_status
@@ -74,15 +74,15 @@ msgid "Omaduse Kellele (who) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_type
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (bug_type) caption"
+msgid "Omaduse T&uuml;&uuml;p (bug_type) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_type_comment
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (bug_type) kommentaar"
+msgid "Omaduse T&uuml;&uuml;p (bug_type) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_type_help
-msgid "Omaduse T&amp;uuml;&amp;uuml;p (bug_type) help"
+msgid "Omaduse T&uuml;&uuml;p (bug_type) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_class
@@ -98,39 +98,39 @@ msgid "Omaduse Klass (bug_class) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_severity
-msgid "Omaduse T&amp;otilde;sidus (bug_severity) caption"
+msgid "Omaduse T&otilde;sidus (bug_severity) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_severity_comment
-msgid "Omaduse T&amp;otilde;sidus (bug_severity) kommentaar"
+msgid "Omaduse T&otilde;sidus (bug_severity) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_severity_help
-msgid "Omaduse T&amp;otilde;sidus (bug_severity) help"
+msgid "Omaduse T&otilde;sidus (bug_severity) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_monitors
-msgid "Omaduse J&amp;auml;lgijad (monitors) caption"
+msgid "Omaduse J&auml;lgijad (monitors) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_monitors_comment
-msgid "Omaduse J&amp;auml;lgijad (monitors) kommentaar"
+msgid "Omaduse J&auml;lgijad (monitors) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_monitors_help
-msgid "Omaduse J&amp;auml;lgijad (monitors) help"
+msgid "Omaduse J&auml;lgijad (monitors) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_deadline
-msgid "Omaduse T&amp;auml;htaeg (deadline) caption"
+msgid "Omaduse T&auml;htaeg (deadline) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_deadline_comment
-msgid "Omaduse T&amp;auml;htaeg (deadline) kommentaar"
+msgid "Omaduse T&auml;htaeg (deadline) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_deadline_help
-msgid "Omaduse T&amp;auml;htaeg (deadline) help"
+msgid "Omaduse T&auml;htaeg (deadline) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_url
@@ -374,15 +374,15 @@ msgid "Omaduse Kasutusvalmis (cust_live_date) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_crit
-msgid "Omaduse Vastuv&amp;otilde;tu kriteeriumid (cust_crit) caption"
+msgid "Omaduse Vastuv&otilde;tu kriteeriumid (cust_crit) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_crit_comment
-msgid "Omaduse Vastuv&amp;otilde;tu kriteeriumid (cust_crit) kommentaar"
+msgid "Omaduse Vastuv&otilde;tu kriteeriumid (cust_crit) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_crit_help
-msgid "Omaduse Vastuv&amp;otilde;tu kriteeriumid (cust_crit) help"
+msgid "Omaduse Vastuv&otilde;tu kriteeriumid (cust_crit) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_budget
@@ -406,7 +406,7 @@ msgid "Grupi Kliendi andmed (cust) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_MONITOR
-msgid "Seose J&amp;auml;lgija (RELTYPE_MONITOR) tekst"
+msgid "Seose J&auml;lgija (RELTYPE_MONITOR) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_FILE
@@ -422,7 +422,7 @@ msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_BUGTYPE
-msgid "Seose Bugi t&amp;amp;uuml;&amp;amp;uuml;p (RELTYPE_BUGTYPE) tekst"
+msgid "Seose Bugi t&amp;uuml;&amp;uuml;p (RELTYPE_BUGTYPE) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_COMMENT
@@ -494,7 +494,7 @@ msgid "Korduv"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:205
-msgid "&amp;Uuml;ksikjuht"
+msgid "&Uuml;ksikjuht"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:206
@@ -502,7 +502,7 @@ msgid "Puudutab suurt osa"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:207
-msgid "Puudutab k&amp;otilde;iki"
+msgid "Puudutab k&otilde;iki"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:262
@@ -532,49 +532,49 @@ msgid "Stopper"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:495
-msgid "Kellele ei tohi olla t&amp;uuml;hi!"
+msgid "Kellele ei tohi olla t&uuml;hi!"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:512
-msgid "T&amp;auml;htaeg ei tohi olla minevikus!"
+msgid "T&auml;htaeg ei tohi olla minevikus!"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:550
 msgid ""
-"Selliste parameetritega ei saa salvestada, kuna see l&amp;uuml;kkaks j&amp;"
-"auml;rgnevad bugid &amp;uuml;le t&amp;auml;htaja: %s!"
+"Selliste parameetritega ei saa salvestada, kuna see l&uuml;kkaks j&auml;"
+"rgnevad bugid &uuml;le t&auml;htaja: %s!"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:556
-msgid "Bugi ei ole v&amp;otilde;imalik valmis saada enne %s!"
+msgid "Bugi ei ole v&otilde;imalik valmis saada enne %s!"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:585
-msgid "Puuduvad &otilde;igused bugi sulgeda!"
+msgid "Puuduvad õigused bugi sulgeda!"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:591
-msgid "Staatus muudeti %s =&gt; %s"
+msgid "Staatus muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:600
-msgid "Prioriteet muudeti %s =&gt; %s"
+msgid "Prioriteet muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:609
-msgid "Tegelik tundide arv muudeti %s =&gt; %s"
+msgid "Tegelik tundide arv muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:618
-msgid "Prognoositud tundide arv muudeti %s =&gt; %s"
+msgid "Prognoositud tundide arv muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:633
-msgid "Kellele muudeti %s =&gt; %s"
+msgid "Kellele muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:645
-msgid "Klass muudeti %s =&gt; %s"
+msgid "Klass muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:724
@@ -589,21 +589,21 @@ msgstr ""
 #: classes/applications/bug_o_matic_3000/bug.aw:962
 msgid ""
 "\n"
-"Tegelik tundide arv muudeti %s =&gt; %s"
+"Tegelik tundide arv muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:974
 msgid "Added comment to bug %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1056
-msgid "Uus arendus&amp;uuml;lesanne"
+#: classes/applications/bug_o_matic_3000/bug.aw:1057
+msgid "Uus arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1061
+#: classes/applications/bug_o_matic_3000/bug.aw:1062
 msgid "Samale tasemele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1067
+#: classes/applications/bug_o_matic_3000/bug.aw:1068
 msgid "Sisse"
 msgstr ""

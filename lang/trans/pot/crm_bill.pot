@@ -146,6 +146,18 @@ msgstr ""
 msgid "Omaduse Staatus (state) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill.aw:prop_partial_recieved
+msgid "Omaduse Osaline laekumine (partial_recieved) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_partial_recieved_comment
+msgid "Omaduse Osaline laekumine (partial_recieved) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_partial_recieved_help
+msgid "Omaduse Osaline laekumine (partial_recieved) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill.aw:prop_disc
 msgid "Omaduse Allahindlus (%) (disc) caption"
 msgstr ""
@@ -194,6 +206,18 @@ msgstr ""
 msgid "Omaduse Keel (language) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill.aw:prop_rows_different_pages
+msgid "Omaduse Read erinevatel lehekülgedel (rows_different_pages) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_rows_different_pages_comment
+msgid "Omaduse Read erinevatel lehekülgedel (rows_different_pages) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_rows_different_pages_help
+msgid "Omaduse Read erinevatel lehekülgedel (rows_different_pages) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill.aw:prop_bill_rows
 msgid "Omaduse Arveread  (bill_rows) caption"
 msgstr ""
@@ -216,6 +240,66 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_signers_help
 msgid "Omaduse Allkirjastajad (signers) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef1
+msgid "Omaduse Kasutajadefineeritud muutuja 1 (udef1) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef1_comment
+msgid "Omaduse Kasutajadefineeritud muutuja 1 (udef1) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef1_help
+msgid "Omaduse Kasutajadefineeritud muutuja 1 (udef1) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef2
+msgid "Omaduse Kasutajadefineeritud muutuja 2 (udef2) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef2_comment
+msgid "Omaduse Kasutajadefineeritud muutuja 2 (udef2) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef2_help
+msgid "Omaduse Kasutajadefineeritud muutuja 2 (udef2) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef3
+msgid "Omaduse Kasutajadefineeritud muutuja 3 (udef3) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef3_comment
+msgid "Omaduse Kasutajadefineeritud muutuja 3 (udef3) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef3_help
+msgid "Omaduse Kasutajadefineeritud muutuja 3 (udef3) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef4
+msgid "Omaduse Kasutajadefineeritud muutuja 4 (udef4) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef4_comment
+msgid "Omaduse Kasutajadefineeritud muutuja 4 (udef4) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef4_help
+msgid "Omaduse Kasutajadefineeritud muutuja 4 (udef4) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef5
+msgid "Omaduse Kasutajadefineeritud muutuja 5 (udef5) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef5_comment
+msgid "Omaduse Kasutajadefineeritud muutuja 5 (udef5) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_udef5_help
+msgid "Omaduse Kasutajadefineeritud muutuja 5 (udef5) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_preview
@@ -338,115 +422,119 @@ msgstr ""
 msgid "Seose Allkirjastaja (RELTYPE_SIGNER) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:139
+#: classes/applications/crm/crm_bill.aw:158
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:140
+#: classes/applications/crm/crm_bill.aw:159
 msgid "Saadetud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:141
+#: classes/applications/crm/crm_bill.aw:160
 msgid "Makstud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:181 classes/applications/crm/crm_bill.aw:407 classes/applications/crm/crm_bill.aw:445
+#: classes/applications/crm/crm_bill.aw:161
+msgid "Laekunud"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:201 classes/applications/crm/crm_bill.aw:423 classes/applications/crm/crm_bill.aw:461
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:281
+#: classes/applications/crm/crm_bill.aw:297
 msgid "Sellise numberiga arve on juba olemas!"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:288
+#: classes/applications/crm/crm_bill.aw:304
 msgid "Number ei ole seerias!"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:344
+#: classes/applications/crm/crm_bill.aw:360
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:349
+#: classes/applications/crm/crm_bill.aw:365
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:354
+#: classes/applications/crm/crm_bill.aw:370
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:359
+#: classes/applications/crm/crm_bill.aw:375
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:364 classes/applications/crm/crm_bill.aw:1843
+#: classes/applications/crm/crm_bill.aw:380 classes/applications/crm/crm_bill.aw:1924
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:369
+#: classes/applications/crm/crm_bill.aw:385
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:374
+#: classes/applications/crm/crm_bill.aw:390
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:379
+#: classes/applications/crm/crm_bill.aw:395
 msgid "Artikkel"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:383
+#: classes/applications/crm/crm_bill.aw:399
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:388
+#: classes/applications/crm/crm_bill.aw:404
 msgid "+KM?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:393 classes/applications/crm/crm_bill.aw:518
+#: classes/applications/crm/crm_bill.aw:409 classes/applications/crm/crm_bill.aw:534
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1062 classes/applications/crm/crm_bill.aw:1447
+#: classes/applications/crm/crm_bill.aw:1131 classes/applications/crm/crm_bill.aw:1528
 msgid "Prinditav arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1759
+#: classes/applications/crm/crm_bill.aw:1840
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1766
+#: classes/applications/crm/crm_bill.aw:1847
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1774
+#: classes/applications/crm/crm_bill.aw:1855
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1781
+#: classes/applications/crm/crm_bill.aw:1862
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1788
+#: classes/applications/crm/crm_bill.aw:1869
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1793
+#: classes/applications/crm/crm_bill.aw:1874
 msgid "Koonda read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1802
+#: classes/applications/crm/crm_bill.aw:1883
 msgid "Kustuta read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1803
+#: classes/applications/crm/crm_bill.aw:1884
 msgid "Oled kindel et soovid read kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1832
+#: classes/applications/crm/crm_bill.aw:1913
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1837
+#: classes/applications/crm/crm_bill.aw:1918
 msgid "Tunde"
 msgstr ""
 

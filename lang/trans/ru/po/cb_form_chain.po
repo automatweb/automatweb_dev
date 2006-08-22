@@ -44,15 +44,15 @@ msgid ""
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:prop_redir_to
-msgid "Omaduse P&amp;auml;rast t&amp;auml;itmist suuna (redir_to) caption"
+msgid "Omaduse P&auml;rast t&auml;itmist suuna (redir_to) caption"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:prop_redir_to_comment
-msgid "Omaduse P&amp;auml;rast t&amp;auml;itmist suuna (redir_to) kommentaar"
+msgid "Omaduse P&auml;rast t&auml;itmist suuna (redir_to) kommentaar"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:prop_redir_to_help
-msgid "Omaduse P&amp;auml;rast t&amp;auml;itmist suuna (redir_to) help"
+msgid "Omaduse P&auml;rast t&auml;itmist suuna (redir_to) help"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_view_ctl
@@ -68,15 +68,15 @@ msgid "Omaduse Kinnitusevaate kontroller (confirm_view_ctl) help"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:prop_disp_view_ctl
-msgid "Omaduse V&amp;auml;ljundi kontroller  (disp_view_ctl) caption"
+msgid "Omaduse V&auml;ljundi kontroller  (disp_view_ctl) caption"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:prop_disp_view_ctl_comment
-msgid "Omaduse V&amp;auml;ljundi kontroller  (disp_view_ctl) kommentaar"
+msgid "Omaduse V&auml;ljundi kontroller  (disp_view_ctl) kommentaar"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:prop_disp_view_ctl_help
-msgid "Omaduse V&amp;auml;ljundi kontroller  (disp_view_ctl) help"
+msgid "Omaduse V&auml;ljundi kontroller  (disp_view_ctl) help"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs
@@ -498,11 +498,11 @@ msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:277
 #: classes/applications/cb_form_chain/cb_form_chain.aw:406
-msgid "Lehek&amp;uuml;lg"
+msgid "Lehek&uuml;lg"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:283
-msgid "J&amp;auml;rjekord"
+msgid "J&auml;rjekord"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:289
@@ -522,7 +522,7 @@ msgid "Andmed tabelina"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:313
-msgid "Kinnituse vaates tabel &amp;uuml;levalt alla"
+msgid "Kinnituse vaates tabel &uuml;levalt alla"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:319
@@ -538,7 +538,7 @@ msgid "Pealkiri"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:418
-msgid "N&amp;auml;ita salvesta nuppu"
+msgid "N&auml;ita salvesta nuppu"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:424
@@ -615,11 +615,11 @@ msgid "Eraldaja enne"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:2011
-msgid "Eraldaja p&amp;auml;rast"
+msgid "Eraldaja p&auml;rast"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:2017
-msgid "N&amp;auml;ita tabelis"
+msgid "N&auml;ita tabelis"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:2169
@@ -635,5 +635,5 @@ msgid "Muutja"
 msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:2366
-msgid "Kuhu suunata p&amp;auml;rast sisestust (%s)"
+msgid "Kuhu suunata p&auml;rast sisestust (%s)"
 msgstr ""

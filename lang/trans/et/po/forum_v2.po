@@ -558,40 +558,16 @@ msgstr "vıimalus m‰‰rata, mitut teemat korraga kuvatakse"
 msgid "Omaduse Teemasid lehel (topics_on_page) help"
 msgstr "vıimalus m‰‰rata, mitut teemat korraga kuvatakse"
 
-#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form
-msgid ""
-"Omaduse N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;"
-"lja? (show_image_upload_in_add_topic_form) caption"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_sort_order
+msgid "Omaduse Teemade j&auml;rjekord (topics_sort_order) caption"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form_comment
-msgid ""
-"Omaduse N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;"
-"lja? (show_image_upload_in_add_topic_form) kommentaar"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_sort_order_comment
+msgid "Omaduse Teemade j&auml;rjekord (topics_sort_order) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form_help
-msgid ""
-"Omaduse N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;"
-"lja? (show_image_upload_in_add_topic_form) help"
-msgstr ""
-
-#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form
-msgid ""
-"Omaduse N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise "
-"v&auml;lja? (show_image_upload_in_add_comment_form) caption"
-msgstr ""
-
-#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_comment
-msgid ""
-"Omaduse N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise "
-"v&auml;lja? (show_image_upload_in_add_comment_form) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_help
-msgid ""
-"Omaduse N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise "
-"v&auml;lja? (show_image_upload_in_add_comment_form) help"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_sort_order_help
+msgid "Omaduse Teemade j&auml;rjekord (topics_sort_order) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page
@@ -640,6 +616,78 @@ msgstr ""
 # classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector_help
 msgid "Omaduse Teemade tasemed (topic_selector) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle
+msgid ""
+"Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle_comment
+msgid ""
+"Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle_help
+msgid "Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form
+msgid ""
+"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form_comment
+msgid ""
+"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) "
+"kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form_help
+msgid ""
+"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form
+msgid ""
+"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
+"caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_comment
+msgid ""
+"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
+"kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_help
+msgid ""
+"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
+"help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_use_image_verification
+msgid "Omaduse Kasuta kontrollpilti (use_image_verification) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_use_image_verification_comment
+msgid "Omaduse Kasuta kontrollpilti (use_image_verification) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_use_image_verification_help
+msgid "Omaduse Kasuta kontrollpilti (use_image_verification) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_verification_image
+msgid "Omaduse Kontrollpilt (verification_image) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_verification_image_comment
+msgid "Omaduse Kontrollpilt (verification_image) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_verification_image_help
+msgid "Omaduse Kontrollpilt (verification_image) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file
@@ -749,6 +797,14 @@ msgstr ""
 msgid "Grupi Teemad (topic_selector) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:group_image_verification
+msgid "Grupi Kontrollpilt (image_verification) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:group_image_verification_help
+msgid "Grupi Kontrollpilt (image_verification) help"
+msgstr ""
+
 # classes/contentmgmt/forum/forum_v2.aw:group_import
 #: classes/contentmgmt/forum/forum_v2.aw:group_import
 msgid "Grupi Import (import) pealkiri"
@@ -805,43 +861,75 @@ msgstr ""
 msgid "Seose Meiliaadress (RELTYPE_EMAIL) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:265
+#: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_IMAGE_VERIFICATION
+msgid "Seose Kontrollpilt (RELTYPE_IMAGE_VERIFICATION) tekst"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:261
+msgid "Uuemad teemad eespool"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:262
+msgid "T&auml;hestikulises j&auml;rjekorras (A-Z)"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:263
+msgid "Viimati kommenteeritud eespool"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:264
+msgid "Enim kommenteeritud eespool"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:299
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1390
-msgid "Pealkirja v&otilde;i sisu v&auml;li peab olema t&auml;idetud"
+#: classes/contentmgmt/forum/forum_v2.aw:1464
+msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1585
+#: classes/contentmgmt/forum/forum_v2.aw:1468
+msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1472
+msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1687
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1590
+#: classes/contentmgmt/forum/forum_v2.aw:1692
 msgid "J‰ta v‰lja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1597
+#: classes/contentmgmt/forum/forum_v2.aw:1699
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1770
+#: classes/contentmgmt/forum/forum_v2.aw:1872
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1819
+#: classes/contentmgmt/forum/forum_v2.aw:1921
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1832
+#: classes/contentmgmt/forum/forum_v2.aw:1932
+msgid "Kontrollnumber"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1954
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2207
+#: classes/contentmgmt/forum/forum_v2.aw:2370
 msgid " teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2214
+#: classes/contentmgmt/forum/forum_v2.aw:2377
 msgid " aadresside kaust"
 msgstr ""
 

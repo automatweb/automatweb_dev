@@ -11,19 +11,19 @@ msgstr ""
 
 
 #: classes/applications/scm/scm_contestant.aw:class_1092_help
-msgid "Klassi V&amp;otilde;istleja help"
+msgid "Klassi V&otilde;istleja help"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_contestant
-msgid "Omaduse V&amp;otilde;istleja (contestant) caption"
+msgid "Omaduse V&otilde;istleja (contestant) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_contestant_comment
-msgid "Omaduse V&amp;otilde;istleja (contestant) kommentaar"
+msgid "Omaduse V&otilde;istleja (contestant) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_contestant_help
-msgid "Omaduse V&amp;otilde;istleja (contestant) help"
+msgid "Omaduse V&otilde;istleja (contestant) help"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_contestants_company
@@ -38,28 +38,16 @@ msgstr ""
 msgid "Omaduse Firmast (contestants_company) help"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:prop_comp_tb
-msgid "Omaduse V&amp;otilde;istluste riba (comp_tb) caption"
+#: classes/applications/scm/scm_contestant.aw:prop_reg_tbl
+msgid "Omaduse V&otilde;istluste tabel (reg_tbl) caption"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:prop_comp_tb_comment
-msgid "Omaduse V&amp;otilde;istluste riba (comp_tb) kommentaar"
+#: classes/applications/scm/scm_contestant.aw:prop_reg_tbl_comment
+msgid "Omaduse V&otilde;istluste tabel (reg_tbl) kommentaar"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:prop_comp_tb_help
-msgid "Omaduse V&amp;otilde;istluste riba (comp_tb) help"
-msgstr ""
-
-#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl
-msgid "Omaduse V&amp;otilde;istluste tabel (comp_tbl) caption"
-msgstr ""
-
-#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl_comment
-msgid "Omaduse V&amp;otilde;istluste tabel (comp_tbl) kommentaar"
-msgstr ""
-
-#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl_help
-msgid "Omaduse V&amp;otilde;istluste tabel (comp_tbl) help"
+#: classes/applications/scm/scm_contestant.aw:prop_reg_tbl_help
+msgid "Omaduse V&otilde;istluste tabel (reg_tbl) help"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_reg_button
@@ -74,43 +62,131 @@ msgstr ""
 msgid "Omaduse Registreeru (reg_button) help"
 msgstr ""
 
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl
+msgid "Omaduse voistlused (comp_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl_comment
+msgid "Omaduse voistlused (comp_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl_help
+msgid "Omaduse voistlused (comp_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_caption
+msgid "Omaduse V&otilde;istlus (comp_caption) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_caption_comment
+msgid "Omaduse V&otilde;istlus (comp_caption) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_caption_help
+msgid "Omaduse V&otilde;istlus (comp_caption) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_sel_teams
+msgid "Omaduse Minu meeskonnad (sel_teams) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_sel_teams_comment
+msgid "Omaduse Minu meeskonnad (sel_teams) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_sel_teams_help
+msgid "Omaduse Minu meeskonnad (sel_teams) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_teams_submit
+msgid "Omaduse Salvesta (teams_submit) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_teams_submit_comment
+msgid "Omaduse Salvesta (teams_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_teams_submit_help
+msgid "Omaduse Salvesta (teams_submit) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_unreg_button
+msgid "Omaduse Eemalda registratsioon (unreg_button) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_unreg_button_comment
+msgid "Omaduse Eemalda registratsioon (unreg_button) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_unreg_button_help
+msgid "Omaduse Eemalda registratsioon (unreg_button) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:group_register
+msgid "Grupi Registreeri v&otilde;istlustele (register) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:group_register_help
+msgid "Grupi Registreeri v&otilde;istlustele (register) help"
+msgstr ""
+
 #: classes/applications/scm/scm_contestant.aw:group_competitions
-msgid "Grupi V&amp;otilde;istlused (competitions) pealkiri"
+msgid "Grupi Minu v&otilde;istlused (competitions) pealkiri"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:group_competitions_help
-msgid "Grupi V&amp;otilde;istlused (competitions) help"
+msgid "Grupi Minu v&otilde;istlused (competitions) help"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:rel_RELTYPE_CONTESTANT
-msgid "Seose V&amp;amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
+msgid "Seose V&amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:54
-msgid "Registreeri"
+#: classes/applications/scm/scm_contestant.aw:128 classes/applications/scm/scm_contestant.aw:164
+msgid "Ei"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:181
-msgid "V&amp;otilde;istlus"
+#: classes/applications/scm/scm_contestant.aw:128 classes/applications/scm/scm_contestant.aw:192
+msgid "Jah"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:186
+#: classes/applications/scm/scm_contestant.aw:174
+msgid "Meeskonnad m&auml;&auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:190
+msgid "M&auml;&auml;ra meeskond"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:208
+msgid "-Vali meeskond-"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:345
+msgid "V&otilde;istlus"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:350
 msgid "Spordiala"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:191
+#: classes/applications/scm/scm_contestant.aw:355
+msgid "Meeskondlik"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:361
 msgid "Toimumiskoht"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:196
+#: classes/applications/scm/scm_contestant.aw:366
 msgid "Toimumisaeg"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:201
+#: classes/applications/scm/scm_contestant.aw:372
 msgid "Korraldaja"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:206
-msgid "Turniir"
+#: classes/applications/scm/scm_contestant.aw:377
+msgid "V&otilde;istlussari"
 msgstr ""
 

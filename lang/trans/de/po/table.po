@@ -21,6 +21,6 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/table.aw:2401
-msgid "K&amp;otilde;ik"
+#: classes/vcl/table.aw:2414
+msgid "K&otilde;ik"
 msgstr ""

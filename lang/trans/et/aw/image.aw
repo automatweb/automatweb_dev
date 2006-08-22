@@ -1,8 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Pilt (file) kommentaar"] = "välja järel oleval Browse nupul klikkides avaneb võimalus valida kättesaadavalt andmekandjalt soovitud pildifail";
 $GLOBALS["TRANS"]["Omaduse Pilt (file) help"] = "välja järel oleval Browse nupul klikkides avaneb võimalus valida kättesaadavalt andmekandjalt soovitud pildifail";
-$GLOBALS["TRANS"]["Omaduse Mõõtmed (dimensions) kommentaar"] = "siin kuvatakse sisestatud pildi suurust pixlites (laius X kõrgus). Väli ilmub peale pildi esmakordset salvestamist";
-$GLOBALS["TRANS"]["Omaduse Mõõtmed (dimensions) help"] = "siin kuvatakse sisestatud pildi suurust pixlites (laius X kõrgus). Väli ilmub peale pildi esmakordset salvestamist";
 $GLOBALS["TRANS"]["Omaduse Pildi allkiri (comment) kommentaar"] = " võimaldab lisada pildile kommentaari. Pildi allkirja näidatakse veebilehel pildi all väikeses kirjas";
 $GLOBALS["TRANS"]["Omaduse Pildi allkiri (comment) help"] = " võimaldab lisada pildile kommentaari. Pildi allkirja näidatakse veebilehel pildi all väikeses kirjas";
 $GLOBALS["TRANS"]["Omaduse Pildi autor (author) kommentaar"] = "võimaldab pildi juures autori nime, vastaval kujundusega kokkulepitud kohal.";
@@ -25,8 +23,6 @@ $GLOBALS["TRANS"]["Omaduse Uus laius (new_w) kommentaar"] = "võimaldab määrata Ü
 $GLOBALS["TRANS"]["Omaduse Uus laius (new_w) help"] = "võimaldab määrata Üldine vaates sisestatud pildi uue laiuse";
 $GLOBALS["TRANS"]["Omaduse Uus k&otilde;rgus (new_h) kommentaar"] = "võimaldab määrata Üldine vaates sisestatud pildi uue kõrguse";
 $GLOBALS["TRANS"]["Omaduse Uus k&otilde;rgus (new_h) help"] = "võimaldab määrata Üldine vaates sisestatud pildi uue kõrguse";
-$GLOBALS["TRANS"]["Omaduse Mõõtmed (dimensions_big) kommentaar"] = "siin kuvatakse Üldine vaates sisestatud pildi suurust pixlites (laius X kõrgus)";
-$GLOBALS["TRANS"]["Omaduse Mõõtmed (dimensions_big) help"] = "siin kuvatakse Üldine vaates sisestatud pildi suurust pixlites (laius X kõrgus)";
 $GLOBALS["TRANS"]["Omaduse Uus laius (suur) (new_w_big) kommentaar"] = "võimaldab määrata Suur pilt vaates sisestatud pildi uue laiuse";
 $GLOBALS["TRANS"]["Omaduse Uus laius (suur) (new_w_big) help"] = "võimaldab määrata Suur pilt vaates sisestatud pildi uue laiuse";
 $GLOBALS["TRANS"]["Omaduse Uus k&otilde;rgus (suur) (new_h_big) kommentaar"] = "võimaldab määrata Suur pilt vaates sisestatud pildi uue kõrguse";

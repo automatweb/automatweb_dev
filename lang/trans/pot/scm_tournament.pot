@@ -11,46 +11,86 @@ msgstr ""
 
 
 #: classes/applications/scm/scm_tournament.aw:class_1096_help
-msgid "Klassi Turniir help"
+msgid "Klassi V&otilde;istlussari help"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_comp_toolbar
-msgid "Omaduse T&amp;ouml;&amp;ouml;riistariba (comp_toolbar) caption"
+msgid "Omaduse T&ouml;&ouml;riistariba (comp_toolbar) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_comp_toolbar_comment
-msgid "Omaduse T&amp;ouml;&amp;ouml;riistariba (comp_toolbar) kommentaar"
+msgid "Omaduse T&ouml;&ouml;riistariba (comp_toolbar) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_comp_toolbar_help
-msgid "Omaduse T&amp;ouml;&amp;ouml;riistariba (comp_toolbar) help"
+msgid "Omaduse T&ouml;&ouml;riistariba (comp_toolbar) help"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_comp_table
-msgid "Omaduse V&amp;ouml;istlused (comp_table) caption"
+msgid "Omaduse V&ouml;istlused (comp_table) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_comp_table_comment
-msgid "Omaduse V&amp;ouml;istlused (comp_table) kommentaar"
+msgid "Omaduse V&ouml;istlused (comp_table) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_comp_table_help
-msgid "Omaduse V&amp;ouml;istlused (comp_table) help"
+msgid "Omaduse V&ouml;istlused (comp_table) help"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_search_result
+msgid "Omaduse Otsingutulemuste hoidja (search_result) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_search_result_comment
+msgid "Omaduse Otsingutulemuste hoidja (search_result) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_search_result_help
+msgid "Omaduse Otsingutulemuste hoidja (search_result) help"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_rem_competitions
+msgid "Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast (rem_competitions) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_rem_competitions_comment
+msgid "Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast (rem_competitions) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_rem_competitions_help
+msgid "Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast (rem_competitions) help"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:group_competitions
-msgid "Grupi V&amp;otilde;istlused (competitions) pealkiri"
+msgid "Grupi V&otilde;istlused (competitions) pealkiri"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:group_competitions_help
-msgid "Grupi V&amp;otilde;istlused (competitions) help"
+msgid "Grupi V&otilde;istlused (competitions) help"
 msgstr ""
 
-#: classes/applications/scm/scm_tournament.aw:43
-msgid "Lisa uus v&otilde;istlus"
+#: classes/applications/scm/scm_tournament.aw:57
+msgid "Lisa uus võistlus"
 msgstr ""
 
-#: classes/applications/scm/scm_tournament.aw:86
-msgid "V&otilde;istluse nimi"
+#: classes/applications/scm/scm_tournament.aw:108 classes/applications/scm/scm_tournament.aw:109
+msgid "M&auml;&auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:169
+msgid "Võistluse nimi"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:174
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:179
+msgid "Spordiala"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:184
+msgid "V&otilde;istluse aeg"
 msgstr ""
 

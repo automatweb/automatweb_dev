@@ -10,19 +10,19 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/applications/scm/scm_group.aw:class_1098_help
-msgid "Klassi V&amp;otilde;istlusklass help"
+msgid "Klassi V&otilde;istlusklass help"
 msgstr ""
 
 #: classes/applications/scm/scm_group.aw:prop_abbreviation
-msgid "Omaduse L&amp;uuml;hend (abbreviation) caption"
+msgid "Omaduse L&uuml;hend (abbreviation) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_group.aw:prop_abbreviation_comment
-msgid "Omaduse L&amp;uuml;hend (abbreviation) kommentaar"
+msgid "Omaduse L&uuml;hend (abbreviation) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_group.aw:prop_abbreviation_help
-msgid "Omaduse L&amp;uuml;hend (abbreviation) help"
+msgid "Omaduse L&uuml;hend (abbreviation) help"
 msgstr ""
 
 #: classes/applications/scm/scm_group.aw:prop_age_from

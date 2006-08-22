@@ -15,15 +15,15 @@ msgid "Klassi Isikud veebis help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_company
-msgid "Omaduse Ettev&otilde;te (company) caption"
+msgid "Omaduse Ettevõte (company) caption"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_company_comment
-msgid "Omaduse Ettev&otilde;te (company) kommentaar"
+msgid "Omaduse Ettevõte (company) kommentaar"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_company_help
-msgid "Omaduse Ettev&otilde;te (company) help"
+msgid "Omaduse Ettevõte (company) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_departments
@@ -39,39 +39,39 @@ msgid "Omaduse Osakonnad (departments) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_persons_principe
-msgid "Omaduse Isikute j&auml;rjestamisprintsiip (persons_principe) caption"
+msgid "Omaduse Isikute järjestamisprintsiip (persons_principe) caption"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_persons_principe_comment
-msgid "Omaduse Isikute j&auml;rjestamisprintsiip (persons_principe) kommentaar"
+msgid "Omaduse Isikute järjestamisprintsiip (persons_principe) kommentaar"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_persons_principe_help
-msgid "Omaduse Isikute j&auml;rjestamisprintsiip (persons_principe) help"
+msgid "Omaduse Isikute järjestamisprintsiip (persons_principe) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_department_grouping
-msgid "Omaduse Grupeerimine osakonna j&auml;rgi (department_grouping) caption"
+msgid "Omaduse Grupeerimine osakonna järgi (department_grouping) caption"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_department_grouping_comment
-msgid "Omaduse Grupeerimine osakonna j&auml;rgi (department_grouping) kommentaar"
+msgid "Omaduse Grupeerimine osakonna järgi (department_grouping) kommentaar"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_department_grouping_help
-msgid "Omaduse Grupeerimine osakonna j&auml;rgi (department_grouping) help"
+msgid "Omaduse Grupeerimine osakonna järgi (department_grouping) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_grouping_principe
-msgid "Omaduse Grupeerimise j&auml;rjestamisprintsiip (grouping_principe) caption"
+msgid "Omaduse Grupeerimise järjestamisprintsiip (grouping_principe) caption"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_grouping_principe_comment
-msgid "Omaduse Grupeerimise j&auml;rjestamisprintsiip (grouping_principe) kommentaar"
+msgid "Omaduse Grupeerimise järjestamisprintsiip (grouping_principe) kommentaar"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_grouping_principe_help
-msgid "Omaduse Grupeerimise j&auml;rjestamisprintsiip (grouping_principe) help"
+msgid "Omaduse Grupeerimise järjestamisprintsiip (grouping_principe) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_view
@@ -87,11 +87,11 @@ msgid "Omaduse Vaadete tabel (view) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:group_view
-msgid "Grupi N&auml;itamine (view) pealkiri"
+msgid "Grupi Näitamine (view) pealkiri"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:group_view_help
-msgid "Grupi N&auml;itamine (view) help"
+msgid "Grupi Näitamine (view) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:rel_RELTYPE_COMPANY
@@ -135,7 +135,7 @@ msgid "-- vali --"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:108
-msgid "p&otilde;hi"
+msgid "põhi"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:109
@@ -147,34 +147,42 @@ msgid "kesk-eri"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:111
-msgid "k&otilde;rgem"
+msgid "kõrgem"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:114
 msgid "
-			Osakondade tasemed, mida n&auml;idataks, saab m&auml;rkida kujul '1,2,3' v&otilde;i '1-2' v&otilde;i '3'
-			teplates peaks olema subid umbes kujul:
-			&lt;!-- SUB: DEPARTMENT --&gt;
+			Osakondade tasemed, mida näidataks, saab märkida kujul '1,2,3' või '1-2' või '3'
+			juhul , kui on vaja kuvada inimesi üksteise kõrval, siis teplates peaks olema subid umbes kujul:
+			<!-- SUB: DEPARTMENT -->
 			{VAR:department_name}
-			&lt;table&gt;
-			&lt;!-- SUB: ROW --&gt;
-				&lt;tr&gt;
-				&lt;!-- SUB: COL --&gt;
-					&lt;td&gt;
-					&lt;!-- SUB: worker --&gt;
-						{VAR:profession} {VAR:name}
-					&lt;!-- END SUB: worker --&gt;
-					&lt;/td&gt;
-				&lt;!-- END SUB: COL --&gt;
-				&lt;/tr&gt;
-			&lt;!-- END SUB: ROW --&gt;
-			&lt;/table&gt;
-			&lt;!-- SUB: DEPARTMENT --&gt;
+			<table>
+			<!-- SUB: LINE -->
+				<tr>
+				<!-- SUB: WORKER -->
+					<td>
+					<p align=bottom><center>
+						{VAR:photo} <br>
+						<b>{VAR:name} </b><br>
+						{VAR:rank} <br>
+					</center></p>
+					</td>
+				<!-- END SUB: WORKER -->
+				</tr>
+			<!-- END SUB: LINE -->
+			</table>
+			<!-- SUB: DEPARTMENT -->
 			
-			juhul kui miski taseme osakonda oleks vaja teistmoodi n&auml;idata, siis tuleks &lt;!-- SUB: DEPARTMENT --&gt; sisse teha &lt;!-- SUB: LEVEL4DEPARTMENT --&gt; (vastavalt taseme numbrile) , mis oleks muidu sama struktuuriga nagu DEPARTMENT
+			kui igal real on 1 inimene, siis võib SUB: LINE vahelt ära jätta
+			
+			Kui viimaseks vaateks on üks konkreetne isik, siis template sees ühtegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
+			
+			endine variant ka igaks juhuks töötab veel
+			
+			juhul kui miski taseme osakonda oleks vaja teistmoodi näidata, siis tuleks <!-- SUB: DEPARTMENT --> sisse teha <!-- SUB: LEVEL4DEPARTMENT --> (vastavalt taseme numbrile) , mis oleks muidu sama struktuuriga nagu DEPARTMENT
 
 			muutujad mida saab kasutada:
-			DEPARTMENT sub'is: department_name, address , phone , fax , email , next_level_link (link n&auml;gemas antud osakonda uues vaates).
+			DEPARTMENT sub'is: department_name, address , phone , fax , email , next_level_link (link nägemas antud osakonda uues vaates).
 			sub'is worker :
 			name , name_with_email , email , emails, photo, contact,
 			profession , profession_with_directive , professions , directive (ametijuhend), wage_doc , wage_doc_exist (palgaandmete dokument, kui on olemas),
@@ -182,11 +190,11 @@ msgid "
 			phone, phones , home_phone, home_phones, mobile_phone, mobile_phones, skype_phone, skype_phones, short_phone, short_phones, work_phone, work_phones, extension_phone, extension_phones,
 			next_level_link (link j'gmise taseme vaatesse... kui tegu siis antud inimesega),
 			company, section,
-			url, urls.
+			url, urls,
+			ta1 - ta5 (kasutajadefineeritud muutujad).
 
-			Kui lisada objekt men&uuml;&uuml;sse, siis esimeseks vaate infoks tuleb men&uuml;&uuml;s olev.
-			Kui viimaseks vaateks on &uuml;ks konkreetne isik, siis template sees &uuml;htegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
-			Template'ide t&otilde;lkimiseks kasutada faili persons_web_view.aw.
+			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev.
+			Template'ide tõlkimiseks kasutada faili persons_web_view.aw.
 			"
 msgstr ""
 
@@ -226,11 +234,11 @@ msgstr ""
 msgid "Minimaalne tulpade arv"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:562
+#: classes/crm/persons_webview.aw:563
 msgid "pole asutust valitud"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:922
+#: classes/crm/persons_webview.aw:987
 msgid "Palk"
 msgstr ""
 

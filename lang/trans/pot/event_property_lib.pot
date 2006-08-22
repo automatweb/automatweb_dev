@@ -34,7 +34,7 @@ msgstr ""
 msgid "Vaata"
 msgstr ""
 
-#: classes/calendar/event_property_lib.aw:373
+#: classes/calendar/event_property_lib.aw:377
 msgid "osalejad.xls"
 msgstr ""
 

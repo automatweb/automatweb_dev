@@ -110,43 +110,43 @@ msgstr ""
 msgid "Seose Meeskonna liige (RELTYPE_TEAM_MEMBER) tekst"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:119
+#: classes/applications/procurement_center/procurement_center.aw:122
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:126
+#: classes/applications/procurement_center/procurement_center.aw:129
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:132
+#: classes/applications/procurement_center/procurement_center.aw:135
 msgid "Hange"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:139
+#: classes/applications/procurement_center/procurement_center.aw:142
 msgid "Kustuta valitud hanked"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:141
+#: classes/applications/procurement_center/procurement_center.aw:144
 msgid "Kas oled kindel et soovid valitud hanked kustudada?"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:179
+#: classes/applications/procurement_center/procurement_center.aw:182
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:185
+#: classes/applications/procurement_center/procurement_center.aw:188
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:191
+#: classes/applications/procurement_center/procurement_center.aw:194
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:200
+#: classes/applications/procurement_center/procurement_center.aw:203
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:206
+#: classes/applications/procurement_center/procurement_center.aw:209
 msgid "Muudetud"
 msgstr ""
 

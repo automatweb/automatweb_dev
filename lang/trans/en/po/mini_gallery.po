@@ -32,7 +32,7 @@ msgstr ""
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_cols
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols
 msgid "Omaduse Tulpi (cols) caption"
-msgstr "Solumns"
+msgstr "Columns"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_comment
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_comment
@@ -61,7 +61,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_comments
 msgid "Omaduse Pildid kommenteeritavad (comments) caption"
-msgstr ""
+msgstr "Enable to comment the images"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_comments_comment
 msgid "Omaduse Pildid kommenteeritavad (comments) kommentaar"
@@ -87,15 +87,15 @@ msgid "Omaduse Piltide stiil (style) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_sorter
-msgid "Omaduse Piltide j&amp;auml;rjestamine (sorter) caption"
+msgid "Omaduse Piltide j&auml;rjestamine (sorter) caption"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_sorter_comment
-msgid "Omaduse Piltide j&amp;auml;rjestamine (sorter) kommentaar"
+msgid "Omaduse Piltide j&auml;rjestamine (sorter) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_sorter_help
-msgid "Omaduse Piltide j&amp;auml;rjestamine (sorter) help"
+msgid "Omaduse Piltide j&auml;rjestamine (sorter) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file
@@ -114,15 +114,15 @@ msgid "Omaduse Uploadi ZIP fail (zip_file) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_refresh
-msgid "Omaduse V&amp;auml;rskenda (refresh) caption"
+msgid "Omaduse V&auml;rskenda (refresh) caption"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_refresh_comment
-msgid "Omaduse V&amp;auml;rskenda (refresh) kommentaar"
+msgid "Omaduse V&auml;rskenda (refresh) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_refresh_help
-msgid "Omaduse V&amp;auml;rskenda (refresh) help"
+msgid "Omaduse V&auml;rskenda (refresh) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_mg_tb
@@ -178,66 +178,89 @@ msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr "style"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:65
-#: classes/contentmgmt/gallery/mini_gallery.aw:462
+#: classes/contentmgmt/gallery/mini_gallery.aw:467
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:66
-#: classes/contentmgmt/gallery/mini_gallery.aw:468
-msgid "J&amp;auml;rjekord"
+#: classes/contentmgmt/gallery/mini_gallery.aw:473
+msgid "J&auml;rjekord"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:67
-msgid "Loomise kuup&amp;auml;ev vanemad enne"
+msgid "Loomise kuup&auml;ev vanemad enne"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:68
-msgid "Muutmise kuup&amp;auml;ev vanemad enne"
+msgid "Muutmise kuup&auml;ev vanemad enne"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:69
-msgid "Loomise kuup&amp;auml;ev uuemad enne"
+msgid "Pildistamise kuup&auml;ev vanemad enne"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:70
-msgid "Muutmise kuup&amp;auml;ev uuemad enne"
+msgid "Loomise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:264
-msgid "Valitud piltide kataloogi ei ole &amp;otilde;igusi objekte lisada!"
+#: classes/contentmgmt/gallery/mini_gallery.aw:71
+msgid "Muutmise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:426
+#: classes/contentmgmt/gallery/mini_gallery.aw:72
+msgid "Pildistamise kuup&auml;ev uuemad enne"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:269
+msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
+msgstr "No add access to the selected image folder"
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:431
 msgid "Galerii "
 msgstr "Gallery"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:426
+#: classes/contentmgmt/gallery/mini_gallery.aw:431
 msgid " pildid"
 msgstr " images"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:440
+#: classes/contentmgmt/gallery/mini_gallery.aw:445
 msgid "Lisa uus pilt"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:446
+#: classes/contentmgmt/gallery/mini_gallery.aw:451
 msgid "Salvesta pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:452
+#: classes/contentmgmt/gallery/mini_gallery.aw:457
 msgid "Kustuta valitud pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:454
+#: classes/contentmgmt/gallery/mini_gallery.aw:459
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:474
+#: classes/contentmgmt/gallery/mini_gallery.aw:479
 msgid "Muutja"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:480
+#: classes/contentmgmt/gallery/mini_gallery.aw:485
 msgid "Muudetud"
 msgstr ""
 
-#~ msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
-#~ msgstr "No add access to the selected image folder"
+#~ msgid "Omaduse Piltide j&amp;auml;rjestamine (sorter) caption"
+#~ msgstr "Ordering images by"
+
+#~ msgid "J&amp;auml;rjekord"
+#~ msgstr "Order"
+
+#~ msgid "Loomise kuup&amp;auml;ev vanemad enne"
+#~ msgstr "Creation date older before"
+
+#~ msgid "Muutmise kuup&amp;auml;ev vanemad enne"
+#~ msgstr "Modifying date older before"
+
+#~ msgid "Loomise kuup&amp;auml;ev uuemad enne"
+#~ msgstr "Creation date earlier before"
+
+#~ msgid "Muutmise kuup&amp;auml;ev uuemad enne"
+#~ msgstr "Modifying date earlier before"

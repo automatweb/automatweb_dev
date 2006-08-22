@@ -29,28 +29,30 @@ msgstr ""
 msgid "Omaduse Initsialiseeri objekt (on_init) help"
 msgstr ""
 
+# classes/contentmgmt/webform.aw:prop_form_type
 #: classes/contentmgmt/webform.aw:prop_form_type
-msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type) caption"
-msgstr ""
+msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) caption"
+msgstr "Form type"
 
 #: classes/contentmgmt/webform.aw:prop_form_type_comment
-msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type) kommentaar"
+msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:prop_form_type_help
-msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type) help"
+msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) help"
 msgstr ""
 
+# classes/contentmgmt/webform.aw:prop_form_type_value
 #: classes/contentmgmt/webform.aw:prop_form_type_value
-msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type_value) caption"
-msgstr ""
+msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) caption"
+msgstr "Form type"
 
 #: classes/contentmgmt/webform.aw:prop_form_type_value_comment
-msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type_value) kommentaar"
+msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:prop_form_type_value_help
-msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type_value) help"
+msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) help"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:prop_def_name
@@ -83,34 +85,36 @@ msgstr ""
 msgid "Omaduse Saatja e-mail (def_mail) help"
 msgstr ""
 
+# classes/contentmgmt/webform.aw:prop_obj_name
 #: classes/contentmgmt/webform.aw:prop_obj_name
 msgid ""
-"Omaduse Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks "
-"(obj_name) caption"
-msgstr ""
+"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
+"caption"
+msgstr "Which properties are set as entry name"
 
 #: classes/contentmgmt/webform.aw:prop_obj_name_comment
 msgid ""
-"Omaduse Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks "
-"(obj_name) kommentaar"
+"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
+"kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:prop_obj_name_help
 msgid ""
-"Omaduse Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks "
-"(obj_name) help"
+"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
+"help"
 msgstr ""
 
+# classes/contentmgmt/webform.aw:prop_redirect
 #: classes/contentmgmt/webform.aw:prop_redirect
-msgid "Omaduse Kuhu suunata peale t&amp;auml;tmist (redirect) caption"
-msgstr ""
+msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) caption"
+msgstr "Redirect after entry"
 
 #: classes/contentmgmt/webform.aw:prop_redirect_comment
-msgid "Omaduse Kuhu suunata peale t&amp;auml;tmist (redirect) kommentaar"
+msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:prop_redirect_help
-msgid "Omaduse Kuhu suunata peale t&amp;auml;tmist (redirect) help"
+msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) help"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:prop_error_location
@@ -473,12 +477,13 @@ msgstr "Search"
 msgid "Grupi Otsing (search) help"
 msgstr ""
 
+# classes/contentmgmt/webform.aw:group_entries
 #: classes/contentmgmt/webform.aw:group_entries
-msgid "Grupi N&amp;auml;ita sisestusi (entries) pealkiri"
-msgstr ""
+msgid "Grupi N&auml;ita sisestusi (entries) pealkiri"
+msgstr "Display entries"
 
 #: classes/contentmgmt/webform.aw:group_entries_help
-msgid "Grupi N&amp;auml;ita sisestusi (entries) help"
+msgid "Grupi N&auml;ita sisestusi (entries) help"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:group_controllers
@@ -501,12 +506,13 @@ msgstr "Saving data"
 msgid "Grupi Salvestamine (set_controllers) help"
 msgstr ""
 
+# classes/contentmgmt/webform.aw:group_get_controllers
 #: classes/contentmgmt/webform.aw:group_get_controllers
-msgid "Grupi N&amp;auml;itamine (get_controllers) pealkiri"
-msgstr ""
+msgid "Grupi N&auml;itamine (get_controllers) pealkiri"
+msgstr "Display"
 
 #: classes/contentmgmt/webform.aw:group_get_controllers_help
-msgid "Grupi N&amp;auml;itamine (get_controllers) help"
+msgid "Grupi N&auml;itamine (get_controllers) help"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_METAMGR
@@ -525,7 +531,7 @@ msgid "Seose Salvestamise kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr "Save controller"
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_VIEWCONTROLLER
-msgid "Seose N&amp;amp;auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
+msgid "Seose N&amp;auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_EMAIL
@@ -534,8 +540,7 @@ msgid "Seose Meiliaadress (RELTYPE_EMAIL) tekst"
 msgstr "E-mail address"
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_OBJECT_TYPE
-msgid ""
-"Seose Objekti t&amp;amp;uuml;&amp;amp;uuml;p (RELTYPE_OBJECT_TYPE) tekst"
+msgid "Seose Objekti t&amp;uuml;&amp;uuml;p (RELTYPE_OBJECT_TYPE) tekst"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_REGISTER
@@ -564,17 +569,16 @@ msgid "Seose Objektide eksport (RELTYPE_OBJECT_EXPORT) tekst"
 msgstr "Object export"
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_CAL_REG_FORM
-msgid "Seose S&amp;amp;uuml;ndmuse vorm (RELTYPE_CAL_REG_FORM) tekst"
+msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_CAL_REG_FORM) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_CAL_REG_FORM_CONF
-msgid ""
-"Seose S&amp;amp;uuml;ndmuse vormi konf (RELTYPE_CAL_REG_FORM_CONF) tekst"
+msgid "Seose S&amp;uuml;ndmuse vormi konf (RELTYPE_CAL_REG_FORM_CONF) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_AFTER_SAVE_CONTROLLER
 msgid ""
-"Seose p&amp;amp;auml;rast salvestamist kontroller "
+"Seose p&amp;auml;rast salvestamist kontroller "
 "(RELTYPE_AFTER_SAVE_CONTROLLER) tekst"
 msgstr ""
 
@@ -583,16 +587,16 @@ msgid "Tekst"
 msgstr "Text"
 
 #: classes/contentmgmt/webform.aw:210
-msgid "V&amp;auml;ike tekstikast"
-msgstr ""
+msgid "V&auml;ike tekstikast"
+msgstr "Small textbox"
 
 #: classes/contentmgmt/webform.aw:211
-msgid "Valikv&amp;auml;li"
-msgstr ""
+msgid "Valikv&auml;li"
+msgstr "Select"
 
 #: classes/contentmgmt/webform.aw:212
-msgid "Kuup&amp;auml;evavalik"
-msgstr ""
+msgid "Kuup&auml;evavalik"
+msgstr "Date select"
 
 #: classes/contentmgmt/webform.aw:213
 msgid "Liitu mailinglistiga"
@@ -603,28 +607,28 @@ msgid "Suur tekstikast"
 msgstr "Textarea"
 
 #: classes/contentmgmt/webform.aw:215
-msgid "Peidetud v&amp;auml;li"
-msgstr ""
+msgid "Peidetud v&auml;li"
+msgstr "Hidden field"
 
 #: classes/contentmgmt/webform.aw:216
 msgid "Saada nupp"
 msgstr "Send button"
 
 #: classes/contentmgmt/webform.aw:217
-msgid "T&amp;uuml;hista nupp"
-msgstr ""
+msgid "T&uuml;hista nupp"
+msgstr "Cancel button"
 
 #: classes/contentmgmt/webform.aw:218
 msgid "Prindi nupp"
 msgstr "Print button"
 
 #: classes/contentmgmt/webform.aw:219
-msgid "Pildi &amp;uuml;leslaadimine"
-msgstr ""
+msgid "Pildi &uuml;leslaadimine"
+msgstr "Image upload"
 
 #: classes/contentmgmt/webform.aw:220
-msgid "Faili &amp;uuml;leslaadimine"
-msgstr ""
+msgid "Faili &uuml;leslaadimine"
+msgstr "File upload"
 
 #: classes/contentmgmt/webform.aw:223
 msgid "Eesnimi"
@@ -659,8 +663,8 @@ msgid "Tavaline vorm"
 msgstr "Regular form"
 
 #: classes/contentmgmt/webform.aw:233
-msgid "S&amp;uuml;ndmusele registreerimine"
-msgstr ""
+msgid "S&uuml;ndmusele registreerimine"
+msgstr "Event registration"
 
 #: classes/contentmgmt/webform.aw:234
 msgid "Toode"
@@ -694,21 +698,25 @@ msgstr "Are you sure you want to delete selected properties?"
 msgid "Andmed"
 msgstr "Data"
 
-#: classes/contentmgmt/webform.aw:756
-msgid "M&amp;auml;&amp;auml;ra saaja aadressiks"
+#: classes/contentmgmt/webform.aw:618
+msgid "Objekti t&uuml;&uuml;p "
 msgstr ""
+
+#: classes/contentmgmt/webform.aw:756
+msgid "M&auml;&auml;ra saaja aadressiks"
+msgstr "Set as receiver address"
 
 #: classes/contentmgmt/webform.aw:760
-msgid "M&amp;auml;&amp;auml;ra saatja aadressiks"
-msgstr ""
+msgid "M&auml;&auml;ra saatja aadressiks"
+msgstr "Set as sender address"
 
 #: classes/contentmgmt/webform.aw:764
-msgid "*elemendinimi* peab olema t&amp;auml;idetud"
-msgstr ""
+msgid "*elemendinimi* peab olema t&auml;idetud"
+msgstr "*elemendinimi* field has to be filled out "
 
 #: classes/contentmgmt/webform.aw:766
-msgid "%caption peab olema t&amp;auml;idetud"
-msgstr ""
+msgid "%caption peab olema t&auml;idetud"
+msgstr "%caption has to be filled out"
 
 #: classes/contentmgmt/webform.aw:770
 msgid "*elemendinimi* peab olema valitud"
@@ -719,8 +727,8 @@ msgid "%caption peab olema valitud"
 msgstr "%caption has to be selected"
 
 #: classes/contentmgmt/webform.aw:776
-msgid "Kontrolli e-maili &amp;otilde;igsust"
-msgstr ""
+msgid "Kontrolli e-maili &otilde;igsust"
+msgstr "Please provide a correct e-mail address"
 
 #: classes/contentmgmt/webform.aw:778
 msgid "%caption sisestatud e-mailiaadress pole korrektne"
@@ -759,16 +767,16 @@ msgid "-- vali --"
 msgstr "-- select --"
 
 #: classes/contentmgmt/webform.aw:1158
-msgid "Mitmerealine rippmen&amp;uuml;&amp;uuml;"
-msgstr ""
+msgid "Mitmerealine rippmen&uuml;&uuml;"
+msgstr "Multiple select"
 
 #: classes/contentmgmt/webform.aw:1159
-msgid "Rippmen&amp;uuml;&amp;uuml;"
-msgstr ""
+msgid "Rippmen&uuml;&uuml;"
+msgstr "Select"
 
 #: classes/contentmgmt/webform.aw:1160
-msgid "M&amp;auml;rkeruut"
-msgstr ""
+msgid "M&auml;rkeruut"
+msgstr "Checkbox"
 
 #: classes/contentmgmt/webform.aw:1161
 msgid "Raadionupp"
@@ -779,12 +787,12 @@ msgid "--vali--"
 msgstr "--select--"
 
 #: classes/contentmgmt/webform.aw:1165
-msgid "J&auml;rjekord (kasvav)"
-msgstr ""
+msgid "Järjekord (kasvav)"
+msgstr "Order (ascending)"
 
 #: classes/contentmgmt/webform.aw:1166
-msgid "J&auml;rjekord (kahanev)"
-msgstr ""
+msgid "Järjekord (kahanev)"
+msgstr "Order (descending)"
 
 #: classes/contentmgmt/webform.aw:1167
 msgid "Nimi (kasvav)"
@@ -822,96 +830,13 @@ msgstr ""
 msgid "Registreeru"
 msgstr "Register"
 
-#: classes/contentmgmt/webform.aw:1770
+#: classes/contentmgmt/webform.aw:1786
 msgid "Saada"
 msgstr "Send"
 
-#: classes/contentmgmt/webform.aw:2258
-msgid "Liigu edasi &amp;raquo;"
-msgstr ""
-
-# classes/contentmgmt/webform.aw:prop_form_type
-#~ msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) caption"
-#~ msgstr "Form type"
-
-# classes/contentmgmt/webform.aw:prop_form_type_value
-#~ msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) caption"
-#~ msgstr "Form type"
-
-# classes/contentmgmt/webform.aw:prop_obj_name
-#~ msgid ""
-#~ "Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks "
-#~ "(obj_name) caption"
-#~ msgstr "Which properties are set as entry name"
-
-# classes/contentmgmt/webform.aw:prop_redirect
-#~ msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) caption"
-#~ msgstr "Redirect after entry"
-
-# classes/contentmgmt/webform.aw:group_entries
-#~ msgid "Grupi N&auml;ita sisestusi (entries) pealkiri"
-#~ msgstr "Display entries"
-
-# classes/contentmgmt/webform.aw:group_get_controllers
-#~ msgid "Grupi N&auml;itamine (get_controllers) pealkiri"
-#~ msgstr "Display"
-
-#~ msgid "V&auml;ike tekstikast"
-#~ msgstr "Small textbox"
-
-#~ msgid "Valikv&auml;li"
-#~ msgstr "Select"
-
-#~ msgid "Kuup&auml;evavalik"
-#~ msgstr "Date select"
-
-#~ msgid "Peidetud v&auml;li"
-#~ msgstr "Hidden field"
-
-#~ msgid "T&uuml;hista nupp"
-#~ msgstr "Cancel button"
-
-#~ msgid "Pildi &uuml;leslaadimine"
-#~ msgstr "Image upload"
-
-#~ msgid "Faili &uuml;leslaadimine"
-#~ msgstr "File upload"
-
-#~ msgid "S&uuml;ndmusele registreerimine"
-#~ msgstr "Event registration"
-
-#~ msgid "M&auml;&auml;ra saaja aadressiks"
-#~ msgstr "Set as receiver address"
-
-#~ msgid "M&auml;&auml;ra saatja aadressiks"
-#~ msgstr "Set as sender address"
-
-#~ msgid "*elemendinimi* peab olema t&auml;idetud"
-#~ msgstr "*elemendinimi* field has to be filled out "
-
-#~ msgid "%caption peab olema t&auml;idetud"
-#~ msgstr "%caption has to be filled out"
-
-#~ msgid "Kontrolli e-maili &otilde;igsust"
-#~ msgstr "Please provide a correct e-mail address"
-
-#~ msgid "Mitmerealine rippmen&uuml;&uuml;"
-#~ msgstr "Multiple select"
-
-#~ msgid "Rippmen&uuml;&uuml;"
-#~ msgstr "Select"
-
-#~ msgid "M&auml;rkeruut"
-#~ msgstr "Checkbox"
-
-#~ msgid "Järjekord (kasvav)"
-#~ msgstr "Order (ascending)"
-
-#~ msgid "Järjekord (kahanev)"
-#~ msgstr "Order (descending)"
-
-#~ msgid "Liigu edasi &raquo;"
-#~ msgstr "Go on &raquo;"
+#: classes/contentmgmt/webform.aw:2274
+msgid "Liigu edasi &raquo;"
+msgstr "Go on &raquo;"
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_VIEWCONTROLLER
 #~ msgid "Seose N&auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"

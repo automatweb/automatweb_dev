@@ -26,4 +26,9 @@ $GLOBALS["TRANS"]["Nimetus"] = "Name";
 $GLOBALS["TRANS"]["Asukoht"] = "Location";
 $GLOBALS["TRANS"]["Looja"] = "Createdby";
 $GLOBALS["TRANS"]["Viimati muudetud"] = "Last modified";
+$GLOBALS["TRANS"]["T&ouml;&ouml;riistariba"] = "Toolbar";
+$GLOBALS["TRANS"]["Aadressi riba"] = "Address bar";
+$GLOBALS["TRANS"]["Men&uuml;&uuml;d"] = "Menus";
+$GLOBALS["TRANS"]["Kerimisriba"] = "Scrollbars";
+$GLOBALS["TRANS"]["Saidi sisene link"] = "Inner-site link";
 ?>

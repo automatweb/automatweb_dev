@@ -19,11 +19,11 @@ msgid "CVS commit"
 msgstr ""
 
 #: classes/applications/cb_trans/cb_translate.aw:242
-msgid "Näita muutusi"
+msgid "N&auml;ita muutusi"
 msgstr ""
 
 #: classes/applications/cb_trans/cb_translate.aw:246
-msgid "AW tõlkimine"
+msgid "AW t&otilde;lkimine"
 msgstr ""
 
 #: classes/applications/cb_trans/cb_translate.aw:271

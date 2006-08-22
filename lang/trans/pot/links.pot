@@ -346,3 +346,7 @@ msgstr ""
 msgid "Kerimisriba"
 msgstr ""
 
+#: classes/contentmgmt/links.aw:298
+msgid "Saidi sisene link"
+msgstr ""
+

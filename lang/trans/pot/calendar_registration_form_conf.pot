@@ -237,15 +237,15 @@ msgstr ""
 msgid "Isikute kaust (%s)"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:251
+#: classes/applications/calendar/calendar_registration_form_conf.aw:253
 msgid "Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:270
+#: classes/applications/calendar/calendar_registration_form_conf.aw:272
 msgid "calendar_registration_form::show(%s): event and object type must be related!"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:648
+#: classes/applications/calendar/calendar_registration_form_conf.aw:666
 msgid "calendar_registration_form::show_data(%s): event and object type must be related!"
 msgstr ""
 

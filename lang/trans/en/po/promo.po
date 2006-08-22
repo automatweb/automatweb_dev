@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_needs_translation
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/contentmgmt/promo.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_is_translated
 msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/contentmgmt/promo.aw:prop_is_translated_comment
 msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
@@ -97,7 +97,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_groups
 msgid "Omaduse Grupid, kellele kasti n&auml;idata (groups) caption"
-msgstr "Groups, who to show the container"
+msgstr "Groups, to who show the container"
 
 #: classes/contentmgmt/promo.aw:prop_groups_comment
 msgid "Omaduse Grupid, kellele kasti n&auml;idata (groups) kommentaar"
@@ -123,32 +123,25 @@ msgid "Omaduse Ilma pealkirjata (no_title) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_show_inact
-msgid ""
-"Omaduse N&amp;auml;ita mitteaktiivseid dokumente tekstina (show_inact) "
-"caption"
-msgstr "Show non active documents as text"
+msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) caption"
+msgstr "Show non-active documents as text"
 
 #: classes/contentmgmt/promo.aw:prop_show_inact_comment
-msgid ""
-"Omaduse N&amp;auml;ita mitteaktiivseid dokumente tekstina (show_inact) "
-"kommentaar"
+msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_show_inact_help
-msgid ""
-"Omaduse N&amp;auml;ita mitteaktiivseid dokumente tekstina (show_inact) help"
+msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) help"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_auto_period
 #: classes/contentmgmt/promo.aw:prop_auto_period
-msgid ""
-"Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) caption"
+msgid "Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) caption"
 msgstr "Has periodic, automatically changing content"
 
 # classes/contentmgmt/promo.aw:prop_auto_period_comment
 #: classes/contentmgmt/promo.aw:prop_auto_period_comment
-msgid ""
-"Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) kommentaar"
+msgid "Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_auto_period_help
@@ -169,123 +162,87 @@ msgid "Omaduse N&auml;ita igal pool (all_menus) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search
-msgid ""
-"Omaduse &amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel (not_in_search) "
-"caption"
-msgstr "Do not display on the search result page"
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"
+msgstr "Don't display on the search result page"
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search_comment
-msgid ""
-"Omaduse &amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel (not_in_search) "
-"kommentaar"
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search_help
-msgid ""
-"Omaduse &amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel (not_in_search) "
-"help"
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_doc_view
-msgid ""
-"Omaduse &amp;Auml;ra n&amp;auml;ita dokumendi pikas vaates (not_in_doc_view) "
-"caption"
-msgstr "Do not show in document's long view"
+msgid "Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) caption"
+msgstr "Don't display in document's long view"
 
 #: classes/contentmgmt/promo.aw:prop_not_in_doc_view_comment
-msgid ""
-"Omaduse &amp;Auml;ra n&amp;auml;ita dokumendi pikas vaates (not_in_doc_view) "
-"kommentaar"
+msgid "Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_doc_view_help
-msgid ""
-"Omaduse &amp;Auml;ra n&amp;auml;ita dokumendi pikas vaates (not_in_doc_view) "
-"help"
+msgid "Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs
-msgid ""
-"Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes "
-"(trans_all_langs) caption"
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) caption"
 msgstr "Content is displayed in all languages"
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs_comment
-msgid ""
-"Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes "
-"(trans_all_langs) kommentaar"
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs_help
-msgid ""
-"Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes "
-"(trans_all_langs) help"
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs
-msgid ""
-"Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes "
-"(content_all_langs) caption"
-msgstr "Content is displayed in all languages"
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"
+msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs_comment
-msgid ""
-"Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes "
-"(content_all_langs) kommentaar"
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs_help
-msgid ""
-"Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes "
-"(content_all_langs) help"
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section
-msgid ""
-"Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata "
-"(section) caption"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) caption"
 msgstr "Select folders where the container will be displayed"
 
 #: classes/contentmgmt/promo.aw:prop_section_comment
-msgid ""
-"Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata "
-"(section) kommentaar"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_help
-msgid ""
-"Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata "
-"(section) help"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow
-msgid ""
-"Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata "
-"(section_noshow) caption"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) caption"
 msgstr "Select folders where the container will NOT be displayed"
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow_comment
-msgid ""
-"Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata "
-"(section_noshow) kommentaar"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow_help
-msgid ""
-"Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata "
-"(section_noshow) help"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (sort_by) caption"
-msgstr ""
+msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) caption"
+msgstr "Documents will be sorted by"
 
 #: classes/contentmgmt/promo.aw:prop_sort_by_comment
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (sort_by) kommentaar"
+msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by_help
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (sort_by) help"
+msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) help"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_sort_ord
@@ -304,15 +261,15 @@ msgid "Omaduse  (sort_ord) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by2
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (2) (sort_by2) caption"
-msgstr ""
+msgid "Omaduse Dokumente j&auml;rjestatakse (2) (sort_by2) caption"
+msgstr "Documents will be sorted by"
 
 #: classes/contentmgmt/promo.aw:prop_sort_by2_comment
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (2) (sort_by2) kommentaar"
+msgid "Omaduse Dokumente j&auml;rjestatakse (2) (sort_by2) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by2_help
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (2) (sort_by2) help"
+msgid "Omaduse Dokumente j&auml;rjestatakse (2) (sort_by2) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_ord2
@@ -328,15 +285,15 @@ msgid "Omaduse  (sort_ord2) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by3
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (3) (sort_by3) caption"
-msgstr ""
+msgid "Omaduse Dokumente j&auml;rjestatakse (3) (sort_by3) caption"
+msgstr "Documents will be sorted by"
 
 #: classes/contentmgmt/promo.aw:prop_sort_by3_comment
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (3) (sort_by3) kommentaar"
+msgid "Omaduse Dokumente j&auml;rjestatakse (3) (sort_by3) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by3_help
-msgid "Omaduse Dokumente j&amp;auml;rjestatakse (3) (sort_by3) help"
+msgid "Omaduse Dokumente j&auml;rjestatakse (3) (sort_by3) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_ord3
@@ -368,7 +325,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead
 msgid "Omaduse Template n&auml;itamiseks (tpl_lead) caption"
-msgstr ""
+msgstr "Template for display"
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead_comment
 msgid "Omaduse Template n&auml;itamiseks (tpl_lead) kommentaar"
@@ -409,21 +366,15 @@ msgid "Omaduse Template (dokumendi sees) (promo_tpl) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_last_menus
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse "
-"(last_menus) caption"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) caption"
 msgstr "Select folders, from where the last documents are taken"
 
 #: classes/contentmgmt/promo.aw:prop_last_menus_comment
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse "
-"(last_menus) kommentaar"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_last_menus_help
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse "
-"(last_menus) help"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) help"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_ndocs
@@ -442,16 +393,15 @@ msgid "Omaduse Mitu viimast dokumenti (ndocs) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs
-msgid "Omaduse Mitu algusest &amp;auml;ra j&amp;auml;tta (start_ndocs) caption"
+msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) caption"
 msgstr "How many to skip from the beginning"
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs_comment
-msgid ""
-"Omaduse Mitu algusest &amp;auml;ra j&amp;auml;tta (start_ndocs) kommentaar"
+msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs_help
-msgid "Omaduse Mitu algusest &amp;auml;ra j&amp;auml;tta (start_ndocs) help"
+msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) help"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_is_dyn
@@ -482,51 +432,39 @@ msgid "Omaduse  (kw_tb) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_kws
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) caption"
+msgid "Omaduse M&auml;rks&otilde;nad (kws) caption"
 msgstr "Keywords"
 
 #: classes/contentmgmt/promo.aw:prop_kws_comment
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) kommentaar"
+msgid "Omaduse M&auml;rks&otilde;nad (kws) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_kws_help
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) help"
+msgid "Omaduse M&auml;rks&otilde;nad (kws) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_menu_keywords
-msgid ""
-"Omaduse Kasuta aktiivse kausta m&amp;auml;rks&amp;otilde;nu "
-"(use_menu_keywords) caption"
-msgstr "Use keywords of active folder"
+msgid "Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) caption"
+msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_menu_keywords_comment
-msgid ""
-"Omaduse Kasuta aktiivse kausta m&amp;auml;rks&amp;otilde;nu "
-"(use_menu_keywords) kommentaar"
+msgid "Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_menu_keywords_help
-msgid ""
-"Omaduse Kasuta aktiivse kausta m&amp;auml;rks&amp;otilde;nu "
-"(use_menu_keywords) help"
+msgid "Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type
-msgid ""
-"Omaduse Kasuta dokumendi sisu t&amp;uuml;&amp;uuml;bi m&amp;auml;&amp;auml;"
-"rangut (use_doc_content_type) caption"
-msgstr "Use setting of document content type"
+msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) caption"
+msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type_comment
-msgid ""
-"Omaduse Kasuta dokumendi sisu t&amp;uuml;&amp;uuml;bi m&amp;auml;&amp;auml;"
-"rangut (use_doc_content_type) kommentaar"
+msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type_help
-msgid ""
-"Omaduse Kasuta dokumendi sisu t&amp;uuml;&amp;uuml;bi m&amp;auml;&amp;auml;"
-"rangut (use_doc_content_type) help"
+msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_general_sub
@@ -571,7 +509,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_doc_ord
 msgid "Grupi Dokumentide j&auml;rjestamine (doc_ord) pealkiri"
-msgstr ""
+msgstr "Documents ordering"
 
 #: classes/contentmgmt/promo.aw:group_doc_ord_help
 msgid "Grupi Dokumentide j&auml;rjestamine (doc_ord) help"
@@ -618,23 +556,19 @@ msgid "Grupi Dokumendid (menus_sub) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_kws
-msgid "Grupi M&amp;auml;rks&amp;otilde;nad (kws) pealkiri"
-msgstr ""
+msgid "Grupi M&auml;rks&otilde;nad (kws) pealkiri"
+msgstr "Keywords"
 
 #: classes/contentmgmt/promo.aw:group_kws_help
-msgid "Grupi M&amp;auml;rks&amp;otilde;nad (kws) help"
+msgid "Grupi M&auml;rks&otilde;nad (kws) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU
-msgid ""
-"Seose n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_ASSIGNED_MENU) "
-"tekst"
+msgid "Seose n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
 msgstr "display next to folder"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_SOURCE
-msgid ""
-"Seose v&amp;otilde;ta dokumente selle men&amp;uuml;&amp;uuml; alt "
-"(RELTYPE_DOC_SOURCE) tekst"
+msgid "Seose v&amp;otilde;ta dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_SOURCE) tekst"
 msgstr "get documents from this folder"
 
 # classes/contentmgmt/promo.aw:rel_RELTYPE_IMAGE
@@ -643,20 +577,16 @@ msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr "image"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_NO_SHOW_MENU
-msgid ""
-"Seose &amp;amp;auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures "
-"(RELTYPE_NO_SHOW_MENU) tekst"
-msgstr "do not display next to folder"
+msgid "Seose &amp;Auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
+msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_KEYWORD
-msgid "Seose V&amp;amp;otilde;tmes&amp;amp;otilde;na (RELTYPE_KEYWORD) tekst"
-msgstr "Keyword"
+msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_IGNORE
-msgid ""
-"Seose ignoreeri dokumente selle men&amp;amp;uuml;&amp;amp;uuml; alt "
-"(RELTYPE_DOC_IGNORE) tekst"
-msgstr "ignore documents from under this folder"
+msgid "Seose ignoreeri dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_IGNORE) tekst"
+msgstr ""
 
 #: classes/contentmgmt/promo.aw:222
 msgid "Vali template"
@@ -683,40 +613,40 @@ msgid "Skrolliv"
 msgstr "Scrollable"
 
 #: classes/contentmgmt/promo.aw:261
-msgid "J&amp;auml;rjekorra j&amp;auml;rgi"
-msgstr ""
+msgid "J&auml;rjekorra j&auml;rgi"
+msgstr "Order"
 
 #: classes/contentmgmt/promo.aw:262
-msgid "Loomise kuup&amp;auml;eva j&amp;auml;rgi"
+msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:263
-msgid "Muutmise kuup&amp;auml;eva j&amp;auml;rgi"
+msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:264
-msgid "Dokumenti kirjutatud kuup&amp;auml;eva j&amp;auml;rgi"
+msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:265
-msgid "Objekti nime j&amp;auml;rgi"
+msgid "Objekti nime j&auml;rgi"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:266
-msgid "Kalendris valitud aja j&amp;auml;rgi"
+msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:267
 msgid "Random"
-msgstr ""
+msgstr "Random"
 
 #: classes/contentmgmt/promo.aw:275
 msgid "Suurem (uuem) enne"
 msgstr "Bigger (newer) first"
 
 #: classes/contentmgmt/promo.aw:276
-msgid "V&amp;auml;iksem (vanem) enne"
-msgstr ""
+msgid "V&auml;iksem (vanem) enne"
+msgstr "Smaller (older) first"
 
 #: classes/contentmgmt/promo.aw:340 classes/contentmgmt/promo.aw:389
 #: classes/contentmgmt/promo.aw:436
@@ -729,6 +659,7 @@ msgid "Nimi"
 msgstr "Name"
 
 #: classes/contentmgmt/promo.aw:353 classes/contentmgmt/promo.aw:402
+#: classes/contentmgmt/promo.aw:459
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr "incl. submenus"
 
@@ -736,130 +667,6 @@ msgstr "incl. submenus"
 msgid "Pane pealkirjaks"
 msgstr "Set as title"
 
-#: classes/contentmgmt/promo.aw:459
-msgid "k.a. alammen&amp;uuml;&amp;uuml;d"
-msgstr "incl. submenus"
-
 #: classes/contentmgmt/promo.aw:1084
-msgid "M&amp;auml;rks&amp;otilde;na"
+msgid "M&auml;rks&otilde;na"
 msgstr ""
-
-# classes/contentmgmt/promo.aw:prop_needs_translation
-#~ msgid "Omaduse Vajab tõlget (needs_translation) caption"
-#~ msgstr "Needs translation"
-
-# classes/contentmgmt/promo.aw:prop_is_translated
-#~ msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-#~ msgstr "Translation confirmed"
-
-# classes/contentmgmt/promo.aw:prop_type
-#~ msgid "Omaduse Kasti tüüp (type) caption"
-#~ msgstr "Container type"
-
-# classes/contentmgmt/promo.aw:prop_groups
-#~ msgid "Omaduse Grupid, kellele kasti näidata (groups) caption"
-#~ msgstr "Groups, who to show the container"
-
-# classes/contentmgmt/promo.aw:prop_show_inact
-#~ msgid ""
-#~ "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) caption"
-#~ msgstr "Show not active documents as text"
-
-# classes/contentmgmt/promo.aw:prop_all_menus
-#~ msgid "Omaduse Näita igal pool (all_menus) caption"
-#~ msgstr "Display everywhere"
-
-# classes/contentmgmt/promo.aw:prop_not_in_search
-#~ msgid ""
-#~ "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) "
-#~ "caption"
-#~ msgstr "Do not display on search result page"
-
-# classes/contentmgmt/promo.aw:prop_trans_all_langs
-#~ msgid ""
-#~ "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) "
-#~ "caption"
-#~ msgstr "Content displayed in all languages"
-
-# classes/contentmgmt/promo.aw:prop_content_all_langs
-#~ msgid ""
-#~ "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) "
-#~ "caption"
-#~ msgstr "Content displayed in all languages"
-
-# classes/contentmgmt/promo.aw:prop_section
-#~ msgid ""
-#~ "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) "
-#~ "caption"
-#~ msgstr "Select folders where the container will be displayed"
-
-# classes/contentmgmt/promo.aw:prop_section_noshow
-#~ msgid ""
-#~ "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata "
-#~ "(section_noshow) caption"
-#~ msgstr "Select folders where the container will NOT be displayed"
-
-# classes/contentmgmt/promo.aw:prop_sort_by
-#~ msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) caption"
-#~ msgstr "Documents sorted by"
-
-# classes/contentmgmt/promo.aw:prop_tpl_lead
-#~ msgid "Omaduse Template näitamiseks (tpl_lead) caption"
-#~ msgstr "Display template"
-
-# classes/contentmgmt/promo.aw:prop_last_menus
-#~ msgid ""
-#~ "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) "
-#~ "caption"
-#~ msgstr "Select folders, from where the last documents are taken"
-
-# classes/contentmgmt/promo.aw:prop_start_ndocs
-#~ msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) caption"
-#~ msgstr "How many to skip from the beginning"
-
-# classes/contentmgmt/promo.aw:group_show
-#~ msgid "Grupi Näitamine (show) pealkiri"
-#~ msgstr "Display settings"
-
-#~ msgid "Üleval"
-#~ msgstr "Top"
-
-#~ msgid "J&auml;rjekorra j&auml;rgi"
-#~ msgstr "By order"
-
-#~ msgid "Loomise kuup&auml;eva j&auml;rgi"
-#~ msgstr "By created date"
-
-#~ msgid "Muutmise kuup&auml;eva j&auml;rgi"
-#~ msgstr "By modified date"
-
-#~ msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
-#~ msgstr "By document date"
-
-#~ msgid "Objekti nime j&auml;rgi"
-#~ msgstr "By object name"
-
-#~ msgid "Kalendris valitud aja j&auml;rgi"
-#~ msgstr "By time selected in calendar"
-
-#~ msgid "V&auml;iksem (vanem) enne"
-#~ msgstr "Smaller (older) first"
-
-#~ msgid "k.a. alammenüüd"
-#~ msgstr "incl. submenus"
-
-# classes/contentmgmt/promo.aw:group_menus
-#~ msgid "Grupi Kaustad (menus) pealkiri"
-#~ msgstr "Folders"
-
-# classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU
-#~ msgid "Seose näita menüü juures (RELTYPE_ASSIGNED_MENU) tekst"
-#~ msgstr "assigned folder"
-
-# classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_SOURCE
-#~ msgid "Seose võta dokumente selle menüü alt (RELTYPE_DOC_SOURCE) tekst"
-#~ msgstr "document source folder"
-
-# classes/contentmgmt/promo.aw:rel_RELTYPE_NO_SHOW_MENU
-#~ msgid "Seose &auml;ra näita menüü juures (RELTYPE_NO_SHOW_MENU) tekst"
-#~ msgstr "do not display folder"

@@ -28,7 +28,6 @@ $GLOBALS["TRANS"]["Plaanist väljas"] = "Out of planning";
 $GLOBALS["TRANS"]["Arhiveeritud"] = "Archived";
 $GLOBALS["TRANS"]["Uut tööd saab luua vaid ressursihalduskeskkonnas. "] = "New job can only be created via the manager";
 $GLOBALS["TRANS"]["Tööl puudub ressurss, projekt või ressursihalduskeskkond. "] = "Job has no resource, case or manager";
-$GLOBALS["TRANS"]["Tööl puudub ressurss või projekt. "] = "Job has no case or resource";
 $GLOBALS["TRANS"]["Viga! "] = "Error! ";
 $GLOBALS["TRANS"]["Esinenud tõrked: "] = "Problems:";
 $GLOBALS["TRANS"]["Määramata"] = "Undefined";

@@ -158,15 +158,15 @@ msgid "Omaduse Tehingu andmed (title2) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_type
-msgid "Omaduse Tehingu t&amp;uuml;&amp;uuml;p (transaction_type) caption"
+msgid "Omaduse Tehingu t&uuml;&uuml;p (transaction_type) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_type_comment
-msgid "Omaduse Tehingu t&amp;uuml;&amp;uuml;p (transaction_type) kommentaar"
+msgid "Omaduse Tehingu t&uuml;&uuml;p (transaction_type) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_type_help
-msgid "Omaduse Tehingu t&amp;uuml;&amp;uuml;p (transaction_type) help"
+msgid "Omaduse Tehingu t&uuml;&uuml;p (transaction_type) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_price
@@ -254,15 +254,15 @@ msgid "Omaduse Tehing s&otilde;lmitud (transaction_closed) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title3
-msgid "Omaduse M&amp;uuml;&amp;uuml;ja andmed (title3) caption"
+msgid "Omaduse M&uuml;&uuml;ja andmed (title3) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title3_comment
-msgid "Omaduse M&amp;uuml;&amp;uuml;ja andmed (title3) kommentaar"
+msgid "Omaduse M&uuml;&uuml;ja andmed (title3) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title3_help
-msgid "Omaduse M&amp;uuml;&amp;uuml;ja andmed (title3) help"
+msgid "Omaduse M&uuml;&uuml;ja andmed (title3) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_seller_search
@@ -427,27 +427,27 @@ msgid "Omaduse Maakler 2 (realestate_agent2) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_weeks_valid_for
-msgid "Omaduse Kehtib (n&amp;auml;dalat) (weeks_valid_for) caption"
+msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_weeks_valid_for_comment
-msgid "Omaduse Kehtib (n&amp;auml;dalat) (weeks_valid_for) kommentaar"
+msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_weeks_valid_for_help
-msgid "Omaduse Kehtib (n&amp;auml;dalat) (weeks_valid_for) help"
+msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_visible_to
-msgid "Omaduse N&amp;auml;htav (visible_to) caption"
+msgid "Omaduse N&auml;htav (visible_to) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_visible_to_comment
-msgid "Omaduse N&amp;auml;htav (visible_to) kommentaar"
+msgid "Omaduse N&auml;htav (visible_to) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_visible_to_help
-msgid "Omaduse N&amp;auml;htav (visible_to) help"
+msgid "Omaduse N&auml;htav (visible_to) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_priority
@@ -463,32 +463,31 @@ msgid "Omaduse Prioriteet (priority) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_on_webpage
-msgid "Omaduse N&amp;auml;ita firma kodulehel (show_on_webpage) caption"
+msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_on_webpage_comment
-msgid "Omaduse N&amp;auml;ita firma kodulehel (show_on_webpage) kommentaar"
+msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_on_webpage_help
-msgid "Omaduse N&amp;auml;ita firma kodulehel (show_on_webpage) help"
+msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_house_number_on_web
 msgid ""
-"Omaduse N&amp;auml;ita majanumbrit kodulehel (show_house_number_on_web) "
-"caption"
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_house_number_on_web_comment
 msgid ""
-"Omaduse N&amp;auml;ita majanumbrit kodulehel (show_house_number_on_web) "
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) "
 "kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_house_number_on_web_help
 msgid ""
-"Omaduse N&amp;auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_special_homepage
@@ -592,15 +591,15 @@ msgid "Omaduse Lisainfo RUS (additional_info_ru) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_keywords_et
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (keywords_et) caption"
+msgid "Omaduse M&auml;rks&otilde;nad (keywords_et) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_keywords_et_comment
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (keywords_et) kommentaar"
+msgid "Omaduse M&auml;rks&otilde;nad (keywords_et) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_keywords_et_help
-msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (keywords_et) help"
+msgid "Omaduse M&auml;rks&otilde;nad (keywords_et) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_pictures
@@ -730,11 +729,11 @@ msgid "Omaduse  (map_id) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_main
-msgid "Grupi &amp;Uuml;ldandmed ja asukoht (grp_main) pealkiri"
+msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) pealkiri"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_main_help
-msgid "Grupi &amp;Uuml;ldandmed ja asukoht (grp_main) help"
+msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_detailed

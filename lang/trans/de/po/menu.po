@@ -1364,7 +1364,7 @@ msgstr ""
 msgid "OID"
 msgstr ""
 
-#: classes/menu.aw:731 classes/menu.aw:1541 classes/menu.aw:1593
+#: classes/menu.aw:731 classes/menu.aw:1542 classes/menu.aw:1594
 msgid "Nimi"
 msgstr ""
 
@@ -1456,34 +1456,34 @@ msgstr ""
 msgid "-- vali --"
 msgstr ""
 
-#: classes/menu.aw:1386 classes/menu.aw:1406
+#: classes/menu.aw:1387 classes/menu.aw:1407
 msgid "--vali--"
 msgstr ""
 
-#: classes/menu.aw:1533 classes/menu.aw:1585
+#: classes/menu.aw:1534 classes/menu.aw:1586
 msgid "ID"
 msgstr ""
 
-#: classes/menu.aw:1546
+#: classes/menu.aw:1547
 msgid "kustuta"
 msgstr ""
 
-#: classes/menu.aw:1598
+#: classes/menu.aw:1599
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/menu.aw:1750
+#: classes/menu.aw:1751
 msgid "Dokument"
 msgstr ""
 
-#: classes/menu.aw:1757
+#: classes/menu.aw:1758
 msgid "ka alammen&uuml;&uuml;de juures"
 msgstr ""
 
-#: classes/menu.aw:1763
+#: classes/menu.aw:1764
 msgid "Vali asukoht"
 msgstr ""
 
-#: classes/menu.aw:1815
+#: classes/menu.aw:1816
 msgid "M&auml;rks&otilde;na"
 msgstr ""

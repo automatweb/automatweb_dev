@@ -1,6 +1,7 @@
 <?php
 $GLOBALS["TRANS"]["Ava"] = "Open";
 $GLOBALS["TRANS"]["Muuda"] = "Change";
+$GLOBALS["TRANS"]["L&otilde;ika"] = "Cut";
 $GLOBALS["TRANS"]["Kopeeri"] = "Copy";
 $GLOBALS["TRANS"]["Kustutada valitud objektid?"] = "Delete selected objects?";
 $GLOBALS["TRANS"]["Kustuta"] = "Delete";
@@ -17,11 +18,15 @@ $GLOBALS["TRANS"]["Kleebi"] = "Paste";
 $GLOBALS["TRANS"]["Uuenda"] = "Refresh";
 $GLOBALS["TRANS"]["Impordi"] = "Import";
 $GLOBALS["TRANS"]["Suured ikoonid"] = "Big icons";
+$GLOBALS["TRANS"]["Väiksed ikoonid"] = "Small icons";
 $GLOBALS["TRANS"]["Detailne vaade"] = "Detail view";
 $GLOBALS["TRANS"]["Eelvaade"] = "Preview";
+$GLOBALS["TRANS"]["Valitud pole &uuml;htegi objekti!"] = "No objects selected!";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Jrk"] = "Ord";
 $GLOBALS["TRANS"]["Muutja"] = "Modified by";
 $GLOBALS["TRANS"]["Muudetud"] = "Modified";
+$GLOBALS["TRANS"]["T&uuml;&uuml;p"] = "Type";
 $GLOBALS["TRANS"]["Tegevus"] = "Action";
+$GLOBALS["TRANS"]["Vali"] = "Select&nbsp;all";
 ?>

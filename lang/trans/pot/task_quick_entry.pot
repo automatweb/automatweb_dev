@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Aeg (date) help"
 msgstr ""
 
+#: classes/applications/groupware/task_quick_entry.aw:prop_cust_type
+msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_cust_type_comment
+msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_cust_type_help
+msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) help"
+msgstr ""
+
 #: classes/applications/groupware/task_quick_entry.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
 msgstr ""
@@ -48,6 +60,30 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_customer_help
 msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_custp_fn
+msgid "Omaduse Eesnimi (custp_fn) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_custp_fn_comment
+msgid "Omaduse Eesnimi (custp_fn) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_custp_fn_help
+msgid "Omaduse Eesnimi (custp_fn) help"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_custp_ln
+msgid "Omaduse Perenimi (custp_ln) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_custp_ln_comment
+msgid "Omaduse Perenimi (custp_ln) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_custp_ln_help
+msgid "Omaduse Perenimi (custp_ln) help"
 msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_project
@@ -150,7 +186,7 @@ msgstr ""
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:623
+#: classes/applications/groupware/task_quick_entry.aw:624
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
