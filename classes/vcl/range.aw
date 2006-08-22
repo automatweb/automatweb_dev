@@ -24,7 +24,7 @@ class range extends class_base
 		);
 		$prop['value'] = $this->get_html($params);
 
-		return array('range' => $prop);
+		return array($prop['name'] => $prop);
 	}
 
 	function process_vcl_property($arr)
