@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.5 2006/08/21 15:18:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.6 2006/08/22 15:35:00 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -548,6 +548,7 @@ class procurement_offer extends class_base
 		
 		$conns = $this_obj->connections_to(array(
 			'reltype' => 1,
+			'class' => CL_PROCUREMENT_OFFER_ROW,
 		));
 		foreach($conns as $conn)
 		{
