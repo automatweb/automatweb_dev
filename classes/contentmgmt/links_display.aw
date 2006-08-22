@@ -102,7 +102,8 @@ class links_display
 		{
 			$img = new object_list(array(
 				"parent" => $link->id(),
-				"class_id" => CL_FILE
+				"class_id" => CL_FILE,
+				"lang_id" => array()
 			));
 
 			$awf = get_instance(CL_FILE);

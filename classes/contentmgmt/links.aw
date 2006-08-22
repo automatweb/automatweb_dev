@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.20 2006/08/21 12:57:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.21 2006/08/22 11:40:17 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -275,7 +275,8 @@ class links extends class_base
 			case "link_image_show":
 				$img = new object_list(array(
 					"parent" => $arr["obj_inst"]->id(),
-					"class_id" => CL_FILE
+					"class_id" => CL_FILE,
+					"lang_id" => array()
 				));
 				if ($img->count() > 0)
 				{
