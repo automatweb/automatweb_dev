@@ -80,18 +80,7 @@
             <reltype>RELTYPE_GROUP</reltype>
             <multiple>1</multiple>
             <editonly>1</editonly>
-            <caption>V&amp;amp;otilde;istlusgrupid</caption>
-      </property>
-      <property>
-            <name>scm_groups_comment</name>
-            <table>objects</table>
-            <group>sub_general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <editonly>1</editonly>
-            <no_caption>1</no_caption>
-            <store>no</store>
+            <caption>V&amp;amp;otilde;istlusklassid</caption>
       </property>
       <property>
             <name>scm_score_calc</name>
@@ -155,6 +144,16 @@
             <caption>V&amp;amp;otilde;istlusklassi valik</caption>
       </property>
       <property>
+            <name>search_result</name>
+            <table>objects</table>
+            <group>manage_contestants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>evt_team_result_calc</name>
             <table>objects</table>
             <group>general_settings</group>
@@ -182,6 +181,17 @@
             <method>serialize</method>
             <type>checkbox</type>
             <caption>Unikaalne rinnanumber</caption>
+      </property>
+      <property>
+            <name>scm_groups_comment</name>
+            <table>objects</table>
+            <group>group_comments</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <editonly>1</editonly>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>map</name>
@@ -242,16 +252,6 @@
             <store>no</store>
       </property>
       <property>
-            <name>search_result</name>
-            <table>objects</table>
-            <group>manage_contestants</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
             <name>contestants</name>
             <table>objects</table>
             <group>manage_contestants</group>
@@ -300,6 +300,10 @@
                   <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
                   <parent>general</parent>
             </general_settings>
+            <group_comments>
+                  <caption>V&amp;amp;otilde;istlusklasside kommentaarid</caption>
+                  <parent>general</parent>
+            </group_comments>
             <map_gr>
                   <caption>Kaart</caption>
                   <submit>no</submit>

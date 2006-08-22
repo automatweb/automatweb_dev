@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.7 2006/08/21 19:03:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.8 2006/08/22 15:37:51 tarvo Exp $
 // scm_result.aw - Tulemus 
 /*
 
@@ -221,7 +221,7 @@ class scm_result extends class_base
 					"result" => $obj->id(),
 					"team_oid" => $arr["set_team"]?$extra_data["team"]:NULL,
 					"team" => $arr["set_team"]?call_user_method("name", obj($extra_data["team"])):NULL,
-					"groups" => $arr["set_groups"]?$extra_data["groups"]:NULL,
+					"groups" => $extra_data["groups"],
 				);
 			}
 		}
@@ -274,7 +274,9 @@ class scm_result extends class_base
 		{
 			// returns result for each team registered
 			$cmp = get_instance(CL_SCM_COMPETITION);
-			$contestants = $cmp->get_contestants(array("competition" => $arr["competition"]));
+			$contestants = $cmp->get_contestants(array(
+				"competition" => $arr["competition"]
+			));
 			foreach($contestants as $oid => $data)
 			{
 				$cnt = $oid;
@@ -301,6 +303,7 @@ class scm_result extends class_base
 						"team" => $data["data"]["team"],
 						"competition" => $cmp,
 						"team_oid" => $data["data"]["team"],
+						"groups" => $data["data"]["groups"],
 					);
 				}
 				$teams_already_been[] = $data["data"]["team"];
@@ -331,7 +334,7 @@ class scm_result extends class_base
 				$ret_data["team"] = $data["team"];
 				$ret_data["team_oid"] = $data["team_oid"];
 			}
-			// siin läheb mingi haige tulemuse formattimine lahti.. see tuleks siit ära kolida
+			// siin l&auml;heb mingi haige tulemuse formattimine lahti.. see tuleks siit &auml;ra kolida
 			$comp_inst = get_instance(CL_SCM_COMPETITION);
 			$res_obj = obj($data["result"]);
 			$raw_result = $res_obj->prop("result");

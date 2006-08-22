@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.13 2006/08/21 19:03:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.14 2006/08/22 15:37:51 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -34,9 +34,7 @@
 	@caption V&otilde;istlussari
 
 	@property scm_group type=relpicker reltype=RELTYPE_GROUP multiple=1 editonly=1
-	@caption V&otilde;istlusgrupid
-
-	@property scm_groups_comment type=table editonly=1 no_caption=1
+	@caption V&otilde;istlusklassid
 
 @groupinfo general_settings caption="M&auml;&auml;rangud" parent=general
 	@default group=general_settings
@@ -58,6 +56,8 @@
 
 	@property group_select_type type=chooser default=year
 	@caption V&otilde;istlusklassi valik
+
+	@property search_res type=hidden store=no name=search_result_sett no_caption=1
 	
 	@property evt_team_result_calc type=select store=no 
 	@caption V&otilde;istkonna tulemuse arvutus
@@ -67,6 +67,11 @@
 
 	@property uniqe_nr type=checkbox
 	@caption Unikaalne rinnanumber
+
+
+@groupinfo group_comments caption="V&otilde;istlusklasside kommentaarid" parent=general
+	@default group=group_comments
+	@property scm_groups_comment type=table editonly=1 no_caption=1
 
 @groupinfo map_gr caption="Kaart" submit=no
 	@property map type=text group=map_gr
@@ -409,7 +414,7 @@ class scm_competition extends class_base
 
 				foreach($contestants as $oid => $data)
 				{
-					// siin peaks välja raalima kas on olemas seoses võistlusklassi info, kui pole sis selle seosesse kirjutama
+					// siin peaks v&auml;lja raalima kas on olemas seoses v&otilde;istlusklassi info, kui pole sis selle seosesse kirjutama
 					$person = obj($cont->get_contestant_person(array("contestant" => $oid)));
 
 					// gender
@@ -450,7 +455,7 @@ class scm_competition extends class_base
 					}
 					else
 					{
-						// siin peaks ta nüüd kudagi gruppidesse jaotama
+						// siin peaks ta n&uuml;&uuml;d kudagi gruppidesse jaotama
 						$cmp_groups = $this->get_groups(array(
 							"competition" => $arr["obj_inst"]->id(),
 						));
@@ -545,13 +550,13 @@ class scm_competition extends class_base
 			case "results_tbl":
 				$t = &$prop["vcl_inst"];
 				$competition = $arr["obj_inst"]->id();
-				$event = obj($this->get_event(array(
+				$event_oid = $this->get_event(array(
 					"competition" => $competition,
-				)));
-				$this->_gen_res_tbl(&$t, $event->prop("type"));
+				));
+				$event = obj($event);
 
 				$res_inst = get_instance(CL_SCM_RESULT);
-				$et = ($event_id = call_user_method("prop", obj($competition), "scm_event"))?(call_user_method("prop", obj($event_id), "type")):false;
+				$et = ($event_oid)?(call_user_method("prop", obj($event_oid), "type")):false;
 				if($et == "multi" || $et == "single")
 				{
 					$results = $res_inst->get_results(array(
@@ -568,18 +573,27 @@ class scm_competition extends class_base
 				}
 				$results = $this->convert_results($results, $competition);
 
-				$event = $this->get_event(array(
-					"competition" => $arr["obj_inst"]->id()
-				));
 				$inst = get_instance(CL_SCM_EVENT);
 				$res_type = $inst->get_result_type(array(
-					"event" => $event
+					"event" => $event_oid,
 				));
 				$type_inst = get_instance(CL_SCM_RESULT_TYPE);
 				$format = $type_inst->get_format(array(
 					"result_type" => $res_type
 				));
-
+				// finding out all groups used in competition(for table filter)
+				foreach($results as $k => $data)
+				{
+					$groups = array_merge($groups, $data["groups"]);
+					foreach($data["groups"] as $group)
+					{
+						$o = obj($group);
+						$tmp[$group] = $o->prop("abbreviation");
+					}
+					$results[$k]["groups"] = $tmp;
+					$merged = array_merge($merged, $tmp);
+				}
+				$this->_gen_res_tbl(&$t, $et, array_unique($merged));
 				foreach($results as $data)
 				{
 					$data["result"] = $this->_gen_format_caption(array(
@@ -741,13 +755,32 @@ class scm_competition extends class_base
 
 			case "evt_result_type":
 				$o = obj($arr["obj_inst"]->id());
-				if(!$o->prop("scm_event"))
+				if(!($event = $o->prop("scm_event")))
 				{
 					return PROP_IGNORE;
 				}
-				$prop["options"] = array(
-					"tere" => "tere",
-				);
+				$e_ob = obj($event);
+				$sel = $e_ob->prop("result_type");
+				$c = new connection();
+				$conns = $c->find(array(
+					"from" => $event,
+					"to.class_id" => CL_SCM_RESULT_TYPE,
+					"type" => 1,
+				));
+				foreach($conns as $cid => $data)
+				{
+					$o = obj($data["to"]);
+					$prop["options"][$data["to"]] = $o->name();
+				}
+				$prop["selected"] = $sel;
+
+				$append_text = $this->_gen_fake_relpicker(array(
+					"form_name" => "evt_result_type_search",
+					"class" => "scm_result_type",
+					"id" => $sel,
+					"class_id" => CL_SCM_RESULT_TYPE,
+				));
+				$prop["post_append_text"] = $append_text;
 			break;
 
 			case "evt_team_result_calc":
@@ -759,6 +792,13 @@ class scm_competition extends class_base
 				elseif(($type = call_user_method("prop", obj($event), "type")) == "single" || $type == "multi_coll")
 				{
 					return PROP_IGNORE;
+				}
+				else
+				{
+					$inst = get_instance(CL_SCM_EVENT);
+					$event = obj($event);
+					$prop["options"] = $inst->get_alg();
+					$prop["selected"] = $event->prop("team_result_calc");
 				}
 			break;
 			// to override original name prop
@@ -776,6 +816,27 @@ class scm_competition extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "evt_team_result_calc":
+				$evt = ($s = $arr["obj_inst"]->prop("scm_event"))?obj($s):false;
+				$evt->set_prop("team_result_calc", $arr["request"]["evt_team_result_calc"]);
+			break;
+			case "evt_result_type":
+				// sick relpicker überhack
+				if(strlen(($result = $arr["request"]["evt_result_type_search"])) || strlen($res = $arr["request"]["evt_result_type"]))
+				{
+					$result = $result?$result:$res;
+					$event = ($s = $arr["obj_inst"]->prop("scm_event"))?obj($s):false;
+					foreach(split(",", $result) as $rt)
+					{
+						$event->connect(array(
+							"to" => $rt,
+							"type" => 1,
+						));
+						$event->set_prop("result_type", $rt);
+						$event->save();
+					}
+				}
+			break;
 			case "add_results_tbl":
 				$res_type = get_instance(CL_SCM_RESULT_TYPE);
 				$res = get_instance(CL_SCM_RESULT);
@@ -812,9 +873,9 @@ class scm_competition extends class_base
 				{
 					foreach($data as $team => $result_data)
 					{
-						//siin on nüüd olemas result object.. ja team
-						// ühesõnaga ma saan team'i liikmed kätte.. ja neil on selle võistlusega vb juba tulemus kellegil olemas, ma pean välja raalima kas on ja kui on siis apdeitima.. kui pole sis uue tegema. IMEB!!
-						// a seda ka et vähemalt ühel liikmel on olemas result objek.. mudu ta siia üldse ei jõuaks, vist!!
+						//siin on n&uuml;&uuml;d olemas result object.. ja team
+						// &uuml;hes&otilde;naga ma saan team'i liikmed k&auml;tte.. ja neil on selle v&otilde;istlusega vb juba tulemus kellegil olemas, ma pean v&auml;lja raalima kas on ja kui on siis apdeitima.. kui pole sis uue tegema. IMEB!!
+						// a seda ka et v&auml;hemalt &uuml;hel liikmel on olemas result objek.. mudu ta siia &uuml;ldse ei j&otilde;uaks, vist!!
 						$inst = get_instance(CL_SCM_TEAM);
 						$members = $inst->get_team_members(array(
 							"team" => $team,
@@ -829,7 +890,7 @@ class scm_competition extends class_base
 							));
 							if($list->count())
 							{
-								// ehk siin on siis see koht kus on välja raalitud et result on olemas ja tulemus updeiditakse
+								// ehk siin on siis see koht kus on v&auml;lja raalitud et result on olemas ja tulemus updeiditakse
 								$obj = $list->begin();;
 								$rev = $res_type->format_data(array(
 									"source" => "result",
@@ -845,7 +906,7 @@ class scm_competition extends class_base
 							}
 							else
 							{
-								// tuleb teha uus(teoorias ei tohiks asi siia üldse jõuda, sest result objekt peaks juba olemas olema!!)
+								// tuleb teha uus(teoorias ei tohiks asi siia &uuml;ldse j&otilde;uda, sest result objekt peaks juba olemas olema!!)
 								$rev = $res_type->format_data(array(
 									"source" => "competition",
 									"oid" => $competition,
@@ -950,7 +1011,6 @@ class scm_competition extends class_base
 				}
 			}
 		}
-
 	}
 
 
@@ -1009,6 +1069,38 @@ class scm_competition extends class_base
 				"competition" => $arr["id"],
 			));
 		}
+	}
+
+	function _gen_fake_relpicker($arr)
+	{
+		$space = "&nbsp;";
+		$new = html::href(array(
+			"caption" => html::img(array(
+					"url" => "/automatweb/images/icons/new.gif",
+					"border" => 0,
+				)),
+			"url" => "#",
+		));
+		$edit = html::href(array(
+			"caption" => html::img(array(
+					"url" => "/automatweb/images/icons/edit.gif",
+					"border" => 0,
+				)),
+			"url" => $this->mk_my_orb("change", array(
+				"class" => $arr["class"],
+				"id" => $arr["id"],
+				"return_url" => get_ru(),
+			)),
+		));
+		$popup_search = get_instance("vcl/popup_search");
+		$search = $popup_search->get_popup_search_link(array(
+			"pn" => $arr["form_name"],
+			"clid" => $arr["class_id"],
+		));
+		$hidd = html::hidden(array(
+			"name" => $arr["form_name"],
+		));
+		return $hidd.$search.$space.$edit.$space.$new;
 	}
 
 	function get_rel_data($rel)
@@ -1116,6 +1208,7 @@ class scm_competition extends class_base
 						"result" => $result["raw_result"],
 						"result_arr" => $result["result"],
 						"id" => strlen($result["id"])?$result["id"]:t("-"),
+						"groups" => $result["groups"],
 
 					);
 				}
@@ -1127,7 +1220,10 @@ class scm_competition extends class_base
 					foreach($res as $result)
 					{
 						$team_data[$result["team_oid"]][] = $result["raw_result"];
-						$final_res[$result["team_oid"]] = $result["team_oid"];
+						$final_res[$result["team_oid"]] = array(
+							"team" => $result["team_oid"],
+							"groups" => $result["groups"],
+						);
 					}
 					$event = get_instance(CL_SCM_EVENT);
 					$calc_fun = $event->get_team_result_calc_fun(array(
@@ -1146,9 +1242,10 @@ class scm_competition extends class_base
 						"data" => $team_tot_raw,
 						"competition" => $competition,
 					));
-					foreach($final_res as $team)
+					foreach($final_res as $data)
 					{
-
+						$team = &$data["team"];
+						$groups = &$data["groups"];
 						$memb = $team_inst->get_team_members(array(
 							"team" => $team,
 							"competition" => $arr["competition"],
@@ -1170,6 +1267,7 @@ class scm_competition extends class_base
 							"result" => $team_tot_raw[$team],
 							"result_arr" => $team_tot_arr[$team],
 							"company" => $company,
+							"groups" => $groups,
 						);
 					}
 				}
@@ -1208,6 +1306,7 @@ class scm_competition extends class_base
 						"result" => $result["raw_result"],
 						"result_arr" => $result["result"],
 						"company" => $company,
+						"groups" => $result["groups"],
 					);
 				}
 
@@ -1234,7 +1333,7 @@ class scm_competition extends class_base
 		
 		if(!$loc_id)
 		{
-			return t("Võistluse toimumise asukoht m&auml;&auml;ramata");
+			return t("V&otilde;istluse toimumise asukoht m&auml;&auml;ramata");
 		}
 		$loc = obj($loc_id);
 		$img_inst = get_instance(CL_IMAGE);
@@ -1343,7 +1442,7 @@ class scm_competition extends class_base
 		return $html;
 	}
 
-	function _gen_res_tbl($t, $type = "single")
+	function _gen_res_tbl($t, $type = "single", $groups = array())
 	{
 		if($type == "single")
 		{
@@ -1377,22 +1476,15 @@ class scm_competition extends class_base
 			"name" => "result",
 			"caption" => t("Tulemus"),
 		));
-
 		$t->define_field(array(
-			"name" => "group",
+			"name" => "groups",
 			"caption" => t("V&otilde;istlusklassid"),
 			"align" => "center",
-			"filter" => array(
-				1 => "essa",
-			),
+			"filter" => $groups, 
+			"callback" => array(&$this, "__group_format"),
+			"filter_compare" => array(&$this, "__group_filter"),
 		));
 
-		$t->define_field(array(
-			"name" => "group_place",
-			"caption" => t("Koht v&otilde;istlusklassis"),
-			"sortable" => true,
-			"align" => "center",
-		));
 		$t->define_field(array(
 			"name" => "place",
 			"caption" => t("Koht"),
@@ -1804,7 +1896,7 @@ class scm_competition extends class_base
 	{
 		$result = $arr["result"];
 		$type = (strlen($arr["team"])?"team":"contestant");
-		// formaadi väljad käikase läbi ja tekitatakse input'id
+		// formaadi v&auml;ljad k&auml;ikase l&auml;bi ja tekitatakse input'id
 		if($type == "team")
 		{
 			$for_team = "[".$arr["team"]."]";
@@ -1898,7 +1990,7 @@ class scm_competition extends class_base
 			finds out in which company contestants work
 		@returns
 			if all work in one company, returns its name.
-			if members are in different company's, returns 'segavõistkond'.
+			if members are in different company's, returns 'segav&otilde;istkond'.
 			if argument has 0 members, according text is returned
 	**/
 	function _get_multi_company_name($memb)
