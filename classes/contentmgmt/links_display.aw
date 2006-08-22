@@ -106,7 +106,8 @@ class links_display
 			));
 
 			$awf = get_instance(CL_FILE);
-			if ($img->count() > 0 && $awf->can_be_embedded($o =& $img->begin()))
+			$o = $img->begin();
+			if ($img->count() > 0 && $awf->can_be_embedded($o))
 			{
 				$img = $awf->get_url($o->id(),"");
 			}
