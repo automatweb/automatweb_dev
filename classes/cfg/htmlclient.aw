@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.148 2006/07/03 12:13:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.149 2006/08/23 19:30:48 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -775,7 +775,19 @@ class htmlclient extends aw_template
 				"more_help_text" => $this->config["more_help_text"],
 				"close_help_text" => $this->config["close_help_text"],
 				"open_help_text" => $this->config["open_help_text"],
+				"feedback_link" => $this->mk_my_orb("redir_new_feedback", array(
+					"d_class" => $_GET["class"],
+					"d_obj" => $_GET["id"],
+					"object_grp" => $_GET["group"]
+				), "customer_feedback_entry"),
+				"feedback_m_link" => $this->mk_my_orb("redir_m", array(	), "customer_feedback_manager")
 			));
+			if (aw_ini_get("site_id") == 155)
+			{
+				$tp->vars(array(
+					"NEWIF" => $tp->parse("NEWIF"),
+				));
+			}
 			if ($this->config["show_help"])
 			{
 				$tp->vars(array(

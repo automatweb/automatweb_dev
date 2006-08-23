@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.494 2006/08/16 13:42:47 kristo Exp $
+// $Id: class_base.aw,v 2.495 2006/08/23 19:30:45 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -600,7 +600,7 @@ class class_base extends aw_template
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
 			"show_help" => aw_ini_get("class_base.show_help"),
-			"add_txt" => $add_txt
+			"add_txt" => $add_txt,
 		));
 		$cli->rte_type = $this->classinfo(array("name" => "allow_rte"));
 

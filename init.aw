@@ -299,7 +299,11 @@ function init_config($arr)
 		foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 		{
 			define($cld["def"], $clid);
-			$GLOBALS["cfg"]["class_lut"][basename($cld["file"])] = $clid;
+			$bnf = basename($cld["file"]);
+			if (!isset($GLOBALS["cfg"]["class_lut"][$bnf]))
+			{
+				$GLOBALS["cfg"]["class_lut"][$bnf] = $clid;
+			}
 		}
 
 		// and here do the defs for programs

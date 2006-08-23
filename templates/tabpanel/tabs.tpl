@@ -52,7 +52,12 @@
 <!-- SUB: SHOW_HELP -->
   <td valign="right" align="center" class="tabpanelheaderstyle">
 
-  <span class="aw04tab2content"><a href="javascript:showhide_help();">{VAR:open_help_text}</a></span>
+  <span class="aw04tab2content"><a href="javascript:showhide_help();">{VAR:open_help_text}</a>
+	<!-- SUB: NEWIF -->
+		<a href='{VAR:feedback_link}'>Tagasiside</a>
+		<a href='{VAR:feedback_m_link}'>Manager</a>
+	<!-- END SUB: NEWIF -->
+	</span>
   </td>
   <!-- END SUB: SHOW_HELP -->
   </tr>
