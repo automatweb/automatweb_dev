@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_accommodation.aw,v 1.4 2005/12/27 21:26:05 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_accommodation.aw,v 1.5 2006/08/23 14:15:54 tarvo Exp $
 // crm_field_accommodation.aw - Majutusettev&otilde;te (valdkond) 
 /*
 
@@ -18,7 +18,7 @@ Modifing classes:
 
 
 
-@classinfo syslog_type=ST_CRM_FIELD_ACCOMMODATION no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_FIELD_ACCOMMODATION no_status=1 prop_cb=1
 
 @default table=objects
 @default field=meta
@@ -93,16 +93,16 @@ Modifing classes:
 	@caption Garaa&#158;
 
 	@property has_seminar_rooms type=checkbox
-	@caption Seminari- ja/või konverentsiruumid
+	@caption Seminari- ja/v&otilde;i konverentsiruumid
 
 
 @default group=services
 
 	@property has_extra_beds type=checkbox
-	@caption Lisavoodi võimalus
+	@caption Lisavoodi v&otilde;imalus
 
 	@property has_baby_beds type=checkbox
-	@caption Beebivoodi võimalus
+	@caption Beebivoodi v&otilde;imalus
 
 	@property has_cur_xch type=checkbox
 	@caption Valuutavahetus
@@ -111,13 +111,13 @@ Modifing classes:
 	@caption WiFi leviala
 
 	@property has_internet type=checkbox
-	@caption Interneti kasutamise võimalus
+	@caption Interneti kasutamise v&otilde;imalus
 
 	@property has_safety_boxes type=checkbox
 	@caption Hoiulaekad
 
 	@property has_safe type=checkbox
-	@caption &#154;eif
+	@caption Seif
 
 	@property has_sauna type=checkbox
 	@caption Saun
@@ -129,7 +129,7 @@ Modifing classes:
 	@caption Raviteenused
 
 	@property has_washing type=checkbox
-	@caption Pesu pesemisvõimalus
+	@caption Pesu pesemisv&otilde;imalus
 
 	@property has_services_carrental type=checkbox
 	@caption Autorent
@@ -147,16 +147,16 @@ Modifing classes:
 	@caption L&otilde;kkeplats/grill
 
 	@property has_camping_tent type=checkbox
-	@caption Telkimisvõimalus
+	@caption Telkimisv&otilde;imalus
 
 	@property has_camping_trailer type=checkbox
-	@caption Haagissuvilaga peatumise võimalus
+	@caption Haagissuvilaga peatumise v&otilde;imalus
 
 	@property has_camping_caravan type=checkbox
 	@caption Karavanikohad
 
 	@property has_camping_rentatent type=checkbox
-	@caption Telkide laenutamise võimalus
+	@caption Telkide laenutamise v&otilde;imalus
 
 
 @default group=catering
@@ -177,22 +177,22 @@ Modifing classes:
 	@caption Lobby baar
 
 	@property food_use_kitchen type=checkbox
-	@caption Toidu valmistamise võimalus
+	@caption Toidu valmistamise v&otilde;imalus
 
 
 @default group=active_vacation
 
 	@property has_playground type=checkbox
-	@caption Laste mänguväljak
+	@caption Laste m&auml;nguv&auml;ljak
 
 	@property has_sporting_ground type=checkbox
-	@caption Spordiväljak
+	@caption Spordiv&auml;ljak
 
 	@property has_tennis type=checkbox
-	@caption Tenniseväljak
+	@caption Tennisev&auml;ljak
 
 	@property has_ballgames type=checkbox
-	@caption Pallimängud
+	@caption Pallim&auml;ngud
 
 	@property has_horseriding type=checkbox
 	@caption Ratsutamine
@@ -201,10 +201,10 @@ Modifing classes:
 	@caption Jalgrattalaenutus
 
 	@property has_rentafloatingvehicle type=checkbox
-	@caption Veesõiduki laenutus
+	@caption Vees&otilde;iduki laenutus
 
 	@property has_swimming_out type=checkbox
-	@caption Ujumisvõimalus (välitingimustes)
+	@caption Ujumisv&otilde;imalus (v&auml;litingimustes)
 
 	@property has_fishing type=checkbox
 	@caption Kalastamine
@@ -237,6 +237,11 @@ Modifing classes:
 	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment table_fields=name,ord table_edit_fields=ord override_parent=this direct_links=1 
 	@caption Pildid
 
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
 @groupinfo products caption="Tooted" submit=no
 
 @groupinfo services caption="Lisateenused"
@@ -244,6 +249,7 @@ Modifing classes:
 @groupinfo active_vacation caption="Aktiivne puhkus" 
 @groupinfo cedit caption="Kontaktandmed" 
 @groupinfo images caption="Pildid" submit=no
+@groupinfo transl caption=T&otilde;lgi
 
 @reltype EMAIL value=1 clid=CL_ML_MEMBER
 @caption E-post
@@ -270,6 +276,11 @@ class crm_field_accommodation extends class_base
 			"tpldir" => "applications/crm/crm_field_accommodation",
 			"clid" => CL_CRM_FIELD_ACCOMMODATION
 		));
+
+		$this->trans_props = array(
+			"name", "comment"
+		);
+
 	}
 
 	//////
@@ -328,10 +339,27 @@ class crm_field_accommodation extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 
 		}
 		return $retval;
 	}	
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed

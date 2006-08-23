@@ -211,7 +211,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>checkbox</type>
-            <caption>Seminari- ja/v&amp;otilde;i konverentsiruumid</caption>
+            <caption>Seminari- ja/v&amp;amp;otilde;i konverentsiruumid</caption>
       </property>
       <property>
             <name>has_extra_beds</name>
@@ -220,7 +220,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Lisavoodi v&amp;otilde;imalus</caption>
+            <caption>Lisavoodi v&amp;amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_baby_beds</name>
@@ -229,7 +229,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Beebivoodi v&amp;otilde;imalus</caption>
+            <caption>Beebivoodi v&amp;amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_cur_xch</name>
@@ -256,7 +256,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Interneti kasutamise v&amp;otilde;imalus</caption>
+            <caption>Interneti kasutamise v&amp;amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_safety_boxes</name>
@@ -274,7 +274,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>&amp;amp;#154;eif</caption>
+            <caption>Seif</caption>
       </property>
       <property>
             <name>has_sauna</name>
@@ -310,7 +310,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Pesu pesemisv&amp;otilde;imalus</caption>
+            <caption>Pesu pesemisv&amp;amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_services_carrental</name>
@@ -365,7 +365,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Telkimisv&amp;otilde;imalus</caption>
+            <caption>Telkimisv&amp;amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_camping_trailer</name>
@@ -374,7 +374,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Haagissuvilaga peatumise v&amp;otilde;imalus</caption>
+            <caption>Haagissuvilaga peatumise v&amp;amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_camping_caravan</name>
@@ -392,7 +392,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Telkide laenutamise v&amp;otilde;imalus</caption>
+            <caption>Telkide laenutamise v&amp;amp;otilde;imalus</caption>
       </property>
       <property>
             <name>food_breakfast_included</name>
@@ -446,7 +446,7 @@
             <method>serialize</method>
             <group>catering</group>
             <type>checkbox</type>
-            <caption>Toidu valmistamise v&amp;otilde;imalus</caption>
+            <caption>Toidu valmistamise v&amp;amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_playground</name>
@@ -455,7 +455,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Laste m&amp;auml;nguv&amp;auml;ljak</caption>
+            <caption>Laste m&amp;amp;auml;nguv&amp;amp;auml;ljak</caption>
       </property>
       <property>
             <name>has_sporting_ground</name>
@@ -464,7 +464,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Spordiv&amp;auml;ljak</caption>
+            <caption>Spordiv&amp;amp;auml;ljak</caption>
       </property>
       <property>
             <name>has_tennis</name>
@@ -473,7 +473,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Tennisev&amp;auml;ljak</caption>
+            <caption>Tennisev&amp;amp;auml;ljak</caption>
       </property>
       <property>
             <name>has_ballgames</name>
@@ -482,7 +482,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Pallim&amp;auml;ngud</caption>
+            <caption>Pallim&amp;amp;auml;ngud</caption>
       </property>
       <property>
             <name>has_horseriding</name>
@@ -509,7 +509,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Vees&amp;otilde;iduki laenutus</caption>
+            <caption>Vees&amp;amp;otilde;iduki laenutus</caption>
       </property>
       <property>
             <name>has_swimming_out</name>
@@ -518,7 +518,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Ujumisv&amp;otilde;imalus (v&amp;auml;litingimustes)</caption>
+            <caption>Ujumisv&amp;amp;otilde;imalus (v&amp;amp;auml;litingimustes)</caption>
       </property>
       <property>
             <name>has_fishing</name>
@@ -631,9 +631,18 @@
             <direct_links>1</direct_links>
             <caption>Pildid</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_FIELD_ACCOMMODATION</syslog_type>
-            <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
@@ -658,6 +667,9 @@
                   <caption>Pildid</caption>
                   <submit>no</submit>
             </images>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <EMAIL>
