@@ -4,55 +4,72 @@
             <name>date</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
             <type>date_select</type>
-            <field>date</field>
             <caption>Kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>buyer</name>
             <table>objects</table>
             <group>general</group>
-            <type>select</type>
-            <field>buyer</field>
-            <caption>Pakkumised </caption>
+            <field>meta</field>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BUYER</reltype>
+            <caption>Ostja</caption>
       </property>
       <property>
             <name>bargainer</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
             <type>relpicker</type>
             <reltype>RELTYPE_BUYER</reltype>
-            <field>bargainer</field>
             <caption>Hankija</caption>
+      </property>
+      <property>
+            <name>stat</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>select</type>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>offers_add</name>
+            <table>objects</table>
+            <group>offers</group>
+            <field>meta</field>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>offers</name>
             <table>objects</table>
             <group>offers</group>
+            <field>meta</field>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>offers</field>
-            <caption>Failid </caption>
+            <reltype>RELTYPE_OFFER</reltype>
       </property>
       <property>
             <name>files</name>
             <table>objects</table>
             <group>files</group>
-            <type>table</type>
+            <field>meta</field>
+            <type>text</type>
             <no_caption>1</no_caption>
-            <store>no</store>
-            <field>files</field>
-            <caption>Ostud </caption>
+            <caption>Manused</caption>
       </property>
       <property>
             <name>purchases</name>
             <table>objects</table>
             <group>purchases</group>
+            <field>meta</field>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>purchases</field>
       </property>
       <classinfo>
             <syslog_type>ST_PURCHASE</syslog_type>
@@ -61,6 +78,19 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <offers>
+                  <caption>Pakkumised</caption>
+                  <submit>no</submit>
+            </offers>
+            <files>
+                  <caption>Failid</caption>
+            </files>
+            <purchases>
+                  <caption>Ostud</caption>
+                  <submit>no</submit>
+            </purchases>
+      </groupinfo>
       <reltypes>
             <BUYER>
                   <value>1</value>
@@ -70,6 +100,11 @@
                   </clid>
                   <caption>Ostja </caption>
             </BUYER>
+            <OFFER>
+                  <value>2</value>
+                  <clid>CL_PROCUREMENT_OFFER</clid>
+                  <caption>Pakkumine </caption>
+            </OFFER>
       </reltypes>
 </properties>
 

@@ -75,6 +75,16 @@
             <field>d_tbl</field>
       </property>
       <property>
+            <name>products</name>
+            <table>objects</table>
+            <group>products</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+      </property>
+      <property>
             <name>o_tb</name>
             <table>objects</table>
             <group>o</group>
@@ -202,6 +212,9 @@
                   <caption>N&amp;amp;otilde;uete nimekiri</caption>
                   <submit>no</submit>
             </d>
+            <products>
+                  <caption>Toodete nimekiri</caption>
+            </products>
             <s>
                   <caption>Hanke tingimused</caption>
             </s>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.2 2006/08/22 15:33:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.3 2006/08/23 15:04:21 markop Exp $
 // purchase.aw - Ost 
 /*
 
@@ -21,7 +21,7 @@
 @property stat type=select 
 @caption Staatus
 
-@groupinfo offers caption=Pakkumised 
+@groupinfo offers caption=Pakkumised submit=no
 @default group=offers
 
 @property offers_add type=toolbar no_caption=1 store=no
@@ -30,10 +30,12 @@
 @groupinfo files caption=Failid 
 @default group=files
 
-@property files type=fileupload no_caption=1 store=yes table=objects field=meta method=serialize form=+emb
-@caption Failid 
+@property files type=text  no_caption=1
+@caption Manused
+property files type=fileupload no_caption=1 store=yes table=objects field=meta method=serialize form=+emb
+caption Failid 
 
-@groupinfo purchases caption=Ostud 
+@groupinfo purchases caption=Ostud  submit=no
 @default group=purchases
 
 @property purchases type=table no_caption=1
@@ -84,6 +86,8 @@ class purchase extends class_base
 			case "stat":
 				$prop["options"] = array(0 => "aktiivne" , 1 => "arhiveeritud");
 				break;
+			
+			
 			case "files":
 				$file_inst = get_instance(CL_FILE);
 				//$url = $file_inst->get_url($arr["obj_inst"]->prop($prop["name"]));
@@ -99,6 +103,12 @@ class purchase extends class_base
 					}
 				}
 				break;
+				
+			case "files":
+				$this->_get_files($arr);
+			break;
+	
+				
 			case "offers_add":
 				$tb =&$arr["prop"]["vcl_inst"];
 				$pps = get_instance("vcl/popup_search");
@@ -141,11 +151,7 @@ class purchase extends class_base
 					"caption" => t("Pakkumise failid"),
 					"align" => "center",
 				));
-/*				$t->define_field(array(
-					'name' => 'pick',
-					'caption' => t('Vali'),
-				));
-*/				$t->define_chooser(array(
+				$t->define_chooser(array(
 					"name" => "sel",
 					"field" => "oid",
 					"caption" => t("Vali"),
@@ -154,18 +160,44 @@ class purchase extends class_base
 				$conns = $arr["obj_inst"]->connections_from(array(
 					'type' => "RELTYPE_OFFER",
 				));
+				$file_inst = get_instance(CL_FILE);
 				foreach($conns as $conn)
 				{
 					if(is_oid($conn->prop("to")))$row = obj($conn->prop("to"));
 					else continue;
 					$offer_obj = obj($conn->prop("to"));
+					
+					$file_conns = $offer_obj->connections_from(array(
+						'class' => array(CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_FILE),
+					));
+					$files = "";
+					
+					foreach($file_conns as $file_conn)
+					{
+						$file_obj = obj($file_conn->prop("to"));
+						
+						if($file_obj->class_id() == CL_FILE)
+						{
+							$files.= html::href(array(
+							"url" => $file_inst->get_url($file_conn->prop("to"),$name),
+							//"url" => $f_obj->prop("file_url"),
+							"caption" => $file_conn->prop("to.name")))
+							."<br>";
+						}
+						foreach($file_obj->connections_from(array('type' => RELTYPE_FILE,)) as $f_conn)
+						{
+							$f_obj = obj($f_conn->prop("to"));
+							$files.= html::href(array(
+							"url" => $file_inst->get_url($f_conn->prop("to"),$name),
+							//"url" => $f_obj->prop("file_url"),
+							"caption" => $f_conn->prop("to.name")))
+							."<br>";
+						}
+					}
 					$t->define_data(array(
-						"date" => $offer_obj->prop("accept_date"),
-						"files" => $offer_obj->prop("files"),
-/*						"pick" => html::checkbox(array(
-							"name" => "offer[".$offer_obj->id()."]",
-							)),
-*/						"oid" => $offer_obj->id(),
+						"date" => date('d-m-y/h:m', $offer_obj->prop("accept_date")),
+						"files" => $files,
+						"oid" => $offer_obj->id(),
 					));
 				}
 				break;
@@ -255,22 +287,20 @@ class purchase extends class_base
 			));
 		}
 		}
+		$t->set_sortable(false);
 	}
 
 	/**
 		@attrib name=remove_offers
 	**/
 	function remove_offers($arr)
-	{arr($arr);
-	//	$this->disconnect($arr["sel"]);
-		
+	{
 		$this_obj = obj($arr["id"]);
 		foreach($arr["sel"] as $offer)
 		{
 			$off_obj = obj($offer);
 			$this_obj->disconnect(array("from" => $offer));
 		}
-	//	object_list::iterate_list($arr["sel"], "delete");
 		return $arr["post_ru"];
 	}
 
@@ -280,7 +310,7 @@ class purchase extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "files":
+/*			case "files":
 					$prop["value"] = $arr["obj_inst"]->prop("files");
 					if (isset($_FILES["files"]["tmp_name"]))
 					{
@@ -300,6 +330,11 @@ class purchase extends class_base
 						$prop["value"][] = $file_data["id"];
 					}
 				break;
+*/
+			case "files":
+				$this->_set_files($arr);
+			break;
+		
 			//-- set_property --//
 		}
 		return $retval;
@@ -324,6 +359,285 @@ class purchase extends class_base
 		));
 		return $this->parse();
 	}
+
+
+
+
+
+	function _get_files($arr)
+	{
+		$objs = array();
+
+		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		{
+			$ol = new object_list($arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_FILE"
+			)));
+			$objs = $ol->arr();
+		}
+
+		$objs[] = obj();
+		$objs[] = obj();
+		$objs[] = obj();
+
+		$types = array(
+			CL_FILE => t(""),
+			CL_CRM_MEMO => t("Memo"),
+			CL_CRM_DOCUMENT => t("CRM Dokument"),
+			CL_CRM_DEAL => t("Leping"),
+			CL_CRM_OFFER => t("Pakkumine")
+		);
+
+		$impl = get_current_company();
+		$impl = $impl->id();
+
+		if ($this->can("view", $impl))
+		{
+			$impl_o = obj($impl);
+			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+			{
+				$u = get_instance(CL_USER);
+				$impl = $u->get_current_company();
+			}
+		}
+
+		if ($this->can("view", $impl))
+		{
+			$implo = obj($impl);
+			$f = get_instance("applications/crm/crm_company_docs_impl");
+			$fldo = $f->_init_docs_fld(obj($impl));
+			$ot = new object_tree(array(
+				"parent" => $fldo->id(),
+				"class_id" => CL_MENU
+			));
+			$folders = array($fldo->id() => $fldo->name());
+			$this->_req_level = 0;
+			$this->_req_get_folders($ot, $folders, $fldo->id());
+
+			// add server folders if set
+			$sf = $implo->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
+			if ($sf)
+			{
+				$s = $sf->instance();
+				$fld = $s->get_folders($sf);
+				$t =& $arr["prop"]["vcl_inst"];
+
+				usort($fld, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
+
+				$folders[$sf->id().":/"] = $sf->name();
+				$this->_req_get_s_folders($fld, $sf, $folders, 0);
+			}
+		}
+		else
+		{
+			$fldo = obj();
+			$folders = array();
+		}
+
+		$clss = aw_ini_get("classes");
+		foreach($objs as $idx => $o)
+		{
+			$this->vars(array(
+				"name" => $o->name(),
+				"idx" => $idx,
+				"types" => $this->picker($types)
+			));
+
+			if (is_oid($o->id()))
+			{
+				$ff = $o->get_first_obj_by_reltype("RELTYPE_FILE");
+				if (!$ff)
+				{
+					$ff = $o;
+				}
+				$fi = $ff->instance();
+				$fu = html::href(array(
+					"url" => $fi->get_url($ff->id(), $ff->name()),
+					"caption" => $ff->name()
+				));
+				$data[] = array(
+					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
+					"file" => $fu,
+					"type" => $clss[$o->class_id()]["name"],
+					"del" => html::href(array(
+						"url" => $this->mk_my_orb("del_file_rel", array(
+								"return_url" => get_ru(),
+								"fid" => $o->id(),
+								"from" => $arr["obj_inst"]->id()
+						)),
+						"caption" => t("Kustuta")
+					)),
+					"folder" => $o->path_str(array(
+						"start_at" => $fldo->id(),
+						"path_only" => true
+					))
+				);
+			}
+			else
+			{
+				$data[] = array(
+					"name" => html::textbox(array(
+						"name" => "fups_d[$idx][tx_name]",
+						"size" => 15
+					)),
+					"file" => html::fileupload(array(
+						"name" => "fups_".$idx
+					)),
+					"type" => html::select(array(
+						"options" => $types,
+						"name" => "fups_d[$idx][type]"
+					)),
+					"del" => "",
+					"folder" => html::select(array(
+						"name" => "fups_d[$idx][folder]",
+						"options" => $folders
+					))
+				);
+			}
+		}
+
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));
+		
+		$t->define_field(array(
+			"caption" => t("Nimi"),
+			"name" => "name",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Fail"),
+			"name" => "file",
+		));
+
+		$t->define_field(array(
+			"caption" => t("T&uuml;&uuml;p"),
+			"name" => "type",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Kataloog"),
+			"name" => "folder",
+		));
+
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "del",
+		));
+
+		foreach($data as $e)
+		{
+			$t->define_data($e);
+		}
+
+		$arr["prop"]["value"] = $t->draw();
+	}
+		function _set_files($arr)
+	{
+		$t = obj($arr["request"]["id"]);
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		foreach(safe_array($_POST["fups_d"]) as $num => $entry)
+		{
+			if (is_uploaded_file($_FILES["fups_".$num]["tmp_name"]))
+			{
+				$f = get_instance("applications/crm/crm_company_docs_impl");
+				$fldo = $f->_init_docs_fld($co);
+				if ($this->can("add", $entry["folder"]))
+				{
+					$fldo = obj($entry["folder"]);
+				}
+				if (!$fldo)
+				{
+					return;
+				}
+
+				if ($entry["type"] == CL_FILE)
+				{
+					// add file
+					$f = get_instance(CL_FILE);
+
+					$fs_fld = null;
+					if (strpos($entry["folder"], ":") !== false)
+					{
+						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
+						$sf_o = obj($sf_id);
+						$fs_fld = $sf_o->prop("folder").$sf_path;
+					}
+					$fil = $f->add_upload_image("fups_$num", $fldo->id(), 0, $fs_fld);
+
+					if (is_array($fil))
+					{
+						$t->connect(array(
+							"to" => $fil["id"],
+							"reltype" => "RELTYPE_FILE"
+						));
+					}
+				}
+				else
+				{
+					$o = obj();
+					$o->set_class_id($entry["type"]);
+					$o->set_name($entry["tx_name"] != "" ? $entry["tx_name"] : $_FILES["fups_$num"]["name"]);
+
+			
+					$o->set_parent($fldo->id());
+					
+					if ($entry["type"] != CL_FILE)
+					{
+						$o->set_prop("project", $t->id());
+						$o->set_prop("customer", reset($t->prop("buyer")));
+					}
+					$o->save();
+
+					// add file
+					$f = get_instance(CL_FILE);
+
+					$fs_fld = null;
+					if (strpos($entry["folder"], ":") !== false)
+					{
+						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
+						$sf_o = obj($sf_id);
+						$fs_fld = $sf_o->prop("folder").$sf_path;
+					}
+					$fil = $f->add_upload_image("fups_$num", $o->id(), 0, $fs_fld);
+
+					if (is_array($fil))
+					{
+						$o->connect(array(
+							"to" => $fil["id"],
+							"reltype" => "RELTYPE_FILE"
+						));
+						$t->connect(array(
+							"to" => $o->id(),
+							"reltype" => "RELTYPE_FILE"
+						));
+					}
+				}
+			}
+		}
+		return $arr["post_ru"];
+	}
+	function _req_get_folders($ot, &$folders, $parent)
+	{
+		$this->_req_level++;
+		$objs = $ot->level($parent);
+		foreach($objs as $o)
+		{
+			$folders[$o->id()] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_req_level).$o->name();
+			$this->_req_get_folders($ot, $folders, $o->id());
+		}
+		$this->_req_level--;
+	}
+
+
+
+
+
+
+
+
 
 //-- methods --//
 }

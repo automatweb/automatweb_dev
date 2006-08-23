@@ -87,6 +87,15 @@
             <field>products</field>
       </property>
       <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <field>files</field>
+            <caption>Manused</caption>
+      </property>
+      <property>
             <name>p_tb</name>
             <table>objects</table>
             <group>r_list</group>
@@ -135,6 +144,9 @@
             <products>
                   <caption>Tooted</caption>
             </products>
+            <files>
+                  <caption>Failid</caption>
+            </files>
             <r>
                   <caption>N&amp;amp;otilde;uded</caption>
                   <submit>no</submit>

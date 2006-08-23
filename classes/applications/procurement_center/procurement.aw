@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.4 2006/07/06 13:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.5 2006/08/23 15:04:21 markop Exp $
 // procurement.aw - Hange 
 /*
 
@@ -26,6 +26,8 @@
 	@property proj type=text table=aw_procurements field=aw_proj
 	@caption Projekt
 
+
+
 @default group=d
 	
 	@property d_tb type=toolbar no_caption=1 store=no
@@ -35,6 +37,9 @@
 		@property d_tr type=treeview no_caption=1 store=no parent=d_l
 
 		@property d_tbl type=table no_caption=1 store=no parent=d_l
+
+@default group=products
+		@property products type=table no_caption=1 table=objects field=meta method=serialize
 
 @default group=o
 	
@@ -78,6 +83,8 @@
 	@caption Kriteeriumid
 
 @groupinfo d caption="N&otilde;uete nimekiri" submit=no
+@groupinfo products caption="Toodete nimekiri"
+
 @groupinfo s caption="Hanke tingimused"
 	@groupinfo s_general caption="M&auml;&auml;rangud"  parent=s
 	@groupinfo s_pris caption="Prioriteedid" parent=s
@@ -204,8 +211,136 @@ class procurement extends class_base
 			case "offerers":
 				$prop["value"] = $this->make_keys(array_keys($prop["options"]));
 				break;
+			
+			case "products":
+				$prop["value"] = $this->products_table(&$arr["prop"]["vcl_inst"],$arr["obj_inst"]);
+				break;
 		};
 		return $retval;
+	}
+
+	function products_table(&$t , $this_obj)
+	{
+		//see esimene vaid sorteerimiseks 
+//		$t->define_field(array(
+//			"name" => "jrk",
+//			"caption" => t("Jrk"),
+//			"numeric" => 1,
+//		));
+		$company_id = $this_obj->prop("orderer");
+		if(is_oid($company_id) && $this->can("view", $company_id)) $co = obj($company_id);
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Toode"),
+		));
+		$t->define_field(array(
+			'name' => 'amount',
+			'caption' => t('Kogus'),
+		));
+		$t->define_field(array(
+			'name' => 'unit',
+			'caption' => t('&Uuml;hik'),
+		));
+
+		$unit_list = new object_list(array(
+			"class_id" => CL_UNIT
+		));
+		
+		$unit_opts = array();
+		foreach($unit_list->arr() as $unit)
+		{
+			$unit_opts[$unit->id()] = $unit->prop("unit_code");
+		}
+
+		$products = $this_obj->meta("products");
+		$x = 0;
+		foreach($products as $product)
+		{
+			if(!$product["product"]) continue;
+			$t->define_data(array(
+	//			"jrk"		=> $x+1,
+				"product"	=> html::textbox(array(
+							"name" => "products[".$x."][product]",
+							"size" => "15",
+							"value" => $product["product"],
+							"autocomplete_source" => $this->mk_my_orb ("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
+							"autocomplete_params" => "products[".$x."][product]",
+							)) ,
+				"amount"	=> html::textbox(array(
+							"name" => "products[".$x."][amount]",
+							"size" => "6",
+							"value" => $product["amount"],
+							)),
+				'unit'		=> html::select(array(
+							"name" => "products[".$x."][unit]",
+							"options" => $unit_opts,
+							"value" => $product["unit"],
+						)),
+			));
+			$x++;
+		}
+	
+		//lisaread
+		$enough = $x +10;
+		$u = get_instance(CL_USER);
+		if(!is_object($co))$co = obj($u->get_current_company());
+		if(is_object($co))$curr_val = $co->prop("currency");
+		while($x < $enough)
+		{
+			$t->define_data(array(
+	//			"jrk"		=> $x+1,
+				"product"	=> html::textbox(array(
+							"name" => "products[".$x."][product]",
+							"size" => "15",
+							"autocomplete_source" => $this->mk_my_orb ("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
+							"autocomplete_params" => "products[".$x."][product]",
+							)),
+				"amount"	=> html::textbox(array(
+							"name" => "products[".$x."][amount]",
+							"size" => "6",
+							)),
+				'unit'		=> html::select(array(
+							"name" => "products[".$x."][unit]",
+							"options" => $unit_opts,
+							)),
+			));
+			$x++;
+		}
+		$t->set_sortable(false);
+	//	$t->set_default_sortby("jrk");
+	}
+
+	/**
+		@attrib name=product_autocomplete_source
+		@param product optional
+	**/
+	function product_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+		
+		$ol = new object_list();
+		if(is_oid($_GET["buyer"]))
+		{
+			$co = obj($_GET["buyer"]);
+			foreach($co->connections_from(array("type" => "RELTYPE_WAREHOUSE")) as $conn)
+			{
+				$warehouse = obj($conn->prop("to"));
+				foreach($warehouse->connections_from(array("type" => "RELTYPE_PRODUCT")) as $product_conn)
+				{
+					if(is_oid($product_conn->prop("to"))) $ol->add($product_conn->prop("to"));
+				}
+			}
+		}
+		else
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+			"name" => $arr["product"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200
+		));
+		return $ac->finish_ac($ol->names());
 	}
 
 	function set_property($arr = array())
@@ -220,6 +355,31 @@ class procurement extends class_base
 
 			case "team":
 				$this->_save_team($arr);
+				break;
+			case "products":
+				//liidab need tooted juurde mida veel ei eksisteeri
+				foreach($prop["value"] as $product)
+				{
+					$ol = new object_list(array(
+						"class_id" => array(CL_SHOP_PRODUCT),
+						"name" => $product["product"],
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					
+					$co = obj($arr["obj_inst"]->prop("orderer"));
+					$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+					$parent = $warehouse->id();
+					if (!$ol->count())
+					{
+						$p = obj();
+						$p->set_class_id(CL_SHOP_PRODUCT);
+						$p->set_parent($parent);
+						$p->set_name($product["product"]);
+						$p->save();
+					}
+				}
+				$arr["obj_inst"]->set_meta("products",$prop["value"]);
 				break;
 		}
 		return $retval;
@@ -737,5 +897,68 @@ class procurement extends class_base
 			"action" => "delete_procurements"
 		));
 	}
+	
+	
+	function callback_generate_scripts($arr)
+	{
+		
+		$meta = $arr["obj_inst"]->meta("products"); $size = sizeof($meta);
+		$ret = "
+		function aw_submit_handler() {".
+		"".
+		// fetch list of companies with that name and ask user if count > 0
+		"var url = '".$this->mk_my_orb("check_existing")."';";
+		
+		$x = 0;
+		while($x < $size)
+		{
+			$ret.= "url = url + '&p[".$x."]=' + escape(document.changeform.products_".$x."__product_.value);
+				";
+			$x++;
+		}
+		
+		$ret.= "num= aw_get_url_contents(url);".
+		"if (num != \"\")
+		{
+			var ansa = confirm(num);
+			if (ansa)
+			{
+				return true;
+			}
+			return false;
+		}".
+		"return true;}
+		";
+		return $ret;
+	}
+	
+	/**
+		@attrib name=check_existing
+		@param p optional type=array
+	**/
+	function check_existing($arr)
+	{
+		foreach($arr["p"] as $product)
+		{	
+			if(!(strlen($product) > 1)) continue;
+			if (mb_detect_encoding($arr["p"],"UTF-8,ISO-8859-1") == "UTF-8")
+			{
+				$product = iconv("UTF-8", aw_global_get("charset"), $product);
+			}
+			// if project exists
+			$ol = new object_list(array(
+				"class_id" => array(CL_SHOP_PRODUCT),
+				"name" => $product,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			if (!$ol->count())
+			{
+				$ret .= sprintf(t("Toodet nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $product);
+			}
+		}
+		die(iconv(aw_global_get("charset"), "UTF-8", $ret));
+	}
+	
 }
 ?>
