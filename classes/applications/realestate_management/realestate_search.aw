@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.43 2006/08/11 09:23:24 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.44 2006/08/23 07:41:08 tarvo Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -13,25 +13,25 @@
 @default field=meta
 @default method=serialize
 	@property template type=select
-	@caption N&auml;itamise põhi (template)
+	@caption N&auml;itamise p&otilde;hi (template)
 
 	@property result_format type=select
 	@caption Otsingutulemuste n&auml;itamise formaat
 
 	@property result_no_form type=checkbox ch_value=1
-	@comment N&auml;ita otsingutulemusi ilma otsinguvormita. Ei mõjuta admin liidese otsingut.
+	@comment N&auml;ita otsingutulemusi ilma otsinguvormita. Ei m&otilde;juta admin liidese otsingut.
 	@caption Tulemused otsinguvormita
 
 	@property search_result_no_redirect type=checkbox ch_value=1
-	@comment Otsingutulemustelt objekti detailvaatele ei suunata. Ei mõjuta admin liidese otsingut.
+	@comment Otsingutulemustelt objekti detailvaatele ei suunata. Ei m&otilde;juta admin liidese otsingut.
 	@caption Suunamiseta
 
 	@property result_pageselector_pos type=select
-	@comment Otsingutulemuste tabeli navigatsiooni asukoht. Ei mõjuta admin liidese otsingut.
+	@comment Otsingutulemuste tabeli navigatsiooni asukoht. Ei m&otilde;juta admin liidese otsingut.
 	@caption Tabeli navigatsiooni asukoht
 
 	@property searchform_select_size type=textbox datatype=int
-	@comment [0] - võimalus valida parameetrile vaid üks v&auml;&auml;rtus, [1 - ...] - võimalus valida mitu.
+	@comment [0] - v&otilde;imalus valida parameetrile vaid üks v&auml;&auml;rtus, [1 - ...] - v&otilde;imalus valida mitu.
 	@caption Otsinguvormi valikuelementide suurus
 
 	@property searchform_columns type=textbox datatype=int default=2
@@ -303,9 +303,9 @@ class realestate_search extends class_base
 
 			case "result_pageselector_pos":
 				$prop["options"] = array (
-					"top" => t("Üleval"),
+					"top" => t("&Uuml;leval"),
 					"bottom" => t("All"),
-					"both" => t("Üleval ja all"),
+					"both" => t("&Uuml;leval ja all"),
 				);
 				break;
 
@@ -316,7 +316,7 @@ class realestate_search extends class_base
 					CL_REALESTATE_COTTAGE => t("Suvila"),
 					CL_REALESTATE_HOUSEPART => t("Majaosa"),
 					CL_REALESTATE_APARTMENT => t("Korter"),
-					CL_REALESTATE_COMMERCIAL => t("Äripind"),
+					CL_REALESTATE_COMMERCIAL => t("&Auml;ripind"),
 					CL_REALESTATE_GARAGE => t("Garaaz"),
 					CL_REALESTATE_LAND => t("Maat&uuml;kk"),
 				);
@@ -946,7 +946,7 @@ exit_function("jigaboo");
 			{
 				if (in_array ("searchparam_address1", $visible_formelements))
 				{
-					$options = array(REALESTATE_SEARCH_ALL => t("Kõik linnad"));
+					$options = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik linnad"));
 					$options = !empty ($search["a2"]) ? array (reset ($search["a2"]) => $this->options_a2[reset ($search["a2"])]) + $options : $options;
 				}
 				else
@@ -979,7 +979,7 @@ exit_function("jigaboo");
 			{
 				if (in_array ("searchparam_address2", $visible_formelements))
 				{
-					$options = array(REALESTATE_SEARCH_ALL => t("Kõik linnaosad"));
+					$options = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik linnaosad"));
 					$options = !empty ($search["a3"]) ? array (reset ($search["a3"]) => $this->options_a3[reset ($search["a3"])]) + $options : $options;
 				}
 				else
@@ -1001,7 +1001,7 @@ exit_function("jigaboo");
 			{
 				if (in_array ("searchparam_address1", $visible_formelements))
 				{
-					$options = array(REALESTATE_SEARCH_ALL => t("Kõik vallad"));
+					$options = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik vallad"));
 					$options = !empty ($search["a4"]) ? array (reset ($search["a4"]) => $this->options_a4[reset ($search["a4"])]) + $options : $options;
 				}
 				else
@@ -1034,7 +1034,7 @@ exit_function("jigaboo");
 			{
 				if (in_array ("searchparam_address4", $visible_formelements))
 				{
-					$options = array(REALESTATE_SEARCH_ALL => t("Kõik asulad"));
+					$options = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik asulad"));
 					$options = !empty ($search["a5"]) ? array (reset ($search["a5"]) => $this->options_a5[reset ($search["a5"])]) + $options : $options;
 				}
 				else
@@ -1274,7 +1274,7 @@ exit_function("jigaboo");
 					{
 						$template = $this_object->prop ("result_format").".tpl";
 						$this->read_template($template);
-						lc_site_load("realestate",$this);
+						lc_site_load("realestate_search",&$this);
 					
 					}
 					$table->set_layout("realestate_searchresult");
@@ -1418,7 +1418,7 @@ exit_function("jigaboo");
 		### output
 		$template = $this_object->prop ("template") . ".tpl";
 		$this->read_template($template);
-		lc_site_load("realestate",$this);
+		lc_site_load("realestate_search",&$this);
 
 		if ($this_object->prop ("result_no_form") and $search_requested)
 		{ #### don't show search form
@@ -1568,7 +1568,7 @@ exit_function("jigaboo");
 			CL_REALESTATE_COTTAGE => t("Suvila"),
 			CL_REALESTATE_HOUSEPART => t("Majaosa"),
 			CL_REALESTATE_APARTMENT => t("Korter"),
-			CL_REALESTATE_COMMERCIAL => t("Äripind"),
+			CL_REALESTATE_COMMERCIAL => t("&Auml;ripind"),
 			CL_REALESTATE_GARAGE => t("Garaaz"),
 			CL_REALESTATE_LAND => t("Maat&uuml;kk"),
 		);
@@ -1590,7 +1590,7 @@ exit_function("jigaboo");
 		}
 
 		natcasesort ($this->options_tt);
-		$this->options_tt = array(REALESTATE_SEARCH_ALL => t("Kõik tehingud")) + $this->options_tt;
+		$this->options_tt = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik tehingud")) + $this->options_tt;
 
 		### address1
 		$list =& $this->administrative_structure->prop (array (
@@ -1607,7 +1607,7 @@ exit_function("jigaboo");
 
 		}
 		natcasesort ($this->options_a1);
-		$this->options_a1 = array(REALESTATE_SEARCH_ALL => t("Kõik maakonnad")) + $this->options_a1;
+		$this->options_a1 = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik maakonnad")) + $this->options_a1;
 		### to save time, get only a minimal set of options for elementary web search
 		if ($arr["get_minimal_set"])
 		{
@@ -1712,7 +1712,7 @@ exit_function("jigaboo");
 			else $this->options_c[$key] = $val->name();
 		}
 		natcasesort ($this->options_c);
-		$this->options_c = array(REALESTATE_SEARCH_ALL => t("Kõik valmidused")) + $this->options_c;
+		$this->options_c = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik valmidused")) + $this->options_c;
 
 		### usage_purpose
 		$prop_args = array (
@@ -1727,7 +1727,7 @@ exit_function("jigaboo");
 			if($trans[$lang_id]) $this->options_up[$key] = $trans[$lang_id];
 			else $this->options_up[$key] = $val->name();
 		}
-		$this->options_up = array(REALESTATE_SEARCH_ALL => t("Kõik t&uuml;&uuml;bid")) + $this->options_up;
+		$this->options_up = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik t&uuml;&uuml;bid")) + $this->options_up;
 
 		### special_status
 		$prop_args = array (
@@ -1742,7 +1742,7 @@ exit_function("jigaboo");
 			else $this->options_ss[$key] = $val->name();
 		}
 		natcasesort ($this->options_ss);
-		$this->options_ss = array(REALESTATE_SEARCH_ALL => t("Kõik")) + $this->options_ss;
+		$this->options_ss = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik")) + $this->options_ss;
 		### agent
 		$sections = $this_object->prop ("agent_sections");
 		$options = array ();
@@ -1789,7 +1789,7 @@ exit_function("jigaboo");
 		}
 
 		natcasesort ($options);
-		$this->options_agent = array(REALESTATE_SEARCH_ALL => t("Kõik maaklerid")) + $options;
+		$this->options_agent = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik maaklerid")) + $options;
 		exit_function ("re_search::get_options");
 	}
 
@@ -2618,10 +2618,10 @@ exit_function("jigaboo");
 		$parent_value = $arr["reAddressSelected"];
 		$child_division = obj ((int) $arr["reAddressDivision"]);
 		$administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-		if($child_division->prop ("type") == CL_COUNTRY_CITY) $all_selection = t("Kõik linnad");
-		elseif($child_division->prop ("type") == CL_COUNTRY_CITYDISTRICT) $all_selection = t("Kõik linnaosad");
-		elseif($child_division->name() == "Vald") $all_selection = t("Kõik vallad");
-		else $all_selection = t("Kõik asulad");
+		if($child_division->prop ("type") == CL_COUNTRY_CITY) $all_selection = t("K&otilde;ik linnad");
+		elseif($child_division->prop ("type") == CL_COUNTRY_CITYDISTRICT) $all_selection = t("K&otilde;ik linnaosad");
+		elseif($child_division->name() == "Vald") $all_selection = t("K&otilde;ik vallad");
+		else $all_selection = t("K&otilde;ik asulad");
 		
 		$options = array(REALESTATE_SEARCH_ALL . "=>" . $all_selection);
 
