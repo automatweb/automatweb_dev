@@ -144,42 +144,35 @@
             <caption>V&amp;amp;otilde;istlusklassi valik</caption>
       </property>
       <property>
-            <name>search_result</name>
-            <table>objects</table>
-            <group>manage_contestants</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>evt_team_result_calc</name>
+            <name>team_result_calc</name>
             <table>objects</table>
             <group>general_settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <store>no</store>
+            <editonly>1</editonly>
             <caption>V&amp;amp;otilde;istkonna tulemuse arvutus</caption>
       </property>
       <property>
-            <name>evt_result_type</name>
+            <name>result_type</name>
             <table>objects</table>
             <group>general_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <store>no</store>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RESULT_TYPE</reltype>
+            <editonly>1</editonly>
             <caption>Paremusj&amp;amp;auml;rjestuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>uniqe_nr</name>
+            <name>unique_nr</name>
             <table>objects</table>
             <group>general_settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
             <caption>Unikaalne rinnanumber</caption>
       </property>
       <property>
@@ -248,6 +241,16 @@
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>search_result</name>
+            <table>objects</table>
+            <group>manage_contestants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
@@ -372,6 +375,11 @@
                   </clid>
                   <caption>V&amp;amp;otilde;istleja</caption>
             </CONTESTANT>
+            <RESULT_TYPE>
+                  <value>7</value>
+                  <clid>CL_SCM_RESULT_TYPE</clid>
+                  <caption>Paremusj&amp;amp;auml;rjestuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </RESULT_TYPE>
       </reltypes>
 </properties>
 

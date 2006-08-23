@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.8 2006/08/22 15:37:51 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.9 2006/08/23 12:22:06 tarvo Exp $
 // scm_result.aw - Tulemus 
 /*
 
@@ -339,11 +339,11 @@ class scm_result extends class_base
 			$res_obj = obj($data["result"]);
 			$raw_result = $res_obj->prop("result");
 			$event = $comp_inst->get_event(array(
-				"competition" => $data["competition"]
+				"competition" => $data["competition"],
 			));
 			$event_inst = get_instance(CL_SCM_EVENT);
-			$rtype = obj($event_inst->get_result_type(array(
-				"event" => $event
+			$rtype = obj($comp_inst->get_result_type(array(
+				"competition" => $data["competition"],
 			)));
 			$rtype_inst = get_instance(CL_SCM_RESULT_TYPE);
 			$fun = $rtype_inst->units[$rtype->prop("unit")]["fun"];

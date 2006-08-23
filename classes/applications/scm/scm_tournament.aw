@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.7 2006/07/27 23:32:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.8 2006/08/23 12:22:06 tarvo Exp $
 // scm_tournament.aw - V&otilde;istlussari
 /*
 
@@ -54,7 +54,7 @@ class scm_tournament extends class_base
 				));
 				$prop["vcl_inst"]->add_button(array(
 					"name" => "add_competition",
-					"tooltip" => t("Lisa uus võistlus"),
+					"tooltip" => t("Lisa uus v&otilde;istlus"),
 					"img" => "new.gif",
 					"url" => $url,
 				));
@@ -166,7 +166,7 @@ class scm_tournament extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Võistluse nimi"),
+			"caption" => t("V&otilde;istluse nimi"),
 			"sortable" => true,
 		));
 		$t->define_field(array(

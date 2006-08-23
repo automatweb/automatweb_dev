@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.7 2006/08/21 19:03:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.8 2006/08/23 12:22:06 tarvo Exp $
 // scm_event.aw - Spordiala 
 /*
 
@@ -129,7 +129,7 @@ class scm_event extends class_base
 	}
 
 //-- methods --//
-
+	/* next two functions are deprecated.. ai tink */
 	function get_result_type($arr = array())
 	{
 		 $obj = obj($arr["event"]);

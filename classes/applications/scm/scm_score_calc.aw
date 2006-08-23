@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.6 2006/08/21 19:03:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.7 2006/08/23 12:22:06 tarvo Exp $
 // scm_score_calc.aw - Punktis&uuml;steem 
 /*
 
@@ -120,16 +120,16 @@ class scm_score_calc extends class_base
 	/* algoritmide funktsioonid */
 
 	/*
-		pm siin on siis need funktsioonid kuhu tuleb edasi anda tulemused, ning välja lastakse punktid
+		pm siin on siis need funktsioonid kuhu tuleb edasi anda tulemused, ning v&auml;lja lastakse punktid
 
-		ok.. olen competitionis. seal on mul keretäis jama. kuidas seda ilusaks saada?
-		+ kõigepealt tuleks vastavalt result type'ile sorteerida äki? .. a vb pean seda siin samas tegema?.. siin poleks hea!!
+		ok.. olen competitionis. seal on mul keret&auml;is jama. kuidas seda ilusaks saada?
+		+ k&otilde;igepealt tuleks vastavalt result type'ile sorteerida &auml;ki? .. a vb pean seda siin samas tegema?.. siin poleks hea!!
 		+ siia peaks andma:
 		array(
 			id,
 			raw_result,
 		)
-		jeah.. siin ei tohiks üldse tegelt mingit sortimist teha!!!!!
+		jeah.. siin ei tohiks &uuml;ldse tegelt mingit sortimist teha!!!!!
 	*/
 
 	/**
@@ -226,10 +226,8 @@ class scm_score_calc extends class_base
 		$competition_inst = get_instance(CL_SCM_COMPETITION);
 		$res_type_inst = get_instance(CL_SCM_RESULT_TYPE);
 
-		$res_type = $event_inst->get_result_type(array(
-			"event" => $competition_inst->get_event(array(
-				"competition" => $arr["competition"]
-			))
+		$res_type = $competition_inst->get_result_type(array(
+			"competition" => $arr["competition"],
 		));
 		$sorted = $res_type_inst->sort_results(array(
 			"data" => $arr["data"],

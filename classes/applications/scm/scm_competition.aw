@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.14 2006/08/22 15:37:51 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.15 2006/08/23 12:22:06 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -57,15 +57,13 @@
 	@property group_select_type type=chooser default=year
 	@caption V&otilde;istlusklassi valik
 
-	@property search_res type=hidden store=no name=search_result_sett no_caption=1
-	
-	@property evt_team_result_calc type=select store=no 
+	@property team_result_calc type=select editonly=1
 	@caption V&otilde;istkonna tulemuse arvutus
 
-	@property evt_result_type type=select store=no
+	@property result_type type=relpicker reltype=RELTYPE_RESULT_TYPE editonly=1
 	@caption Paremusj&auml;rjestuse t&uuml;&uuml;p
 
-	@property uniqe_nr type=checkbox
+	@property unique_nr type=checkbox ch_value=1 default=1
 	@caption Unikaalne rinnanumber
 
 
@@ -128,6 +126,9 @@
 
 @reltype CONTESTANT value=6 clid=CL_SCM_CONTESTANT,CL_SCM_TEAM
 @caption V&otilde;istleja
+
+@reltype RESULT_TYPE value=7 clid=CL_SCM_RESULT_TYPE
+@caption Paremusj&auml;rjestuse t&uuml;&uuml;p
 
 */
 
@@ -204,6 +205,11 @@ class scm_competition extends class_base
 			break;
 
 			case "teams_tb":
+				$et = ($evt = ($s = $arr["obj_inst"]->prop("scm_event"))?obj($s):false)?call_user_method("prop", $evt, "type"):false;
+				if($et == "single")
+				{
+					return PROP_IGNORE;
+				}
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
 					"name" => "add_team",
@@ -242,7 +248,8 @@ class scm_competition extends class_base
 				$e = $evt?obj($evt):false;
 				if($e && $e->prop("type") == "single")
 				{
-					$prop["value"] = "<font color=\"#FF0000\">".t("V&otilde;istlus ei ole v&otilde;istkondlik")."</font>";
+					$prop["value"] = t("Individuaalne v&otilde;istlus");
+					return $retval;
 				}
 				$t = &$prop["vcl_inst"];
 
@@ -573,9 +580,8 @@ class scm_competition extends class_base
 				}
 				$results = $this->convert_results($results, $competition);
 
-				$inst = get_instance(CL_SCM_EVENT);
-				$res_type = $inst->get_result_type(array(
-					"event" => $event_oid,
+				$res_type = $this->get_result_type(array(
+					"competition" => $competition,
 				));
 				$type_inst = get_instance(CL_SCM_RESULT_TYPE);
 				$format = $type_inst->get_format(array(
@@ -606,22 +612,26 @@ class scm_competition extends class_base
 			case "add_results_tbl":
 
 				$archive = ($arr["obj_inst"]->prop("archive"));
-
 				$t = &$prop["vcl_inst"];
 				$event = $this->get_event(array("competition" => $arr["obj_inst"]->id()));
 				$o = obj($event);
 				$event_type = $o->prop("type");
 				$this->_gen_add_res_tbl(&$t, $event_type);
-				$conts = $this->get_contestants(array("competition" => $arr["obj_inst"]->id()));
-				$inst = get_instance(CL_SCM_EVENT);
-				$res_type = $inst->get_result_type(array("event" => $event));
+				$conts = $this->get_contestants(array(
+					"competition" => $arr["obj_inst"]->id()
+				));
+				$res_type = $this->get_result_type(array(
+					"competition" => $arr["obj_inst"]->id(),
+				));
 				if(!$res_type)
 				{
 					return PROP_IGNORE;
 				}
 
 				$type_inst = get_instance(CL_SCM_RESULT_TYPE);
-				$format = $type_inst->get_format(array("result_type" => $res_type));
+				$format = $type_inst->get_format(array(
+					"result_type" => $res_type
+				));
 				$res_inst = get_instance(CL_SCM_RESULT);
 
 				// result field
@@ -753,43 +763,10 @@ class scm_competition extends class_base
 				);
 			break;
 
-			case "evt_result_type":
+			case "team_result_calc":
 				$o = obj($arr["obj_inst"]->id());
-				if(!($event = $o->prop("scm_event")))
-				{
-					return PROP_IGNORE;
-				}
-				$e_ob = obj($event);
-				$sel = $e_ob->prop("result_type");
-				$c = new connection();
-				$conns = $c->find(array(
-					"from" => $event,
-					"to.class_id" => CL_SCM_RESULT_TYPE,
-					"type" => 1,
-				));
-				foreach($conns as $cid => $data)
-				{
-					$o = obj($data["to"]);
-					$prop["options"][$data["to"]] = $o->name();
-				}
-				$prop["selected"] = $sel;
-
-				$append_text = $this->_gen_fake_relpicker(array(
-					"form_name" => "evt_result_type_search",
-					"class" => "scm_result_type",
-					"id" => $sel,
-					"class_id" => CL_SCM_RESULT_TYPE,
-				));
-				$prop["post_append_text"] = $append_text;
-			break;
-
-			case "evt_team_result_calc":
-				$o = obj($arr["obj_inst"]->id());
-				if(!($event = $o->prop("scm_event")))
-				{
-					return PROP_IGNORE;
-				}
-				elseif(($type = call_user_method("prop", obj($event), "type")) == "single" || $type == "multi_coll")
+				$event = $o->prop("scm_event");
+				if(($type = call_user_method("prop", obj($event), "type")) == "single" || $type == "multi_coll")
 				{
 					return PROP_IGNORE;
 				}
@@ -798,7 +775,7 @@ class scm_competition extends class_base
 					$inst = get_instance(CL_SCM_EVENT);
 					$event = obj($event);
 					$prop["options"] = $inst->get_alg();
-					$prop["selected"] = $event->prop("team_result_calc");
+					$prop["selected"] = $arr["obj_inst"]->prop("team_result_calc");
 				}
 			break;
 			// to override original name prop
@@ -816,27 +793,6 @@ class scm_competition extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
-			case "evt_team_result_calc":
-				$evt = ($s = $arr["obj_inst"]->prop("scm_event"))?obj($s):false;
-				$evt->set_prop("team_result_calc", $arr["request"]["evt_team_result_calc"]);
-			break;
-			case "evt_result_type":
-				// sick relpicker überhack
-				if(strlen(($result = $arr["request"]["evt_result_type_search"])) || strlen($res = $arr["request"]["evt_result_type"]))
-				{
-					$result = $result?$result:$res;
-					$event = ($s = $arr["obj_inst"]->prop("scm_event"))?obj($s):false;
-					foreach(split(",", $result) as $rt)
-					{
-						$event->connect(array(
-							"to" => $rt,
-							"type" => 1,
-						));
-						$event->set_prop("result_type", $rt);
-						$event->save();
-					}
-				}
-			break;
 			case "add_results_tbl":
 				$res_type = get_instance(CL_SCM_RESULT_TYPE);
 				$res = get_instance(CL_SCM_RESULT);
@@ -964,6 +920,22 @@ class scm_competition extends class_base
 		// getting event_type 
 		$et = ($evt = $arr["obj_inst"]->prop("scm_event"))?call_user_method("prop", obj($evt), "type"):false;
 
+		// setting team_result_calc if it isn't set
+		if(($et == "multi" || $et == "multi_coll") && !$arr["obj_inst"]->prop("team_result_calc"))
+		{
+			$prop_val = call_user_method("prop", obj($evt), "team_result_calc");
+			$arr["obj_inst"]->set_prop("team_result_calc", $prop_val);
+			$arr["obj_inst"]->save();
+		}
+
+		// setting result_type if it isn't set
+		if(($et == "multi" || $et == "multi_coll") && !$arr["obj_inst"]->prop("result_type"))
+		{
+			$prop_val = call_user_method("prop", obj($evt), "result_type");
+			$arr["obj_inst"]->set_prop("result_type", $prop_val);
+			$arr["obj_inst"]->save();
+		}
+
 		// checking and setting dha start and end times of dha compeititon
 		if(($from = $arr["request"]["datetime_form"]) && ($date_to = $arr["request"]["date_to"]))
 		{
@@ -1035,17 +1007,38 @@ class scm_competition extends class_base
 
 	function _update_contestant_ids($arr, $et = "single")
 	{
-		foreach($arr["request"]["contestant_ids"] as $relid => $ids)
+		// check for unique id's if needed
+		$ids = $arr["request"]["contestant_ids"];
+		$unique = $arr["obj_inst"]->prop("unique_nr");
+		if($unique)
+		{
+			foreach($ids as $relid => $real_ids)
+			{
+				if($et == "single")
+				{
+					$to_check[] = reset($real_ids);
+				}
+				else
+				{
+					$to_check = array_merge($to_check, $real_ids);
+				}
+			}
+			if(count(array_unique($to_check)) < count($to_check))
+			{
+				return false;
+			}
+		}
+		foreach($ids as $relid => $sub_ids)
 		{
 			$c = new connection($relid);
 			$data = aw_unserialize($c->prop("data"));
 			if($et == "single")
 			{
-				$data["id"] = reset($ids);
+				$data["id"] = reset($sub_ids);
 			}
 			else
 			{
-				foreach($ids as $c_oid => $c_id)
+				foreach($sub_ids as $c_oid => $c_id)
 				{
 					$data["members"][$c_oid] = $c_id;
 				}
@@ -1071,6 +1064,20 @@ class scm_competition extends class_base
 		}
 	}
 
+	/**
+		@comment
+			okey actually this function isn't needed any more here, and it's not finished completely.. but i'll leave it here.. might be useful someday
+			I used it to generate a fake relpicker. i made a type=select property and appended this crap to it
+			like that:
+			$prop["post_append_text"] => $this->_gen_fake_relpicker(array(
+				"class" => class_file_name(scm_competition),
+				"class_id" = clid (CL_SCM_COMPETITION),
+				"id" => current_obj_id,
+				"form_name" =>  name of the form element that catches the popup search result,
+			));
+
+			i almost needed it when i wantet to use releditor on a relpicker type prop(doesnt work by default)
+	**/
 	function _gen_fake_relpicker($arr)
 	{
 		$space = "&nbsp;";
@@ -1226,8 +1233,8 @@ class scm_competition extends class_base
 						);
 					}
 					$event = get_instance(CL_SCM_EVENT);
-					$calc_fun = $event->get_team_result_calc_fun(array(
-						"event" => $event_id
+					$calc_fun = $this->get_team_result_calc_fun(array(
+						"competition" => $competition,
 					));
 					foreach($team_data as $team_oid => $results)
 					{
@@ -1602,6 +1609,18 @@ class scm_competition extends class_base
 			return false;
 		}
 	}
+	
+	function get_team_result_calc_fun($arr)
+	{
+		return call_user_method("prop", obj($arr["competition"]), "team_result_calc");
+	}
+
+	function get_result_type($arr)
+	{
+		return call_user_method("prop", obj($arr["competition"]), "result_type");
+	}
+
+
 	/**
 		@attrib params=name api=1
 		@param registered optional type=bool
