@@ -2097,6 +2097,14 @@ class crm_company extends class_base
 				$data["value"] = $arr["request"]["my_stats_s_cust"];
 				break;
 
+			case "my_stats_s_type":
+				$data["value"] = $arr["request"]["my_stats_s_type"];
+				$data["options"] = array(
+					"" => t("Kokkuv&otilde;te"),
+					"rows" => t("Ridade kaupa")
+				);
+				break;
+
 			case "my_stats":
 				$i = get_instance(CL_CRM_PERSON);
 				$arr["request"]["stats_s_cust"] = $arr["request"]["my_stats_s_cust"];

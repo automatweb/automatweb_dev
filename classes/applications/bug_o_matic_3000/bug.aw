@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.50 2006/08/16 13:18:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.51 2006/08/23 13:20:21 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -301,7 +301,7 @@ class bug extends class_base
 				{
 					$u = get_instance(CL_USER);
 					$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
-					$crea = sprintf(t("Looja: %s"), $p->name());\
+					$crea = sprintf(t("Looja: %s"), $p->name());
 				}
 				$prop["post_append_text"] = " #".$arr["obj_inst"]->id()." ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".$crea;
 				break;
