@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.86 2006/08/17 11:16:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.87 2006/08/24 10:12:14 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -563,6 +563,73 @@ class crm_bill extends class_base
 			$arr["obj_inst"]->save();
 		}
 
+		//kokkuleppe hind
+		$agreement_price = $arr["obj_inst"]->meta("agreement_price");
+		$t->define_data(array(
+			"name" => t("Kokkuleppehind")
+			."<br>".html::textarea(array(
+				"name" => "agreement_price[name]",
+				"value" => $agreement_price["name"],
+				"rows" => 5,
+				"cols" => 45
+			)),
+			"code" => html::textbox(array(
+				"name" => "agreement_price[code]",
+				"value" => $agreement_price["code"],
+				"size" => 10
+			)),
+			"date" => html::textbox(array(
+				"name" => "agreement_price[date]",
+				"value" => $agreement_price["date"],
+				"size" => 8
+			)),
+			"unit" => html::textbox(array(
+				"name" => "agreement_price[unit]",
+				"value" => $agreement_price["unit"],
+				"size" => 3
+			)),
+			"price" => html::textbox(array(
+				"name" => "agreement_price[price]",
+				"value" => $agreement_price["price"],
+				"size" => 5
+			)),
+			"amt" => html::textbox(array(
+				"name" => "agreement_price[amt]",
+				"value" => $agreement_price["amt"],
+				"size" => 5
+			)),
+			"sum" => $agreement_price["sum"],
+			"has_tax" => html::checkbox(array(
+				"name" => "agreement_price[has_tax]",
+				"ch_value" => 1,
+				"checked" => $agreement_price["has_tax"] == 1 ? true : false
+			)),
+			"prod" => html::select(array(
+				"name" => "ragreement_price[prod]",
+				"options" => $r_prods,
+				"value" => $agreement_price["prod"]
+			))." ".html::popup(array(
+				"width" => 800,
+				"height" => 500,
+				"scrollbars" => 1,
+				"url" => $this->mk_my_orb("do_search", array("pn" => "agreement_price[prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
+				"caption" => t("Vali")
+			)),
+			"sel" => html::checkbox(array(
+				"name" => "sel_rows[]",
+				"value" => $id
+			)),
+			"person" => html::select(array(
+				"name" => "agreement_price[person]",
+				"options" => $r_pers,
+				"value" => $row["persons"],
+				"multiple" => 1
+			)).$pps->get_popup_search_link(array(
+				"pn" => "agreement_price[person]",
+				"multiple" => 1,
+				"clid" => array(CL_CRM_PERSON)
+			))
+		));
 		$arr["prop"]["value"] = $t->draw();
 	}
 
@@ -894,21 +961,30 @@ class crm_bill extends class_base
 				"HAS_ORDERER_CONTACT_PROF" => $this->parse("HAS_ORDERER_CONTACT_PROF")
 			));
 		}
-
+		
 		$rs = array();
 		$sum_wo_tax = 0;
 		$tax = 0;
 		$sum = 0;
-		$brows = $this->get_bill_rows($b);
-
+		
+		$agreement = $b->meta("agreement_price");
+		if($agreement["price"] && strlen($agreement["name"]) > 0 )//kui kokkuleppehind on täidetud, siis rohkem ridu ei ole näha
+		{
+			$bill_rows = array($agreement);
+//			$agreement_price_data = $this->get_agreement_row($agreement);
+//			extract($agreement_price_data);
+		}
+		else
+		{
+			$bill_rows = $this->get_bill_rows($b);
+		}	
+			
+		$brows = $bill_rows; //moment ei tea miks see topelt tuleb... igaks juhuks ei võtnud maha... hiljem käib miski reset
 		$grp_rows = array();
-
 		$tax_rows = array();
-
 		$_no_prod_idx = -1;
-
 		$has_nameless_rows = 0;//miski muutuja , et kui see üheks muutub, siis lisab liidab kõik read kokku
-
+	
 		foreach($brows as $row)
 		{
 			if ($row["is_oe"])
@@ -917,7 +993,6 @@ class crm_bill extends class_base
 			}
 			$cur_tax = 0;
 			$cur_sum = 0;
-
 			$tax_rate = 0;
 			if (!$this->can("view", $row["prod"]) && $row["has_tax"] == 1)
 			{
@@ -980,7 +1055,7 @@ class crm_bill extends class_base
 			$tot_cur_sum += $cur_sum;
 			if(!strlen($row["comment"])>0)$has_nameless_rows = 1;
 		}
- 
+
 		$fbr = reset($brows);
 		
 		//koondab sama nimega ja nimetud ühe hinnaga read kokku
@@ -1025,8 +1100,8 @@ class crm_bill extends class_base
 				$rs[] = array("str" => $this->parse("ROW"), "date" => $grp_row["date"] , "jrk" => $grp_row["jrk"] , "id" => $grp_row["id"],);
 			}
 		}
-
-		foreach($this->get_bill_rows($b) as $row)
+	
+		foreach($bill_rows as $row)
 		{
 			if (!$row["is_oe"])
 			{
@@ -1034,7 +1109,7 @@ class crm_bill extends class_base
 			}
 			$cur_tax = 0;
 			$cur_sum = 0;
-
+	
 			$tax_rate = 0;
 			if (!$this->can("view", $row["prod"]) && $row["has_tax"] == 1)
 			{
@@ -1070,18 +1145,19 @@ class crm_bill extends class_base
 				"desc" => $row["name"],
 				"date" => $row["date"] 
 			));
-
+	
 			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"] , "id" => $grp_row["id"],);
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
 		}
+			
 		usort($rs, array(&$this, "__br_sort"));
 		foreach($rs as $idx => $ida)
 		{
 			$rs[$idx] = $ida["str"];
 		}
-
+		
 		$tax_rows_str = "";
 		foreach($tax_rows as $tax_rate => $tax_amt)
 		{
@@ -1112,7 +1188,6 @@ class crm_bill extends class_base
 
 	//	$sum_wo_tax = $this->round_sum($sum_wo_tax);
 		$sum = $this->round_sum($sum);
-
 		$this->vars(array(
 			"SIGNATURE" => $sigs,
 			"TAX_ROW" => $tax_rows_str,
@@ -1669,6 +1744,9 @@ class crm_bill extends class_base
 				));
 			}
 		}
+		//summa õigeks
+		$arr["request"]["agreement_price"]["sum"] = $arr["request"]["agreement_price"]["price"]*$arr["request"]["agreement_price"]["amt"];
+		$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);
 	}
 
 	/**
