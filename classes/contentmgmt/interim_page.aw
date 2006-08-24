@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.7 2006/08/24 11:59:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.8 2006/08/24 14:23:20 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -188,11 +188,13 @@ class interim_page extends class_base
 					$c = "";
 					foreach($property_list["cfg_proplist"] as $prop => $prop_data)
 					{
-						if($prop_data["group"] == $sub || in_array($sub , $prop_data["group"]));
+						if(($prop_data["group"] == $sub) || (is_array($prop_data["group"]) && in_array($sub , $prop_data["group"])))
 						{
+							$image_url = null;
 							if(in_array($prop, $img_props))//piltidega peab veidi teisiti käituma
 							{
 								$image = $register_obj->get_first_obj_by_reltype("RELTYPE_IMAGE".array_search($prop, $img_props));
+						
 								if($image)
 								{
 									$image_inst = $image->instance();
