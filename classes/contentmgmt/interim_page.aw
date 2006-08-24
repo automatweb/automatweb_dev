@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.6 2006/04/12 14:33:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.7 2006/08/24 11:59:52 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -167,7 +167,7 @@ class interim_page extends class_base
 			$x = 1;
 			while($x < 21)
 			{
-				$img_props[] = "userim".$x;
+				$img_props[$x] = "userim".$x;
 				$image = $register_obj->get_first_obj_by_reltype("RELTYPE_IMAGE".$x);
 				if($image)
 				{
@@ -180,7 +180,6 @@ class interim_page extends class_base
 			//järgnev on subide väljapraakimiseks group järgi, et noh, kui miski grupi propertitel väärtusi pole, siis templades sellenimelise SUBi koodi näha ei ole
 			
 			$grps = safe_array($form_obj->meta("cfg_groups"));
-
 			foreach($grps as $sub => $data)
 			{
 				if ($this->is_template($sub))
@@ -189,11 +188,11 @@ class interim_page extends class_base
 					$c = "";
 					foreach($property_list["cfg_proplist"] as $prop => $prop_data)
 					{
-						if($prop_data["group"] == $sub)
+						if($prop_data["group"] == $sub || in_array($sub , $prop_data["group"]));
 						{
 							if(in_array($prop, $img_props))//piltidega peab veidi teisiti käituma
 							{
-								$image = $register_obj->get_first_obj_by_reltype("RELTYPE_IMAGE".$x);
+								$image = $register_obj->get_first_obj_by_reltype("RELTYPE_IMAGE".array_search($prop, $img_props));
 								if($image)
 								{
 									$image_inst = $image->instance();
@@ -202,7 +201,7 @@ class interim_page extends class_base
 									if(strlen($image_url) > 1)
 									{
 										$not_empty_sub = 1;
-									}						
+									}
 								}
 							}
 							else
