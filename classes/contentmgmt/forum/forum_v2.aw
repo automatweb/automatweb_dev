@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.105 2006/08/16 15:34:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.106 2006/08/24 13:30:15 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -2117,11 +2117,11 @@ class forum_v2 extends class_base
 	//		return $this->finish_action($arr);
 	//	}
 		$errors = array();
-		if ( empty($arr['name']) )
+		if ( isset($arr['name']) && empty($arr['name']) )
 		{
 			$errors['name'] = 1;
 		}
-		if ( empty($arr['commtext']) )
+		if ( isset($arr['commtext']) && empty($arr['commtext']) )
 		{
 			$errors['commtext'] = 1;
 		}
