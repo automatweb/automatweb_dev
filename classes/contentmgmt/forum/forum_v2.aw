@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.107 2006/08/24 13:33:38 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.108 2006/08/24 13:39:59 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -168,12 +168,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property topics_sort_order type=select 
 		@caption Teemade j&auml;rjekord
-
-		@property show_image_upload_in_add_topic_form type=checkbox ch_value=1
-		@caption N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
-
-		@property show_image_upload_in_add_comment_form type=checkbox ch_value=1
-		@caption N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
 
 		@property comments_on_page type=textbox
 		@caption Kommentaare lehel
