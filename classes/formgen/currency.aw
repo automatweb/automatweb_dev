@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.6 2006/07/25 11:33:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.7 2006/08/24 13:08:36 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -26,6 +26,12 @@
 @property rates type=callback callback=callback_get_rates
 @caption Kaustad kust otsida
 
+@groupinfo translate caption=T&otilde;lge
+@default group=translate
+
+@property translate type=table no_caption=1 
+
+
 */
 
 define("RET_NAME",1);
@@ -44,6 +50,19 @@ class currency extends class_base
 		lc_load("definition");
 	}
 
+	function get_property($arr)
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "translate":
+				$this->do_table($arr);
+				break;
+			};
+		return $retval;
+	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -54,9 +73,66 @@ class currency extends class_base
 			case "rates":
 				$this->submit_meta($arr);
 				break;
+			case "translate":
+				$this->submit_trans($arr);
+				break;
 		}
 		return $retval;
 	}
+
+	function submit_trans($arr = array())
+	{
+		$arr["obj_inst"]->set_meta("unit", $arr["request"]["unit"]);
+		$arr["obj_inst"]->set_meta("small_unit", $arr["request"]["small_unit"]);
+	}
+
+	function do_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "lang",
+			"caption" => t("Keel"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "unit",
+			"caption" => t("&Uuml;hik"),
+		));
+		$t->define_field(array(
+			"name" => "small_unit",
+			"caption" => t("Peenraha"),
+		));
+		
+		$langdata = array();
+		aw_global_set("output_charset", "utf-8");
+		$lg = get_instance("languages");
+		$langdata = $lg->get_list(array("all_data" => 1,));
+
+		$unit_meta = $arr["obj_inst"]->meta("unit");
+		$small_unit_meta = $arr["obj_inst"]->meta("small_unit");
+		
+		foreach($langdata as $id => $lang)
+		{
+			if($arr["obj_inst"]->lang_id() != $id)
+			{
+				$t->define_data(array(
+					"unit" => html::textbox(array(
+							"name" => "unit[".$lang["acceptlang"]."]",
+							"value" => $unit_meta[$lang["acceptlang"]],
+							"size" => 10,
+					)),
+					"lang" => $lang["name"],
+					"small_unit" =>html::textbox(array(
+							"name" => "small_unit[".$lang["acceptlang"]."]",
+							"value" => $small_unit_meta[$lang["acceptlang"]],
+							"size" => 10,
+					)),
+				));
+			}
+		}
+
+	}
+
 
 	function submit_meta($arr = array())
 	{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/en/number.aw,v 1.5 2005/11/03 18:02:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/en/number.aw,v 1.6 2006/08/24 13:08:37 markop Exp $
 // en.aw - english localization
 class number
 {
@@ -118,11 +118,20 @@ class number
 			$currency->set_prop("unit_name", "euros");
 			$currency->set_prop("small_unit_name", "cents");
 		}
-
-		$res = $this->get_lc_number($eek)." ".$currency->prop("unit_name");
+		
+		//äkki on unitid tõlgitud
+		$unit_meta = $currency->meta("unit");
+		$small_unit_meta = $currency->meta("small_unit");
+		if($unit_meta["en"]) $unit = $unit_meta["en"];
+		else $unit = $currency->prop("unit_name");
+		
+		if($small_unit_meta["en"]) $small_unit = $small_unit_meta["en"];
+		else $small_unit = $currency->prop("small_unit_name");
+		
+		$res = $this->get_lc_number($eek)." ".$unit;
 		if ($cent > 0)
 		{
-			$res .= " and ".$this->get_lc_number($cent)." ".$currency->prop("small_unit_name");
+			$res .= " and ".$this->get_lc_number($cent)." ".$small_unit;
 		}
 		return $res;
 	}

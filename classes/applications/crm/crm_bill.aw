@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.87 2006/08/24 10:12:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.88 2006/08/24 13:08:38 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -635,6 +635,8 @@ class crm_bill extends class_base
 
 	function get_sum($bill)
 	{
+		$agreement = $bill->meta("agreement_price");
+		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
 		return $bill->prop("sum");
 	}
 
@@ -1197,7 +1199,6 @@ class crm_bill extends class_base
 			"total" => number_format($sum, 2, ".", " "),
 			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc)
 		));
-
 		$res =  $this->parse();
 		if (false && !$_GET["gen_print"])
 		{
