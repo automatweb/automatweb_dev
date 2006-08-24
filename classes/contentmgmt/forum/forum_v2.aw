@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.106 2006/08/24 13:30:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.107 2006/08/24 13:33:38 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -169,6 +169,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property topics_sort_order type=select 
 		@caption Teemade j&auml;rjekord
 
+		@property show_image_upload_in_add_topic_form type=checkbox ch_value=1
+		@caption N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
+
+		@property show_image_upload_in_add_comment_form type=checkbox ch_value=1
+		@caption N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
+
 		@property comments_on_page type=textbox
 		@caption Kommentaare lehel
 
@@ -277,6 +283,9 @@ class forum_v2 extends class_base
 		//	case "comments_on_page":
 		//		$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
 		//		break;
+			case "topics_sort_order":
+				$data['options'] = $this->topics_sort_order;
+				break;
 			case "topics_sort_order":
 				$data['options'] = $this->topics_sort_order;
 				break;
@@ -2127,6 +2136,7 @@ class forum_v2 extends class_base
 		}
 		if ( isset($arr['uemail']) && empty($arr['uemail']) )
 		{
+			$_SESSION['forum_comment_error'] = $errors;
 			$errors['email'] = 1;
 		}
 
@@ -2169,6 +2179,11 @@ class forum_v2 extends class_base
 		unset($emb["id"]);
 		$emb["parent"] = $arr["topic"];
 		$emb["status"] = STAT_ACTIVE;
+		if (!$this->can("add", $emb["parent"]))
+		{
+			aw_session_set("no_cache", 1);
+			return $this->finish_action($arr);
+		}
 		$this->comm_id = $t->submit($emb);
 		// figure out the images parent:
 		$images_folder_id = $obj_inst->prop("images_folder");
