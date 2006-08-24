@@ -7,7 +7,17 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Punktis&amp;amp;uuml;steem</caption>
+            <caption>Vali koodialus</caption>
+      </property>
+      <property>
+            <name>active_calc</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <caption>Aktiivne kood</caption>
       </property>
       <property>
             <name>max_points</name>
@@ -50,6 +60,17 @@
             <caption>&amp;amp;Uuml;lej&amp;amp;auml;&amp;amp;auml;nud v&amp;amp;otilde;istlejad</caption>
       </property>
       <property>
+            <name>cntr_formula</name>
+            <table>objects</table>
+            <group>algorithm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_CFGCONTROLLER</reltype>
+            <props>formula</props>
+            <caption>Kood</caption>
+      </property>
+      <property>
             <name>man_count</name>
             <table>objects</table>
             <group>manual_points</group>
@@ -83,5 +104,12 @@
                   <caption>Kohapunktid</caption>
             </manual_points>
       </groupinfo>
+      <reltypes>
+            <CFGCONTROLLER>
+                  <value>1</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CFGCONTROLLER>
+      </reltypes>
 </properties>
 
