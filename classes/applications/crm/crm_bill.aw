@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.88 2006/08/24 13:08:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.89 2006/08/24 15:04:36 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -512,11 +512,7 @@ class crm_bill extends class_base
 					"value" => $t_inf["amt"],
 					"size" => 5
 				)),
-				"sum" => html::textbox(array(
-					"name" => "rows[$id][sum]",
-					"value" => $t_inf["sum"],
-					"size" => 5
-				)),
+				"sum" => $t_inf["sum"],
 				"has_tax" => html::checkbox(array(
 					"name" => "rows[$id][has_tax]",
 					"ch_value" => 1,
@@ -762,6 +758,27 @@ class crm_bill extends class_base
 			$grp_rows[$new_row["key"]][$new_row["price"]] = $new_row;
 		}
 		return ($grp_rows);
+	}
+
+	function collocate($grp_rows)
+	{
+		$new_rows = array();
+		foreach($grp_rows as $key => $row)
+		{
+			$new_line = 1;
+			foreach($new_rows as $n_key => $new_row)
+			{
+				if($new_row["price"] == $row["price"] && ($new_row["comment"] == $row["comment"] || !$row["comment"]))
+				{
+					$new_rows[$n_key]["sum"] = $new_rows[$n_key]["sum"] + $row["sum"];
+					$new_rows[$n_key]["amt"] = $new_rows[$n_key]["amt"] + $row["amt"];
+					$new_line = 0;
+					break;
+				}
+			}
+			if($new_line) $new_rows[] = $row;
+		}
+		return ($new_rows);
 	}
 
 	function show($arr)
@@ -1059,7 +1076,6 @@ class crm_bill extends class_base
 		}
 
 		$fbr = reset($brows);
-		
 		//koondab sama nimega ja nimetud ühe hinnaga read kokku
 		if(!$arr["all_rows"]) $grp_rows = $this->collocate_rows($grp_rows);
 		foreach($grp_rows as $prod => $grp_rowa)
@@ -1218,7 +1234,6 @@ class crm_bill extends class_base
 			$url = aw_url_change_var("group", "preview_add", aw_url_change_var("openprintdialog", 1));
 			$res .= "<script language='javascript'>setTimeout('window.location.href=\"$url\"',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.location.href='$url'; }</script>";
 		}
-
 		die($res);
 	}
 
@@ -1315,7 +1330,10 @@ class crm_bill extends class_base
 	function show_add($arr)
 	{
 		$b = obj($arr["id"]);
-
+		$bill_rows = $this->get_bill_rows($b);
+		//lükkab mõned read kokku ja liidab summa , ning koguse.võibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha äkki
+		$bill_rows = $this->collocate($bill_rows);
+		
 		$tpl = "show_add";
 		$lc = "et";
 		if ($this->can("view", $b->prop("language")))
@@ -1466,7 +1484,7 @@ class crm_bill extends class_base
 		$sum_wo_tax = 0;
 		$tax = 0;
 		$sum = 0;
-		foreach($this->get_bill_rows($b) as $key => $row)
+		foreach($bill_rows as $key => $row)
 		{
 			if ($row["is_oe"])
 			{
@@ -1511,7 +1529,7 @@ class crm_bill extends class_base
 			$tot_cur_sum += $cur_sum;
 		}
 		
-		foreach($this->get_bill_rows($b) as $key => $row)
+		foreach($bill_rows as $key => $row)
 		{
 			if (!$row["is_oe"])
 			{
