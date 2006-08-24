@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.7 2006/08/24 13:08:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.8 2006/08/24 13:12:21 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -110,6 +110,21 @@ class currency extends class_base
 
 		$unit_meta = $arr["obj_inst"]->meta("unit");
 		$small_unit_meta = $arr["obj_inst"]->meta("small_unit");
+		
+		//kui ei ole keelt valitud, siis ei tule eriti suurt valikut mitte
+		$t->define_data(array(
+			"unit" => html::textbox(array(
+				"name" => "unit[en]",
+				"value" => $unit_meta[$lang["acceptlang"]],
+				"size" => 10,
+			)),
+			"lang" => "Inglise",
+			"small_unit" =>html::textbox(array(
+				"name" => "small_unit[en]",
+				"value" => $small_unit_meta["en"],
+				"size" => 10,
+			)),
+		));
 		
 		foreach($langdata as $id => $lang)
 		{
