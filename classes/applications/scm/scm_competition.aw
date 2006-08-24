@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.15 2006/08/23 12:22:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.16 2006/08/24 12:36:29 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -525,14 +525,21 @@ class scm_competition extends class_base
 					$id = ($event_type == "multi" || $event_type == "multi_coll")?$data["id"]:$data["data"]["id"];
 
 					// links
-					$team_name = html::href(array(
-						"caption" => $team->name(),
-						"url" => $this->mk_my_orb("change", array(
-							"class" => "scm_team",
-							"id" => $team->id(),
-							"return_url" => get_ru(),
-						)),
-					));
+					if($event_type != "single")
+					{
+						$team_name = html::href(array(
+							"caption" => $team->name(),
+							"url" => $this->mk_my_orb("change", array(
+								"class" => "scm_team",
+								"id" => $team->id(),
+								"return_url" => get_ru(),
+							)),
+						));
+					}
+					else
+					{
+						$team_name = t("-");
+					}
 					$t->define_data(array(
 						"name" => html::href(array(
 							"caption" => $person->prop("lastname").", ".$person->prop("firstname"),
@@ -545,7 +552,7 @@ class scm_competition extends class_base
 						"company" => $company->name(),
 						"sex" => (($s = $sex) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("Sugu m&auml;&auml;ramata")),
 						"birthday" => $dob,
-						"team" => ($event_type == "multi" || $event_type == "multi_coll")?$team_name:t("-"),
+						"team" => $team_name,
 						"groups" => $ngroups,
 						"id" => $id.".".$oid.".".$data["connection"]->id(),
 						"contact" => $contact,

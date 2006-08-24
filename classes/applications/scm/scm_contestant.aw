@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.7 2006/08/17 15:45:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.8 2006/08/24 12:36:29 tarvo Exp $
 // scm_contestant.aw - V&otilde;istleja 
 /*
 
@@ -311,9 +311,10 @@ class scm_contestant extends class_base
 		return $retval;
 	}	
 
-	function callback_pre_save($arr)
+	function callback_post_save($arr)
 	{
 		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop_str("contestant"));
+		$arr["obj_inst"]->save();
 	}
 
 	function callback_mod_reforb($arr)
