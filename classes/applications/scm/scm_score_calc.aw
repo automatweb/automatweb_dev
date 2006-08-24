@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.8 2006/08/24 11:25:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.9 2006/08/24 12:15:10 tarvo Exp $
 // scm_score_calc.aw - Punktis&uuml;steem 
 /*
 
@@ -10,10 +10,10 @@
 @default field=meta
 @default method=serialize
 
-@property score_calculator type=select
+@property score_calculator type=select editonly=1
 @caption Vali koodialus
 
-@property active_calc type=chooser orient=vertical
+@property active_calc type=chooser orient=vertical editonly=1
 @caption Aktiivne kood
 
 @groupinfo algorithm caption="Algoritm"
@@ -146,7 +146,7 @@ class scm_score_calc extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 	
-	function callback_pre_save($arr)
+	function callback_post_save($arr)
 	{
 		// make a new controller and connect it if necessary
 		$c = $arr["obj_inst"]->get_first_conn_by_reltype("RELTYPE_CFGCONTROLLER");

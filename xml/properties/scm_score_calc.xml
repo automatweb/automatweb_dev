@@ -7,6 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <editonly>1</editonly>
             <caption>Vali koodialus</caption>
       </property>
       <property>
@@ -17,6 +18,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <orient>vertical</orient>
+            <editonly>1</editonly>
             <caption>Aktiivne kood</caption>
       </property>
       <property>
