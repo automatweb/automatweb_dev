@@ -25,6 +25,7 @@ class popup_menu extends aw_template
 	function begin_menu($menu_id)
 	{
 		$this->items = array();
+		$this->menus = array();
 		$this->menu_id = $menu_id;
 	}
 
@@ -49,15 +50,100 @@ class popup_menu extends aw_template
 	**/
 	function add_item($arr)
 	{
-		$this->items[] = $arr;
+		if ($arr["parent"] == "")
+		{
+			$arr["parent"] = $this->menu_id;
+		}
+		//$this->items[] = $arr;
+		global $mc_counter;
+		$mc_counter++;
+		if (!empty($arr["onClick"]))
+		{
+			$arr["onClick"] = " onClick=\"". $arr["onClick"] . "\"";
+		};
+		if (!empty($arr["oncl"]))
+		{
+			$arr["oncl"] = " onClick=\"". $arr["oncl"] . "\"";
+		};
+
+		if (!empty($arr["link"]))
+		{
+			$arr["url"] = $arr["link"];
+		};
+
+		if (isset($arr["action"]))
+		{
+			$arr["url"] = "javascript:submit_changeform('$arr[action]');";
+		};
+
+		$id = "";
+		if (!empty($arr["href_id"]))
+		{
+			$id = "id='$arr[href_id]'";
+		}
+
+		if (empty($arr["disabled"]))
+		{
+			$rv ='<a '.$id.' class="menuItem" href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
+		}
+		else
+		{
+			$rv = '<a '.$id.' class="menuItem" href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
+		}
+		$this->menus[$arr["parent"]] .= $rv;
+	}
+
+	/** adds a separator line between menu isems that can not be clicked
+		@attrib api=1
+	**/
+	function add_separator($arr)
+	{
+		//$this->items[] = array("__is_sep" => 1);
+		if (!$arr["parent"])
+		{
+			$arr["parent"] = $this->menu_id;
+		}
+		$this->menus[$arr["parent"]] .= '<div class="menuItemSep"></div>'."\n";
+	}
+
+	/** adds an item to the given menu that opens up a new sub-menu
+		@attrib api=1
+
+		@param parent optional type=string
+			The internal name of the submenu, use to make sub-sub-..-menus
+
+		@param text required type=string
+			The text to display for the sub menu
+	**/
+	function add_sub_menu($arr)
+	{
+		if (!$arr["parent"])
+		{
+			$arr["parent"] = $this->menu_id;
+		}
+		$arr["sub_menu_id"] = $arr["name"];
+		$baseurl = $this->cfg["baseurl"];
+		$rv = '<a class="menuItem" href="" onclick="return false;"
+			        onmouseover="menuItemMouseover(event, \''.$arr["sub_menu_id"].'\');">
+				<span class="menuItemText">'.$arr["text"].'</span>
+				<span class="menuItemArrow"><img style="border:0px" src="'.$baseurl.
+				'/automatweb/images/arr.gif" alt=""></span></a>';
+
+		$this->menus[$arr["parent"]] .= $rv;
 	}
 
 	/** Returns the HTML of the popup menu
 
 		@attrib name=get_menu params=name api=1 
 
-		@param icon required type=string
+		@param icon optional type=string
 			Icon image name
+
+		@param text optional type=string
+			If you wish to display text instead of an icon as the menu button, then put it here
+
+		@param load_on_demand_url optional type=string
+			Setting this triggers the load on demand functionality. When the user clicks the icon, this url is fetched and it must return the menu content.
 
 		@comment
 			returns the html source of the popup menu
@@ -89,13 +175,12 @@ class popup_menu extends aw_template
 		}
 
 		$is = "";
-		foreach($this->items as $item)
+		foreach($this->menus as $parent => $menudata)
 		{
-			$is .= "<a class=\"menuItem\" $item[oncl] href=\"".$item["link"]."\">".$item["text"]."</a>";
-		}
-
+			$is .= '<div id="'.$parent.'" class="menu" onmouseover="menuMouseover(event)">'."\n${menudata}</div>\n";
+		};
 		$this->vars(array(
-			"MENU_ITEM" => $is,
+			"ss" => $is,
 			"menu_id" => $this->menu_id,
 			"menu_icon" => $icon,
 			"alt" => $param["alt"]
@@ -107,15 +192,21 @@ class popup_menu extends aw_template
 				"text" => $param["text"]
 			));
 			$this->vars(array(
-				"HAS_TEXT" => $this->parse("HAS_TEXT")
+				"HAS_TEXT" => $href_ct = $this->parse("HAS_TEXT")
 			));
 		}
 		else
 		{
 			$this->vars(array(
-				"HAS_ICON" => $this->parse("HAS_ICON")
+				"HAS_ICON" => $href_ct = $this->parse("HAS_ICON")
 			));
 		}
+
+		if (is_array($param) && !empty($param["load_on_demand_url"]))
+		{
+			return "<div id='lod_".$this->menu_id."'><a href='#' onClick='el = document.getElementById(\"lod_".$this->menu_id."\");el.innerHTML=aw_get_url_contents(\"".$param["load_on_demand_url"]."\");nhr=document.getElementById(\"href_".$this->menu_id."\");evObj = document.createEvent(\"MouseEvents\");evObj.initEvent( \"click\", true, true );nhr.dispatchEvent(evObj);'>$href_ct</a></div>";
+		}
+
 		return $this->parse();
 	}
 }

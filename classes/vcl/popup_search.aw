@@ -111,7 +111,7 @@ class popup_search extends aw_template
 		}
 
 		
-		if (false && $arr["property"]["style"] == "autocomplete")
+		if ($arr["property"]["style"] == "autocomplete")
 		{
 			$selstr = "";
 			if ($this->can("view", $sel))
@@ -127,7 +127,7 @@ class popup_search extends aw_template
 				"content" => $selstr,
 				"value" => $sel,
 				"autocomplete_source" => $as,
-				"autocomplete_params" => array($arr["property"]["name"]),
+				//"autocomplete_params" => array($arr["property"]["name"]),
 				"option_is_tuple" => true
 			));
 		}

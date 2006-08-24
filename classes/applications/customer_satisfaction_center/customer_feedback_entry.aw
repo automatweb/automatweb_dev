@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.1 2006/08/23 19:30:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.2 2006/08/24 13:16:15 kristo Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -545,6 +545,21 @@ class customer_feedback_entry extends class_base
 		{
 			$_SESSION["authenticated_as_customer_care_personnell"] = 1;
 		}
+	}
+
+	/**
+		@attrib name=a
+	**/
+	function a()
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu("my_popup_menu");
+		$pm->add_item(array(
+			"text" => t("Valik"),
+			"link" => 'http://www.neti.ee'
+		));
+		die($pm->get_menu());
+		
 	}
 }
 ?>
