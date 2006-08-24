@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.169 2006/08/16 13:42:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.170 2006/08/24 10:15:44 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1350,8 +1350,8 @@ class menu extends class_base
 
 	function _gen_nice_alias($name)
 	{
-		$to_replace = array("ä","Ä","ö","Ö","ü","Ü","õ","Õ","¾","®","¹","©"," ");
-		$replace_with = array("a","A","o","O","u","U","o","O","z","Z","s","S","_");
+		$to_replace = array("&auml;","&Auml;","&ouml;","&Ouml;","&uuml;","&Uuml;","&otilde;","&Otilde;","¾","®","¹","©"," ");
+		$replace_with = array("a","a","o","o","u","u","o","o","z","z","s","s","-");
 		$str = "!\"@#.¤$%&/()[]={}?\+-`'|,;:";
 		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);;
 		$name = str_replace($to_replace, $replace_with, $name);
