@@ -11,5 +11,12 @@
 			</function>
 		</action>
 
+		<action name="a">
+			<function name="a">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -107,6 +107,12 @@
 <!-- END SUB: GRIDITEM_NO_CAPTION -->
 
 <!-- SUB: GRID_HBOX -->
+
+<!-- SUB: GRID_HAS_CLOSER -->
+<a href='#' onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'>close</a>
+<div id='{VAR:grid_name}'>
+<!-- END SUB: GRID_HAS_CLOSER -->
+
 <!-- hbox -->
 <table border=0 cellspacing=0 cellpadding=0 width='100%'>
 <tr>
@@ -117,9 +123,19 @@
 <!-- END SUB: GRID_HBOX_ITEM -->
 </tr>
 </table>
+
+<!-- SUB: GRID_CLOSER_END -->
+</div>
+<!-- END SUB: GRID_CLOSER_END -->
+
 <!-- END SUB: GRID_HBOX -->
 
 <!-- SUB: GRID_VBOX -->
+<!-- SUB: VGRID_HAS_CLOSER -->
+<a href='#' onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'>close</a>
+<div id='{VAR:grid_name}'>
+<!-- END SUB: VGRID_HAS_CLOSER -->
+
 <!-- vbox -->
 <table border=0 cellspacing=0 cellpadding=0 width='100%'>
 <!-- SUB: GRID_VBOX_ITEM -->
@@ -128,6 +144,11 @@
 </tr>
 <!-- END SUB: GRID_VBOX_ITEM -->
 </table>
+
+<!-- SUB: VGRID_CLOSER_END -->
+</div>
+<!-- END SUB: VGRID_CLOSER_END -->
+
 <!-- END SUB: GRID_VBOX -->
 
 <!-- SUB: PROPERTY_HELP -->

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.149 2006/08/23 19:30:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.150 2006/08/25 09:47:17 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -767,6 +767,8 @@ class htmlclient extends aw_template
 			{
 				$tp = $this->tabpanel;
 			};
+			$bm = get_instance("vcl/popup_menu");
+			$bm->begin_menu("wallabi");
 			$tp->vars(array(
 				"help" => $this->vars["help"],
 				"help_url" => $this->config["help_url"],
@@ -780,7 +782,9 @@ class htmlclient extends aw_template
 					"d_obj" => $_GET["id"],
 					"object_grp" => $_GET["group"]
 				), "customer_feedback_entry"),
-				"feedback_m_link" => $this->mk_my_orb("redir_m", array(	), "customer_feedback_manager")
+				"feedback_m_link" => $this->mk_my_orb("redir_m", array(	), "customer_feedback_manager"),
+				"bm_pop" => $bm->get_menu(array("load_on_demand_url" => $this->mk_my_orb("pm_lod", array("url" => get_ru()), "user_bookmarks"))),
+				"srch_link" => $this->mk_my_orb("redir_search", array("url" => get_ru()), "aw_object_search")
 			));
 			if (aw_ini_get("site_id") == 155)
 			{
@@ -1200,9 +1204,22 @@ class htmlclient extends aw_template
 				$content .= $this->parse("GRID_HBOX_ITEM");
 			};
 
+			$ghc = $gce = "";
+			if ($ldata["closeable"] == 1)
+			{
+				$this->vars(array(
+					"grid_name" => $layout_name
+				));
+				$ghc = $this->parse("GRID_HAS_CLOSER");
+				$gce = $this->parse("GRID_CLOSER_END");
+			}
+
 			$this->vars(array(
 				"GRID_HBOX_ITEM" => $content,
+				"GRID_HAS_CLOSER" => $ghc,
+				"GRID_CLOSER_END" => $gce
 			));
+
 			$html .= $this->parse("GRID_HBOX");
 
 		}
@@ -1219,6 +1236,21 @@ class htmlclient extends aw_template
 
 			$this->vars(array(
 				"GRID_VBOX_ITEM" => $content,
+			));
+
+			$ghc = $gce = "";
+			if ($ldata["closeable"] == 1)
+			{
+				$this->vars(array(
+					"grid_name" => $layout_name
+				));
+				$ghc = $this->parse("VGRID_HAS_CLOSER");
+				$gce = $this->parse("VGRID_CLOSER_END");
+			}
+
+			$this->vars(array(
+				"VGRID_HAS_CLOSER" => $ghc,
+				"VGRID_CLOSER_END" => $gce
 			));
 			
 			$html .= $this->parse("GRID_VBOX");
