@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.9 2006/08/24 13:27:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.10 2006/08/25 10:06:56 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -163,6 +163,7 @@ class currency extends class_base
 		
 		$curr_object_list = new object_list(array(
 			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
 		));
 		
 		$curr_opt = array();
