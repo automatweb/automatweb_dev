@@ -71,7 +71,7 @@ msgid "Grupi V&otilde;istlused (competitions) help"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:57
-msgid "Lisa uus võistlus"
+msgid "Lisa uus v&otilde;istlus"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:108 classes/applications/scm/scm_tournament.aw:109
@@ -79,7 +79,7 @@ msgid "M&auml;&auml;ramata"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:169
-msgid "Võistluse nimi"
+msgid "V&otilde;istluse nimi"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:174

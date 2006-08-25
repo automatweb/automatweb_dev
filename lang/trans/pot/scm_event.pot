@@ -51,7 +51,7 @@ msgid "Omaduse Paremusj&auml;rjestuse t&uuml;&uuml;p (result_type) help"
 msgstr ""
 
 #: classes/applications/scm/scm_event.aw:rel_RELTYPE_RESULT_TYPE
-msgid "Seose Paremusj&amp;auml;rjestuse t&amp;uuml;&amp;uuml;p (RELTYPE_RESULT_TYPE) tekst"
+msgid "Seose Paremusj&auml;rjestuse t&uuml;&uuml;p (RELTYPE_RESULT_TYPE) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_event.aw:46

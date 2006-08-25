@@ -50,21 +50,15 @@ msgid "Omaduse Otsingutulemuste hoidja (search_result) help"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_rem_competitions
-msgid ""
-"Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast "
-"(rem_competitions) caption"
+msgid "Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast (rem_competitions) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_rem_competitions_comment
-msgid ""
-"Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast "
-"(rem_competitions) kommentaar"
+msgid "Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast (rem_competitions) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:prop_rem_competitions_help
-msgid ""
-"Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast "
-"(rem_competitions) help"
+msgid "Omaduse Eemalda v&otilde;istlus(ed) v&otilde;istlussarjast (rem_competitions) help"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:group_competitions
@@ -76,7 +70,7 @@ msgid "Grupi V&otilde;istlused (competitions) help"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:57
-msgid "Lisa uus võistlus"
+msgid "Lisa uus v&otilde;istlus"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:108
@@ -85,7 +79,7 @@ msgid "M&auml;&auml;ramata"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:169
-msgid "Võistluse nimi"
+msgid "V&otilde;istluse nimi"
 msgstr ""
 
 #: classes/applications/scm/scm_tournament.aw:174

@@ -14,15 +14,27 @@ msgid "Klassi Punktis&uuml;steem help"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_score_calculator
-msgid "Omaduse Punktis&uuml;steem (score_calculator) caption"
+msgid "Omaduse Vali koodialus (score_calculator) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_score_calculator_comment
-msgid "Omaduse Punktis&uuml;steem (score_calculator) kommentaar"
+msgid "Omaduse Vali koodialus (score_calculator) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_score_calculator_help
-msgid "Omaduse Punktis&uuml;steem (score_calculator) help"
+msgid "Omaduse Vali koodialus (score_calculator) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_active_calc
+msgid "Omaduse Aktiivne kood (active_calc) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_active_calc_comment
+msgid "Omaduse Aktiivne kood (active_calc) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_active_calc_help
+msgid "Omaduse Aktiivne kood (active_calc) help"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_max_points
@@ -62,17 +74,27 @@ msgid "Omaduse Erandid (points_exception) help"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_points_others
-msgid ""
-"Omaduse &Uuml;lej&auml;&auml;nud v&otilde;istlejad (points_others) caption"
+msgid "Omaduse &Uuml;lej&auml;&auml;nud v&otilde;istlejad (points_others) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_points_others_comment
-msgid ""
-"Omaduse &Uuml;lej&auml;&auml;nud v&otilde;istlejad (points_others) kommentaar"
+msgid "Omaduse &Uuml;lej&auml;&auml;nud v&otilde;istlejad (points_others) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_points_others_help
 msgid "Omaduse &Uuml;lej&auml;&auml;nud v&otilde;istlejad (points_others) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_cntr_formula
+msgid "Omaduse Kood (cntr_formula) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_cntr_formula_comment
+msgid "Omaduse Kood (cntr_formula) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_cntr_formula_help
+msgid "Omaduse Kood (cntr_formula) help"
 msgstr ""
 
 #: classes/applications/scm/scm_score_calc.aw:prop_man_count
@@ -115,22 +137,26 @@ msgstr ""
 msgid "Grupi Kohapunktid (manual_points) help"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:79
+#: classes/applications/scm/scm_score_calc.aw:rel_RELTYPE_CFGCONTROLLER
+msgid "Seose Kontroller (RELTYPE_CFGCONTROLLER) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:106
 msgid "Koht nr %s:"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:81
+#: classes/applications/scm/scm_score_calc.aw:108
 msgid "&Uuml;lej&auml;&auml;nud:"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:200
-msgid "Esimesed 5(10p alates)"
+#: classes/applications/scm/scm_score_calc.aw:277
+msgid "Esimesed 5 (10p alates, astmega 2)"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:201
-msgid "Esimesed 3 saavad(15/4)"
+#: classes/applications/scm/scm_score_calc.aw:278
+msgid "Esimesed 3 (15p alates, astmega 4)"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:202
-msgid "Esimesed kolm saavad punktid (laskmine)"
+#: classes/applications/scm/scm_score_calc.aw:279
+msgid "Esimesed 3 (5p alates, astmega 2)"
 msgstr ""

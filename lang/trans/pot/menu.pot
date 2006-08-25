@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/menu.aw:class_39_help
-msgid "Klassi Men&uuml;&uuml;(vend) help"
+#: classes/menu.aw:class_1_help
+msgid "Klassi Kaust help"
 msgstr ""
 
 #: classes/menu.aw:prop_needs_translation
@@ -1131,19 +1131,19 @@ msgid "Grupi &Otilde;igused (acl) help"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_PICTURES_MENU
-msgid "Seose v&amp;otilde;ta pildid men&amp;uuml;&amp;uuml;lt (RELTYPE_PICTURES_MENU) tekst"
+msgid "Seose v&otilde;ta pildid men&uuml;&uuml;lt (RELTYPE_PICTURES_MENU) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SHOW_SUBFOLDERS_MENU
-msgid "Seose v&amp;otilde;ta alamkasutad men&amp;uuml;&amp;uuml;lt (RELTYPE_SHOW_SUBFOLDERS_MENU) tekst"
+msgid "Seose v&otilde;ta alamkasutad men&uuml;&uuml;lt (RELTYPE_SHOW_SUBFOLDERS_MENU) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SHOW_AS_CALENDAR
-msgid "Seose v&amp;otilde;ta objekte kalendrist (RELTYPE_SHOW_AS_CALENDAR) tekst"
+msgid "Seose v&otilde;ta objekte kalendrist (RELTYPE_SHOW_AS_CALENDAR) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SHOW_AS_LAYOUT
-msgid "Seose kasuta saidi n&amp;auml;itamisel layouti (RELTYPE_SHOW_AS_LAYOUT) tekst"
+msgid "Seose kasuta saidi n&auml;itamisel layouti (RELTYPE_SHOW_AS_LAYOUT) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SEEALSO
@@ -1151,7 +1151,7 @@ msgid "Seose vaata lisaks (RELTYPE_SEEALSO) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_IP
-msgid "Seose IP aadress ligip&amp;auml;&amp;auml;su piiramiseks (RELTYPE_IP) tekst"
+msgid "Seose IP aadress ligip&auml;&auml;su piiramiseks (RELTYPE_IP) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_ACL_GROUP
@@ -1163,11 +1163,11 @@ msgid "Seose objektide nimekiri (RELTYPE_OBJ_TREE) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_DOCS_FROM_MENU
-msgid "Seose v&amp;otilde;ta dokumente men&amp;uuml;&amp;uuml; alt (RELTYPE_DOCS_FROM_MENU) tekst"
+msgid "Seose v&otilde;ta dokumente men&uuml;&uuml; alt (RELTYPE_DOCS_FROM_MENU) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_PERIOD
-msgid "Seose v&amp;otilde;ta dokumente perioodi alt (RELTYPE_PERIOD) tekst"
+msgid "Seose v&otilde;ta dokumente perioodi alt (RELTYPE_PERIOD) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_OBJ_TABLE_CONF
@@ -1187,7 +1187,7 @@ msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SUBMENUS
-msgid "Seose alammen&amp;uuml;&amp;uuml;d objektist (RELTYPE_SUBMENUS) tekst"
+msgid "Seose alammen&uuml;&uuml;d objektist (RELTYPE_SUBMENUS) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_CONTENT_FROM
@@ -1215,7 +1215,7 @@ msgid "Seose Keeleseos (RELTYPE_LANG_REL) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_KEYWORD
-msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
 #: classes/menu.aw:462

@@ -63,10 +63,10 @@ msgid "Omaduse Meeskond (team) help"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:rel_RELTYPE_CONTESTANT
-msgid "Seose V&amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
+msgid "Seose V&otilde;istleja (RELTYPE_CONTESTANT) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_result.aw:rel_RELTYPE_COMPETITION
-msgid "Seose V&amp;otilde;istlus (RELTYPE_COMPETITION) tekst"
+msgid "Seose V&otilde;istlus (RELTYPE_COMPETITION) tekst"
 msgstr ""
 

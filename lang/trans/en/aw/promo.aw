@@ -47,6 +47,11 @@ $GLOBALS["TRANS"]["Paremal"] = "Right";
 $GLOBALS["TRANS"]["All"] = "Bottom";
 $GLOBALS["TRANS"]["Skrolliv"] = "Scrollable";
 $GLOBALS["TRANS"]["J&auml;rjekorra j&auml;rgi"] = "Order";
+$GLOBALS["TRANS"]["Loomise kuup&auml;eva j&auml;rgi"] = "Creation date";
+$GLOBALS["TRANS"]["Muutmise kuup&auml;eva j&auml;rgi"] = "Modification date";
+$GLOBALS["TRANS"]["Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"] = "Date written in document";
+$GLOBALS["TRANS"]["Objekti nime j&auml;rgi"] = "Name of object";
+$GLOBALS["TRANS"]["Kalendris valitud aja j&auml;rgi"] = "Date selected in calendar";
 $GLOBALS["TRANS"]["Random"] = "Random";
 $GLOBALS["TRANS"]["Suurem (uuem) enne"] = "Bigger (newer) first";
 $GLOBALS["TRANS"]["V&auml;iksem (vanem) enne"] = "Smaller (older) first";
@@ -54,4 +59,5 @@ $GLOBALS["TRANS"]["ID"] = "ID";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["k.a. alammen&uuml;&uuml;d"] = "incl. submenus";
 $GLOBALS["TRANS"]["Pane pealkirjaks"] = "Set as title";
+$GLOBALS["TRANS"]["M&auml;rks&otilde;na"] = "Keyword";
 ?>

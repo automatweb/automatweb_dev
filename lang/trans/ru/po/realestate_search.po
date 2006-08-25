@@ -248,7 +248,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address2
 msgid "Omaduse Linn (searchparam_address2) caption"
-msgstr "���
+msgstr "���"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address2_comment
 msgid "Omaduse Linn (searchparam_address2) kommentaar"

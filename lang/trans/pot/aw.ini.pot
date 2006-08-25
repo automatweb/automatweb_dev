@@ -1962,6 +1962,46 @@ msgstr ""
 msgid "Klassi Asukoht (1116) nimi"
 msgstr ""
 
+#: aw.ini:class_1117
+msgid "Klassi Veesõiduk (1117) nimi"
+msgstr ""
+
+#: aw.ini:class_1118
+msgid "Klassi Veesõidukite haldus (1118) nimi"
+msgstr ""
+
+#: aw.ini:class_1119
+msgid "Klassi Veesõidukite otsing (1119) nimi"
+msgstr ""
+
+#: aw.ini:class_1124
+msgid "Klassi Kontrollpilt (1124) nimi"
+msgstr ""
+
+#: aw.ini:class_1126
+msgid "Klassi &Uuml;hik (1126) nimi"
+msgstr ""
+
+#: aw.ini:class_1127
+msgid "Klassi Pakkumise rida (1127) nimi"
+msgstr ""
+
+#: aw.ini:class_1128
+msgid "Klassi Ost (1128) nimi"
+msgstr ""
+
+#: aw.ini:class_1129
+msgid "Klassi Kliendi tagasiside sisestus (1129) nimi"
+msgstr ""
+
+#: aw.ini:class_1130
+msgid "Klassi Kliendi tagasiside (1130) nimi"
+msgstr ""
+
+#: aw.ini:class_1131
+msgid "Klassi Kasutaja j&auml;rjehoidjad (1131) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""

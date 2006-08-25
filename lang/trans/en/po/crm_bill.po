@@ -395,7 +395,7 @@ msgid "Grupi Eelvaade ridadega (preview_w_rows) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:rel_RELTYPE_TASK
-msgid "Seose &amp;Uuml;lesanne (RELTYPE_TASK) tekst"
+msgid "Seose &Uuml;lesanne (RELTYPE_TASK) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:rel_RELTYPE_CUST
@@ -469,7 +469,7 @@ msgid "&Uuml;hik"
 msgstr "Unit"
 
 #: classes/applications/crm/crm_bill.aw:380
-#: classes/applications/crm/crm_bill.aw:1924
+#: classes/applications/crm/crm_bill.aw:2003
 msgid "Hind"
 msgstr "Price"
 
@@ -495,51 +495,56 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:409
 #: classes/applications/crm/crm_bill.aw:534
+#: classes/applications/crm/crm_bill.aw:616
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1131
-#: classes/applications/crm/crm_bill.aw:1528
+#: classes/applications/crm/crm_bill.aw:569
+msgid "Kokkuleppehind"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1207
+#: classes/applications/crm/crm_bill.aw:1604
 msgid "Prinditav arve"
 msgstr "Printable version"
 
-#: classes/applications/crm/crm_bill.aw:1840
+#: classes/applications/crm/crm_bill.aw:1919
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1847
+#: classes/applications/crm/crm_bill.aw:1926
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1855
+#: classes/applications/crm/crm_bill.aw:1934
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1862
+#: classes/applications/crm/crm_bill.aw:1941
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1869
+#: classes/applications/crm/crm_bill.aw:1948
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1874
+#: classes/applications/crm/crm_bill.aw:1953
 msgid "Koonda read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1883
+#: classes/applications/crm/crm_bill.aw:1962
 msgid "Kustuta read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1884
+#: classes/applications/crm/crm_bill.aw:1963
 msgid "Oled kindel et soovid read kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1913
+#: classes/applications/crm/crm_bill.aw:1992
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1918
+#: classes/applications/crm/crm_bill.aw:1997
 msgid "Tunde"
 msgstr ""
 

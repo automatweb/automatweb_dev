@@ -86,27 +86,15 @@ msgid "Omaduse V&otilde;istlussari (scm_tournament) help"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:prop_scm_group
-msgid "Omaduse V&otilde;istlusgrupid (scm_group) caption"
+msgid "Omaduse V&otilde;istlusklassid (scm_group) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:prop_scm_group_comment
-msgid "Omaduse V&otilde;istlusgrupid (scm_group) kommentaar"
+msgid "Omaduse V&otilde;istlusklassid (scm_group) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:prop_scm_group_help
-msgid "Omaduse V&otilde;istlusgrupid (scm_group) help"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:prop_scm_groups_comment
-msgid "Omaduse  (scm_groups_comment) caption"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:prop_scm_groups_comment_comment
-msgid "Omaduse  (scm_groups_comment) kommentaar"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:prop_scm_groups_comment_help
-msgid "Omaduse  (scm_groups_comment) help"
+msgid "Omaduse V&otilde;istlusklassid (scm_group) help"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:prop_scm_score_calc
@@ -181,40 +169,52 @@ msgstr ""
 msgid "Omaduse V&otilde;istlusklassi valik (group_select_type) help"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_evt_team_result_calc
-msgid "Omaduse V&otilde;istkonna tulemuse arvutus (evt_team_result_calc) caption"
+#: classes/applications/scm/scm_competition.aw:prop_team_result_calc
+msgid "Omaduse V&otilde;istkonna tulemuse arvutus (team_result_calc) caption"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_evt_team_result_calc_comment
-msgid "Omaduse V&otilde;istkonna tulemuse arvutus (evt_team_result_calc) kommentaar"
+#: classes/applications/scm/scm_competition.aw:prop_team_result_calc_comment
+msgid "Omaduse V&otilde;istkonna tulemuse arvutus (team_result_calc) kommentaar"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_evt_team_result_calc_help
-msgid "Omaduse V&otilde;istkonna tulemuse arvutus (evt_team_result_calc) help"
+#: classes/applications/scm/scm_competition.aw:prop_team_result_calc_help
+msgid "Omaduse V&otilde;istkonna tulemuse arvutus (team_result_calc) help"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_evt_result_type
-msgid "Omaduse Paremusj&auml;rjestuse t&uuml;&uuml;p (evt_result_type) caption"
+#: classes/applications/scm/scm_competition.aw:prop_result_type
+msgid "Omaduse Paremusj&auml;rjestuse t&uuml;&uuml;p (result_type) caption"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_evt_result_type_comment
-msgid "Omaduse Paremusj&auml;rjestuse t&uuml;&uuml;p (evt_result_type) kommentaar"
+#: classes/applications/scm/scm_competition.aw:prop_result_type_comment
+msgid "Omaduse Paremusj&auml;rjestuse t&uuml;&uuml;p (result_type) kommentaar"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_evt_result_type_help
-msgid "Omaduse Paremusj&auml;rjestuse t&uuml;&uuml;p (evt_result_type) help"
+#: classes/applications/scm/scm_competition.aw:prop_result_type_help
+msgid "Omaduse Paremusj&auml;rjestuse t&uuml;&uuml;p (result_type) help"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_uniqe_nr
-msgid "Omaduse Unikaalne rinnanumber (uniqe_nr) caption"
+#: classes/applications/scm/scm_competition.aw:prop_unique_nr
+msgid "Omaduse Unikaalne rinnanumber (unique_nr) caption"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_uniqe_nr_comment
-msgid "Omaduse Unikaalne rinnanumber (uniqe_nr) kommentaar"
+#: classes/applications/scm/scm_competition.aw:prop_unique_nr_comment
+msgid "Omaduse Unikaalne rinnanumber (unique_nr) kommentaar"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:prop_uniqe_nr_help
-msgid "Omaduse Unikaalne rinnanumber (uniqe_nr) help"
+#: classes/applications/scm/scm_competition.aw:prop_unique_nr_help
+msgid "Omaduse Unikaalne rinnanumber (unique_nr) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_groups_comment
+msgid "Omaduse  (scm_groups_comment) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_groups_comment_comment
+msgid "Omaduse  (scm_groups_comment) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_groups_comment_help
+msgid "Omaduse  (scm_groups_comment) help"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:prop_map
@@ -353,6 +353,14 @@ msgstr ""
 msgid "Grupi M&auml;&auml;rangud (general_settings) help"
 msgstr ""
 
+#: classes/applications/scm/scm_competition.aw:group_group_comments
+msgid "Grupi V&otilde;istlusklasside kommentaarid (group_comments) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_group_comments_help
+msgid "Grupi V&otilde;istlusklasside kommentaarid (group_comments) help"
+msgstr ""
+
 #: classes/applications/scm/scm_competition.aw:group_map_gr
 msgid "Grupi Kaart (map_gr) pealkiri"
 msgstr ""
@@ -426,206 +434,206 @@ msgid "Seose Asukoht (RELTYPE_LOCATION) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:rel_RELTYPE_TOURNAMENT
-msgid "Seose V&amp;otilde;istlussari (RELTYPE_TOURNAMENT) tekst"
+msgid "Seose V&otilde;istlussari (RELTYPE_TOURNAMENT) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:rel_RELTYPE_SCORE_CALC
-msgid "Seose Punktis&amp;uuml;steem (RELTYPE_SCORE_CALC) tekst"
+msgid "Seose Punktis&uuml;steem (RELTYPE_SCORE_CALC) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:rel_RELTYPE_GROUP
-msgid "Seose V&amp;otilde;istlusgrupp (RELTYPE_GROUP) tekst"
+msgid "Seose V&otilde;istlusgrupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:rel_RELTYPE_CONTESTANT
-msgid "Seose V&amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
+msgid "Seose V&otilde;istleja (RELTYPE_CONTESTANT) tekst"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:139
+#: classes/applications/scm/scm_competition.aw:rel_RELTYPE_RESULT_TYPE
+msgid "Seose Paremusj&auml;rjestuse t&uuml;&uuml;p (RELTYPE_RESULT_TYPE) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:145
 msgid "Avalik"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:140
+#: classes/applications/scm/scm_competition.aw:146
 msgid "Piiratud"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:141
+#: classes/applications/scm/scm_competition.aw:147
 msgid "Registreerumine l&otilde;ppenud"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:180
+#: classes/applications/scm/scm_competition.aw:186
 msgid "V&otilde;istlusklass"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:184
+#: classes/applications/scm/scm_competition.aw:190
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:206
+#: classes/applications/scm/scm_competition.aw:217
 msgid "Lisa uus meeskond"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:222
+#: classes/applications/scm/scm_competition.aw:233
 msgid "Eemalda meeskonnad"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:240
-msgid "V&otilde;istlus ei ole v&otilde;istkondlik"
+#: classes/applications/scm/scm_competition.aw:251
+msgid "Individuaalne v&otilde;istlus"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:306
+#: classes/applications/scm/scm_competition.aw:318
 msgid "Lisa uus v&otilde;istleja"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:322
+#: classes/applications/scm/scm_competition.aw:334
 msgid "Lisa uus v&otilde;istkonnaliige"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:361
+#: classes/applications/scm/scm_competition.aw:373
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:368
+#: classes/applications/scm/scm_competition.aw:380
 msgid "Eemalda v&otilde;istluselt"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:501
+#: classes/applications/scm/scm_competition.aw:513
 msgid "Telefoninumber puudub"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:503
+#: classes/applications/scm/scm_competition.aw:515
 msgid "E-mailiaadress puudub"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:507
+#: classes/applications/scm/scm_competition.aw:519
 msgid "Andmed puuduvad"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:534
-msgid "Mees"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:534
-msgid "Naine"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:534
-msgid "Sugu m&auml;&auml;ramata"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:536
-#: classes/applications/scm/scm_competition.aw:1118
+#: classes/applications/scm/scm_competition.aw:541
+#: classes/applications/scm/scm_competition.aw:1224
 msgid "-"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:635
-#: classes/applications/scm/scm_competition.aw:1915
+#: classes/applications/scm/scm_competition.aw:553
+msgid "Mees"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:553
+msgid "Naine"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:553
+msgid "Sugu m&auml;&auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:666
+#: classes/applications/scm/scm_competition.aw:2033
 msgid "Segav&otilde;istkond"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:737
+#: classes/applications/scm/scm_competition.aw:768
 msgid "S&uuml;nniaasta alusel"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:738
+#: classes/applications/scm/scm_competition.aw:769
 msgid "Vanuse alusel"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1070
+#: classes/applications/scm/scm_competition.aw:1176
 msgid "Liikmed"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1237
-msgid "Võistluse toimumise asukoht m&auml;&auml;ramata"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1244
-msgid "Pilt on m&auml;&auml;ramata"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1256
-#: classes/applications/scm/scm_competition.aw:1352
-#: classes/applications/scm/scm_competition.aw:1417
-msgid "V&otilde;istleja"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1261
-#: classes/applications/scm/scm_competition.aw:1373
-#: classes/applications/scm/scm_competition.aw:1437
-#: classes/applications/scm/scm_competition.aw:1456
-msgid "Firma"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1266
-msgid "Sugu"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1272
-msgid "S&uuml;nniaeg"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1281
-#: classes/applications/scm/scm_competition.aw:1366
-#: classes/applications/scm/scm_competition.aw:1451
-msgid "Meeskond"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1290
-#: classes/applications/scm/scm_competition.aw:1383
-#: classes/applications/scm/scm_competition.aw:1461
-msgid "V&otilde;istlusklassid"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1298
-msgid "S&auml;rgi number"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1306
-msgid "Kontaktandmed"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1322
-msgid "V&otilde;istlusklass m&auml;&auml;ramata"
+#: classes/applications/scm/scm_competition.aw:1350
+msgid "V&otilde;istluse toimumise asukoht m&auml;&auml;ramata"
 msgstr ""
 
 #: classes/applications/scm/scm_competition.aw:1357
-#: classes/applications/scm/scm_competition.aw:1422
+msgid "Pilt on m&auml;&auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1369
+#: classes/applications/scm/scm_competition.aw:1465
+#: classes/applications/scm/scm_competition.aw:1523
+msgid "V&otilde;istleja"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1374
+#: classes/applications/scm/scm_competition.aw:1486
+#: classes/applications/scm/scm_competition.aw:1543
+#: classes/applications/scm/scm_competition.aw:1562
+msgid "Firma"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1379
+msgid "Sugu"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1385
+msgid "S&uuml;nniaeg"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1394
+#: classes/applications/scm/scm_competition.aw:1479
+#: classes/applications/scm/scm_competition.aw:1557
+msgid "Meeskond"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1403
+#: classes/applications/scm/scm_competition.aw:1495
+#: classes/applications/scm/scm_competition.aw:1567
+msgid "V&otilde;istlusklassid"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1411
+msgid "S&auml;rgi number"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1419
+msgid "Kontaktandmed"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1435
+msgid "V&otilde;istlusklass m&auml;&auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:1470
+#: classes/applications/scm/scm_competition.aw:1528
 msgid "V&otilde;istleja nr"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1378
-#: classes/applications/scm/scm_competition.aw:1442
+#: classes/applications/scm/scm_competition.aw:1491
+#: classes/applications/scm/scm_competition.aw:1548
 msgid "Tulemus"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1392
-msgid "Koht v&otilde;istlusklassis"
-msgstr ""
-
-#: classes/applications/scm/scm_competition.aw:1398
+#: classes/applications/scm/scm_competition.aw:1504
 msgid "Koht"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1404
+#: classes/applications/scm/scm_competition.aw:1510
 msgid "Punkte"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1431
+#: classes/applications/scm/scm_competition.aw:1537
 msgid "V&otilde;istkond"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1766
+#: classes/applications/scm/scm_competition.aw:1884
 msgid "-Vali v&otilde;istlusklass-"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1776
+#: classes/applications/scm/scm_competition.aw:1894
 msgid "M&auml;&auml;ra v&otilde;istlejad klassi"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1777
+#: classes/applications/scm/scm_competition.aw:1895
 msgid "Eemalda v&otilde;istlejad klassist"
 msgstr ""
 
-#: classes/applications/scm/scm_competition.aw:1909
+#: classes/applications/scm/scm_competition.aw:2027
 msgid "&Uuml;htegi liiget pole registreerunud"
 msgstr ""

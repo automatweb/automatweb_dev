@@ -138,7 +138,7 @@ msgid "Grupi Minu v&otilde;istlused (competitions) help"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:rel_RELTYPE_CONTESTANT
-msgid "Seose V&amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
+msgid "Seose V&otilde;istleja (RELTYPE_CONTESTANT) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:128
@@ -163,30 +163,30 @@ msgstr ""
 msgid "-Vali meeskond-"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:345
+#: classes/applications/scm/scm_contestant.aw:346
 msgid "V&otilde;istlus"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:350
+#: classes/applications/scm/scm_contestant.aw:351
 msgid "Spordiala"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:355
+#: classes/applications/scm/scm_contestant.aw:356
 msgid "Meeskondlik"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:361
+#: classes/applications/scm/scm_contestant.aw:362
 msgid "Toimumiskoht"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:366
+#: classes/applications/scm/scm_contestant.aw:367
 msgid "Toimumisaeg"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:372
+#: classes/applications/scm/scm_contestant.aw:373
 msgid "Korraldaja"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:377
+#: classes/applications/scm/scm_contestant.aw:378
 msgid "V&otilde;istlussari"
 msgstr ""

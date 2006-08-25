@@ -407,7 +407,7 @@ msgid "Grupi Kliendi andmed (cust) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_MONITOR
-msgid "Seose J&auml;lgija (RELTYPE_MONITOR) tekst"
+msgid "Seose Jälgija (RELTYPE_MONITOR) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_FILE
@@ -423,7 +423,7 @@ msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_BUGTYPE
-msgid "Seose Bugi t&amp;uuml;&amp;uuml;p (RELTYPE_BUGTYPE) tekst"
+msgid "Seose Bugi t&uuml;&uuml;p (RELTYPE_BUGTYPE) tekst"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_COMMENT

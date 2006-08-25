@@ -618,23 +618,23 @@ msgstr "Order"
 
 #: classes/contentmgmt/promo.aw:262
 msgid "Loomise kuup&auml;eva j&auml;rgi"
-msgstr ""
+msgstr "Creation date"
 
 #: classes/contentmgmt/promo.aw:263
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
-msgstr ""
+msgstr "Modification date"
 
 #: classes/contentmgmt/promo.aw:264
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
-msgstr ""
+msgstr "Date written in document"
 
 #: classes/contentmgmt/promo.aw:265
 msgid "Objekti nime j&auml;rgi"
-msgstr ""
+msgstr "Name of object"
 
 #: classes/contentmgmt/promo.aw:266
 msgid "Kalendris valitud aja j&auml;rgi"
-msgstr ""
+msgstr "Date selected in calendar"
 
 #: classes/contentmgmt/promo.aw:267
 msgid "Random"
@@ -669,4 +669,4 @@ msgstr "Set as title"
 
 #: classes/contentmgmt/promo.aw:1084
 msgid "M&auml;rks&otilde;na"
-msgstr ""
+msgstr "Keyword"

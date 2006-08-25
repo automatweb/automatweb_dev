@@ -482,13 +482,11 @@ msgid "Omaduse Kindlustus (insurance_status) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate
-msgid ""
-"Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) caption"
+msgid "Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_comment
-msgid ""
-"Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) kommentaar"
+msgid "Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_help
@@ -496,13 +494,11 @@ msgid "Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_view
-msgid ""
-"Omaduse Kindlustust tõendav dokument (insurance_certificate_view) caption"
+msgid "Omaduse Kindlustust tõendav dokument (insurance_certificate_view) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_view_comment
-msgid ""
-"Omaduse Kindlustust tõendav dokument (insurance_certificate_view) kommentaar"
+msgid "Omaduse Kindlustust tõendav dokument (insurance_certificate_view) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_view_help
@@ -526,8 +522,7 @@ msgid "Omaduse Maksuvõla puudumise tõend aegub (tax_clearance_expires) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_expires_comment
-msgid ""
-"Omaduse Maksuvõla puudumise tõend aegub (tax_clearance_expires) kommentaar"
+msgid "Omaduse Maksuvõla puudumise tõend aegub (tax_clearance_expires) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_expires_help
@@ -535,13 +530,11 @@ msgid "Omaduse Maksuvõla puudumise tõend aegub (tax_clearance_expires) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_status
-msgid ""
-"Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) caption"
+msgid "Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_status_comment
-msgid ""
-"Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) kommentaar"
+msgid "Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_status_help
@@ -549,13 +542,11 @@ msgid "Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate
-msgid ""
-"Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) caption"
+msgid "Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_comment
-msgid ""
-"Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) kommentaar"
+msgid "Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_help
@@ -563,13 +554,11 @@ msgid "Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_view
-msgid ""
-"Omaduse Maksuvõla puudumise tõend (tax_clearance_certificate_view) caption"
+msgid "Omaduse Maksuvõla puudumise tõend (tax_clearance_certificate_view) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_view_comment
-msgid ""
-"Omaduse Maksuvõla puudumise tõend (tax_clearance_certificate_view) kommentaar"
+msgid "Omaduse Maksuvõla puudumise tõend (tax_clearance_certificate_view) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_view_help
@@ -677,8 +666,7 @@ msgid "Omaduse Siduss&uuml;steemi ID (contact_search_ext_id_alphanum) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_contact_search_ext_id_alphanum_comment
-msgid ""
-"Omaduse Siduss&uuml;steemi ID (contact_search_ext_id_alphanum) kommentaar"
+msgid "Omaduse Siduss&uuml;steemi ID (contact_search_ext_id_alphanum) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_contact_search_ext_id_alphanum_help
@@ -1314,8 +1302,7 @@ msgid "Omaduse Projekti kontaktisik (all_proj_search_contact_person) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_all_proj_search_contact_person_comment
-msgid ""
-"Omaduse Projekti kontaktisik (all_proj_search_contact_person) kommentaar"
+msgid "Omaduse Projekti kontaktisik (all_proj_search_contact_person) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_all_proj_search_contact_person_help
@@ -3055,7 +3042,7 @@ msgid "Grupi Versioonid (versions) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_ETTEVOTLUSVORM
-msgid "Seose &Otilde;iguslik vorm (RELTYPE_ETTEVOTLUSVORM) tekst"
+msgid "Seose Õiguslik vorm (RELTYPE_ETTEVOTLUSVORM) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_ADDRESS
@@ -3071,11 +3058,11 @@ msgid "Seose Tooted (RELTYPE_TOOTED) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_CHILD_ORG
-msgid "Seose T&uuml;tar-organisatsioonid (RELTYPE_CHILD_ORG) tekst"
+msgid "Seose Tütar-organisatsioonid (RELTYPE_CHILD_ORG) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_WORKERS
-msgid "Seose T&ouml;&ouml;tajad (RELTYPE_WORKERS) tekst"
+msgid "Seose Töötajad (RELTYPE_WORKERS) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_OFFER
@@ -3091,7 +3078,7 @@ msgid "Seose Kohtumine (RELTYPE_KOHTUMINE) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_CALL
-msgid "Seose K&otilde;ne (RELTYPE_CALL) tekst"
+msgid "Seose Kõne (RELTYPE_CALL) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_TASK
@@ -3115,15 +3102,15 @@ msgid "Seose Fax (RELTYPE_TELEFAX) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_JOBS
-msgid "Seose T&amp;ouml;&amp;ouml;pakkumine (RELTYPE_JOBS) tekst"
+msgid "Seose T&ouml;&ouml;pakkumine (RELTYPE_JOBS) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_TOOPAKKUJA
-msgid "Seose T&ouml;&ouml;pakkuja (RELTYPE_TOOPAKKUJA) tekst"
+msgid "Seose Tööpakkuja (RELTYPE_TOOPAKKUJA) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_TOOTSIJA
-msgid "Seose T&ouml;&ouml;otsija (RELTYPE_TOOTSIJA) tekst"
+msgid "Seose Tööotsija (RELTYPE_TOOTSIJA) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_CUSTOMER
@@ -3151,11 +3138,11 @@ msgid "Seose tellimus (RELTYPE_ORDER) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_SECTION
-msgid "Seose &Uuml;ksus (RELTYPE_SECTION) tekst"
+msgid "Seose Üksus (RELTYPE_SECTION) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_PROFESSIONS
-msgid "Seose V&otilde;imalikud ametid (RELTYPE_PROFESSIONS) tekst"
+msgid "Seose Võimalikud ametid (RELTYPE_PROFESSIONS) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_CATEGORY
@@ -3167,7 +3154,7 @@ msgid "Seose Persoon, kellele firma on klient (RELTYPE_MAINTAINER) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_SELLER
-msgid "Seose Persoon, kes m&uuml;&uuml;s (RELTYPE_SELLER) tekst"
+msgid "Seose Persoon, kes müüs (RELTYPE_SELLER) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_PROJECT
@@ -3179,7 +3166,7 @@ msgid "Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_SECTION_WEBSIDE
-msgid "Seose &Uuml;ksus veebis (RELTYPE_SECTION_WEBSIDE) tekst"
+msgid "Seose Üksus veebis (RELTYPE_SECTION_WEBSIDE) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_GROUP
@@ -3195,7 +3182,7 @@ msgid "Seose Pakkumise fail (RELTYPE_OFFER_FILE) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_DAY_REPORT
-msgid "Seose p&amp;auml;eva raport (RELTYPE_DAY_REPORT) tekst"
+msgid "Seose p&auml;eva raport (RELTYPE_DAY_REPORT) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_DOCS_FOLDER
@@ -3279,9 +3266,7 @@ msgid "Seose Kindlustusdokumendi fail (RELTYPE_INSURANCE_CERT_FILE) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_TAX_CLEARANCE_FILE
-msgid ""
-"Seose Maksuv&otilde;la puudumise t&otilde;endi fail "
-"(RELTYPE_TAX_CLEARANCE_FILE) tekst"
+msgid "Seose Maksuvõla puudumise tõendi fail (RELTYPE_TAX_CLEARANCE_FILE) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_SHOP_WAREHOUSE_PURCHASE_BILL
@@ -3289,7 +3274,7 @@ msgid "Seose Ostu arve (RELTYPE_SHOP_WAREHOUSE_PURCHASE_BILL) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_DEF_POLL
-msgid "Seose Kiirk&amp;uuml;sitlus (RELTYPE_DEF_POLL) tekst"
+msgid "Seose Kiirk&uuml;sitlus (RELTYPE_DEF_POLL) tekst"
 msgstr ""
 
 #: classes/crm/crm_company.aw:1221 classes/crm/crm_company.aw:1601
@@ -3332,7 +3317,7 @@ msgstr ""
 msgid "Kehtiv"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1446 classes/crm/crm_company.aw:5244
+#: classes/crm/crm_company.aw:1446 classes/crm/crm_company.aw:5252
 msgid "%s foorum"
 msgstr ""
 
@@ -3340,7 +3325,7 @@ msgstr ""
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1611 classes/crm/crm_company.aw:5624
+#: classes/crm/crm_company.aw:1611 classes/crm/crm_company.aw:5632
 msgid "Lisa"
 msgstr ""
 
@@ -3356,8 +3341,8 @@ msgstr ""
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2058 classes/crm/crm_company.aw:4604
-#: classes/crm/crm_company.aw:4641
+#: classes/crm/crm_company.aw:2058 classes/crm/crm_company.aw:4612
+#: classes/crm/crm_company.aw:4649
 msgid "--vali--"
 msgstr ""
 
@@ -3381,120 +3366,118 @@ msgstr ""
 msgid "Eelmine kuu"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2075
+#: classes/crm/crm_company.aw:2075 classes/crm/crm_company.aw:2103
 msgid "Kokkuv&otilde;te"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2076
+#: classes/crm/crm_company.aw:2076 classes/crm/crm_company.aw:2104
 msgid "Ridade kaupa"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2114
+#: classes/crm/crm_company.aw:2122
 msgid "Loo arve"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2241
+#: classes/crm/crm_company.aw:2249
 msgid "Nimi peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2728
+#: classes/crm/crm_company.aw:2736
 msgid "Positiivne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2729
+#: classes/crm/crm_company.aw:2737
 msgid "Neutraalne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2730
+#: classes/crm/crm_company.aw:2738
 msgid "Negatiivne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3607
+#: classes/crm/crm_company.aw:3615
 msgid "Uus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3647
+#: classes/crm/crm_company.aw:3655
 msgid "Kataloog määramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3701
+#: classes/crm/crm_company.aw:3709
 msgid "Kalender või kalendri sündmuste kataloog määramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3714 classes/crm/crm_company.aw:3715
-#: classes/crm/crm_company.aw:4393 classes/crm/crm_company.aw:4475
-#: classes/crm/crm_company.aw:5606 classes/crm/crm_company.aw:5633
+#: classes/crm/crm_company.aw:3722 classes/crm/crm_company.aw:3723
+#: classes/crm/crm_company.aw:4401 classes/crm/crm_company.aw:4483
+#: classes/crm/crm_company.aw:5614 classes/crm/crm_company.aw:5641
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3727
+#: classes/crm/crm_company.aw:3735
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4087 classes/crm/crm_company.aw:4752
+#: classes/crm/crm_company.aw:4095 classes/crm/crm_company.aw:4760
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4343 classes/crm/crm_company.aw:4417
-#: classes/crm/crm_company.aw:5559 classes/crm/crm_company.aw:5629
+#: classes/crm/crm_company.aw:4351 classes/crm/crm_company.aw:4425
+#: classes/crm/crm_company.aw:5567 classes/crm/crm_company.aw:5637
 msgid "Toimetus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4368 classes/crm/crm_company.aw:4446
-#: classes/crm/crm_company.aw:5587 classes/crm/crm_company.aw:5632
+#: classes/crm/crm_company.aw:4376 classes/crm/crm_company.aw:4454
+#: classes/crm/crm_company.aw:5595 classes/crm/crm_company.aw:5640
 msgid "Kohtumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5015
-msgid ""
-"crm_company::on_create_customer(): category %s has no parent company or "
-"category!"
+#: classes/crm/crm_company.aw:5023
+msgid "crm_company::on_create_customer(): category %s has no parent company or category!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5168
+#: classes/crm/crm_company.aw:5176
 msgid "Konfliktsed projektid:<br>"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5285
+#: classes/crm/crm_company.aw:5293
 msgid "%s serveri failid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5577 classes/crm/crm_company.aw:5631
+#: classes/crm/crm_company.aw:5585 classes/crm/crm_company.aw:5639
 msgid "K&otilde;ne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5625
+#: classes/crm/crm_company.aw:5633
 msgid "T&ouml;&ouml;"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5626
+#: classes/crm/crm_company.aw:5634
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5627
+#: classes/crm/crm_company.aw:5635
 msgid "Eraisik"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5628
+#: classes/crm/crm_company.aw:5636
 msgid "Projekt"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5630
+#: classes/crm/crm_company.aw:5638
 msgid "Arve"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5634
+#: classes/crm/crm_company.aw:5642
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5715
+#: classes/crm/crm_company.aw:5723
 msgid "Siduss&uuml;steem"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5720
+#: classes/crm/crm_company.aw:5728
 msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5777
+#: classes/crm/crm_company.aw:5785
 msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
