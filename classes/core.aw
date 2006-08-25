@@ -297,7 +297,7 @@ class core extends acl_base
 
 	function register_parser($args = array())
 	{
-		// esimesel kasutamisel loome uue nö dummy objekti, mille sisse
+		// esimesel kasutamisel loome uue n&ouml; dummy objekti, mille sisse
 		// edaspidi registreerime koikide parserite callback meetodid
 		if (!isset($this->parsers) || !is_object($this->parsers))
 		{
@@ -324,8 +324,8 @@ class core extends acl_base
 		}
 		else
 		{
-			// kui klassi ja funktsiooni polnud defineeritud, siis järelikult
-			// soovitakse siia alla registreerida nö. sub_parsereid.
+			// kui klassi ja funktsiooni polnud defineeritud, siis j&auml;relikult
+			// soovitakse siia alla registreerida n&ouml;. sub_parsereid.
 			$block = array(
 				"reg" => $reg,
 				"parserchain" => array(),
@@ -334,7 +334,7 @@ class core extends acl_base
 		$this->parsers->reglist[] = $block;
 
 
-		// tagastab äsja registreeritud parseriobjekti ID nimekirjas
+		// tagastab &auml;sja registreeritud parseriobjekti ID nimekirjas
 		return sizeof($this->parsers->reglist) - 1;
 	}
 
@@ -342,7 +342,7 @@ class core extends acl_base
 	// !Registreerib alamparseri
 	// argumendid:
 	// idx(int) - millise $match array elemendi peale erutuda
-	// match(string) - mis peaks elemendi väärtuses olema, et see välja kutsuks
+	// match(string) - mis peaks elemendi v&auml;&auml;rtuses olema, et see v&auml;lja kutsuks
 	// reg_id(int) - millise master parseri juurde see registreerida
 	// class(string) - klass
 	// function(string) - funktsiooni nimi
@@ -380,7 +380,7 @@ class core extends acl_base
 		$meta = $o->meta();
 
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
-		// esimese tsükliga kutsume parserite reset funktioonud välja. If any.
+		// esimese ts&uuml;kliga kutsume parserite reset funktioonud v&auml;lja. If any.
 		if (!is_array($this->parsers->reglist))
 		{
 			return;
@@ -403,7 +403,7 @@ class core extends acl_base
 
 		foreach($this->parsers->reglist as $pkey => $parser)
 		{
-			// itereerime seni, kuni see äsjaleitud regulaaravaldis enam ei matchi.
+			// itereerime seni, kuni see &auml;sjaleitud regulaaravaldis enam ei matchi.
 			$cnt = 0;
 			while(preg_match($parser["reg"],$text,$matches))
 			{
@@ -413,7 +413,7 @@ class core extends acl_base
 					return;
 				};
 				// siia tuleb tekitada mingi if lause, mis 
-				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja välja
+				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja v&auml;lja
 				if (sizeof($parser["parserchain"] > 0))
 				{
 					foreach($parser["parserchain"] as $skey => $sval)
@@ -533,7 +533,7 @@ class core extends acl_base
 
 		$this->_log(ST_CORE, SA_RAISE_ERROR, $msg, $oid);
 
-		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<br /><br />\n\n".$msg." </b>";
+		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie t&auml;helepanu mingile ebat&auml;psusele  andmetes v&otilde;i n&auml;puveale.<br /><br />\n\n".$msg." </b>";
 
 		// also attach backtrace
 		if (function_exists("debug_backtrace"))
@@ -883,7 +883,12 @@ class core extends acl_base
 		$res .= ($sep == "/") ? "/" : "?";
 		foreach($this->orb_values as $name => $value)
 		{
-			$res .= $name."=".$value.$sep;
+			$add = $name."=".$value.$sep;
+			if(strlen($res.$add) > 3000)
+			{
+				break;
+			}
+			$res .= $add;
 		};
 		return substr($res,0,-1);
 	}
@@ -1109,8 +1114,8 @@ class core extends acl_base
 
 		// jama on selles, et "w" modes avamine truncateb olemasoleva faili,
 		// ja sellest voib tekkida jamasid... see, et mitu inimest korraga sama
-		// faili kirjutavad, peaks olema suht väikese tõenäosusega sündmus, sest
-		// üldjuhul me kasutame random nimedega faile.
+		// faili kirjutavad, peaks olema suht v&auml;ikese t&otilde;en&auml;osusega s&uuml;ndmus, sest
+		// &uuml;ldjuhul me kasutame random nimedega faile.
 		// "b" is for os-indepence, winblowsil on huvitav omadus isiklikke reavahetusi kasutada
 		if (not(($fh = fopen($file,"wb"))))
 		{
