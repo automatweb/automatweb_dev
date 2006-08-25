@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.90 2006/08/25 11:16:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.91 2006/08/25 11:29:14 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1333,6 +1333,13 @@ class crm_bill extends class_base
 		$bill_rows = $this->get_bill_rows($b);
 		//lükkab mõned read kokku ja liidab summa , ning koguse.võibolla saaks sama funktsiooni teise sarnase asemel ka kasutada, kui seda varem teha äkki
 //		$bill_rows = $this->collocate($bill_rows);
+		
+		//tühja kirjeldusega read välja
+		foreach($bill_rows as $key => $val)
+		{
+			if(!(strlen($val["name"]) > 0)) unset($bill_rows[$key]);
+		}
+		
 		
 		$tpl = "show_add";
 		$lc = "et";
