@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.150 2006/08/25 09:47:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.151 2006/08/25 10:48:56 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -784,6 +784,7 @@ class htmlclient extends aw_template
 				), "customer_feedback_entry"),
 				"feedback_m_link" => $this->mk_my_orb("redir_m", array(	), "customer_feedback_manager"),
 				"bm_pop" => $bm->get_menu(array("load_on_demand_url" => $this->mk_my_orb("pm_lod", array("url" => get_ru()), "user_bookmarks"))),
+				"qa_pop" => $bm->get_menu(array("load_on_demand_url" => $this->mk_my_orb("qa_lod", array("url" => get_ru()), "obj_quick_add"))),
 				"srch_link" => $this->mk_my_orb("redir_search", array("url" => get_ru()), "aw_object_search")
 			));
 			if (aw_ini_get("site_id") == 155)
