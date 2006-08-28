@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.175 2006/08/21 15:11:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.176 2006/08/28 11:41:57 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -246,7 +246,7 @@ class image extends class_base
 	}
 
 	///
-	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse välja callbackina
+	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse v&auml;lja callbackina
 	//  force_comments - shows comment count and links to comment window even if not set in images prop
 	function parse_alias($args = array())
 	{
@@ -1932,6 +1932,22 @@ class image extends class_base
 	{
 		$s = $this->parse_alias(array("alias" => array("target" => $arr["id"])));
 		die($s["replacement"]);
+	}
+	
+	/**
+		@attrib name=gen_image_alias_for_doc params=name
+		@param img_id required type=int
+		@param doc_id required type=int
+	**/
+	function gen_image_alias_for_doc($arr)
+	{
+		$c = new connection();
+		$c->load(array(
+			"from" => $arr["doc_id"],
+			"to" => $arr["img_id"],
+		));
+		$c->save();
+		die($c->id());
 	}
 
 	function do_db_upgrade($t, $f)

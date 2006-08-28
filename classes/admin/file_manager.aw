@@ -113,6 +113,10 @@ class file_manager extends aw_template
 		foreach($ol->arr() as $o)
 		{
 			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $o->id()), CL_FILE);
+			$gen_alias_url = $this->mk_my_orb("gen_file_alias_for_doc", array(
+				"doc_id" => $arr["docid"],
+				"file_id" => $o->id(),
+			), CL_FILE);
 			$image_url = $ii->get_url($o->id(), $o->name());
 			$link_name = $o->name();
 			$t->define_data(array(
@@ -123,6 +127,7 @@ class file_manager extends aw_template
 					"onClick" => "
 						FCK=window.parent.opener.FCK;
 						var eSelected = FCK.Selection.MoveToAncestorNode(\"A\") ; 
+						aw_get_url_contents(\"".$gen_alias_url."\");
 						if (eSelected)
 						{
 							eSelected.href=\"$image_url\";

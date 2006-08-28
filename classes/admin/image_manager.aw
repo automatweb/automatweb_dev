@@ -113,6 +113,10 @@ class image_manager extends aw_template
 		{
 			$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $o->id()), CL_IMAGE);
 			$image_url = $ii->get_url_by_id($o->id());
+			$gen_alias_url = $this->mk_my_orb("gen_image_alias_for_doc", array(
+				"img_id" => $o->id(),
+				"doc_id" => $arr["docid"],
+			), CL_IMAGE);
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
 				"sel" => html::href(array(
@@ -121,6 +125,7 @@ class image_manager extends aw_template
 					"onClick" => "
 						FCK=window.parent.opener.FCK;
 						var eSelected = FCK.Selection.GetSelectedElement() ; 
+						aw_get_url_contents(\"".$gen_alias_url."\");
 						if (\"\"+eSelected == \"HTMLImageElement\")
 						{
 							eSelected.src=\"$image_url\";

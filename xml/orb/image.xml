@@ -164,5 +164,14 @@
 			</function>
 		</action>
 
+		<action name="gen_image_alias_for_doc">
+			<function name="gen_image_alias_for_doc">
+				<arguments>
+					<required name="img_id" type="int" />
+					<required name="doc_id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

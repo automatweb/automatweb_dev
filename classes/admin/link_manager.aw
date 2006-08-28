@@ -142,6 +142,10 @@ class link_manager extends aw_template
 			{
 				$link_url = obj_link($o->id());
 			}
+			$gen_alias_url = $this->mk_my_orb("gen_link_alias_for_doc",array(
+				"doc_id" => $arr["docid"],
+				"link_id" => $o->id(),
+			), CL_EXTLINK);
 			$link_name = str_replace("\"", "\\\"", $o->name());
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
@@ -151,6 +155,7 @@ class link_manager extends aw_template
 					"onClick" => "
 						FCK=window.parent.opener.FCK;
 						var eSelected = FCK.Selection.MoveToAncestorNode(\"A\") ; 
+						aw_get_url_contents(\"".$gen_alias_url."\");
 						if (eSelected)
 						{
 							eSelected.href=\"$link_url\";

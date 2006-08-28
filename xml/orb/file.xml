@@ -38,5 +38,14 @@
 			</function>
 		</action>
 
+		<action name="gen_file_alias_for_doc">
+			<function name="gen_file_alias_for_doc">
+				<arguments>
+					<required name="doc_id" type="int" />
+					<required name="file_id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

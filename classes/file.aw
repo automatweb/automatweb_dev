@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.128 2006/08/21 12:09:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.129 2006/08/28 11:41:57 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -257,7 +257,7 @@ class file extends class_base
 			case "file":
 				// see asi eeldab ajutise faili tegemist eksole?
 
-				// ah sa raisk küll, siinkohal on mul ju konkreetse faili sisu
+				// ah sa raisk k&uuml;ll, siinkohal on mul ju konkreetse faili sisu
 				if (is_array($data["value"]))
 				{
 					$file = $data["value"]["tmp_name"];
@@ -361,7 +361,7 @@ class file extends class_base
 		{
 			$fi = $this->get_file_by_id($alias["target"], true);
 			// n2itame kohe
-			// kontrollime koigepealt, kas headerid on ehk väljastatud juba.
+			// kontrollime koigepealt, kas headerid on ehk v&auml;ljastatud juba.
 			// dokumendi preview vaatamisel ntx on.
 			if (trim($fi["type"]) == "text/html")
 			{
@@ -468,7 +468,7 @@ class file extends class_base
 	}
 
 	////
-	// !Salvestab faili failisysteemi. For internal use, s.t. kutsutakse välja save_file seest
+	// !Salvestab faili failisysteemi. For internal use, s.t. kutsutakse v&auml;lja save_file seest
 	// returns the name of the file that the data was saved in
 	function _put_fs($arr)
 	{
@@ -615,7 +615,7 @@ class file extends class_base
 
 	////
 	// !Selle funktsiooni abil salvestatakse fail systeemi sisse,
-	// soltuvalt parameetrist store väärtusest
+	// soltuvalt parameetrist store v&auml;&auml;rtusest
 	// argumendid:
 	// filename(string) - faili nimi
 	// type(string) - faili tyyp (MIME)
@@ -766,7 +766,7 @@ class file extends class_base
 		return $ret;
 	}
 
-	/** Näitab faili. DUH. 
+	/** N&auml;itab faili. DUH. 
 		
 		@attrib name=preview params=name nologin="1" default="0"
 		
@@ -823,7 +823,7 @@ class file extends class_base
 		$fc = $this->get_file_by_id($id);
 		if ($this->can_be_embedded($fc))
 		{
-			$this->mk_path($fc["parent"],"Näita faili");
+			$this->mk_path($fc["parent"],"N&auml;ita faili");
 			print $fc["content"];
 		}
 		else
@@ -1139,6 +1139,22 @@ class file extends class_base
 		$i = $o->instance();
 		$s = $i->parse_alias(array("alias" => array("target" => $arr["id"])));
 		die($s);
+	}
+
+	/**
+		@attrib name=gen_file_alias_for_doc params=name
+		@param doc_id required type=int
+		@param file_id required type=int
+	**/
+	function gen_file_alias_for_doc($arr)
+	{
+		$c = new connection();
+		$c->load(array(
+			"from" => $arr["doc_id"],
+			"to" => $arr["file_id"],
+		));
+		$c->save();
+		die($c->id());
 	}
 };
 ?>

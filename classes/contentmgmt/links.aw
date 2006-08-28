@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.22 2006/08/22 11:42:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.23 2006/08/28 11:41:44 tarvo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -389,7 +389,7 @@ class links extends class_base
 	}
 
 	// registreerib kliki lingile
-	// peab ehitama ka mehhanisimi spämmimise vältimiseks
+	// peab ehitama ka mehhanisimi sp&auml;mmimise v&auml;ltimiseks
 	function add_hit($id,$host,$uid) 
 	{
 		if (!aw_ini_get("links.use_hit_counter"))
@@ -424,6 +424,22 @@ class links extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	/**
+		@attrib name=gen_link_alias_for_doc params=name
+		@param doc_id required type=int
+		@param link_id required type=int
+	**/
+	function gen_link_alias_for_doc($arr)
+	{
+		$c = new connection();
+		$c->load(array(
+			"from" => $arr["doc_id"],
+			"to" => $arr["link_id"],
+		));
+		$c->save();
+		die($c->id());
 	}
 }
 ?>
