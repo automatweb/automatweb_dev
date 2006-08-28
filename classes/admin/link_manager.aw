@@ -107,6 +107,11 @@ class link_manager extends aw_template
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "location",
+			"caption" => t("Asukoht"),
+			"sortable" => true,
+		));
+		$t->define_field(array(
 			"name" => "sel",
 			"caption" => t("Vali"),
 		));
@@ -147,8 +152,10 @@ class link_manager extends aw_template
 				"link_id" => $o->id(),
 			), CL_EXTLINK);
 			$link_name = str_replace("\"", "\\\"", $o->name());
+			$location = $this->gen_location_for_obj($o);
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
+				"location" => $location,
 				"sel" => html::href(array(
 					"url" => "javascript:void(0)",
 					"caption" => t("Vali see"),
@@ -217,6 +224,17 @@ class link_manager extends aw_template
 
 		$html = $htmlc->get_result();
 		return $html;
+	}
+
+	function gen_location_for_obj($o)
+	{
+		$o = obj($o->parent());
+		for($i=0;$i<3;$i++)
+		{
+			$ret[] = $o?$o->name():NULL;
+			$o = (($o) && $s = $o->parent())?obj($s):false;
+		}
+		return join(" / ", array_reverse($ret));
 	}
 }
 ?>

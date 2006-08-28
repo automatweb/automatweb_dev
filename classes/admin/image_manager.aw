@@ -88,6 +88,11 @@ class image_manager extends aw_template
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "location",
+			"caption" => t("Asukoht"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
 			"name" => "sel",
 			"caption" => t("Vali"),
 		));
@@ -117,8 +122,10 @@ class image_manager extends aw_template
 				"img_id" => $o->id(),
 				"doc_id" => $arr["docid"],
 			), CL_IMAGE);
+			$location = $this->gen_location_for_obj($o);
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
+				"location" => $location,
 				"sel" => html::href(array(
 					"url" => "javascript:void(0)",
 					"caption" => t("Vali see"),
@@ -144,5 +151,17 @@ class image_manager extends aw_template
 		$t->sort_by();
 		return $t->draw();
 	}
+
+	function gen_location_for_obj($o)
+	{
+		$o = obj($o->parent());
+		for($i=0;$i<3;$i++)
+		{
+			$ret[] = $o?$o->name():NULL;
+			$o = (($o) && $s = $o->parent())?obj($s):false;
+		}
+		return join(" / ", array_reverse($ret));
+	}
+
 }
 ?>

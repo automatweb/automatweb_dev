@@ -89,6 +89,11 @@ class file_manager extends aw_template
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "location",
+			"caption" => t("Asukoht"),
+			"sortable" => true,
+		));
+		$t->define_field(array(
 			"name" => "sel",
 			"caption" => t("Vali"),
 		));
@@ -119,8 +124,10 @@ class file_manager extends aw_template
 			), CL_FILE);
 			$image_url = $ii->get_url($o->id(), $o->name());
 			$link_name = $o->name();
+			$location = $this->gen_location_for_obj($o);
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
+				"location" => $location,
 				"sel" => html::href(array(
 					"url" => "javascript:void(0)",
 					"caption" => t("Vali see"),
@@ -147,6 +154,17 @@ class file_manager extends aw_template
 		$t->set_default_sortby("name");
 		$t->sort_by();
 		return "<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</script> ".$t->draw();
+	}
+
+	function gen_location_for_obj($o)
+	{
+		$o = obj($o->parent());
+		for($i=0;$i<3;$i++)
+		{
+			$ret[] = $o?$o->name():NULL;
+			$o = (($o) && $s = $o->parent())?obj($s):false;
+		}
+		return join(" / ", array_reverse($ret));
 	}
 }
 ?>
