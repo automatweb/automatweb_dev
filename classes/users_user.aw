@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.126 2006/05/22 12:30:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.127 2006/08/28 11:02:44 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -163,6 +163,8 @@ class users_user extends aw_template
 		$logins = $user_obj->prop("logins") + 1;
 		$user_obj->set_prop("logins", $logins);
 		$user_obj->set_prop("lastaction", time());
+		$_SESSION["user_history_count"] = $user_obj->prop("history_size");
+		$_SESSION["user_history_has_folders"] = $user_obj->prop("history_has_folders");
 		if (aw_ini_get("users.count_logins"))
 		{
 			$user_obj->save(); 

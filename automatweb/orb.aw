@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.23 2006/05/22 12:30:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.24 2006/08/28 11:02:46 kristo Exp $
 if (!ini_get("safe_mode"))
 {
 	set_time_limit(0);
@@ -88,6 +88,8 @@ $orb->process_request(array(
 ));
 
 $content = $orb->get_data();
+
+
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus

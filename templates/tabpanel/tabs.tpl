@@ -58,7 +58,8 @@
 		<a href='{VAR:feedback_m_link}'>Manager</a>
 		<a href='{VAR:srch_link}'>Otsing</a>
 
-		{VAR:bm_pop} | {VAR:qa_pop}
+		<table border="1">
+		<tr><td>{VAR:bm_pop}</td><td> {VAR:qa_pop} </td><td>{VAR:settings_pop}</td><td>{VAR:history_pop}</td></tr></table>
 	<!-- END SUB: NEWIF -->
 	</span>
   </td>

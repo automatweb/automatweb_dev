@@ -33,6 +33,7 @@ foreach($i->get_langs() as $_uil)
 	));
 }
 
+
 // do not display the YAH bar, if site_title is empty
 $sf->vars(array(
 	"site_title" => $site_title,
@@ -129,4 +130,48 @@ if (!$styles_done)
 	echo $styles;
 };
 aw_shutdown();
+
+flush();
+
+if ($_SESSION["user_history_count"] > 0)
+{
+	if (!is_array($_SESSION["user_history"]))
+	{
+		$_SESSION["user_history"] = array();
+	}
+	$pu = parse_url(get_ru());
+	parse_str($pu["query"], $bits);
+	$st = $site_title;
+	if ($bits["id"])
+	{
+		$o = obj($bits["id"]);
+		$st = $o->name();
+	}
+
+	if ($bits["group"])
+	{
+		$gl = $o->get_group_list();
+		$st .= " - ".$gl[$bits["group"]]["caption"];
+	}
+	if ($st != "")
+	{
+		if ($_SESSION["user_history_has_folders"])
+		{
+			$_SESSION["user_history"][$bits["class"]][get_ru()] = strip_tags($st);
+			if (count($_SESSION["user_history"][$bits["class"]]) > $_SESSION["user_history_count"])
+			{
+				array_shift($_SESSION["user_history"][$bits["class"]]);
+			}
+		}
+		else
+		{
+			$_SESSION["user_history"][get_ru()] = strip_tags($st);
+			if (count($_SESSION["user_history"]) > $_SESSION["user_history_count"])
+			{
+				array_shift($_SESSION["user_history"]);
+			}
+		}
+	}
+}
+
 ?>

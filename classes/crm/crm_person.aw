@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.140 2006/07/12 08:54:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.141 2006/08/28 11:02:39 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2235,6 +2235,30 @@ class crm_person extends class_base
 				}
 			}
 
+		}
+
+		// write name and e-mail to the user
+		$u = $this->has_user($arr["obj_inst"]);
+		if ($u)
+		{
+			$mod = false;
+			if ($u->prop("real_name") != $arr["obj_inst"]->name())
+			{
+				$u->set_prop("real_name", $arr["obj_inst"]->name());
+				$mod = true;
+			}
+			if ($u->prop("email") != $arr["obj_inst"]->prop_str("email"))
+			{
+				$u->set_prop("email", $arr["obj_inst"]->prop_str("email"));
+				$mod = true;
+			}
+
+			if ($mod)
+			{
+				aw_disable_acl();
+				$u->save();
+				aw_restore_acl();
+			}
 		}
 	}
 

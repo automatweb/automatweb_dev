@@ -114,6 +114,9 @@ class popup_menu extends aw_template
 
 		@param text required type=string
 			The text to display for the sub menu
+
+		@param name required type=string
+			The id of the menu
 	**/
 	function add_sub_menu($arr)
 	{

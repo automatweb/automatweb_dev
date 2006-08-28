@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.1 2006/08/25 09:47:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.2 2006/08/28 11:02:43 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -252,7 +252,7 @@ class user_bookmarks extends class_base
 		$bm = $this->init_bm();
 
 		$pm = get_instance("vcl/popup_menu");
-		$pm->begin_menu("wallabi");
+		$pm->begin_menu("user_bookmarks");
 		$pm->add_item(array(
 			"text" => t("Pane j&auml;rjehoidjasse"),
 			"link" => $this->mk_my_orb("add_to_bm", array("url" => $arr["url"]))

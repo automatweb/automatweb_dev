@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.1 2006/08/25 10:48:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.2 2006/08/28 11:02:43 kristo Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -184,7 +184,7 @@ class obj_quick_add extends class_base
 		parse_str($q, $td);
 
 		$pm = get_instance("vcl/popup_menu");
-		$pm->begin_menu("wallabi");
+		$pm->begin_menu("user_qa");
 		$pm->add_item(array(
 			"text" => t("Pane kiirmen&uuml;&uuml;sse"),
 			"link" => $this->mk_my_orb("add_to_bm", array("url" => $arr["url"]))

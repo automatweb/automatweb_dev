@@ -20,11 +20,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 @classinfo syslog_type=ST_USERS relationmgr=yes no_status=1 
 
-@groupinfo chpwd caption="Parool"
-@groupinfo objects caption="Objektid ja &Otilde;igused"
-@groupinfo objects_own caption="Enda tehtud" parent=objects
-@groupinfo objects_other caption="Teiste tehtud" parent=objects
-@groupinfo groups caption=Grupid
+@groupinfo chpwd caption="Salas&otilde;na muutmine"
+@groupinfo groups caption=Kasutajagrupid
+@groupinfo settings caption=Seaded
+
 @groupinfo jdata caption="Liitumise info"
 @groupinfo stat caption=Statistika
 @groupinfo aclwizard caption="ACL Maag"
@@ -34,137 +33,135 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @default table=users
 @default group=general
 
-@property uid field=uid type=text group=general editonly=1
-@caption Kasutajanimi
+	@property uid field=uid type=text group=general editonly=1
+	@caption Kasutajanimi
 
-@property uid_entry store=no type=textbox group=general 
-@caption Kasutajanimi
+	@property link_to_p type=text store=no
+	@caption Isik
 
-@property logins field=logins type=text store=yes 
-@caption Sisselogimisi
+	@property uid_entry store=no type=textbox group=general 
+	@caption Kasutajanimi
 
-@property lastaction field=lastaction type=text
-@caption Viimane sisse logimine
+	@property logins field=logins type=text store=yes 
+	@caption Sisselogimisi
 
-@property blocked field=blocked type=checkbox ch_value=1
-@caption Blokeeritud
+	@property lastaction field=lastaction type=text
+	@caption Viimane sisse logimine
 
-@property real_name type=textbox table=users field=config method=serialize
-@caption Nimi
+	@property created field=created type=date table=objects
+	@caption Loodud
 
-@property email field=email type=textbox
-@caption E-mail
+	@property createdby field=createdby type=text table=objects
+	@caption Looja
 
-@property notify field=notify type=checkbox ch_value=1
-@caption Uuest mailist teavitamine
+	@property blocked field=blocked type=checkbox ch_value=1
+	@caption Blokeeritud
 
-@property created field=created type=date table=objects
-@caption Loodud
+	@property real_name type=hidden table=users field=config method=serialize
+	@caption Nimi
 
-@property createdby field=createdby type=text table=objects
-@caption Looja
+	@property email field=email type=hidden
+	@caption E-mail
 
-@property comment type=textarea rows=5 cols=30 table=objects field=comment
-@caption Kommentaar
+	@property notify field=notify type=checkbox ch_value=1
+	@caption Uuest mailist teavitamine
 
-@property admin_lang store=no type=select
-@caption Admin keel
+	@property comment type=textarea rows=5 cols=30 table=objects field=comment
+	@caption Kommentaar
 
-@property base_lang type=select field=meta method=serialize table=objects
-@caption Baaskeel
-
-@property target_lang type=select field=meta method=serialize table=objects
-@caption Sihtkeel
-
-@property act_from type=date_select table=users field=config method=serialize
-@caption Aktiivne alates
-
-@property act_to type=date_select table=users field=config method=serialize
-@caption Aktiivne kuni
-
-@property password_hash type=hidden table=users field=config method=serialize
-@property password_hash_timestamp type=hidden table=users field=config method=serialize
-@property join_grp type=hidden table=users field=join_grp
+	@property password_hash type=hidden table=users field=config method=serialize
+	@property password_hash_timestamp type=hidden table=users field=config method=serialize
+	@property join_grp type=hidden table=users field=join_grp
 
 @default group=chpwd
 
-@property passwd type=password store=no
-@caption Salasõna
+	@property passwd type=password store=no
+	@caption Salasõna
 
-@property passwd_again type=password store=no
-@caption Salasõna uuesti
+	@property passwd_again type=password store=no
+	@caption Salasõna uuesti
 
-@property password type=hidden table=users field=password store=no
+	@property password type=hidden table=users field=password store=no
 
+	@property gen_pwd store=no type=text 
+	@caption Genereeri parool
 
-@property gen_pwd store=no type=text 
-@caption Genereeri parool
+	@property genpwd store=no type=textbox 
+	@caption Genereeritud parool
 
-@property genpwd store=no type=textbox 
-@caption Genereeritud parool
-
-@property resend_welcome store=no type=checkbox ch_value=1
-@caption Saada tervitusmeil
-
-@default group=objects
-
-@property objects_own type=text  store=no no_caption=1 group=objects_own
-@caption Objektid
-
-@property objects_other type=text  store=no no_caption=1 group=objects_other
-@caption Objektid
-
-@property obj_acl type=callback callback=get_acls store=no group=objects_own
-
-@property obj_acl_other type=callback callback=get_acls store=no group=objects_other
+	@property resend_welcome store=no type=checkbox ch_value=1
+	@caption Saada tervitusmeil
 
 @default group=groups
 
-@property groups type=text  store=no no_caption=1
+	@property groups type=text  store=no no_caption=1
 
-@property home_folder type=hidden field=home_folder table=users
+	@property home_folder type=hidden field=home_folder table=users
 
 @default group=jdata
 
-@property jdata type=callback callback=callback_jdata  store=no no_caption=1
-@caption Liitumise andmed
+	@property jdata type=callback callback=callback_jdata  store=no no_caption=1
+	@caption Liitumise andmed
 
 @default group=stat
 
-@property stat type=text store=no no_caption=1
-@caption Statistika
+	@property stat type=text store=no no_caption=1
+	@caption Statistika
 
 @default group=aclwizard
 
-@property aclwizard_q type=text store=no
-@caption Millised on kasutaja
+	@property aclwizard_q type=text store=no
+	@caption Millised on kasutaja
 
-@property aclwiz type=hidden table=objects field=meta method=serialize
+	@property aclwiz type=hidden table=objects field=meta method=serialize
 
-@property aclwizard_a type=text store=no
-@caption 
-
-@property set_ui_lang type=select store=no
-@caption Liidese keel
+	@property aclwizard_a type=text store=no
+	@caption 
 
 @groupinfo userdef caption="User-defined"
 
-@property userch1 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
-@caption User-defined checkbox 1
+	@property userch1 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+	@caption User-defined checkbox 1
 
-@property userch2 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
-@caption User-defined checkbox 2
+	@property userch2 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+	@caption User-defined checkbox 2
 
-@property userch3 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
-@caption User-defined checkbox 3
+	@property userch3 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+	@caption User-defined checkbox 3
 
-@property userch4 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
-@caption User-defined checkbox 4
+	@property userch4 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+	@caption User-defined checkbox 4
 
-@property userch5 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
-@caption User-defined checkbox 5
+	@property userch5 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
+	@caption User-defined checkbox 5
 
-@property join_form_entry type=hidden table=users field=join_form_entry 
+	@property join_form_entry type=hidden table=users field=join_form_entry 
+
+@default group=settings
+
+	@property lg_hdh type=text subtitle=1 store=no
+	@caption Ajaloo seaded
+
+	@property history_size type=textbox table=objects field=meta method=serialize size=5
+	@caption Mitu viimati k&uuml;lastatud objekti on ajaloos
+
+	@property history_has_folders type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Ajalugu on jagatud kataloogideks
+
+	@property lg_hdl type=text subtitle=1 store=no
+	@caption Keeleseaded
+
+	@property set_ui_lang type=select store=no
+	@caption Liidese keel
+
+	@property lg_hd type=text subtitle=1 store=no
+	@caption T&otilde;lkekeskkond
+
+	@property base_lang type=select field=meta method=serialize table=objects
+	@caption Baaskeel
+
+	@property target_lang type=select field=meta method=serialize table=objects
+	@caption Sihtkeel
 
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
@@ -205,6 +202,15 @@ class user extends class_base
 		$prop =& $arr["prop"];
 		switch($prop["name"])
 		{
+			case "link_to_p":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				$p = $this->get_person_for_user($arr["obj_inst"]);
+				$prop["value"] = html::obj_change_url($p);
+				break;
+
 			case "name":
 				return PROP_IGNORE;
 
@@ -245,14 +251,6 @@ class user extends class_base
 
 			case "groups":
 				$prop['value'] = $this->_get_group_membership($arr["obj_inst"]->prop("uid"), $arr["obj_inst"]->id());
-				break;
-
-			case "objects_own":
-				$prop["value"] = $this->_get_objects($arr["obj_inst"]->prop("uid"), true);
-				break;
-
-			case "objects_other":
-				$prop["value"] = $this->_get_objects($arr["obj_inst"]->prop("uid"), false);
 				break;
 
 			case "stat":
@@ -315,6 +313,14 @@ class user extends class_base
 				$i = get_instance("core/trans/pot_scanner");
 				$prop["options"] = array("" => "") + $i->get_langs();
 				$prop["value"] = aw_ini_get("user_interface.default_language");
+				break;
+
+			case "history_size":
+				$_SESSION["user_history_count"] = $arr["obj_inst"]->prop("history_size");
+				break;
+
+			case "history_has_folders":
+				$_SESSION["user_history_has_folders"] = $arr["obj_inst"]->prop("history_has_folders");
 				break;
 		}
 		return PROP_OK;
@@ -403,21 +409,6 @@ class user extends class_base
 
 			case "groups":
 				$prop['value'] = $this->_set_group_membership($arr["obj_inst"]->prop("uid"), $arr["request"], $arr["obj_inst"]->id());
-				break;
-
-			case "obj_acl":
-				// read all acls from request and set them
-				$ea = $arr["request"]["edit_acl"];
-				if ($ea)
-				{
-					$a = $this->acl_list_acls();
-					$acl = array();
-					foreach($a as $a_bp => $a_name)
-					{
-						$acl[$a_name] = $arr["request"]["acl_".$a_bp];
-					}
-					$this->save_acl($ea, $gid, $acl);
-				}
 				break;
 
 			case "aclwiz":
@@ -859,52 +850,6 @@ class user extends class_base
 		return -1;
 	}
 
-	function _get_objects($uid, $own)
-	{
-		// get all groups this user is a member of
-		$grps = $this->users->getgroupsforuser($uid);
-		// now, get all the folders that have access set for these groups
-		$dat = $this->acl_get_acls_for_groups(array("grps" => array_keys($grps)));
-
-		$g = get_instance(CL_GROUP);
-	
-		$t =& $g->_init_obj_table(array(
-			"exclude" => array("grp_name")
-		));
-		foreach($dat as $row)
-		{
-			if ($own && $row["createdby"] != $uid)
-			{
-				continue;
-			}
-			if (!$own && $row["createdby"] == $uid)
-			{
-				continue;
-			}
-			if (!$this->can("view", $row["oid"]))
-			{
-				continue;
-			}
-			if (!is_oid($row["oid"]) || $row['status'] == STAT_DELETED)
-			{
-				continue;
-			};
-			$o = obj($row["oid"]);
-			$row["acl"] = html::href(array(
-				"caption" => t("Muuda"),
-				"url" => aw_url_change_var("edit_acl", $row["oid"])
-			));
-			$t->define_data($row);
-		}
-		$t->set_default_sortby("obj_name");
-		$t->sort_by();
-		return $t->draw(array(
-			"has_pages" => true,
-			"records_per_page" => 100,
-			"pageselector" => "text"
-		));
-	}
-
 	function callback_on_load($arr)
 	{
 		if ($arr["request"]["action"] == "new")
@@ -940,48 +885,6 @@ class user extends class_base
 		}
 
 		$arr["args"]["set_ui_lang"] = $arr["request"]["set_ui_lang"];
-	}
-
-	function get_acls($arr)
-	{
-		$acls = array();
-		$ea = $arr["request"]["edit_acl"];
-		if ($ea)
-		{
-			$o = obj($ea);
-			$acls["acl_desc"] = array(
-				'name' => "acl_desc",
-				'type' => 'text',
-				'store' => 'no',
-				'group' => 'objects',
-				'value' => sprintf(t('Muuda objekti %s  &otilde;igusi'), $o->name())
-			);
-			$acls["edit_acl"] = array(
-				'name' => "edit_acl",
-				'type' => 'hidden',
-				'store' => 'no',
-				'value' => $ea
-			);
-
-			// get active acl 
-			$act_acl = $this->get_acl_for_oid_gid($ea, $this->users->get_gid_for_oid($arr["request"]["id"]));
-
-			$a = $this->acl_list_acls();
-			foreach($a as $a_bp => $a_name)
-			{
-				$rt = "acl_".$a_bp;
-				$acls[$rt] = array(
-					'name' => $rt,
-					'caption' => $a_name,
-					'type' => 'checkbox',
-					'ch_value' => 1,
-					'store' => 'no',
-					'group' => 'objects',
-					'value' => $act_acl[$a_name]
-				);
-			}
-		}
-		return $acls;
 	}
 
 	function on_delete_user_bro($arr)
@@ -2171,6 +2074,77 @@ class user extends class_base
 			break;
 		}
 		return false;
+	}
+
+	/**
+		@attrib name=settings_lod
+		@param url optional 
+	**/
+	function settings_lod($arr)
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu("settings_pop");
+
+		$u = obj(aw_global_get("uid_oid"));
+		$u->set_class_id(CL_USER);
+		$gl = $u->get_group_list();
+
+		foreach($gl as $gn => $d)
+		{
+			if ($gn == "userdef")
+			{
+				continue;
+			}
+			$pm->add_item(array(
+				"text" => $d["caption"],
+				"link" => html::get_change_url($u->id(), array("group" => $gn, "return_url" => $arr["url"]))
+			));
+		}
+		die($pm->get_menu());
+	}
+
+	/**
+		@attrib name=hist_lod
+		@param url optional 
+	**/
+	function hist_lod($arr)
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu("history_pop");
+
+		$u = obj(aw_global_get("uid_oid"));
+		if ($u->prop("history_has_folders"))
+		{
+			$clss = aw_ini_get("classes");
+			foreach($_SESSION["user_history"] as $class => $p)
+			{
+				$pm->add_sub_menu(array(
+					"text" => $clss[clid_for_name($class)]["name"],
+					"name" => $class
+				));
+				foreach($p as $url => $capt)
+				{
+					// parse url and get object name / group from the url
+					$pm->add_item(array(
+						"text" => $capt,
+						"link" => $url,
+						"parent" => $class
+					));
+				}
+			}
+		}
+		else
+		{
+			foreach($_SESSION["user_history"] as $url => $capt)
+			{
+				// parse url and get object name / group from the url
+				$pm->add_item(array(
+					"text" => $capt,
+					"link" => $url
+				));
+			}
+		}
+		die($pm->get_menu());
 	}
 }
 ?>

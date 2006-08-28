@@ -10,6 +10,15 @@
             <caption>Kasutajanimi</caption>
       </property>
       <property>
+            <name>link_to_p</name>
+            <table>users</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>link_to_p</field>
+            <caption>Isik</caption>
+      </property>
+      <property>
             <name>uid_entry</name>
             <table>users</table>
             <group>general</group>
@@ -36,41 +45,6 @@
             <caption>Viimane sisse logimine</caption>
       </property>
       <property>
-            <name>blocked</name>
-            <table>users</table>
-            <group>general</group>
-            <field>blocked</field>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Blokeeritud</caption>
-      </property>
-      <property>
-            <name>real_name</name>
-            <table>users</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>config</field>
-            <method>serialize</method>
-            <caption>Nimi</caption>
-      </property>
-      <property>
-            <name>email</name>
-            <table>users</table>
-            <group>general</group>
-            <field>email</field>
-            <type>textbox</type>
-            <caption>E-mail</caption>
-      </property>
-      <property>
-            <name>notify</name>
-            <table>users</table>
-            <group>general</group>
-            <field>notify</field>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Uuest mailist teavitamine</caption>
-      </property>
-      <property>
             <name>created</name>
             <table>objects</table>
             <group>general</group>
@@ -87,6 +61,41 @@
             <caption>Looja</caption>
       </property>
       <property>
+            <name>blocked</name>
+            <table>users</table>
+            <group>general</group>
+            <field>blocked</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Blokeeritud</caption>
+      </property>
+      <property>
+            <name>real_name</name>
+            <table>users</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>config</field>
+            <method>serialize</method>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>email</name>
+            <table>users</table>
+            <group>general</group>
+            <field>email</field>
+            <type>hidden</type>
+            <caption>E-mail</caption>
+      </property>
+      <property>
+            <name>notify</name>
+            <table>users</table>
+            <group>general</group>
+            <field>notify</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Uuest mailist teavitamine</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
@@ -95,51 +104,6 @@
             <cols>30</cols>
             <field>comment</field>
             <caption>Kommentaar</caption>
-      </property>
-      <property>
-            <name>admin_lang</name>
-            <table>users</table>
-            <group>general</group>
-            <store>no</store>
-            <type>select</type>
-            <field>admin_lang</field>
-            <caption>Admin keel</caption>
-      </property>
-      <property>
-            <name>base_lang</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Baaskeel</caption>
-      </property>
-      <property>
-            <name>target_lang</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Sihtkeel</caption>
-      </property>
-      <property>
-            <name>act_from</name>
-            <table>users</table>
-            <group>general</group>
-            <type>date_select</type>
-            <field>config</field>
-            <method>serialize</method>
-            <caption>Aktiivne alates</caption>
-      </property>
-      <property>
-            <name>act_to</name>
-            <table>users</table>
-            <group>general</group>
-            <type>date_select</type>
-            <field>config</field>
-            <method>serialize</method>
-            <caption>Aktiivne kuni</caption>
       </property>
       <property>
             <name>password_hash</name>
@@ -219,44 +183,6 @@
             <caption>Saada tervitusmeil</caption>
       </property>
       <property>
-            <name>objects_own</name>
-            <table>users</table>
-            <group>objects_own</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>objects_own</field>
-            <caption>Objektid</caption>
-      </property>
-      <property>
-            <name>objects_other</name>
-            <table>users</table>
-            <group>objects_other</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>objects_other</field>
-            <caption>Objektid</caption>
-      </property>
-      <property>
-            <name>obj_acl</name>
-            <table>users</table>
-            <group>objects_own</group>
-            <type>callback</type>
-            <callback>get_acls</callback>
-            <store>no</store>
-            <field>obj_acl</field>
-      </property>
-      <property>
-            <name>obj_acl_other</name>
-            <table>users</table>
-            <group>objects_other</group>
-            <type>callback</type>
-            <callback>get_acls</callback>
-            <store>no</store>
-            <field>obj_acl_other</field>
-      </property>
-      <property>
             <name>groups</name>
             <table>users</table>
             <group>groups</group>
@@ -320,15 +246,6 @@
             <caption></caption>
       </property>
       <property>
-            <name>set_ui_lang</name>
-            <table>users</table>
-            <group>aclwizard</group>
-            <type>select</type>
-            <store>no</store>
-            <field>set_ui_lang</field>
-            <caption>Liidese keel</caption>
-      </property>
-      <property>
             <name>userch1</name>
             <table>objects</table>
             <group>userdef</group>
@@ -390,6 +307,83 @@
             <type>hidden</type>
             <field>join_form_entry</field>
       </property>
+      <property>
+            <name>lg_hdh</name>
+            <table>users</table>
+            <group>settings</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>lg_hdh</field>
+            <caption>Ajaloo seaded</caption>
+      </property>
+      <property>
+            <name>history_size</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <caption>Mitu viimati k&amp;amp;uuml;lastatud objekti on ajaloos</caption>
+      </property>
+      <property>
+            <name>history_has_folders</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ajalugu on jagatud kataloogideks</caption>
+      </property>
+      <property>
+            <name>lg_hdl</name>
+            <table>users</table>
+            <group>settings</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>lg_hdl</field>
+            <caption>Keeleseaded</caption>
+      </property>
+      <property>
+            <name>set_ui_lang</name>
+            <table>users</table>
+            <group>settings</group>
+            <type>select</type>
+            <store>no</store>
+            <field>set_ui_lang</field>
+            <caption>Liidese keel</caption>
+      </property>
+      <property>
+            <name>lg_hd</name>
+            <table>users</table>
+            <group>settings</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>lg_hd</field>
+            <caption>T&amp;amp;otilde;lkekeskkond</caption>
+      </property>
+      <property>
+            <name>base_lang</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Baaskeel</caption>
+      </property>
+      <property>
+            <name>target_lang</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sihtkeel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_USERS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -397,22 +391,14 @@
       </classinfo>
       <groupinfo>
             <chpwd>
-                  <caption>Parool</caption>
+                  <caption>Salas&amp;amp;otilde;na muutmine</caption>
             </chpwd>
-            <objects>
-                  <caption>Objektid ja &amp;amp;Otilde;igused</caption>
-            </objects>
-            <objects_own>
-                  <caption>Enda tehtud</caption>
-                  <parent>objects</parent>
-            </objects_own>
-            <objects_other>
-                  <caption>Teiste tehtud</caption>
-                  <parent>objects</parent>
-            </objects_other>
             <groups>
-                  <caption>Grupid</caption>
+                  <caption>Kasutajagrupid</caption>
             </groups>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
             <jdata>
                   <caption>Liitumise info</caption>
             </jdata>
