@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.5 2006/08/23 15:04:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.6 2006/08/28 13:14:27 markop Exp $
 // procurement.aw - Hange 
 /*
 
@@ -358,32 +358,113 @@ class procurement extends class_base
 				break;
 			case "products":
 				//liidab need tooted juurde mida veel ei eksisteeri
-				foreach($prop["value"] as $product)
-				{
-					$ol = new object_list(array(
-						"class_id" => array(CL_SHOP_PRODUCT),
-						"name" => $product["product"],
-						"lang_id" => array(),
-						"site_id" => array(),
-					));
-					
-					$co = obj($arr["obj_inst"]->prop("orderer"));
-					$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
-					$parent = $warehouse->id();
-					if (!$ol->count())
-					{
-						$p = obj();
-						$p->set_class_id(CL_SHOP_PRODUCT);
-						$p->set_parent($parent);
-						$p->set_name($product["product"]);
-						$p->save();
-					}
-				}
-				$arr["obj_inst"]->set_meta("products",$prop["value"]);
+				
+				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("val" => $prop["value"] , "id" => $arr["obj_inst"]->id()))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
+					</script>";
+				die($popup);
 				break;
 		}
 		return $retval;
 	}	
+	
+	/**
+		@attrib name=set_type
+	**/
+	function set_type($arr)
+	{
+		$this_object = obj($_GET["id"]);
+		classload("vcl/table");
+		$t = new aw_table(array(
+			"layout" => "generic"
+		));
+			$t->define_field(array(
+			"name" => "name",
+			"sortable" => 1,
+			"caption" => t("Nimi")
+		));
+			$t->define_field(array(
+			"name" => "type",
+			"sortable" => 1,
+			"caption" => t("T&uuml;&uuml;p")
+		));
+		$t->set_default_sortby("name");
+		$types = new object_list(array(
+				"class_id" => array(CL_SHOP_PRODUCT_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+		));
+		$options = $types->names();
+		asort($options);
+		if($_POST["types"])
+		{
+			foreach($_GET["val"] as $product)
+			{
+				$ol = new object_list(array(
+					"class_id" => array(CL_SHOP_PRODUCT),
+					"name" => $product["product"],
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+
+				$co = obj($this_object->prop("orderer"));
+				$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+				$parent = $warehouse->id();
+				if (!$ol->count())
+				{
+					$p = obj();
+					$p->set_class_id(CL_SHOP_PRODUCT);
+					$p->set_parent($parent);
+					$p->set_name($product["product"]);
+					$p->set_prop("item_type" ,$_POST["types"][$product["product"]]);
+					$p->save();
+				}
+			}
+			$this_object->set_meta("products",$_GET["val"]);
+			$this_object->save();
+			die("<script type='text/javascript'>
+			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
+			window.close();
+			</script>");
+		}
+		
+		$new_products = 0;
+		foreach($_GET["val"] as $product)
+		{
+			$ol = new object_list(array(
+				"class_id" => array(CL_SHOP_PRODUCT),
+				"name" => $product["product"],
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			
+			$co = obj($this_object->prop("orderer"));
+			$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+			$parent = $warehouse->id();
+			if (!$ol->count())
+			{
+				$new_products = 1;
+				$dat = array(
+					"name" => $product["product"],
+					"type" => html::select(array("options" => $options, "name" => "types[".$product["product"]."]")),
+				);
+				if(strlen($product["product"]) > 0) $t->define_data($dat);
+			}
+		}
+		
+		if(!$new_products)
+		{
+			$this_object->set_meta("products",$_GET["val"]);
+			$this_object->save();
+			die("<script type='text/javascript'>
+			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
+			window.close();
+			</script>");
+		}
+		$t->define_data(array("type" => html::submit(array("name" => "submit", "class" => "submit" , "value" => "submit" , "onclick"=>"self.disabled=true;submit_changeform(''); return false;") )));
+		$t->set_sortable(false);
+		return "<form action='".$this->mk_my_orb("set_type", array("val" => $_GET["val"], "id" => $_GET["id"]))."' method='POST' name='changeform' enctype='multipart/form-data' >".$t->draw()."</form>";
+	}
+
 
 	function callback_mod_reforb($arr)
 	{

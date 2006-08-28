@@ -9,6 +9,13 @@
 			</function>
 		</action>
 
+		<action name="set_type">
+			<function name="set_type">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_procurements">
 			<function name="delete_procurements">
 				<arguments>
@@ -26,9 +33,7 @@
 		<action name="check_existing">
 			<function name="check_existing">
 				<arguments>
-					<optional name="c" />
-					<optional name="p" />
-					<optional name="t" />
+					<optional name="p" type="array" />
 				</arguments>
 			</function>
 		</action>
