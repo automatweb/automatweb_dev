@@ -856,11 +856,8 @@ function aw_get_el(name,form)
 	function get_popup_search_link($arr)
 	{
 		$url = $this->mk_my_orb("do_search", $arr);
-		return html::href(array(
-			"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
-			"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
-			"title" => t("Otsi")
-		));
+		$s = t("Otsi");
+		return "<a class=\"aw04toolbarbutton\" title=\"$s\" alt=\"$s\" href='javascript:aw_popup_scroll(\"$url\",\"$s\",550,500)' onMouseOver=\"this.className='aw04toolbarbuttonhover'\" onMouseOut=\"this.className='aw04toolbarbutton'\" onMouseDown=\"this.className='aw04toolbarbuttondown'\" onMouseUp=\"this.className='aw04toolbarbuttonhover'\"><img alt=\"$s\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0></a>";
 	}
 
 	/**

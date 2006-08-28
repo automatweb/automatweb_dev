@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.2 2006/08/28 11:02:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.3 2006/08/28 12:21:30 kristo Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -229,6 +229,7 @@ class obj_quick_add extends class_base
 				));
 			}
 		}
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($pm->get_menu());
 	}
 
@@ -318,6 +319,11 @@ class obj_quick_add extends class_base
 			}
 		}
 		return $arr["url"];
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["tf"] = $arr["request"]["tf"];
 	}
 }
 ?>

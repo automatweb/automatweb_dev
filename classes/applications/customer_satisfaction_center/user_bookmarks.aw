@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.2 2006/08/28 11:02:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.3 2006/08/28 12:21:31 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -65,6 +65,11 @@ class user_bookmarks extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["objs"] = 0;
 		$arr["tf"] = $_GET["tf"];
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["tf"] = $arr["request"]["tf"];
 	}
 
 	function init_bm()
@@ -226,7 +231,7 @@ class user_bookmarks extends class_base
 				$inf = array();	
 				foreach($gl as $nm => $dat)
 				{
-					$inf[$nm] = $dat["caption"];
+					$inf[$nm] = ($dat["parent"] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "").$dat["caption"];
 				}
 				$grp = html::select(array(
 					"options" => $inf,
@@ -314,6 +319,7 @@ class user_bookmarks extends class_base
 				));
 			}
 		}
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($pm->get_menu());
 	}
 

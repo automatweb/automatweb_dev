@@ -2100,6 +2100,7 @@ class user extends class_base
 				"link" => html::get_change_url($u->id(), array("group" => $gn, "return_url" => $arr["url"]))
 			));
 		}
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($pm->get_menu());
 	}
 
@@ -2144,6 +2145,7 @@ class user extends class_base
 				));
 			}
 		}
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($pm->get_menu());
 	}
 }

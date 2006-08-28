@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.1 2006/08/25 09:47:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.2 2006/08/28 12:21:30 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -11,28 +11,28 @@
 
 	@property s_tb type=toolbar no_caption=1 
 
-	@property s_name type=textbox 
+	@property s_name type=textbox  size=50
 	@caption Nimi
 
-	@property s_comment type=textbox 
+	@property s_comment type=textbox  size=50
 	@caption Kommentaar
 
-	@property s_clid type=select multiple=1 size=5
+	@property s_clid type=select multiple=1 size=10
 	@caption T&uuml;&uuml;p
 
-	@property s_oid type=textbox 
+	@property s_oid type=textbox  size=50
 	@caption OID
 
-	@property s_creator type=textbox 
+	@property s_creator type=textbox  size=50
 	@caption Looja
 
-	@property s_modifier type=textbox 
+	@property s_modifier type=textbox  size=50
 	@caption Muutja
 
 	@property s_status type=chooser
 	@caption Aktiivsus
 
-	@property s_alias type=textbox 
+	@property s_alias type=textbox  size=50
 	@caption Alias
 
 	@property s_language type=chooser

@@ -67,55 +67,15 @@
             <name>file_1</name>
             <table>objects</table>
             <group>general</group>
-            <type>fileupload</type>
+            <type>text</type>
             <field>file_1</field>
-            <caption>Fail 1</caption>
-      </property>
-      <property>
-            <name>file_1_t</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>file_1_t</field>
-      </property>
-      <property>
-            <name>file_2</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>fileupload</type>
-            <field>file_2</field>
-            <caption>Fail 2</caption>
-      </property>
-      <property>
-            <name>file_2_t</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>file_2_t</field>
-      </property>
-      <property>
-            <name>file_3</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>fileupload</type>
-            <field>file_3</field>
-            <caption>Fail 3</caption>
-      </property>
-      <property>
-            <name>file_3_t</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>file_3_t</field>
+            <caption>Failid</caption>
       </property>
       <property>
             <name>seriousness</name>
             <table>aw_customer_feedback</table>
             <group>general</group>
-            <type>select</type>
+            <type>chooser</type>
             <field>aw_seriousness</field>
             <caption>T&amp;amp;otilde;sidus</caption>
       </property>
@@ -123,7 +83,7 @@
             <name>fb_type</name>
             <table>aw_customer_feedback</table>
             <group>general</group>
-            <type>select</type>
+            <type>chooser</type>
             <field>aw_fb_type</field>
             <caption>Soovin tagasisidet</caption>
       </property>

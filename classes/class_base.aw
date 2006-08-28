@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.495 2006/08/23 19:30:45 kristo Exp $
+// $Id: class_base.aw,v 2.496 2006/08/28 12:21:29 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3051,6 +3051,7 @@ class class_base extends aw_template
 
 		$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 		$this->cli = &$cli;
+		$this->cli->config["show_help"] = aw_ini_get("class_base.show_help");
 
 		$this->action = $action;
 		$this->obj_inst = new object($args["id"]);
@@ -3135,6 +3136,7 @@ class class_base extends aw_template
 
 		$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 		$this->cli = &$cli;
+		$this->cli->config["show_help"] = aw_ini_get("class_base.show_help");
 
 		$this->action = $action;
 		$this->obj_inst = new object($args["id"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.2 2006/08/24 13:16:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.3 2006/08/28 12:21:30 kristo Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -31,25 +31,13 @@
 @property comment_ta type=textarea rows=10 cols=50 table=aw_customer_feedback field=aw_comment_ta
 @caption Kommentaar
 
-@property file_1 type=fileupload
-@caption Fail 1
+@property file_1 type=text
+@caption Failid
 
-@property file_1_t type=text store=no
-
-@property file_2 type=fileupload
-@caption Fail 2
-
-@property file_2_t type=text store=no
-
-@property file_3 type=fileupload
-@caption Fail 3
-
-@property file_3_t type=text store=no
-
-@property seriousness type=select table=aw_customer_feedback field=aw_seriousness
+@property seriousness type=chooser table=aw_customer_feedback field=aw_seriousness
 @caption T&otilde;sidus
 
-@property fb_type type=select table=aw_customer_feedback field=aw_fb_type
+@property fb_type type=chooser table=aw_customer_feedback field=aw_fb_type
 @caption Soovin tagasisidet
 
 @property fb_email type=textbox table=aw_customer_feedback field=aw_fb_email
@@ -246,6 +234,10 @@ class customer_feedback_entry extends class_base
 				{
 					$prop["value"] = $p->prop_str("email");
 				}
+				break;
+
+			case "file_1":
+				$this->_file_1($arr);
 				break;
 
 			case "file_1_t":
@@ -547,19 +539,66 @@ class customer_feedback_entry extends class_base
 		}
 	}
 
-	/**
-		@attrib name=a
-	**/
-	function a()
+	function _file_1($arr)
 	{
-		$pm = get_instance("vcl/popup_menu");
-		$pm->begin_menu("my_popup_menu");
-		$pm->add_item(array(
-			"text" => t("Valik"),
-			"link" => 'http://www.neti.ee'
-		));
-		die($pm->get_menu());
+		if (!$arr["new"])
+		{
+			$f = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FILE1");
+			if ($f)
+			{
+				$fi = get_instance(CL_FILE);
+				$f1 = html::href(array(
+					"url" => $fi->get_url($f->id(), $f->name()),
+					"caption" => html::img(array(
+						"url" => icons::get_icon_url(CL_FILE,$f->name()),
+						"border" => "0"
+						))." ".$f->name(),
+					"target" => "_blank",
+				));
+			}
+			$f = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FILE2");
+			if ($f)
+			{
+				$fi = get_instance(CL_FILE);
+				$f2 = html::href(array(
+					"url" => $fi->get_url($f->id(), $f->name()),
+					"caption" => html::img(array(
+						"url" => icons::get_icon_url(CL_FILE,$f->name()),
+						"border" => "0"
+						))." ".$f->name(),
+					"target" => "_blank",
+				));
+			}
+			$f = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FILE3");
+			if ($f)
+			{
+				$fi = get_instance(CL_FILE);
+				$f3 = html::href(array(
+					"url" => $fi->get_url($f->id(), $f->name()),
+					"caption" => html::img(array(
+						"url" => icons::get_icon_url(CL_FILE,$f->name()),
+						"border" => "0"
+						))." ".$f->name(),
+					"target" => "_blank",
+				));
+			}
+		}
 		
+		$f1u = html::fileupload(array("name" => "file_1"));
+		$f2u = html::fileupload(array("name" => "file_2"));
+		$f3u = html::fileupload(array("name" => "file_3"));
+		$arr["prop"]["value"] = "<table border=0 width='100%'>
+			<tr>
+				<td class='aw04contentcellright'>$f1&nbsp;</td>
+				<td class='aw04contentcellright'>$f2&nbsp;</td>
+				<td class='aw04contentcellright'>$f3&nbsp;</td>
+			</tr>
+			<tr>
+				<td class='aw04contentcellright'>$f1u</td>
+				<td class='aw04contentcellright'>$f2u</td>
+				<td class='aw04contentcellright'>$f3u</td>
+			</tr>
+		</table>";
 	}
 }
 ?>

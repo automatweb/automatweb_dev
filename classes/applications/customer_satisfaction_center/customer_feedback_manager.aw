@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.1 2006/08/23 19:30:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.2 2006/08/28 12:21:30 kristo Exp $
 // customer_feedback_manager.aw - Kliendi tagasiside 
 /*
 
@@ -115,6 +115,12 @@ class customer_feedback_manager extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "site",
+			"caption" => t("Sait"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "class",
 			"caption" => t("Klass"),
 			"align" => "center",
@@ -188,6 +194,7 @@ class customer_feedback_manager extends class_base
 
 		$e  = get_instance(CL_CUSTOMER_FEEDBACK_ENTRY);
 		$clss = aw_ini_get("classes");
+		$sl = get_instance("install/site_list");
 		foreach($ol->arr() as $o)
 		{
 			$p = $o->get_first_obj_by_reltype("RELTYPE_PERSON");
@@ -209,7 +216,8 @@ class customer_feedback_manager extends class_base
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru()), $o->class_id()),
 					"caption" => t("Muuda")
-				))
+				)),
+				"site" => $sl->get_url_for_site($o->site_id())
 			));
 		}
 	}

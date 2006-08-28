@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.65 2006/07/14 12:36:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.66 2006/08/28 12:21:25 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1382,8 +1382,13 @@ class treeview extends class_base
 		$tv->start_tree($tree_opts);
 		if (!$arr["no_root_item"])
 		{
+			$nm = parse_obj_name($root_item->name());
+			if ($var && $_GET[$var] == "")
+			{
+				$nm = "<b>".$nm."</b>";
+			}
 			$tv->add_item(0,array(
-				"name" => parse_obj_name($root_item->name()),
+				"name" => $nm,
 				"id" => $root_item->id(),
 				"url" => $url,
 			));

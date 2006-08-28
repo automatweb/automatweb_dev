@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.20 2006/03/20 08:55:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.21 2006/08/28 12:21:27 kristo Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -84,6 +84,14 @@ class object_type extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "name":
+				if ($data["value"] == "" && $arr["request"]["type"])
+				{
+					$clss = aw_ini_get("classes");
+					$data["value"] = $clss[$arr["request"]["type"]]["name"];
+				}
+				break;
+
 			case "configuration":
 				$arr["obj_inst"]->set_meta("classificator",$arr["request"]["classificator"]);
 				$arr["obj_inst"]->set_meta("clf_type",$arr["request"]["clf_type"]);
