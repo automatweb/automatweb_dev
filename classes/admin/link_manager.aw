@@ -126,14 +126,16 @@ class link_manager extends aw_template
 		classload("vcl/table");
 		$t = new vcl_table;
 		$this->_init_t($t);
-
+		
 		$ol = new object_list(array(
 			"class_id" => CL_EXTLINK,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"name" => "%".$_GET["s"]["name"]."%",
 			"url" => "%".$_GET["s"]["url"]."%",
-			"limit" => ($_GET["s"]["name"] == "" && $_GET["s"]["url"] == "") ? 30 : NULL
+			"limit" => (($_GET["s"]["name"] == "" && $_GET["s"]["url"] == "") || $_GET["s"]["last"]) ? 30 : NULL,
+			"createdby" => ($_GET["s"]["my"])?aw_global_get("uid"):"%",
+			"sort_by" => "objects.created DESC",
 		));
 		$ii = get_instance(CL_EXTLINK);
 		foreach($ol->arr() as $o)
@@ -210,6 +212,20 @@ class link_manager extends aw_template
 			"name" => "s[submit]",
 			"type" => "submit",
 			"value" => t("Otsi"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "s[my]",
+			"type" => "checkbox",
+			"caption" => t("Minu lisatud"),
+			"value" => $_GET["s"]["my"],
+		));
+
+		$htmlc->add_property(array(
+			"name" => "s[last]",
+			"type" => "checkbox",
+			"caption" => t("Viimased 30"),
+			"value" => $_GET["s"]["last"],
 		));
 
 		$htmlc->finish_output(array(

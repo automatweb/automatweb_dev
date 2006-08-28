@@ -112,7 +112,11 @@ class file_manager extends aw_template
 		$ol = new object_list(array(
 			"class_id" => CL_FILE,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"name" => "%".$_GET["s"]["name"]."%",
+			"limit" => ($_GET["s"]["name"] == "" || $_GET["s"]["last"]) ? 30 : NULL,
+			"createdby" => ($_GET["s"]["my"])?aw_global_get("uid"):"%",
+			"sort_by" => "objects.created DESC",
 		));
 		$ii = get_instance(CL_FILE);
 		foreach($ol->arr() as $o)
@@ -153,8 +157,59 @@ class file_manager extends aw_template
 		}
 		$t->set_default_sortby("name");
 		$t->sort_by();
-		return "<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</script> ".$t->draw();
+		return "<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</script> ".$this->draw_form($arr).$t->draw();
 	}
+
+	function draw_form($arr)
+	{
+		classload("cfg/htmlclient");
+		$htmlc = new htmlclient(array(
+			'template' => "default",
+		));
+		$htmlc->start_output();
+
+		// search by name, url
+		$htmlc->add_property(array(
+			"name" => "s[name]",
+			"type" => "textbox",
+			"caption" => t("Nimi"),
+			"value" => $_GET["s"]["name"]
+		));
+
+		$htmlc->add_property(array(
+			"name" => "s[submit]",
+			"type" => "submit",
+			"value" => t("Otsi"),
+		));
+
+		$htmlc->add_property(array(
+			"name" => "s[my]",
+			"type" => "checkbox",
+			"caption" => t("Minu lisatud"),
+			"value" => $_GET["s"]["my"],
+		));
+
+		$htmlc->add_property(array(
+			"name" => "s[last]",
+			"type" => "checkbox",
+			"caption" => t("Viimased 30"),
+			"value" => $_GET["s"]["last"],
+		));
+
+		$htmlc->finish_output(array(
+			"action" => "manager",
+			"method" => "GET",
+			"data" => array(
+				"docid" => $arr["docid"],
+				"orb_class" => "file_manager",
+				"reforb" => 0
+			)
+		));
+
+		$html = $htmlc->get_result();
+		return $html;
+	}
+
 
 	function gen_location_for_obj($o)
 	{
