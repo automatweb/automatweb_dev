@@ -521,7 +521,7 @@ class search_conf extends aw_template
 			$this->db_query($sql);
 			while ($row = $this->db_next())
 			{
-				if (!$this->can("view", $row["oid"]))
+				if (!$this->can("view", $row["docid"]))
 				{
 					continue;
 				}
