@@ -11,7 +11,7 @@
 </tr>
 <tr>
 <td class="{VAR:style_form_text}" nowrap width="16%">Pealkiri:</td>
-<td class="{VAR:style_form_text}" align="left"><input type="text" name="name" class="{VAR:style_form_element}"></td>
+<td class="{VAR:style_form_text}" align="left"><input type="text" name="name" class="{VAR:style_form_element}" value="{VAR:title}" /></td>
 </tr>
 <tr>
 	<td class="{VAR:style_form_text}" nowrap width="16%">Autori nimi:</td>
@@ -48,7 +48,7 @@
 	<td colspan="2" class="{VAR:style_form_text}" nowrap>Kommentaar:</td>
 </tr>
 <tr>
-	<td colspan="2" class="{VAR:style_form_text}"><textarea name="commtext" cols="40" rows="10" class="{VAR:style_form_element}"></textarea></td>
+	<td colspan="2" class="{VAR:style_form_text}"><textarea name="commtext" cols="40" rows="10" class="{VAR:style_form_element}" value="{VAR:commtext}"></textarea></td>
 </tr>
 <tr>
 	<td colspan="2" class="{VAR:style_form_text}"><input type="submit" value="Lisa kommentaar"></td>

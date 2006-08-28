@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.108 2006/08/24 13:39:59 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.109 2006/08/28 14:27:35 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1450,6 +1450,15 @@ class forum_v2 extends class_base
 				));
 			
 			}
+
+			// if user tries to add comment, and he has an error during the submitting
+			// then this one here should keep the data user already submitted and
+			// puts it back into comment form --dragut
+			if ( !empty( $_SESSION['forum_comment_error']['submit_values'] ) )
+			{
+				$this->vars($_SESSION['forum_comment_error']['submit_values']);
+			}
+
 			if ($this->obj_inst->prop("show_logged") == 1)
 			{
 				$add = "_logged";
@@ -1462,7 +1471,15 @@ class forum_v2 extends class_base
 			if ($_SESSION['forum_comment_error'])
 			{
 				$error_msg = "";
+				if ( $_SESSION['forum_comment_error']['verification_code'] )
+				{
+					$error_msg .= t('Sisestatud kontrollkood on vale! <br />');
+				}
 				if ( $_SESSION['forum_comment_error']['name'] )
+				{
+					$error_msg .= t('Pealkirja v&auml;li peab olema t&auml;idetud! <br />');
+				}
+				if ( $_SESSION['forum_comment_error']['author'] )
 				{
 					$error_msg .= t('Nime v&auml;li peab olema t&auml;idetud! <br />');
 				}
@@ -1928,8 +1945,13 @@ class forum_v2 extends class_base
 		if ($this->obj_inst->prop('use_image_verification'))
 		{
 			$image_verification = $this->obj_inst->get_first_obj_by_reltype('RELTYPE_IMAGE_VERIFICATION');
+			$image_verification_error_msg = "";
 			if (!empty($image_verification))
 			{
+				if ( !empty( $_SESSION['add_topic_error']['image_verification'] ) )
+				{
+					$image_verification_error_msg = t('Sisestatud kontrollkood on vale! <br />');
+				}
 				$htmlc->add_property(array(
 					'name' => 'image_verification',
 					'caption' => t('Kontrollnumber'),
@@ -1941,7 +1963,8 @@ class forum_v2 extends class_base
 					)).html::textbox(array(
 						'name' => 'ver_code',
 						'size' => 20
-					))
+					)),
+					'error' => $image_verification_error_msg
 				));
 			}
 		}
@@ -2024,9 +2047,11 @@ class forum_v2 extends class_base
 			if ($obj_inst->prop('use_image_verification'))
 			{
 				$image_verification_inst = get_instance('core/util/image_verification/image_verification');
+				$image_verification_passed = true;
 				if (!$image_verification_inst->validate($arr['ver_code']))
 				{
-					return $this->finish_action($arr);
+				//	return $this->abort_action($arr);
+					$image_verification_passed = false;
 				}
 				
 			}
@@ -2082,6 +2107,13 @@ class forum_v2 extends class_base
 
 		$cb_values = $t->cb_values;
 		// ma pean tagasi suunama siin
+		if ( $image_verification_passed === false )
+		{
+		//	$cb_values['image_verification']['error'] = t('Sisestatud kontrollkood on vale! <br />');
+			$_SESSION['add_topic_error']['image_verification'] = 1;
+		//	aw_global_set('cb_values', $cb_values);
+		//	arr(aw_global_get('cb_values'));
+		}
 		if (is_array($cb_values) && sizeof($cb_values) > 0)
 		{
 			return $this->abort_action($arr);
@@ -2113,32 +2145,9 @@ class forum_v2 extends class_base
 	**/
 	function submit_comment($arr)
 	{
-		// at least comment text or title have to be set
-	//	if (empty($arr['name']) && empty($arr['commtext']))
-	//	{
-	//		$_SESSION['forum_comment_error'] = 1;
-	//		return $this->finish_action($arr);
-	//	}
-		$errors = array();
-		if ( isset($arr['name']) && empty($arr['name']) )
-		{
-			$errors['name'] = 1;
-		}
-		if ( isset($arr['commtext']) && empty($arr['commtext']) )
-		{
-			$errors['commtext'] = 1;
-		}
-		if ( isset($arr['uemail']) && empty($arr['uemail']) )
-		{
-			$_SESSION['forum_comment_error'] = $errors;
-			$errors['email'] = 1;
-		}
 
-		if ( !empty($errors) )
-		{
-			$_SESSION['forum_comment_error'] = $errors;
-			return $this->finish_action($arr);
-		}
+		$errors = array();
+
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$obj_inst = obj($arr["id"]);
@@ -2149,7 +2158,7 @@ class forum_v2 extends class_base
 				$image_verification_inst = get_instance('core/util/image_verification/image_verification');
 				if ( !$image_verification_inst->validate($arr['ver_code']) )
 				{
-					return $this->finish_action($arr);
+					$errors['verification_code'] = 1;
 				}
 			}
 
@@ -2162,6 +2171,35 @@ class forum_v2 extends class_base
 				$arr["uname"] = $uid;
 				$arr["uemail"] = $user_obj->prop("email");
 			}
+		}
+
+		if ( isset($arr['name']) && empty($arr['name']) )
+		{
+			$errors['name'] = 1;
+		}
+		if ( isset($arr['commtext']) && empty($arr['commtext']) )
+		{
+			$errors['commtext'] = 1;
+		}
+		if ( isset($arr['uname']) && empty($arr['uname']) )
+		{
+			$errors['author'] = 1;
+		}
+		if ( isset($arr['uemail']) && empty($arr['uemail']) )
+		{
+			$errors['email'] = 1;
+		}
+
+		if ( !empty($errors) )
+		{
+			$_SESSION['forum_comment_error'] = $errors;
+			$_SESSION['forum_comment_error']['submit_values'] = array(
+				'title' => $arr['name'],
+				'commtext' => $arr['commtext'],
+				'author' => $arr['uname'],
+				'author_email' => $arr['uemail']
+			);
+			return $this->finish_action($arr);
 		}
 
 		$t = get_instance(CL_COMMENT);
