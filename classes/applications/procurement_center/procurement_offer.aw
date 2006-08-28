@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.8 2006/08/28 13:14:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.9 2006/08/28 13:40:20 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -190,7 +190,9 @@ class procurement_offer extends class_base
 				}
 				break;
 			case "products":
-				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("val" => $arr["request"]["products"] , "id" => $arr["obj_inst"]->id() , "accept" => $arr["request"]["accept"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
+				$_SESSION["procurement"]["accept"] = $arr["request"]["accept"];
+				$_SESSION["procurement"]["val"] = $arr["request"]["products"];
+				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("id" => $arr["obj_inst"]->id()))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
 				</script>";
 				die($popup);
 				break;
@@ -234,7 +236,7 @@ class procurement_offer extends class_base
 		
 		if($_POST["types"])
 		{
-			foreach($_GET["val"] as $key=>$product)
+			foreach($_SESSION["procurement"]["val"] as $key=>$product)
 			{
 				$ol = new object_list(array(
 					"class_id" => array(CL_SHOP_PRODUCT),
@@ -274,7 +276,7 @@ class procurement_offer extends class_base
 					else continue;
 				}
 				$o->set_prop("accept", $product["accept"]);
-				if(array_key_exists($key , $_GET["accept"])) $o->set_prop("accept",1);
+				if(array_key_exists($key , $_SESSION["procurement"]["accept"])) $o->set_prop("accept",1);
 				else $o->set_prop("accept",null);
 				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
 				foreach($product as $key=>$val)
@@ -290,6 +292,8 @@ class procurement_offer extends class_base
 				}
 				$o->save();
 			}
+			
+			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
 			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
 			window.close();
@@ -297,7 +301,7 @@ class procurement_offer extends class_base
 		}
 		
 		$new_products = 0;
-		foreach($_GET["val"] as $product)
+		foreach($_SESSION["procurement"]["val"] as $product)
 		{
 			$ol = new object_list(array(
 				"class_id" => array(CL_SHOP_PRODUCT),
@@ -319,7 +323,7 @@ class procurement_offer extends class_base
 		
 		if(!$new_products)
 		{
-			foreach($_GET["val"] as $product)
+			foreach($_SESSION["procurement"]["val"] as $key=>$product)
 			{		
 				if(is_oid($product["row_id"]))
 				{
@@ -342,8 +346,7 @@ class procurement_offer extends class_base
 					else continue;
 				}
 				$o->set_prop("accept", $product["accept"]);
-				
-				if(array_key_exists($product["row_id"] , $_GET["accept"])) $o->set_prop("accept",1);
+				if(array_key_exists($product["row_id"] , $_SESSION["procurement"]["accept"])) $o->set_prop("accept",1);
 				else $o->set_prop("accept",null);
 				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
 				foreach($product as $key=>$val)
@@ -359,6 +362,7 @@ class procurement_offer extends class_base
 				}
 				$o->save();
 			}
+			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
 			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
 			window.close();

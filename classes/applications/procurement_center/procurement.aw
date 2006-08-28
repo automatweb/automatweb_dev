@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.6 2006/08/28 13:14:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.7 2006/08/28 13:40:20 markop Exp $
 // procurement.aw - Hange 
 /*
 
@@ -358,7 +358,7 @@ class procurement extends class_base
 				break;
 			case "products":
 				//liidab need tooted juurde mida veel ei eksisteeri
-				
+				$_SESSION["procurement"]["val"] = $prop["value"];
 				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("val" => $prop["value"] , "id" => $arr["obj_inst"]->id()))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
 					</script>";
 				die($popup);
@@ -419,8 +419,9 @@ class procurement extends class_base
 					$p->save();
 				}
 			}
-			$this_object->set_meta("products",$_GET["val"]);
+			$this_object->set_meta("products",$_SESSION["procurement"]["val"]);
 			$this_object->save();
+			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
 			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
 			window.close();
@@ -428,7 +429,7 @@ class procurement extends class_base
 		}
 		
 		$new_products = 0;
-		foreach($_GET["val"] as $product)
+		foreach($_SESSION["procurement"]["val"] as $product)
 		{
 			$ol = new object_list(array(
 				"class_id" => array(CL_SHOP_PRODUCT),
@@ -453,8 +454,9 @@ class procurement extends class_base
 		
 		if(!$new_products)
 		{
-			$this_object->set_meta("products",$_GET["val"]);
+			$this_object->set_meta("products",$_SESSION["procurement"]["val"]);
 			$this_object->save();
+			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
 			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
 			window.close();
@@ -462,7 +464,7 @@ class procurement extends class_base
 		}
 		$t->define_data(array("type" => html::submit(array("name" => "submit", "class" => "submit" , "value" => "submit" , "onclick"=>"self.disabled=true;submit_changeform(''); return false;") )));
 		$t->set_sortable(false);
-		return "<form action='".$this->mk_my_orb("set_type", array("val" => $_GET["val"], "id" => $_GET["id"]))."' method='POST' name='changeform' enctype='multipart/form-data' >".$t->draw()."</form>";
+		return "<form action='".$this->mk_my_orb("set_type", array("id" => $_GET["id"]))."' method='POST' name='changeform' enctype='multipart/form-data' >".$t->draw()."</form>";
 	}
 
 
