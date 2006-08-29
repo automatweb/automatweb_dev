@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="delete_cos">
+			<function name="delete_cos">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

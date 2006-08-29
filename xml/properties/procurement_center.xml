@@ -1,13 +1,30 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimetus</caption>
+      </property>
+      <property>
             <name>owner</name>
             <table>objects</table>
-            <group>general</group>
+            <group>settings</group>
             <type>text</type>
             <store>no</store>
             <field>owner</field>
             <caption>Omanik</caption>
+      </property>
+      <property>
+            <name>offerers_folder</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_PROCUREMENT_CENTER_FOLDERS</reltype>
+            <caption>Pakkujate kataloog</caption>
       </property>
       <property>
             <name>p_tb</name>
@@ -56,6 +73,341 @@
             <no_caption>1</no_caption>
             <field>team_table</field>
       </property>
+      <property>
+            <name>offerers_tb</name>
+            <table>objects</table>
+            <group>offerers_tree</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>offerers_tb</field>
+      </property>
+      <property>
+            <name>offerers_tr</name>
+            <table>objects</table>
+            <group>offerers_tree</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>offerers_l</parent>
+            <field>offerers_tr</field>
+      </property>
+      <property>
+            <name>offerers_tbl</name>
+            <table>objects</table>
+            <group>offerers_tree</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>offerers_l</parent>
+            <field>offerers_tbl</field>
+      </property>
+      <property>
+            <name>offerers_find_tb</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>offerers_find_tb</field>
+      </property>
+      <property>
+            <name>offerers_find_name</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <field>offerers_find_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>offerers_find_address</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <field>offerers_find_address</field>
+            <caption>Aadress</caption>
+      </property>
+      <property>
+            <name>offerers_find_groups</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <field>offerers_find_groups</field>
+            <caption>Hankijagruppid</caption>
+      </property>
+      <property>
+            <name>offerers_find_done</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <no_caption>1</no_caption>
+            <field>offerers_find_done</field>
+            <caption>Teostanud hankeid</caption>
+      </property>
+      <property>
+            <name>offerers_find_start</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <field>offerers_find_start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>offerers_find_end</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <field>offerers_find_end</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>offerers_find_product</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <field>offerers_find_product</field>
+            <caption>pakutud Toode</caption>
+      </property>
+      <property>
+            <name>offerers_find_only_buy</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <parent>offerers_find_params</parent>
+            <no_caption>1</no_caption>
+            <field>offerers_find_only_buy</field>
+            <caption>Ainult ostudega</caption>
+      </property>
+      <property>
+            <name>do_find_offerers</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>submit</type>
+            <store>no</store>
+            <value>Otsi</value>
+            <parent>offerers_find_params</parent>
+            <action>find_offerers</action>
+            <no_caption>1</no_caption>
+            <field>do_find_offerers</field>
+      </property>
+      <property>
+            <name>offerers_find_tbl</name>
+            <table>objects</table>
+            <group>offerers_find</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>offerers_find_l</parent>
+            <field>offerers_find_tbl</field>
+      </property>
+      <property>
+            <name>offers_tr</name>
+            <table>objects</table>
+            <group>offers_tree</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>offers_l</parent>
+            <field>offers_tr</field>
+      </property>
+      <property>
+            <name>offers_tbl</name>
+            <table>objects</table>
+            <group>offers_tree</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>offers_l</parent>
+            <field>offers_tbl</field>
+      </property>
+      <property>
+            <name>offers_find_tb</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>offers_find_tb</field>
+      </property>
+      <property>
+            <name>offers_find_name</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offers_find_params</parent>
+            <field>offers_find_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>offers_find_address</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offers_find_params</parent>
+            <field>offers_find_address</field>
+            <caption>Aadress</caption>
+      </property>
+      <property>
+            <name>offers_find_groups</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offers_find_params</parent>
+            <field>offers_find_groups</field>
+            <caption>Hankijagruppid</caption>
+      </property>
+      <property>
+            <name>offers_find_start</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>offers_find_params</parent>
+            <field>offers_find_start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>offers_find_end</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>offers_find_params</parent>
+            <field>offers_find_end</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>offers_find_product</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>offers_find_params</parent>
+            <field>offers_find_product</field>
+            <caption>pakutud Toode</caption>
+      </property>
+      <property>
+            <name>offers_find_only_buy</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <parent>offers_find_params</parent>
+            <no_caption>1</no_caption>
+            <field>offers_find_only_buy</field>
+            <caption>Ainult ostudega</caption>
+      </property>
+      <property>
+            <name>offers_find_archived</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <parent>offers_find_params</parent>
+            <no_caption>1</no_caption>
+            <field>offers_find_archived</field>
+            <caption>Arhiveeritud</caption>
+      </property>
+      <property>
+            <name>do_find_offers</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>submit</type>
+            <store>no</store>
+            <value>Otsi</value>
+            <parent>offers_find_params</parent>
+            <action>find_offerers</action>
+            <no_caption>1</no_caption>
+            <field>do_find_offers</field>
+      </property>
+      <property>
+            <name>offers_find_tbl</name>
+            <table>objects</table>
+            <group>offers_find</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>offers_find_l</parent>
+            <field>offers_find_tbl</field>
+      </property>
+      <property>
+            <name>buyings_tr</name>
+            <table>objects</table>
+            <group>buyings_tree</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>buyings_l</parent>
+            <field>buyings_tr</field>
+      </property>
+      <property>
+            <name>buyings_tbl</name>
+            <table>objects</table>
+            <group>buyings_find</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>buyings_find_l</parent>
+            <field>buyings_tbl</field>
+      </property>
+      <property>
+            <name>buyings_textbox</name>
+            <table>objects</table>
+            <group>buyings_find</group>
+            <type>textbox</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>buyings_find_l</parent>
+            <field>buyings_textbox</field>
+      </property>
+      <property>
+            <name>products_tr</name>
+            <table>objects</table>
+            <group>products_tree</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>products_l</parent>
+            <field>products_tr</field>
+      </property>
+      <property>
+            <name>products_tbl</name>
+            <table>objects</table>
+            <group>products_find</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>products_find_l</parent>
+            <field>products_tbl</field>
+      </property>
+      <property>
+            <name>products_textbox</name>
+            <table>objects</table>
+            <group>products_find</group>
+            <type>textbox</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>products_find_l</parent>
+            <field>products_textbox</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROCUREMENT_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -64,6 +416,10 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+                  <parent>general</parent>
+            </settings>
             <p>
                   <caption>Hanked</caption>
                   <submit>no</submit>
@@ -72,6 +428,50 @@
                   <caption>Meeskond</caption>
                   <submit>no</submit>
             </team>
+            <offerers>
+                  <caption>Pakkujad</caption>
+            </offerers>
+            <offerers_tree>
+                  <caption>Puuvaates</caption>
+                  <parent>offerers</parent>
+            </offerers_tree>
+            <offerers_find>
+                  <caption>Otsing</caption>
+                  <parent>offerers</parent>
+            </offerers_find>
+            <offers>
+                  <caption>Pakkumised</caption>
+            </offers>
+            <offers_tree>
+                  <caption>Puuvaates</caption>
+                  <parent>offers</parent>
+            </offers_tree>
+            <offers_find>
+                  <caption>Otsing</caption>
+                  <parent>offers</parent>
+            </offers_find>
+            <buyings>
+                  <caption>Ostud</caption>
+            </buyings>
+            <buyings_tree>
+                  <caption>Puuvaates</caption>
+                  <parent>buyings</parent>
+            </buyings_tree>
+            <buyings_find>
+                  <caption>Otsing</caption>
+                  <parent>buyings</parent>
+            </buyings_find>
+            <products>
+                  <caption>Tooted</caption>
+            </products>
+            <products_tree>
+                  <caption>Puuvaates</caption>
+                  <parent>products</parent>
+            </products_tree>
+            <products_find>
+                  <caption>Otsing</caption>
+                  <parent>products</parent>
+            </products_find>
       </groupinfo>
       <reltypes>
             <MANAGER_CO>
@@ -84,6 +484,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Meeskonna liige</caption>
             </TEAM_MEMBER>
+            <PROCUREMENT_CENTER_FOLDERS>
+                  <value>3</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Hankekeskkonna kataloog</caption>
+            </PROCUREMENT_CENTER_FOLDERS>
       </reltypes>
       <layout>
             <p_l>
@@ -91,6 +496,56 @@
                   <width>30%:70%</width>
                   <group>p</group>
             </p_l>
+            <offerers_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>offerers_tree</group>
+            </offerers_l>
+            <offerers_find_l>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>offerers_find</group>
+            </offerers_find_l>
+            <offerers_find_params>
+                  <type>vbox</type>
+                  <parent>offerers_find_l</parent>
+                  <group>offerers_find</group>
+            </offerers_find_params>
+            <offers_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>offers_tree</group>
+            </offers_l>
+            <offers_find_l>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>offers_find</group>
+            </offers_find_l>
+            <offers_find_params>
+                  <type>vbox</type>
+                  <parent>offers_find_l</parent>
+                  <group>offers_find</group>
+            </offers_find_params>
+            <buyings_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>buyings_tree</group>
+            </buyings_l>
+            <buyings_find_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>buyings_find</group>
+            </buyings_find_l>
+            <products_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>products_tree</group>
+            </products_l>
+            <products_find_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>products_find</group>
+            </products_find_l>
       </layout>
 </properties>
 
