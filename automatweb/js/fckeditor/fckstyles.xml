@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Styles>
+	<Style name="None" element="span">
+		<Attribute name="style" value="font-weight: normal; font-style:none;font-size:12px;color:black;text-decoration:none;" />
+	</Style>
 	<Style name="Image on Left" element="img">
 		<Attribute name="style" value="padding: 5px; margin-right: 5px" />
 		<Attribute name="border" value="2" />
