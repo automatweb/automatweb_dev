@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.23 2006/07/19 16:59:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.24 2006/08/29 07:18:57 kristo Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -1636,7 +1636,7 @@ class realestate_add extends class_base
 	{	
 		$uid = aw_global_get("uid");
 		global $id;
-		if(is_oid($id))
+		if($this->can("view", $id))
 		{
 			$property = obj($id);
 			if($property->createdby() == $uid)$property->delete();
