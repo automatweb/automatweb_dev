@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.176 2006/08/28 11:41:57 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.177 2006/08/29 10:12:03 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -923,11 +923,43 @@ class image extends class_base
 				{
 					$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
 					$image_url = $this->get_url_by_id($arr["obj_inst"]->id());
+					$alias_url = $this->mk_my_orb("gen_image_alias_for_doc", array(
+						"img_id" => $arr["obj_inst"]->id(),
+						"close" => true,
+					), CL_IMAGE);
 					$prop["value"] .= "&nbsp;&nbsp;
 						<script language=\"javascript\">
+						function getDocID()
+						{
+							q = window.parent.location.href;
+							ar = new Array();
+							ar = q.split('&');
+							for(i=0;i<ar.length;i++)
+							{
+								pair = ar[i].split('=');
+								if(pair[0]=='doc')
+								{
+									doc_url = pair[1];
+									break;
+								}
+							}
+							ar = doc_url.split('%26');
+							for(i=0;i<ar.length;i++)
+							{
+								pair=ar[i].split('%3D');
+								if(pair[0]=='id')
+								{
+									doc_id = pair[1];
+									break;
+								}
+							}
+							return doc_id;
+						}
 						if (window.parent.name == \"InsertAWImageCommand\")
 						{
-							document.write(\"<a href='#' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.GetSelectedElement() ;if (\\\"\\\"+eSelected == \\\"HTMLImageElement\\\") { eSelected.src=\\\"$image_url\\\"; } else { ct=aw_get_url_contents(\\\"$url\\\"); FCK.InsertHtml(ct); } window.parent.close();'>Paiguta dokumenti</a>\");
+							aw_url = '".$alias_url."';
+							url = aw_url + '&doc_id=' + getDocID();
+							document.write(\"<a href='\"+url+\"' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.GetSelectedElement() ;if (\\\"\\\"+eSelected == \\\"HTMLImageElement\\\") { eSelected.src=\\\"$image_url\\\"; } else { ct=aw_get_url_contents(\\\"$url\\\"); FCK.InsertHtml(ct); } '>Paiguta dokumenti</a>\");
 						}
 					</script>
 					";
@@ -1938,6 +1970,7 @@ class image extends class_base
 		@attrib name=gen_image_alias_for_doc params=name
 		@param img_id required type=int
 		@param doc_id required type=int
+		@param close optional type=bool
 	**/
 	function gen_image_alias_for_doc($arr)
 	{
@@ -1947,7 +1980,11 @@ class image extends class_base
 			"to" => $arr["img_id"],
 		));
 		$c->save();
-		die($c->id());
+		$close = "<script language=\"javascript\">
+		javascript:window.parent.close();
+		</script>";
+		$out = $arr["close"]?$close:$c->id();
+		die($out);
 	}
 
 	function do_db_upgrade($t, $f)

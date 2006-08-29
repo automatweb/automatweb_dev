@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.129 2006/08/28 11:41:57 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.130 2006/08/29 10:12:03 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -202,17 +202,50 @@ class file extends class_base
 						"target" => "_blank",
 					));
 				}
-
-				$link_url = $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name());
-				$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
-				$data["value"] .= "&nbsp;&nbsp;
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					$link_url = $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name());
+					$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+					$alias_url = $this->mk_my_orb("gen_file_alias_for_doc", array(
+						"file_id" => $arr["obj_inst"]->id(),
+						"close" => true,
+					), CL_FILE);
+					$data["value"] .= "&nbsp;&nbsp;
 					<script language=\"javascript\">
-					if (window.parent.name == \"InsertAWFupCommand\")
-					{
-						document.write(\"<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</sc\"+\"ript><a href='#' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; SetAttribute( eSelected, \\\"_fcksavedurl\\\", \\\"$link_url\\\" ) ; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Paiguta dokumenti</a>\");
-					}
-				</script>
-				";
+						function getDocID()
+						{
+							q = window.parent.location.href;
+							ar = new Array();
+							ar = q.split('&');
+							for(i=0;i<ar.length;i++)
+							{
+								pair = ar[i].split('=');
+								if(pair[0]=='doc')
+								{
+									doc_url = pair[1];
+									break;
+								}
+							}
+							ar = doc_url.split('%26');
+							for(i=0;i<ar.length;i++)
+							{
+								pair=ar[i].split('%3D');
+								if(pair[0]=='id')
+								{
+									doc_id = pair[1];
+									break;
+								}
+							}
+							return doc_id;
+						}
+						if (window.parent.name == \"InsertAWFupCommand\")
+						{
+							url = '".$alias_url."' + '&doc_id=' + getDocID();
+							document.write(\"<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</sc\"+\"ript><a href='\"+url+\"' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; SetAttribute( eSelected, \\\"_fcksavedurl\\\", \\\"$link_url\\\" ) ; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Paiguta dokumenti</a>\");
+						}
+					</script>
+					";
+				}	
 				break;
 
 			case "file":
@@ -1145,6 +1178,7 @@ class file extends class_base
 		@attrib name=gen_file_alias_for_doc params=name
 		@param doc_id required type=int
 		@param file_id required type=int
+		@param close optional type=bool
 	**/
 	function gen_file_alias_for_doc($arr)
 	{
@@ -1154,7 +1188,11 @@ class file extends class_base
 			"to" => $arr["file_id"],
 		));
 		$c->save();
-		die($c->id());
+		$close = "<script language=\"javascript\">
+		javascript:window.parent.close();
+		</script>";
+		$out = $arr["close"]?$close:$c->id();
+		die($out);
 	}
 };
 ?>

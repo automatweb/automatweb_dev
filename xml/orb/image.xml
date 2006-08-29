@@ -169,6 +169,7 @@
 				<arguments>
 					<required name="img_id" type="int" />
 					<required name="doc_id" type="int" />
+					<optional name="close" type="bool" />
 				</arguments>
 			</function>
 		</action>

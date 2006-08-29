@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.23 2006/08/28 11:41:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.24 2006/08/29 10:12:05 tarvo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -306,24 +306,59 @@ class links extends class_base
 					$prop["value"] = "/".$arr["obj_inst"]->prop("docid");
 				}
 
-				if (aw_ini_get("extlinks.directlink") == 1)
+				if (is_oid($arr["obj_inst"]->id()))
 				{
-					$link_url = $arr["obj_inst"]->prop("url");
-				}
-				else
-				{
-					$link_url = obj_link($arr["obj_inst"]->id());
-				}
-
-				$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
-				$prop["post_append_text"] .= "&nbsp;&nbsp;
-					<script language=\"javascript\">
-					if (window.parent.name == \"InsertAWFupCommand\")
+					if (aw_ini_get("extlinks.directlink") == 1)
 					{
-						document.write(\"<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</sc\"+\"ript><a href='#' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; SetAttribute( eSelected, \\\"_fcksavedurl\\\", \\\"$link_url\\\" ) ; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Paiguta dokumenti</a>\");
+						$link_url = $arr["obj_inst"]->prop("url");
 					}
-				</script>
-				";
+					else
+					{
+						$link_url = obj_link($arr["obj_inst"]->id());
+					}
+
+					$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+					$alias_url = $this->mk_my_orb("gen_link_alias_for_doc", array(
+						"link_id" => $arr["obj_inst"]->id(),
+						"close" => true,
+					), CL_EXTLINK);
+
+					$prop["post_append_text"] .= "&nbsp;&nbsp;
+						<script language=\"javascript\">
+						function getDocID()
+						{
+							q = window.parent.location.href;
+							ar = new Array();
+							ar = q.split('&');
+							for(i=0;i<ar.length;i++)
+							{
+								pair = ar[i].split('=');
+								if(pair[0]=='doc')
+								{
+									doc_url = pair[1];
+									break;
+								}
+							}
+							ar = doc_url.split('%26');
+							for(i=0;i<ar.length;i++)
+							{
+								pair=ar[i].split('%3D');
+								if(pair[0]=='id')
+								{
+									doc_id = pair[1];
+									break;
+								}
+							}
+							return doc_id;
+						}
+						if (window.parent.name == \"InsertAWFupCommand\")
+						{
+							url = '".$alias_url."' + '&doc_id=' + getDocID();
+							document.write(\"<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</sc\"+\"ript><a href='\"+url+\"' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; SetAttribute( eSelected, \\\"_fcksavedurl\\\", \\\"$link_url\\\" ) ; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Paiguta dokumenti</a>\");
+						}
+					</script>
+					";
+				}
 				break;
 
 			case "link_image_active_until":
@@ -430,6 +465,7 @@ class links extends class_base
 		@attrib name=gen_link_alias_for_doc params=name
 		@param doc_id required type=int
 		@param link_id required type=int
+		@param close optional type=bool
 	**/
 	function gen_link_alias_for_doc($arr)
 	{
@@ -439,7 +475,11 @@ class links extends class_base
 			"to" => $arr["link_id"],
 		));
 		$c->save();
-		die($c->id());
+		$close = "<script language=\"javascript\">
+		javascript:window.parent.close();
+		</script>";
+		$out = $arr["close"]?$close:$c->id();
+		die($out);
 	}
 }
 ?>

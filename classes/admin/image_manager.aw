@@ -33,6 +33,9 @@ class image_manager extends aw_template
 			$image_list = new object_list();
 		}
 
+		parse_str($arr["doc"], $params);
+		$doc = obj($params["id"]);
+
 		if ($image_list->count())
 		{
 			$imgo = $image_list->begin();
@@ -41,8 +44,6 @@ class image_manager extends aw_template
 		else
 		{
 			$parent = aw_ini_get("image.default_folder");
-			parse_str($arr["doc"], $params);
-			$doc = obj($params["id"]);
 			if (!$parent)
 			{
 				$parent = $doc->parent();

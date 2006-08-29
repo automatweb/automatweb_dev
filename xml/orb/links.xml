@@ -23,6 +23,7 @@
 				<arguments>
 					<required name="doc_id" type="int" />
 					<required name="link_id" type="int" />
+					<optional name="close" type="bool" />
 				</arguments>
 			</function>
 		</action>
