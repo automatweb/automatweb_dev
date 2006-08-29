@@ -164,7 +164,7 @@ class crm_data extends class_base
 	{
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
-		
+
 		$cs = $p->connections_to(array("from.class_id" => CL_CRM_SECTION));
 		$c = reset($cs);
 		if (!$c)
