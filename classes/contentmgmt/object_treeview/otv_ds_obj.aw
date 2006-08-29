@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.47 2006/05/09 11:26:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.48 2006/08/29 07:41:29 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -548,12 +548,6 @@ class otv_ds_obj extends class_base
 			$sby = $ob->prop("sort_by");
 		}
 // seems that if i want to filter something - i need to do it here:
-// --> $filters - and this filters which are set in otv and will be passed on here as 
-//   -- eh, kui yheja sama v2ljapeale on salvestatud mingi filter ja selle sama v2lja
-//   -- peale on m22ratud ka see, et filtreerimine peaks toima vastavalt esit2hele
-//   -- siis antud juhul filtreeritakse ainult esit2he j2rgi, kuna see tuleb p2rast
-//   !!! tuleks teha variant, et saab mingit AND ja OR konstruktsioone kasutada !!!
-// --> and i think it would be nice to check if the ds is able to filter something at all
 
 		$clss = aw_ini_get("classes");
 		$_ft = array(
