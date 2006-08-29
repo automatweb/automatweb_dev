@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.75 2006/07/14 12:00:29 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.75 2006/07/14 12:00:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.76 2006/08/29 07:38:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.76 2006/08/29 07:38:28 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -3011,10 +3011,12 @@ echo "<hr>";
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start())
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start()/*-7*3600*24*/),
+			"sort_by" => "objects.createdby, objects.created"
 		));
-		echo "com count = ".$coms->count()." <br>";
-
+//		echo "com count = ".$coms->count()." <br>";
+echo "<div style='font-size: 10px;'>";
+		$i = array("marko" => "", "dragut" => "", "tarvo" => "");
 		foreach($coms->arr() as $com)
 		{
 			if ($com->createdby() == "")
@@ -3028,6 +3030,10 @@ echo "<hr>";
 					{
 						$uid = "kix";
 					}
+					if ($uid == "markop")
+					{
+						$uid = "marko";
+					}
 					$com_by_p[$uid][] = $com;
 				}
 				else
@@ -3038,9 +3044,32 @@ echo "<hr>";
 			else
 			{
 				$com_by_p[$com->createdby()][] = $com;
+				$uid = $com->createdby();
+			}
+			if (!isset($i[$uid]))
+			{
+				continue;
+			}
+
+			//echo date("d.m.Y H:i", $com->created())." ".$uid."<br>".substr(nl2br($com->comment()), 0, 200)."<hr>";
+			$bs[$uid][] = array(
+				"t" => $com->created(),
+				"c" => $com->comment(),
+				"p" => $com->parent()
+			);
+			$wh[$uid] += $com->prop("add_wh");
+		}
+		asort($bs);
+		foreach($bs as $uid => $bgs)
+		{
+			echo "$uid has ".count($bgs)." comments wh = ".$wh[$uid]."<br><br>";
+			foreach($bgs as $bg)
+			{
+				$o = obj($bg["p"]);
+				echo "bug ".$o->name()." - ".nl2br($bg["c"])."<hr>";
 			}
 		}
-
+die();
 		// calc work hrs per p
 		foreach($com_by_p as $uid => $coms)
 		{
