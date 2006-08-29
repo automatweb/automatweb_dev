@@ -48,7 +48,7 @@
 	<td colspan="2" class="{VAR:style_form_text}" nowrap>Kommentaar:</td>
 </tr>
 <tr>
-	<td colspan="2" class="{VAR:style_form_text}"><textarea name="commtext" cols="40" rows="10" class="{VAR:style_form_element}" value="{VAR:commtext}"></textarea></td>
+	<td colspan="2" class="{VAR:style_form_text}"><textarea name="commtext" cols="40" rows="10" class="{VAR:style_form_element}">{VAR:commtext}</textarea></td>
 </tr>
 <tr>
 	<td colspan="2" class="{VAR:style_form_text}"><input type="submit" value="Lisa kommentaar"></td>

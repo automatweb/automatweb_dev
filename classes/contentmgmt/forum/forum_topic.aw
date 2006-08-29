@@ -1,46 +1,47 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.18 2006/05/31 13:29:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.19 2006/08/29 13:27:48 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
+@classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1
 
 @default table=objects
 @default group=general
 
-@property name type=textbox
-@caption Pealkiri
+	@property name type=textbox
+	@caption Pealkiri
 
-@property comment type=textarea
-@caption Sisu
+	@property comment type=textarea
+	@caption Sisu
 
-@property author_name type=textbox field=meta method=serialize
-@caption Autori nimi
+	@property author_name type=textbox field=meta method=serialize
+	@caption Autori nimi
 
-@property author_email type=textbox field=meta method=serialize
-@caption Autori meil
+	@property author_email type=textbox field=meta method=serialize
+	@caption Autori meil
 
-@property locked type=checkbox ch_value=1 field=meta method=serialize
-@caption Teema lukus
-@comment Lukus teemale uusi kommentaare lisada ei saa
+	@property locked type=checkbox ch_value=1 field=meta method=serialize
+	@caption Teema lukus
+	@comment Lukus teemale uusi kommentaare lisada ei saa
 
-@property answers_to_mail type=checkbox ch_value=1 store=no
-@caption Soovin vastuseid e-mailile
+	@property answers_to_mail type=checkbox ch_value=1 store=no
+	@caption Soovin vastuseid e-mailile
 
-@property image type=releditor reltype=RELTYPE_FORUM_IMAGE rel_id=first use_form=emb field=meta method=serialize
-@caption Pilt
+	@property image type=releditor reltype=RELTYPE_FORUM_IMAGE rel_id=first use_form=emb field=meta method=serialize
+	@caption Pilt
 
-@property subscribers_editor type=releditor store=no mode=manager reltype=RELTYPE_SUBSCRIBER props=mail,name group=subscribers no_caption=1
-
-@classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC
+	@property image_verification type=text stoer=no
+	@caption Kontrollkood
 
 @groupinfo subscribers caption="Mailinglist"
+
+	@property subscribers_editor type=releditor store=no mode=manager reltype=RELTYPE_SUBSCRIBER props=mail,name group=subscribers no_caption=1
+
 
 @reltype SUBSCRIBER value=1 clid=CL_ML_MEMBER
 @caption Tellija
 
 @reltype FORUM_IMAGE value=2 clid=CL_IMAGE
 @caption Pilt
-
-@classinfo no_status=1
 
 */
 
@@ -90,9 +91,24 @@ class forum_topic extends class_base
 			case "name":
 				if (empty($prop["value"]))
 				{
-					$prop["error"] = $prop["caption"] . " ei tohi olla tühi";
+					$prop["error"] = $prop["caption"] . " ei tohi olla tühi!";
 					$retval = PROP_FATAL_ERROR;
 				};
+				break;
+			case 'image_verification':
+				if ($this->can('view', $arr['request']['forum_id']))
+				{
+					$forum_obj = new object($arr['request']['forum_id']);
+					if ($forum_obj->prop('use_image_verification'))	
+					{
+						$image_verification_inst = get_instance('core/util/image_verification/image_verification');
+						if ( !$image_verification_inst->validate($arr['request']['ver_code']) )
+						{
+							$prop['error'] = t('Sisestatud kontrollkood on vale!');
+							$retval = PROP_FATAL_ERROR;
+						}
+					}	
+				}
 				break;
 
 		}
