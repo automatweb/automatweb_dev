@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.110 2006/08/29 13:27:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.111 2006/08/29 13:31:03 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -2031,20 +2031,6 @@ class forum_v2 extends class_base
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$obj_inst = obj($arr["id"]);
-/*
-			// so, here is the image verification thingie:
-			if ($obj_inst->prop('use_image_verification'))
-			{
-				$image_verification_inst = get_instance('core/util/image_verification/image_verification');
-				$image_verification_passed = true;
-				if (!$image_verification_inst->validate($arr['ver_code']))
-				{
-				//	return $this->abort_action($arr);
-					$image_verification_passed = false;
-				}
-				
-			}
-*/
 			$uid = aw_global_get("uid");
 			if($obj_inst->prop("show_logged") != 1 && !empty($uid))
 			{
@@ -2096,13 +2082,6 @@ class forum_v2 extends class_base
 
 		$cb_values = $t->cb_values;
 		// ma pean tagasi suunama siin
-//		if ( $image_verification_passed === false )
-//		{
-		//	$cb_values['image_verification']['error'] = t('Sisestatud kontrollkood on vale! <br />');
-//			$_SESSION['add_topic_error']['image_verification'] = 1;
-		//	aw_global_set('cb_values', $cb_values);
-		//	arr(aw_global_get('cb_values'));
-//		}
 		if (is_array($cb_values) && sizeof($cb_values) > 0)
 		{
 			return $this->abort_action($arr);
