@@ -1140,7 +1140,12 @@ class realestate_import extends class_base
 				$value = iconv(REALESTATE_IMPORT_CHARSET_FROM, (REALESTATE_IMPORT_CHARSET_TO."//TRANSLIT")
 				,$this->property_data["LISAINFO_INFO"]);
 				$property->set_prop ("additional_info_et", $value);
-				
+		
+				#### property_area
+				if($property->is_property("property_area"))$property->set_prop ("property_area", $this->property_data["KRUNT"]);
+				arr($this->property_data["KRUNT"]);
+				arr($property->prop("property_area"));
+		
 				#### picture_icon
 				if ($property->prop ("picture_icon_city24") != $this->property_data["IKOONI_URL"])
 				{

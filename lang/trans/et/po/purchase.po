@@ -1,0 +1,116 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/procurement_center/purchase.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_date
+msgid "Omaduse Kuupäev (date) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_date_comment
+msgid "Omaduse Kuupäev (date) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_date_help
+msgid "Omaduse Kuupäev (date) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_buyer
+msgid "Omaduse Pakkumised  (buyer) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_buyer_comment
+msgid "Omaduse Pakkumised  (buyer) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_buyer_help
+msgid "Omaduse Pakkumised  (buyer) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_bargainer
+msgid "Omaduse Hankija (bargainer) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_bargainer_comment
+msgid "Omaduse Hankija (bargainer) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_bargainer_help
+msgid "Omaduse Hankija (bargainer) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_offers
+msgid "Omaduse Failid  (offers) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_offers_comment
+msgid "Omaduse Failid  (offers) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_offers_help
+msgid "Omaduse Failid  (offers) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_files
+msgid "Omaduse Ostud  (files) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_files_comment
+msgid "Omaduse Ostud  (files) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_files_help
+msgid "Omaduse Ostud  (files) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_purchases
+msgid "Omaduse  (purchases) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_purchases_comment
+msgid "Omaduse  (purchases) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_purchases_help
+msgid "Omaduse  (purchases) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:group_offers
+msgid "Grupi offers (offers) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:group_offers_help
+msgid "Grupi offers (offers) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:group_files
+msgid "Grupi files (files) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:group_files_help
+msgid "Grupi files (files) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:group_purchases
+msgid "Grupi purchases (purchases) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:group_purchases_help
+msgid "Grupi purchases (purchases) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:rel_RELTYPE_BUYER
+msgid "Seose Ostja  (RELTYPE_BUYER) tekst"
+msgstr ""
+

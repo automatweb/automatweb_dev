@@ -430,7 +430,9 @@ class realestate_apartment extends realestate_property
 				break;
 
 			case "number_of_storeys":
+				$prop["value"] = (int)($prop["value"]);
 				$prop["options"] = range (1, 50);
+			//	arr($prop["value"]);
 				break;
 */		}
 

@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>N&amp;amp;auml;itamise p&amp;otilde;hi (template)</caption>
+            <caption>N&amp;amp;auml;itamise p&amp;amp;otilde;hi (template)</caption>
       </property>
       <property>
             <name>result_format</name>
@@ -26,7 +26,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <comment>N&amp;amp;auml;ita otsingutulemusi ilma otsinguvormita. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
+            <comment>N&amp;amp;auml;ita otsingutulemusi ilma otsinguvormita. Ei m&amp;amp;otilde;juta admin liidese otsingut.</comment>
             <caption>Tulemused otsinguvormita</caption>
       </property>
       <property>
@@ -37,7 +37,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <comment>Otsingutulemustelt objekti detailvaatele ei suunata. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
+            <comment>Otsingutulemustelt objekti detailvaatele ei suunata. Ei m&amp;amp;otilde;juta admin liidese otsingut.</comment>
             <caption>Suunamiseta</caption>
       </property>
       <property>
@@ -47,7 +47,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <comment>Otsingutulemuste tabeli navigatsiooni asukoht. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
+            <comment>Otsingutulemuste tabeli navigatsiooni asukoht. Ei m&amp;amp;otilde;juta admin liidese otsingut.</comment>
             <caption>Tabeli navigatsiooni asukoht</caption>
       </property>
       <property>
@@ -58,7 +58,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <datatype>int</datatype>
-            <comment>[0] - v&amp;otilde;imalus valida parameetrile vaid &amp;uuml;ks v&amp;amp;auml;&amp;amp;auml;rtus, [1 - ...] - v&amp;otilde;imalus valida mitu.</comment>
+            <comment>[0] - v&amp;amp;otilde;imalus valida parameetrile vaid &amp;uuml;ks v&amp;amp;auml;&amp;amp;auml;rtus, [1 - ...] - v&amp;amp;otilde;imalus valida mitu.</comment>
             <caption>Otsinguvormi valikuelementide suurus</caption>
       </property>
       <property>

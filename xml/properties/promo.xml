@@ -49,7 +49,7 @@
             <method>serialize</method>
             <trans>1</trans>
             <group>general_sub</group>
-            <caption>Kasti t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Kasti t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>link</name>
@@ -77,7 +77,7 @@
             <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
-            <caption>Grupid, kellele kasti n&amp;auml;idata</caption>
+            <caption>Grupid, kellele kasti n&amp;amp;auml;idata</caption>
       </property>
       <property>
             <name>no_title</name>
@@ -117,7 +117,7 @@
             <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
-            <caption>N&amp;auml;ita igal pool</caption>
+            <caption>N&amp;amp;auml;ita igal pool</caption>
       </property>
       <property>
             <name>not_in_search</name>
@@ -244,7 +244,7 @@
             <table>menu</table>
             <group>templates</group>
             <field>tpl_lead</field>
-            <caption>Template n&amp;auml;itamiseks</caption>
+            <caption>Template n&amp;amp;auml;itamiseks</caption>
       </property>
       <property>
             <name>use_fld_tpl</name>
@@ -272,7 +272,7 @@
             <method>serialize</method>
             <store>no</store>
             <field>last_menus</field>
-            <caption>Vali men&amp;uuml;&amp;uuml;d, mille alt viimaseid dokumente v&amp;otilde;etakse</caption>
+            <caption>Vali men&amp;amp;uuml;&amp;amp;uuml;d, mille alt viimaseid dokumente v&amp;amp;otilde;etakse</caption>
       </property>
       <property>
             <name>ndocs</name>
@@ -347,7 +347,7 @@
       </classinfo>
       <groupinfo>
             <general_sub>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general_sub>
             <users>
@@ -355,29 +355,29 @@
                   <parent>general</parent>
             </users>
             <show>
-                  <caption>N&amp;auml;itamine</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
             </show>
             <show_sub>
-                  <caption>N&amp;auml;itamine</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
                   <parent>show</parent>
             </show_sub>
             <container_locations>
-                  <caption>Konteineri n&amp;auml;itamise asukohad</caption>
+                  <caption>Konteineri n&amp;amp;auml;itamise asukohad</caption>
                   <parent>show</parent>
             </container_locations>
             <doc_ord>
-                  <caption>Dokumentide j&amp;auml;rjestamine</caption>
+                  <caption>Dokumentide j&amp;amp;auml;rjestamine</caption>
                   <parent>show</parent>
             </doc_ord>
             <look>
-                  <caption>V&amp;auml;limus</caption>
+                  <caption>V&amp;amp;auml;limus</caption>
             </look>
             <look_sub>
-                  <caption>V&amp;auml;limus</caption>
+                  <caption>V&amp;amp;auml;limus</caption>
                   <parent>look</parent>
             </look_sub>
             <templates>
-                  <caption>Kujundusp&amp;otilde;hjad</caption>
+                  <caption>Kujundusp&amp;amp;otilde;hjad</caption>
                   <parent>look</parent>
             </templates>
             <menus>
@@ -403,12 +403,12 @@
             <ASSIGNED_MENU>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>n&amp;auml;ita men&amp;uuml;&amp;uuml; juures</caption>
+                  <caption>n&amp;amp;auml;ita men&amp;amp;uuml;&amp;amp;uuml; juures</caption>
             </ASSIGNED_MENU>
             <DOC_SOURCE>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>v&amp;otilde;ta dokumente selle men&amp;uuml;&amp;uuml; alt</caption>
+                  <caption>v&amp;amp;otilde;ta dokumente selle men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
             </DOC_SOURCE>
             <IMAGE>
                   <value>3</value>
@@ -418,7 +418,7 @@
             <NO_SHOW_MENU>
                   <value>4</value>
                   <clid>CL_MENU</clid>
-                  <caption>&amp;amp;auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures</caption>
+                  <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita men&amp;amp;uuml;&amp;amp;uuml; juures</caption>
             </NO_SHOW_MENU>
             <KEYWORD>
                   <value>5</value>

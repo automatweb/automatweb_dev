@@ -81,7 +81,7 @@ FCKConfig.Plugins.Add( 'awfup', 'en' ) ;
 FCKConfig.Plugins.Add( 'awimageupload', 'en' ) ;
 
 FCKConfig.ToolbarSets["aw"] = [
-       ['Cut','Copy','Paste','PasteText','PasteWord'],
+       ['Source','Cut','Copy','Paste','PasteText','PasteWord'],
        ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
        ['Bold','Italic','Underline','StrikeThrough','-'],
        ['OrderedList','UnorderedList','-','Outdent','Indent'],

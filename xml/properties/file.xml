@@ -106,7 +106,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Ji&amp;amp;otilde;ustumise kuup&amp;amp;auml;ev</caption>
+            <caption>J&amp;amp;otilde;ustumise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>act_date</name>

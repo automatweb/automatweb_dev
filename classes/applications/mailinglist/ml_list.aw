@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.84 2006/07/19 11:14:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.85 2006/08/29 07:26:09 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -17,7 +17,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Kaustad millega liituda
 
 @property choose_languages type=select multiple=1 field=meta method=serialize
-@caption Keeled millega võib liituda
+@caption Keeled millega v&otilde;ib liituda
 
 @property multiple_folders type=checkbox ch_value=1
 @caption Lase liitumisel/lahkumisel kausta valida
@@ -29,7 +29,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Kirjade asukoht
 
 @property sub_form_type type=select rel=1
-@caption Vormi tüüp
+@caption Vormi t&uuml;&uuml;p
 
 @property redir_obj type=relpicker reltype=RELTYPE_REDIR_OBJECT rel=1
 @caption Dokument millele suunata
@@ -123,7 +123,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Formaat
 
 @property export_from_date type=date_select store=no default=-1
-@caption Alates kuupäevast
+@caption Alates kuup&auml;evast
 
 @property exp_sbt type=submit
 @caption Ekspordi
@@ -228,7 +228,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Listi liikmete allikas
 
 @reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
-@caption ümbersuunamine
+@caption &Uuml;mbersuunamine
 
 @reltype ADM_MESSAGE value=3 clid=CL_MESSAGE
 @caption administratiivne teade 
@@ -557,7 +557,7 @@ class ml_list extends class_base
 		if(empty($args["email"]))
 		{
 			$allow = false;
-			$erx["XXX"]["msg"] = t("Liitumisel vaja täita aadressi väli");
+			$erx["XXX"]["msg"] = t("Liitumisel vaja t&auml;ita aadressi v&auml;li");
 		}
 		
 		if (sizeof($errors) > 0 || (!$allow && $args["op"] == 1))
@@ -755,7 +755,7 @@ class ml_list extends class_base
 				break;
 	
 			case "separator_legend":
-				$prop["value"] = "tab'i eraldajana kasutamiseks märgi tekstikasti /t";
+				$prop["value"] = "tab'i eraldajana kasutamiseks m&auml;rgi tekstikasti /t";
 				break;
 			case "list_status_table":
 				$this->gen_list_status_table($arr);
@@ -812,7 +812,7 @@ class ml_list extends class_base
 					"name" => "send",
 					"img" => "mail_send.gif",
 					"tooltip" => t("Saada"),
-					"confirm" => t("Saata kiri ära?"),
+					"confirm" => t("Saata kiri &auml;ra?"),
 				));
 				*/
 				break;
@@ -884,7 +884,7 @@ class ml_list extends class_base
 					ML_EXPORT_CSV => t("nimi,aadress"),
 					ML_EXPORT_NAMEADDR => t("nimi &lt;aadress&gt;"),
 					ML_EXPORT_ADDR => t("aadress"),
-					ML_EXPORT_ALL => t("Kõik andmed"),
+					ML_EXPORT_ALL => t("K&otilde;ik andmed"),
 				);
 				$prop["value"] = 1;
 				break;
@@ -1731,7 +1731,7 @@ class ml_list extends class_base
 			//$row["mid"] = $mail_obj->name();
 			if (!$row["patch_size"])
 			{
-				$row["patch_size"] = t("kõik");
+				$row["patch_size"] = t("k&otilde;ik");
 			};
 			$row["delay"]/=60;
 			$row["status"] = html::href(array(
@@ -2300,7 +2300,7 @@ class ml_list extends class_base
 		{
 			$refresh_rate = 30;
 			header("Refresh: $refresh_rate; url=$url");
-			$str = ", värskendan iga ${refresh_rate} sekundi järel";
+			$str = ", v&auml;rskendan iga ${refresh_rate} sekundi j&auml;rel";
 		}
 		return sprintf(t("Liikmeid: %s, saadetud: %s %s"), $member_count, $served_count, $str);
 	}
@@ -2400,7 +2400,7 @@ class ml_list extends class_base
 			"name" => "send_away",
 			"type" => "checkbox",
 			"ch_value" => 1,
-			"caption" => t("Saada peale salvestamist ära"),
+			"caption" => t("Saada peale salvestamist &auml;ra"),
 		);
 
 		// narf, can I make this work better perhaps? I really do hate callback ..
@@ -2432,7 +2432,7 @@ class ml_list extends class_base
 						"type" => "text",
 						"name" => "legend",
 						"caption" =>  t("Asenduste legend"),
-						"value" => t("Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
+						"value" => t("Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br /><br />
 							#username# - AutomatWebi kasutajanimi<br />
 							#name# - Listi liikme nimi<br />
 							#e-mail# - Listi liikme e-mail<br/>
@@ -2441,8 +2441,8 @@ class ml_list extends class_base
 							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br />
 							#lahkumine# - link, millel klikkides inimene saab listist lahkuda<br />
 							<br />
-							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi lõppu #traceid#
-							Näiteks: http://www.struktuur.ee/aw#traceid#
+							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi l&otilde;ppu #traceid#
+							N&auml;iteks: http://www.struktuur.ee/aw#traceid#
 							"),
 					);
 				}

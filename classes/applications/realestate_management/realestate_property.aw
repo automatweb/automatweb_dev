@@ -362,7 +362,7 @@ class realestate_property extends class_base
 			}
 			else
 			{
-				echo t("Kinnisvarahalduskeskkond objekti jaoks m&auml;&auml;ramata või puudub juurdep&auml;&auml;suõigus");
+				echo t("Kinnisvarahalduskeskkond objekti jaoks m&auml;&auml;ramata v&otilde;i puudub juurdep&auml;&auml;su&otilde;igus");
 			}
 		}
 	}
@@ -1132,7 +1132,7 @@ class realestate_property extends class_base
 		else
 		{
 			return false;
-		}
+		}//arr($this_object->prop("transaction_type"));
 		$this_object_id = $this_object->id ();
 		$view_type = $arr["view_type"];
 		$no_picture_data = false;
@@ -1416,7 +1416,7 @@ class realestate_property extends class_base
 		else
 		{
 			error::raise (array (
-				"msg" => sprintf (t("Kinnisvaraobjektil halduskeskkond defineerimata või puudub juurdep&auml;&auml;suõigus (oid: %s)."), $arr["id"]),
+				"msg" => sprintf (t("Kinnisvaraobjektil halduskeskkond defineerimata v&otilde;i puudub juurdep&auml;&auml;su&otilde;igus (oid: %s)."), $arr["id"]),
 				"fatal" => true,
 				"show" => true,
 			));
@@ -2535,7 +2535,7 @@ class realestate_property extends class_base
 			else
 			{
 				error::raise(array(
-					"msg" => sprintf (t("Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal kustutada. Viga õiguste seadetes. J&auml;&auml;b orbobjekt, mille id on %s"), $arr["oid"], $o->id ()),
+					"msg" => sprintf (t("Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal kustutada. Viga &otilde;iguste seadetes. J&auml;&auml;b orbobjekt, mille id on %s"), $arr["oid"], $o->id ()),
 					"fatal" => false,
 					"show" => false,
 				));

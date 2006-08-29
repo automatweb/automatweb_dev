@@ -3,4 +3,3 @@
 	<class name="location" folder="applications/scm" extends="class_base">
 	</class>
 </orb>
-		

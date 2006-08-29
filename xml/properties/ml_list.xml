@@ -20,7 +20,7 @@
             <group>general</group>
             <type>select</type>
             <multiple>1</multiple>
-            <caption>Keeled millega v&amp;otilde;ib liituda</caption>
+            <caption>Keeled millega v&amp;amp;otilde;ib liituda</caption>
       </property>
       <property>
             <name>multiple_folders</name>
@@ -60,7 +60,7 @@
             <group>general</group>
             <type>select</type>
             <rel>1</rel>
-            <caption>Vormi t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Vormi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>redir_obj</name>
@@ -306,7 +306,7 @@
             <type>date_select</type>
             <store>no</store>
             <default>-1</default>
-            <caption>Alates kuup&amp;auml;evast</caption>
+            <caption>Alates kuup&amp;amp;auml;evast</caption>
       </property>
       <property>
             <name>exp_sbt</name>
@@ -617,7 +617,7 @@
             <REDIR_OBJECT>
                   <value>2</value>
                   <clid>CL_DOCUMENT</clid>
-                  <caption>&amp;uuml;mbersuunamine</caption>
+                  <caption>&amp;amp;Uuml;mbersuunamine</caption>
             </REDIR_OBJECT>
             <ADM_MESSAGE>
                   <value>3</value>
