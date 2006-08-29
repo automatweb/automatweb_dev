@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.141 2006/08/28 11:02:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.142 2006/08/29 06:35:47 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2833,6 +2833,7 @@ class crm_person extends class_base
 	{
 		$arr["add_to_task"] = $_GET["add_to_task"];
 		$arr["add_to_co"] = $_GET["add_to_co"];
+		$arr["post_ru"] = post_ru();
 	}
 
 	function callback_mod_tab($arr)
@@ -3606,6 +3607,23 @@ class crm_person extends class_base
 			"sum" => number_format($s_sum, 2)
 		));
 		$arr["prop"]["value"] = $t->draw();
+	}
+
+	/**
+		@attrib name=submit_delete_docs
+		@param sel optional 
+		@param post_ru optional
+	**/
+	function submit_delete_docs($arr)
+	{
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			$ol = new object_list(array(
+				"oid" => $arr["sel"]
+			));
+			$ol->foreach_o(array("func" => "delete"));
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>
