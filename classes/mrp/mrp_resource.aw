@@ -308,6 +308,10 @@ class mrp_resource extends class_base
 
 	function get_resource_state($resource)
 	{
+		if (!is_oid($resource->id()))
+		{
+			return;
+		}
 		if ($resource->prop("state") == MRP_STATUS_RESOURCE_OUTOFSERVICE)
 		{
 			return array(MRP_STATUS_RESOURCE_OUTOFSERVICE, 0);
