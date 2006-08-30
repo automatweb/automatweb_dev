@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.130 2006/08/29 10:12:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.131 2006/08/30 13:50:23 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -136,7 +136,20 @@ class file extends class_base
 				}
 				$retval = PROP_IGNORE;
 				break;
-
+			case "comment":
+				$js = "<script>
+					tb = document.getElementById(\"".$data["name"]."\");
+					if(window.parent.name == \"InsertAWFupCommand\" && tb.value == \"\")
+					{
+						FCK=window.parent.opener.FCK;
+						if(FCK.Selection.GetType() == \"Text\")
+						{
+							tb.value = (FCK.EditorDocument.selection)?FCK.EditorDocument.selection.createRange().text:FCK.EditorDocument.getSelection();
+						}
+					}
+				</script>";
+				$data["post_append_text"] = $js;
+			break;
 			case "filename":
 				if ($arr["new"])
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.24 2006/08/29 10:12:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.25 2006/08/30 13:50:21 tarvo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -250,7 +250,21 @@ class links extends class_base
 		switch($prop["name"])
 		{
 
+			case "name":
+				$js = "<script>
+					tb = document.getElementById(\"".$prop["name"]."\");
+					if (window.parent.name == \"InsertAWFupCommand\" && tb.value == \"\")
+					{
 
+						FCK=window.parent.opener.FCK;
+						if(FCK.Selection.GetType() == \"Text\")
+						{
+							tb.value = (FCK.EditorDocument.selection)?FCK.EditorDocument.selection.createRange().text:FCK.EditorDocument.getSelection();
+						}
+					}
+				</script>";
+				$prop["post_append_text"] = $js;
+			break;
 			case "newwintoolbar":
 			case "newwinlocation":
 			case "newwinmenu":
@@ -351,6 +365,7 @@ class links extends class_base
 							}
 							return doc_id;
 						}
+						FCK=window.parent.opener.FCK;
 						if (window.parent.name == \"InsertAWFupCommand\")
 						{
 							url = '".$alias_url."' + '&doc_id=' + getDocID();
