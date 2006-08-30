@@ -104,7 +104,12 @@ class promo_display
 
 			$show_promo = false;
 			
-			$msec = $o->meta("section");
+			//$msec = $o->meta("section");
+			$msec = array();
+			foreach($o->connections_from(array("type" => "RELTYPE_ASSIGNED_MENU")) as $c)
+			{
+				$msec[$c->prop("to")] = $c->prop("to");
+			}
 
 			$section_include_submenus = $o->meta("section_include_submenus");
 
