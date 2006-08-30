@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.91 2006/08/25 11:29:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.92 2006/08/30 10:11:37 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -46,6 +46,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved default=-1
 	@caption Laekumiskuup&auml;ev
+
+	@property bill_trans_date type=date_select table=aw_crm_bill field=aw_trans_date default=-1
+	@caption Kandekuup&auml;ev
 
 	@property state type=select table=aw_crm_bill field=aw_state
 	@caption Staatus
@@ -269,6 +272,9 @@ class crm_bill extends class_base
 					$x++;
 				}
 				$prop["value"] = $val;
+				break;
+			case "bill_trans_date":
+				if($prop["value"] == -1) $prop["value"] = time();
 				break;
 
 		};
@@ -1801,7 +1807,8 @@ class crm_bill extends class_base
 			"to" => $row->id(),
 			"type" => "RELTYPE_ROW"
 		));
-
+		$bill->set_prop("bill_trans_date", time());
+		$bill->save();
 		return $arr["retu"];
 	}
 
@@ -2079,6 +2086,12 @@ class crm_bill extends class_base
 				$this->db_add_col($table, array(
 					"name" => $field,
 					"type" => "varchar(255)"
+				));
+				return true;
+			case "aw_trans_date":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "int"
 				));
 				return true;
 		}

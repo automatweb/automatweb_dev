@@ -101,6 +101,15 @@
             <caption>Laekumiskuup&amp;amp;auml;ev</caption>
       </property>
       <property>
+            <name>bill_trans_date</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_trans_date</field>
+            <default>-1</default>
+            <caption>Kandekuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>state</name>
             <table>aw_crm_bill</table>
             <group>general</group>
