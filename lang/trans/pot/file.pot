@@ -159,15 +159,15 @@ msgid "Omaduse N&auml;ita ikooni (show_icon) help"
 msgstr ""
 
 #: classes/file.aw:prop_j_time
-msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) caption"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) caption"
 msgstr ""
 
 #: classes/file.aw:prop_j_time_comment
-msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) kommentaar"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_j_time_help
-msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) help"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) help"
 msgstr ""
 
 #: classes/file.aw:prop_act_date
@@ -243,7 +243,7 @@ msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/file.aw:rel_RELTYPE_KEYWORD
-msgid "Seose M&amp;auml;rks&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
 #: classes/file.aw:152

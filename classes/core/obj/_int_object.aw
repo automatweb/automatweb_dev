@@ -203,7 +203,7 @@ class _int_object
 		{
 			$c = new connection();
 			$finder = array(
-				"from" => $this->obj["oid"],
+				"from" => $this->obj["brother_of"],
 				"from.class_id" => $this->obj["class_id"],
 				"to" => $oid,
 			);

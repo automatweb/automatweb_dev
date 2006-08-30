@@ -109,7 +109,8 @@
 <!-- SUB: GRID_HBOX -->
 
 <!-- SUB: GRID_HAS_CLOSER -->
-<a href='#' onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'>close</a>
+<table border=0 width="100%" bgcolor="#999999">
+<tr><td>{VAR:area_caption}</td><td align="right"> <a href='#' onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'>close</a></td></tr></table>
 <div id='{VAR:grid_name}'>
 <!-- END SUB: GRID_HAS_CLOSER -->
 
@@ -132,7 +133,8 @@
 
 <!-- SUB: GRID_VBOX -->
 <!-- SUB: VGRID_HAS_CLOSER -->
-<a href='#' onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'>close</a>
+<table border=0 width="100%" bgcolor="#999999">
+<tr><td>{VAR:area_caption}</td><td align="right"> <a href='#' onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'>close</a></td></tr></table>
 <div id='{VAR:grid_name}'>
 <!-- END SUB: VGRID_HAS_CLOSER -->
 

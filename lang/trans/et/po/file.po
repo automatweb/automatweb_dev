@@ -119,16 +119,12 @@ msgstr ""
 # classes/file.aw:prop_file_url_comment
 #: classes/file.aw:prop_file_url_comment
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) kommentaar"
-msgstr ""
-"Interneti aadress, kust fail võetakse. Kui on tehtud valik ka „Vali fail“ "
-"lahtris, siis URLina viitamine ei toimi."
+msgstr "Interneti aadress, kust fail võetakse. Kui on tehtud valik ka „Vali fail“ lahtris, siis URLina viitamine ei toimi."
 
 # classes/file.aw:prop_file_url_help
 #: classes/file.aw:prop_file_url_help
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) help"
-msgstr ""
-"Interneti aadress, kust fail võetakse. Kui on tehtud valik ka „Vali fail“ "
-"lahtris, siis URLina viitamine ei toimi."
+msgstr "Interneti aadress, kust fail võetakse. Kui on tehtud valik ka „Vali fail“ lahtris, siis URLina viitamine ei toimi."
 
 #: classes/file.aw:prop_showal
 msgid "Omaduse N&auml;ita kohe (showal) caption"
@@ -182,15 +178,15 @@ msgid "Omaduse N&auml;ita ikooni (show_icon) help"
 msgstr ""
 
 #: classes/file.aw:prop_j_time
-msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) caption"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) caption"
 msgstr ""
 
 #: classes/file.aw:prop_j_time_comment
-msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) kommentaar"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_j_time_help
-msgid "Omaduse Ji&otilde;ustumise kuup&auml;ev (j_time) help"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) help"
 msgstr ""
 
 #: classes/file.aw:prop_act_date
@@ -270,7 +266,7 @@ msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/file.aw:rel_RELTYPE_KEYWORD
-msgid "Seose M&amp;auml;rks&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
 #: classes/file.aw:152
@@ -283,12 +279,8 @@ msgstr ""
 
 # classes/file.aw:prop_showal_comment
 #~ msgid "Omaduse Näita kohe (showal) kommentaar"
-#~ msgstr ""
-#~ "valiku märkimisel ei kuvata faili lingina vaid üritatakse seda kohe "
-#~ "näidata."
+#~ msgstr "valiku märkimisel ei kuvata faili lingina vaid üritatakse seda kohe näidata."
 
 # classes/file.aw:prop_showal_help
 #~ msgid "Omaduse Näita kohe (showal) help"
-#~ msgstr ""
-#~ "valiku märkimisel ei kuvata faili lingina vaid üritatakse seda kohe "
-#~ "näidata."
+#~ msgstr "valiku märkimisel ei kuvata faili lingina vaid üritatakse seda kohe näidata."

@@ -9,16 +9,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/admin/image_manager.aw:87
 msgid "Pilt"
 msgstr ""
 
 #: classes/admin/image_manager.aw:92
+msgid "Asukoht"
+msgstr ""
+
+#: classes/admin/image_manager.aw:97
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/image_manager.aw:120
+#: classes/admin/image_manager.aw:136
 msgid "Vali see"
 msgstr ""
 
+#: classes/admin/image_manager.aw:172
+msgid "Nimi"
+msgstr ""
+
+#: classes/admin/image_manager.aw:179
+msgid "Otsi"
+msgstr ""
+
+#: classes/admin/image_manager.aw:185
+msgid "Minu lisatud"
+msgstr ""
+
+#: classes/admin/image_manager.aw:192
+msgid "Viimased 30"
+msgstr ""

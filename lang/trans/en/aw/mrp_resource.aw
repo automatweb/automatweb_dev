@@ -21,7 +21,6 @@ $GLOBALS["TRANS"]["Grupi Kinnised ajad (grp_resource_unavailable_una) pealkiri"]
 $GLOBALS["TRANS"]["Seose Ressursi kalender (RELTYPE_MRP_SCHEDULE) tekst"] = "Resource calendar";
 $GLOBALS["TRANS"]["Seose Ressursi omanik (RELTYPE_MRP_OWNER) tekst"] = "Resource owner";
 $GLOBALS["TRANS"]["Seose Kordus (RELTYPE_RECUR) tekst"] = "Recurrence";
-$GLOBALS["TRANS"]["Seose T&ouml;&ouml;aja kordus (RELTYPE_RECUR_WRK) tekst"] = "Available time recurrence";
 $GLOBALS["TRANS"]["Vaba"] = "Free";
 $GLOBALS["TRANS"]["Kasutusel"] = "In use";
 $GLOBALS["TRANS"]["Suletud"] = "Closed";

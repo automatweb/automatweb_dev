@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:class_1130_help
 msgid "Klassi Kliendi tagasiside help"
 msgstr ""
@@ -95,30 +94,35 @@ msgid "Organisatsioon"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:119
-msgid "Klass"
+msgid "Sait"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:125
-msgid "Objekt"
+msgid "Klass"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:131
-msgid "T&otilde;sidus"
+msgid "Objekt"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:137
-msgid "Arendajapoolne staatus"
+msgid "T&otilde;sidus"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:143
+msgid "Arendajapoolne staatus"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:149
 msgid "Lahendamise aeg"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:152 classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:207
+#: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:158
+#: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:214
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:159 classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:211
+#: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:165
+#: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:218
 msgid "Muuda"
 msgstr ""
-

@@ -29,6 +29,18 @@ msgstr ""
 msgid "Omaduse Kasutajanimi (uid) help"
 msgstr ""
 
+#: classes/core/users/user.aw:prop_link_to_p
+msgid "Omaduse Isik (link_to_p) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_link_to_p_comment
+msgid "Omaduse Isik (link_to_p) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_link_to_p_help
+msgid "Omaduse Isik (link_to_p) help"
+msgstr ""
+
 # classes/core/users/user.aw:prop_uid_entry
 #: classes/core/users/user.aw:prop_uid_entry
 msgid "Omaduse Kasutajanimi (uid_entry) caption"
@@ -72,6 +84,36 @@ msgstr ""
 # classes/core/users/user.aw:prop_lastaction_help
 #: classes/core/users/user.aw:prop_lastaction_help
 msgid "Omaduse Viimane sisse logimine (lastaction) help"
+msgstr ""
+
+# classes/core/users/user.aw:prop_created
+#: classes/core/users/user.aw:prop_created
+msgid "Omaduse Loodud (created) caption"
+msgstr ""
+
+# classes/core/users/user.aw:prop_created_comment
+#: classes/core/users/user.aw:prop_created_comment
+msgid "Omaduse Loodud (created) kommentaar"
+msgstr ""
+
+# classes/core/users/user.aw:prop_created_help
+#: classes/core/users/user.aw:prop_created_help
+msgid "Omaduse Loodud (created) help"
+msgstr ""
+
+# classes/core/users/user.aw:prop_createdby
+#: classes/core/users/user.aw:prop_createdby
+msgid "Omaduse Looja (createdby) caption"
+msgstr ""
+
+# classes/core/users/user.aw:prop_createdby_comment
+#: classes/core/users/user.aw:prop_createdby_comment
+msgid "Omaduse Looja (createdby) kommentaar"
+msgstr ""
+
+# classes/core/users/user.aw:prop_createdby_help
+#: classes/core/users/user.aw:prop_createdby_help
+msgid "Omaduse Looja (createdby) help"
 msgstr ""
 
 # classes/core/users/user.aw:prop_blocked
@@ -126,111 +168,6 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_notify_help
 msgid "Omaduse Uuest mailist teavitamine (notify) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_created
-#: classes/core/users/user.aw:prop_created
-msgid "Omaduse Loodud (created) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_created_comment
-#: classes/core/users/user.aw:prop_created_comment
-msgid "Omaduse Loodud (created) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_created_help
-#: classes/core/users/user.aw:prop_created_help
-msgid "Omaduse Loodud (created) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_createdby
-#: classes/core/users/user.aw:prop_createdby
-msgid "Omaduse Looja (createdby) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_createdby_comment
-#: classes/core/users/user.aw:prop_createdby_comment
-msgid "Omaduse Looja (createdby) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_createdby_help
-#: classes/core/users/user.aw:prop_createdby_help
-msgid "Omaduse Looja (createdby) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_admin_lang
-#: classes/core/users/user.aw:prop_admin_lang
-msgid "Omaduse Admin keel (admin_lang) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_admin_lang_comment
-#: classes/core/users/user.aw:prop_admin_lang_comment
-msgid "Omaduse Admin keel (admin_lang) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_admin_lang_help
-#: classes/core/users/user.aw:prop_admin_lang_help
-msgid "Omaduse Admin keel (admin_lang) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_base_lang
-#: classes/core/users/user.aw:prop_base_lang
-msgid "Omaduse Baaskeel (base_lang) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_base_lang_comment
-#: classes/core/users/user.aw:prop_base_lang_comment
-msgid "Omaduse Baaskeel (base_lang) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_base_lang_help
-#: classes/core/users/user.aw:prop_base_lang_help
-msgid "Omaduse Baaskeel (base_lang) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_target_lang
-#: classes/core/users/user.aw:prop_target_lang
-msgid "Omaduse Sihtkeel (target_lang) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_target_lang_comment
-#: classes/core/users/user.aw:prop_target_lang_comment
-msgid "Omaduse Sihtkeel (target_lang) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_target_lang_help
-#: classes/core/users/user.aw:prop_target_lang_help
-msgid "Omaduse Sihtkeel (target_lang) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_act_from
-#: classes/core/users/user.aw:prop_act_from
-msgid "Omaduse Aktiivne alates (act_from) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_act_from_comment
-#: classes/core/users/user.aw:prop_act_from_comment
-msgid "Omaduse Aktiivne alates (act_from) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_act_from_help
-#: classes/core/users/user.aw:prop_act_from_help
-msgid "Omaduse Aktiivne alates (act_from) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_act_to
-#: classes/core/users/user.aw:prop_act_to
-msgid "Omaduse Aktiivne kuni (act_to) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_act_to_comment
-#: classes/core/users/user.aw:prop_act_to_comment
-msgid "Omaduse Aktiivne kuni (act_to) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_act_to_help
-#: classes/core/users/user.aw:prop_act_to_help
-msgid "Omaduse Aktiivne kuni (act_to) help"
 msgstr ""
 
 #: classes/core/users/user.aw:prop_password_hash
@@ -353,66 +290,6 @@ msgstr ""
 msgid "Omaduse Saada tervitusmeil (resend_welcome) help"
 msgstr ""
 
-# classes/core/users/user.aw:prop_objects_own
-#: classes/core/users/user.aw:prop_objects_own
-msgid "Omaduse Objektid (objects_own) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_objects_own_comment
-#: classes/core/users/user.aw:prop_objects_own_comment
-msgid "Omaduse Objektid (objects_own) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_objects_own_help
-#: classes/core/users/user.aw:prop_objects_own_help
-msgid "Omaduse Objektid (objects_own) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_objects_other
-#: classes/core/users/user.aw:prop_objects_other
-msgid "Omaduse Objektid (objects_other) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_objects_other_comment
-#: classes/core/users/user.aw:prop_objects_other_comment
-msgid "Omaduse Objektid (objects_other) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_objects_other_help
-#: classes/core/users/user.aw:prop_objects_other_help
-msgid "Omaduse Objektid (objects_other) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_obj_acl
-#: classes/core/users/user.aw:prop_obj_acl
-msgid "Omaduse  (obj_acl) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_obj_acl_comment
-#: classes/core/users/user.aw:prop_obj_acl_comment
-msgid "Omaduse  (obj_acl) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_obj_acl_help
-#: classes/core/users/user.aw:prop_obj_acl_help
-msgid "Omaduse  (obj_acl) help"
-msgstr ""
-
-# classes/core/users/user.aw:prop_obj_acl_other
-#: classes/core/users/user.aw:prop_obj_acl_other
-msgid "Omaduse  (obj_acl_other) caption"
-msgstr ""
-
-# classes/core/users/user.aw:prop_obj_acl_other_comment
-#: classes/core/users/user.aw:prop_obj_acl_other_comment
-msgid "Omaduse  (obj_acl_other) kommentaar"
-msgstr ""
-
-# classes/core/users/user.aw:prop_obj_acl_other_help
-#: classes/core/users/user.aw:prop_obj_acl_other_help
-msgid "Omaduse  (obj_acl_other) help"
-msgstr ""
-
 # classes/core/users/user.aw:prop_groups
 #: classes/core/users/user.aw:prop_groups
 msgid "Omaduse  (groups) caption"
@@ -518,18 +395,6 @@ msgstr ""
 msgid "Omaduse  (aclwizard_a) help"
 msgstr ""
 
-#: classes/core/users/user.aw:prop_set_ui_lang
-msgid "Omaduse Liidese keel (set_ui_lang) caption"
-msgstr ""
-
-#: classes/core/users/user.aw:prop_set_ui_lang_comment
-msgid "Omaduse Liidese keel (set_ui_lang) kommentaar"
-msgstr ""
-
-#: classes/core/users/user.aw:prop_set_ui_lang_help
-msgid "Omaduse Liidese keel (set_ui_lang) help"
-msgstr ""
-
 # classes/core/users/user.aw:prop_userch1
 #: classes/core/users/user.aw:prop_userch1
 msgid "Omaduse User-defined checkbox 1 (userch1) caption"
@@ -620,52 +485,130 @@ msgstr ""
 msgid "Omaduse  (join_form_entry) help"
 msgstr ""
 
-# classes/core/users/user.aw:group_chpwd
+#: classes/core/users/user.aw:prop_lg_hdh
+msgid "Omaduse Ajaloo seaded (lg_hdh) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_lg_hdh_comment
+msgid "Omaduse Ajaloo seaded (lg_hdh) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_lg_hdh_help
+msgid "Omaduse Ajaloo seaded (lg_hdh) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_history_size
+msgid "Omaduse Mitu viimati k&uuml;lastatud objekti on ajaloos (history_size) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_history_size_comment
+msgid "Omaduse Mitu viimati k&uuml;lastatud objekti on ajaloos (history_size) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_history_size_help
+msgid "Omaduse Mitu viimati k&uuml;lastatud objekti on ajaloos (history_size) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_history_has_folders
+msgid "Omaduse Ajalugu on jagatud kataloogideks (history_has_folders) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_history_has_folders_comment
+msgid "Omaduse Ajalugu on jagatud kataloogideks (history_has_folders) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_history_has_folders_help
+msgid "Omaduse Ajalugu on jagatud kataloogideks (history_has_folders) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_lg_hdl
+msgid "Omaduse Keeleseaded (lg_hdl) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_lg_hdl_comment
+msgid "Omaduse Keeleseaded (lg_hdl) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_lg_hdl_help
+msgid "Omaduse Keeleseaded (lg_hdl) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_set_ui_lang
+msgid "Omaduse Liidese keel (set_ui_lang) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_set_ui_lang_comment
+msgid "Omaduse Liidese keel (set_ui_lang) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_set_ui_lang_help
+msgid "Omaduse Liidese keel (set_ui_lang) help"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_lg_hd
+msgid "Omaduse T&otilde;lkekeskkond (lg_hd) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_lg_hd_comment
+msgid "Omaduse T&otilde;lkekeskkond (lg_hd) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_lg_hd_help
+msgid "Omaduse T&otilde;lkekeskkond (lg_hd) help"
+msgstr ""
+
+# classes/core/users/user.aw:prop_base_lang
+#: classes/core/users/user.aw:prop_base_lang
+msgid "Omaduse Baaskeel (base_lang) caption"
+msgstr ""
+
+# classes/core/users/user.aw:prop_base_lang_comment
+#: classes/core/users/user.aw:prop_base_lang_comment
+msgid "Omaduse Baaskeel (base_lang) kommentaar"
+msgstr ""
+
+# classes/core/users/user.aw:prop_base_lang_help
+#: classes/core/users/user.aw:prop_base_lang_help
+msgid "Omaduse Baaskeel (base_lang) help"
+msgstr ""
+
+# classes/core/users/user.aw:prop_target_lang
+#: classes/core/users/user.aw:prop_target_lang
+msgid "Omaduse Sihtkeel (target_lang) caption"
+msgstr ""
+
+# classes/core/users/user.aw:prop_target_lang_comment
+#: classes/core/users/user.aw:prop_target_lang_comment
+msgid "Omaduse Sihtkeel (target_lang) kommentaar"
+msgstr ""
+
+# classes/core/users/user.aw:prop_target_lang_help
+#: classes/core/users/user.aw:prop_target_lang_help
+msgid "Omaduse Sihtkeel (target_lang) help"
+msgstr ""
+
 #: classes/core/users/user.aw:group_chpwd
-msgid "Grupi Parool (chpwd) pealkiri"
+msgid "Grupi Salas&otilde;na muutmine (chpwd) pealkiri"
 msgstr ""
 
-# classes/core/users/user.aw:group_chpwd_help
 #: classes/core/users/user.aw:group_chpwd_help
-msgid "Grupi Parool (chpwd) help"
+msgid "Grupi Salas&otilde;na muutmine (chpwd) help"
 msgstr ""
 
-#: classes/core/users/user.aw:group_objects
-msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
-msgstr ""
-
-#: classes/core/users/user.aw:group_objects_help
-msgid "Grupi Objektid ja &Otilde;igused (objects) help"
-msgstr ""
-
-# classes/core/users/user.aw:group_objects_own
-#: classes/core/users/user.aw:group_objects_own
-msgid "Grupi Enda tehtud (objects_own) pealkiri"
-msgstr ""
-
-# classes/core/users/user.aw:group_objects_own_help
-#: classes/core/users/user.aw:group_objects_own_help
-msgid "Grupi Enda tehtud (objects_own) help"
-msgstr ""
-
-# classes/core/users/user.aw:group_objects_other
-#: classes/core/users/user.aw:group_objects_other
-msgid "Grupi Teiste tehtud (objects_other) pealkiri"
-msgstr ""
-
-# classes/core/users/user.aw:group_objects_other_help
-#: classes/core/users/user.aw:group_objects_other_help
-msgid "Grupi Teiste tehtud (objects_other) help"
-msgstr ""
-
-# classes/core/users/user.aw:group_groups
 #: classes/core/users/user.aw:group_groups
-msgid "Grupi Grupid (groups) pealkiri"
+msgid "Grupi Kasutajagrupid (groups) pealkiri"
 msgstr ""
 
-# classes/core/users/user.aw:group_groups_help
 #: classes/core/users/user.aw:group_groups_help
-msgid "Grupi Grupid (groups) help"
+msgid "Grupi Kasutajagrupid (groups) help"
+msgstr ""
+
+#: classes/core/users/user.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/core/users/user.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
 msgstr ""
 
 # classes/core/users/user.aw:group_jdata
@@ -729,8 +672,7 @@ msgid "Seose FG profiil (RELTYPE_FG_PROFILE) tekst"
 msgstr ""
 
 #: classes/core/users/user.aw:rel_RELTYPE_ACCESS_FROM_IP
-msgid ""
-"Seose ligip&amp;auml;&amp;auml;su aadress (RELTYPE_ACCESS_FROM_IP) tekst"
+msgid "Seose ligip&auml;&auml;su aadress (RELTYPE_ACCESS_FROM_IP) tekst"
 msgstr ""
 
 # classes/core/users/user.aw:rel_RELTYPE_JOIN_SITE
@@ -738,143 +680,130 @@ msgstr ""
 msgid "Seose liitumise andmed (RELTYPE_JOIN_SITE) tekst"
 msgstr ""
 
-#: classes/core/users/user.aw:285
+#: classes/core/users/user.aw:283
 msgid "Genereeri parool"
 msgstr ""
 
-#: classes/core/users/user.aw:350
+#: classes/core/users/user.aw:356
 msgid "Selline kasutaja on juba olemas!"
 msgstr ""
 
-#: classes/core/users/user.aw:355
+#: classes/core/users/user.aw:361
 msgid "Selline kasutajanimi pole lubatud!"
 msgstr ""
 
-#: classes/core/users/user.aw:374
+#: classes/core/users/user.aw:380
 msgid "Paroolid pole samad!"
 msgstr ""
 
-#: classes/core/users/user.aw:380
+#: classes/core/users/user.aw:386
 msgid "Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!"
 msgstr ""
 
-#: classes/core/users/user.aw:434
+#: classes/core/users/user.aw:425
 msgid "Sellist kasutajat pole!"
 msgstr ""
 
-#: classes/core/users/user.aw:478
+#: classes/core/users/user.aw:469
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/user.aw:483
+#: classes/core/users/user.aw:474
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/user.aw:486
+#: classes/core/users/user.aw:477
 msgid "Jah"
 msgstr ""
 
-#: classes/core/users/user.aw:486
+#: classes/core/users/user.aw:477
 msgid "Ei"
 msgstr ""
 
-#: classes/core/users/user.aw:649
+#: classes/core/users/user.aw:640
 msgid "Nimi"
 msgstr ""
 
-#: classes/core/users/user.aw:655
+#: classes/core/users/user.aw:646
 msgid "Liige?"
 msgstr ""
 
-#: classes/core/users/user.aw:661
+#: classes/core/users/user.aw:652
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/core/users/user.aw:669
+#: classes/core/users/user.aw:660
 msgid "Mitu liiget"
 msgstr ""
 
-#: classes/core/users/user.aw:676
+#: classes/core/users/user.aw:667
 msgid "Muutja"
 msgstr ""
 
-#: classes/core/users/user.aw:684
+#: classes/core/users/user.aw:675
 msgid "Muudetud"
 msgstr ""
 
-#: classes/core/users/user.aw:692 classes/core/users/user.aw:1197
+#: classes/core/users/user.aw:683 classes/core/users/user.aw:1100
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/core/users/user.aw:894
-msgid "Muuda"
-msgstr ""
-
-#: classes/core/users/user.aw:957
-msgid "Muuda objekti %s  &otilde;igusi"
-msgstr ""
-
-#: classes/core/users/user.aw:1174
+#: classes/core/users/user.aw:1077
 msgid "Nr"
 msgstr ""
 
-#: classes/core/users/user.aw:1178
+#: classes/core/users/user.aw:1081
 msgid "Millal"
 msgstr ""
 
-#: classes/core/users/user.aw:1187
+#: classes/core/users/user.aw:1090
 msgid "Kes"
 msgstr ""
 
-#: classes/core/users/user.aw:1192
+#: classes/core/users/user.aw:1095
 msgid "IP"
 msgstr ""
 
-#: classes/core/users/user.aw:1202
+#: classes/core/users/user.aw:1105
 msgid "Tegevus"
 msgstr ""
 
-#: classes/core/users/user.aw:1209
+#: classes/core/users/user.aw:1112
 msgid "Saidi ID"
 msgstr ""
 
-#: classes/core/users/user.aw:1215
+#: classes/core/users/user.aw:1118
 msgid "OID"
 msgstr ""
 
-#: classes/core/users/user.aw:1220
+#: classes/core/users/user.aw:1123
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1673
+#: classes/core/users/user.aw:1576
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1745
+#: classes/core/users/user.aw:1648
 msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
 msgstr ""
 
-#: classes/core/users/user.aw:1753
+#: classes/core/users/user.aw:1656
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1758
+#: classes/core/users/user.aw:1661
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1763
+#: classes/core/users/user.aw:1666
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1773
-msgid ""
-"Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, "
-"kehtib default.<br>N&auml;gemis&otilde;igus ainult."
+#: classes/core/users/user.aw:1676
+msgid "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;igus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1809
-msgid ""
-"Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;"
-"rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele "
-"m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
+#: classes/core/users/user.aw:1712
+msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr ""

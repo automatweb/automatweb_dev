@@ -207,7 +207,23 @@ class popup_menu extends aw_template
 
 		if (is_array($param) && !empty($param["load_on_demand_url"]))
 		{
-			return "<div id='lod_".$this->menu_id."'><a href='#' onClick='el = document.getElementById(\"lod_".$this->menu_id."\");el.innerHTML=aw_get_url_contents(\"".$param["load_on_demand_url"]."\");nhr=document.getElementById(\"href_".$this->menu_id."\");evObj = document.createEvent(\"MouseEvents\");evObj.initEvent( \"click\", true, true );nhr.dispatchEvent(evObj);'>$href_ct</a></div>";
+			static $lod_num;
+			$lod_num++;
+
+			return "<div id='lod_".$this->menu_id."'><a href='#' onClick='tb_lod".$lod_num."()'>$href_ct</a></div>
+			<script language=javascript>
+			function tb_lod".$lod_num."()
+			{
+				el = document.getElementById(\"lod_".$this->menu_id."\");
+				el.innerHTML=aw_get_url_contents(\"".$param["load_on_demand_url"]."\");
+				nhr=document.getElementById(\"href_".$this->menu_id."\");
+				if (document.createEvent) {evObj = document.createEvent(\"MouseEvents\");evObj.initEvent( \"click\", true, true );nhr.dispatchEvent(evObj);} 
+				else { 
+					nhr.fireEvent(\"onclick\");
+				}
+			}
+			</script>
+			";
 		}
 
 		return $this->parse();

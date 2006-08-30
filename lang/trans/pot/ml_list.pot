@@ -27,15 +27,15 @@ msgid "Omaduse Kaustad millega liituda (choose_menu) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_choose_languages
-msgid "Omaduse Keeled millega võib liituda (choose_languages) caption"
+msgid "Omaduse Keeled millega v&otilde;ib liituda (choose_languages) caption"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_choose_languages_comment
-msgid "Omaduse Keeled millega võib liituda (choose_languages) kommentaar"
+msgid "Omaduse Keeled millega v&otilde;ib liituda (choose_languages) kommentaar"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_choose_languages_help
-msgid "Omaduse Keeled millega võib liituda (choose_languages) help"
+msgid "Omaduse Keeled millega v&otilde;ib liituda (choose_languages) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_multiple_folders
@@ -75,15 +75,15 @@ msgid "Omaduse Kirjade asukoht (msg_folder) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_sub_form_type
-msgid "Omaduse Vormi tüüp (sub_form_type) caption"
+msgid "Omaduse Vormi t&uuml;&uuml;p (sub_form_type) caption"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_sub_form_type_comment
-msgid "Omaduse Vormi tüüp (sub_form_type) kommentaar"
+msgid "Omaduse Vormi t&uuml;&uuml;p (sub_form_type) kommentaar"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_sub_form_type_help
-msgid "Omaduse Vormi tüüp (sub_form_type) help"
+msgid "Omaduse Vormi t&uuml;&uuml;p (sub_form_type) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_redir_obj
@@ -351,15 +351,15 @@ msgid "Omaduse Formaat (export_type) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_export_from_date
-msgid "Omaduse Alates kuupäevast (export_from_date) caption"
+msgid "Omaduse Alates kuup&auml;evast (export_from_date) caption"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_export_from_date_comment
-msgid "Omaduse Alates kuupäevast (export_from_date) kommentaar"
+msgid "Omaduse Alates kuup&auml;evast (export_from_date) kommentaar"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_export_from_date_help
-msgid "Omaduse Alates kuupäevast (export_from_date) help"
+msgid "Omaduse Alates kuup&auml;evast (export_from_date) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_exp_sbt
@@ -743,7 +743,7 @@ msgid "Seose Listi liikmete allikas (RELTYPE_MEMBER_PARENT) tekst"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:rel_RELTYPE_REDIR_OBJECT
-msgid "Seose &uuml;mbersuunamine (RELTYPE_REDIR_OBJECT) tekst"
+msgid "Seose &Uuml;mbersuunamine (RELTYPE_REDIR_OBJECT) tekst"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:rel_RELTYPE_ADM_MESSAGE

@@ -25,5 +25,12 @@
 			</function>
 		</action>
 
+		<action name="delete_rels">
+			<function name="delete_rels">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

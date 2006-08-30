@@ -115,31 +115,31 @@ msgstr ""
 msgid "Peenraha"
 msgstr ""
 
-#: classes/formgen/currency.aw:180
+#: classes/formgen/currency.aw:181
 msgid "Alguskuupäev"
 msgstr ""
 
-#: classes/formgen/currency.aw:184
+#: classes/formgen/currency.aw:185
 msgid "Lõppkuupäev"
 msgstr ""
 
-#: classes/formgen/currency.aw:188
+#: classes/formgen/currency.aw:189
 msgid "Valuuta"
 msgstr ""
 
-#: classes/formgen/currency.aw:192
+#: classes/formgen/currency.aw:193
 msgid "Kurss"
 msgstr ""
 
-#: classes/formgen/currency.aw:196
+#: classes/formgen/currency.aw:197
 msgid "Ostukurss"
 msgstr ""
 
-#: classes/formgen/currency.aw:200
+#: classes/formgen/currency.aw:201
 msgid "Müügikurss"
 msgstr ""
 
-#: classes/formgen/currency.aw:234
+#: classes/formgen/currency.aw:235
 msgid "Kursid"
 msgstr ""
 

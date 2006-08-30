@@ -722,55 +722,63 @@ msgstr ""
 msgid "Enim kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:299
+#: classes/contentmgmt/forum/forum_v2.aw:302
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1464
+#: classes/contentmgmt/forum/forum_v2.aw:1476 classes/contentmgmt/forum/forum_v2.aw:1953 classes/contentmgmt/forum/forum_v2.aw:2112
+msgid "Sisestatud kontrollkood on vale! <br />"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1480
+msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1484
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1468
+#: classes/contentmgmt/forum/forum_v2.aw:1488
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1472
+#: classes/contentmgmt/forum/forum_v2.aw:1492
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1687
+#: classes/contentmgmt/forum/forum_v2.aw:1707
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1692
+#: classes/contentmgmt/forum/forum_v2.aw:1712
 msgid "Jäta välja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1699
+#: classes/contentmgmt/forum/forum_v2.aw:1719
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1872
+#: classes/contentmgmt/forum/forum_v2.aw:1892
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1921
+#: classes/contentmgmt/forum/forum_v2.aw:1941
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1932
+#: classes/contentmgmt/forum/forum_v2.aw:1957
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1954
+#: classes/contentmgmt/forum/forum_v2.aw:1980
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2370
+#: classes/contentmgmt/forum/forum_v2.aw:2417
 msgid " teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2377
+#: classes/contentmgmt/forum/forum_v2.aw:2424
 msgid " aadresside kaust"
 msgstr ""
 

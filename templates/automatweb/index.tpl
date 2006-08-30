@@ -69,7 +69,7 @@ function check_generic_unloader()
 	<!-- SUB: LANG_STRING -->
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-	<td class="aw04yah">
+	<td class="aw04yah">{VAR:prod_family} |
 <!-- SUB: YAH -->
 {VAR:site_title}
 <!-- END SUB: YAH -->

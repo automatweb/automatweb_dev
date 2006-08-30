@@ -259,40 +259,32 @@ msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) caption"
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) caption"
 msgstr "Topic folder response number style"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_comment
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_comment
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) "
-"kommentaar"
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_help
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) help"
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) caption"
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) caption"
 msgstr "Topic folder last answer style"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_comment
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_comment
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) "
-"kommentaar"
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_help
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) help"
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_thread_styles_subtitle
@@ -599,13 +591,11 @@ msgid "Omaduse Teemade tasemed (topic_selector) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle
-msgid ""
-"Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) caption"
+msgid "Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle_comment
-msgid ""
-"Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) kommentaar"
+msgid "Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle_help
@@ -613,37 +603,27 @@ msgid "Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form
-msgid ""
-"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) caption"
+msgid "Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form_comment
-msgid ""
-"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) "
-"kommentaar"
+msgid "Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form_help
-msgid ""
-"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) help"
+msgid "Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form
-msgid ""
-"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
-"caption"
+msgid "Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_comment
-msgid ""
-"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
-"kommentaar"
+msgid "Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_help
-msgid ""
-"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
-"help"
+msgid "Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_use_image_verification
@@ -861,62 +841,70 @@ msgstr ""
 msgid "Enim kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:299
+#: classes/contentmgmt/forum/forum_v2.aw:302
 msgid "Teemade kaust on valimata"
 msgstr "Topic folder is not selected"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1464
+#: classes/contentmgmt/forum/forum_v2.aw:1476
+#: classes/contentmgmt/forum/forum_v2.aw:1953
+#: classes/contentmgmt/forum/forum_v2.aw:2112
+msgid "Sisestatud kontrollkood on vale! <br />"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1480
+msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1484
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1468
+#: classes/contentmgmt/forum/forum_v2.aw:1488
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1472
+#: classes/contentmgmt/forum/forum_v2.aw:1492
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1687
+#: classes/contentmgmt/forum/forum_v2.aw:1707
 msgid "Teema"
 msgstr "Topic"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1692
+#: classes/contentmgmt/forum/forum_v2.aw:1712
 msgid "Jäta välja"
 msgstr "Exclude"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1699
+#: classes/contentmgmt/forum/forum_v2.aw:1719
 msgid "k.a. alamkaustad"
 msgstr "incl. subfolders"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1872
+#: classes/contentmgmt/forum/forum_v2.aw:1892
 msgid "Uus teema"
 msgstr "New topic"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1921
+#: classes/contentmgmt/forum/forum_v2.aw:1941
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1932
+#: classes/contentmgmt/forum/forum_v2.aw:1957
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1954
+#: classes/contentmgmt/forum/forum_v2.aw:1980
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2370
+#: classes/contentmgmt/forum/forum_v2.aw:2417
 msgid " teemade kaust"
 msgstr " topic folder"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2377
+#: classes/contentmgmt/forum/forum_v2.aw:2424
 msgid " aadresside kaust"
 msgstr " address folder"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_show_logged
-#~ msgid ""
-#~ "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt "
-#~ "(show_logged) caption"
+#~ msgid "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) caption"
 #~ msgstr "Display logged in user's e-mail and name automatically"
 
 # classes/contentmgmt/forum/forum_v2.aw:group_contents

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:class_1129_help
 msgid "Klassi Kliendi tagasiside sisestus help"
 msgstr ""
@@ -99,75 +98,15 @@ msgid "Omaduse Kommentaar (comment_ta) help"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_1
-msgid "Omaduse Fail 1 (file_1) caption"
+msgid "Omaduse Failid (file_1) caption"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_1_comment
-msgid "Omaduse Fail 1 (file_1) kommentaar"
+msgid "Omaduse Failid (file_1) kommentaar"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_1_help
-msgid "Omaduse Fail 1 (file_1) help"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_1_t
-msgid "Omaduse  (file_1_t) caption"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_1_t_comment
-msgid "Omaduse  (file_1_t) kommentaar"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_1_t_help
-msgid "Omaduse  (file_1_t) help"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_2
-msgid "Omaduse Fail 2 (file_2) caption"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_2_comment
-msgid "Omaduse Fail 2 (file_2) kommentaar"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_2_help
-msgid "Omaduse Fail 2 (file_2) help"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_2_t
-msgid "Omaduse  (file_2_t) caption"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_2_t_comment
-msgid "Omaduse  (file_2_t) kommentaar"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_2_t_help
-msgid "Omaduse  (file_2_t) help"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_3
-msgid "Omaduse Fail 3 (file_3) caption"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_3_comment
-msgid "Omaduse Fail 3 (file_3) kommentaar"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_3_help
-msgid "Omaduse Fail 3 (file_3) help"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_3_t
-msgid "Omaduse  (file_3_t) caption"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_3_t_comment
-msgid "Omaduse  (file_3_t) kommentaar"
-msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_3_t_help
-msgid "Omaduse  (file_3_t) help"
+msgid "Omaduse Failid (file_1) help"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_seriousness
@@ -274,79 +213,74 @@ msgstr ""
 msgid "Seose Fail 3 (RELTYPE_FILE3) tekst"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:105
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:93
 msgid "Fataalne viga"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:106
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:94
 msgid "Segav viga"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:107
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:95
 msgid "Tr&uuml;kiviga"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:108
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:96
 msgid "Soovitus"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:112
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:100
 msgid "Meilile"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:113
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:101
 msgid "Telefonile"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:114
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:102
 msgid "Ei soovi"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:119
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:107
 msgid "Lahtine"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:120
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:108
 msgid "Tegemisel"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:121
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:109
 msgid "Valmis"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:122
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:110
 msgid "Testitud"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:123
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:111
 msgid "Suletud"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:124
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:112
 msgid "Vale teade"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:125
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:113
 msgid "Kordamatu"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:126
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:114
 msgid "Parandamatu"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:127
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:115
 msgid "Ei paranda"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:128
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:116
 msgid "Vajab tagasisidet"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:144
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:132
 msgid "&Auml;ra jama, mees! m&otilde;tled ka mis teed v&auml;?"
 msgstr ""
-
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:558
-msgid "Valik"
-msgstr ""
-

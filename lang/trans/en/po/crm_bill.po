@@ -469,7 +469,7 @@ msgid "&Uuml;hik"
 msgstr "Unit"
 
 #: classes/applications/crm/crm_bill.aw:380
-#: classes/applications/crm/crm_bill.aw:2003
+#: classes/applications/crm/crm_bill.aw:2028
 msgid "Hind"
 msgstr "Price"
 
@@ -494,57 +494,57 @@ msgid "+KM?"
 msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:409
-#: classes/applications/crm/crm_bill.aw:534
-#: classes/applications/crm/crm_bill.aw:616
+#: classes/applications/crm/crm_bill.aw:530
+#: classes/applications/crm/crm_bill.aw:612
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:569
+#: classes/applications/crm/crm_bill.aw:565
 msgid "Kokkuleppehind"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1207
-#: classes/applications/crm/crm_bill.aw:1604
+#: classes/applications/crm/crm_bill.aw:1223
+#: classes/applications/crm/crm_bill.aw:1629
 msgid "Prinditav arve"
 msgstr "Printable version"
 
-#: classes/applications/crm/crm_bill.aw:1919
+#: classes/applications/crm/crm_bill.aw:1944
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1926
+#: classes/applications/crm/crm_bill.aw:1951
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1934
+#: classes/applications/crm/crm_bill.aw:1959
 msgid "Prindi arve"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1941
+#: classes/applications/crm/crm_bill.aw:1966
 msgid "Prindi arve lisa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1948
+#: classes/applications/crm/crm_bill.aw:1973
 msgid "Prindi arve koos lisaga"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1953
+#: classes/applications/crm/crm_bill.aw:1978
 msgid "Koonda read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1962
+#: classes/applications/crm/crm_bill.aw:1987
 msgid "Kustuta read"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1963
+#: classes/applications/crm/crm_bill.aw:1988
 msgid "Oled kindel et soovid read kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1992
+#: classes/applications/crm/crm_bill.aw:2017
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:1997
+#: classes/applications/crm/crm_bill.aw:2022
 msgid "Tunde"
 msgstr ""
 

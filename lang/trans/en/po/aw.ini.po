@@ -2340,6 +2340,14 @@ msgstr ""
 msgid "Klassi Kasutaja j&auml;rjehoidjad (1131) nimi"
 msgstr ""
 
+#: aw.ini:class_1132
+msgid "Klassi AW Objektide otsing (1132) nimi"
+msgstr ""
+
+#: aw.ini:class_1133
+msgid "Klassi Kiirlisamine (1133) nimi"
+msgstr ""
+
 # aw.ini:classfolder_29
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"

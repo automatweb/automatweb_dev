@@ -118,19 +118,19 @@ msgstr ""
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1592 classes/class_base.aw:4907 classes/class_base.aw:4918
+#: classes/class_base.aw:1592 classes/class_base.aw:4909 classes/class_base.aw:4920
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:3428
+#: classes/class_base.aw:3430
 msgid "See väli ei tohi olla tühi!"
 msgstr ""
 
-#: classes/class_base.aw:3437
+#: classes/class_base.aw:3439
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4804
+#: classes/class_base.aw:4806
 msgid "%s is not a valid configuration form!"
 msgstr ""
 

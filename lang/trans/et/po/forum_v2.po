@@ -23,16 +23,12 @@ msgstr ""
 # classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_comment
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_comment
 msgid "Omaduse Teemade kaust (topic_folder) kommentaar"
-msgstr ""
-"vıimalus valida kasutatavat teemade kausta seostehalduriga seostatud "
-"kaustade hulgast "
+msgstr "vıimalus valida kasutatavat teemade kausta seostehalduriga seostatud kaustade hulgast "
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_help
 msgid "Omaduse Teemade kaust (topic_folder) help"
-msgstr ""
-"vıimalus valida kasutatavat teemade kausta seostehalduriga seostatud "
-"kaustade hulgast "
+msgstr "vıimalus valida kasutatavat teemade kausta seostehalduriga seostatud kaustade hulgast "
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_address_folder
 #: classes/contentmgmt/forum/forum_v2.aw:prop_address_folder
@@ -99,16 +95,12 @@ msgstr ""
 # classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_comment
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_comment
 msgid "Omaduse E-mail kellelt (mail_from) kommentaar"
-msgstr ""
-"kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata saatja "
-"nimi"
+msgstr "kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata saatja nimi"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_help
 msgid "Omaduse E-mail kellelt (mail_from) help"
-msgstr ""
-"kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata saatja "
-"nimi"
+msgstr "kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata saatja nimi"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_mail_address
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_address
@@ -118,16 +110,12 @@ msgstr ""
 # classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_comment
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_comment
 msgid "Omaduse E-maili aadress kellelt (mail_address) kommentaar"
-msgstr ""
-"kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata saatja "
-"meiliaadress"
+msgstr "kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata saatja meiliaadress"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_help
 msgid "Omaduse E-maili aadress kellelt (mail_address) help"
-msgstr ""
-"kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata saatja "
-"meiliaadress"
+msgstr "kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata saatja meiliaadress"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject
@@ -137,16 +125,12 @@ msgstr ""
 # classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_comment
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_comment
 msgid "Omaduse Maili subject (mail_subject) kommentaar"
-msgstr ""
-"kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata kirja "
-"teema(subjekt)"
+msgstr "kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata kirja teema(subjekt)"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_help
 msgid "Omaduse Maili subject (mail_subject) help"
-msgstr ""
-"kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata kirja "
-"teema(subjekt)"
+msgstr "kui foorum peab kellegile saatma meile, siis siit on vıimalik m‰‰rata kirja teema(subjekt)"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_logged
 msgid "Omaduse Luba kasutajal oma andmeid muuta (show_logged) caption"
@@ -276,40 +260,32 @@ msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) caption"
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) caption"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_comment
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_comment
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) "
-"kommentaar"
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_help
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) help"
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) caption"
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) caption"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_comment
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_comment
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) "
-"kommentaar"
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_help
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) help"
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_thread_styles_subtitle
@@ -598,10 +574,7 @@ msgstr "m‰‰ra mitu taset teemasid on ainult administraatorite luua ja hallata."
 # classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_help
 msgid "Omaduse Teemade s¸gavus (topic_depth) help"
-msgstr ""
-"m‰‰ra mitu taset teemasid on ainult administraatorite luua ja hallata. (N: "
-"kui teemade s¸gavus on 1, siis tavakasutajad saavad teemasid lisada alles "
-"alates teisest tasemest)"
+msgstr "m‰‰ra mitu taset teemasid on ainult administraatorite luua ja hallata. (N: kui teemade s¸gavus on 1, siis tavakasutajad saavad teemasid lisada alles alates teisest tasemest)"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector
@@ -619,13 +592,11 @@ msgid "Omaduse Teemade tasemed (topic_selector) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle
-msgid ""
-"Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) caption"
+msgid "Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle_comment
-msgid ""
-"Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) kommentaar"
+msgid "Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_image_upload_subtitle_help
@@ -633,37 +604,27 @@ msgid "Omaduse Pildi &uuml;leslaadimise v&auml;li (image_upload_subtitle) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form
-msgid ""
-"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) caption"
+msgid "Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form_comment
-msgid ""
-"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) "
-"kommentaar"
+msgid "Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_topic_form_help
-msgid ""
-"Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) help"
+msgid "Omaduse Teema lisamise vormis (show_image_upload_in_add_topic_form) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form
-msgid ""
-"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
-"caption"
+msgid "Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_comment
-msgid ""
-"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
-"kommentaar"
+msgid "Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_help
-msgid ""
-"Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) "
-"help"
+msgid "Omaduse Kommentaari lisamise vormis (show_image_upload_in_add_comment_form) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_use_image_verification
@@ -881,70 +842,72 @@ msgstr ""
 msgid "Enim kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:299
+#: classes/contentmgmt/forum/forum_v2.aw:302
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1464
+#: classes/contentmgmt/forum/forum_v2.aw:1476
+#: classes/contentmgmt/forum/forum_v2.aw:1953
+#: classes/contentmgmt/forum/forum_v2.aw:2112
+msgid "Sisestatud kontrollkood on vale! <br />"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1480
+msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1484
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1468
+#: classes/contentmgmt/forum/forum_v2.aw:1488
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1472
+#: classes/contentmgmt/forum/forum_v2.aw:1492
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1687
+#: classes/contentmgmt/forum/forum_v2.aw:1707
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1692
+#: classes/contentmgmt/forum/forum_v2.aw:1712
 msgid "J‰ta v‰lja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1699
+#: classes/contentmgmt/forum/forum_v2.aw:1719
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1872
+#: classes/contentmgmt/forum/forum_v2.aw:1892
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1921
+#: classes/contentmgmt/forum/forum_v2.aw:1941
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1932
+#: classes/contentmgmt/forum/forum_v2.aw:1957
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1954
+#: classes/contentmgmt/forum/forum_v2.aw:1980
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2370
+#: classes/contentmgmt/forum/forum_v2.aw:2417
 msgid " teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2377
+#: classes/contentmgmt/forum/forum_v2.aw:2424
 msgid " aadresside kaust"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_show_logged_comment
-#~ msgid ""
-#~ "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt "
-#~ "(show_logged) kommentaar"
-#~ msgstr ""
-#~ "t‰idab teema ja kommentaari lisamisel vastavad v‰ljad automaatselt antud "
-#~ "kasutaja objekti juures sisestud infoga."
+#~ msgid "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) kommentaar"
+#~ msgstr "t‰idab teema ja kommentaari lisamisel vastavad v‰ljad automaatselt antud kasutaja objekti juures sisestud infoga."
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_show_logged_help
-#~ msgid ""
-#~ "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt "
-#~ "(show_logged) help"
-#~ msgstr ""
-#~ "t‰idab teema ja kommentaari lisamisel vastavad v‰ljad automaatselt antud "
-#~ "kasutaja objekti juures sisestud infoga."
+#~ msgid "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) help"
+#~ msgstr "t‰idab teema ja kommentaari lisamisel vastavad v‰ljad automaatselt antud kasutaja objekti juures sisestud infoga."

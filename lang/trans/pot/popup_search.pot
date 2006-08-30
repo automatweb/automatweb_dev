@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/popup_search.aw:149 classes/vcl/popup_search.aw:465 classes/vcl/popup_search.aw:862
+#: classes/vcl/popup_search.aw:149 classes/vcl/popup_search.aw:465 classes/vcl/popup_search.aw:859
 msgid "Otsi"
 msgstr ""
 

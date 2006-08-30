@@ -33,9 +33,38 @@ foreach($i->get_langs() as $_uil)
 	));
 }
 
+// check the url for classes and if any of those are in a prod family, then set that
+$pf = "";
+$clss = aw_ini_get("classes");
+if (!empty($_GET["class"]))
+{
+	$clid = clid_for_name($_GET["class"]);
+	if (!empty($clss[$clid]["prod_family"]))
+	{
+		$pf = $clss[$clid]["prod_family"];
+	}
+}
+$ru = $_GET["return_url"];
+while (!empty($ru))
+{
+	$url_bits = parse_url($ru);
+	$vals = array();
+	parse_str($url_bits["query"], $vals);
+	if (!empty($vals["class"]))
+	{
+		$clid = clid_for_name($vals["class"]);
+		if (!empty($clss[$clid]["prod_family"]))
+		{
+			$pf = $clss[$clid]["prod_family"];
+		}
+	}
+	$ru = $vals["return_url"];
+}
+
 
 // do not display the YAH bar, if site_title is empty
 $sf->vars(array(
+	"prod_family" => $pf,
 	"site_title" => $site_title,
 	"ui_lang" => $pm->get_menu(array(
 		"text" => t("[Liidese keel]")

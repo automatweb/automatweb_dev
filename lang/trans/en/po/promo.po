@@ -163,7 +163,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search
 msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"
-msgstr "Don't display on the search result page"
+msgstr "Don't display on the page of search result"
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search_comment
 msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) kommentaar"
@@ -445,7 +445,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_menu_keywords
 msgid "Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) caption"
-msgstr ""
+msgstr "Use keywords of active folder"
 
 #: classes/contentmgmt/promo.aw:prop_use_menu_keywords_comment
 msgid "Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) kommentaar"
@@ -457,7 +457,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type
 msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) caption"
-msgstr ""
+msgstr "Use settings of document content type"
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type_comment
 msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) kommentaar"
@@ -549,7 +549,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_menus_sub
 msgid "Grupi Dokumendid (menus_sub) pealkiri"
-msgstr ""
+msgstr "Documents"
 
 #: classes/contentmgmt/promo.aw:group_menus_sub_help
 msgid "Grupi Dokumendid (menus_sub) help"
@@ -578,15 +578,15 @@ msgstr "image"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_NO_SHOW_MENU
 msgid "Seose &amp;Auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
-msgstr ""
+msgstr "don't display next to folder"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_KEYWORD
 msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
-msgstr ""
+msgstr "Keyword"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_IGNORE
 msgid "Seose ignoreeri dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_IGNORE) tekst"
-msgstr ""
+msgstr "ignore documents of this folder"
 
 #: classes/contentmgmt/promo.aw:222
 msgid "Vali template"
@@ -602,7 +602,7 @@ msgstr "Right"
 
 #: classes/contentmgmt/promo.aw:241
 msgid "&Uuml;leval"
-msgstr ""
+msgstr "Top"
 
 #: classes/contentmgmt/promo.aw:242
 msgid "All"

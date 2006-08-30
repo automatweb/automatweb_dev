@@ -15,10 +15,30 @@ msgid "Fail"
 msgstr ""
 
 #: classes/admin/file_manager.aw:93
+msgid "Asukoht"
+msgstr ""
+
+#: classes/admin/file_manager.aw:98
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/file_manager.aw:122
+#: classes/admin/file_manager.aw:137
 msgid "Vali see"
+msgstr ""
+
+#: classes/admin/file_manager.aw:175
+msgid "Nimi"
+msgstr ""
+
+#: classes/admin/file_manager.aw:182
+msgid "Otsi"
+msgstr ""
+
+#: classes/admin/file_manager.aw:188
+msgid "Minu lisatud"
+msgstr ""
+
+#: classes/admin/file_manager.aw:195
+msgid "Viimased 30"
 msgstr ""
 

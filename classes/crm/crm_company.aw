@@ -19,76 +19,89 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
 
-	@property name type=textbox size=30 maxlength=255 table=objects
-	@caption Organisatsiooni nimi
+	@layout co_top type=hbox closeable=1 area_caption=&Uuml;ldandmed width=50%:50%
 
-	@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name
-	@caption Nime l&uuml;hend
+		@layout co_top_left type=vbox parent=co_top
 
-	@property comment type=textarea cols=65 rows=3 table=objects
-	@caption Kommentaar
+			@property name type=textbox size=30 maxlength=255 table=objects parent=co_top_left captionside=top
+			@caption Organisatsiooni nimi
+
+			@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name parent=co_top_left captionside=top
+			@caption Nime l&uuml;hend
+
+			@property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma parent=co_top_left captionside=top
+			@caption Registri number
+
+			@property ettevotlusvorm type=relpicker table=kliendibaas_firma automatic=1 reltype=RELTYPE_ETTEVOTLUSVORM parent=co_top_left captionside=top
+			@caption Õiguslik vorm
+
+			@property comment type=textarea cols=65 rows=3 table=objects parent=co_top_left captionside=top
+			@caption Kommentaar
+
+		@layout co_top_right type=vbox parent=co_top
+
+			@property code type=textbox table=kliendibaas_firma parent=co_top_right captionside=top
+			@caption Kood
+
+			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right captionside=top
+			@caption KMKohuslase nr
+
+			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects parent=co_top_right captionside=top
+			@caption Organisatsiooni logo
+
+			@property firmajuht type=select table=kliendibaas_firma  editonly=1 parent=co_top_right captionside=top
+			@caption Firmajuht
+
+			@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1 parent=co_top_right captionside=top
+			@caption Asutatud
+
+	@layout co_bottom type=hbox closeable=1 area_caption=Kliendisuhe width=50%:50%
+
+		@layout co_bottom_left type=vbox parent=co_bottom
+
+			@property cust_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_left captionside=top
+			@caption Kliendisuhte alguskuup&auml;ev
+
+			@property cust_contract_creator type=select table=kliendibaas_firma parent=co_bottom_left captionside=top
+			@caption Kliendisuhte looja
+
+			@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager parent=co_bottom_left captionside=top
+			@caption Kliendihaldur
+
+			@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE parent=co_bottom_left captionside=top
+			@caption Sissetuleku meetod
+
+			@property client_category type=text store=no  parent=co_bottom_left captionside=top
+			@caption Kliendikategooria
+
+
+		@layout co_bottom_right type=vbox parent=co_bottom
+
+			@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype  parent=co_bottom_right captionside=top
+			@caption Kliendpoolne kontaktisik 1
+
+			@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right captionside=top
+			@caption Kliendpoolne kontaktisik 2
+
+			@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right captionside=top
+			@caption Kliendpoolne kontaktisik 3
+
+			@property priority type=textbox table=kliendibaas_firma  parent=co_bottom_right captionside=top
+			@caption Prioriteet
+
+			@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5  parent=co_bottom_right captionside=top
+			@caption Arve viivise %
+
 
 	@property extern_id type=hidden table=kliendibaas_firma field=extern_id
 
-	@property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma
-	@caption Registri number
 
-	@property ettevotlusvorm type=relpicker table=kliendibaas_firma automatic=1 reltype=RELTYPE_ETTEVOTLUSVORM
-	@caption Õiguslik vorm
 
-	@property code type=textbox table=kliendibaas_firma
-	@caption Kood
-
-	@property tax_nr type=textbox table=kliendibaas_firma
-	@caption KMKohuslase nr
-
-	@property cust_contract_date type=date_select table=kliendibaas_firma
-	@caption Kliendisuhte alguskuup&auml;ev
-
-	@property cust_contract_creator type=select table=kliendibaas_firma
-	@caption Kliendisuhte looja
-
-	@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE
-	@caption Sissetuleku meetod
-
-	@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects
-	@caption Organisatsiooni logo
-
-	@property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
-	@caption Firmajuht
-
-	@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype
-	@caption Kontaktisik
-
-	@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1
-	@caption Kontaktisik 2
-
-	@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1
-	@caption Kontaktisik 3
-
-	@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1
-	@caption Asutatud
+@default group=open_hrs
 
 	@property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
 	@caption Avamisajad
 
-	@property priority type=textbox table=kliendibaas_firma
-	@caption Prioriteet
-
-	@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5
-	@caption Arve viivise %
-
-	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager
-	@caption Kliendihaldur
-
-	@property client_category type=text store=no 
-	@caption Kliendikategooria
-
-	@property last_com_type type=text store=no
-	@caption Viimase kommentaari tüüp
-
-	@property com_statistics type=text store=no
-	@caption Kommentaaride statistika
 
 ------ Üldine - Tegevused grupp -----
 @default group=org_sections
@@ -816,6 +829,12 @@ default group=org_objects
     @property comment_type type=chooser store=no
 	@caption Kommentaari tüüp
 
+	@property last_com_type type=text store=no
+	@caption Viimase kommentaari tüüp
+
+	@property com_statistics type=text store=no
+	@caption Kommentaaride statistika
+
 @default group=ext_sys
 
 	@property ext_sys_t type=table store=no no_caption=1
@@ -825,8 +844,9 @@ default group=org_objects
 	@property versions type=version_manager store=no no_caption=1
 
 -------------------------------------------------
-@groupinfo general_sub caption="&Uuml;ldine" parent=general
+@groupinfo general_sub caption="&Uuml;ldandmed" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
+@groupinfo open_hrs caption="Avamisajad" parent=general
 @groupinfo org_sections caption="Tegevus" parent=general
 @groupinfo add_info caption="Lisainfo" parent=general
 @groupinfo user_settings caption="Seaded" parent=general

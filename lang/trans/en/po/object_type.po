@@ -104,38 +104,38 @@ msgstr "Configuration form"
 msgid "Seose Muutuja (RELTYPE_META_ELEMENTS) tekst"
 msgstr "Variable"
 
-#: classes/admin/object_type.aw:183
+#: classes/admin/object_type.aw:191
 msgid "-vali-"
 msgstr "-select-"
 
-#: classes/admin/object_type.aw:184
+#: classes/admin/object_type.aw:192
 msgid "multiple select"
 msgstr "multiple select"
 
-#: classes/admin/object_type.aw:185
+#: classes/admin/object_type.aw:193
 msgid "select"
 msgstr "select"
 
-#: classes/admin/object_type.aw:186
+#: classes/admin/object_type.aw:194
 msgid "checkboxid"
 msgstr "checkboxes"
 
-#: classes/admin/object_type.aw:187
+#: classes/admin/object_type.aw:195
 msgid "radiobuttons"
 msgstr "radiobuttons"
 
-#: classes/admin/object_type.aw:204
+#: classes/admin/object_type.aw:212
 msgid "Oks"
 msgstr "Branch"
 
-#: classes/admin/object_type.aw:212
+#: classes/admin/object_type.aw:220
 msgid "Tüüp"
 msgstr "Type"
 
-#: classes/admin/object_type.aw:228
+#: classes/admin/object_type.aw:236
 msgid "Vaikimisi välimus"
 msgstr ""
 
-#: classes/admin/object_type.aw:278
+#: classes/admin/object_type.aw:286
 msgid "K&otilde;ik"
 msgstr "All"

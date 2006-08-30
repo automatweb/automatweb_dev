@@ -1,38 +1,86 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.124 2006/08/18 10:24:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.125 2006/08/30 17:06:16 kristo Exp $
 // task.aw - TODO item
 /*
 
-@classinfo syslog_type=ST_TASK relationmgr=yes no_status=1 confirm_save_data=1
+@classinfo syslog_type=ST_TASK relationmgr=yes confirm_save_data=1
 
 @default table=objects
+
+
 @default group=general
+@layout top_bit type=vbox closeable=1 area_caption=P&otilde;hiandmed
 
-@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER 
-@caption Klient
+	@layout top_2way type=hbox parent=top_bit
 
-@property code type=text size=5 table=planner field=code
-@caption Kood
+		@layout top_2way_left type=vbox parent=top_2way
 
-@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
-@caption Projekt
+			@property name type=textbox table=objects field=name parent=top_2way_left
+			@caption Nimi
+
+			@property comment type=textbox table=objects field=comment parent=top_2way_left
+			@caption Kommentaar
+
+			@property add_clauses type=chooser store=no parent=top_2way_left multiple=1
+			@caption Lisatingimused
+
+		@layout top_2way_right type=vbox parent=top_2way
+
+			@property start1 type=datetime_select field=start table=planner parent=top_2way_right
+			@caption Algus
+
+			@property end type=datetime_select table=planner parent=top_2way_right
+			@caption L&otilde;peb
+
+			@property deadline type=datetime_select table=planner field=deadline parent=top_2way_right
+			@caption T&auml;htaeg
+	
+	@property hrs_table type=table no_caption=1 store=no parent=top_bit
+
+
+@layout center_bit type=hbox closeable=1 area_caption=Sisu
+
+	@layout center_bit_left type=vbox parent=center_bit 
+
+		@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit_left
+		@caption Sisu
+		
+
+	@layout center_bit_right type=vbox parent=center_bit 
+
+		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled
+
+			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_right_top
+
+			@property co_table type=table no_caption=1 store=no parent=center_bit_right_top
+			@property proj_table type=table no_caption=1 store=no parent=center_bit_right_top
+			@property parts_table type=table no_caption=1 store=no parent=center_bit_right_top
+
+
+			@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=center_bit_right_top
+			@caption Klient
+
+			@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT parent=center_bit_right_top
+			@caption Projekt
+
+
+		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused
+
+			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_right_bottom
+
+			@property files_table type=table no_caption=1 store=no parent=center_bit_right_bottom
+
+
+
+
+
+
 
 @property ppa type=hidden store=no no_caption=1
 
-@property info_on_object type=text store=no
-@caption Osalejad
 
 @property is_done type=checkbox field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
-
-@property start1 type=datetime_select field=start table=planner
-@caption Algus
-
-@property end type=datetime_select table=planner 
-@caption L&otilde;peb
-
-@property deadline type=datetime_select table=planner field=deadline 
-@caption T&auml;htaeg
 
 @layout personal type=hbox
 @caption Kestab terve päeva
@@ -48,16 +96,14 @@
 @property priority type=textbox size=5 table=planner field=priority
 @caption Prioriteet
 
-layout num_hrs type=hbox 
+@property num_hrs_guess type=textbox size=5 field=meta method=serialize 
+@caption Prognoositav tundide arv 	
 
-	@property num_hrs_guess type=textbox size=5 field=meta method=serialize 
-	@caption Prognoositav tundide arv 	
+@property num_hrs_real type=textbox size=5 field=meta method=serialize 
+@caption Tegelik tundide arv
 
-	@property num_hrs_real type=textbox size=5 field=meta method=serialize 
-	@caption Tegelik tundide arv
-
-	@property num_hrs_to_cust type=textbox size=5 field=meta method=serialize
-	@caption Tundide arv kliendile
+@property num_hrs_to_cust type=textbox size=5 field=meta method=serialize
+@caption Tundide arv kliendile
 
 @layout hr_price_layout type=hbox no_caption=1
 caption Tunnihind
@@ -74,20 +120,11 @@ caption Kokkuleppehind
 	@property deal_price type=textbox size=5 field=meta method=serialize parent=deal_price_layout
 	@caption Kokkuleppehind
 
-	@property deal_price_currency type=select field=meta method=serialize parent=deal_price_layout
-	@caption Valuuta
-
-@property content type=textarea cols=80 rows=30 field=description table=planner
-@caption Sisu
-
-@property client_remind type=checkbox ch_value=1 table=objects field=meta method=serialize
-@caption Kliendi teavitamine vajalik
-
 @property bill_no type=text table=planner 
 @caption Arve number
 
-@property files type=text 
-@caption Failid
+@property code type=hidden size=5 table=planner field=code
+@caption Kood
 
 @property participants type=popup_search multiple=1 table=objects field=meta method=serialize clid=CL_CRM_PERSON
 @caption Osalejad
@@ -95,8 +132,8 @@ caption Kokkuleppehind
 @property controller_disp type=text store=no 
 @caption Kontrolleri v&auml;ljund
 
-@property aliasmgr type=aliasmgr store=no
-@caption Seostehaldur
+property aliasmgr type=aliasmgr store=no
+caption Seostehaldur
 
 @default field=meta
 
@@ -357,7 +394,69 @@ class task extends class_base
 		}
 		$retval = PROP_OK;
 		switch($data["name"])
-		{
+		{	
+			case "parts_tb":
+				$this->_parts_tb($arr);
+				break;
+
+			case "co_table":
+				$this->_co_table($arr);
+				break;
+
+			case "proj_table":
+				$this->_proj_table($arr);
+				break;
+
+			case "parts_table":
+				$this->_parts_table($arr);
+				break;
+
+			case "hrs_table":
+				$this->_hrs_table($arr);
+				break;
+
+			case "files_tb":
+				$this->_files_tb($arr);
+				break;
+
+			case "files_table":
+				$this->_files_table($arr);
+				break;
+
+			case "add_clauses":
+				$data["options"] = array(
+					"status" => t("Aktiivne"),
+					"is_done" => t("Tehtud"),
+					"whole_day" => t("Terve p&auml;ev"),
+					"is_goal" => t("Verstapost"),
+					"is_personal" => t("Isiklik"),
+					"send_bill" => t("Arvele"),
+				);
+				$data["value"] = array(
+					"status" => $arr["obj_inst"]->prop("status") == STAT_ACTIVE ? 1 : 0,
+					"is_done" => $arr["obj_inst"]->prop("is_done") ? 1 : 0,
+					"whole_day" => $arr["obj_inst"]->prop("whole_day") ? 1 : 0,
+					"is_goal" => $arr["obj_inst"]->prop("is_goal") ? 1 : 0,
+					"is_personal" => $arr["obj_inst"]->prop("is_personal") ? 1 : 0,
+					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
+				);
+				break;
+
+			case "priority":
+			case "bill_no":
+			case "deal_price":
+			case "num_hrs_guess":
+			case "num_hrs_real":
+			case "num_hrs_to_cust":
+			case "is_done":
+			case "status":
+			case "whole_day":
+			case "is_goal":
+			case "is_personal":
+			case "send_bill":
+			case "hr_price_currency":
+				return PROP_IGNORE;
+
 			case "controller_disp":
 				$cs = get_instance(CL_CRM_SETTINGS);
 				$pc = $cs->get_task_controller($cs->get_current_settings());
@@ -373,32 +472,6 @@ class task extends class_base
 				}
 				break;
 			
-			case "hr_price_currency":
-				$curr_object_list = new object_list(array(
-					"class_id" => CL_CURRENCY,
-				));
-				foreach($curr_object_list->arr() as $curr)
-				{
-					$data["options"][$curr->id()] = $curr->name();
-				}
-				$u = get_instance(CL_USER);
-				$company = obj($u->get_current_company());
-				if(!$data["value"])$data["value"] = $company->prop("currency");
-				break;
-
-			case "deal_price_currency":
-				$curr_object_list = new object_list(array(
-					"class_id" => CL_CURRENCY,
-				));
-				foreach($curr_object_list->arr() as $curr)
-				{
-					$data["options"][$curr->id()] = $curr->name();
-				}
-				$u = get_instance(CL_USER);
-				$company = obj($u->get_current_company());
-				if(!$data["value"])$data["value"] = $company->prop("currency");
-				break;
-
 			case "content":
 				if($this->mail_data)
 				{
@@ -559,166 +632,13 @@ class task extends class_base
 									$arr["obj_inst"]->set_prop("hr_price", $data["value"]);
 									$arr["obj_inst"]->save();
 								}
-								break;
+								return PROP_IGNORE;
 							}
 						}
 					}
 
 				}
-				break;
-
-			case "bill_no":
-				// small conversion - if set, create a relation instead and clear, so that we can have multiple
-				if ($this->can("view", $data["value"] ))
-				{
-					$arr["obj_inst"]->connect(array(
-						"to" => $data["value"],
-						"type" => "RELTYPE_BILL"
-					));
-					$arr["obj_inst"]->set_prop("bill_no", "");
-					$arr["obj_inst"]->save();
-					$data["value"] = "";
-				}
-
-				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
-				{
-					$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"));
-					if (!count($cs))
-					{
-						$ol = new object_list();
-					}
-					else
-					{
-						$ol = new object_list($cs);
-					}
-					$data["value"] = html::obj_change_url($ol->arr());
-				}
-
-				if ($data["value"] == "" && is_object($arr["obj_inst"]) && !$arr["new"])
-				{
-					$data["value"] = html::href(array(
-						"url" => $this->mk_my_orb("create_bill_from_task", array("id" => $arr["obj_inst"]->id(),"post_ru" => get_ru())),
-						"caption" => t("Loo uus arve")
-					));
-				}
-				break;
-
-			case 'info_on_object':
-				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
-				{
-					$conns = $arr['obj_inst']->connections_to(array(
-						'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
-					));
-					foreach($conns as $conn)
-					{
-						$obj = $conn->from();
-						//isik
-						$data['value'].= html::href(array(
-								'url' => html::get_change_url($obj->id()),
-								'caption' => $obj->name(),
-						));
-						//isiku default firma
-						if(is_oid($obj->prop('work_contact')))
-						{
-							$company = new object($obj->prop('work_contact'));
-							$data['value'] .= " ".html::href(array(
-									'url' => html::get_change_url($company->id()),
-									'caption' => $company->name(),
-							));
-						}
-						//isiku ametinimetused...
-						$conns2 = $obj->connections_from(array(
-							'type' => 'RELTYPE_RANK',
-						));
-						$professions = '';
-						foreach($conns2 as $conn2)
-						{
-							$professions.=', '.$conn2->prop('to.name');
-						}
-						if(strlen($professions))
-						{
-							$data['value'].=$professions;
-						}
-						//isiku telefonid
-						$conns2 = $obj->connections_from(array(
-							'type' => 'RELTYPE_PHONE'
-						));
-						$phones = '';
-						foreach($conns2 as $conn2)
-						{
-							$phones.=', '.$conn2->prop('to.name');
-						}
-						if(strlen($phones))
-						{
-							$data['value'].=$phones;
-						}
-						//isiku emailid
-						$conns2 = $obj->connections_from(array(
-							'type' => 'RELTYPE_EMAIL',
-						));
-						$emails = '';
-						foreach($conns2 as $conn2)
-						{
-							$to_obj = $conn2->to();
-							$emails.=', '.$to_obj->prop('mail');
-						}
-						if(strlen($emails))
-						{
-							$data['value'].=$emails;
-						}						
-						$data['value'].='<br>';
-					}
-
-					$u = get_instance(CL_USER);
-					$cur_co = obj($u->get_current_company());
-					$prms = array(
-						"id" => $arr["obj_inst"]->id(),
-						"pn" => "participants_h",
-						"clid" => CL_CRM_PERSON,
-						"multiple" => 1,
-					);
-					if ($arr["obj_inst"]->prop("customer.name") != "" || $cur_co->name() != "")
-					{
-						$prms["MAX_FILE_SIZE"] = 1;
-						$prms["s"] = array("search_co" => $arr["obj_inst"]->prop("customer.name").",".$cur_co->name());
-					}
-
-					$url = $this->mk_my_orb("do_search", $prms, "crm_participant_search");
-					$data["value"] .= html::href(array(
-						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
-						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
-						"title" => t("Otsi")
-					));
-
-					$pm = get_instance("vcl/popup_menu");
-					$pm->begin_menu("call_add_p");
-					if ($this->can("view", $arr["obj_inst"]->prop("customer")))
-					{	
-						$pm->add_item(array(
-							"text" => sprintf(t("Lisa isik organisatsiooni %s"), $arr["obj_inst"]->prop("customer.name")),
-							"link" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->prop("customer"), array(
-								"return_url" => get_ru(), 
-								"add_to_task" => $arr["obj_inst"]->id(),
-								"add_to_co" => $arr["obj_inst"]->prop("customer"),
-							))
-						));
-					}
-
-					$cur_co = get_current_company();
-					$pm->add_item(array(
-						"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cur_co->name()),
-						"link" => html::get_new_url(CL_CRM_PERSON, $cur_co->id(), array(
-							"return_url" => get_ru(), 
-							"add_to_task" => $arr["obj_inst"]->id(),
-							"add_to_co" => $cur_co->id()
-						))
-					));
-
-					$data["value"] .= $pm->get_menu(array(
-						"icon" => "new.gif"
-					));
-				}
-			break;
+				return PROP_IGNORE;
 
 			case 'task_toolbar' :
 			{
@@ -760,6 +680,7 @@ class task extends class_base
 			}
 
 			case "project":
+				return PROP_IGNORE;
 				if ($this->can("view",$arr["request"]["alias_to_org"]))
 				{
 					$ol = new object_list(array(
@@ -819,6 +740,7 @@ class task extends class_base
 				break;
 
 			case "customer":
+				return PROP_IGNORE;
 				$i = get_instance(CL_CRM_COMPANY);
 				$cst = $i->get_my_customers();
 // 				if($this->$co)
@@ -874,10 +796,6 @@ class task extends class_base
 				$this->_other_expenses($arr);
 				break;
 
-			case "files":
-				$this->_get_files($arr);
-				break;
-
 			case "search_contact_company":
 			case "search_contact_firstname":
 			case "search_contact_lastname":
@@ -910,16 +828,29 @@ class task extends class_base
 		
 		switch($prop["name"])
 		{
+			case "add_clauses":
+				$arr["obj_inst"]->set_status($prop["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
+				$arr["obj_inst"]->set_prop("is_done", $prop["value"]["is_done"] ? 8 : 0);
+				$arr["obj_inst"]->set_prop("whole_day", $prop["value"]["whole_day"] ? 1 : 0);
+				$arr["obj_inst"]->set_prop("is_goal", $prop["value"]["is_goal"] ? 1 : 0);
+				$arr["obj_inst"]->set_prop("is_personal", $prop["value"]["is_personal"] ? 1 : 0);
+				$arr["obj_inst"]->set_prop("send_bill", $prop["value"]["send_bill"] ? 1 : 0);
+				break;
+
+			case "is_done":
+			case "status":
+			case "whole_day":
+			case "is_goal":
+			case "is_personal":
+			case "send_bill":
+				return PROP_IGNORE;
+
 			case "sel_resources":
 				$this->_set_resources($arr);
 				break;
 
 			case "rows":
 				$this->_save_rows($arr);
-				break;
-
-			case "files":
-				$this->_set_files($arr);
 				break;
 
 			case "participants":
@@ -1000,6 +931,7 @@ class task extends class_base
 				break;
 
 			case "customer":
+				return PROP_IGNORE;
 				if (isset($_POST["customer"]))
 				{
 					$prop["value"] = $_POST["customer"];
@@ -1007,6 +939,7 @@ class task extends class_base
 				break;
 
 			case "project":
+				return PROP_IGNORE;
 				if (isset($_POST["project"]))
 				{
 					$prop["value"] = $_POST["project"];
@@ -1068,6 +1001,14 @@ class task extends class_base
 			$pv[$arr["request"]["set_pred"]] = $arr["request"]["set_pred"];
 			$arr["obj_inst"]->set_prop("predicates", $arr["request"]["set_pred"]);
 		}
+		if ($arr["request"]["group"] == "general" && !$arr["request"]["add_clauses"]["status"])
+		{
+			$arr["obj_inst"]->set_status(STAT_NOTACTIVE);
+		}
+		if ($arr["request"]["group"] == "general" && $arr["request"]["add_clauses"]["status"])
+		{
+			$arr["obj_inst"]->set_status(STAT_ACTIVE);
+		}
 	}
 
 	function callback_post_save($arr)
@@ -1079,6 +1020,35 @@ class task extends class_base
 		if ($_POST["participants_h"] > 0)
 		{
 			$this->post_save_add_parts = explode(",", $_POST["participants_h"]);
+		}
+
+		if ($this->can("view", $_POST["orderer_h"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $_POST["orderer_h"],
+				"type" => "RELTYPE_CUSTOMER"
+			));
+		}
+		if ($_POST["project_h"] > 0)
+		{
+			foreach(explode(",", $_POST["project_h"]) as $proj)
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $proj,
+					"type" => "RELTYPE_PROJECT"
+				));
+				$arr["obj_inst"]->create_brother($proj);
+			}
+		}
+		if ($_POST["files_h"] > 0)
+		{
+			foreach(explode(",", $_POST["files_h"]) as $proj)
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $proj,
+					"type" => "RELTYPE_FILE"
+				));
+			}
 		}
 		
 		if (is_array($this->post_save_add_parts))
@@ -1094,11 +1064,6 @@ class task extends class_base
 		if(!empty($arr['new']))
 		{
 			$this->add_participant($arr["obj_inst"], get_current_person());
-		}
-
-		if ($this->add_to_proj)
-		{
-			$arr["obj_inst"]->create_brother($this->add_to_proj);
 		}
 
 		$pl = get_instance(CL_PLANNER);
@@ -1171,297 +1136,6 @@ class task extends class_base
 	function search_for_proj($arr)
 	{
 		
-	}
-
-	function _get_files($arr)
-	{
-		$objs = array();
-
-		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
-		{
-			$ol = new object_list($arr["obj_inst"]->connections_from(array(
-				"type" => "RELTYPE_FILE"
-			)));
-			$objs = $ol->arr();
-		}
-
-		$objs[] = obj();
-
-		$types = array(
-			CL_FILE => t(""),
-			CL_CRM_MEMO => t("Memo"),
-			CL_CRM_DOCUMENT => t("CRM Dokument"),
-			CL_CRM_DEAL => t("Leping"),
-			CL_CRM_OFFER => t("Pakkumine")
-		);
-
-		$u = get_instance(CL_USER);
-		if ($arr["obj_inst"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
-		{
-			$impl = $arr["obj_inst"]->prop("customer");
-			$impl_o = obj($impl);
-			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
-			{
-				$impl = $u->get_current_company();
-			}
-		}
-		else
-		{
-			$impl = $u->get_current_company();
-		}
-		if ($this->can("view", $impl))
-		{
-			$implo = obj($impl);
-			$f = get_instance("applications/crm/crm_company_docs_impl");
-			$fldo = $f->_init_docs_fld($implo);
-			$ot = new object_tree(array(
-				"parent" => $fldo->id(),
-				"class_id" => CL_MENU
-			));
-			$folders = array($fldo->id() => $fldo->name());
-			$this->_req_level = 0;
-			$this->_req_get_folders($ot, $folders, $fldo->id());
-
-			// add server folders if set
-			$sf = $implo->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
-			if ($sf)
-			{
-				$s = $sf->instance();
-				$fld = $s->get_folders($sf);
-				$t =& $arr["prop"]["vcl_inst"];
-
-				usort($fld, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
-
-				$folders[$sf->id().":/"] = $sf->name();
-				$this->_req_get_s_folders($fld, $sf, $folders, 0);
-			}
-		}
-		else
-		{
-			$fldo = obj();
-			$folders = array();
-		}
-
-		$clss = aw_ini_get("classes");
-		foreach($objs as $idx => $o)
-		{
-			$this->vars(array(
-				"name" => $o->name(),
-				"idx" => $idx,
-				"types" => $this->picker($types)
-			));
-
-			if (is_oid($o->id()))
-			{
-				if ($o->class_id() == CL_FILE)
-				{
-					$fi = $o->instance();
-					$fu = html::href(array(
-						"url" => $fi->get_url($o->id(), $o->name()),
-						"caption" => $o->name()
-					));
-				}
-				else
-				{
-					$fu = array();
-					foreach($o->connections_from(array("type" => "RELTYPE_FILE")) as $c)
-					{
-						$ff = $c->to();
-						$fi = $ff->instance();
-						if (method_exists($fi, "get_url"))
-						{
-							$fu[] = html::href(array(
-								"url" => $fi->get_url($ff->id(), $ff->name()),
-								"caption" => $ff->name()
-							));
-						}
-					}
-					$fu = join(", ", $fu);
-				}
-				$data[] = array(
-					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
-					"file" => $fu,
-					"type" => $clss[$o->class_id()]["name"],
-					"del" => html::href(array(
-						"url" => $this->mk_my_orb("del_file_rel", array(
-								"return_url" => get_ru(),
-								"fid" => $o->id(),
-						)),
-						"caption" => t("Kustuta")
-					)),
-					"folder" => $o->path_str(array(
-						"start_at" => $fldo->id(),
-						"path_only" => true
-					))
-				);
-			}
-			else
-			{
-				$data[] = array(
-					"name" => html::textbox(array(
-						"name" => "fups_d[$idx][tx_name]"
-					)),
-					"file" => html::fileupload(array(
-						"name" => "fups_".$idx
-					)),
-					"type" => html::select(array(
-						"options" => $types,
-						"name" => "fups_d[$idx][type]"
-					)),
-					"del" => "",
-					"folder" => html::select(array(
-						"name" => "fups_d[$idx][folder]",
-						"options" => $folders
-					))
-				);
-			}
-		}
-
-		classload("vcl/table");
-		$t = new vcl_table(array(
-			"layout" => "generic",
-		));
-		
-		$t->define_field(array(
-			"caption" => t("Nimi"),
-			"name" => "name",
-		));
-
-		$t->define_field(array(
-			"caption" => t("Fail"),
-			"name" => "file",
-		));
-
-		$t->define_field(array(
-			"caption" => t("T&uuml;&uuml;p"),
-			"name" => "type",
-		));
-
-		$t->define_field(array(
-			"caption" => t("Kataloog"),
-			"name" => "folder",
-		));
-
-		$t->define_field(array(
-			"caption" => t(""),
-			"name" => "del",
-		));
-
-		foreach($data as $e)
-		{
-			$t->define_data($e);
-		}
-
-		$arr["prop"]["value"] = $t->draw();
-	}
-
-	function _set_files($arr)
-	{
-		$t = obj($arr["request"]["id"]);
-		$u = get_instance(CL_USER);
-		$co = obj($u->get_current_company());
-		foreach(safe_array($_POST["fups_d"]) as $num => $entry)
-		{
-			if (is_uploaded_file($_FILES["fups_".$num]["tmp_name"]))
-			{
-				$f = get_instance("applications/crm/crm_company_docs_impl");
-				$fldo = $f->_init_docs_fld($co);
-				if ($this->can("add", $entry["folder"]))
-				{
-					$fldo = obj($entry["folder"]);
-				}
-				if (!$fldo)
-				{
-					return;
-				}
-
-				if ($entry["type"] == CL_FILE)
-				{
-					// add file
-					$f = get_instance(CL_FILE);
-
-					$fs_fld = null;
-					if (strpos($entry["folder"], ":") !== false)
-					{
-						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
-						$sf_o = obj($sf_id);
-						$fs_fld = $sf_o->prop("folder").$sf_path;
-					}
-					$fil = $f->add_upload_image("fups_$num", $fldo->id(), 0, $fs_fld);
-					if (is_array($fil))
-					{
-						$t->connect(array(
-							"to" => $fil["id"],
-							"reltype" => "RELTYPE_FILE"
-						));
-					}
-				}
-				else
-				{
-					$o = obj();
-					$o->set_class_id($entry["type"]);
-					$o->set_name($entry["tx_name"] != "" ? $entry["tx_name"] : $_FILES["fups_$num"]["name"]);
-
-			
-					$o->set_parent($fldo->id());
-					if ($entry["type"] != CL_FILE)
-					{
-						$o->set_prop("project", $t->prop("project"));
-						if ($o->class_id() != CL_CRM_OFFER)
-						{
-							$o->set_prop("task", $t->id());
-							$o->set_prop("customer", $t->prop("customer"));
-						}
-						else
-						{
-							$o->set_prop("orderer", $t->prop("customer"));
-						}
-
-						if ($entry["type"] == CL_CRM_DEAL)
-						{
-							$o->connect(array(
-								"to" => $t->prop("customer"),
-								"type" => "RELTYPE_SIDE"
-							));
-							$o->connect(array(
-								"to" => $co->id(),
-								"type" => "RELTYPE_SIDE"
-							));
-							$o->set_prop("sides", array(
-								$t->prop("customer") => $t->prop("customer"),
-								$co->id() => $co->id()
-							));
-						}
-					}
-					$o->save();
-
-					// add file
-					$f = get_instance(CL_FILE);
-
-					$fs_fld = null;
-					if (strpos($entry["folder"], ":") !== false)
-					{
-						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
-						$sf_o = obj($sf_id);
-						$fs_fld = $sf_o->prop("folder").$sf_path;
-					}
-					$fil = $f->add_upload_image("fups_$num", $o->id(), 0, $fs_fld);
-
-					if (is_array($fil))
-					{
-						$o->connect(array(
-							"to" => $fil["id"],
-							"reltype" => "RELTYPE_FILE"
-						));
-						$t->connect(array(
-							"to" => $o->id(),
-							"reltype" => "RELTYPE_FILE"
-						));
-					}
-				}
-			}
-		}
-		return $arr["post_ru"];
 	}
 
 	function _init_rows_t(&$t, $impl_filt = NULL)
@@ -2612,6 +2286,9 @@ class task extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["participants_h"] = 0;
+		$arr["orderer_h"] = 0;
+		$arr["project_h"] = 0;
+		$arr["files_h"] = 0;
 		if ($_GET["action"] == "new")
 		{
 			$arr["add_to_cal"] = $_GET["add_to_cal"];
@@ -2744,6 +2421,620 @@ class task extends class_base
 			"to" => $row->id(),
 			"type" => "RELTYPE_ROW"
 		));
+	}
+
+	function _hrs_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "priority",
+			"caption" => t("Prioriteet"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "num_hrs_guess",
+			"caption" => t("Prognoositav tundide arv"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "num_hrs_real",
+			"caption" => t("Tegelik tundide arv"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "num_hrs_to_cust",
+			"caption" => t("Tundide arv kliendile"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "hr_price",
+			"caption" => t("Tunnihind"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "deal_price",
+			"caption" => t("Kokkuleppehind"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "hr_price_currency",
+			"caption" => t("Valuuta"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "bill_no",
+			"caption" => t("Arve number"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "code",
+			"caption" => t("Kood"),
+			"align" => "center"
+		));
+
+		$curr_object_list = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$curs = array();
+		foreach($curr_object_list->arr() as $curr)
+		{
+			$curs[$curr->id()] = $curr->name();
+		}
+		$u = get_instance(CL_USER);
+		$company = obj($u->get_current_company());
+		if(!$arr["obj_inst"]->prop("hr_price_currency"))
+		{
+			$arr["obj_inst"]->set_prop("hr_price_currency", $company->prop("currency"));
+		}
+
+
+		// small conversion - if set, create a relation instead and clear, so that we can have multiple
+		if ($this->can("view", $arr["obj_inst"]->prop("bill_no") ))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["obj_inst"]->prop("bill_no"),
+				"type" => "RELTYPE_BILL"
+			));
+			$arr["obj_inst"]->set_prop("bill_no", "");
+			$arr["obj_inst"]->save();
+		}
+
+		$bno = "";
+		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		{
+			$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"));
+			if (!count($cs))
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list($cs);
+			}
+			$bno = html::obj_change_url($ol->arr());
+		}
+
+		if ($bno == "" && is_object($arr["obj_inst"]) && !$arr["new"])
+		{
+			$bno = html::href(array(
+				"url" => $this->mk_my_orb("create_bill_from_task", array("id" => $arr["obj_inst"]->id(),"post_ru" => get_ru())),
+				"caption" => t("Loo uus arve")
+			));
+		}
+
+		$t->define_data(array(
+			"priority" => html::textbox(array(
+				"name" => "priority",
+				"value" => $arr["obj_inst"]->prop("priority"),
+				"size" => 5
+			)),
+			"num_hrs_guess" => html::textbox(array(
+				"name" => "num_hrs_guess",
+				"value" => $arr["obj_inst"]->prop("num_hrs_guess"),
+				"size" => 5
+			)),
+			"num_hrs_real" => html::textbox(array(
+				"name" => "num_hrs_real",
+				"value" => $arr["obj_inst"]->prop("num_hrs_real"),
+				"size" => 5
+			)),
+			"num_hrs_to_cust" => html::textbox(array(
+				"name" => "num_hrs_to_cust",
+				"value" => $arr["obj_inst"]->prop("num_hrs_to_cust"),
+				"size" => 5
+			)),
+			"hr_price" => html::textbox(array(
+				"name" => "hr_price",
+				"value" => $arr["obj_inst"]->prop("hr_price"),
+				"size" => 5
+			)),
+			"deal_price" => html::textbox(array(
+				"name" => "deal_price",
+				"value" => $arr["obj_inst"]->prop("deal_price"),
+				"size" => 5
+			)),
+			"hr_price_currency" => html::select(array(
+				"name" => "hr_price_currency",
+				"options" => $curs,
+				"value" => $arr["obj_inst"]->prop("hr_price_currency"),
+			)),
+			"bill_no" => $bno,
+			"code" => $arr["obj_inst"]->prop("code")
+		));
+	}
+
+	function _parts_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"tooltip" => t("Uus"),
+		));
+
+		$tb->add_sub_menu(array(
+			"parent" => "new",
+			"name" => "cust",
+			"text" => t("Tellija"),
+		));
+		
+		$tb->add_menu_item(array(
+			"parent" => "cust",
+			"text" => t("Organisatsioon"),
+			"link" => html::get_new_url(CL_CRM_COMPANY, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 3 // RELTYPE_CUSTOMER
+			)),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "cust",
+			"text" => t("Isik"),
+			"link" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 3 // RELTYPE_CUSTOMER
+			)),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Projekt"),
+			"link" => html::get_new_url(CL_PROJECT, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 4 // RELTYPE_PROJECT
+			)),
+		));
+
+		$tb->add_sub_menu(array(
+			"parent" => "new",
+			"name" => "part",
+			"text" => t("Osaleja"),
+		));
+		
+		if ($arr["obj_inst"]->prop("customer"))
+		{
+			$tb->add_menu_item(array(
+				"parent" => "part",
+				"text" => sprintf(t("Lisa isik organisatsiooni %s"), $arr["obj_inst"]->prop("customer.name")),
+				"link" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->prop("customer"), array(
+					"return_url" => get_ru(), 
+					"add_to_task" => $arr["obj_inst"]->id(),
+					"add_to_co" => $arr["obj_inst"]->prop("customer"),
+				))
+			));
+		}
+
+		$cur_co = get_current_company();
+		$tb->add_menu_item(array(
+			"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cur_co->name()),
+			"parent" => "part",
+			"link" => html::get_new_url(CL_CRM_PERSON, $cur_co->id(), array(
+				"return_url" => get_ru(), 
+				"add_to_task" => $arr["obj_inst"]->id(),
+				"add_to_co" => $cur_co->id()
+			))
+		));
+
+		$tb->add_menu_button(array(
+			"name" => "search",
+			"tooltip" => t("Otsi"),
+			"img" => "search.gif"
+		));
+
+		$url = $this->mk_my_orb("do_search", array("pn" => "orderer_h", "clid" => array(
+			CL_CRM_PERSON,
+			CL_CRM_COMPANY
+		)), "popup_search");
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Tellija"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+		));
+		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1), "popup_search");
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Projekt"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+		));
+		$url = $this->mk_my_orb("do_search", array("pn" => "participants_h", "clid" => CL_CRM_PERSON,"multiple" => 1), "popup_search");
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Osaleja"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_rels"
+		));
+	}
+
+	function _init_co_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel_ord",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "orderer",
+			"caption" => t("Tellija"),
+			"sortable" => 1,
+			"width" => "40%"
+		));
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"sortable" => 1,
+			"width" => "35%"
+		));
+		$t->define_field(array(
+			"name" => "contact",
+			"caption" => t("Kontaktisik"),
+			"sortable" => 1,
+			"width" => "25%"
+		));
+	}
+
+	function _co_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_co_table($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		{
+			$c = $c->to();
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"orderer" => html::obj_change_url($c),
+				"phone" => html::obj_change_url($c->prop("phone_id")),
+				"contact" => html::obj_change_url($c->prop("contact_person"))
+			));
+		}
+	}
+
+	function _init_proj_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel_proj",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"sortable" => 1,
+			"width" => "40%"
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"sortable" => 1,
+			"width" => "35%"
+		));
+		$t->define_field(array(
+			"name" => "deadline",
+			"caption" => t("L&otilde;ppt&auml;htaeg"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y",
+			"width" => "25%"
+		));
+	}
+
+	function _proj_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_proj_table($t);
+
+		$p = get_instance(CL_PROJECT);
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+		{
+			$c = $c->to();
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"project" => html::obj_change_url($c),
+				"status" => $p->states[$c->prop("state")],
+				"deadline" => $c->prop("deadline")
+			));
+		}
+	}
+
+	function _init_parts_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel_part",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "part",
+			"caption" => t("Osaleja"),
+			"sortable" => 1,
+			"width" => "40%"
+		));
+		$t->define_field(array(
+			"name" => "prof",
+			"caption" => t("Ametinimetus"),
+			"sortable" => 1,
+			"width" => "35%"
+		));
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"sortable" => 1,
+			"width" => "25%"
+		));
+	}
+
+	function _parts_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_parts_table($t);
+
+		$p = get_instance(CL_PROJECT);
+		$types = array(10, 8);
+		if ($arr["obj_inst"]->class_id() == CL_CRM_CALL)
+		{
+			$types = 9;
+		}
+		if ($arr["obj_inst"]->class_id() == CL_CRM_MEETING)
+		{
+			$types = 8;
+		}
+		foreach($arr["obj_inst"]->connections_to(array("type" => $types)) as $c)
+		{
+			$c = $c->from();
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"part" => html::obj_change_url($c),
+				"prof" => html::obj_change_url($c->prop("rank")),
+				"phone" => html::obj_change_url($c->prop("phone"))
+			));
+		}
+	}
+
+	function _files_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "nemw",
+			"tooltip" => t("Uus"),
+		));
+
+		// insert folders where to add
+		$u = get_instance(CL_USER);
+		if ($arr["obj_inst"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
+		{
+			$impl = $arr["obj_inst"]->prop("customer");
+			$impl_o = obj($impl);
+			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+			{
+				$impl = $u->get_current_company();
+			}
+		}
+		else
+		{
+			$impl = $u->get_current_company();
+		}
+		if ($this->can("view", $impl))
+		{
+			$implo = obj($impl);
+			$f = get_instance("applications/crm/crm_company_docs_impl");
+			$fldo = $f->_init_docs_fld($implo);
+			$ot = new object_tree(array(
+				"parent" => $fldo->id(),
+				"class_id" => CL_MENU
+			));
+			$folders = array($fldo->id() => $fldo->name());
+			$tb->add_sub_menu(array(
+				"parent" => "nemw",
+				"name" => "mainf",
+				"text" => $fldo->name(),
+			));
+			$this->_add_fa($tb, "mainf", $fldo->id());
+			$this->_req_level = 0;
+			$this->_req_get_folders_tb($ot, $folders, $fldo->id(), $tb, "mainf");
+		}
+
+		$url = $this->mk_my_orb("do_search", array("pn" => "files_h", "clid" => array(
+			CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER
+		), "multiple" => 1), "popup_search");
+		$tb->add_button(array(
+			"name" => "search",
+			"img" => "search.gif",
+			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)"
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_rels"
+		));
+	}
+
+	function _req_get_folders_tb($ot, &$folders, $parent, &$tb, $parent_nm)
+	{
+		$this->_req_level++;
+		$objs = $ot->level($parent);
+		foreach($objs as $o)
+		{
+			$tb->add_sub_menu(array(
+				"parent" => $parent_nm,
+				"name" => "fd".$o->id(),
+				"text" => $o->name(),
+			));
+			$this->_add_fa($tb, "fd".$o->id(), $o->id());
+			$this->_req_get_folders_tb($ot, $folders, $o->id(), $tb, "fd".$o->id());
+		}
+		$this->_req_level--;
+	}
+
+	function _add_fa(&$tb, $pt_n, $pt)
+	{
+		$types = array(
+			CL_FILE => t(""),
+			CL_CRM_MEMO => t("Memo"),
+			CL_CRM_DOCUMENT => t("CRM Dokument"),
+			CL_CRM_DEAL => t("Leping"),
+			CL_CRM_OFFER => t("Pakkumine")
+		);
+		foreach($types as $clid => $nm)
+		{
+			$tb->add_menu_item(array(
+				"parent" => $pt_n,
+				"text" => $nm,
+				"link" => html::get_new_url($clid, $pt, array(
+					"return_url" => get_ru(), 
+					"alias_to" => $_GET["id"],
+					"reltype" => 2
+				)),
+			));
+		}
+	}
+
+	function _init_files_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Manuse nimi"),
+			"sortable" => 1,
+			"width" => "40%"
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"sortable" => 1,
+			"width" => "35%"
+		));
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Viimane muutja"),
+			"sortable" => 1,
+			"width" => "25%"
+		));
+	}
+
+	function _files_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_files_table($t);
+
+		$clss = aw_ini_get("classes");
+		$u = get_instance(CL_USER);
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FILE")) as $c)
+		{
+			$c = $c->to();
+			$m = $c->modifiedby();
+			$m = $u->get_person_for_uid($m);
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"name" => html::obj_change_url($c),
+				"type" => $clss[$c->class_id()]["name"],
+				"modifiedby" => html::obj_change_url($m)
+			));
+		}
+	}
+
+	/**
+		@attrib name=delete_rels
+	**/
+	function delete_rels($arr)
+	{
+		$o = obj($arr["id"]);
+		$o = obj($o->brother_of());
+		if (is_array($arr["sel_ord"]) && count($arr["sel_ord"]))
+		{
+			foreach(safe_array($arr["sel_ord"]) as $item)
+			{
+				$o->disconnect(array(
+					"from" => $item,
+				));
+			}
+			// now we need to get the first orderer and set that as the new default orderer
+			$ord = $o->get_first_obj_by_reltype("RELTYPE_CUSTOMER");
+			if ($ord && $o->prop("customer") != $ord->id())
+			{
+				$o->set_prop("customer", $ord->id());
+				$o->save();
+			}
+			else
+			if (!$ord)
+			{
+				$o->set_prop("customer", 0);
+				$o->save();
+			}
+		}
+
+		if (is_array($arr["sel_proj"]) && count($arr["sel_proj"]))
+		{
+			foreach(safe_array($arr["sel_proj"]) as $item)
+			{
+				$o->disconnect(array(
+					"from" => $item,
+				));
+			}
+			// now we need to get the first orderer and set that as the new default orderer
+			$ord = $o->get_first_obj_by_reltype("RELTYPE_PROJECT");
+			if ($ord && $o->prop("project") != $ord->id())
+			{
+				$o->set_prop("project", $ord->id());
+				$o->save();
+			}
+			else
+			if (!$ord)
+			{
+				$o->set_prop("project", 0);
+				$o->save();
+			}
+		}	
+
+		if (is_array($arr["sel_part"]) && count($arr["sel_part"]))
+		{
+			$arr["check"] = $arr["sel_part"];
+			$arr["event_id"] = $arr["id"];
+			post_message_with_param(
+				MSG_MEETING_DELETE_PARTICIPANTS,
+				CL_CRM_MEETING,
+				&$arr
+			);
+		}
+
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			foreach(safe_array($arr["sel"]) as $item)
+			{
+				$o->disconnect(array(
+					"from" => $item,
+				));
+			}
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>
