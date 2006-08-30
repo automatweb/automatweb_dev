@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.2 2006/08/16 17:28:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.3 2006/08/30 12:26:42 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -14,11 +14,9 @@
 
 	@property max_results type=textbox table=watercraft_search
 	@caption Maksimaalne tulemuste arv
-	@comment Kui on 0, siis n&auml;idatakse k&otilde;iki tulemusi &uuml;hel lehel
 
 	@property no_search_form type=checkbox ch_value=1 table=watercraft_search
 	@caption &Auml;ra kuva otsinguvormi
-	@comment Kui on 0, siis kuvatakse k&otilde;iki tulemusi
 
 	@property saved_searches type=text store=no
 	@caption Salvestatud otsing
@@ -26,60 +24,84 @@
 @groupinfo parameters caption="Parameetrid"
 @default group=parameters
 
-	@property parameters_subtitle type=text store=no subtitle=1
+	@property search_form_conf type=chooser orient=vertical multiple=1 field=meta method=serialize
 	@caption Otsinguvormis kuvatavad v&auml;ljad
 
-	@property watercraft_type type=checkbox ch_value=1 table=watercraft_search
-	@caption Aluse t&uuml;&uuml;p
+	property parameters_subtitle type=text store=no subtitle=1
+	caption Otsinguvormis kuvatavad v&auml;ljad
 
-	@property condition type=checkbox ch_value=1 table=watercraft_search
-	@caption Seisukord
+	property watercraft_type type=checkbox ch_value=1 table=watercraft_search
+	caption Aluse t&uuml;&uuml;p
 
-	@property body_material type=checkbox ch_value=1 table=watercraft_search
-	@caption Kerematerjal
+	property condition type=checkbox ch_value=1 table=watercraft_search
+	caption Seisukord
 
-	@property location type=checkbox ch_value=1 table=watercraft_search
-	@caption Asukoht
+	property body_material type=checkbox ch_value=1 table=watercraft_search
+	caption Kerematerjal
 
-	@property length type=checkbox ch_value=1 table=watercraft_search
-	@caption Pikkus
+	property location type=checkbox ch_value=1 table=watercraft_search
+	caption Asukoht
 
-	@property width type=checkbox ch_value=1 table=watercraft_search
-	@caption Laius
+	property length type=checkbox ch_value=1 table=watercraft_search
+	caption Pikkus
 
-	@property height type=checkbox ch_value=1 table=watercraft_search
-	@caption K&otilde;rgus
+	property width type=checkbox ch_value=1 table=watercraft_search
+	caption Laius
 
-	@property weight type=checkbox ch_value=1 table=watercraft_search
-	@caption Raskus
+	property height type=checkbox ch_value=1 table=watercraft_search
+	caption K&otilde;rgus
 
-	@property draught type=checkbox ch_value=1 table=watercraft_search
-	@caption S&uuml;vis
+	property weight type=checkbox ch_value=1 table=watercraft_search
+	caption Raskus
 
-	@property creation_year type=checkbox ch_value=1 table=watercraft_search
-	@caption Valmistamisaasta
+	property draught type=checkbox ch_value=1 table=watercraft_search
+	caption S&uuml;vis
 
-	@property passanger_count type=checkbox ch_value=1 table=watercraft_search
-	@caption Reisijaid
+	property creation_year type=checkbox ch_value=1 table=watercraft_search
+	caption Valmistamisaasta
 
-	@property additional_equipment type=checkbox ch_value=1 table=watercraft_search
-	@caption Lisavarustus
+	property passanger_count type=checkbox ch_value=1 table=watercraft_search
+	caption Reisijaid
 
-	@property seller type=checkbox ch_value=1 table=watercraft_search
-	@caption M&uuml;&uuml;ja
+	property additional_equipment type=checkbox ch_value=1 table=watercraft_search
+	caption Lisavarustus
+
+	property seller type=checkbox ch_value=1 table=watercraft_search
+	caption M&uuml;&uuml;ja
 	
-	@property price type=checkbox ch_value=1 table=watercraft_search
-	@caption Hind
+	property price type=checkbox ch_value=1 table=watercraft_search
+	caption Hind
+
 */
 
 class watercraft_search extends class_base
 {
+
+	var $visible_form_elements;
+
 	function watercraft_search()
 	{
 		$this->init(array(
 			"tpldir" => "applications/watercraft_management/watercraft_search",
 			"clid" => CL_WATERCRAFT_SEARCH
 		));
+
+		$this->visible_form_elements = array(
+			'watercraft_type' => t('Aluse t&uuml;&uuml;p'),
+			'condition' => t('Seisukord'),
+			'body_material' => t('Kerematerjal'),
+			'location' => t('Asukoht'),
+			'length' => t('Pikkus'),
+			'width' => t('Laius'),
+			'height' => t('K&otilde;rgus'),
+			'weight' => t('Raskus'),
+			'draught' => t('S&uuml;vis'),
+			'creation_year' => t('Valmistamisaasta'),
+			'passanger_count' => t('Reisijaid'),
+			'additional_equipment' => t('Lisavarustus'),
+			'seller' => t('M&uuml;&uuml;ja'),
+			'price' => t('Hind')
+		);
 	}
 
 	function get_property($arr)
@@ -93,6 +115,15 @@ class watercraft_search extends class_base
 				{
 					$prop['value'] = 50;
 				}
+				break;
+			case 'max_results':
+				if ( $arr['new'] == 1 )
+				{
+					$prop['value'] = 500;
+				}
+				break;
+			case 'search_form_conf':
+				$prop['options'] = $this->visible_form_elements;
 				break;
 		};
 		return $retval;
@@ -142,20 +173,20 @@ class watercraft_search extends class_base
 			case 'results_on_page':
 			case 'max_results':
 			case 'no_search_form':
-			case 'watercraft_type':
-			case 'condition':
-			case 'body_material':
-			case 'location':
-			case 'length':
-			case 'width':
-			case 'height':
-			case 'weight':
-			case 'draught':
-			case 'creation_year':
-			case 'passanger_count':
-			case 'additional_equipment':
-			case 'seller':
-			case 'price':
+		//	case 'watercraft_type':
+		//	case 'condition':
+		//	case 'body_material':
+		//	case 'location':
+		//	case 'length':
+		//	case 'width':
+		//	case 'height':
+		//	case 'weight':
+		//	case 'draught':
+		//	case 'creation_year':
+		//	case 'passanger_count':
+		//	case 'additional_equipment':
+		//	case 'seller':
+		//	case 'price':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'

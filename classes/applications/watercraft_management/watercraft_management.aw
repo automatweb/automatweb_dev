@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.2 2006/08/08 17:13:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.3 2006/08/30 12:26:42 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -9,20 +9,41 @@
 @default table=objects
 @default group=general
 
-	@property keeper type=relpicker reltype=RELTYPE_KEEPER table=watercraft_management
-	@caption Haldaja
-	
-	@property data type=relpicker reltype=RELTYPE_DATA table=watercraft_management
-	@caption Vees&otilde;idukite andmed
+	@groupinfo sub_general caption="&Uuml;ldine" parent=general
+	@default group=sub_general
 
-	@property cities type=relpicker reltype=RELTYPE_CITIES table=watercraft_management
-	@caption Linnad
+		@property keeper type=relpicker reltype=RELTYPE_KEEPER table=watercraft_management
+		@caption Haldaja
+		
+		@property data type=relpicker reltype=RELTYPE_DATA table=watercraft_management
+		@caption Vees&otilde;idukite andmed
 
-	@property manufacturers type=relpicker reltype=RELTYPE_MANUFACTURERS table=watercraft_management
-	@caption Tootjad
+		@property search type=relpicker reltype=RELTYPE_SEARCH table=watercraft_management
+		@caption Otsing
 
-	@property search type=relpicker reltype=RELTYPE_SEARCH table=watercraft_management
-	@caption Otsing
+		@property manufacturers type=relpicker reltype=RELTYPE_MANUFACTURERS table=watercraft_management
+		@caption Tootjad
+
+		@property locations type=relpicker reltype=RELTYPE_LOCATIONS table=watercraft_management
+		@caption Asukohad
+
+	@groupinfo manufacturers_management caption="Tootjate haldamine" parent=general
+	@default group=manufacturers_management
+
+		@property manufacturers_management_toolbar type=toolbar no_caption=1
+		@caption Tootjate t&ouml;&ouml;riistariba
+
+		@property manufacturers_management_table type=table no_caption=1
+		@caption Tootjad
+
+	@groupinfo locations_management caption="Asukohtade haldamine" parent=general
+	@default group=locations_management
+
+		@property locations_management_toolbar type=toolbar no_caption=1
+		@caption Asukohtade t&ouml;&ouml;riistariba
+
+		@property locations_management_table type=table no_caption=1
+		@caption Asukohad
 
 @groupinfo watercrafts caption="Vees&otilde;idukid"
 
@@ -44,7 +65,55 @@
 	@property watercrafts_toolbar type=toolbar no_caption=1 group=all,motor_boat,sailing_ship,dinghy,rowing_boat,scooter,sailboard,canoe,fishing_boat,other,accessories,search
 	@caption Vees&otilde;idukite t&ouml;&ouml;riistariba
 
-	@property watercrafts_table type=table no_caption=1 group=all,motor_boat,sailing_ship,dinghy,rowing_boat,scooter,sailboard,canoe,fishing_boat,other,accessories,search
+	@layout watercraft_search_frame type=hbox width=20%:80%
+
+		@layout watercraft_search_frame_left type=vbox parent=watercraft_search_frame
+
+			@property watercraft_type type=select store=no parent=watercraft_search_frame_left
+			@caption Aluse t&uuml;&uuml;p
+
+			@property condition type=select store=no parent=watercraft_search_frame_left
+			@caption Seisukord
+
+			@property body_material type=select store=no parent=watercraft_search_frame_left
+			@caption Kerematerjal
+
+			@property location type=select store=no parent=watercraft_search_frame_left
+			@caption Asukoht
+
+			@property length type=range store=no parent=watercraft_search_frame_left
+			@caption Pikkus
+
+			@property width type=range store=no parent=watercraft_search_frame_left
+			@caption Laius
+
+			@property height type=range store=no parent=watercraft_search_frame_left
+			@caption K&otilde;rgus
+
+			@property weight type=range store=no parent=watercraft_search_frame_left
+			@caption Raskus
+
+			@property draught type=range store=no parent=watercraft_search_frame_left
+			@caption S&uuml;vis
+
+			@property creation_year type=range store=no parent=watercraft_search_frame_left
+			@caption Valmistamisaasta
+
+			@property passanger_count type=range store=no parent=watercraft_search_frame_left
+			@caption Reisijaid
+
+			@property additional_equipment type=text store=no parent=watercraft_search_frame_left
+			@caption Lisavarustus
+
+			@property seller type=select store=no parent=watercraft_search_frame_left
+			@caption M&uuml;&uuml;ja
+			
+			@property price type=range store=no parent=watercraft_search_frame_left
+			@caption Hind
+
+		@layout watercraft_search_frame_right type=vbox parent=watercraft_search_frame 
+
+	@property watercrafts_table type=table no_caption=1 group=all,motor_boat,sailing_ship,dinghy,rowing_boat,scooter,sailboard,canoe,fishing_boat,other,accessories,search parent=watercraft_search_frame_right
 	@caption Vees&otilde;idukite tabel
 
 @reltype KEEPER value=1 clid=CL_CRM_COMPANY
@@ -53,8 +122,8 @@
 @reltype DATA value=2 clid=CL_MENU
 @caption Vees&otilde;idukite andmed
 
-@reltype CITIES value=3 clid=CL_MENU
-@caption Linnad
+@reltype LOCATIONS value=3 clid=CL_MENU
+@caption Asukohad
 
 @reltype MANUFACTURERS value=4 clid=CL_MENU
 @caption Tootjad
@@ -67,6 +136,8 @@
 class watercraft_management extends class_base
 {
 	var $watercraft_inst;
+	var $watercraft_search_inst;
+	var $search_obj;
 
 	function watercraft_management()
 	{
@@ -76,17 +147,59 @@ class watercraft_management extends class_base
 		));
 
 		$this->watercraft_inst = get_instance(CL_WATERCRAFT);
+		$this->watercraft_search_inst = get_instance(CL_WATERCRAFT_SEARCH);
 
 	}
 
 	function get_property($arr)
 	{
+		if ( empty($this->search_obj) )
+		{
+			$search_oid = $arr['obj_inst']->prop('search');
+			if ( $this->can('view', $search_oid) )
+			{
+				$this->search_obj = new object($search_oid);
+			}
+		}
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case 'watercraft_type':
+				$prop['options'] = $this->watercraft_inst->watercraft_type; 
+				break;
+			case 'condition':
+				$prop['options'] = $this->watercraft_inst->condition;
+				break;
+			case 'body_material':
+				$prop['options'] = $this->watercraft_inst->body_material;
+				break;
+		//	case 'location':
+		//	case 'length': 
+		//	case 'width':
+		//	case 'height':
+		//	case 'weight':
+		//	case 'draught':
+		//	case 'creation_year':
+		//	case 'passanger_count':
+		//	case 'additional_equipment':
+		//	case 'seller':
+		//	case 'price':
+				
 		};
+
+		if ( !empty($this->search_obj) )
+		{
+			if ( array_key_exists( $prop['name'], $this->watercraft_search_inst->visible_form_elements ) )
+			{
+			$search_form_conf = $this->search_obj->prop('search_form_conf');
+				if ( !in_array( $prop['name'],  $search_form_conf) )
+				{
+					$retval = PROP_IGNORE;
+				}
+			}
+		}
+
 		return $retval;
 	}
 
@@ -129,6 +242,11 @@ class watercraft_management extends class_base
 			'action' => '_delete_objects',
 			'confirm' => t('Oled kindel et soovid valitud objektid kustutada?')
 		));
+		// XXX 
+		// Siia võiks teha juurde otsingu seadete nupu, millel klikkides saab otsingu objekti muutma
+		// või siis kui otsingu objekti veel olemas ei ole, siis tehakse ja seostatakse see ära
+		// et pmst otsingu tabi alt saaks seda ka konfida - minu arust tundub see mõistlik, loogiline ja
+		// mugav --dragut
 
 		return PROP_OK;
 	}
@@ -138,6 +256,10 @@ class watercraft_management extends class_base
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
 
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi'),
+		));
 		$t->define_field(array(
 			'name' => 'type',
 			'caption' => t('T&uuml;&uuml;p')
@@ -193,10 +315,17 @@ class watercraft_management extends class_base
 
 		$watercrafts = new object_list($filter);
 
-		foreach ($watercrafts->arr() as $watercraft)
+		foreach ($watercrafts->arr() as $id => $watercraft)
 		{
-			$watercraft_oid = $watercraft->id();
-			$location_str = "";
+			$name_str = html::href(array(
+				'url' => $this->mk_my_orb('change', array(
+					'id' => $id,
+					'return_url' => get_ru()
+				), CL_WATERCRAFT),
+				'caption' => $watercraft->name()
+			));
+
+			$location_str = '';
 			$location = $watercraft->prop('location');
 			if ($this->can('view', $location))
 			{
@@ -207,6 +336,7 @@ class watercraft_management extends class_base
 			{
 				$location_str = $watercraft->prop('location_other');
 			}
+
 			$seller_str = "";
 			$seller = $watercraft->prop('seller');
 			if ($this->can('view', $seller))
@@ -217,7 +347,9 @@ class watercraft_management extends class_base
 					'url' => $this->mk_my_orb('change', array('id' => $seller->id()), $seller->class_id())
 				));
 			}
+
 			$t->define_data(array(
+				'name' => $name_str,
 				'type' => $this->watercraft_inst->watercraft_type[$watercraft->prop('watercraft_type')],
 				'manufacturer' => '',
 				'brand' => $watercraft->prop('brand'),
@@ -227,8 +359,140 @@ class watercraft_management extends class_base
 				'visible' => ($watercraft->prop('visible') == 1) ? t('Jah') : t('Ei'),
 				'archive' => ($watercraft->prop('archived') == 1) ? t('Jah') : t('Ei'),
 				'select' => html::checkbox(array(
-					'name' => 'selected_ids['.$watercraft_oid.']',
-					'value' => $watercraft_oid
+					'name' => 'selected_ids['.$id.']',
+					'value' => $id
+				))
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _get_manufacturers_management_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		
+		$t->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Uus Tootja'),
+			'url' => $this->mk_my_orb('new', array(
+				'parent' => $arr['obj_inst']->prop('manufacturers'),
+				'return_url' => get_ru()
+			), CL_CRM_COMPANY),
+		));
+
+		$t->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta'),
+			'action' => '_delete_objects',
+			'confirm' => t('Oled kindel et soovid valitud objektid kustutada?')
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_manufacturers_management_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi'),
+		));
+		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali'),
+			'width' => '5%',
+			'align' => 'center'
+		));
+
+		$manufacturers = new object_list(array(
+			'class_id' => CL_CRM_COMPANY,
+			'parent' => $arr['obj_inst']->prop('manufacturers'),
+		));
+
+		foreach ($manufacturers->arr() as $id => $manufacturer)
+		{
+			$t->define_data(array(
+				'name' => html::href(array(
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $id,
+						'return_url' => get_ru()
+					), CL_CRM_COMPANY),
+					'caption' => $manufacturer->name()
+				)),
+				'select' => html::checkbox(array(
+					'name' => 'selected_ids['.$id.']',
+					'value' => $id
+				))
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _get_locations_management_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		
+		$t->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Uus asukoht'),
+			'url' => $this->mk_my_orb('new', array(
+				'parent' => $arr['obj_inst']->prop('locations'),
+				'return_url' => get_ru()
+			), CL_CRM_ADDRESS),
+		));
+
+		$t->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta'),
+			'action' => '_delete_objects',
+			'confirm' => t('Oled kindel et soovid valitud objektid kustutada?')
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_locations_management_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi'),
+		));
+		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali'),
+			'width' => '5%',
+			'align' => 'center'
+		));
+
+		$locations = new object_list(array(
+			'class_id' => CL_CRM_ADDRESS,
+			'parent' => $arr['obj_inst']->prop('locations'),
+		));
+
+		foreach ($locations->arr() as $id => $location)
+		{
+			$t->define_data(array(
+				'name' => html::href(array(
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $id,
+						'return_url' => get_ru()
+					), CL_CRM_ADDRESS),
+					'caption' => $location->name()
+				)),
+				'select' => html::checkbox(array(
+					'name' => 'selected_ids['.$id.']',
+					'value' => $id
 				))
 			));
 		}
@@ -239,6 +503,27 @@ class watercraft_management extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr['id'] == 'manufacturers_management')
+		{
+			$manufacturers = $arr['obj_inst']->prop('manufacturers');
+			if ( empty($manufacturers) )
+			{
+				return false;
+			}
+		}
+
+		if ($arr['id'] == 'locations_management')
+		{
+			$locations = $arr['obj_inst']->prop('locations');
+			if ( empty($locations) )
+			{
+				return false;
+			}
+		}
 	}
 
 	////////////////////////////////////
@@ -286,7 +571,7 @@ class watercraft_management extends class_base
 		{
 			case 'keeper':
 			case 'data':
-			case 'cities':
+			case 'locations':
 			case 'manufacturers':
 			case 'search':
 				$this->db_add_col($table, array(

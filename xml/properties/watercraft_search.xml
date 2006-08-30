@@ -15,7 +15,6 @@
             <type>textbox</type>
             <field>max_results</field>
             <caption>Maksimaalne tulemuste arv</caption>
-            <comment>Kui on 0, siis n&amp;amp;auml;idatakse k&amp;amp;otilde;iki tulemusi &amp;amp;uuml;hel lehel</comment>
       </property>
       <property>
             <name>no_search_form</name>
@@ -25,7 +24,6 @@
             <ch_value>1</ch_value>
             <field>no_search_form</field>
             <caption>&amp;amp;Auml;ra kuva otsinguvormi</caption>
-            <comment>Kui on 0, siis kuvatakse k&amp;amp;otilde;iki tulemusi</comment>
       </property>
       <property>
             <name>saved_searches</name>
@@ -37,140 +35,15 @@
             <caption>Salvestatud otsing</caption>
       </property>
       <property>
-            <name>parameters_subtitle</name>
+            <name>search_form_conf</name>
             <table>objects</table>
             <group>parameters</group>
-            <type>text</type>
-            <store>no</store>
-            <subtitle>1</subtitle>
-            <field>parameters_subtitle</field>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Otsinguvormis kuvatavad v&amp;amp;auml;ljad</caption>
-      </property>
-      <property>
-            <name>watercraft_type</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>watercraft_type</field>
-            <caption>Aluse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
-      </property>
-      <property>
-            <name>condition</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>condition</field>
-            <caption>Seisukord</caption>
-      </property>
-      <property>
-            <name>body_material</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>body_material</field>
-            <caption>Kerematerjal</caption>
-      </property>
-      <property>
-            <name>location</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>location</field>
-            <caption>Asukoht</caption>
-      </property>
-      <property>
-            <name>length</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>length</field>
-            <caption>Pikkus</caption>
-      </property>
-      <property>
-            <name>width</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>width</field>
-            <caption>Laius</caption>
-      </property>
-      <property>
-            <name>height</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>height</field>
-            <caption>K&amp;amp;otilde;rgus</caption>
-      </property>
-      <property>
-            <name>weight</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>weight</field>
-            <caption>Raskus</caption>
-      </property>
-      <property>
-            <name>draught</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>draught</field>
-            <caption>S&amp;amp;uuml;vis</caption>
-      </property>
-      <property>
-            <name>creation_year</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>creation_year</field>
-            <caption>Valmistamisaasta</caption>
-      </property>
-      <property>
-            <name>passanger_count</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>passanger_count</field>
-            <caption>Reisijaid</caption>
-      </property>
-      <property>
-            <name>additional_equipment</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>additional_equipment</field>
-            <caption>Lisavarustus</caption>
-      </property>
-      <property>
-            <name>seller</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>seller</field>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
-      </property>
-      <property>
-            <name>price</name>
-            <table>watercraft_search</table>
-            <group>parameters</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>price</field>
-            <caption>Hind</caption>
       </property>
       <classinfo>
             <syslog_type>ST_WATERCRAFT_SEARCH</syslog_type>

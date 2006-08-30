@@ -31,18 +31,17 @@
             <type>chooser</type>
             <orient>vertical</orient>
             <multiple>1</multiple>
-            <store>no</store>
-            <field>watercraft_accessories</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Varustus/tarvikud (hetkel ei salvestu)</caption>
       </property>
       <property>
             <name>manufacturer</name>
-            <table>objects</table>
+            <table>watercraft</table>
             <group>general</group>
             <type>select</type>
-            <store>no</store>
             <field>manufacturer</field>
-            <caption>Tootja (Mis Mudelid siia tulema peaksid?)</caption>
+            <caption>Tootja </caption>
       </property>
       <property>
             <name>brand</name>
@@ -72,11 +71,9 @@
             <name>location</name>
             <table>watercraft</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_LOCATION</reltype>
-            <automatic>1</automatic>
+            <type>select</type>
             <field>location</field>
-            <caption>Asukoht (praegu v&amp;amp;otilde;etakse vaikimisi k&amp;amp;otilde;ik s&amp;amp;uuml;steemis olevad linnad)</caption>
+            <caption>Asukoht </caption>
       </property>
       <property>
             <name>location_other</name>

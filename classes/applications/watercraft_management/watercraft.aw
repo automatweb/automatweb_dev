@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.1 2006/08/08 12:58:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.2 2006/08/30 12:26:42 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -18,11 +18,11 @@
 	@property watercraft_type_other type=textbox table=watercraft
 	@caption Muu aluset&uuml;&uuml;p
 
-	@property watercraft_accessories type=chooser orient=vertical multiple=1 store=no
+	@property watercraft_accessories type=chooser orient=vertical multiple=1 field=meta method=serialize
 	@caption Varustus/tarvikud (hetkel ei salvestu)
 
-	@property manufacturer type=select store=no
-	@caption Tootja (Mis Mudelid siia tulema peaksid?)
+	@property manufacturer type=select table=watercraft
+	@caption Tootja 
 
 	@property brand type=textbox table=watercraft
 	@caption Mark
@@ -33,8 +33,11 @@
 	@property body_material_other type=textbox table=watercraft
 	@caption Muu kerematerjal
 
-	@property location type=relpicker reltype=RELTYPE_LOCATION automatic=1 table=watercraft
-	@caption Asukoht (praegu v&otilde;etakse vaikimisi k&otilde;ik s&uuml;steemis olevad linnad)
+	property location type=relpicker reltype=RELTYPE_LOCATION automatic=1 table=watercraft
+	caption Asukoht (praegu v&otilde;etakse vaikimisi k&otilde;ik s&uuml;steemis olevad linnad)
+
+	@property location type=select table=watercraft
+	@caption Asukoht 
 
 	@property location_other type=textbox table=watercraft
 	@caption Muu asukoht
@@ -318,6 +321,34 @@ class watercraft extends class_base
 					$prop['options'] = $this->accessories;
 				}
 				break;
+			case 'manufacturer':
+				$management = $this->get_management_object($arr);
+				if ( $management !== false )
+				{
+					$manufacturers = new object_list(array(
+						'class_id' => CL_CRM_COMPANY,
+						'parent' => $management->prop('manufacturers')
+					));
+					foreach ($manufacturers->arr() as $id => $manufacturer)
+					{
+						$prop['options'][$id] = $manufacturer->name();
+					}
+				}
+				break;
+			case 'location':
+				$management = $this->get_management_object($arr);
+				if ( $management !== false )
+				{
+					$locations = new object_list(array(
+						'class_id' => CL_CRM_ADDRESS,
+						'parent' => $management->prop('locations')
+					));
+					foreach ($locations->arr() as $id => $location)
+					{
+						$prop['options'][$id] = $location->name();
+					}
+				}
+				break;
 			case 'body_material':
 				$prop['options'] = $this->body_material;
 				break;
@@ -569,7 +600,6 @@ class watercraft extends class_base
 
 	function callback_mod_tab($arr)
 	{
-	//	arr($arr);
 		$watercraft_type = $arr['obj_inst']->prop('watercraft_type');
 
 		$no_engine = array(
@@ -616,6 +646,22 @@ class watercraft extends class_base
 		return $result;
 	}
 
+	function get_management_object($arr)
+	{
+		$managements_ol = new object_list(array(
+			'class_id' => CL_WATERCRAFT_MANAGEMENT,
+			'data' => $arr['obj_inst']->parent()
+		));
+		if ( $managements_ol->count() > 0 )
+		{
+			return $managements_ol->begin();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	function do_db_upgrade($table, $field, $query, $error)
 	{
 		if (empty($field))
@@ -644,6 +690,7 @@ class watercraft extends class_base
 			case 'engine_cooling':
 			case 'mast_material':
 			case 'mast_count':
+			case 'manufacturer':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
