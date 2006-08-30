@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.111 2006/08/29 13:31:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.112 2006/08/30 10:29:05 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1130,6 +1130,10 @@ class forum_v2 extends class_base
 		$fld = $args["fld"];
 		$this->read_template("topic.tpl");
 
+		if (!$this->can("view", $args["request"]["topic"]))
+		{
+			return "";
+		}
 		$topic_obj = new object($args["request"]["topic"]);
 
 		$this->_add_style("style_comment_user");
