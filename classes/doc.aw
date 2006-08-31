@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.134 2006/08/21 14:14:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.135 2006/08/31 12:39:04 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -77,6 +77,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 	@property frontpage_right type=checkbox ch_value=1 trans=1
 	@caption Esilehel tulbas paremal
+
+	@property frontpage_center type=checkbox ch_value=1 trans=1
+	@caption Esilehel keskel
 
 	@property dcache type=checkbox store=no trans=1
 	@caption Cache otsingu jaoks
