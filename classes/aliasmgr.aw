@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.206 2006/08/31 11:31:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.207 2006/08/31 11:40:34 tarvo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -152,9 +152,8 @@ class aliasmgr extends aw_template
 		{
 			$fields["complexity"] = array(
 				"type" => "text",
-				"caption" => t(""),
 				'value' => html::href(array(
-					'caption' =>'lihtsam otsing',
+					'caption' => t("Lihtsam otsing"),
 					'url' => $request.'&simple=1',
 				)),
 			);
@@ -187,9 +186,8 @@ class aliasmgr extends aw_template
 			
 			$fields["complexity"] = array(
 				"type" => "text",
-				"caption" => t(""),
 				'value' => html::href(array(
-					'caption' =>'t&auml;psem otsing',
+					'caption' => t("T&auml;psem otsing"),
 					'url' => $request.'&complex=1',
 				)),
 			);
@@ -297,7 +295,8 @@ class aliasmgr extends aw_template
 		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$this->t->define_field(array(
 			"name" => "icon",
-			"caption" => t(""),
+			"caption" =>
+				 "",
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
