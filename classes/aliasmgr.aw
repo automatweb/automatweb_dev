@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.205 2006/08/30 07:26:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.206 2006/08/31 11:31:02 tarvo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -189,7 +189,7 @@ class aliasmgr extends aw_template
 				"type" => "text",
 				"caption" => t(""),
 				'value' => html::href(array(
-					'caption' =>'täpsem otsing',
+					'caption' =>'t&auml;psem otsing',
 					'url' => $request.'&complex=1',
 				)),
 			);
@@ -360,7 +360,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "title",
-			"caption" => t("Tüüp"),
+			"caption" => t("T&uuml;&uuml;p"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -368,7 +368,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "reltype",
-			"caption" => t("Seose tüüp"),
+			"caption" => t("Seose t&uuml;&uuml;p"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -939,7 +939,7 @@ class aliasmgr extends aw_template
 			$v = str_replace("&auml;","ä",$vals);
 			$v = str_replace("&Auml;","Ä",$v);
 			$v = str_replace("&uuml;","ü",$v);
-			$v = str_replace("&Üuml;","Ü",$v);
+			$v = str_replace("&Uuml;","Ü",$v);
 			$v = str_replace("&otilde;","õ",$v);
 			$v = str_replace("&Otilde;","Õ",$v);
 			$v = str_replace("&ouml;","ö",$v);
@@ -973,7 +973,7 @@ class aliasmgr extends aw_template
 
 		$toolbar->add_cdata(
 			html::select(array(
-				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => t('Seose tüüp')) + $this->reltypes),
+				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => t('Seose t&uuml;&uuml;p')) + $this->reltypes),
 				"name" => "reltype",
 				"selected" => $this->reltype,
 				'onchange' => "listB.populate();",
@@ -1026,7 +1026,7 @@ HTM;
 		{
 			$toolbar->add_button(array(
 				"name" => "translate",
-				"tooltip" => t("Tõlgi"),
+				"tooltip" => t("T&otilde;lgi"),
 				"url" => $this->mk_my_orb("create",array("id" => $this->id,"return_url" => $return_url),"object_translation"),
 				"target" => "_blank",
 				"img" => "edit.gif",
