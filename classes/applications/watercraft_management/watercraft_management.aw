@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.3 2006/08/30 12:26:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.4 2006/08/31 14:36:32 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -81,7 +81,7 @@
 			@property location type=select store=no parent=watercraft_search_frame_left
 			@caption Asukoht
 
-			@property length type=range store=no parent=watercraft_search_frame_left
+			@property length type=range store=no parent=watercraft_search_frame_left 
 			@caption Pikkus
 
 			@property width type=range store=no parent=watercraft_search_frame_left
@@ -110,11 +110,16 @@
 			
 			@property price type=range store=no parent=watercraft_search_frame_left
 			@caption Hind
+			
+			@property watercraft_search_submit type=submit store=no no_caption=1 parent=watercraft_search_frame_left
+			@caption Otsi
 
 		@layout watercraft_search_frame_right type=vbox parent=watercraft_search_frame 
 
 	@property watercrafts_table type=table no_caption=1 group=all,motor_boat,sailing_ship,dinghy,rowing_boat,scooter,sailboard,canoe,fishing_boat,other,accessories,search parent=watercraft_search_frame_right
 	@caption Vees&otilde;idukite tabel
+
+			
 
 @reltype KEEPER value=1 clid=CL_CRM_COMPANY
 @caption Haldaja
@@ -133,11 +138,15 @@
 
 */
 
+define('SELLER_TYPE_PERSON', 145);
+define('SELLER_TYPE_COMPANY', 129);
+
 class watercraft_management extends class_base
 {
 	var $watercraft_inst;
 	var $watercraft_search_inst;
 	var $search_obj;
+	var $seller_type;
 
 	function watercraft_management()
 	{
@@ -148,6 +157,10 @@ class watercraft_management extends class_base
 
 		$this->watercraft_inst = get_instance(CL_WATERCRAFT);
 		$this->watercraft_search_inst = get_instance(CL_WATERCRAFT_SEARCH);
+		$this->seller_type = array(
+			SELLER_TYPE_PERSON => t('Eraisik'),
+			SELLER_TYPE_COMPANY => t('Firma')
+		);
 
 	}
 
@@ -166,25 +179,47 @@ class watercraft_management extends class_base
 		switch($prop["name"])
 		{
 			case 'watercraft_type':
-				$prop['options'] = $this->watercraft_inst->watercraft_type; 
+				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->watercraft_type; 
+				$prop['selected'] = $arr['request']['watercraft_type'];
 				break;
 			case 'condition':
-				$prop['options'] = $this->watercraft_inst->condition;
+				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->condition;
+				$prop['selected'] = $arr['request']['condition'];
 				break;
 			case 'body_material':
-				$prop['options'] = $this->watercraft_inst->body_material;
+				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->body_material;
+				$prop['selected'] = $arr['request']['body_material'];
 				break;
-		//	case 'location':
-		//	case 'length': 
-		//	case 'width':
-		//	case 'height':
-		//	case 'weight':
-		//	case 'draught':
-		//	case 'creation_year':
-		//	case 'passanger_count':
-		//	case 'additional_equipment':
-		//	case 'seller':
-		//	case 'price':
+			case 'location':
+				$prop['options'][0] = t('K&otilde;ik');
+				$locations = new object_list(array(
+					'class_id' => CL_CRM_ADDRESS,
+					'parent' => $arr['obj_inst']->prop('locations')
+				));
+				foreach ( $locations->arr() as $id => $location )
+				{
+					$prop['options'][$id] = $location->name();
+				}
+				$prop['selected'] = $arr['request']['location'];
+				break;
+			case 'length': 
+			case 'width':
+			case 'height':
+			case 'weight':
+			case 'draught':
+			case 'creation_year':
+			case 'passanger_count':
+			case 'price':
+				$range = &$prop['vcl_inst'];
+				$range->set_range($arr['request'][$prop['name']]);
+				break;
+			case 'additional_equipment':
+				$prop['value'] = '???';
+				break;
+			case 'seller':
+				$prop['options'] = array(t('K&otilde;ik')) + $this->seller_type;
+				$prop['selected'] = $arr['request']['seller_type'];
+				break;
 				
 		};
 
@@ -242,11 +277,30 @@ class watercraft_management extends class_base
 			'action' => '_delete_objects',
 			'confirm' => t('Oled kindel et soovid valitud objektid kustutada?')
 		));
-		// XXX 
-		// Siia võiks teha juurde otsingu seadete nupu, millel klikkides saab otsingu objekti muutma
-		// või siis kui otsingu objekti veel olemas ei ole, siis tehakse ja seostatakse see ära
-		// et pmst otsingu tabi alt saaks seda ka konfida - minu arust tundub see mõistlik, loogiline ja
-		// mugav --dragut
+
+		$search_oid = $arr['obj_inst']->prop('search');
+		if ( !empty($search_oid) )
+		{
+			$t->add_button(array(
+				'name' => 'settings',
+				'img' => 'settings.gif',
+				'tooltip' => t('Otsingu seaded'),
+				'url' => $this->mk_my_orb('change', array(
+					'id' => $search_oid,
+					'group' => 'parameters',
+					'return_url' => get_ru()
+				), CL_WATERCRAFT_SEARCH)
+			));
+		}
+		else
+		{
+			$t->add_button(array(
+				'name' => 'settings',
+				'img' => 'settings.gif',
+				'tooltip' => t('Otsingu seaded'),
+				'disabled' => true
+			));
+		}
 
 		return PROP_OK;
 	}
@@ -308,7 +362,38 @@ class watercraft_management extends class_base
 			'parent' => $arr['obj_inst']->prop('data')
 		);
 
-		if ($arr['request']['group'] != 'all')
+		if ( $arr['request']['group'] == 'search' )
+		{
+			foreach ($this->watercraft_search_inst->search_form_elements as $name => $caption)
+			{
+				if ( is_array($arr['request'][$name]) )
+				{
+					$from = (int)$arr['request'][$name]['from'];
+					$to = (int)$arr['request'][$name]['to'];
+
+					if ( empty($from) && empty($to) )
+					{
+						continue;
+					} 
+					$filter[$name] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from, $to);
+				}
+				else
+				{
+					if ( !empty($arr['request'][$name]) )
+					{
+						if ($name == 'seller')
+						{
+						//	$filter['CL_WATERCRAFT.RELTYPE_SELLER.class_id'] = $arr['request'][$name];
+						}
+						else
+						{
+							$filter[$name] = $arr['request'][$name];
+						}
+					}
+				}
+			}
+		}
+		else
 		{
 			$filter['watercraft_type'] = constant('WATERCRAFT_TYPE_'.strtoupper($arr['request']['group']));
 		}
@@ -325,6 +410,19 @@ class watercraft_management extends class_base
 				'caption' => $watercraft->name()
 			));
 
+			$manufacturer_str = '';
+			$manufacturer_oid = $watercraft->prop('manufacturer');
+			if ($this->can('view', $manufacturer_oid))
+			{
+				$manufacturer = new object($manufacturer_oid);
+				$manufacturer_str = html::href(array(
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $manufacturer_oid,
+						'return_url' => get_ru()
+					), CL_CRM_COMPANY),
+					'caption' => $manufacturer->name()
+				));
+			}
 			$location_str = '';
 			$location = $watercraft->prop('location');
 			if ($this->can('view', $location))
@@ -351,7 +449,7 @@ class watercraft_management extends class_base
 			$t->define_data(array(
 				'name' => $name_str,
 				'type' => $this->watercraft_inst->watercraft_type[$watercraft->prop('watercraft_type')],
-				'manufacturer' => '',
+				'manufacturer' => $manufacturer_str,
 				'brand' => $watercraft->prop('brand'),
 				'location' => $location_str,
 				'seller' => $seller_str,
@@ -526,6 +624,23 @@ class watercraft_management extends class_base
 		}
 	}
 
+	function callback_mod_retval($arr)
+	{
+	//	arr($arr);
+		$arr['args']['watercraft_type'] = (int)$arr['request']['watercraft_type'];
+		$arr['args']['condition'] = (int)$arr['request']['condition'];
+		$arr['args']['body_material'] = (int)$arr['request']['body_material'];
+		$arr['args']['location'] = (int)$arr['request']['location'];
+		$arr['args']['length'] = $arr['request']['length'];
+		$arr['args']['width'] = $arr['request']['width'];
+		$arr['args']['height'] = $arr['request']['height'];
+		$arr['args']['weight'] = $arr['request']['weight'];
+		$arr['args']['draught'] = $arr['request']['draught'];
+		$arr['args']['creation_year'] = $arr['request']['creation_year'];
+		$arr['args']['passanger_count'] = $arr['request']['passanger_count'];
+		$arr['args']['price'] = $arr['request']['price'];
+		$arr['args']['seller'] = $arr['request']['seller'];
+	}
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////

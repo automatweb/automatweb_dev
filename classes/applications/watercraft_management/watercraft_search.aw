@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.3 2006/08/30 12:26:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.4 2006/08/31 14:36:32 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -77,7 +77,7 @@
 class watercraft_search extends class_base
 {
 
-	var $visible_form_elements;
+	var $search_form_elements;
 
 	function watercraft_search()
 	{
@@ -86,7 +86,7 @@ class watercraft_search extends class_base
 			"clid" => CL_WATERCRAFT_SEARCH
 		));
 
-		$this->visible_form_elements = array(
+		$this->search_form_elements = array(
 			'watercraft_type' => t('Aluse t&uuml;&uuml;p'),
 			'condition' => t('Seisukord'),
 			'body_material' => t('Kerematerjal'),
@@ -123,7 +123,7 @@ class watercraft_search extends class_base
 				}
 				break;
 			case 'search_form_conf':
-				$prop['options'] = $this->visible_form_elements;
+				$prop['options'] = $this->search_form_elements;
 				break;
 		};
 		return $retval;

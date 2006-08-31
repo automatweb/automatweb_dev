@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.2 2006/08/30 12:26:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.3 2006/08/31 14:36:32 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -311,6 +311,12 @@ class watercraft extends class_base
 			case 'watercraft_type':
 				$prop['options'] = $this->watercraft_type;
 				break;
+			case 'watercraft_type_other':
+				if ($arr['obj_inst']->prop('watercraft_type') != WATERCRAFT_TYPE_OTHER)
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
 			case 'watercraft_accessories':
 				if ($arr['obj_inst']->prop('watercraft_type') != WATERCRAFT_TYPE_ACCESSORIES)
 				{
@@ -323,6 +329,7 @@ class watercraft extends class_base
 				break;
 			case 'manufacturer':
 				$management = $this->get_management_object($arr);
+				$prop['options'][] = t('--Vali--');
 				if ( $management !== false )
 				{
 					$manufacturers = new object_list(array(
@@ -337,6 +344,7 @@ class watercraft extends class_base
 				break;
 			case 'location':
 				$management = $this->get_management_object($arr);
+				$prop['options'][] = t('--Vali--');
 				if ( $management !== false )
 				{
 					$locations = new object_list(array(
@@ -348,9 +356,23 @@ class watercraft extends class_base
 						$prop['options'][$id] = $location->name();
 					}
 				}
+				// xxx i don't know if this is necessary here, so i will comment out it now --dragut
+				//$prop['options'][-1] = t('Muu asukoht');
+				break;
+			case 'location_other':
+				if ($arr['obj_inst']->prop('location') > 0)
+				{
+					$retval = PROP_IGNORE;
+				}
 				break;
 			case 'body_material':
 				$prop['options'] = $this->body_material;
+				break;
+			case 'body_material_other':
+				if ($arr['obj_inst']->prop('body_material') != BODY_MATERIAL_OTHER)
+				{
+					$retval = PROP_IGNORE;
+				}
 				break;
 			case 'condition':
 				$prop['options'] = $this->condition;
@@ -388,6 +410,12 @@ class watercraft extends class_base
 				break;
 			case 'mast_material':
 				$prop['options'] = $this->mast_material;
+				break;
+			case 'mast_material_other':
+				if ($arr['obj_inst']->prop('mast_material') != MAST_MATERIAL_OTHER)
+				{
+					$retval = PROP_IGNORE;
+				}
 				break;
 			case 'mast_count':
 				$prop['options'] = $this->custom_range(1, 4);

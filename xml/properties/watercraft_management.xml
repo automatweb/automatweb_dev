@@ -249,6 +249,17 @@
             <caption>Hind</caption>
       </property>
       <property>
+            <name>watercraft_search_submit</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>watercraft_search_frame_left</parent>
+            <field>watercraft_search_submit</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>watercrafts_table</name>
             <table>objects</table>
             <group>
