@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.11 2006/05/18 08:15:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.12 2006/08/31 10:42:36 tarvo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -11,10 +11,10 @@
 	@classinfo trans=1 syslog_type=ST_MENU_TREE
 
 	@property menus type=select multiple=1 size=15 trans=1
-	@caption Menüüd
+	@caption Men&uuml;&uuml;d
 
 	@property children_only type=checkbox ch_value=1 trans=1
-	@caption Ainult alammenüüd
+	@caption Ainult alammen&uuml;&uuml;d
 
 	@property template type=select trans=1
 	@caption Template
