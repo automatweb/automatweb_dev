@@ -73,7 +73,7 @@ mis teine. ntx kui tahad ainult originaalobjekte, mitte vendi, siis:
 parameetrid on:
 v6rdlus: OBJ_COMP_LESS - <  data1, OBJ_COMP_GREATER - > data1, 
 OBJ_COMP_LESS_OR_EQ - <= data1, OBJ_COMP_GREATER_OR_EQ - >= data1, 
-OBJ_COMP_BETWEEN - > data1 and < data2, 
+OBJ_COMP_BETWEEN - > data1 and < data2, OBJ_COMP_BETWEEN_INCLUDING - >= data1 and <= data2,
 OBJ_COMP_EQUAL - = data1
 
 
