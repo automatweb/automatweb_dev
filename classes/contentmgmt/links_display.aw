@@ -12,7 +12,6 @@ class links_display
 
 		list($url,$target,$caption) = $this->draw_link($alias["target"]);
 
-
 		if (strpos($url, 0, 3) == "www")
 		{
 			$url = "http://".$url;
@@ -60,6 +59,7 @@ class links_display
 		{
 			$val = $obj->prop($prop);
 		}
+		$val = htmlentities($val);
 
 		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $obj->lang_id())
 		{
