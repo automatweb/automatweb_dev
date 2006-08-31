@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.12 2006/08/31 10:42:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.13 2006/08/31 12:58:43 tarvo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -44,7 +44,7 @@ class menu_tree extends class_base
 		{
 			case "num_levels":
 				$data["options"] = array(
-					0 => "K&otilde;ik",
+					0 => t("K&otilde;ik"),
 					1 => 1,
 					2 => 2,
 					3 => 3,
