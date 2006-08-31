@@ -232,6 +232,16 @@
             <caption>Esilehel tulbas paremal</caption>
       </property>
       <property>
+            <name>frontpage_center</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <field>frontpage_center</field>
+            <caption>Esilehel keskel</caption>
+      </property>
+      <property>
             <name>dcache</name>
             <table>documents</table>
             <group>general</group>
