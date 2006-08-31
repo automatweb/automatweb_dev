@@ -3,6 +3,10 @@
 
 class range extends class_base
 {
+	var $name;
+	var $from;
+	var $to;
+
 	function range()
 	{
 //		$this->init("vcl/range");
@@ -13,18 +17,15 @@ class range extends class_base
 		$saved_value = $arr['obj_inst']->prop($arr['prop']['name']);
 		if (!empty($saved_value))
 		{
-			list($from, $to) = explode('-', $saved_value);
+			list($this->from, $this->to) = explode('-', $saved_value);
 		}
-		
-		$prop = $arr['prop'];
-		$params = array(
-			'from' => $from,
-			'to' => $to,
-			'prop' => $prop
-		);
-		$prop['value'] = $this->get_html($params);
 
-		return array($prop['name'] => $prop);
+		$this->name = $arr["property"]["name"];
+		$vcl_inst = $this;
+		$res = $arr["property"];
+		$res["vcl_inst"] = &$vcl_inst;
+		
+		return array($this->name => $res);
 	}
 
 	function process_vcl_property($arr)
@@ -34,20 +35,49 @@ class range extends class_base
 
 	function get_html($arr)
 	{
+
 		$str = html::textbox(array(
-			'name' => $arr['prop']['name'].'[from]',
-			'value' => $arr['from'],
+			'name' => $this->name.'[from]',
+			'value' => $this->from,
 			'size' => 5
 			
 		));
 		$str .= ' - ';
 		$str .= html::textbox(array(
-			'name' => $arr['prop']['name'].'[to]',
-			'value' => $arr['to'],
+			'name' => $this->name.'[to]',
+			'value' => $this->to,
 			'size' => 5
 			
 		));
 		return $str;
+	}
+
+	function set_from($from)
+	{
+		$this->from = $from;
+	}
+
+	function set_to($to)
+	{
+		$this->to = $to;
+	}
+
+	function set_range($range)
+	{
+		if (is_string($range))
+		{
+			list($this->from, $this->to) = explode('-', $range);
+			return true;
+		}
+
+		if (is_array($range))
+		{
+			$this->from = $range['from'];
+			$this->to = $range['to'];
+			return true;
+		}
+
+		return false;
 	}
 
 }
