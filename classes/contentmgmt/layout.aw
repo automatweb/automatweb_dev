@@ -391,7 +391,7 @@ class layout extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
-				"caption" => (1+$i)." tulba laius",
+				"caption" => sprintf(t("%d tulba laius"), ($i+1)),
 				"value" => $ge->get_col_width($i)
 			);
 		}
@@ -413,7 +413,7 @@ class layout extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
-				"caption" => ($i+1)." tulba k&otilde;rgus",
+				"caption" => sprintf(t("%d tulba k&otilde;rgus"), ($i+1)),
 				"value" => $ge->get_col_height($i)
 			);
 		}
