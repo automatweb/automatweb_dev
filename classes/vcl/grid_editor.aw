@@ -204,7 +204,8 @@ class grid_editor extends class_base
 			if ($col == 0)
 			{
 				$this->vars(array(
-					"after" => "-1"
+					"after" => "-1",
+					"add_col_caption" => t("Lisa tulp"),
 				));
 				$fc = $this->parse("FIRST_C");
 			}
@@ -212,7 +213,10 @@ class grid_editor extends class_base
 				"FIRST_C" => $fc, 
 				"col" => $col,
 				"col" => $col,
-				"after" => (int)$col
+				"after" => (int)$col,
+				"confirm_col_del" => t("Oled kindel et tahad tulpa kustutada?"),
+				"del_col" => t("Kustuta tulp"),
+				"add_col" => t("Lisa tulp"),
 			));
 			$this->parse("DC");
 		}
@@ -235,24 +239,24 @@ class grid_editor extends class_base
 				}
 
 				$sh = $sv = $eu = $el = $er = $ed = "<img src='".$this->cfg["baseurl"]."/automatweb/images/trans.gif' width='8' height='8'>"; 
-				$sh = "<a href='javascript:split_hor($i,$a)'><img alt='Jaga pooleks horisontaalselt' title='Jaga pooleks horisontaalselt' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_down.gif' border=0></a>";
-				$sv = "<a href='javascript:split_ver($i,$a)'><img alt='Jaga pooleks vertikaalselt' title='Jaga pooleks vertikaalselt' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_left.gif' border=0></a>";
+				$sh = "<a href='javascript:split_hor($i,$a)'><img alt=\"".t("Jaga pooleks horisontaalselt")."\" title=\"".t("Jaga pooleks horisontaalselt")."\" src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_down.gif' border=0></a>";
+				$sv = "<a href='javascript:split_ver($i,$a)'><img alt=\"".t("Jaga pooleks vertikaalselt")."\" title=\"".t("Jaga pooleks vertikaalselt")."\" src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_left.gif' border=0></a>";
 
 				if ($i != 0)
 				{
-					$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='Kustuta &uuml;lemine cell' title='Kustuta &uuml;lemine cell' src='".$this->cfg["baseurl"]."/automatweb/images/up_r_arr.gif'></a>";
+					$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt=\"".t("Kustuta &uuml;lemine cell")."\" title=\"".t("Kustuta &uuml;lemine cell")."\" src='".$this->cfg["baseurl"]."/automatweb/images/up_r_arr.gif'></a>";
 				}
 				if ($a != 0)
 				{
-					$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt='Kustuta vasak cell' title='Kustuta vasak cell' src='".$this->cfg["baseurl"]."/automatweb/images/left_r_arr.gif'></a>";
+					$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt=\"".t("Kustuta vasak cell")."\" title=\"".t("Kustuta vasak cell")."\" src='".$this->cfg["baseurl"]."/automatweb/images/left_r_arr.gif'></a>";
 				}
 				if (($a+$spans["colspan"]) != $this->arr["cols"])
 				{
-					$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt='Kustuta parem cell' title='Kustuta parem cell' src='".$this->cfg["baseurl"]."/automatweb/images/right_r_arr.gif'></a>";
+					$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt=\"".t("Kustuta parem cell")."\" title=\"".t("Kustuta parem cell")."\" src='".$this->cfg["baseurl"]."/automatweb/images/right_r_arr.gif'></a>";
 				}
 				if (($i+$spans["rowspan"]) != $this->arr["rows"])
 				{
-					$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt='Kustuta alumine cell' title='Kustuta alumine cell' src='".$this->cfg["baseurl"]."/automatweb/images/down_r_arr.gif'></a>";
+					$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt=\"".t("Kustuta alumine cell")."\" title=\"".t("Kustuta alumine cell")."\" src='".$this->cfg["baseurl"]."/automatweb/images/down_r_arr.gif'></a>";
 				}
 
 				$map = $this->arr["map"][$i][$a];
@@ -281,7 +285,7 @@ class grid_editor extends class_base
 					$cc = $this->parse("COL_CONTENT");
 				}
 				$this->vars(array(
-					"COL_CONTENT" => $cc
+					"COL_CONTENT" => $cc,
 				));
 				$col.=$this->parse("COL");
 			}
@@ -289,7 +293,10 @@ class grid_editor extends class_base
 			if ($i == 0)
 			{
 				$this->vars(array(
-					"after" => "-1"
+					"after" => "-1",
+					"add_row" => t("Lisa rida"),
+					"del_row" => t("Kustuta rida"),
+					"confirm_row_del" => t("Oled kindel et soovid rida kustutada?"),
 				));
 				$fr = $this->parse("FIRST_R");
 			}
@@ -305,6 +312,7 @@ class grid_editor extends class_base
 
 		$this->vars(array(
 			"selstyle" => $this->mk_my_orb("sel_style", array(), "layout"),
+			"cell_count" => t("Mitu lahtrit kustutada"),
 			"oid" => $oid
 		));
 		return $this->parse();
@@ -1925,56 +1933,56 @@ class grid_editor extends class_base
 		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			'name' => 'merge_down',
-			'tooltip' => 'Merge alla',
+			'tooltip' => t("Merge alla"),
 			'url' => 'javascript:exec_cmd(\'merge_down\')',
 			'img' => 'down_r_arr.png'
 		));
 		$tb->add_button(array(
 			'name' => 'merge_up',
-			'tooltip' => 'Merge &uuml;les',
+			'tooltip' => t("Merge &uuml;les"),
 			'url' => 'javascript:exec_cmd(\'merge_up\')',
 			'img' => 'up_r_arr.png'
 		));
 		$tb->add_button(array(
 			'name' => 'merge_left',
-			'tooltip' => 'Merge vasakule',
+			'tooltip' => t("Merge vasakule"),
 			'url' => 'javascript:exec_cmd(\'merge_left\')',
 			'img' => 'left_r_arr.png'
 		));
 		$tb->add_button(array(
 			'name' => 'merge_right',
-			'tooltip' => 'Merge paremale',
+			'tooltip' => t("Merge paremale"),
 			'url' => 'javascript:exec_cmd(\'merge_right\')',
 			'img' => 'right_r_arr.png'
 		));
 
 		$tb->add_button(array(
 			'name' => 'split_down',
-			'tooltip' => 'Split alla',
+			'tooltip' => t("Split alla"),
 			'url' => 'javascript:exec_cmd(\'split_down\')',
 			'img' => 'merge_down.png'
 		));
 		$tb->add_button(array(
 			'name' => 'split_up',
-			'tooltip' => 'Split &uuml;les',
+			'tooltip' => t("Split &uuml;les"),
 			'url' => 'javascript:exec_cmd(\'split_up\')',
 			'img' => 'merge_up.png'
 		));
 		$tb->add_button(array(
 			'name' => 'split_left',
-			'tooltip' => 'Split vasakule',
+			'tooltip' => t("Split vasakule"),
 			'url' => 'javascript:exec_cmd(\'split_left\')',
 			'img' => 'merge_left.png'
 		));
 		$tb->add_button(array(
 			'name' => 'split_right',
-			'tooltip' => 'Split paremale',
+			'tooltip' => t("Split paremale"),
 			'url' => 'javascript:exec_cmd(\'split_right\')',
 			'img' => 'merge_right.png'
 		));
 		$tb->add_button(array(
 			'name' => 'delete_rc',
-			'tooltip' => 'Kustuta read/tulbad',
+			'tooltip' => t("Kustuta read/tulbad"),
 			'url' => 'javascript:exec_cmd(\'delete_rc\')',
 			'img' => 'delete.gif'
 		));

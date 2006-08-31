@@ -125,7 +125,7 @@ function exec_cmd(cmd)
 {VAR:toolbar}
 <table border=1 cellspacing=1 cellpadding=2>
 	<tr>
-		<td bgcolor="#FFFFFF" colspan=2 class="celltext">Mitu celli kustutada:</td><td bgcolor="#FFFFFF" colspan=100>
+		<td bgcolor="#FFFFFF" colspan=2 class="celltext">{VAR:cell_count}</td><td bgcolor="#FFFFFF" colspan=100>
 			<input type='text' name='exp_count' value=1 size=2 class="formtext">
 		</td>
 	</tr>
@@ -136,11 +136,11 @@ function exec_cmd(cmd)
 					<tr>
 						<td valign="bottom">
 							<!-- SUB: FIRST_C -->
-								<a href="javascript:add_col({VAR:after},1);"><img alt="Lisa tulp" title="Lisa tulp" src='{VAR:baseurl}/automatweb/images/rohe_nool_alla.gif' border=0></a>
+								<a href="javascript:add_col({VAR:after},1);"><img alt="{VAR:add_col_caption}" title="{VAR:add_col_caption}" src='{VAR:baseurl}/automatweb/images/rohe_nool_alla.gif' border=0></a>
 							<!-- END SUB: FIRST_C -->
 						</td>
-						<td valign="bottom" align="middle"><input type='checkbox' NAME='dc_{VAR:col}' value=1><br><a href="#" onClick="if (confirm('Oled kindel et tahad tulpa kustutada?')) { del_col({VAR:col},1); return true;} else { return false;} "><img alt="Kustuta tulp" title="Kustuta tulp" src='{VAR:baseurl}/automatweb/images/puna_nool_alla.gif' border=0></a></td>
-						<td valign="bottom"><a href='javascript:add_col({VAR:after}, 1)'><img alt="Lisa tulp" title="Lisa tulp" src='{VAR:baseurl}/automatweb/images/rohe_nool_alla.gif' border=0></a></td>
+						<td valign="bottom" align="middle"><input type='checkbox' NAME='dc_{VAR:col}' value=1><br><a href="#" onClick="if (confirm('{VAR:confirm_col_del}')) { del_col({VAR:col},1); return true;} else { return false;} "><img alt="{VAR:del_col}" title="{VAR:del_col}" src='{VAR:baseurl}/automatweb/images/puna_nool_alla.gif' border=0></a></td>
+						<td valign="bottom"><a href='javascript:add_col({VAR:after}, 1)'><img alt="{VAR:add_col}" title="{VAR:add_col}" src='{VAR:baseurl}/automatweb/images/rohe_nool_alla.gif' border=0></a></td>
 					</tr>
 				</table>
 			</td>
@@ -184,15 +184,15 @@ function exec_cmd(cmd)
 				<tr>
 					<td align="left">
 						<!-- SUB: FIRST_R -->
-							<a href='javascript:add_row({VAR:after},1)'><img alt="Lisa rida" title="Lisa rida" src='{VAR:baseurl}/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a>
+							<a href='javascript:add_row({VAR:after},1)'><img alt="{VAR:add_row}" title="{VAR:add_row}" src='{VAR:baseurl}/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a>
 						<!-- END SUB: FIRST_R -->
 					</td>
 				</tr>
 				<tr>
-					<td><a href="#" onClick="if (confirm('Oled kindel et soovid rida kustutada?')) { del_row({VAR:row},1); return true; } else {return false;} "><img src='{VAR:baseurl}/automatweb/images/puna_nool_vasakule.gif' alt="Kustuta rida" title="Kustuta rida" BORDER=0></a><input type='checkbox' NAME='dr_{VAR:row}' value=1></td>
+					<td><a href="#" onClick="if (confirm('{VAR:confirm_row_del}')) { del_row({VAR:row},1); return true; } else {return false;} "><img src='{VAR:baseurl}/automatweb/images/puna_nool_vasakule.gif' alt="{VAR:del_row}" title="{VAR:del_row}" BORDER=0></a><input type='checkbox' NAME='dr_{VAR:row}' value=1></td>
 				</tr>
 				<tr>
-					<td><a href='javascript:add_row({VAR:after},1)'><img alt="Lisa rida" title="Lisa rida" src='{VAR:baseurl}/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a></td>
+					<td><a href='javascript:add_row({VAR:after},1)'><img alt="{VAR:add_row}" title="{VAR:add_row}" src='{VAR:baseurl}/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a></td>
 				</tr>
 			</table>
 		</td>
