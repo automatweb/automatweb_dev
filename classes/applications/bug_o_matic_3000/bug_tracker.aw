@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.76 2006/08/29 07:38:28 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.76 2006/08/29 07:38:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.77 2006/09/01 12:23:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.77 2006/09/01 12:23:44 dragut Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -9,7 +9,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 /*
 
-@classinfo syslog_type=ST_BUG_TRACKER relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_BUG_TRACKER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
@@ -127,6 +127,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Kustuta
 
 @default group=charts
+@default group=gantt_chart
 
 	@property gantt_p type=text store=no 
 	@caption Kelle buge n&auml;idata
@@ -135,6 +136,11 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property gantt_summary type=text store=no
 	@caption Kokkuv&otilde;te
+
+@default group=my_bugs_stat
+
+	@property my_bugs_stat_table type=table no_caption=1
+	@caption Minuga seotud bugid
 
 @default group=settings_people
 
@@ -170,6 +176,8 @@ define("BUG_STATUS_CLOSED", 5);
 
 @groupinfo archive caption="Arhiiv" submit=no
 @groupinfo charts caption="Kaardid" submit=no
+	@groupinfo gantt_chart caption="Gantti diagramm" parent=charts submit=no
+	@groupinfo my_bugs_stat caption="Minu Bugide stat" parent=charts
 @groupinfo settings caption="Seaded" submit=no
 	@groupinfo settings_people caption="Isikud" submit=no parent=settings
 
@@ -395,6 +403,87 @@ class bug_tracker extends class_base
 		}
 		return $retval;
 	}	
+
+	function _get_my_bugs_stat_table($arr)
+	{
+		classload("core/date/date_calc");
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi')
+		));
+		$t->define_field(array(
+			'name' => 'comment_count',
+			'caption' => t('Kommentaaride arv'),
+			'width' => '10%',
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'working_hours',
+			'caption' => t('T&ouml;&ouml;tunnid'),
+			'width' => '10%',
+			'align' => 'center'
+		));
+
+		$bug_comments = new object_list(array(
+			"class_id" => CL_BUG_COMMENT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start()/*-7*3600*24*/),
+			"sort_by" => "objects.createdby, objects.created"
+		));
+
+		$uid = aw_global_get('uid');
+		$bugs = array();
+		foreach ($bug_comments->arr() as $id => $bug_comment)
+		{
+			if ($bug_comment->createdby() == '')
+			{
+				$text = $com->comment();
+				if (preg_match("/cvs commit by ([^ ]+) in/imsU", $text, $mt))
+				{
+					if ($uid == $mt[1])
+					{
+						$bugs[$bug_comment->parent()][$id] = $bug_comment;
+					}
+				}
+
+			}
+			else
+			{
+				if ($uid == $bug_comment->createdby())
+				{
+					$bugs[$bug_comment->parent()][$id] = $bug_comment;
+				}
+			}
+		}
+
+		foreach ($bugs as $bug_id => $comments)
+		{
+			$bug = new object($bug_id);
+			$working_hours = 0;
+			foreach ($comments as $comment_id => $comment)
+			{
+				$working_hours += $comment->prop('add_wh');
+			}
+			$t->define_data(array(
+				'name' => html::href(array(
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $bug_id,
+						'return_url' => get_ru()
+					), CL_BUG),
+					'caption' => $bug->name()
+				)),
+				'comment_count' => count($comments),
+				'working_hours' => $working_hours
+			));
+		}
+
+		return PROP_OK;
+	}
 
 	function _bug_toolbar($arr)
 	{

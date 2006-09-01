@@ -358,7 +358,7 @@
       <property>
             <name>gantt_p</name>
             <table>objects</table>
-            <group>charts</group>
+            <group>gantt_chart</group>
             <type>text</type>
             <store>no</store>
             <field>gantt_p</field>
@@ -367,7 +367,7 @@
       <property>
             <name>gantt</name>
             <table>objects</table>
-            <group>charts</group>
+            <group>gantt_chart</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -376,11 +376,21 @@
       <property>
             <name>gantt_summary</name>
             <table>objects</table>
-            <group>charts</group>
+            <group>gantt_chart</group>
             <type>text</type>
             <store>no</store>
             <field>gantt_summary</field>
             <caption>Kokkuv&amp;amp;otilde;te</caption>
+      </property>
+      <property>
+            <name>my_bugs_stat_table</name>
+            <table>objects</table>
+            <group>my_bugs_stat</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>my_bugs_stat_table</field>
+            <caption>Minuga seotud bugid</caption>
       </property>
       <property>
             <name>sp_tb</name>
@@ -441,6 +451,7 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <bugs>
@@ -504,6 +515,15 @@
                   <caption>Kaardid</caption>
                   <submit>no</submit>
             </charts>
+            <gantt_chart>
+                  <caption>Gantti diagramm</caption>
+                  <parent>charts</parent>
+                  <submit>no</submit>
+            </gantt_chart>
+            <my_bugs_stat>
+                  <caption>Minu Bugide stat</caption>
+                  <parent>charts</parent>
+            </my_bugs_stat>
             <settings>
                   <caption>Seaded</caption>
                   <submit>no</submit>
