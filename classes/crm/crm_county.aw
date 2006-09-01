@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.3 2005/04/21 09:23:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.4 2006/09/01 09:35:40 markop Exp $
 /*
 	@tableinfo kliendibaas_maakond index=oid master_table=objects master_index=oid
 
@@ -9,8 +9,21 @@
 	@property name type=textbox size=20
 	@caption Maakonna nimetus
 	
+	@property country type=relpicker reltype=RELTYPE_COUNTRY
+	@caption Riik
+	
+	@property area type=relpicker reltype=RELTYPE_AREA
+	@caption Piirkond
+	
+	
 @property comment type=textarea cols=40 rows=3 table=objects field=comment
 @caption Kommentaar
+	
+@reltype COUNTRY value=1 clid=CL_CRM_COUNTRY
+@caption Riik	
+	
+@reltype AREA value=2 clid=CL_CRM_AREA
+@caption Piirkond		
 	
 //	@default table=kliendibaas_maakond
 
@@ -18,7 +31,13 @@
 
 */
 
+
+
+
+
 /*
+
+
 
 CREATE TABLE `kliendibaas_maakond` (
   `oid` int(11) NOT NULL default '0',

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.1 2006/07/10 03:29:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.2 2006/09/01 09:35:40 markop Exp $
 // crm_area.aw - Piirkond 
 /*
 
@@ -8,8 +8,14 @@
 @default table=objects
 @default group=general
 
+@property country type=relpicker reltype=RELTYPE_COUNTRY
+@caption Riik
+
 @property comment type=textarea cols=40 rows=3 table=objects field=comment
 @caption Kommentaar
+
+@reltype COUNTRY value=1 clid=CL_CRM_COUNTRY
+@caption Riik
 
 */
 

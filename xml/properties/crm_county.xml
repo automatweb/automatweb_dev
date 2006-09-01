@@ -10,6 +10,24 @@
             <caption>Maakonna nimetus</caption>
       </property>
       <property>
+            <name>country</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTRY</reltype>
+            <field>country</field>
+            <caption>Riik</caption>
+      </property>
+      <property>
+            <name>area</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_AREA</reltype>
+            <field>area</field>
+            <caption>Piirkond</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
@@ -29,5 +47,17 @@
                   <master_index>oid</master_index>
             </kliendibaas_maakond>
       </tableinfo>
+      <reltypes>
+            <COUNTRY>
+                  <value>1</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Riik	</caption>
+            </COUNTRY>
+            <AREA>
+                  <value>2</value>
+                  <clid>CL_CRM_AREA</clid>
+                  <caption>Piirkond		</caption>
+            </AREA>
+      </reltypes>
 </properties>
 

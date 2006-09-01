@@ -8,8 +8,31 @@
 	@property name type=textbox size=20
 	@caption Linna nimetus
 
+
+	@property country type=relpicker reltype=RELTYPE_COUNTRY
+	@caption Riik
+	
+	@property area type=relpicker reltype=RELTYPE_AREA
+	@caption Piirkond
+	
+	@property county type=relpicker reltype=RELTYPE_COUNTY
+	@caption Maakond
+
 	@property comment type=textarea cols=40 rows=3 table=objects field=comment
 	@caption Kommentaar
+
+
+@reltype COUNTRY value=1 clid=CL_CRM_COUNTRY
+@caption Riik
+
+@reltype AREA value=2 clid=CL_CRM_AREA
+@caption Piirkond
+
+@reltype COUNTY value=3 clid=CL_CRM_COUNTY
+@caption Maakond
+
+
+
 
 	@classinfo no_status=1 syslog_type=ST_CRM_CITY
 	

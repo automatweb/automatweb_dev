@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>country</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTRY</reltype>
+            <field>country</field>
+            <caption>Riik</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
@@ -16,5 +25,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <COUNTRY>
+                  <value>1</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Riik</caption>
+            </COUNTRY>
+      </reltypes>
 </properties>
 
