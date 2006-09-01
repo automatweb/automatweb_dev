@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.5 2006/09/01 12:55:12 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.6 2006/09/01 13:11:21 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -11,6 +11,9 @@
 
 	@groupinfo sub_general caption="&Uuml;ldine" parent=general
 	@default group=sub_general
+		
+		@property name type=textbox
+		@caption Nimi
 
 		@property keeper type=relpicker reltype=RELTYPE_KEEPER table=watercraft_management
 		@caption Haldaja
