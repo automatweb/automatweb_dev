@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.4 2006/08/31 14:36:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.5 2006/09/01 12:55:12 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -383,7 +383,7 @@ class watercraft_management extends class_base
 					{
 						if ($name == 'seller')
 						{
-						//	$filter['CL_WATERCRAFT.RELTYPE_SELLER.class_id'] = $arr['request'][$name];
+							$filter['CL_WATERCRAFT.RELTYPE_SELLER.class_id'] = $arr['request'][$name];
 						}
 						else
 						{
