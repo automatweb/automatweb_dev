@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.4 2006/09/01 09:35:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.5 2006/09/01 09:38:30 markop Exp $
 /*
 	@tableinfo kliendibaas_maakond index=oid master_table=objects master_index=oid
 
 	@default table=objects
 	@default group=general
-
+	@default field=meta
 	@property name type=textbox size=20
 	@caption Maakonna nimetus
 	

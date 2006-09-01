@@ -4,7 +4,7 @@
 
 	@default table=objects
 	@default group=general
-
+	@default field=meta
 	@property name type=textbox size=20
 	@caption Linna nimetus
 

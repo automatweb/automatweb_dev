@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.2 2006/09/01 09:35:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.3 2006/09/01 09:38:30 markop Exp $
 // crm_area.aw - Piirkond 
 /*
 
@@ -7,6 +7,7 @@
 
 @default table=objects
 @default group=general
+@default field=meta
 
 @property country type=relpicker reltype=RELTYPE_COUNTRY
 @caption Riik

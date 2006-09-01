@@ -4,19 +4,19 @@
             <name>country</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
             <type>relpicker</type>
             <reltype>RELTYPE_COUNTRY</reltype>
-            <field>country</field>
             <caption>Riik</caption>
       </property>
       <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
+            <field>comment</field>
             <type>textarea</type>
             <cols>40</cols>
             <rows>3</rows>
-            <field>comment</field>
             <caption>Kommentaar</caption>
       </property>
       <classinfo>
