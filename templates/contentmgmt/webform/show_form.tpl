@@ -13,12 +13,11 @@
 function submit_changeform(action)
 {
 	{VAR:submit_handler}
-	if (typeof action == "string" && action != "")
+	if (typeof action == "string" && action.length>0)
 	{
 		document.changeform.action.value = action;
 	};
-
-//	document.changeform.submit();
+	document.changeform.submit();
 }
 </script>
 </form>
