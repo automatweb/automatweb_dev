@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.51 2006/08/23 13:20:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.52 2006/09/01 13:50:27 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -816,7 +816,7 @@ class bug extends class_base
 			$com_str .= $this->parse("COMMENT");
 		}
 
-		$main_c = $this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("bug_content")))));
+		$main_c = $o->createdby()." @ ".date("d.m.Y H:i", $o->created())."<br>".$this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("bug_content")))));
 		$this->vars(array(
 			"main_text" => $so == "asc" ? $main_c : "",
 			"main_text_after" => $so == "asc" ? "" : $main_c,
