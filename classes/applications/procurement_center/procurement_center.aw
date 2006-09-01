@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.6 2006/08/31 14:43:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.7 2006/09/01 12:06:59 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -83,6 +83,7 @@
 @groupinfo offers caption="Pakkumised"
 @groupinfo offers_tree caption="Puuvaates" parent=offers
 @default group=offers_tree
+	@property offers_tb type=toolbar no_caption=1 store=no
 	@layout offers_l type=hbox width=30%:70%
 		@property offers_tr type=treeview no_caption=1 store=no parent=offers_l
 		@property offers_tbl type=table no_caption=1 store=no parent=offers_l
@@ -417,7 +418,7 @@ class procurement_center extends class_base
 		
 		$arr["prop"]["vcl_inst"]->add_item(0, array(
 			"id" => 1,
-			"name" => t('Aadressid'),
+			"name" => t('Asukoht'),
 			"url" => $this->mk_my_orb("change",array(
 				"id" => $arr["obj_inst"]->id(),
 				"group" => "offerers",
@@ -449,7 +450,7 @@ class procurement_center extends class_base
 				"class_id" => CL_CRM_AREA,
 				"sort_by" => "name",
 				"lang_id" => array(),
-//				"parent" => $arr["request"]["country_id"]
+				"country" => $arr["request"]["country"]
 			));
 			foreach($areas->names() as $id => $name)
 			{
@@ -473,7 +474,7 @@ class procurement_center extends class_base
 				"class_id" => CL_CRM_CITY,
 				"sort_by" => "name",
 				"lang_id" => array(),
-//				"parent" => $arr["request"]["country_id"]
+				"area" => $arr["request"]["area"]
 			));
 			foreach($city->names() as $id => $name)
 			{
@@ -563,6 +564,7 @@ class procurement_center extends class_base
 						"p_id" => $o->id(),
 						"result" => "valid",
 					)),
+					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
 				));
 				$x++;
 			}
@@ -600,6 +602,7 @@ class procurement_center extends class_base
 						"p_id" => $o->id(),
 						"result" => "archived",
 					)),
+					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
 				));
 				$x++;
 			}
@@ -696,8 +699,7 @@ class procurement_center extends class_base
 		if(is_oid($arr["request"]["p_id"]) && $this->can("view", $arr["request"]["p_id"]))
 		{
 			$p_obj = obj($arr["request"]["p_id"]);
-			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
-			if($p_obj->class_id() == CL_CRM_MENU)
+			if($p_obj->class_id() == CL_MENU)
 			{
 				$offerers = new object_list(array(
 					"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
@@ -707,10 +709,11 @@ class procurement_center extends class_base
 				));
 				$filter["offerer"] = $offerers->ids();
 			}
+			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
 		}
 		
 		//otsingust
-		if(sizeof($arr["obj_inst"]->meta("search_data")) > 0)
+		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
 			$ol = $this->search_offers($arr["obj_inst"]);
 			$arr["obj_inst"]->set_meta("search_data", null);
@@ -808,11 +811,12 @@ class procurement_center extends class_base
 			'tooltip'=> t('Uus')
 		));
 
-		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->id();
+		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->prop("offerers_folder");
 
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text'=> t('Pakkumine'),
+//			'link'=> $this->mk_my_orb("insert_offer" , array("return_url" => get_ru(), "parent" => $parent)),
 			'link'=> html::get_new_url(CL_PROCUREMENT_OFFER, $parent, array("return_url" => get_ru()))
 		));
 
@@ -827,7 +831,7 @@ class procurement_center extends class_base
 			'img' => 'delete.gif',
 			'tooltip' => t('Kustuta valitud hanked'),
 			'action' => 'delete_procurements',
-			'confirm' => t("Kas oled kindel et soovid valitud hanked kustudada?")
+			'confirm' => t("Kas oled kindel et soovid valitud pakkumised kustudada?")
 		));
 	}
 	
@@ -845,7 +849,7 @@ class procurement_center extends class_base
 		{
 			$p_obj = obj($arr["request"]["p_id"]);
 			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
-			if($p_obj->class_id() == CL_CRM_MENU)
+			if($p_obj->class_id() == CL_MENU)
 			{
 				$offerers = new object_list(array(
 					"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
@@ -856,9 +860,9 @@ class procurement_center extends class_base
 				$filter["offerer"] = $offerers->ids();
 			}
 		}
-		
+
 		//otsingust
-		if(sizeof($arr["obj_inst"]->meta("search_data")) > 0)
+		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
 			$ol = $this->search_buyings($arr["obj_inst"]);
 			$arr["obj_inst"]->set_meta("search_data", null);
@@ -981,7 +985,7 @@ class procurement_center extends class_base
 			'name' => 'del',
 			'img' => 'delete.gif',
 			'tooltip' => t('Kustuta ost'),
-			'action' => 'delete_purchases',
+			'action' => 'delete_cos',
 			'confirm' => t("Kas oled kindel et soovid valitud ostud kustudada?")
 		));
 	}
@@ -1079,7 +1083,8 @@ class procurement_center extends class_base
 						"group" => "buyings",
 						"p_id" => $offerer->id(),
 						)),
-				));
+					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
+					));
 			}
 		}
 	}
@@ -1135,7 +1140,7 @@ class procurement_center extends class_base
 			}
 		}
 		//otsingust
-		if(sizeof($arr["obj_inst"]->meta("search_data")) > 0)
+		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
 			$ol = $this->search_offerers($arr["obj_inst"]);
 			$arr["obj_inst"]->set_meta("search_data", null);
@@ -1145,7 +1150,6 @@ class procurement_center extends class_base
 			"class_id" => array(CL_FOLDER, CL_CRM_COMPANY, CL_CRM_PERSON),
 			"parent" => $parent,
 			"lang_id" => array(),
-			"site_id" => array()
 			));
 		$p_inst = get_instance(CL_CRM_PERSON);
 		foreach($ol->arr() as $o)
@@ -1381,13 +1385,7 @@ class procurement_center extends class_base
 			'tooltip'=> t('Uus')
 		));
 
-		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->prop("impl_folder");
-
-		$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text'=> t('Kataloog'),
-			'link'=> html::get_new_url(CL_MENU, $parent, array("return_url" => get_ru()))
-		));
+		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->prop("offerers_folder");
 
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
@@ -1422,12 +1420,6 @@ class procurement_center extends class_base
 			'text'=> t('Pakkumine'),
 			'link'=> html::get_new_url(CL_PROCUREMENT_OFFER, $parent, array(
 				"return_url" => get_ru(),
-				"pseh" => aw_register_ps_event_handler(
-						CL_PROCUREMENT_CENTER, 
-						"handle_impl_submit", 
-						array("id" => $arr["obj_inst"]->id()),
-						CL_PROCUREMENT_OFFER
-				)
 			))
 		));
 
@@ -1475,6 +1467,19 @@ class procurement_center extends class_base
 		$this->quote(&$ss);
 		$cfg->set_simple_config("login_grp_redirect", $ss);
 	*/
+	}
+	
+	/**
+		@attrib name=insert_offer
+	**/
+	function insert_offer($arr)
+	{
+		$o = obj();
+		$o->set_parent($_GET["parent"]);
+		$o->set_class_id(CL_PROCUREMENT_OFFER);
+		$o->set_name(sprintf(t("pakkumine %s"), $o->id()));
+		$o->save();
+		return html::get_change_url($o->id());
 	}
 	
 	/**

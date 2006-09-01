@@ -1,14 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.5 2006/09/01 09:38:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.6 2006/09/01 12:05:25 markop Exp $
 /*
 	@tableinfo kliendibaas_maakond index=oid master_table=objects master_index=oid
 
 	@default table=objects
 	@default group=general
-	@default field=meta
+
 	@property name type=textbox size=20
 	@caption Maakonna nimetus
-	
+		
+	@default field=meta
 	@property country type=relpicker reltype=RELTYPE_COUNTRY
 	@caption Riik
 	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.3 2006/08/23 15:04:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.4 2006/09/01 12:06:59 markop Exp $
 // purchase.aw - Ost 
 /*
 
@@ -15,7 +15,7 @@
 @property buyer type=relpicker reltype=RELTYPE_BUYER
 @caption Ostja
 
-@property bargainer type=relpicker reltype=RELTYPE_BUYER
+@property offerer type=relpicker reltype=RELTYPE_OFFERER
 @caption Hankija
 
 @property stat type=select 
@@ -57,6 +57,8 @@ Ostud (kuvatakse pakkumise read, mis on selle ostuga seotud)
 @reltype OFFER value=2 clid=CL_PROCUREMENT_OFFER
 @caption Pakkumine 
 
+@reltype OFFERER value=3 clid=CL_CRM_PERSON,CL_CRM_COMPANY
+@caption Pakkuja
 */
 class purchase extends class_base
 {
@@ -66,6 +68,7 @@ class purchase extends class_base
 			"tpldir" => "applications/procurement_center/purchase",
 			"clid" => CL_PURCHASE
 		));
+		$this->stats = array(0 => "aktiivne" , 1 => "arhiveeritud");
 	}
 
 	function get_property($arr)
@@ -84,7 +87,7 @@ class purchase extends class_base
 				}
 				break;
 			case "stat":
-				$prop["options"] = array(0 => "aktiivne" , 1 => "arhiveeritud");
+				$prop["options"] = $this->stats;
 				break;
 			
 			
@@ -283,7 +286,7 @@ class purchase extends class_base
 				'unit'		=> $unit,
 				'price'		=> $row->prop("price"),
 				'currency'	=> $currency,
-				'shipment'	=> $row->prop("shipment"),
+				'shipment'	=> date("d.m.Y", $row->prop("shipment")),
 			));
 		}
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.9 2006/08/28 13:40:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.10 2006/09/01 12:06:59 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -66,7 +66,7 @@
 @reltype PROCUREMENT value=1 clid=CL_PROCUREMENT
 @caption Hange
 
-@reltype OFFERER value=2 clid=CL_CRM_COMPANY
+@reltype OFFERER value=2 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Pakkuja
 */
 
@@ -549,7 +549,8 @@ class procurement_offer extends class_base
 
 	function calculate_price($o)
 	{
-		$reqs = $this->model->get_requirements_from_procurement(obj($o->prop("procurement")));
+		if(is_oid($o->prop("procurement")) && $this->can("view", $o->prop("procurement")))$reqs = $this->model->get_requirements_from_procurement(obj($o->prop("procurement")));
+		else return;
 		$hrs = 0;
 		$pr = 0;
 		$data = $o->meta("defaults");
@@ -1096,9 +1097,11 @@ class procurement_offer extends class_base
 
 	function callback_generate_scripts($arr)
 	{
+		if($arr["obj_inst"]->id() > 0)
 		$conns = $arr["obj_inst"]->connections_to(array(
 			'class' => CL_PROCUREMENT_OFFER_ROW,
 		));
+		else return;
 		$procurement_inst = get_instance(CL_PROCUREMENT);
 		$max_x = 0;
 		$xs = array();
