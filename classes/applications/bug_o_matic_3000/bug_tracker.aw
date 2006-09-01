@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.77 2006/09/01 12:23:44 dragut Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.77 2006/09/01 12:23:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.78 2006/09/01 12:28:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.78 2006/09/01 12:28:13 dragut Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -442,7 +442,7 @@ class bug_tracker extends class_base
 		{
 			if ($bug_comment->createdby() == '')
 			{
-				$text = $com->comment();
+				$text = $bug_comment->comment();
 				if (preg_match("/cvs commit by ([^ ]+) in/imsU", $text, $mt))
 				{
 					if ($uid == $mt[1])
