@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.44 2006/08/23 07:41:08 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.45 2006/09/01 11:52:33 kristo Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -2644,6 +2644,7 @@ exit_function("jigaboo");
 		}
 
 		$options = implode ("\n", $options);
+		$options = html_entity_decode($options, ENT_NOQUOTES, aw_global_get("charset"));
 		$charset = aw_global_get("charset");
 		header ("Content-Type: text/html; charset=" . $charset);
 		echo $options;
