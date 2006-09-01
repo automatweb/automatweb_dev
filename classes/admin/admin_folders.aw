@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.60 2006/04/11 10:55:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.61 2006/09/01 11:22:39 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -146,10 +146,17 @@ class admin_folders extends aw_template
 			"get_branch_func" => $this->mk_my_orb("gen_folders",array("NG" => $_GET["NG"], "period" => $this->period, "parent" => "0"),"workbench"),
 	
 		));
+
+		$has_items = array();
 		if (is_array($rn) && count($rn) >1)
 		{
 			foreach($rn as $rn_i)
 			{
+				if (isset($has_items[$rn_i]))
+				{
+					continue;
+				}
+				$has_items[$rn_i] = 1;
 				$rn_o = obj($rn_i);
 				$this->tree->add_item(0,array(
 					"id" => $rn_i,
@@ -190,10 +197,15 @@ class admin_folders extends aw_template
 		$second_level_parents = array();
 		foreach($ol->arr() as $menu)
 		{
+			if (isset($has_items[$menu->id()]))
+			{
+				continue;
+			}
 			$rs = $this->resolve_item_new($menu);
 			if ($rs !== false)
 			{	
 				$this->tree->add_item($rs["parent"], $rs);
+				$has_items[$menu->id()] = 1;
 				// also, gather all id's of objects that were inserted in the tree, so that
 				// we can also get their submenus so that the tree know is they have subitems
 				$second_level_parents[$rs["id"]] = $rs["id"];
@@ -220,10 +232,15 @@ class admin_folders extends aw_template
 			));
 			foreach($ol->arr() as $menu)
 			{
+				if (isset($has_items[$menu->id()]))
+				{
+					continue;
+				}
 				$rs = $this->resolve_item_new($menu);
 				if ($rs !== false)
 				{	
 					$this->tree->add_item($rs["parent"], $rs);
+					$has_items[$menu->id()] = 1;
 				}
 			}
 		}
