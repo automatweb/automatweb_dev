@@ -973,13 +973,14 @@ class crm_company_bills_impl extends class_base
 				if ($this->can("view", $signer_id))
 				{
 					$signer_o = obj($signer_id);
-					$tmp[] = trim(mb_strtoupper($signer_o->prop("firstname")));
+					$tmp[] = trim(mb_strtoupper($signer_o->prop("comment")));
 				}
 			}
 			$rfn = join(",", $tmp);
 			if ($rfn == "")
 			{
-				$rfn = $fn;
+				//$rfn = $fn;
+				$rfn = $p->prop("comment");
 			}
 			
 			$penalty = "0,00";
@@ -988,6 +989,8 @@ class crm_company_bills_impl extends class_base
 				$cust = obj($b->prop("customer"));
 				if($cust->prop("bill_penalty_pct")) $penalty = $cust->prop("bill_penalty_pct");
 			}
+			if($b->prop("bill_trans_date")) $date = date("d.m.Y", $b->prop("bill_trans_date"));
+			else $date = date("d.m.Y", $b->prop("bill_date"));
 			// bill info row
 			$brow = array();
 			$brow[] = $b->prop("bill_no");						// arve nr
@@ -1016,7 +1019,7 @@ class crm_company_bills_impl extends class_base
 			$brow[] = "";
 			$brow[] = ($cur ? $cur : t("EEK"));	// EEK (valuuta) 
 			$brow[] = ""; 
-			$brow[] = date("d.m.Y", $b->prop("bill_trans_date"));		// arve kuupäev
+			$brow[] = $date;	// arve kuupäev//////////////
 			$brow[] = 0;			// (teadmata - vaikeväärtus 0)   
 			$brow[] = "";
 			$brow[] = "";
@@ -1027,7 +1030,7 @@ class crm_company_bills_impl extends class_base
 			$brow[] = "";
 			$brow[] = ""; 
 			$ct[] = join("\t", $brow);
-
+			
 			// customer info row
 			$custr = array();
 			if ($this->can("view", $b->prop("customer")))
@@ -1245,6 +1248,7 @@ class crm_company_bills_impl extends class_base
 		}
 		else
 		{
+			if(!count($row["persons"])) return "";
 			$list = new object_list(array(
 				"oid" => $row["persons"],
 				"lang_id" => array(),
