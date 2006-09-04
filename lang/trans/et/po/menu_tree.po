@@ -15,67 +15,53 @@ msgstr ""
 msgid "Klassi Sisukaart help"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_needs_translation
 #: classes/contentmgmt/menu_tree.aw:prop_needs_translation
-msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_needs_translation_comment
 #: classes/contentmgmt/menu_tree.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_needs_translation_help
 #: classes/contentmgmt/menu_tree.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_is_translated
 #: classes/contentmgmt/menu_tree.aw:prop_is_translated
-msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_is_translated_comment
 #: classes/contentmgmt/menu_tree.aw:prop_is_translated_comment
-msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_is_translated_help
 #: classes/contentmgmt/menu_tree.aw:prop_is_translated_help
-msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_menus
 #: classes/contentmgmt/menu_tree.aw:prop_menus
-msgid "Omaduse Menüüd (menus) caption"
+msgid "Omaduse Men&uuml;&uuml;d (menus) caption"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_menus_comment
 #: classes/contentmgmt/menu_tree.aw:prop_menus_comment
-msgid "Omaduse Menüüd (menus) kommentaar"
-msgstr "menüüde valik, mille kohta sisukaart luuakse."
+msgid "Omaduse Men&uuml;&uuml;d (menus) kommentaar"
+msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_menus_help
 #: classes/contentmgmt/menu_tree.aw:prop_menus_help
-msgid "Omaduse Menüüd (menus) help"
-msgstr "menüüde valik, mille kohta sisukaart luuakse."
+msgid "Omaduse Men&uuml;&uuml;d (menus) help"
+msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_children_only
 #: classes/contentmgmt/menu_tree.aw:prop_children_only
-msgid "Omaduse Ainult alammenüüd (children_only) caption"
+msgid "Omaduse Ainult alammen&uuml;&uuml;d (children_only) caption"
 msgstr ""
 
-# classes/contentmgmt/menu_tree.aw:prop_children_only_comment
 #: classes/contentmgmt/menu_tree.aw:prop_children_only_comment
-msgid "Omaduse Ainult alammenüüd (children_only) kommentaar"
+msgid "Omaduse Ainult alammen&uuml;&uuml;d (children_only) kommentaar"
 msgstr ""
-"valiku tegemisel kuvatakse sisukaardis ainult valitud menüüde alammenüüd."
 
-# classes/contentmgmt/menu_tree.aw:prop_children_only_help
 #: classes/contentmgmt/menu_tree.aw:prop_children_only_help
-msgid "Omaduse Ainult alammenüüd (children_only) help"
+msgid "Omaduse Ainult alammen&uuml;&uuml;d (children_only) help"
 msgstr ""
-"valiku tegemisel kuvatakse sisukaardis ainult valitud menüüde alammenüüd."
 
 # classes/contentmgmt/menu_tree.aw:prop_template
 #: classes/contentmgmt/menu_tree.aw:prop_template
@@ -109,21 +95,35 @@ msgstr ""
 
 # classes/contentmgmt/menu_tree.aw:prop_no_unclickable
 #: classes/contentmgmt/menu_tree.aw:prop_no_unclickable
-msgid ""
-"Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid "
-"(no_unclickable) caption"
+msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) caption"
 msgstr ""
 
 # classes/contentmgmt/menu_tree.aw:prop_no_unclickable_comment
 #: classes/contentmgmt/menu_tree.aw:prop_no_unclickable_comment
-msgid ""
-"Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid "
-"(no_unclickable) kommentaar"
+msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/menu_tree.aw:prop_no_unclickable_help
 #: classes/contentmgmt/menu_tree.aw:prop_no_unclickable_help
-msgid ""
-"Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid "
-"(no_unclickable) help"
+msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) help"
 msgstr ""
+
+#: classes/contentmgmt/menu_tree.aw:47
+msgid "K&otilde;ik"
+msgstr ""
+
+# classes/contentmgmt/menu_tree.aw:prop_menus_comment
+#~ msgid "Omaduse Menüüd (menus) kommentaar"
+#~ msgstr "menüüde valik, mille kohta sisukaart luuakse."
+
+# classes/contentmgmt/menu_tree.aw:prop_menus_help
+#~ msgid "Omaduse Menüüd (menus) help"
+#~ msgstr "menüüde valik, mille kohta sisukaart luuakse."
+
+# classes/contentmgmt/menu_tree.aw:prop_children_only_comment
+#~ msgid "Omaduse Ainult alammenüüd (children_only) kommentaar"
+#~ msgstr "valiku tegemisel kuvatakse sisukaardis ainult valitud menüüde alammenüüd."
+
+# classes/contentmgmt/menu_tree.aw:prop_children_only_help
+#~ msgid "Omaduse Ainult alammenüüd (children_only) help"
+#~ msgstr "valiku tegemisel kuvatakse sisukaardis ainult valitud menüüde alammenüüd."

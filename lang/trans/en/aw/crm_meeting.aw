@@ -1,14 +1,12 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Sisu (content) caption"] = "Content";
 $GLOBALS["TRANS"]["Omaduse Klient (customer) caption"] = "Customer";
 $GLOBALS["TRANS"]["Omaduse Projekt (project) caption"] = "Project";
-$GLOBALS["TRANS"]["Omaduse Osalejad (info_on_object) caption"] = "Participants";
+$GLOBALS["TRANS"]["Omaduse Kokkuvõte (summary) caption"] = "Summary";
 $GLOBALS["TRANS"]["Omaduse Tehtud (is_done) caption"] = "Done";
 $GLOBALS["TRANS"]["Omaduse Kestab terve päeva (whole_day) caption"] = "Lasts all day";
-$GLOBALS["TRANS"]["Omaduse Sisu (content) caption"] = "Content";
 $GLOBALS["TRANS"]["Omaduse Arve number (bill_no) caption"] = "Invoice no";
 $GLOBALS["TRANS"]["Omaduse Osalejad (participants) caption"] = "Participants";
-$GLOBALS["TRANS"]["Omaduse Kokkuvõte (summary) caption"] = "Summary";
-$GLOBALS["TRANS"]["Omaduse Aliastehaldur (aliasmgr) caption"] = "Connection manager";
 $GLOBALS["TRANS"]["Omaduse Toolbar (task_toolbar) caption"] = "Toolbar";
 $GLOBALS["TRANS"]["Omaduse Kordused (recurrence) caption"] = "Recurrences";
 $GLOBALS["TRANS"]["Omaduse Kalendrid (calendar_selector) caption"] = "Calendars";
@@ -31,8 +29,8 @@ $GLOBALS["TRANS"]["Grupi Osalejad (participants) pealkiri"] = "Participants";
 $GLOBALS["TRANS"]["Grupi Ressursid (resources) pealkiri"] = "Resources";
 $GLOBALS["TRANS"]["Seose Kordus (RELTYPE_RECURRENCE) tekst"] = "Recurrence";
 $GLOBALS["TRANS"]["--Vali--"] = "--Select--";
-$GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Kustuta valitud"] = "Delete selected";
 $GLOBALS["TRANS"]["Oled kindel, et tahad valitud osalejad eemaldada?"] = "Are you sure you want to remove the selected participants?";
+$GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 ?>

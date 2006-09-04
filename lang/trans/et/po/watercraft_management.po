@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/watercraft_management/watercraft_management.aw:class__help
-msgid "Klassi  help"
+#: classes/applications/watercraft_management/watercraft_management.aw:class_1118_help
+msgid "Klassi Veesõidukite haldus help"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:prop_keeper
@@ -38,16 +37,16 @@ msgstr ""
 msgid "Omaduse Vees&otilde;idukite andmed (data) help"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:prop_cities
-msgid "Omaduse Linnad (cities) caption"
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_search
+msgid "Omaduse Otsing (search) caption"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:prop_cities_comment
-msgid "Omaduse Linnad (cities) kommentaar"
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_search_comment
+msgid "Omaduse Otsing (search) kommentaar"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:prop_cities_help
-msgid "Omaduse Linnad (cities) help"
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_search_help
+msgid "Omaduse Otsing (search) help"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:prop_manufacturers
@@ -62,16 +61,64 @@ msgstr ""
 msgid "Omaduse Tootjad (manufacturers) help"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:prop_search
-msgid "Omaduse Otsing (search) caption"
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations
+msgid "Omaduse Asukohad (locations) caption"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:prop_search_comment
-msgid "Omaduse Otsing (search) kommentaar"
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations_comment
+msgid "Omaduse Asukohad (locations) kommentaar"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:prop_search_help
-msgid "Omaduse Otsing (search) help"
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations_help
+msgid "Omaduse Asukohad (locations) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_manufacturers_management_toolbar
+msgid "Omaduse Tootjate t&ouml;&ouml;riistariba (manufacturers_management_toolbar) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_manufacturers_management_toolbar_comment
+msgid "Omaduse Tootjate t&ouml;&ouml;riistariba (manufacturers_management_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_manufacturers_management_toolbar_help
+msgid "Omaduse Tootjate t&ouml;&ouml;riistariba (manufacturers_management_toolbar) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_manufacturers_management_table
+msgid "Omaduse Tootjad (manufacturers_management_table) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_manufacturers_management_table_comment
+msgid "Omaduse Tootjad (manufacturers_management_table) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_manufacturers_management_table_help
+msgid "Omaduse Tootjad (manufacturers_management_table) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations_management_toolbar
+msgid "Omaduse Asukohtade t&ouml;&ouml;riistariba (locations_management_toolbar) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations_management_toolbar_comment
+msgid "Omaduse Asukohtade t&ouml;&ouml;riistariba (locations_management_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations_management_toolbar_help
+msgid "Omaduse Asukohtade t&ouml;&ouml;riistariba (locations_management_toolbar) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations_management_table
+msgid "Omaduse Asukohad (locations_management_table) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations_management_table_comment
+msgid "Omaduse Asukohad (locations_management_table) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_locations_management_table_help
+msgid "Omaduse Asukohad (locations_management_table) help"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:prop_watercrafts_toolbar
@@ -86,6 +133,186 @@ msgstr ""
 msgid "Omaduse Vees&otilde;idukite t&ouml;&ouml;riistariba (watercrafts_toolbar) help"
 msgstr ""
 
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_watercraft_type
+msgid "Omaduse Aluse t&uuml;&uuml;p (watercraft_type) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_watercraft_type_comment
+msgid "Omaduse Aluse t&uuml;&uuml;p (watercraft_type) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_watercraft_type_help
+msgid "Omaduse Aluse t&uuml;&uuml;p (watercraft_type) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_condition
+msgid "Omaduse Seisukord (condition) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_condition_comment
+msgid "Omaduse Seisukord (condition) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_condition_help
+msgid "Omaduse Seisukord (condition) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_body_material
+msgid "Omaduse Kerematerjal (body_material) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_body_material_comment
+msgid "Omaduse Kerematerjal (body_material) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_body_material_help
+msgid "Omaduse Kerematerjal (body_material) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_location
+msgid "Omaduse Asukoht (location) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_location_comment
+msgid "Omaduse Asukoht (location) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_location_help
+msgid "Omaduse Asukoht (location) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_length
+msgid "Omaduse Pikkus (length) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_length_comment
+msgid "Omaduse Pikkus (length) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_length_help
+msgid "Omaduse Pikkus (length) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_width
+msgid "Omaduse Laius (width) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_width_comment
+msgid "Omaduse Laius (width) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_width_help
+msgid "Omaduse Laius (width) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_height
+msgid "Omaduse K&otilde;rgus (height) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_height_comment
+msgid "Omaduse K&otilde;rgus (height) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_height_help
+msgid "Omaduse K&otilde;rgus (height) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_weight
+msgid "Omaduse Raskus (weight) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_weight_comment
+msgid "Omaduse Raskus (weight) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_weight_help
+msgid "Omaduse Raskus (weight) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_draught
+msgid "Omaduse S&uuml;vis (draught) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_draught_comment
+msgid "Omaduse S&uuml;vis (draught) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_draught_help
+msgid "Omaduse S&uuml;vis (draught) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_creation_year
+msgid "Omaduse Valmistamisaasta (creation_year) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_creation_year_comment
+msgid "Omaduse Valmistamisaasta (creation_year) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_creation_year_help
+msgid "Omaduse Valmistamisaasta (creation_year) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_passanger_count
+msgid "Omaduse Reisijaid (passanger_count) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_passanger_count_comment
+msgid "Omaduse Reisijaid (passanger_count) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_passanger_count_help
+msgid "Omaduse Reisijaid (passanger_count) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_additional_equipment
+msgid "Omaduse Lisavarustus (additional_equipment) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_additional_equipment_comment
+msgid "Omaduse Lisavarustus (additional_equipment) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_additional_equipment_help
+msgid "Omaduse Lisavarustus (additional_equipment) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_seller
+msgid "Omaduse M&uuml;&uuml;ja (seller) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_seller_comment
+msgid "Omaduse M&uuml;&uuml;ja (seller) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_seller_help
+msgid "Omaduse M&uuml;&uuml;ja (seller) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_price
+msgid "Omaduse Hind (price) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_price_comment
+msgid "Omaduse Hind (price) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_price_help
+msgid "Omaduse Hind (price) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_watercraft_search_submit
+msgid "Omaduse Otsi (watercraft_search_submit) caption"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_watercraft_search_submit_comment
+msgid "Omaduse Otsi (watercraft_search_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:prop_watercraft_search_submit_help
+msgid "Omaduse Otsi (watercraft_search_submit) help"
+msgstr ""
+
 #: classes/applications/watercraft_management/watercraft_management.aw:prop_watercrafts_table
 msgid "Omaduse Vees&otilde;idukite tabel (watercrafts_table) caption"
 msgstr ""
@@ -96,6 +323,30 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:prop_watercrafts_table_help
 msgid "Omaduse Vees&otilde;idukite tabel (watercrafts_table) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:group_sub_general
+msgid "Grupi &Uuml;ldine (sub_general) pealkiri"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:group_sub_general_help
+msgid "Grupi &Uuml;ldine (sub_general) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:group_manufacturers_management
+msgid "Grupi Tootjate haldamine (manufacturers_management) pealkiri"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:group_manufacturers_management_help
+msgid "Grupi Tootjate haldamine (manufacturers_management) help"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:group_locations_management
+msgid "Grupi Asukohtade haldamine (locations_management) pealkiri"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:group_locations_management_help
+msgid "Grupi Asukohtade haldamine (locations_management) help"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:group_watercrafts
@@ -207,11 +458,11 @@ msgid "Seose Haldaja (RELTYPE_KEEPER) tekst"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:rel_RELTYPE_DATA
-msgid "Seose Vees&amp;otilde;idukite andmed (RELTYPE_DATA) tekst"
+msgid "Seose Vees&otilde;idukite andmed (RELTYPE_DATA) tekst"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:rel_RELTYPE_CITIES
-msgid "Seose Linnad (RELTYPE_CITIES) tekst"
+#: classes/applications/watercraft_management/watercraft_management.aw:rel_RELTYPE_LOCATIONS
+msgid "Seose Asukohad (RELTYPE_LOCATIONS) tekst"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:rel_RELTYPE_MANUFACTURERS
@@ -222,63 +473,105 @@ msgstr ""
 msgid "Seose Otsing (RELTYPE_SEARCH) tekst"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:111
+#: classes/applications/watercraft_management/watercraft_management.aw:164
+msgid "Eraisik"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:165
+msgid "Firma"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:185
+#: classes/applications/watercraft_management/watercraft_management.aw:189
+#: classes/applications/watercraft_management/watercraft_management.aw:193
+#: classes/applications/watercraft_management/watercraft_management.aw:197
+#: classes/applications/watercraft_management/watercraft_management.aw:223
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:262
 msgid "Uus vees&otilde;iduk"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:121
+#: classes/applications/watercraft_management/watercraft_management.aw:272
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:128
+#: classes/applications/watercraft_management/watercraft_management.aw:279
+#: classes/applications/watercraft_management/watercraft_management.aw:489
+#: classes/applications/watercraft_management/watercraft_management.aw:555
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:130
+#: classes/applications/watercraft_management/watercraft_management.aw:281
+#: classes/applications/watercraft_management/watercraft_management.aw:491
+#: classes/applications/watercraft_management/watercraft_management.aw:557
 msgid "Oled kindel et soovid valitud objektid kustutada?"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:143
+#: classes/applications/watercraft_management/watercraft_management.aw:290
+#: classes/applications/watercraft_management/watercraft_management.aw:303
+msgid "Otsingu seaded"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:318
+#: classes/applications/watercraft_management/watercraft_management.aw:504
+#: classes/applications/watercraft_management/watercraft_management.aw:570
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:322
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:147
+#: classes/applications/watercraft_management/watercraft_management.aw:326
 msgid "Tootja"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:151
+#: classes/applications/watercraft_management/watercraft_management.aw:330
 msgid "Mark"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:155
+#: classes/applications/watercraft_management/watercraft_management.aw:334
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:159
+#: classes/applications/watercraft_management/watercraft_management.aw:338
 msgid "M&uuml;&uuml;ja"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:163
+#: classes/applications/watercraft_management/watercraft_management.aw:342
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:167
+#: classes/applications/watercraft_management/watercraft_management.aw:346
 msgid "N&auml;htav"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:173
+#: classes/applications/watercraft_management/watercraft_management.aw:352
 msgid "Arhiivis"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:179
+#: classes/applications/watercraft_management/watercraft_management.aw:358
+#: classes/applications/watercraft_management/watercraft_management.aw:508
+#: classes/applications/watercraft_management/watercraft_management.aw:574
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:227 classes/applications/watercraft_management/watercraft_management.aw:228
+#: classes/applications/watercraft_management/watercraft_management.aw:460
+#: classes/applications/watercraft_management/watercraft_management.aw:461
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:227 classes/applications/watercraft_management/watercraft_management.aw:228
+#: classes/applications/watercraft_management/watercraft_management.aw:460
+#: classes/applications/watercraft_management/watercraft_management.aw:461
 msgid "Ei"
 msgstr ""
 
+#: classes/applications/watercraft_management/watercraft_management.aw:479
+msgid "Uus Tootja"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:545
+msgid "Uus asukoht"
+msgstr ""

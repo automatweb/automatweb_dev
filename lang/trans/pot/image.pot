@@ -390,7 +390,7 @@ msgstr ""
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
 
-#: classes/image.aw:1416
+#: classes/image.aw:1448
 msgid "Lisa"
 msgstr ""
 

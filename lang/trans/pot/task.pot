@@ -802,7 +802,7 @@ msgstr ""
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:658 classes/applications/groupware/task.aw:2643 classes/applications/groupware/task.aw:2654 classes/applications/groupware/task.aw:2660 classes/applications/groupware/task.aw:2666 classes/applications/groupware/task.aw:2859
+#: classes/applications/groupware/task.aw:658 classes/applications/groupware/task.aw:2643 classes/applications/groupware/task.aw:2654 classes/applications/groupware/task.aw:2660 classes/applications/groupware/task.aw:2666 classes/applications/groupware/task.aw:2868
 msgid "Otsi"
 msgstr ""
 
@@ -970,7 +970,7 @@ msgstr ""
 msgid "Loo uus arve"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2573 classes/applications/groupware/task.aw:2815
+#: classes/applications/groupware/task.aw:2573 classes/applications/groupware/task.aw:2824
 msgid "Uus"
 msgstr ""
 
@@ -1014,35 +1014,35 @@ msgstr ""
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2888
+#: classes/applications/groupware/task.aw:2897
 msgid ""
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2889
+#: classes/applications/groupware/task.aw:2898
 msgid "Memo"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2890
+#: classes/applications/groupware/task.aw:2899
 msgid "CRM Dokument"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2891
+#: classes/applications/groupware/task.aw:2900
 msgid "Leping"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2892
+#: classes/applications/groupware/task.aw:2901
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2916
+#: classes/applications/groupware/task.aw:2925
 msgid "Manuse nimi"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2922
+#: classes/applications/groupware/task.aw:2931
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2928
+#: classes/applications/groupware/task.aw:2937
 msgid "Viimane muutja"
 msgstr ""
 

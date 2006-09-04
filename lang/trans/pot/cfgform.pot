@@ -571,11 +571,11 @@ msgid "Seose Salvestamise kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:rel_RELTYPE_VIEWCONTROLLER
-msgid "Seose N&amp;auml;itamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
+msgid "Seose N&auml;itamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:rel_RELTYPE_OUTPUT
-msgid "Seose V&auml;ljund (RELTYPE_OUTPUT) tekst"
+msgid "Seose Väljund (RELTYPE_OUTPUT) tekst"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:174

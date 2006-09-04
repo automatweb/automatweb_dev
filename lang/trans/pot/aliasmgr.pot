@@ -10,51 +10,55 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/aliasmgr.aw:155 classes/aliasmgr.aw:190 classes/aliasmgr.aw:300
-msgid ""
+#: classes/aliasmgr.aw:156
+msgid "Lihtsam otsing"
 msgstr ""
 
-#: classes/aliasmgr.aw:164
+#: classes/aliasmgr.aw:163
 msgid "Klass"
 msgstr ""
 
-#: classes/aliasmgr.aw:308
+#: classes/aliasmgr.aw:190
+msgid "T&auml;psem otsing"
+msgstr ""
+
+#: classes/aliasmgr.aw:307
 msgid "Nimi"
 msgstr ""
 
-#: classes/aliasmgr.aw:314
+#: classes/aliasmgr.aw:313
 msgid "Keel"
 msgstr ""
 
-#: classes/aliasmgr.aw:321
+#: classes/aliasmgr.aw:320
 msgid "Asukoht"
 msgstr ""
 
-#: classes/aliasmgr.aw:327
+#: classes/aliasmgr.aw:326
 msgid "Alias"
 msgstr ""
 
-#: classes/aliasmgr.aw:335
+#: classes/aliasmgr.aw:334
 msgid "Link"
 msgstr ""
 
-#: classes/aliasmgr.aw:344
+#: classes/aliasmgr.aw:343
 msgid "Muutja"
 msgstr ""
 
-#: classes/aliasmgr.aw:352
+#: classes/aliasmgr.aw:351
 msgid "Muudetud"
 msgstr ""
 
-#: classes/aliasmgr.aw:363
-msgid "Tüüp"
+#: classes/aliasmgr.aw:362
+msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/aliasmgr.aw:371 classes/aliasmgr.aw:975
-msgid "Seose tüüp"
+#: classes/aliasmgr.aw:370 classes/aliasmgr.aw:975
+msgid "Seose t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/aliasmgr.aw:492
+#: classes/aliasmgr.aw:491
 msgid "&otilde;igus"
 msgstr ""
 
@@ -79,7 +83,7 @@ msgid "Otsi"
 msgstr ""
 
 #: classes/aliasmgr.aw:1028
-msgid "Tõlgi"
+msgid "T&otilde;lgi"
 msgstr ""
 
 #: classes/aliasmgr.aw:1039

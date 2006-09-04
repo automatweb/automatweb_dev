@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:47 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,86 +9,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/aliasmgr.aw:156
+msgid "Lihtsam otsing"
+msgstr "Simple search"
 
-#: classes/aliasmgr.aw:136 classes/aliasmgr.aw:171 classes/aliasmgr.aw:487
-msgid ""
-msgstr ""
-
-#: classes/aliasmgr.aw:145
+#: classes/aliasmgr.aw:163
 msgid "Klass"
 msgstr "Class"
 
-#: classes/aliasmgr.aw:495
+#: classes/aliasmgr.aw:190
+msgid "T&auml;psem otsing"
+msgstr "Advanced search"
+
+#: classes/aliasmgr.aw:307
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/aliasmgr.aw:501
+#: classes/aliasmgr.aw:313
 msgid "Keel"
 msgstr "Language"
 
-#: classes/aliasmgr.aw:508
-msgid "Muu info"
-msgstr "Other info"
+#: classes/aliasmgr.aw:320
+msgid "Asukoht"
+msgstr "Location"
 
-#: classes/aliasmgr.aw:514
+#: classes/aliasmgr.aw:326
 msgid "Alias"
 msgstr "Alias"
 
-#: classes/aliasmgr.aw:522
+#: classes/aliasmgr.aw:334
 msgid "Link"
 msgstr "Link"
 
-#: classes/aliasmgr.aw:531
-msgid "Cache"
-msgstr "Cache"
-
-#: classes/aliasmgr.aw:540
+#: classes/aliasmgr.aw:343
 msgid "Muutja"
 msgstr "Modifiedby"
 
-#: classes/aliasmgr.aw:548
+#: classes/aliasmgr.aw:351
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/aliasmgr.aw:559
-msgid "Tüüp"
+#: classes/aliasmgr.aw:362
+msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/aliasmgr.aw:567
-msgid "Seose tüüp"
-msgstr "Connection type"
+#: classes/aliasmgr.aw:370 classes/aliasmgr.aw:975
+msgid "Seose t&uuml;&uuml;p"
+msgstr "Relation type"
 
-#: classes/aliasmgr.aw:948 classes/aliasmgr.aw:961
-msgid "Objekti t&uuml;&uuml;p"
-msgstr "Object type"
-
-#: classes/aliasmgr.aw:1132
-msgid "Lisa uus objekt"
-msgstr "Add new object"
-
-#: classes/aliasmgr.aw:1142 classes/aliasmgr.aw:1151
-msgid "Otsi"
-msgstr "Search"
-
-#: classes/aliasmgr.aw:1168
-msgid "Tõlgi"
-msgstr "Translate"
-
-#: classes/aliasmgr.aw:1179
-msgid "Reload"
-msgstr "Reload"
-
-#: classes/aliasmgr.aw:1190
-msgid "Loo seos(ed)"
-msgstr "Add connection(s)"
-
-#: classes/aliasmgr.aw:1200
-msgid "Salvesta"
-msgstr "Save"
-
-#: classes/aliasmgr.aw:1207
-msgid "Kustuta valitud seos(ed)"
-msgstr "Delete selected connection(s)"
+#: classes/aliasmgr.aw:491
+msgid "&otilde;igus"
+msgstr "Permission"
 
 #: classes/aliasmgr.aw:876
 msgid "Too vend"
@@ -97,3 +68,50 @@ msgstr "Brother"
 #: classes/aliasmgr.aw:886
 msgid "&Otilde;igus"
 msgstr "Permission"
+
+#: classes/aliasmgr.aw:948 classes/aliasmgr.aw:961
+msgid "Objekti t&uuml;&uuml;p"
+msgstr "Object type"
+
+#: classes/aliasmgr.aw:992
+msgid "Lisa uus objekt"
+msgstr "Add new object"
+
+#: classes/aliasmgr.aw:1002 classes/aliasmgr.aw:1011
+msgid "Otsi"
+msgstr "Search"
+
+#: classes/aliasmgr.aw:1028
+msgid "T&otilde;lgi"
+msgstr "Translate"
+
+#: classes/aliasmgr.aw:1039
+msgid "Reload"
+msgstr "Reload"
+
+#: classes/aliasmgr.aw:1050
+msgid "Loo seos(ed)"
+msgstr "Add connection(s)"
+
+#: classes/aliasmgr.aw:1060
+msgid "Salvesta"
+msgstr "Save"
+
+#: classes/aliasmgr.aw:1067
+msgid "Kustuta valitud seos(ed)"
+msgstr "Delete selected connection(s)"
+
+#~ msgid "Tüüp"
+#~ msgstr "Type"
+
+#~ msgid "Seose tüüp"
+#~ msgstr "Connection type"
+
+#~ msgid "Tõlgi"
+#~ msgstr "Translate"
+
+#~ msgid "Muu info"
+#~ msgstr "Other info"
+
+#~ msgid "Cache"
+#~ msgstr "Cache"

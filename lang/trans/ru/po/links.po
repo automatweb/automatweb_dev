@@ -329,22 +329,22 @@ msgstr ""
 msgid "Viimati muudetud"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:263
+#: classes/contentmgmt/links.aw:277
 msgid "T&ouml;&ouml;riistariba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:264
+#: classes/contentmgmt/links.aw:278
 msgid "Aadressi riba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:265
+#: classes/contentmgmt/links.aw:279
 msgid "Men&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:266
+#: classes/contentmgmt/links.aw:280
 msgid "Kerimisriba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:298
+#: classes/contentmgmt/links.aw:312
 msgid "Saidi sisene link"
 msgstr ""

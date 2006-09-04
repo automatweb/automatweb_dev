@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_sorter
 msgid "Omaduse Piltide j&auml;rjestamine (sorter) caption"
-msgstr ""
+msgstr "Ordering images by"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_sorter_comment
 msgid "Omaduse Piltide j&auml;rjestamine (sorter) kommentaar"
@@ -115,7 +115,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_refresh
 msgid "Omaduse V&auml;rskenda (refresh) caption"
-msgstr ""
+msgstr "Refresh"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_refresh_comment
 msgid "Omaduse V&auml;rskenda (refresh) kommentaar"
@@ -161,7 +161,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_manage
 msgid "Grupi Halda pilte (manage) pealkiri"
-msgstr ""
+msgstr "Manage images"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_manage_help
 msgid "Grupi Halda pilte (manage) help"
@@ -185,31 +185,31 @@ msgstr "Name"
 #: classes/contentmgmt/gallery/mini_gallery.aw:66
 #: classes/contentmgmt/gallery/mini_gallery.aw:473
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:67
 msgid "Loomise kuup&auml;ev vanemad enne"
-msgstr ""
+msgstr "Creation date older first"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:68
 msgid "Muutmise kuup&auml;ev vanemad enne"
-msgstr ""
+msgstr "Modification date older first"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:69
 msgid "Pildistamise kuup&auml;ev vanemad enne"
-msgstr ""
+msgstr "Photographing date older first"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:70
 msgid "Loomise kuup&auml;ev uuemad enne"
-msgstr ""
+msgstr "Creation date newer first"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:71
 msgid "Muutmise kuup&auml;ev uuemad enne"
-msgstr ""
+msgstr "Modification date newew first"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:72
 msgid "Pildistamise kuup&auml;ev uuemad enne"
-msgstr ""
+msgstr "Photographing date newer first"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:269
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
@@ -225,27 +225,27 @@ msgstr " images"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:445
 msgid "Lisa uus pilt"
-msgstr ""
+msgstr "Add new image"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:451
 msgid "Salvesta pildid"
-msgstr ""
+msgstr "Save images"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:457
 msgid "Kustuta valitud pildid"
-msgstr ""
+msgstr "Delete selected images"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:459
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
-msgstr ""
+msgstr "Are you sure you want to delete selected images?"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:479
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:485
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #~ msgid "Omaduse Piltide j&amp;auml;rjestamine (sorter) caption"
 #~ msgstr "Ordering images by"

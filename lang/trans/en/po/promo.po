@@ -235,7 +235,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) caption"
-msgstr "Documents will be sorted by"
+msgstr "Ordering documents by"
 
 #: classes/contentmgmt/promo.aw:prop_sort_by_comment
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) kommentaar"
@@ -262,7 +262,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by2
 msgid "Omaduse Dokumente j&auml;rjestatakse (2) (sort_by2) caption"
-msgstr "Documents will be sorted by"
+msgstr "Ordering documents by"
 
 #: classes/contentmgmt/promo.aw:prop_sort_by2_comment
 msgid "Omaduse Dokumente j&auml;rjestatakse (2) (sort_by2) kommentaar"
@@ -286,7 +286,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by3
 msgid "Omaduse Dokumente j&auml;rjestatakse (3) (sort_by3) caption"
-msgstr "Documents will be sorted by"
+msgstr "Ordering documents by"
 
 #: classes/contentmgmt/promo.aw:prop_sort_by3_comment
 msgid "Omaduse Dokumente j&auml;rjestatakse (3) (sort_by3) kommentaar"
@@ -564,29 +564,29 @@ msgid "Grupi M&auml;rks&otilde;nad (kws) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU
-msgid "Seose n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
-msgstr "display next to folder"
+msgid "Seose n&auml;ita men&uuml;&uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
+msgstr "Display next to folder"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_SOURCE
-msgid "Seose v&amp;otilde;ta dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_SOURCE) tekst"
-msgstr "get documents from this folder"
+msgid "Seose v&otilde;ta dokumente selle men&uuml;&uuml; alt (RELTYPE_DOC_SOURCE) tekst"
+msgstr "Get documents from this folder"
 
 # classes/contentmgmt/promo.aw:rel_RELTYPE_IMAGE
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
-msgstr "image"
+msgstr "Image"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_NO_SHOW_MENU
-msgid "Seose &amp;Auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
-msgstr "don't display next to folder"
+msgid "Seose &Auml;ra n&auml;ita men&uuml;&uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
+msgstr "Don't display next to folder"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_KEYWORD
-msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr "Keyword"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_IGNORE
-msgid "Seose ignoreeri dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_IGNORE) tekst"
-msgstr "ignore documents of this folder"
+msgid "Seose ignoreeri dokumente selle men&uuml;&uuml; alt (RELTYPE_DOC_IGNORE) tekst"
+msgstr "Ignore documents of this folder"
 
 #: classes/contentmgmt/promo.aw:222
 msgid "Vali template"
@@ -670,3 +670,18 @@ msgstr "Set as title"
 #: classes/contentmgmt/promo.aw:1084
 msgid "M&auml;rks&otilde;na"
 msgstr "Keyword"
+
+#~ msgid "Seose n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
+#~ msgstr "display next to folder"
+
+#~ msgid "Seose v&amp;otilde;ta dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_SOURCE) tekst"
+#~ msgstr "get documents from this folder"
+
+#~ msgid "Seose &amp;Auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
+#~ msgstr "don't display next to folder"
+
+#~ msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+#~ msgstr "Keyword"
+
+#~ msgid "Seose ignoreeri dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_IGNORE) tekst"
+#~ msgstr "ignore documents of this folder"

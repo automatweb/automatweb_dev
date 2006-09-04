@@ -87,6 +87,69 @@ msgstr ""
 msgid "Omaduse  (hrs_table) help"
 msgstr ""
 
+# classes/crm/crm_meeting.aw:prop_content
+#: classes/crm/crm_meeting.aw:prop_content
+msgid "Omaduse Sisu (content) caption"
+msgstr "Content"
+
+# classes/crm/crm_meeting.aw:prop_content_comment
+#: classes/crm/crm_meeting.aw:prop_content_comment
+msgid "Omaduse Sisu (content) kommentaar"
+msgstr ""
+
+# classes/crm/crm_meeting.aw:prop_content_help
+#: classes/crm/crm_meeting.aw:prop_content_help
+msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_parts_tb
+msgid "Omaduse  (parts_tb) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_parts_tb_comment
+msgid "Omaduse  (parts_tb) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_parts_tb_help
+msgid "Omaduse  (parts_tb) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_co_table
+msgid "Omaduse  (co_table) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_co_table_comment
+msgid "Omaduse  (co_table) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_co_table_help
+msgid "Omaduse  (co_table) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_proj_table
+msgid "Omaduse  (proj_table) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_proj_table_comment
+msgid "Omaduse  (proj_table) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_proj_table_help
+msgid "Omaduse  (proj_table) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_parts_table
+msgid "Omaduse  (parts_table) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_parts_table_comment
+msgid "Omaduse  (parts_table) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_parts_table_help
+msgid "Omaduse  (parts_table) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
 msgstr "Customer"
@@ -111,19 +174,41 @@ msgstr ""
 msgid "Omaduse Projekt (project) help"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_info_on_object
-#: classes/crm/crm_meeting.aw:prop_info_on_object
-msgid "Omaduse Osalejad (info_on_object) caption"
-msgstr "Participants"
-
-# classes/crm/crm_meeting.aw:prop_info_on_object_comment
-#: classes/crm/crm_meeting.aw:prop_info_on_object_comment
-msgid "Omaduse Osalejad (info_on_object) kommentaar"
+#: classes/crm/crm_meeting.aw:prop_files_tb
+msgid "Omaduse  (files_tb) caption"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_info_on_object_help
-#: classes/crm/crm_meeting.aw:prop_info_on_object_help
-msgid "Omaduse Osalejad (info_on_object) help"
+#: classes/crm/crm_meeting.aw:prop_files_tb_comment
+msgid "Omaduse  (files_tb) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_files_tb_help
+msgid "Omaduse  (files_tb) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_files_table
+msgid "Omaduse  (files_table) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_files_table_comment
+msgid "Omaduse  (files_table) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_files_table_help
+msgid "Omaduse  (files_table) help"
+msgstr ""
+
+# classes/crm/crm_meeting.aw:prop_summary
+#: classes/crm/crm_meeting.aw:prop_summary
+msgid "Omaduse Kokkuvõte (summary) caption"
+msgstr "Summary"
+
+#: classes/crm/crm_meeting.aw:prop_summary_comment
+msgid "Omaduse Kokkuvõte (summary) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_summary_help
+msgid "Omaduse Kokkuvõte (summary) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:prop_is_done
@@ -376,21 +461,6 @@ msgstr ""
 msgid "Omaduse User-defined textarea 3 (udefta3) help"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_content
-#: classes/crm/crm_meeting.aw:prop_content
-msgid "Omaduse Sisu (content) caption"
-msgstr "Content"
-
-# classes/crm/crm_meeting.aw:prop_content_comment
-#: classes/crm/crm_meeting.aw:prop_content_comment
-msgid "Omaduse Sisu (content) kommentaar"
-msgstr ""
-
-# classes/crm/crm_meeting.aw:prop_content_help
-#: classes/crm/crm_meeting.aw:prop_content_help
-msgid "Omaduse Sisu (content) help"
-msgstr ""
-
 #: classes/crm/crm_meeting.aw:prop_send_bill
 msgid "Omaduse Saata arve (send_bill) caption"
 msgstr ""
@@ -475,19 +545,6 @@ msgstr ""
 msgid "Omaduse Tunni hind (hr_price) help"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_summary
-#: classes/crm/crm_meeting.aw:prop_summary
-msgid "Omaduse Kokkuvõte (summary) caption"
-msgstr "Summary"
-
-#: classes/crm/crm_meeting.aw:prop_summary_comment
-msgid "Omaduse Kokkuvõte (summary) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:prop_summary_help
-msgid "Omaduse Kokkuvõte (summary) help"
-msgstr ""
-
 #: classes/crm/crm_meeting.aw:prop_controller_disp
 msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) caption"
 msgstr ""
@@ -498,21 +555,6 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_controller_disp_help
 msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) help"
-msgstr ""
-
-# classes/crm/crm_meeting.aw:prop_aliasmgr
-#: classes/crm/crm_meeting.aw:prop_aliasmgr
-msgid "Omaduse Aliastehaldur (aliasmgr) caption"
-msgstr "Connection manager"
-
-# classes/crm/crm_meeting.aw:prop_aliasmgr_comment
-#: classes/crm/crm_meeting.aw:prop_aliasmgr_comment
-msgid "Omaduse Aliastehaldur (aliasmgr) kommentaar"
-msgstr ""
-
-# classes/crm/crm_meeting.aw:prop_aliasmgr_help
-#: classes/crm/crm_meeting.aw:prop_aliasmgr_help
-msgid "Omaduse Aliastehaldur (aliasmgr) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:prop_task_toolbar
@@ -839,50 +881,81 @@ msgstr ""
 msgid "Seose Eeldustegevus (RELTYPE_PREDICATE) tekst"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:265
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_FILE
+msgid "Seose Fail (RELTYPE_FILE) tekst"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:316
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:266
+#: classes/crm/crm_meeting.aw:317
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:267
+#: classes/crm/crm_meeting.aw:318
 msgid "Terve p&auml;ev"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:268
+#: classes/crm/crm_meeting.aw:319
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:269
+#: classes/crm/crm_meeting.aw:320
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:484
+#: classes/crm/crm_meeting.aw:542
 msgid "--Vali--"
 msgstr "--Select--"
 
-#: classes/crm/crm_meeting.aw:566 classes/crm/crm_meeting.aw:612
-#: classes/crm/crm_meeting.aw:633
-msgid "Otsi"
-msgstr "Search"
-
-#: classes/crm/crm_meeting.aw:574 classes/crm/crm_meeting.aw:585
-msgid "Lisa isik organisatsiooni %s"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:623
+#: classes/crm/crm_meeting.aw:553
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/crm/crm_meeting.aw:625
+#: classes/crm/crm_meeting.aw:555
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr "Are you sure you want to remove the selected participants?"
 
-#: classes/crm/crm_meeting.aw:642
+#: classes/crm/crm_meeting.aw:563
+msgid "Otsi"
+msgstr "Search"
+
+#: classes/crm/crm_meeting.aw:572
 msgid "Salvesta"
 msgstr "Save"
+
+#: classes/crm/crm_meeting.aw:1085
+msgid "Prognoositav tundide arv"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1090
+msgid "Tegelik tundide arv"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1095
+msgid "Tundide arv kliendile"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1100
+msgid "Tunnihind"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1105
+msgid "Arve number"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:1139
+msgid "Loo uus arve"
+msgstr ""
+
+# classes/crm/crm_meeting.aw:prop_info_on_object
+#~ msgid "Omaduse Osalejad (info_on_object) caption"
+#~ msgstr "Participants"
+
+# classes/crm/crm_meeting.aw:prop_aliasmgr
+#~ msgid "Omaduse Aliastehaldur (aliasmgr) caption"
+#~ msgstr "Connection manager"
 
 # classes/crm/crm_meeting.aw:prop_start1
 #~ msgid "Omaduse Algab  (start1) caption"

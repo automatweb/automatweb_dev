@@ -531,11 +531,11 @@ msgid "Grupi M&auml;rks&otilde;nad (kws) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU
-msgid "Seose n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
+msgid "Seose n&auml;ita men&uuml;&uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_SOURCE
-msgid "Seose v&amp;otilde;ta dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_SOURCE) tekst"
+msgid "Seose v&otilde;ta dokumente selle men&uuml;&uuml; alt (RELTYPE_DOC_SOURCE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_IMAGE
@@ -543,15 +543,15 @@ msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_NO_SHOW_MENU
-msgid "Seose &amp;Auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
+msgid "Seose &Auml;ra n&auml;ita men&uuml;&uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_KEYWORD
-msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_IGNORE
-msgid "Seose ignoreeri dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_IGNORE) tekst"
+msgid "Seose ignoreeri dokumente selle men&uuml;&uuml; alt (RELTYPE_DOC_IGNORE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:222

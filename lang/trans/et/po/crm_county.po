@@ -10,17 +10,53 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/crm/crm_county.aw:class_140_help
+#: classes/crm/crm_county.aw:class_140_help
 msgid "Klassi Maakond help"
 msgstr ""
 
 # classes/crm/crm_county.aw:prop_name
+#: classes/crm/crm_county.aw:prop_name
 msgid "Omaduse Maakonna nimetus (name) caption"
 msgstr ""
 
 # classes/crm/crm_county.aw:prop_name_comment
+#: classes/crm/crm_county.aw:prop_name_comment
 msgid "Omaduse Maakonna nimetus (name) kommentaar"
 msgstr ""
 
 # classes/crm/crm_county.aw:prop_name_help
+#: classes/crm/crm_county.aw:prop_name_help
 msgid "Omaduse Maakonna nimetus (name) help"
+msgstr ""
+
+#: classes/crm/crm_county.aw:prop_country
+msgid "Omaduse Riik (country) caption"
+msgstr ""
+
+#: classes/crm/crm_county.aw:prop_country_comment
+msgid "Omaduse Riik (country) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_county.aw:prop_country_help
+msgid "Omaduse Riik (country) help"
+msgstr ""
+
+#: classes/crm/crm_county.aw:prop_area
+msgid "Omaduse Piirkond (area) caption"
+msgstr ""
+
+#: classes/crm/crm_county.aw:prop_area_comment
+msgid "Omaduse Piirkond (area) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_county.aw:prop_area_help
+msgid "Omaduse Piirkond (area) help"
+msgstr ""
+
+#: classes/crm/crm_county.aw:rel_RELTYPE_COUNTRY
+msgid "Seose Riik\t (RELTYPE_COUNTRY) tekst"
+msgstr ""
+
+#: classes/crm/crm_county.aw:rel_RELTYPE_AREA
+msgid "Seose Piirkond\t\t (RELTYPE_AREA) tekst"
 msgstr ""

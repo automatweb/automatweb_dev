@@ -43,9 +43,7 @@ msgstr "aadress, kuhu link viitab."
 # classes/contentmgmt/links.aw:prop_url_help
 #: classes/contentmgmt/links.aw:prop_url_help
 msgid "Omaduse URL (url) help"
-msgstr ""
-"aadress, kuhu link viitab. Kirjutatakse kujul http://www.struktuur.ee või "
-"saidi sisese lingi puhul dokumendi või kausta ID."
+msgstr "aadress, kuhu link viitab. Kirjutatakse kujul http://www.struktuur.ee või saidi sisese lingi puhul dokumendi või kausta ID."
 
 # classes/contentmgmt/links.aw:prop_docid
 #: classes/contentmgmt/links.aw:prop_docid
@@ -85,18 +83,12 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_url_int_text_comment
 #: classes/contentmgmt/links.aw:prop_url_int_text_comment
 msgid "Omaduse Saidi sisene link (url_int_text) kommentaar"
-msgstr ""
-"avades selle valiku, on võimalik nime või sisu järgi otsida saidi siseseid "
-"dokumente, millele link viitama panna."
+msgstr "avades selle valiku, on võimalik nime või sisu järgi otsida saidi siseseid dokumente, millele link viitama panna."
 
 # classes/contentmgmt/links.aw:prop_url_int_text_help
 #: classes/contentmgmt/links.aw:prop_url_int_text_help
 msgid "Omaduse Saidi sisene link (url_int_text) help"
-msgstr ""
-"avades selle valiku, on võimalik nime või sisu järgi otsida saidi siseseid "
-"dokumente, millele link viitama panna. Olles leidnud sobiva kinnita see "
-"\"Vali see\" lingil klikkides. Automaatselt pannakse lingile nimi ning "
-"täidetakse URL lahter."
+msgstr "avades selle valiku, on võimalik nime või sisu järgi otsida saidi siseseid dokumente, millele link viitama panna. Olles leidnud sobiva kinnita see \"Vali see\" lingil klikkides. Automaatselt pannakse lingile nimi ning täidetakse URL lahter."
 
 # classes/contentmgmt/links.aw:prop_alt
 #: classes/contentmgmt/links.aw:prop_alt
@@ -106,16 +98,12 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_alt_comment
 #: classes/contentmgmt/links.aw:prop_alt_comment
 msgid "Omaduse Alt tekst (alt) kommentaar"
-msgstr ""
-"tekst, mis ilmub kursori kõrvale nähtavale kui lingil olles kursorit mõni "
-"hetk mitte liigutada."
+msgstr "tekst, mis ilmub kursori kõrvale nähtavale kui lingil olles kursorit mõni hetk mitte liigutada."
 
 # classes/contentmgmt/links.aw:prop_alt_help
 #: classes/contentmgmt/links.aw:prop_alt_help
 msgid "Omaduse Alt tekst (alt) help"
-msgstr ""
-"tekst, mis ilmub kursori kõrvale nähtavale kui lingil olles kursorit mõni "
-"hetk mitte liigutada."
+msgstr "tekst, mis ilmub kursori kõrvale nähtavale kui lingil olles kursorit mõni hetk mitte liigutada."
 
 # classes/contentmgmt/links.aw:prop_newwindow
 #: classes/contentmgmt/links.aw:prop_newwindow
@@ -152,16 +140,12 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_use_javascript_comment
 #: classes/contentmgmt/links.aw:prop_use_javascript_comment
 msgid "Omaduse Kasuta javascripti (use_javascript) kommentaar"
-msgstr ""
-"võtab kasutusele kõik selles vaates olevad valikud. Selle valimisel avaneb "
-"lingi aadress automaatselt uues aknas."
+msgstr "võtab kasutusele kõik selles vaates olevad valikud. Selle valimisel avaneb lingi aadress automaatselt uues aknas."
 
 # classes/contentmgmt/links.aw:prop_use_javascript_help
 #: classes/contentmgmt/links.aw:prop_use_javascript_help
 msgid "Omaduse Kasuta javascripti (use_javascript) help"
-msgstr ""
-"võtab kasutusele kõik selles vaates olevad valikud. Selle valimisel avaneb "
-"lingi aadress automaatselt uues aknas."
+msgstr "võtab kasutusele kõik selles vaates olevad valikud. Selle valimisel avaneb lingi aadress automaatselt uues aknas."
 
 # classes/contentmgmt/links.aw:prop_newwinwidth
 #: classes/contentmgmt/links.aw:prop_newwinwidth
@@ -316,14 +300,12 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_link_image_active_until_comment
 #: classes/contentmgmt/links.aw:prop_link_image_active_until_comment
 msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) kommentaar"
-msgstr ""
-"pildi näitamise aeg. Sisestatud aja mõõdudes kuvatakse link jälle tekstina."
+msgstr "pildi näitamise aeg. Sisestatud aja mõõdudes kuvatakse link jälle tekstina."
 
 # classes/contentmgmt/links.aw:prop_link_image_active_until_help
 #: classes/contentmgmt/links.aw:prop_link_image_active_until_help
 msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) help"
-msgstr ""
-"pildi näitamise aeg. Sisestatud aja mõõdudes kuvatakse link jälle tekstina."
+msgstr "pildi näitamise aeg. Sisestatud aja mõõdudes kuvatakse link jälle tekstina."
 
 #: classes/contentmgmt/links.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
@@ -405,22 +387,22 @@ msgstr ""
 msgid "Viimati muudetud"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:263
+#: classes/contentmgmt/links.aw:277
 msgid "T&ouml;&ouml;riistariba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:264
+#: classes/contentmgmt/links.aw:278
 msgid "Aadressi riba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:265
+#: classes/contentmgmt/links.aw:279
 msgid "Men&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:266
+#: classes/contentmgmt/links.aw:280
 msgid "Kerimisriba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:298
+#: classes/contentmgmt/links.aw:312
 msgid "Saidi sisene link"
 msgstr ""

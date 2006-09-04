@@ -87,110 +87,138 @@ msgid "Omaduse  (offers) help"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:prop_files
-msgid "Omaduse  (files) caption"
+msgid "Omaduse Manused (files) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:prop_files_comment
-msgid "Omaduse  (files) kommentaar"
+msgid "Omaduse Manused (files) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:prop_files_help
-msgid "Omaduse  (files) help"
+msgid "Omaduse Manused (files) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_purchases
+msgid "Omaduse  (purchases) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_purchases_comment
+msgid "Omaduse  (purchases) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:prop_purchases_help
+msgid "Omaduse  (purchases) help"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:group_offers
-msgid "Grupi offers (offers) pealkiri"
+msgid "Grupi Pakkumised (offers) pealkiri"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:group_offers_help
-msgid "Grupi offers (offers) help"
+msgid "Grupi Pakkumised (offers) help"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:group_files
-msgid "Grupi files (files) pealkiri"
+msgid "Grupi Failid (files) pealkiri"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:group_files_help
-msgid "Grupi files (files) help"
+msgid "Grupi Failid (files) help"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:126
+#: classes/applications/procurement_center/purchase.aw:group_purchases
+msgid "Grupi Ostud (purchases) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:group_purchases_help
+msgid "Grupi Ostud (purchases) help"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:rel_RELTYPE_BUYER
+msgid "Seose Ostja  (RELTYPE_BUYER) tekst"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:rel_RELTYPE_OFFER
+msgid "Seose Pakkumine  (RELTYPE_OFFER) tekst"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:129
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:136 classes/applications/procurement_center/purchase.aw:468
+#: classes/applications/procurement_center/purchase.aw:139 classes/applications/procurement_center/purchase.aw:471
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:145
+#: classes/applications/procurement_center/purchase.aw:148
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:151
+#: classes/applications/procurement_center/purchase.aw:154
 msgid "Pakkumise failid"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:157
+#: classes/applications/procurement_center/purchase.aw:160
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:216
+#: classes/applications/procurement_center/purchase.aw:219
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:220
+#: classes/applications/procurement_center/purchase.aw:223
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:224
+#: classes/applications/procurement_center/purchase.aw:227
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:228
+#: classes/applications/procurement_center/purchase.aw:231
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:232
+#: classes/applications/procurement_center/purchase.aw:235
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:236
+#: classes/applications/procurement_center/purchase.aw:239
 msgid "Tarneaeg"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:384 classes/applications/procurement_center/purchase.aw:525
+#: classes/applications/procurement_center/purchase.aw:387 classes/applications/procurement_center/purchase.aw:528
 msgid ""
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:385
+#: classes/applications/procurement_center/purchase.aw:388
 msgid "Memo"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:386
+#: classes/applications/procurement_center/purchase.aw:389
 msgid "CRM Dokument"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:387
+#: classes/applications/procurement_center/purchase.aw:390
 msgid "Leping"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:388
+#: classes/applications/procurement_center/purchase.aw:391
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:505
+#: classes/applications/procurement_center/purchase.aw:508
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:510
+#: classes/applications/procurement_center/purchase.aw:513
 msgid "Fail"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:515
+#: classes/applications/procurement_center/purchase.aw:518
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:520
+#: classes/applications/procurement_center/purchase.aw:523
 msgid "Kataloog"
 msgstr ""
 

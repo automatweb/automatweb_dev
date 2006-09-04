@@ -53,16 +53,12 @@ msgstr ""
 # classes/layout.aw:prop_cell_style_folders_comment
 #: classes/contentmgmt/layout.aw:prop_cell_style_folders_comment
 msgid "Omaduse Stiilide kataloogid (cell_style_folders) kommentaar"
-msgstr ""
-"kui seostehalduri abil on seotud seose tüüp \"celli stiilide kataloog\", "
-"siis on võimalik valida, millistest kaustadest stiilid võetakse."
+msgstr "kui seostehalduri abil on seotud seose tüüp \"celli stiilide kataloog\", siis on võimalik valida, millistest kaustadest stiilid võetakse."
 
 # classes/layout.aw:prop_cell_style_folders_help
 #: classes/contentmgmt/layout.aw:prop_cell_style_folders_help
 msgid "Omaduse Stiilide kataloogid (cell_style_folders) help"
-msgstr ""
-"kui seostehalduri abil on seotud seose tüüp \"celli stiilide kataloog\", "
-"siis on võimalik valida, millistest kaustadest stiilid võetakse."
+msgstr "kui seostehalduri abil on seotud seose tüüp \"celli stiilide kataloog\", siis on võimalik valida, millistest kaustadest stiilid võetakse."
 
 # classes/layout.aw:prop_grid
 #: classes/contentmgmt/layout.aw:prop_grid
@@ -72,16 +68,12 @@ msgstr ""
 # classes/layout.aw:prop_grid_comment
 #: classes/contentmgmt/layout.aw:prop_grid_comment
 msgid "Omaduse Tabel (grid) kommentaar"
-msgstr ""
-"Tabel vaates on võimalik tabeli lahtreid valida ning omavahel ühendada ja "
-"lahutada."
+msgstr "Tabel vaates on võimalik tabeli lahtreid valida ning omavahel ühendada ja lahutada."
 
 # classes/layout.aw:prop_grid_help
 #: classes/contentmgmt/layout.aw:prop_grid_help
 msgid "Omaduse Tabel (grid) help"
-msgstr ""
-"Tabel vaates on võimalik tabeli lahtreid valida ning omavahel ühendada ja "
-"lahutada."
+msgstr "Tabel vaates on võimalik tabeli lahtreid valida ning omavahel ühendada ja lahutada."
 
 # classes/layout.aw:prop_table_style
 #: classes/contentmgmt/layout.aw:prop_table_style
@@ -106,16 +98,12 @@ msgstr ""
 # classes/layout.aw:prop_sel_style_comment
 #: classes/contentmgmt/layout.aw:prop_sel_style_comment
 msgid "Omaduse Vali elemendi stiil (sel_style) kommentaar"
-msgstr ""
-"võimaldab selekteeritud lahtritele või tervetele tulpadele/ridadele eraldi "
-"stiile rakendada."
+msgstr "võimaldab selekteeritud lahtritele või tervetele tulpadele/ridadele eraldi stiile rakendada."
 
 # classes/layout.aw:prop_sel_style_help
 #: classes/contentmgmt/layout.aw:prop_sel_style_help
 msgid "Omaduse Vali elemendi stiil (sel_style) help"
-msgstr ""
-"võimaldab selekteeritud lahtritele või tervetele tulpadele/ridadele eraldi "
-"stiile rakendada."
+msgstr "võimaldab selekteeritud lahtritele või tervetele tulpadele/ridadele eraldi stiile rakendada."
 
 # classes/layout.aw:prop_grid_styles
 #: classes/contentmgmt/layout.aw:prop_grid_styles
@@ -170,16 +158,12 @@ msgstr ""
 # classes/layout.aw:prop_grid_aliases_comment
 #: classes/contentmgmt/layout.aw:prop_grid_aliases_comment
 msgid "Omaduse Aliased (grid_aliases) kommentaar"
-msgstr ""
-"tabeli täitmine sisuga. Sisuks võib olla nii tekst kui ka alloleva "
-"seostehalduri abil tekitatud aliased."
+msgstr "tabeli täitmine sisuga. Sisuks võib olla nii tekst kui ka alloleva seostehalduri abil tekitatud aliased."
 
 # classes/layout.aw:prop_grid_aliases_help
 #: classes/contentmgmt/layout.aw:prop_grid_aliases_help
 msgid "Omaduse Aliased (grid_aliases) help"
-msgstr ""
-"tabeli täitmine sisuga. Sisuks võib olla nii tekst kui ka alloleva "
-"seostehalduri abil tekitatud aliased."
+msgstr "tabeli täitmine sisuga. Sisuks võib olla nii tekst kui ka alloleva seostehalduri abil tekitatud aliased."
 
 # classes/layout.aw:prop_grid_aliases_list
 #: classes/contentmgmt/layout.aw:prop_grid_aliases_list
@@ -228,23 +212,17 @@ msgstr "võimaldab tekitada tabeli arvutist lisatud csv failist."
 
 # classes/layout.aw:prop_import_remove_empty
 #: classes/contentmgmt/layout.aw:prop_import_remove_empty
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"caption"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) caption"
 msgstr ""
 
 # classes/layout.aw:prop_import_remove_empty_comment
 #: classes/contentmgmt/layout.aw:prop_import_remove_empty_comment
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"kommentaar"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) kommentaar"
 msgstr ""
 
 # classes/layout.aw:prop_import_remove_empty_help
 #: classes/contentmgmt/layout.aw:prop_import_remove_empty_help
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"help"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) help"
 msgstr ""
 
 # classes/layout.aw:prop_import_sep
@@ -264,26 +242,18 @@ msgstr "tulpade tekitamiseks tuleb ette anda eraldav sümbol."
 
 # classes/layout.aw:prop_show_in_folders
 #: classes/contentmgmt/layout.aw:prop_show_in_folders
-msgid ""
-"Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) caption"
+msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) caption"
 msgstr ""
 
 # classes/layout.aw:prop_show_in_folders_comment
 #: classes/contentmgmt/layout.aw:prop_show_in_folders_comment
-msgid ""
-"Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) kommentaar"
-msgstr ""
-"kui seostehalduri abil on seotud seose tüüp \"Näita selles kataloogis\", "
-"siis on võimalik valida, millistes seda tabelit näidatakse. Kui ei ole "
-"midagi valitud siis ei ole tabelil mingit näitamise piirangut."
+msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) kommentaar"
+msgstr "kui seostehalduri abil on seotud seose tüüp \"Näita selles kataloogis\", siis on võimalik valida, millistes seda tabelit näidatakse. Kui ei ole midagi valitud siis ei ole tabelil mingit näitamise piirangut."
 
 # classes/layout.aw:prop_show_in_folders_help
 #: classes/contentmgmt/layout.aw:prop_show_in_folders_help
 msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) help"
-msgstr ""
-"kui seostehalduri abil on seotud seose tüüp \"Näita selles kataloogis\", "
-"siis on võimalik valida, millistes seda tabelit näidatakse. Kui ei ole "
-"midagi valitud siis ei ole tabelil mingit näitamise piirangut."
+msgstr "kui seostehalduri abil on seotud seose tüüp \"Näita selles kataloogis\", siis on võimalik valida, millistes seda tabelit näidatakse. Kui ei ole midagi valitud siis ei ole tabelil mingit näitamise piirangut."
 
 # classes/layout.aw:prop_header
 #: classes/contentmgmt/layout.aw:prop_header
@@ -315,20 +285,12 @@ msgstr "võimaldab tabelile tekitada jaluse."
 msgid "Omaduse Jalus (footer) help"
 msgstr "võimaldab tabelile tekitada jaluse."
 
-#: classes/contentmgmt/layout.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/layout.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/layout.aw:group_settings
-msgid "Grupi Määrangud (settings) pealkiri"
+msgid "Grupi M&auml;&auml;rangud (settings) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_settings_help
-msgid "Grupi Määrangud (settings) help"
+msgid "Grupi M&auml;&auml;rangud (settings) help"
 msgstr ""
 
 # classes/layout.aw:group_layout
@@ -362,11 +324,11 @@ msgid "Grupi Tabeli sisu (aliases) help"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_hfoot
-msgid "Grupi Päis ja jalus (hfoot) pealkiri"
+msgid "Grupi P&auml;is ja jalus (hfoot) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_hfoot_help
-msgid "Grupi Päis ja jalus (hfoot) help"
+msgid "Grupi P&auml;is ja jalus (hfoot) help"
 msgstr ""
 
 # classes/layout.aw:group_import
@@ -395,5 +357,13 @@ msgid "Seose celli stiilide kataloog (RELTYPE_CELLSTYLE_FOLDER) tekst"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:rel_RELTYPE_SHOW_FOLDER
-msgid "Seose n&auml;ita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
+msgid "Seose näita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
+msgstr ""
+
+#: classes/contentmgmt/layout.aw:394
+msgid "%d tulba laius"
+msgstr ""
+
+#: classes/contentmgmt/layout.aw:416
+msgid "%d tulba k&otilde;rgus"
 msgstr ""

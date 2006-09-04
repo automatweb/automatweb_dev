@@ -10,19 +10,19 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/admin/admin_folders.aw:142 classes/admin/admin_folders.aw:298
+#: classes/admin/admin_folders.aw:142 classes/admin/admin_folders.aw:315
 msgid "<b>AutomatWeb</b>"
 msgstr ""
 
-#: classes/admin/admin_folders.aw:541 classes/admin/admin_folders.aw:960
+#: classes/admin/admin_folders.aw:558 classes/admin/admin_folders.aw:977
 msgid "Mitteperioodilised"
 msgstr ""
 
-#: classes/admin/admin_folders.aw:551 classes/admin/admin_folders.aw:970
+#: classes/admin/admin_folders.aw:568 classes/admin/admin_folders.aw:987
 msgid "Reload"
 msgstr ""
 
-#: classes/admin/admin_folders.aw:557 classes/admin/admin_folders.aw:976
+#: classes/admin/admin_folders.aw:574 classes/admin/admin_folders.aw:993
 msgid "Logi v&auml;lja"
 msgstr ""
 

@@ -436,6 +436,6 @@ msgstr "Don't show in print view"
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr "Image automatic resizing is controlled by object "
 
-#: classes/image.aw:1416
+#: classes/image.aw:1448
 msgid "Lisa"
 msgstr "Add"

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/grid_editor.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -34,11 +33,101 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:28 classes/vcl/grid_editor.aw:1338 classes/vcl/grid_editor.aw:1453 classes/vcl/grid_editor.aw:1531 classes/vcl/grid_editor.aw:1561 classes/vcl/grid_editor.aw:1591 classes/vcl/grid_editor.aw:1749 classes/vcl/grid_editor.aw:1788
+#: classes/vcl/grid_editor.aw:28 classes/vcl/grid_editor.aw:1346
+#: classes/vcl/grid_editor.aw:1461 classes/vcl/grid_editor.aw:1539
+#: classes/vcl/grid_editor.aw:1569 classes/vcl/grid_editor.aw:1599
+#: classes/vcl/grid_editor.aw:1757 classes/vcl/grid_editor.aw:1796
 msgid "allah"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1750 classes/vcl/grid_editor.aw:1789
+#: classes/vcl/grid_editor.aw:208 classes/vcl/grid_editor.aw:219
+msgid "Lisa tulp"
+msgstr "Add column"
+
+#: classes/vcl/grid_editor.aw:217
+msgid "Oled kindel et tahad tulpa kustutada?"
+msgstr "Are you sure that you want to delete the column?"
+
+#: classes/vcl/grid_editor.aw:218
+msgid "Kustuta tulp"
+msgstr "Delete column"
+
+#: classes/vcl/grid_editor.aw:242
+msgid "Jaga pooleks horisontaalselt"
+msgstr "Split horizontally"
+
+#: classes/vcl/grid_editor.aw:243
+msgid "Jaga pooleks vertikaalselt"
+msgstr "Split vertically"
+
+#: classes/vcl/grid_editor.aw:247
+msgid "Kustuta &uuml;lemine cell"
+msgstr "Delete upper cell"
+
+#: classes/vcl/grid_editor.aw:251
+msgid "Kustuta vasak cell"
+msgstr "Delete left cell"
+
+#: classes/vcl/grid_editor.aw:255
+msgid "Kustuta parem cell"
+msgstr "Delete right cell"
+
+#: classes/vcl/grid_editor.aw:259
+msgid "Kustuta alumine cell"
+msgstr "Delete bottom cell"
+
+#: classes/vcl/grid_editor.aw:297
+msgid "Lisa rida"
+msgstr "Add row"
+
+#: classes/vcl/grid_editor.aw:298
+msgid "Kustuta rida"
+msgstr "Delete row"
+
+#: classes/vcl/grid_editor.aw:299
+msgid "Oled kindel et soovid rida kustutada?"
+msgstr "Are you sure you want to delete the row?"
+
+#: classes/vcl/grid_editor.aw:315
+msgid "Mitu lahtrit kustutada"
+msgstr "Number of cells to delete?"
+
+#: classes/vcl/grid_editor.aw:1758 classes/vcl/grid_editor.aw:1797
 msgid "allah2"
 msgstr ""
 
+#: classes/vcl/grid_editor.aw:1936
+msgid "Merge alla"
+msgstr "Merge down"
+
+#: classes/vcl/grid_editor.aw:1942
+msgid "Merge &uuml;les"
+msgstr "Merge up"
+
+#: classes/vcl/grid_editor.aw:1948
+msgid "Merge vasakule"
+msgstr "Merge left"
+
+#: classes/vcl/grid_editor.aw:1954
+msgid "Merge paremale"
+msgstr "Merge right"
+
+#: classes/vcl/grid_editor.aw:1961
+msgid "Split alla"
+msgstr "Split down"
+
+#: classes/vcl/grid_editor.aw:1967
+msgid "Split &uuml;les"
+msgstr "Split up"
+
+#: classes/vcl/grid_editor.aw:1973
+msgid "Split vasakule"
+msgstr "Split left"
+
+#: classes/vcl/grid_editor.aw:1979
+msgid "Split paremale"
+msgstr "Split right"
+
+#: classes/vcl/grid_editor.aw:1985
+msgid "Kustuta read/tulbad"
+msgstr "Delete rows/columns"

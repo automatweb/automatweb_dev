@@ -66,16 +66,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_def_name_comment
 #: classes/contentmgmt/webform.aw:prop_def_name_comment
 msgid "Omaduse Saatja nimi (def_name) kommentaar"
-msgstr ""
-"peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega "
-"saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
+msgstr "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
 
 # classes/contentmgmt/webform.aw:prop_def_name_help
 #: classes/contentmgmt/webform.aw:prop_def_name_help
 msgid "Omaduse Saatja nimi (def_name) help"
-msgstr ""
-"peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega "
-"saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
+msgstr "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
 
 # classes/contentmgmt/webform.aw:prop_def_mail
 #: classes/contentmgmt/webform.aw:prop_def_mail
@@ -85,40 +81,26 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_def_mail_comment
 #: classes/contentmgmt/webform.aw:prop_def_mail_comment
 msgid "Omaduse Saatja e-mail (def_mail) kommentaar"
-msgstr ""
-"peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega "
-"saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
+msgstr "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
 
 # classes/contentmgmt/webform.aw:prop_def_mail_help
 #: classes/contentmgmt/webform.aw:prop_def_mail_help
 msgid "Omaduse Saatja e-mail (def_mail) help"
-msgstr ""
-"peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega "
-"saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
+msgstr "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
 
 #: classes/contentmgmt/webform.aw:prop_obj_name
-msgid ""
-"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
-"caption"
+msgid "Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) caption"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:prop_obj_name_comment
 #: classes/contentmgmt/webform.aw:prop_obj_name_comment
-msgid ""
-"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
-"kommentaar"
-msgstr ""
-"millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse "
-"objekti nimena AutomatWebi administreerimisliideses"
+msgid "Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) kommentaar"
+msgstr "millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse objekti nimena AutomatWebi administreerimisliideses"
 
 # classes/contentmgmt/webform.aw:prop_obj_name_help
 #: classes/contentmgmt/webform.aw:prop_obj_name_help
-msgid ""
-"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
-"help"
-msgstr ""
-"millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse "
-"objekti nimena AutomatWebi administreerimisliideses"
+msgid "Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) help"
+msgstr "millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse objekti nimena AutomatWebi administreerimisliideses"
 
 #: classes/contentmgmt/webform.aw:prop_redirect
 msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) caption"
@@ -127,18 +109,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_redirect_comment
 #: classes/contentmgmt/webform.aw:prop_redirect_comment
 msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) kommentaar"
-msgstr ""
-"kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale "
-"salvestamist suunatakse."
+msgstr "kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale salvestamist suunatakse."
 
 # classes/contentmgmt/webform.aw:prop_redirect_help
 #: classes/contentmgmt/webform.aw:prop_redirect_help
 msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) help"
-msgstr ""
-"kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale "
-"salvestamist suunatakse. Sisese aadressi puhul tuleb sellesse välja märkida "
-"kausta või dokumendi ID, väline aadress tuleb välja kirjutada täispikana "
-"kujul http://www.firmanimi.ee/suunamine"
+msgstr "kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale salvestamist suunatakse. Sisese aadressi puhul tuleb sellesse välja märkida kausta või dokumendi ID, väline aadress tuleb välja kirjutada täispikana kujul http://www.firmanimi.ee/suunamine"
 
 # classes/contentmgmt/webform.aw:prop_error_location
 #: classes/contentmgmt/webform.aw:prop_error_location
@@ -238,14 +214,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_props_comment
 #: classes/contentmgmt/webform.aw:prop_props_comment
 msgid "Omaduse Omadused (props) kommentaar"
-msgstr ""
-"Disketikujuline nupp Salvesta on mõeldud omaduste viimiseks vaatesse Vorm"
+msgstr "Disketikujuline nupp Salvesta on mõeldud omaduste viimiseks vaatesse Vorm"
 
 # classes/contentmgmt/webform.aw:prop_props_help
 #: classes/contentmgmt/webform.aw:prop_props_help
 msgid "Omaduse Omadused (props) help"
-msgstr ""
-"Disketikujuline nupp Salvesta on mõeldud omaduste viimiseks vaatesse Vorm"
+msgstr "Disketikujuline nupp Salvesta on mõeldud omaduste viimiseks vaatesse Vorm"
 
 # classes/contentmgmt/webform.aw:prop_style_folder
 #: classes/contentmgmt/webform.aw:prop_style_folder
@@ -255,14 +229,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_style_folder_comment
 #: classes/contentmgmt/webform.aw:prop_style_folder_comment
 msgid "Omaduse Stiilide kaust (style_folder) kommentaar"
-msgstr ""
-"kaust, mille alt võtta stiilide valiku rippmenüüdesse ilmuvad stiiliobjektid"
+msgstr "kaust, mille alt võtta stiilide valiku rippmenüüdesse ilmuvad stiiliobjektid"
 
 # classes/contentmgmt/webform.aw:prop_style_folder_help
 #: classes/contentmgmt/webform.aw:prop_style_folder_help
 msgid "Omaduse Stiilide kaust (style_folder) help"
-msgstr ""
-"kaust, mille alt võtta stiilide valiku rippmenüüdesse ilmuvad stiiliobjektid"
+msgstr "kaust, mille alt võtta stiilide valiku rippmenüüdesse ilmuvad stiiliobjektid"
 
 # classes/contentmgmt/webform.aw:prop_def_caption_style
 #: classes/contentmgmt/webform.aw:prop_def_caption_style
@@ -272,16 +244,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_def_caption_style_comment
 #: classes/contentmgmt/webform.aw:prop_def_caption_style_comment
 msgid "Omaduse Vaikimisi pealkirja stiil (def_caption_style) kommentaar"
-msgstr ""
-"stiiliobjekt, mis omistatakse kõigile elemenditekstidele, millele ei ole "
-"allpool eraldi stiili valitud"
+msgstr "stiiliobjekt, mis omistatakse kõigile elemenditekstidele, millele ei ole allpool eraldi stiili valitud"
 
 # classes/contentmgmt/webform.aw:prop_def_caption_style_help
 #: classes/contentmgmt/webform.aw:prop_def_caption_style_help
 msgid "Omaduse Vaikimisi pealkirja stiil (def_caption_style) help"
-msgstr ""
-"stiiliobjekt, mis omistatakse kõigile elemenditekstidele, millele ei ole "
-"allpool eraldi stiili valitud"
+msgstr "stiiliobjekt, mis omistatakse kõigile elemenditekstidele, millele ei ole allpool eraldi stiili valitud"
 
 # classes/contentmgmt/webform.aw:prop_def_prop_style
 #: classes/contentmgmt/webform.aw:prop_def_prop_style
@@ -291,16 +259,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_def_prop_style_comment
 #: classes/contentmgmt/webform.aw:prop_def_prop_style_comment
 msgid "Omaduse Vaikimisi elemendi stiil (def_prop_style) kommentaar"
-msgstr ""
-"stiiliobjekt, mis omistatakse kõigile elementidele, millele ei ole allpool "
-"eraldi stiili valitud"
+msgstr "stiiliobjekt, mis omistatakse kõigile elementidele, millele ei ole allpool eraldi stiili valitud"
 
 # classes/contentmgmt/webform.aw:prop_def_prop_style_help
 #: classes/contentmgmt/webform.aw:prop_def_prop_style_help
 msgid "Omaduse Vaikimisi elemendi stiil (def_prop_style) help"
-msgstr ""
-"stiiliobjekt, mis omistatakse kõigile elementidele, millele ei ole allpool "
-"eraldi stiili valitud"
+msgstr "stiiliobjekt, mis omistatakse kõigile elementidele, millele ei ole allpool eraldi stiili valitud"
 
 # classes/contentmgmt/webform.aw:prop_def_form_style
 #: classes/contentmgmt/webform.aw:prop_def_form_style
@@ -310,16 +274,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_def_form_style_comment
 #: classes/contentmgmt/webform.aw:prop_def_form_style_comment
 msgid "Omaduse Tabeli stiil (def_form_style) kommentaar"
-msgstr ""
-"vormile määratav tabeli stiil, mis paneb paika tabeli jooned, elementide "
-"omavahelise kauguse jm"
+msgstr "vormile määratav tabeli stiil, mis paneb paika tabeli jooned, elementide omavahelise kauguse jm"
 
 # classes/contentmgmt/webform.aw:prop_def_form_style_help
 #: classes/contentmgmt/webform.aw:prop_def_form_style_help
 msgid "Omaduse Tabeli stiil (def_form_style) help"
-msgstr ""
-"vormile määratav tabeli stiil, mis paneb paika tabeli jooned, elementide "
-"omavahelise kauguse jm"
+msgstr "vormile määratav tabeli stiil, mis paneb paika tabeli jooned, elementide omavahelise kauguse jm"
 
 # classes/contentmgmt/webform.aw:prop_styles
 #: classes/contentmgmt/webform.aw:prop_styles
@@ -344,16 +304,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_preview_comment
 #: classes/contentmgmt/webform.aw:prop_preview_comment
 msgid "Omaduse Eelvaade (preview) kommentaar"
-msgstr ""
-"Vormi eelvaade, millisena seda veebil kuvama hakatakse. Läbi vormi eelvaate "
-"on võimalik teha ka sisestusi."
+msgstr "Vormi eelvaade, millisena seda veebil kuvama hakatakse. Läbi vormi eelvaate on võimalik teha ka sisestusi."
 
 # classes/contentmgmt/webform.aw:prop_preview_help
 #: classes/contentmgmt/webform.aw:prop_preview_help
 msgid "Omaduse Eelvaade (preview) help"
-msgstr ""
-"Vormi eelvaade, millisena seda veebil kuvama hakatakse. Läbi vormi eelvaate "
-"on võimalik teha ka sisestusi."
+msgstr "Vormi eelvaade, millisena seda veebil kuvama hakatakse. Läbi vormi eelvaate on võimalik teha ka sisestusi."
 
 # classes/contentmgmt/webform.aw:prop_entries_toolbar
 #: classes/contentmgmt/webform.aw:prop_entries_toolbar
@@ -393,18 +349,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_entries_comment
 #: classes/contentmgmt/webform.aw:prop_entries_comment
 msgid "Omaduse Sisestused (entries) kommentaar"
-msgstr ""
-"Nimekiri vormisisestustest, iga sisestuse kohta kuvatakse selle Nimi, Looja, "
-"Loomise aega, Muutjat, Muutmise aega, Muutmise linki ning märkeruutu selle "
-"rea valimiseks."
+msgstr "Nimekiri vormisisestustest, iga sisestuse kohta kuvatakse selle Nimi, Looja, Loomise aega, Muutjat, Muutmise aega, Muutmise linki ning märkeruutu selle rea valimiseks."
 
 # classes/contentmgmt/webform.aw:prop_entries_help
 #: classes/contentmgmt/webform.aw:prop_entries_help
 msgid "Omaduse Sisestused (entries) help"
-msgstr ""
-"Nimekiri vormisisestustest, iga sisestuse kohta kuvatakse selle Nimi, Looja, "
-"Loomise aega, Muutjat, Muutmise aega, Muutmise linki ning märkeruutu selle "
-"rea valimiseks. Valitud kirjed saab kustutada."
+msgstr "Nimekiri vormisisestustest, iga sisestuse kohta kuvatakse selle Nimi, Looja, Loomise aega, Muutjat, Muutmise aega, Muutmise linki ning märkeruutu selle rea valimiseks. Valitud kirjed saab kustutada."
 
 # classes/contentmgmt/webform.aw:prop_set_controller_folder
 #: classes/contentmgmt/webform.aw:prop_set_controller_folder
@@ -414,16 +364,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_set_controller_folder_comment
 #: classes/contentmgmt/webform.aw:prop_set_controller_folder_comment
 msgid "Omaduse Kontrollerite kaust (set_controller_folder) kommentaar"
-msgstr ""
-"kaust, mille sees on kontrolleriobjektid, mille abil kontrollitakse "
-"veebivormi väljadesse sisestatud andmete korrektsust"
+msgstr "kaust, mille sees on kontrolleriobjektid, mille abil kontrollitakse veebivormi väljadesse sisestatud andmete korrektsust"
 
 # classes/contentmgmt/webform.aw:prop_set_controller_folder_help
 #: classes/contentmgmt/webform.aw:prop_set_controller_folder_help
 msgid "Omaduse Kontrollerite kaust (set_controller_folder) help"
-msgstr ""
-"kaust, mille sees on kontrolleriobjektid, mille abil kontrollitakse "
-"veebivormi väljadesse sisestatud andmete korrektsust"
+msgstr "kaust, mille sees on kontrolleriobjektid, mille abil kontrollitakse veebivormi väljadesse sisestatud andmete korrektsust"
 
 # classes/contentmgmt/webform.aw:prop_submit_controllers
 #: classes/contentmgmt/webform.aw:prop_submit_controllers
@@ -433,18 +379,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_submit_controllers_comment
 #: classes/contentmgmt/webform.aw:prop_submit_controllers_comment
 msgid "Omaduse Kontrollerid (submit_controllers) kommentaar"
-msgstr ""
-"igale väljale saab määrata ühe või mitu kontrollerit. Eeldefineeritud on "
-"täitmise kontrollerid (täidetud kehtib tekstisisestuskastide kohta, valitud "
-"kehtib valikelementide kohta) ning e-maili õigsuse kontroller"
+msgstr "igale väljale saab määrata ühe või mitu kontrollerit. Eeldefineeritud on täitmise kontrollerid (täidetud kehtib tekstisisestuskastide kohta, valitud kehtib valikelementide kohta) ning e-maili õigsuse kontroller"
 
 # classes/contentmgmt/webform.aw:prop_submit_controllers_help
 #: classes/contentmgmt/webform.aw:prop_submit_controllers_help
 msgid "Omaduse Kontrollerid (submit_controllers) help"
-msgstr ""
-"igale väljale saab määrata ühe või mitu kontrollerit. Eeldefineeritud on "
-"täitmise kontrollerid (täidetud kehtib tekstisisestuskastide kohta, valitud "
-"kehtib valikelementide kohta) ning e-maili õigsuse kontroller"
+msgstr "igale väljale saab määrata ühe või mitu kontrollerit. Eeldefineeritud on täitmise kontrollerid (täidetud kehtib tekstisisestuskastide kohta, valitud kehtib valikelementide kohta) ning e-maili õigsuse kontroller"
 
 # classes/contentmgmt/webform.aw:prop_get_controller_folder
 #: classes/contentmgmt/webform.aw:prop_get_controller_folder
@@ -454,18 +394,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_get_controller_folder_comment
 #: classes/contentmgmt/webform.aw:prop_get_controller_folder_comment
 msgid "Omaduse Kontrollerite kaust (get_controller_folder) kommentaar"
-msgstr ""
-"igale väljale saab määrata ühe või mitu kontrollerit. Eeldefineeritud on "
-"täitmise kontrollerid (täidetud kehtib tekstisisestuskastide kohta, valitud "
-"kehtib valikelementide kohta) ning e-maili õigsuse kontroller"
+msgstr "igale väljale saab määrata ühe või mitu kontrollerit. Eeldefineeritud on täitmise kontrollerid (täidetud kehtib tekstisisestuskastide kohta, valitud kehtib valikelementide kohta) ning e-maili õigsuse kontroller"
 
 # classes/contentmgmt/webform.aw:prop_get_controller_folder_help
 #: classes/contentmgmt/webform.aw:prop_get_controller_folder_help
 msgid "Omaduse Kontrollerite kaust (get_controller_folder) help"
-msgstr ""
-"igale väljale saab määrata ühe või mitu kontrollerit. Eeldefineeritud on "
-"täitmise kontrollerid (täidetud kehtib tekstisisestuskastide kohta, valitud "
-"kehtib valikelementide kohta) ning e-maili õigsuse kontroller"
+msgstr "igale väljale saab määrata ühe või mitu kontrollerit. Eeldefineeritud on täitmise kontrollerid (täidetud kehtib tekstisisestuskastide kohta, valitud kehtib valikelementide kohta) ning e-maili õigsuse kontroller"
 
 # classes/contentmgmt/webform.aw:prop_view_controllers
 #: classes/contentmgmt/webform.aw:prop_view_controllers
@@ -475,18 +409,12 @@ msgstr ""
 # classes/contentmgmt/webform.aw:prop_view_controllers_comment
 #: classes/contentmgmt/webform.aw:prop_view_controllers_comment
 msgid "Omaduse Kontrollerid (view_controllers) kommentaar"
-msgstr ""
-"igale väljale saab kontrolleri abil määrata vaikimisi sisu ning seda, "
-"millisel tingimusel seda vormielementi kasutajale kuvatakse/ei kuvata."
+msgstr "igale väljale saab kontrolleri abil määrata vaikimisi sisu ning seda, millisel tingimusel seda vormielementi kasutajale kuvatakse/ei kuvata."
 
 # classes/contentmgmt/webform.aw:prop_view_controllers_help
 #: classes/contentmgmt/webform.aw:prop_view_controllers_help
 msgid "Omaduse Kontrollerid (view_controllers) help"
-msgstr ""
-"igale väljale saab kontrolleri abil määrata vaikimisi sisu ning seda, "
-"millisel tingimusel seda vormielementi kasutajale kuvatakse/ei kuvata. "
-"Kontrollerite lisamiseks tuleb see lisada õigesse kausta. Kontrollerite "
-"süntaksi koostamine on jõukohane php-teadmistega kasutajale"
+msgstr "igale väljale saab kontrolleri abil määrata vaikimisi sisu ning seda, millisel tingimusel seda vormielementi kasutajale kuvatakse/ei kuvata. Kontrollerite lisamiseks tuleb see lisada õigesse kausta. Kontrollerite süntaksi koostamine on jõukohane php-teadmistega kasutajale"
 
 # classes/contentmgmt/webform.aw:group_form
 #: classes/contentmgmt/webform.aw:group_form
@@ -600,7 +528,7 @@ msgid "Seose Salvestamise kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_VIEWCONTROLLER
-msgid "Seose N&amp;auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
+msgid "Seose N&auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_EMAIL
@@ -609,7 +537,7 @@ msgid "Seose Meiliaadress (RELTYPE_EMAIL) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_OBJECT_TYPE
-msgid "Seose Objekti t&amp;uuml;&amp;uuml;p (RELTYPE_OBJECT_TYPE) tekst"
+msgid "Seose Objekti t&uuml;&uuml;p (RELTYPE_OBJECT_TYPE) tekst"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_REGISTER
@@ -638,17 +566,15 @@ msgid "Seose Objektide eksport (RELTYPE_OBJECT_EXPORT) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_CAL_REG_FORM
-msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_CAL_REG_FORM) tekst"
+msgid "Seose S&uuml;ndmuse vorm (RELTYPE_CAL_REG_FORM) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_CAL_REG_FORM_CONF
-msgid "Seose S&amp;uuml;ndmuse vormi konf (RELTYPE_CAL_REG_FORM_CONF) tekst"
+msgid "Seose S&uuml;ndmuse vormi konf (RELTYPE_CAL_REG_FORM_CONF) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_AFTER_SAVE_CONTROLLER
-msgid ""
-"Seose p&amp;auml;rast salvestamist kontroller "
-"(RELTYPE_AFTER_SAVE_CONTROLLER) tekst"
+msgid "Seose p&auml;rast salvestamist kontroller (RELTYPE_AFTER_SAVE_CONTROLLER) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:209
@@ -831,6 +757,22 @@ msgstr ""
 msgid "Ekspordi objektid"
 msgstr ""
 
+#: classes/contentmgmt/webform.aw:1150
+msgid "Vasakul"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1151
+msgid "Paremal"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1152
+msgid "Peal"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1153
+msgid "All"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:1157
 msgid "-- vali --"
 msgstr ""
@@ -887,22 +829,66 @@ msgstr ""
 msgid "vertikaalne"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1440
+#: classes/contentmgmt/webform.aw:1348
+msgid "K&otilde;rgus"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1355
+msgid "Laius"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1370
+msgid "Jrk"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1371
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1372
+msgid "Pealkirja asukoht"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1373
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1374
+msgid "K&otilde;rvale"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1375
+msgid "Vahe"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1376
+msgid "Vali"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1377
+msgid "Ei n&auml;ita veebis"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1378
+msgid "Ei n&auml;ita nime"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1451
 msgid "Veateate stiil"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1496 classes/contentmgmt/webform.aw:1519
+#: classes/contentmgmt/webform.aw:1507 classes/contentmgmt/webform.aw:1530
 msgid "-- Vali --"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1603
+#: classes/contentmgmt/webform.aw:1614
 msgid "Registreeru"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1786
+#: classes/contentmgmt/webform.aw:1797
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2274
+#: classes/contentmgmt/webform.aw:2285
 msgid "Liigu edasi &raquo;"
 msgstr ""

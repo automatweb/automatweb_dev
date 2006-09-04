@@ -32,7 +32,7 @@ msgstr ""
 # classes/layout.aw:prop_columns
 #: classes/contentmgmt/layout.aw:prop_columns
 msgid "Omaduse Tulpi (columns) caption"
-msgstr "Solumns"
+msgstr "Columns"
 
 # classes/layout.aw:prop_columns_comment
 #: classes/contentmgmt/layout.aw:prop_columns_comment
@@ -122,7 +122,7 @@ msgstr ""
 # classes/layout.aw:prop_row_widths
 #: classes/contentmgmt/layout.aw:prop_row_widths
 msgid "Omaduse Ridade laiused (row_widths) caption"
-msgstr "Row widths"
+msgstr "Rows width"
 
 # classes/layout.aw:prop_row_widths_comment
 #: classes/contentmgmt/layout.aw:prop_row_widths_comment
@@ -137,7 +137,7 @@ msgstr ""
 # classes/layout.aw:prop_row_heights
 #: classes/contentmgmt/layout.aw:prop_row_heights
 msgid "Omaduse Ridade k&otilde;rgused (row_heights) caption"
-msgstr "Row heights"
+msgstr "Rows height"
 
 # classes/layout.aw:prop_row_heights_comment
 #: classes/contentmgmt/layout.aw:prop_row_heights_comment
@@ -211,23 +211,17 @@ msgstr ""
 
 # classes/layout.aw:prop_import_remove_empty
 #: classes/contentmgmt/layout.aw:prop_import_remove_empty
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"caption"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) caption"
 msgstr "Remove empty lines from the end"
 
 # classes/layout.aw:prop_import_remove_empty_comment
 #: classes/contentmgmt/layout.aw:prop_import_remove_empty_comment
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"kommentaar"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) kommentaar"
 msgstr ""
 
 # classes/layout.aw:prop_import_remove_empty_help
 #: classes/contentmgmt/layout.aw:prop_import_remove_empty_help
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"help"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) help"
 msgstr ""
 
 # classes/layout.aw:prop_import_sep
@@ -247,14 +241,12 @@ msgstr ""
 
 # classes/layout.aw:prop_show_in_folders
 #: classes/contentmgmt/layout.aw:prop_show_in_folders
-msgid ""
-"Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) caption"
+msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) caption"
 msgstr "Show in folders"
 
 # classes/layout.aw:prop_show_in_folders_comment
 #: classes/contentmgmt/layout.aw:prop_show_in_folders_comment
-msgid ""
-"Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) kommentaar"
+msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) kommentaar"
 msgstr ""
 
 # classes/layout.aw:prop_show_in_folders_help
@@ -292,20 +284,13 @@ msgstr ""
 msgid "Omaduse Jalus (footer) help"
 msgstr ""
 
-#: classes/contentmgmt/layout.aw:group_general
-msgid "Grupi ‹ldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/layout.aw:group_general_help
-msgid "Grupi ‹ldine (general) help"
-msgstr ""
-
+# classes/layout.aw:group_settings
 #: classes/contentmgmt/layout.aw:group_settings
-msgid "Grupi M‰‰rangud (settings) pealkiri"
-msgstr ""
+msgid "Grupi M&auml;&auml;rangud (settings) pealkiri"
+msgstr "Settings"
 
 #: classes/contentmgmt/layout.aw:group_settings_help
-msgid "Grupi M‰‰rangud (settings) help"
+msgid "Grupi M&auml;&auml;rangud (settings) help"
 msgstr ""
 
 # classes/layout.aw:group_layout
@@ -338,12 +323,13 @@ msgstr "Table contents"
 msgid "Grupi Tabeli sisu (aliases) help"
 msgstr ""
 
+# classes/layout.aw:group_hfoot
 #: classes/contentmgmt/layout.aw:group_hfoot
-msgid "Grupi P‰is ja jalus (hfoot) pealkiri"
-msgstr ""
+msgid "Grupi P&auml;is ja jalus (hfoot) pealkiri"
+msgstr "Header and footer"
 
 #: classes/contentmgmt/layout.aw:group_hfoot_help
-msgid "Grupi P‰is ja jalus (hfoot) help"
+msgid "Grupi P&auml;is ja jalus (hfoot) help"
 msgstr ""
 
 # classes/layout.aw:group_import
@@ -371,18 +357,15 @@ msgstr ""
 msgid "Seose celli stiilide kataloog (RELTYPE_CELLSTYLE_FOLDER) tekst"
 msgstr "cell style folder"
 
-#: classes/contentmgmt/layout.aw:rel_RELTYPE_SHOW_FOLDER
-msgid "Seose n&auml;ita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
-msgstr ""
-
-# classes/layout.aw:group_settings
-#~ msgid "Grupi M&auml;&auml;rangud (settings) pealkiri"
-#~ msgstr "Settings"
-
-# classes/layout.aw:group_hfoot
-#~ msgid "Grupi P&auml;is ja jalus (hfoot) pealkiri"
-#~ msgstr "Header and footer"
-
 # classes/layout.aw:rel_RELTYPE_SHOW_FOLDER
-#~ msgid "Seose n‰ita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
-#~ msgstr "display in this folder"
+#: classes/contentmgmt/layout.aw:rel_RELTYPE_SHOW_FOLDER
+msgid "Seose n‰ita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
+msgstr "display in this folder"
+
+#: classes/contentmgmt/layout.aw:394
+msgid "%d tulba laius"
+msgstr "Row %d width"
+
+#: classes/contentmgmt/layout.aw:416
+msgid "%d tulba k&otilde;rgus"
+msgstr "Row %d height"

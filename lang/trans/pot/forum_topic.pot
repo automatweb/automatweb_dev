@@ -98,6 +98,18 @@ msgstr ""
 msgid "Omaduse Pilt (image) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_topic.aw:prop_image_verification
+msgid "Omaduse Kontrollkood (image_verification) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_image_verification_comment
+msgid "Omaduse Kontrollkood (image_verification) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:prop_image_verification_help
+msgid "Omaduse Kontrollkood (image_verification) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_topic.aw:prop_subscribers_editor
 msgid "Omaduse  (subscribers_editor) caption"
 msgstr ""
@@ -124,5 +136,9 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:rel_RELTYPE_FORUM_IMAGE
 msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:107
+msgid "Sisestatud kontrollkood on vale!"
 msgstr ""
 
