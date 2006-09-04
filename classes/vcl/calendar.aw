@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.81 2006/07/04 15:50:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.82 2006/09/04 17:03:48 dragut Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -474,6 +474,7 @@ class vcalendar extends aw_template
 
 		};
 		$this->overview_items[$use_date] = true;
+		$this->overview_items_oids[$use_date][$arr['event_oid']] = $arr['event_oid'];
 		if (!empty($arr["url"]))
 		{
 			$this->overview_urls[$use_date] = $arr["url"];
@@ -635,12 +636,14 @@ class vcalendar extends aw_template
 						$this->add_overview_item(array(
 							"timestamp" => $tmp["timestamp"],
 							"url" => $tmp["url"],
+							"event_oid" => $tmp["event_oid"]
 						));
 					}
 					else
 					{
 						$this->add_overview_item(array(
 							"timestamp" => $tm,
+							"event_oid" => $tmp["event_oid"]
 						));
 					};
 				};
@@ -1363,7 +1366,6 @@ class vcalendar extends aw_template
 	function draw_s_month($arr)
 	{
 		$this->read_template("minical.tpl");
-
 		// the idea here is that drawing of month always starts from
 		// the first day of the week in which the month starts and ends
 		// on the last day of the week in which the month ends
@@ -1452,7 +1454,6 @@ class vcalendar extends aw_template
 			{
 				$reals = mktime(0,0,0,$s_parts["mon"],$s_parts["day"],$s_parts["year"]);
 				$s_parts["day"]++;
-
 				$dstamp = date("Ymd",$reals);
 				$has_events = $this->overview_items[$dstamp];
 				$style = $has_events ? $style_day_with_events : $style_day_without_events;
@@ -1480,7 +1481,6 @@ class vcalendar extends aw_template
 					$mode = 2;
 					$style = $style_day_deactive;
 				};
-
 				if (!empty($this->overview_urls[$dstamp]))
 				{
 					$day_url = $this->overview_urls[$dstamp];
@@ -1515,11 +1515,32 @@ class vcalendar extends aw_template
 				{
 					$link = $caption;
 				}
+
+				$events_str = ""; 
+				if (is_array($this->overview_items_oids[$dstamp]))
+				{
+					foreach ($this->overview_items_oids[$dstamp] as $event_oid)
+					{
+						if ($this->can('view', $event_oid))
+						{
+							$event_obj = new object($event_oid);
+							$this->vars(array(
+								'event_title' => $event_obj->name(),
+								'event_content' => $event_obj->prop('content')
+							));
+							$events_str .= $this->parse('EVENT');
+						}
+					}
+				}
+
 				$this->vars(array(
 					"style" => $style,
 					"link" => $link,
 					"link2" => $day_url,
 					"caption" => $caption,
+					"event_title" => "",
+					"event_content" => "",
+					"EVENT" => $events_str
 				));
 				if($this->is_template("CLICKABLE") && $mode == 0)
 				{
