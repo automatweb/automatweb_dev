@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.19 2006/08/29 13:27:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.20 2006/09/04 17:40:40 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1
@@ -104,7 +104,7 @@ class forum_topic extends class_base
 						$image_verification_inst = get_instance('core/util/image_verification/image_verification');
 						if ( !$image_verification_inst->validate($arr['request']['ver_code']) )
 						{
-							$prop['error'] = t('Sisestatud kontrollkood on vale!');
+							$prop['error'] = t('Sisestatud kontrollnumber on vale!');
 							$retval = PROP_FATAL_ERROR;
 						}
 					}	
