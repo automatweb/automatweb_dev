@@ -152,6 +152,7 @@ class doc_display extends aw_template
 		$this->_do_forum($doc);
 		$this->_do_charset($doc);
 		$this->_do_checkboxes($doc);
+		$this->_do_user_subs($doc);
 
 		$this->vars(array(
 			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : ""),
@@ -338,5 +339,42 @@ class doc_display extends aw_template
 			));
 		}
 		return $pm->get_menu();
+	}
+
+	function _do_user_subs($doc)
+	{
+		$u1s = "";
+		if ($doc->prop("user1") != "")
+		{
+			$u1s = $this->parse("user1_sub");
+		}
+		$u2s = "";
+		if ($doc->prop("user2") != "")
+		{
+			$u2s = $this->parse("user2_sub");
+		}
+		$u3s = "";
+		if ($doc->prop("user3") != "")
+		{
+			$u3s = $this->parse("user3_sub");
+		}
+		$u4s = "";
+		if ($doc->prop("user4") != "")
+		{
+			$u4s = $this->parse("user4_sub");
+		}
+		$u5s = "";
+		if ($doc->prop("user5") != "")
+		{
+			$u5s = $this->parse("user5_sub");
+		}
+		$u6s = "";
+		if ($doc->prop("user6") != "")
+		{
+			$u6s = $this->parse("user6_sub");
+		}
+		$this->vars(array(
+			"user1_sub" => $u1s
+		));
 	}
 }
