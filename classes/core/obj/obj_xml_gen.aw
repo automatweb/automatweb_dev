@@ -58,12 +58,24 @@ class obj_xml_gen
 
 		$obj_list =  array($o) + $other_objs;
 
+		$clss = aw_ini_get("classes");
+
 		if ($new_rels)
 		{
-			foreach($obj_list as $o)
+			foreach($obj_list as $idx => $o)
 			{
+				if ($clss[$o->class_id()]["no_copy"] == 1)
+				{
+					unset($obj_list[$idx]);
+					continue;
+				}
 				foreach($o->connections_from() as $c)
 				{
+					$to = $c->to();
+					if ($clss[$to->class_id()]["no_copy"] == 1)
+					{
+						continue;
+					}
 					$obj_list[$c->prop("to")] = $c->to();
 					$this->_req_read_rel_objs($c->to(), $obj_list);
 				}
@@ -75,11 +87,17 @@ class obj_xml_gen
 
 	function _req_read_rel_objs($o, &$obj_list)
 	{
+		$clss = aw_ini_get("classes");
 		foreach($o->connections_from() as $c)
 		{
 			if (isset($obj_list[$c->prop("to")]))
 			{
 				continue; // break cyclic rels
+			}
+			$to = $c->to();
+			if ($clss[$to->class_id()]["no_copy"] == 1)
+			{
+				continue;
 			}
 			$obj_list[$c->prop("to")] = $c->to();
 			$this->_req_read_rel_objs($c->to(), $obj_list);
@@ -172,7 +190,7 @@ class obj_xml_gen
 	{
 		$copy_rels = isset($options["copy_rels"]) ? $options["copy_rels"] : true;
 		$new_rels = isset($options["new_rels"]) ? $options["new_rels"] : false;
-
+		$clss = aw_ini_get("classes");
 		$xml = "";
 		if ($copy_rels || $new_rels)
 		{
@@ -180,6 +198,11 @@ class obj_xml_gen
 			{
 				foreach($o->connections_from() as $c)
 				{
+					$to = $c->to();
+					if ($clss[$to->class_id()]["no_copy"] == 1)
+					{
+						continue;
+					}
 					$xml .= "\t<rel>\n";
 					$xml .= "\t\t<from>".$c->prop("from")."</from>\n";
 					$xml .= "\t\t<to>".$c->prop("to")."</to>\n";
@@ -218,7 +241,6 @@ class obj_xml_gen
 		xml_set_character_data_handler($parser, array(&$this, "_chard"));
 		xml_parse($parser, $xml, true);
 		xml_parser_free($parser);
-
 		// create objects
 		$oid = $this->_crea_obj($this->objects[$this->start_object], $parent);
 		unset($this->objects[$this->start_object]);
@@ -288,14 +310,6 @@ class obj_xml_gen
 		$o->set_ord($data["ot_flds"]["ord"]);
 		$o->set_alias($data["ot_flds"]["alias"]);
 
-		$md = unserialize($data["ot_flds"]["meta"]);
-		if (is_array($meta))
-		{
-			foreach($meta as $k => $v)
-			{
-				$o->set_meta($k, $v);
-			}
-		}
 		$o->set_subclass($data["ot_flds"]["subclass"]);
 		$o->set_flags($data["ot_flds"]["flags"]);
 
@@ -312,6 +326,15 @@ class obj_xml_gen
 				$o->set_prop($k, $v);
 			}
 		}
+		$md = unserialize($data["ot_flds"]["meta"]);
+		if (is_array($md))
+		{
+			foreach($md as $k => $v)
+			{
+				$o->set_meta($k, $v);
+			}
+		}
+
 		$o->save();
 		return $o->id();
 	}
@@ -413,16 +436,16 @@ class obj_xml_gen
 		{
 			if ($this->index)
 			{
-				$this->cur_obj[$this->index] = $str;
+				$this->cur_obj[$this->index] .= $str;
 			}
 			else
 			{
-				$this->cur_obj[$this->index1][$this->index2] = $str;
+				$this->cur_obj[$this->index1][$this->index2] .= $str;
 			}
 		}
 		if ($this->_in_rel)
 		{
-			$this->cur_rel[$this->index2] = $str;
+			$this->cur_rel[$this->index2] .= $str;
 		}
 	}
 }

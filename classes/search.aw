@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.100 2006/01/06 12:12:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.101 2006/09/04 10:41:59 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -431,6 +431,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						if ($val)
 						{
 							//$val = str_replace("'", "\\'", $val);
+							$this->quote(&$val);
 							if (strpos($val,",") !== false)
 							{
 								$pts = array();
