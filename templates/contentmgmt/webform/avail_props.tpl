@@ -30,16 +30,16 @@ function selall()
 	<table border="1" style="border-collapse: collapse; font-size: 11px; border-color: #CCC;" cellpadding="3px">
 		<!-- SUB: av_props -->
 		<tr>
-			<td width="30" align="center">Tüüp</td>
-			<td width="100">Mitu elementi</td>
-			<td width="100">Kasutus</td>
+			<td width="30" align="center">{VAR:type_cap}</td>
+			<td width="100">{VAR:el_count_cap}</td>
+			<td width="100">{VAR:usage_cap}</td>
 		</tr>
 		<!-- END SUB: av_props -->
 		<!-- SUB: avail_property -->
 		<tr>
 			<td width="30" align="center">{VAR:prp_name}</td>
 			<td width="100"><input type="text" id="mark[{VAR:prp_type}]" name="mark[{VAR:prp_type}]" style="width:50px"></td>
-			<td width="100">kasutusel {VAR:prp_used} / alles {VAR:prp_unused}</td>
+			<td width="100">{VAR:used_cap} {VAR:prp_used} / {VAR:unused_cap} {VAR:prp_unused}</td>
 		</tr>	
 		<!-- END SUB: avail_property -->
 	</table>

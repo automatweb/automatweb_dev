@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.94 2006/08/11 09:31:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.95 2006/09/04 11:47:23 tarvo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -732,19 +732,9 @@ class webform extends class_base
 		// have to put it here right now - in the future it should work that t() way
 		// so lets create an array where i hold those error messages in both languages
 		$error_messages = array(
-			"element_has_to_be_filled" => array(
-				"et" => "%caption peab olema t&auml;idetud",
-				"en" => "%caption has to be filled out",
-			),
-			"element_has_to_be_selected" => array(
-				"et" => "%caption peab olema valitud",
-				"en" => "%caption has to be selected",
-			),
-			"email_address_not_correct" => array(
-				"et" => "%caption sisestatud e-mailiaadress pole korrektne",
-				"en" => "%caption inserted e-mail address is not correct",
-			),
-			
+			"element_has_to_be_filled" => t("%caption peab olema t&auml;idetud"),
+			"element_has_to_be_selected" => t("%caption peab olema valitud"),
+			"email_address_not_correct" => t("%caption sisestatud e-mailiaadress pole korrektne"),
 		);
 		// now, lets get what language is used
 		$languages_inst = get_instance("languages"); 
@@ -764,19 +754,19 @@ class webform extends class_base
 				"name" => t("*elemendinimi* peab olema t&auml;idetud"),
 				"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
 //				"errmsg" => t("%caption peab olema t&auml;idetud"),
-				"errmsg" => $error_messages['element_has_to_be_filled'][$lang_data['acceptlang']],
+				"errmsg" => $error_messages['element_has_to_be_filled'],
 			),
 			array(
 				"name" => t("*elemendinimi* peab olema valitud"),
 				"formula" => 'if(empty($prop["value"])){$retval = PROP_ERROR;}',
 //				"errmsg" => t("%caption peab olema valitud"),
-				"errmsg" => $error_messages['element_has_to_be_selected'][$lang_data['acceptlang']],
+				"errmsg" => $error_messages['element_has_to_be_selected'],
 			),
 			array(
 				"name" => t("Kontrolli e-maili &otilde;igsust"),
 				"formula" => 'if(!is_email($prop["value"])){$retval = PROP_ERROR;}',
 //				"errmsg" => t("%caption sisestatud e-mailiaadress pole korrektne"),
-				"errmsg" => $error_messages['email_address_not_correct'][$lang_data['acceptlang']],
+				"errmsg" => $error_messages['email_address_not_correct'],
 			),
 			array(
 				"name" => t("Kuva sisestaja IP ja host aadress"),
@@ -984,6 +974,11 @@ class webform extends class_base
 		}
 		if(!empty($show_props))
 		{
+			$this->vars(array(
+				"type_cap" => t("T&uuml;&uuml;p"),
+				"el_count_cap" => t("Mitu elementi"),
+				"usage_cap" => t("Kasutus"),
+			));
 			$vrs["av_props"] = $this->parse("av_props");
 		}
 		$sc = "";
@@ -996,6 +991,8 @@ class webform extends class_base
 				"prp_type" => $prop["type"],
 				"prp_used" => (int)$prp_count[$prop["type"]],
 				"prp_unused" => ((int)$ext_count[$prop["type"]] - (int)$prp_count[$prop["type"]]),
+				"used_cap" => t("kasutusel"),
+				"unused_cap" => t("alles"),
 			));
 			$sc .= $this->parse("avail_property");
 		}
@@ -1147,10 +1144,10 @@ class webform extends class_base
 		
 		// lotsa needed options for various things
 		$capt_opts = array(
-			0 => "Vasakul",
-			"right" => "Paremal",
-			"top" => "Peal",
-			"bottom" => "All",
+			0 => t("Vasakul"),
+			"right" => t("Paremal"),
+			"top" => t("Peal"),
+			"bottom" => t("All"),
 			//"in" => "Sees",
 		);
 		$prp_types = array(
@@ -1345,12 +1342,14 @@ class webform extends class_base
 					{
 						$this->vars(array(
 							"ht" => $property["height"],
+							"height_caption" => t("K&otilde;rgus"),
 						));
 						$height = $this->parse("HEIGHT");
 					}
 					$this->vars(array(
 						"wt" => $property["width"],
 						"HEIGHT" => $height,
+						"width_caption" => t("Laius"),
 					));
 					$clf5 = $this->parse("CLF5");
 				}
@@ -1365,6 +1364,15 @@ class webform extends class_base
 			}
 			$this->vars(array(
 				"property" => $sc,
+				"jrk_caption" => t("Jrk"),
+				"cpt_caption" => t("Pealkiri"),
+				"cpt_loc_caption" => t("Pealkirja asukoht"),
+				"type_caption" => t("T&uuml;&uuml;p"),
+				"side_caption" => t("K&otilde;rvale"),
+				"split_caption" => t("Vahe"),
+				"sel_caption" => t("Vali"),
+				"no_web_caption" => t("Ei n&auml;ita veebis"),
+				"no_name_caption" => t("Ei n&auml;ita nime"),
 			));
 			$c .= $this->parse("group");
 		}
@@ -1446,14 +1454,14 @@ class webform extends class_base
 		{
 			$props[$key."_capt"] = array(
 				"name" => "style[$key][caption]",
-				"caption" => $val["caption"]." pealkirja stiil",
+				"caption" => sprintf(t("%s pealkirja stiil"), $val["caption"]),
 				"type" => "select",
 				"options" => $this->all_rels,
 				"selected" => $sel_styles[$key]["caption"],
 			);
 			$props[$key] = array(
 				"name" => "style[$key][prop]",
-				"caption" => $val["caption"]." elemendi stiil",
+				"caption" => sprintf(t("%s elemendi stiil"), $val["caption"]),
 				"type" => "select",
 				"options" => $this->all_rels,
 				"selected" => $sel_styles[$key]["prop"],

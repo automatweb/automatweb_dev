@@ -23,15 +23,15 @@ function selall()
 <legend>{VAR:grp_caption}</legend>
 	<table style="border-collapse: collapse; font-size: 11px; border-color: #CCC;" cellpadding="3px">
 	<tr bgcolor="{VAR:bgcolor}">
-		<td width="50">Jrk</td>
-		<td width="100">Pealkiri</td>
-		<td width="150">Pealkirja asukoht</td>
-		<td width="100">Tüüp</td>
-		<td width="30">Kõrvale</td>
-		<td width="10">Vahe</td>
-		<td width="30" align="center"><a href="javascript:selall()">Vali</a></td>
-		<td width="30">Ei näita veebis</td>
-		<td width="30">Ei näita nime</td>
+		<td width="50">{VAR:jrk_caption}</td>
+		<td width="100">{VAR:cpt_caption}</td>
+		<td width="150">{VAR:cpt_loc_caption}</td>
+		<td width="100">{VAR:type_caption}</td>
+		<td width="30">{VAR:side_caption}</td>
+		<td width="10">{VAR:split_caption}</td>
+		<td width="30" align="center"><a href="javascript:selall()">{VAR:sel_caption}</a></td>
+		<td width="30">{VAR:no_web_caption}</td>
+		<td width="30">{VAR:no_name_caption}</td>
 	</tr>
 	<!-- SUB: subt -->
 	<tr bgcolor="{VAR:bgcolor}">
@@ -54,12 +54,12 @@ function selall()
 	<tr bgcolor="{VAR:bgcolor}">
 		<td colspan="2">
 		<!-- SUB: HEIGHT -->
-		Kõrgus
+		{VAR:height_caption}	
 		<input type="text" name="prp_opts[{VAR:prp_key}][height]" size="4" value="{VAR:ht}">
 		<!-- END SUB: HEIGHT -->
 		</td>
 		<td colspan="5">
-		Laius
+		{VAR:width_caption}	
 		<input type="text" name="prp_opts[{VAR:prp_key}][width]" size="4" value="{VAR:wt}">
 		</td>
 	</tr>
