@@ -981,7 +981,13 @@ class crm_company_bills_impl extends class_base
 			{
 				$rfn = $fn;
 			}
-
+			
+			$penalty = "0,00";
+			if ($this->can("view", $b->prop("customer")))
+			{
+				$cust = obj($b->prop("customer"));
+				if($cust->prop("bill_penalty_pct")) $penalty = $cust->prop("bill_penalty_pct");
+			}
 			// bill info row
 			$brow = array();
 			$brow[] = $b->prop("bill_no");						// arve nr
@@ -997,7 +1003,7 @@ class crm_company_bills_impl extends class_base
 			$brow[] = "";
 			//$brow[] = "";
 			$brow[] = 0;			//    0 (teadmata - vaikeväärtus 0) 
-			$brow[] = "0,00";		// 0,00 (teadmata - vaikeväärtus 0,00) 
+			$brow[] = $penalty;		// 0,00 (teadmata - vaikeväärtus 0,00) viivis
 			$brow[] = "";
 			$brow[] = 1;			// 1 (teadmata - vaikeväärtus 1) 
 			$brow[] = ""; 
@@ -1104,7 +1110,7 @@ class crm_company_bills_impl extends class_base
 			$pr[] = "0";	//(teadmata - vaikeväärtus 0) 
 			$pr[] = "0";	//(teadmata - vaikeväärtus 0)  
 			$pr[] = "";
-			$pr[] = "0"; //(teadmata - vaikeväärtus 0)			
+			$pr[] = "0"; //(teadmata - vaikeväärtus 0)
 			$ct[] = join("\t", $pr);
 
 			$rows = $i->get_bill_rows($b);
