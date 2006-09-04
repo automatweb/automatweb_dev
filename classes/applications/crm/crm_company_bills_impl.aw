@@ -1232,7 +1232,7 @@ class crm_company_bills_impl extends class_base
 	{
 		$ret = "";
 		$comments = array();
-		if (count($row["persons"]) == 0)
+		if (count($row["persons"]) == 0 && $this->can("view", $b->prop("customer")))
 		{
 			$cc = get_instance(CL_CRM_COMPANY);
 			$crel = $cc->get_cust_rel(obj($b->prop("customer")));
@@ -1240,7 +1240,7 @@ class crm_company_bills_impl extends class_base
 			{
 				return "";
 			}
-			//return mb_strtoupper($crel->prop_str("client_manager"), aw_global_get("charset"));
+			//return mb_strtoupper($crel->prop("client_manager.firstname"), aw_global_get("charset")
 			$ret = $crel->prop("comment");
 		}
 		else
