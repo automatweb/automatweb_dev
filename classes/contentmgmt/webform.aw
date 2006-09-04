@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.96 2006/09/04 11:49:17 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.97 2006/09/04 12:47:28 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1998,11 +1998,44 @@ class webform extends class_base
 			$pd["capt_ord"] = $pd["wf_capt_ord"];
 			if ($pd["capt_ord"] == "in" && empty($arr['value']))
 			{
-				$pd["value"] = $pd["caption"];
-				$pd["onFocus"] = "if (this.value == '".$pd['value']."')this.value=''";
-				$pd["onBlur"] = "if (this.value == '')this.value='".$pd['value']."'";
-				$pd["selected"] = array_search($pd['caption'], $pd['options']);
-			
+				switch ($pd['type'])
+				{
+					case 'select':
+						if ($pd['multiple'] == 1)
+						{
+							$values = explode(',', $pd['caption']);
+							foreach ($values as $value)
+							{
+								$pd['selected'][] = array_search($value, $pd['options']);
+							}
+						}
+						else
+						{
+							$pd["selected"] = array_search($pd['caption'], $pd['options']);
+						}
+						break;
+					case 'chooser':
+						if ($pd['multiple'] == 1)
+						{
+							$values = explode(',', $pd['caption']);
+							foreach ($values as $value)
+							{
+								$pd['value'][array_search($value, $pd['options'])] = $value;
+							}
+						}
+						else
+						{
+							$pd['value'] = array_search($pd['caption'], $pd['options']);
+						}
+						break;
+
+					default:
+						$pd["value"] = $pd["caption"];
+						$pd["onFocus"] = "if (this.value == '".$pd['value']."')this.value=''";
+						$pd["onBlur"] = "if (this.value == '')this.value='".$pd['value']."'";
+				}
+				
+//		arr($pd);	
 			}
 			$htmlc->add_property($pd);
 		}
