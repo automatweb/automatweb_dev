@@ -101,6 +101,7 @@
             <field>meta</field>
             <parent>co_top_right</parent>
             <captionside>top</captionside>
+            <override_parent>this</override_parent>
             <caption>Organisatsiooni logo</caption>
       </property>
       <property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.88 2006/07/05 10:12:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.89 2006/09/04 12:18:27 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -939,13 +939,16 @@ class releditor extends core
 		// TODO: make it give feedback to the user, if an object can not be added
 		if ($el_count > 0)
 		{
-
 			$emb["group"] = "general";
 			$obj_parent = $obj->parent();
 			if (is_oid($prop["obj_parent"]))
 			{
 				$obj_parent = $prop["obj_parent"];
 			};
+			if ($prop["override_parent"] == "this")
+			{
+				$obj_parent = $obj->id();
+			}
 			$emb["parent"] = $obj_parent;
 			$emb["return"] = "id";
 			$emb["prefix"] = $elname;

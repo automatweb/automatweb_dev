@@ -46,7 +46,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right captionside=top
 			@caption KMKohuslase nr
 
-			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects parent=co_top_right captionside=top
+			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects parent=co_top_right captionside=top override_parent=this
 			@caption Organisatsiooni logo
 
 			@property firmajuht type=select table=kliendibaas_firma  editonly=1 parent=co_top_right captionside=top
