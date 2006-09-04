@@ -934,6 +934,7 @@ class crm_company_bills_impl extends class_base
 	{
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
+		$co = obj($u->get_current_company());
 		$fn = trim(mb_strtoupper($p->prop("firstname")));
 	
 		$ct = array();
@@ -988,7 +989,9 @@ class crm_company_bills_impl extends class_base
 			{
 				$cust = obj($b->prop("customer"));
 				if($cust->prop("bill_penalty_pct")) $penalty = $cust->prop("bill_penalty_pct");
+				else $penalty = $co->prop("bill_penalty_pct");
 			}
+
 			if($b->prop("bill_trans_date")) $date = date("d.m.Y", $b->prop("bill_trans_date"));
 			else $date = date("d.m.Y", $b->prop("bill_date"));
 			// bill info row
