@@ -852,7 +852,7 @@ class relationmgr extends aw_template
 		$this->vars(array(
 			"class_ids" => $this->clid_list,
 			"id" => $arr["obj_inst"]->id(),
-			"return_url" => get_ru(),
+			"return_url" => urlencode(get_ru()),
 			"period" => $period,
 			"search_url" => aw_ini_get("baseurl").aw_url_change_var(array("srch" => 1)),
 		));
