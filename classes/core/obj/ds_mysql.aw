@@ -1545,7 +1545,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					else
 					{
 						$opn_app = "";
-						if ($v_data != 0)
+						if (!is_numeric($v_data) || $v_data != 0)
 						{
 							$opn_app = "OR $tf IS NULL";
 						}
