@@ -1230,22 +1230,34 @@ class crm_company_bills_impl extends class_base
 
 	function _get_bill_row_obj_hr($row, $b)
 	{
+		$ret = "";
+		$comments = array();
 		if (count($row["persons"]) == 0)
 		{
 			$cc = get_instance(CL_CRM_COMPANY);
 			$crel = $cc->get_cust_rel(obj($b->prop("customer")));
 			if (!$crel)
 			{
-				return "";	
+				return "";
 			}
-			return mb_strtoupper($crel->prop_str("client_manager"), aw_global_get("charset"));
+			//return mb_strtoupper($crel->prop_str("client_manager"), aw_global_get("charset"));
+			$ret = $crel->prop("comment");
 		}
-		$list = new object_list(array(
-			"oid" => $row["persons"],
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		return mb_strtoupper(join(", ", $list->names()), aw_global_get("charset"));
+		else
+		{
+			$list = new object_list(array(
+				"oid" => $row["persons"],
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			foreach($list->arr() as $person)
+			{
+				$comments[] = $person->prop("comment");
+			}
+			$ret = join(", " , $comments);
+		}
+		return $ret;
+		//mb_strtoupper(join(", ", $list->names()), aw_global_get("charset"));
 	}
 
 	function nice_trim($s)
