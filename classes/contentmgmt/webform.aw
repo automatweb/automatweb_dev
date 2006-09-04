@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.95 2006/09/04 11:47:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.96 2006/09/04 11:49:17 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1144,11 +1144,11 @@ class webform extends class_base
 		
 		// lotsa needed options for various things
 		$capt_opts = array(
-			0 => t("Vasakul"),
-			"right" => t("Paremal"),
-			"top" => t("Peal"),
-			"bottom" => t("All"),
-			//"in" => "Sees",
+			0 => "Vasakul",
+			"right" => "Paremal",
+			"top" => "Peal",
+			"bottom" => "All",
+			"in" => "Sees",
 		);
 		$prp_types = array(
 			"" => t("-- vali --"),
@@ -1858,7 +1858,6 @@ class webform extends class_base
 			// some goddamn thing messes up the element captions, reorder them
 			//$els[$key]["caption"] = $all_props[$key]["caption"];
 			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
-			
 			// treat all text properties as an ordinary text property
 			if($all_props[$key]["type"] == "text" && empty($all_props[$key]["value"]))
 			{
@@ -1994,10 +1993,17 @@ class webform extends class_base
 		));
 		$htmlc->set_layout($layout);
 		$htmlc->start_output();
-
 		foreach($els as $pn => $pd)
 		{
 			$pd["capt_ord"] = $pd["wf_capt_ord"];
+			if ($pd["capt_ord"] == "in" && empty($arr['value']))
+			{
+				$pd["value"] = $pd["caption"];
+				$pd["onFocus"] = "if (this.value == '".$pd['value']."')this.value=''";
+				$pd["onBlur"] = "if (this.value == '')this.value='".$pd['value']."'";
+				$pd["selected"] = array_search($pd['caption'], $pd['options']);
+			
+			}
 			$htmlc->add_property($pd);
 		}
 		$htmlc->finish_output();

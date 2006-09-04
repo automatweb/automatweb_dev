@@ -114,6 +114,10 @@ class html extends aw_template
 
 	@param onkeypress optional type=string
 		If set, then onkeypress=$onkeypress. Not allowed if autocomplete used.
+	@param onFocus optional type=string
+		If set, then onFocus=$onFocus. 
+	@param onBlur optional type=string
+		If set, then onBlur=$onBlur. 
 
 	@param autocomplete_source optional type=string
 		Relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) http URL that refers to source of autocomplete options. Response expected in JSON format (http://www.json.org/)(classes/protocols/data/aw_json). Response is an array:
@@ -170,6 +174,8 @@ class html extends aw_template
 		$value = str_replace('"' , '&quot;',$value);
 		settype ($option_is_tuple, "boolean");
 		$onkeypress = isset($onkeypress) ? ' onkeypress="'.$onkeypress.'"' : "";
+		$onFocus = isset($onFocus) ? ' onFocus="'.$onFocus.'"' : '';
+		$onBlur = isset($onBlur) ? ' onBlur="'.$onBlur.'"' : '';
 		$autocomplete = "";
 		$js_name = str_replace(array("[", "]", "-"), "_", $name);
 
@@ -261,7 +267,7 @@ class html extends aw_template
 			}
 		}
 
-		return "<input type=\"text\" id=\"$id\" $ac_off name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$disabled}{$textsize} />$post_append_text\n{$value_elem}{$autocomplete}";
+		return "<input type=\"text\" id=\"$id\" $ac_off name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize} />$post_append_text\n{$value_elem}{$autocomplete}";
 	}
 
 	/**
@@ -282,6 +288,12 @@ class html extends aw_template
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
 
+	@param onFocus optional type=string
+		if set, onFocus=$onFocus.
+	@param onBlur optional type=string
+		if set, onBlur=$onBlur.
+
+
 	@returns string / html textarea
 
 	@comment creates html textarea
@@ -292,6 +304,9 @@ class html extends aw_template
 		$cols = isset($cols) ? $cols : 40;
 		$rows = isset($rows) ? $rows : 5;
 		$value = isset($value) ? $value : "";
+		$onFocus = isset($onFocus) ? ' onFocus="'.$onFocus.'"' : '';
+		$onBlur = isset($onBlur) ? ' onBlur="'.$onBlur.'"' : '';
+
 		if (strpos($value, "<") !== false)
 		{
 			$value = htmlspecialchars($value);
@@ -319,7 +334,7 @@ class html extends aw_template
 			$disabled = ($disabled ? " disabled" : "");
 			$wrap = isset($wrap) ? $wrap : "soft";
 			$style = isset($style) ? " style='$style' " : "";
-			$retval = "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize>$value</textarea>\n";
+			$retval = "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize $onFocus $onBlur>$value</textarea>\n";
 		};
 		return $retval;
 	}

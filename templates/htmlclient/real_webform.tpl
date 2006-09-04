@@ -61,6 +61,11 @@
 	</td>
 </tr>
 <!-- END SUB: LINE_RIGHT -->
+<!-- SUB: LINE_IN -->
+<tr>
+<td colspan="2" class="{VAR:webform_element}">{VAR:element}</td>
+</tr>
+<!-- END SUB: LINE_IN -->
 <!-- SUB: HEADER -->
 <tr>
 	<td class="{VAR:webform_header}" colspan="2">
