@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.496 2006/08/28 12:21:29 kristo Exp $
+// $Id: class_base.aw,v 2.497 2006/09/04 12:38:47 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1584,7 +1584,7 @@ class class_base extends aw_template
 			};
 
 			// experimental hook for new relationmgr
-			if (empty($this->classinfo["r2"]) && empty($this->view))
+			if (empty($this->classinfo["r2"]) && false && empty($this->view))
 			{
 				$this->cli->add_tab(array(
 					"id" => "list_aliases",
@@ -4903,7 +4903,7 @@ class class_base extends aw_template
 			$this->classinfo = array();
 		};
 		$this->classinfo = array_merge($this->classinfo,$cfgu->get_classinfo());
-		if (isset($this->classinfo["r2"]) )
+		if (isset($this->classinfo["r2"]) || true)
 		{
 			$this->groupinfo["relationmgr"] = array(
 				"caption" => t("Seostehaldur"),
