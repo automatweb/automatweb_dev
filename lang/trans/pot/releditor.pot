@@ -27,7 +27,7 @@ msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr ""
 
 #: classes/vcl/releditor.aw:75
-msgid "Viga %s definitsioonis (seose t&uuml;&uuml;p defineerimata!)"
+msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr ""
 
 #: classes/vcl/releditor.aw:111
@@ -67,7 +67,7 @@ msgid "Muuda"
 msgstr ""
 
 #: classes/vcl/releditor.aw:681
-msgid "Vali &uuml;ks"
+msgid "Vali üks"
 msgstr ""
 
 #: classes/vcl/releditor.aw:690 classes/vcl/releditor.aw:728

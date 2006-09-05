@@ -11,6 +11,4 @@ $GLOBALS["TRANS"]["Omaduse Teemasid lehel (topics_on_page) kommentaar"] = "võima
 $GLOBALS["TRANS"]["Omaduse Teemasid lehel (topics_on_page) help"] = "võimalus määrata, mitut teemat korraga kuvatakse";
 $GLOBALS["TRANS"]["Omaduse Kommentaare lehel (comments_on_page) kommentaar"] = "võimalus määrata, mitut kommentaari korraga ühe teema juures kuvatakse";
 $GLOBALS["TRANS"]["Omaduse Kommentaare lehel (comments_on_page) help"] = "võimalus määrata, mitut kommentaari korraga ühe teema juures kuvatakse";
-$GLOBALS["TRANS"]["Omaduse Teemade sügavus (topic_depth) kommentaar"] = "määra mitu taset teemasid on ainult administraatorite luua ja hallata.";
-$GLOBALS["TRANS"]["Omaduse Teemade sügavus (topic_depth) help"] = "määra mitu taset teemasid on ainult administraatorite luua ja hallata. (N: kui teemade sügavus on 1, siis tavakasutajad saavad teemasid lisada alles alates teisest tasemest)";
 ?>

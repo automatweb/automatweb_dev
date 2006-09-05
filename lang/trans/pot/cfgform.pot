@@ -666,6 +666,10 @@ msgstr ""
 msgid "Lisa grupp"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:1166
+msgid "&Uuml;htegi gruppi pole veel!"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:1337
 msgid "vaikestiil"
 msgstr ""

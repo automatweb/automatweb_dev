@@ -593,198 +593,222 @@ msgstr ""
 msgid "Objekti t&uuml;&uuml;p "
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:756
-msgid "M&auml;&auml;ra saaja aadressiks"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:760
-msgid "M&auml;&auml;ra saatja aadressiks"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:764
-msgid "*elemendinimi* peab olema t&auml;idetud"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:766
+#: classes/contentmgmt/webform.aw:735 classes/contentmgmt/webform.aw:756
 msgid "%caption peab olema t&auml;idetud"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:770
-msgid "*elemendinimi* peab olema valitud"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:772
+#: classes/contentmgmt/webform.aw:736 classes/contentmgmt/webform.aw:762
 msgid "%caption peab olema valitud"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:776
-msgid "Kontrolli e-maili &otilde;igsust"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:778
+#: classes/contentmgmt/webform.aw:737 classes/contentmgmt/webform.aw:768
 msgid "%caption sisestatud e-mailiaadress pole korrektne"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:782 classes/contentmgmt/webform.aw:793
+#: classes/contentmgmt/webform.aw:746
+msgid "M&auml;&auml;ra saaja aadressiks"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:750
+msgid "M&auml;&auml;ra saatja aadressiks"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:754
+msgid "*elemendinimi* peab olema t&auml;idetud"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:760
+msgid "*elemendinimi* peab olema valitud"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:766
+msgid "Kontrolli e-maili &otilde;igsust"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:772 classes/contentmgmt/webform.aw:783
 msgid "Kuva sisestaja IP ja host aadress"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:786 classes/contentmgmt/webform.aw:797
+#: classes/contentmgmt/webform.aw:776 classes/contentmgmt/webform.aw:787
 msgid "Sisesta dokumendi pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:842
+#: classes/contentmgmt/webform.aw:832
 msgid "Otsi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:850
+#: classes/contentmgmt/webform.aw:840
 msgid "Muuda otsingu seadeid"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:860
+#: classes/contentmgmt/webform.aw:850
 msgid "Kustuta valitud sisestused"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:863
+#: classes/contentmgmt/webform.aw:853
 msgid "Oled kindel, et tahad valitud sisestused kustutada?"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:867
+#: classes/contentmgmt/webform.aw:857
 msgid "Ekspordi objektid"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1150
-msgid "Vasakul"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1151
-msgid "Paremal"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1152
-msgid "Peal"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1153
-msgid "All"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1157
-msgid "-- vali --"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1158
-msgid "Mitmerealine rippmen&uuml;&uuml;"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1159
-msgid "Rippmen&uuml;&uuml;"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1160
-msgid "M&auml;rkeruut"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1161
-msgid "Raadionupp"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1164
-msgid "--vali--"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1165
-msgid "Järjekord (kasvav)"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1166
-msgid "Järjekord (kahanev)"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1167
-msgid "Nimi (kasvav)"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1168
-msgid "Nimi (kahanev)"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1169
-msgid "Loomisaeg (kasvav)"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1170
-msgid "Loomisaeg (kahanev)"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1172
-msgid "horisontaalne"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1172
-msgid "vertikaalne"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1348
-msgid "K&otilde;rgus"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1355
-msgid "Laius"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1370
-msgid "Jrk"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1371
-msgid "Pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1372
-msgid "Pealkirja asukoht"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1373
+#: classes/contentmgmt/webform.aw:978 classes/contentmgmt/webform.aw:1370
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1374
+#: classes/contentmgmt/webform.aw:979
+msgid "Mitu elementi"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:980
+msgid "Kasutus"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:994
+msgid "kasutusel"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:995
+msgid "alles"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1147
+msgid "Vasakul"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1148
+msgid "Paremal"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1149
+msgid "Peal"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1150
+msgid "All"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1154
+msgid "-- vali --"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1155
+msgid "Mitmerealine rippmen&uuml;&uuml;"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1156
+msgid "Rippmen&uuml;&uuml;"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1157
+msgid "M&auml;rkeruut"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1158
+msgid "Raadionupp"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1161
+msgid "--vali--"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1162
+msgid "Järjekord (kasvav)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1163
+msgid "Järjekord (kahanev)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1164
+msgid "Nimi (kasvav)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1165
+msgid "Nimi (kahanev)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1166
+msgid "Loomisaeg (kasvav)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1167
+msgid "Loomisaeg (kahanev)"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1169
+msgid "horisontaalne"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1169
+msgid "vertikaalne"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1345
+msgid "K&otilde;rgus"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1352
+msgid "Laius"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1367
+msgid "Jrk"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1368
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1369
+msgid "Pealkirja asukoht"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1371
 msgid "K&otilde;rvale"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1375
+#: classes/contentmgmt/webform.aw:1372
 msgid "Vahe"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1376
+#: classes/contentmgmt/webform.aw:1373
 msgid "Vali"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1377
+#: classes/contentmgmt/webform.aw:1374
 msgid "Ei n&auml;ita veebis"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1378
+#: classes/contentmgmt/webform.aw:1375
 msgid "Ei n&auml;ita nime"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1451
+#: classes/contentmgmt/webform.aw:1448
 msgid "Veateate stiil"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1507 classes/contentmgmt/webform.aw:1530
+#: classes/contentmgmt/webform.aw:1457
+msgid "%s pealkirja stiil"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1464
+msgid "%s elemendi stiil"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1504 classes/contentmgmt/webform.aw:1527
 msgid "-- Vali --"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1614
+#: classes/contentmgmt/webform.aw:1611
 msgid "Registreeru"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1797
+#: classes/contentmgmt/webform.aw:1794
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2285
+#: classes/contentmgmt/webform.aw:2282
 msgid "Liigu edasi &raquo;"
 msgstr ""

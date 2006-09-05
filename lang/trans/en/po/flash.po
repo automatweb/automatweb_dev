@@ -31,7 +31,7 @@ msgstr ""
 
 #: classes/contentmgmt/flash.aw:prop_file_url
 msgid "Omaduse Sisesta faili aadress (file_url) caption"
-msgstr ""
+msgstr "Enter file url"
 
 #: classes/contentmgmt/flash.aw:prop_file_url_comment
 msgid "Omaduse Sisesta faili aadress (file_url) kommentaar"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: classes/contentmgmt/flash.aw:prop_click_tag
 msgid "Omaduse Link (Click Tag) (click_tag) caption"
-msgstr ""
+msgstr "Link (Click Tag)"
 
 #: classes/contentmgmt/flash.aw:prop_click_tag_comment
 msgid "Omaduse Link (Click Tag) (click_tag) kommentaar"

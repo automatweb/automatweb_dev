@@ -20,12 +20,12 @@ $GLOBALS["TRANS"]["Omaduse Jalus (footer) caption"] = "Footer";
 $GLOBALS["TRANS"]["Grupi M&auml;&auml;rangud (settings) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Grupi Tabel (layout) pealkiri"] = "Table";
 $GLOBALS["TRANS"]["Grupi Stiilid (styles) pealkiri"] = "Styles";
-$GLOBALS["TRANS"]["Grupi Tabeli sisu (aliases) pealkiri"] = "Table contents";
+$GLOBALS["TRANS"]["Grupi Tabeli sisu (aliases) pealkiri"] = "Table content";
 $GLOBALS["TRANS"]["Grupi P&auml;is ja jalus (hfoot) pealkiri"] = "Header and footer";
 $GLOBALS["TRANS"]["Grupi Import (import) pealkiri"] = "Import";
 $GLOBALS["TRANS"]["Grupi Eelvaade (preview) pealkiri"] = "Preview";
 $GLOBALS["TRANS"]["Seose celli stiilide kataloog (RELTYPE_CELLSTYLE_FOLDER) tekst"] = "cell style folder";
-$GLOBALS["TRANS"]["Seose näita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"] = "display in this folder";
+$GLOBALS["TRANS"]["Seose nï¿½ta selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"] = "display in this folder";
 $GLOBALS["TRANS"]["%d tulba laius"] = "Row %d width";
 $GLOBALS["TRANS"]["%d tulba k&otilde;rgus"] = "Row %d height";
 ?>

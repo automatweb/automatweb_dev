@@ -122,15 +122,15 @@ msgid "Omaduse Luba kasutajal oma andmeid muuta (show_logged) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_general_subtitle
-msgid "Omaduse Üldine (style_general_subtitle) caption"
+msgid "Omaduse &Uuml;ldine (style_general_subtitle) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_general_subtitle_comment
-msgid "Omaduse Üldine (style_general_subtitle) kommentaar"
+msgid "Omaduse &Uuml;ldine (style_general_subtitle) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_general_subtitle_help
-msgid "Omaduse Üldine (style_general_subtitle) help"
+msgid "Omaduse &Uuml;ldine (style_general_subtitle) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_donor
@@ -470,15 +470,15 @@ msgid "Omaduse Kommentaare lehel (comments_on_page) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth
-msgid "Omaduse Teemade sügavus (topic_depth) caption"
+msgid "Omaduse Teemade s&uuml;gavus (topic_depth) caption"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_comment
-msgid "Omaduse Teemade sügavus (topic_depth) kommentaar"
+msgid "Omaduse Teemade s&uuml;gavus (topic_depth) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_help
-msgid "Omaduse Teemade sügavus (topic_depth) help"
+msgid "Omaduse Teemade s&uuml;gavus (topic_depth) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector
@@ -590,11 +590,11 @@ msgid "Omaduse Foorumi sisu (show) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_general_sub
-msgid "Grupi Üldine (general_sub) pealkiri"
+msgid "Grupi &Uuml;ldine (general_sub) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_general_sub_help
-msgid "Grupi Üldine (general_sub) help"
+msgid "Grupi &Uuml;ldine (general_sub) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_mail_settings
@@ -614,11 +614,11 @@ msgid "Grupi Kasutajad (users) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_look
-msgid "Grupi Välimus (look) pealkiri"
+msgid "Grupi V&auml;limus (look) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_look_help
-msgid "Grupi Välimus (look) help"
+msgid "Grupi V&auml;limus (look) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_styles
@@ -750,7 +750,7 @@ msgid "Teema"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:1710
-msgid "Jäta välja"
+msgid "J&auml;ta v&auml;lja"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:1717

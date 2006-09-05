@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/core/util/image_verification/image_verification.aw:prop_width
 msgid "Omaduse Laius (width) caption"
-msgstr ""
+msgstr "Width"
 
 #: classes/core/util/image_verification/image_verification.aw:prop_width_comment
 msgid "Omaduse Laius (width) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/core/util/image_verification/image_verification.aw:prop_height
 msgid "Omaduse K&otilde;rgus (height) caption"
-msgstr ""
+msgstr "Height"
 
 #: classes/core/util/image_verification/image_verification.aw:prop_height_comment
 msgid "Omaduse K&otilde;rgus (height) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/core/util/image_verification/image_verification.aw:prop_text_color
 msgid "Omaduse Teksti v&auml;rv (text_color) caption"
-msgstr ""
+msgstr "Text color"
 
 #: classes/core/util/image_verification/image_verification.aw:prop_text_color_comment
 msgid "Omaduse Teksti v&auml;rv (text_color) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/core/util/image_verification/image_verification.aw:prop_background_color
 msgid "Omaduse Tausta v&auml;rv (background_color) caption"
-msgstr ""
+msgstr "Background color"
 
 #: classes/core/util/image_verification/image_verification.aw:prop_background_color_comment
 msgid "Omaduse Tausta v&auml;rv (background_color) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/core/util/image_verification/image_verification.aw:prop_image_preview
 msgid "Omaduse Eelvaade (image_preview) caption"
-msgstr ""
+msgstr "Image preview"
 
 #: classes/core/util/image_verification/image_verification.aw:prop_image_preview_comment
 msgid "Omaduse Eelvaade (image_preview) kommentaar"

@@ -9,22 +9,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/doc_display.aw:315
+#: classes/doc_display.aw:316
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/doc_display.aw:321
+#: classes/doc_display.aw:322
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc_display.aw:326
+#: classes/doc_display.aw:327
 msgid "Peida"
 msgstr ""
 
-#: classes/doc_display.aw:330
+#: classes/doc_display.aw:331
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/doc_display.aw:336
+#: classes/doc_display.aw:337
 msgid "Kleebi"
 msgstr ""

@@ -316,7 +316,7 @@ msgstr ""
 # classes/layout.aw:group_aliases
 #: classes/contentmgmt/layout.aw:group_aliases
 msgid "Grupi Tabeli sisu (aliases) pealkiri"
-msgstr "Table contents"
+msgstr "Table content"
 
 # classes/contentmgmt/layout.aw:group_aliases_help
 #: classes/contentmgmt/layout.aw:group_aliases_help
@@ -359,7 +359,7 @@ msgstr "cell style folder"
 
 # classes/layout.aw:rel_RELTYPE_SHOW_FOLDER
 #: classes/contentmgmt/layout.aw:rel_RELTYPE_SHOW_FOLDER
-msgid "Seose näita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
+msgid "Seose nï¿½ta selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
 msgstr "display in this folder"
 
 #: classes/contentmgmt/layout.aw:394
