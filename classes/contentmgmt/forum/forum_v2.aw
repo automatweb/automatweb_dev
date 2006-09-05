@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.113 2006/09/04 17:40:40 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.114 2006/09/05 09:56:28 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -12,7 +12,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 @default table=objects
 
 
-	@groupinfo general_sub caption="Üldine" parent=general
+	@groupinfo general_sub caption="&Uuml;ldine" parent=general
 	@default group=general_sub
 
 		@property name type=textbox rel=1 trans=1
@@ -34,7 +34,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
 		@caption Teemade kaust
-		@comment Sellest kaustast võetakse foorumi teemad
+		@comment Sellest kaustast v&uuml;etakse foorumi teemad
 
 		@property address_folder type=relpicker reltype=RELTYPE_ADDRESS_FOLDER
 		@caption Listiliikmete kaust
@@ -42,7 +42,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property images_folder type=relpicker reltype=RELTYPE_IMAGES_FOLDER
 		@caption Piltide kaust
-		@comment Kui piltide kaust on valitud, siis foorumisse pandud piltide objektid salvestatakse selle kausta alla, muidu pannakse selle objekti alla, mille külge pilt pannakse
+		@comment Kui piltide kaust on valitud, siis foorumisse pandud piltide objektid salvestatakse selle kausta alla, muidu pannakse selle objekti alla, mille k&uuml;lge pilt pannakse
 
 		@property faq_folder type=relpicker reltype=RELTYPE_FAQ_FOLDER
 		@caption KKK kaust
@@ -67,7 +67,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property mail_subject type=textbox
 		@caption Maili subject
-		@comment Kui määramata, siis foorumi topic
+		@comment Kui m&auml;&auml;ramata, siis foorumi topic
 
 	@groupinfo users caption="Kasutajad" parent=general
 	@default group=users
@@ -75,13 +75,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property show_logged type=checkbox ch_value=1
 		@caption Luba kasutajal oma andmeid muuta
 
-@groupinfo look caption="Välimus"
+@groupinfo look caption="V&auml;limus"
 
 	@groupinfo styles caption="Stiilid" parent=look
 	@default group=styles
 
 		@property style_general_subtitle type=text store=no subtitle=1
-		@caption Üldine
+		@caption &Uuml;ldine
 
 			@property style_donor type=relpicker reltype=RELTYPE_STYLE_DONOR
 			@caption Stiilidoonor
@@ -173,7 +173,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@caption Kommentaare lehel
 
 		@property topic_depth type=select default=0
-		@caption Teemade sügavus
+		@caption Teemade s&uuml;gavus
 
 		@property topic_selector type=table no_caption=1
 		@caption Teemade tasemed
@@ -1707,7 +1707,7 @@ class forum_v2 extends class_base
 
 		$t->define_field(array(
 			"name" => "exclude",
-			"caption" => t("Jäta välja"),
+			"caption" => t("J&auml;ta v&auml;lja"),
 			"align" => "center",
 			"width" => 100,
 		));

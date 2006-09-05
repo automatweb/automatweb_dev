@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.4 2005/04/25 14:14:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.5 2006/09/05 09:56:28 kristo Exp $
 // iframe.aw - iframes
 
 /*
@@ -23,7 +23,7 @@
 	@caption Kõrgus
 
 	@property frameborder type=checkbox default=1 ch_value=1 
-	@caption Ümbritseda raamiga
+	@caption &Uuml;mbritseda raamiga
 
 	@property scrolling type=select 
 	@caption Kerimisribad
@@ -54,7 +54,7 @@ class iframe extends class_base
 		global $lc_iframe;
 		lc_load("iframe");
 
-		$this->lc_load("iframe","lc_iframe");
+		$this->lc_load("ifram","lc_iframe");
 
 
 	}

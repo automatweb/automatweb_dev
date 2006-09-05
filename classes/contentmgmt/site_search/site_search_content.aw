@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.76 2006/06/25 21:11:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.77 2006/09/05 09:56:28 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1882,13 +1882,13 @@ class site_search_content extends class_base
 	{
 		$t->define_field(array(
 			"name" => "loc",
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"align" => "center",
 		));
 		
 		$t->define_field(array(
 			"name" => "link",
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"align" => "center",
 		));
 

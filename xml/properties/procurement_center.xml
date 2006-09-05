@@ -216,6 +216,15 @@
             <field>offerers_find_tbl</field>
       </property>
       <property>
+            <name>offers_tb</name>
+            <table>objects</table>
+            <group>offers_tree</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>offers_tb</field>
+      </property>
+      <property>
             <name>offers_tr</name>
             <table>objects</table>
             <group>offers_tree</group>

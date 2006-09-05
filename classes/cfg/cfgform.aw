@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.93 2006/08/08 16:17:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.94 2006/09/05 09:56:27 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -11,13 +11,13 @@
 	@caption Klass
 
 	@property ctype type=text editonly=1 field=subclass
-	@caption Tüüp
+	@caption T&uuml;&uuml;p
 
 	@default field=meta
 	@default method=serialize
 
 	@property use_output type=relpicker reltype=RELTYPE_OUTPUT
-	@caption Väljundvorm
+	@caption V&auml;ljundvorm
 
 	@property xml_definition type=fileupload editonly=1
 	@caption Uploadi vormi fail
@@ -32,13 +32,13 @@
 	@caption RTE
 
 	@property classinfo_allow_rte_toggle type=checkbox ch_value=1 field=meta method=serialize
-	@caption Näita RTE/HTML nuppu
+	@caption N&auml;ita RTE/HTML nuppu
 
 	@property default_view_is_html type=checkbox ch_value=1 field=meta method=serialize
 	@caption Default vaade HTML
 
 	@property classinfo_disable_relationmgr type=checkbox ch_value=1 field=meta method=serialize
-	@caption Ära kasuta seostehaldurit
+	@caption &Auml;ra kasuta seostehaldurit
 
 	@property edit_groups type=callback callback=callback_edit_groups group=groupdata_a
 	@caption Muuda gruppe
@@ -56,7 +56,7 @@
 	@caption Av. Toolbar
 
 	@property availprops type=table store=no group=avail no_caption=1
-	@caption Kõik omadused
+	@caption K&otilde;ik omadused
 
 	@property cfg_proplist type=hidden field=meta method=serialize
 	@caption Omadused
@@ -77,7 +77,7 @@
 	@caption Vaikimisi väärtused
 
 	@property sysdefault type=table group=system no_caption=1
-	@caption Süsteemi seaded
+	@caption S&uuml;steemi seaded
 
 	@property trans_tbl_capt type=text subtitle=1 group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 
 	@caption Omadused
@@ -94,14 +94,14 @@
 		@groupinfo groupdata_b caption=Liikumine parent=groupdata
 
 	@groupinfo layout caption=Layout submit=no
-	@groupinfo avail caption="Kõik omadused" submit=no
+	@groupinfo avail caption="K&otilde;ik omadused" submit=no
 	@groupinfo controllers caption="Kontrollerid"
 	
 	@groupinfo set_controllers caption=Salvestamine parent=controllers
-	@groupinfo get_controllers caption=Näitamine parent=controllers
+	@groupinfo get_controllers caption=N&auml;itamine parent=controllers
 
 	@groupinfo settings caption="Seaded"
-	@groupinfo defaults caption="Omaduste väärtused" parent=settings
+	@groupinfo defaults caption="Omaduste v&auml;&auml;rtused" parent=settings
 	@groupinfo system caption="Vormi seaded" parent=settings
 	@groupinfo translate caption="T&otilde;lgi" 
 		@groupinfo lang_1 caption="lang" parent=translate
@@ -139,7 +139,7 @@
 	@caption N&auml;itamise kontroller
 	
 	@reltype OUTPUT value=4 clid=CL_CFGFORM
-	@caption Väljund
+	@caption V&auml;ljund
 
 	// so, how da fuck do I implement the grid layout thingie?
 	// add_item (item, row, col)
@@ -1163,7 +1163,7 @@ class cfgform extends class_base
 		}
 		else
 		{
-			$opts["none"] = "Ühtegi gruppi pole veel!";
+			$opts["none"] = t("&Uuml;htegi gruppi pole veel!");
 		};
 
 		$toolbar->add_cdata(html::select(array(

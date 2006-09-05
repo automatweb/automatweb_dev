@@ -4,9 +4,9 @@
             <name>name</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
             <type>textbox</type>
             <size>20</size>
+            <field>name</field>
             <caption>Linna nimetus</caption>
       </property>
       <property>

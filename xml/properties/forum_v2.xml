@@ -40,7 +40,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_TOPIC_FOLDER</reltype>
             <caption>Teemade kaust</caption>
-            <comment>Sellest kaustast v&amp;otilde;etakse foorumi teemad</comment>
+            <comment>Sellest kaustast v&amp;amp;uuml;etakse foorumi teemad</comment>
       </property>
       <property>
             <name>address_folder</name>
@@ -62,7 +62,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_IMAGES_FOLDER</reltype>
             <caption>Piltide kaust</caption>
-            <comment>Kui piltide kaust on valitud, siis foorumisse pandud piltide objektid salvestatakse selle kausta alla, muidu pannakse selle objekti alla, mille k&amp;uuml;lge pilt pannakse</comment>
+            <comment>Kui piltide kaust on valitud, siis foorumisse pandud piltide objektid salvestatakse selle kausta alla, muidu pannakse selle objekti alla, mille k&amp;amp;uuml;lge pilt pannakse</comment>
       </property>
       <property>
             <name>faq_folder</name>
@@ -111,7 +111,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Maili subject</caption>
-            <comment>Kui m&amp;auml;&amp;auml;ramata, siis foorumi topic</comment>
+            <comment>Kui m&amp;amp;auml;&amp;amp;auml;ramata, siis foorumi topic</comment>
       </property>
       <property>
             <name>show_logged</name>
@@ -132,7 +132,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>&amp;Uuml;ldine</caption>
+            <caption>&amp;amp;Uuml;ldine</caption>
       </property>
       <property>
             <name>style_donor</name>
@@ -422,7 +422,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Teemade s&amp;uuml;gavus</caption>
+            <caption>Teemade s&amp;amp;uuml;gavus</caption>
       </property>
       <property>
             <name>topic_selector</name>
@@ -526,7 +526,7 @@
       </classinfo>
       <groupinfo>
             <general_sub>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general_sub>
             <mail_settings>
@@ -538,7 +538,7 @@
                   <parent>general</parent>
             </users>
             <look>
-                  <caption>V&amp;auml;limus</caption>
+                  <caption>V&amp;amp;auml;limus</caption>
             </look>
             <styles>
                   <caption>Stiilid</caption>

@@ -16,7 +16,7 @@
             <type>text</type>
             <editonly>1</editonly>
             <field>subclass</field>
-            <caption>T&amp;uuml;&amp;uuml;p</caption>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>use_output</name>
@@ -26,7 +26,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_OUTPUT</reltype>
-            <caption>V&amp;auml;ljundvorm</caption>
+            <caption>V&amp;amp;auml;ljundvorm</caption>
       </property>
       <property>
             <name>xml_definition</name>
@@ -76,7 +76,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita RTE/HTML nuppu</caption>
+            <caption>N&amp;amp;auml;ita RTE/HTML nuppu</caption>
       </property>
       <property>
             <name>default_view_is_html</name>
@@ -96,7 +96,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;Auml;ra kasuta seostehaldurit</caption>
+            <caption>&amp;amp;Auml;ra kasuta seostehaldurit</caption>
       </property>
       <property>
             <name>edit_groups</name>
@@ -164,7 +164,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>K&amp;otilde;ik omadused</caption>
+            <caption>K&amp;amp;otilde;ik omadused</caption>
       </property>
       <property>
             <name>cfg_proplist</name>
@@ -237,7 +237,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>S&amp;uuml;steemi seaded</caption>
+            <caption>S&amp;amp;uuml;steemi seaded</caption>
       </property>
       <property>
             <name>trans_tbl_capt</name>
@@ -374,7 +374,7 @@
                   <submit>no</submit>
             </layout>
             <avail>
-                  <caption>K&amp;otilde;ik omadused</caption>
+                  <caption>K&amp;amp;otilde;ik omadused</caption>
                   <submit>no</submit>
             </avail>
             <controllers>
@@ -385,14 +385,14 @@
                   <parent>controllers</parent>
             </set_controllers>
             <get_controllers>
-                  <caption>N&amp;auml;itamine</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
                   <parent>controllers</parent>
             </get_controllers>
             <settings>
                   <caption>Seaded</caption>
             </settings>
             <defaults>
-                  <caption>Omaduste v&amp;auml;&amp;auml;rtused</caption>
+                  <caption>Omaduste v&amp;amp;auml;&amp;amp;auml;rtused</caption>
                   <parent>settings</parent>
             </defaults>
             <system>
@@ -473,7 +473,7 @@
             <OUTPUT>
                   <value>4</value>
                   <clid>CL_CFGFORM</clid>
-                  <caption>V&amp;auml;ljund</caption>
+                  <caption>V&amp;amp;auml;ljund</caption>
             </OUTPUT>
       </reltypes>
       <layout>
