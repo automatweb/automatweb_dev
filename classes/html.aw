@@ -1053,6 +1053,10 @@ class html extends aw_template
 	**/
 	function obj_change_url($o, $caption = NULL)
 	{
+		if (!$this)
+		{
+			$this = get_instance(CL_FILE);
+		}
 		if (is_array($o))
 		{
 			$res = array();
