@@ -119,43 +119,71 @@
             <caption>Asutatud</caption>
       </property>
       <property>
-            <name>cust_contract_date</name>
+            <name>buyer</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
-            <type>date_select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BUYER</reltype>
             <parent>co_bottom_left</parent>
-            <field>cust_contract_date</field>
-            <caption>Kliendisuhte alguskuup&amp;amp;auml;ev</caption>
+            <field>buyer</field>
+            <caption>Ostja</caption>
       </property>
       <property>
-            <name>cust_contract_creator</name>
+            <name>buyer_contract_creator</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
             <type>select</type>
             <parent>co_bottom_left</parent>
-            <field>cust_contract_creator</field>
-            <caption>Kliendisuhte looja</caption>
+            <field>buyer_contract_creator</field>
+            <caption>Hankijasuhte looja</caption>
       </property>
       <property>
-            <name>client_manager</name>
+            <name>buyer_contract_date</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>date_select</type>
+            <parent>co_bottom_left</parent>
+            <field>buyer_contract_date</field>
+            <caption>Hankijasuhte alguskuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>buyer_contract_person</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_CLIENT_MANAGER</reltype>
-            <field>client_manager</field>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
             <parent>co_bottom_left</parent>
-            <caption>Kliendihaldur</caption>
+            <field>buyer_contract_person</field>
+            <caption>Ostja kontaktisik 1</caption>
       </property>
       <property>
-            <name>referal_type</name>
-            <table>objects</table>
+            <name>buyer_contract_person2</name>
+            <table>kliendibaas_firma</table>
             <group>general_sub</group>
-            <type>classificator</type>
-            <store>connect</store>
-            <reltype>RELTYPE_REFERAL_TYPE</reltype>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
             <parent>co_bottom_left</parent>
-            <field>referal_type</field>
-            <caption>Sissetuleku meetod</caption>
+            <field>buyer_contract_person2</field>
+            <caption>Ostja kontaktisik 2</caption>
+      </property>
+      <property>
+            <name>buyer_contract_person3</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <parent>co_bottom_left</parent>
+            <field>buyer_contract_person3</field>
+            <caption>Ostja kontaktisik 3</caption>
+      </property>
+      <property>
+            <name>buyer_priority</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <parent>co_bottom_left</parent>
+            <field>buyer_priority</field>
+            <caption>Ostja prioriteet</caption>
       </property>
       <property>
             <name>client_category</name>
@@ -166,6 +194,34 @@
             <parent>co_bottom_left</parent>
             <field>client_category</field>
             <caption>Kliendikategooria</caption>
+      </property>
+      <property>
+            <name>cust</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BUYER</reltype>
+            <parent>co_bottom_right</parent>
+            <field>cust</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
+      </property>
+      <property>
+            <name>cust_contract_creator</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>select</type>
+            <parent>co_bottom_right</parent>
+            <field>cust_contract_creator</field>
+            <caption>Kliendisuhte looja</caption>
+      </property>
+      <property>
+            <name>cust_contract_date</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>date_select</type>
+            <parent>co_bottom_right</parent>
+            <field>cust_contract_date</field>
+            <caption>Kliendisuhte alguskuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>contact_person</name>
@@ -198,13 +254,44 @@
             <caption>Kliendpoolne kontaktisik 3</caption>
       </property>
       <property>
-            <name>priority</name>
+            <name>cust_priority</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
             <type>textbox</type>
             <parent>co_bottom_right</parent>
-            <field>priority</field>
-            <caption>Prioriteet</caption>
+            <field>cust_priority</field>
+            <caption>Kliendi prioriteet</caption>
+      </property>
+      <property>
+            <name>referal_type</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>classificator</type>
+            <store>connect</store>
+            <reltype>RELTYPE_REFERAL_TYPE</reltype>
+            <parent>co_bottom_right</parent>
+            <field>referal_type</field>
+            <caption>Sissetuleku meetod</caption>
+      </property>
+      <property>
+            <name>client_manager</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CLIENT_MANAGER</reltype>
+            <field>client_manager</field>
+            <parent>co_bottom_right</parent>
+            <caption>Kliendihaldur</caption>
+      </property>
+      <property>
+            <name>bill_due_date_days</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>co_bottom_right</parent>
+            <field>bill_due_date_days</field>
+            <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
       </property>
       <property>
             <name>bill_penalty_pct</name>
@@ -3132,6 +3219,11 @@
                   <clid>CL_POLL</clid>
                   <caption>Kiirk&amp;amp;uuml;sitlus</caption>
             </DEF_POLL>
+            <BUYER>
+                  <value>62</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Ostja, M&amp;amp;uuml;&amp;amp;uuml;a</caption>
+            </BUYER>
       </reltypes>
       <layout>
             <co_top>

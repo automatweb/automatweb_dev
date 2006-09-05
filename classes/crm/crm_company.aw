@@ -59,23 +59,41 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 		@layout co_bottom_left type=vbox parent=co_bottom
 
-			@property cust_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_left 
-			@caption Kliendisuhte alguskuup&auml;ev
+			@property buyer type=relpicker reltype=RELTYPE_BUYER table=kliendibaas_firma parent=co_bottom_left
+			@caption Ostja
 
-			@property cust_contract_creator type=select table=kliendibaas_firma parent=co_bottom_left 
-			@caption Kliendisuhte looja
+			@property buyer_contract_creator type=select table=kliendibaas_firma parent=co_bottom_left
+			@caption Hankijasuhte looja
 
-			@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager parent=co_bottom_left 
-			@caption Kliendihaldur
+			@property buyer_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_left 
+			@caption Hankijasuhte alguskuup&auml;ev
 
-			@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE parent=co_bottom_left 
-			@caption Sissetuleku meetod
+			@property buyer_contract_person type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_left
+			@caption Ostja kontaktisik 1
+			
+			@property buyer_contract_person2 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_left
+			@caption Ostja kontaktisik 2
+
+			@property buyer_contract_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_left
+			@caption Ostja kontaktisik 3
+
+			@property buyer_priority type=textbox table=kliendibaas_firma  parent=co_bottom_left
+			@caption Ostja prioriteet
 
 			@property client_category type=text store=no  parent=co_bottom_left 
 			@caption Kliendikategooria
 
 
 		@layout co_bottom_right type=vbox parent=co_bottom
+			
+			@property cust type=relpicker reltype=RELTYPE_BUYER table=kliendibaas_firma parent=co_bottom_right
+			@caption M&uuml;&uuml;ja
+
+			@property cust_contract_creator type=select table=kliendibaas_firma parent=co_bottom_right 
+			@caption Kliendisuhte looja
+
+			@property cust_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_right 
+			@caption Kliendisuhte alguskuup&auml;ev
 
 			@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype  parent=co_bottom_right 
 			@caption Kliendpoolne kontaktisik 1
@@ -86,8 +104,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right 
 			@caption Kliendpoolne kontaktisik 3
 
-			@property priority type=textbox table=kliendibaas_firma  parent=co_bottom_right 
-			@caption Prioriteet
+			@property cust_priority type=textbox table=kliendibaas_firma  parent=co_bottom_right 
+			@caption Kliendi prioriteet
+
+			@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE parent=co_bottom_right 
+			@caption Sissetuleku meetod
+
+			@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager parent=co_bottom_right 
+			@caption Kliendihaldur
+
+			@property bill_due_date_days type=textbox size=5 table=kliendibaas_firma parent=co_bottom_right 
+			@caption Makset&auml;htaeg (p&auml;evi)
 
 			@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5  parent=co_bottom_right 
 			@caption Arve viivise %
@@ -1099,6 +1126,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype DEF_POLL value=62 clid=CL_POLL
 @caption Kiirk&uuml;sitlus
+
+@reltype BUYER value=62 clid=CL_CRM_COMPANY
+@caption Ostja, M&uuml;&uuml;a
 
 */
 /*
@@ -5505,13 +5535,28 @@ class crm_company extends class_base
 		{
 			switch($field)
 			{
+				case "cust":
 				case "cust_contract_date":
 				case "cust_contract_creator":
+				case "cust_priority":
 				case "contact_person":
 				case "contact_person2":
 				case "contact_person3":
 				case "client_manager":
+				case "buyer":
+				case "buyer_contract_creator":
+				case "buyer_contract_person":
+				case "buyer_contract_person2":
+				case "buyer_contract_person3":
+				case "buyer_contract_date":
+				case "buyer_priority":
 				case "aw_currency":
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => "int",
+					));
+					return true;
+
 				case "aw_bill_due_days":
 					$this->db_add_col($tbl, array(
 						"name" => $field,
