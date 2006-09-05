@@ -1,7 +1,7 @@
 <span class="menuBar" style="height:15px;text-align: center;
-border:0px;background-color: transparent ;
+background-color: transparent ;
 "><a class="menuButton" href="" 
-style="border:0px;"
+
 onclick="return buttonClick(event, '{VAR:menu_id}');"
 oncontextmenu="return buttonClick(event, '{VAR:menu_id}');" alt="{VAR:alt}" title="{VAR:alt}" id='href_{VAR:menu_id}'>
 <!-- SUB: HAS_ICON -->
@@ -14,12 +14,5 @@ oncontextmenu="return buttonClick(event, '{VAR:menu_id}');" alt="{VAR:alt}" titl
 </a>
 </div>
 {VAR:ss}
-<!--
-<div id="{VAR:menu_id}" class="menu" onmouseover="menuMouseover(event)">
-<!-- SUB: MENU_ITEM -->
-<a class="menuItem" href="{VAR:link}">{VAR:text}</a>
-<!-- END SUB: MENU_ITEM -->
-</div>
 
--->
 </span>

@@ -158,7 +158,8 @@ class crm_company_qv_impl extends class_base
 				"site_id" => array(),
 				"sort_by" => "deadline desc",
 				"deadline" => "%",
-				"oid" => $arr["tasks"]->ids()
+				"oid" => $arr["tasks"]->ids(),
+				"brother_of" => new obj_predicate_prop("id")
 			));
 
 			// also add call/meeting/offer by range

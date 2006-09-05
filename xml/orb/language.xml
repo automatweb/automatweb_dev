@@ -1,5 +1,12 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="language" folder="core" extends="class_base">
+		<action name="lang_pop">
+			<function name="lang_pop">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

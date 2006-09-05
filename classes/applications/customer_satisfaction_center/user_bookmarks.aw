@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.3 2006/08/28 12:21:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.4 2006/09/05 09:40:13 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -320,7 +320,9 @@ class user_bookmarks extends class_base
 			}
 		}
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
-		die($pm->get_menu());
+		die($pm->get_menu(array(
+					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
+		)));
 	}
 
 	function callback_post_save($arr)

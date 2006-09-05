@@ -173,8 +173,7 @@ function depressButton(button) {
   if (pp_browser.isIE) {
     x += button.offsetParent.clientLeft;
     y += button.offsetParent.clientTop;
-  }
-
+}
   button.menu.style.left = x + "px";
   button.menu.style.top  = y + "px";
   button.menu.style.visibility = "visible";

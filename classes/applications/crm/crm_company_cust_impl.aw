@@ -1292,7 +1292,7 @@ class crm_company_cust_impl extends class_base
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "all_proj_search_part",
 			"value" => $v,
-			"size" => 25
+			"size" => 15
 		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.all_proj_search_part.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
@@ -1313,7 +1313,7 @@ class crm_company_cust_impl extends class_base
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "proj_search_part",
 			"value" => $v,
-			"size" => 25
+			"size" => 15
 		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.proj_search_part.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
@@ -1918,11 +1918,11 @@ class crm_company_cust_impl extends class_base
 				$parm = array(
 					'parent'=>$p_str,
 					'text' => $c->prop("to.name"),
-					'link' => str_replace(urlencode("%s"), $c->prop("to"), $link)
+					'link' => str_replace(urlencode("%s"), $c->prop("to"), str_replace("%s", $c->prop("to"), $link))
 				);
 				if ($oncl !== NULL)
 				{
-					$parm["onClick"] = str_replace(urlencode("%s"), $c->prop("to"), $oncl);
+					$parm["onClick"] = str_replace(urlencode("%s"), $c->prop("to"), str_replace("%s", $c->prop("to"), $oncl));
 					$parm["link"] = "#";
 				}
 				$tb->add_menu_item($parm);

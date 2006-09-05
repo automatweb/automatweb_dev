@@ -64,6 +64,25 @@
 	background: #5FC000;
 	color: #000000;
 }
+.style1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+}
+.style4 {font-family: Arial, Helvetica, sans-serif; font-size: 11px; }
+.style4 a {font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #0018af;}
+a:link {
+	color: #0018af;
+}
+a:visited {
+	color: #0018af;
+}
+a:hover {
+	color: #0018af;
+}
+a:active {
+	color: #0018af;
+}
 </style>
 
 <script type="text/javascript">
@@ -97,29 +116,7 @@ function hilight_event(el,tgt)
 </script>
 
 
-<div class="aw04kalender01" align="right">
-<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-			<!-- SUB: TODAY -->
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:today_url}"><b>Täna</b></a></td>
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-		  <!-- END SUB: TODAY -->
 
-			<!-- SUB: PAGE -->
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:link}"><b>{VAR:text}</b></a></td>
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-			<!-- END SUB: PAGE -->
-
-			<!-- SUB: SEL_PAGE -->
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_back.gif"><b>{VAR:text}</b></td>
-		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-			<!-- END SUB: SEL_PAGE -->
-			</tr>
-			</table>
-</div>
 
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -128,12 +125,37 @@ function hilight_event(el,tgt)
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
-		<td class="aw04kalender02">
-			<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
-		</td>
-	<td align="right" valign="middle" class="aw04kalender02">
+		<td class="aw04kalender02" style="padding-bottom: 5px;">
+			<div class="style4" style="float: left; margin-left: 15px;">
+			<a href="{VAR:prevlink}"><b>&laquo;</b></a> <b>{VAR:caption}</b>  <a href="{VAR:nextlink}"><b>&raquo;</b></a>			</div>
+			<div>
+			<div class="aw04kalender01" align="right">
+<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<!-- SUB: TODAY -->
+		  <td>&nbsp;</td>
+		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:today_url}" class="style1">Täna</a></td>
+		  
+		  <!-- END SUB: TODAY -->
 
-	<select id='navi_month' name='month' style="border: 1px solid gray">{VAR:mnames}</select>
+			<!-- SUB: PAGE -->
+		  <td><span class="style4">&nbsp;|&nbsp;</span></td>
+		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:link}" class="style4"><b>{VAR:text}</b></a></td>
+			<!-- END SUB: PAGE -->
+
+			<!-- SUB: SEL_PAGE -->
+		  <td><span class="style4">&nbsp;|&nbsp;</span></td>
+		  <td><span class="style4"><b>{VAR:text}</b></span></td>
+		  <td>&nbsp;</td>
+			<!-- END SUB: SEL_PAGE -->
+			</tr>
+			</table>
+</div>
+			</div>
+		</td>
+	<td style="padding-bottom: 5px;" align="right" valign="middle" width="211">
+
+	  <select id='navi_month' name='month' style="border: 1px solid gray">{VAR:mnames}</select>
 	<select id='navi_year' name='year'>{VAR:years}</select>
 	<input type="button" class="aw04formbutton" value="Go!" onClick='navigate_to()'>
 	
@@ -185,4 +207,3 @@ function hilight_event(el,tgt)
 	</td>
 </tr>
 </table>
-

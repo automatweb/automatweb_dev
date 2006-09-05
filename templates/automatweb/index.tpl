@@ -1,85 +1,54 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}">
+<meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
 <title>{VAR:title_action}{VAR:uid}@AutomatWeb</title>
-<link REL="icon" HREF="{VAR:baseurl}/automatweb/images/icons/favicon.ico" TYPE="image/x-icon">
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css" />
+<link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
+<!--[if lt IE 7]>
+    <link rel="stylesheet" type="text/css" href="{VAR:baseurl}/automatweb/css/iefix.css" />
+<![endif]-->
+<link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
+<link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
 
-
-<!-- SUB: aw_styles -->
-<!-- END SUB: aw_styles -->
-
+<!-- ma ei tea kas neid kõiki vaja läheb, aga las nad olla siin -->
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/ajax.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/CalendarPopup.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/popup_menu.js"></script>
+<!-- // ma ei tea kas neid kõiki vaja läheb, aga las nad olla siin -->
 
-
-<script type="text/javascript">
-<!--
-function remote(toolbar,width,height,file)
-{
-	self.name = "root";
-	var wprops = "toolbar=" + toolbar + ",location=0,directories=0,status=0, "+
-	"menubar=0,scrollbars=1,resizable=1,width=" + width + ",height=" + height;
-	openwindow = window.open(file,"remote",wprops);
-}
-
-function box2(caption,url)
-{
-	var answer=confirm(caption)
-	if (answer)
-	{
-		window.location=url
-	}
-}
-
-function generic_loader()
-{
-	// don't do anything. screw you.
-}
-
-function check_generic_loader()
-{
-	if (generic_loader)
-	{
-		generic_loader();
-	}
-};
-
-function generic_unloader()
-{
-	// don't do anything. screw you.
-}
-
-function check_generic_unloader()
-{
-	if (generic_unloader)
-	{
-		generic_unloader();
-	}
-};
-
-// -->
-</script>
 </head>
-<body link="#0000ff" vlink="#0000ff" onBeforeUnLoad="check_generic_unloader();" onLoad="create_objects(); check_generic_loader();">
-	<!-- SUB: LANG_STRING -->
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr>
-	<td class="aw04yah">{VAR:prod_family} |
-<!-- SUB: YAH -->
-{VAR:site_title}
-<!-- END SUB: YAH -->
-	</td>
-	<td nowrap align="right" class="aw04yah">{VAR:header_text}<span class="mlang">[{VAR:lang_string}]</span>&nbsp;&nbsp;{VAR:ui_lang}&nbsp;&nbsp;</td>
-</tr>
-</table>
-	<!-- END SUB: LANG_STRING -->
 
-{VAR:content}
+<body onResize="document.execCommand('Refresh')">
+<!-- päis -->
+<div id="pais">
+	<div class="logo">
+		<span>{VAR:prod_family}</span>
+		<a href="{VAR:baseurl}" title="AutomatWeb"><img src="{VAR:baseurl}/automatweb/images/aw06/aw_logo.gif" alt="AutomatWeb.com" width="183" height="34" border="0" /></a>
+	</div>
+	<div class="top-left-menyy"><a href="{VAR:cur_p_url}"><strong>{VAR:cur_p_name}</strong></a> | {VAR:cur_co_url} | {VAR:cur_class} | <a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a></div>
+	<div class="top-right-menyy">
+		{VAR:lang_pop}
+		{VAR:settings_pop}
 
+		<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" class="logout">Logi välja</a>
+	</div>
+	<div class="olekuriba">Asukoht:
+		<!-- SUB: YAH -->
+		{VAR:site_title}
+		<!-- END SUB: YAH -->
+	</div>
+
+	{VAR:content}
+<!-- //sisu -->
+<!-- jalus -->
+	<div id="jalus">
+		AutomatWeb&reg; on Struktuur Meedia registreeritud kaubamärk. Kõik õigused kaitstud, &copy; 1999-2006. <br />
+		Palun külasta meie kodulehekülgi: <a href="http://www.struktuur.ee">Struktuur Meedia</a>, <a href="http://www.automatweb.com">AutomatWeb</a>.
+	</div>
+<!--//jalus -->
+<img src="{VAR:baseurl}/automatweb/images/aw06/blank.gif" alt="#" width="1010" height="1" />
 </body>
 </html>

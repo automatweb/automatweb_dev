@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create_customer)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
-@classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes confirm_save_data=1 versioned=1
+@classinfo syslog_type=ST_CRM_COMPANY no_status=1 confirm_save_data=1 versioned=1
 
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
 
@@ -23,73 +23,73 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 		@layout co_top_left type=vbox parent=co_top
 
-			@property name type=textbox size=30 maxlength=255 table=objects parent=co_top_left captionside=top
+			@property name type=textbox size=30 maxlength=255 table=objects parent=co_top_left 
 			@caption Organisatsiooni nimi
 
-			@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name parent=co_top_left captionside=top
+			@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name parent=co_top_left 
 			@caption Nime l&uuml;hend
 
-			@property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma parent=co_top_left captionside=top
+			@property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma parent=co_top_left 
 			@caption Registri number
 
-			@property ettevotlusvorm type=relpicker table=kliendibaas_firma automatic=1 reltype=RELTYPE_ETTEVOTLUSVORM parent=co_top_left captionside=top
+			@property ettevotlusvorm type=relpicker table=kliendibaas_firma automatic=1 reltype=RELTYPE_ETTEVOTLUSVORM parent=co_top_left 
 			@caption Õiguslik vorm
 
-			@property comment type=textarea cols=65 rows=3 table=objects parent=co_top_left captionside=top
+			@property comment type=textarea cols=40 rows=2 table=objects parent=co_top_left 
 			@caption Kommentaar
 
 		@layout co_top_right type=vbox parent=co_top
 
-			@property code type=textbox table=kliendibaas_firma parent=co_top_right captionside=top
+			@property code type=textbox table=kliendibaas_firma parent=co_top_right 
 			@caption Kood
 
-			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right captionside=top
+			@property tax_nr type=textbox table=kliendibaas_firma parent=co_top_right 
 			@caption KMKohuslase nr
 
 			@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects parent=co_top_right captionside=top override_parent=this
 			@caption Organisatsiooni logo
 
-			@property firmajuht type=select table=kliendibaas_firma  editonly=1 parent=co_top_right captionside=top
+			@property firmajuht type=select table=kliendibaas_firma  editonly=1 parent=co_top_right 
 			@caption Firmajuht
 
-			@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1 parent=co_top_right captionside=top
+			@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1 parent=co_top_right 
 			@caption Asutatud
 
 	@layout co_bottom type=hbox closeable=1 area_caption=Kliendisuhe width=50%:50%
 
 		@layout co_bottom_left type=vbox parent=co_bottom
 
-			@property cust_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_left captionside=top
+			@property cust_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_left 
 			@caption Kliendisuhte alguskuup&auml;ev
 
-			@property cust_contract_creator type=select table=kliendibaas_firma parent=co_bottom_left captionside=top
+			@property cust_contract_creator type=select table=kliendibaas_firma parent=co_bottom_left 
 			@caption Kliendisuhte looja
 
-			@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager parent=co_bottom_left captionside=top
+			@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager parent=co_bottom_left 
 			@caption Kliendihaldur
 
-			@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE parent=co_bottom_left captionside=top
+			@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE parent=co_bottom_left 
 			@caption Sissetuleku meetod
 
-			@property client_category type=text store=no  parent=co_bottom_left captionside=top
+			@property client_category type=text store=no  parent=co_bottom_left 
 			@caption Kliendikategooria
 
 
 		@layout co_bottom_right type=vbox parent=co_bottom
 
-			@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype  parent=co_bottom_right captionside=top
+			@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype  parent=co_bottom_right 
 			@caption Kliendpoolne kontaktisik 1
 
-			@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right captionside=top
+			@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right 
 			@caption Kliendpoolne kontaktisik 2
 
-			@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right captionside=top
+			@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right 
 			@caption Kliendpoolne kontaktisik 3
 
-			@property priority type=textbox table=kliendibaas_firma  parent=co_bottom_right captionside=top
+			@property priority type=textbox table=kliendibaas_firma  parent=co_bottom_right 
 			@caption Prioriteet
 
-			@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5  parent=co_bottom_right captionside=top
+			@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5  parent=co_bottom_right 
 			@caption Arve viivise %
 
 
@@ -203,7 +203,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@layout hbox_others type=hbox width=20%:80%
 
-		@layout vbox_contacts_left type=vbox parent=hbox_others
+		@layout vbox_contacts_left type=vbox parent=hbox_others closeable=1 area_caption=Organisatsiooni&nbsp;struktuur
 
 			@property unit_listing_tree type=treeview no_caption=1 store=no parent=vbox_contacts_left
 			@caption Puu
@@ -246,8 +246,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@layout contacts_edit type=hbox
 
-		@property cedit_tree type=treeview store=no parent=contacts_edit no_caption=1
-		@property cedit_table type=table store=no parent=contacts_edit no_caption=1
+		@layout contacts_edit_tree type=hbox parent=contacts_edit closeable=1 area_caption=Struktuur
+
+			@property cedit_tree type=treeview store=no parent=contacts_edit_tree no_caption=1
+
+		@layout contacts_edit_table type=hbox parent=contacts_edit 
+			@property cedit_table type=table store=no parent=contacts_edit_table no_caption=1
 
 
 @default group=cedit
@@ -293,7 +297,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@layout personal_tree_table type=hbox  width=20%:80%
 
-		@layout personal_hbox_tree type=vbox parent=personal_tree_table
+		@layout personal_hbox_tree type=vbox parent=personal_tree_table closeable=1 area_caption=Struktuur
 			@property unit_listing_tree_personal type=treeview no_caption=1 store=no parent=personal_hbox_tree
 
 		@layout personal_hbox_table type=vbox parent=personal_tree_table
@@ -305,7 +309,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 		@property personal_candidates_toolbar type=toolbar store=no no_caption=1 parent=personal_toolbar_cand
 
 	@layout personal_tree_table_cand type=hbox width=20%:80%
-		@layout personal_hbox_tree_cand type=vbox parent=personal_tree_table_cand
+		@layout personal_hbox_tree_cand type=vbox parent=personal_tree_table_cand closeable=1 area_caption=Struktuur
 			@property unit_listing_tree_candidates type=treeview no_caption=1 store=no parent=personal_hbox_tree_cand
 
 		@layout personal_hbox_table_cand type=vbox parent=personal_tree_table_cand
@@ -323,7 +327,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@layout my_cust_bot type=hbox width=20%:80%
 
-		@layout vbox_customers_left type=vbox parent=my_cust_bot
+		@layout vbox_customers_left type=vbox parent=my_cust_bot closeable=1 area_caption=Otsing
 
 			@property customer_search_name type=textbox size=30 store=no parent=vbox_customers_left captionside=top
 			@caption Nimi
@@ -421,10 +425,10 @@ default group=org_objects
 	@property org_proj_arh_tb type=toolbar no_caption=1 group=org_projects_archive
 
 	@layout projects_main type=hbox width=20%:80%
-		@layout projects_tree type=vbox parent=projects_main
+		@layout projects_tree type=vbox parent=projects_main closeable=1 area_caption=Otsing
 			@property projects_listing_tree type=treeview no_caption=1 parent=projects_tree no_caption=1
 
-			@layout all_proj_search_b type=vbox parent=projects_tree
+			@layout all_proj_search_b type=vbox parent=projects_tree 
 
 				@layout all_proj_search_b_top type=vbox parent=all_proj_search_b
 
@@ -484,28 +488,28 @@ default group=org_objects
 
 	@layout my_proj type=hbox width=20%:80%
 
-		@layout my_proj_search type=vbox parent=my_proj
+		@layout my_proj_search type=vbox parent=my_proj closeable=1 area_caption=Otsing
 
 			@layout my_proj_search_b type=vbox parent=my_proj_search
 
 				@layout my_proj_search_b_top type=vbox parent=my_proj_search_b
 
-					@property proj_search_cust type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@property proj_search_cust type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
 					@caption Klient
 
-					@property proj_search_part type=text size=28 parent=my_proj_search_b_top store=no captionside=top
+					@property proj_search_part type=text size=18 parent=my_proj_search_b_top store=no captionside=top
 					@caption Osaleja
 
-					@property proj_search_name type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@property proj_search_name type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
 					@caption Projekti nimi
 
-					@property proj_search_code type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@property proj_search_code type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
 					@caption Projekti kood
 
-					@property proj_search_contact_person type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@property proj_search_contact_person type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
 					@caption Projekti kontaktisik
 
-					@property proj_search_task_name type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@property proj_search_task_name type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
 					@caption &Uuml;lesande nimi
 
 				@layout my_proj_search_b_dl type=vbox parent=my_proj_search_b
@@ -540,7 +544,7 @@ default group=org_objects
 
 	@layout docs_lt type=hbox width=20%:80%
 
-		@layout docs_left type=vbox parent=docs_lt
+		@layout docs_left type=vbox parent=docs_lt closeable=1 area_caption=Otsing
 
 			@property docs_tree type=treeview parent=docs_left no_caption=1
 
@@ -578,7 +582,7 @@ default group=org_objects
 
 	@layout docs_news_lt type=hbox width=20%:80%
 
-		@layout docs_news_left type=vbox parent=docs_news_lt
+		@layout docs_news_left type=vbox parent=docs_news_lt closeable=1 area_caption=Otsing
 
 			@property dn_s_name type=textbox size=30 store=no captionside=top parent=docs_news_left
 			@caption Nimi
@@ -619,7 +623,7 @@ default group=org_objects
 
 	@layout bills_list_box type=hbox width=20%:80%
 
-		@layout bills_list_s type=vbox parent=bills_list_box
+		@layout bills_list_s type=vbox parent=bills_list_box closeable=1 area_caption=Otsing
 
 			otsing Kliendi, arve nr,  esitamise ajavahemiku,
 			kliendihalduri, koostamisel/makstud/maksmata järgi
@@ -656,29 +660,29 @@ default group=org_objects
 
 	@layout my_tasks type=hbox width=20%:80%
 
-		@layout all_act_search type=vbox parent=my_tasks
+		@layout all_act_search type=vbox parent=my_tasks closeable=1 area_caption=Otsing
 
 			@layout act_s_dl_layout_top type=vbox parent=all_act_search
 
-			@property act_s_cust type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
+			@property act_s_cust type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Klient
 
 			@property act_s_part type=text size=30 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Osaleja
 
-			@property act_s_cal_name type=text size=30 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
+			@property act_s_cal_name type=text size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Kalender
 
-			@property act_s_task_name type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
+			@property act_s_task_name type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Tegevuse nimi
 
-			@property act_s_task_content type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
+			@property act_s_task_content type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Tegevuse sisu
 
-			@property act_s_code type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions
+			@property act_s_code type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions
 			@caption Toimetuse kood
 
-			@property act_s_proj_name type=textbox size=33 parent=all_act_search store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
+			@property act_s_proj_name type=textbox size=18 parent=all_act_search store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Projekti nimi
 
 			@layout act_s_dl_layout type=vbox parent=all_act_search
@@ -791,9 +795,11 @@ default group=org_objects
 
 	@layout res_lt type=hbox width=20%:80%
 
-		@property res_tree type=treeview no_caption=1 parent=res_lt
+		@layout res_lt_tree type=hbox parent=res_lt closeable=1 area_caption=Ressurssid
+			@property res_tree type=treeview no_caption=1 parent=res_lt_tree
 
-		@property res_tbl type=table no_caption=1 parent=res_lt
+		@layout res_lt_tbl type=hbox parent=res_lt 
+			@property res_tbl type=table no_caption=1 parent=res_lt_tbl
 
 @default group=transl
 
@@ -846,10 +852,8 @@ default group=org_objects
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldandmed" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
-@groupinfo open_hrs caption="Avamisajad" parent=general
 @groupinfo org_sections caption="Tegevus" parent=general
 @groupinfo add_info caption="Lisainfo" parent=general
-@groupinfo user_settings caption="Seaded" parent=general
 @groupinfo special_offers caption="Eripakkumised" submit=no parent=general
 @groupinfo comments caption="Kommentaarid" parent=general
 
@@ -860,7 +864,7 @@ default group=org_objects
 	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no save=no
 	@groupinfo contacts_edit caption="Toimeta isikuid" parent=people submit=no
 
-@groupinfo resources caption="Ressursid"  submit=no save=no
+@groupinfo resources caption="Ressursid"  submit=no save=no parent=people
 @groupinfo contacts caption="Kontaktid"
 @groupinfo overview caption="Tegevused" save=no
 
@@ -889,9 +893,9 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @groupinfo org_images caption="Pildid" submit=yes parent=general
 
-	@groupinfo documents_all caption="Dokumendid" submit=no parent=general save=no
+	@groupinfo documents_all caption="Dokumendid" submit=no save=no
 	@groupinfo documents_news caption="Siseuudised" submit=no parent=general submit_method=get save=no
-	@groupinfo documents_forum caption="Foorum" submit=no parent=general
+	@groupinfo documents_forum caption="Foorum" submit=no parent=people
 	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	save=no
 	@groupinfo ext_sys caption="Siduss&uuml;steemid" parent=general
 	@groupinfo documents_polls caption="Kiirk&uuml;sitlused" submit=no parent=general
@@ -909,13 +913,15 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
 	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no submit_method=get
 
-@groupinfo qv caption="Vaata"  submit=no save=no
+groupinfo qv caption="Vaata"  submit=no save=no
 
-	@groupinfo quick_view caption="Vaata"  submit=no save=no parent=qv
-	@groupinfo my_view caption="Minu p&auml;ev"  submit=no save=no parent=qv
+	@groupinfo quick_view caption="Vaata"  submit=no save=no parent=stats
+	@groupinfo my_view caption="Minu p&auml;ev"  submit=no save=no parent=stats
 
 @groupinfo transl caption=T&otilde;lgi
-@groupinfo versions caption=Versioonid submit=no save=no
+@groupinfo versions caption=Versioonid submit=no save=no parent=stats
+@groupinfo open_hrs caption="Avamisajad" parent=people
+@groupinfo user_settings caption="Seaded" parent=people
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -5698,7 +5704,7 @@ class crm_company extends class_base
 					{
 						if (taste == pwd.charCodeAt(i))
 						{
-							aw_popup_scroll("'.$url.'", "quick_task_entry", 600,600);
+							aw_popup_scroll("'.$url.'", "quick_task_entry", 1000,600);
 							break;
 						}
 					}
@@ -5756,7 +5762,10 @@ class crm_company extends class_base
 		$this->_init_ext_sys_t($t);
 
 		$crel = $this->get_cust_rel($arr["obj_inst"], true);
-
+		if (!$crel)
+		{
+			return;
+		}
 		$data = array();
 		foreach($crel->connections_from(array("type" => "RELTYPE_EXT_SYS_ENTRY")) as $c)
 		{

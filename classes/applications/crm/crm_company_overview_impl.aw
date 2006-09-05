@@ -377,7 +377,7 @@ class crm_company_overview_impl extends class_base
 		if ($r["group"] != "ovrv_offers")
 		{
 			$t->define_field(array(
-				"caption" => t("Prioriteet"),
+				"caption" => t("Pri"),
 				"name" => "priority",
 	//			"chgbgcolor" => "col",
 				"align" => "center",
@@ -1089,7 +1089,7 @@ class crm_company_overview_impl extends class_base
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "act_s_part",
 			"value" => $v,
-			"size" => 25
+			"size" => 15
 		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.act_s_part.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
@@ -1114,7 +1114,7 @@ class crm_company_overview_impl extends class_base
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "act_s_cal_name",
 			"value" => $v,
-			"size" => 25
+			"size" => 15
 		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.act_s_cal_name.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}

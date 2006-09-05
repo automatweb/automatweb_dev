@@ -1,0 +1,17 @@
+#pais {
+	width:expression(((document.compatMode && document.compatMode=='CSS1Compat') ? document.documentElement.clientWidth : document.body.clientWidth) > 1024 ? "auto" : (((document.compatMode && document.compatMode=='CSS1Compat') ? document.documentElement.clientWidth : document.body.clientWidth) < 1024 ? "1010px" : "auto"));
+
+}
+#k_menyy {
+	width:expression(((document.compatMode && document.compatMode=='CSS1Compat') ? document.documentElement.clientWidth : document.body.clientWidth) > 1024 ? "auto" : (((document.compatMode && document.compatMode=='CSS1Compat') ? document.documentElement.clientWidth : document.body.clientWidth) < 1024 ? "962px" : "auto"));
+
+}
+#sisu {
+	width:expression(((document.compatMode && document.compatMode=='CSS1Compat') ? document.documentElement.clientWidth : document.body.clientWidth) > 1024 ? "auto" : (((document.compatMode && document.compatMode=='CSS1Compat') ? document.documentElement.clientWidth : document.body.clientWidth) < 1024 ? "1005px" : "auto"));
+
+}
+
+#jalus {
+	width:expression(((document.compatMode && document.compatMode=='CSS1Compat') ? document.documentElement.clientWidth : document.body.clientWidth) > 1024 ? "auto" : (((document.compatMode && document.compatMode=='CSS1Compat') ? document.documentElement.clientWidth : document.body.clientWidth) < 1024 ? "998px" : "auto"));
+
+}

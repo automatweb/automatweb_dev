@@ -1,189 +1,205 @@
-<table border='0' class="aw04contenttable" align="center" cellpadding="0" cellspacing="0" width="100%">
-<!-- SUB: SHOW_CHANGEFORM -->
-<form action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
-<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
-<!-- END SUB: SHOW_CHANGEFORM -->
+<table id="" width="100%" border="0" cellspacing="0" cellpadding="0"> <!-- aw06contenttable -->
+	
+	<!-- SUB: SHOW_CHANGEFORM -->
+	<form action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
+	    <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
+	<!-- END SUB: SHOW_CHANGEFORM -->
 
-{VAR:content}
+	{VAR:content}
 
-<!-- SUB: ERROR -->
-<tr>
-	<td colspan="2" bgcolor="red" align="center"><span style='color: white; font-weight: bold;'>{VAR:error_text}</span></td>
-</tr>
-<!-- END SUB: ERROR -->
+	<!-- SUB: ERROR -->
+	<tr>
+	    <td colspan="2" id="error">{VAR:error_text}</td>
+	</tr>
+	<!-- END SUB: ERROR -->
+	
+	<!-- SUB: PROP_ERR_MSG -->
+	<tr>
+	    <td width="100"></td>
+	    <td id="error_msg">{VAR:err_msg}</td>
+	</tr>
+	<!-- END SUB: PROP_ERR_MSG -->
+	
+	<!-- SUB: LINE -->
+	<tr>
+	    <td width="100" id="linecaption" >{VAR:caption}</td>
+	    <td id="lineelment">{VAR:element}</td>
+	</tr>
+	<!-- END SUB: LINE -->
+  
+	<!-- SUB: HEADER -->
+	<tr>
+	    <td></td>
+	    <td id="header">{VAR:caption}</td>
+	</tr>
+	<!-- END SUB: HEADER -->
 
-<!-- SUB: PROP_ERR_MSG -->
-<tr>
-	<td class="aw04contentcellleft" width='80'></td>
-	<td class='aw04contentcellright'><span style='color: red'>{VAR:err_msg}</span>	</td>
-</tr>	
-<!-- END SUB: PROP_ERR_MSG -->
+	<!-- SUB: SUB_TITLE -->
+	<tr>
+	    <td colspan="2" id="subtitle">{VAR:value}</td>
+	</tr>
+	<!-- END SUB: SUB_TITLE -->
 
-<!-- SUB: LINE -->
-<tr>
-        <td class='aw04contentcellleft' width='80' nowrap>
-		{VAR:caption}
-		</td>
-        <td class='aw04contentcellright'>
-		{VAR:element}
-        </td>
-</tr>
-<!-- END SUB: LINE -->
+	<!-- SUB: CONTENT -->
+	<tr>
+	    <td colspan="2" id="content">{VAR:value}</td>
+	</tr>
+	<!-- END SUB: CONTENT -->
 
-<!-- SUB: HEADER -->
-<tr>
-	<td class='aw04contentcellsubheader' width='80'>
-	&nbsp;
-	</td>
-	<td class='aw04contentcellsubheader'>
-	{VAR:caption}
-	</td>
-</tr>
-<!-- END SUB: HEADER -->
-
-<!-- SUB: SUB_TITLE -->
-<tr>
-	<td colspan='2' class='aw04contentcellsubtitle'>
-	<span id='{VAR:st_id}' >{VAR:value}</span>
-	</td>
-</tr>
-<!-- END SUB: SUB_TITLE -->
-
-<!-- SUB: CONTENT -->
-<tr>
-	<td colspan='2' class='aw04contentcellcontent'>
-	{VAR:value}
-	</td>
-</tr>
-<!-- END SUB: CONTENT -->
-
-<!-- SUB: SUBMIT -->
-<tr>
-	<td class='aw04contentcellleft' align='center' width='80'>&nbsp;</td>
-	<td class='aw04contentcellright'>
+	<!-- SUB: SUBMIT -->
+	<tr>
+	    <td width="100"></td>
+	    <td id="buttons">
 		<!-- SUB: BACK_BUTTON -->
-			<input type='submit' name='{VAR:back_button_name}' value='{VAR:back_button_caption}' class='aw04formbutton' >
+		<input id="button" type="submit" name="{VAR:back_button_name}" value="{VAR:back_button_caption}" />
 		<!-- END SUB: BACK_BUTTON -->
-
-		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}' accesskey='s' class='aw04formbutton' onClick='self.disabled=true;submit_changeform("{VAR:action}"); return false;'>
-
+		<input id="button" type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" accesskey='s' onClick='self.disabled=true;submit_changeform("{VAR:action}"); return false;'/>
 		<!-- SUB: FORWARD_BUTTON -->
-			<input type='submit' name='{VAR:forward_button_name}' value='{VAR:forward_button_caption}' class='aw04formbutton' >
+		<input id="button" type="submit" name="{VAR:forward_button_name}" value="{VAR:forward_button_caption}" />
 		<!-- END SUB: FORWARD_BUTTON -->
-	</td>
-</tr>
-<!-- END SUB: SUBMIT -->
+	    </td>
+	</tr>
+	<!-- END SUB: SUBMIT -->
 
-<!-- SUB: SUBITEM -->
-	<span style='color: red'>{VAR:err_msg}</span>
-        {VAR:element}
-        <span class="aw04contentcellright">{VAR:caption}</span>
-	&nbsp;
-<!-- END SUB: SUBITEM -->
 
-<!-- SUB: SUBITEM2 -->
-	<span style='color: red'>{VAR:err_msg}</span>
-        <div class="aw04contentcellleft">{VAR:caption}</div>
-        <div class="aw04contentcellright">{VAR:element}</div>
-<!-- END SUB: SUBITEM2 -->
 
-<!-- SUB: GRIDITEM -->
-	<div class="aw04gridcell_caption">{VAR:caption}: {VAR:element}</div>
-<!-- END SUB: GRIDITEM -->
+			<!-- SUB: SUBITEM -->
+		<span style='color: red'>{VAR:err_msg}</span>
+		{VAR:element}
+		<span class="aw04contentcellright">{VAR:caption}</span>
+		&nbsp;
+		<!-- END SUB: SUBITEM -->
 
-<!-- SUB: GRIDITEM -->
-	<div class="aw04gridcell_caption">
-	<!-- SUB: CAPTION_TOP -->
-	{VAR:caption}:<br/>
-	<!-- END SUB: CAPTION_TOP -->
-	<!-- SUB: CAPTION_LEFT -->
-	{VAR:caption}:
-	<!-- END SUB: CAPTION -->
-	{VAR:element}</div>
-<!-- END SUB: GRIDITEM -->
+		<!-- SUB: SUBITEM2 -->
+		<span style='color: red'>{VAR:err_msg}</span>
+		<div class="aw04contentcellleft">{VAR:caption}</div>
+		<div class="aw04contentcellright">{VAR:element}</div>
+		<!-- END SUB: SUBITEM2 -->
 
-<!-- SUB: GRIDITEM_NO_CAPTION -->
-	<div class="aw04gridcell_no_caption">{VAR:element}</div>
-<!-- END SUB: GRIDITEM_NO_CAPTION -->
+		<!-- SUB: GRIDITEM -->
+		<div class="aw04gridcell_caption">{VAR:caption}: {VAR:element}</div>
+		<!-- END SUB: GRIDITEM -->
 
-<!-- SUB: GRID_HBOX -->
+		<!-- SUB: GRIDITEM -->
+		<div class="aw04gridcell_caption">
+			<!-- SUB: CAPTION_TOP -->
+			{VAR:caption}:<br/>
+			{VAR:element}
+			<!-- END SUB: CAPTION_TOP -->
+			<!-- SUB: CAPTION_LEFT -->
+			<table border="0" width="100%">
+			<tr>
+				<td width="20%" align="right">
+			{VAR:caption}:
+				</td>
+				<td width="70%">
+			{VAR:element}
+				</td></tr></table>
+			<!-- END SUB: CAPTION-LEFT -->
+		</div>
+		<!-- END SUB: GRIDITEM -->
 
-<!-- SUB: GRID_HAS_CLOSER -->
-<table border=0 width="100%" bgcolor="#999999">
-<tr><td>{VAR:area_caption}</td><td align="right"> <a href='#' onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'>close</a></td></tr></table>
-<div id='{VAR:grid_name}'>
-<!-- END SUB: GRID_HAS_CLOSER -->
+		<!-- SUB: GRIDITEM_NO_CAPTION -->
+		<div class="aw04gridcell_no_caption">{VAR:element}</div>
+		<!-- END SUB: GRIDITEM_NO_CAPTION -->
 
-<!-- hbox -->
-<table border=0 cellspacing=0 cellpadding=0 width='100%'>
-<tr>
-<!-- SUB: GRID_HBOX_ITEM -->
-<td valign='top' {VAR:item_width} style='padding-left: 5px;'>
-{VAR:item}
-</td>
-<!-- END SUB: GRID_HBOX_ITEM -->
-</tr>
-</table>
+		<!-- SUB: GRID_HBOX -->
+			<!-- SUB: GRID_HAS_CLOSER -->
+		<div id="vbox">
+			<div class="pais">
+				<div class="caption">{VAR:area_caption}</div>
+				<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif" alt="Kinni" width="20" height="15" border="0" class="btn" /></a></div>
+			</div>
+			<div class="sisu" id="{VAR:grid_name}">
+			<!-- END SUB: GRID_HAS_CLOSER -->
+			
+			<table border=0 cellspacing=0 cellpadding=0 width='100%'>
+				<tr>
+					<!-- SUB: GRID_HBOX_ITEM -->
+					<td valign='top' {VAR:item_width} style='padding-left: 0px;'>{VAR:item}</td>
+					<!-- END SUB: GRID_HBOX_ITEM -->
+				</tr>
+			</table>
+			<!-- SUB: GRID_CLOSER_END -->
+			</div></div>
+			<!-- END SUB: GRID_CLOSER_END -->
+		<!-- END SUB: GRID_HBOX -->
+		
+		<!-- SUB: GRID_VBOX -->
+		<!-- SUB: VGRID_HAS_CLOSER -->
+		<div id="vbox">
+			<div class="pais">
+				<div class="caption">{VAR:area_caption}</div>
+				<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif" alt="Kinni" width="20" height="15" border="0" class="btn" /></a></div>
+			</div>
+			<div class="sisu" id="{VAR:grid_name}">
+			<div class="sisu2">
+		<!-- END SUB: VGRID_HAS_CLOSER -->
+			<!-- SUB: GRID_VBOX_ITEM -->
+			    <div class="sisu3">{VAR:item}
+			    </div>
 
-<!-- SUB: GRID_CLOSER_END -->
-</div>
-<!-- END SUB: GRID_CLOSER_END -->
+			<!-- END SUB: GRID_VBOX_ITEM -->
+				<!-- SUB: GRID_VBOX_SUBITEM -->
+				<div class="sisu3">{VAR:item}</div>
+				<!-- END SUB: GRID_VBOX_SUBITEM -->
 
-<!-- END SUB: GRID_HBOX -->
+			<!-- SUB: VGRID_CLOSER_END -->
+			</div>
+			</div>
+		</div>
+			<!-- END SUB: VGRID_CLOSER_END -->
+		<!-- END SUB: GRID_VBOX -->
 
-<!-- SUB: GRID_VBOX -->
-<!-- SUB: VGRID_HAS_CLOSER -->
-<table border=0 width="100%" bgcolor="#999999">
-<tr><td>{VAR:area_caption}</td><td align="right"> <a href='#' onClick='el=document.getElementById("{VAR:grid_name}");if (el.style.display=="none") { el.style.display="block"; } else { el.style.display="none"; }'>close</a></td></tr></table>
-<div id='{VAR:grid_name}'>
-<!-- END SUB: VGRID_HAS_CLOSER -->
+		<!-- SUB: GRID_TABLEBOX -->
+		<div id="tablebox">
+		    <div class="pais">
+			<div class="caption">Tabeli pealkiri</div>
+			<div class="navigaator">
+			    <!-- siia tuleb ühel ilusal päeval lehtede kruttimise navigaator, homseks seda vaja pole, seega las see div jääb tühjaks -->
+			</div>
+		    </div>
+		    <div class="sisu">
+		    <!-- SUB: GRID_TABLEBOX_ITEM -->
+			{VAR:item}
+		    <!-- END SUB: GRID_TABLEBOX_ITEM -->
+		    </div>
+		</div>
+		<!-- END SUB: GRID_TABLEBOX -->
 
-<!-- vbox -->
-<table border=0 cellspacing=0 cellpadding=0 width='100%'>
-<!-- SUB: GRID_VBOX_ITEM -->
-<tr>
-<td valign='top'>{VAR:item}</td>
-</tr>
-<!-- END SUB: GRID_VBOX_ITEM -->
-</table>
+		<!-- SUB: PROPERTY_HELP -->
+		<div id="property_{VAR:property_name}_help" style="display: none;">
+		<strong>{VAR:property_caption} - {VAR:property_comment}</strong>
+		<p>{VAR:property_help}</p>
+		</div>
+		<!-- END SUB: PROPERTY_HELP -->
 
-<!-- SUB: VGRID_CLOSER_END -->
-</div>
-<!-- END SUB: VGRID_CLOSER_END -->
 
-<!-- END SUB: GRID_VBOX -->
-
-<!-- SUB: PROPERTY_HELP -->
-<div id="property_{VAR:property_name}_help" style="display: none;">
-<strong>{VAR:property_caption} - {VAR:property_comment}</strong>
-<p>{VAR:property_help}</p>
-</div>
-<!-- END SUB: PROPERTY_HELP -->
 
 <!-- SUB: SHOW_CHANGEFORM2 -->
-{VAR:reforb}
-<script type="text/javascript">
-{VAR:scripts}
-function submit_changeform(action)
-{
-	changed = 0;
-	{VAR:submit_handler}
-	if (typeof(aw_submit_handler) != "undefined")
-	{
-		if (aw_submit_handler() == false)
+	{VAR:reforb}
+		<script type="text/javascript">
+		{VAR:scripts}
+		function submit_changeform(action)
 		{
-			return false;
+			changed = 0;
+			{VAR:submit_handler}
+			if (typeof(aw_submit_handler) != "undefined")
+			{
+				if (aw_submit_handler() == false)
+				{
+					return false;
+				}
+			}
+			if (typeof action == "string" && action.length>0)
+			{
+				document.changeform.action.value = action;
+			};
+			document.changeform.submit();
 		}
-	}
-	if (typeof action == "string" && action.length>0)
-	{
-		document.changeform.action.value = action;
-	};
-	document.changeform.submit();
-}
-</script>
-</form>
-<!-- END SUB: SHOW_CHANGEFORM2 -->
+		</script>
+	</form>
+	<!-- END SUB: SHOW_CHANGEFORM2 -->
 </table>
 
 <!-- SUB: iframe_body_style -->

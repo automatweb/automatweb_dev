@@ -537,7 +537,6 @@
       </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
-            <relationmgr>yes</relationmgr>
             <confirm_save_data>1</confirm_save_data>
       </classinfo>
       <groupinfo>
@@ -560,9 +559,11 @@
             </projects>
             <comments>
                   <caption>Kommentaarid</caption>
+                  <parent>other_exp</parent>
             </comments>
             <reminders>
                   <caption>Meeldetuletused</caption>
+                  <parent>other_exp</parent>
             </reminders>
             <participants>
                   <caption>Osalejad</caption>
@@ -573,9 +574,11 @@
             </other_exp>
             <resources>
                   <caption>Ressursid</caption>
+                  <parent>other_exp</parent>
             </resources>
             <predicates>
                   <caption>Eeldused</caption>
+                  <parent>other_exp</parent>
             </predicates>
       </groupinfo>
       <tableinfo>

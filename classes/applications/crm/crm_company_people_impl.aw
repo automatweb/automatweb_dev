@@ -390,7 +390,7 @@ class crm_company_people_impl extends class_base
 			));*/
 			$pdat["ranks_arr"] = $p2r[$person->id()];
 			$pdat["sections_arr"] = $p2s[$person->id()];
-			$pdat["rank"] = join(",", $pdat["ranks_arr"]);
+			$pdat["rank"] = join(", ", $pdat["ranks_arr"]);
 		exit_function("ghr::loop::fetch2");
 			if(is_oid($arr['request']['cat']))
 			{
@@ -454,7 +454,7 @@ class crm_company_people_impl extends class_base
 				$to_obj = $conn->to();
 				$emails[] = $to_obj->prop("mail");
 			};
-			$pdat["email"] = join(",", $emails);
+			$pdat["email"] = join(", ", $emails);
 
 			$econns = $person->connections_from(array(
 				"type" => "RELTYPE_PHONE",
@@ -465,7 +465,7 @@ class crm_company_people_impl extends class_base
 				$to_obj = $conn->to();
 				$phs[] = $to_obj->prop("name");
 			};
-			$pdat["phone"] = join(",", $phs);
+			$pdat["phone"] = join(", ", $phs);
 
 
 

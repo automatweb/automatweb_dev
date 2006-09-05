@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.85 2006/08/17 09:52:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.86 2006/09/05 09:40:15 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1262,7 +1262,6 @@ class aw_table extends aw_template
 			$tbl .= $pageselector;
 		}
 
-		// tagastame selle käki
 		return $tbl;
 	}
 
@@ -2359,7 +2358,7 @@ class aw_table extends aw_template
 				$tbl2 .= $this->opentag(array(
 					"name" => "td",
 					"align" => "center",
-					"classid" => $this->$filter_style,
+					"classid" => $filter_style,
 				));
 				$tbl2 .= $filter_contents;
 				$tbl2 .= "</td>\n";
@@ -2468,10 +2467,28 @@ class vcl_table extends aw_table
 		return array($pr["name"] => $pr);
 	}
 
-	function get_html()
+	function get_html($bare = false)
 	{
 		$this->sort_by();
 		$rv = $this->draw();
+		if (count($this->data) == 0 && count($this->rowdefs) == 0 || $bare)
+		{
+			return $rv;
+		}
+		// tagastame selle käki
+		return '<div id="tablebox">
+		    <div class="pais">
+			<div class="caption">'.$this->table_caption.'</div>
+			<div class="navigaator">
+			    <!-- siia tuleb ühel ilusal päeval lehtede kruttimise navigaator, homseks seda vaja pole, seega las see div jääb tühjaks -->
+			</div>
+		    </div>
+		    <div class="sisu">
+		    <!-- SUB: GRID_TABLEBOX_ITEM -->
+			'.$rv.'
+		    <!-- END SUB: GRID_TABLEBOX_ITEM -->
+		    </div>
+		</div>';
 		return $rv;
 	}
 

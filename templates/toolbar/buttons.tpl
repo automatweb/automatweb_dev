@@ -1,81 +1,69 @@
 <!-- SUB: start -->
-<!--<div class="aw04toolbar">-->
-
-<table class="aw04toolbar" width="100%" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-	<td>
-
-	<table border="0" cellpadding="0" cellspacing="0">
-	<tr>
+<div class="toimingud">
 <!-- END SUB: start -->
+	<div class="v">
+		<!-- SUB: button -->
+		
+		{VAR:surround_start}
+		<div nowrap class="tb_but" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+		<a href="{VAR:url}"><img style="button" src="{VAR:img_url}" border="0"></a>
+		</div>
+		{VAR:surround_end}
+	
+		<!-- END SUB: button -->
 
-<!-- SUB: button -->
- 	<td nowrap class="aw04toolbarbutton" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}">{VAR:surround_start}<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" border="0"></a>{VAR:surround_end}</td>
-<!-- END SUB: button -->
+		<!-- SUB: button_disabled -->
+			<td nowrap class="aw04toolbarbutton">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:img_url}" border="0"><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
+					</tr>
+				</table>
+			</td>
+		<!-- END SUB: button_disabled -->
 
-<!-- SUB: button_disabled -->
-  	<td nowrap class="aw04toolbarbutton">
-		<table border="0" cellpadding="0" cellspacing="0">
-			<tr>
-				<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:img_url}" border="0"><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
-			</tr>
-		</table>
-	</td>
-<!-- END SUB: button_disabled -->
+		<!-- SUB: menu_button -->
+			<div nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+				<table cellpadding=0 cellspacing=0>
+					<tr>
+						<td valign='bottom'>
+						<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" border="0"></a>
+						</td>
+						<td valign='bottom'>
+							<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+						</a>
+					</tr>
+				</table>
+			</div>
+		<!-- END SUB: menu_button -->
 
-<!-- SUB: menu_button -->
-	<td nowrap class="aw04toolbarbutton" valign="middle" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
-		<table cellpadding=0 cellspacing=0>
-			<tr>
-				<td valign='bottom'>
-				<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" border="0"></a>
-				</td>
-				<td valign='bottom'>
-					<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
-				</a>
-			</tr>
-		</table>
-	</td>
-<!-- END SUB: menu_button -->
+		<!-- SUB: text_button -->
+		 <div class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none; white-space: nowrap;">{VAR:tooltip}</a></div>
+		<!-- END SUB: text_button -->
+		
+		<!-- SUB: text_button_disabled -->
+		 <div class="aw04toolbarbutton"><span style="white-space: nowrap;">{VAR:tooltip}</span></div>
+		<!-- END SUB: text_button_disabled -->
 
-<!-- SUB: text_button -->
- <td class="aw04toolbarbutton" valign="middle" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none; white-space: nowrap;">{VAR:tooltip}</a></td>
-<!-- END SUB: text_button -->
+		<!-- SUB: separator -->
+		 <img style="float: left;" src="/automatweb/images/aw06/vahe_joon.gif" alt=" " width="2" height="26" class="vahe" hspace="2" />
+		<!-- END SUB: separator -->
 
-<!-- SUB: text_button_disabled -->
-	<td class="aw04toolbarbutton"><span style="white-space: nowrap;">{VAR:tooltip}</span></td>
-<!-- END SUB: text_button_disabled -->
+		<!-- SUB: cdata -->
+			 <td class="aw04toolbardata">{VAR:data}</td>
+		<!-- END SUB: cdata -->
 
-<!-- SUB: separator -->
-	<td class="aw04buttonsep" nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/trans.gif" width="1" height="1" border="0" alt=""></td>
-<!-- END SUB: separator -->
+	</div>
 
-<!-- SUB: cdata -->
-	 <td class="aw04toolbardata">{VAR:data}</td>
-<!-- END SUB: cdata -->
+	<!-- SUB: end -->
+	</div>
+	<!-- END SUB: end -->
 
-
-<!-- SUB: end -->
-	</tr>
-	</table>
-</td>
-<!--</div>-->
-<!-- END SUB: end -->
-
-<!-- SUB: right_side -->
-<td align="right"  class="aw04buttongroup">
-	<table border="0" cellspacing="0" cellpadding="0">
-	<tr>
-	<td align="right" valign="center">
-			{VAR:right_side_content}
-	</td>
-	</tr>
-	</table>
-</td>
-<!-- END SUB: right_side -->
-
+	<!-- SUB: right_side -->
+	<div class="p">
+		{VAR:right_side_content}
+	</div>
+	<!-- END SUB: right_side -->
+	<br class="clear" />
 <!-- SUB: real_end -->
-	</tr>
-	</table>
 <!-- END SUB: real_end -->
-

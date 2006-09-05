@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.56 2006/08/30 17:06:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.57 2006/09/05 09:40:14 kristo Exp $
 // crm_call.aw - phone call
 /*
 
-@classinfo syslog_type=ST_CRM_CALL relationmgr=yes no_status=1 confirm_save_data=1
+@classinfo syslog_type=ST_CRM_CALL no_status=1 confirm_save_data=1
 
 @default table=planner
 

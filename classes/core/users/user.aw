@@ -2101,7 +2101,9 @@ class user extends class_base
 			));
 		}
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
-		die($pm->get_menu());
+		die($pm->get_menu(array(
+			"text" => '<img src="/automatweb/images/aw06/ikoon_seaded.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />'.t("Seaded").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
+		)));
 	}
 
 	/**
@@ -2146,7 +2148,9 @@ class user extends class_base
 			}
 		}
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
-		die($pm->get_menu());
+		die($pm->get_menu(array(
+			"text" => '<img src="/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />'.t("Ajalugu").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
+		)));
 	}
 }
 ?>

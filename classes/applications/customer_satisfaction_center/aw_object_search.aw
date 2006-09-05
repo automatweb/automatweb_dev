@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.2 2006/08/28 12:21:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.3 2006/09/05 09:40:13 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -164,7 +164,7 @@ class aw_object_search extends class_base
 	**/
 	function delete_bms($arr)
 	{
-		object_list::iterate_list($arr["sel"], "delete");
+		object_list::iterate_list($_GET["sel"], "delete");
 		return $arr["post_ru"];
 	}
 

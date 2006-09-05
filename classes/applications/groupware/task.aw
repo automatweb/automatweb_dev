@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.125 2006/08/30 17:06:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.126 2006/09/05 09:40:13 kristo Exp $
 // task.aw - TODO item
 /*
 
-@classinfo syslog_type=ST_TASK relationmgr=yes confirm_save_data=1
+@classinfo syslog_type=ST_TASK confirm_save_data=1
 
 @default table=objects
 
@@ -207,12 +207,12 @@ caption Osalejad
 @groupinfo calendars caption=Kalendrid
 @groupinfo others caption=Teised submit_method=get
 @groupinfo projects caption=Projektid
-@groupinfo comments caption=Kommentaarid
-@groupinfo reminders caption=Meeldetuletused
+@groupinfo comments caption=Kommentaarid parent=other_exp
+@groupinfo reminders caption=Meeldetuletused parent=other_exp
 @groupinfo participants caption=Osalejad submit=no
-@groupinfo other_exp caption="Muud kulud" 
-@groupinfo resources caption="Ressursid" 
-@groupinfo predicates caption="Eeldused" 
+@groupinfo other_exp caption="Muud kulud"  
+@groupinfo resources caption="Ressursid" parent=other_exp
+@groupinfo predicates caption="Eeldused" parent=other_exp
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -2484,7 +2484,7 @@ class task extends class_base
 		}
 		$u = get_instance(CL_USER);
 		$company = obj($u->get_current_company());
-		if(!$arr["obj_inst"]->prop("hr_price_currency"))
+		if(!$arr["obj_inst"]->prop("hr_price_currency") && $arr["obj_inst"]->class_id())
 		{
 			$arr["obj_inst"]->set_prop("hr_price_currency", $company->prop("currency"));
 		}
@@ -2704,6 +2704,10 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_co_table($t);
 
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 		{
 			$c = $c->to();
@@ -2750,6 +2754,10 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_proj_table($t);
 
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$p = get_instance(CL_PROJECT);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
 		{
@@ -2794,6 +2802,10 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_parts_table($t);
 
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$p = get_instance(CL_PROJECT);
 		$types = array(10, 8);
 		if ($arr["obj_inst"]->class_id() == CL_CRM_CALL)
@@ -2945,6 +2957,10 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_files_table($t);
 
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$clss = aw_ini_get("classes");
 		$u = get_instance(CL_USER);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FILE")) as $c)

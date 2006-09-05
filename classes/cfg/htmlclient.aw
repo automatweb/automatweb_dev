@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.153 2006/08/30 17:06:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.154 2006/09/05 09:40:14 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -283,7 +283,7 @@ class htmlclient extends aw_template
 
 		if (empty($args["value"]) && is_callable(array($args["vcl_inst"], "get_html")))
 		{
-			$args["value"] = $args["vcl_inst"]->get_html();
+			$args["value"] = $args["vcl_inst"]->get_html($this->layoutinfo[$args["parent"]]["closeable"] == 1);
 		}
 		if($args["type"] == "reset" || $args["type"] == "button")
 		{
@@ -786,12 +786,22 @@ class htmlclient extends aw_template
 				"feedback_link" => $this->mk_my_orb("redir_new_feedback", array(
 					"d_class" => $_GET["class"],
 					"d_obj" => $_GET["id"],
-					"object_grp" => $_GET["group"]
+					"object_grp" => $_GET["group"],
+					"url" => get_ru()
 				), "customer_feedback_entry"),
-				"feedback_m_link" => $this->mk_my_orb("redir_m", array(	), "customer_feedback_manager"),
-				"bm_pop" => $bm->get_menu(array("load_on_demand_url" => $this->mk_my_orb("pm_lod", array("url" => get_ru()), "user_bookmarks"))),
-				"history_pop" => $bm_h->get_menu(array("load_on_demand_url" => $this->mk_my_orb("hist_lod", array("url" => get_ru()), "user"))),
-				"qa_pop" => $bmq->get_menu(array("load_on_demand_url" => $this->mk_my_orb("qa_lod", array("url" => get_ru()), "obj_quick_add"))),
+				"feedback_m_link" => $this->mk_my_orb("redir_m", array("url" => get_ru()), "customer_feedback_manager"),
+				"bm_pop" => $bm->get_menu(array(
+					"load_on_demand_url" => $this->mk_my_orb("pm_lod", array("url" => get_ru()), "user_bookmarks"),
+					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
+				)),
+				"history_pop" => $bm_h->get_menu(array(
+					"load_on_demand_url" => $this->mk_my_orb("hist_lod", array("url" => get_ru()), "user"),
+					"text" => '<img src="/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />'.t("Ajalugu").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
+				)),
+				"qa_pop" => $bmq->get_menu(array(
+					"load_on_demand_url" => $this->mk_my_orb("qa_lod", array("url" => get_ru()), "obj_quick_add"),
+					"text" => '<img alt="" title="" border="0" src="'.aw_ini_get("baseurl").'/automatweb/images/aw06/ikoon_lisa.gif" id="mb_user_qa" border="0" class="ikoon" />'.t("Lisa kiiresti").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>'
+				)),
 				"settings_pop" => $bmb->get_menu(array("load_on_demand_url" => $this->mk_my_orb("settings_lod", array("url" => get_ru()), "user"))),
 				"srch_link" => $this->mk_my_orb("redir_search", array("url" => get_ru()), "aw_object_search")
 			));
@@ -1241,7 +1251,7 @@ class htmlclient extends aw_template
 				$this->vars(array(
 					"item" => $layout_item,
 				));
-				$content .= $this->parse("GRID_VBOX_ITEM");
+				$content .= $this->parse($ldata["closeable"] ? "GRID_VBOX_ITEM" : "GRID_VBOX_SUBITEM");
 			};
 
 			$this->vars(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.128 2006/07/13 11:46:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.129 2006/09/05 09:40:12 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1502,6 +1502,7 @@ class planner extends class_base
 	// event_id - id of an event
 	function get_event_edit_link($arr)
 	{
+		return html::get_change_url($arr["event_id"], array("return_url" => get_ru()));
 		return $this->mk_my_orb("change",array(
 			"id" => $arr["cal_id"],
 			"group" => "add_event",
@@ -2198,6 +2199,7 @@ class planner extends class_base
 						CL_PLANNER),
 					"caption" => $result->name(),
 				));
+				//$href_to_event = html::get_change_url($result->brother_of(), array("return_url" => get_ru()));
 			}
 			else
 			{

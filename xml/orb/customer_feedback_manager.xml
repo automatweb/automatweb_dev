@@ -4,6 +4,7 @@
 		<action name="redir_m">
 			<function name="redir_m">
 				<arguments>
+					<optional name="url" />
 				</arguments>
 			</function>
 		</action>

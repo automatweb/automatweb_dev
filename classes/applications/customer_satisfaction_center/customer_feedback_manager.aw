@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.2 2006/08/28 12:21:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.3 2006/09/05 09:40:13 kristo Exp $
 // customer_feedback_manager.aw - Kliendi tagasiside 
 /*
 
@@ -224,11 +224,12 @@ class customer_feedback_manager extends class_base
 
 	/**
 		@attrib name=redir_m
+		@param url optional
 	**/
-	function redir_m()
+	function redir_m($arr)
 	{
 		$m = $this->init_manager();
-		return html::get_change_url($m->id(), array("group" => "fb"));
+		return html::get_change_url($m->id(), array("group" => "fb", "return_url" => $arr["url"]));
 	}
 
 }

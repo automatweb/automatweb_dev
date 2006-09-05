@@ -18,12 +18,12 @@
             <caption>Ostja</caption>
       </property>
       <property>
-            <name>bargainer</name>
+            <name>offerer</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <type>relpicker</type>
-            <reltype>RELTYPE_BUYER</reltype>
+            <reltype>RELTYPE_OFFERER</reltype>
             <caption>Hankija</caption>
       </property>
       <property>
@@ -105,6 +105,14 @@
                   <clid>CL_PROCUREMENT_OFFER</clid>
                   <caption>Pakkumine </caption>
             </OFFER>
+            <OFFERER>
+                  <value>3</value>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
+                  <caption>Pakkuja</caption>
+            </OFFERER>
       </reltypes>
 </properties>
 

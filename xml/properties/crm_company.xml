@@ -18,7 +18,6 @@
             <size>30</size>
             <maxlength>255</maxlength>
             <parent>co_top_left</parent>
-            <captionside>top</captionside>
             <field>name</field>
             <caption>Organisatsiooni nimi</caption>
       </property>
@@ -30,7 +29,6 @@
             <size>10</size>
             <field>aw_short_name</field>
             <parent>co_top_left</parent>
-            <captionside>top</captionside>
             <caption>Nime l&amp;amp;uuml;hend</caption>
       </property>
       <property>
@@ -41,7 +39,6 @@
             <size>10</size>
             <maxlength>20</maxlength>
             <parent>co_top_left</parent>
-            <captionside>top</captionside>
             <field>reg_nr</field>
             <caption>Registri number</caption>
       </property>
@@ -53,7 +50,6 @@
             <automatic>1</automatic>
             <reltype>RELTYPE_ETTEVOTLUSVORM</reltype>
             <parent>co_top_left</parent>
-            <captionside>top</captionside>
             <field>ettevotlusvorm</field>
             <caption>&amp;Otilde;iguslik vorm</caption>
       </property>
@@ -62,10 +58,9 @@
             <table>objects</table>
             <group>general_sub</group>
             <type>textarea</type>
-            <cols>65</cols>
-            <rows>3</rows>
+            <cols>40</cols>
+            <rows>2</rows>
             <parent>co_top_left</parent>
-            <captionside>top</captionside>
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>
@@ -75,7 +70,6 @@
             <group>general_sub</group>
             <type>textbox</type>
             <parent>co_top_right</parent>
-            <captionside>top</captionside>
             <field>code</field>
             <caption>Kood</caption>
       </property>
@@ -85,7 +79,6 @@
             <group>general_sub</group>
             <type>textbox</type>
             <parent>co_top_right</parent>
-            <captionside>top</captionside>
             <field>tax_nr</field>
             <caption>KMKohuslase nr</caption>
       </property>
@@ -111,7 +104,6 @@
             <type>select</type>
             <editonly>1</editonly>
             <parent>co_top_right</parent>
-            <captionside>top</captionside>
             <field>firmajuht</field>
             <caption>Firmajuht</caption>
       </property>
@@ -123,7 +115,6 @@
             <year_from>1800</year_from>
             <default>-1</default>
             <parent>co_top_right</parent>
-            <captionside>top</captionside>
             <field>year_founded</field>
             <caption>Asutatud</caption>
       </property>
@@ -133,7 +124,6 @@
             <group>general_sub</group>
             <type>date_select</type>
             <parent>co_bottom_left</parent>
-            <captionside>top</captionside>
             <field>cust_contract_date</field>
             <caption>Kliendisuhte alguskuup&amp;amp;auml;ev</caption>
       </property>
@@ -143,7 +133,6 @@
             <group>general_sub</group>
             <type>select</type>
             <parent>co_bottom_left</parent>
-            <captionside>top</captionside>
             <field>cust_contract_creator</field>
             <caption>Kliendisuhte looja</caption>
       </property>
@@ -155,7 +144,6 @@
             <reltype>RELTYPE_CLIENT_MANAGER</reltype>
             <field>client_manager</field>
             <parent>co_bottom_left</parent>
-            <captionside>top</captionside>
             <caption>Kliendihaldur</caption>
       </property>
       <property>
@@ -166,7 +154,6 @@
             <store>connect</store>
             <reltype>RELTYPE_REFERAL_TYPE</reltype>
             <parent>co_bottom_left</parent>
-            <captionside>top</captionside>
             <field>referal_type</field>
             <caption>Sissetuleku meetod</caption>
       </property>
@@ -177,7 +164,6 @@
             <type>text</type>
             <store>no</store>
             <parent>co_bottom_left</parent>
-            <captionside>top</captionside>
             <field>client_category</field>
             <caption>Kliendikategooria</caption>
       </property>
@@ -188,7 +174,6 @@
             <type>relpicker</type>
             <editonly>1</editonly>
             <parent>co_bottom_right</parent>
-            <captionside>top</captionside>
             <field>contact_person</field>
             <caption>Kliendpoolne kontaktisik 1</caption>
       </property>
@@ -199,7 +184,6 @@
             <type>relpicker</type>
             <editonly>1</editonly>
             <parent>co_bottom_right</parent>
-            <captionside>top</captionside>
             <field>contact_person2</field>
             <caption>Kliendpoolne kontaktisik 2</caption>
       </property>
@@ -210,7 +194,6 @@
             <type>relpicker</type>
             <editonly>1</editonly>
             <parent>co_bottom_right</parent>
-            <captionside>top</captionside>
             <field>contact_person3</field>
             <caption>Kliendpoolne kontaktisik 3</caption>
       </property>
@@ -220,7 +203,6 @@
             <group>general_sub</group>
             <type>textbox</type>
             <parent>co_bottom_right</parent>
-            <captionside>top</captionside>
             <field>priority</field>
             <caption>Prioriteet</caption>
       </property>
@@ -231,7 +213,6 @@
             <type>textbox</type>
             <size>5</size>
             <parent>co_bottom_right</parent>
-            <captionside>top</captionside>
             <field>bill_penalty_pct</field>
             <caption>Arve viivise %</caption>
       </property>
@@ -672,7 +653,7 @@
             <group>contacts_edit</group>
             <type>treeview</type>
             <store>no</store>
-            <parent>contacts_edit</parent>
+            <parent>contacts_edit_tree</parent>
             <no_caption>1</no_caption>
             <field>cedit_tree</field>
       </property>
@@ -682,7 +663,7 @@
             <group>contacts_edit</group>
             <type>table</type>
             <store>no</store>
-            <parent>contacts_edit</parent>
+            <parent>contacts_edit_table</parent>
             <no_caption>1</no_caption>
             <field>cedit_table</field>
       </property>
@@ -1362,7 +1343,7 @@
             <type>textbox</type>
             <store>no</store>
             <parent>my_proj_search_b_top</parent>
-            <size>33</size>
+            <size>18</size>
             <captionside>top</captionside>
             <field>proj_search_cust</field>
             <caption>Klient</caption>
@@ -1372,7 +1353,7 @@
             <table>objects</table>
             <group>my_projects</group>
             <type>text</type>
-            <size>28</size>
+            <size>18</size>
             <parent>my_proj_search_b_top</parent>
             <store>no</store>
             <captionside>top</captionside>
@@ -1386,7 +1367,7 @@
             <type>textbox</type>
             <store>no</store>
             <parent>my_proj_search_b_top</parent>
-            <size>33</size>
+            <size>18</size>
             <captionside>top</captionside>
             <field>proj_search_name</field>
             <caption>Projekti nimi</caption>
@@ -1398,7 +1379,7 @@
             <type>textbox</type>
             <store>no</store>
             <parent>my_proj_search_b_top</parent>
-            <size>33</size>
+            <size>18</size>
             <captionside>top</captionside>
             <field>proj_search_code</field>
             <caption>Projekti kood</caption>
@@ -1410,7 +1391,7 @@
             <type>textbox</type>
             <store>no</store>
             <parent>my_proj_search_b_top</parent>
-            <size>33</size>
+            <size>18</size>
             <captionside>top</captionside>
             <field>proj_search_contact_person</field>
             <caption>Projekti kontaktisik</caption>
@@ -1422,7 +1403,7 @@
             <type>textbox</type>
             <store>no</store>
             <parent>my_proj_search_b_top</parent>
-            <size>33</size>
+            <size>18</size>
             <captionside>top</captionside>
             <field>proj_search_task_name</field>
             <caption>&amp;amp;Uuml;lesande nimi</caption>
@@ -1887,7 +1868,7 @@
                   <num_5>bills_search</num_5>
             </group>
             <type>textbox</type>
-            <size>33</size>
+            <size>18</size>
             <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
@@ -1925,7 +1906,7 @@
                   <num_5>bills_search</num_5>
             </group>
             <type>text</type>
-            <size>30</size>
+            <size>18</size>
             <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
@@ -1944,7 +1925,7 @@
                   <num_5>ovrv_mails</num_5>
             </group>
             <type>textbox</type>
-            <size>33</size>
+            <size>18</size>
             <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
@@ -1963,7 +1944,7 @@
                   <num_5>ovrv_mails</num_5>
             </group>
             <type>textbox</type>
-            <size>33</size>
+            <size>18</size>
             <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
@@ -1981,7 +1962,7 @@
                   <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
-            <size>33</size>
+            <size>18</size>
             <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
@@ -2000,7 +1981,7 @@
                   <num_5>bills_search</num_5>
             </group>
             <type>textbox</type>
-            <size>33</size>
+            <size>18</size>
             <parent>all_act_search</parent>
             <store>no</store>
             <captionside>top</captionside>
@@ -2426,7 +2407,7 @@
             <group>resources</group>
             <type>treeview</type>
             <no_caption>1</no_caption>
-            <parent>res_lt</parent>
+            <parent>res_lt_tree</parent>
             <store>no</store>
             <field>res_tree</field>
       </property>
@@ -2436,7 +2417,7 @@
             <group>resources</group>
             <type>table</type>
             <no_caption>1</no_caption>
-            <parent>res_lt</parent>
+            <parent>res_lt_tbl</parent>
             <store>no</store>
             <field>res_tbl</field>
       </property>
@@ -2569,10 +2550,8 @@
             <field>versions</field>
       </property>
       <classinfo>
-            <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
             <no_status>1</no_status>
-            <r2>yes</r2>
             <confirm_save_data>1</confirm_save_data>
             <versioned>1</versioned>
       </classinfo>
@@ -2585,10 +2564,6 @@
                   <caption>&amp;Uuml;ldkontaktid</caption>
                   <parent>general</parent>
             </cedit>
-            <open_hrs>
-                  <caption>Avamisajad</caption>
-                  <parent>general</parent>
-            </open_hrs>
             <org_sections>
                   <caption>Tegevus</caption>
                   <parent>general</parent>
@@ -2597,10 +2572,6 @@
                   <caption>Lisainfo</caption>
                   <parent>general</parent>
             </add_info>
-            <user_settings>
-                  <caption>Seaded</caption>
-                  <parent>general</parent>
-            </user_settings>
             <special_offers>
                   <caption>Eripakkumised</caption>
                   <submit>no</submit>
@@ -2641,6 +2612,7 @@
                   <caption>Ressursid</caption>
                   <submit>no</submit>
                   <save>no</save>
+                  <parent>people</parent>
             </resources>
             <contacts>
                   <caption>Kontaktid</caption>
@@ -2739,7 +2711,6 @@
             <documents_all>
                   <caption>Dokumendid</caption>
                   <submit>no</submit>
-                  <parent>general</parent>
                   <save>no</save>
             </documents_all>
             <documents_news>
@@ -2752,7 +2723,7 @@
             <documents_forum>
                   <caption>Foorum</caption>
                   <submit>no</submit>
-                  <parent>general</parent>
+                  <parent>people</parent>
             </documents_forum>
             <documents_lmod>
                   <caption>Viimati muudetud</caption>
@@ -2820,22 +2791,17 @@
                   <save>no</save>
                   <submit_method>get</submit_method>
             </stats_my>
-            <qv>
-                  <caption>Vaata</caption>
-                  <submit>no</submit>
-                  <save>no</save>
-            </qv>
             <quick_view>
                   <caption>Vaata</caption>
                   <submit>no</submit>
                   <save>no</save>
-                  <parent>qv</parent>
+                  <parent>stats</parent>
             </quick_view>
             <my_view>
                   <caption>Minu p&amp;amp;auml;ev</caption>
                   <submit>no</submit>
                   <save>no</save>
-                  <parent>qv</parent>
+                  <parent>stats</parent>
             </my_view>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
@@ -2844,7 +2810,16 @@
                   <caption>Versioonid</caption>
                   <submit>no</submit>
                   <save>no</save>
+                  <parent>stats</parent>
             </versions>
+            <open_hrs>
+                  <caption>Avamisajad</caption>
+                  <parent>people</parent>
+            </open_hrs>
+            <user_settings>
+                  <caption>Seaded</caption>
+                  <parent>people</parent>
+            </user_settings>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -3205,6 +3180,8 @@
             <vbox_contacts_left>
                   <type>vbox</type>
                   <parent>hbox_others</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Organisatsiooni&amp;nbsp;struktuur</area_caption>
                   <group>contacts2</group>
             </vbox_contacts_left>
             <vbox_contacts_right>
@@ -3216,6 +3193,18 @@
                   <type>hbox</type>
                   <group>contacts_edit</group>
             </contacts_edit>
+            <contacts_edit_tree>
+                  <type>hbox</type>
+                  <parent>contacts_edit</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Struktuur</area_caption>
+                  <group>contacts_edit</group>
+            </contacts_edit_tree>
+            <contacts_edit_table>
+                  <type>hbox</type>
+                  <parent>contacts_edit</parent>
+                  <group>contacts_edit</group>
+            </contacts_edit_table>
             <personal_toolbar>
                   <type>hbox</type>
                   <group>personal_offers</group>
@@ -3228,6 +3217,8 @@
             <personal_hbox_tree>
                   <type>vbox</type>
                   <parent>personal_tree_table</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Struktuur</area_caption>
                   <group>personal_offers</group>
             </personal_hbox_tree>
             <personal_hbox_table>
@@ -3247,6 +3238,8 @@
             <personal_hbox_tree_cand>
                   <type>vbox</type>
                   <parent>personal_tree_table_cand</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Struktuur</area_caption>
                   <group>personal_candits</group>
             </personal_hbox_tree_cand>
             <personal_hbox_table_cand>
@@ -3262,6 +3255,8 @@
             <vbox_customers_left>
                   <type>vbox</type>
                   <parent>my_cust_bot</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>relorg_s</group>
             </vbox_customers_left>
             <relorg_t_l>
@@ -3277,6 +3272,8 @@
             <projects_tree>
                   <type>vbox</type>
                   <parent>projects_main</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>org_projects_archive</group>
             </projects_tree>
             <all_proj_search_b>
@@ -3317,6 +3314,8 @@
             <my_proj_search>
                   <type>vbox</type>
                   <parent>my_proj</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>my_projects</group>
             </my_proj_search>
             <my_proj_search_b>
@@ -3347,6 +3346,8 @@
             <docs_left>
                   <type>vbox</type>
                   <parent>docs_lt</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>documents_all</group>
             </docs_left>
             <docs_search>
@@ -3367,6 +3368,8 @@
             <docs_news_left>
                   <type>vbox</type>
                   <parent>docs_news_lt</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>documents_news</group>
             </docs_news_left>
             <bills_list_box>
@@ -3377,6 +3380,8 @@
             <bills_list_s>
                   <type>vbox</type>
                   <parent>bills_list_box</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>bills_list</group>
             </bills_list_s>
             <my_tasks>
@@ -3394,6 +3399,8 @@
             <all_act_search>
                   <type>vbox</type>
                   <parent>my_tasks</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>
                         <num_0>my_tasks</num_0>
                         <num_1>meetings</num_1>
@@ -3432,6 +3439,18 @@
                   <width>20%:80%</width>
                   <group>resources</group>
             </res_lt>
+            <res_lt_tree>
+                  <type>hbox</type>
+                  <parent>res_lt</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Ressurssid</area_caption>
+                  <group>resources</group>
+            </res_lt_tree>
+            <res_lt_tbl>
+                  <type>hbox</type>
+                  <parent>res_lt</parent>
+                  <group>resources</group>
+            </res_lt_tbl>
       </layout>
 </properties>
 

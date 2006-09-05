@@ -601,7 +601,6 @@
       </property>
       <classinfo>
             <syslog_type>ST_CRM_MEETING</syslog_type>
-            <relationmgr>yes</relationmgr>
             <confirm_save_data>1</confirm_save_data>
       </classinfo>
       <groupinfo>

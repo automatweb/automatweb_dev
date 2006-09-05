@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.3 2006/08/28 12:21:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.4 2006/09/05 09:40:13 kristo Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -230,7 +230,9 @@ class obj_quick_add extends class_base
 			}
 		}
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
-		die($pm->get_menu());
+		die($pm->get_menu(array(
+			"text" => '<img alt="" title="" border="0" src="'.aw_ini_get("baseurl").'/automatweb/images/aw06/ikoon_lisa.gif" id="mb_user_qa" border="0" class="ikoon" />'.t("Lisa kiiresti").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>'
+		)));
 	}
 
 	function init_qa()

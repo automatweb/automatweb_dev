@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.22 2006/06/30 21:19:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.23 2006/09/05 09:40:14 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -403,6 +403,29 @@ class language extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	/**
+		@attrib name=lang_pop
+	**/
+	function lang_pop($arr)
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu("lang_pop");
+		$l = get_instance("languages");
+		$ll = $l->get_list();
+		foreach($ll as $lid => $ld)
+		{
+			$pm->add_item(array(
+				"text" => $ld,
+				"link" => aw_ini_get("baseurl")."/automatweb/?set_lang_id=".$lid,
+			));
+		}
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		$ld = $l->fetch(aw_global_get("lang_id"));
+		die($pm->get_menu(array(
+			"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
+		)));
 	}
 }
 ?>

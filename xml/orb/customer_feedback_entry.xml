@@ -7,6 +7,7 @@
 					<required name="d_class" />
 					<optional name="d_obj" />
 					<required name="object_grp" />
+					<optional name="url" />
 				</arguments>
 			</function>
 		</action>

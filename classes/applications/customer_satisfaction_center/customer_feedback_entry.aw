@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.3 2006/08/28 12:21:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_entry.aw,v 1.4 2006/09/05 09:40:13 kristo Exp $
 // customer_feedback_entry.aw - Kliendi tagasiside sisestus 
 /*
 
@@ -129,6 +129,7 @@ class customer_feedback_entry extends class_base
 				return PROP_IGNORE;
 
 			case "rules":
+				return PROP_IGNORE;
 				$prop["value"] = t("&Auml;ra jama, mees! m&otilde;tled ka mis teed v&auml;?");
 				break;
 
@@ -336,6 +337,7 @@ class customer_feedback_entry extends class_base
 		@param d_class required 
 		@param d_obj optional
 		@param object_grp required
+		@param url optional
 	**/
 	function redir_new_feedback($arr)
 	{
@@ -347,7 +349,8 @@ class customer_feedback_entry extends class_base
 		header("Location: ".html::get_new_url(CL_CUSTOMER_FEEDBACK_ENTRY, $co->id(), array(
 			"d_class" => $arr["d_class"],
 			"d_obj" => $arr["d_obj"],
-			"object_grp" => $arr["object_grp"]
+			"object_grp" => $arr["object_grp"],
+			"return_url" => $arr["url"]
 		)));
 		die();
 	}

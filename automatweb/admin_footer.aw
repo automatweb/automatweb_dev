@@ -61,14 +61,44 @@ while (!empty($ru))
 	$ru = $vals["return_url"];
 }
 
-
+$p = get_current_person();
+$co = get_current_company();
+$clss = aw_ini_get("classes");
+$cur_obj = obj();
+if ($sf->can("view", $_GET["id"]))
+{
+	$cur_obj = obj($_GET["id"]);
+}
+$h = get_instance("html");
 // do not display the YAH bar, if site_title is empty
+$bmb = get_instance("vcl/popup_menu");
+$bmb->begin_menu("settings_pop");
+$bml = get_instance("vcl/popup_menu");
+$bml->begin_menu("lang_pop");
+
+$l = get_instance("languages");
+$ld = $l->fetch(aw_global_get("lang_id"));
+
 $sf->vars(array(
 	"prod_family" => $pf,
+	"cur_p_name" => $p->name(),
+	"cur_p_url" => $h->obj_change_url($p),
+	"cur_co_url" => $h->obj_change_url($co),
+	"cur_co_name" => $co->name(),
+	"cur_class" => $clss[clid_for_name($_GET["class"])]["name"],
+	"cur_obj_name" => $cur_obj->name(),
 	"site_title" => $site_title,
 	"ui_lang" => $pm->get_menu(array(
 		"text" => t("[Liidese keel]")
-	))
+	)),
+	"settings_pop" => $bmb->get_menu(array(
+		"load_on_demand_url" => $sf->mk_my_orb("settings_lod", array("url" => get_ru()), "user"),
+		"text" => '<img src="/automatweb/images/aw06/ikoon_seaded.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />'.t("Seaded").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
+	)),
+	"lang_pop" => $bml->get_menu(array(
+		"load_on_demand_url" => $sf->mk_my_orb("lang_pop", array("url" => get_ru()), "language"),
+		"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
+	)),
 ));
 
 $sf->vars(array(
@@ -76,7 +106,6 @@ $sf->vars(array(
 ));
 
 $tmp = array();
-$l = get_instance("languages");
 if ($site_title != "")	// weird, but lots of places rely on the yah line being empty and thus having no height.
 {
 	// do the language selecta

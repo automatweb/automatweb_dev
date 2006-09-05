@@ -469,7 +469,7 @@ class planner_model extends core
 	function get_event_edit_link($arr)
 	{
 		$evo = obj($arr["event_id"]);
-		if ($evo->class_id() == CL_CRM_PERSON || $evo->class_id() == CL_BROTHER_DOCUMENT || $evo->class_id() == CL_DOCUMENT || $evo->class_id() == CL_BUG) // birthday
+		if (true || $evo->class_id() == CL_CRM_PERSON || $evo->class_id() == CL_BROTHER_DOCUMENT || $evo->class_id() == CL_DOCUMENT || $evo->class_id() == CL_BUG) // birthday
 		{
 			return html::get_change_url($evo->id(), array("return_url" => get_ru()));
 		}
