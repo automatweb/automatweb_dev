@@ -28,7 +28,7 @@
 		<span>{VAR:prod_family}</span>
 		<a href="{VAR:baseurl}" title="AutomatWeb"><img src="{VAR:baseurl}/automatweb/images/aw06/aw_logo.gif" alt="AutomatWeb.com" width="183" height="34" border="0" /></a>
 	</div>
-	<div class="top-left-menyy"><a href="{VAR:cur_p_url}"><strong>{VAR:cur_p_name}</strong></a> | {VAR:cur_co_url} | {VAR:cur_class} | <a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a></div>
+	<div class="top-left-menyy">{VAR:cur_p_url} | {VAR:cur_co_url} | {VAR:cur_class} | <a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a></div>
 	<div class="top-right-menyy">
 		{VAR:lang_pop}
 		{VAR:settings_pop}
