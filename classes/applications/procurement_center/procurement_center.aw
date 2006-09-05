@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.7 2006/09/01 12:06:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.8 2006/09/05 15:24:43 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -146,11 +146,13 @@
 @default group=products
 @groupinfo products_tree caption="Puuvaates" parent=products
 @default group=products_tree
+	@property products_tb type=toolbar no_caption=1 store=no	
 	@layout products_l type=hbox width=30%:70%
 		@property products_tr type=treeview no_caption=1 store=no parent=products_l
 		@property products_tbl type=table no_caption=1 store=no parent=products_l
 @groupinfo products_find caption="Otsing" parent=products
 @default group=products_find
+	@property products_find_tb type=toolbar no_caption=1 store=no	
 	@property products_find_tb type=toolbar no_caption=1 store=no
 	@layout products_find_l type=hbox width=20%:80%
 		@layout products_find_params type=vbox parent=products_find_l
@@ -238,6 +240,10 @@ class procurement_center extends class_base
 			case "buyings_tr":
 				$this->_buyings_tr($arr);
 				break;
+			case "products_tr":
+				$this->_products_tr($arr);
+				break;	
+				
 			case "offerers_find_tbl":
 			case "offerers_tbl":
 				$this->_offerers_table($arr);
@@ -262,6 +268,14 @@ class procurement_center extends class_base
 			case "buyings_tbl":
 			case "buyings_find_tbl":
 				$this->_buyings_tbl($arr);
+				break;
+			case "products_tbl":
+			case "products_find_tbl":
+				$this->_products_tbl($arr);
+				break;
+			case "products_tb":
+			case "products_find_tb":
+				$this->_products_tb($arr);
 				break;
 			case "offerers_find_name":
 			case "offerers_find_address":
@@ -1432,6 +1446,550 @@ class procurement_center extends class_base
 		));
 	}
 	
+	function search_products($this_obj)
+	{
+		$ol = new object_list();
+		$filter = array("class_id" => array(CL_SHOP_PRODUCT), "lang_id" => array());
+		$data = $this_obj->meta("search_data");
+		if($data["products_find_product_name"]) $filter["name"] = array("%".$data["products_find_product_name"]."%");
+		
+		if($data["products_find_name"] || $data["products_find_address"] || $data["products__find_groups"] || $data["products_find_apply"])
+		{
+			$offerer_filter = array("class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON), "lang_id" => array());
+			if($data["products_find_name"]) $offerer_filter["name"] = "%".$data["products_find_name"]."%";
+			if($data["products_find_address"]) $offerer_filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+				"CL_CRM_COMPANY.contact.name" => "%".$data["products_find_address"]."%",
+				"CL_CRM_PERSON.address.name" => "%".$data["products_find_address"]."%",
+				)
+			));
+			if($data["products__find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
+			$offerer_list = new object_list($offerer_filter);
+			foreach($offerer_list->arr() as $offerer)
+			{arr($offerer->name());
+				$row_filter = array(
+					"class_id" => array(CL_PROCUREMENT_OFFER_ROW),
+					"lang_id" => array(),
+					"CL_PROCUREMENT_OFFER_ROW.RELTYPE_OFFER.offerer" => $offerer->id(),
+				);
+				if($data["products_find_apply"])
+				$row_filter["accept"] = $data["products_find_apply"];
+				$offer_rows = new object_list($row_filter);
+				
+				foreach($offer_rows->arr() as $row)
+				{
+					$filter["name"][] = $row->prop("product");
+				}
+			}
+			if(!(sizeof($filter["name"])>1)) return new object_list();
+		}
+
+		$offerer_list = new object_list($offerer_filter);
+	
+		arr($filter);
+		$ol = new object_list($filter);
+		return $ol;
+	}	
+	
+	function _products_tbl($arr)
+	{
+		classload("core/icons");
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_products_tbl($t);
+		$filter = array(
+//			"parent" => $_GET["tree_filter"],
+			"class_id" => array(CL_SHOP_PRODUCT),
+//			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
+		);
+		if(is_oid($arr["request"]["p_id"]) && $this->can("view", $arr["request"]["p_id"]))
+		{
+			$p_obj = obj($arr["request"]["p_id"]);
+			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
+			if($p_obj->class_id() == CL_MENU)
+			{
+				$offerers = new object_list(array(
+					"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"parent" => $arr["request"]["p_id"],
+				));
+				$filter["offerer"] = $offerers->ids();
+			}
+		}
+
+		//otsingust
+		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
+		{
+			$ol = $this->search_products($arr["obj_inst"]);
+			$arr["obj_inst"]->set_meta("search_data", null);
+			$arr["obj_inst"]->save();
+		}
+		else $ol = new object_list($filter);
+		
+		foreach($ol->arr() as $o)
+		{
+			if ($o->class_id() == CL_MENU)
+			{
+				$tp = t("Kaust");
+			}
+			else
+			if (is_oid($o->prop("item_type")))
+			{
+				$tp = obj($o->prop("item_type"));
+				$tp = $tp->name();
+			}
+			else
+			{
+				$tp = "";
+			}
+			
+			$get = "";
+			if ($o->prop("item_count") > 0)
+			{
+				$get = html::href(array(
+					"url" => $this->mk_my_orb("create_export", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => t("V&otilde;ta laost")
+				));
+			}
+			
+			$put = "";
+			if ($o->class_id() != CL_MENU)
+			{
+				$put = html::href(array(
+					"url" => $this->mk_my_orb("create_reception", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => t("Vii lattu")
+				));
+			}
+			
+			$t->define_data(array(
+				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
+				"name" => $o->name(),
+				"cnt" => $o->prop("item_count"),
+				"item_type" => $tp,
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $o->id(),
+						"return_url" => get_ru()
+					), $o->class_id()),
+					"caption" => t("Muuda")
+				)),
+				"get" => $get,
+				"put" => $put,
+				"del" => html::checkbox(array(
+					"name" => "sel[]",
+					"value" => $o->id()
+				)),
+				"is_menu" => ($o->class_id() == CL_MENU ? 0 : 1),
+				"ord" => html::textbox(array(
+					"name" => "set_ord[".$o->id()."]",
+					"value" => $o->ord(),
+					"size" => 5
+				)).html::hidden(array(
+					"name" => "old_ord[".$o->id()."]",
+					"value" => $o->ord()
+				)),
+				"hidden_ord" => $o->ord()
+			));
+		
+		}
+	}
+	
+	function _products_tr(&$arr)
+	{
+		$co = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+		$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+		$warehouse->config = obj($warehouse->prop("conf"));
+		$arr["prop"]["vcl_inst"] = new object_tree(array(
+			"parent" => $warehouse->config->prop("prod_fld"),
+			"class_id" => CL_MENU,
+			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
+			"sort_by" => "objects.jrk"
+		));
+		
+		classload("vcl/treeview");
+		$tv = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML,
+				"tree_id" => "prods",
+				"persist_state" => true,
+			),
+			"root_item" => obj($warehouse->config->prop("prod_fld")),
+			"ot" => $arr["prop"]["vcl_inst"],
+			"var" => "tree_filter"
+		));
+		return $tv->finalize_tree();
+	
+	}
+	
+	function _init_products_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("&nbsp;"),
+			"sortable" => 0,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "item_type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "cnt",
+			"caption" => t("Kogus laos"),
+			"align" => "center",
+			"type" => "int"
+		));
+
+		$t->define_field(array(
+			"name" => "get",
+			"caption" => t("V&otilde;ta laost"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "put",
+			"caption" => t("Vii lattu"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "del",
+			"caption" => "<a href='javascript:aw_sel_chb(document.changeform,\"sel\")'>".t("Vali")."</a>",
+			"align" => "center",
+		));
+	}
+	
+	function _products_tb(&$data)
+	{
+		$tb =& $data["prop"]["toolbar"];
+
+		$tb->add_menu_button(array(
+			"name" => "crt_".$this->prod_type_fld,
+			"tooltip" => t("Uus")
+		));
+
+		$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
+
+		$tb->add_menu_item(array(
+			"parent" => "crt_".$this->prod_type_fld,
+			"text" => t("Lisa kaust"),
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->prod_tree_root,
+				"return_url" => get_ru(),
+			), CL_MENU)
+		));
+
+		$tb->add_button(array(
+			"name" => "del",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta valitud"),
+			'action' => 'delete_cos',
+		));
+
+		$tb->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"tooltip" => t("Lisa korvi"),
+			"action" => "add_to_cart"
+		));
+		
+		$tb->add_button(array(
+			"name" => "compare",
+			"img" => "rte_table.gif",
+			"tooltip" => t("Lisa võrdlusesse"),
+			"action" => "add_to_compare",
+		//	"target" => "asdasdasd",
+		));
+	}
+	
+	function _req_add_itypes(&$tb, $parent, &$data)
+	{
+		$ol = new object_list(array(
+			"parent" => $parent,
+			"class_id" => array(CL_MENU, CL_SHOP_PRODUCT_TYPE),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			if ($o->class_id() != CL_MENU)
+			{
+				$tb->add_menu_item(array(
+					"parent" => "crt_".$parent,
+					"text" => $o->name(),
+					"link" => $this->mk_my_orb("new", array(
+						"item_type" => $o->id(),
+						"parent" => $this->prod_tree_root,
+						"alias_to" => $data["obj_inst"]->id(),
+						"reltype" => 2, //RELTYPE_PRODUCT,
+						"return_url" => get_ru(),
+						"cfgform" => $o->prop("sp_cfgform"),
+						"object_type" => $o->prop("sp_object_type")
+					), CL_SHOP_PRODUCT)
+				));
+			}
+			else
+			{
+				$tb->add_sub_menu(array(
+					"parent" => "crt_".$parent,
+					"name" => "crt_".$o->id(),
+					"text" => $o->name()
+				));
+				$this->_req_add_itypes($tb, $o->id(), $data);
+			}
+		}
+	}
+	
+	/** 
+		@attrib name=add_to_compare
+		@param id required type=int acl=view
+		@param sel optional
+		@param group optional
+	**/
+	function add_to_compare($arr)
+	{
+		$this->id = $arr["id"];
+		$this_obj = obj($arr["id"]);
+		$this->buyer = $this_obj->prop("owner");
+		classload("vcl/table");
+		$ret = "";
+		$t = new vcl_table;
+//		$this->_init_compare_t($t);
+
+		$ol= new object_list();
+		foreach($arr["sel"] as $sel)
+		{
+		 	if(is_oid($sel) && $this->can("view" , $sel)) $ol->add($sel);
+		}
+		$categorys = $this->get_categorys($ol);
+		foreach($categorys as  $category => $products)
+		{
+			$offerers = $this->get_offerers($products);
+			$ret.= $this->make_category_table(array("products" => $products, "category" => $category, "offerers" => $offerers));
+		}
+
+		$sf = new aw_template;
+		$sf->db_init();
+		$sf->tpl_init("automatweb");
+		$sf->read_template("index.tpl");
+			
+		$sf->vars(array(
+			"content"	=> $ret,
+			"uid" => aw_global_get("uid"),
+			"charset" => aw_global_get("charset")
+		));
+//		die($ret);
+		die($sf->parse());
+	}
+	
+	function get_categorys($ol)
+	{
+		$categorys = array();
+		foreach ($ol->arr() as $o)
+		{
+			$categorys[$o->prop("item_type")][] = $o;
+		}
+		return $categorys;
+	}
+	
+	function get_offerers($products)
+	{
+		$offers_list = new object_list(array(
+			"class_id" => CL_PROCUREMENT_OFFER,
+			"lang_id" => array(),
+			"procurement.orderer" => $this->buyer,
+		));
+		$products_names = array();
+		foreach($products as $product)
+		{
+			$products_names[$product->name()] = $product->name();
+		}
+		$offerers_list = new object_list();
+		foreach ($offers_list->arr() as $offer)
+		{
+			$row_list = new object_list(array(
+				"class_id" => CL_PROCUREMENT_OFFER_ROW,
+				"lang_id" => array(),
+//				"product" => $products_names,
+				"CL_PROCUREMENT_OFFER_ROW.RELTYPE_OFFER" => $offer->id(),
+			));
+			foreach($row_list->arr() as $row)
+			{
+				if(is_oid($offer->prop("offerer")) && $this->can("view" , $offer->prop("offerer")) && in_array($row->prop("product") , $products_names))
+				{
+					$offerers_list->add($offer->prop("offerer"));
+					break;
+				}
+			}
+		}
+		return $offerers_list;
+	}
+	
+	function make_category_table($args)
+	{
+		extract($args);
+//		foreach
+		$t_main = new vcl_table;
+//		$this->_init_compare_t($t_main);
+		//esialgne tabel tuleb lihtsalt ridadena
+		
+		$category_name = "";
+		if(is_oid($category) && $this->can("view", $category))
+		{	
+			$category_obj = obj($category);
+			$category_name = $category_obj->name();
+		}		
+		$t_main->define_field(array("name" => "main_row" ));
+		$t_main->define_data(array("main_row" => $category_name));
+		$t_main->define_data(array("main_row" => $this->get_offerer_table($args)));
+		return $t_main->draw();
+	}
+
+	function get_offerer_table($arr)
+	{
+		extract($arr);
+		$t_offerer = new vcl_table;
+//		$this->_init_compare_t($t_offerer);
+		
+		$t_offerer->define_field(array("name" => "product"));
+		
+		foreach($offerers->arr() as $offerer)
+		{
+			$t_offerer->define_field(array("name" => "offerer".$offerer->id()));
+		}
+		$data = array("product" => t("Hankija nimi"));
+		
+		foreach($offerers->arr() as $offerer)
+		{
+			$data["offerer".$offerer->id()] = $offerer->name();
+		}
+		$t_offerer->define_data($data);
+
+
+		$data = array("product" => t("Ajalugu"));
+		foreach($offerers->arr() as $offerer)
+		{
+			$data["offerer".$offerer->id()] = "ajalugu";
+		}
+		$t_offerer->define_data($data);
+
+		$data = array("product" => t("Piirkond"));
+		foreach($offerers->arr() as $offerer)
+		{
+			if($offerer->class_id == CL_CRM_COMPANY) $address = $offerer->prop("contact");
+			else $address = $offerer->prop("address");
+			if(is_oid($offerer->prop("address")) && $this->can("view" , $offerer->prop("address"))) $address_object = obj($offerer->prop("address"));
+			if(is_object($address_object) && is_oid($address_object->prop("piirkond")) && $this->can("view", $address_object->prop("piirkond")))
+			{
+				$area = obj($address_object->prop("piirkond"));
+				$data["offerer".$offerer->id()] = $area->name();
+			}
+		}
+		$t_offerer->define_data($data);
+
+		$data = array("product" => $this->get_names_table(array("products" => $products, "category" => $category)));
+		foreach($offerers->arr() as $offerer)
+		{
+			$data["offerer".$offerer->id()] = $this->get_products_table(array("offerer" => $offerer , "products" => $products, "category" => $category));
+		}
+		$t_offerer->define_data($data);
+
+		return $t_offerer->draw();
+	}
+	
+	function get_names_table($arr)
+	{
+		extract($arr);
+		$t_names = new vcl_table;
+//		$this->_init_compare_t($t_offerer);
+		$t_names->define_field(array("name" => "name", "caption" => t("Toote nimetus")));
+		foreach($products as $product)
+		{
+			if($product->prop("item_type") == $category) $t_names->define_data(array("name" => $product->name()));
+		}
+		return $t_names->draw();
+	}
+
+	function get_products_table($arr)
+	{
+		extract($arr);
+		$t_products = new vcl_table;
+//		$this->_init_compare_t($t_offerer);
+		$t_products->define_field(array("name" => "price","caption" => t("Hind")));
+		$t_products->define_field(array("name" => "amount","caption" => t("Kogus")));
+		$t_products->define_field(array("name" => "unit","caption" => t("&Uuml;hik")));
+		$t_products->define_field(array("name" => "date","caption" => t("Kuupäev")));
+		
+		foreach($products as $product)
+		{
+			if($product->prop("item_type") == $category)
+			{
+				$date=$amount=$unit=$price="";
+				$offers_list = new object_list(array(
+					"class_id" => CL_PROCUREMENT_OFFER,
+					"lang_id" => array(),
+					"procurement.orderer" => $this->buyer,
+					"offerer" => $offerer->id(),
+				));
+				foreach($offers_list->arr() as $offer)
+				{
+					$row_list = new object_list(array(
+						"class_id" => CL_PROCUREMENT_OFFER_ROW,
+						"lang_id" => array(),
+						"product" => $product->name(),
+						"CL_PROCUREMENT_OFFER_ROW.RELTYPE_OFFER" => $offer->id(),
+					));
+					foreach($row_list->arr() as $row)
+					{
+//						arr($row->prop("product") . " - " . $o->name());
+						$price = $row->prop("price");
+						$amount = $row->prop("amount");
+						$unit_obj = obj($row->prop("unit"));
+						$unit = $unit_obj->prop("unit_code");
+						$date = date("d.m.Y",$row->prop("shipment"));
+					}
+				}
+				
+				$t_products->define_data(array(
+					"price" => $price,
+					"amount" => $amount,
+					"unit" => $unit,
+					"date" => $date,
+				));
+			}
+		}
+		return $t_products->draw();
+	}
+
 	function handle_impl_submit($new_obj, $arr)
 	{
 		// so here we need to set a bunch of stuff for the company to work right
