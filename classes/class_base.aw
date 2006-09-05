@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.497 2006/09/04 12:38:47 kristo Exp $
+// $Id: class_base.aw,v 2.498 2006/09/05 09:27:14 dragut Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2088,6 +2088,11 @@ class class_base extends aw_template
 			$val["value"] = $val["vcl_inst"]->get_html();
 		};
 
+		if (($val["type"] == "range") && is_object($val["vcl_inst"]))
+		{
+			$val["value"] = $val["vcl_inst"]->get_html();
+		};
+
 		if (($val["type"] == "objpicker") && isset($val["clid"]) && defined($val["clid"]))
 		{
 			global $awt;
@@ -2588,6 +2593,12 @@ class class_base extends aw_template
 				classload("vcl/relmanager");
 				$val["vcl_inst"] = new relmanager();
 			};
+
+			if ( ($val['type'] == 'range') && !is_object($val['vcl_inst']) )
+			{
+				classload('vcl/range');
+				$val['vcl_inst'] = new range();
+			}
 
 			if (($val["type"] == "calendar") && !is_object($val["vcl_inst"]))
 			{
