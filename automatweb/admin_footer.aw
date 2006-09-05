@@ -81,8 +81,10 @@ $ld = $l->fetch(aw_global_get("lang_id"));
 $sf->vars(array(
 	"prod_family" => $pf,
 	"cur_p_name" => $p->name(),
-	"cur_p_url" => html::obj_change_url($p),
-	"cur_co_url" => html::obj_change_url($co),
+//	"cur_p_url" => html::obj_change_url($p),
+	"cur_p_url" => html::get_change_url($p->id(), array('return_url' => get_ru())),
+//	"cur_co_url" => html::obj_change_url($co),
+	"cur_co_url" => html::get_change_url($co->id(), array('return_url' => get_ru())),
 	"cur_co_name" => $co->name(),
 	"cur_class" => $clss[clid_for_name($_GET["class"])]["name"],
 	"cur_obj_name" => $cur_obj->name(),
