@@ -51,7 +51,7 @@
             <type>checkbox</type>
             <default>1</default>
             <ch_value>1</ch_value>
-            <caption>&amp;Uuml;mbritseda raamiga</caption>
+            <caption>&amp;amp;Uuml;mbritseda raamiga</caption>
       </property>
       <property>
             <name>scrolling</name>

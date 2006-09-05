@@ -2152,5 +2152,58 @@ class user extends class_base
 			"text" => '<img src="/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />'.t("Ajalugu").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
 		)));
 	}
+
+	/**
+		@attrib name=open_layer
+		@param u_class required
+		@param u_group required
+		@param u_layout required
+	**/
+	function open_layer($arr)
+	{
+		extract($arr);
+		$this->get_layer_state($arr);
+		$this->db_query("UPDATE layer_states SET aw_state = 1 WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout'");
+		die();
+	}
+	/**
+		@attrib name=close_layer
+		@param u_class required
+		@param u_group required
+		@param u_layout required
+	**/
+	function close_layer($arr)
+	{
+		extract($arr);
+		$this->get_layer_state($arr);
+		$this->db_query("UPDATE layer_states SET aw_state = 0 WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout'");
+		die();
+	}
+
+	/** returns the state of the layer
+		@attrib api=1
+		@param u_class required
+		@param u_group required
+		@param u_layout required
+	**/
+	function get_layer_state($arr)
+	{
+		extract($arr);
+		$val = $this->db_query("SELECT aw_state FROM layer_states WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout'", false);
+		if (!$val)
+		{
+			$this->db_query("CREATE TABLE layer_states (aw_class varchar(255), aw_group varchar(255), aw_layer varchar(255), aw_state int default 1)");
+			$this->db_query("SELECT aw_state FROM layer_states WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout'");
+		}
+		$row = $this->db_next();
+		$val = $row["aw_state"];
+		if ($val === null)
+		{
+			// insert new rec
+			$this->db_query("INSERT INTO layer_states (aw_class,aw_group, aw_layer, aw_state) values('$u_class','$u_group','$u_layout',1)");
+			return 1;
+		}
+		return $val;
+	}
 }
 ?>

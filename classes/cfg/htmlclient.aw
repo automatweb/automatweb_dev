@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.154 2006/09/05 09:40:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.155 2006/09/05 13:55:19 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1226,9 +1226,23 @@ class htmlclient extends aw_template
 			$ghc = $gce = "";
 			if ($ldata["closeable"] == 1)
 			{
+				$u = get_instance(CL_USER);
+				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
 				$this->vars(array(
 					"grid_name" => $layout_name,
-					"area_caption" => $ldata["area_caption"]
+					"area_caption" => $ldata["area_caption"],
+					"open_layer_url" => $this->mk_my_orb("open_layer", array(
+						"u_class" => $_GET["class"],
+						"u_group" => $_GET["group"],
+						"u_layout" => $layout_name
+					), "user"),
+					"close_layer_url" => $this->mk_my_orb("close_layer", array(
+						"u_class" => $_GET["class"],
+						"u_group" => $_GET["group"],
+						"u_layout" => $layout_name
+					), "user"),
+					"display" => $state ? "block" : "none",
+					"closer_state" => $state ? "up" : "down"
 				));
 				$ghc = $this->parse("GRID_HAS_CLOSER");
 				$gce = $this->parse("GRID_CLOSER_END");
@@ -1261,9 +1275,23 @@ class htmlclient extends aw_template
 			$ghc = $gce = "";
 			if ($ldata["closeable"] == 1)
 			{
+				$u = get_instance(CL_USER);
+				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
 				$this->vars(array(
 					"grid_name" => $layout_name,
-					"area_caption" => $ldata["area_caption"]
+					"area_caption" => $ldata["area_caption"],
+					"open_layer_url" => $this->mk_my_orb("open_layer", array(
+						"u_class" => $_GET["class"],
+						"u_group" => $_GET["group"],
+						"u_layout" => $layout_name
+					), "user"),
+					"close_layer_url" => $this->mk_my_orb("close_layer", array(
+						"u_class" => $_GET["class"],
+						"u_group" => $_GET["group"],
+						"u_layout" => $layout_name
+					), "user"),
+					"display" => $state ? "block" : "none",
+					"closer_state" => $state ? "up" : "down"
 				));
 				$ghc = $this->parse("VGRID_HAS_CLOSER");
 				$gce = $this->parse("VGRID_CLOSER_END");

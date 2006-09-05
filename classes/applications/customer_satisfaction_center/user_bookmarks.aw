@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.4 2006/09/05 09:40:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.5 2006/09/05 13:55:18 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -258,19 +258,6 @@ class user_bookmarks extends class_base
 
 		$pm = get_instance("vcl/popup_menu");
 		$pm->begin_menu("user_bookmarks");
-		$pm->add_item(array(
-			"text" => t("Pane j&auml;rjehoidjasse"),
-			"link" => $this->mk_my_orb("add_to_bm", array("url" => $arr["url"]))
-		));
-		$pm->add_item(array(
-			"text" => t("Eemalda j&auml;rjehoidjast"),
-			"link" => $this->mk_my_orb("remove_from_bm", array("url" => $arr["url"]))
-		));
-		$pm->add_item(array(
-			"text" => t("Toimeta j&auml;rjehoidjat"),
-			"link" => html::get_change_url($bm->id(), array("return_url" => $arr["url"], "group" => "bms"))
-		));
-		$pm->add_separator();
 
 		// now, add items from the bum
 		$ot = new object_tree(array(
@@ -319,6 +306,21 @@ class user_bookmarks extends class_base
 				));
 			}
 		}
+
+		$pm->add_separator();
+		$pm->add_item(array(
+			"text" => t("Pane j&auml;rjehoidjasse"),
+			"link" => $this->mk_my_orb("add_to_bm", array("url" => $arr["url"]))
+		));
+		$pm->add_item(array(
+			"text" => t("Eemalda j&auml;rjehoidjast"),
+			"link" => $this->mk_my_orb("remove_from_bm", array("url" => $arr["url"]))
+		));
+		$pm->add_item(array(
+			"text" => t("Toimeta j&auml;rjehoidjat"),
+			"link" => html::get_change_url($bm->id(), array("return_url" => $arr["url"], "group" => "bms"))
+		));
+
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die($pm->get_menu(array(
 					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'

@@ -24,5 +24,25 @@
 			</function>
 		</action>
 
+		<action name="open_layer">
+			<function name="open_layer">
+				<arguments>
+					<required name="u_class" />
+					<required name="u_group" />
+					<required name="u_layout" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="close_layer">
+			<function name="close_layer">
+				<arguments>
+					<required name="u_class" />
+					<required name="u_group" />
+					<required name="u_layout" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

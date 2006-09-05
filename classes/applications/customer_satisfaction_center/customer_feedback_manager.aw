@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.3 2006/09/05 09:40:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.4 2006/09/05 13:55:18 kristo Exp $
 // customer_feedback_manager.aw - Kliendi tagasiside 
 /*
 
@@ -110,13 +110,13 @@ class customer_feedback_manager extends class_base
 		));
 		$t->define_field(array(
 			"name" => "co",
-			"caption" => t("Organisatsioon"),
+			"caption" => t("ORG"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "site",
-			"caption" => t("Sait"),
+			"caption" => t("Domeen"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -133,6 +133,15 @@ class customer_feedback_manager extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Lisatud"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
 			"name" => "severity",
 			"caption" => t("T&otilde;sidus"),
 			"align" => "center",
@@ -140,7 +149,7 @@ class customer_feedback_manager extends class_base
 		));
 		$t->define_field(array(
 			"name" => "dev_status",
-			"caption" => t("Arendajapoolne staatus"),
+			"caption" => t("Staatus"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -203,7 +212,7 @@ class customer_feedback_manager extends class_base
 	
 			$t->define_data(array(
 				"person" => html::obj_change_url($p),
-				"co" => html::obj_change_url($co),
+				"co" => html::get_change_url($co->id(), array("return_url" => get_ru()), parse_obj_name($co->prop("short_name"))),
 				"class" => $clss[$ob->class_id()]["name"],
 				"object" => html::obj_change_url($ob),
 				"severity" => $e->severities[$o->prop("seriousness")],
@@ -217,7 +226,8 @@ class customer_feedback_manager extends class_base
 					"url" => $this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru()), $o->class_id()),
 					"caption" => t("Muuda")
 				)),
-				"site" => $sl->get_url_for_site($o->site_id())
+				"site" => $sl->get_url_for_site($o->site_id()),
+				"created" => $o->created()
 			));
 		}
 	}

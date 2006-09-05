@@ -8,6 +8,13 @@
 			</function>
 		</action>
 
+		<action name="insert_offer">
+			<function name="insert_offer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_cos">
 			<function name="delete_cos">
 				<arguments>
