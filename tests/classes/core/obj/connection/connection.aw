@@ -10,6 +10,17 @@ class connection_test extends UnitTestCase
 	function setUp()
 	{
 		$this->db = get_instance("class_base");
+
+		aw_disable_acl();
+		$this->o_from = $this->_get_temp_o();
+		$this->o_to = $this->_get_temp_o();		
+	}
+
+	function tearDown()
+	{
+		$this->o_from->delete(true);
+		$this->o_to->delete(true);
+		aw_restore_acl();
 	}
 
 	function test_construct()
@@ -28,32 +39,44 @@ class connection_test extends UnitTestCase
 
 	function test_construct_arr()
 	{
+		// without reltype:
 		$c = new connection(array(
-			"from" => 60,
-			"to" => 70,
+			'from' => $this->o_from->id(),
+			'to' => $this->o_to->id(),
+		));
+		$this->assertTrue($c->prop('from') == $this->o_from->id());
+		$this->assertTrue($c->prop("to") == $this->o_to->id());
+		// also we should check that it didn't write anything to db
+		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 0", "id");
+		$this->assertTrue($id == NULL);
+
+		// with reltype
+		$c = new connection(array(
+			'from' => $this->o_from->id(),
+			'to' => $this->o_to->id(),
 			"reltype" => 669
 		));
-		$this->assertTrue($c->prop("from") == 60);
-		$this->assertTrue($c->prop("to") == 70);
+		$this->assertTrue($c->prop('from') == $this->o_from->id());
+		$this->assertTrue($c->prop("to") == $this->o_to->id());
 		$this->assertTrue($c->prop("reltype") == 669);
 		// also we should check that it didn't write anything to db
-		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = 60 AND target = 70 AND reltype = 669", "id");
+		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
 		$this->assertTrue($id == NULL);
 	}
 
 	function test_construct_arr_save()
 	{
 		$c = new connection(array(
-			"from" => 60,
-			"to" => 70,
-			"reltype" => 668
+			"from" => $this->o_from->id(),
+			"to" => $this->o_to->id(),
+			"reltype" => 669
 		));
 		$c->save();
-		$this->assertTrue($c->prop("from") == 60);
-		$this->assertTrue($c->prop("to") == 70);
-		$this->assertTrue($c->prop("reltype") == 668);
+		$this->assertTrue($c->prop("from") == $this->o_from->id());
+		$this->assertTrue($c->prop("to") == $this->o_to->id());
+		$this->assertTrue($c->prop("reltype") == 669);
 		// also we should check that it wrote the conn
-		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = 60 AND target = 70 AND reltype = 668", "id");
+		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
 		$this->assertTrue($id > 0);
 	}
 
@@ -77,15 +100,15 @@ class connection_test extends UnitTestCase
 	{
 		$c = new connection();
 		$c->load(array(
-			"from" => 60,
-			"to" => 70,
-			"reltype" => 667
+			"from" => $this->o_from->id(),
+			"to" => $this->o_to->id(),
+			"reltype" => 669
 		));
-		$this->assertTrue($c->prop("from") == 60);
-		$this->assertTrue($c->prop("to") == 70);
-		$this->assertTrue($c->prop("reltype") == 667);
+		$this->assertTrue($c->prop("from") == $this->o_from->id());
+		$this->assertTrue($c->prop("to") == $this->o_to->id());
+		$this->assertTrue($c->prop("reltype") == 669);
 		// also we should check that it didn't write anything to db
-		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = 60 AND target = 70 AND reltype = 667", "id");
+		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
 		$this->assertTrue($id == NULL);
 	}
 
@@ -184,21 +207,21 @@ class connection_test extends UnitTestCase
 	{
 		// create
 		$c = new connection(array(
-			"from" => 60,
-			"to" => 70,
-			"reltype" => 660
+			"from" => $this->o_from->id(),
+			"to" => $this->o_to->id(),
+			"reltype" => 669
 		));
 		$c->save();
-		$this->assertTrue($c->prop("from") == 60);
-		$this->assertTrue($c->prop("to") == 70);
-		$this->assertTrue($c->prop("reltype") == 660);
+		$this->assertTrue($c->prop("from") == $this->o_from->id());
+		$this->assertTrue($c->prop("to") == $this->o_to->id());
+		$this->assertTrue($c->prop("reltype") == 669);
 		// also we should check that it wrote the conn
-		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = 60 AND target = 70 AND reltype = 660", "id");
+		$id = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
 		$this->assertTrue($id > 0);
 		// now delete the thing
 		$res = $c->delete();
 		$this->assertTrue($id == $res);
-		$id2 = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = 60 AND target = 70 AND reltype = 660", "id");
+		$id2 = $this->db->db_fetch_field("SELECT id FROM aliases WHERE source = ".$this->o_from->id()." AND target = ".$this->o_to->id()." AND reltype = 669", "id");
 		$this->assertTrue($id2 < 1);
 	}
 
@@ -251,6 +274,18 @@ class connection_test extends UnitTestCase
 		$from = $c->from();
 		$this->assertTrue(__is_err());
 	}
+	function _get_temp_o()
+	{
+	//	aw_disable_acl();
+		// create new object
+		$o = obj();
+		$o->set_parent(aw_ini_get("site_rootmenu"));
+		$o->set_class_id(CL_MENU);
+		$o->save();
+	//	aw_restore_acl();
+
+		return $o;
+	}	
 }
 
 ?>

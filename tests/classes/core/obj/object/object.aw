@@ -38,7 +38,7 @@ class object_test extends UnitTestCase
 	function test_construct_alias()
 	{
 		// get random object
-		$this->db->db_query("SELECT oid,name,alias FROM objects WHERE status > 0 and alias != ''");
+		$this->db->db_query("SELECT oid,name,alias FROM objects WHERE status > 0 and alias != '' and site_id=".aw_ini_get("site_id"));
 		while ($row = $this->db->db_next())
 		{
 			if ($this->db->can("view", $row["oid"]))
@@ -768,7 +768,7 @@ class object_test extends UnitTestCase
 
 	function test_path_str_err_cycle()
 	{
-		//__disable_err();
+		__disable_err();
 		aw_disable_acl();
 		$o1 = $this->_get_temp_o();
 		$o2 = $this->_get_temp_o();
