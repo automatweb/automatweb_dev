@@ -1142,6 +1142,10 @@ class html extends aw_template
 	**/
 	function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
 	{
+		if (!$this)
+		{
+			$this = get_instance(CL_FILE);
+		}
 		if (!$this->can("view", $oid))
 		{
 			if ($caption != "")
