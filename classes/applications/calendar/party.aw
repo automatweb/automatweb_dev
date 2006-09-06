@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.7 2005/10/26 16:01:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.8 2006/09/06 16:02:46 dragut Exp $
 // party.aw - Pidu 
 /*
 
@@ -310,6 +310,7 @@ class party extends class_base
 		{
 			$flyer_i = get_instance(CL_FLYER);
 			$evt["image"] = $flyer_i->show($image);
+			$evt["image_url"] = $flyer_i->image->get_url($image->prop('file1'));
 		}
 		$this->vars($evt);
 		return $this->parse();
