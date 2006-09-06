@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.499 2006/09/05 09:40:12 kristo Exp $
+// $Id: class_base.aw,v 2.500 2006/09/06 12:52:13 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1413,6 +1413,10 @@ class class_base extends aw_template
 		// but that doesn't really belong to classinfo
 		if (empty($no_yah))
 		{
+			if ($_GET["class"] == "admin_if")
+			{
+				$parent = $_GET["parent"];
+			}
 			$this->mk_path($parent,$title,aw_global_get("period"));
 		};
 

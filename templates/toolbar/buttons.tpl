@@ -37,6 +37,37 @@
 			</div>
 		<!-- END SUB: menu_button -->
 
+
+		<!-- SUB: menu_button_lod -->
+			<div id='tb_lod_{VAR:lod_name}' nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+				<table cellpadding=0 cellspacing=0>
+					<tr>
+						<td valign='bottom'>
+						<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"></a>
+						</td>
+						<td valign='bottom'>
+							<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+						</a>
+					</tr>
+				</table>
+			</div>
+			<script language=javascript>
+			function tb_tb_lod{VAR:tb_lod_num}()
+			{
+				el = document.getElementById("tb_lod_{VAR:lod_name}");
+				el.innerHTML=aw_get_url_contents("{VAR:load_on_demand_url}");
+				nhr=document.getElementById("href_{VAR:lod_name}");
+				if (document.createEvent) {evObj = document.createEvent("MouseEvents");evObj.initEvent( "click", true, true );nhr.dispatchEvent(evObj);} 
+				else { 
+					nhr.fireEvent("onclick");
+				}
+			}
+			</script>
+
+		<!-- END SUB: menu_button_lod -->
+
+
+
 		<!-- SUB: text_button -->
 		 <div class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none; white-space: nowrap;">{VAR:tooltip}</a></div>
 		<!-- END SUB: text_button -->

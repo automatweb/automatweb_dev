@@ -24,6 +24,7 @@
 					<optional name="icon" type="string" />
 					<optional name="text" type="string" />
 					<optional name="load_on_demand_url" type="string" />
+					<optional name="is_toolbar" type="bool" />
 				</arguments>
 			</function>
 		</action>

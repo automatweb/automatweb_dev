@@ -487,6 +487,15 @@
             <field>buyings_find_tbl</field>
       </property>
       <property>
+            <name>products_tb</name>
+            <table>objects</table>
+            <group>products_tree</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no	</store>
+            <field>products_tb</field>
+      </property>
+      <property>
             <name>products_tr</name>
             <table>objects</table>
             <group>products_tree</group>

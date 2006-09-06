@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.14 2006/07/07 10:46:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.15 2006/09/06 12:52:18 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -41,6 +41,8 @@ class toolbar extends aw_template
 			A text which is displayed while hovering over the button
 		@param side optional type=bool
 			If set to true, button is displayed on right side(by default its on left).
+		@param load_on_demand_url optional type=string
+			If set, the popup is loaded on demand from the given url
 		@comment
 			Adds a menu button, under where one can add menu items
 		@examples
@@ -384,13 +386,26 @@ class toolbar extends aw_template
 					$disabled = !empty($val["disabled"]) ? "_disabled" : "";
 					$val["img_url"] = substr($val["img"], 0, 4) == "http" ? $val["img"] : $this->imgbase."/".$val["img"];
 
+					if ($val["load_on_demand_url"] != "")
+					{
+						static $tb_lod_num;
+						$tb_lod_num++;
+						$val["lod_name"] = $val["name"];
+						$val["tb_lod_num"] = $tb_lod_num;
+					}
+
 					$this->vars($val);
 					$tpl = $val["type"] . $disabled;
 
 					if ($val["ismenu"])
 					{
 						$tpl = "menu_button";
-					};
+					}
+					if ($val["load_on_demand_url"] != "")
+					{
+						$tpl = "menu_button_lod";
+					}
+
 					if ($side == "left")
 					{
 						$result .= $this->parse($tpl);

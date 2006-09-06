@@ -8,6 +8,16 @@
 			</function>
 		</action>
 
+		<action name="add_to_compare">
+			<function name="add_to_compare">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="sel" />
+					<optional name="group" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="insert_offer">
 			<function name="insert_offer">
 				<arguments>

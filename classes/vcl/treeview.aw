@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.66 2006/08/28 12:21:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.67 2006/09/06 12:52:18 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -525,7 +525,7 @@ class treeview extends class_base
 	function finalize_tree($arr = array())
 	{
 
-		$this->rootnode = empty($arr["rootnode"]) ? 0 : $arr["rootnode"];
+		$this->rootnode = empty($arr["rootnode"]) ? (int)$this->rootnode : $arr["rootnode"];
 
 		if ($this->tree_type == TREE_HTML)
 		{
@@ -636,7 +636,6 @@ class treeview extends class_base
 		{
 			$this->r_path = $this->r_path + $this->open_nodes;
 		};
-
 		$t = get_instance("languages");
 
 		$level = $_REQUEST["called_by_js"]?$_COOKIE[$this->tree_id."_level"]:1;
@@ -652,6 +651,7 @@ class treeview extends class_base
 			}
 			$this->auto_open = "''".$this->auto_open_tmp;
 		}
+
 		$this->vars(array(
 			"target" => $this->tree_dat["url_target"],
 			"open_nodes" => $this->auto_open,
@@ -1475,6 +1475,14 @@ class treeview extends class_base
 	function set_only_one_level_opened($value)
 	{
 		$this->only_one_level_opened = $value;
+	}
+
+	/** Sets the rootnode for the tree
+		@attrib api=1
+	**/
+	function set_rootnode($rn)
+	{
+		$this->rootnode = $rn;
 	}
 };
 ?>

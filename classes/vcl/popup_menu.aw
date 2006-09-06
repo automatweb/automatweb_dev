@@ -148,6 +148,9 @@ class popup_menu extends aw_template
 		@param load_on_demand_url optional type=string
 			Setting this triggers the load on demand functionality. When the user clicks the icon, this url is fetched and it must return the menu content.
 
+		@param is_toolbar optional type=bool
+			If this is used from a toolbar button load on demand function, then you should set this to make things look alright
+
 		@comment
 			returns the html source of the popup menu
 		@examples
@@ -202,6 +205,13 @@ class popup_menu extends aw_template
 		{
 			$this->vars(array(
 				"HAS_ICON" => $href_ct = $this->parse("HAS_ICON")
+			));
+		}
+
+		if ($param["is_toolbar"])
+		{
+			$this->vars(array(
+				"IS_TOOLBAR" => $this->parse("IS_TOOLBAR")
 			));
 		}
 

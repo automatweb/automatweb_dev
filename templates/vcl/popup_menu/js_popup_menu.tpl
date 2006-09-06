@@ -16,3 +16,6 @@ oncontextmenu="return buttonClick(event, '{VAR:menu_id}');" alt="{VAR:alt}" titl
 {VAR:ss}
 
 </span>
+<!-- SUB: IS_TOOLBAR -->
+<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="/automatweb/images/icons/downarr.png" border="0"></a></td>
+<!-- END SUB: IS_TOOLBAR -->
