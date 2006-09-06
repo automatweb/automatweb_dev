@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.94 2006/09/06 14:28:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.95 2006/09/06 16:44:35 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -678,7 +678,7 @@ class crm_bill extends class_base
 			$sum = 0;
 			foreach($agreement as $a)
 			{
-				$sum.= $agreement["sum"];
+				$sum+= $a["sum"];
 			}
 			return $sum;
 		}
@@ -797,7 +797,7 @@ class crm_bill extends class_base
 						break;
 					}
 				}
-				$row["key"] = $n_key;
+				$row["key"] = $key;
 				if($new_line) $new_rows[] = $row;
 			}
 		}
@@ -1046,7 +1046,7 @@ class crm_bill extends class_base
 		else
 		{
 			$bill_rows = $this->get_bill_rows($b);
-		}	
+		}
 		$brows = $bill_rows; //moment ei tea miks see topelt tuleb... igaks juhuks ei võtnud maha... hiljem käib miski reset
 		$grp_rows = array();
 		$tax_rows = array();
@@ -1705,7 +1705,13 @@ class crm_bill extends class_base
 		$sum_wo_tax = 0;
 		$tax = 0;
 		$sum = 0;
-		foreach($this->get_bill_rows($b) as $row)
+		
+		$agreement_price = $b->meta("agreement_price");
+		if($agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0) $rows = $agreement_price;
+		elseif($agreement_price["price"] && strlen($agreement_price["name"]) > 0) $rows = array($agreement_price);
+		
+		else $rows = $this->get_bill_rows($b);
+		foreach($rows as $row)
 		{
 			$cur_tax = 0;
 			$cur_sum = 0;
@@ -1826,6 +1832,7 @@ class crm_bill extends class_base
 			foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
 			{
 				$arr["request"]["agreement_price"][$key]["sum"] = $arr["request"]["agreement_price"][$key]["price"]*$arr["request"]["agreement_price"][$key]["amt"];
+				if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) unset($arr["request"]["agreement_price"][$key]);
 			}
 		}
 		$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);

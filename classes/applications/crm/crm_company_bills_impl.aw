@@ -763,7 +763,6 @@ class crm_company_bills_impl extends class_base
 				));
 			}
 			$cursum = $bill_i->get_sum($bill);
-
 			$pop = get_instance("vcl/popup_menu");
 			$pop->begin_menu("bill_".$bill->id());
 			$pop->add_item(Array(
