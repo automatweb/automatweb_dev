@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.86 2006/09/05 09:40:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.87 2006/09/06 13:38:50 dragut Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -249,9 +249,11 @@ class aw_table extends aw_template
 	/**
 	@attrib api=1 params=name
 	@param $name required type=string
-		checkbox name
+		Checkbox name, the checkbox element name attribute is set $name[value_which is set in define_data() method]
 	@param $field required type=string
-		field name
+		Field name, via this name you can add value to chooser in define_data() method
+	@param $caption optional type=string default=Vali
+		Caption of the chooser column
 	@example ${draw}
 	@comments
 		Defines a chooser (a column of checkboxes)
@@ -2291,7 +2293,7 @@ class aw_table extends aw_template
 				"classid" => $this->header_normal,
 			));
 			$name = $this->chooser_config["name"];
-			$caption = isset($this->chooser_config["caption"]) ? $this->chooser_config["caption"] : "X";
+			$caption = isset($this->chooser_config["caption"]) ? $this->chooser_config["caption"] : t('Vali');
 			$tbl .= "<a href='javascript:selall(\"${name}\")'>" . $caption . "</a>";
 			$tbl .= "</td>";
 			$cell_count++;
