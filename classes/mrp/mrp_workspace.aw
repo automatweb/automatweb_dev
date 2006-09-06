@@ -1799,7 +1799,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->start_tree (array (
 			"type" => TREE_DHTML,
 			"tree_id" => "projecttree",
-			"persist_state" => 1,
+			"persist_state" => 0,
 			"has_root" => 1,
 			"open_path" => $open_path,
 			"root_url" => aw_url_change_var (array(
@@ -1809,10 +1809,12 @@ if ($_GET['show_thread_data'] == 1)
 			"root_name" => t("Kõik projektid") . " (" . $this->projects_all_count . ")",
 			"get_branch_func" => $this->mk_my_orb("get_projects_subtree", array(
 				"id" => $this_object->id(),
+				// "url" => urlencode(aw_global_get("REQUEST_URI")),
 				"url" => aw_global_get("REQUEST_URI"),
 				"parent" => "",
 			)),
 		));
+		$tree->set_only_one_level_opened (true);
 
 		// $tree->add_item (0, array (
 			// "name" => t("Planeerimine"),
@@ -1915,10 +1917,13 @@ if ($_GET['show_thread_data'] == 1)
 			// )),
 		));
 
-		$tree->add_item ("archived", array (
-			"id" => "dummy",
-			"parent" => "archived",
-		));
+		if ($this_object->prop("automatic_archiving_period"))
+		{
+			$tree->add_item ("archived", array (
+				"id" => "dummy",
+				"parent" => "archived",
+			));
+		}
 
 		$tree->add_item (0, array (
 			"name" => t("Allhanket&ouml;&ouml;d") . " (" . $this->jobs_subcontracted_count . ")",
@@ -4239,7 +4244,7 @@ if ($_GET['show_thread_data'] == 1)
 		if ($arr["request"]["sort_order"] == "desc")
 		{
 			$t->set_default_sorder("desc");
-		}		
+		}
 
 		$t->sort_by();
 		$t->set_sortable(false);
@@ -4837,7 +4842,7 @@ if ($_GET['show_thread_data'] == 1)
 		{
 			$cellcontents = html::textbox (array (
 				"name" => "mrp_project_priority-" . $row["project_id"],
-				"size" => "2",
+				"size" => "5",
 				"textsize" => "12px",
 				"value" => $row["priority"],
 			));
@@ -5290,6 +5295,8 @@ if ($_GET['show_thread_data'] == 1)
 	{
 		if (strstr($arr["parent"], "archived"))
 		{
+			// $url = urldecode($arr["url"]);
+			$url = $arr["url"];
 			$period_data = explode("_", $arr["parent"]);
 			$bottom_level = isset($period_data[1]);
 			$this_object = obj($arr["this"]);
@@ -5299,8 +5306,9 @@ if ($_GET['show_thread_data'] == 1)
 				"type" => TREE_DHTML,
 				"tree_id" => "projecttree",
 				"has_root" => false,
-				"persist_state" => 1,
+				"persist_state" => 0,
 			));
+			$tree->set_only_one_level_opened (true);
 
 			# get items
 			if ($bottom_level)
@@ -5341,7 +5349,7 @@ if ($_GET['show_thread_data'] == 1)
 						"name" => $period . " ({$count})",
 						"id" => $id,
 						"parent" => $arr["parent"],
-						"url" => $bottom_level ? aw_url_change_var ("mrp_tree_active_item", $id, aw_url_change_var ("ft_page", 0, $arr["url"])) : "javascript: void(0);",
+						"url" => $bottom_level ? aw_url_change_var ("mrp_tree_active_item", $id, aw_url_change_var ("ft_page", 0, $url)) : "javascript: void(0);",
 					));
 
 					if (!$bottom_level)
@@ -5354,7 +5362,7 @@ if ($_GET['show_thread_data'] == 1)
 				}
 			}
 
-			preg_match ("/mrp_tree_active_item=([^\&]+)/", $arr["url"], $active_node);
+			preg_match ("/mrp_tree_active_item=(archived_[^\&]+)/", $url, $active_node);
 
 			if ($active_node[1])
 			{
