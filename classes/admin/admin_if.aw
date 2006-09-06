@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.1 2006/09/06 12:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.2 2006/09/06 13:13:13 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -820,24 +820,24 @@ class admin_if extends class_base
 		if ($this->can("edit", $id))
 		{
 			$pm->add_item(array(
-				"link" => $this->mk_my_orb("change", array("id" => $id, "parent" => $parent,"period" => $period), $clid,true,true),
+				"link" => $this->mk_my_orb("if_change", array("id" => $id, "parent" => $parent,"period" => $period), $clid,true,true),
 				"text" => t("Muuda")
 			));
 
 			$pm->add_item(array(
-				"link" => $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1"), "admin_if",true,true),
+				"link" => $this->mk_my_orb("if_cut", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1"), "admin_if",true,true),
 				"text" => t("L&otilde;ika")
 			));
 		}
 
 		$pm->add_item(array(
-			"link" => $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_if",true,true),
+			"link" => $this->mk_my_orb("if_copy", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_if",true,true),
 			"text" => t("Kopeeri")
 		));
 
 		if ($this->can("delete", $id))
 		{
-			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_if",true,true);
+			$delurl = $this->mk_my_orb("if_delete", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_if",true,true);
 			$delurl = "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){window.location='$delurl';};";
 
 			$pm->add_item(array(
