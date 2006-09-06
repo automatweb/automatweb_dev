@@ -4118,11 +4118,6 @@ class crm_company extends class_base
 				}
 			}
 		}
- 
-
-
-
-
 
 		sort($sel);
 
@@ -4131,7 +4126,6 @@ class crm_company extends class_base
 			$arr["sel"] = $sel;
 		}
 		//$this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"]));
-		
 		if(!is_object($bill))
 		{
 			// create a bill for all selected tasks
@@ -4148,6 +4142,7 @@ class crm_company extends class_base
 			}
 	
 			$bill->set_prop("bill_no", $bno);
+			$bill->set_prop("bill_trans_date", time());
 			$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
 			if (is_oid($arr["proj"]))
 			{
@@ -4337,8 +4332,9 @@ class crm_company extends class_base
 
 			}
 		}
-
-		return html::get_change_url($bill->id(), array("return_url" => aw_url_change_var("proj", NULL, $arr["post_ru"])));
+		return html::get_change_url($bill->id(),array("return_url" => 
+				html::get_change_url($arr["id"], array("group" => "bills")),
+			));
 	}
 
 	/**
