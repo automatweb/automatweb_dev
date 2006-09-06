@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.3 2006/08/31 14:36:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.4 2006/09/06 14:30:04 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -60,6 +60,15 @@
 	@property archived type=checkbox ch_value=1 table=watercraft
 	@caption Arhiveeritud
 
+@groupinfo images caption="Pildid"
+@default group=images
+
+	@property images_toolbar type=toolbar no_caption=1
+	@caption Piltide t&ouml;&ouml;riistariba
+
+	@property images_table type=table no_caption=1
+	@caption Pildid
+
 @groupinfo parameters caption="Parameetrid"
 @default group=parameters
 
@@ -89,15 +98,6 @@
 
 	@property sleeper_count type=select table=watercraft
 	@caption Magamiskohti
-
-@groupinfo sail caption="Purjed"
-@default group=sail
-
-	@property sail_table type=table
-	@caption Purjed
-
-	@property sail_info type=textarea rows=10 cols=80 table=watercraft
-	@caption Lisainfo
 
 @groupinfo engines caption="Mootor(id)"
 @default group=engines
@@ -140,6 +140,15 @@
 
 	@property mast_count type=select table=watercraft
 	@caption Mastide arv
+
+@groupinfo sail caption="Purjed"
+@default group=sail
+
+	@property sail_table type=table
+	@caption Purjed
+
+	@property sail_info type=textarea rows=10 cols=80 table=watercraft
+	@caption Lisainfo
 
 @groupinfo additional_equipment caption="Lisavarustus"
 @default group=additional_equipment
@@ -389,6 +398,7 @@ class watercraft extends class_base
 				break;
 			case 'creation_year':
 				$prop['options'] = $this->custom_range(1900, date('Y'));
+				$prop['selected'] = '2000';
 				break;
 			case 'passanger_count':
 				$prop['options'] = $this->custom_range(1, 50);
@@ -434,6 +444,71 @@ class watercraft extends class_base
 		}
 		return $retval;
 	}	
+
+	
+	function _get_images_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		
+		$t->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Uus Pilt'),
+			'url' => $this->mk_my_orb('new', array(
+				'parent' => $arr['obj_inst']->id(),
+				'return_url' => get_ru()
+			), CL_IMAGE),
+		));
+
+		$t->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta'),
+			'action' => '_delete_objects',
+			'confirm' => t('Oled kindel et soovid valitud objektid kustutada?')
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_images_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi')
+		));
+		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali'),
+			'width' => '5%',
+			'align' => 'center'
+		));
+
+		$images = new object_list(array(
+			'class_id' => CL_IMAGE,
+			'parent' => $arr['obj_inst']->id()
+		));
+
+		foreach ($images->arr() as $id => $image)
+		{
+			$t->define_data(array(
+				'name' => html::href(array(
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $image->id()
+					), CL_IMAGE),
+					'caption' => $image->name()
+				)),
+				'select' => html::checkbox(array(
+					'name' => 'selected_ids['.$id.']',
+					'value' => $id
+				))
+			));
+		}
+		return PROP_OK;
+	}
 
 	function _get_sail_table($arr)
 	{
@@ -631,7 +706,8 @@ class watercraft extends class_base
 		$watercraft_type = $arr['obj_inst']->prop('watercraft_type');
 
 		$no_engine = array(
-			WATERCRAFT_TYPE_CANOE
+			WATERCRAFT_TYPE_CANOE,
+			WATERCRAFT_TYPE_SAILBOARD
 		);
 		if ( $arr['id'] == 'engines' && in_array($watercraft_type, $no_engine) )
 		{
@@ -639,9 +715,12 @@ class watercraft extends class_base
 		}
 
 		$no_mast = array(
+			WATERCRAFT_TYPE_MOTOR_BOAT,
+			WATERCRAFT_TYPE_DINGHY,
+			WATERCRAFT_TYPE_ROWING_BOAT,
 			WATERCRAFT_TYPE_SCOOTER,
 			WATERCRAFT_TYPE_CANOE,
-		);	
+		);
 		if ( ( $arr['id'] == 'mast' || $arr['id'] == 'sail' ) && in_array($watercraft_type, $no_mast) )
 		{
 			return false;
@@ -688,6 +767,23 @@ class watercraft extends class_base
 		{
 			return false;
 		}
+	}
+
+	/**
+		@attrib name=_delete_objects
+	**/
+	function _delete_objects($arr)
+	{
+
+		foreach ($arr['selected_ids'] as $id)
+		{
+			if (is_oid($id) && $this->can("delete", $id))
+			{
+				$object = new object($id);
+				$object->delete();
+			}
+		}
+		return $arr['post_ru'];
 	}
 
 	function do_db_upgrade($table, $field, $query, $error)

@@ -135,6 +135,26 @@
             <caption>Arhiveeritud</caption>
       </property>
       <property>
+            <name>images_toolbar</name>
+            <table>objects</table>
+            <group>images</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>images_toolbar</field>
+            <caption>Piltide t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>images_table</name>
+            <table>objects</table>
+            <group>images</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>images_table</field>
+            <caption>Pildid</caption>
+      </property>
+      <property>
             <name>centreboard</name>
             <table>objects</table>
             <group>parameters</group>
@@ -208,25 +228,6 @@
             <type>select</type>
             <field>sleeper_count</field>
             <caption>Magamiskohti</caption>
-      </property>
-      <property>
-            <name>sail_table</name>
-            <table>objects</table>
-            <group>sail</group>
-            <type>table</type>
-            <store>no</store>
-            <field>sail_table</field>
-            <caption>Purjed</caption>
-      </property>
-      <property>
-            <name>sail_info</name>
-            <table>watercraft</table>
-            <group>sail</group>
-            <type>textarea</type>
-            <rows>10</rows>
-            <cols>80</cols>
-            <field>sail_info</field>
-            <caption>Lisainfo</caption>
       </property>
       <property>
             <name>engine_manufacturer</name>
@@ -325,6 +326,25 @@
             <caption>Mastide arv</caption>
       </property>
       <property>
+            <name>sail_table</name>
+            <table>objects</table>
+            <group>sail</group>
+            <type>table</type>
+            <store>no</store>
+            <field>sail_table</field>
+            <caption>Purjed</caption>
+      </property>
+      <property>
+            <name>sail_info</name>
+            <table>watercraft</table>
+            <group>sail</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>80</cols>
+            <field>sail_info</field>
+            <caption>Lisainfo</caption>
+      </property>
+      <property>
             <name>additional_equipment_table</name>
             <table>objects</table>
             <group>additional_equipment</group>
@@ -350,18 +370,21 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <images>
+                  <caption>Pildid</caption>
+            </images>
             <parameters>
                   <caption>Parameetrid</caption>
             </parameters>
-            <sail>
-                  <caption>Purjed</caption>
-            </sail>
             <engines>
                   <caption>Mootor(id)</caption>
             </engines>
             <mast>
                   <caption>Mast(id)</caption>
             </mast>
+            <sail>
+                  <caption>Purjed</caption>
+            </sail>
             <additional_equipment>
                   <caption>Lisavarustus</caption>
             </additional_equipment>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.6 2006/09/01 13:11:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.7 2006/09/06 14:30:04 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -313,6 +313,10 @@ class watercraft_management extends class_base
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
 
+		$t->define_chooser(array(
+			'name' => 'selected_ids',
+			'field' => 'select'
+		));
 		$t->define_field(array(
 			'name' => 'name',
 			'caption' => t('Nimi'),
@@ -350,12 +354,6 @@ class watercraft_management extends class_base
 		$t->define_field(array(
 			'name' => 'archive',
 			'caption' => t('Arhiivis'),
-			'align' => 'center',
-			'width' => '5%'
-		));
-		$t->define_field(array(
-			'name' => 'select',
-			'caption' => t('Vali'),
 			'align' => 'center',
 			'width' => '5%'
 		));
@@ -448,8 +446,8 @@ class watercraft_management extends class_base
 					'url' => $this->mk_my_orb('change', array('id' => $seller->id()), $seller->class_id())
 				));
 			}
-
 			$t->define_data(array(
+				'select' => $id,
 				'name' => $name_str,
 				'type' => $this->watercraft_inst->watercraft_type[$watercraft->prop('watercraft_type')],
 				'manufacturer' => $manufacturer_str,
@@ -459,10 +457,6 @@ class watercraft_management extends class_base
 				'price' => $watercraft->prop('price'),
 				'visible' => ($watercraft->prop('visible') == 1) ? t('Jah') : t('Ei'),
 				'archive' => ($watercraft->prop('archived') == 1) ? t('Jah') : t('Ei'),
-				'select' => html::checkbox(array(
-					'name' => 'selected_ids['.$id.']',
-					'value' => $id
-				))
 			));
 		}
 
@@ -644,6 +638,48 @@ class watercraft_management extends class_base
 		$arr['args']['price'] = $arr['request']['price'];
 		$arr['args']['seller'] = $arr['request']['seller'];
 	}
+
+	function callback_post_save($arr)
+	{
+		if ( $arr['new'] == 1 )
+		{
+			$data = new object();
+			$data->set_parent($arr['obj_inst']->id());
+			$data->set_class_id(CL_MENU);
+			$data->set_name(t('Vees&otilde;idukid'));
+			$data_oid = $data->save();
+			$arr['obj_inst']->connect(array(
+				'to' => $data_oid,
+				'type' => 'RELTYPE_DATA'
+			));
+			$arr['obj_inst']->set_prop('data', $data_oid);
+
+			$manufacturers = new object();
+			$manufacturers->set_parent($arr['obj_inst']->id());
+			$manufacturers->set_class_id(CL_MENU);
+			$manufacturers->set_name(t('Tootjad'));
+			$manufacturers_oid = $manufacturers->save();
+			$arr['obj_inst']->connect(array(
+				'to' => $manufacturers_oid,
+				'type' => 'RELTYPE_MANUFACTURERS'
+			));
+			$arr['obj_inst']->set_prop('manufacturers', $manufacturers_oid);
+			
+			$locations = new object();
+			$locations->set_parent($arr['obj_inst']->id());
+			$locations->set_class_id(CL_MENU);
+			$locations->set_name(t('Asukohad'));
+			$locations_oid = $locations->save();
+			$arr['obj_inst']->connect(array(
+				'to' => $locations_oid,
+				'type' => 'RELTYPE_LOCATIONS'
+			));
+			$arr['obj_inst']->set_prop('locations', $locations_oid);
+
+			$arr['obj_inst']->save();
+		}
+	}
+
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
