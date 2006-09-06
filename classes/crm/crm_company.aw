@@ -5551,6 +5551,7 @@ class crm_company extends class_base
 				case "buyer_contract_date":
 				case "buyer_priority":
 				case "aw_currency":
+				case "bill_due_date_days":
 					$this->db_add_col($tbl, array(
 						"name" => $field,
 						"type" => "int",
