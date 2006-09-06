@@ -1143,6 +1143,11 @@ class crm_company_bills_impl extends class_base
 
 			$rows = $i->get_bill_rows($b);
 			//kui eksisteerib kokkuleppe hind, siis võtab selle ridade asemele
+						
+			if($agreement_price[0]["price"] && strlen($agreement_price[0]["name"]) > 0)
+			{
+				$rows = $agreement_price;
+			}
 			if($agreement_price["price"] && strlen($agreement_price["name"]) > 0)
 			{
 				$rows = array(0 => array(
