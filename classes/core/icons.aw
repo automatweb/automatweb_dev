@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.4 2006/05/17 14:14:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.5 2006/09/06 11:12:11 voldemar Exp $
 
 class icons extends aw_template
 {
@@ -8,7 +8,7 @@ class icons extends aw_template
 		$this->init("automatweb/config");
 	}
 
-	
+
 	/** returns the url for the icons for the given class / object name (for file objects)
 
 		@attrib api=1
@@ -28,12 +28,19 @@ class icons extends aw_template
 		else
 		{
 			$clid = $arg1;
-		};
+		}
 
 		if ($clid == CL_FILE)
 		{
+			if (empty($name) and is_object($arg1))
+			{
+				$name = $arg1->name();
+			}
+
 			$pi = pathinfo($name);
-			return aw_ini_get("icons.server")."/ftype_".strtolower($pi["extension"]).".gif";
+			$icon_url = aw_ini_get("icons.server")."/ftype_".strtolower($pi["extension"]).".gif";
+			return $icon_url;
+			// return aw_ini_get("icons.server")."/ftype_".strtolower($pi["extension"]).".gif";
 		}
 		else
 		if (in_array($clid,array("promo_box","brother","conf_icon_other","conf_icon_programs","conf_icon_classes","conf_icon_ftypes","conf_icons","conf_jf","conf_users","conf_icon_import","conf_icon_db","homefolder","hf_groups")))
@@ -48,7 +55,7 @@ class icons extends aw_template
 
 		return aw_ini_get("baseurl")."/automatweb/images/icon_aw.gif";
 	}
-	
+
 	/**
 		@attrib params=pos api=1
 		@param fid required type=int
@@ -63,7 +70,7 @@ class icons extends aw_template
 	{
 		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
 	}
-	
+
 	/**
 		@attrib params=pos api=1
 		@param clid required type=int
@@ -76,7 +83,7 @@ class icons extends aw_template
 		@examples
 		classload("core/icons");
 		$ic = icons::get_icon(CL_MENU);
-		
+
 		// $ic conains
 		// <img src='http://_blabla_/automatweb/images/icons/class_1.gif'>
 	**/
