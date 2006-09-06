@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.93 2006/09/06 13:55:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.94 2006/09/06 14:28:29 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -242,6 +242,16 @@ class crm_bill extends class_base
 				break;
 
 			case "sum":
+				$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
+				if($agreement_prices[0]["price"] && strlen($agreement_prices[0]["name"]) > 0)
+				{
+					$sum = 0;
+					foreach($agreement_prices as $agreement_price)
+					{
+						$sum+= $agreement_price["sum"];
+					}
+					$prop["value"] = $sum;
+				}
 				$prop["value"] = number_format($prop["value"], 2);
 				$curn = $arr["obj_inst"]->prop("customer.currency.name");
 				$prop["value"] .= " ".($curn == "" ? "EEK" : $curn);
@@ -553,6 +563,15 @@ class crm_bill extends class_base
 			$sum += $t_inf["sum"];
 		}
 		$t->set_sortable(false);
+
+		if($arr["obj_inst"]->meta("agreement_price"))
+		{
+			$sum = 0;
+			foreach($arr["obj_inst"]->meta("agreement_price") as $agreement_price)
+			{
+				$sum+= $agreement_price["sum"];
+			}
+		}
 
 		if ($arr["obj_inst"]->prop("disc") > 0)
 		{
@@ -1017,6 +1036,7 @@ class crm_bill extends class_base
 		$sum = 0;
 		
 		$agreement = $b->meta("agreement_price");
+		if($agreement["price"] && $agreement["name"]) $agreement = array($agreement); // kui on vanast ajast jäänud
 		if($agreement[0]["price"] && strlen($agreement[0]["name"]) > 0 )//kui kokkuleppehind on täidetud, siis rohkem ridu ei ole näha
 		{
 			$bill_rows = $agreement;
