@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.92 2006/08/30 10:11:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.93 2006/09/06 13:55:47 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -566,72 +566,87 @@ class crm_bill extends class_base
 		}
 
 		//kokkuleppe hind
-		$agreement_price = $arr["obj_inst"]->meta("agreement_price");
-		$t->define_data(array(
-			"name" => t("Kokkuleppehind")
-			."<br>".html::textarea(array(
-				"name" => "agreement_price[name]",
-				"value" => $agreement_price["name"],
-				"rows" => 5,
-				"cols" => 45
-			)),
-			"code" => html::textbox(array(
-				"name" => "agreement_price[code]",
-				"value" => $agreement_price["code"],
-				"size" => 10
-			)),
-			"date" => html::textbox(array(
-				"name" => "agreement_price[date]",
-				"value" => $agreement_price["date"],
-				"size" => 8
-			)),
-			"unit" => html::textbox(array(
-				"name" => "agreement_price[unit]",
-				"value" => $agreement_price["unit"],
-				"size" => 3
-			)),
-			"price" => html::textbox(array(
-				"name" => "agreement_price[price]",
-				"value" => $agreement_price["price"],
-				"size" => 5
-			)),
-			"amt" => html::textbox(array(
-				"name" => "agreement_price[amt]",
-				"value" => $agreement_price["amt"],
-				"size" => 5
-			)),
-			"sum" => $agreement_price["sum"],
-			"has_tax" => html::checkbox(array(
-				"name" => "agreement_price[has_tax]",
-				"ch_value" => 1,
-				"checked" => $agreement_price["has_tax"] == 1 ? true : false
-			)),
-			"prod" => html::select(array(
-				"name" => "ragreement_price[prod]",
-				"options" => $r_prods,
-				"value" => $agreement_price["prod"]
-			))." ".html::popup(array(
-				"width" => 800,
-				"height" => 500,
-				"scrollbars" => 1,
-				"url" => $this->mk_my_orb("do_search", array("pn" => "agreement_price[prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
-				"caption" => t("Vali")
-			)),
-			"sel" => html::checkbox(array(
-				"name" => "sel_rows[]",
-				"value" => $id
-			)),
-			"person" => html::select(array(
-				"name" => "agreement_price[person]",
-				"options" => $r_pers,
-				"value" => $row["persons"],
-				"multiple" => 1
-			)).$pps->get_popup_search_link(array(
-				"pn" => "agreement_price[person]",
-				"multiple" => 1,
-				"clid" => array(CL_CRM_PERSON)
-			))
-		));
+		$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
+		if(!is_array($agreement_prices[0]) && is_array($agreement_prices)) $agreement_prices = array($agreement_prices);//endiste kokkuleppehindade jaoks mis pold massiivis
+		if($agreement_prices == null) $agreement_prices = array();
+		if(is_array($agreement_prices[0]))
+		{
+			$agreement_prices[] = array();
+			$x = 0;
+			foreach($agreement_prices as $key => $agreement_price)
+			{
+				if(($agreement_price["name"] && $agreement_price["price"]) || !$done_new_line)
+				{
+					$t->define_data(array(
+						"name" => t("Kokkuleppehind")." ".($x+1)
+						."<br>".html::textarea(array(
+							"name" => "agreement_price[".$x."][name]",
+							"value" => $agreement_price["name"],
+							"rows" => 5,
+							"cols" => 45
+						)),
+						"code" => html::textbox(array(
+							"name" => "agreement_price[".$x."][code]",
+							"value" => $agreement_price["code"],
+							"size" => 10
+						)),
+						"date" => html::textbox(array(
+							"name" => "agreement_price[".$x."][date]",
+							"value" => $agreement_price["date"],
+							"size" => 8
+						)),
+						"unit" => html::textbox(array(
+							"name" => "agreement_price[".$x."][unit]",
+							"value" => $agreement_price["unit"],
+							"size" => 3
+						)),
+						"price" => html::textbox(array(
+							"name" => "agreement_price[".$x."][price]",
+							"value" => $agreement_price["price"],
+							"size" => 5
+						)),
+						"amt" => html::textbox(array(
+							"name" => "agreement_price[".$x."][amt]",
+							"value" => $agreement_price["amt"],
+							"size" => 5
+						)),
+						"sum" => $agreement_price["sum"],
+						"has_tax" => html::checkbox(array(
+							"name" => "agreement_price[".$x."][has_tax]",
+							"ch_value" => 1,
+							"checked" => $agreement_price["has_tax"] == 1 ? true : false
+						)),
+						"prod" => html::select(array(
+							"name" => "agreement_price[".$x."][prod]",
+							"options" => $r_prods,
+							"value" => $agreement_price["prod"]
+						))." ".html::popup(array(
+							"width" => 800,
+							"height" => 500,
+							"scrollbars" => 1,
+							"url" => $this->mk_my_orb("do_search", array("pn" => "agreement_price[".$x."][prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
+							"caption" => t("Vali")
+						)),
+						"sel" => html::checkbox(array(
+							"name" => "sel_rows[]",
+							"value" => $id
+						)),
+						"person" => html::select(array(
+							"name" => "agreement_price[".$x."][person]",
+							"options" => $r_pers,
+							"value" => $row["persons"],
+							"multiple" => 1
+						)).$pps->get_popup_search_link(array(
+							"pn" => "agreement_price[".$x."][person]",
+							"multiple" => 1,
+							"clid" => array(CL_CRM_PERSON)
+						))
+					));
+					$x++;
+					if(!($agreement_price["name"] && $agreement_price["price"]))$done_new_line = 1;
+				}
+			}
+		}
 		$arr["prop"]["value"] = $t->draw();
 	}
 
@@ -639,6 +654,15 @@ class crm_bill extends class_base
 	{
 		$agreement = $bill->meta("agreement_price");
 		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
+		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
+		{
+			$sum = 0;
+			foreach($agreement as $a)
+			{
+				$sum.= $agreement["sum"];
+			}
+			return $sum;
+		}
 		return $bill->prop("sum");
 	}
 
@@ -993,9 +1017,9 @@ class crm_bill extends class_base
 		$sum = 0;
 		
 		$agreement = $b->meta("agreement_price");
-		if($agreement["price"] && strlen($agreement["name"]) > 0 )//kui kokkuleppehind on täidetud, siis rohkem ridu ei ole näha
+		if($agreement[0]["price"] && strlen($agreement[0]["name"]) > 0 )//kui kokkuleppehind on täidetud, siis rohkem ridu ei ole näha
 		{
-			$bill_rows = array($agreement);
+			$bill_rows = $agreement;
 //			$agreement_price_data = $this->get_agreement_row($agreement);
 //			extract($agreement_price_data);
 		}
@@ -1003,7 +1027,6 @@ class crm_bill extends class_base
 		{
 			$bill_rows = $this->get_bill_rows($b);
 		}	
-			
 		$brows = $bill_rows; //moment ei tea miks see topelt tuleb... igaks juhuks ei võtnud maha... hiljem käib miski reset
 		$grp_rows = array();
 		$tax_rows = array();
@@ -1776,9 +1799,17 @@ class crm_bill extends class_base
 				));
 			}
 		}
+		
 		//summa õigeks
-		$arr["request"]["agreement_price"]["sum"] = $arr["request"]["agreement_price"]["price"]*$arr["request"]["agreement_price"]["amt"];
+		if(is_array($arr["request"]["agreement_price"]))
+		{
+			foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
+			{
+				$arr["request"]["agreement_price"][$key]["sum"] = $arr["request"]["agreement_price"][$key]["price"]*$arr["request"]["agreement_price"][$key]["amt"];
+			}
+		}
 		$arr["obj_inst"]->set_meta("agreement_price", $arr["request"]["agreement_price"]);
+		$arr["obj_inst"]->save();
 	}
 
 	/**
