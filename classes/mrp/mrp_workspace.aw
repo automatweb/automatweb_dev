@@ -1809,10 +1809,10 @@ if ($_GET['show_thread_data'] == 1)
 			"root_name" => t("Kõik projektid") . " (" . $this->projects_all_count . ")",
 			"get_branch_func" => $this->mk_my_orb("get_projects_subtree", array(
 				"id" => $this_object->id(),
-				// "url" => urlencode(aw_global_get("REQUEST_URI")),
-				"url" => aw_global_get("REQUEST_URI"),
-				"parent" => "",
-			)),
+				"url" => urlencode(aw_global_get("REQUEST_URI")),
+				// "url" => aw_global_get("REQUEST_URI"),
+				// "parent" => "",
+			)) . "&parent=",//!!! ilmselt ajutine muudatus prisma serveri jaoks -- mkmyorb on seal arvatavasti vana vms.
 		));
 		$tree->set_only_one_level_opened (true);
 
