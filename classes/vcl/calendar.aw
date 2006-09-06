@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.82 2006/09/04 17:03:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.83 2006/09/06 16:01:58 dragut Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1525,8 +1525,10 @@ class vcalendar extends aw_template
 						{
 							$event_obj = new object($event_oid);
 							$this->vars(array(
+								'event_id' => $event_oid,
 								'event_title' => $event_obj->name(),
-								'event_content' => $event_obj->prop('content')
+								'event_content' => $event_obj->prop('content'),
+								'event_comment' => $event_obj->comment()
 							));
 							$events_str .= $this->parse('EVENT');
 						}
@@ -1540,6 +1542,7 @@ class vcalendar extends aw_template
 					"caption" => $caption,
 					"event_title" => "",
 					"event_content" => "",
+					"event_comment" => "",
 					"EVENT" => $events_str
 				));
 				if($this->is_template("CLICKABLE") && $mode == 0)
@@ -1684,6 +1687,7 @@ class vcalendar extends aw_template
 			{
 				$flyer_i = get_instance(CL_FLYER);
 				$evt["image"] = $flyer_i->show($image);
+				$evt['image_url'] = $flyer_i->image->get_url($image->prop('file1'));
 			}
 			$evt["content"] = nl2br($evt["content"]);
 			$this->aliasmgr->parse_oo_aliases($evt["id"], $evt["content"]);
@@ -1733,7 +1737,6 @@ class vcalendar extends aw_template
 			$time = "";
 		};
 		$title = sprintf(t("Lisas [%s] %s /  Muutis [%s] %s"), $evt["createdby"], date("d.m.y", $evt["created"]), $evt["modifiedby"], date("d.m.y", $evt["modified"]));
-
 		$this->evt_tpl->vars(array(
 			"title" => $title,
 			'start_timestamp' => $evt['start'],
