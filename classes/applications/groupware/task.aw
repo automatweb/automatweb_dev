@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.127 2006/09/07 08:49:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.128 2006/09/07 09:38:41 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -828,7 +828,6 @@ class task extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		
 		switch($prop["name"])
 		{
 			case "add_clauses":
@@ -964,6 +963,13 @@ class task extends class_base
 					}
 				}
 				$arr["obj_inst"]->set_meta("other_expenses", $set);
+				break;
+			case "hrs_table":
+				if (!(strlen($arr["request"]["hr_price"])> 0))
+				{
+					$prop["error"] = t("Tunnihind sisestamata!");
+					return PROP_ERROR;
+				}
 				break;
 		};
 		return $retval;
