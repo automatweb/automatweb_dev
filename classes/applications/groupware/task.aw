@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.126 2006/09/05 09:40:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.127 2006/09/07 08:49:52 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -70,12 +70,6 @@
 
 			@property files_table type=table no_caption=1 store=no parent=center_bit_right_bottom
 
-
-
-
-
-
-
 @property ppa type=hidden store=no no_caption=1
 
 
@@ -117,8 +111,15 @@ caption Tunnihind
 @layout deal_price_layout type=hbox no_caption=1
 caption Kokkuleppehind
 	
-	@property deal_price type=textbox size=5 field=meta method=serialize parent=deal_price_layout
+	@property deal_unit type=textbox size=5 field=meta method=serialize parent=hr_price_layout
+	@caption &Uuml;hik
+
+	@property deal_amount type=textbox size=5 field=meta method=serialize parent=hr_price_layout
+	@caption Koogus
+
+	@property deal_price type=textbox size=5 field=meta method=serialize parent=hr_price_layout
 	@caption Kokkuleppehind
+
 
 @property bill_no type=text table=planner 
 @caption Arve number
@@ -445,6 +446,8 @@ class task extends class_base
 			case "priority":
 			case "bill_no":
 			case "deal_price":
+			case "deal_unit":
+			case "deal_amount":
 			case "num_hrs_guess":
 			case "num_hrs_real":
 			case "num_hrs_to_cust":
@@ -2454,7 +2457,7 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "deal_price",
 			"caption" => t("Kokkuleppehind"),
-			"align" => "center"
+			"align" => "right"
 		));
 		$t->define_field(array(
 			"name" => "hr_price_currency",
@@ -2550,11 +2553,19 @@ class task extends class_base
 				"value" => $arr["obj_inst"]->prop("hr_price"),
 				"size" => 5
 			)),
-			"deal_price" => html::textbox(array(
+			"deal_price" => t("Hind")." ".html::textbox(array(
 				"name" => "deal_price",
 				"value" => $arr["obj_inst"]->prop("deal_price"),
 				"size" => 5
-			)),
+			))."<br>".t("Kogus")." ".html::textbox(array(
+				"name" => "deal_amount",
+				"value" => $arr["obj_inst"]->prop("deal_amount"),
+				"size" => 5
+			))."<br>".t("&Uuml;hik")." ".html::textbox(array(
+				"name" => "deal_unit",
+				"value" => $arr["obj_inst"]->prop("deal_unit"),
+				"size" => 5
+			))."<br>",
 			"hr_price_currency" => html::select(array(
 				"name" => "hr_price_currency",
 				"options" => $curs,

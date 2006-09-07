@@ -270,6 +270,28 @@
             <caption>Valuuta</caption>
       </property>
       <property>
+            <name>deal_unit</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>deal_price_layout</parent>
+            <caption>&amp;amp;Uuml;hik</caption>
+      </property>
+      <property>
+            <name>deal_amount</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>deal_price_layout</parent>
+            <caption>Koogus</caption>
+      </property>
+      <property>
             <name>deal_price</name>
             <table>objects</table>
             <group>general</group>
