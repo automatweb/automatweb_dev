@@ -935,9 +935,11 @@ class html extends aw_template
 		$onClick = isset($onClick) ? " onClick='$onClick'" : "";
 		$title = isset($title) ? " alt='$title' title='$title'" : "";
 		$class = isset($class) ? " class='$class'" : "";
+		$onMouseOver = isset($onmouseover)?" onMouseOver='".$onmouseover."'":"";
+		$onMouseOut = isset($onmouseout)?" onMouseOut='".$onmouseout."'":"";
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$id = isset($id) ? " id='$id'" : "";
-		return "<a href='{$url}'" . $target . $title . $onClick . $ti . $textsize . $class . $id . ">{$caption}</a>";
+		return "<a href='{$url}'" . $target . $title . $onClick . $onMouseOver . $onMouseOut . $ti . $textsize . $class . $id . ">{$caption}</a>";
 	}
 
 	/**Popup

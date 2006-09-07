@@ -78,7 +78,7 @@ class image_manager extends aw_template
 			"img_new" => html::get_new_url(CL_IMAGE, $parent),
 			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id()))
 		));
-		return $this->parse();
+		die($this->parse());
 	}
 
 	function _init_t(&$t)
@@ -108,6 +108,7 @@ class image_manager extends aw_template
 		classload("vcl/table");
 		$t = new vcl_table;
 		$this->_init_t($t);
+		$this->read_template("manager.tpl");
 
 		$ol = new object_list(array(
 			"class_id" => CL_IMAGE,
@@ -123,14 +124,27 @@ class image_manager extends aw_template
 		foreach($ol->arr() as $o)
 		{
 			$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $o->id()), CL_IMAGE);
+			$im = get_instance(CL_IMAGE);
+			$pop_url = $im->get_url_by_id($o->id());
+
 			$image_url = $ii->get_url_by_id($o->id());
 			$gen_alias_url = $this->mk_my_orb("gen_image_alias_for_doc", array(
 				"img_id" => $o->id(),
 				"doc_id" => $arr["docid"],
 			), CL_IMAGE);
 			$location = $this->gen_location_for_obj($o);
+			
+			$name = html::href(array(
+				"caption" => $o->name(),
+				"onmouseover" => "showThumb(event, \"".$pop_url."\");",
+				"onmouseout" => "hideThumb();",
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $o->id(),
+					"return_url" => get_ru(),
+				), CL_IMAGE),
+			));
 			$t->define_data(array(
-				"name" => html::obj_change_url($o),
+				"name" => $name,
 				"location" => $location,
 				"sel" => html::href(array(
 					"url" => "javascript:void(0)",
@@ -155,7 +169,10 @@ class image_manager extends aw_template
 		}
 		$t->set_default_sortby("name");
 		$t->sort_by();
-		return $this->draw_form($arr).$t->draw();
+		$this->vars(array(
+			"body" => $this->draw_form($arr).$t->draw(),
+		));
+		return $this->parse();
 	}
 
 	function draw_form($arr)
