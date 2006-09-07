@@ -36,5 +36,23 @@
 			</function>
 		</action>
 
+		<action name="gen_protocol_html">
+			<function name="gen_protocol_html">
+				<arguments>
+					<required name="competition" type="int" />
+					<required name="group" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="gen_protocol_pdf">
+			<function name="gen_protocol_pdf">
+				<arguments>
+					<required name="competition" type="int" />
+					<required name="group" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

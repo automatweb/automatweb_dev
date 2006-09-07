@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.16 2006/08/24 12:36:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.17 2006/09/07 14:47:51 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -106,6 +106,8 @@
 		@caption Tulemuste tabel
 
 	@groupinfo add_results parent=results caption="Sisesta tulemused"
+		@property add_results_tb type=toolbar group=add_results no_caption=1
+
 		@property add_results_tbl type=table group=add_results no_caption=1
 		@caption Tulemuste lisamine
 
@@ -137,7 +139,7 @@ class scm_competition extends class_base
 	function scm_competition()
 	{
 		$this->init(array(
-			"tpldir" => "applications/scm/scm_competition",
+			"tpldir" => "applications/scm",
 			"clid" => CL_SCM_COMPETITION
 		));
 
@@ -598,6 +600,7 @@ class scm_competition extends class_base
 				foreach($results as $k => $data)
 				{
 					$groups = array_merge($groups, $data["groups"]);
+					unset($tmp);
 					foreach($data["groups"] as $group)
 					{
 						$o = obj($group);
@@ -757,6 +760,44 @@ class scm_competition extends class_base
 				{
 					$t->define_data($row);
 				}
+			break;
+			case "add_results_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_menu_button(array(
+					"name" => "print",
+					"img" => "print.gif",
+				));
+				$tb->add_sub_menu(array(
+					"parent" => "print",
+					"name" => "html",
+					"text" => "HTML",
+				));
+				$tb->add_sub_menu(array(
+					"parent" => "print",
+					"name" => "pdf",
+					"text" => "PDF",
+				));
+				 $groups = $this->get_groups(array("competition" => $arr["obj_inst"]->id()));
+				 foreach($groups as $grid)
+				 {
+				 	$o = obj($grid);
+					$tb->add_menu_item(array(
+						"parent" => "html",
+						"text" => ($name = $o->name())." (".($abr = call_user_method("prop", $o, "abbreviation")).")",
+						"url" => $this->mk_my_orb("gen_protocol_html", array(
+							"competition" => $arr["obj_inst"]->id(),
+							"group" => $grid,
+						)),
+					));
+					$tb->add_menu_item(array(
+						"parent" => "pdf",
+						"text" => $name." (".$abr.")",
+						"url" => $this->mk_my_orb("gen_protocol_pdf", array(
+							"competition" => $arr["obj_inst"]->id(),
+							"group" => $grid,
+						)),
+					));
+				 }
 			break;
 
 			case "register":
@@ -2247,6 +2288,190 @@ class scm_competition extends class_base
 			"return_url" => $arr["return_url"],
 		));
 		return $url;
+	}
+
+
+
+	function gen_protocol($arg)
+	{
+		$this->read_template("html_protocol.tpl");
+		$event_oid = $this->get_event(array(
+			"competition" => $arg["competition"],
+		));
+		$res_inst = get_instance(CL_SCM_RESULT);
+		$et = ($event_oid)?(call_user_method("prop", obj($event_oid), "type")):false;
+		if($et == "multi" || $et == "single")
+		{
+			$results = $res_inst->get_results(array(
+				"competition" => $arg["competition"],
+				"type" => "contestant",
+			));
+		}
+		else
+		{
+			$results = $res_inst->get_results(array(
+				"competition" => $arg["competition"],
+				"type" => "team",
+			));
+		}
+		$parse_type = ($et == "single")?"contestant":"team";
+		$results = $this->convert_results($results, $arg["competition"]);
+
+		$res_type = $this->get_result_type(array(
+			"competition" => $arg["competition"],
+		));
+		$type_inst = get_instance(CL_SCM_RESULT_TYPE);
+		$format = $type_inst->get_format(array(
+			"result_type" => $res_type
+		));
+		ksort($results);
+		foreach($results as $place => $data)
+		{
+			if(!in_array($arg["group"], $data["groups"]))
+			{
+				continue;
+			}
+			unset($ind, $team);
+			if($et == "single")
+			{
+				$this->vars(array(
+					"first_name" => $data["contestant"],
+				));
+				$ind = $this->parse("INDIVIDUAL");
+			}
+			else
+			{
+				$this->vars(array(
+					"team" => $data["team_name"],
+				));
+				$team = $this->parse("TEAM");
+			}
+
+			$data["result"] = $this->_gen_format_caption(array(
+				"result" => $data["result_arr"],
+				"format" => $format,
+			));
+			$this->vars(array(
+				"INDIVIDUAL" => $ind,
+				"TEAM" => $team,
+				"type" => ($et == "single")?t("V&otilde;istleja"):t("V&otilde;istkond"),
+				"contestant" => $cnt_caption,
+				"result" => $data["result"],
+				"place" => $place,
+				"points" => $data["points"],
+			));
+			$res_rows .= $this->parse("ROW");
+		}
+		$c_obj = obj($arg["competition"]);
+		$g_obj = obj($arg["group"]);
+		$cmp_inst = get_instance(CL_SCM_COMPETITION);
+		$org = obj($cmp_inst->get_organizer(array(
+			"competition" => $arg["competition"],
+		)));
+		$tourn = $c_obj->prop("scm_tournament");
+		foreach($tourn as $tid)
+		{
+			$o = $tid?obj($tid):false;
+			if($o)
+			{
+				$tourns[] = $o->name();
+			}
+		}
+		$location = $c_obj->prop_str("location");
+		$start_time = $c_obj->prop("date_from");
+		$end_time = $c_obj->prop("date_to");
+		$event = ($evt_oid = $cmp_inst->get_event(array("competition" => $arg["competition"])))?obj($evt_oid):false;
+		if(($name = $c_obj->name()))
+		{
+			$this->vars(array(
+				"competition_caption" => t("&Uuml;ritus"),
+				"competition_name" => $name,
+			));
+			$competition = $this->parse("COMPETITION"); 
+		}
+		if(count($tourns))
+		{
+			$this->vars(array(
+				"tournament_caption" => t("V&otilde;istlussar(i/jad)"),
+				"tournament_name" => join(", ", $tourns),		
+			));
+			$tournament = $this->parse("TOURNAMENT");
+		}
+		if($org)
+		{
+			$this->vars(array(
+				"organizer_caption" => t("Organisaator"),
+				"organizer_name" => $org->name(),
+			));
+			$organizer = $this->parse("ORGANIZER");
+		}
+		if($location)
+		{
+			$this->vars(array(
+				"location_caption" => t("Asukoht"),
+				"location_name" => $location,
+			));
+			$location  = $this->parse("LOCATION");
+		}
+		if($event)
+		{
+			$this->vars(array(
+				"event_caption" => t("Spordiala"),
+				"event_name" => $event->name(),
+			));
+			$event  = $this->parse("EVENT");
+		}
+		if(strlen($res_rows))
+		{
+			$this->vars(array(
+				"ROW" => $res_rows,
+			));
+			$has_results = $this->parse("HAS_RESULTS");
+		}
+		else
+		{
+			$hasnt_results = $this->parse("HASNT_RESULTS");
+		}
+		$this->vars(array(
+			"COMPETITION" => $competition,
+			"TOURNAMENT" => $tournament,
+			"ORGANIZER" => $organizer,
+			"LOCATION" => $location,
+			"time_caption" => t("Toimumisaeg"),
+			"time_name" => date("H:i d/m/Y", $start_time)." - ".date("H:i d/m/Y", $end_time),
+			"EVENT" => $event,
+			"group_caption" => t("V&otilde;istlusklass"),
+			"group_name" => $g_obj->name(),
+			"HAS_RESULTS" => $has_results,
+			"HASNT_RESULTS" => $hasnt_results,
+		));
+		return $this->parse();
+	}
+
+	/**
+		@attrib name=gen_protocol_html params=name
+		@param competition required type=int
+		@param group required type=int
+	**/
+	function gen_protocol_html($arg)
+	{
+		die($this->gen_protocol($arg));
+	}
+
+	/**
+		@attrib params=name name=gen_protocol_pdf
+		@param competition required type=int
+		@param group required type=int
+	**/
+	function gen_protocol_pdf($arr)
+	{
+		$h2p = get_instance("core/converters/html2pdf");
+		$html = "<html><head><title>tiitel</title><body>bodyyy</body></html>";
+		die($h2p->gen_pdf(array(
+			"source" => $this->gen_protocol($arr),
+			"filename" => "protokoll",
+			//"source" => $this->mk_my_orb("gen_protocol", $arr),
+		)));
 	}
 }
 ?>

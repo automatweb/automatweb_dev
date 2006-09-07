@@ -277,6 +277,16 @@
             <caption>Tulemuste tabel</caption>
       </property>
       <property>
+            <name>add_results_tb</name>
+            <table>objects</table>
+            <group>add_results</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>add_results_tbl</name>
             <table>objects</table>
             <group>add_results</group>
