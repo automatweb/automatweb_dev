@@ -1112,8 +1112,17 @@ class crm_company_bills_impl extends class_base
 
 				$custr[] = $cust->comment();	// kliendi kood hansaraamas
 				$custr[] = $cust->name()." ".$cust->prop("ettevotlusvorm.shortname");	// kliendi kood hansaraamas
-				$custr[] = $cust->prop_str("contact");
-				$custr[] = $cust->prop("contact.postiindeks")." ".$cust->prop("contact.riik.name");
+				
+				if($cust->class_id() == CL_CRM_PERSON)
+				{
+					$custr[] = $cust->prop_str("address");
+					$custr[] = $cust->prop("address.postiindeks")." ".$cust->prop("address.riik.name");
+				}
+				else
+				{
+					$custr[] = $cust->prop_str("contact");
+					$custr[] = $cust->prop("contact.postiindeks")." ".$cust->prop("contact.riik.name");
+				}
 				$cust_code = $cust->prop("code");
 				list($cm) = explode(" ", $cust->prop_str("client_manager"));
 				$cm = mb_strtoupper($cm);
@@ -1234,7 +1243,8 @@ class crm_company_bills_impl extends class_base
 				} 
 				$ri[] = $this->nice_trim($dd);	// testartikkel (toimetuse rea sisu) 
 				$ri[] = str_replace(".", ",", $row["price"]);	// 555,00 (ühiku hind) 
-				$sum = round(str_replace(",", ".", $row["sum"])*2.0+0.049,1)/2.0;
+//				$sum = round(str_replace(",", ".", $row["sum"])*2.0+0.049,1)/2.0;
+				$sum = str_replace(",", ".", $row["sum"]);
 				$ri[] = str_replace(".", ",",$sum);	// 16300,35 (rea summa km-ta) 
 				$ri[] = str_replace(".", ",", $b->prop("disc")); //11,0 (ale%) 
 				$ri[] = $acct;		// (konto)    
