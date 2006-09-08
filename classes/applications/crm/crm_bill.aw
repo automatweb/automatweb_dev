@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.98 2006/09/08 14:18:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.99 2006/09/08 16:43:29 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1851,7 +1851,7 @@ class crm_bill extends class_base
 				$sts = $seti->get_current_settings();
 				if ($sts && !$arr["request"]["agreement_price"]["prod"])
 				{
-					$arr["request"]["agreement_price"]["prod"] = $sts->prop("bill_def_prod");
+					$arr["request"]["agreement_price"][$key]["prod"] = $sts->prop("bill_def_prod");
 				}
 			
 				$arr["request"]["agreement_price"][$key]["sum"] = $arr["request"]["agreement_price"][$key]["price"]*$arr["request"]["agreement_price"][$key]["amt"];

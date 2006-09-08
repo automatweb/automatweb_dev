@@ -101,6 +101,15 @@
             <caption>Arvele m&amp;amp;auml;&amp;amp;auml;ramise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
+            <name>ord</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>text</type>
+            <field>aw_task_ord</field>
+            <no_caption>1</no_caption>
+            <caption>Jrk</caption>
+      </property>
+      <property>
             <name>comments</name>
             <table>objects</table>
             <group>comments</group>

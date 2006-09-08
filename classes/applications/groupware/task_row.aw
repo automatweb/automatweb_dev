@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.6 2006/08/16 13:27:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.7 2006/09/08 16:43:28 markop Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -43,6 +43,9 @@
 
 	@property to_bill_date type=date_select table=aw_task_rows field=aw_to_bill_date
 	@caption Arvele m&auml;&auml;ramise kuup&auml;ev
+
+	@property ord type=text table=aw_task_rows field=aw_task_ord no_caption=1
+	@caption Jrk
 
 @default group=comments
 
@@ -115,6 +118,12 @@ class task_row extends class_base
 					"type" => "int"
 				));
 				return true;
+			case "aw_task_ord":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+			return true;
 		}
 	}
 }

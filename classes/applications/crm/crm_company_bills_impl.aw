@@ -72,10 +72,11 @@ class crm_company_bills_impl extends class_base
 			"is_done" => 1,
 			"lang_id" => array(),
 		));
-
+		
 		$deal_tasks = array();
 		foreach($all_tasks->arr() as $row)
 		{
+			if($row->is_brother()) continue;
 			if(strlen($row->prop("deal_price")) > 0)
 			{
 				$projs[$row->prop("project")] = $row->prop("project");
@@ -349,7 +350,7 @@ class crm_company_bills_impl extends class_base
 		$deal_tasks = array();
 		foreach($all_tasks->arr() as $row)
 		{
-			if(strlen($row->prop("deal_price")) > 0)
+			if((strlen($row->prop("deal_price")) > 0) && ($row->prop("send_bill")))
 			{	
 				$t->define_data(array(
 						"oid" => $row->id(),
@@ -1140,7 +1141,9 @@ class crm_company_bills_impl extends class_base
 			// payment row
 			$pr = array();
 			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00) 
-			$pr[] = str_replace(".", ",", round($i->get_bill_sum($b,BILL_SUM_WO_TAX)*2.0+0.049,1)/2.0);		// 33492,03 (summa käibemaksuta)  
+//			$pr[] = str_replace(".", ",", round($i->get_bill_sum($b,BILL_SUM_WO_TAX)*2.0+0.049,1)/2.0);		// 33492,03 (summa käibemaksuta)  
+			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM_WO_TAX));		// 33492,03 (summa käibemaksuta)  
+			
 			$pr[] = "";
 			$pr[] = str_replace(".", ",", round($i->get_bill_sum($b,BILL_SUM_TAX)*2.0+0.049,1)/2.0);		// 6028,57 (käibemaks) 
 			$pr[] = str_replace(".", ",", round($i->get_bill_sum($b,BILL_SUM)*2.0+0.049,1)/2.0);		// 39520,60 (Summa koos käibemaksuga)      

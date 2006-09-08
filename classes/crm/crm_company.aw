@@ -2039,9 +2039,13 @@ class crm_company extends class_base
 					$data["value"] = -1;
 				}
 				break;
-
-			case 'bill_proj_list':
 			case 'bill_task_list':
+				if($arr["request"]["different_customers"])
+				{
+					$data["error"] = t("Tööd on teostatud erinevatele klientidele, palun kontrolli!");
+					return PROP_ERROR;
+				}
+			case 'bill_proj_list':
 			case 'bill_tb':
 			case 'bills_list':
 			case 'bills_tb':
@@ -4103,9 +4107,18 @@ class crm_company extends class_base
 					$task = $to->id();
 				}
 			}
-			if(is_oid($task))$customers[$task] = $task;
+			if(is_oid($task) && $this->can("view", $task))
+			{
+				$task=obj($task);
+				if(is_oid($task->prop("customer")))
+				{
+					$customers[$task->prop("customer")] = $task->prop("customer");
+				}
+			}
 		}
-		if(is_object($arr["bill"])) $customers[$arr["bill"]->id()] = $arr["bill"]->id();
+		if(is_object($arr["bill"])) $customers[$arr["bill"]->prop("customer")] = $arr["bill"]->prop("customer");
+		if(sizeof($customers) > 1) return 1;
+		else return false;
 		if(sizeof($customers) > 1)
 		{
 			$_SESSION["task_sel"] = $arr["sel"];
@@ -4148,7 +4161,13 @@ class crm_company extends class_base
 		{
 			$arr["sel"] = $sel;
 		}
-		//$this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"]));
+
+		//kui tööd erinevatele klientidele
+		if($this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"])))
+		{
+			return aw_url_change_var("different_customers", "1", $arr["post_ru"]);
+		}
+		
 		if(!is_object($bill))
 		{
 			// create a bill for all selected tasks
@@ -4272,14 +4291,27 @@ class crm_company extends class_base
 						$deal_name = $prod_obj->comment();
 					}
 				}
+				
+				//vaikimisi artikkel ka
+				$prod = "";
+				$seti = get_instance(CL_CRM_SETTINGS);
+				$sts = $seti->get_current_settings();
+				if ($sts)
+				{
+					$prod = $sts->prop("bill_def_prod");
+				}
+			
 				$agreement[] = array(
 					"unit" => $to->prop("deal_unit"),
 					"price" => $to->prop("deal_price"),
 					"amt" => $to->prop("deal_amount"),
 					"name" => $deal_name,
+					"prod" => $prod,
 				);
 				$bill->set_meta("agreement_price" , $agreement);
 				$bill->save();
+				$to->set_prop("send_bill" , 0);
+				$to->save();
 			}
 			
 			$filt_by_row = null;
@@ -4335,7 +4367,7 @@ class crm_company extends class_base
 
 			// now, get all rows from task and convert to bill rows
 			$task_i = get_instance(CL_TASK);
-			foreach($task_i->get_task_bill_rows($task_o, true, $bill->prop("bill_id")) as $row)
+			foreach($task_i->get_task_bill_rows($task_o, true, $bill->id()) as $row)
 			{
 				if ($filt_by_row !== null && $row["row_oid"] != $filt_by_row)
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.129 2006/09/08 10:23:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.130 2006/09/08 16:43:28 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2165,6 +2165,7 @@ class task extends class_base
 		// I think rows should not be deleted. or we can add that later
 		$task = obj($arr["request"]["id"]);
 		$max_row = 0;
+		$max_ord = 0;
 		foreach(safe_array($_POST["rows"]) as $_oid => $e)
 		{
 			if (!is_oid($_oid))
@@ -2266,6 +2267,10 @@ class task extends class_base
 				$is_mod = true;
 			}
 
+			//järjekorra seadmine
+			if(!($e["ord"] > -1)) $e["ord"] = 10+$max_ord;
+			if($e["ord"] > $max_ord) $max_ord = $e["ord"];
+			
 			if ($o->prop("ord") != $e["ord"])
 			{
 				$o->set_prop("ord", $e["ord"]);
