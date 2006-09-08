@@ -3,7 +3,7 @@ class date
 {
 	function date()
 	{
-		$this->month = array("jaanuar", "veebruar", "m&auml;rts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember");
+		$this->month = array("Jaanuar", "Veebruar", "M&auml;rts", "Aprill", "Mai", "Juuni", "Juuli", "August", "September", "Oktoober", "November", "Detsember");
 	}
 
 	function get_lc_date($timestamp, $format)
@@ -59,7 +59,7 @@ class date
 	function get_lc_weekday($num, $short = false, $ucfirst = false)
 	{
 		// date("w") returns 0 for sunday, but for historical reasons should also work with 7
-		$names = array("pühapäev","esmaspäev","teisipäev","kolmapäev","neljapäev","reede","laupäev","pühapäev");
+		$names = array("p&uuml;hap&auml;ev","esmasp&auml;ev","teisip&auml;ev","kolmap&auml;ev","neljap&auml;ev","reede","laup&auml;ev","p&uuml;hap&auml;ev");
 		$name = ($ucfirst) ? ucfirst($names[$num]) : $names[$num];
 		return $short ? substr($name,0,1) : $name;
 	}
