@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.78 2006/09/01 12:28:13 dragut Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.78 2006/09/01 12:28:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.79 2006/09/08 06:11:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.79 2006/09/08 06:11:51 dragut Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1628,10 +1628,12 @@ class bug_tracker extends class_base
 
 				if ($arr["request"]["b_mon"])
 				{
-					$filt["monitors"] = $arr["request"]["b_mon"];
+					//$filt["monitors"] = $arr["request"]["b_mon"];
+					$filt["CL_BUG.RELTYPE_MONITOR"] = $arr["request"]["b_mon"];
 					unset($filt["parent"]);
 				}
-
+				$filt["lang_id"] = array();
+				$filt["site_id"] = array();
 				$ol = new object_list($filt);
 			}
 		}
