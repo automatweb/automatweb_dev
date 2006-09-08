@@ -2004,6 +2004,21 @@ class crm_company extends class_base
 				break;
 
 			case "bill_s_from":
+				$data =& $arr["prop"];
+				if (!isset($arr["request"][$data["name"]]))
+				{
+					$data["value"] = mktime(0,0,0, date("m")-($data["name"] == "bill_s_from" ? 1 : 0), 1, date("Y"));
+				}
+				else
+				if ($arr["request"][$data["name"]]["year"] > 1)
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				else
+				{
+					$data["value"] = -1;
+				}
+				break;			
 			case "bill_s_to":
 				$data =& $arr["prop"];
 				if (!isset($arr["request"][$data["name"]]))
