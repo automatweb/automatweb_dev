@@ -4243,22 +4243,22 @@ class crm_company extends class_base
 			if($to->class_id() == CL_TASK && ($to->prop("deal_unit") || $to->prop("deal_price") || $to->prop("deal_amount")))
 			{
 				$agreement = $bill->meta("agreement_price");
+				if(!is_array($agreement)) $agreement = array();
 
-			//	arve kokkuleppehinnale miskit paremat nime
-// 				if(!is_array($agreement)) $agreement = array();
-// 				if()$proj_obj = $obj($to->prop("project"));
-// 				if()$co = $obj($proj_obj->prop("implementor"));
-// 				if()$art = 
-// 				$names = new object_list(array(
-// 					"class_id" => 
-// 					"lang_id" => 
-// 					"$to"
-// 				));
+				$deal_name = $to->name();
+				if ($sts)
+				{
+					if(is_oid($sts->prop("bill_def_prod")) && $this->can("view",$sts->prop("bill_def_prod")))
+					{
+						$prod_obj = obj($sts->prop("bill_def_prod"));
+						$deal_name = $prod_obj->comment();
+					}
+				}
 				$agreement[] = array(
 					"unit" => $to->prop("deal_unit"),
 					"price" => $to->prop("deal_price"),
 					"amt" => $to->prop("deal_amount"),
-					"name" => $to->name(),
+					"name" => $deal_name,
 				);
 				$bill->set_meta("agreement_price" , $agreement);
 				$bill->save();
