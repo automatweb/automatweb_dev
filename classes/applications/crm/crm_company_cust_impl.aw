@@ -222,13 +222,13 @@ class crm_company_cust_impl extends class_base
 
 		/*$tf->define_field(array(
 			"name" => "pohitegevus",
-			"caption" => t("Põhitegevus"),
+			"caption" => t("P&otilde;hitegevus"),
 			"sortable" => 1,
 		));*/
 
 		/*$tf->define_field(array(
 			"name" => "corpform",
-			"caption" => t("Õiguslik vorm"),
+			"caption" => t("&Otilde;iguslik vorm"),
 			"sortable" => 1,
 		));*/
 
@@ -642,7 +642,7 @@ class crm_company_cust_impl extends class_base
 		$node_id = -1;
 		$tree->add_item(0, array(
 			'id' => $node_id,
-			'name' => t('Kõik organisatsioonid'),
+			'name' => t('K&otilde;ik organisatsioonid'),
 			'url' => '',
 		));
 		$tree->set_feature(PERSIST_STATE);
@@ -796,8 +796,8 @@ class crm_company_cust_impl extends class_base
 					t("Koostamisel"),
 					t("Saadetud"),
 					t("Esitletud"),
-					t("Tagasilükatud"),
-					t("Positiivelt lõppenud")
+					t("Tagasil&uuml;katud"),
+					t("Positiivelt l&otilde;ppenud")
 				);
 				foreach ($offers->arr() as $offer)
 				{
@@ -1592,6 +1592,11 @@ class crm_company_cust_impl extends class_base
 	function _finish_org_tbl($arr, &$orglist)
 	{
 		$tf = &$arr["prop"]["vcl_inst"];
+		$org = obj($arr["request"]["id"]);
+		$format_s = t("%s kliendid");
+		$format_t = t("%s kliendid: %s");
+		$format = ($arr["request"]["group"] == "relorg_t")?$format_t:$format_s;
+		$tf->table_caption = sprintf($format, $org->name(), $arr["obj_inst"]->name());
 		$this->_org_table_header(&$tf);
 		$default_cfg = true;
 
@@ -1653,7 +1658,7 @@ class crm_company_cust_impl extends class_base
 			}
 
 			$o = obj($org);
-			// aga ülejäänud on kõik seosed!
+			// aga &uuml;lej&auml;&auml;nud on k&otilde;ik seosed!
 			$name = $client_manager = $pm = $vorm = $tegevus = $contact = $juht = $juht_id = $phone = $fax = $url = $mail = $ceo = "";
 
 			if ($this->can("view", $o->prop("ettevotlusvorm")))
