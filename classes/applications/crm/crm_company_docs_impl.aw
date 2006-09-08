@@ -242,6 +242,10 @@ class crm_company_docs_impl extends class_base
 		}*/
 
 		$t =& $arr["prop"]["vcl_inst"];
+		$format = t("%s dokumendid");
+		$format = strlen($arr["request"]["tf"])?$format.", kataloog: %s":$format;
+		$o = obj($arr["request"]["tf"]);
+		$t->table_caption = sprintf($format, $arr["obj_inst"]->name(), $o->name());
 		$this->_init_docs_tbl($t, $arr["request"]);
 		if ($arr["request"]["files_from_fld"] != "")
 		{
@@ -332,7 +336,6 @@ class crm_company_docs_impl extends class_base
 					));
 				}
 			}
-			
 			$t->define_data(array(
 				"icon" => $pm->get_menu(array(
 					"icon" => icons::get_icon_url($o)
