@@ -13,17 +13,18 @@ function selall()
 <div class="aw04kalenderkast03">
 <small>
 <!-- SUB: DCHECK -->
-<div class="aw04kalendersubevent">
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tr class="aw04kalendersubevent">
-<td width="90%">
-</td>
-<td width="10%" align="right">
-<a href="javascript:selall()">Vali</a>
-</td>
-</tr>
-</table>
-</div>
+	<div class="aw04kalendersubevent">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr class="aw04kalendersubevent">
+				<td width="4%" align="center">
+					<a href="javascript:selall()">Vali</a>
+				</td>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
 <!-- END SUB: DCHECK -->
 	{VAR:EVENT}
 </small>
