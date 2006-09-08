@@ -51,6 +51,17 @@
             <comment>Eemalda AW aliased (nt. #pict1#)</comment>
       </property>
       <property>
+            <name>user_readable_output</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Loetav v&amp;amp;auml;ljund</caption>
+            <comment>Objekti ID'd arendatakse objektide nimedega</comment>
+      </property>
+      <property>
             <name>local_file</name>
             <table>objects</table>
             <group>locations</group>

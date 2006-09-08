@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.4 2005/12/30 09:49:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.5 2006/09/08 09:43:11 kristo Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
@@ -29,6 +29,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 	@property remove_aliases type=checkbox ch_value=1 field=meta method=serialize
 	@caption Eemalda aliased
 	@comment Eemalda AW aliased (nt. #pict1#)
+
+	@property user_readable_output type=checkbox ch_value=1 field=meta method=serialize
+	@caption Loetav v&auml;ljund
+	@comment Objekti ID'd arendatakse objektide nimedega
 
 @groupinfo locations caption="Asukohad"
 @default group=locations
