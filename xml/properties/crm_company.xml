@@ -3472,7 +3472,7 @@
                   <type>vbox</type>
                   <parent>docs_lt</parent>
                   <closeable>1</closeable>
-                  <area_caption>Otsing</area_caption>
+                  <area_caption>Dokumendid</area_caption>
                   <group>documents_all</group>
             </docs_left>
             <docs_search>

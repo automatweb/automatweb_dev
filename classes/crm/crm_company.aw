@@ -578,7 +578,7 @@ default group=org_objects
 
 	@layout docs_lt type=hbox width=20%:80%
 
-		@layout docs_left type=vbox parent=docs_lt closeable=1 area_caption=Otsing
+		@layout docs_left type=vbox parent=docs_lt closeable=1 area_caption=Dokumendid
 
 			@property docs_tree type=treeview parent=docs_left no_caption=1
 
