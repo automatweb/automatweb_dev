@@ -726,7 +726,7 @@ default group=org_objects
 				@property act_s_dl_to type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 				@caption T&auml;htaeg kuni
 
-			@property act_s_status type=select parent=all_act_search store=no captionside=top
+			@property act_s_status type=chooser parent=all_act_search store=no captionside=top
 			@caption Staatus
 
 			@property act_s_print_view type=checkbox parent=all_act_search store=no captionside=top ch_value=1 no_caption=1
