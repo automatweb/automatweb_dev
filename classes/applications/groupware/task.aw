@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.128 2006/09/07 09:38:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.129 2006/09/08 10:23:12 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -442,7 +442,6 @@ class task extends class_base
 					"send_bill" => $arr["obj_inst"]->prop("send_bill") ? 1 : 0,
 				);
 				break;
-
 			case "priority":
 			case "bill_no":
 			case "deal_price":
@@ -1147,8 +1146,27 @@ class task extends class_base
 		
 	}
 
+
+
 	function _init_rows_t(&$t, $impl_filt = NULL)
 	{
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("Jrk"),
+			"align" => "center",
+			"callback" =>  array(&$this, "__ord_format"),
+			"callb_pass_row" => true,
+			"numeric" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "id",
+//			"caption" => t("Jrk"),
+//			"align" => "center",
+		"callb_pass_row" => true,
+		"numeric" => 1,
+		));
+
 		$t->define_field(array(
 			"name" => "task",
 			"caption" => t("Tegevus"),
@@ -1161,6 +1179,8 @@ class task extends class_base
 			"align" => "center",
 			"sortable" => 1,
 			"chgbgcolor" => "col",
+			"callback" =>  array(&$this, "__date_format"),
+			"callb_pass_row" => true,
 		));
 
 		$t->define_field(array(
@@ -1325,26 +1345,27 @@ class task extends class_base
 			{
 				if($ob->prop("done") || !strlen($ob->prop("date")))
 				{
-					$data_done[$ob->prop("date")."_".$key] = $ro;
+					$data_done[] = $ro;
 				}
 				else
 				{
-					$data[$ob->prop("date")."_".$key] = $ro;
+					$data[] = $ro;
 				}
 			}
 			else
 			{
 				if($ob->prop("is_done") || !strlen($ob->prop("start1")))
 				{
-					$data_done[$ob->prop("start1")."_".$key] = $ro;
+					$data_done[] = $ro;
 				}
 				else
 				{
-					$data[$ob->prop("start1")."_".$key] = $ro;
+					$data[] = $ro;
 				}
 			}
 		}
 		ksort($data);
+		ksort($data_done);
 		$cs = array_merge($data, $data_done);
 
 		$null_idx = 0;
@@ -1357,13 +1378,12 @@ class task extends class_base
 			$row = $ro->to();
 			$rows_object_list->add($row);
 		}
-		
-		$rows_object_list->sort_by(array("prop" => "date","order" => "asc"));
-		
+		//$rows_object_list->sort_by(array("prop" => "ord","order" => "desc"));
 		$row_ids = $rows_object_list->ids();
 		$row_ids[] = NULL;
 		$row_ids[] = NULL;
 		$row_ids[] = NULL;
+		$not_sorted=true;
 		foreach($row_ids as $ro)
 		{
 			if ($ro === NULL)
@@ -1371,6 +1391,12 @@ class task extends class_base
 				$idx = $null_idx--;
 				$row = obj();
 				$def_impl = $o_def_impl;
+				if($not_sorted)	$t->sort_by(array(
+					"field" => array("ord", "date" , "id"),
+					"order" => array("asc", "asc" , "asc"),
+				));
+				$t->set_sortable(false);
+				$not_sorted = false;
 			}
 			else
 			{
@@ -1499,19 +1525,20 @@ class task extends class_base
 				));
 				$bv = ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill"));
 			}
-
 			$t->define_data(array(
+				"idx" => $idx,
+				"ord_val" => $row->prop("ord"),
+				"date_val" => $date,
+				"date_sel" => $date_sel,
+				"ord" => $row->prop("ord"),
+				"id" => $row->id(),
 				"task" => $pref."<a name='row_".$idx."'></a>".html::textarea(array(
 					"name" => "rows[$idx][task]",
 					"value" => $row->prop("content"),
 					"rows" => 5,
 					"cols" => 45
 				)).$app,
-				"date" => html::textbox(array(
-					"name" => "rows[$idx][date]",
-					"value" => $date,
-					"size" => 7
-				)).$date_sel,
+				"date" => $row->prop("date"),
 				"impl" => html::select(array(
 					"name" => "rows[$idx][impl]",
 					"options" => $impls,
@@ -1548,8 +1575,29 @@ class task extends class_base
 				"col" => $col
 			));
 		}
-		$t->set_sortable(false);
 	}
+
+	function __ord_format($val)
+	{
+		return html::textbox(array(
+					"name" => "rows[".$val["idx"]."][ord]",
+					"value" => $val["ord_val"],
+					"size" => 3,
+		));
+	}
+	function __date_format($val)
+	{
+		return html::textbox(array(
+				"name" => "rows[".$val["idx"]."][date]",
+				"value" => $val["date_val"],
+				"size" => 7
+			)).$val["date_sel"];
+	}
+	function __id_format($val)
+	{
+		return " ";
+	}
+
 
 	function get_task_bill_rows($task, $only_on_bill = true, $bill_id = null)
 	{
@@ -2116,7 +2164,7 @@ class task extends class_base
 		// add new rows that are without oid
 		// I think rows should not be deleted. or we can add that later
 		$task = obj($arr["request"]["id"]);
-
+		$max_row = 0;
 		foreach(safe_array($_POST["rows"]) as $_oid => $e)
 		{
 			if (!is_oid($_oid))
@@ -2128,6 +2176,7 @@ class task extends class_base
 				$o = obj();
 				$o->set_class_id(CL_TASK_ROW);
 				$o->set_parent($arr["request"]["id"]);
+				$o->save();
 				$is_mod = true;
 			}
 			else
@@ -2214,6 +2263,12 @@ class task extends class_base
 			if ($o->prop("time_guess") != $e["time_guess"])
 			{
 				$o->set_prop("time_guess", $e["time_guess"]);
+				$is_mod = true;
+			}
+
+			if ($o->prop("ord") != $e["ord"])
+			{
+				$o->set_prop("ord", $e["ord"]);
 				$is_mod = true;
 			}
 
