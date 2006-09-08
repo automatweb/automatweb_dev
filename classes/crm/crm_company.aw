@@ -406,8 +406,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@layout relorg_t_l type=hbox group=relorg_t width=20%:80%
 
-		@property customer_listing_tree type=treeview no_caption=1 parent=relorg_t_l
-		@caption Rühmade puu
+		@layout relorg_t_l_tree type=vbox parent=relorg_t_l closeable=1 area_caption=Kliendigrupid
+			@property customer_listing_tree type=treeview no_caption=1 parent=relorg_t_l_tree
+			@caption Rühmade puu
 
 		@property customer_t type=table store=no no_caption=1 parent=relorg_t_l
 		@caption Kliendid

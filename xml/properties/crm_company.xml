@@ -1133,7 +1133,7 @@
             <group>relorg_t</group>
             <type>treeview</type>
             <no_caption>1</no_caption>
-            <parent>relorg_t_l</parent>
+            <parent>relorg_t_l_tree</parent>
             <store>no</store>
             <field>customer_listing_tree</field>
             <caption>R&amp;uuml;hmade puu</caption>
@@ -3370,6 +3370,13 @@
                   <group>relorg_t</group>
                   <width>20%:80%</width>
             </relorg_t_l>
+            <relorg_t_l_tree>
+                  <type>vbox</type>
+                  <parent>relorg_t_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kliendigrupid</area_caption>
+                  <group>relorg_t</group>
+            </relorg_t_l_tree>
             <projects_main>
                   <type>hbox</type>
                   <width>20%:80%</width>
