@@ -61,8 +61,29 @@ class crm_company_bills_impl extends class_base
 			"done" => 1
 		));
 
+		$projs = array();
 		$tasks = new object_list();
 		$sum2proj = array();
+
+		//kokkuleppe hinnaga toimetused... sellega peaks miski optimaalsema variandi välja mõtlema ka
+		$all_tasks = new object_list(array(
+			"class_id" => CL_TASK,
+			"send_bill" => 1,
+			"is_done" => 1,
+			"lang_id" => array(),
+		));
+
+		$deal_tasks = array();
+		foreach($all_tasks->arr() as $row)
+		{
+			if(strlen($row->prop("deal_price")) > 0)
+			{
+				$projs[$row->prop("project")] = $row->prop("project");
+				$deal_tasks[] = $row->id();
+				$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
+			}
+		}
+
 		if ($rows->count())
 		{
 			$c = new connection();
@@ -74,8 +95,9 @@ class crm_company_bills_impl extends class_base
 			foreach($t2row as $conn)
 			{
 				$task = obj($conn["from"]);
+				if(in_array($task->id(), $deal_tasks)) continue;
 				if ($task->prop("send_bill"))
-				{	
+				{	arr($task->name());
 					$row = obj($conn["to"]);
 					$sum2proj[$task->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
 					$tasks->add($conn["from"]);
@@ -84,7 +106,6 @@ class crm_company_bills_impl extends class_base
 		}
 
 		// get all projects from the lists
-		$projs = array();
 		foreach($tasks->arr() as $row)
 		{
 			$projs[$row->prop("project")] = $row->prop("project");
@@ -128,7 +149,6 @@ class crm_company_bills_impl extends class_base
 
 			$lister .= $table->draw();
 			$lister .= "</span>";
-
 			$dat[] = array(
 				"name" => html::obj_change_url($po),
 				"open" => html::href(array(
@@ -215,7 +235,6 @@ class crm_company_bills_impl extends class_base
 				continue;
 			}
 			$po = obj($p);
-
 			$t->define_data(array(
 				"name" => html::obj_change_url($po),
 				"open" => html::href(array(
@@ -314,11 +333,38 @@ class crm_company_bills_impl extends class_base
 				)
 			))
 		));
-
+		
+		//kokkuleppehinna jaoks
+		//see ka optimaalsemaks vaja tegelt
+		$all_tasks = new object_list(array(
+			"class_id" => CL_TASK,
+			"send_bill" => 1,
+			"is_done" => 1,
+			"project" => $arr["request"]["proj"],
+		));
 		$tasks = new object_list();
 		$sum2task = array();
 		$hr2task = array();
-		$task2row = array();
+		$task2row = array();		
+		$deal_tasks = array();
+		foreach($all_tasks->arr() as $row)
+		{
+			if(strlen($row->prop("deal_price")) > 0)
+			{	
+				$t->define_data(array(
+						"oid" => $row->id(),
+						"name" => $row->name(),
+//						"hrs" => number_format(str_replace(",", ".", $row->prop("time_to_cust")), 2),
+//						"hr_price" => number_format($row->prop("hr_price"),2),
+						"sum" => $row->prop("deal_price").t("(Kokkuleppehind)"),
+						"set_date" => $row->prop("to_bill_date"),
+				));
+				$deal_tasks[] = $row->id();
+				$sum2task[$row->id()] += str_replace(",", ".", $row->prop("deal_price"));
+				$hr2task[$row->id()] += str_replace(",", ".", $row->prop("deal_amt"));
+			}
+		}
+		
 		if ($rows->count())
 		{
 			$c = new connection();
@@ -335,9 +381,12 @@ class crm_company_bills_impl extends class_base
 				$task2row[$task->id()][] = $row->id();
 				if ($task->prop("project") == $arr["request"]["proj"])
 				{
-					$sum2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
-					$hr2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust"));
-					$tasks->add($conn["from"]);
+					if(!in_array($task->id(), $deal_tasks))
+					{
+						$sum2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
+						$hr2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust"));
+						$tasks->add($conn["from"]);
+					}
 				}
 			}
 		}
@@ -388,7 +437,6 @@ class crm_company_bills_impl extends class_base
 			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
 		}
 
-
 		foreach($projs as $p)
 		{
 			$po = obj($p);
@@ -423,6 +471,7 @@ class crm_company_bills_impl extends class_base
 				)
 			));
 		}
+
 		$task_i = get_instance(CL_TASK);
 		foreach($events as $evt)
 		{

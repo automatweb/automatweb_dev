@@ -4237,6 +4237,32 @@ class crm_company extends class_base
 		foreach(safe_array($arr["sel"]) as $task)
 		{
 			$to = obj($task);
+			
+			//kokkuleppehinna toimetuselt arvele pookimine
+			if($to->class_id() == CL_TASK && ($to->prop("deal_unit") || $to->prop("deal_price") || $to->prop("deal_amount")))
+			{
+				$agreement = $bill->meta("agreement_price");
+
+			//	arve kokkuleppehinnale miskit paremat nime
+// 				if(!is_array($agreement)) $agreement = array();
+// 				if()$proj_obj = $obj($to->prop("project"));
+// 				if()$co = $obj($proj_obj->prop("implementor"));
+// 				if()$art = 
+// 				$names = new object_list(array(
+// 					"class_id" => 
+// 					"lang_id" => 
+// 					"$to"
+// 				));
+				$agreement[] = array(
+					"unit" => $to->prop("deal_unit"),
+					"price" => $to->prop("deal_price"),
+					"amt" => $to->prop("deal_amount"),
+					"name" => $to->name(),
+				);
+				$bill->set_meta("agreement_price" , $agreement);
+				$bill->save();
+			}
+			
 			$filt_by_row = null;
 			if ($to->class_id() == CL_TASK_ROW)
 			{

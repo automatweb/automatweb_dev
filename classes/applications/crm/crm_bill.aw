@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.95 2006/09/06 16:44:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.96 2006/09/08 10:19:58 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -588,8 +588,8 @@ class crm_bill extends class_base
 		$agreement_prices = $arr["obj_inst"]->meta("agreement_price");
 		if(!is_array($agreement_prices[0]) && is_array($agreement_prices)) $agreement_prices = array($agreement_prices);//endiste kokkuleppehindade jaoks mis pold massiivis
 		if($agreement_prices == null) $agreement_prices = array();
-		if(is_array($agreement_prices[0]))
-		{
+// 		if(is_array($agreement_prices[0]))
+// 		{
 			$agreement_prices[] = array();
 			$x = 0;
 			foreach($agreement_prices as $key => $agreement_price)
@@ -664,7 +664,7 @@ class crm_bill extends class_base
 					$x++;
 					if(!($agreement_price["name"] && $agreement_price["price"]))$done_new_line = 1;
 				}
-			}
+// 			}
 		}
 		$arr["prop"]["value"] = $t->draw();
 	}
@@ -804,7 +804,7 @@ class crm_bill extends class_base
 		$grp_rows = array();
 		foreach($new_rows as $key => $new_row)
 		{
-			$grp_rows[$new_row["key"]][$new_row["price"]] = $new_row;
+			$grp_rows[$new_row["key"]][$new_row["price"].$new_row["comment"]] = $new_row;
 		}
 		return ($grp_rows);
 	}
@@ -1126,6 +1126,7 @@ class crm_bill extends class_base
 
 		$fbr = reset($brows);
 		//koondab sama nimega ja nimetud ühe hinnaga read kokku
+		
 		if(!$arr["all_rows"]) $grp_rows = $this->collocate_rows($grp_rows);
 		foreach($grp_rows as $prod => $grp_rowa)
 		{
