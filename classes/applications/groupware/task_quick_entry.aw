@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.19 2006/09/08 06:43:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.20 2006/09/08 11:13:08 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -13,7 +13,6 @@
 @property date type=datetime_select store=no
 @caption Aeg
 
-
 @property cust_type type=select
 @caption Kliendi t&uuml;&uuml;p
 
@@ -25,8 +24,6 @@
 
 @property custp_ln type=textbox
 @caption Perenimi
-
-
 
 @property project type=textbox store=no
 @caption Projekt
@@ -45,7 +42,6 @@
 
 @property submit_and_add type=text 
 @caption &nbsp;
-
 
 */
 
@@ -490,6 +486,7 @@ class task_quick_entry extends class_base
 			$r->set_prop("done", 1);
 			$r->set_prop("on_bill", 1);
 			$r->set_prop("impl", $cur_p->id());
+			$r->set_prop("ord", 0);
 			$r->save();
 
 			$t->connect(array(
@@ -500,6 +497,18 @@ class task_quick_entry extends class_base
 		else
 		{
 			$t = $ol->begin();
+			
+			//järjekorranumbri andmine
+			$max_ord = 0;
+			foreach($cs = $task->connections_from(array("from" => $t->id())) as $row)
+			{
+				if($this->can("view", $row->prop("to")))
+				{
+					$row_obj = obj($row->prop("to"));
+					if($row_obj->prop("ord") > $max_ord) $max_ord = $row_obj->prop("ord") + 10;
+				}
+			}
+
 			// add row to task
 
 			$r = obj();
