@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.96 2006/09/08 10:19:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.97 2006/09/08 13:12:07 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -227,6 +227,7 @@ class crm_bill extends class_base
 
 			case "customer":
 				$i = get_instance(CL_CRM_COMPANY);
+				$p_i = get_instance(CL_CRM_PERSON);
 				$cust = $i->get_my_customers();
 				if (count($cust))
 				{
@@ -345,10 +346,23 @@ class crm_bill extends class_base
 
 			case "customer":
 				// check if the 
-				if ($this->can("view", $prop["value"]) && $arr["obj_inst"]->prop("bill_due_date_days") == 0)
+				if ($this->can("view", $prop["value"]) && (($arr["obj_inst"]->prop("bill_due_date_days") == 0) || ($arr["obj_inst"]->prop("bill_due_date_days") == null)))
 				{
 					$cc = get_instance(CL_CRM_COMPANY);
-					$crel = $cc->get_cust_rel(obj($prop["value"]));
+					$crel = $cc->get_cust_rel(obj($prop["value"]));arr($crel->prop("bill_due_date_days"));
+					
+					if(!$crel)
+					{
+						$u = get_instance(CL_USER);
+						$my_co = $u->get_current_company();
+						$ol = new object_list(array(
+							"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+							"buyer" => $prop["value"],
+							"seller" => $my_co
+						));
+						$crel = reset($ol->arr());
+					}
+					
 					if ($crel)
 					{
 						$this->_set_bddd = $crel->prop("bill_due_date_days");
@@ -577,7 +591,7 @@ class crm_bill extends class_base
 		{
 			$sum -= $sum * ($arr["obj_inst"]->prop("disc") / 100.0);
 		}
-		$sum = $this->round_sum($sum);
+//		$sum = $this->round_sum($sum);
 		if ($arr["obj_inst"]->prop("sum") != $sum)
 		{
 			$arr["obj_inst"]->set_prop("sum", $sum);
