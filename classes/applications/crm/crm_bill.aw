@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.97 2006/09/08 13:12:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.98 2006/09/08 14:18:24 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1846,6 +1846,14 @@ class crm_bill extends class_base
 		{
 			foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
 			{
+				//vaikimisi artikkel ka
+				$seti = get_instance(CL_CRM_SETTINGS);
+				$sts = $seti->get_current_settings();
+				if ($sts && !$arr["request"]["agreement_price"]["prod"])
+				{
+					$arr["request"]["agreement_price"]["prod"] = $sts->prop("bill_def_prod");
+				}
+			
 				$arr["request"]["agreement_price"][$key]["sum"] = $arr["request"]["agreement_price"][$key]["price"]*$arr["request"]["agreement_price"][$key]["amt"];
 				if(!$arr["request"]["agreement_price"][$key]["price"] && !(strlen($arr["request"]["agreement_price"][$key]["name"]) > 1) && !$arr["request"]["agreement_price"][$key]["atm"]) unset($arr["request"]["agreement_price"][$key]);
 			}
