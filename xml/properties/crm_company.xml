@@ -1561,6 +1561,22 @@
             <caption>T&amp;amp;uuml;hista otsing</caption>
       </property>
       <property>
+            <name>my_proj_qadd</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>quick_add</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <clid>CL_PROJECT</clid>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>code</num_1>
+                  <num_2>priority</num_2>
+            </props>
+            <parent>my_proj_qadd</parent>
+            <field>my_proj_qadd</field>
+      </property>
+      <property>
             <name>my_projects</name>
             <table>objects</table>
             <group>my_projects</group>
@@ -2746,13 +2762,11 @@
             </ovrv_mails>
             <projs>
                   <caption>Projektid</caption>
-                  <save>no</save>
             </projs>
             <my_projects>
                   <caption>Projektid</caption>
                   <parent>projs</parent>
                   <submit>no</submit>
-                  <save>no</save>
             </my_projects>
             <org_projects_archive>
                   <caption>Projektide arhiiv</caption>
@@ -3403,9 +3417,14 @@
                   <width>20%:80%</width>
                   <group>my_projects</group>
             </my_proj>
-            <my_proj_search>
+            <my_proj_search_group>
                   <type>vbox</type>
                   <parent>my_proj</parent>
+                  <group>my_projects</group>
+            </my_proj_search_group>
+            <my_proj_search>
+                  <type>vbox</type>
+                  <parent>my_proj_search_group</parent>
                   <closeable>1</closeable>
                   <area_caption>Otsing</area_caption>
                   <group>my_projects</group>
@@ -3430,6 +3449,13 @@
                   <parent>my_proj_search</parent>
                   <group>my_projects</group>
             </my_proj_search_but_row>
+            <my_proj_qadd>
+                  <type>vbox</type>
+                  <parent>my_proj_search_group</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Kiirlisamine</area_caption>
+                  <group>my_projects</group>
+            </my_proj_qadd>
             <docs_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>

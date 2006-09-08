@@ -515,7 +515,9 @@ default group=org_objects
 
 	@layout my_proj type=hbox width=20%:80%
 
-		@layout my_proj_search type=vbox parent=my_proj closeable=1 area_caption=Otsing
+		@layout my_proj_search_group type=vbox parent=my_proj
+
+		@layout my_proj_search type=vbox parent=my_proj_search_group closeable=1 area_caption=Otsing
 
 			@layout my_proj_search_b type=vbox parent=my_proj_search
 
@@ -557,6 +559,10 @@ default group=org_objects
 
 				@property proj_search_clear type=submit  parent=my_proj_search_but_row no_caption=1
 				@caption T&uuml;hista otsing
+
+		@layout my_proj_qadd type=vbox parent=my_proj_search_group closeable=1 area_caption=Kiirlisamine
+
+			@property my_proj_qadd type=quick_add store=no no_caption=1 clid=CL_PROJECT props=name,code,priority parent=my_proj_qadd
 
 		@property my_projects type=table no_caption=1 store=no parent=my_proj
 
@@ -902,8 +908,8 @@ default group=org_objects
 	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no save=no
 	@groupinfo ovrv_mails caption="Meilid" parent=overview submit=no save=no
 
-@groupinfo projs caption="Projektid" save=no
-	@groupinfo my_projects caption="Projektid" parent=projs submit=no save=no
+@groupinfo projs caption="Projektid" 
+	@groupinfo my_projects caption="Projektid" parent=projs submit=no 
 	groupinfo org_projects caption="Projektid" submit=no parent=projs save=no
 	@groupinfo org_projects_archive caption="Projektide arhiiv" submit=no parent=projs save=no
 	@groupinfo my_reports caption="Minu raportid" submit=no parent=projs save=no
@@ -2686,12 +2692,10 @@ class crm_company extends class_base
 	function submit_delete_relations($arr)
 	{
 		$main_obj = new object($arr['id']);
-
 		if((int)$arr['unit'])
 		{
 			$main_obj = new object($arr['unit']);
 		}
-
 		if (is_array($arr["check"]))
 		{
 			foreach($arr['check'] as $key => $value)

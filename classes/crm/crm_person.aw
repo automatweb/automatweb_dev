@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.142 2006/08/29 06:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.143 2006/09/08 08:39:13 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -305,6 +305,13 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 
 @property candidate type=releditor reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no
 
+
+@groupinfo skills caption="Oskused" parent=work submit=no
+@default group=skills
+
+	@property skills_tb type=toolbar no_caption=1 store=no
+	@property skills_table type=table no_caption=1 store=no
+
 ------------------------------------------------------------------
 
 @groupinfo overview caption="Tegevused"
@@ -545,6 +552,9 @@ caption Sõbragrupid
 @reltype WAGE_DOC value=52 clid=CL_DOCUMENT
 @caption Palgainfo
 
+@reltype HAS_SKILL value=53 clid=CL_PERSON_HAS_SKILL
+@caption Oskus
+
 
 */
 
@@ -650,6 +660,14 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "skills_tb":
+				$this->_skills_tb($arr);
+				break;
+
+			case "skills_table":
+				$this->_skills_table($arr);
+				break;
+
 			case "ct_rel_tb":
 				$this->_ct_rel_tb($arr);
 				break;
@@ -3624,6 +3642,66 @@ class crm_person extends class_base
 			$ol->foreach_o(array("func" => "delete"));
 		}
 		return $arr["post_ru"];
+	}
+
+	function _skills_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"url" => html::get_new_url(CL_PERSON_HAS_SKILL, $arr["obj_inst"]->id(), array(
+				"return_url" => get_ru(), 
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 53
+			)),
+			"tooltip" => t("Lisa")
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_skills",
+			"tooltip" => t("Kustuta oskused")
+		));
+	}
+
+	function _init_skills_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Oskus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Omandatud"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y"
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _skills_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_skills_t($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_HAS_SKILL")) as $c)
+		{
+			$o = $c->to();
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"created" => $o->prop("skill_acquired"),
+				"oid" => $o->id()
+			));
+		}
 	}
 }
 ?>

@@ -875,6 +875,26 @@
             <store>no</store>
       </property>
       <property>
+            <name>skills_tb</name>
+            <table>objects</table>
+            <group>skills</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>skills_table</name>
+            <table>objects</table>
+            <group>skills</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>org_actions</name>
             <table>objects</table>
             <group>all_actions</group>
@@ -1176,6 +1196,11 @@
                   <parent>work</parent>
                   <submit>no</submit>
             </candidate>
+            <skills>
+                  <caption>Oskused</caption>
+                  <parent>work</parent>
+                  <submit>no</submit>
+            </skills>
             <overview>
                   <caption>Tegevused</caption>
             </overview>
@@ -1369,6 +1394,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Palgainfo</caption>
             </WAGE_DOC>
+            <HAS_SKILL>
+                  <value>53</value>
+                  <clid>CL_PERSON_HAS_SKILL</clid>
+                  <caption>Oskus</caption>
+            </HAS_SKILL>
       </reltypes>
       <layout>
             <docs_lt>
