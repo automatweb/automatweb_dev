@@ -97,7 +97,7 @@ class crm_company_bills_impl extends class_base
 				$task = obj($conn["from"]);
 				if(in_array($task->id(), $deal_tasks)) continue;
 				if ($task->prop("send_bill"))
-				{	arr($task->name());
+				{
 					$row = obj($conn["to"]);
 					$sum2proj[$task->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
 					$tasks->add($conn["from"]);
