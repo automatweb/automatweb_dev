@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.143 2006/09/08 08:39:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.144 2006/09/08 11:36:22 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3476,6 +3476,8 @@ class crm_person extends class_base
 			"name" => "content",
 			"caption" => t("Rea sisu"),
 			"align" => "center",
+			"callback" =>  array(&$this, "__content_format"),
+			"callb_pass_row" => true,
 		));
 		$t->define_field(array(
 			"name" => "length",
@@ -3601,11 +3603,13 @@ class crm_person extends class_base
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
 			$t->define_data(array(
+				"content_val" => $bi->_split_long_words($o->prop("content")),				
+				"content" => $o->prop("ord"),
 				"date" => $o->prop("date"),
 				"cust" => html::obj_change_url($task->prop("customer")),
 				"proj" => html::obj_change_url($task->prop("project")),
 				"task" => html::obj_change_url($task),
-				"content" => $bi->_split_long_words($o->prop("content")),
+			//	"content" => $bi->_split_long_words($o->prop("content")),
 				"length" => $o->prop("time_real"),
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
@@ -3615,7 +3619,12 @@ class crm_person extends class_base
 			$l_sum += $o->prop("time_real");
 			$s_sum += $sum;
 		}
-
+		$t->sort_by(array(
+			"field" => array("date" , "content"),
+			"order" => array("asc", "asc"),
+		));
+		$t->set_sortable(false);
+		
 		$t->set_default_sortby("date");
 		$t->sort_by();
 
@@ -3625,6 +3634,11 @@ class crm_person extends class_base
 			"sum" => number_format($s_sum, 2)
 		));
 		$arr["prop"]["value"] = $t->draw();
+	}
+
+	function __content_format($val)
+	{
+		return $val["content_val"];
 	}
 
 	/**
