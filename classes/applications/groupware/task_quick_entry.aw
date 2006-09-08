@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.18 2006/08/17 12:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.19 2006/09/08 06:43:58 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -345,7 +345,15 @@ class task_quick_entry extends class_base
 		if (mb_detect_encoding($arr["request"]["customer"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["customer"]);
+		}
+
+		if (mb_detect_encoding($arr["request"]["project"], "UTF-8,ISO-8859-1") == "UTF-8")
+		{
 			$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["project"]);
+		}
+
+		if (mb_detect_encoding($arr["request"]["task"], "UTF-8,ISO-8859-1") == "UTF-8")
+		{
 			$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["task"]);
 		}
 		if ($arr["request"]["task"] == "")
@@ -354,7 +362,6 @@ class task_quick_entry extends class_base
 		}
 		//$arr["request"]["content"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["content"]);
 		$arr["request"]["duration"] = str_replace(",", ".", $arr["request"]["duration"]);
-
 		if($arr["request"]["customer"])
 		{
 			$ol = new object_list(array(
