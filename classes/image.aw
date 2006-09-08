@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.177 2006/08/29 10:12:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.178 2006/09/08 09:45:13 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -834,6 +834,13 @@ class image extends class_base
 		@param alt optional type=string
 			Alt text of the image
 
+		@param size optional type=array
+			array(
+				height => int,
+				width => int
+			)
+			sets img tag height and width
+
 		@returns
 			- Rewrote URL
 			- If url parameter is empty, then returns empty value
@@ -846,15 +853,17 @@ class image extends class_base
 		@examples
 			none
 	**/
-	function make_img_tag($url, $alt = "")
+	function make_img_tag($url, $alt = "", $size = array())
 	{
+		$tag = $size["height"]?" height=\"".$size["height"]."\"":"";
+		$tag .= $size["width"]?" width=\"".$size["width"]."\"":"";
 		if ($url == "")
 		{
-			return "<img border=\"0\" src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\" title=\"$alt\">";
+			return "<img border=\"0\" src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\" title=\"$alt\"".$tag.">";
 		}
 		else
 		{
-			return "<img border=\"0\" src=\"$url\" alt=\"$alt\" title=\"$alt\">";
+			return "<img border=\"0\" src=\"$url\" alt=\"$alt\" title=\"$alt\"".$tag.">";
 		}
 	}
 
@@ -1811,7 +1820,14 @@ class image extends class_base
 			Images alternate text
 		@param has_big_alt optional type=string default=NULL
 			If big image is set, then this is the big image's alternate text.	
-	
+
+		@param size optional type=array
+			array(
+				height => int,
+				width => int
+			)
+			sets img tag height and width	
+
 		@errors 
 			none
 
@@ -1824,7 +1840,7 @@ class image extends class_base
 		@examples
 			none
 	**/
-	function make_img_tag_wl($id, $alt = NULL, $has_big_alt = NULL)
+	function make_img_tag_wl($id, $alt = NULL, $has_big_alt = NULL, $size = array())
 	{
 		$that = get_instance(CL_IMAGE);
 		$u = $that->get_url_by_id($id);
@@ -1844,7 +1860,7 @@ class image extends class_base
 			{
 				$alt = $has_big_alt;
 			}
-			$imagetag = image::make_img_tag($u, $alt);
+			$imagetag = image::make_img_tag($u, $alt, $size);
 
 			$size = @getimagesize($file2);
 
@@ -1860,7 +1876,7 @@ class image extends class_base
 		}
 		else
 		{
-			$imagetag = image::make_img_tag($u, $alt);
+			$imagetag = image::make_img_tag($u, $alt, $size);
 		}
 
 		return $imagetag;

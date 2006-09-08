@@ -28,7 +28,7 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
-			'text'=> t('Töötaja'),
+			'text'=> t('T&ouml;&ouml;taja'),
 			'link'=>aw_url_change_var(array(
 				'action' => 'create_new_person',
 				'parent' => $arr['obj_inst']->id(),
@@ -40,11 +40,11 @@ class crm_company_people_impl extends class_base
 			))
 		));
 
-		//uus kõne
+		//uus k&otilde;ne
 		$tb->add_button(array(
 			'name' => 'Kone',
 			'img' => 'class_223.gif',
-			'tooltip' => t('Tee kõne'),
+			'tooltip' => t('Tee k&otilde;ne'),
 			'action' => 'submit_new_call'
 		));
 
@@ -180,7 +180,7 @@ class crm_company_people_impl extends class_base
 		$t->define_field(array(
 			'name' => 'section',
 			"chgbgcolor" => "cutcopied",
-			'caption' => t('Üksus'),
+			'caption' => t('&Uuml;ksus'),
 			'sortable' => '1',
 		));
 		$t->define_field(array(
@@ -429,7 +429,7 @@ class crm_company_people_impl extends class_base
 		exit_function("ghr::loop::sectp");
 
 			//kui amet kuulub $pdat['sections_arr'] olevasse sektsiooni ja persoon on seotud
-			//selle ametiga, siis seda näidata kujul
+			//selle ametiga, siis seda n&auml;idata kujul
 
 			$ccp = (isset($_SESSION["crm_copy_p"][$person->id()]) || isset($_SESSION["crm_cut_p"][$person->id()]) ? "#E2E2DB" : "");
 			$cal = "";
@@ -475,7 +475,7 @@ class crm_company_people_impl extends class_base
 			if ($imgo)
 			{
 				$img_i = $imgo->instance();
-				$img = $img_i->make_img_tag_wl($imgo->id());
+				$img = $img_i->make_img_tag_wl($imgo->id(),"","",array("width" => 60));
 			}
 
 			list($fn, $ln) = explode(" ", $person->prop('name'));
@@ -516,7 +516,7 @@ class crm_company_people_impl extends class_base
 			$o = $arr["obj_inst"];
 		}
 
-		$section_img = html::img(array("url" => icons::get_icon_url(CL_CRM_SECTION), "border" => "0", "alt" => t("Üksus")));
+		$section_img = html::img(array("url" => icons::get_icon_url(CL_CRM_SECTION), "border" => "0", "alt" => t("&Uuml;ksus")));
 		$prof_img = html::img(array("url" => icons::get_icon_url(CL_CRM_PROFESSION), "border" => "0", "alt" => t("Amet")));
 
 		foreach($o->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
@@ -571,7 +571,7 @@ class crm_company_people_impl extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'section',
-			'caption' => t('Üksus'),
+			'caption' => t('&Uuml;ksus'),
 			'sortable' => '1',
 		));
 		$t->define_field(array(
@@ -654,9 +654,9 @@ class crm_company_people_impl extends class_base
 		$toolbar->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => t('Kustuta valitud tööpakkumised'),
+			'tooltip' => t('Kustuta valitud t&ouml;&ouml;pakkumised'),
 			'action' => 'delete_selected_objects',
-			'confirm' => t("Kas oled kindel et soovid valitud tööpakkumised kustudada?")
+			'confirm' => t("Kas oled kindel et soovid valitud t&ouml;&ouml;pakkumised kustudada?")
 		));
 
 		if($arr["request"]["cat"] && $arr["request"]["unit"] && $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT)
@@ -672,7 +672,7 @@ class crm_company_people_impl extends class_base
 
 		$toolbar->add_menu_item(array(
 			'parent'=>'add_item',
-			'text'=> t('Tööpakkumine'),
+			'text'=> t('T&ouml;&ouml;pakkumine'),
 			'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
@@ -787,7 +787,7 @@ class crm_company_people_impl extends class_base
 
 			if(!$professions[$job->prop("profession")])
 			{
-				$professin_cap = t("Määramata");
+				$professin_cap = t("M&auml;&auml;ramata");
 			}
 			else
 			{
@@ -814,7 +814,7 @@ class crm_company_people_impl extends class_base
 		$toolbar->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => t('Kustuta valitud tööpakkumised'),
+			'tooltip' => t('Kustuta valitud t&ouml;&ouml;pakkumised'),
 		));
 	}
 
@@ -954,7 +954,7 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
-			'text'=> t('Töötaja'),
+			'text'=> t('T&ouml;&ouml;taja'),
 			'link'=>aw_url_change_var(array(
 				'action' => 'create_new_person',
 				'parent' => $arr['obj_inst']->id(),
@@ -970,7 +970,7 @@ class crm_company_people_impl extends class_base
 		{
 			$tb->add_menu_item(array(
 				'parent'=>'add_item',
-				'text' => t('Üksus'),
+				'text' => t('&Uuml;ksus'),
 				'link'=>$this->mk_my_orb('new',array(
 						'parent'=>$arr['obj_inst']->id(),
 						'alias_to'=>$alias_to,
