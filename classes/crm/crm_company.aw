@@ -5152,7 +5152,7 @@ class crm_company extends class_base
 			return false;
 		}
 		$u = get_instance(CL_USER);
-		if ($other_co === null)
+		if ($my_co === null)
 		{
 			$my_co = $u->get_current_company();
 		}
