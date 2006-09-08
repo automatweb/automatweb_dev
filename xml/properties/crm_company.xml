@@ -1602,7 +1602,10 @@
       <property>
             <name>docs_tb</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -1611,7 +1614,10 @@
       <property>
             <name>docs_tree</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>treeview</type>
             <parent>docs_left_tree</parent>
             <no_caption>1</no_caption>
@@ -1621,7 +1627,10 @@
       <property>
             <name>docs_s_name</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -1633,7 +1642,10 @@
       <property>
             <name>docs_s_type</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
@@ -1644,7 +1656,10 @@
       <property>
             <name>docs_s_task</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -1656,7 +1671,10 @@
       <property>
             <name>docs_s_user</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -1668,7 +1686,10 @@
       <property>
             <name>docs_s_customer</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -1680,7 +1701,10 @@
       <property>
             <name>docs_s_sbt</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>submit</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1691,7 +1715,10 @@
       <property>
             <name>docs_s_clear</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>submit</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1702,7 +1729,10 @@
       <property>
             <name>docs_empty2</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>hidden</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1712,7 +1742,10 @@
       <property>
             <name>docs_empty</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>hidden</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1722,7 +1755,10 @@
       <property>
             <name>docs_tbl</name>
             <table>objects</table>
-            <group>documents_all</group>
+            <group>
+                  <num_0>documents_all</num_0>
+                  <num_1>documents_all_browse</num_1>
+            </group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1973,6 +2009,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>toolbar</type>
             <store>no</store>
@@ -1989,6 +2026,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2008,6 +2046,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>text</type>
             <size>30</size>
@@ -2027,6 +2066,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>text</type>
             <size>18</size>
@@ -2046,6 +2086,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2065,6 +2106,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2083,6 +2125,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>documents_all_manage</num_5>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2102,6 +2145,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>textbox</type>
             <size>18</size>
@@ -2121,6 +2165,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>date_select</type>
             <store>no</store>
@@ -2144,6 +2189,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>date_select</type>
             <store>no</store>
@@ -2167,6 +2213,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>chooser</type>
             <parent>all_act_search</parent>
@@ -2185,6 +2232,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>checkbox</type>
             <parent>all_act_search</parent>
@@ -2206,6 +2254,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
                   <num_6>ovrv_mails</num_6>
+                  <num_7>documents_all_manage</num_7>
             </group>
             <type>submit</type>
             <parent>all_act_search</parent>
@@ -2225,6 +2274,7 @@
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
                   <num_6>ovrv_mails</num_6>
+                  <num_7>documents_all_manage</num_7>
             </group>
             <type>table</type>
             <store>no</store>
@@ -2242,6 +2292,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
             </group>
             <type>calendar</type>
             <store>no</store>
@@ -2834,6 +2885,18 @@
                   <submit>no</submit>
                   <save>no</save>
             </documents_all>
+            <documents_all_browse>
+                  <caption>Dokumendid</caption>
+                  <parent>documents_all</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </documents_all_browse>
+            <documents_all_manage>
+                  <caption>Haldus</caption>
+                  <parent>documents_all</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </documents_all_manage>
             <documents_news>
                   <caption>Siseuudised</caption>
                   <submit>no</submit>
@@ -3486,36 +3549,54 @@
             <docs_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>documents_all</group>
+                  <group>
+                        <num_0>documents_all</num_0>
+                        <num_1>documents_all_browse</num_1>
+                  </group>
             </docs_lt>
             <docs_left>
                   <type>vbox</type>
                   <parent>docs_lt</parent>
-                  <group>documents_all</group>
+                  <group>
+                        <num_0>documents_all</num_0>
+                        <num_1>documents_all_browse</num_1>
+                  </group>
             </docs_left>
             <docs_left_tree>
                   <type>vbox</type>
                   <parent>docs_left</parent>
                   <closeable>1</closeable>
                   <area_caption>Dokumendid</area_caption>
-                  <group>documents_all</group>
+                  <group>
+                        <num_0>documents_all</num_0>
+                        <num_1>documents_all_browse</num_1>
+                  </group>
             </docs_left_tree>
             <docs_left_search>
                   <type>vbox</type>
                   <parent>docs_left</parent>
                   <closeable>1</closeable>
                   <area_caption>Otsing</area_caption>
-                  <group>documents_all</group>
+                  <group>
+                        <num_0>documents_all</num_0>
+                        <num_1>documents_all_browse</num_1>
+                  </group>
             </docs_left_search>
             <docs_s_f>
                   <type>vbox</type>
                   <parent>docs_left_search</parent>
-                  <group>documents_all</group>
+                  <group>
+                        <num_0>documents_all</num_0>
+                        <num_1>documents_all_browse</num_1>
+                  </group>
             </docs_s_f>
             <docs_s_but_row>
                   <type>hbox</type>
                   <parent>docs_left_search</parent>
-                  <group>documents_all</group>
+                  <group>
+                        <num_0>documents_all</num_0>
+                        <num_1>documents_all_browse</num_1>
+                  </group>
             </docs_s_but_row>
             <docs_news_lt>
                   <type>hbox</type>
@@ -3551,6 +3632,7 @@
                         <num_3>ovrv_offers</num_3>
                         <num_4>all_actions</num_4>
                         <num_5>ovrv_mails</num_5>
+                        <num_6>documents_all_manage</num_6>
                   </group>
             </my_tasks>
             <all_act_search>
@@ -3565,6 +3647,7 @@
                         <num_3>ovrv_offers</num_3>
                         <num_4>all_actions</num_4>
                         <num_5>ovrv_mails</num_5>
+                        <num_6>documents_all_manage</num_6>
                   </group>
             </all_act_search>
             <act_s_dl_layout_top>
@@ -3577,6 +3660,7 @@
                         <num_3>ovrv_offers</num_3>
                         <num_4>all_actions</num_4>
                         <num_5>ovrv_mails</num_5>
+                        <num_6>documents_all_manage</num_6>
                   </group>
             </act_s_dl_layout_top>
             <act_s_dl_layout>
@@ -3589,6 +3673,7 @@
                         <num_3>ovrv_offers</num_3>
                         <num_4>all_actions</num_4>
                         <num_5>ovrv_mails</num_5>
+                        <num_6>documents_all_manage</num_6>
                   </group>
             </act_s_dl_layout>
             <res_lt>
