@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.5 2006/09/08 09:43:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.6 2006/09/08 09:53:40 kristo Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
@@ -694,7 +694,14 @@ class xml_export extends class_base
 				$xml_file .= "<".$field_config['name']." ";
 				foreach ($field_config['xml_tag_param'] as $xml_tag_param_value)
 				{
-					$xml_file .= $xml_tag_param_value['param_name']."=\"".$obj->prop($xml_tag_param_value['param_value'])."\" ";
+					if ($o->prop("user_readable_output") == 1)
+					{
+						$xml_file .= $xml_tag_param_value['param_name']."=\"".$this->_proc_xml_val($obj->prop_str($xml_tag_param_value['param_value']))."\" ";
+					}
+					else
+					{
+						$xml_file .= $xml_tag_param_value['param_name']."=\"".$this->_proc_xml_val($obj->prop($xml_tag_param_value['param_value']))."\" ";
+					}
 				}
 				
 				if (empty($field_config['xml_tag_content']))
@@ -711,7 +718,14 @@ class xml_export extends class_base
 					foreach ($field_config['xml_tag_content'] as $xml_tag_content_value)
 					{
 						$xml_file .= $xml_tag_content_value['sep_before'];
-						$xml_file .= $obj->prop($xml_tag_content_value['value']);
+						if ($o->prop("user_readable_output") == 1)
+						{
+							$xml_file .= $this->_proc_xml_val($obj->prop_str($xml_tag_content_value['value']));
+						}
+						else
+						{
+							$xml_file .= $this->_proc_xml_val($obj->prop($xml_tag_content_value['value']));
+						}
 						$xml_file .= $xml_tag_content_value['sep_after'];
 					}
 					if ($field_config['cdata'] == 1)
@@ -784,6 +798,11 @@ class xml_export extends class_base
 		exit();
 	}
 
+	function _proc_xml_val($str)
+	{
+		$str = str_replace("&", "&amp;", $str);
+		return str_replace("<", "&lt;", str_replace(">", "&gt;", $str));
+	}
 
 	//// params:
 	// object => current object instance
