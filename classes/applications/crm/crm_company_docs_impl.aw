@@ -99,15 +99,6 @@ class crm_company_docs_impl extends class_base
 				'action' => 'submit_paste_docs',
 			));
 		}
-
-		$tb->add_separator();
-
-		$tb->add_button(array(
-			'name' => 'Search',
-			'img' => 'search.gif',
-			'tooltip' => t('Otsi'),
-			'url' => aw_url_change_var("do_doc_search", 1)
-		));
 	}
 
 	function _get_docs_tree($arr)

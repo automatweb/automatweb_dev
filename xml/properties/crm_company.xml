@@ -1613,7 +1613,7 @@
             <table>objects</table>
             <group>documents_all</group>
             <type>treeview</type>
-            <parent>docs_left</parent>
+            <parent>docs_left_tree</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>docs_tree</field>
@@ -1626,7 +1626,7 @@
             <size>30</size>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_f</parent>
             <field>docs_s_name</field>
             <caption>Nimetus</caption>
       </property>
@@ -1637,7 +1637,7 @@
             <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_f</parent>
             <field>docs_s_type</field>
             <caption>Liik</caption>
       </property>
@@ -1649,7 +1649,7 @@
             <size>30</size>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_f</parent>
             <field>docs_s_task</field>
             <caption>Toimetus</caption>
       </property>
@@ -1661,7 +1661,7 @@
             <size>30</size>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_f</parent>
             <field>docs_s_user</field>
             <caption>Tegija</caption>
       </property>
@@ -1673,7 +1673,7 @@
             <size>30</size>
             <store>no</store>
             <captionside>top</captionside>
-            <parent>docs_search</parent>
+            <parent>docs_s_f</parent>
             <field>docs_s_customer</field>
             <caption>Klient</caption>
       </property>
@@ -1698,6 +1698,26 @@
             <parent>docs_s_but_row</parent>
             <field>docs_s_clear</field>
             <caption>T&amp;amp;uuml;hista otsing</caption>
+      </property>
+      <property>
+            <name>docs_empty2</name>
+            <table>objects</table>
+            <group>documents_all</group>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>docs_left_search</parent>
+            <field>docs_empty2</field>
+      </property>
+      <property>
+            <name>docs_empty</name>
+            <table>objects</table>
+            <group>documents_all</group>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>docs_left</parent>
+            <field>docs_empty</field>
       </property>
       <property>
             <name>docs_tbl</name>
@@ -3471,18 +3491,30 @@
             <docs_left>
                   <type>vbox</type>
                   <parent>docs_lt</parent>
+                  <group>documents_all</group>
+            </docs_left>
+            <docs_left_tree>
+                  <type>vbox</type>
+                  <parent>docs_left</parent>
                   <closeable>1</closeable>
                   <area_caption>Dokumendid</area_caption>
                   <group>documents_all</group>
-            </docs_left>
-            <docs_search>
+            </docs_left_tree>
+            <docs_left_search>
                   <type>vbox</type>
                   <parent>docs_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
                   <group>documents_all</group>
-            </docs_search>
+            </docs_left_search>
+            <docs_s_f>
+                  <type>vbox</type>
+                  <parent>docs_left_search</parent>
+                  <group>documents_all</group>
+            </docs_s_f>
             <docs_s_but_row>
                   <type>hbox</type>
-                  <parent>docs_left</parent>
+                  <parent>docs_left_search</parent>
                   <group>documents_all</group>
             </docs_s_but_row>
             <docs_news_lt>

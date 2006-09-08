@@ -578,35 +578,42 @@ default group=org_objects
 
 	@layout docs_lt type=hbox width=20%:80%
 
-		@layout docs_left type=vbox parent=docs_lt closeable=1 area_caption=Dokumendid
+		@layout docs_left type=vbox parent=docs_lt
+			
+			@layout docs_left_tree type=vbox parent=docs_left closeable=1 area_caption=Dokumendid
 
-			@property docs_tree type=treeview parent=docs_left no_caption=1
+				@property docs_tree type=treeview parent=docs_left_tree no_caption=1
 
-			@layout docs_search type=vbox parent=docs_left
+			@layout docs_left_search type=vbox parent=docs_left closeable=1 area_caption=Otsing
+				
+				@layout docs_s_f type=vbox parent=docs_left_search
 
-				@property docs_s_name type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Nimetus
+					@property docs_s_name type=textbox size=30 store=no captionside=top parent=docs_s_f
+					@caption Nimetus
 
-				@property docs_s_type type=select store=no captionside=top parent=docs_search
-				@caption Liik
+					@property docs_s_type type=select store=no captionside=top parent=docs_s_f
+					@caption Liik
 
-				@property docs_s_task type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Toimetus
+					@property docs_s_task type=textbox size=30 store=no captionside=top parent=docs_s_f
+					@caption Toimetus
 
-				@property docs_s_user type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Tegija
+					@property docs_s_user type=textbox size=30 store=no captionside=top parent=docs_s_f
+					@caption Tegija
 
-				@property docs_s_customer type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Klient
+					@property docs_s_customer type=textbox size=30 store=no captionside=top parent=docs_s_f
+					@caption Klient
 
-			@layout docs_s_but_row type=hbox parent=docs_left
+				@layout docs_s_but_row type=hbox parent=docs_left_search
 
-				@property docs_s_sbt type=submit store=no no_caption=1 parent=docs_s_but_row
-				@caption Otsi
+					@property docs_s_sbt type=submit store=no no_caption=1 parent=docs_s_but_row
+					@caption Otsi
 
-				@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
-				@caption T&uuml;hista otsing
+					@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
+					@caption T&uuml;hista otsing
+					
+				@property docs_empty2 type=hidden store=no no_caption=1 parent=docs_left_search
 
+			@property docs_empty type=hidden store=no no_caption=1 parent=docs_left
 
 		@property docs_tbl type=table store=no no_caption=1 parent=docs_lt
 
@@ -1982,14 +1989,7 @@ class crm_company extends class_base
 			case 'docs_s_user':
 			case 'docs_s_sbt':
 			case 'docs_s_clear':
-				if(!$arr['request']['do_doc_search'])
-				{
-					return PROP_IGNORE;
-				}
-				else
-				{
-					$data['value'] = $arr['request'][$data["name"]];
-				}
+				$data['value'] = $arr['request'][$data["name"]];
 				break;
 
 			case "dn_s_name":
@@ -3087,7 +3087,6 @@ class crm_company extends class_base
 			$arr["args"]["docs_s_name"] = $arr["request"]["docs_s_name"];
 			$arr["args"]["docs_s_customer"] = $arr["request"]["docs_s_customer"];
 			$arr["args"]["docs_s_sbt"] = $arr["request"]["docs_s_sbt"];
-			$arr["args"]["do_doc_search"] = 1;
 		}
 
 		if ($arr["request"]["act_s_sbt"] || $arr["request"]["group"] == "bills_search")
