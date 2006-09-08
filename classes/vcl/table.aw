@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.87 2006/09/06 13:38:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.88 2006/09/08 11:00:33 dragut Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -978,6 +978,30 @@ class aw_table extends aw_template
 				$rowid = $this->prefix . $this->id . $counter;
 				$tbl .= "<tr id='$rowid' class='$row_style'>";
 
+					if ($this->use_chooser)
+					{
+						$chooser_value = $v[$this->chooser_config["field"]];
+						$name = $this->chooser_config["name"] . "[${chooser_value}]";
+						$onclick = "";
+						if ($this->chooser_hilight)
+						{
+							$onclick = " onClick=\"hilight(this,'${rowid}')\" ";
+						};
+						$stl = "";
+						if (!empty($this->chooser_config["chgbgcolor"]) && !empty($v[$this->chooser_config["chgbgcolor"]]))
+						{
+							$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
+						}
+						if($chooser_value)
+						{
+							$tbl .= "<td align='center' $stl><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".($v[$this->chooser_config["name"]] ? "checked" : "")."></td>";
+						}
+						else
+						{
+							$tbl .= "<td align='center'>&nbsp;</td>";
+						}
+					};
+
 				$tmp = "";
 				// grpupeerimine
 				if (isset($rgroupby) && is_array($rgroupby))
@@ -1210,30 +1234,6 @@ class aw_table extends aw_template
 					};
 
 					// rida lopeb
-
-					if ($this->use_chooser)
-					{
-						$chooser_value = $v[$this->chooser_config["field"]];
-						$name = $this->chooser_config["name"] . "[${chooser_value}]";
-						$onclick = "";
-						if ($this->chooser_hilight)
-						{
-							$onclick = " onClick=\"hilight(this,'${rowid}')\" ";
-						};
-						$stl = "";
-						if (!empty($this->chooser_config["chgbgcolor"]) && !empty($v[$this->chooser_config["chgbgcolor"]]))
-						{
-							$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
-						}
-						if($chooser_value)
-						{
-							$tbl .= "<td align='center' $stl><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".($v[$this->chooser_config["name"]] ? "checked" : "")."></td>";
-						}
-						else
-						{
-							$tbl .= "<td align='center'>&nbsp;</td>";
-						}
-					};
 					$tbl .= "</tr>\n";
 				};
 				if($this->final_enum)
@@ -2156,6 +2156,20 @@ class aw_table extends aw_template
 
 		$tbl2 = $this->_req_draw_header($subs);
 
+		if ($this->use_chooser)
+		{
+			$tbl .= $this->opentag(array(
+				"name" => "td",
+				"align" => "center",
+				"classid" => $this->header_normal,
+			));
+			$name = $this->chooser_config["name"];
+			$caption = isset($this->chooser_config["caption"]) ? $this->chooser_config["caption"] : t('Vali');
+			$tbl .= "<a href='javascript:selall(\"${name}\")'>" . $caption . "</a>";
+			$tbl .= "</td>";
+			$cell_count++;
+		};
+
 		foreach($this->rowdefs as $k => $v)
 		{
 			if (!(($parent == "" && empty($v["parent"])) || isset($parent[$v["parent"]])))
@@ -2285,19 +2299,6 @@ class aw_table extends aw_template
 			$cell_count++;
 		};
 
-		if ($this->use_chooser)
-		{
-			$tbl .= $this->opentag(array(
-				"name" => "td",
-				"align" => "center",
-				"classid" => $this->header_normal,
-			));
-			$name = $this->chooser_config["name"];
-			$caption = isset($this->chooser_config["caption"]) ? $this->chooser_config["caption"] : t('Vali');
-			$tbl .= "<a href='javascript:selall(\"${name}\")'>" . $caption . "</a>";
-			$tbl .= "</td>";
-			$cell_count++;
-		};
 
 		// header kinni
 		$tbl .= "</tr>";
