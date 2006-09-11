@@ -242,6 +242,48 @@
             <caption>Esilehel keskel</caption>
       </property>
       <property>
+            <name>esilehel</name>
+            <table>documents</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <field>esilehel</field>
+            <caption>Esilehel</caption>
+      </property>
+      <property>
+            <name>jrk1</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <field>jrk1</field>
+            <caption>Jrk1</caption>
+      </property>
+      <property>
+            <name>esilehel_uudis</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <field>esilehel_uudis</field>
+            <caption>Esilehel uudis</caption>
+      </property>
+      <property>
+            <name>jrk2</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <field>jrk2</field>
+            <caption>Jrk2</caption>
+      </property>
+      <property>
             <name>dcache</name>
             <table>documents</table>
             <group>general</group>
@@ -656,16 +698,6 @@
             <default>1</default>
             <field>title_clickable</field>
             <caption>Pealkiri klikitav</caption>
-      </property>
-      <property>
-            <name>esilehel</name>
-            <table>documents</table>
-            <group>settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <trans>1</trans>
-            <field>esilehel</field>
-            <caption>Esilehel</caption>
       </property>
       <property>
             <name>dcache_save</name>
