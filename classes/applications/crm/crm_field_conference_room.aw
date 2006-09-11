@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_conference_room.aw,v 1.2 2005/12/27 21:26:05 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_conference_room.aw,v 1.3 2006/09/11 10:37:46 tarvo Exp $
 // crm_field_conference_room.aw - Konverentsiruum (valdkond) 
 /*
 
@@ -30,8 +30,12 @@
 	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment table_fields=name,ord table_edit_fields=ord override_parent=this direct_links=1 
 	@caption Pildid
 
+@default group=rooms
+	@property rooms type=releditor mode=manager reltype=RELTYPE_ROOM props=name,area,description,chair,chair_table,conference_table,u_table,oval_table,chair_diag
+
 @groupinfo cedit caption="Kontaktandmed" 
 @groupinfo images caption="Pildid" submit=no
+@groupinfo rooms caption="Ruumid"
 
 @reltype EMAIL value=1 clid=CL_ML_MEMBER
 @caption E-post
@@ -44,6 +48,9 @@
 
 @reltype IMAGE value=4 clid=CL_IMAGE
 @caption Pilt
+
+@reltype ROOM value=5 clid=CL_ROOM
+@caption Ruum
 
 */
 

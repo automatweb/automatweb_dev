@@ -76,6 +76,27 @@
             <direct_links>1</direct_links>
             <caption>Pildid</caption>
       </property>
+      <property>
+            <name>rooms</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>rooms</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_ROOM</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>area</num_1>
+                  <num_2>description</num_2>
+                  <num_3>chair</num_3>
+                  <num_4>chair_table</num_4>
+                  <num_5>conference_table</num_5>
+                  <num_6>u_table</num_6>
+                  <num_7>oval_table</num_7>
+                  <num_8>chair_diag</num_8>
+            </props>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_FIELD_CONFERENCE_ROOM</syslog_type>
             <no_comment>1</no_comment>
@@ -90,6 +111,9 @@
                   <caption>Pildid</caption>
                   <submit>no</submit>
             </images>
+            <rooms>
+                  <caption>Ruumid</caption>
+            </rooms>
       </groupinfo>
       <reltypes>
             <EMAIL>
@@ -112,6 +136,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Pilt</caption>
             </IMAGE>
+            <ROOM>
+                  <value>5</value>
+                  <clid>CL_ROOM</clid>
+                  <caption>Ruum</caption>
+            </ROOM>
       </reltypes>
 </properties>
 
