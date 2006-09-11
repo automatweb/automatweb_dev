@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.130 2006/09/08 16:43:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.131 2006/09/11 15:03:13 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1159,14 +1159,14 @@ class task extends class_base
 			"numeric" => 1,
 		));
 
-		$t->define_field(array(
+	/*	$t->define_field(array(
 			"name" => "id",
 //			"caption" => t("Jrk"),
 //			"align" => "center",
 		"callb_pass_row" => true,
 		"numeric" => 1,
 		));
-
+*/
 		$t->define_field(array(
 			"name" => "task",
 			"caption" => t("Tegevus"),
