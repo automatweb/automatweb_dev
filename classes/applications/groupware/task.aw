@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.131 2006/09/11 15:03:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.132 2006/09/11 17:21:36 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -251,7 +251,7 @@ class task extends class_base
 	{
 		$this->init(array(
 			"tpldir" => "groupware/task",
-			"clid" => CL_TASK
+			"clid" => CL_TASK,
 		));
 	}
 
@@ -365,8 +365,9 @@ class task extends class_base
 		return $this->parse().$post;
 	}
 	
+	
 	function callback_on_load($arr)
-	{
+	{	
 		if(($arr["request"]["msgid"]))
 		{
 			$mail = get_instance(CL_MESSAGE);
@@ -399,7 +400,7 @@ class task extends class_base
 			case "parts_tb":
 				$this->_parts_tb($arr);
 				break;
-
+			
 			case "co_table":
 				$this->_co_table($arr);
 				break;
@@ -1150,6 +1151,15 @@ class task extends class_base
 
 	function _init_rows_t(&$t, $impl_filt = NULL)
 	{
+		$selected = "";
+		$seti = get_instance(CL_CRM_SETTINGS);
+			$sts = $seti->get_current_settings();
+			if ($sts && $sts->prop("default_task_rows_bills_filter"))
+			{
+				$settings_inst = get_instance("applications/crm/crm_settings");
+				$selected = $settings_inst->bills_filter_options[$sts->prop("default_task_rows_bills_filter")];
+			}
+		
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk"),
@@ -1221,10 +1231,13 @@ class task extends class_base
 			"filter_compare" => array(&$this, "__done_filt_comp"),
 		));
 
+		
+
 		$t->define_field(array(
 			"name" => "on_bill",
 			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>Arvele</a>"),
 			"align" => "center",
+			"filter_options" => array("selected" => $selected),
 			"filter" => array(
 				t("Jah"),
 				t("Ei"),
@@ -2268,9 +2281,11 @@ class task extends class_base
 			}
 
 			//järjekorra seadmine
-			if(!($e["ord"] > -1)) $e["ord"] = 10+$max_ord;
 			if($e["ord"] > $max_ord) $max_ord = $e["ord"];
-			
+			if($e["ord"] == null)
+			{
+				$e["ord"] = 10+$max_ord;
+			}
 			if ($o->prop("ord") != $e["ord"])
 			{
 				$o->set_prop("ord", $e["ord"]);

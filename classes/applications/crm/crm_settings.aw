@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.14 2006/05/10 09:13:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.15 2006/09/11 17:22:55 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -38,6 +38,15 @@
 
 	@property controller_meeting type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize
 	@caption Kohtumise kontroller
+
+	@property default_tasks_view type=select table=objects field=meta
+	@caption Tegevused vaikimisi vaade
+
+	@property view_task_rows_open type=checkbox ch_value=1 table=objects field=meta
+	@caption Vaikimisi avatakse toimetuse nimel klikkides kohe read
+
+	@property default_task_rows_bills_filter type=select table=objects field=meta
+	@caption Toimetuse ridades valitud Arve tulba vaikimisi filter
 
 @default group=tables
 	@property tables_toolbar type=toolbar store=no no_caption=1
@@ -165,6 +174,14 @@ class crm_settings extends class_base
 			"coworker" => CL_CRM_PERSON,
 			"customer_employer" => CL_CRM_PERSON,
 		);
+		
+		$this->bills_filter_options = array(
+					"" => "",
+					0 => t("Jah"),
+					1 => t("Ei"),
+					2 => t("Arvel"),
+					3 => t("Arveta"),
+		);
 	}
 
 	function get_property($arr)
@@ -174,8 +191,17 @@ class crm_settings extends class_base
 
 		switch($prop["name"])
 		{
+			case "default_tasks_view":
+				$prop["options"] = array(
+					0 => t("Tabelvaade"),
+					1 => t("Kalendervaade"),
+				);
+				break;
+			
+			case "default_task_rows_bills_filter":
+				$prop["options"] = $this->bills_filter_options;
+				break;
 		}
-
 		return $retval;
 	}
 
