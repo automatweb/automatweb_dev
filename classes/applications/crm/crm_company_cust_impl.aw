@@ -123,6 +123,11 @@ class crm_company_cust_impl extends class_base
 		$i = get_instance(CL_CRM_COMPANY);
 		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
+
+		$user_obj = obj($u->get_current_person());
+		$format = t('%s projektid, milles on %s osaline');
+		$table->set_caption(sprintf($format, $arr['obj_inst']->name(), $user_obj->name()));
+
 		$my_co = obj($u->get_current_company());
 		if ($my_co->id() == $arr["obj_inst"]->id())
 		{
@@ -846,6 +851,10 @@ class crm_company_cust_impl extends class_base
 		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
 		$my_co = obj($u->get_current_company());
+		$user_obj = new object($u->get_current_person());
+
+		$format = t('%s projektid milles on %s osaline');
+		$table->set_caption(sprintf($format, $arr['obj_inst']->name(), $user_obj->name()));
 
 		if ($arr["request"]["search_all_proj"] == 1 && $arr["request"]["org_id"])
 		{
@@ -1241,16 +1250,24 @@ class crm_company_cust_impl extends class_base
 				"class_id" => CL_CRM_DAY_REPORT,
 				"parent" => $arr["obj_inst"]->id(),
 			));
+
+			$format = t('%s k&otilde;ik raportid');
 		}
 		else
 		{
 			$u = get_instance(CL_USER);
+			$current_person_oid = $u->get_current_person();
 			$reps = new object_list(array(
 				"class_id" => CL_CRM_DAY_REPORT,
 				"parent" => $arr["obj_inst"]->id(),
-				"reporter" => $u->get_current_person()
+				"reporter" => $current_person_oid
 			));
+			$user_obj = obj($current_person_oid);
+			$current_person_name = $user_obj->name();
+			$format = t('%s raportid, milles on %s osaline');
 		}
+		
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $current_person_name));
 
 		foreach($reps->arr() as $r)
 		{

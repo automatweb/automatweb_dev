@@ -674,6 +674,9 @@ class crm_company_overview_impl extends class_base
 			case 'ovrv_mails':
 				$format = t('%s mailid, milles on %s osaline');
 				break;
+			case 'documents_all_manage':
+				$format = t('%s dokumendid: haldus');
+				break;
 			default:
 				$format = t('%s k&otilde;ik tegemised, milles on %s osaline');
 		}
