@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.3 2006/09/12 15:20:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.4 2006/09/12 15:30:07 dragut Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -830,7 +830,13 @@ class admin_if extends class_base
 			));
 
 			$pm->add_item(array(
-				"link" => $this->mk_my_orb("if_cut", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1"), "admin_if",true,true),
+				"link" => $this->mk_my_orb("if_cut", array(
+					"reforb" => 1, 
+					"id" => $id, 
+					"parent" => $parent,
+					"sel[$id]" => "1",
+					"return_url" => get_ru()
+				), "admin_if",true,true),
 				"text" => t("L&otilde;ika")
 			));
 		}
