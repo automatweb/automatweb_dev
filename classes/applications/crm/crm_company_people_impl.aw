@@ -166,7 +166,7 @@ class crm_company_people_impl extends class_base
 			'callb_pass_row' => true,
 		));
 		$t->define_field(array(
-        	'name' => 'phone',
+			'name' => 'phone',
 			"chgbgcolor" => "cutcopied",
 			'caption' => t('Telefon'),
 			'sortable' => '1',
@@ -187,7 +187,7 @@ class crm_company_people_impl extends class_base
 			'name' => 'rank',
 			"chgbgcolor" => "cutcopied",
 			'caption' => t('Ametinimetus'),
-            'sortable' => '1',
+			'sortable' => '1',
 		));
 
 		$t->define_chooser(array(
@@ -210,6 +210,9 @@ class crm_company_people_impl extends class_base
 		enter_function("ghr::init_t");
 		$this->_init_human_resources_table($t);
 		exit_function("ghr::init_t");
+
+		$format = t('%s t&ouml;&ouml;tajad');
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
 		$crmp = get_instance(CL_CRM_PERSON);
 
@@ -583,6 +586,10 @@ class crm_company_people_impl extends class_base
 			'name'=>'check',
 			'field'=>'id',
 		));*/
+		
+		$format = t('%s t&ouml;&ouml;tajate otsingu tulemused');
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
+		
 
 		$search_params = array(
 			'class_id' => CL_CRM_PERSON,
@@ -755,6 +762,9 @@ class crm_company_people_impl extends class_base
 			"align" => "center"
 		));
 
+		$format = t('%s t&ouml;&ouml;pakkumised');
+		$table->set_caption(sprintf($format, $arr['obj_inst']->name()));
+
 		$section_cl = get_instance(CL_CRM_SECTION);
 
 		if(is_oid($arr['request']['unit']))
@@ -856,6 +866,9 @@ class crm_company_people_impl extends class_base
 			"caption" => t("Osakond"),
 			"sortable" => "1",
 		));
+
+		$format = t('%ssse t&ouml;&ouml;le kandideerijad');
+		$table->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
 		$section_cl = get_instance(CL_CRM_SECTION);
 

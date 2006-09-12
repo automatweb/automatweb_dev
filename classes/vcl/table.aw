@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.88 2006/09/08 11:00:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.89 2006/09/12 10:44:58 dragut Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -13,6 +13,7 @@ class aw_table extends aw_template
 	var $id = 'table_0';
 	var $filter_name = "awTblFlt";
 	var $name = "awTable0";
+	var $table_caption; 
 
 	function aw_table($data = array())
 	{
@@ -109,6 +110,11 @@ class aw_table extends aw_template
 	function set_header($arr)
 	{
 		$this->table_header = $arr;
+	}
+
+	function set_caption($arr)
+	{
+		$this->table_caption = $arr;
 	}
 
 	////

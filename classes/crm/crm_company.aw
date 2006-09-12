@@ -638,6 +638,7 @@ default group=org_objects
 			@caption Otsi
 
 		@property dn_res type=table no_caption=1 store=no parent=docs_news_lt
+		@caption Uudised
 
 @default group=documents_lmod
 
@@ -5894,6 +5895,9 @@ class crm_company extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_ext_sys_t($t);
+
+		$format = t('%s siduss&uuml;steemid');
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
 		$crel = $this->get_cust_rel($arr["obj_inst"], true);
 		if (!$crel)

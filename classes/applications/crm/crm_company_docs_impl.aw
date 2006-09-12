@@ -245,7 +245,7 @@ class crm_company_docs_impl extends class_base
 		$format = t("%s dokumendid");
 		$format = strlen($arr["request"]["tf"])?$format.", kataloog: %s":$format;
 		$o = obj($arr["request"]["tf"]);
-		$t->table_caption = sprintf($format, $arr["obj_inst"]->name(), $o->name());
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $o->name()));
 		$this->_init_docs_tbl($t, $arr["request"]);
 		if ($arr["request"]["files_from_fld"] != "")
 		{
@@ -532,6 +532,9 @@ class crm_company_docs_impl extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_dn_res_t($t);
+
+		$format = t("%s siseuudised");
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
 		$ol = $this->_get_news($this->_init_content_docs_fld($arr["obj_inst"]), $arr["request"]);
 		foreach($ol->arr() as $o)
