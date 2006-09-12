@@ -749,6 +749,7 @@ class crm_company_bills_impl extends class_base
 		if ($arr["request"]["group"] == "bills_monthly")
 		{
 			$bills = $d->get_bills_by_co($arr["obj_inst"], array("monthly" => 1));
+			$format = t('%s kuuarved');
 		}
 		else
 		{
@@ -783,7 +784,11 @@ class crm_company_bills_impl extends class_base
 				$filt["state"] = $arr["request"]["bill_s_status"];
 			}
 			$bills = $d->get_bills_by_co($arr["obj_inst"], $filt);
+			$format = t('%s arved');
 		}
+
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
+
 		$bill_i = get_instance(CL_CRM_BILL);
 
 		if ($arr["request"]["export_hr"] > 0)
