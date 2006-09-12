@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.500 2006/09/06 12:52:13 kristo Exp $
+// $Id: class_base.aw,v 2.501 2006/09/12 09:29:43 markop Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -360,7 +360,7 @@ class class_base extends aw_template
 				"request" => $args,
 			));
 		}
-
+		
 		if ($args["no_active_tab"])
 		{
 			$this->no_active_tab = 1;
@@ -4578,7 +4578,13 @@ class class_base extends aw_template
 		}
 		else
 		{
-			$use_group = $default_group;
+			if (method_exists($this->inst,"callback_get_default_group"))
+			{
+				$use_group = $this->inst->callback_get_default_group(array(
+					"request" => $args,
+				));
+			}
+			else $use_group = $default_group;
 		};
 
 		if (!$use_group)

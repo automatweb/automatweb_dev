@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.132 2006/09/11 17:21:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.133 2006/09/12 09:29:42 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -365,6 +365,16 @@ class task extends class_base
 		return $this->parse().$post;
 	}
 	
+	function callback_get_default_group($arr)
+	{
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		if ($sts && $sts->prop("view_task_rows_open"))
+		{
+			return "rows";
+		}
+		return "general";
+	}
 	
 	function callback_on_load($arr)
 	{	
