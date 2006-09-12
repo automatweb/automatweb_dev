@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.15 2006/08/15 14:08:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.16 2006/09/12 09:11:52 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -926,13 +926,14 @@ class persons_webview extends class_base
 		}
 		else
 		{
+			$c = "";
 			foreach($workers as $val)
 			{
-				$c = "";
+				$worker = $val["worker"];
 				if($this->is_template("WORKER"))
 				{
 					$this->parse_worker($worker);
-					$c .= $this->parse("worker");
+					$c .= $this->parse("WORKER");
 				}
 			}
 			$this->vars(array(
