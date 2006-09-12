@@ -1254,6 +1254,10 @@ class mrp_case extends class_base
 			$job = obj($job_id);
 
 			$resource_id = $job->prop ("resource");
+			if (!$this->can("view", $resource_id))
+			{
+				continue;
+			}
 			$resource = obj ($resource_id);
 			$disabled = false;
 
