@@ -146,6 +146,9 @@ class crm_company_res_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_res_t($t);
 
+		$format = t('%s ressursid');
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
+
 		$parent = is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $this->_get_res_parent($arr["obj_inst"]);
 
 		$ol = new object_list(array(
