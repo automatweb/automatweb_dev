@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.99 2006/09/08 16:43:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.100 2006/09/12 12:23:03 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -344,12 +344,29 @@ class crm_bill extends class_base
 				}
 				break;
 
+			case "impl":
+				if(!$prop["value"])
+				{
+					$u = get_instance(CL_USER);
+					$prop["value"] = $u->get_current_company();
+				}
+			
 			case "customer":
-				// check if the 
+				// check if the customer_awAutoCompleteTextbox
+				if(!is_oid($prop["value"]))
+				{
+					$ol = new object_list(array(
+						"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
+						"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+						"lang_id" => array(),
+					));
+					$cust_obj = $ol->begin();
+					$prop["value"] = $cust_obj->id();
+				}
 				if ($this->can("view", $prop["value"]) && (($arr["obj_inst"]->prop("bill_due_date_days") == 0) || ($arr["obj_inst"]->prop("bill_due_date_days") == null)))
 				{
 					$cc = get_instance(CL_CRM_COMPANY);
-					$crel = $cc->get_cust_rel(obj($prop["value"]));arr($crel->prop("bill_due_date_days"));
+					$crel = $cc->get_cust_rel(obj($prop["value"]));
 					
 					if(!$crel)
 					{
