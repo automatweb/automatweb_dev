@@ -53,6 +53,9 @@ class crm_company_bills_impl extends class_base
 
 		$t =& $arr["prop"]["vcl_inst"];
 
+		$format = t('%s maksmata t&ouml;&ouml;d');
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
+
 		// list all task rows that are not billed yet
 		$rows = new object_list(array(
 			"class_id" => CL_TASK_ROW,
