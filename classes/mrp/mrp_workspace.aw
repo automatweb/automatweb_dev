@@ -392,45 +392,7 @@
 
 */
 
-### resource types
-define ("MRP_RESOURCE_SCHEDULABLE", 1);
-define ("MRP_RESOURCE_NOT_SCHEDULABLE", 2);
-define ("MRP_RESOURCE_SUBCONTRACTOR", 3);
-
-### states
-define ("MRP_STATUS_NEW", 1);
-define ("MRP_STATUS_PLANNED", 2);
-define ("MRP_STATUS_INPROGRESS", 3);
-define ("MRP_STATUS_ABORTED", 4);
-define ("MRP_STATUS_DONE", 5);
-define ("MRP_STATUS_LOCKED", 6);
-define ("MRP_STATUS_PAUSED", 7);
-define ("MRP_STATUS_DELETED", 8);
-define ("MRP_STATUS_ONHOLD", 9);
-define ("MRP_STATUS_ARCHIVED", 10);
-
-define ("MRP_STATUS_RESOURCE_AVAILABLE", 10);
-define ("MRP_STATUS_RESOURCE_INUSE", 11);
-define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
-
-### misc
-define ("MRP_DATE_FORMAT", "j/m/Y H.i");
-
-### colours (CSS colour definition)
-define ("MRP_COLOUR_NEW", "#05F123");
-define ("MRP_COLOUR_PLANNED", "#5B9F44");
-define ("MRP_COLOUR_INPROGRESS", "#FF9900");
-define ("MRP_COLOUR_ABORTED", "#FF13F3");
-define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#999999");
-define ("MRP_COLOUR_UNAVAILABLE", "#D0D0D0");
-define ("MRP_COLOUR_ONHOLD", "#9900CC");
-define ("MRP_COLOUR_ARCHIVED", "#0066CC");
-define ("MRP_COLOUR_HILIGHTED", "#FFE706");
-define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
-define ("MRP_COLOUR_OVERDUE", "#DF0D12");
-define ("MRP_COLOUR_AVAILABLE", "#FCFCF4");
-define ("MRP_COLOUR_PRJHILITE", "#FFE706");
+classload("mrp/mrp_header");
 
 class mrp_workspace extends class_base
 {
@@ -449,6 +411,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_RESOURCE_AVAILABLE => t("Vaba"),
 			MRP_STATUS_RESOURCE_INUSE => t("Kasutusel"),
 			MRP_STATUS_RESOURCE_OUTOFSERVICE => t("Suletud"),
+			MRP_STATUS_RESOURCE_INACTIVE => t("Arhiveeritud"),
 		);
 
 		$this->states = array (
@@ -908,13 +871,7 @@ class mrp_workspace extends class_base
 						$tmp = obj($job->prop($rpn));
 						if ($this->can("edit", $tmp->id()))
 						{
-							$prop["value"] = html::get_change_url(
-								$tmp->id(),
-								array(
-									"return_url" => get_ru()
-								),
-								$tmp->name()
-							);
+							$prop["value"] = html::obj_change_url($tmp);
 						}
 						else
 						{
@@ -1022,6 +979,13 @@ class mrp_workspace extends class_base
 			### resources tab
 			case "resources_toolbar":
 				$this->create_resources_toolbar ($arr);
+
+				if (aw_global_get("mrp_errors"))
+				{
+					$retval = PROP_ERROR;
+					$prop["error"] = aw_global_get("mrp_errors");
+					aw_session_del("mrp_errors");
+				}
 				break;
 			case "resources_tree":
 				$this->create_resources_tree ($arr);
@@ -1381,6 +1345,7 @@ class mrp_workspace extends class_base
 					$scheduler->add(array(
 						"event" => $event,
 						"time" => time() + 86400,
+						"uid" => aw_global_get("uid"),
 						// "uid" => "voldemar",//!!! mujalt v6tta
 						// "password" => "lagendik",
 						"auth_as_local_user" => true,
@@ -1646,19 +1611,11 @@ if ($_GET['show_thread_data'] == 1)
 
 			foreach(safe_array($res2p[$resource->id()]) as $person)
 			{
-				$operators[] = html::get_change_url(
-					$person->id(),
-					array("return_url" => get_ru()),
-					$person->name()
-				);
+				$operators[] = html::obj_change_url($person);
 			}
 
 			$table->define_data (array (
-				"name" => html::get_change_url(
-					$resource->id(),
-					array("return_url" => get_ru()),
-					$resource->name()
-				),
+				"name" => html::obj_change_url($resource),
 				"order" => $resource->ord (),
 				"operator" => join(",",$operators),
 				"status" => $this->resource_states[$resource->prop("state")],
@@ -1749,9 +1706,9 @@ if ($_GET['show_thread_data'] == 1)
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => t("Kustuta"),
+			"tooltip" => t("Arhiveeri"),
 			"action" => "delete",
-			"confirm" => t("Kustutada kõik valitud ressursid?"),
+			"confirm" => t("Arhiveerida kõik valitud ressursid?"),
 		));
 	}
 
@@ -2271,22 +2228,10 @@ if ($_GET['show_thread_data'] == 1)
 			### define data for html table row
 			$definition = array (
 				"customer" => (is_object ($customer) ? $customer->name () : ""),
-				"project" => html::get_change_url(
-					$project->id(),
-					array("return_url" => get_ru()),
-					$project->name ()
-				),
-				"resource" => html::get_change_url(
-					$resource->id(),
-					array("return_url" => get_ru()),
-					$resource->name ()
-				),
+				"project" => html::obj_change_url($project),
+				"resource" => html::obj_change_url($resource),
 				"scheduled_date" => $job->prop ("starttime"),
-				"modify" => html::get_change_url(
-					$job->id(),
-					array("return_url" => get_ru()),
-					t("Ava")
-				),
+				"modify" => html::obj_change_url($job, t("Ava")),
 				"bgcolour_overdue" => $bg_colour,
 				"advisedstart" => '<span style="white-space: nowrap;">' . html::datetime_select(array(
 					"name" => "mrp_job_advisedstart-" . $job_id,
@@ -2384,22 +2329,14 @@ if ($_GET['show_thread_data'] == 1)
 			### define data for html table row
 			$definition = array (
 				"customer" => (is_object ($customer) ? $customer->name () : ""),
-				"project" => html::get_change_url(
-					$project->id(),
-					array("return_url" => get_ru()),
-					$project->name ()
-				),
+				"project" => html::obj_change_url($project),
 				"resource" => html::get_change_url(
 					$resource->id(),
 					array("return_url" => get_ru()),
 					$resource->name ()
 				),
 				"due_date" => $project->prop ("due_date"),
-				"modify" => html::get_change_url(
-					$job->id(),
-					array("return_url" => get_ru()),
-					t("Ava")
-				),
+				"modify" => html::obj_change_url($job, t("Ava")),
 				"reschedule" => html::checkbox(array(
 					"name" => "mrp_job_reschedule-" . $job_id,
 					)
@@ -2718,7 +2655,6 @@ if ($_GET['show_thread_data'] == 1)
 			}
 		}
 
-
 		foreach ($jobs as $job)
 		{
 			if (!$this->can("view", $job["project"]))
@@ -2895,7 +2831,7 @@ if ($_GET['show_thread_data'] == 1)
 				"caption" => t("Kaota valik"),
 				"url" => aw_url_change_var ("mrp_hilight", ""),
 			));
-			$change_url = html::get_change_url ($project->id(), array("return_url" => get_ru()), parse_obj_name($project->name ()));
+			$change_url = html::obj_change_url ($project);
 			$navigation .= t(' &nbsp;&nbsp;Valitud projekt: ') . $change_url . ' (' . $deselect . ')';
 		}
 
@@ -2978,13 +2914,43 @@ if ($_GET['show_thread_data'] == 1)
 			$ol = new object_list (array (
 				"oid" => array_keys ($sel),
 			));
+			$errors = NULL;
+			$res_e = array();
 
 			for ($o = $ol->begin (); !$ol->end (); $o = $ol->next ())
 			{
-				if ($this->can ("delete", $o->id()))
+				if (CL_MRP_RESOURCE == $o->class_id() and MRP_STATUS_RESOURCE_INUSE != $o->prop("state"))
+				{
+					$applicable_states = array(
+						MRP_STATUS_DONE,
+						MRP_STATUS_ARCHIVED,
+					);
+					$list = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"CL_MRP_CASE.RELTYPE_MRP_USED_RESOURCE" => $o->id(),
+						"state" => new obj_predicate_not($applicable_states),
+					));
+
+					if (0 < $list->count())
+					{
+						$res_e[] = $o->name();
+					}
+					else
+					{
+						$o->set_prop("state", MRP_STATUS_RESOURCE_INACTIVE);
+						$o->save();
+					}
+				}
+				elseif ($this->can ("delete", $o->id()))
 				{
 					$o->delete ();
 				}
+			}
+
+			if (count($res_e))
+			{
+				$errors .= sprintf(t("Ressurssi/ressursse <i>%s</i> arhiveerida ei saa, sest sellel/neil on lõpetamata projekte. "), implode(",", $res_e));
+				aw_session_set("mrp_errors", $errors);
 			}
 		}
 
@@ -3713,7 +3679,7 @@ if ($_GET['show_thread_data'] == 1)
 			foreach($ol->arr() as $case)
 			{
 				$t->define_data(array(
-					"name" => html::get_change_url($case->id(), array("return_url" => get_ru()), parse_obj_name($case->name())),
+					"name" => html::obj_change_url($case),
 					"comment" => $case->comment(),
 					"start" => $case->prop("starttime"),
 					"end" => $case->prop("due_date"),
@@ -4072,7 +4038,7 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $person->id()))
 				{
-				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+				$workers_str[] = html::obj_change_url($person);
 			}
 				else
 				{
@@ -4086,11 +4052,7 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $cust->id()))
 				{
-				$custo = html::get_change_url($cust->id(), array(
-						"return_url" => get_ru()
-					),
-					$cust->name()
-				);
+				$custo = html::obj_change_url($cust);
 			}
 				else
 				{
@@ -4176,11 +4138,7 @@ if ($_GET['show_thread_data'] == 1)
 			$resource_str = $res->name();
 			if ($this->can("edit", $res->id()))
 			{
-				$resource_str = html::get_change_url($res->id(), array(
-						"return_url" => get_ru()
-					),
-					$res->name()
-				);
+				$resource_str = html::obj_change_url($res);
 			}
 
 			$project_str = $proj->name();
@@ -4967,7 +4925,7 @@ if ($_GET['show_thread_data'] == 1)
 			}
 			$csn[$cust->name()] = 1;
 			$t->define_data(array(
-				"name" => html::get_change_url($cust->id(), array("return_url" => get_ru()), $cust->name()),
+				"name" => html::obj_change_url($cust),
 				"address" => $cust->prop_str("contact"),
 				"phone" => $cust->prop_str("phone_id"),
 				"email" => $cust->prop_str("email_id"),
@@ -5244,6 +5202,8 @@ if ($_GET['show_thread_data'] == 1)
 	**/
 	function archive_projects($arr)
 	{
+		aw_switch_user("struktuur");
+
 		if (!$this->can("view", $arr["id"]))
 		{
 			exit (1);
@@ -5277,6 +5237,7 @@ if ($_GET['show_thread_data'] == 1)
 		$scheduler->add(array(
 			"event" => $event,
 			"time" => time() + 86400,
+			"uid" => aw_global_get("uid"),
 			// "uid" => "voldemar",//!!! mujalt v6tta
 			// "password" => "lagendik",
 			"auth_as_local_user" => true,
