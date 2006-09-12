@@ -511,6 +511,7 @@ class crm_company_bills_impl extends class_base
 
 	function _get_bill_tb($arr)
 	{
+		$_SESSION["create_bill_ru"] = get_ru();
 		$tb =& $arr["prop"]["vcl_inst"];
 
 		$tb->add_button(array(

@@ -2214,6 +2214,7 @@ class crm_company extends class_base
 				break;
 
 			case "my_stats_tb":
+				$_SESSION["create_bill_ru"] = get_ru();
 				$arr["prop"]["vcl_inst"]->add_button(array(
 					"name" => "creab",
 					"img" => "save.gif",
@@ -4425,9 +4426,15 @@ class crm_company extends class_base
 
 			}
 		}
-		return html::get_change_url($bill->id(),array("return_url" => 
-				html::get_change_url($arr["id"], array("group" => "bills")),
-			));
+		if($_SESSION["create_bill_ru"])
+		{
+			$create_bill_ru = $_SESSION["create_bill_ru"];
+		}
+		else 
+		{
+			$create_bill_ru = html::get_change_url($arr["id"], array("group" => "bills"));
+		}
+		return html::get_change_url($bill->id(),array("return_url" => $create_bill_ru,));
 	}
 
 	/**
