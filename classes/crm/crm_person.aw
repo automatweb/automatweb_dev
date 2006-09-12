@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.144 2006/09/08 11:36:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.145 2006/09/12 10:14:37 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3614,7 +3614,7 @@ class crm_person extends class_base
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
 				"check" => $check,
-				"sum" => number_format($sum, 2)
+				"sum" => number_format($sum, 2, ',', '')
 			));
 			$l_sum += $o->prop("time_real");
 			$s_sum += $sum;
@@ -3630,8 +3630,8 @@ class crm_person extends class_base
 
 		$t->define_data(array(
 			"content" => t("<b>Summa</b>"),
-			"length" => number_format($l_sum, 2),
-			"sum" => number_format($s_sum, 2)
+			"length" => number_format($l_sum, 2, ',', ''),
+			"sum" => number_format($s_sum, 2, ',', '')
 		));
 		$arr["prop"]["value"] = $t->draw();
 	}
