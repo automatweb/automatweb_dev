@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.21 2006/09/11 15:37:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.22 2006/09/12 13:09:27 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -192,7 +192,7 @@ class task_quick_entry extends class_base
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"lang_id" => array(),
 			"site_id" => array(),
-			"limit" => 30,
+	//		"limit" => 30,
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
