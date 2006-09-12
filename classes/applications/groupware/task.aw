@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.134 2006/09/12 12:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.135 2006/09/12 15:59:27 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -183,7 +183,8 @@ caption Osalejad
 @caption Tulemuste tabel
 
 @default group=other_exp
-
+@default group=comments
+//ajutiselt teine parent
 	@property other_expenses type=table store=no no_caption=1 method=serialize
 
 @default group=rows
@@ -243,6 +244,9 @@ caption Osalejad
 
 @reltype PREDICATE value=9 clid=CL_TASK,CL_CRM_CALL
 @caption Eeldustegevus
+
+@reltype EXPENSE value=10 clid=CL_CRM_EXPENSE
+@caption Muu kulu
 */
 
 class task extends class_base
@@ -968,16 +972,47 @@ class task extends class_base
 				break;
 
 			case "other_expenses":
-				$set = array();
-				foreach(safe_array($_POST["exp"]) as $entry)
+				foreach(safe_array($_POST["exp"]) as $key => $entry)
 				{
-					if ($entry["exp"] != "" && $entry["cost"] != "")
+					if(is_oid($key) && $this->can("view" ,$key)){
+						$obj = obj($key);
+						if($obj->class_id() == CL_CRM_EXPENSE)
+						{
+							if($entry["name"] == "" && $entry["cost"] == "")
+							{
+								$cs = $arr["obj_inst"]->connections_from(array("to" => $key));
+								$c = reset($cs);
+								$o = $c->to();
+								$o->delete();
+							}
+							else
+							{
+								$obj->set_name($entry["name"]);
+								$obj->set_prop("date" , $entry["date"]);
+								$obj->set_prop("cost" , $entry["cost"]);
+								$obj->save();
+							}
+							continue;
+						}
+					}
+					//edasi juhul kui sellist kulude objekti veel pole 
+					if ($entry["name"] != "" && $entry["cost"] != "")
 					{
-						$set[] = $entry;
+						$row = obj();
+						$row->set_parent($arr["obj_inst"]->id());
+						$row->set_class_id(CL_CRM_EXPENSE);
+						$row->set_name($entry["name"]);
+						$row->set_prop("date", $entry["date"]);
+						$row->set_prop("cost", $entry["cost"]);
+						$row->save();
+						$arr["obj_inst"]->connect(array(
+							"to" => $row->id(),
+							"type" => "RELTYPE_EXPENSE"
+						));
 					}
 				}
-				$arr["obj_inst"]->set_meta("other_expenses", $set);
 				break;
+				
 			case "hrs_table":
 				if (!(strlen($arr["request"]["hr_price"])> 0))
 				{
@@ -1113,12 +1148,16 @@ class task extends class_base
 	function _init_other_exp_t(&$t)
 	{
 		$t->define_field(array(
-			"name" => "exp",
+			"name" => "name",
 			"caption" => t("Nimi"),
 		));
 		$t->define_field(array(
 			"name" => "cost",
 			"caption" => t("Hind")
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev")
 		));
 	}
 
@@ -1127,28 +1166,58 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_other_exp_t($t);
 		
-		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
+//		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
+		$dat = array();
 		$dat[] = array();
 		$dat[] = array();
 		$dat[] = array();
-
 		$nr = 1;
+		
+		$cs = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_EXPENSE",
+		));
+		foreach ($cs as $key => $ro)
+		{
+			$ob = $ro->to();
+			if($ob->class_id() == CL_CRM_EXPENSE)
+			{
+				$t->define_data(array(
+					"name" => html::textbox(array(
+						"name" => "exp[".$ob->id()."][name]",
+						"value" => $ob->name(),
+					)),
+					"cost" => html::textbox(array(
+						"name" => "exp[".$ob->id()."][cost]",
+						"size" => 5,
+						"value" => $ob->prop("cost"),
+					)),
+					"date" => html::date_select(array(
+						"name" => "exp[".$ob->id()."][date]",
+						"value" => $ob->prop("date"),
+					)),
+				));
+	//			$nr++;
+			}
+		}
 		foreach($dat as $exp)
 		{
 			$t->define_data(array(
-				"exp" => html::textbox(array(
-					"name" => "exp[$nr][exp]",
+				"name" => html::textbox(array(
+					"name" => "exp[$nr][name]",
 					"value" => $exp["exp"]
 				)),
 				"cost" => html::textbox(array(
 					"name" => "exp[$nr][cost]",
 					"size" => 5,
 					"value" => $exp["cost"]
-				))
+				)),
+				"date" => html::date_select(array(
+					"name" => "exp[$nr][date]",
+				)),
 			));
 			$nr++;
 		}
-
+		
 		$t->set_sortable(false);
 	}
 
@@ -2299,6 +2368,7 @@ class task extends class_base
 			if($e["ord"] == null)
 			{
 				$e["ord"] = 10+$max_ord;
+				$max_ord = $e["ord"];
 			}
 			if ($o->prop("ord") != $e["ord"])
 			{

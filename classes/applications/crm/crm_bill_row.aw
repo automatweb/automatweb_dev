@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.5 2006/07/10 11:30:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.6 2006/09/12 16:02:40 markop Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
@@ -57,6 +57,10 @@
 
 @reltype PEOPLE value=4 clid=CL_CRM_PERSON
 @caption Isik
+
+@reltype EXPENSE value=5 clid=CL_CRM_EXPENSE
+@caption Toimetuse rida
+
 */
 
 class crm_bill_row extends class_base

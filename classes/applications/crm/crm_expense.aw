@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.1 2006/09/12 13:19:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.2 2006/09/12 16:02:40 markop Exp $
 // crm_expense.aw - Kulu 
 /*
 
@@ -7,6 +7,25 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+
+	@property cost type=textbox
+	@caption Maksumus
+
+	@property date type=date_select
+	@caption Kuup&auml;ev
+
+	@property on_bill type=checkbox ch_value=1
+	@caption Arvele
+
+	@property bill_id type=relpicker reltype=RELTYPE_BILL
+	@caption Arve
+
+	@property to_bill_date type=date_select
+	@caption Arvele m&auml;&auml;ramise kuup&auml;ev
+
+	@reltype BILL value=1 clid=CL_CRM_BILL
+	@caption Arve
 
 */
 

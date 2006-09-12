@@ -312,7 +312,7 @@ class crm_company_bills_impl extends class_base
 
 		// list all task rows that are not billed yet
 		$rows = new object_list(array(
-			"class_id" => array(CL_TASK_ROW,CL_CRM_MEETING),
+			"class_id" => array(CL_TASK_ROW,CL_CRM_MEETING,CL_CRM_EXPENSE),
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -333,11 +333,19 @@ class crm_company_bills_impl extends class_base
 							"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 							"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
 						)
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"class_id" => CL_CRM_EXPENSE,
+//							"send_bill" => 1,
+//							"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+//							"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
+						)
 					))
 				)
 			))
 		));
-		
 		//kokkuleppehinna jaoks
 		//see ka optimaalsemaks vaja tegelt
 		$all_tasks = new object_list(array(
@@ -395,6 +403,31 @@ class crm_company_bills_impl extends class_base
 			}
 		}
 
+		if ($rows->count())
+		{
+			$c = new connection();
+			$t2row = $c->find(array(
+				"to.class_id" => CL_CRM_EXPENSE,
+				"to" => $rows->ids(),
+//				"type" => "RELTYPE_EXPENSE"
+			));
+			foreach($t2row as $conn)
+			{
+				$task = obj($conn["from"]);
+				$row = obj($conn["to"]);
+
+				$task2row[$task->id()][] = $row->id();
+				if ($task->prop("project") == $arr["request"]["proj"])
+				{
+//					if(!in_array($task->id(), $deal_tasks))
+//					{
+						$sum2task[$task->id()] += str_replace(",", ".", $row->prop("cost"));
+						$tasks->add($conn["from"]);
+//					}
+				}
+			}
+		}
+
 		foreach($tasks->arr() as $o)
 		{
 			$rs = $task2row[$o->id()];
@@ -405,6 +438,16 @@ class crm_company_bills_impl extends class_base
 					$ro = obj($row_id);
 				//	$sel_ = 0;
 				//	if(in_array($_SESSION["task_sel"],$row_id)) $sel_ =1;
+					if($ro->class_id() == CL_CRM_EXPENSE)
+					{
+						$t->define_data(array(
+							"oid" => $row_id,
+							"name" => $ro->name(),
+							"sum" => number_format(str_replace(",", ".", $ro->prop("cost")),2),
+							"set_date" => $ro->prop("date"),
+						));
+						continue;
+					}
 					$t->define_data(array(
 						"oid" => $row_id,
 						"name" => $ro->prop("content"),
