@@ -124,9 +124,23 @@ class crm_company_cust_impl extends class_base
 		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
 
-		$user_obj = obj($u->get_current_person());
-		$format = t('%s projektid, milles on %s osaline');
-		$table->set_caption(sprintf($format, $arr['obj_inst']->name(), $user_obj->name()));
+		if ( isset($arr['request']['proj_search_part']) )
+		{
+			$participants_name = $arr['request']['proj_search_part'];
+			$format = t('%s projektid');
+			if ( !empty($participants_name) )
+			{
+				$format .= t(', milles on %s osaline');
+			}
+		}
+		else
+		{
+			$user_obj = obj($u->get_current_person());
+			$participants_name = $user_obj->name();
+			$format = t('%s projektid, milles on %s osaline');
+		}
+
+		$table->set_caption(sprintf($format, $arr['obj_inst']->name(), $participants_name));
 
 		$my_co = obj($u->get_current_company());
 		if ($my_co->id() == $arr["obj_inst"]->id())
@@ -851,10 +865,24 @@ class crm_company_cust_impl extends class_base
 		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
 		$my_co = obj($u->get_current_company());
-		$user_obj = new object($u->get_current_person());
+		
+		if ( isset($arr['request']['all_proj_search_part']) )
+		{
+			$format = t('%s projektide arhiiv');
+			$participants_name = $arr['request']['all_proj_search_part'];
+			if ( !empty($participants_name) )
+			{
+				$format .= t(', milles on %s osaline');
+			}
+		}
+		else
+		{
+			$user_obj = new object($u->get_current_person());
+			$participants_name = $user_obj->name();
+			$format = t('%s projektid milles on %s osaline');
+		}
 
-		$format = t('%s projektid milles on %s osaline');
-		$table->set_caption(sprintf($format, $arr['obj_inst']->name(), $user_obj->name()));
+		$table->set_caption(sprintf($format, $arr['obj_inst']->name(), $participants_name));
 
 		if ($arr["request"]["search_all_proj"] == 1 && $arr["request"]["org_id"])
 		{

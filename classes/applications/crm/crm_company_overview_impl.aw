@@ -658,29 +658,44 @@ class crm_company_overview_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_my_tasks_t($t, $table_data, $arr["request"]);
 
-		$user_inst = get_instance(CL_USER);
-		$user_obj = obj($user_inst->get_current_person());
+
 		switch ($arr['request']['group'])
 		{
 			case 'my_tasks':
-				$format = t('%s toimetused, milles on %s osaline');
+				$format = t('%s toimetused');
 				break;
 			case 'meetings':
-				$format = t('%s kohtumised, milles on %s osaline');
+				$format = t('%s kohtumised');
 				break;
 			case 'calls':
-				$format = t('%s k&otilde;ned milles on %s osaline');
+				$format = t('%s k&otilde;ned');
 				break;
 			case 'ovrv_mails':
-				$format = t('%s mailid, milles on %s osaline');
+				$format = t('%s mailid');
 				break;
 			case 'documents_all_manage':
 				$format = t('%s dokumendid: haldus');
 				break;
 			default:
-				$format = t('%s k&otilde;ik tegemised, milles on %s osaline');
+				$format = t('%s k&otilde;ik tegemised');
 		}
-		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $user_obj->name()));
+		if ( isset($arr['request']['act_s_part']) && ($arr['request']['group'] != 'ovrv_mails') )
+		{
+			$participants_name = $arr['request']['act_s_part'];
+			if (!empty($participants_name))
+			{
+				$format .= t(', milles on %s osaline');
+			}
+		}
+		else
+		{
+			$user_inst = get_instance(CL_USER);
+			$user_obj = obj($user_inst->get_current_person());
+			$participants_name = $user_obj->name();
+			$format .= t(', milles on %s osaline');
+		}
+
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $participants_name));
 
 		foreach($table_data as $row)
 		{
@@ -1502,11 +1517,23 @@ class crm_company_overview_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_my_tasks_t($t, $table_data, $arr["request"]);
 
-		$user_inst = get_instance(CL_USER);
-		$user_obj = new object($user_inst->get_current_person());
-
-		$format = t('%s dokumendid, milles on %s osaline');
-		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $user_obj->name()));
+		$format = t('%s dokumendid');
+		if ( isset($arr['request']['act_s_part']) )
+		{
+			$participants_name = $arr['request']['act_s_part'];
+			if (!empty($participants_name))
+			{
+				$format .= t(', milles on %s osaline');
+			}
+		}
+		else
+		{
+			$user_inst = get_instance(CL_USER);
+			$user_obj = new object($user_inst->get_current_person());
+			$participants_name = $user_obj->name();
+			$format = t('%s dokumendid, milles on %s osaline');
+		}
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $participants_name));
 
 
 		foreach($table_data as $row)
