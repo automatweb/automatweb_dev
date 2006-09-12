@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.2 2006/09/06 13:13:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.3 2006/09/12 15:20:16 dragut Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -820,7 +820,12 @@ class admin_if extends class_base
 		if ($this->can("edit", $id))
 		{
 			$pm->add_item(array(
-				"link" => $this->mk_my_orb("if_change", array("id" => $id, "parent" => $parent,"period" => $period), $clid,true,true),
+				"link" => $this->mk_my_orb("change", array(
+					"id" => $id, 
+					"parent" => $parent,
+					"period" => $period,
+					"return_url" => get_ru()
+				), $clid,true,true),
 				"text" => t("Muuda")
 			));
 
