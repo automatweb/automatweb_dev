@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.133 2006/09/12 09:29:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.134 2006/09/12 12:52:24 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -403,6 +403,10 @@ class task extends class_base
 			{
 				return PROP_IGNORE;
 			}
+		}
+		if (!is_object($arr["obj_inst"]))
+		{
+			$arr["obj_inst"] = obj();
 		}
 		$retval = PROP_OK;
 		switch($data["name"])
