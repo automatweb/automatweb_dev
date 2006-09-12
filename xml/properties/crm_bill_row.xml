@@ -144,6 +144,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Isik</caption>
             </PEOPLE>
+            <EXPENSE>
+                  <value>5</value>
+                  <clid>CL_CRM_EXPENSE</clid>
+                  <caption>Toimetuse rida</caption>
+            </EXPENSE>
       </reltypes>
 </properties>
 

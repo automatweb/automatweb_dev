@@ -277,7 +277,7 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <parent>deal_price_layout</parent>
+            <parent>hr_price_layout</parent>
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
       <property>
@@ -288,7 +288,7 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <parent>deal_price_layout</parent>
+            <parent>hr_price_layout</parent>
             <caption>Koogus</caption>
       </property>
       <property>
@@ -299,7 +299,7 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <parent>deal_price_layout</parent>
+            <parent>hr_price_layout</parent>
             <caption>Kokkuleppehind</caption>
       </property>
       <property>
@@ -499,7 +499,7 @@
       <property>
             <name>other_expenses</name>
             <table>objects</table>
-            <group>other_exp</group>
+            <group>comments</group>
             <field>meta</field>
             <type>table</type>
             <store>no</store>
@@ -667,6 +667,11 @@
                   </clid>
                   <caption>Eeldustegevus</caption>
             </PREDICATE>
+            <EXPENSE>
+                  <value>10</value>
+                  <clid>CL_CRM_EXPENSE</clid>
+                  <caption>Muu kulu</caption>
+            </EXPENSE>
       </reltypes>
       <layout>
             <top_bit>
