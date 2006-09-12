@@ -658,6 +658,27 @@ class crm_company_overview_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_my_tasks_t($t, $table_data, $arr["request"]);
 
+		$user_inst = get_instance(CL_USER);
+		$user_obj = obj($user_inst->get_current_person());
+		switch ($arr['request']['group'])
+		{
+			case 'my_tasks':
+				$format = t('%s toimetused, milles on %s osaline');
+				break;
+			case 'meetings':
+				$format = t('%s kohtumised, milles on %s osaline');
+				break;
+			case 'calls':
+				$format = t('%s k&otilde;ned milles on %s osaline');
+				break;
+			case 'ovrv_mails':
+				$format = t('%s mailid, milles on %s osaline');
+				break;
+			default:
+				$format = t('%s k&otilde;ik tegemised, milles on %s osaline');
+		}
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $user_obj->name()));
+
 		foreach($table_data as $row)
 		{
 			if ($row["deadline"] > 100 || ($_GET["sortby"] != "" && $_GET["sortby"] != "deadline"))
@@ -1477,6 +1498,13 @@ class crm_company_overview_impl extends class_base
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_my_tasks_t($t, $table_data, $arr["request"]);
+
+		$user_inst = get_instance(CL_USER);
+		$user_obj = new object($user_inst->get_current_person());
+
+		$format = t('%s dokumendid, milles on %s osaline');
+		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $user_obj->name()));
+
 
 		foreach($table_data as $row)
 		{
