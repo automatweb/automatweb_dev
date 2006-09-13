@@ -2094,11 +2094,18 @@ class crm_company extends class_base
 				}
 				break;
 
+
+
+			case "stats_s_proj":
+				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=proj_autocomplete_source";
+				$data["autocomplete_params"] = array("stats_s_cust","stats_s_proj");
+				$data["value"] = $arr["request"][$data["name"]];
+				aw_global_set("changeform_target",  "_blank");
+				break;
+
 			case "stats_s_cust":
 				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
 				$data["autocomplete_params"] = array("stats_s_cust");
-
-			case "stats_s_proj":
 			case "stats_s_worker":
 			case "stats_s_only_billable":
 			case "stats_s_detailed":
@@ -5492,6 +5499,48 @@ class crm_company extends class_base
 			"to" => $srv->id(),
 			"type" => "RELTYPE_SERVER_FILES"
 		));
+	}
+
+	/**
+		@attrib name=proj_autocomplete_source
+		@param stats_s_cust optional
+		@param stats_s_proj optional
+	**/
+	function proj_autocomplete_source($arr)
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+		if($arr["stats_s_cust"])
+		{
+			$orderers = new object_list(array(
+				"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+				"name" => $arr["stats_s_cust"]."%",
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			$orderers = $orderers->ids();
+		}
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_PROJECT),
+			"name" => $arr["stats_s_proj"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"orderer" => $orderers,
+		));
+		$autocomplete_options = $ol->names();
+		exit ($cl_json->encode($option_data));
 	}
 
 	/**
