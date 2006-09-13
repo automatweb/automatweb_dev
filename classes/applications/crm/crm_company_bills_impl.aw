@@ -82,12 +82,13 @@ class crm_company_bills_impl extends class_base
 			if($row->is_brother()) continue;
 			if(strlen($row->prop("deal_price")) > 0)
 			{
-				$projs[$row->prop("project")] = $row->prop("project");
+	//			$projs[$row->prop("project")] = $row->prop("project");
 				$deal_tasks[] = $row->id();
-				$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
+	//			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
 			}
 		}
 
+		$agreement_tasks = array();
 		if ($rows->count())
 		{
 			$c = new connection();
@@ -99,7 +100,10 @@ class crm_company_bills_impl extends class_base
 			foreach($t2row as $conn)
 			{
 				$task = obj($conn["from"]);
-				if(in_array($task->id(), $deal_tasks)) continue;
+				if(in_array($task->id(), $deal_tasks)){
+					$greement_tasks[] = $task;
+					continue;
+				}
 				if ($task->prop("send_bill"))
 				{
 					$row = obj($conn["to"]);
@@ -108,6 +112,13 @@ class crm_company_bills_impl extends class_base
 				}
 			}
 		}
+		//siia vaid need kokkuleppehinna taskid, millel on mõni arvele minev rida ka olemas
+		foreach($greement_tasks as $row)
+		{
+			$projs[$row->prop("project")] = $row->prop("project");
+			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("deal_price"));
+		}
+
 
 		// get all projects from the lists
 		foreach($tasks->arr() as $row)
