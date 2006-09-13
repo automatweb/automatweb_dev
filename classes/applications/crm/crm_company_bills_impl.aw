@@ -1047,6 +1047,8 @@ class crm_company_bills_impl extends class_base
 			$renumber = true;
 			$bno = $_GET["exp_bno"];
 		}
+		$min = time() + 24*3600*10;
+		$max = 0;
 		foreach($bills->arr() as $b)
 		{
 			$agreement_price = $b->meta("agreement_price");
@@ -1117,6 +1119,11 @@ class crm_company_bills_impl extends class_base
 
 			if($b->prop("bill_trans_date")) $date = date("d.m.Y", $b->prop("bill_trans_date"));
 			else $date = date("d.m.Y", $b->prop("bill_date"));
+
+			$min = min($min, $date);
+			$max = max($max, $date);
+
+
 			// bill info row
 			$brow = array();
 			$brow[] = $b->prop("bill_no");				// arve nr
@@ -1187,7 +1194,7 @@ class crm_company_bills_impl extends class_base
 				$custr[] = "";
 				$custr[] = "";
 			}
-			$ct[] = join("\t", $custr);
+			$ct[] = join("\t", $custr)."\t\t\t\t\t";
 			$ct[] = join("\t", array("", "", "", ""));	// esindajad
 	
 			// payment row
@@ -1374,18 +1381,22 @@ class crm_company_bills_impl extends class_base
 		}
 		header("Content-type: text/plain");
 		header('Content-Disposition: attachment; filename="arved.txt"');
-		echo "format	\n";	
-		echo "1	44	1	0	1	\n";
-		echo "\n";
-		echo "sysformat	\n";
-		echo "1	1	1	1	.	,	 	\n";
-		echo "\n";
-		echo "commentstring	\n";
-		echo "\n";
-		echo "\n";
-		echo "fakt1	\n";
+		echo "format	\r\n";	
+		echo "1\t44\t1\t\r\n";
+		echo "\r\n";
+//		echo "sysformat	\r\n";
+//		echo "1	1	1	1	.	,	 	\r\n";
+//		echo "\n";
+		echo "commentstring	\r\n";
+		$co = get_current_company();
+		$co_n = $co->name();
+		$from = date("d.m.Y", $min);
+		$to = date("d.m.Y", $max);
+		echo "$co_n $from - $to\r\n";
+		echo "\r\n";
+		echo "fakt1	\r\n";
 
-		die(join("\n", $ct));
+		die(join("\r\n", $ct));
 	}
 
 	function _get_bill_row_obj_hr($row, $b)
