@@ -4235,7 +4235,7 @@ class crm_company extends class_base
 				$c_r_t = reset($c_r_t);
 			}
 			$c_r_t_o = obj($c_r_t);
-			if ($c_r_t_o->class_id() == CL_TASK_ROW)
+			if (($c_r_t_o->class_id() == CL_TASK_ROW) || ($c_r_t_o->class_id() == CL_CRM_EXPENSE))
 			{
 				$t_conns = $c_r_t_o->connections_to(array("from.class_id" => CL_TASK));
 				$t_conn = reset($t_conns);
@@ -4340,7 +4340,48 @@ class crm_company extends class_base
 					$task = $to->id();
 				}
 			}
+			
+			//kulud arveridadeks
+			if ($to->class_id() == CL_CRM_EXPENSE)
+			{
+				$expense = $to;
+				$filt_by_row = $to->id();
+				// get task from row
+				$conns = $to->connections_to(array("from.class_id" => CL_TASK,"type" => "RELTYPE_EXPENSE"));
+				$c = reset($conns);
+				if ($c)
+				{
+					$to = $c->from();
+					$task = $to->id();
+				}
+				$task_o = obj($task);
+				$br = obj();
+				$br->set_class_id(CL_CRM_BILL_ROW);
+				$br->set_parent($bill->id());
+				$br->set_prop("name", $expense->name());
+				$br->set_prop("amt", 1);
+				$br->set_prop("price", $expense->prop("cost"));
+				$br->set_prop("date", date("d.m.Y", $expense->prop("date")));
+				// get default prod
 
+				if ($sts)
+				{
+					$br->set_prop("prod", $sts->prop("bill_def_prod"));
+				}
+				$br->save();
+				$br->connect(array(
+					"to" => $task_o->id(),
+					"type" => "RELTYPE_TASK"
+				));
+				$br->connect(array(
+					"to" => $expense->id(),
+					"type" => "RELTYPE_EXPENSE"
+				));
+				$bill->connect(array(
+					"to" => $br->id(),
+					"type" => "RELTYPE_ROW"
+				));
+			}
 			$bill->connect(array(
 				"to" => $task,
 				"reltype" => "RELTYPE_TASK"
