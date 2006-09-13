@@ -13,6 +13,14 @@
 			</function>
 		</action>
 
+		<action name="error_popup">
+			<function name="error_popup">
+				<arguments>
+					<optional name="text" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="search_for_proj">
 			<function name="search_for_proj">
 				<arguments>

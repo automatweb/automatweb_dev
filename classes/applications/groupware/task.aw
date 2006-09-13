@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.135 2006/09/12 15:59:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.136 2006/09/13 14:09:50 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1014,6 +1014,27 @@ class task extends class_base
 				break;
 				
 			case "hrs_table":
+				$different_customers = 0;
+				if(is_oid($arr["obj_inst"]->prop("project")) && $arr["obj_inst"]->prop("customer"))
+				{
+					$project = obj($arr["obj_inst"]->prop("project"));
+					$different_customers = 1;
+					$orderers = $project->prop("orderer");
+					if(!is_array($orderers)) $orderers = array($orderers);
+					foreach($orderers as $orderer)
+					{
+						if($orderer == $arr["obj_inst"]->prop("customer")) $different_customers = 0;
+					}
+				}
+				//if($different_customers) $prop["error"]arr("asdasd");
+				$url = $this->mk_my_orb("error_popup", array(
+					"text" => t("<br><br><br>Valitud Projekti ja Toimetuse kliendid erinevad"),
+				));
+				if($different_customers)
+				{
+					$prop["error"] = "<script name= javascript>window.open('".$url."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=500')</script>";
+					return PROP_ERROR;
+				}
 				if (!(strlen($arr["request"]["hr_price"])> 0))
 				{
 					$prop["error"] = t("Tunnihind sisestamata!");
@@ -1219,6 +1240,17 @@ class task extends class_base
 		}
 		
 		$t->set_sortable(false);
+	}
+
+	
+
+	/**
+		@attrib name=error_popup
+		@param text optional
+	**/
+	function error_popup($arr)
+	{
+		return $arr["text"];
 	}
 
 	/**
