@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.89 2006/09/12 10:44:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.90 2006/09/13 10:15:04 dragut Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -13,7 +13,9 @@ class aw_table extends aw_template
 	var $id = 'table_0';
 	var $filter_name = "awTblFlt";
 	var $name = "awTable0";
-	var $table_caption; 
+
+	var $table_caption = ''; 
+	var $parsed_pageselector = '';
 
 	function aw_table($data = array())
 	{
@@ -376,7 +378,7 @@ class aw_table extends aw_template
 		@param d_row_cnt required type=int
 			Number of records in total.
 		@param no_recount type=bool
-		@param position type=string
+		@param position type=string default=top
 			Pageselector position in table layout "top" || "bottom" || "both". default is "top".
 		@comment
 	**/
@@ -817,7 +819,6 @@ class aw_table extends aw_template
 
 		$this->_get_max_level_cnt("");
 		$this->max_sh_count = $this->_max_gml-1;
-
 		if (!empty($this->table_header))
 		{
 			$tbl .= $this->table_header;
@@ -852,34 +853,29 @@ class aw_table extends aw_template
 			};
 		}
 
+		// parse pageselector
 		$pageselector = "";
-
 		if (!empty($this->pageselector))
 		{
 			switch($this->pageselector)
 			{
 				case "text":
-					$pageselector = $this->draw_text_pageselector(array(
+					$this->parsed_pageselector = $this->draw_text_pageselector(array(
 						"records_per_page" => $this->records_per_page
 					));
 					break;
 				case "buttons":
-					$pageselector = $this->draw_button_pageselector(array(
+					$this->parsed_pageselector = $this->draw_button_pageselector(array(
 						"records_per_page" => $this->records_per_page
 					));
 					break;
 				case "lb":
 				default:
-					$pageselector = $this->draw_lb_pageselector(array(
+					$this->parsed_pageselector = $this->draw_lb_pageselector(array(
 						"records_per_page" => $this->records_per_page
 					));
 			}
 
-			// header pageselector
-			if (empty($this->pageselector_position) or "top" == $this->pageselector_position or "both" == $this->pageselector_position)
-			{
-				$tbl .= $pageselector;
-			}
 		}
 
 
@@ -1263,12 +1259,6 @@ class aw_table extends aw_template
 			$tbl .= "</td></tr></table>\n";
 		};
 		*/
-
-		// footer pageselector
-		if (!empty($this->pageselector) and ("bottom" == $this->pageselector_position or "both" == $this->pageselector_position))
-		{
-			$tbl .= $pageselector;
-		}
 
 		return $tbl;
 	}
@@ -2484,12 +2474,35 @@ class vcl_table extends aw_table
 		{
 			return $rv;
 		}
+
+		// Let's figure out where we should show the pageselector:
+		$pageselector_top = '';
+		$pageselector_bottom = '';
+		if ( !empty($this->parsed_pageselector) )
+		{
+			switch ($this->pageselector_position)
+			{
+				case 'top':
+					$pageselector_top = $this->parsed_pageselector;
+					break;
+				case 'bottom':
+					$pageselector_bottom = $this->parsed_pageselector;
+					break;
+				case 'both':
+				default:
+					$pageselector_top = $pageselector_bottom = $this->parsed_pageselector;
+
+			}
+		}
+
 		// tagastame selle käki
 		return '<div id="tablebox">
 		    <div class="pais">
 			<div class="caption">'.$this->table_caption.'</div>
 			<div class="navigaator">
-			    <!-- siia tuleb ühel ilusal päeval lehtede kruttimise navigaator, homseks seda vaja pole, seega las see div jääb tühjaks -->
+				<!-- siia tuleb ühel ilusal päeval lehtede kruttimise navigaator, homseks seda vaja pole, seega las see div jääb tühjaks -->
+				'.$pageselector_top.'
+				
 			</div>
 		    </div>
 		    <div class="sisu">
@@ -2497,6 +2510,9 @@ class vcl_table extends aw_table
 			'.$rv.'
 		    <!-- END SUB: GRID_TABLEBOX_ITEM -->
 		    </div>
+		    <div>
+				'.$pageselector_bottom.'
+		    </div>	
 		</div>';
 		return $rv;
 	}
