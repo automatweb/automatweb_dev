@@ -85,6 +85,52 @@
 					<li>{VAR:extraf_name}</li>
 				<!-- END SUB: extraf_value -->
 			</ul>
+				<!-- SUB: conference_room_table -->
+					<table border="1">
+						<!-- SUB: croom_table_header -->
+							<tr>
+								<!-- SUB: croom_header_name_col -->
+									<td>{VAR:room_name_header}</td>
+								<!-- END SUB: room_header_name_col -->
+								<!-- SUB: croom_header_area_col -->
+									<td>{VAR:area_value_header}</td>
+								<!-- END SUB: croom_header_area_col -->
+								<!-- SUB: croom_header_table_col -->
+									<td><img width="50" src="img/{VAR:col_value_header}_default.jpg" title="{VAR:col_value_header_title}" alt="{VAR:col_value_header_alt}"></td>
+								<!-- END SUB: croom_header_table_col -->
+							</tr>
+						<!-- END SUB: croom_table_header -->
+						<!-- SUB: croom_table_row -->
+						<!-- END SUB: croom_table_row -->
+						<!-- SUB: croom_table_row_odd -->
+							<tr bgcolor="silver">
+								<!-- SUB: croom_name_col_odd -->
+									<td>{VAR:room_name_odd}{VAR:room_comment_odd}</td>
+								<!-- END SUB: room_name_col_odd -->
+								<!-- SUB: croom_area_col_odd -->
+									<td>{VAR:area_value_odd}</td>
+								<!-- END SUB: room_area_col_odd -->
+								<!-- SUB: croom_table_col_odd -->
+									<td>{VAR:col_value_odd}</td>
+								<!-- END SUB: croom_table_col_odd -->
+							</tr>
+						<!-- END SUB: croom_table_row_odd -->
+						<!-- SUB: croom_table_row_even -->
+							<tr bgcolor="lightblue">
+								<!-- SUB: croom_name_col_even -->
+									<td>{VAR:room_name_even}{VAR:room_comment_even}</td>
+								<!-- END SUB: room_name_col_even -->
+								<!-- SUB: croom_area_col_even -->
+									<td>{VAR:area_value_even}</td>
+								<!-- END SUB: room_area_col_even -->
+								<!-- SUB: croom_table_col_even -->
+									<td>{VAR:col_value_even}</td>
+								<!-- END SUB: croom_table_col_even -->
+							</tr>
+						<!-- END SUB: croom_table_row_even -->
+					</table>
+				<!-- END SUB: conference_room_table -->
+
 			<!-- END SUB: extrafeatures -->
 		</td>
 		<td width=20>&nbsp;</td>

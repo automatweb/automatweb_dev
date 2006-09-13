@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.15 2006/05/30 11:10:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.16 2006/09/13 12:33:11 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -601,6 +601,111 @@ class crm_company_webview extends class_base
 										$thisval = t($pinf['caption']).': '.implode(', ',$values);
 									}
 								}
+								if ($pinf["type"] == "releditor" && $pinf["reltype"] == "RELTYPE_ROOM")
+								{
+									$conns = $extrainfo[$type]["o"]->connections_from(array(
+										"type" => RELTYPE_ROOM,
+									));
+									$count = 1;
+									$header_done = false;
+									$odd_even = array("_odd", "_even", "");
+									foreach($conns as $cdata)
+									{
+										$room = obj($cdata->to());
+										if(!$room_type_props)
+										{
+											$props = $room->get_property_list();
+											foreach($props as $n => $d)
+											{
+												if(substr($n, 0, 5) == "type_")
+												{
+													$room_type_props[$d["name"]] = "";
+												}
+											}
+										}
+										$propvals = $room->properties();
+										foreach($room_type_props as $n => $v)
+										{
+											$room_type_props[$n] = $propvals[$n];
+										}
+										unset($cols, $cols_odd, $cols_even);
+										foreach ($room_type_props as $name => $val)
+										{
+											if(!$cols)
+											{
+												foreach($odd_even as $odd_even_type)
+												{
+													$this->vars(array(
+														"room_name".$odd_even_type => $room->name(),
+														"room_comment".$odd_even_type => $room->prop("description"),
+													));
+													${"croom_name".$odd_even_type} = $this->parse("croom_name_col".$odd_even_type);
+													$this->vars(array(
+														"area_value".$odd_even_type => $room->prop("area"),
+													));
+													${"croom_area".$odd_even_type} = $this->parse("croom_area_col".$odd_even_type);
+												}
+											}
+											foreach($odd_even as $odd_even_type)
+											{
+												$this->vars(array(
+													"col_value".$odd_even_type => $val,
+												));
+												${"cols".$odd_even_type} .= $this->parse("croom_table_col".$odd_even_type);
+											}
+
+											// for table header
+											if(!$header_done)
+											{
+												$this->vars(array(
+													"col_value_header" => $name,
+													"col_value_header_title" => $props[$name]["caption"],
+													"col_value_header_alt" => $props[$name]["caption"],
+												));
+												$croom_tab_header .= $this->parse("croom_header_table_col");
+											}
+										}
+										$header_done = true;
+										$t="_even";
+										foreach($odd_even as $odd_even_type)
+										{
+											$this->vars(array(
+												"croom_table_col".$odd_even_type => ${"cols".$odd_even_type},
+												"croom_name_col".$odd_even_type => ${"croom_name".$odd_even_type},
+												"croom_area_col".$odd_even_type => ${"croom_area".$odd_even_type},
+											));
+										}
+										$count++;
+										if($count % 2)
+										{
+											$rows_odd_even .= $this->parse("croom_table_row_odd");
+										}
+										else
+										{
+											$rows_odd_even .= $this->parse("croom_table_row_even");
+										}
+										$rows .= $this->parse("croom_table_row");
+										
+									}
+
+									// table header
+									$this->vars(array("room_name_header" => t("Ruum")));
+									$name = $this->parse("croom_header_name_col");
+									$this->vars(array("area_value_header" => t("pind")));
+									$area = $this->parse("croom_header_area_col");
+									$this->vars(array(
+										"croom_header_name_col" => $name,
+										"croom_header_area_col" => $area,
+										"croom_header_table_col" => $croom_tab_header,
+									));
+									$tab_header = $this->parse("croom_table_header");
+
+									$this->vars(array(
+										"croom_table_header" => $tab_header,
+										"croom_table_row" => $rows_odd_even?$rows_odd_even:$rows, 
+									));
+									$croom_table = $this->parse("conference_room_table");
+								}
 								
 								if (!empty($thisval))
 								{
@@ -612,7 +717,7 @@ class crm_company_webview extends class_base
 							}
 
 							
-							if (!empty($innervalue))
+							if (!empty($innervalue) || !empty($croom_table))
 							{
 								// find if the field object has been set it's own title, too
 								$fields_title = $pval['name'];
@@ -624,6 +729,7 @@ class crm_company_webview extends class_base
 								$this->vars(array(
 									'extraf_title' => ifset($crm_field_titles, $type) . ($fields_title==""?"":(": ".$fields_title)),
 									'extraf_value' => $innervalue,
+									"conference_room_table" => $croom_table,
 								));
 								$value .= $this->parse('extrafeatures');
 							}	

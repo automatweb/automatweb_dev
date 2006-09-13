@@ -30,57 +30,57 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
-            <name>chair</name>
+            <name>type_chair</name>
             <table>room</table>
             <group>general</group>
             <type>textbox</type>
             <parent>right</parent>
-            <field>chair</field>
+            <field>type_chair</field>
             <caption>Toolid</caption>
       </property>
       <property>
-            <name>chair_table</name>
+            <name>type_chair_table</name>
             <table>room</table>
             <group>general</group>
             <type>textbox</type>
             <parent>right</parent>
-            <field>chair_table</field>
+            <field>type_chair_table</field>
             <caption>Tool + Laud</caption>
       </property>
       <property>
-            <name>conference_table</name>
+            <name>type_conference_table</name>
             <table>room</table>
             <group>general</group>
             <type>textbox</type>
             <parent>right</parent>
-            <field>conference_table</field>
+            <field>type_conference_table</field>
             <caption>N&amp;amp;otilde;upidamislaud</caption>
       </property>
       <property>
-            <name>u_table</name>
+            <name>type_u_table</name>
             <table>room</table>
             <group>general</group>
             <type>textbox</type>
             <parent>right</parent>
-            <field>u_table</field>
+            <field>type_u_table</field>
             <caption>U-kujuline laud</caption>
       </property>
       <property>
-            <name>oval_table</name>
+            <name>type_oval_table</name>
             <table>room</table>
             <group>general</group>
             <type>textbox</type>
             <parent>right</parent>
-            <field>oval_table</field>
+            <field>type_oval_table</field>
             <caption>&amp;amp;Uuml;marlaud</caption>
       </property>
       <property>
-            <name>chair_diag</name>
+            <name>type_chair_diag</name>
             <table>room</table>
             <group>general</group>
             <type>textbox</type>
             <parent>right</parent>
-            <field>chair_diag</field>
+            <field>type_chair_diag</field>
             <caption>Ainult toolid diagonaalis</caption>
       </property>
       <classinfo>

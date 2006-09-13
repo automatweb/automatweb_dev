@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/Attic/room.aw,v 1.1 2006/09/11 10:37:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/Attic/room.aw,v 1.2 2006/09/13 12:33:09 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -21,22 +21,22 @@
 		@caption Kirjeldus
 
 	@layout right parent=split type=vbox closeable=1 area_caption=Maks.kohti
-		@property chair type=textbox parent=right
+		@property type_chair type=textbox parent=right
 		@caption Toolid
 
-		@property chair_table type=textbox parent=right
+		@property type_chair_table type=textbox parent=right
 		@caption Tool + Laud
 		
-		@property conference_table type=textbox parent=right
+		@property type_conference_table type=textbox parent=right
 		@caption N&otilde;upidamislaud
 		
-		@property u_table type=textbox parent=right
+		@property type_u_table type=textbox parent=right
 		@caption U-kujuline laud
 
-		@property oval_table type=textbox parent=right
+		@property type_oval_table type=textbox parent=right
 		@caption &Uuml;marlaud
 
-		@property chair_diag type=textbox parent=right
+		@property type_chair_diag type=textbox parent=right
 		@caption Ainult toolid diagonaalis
 
 
@@ -59,6 +59,12 @@ class room extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "name":
+				$o = obj(907);
+				$o->connect(array(
+					"to" => 989
+				));
+				break;
 		};
 		return $retval;
 	}
@@ -112,12 +118,12 @@ class room extends class_base
 				return true;
 				break;
 			case "area":
-			case "chair":
-			case "chair_table":
-			case "conference_table":
-			case "u_table":
-			case "oval_table":
-			case "chair_diag":
+			case "type_chair":
+			case "type_chair_table":
+			case "type_conference_table":
+			case "type_u_table":
+			case "type_oval_table":
+			case "type_chair_diag":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int",
