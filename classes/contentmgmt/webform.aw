@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.97 2006/09/04 12:47:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.98 2006/09/13 15:56:59 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2004,14 +2004,32 @@ class webform extends class_base
 						if ($pd['multiple'] == 1)
 						{
 							$values = explode(',', $pd['caption']);
+							$found = false;
 							foreach ($values as $value)
 							{
-								$pd['selected'][] = array_search($value, $pd['options']);
+								$search_result = array_search($value, $pd['options']);
+								if ( $search_result !== false )
+								{
+									$pd['selected'][] = array_search($value, $pd['options']);
+									$found = true;
+								}
+							}
+							if ($found === false)
+							{
+								$pd['options'] = array('' => sprintf(t('--Vali %s--'), $pd['caption'])) + $pd['options'];
 							}
 						}
 						else
 						{
-							$pd["selected"] = array_search($pd['caption'], $pd['options']);
+							$selected_option = array_search($pd['caption'], $pd['options']);
+							if ( $selected_option === false )
+							{
+								$pd['options'][''] = sprintf(t('--Vali %s--'), $pd['caption']);
+							}
+							else
+							{
+								$pd['selected'] = $selected_option;
+							}
 						}
 						break;
 					case 'chooser':
