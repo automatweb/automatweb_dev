@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.129 2006/09/05 09:40:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.130 2006/09/13 10:42:54 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1359,11 +1359,11 @@ class planner extends class_base
 				*/
 				$toolbar->add_menu_item(array(
 					"parent" => "create_event",
-					"link" => $this->mk_my_orb("change",array(
+					"link" => html::get_new_url($clid, $id, array("return_url" => get_ru(), "add_to_cal" => $id)) /*$this->mk_my_orb("change",array(
 						"id" => $id,
 						"group" => "add_event",
 						"clid" => $clid,
-					)),
+					))*/,
 					"text" => $tmp[$clid]["name"],
 				));
 			};
