@@ -353,6 +353,15 @@
 			</function>
 		</action>
 
+		<action name="proj_autocomplete_source">
+			<function name="proj_autocomplete_source">
+				<arguments>
+					<optional name="stats_s_cust" />
+					<optional name="stats_s_proj" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="name_autocomplete_source">
 			<function name="name_autocomplete_source">
 				<arguments>
