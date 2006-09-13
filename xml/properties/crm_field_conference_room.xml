@@ -89,12 +89,12 @@
                   <num_0>name</num_0>
                   <num_1>area</num_1>
                   <num_2>description</num_2>
-                  <num_3>chair</num_3>
-                  <num_4>chair_table</num_4>
-                  <num_5>conference_table</num_5>
-                  <num_6>u_table</num_6>
-                  <num_7>oval_table</num_7>
-                  <num_8>chair_diag</num_8>
+                  <num_3>type_chair</num_3>
+                  <num_4>type_chair_table</num_4>
+                  <num_5>type_conference_table</num_5>
+                  <num_6>type_u_table</num_6>
+                  <num_7>type_oval_table</num_7>
+                  <num_8>type_chair_diag</num_8>
             </props>
       </property>
       <classinfo>
