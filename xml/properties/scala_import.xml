@@ -1,5 +1,133 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>warehouse</name>
+            <table>scala_import</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WAREHOUSE</reltype>
+            <field>warehouse</field>
+            <caption>Ladu</caption>
+            <comment>Ladu kuhu alla imporditud tooted pannakse</comment>
+      </property>
+      <property>
+            <name>user_group</name>
+            <table>scala_import</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_USER_GROUP</reltype>
+            <field>user_group</field>
+            <caption>Kasutajagrupp</caption>
+            <comment>Kasutajagrupp kuhu hakkavad imporditud kasutajad kuuluma</comment>
+      </property>
+      <property>
+            <name>config_form</name>
+            <table>scala_import</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONFIG_FORM</reltype>
+            <field>config_form</field>
+            <caption>Seadete vorm</caption>
+            <comment>Seadete vorm toote sisestamiseks</comment>
+      </property>
+      <property>
+            <name>ftp_host</name>
+            <table>scala_import</table>
+            <group>ftp_config</group>
+            <type>textbox</type>
+            <field>ftp_host</field>
+            <caption>FTP aadress</caption>
+            <comment>FTP serveri aadress</comment>
+      </property>
+      <property>
+            <name>ftp_user</name>
+            <table>scala_import</table>
+            <group>ftp_config</group>
+            <type>textbox</type>
+            <field>ftp_user</field>
+            <caption>FTP kasutaja</caption>
+            <comment>Kasutajanimi, millega FTP serverisse logitakse</comment>
+      </property>
+      <property>
+            <name>ftp_password</name>
+            <table>scala_import</table>
+            <group>ftp_config</group>
+            <type>password</type>
+            <field>ftp_password</field>
+            <caption>FTP parool</caption>
+            <comment>Parool FTP kasutajale</comment>
+      </property>
+      <property>
+            <name>ftp_file_location_pricing</name>
+            <table>scala_import</table>
+            <group>ftp_config</group>
+            <type>textbox</type>
+            <field>ftp_file_location_pricing</field>
+            <caption>pricing.xml</caption>
+      </property>
+      <property>
+            <name>ftp_file_location_customer</name>
+            <table>scala_import</table>
+            <group>ftp_config</group>
+            <type>textbox</type>
+            <field>ftp_file_location_customer</field>
+            <caption>customer.xml</caption>
+      </property>
+      <property>
+            <name>ftp_file_location_availability</name>
+            <table>scala_import</table>
+            <group>ftp_config</group>
+            <type>textbox</type>
+            <field>ftp_file_location_availability</field>
+            <caption>availability.xml </caption>
+      </property>
+      <property>
+            <name>prices_config_table</name>
+            <table>objects</table>
+            <group>prices</group>
+            <type>table</type>
+            <store>no</store>
+            <field>prices_config_table</field>
+            <caption>Hindade seadete tabel</caption>
+      </property>
+      <property>
+            <name>users_config_table</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>table</type>
+            <store>no</store>
+            <field>users_config_table</field>
+            <caption>Kasutajate seadete tabel</caption>
+      </property>
+      <property>
+            <name>categories_config_table</name>
+            <table>objects</table>
+            <group>categories</group>
+            <type>table</type>
+            <store>no</store>
+            <field>categories_config_table</field>
+            <caption>Kategooriate seadete tabel</caption>
+      </property>
+      <property>
+            <name>warehouse_status_config_table</name>
+            <table>objects</table>
+            <group>warehouse_status</group>
+            <type>table</type>
+            <store>no</store>
+            <field>warehouse_status_config_table</field>
+            <caption>Laoseisu seadete tabel</caption>
+      </property>
+      <property>
+            <name>recurrence</name>
+            <table>objects</table>
+            <group>recurrence_config</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_RECURRENCE</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <field>recurrence</field>
+            <caption>Kordused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SCALA_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +135,61 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <ftp_config>
+                  <caption>FTP seaded</caption>
+            </ftp_config>
+            <import_config>
+                  <caption>Impordi seaded</caption>
+            </import_config>
+            <prices>
+                  <caption>Hinnad</caption>
+                  <parent>import_config</parent>
+            </prices>
+            <users>
+                  <caption>Kasutajad</caption>
+                  <parent>import_config</parent>
+            </users>
+            <categories>
+                  <caption>Kategooriad</caption>
+                  <parent>import_config</parent>
+            </categories>
+            <warehouse_status>
+                  <caption>Laoseis</caption>
+                  <parent>import_config</parent>
+            </warehouse_status>
+            <recurrence_config>
+                  <caption>Korduste seadistamine</caption>
+            </recurrence_config>
+      </groupinfo>
+      <tableinfo>
+            <scala_import>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </scala_import>
+      </tableinfo>
+      <reltypes>
+            <WAREHOUSE>
+                  <value>1</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
+            <USER_GROUP>
+                  <value>2</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Ladu</caption>
+            </USER_GROUP>
+            <CONFIG_FORM>
+                  <value>3</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Seadete vorm</caption>
+            </CONFIG_FORM>
+            <RECURRENCE>
+                  <value>4</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Kordused</caption>
+            </RECURRENCE>
+      </reltypes>
 </properties>
 

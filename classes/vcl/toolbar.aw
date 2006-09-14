@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.15 2006/09/06 12:52:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.16 2006/09/14 09:11:41 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -473,6 +473,18 @@ class toolbar extends aw_template
 		$res["vcl_inst"] = &$vcl_inst;
 			// for backwards compatibility
 		$res["toolbar"] = &$vcl_inst;
+		// if quicksearch is set, add that
+		if ($arr["property"]["quicksearch"])
+		{
+			$clss = $this->picker("", array(CL_CRM_PERSON => t("Isik")));
+
+			$url = $this->mk_my_orb("redir_search", array("url" => get_ru(), "MAX_FILE_SIZE" => 100000), "aw_object_search");
+			$sb = "<input type=text size=10 name=tb_quicksearch> <select name=tb_qs_clid>".$clss."</select> <input type=button onClick='window.location=\"".$url."&s_name=\"+document.changeform.tb_quicksearch.value+\"&s_clid=\"+document.changeform.tb_qs_clid.options[document.changeform.tb_qs_clid.selectedIndex].value' value='".t("Otsi")."'>";
+
+			$sb = '<div nowrap class="tb_but" onMouseOver="this.className=\'tb_but_ov\'" onMouseOut="this.className=\'tb_but\'" onMouseDown="this.className=\'tb_but_ov\'" onMouseUp="this.className=\'tb_but\'">'.$sb.'</div>';
+
+			$vcl_inst->add_cdata($sb, true);
+		}
 		$rv = array($name => $res);
 		return $rv;
 	}

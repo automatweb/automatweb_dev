@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.3 2006/09/05 09:40:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.4 2006/09/14 09:11:37 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -361,11 +361,14 @@ class aw_object_search extends class_base
 	/**
 		@attrib name=redir_search
 		@param url optional
+		@param s_name optional
+		@param s_clid optional
+		@param MAX_FILE_SIZE optional
 	**/
 	function redir_search($arr)
 	{
 		$so = $this->init_search();
-		return html::get_change_url($so->id(), array("group" => "srch", "return_url" => $arr["url"]));
+		return html::get_change_url($so->id(), array("group" => "srch", "return_url" => $arr["url"], "s_name" => $arr["s_name"], "s_clid" => $arr["s_clid"], "MAX_FILE_SIZE" => $arr["MAX_FILE_SIZE"]));
 	}
 }
 ?>

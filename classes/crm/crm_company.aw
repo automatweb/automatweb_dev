@@ -269,7 +269,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 @default group=contacts_edit
 
-	@property cedit_tb type=toolbar no_caption=1 store=no
+	@property cedit_tb type=toolbar no_caption=1 store=no quicksearch=CL_CRM_PERSON
 
 	@layout contacts_edit type=hbox
 
@@ -3437,6 +3437,14 @@ class crm_company extends class_base
 		);
 	}
 
+	/** Returns an array of all sections that the company has
+		@attrib api=1 params=pos
+		@param obj required type=object
+			The company to return sections for
+
+		@returns
+			Array of section id's that the company has
+	**/
 	function get_all_org_sections($obj)
 	{
 		static $retval;

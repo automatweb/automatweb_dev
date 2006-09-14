@@ -895,6 +895,16 @@
             <store>no</store>
       </property>
       <property>
+            <name>atwork_table</name>
+            <table>objects</table>
+            <group>atwork</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>org_actions</name>
             <table>objects</table>
             <group>all_actions</group>
@@ -1197,10 +1207,15 @@
                   <submit>no</submit>
             </candidate>
             <skills>
-                  <caption>Oskused</caption>
+                  <caption>P&amp;amp;auml;devused</caption>
                   <parent>work</parent>
                   <submit>no</submit>
             </skills>
+            <atwork>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;ajad</caption>
+                  <parent>work</parent>
+                  <submit>no</submit>
+            </atwork>
             <overview>
                   <caption>Tegevused</caption>
             </overview>
@@ -1397,7 +1412,7 @@
             <HAS_SKILL>
                   <value>53</value>
                   <clid>CL_PERSON_HAS_SKILL</clid>
-                  <caption>Oskus</caption>
+                  <caption>P&amp;amp;auml;devus</caption>
             </HAS_SKILL>
       </reltypes>
       <layout>

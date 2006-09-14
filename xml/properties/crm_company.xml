@@ -732,6 +732,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <quicksearch>CL_CRM_PERSON</quicksearch>
             <field>cedit_tb</field>
       </property>
       <property>
@@ -1832,6 +1833,7 @@
             <store>no</store>
             <parent>docs_news_lt</parent>
             <field>dn_res</field>
+            <caption>Uudised</caption>
       </property>
       <property>
             <name>documents_lmod</name>

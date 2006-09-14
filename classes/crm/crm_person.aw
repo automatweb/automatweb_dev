@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.145 2006/09/12 10:14:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.146 2006/09/14 09:11:39 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -306,11 +306,16 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 @property candidate type=releditor reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no
 
 
-@groupinfo skills caption="Oskused" parent=work submit=no
+@groupinfo skills caption="P&auml;devused" parent=work submit=no
 @default group=skills
 
 	@property skills_tb type=toolbar no_caption=1 store=no
 	@property skills_table type=table no_caption=1 store=no
+
+@groupinfo atwork caption="T&ouml;&ouml;ajad" parent=work submit=no
+@default group=atwork
+
+	@property atwork_table type=text no_caption=1 store=no
 
 ------------------------------------------------------------------
 
@@ -553,7 +558,7 @@ caption Sõbragrupid
 @caption Palgainfo
 
 @reltype HAS_SKILL value=53 clid=CL_PERSON_HAS_SKILL
-@caption Oskus
+@caption P&auml;devus
 
 
 */
@@ -660,6 +665,10 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "atwork_table":
+				$this->_atwork_table($arr);
+				break;
+
 			case "skills_tb":
 				$this->_skills_tb($arr);
 				break;
@@ -3675,7 +3684,7 @@ class crm_person extends class_base
 			"name" => "delete",
 			"img" => "delete.gif",
 			"action" => "delete_skills",
-			"tooltip" => t("Kustuta oskused")
+			"tooltip" => t("Kustuta p&auml;devused")
 		));
 	}
 
@@ -3683,7 +3692,7 @@ class crm_person extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Oskus"),
+			"caption" => t("P&auml;devus"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -3716,6 +3725,74 @@ class crm_person extends class_base
 				"oid" => $o->id()
 			));
 		}
+	}
+
+	function _atwork_table($arr)
+	{
+		classload("core/date/date_calc");
+		$m = get_instance("applications/rostering/rostering_model");		
+		$start = get_week_start();
+		$end = get_week_start()+24*7*3600;
+		$work_times = $m->get_schedule_for_person($arr["obj_inst"], $start, $end);
+		$chart = get_instance("vcl/gantt_chart");
+		$chart->configure_chart (array (
+			"chart_id" => "person_wh",
+			"style" => "aw",
+			"start" => $start,
+			"end" => $end,
+			"width" => 850,
+			"row_height" => 10,
+		));
+
+		$pl_done = array();
+		foreach($work_times as $wt_item)
+		{
+			if ($pl_done[$wt_item["workplace"]])
+			{
+				continue;
+			}
+			$pl_done[$wt_item["workplace"]] = 1;
+			$wpl = obj($wt_item["workplace"]);
+			$chart->add_row (array (
+				"name" => $wpl->id(),
+				"title" => $wpl->name(),
+				"uri" => html::obj_change_url($wpl)
+			));
+		}
+
+		static $wtid;
+		foreach($work_times as $wt_item)
+		{
+			$bar = array (
+				"id" => ++$wtid,
+				"row" => $wt_item["workplace"],
+				"start" => $wt_item["start"],
+				"length" => $wt_item["end"] - $wt_item["start"],
+				"title" => date("d.m.Y H:i", $wt_item["start"])." - ".date("d.m.Y H:i", $wt_item["end"]),
+			);
+
+			$chart->add_bar ($bar);
+		}
+
+		$i = 0;
+		$days = array ("P", "E", "T", "K", "N", "R", "L");
+		$columns = 7;
+		while ($i < $columns)
+		{
+			$day_start = (get_day_start() + ($i * 86400));
+			$day = date ("w", $day_start);
+			$date = date ("j/m/Y", $day_start);
+			$uri = aw_url_change_var ("mrp_chart_length", 1);
+			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
+			$chart->define_column (array (
+				"col" => ($i + 1),
+				"title" => $days[$day] . " - " . $date,
+				"uri" => $uri,
+			));
+			$i++;
+		}
+		
+		$arr["prop"]["value"] = $chart->draw_chart();
 	}
 }
 ?>

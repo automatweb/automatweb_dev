@@ -12,6 +12,9 @@
 			<function name="redir_search">
 				<arguments>
 					<optional name="url" />
+					<optional name="s_name" />
+					<optional name="s_clid" />
+					<optional name="MAX_FILE_SIZE" />
 				</arguments>
 			</function>
 		</action>
