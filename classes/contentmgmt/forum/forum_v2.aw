@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.114 2006/09/05 09:56:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.115 2006/09/14 10:19:10 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1404,7 +1404,7 @@ class forum_v2 extends class_base
 
 		if (0 == $topic_obj->prop("locked"))
 		{
-
+			aw_session_set('no_cache', 1);
 			$this->read_template("add_comment.tpl");
 			$this->reforb_action = "submit_comment";
 			$this->_add_style("style_form_caption");
@@ -1940,6 +1940,7 @@ class forum_v2 extends class_base
 				"type" => "fileupload",
 			));
 		}
+		aw_session_set('no_cache', 1);
 		if ($this->obj_inst->prop('use_image_verification'))
 		{
 			$image_verification = $this->obj_inst->get_first_obj_by_reltype('RELTYPE_IMAGE_VERIFICATION');
