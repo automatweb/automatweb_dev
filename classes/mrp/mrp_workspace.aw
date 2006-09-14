@@ -1344,10 +1344,8 @@ class mrp_workspace extends class_base
 
 					$scheduler->add(array(
 						"event" => $event,
-						"time" => time() + 86400,
+						"time" => time() + 300,
 						"uid" => aw_global_get("uid"),
-						// "uid" => "voldemar",//!!! mujalt v6tta
-						// "password" => "lagendik",
 						"auth_as_local_user" => true,
 					));
 				}
@@ -5202,33 +5200,53 @@ if ($_GET['show_thread_data'] == 1)
 	**/
 	function archive_projects($arr)
 	{
-		aw_switch_user("struktuur");
+		// aw_switch_user("struktuur");//!!! prismas vist pole seda kasutajat. yldiselt peaks see olema ja seda siin kasutama. [voldemar 9/14/06]
+		// aw_switch_user("kix");//!!! ajutiselt v2lja -- prismas probleem aw_switch_user-iga [voldemar 9/14/06]
 
 		if (!$this->can("view", $arr["id"]))
 		{
+			$scheduler->add(array(
+				"event" => $event,
+				"time" => time() + 86400,
+				"uid" => aw_global_get("uid"),
+				"auth_as_local_user" => true,
+			));
 			exit (1);
 		}
 
 		$this_object = obj($arr["id"]);
+		$aap = $this_object->prop("automatic_archiving_period");
 
-		if (!$this_object->prop("automatic_archiving_period"))
+		if (!$aap)
 		{
 			exit (2);
 		}
 
 		### archive projects finished before now minus autoarchive period
-		$time = time() -  $this_object->prop("automatic_archiving_period") * 86400;
+		$a_time = time() -  $aap * 86400;
 
 		$projects = new object_list (array (
 			"class_id" => CL_MRP_CASE,
 			"state" => MRP_STATUS_DONE,
 			"parent" => $this_object->prop ("projects_folder"),
-			"finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN, 1, $time),
+			"finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN, 10, $a_time),
 		));
 
+//!!! ajutine
+foreach ($projects->arr() as $project)
+{
+		$project->set_prop("archived", time());
+		$project->set_prop("state", MRP_STATUS_ARCHIVED);
+		$project->save();
+}
+
+/* ajutiselt v2lja -- prismas ei t88ta objlist->set_prop miskip2rast. [voldemar 9/14/06]
 		$projects->set_prop("archived", time());
 		$projects->set_prop("state", MRP_STATUS_ARCHIVED);
 		$projects->save();
+
+END ajutine
+*/
 
 		### add next archiving event to scheduler
 		$scheduler = get_instance("scheduler");
@@ -5238,8 +5256,6 @@ if ($_GET['show_thread_data'] == 1)
 			"event" => $event,
 			"time" => time() + 86400,
 			"uid" => aw_global_get("uid"),
-			// "uid" => "voldemar",//!!! mujalt v6tta
-			// "password" => "lagendik",
 			"auth_as_local_user" => true,
 		));
 
