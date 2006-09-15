@@ -59,6 +59,46 @@
             <caption>Loe l&amp;auml;hemalt</caption>
       </property>
       <property>
+            <name>contact_person_orderer</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_contact_person</field>
+            <parent>left_bit</parent>
+            <caption>Tellija kontaktisik</caption>
+      </property>
+      <property>
+            <name>contact_person_implementor</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_contact_person_impl</field>
+            <parent>left_bit</parent>
+            <caption>Teostaja kontaktisik</caption>
+      </property>
+      <property>
+            <name>hrs_guess</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>aw_hrs_guess</field>
+            <size>5</size>
+            <parent>left_bit</parent>
+            <caption> Prognoositav tundide arv</caption>
+      </property>
+      <property>
+            <name>prepayment</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>aw_prepayment</field>
+            <size>5</size>
+            <parent>left_bit</parent>
+            <caption>Ettemaks</caption>
+      </property>
+      <property>
             <name>start</name>
             <table>aw_projects</table>
             <group>general2</group>
@@ -156,42 +196,6 @@
             <caption>Osalejad</caption>
       </property>
       <property>
-            <name>contact_person_orderer</name>
-            <table>aw_projects</table>
-            <group>info_t</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <field>aw_contact_person</field>
-            <caption>Tellija kontaktisik</caption>
-      </property>
-      <property>
-            <name>contact_person_implementor</name>
-            <table>aw_projects</table>
-            <group>info_t</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <field>aw_contact_person_impl</field>
-            <caption>Teostaja kontaktisik</caption>
-      </property>
-      <property>
-            <name>hrs_guess</name>
-            <table>aw_projects</table>
-            <group>info_t</group>
-            <type>textbox</type>
-            <field>aw_hrs_guess</field>
-            <size>5</size>
-            <caption> Prognoositav tundide arv</caption>
-      </property>
-      <property>
-            <name>prepayment</name>
-            <table>aw_projects</table>
-            <group>info_t</group>
-            <type>textbox</type>
-            <field>aw_prepayment</field>
-            <size>5</size>
-            <caption>Ettemaks</caption>
-      </property>
-      <property>
             <name>description</name>
             <table>aw_projects</table>
             <group>info_t</group>
@@ -287,7 +291,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>event_list</field>
-            <caption>S&amp;uuml;ndmused</caption>
+            <caption>Tegevused</caption>
       </property>
       <property>
             <name>add_event</name>
@@ -491,25 +495,26 @@
       <property>
             <name>team_tb</name>
             <table>objects</table>
-            <group>team_t</group>
+            <group>team</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>team_tb</field>
       </property>
       <property>
-            <name>team</name>
+            <name>team_team_tree</name>
             <table>objects</table>
-            <group>team_t</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
+            <group>team</group>
+            <type>treeview</type>
             <store>no</store>
-            <field>team</field>
+            <no_caption>1</no_caption>
+            <parent>team_search</parent>
+            <field>team_team_tree</field>
       </property>
       <property>
             <name>team_search_co</name>
             <table>objects</table>
-            <group>team_t</group>
+            <group>team</group>
             <type>textbox</type>
             <captionside>top</captionside>
             <parent>team_search</parent>
@@ -519,7 +524,7 @@
       <property>
             <name>team_search_person</name>
             <table>objects</table>
-            <group>team_t</group>
+            <group>team</group>
             <type>textbox</type>
             <captionside>top</captionside>
             <parent>team_search</parent>
@@ -527,9 +532,17 @@
             <caption>Isik</caption>
       </property>
       <property>
+            <name>hidden_team</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>hidden</type>
+            <parent>team_search</parent>
+            <field>hidden_team</field>
+      </property>
+      <property>
             <name>team_search_sbt</name>
             <table>objects</table>
-            <group>team_t</group>
+            <group>team</group>
             <type>submit</type>
             <captionside>top</captionside>
             <parent>team_search</parent>
@@ -539,42 +552,14 @@
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>team_search_res</name>
+            <name>team</name>
             <table>objects</table>
-            <group>team_t</group>
+            <group>team</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>team_search_res</field>
-      </property>
-      <property>
-            <name>team_team_tb</name>
-            <table>objects</table>
-            <group>team_team</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>team_team_tb</field>
-      </property>
-      <property>
-            <name>team_team_tree</name>
-            <table>objects</table>
-            <group>team_team</group>
-            <type>treeview</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>team_team_l</parent>
-            <field>team_team_tree</field>
-      </property>
-      <property>
-            <name>team_team_tbl</name>
-            <table>objects</table>
-            <group>team_team</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>team_team_l</parent>
-            <field>team_team_tbl</field>
+            <parent>team_r</parent>
+            <field>team</field>
       </property>
       <property>
             <name>goal_tb</name>
@@ -754,28 +739,6 @@
                   <caption>Projekti info</caption>
                   <parent>info</parent>
             </info_t>
-            <strat>
-                  <caption>Eesm&amp;amp;auml;rgid</caption>
-                  <parent>info</parent>
-                  <submit>no</submit>
-            </strat>
-            <strat_a>
-                  <caption>Eesm&amp;amp;auml;rkide hindamine</caption>
-                  <parent>info</parent>
-                  <submit>no</submit>
-            </strat_a>
-            <strat_res>
-                  <caption>Eesm&amp;amp;auml;rkide hindamise tulemused</caption>
-                  <parent>info</parent>
-                  <store>no</store>
-                  <submit>no</submit>
-            </strat_res>
-            <analysis>
-                  <caption>Anal&amp;amp;uuml;&amp;amp;uuml;sid</caption>
-                  <parent>info</parent>
-                  <store>no</store>
-                  <submit>no</submit>
-            </analysis>
             <general2>
                   <parent>general</parent>
                   <caption>&amp;Uuml;ldine</caption>
@@ -798,7 +761,7 @@
                   <submit>no</submit>
             </sides>
             <event_list>
-                  <caption>S&amp;uuml;ndmused</caption>
+                  <caption>Tegevused</caption>
                   <submit>no</submit>
             </event_list>
             <goals_edit>
@@ -812,10 +775,49 @@
                   <submit>no</submit>
             </goals_gantt>
             <event_list_cal>
-                  <caption>Kalender</caption>
+                  <caption>Tegevused kalendaarselt</caption>
                   <submit>no</submit>
-                  <parent>event_list</parent>
             </event_list_cal>
+            <event_list_premise>
+                  <caption>Tegevused eeldustegevuste p&amp;otilde;hiselt</caption>
+                  <submit>no</submit>
+            </event_list_premise>
+            <valuation>
+                  <caption>Hindamine</caption>
+                  <submit>no</submit>
+            </valuation>
+            <strat>
+                  <caption>Eesm&amp;amp;auml;rgid</caption>
+                  <parent>valuation</parent>
+                  <submit>no</submit>
+            </strat>
+            <strat_a>
+                  <caption>Eesm&amp;amp;auml;rkide hindamine</caption>
+                  <parent>valuation</parent>
+                  <submit>no</submit>
+            </strat_a>
+            <strat_res>
+                  <caption>Eesm&amp;amp;auml;rkide hindamise tulemused</caption>
+                  <parent>valuation</parent>
+                  <store>no</store>
+                  <submit>no</submit>
+            </strat_res>
+            <analysis>
+                  <caption>Anal&amp;amp;uuml;&amp;amp;uuml;sid</caption>
+                  <parent>valuation</parent>
+                  <store>no</store>
+                  <submit>no</submit>
+            </analysis>
+            <risks>
+                  <caption>Riskid</caption>
+                  <parent>valuation</parent>
+                  <submit>no</submit>
+            </risks>
+            <risks_eval>
+                  <caption>Riskide hindamine</caption>
+                  <parent>valuation</parent>
+                  <submit>no</submit>
+            </risks_eval>
             <add_event>
                   <caption>Muuda s&amp;uuml;ndmust</caption>
             </add_event>
@@ -833,28 +835,6 @@
                   <caption>Meeskond</caption>
                   <submit>no</submit>
             </team>
-            <team_t>
-                  <caption>Meeskond</caption>
-                  <parent>team</parent>
-            </team_t>
-            <team_team>
-                  <caption>Tiimid</caption>
-                  <parent>team</parent>
-                  <submit>no</submit>
-            </team_team>
-            <risks_t>
-                  <caption>Riskid</caption>
-            </risks_t>
-            <risks>
-                  <caption>Riskid</caption>
-                  <parent>risks_t</parent>
-                  <submit>no</submit>
-            </risks>
-            <risks_eval>
-                  <caption>Riskide hindamine</caption>
-                  <parent>risks_t</parent>
-                  <submit>no</submit>
-            </risks_eval>
             <req>
                   <caption>N&amp;amp;otilde;uded</caption>
                   <submit>no</submit>
@@ -1029,20 +1009,20 @@
                   <width>20%:80%</width>
                   <group>files</group>
             </files_lay>
-            <team_s>
-                  <type>vbox</type>
-                  <group>team_t</group>
-            </team_s>
+            <team>
+                  <type>hbox</type>
+                  <group>team</group>
+            </team>
             <team_search>
-                  <parent>team_s</parent>
-                  <type>hbox</type>
-                  <group>team_t</group>
+                  <parent>team</parent>
+                  <type>vbox</type>
+                  <group>team</group>
             </team_search>
-            <team_team_l>
-                  <type>hbox</type>
-                  <width>30%:70%</width>
-                  <group>team_team</group>
-            </team_team_l>
+            <team_r>
+                  <parent>team</parent>
+                  <type>vbox</type>
+                  <group>team</group>
+            </team_r>
             <goal_vb>
                   <type>hbox</type>
                   <width>

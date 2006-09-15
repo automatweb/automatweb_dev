@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.98 2006/09/15 09:58:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.99 2006/09/15 14:46:23 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -33,6 +33,19 @@
 
 		@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc parent=left_bit
 		@caption Loe lähemalt
+
+
+	@property contact_person_orderer type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person parent=left_bit
+	@caption Tellija kontaktisik
+
+	@property contact_person_implementor type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person_impl parent=left_bit
+	@caption Teostaja kontaktisik
+
+	@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5 parent=left_bit
+	@caption  Prognoositav tundide arv
+
+	@property prepayment type=textbox table=aw_projects field=aw_prepayment size=5 parent=left_bit
+	@caption Ettemaks
 
 property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
 caption Tellija
@@ -75,28 +88,14 @@ caption Teostajad
 
 @default group=info_t
 
-	@property contact_person_orderer type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person
-	@caption Tellija kontaktisik
-
-	@property contact_person_implementor type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person_impl
-	@caption Teostaja kontaktisik
-
-	@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5
-	@caption  Prognoositav tundide arv
-
-	@property prepayment type=textbox table=aw_projects field=aw_prepayment size=5
-	@caption Ettemaks
-
 	@property description type=textarea rows=10 cols=50 table=aw_projects field=aw_description 
 	@caption Kirjeldus
 
 	@property proj_type type=classificator table=aw_projects field=aw_type store=connect reltype=RELTYPE_TYPE multiple=1
 	@caption Liik
 
-	@property create_task type=checkbox ch_value=1 store=no
+	@property create_task type=checkbox ch_value=1 store=no 
 	@caption Moodusta &uuml;lesanne
-
-
 
 
 
@@ -127,7 +126,7 @@ caption Teostajad
 	@caption Sündmuste toolbar 
 
 	@property event_list type=calendar no_caption=1
-	@caption Sündmused
+	@caption Tegevused
 
 
 @default group=add_event
@@ -198,35 +197,38 @@ caption Teostajad
 	@property controller_disp type=text store=no 
 	@caption Kontrolleri v&auml;ljund
 
-@default group=team_t
+@default group=team
 
 	@property team_tb type=toolbar no_caption=1 store=no
 
-	@property team type=table no_caption=1 store=no
+	@layout team type=hbox 30%:70%
 
-	@layout team_s type=vbox 
-
-		@layout team_search parent=team_s type=hbox
-
+		@layout team_search parent=team type=vbox
+	
+			@property team_team_tree type=treeview store=no no_caption=1 parent=team_search
+				
 			@property team_search_co type=textbox captionside=top parent=team_search
 			@caption Firma
-
+	
 			@property team_search_person type=textbox captionside=top parent=team_search
 			@caption Isik
-
+	
+			@property hidden_team type=hidden parent=team_search
+	
 			@property team_search_sbt type=submit captionside=top parent=team_search no_caption=1
 			@caption Otsi
 
-	@property team_search_res type=table no_caption=1 
+		@layout team_r parent=team type=vbox
 
-@default group=team_team
+			property team_search_res type=table no_caption=1 parent=team_r
+			@property team type=table no_caption=1 store=no parent=team_r
 
-	@property team_team_tb type=toolbar no_caption=1 store=no
+	property team_team_tb type=toolbar no_caption=1 store=no
 
-	@layout team_team_l type=hbox width=30%:70%
+	layout team_team_l type=hbox width=30%:70%
 
-		@property team_team_tree type=treeview store=no no_caption=1 parent=team_team_l
-		@property team_team_tbl type=table store=no no_caption=1 parent=team_team_l
+
+		property team_team_tbl type=table store=no no_caption=1 parent=team_team_l
 
 @default group=goals_edit
 
@@ -285,11 +287,6 @@ caption Teostajad
 
 @groupinfo info caption="Projekti info"
 	@groupinfo info_t caption="Projekti info" parent=info
-	@groupinfo strat caption="Eesm&auml;rgid" parent=info submit=no
-	@groupinfo strat_a caption="Eesm&auml;rkide hindamine" parent=info submit=no
-	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=info store=no submit=no
-	@groupinfo analysis caption="Anal&uuml;&uuml;sid" parent=info store=no submit=no
-
 	
 @groupinfo general2 parent=general caption="Üldine"
 	@groupinfo web_settings parent=general caption="Veebiseadistused"
@@ -297,13 +294,25 @@ caption Teostajad
 	@groupinfo participants parent=general caption="Osalejad"
 	@groupinfo sides parent=general caption="Konfliktianal&uuml;&uuml;s" submit=no
 
-@groupinfo event_list caption="Sündmused" submit=no
+@groupinfo event_list caption="Tegevused" submit=no
 
 	@groupinfo goals_edit caption="Muuda" parent=event_list submit=no
 	@groupinfo goals_gantt caption="Vaata" parent=event_list submit=no
-	@groupinfo event_list_cal caption="Kalender" submit=no parent=event_list
+
+groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
+
+@groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
+@groupinfo event_list_premise caption="Tegevused eeldustegevuste põhiselt" submit=no
 
 
+@groupinfo valuation caption="Hindamine" submit=no
+	@groupinfo strat caption="Eesm&auml;rgid" parent=valuation submit=no
+	@groupinfo strat_a caption="Eesm&auml;rkide hindamine" parent=valuation submit=no
+	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=valuation store=no submit=no
+	@groupinfo analysis caption="Anal&uuml;&uuml;sid" parent=valuation store=no submit=no
+	@groupinfo risks caption="Riskid" parent=valuation submit=no
+	@groupinfo risks_eval caption="Riskide hindamine" parent=valuation submit=no
+	
 @groupinfo add_event caption="Muuda sündmust"
 @groupinfo files caption="Dokumendid" submit=no
 @groupinfo trans caption="Tõlkimine"
@@ -312,12 +321,10 @@ caption Teostajad
 
 @groupinfo team caption="Meeskond" submit=no
 
-	@groupinfo team_t caption="Meeskond" parent=team
-	@groupinfo team_team caption="Tiimid" parent=team submit=no
+	groupinfo team caption="Meeskond" parent=team
+	groupinfo team_team caption="Tiimid" parent=team submit=no
 	
-@groupinfo risks_t caption="Riskid"
-	@groupinfo risks caption="Riskid" parent=risks_t submit=no
-	@groupinfo risks_eval caption="Riskide hindamine" parent=risks_t submit=no
+groupinfo risks_t caption="Riskid"
 
 @groupinfo req caption="N&otilde;uded" submit=no
 
@@ -426,6 +433,10 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "hidden_team":
+				if($arr["request"]["team"]) $data["value"] = $arr["request"]["team"];
+				if($arr["request"]["hidden_team"]) $data["value"] = $arr["request"]["hidden_team"];
+				break;
 			case "parts_tb":
 				$this->_parts_tb($arr);
 				break;
@@ -462,6 +473,7 @@ class project extends class_base
 				return $ia->$fn($arr);
 				break;
 
+			case "team_tb":
 			case "team_team_tb":
 			case "team_team_tree":
 			case "team_team_tbl":
@@ -561,14 +573,10 @@ class project extends class_base
 				$data["value"] = $arr["request"][$data["name"]];
 				break;
 
-			case "team_search_res":
+/*			case "team_search_res":
 				$this->_get_team_search_res($arr);
 				break;
-
-			case "team_tb":
-				$this->_get_team_tb($arr);
-				break;
-
+*/
 			case "team":
 				$this->_get_team($arr);
 				break;
@@ -2498,6 +2506,10 @@ class project extends class_base
 				$args["cb_group"] = $this->emb_group;
 			};
 		};
+		if($arr["request"]["hidden_team"] && !$args["team"])
+		{
+		  $args["team"] = $arr["request"]["hidden_team"];
+		}
 		$args["team_search_person"] = $arr["request"]["team_search_person"];
 		$args["team_search_co"] = $arr["request"]["team_search_co"];
 	}
@@ -3481,7 +3493,7 @@ class project extends class_base
 			"field" => "oid"
 		));
 	}
-
+/*
 	function _get_team($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -3575,26 +3587,8 @@ class project extends class_base
 		}
 		$t->set_default_sortby("person");
 	}
-
-	function _get_team_tb($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-
-		$t->add_button(array(
-			"name" => "save",
-			"img" => "save.gif",
-			"action" => "add_participants",
-			"tooltip" => t("Lisa"),
-		));
-
-		$t->add_button(array(
-			"name" => "delete",
-			"img" => "delete.gif",
-			"action" => "del_participants",
-			"tooltip" => t("Kustuta"),
-		));
-	}
-
+*/
+/*
 	function _init_team_search_res_t(&$t)
 	{
 		$t->define_field(array(
@@ -3640,39 +3634,173 @@ class project extends class_base
 			"field" => "oid"
 		));
 	}
+*/
+	function _init_teams_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+//			"width" => "16%",
+			"sortable" => 1
+		));
 
-	function _get_team_search_res($arr)
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_team($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_team_search_res_t($t);
-
-		if ($arr["request"]["team_search_person"] == "" && $arr["request"]["team_search_co"] == "")
+		
+		//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
+		if(($arr["request"]["no_search"]) && $arr["request"]["team"] == "teams")
 		{
+			$this->_init_teams_t($t);
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TEAM")) as $c)
+			{
+				$t->define_data(array(
+					"name" => $c->prop("to.name"),
+					"oid" => $c->prop("to"),
+				));
+			}
+			return;
+		}
+		
+		$this->_init_team_t($t);
+		
+		if(($arr["request"]["no_search"]) && ($arr["request"]["team"] == "all_parts" || is_oid($arr["request"]["team"])))
+		{
+			$connectons = array();
+			if(is_oid($arr["request"]["team"]))
+			{
+				$team = obj($arr["request"]["team"]);
+				$connections = $team->connections_from(array("type" => "RELTYPE_TEAM_MEMBER"));
+			}
+			else $connections = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
+			
+			$p = get_instance(CL_CRM_PERSON);
+			$from = $arr["obj_inst"]->prop("implementor");
+			if (is_array($from))
+			{
+				$from = reset($from);
+			}
+			$to = $arr["obj_inst"]->prop("orderer");
+			if (is_array($to))
+			{
+				$to = reset($to);
+			}
 			$ol = new object_list();
+			foreach($connections as $c)
+			{
+				$o = $c->to();
+				if ($o->class_id() == CL_USER)
+				{
+					$i = $o->instance();
+					$o = obj($i->get_person_for_user($o));
+				}
+	
+				$co = $p->get_all_employers_for_person($o);
+				$co_s = array();
+				if (count($co))
+				{
+					foreach($co as $co_oid)
+					{
+						$co_s[] = html::obj_change_url(obj($co_oid));
+					}
+				}
+				else
+				{
+					$empl = $o->get_first_obj_by_reltype("RELTYPE_WORK");
+					if ($empl)
+					{
+						$co_s[] = html::obj_change_url($empl);
+					}
+				}
+	
+				if ($o->class_id() == CL_CRM_COMPANY)
+				{
+					continue;
+				}
+	
+				$role_url = $this->mk_my_orb("change", array(
+					"from_org" => $from,
+					"to_org" => $to,
+					"to_project" => $arr["obj_inst"]->id()
+				), "crm_role_manager");
+		
+				$ol_2 = new object_list(array(
+					"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"company" => $from,
+					"client" => $to, 
+					"project" => $arr["obj_inst"]->id(),
+					"person" => $o->id()
+				));
+				
+	
+				$rs = array();
+				foreach($ol_2->arr() as $role_entry)
+				{
+					$tmp = html::obj_change_url($role_entry->prop("role"));
+					$tmp = html::obj_change_url($role_entry->prop("unit")).($tmp != "" ? " / " : "").$tmp;
+					$rs[] = $tmp;
+				}
+				$t->define_data(array(
+					"person" => html::obj_change_url($o),
+					"co" => join(", ", $co_s),
+					"rank" => html::obj_change_url($o->prop("rank")),
+					"phone" => html::obj_change_url($o->prop("phone")),
+					"mail" => html::obj_change_url($o->prop("email")),
+					"roles" => join("<br>", $rs)."<br>".html::popup(array(
+						"url" => $role_url,
+						'caption' => t('Rollid'),
+						"width" => 800,
+						"height" => 600,
+						"scrollbars" => "auto"
+					)),
+					"oid" => $o->id()
+				));
+				$ol->add($o);
+			}
 		}
 		else
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_PERSON,
-				"name" => "%".$arr["request"]["team_search_person"]."%",
-				"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%",
-				"lang_id" => array(),
-				"site_id" => array()
-			));
-		}
-
-		$clss = aw_ini_get("classes");
-
-		foreach($ol->arr() as $o)
-		{
-			$t->define_data(array(
-				"name" => html::obj_change_url($o),
-				"rank" => html::obj_change_url($o->prop("rank")),
-				"phone" => $o->prop_str("phone"),
-				"mail" => $o->prop_str("email"),
-				"co" => html::obj_change_url($o->get_first_obj_by_reltype("RELTYPE_WORK")),
-				"oid" => $o->id()
-			));
+			if ($arr["request"]["team_search_person"] == "" && $arr["request"]["team_search_co"] == "")
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"name" => "%".$arr["request"]["team_search_person"]."%",
+					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%",
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+			}
+			foreach($ol->arr() as $o)
+			{
+				$t->define_data(array(
+					"person" => html::obj_change_url($o),
+					"rank" => html::obj_change_url($o->prop("rank")),
+					"phone" => $o->prop_str("phone"),
+					"mail" => $o->prop_str("email"),
+					"co" => html::obj_change_url($o->get_first_obj_by_reltype("RELTYPE_WORK")),
+					"oid" => $o->id(),
+//					"roles" => join("<br>", $rs)."<br>".html::popup(array(
+//						"url" => $role_url,
+//						'caption' => t('Rollid'),
+//						"width" => 800,
+//						"height" => 600,
+//						"scrollbars" => "auto"
+//					)),
+				));
+			}
 		}
 	}
 
@@ -4555,7 +4683,7 @@ class project extends class_base
 	**/
 	function copy_team_mem($arr)
 	{
-		$_SESSION["proj_team_member_copy"] = $arr["check"];
+		$_SESSION["proj_team_member_copy"] = $arr["sel"];
 		return $arr["post_ru"];
 	}
 
@@ -4585,10 +4713,23 @@ class project extends class_base
 	**/
 	function del_team_mem($arr)
 	{
-		$team = obj($arr["team"]);
-		foreach(safe_array($arr["check"]) as $mem_id)
+		//kustutab meeskonnad
+		if($arr["team"] == "teams" && is_oid($arr["id"]))
 		{
-			$team->disconnect(array("from" => $mem_id));
+			$project = obj($arr["id"]);
+			foreach(safe_array($arr["sel"]) as $mem_id)
+			{
+				$project->disconnect(array("from" => $mem_id));	
+			}
+		}
+		//kustutab meeskonnaliikmed meeskonnast
+		if(is_oid($arr["team"]))
+		{
+			$team = obj($arr["team"]);
+			foreach(safe_array($arr["sel"]) as $mem_id)
+			{
+				$team->disconnect(array("from" => $mem_id));
+			}
 		}
 		return $arr["post_ru"];
 	}
