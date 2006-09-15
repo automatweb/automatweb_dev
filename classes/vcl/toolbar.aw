@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.16 2006/09/14 09:11:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.17 2006/09/15 07:27:53 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -476,7 +476,14 @@ class toolbar extends aw_template
 		// if quicksearch is set, add that
 		if ($arr["property"]["quicksearch"])
 		{
-			$clss = $this->picker("", array(CL_CRM_PERSON => t("Isik")));
+			$clss = aw_ini_get("classes");
+			$clp = array();
+			foreach((array)$arr["property"]["quicksearch"] as $cldef)
+			{
+				$clid = @constant($cldef);
+				$clp[$clid] = $clss[$clid]["name"];
+			}
+			$clss = $this->picker("", $clp);
 
 			$url = $this->mk_my_orb("redir_search", array("url" => get_ru(), "MAX_FILE_SIZE" => 100000), "aw_object_search");
 			$sb = "<input type=text size=10 name=tb_quicksearch> <select name=tb_qs_clid>".$clss."</select> <input type=button onClick='window.location=\"".$url."&s_name=\"+document.changeform.tb_quicksearch.value+\"&s_clid=\"+document.changeform.tb_qs_clid.options[document.changeform.tb_qs_clid.selectedIndex].value' value='".t("Otsi")."'>";

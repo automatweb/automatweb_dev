@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.4 2006/09/14 09:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.5 2006/09/15 07:27:53 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -236,6 +236,11 @@ class aw_object_search extends class_base
 			"align" => "center",
 			"sortable" => 1,
 		));
+		$t->define_field(array(
+			"name" => "oppnar",
+			"caption" => t("Ava"),
+			"align" => "center"
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -260,14 +265,18 @@ class aw_object_search extends class_base
 			$t->define_data(array(
 				"oid" => $o->id(),
 				"icon" => icons::get_icon($o),
-				"name" => html::obj_change_url($o),
+				"name" => html::get_change_url($o->id(), array(), parse_obj_name($o->name())),
 				"lang" => $o->lang(),
 				"class_id" => $clss[$o->class_id()]["name"],
 				"location" => $po->name(),
 				"created" => $o->created(),
 				"createdby" => $o->createdby(),
 				"modified" => $o->modified(),
-				"modifiedby" => $o->modifiedby()
+				"modifiedby" => $o->modifiedby(),
+				"oppnar" => html::href(array(
+					"url" => $this->mk_my_orb("redir", array("parent" => $o->id()), CL_ADMIN_IF),
+					"caption" => t("Ava")
+				))
 			));
 		}
 		$t->set_default_sortby("name");

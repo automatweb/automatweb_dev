@@ -2163,7 +2163,7 @@ class user extends class_base
 	{
 		extract($arr);
 		$this->get_layer_state($arr);
-		$this->db_query("UPDATE layer_states SET aw_state = 1 WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout'");
+		$this->db_query("UPDATE layer_states SET aw_state = 1 WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout' AND aw_uid = '".aw_global_get("uid")."'");
 		die();
 	}
 	/**
@@ -2176,7 +2176,7 @@ class user extends class_base
 	{
 		extract($arr);
 		$this->get_layer_state($arr);
-		$this->db_query("UPDATE layer_states SET aw_state = 0 WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout'");
+		$this->db_query("UPDATE layer_states SET aw_state = 0 WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout' AND aw_uid = '".aw_global_get("uid")."'");
 		die();
 	}
 
@@ -2189,18 +2189,22 @@ class user extends class_base
 	function get_layer_state($arr)
 	{
 		extract($arr);
-		$val = $this->db_query("SELECT aw_state FROM layer_states WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout'", false);
+		$val = $this->db_query("SELECT aw_state FROM layer_states WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout' AND aw_uid = '".aw_global_get("uid")."'", false);
 		if (!$val)
 		{
-			$this->db_query("CREATE TABLE layer_states (aw_class varchar(255), aw_group varchar(255), aw_layer varchar(255), aw_state int default 1)");
-			$this->db_query("SELECT aw_state FROM layer_states WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout'");
+			$val = $this->db_query("CREATE TABLE layer_states (aw_class varchar(255), aw_group varchar(255), aw_layer varchar(255), aw_state int default 1, aw_uid varchar(255))", false);
+			if (!$val)
+			{
+				$this->db_query("ALTER TABLE layer_states ADD aw_uid varchar(255)");
+			}
+			$this->db_query("SELECT aw_state FROM layer_states WHERE aw_class = '$u_class' AND aw_group = '$u_group' AND aw_layer = '$u_layout' AND aw_uid = '".aw_global_get("uid")."'");
 		}
 		$row = $this->db_next();
 		$val = $row["aw_state"];
 		if ($val === null)
 		{
 			// insert new rec
-			$this->db_query("INSERT INTO layer_states (aw_class,aw_group, aw_layer, aw_state) values('$u_class','$u_group','$u_layout',1)");
+			$this->db_query("INSERT INTO layer_states (aw_class,aw_group, aw_layer, aw_state,aw_uid) values('$u_class','$u_group','$u_layout',1,'".aw_global_get("uid")."')");
 			return 1;
 		}
 		return $val;
