@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.6 2006/09/08 09:53:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.7 2006/09/15 11:08:43 kristo Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
@@ -684,6 +684,8 @@ class xml_export extends class_base
 		{
 //			$xml_file .= "<object>\n";
 			$xml_file .= "<".$xml_object_tag_name.">\n";
+			
+			$pd = $obj->get_property_list();
 
 			foreach ($xml_config_data as $field_name => $field_config)
 			{
@@ -696,7 +698,13 @@ class xml_export extends class_base
 				{
 					if ($o->prop("user_readable_output") == 1)
 					{
-						$xml_file .= $xml_tag_param_value['param_name']."=\"".$this->_proc_xml_val($obj->prop_str($xml_tag_param_value['param_value']))."\" ";
+						$str_val = $this->_proc_xml_val($obj->prop_str($xml_tag_param_value['param_value']))."\" ";
+						if ($xml_tag_param_value['param_value'] == "openhours" && $this->can("view", $obj->prop($xml_tag_param_value['param_value'])))
+						{
+							$oh = get_instance(CL_OPENHOURS);
+							$str_val = $this->_proc_xml_val($oh->show(array("id" => $obj->prop($xml_tag_param_value['param_value']))));
+						}
+						$xml_file .= $xml_tag_param_value['param_name']."=\"".$str_val."\" ";
 					}
 					else
 					{
@@ -720,7 +728,14 @@ class xml_export extends class_base
 						$xml_file .= $xml_tag_content_value['sep_before'];
 						if ($o->prop("user_readable_output") == 1)
 						{
-							$xml_file .= $this->_proc_xml_val($obj->prop_str($xml_tag_content_value['value']));
+							$str_val = $obj->prop_str($xml_tag_content_value['value']);
+							if ($xml_tag_content_value['value'] == "openhours" && $ro = $obj->get_first_obj_by_reltype("RELTYPE_OPENHOURS"))
+							{
+								$oh = get_instance(CL_OPENHOURS);
+								$str_val = $oh->show(array("id" => $ro->id()));
+							}
+	
+							$xml_file .= $this->_proc_xml_val($str_val);
 						}
 						else
 						{
@@ -739,7 +754,6 @@ class xml_export extends class_base
 			$xml_file .= "</".$xml_object_tag_name.">\n";
 
 		} 
-
 //		$xml_file .= "</objects>";
 		$xml_file .= "</".$xml_root_tag_name.">";
 
