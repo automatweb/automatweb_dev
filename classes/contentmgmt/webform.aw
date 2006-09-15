@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.98 2006/09/13 15:56:59 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.99 2006/09/15 07:14:26 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2016,7 +2016,7 @@ class webform extends class_base
 							}
 							if ($found === false)
 							{
-								$pd['options'] = array('' => sprintf(t('--Vali %s--'), $pd['caption'])) + $pd['options'];
+								$pd['options'] = array('' => $pd['caption']) + $pd['options'];
 							}
 						}
 						else
@@ -2024,7 +2024,7 @@ class webform extends class_base
 							$selected_option = array_search($pd['caption'], $pd['options']);
 							if ( $selected_option === false )
 							{
-								$pd['options'][''] = sprintf(t('--Vali %s--'), $pd['caption']);
+								$pd['options'][''] = $pd['caption'];
 							}
 							else
 							{
