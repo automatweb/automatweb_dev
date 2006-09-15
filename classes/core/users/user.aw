@@ -1887,7 +1887,7 @@ class user extends class_base
 
 	/**
 		@attrib params=pos api=1
-		@param uid required type=int
+		@param uid required type=string
 		User id
 		@comment
 		Checks wheather the user id is taken or not

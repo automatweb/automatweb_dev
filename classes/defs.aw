@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.223 2006/06/30 13:30:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.224 2006/09/15 11:17:45 dragut Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -545,13 +545,19 @@ if (!defined("DEFS"))
 	{
 		// loome parseri
 		$parser = xml_parser_create();
+
+		// turn off the case folding:
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+
 		$values = array();
 		$tags = array();
+
 		// xml data arraysse
 		xml_parse_into_struct($parser,$args["xml"],&$values,&$tags);
+
 		// R.I.P. parser
 		xml_parser_free($parser);
+
 		return array($values,$tags);
 	};
 
