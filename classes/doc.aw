@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.136 2006/09/11 10:18:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.137 2006/09/15 09:29:03 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -650,6 +650,16 @@ class doc extends class_base
 				{
 					$args["obj_inst"]->set_prop("nobreaks",0);
 				};
+				// also, if the cfgform says that you are using fck editor, then 
+				// set the nobreaker
+				if ($this->can("view", $args["request"]["cfgform"]))
+				{
+					$cff = obj($args["request"]["cfgform"]);
+					if ($cff->prop("classinfo_allow_rte") == 2)
+					{
+						$args["obj_inst"]->set_prop("nobreaks",0);
+					}
+				}
 				break;
 
 			case "versions":
@@ -693,6 +703,14 @@ class doc extends class_base
 			$obj_inst->set_prop("lead",$this->_doc_strip_tags($obj_inst->prop("lead")));	
 			$obj_inst->set_prop("moreinfo",$this->_doc_strip_tags($obj_inst->prop("moreinfo")));	
 		};
+		if ($this->can("view", $args["request"]["cfgform"]))
+		{
+			$cff = obj($args["request"]["cfgform"]);
+			if ($cff->prop("classinfo_allow_rte") == 2)
+			{
+				$obj_inst->set_prop("nobreaks",1);
+			}
+		}
 
 		$old_tm = $obj_inst->prop("tm");
 		if (empty($old_tm) && !empty($args["request"]["tm"]))

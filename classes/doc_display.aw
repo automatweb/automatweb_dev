@@ -38,6 +38,7 @@ class doc_display extends aw_template
 		}
 
 		$text = $this->_get_text($arr, $doc);
+		$this->create_relative_links($text);
 		$text_no_aliases = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$text);
 
 		$al = get_instance("alias_parser");
@@ -339,6 +340,18 @@ class doc_display extends aw_template
 			));
 		}
 		return $pm->get_menu();
+	}
+
+	function create_relative_links(&$text)
+	{
+		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/imsU",$text,$matches))
+		{
+			$text = str_replace($matches[0],"<a href='#" . $matches[2] . "'>$matches[4]</a>",$text);
+		}
+		while(preg_match("/(#)(s)(\d+?)(#)/",$text,$matches))
+		{
+			$text = str_replace($matches[0],"<a name='" . $matches[3] . "'> </a>",$text);
+		}
 	}
 
 	function _do_user_subs($doc)
