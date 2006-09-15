@@ -187,13 +187,25 @@ class project_files_impl extends class_base
 			$pt = new obj_predicate_not(array($pt, $pt) + $ot->ids());
 			$pr = $arr["obj_inst"]->id();
 		}
-
-		$ol = new object_list(array(
+		$filter = array(
+			$filters,
 			"parent" => $pt,
-			"project" => $pr,
+//			"project" => $pr,
 			"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER),
-		));
+			"lang_id" => array(),
+		);
+		$filter[] = new object_list_filter(array(
+			"logic" => "OR",
+			"conditions" => array(
+//				"CL_FILE.project" => $pr, // enne oli rõõmsalt ka fail sees, kuid ei ole seni faili kuidagi projektiga seostatud.
+				"CL_CRM_DOCUMENT.project" => $pr,
+				"CL_CRM_DEAL.project" => $pr,
+				"CL_CRM_MEMO.project" => $pr,
+				"CL_CRM_OFFER.project" => $pr,
+			))
+		);
 
+		$ol = new object_list($filter);
 		classload("core/icons");
 		$clss = aw_ini_get("classes");
 		get_instance(CL_FILE);
