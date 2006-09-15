@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.5 2006/09/05 13:55:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.6 2006/09/15 07:35:57 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -77,7 +77,8 @@ class user_bookmarks extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_USER_BOOKMARKS,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"createdby" => aw_global_get("uid")
 		));
 		if (!$ol->count())
 		{
