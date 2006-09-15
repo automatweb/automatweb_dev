@@ -2119,13 +2119,13 @@ class user extends class_base
 		if ($u->prop("history_has_folders"))
 		{
 			$clss = aw_ini_get("classes");
-			foreach($_SESSION["user_history"] as $class => $p)
+			foreach(array_reverse($_SESSION["user_history"]) as $class => $p)
 			{
 				$pm->add_sub_menu(array(
 					"text" => $clss[clid_for_name($class)]["name"],
 					"name" => $class
 				));
-				foreach($p as $url => $capt)
+				foreach(array_reverse($p) as $url => $capt)
 				{
 					// parse url and get object name / group from the url
 					$pm->add_item(array(
@@ -2138,7 +2138,7 @@ class user extends class_base
 		}
 		else
 		{
-			foreach($_SESSION["user_history"] as $url => $capt)
+			foreach(array_reverse($_SESSION["user_history"]) as $url => $capt)
 			{
 				// parse url and get object name / group from the url
 				$pm->add_item(array(
