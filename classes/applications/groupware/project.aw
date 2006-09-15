@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.97 2006/07/14 11:09:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.98 2006/09/15 09:58:23 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -11,44 +11,67 @@
 
 @default group=general2
 
-	@property name type=textbox
-	@caption Nimi
 
-	@property code type=textbox table=aw_projects field=aw_code
-	@caption Kood
+	@layout up_bit type=hbox width=50%:50%
 
-	@property priority type=textbox table=aw_projects field=aw_priority size=5
-	@caption Prioriteet
+		@layout left_bit type=vbox parent=up_bit
+	
+		@property name type=textbox parent=left_bit
+		@caption Nimi
+	
+		@property code type=textbox table=aw_projects field=aw_code parent=left_bit
+		@caption Kood
 
-	@property archive_code type=textbox table=aw_projects field=aw_archive_code size=10
-	@caption Arhiveerimistunnus
+		@property priority type=textbox table=aw_projects field=aw_priority size=5 parent=left_bit
+		@caption Prioriteet
+	
+		@property archive_code type=textbox table=aw_projects field=aw_archive_code size=10 parent=left_bit
+		@caption Arhiveerimistunnus
+	
+		@property state type=select table=aw_projects field=aw_state default=1 parent=left_bit
+		@caption Staatus
 
-	@property state type=select table=aw_projects field=aw_state default=1
-	@caption Staatus
+		@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc parent=left_bit
+		@caption Loe lähemalt
 
-	@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker
-	@caption Tellija
+property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
+caption Tellija
 
-	@property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize
-	@caption Teostaja
+property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
+caption Teostajad
 
-	@property start type=date_select table=aw_projects field=aw_start
-	@caption Algus
+	@layout center_bit type=vbox parent=up_bit
 
-	@property end type=date_select table=aw_projects field=aw_end
-	@caption L&otilde;pp
+		@property start type=date_select table=aw_projects field=aw_start parent=center_bit
+		@caption Algus
+	
+		@property end type=date_select table=aw_projects field=aw_end parent=center_bit
+		@caption L&otilde;pp
+	
+		@property deadline type=date_select table=aw_projects field=aw_deadline parent=center_bit
+		@caption Deadline
 
-	@property deadline type=date_select table=aw_projects field=aw_deadline
-	@caption Deadline
+		@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit
 
-	@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc
-	@caption Loe lähemalt
+		@property orderer_table type=table no_caption=1 store=no parent=center_bit
+		@property part_table type=table no_caption=1 store=no parent=center_bit
+		@property impl_table type=table no_caption=1 store=no parent=center_bit
 
-	@layout parts type=hbox width=20%:80%
-	@caption Osalejad
+		@property implementor type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_IMPLEMENTOR
+		@caption Teostajad
 
-		@property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1 table=objects field=meta method=serialize no_caption=1 parent=parts
+		@property orderer type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_ORDERER
+		@caption Klient
+			
+		@property participants type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_PARTICIPANT
 		@caption Osalejad
+		
+		
+		layout parts type=hbox width=20%:80%
+	caption Osalejad
+
+	property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1 table=objects field=meta method=serialize no_caption=1 parent=parts
+	caption Osalejad
 
 @default group=info_t
 
@@ -329,7 +352,7 @@
 @reltype ORDERER value=9 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption tellija
 
-@reltype IMPLEMENTOR value=10 clid=CL_CRM_COMPANY
+@reltype IMPLEMENTOR value=10 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption teostaja
 
 @reltype PRJ_VIDEO value=11 clid=CL_VIDEO
@@ -403,6 +426,19 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "parts_tb":
+				$this->_parts_tb($arr);
+				break;
+			case "orderer_table":
+				$this->_orderer_table($arr);
+				break;
+			case "part_table":
+				$this->_part_table($arr);
+				break;
+			case "impl_table":
+				$this->_impl_table($arr);
+				break;
+				
 			case "analysis_tb":
 			case "analysis_table":
 				static $ib;
@@ -583,6 +619,7 @@ class project extends class_base
 				break;
 
 			case "orderer":
+				return PROP_IGNORE;
 				if ($this->can("view", $arr["request"]["connect_orderer"]))
 				{
 					$data["value"] = array(
@@ -624,6 +661,7 @@ class project extends class_base
 				break;
 
 			case "implementor":
+				return PROP_IGNORE;
 				if ($arr["new"])
 				{
 					$data["value"] = $arr["request"]["connect_impl"];
@@ -646,6 +684,7 @@ class project extends class_base
 				break;
 
 			case "participants":
+				return PROP_IGNORE;
 				if (!$arr["new"])
 				{
 					$cur_pts = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
@@ -2465,9 +2504,11 @@ class project extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		$arr["implementor"] = "0";
 		$arr["post_ru"] = post_ru();
-		$arr["connect_impl"] = $_GET["connect_impl"];
-		$arr["connect_orderer"] = $_GET["connect_orderer"];
+		$arr["implementor"] = $_GET["implementor"];
+		$arr["partipicants"] = $_GET["partipicants"];
+		$arr["orderer"] = $_GET["orderer"];
 		$arr["tf"] = $_GET["tf"];
 		$arr["team"] = $_GET["team"];
 	}
@@ -3070,27 +3111,35 @@ class project extends class_base
 
 	function callback_post_save($arr)
 	{
-		if (is_oid($arr["request"]["connect_impl"]) && $this->can("view", $arr["request"]["connect_impl"]))
+		if (is_oid($arr["request"]["implementor"]) && $this->can("view", $arr["request"]["implementor"]))
 		{
 			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["connect_impl"],
+				"to" => $arr["request"]["implementor"],
 				"reltype" => "RELTYPE_IMPLEMENTOR"
 			));
 
 			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["connect_impl"],
+				"to" => $arr["request"]["implementor"],
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
 		}
-		if (is_oid($arr["request"]["connect_orderer"]) && $this->can("view", $arr["request"]["connect_orderer"]))
+		if (is_oid($arr["request"]["orderer"]) && $this->can("view", $arr["request"]["orderer"]))
 		{
 			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["connect_orderer"],
+				"to" => $arr["request"]["orderer"],
 				"reltype" => "RELTYPE_ORDERER"
 			));
 
 			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["connect_orderer"],
+				"to" => $arr["request"]["orderer"],
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+		}
+
+		if (is_oid($arr["request"]["partipicants"]) && $this->can("view", $arr["request"]["partipicants"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["partipicants"],
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
 		}
@@ -4575,5 +4624,345 @@ class project extends class_base
 		unset($_SESSION["proj_cut_files"]);
 		return $arr["post_ru"];
 	}
+		
+	function _init_orderer_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel_ord",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "orderer",
+			"caption" => t("Tellija"),
+			"sortable" => 1,
+			"width" => "40%"
+		));
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"sortable" => 1,
+			"width" => "35%"
+		));
+		$t->define_field(array(
+			"name" => "contact",
+			"caption" => t("Kontaktisik"),
+			"sortable" => 1,
+			"width" => "25%"
+		));
+	}
+
+	function _orderer_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_orderer_table($t);
+
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+		foreach($arr["obj_inst"]->connections_from(array("type" => 9)) as $c)
+		{
+			$c = $c->to();
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"orderer" => html::obj_change_url($c),
+				"phone" => html::obj_change_url($c->prop("phone_id")),
+				"contact" => html::obj_change_url($c->prop("contact_person"))
+			));
+		}
+	}
+
+	function _init_part_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel_part",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "participants",
+			"caption" => t("Osaleja"),
+			"sortable" => 1,
+			"width" => "40%"
+		));
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"sortable" => 1,
+			"width" => "35%"
+		));
+		$t->define_field(array(
+			"name" => "contact",
+			"caption" => t("Kontaktisik"),
+			"sortable" => 1,
+			"width" => "25%"
+		));
+	}
+
+	function _part_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_part_table($t);
+
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+		$p = get_instance(CL_PROJECT);
+		foreach($arr["obj_inst"]->connections_from(array("type" => 2)) as $c)
+		{
+			$c = $c->to();
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"participants" => html::obj_change_url($c),
+				"phone" => html::obj_change_url($c->prop("phone_id")),
+				"contact" => html::obj_change_url($c->prop("contact_person"))
+			));
+		}
+	}
+
+	function _init_impl_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel_ord",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "implementor",
+			"caption" => t("Teostaja"),
+			"sortable" => 1,
+			"width" => "40%"
+		));
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"sortable" => 1,
+			"width" => "35%"
+		));
+		$t->define_field(array(
+			"name" => "contact",
+			"caption" => t("Kontaktisik"),
+			"sortable" => 1,
+			"width" => "25%"
+		));
+	}
+
+	function _impl_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_impl_table($t);
+
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+		foreach($arr["obj_inst"]->connections_from(array("type" => 10)) as $c)
+		{
+			$c = $c->to();
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"implementor" => html::obj_change_url($c),
+				"phone" => html::obj_change_url($c->prop("phone_id")),
+				"contact" => html::obj_change_url($c->prop("contact_person"))
+			));
+		}
+	}
+
+	function _parts_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"tooltip" => t("Uus"),
+		));
+
+		$tb->add_sub_menu(array(
+			"parent" => "new",
+			"name" => "cust",
+			"text" => t("Tellija"),
+		));
+		
+		$tb->add_menu_item(array(
+			"parent" => "cust",
+			"text" => t("Organisatsioon"),
+			"link" => html::get_new_url(CL_CRM_COMPANY, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 9 // RELTYPE_CUSTOMER
+			)),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "cust",
+			"text" => t("Isik"),
+			"link" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 9 // RELTYPE_CUSTOMER
+			)),
+		));
+
+//		if ($arr["obj_inst"]->prop("customer"))
+//		{
+		$tb->add_sub_menu(array(
+			"parent" => "new",
+			"name" => "part",
+			"text" => t("Osaleja"),
+		));
+//		}
+//		$cur_co = get_current_company();
+		$tb->add_menu_item(array(
+			"parent" => "part",
+			"text" => t("Organisatsioon"),
+			"link" => html::get_new_url(CL_CRM_COMPANY, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 2 
+			)),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "part",
+			"text" => t("Isik"),
+			"link" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 2
+			)),
+		));
+
+		$tb->add_sub_menu(array(
+			"parent" => "new",
+			"name" => "expl",
+			"text" => t("Teostaja"),
+		));	
+		$tb->add_menu_item(array(
+			"parent" => "expl",
+			"text" => t("Organisatsioon"),
+			"link" => html::get_new_url(CL_CRM_COMPANY, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 10 
+			)),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "expl",
+			"text" => t("Isik"),
+			"link" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 10
+			)),
+		));
+
+
+/*		$tb->add_menu_item(array(
+			"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cur_co->name()),
+			"parent" => "part",
+			"link" => html::get_new_url(CL_CRM_PERSON, $cur_co->id(), array(
+				"return_url" => get_ru(), 
+				"add_to_task" => $arr["obj_inst"]->id(),
+				"add_to_co" => $cur_co->id()
+			))
+		));
+*/		
+/*		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Teostaja"),
+			"link" => html::get_new_url(CL_CRM_COMPANY, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 10
+			)),
+		));
+*/
+		$tb->add_menu_button(array(
+			"name" => "search",
+			"tooltip" => t("Otsi"),
+			"img" => "search.gif"
+		));
+
+		$url = $this->mk_my_orb("do_search", array(
+				"pn" => "orderer",
+				"clid" => array(
+					CL_CRM_PERSON,
+					CL_CRM_COMPANY
+				)), "popup_search");
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Tellija"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+		));
+
+		$url = $this->mk_my_orb("do_search", array(
+				"pn" => "participants",
+				"clid" => array(
+					CL_CRM_PERSON,
+					CL_CRM_COMPANY,
+					CL_USER,
+				)), "popup_search");
+
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Osaleja"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi1")."',550,500)",
+		));
+
+		$url = $this->mk_my_orb("do_search", array(
+			"pn" => "implementor",
+			"clid" =>  array(
+				CL_CRM_PERSON,
+				CL_CRM_COMPANY
+			)), "popup_search");
+
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Teostaja"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi2")."',550,500)",
+		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_rels"
+		));
+	}
+	
+	/**
+	@attrib name=delete_rels
+	**/
+	function delete_rels($arr)
+	{
+		$o = obj($arr["id"]);
+		$o = obj($o->brother_of());
+		if (is_array($arr["sel_ord"]) && count($arr["sel_ord"]))
+		{
+			foreach(safe_array($arr["sel_ord"]) as $item)
+			{
+				$o->disconnect(array(
+					"from" => $item,
+				));
+			}
+		}
+
+		if (is_array($arr["sel_part"]) && count($arr["sel_part"]))
+		{
+			foreach(safe_array($arr["sel_part"]) as $item)
+			{
+				$o->disconnect(array(
+					"from" => $item,
+				));
+			}
+		}
+
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			foreach(safe_array($arr["sel"]) as $item)
+			{
+				$o->disconnect(array(
+					"from" => $item,
+				));
+			}
+		}
+		return $arr["post_ru"];
+	}
+	
 };
 ?>

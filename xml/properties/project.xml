@@ -5,6 +5,7 @@
             <table>objects</table>
             <group>general2</group>
             <type>textbox</type>
+            <parent>left_bit</parent>
             <field>name</field>
             <caption>Nimi</caption>
       </property>
@@ -14,6 +15,7 @@
             <group>general2</group>
             <type>textbox</type>
             <field>aw_code</field>
+            <parent>left_bit</parent>
             <caption>Kood</caption>
       </property>
       <property>
@@ -23,6 +25,7 @@
             <type>textbox</type>
             <field>aw_priority</field>
             <size>5</size>
+            <parent>left_bit</parent>
             <caption>Prioriteet</caption>
       </property>
       <property>
@@ -32,6 +35,7 @@
             <type>textbox</type>
             <field>aw_archive_code</field>
             <size>10</size>
+            <parent>left_bit</parent>
             <caption>Arhiveerimistunnus</caption>
       </property>
       <property>
@@ -41,62 +45,8 @@
             <type>select</type>
             <field>aw_state</field>
             <default>1</default>
+            <parent>left_bit</parent>
             <caption>Staatus</caption>
-      </property>
-      <property>
-            <name>orderer</name>
-            <table>objects</table>
-            <group>general2</group>
-            <type>popup_search</type>
-            <clid>
-                  <num_0>CL_CRM_COMPANY</num_0>
-                  <num_1>CL_CRM_PERSON</num_1>
-            </clid>
-            <reltype>RELTYPE_ORDERER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <multiple>1</multiple>
-            <store>connect</store>
-            <style>relpicker</style>
-            <caption>Tellija</caption>
-      </property>
-      <property>
-            <name>implementor</name>
-            <table>objects</table>
-            <group>general2</group>
-            <type>popup_search</type>
-            <clid>
-                  <num_0>CL_CRM_COMPANY</num_0>
-                  <num_1>CL_CRM_PERSON</num_1>
-            </clid>
-            <reltype>RELTYPE_IMPLEMENTOR</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Teostaja</caption>
-      </property>
-      <property>
-            <name>start</name>
-            <table>aw_projects</table>
-            <group>general2</group>
-            <type>date_select</type>
-            <field>aw_start</field>
-            <caption>Algus</caption>
-      </property>
-      <property>
-            <name>end</name>
-            <table>aw_projects</table>
-            <group>general2</group>
-            <type>date_select</type>
-            <field>aw_end</field>
-            <caption>L&amp;amp;otilde;pp</caption>
-      </property>
-      <property>
-            <name>deadline</name>
-            <table>aw_projects</table>
-            <group>general2</group>
-            <type>date_select</type>
-            <field>aw_deadline</field>
-            <caption>Deadline</caption>
       </property>
       <property>
             <name>doc</name>
@@ -105,19 +55,104 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PRJ_DOCUMENT</reltype>
             <field>aw_doc</field>
+            <parent>left_bit</parent>
             <caption>Loe l&amp;auml;hemalt</caption>
+      </property>
+      <property>
+            <name>start</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>date_select</type>
+            <field>aw_start</field>
+            <parent>center_bit</parent>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>date_select</type>
+            <field>aw_end</field>
+            <parent>center_bit</parent>
+            <caption>L&amp;amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>deadline</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>date_select</type>
+            <field>aw_deadline</field>
+            <parent>center_bit</parent>
+            <caption>Deadline</caption>
+      </property>
+      <property>
+            <name>parts_tb</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>center_bit</parent>
+            <field>parts_tb</field>
+      </property>
+      <property>
+            <name>orderer_table</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>center_bit</parent>
+            <field>orderer_table</field>
+      </property>
+      <property>
+            <name>part_table</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>center_bit</parent>
+            <field>part_table</field>
+      </property>
+      <property>
+            <name>impl_table</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>center_bit</parent>
+            <field>impl_table</field>
+      </property>
+      <property>
+            <name>implementor</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_IMPLEMENTOR</reltype>
+            <caption>Teostajad</caption>
+      </property>
+      <property>
+            <name>orderer</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_ORDERER</reltype>
+            <caption>Klient</caption>
       </property>
       <property>
             <name>participants</name>
             <table>objects</table>
             <group>general2</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_PARTICIPANT</reltype>
-            <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
-            <no_caption>1</no_caption>
-            <parent>parts</parent>
+            <reltype>RELTYPE_PARTICIPANT</reltype>
             <caption>Osalejad</caption>
       </property>
       <property>
@@ -898,7 +933,10 @@
             </ORDERER>
             <IMPLEMENTOR>
                   <value>10</value>
-                  <clid>CL_CRM_COMPANY</clid>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>teostaja</caption>
             </IMPLEMENTOR>
             <PRJ_VIDEO>
@@ -971,12 +1009,21 @@
             </ANALYSIS_WS>
       </reltypes>
       <layout>
-            <parts>
+            <up_bit>
                   <type>hbox</type>
-                  <width>20%:80%</width>
+                  <width>50%:50%</width>
                   <group>general2</group>
-                  <caption>Osalejad</caption>
-            </parts>
+            </up_bit>
+            <left_bit>
+                  <type>vbox</type>
+                  <parent>up_bit</parent>
+                  <group>general2</group>
+            </left_bit>
+            <center_bit>
+                  <type>vbox</type>
+                  <parent>up_bit</parent>
+                  <group>general2</group>
+            </center_bit>
             <files_lay>
                   <type>hbox</type>
                   <width>20%:80%</width>
