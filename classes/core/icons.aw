@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.5 2006/09/06 11:12:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.6 2006/09/18 12:35:12 kristo Exp $
 
 class icons extends aw_template
 {
@@ -89,8 +89,14 @@ class icons extends aw_template
 	**/
 	function get_icon($o)
 	{
+		if (!is_object($o) && $this->can("view", $o))
+		{
+			$o = obj($o);
+		}
 		return html::img(array(
 			"url" => icons::get_icon_url($o),
+			"alt" => sprintf(t("Objekti id on %s"), $o->id()),
+			"title" => sprintf(t("Objekti id on %s"), $o->id())
 		));
 	}
 }

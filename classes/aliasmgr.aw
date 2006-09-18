@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.207 2006/08/31 11:40:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.208 2006/09/18 12:35:13 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -519,9 +519,7 @@ class aliasmgr extends aw_template
 
 			$reltype_id = $alias->prop("reltype");
 
-			$adat["icon"] = html::img(array(
-				"url" => icons::get_icon_url($target_obj),
-			));
+			$adat["icon"] = icons::get_icon($target_obj);
 
 			// it has a meaning only for embedded aliases
 			if ($reltype_id == 0)
