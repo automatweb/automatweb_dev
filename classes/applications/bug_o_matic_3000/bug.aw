@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.54 2006/09/18 06:56:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.55 2006/09/18 07:30:54 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -583,7 +583,7 @@ class bug extends class_base
 			case "bug_status":
 				$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
 				$this->_ac_new_state = $prop["value"];
-				if($prop["value"] == BUG_STATUS_CLOSED && !$arr["new"])
+				if($prop["value"] == BUG_STATUS_CLOSED && !$arr["new"] && $arr["obj_inst"]->prop("bug_status") != BUG_STATUS_CLOSED)
 				{
 					if(aw_global_get("uid") != $arr["obj_inst"]->createdby())
 					{
