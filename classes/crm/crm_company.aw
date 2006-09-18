@@ -505,6 +505,9 @@ default group=org_objects
 				@property all_proj_search_sbt type=submit  parent=all_proj_search_but_row no_caption=1
 				@caption Otsi
 
+				@property all_proj_search_change_mode_sbt type=submit  parent=all_proj_search_but_row no_caption=1
+				@caption Otsi ja muuda vormi
+
 				@property all_proj_search_clear type=submit  parent=all_proj_search_but_row no_caption=1
 				@caption T&uuml;hista otsing
 
@@ -557,6 +560,9 @@ default group=org_objects
 
 				@property proj_search_sbt type=submit  parent=my_proj_search_but_row no_caption=1
 				@caption Otsi
+
+				@property proj_search_change_mode_sbt type=submit  parent=my_proj_search_but_row no_caption=1
+				@caption Otsi ja muuda vormi
 
 				@property proj_search_clear type=submit  parent=my_proj_search_but_row no_caption=1
 				@caption T&uuml;hista otsing
@@ -1176,6 +1182,9 @@ ALTER TABLE `kliendibaas_firma` ADD `activity_keywords` TEXT AFTER `tegevuse_kir
 define("CRM_TASK_VIEW_TABLE", 0);
 define("CRM_TASK_VIEW_CAL", 1);
 
+define("CRM_PROJECTS_SEARCH_SIMPLE", 1);
+define("CRM_PROJECTS_SEARCH_DETAIL", 2);
+
 define("CRM_COMMENT_POSITIVE", 1);
 define("CRM_COMMENT_NEUTRAL", 2);
 define("CRM_COMMENT_NEGATIVE", 3);
@@ -1204,6 +1213,7 @@ class crm_company extends class_base
 		$this->trans_props = array(
 			"tegevuse_kirjeldus", "userta1", "userta2", "userta3", "userta4", "userta5"
 		);
+		
 	}
 
 	function crm_company_init()
@@ -1754,6 +1764,10 @@ class crm_company extends class_base
 				break;
 
 			case "proj_search_dl_from":
+				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				{
+					return PROP_IGNORE;
+				}
 				if (!isset($arr["request"]["proj_search_sbt"]))
 				{
 					$data["value"] = -1; //mktime(0,0,0, date("m"), date("d"), date("Y")-1);
@@ -1770,6 +1784,10 @@ class crm_company extends class_base
 				break;
 
 			case "proj_search_dl_to":
+				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				{
+					return PROP_IGNORE;
+				}
 				if (!isset($arr["request"]["proj_search_sbt"]))
 				{
 					$data["value"] = -1; //mktime(0,0,0, date("m"), date("d"), date("Y")+1);
@@ -1786,24 +1804,43 @@ class crm_company extends class_base
 				break;
 
 			case "proj_search_state":
+
 				$proj_i = get_instance(CL_PROJECT);
 				$data["options"] = array("" => "") + $proj_i->states;
 				if (!isset($arr["request"]["proj_search_state"]))
 				{
 					$data["value"] = PROJ_IN_PROGRESS;
 				}
-
+				else
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				break;
 			case "proj_search_cust":
-			case "proj_search_name":
 			case "proj_search_code":
 			case "proj_search_contact_person":
 			case "proj_search_task_name":
+				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				{
+					return PROP_IGNORE;
+				}
+			case "proj_search_name":
 				if ($arr["request"]["do_proj_search"])
 				{
 					$data["value"] = $arr["request"][$data["name"]];
 				}
 				break;
-
+			case "proj_search_change_mode_sbt":
+			case "all_proj_search_change_mode_sbt":
+				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL  )
+				{
+					$data['caption'] = t('Otsi ja t&auml;ienda');
+				}
+				else
+				{
+					$data['caption'] = t('Lihtne otsing');
+				}
+				break;
 			case "all_proj_search_state":
 				$proj_i = get_instance(CL_PROJECT);
 				$data["options"] = array("" => "") + $proj_i->states;
@@ -1833,6 +1870,10 @@ class crm_company extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				{
+					return PROP_IGNORE;
+				}
 				if (!$arr['request'][$data["name"]])
 				{
 					$data["value"] = -1;
@@ -1844,11 +1885,15 @@ class crm_company extends class_base
 				break;
 
 			case "all_proj_search_cust":
-			case "all_proj_search_name":
 			case "all_proj_search_code":
 			case "all_proj_search_arh_code":
 			case "all_proj_search_contact_person":
 			case "all_proj_search_task_name":
+				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				{
+					return PROP_IGNORE;
+				}
+			case "all_proj_search_name":
 			case "all_proj_search_sbt":
 			case "all_proj_search_clear":
 				if (!$arr["request"]["search_all_proj"])
@@ -1860,7 +1905,7 @@ class crm_company extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-
+				
 			/// OBJECTS TAB
 			case "objects_listing_toolbar":
 			case "objects_listing_tree":
@@ -2859,6 +2904,13 @@ class crm_company extends class_base
 
 		$this->unit=$arr['request']['unit'];
 		$this->category=$arr['request']['category'];
+
+		if ( $this->get_cval(aw_global_get('uid').'_crm_projects_search_mode') == CRM_PROJECTS_SEARCH_DETAIL )
+		{
+			$_SESSION['crm_projects_search_mode'] = CRM_PROJECTS_SEARCH_DETAIL;
+			aw_global_set('crm_projects_search_mode', CRM_PROJECTS_SEARCH_DETAIL);
+		}
+
 	}
 
 	/*
@@ -3086,6 +3138,49 @@ class crm_company extends class_base
 			$arr["args"]["proj_search_state"] = $arr["request"]["proj_search_state"];
 			$arr["args"]["proj_search_sbt"] = 1;
 			$arr["args"]["do_proj_search"] = 1;
+		}
+
+		if ($arr["request"]["proj_search_change_mode_sbt"])
+		{
+			$arr["args"]["proj_search_part"] = $arr["request"]["proj_search_part"];
+			$arr["args"]["proj_search_name"] = $arr["request"]["proj_search_name"];
+			$arr["args"]["proj_search_state"] = $arr["request"]["proj_search_state"];
+			$arr["args"]["proj_search_sbt"] = 1;
+			$arr["args"]["do_proj_search"] = 1;
+			if ( aw_global_get('crm_projects_search_mode') == CRM_PROJECTS_SEARCH_DETAIL )
+			{
+				$_SESSION['crm_projects_search_mode'] = CRM_PROJECTS_SEARCH_SIMPLE;
+				$this->set_cval( aw_global_get('uid').'_crm_projects_search_mode', CRM_PROJECTS_SEARCH_SIMPLE );
+			}
+			else
+			{
+				$_SESSION['crm_projects_search_mode'] = CRM_PROJECTS_SEARCH_DETAIL;
+				$this->set_cval( aw_global_get('uid').'_crm_projects_search_mode', CRM_PROJECTS_SEARCH_DETAIL );
+			}
+		}
+
+		if ($arr["request"]["all_proj_search_change_mode_sbt"])
+		{
+			$arr["args"]["all_proj_search_part"] = $arr["request"]["all_proj_search_part"];
+			$arr["args"]["all_proj_search_name"] = $arr["request"]["all_proj_search_name"];
+			$arr["args"]["all_proj_search_state"] = $arr["request"]["all_proj_search_state"];
+			$arr["args"]["search_all_proj"] = 0;
+			if ( aw_global_get('crm_projects_search_mode') == CRM_PROJECTS_SEARCH_DETAIL )
+			{
+				$_SESSION['crm_projects_search_mode'] = CRM_PROJECTS_SEARCH_SIMPLE;
+				$this->set_cval( aw_global_get('uid').'_crm_projects_search_mode', CRM_PROJECTS_SEARCH_SIMPLE );
+			}
+			else
+			{
+				$_SESSION['crm_projects_search_mode'] = CRM_PROJECTS_SEARCH_DETAIL;
+				$this->set_cval( aw_global_get('uid').'_crm_projects_search_mode', CRM_PROJECTS_SEARCH_DETAIL );
+			}
+		}
+
+		if ($arr["request"]["all_proj_search_clear"])
+		{
+			$arr["args"]["search_all_proj"] = 0;
+			$_SESSION['crm_projects_search_mode'] = CRM_PROJECTS_SEARCH_SIMPLE;
 		}
 
 		if ($arr["request"]["all_proj_search_sbt"])

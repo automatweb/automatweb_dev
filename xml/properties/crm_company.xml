@@ -1404,6 +1404,17 @@
             <caption>Otsi</caption>
       </property>
       <property>
+            <name>all_proj_search_change_mode_sbt</name>
+            <table>objects</table>
+            <group>org_projects_archive</group>
+            <type>submit</type>
+            <parent>all_proj_search_but_row</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>all_proj_search_change_mode_sbt</field>
+            <caption>Otsi ja muuda vormi</caption>
+      </property>
+      <property>
             <name>all_proj_search_clear</name>
             <table>objects</table>
             <group>org_projects_archive</group>
@@ -1549,6 +1560,17 @@
             <store>no</store>
             <field>proj_search_sbt</field>
             <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>proj_search_change_mode_sbt</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>submit</type>
+            <parent>my_proj_search_but_row</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>proj_search_change_mode_sbt</field>
+            <caption>Otsi ja muuda vormi</caption>
       </property>
       <property>
             <name>proj_search_clear</name>
