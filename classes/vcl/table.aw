@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.90 2006/09/13 10:15:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.91 2006/09/18 09:47:54 tarvo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -40,7 +40,7 @@ class aw_table extends aw_template
 
 		$this->header_attribs = array();
 
-		// ridade värvid (och siis stiilid) muutuvad
+		// ridade v&auml;rvid (och siis stiilid) muutuvad
 		// siin defineerime nad
 		$this->style1 = "#AAAAAA";
 		$this->style2 = "#CCCCCC";
@@ -69,7 +69,7 @@ class aw_table extends aw_template
 		$this->rowdefs_ordered = false;
 
 		// esimene kord andmeid sisestada?
-		// seda on vaja selleks, et määrata default sort order.
+		// seda on vaja selleks, et m&auml;&auml;rata default sort order.
 		$this->first = true;
 		$layout = !empty($data["layout"]) ? $data["layout"] : "generic";
 		$this->set_layout($layout);
@@ -777,7 +777,7 @@ class aw_table extends aw_template
 	**/
 	function draw($arr = array())
 	{
-		// väljastab tabeli
+		// v&auml;ljastab tabeli
 		if (!is_array($this->rowdefs))
 		{
 			print "Don't know what to do";
@@ -880,7 +880,7 @@ class aw_table extends aw_template
 
 
 
-		// moodustame välimise raami alguse
+		// moodustame v&auml;limise raami alguse
 		/*
 		if (is_array($this->frameattribs))
 		{
@@ -951,8 +951,8 @@ class aw_table extends aw_template
 		// koostame tabeli sisu
 		if (is_array($this->data))
 		{
-			// tsükkel üle data
-			$counter = 0; // kasutame ridadele erineva värvi andmiseks
+			// ts&uuml;kkel &uuml;le data
+			$counter = 0; // kasutame ridadele erineva v&auml;rvi andmiseks
 			$p_counter = 0;
 			foreach($this->data as $k => $v)
 			{
@@ -994,9 +994,13 @@ class aw_table extends aw_template
 						{
 							$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
 						}
+						if(!empty($this->chooser_config["width"]))
+						{
+							$width = " width=\"".$this->chooser_config["width"]."\"";
+						}
 						if($chooser_value)
 						{
-							$tbl .= "<td align='center' $stl><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".($v[$this->chooser_config["name"]] ? "checked" : "")."></td>";
+							$tbl .= "<td align='center' ".$stl.$width."><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".($v[$this->chooser_config["name"]] ? "checked" : "")."></td>";
 						}
 						else
 						{
@@ -1016,7 +1020,7 @@ class aw_table extends aw_template
 				}
 				$tbl .= $tmp;
 
-				// tsükkel üle rowdefsi, et andmed oleksid oiges järjekorras
+				// ts&uuml;kkel &uuml;le rowdefsi, et andmed oleksid oiges j&auml;rjekorras
 				foreach($this->rowdefs as $k1 => $v1)
 				{
 					if ($this->sh_counts_by_parent[$v1["name"]] > 0)
@@ -1056,7 +1060,7 @@ class aw_table extends aw_template
 						}
 					}
 
-					// määrame ära staili
+					// m&auml;&auml;rame &auml;ra staili
 					if (!$style)
 					{
 						if (isset($this->sortby[$v1["name"]]))
@@ -1139,7 +1143,7 @@ class aw_table extends aw_template
 							if ($today == $thisdate)
 							{
 								// XX: make it translatable
-								$val = date("H:i",$val) . " täna";
+								$val = date("H:i",$val) . " t&auml;na";
 							}
 							else
 							{
@@ -1179,7 +1183,7 @@ class aw_table extends aw_template
 						$val = "&nbsp;";
 					};
 
-					//võeh, ühesõnaga laseme $val läbi functsiooni, mis on defineeritud väljakutsuva klassi sees
+					//v&otilde;eh, &uuml;hes&otilde;naga laseme $val l&auml;bi functsiooni, mis on defineeritud v&auml;ljakutsuva klassi sees
 					//ja $t->define_field(array(
 					//	...
 					//	"callback" => array(&$this, "method")
@@ -1283,7 +1287,7 @@ class aw_table extends aw_template
 		return strip_tags($new);
 	}
 
-	// tagastab csv andmed, kustuda välja draw asemel
+	// tagastab csv andmed, kustuda v&auml;lja draw asemel
 	/**returns cvs data
 		@attrib api=1 params=pos
 		@param sep optional type=string default=;
@@ -1446,7 +1450,7 @@ class aw_table extends aw_template
 		};
 		switch($name)
 		{
-			// vaikimisi määratud sorteerimisjärjekord
+			// vaikimisi m&auml;&auml;ratud sorteerimisj&auml;rjekord
 			case "default_order":
 				$this->default_order = $attrs["value"];
 				$this->default_odir = isset($attrs["order"]) ? $attrs["order"] : "";
@@ -1457,7 +1461,7 @@ class aw_table extends aw_template
 				$this->tableattribs = $attrs;
 				break;
 
-			// välimise tabeli atribuudid
+			// v&auml;limise tabeli atribuudid
 			case "frameattribs":
 				$this->frameattribs = $attrs;
 				break;
@@ -1501,7 +1505,7 @@ class aw_table extends aw_template
 				$this->filter_active = $attrs["value"];
 				break;
 
-			// stiil, mida kasutada parajasti sorteeritud välja headeri näitamiseks
+			// stiil, mida kasutada parajasti sorteeritud v&auml;lja headeri n&auml;itamiseks
 			case "header_sorted":
 				$this->header_sorted = $attrs["value"];
 				break;
@@ -1554,7 +1558,7 @@ class aw_table extends aw_template
 				$this->actionrows = $attrs["value"];
 				break;
 
-			// väljad
+			// v&auml;ljad
 			case "field":
 				$temp = array();
 				while(list($k,$v) = each($attrs))
@@ -2217,7 +2221,7 @@ class aw_table extends aw_template
 				// by default, if a column is not sorted and you click on it, it should be sorted asc
 				$so = "asc";
 
-				// kui on sorteeritud selle välja järgi
+				// kui on sorteeritud selle v&auml;lja j&auml;rgi
 				if (isset($this->sortby[$v["name"]]))
 				{
 					$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
