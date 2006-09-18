@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.4 2006/09/12 15:30:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.5 2006/09/18 10:22:44 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -967,7 +967,7 @@ class admin_if extends class_base
 	}
 
 	/**
-		@attrib name=if_cut
+		@attrib name=if_cut all_args=1
 	**/
 	function if_cut($arr)
 	{
@@ -992,16 +992,16 @@ class admin_if extends class_base
 	}
 
 	/**
-		@attrib name=if_copy
+		@attrib name=if_copy all_args=1
 	**/
 	function if_copy($arr)
 	{
+		extract($arr);
 		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel), "admin_menus");
-		return $arr["post_ru"];
 	}
 
 	/** pastes the cut objects 
-		@attrib name=if_paste params=name default="0"
+		@attrib name=if_paste params=name default="0" all_args=1
 	**/
 	function if_paste($arr)
 	{
