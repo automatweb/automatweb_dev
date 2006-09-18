@@ -1162,6 +1162,14 @@ function t2($s)
 	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : NULL;
 }
 
+function call_fatal_handler($str)
+{
+	if (function_exists($GLOBALS["fatal_error_handler"]))
+	{
+		$GLOBALS["fatal_error_handler"]($str);
+	}
+}
+
 function incl_f($lib)
 {
 	return;

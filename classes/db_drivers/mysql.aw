@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.37 2006/03/22 15:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.38 2006/09/18 11:24:11 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -31,16 +31,18 @@ class mysql
 
 		if (!$this->dbh)
 		{
-			echo "Can't connect to database";
-			print '<br />';
-			print mysql_error();
+			$err =  "Can't connect to database";
+			$err .= '<br />';
+			$err .= mysql_error();
+			call_fatal_handler($err);
 			exit;
 		};
 		if (not(@mysql_select_db($base,$this->dbh)))
 		{
-			echo "Can't connect to database";
-			print '<br />';
-			print mysql_error();
+			$err = "Can't connect to database";
+			$err .= '<br />';
+			$err .= mysql_error();
+			call_fatal_handler($err);
 			exit;
 		};
 		$this->db_base = $base;
