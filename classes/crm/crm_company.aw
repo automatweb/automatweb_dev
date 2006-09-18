@@ -283,38 +283,60 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 @default group=cedit
 
-	@property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma
-	@caption Vaikimisi aadress
+	@layout cedit_master type=vbox
 
-	@property currency type=relpicker reltype=RELTYPE_CURRENCY table=kliendibaas_firma field=aw_currency
-	@caption Valuuta
+	@layout cedit_layout type=vbox area_caption=Vaikeseaded closeable=1 parent=cedit_master
+		@property cedit_toolbar type=toolbar store=no no_caption=1 parent=cedit_layout
+		@property cedit_phone_tbl type=table no_caption=1 parent=cedit_layout
+		@property cedit_telefax_tbl type=table no_caption=1 parent=cedit_layout
+		@property cedit_url_tbl type=table store=no no_caption=1 parent=cedit_layout
+		@property cedit_email_tbl type=table store=no no_caption=1 parent=cedit_layout
+		@property cedit_bank_account_tbl type=table store=no no_caption=1 parent=cedit_layout
 
-	@property round type=textbox method=serialize field=meta
-	@caption &Uuml;marda
+		@property cedit_add_change type=callback callback=gen_cedit_props parent=cedit_layout
+	
 
-	@property phone_id type=releditor mode=manager props=name,type table_fields=name,type choose_default=1 always_show_add=1 table=kliendibaas_firma reltype=RELTYPE_PHONE
-	@caption Telefon
+	@layout cedit_layout_other type=vbox area_caption=Andmed closeable=1 parent=cedit_master
 
-	@property telefax_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name choose_default=1 always_show_add=1
-	@caption Faks
+		@property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma parent=cedit_layout_other
+		@caption Vaikimisi aadress
 
-	@property url_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_URL props=name choose_default=1 always_show_add=1
-	@caption Veebiaadress
+		@property currency type=relpicker reltype=RELTYPE_CURRENCY table=kliendibaas_firma field=aw_currency parent=cedit_layout_other
+		@caption Valuuta
 
-	@property email_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_EMAIL props=mail choose_default=1 always_show_add=1
-	@caption E-posti aadressid
+		@property round type=textbox method=serialize field=meta parent=cedit_layout_other
+		@caption &Uuml;marda
+
+		@property receptionist_name type=textbox field=meta method=serialize parent=cedit_layout_other
+		@caption Telefoni v&otilde;tab vastu
+
+		@property bill_due_days type=textbox size=5 table=kliendibaas_firma field=aw_bill_due_days parent=cedit_layout_other
+		@caption Makset&auml;htaeg p&auml;evades
+
+	@property phone_id type=hidden table=kliendibaas_firma parent=cedit_master no_caption=1
+	@property telefax_id type=hidden table=kliendibaas_firma parent=cedit_master no_caption=1
+	@property url_id type=hidden table=kliendibaas_firma parent=cedit_master no_caption=1
+	@property email_id type=hidden table=kliendibaas_firma parent=cedit_master no_caption=1
+	@property aw_bank_account type=hidden table=kliendibaas_firma parent=cedit_master no_caption=1
+	
+
+	//@property phone_id type=releditor mode=manager props=name,type table_fields=name,type choose_default=1 always_show_add=1 table=kliendibaas_firma reltype=RELTYPE_PHONE
+	//@caption Telefon
+
+	//@property telefax_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name choose_default=1 always_show_add=1
+	//@caption Faks
+
+	//@property url_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_URL props=name choose_default=1 always_show_add=1
+	//@caption Veebiaadress
+
+	//@property email_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_EMAIL props=mail choose_default=1 always_show_add=1
+	//@caption E-posti aadressid
 
 	// @property b_acct_desc type=text subtitle=1 store=no
 	// @caption Pangaarved
 
-	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank,sort_code store=no
-	@caption Pangaarved
-
-	@property receptionist_name type=textbox field=meta method=serialize
-	@caption Telefoni v&otilde;tab vastu
-
-	@property bill_due_days type=textbox size=5 table=kliendibaas_firma field=aw_bill_due_days
-	@caption Makset&auml;htaeg p&auml;evades
+	//@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank,sort_code store=no
+	//@caption Pangaarved
 
 @default group=personal_offers
 -------------- PERSONALI PROPERTID ---------------
@@ -1154,6 +1176,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype BUYER value=62 clid=CL_CRM_COMPANY
 @caption Ostja, M&uuml;&uuml;a
 
+@reltype BANK value=63 clid=CL_CRM_BANK
+@caption Pank
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
@@ -1423,6 +1448,69 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+			// CEDIT tab
+			case "cedit_toolbar":
+				$this->gen_cedit_tb(&$arr);
+			break;
+			// props generated from callback
+			case "cedit_add_ntype":
+				$data["options"] = array(
+					"work" => t("t&ouml;&ouml;l"),
+					"home" => t("kodus"),
+					"short" => t("l&uuml;hinumber"),
+					"mobile" => t("mobiil"),
+					"skype" => t("skype"),
+					"extension" => t("sisetelefon"),
+				);
+			break;
+			// end props generated from callback
+			case "cedit_phone_tbl":
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"number" => t("Telefoninumber"),
+					"type" => t("Telefoninumbri t&uuml;&uuml;p"),
+				);
+				$this->init_cedit_tables(&$t, $fields);
+				$this->fill_cedit_tables(&$arr);
+			break;
+			case "cedit_telefax_tbl":
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"fax" => t("Faksi number"),
+				);
+				$this->init_cedit_tables(&$t, $fields);
+				$this->fill_cedit_tables(&$arr);
+			break;
+			case "cedit_url_tbl":
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"url" => t("Veebiaadress"),
+				);
+				$this->init_cedit_tables(&$t, $fields);
+				$this->fill_cedit_tables(&$arr);
+			break;
+			case "cedit_email_tbl":
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"email" => t("Emaili aadress"),
+				);
+				$this->init_cedit_tables(&$t, $fields);
+				$this->fill_cedit_tables(&$arr);
+			break;
+			case "cedit_bank_account_tbl":
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"name" => t("Arvenumbri nimetus"),
+					"account" => t("Arve number"),
+					"bank" => t("Pank"),
+					"office_code" => t("Kodukontori kood"),
+				);
+				$this->init_cedit_tables(&$t, $fields);
+				$this->fill_cedit_tables(&$arr);
+				$t->table_caption = t("Pangaarved");
+			break;
+			// END CEDIT tab
+
 			case "client_category":
 				return $this->_client_category($arr);
 
@@ -2305,6 +2393,76 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "cedit_add_change":
+				$req = $arr["request"];
+				$ch = $req["cedit_ch_obj"]?$req["cedit_ch_obj"]:false;
+				if($req["cedit_add_number"] && $req["cedit_add_ntype"])
+				{
+					$o = obj($ch);
+					$o->set_class_id(CL_CRM_PHONE);
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_name($req["cedit_add_number"]);
+					$o->set_prop("type", $req["cedit_add_ntype"]);
+					$id = $o->save();
+					!$ch?$arr["obj_inst"]->connect(array(
+						"type" => "RELTYPE_PHONE",
+						"to" => $id,
+					)):"";
+				}
+				if($req["cedit_add_telefax"])
+				{
+					$o = obj($ch);
+					$o->set_class_id(CL_CRM_PHONE);
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_name($req["cedit_add_telefax"]);
+					$id = $o->save();
+					!$ch?$arr["obj_inst"]->connect(array(
+						"type" => "RELTYPE_TELEFAX",
+						"to" => $id,
+					)):"";
+				}
+				if($req["cedit_add_url"])
+				{
+					$o = obj($ch);
+					$o->set_class_id(CL_EXTLINK);
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_name($req["cedit_add_url"]);
+					$o->set_prop("url", $req["cedit_add_url"]);
+					$id = $o->save();
+					!$ch?$arr["obj_inst"]->connect(array(
+						"type" => "RELTYPE_URL",
+						"to" => $id,
+					)):"";
+				}
+				if($req["cedit_add_email"])
+				{
+					$o = obj($ch);
+					$o->set_class_id(CL_ML_MEMBER);
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_name($req["cedit_add_email"]);
+					$o->set_prop("mail", $req["cedit_add_email"]);
+					$id = $o->save();
+					!$ch?$arr["obj_inst"]->connect(array(
+						"type" => "RELTYPE_EMAIL",
+						"to" => $id,
+					)):"";
+				}
+				if($req["cedit_add_acc_name"] && $req["cedit_add_acc_no"])
+				{
+					$o = obj($ch);
+					$o->set_class_id(CL_CRM_BANK_ACCOUNT);
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_name($req["cedit_add_acc_name"]);
+					$o->set_prop("acct_no", $req["cedit_add_acc_no"]);
+					$o->set_prop("bank", $req["cedit_add_acc_bank"]);
+					$o->set_prop("sort_code", $req["cedit_add_acc_off"]);
+					$id = $o->save();
+					!$ch?$arr["obj_inst"]->connect(array(
+						"type" => "RELTYPE_BANK_ACCOUNT",
+						"to" => $id,
+					)):"";
+				}
+			break;
 			case "ext_sys_t":
 				$this->_save_ext_sys_t($arr);
 				break;
@@ -2439,6 +2597,424 @@ class crm_company extends class_base
 		$pl = get_instance(CL_PLANNER);
 		$this->cal_id = $pl->get_calendar_for_user(array(
 			"uid" => aw_global_get("uid"),
+		));
+	}
+	
+	function gen_cedit_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "add",
+			"tooltip" => t("Lisa"),
+			"img" => "new.gif",
+		));
+		$tb->add_menu_item(array(
+			"parent" => "add",
+			"text" => t("Telefon"),
+			"url" => $this->mk_my_orb("change", array(
+				"add_cedit_obj" => "phone",
+				"id" => $arr["request"]["id"],
+				"group" => $arr["request"]["group"],
+				"return_url" => $arr["request"]["return_url"],
+			), CL_CRM_COMPANY),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "add",
+			"text" => t("Faks"),
+			"url" => $this->mk_my_orb("change", array(
+				"add_cedit_obj" => "telefax",
+				"id" => $arr["request"]["id"],
+				"group" => $arr["request"]["group"],
+				"return_url" => $arr["request"]["return_url"],
+			), CL_CRM_COMPANY),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "add",
+			"text" => t("URL"),
+			"url" => $this->mk_my_orb("change", array(
+				"add_cedit_obj" => "url",
+				"id" => $arr["request"]["id"],
+				"group" => $arr["request"]["group"],
+				"return_url" => $arr["request"]["return_url"],
+			), CL_CRM_COMPANY),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "add",
+			"text" => t("E-mail"),
+			"url" => $this->mk_my_orb("change", array(
+				"add_cedit_obj" => "email",
+				"id" => $arr["request"]["id"],
+				"group" => $arr["request"]["group"],
+				"return_url" => $arr["request"]["return_url"],
+			), CL_CRM_COMPANY),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "add",
+			"text" => t("Pangakonto"),
+			"url" => $this->mk_my_orb("change", array(
+				"add_cedit_obj" => "bank_account",
+				"id" => $arr["request"]["id"],
+				"group" => $arr["request"]["group"],
+				"return_url" => $arr["request"]["return_url"],
+			), CL_CRM_COMPANY),
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_selected_objects",
+		));
+		$tb->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"action" => "",
+			"tooltip" => t("Salvesta"),
+		));
+	}
+
+
+	function gen_cedit_props($arr)
+	{
+		$retval = array();
+		$el = $arr["request"]["ch_cedit_obj"]?$arr["request"]["ch_cedit_obj"]:$arr["request"]["add_cedit_obj"];
+		if($arr["request"]["ch_cedit_obj"] && $arr["request"]["obj"])
+		{
+			$o = obj($arr["request"]["obj"]);
+		}
+		switch($el)
+		{
+			case "phone":
+
+				$retval["cedit_add_number_caption"] = array(
+					"name" => "cedit_add_number_caption",
+					"type" => "text",
+					"value" => t("Telefon"),
+					"store" => "no",
+					"caption" => t("T&uuml;&uuml;p"),
+				);
+				$retval["cedit_add_number"] = array(
+					"name" => "cedit_add_number",
+					"type" => "textbox",
+					"store" => "no",
+					"caption" => t("Number"),
+					"value" => $o?$o->name():"",
+				);
+				$retval["cedit_add_ntype"] = array(
+					"name" => "cedit_add_ntype",
+					"type" => "chooser",
+					"store" =>  "no",
+					"caption" => t("T&uuml;&uuml;p"),
+					"value" => $o?$o->prop("type"):"",
+				);
+			break;
+			case "telefax":
+				$retval["cedit_add_fax_caption"] = array(
+					"name" => "cedit_add_number_caption",
+					"type" => "text",
+					"value" => t("Faks"),
+					"store" => "no",
+					"caption" => t("T&uuml;&uuml;p"),
+				);
+				$retval["cedit_add_telefax"] = array(
+					"type" => "textbox",
+					"name" => "cedit_add_telefax",
+					"store" => "no",
+					"caption" => t("Number"),
+					"value" => $o?$o->name():"",
+				);
+			break;
+			case "url":
+				$retval["cedit_add_url_caption"] = array(
+					"name" => "cedit_add_url_caption",
+					"type" => "text",
+					"value" => t("Veebiaadress"),
+					"store" => "no",
+					"caption" => t("T&uuml;&uuml;p"),
+				);
+				$retval["cedit_add_url"] = array(
+					"type" => "textbox",
+					"name" => "cedit_add_url",
+					"store" => "no",
+					"caption" => t("URL"),
+					"value" => $o?$o->name():"",
+				);
+			break;
+			case "email":
+				$retval["cedit_add_email_caption"] = array(
+					"name" => "cedit_add_email_caption",
+					"type" => "text",
+					"value" => t("Mailiaadress"),
+					"store" => "no",
+					"caption" => t("T&uuml;&uuml;p"),
+				);
+				$retval["cedit_add_email"] = array(
+					"type" => "textbox",
+					"name" => "cedit_add_email",
+					"store" => "no",
+					"caption" => t("E-Mail"),
+					"value" => $o?$o->prop("mail"):"",
+				);
+			break;
+			case "bank_account":
+				$retval["cedit_add_acc_caption"] = array(
+					"name" => "cedit_add_acc_caption",
+					"type" => "text",
+					"value" => t("Pangakonto"),
+					"store" => "no",
+					"caption" => t("T&uuml;&uuml;p"),
+				);
+				$retval["cedit_add_acc_name"] = array(
+					"type" => "textbox",
+					"name" => "cedit_add_acc_name",
+					"store" => "no",
+					"caption" => t("Nimi"),
+					"value" => $o?$o->name():"",
+				);
+				$retval["cedit_add_acc_no"] = array(
+					"type" => "textbox",
+					"name" => "cedit_add_acc_no",
+					"store" => "no",
+					"caption" => t("Kontonumber"),
+					"value" => $o?$o->prop("acct_no"):"",
+				);
+				$retval["cedit_add_acc_bank"] = array(
+					"name" => "cedit_add_acc_bank",
+					"type" => "relpicker",
+					"reltype" => "RELTYPE_BANK",
+					"caption" => t("Pank"),
+					"value" => $o?$o->prop("bank"):"",
+				);
+				$retval["cedit_add_acc_off"] = array(
+					"type" => "textbox",
+					"name" => "cedit_add_acc_off",
+					"store" => "no",
+					"caption" => t("Kodukontori kood"),
+					"value" => $o?$o->prop("sort_code"):"",
+				);
+			break;
+		}
+
+		if($arr["request"]["add_cedit_obj"])
+		{
+			$retval["cedit_add_obj_submit"] = array(
+				"name" => "cedit_add_obj_submit",
+				"type" => "submit",
+				"value" => t("Lisa"),
+				"no_caption" => 1,
+			);
+		}
+		elseif($arr["request"]["ch_cedit_obj"])
+		{
+			$retval["cedit_ch_obj"] = array(
+				"name" => "cedit_ch_obj",
+				"type" => "hidden",
+				"no_caption" => 1,
+				"value" => $arr["request"]["obj"],
+			);
+			$retval["cedit_ch_obj_submit"] = array(
+				"name" => "cedit_add_obj_submit",
+				"type" => "submit",
+				"value" => t("Salvesta"),
+				"no_caption" => 1,
+			);
+		}
+		foreach($retval as $k => $data)
+		{
+			$retval[$k]["parent"] = "cedit_layout";
+		}
+		return $retval;
+	}
+
+	function fill_cedit_tables($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		switch($arr["prop"]["name"])
+		{
+			case "cedit_phone_tbl":
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_PHONE",
+				));
+				foreach($conns as $conn)
+				{
+					$obj = $conn->to();
+					$chooser = html::radiobutton(array(
+						"name" => "cedit[".$arr["prop"]["name"]."]",
+						"value" => $obj->id(),
+						"checked" => $arr["obj_inst"]->prop("phone_id") == $obj->id()?1:0,
+					));
+					$arr["request"]["ch_cedit_obj"] = "phone";
+					$arr["request"]["obj"] = $obj->id();
+					unset($arr["request"]["add_cedit_obj"]);
+					$ch_url = $this->mk_my_orb("change", $arr["request"]);
+					$t->define_data(array(
+						"sel" => $obj->id(),
+						"choose" => $chooser,
+						"number" => $obj->name(),
+						"type" => $obj->prop("type"),
+						"change" => html::href(array(
+							"caption" => t("Muuda"),
+							"url" => $ch_url,
+						)),
+					));
+				}
+			break;
+			case "cedit_telefax_tbl":
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_TELEFAX",
+				));
+				foreach($conns as $conn)
+				{
+					$obj = $conn->to();
+					$chooser = html::radiobutton(array(
+						"name" => "cedit[".$arr["prop"]["name"]."]",
+						"value" => $obj->id(),
+						"checked" => $arr["obj_inst"]->prop("telefax_id") == $obj->id()?1:0,
+					));
+					$arr["request"]["ch_cedit_obj"] = "telefax";
+					$arr["request"]["obj"] = $obj->id();
+					unset($arr["request"]["add_cedit_obj"]);
+					$ch_url = $this->mk_my_orb("change", $arr["request"]);
+					$t->define_data(array(
+						"sel" => $obj->id(),
+						"choose" => $chooser,
+						"fax" => $obj->name(),
+						"change" => html::href(array(
+							"caption" => t("Muuda"),
+							"url" => $ch_url,
+						)),
+					));
+				}
+			break;
+			case "cedit_url_tbl":
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_URL",
+				));
+				foreach($conns as $conn)
+				{
+					$obj = $conn->to();
+					$chooser = html::radiobutton(array(
+						"name" => "cedit[".$arr["prop"]["name"]."]",
+						"value" => $obj->id(),
+						"checked" => $arr["obj_inst"]->prop("url_id") == $obj->id()?1:0,
+					));
+					$arr["request"]["ch_cedit_obj"] = "url";
+					$arr["request"]["obj"] = $obj->id();
+					unset($arr["request"]["add_cedit_obj"]);
+					$ch_url = $this->mk_my_orb("change", $arr["request"]);
+					$t->define_data(array(
+						"sel" => $obj->id(),
+						"choose" => $chooser,
+						"url" => $obj->name(),
+						"change" => html::href(array(
+							"caption" => t("Muuda"),
+							"url" => $ch_url,
+						)),
+					));
+				}
+			break;
+			case "cedit_email_tbl":
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_EMAIL",
+				));
+				foreach($conns as $conn)
+				{
+					$obj = $conn->to();
+					$chooser = html::radiobutton(array(
+						"name" => "cedit[".$arr["prop"]["name"]."]",
+						"value" => $obj->id(),
+						"checked" => $arr["obj_inst"]->prop("email_id") == $obj->id()?1:0,
+					));
+					$arr["request"]["ch_cedit_obj"] = "email";
+					$arr["request"]["obj"] = $obj->id();
+					unset($arr["request"]["add_cedit_obj"]);
+					$ch_url = $this->mk_my_orb("change", $arr["request"]);
+					$t->define_data(array(
+						"sel" => $obj->id(),
+						"choose" => $chooser,
+						"email" => $obj->name(),
+						"change" => html::href(array(
+							"caption" => t("Muuda"),
+							"url" => $ch_url,
+						)),
+					));
+				}
+			break;
+			case "cedit_bank_account_tbl":
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_BANK_ACCOUNT",
+				));
+				foreach($conns as $conn)
+				{
+					$obj = $conn->to();
+
+					$chooser = html::radiobutton(array(
+						"name" => "cedit[".$arr["prop"]["name"]."]",
+						"value" => $obj->id(),
+						"checked" => $arr["obj_inst"]->prop("aw_bank_account") == $obj->id()?1:0,
+					));
+					$arr["request"]["ch_cedit_obj"] = "bank_account";
+					$arr["request"]["obj"] = $obj->id();
+					unset($arr["request"]["add_cedit_obj"]);
+					$ch_url = $this->mk_my_orb("change", $arr["request"]);
+					$bank_url = $this->mk_my_orb("change", array(
+						"id" => $obj->prop("bank"),
+						"return_url" => get_ru(),
+					), CL_CRM_BANK);
+					$t->define_data(array(
+						"sel" => $obj->id(),
+						"choose" => $chooser,
+						"name" => $obj->name(),
+						"account" => $obj->prop("acct_no"),
+						"bank" => html::href(array(
+							"caption" =>$obj->prop_str("bank"),
+							"url" => $bank_url,
+						)),
+						"office_code" => $obj->prop("sort_code"),
+						"change" => html::href(array(
+							"caption" => t("Muuda"),
+							"url" => $ch_url,
+						)),
+					));
+				}
+			break;
+		}
+	}
+
+	function init_cedit_tables($t, $fields)
+	{
+		$t->define_chooser(array(
+			"name" => "select",
+			"field" => "sel",
+			"width" => "60",
+		));
+		foreach($fields as $name => $caption)
+		{
+			if($name == "choose")
+			{
+				$width = "10%";
+			}
+			elseif($name == "change")
+			{
+				$width = "60px";
+			}
+			$t->define_field(array(
+				"name" => $name,
+				"caption" => $caption,
+				"width" => $width,
+			));
+		}
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"width" => "80",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "choose",
+			"caption" => t("Vali &uuml;ks"),
+			"width" => "60",
+			"align" => "center",
 		));
 	}
 
@@ -4992,6 +5568,19 @@ class crm_company extends class_base
 
 	function callback_pre_save($arr)
 	{
+		$cedit_props = array(
+			"cedit_phone_tbl" => "phone_id",
+			"cedit_telefax_tbl" => "telefax_id",
+			"cedit_url_tbl" => "url_id",
+			"cedit_email_tbl" => "email_id", 
+			"cedit_bank_account_tbl" => "aw_bank_account",
+		);
+		foreach($arr["request"]["cedit"] as $propname => $val)
+		{
+			$arr["obj_inst"]->set_prop($cedit_props[$propname], $val);
+			$arr["obj_inst"]->save();
+		}
+
 		$this->_gen_company_code($arr["obj_inst"]);
 		if ($arr["request"]["sector"] && $arr["new"])
 		{
@@ -5840,6 +6429,11 @@ class crm_company extends class_base
 				case "buyer_contract_date":
 				case "buyer_priority":
 				case "aw_currency":
+				case "phone_id":
+				case "telefax_id":
+				case "url_id":
+				case "email_id":
+				case "aw_bank_account":
 				case "bill_due_date_days":
 					$this->db_add_col($tbl, array(
 						"name" => $field,

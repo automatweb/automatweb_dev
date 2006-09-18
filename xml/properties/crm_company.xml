@@ -756,11 +756,81 @@
             <field>cedit_table</field>
       </property>
       <property>
+            <name>cedit_toolbar</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cedit_layout</parent>
+            <field>cedit_toolbar</field>
+      </property>
+      <property>
+            <name>cedit_phone_tbl</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>cedit_layout</parent>
+            <store>no</store>
+            <field>cedit_phone_tbl</field>
+      </property>
+      <property>
+            <name>cedit_telefax_tbl</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>cedit_layout</parent>
+            <store>no</store>
+            <field>cedit_telefax_tbl</field>
+      </property>
+      <property>
+            <name>cedit_url_tbl</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cedit_layout</parent>
+            <field>cedit_url_tbl</field>
+      </property>
+      <property>
+            <name>cedit_email_tbl</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cedit_layout</parent>
+            <field>cedit_email_tbl</field>
+      </property>
+      <property>
+            <name>cedit_bank_account_tbl</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cedit_layout</parent>
+            <field>cedit_bank_account_tbl</field>
+      </property>
+      <property>
+            <name>cedit_add_change</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>callback</type>
+            <callback>gen_cedit_props</callback>
+            <parent>cedit_layout</parent>
+            <field>cedit_add_change</field>
+      </property>
+      <property>
             <name>contact</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS</reltype>
+            <parent>cedit_layout_other</parent>
             <field>contact</field>
             <caption>Vaikimisi aadress</caption>
       </property>
@@ -771,6 +841,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CURRENCY</reltype>
             <field>aw_currency</field>
+            <parent>cedit_layout_other</parent>
             <caption>Valuuta</caption>
       </property>
       <property>
@@ -780,88 +851,8 @@
             <type>textbox</type>
             <method>serialize</method>
             <field>meta</field>
+            <parent>cedit_layout_other</parent>
             <caption>&amp;amp;Uuml;marda</caption>
-      </property>
-      <property>
-            <name>phone_id</name>
-            <table>kliendibaas_firma</table>
-            <group>cedit</group>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>type</num_1>
-            </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>type</num_1>
-            </table_fields>
-            <choose_default>1</choose_default>
-            <always_show_add>1</always_show_add>
-            <reltype>RELTYPE_PHONE</reltype>
-            <field>phone_id</field>
-            <caption>Telefon</caption>
-      </property>
-      <property>
-            <name>telefax_id</name>
-            <table>kliendibaas_firma</table>
-            <group>cedit</group>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <reltype>RELTYPE_TELEFAX</reltype>
-            <props>name</props>
-            <choose_default>1</choose_default>
-            <always_show_add>1</always_show_add>
-            <field>telefax_id</field>
-            <caption>Faks</caption>
-      </property>
-      <property>
-            <name>url_id</name>
-            <table>kliendibaas_firma</table>
-            <group>cedit</group>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <reltype>RELTYPE_URL</reltype>
-            <props>name</props>
-            <choose_default>1</choose_default>
-            <always_show_add>1</always_show_add>
-            <field>url_id</field>
-            <caption>Veebiaadress</caption>
-      </property>
-      <property>
-            <name>email_id</name>
-            <table>kliendibaas_firma</table>
-            <group>cedit</group>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <reltype>RELTYPE_EMAIL</reltype>
-            <props>mail</props>
-            <choose_default>1</choose_default>
-            <always_show_add>1</always_show_add>
-            <field>email_id</field>
-            <caption>E-posti aadressid</caption>
-      </property>
-      <property>
-            <name>bank_account</name>
-            <table>kliendibaas_firma</table>
-            <group>cedit</group>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <reltype>RELTYPE_BANK_ACCOUNT</reltype>
-            <field>aw_bank_account</field>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>acct_no</num_1>
-                  <num_2>bank</num_2>
-            </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>acct_no</num_1>
-                  <num_2>bank</num_2>
-                  <num_3>sort_code</num_3>
-            </table_fields>
-            <store>no</store>
-            <caption>Pangaarved</caption>
       </property>
       <property>
             <name>receptionist_name</name>
@@ -870,6 +861,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <parent>cedit_layout_other</parent>
             <caption>Telefoni v&amp;amp;otilde;tab vastu</caption>
       </property>
       <property>
@@ -879,7 +871,53 @@
             <type>textbox</type>
             <size>5</size>
             <field>aw_bill_due_days</field>
+            <parent>cedit_layout_other</parent>
             <caption>Makset&amp;amp;auml;htaeg p&amp;amp;auml;evades</caption>
+      </property>
+      <property>
+            <name>phone_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>hidden</type>
+            <parent>cedit_master</parent>
+            <no_caption>1</no_caption>
+            <field>phone_id</field>
+      </property>
+      <property>
+            <name>telefax_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>hidden</type>
+            <parent>cedit_master</parent>
+            <no_caption>1</no_caption>
+            <field>telefax_id</field>
+      </property>
+      <property>
+            <name>url_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>hidden</type>
+            <parent>cedit_master</parent>
+            <no_caption>1</no_caption>
+            <field>url_id</field>
+      </property>
+      <property>
+            <name>email_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>hidden</type>
+            <parent>cedit_master</parent>
+            <no_caption>1</no_caption>
+            <field>email_id</field>
+      </property>
+      <property>
+            <name>aw_bank_account</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>hidden</type>
+            <parent>cedit_master</parent>
+            <no_caption>1</no_caption>
+            <field>aw_bank_account</field>
       </property>
       <property>
             <name>personal_offers_toolbar</name>
@@ -3345,6 +3383,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Ostja, M&amp;amp;uuml;&amp;amp;uuml;a</caption>
             </BUYER>
+            <BANK>
+                  <value>63</value>
+                  <clid>CL_CRM_BANK</clid>
+                  <caption>Pank</caption>
+            </BANK>
       </reltypes>
       <layout>
             <co_top>
@@ -3418,6 +3461,24 @@
                   <parent>contacts_edit</parent>
                   <group>contacts_edit</group>
             </contacts_edit_table>
+            <cedit_master>
+                  <type>vbox</type>
+                  <group>cedit</group>
+            </cedit_master>
+            <cedit_layout>
+                  <type>vbox</type>
+                  <area_caption>Vaikeseaded</area_caption>
+                  <closeable>1</closeable>
+                  <parent>cedit_master</parent>
+                  <group>cedit</group>
+            </cedit_layout>
+            <cedit_layout_other>
+                  <type>vbox</type>
+                  <area_caption>Andmed</area_caption>
+                  <closeable>1</closeable>
+                  <parent>cedit_master</parent>
+                  <group>cedit</group>
+            </cedit_layout_other>
             <personal_toolbar>
                   <type>hbox</type>
                   <group>personal_offers</group>
