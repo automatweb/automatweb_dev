@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.99 2006/09/15 14:46:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.100 2006/09/18 12:25:42 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -937,7 +937,8 @@ class project extends class_base
 		
 		// aga vaat siin on mingi jama ..
 		$ol = new object_list(array(
-			"parent" => $parents,
+//			"parent" => $parents,
+			"project" => $arr["obj_inst"]->id(),
 			"sort_by" => "planner.start",
 			"class_id" => $this->event_entry_classes,
 			"CL_STAGING.start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start),
