@@ -15,6 +15,27 @@
 			</function>
 		</action>
 
+		<action name="copy_bms">
+			<function name="copy_bms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cut_bms">
+			<function name="cut_bms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_bms">
+			<function name="paste_bms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="pm_lod">
 			<function name="pm_lod">
 				<arguments>

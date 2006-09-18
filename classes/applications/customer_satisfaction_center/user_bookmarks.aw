@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.6 2006/09/15 07:35:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.7 2006/09/18 15:01:53 dragut Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -132,6 +132,30 @@ class user_bookmarks extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta")
 		));
+
+		$tb->add_button(array(
+			"name" => "copy_bms",
+			"action" => "copy_bms",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri")
+		));
+
+		$tb->add_button(array(
+			"name" => "cut_bms",
+			"action" => "cut_bms",
+			"img" => "cut.gif",
+			"tooltip" => t("L&otilde;ika")
+		));
+		
+		if ( is_array(aw_global_get('copy_bookmarks')) || is_array(aw_global_get('cut_bookmarks')) )
+		{
+			$tb->add_button(array(
+				"name" => "paste_bms",
+				"action" => "paste_bms",
+				"img" => "paste.gif",
+				"tooltip" => t("Kleebi")
+			));
+		}
 	}
 
 	/**
@@ -179,9 +203,71 @@ class user_bookmarks extends class_base
 			"icon" => icons::get_icon_url(CL_MENU)
 		));
 	}
+
+	/**
+		@attrib name=copy_bms
+	**/
+	function copy_bms($arr)
+	{
+		$_SESSION['copy_bookmarks'] = $arr['sel'];
+		return $arr['post_ru'];
+	}
 	
+	/**
+		@attrib name=cut_bms
+	**/
+	function cut_bms($arr)
+	{
+		$_SESSION['cut_bookmarks'] = $arr['sel'];
+		return $arr['post_ru'];
+	}
+
+	/**
+		@attrib name=paste_bms
+	**/
+	function paste_bms($arr)
+	{
+		$cut_bookmarks = aw_global_get( 'cut_bookmarks' );
+		foreach ( safe_array($cut_bookmarks) as $oid )
+		{
+			if ( $this->can('edit', $oid) )
+			{
+				$o = new object($oid);
+				// the object cannot be copied under itself
+				if ( $o->id() != $arr['tf'] )
+				{
+					$o->set_parent($arr['tf']);
+					$o->save();
+				}
+			}
+		}
+		unset($_SESSION['cut_bookmarks']);
+
+		$copy_bookmarks = aw_global_get( 'copy_bookmarks' );
+		foreach ( safe_array($copy_bookmarks) as $oid )
+		{
+			if ( $this->can('view', $oid) )
+			{
+				$o = new object($oid);
+				$new_oid = $o->save_new();
+				$new_o = new object($new_oid);
+				$new_o->set_parent($arr['tf']);
+				$new_o->save();
+			}
+		}
+		unset($_SESSION['copy_bookmarks']);
+
+		return $arr['post_ru'];
+	}
+
 	function _init_bm_table(&$t)
 	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("Ikoon"),
+			"width" => "5%",
+			"align" => "center"
+		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Objekti nimi"),
@@ -199,20 +285,23 @@ class user_bookmarks extends class_base
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
-			"field" => "oid"
+			"field" => "oid",
+			"width" => "5%"
 		));
 	}
 
 	function _bm_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
 		$this->_init_bm_table($t);
 
 		$pt = isset($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
 		$ol = new object_list(array(
 			"parent" => $pt,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"sort_by" => "objects.class_id asc, objects.name asc"
 		));
 		$mt = $arr["obj_inst"]->meta("grp_sets");
 		foreach($ol->arr() as $o)
@@ -240,7 +329,11 @@ class user_bookmarks extends class_base
 					"value" => $mt[$o->id()]
 				));
 			}
+
 			$t->define_data(array(
+				"icon" => html::img(array(
+					'url' => icons::get_icon_url($o->class_id())
+				)),
 				"name" => html::obj_change_url($o),
 				"oid" => $o->id(),
 				"link" => $link,
