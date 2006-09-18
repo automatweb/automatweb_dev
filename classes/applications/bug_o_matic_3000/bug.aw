@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.53 2006/09/01 13:51:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.54 2006/09/18 06:56:37 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -379,6 +379,8 @@ class bug extends class_base
 					$filt = array(
 						"class_id" => CL_PROJECT,
 						"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->prop("customer"),
+						"lang_id" => array(),
+						"site_id" => array()
 					);
 					$ol = new object_list($filt);
 				}
