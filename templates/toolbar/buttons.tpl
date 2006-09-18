@@ -81,7 +81,7 @@
 		<!-- END SUB: separator -->
 
 		<!-- SUB: cdata -->
-			 <td class="aw04toolbardata">{VAR:data}</td>
+			 <div class="cdata">{VAR:data}</div>
 		<!-- END SUB: cdata -->
 
 	</div>

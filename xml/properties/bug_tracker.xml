@@ -130,7 +130,6 @@
             <type>textbox</type>
             <store>no</store>
             <parent>s_name_lay</parent>
-            <captionside>top</captionside>
             <size>15</size>
             <field>s_name</field>
             <caption>Nimi</caption>
@@ -142,7 +141,6 @@
             <type>textbox</type>
             <store>no</store>
             <parent>s_name_lay</parent>
-            <captionside>top</captionside>
             <field>s_bug_content</field>
             <caption>Sisu</caption>
       </property>
@@ -154,7 +152,6 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <parent>s_name_lay</parent>
-            <captionside>top</captionside>
             <field>s_find_parens</field>
             <caption>Leia ka buge, millel on alambuge</caption>
       </property>
@@ -166,7 +163,6 @@
             <store>no</store>
             <multiple>1</multiple>
             <parent>s_status_lay</parent>
-            <captionside>top</captionside>
             <size>3</size>
             <field>s_bug_status</field>
             <caption>Staatus</caption>
@@ -178,7 +174,6 @@
             <type>select</type>
             <store>no</store>
             <parent>s_status_lay</parent>
-            <captionside>top</captionside>
             <field>s_bug_priority</field>
             <caption>Prioriteet</caption>
       </property>
@@ -189,7 +184,6 @@
             <type>select</type>
             <store>no</store>
             <parent>s_status_lay</parent>
-            <captionside>top</captionside>
             <field>s_bug_severity</field>
             <caption>T&amp;amp;otilde;sidus</caption>
       </property>
@@ -200,7 +194,6 @@
             <type>textbox</type>
             <store>no</store>
             <parent>s_who_l</parent>
-            <captionside>top</captionside>
             <size>15</size>
             <field>s_who</field>
             <caption>Kellele</caption>
@@ -213,7 +206,6 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <parent>s_who_l</parent>
-            <captionside>top</captionside>
             <field>s_who_empty</field>
             <caption>T&amp;amp;uuml;hi</caption>
       </property>
@@ -224,7 +216,6 @@
             <type>textbox</type>
             <store>no</store>
             <parent>s_who_l</parent>
-            <captionside>top</captionside>
             <field>s_monitors</field>
             <caption>J&amp;amp;auml;lgijad</caption>
       </property>
@@ -235,9 +226,19 @@
             <type>textbox</type>
             <store>no</store>
             <parent>s_who_l</parent>
-            <captionside>top</captionside>
             <field>s_bug_mail</field>
             <caption>Bugmail CC</caption>
+      </property>
+      <property>
+            <name>s_createdby</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <size>15</size>
+            <parent>s_who_l</parent>
+            <field>s_createdby</field>
+            <caption>Looja</caption>
       </property>
       <property>
             <name>s_bug_type</name>
@@ -245,7 +246,6 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
-            <captionside>top</captionside>
             <parent>s_type_lay</parent>
             <size>15</size>
             <field>s_bug_type</field>
@@ -257,7 +257,6 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
-            <captionside>top</captionside>
             <parent>s_type_lay</parent>
             <field>s_bug_class</field>
             <caption>Klass</caption>
@@ -268,7 +267,6 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
-            <captionside>top</captionside>
             <parent>s_type_lay</parent>
             <field>s_bug_component</field>
             <caption>Komponent</caption>
@@ -279,7 +277,6 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
-            <captionside>top</captionside>
             <parent>s_cut_lay</parent>
             <size>15</size>
             <field>s_customer</field>
@@ -291,7 +288,6 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
-            <captionside>top</captionside>
             <parent>s_cut_lay</parent>
             <field>s_project</field>
             <caption>Projekt</caption>
@@ -303,20 +299,9 @@
             <type>date_select</type>
             <default>-1</default>
             <store>no</store>
-            <captionside>top</captionside>
             <parent>s_cut_lay</parent>
             <field>s_deadline</field>
             <caption>T&amp;amp;auml;htaeg</caption>
-      </property>
-      <property>
-            <name>s_createdby</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>textbox</type>
-            <store>no</store>
-            <size>15</size>
-            <field>s_createdby</field>
-            <caption>Looja</caption>
       </property>
       <property>
             <name>s_sbt</name>
@@ -324,6 +309,7 @@
             <group>search</group>
             <type>submit</type>
             <store>no</store>
+            <no_caption>1</no_caption>
             <field>s_sbt</field>
             <caption>Otsi</caption>
       </property>
@@ -575,29 +561,34 @@
                   </group>
             </bug>
             <s_name_lay>
-                  <type>hbox</type>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Sisu</area_caption>
                   <group>search</group>
-                  <caption>Nimi</caption>
             </s_name_lay>
             <s_status_lay>
-                  <type>hbox</type>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Staatus</area_caption>
                   <group>search</group>
-                  <caption>Staatus</caption>
             </s_status_lay>
             <s_who_l>
-                  <type>hbox</type>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Osalejad</area_caption>
                   <group>search</group>
-                  <caption>Kellele</caption>
             </s_who_l>
             <s_type_lay>
-                  <type>hbox</type>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Klass</area_caption>
                   <group>search</group>
-                  <caption>Tyyp</caption>
             </s_type_lay>
             <s_cut_lay>
-                  <type>hbox</type>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Klient</area_caption>
                   <group>search</group>
-                  <caption>Klient</caption>
             </s_cut_lay>
       </layout>
 </properties>
