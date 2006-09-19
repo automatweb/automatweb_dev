@@ -124,22 +124,22 @@ class crm_company_cust_impl extends class_base
 		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
 
+		// setting table caption:
 		if ( isset($arr['request']['proj_search_part']) )
 		{
 			$participants_name = $arr['request']['proj_search_part'];
 			$format = t('%s projektid');
 			if ( !empty($participants_name) )
 			{
-				$format .= t(', milles on %s osaline');
+				$format .= t(', milles %s on osaline');
 			}
 		}
 		else
 		{
 			$user_obj = obj($u->get_current_person());
 			$participants_name = $user_obj->name();
-			$format = t('%s projektid, milles on %s osaline');
+			$format = t('%s projektid, milles %s on osaline');
 		}
-
 		$table->set_caption(sprintf($format, $arr['obj_inst']->name(), $participants_name));
 
 		$my_co = obj($u->get_current_company());
@@ -166,6 +166,7 @@ class crm_company_cust_impl extends class_base
 				"site_id" => array(),
 				"state" => $arr["request"]["do_proj_search"] == 1 ? null : 1
 			));
+
 			if ($arr["request"]["do_proj_search"] == 1)
 			{
 				$filt = $this->_get_my_proj_search_filt($arr["request"], $conns_ol->ids());
@@ -872,14 +873,14 @@ class crm_company_cust_impl extends class_base
 			$participants_name = $arr['request']['all_proj_search_part'];
 			if ( !empty($participants_name) )
 			{
-				$format .= t(', milles on %s osaline');
+				$format .= t(', milles %s on osaline');
 			}
 		}
 		else
 		{
 			$user_obj = new object($u->get_current_person());
 			$participants_name = $user_obj->name();
-			$format = t('%s projektid milles on %s osaline');
+			$format = t('%s projektid milles %s on osaline');
 		}
 
 		$table->set_caption(sprintf($format, $arr['obj_inst']->name(), $participants_name));
