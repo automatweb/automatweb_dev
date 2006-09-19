@@ -318,13 +318,11 @@ class acl_base extends db_connector
 				objects.oid = '$oid' AND objects.status != 0
 		";
 		$this->db_query($q);
+		$rv = null;
 		while ($row = $this->db_next())
 		{
-			if ($row["oid"] != $row["brother_of"] && $row["brother_of"] > 0)
-			{
-				return $this->get_acl_for_oid($row["brother_of"]);
-			}
 			$max_row["oid"] = $row["oid"];
+			$max_row["brother_of"] = $row["brother_of"];
 			$max_row["parent"] = $row["parent"];
 			if (!$row["gid"] || !isset($g_pris[$row["gid"]]))
 			{
@@ -411,6 +409,15 @@ class acl_base extends db_connector
 			}
 
 			$oid = $parent;
+		}
+
+		// now, we have the result. but for brothers we need to do this again for the original object and only use the can_delete privilege from the brother
+		$_t = aw_cache_get("aclcache",$orig_oid);
+		if ($_t["brother_of"] > 0 && $_t["brother_of"] != $_t["oid"])
+		{
+			$rv = $this->can_aw($access, $_t["brother_of"]);
+			$rv["can_delete"] = $max_acl["can_delete"];
+			$max_acl = $rv;
 		}
 
 		// if the max_acl does not contain view and no user is logged, return default

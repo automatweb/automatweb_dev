@@ -472,6 +472,7 @@ class _int_object_loader extends core
 
 		// go through the object tree and find the acl that is of highest priority among the current users group
 		$cur_oid = $oid;
+		$do_orig = false;
 		while ($cur_oid > 0)
 		{
 			if (isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]))
@@ -513,33 +514,9 @@ class _int_object_loader extends core
 				}
 			}
 
-			if ($cur_oid != $tmp["brother_of"] && $tmp["brother_of"] > 0)
+			if ($cur_oid != $tmp["brother_of"] && $tmp["brother_of"] > 0 && $cur_oid == $oid)
 			{
-				$cur_oid = $tmp["brother_of"];
-				if (isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]))
-				{
-					$tmp = $GLOBALS["__obj_sys_acl_memc"][$cur_oid];
-				}
-				else
-				if (isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]))
-				{
-					$tmp = $GLOBALS["__obj_sys_objd_memc"][$cur_oid];
-				}
-				else
-				if ($GLOBALS["objects"][$cur_oid])
-				{
-					$tmp = $GLOBALS["objects"][$cur_oid]->obj;
-				}
-				else
-				{
-					$tmp = $this->ds->get_objdata($cur_oid, array(
-						"no_errors" => true
-					));
-					if ($tmp !== NULL)
-					{
-						$GLOBALS["__obj_sys_objd_memc"][$cur_oid] = $tmp;
-					}
-				}
+				$do_orig = $tmp["brother_of"];
 			}
 
 			$acld = safe_array($tmp["acldata"]);
@@ -566,6 +543,14 @@ class _int_object_loader extends core
 
 			// go to parent
 			$cur_oid = $tmp["parent"];
+		}
+
+		// now, we have the result. but for brothers we need to do this again for the original object and only use the can_delete privilege from the brother
+		if ($do_orig !== false)
+		{
+			$rv = $this->_calc_max_acl($do_orig);
+			$rv["can_delete"] = $max_acl["can_delete"];
+			return $rv;
 		}
 		return $max_acl;
 	}
