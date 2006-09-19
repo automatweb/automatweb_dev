@@ -23,6 +23,16 @@
             <caption>Lahtise osa tabel</caption>
       </property>
       <property>
+            <name>extra_charge_percentage</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Juurdehindlus (%)</caption>
+      </property>
+      <property>
             <name>open_part_add_price</name>
             <table>objects</table>
             <group>parts_other</group>

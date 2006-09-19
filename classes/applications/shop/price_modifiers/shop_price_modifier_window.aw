@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.4 2005/08/18 09:22:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.5 2006/09/19 07:42:52 dragut Exp $
 // shop_price_modifier_window.aw - Akna hinnakujundus 
 /*
 
@@ -21,6 +21,9 @@
 	@caption Lahtise osa tabel
 	
 @default group=parts_other
+
+	@property extra_charge_percentage type=textbox size=5
+	@caption Juurdehindlus (%)
 
 	@property open_part_add_price type=textbox size=5
 	@caption Lahtise osa lisatasu kaldp&ouml;&ouml;rdavanemise korral 
