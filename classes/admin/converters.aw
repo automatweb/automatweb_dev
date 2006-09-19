@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.66 2006/09/19 09:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.67 2006/09/19 09:09:36 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -2000,18 +2000,30 @@ echo "mod ".$con["to.name"]."<br>";
 				{
 					echo "file not in db $file <br>";
 					$sz += filesize($rd."/".$bn);
+					if ($_GET["killswitch"] == 1)
+					{
+						unlink($rd."/".$bn);
+					}
 				}
 				else
 				if ($fs[$bn]["status"] == 0)
 				{
 					echo "file has stat 0 $file <br>";
 					$sz += filesize($rd."/".$bn);
+					if ($_GET["killswitch"] == 1)
+					{
+						unlink($rd."/".$bn);
+					}
 				}
 				else
 				if (!$fs[$bn]["can_view"])
 				{
 					echo "file has no can view  $file <br>";
 					$sz += filesize($rd."/".$bn);
+					if ($_GET["killswitch_badass"] == 1)
+					{
+						unlink($rd."/".$bn);
+					}
 				}
 			}
 		}
