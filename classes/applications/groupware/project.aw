@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.100 2006/09/18 12:25:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.101 2006/09/19 09:35:16 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -765,6 +765,10 @@ class project extends class_base
 				break;
 
 			case "prepayment":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
 				$bill = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PREPAYMENT_BILL");
 				if ($bill)
 				{
