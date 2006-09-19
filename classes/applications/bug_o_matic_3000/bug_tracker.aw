@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.80 2006/09/18 06:56:37 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.80 2006/09/18 06:56:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.81 2006/09/19 12:59:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.81 2006/09/19 12:59:13 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -493,27 +493,16 @@ class bug_tracker extends class_base
 			$pt = !empty($arr["request"]["b_id"]) ? $arr["request"]["b_id"] : $this->get_bugs_parent($arr["obj_inst"]);
 		}
 
-		$tb->add_menu_button(array(
+		$tb->add_button(array(
 			"name" => "add_bug",
-			"tooltip" => t("Uus"),
-		));
-
-		$tb->add_menu_item(array(
-			"parent" => "add_bug",
-			"text" => t("Arendus&uuml;lesanne"),
-			"link" => html::get_new_url(CL_BUG, $pt, array(
+			"tooltip" => t("Lisa"),
+			"url" => html::get_new_url(CL_BUG, $pt, array(
 				"return_url" => get_ru(),
 			)),
-			"href_id" => "add_bug_href"
+			"href_id" => "add_bug_href",
+			"img" => "new.gif",
 		));
 
-		/*$tb->add_menu_item(array(
-			"parent" => "add_bug",
-			"text" => t("Kategooria"),
-			"link" => html::get_new_url(CL_MENU, $pt, array(
-				"return_url" => get_ru(),
-			))
-		));*/
 		$tb->add_button(array(
 			"name" => "save",
 			"tooltip" => t("Salvesta"),

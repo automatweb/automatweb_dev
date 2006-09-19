@@ -6,7 +6,7 @@
 		
 		{VAR:surround_start}
 		<div nowrap class="tb_but" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
-		<a href="{VAR:url}"><img style="button" src="{VAR:img_url}" border="0"></a>
+		<a href="{VAR:url}" {VAR:href_id}><img style="button" src="{VAR:img_url}" border="0"></a>
 		</div>
 		{VAR:surround_end}
 	
