@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.64 2006/06/26 20:04:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.65 2006/09/19 09:01:49 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1965,6 +1965,39 @@ echo "mod ".$con["to.name"]."<br>";
 				$o->save();
 				echo "br ".$o->id()." <br>\n";
 				flush();
+			}
+		}
+		die("all done");
+	}
+
+	/**
+		@attrib name=fie_scan
+	**/
+	function file_scan($arr)
+	{
+		$this->db_query("SELECT o.oid,o.name,o.status,f.file FROM files f left join objects o on o.oid = f.id");
+		$fs = array();
+		while ($row = $this->db_next())
+		{
+			$fs[basename($row["file"])] = $row;
+		}
+		echo "db has ".count($fs)." files <br>\n";
+		flush();
+		$dir = aw_ini_get("site_basedir")."/files";
+		$lut = array(0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f');
+		for($i = 0; $i < 16; $i++)
+		{
+			$rd = $dir."/".$lut[$i];
+			echo "<br>\n<br>\n<br>\nscanning $rd <br>\n<br>\n<br>\n";
+			flush();
+			$fs = $this->get_directory(array("dir" => $rd));
+			foreach($fs as $file)
+			{
+				$bn = basename($file);
+				if (!isset($fs[$bn]))
+				{
+					echo "file not in db $file <br>";
+				}
 			}
 		}
 		die("all done");

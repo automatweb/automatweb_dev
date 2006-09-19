@@ -235,5 +235,12 @@
 			</function>
 		</action>
 
+		<action name="fie_scan">
+			<function name="file_scan">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
