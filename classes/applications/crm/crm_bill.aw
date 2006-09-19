@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.100 2006/09/12 12:23:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.101 2006/09/19 22:27:21 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -352,7 +352,8 @@ class crm_bill extends class_base
 				}
 			
 			case "customer":
-				// check if the customer_awAutoCompleteTextbox
+				// check if the 
+
 				if(!is_oid($prop["value"]))
 				{
 					$ol = new object_list(array(
@@ -367,22 +368,31 @@ class crm_bill extends class_base
 				{
 					$cc = get_instance(CL_CRM_COMPANY);
 					$crel = $cc->get_cust_rel(obj($prop["value"]));
-					
+					$u = get_instance(CL_USER);
+					$my_co = $u->get_current_company();
+					$co_obj = obj($co_obj);
+					$client_obj = obj($prop["value"]);
 					if(!$crel)
 					{
-						$u = get_instance(CL_USER);
-						$my_co = $u->get_current_company();
 						$ol = new object_list(array(
 							"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
 							"buyer" => $prop["value"],
-							"seller" => $my_co
+							"seller" => $my_co,
+							"lang_id" => array(),
 						));
 						$crel = reset($ol->arr());
 					}
-					
 					if ($crel)
 					{
 						$this->_set_bddd = $crel->prop("bill_due_date_days");
+					}
+					if(!($arr["obj_inst"]->prop("bill_due_date_days") > 0))
+					{
+						$this->_set_bddd = $co_obj->prop("bill_due_days");
+					}
+					if(!($arr["obj_inst"]->prop("bill_due_date_days") > 0) && $client_obj->class_id() == CL_CRM_COMPANY)
+					{
+						$this->_set_bddd = $client_obj->prop("bill_due_days");
 					}
 				}
 		}
@@ -2067,7 +2077,7 @@ class crm_bill extends class_base
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');",
+			"onClick" => "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');",
 			"text" => t("Prindi arve lisa")
 		));
 
