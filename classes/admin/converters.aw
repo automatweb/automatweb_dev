@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.65 2006/09/19 09:01:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.66 2006/09/19 09:07:35 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -477,7 +477,7 @@ class converters extends aw_template
 		$arr = $this->db_fetch_array($q);
 		foreach($arr as $val)
 		{
-			if (!is_numeric($val['oid']))
+			if (!is_numeric($val['oid']) || !is_oid($val["oid"]))
 			{
 				$this->db_query("INSERT INTO 
 						objects(parent,name,comment,class_id, jrk, status, metadata, createdby, created, modifiedby, modified)
@@ -1979,12 +1979,14 @@ echo "mod ".$con["to.name"]."<br>";
 		$fs = array();
 		while ($row = $this->db_next())
 		{
+			$row["can_view"] = $this->can("view", $row["oid"]);
 			$fs[basename($row["file"])] = $row;
 		}
 		echo "db has ".count($fs)." files <br>\n";
 		flush();
 		$dir = aw_ini_get("site_basedir")."/files";
 		$lut = array(0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f');
+		$sz = 0;
 		for($i = 0; $i < 16; $i++)
 		{
 			$rd = $dir."/".$lut[$i];
@@ -1997,9 +1999,23 @@ echo "mod ".$con["to.name"]."<br>";
 				if (!isset($fs[$bn]))
 				{
 					echo "file not in db $file <br>";
+					$sz += filesize($rd."/".$bn);
+				}
+				else
+				if ($fs[$bn]["status"] == 0)
+				{
+					echo "file has stat 0 $file <br>";
+					$sz += filesize($rd."/".$bn);
+				}
+				else
+				if (!$fs[$bn]["can_view"])
+				{
+					echo "file has no can view  $file <br>";
+					$sz += filesize($rd."/".$bn);
 				}
 			}
 		}
+		echo "could save ".number_format($sz)." bytes <br>";
 		die("all done");
 	}
 };
