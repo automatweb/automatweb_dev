@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.22 2006/09/12 13:09:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.23 2006/09/19 13:40:53 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -487,6 +487,7 @@ class task_quick_entry extends class_base
 			$r->set_prop("on_bill", 1);
 			$r->set_prop("impl", $cur_p->id());
 			$r->set_prop("ord", 0);
+			$r->set_prop("to_bill_date" , time());
 			$r->save();
 
 			$t->connect(array(
