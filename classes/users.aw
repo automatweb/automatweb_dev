@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.166 2006/09/19 12:04:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.167 2006/09/19 12:45:12 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1010,7 +1010,7 @@ class users extends users_user
 			$hig_w_u_p = -1;
 			foreach($gidlist_pri as $_gid => $_pri)
 			{
-				if ($_pri > $hig_p && $_pri < 100000000)
+				if ($_pri > $hig_p && $_pri != 100000000)
 				{
 					$hig_p = $_pri;
 					$hig = $_gid;
