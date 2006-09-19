@@ -8,6 +8,27 @@
 			</function>
 		</action>
 
+		<action name="copy_quick_adds">
+			<function name="copy_quick_adds">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cut_quick_adds">
+			<function name="cut_quick_adds">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_quick_adds">
+			<function name="paste_quick_adds">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="qa_lod">
 			<function name="qa_lod">
 				<arguments>

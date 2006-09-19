@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.5 2006/09/05 13:55:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.6 2006/09/19 09:34:22 dragut Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -77,6 +77,30 @@ class obj_quick_add extends class_base
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta")
 		));
+
+		$tb->add_button(array(
+			"name" => "copy_quick_adds",
+			"action" => "copy_quick_adds",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri")
+		));
+
+		$tb->add_button(array(
+			"name" => "cut_quick_adds",
+			"action" => "cut_quick_adds",
+			"img" => "cut.gif",
+			"tooltip" => t("L&otilde;ika")
+		));
+		
+		if ( is_array(aw_global_get('copy_quick_adds')) || is_array(aw_global_get('cut_quick_adds')) )
+		{
+			$tb->add_button(array(
+				"name" => "paste_quick_adds",
+				"action" => "paste_quick_adds",
+				"img" => "paste.gif",
+				"tooltip" => t("Kleebi")
+			));
+		}
 	}
 
 	/**
@@ -87,6 +111,63 @@ class obj_quick_add extends class_base
 		object_list::iterate_list($arr["sel"], "delete");
 		return $arr["post_ru"];
 	}
+
+	/**
+		@attrib name=copy_quick_adds
+	**/
+	function copy_quick_adds($arr)
+	{
+		$_SESSION['copy_quick_adds'] = $arr['sel'];
+		return $arr['post_ru'];
+	}
+	
+	/**
+		@attrib name=cut_quick_adds
+	**/
+	function cut_quick_adds($arr)
+	{
+		$_SESSION['cut_quick_adds'] = $arr['sel'];
+		return $arr['post_ru'];
+	}
+
+	/**
+		@attrib name=paste_quick_adds
+	**/
+	function paste_quick_adds($arr)
+	{
+		$cut_quick_adds = aw_global_get( 'cut_quick_adds' );
+		foreach ( safe_array($cut_quick_adds) as $oid )
+		{
+			if ( $this->can('edit', $oid) )
+			{
+				$o = new object($oid);
+				// the object cannot be copied under itself
+				if ( $o->id() != $arr['tf'] )
+				{
+					$o->set_parent($arr['tf']);
+					$o->save();
+				}
+			}
+		}
+		unset($_SESSION['cut_quick_adds']);
+
+		$copy_quick_adds = aw_global_get( 'copy_quick_adds' );
+		foreach ( safe_array($copy_quick_adds) as $oid )
+		{
+			if ( $this->can('view', $oid) )
+			{
+				$o = new object($oid);
+				$new_oid = $o->save_new();
+				$new_o = new object($new_oid);
+				$new_o->set_parent($arr['tf']);
+				$new_o->save();
+			}
+		}
+		unset($_SESSION['copy_quick_adds']);
+
+		return $arr['post_ru'];
+	}
+	
 
 	function _bm_tree($arr)
 	{	
@@ -112,6 +193,12 @@ class obj_quick_add extends class_base
 	function _init_bm_table(&$t)
 	{
 		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("Ikoon"),
+			"width" => "5%",
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Objekti nimi"),
 			"align" => "center"
@@ -123,20 +210,23 @@ class obj_quick_add extends class_base
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
-			"field" => "oid"
+			"field" => "oid",
+			"width" => "5%"
 		));
 	}
 
 	function _bm_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
 		$this->_init_bm_table($t);
 
 		$pt = isset($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
 		$ol = new object_list(array(
 			"parent" => $pt,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"sort_by" => "objects.class_id asc, objects.name asc"
 		));
 		$mt = $arr["obj_inst"]->meta("grp_sets");
 		$clss = aw_ini_get("classes");
@@ -148,6 +238,9 @@ class obj_quick_add extends class_base
 				$clid = $clss[$o->prop("type")]["name"];
 			}
 			$t->define_data(array(
+				"icon" => html::img(array(
+					'url' => icons::get_icon_url($o->class_id())
+				)),
 				"name" => html::obj_change_url($o),
 				"oid" => $o->id(),
 				"clid" => $clid,
