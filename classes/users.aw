@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.165 2006/06/26 10:26:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.166 2006/09/19 12:04:41 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1006,6 +1006,8 @@ class users extends users_user
 			// get highest priority group
 			$hig = 0;
 			$hig_p = -1;
+			$hig_w_u = 0;
+			$hig_w_u_p = -1;
 			foreach($gidlist_pri as $_gid => $_pri)
 			{
 				if ($_pri > $hig_p && $_pri < 100000000)
@@ -1013,11 +1015,42 @@ class users extends users_user
 					$hig_p = $_pri;
 					$hig = $_gid;
 				}
+				if ($_pri > $hig_w_u_p)
+				{
+					$hig_w_u_p = $_pri;
+					$hig_w_u = $_gid;
+				}
 			}
 
 			if ($hig)
 			{
 				$_oid = $this->get_oid_for_gid($hig);
+				if ($_oid)
+				{
+					obj_set_opt("no_auto_translation", 1);
+					aw_disable_acl();
+					$o = obj($_oid);
+					aw_restore_acl();
+					$ar2 = $o->meta("admin_rootmenu2");
+					$gf = $o->meta("grp_frontpage");
+					$lang_id = aw_global_get("lang_id");
+					if (is_array($ar2) && $ar2[$lang_id])
+					{
+						aw_ini_set("","admin_rootmenu2",$ar2[$lang_id]);
+						aw_ini_set("","ini_rootmenu", $GLOBALS["cfg"]["__default"]["rootmenu"]);
+						aw_ini_set("","rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
+					}
+					if (is_array($gf) && $gf[$lang_id])
+					{
+						aw_ini_set("","frontpage",$gf[$lang_id]);
+					}
+					obj_set_opt("no_auto_translation", 0);
+				}
+			}
+
+			if ($hig_w_u)
+			{
+				$_oid = $this->get_oid_for_gid($hig_w_u);
 				if ($_oid)
 				{
 					obj_set_opt("no_auto_translation", 1);
