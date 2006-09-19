@@ -5044,7 +5044,7 @@ class crm_company extends class_base
 				$br = obj();
 				$br->set_class_id(CL_CRM_BILL_ROW);
 				$br->set_parent($bill->id());
-				$br->set_prop("name", $expense->name());
+				$br->set_prop("comment", $expense->name());
 				$br->set_prop("amt", 1);
 				$br->set_prop("price", $expense->prop("cost"));
 				$br->set_prop("date", date("d.m.Y", $expense->prop("date")));
@@ -6231,7 +6231,11 @@ class crm_company extends class_base
 			"site_id" => array(),
 			"orderer" => $orderers,
 		));
-		$autocomplete_options = $ol->names();
+		$autocomplete_options =  $ol->names();
+		foreach($autocomplete_options as $key=>$val)
+		{
+			$autocomplete_options[$key] = iconv(aw_global_get("charset"),"UTF-8",  $autocomplete_options[$key]);
+		}
 		exit ($cl_json->encode($option_data));
 	}
 
@@ -6267,6 +6271,10 @@ class crm_company extends class_base
 			"site_id" => array()
 		));
 		$autocomplete_options = $ol->names();
+		foreach($autocomplete_options as $key=>$val)
+		{
+			$autocomplete_options[$key] = iconv(aw_global_get("charset"),"UTF-8",  $autocomplete_options[$key]);
+		}
 		exit ($cl_json->encode($option_data));
 	}
 
