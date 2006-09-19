@@ -51,7 +51,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_accept_date</field>
-            <caption>Aktsepteerimist&amp;auml;htaeg</caption>
+            <caption>Aktsepteerimist&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>shipment_date</name>
@@ -59,7 +59,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_shipment_date</field>
-            <caption>Tarne t&amp;auml;htaeg</caption>
+            <caption>Tarne t&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>completion_date</name>

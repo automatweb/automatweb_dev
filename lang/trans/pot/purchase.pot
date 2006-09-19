@@ -15,15 +15,15 @@ msgid "Klassi Ost help"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:prop_date
-msgid "Omaduse Kuupäev (date) caption"
+msgid "Omaduse Kuup&auml;ev (date) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:prop_date_comment
-msgid "Omaduse Kuupäev (date) kommentaar"
+msgid "Omaduse Kuup&auml;ev (date) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:prop_date_help
-msgid "Omaduse Kuupäev (date) help"
+msgid "Omaduse Kuup&auml;ev (date) help"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:prop_buyer
@@ -38,16 +38,16 @@ msgstr ""
 msgid "Omaduse Ostja (buyer) help"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:prop_bargainer
-msgid "Omaduse Hankija (bargainer) caption"
+#: classes/applications/procurement_center/purchase.aw:prop_offerer
+msgid "Omaduse Hankija (offerer) caption"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:prop_bargainer_comment
-msgid "Omaduse Hankija (bargainer) kommentaar"
+#: classes/applications/procurement_center/purchase.aw:prop_offerer_comment
+msgid "Omaduse Hankija (offerer) kommentaar"
 msgstr ""
 
-#: classes/applications/procurement_center/purchase.aw:prop_bargainer_help
-msgid "Omaduse Hankija (bargainer) help"
+#: classes/applications/procurement_center/purchase.aw:prop_offerer_help
+msgid "Omaduse Hankija (offerer) help"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:prop_stat
@@ -142,6 +142,18 @@ msgstr ""
 msgid "Seose Pakkumine  (RELTYPE_OFFER) tekst"
 msgstr ""
 
+#: classes/applications/procurement_center/purchase.aw:rel_RELTYPE_OFFERER
+msgid "Seose Pakkuja (RELTYPE_OFFERER) tekst"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:71
+msgid "aktiivne"
+msgstr ""
+
+#: classes/applications/procurement_center/purchase.aw:71
+msgid "arhiveeritud"
+msgstr ""
+
 #: classes/applications/procurement_center/purchase.aw:129
 msgid "Otsi"
 msgstr ""
@@ -187,7 +199,7 @@ msgid "Tarneaeg"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:387 classes/applications/procurement_center/purchase.aw:528
-msgid ""
+msgid "&nbsp;"
 msgstr ""
 
 #: classes/applications/procurement_center/purchase.aw:388

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.10 2006/09/01 12:06:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.11 2006/09/19 14:04:38 tarvo Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -26,10 +26,10 @@
 	@caption Hind
 
 	@property accept_date type=date_select table=aw_procurement_offers field=aw_accept_date
-	@caption Aktsepteerimistähtaeg
+	@caption Aktsepteerimist&auml;htaeg
 	
 	@property shipment_date type=date_select table=aw_procurement_offers field=aw_shipment_date
-	@caption Tarne tähtaeg
+	@caption Tarne t&auml;htaeg
 	
 	@property completion_date type=date_select table=aw_procurement_offers field=aw_completion_date
 	@caption Valmimist&auml;htaeg

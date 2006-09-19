@@ -6,7 +6,7 @@
             <group>general</group>
             <field>meta</field>
             <type>date_select</type>
-            <caption>Kuup&amp;auml;ev</caption>
+            <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>buyer</name>

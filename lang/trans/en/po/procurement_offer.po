@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_procurement
 msgid "Omaduse Hange (procurement) caption"
-msgstr ""
+msgstr "Procurement"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_procurement_comment
 msgid "Omaduse Hange (procurement) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_offerer
 msgid "Omaduse Pakkuja (offerer) caption"
-msgstr ""
+msgstr "Offerer"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_offerer_comment
 msgid "Omaduse Pakkuja (offerer) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_hr_price
 msgid "Omaduse Tunni hind (hr_price) caption"
-msgstr ""
+msgstr "Price(per hour)"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_hr_price_comment
 msgid "Omaduse Tunni hind (hr_price) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_calc_price
 msgid "Omaduse Arvutatud koguhind (calc_price) caption"
-msgstr ""
+msgstr "Price (sum)"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_calc_price_comment
 msgid "Omaduse Arvutatud koguhind (calc_price) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_price
 msgid "Omaduse Hind (price) caption"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_price_comment
 msgid "Omaduse Hind (price) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_accept_date
 msgid "Omaduse Aktsepteerimistähtaeg (accept_date) caption"
-msgstr ""
+msgstr "Accepting date"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_accept_date_comment
 msgid "Omaduse Aktsepteerimistähtaeg (accept_date) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_shipment_date
 msgid "Omaduse Tarne tähtaeg (shipment_date) caption"
-msgstr ""
+msgstr "Shipment date"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_shipment_date_comment
 msgid "Omaduse Tarne tähtaeg (shipment_date) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_completion_date
 msgid "Omaduse Valmimist&auml;htaeg (completion_date) caption"
-msgstr ""
+msgstr "Completion date"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_completion_date_comment
 msgid "Omaduse Valmimist&auml;htaeg (completion_date) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_state
 msgid "Omaduse Staatus (state) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_state_comment
 msgid "Omaduse Staatus (state) kommentaar"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_products
 msgid "Grupi Tooted (products) pealkiri"
-msgstr ""
+msgstr "Products"
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_products_help
 msgid "Grupi Tooted (products) help"
@@ -191,7 +191,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_r
 msgid "Grupi N&otilde;uded (r) pealkiri"
-msgstr ""
+msgstr "Requirements"
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_r_help
 msgid "Grupi N&otilde;uded (r) help"
@@ -199,7 +199,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_r_list
 msgid "Grupi N&otilde;uete nimekiri (r_list) pealkiri"
-msgstr ""
+msgstr "Requirements list"
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_r_list_help
 msgid "Grupi N&otilde;uete nimekiri (r_list) help"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_rejected
 msgid "Grupi Tagasi l&uuml;katud (rejected) pealkiri"
-msgstr ""
+msgstr "Rejected"
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_rejected_help
 msgid "Grupi Tagasi l&uuml;katud (rejected) help"
@@ -215,107 +215,107 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:rel_RELTYPE_PROCUREMENT
 msgid "Seose Hange (RELTYPE_PROCUREMENT) tekst"
-msgstr ""
+msgstr "Procurement"
 
 #: classes/applications/procurement_center/procurement_offer.aw:rel_RELTYPE_OFFERER
 msgid "Seose Pakkuja (RELTYPE_OFFERER) tekst"
-msgstr ""
+msgstr "Offerer"
 
 #: classes/applications/procurement_center/procurement_offer.aw:88
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/procurement_center/procurement_offer.aw:89
 msgid "Avaldatud"
-msgstr ""
+msgstr "Published"
 
 #: classes/applications/procurement_center/procurement_offer.aw:90
 msgid "Tagasi l&uuml;katud"
-msgstr ""
+msgstr "Rejected"
 
 #: classes/applications/procurement_center/procurement_offer.aw:91
 msgid "Vastu v&otilde;etud"
-msgstr ""
+msgstr "Accepted"
 
 #: classes/applications/procurement_center/procurement_offer.aw:95
 msgid "Kohe olemas"
-msgstr ""
+msgstr "Available"
 
 #: classes/applications/procurement_center/procurement_offer.aw:96
 msgid "Vajab seadistamist"
-msgstr ""
+msgstr "Needs configuring"
 
 #: classes/applications/procurement_center/procurement_offer.aw:97
 msgid "Uus arendus"
-msgstr ""
+msgstr "New developement"
 
 #: classes/applications/procurement_center/procurement_offer.aw:203
 msgid "%s rida"
-msgstr ""
+msgstr "%s line"
 
 #: classes/applications/procurement_center/procurement_offer.aw:281
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/applications/procurement_center/procurement_offer.aw:297
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/procurement_center/procurement_offer.aw:304
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/procurement_center/procurement_offer.aw:333
 #: classes/applications/procurement_center/procurement_offer.aw:466
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/procurement_center/procurement_offer.aw:340
 msgid "Valmidus"
-msgstr ""
+msgstr "Readiness"
 
 #: classes/applications/procurement_center/procurement_offer.aw:346
 #: classes/applications/procurement_center/procurement_offer.aw:513
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/procurement_center/procurement_offer.aw:353
 msgid "Seadistamise aeg"
-msgstr ""
+msgstr "Configuring time"
 
 #: classes/applications/procurement_center/procurement_offer.aw:359
 msgid "Kommentaar"
-msgstr ""
+msgstr "Comment"
 
 #: classes/applications/procurement_center/procurement_offer.aw:365
 msgid "Eelistatud"
-msgstr ""
+msgstr "Preferred"
 
 #: classes/applications/procurement_center/procurement_offer.aw:493
 msgid "Id"
-msgstr ""
+msgstr "ID"
 
 #: classes/applications/procurement_center/procurement_offer.aw:499
 msgid "Toode"
-msgstr ""
+msgstr "Product"
 
 #: classes/applications/procurement_center/procurement_offer.aw:504
 msgid "Kogus"
-msgstr ""
+msgstr "Amount"
 
 #: classes/applications/procurement_center/procurement_offer.aw:509
 msgid "&Uuml;hik"
-msgstr ""
+msgstr "Unit"
 
 #: classes/applications/procurement_center/procurement_offer.aw:517
 msgid "Valuuta"
-msgstr ""
+msgstr "Currency"
 
 #: classes/applications/procurement_center/procurement_offer.aw:521
 msgid "Tarneaeg"
-msgstr ""
+msgstr "Shipment time"
 
 #: classes/applications/procurement_center/procurement_offer.aw:525
 #: classes/applications/procurement_center/procurement_offer.aw:531
 msgid "Aktsepteeritud"
-msgstr ""
+msgstr "Accepted"

@@ -340,10 +340,10 @@
             <group>offers_find</group>
             <type>submit</type>
             <store>no</store>
-            <value>Otsi</value>
             <parent>offers_find_params</parent>
             <no_caption>1</no_caption>
             <field>do_find_offers</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>offers_find_tbl</name>
@@ -470,10 +470,10 @@
             <group>buyings_find</group>
             <type>submit</type>
             <store>no</store>
-            <value>Otsi</value>
             <parent>buyings_find_params</parent>
             <no_caption>1</no_caption>
             <field>do_find_buyings</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>buyings_find_tbl</name>
@@ -580,10 +580,10 @@
             <group>products_find</group>
             <type>submit</type>
             <store>no</store>
-            <value>Otsi</value>
             <parent>products_find_params</parent>
             <no_caption>1</no_caption>
             <field>do_find_products</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>products_find_tbl</name>

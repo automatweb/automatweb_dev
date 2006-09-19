@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.4 2006/09/01 12:06:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.5 2006/09/19 14:04:38 tarvo Exp $
 // purchase.aw - Ost 
 /*
 
@@ -10,7 +10,7 @@
 @default field=meta
 
 @property date type=date_select
-@caption Kuupäev
+@caption Kuup&auml;ev
 
 @property buyer type=relpicker reltype=RELTYPE_BUYER
 @caption Ostja
@@ -68,7 +68,7 @@ class purchase extends class_base
 			"tpldir" => "applications/procurement_center/purchase",
 			"clid" => CL_PURCHASE
 		));
-		$this->stats = array(0 => "aktiivne" , 1 => "arhiveeritud");
+		$this->stats = array(0 => t("aktiivne") , 1 => t("arhiveeritud"));
 	}
 
 	function get_property($arr)
@@ -384,7 +384,7 @@ class purchase extends class_base
 		$objs[] = obj();
 
 		$types = array(
-			CL_FILE => t(""),
+			CL_FILE => t("&nbsp;"),
 			CL_CRM_MEMO => t("Memo"),
 			CL_CRM_DOCUMENT => t("CRM Dokument"),
 			CL_CRM_DEAL => t("Leping"),
@@ -525,7 +525,7 @@ class purchase extends class_base
 		));
 
 		$t->define_field(array(
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"name" => "del",
 		));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.9 2006/09/19 12:52:37 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.10 2006/09/19 14:04:38 tarvo Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -108,7 +108,8 @@
 			@caption Ainult ostudega
 			@property offers_find_archived type=checkbox store=no parent=offers_find_params no_caption=1
 			@caption Sh arhiveeritud
-			@property do_find_offers type=submit store=no value=Otsi parent=offers_find_params no_caption=1
+			@property do_find_offers type=submit store=no parent=offers_find_params no_caption=1
+			@caption Otsi
 		
 		@property offers_find_tbl type=table no_caption=1 store=no parent=offers_find_l
 
@@ -139,7 +140,8 @@
 			@caption Pakutud Toode
 			@property buyings_find_archived type=checkbox store=no parent=buyings_find_params no_caption=1
 			@caption Sh arhiveeritud
-			@property do_find_buyings type=submit store=no value=Otsi parent=buyings_find_params no_caption=1
+			@property do_find_buyings type=submit store=no parent=buyings_find_params no_caption=1
+			@caption Otsi
 		@property buyings_find_tbl type=table no_caption=1 store=no parent=buyings_find_l
 
 @groupinfo products caption="Tooted"
@@ -166,7 +168,8 @@
 			@caption Hankijagrupp
 			@property products_find_apply type=checkbox store=no parent=products_find_params no_caption=1
 			@caption Ainult kehtivad Ostud
-			@property do_find_products type=submit store=no value=Otsi parent=products_find_params no_caption=1
+			@property do_find_products type=submit store=no parent=products_find_params no_caption=1
+			@caption Otsi
 		@property products_find_tbl type=table no_caption=1 store=no parent=products_find_l
 
 @reltype MANAGER_CO value=1 clid=CL_CRM_COMPANY
