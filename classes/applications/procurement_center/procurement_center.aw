@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.8 2006/09/05 15:24:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.9 2006/09/19 12:52:37 tarvo Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -75,7 +75,7 @@
 			@caption pakutud Toode
 			@property offerers_find_only_buy type=checkbox store=no parent=offerers_find_params no_caption=1
 			@caption Ainult ostudega
-			@property do_find_offerers type=submit store=no value=Otsi parent=offerers_find_params no_caption=1
+			@property do_find_offerers type=submit store=no parent=offerers_find_params no_caption=1
 			@caption Otsi
 
 		@property offerers_find_tbl type=table no_caption=1 store=no parent=offerers_find_l
@@ -776,7 +776,7 @@ class procurement_center extends class_base
 	{
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => t("Pakkumise kuupäev"),
+			"caption" => t("Pakkumise kuup&auml;ev"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -1008,7 +1008,7 @@ class procurement_center extends class_base
 	{
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => t("Ostu kuupäev"),
+			"caption" => t("Ostu kuup&auml;ev"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -1725,7 +1725,7 @@ class procurement_center extends class_base
 		$tb->add_button(array(
 			"name" => "compare",
 			"img" => "rte_table.gif",
-			"tooltip" => t("Lisa võrdlusesse"),
+			"tooltip" => t("Lisa v&otilde;rdlusesse"),
 			"action" => "add_to_compare",
 		//	"target" => "asdasdasd",
 		));
@@ -1947,7 +1947,7 @@ class procurement_center extends class_base
 		$t_products->define_field(array("name" => "price","caption" => t("Hind")));
 		$t_products->define_field(array("name" => "amount","caption" => t("Kogus")));
 		$t_products->define_field(array("name" => "unit","caption" => t("&Uuml;hik")));
-		$t_products->define_field(array("name" => "date","caption" => t("Kuupäev")));
+		$t_products->define_field(array("name" => "date","caption" => t("Kuup&auml;ev")));
 		
 		foreach($products as $product)
 		{

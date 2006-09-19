@@ -199,7 +199,6 @@
             <group>offerers_find</group>
             <type>submit</type>
             <store>no</store>
-            <value>Otsi</value>
             <parent>offerers_find_params</parent>
             <no_caption>1</no_caption>
             <field>do_find_offerers</field>
