@@ -1869,7 +1869,7 @@ class mrp_case extends class_base
 
 		if ($ws)
 		{
-			if ($this->can("view", $ws->prop("case_header_controller")))
+			if (is_oid($ws->prop("case_header_controller")) && $this->can("view", $ws->prop("case_header_controller")))
 			{
 				$ctr = obj($ws->prop("case_header_controller"));
 				$i = $ctr->instance();
