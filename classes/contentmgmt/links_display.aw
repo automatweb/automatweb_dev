@@ -91,6 +91,10 @@ class links_display
 		elseif (aw_ini_get("extlinks.directlink") == 1)
 		{
 			$linksrc = $url_pv;
+			if (strpos($linksrc, 0, 3) == "www")
+			{
+				$linksrc = "http://".$linksrc;
+			}
 		}
 		else
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.26 2006/09/19 11:49:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.27 2006/09/19 13:09:31 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -325,6 +325,10 @@ class links extends class_base
 					if (aw_ini_get("extlinks.directlink") == 1)
 					{
 						$link_url = $arr["obj_inst"]->prop("url");
+						if (strpos($link_url, 0, 3) == "www")
+						{
+							$link_url = "http://".$link_url;
+						}
 					}
 					else
 					{
