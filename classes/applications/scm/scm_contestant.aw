@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.8 2006/08/24 12:36:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.9 2006/09/19 11:40:00 tarvo Exp $
 // scm_contestant.aw - V&otilde;istleja 
 /*
 
@@ -33,7 +33,11 @@
 	@property comp_caption type=text store=no
 	@caption V&otilde;istlus
 
-	@property sel_teams type=select store=no
+	@prop
+	function callback_pre_save($arr)
+	{
+		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop_str("organizer_person"));
+	}erty sel_teams type=select store=no
 	@caption Minu meeskonnad
 
 	@property teams_submit type=submit
@@ -339,6 +343,287 @@ class scm_contestant extends class_base
 
 //-- methods --//
 
+	/**
+		@attrib name=gen_new_contestant_sheet params=name all_args=1
+	**/
+	function gen_new_contestant_sheet($arr)
+	{
+		$comp = obj($arr["parent"]);
+		$gr = $comp->prop("scm_group");
+		foreach($gr as $group)
+		{
+			$obj = obj($group);
+			$groups[$group] = $obj->name();
+		}
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		if($arr["team"])
+		{
+			$o = obj($arr["team"]);
+			$htmlc->add_property(array(
+				"name" => "team_name",
+				"type" => "text",
+				"store" => "no",
+				"caption" => t("Meeskond"),
+				"value" => $o->name(),
+			));
+			$htmlc->add_property(array(
+				"name" => "team",
+				"type" => "hidden",
+				"store" => "no",
+				"value" => $o->id(),
+			));
+		}
+		$htmlc->add_property(array(
+			"name" => "firstname",
+			"type" => "textbox",
+			"store" => "no",
+			"caption" => t("Eesnimi"),
+		));
+		$htmlc->add_property(array(
+			"name" => "lastname",
+			"type" => "textbox",
+			"store" => "no",
+			"caption" => t("Perekonnanimi"),
+		));
+		$htmlc->add_property(array(
+			"name" => "gender",
+			"type" => "chooser",
+			"store" => "no",
+			"caption" => t("Sugu"),
+			"options" => array(
+				1 => t("Mees"),
+				2 => t("Naine"),
+			),
+		));
+		$htmlc->add_property(array(
+			"name" => "birthday",
+			"type" => "date_select",
+			"default" => -1,
+			"store" => "no",
+			"caption" => t("S&uuml;nniaeg"),
+			"year_from" => 1900,
+			"year_to" => 2006,
+		));
+		if(!$arr["do_not_register"])
+		{
+			$htmlc->add_property(array(
+				"name" => "group",
+				"type" => "select",
+				"multiple" => 1,
+				"store" => "no",
+				"options" => $groups,
+				"caption" => t("V&otilde;istlusklass"),
+			));
+			$htmlc->add_property(array(
+				"name" => "id",
+				"type" => "textbox",
+				"store" => "no",
+				"caption" => t("S&auml;rgi number"),
+			));
+		}
+		else
+		{
+			$htmlc->add_property(array(
+				"name" => "do_not_register",
+				"type" => "hidden",
+				"store" => "no",
+				"value" => true,
+			));
+		}
+		$htmlc->add_property(array(
+			"name" => "phone",
+			"type" => "textbox",
+			"store" => "no",
+			"caption" => t("Telefon"),
+		));
+		$htmlc->add_property(array(
+			"name" => "email",
+			"type" => "textbox",
+			"store" => "no",
+			"caption" => t("E-Mail"),
+		));
+		$htmlc->add_property(array(
+			"name" => "submit",
+			"type" => "submit",
+			"value" => "lisa",
+			"action" => "do_process_contestant_sheet",
+		));
+		$htmlc->add_property(array(
+			"name" => "submit_and_add",
+			"type" => "submit",
+			"value" => "lisa ja uus",
+			"action" => "do_process_contestant_sheet_with_new",
+		));
+		$htmlc->add_property(array(
+			"name" => "parent",
+			"type" => "hidden",
+			"value" => $arr["parent"],
+		));
+		$htmlc->finish_output(array(
+			"data" => array(
+				"orb_class" => "scm_contestant",
+			),
+		));
+		return $htmlc->get_result();
+	}
+	
+	/**
+		@attrib name=do_process_contestant_sheet_with_new params=name all_args=1
+	**/
+	function do_process_contestant_sheet_with_new($arr)
+	{
+		$arr["add_more"] = true;
+		$this->do_process_contestant_sheet($arr);
+	}
+	
+	/**
+		@attrib name=do_process_contestant_sheet params=name all_args=1
+	**/
+	function do_process_contestant_sheet($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"CL_CRM_PERSON.firstname" => $arr["firstname"],
+			"CL_CRM_PERSON.lastname" => $arr["lastname"],
+			"CL_CRM_PERSON.gender" => $arr["gender"],
+			"CL_CRM_PERSON.birthday" => mktime(0,0,0, $arr["birthday"]["month"], $arr["birthday"]["day"], $arr["birthday"]["year"]),
+		));
+		
+		// leian kas olemasoleva crm_personi või tekitan uue
+		if($ol->count())
+		{
+			$o_person = $ol->begin();
+		}
+		else
+		{
+			$o_person = obj();
+			$o_person->set_class_id(CL_CRM_PERSON);
+			$o_person->set_name($arr["firstname"]." ".$arr["lastname"]);
+			$o_person->set_prop("firstname", $arr["firstname"]);
+			$o_person->set_prop("lastname", $arr["lastname"]);			
+			$o_person->set_parent($arr["parent"]);
+			$o_person->set_prop("birthday", mktime(0,0,0, $arr["birthday"]["month"], $arr["birthday"]["day"], $arr["birthday"]["year"]));
+			$o_person->set_prop("gender", $arr["gender"]);
+			$o_person->save();
+
+		}
+		// kui email olemas, lisan crm_personile
+		if(strlen($arr["email"]))
+		{
+			$e_obj = obj();
+			$e_obj->set_class_id(CL_ML_MEMBER);
+			$e_obj->set_parent($o_person->id());
+			$e_obj->set_prop("mail", $arr["email"]);
+			$e_obj->set_prop("mail", $arr["email"]);
+			$e_id = $e_obj->save();
+			$o_person->set_prop("email", $e_id);
+			$o_person->connect(array(
+				"to" => $e_id,
+				"type" => "RELTYPE_EMAIL"
+			));
+			$o_person->save();
+		}
+		// kui telefon olemas, lisan crm_personile
+		if(strlen($arr["phone"]))
+		{
+			$e_obj = obj();
+			$e_obj->set_class_id(CL_CRM_PHONE);
+			$e_obj->set_parent($o_person->id());
+			$e_obj->set_prop("name", $arr["phone"]);
+			$e_obj->set_prop("type", "mobile");
+			$e_id = $e_obj->save();
+			$o_person->set_prop("phone", $e_id);
+			$o_person->connect(array(
+				"to" => $e_id,
+				"type" => "RELTYPE_PHONE"
+			));
+			$o_person->save();
+		}
+
+		$comp_inst = get_instance(CL_SCM_COMPETITION);
+
+
+		// tekitan scm_contestant_objekti
+		$o = obj();
+		$o->set_name($o_person->name());
+		$o->set_parent($arr["parent"]);
+		$o->set_class_id(CL_SCM_CONTESTANT);
+		$o->save();
+		
+		// ühendan scm_contestant'i crm_personiga
+		$o->connect(array(
+			"to" => $o_person->id(),
+			"type" => "RELTYPE_CONTESTANT",
+		));
+		$o->set_prop("contestant", $o_person->id());
+		$cnt_id = $o->save();
+
+		if(!$arr["do_not_register"])
+		{
+			$competition = obj($arr["parent"]);
+		
+			// ühendan scm_competition'i kas võistleja või tiimiga
+			if($arr["team"])
+			{
+				$comp_inst->add_contestant_to_team_and_register(array(
+					"contestant" => $cnt_id,
+					"competition" => $arr["parent"],
+					"team" => $arr["team"],
+					"contestant_id" => $arr["id"],
+					"groups" => $arr["group"],
+				));
+			}
+			else
+			{
+				$competition->connect(array(
+					"type" => "RELTYPE_CONTESTANT",
+					"to" => $cnt_id,
+				));
+				
+				// otsin just tekitatud ühendust, et seal seadeid muuta
+				// tiimi puhul tehti see seal vinges funktsioonis kõik ära..
+				$c = new connection();
+				$conns = $c->find(array(
+					"to" => ($arr["team"])?$arr["team"]:$cnt_id,
+					"from" => $arr["parent"],
+				));
+				$data = $comp_inst->get_rel_data(key($conns));
+
+				$data["data"]["groups"] = $arr["group"];
+				$data["data"]["id"] = $arr["id"];
+				$comp_inst->save_rel_data($data);
+			}
+		}
+		else
+		{
+			if($arr["team"])
+			{
+				// registreedida pole vaja, võistlja tuleb lihtsalt meeskonna liikmeks panna
+				$o = obj($arr["team"]);
+				$o->connect(array(
+					"to" => $cnt_id,
+					"type" => "RELTYPE_SCM_TEAM_MEMBER"
+				));
+			}
+			else
+			{
+				// basically i need to do shitload of nothing here.. groovy
+			}
+		}
+		
+		if($arr["add_more"])
+		{
+			$url = $this->mk_my_orb("gen_new_contestant_sheet", array(
+				"parent" => $arr["parent"],
+				"team" => $arr["team"],
+			), CL_SCM_CONTESTANT);
+			header("Location: $url");
+		}
+		$exit = "<body onLoad=\"javascript:window.opener.location.reload(true);javascript:self.close();\"></body>";
+		die($exit);
+	}
+	
 	function _gen_tbl(&$t)
 	{
 		$t->define_field(array(

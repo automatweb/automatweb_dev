@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.17 2006/09/07 14:47:51 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.18 2006/09/19 11:39:59 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -315,10 +315,15 @@ class scm_competition extends class_base
 				$et = ($evt = $arr["obj_inst"]->prop("scm_event"))?call_user_method("prop", obj($evt), "type"):false;
 				if($et == "single")
 				{
+					$url = $this->mk_my_orb("gen_new_contestant_sheet",array(
+						"parent" => $arr["obj_inst"]->id(),
+					),CL_SCM_CONTESTANT);
 					$tb->add_button(array(
 						"name" => "add_contestant",
 						"tooltip" => t("Lisa uus v&otilde;istleja"),
 						"img" => "new.gif",
+						"url" => "javascript:aw_popup_scroll('".$url."', 'title', 500,500);",
+						/*
 						"url" => $this->mk_my_orb("new", array(
 							"class" => "scm_contestant",
 							"parent" => $this->get_organizer(array("competitions" => ($id = $arr["obj_inst"]->id()))),
@@ -326,6 +331,7 @@ class scm_competition extends class_base
 							"reltype" => 6,
 							"return_url" => get_ru(),
 						)),
+						*/
 					));
 				}
 				elseif($et == "multi" || $et == "multi_coll")
@@ -344,15 +350,23 @@ class scm_competition extends class_base
 					asort($teams_n);
 					foreach($teams_n as $oid => $name)
 					{
+						$url = $this->mk_my_orb("gen_new_contestant_sheet",array(
+							"parent" => $arr["obj_inst"]->id(),
+							"team" => $oid,
+						),CL_SCM_CONTESTANT);
+
 						$tb->add_menu_item(array(
 							"parent" => "new",
 							"name" => "team.".$oid,
 							"text" => $name,
+							"url" => "javascript:aw_popup_scroll('".$url."', 'title', 500,500);",
+							/*
 							"url" => $this->mk_my_orb("add_contestant_to_team_and_register", array(
 								"team" => $oid,
 								"competition" => $arr["obj_inst"]->id(),
 								"return_url" => get_ru(),
 							)),
+							*/
 						));
 					}
 				}
@@ -523,7 +537,6 @@ class scm_competition extends class_base
 					$company = obj($cont->get_contestant_company(array(
 						"contestant" => $oid
 					)));
-
 					$id = ($event_type == "multi" || $event_type == "multi_coll")?$data["id"]:$data["data"]["id"];
 
 					// links
@@ -609,7 +622,10 @@ class scm_competition extends class_base
 					$results[$k]["groups"] = $tmp;
 					$merged = array_merge($merged, $tmp);
 				}
+				
 				$this->_gen_res_tbl(&$t, $et, array_unique($merged));
+				
+				krsort($results, SORT_NUMERIC);
 				foreach($results as $data)
 				{
 					$data["result"] = $this->_gen_format_caption(array(
@@ -1234,7 +1250,7 @@ class scm_competition extends class_base
 				$cnt_inst = get_instance(CL_SCM_CONTESTANT);
 				foreach($res as $result)
 				{
-					$to_calc[$result["contestant"]] = $result["raw_result"];
+					$to_calc[(int)$result["contestant"]] = $result["raw_result"];
 				}
 				$pos_and_point = $this->_get_places_and_points(array(
 					"data" => $to_calc,
@@ -1551,6 +1567,7 @@ class scm_competition extends class_base
 			"caption" => t("Punkte"),
 			"align" => "center",
 		));
+		$t->set_numeric_field("place");
 		$t->set_default_sortby("place");
 
 	}
@@ -2244,10 +2261,13 @@ class scm_competition extends class_base
 		$org = $this->get_organizer(array(
 			"competition" => $arr["competition"],
 		));
-		$obj = obj();
+		if($arr["contestant"])
+		{
+			$obj = obj($arr["contestant"]);
+		}
 		$obj->set_parent($org);
 		$obj->set_class_id(CL_SCM_CONTESTANT);
-		$cnt_id = $obj->save_new();
+		$cnt_id = $obj->save();
 		
 		// connecting contestant to team
 		$t_obj = obj($arr["team"]);
@@ -2266,7 +2286,8 @@ class scm_competition extends class_base
 		if(count($conns))
 		{
 			$data = $this->get_rel_data(key($conns));
-			$data["data"]["members"][$cnt_id] = "";
+			$data["data"]["members"][$cnt_id] = $arr["contestant_id"];
+			$data["data"]["groups"] = array_merge($data["data"]["groups"], $arr["groups"]);
 			$this->save_rel_data($data);
 		}
 		else
@@ -2275,9 +2296,10 @@ class scm_competition extends class_base
 			$team_inst = get_instance(CL_SCM_TEAM);
 			$team_inst->register_team(array(
 				"team" => $arr["team"],
+				"groups" => $arr["groups"],
 				"competition" => $arr["competition"],
 				"members" => array(
-					$cnt_id => obj($cnt_id),
+					$cnt_id => $arr["contestant_id"],
 				),
 			));
 		}

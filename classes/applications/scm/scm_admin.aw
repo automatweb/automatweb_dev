@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_admin.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_admin.aw,v 1.4 2006/09/19 11:39:59 tarvo Exp $
 // scm_admin.aw - Spordiv&otilde;istluste haldus 
 /*
 
@@ -51,15 +51,24 @@ class scm_admin extends class_base
 			//-- get_property --//
 			case "cont_tb":
 				$tb = &$prop["vcl_inst"];
+				
+				$url = $this->mk_my_orb("gen_new_contestant_sheet",array(
+					"parent" => $arr["obj_inst"]->id(),
+					"do_not_register" => true,
+				),CL_SCM_CONTESTANT);
+
 				$tb->add_button(array(
 					"name" => "new_contestant",
 					"tooltip" => t("Lisa uus v&otilde;istleja"),
 					"img" => "new.gif",
+					"url" => "javascript:aw_popup_scroll('".$url."', 'title', 500,400);",
+					/*
 					"url" => $this->mk_my_orb("new",array(
 						"class" => "scm_contestant",
 						"parent" => $arr["obj_inst"]->parent(),
 						"return_url" => post_ru(),
 					)),
+					*/
 				));
 
 			break;

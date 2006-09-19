@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.9 2006/08/21 19:03:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.10 2006/09/19 11:40:00 tarvo Exp $
 // scm_team.aw - Meeskond 
 /*
 
@@ -69,6 +69,7 @@ class scm_team extends class_base
 			case "members_tb":
 				$tb = &$prop["vcl_inst"];
 
+				/*
 				$url = $this->mk_my_orb("new",array(
 					"parent" => $arr["obj_inst"]->id(),
 					"alias_to" => $arr["obj_inst"]->id(),
@@ -77,12 +78,19 @@ class scm_team extends class_base
 					"id" => $arr["obj_inst"]->id(),
 					"return_url" => get_ru(),
 				));
+				*/
 
+				$url = $this->mk_my_orb("gen_new_contestant_sheet",array(
+					"parent" => $arr["obj_inst"]->id(),
+					"team" => $arr["obj_inst"]->id(),
+					"do_not_register" => true,
+				),CL_SCM_CONTESTANT);
+				
 				$tb->add_button(array(
 					"name" => "add_member",
 					"tooltip" => t("Lisa liige"),
 					"img" => "new.gif",
-					"url" => $url,
+					"url" => "javascript:aw_popup_scroll('".$url."', 'title', 500,400);",
 				));
 				$popup_search = get_instance("vcl/popup_search");
 				$search_butt = $popup_search->get_popup_search_link(array(
@@ -99,8 +107,15 @@ class scm_team extends class_base
 				{
 					$inst = get_instance(CL_SCM_CONTESTANT);
 					$pers = obj($inst->get_contestant_person(array("contestant" => $oid)));
+					$url = $this->mk_my_orb("change", array(
+						"id" => $obj->id(),
+						"return_url" => get_ru(),
+					), CL_SCM_CONTESTANT);
 					$t->define_data(array(
-						"name" => $obj->name(),
+						"name" => html::href(array(
+							"url" => $url,
+							"caption" => $obj->name(),
+						)),
 						"sex" => (($s = $pers->prop("gender")) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("M&auml;&auml;ramata")),
 						"company" => ($s = $inst->get_contestant_company(array("contestant" => $oid)))?call_user_method("name", obj($s)):t("M&auml;&auml;ramata"),
 						"rem_contestant" => $oid,

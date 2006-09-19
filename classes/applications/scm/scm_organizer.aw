@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.8 2006/08/11 09:26:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.9 2006/09/19 11:40:00 tarvo Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
@@ -266,7 +266,7 @@ class scm_organizer extends class_base
 						"name" => sprintf($link, $competition_url, $obj->name()),
 						"location" => ($l_obj)?sprintf($link, $location_url, $l_obj->prop("name")):"<font color=\"#FF0000\">".t("Asukoht valimata")."</font>",
 						"event" => ($e_obj)?sprintf($link, $event_url, $e_obj->prop("name")):"<font color=\"#FF0000\">".t("Spordiala valimata")."</font>",
-						"date" => date("d / m / Y",$obj->prop("date")),
+						"date" => date("d / m / Y",$obj->prop("date_from")),
 						"tournament" => ($t_obj)?sprintf($link, $tournament_url, $t_obj->prop("name")):t("Ei ole v&otilde;istlussarja osav&otilde;istlus"),
 						"remove_comp" => $oid,
 					));
@@ -428,10 +428,6 @@ class scm_organizer extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function callback_pre_save($arr)
-	{
-		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop_str("organizer_person"));
-	}
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed

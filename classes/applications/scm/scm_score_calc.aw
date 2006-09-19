@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.9 2006/08/24 12:15:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.10 2006/09/19 11:40:00 tarvo Exp $
 // scm_score_calc.aw - Punktis&uuml;steem 
 /*
 
@@ -222,7 +222,9 @@ class scm_score_calc extends class_base
 		$max = $score_calc->prop("max_points");
 		$step = $score_calc->prop("points_step");
 		$other = $score_calc->prop("points_others");
-		return (($s = ($max - (($place - 1) * $step))) > 0)?$s:$other;
+		$pt = (($s = ($max - (($place - 1) * $step))) > 0)?$s:$other;
+		//echo $place."/";
+		return $pt;
 	}
 
 	function _points($place, $score_calc)

@@ -61,16 +61,6 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <caption>V&amp;amp;otilde;istlus</caption>
-      </property>
-      <property>
-            <name>sel_teams</name>
-            <table>objects</table>
-            <group>competitions</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <store>no</store>
             <caption>Minu meeskonnad</caption>
       </property>
       <property>
