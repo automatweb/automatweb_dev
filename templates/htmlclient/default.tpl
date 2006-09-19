@@ -53,7 +53,7 @@
 		<!-- SUB: BACK_BUTTON -->
 		<input id="button" type="submit" name="{VAR:back_button_name}" value="{VAR:back_button_caption}" />
 		<!-- END SUB: BACK_BUTTON -->
-		<input id="button" type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" accesskey='s' onClick='self.disabled=true;submit_changeform("{VAR:action}"); return false;'/>
+		<input id="button" type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" accesskey='s' onClick='this.disabled=true;self.disabled=true;submit_changeform("{VAR:action}"); return false;'/>
 		<!-- SUB: FORWARD_BUTTON -->
 		<input id="button" type="submit" name="{VAR:forward_button_name}" value="{VAR:forward_button_caption}" />
 		<!-- END SUB: FORWARD_BUTTON -->
