@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.16 2005/03/24 10:19:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.17 2006/09/20 22:04:14 tarvo Exp $
 // pullout.aw - Pullout manager
 
 /*
@@ -11,10 +11,10 @@
 	@default group=general
 
 	@property groups type=select multiple=1 size=15
-	@caption Vali grupid, kellele pullouti näidatakse
+	@caption Vali grupid, kellele pullouti n&auml;idatakse
 
 	@property docs type=relpicker reltype=RELTYPE_DOCUMENT
-	@caption Vali dokument, mida näidata
+	@caption Vali dokument, mida n&auml;idata
 
 	@property align type=select
 	@caption Align
