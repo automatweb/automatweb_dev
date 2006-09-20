@@ -138,6 +138,31 @@ class crm_company_bills_impl extends class_base
 			$projs[$row->prop("project")] = $row->prop("project");
 			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
 		}
+		
+		$other_expenses = new object_list(array(
+			"class_id" => CL_CRM_EXPENSE,
+//			"on_bill" => 1,
+			"bill_id" => '',
+		));
+		
+		foreach($other_expenses->arr() as $row)
+		{
+			$c = new connection();
+			$t2row = $c->find(array(
+				"to.class_id" => CL_CRM_EXPENSE,
+				"to" => $row->id(),
+//				"type" => "RELTYPE_EXPENSE"
+			));
+			foreach($t2row as $conn)
+			{
+				$task = obj($conn["from"]);
+				$row = obj($conn["to"]);
+				$projs[$task->prop("project")] = $task->prop("project");
+				$sum2proj[$task->prop("project")] += $row->prop("cost");
+			}
+		//	$projs[$row->prop("project")] = $row->prop("project");
+		//	$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
+		}
 
 		$custs = array();
 		foreach($projs as $p)
@@ -350,7 +375,7 @@ class crm_company_bills_impl extends class_base
 						"conditions" => array(
 							"class_id" => CL_CRM_EXPENSE,
 //							"send_bill" => 1,
-//							"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+//							"bill_id" => '',
 //							"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
 						)
 					))
@@ -387,7 +412,7 @@ class crm_company_bills_impl extends class_base
 				$hr2task[$row->id()] += str_replace(",", ".", $row->prop("deal_amt"));
 			}
 		}
-		
+
 		if ($rows->count())
 		{
 			$c = new connection();
@@ -426,7 +451,7 @@ class crm_company_bills_impl extends class_base
 			{
 				$task = obj($conn["from"]);
 				$row = obj($conn["to"]);
-
+				if(is_oid($row->prop("bill_id")) && $this->can("view" , $row->prop("bill_id"))) continue;
 				$task2row[$task->id()][] = $row->id();
 				if ($task->prop("project") == $arr["request"]["proj"])
 				{
@@ -450,12 +475,12 @@ class crm_company_bills_impl extends class_base
 				//	$sel_ = 0;
 				//	if(in_array($_SESSION["task_sel"],$row_id)) $sel_ =1;
 					if($ro->class_id() == CL_CRM_EXPENSE)
-					{
+					{$date = $ro->prop("date");
 						$t->define_data(array(
 							"oid" => $row_id,
 							"name" => $ro->name(),
 							"sum" => number_format(str_replace(",", ".", $ro->prop("cost")),2),
-							"set_date" => $ro->prop("date"),
+							"set_date" => mktime(0,0,0, $date["month"], $date["day"], $date["year"]),
 						));
 						continue;
 					}
@@ -509,6 +534,9 @@ class crm_company_bills_impl extends class_base
 				"sum" => number_format($sum2proj[$p], 2)
 			));
 		}
+		$t->set_default_sorder("asc");
+		$t->set_default_sortby("set_date");
+		$t->sort_by();
 
 		return;
 		if ($arr["request"]["cust"])
