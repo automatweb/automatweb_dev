@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.6 2006/05/09 10:57:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.7 2006/09/20 10:30:02 dragut Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1288,6 +1288,19 @@ topic");
 			$subj = "Re: " . $subj;
 		};
 
+		$image_verification_oid = aw_ini_get('document.image_verification');
+		$image_verification_str = '';
+		if ( $this->can( 'view', $image_verification_oid ) )
+		{
+			aw_session_set('no_cache', 1);
+			$image_verification_obj = new object($image_verification_oid);
+			$this->vars(array(
+				'image_verification_url' => aw_ini_get("baseurl")."/".$image_verification_oid,
+				'image_verification_width' => $image_verification_obj->prop('width'),
+				'image_verification_height' => $image_verification_obj->prop('height')
+			));
+			$image_verification_str = $this->parse('IMAGE_VERIFICATION');
+		}
 		$this->vars(array(
 			"cnt" => $cnt,
 			"num_comments" => $cnt,
@@ -1297,6 +1310,7 @@ topic");
 			"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $board,"section" => aw_global_get("section")),"forum"),
 			"subj" => $subj,
 			"reply" => $reply,
+			"IMAGE_VERIFICATION" => $image_verification_str,
 			"reforb" => $this->mk_reforb("submit_comment",array("board" => $board,"parent" => $parent,"section" => $section,"act" => $act,"no_comments" => $args["no_comments"])),
 		));
 		return $this->parse();
@@ -1322,6 +1336,7 @@ topic");
 	**/
 	function submit_comment($args = array())
 	{
+
 		$this->quote($args);
 		extract($args);
 		if (!$name)
@@ -1356,8 +1371,14 @@ topic");
 			$board = $row["board_id"];
 		};
 
+		$image_verification_result = true;
+		if ( isset( $args['ver_code'] ) )
+		{
+			$image_verification_inst = get_instance( CL_IMAGE_VERIFICATION );
+			$image_verification_result =  $image_verification_inst->validate($args['ver_code']); // returns true or false
+		}
 
-		if ( (strlen($name) > 0) && (strlen($comment) > 1) )
+		if ( (strlen($name) > 0) && (strlen($comment) > 1) && ($image_verification_result === true) )
 		{
 			if (is_array($mx))
 			{
@@ -1414,11 +1435,12 @@ topic");
 			// need to flush cache here
 			$this->flush_cache();	
 		}
+
 		if (not($act))
 		{
 			$act = "show_threaded";
 		};
-
+		
 		$alias = false;
 		if ($section)
 		{
@@ -1437,6 +1459,7 @@ topic");
 		{
 			$retval =$this->mk_my_orb($act,array("board" => $board,"section" => $section,"no_comments" => $args["no_comments"]));
 		};
+
 		return $retval;
 
 	}

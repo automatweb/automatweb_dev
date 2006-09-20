@@ -23,6 +23,12 @@
     <td class="text2"><input type="checkbox" NAME="response" VALUE='1' {VAR:response}></td>
   </tr>
   <!-- END SUB: reply -->
+  <!-- SUB: IMAGE_VERIFICATION -->
+  <tr>
+    <td align="right" class="textmiddle">{VAR:LC_MSGBOARD_IMAGE_VERIFICATION}:</td>
+    <td class="textmiddle"><img src="{VAR:image_verification_url}" width="{VAR:image_verification_width}" height="{VAR:image_verification_height}" /></td>
+  </tr>
+  <!-- END SUB: IMAGE_VERIFICATION -->
   <tr>
     <td align="right" class="text2">Jäta nimi ja e-mail meelde:</td>
     <td class="text2"><input type="checkbox" NAME="remember_me" VALUE='1' {VAR:remember_me}></td>
