@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.101 2006/09/19 09:35:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.102 2006/09/20 15:44:14 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -201,7 +201,7 @@ caption Teostajad
 
 	@property team_tb type=toolbar no_caption=1 store=no
 
-	@layout team type=hbox 30%:70%
+	@layout team type=hbox width=30%:70%
 
 		@layout team_search parent=team type=vbox
 	
@@ -213,7 +213,7 @@ caption Teostajad
 			@property team_search_person type=textbox captionside=top parent=team_search
 			@caption Isik
 	
-			@property hidden_team type=hidden parent=team_search
+			@property hidden_team type=hidden parent=team_search no_caption=1
 	
 			@property team_search_sbt type=submit captionside=top parent=team_search no_caption=1
 			@caption Otsi
@@ -326,7 +326,7 @@ groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
 	
 groupinfo risks_t caption="Riskid"
 
-@groupinfo req caption="N&otilde;uded" submit=no
+@groupinfo req caption="N&otilde;uded" submit=no parent=event_list
 
 @groupinfo transl caption=T&otilde;lgi
 
@@ -477,6 +477,7 @@ class project extends class_base
 			case "team_team_tb":
 			case "team_team_tree":
 			case "team_team_tbl":
+			case "team":
 				static $i;
 				if (!$i)
 				{
@@ -577,10 +578,6 @@ class project extends class_base
 				$this->_get_team_search_res($arr);
 				break;
 */
-			case "team":
-				$this->_get_team($arr);
-				break;
-
 			case "implementor_person":
 				$i = get_instance(CL_CRM_COMPANY);
 				if ($this->can("view", $arr["obj_inst"]->prop("implementor")))
@@ -3442,62 +3439,6 @@ class project extends class_base
 		}
 		return aw_ini_get("baseurl")."/automatweb/closewin.html";
 	}
-
-	function _init_team_t(&$t)
-	{
-		$t->define_field(array(
-			"name" => "person",
-			"caption" => t("Nimi"),
-			"align" => "center",
-			"width" => "16%",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"name" => "co",
-			"caption" => t("Organisatsioon"),
-			"align" => "center",
-			"width" => "16%",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"name" => "rank",
-			"caption" => t("Ametinimetus"),
-			"align" => "center",
-			"width" => "16%",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"name" => "phone",
-			"caption" => t("Telefon"),
-			"align" => "center",
-			"width" => "16%",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"name" => "mail",
-			"caption" => t("E-post"),
-			"align" => "center",
-			"width" => "16%",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"name" => "roles",
-			"caption" => t("Rollid"),
-			"align" => "center",
-			"width" => "16%",
-			"sortable" => 1
-		));
-
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "oid"
-		));
-	}
 /*
 	function _get_team($arr)
 	{
@@ -3640,174 +3581,6 @@ class project extends class_base
 		));
 	}
 */
-	function _init_teams_t(&$t)
-	{
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"align" => "center",
-//			"width" => "16%",
-			"sortable" => 1
-		));
-
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "oid"
-		));
-	}
-
-	function _get_team($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		
-		//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
-		if(($arr["request"]["no_search"]) && $arr["request"]["team"] == "teams")
-		{
-			$this->_init_teams_t($t);
-			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TEAM")) as $c)
-			{
-				$t->define_data(array(
-					"name" => $c->prop("to.name"),
-					"oid" => $c->prop("to"),
-				));
-			}
-			return;
-		}
-		
-		$this->_init_team_t($t);
-		
-		if(($arr["request"]["no_search"]) && ($arr["request"]["team"] == "all_parts" || is_oid($arr["request"]["team"])))
-		{
-			$connectons = array();
-			if(is_oid($arr["request"]["team"]))
-			{
-				$team = obj($arr["request"]["team"]);
-				$connections = $team->connections_from(array("type" => "RELTYPE_TEAM_MEMBER"));
-			}
-			else $connections = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
-			
-			$p = get_instance(CL_CRM_PERSON);
-			$from = $arr["obj_inst"]->prop("implementor");
-			if (is_array($from))
-			{
-				$from = reset($from);
-			}
-			$to = $arr["obj_inst"]->prop("orderer");
-			if (is_array($to))
-			{
-				$to = reset($to);
-			}
-			$ol = new object_list();
-			foreach($connections as $c)
-			{
-				$o = $c->to();
-				if ($o->class_id() == CL_USER)
-				{
-					$i = $o->instance();
-					$o = obj($i->get_person_for_user($o));
-				}
-	
-				$co = $p->get_all_employers_for_person($o);
-				$co_s = array();
-				if (count($co))
-				{
-					foreach($co as $co_oid)
-					{
-						$co_s[] = html::obj_change_url(obj($co_oid));
-					}
-				}
-				else
-				{
-					$empl = $o->get_first_obj_by_reltype("RELTYPE_WORK");
-					if ($empl)
-					{
-						$co_s[] = html::obj_change_url($empl);
-					}
-				}
-	
-				if ($o->class_id() == CL_CRM_COMPANY)
-				{
-					continue;
-				}
-	
-				$role_url = $this->mk_my_orb("change", array(
-					"from_org" => $from,
-					"to_org" => $to,
-					"to_project" => $arr["obj_inst"]->id()
-				), "crm_role_manager");
-		
-				$ol_2 = new object_list(array(
-					"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
-					"lang_id" => array(),
-					"site_id" => array(),
-					"company" => $from,
-					"client" => $to, 
-					"project" => $arr["obj_inst"]->id(),
-					"person" => $o->id()
-				));
-				
-	
-				$rs = array();
-				foreach($ol_2->arr() as $role_entry)
-				{
-					$tmp = html::obj_change_url($role_entry->prop("role"));
-					$tmp = html::obj_change_url($role_entry->prop("unit")).($tmp != "" ? " / " : "").$tmp;
-					$rs[] = $tmp;
-				}
-				$t->define_data(array(
-					"person" => html::obj_change_url($o),
-					"co" => join(", ", $co_s),
-					"rank" => html::obj_change_url($o->prop("rank")),
-					"phone" => html::obj_change_url($o->prop("phone")),
-					"mail" => html::obj_change_url($o->prop("email")),
-					"roles" => join("<br>", $rs)."<br>".html::popup(array(
-						"url" => $role_url,
-						'caption' => t('Rollid'),
-						"width" => 800,
-						"height" => 600,
-						"scrollbars" => "auto"
-					)),
-					"oid" => $o->id()
-				));
-				$ol->add($o);
-			}
-		}
-		else
-		{
-			if ($arr["request"]["team_search_person"] == "" && $arr["request"]["team_search_co"] == "")
-			{
-				$ol = new object_list();
-			}
-			else
-			{
-				$ol = new object_list(array(
-					"class_id" => CL_CRM_PERSON,
-					"name" => "%".$arr["request"]["team_search_person"]."%",
-					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%",
-					"lang_id" => array(),
-					"site_id" => array()
-				));
-			}
-			foreach($ol->arr() as $o)
-			{
-				$t->define_data(array(
-					"person" => html::obj_change_url($o),
-					"rank" => html::obj_change_url($o->prop("rank")),
-					"phone" => $o->prop_str("phone"),
-					"mail" => $o->prop_str("email"),
-					"co" => html::obj_change_url($o->get_first_obj_by_reltype("RELTYPE_WORK")),
-					"oid" => $o->id(),
-//					"roles" => join("<br>", $rs)."<br>".html::popup(array(
-//						"url" => $role_url,
-//						'caption' => t('Rollid'),
-//						"width" => 800,
-//						"height" => 600,
-//						"scrollbars" => "auto"
-//					)),
-				));
-			}
-		}
-	}
 
 	/**
 		@attrib name=del_participants
@@ -3830,14 +3603,22 @@ class project extends class_base
 	**/
 	function add_participants($arr)
 	{
+		if(!is_oid($arr["id"])) return $arr["post_ru"];
 		$o = obj($arr["id"]);
-		foreach(safe_array($arr["res_sel"]) as $oid)
+		if(is_oid($arr["team"])) $team = obj($arr["team"]);
+		foreach(safe_array($arr["sel"]) as $oid)
 		{
 			$o->connect(array(
 				"to" => $oid,
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
+			if(is_oid($arr["team"])) $team->connect(array(
+					"to" => $oid,
+					"reltype" => "RELTYPE_TEAM_MEMBER"
+				));
 		}
+		
+		return aw_url_change_var("no_search",1,$arr["post_ru"]);
 		return $arr["post_ru"];
 	}
 

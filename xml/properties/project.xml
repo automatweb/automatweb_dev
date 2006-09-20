@@ -537,6 +537,7 @@
             <group>team</group>
             <type>hidden</type>
             <parent>team_search</parent>
+            <no_caption>1</no_caption>
             <field>hidden_team</field>
       </property>
       <property>
@@ -838,6 +839,7 @@
             <req>
                   <caption>N&amp;amp;otilde;uded</caption>
                   <submit>no</submit>
+                  <parent>event_list</parent>
             </req>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
@@ -1011,6 +1013,7 @@
             </files_lay>
             <team>
                   <type>hbox</type>
+                  <width>30%:70%</width>
                   <group>team</group>
             </team>
             <team_search>
