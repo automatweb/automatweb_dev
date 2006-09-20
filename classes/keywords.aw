@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.67 2006/04/17 10:13:21 kristo Exp $
-// keywords.aw - dokumentide võtmesõnad
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.68 2006/09/20 21:53:53 tarvo Exp $
+// keywords.aw - dokumentide v&otilde;tmes&otilde;nad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
 @classinfo syslog_type=ST_KEYWORDS relationmgr=yes status=no no_status=1
@@ -9,7 +9,7 @@
 @default group=general
 
 @property keyword type=textbox
-@caption Märksõna
+@caption M&auml;rks&otilde;na
 
 @reltype KEYWORD value=1 clid=CL_DOCUMENT
 @caption Dokument
@@ -166,7 +166,7 @@ class keywords extends class_base
 		}
 	}
 
-	/** Kuvab dokude nimekirja, mis mingi kindla võtmesõnaga "seotud" on. 
+	/** Kuvab dokude nimekirja, mis mingi kindla v&otilde;tmes&otilde;naga "seotud" on. 
 		
 		@attrib name=doclist params=name default="0"
 		
@@ -304,13 +304,13 @@ class keywords extends class_base
 			$q = "SELECT * FROM objects WHERE oid = '$row[list_id]'";
 			$this->db_query($q);
 			$ml = $this->db_next();
-			// kui sellele listile pole default maili määratud
+			// kui sellele listile pole default maili m&auml;&auml;ratud
 			if (!$ml["last"])
 			{
-				// checkime, kas grandparentil on default list määratud
+				// checkime, kas grandparentil on default list m&auml;&auml;ratud
 				if (is_oid($gp->last()))
 				{
-					// oli. nyyd on meil default listi id käes. Tuleb ainult lugeda selle listi last
+					// oli. nyyd on meil default listi id k&auml;es. Tuleb ainult lugeda selle listi last
 					#$ml["last"] = $gp["last"];
 					$this->save_handle();
 					$rl = obj($gp->last());
@@ -348,7 +348,7 @@ class keywords extends class_base
 		};
 	}
 	
-	/** Handleb saidi sees täidetud "interests" vormi datat 
+	/** Handleb saidi sees t&auml;idetud "interests" vormi datat 
 		
 		@attrib name=submit_interests params=name nologin="1" default="0"
 		
@@ -486,7 +486,7 @@ class keywords extends class_base
 	function list_keywords($args = array())
 	{
 		$this->read_template("list.tpl");
-		// koigepealt uurime välja lugejate arvu listides
+		// koigepealt uurime v&auml;lja lugejate arvu listides
 		
 		// this should probably be in the list class
 		$q = "SELECT list_id,COUNT(*) AS cnt FROM ml_users GROUP BY list_id";
@@ -584,7 +584,7 @@ class keywords extends class_base
 	}
 
 	////
-	// !Tagastab mingi objekti juurde lisatud võtmesõnad
+	// !Tagastab mingi objekti juurde lisatud v&otilde;tmes&otilde;nad
 	// argumendid:
 	// oid (int) - objekti id
 	function get_keywords($args = array())
@@ -673,11 +673,11 @@ class keywords extends class_base
 			
 			
 	////
-	// !Seda kutsutakse dokude salvestamise juurest välja.
+	// !Seda kutsutakse dokude salvestamise juurest v&auml;lja.
 	// Uuendab mingi dokuga (objektiga) seotud keywordide nimekirja
 	// argumendid:
-	// keywords (string) - komadega eraldatud märksõnade nimekiri
-	// oid (int) - objekti (dokumendi id) millega märksõnad siduda
+	// keywords (string) - komadega eraldatud m&auml;rks&otilde;nade nimekiri
+	// oid (int) - objekti (dokumendi id) millega m&auml;rks&otilde;nad siduda
 	function update_keywords($args = array())
 	{
 		return;	// FIXME: this is fucked - old lists are gone and this probably does not work anyway
@@ -687,7 +687,7 @@ class keywords extends class_base
 		$klist = array();
 		$ids = array();
 		$cids = array();
-		// vaja leida koigi votmesõnade ID-d. Kui ei ole, siis tekitame uue
+		// vaja leida koigi votmes&otilde;nade ID-d. Kui ei ole, siis tekitame uue
 		foreach($keywordlist as $val)
 		{
 			$keyword = trim($val);
@@ -768,7 +768,7 @@ class keywords extends class_base
 			// otherwise pole midagi vaja teha
 		};
 
-		// nüüd peaksid koik votmesonad baasis kajastatud olema
+		// n&uuml;&uuml;d peaksid koik votmesonad baasis kajastatud olema
 
 		// votame vanad seosed maha
 		$q = "DELETE FROM keywords2objects WHERE oid = '$oid'";

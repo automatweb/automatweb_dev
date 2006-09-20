@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keyword_db.aw,v 2.8 2006/03/28 11:45:36 ahti Exp $
-// keyword_db.aw - Võtmesõnade baas
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keyword_db.aw,v 2.9 2006/09/20 21:53:53 tarvo Exp $
+// keyword_db.aw - V&otilde;tmes&otilde;nade baas
 /*
 @classinfo syslog_type=ST_KEYWORD_DB no_status=1 no_comment=1
 
@@ -8,10 +8,10 @@
 @default group=general
 
 @property keyw_cats type=select multiple=1 rows=20 store=no
-@caption Kataloogid, mille alt võtmesõnad kuuluvad sellesse baasi
+@caption Kataloogid, mille alt v&otilde;tmes&otilde;nad kuuluvad sellesse baasi
 
 @property bro_cats type=select multiple=1 rows=20 store=no
-@caption Kataloogid, mille alla saab selle baasi võtmesõnu vennastada
+@caption Kataloogid, mille alla saab selle baasi v&otilde;tmes&otilde;nu vennastada
 
 
 */

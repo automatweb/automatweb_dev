@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.14 2006/03/08 15:15:02 kristo Exp $
+// $Id: menu_alias.aw,v 2.15 2006/09/20 21:53:53 tarvo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -71,12 +71,12 @@ class menu_alias extends aw_template
 		if ($id)
 		{
 			$obj = new object($id);
-			$title = "Muuda menüü linki";
+			$title = t("Muuda men&uuml;&uuml; linki");
 		}
 		else
 		{
 			$obj = new object();
-			$title = "Lisa menüü link";
+			$title = t("Lisa men&uuml;&uuml; link");
 		};
 		$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / $title");
 		$olist = $this->get_menu_list();
