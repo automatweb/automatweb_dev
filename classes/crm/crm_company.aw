@@ -4806,6 +4806,18 @@ class crm_company extends class_base
 					$task = $to->id();
 				}
 			}
+			if ($to->class_id() == CL_CRM_EXPENSE)
+			{
+				$filt_by_row = $to->id();
+				// get task from row
+				$conns = $to->connections_to(array("from.class_id" => CL_TASK,"type" => "RELTYPE_EXPENSE"));
+				$c = reset($conns);
+				if ($c)
+				{
+					$to = $c->from();
+					$task = $to->id();
+				}
+			}
 			if(is_oid($task) && $this->can("view", $task))
 			{
 				$task=obj($task);
@@ -4866,7 +4878,6 @@ class crm_company extends class_base
 		{
 			return aw_url_change_var("different_customers", "1", $arr["post_ru"]);
 		}
-		
 		if(!is_object($bill))
 		{
 			// create a bill for all selected tasks
@@ -5040,6 +5051,7 @@ class crm_company extends class_base
 					$to = $c->from();
 					$task = $to->id();
 				}
+				
 				$task_o = obj($task);
 				$br = obj();
 				$br->set_class_id(CL_CRM_BILL_ROW);
@@ -5047,9 +5059,12 @@ class crm_company extends class_base
 				$br->set_prop("comment", $expense->name());
 				$br->set_prop("amt", 1);
 				$br->set_prop("price", $expense->prop("cost"));
-				$br->set_prop("date", date("d.m.Y", $expense->prop("date")));
+				$date = $expense->prop("date");
+				$br->set_prop("date", date("d.m.Y", mktime(0,0,0, $date["month"], $date["day"], $date["year"])));
+				$expense->set_prop("bill_id", $bill->id());
+				$expense->save();
+				
 				// get default prod
-
 				if ($sts)
 				{
 					$br->set_prop("prod", $sts->prop("bill_def_prod"));

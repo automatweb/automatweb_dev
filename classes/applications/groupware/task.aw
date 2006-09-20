@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.137 2006/09/20 12:16:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.138 2006/09/20 12:31:52 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -419,10 +419,10 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{	
-			case "parts_tb":
-				$this->_parts_tb($arr);
-				break;
-			
+		        case "parts_tb":
+                               $this->_parts_tb($arr);
+                              break;
+
 			case "co_table":
 				$this->_co_table($arr);
 				break;
@@ -1184,6 +1184,14 @@ class task extends class_base
 			"name" => "date",
 			"caption" => t("Kuup&auml;ev")
 		));
+//		$t->define_field(array(
+//			"name" => "on_bill",
+//			"caption" => t("Arvele")
+//		));
+		$t->define_field(array(
+			"name" => "bill",
+			"caption" => t("Arve nr.")
+		));	
 	}
 
 	function _other_expenses($arr)
@@ -1191,8 +1199,8 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_other_exp_t($t);
 		
-//		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
-		$dat = array();
+		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
+// 		$dat = array();
 		$dat[] = array();
 		$dat[] = array();
 		$dat[] = array();
@@ -1206,6 +1214,17 @@ class task extends class_base
 			$ob = $ro->to();
 			if($ob->class_id() == CL_CRM_EXPENSE)
 			{
+					$bno = "";
+					if ($this->can("view", $ob->prop("bill_id")))
+					{
+						$bo = obj($ob->prop("bill_id"));
+						$bno = $bo->prop("bill_no");
+					}
+					$onbill = "";
+					if ($ob->prop("bill_id"))
+					{
+						$onbill = sprintf(t("Arve nr %s"), $bno);
+					}
 				$t->define_data(array(
 					"name" => html::textbox(array(
 						"name" => "exp[".$ob->id()."][name]",
@@ -1220,6 +1239,13 @@ class task extends class_base
 						"name" => "exp[".$ob->id()."][date]",
 						"value" => $ob->prop("date"),
 					)),
+					"on_bill" => html::checkbox(array(
+						"name" => "exp[".$ob->id()."][on_bill]",
+						"value" => 1,
+						"checked" => $checked,
+					)),
+					"bill" => $onbill
+					,
 				));
 	//			$nr++;
 			}
@@ -1242,7 +1268,6 @@ class task extends class_base
 			));
 			$nr++;
 		}
-		
 		$t->set_sortable(false);
 	}
 
