@@ -1266,10 +1266,10 @@ class crm_company_overview_impl extends class_base
 					"lang_id" => array(),
 					"actor" => $u->get_current_person(),
 				);
-				if (!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1))
-				{
-					$filt["is_done"] = new obj_predicate_not(1);
-				}
+			//	if (!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1))
+			//	{
+			//		$filt["is_done"] = new obj_predicate_not(1);
+			//	}
 				$ol = new object_list($filt);
 				$tasks = $this->make_keys($ol->ids());
 				break;
@@ -1692,6 +1692,7 @@ class crm_company_overview_impl extends class_base
 	**/
 	function get_task_row_table($arr)
 	{
+		$sum = 0;
 		global $company;
 		classload("vcl/table");
 		$t = new vcl_table();
@@ -1720,7 +1721,13 @@ class crm_company_overview_impl extends class_base
 				"time" => $row->prop("time_real")."<br>".$stopper,
 				"is_done" => $row->prop("done") ? t("Jah") : t("Ei")
 			));
+			$sum += $row->prop("time_real");
 		}
+		$t->define_data(array(
+				"name" => t("Kokku:"),
+				"time" => $sum,
+		));
+		
 		die(iconv(aw_global_get("charset"), "utf-8", $t->draw()));
 	}
 }
