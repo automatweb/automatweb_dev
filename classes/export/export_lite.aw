@@ -718,7 +718,7 @@ class export_lite extends aw_template
 		$req .= "Cookie: automatweb=".$this->cookie."\r\n";
 		$req .= "User-agent: AW-export_lite-spider\r\n";
 		$req .= "\r\n";
-		classload("socket");
+		classload("protocols/socket");
 		$socket = new socket(array(
 			"host" => $host,
 			"port" => $port,
@@ -786,7 +786,7 @@ class export_lite extends aw_template
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 		$port = ($mt[1] ? $mt[1] : 80);
-		classload("socket");
+		classload("protocols/socket");
 		$socket = new socket(array(
 			"host" => $host,
 			"port" => $port,

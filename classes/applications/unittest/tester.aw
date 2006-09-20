@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/unittest/tester.aw,v 1.1 2005/12/20 13:24:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/unittest/tester.aw,v 1.2 2006/09/20 11:28:03 kristo Exp $
 
 /*
 @default group=general
@@ -173,7 +173,7 @@ class tester extends class_base
 	function handshake($args = array())
 	{
 		extract($args);
-		$socket = get_instance("socket");
+		$socket = get_instance("protocols/socket");
 		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
@@ -226,7 +226,7 @@ class tester extends class_base
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = get_instance("socket");
+		$socket = get_instance("protocols/socket");
 		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
@@ -272,7 +272,7 @@ class tester extends class_base
 		extract($arr);
 
 		$cookie = $this->cookie;
-		$socket = get_instance("socket");
+		$socket = get_instance("protocols/socket");
 		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
@@ -338,7 +338,7 @@ class tester extends class_base
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = get_instance("socket");
+		$socket = get_instance("protocols/socket");
 		$socket->open(array(
 			"host" => $host,
 			"port" => 80,

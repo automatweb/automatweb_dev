@@ -1376,7 +1376,7 @@ class export extends aw_template
 		$req .= "Cookie: automatweb=".$this->cookie."\r\n";
 		$req .= "User-Agent: AW-EXPORT\r\n";
 		$req .= "\r\n";
-		classload("socket");
+		classload("protocols/socket");
 		$socket = new socket(array(
 			"host" => $host,
 			"port" => $port,
@@ -1412,7 +1412,7 @@ class export extends aw_template
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 		$port = ($mt[1] ? $mt[1] : 80);
-		classload("socket");
+		classload("protocols/socket");
 		$socket = new socket(array(
 			"host" => $host,
 			"port" => $port,

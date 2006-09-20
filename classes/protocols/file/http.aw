@@ -39,7 +39,7 @@ class http
 		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
 		$req .= "User-agent: AW-http-fetch\r\n";
 		$req .= "\r\n";
-		classload("socket");
+		classload("protocols/socket");
 		$socket = new socket(array(
 			"host" => $host,
 			"port" => $port,
@@ -133,7 +133,7 @@ class http
 		{
 			$silent = true;
 		}
-		$socket = get_instance("socket");  
+		$socket = get_instance("protocols/socket");  
 		if (substr($host,0,7) == "http://")
 		{
 			$host = substr($host,7);
@@ -229,7 +229,7 @@ class http
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = get_instance("socket");
+		$socket = get_instance("protocols/socket");
 		if (substr($host,0,7) == "http://")
 		{
 			$host = substr($host,7);
@@ -283,7 +283,7 @@ class http
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = get_instance("socket");
+		$socket = get_instance("protocols/socket");
 		if (substr($host,0,7) == "http://")
 		{
 			$host = substr($host,7);
@@ -338,7 +338,7 @@ class http
 		extract($arr);
 
 		$cookie = $this->cookie;
-		$socket = get_instance("socket");
+		$socket = get_instance("protocols/socket");
 		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
@@ -419,7 +419,7 @@ class http
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = get_instance("socket");
+		$socket = get_instance("protocols/socket");
 		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
