@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.138 2006/09/20 12:31:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.139 2006/09/20 13:10:19 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1844,6 +1844,27 @@ class task extends class_base
 				"is_oe" => true,
 				"on_bill" => 1
 			);
+		}
+
+		foreach ($task->connections_from(array("type" => "RELTYPE_EXPENSE")) as $key => $ro)
+		{
+			$ob = $ro->to();
+			if($ob->class_id() == CL_CRM_EXPENSE)
+			{
+				$id = $task->id()."_oe_".$ob->id();
+				$rows[$id] = array(
+					"name" => $ob->name(),
+					"unit" => "",
+					"price" => $ob->prop("cost"),
+					"amt" => 1,
+					"amt_real" => 1,
+					"amt_guess" => 1,
+					"sum" => $ob->prop("cost"),
+					"has_tax" => 1,
+					"is_oe" => true,
+					"on_bill" => 1
+				);
+			}
 		}
 		return $rows;
 	}
