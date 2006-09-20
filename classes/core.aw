@@ -710,7 +710,7 @@ class core extends acl_base
 		if (!($class == "bugtrack" && $action="add_error") && aw_ini_get("config.error_log_site") != "")
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
-			$socket = get_instance("socket");
+			$socket = get_instance("protocols/socket");
 			$socket->open(array(
 				"host" => aw_ini_get("config.error_log_site"),
 				"port" => 80,
