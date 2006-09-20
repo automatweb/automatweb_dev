@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.178 2006/09/08 09:45:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.179 2006/09/20 16:16:35 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -968,7 +968,7 @@ class image extends class_base
 						{
 							aw_url = '".$alias_url."';
 							url = aw_url + '&doc_id=' + getDocID();
-							document.write(\"<a href='\"+url+\"' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.GetSelectedElement() ;if (\\\"\\\"+eSelected == \\\"HTMLImageElement\\\") { eSelected.src=\\\"$image_url\\\"; } else { ct=aw_get_url_contents(\\\"$url\\\"); FCK.InsertHtml(ct); } '>Paiguta dokumenti</a>\");
+							document.write(\"<a href='\"+url+\"' onClick='submit_changeform();FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.GetSelectedElement() ;if (\\\"\\\"+eSelected == \\\"HTMLImageElement\\\") { eSelected.src=\\\"$image_url\\\"; } else { ct=aw_get_url_contents(\\\"$url\\\"); FCK.InsertHtml(ct); } '>Paiguta dokumenti</a>\");
 						}
 					</script>
 					";

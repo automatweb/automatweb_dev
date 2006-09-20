@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.131 2006/08/30 13:50:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.132 2006/09/20 16:16:35 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -254,7 +254,7 @@ class file extends class_base
 						if (window.parent.name == \"InsertAWFupCommand\")
 						{
 							url = '".$alias_url."' + '&doc_id=' + getDocID();
-							document.write(\"<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</sc\"+\"ript><a href='\"+url+\"' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; SetAttribute( eSelected, \\\"_fcksavedurl\\\", \\\"$link_url\\\" ) ; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Paiguta dokumenti</a>\");
+							document.write(\"<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</sc\"+\"ript><a href='\"+url+\"' onClick='submit_changeform();FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; SetAttribute( eSelected, \\\"_fcksavedurl\\\", \\\"$link_url\\\" ) ; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Paiguta dokumenti</a>\");
 						}
 					</script>
 					";

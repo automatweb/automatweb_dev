@@ -82,7 +82,7 @@ class file_manager extends aw_template
 			"img_new" => html::get_new_url(CL_FILE, $parent),
 			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id()))
 		));
-		return $this->parse();
+		die($this->parse());
 	}
 
 	function _init_t(&$t)
