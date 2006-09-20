@@ -658,10 +658,14 @@ class core extends acl_base
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si,"process_error"))
 		{
-			$send_mail = $si->process_error(array(
+			$tmp = $si->process_error(array(
 				"err_type" => $err_type,
 				"content" => $content
 			));
+			if ($tmp !== null)
+			{
+				$send_mail = $tmp;
+			}
 		}
 
 		if ($_SERVER["REQUEST_METHOD"] == "OPTIONS")

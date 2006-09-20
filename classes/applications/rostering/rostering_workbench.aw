@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.1 2006/09/14 09:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.2 2006/09/20 12:04:13 kristo Exp $
 // rostering_workbench.aw - T&ouml;&ouml;aja planeerimine 
 /*
 
@@ -95,22 +95,22 @@
 		@property skl_table type=table no_caption=1 store=no parent=skl_main
 
 
-@groupinfo ppl caption="Isikud"
+@groupinfo ppl caption="Isikud" submit=no
 
 @groupinfo settings caption="Seaded"
-	@groupinfo cycles caption="Ts&uuml;klid" parent=settings
-	@groupinfo scenarios caption="Stsenaariumid" parent=settings
-	@groupinfo wa caption="T&ouml;&ouml;kohad" parent=settings
-	@groupinfo shifts caption="Vahetused" parent=settings
+	@groupinfo cycles caption="Ts&uuml;klid" parent=settings submit=no
+	@groupinfo scenarios caption="Stsenaariumid" parent=settings submit=no
+	@groupinfo wa caption="T&ouml;&ouml;kohad" parent=settings submit=no
+	@groupinfo shifts caption="Vahetused" parent=settings submit=no
 	@groupinfo skills caption="P&auml;devused" parent=settings submit=no 
 	@groupinfo skills_losing caption="P&auml;devuste kadumine" parent=settings submit=no 
 
 @groupinfo stats caption="Statistika"
-	@groupinfo stats_wp caption="T&ouml;&ouml;postid" parent=stats
-	@groupinfo stats_overtime caption="&Uuml;letunnid" parent=stats
+	@groupinfo stats_wp caption="T&ouml;&ouml;postid" parent=stats submit=no
+	@groupinfo stats_overtime caption="&Uuml;letunnid" parent=stats submit=no
 
 @groupinfo graph caption="Graafikud"
-	@groupinfo admin_act caption="Administratiivsed tegevused" parent=graph
+	@groupinfo admin_act caption="Administratiivsed tegevused" parent=graph submit=no
 	@groupinfo op_act caption="Operatiivsed tegevused" parent=graph
 
 @reltype OWNER value=1 clid=CL_CRM_COMPANY

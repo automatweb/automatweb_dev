@@ -120,6 +120,38 @@ class site_base extends aw_template
 	{
 		return "main.tpl";
 	}
+
+	/** 	This gets called when a section is not found or the user has no access to the given section. 
+		The section is given in the parameter.
+		This should return an url to redirect to. If it returns empty, then the user is presented with a 404 error
+	**/
+	function handle_error_redir($sect)
+	{
+		return null;
+	}
+
+	/**	This gets called when an error is generated. It should return true if an e-mail should be sent to the error list. 
+		Parameter is:
+			array("err_type" => type of error, "content" => content of error message)
+	**/
+	function process_error($arr)
+	{
+		return null;
+	}
+
+	/**	This gets called when an user logs in. No return value or parameters
+	**/
+	function on_login()
+	{
+		
+	}
+
+	/**	This gets called when an user is added from the old site interface. Parameter is uid. No return value
+	**/
+	function on_add_user_site($uid)
+	{
+		
+	}
 }
 
 ?>
