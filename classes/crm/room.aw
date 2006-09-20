@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/Attic/room.aw,v 1.2 2006/09/13 12:33:09 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/Attic/room.aw,v 1.3 2006/09/20 14:10:33 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -59,12 +59,6 @@ class room extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
-			case "name":
-				$o = obj(907);
-				$o->connect(array(
-					"to" => 989
-				));
-				break;
 		};
 		return $retval;
 	}
