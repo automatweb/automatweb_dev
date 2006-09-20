@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.501 2006/09/12 09:29:43 markop Exp $
+// $Id: class_base.aw,v 2.502 2006/09/20 16:38:59 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -31,7 +31,7 @@
 	@property needs_translation type=checkbox field=flags method=bitmask ch_value=2 // OBJ_NEEDS_TRANSLATION
 	@caption Vajab t&otilde;lget
 
-	// see peaks olemas olema ainult siis, kui sellel objekt on _actually_ mingi asja tõlge
+	// see peaks olemas olema ainult siis, kui sellel objekt on _actually_ mingi asja t&otilde;lge
 	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
 	@caption T&otilde;lge kinnitatud
 
@@ -572,7 +572,7 @@ class class_base extends aw_template
 		// aga mis siis, kui see on sama aken?
 		$translate_url = html::href(array(
 			"url" => "javascript:void(0);",
-			"caption" => t("Tõlgi"),
+			"caption" => t("T&otilde;lgi"),
 			"onClick" => "window.open(\"".$this->mk_my_orb("editor",array(
 				"clid" => $this->clid,
 				"group" => $args["group"],
@@ -596,7 +596,7 @@ class class_base extends aw_template
 
 			"translate_url" => in_array(aw_global_get("uid"), aw_ini_get("class_base.show_trans"))?$translate_url." | ":"",
 			"more_help_text" => t("Rohkem infot"),
-			"close_help_text" => t("Peida ära"),
+			"close_help_text" => t("Peida &auml;ra"),
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
 			"show_help" => aw_ini_get("class_base.show_help"),
@@ -604,12 +604,12 @@ class class_base extends aw_template
 		));
 		$cli->rte_type = $this->classinfo(array("name" => "allow_rte"));
 
-		// käes ongi .. see asi eeldab, et layoutile on grupp peale väänatud ..
-		// samas ei pruugi see üldse case olla. sitta sellest grupist .. propertyle öeldakse
-		// mis grupis ta on ja kui seal mingi layout ka ringi töllerdab eks ma siis lihtsalt
+		// k&auml;es ongi .. see asi eeldab, et layoutile on grupp peale v&auml;&auml;natud ..
+		// samas ei pruugi see &uuml;ldse case olla. sitta sellest grupist .. propertyle &ouml;eldakse
+		// mis grupis ta on ja kui seal mingi layout ka ringi t&ouml;llerdab eks ma siis lihtsalt
 		// kasutan seda
 
-		// aga mul on kuidagi vaja need layout asjad ka õigesse kohta saada .. how the fuck do I do that?
+		// aga mul on kuidagi vaja need layout asjad ka &otilde;igesse kohta saada .. how the fuck do I do that?
 		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
 		{
 			$tmp = array();
@@ -2694,7 +2694,7 @@ class class_base extends aw_template
 				$awt->stop("getter $getter");
 			}
 			else
-			// callbackiga saad muuta ühe konkreetse omaduse sisu
+			// callbackiga saad muuta &uuml;he konkreetse omaduse sisu
 			if ($callback)
 			{
 				$awt->start("get_property_${pname}");
@@ -3446,7 +3446,7 @@ class class_base extends aw_template
 			if (1 == $prpdata["required"] && !$val)
 			{
 				$res[$key] = array(
-					"msg" => t("See väli ei tohi olla tühi!"),
+					"msg" => t("See v&auml;li ei tohi olla t&uuml;hi!"),
 				);
 			};
 
@@ -4061,7 +4061,7 @@ class class_base extends aw_template
 
 		if ($new)
 		{
-			aw_session_set("added_object",$id);//axel häkkis
+			aw_session_set("added_object",$id);//axel h&auml;kkis
 
 			if ($alias_to || $rawdata["alias_to"])
 			{
@@ -4361,7 +4361,7 @@ class class_base extends aw_template
 			"filter" => $filter,
 		));
 
-		// nii .. ja kuidas ma nüüd saan teada kõik omadused, mis mind huvitavad?
+		// nii .. ja kuidas ma n&uuml;&uuml;d saan teada k&otilde;ik omadused, mis mind huvitavad?
 
 		// I could use a different approach here ... for example, if I'm saving then
 		// only the properties that should be saved should be returned. or not?
@@ -4401,7 +4401,7 @@ class class_base extends aw_template
 			));
 			$this->layoutinfo = $lx;
 
-			// okei, aga kus see layout mäng tuleb?
+			// okei, aga kus see layout m&auml;ng tuleb?
 			$all_properties = $cfg_props;
 			$this->classinfo = $cl_vis->get_classinfo(array(
 				"class_id" => $cls_id

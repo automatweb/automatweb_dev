@@ -34,7 +34,7 @@
 @caption Alias
 
 @property keywords type=textbox size=60 trans=1
-@caption Võtmesõnad
+@caption V&otilde;tmes&otilde;nad
 
 @property names type=textbox size=60 trans=1
 @caption Nimed
@@ -55,10 +55,10 @@
 @caption Foorum
 
 @property showlead type=checkbox ch_value=1 default=1
-@caption Näita leadi
+@caption N&auml;ita leadi
 
 @property show_modified type=checkbox ch_value=1
-@caption Näita muutmise kuupäeva
+@caption N&auml;ita muutmise kuup&auml;eva
 
 //---------------
 @property no_right_pane type=checkbox ch_value=1 group=settings
@@ -71,10 +71,10 @@
 @caption Pealkiri klikitav
 
 @property clear_styles type=checkbox ch_value=1 store=no
-@caption Tühista stiilid
+@caption T&uuml;hista stiilid
 
 @property link_keywords type=checkbox ch_value=1 store=no
-@caption Lingi võtmesõnad
+@caption Lingi v&otilde;tmes&otilde;nad
 
 @property esilehel type=checkbox ch_value=1 group=settings
 @caption Esilehel
@@ -94,16 +94,16 @@
 
 
 @property show_title type=checkbox ch_value=1
-@caption Näita pealkirja
+@caption N&auml;ita pealkirja
 
 @property no_search type=checkbox ch_value=1
-@caption Jäta otsingust välja
+@caption J&auml;ta otsingust v&auml;lja
 
 @property cite type=textarea cols=60 rows=10
 @caption Tsitaat
 
 @property tm type=textbox size=20
-@caption Kuupäev
+@caption Kuup&auml;ev
 
 @property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1
 @caption 'Prindi' nupp
@@ -151,16 +151,16 @@
 @caption Dok. modified
 
 @property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
-@caption Vali kalendrid, millesse see sündmus veel salvestatakse.
+@caption Vali kalendrid, millesse see s&uuml;ndmus veel salvestatakse.
 
 @property calendar_relation type=select field=meta method=serialize group=general table=objects
-@caption Põhikalender
+@caption P&otilde;hikalender
 
 @property gen_static type=checkbox store=no
 @caption Genereeri staatiline
 
 @property no_last type=checkbox ch_value=1 group=settings trans=1
-@caption Ära arvesta muutmist
+@caption &Auml;ra arvesta muutmist
 
 @property show_last_changed type=checkbox ch_value=1 group=settings trans=1 table=objects field=meta method=serialize
 @caption Muutmise kuupaev dokumendi sees
