@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.101 2006/09/19 22:27:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.102 2006/09/20 14:06:26 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -724,6 +724,29 @@ class crm_bill extends class_base
 			return $sum;
 		}
 		return $bill->prop("sum");
+	}
+
+	//returns bill sum without other expenses
+	function get_sum_wo_exp($bill)
+	{
+		$agreement = $bill->meta("agreement_price");
+		if($agreement["sum"] && $agreement["price"] && strlen($agreement["name"]) > 0) return $agreement["sum"];
+		if($agreement[0]["sum"] && $agreement[0]["price"] && strlen($agreement[0]["name"]) > 0) 
+		{
+			$sum = 0;
+			foreach($agreement as $a)
+			{
+				$sum+= $a["sum"];
+			}
+			return $sum;
+		}
+		$rows = $this->get_bill_rows($bill);
+		$sum = 0;
+		foreach($rows as $row)
+		{
+			if(!$row["is_oe"]) $sum+= $row["sum"];
+		}
+		return $sum;
 	}
 
 	function _calc_sum($bill)
