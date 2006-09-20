@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.9 2005/05/20 08:18:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.10 2006/09/20 10:28:48 kristo Exp $
 // now I have to figure out a way to execute this from site directory.
 // so that I can actually parse an INI file
 
@@ -24,7 +24,7 @@ else
 echo "Welcome to AW shell!\n";
 print "Using $inifile\n";
 
-classload("timer");
+classload("core/util/timer");
 $awt = new aw_timer;
 
 readline_completion_function("autocomplete");
@@ -61,7 +61,6 @@ while ($continue)
 	if ($str == "timer")
 	{
 		$use_timer = true;
-		classload("timer");
 		$awt = new aw_timer();
 		print "Using timer from now on\n";
 	}

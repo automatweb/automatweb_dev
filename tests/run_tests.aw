@@ -9,7 +9,7 @@ $basedir = realpath("..");
 include("$basedir/init.aw");
 init_config(array("ini_files" => array("$basedir/aw.ini", $argv[1])));
 classload("defs");
-classload("aw_template","timer");
+classload("aw_template","core/util/timer");
 classload("core/obj/object", "core/error");
 
 require_once('simpletest/unit_tester.php');

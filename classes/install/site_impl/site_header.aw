@@ -14,7 +14,7 @@ lc_init();
 classload("aw_template");
 classload("defs");
 classload("cache");
-classload("timer");
+classload("core/util/timer");
 classload("menuedit");
 classload("document");
 classload("file");

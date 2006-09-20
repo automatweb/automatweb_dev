@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.19 2006/03/23 14:24:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.20 2006/09/20 10:28:48 kristo Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -680,7 +680,7 @@ class persona_import extends class_base
 			};
 		};	
 
-		classload("timer");
+		classload("core/util/timer");
 		$aw_timer = new aw_timer();
 
 
