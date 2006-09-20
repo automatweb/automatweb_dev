@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.136 2006/09/13 14:09:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.137 2006/09/20 12:16:26 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -38,11 +38,15 @@
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
 
-@layout center_bit type=hbox closeable=1 area_caption=Sisu
+@layout center_bit type=hbox 
+	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
 
 	@layout center_bit_left type=vbox parent=center_bit 
 
-		@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit_left
+
+		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
+
+		@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit_left_ct
 		@caption Sisu
 		
 

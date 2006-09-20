@@ -67,6 +67,16 @@
             <field>hrs_table</field>
       </property>
       <property>
+            <name>center_bit_vis</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>center_bit</parent>
+            <field>center_bit_vis</field>
+      </property>
+      <property>
             <name>content</name>
             <table>planner</table>
             <group>general</group>
@@ -75,7 +85,7 @@
             <cols>80</cols>
             <rows>30</rows>
             <field>description</field>
-            <parent>center_bit_left</parent>
+            <parent>center_bit_left_ct</parent>
             <caption>Sisu</caption>
       </property>
       <property>
@@ -697,8 +707,6 @@
             </top_2way_right>
             <center_bit>
                   <type>hbox</type>
-                  <closeable>1</closeable>
-                  <area_caption>Sisu</area_caption>
                   <group>general</group>
             </center_bit>
             <center_bit_left>
@@ -706,6 +714,13 @@
                   <parent>center_bit</parent>
                   <group>general</group>
             </center_bit_left>
+            <center_bit_left_ct>
+                  <type>hbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Sisu</area_caption>
+                  <parent>center_bit_left</parent>
+                  <group>general</group>
+            </center_bit_left_ct>
             <center_bit_right>
                   <type>vbox</type>
                   <parent>center_bit</parent>

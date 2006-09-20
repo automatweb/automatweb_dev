@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.57 2006/09/05 09:40:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.58 2006/09/20 12:16:26 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -42,11 +42,14 @@
 	@property hrs_table type=table no_caption=1 store=no parent=top_bit
 
 
-@layout center_bit type=hbox closeable=1 area_caption=Sisu
+@layout center_bit type=hbox 
+	@property center_bit_vis type=hidden store=no no_caption=1 parent=center_bit
 
 	@layout center_bit_left type=vbox parent=center_bit 
 
-		@property content type=textarea cols=80 rows=30 field=description parent=center_bit_left no_caption=1
+		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
+
+		@property content type=textarea cols=80 rows=30 field=description parent=center_bit_left_ct no_caption=1
 		@caption Sisu
 
 	@layout center_bit_right type=vbox parent=center_bit 
