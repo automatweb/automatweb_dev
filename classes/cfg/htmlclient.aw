@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.155 2006/09/05 13:55:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.156 2006/09/20 13:45:37 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1291,7 +1291,9 @@ class htmlclient extends aw_template
 						"u_layout" => $layout_name
 					), "user"),
 					"display" => $state ? "block" : "none",
-					"closer_state" => $state ? "up" : "down"
+					"closer_state" => $state ? "up" : "down",
+					"VGRID_HAS_PADDING" => $ldata["no_padding"] ? "" : $this->parse("VGRID_HAS_PADDING"),
+					"VGRID_NO_PADDING" => $ldata["no_padding"] ? $this->parse("VGRID_NO_PADDING") : "",
 				));
 				$ghc = $this->parse("VGRID_HAS_CLOSER");
 				$gce = $this->parse("VGRID_CLOSER_END");

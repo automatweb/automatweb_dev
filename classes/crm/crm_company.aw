@@ -1326,7 +1326,7 @@ class crm_company extends class_base
 				$popm = get_instance("vcl/popup_menu");
 				$popm->begin_menu("cst_".$node_id);
 				$popm->add_item(array(
-					"link" => html::obj_change_url($conn->prop("to")),
+					"link" => html::get_change_url($conn->prop("to"), array("return_url" => get_ru())),
 					"text" => t("Muuda")
 				));
 				$popm->add_item(array(

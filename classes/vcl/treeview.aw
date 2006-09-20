@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.67 2006/09/06 12:52:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.68 2006/09/20 13:45:38 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -933,8 +933,6 @@ class treeview extends class_base
 				"target" => $url_target,
 				"alt" => $item["alt"]
 			));
-
-
 
 			if (empty($subres))
 			{

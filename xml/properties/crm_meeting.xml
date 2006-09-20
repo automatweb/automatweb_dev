@@ -97,6 +97,7 @@
             <rows>30</rows>
             <parent>center_bit_left_ct</parent>
             <no_caption>1</no_caption>
+            <width>100%</width>
             <field>content</field>
             <caption>Sisu</caption>
       </property>
@@ -742,6 +743,7 @@
                   <parent>center_bit_right</parent>
                   <closeable>1</closeable>
                   <area_caption>Osapooled</area_caption>
+                  <no_padding>1</no_padding>
                   <group>general</group>
             </center_bit_right_top>
             <center_bit_right_bottom>
@@ -749,6 +751,7 @@
                   <parent>center_bit_right</parent>
                   <closeable>1</closeable>
                   <area_caption>Manused</area_caption>
+                  <no_padding>1</no_padding>
                   <group>general</group>
             </center_bit_right_bottom>
             <center_bit_bottom>

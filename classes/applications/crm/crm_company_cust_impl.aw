@@ -1630,6 +1630,7 @@ class crm_company_cust_impl extends class_base
 			'attrib' => 'category',
 			'leafs' => false,
 			'style' => 'nodetextbuttonlike',
+			"edit_mode" => 1
 		));
 
 		return PROP_OK;

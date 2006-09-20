@@ -232,6 +232,7 @@
       <groupinfo>
             <ppl>
                   <caption>Isikud</caption>
+                  <submit>no</submit>
             </ppl>
             <settings>
                   <caption>Seaded</caption>
@@ -239,18 +240,22 @@
             <cycles>
                   <caption>Ts&amp;amp;uuml;klid</caption>
                   <parent>settings</parent>
+                  <submit>no</submit>
             </cycles>
             <scenarios>
                   <caption>Stsenaariumid</caption>
                   <parent>settings</parent>
+                  <submit>no</submit>
             </scenarios>
             <wa>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
                   <parent>settings</parent>
+                  <submit>no</submit>
             </wa>
             <shifts>
                   <caption>Vahetused</caption>
                   <parent>settings</parent>
+                  <submit>no</submit>
             </shifts>
             <skills>
                   <caption>P&amp;amp;auml;devused</caption>
@@ -268,10 +273,12 @@
             <stats_wp>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;postid</caption>
                   <parent>stats</parent>
+                  <submit>no</submit>
             </stats_wp>
             <stats_overtime>
                   <caption>&amp;amp;Uuml;letunnid</caption>
                   <parent>stats</parent>
+                  <submit>no</submit>
             </stats_overtime>
             <graph>
                   <caption>Graafikud</caption>
@@ -279,6 +286,7 @@
             <admin_act>
                   <caption>Administratiivsed tegevused</caption>
                   <parent>graph</parent>
+                  <submit>no</submit>
             </admin_act>
             <op_act>
                   <caption>Operatiivsed tegevused</caption>

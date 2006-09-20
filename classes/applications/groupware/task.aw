@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.139 2006/09/20 13:10:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.140 2006/09/20 13:45:37 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -46,13 +46,13 @@
 
 		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
 
-		@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit_left_ct
+		@property content type=textarea no_caption=1 cols=80 rows=30 field=description table=planner parent=center_bit_left_ct width=100%
 		@caption Sisu
 		
 
 	@layout center_bit_right type=vbox parent=center_bit 
 
-		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled
+		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
 
 			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_right_top
 
@@ -68,7 +68,7 @@
 			@caption Projekt
 
 
-		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused
+		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
 
 			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_right_bottom
 

@@ -77,10 +77,6 @@
 		<!-- END SUB: SUBITEM2 -->
 
 		<!-- SUB: GRIDITEM -->
-		<div class="aw04gridcell_caption">{VAR:caption}: {VAR:element}</div>
-		<!-- END SUB: GRIDITEM -->
-
-		<!-- SUB: GRIDITEM -->
 		<div class="aw04gridcell_caption">
 			<!-- SUB: CAPTION_TOP -->
 			{VAR:caption}:<br/>
@@ -133,13 +129,20 @@
 				<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" alt="Kinni" width="20" height="15" border="0" class="btn"  id="{VAR:grid_name}_closer_img"/></a></div>
 			</div>
 			<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
+			<!-- SUB: VGRID_HAS_PADDING -->
 			<div class="sisu2">
+			<!-- END SUB: VGRID_HAS_PADDING -->
+
+			<!-- SUB: VGRID_NO_PADDING -->
+			<div class="sisu2nop">
+			<!-- END SUB: VGRID_NO_PADDING -->
 		<!-- END SUB: VGRID_HAS_CLOSER -->
+
 			<!-- SUB: GRID_VBOX_ITEM -->
-			    <div class="sisu3">{VAR:item}
-			    </div>
+			    <div class="sisu3">{VAR:item}</div>
 
 			<!-- END SUB: GRID_VBOX_ITEM -->
+
 				<!-- SUB: GRID_VBOX_SUBITEM -->
 				<div class="sisu3">{VAR:item}</div>
 				<!-- END SUB: GRID_VBOX_SUBITEM -->

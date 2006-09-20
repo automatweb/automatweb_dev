@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.58 2006/09/20 12:16:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.59 2006/09/20 13:45:37 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -49,12 +49,12 @@
 
 		@layout center_bit_left_ct  type=hbox closeable=1 area_caption=Sisu parent=center_bit_left
 
-		@property content type=textarea cols=80 rows=30 field=description parent=center_bit_left_ct no_caption=1
+		@property content type=textarea cols=80 rows=30 field=description parent=center_bit_left_ct no_caption=1 width=100%
 		@caption Sisu
 
 	@layout center_bit_right type=vbox parent=center_bit 
 
-		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled
+		@layout center_bit_right_top type=vbox parent=center_bit_right closeable=1 area_caption=Osapooled no_padding=1
 
 			@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit_right_top
 
@@ -70,7 +70,7 @@
 			@caption Projekt
 
 
-		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused
+		@layout center_bit_right_bottom type=vbox parent=center_bit_right closeable=1 area_caption=Manused no_padding=1
 
 			@property files_tb type=toolbar no_caption=1 store=no parent=center_bit_right_bottom
 

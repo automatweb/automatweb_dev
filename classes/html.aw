@@ -333,6 +333,10 @@ class html extends aw_template
 		{
 			$disabled = ($disabled ? " disabled" : "");
 			$wrap = isset($wrap) ? $wrap : "soft";
+			if (!empty($width))
+			{
+				$style .= ";width: $width;";
+			}
 			$style = isset($style) ? " style='$style' " : "";
 			$retval = "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize $onFocus $onBlur>$value</textarea>\n";
 		};
