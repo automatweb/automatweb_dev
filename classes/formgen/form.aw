@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.125 2005/11/03 13:29:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.126 2006/09/20 11:16:36 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -6479,7 +6479,7 @@ class form extends form_base
 		{
 			return "Kasutatav filter formile $this->id on määramata";
 		};
-		$sf = get_instance("search_filter");
+		$sf = get_instance("formgen/search_filter");
 		$sf->id=$this->arr["search_filter"];
 
 		$sf->__load_filter();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.128 2006/09/05 10:17:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.129 2006/09/20 11:16:35 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -423,13 +423,17 @@ class users_user extends aw_template
 	// type(int or array) - mis tyypi gruppe listida?
 	function get_group_picker($arr)
 	{
-		$ret = array();
-		$this->list_groups($arr);
-		while ($row = $this->db_next())
+		$filt = array(
+			"class_id" => CL_GROUP,
+			"lang_id" => array(),
+			"site_id" => array()
+		);
+		if ($arr["type"])
 		{
-			$ret[$row["gid"]] = $row["name"];
+			$filt["type"] = $arr["type"];
 		}
-		return $ret;
+		$ol = new object_list($filt);
+		return $ol->names();
 	}
 
 	////

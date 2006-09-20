@@ -37,7 +37,7 @@ class form_filter_search_element extends form_search_element
 			aw_global_set("partsloaded",1);
 			if ($this->form->arr["search_filter"])
 			{
-				$sf=get_instance("search_filter");
+				$sf=get_instance("formgen/search_filter");
 				$sf->id=$this->form->arr["search_filter"];
 				//fuck! i need to load the m.a. to get fake form element names. damn.
 				$sf->__load_data();

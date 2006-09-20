@@ -7,7 +7,7 @@ class search_filter extends aw_template
         {
                 $this->init("automatweb/filter");
                 lc_load("definition");
-                $this->sql_filter=get_instance("sql_filter");
+                $this->sql_filter=get_instance("formgen/sql_filter");
         }
 
 

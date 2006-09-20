@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.62 2006/03/03 13:20:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.63 2006/09/20 11:16:35 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -300,7 +300,7 @@ class table extends aw_template
 			};
 			$this->vars(array("COL" => $col));
 			$this->parse("LINE");
-			$flt=get_instance("search_filter");
+			$flt=get_instance("formgen/search_filter");
 			$flt->id=$GLOBALS["filter$id"];
 			$flt->__load_data();
 
