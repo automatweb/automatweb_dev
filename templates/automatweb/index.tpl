@@ -43,12 +43,38 @@ function MM_swapImage() { //v3.0
   var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
    if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
 }
+
+function generic_loader()
+{
+	// don't do anything. screw you.
+}
+	
+function check_generic_loader()
+{
+	if (generic_loader)
+	{
+		generic_loader();
+	}
+};
+		
+function generic_unloader()
+{
+	// don't do anything. screw you.
+}
+							
+function check_generic_unloader()
+{
+	if (generic_unloader)
+	{
+		generic_unloader();
+	}
+};
 //-->
 </script>
 
 </head>
 
-<body onResize="document.execCommand('Refresh')">
+<body onResize="document.execCommand('Refresh')" onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
 <!-- päis -->
 <div id="pais">
 	<div class="logo">
