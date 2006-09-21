@@ -123,7 +123,7 @@ class project_teams_impl extends class_base
 		$tb =& $arr["prop"]["vcl_inst"];
 
 		classload("core/icons");
-		$nm = t("Tiimid");
+		$nm = t("T&ouml;&ouml;perekonnad");
 		if ($arr["request"]["team"] == "")
 		{
 			$nm = "<b>".$nm."</b>";

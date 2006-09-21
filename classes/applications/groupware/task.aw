@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.140 2006/09/20 13:45:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.141 2006/09/21 13:27:00 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -201,8 +201,15 @@ caption Osalejad
 	@property sel_resources type=table no_caption=1 method=serialize
 
 @default group=predicates
+	@layout predicates_l type=hbox width=40%:60%
+	@layout predicates_left type=vbox parent=predicates_l closeable=1 area_caption=Eeldustegevused no_padding=1
 
-	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect field=meta method=serialize
+	@property predicates_tb type=toolbar parent=predicates_left no_caption=1
+	@property predicates_table type=table store=no  no_caption=1 parent=predicates_left 
+	
+	@layout predicates_right type=vbox parent=predicates_l
+	
+	@property predicates multiple=1 type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect field=meta parent=predicates_right method=serialize
 	@caption Eeldustegevused
 
 	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal method=
@@ -377,7 +384,7 @@ class task extends class_base
 	{
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
-		if ($sts && $sts->prop("view_task_rows_open"))
+		if ($sts && $sts->prop("view_task_rows_open") && ($_GET["action"] != "new"))
 		{
 			return "rows";
 		}
@@ -419,6 +426,18 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{	
+			case "predicates":
+				return PROP_IGNORE;
+				break;
+			
+			case "predicates_tb":
+				$this->_predicates_tb($arr);
+				break;
+				
+			case "predicates_table":
+				$this->_predicates_table($arr);
+				break;
+				
 		        case "parts_tb":
                                $this->_parts_tb($arr);
                               break;
@@ -1096,6 +1115,30 @@ class task extends class_base
 
 	function callback_post_save($arr)
 	{
+		if (is_oid($arr["request"]["predicates"]) && $this->can("view", $arr["request"]["predicates"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["predicates"],
+				"reltype" => "RELTYPE_PREDICATE"
+			));
+		}
+		if ($this->can("view", $_POST["predicates"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $_POST["predicates"],
+				"type" => "RELTYPE_PREDICATE"
+			));
+		}
+		if ($_POST["predicates"] > 0)
+		{
+			foreach(explode(",", $_POST["predicates"]) as $pred)
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $pred,
+					"type" => "RELTYPE_PREDICATE"
+				));
+			}
+		}
 		if ($arr["request"]["participants_h"] > 0)
 		{
 			$this->post_save_add_parts = explode(",", $arr["request"]["participants_h"]);
@@ -1492,9 +1535,10 @@ class task extends class_base
 		$u = get_instance(CL_USER);
 		$def_impl = $u->get_current_person();
 		$o_def_impl = array($def_impl => $def_impl);
-		$cs = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_ROW",
-		));
+//		if($arr["obj_inst"]->id() > 0)	$cs = $arr["obj_inst"]->connections_from(array(
+//				"type" => "RELTYPE_ROW",
+//			));
+//		else $cs = array();	
 		foreach ($cs as $key => $ro)
 		{
 			$ob = $ro->to();
@@ -2534,6 +2578,7 @@ class task extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		$arr["predicates"] = 0;
 		$arr["post_ru"] = post_ru();
 		$arr["participants_h"] = 0;
 		$arr["orderer_h"] = 0;
@@ -3309,6 +3354,90 @@ class task extends class_base
 			}
 		}
 		return $arr["post_ru"];
+	}
+	
+	function _init_predicates_table(&$t)
+	{
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+		$t->define_field(array(
+			"name" => "predicates",
+			"caption" => t("Eeldustegevus"),
+			"sortable" => 1,
+			"width" => "80%"
+		));
+	}
+
+	function _predicates_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_predicates_table($t);
+
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+		foreach($arr["obj_inst"]->connections_from(array("type" => 9)) as $c)
+		{
+			$c = $c->to();
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"predicates" => html::obj_change_url($c),
+			));
+		}
+		return $t->draw();
+	}
+	
+	
+	function _predicates_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"tooltip" => t("Uus"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Toimetus"),
+			"link" => html::get_new_url(CL_TASK, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 9
+			)),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("K&otilde;ne"),
+			"link" => html::get_new_url(CL_CRM_CALL, $arr["obj_inst"]->parent(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 9
+			)),
+		));
+		
+		$url = $this->mk_my_orb("do_search", array(
+				"pn" => "predicates",
+				"clid" => array(
+					CL_TASK,
+					CL_CRM_CALL
+				),"multiple"=>1,
+				),"popup_search");
+
+		$tb->add_button(array(
+			"name" => "search",
+			"tooltip" => t("Otsi"),
+			"img" => "search.gif",
+			"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_rels"
+		));
 	}
 }
 ?>

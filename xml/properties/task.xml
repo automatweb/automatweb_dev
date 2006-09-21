@@ -548,14 +548,35 @@
             <store>no</store>
       </property>
       <property>
+            <name>predicates_tb</name>
+            <table>objects</table>
+            <group>predicates</group>
+            <field>meta</field>
+            <type>toolbar</type>
+            <parent>predicates_left</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>predicates_table</name>
+            <table>objects</table>
+            <group>predicates</group>
+            <field>meta</field>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>predicates_left</parent>
+      </property>
+      <property>
             <name>predicates</name>
             <table>objects</table>
             <group>predicates</group>
             <field>meta</field>
-            <type>relpicker</type>
             <multiple>1</multiple>
+            <type>relpicker</type>
             <reltype>RELTYPE_PREDICATE</reltype>
             <store>connect</store>
+            <parent>predicates_right</parent>
             <method>serialize</method>
             <caption>Eeldustegevused</caption>
       </property>
@@ -758,6 +779,24 @@
                   <no_caption>1</no_caption>
                   <group>general</group>
             </deal_price_layout>
+            <predicates_l>
+                  <type>hbox</type>
+                  <width>40%:60%</width>
+                  <group>predicates</group>
+            </predicates_l>
+            <predicates_left>
+                  <type>vbox</type>
+                  <parent>predicates_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Eeldustegevused</area_caption>
+                  <no_padding>1</no_padding>
+                  <group>predicates</group>
+            </predicates_left>
+            <predicates_right>
+                  <type>vbox</type>
+                  <parent>predicates_l</parent>
+                  <group>predicates</group>
+            </predicates_right>
       </layout>
 </properties>
 
