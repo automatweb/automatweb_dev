@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.56 2006/09/18 11:50:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.57 2006/09/21 13:58:26 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -682,6 +682,7 @@ class bug extends class_base
 		$monitors[] = $bug->prop("who");
 
 		// I should add a way to send CC-s to arbitraty e-mail addresses as well
+		$notify_addresses = array();
 		foreach(array_unique($monitors) as $person)
 		{
 			if(!$this->can("view", $person))
@@ -695,7 +696,7 @@ class bug extends class_base
 				continue;
 			}
 			$email = $person_obj->prop("email");
-			$notify_addresses = array();
+
 			if (is_oid($email))
 			{
 				$email_obj = new object($email);
@@ -715,25 +716,27 @@ class bug extends class_base
 				$notify_addresses[] = $addr;
 			}; 
 		};
+
 		if (sizeof($notify_addresses) == 0)
 		{
 			return false;
 		};
 
-		$notify_list = join(",",$notify_addresses);
+		foreach($notify_addresses as $adr)
+		{
+			$oid = $bug->id();
+			$name = $bug->name();
+			$uid = aw_global_get("uid");
 
-		$oid = $bug->id();
-		$name = $bug->name();
-		$uid = aw_global_get("uid");
+			$msgtxt = t("Bug") . ": " . $this->mk_my_orb("change",array("id" => $oid)) . "\n";
+			$msgtxt .= t("Summary") . ": " . $name . "\n";
+			$msgtxt .= t("URL") . ": " . $bug->prop("bug_url") . "\n";
+			$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
+			$msgtxt .= strip_tags($comment)."\n";
+			$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc", false));
 
-		$msgtxt = t("Bug") . ": " . $this->mk_my_orb("change",array("id" => $oid)) . "\n";
-		$msgtxt .= t("Summary") . ": " . $name . "\n";
-		$msgtxt .= t("URL") . ": " . $bug->prop("bug_url") . "\n";
-		$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
-		$msgtxt .= strip_tags($comment)."\n";
-		$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc", false));
-
-		send_mail($notify_list,"Bug #" . $oid . ": " . $name . " : " . $uid . " lisas kommentaari",$msgtxt,"From: automatweb@automatweb.com");
+			send_mail($adr,"Bug #" . $oid . ": " . $name . " : " . $uid . " lisas kommentaari",$msgtxt,"From: automatweb@automatweb.com");
+		}
 	}
 
 	function get_sort_priority($bug)
