@@ -59,26 +59,6 @@
             <caption>Loe l&amp;auml;hemalt</caption>
       </property>
       <property>
-            <name>contact_person_orderer</name>
-            <table>aw_projects</table>
-            <group>general2</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <field>aw_contact_person</field>
-            <parent>left_bit</parent>
-            <caption>Tellija kontaktisik</caption>
-      </property>
-      <property>
-            <name>contact_person_implementor</name>
-            <table>aw_projects</table>
-            <group>general2</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <field>aw_contact_person_impl</field>
-            <parent>left_bit</parent>
-            <caption>Teostaja kontaktisik</caption>
-      </property>
-      <property>
             <name>hrs_guess</name>
             <table>aw_projects</table>
             <group>general2</group>
@@ -97,6 +77,24 @@
             <size>5</size>
             <parent>left_bit</parent>
             <caption>Ettemaks</caption>
+      </property>
+      <property>
+            <name>contact_person_orderer</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>select</type>
+            <field>aw_contact_person</field>
+            <parent>left_bit</parent>
+            <caption>Tellija kontaktisik</caption>
+      </property>
+      <property>
+            <name>contact_person_implementor</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>select</type>
+            <field>aw_contact_person_impl</field>
+            <parent>left_bit</parent>
+            <caption>Teostaja kontaktisik</caption>
       </property>
       <property>
             <name>start</name>
@@ -1004,6 +1002,8 @@
             <center_bit>
                   <type>vbox</type>
                   <parent>up_bit</parent>
+                  <closeable>1</closeable>
+                  <no_padding>1</no_padding>
                   <group>general2</group>
             </center_bit>
             <files_lay>
@@ -1014,6 +1014,7 @@
             <team>
                   <type>hbox</type>
                   <width>30%:70%</width>
+                  <closeable>1</closeable>
                   <group>team</group>
             </team>
             <team_search>

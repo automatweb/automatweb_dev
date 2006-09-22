@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.102 2006/09/20 15:44:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.103 2006/09/22 15:39:32 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -35,17 +35,17 @@
 		@caption Loe lähemalt
 
 
-	@property contact_person_orderer type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person parent=left_bit
-	@caption Tellija kontaktisik
-
-	@property contact_person_implementor type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person_impl parent=left_bit
-	@caption Teostaja kontaktisik
-
 	@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5 parent=left_bit
 	@caption  Prognoositav tundide arv
 
 	@property prepayment type=textbox table=aw_projects field=aw_prepayment size=5 parent=left_bit
 	@caption Ettemaks
+
+	@property contact_person_orderer type=select table=aw_projects field=aw_contact_person parent=left_bit
+	@caption Tellija kontaktisik
+
+	@property contact_person_implementor type=select table=aw_projects field=aw_contact_person_impl parent=left_bit
+	@caption Teostaja kontaktisik
 
 property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
 caption Tellija
@@ -53,7 +53,7 @@ caption Tellija
 property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
 caption Teostajad
 
-	@layout center_bit type=vbox parent=up_bit
+	@layout center_bit type=vbox parent=up_bit  closeable=1 no_padding=1
 
 		@property start type=date_select table=aw_projects field=aw_start parent=center_bit
 		@caption Algus
@@ -85,6 +85,9 @@ caption Teostajad
 
 	property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1 table=objects field=meta method=serialize no_caption=1 parent=parts
 	caption Osalejad
+
+
+
 
 @default group=info_t
 
@@ -201,9 +204,9 @@ caption Teostajad
 
 	@property team_tb type=toolbar no_caption=1 store=no
 
-	@layout team type=hbox width=30%:70%
+	@layout team type=hbox width=30%:70% closeable=1 
 
-		@layout team_search parent=team type=vbox
+		@layout team_search parent=team type=vbox 
 	
 			@property team_team_tree type=treeview store=no no_caption=1 parent=team_search
 				
@@ -598,6 +601,29 @@ class project extends class_base
 				break;
 
 			case "contact_person_orderer":
+				$data["options"] = array("" => t("--Vali--"));
+				foreach($arr["obj_inst"]->connections_from(array("type" => 9)) as $c)
+				{
+					$c = $c->to();
+					if($c->class_id() == CL_CRM_PERSON){
+						$data["options"][$c->id()] = $c->name();
+					}
+					if($c->class_id() == CL_CRM_COMPANY){
+						$wl = array();
+						$i = get_instance(CL_CRM_COMPANY);
+						$i->get_all_workers_for_company($c, &$wl);
+						if (count($wl))
+						{
+							$ol = new object_list(array("oid" => $wl));
+							foreach ($ol->arr() as $person)
+							{
+								$data["options"][$person->id()] = $person->name();
+							}
+						}
+					}
+					
+				}
+				/*
 				$ord = $arr["obj_inst"]->prop("orderer");
 				if (is_array($ord))
 				{
@@ -607,10 +633,33 @@ class project extends class_base
 				{
 					$this->_proc_cp(obj($ord), $data);
 				}
-				asort($data["options"]);
+				asort($data["options"]);*/
 				break;
 
 			case "contact_person_implementor":
+				$data["options"] = array("" => t("--Vali--"));
+				foreach($arr["obj_inst"]->connections_from(array("type" => 10)) as $c)
+				{
+					$c = $c->to();
+					if($c->class_id() == CL_CRM_PERSON){
+						$data["options"][$c->id()] = $c->name();
+					}
+					if($c->class_id() == CL_CRM_COMPANY){
+						$wl = array();
+						$i = get_instance(CL_CRM_COMPANY);
+						$i->get_all_workers_for_company($c, &$wl);
+						if (count($wl))
+						{
+							$ol = new object_list(array("oid" => $wl));
+							foreach ($ol->arr() as $person)
+							{
+								$data["options"][$person->id()] = $person->name();
+							}
+						}
+					}
+					
+				}
+				/*
 				$ord = $arr["obj_inst"]->prop("implementor");
 				if (is_array($ord))
 				{
@@ -620,7 +669,7 @@ class project extends class_base
 				{
 					$this->_proc_cp(obj($ord), $data);
 				}
-				asort($data["options"]);
+				asort($data["options"]);*/
 				break;
 
 			case "orderer":
@@ -810,10 +859,15 @@ class project extends class_base
 					$this->do_create_task = 1;
 				}
 				break;
-
+			
 			case "orderer":
-			case "implementor":
+			case "ipmlementor":
+			case "participants":
+				return PROP_IGNORE;
+//			case "orderer":
+//			case "implementor":
 			case "implementor_person":
+				return PROP_IGNORE;
 				if (is_oid($prop["value"]))
 				{
 					$prop["value"] = array($prop["value"]);
@@ -2518,10 +2572,10 @@ class project extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["implementor"] = "0";
+//		$arr["implementor"] = "0";
 		$arr["post_ru"] = post_ru();
 		$arr["implementor"] = $_GET["implementor"];
-		$arr["partipicants"] = $_GET["partipicants"];
+		$arr["participants"] = $_GET["participants"];
 		$arr["orderer"] = $_GET["orderer"];
 		$arr["tf"] = $_GET["tf"];
 		$arr["team"] = $_GET["team"];
@@ -3137,6 +3191,37 @@ class project extends class_base
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
 		}
+		
+		if ($this->can("view", $_POST["implementor"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $_POST["implementor"],
+				"reltype" => "RELTYPE_IMPLEMENTOR"
+			));
+			$arr["obj_inst"]->connect(array(
+				"to" => $_POST["implementor"],
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+		}
+		if ($_POST["implementor"] > 0)
+		{
+			foreach(explode(",", $_POST["implementor"]) as $pred)
+			{
+			$arr["obj_inst"]->connect(array(
+				"to" => $pred,
+				"reltype" => "RELTYPE_IMPLEMENTOR"
+			));
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $pred,
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+			}
+		}
+		
+		
+		
+		
 		if (is_oid($arr["request"]["orderer"]) && $this->can("view", $arr["request"]["orderer"]))
 		{
 			$arr["obj_inst"]->connect(array(
@@ -3149,13 +3234,59 @@ class project extends class_base
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
 		}
-
-		if (is_oid($arr["request"]["partipicants"]) && $this->can("view", $arr["request"]["partipicants"]))
+		
+		if ($this->can("view", $_POST["orderer"]))
 		{
 			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["partipicants"],
+				"to" => $_POST["orderer"],
+				"reltype" => "RELTYPE_ORDERER"
+			));
+			$arr["obj_inst"]->connect(array(
+				"to" => $_POST["orderer"],
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
+		}
+		if ($_POST["implementor"] > 0)
+		{
+			foreach(explode(",", $_POST["orderer"]) as $pred)
+			{
+			$arr["obj_inst"]->connect(array(
+				"to" => $pred,
+				"reltype" => "RELTYPE_ORDERER"
+			));
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $pred,
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+			}
+		}
+
+		if (is_oid($arr["request"]["participants"]) && $this->can("view", $arr["request"]["participants"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["participants"],
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+		}
+
+		if ($this->can("view", $_POST["participants"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $_POST["participants"],
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+		}
+		if ($_POST["implementor"] > 0)
+		{
+			foreach(explode(",", $_POST["participants"]) as $pred)
+			{
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $pred,
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+			}
 		}
 
 		if ($this->do_create_task == 1)
@@ -4590,6 +4721,15 @@ class project extends class_base
 		foreach($arr["obj_inst"]->connections_from(array("type" => 9)) as $c)
 		{
 			$c = $c->to();
+			if($c->class_id() == CL_CRM_PERSON)
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"orderer" => html::obj_change_url($c),
+				"phone" => html::obj_change_url($c->prop("phone")),
+				"contact" => html::obj_change_url($c)
+			));
+			
+			else
 			$t->define_data(array(
 				"oid" => $c->id(),
 				"orderer" => html::obj_change_url($c),
@@ -4634,10 +4774,18 @@ class project extends class_base
 		{
 			return;
 		}
-		$p = get_instance(CL_PROJECT);
 		foreach($arr["obj_inst"]->connections_from(array("type" => 2)) as $c)
 		{
-			$c = $c->to();
+			$c = $c->to();			
+			if($c->class_id() == CL_CRM_PERSON)
+			$t->define_data(array(
+				"oid" => $c->id(),
+				"participants" => html::obj_change_url($c),
+				"phone" => html::obj_change_url($c->prop("phone")),
+				"contact" => html::obj_change_url($c)
+			));
+			
+			else
 			$t->define_data(array(
 				"oid" => $c->id(),
 				"participants" => html::obj_change_url($c),
@@ -4685,12 +4833,23 @@ class project extends class_base
 		foreach($arr["obj_inst"]->connections_from(array("type" => 10)) as $c)
 		{
 			$c = $c->to();
-			$t->define_data(array(
-				"oid" => $c->id(),
-				"implementor" => html::obj_change_url($c),
-				"phone" => html::obj_change_url($c->prop("phone_id")),
-				"contact" => html::obj_change_url($c->prop("contact_person"))
-			));
+			if($c->class_id() == CL_CRM_PERSON){
+				$t->define_data(array(
+					"oid" => $c->id(),
+					"implementor" => html::obj_change_url($c),
+					"phone" => html::obj_change_url($c->prop("phone")),
+					"contact" => html::obj_change_url($c)
+				));
+			}
+			else
+			{
+				$t->define_data(array(
+					"oid" => $c->id(),
+					"implementor" => html::obj_change_url($c),
+					"phone" => html::obj_change_url($c->prop("phone_id")),
+					"contact" => html::obj_change_url($c->prop("contact_person"))
+				));
+			}
 		}
 	}
 
