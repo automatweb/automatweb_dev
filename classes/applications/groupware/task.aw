@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.141 2006/09/21 13:27:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.142 2006/09/22 13:13:06 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -871,6 +871,8 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "predicates":
+				return PROP_IGNORE;
 			case "add_clauses":
 				$arr["obj_inst"]->set_status($prop["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
 				$arr["obj_inst"]->set_prop("is_done", $prop["value"]["is_done"] ? 8 : 0);
