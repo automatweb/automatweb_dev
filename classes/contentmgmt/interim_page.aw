@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.8 2006/08/24 14:23:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.9 2006/09/25 14:39:56 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -165,7 +165,7 @@ class interim_page extends class_base
 			//tekitab userim muutujad ja annab neile väärtuseks pildiurlid:
 			$img_props = array();//siia paigutab miski hulk piltide properteid .. hiljem läheb vaja
 			$x = 1;
-			while($x < 21)
+			while($x < 31)
 			{
 				$img_props[$x] = "userim".$x;
 				$image = $register_obj->get_first_obj_by_reltype("RELTYPE_IMAGE".$x);
