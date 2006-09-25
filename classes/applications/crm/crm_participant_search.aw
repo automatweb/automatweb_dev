@@ -11,25 +11,45 @@ class crm_participant_search extends popup_search
 	function _insert_form_props(&$htmlc, $arr)
 	{
 		parent::_insert_form_props($htmlc, $arr);
-		$htmlc->add_property(array(
+		/*$htmlc->add_property(array(
 			"name" => "s[search_co]",
 			"type" => "textbox",
 			"value" => $arr["s"]["search_co"],
 			"caption" => t("Organisatsioon"),
-		));
+		));*/
+		$opts = array();
+		if (is_array($arr["s"]["co"]))
+		{
+			foreach($arr["s"]["co"] as $co)
+			{
+				if ($this->can("view", $co))
+				{
+					$coo = obj($co);
+					$opts[$co] = $coo->name();
+				}
+			}
+		}
+		$opts["cur_co"] = t("Meie firma");
+		$opts["my_cust"] = t("Minu kliendid");
+		$opts["imp"] = t("Olulised");
+		$opts["def"] = t("Esimesed kolmkümmend");
+
 		$htmlc->add_property(array(
 			"name" => "s[show_vals]",
 			"type" => "chooser",
 			"value" => isset($_GET["MAX_FILE_SIZE"]) ? $arr["s"]["show_vals"] : array("cur_co" => 1),
 			"caption" => t("N&auml;ita"),
 			"multiple" => 1,
-			"options" => array(
-				"cur_co" => t("Meie firma"),
-				"my_cust" => t("Minu kliendid"),
-				"imp" => t("Olulised"),
-				"def" => t("Esimesed kolmkümmend")
-			)
+			"orient" => "vertical",
+			"options" => $opts
 		));
+	}
+
+	function _process_reforb_args(&$data)
+	{
+		$data["s"] = array(
+			"co" => $_GET["s"]["co"]
+		);
 	}
 
 	function _get_filter_props(&$filter, $arr)
@@ -48,9 +68,9 @@ class crm_participant_search extends popup_search
 
 		if (is_array($arr["s"]["show_vals"]))
 		{
+			$c = get_instance(CL_CRM_COMPANY);
 			if ($arr["s"]["show_vals"]["cur_co"])
 			{
-				$c = get_instance(CL_CRM_COMPANY);
 				$u = get_instance(CL_USER);
 				$filter["oid"] = array_keys($c->get_employee_picker(obj($u->get_current_company())));
 			}
@@ -77,7 +97,6 @@ class crm_participant_search extends popup_search
 
 			if ($arr["s"]["show_vals"]["imp"])
 			{
-				$c = get_instance(CL_CRM_COMPANY);
 				$u = get_instance(CL_USER);
 				if (!is_array($filter["oid"]))
 				{
@@ -95,12 +114,28 @@ class crm_participant_search extends popup_search
 				$ol = new object_list(array("class_id" => CL_CRM_PERSON, "lang_id" => array(), "site_id" => array(), "limit" => 30));
 				$filter["oid"] += $ol->ids();
 			}
+
+			if (is_array($arr["s"]["show_vals"]))
+			{
+				foreach($arr["s"]["show_vals"] as $k => $v)
+				{
+					if (is_oid($k) && $v)
+					{
+						if (!is_array($filter["oid"]))
+						{
+							$filter["oid"] = array();
+						}
+						$filter["oid"] += array_keys($c->get_employee_picker(obj($k)));
+					}
+				}
+			}
 		}
 
 		if (is_array($filter["oid"]) && !count($filter["oid"]))
 		{
 			$filter["oid"] = -1;
 		}
+//		die(dbg::dump($filter["oid"]));
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.142 2006/09/22 13:13:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.143 2006/09/25 14:34:40 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1066,6 +1066,9 @@ class task extends class_base
 					return PROP_ERROR;
 				}
 				break;
+
+			case "predicates":
+				return PROP_IGNORE;
 		};
 		return $retval;
 	}
@@ -2964,7 +2967,13 @@ class task extends class_base
 			"text" => t("Projekt"),
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 		));
-		$url = $this->mk_my_orb("do_search", array("pn" => "participants_h", "clid" => CL_CRM_PERSON,"multiple" => 1), "popup_search");
+		$cur = get_current_company();
+		$s = array("co" => array($cur->id() => $cur->id()));
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		{
+			$s["co"][$c->prop("to")] = $c->prop("to");
+		}
+		$url = $this->mk_my_orb("do_search", array("pn" => "participants_h", "clid" => CL_CRM_PERSON,"multiple" => 1, "s" => $s), "crm_participant_search");
 		$tb->add_menu_item(array(
 			"parent" => "search",
 			"text" => t("Osaleja"),

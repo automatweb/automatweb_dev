@@ -465,18 +465,20 @@ class popup_search extends aw_template
 			"caption" => t("Otsi")
 		));
 
-		$htmlc->finish_output(array(
-			"action" => "do_search",
-			"method" => "GET",
-			"data" => array(
+		$data = array(
 				"id" => $arr["id"],
 				"pn" => $arr["pn"],
 				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
 				"orb_class" => $_GET["class"],
-				"reforb" => 0
-			)
+				"reforb" => 0,
+			);
+		$this->_process_reforb_args($data);
+		$htmlc->finish_output(array(
+			"action" => "do_search",
+			"method" => "GET",
+			"data" => $data
 		));
 
 		$html = $htmlc->get_result();
@@ -484,6 +486,10 @@ class popup_search extends aw_template
 		return $html;
 	}
 	
+	function _process_reforb_args(&$data)
+	{
+	}
+
 	/**
 		@attrib params=pos
 		@param filter required type=array
@@ -893,6 +899,35 @@ function aw_get_el(name,form)
 		}
 		exit ($cl_json->encode($option_data));
 
+	}
+
+	/** Post-processes popup_search and creates the needed connections
+		@attrib api=1 params=pos
+		@param o required type=object
+			The object to connect to
+
+		@param val required type=string
+			The value from the popup search class
+
+		@param rt required type=string
+			The reltype to use for connection
+
+	**/
+	function do_create_rels($o, $val, $rt)
+	{
+		if ($val != "")
+		{
+			foreach(explode(",", $val) as $item)
+			{
+				if ($this->can("view", $item))
+				{
+					$o->connect(array(
+						"to" => $item,
+						"type" => $rt
+					));
+				}
+			}
+		}
 	}
 }
 ?>
