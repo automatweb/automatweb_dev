@@ -135,6 +135,11 @@ class acl_manager extends class_base
 			"caption" => t("Juurkaust"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "set_acl",
+			"caption" => t("M&auml;&auml;ra"),
+			"align" => "center"
+		));
 	}
 
 	function _get_table($r)
@@ -190,6 +195,11 @@ class acl_manager extends class_base
 				"value" => 1,
 				"checked" => in_array($obj->id(), $adm_rm[aw_global_get("lang_id")])
 			));
+			$dat["set_acl"] = html::checkbox(array(
+				"name" => "set_acl[$oid]",
+				"value" => 1,
+				"checked" => isset($acls[$oid])
+			));
 
 			foreach(aw_ini_get("acl.names") as $id => $name)
 			{
@@ -213,7 +223,7 @@ class acl_manager extends class_base
 			"name" => "save",
 			"tooltip" => t("Salvesta &otilde;igused"),
 			"img" => "save.gif",
-			"url" => "javascript:changeform.submit()"
+			"url" => "javascript:document.changeform.submit()"
 		));
 
 		$o = obj($r["id"]);
@@ -268,7 +278,7 @@ class acl_manager extends class_base
 			}
 			// if there is an acl relation for this group, then save the data
 			// if not and there are some thingies set, then create it
-			if (isset($acl[$o->id()]) || (isset($arr["acl_matrix"][$o->id()]) && count($arr["acl_matrix"][$o->id()])))
+			if (isset($acl[$o->id()]) || (isset($arr["acl_matrix"][$o->id()]) && count($arr["acl_matrix"][$o->id()])) || $arr["set_acl"][$o->id()] == 1)
 			{
 				$obj->acl_set($o, safe_array($arr["acl_matrix"][$o->id()]));
 			}	
