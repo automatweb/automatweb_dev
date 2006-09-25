@@ -185,6 +185,10 @@ a:hover {text-decoration: underline}
 	border: 1px solid #05a6e9;
 	text-decoration: none
 }
+#pais .popup_item a.akt, #pais .popup_item a:hover { /*kalmer 22.09.2006*/
+	border-bottom: 0px solid #ffffff;
+	text-decoration: underline;
+}
 #pais .toiming a.nupp img.ikoon {
 	margin-left: -18px;
 	position: absolute
