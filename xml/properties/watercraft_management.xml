@@ -230,7 +230,8 @@
             <name>additional_equipment</name>
             <table>objects</table>
             <group>search</group>
-            <type>text</type>
+            <type>textbox</type>
+            <size>20</size>
             <store>no</store>
             <parent>watercraft_search_frame_left</parent>
             <field>additional_equipment</field>

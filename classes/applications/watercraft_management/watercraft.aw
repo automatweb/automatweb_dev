@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.4 2006/09/06 14:30:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.5 2006/09/25 12:41:11 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -398,7 +398,10 @@ class watercraft extends class_base
 				break;
 			case 'creation_year':
 				$prop['options'] = $this->custom_range(1900, date('Y'));
-				$prop['selected'] = '2000';
+				if ( empty($prop['value']) )
+				{
+					$prop['selected'] = '2000';
+				}
 				break;
 			case 'passanger_count':
 				$prop['options'] = $this->custom_range(1, 50);
@@ -788,9 +791,55 @@ class watercraft extends class_base
 
 	function do_db_upgrade($table, $field, $query, $error)
 	{
+
 		if (empty($field))
 		{
-			$this->db_query('CREATE TABLE '.$table.' (oid INT PRIMARY KEY NOT NULL)');
+			// db table doesn't exist, so lets create it:
+			$this->db_query('CREATE TABLE '.$table.' (
+				oid INT PRIMARY KEY NOT NULL,
+
+				deal_type int,
+				watercraft_type int,
+				body_material int,
+				location int,
+				condition int,
+				seller int,
+				visible int,
+				archived int,
+				centreboard int,
+				creation_year int,
+				passanger_count int,
+				sleeper_count int,
+				engine_count int,
+				engine_type int,
+				fuel int,
+				engine_cooling int,
+				mast_material int,
+				mast_count int,
+				manufacturer int,
+
+				length float,
+				width float,
+				height float,
+				weight float,
+				draught float,
+				fuel_tank float,
+				engine_power float,
+
+				watercraft_type_other varchar(255),
+				body_material_other varchar(255),
+				location_other varchar(255),
+				condition_info varchar(255),
+				brand varchar(255),
+				price varchar(255),
+				engine_manufacturer varchar(255),
+				engine_model varchar(255),
+				engine_capacity varchar(255),
+				mast_material_other varchar(255),
+
+				sail_info text,
+				additional_equipment_info text
+			)');
 			return true;
 		}
 

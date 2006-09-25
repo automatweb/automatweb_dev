@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.7 2006/09/06 14:30:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.8 2006/09/25 12:41:11 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -105,7 +105,7 @@
 			@property passanger_count type=range store=no parent=watercraft_search_frame_left
 			@caption Reisijaid
 
-			@property additional_equipment type=text store=no parent=watercraft_search_frame_left
+			@property additional_equipment type=textbox size=20 store=no parent=watercraft_search_frame_left
 			@caption Lisavarustus
 
 			@property seller type=select store=no parent=watercraft_search_frame_left
@@ -216,9 +216,9 @@ class watercraft_management extends class_base
 				$range = &$prop['vcl_inst'];
 				$range->set_range($arr['request'][$prop['name']]);
 				break;
-			case 'additional_equipment':
-				$prop['value'] = '???';
-				break;
+		//	case 'additional_equipment':
+		//
+		//		break;
 			case 'seller':
 				$prop['options'] = array(t('K&otilde;ik')) + $this->seller_type;
 				$prop['selected'] = $arr['request']['seller_type'];
@@ -228,9 +228,9 @@ class watercraft_management extends class_base
 
 		if ( !empty($this->search_obj) )
 		{
-			if ( array_key_exists( $prop['name'], $this->watercraft_search_inst->visible_form_elements ) )
+			if ( array_key_exists( $prop['name'], $this->watercraft_search_inst->search_form_elements ) )
 			{
-			$search_form_conf = $this->search_obj->prop('search_form_conf');
+				$search_form_conf = $this->search_obj->prop('search_form_conf');
 				if ( !in_array( $prop['name'],  $search_form_conf) )
 				{
 					$retval = PROP_IGNORE;
@@ -367,6 +367,7 @@ class watercraft_management extends class_base
 		{
 			foreach ($this->watercraft_search_inst->search_form_elements as $name => $caption)
 			{
+				// if it is range:
 				if ( is_array($arr['request'][$name]) )
 				{
 					$from = (int)$arr['request'][$name]['from'];
@@ -716,7 +717,14 @@ class watercraft_management extends class_base
 	{
 		if (empty($field))
 		{
-			$this->db_query('CREATE TABLE '.$table.' (oid INT PRIMARY KEY NOT NULL)');
+			$this->db_query('CREATE TABLE '.$table.' (
+				oid INT PRIMARY KEY NOT NULL, 
+				keeper int, 
+				data int, 
+				locations int, 
+				manufacturers int, 
+				search int
+			)');
 			return true;
 		}
 
