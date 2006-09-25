@@ -23,7 +23,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 		@layout co_top_left type=vbox parent=co_top
 
-			@property name type=textbox size=30 maxlength=255 table=objects parent=co_top_left 
+			@property name type=textbox size=3f0 maxlength=255 table=objects parent=co_top_left 
 			@caption Organisatsiooni nimi
 
 			@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name parent=co_top_left 
@@ -369,72 +369,64 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 ---------------------------------------------------
 
 /////start of my_customers
-@default group=relorg_s
+@default group=relorg_s,relorg_b,relorg_t
 
 	@property my_customers_toolbar type=toolbar no_caption=1 store=no
 	@caption "Klientide toolbar"
 
 	@layout my_cust_bot type=hbox width=20%:80%
 
-		@layout vbox_customers_left type=vbox parent=my_cust_bot closeable=1 area_caption=Otsing
+		@layout tree_search_split type=vbox parent=my_cust_bot
+			
+			@property tree_search_split_dummy type=hidden no_caption=1 parent=tree_search_split
 
-			@property customer_search_name type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-			@caption Nimi
+			@layout vvoc_customers_tree_left type=vbox parent=tree_search_split closeable=1 area_caption=Kliendigrupid
+				@property customer_listing_tree type=treeview no_caption=1 parent=vvoc_customers_tree_left
+				@caption R&uuml;hmade puu
 
-			@property customer_search_reg type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-			@caption Reg nr.
+			@layout vbox_customers_left type=vbox parent=tree_search_split closeable=1 area_caption=Otsing
 
-			@property customer_search_worker type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-			@caption T&ouml;&ouml;taja
+				@property customer_search_name type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+				@caption Nimi
 
-			@property customer_search_address type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-			@caption Aadress
+				@property customer_search_reg type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+				@caption Reg nr.
 
-			@property customer_search_city type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-			@caption Linn/Vald/Alev
+				@property customer_search_worker type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+				@caption T&ouml;&ouml;taja
 
-			@property customer_search_county type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-			@caption Maakond
+				@property customer_search_address type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+				@caption Aadress
 
-			@property customer_search_ev type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-			@caption &Otilde;iguslik vorm
+				@property customer_search_city type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+				@caption Linn/Vald/Alev
 
-			@property customer_search_keywords type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-			@caption M&auml;rks&otilde;nad
+				@property customer_search_county type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+				@caption Maakond
 
-			@property customer_search_is_co type=chooser  store=no parent=vbox_customers_left multiple=1 no_caption=1
-			@caption Organisatsioon
+				@property customer_search_ev type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+				@caption &Otilde;iguslik vorm
 
-			@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left captionside=top
-			@caption Kliendihaldur
+				@property customer_search_keywords type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+				@caption M&auml;rks&otilde;nad
 
-			@property customer_search_cust_grp type=select store=no parent=vbox_customers_left captionside=top
-			@caption Kliendigrupp
+				@property customer_search_is_co type=chooser  store=no parent=vbox_customers_left multiple=1 no_caption=1
+				@caption Organisatsioon
 
-			@property customer_search_print_view type=checkbox parent=vbox_customers_left store=no captionside=top ch_value=1 no_caption=1
-			@caption Printvaade
+				@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left captionside=top
+				@caption Kliendihaldur
 
-			@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_left no_caption=1
-			@caption Otsi
+				@property customer_search_cust_grp type=select store=no parent=vbox_customers_left captionside=top
+				@caption Kliendigrupp
+
+				@property customer_search_print_view type=checkbox parent=vbox_customers_left store=no captionside=top ch_value=1 no_caption=1
+				@caption Printvaade
+
+				@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_left no_caption=1
+				@caption Otsi
 
 		@property my_customers_table type=table store=no no_caption=1 parent=my_cust_bot
 		@caption Kliendid
-
-
-@default group=relorg_t
-
-	@property customer_toolbar type=toolbar no_caption=1 store=no
-	@caption "Klientide toolbar"
-
-	@layout relorg_t_l type=hbox group=relorg_t width=20%:80%
-
-		@layout relorg_t_l_tree type=vbox parent=relorg_t_l closeable=1 area_caption=Kliendigrupid
-			@property customer_listing_tree type=treeview no_caption=1 parent=relorg_t_l_tree
-			@caption Rühmade puu
-
-		@property customer_t type=table store=no no_caption=1 parent=relorg_t_l
-		@caption Kliendid
-
 
 /////end of my_customers
 
@@ -953,8 +945,9 @@ default group=org_objects
 	@groupinfo all_reports caption="K&otilde;ik raportid" submit=no parent=projs save=no
 
 @groupinfo relorg caption="Kliendid" focus=customer_search_name save=no
-	@groupinfo relorg_s caption="Otsing" focus=customer_search_name parent=relorg submit=no save=no
-	@groupinfo relorg_t caption="Puuvaade" parent=relorg submit=no save=no
+	@groupinfo relorg_s caption="M&uuml;&uuml;jad" focus=customer_search_name parent=relorg submit=no save=no
+	@groupinfo relorg_b caption="Ostjad" focus=customer_search_name parent=relorg submit=no save=no
+	@groupinfo relorg_t caption="K&otilde;ik" parent=relorg submit=no save=no
 
 groupinfo org_objects_main caption="Objektid" submit=no
 
@@ -1343,6 +1336,7 @@ class crm_company extends class_base
 					$attrib=>$conn->prop('to'),
 					'cat'=>'',
 					'org_id' => '',
+					'customer_search_submit' => NULL,
 				)),
 				'oid' => $conn->prop('to'),
 				"class_id" => $conn->prop("to.class_id"),
@@ -6003,8 +5997,20 @@ class crm_company extends class_base
 
 	function callback_mod_tab($arr)
 	{
+
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
+			return false;
+		}
+
+		if($arr["id"] == "relorg_t")
+		{
+			$u = get_instance(CL_USER);
+			$co = $u->get_current_company();
+			if ($arr["request"]["id"] == $co)
+			{
+				return true;
+			}
 			return false;
 		}
 

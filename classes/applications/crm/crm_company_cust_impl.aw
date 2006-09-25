@@ -309,70 +309,6 @@ class crm_company_cust_impl extends class_base
 		));
 	}
 
-	function _get_customer($arr, $filter = NULL)
-	{
-		if ($arr["request"]["customer_search"])
-		{
-			return PROP_IGNORE;
-		}
-
-		if ($filter)
-		{
-			$orglist = $this->make_keys($filter);
-		}
-		else
-		{
-			// different for customer vs my co.
-			$u = get_instance(CL_USER);
-			$co = $u->get_current_company();
-			if ($arr["obj_inst"]->id() == $co)
-			{
-				if ($arr["request"]["customer_search_submit"] != "")
-				{
-					$ol = new object_list($this->_get_customer_search_filter($arr["request"]));
-					$orglist = $this->make_keys($ol->ids());
-				}
-				else
-				{
-					$u = get_instance(CL_USER);
-					$p = obj($u->get_current_person());
-					$ol = new object_list($this->_get_customer_search_filter(array("customer_search_cust_mgr" => $p->name())));
-					$orglist = $this->make_keys($ol->ids());
-				}
-			}
-			else
-			{
-				if ($arr["request"]["customer_search_submit"] != "")
-				{
-					$ol = new object_list($this->_get_customer_search_filter($arr["request"]));
-					$orglist = $this->make_keys($ol->ids());
-				}
-				else
-				{
-					// get all companies that are customers of THAT company
-					$d = get_instance("applications/crm/crm_data");
-					$orglist = $d->get_customers_for_company($arr["obj_inst"]);
-				}
-			}
-		}
-
-		$this->_finish_org_tbl($arr, $orglist);
-
-		if ($arr["request"]["customer_search_print_view"] == 1)
-		{
-			$sf = new aw_template;
-			$sf->db_init();
-			$sf->tpl_init("automatweb");
-			$sf->read_template("index.tpl");
-			$sf->vars(array(
-				"content"	=> $arr["prop"]["vcl_inst"]->draw(),
-				"uid" => aw_global_get("uid"),
-				"charset" => aw_global_get("charset")
-			));
-			die($sf->parse());
-		}
-
-	}
 
 	function _get_role_html($arr)
 	{
@@ -468,6 +404,31 @@ class crm_company_cust_impl extends class_base
 			'text' => t('Arve'),
 			"action" => "go_to_create_bill"
 		));
+
+// add category
+		$alias_to = $arr['obj_inst']->id();
+		$rt = 30;
+
+		if((int)$arr['request']['category'])
+		{
+			$alias_to = $arr['request']['category'];
+			$parent = (int)$arr['request']['category'];
+			$rt = 2;
+		}
+
+		$tb->add_menu_item(array(
+			'parent'=>'add_item',
+			'text' => t('Kategooria'),
+			'link' => $this->mk_my_orb('new',array(
+					'parent' => $arr['obj_inst']->id(),
+					'alias_to' => $alias_to,
+					'reltype' => $rt, //RELTYPE_CATEGORY
+					'return_url' => get_ru()
+				),
+				'crm_category'
+			)
+		));
+
 
 		$tb->add_button(array(
 			'name' => 'add_task_to_co',
@@ -578,12 +539,6 @@ class crm_company_cust_impl extends class_base
 			}
 		}
 		return $ret;
-	}
-
-	function _get_my_customers_table($arr)
-	{
-		$i = get_instance(CL_CRM_COMPANY);
-		$this->_get_customer($arr);
 	}
 
 	function _get_offers_listing_toolbar($arr)
@@ -1385,13 +1340,18 @@ class crm_company_cust_impl extends class_base
 		return PROP_OK;
 	}
 
-	function _get_customer_search_filter($r, $oids)
+	function _get_customer_search_filter($r, $within = false, $oids)
 	{
 		$ret = array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
 			"site_id" => array(),
-			"lang_id" => array()
+			"lang_id" => array(),
 		);
+		
+		if($within)
+		{
+			$ret["oid"] = $within;
+		}
 
 		if ($r["customer_search_name"] != "")
 		{
@@ -1469,7 +1429,6 @@ class crm_company_cust_impl extends class_base
 			{
 				$oids = -1;
 			}
-			$ret["oid"] = $oids;
 		}
 
 		if (empty($r["customer_search_is_co"]["is_co"]) && !empty($r["customer_search_is_co"]["is_person"]))
@@ -1534,75 +1493,7 @@ class crm_company_cust_impl extends class_base
 			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 		}
 	}
-
-	function _get_customer_toolbar($arr)
-	{
-		$tb =& $arr["prop"]["vcl_inst"];
-
-		$tb->add_menu_button(array(
-			'name'=>'add_item',
-			'tooltip'=> t('Uus')
-		));
-
-		$alias_to = $arr['obj_inst']->id();
-		$rt = 30;
-
-		if((int)$arr['request']['category'])
-		{
-			$alias_to = $arr['request']['category'];
-			$parent = (int)$arr['request']['category'];
-			$rt = 2;
-		}
-
-		$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text' => t('Kategooria'),
-			'link' => $this->mk_my_orb('new',array(
-					'parent' => $arr['obj_inst']->id(),
-					'alias_to' => $alias_to,
-					'reltype' => $rt, //RELTYPE_CATEGORY
-					'return_url' => get_ru()
-				),
-				'crm_category'
-			)
-		));
-
-		if (is_oid($arr["request"]["category"]))
-		{
-			$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text' => t('Klient'),
-				'link' => $this->mk_my_orb('new',array(
-						'parent' => $arr['obj_inst']->id(),
-						'alias_to' => $alias_to,
-						'reltype' => 3, // crm_category.CUSTOMER,
-						'return_url' => get_ru()
-					),
-					'crm_company'
-				)
-			));
-		}
-
-		//delete button
-		$tb->add_button(array(
-			'name' => 'del',
-			'img' => 'delete.gif',
-			'tooltip' => t('Kustuta valitud'),
-			'action' => 'submit_delete_customer_relations',
-		));
-
-		$tb->add_separator();
-
-		$tb->add_button(array(
-			'name' => 'Search',
-			'img' => 'search.gif',
-			'tooltip' => t('Otsi'),
-			'url' => aw_url_change_var("group", "relorg_s")
-		));
-
-		return PROP_OK;
-	}
-
+	
 	function _get_customer_listing_tree($arr)
 	{
 		$tree_inst = &$arr['prop']['vcl_inst'];
@@ -1618,7 +1509,6 @@ class crm_company_cust_impl extends class_base
 				$arr['request']['category'] = $f_cat->id();
 			}
 		}
-
 		$i = get_instance(CL_CRM_COMPANY);
 		$i->active_node = (int)$arr['request']['category'];
 		$i->generate_tree(array(
@@ -1632,6 +1522,14 @@ class crm_company_cust_impl extends class_base
 			'style' => 'nodetextbuttonlike',
 			"edit_mode" => 1
 		));
+		/*
+		$tree_inst->start_tree(array(
+			"type" => TREE_DHTML,
+			"has_root" => 1,
+			"root_name" => "hey",
+			"root_url" => "#"
+		));
+		*/
 
 		return PROP_OK;
 	}
@@ -1904,50 +1802,151 @@ class crm_company_cust_impl extends class_base
 		$tf->set_default_sortby("name");
 	}
 
-	function _get_customer_t($arr)
+	function _get_customer($arr, $filter = NULL)
 	{
-		//will list the companys from the category
-		//if category is selected
-		$organization = &$arr['obj_inst'];
-
-		if (!is_oid($arr['request']['category']))
+		if ($arr["request"]["customer_search"])
 		{
-			$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
-			if ($f_cat)
-			{
-				$arr['request']['category'] = $f_cat->id();
-			}
+			return PROP_IGNORE;
 		}
 
-		if($arr['request']['category']!='parent' && is_oid($arr['request']['category']))
-		{
-			$organization = new object($arr['request']['category']);
-		}
 
-		$orgs = $organization->connections_from(array(
-			"type" => 'RELTYPE_CUSTOMER',
-		));
-
-		$orglist = array();
-		foreach($orgs as $org)
+		if ($filter)
 		{
-			$orglist[$org->prop("to")] = $org->prop("to");
-		}
-
-		// add the sections from the selected section to edit
-		if ($arr["request"]["category"])
-		{
-			$from = obj($arr["request"]["category"]);
+			$orglist = $this->make_keys($filter);
 		}
 		else
 		{
-			$from = $arr["obj_inst"];
+			if($arr["request"]["group"] != "relorg_t")
+			{
+				$ol2 = new object_list(array(
+					"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+					(($arr["request"]["group"] == "relorg_s")?"buyer":"seller") => $arr["obj_inst"]->id(),
+				));
+				$ol2 = $ol2->ids();
+			}
+			else
+			{
+				$ol2 = false;
+			}
+			// different for customer vs my co.
+			$u = get_instance(CL_USER);
+			$co = $u->get_current_company();
+			if ($arr["obj_inst"]->id() == $co)
+			{
+				$ol = new object_list($this->_get_customer_search_filter($arr["request"], $ol2));
+				$orglist = $this->make_keys($ol->ids());
+
+				/*
+				if ($arr["request"]["customer_search_submit"] != "")
+				{
+				}
+				else
+				{
+					$u = get_instance(CL_USER);
+					$p = obj($u->get_current_person());
+					$ol = new object_list($this->_get_customer_search_filter(array("customer_search_cust_mgr" => $p->name())));
+					$orglist = $this->make_keys($ol->ids());
+				}
+				*/
+			}
+			else
+			{
+				$ol = new object_list($this->_get_customer_search_filter($arr["request"], $ol2));
+				$orglist = $this->make_keys($ol->ids());
+				/*
+				if ($arr["request"]["customer_search_submit"] != "")
+				{
+				}
+				else
+				{
+					// get all companies that are customers of THAT company
+					$d = get_instance("applications/crm/crm_data");
+					$orglist = $d->get_customers_for_company($arr["obj_inst"]);
+				}
+				*/
+			}
 		}
-		foreach($from->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
-		{
-			$orglist[] = $c->prop("to");
-		}
+
 		$this->_finish_org_tbl($arr, $orglist);
+
+		if ($arr["request"]["customer_search_print_view"] == 1)
+		{
+			$sf = new aw_template;
+			$sf->db_init();
+			$sf->tpl_init("automatweb");
+			$sf->read_template("index.tpl");
+			$sf->vars(array(
+				"content"	=> $arr["prop"]["vcl_inst"]->draw(),
+				"uid" => aw_global_get("uid"),
+				"charset" => aw_global_get("charset")
+			));
+			die($sf->parse());
+		}
+
+	}
+
+	function _get_my_customers_table($arr)
+	{
+		if($arr["request"]["customer_search_submit"])
+		{
+			$this->_get_customer(&$arr);
+		}
+		else
+		{
+			//will list the companys from the category
+			//if category is selected
+			$organization = &$arr['obj_inst'];
+			$org_old = $organization;
+
+			if (!is_oid($arr['request']['category']))
+			{
+				$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
+				if ($f_cat)
+				{
+					$arr['request']['category'] = $f_cat->id();
+				}
+			}
+
+			if($arr['request']['category']!='parent' && is_oid($arr['request']['category']))
+			{
+				$organization = new object($arr['request']['category']);
+			}
+
+
+			$conn_filt = array(
+				"type" => 'RELTYPE_CUSTOMER',
+			);
+			if($arr["request"]["group"] != "relorg_t")
+			{
+				$ol2 = new object_list(array(
+					"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+					(($arr["request"]["group"] == "relorg_s")?"buyer":"seller") => $org_old->id(),
+				));
+				$conn_filt["to"] = $ol2->ids();
+			}
+			$orgs = $organization->connections_from($conn_filt);
+
+			$orglist = array();
+			foreach($orgs as $org)
+			{
+				$orglist[$org->prop("to")] = $org->prop("to");
+			}
+
+			// add the sections from the selected section to edit
+			if ($arr["request"]["category"])
+			{
+				$from = obj($arr["request"]["category"]);
+			}
+			else
+			{
+				$from = $arr["obj_inst"];
+			}
+			foreach($from->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
+			{
+				$orglist[] = $c->prop("to");
+			}
+			$this->_finish_org_tbl($arr, $orglist);
+		}
 	}
 
 	function _do_cust_cat_tb_submenus(&$tb, $link, $p, $p_str, $oncl = null)
