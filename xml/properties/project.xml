@@ -97,6 +97,26 @@
             <caption>Teostaja kontaktisik</caption>
       </property>
       <property>
+            <name>orderer</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_ORDERER</reltype>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>implementor</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_IMPLEMENTOR</reltype>
+            <caption>Teostajad</caption>
+      </property>
+      <property>
             <name>start</name>
             <table>aw_projects</table>
             <group>general2</group>
@@ -162,26 +182,6 @@
             <store>no</store>
             <parent>center_bit</parent>
             <field>impl_table</field>
-      </property>
-      <property>
-            <name>implementor</name>
-            <table>objects</table>
-            <group>general2</group>
-            <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_IMPLEMENTOR</reltype>
-            <caption>Teostajad</caption>
-      </property>
-      <property>
-            <name>orderer</name>
-            <table>objects</table>
-            <group>general2</group>
-            <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_ORDERER</reltype>
-            <caption>Klient</caption>
       </property>
       <property>
             <name>participants</name>
