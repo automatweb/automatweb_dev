@@ -41,7 +41,7 @@ function aw_get_el(name,form)
     for(i = 0; i < form.elements.length; i++)
 	{
         el = form.elements[i];
-        if (el.name.indexOf(name) != -1)
+        if (el.name.indexOf(name) == 0)
 		{
 			return el;
 		}

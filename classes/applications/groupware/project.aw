@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.103 2006/09/22 15:39:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.104 2006/09/25 09:10:10 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -47,10 +47,10 @@
 	@property contact_person_implementor type=select table=aw_projects field=aw_contact_person_impl parent=left_bit
 	@caption Teostaja kontaktisik
 
-property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
+@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
 caption Tellija
 
-property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
+@property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
 caption Teostajad
 
 	@layout center_bit type=vbox parent=up_bit  closeable=1 no_padding=1
@@ -861,13 +861,12 @@ class project extends class_base
 				break;
 			
 			case "orderer":
-			case "ipmlementor":
-			case "participants":
-				return PROP_IGNORE;
-//			case "orderer":
-//			case "implementor":
+			case "implementor":
 			case "implementor_person":
-				return PROP_IGNORE;
+				if (count(explode(",", $prop["value"])) > 1)
+				{
+					$prop["value"] = $this->make_keys(explode(",", $prop["value"]));
+				}
 				if (is_oid($prop["value"]))
 				{
 					$prop["value"] = array($prop["value"]);
@@ -2572,11 +2571,10 @@ class project extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-//		$arr["implementor"] = "0";
 		$arr["post_ru"] = post_ru();
-		$arr["implementor"] = $_GET["implementor"];
-		$arr["participants"] = $_GET["participants"];
-		$arr["orderer"] = $_GET["orderer"];
+		$arr["implementor"] = "0";
+		$arr["participants"] = "0";
+		$arr["orderer"] = "0";
 		$arr["tf"] = $_GET["tf"];
 		$arr["team"] = $_GET["team"];
 	}
@@ -3179,128 +3177,10 @@ class project extends class_base
 
 	function callback_post_save($arr)
 	{
-		if (is_oid($arr["request"]["implementor"]) && $this->can("view", $arr["request"]["implementor"]))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["implementor"],
-				"reltype" => "RELTYPE_IMPLEMENTOR"
-			));
-
-			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["implementor"],
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-		}
-		
-		if ($this->can("view", $_POST["implementor"]))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $_POST["implementor"],
-				"reltype" => "RELTYPE_IMPLEMENTOR"
-			));
-			$arr["obj_inst"]->connect(array(
-				"to" => $_POST["implementor"],
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-		}
-		if ($_POST["implementor"] > 0)
-		{
-			foreach(explode(",", $_POST["implementor"]) as $pred)
-			{
-			$arr["obj_inst"]->connect(array(
-				"to" => $pred,
-				"reltype" => "RELTYPE_IMPLEMENTOR"
-			));
-
-			$arr["obj_inst"]->connect(array(
-				"to" => $pred,
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-			}
-		}
-		
-		
-		
-		
-		if (is_oid($arr["request"]["orderer"]) && $this->can("view", $arr["request"]["orderer"]))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["orderer"],
-				"reltype" => "RELTYPE_ORDERER"
-			));
-
-			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["orderer"],
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-		}
-		
-		if ($this->can("view", $_POST["orderer"]))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $_POST["orderer"],
-				"reltype" => "RELTYPE_ORDERER"
-			));
-			$arr["obj_inst"]->connect(array(
-				"to" => $_POST["orderer"],
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-		}
-		if ($_POST["implementor"] > 0)
-		{
-			foreach(explode(",", $_POST["orderer"]) as $pred)
-			{
-			$arr["obj_inst"]->connect(array(
-				"to" => $pred,
-				"reltype" => "RELTYPE_ORDERER"
-			));
-
-			$arr["obj_inst"]->connect(array(
-				"to" => $pred,
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-			}
-		}
-
-		if (is_oid($arr["request"]["participants"]) && $this->can("view", $arr["request"]["participants"]))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $arr["request"]["participants"],
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-		}
-
-		if ($this->can("view", $_POST["participants"]))
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => $_POST["participants"],
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-		}
-		if ($_POST["implementor"] > 0)
-		{
-			foreach(explode(",", $_POST["participants"]) as $pred)
-			{
-
-			$arr["obj_inst"]->connect(array(
-				"to" => $pred,
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-			}
-		}
-
 		if ($this->do_create_task == 1)
 		{
 			$this->_create_task($arr);
 		}
-
-		/*if ($add_mem)
-		{
-			$arr["obj_inst"]->connect(array(
-				"to" => aw_global_get("uid_oid"),
-				"reltype" => "RELTYPE_PARTICIPANT"
-			));
-		}*/
 	}
 
 	function _mk_tbl()
