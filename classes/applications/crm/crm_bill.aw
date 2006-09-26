@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.102 2006/09/20 14:06:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.103 2006/09/26 13:06:05 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -850,7 +850,7 @@ class crm_bill extends class_base
 				$new_line = 1;
 				foreach($new_rows as $n_key => $new_row)
 				{
-					if($new_row["price"] == $row["price"] && ($new_row["comment"] == $row["comment"] || !$row["comment"]))
+					if($new_row["price"] == $row["price"] && ($new_row["comment"] == $row["comment"] || !$row["comment"])&& ($key == $new_row["key"] || !($key>0)))
 					{
 						$new_rows[$n_key]["sum_wo_tax"] = $new_rows[$n_key]["sum_wo_tax"] + $row["sum_wo_tax"];
 						$new_rows[$n_key]["tax"] = $new_rows[$n_key]["tax"] + $row["tax"];
@@ -905,13 +905,14 @@ class crm_bill extends class_base
 			$lo = obj($b->prop("language"));
 			$lc = $lo->prop("lang_acceptlang");
 		}
+		
+		$default_template = $tpl."_et";
 		$tpl .= "_".$lc;
 
 		if ($this->read_site_template($tpl.".tpl", true) === false)
 		{
 			$this->read_site_template("show.tpl");
 		}
-
 		$ord = obj();
 		$ord_cur = obj();
 		$ord_ct_prof = "";
@@ -1268,13 +1269,14 @@ class crm_bill extends class_base
 				$cur_tax = 0;
 				$cur_pr = $this->num($row["price"]);
 			}
-			$tax_rows[$tax_rate] += $cur_tax;
+			$name = $row["comment"];
+			$tax_rows["$tax_rate"] += $cur_tax;
 			$this->vars(array(
 				"unit" => $row["unit"],
 				"amt" => $row["amt"],
 				"price" => number_format($cur_pr, 2, ".", " "),
 				"sum" => number_format($cur_sum, 2, ".",  " "),
-				"desc" => $row["name"],
+				"desc" => $name,
 				"date" => $row["date"] 
 			));
 	
@@ -1293,7 +1295,7 @@ class crm_bill extends class_base
 		$tax_rows_str = "";
 		foreach($tax_rows as $tax_rate => $tax_amt)
 		{
-			if ($tax_rate > 0 || true)
+			if ($tax_rate > 0 )
 			{
 				$this->vars(array(
 					"tax_rate" => floor($tax_rate*100.0),
