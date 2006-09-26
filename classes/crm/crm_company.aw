@@ -5052,7 +5052,7 @@ class crm_company extends class_base
 				$br->set_parent($bill->id());
 				$br->set_prop("comment", $expense->name());
 				$br->set_prop("amt", 1);
-				$br->set_prop("price", $expense->prop("cost"));
+				$br->set_prop("price", str_replace(",", ".", $expense->prop("cost")));
 				$br->set_prop("is_oe", 1);
 				$date = $expense->prop("date");
 				$br->set_prop("date", date("d.m.Y", mktime(0,0,0, $date["month"], $date["day"], $date["year"])));
@@ -6913,9 +6913,6 @@ class crm_company extends class_base
 		$o->connect(array("to" => $arr["def_poll"], "type" => "RELTYPE_DEF_POLL"));
 		return $arr["post_ru"];
 	}
-	
-
-
 }
 
 ?>
