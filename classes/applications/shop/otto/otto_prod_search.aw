@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.14 2006/03/09 20:55:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.15 2006/09/26 09:37:29 dragut Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -34,26 +34,27 @@ class otto_prod_search extends class_base
 	);
 
 	var $search_fld_bp_ee = array(
-//		array("Naistele", array(83)),
-//		array("Noortele", array(101)),
-//		array("Lastele", array(100)),
-//		array("Jalatsid", array(2119)),
-//		array("Sport & vaba aeg", array(2120)),
-//		array("Veelgi soodsam", array(2121))
+		'1' => array("Naistele", array(83)),
+	//	array("Noortele", array(101)),
+		'2' => array("Lastele", array(100)),
+		'3' => array("Jalatsid", array(2119)),
+		'4' => array("Sport & vaba aeg", array(2120)),
+		'5' => array("Veelgi soodsam", array(2121))
+
 	);
 
 	var $search_fld_bp_lat = array(
-//		array("Sievieðu mode", array(135883)),
-//		array("Virieðu mode", array(135836)),
-//		array("Bernu un pusaudþu mode", array(135962)),
-//		array("Apavi", array(135963)),
-//		array("Sporta preces", array(135964)),
-//		array("Majturiba", array(135965))
+		'1' => array("Sievieðu mode", array(135883)),
+		'2' => array("Virieðu mode", array(135836)),
+		'3' => array("Bernu un pusaudþu mode", array(135962)),
+		'4' => array("Apavi", array(135963)),
+		'5' => array("Sporta preces", array(135964)),
+		'6' => array("Majturiba", array(135965))
 	);
-
 
 	function otto_prod_search()
 	{
+
 		$this->init(array(
 			"tpldir" => "applications/shop/otto/otto_prod_search",
 			"clid" => CL_OTTO_PROD_SEARCH
@@ -66,6 +67,7 @@ class otto_prod_search extends class_base
 
 		if ( (aw_ini_get("site_id") == 276) || (aw_ini_get("site_id") == 277) )
 		{
+
 			if (aw_global_get("lang_id") == 1)
 			{
 				$this->search_fld = $this->search_fld_bp_ee;
@@ -122,13 +124,25 @@ class otto_prod_search extends class_base
 	//	content_for - array of templates to get content for
 	function on_get_subtemplate_content($arr)
 	{
+		$sel_folder = safe_array($_GET['search_fld']);
 		$this->read_template("minisearch.tpl");
+
+		$res = "";
+		foreach ($this->search_fld as $nr => $data)
+		{
+			$this->vars(array(
+				'folder' => $nr,
+				'selected' => selected( in_array($nr, $sel_folder) ),
+				'folder_name' => $data[0]
+			));
+			$res .= $this->parse('SEARCH_FOLDER');
+		}
 
 		$this->vars(array(
 			"str" => $_GET["str"],
-			"extsearch" => $this->mk_my_orb("exts")
+			"extsearch" => $this->mk_my_orb("exts"),
+			'SEARCH_FOLDER' => $res
 		));
-
 		$arr["inst"]->vars(array(
 			"OTTOSEARCH" => $this->parse()
 		));
@@ -163,6 +177,55 @@ class otto_prod_search extends class_base
 //			"user18" => $this->_get_pgs()
 		);
 
+		// lets add the category support for minisearch
+		$parents = array();
+		$awa = new aw_array($_GET["search_fld"]);
+
+		foreach($awa->get() as $fld)
+		{
+
+			$flds = $this->search_fld[$fld][1];
+			if (is_array($flds))
+			{
+				foreach($flds as $rfld)
+				{
+					$ot = new object_tree(array(
+						"parent" => $rfld,
+						"class_id" => CL_MENU,
+						'status' => STAT_ACTIVE
+					));
+					$ol = $ot->to_list();
+					foreach($ol->ids() as $fldo)
+					{
+						$parents[$fldo] = $fldo;
+					}
+				}
+			}
+		}
+
+		if (count($parents) > 0)
+		{
+			// only for bonprix now:
+			if (aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
+			{
+				// so, i need all those categories which should be shown under those parents:
+				$categories = array();
+				$parents_str = implode(',', $parents);
+
+				$sql = "SELECT * FROM otto_imp_t_aw_to_cat WHERE aw_folder IN ($parents_str) AND lang_id=".aw_global_get('lang_id');
+				$this->db_query($sql);
+				while ($row = $this->db_next())
+				{
+					$categories[$row['category']] = $row['category'];
+				}
+				$arr['categories'] = $categories;
+			}
+			else
+			{
+			//	$filter["parent"] = $parents;
+			}
+
+		}
 		return $this->do_draw_res($arr, $filter);
 	}
 
@@ -187,7 +250,7 @@ class otto_prod_search extends class_base
 		{
 			$jstr = "-1";
 		}
-
+/*
 		$q = "
 			SELECT 
 				o.brother_of as oid,
@@ -206,12 +269,29 @@ class otto_prod_search extends class_base
 			GROUP BY
 				pi.imnr
 		";
+*/
+		$q = "
+			SELECT 
+				o.brother_of as oid,
+				pi.imnr as imnr,
+				pr.user20 as product_code,
+				pr.user11 as user11,
+				pr.user18 as user18
+			FROM 
+				aw_shop_products pr
+				LEFT JOIN otto_prod_img pi ON (pi.pcode = pr.user20)
+				LEFT JOIN objects o ON pr.aw_oid = o.oid 
+			WHERE
+				o.status > 0 AND o.lang_id = ".$lang_id." AND
+				pr.aw_oid IN (".$jstr.") AND
+				pi.imnr IS NOT NULL
+			GROUP BY
+				pi.imnr
+		";
 		$this->db_query($q);
-
 
 		$ol_cnt = new object_list();
 		$product_data = array();
-
 		while ($row = $this->db_next())
 		{
 			$product_data[$row['oid']] = $row;
@@ -222,14 +302,28 @@ class otto_prod_search extends class_base
 
 		enter_function('otto_prod_search::do_draw_res::prod_to_cat_lut');
 		$product_codes_str = implode(',', map("'%s'", $product_codes));
+
 		$query = "SELECT * FROM otto_imp_t_prod_to_cat WHERE product_code IN ($product_codes_str) AND lang_id=$lang_id";
+
 		$this->db_query($query);
 
 		// products to categories 
 		$prod_to_cat_lut = array();
 		while ($row = $this->db_next())
 		{
-			$prod_to_cat_lut[$row['product_code']][] = $row['category'];
+			if (!empty($arr['categories']))
+			{
+
+				if (in_array($row['category'], $arr['categories']))
+				{
+					$prod_to_cat_lut[$row['product_code']][] = $row['category'];
+				}
+			}
+			else
+			{
+				$prod_to_cat_lut[$row['product_code']][] = $row['category'];
+
+			}
 		}
 		exit_function('otto_prod_search::do_draw_res::prod_to_cat_lut');
 
@@ -257,6 +351,7 @@ class otto_prod_search extends class_base
 			{
 				enter_function('prod_to_cat_lut');
 				$categories_str = implode(',', map("'%s'", $prod_to_cat_lut[$product_code]));
+
 				$sections = $this->db_fetch_array("select aw_folder from otto_imp_t_aw_to_cat where category in ($categories_str) and lang_id=$lang_id");
 				foreach ($sections as $section_data)
 				{
@@ -265,11 +360,13 @@ class otto_prod_search extends class_base
 						if (!empty($discount_products_data[$product_code]))
 						{
 							$section = $section_data['aw_folder'];
+							break;
 						}
 					}
 					else
 					{
 						$section = $section_data['aw_folder'];	
+						break;
 					}	
 				}
 				exit_function('prod_to_cat_lut');
@@ -277,26 +374,50 @@ class otto_prod_search extends class_base
 			}
 			else
 			{
-				$category = $prod_data['user11'];
-			
-				if (empty($category))
+				// kui tegemist on bonprix-i saitidega, siis kõik tooted peaks leitama
+				// sellest otto_imp_t_prod_to_cat tabelist ehk siin siis prod_to_cat_lut
+				// massiivist, kui seda sealt ei leita, siis, well, ei ole seda vaja ka 
+				// näidata --dragut
+				if (aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
 				{
-					$category = $prod_data['user18'];
+					$section = "";
 				}
-		
-				$section = $this->db_fetch_field("select aw_folder from otto_imp_t_aw_to_cat where category='$category' and lang_id=$lang_id", "aw_folder");
+				else
+				{
+					// see siin on ylelyldse tagasiyhilduvuse eesm2rgiga, ja praegu tundub
+					// mulle, et reaalselt on seda ainult otto toodete jaoks vaja, nii et mingi hetk
+					// v6iks selle siit ehk ka 2ra kustutada --dragut
+					$category = $prod_data['user11'];
+
+					if (empty($category))
+					{
+						$category = $prod_data['user18'];
+					}
+				// this one takes the last aw_folder entry,
+				//	$section = $this->db_fetch_field("select aw_folder from otto_imp_t_aw_to_cat where category='$category' and lang_id=$lang_id", "aw_folder");
+				// lets try with the first one
+					$tmp_sections =$this->db_fetch_array("select aw_folder from otto_imp_t_aw_to_cat where category='$category' and lang_id=$lang_id");
+					$section = reset($tmp_section);
+					if (in_array($section, $discount_products_parents))
+					{
+						if (empty($discount_products_data[$product_code]))
+						{
+							$section = "";
+						}
+					}
+				}
+
 			}
 
 			if (!empty($section))
 			{
 				$data = array(
-				//	'product_obj' => $product_obj,
 					'product_oid' => $product_oid,
 					'section' => $section,
 					'imnr' => $product_data[$product_id]['imnr'],
 					'product_code' => $product_code
 				);
-			//	$image_data[$product_data[$product_id]['imnr']] = $data;
+
 				$image_data[$prod_data['imnr']] = $data;
 			}
 		}
@@ -352,27 +473,7 @@ class otto_prod_search extends class_base
 			"cur_page" => ($page+1)
 		));
 		exit_function('otto_prod_search::do_draw_res::gen_page_list');
-/*
 
-		$ids = array_values($ol_cnt->ids());
-		$u_ids = array();
-		for($i = $from; $i < $to; $i++)
-		{
-			$u_ids[] = $ids[$i];
-		}
-		//$filter["limit"] = $from.",".$to;
-		$filter["oid"] = $u_ids;
-		if (count($u_ids) < 1)
-		{
-			$ol = new object_list();
-		}
-		else
-		{
-			$ol = new object_list($filter);
-		}
-
-		$used_ims = array();
-*/
 		enter_function('otto_prod_search::do_draw_res::slice_out_current_page');
 		$image_data = array_slice($image_data, $from, 10); 
 		exit_function('otto_prod_search::do_draw_res::slice_out_current_page');
@@ -448,137 +549,6 @@ class otto_prod_search extends class_base
 		}
 		exit_function('otto_prod_search::do_draw_res::draw_current_page');
 
-/*
-		$prod = $ol->begin();
-		for ($r = 0; $r < 5; $r++)
-		{
-			$ps = "";
-			for($i = 0; $i < 2; $i++)
-			{
-				if (!is_object($prod) || !is_oid($prod->id()))
-				{
-					$i = $r = 100;
-					continue;
-				}
-				
-				$product_code = $prod->prop('user20');
-				$lang_id = aw_global_get('lang_id');
-
-				if ($_GET['dragut'])
-				{
-					$cat = $this->db_fetch_field("select category from otto_imp_t_prod_to_cat where product_code='$product_code' and lang_id=$lang_id", "category");
-					if (empty($cat)){
-						$cat = $prod->prop('user11');
-					}
-					$section = $this->db_fetch_field("select aw_folder from otto_imp_t_aw_to_cat where category='$cat' and lang_id=$lang_id", "aw_folder");
-				}
-	
-				$viewlink = $this->mk_my_orb("show_items", array(
-//					"section" => $prod->parent(),
-					'section' => (empty($section)) ? $prod->parent() : $section,
-					"id" => aw_ini_get("shop.prod_fld_path_oc"),
-					"page" => $prod->prop("user18"),
-					"oview" => 2,
-					"apid" => $prod->id()
-				), "shop_order_center");
-
-				$imnr = $this->db_fetch_field("SELECT imnr FROM otto_prod_img WHERE pcode = '".$prod->prop("user20")."' AND nr = 1","imnr");
-
-				if (isset($used_ims[$imnr]))
-				{
-					$prod = $ol->next();
-					if ($i > 0)
-					{
-						$i--;
-					}
-					else
-					{
-						$i = 1; 
-						$r--;
-					}
-					continue;
-				}
-				$used_ims[$imnr] = 1;
-
-				//echo "addar $i $a ".$prod->id()."<br>";
-
-				if ($imnr != "")
-				{
-					$imnr = html::img(array(
-						"url" => $this->get_img_url($imnr, "formatb"),
-						"width" => 80,
-						//"height" => 140,
-						"border" => "0"
-					));
-
-					// link to prod
-					$imnr = html::href(array(
-						"url" => $viewlink,
-						"caption" => $imnr
-					));
-				}
-				else
-				{
-					//$i--;
-					//$prod = $ol->next();
-					//continue;
-					$imnr = html::img(array(
-						"url" => aw_ini_get("baseurl")."/automatweb/images/transparent.gif",
-						"width" => 80,
-						//"height" => 140,
-						"border" => "0"
-					));
-
-					// link to prod
-					$imnr = html::href(array(
-						"url" => $viewlink,
-						"caption" => $imnr
-					));
-				}
-				//echo "q = $q , f = $folder";
-				// start PATH
-				if (is_oid($folder) && $this->can("view", $folder))
-				{
-					$fo = obj($folder);
-					$path = $fo->path_str(array(
-						"to" => aw_ini_get("shop.prod_fld_path"),
-						"no_self" => 1,
-						"max_len" => 3
-					));
-				}
-				else
-				{
-					$path = $prod->path_str(array(
-						"to" => aw_ini_get("shop.prod_fld_path"),
-						"no_self" => 1,
-						"max_len" => 3
-					));
-				}
-				// end PATH
-
-				$prod_i = $prod->instance();
-				$this->vars(array(
-					"prod_link" => $folder ? aw_url_change_var("section", $folder, $viewlink) : $viewlink,
-					"prod_name" => $this->char_replace($prod->name()),
-					"prod_desc" => $this->char_replace($prod->prop("userta2")),
-					"prod_price" => $prod_i->get_price($prod),
-					"path" => $path,
-					"pimg" => $imnr
-				));
-
-				$ps .= $this->parse("PROD");
-
-				$prod = $ol->next();
-			}
-
-			$this->vars(array(
-				"PROD" => $ps
-			));
-
-			$l .= $this->parse("LINE");
-		}
-*/
-
 		$this->vars(array(
 			"LINE" => $l
 		));
@@ -627,6 +597,7 @@ class otto_prod_search extends class_base
 			$parents = array();
 			foreach($awa->get() as $fld)
 			{
+
 				$flds = $this->search_fld[$fld][1];
 				if (is_array($flds))
 				{
@@ -634,7 +605,8 @@ class otto_prod_search extends class_base
 					{
 						$ot = new object_tree(array(
 							"parent" => $rfld,
-							"class_id" => CL_MENU
+							"class_id" => CL_MENU,
+							'status' => STAT_ACTIVE
 						));
 						$ol = $ot->to_list();
 						foreach($ol->ids() as $fldo)
@@ -644,13 +616,30 @@ class otto_prod_search extends class_base
 					}
 				}
 			}
-
 			if (count($parents) > 0)
 			{
-				$filter["parent"] = $parents;
+		
+				// so, i need all those categories which should be shown under those parents:
+				$categories = array();
+				$parents_str = implode(',', $parents);
+
+				$sql = "SELECT * FROM otto_imp_t_aw_to_cat WHERE aw_folder IN ($parents_str) AND lang_id=".aw_global_get('lang_id');
+				$this->db_query($sql);
+				while ($row = $this->db_next())
+				{
+					$categories[$row['category']] = $row['category'];
+				}
+				$arr['categories'] = $categories;
+
+
+
+//				$filter["parent"] = $parents;
+
+
 			}
 
-			$filter["user18"] = $this->_get_pgs();
+		//	$filter["user18"] = $this->_get_pgs();
+
 			$str = $this->do_draw_res($arr, $filter);
 		}
 
