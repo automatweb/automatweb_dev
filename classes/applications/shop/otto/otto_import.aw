@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.44 2006/03/16 16:39:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.45 2006/09/26 09:36:26 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -123,6 +123,20 @@
 
 		@property foldernames type=table store=no group=foldersnames
 		@caption Kaustade nimed impordi jaoks
+
+@groupinfo containers caption="Konteinerid"
+
+	@property containers_toolbar type=toolbar group=containers no_caption=1
+	@caption Konteinerite t&oouml;&ouml;riisariba
+
+	@property containers_list type=table group=containers no_caption=1
+	@caption Konteinerite nimekiri
+
+	@property container_info type=table group=containers
+	@caption Konteineri info
+
+	@property container_rows type=table group=containers
+	@caption Konteineri read
 
 @groupinfo views caption="Vaated"
 
@@ -255,7 +269,8 @@ class otto_import extends class_base
 				$this->_foldernames($arr);
 				break;
 			case "del_prods_by_filename_info":
-				$prop['value'] = t("Failinimest v&otilde;ib kirjutada ka ainult alguse v&otilde;i l&otilde;pu, puuduvat osa t&auml;histab sel juhul '%' m&auml;rk <br />");
+				$prop['value'] = t("Failikood moodustub failinimest j&auml;rgmiselt: faili nimi: EST.TT010, selle faili kood: T010. Toodete otsimisel arvestatakse aktiivse keele ja saidi id-ga.<br /> ");
+				$prop['value'] .= t("Failikoodist v&otilde;ib kirjutada ka ainult alguse v&otilde;i l&otilde;pu, puuduvat osa t&auml;histab sel juhul '%' m&auml;rk <br />");
 				$prop['value'] .= t("N&auml;iteks k&otilde;ik 'G'-ga algavad t&auml;hised oleks: 'G%'. K&otilde;ik 'H0' algusega oleks 'H0%'. '%' m&auml;rgi v&otilde;ib ka &auml;ra j&auml;tta, sel juhul otsitakse t&auml;pselt selle j&auml;rgi, mis tekstikastis on. ")."<br />";
 
 				$prop['value'] .= t("Peale salvestamist kuvatakse teile tekstikastis olevale stringile vastavad lehed, mille alusel hakatakse tooteid kustutama. Muutes stringi tekstikastis ja uuesti salvastades, saate veenduda, et &otilde;igete t&auml;histe j&rgi hakatakse tooteid otsima.")."<br />";
@@ -392,6 +407,22 @@ class otto_import extends class_base
 		}
 	}
 
+	function callback_mod_reforb($arr)
+	{
+		if ( $_GET['container_id'] && ($arr['group'] == 'containers') )
+		{
+			$arr['container_id'] = (int)$_GET['container_id'];
+		}
+	}
+	
+	function callback_mod_retval($arr)
+	{
+		if ( isset($arr['request']['container_id']) )
+		{
+			$arr['args']['container_id'] = $arr['request']['container_id'];
+		}
+	}
+
 	function _init_fn_t(&$t)
 	{
 		$t->define_field(array(
@@ -479,6 +510,307 @@ class otto_import extends class_base
 			
 			$this->do_prod_import($arr["obj_inst"]);
 		}
+
+	}
+
+	function _get_containers_toolbar($arr)
+	{
+		$containers = $arr['obj_inst']->meta('containers');
+		$new_key = max( array_keys( $containers ) ) + 1;
+
+		$toolbar = &$arr['prop']['vcl_inst'];
+		$toolbar->add_button(array(
+			"name" => "new",
+			"tooltip" => t('Uus konteiner'),
+			"url" => $this->mk_my_orb('change', array(
+				'id' => $arr['obj_inst']->id(),
+				'group' => 'containers',
+				'container_id' => $new_key
+			)),
+			"img" => "new.gif",
+		));
+		$toolbar->add_separator();
+//		$toolbar->add_cdata("some text");
+		$toolbar->add_button(array(
+			"name" => "list",
+			"tooltip" => t('Konteinerite nimekiri'),
+			"url" => $this->mk_my_orb('change', array(
+				'id' => $arr['obj_inst']->id(),
+				'group' => 'containers',
+			)),
+			"img" => "iother_promo_box.gif",
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_containers_list($arr)
+	{
+		if ( isset($arr['request']['container_id']) )
+		{
+			return PROP_IGNORE;
+		}
+
+		$table = &$arr['prop']['vcl_inst'];
+		$table->set_sortable(false);
+
+		$table->define_field(array(
+			'name' => 'id',
+			'caption' => t('ID'),
+			'align' => 'center',
+			'width' => '10%'
+		));
+		$table->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi'),
+			'align' => 'center'
+		));
+		$table->define_field(array(
+			'name' => 'delete',
+			'caption' => t('Kustuta'),
+			'width' => '10%',
+			'align' => 'center'
+		));
+
+		$saved_containers = $arr['obj_inst']->meta('containers');
+		foreach (safe_array($saved_containers) as $container_key => $container) 
+		{
+			$table->define_data(array(
+				'id' => $container_key." ",
+				'name' => html::href(array(
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $arr['obj_inst']->id(),
+						'group' => 'containers',
+						'container_id' => $container_key
+					)),
+					'caption' => $container['name']
+				)),
+				'delete' => html::checkbox(array(
+					'name' => 'delete_container['.$container_key.']',
+					'value' => 1
+				)),
+			));
+
+		}
+	}
+
+	function _set_containers_list($arr)
+	{
+		$containers = $arr['obj_inst']->meta('containers');
+		foreach ( safe_array($arr['request']['delete_container']) as $key => $value )
+		{
+			unset($containers[$key]);
+		}
+		$arr['obj_inst']->set_meta('containers', $containers);
+		return PROP_OK;
+	}
+
+	function _get_container_info($arr)
+	{
+		if (!isset($arr['request']['container_id']))
+		{
+			return PROP_IGNORE;	
+		}
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi')
+		));
+		$t->define_field(array(
+			'name' => 'categories',
+			'caption' => t('Kategooriad')
+		));
+		$t->define_field(array(
+			'name' => 'all_categories',
+			'caption' => t('N&auml;ita k&otilde;igis kategooriates'),
+			'align' => 'center'
+		));
+
+		$container_id = (int)$arr['request']['container_id'];
+		if (empty($container_id)) {}
+
+		$saved_containers = $arr['obj_inst']->meta('containers');
+		$name = $saved_containers[$container_id]['name'];
+		$categories = $saved_containers[$container_id]['categories'];
+		$all_categories = $saved_containers[$container_id]['all_categories'];
+
+		$t->define_data(array(
+			'name' => html::textbox(array(
+				'name' => 'container[name]',
+				'value' => $name
+			)).
+			html::hidden(array(
+				'name' => 'container[id]',
+				'value' => $container_id
+			)),
+			'categories' => html::textarea(array(
+				'name' => 'container[categories]',
+				'value' => implode(',', $categories)
+			)),
+			'all_categories' => html::checkbox(array(
+				'name' => 'container[all_categories]',
+				'value' => 1,
+				'checked' => ($all_categories) ? true : false
+			))
+		));
+
+		return PROP_OK;
+	}
+
+	function _set_container_info($arr)
+	{
+		if ( !isset($arr['request']['container']) )
+		{
+			return PROP_OK;
+		}
+
+		$saved_containers = $arr['obj_inst']->meta('containers');
+		$containers_lut = $arr['obj_inst']->meta('containers_lut');
+		$data = $arr['request']['container'];
+
+		$container = $saved_containers[$data['id']];
+		$container['name'] = $data['name'];
+		$container['categories'] = explode(',', $data['categories']);
+		$container['all_categories'] = $data['all_categories'];
+
+		// clean up the container data from the lut
+		foreach ( $containers_lut['by_cat'] as $key => $value )
+		{
+			if ( array_key_exists($data['id'], $value) || !empty($container['all_categories']) )
+			{
+				unset($containers_lut['by_cat'][$key][$data['id']]);
+				if ( empty($containers_lut['by_cat'][$key]) )
+				{
+					unset( $containers_lut['by_cat'][$key] );
+				}
+			}
+		}
+		unset($containers_lut['all_cat'][$data['id']]);
+
+		// put back the container into the lut where needed
+		if ( empty($container['all_categories']) )
+		{
+			foreach ( $container['categories'] as $cat )
+			{
+				$containers_lut['by_cat'][$cat][$data['id']] = $data['id'];
+			}
+		}
+		else
+		{
+			$containers_lut['all_cat'][$data['id']] = $data['id'];
+		}
+
+		$valid_rows = array();
+		foreach (safe_array($data['rows']) as $row)
+		{
+			if ( !isset($row['delete']) )
+			{
+				foreach ($row as $row_value)
+				{
+					if ( !empty($row_value) ) 
+					{
+						$valid_rows[] = $row;
+						break;
+					}
+				}
+			}
+		}
+		$container['rows'] = $valid_rows;
+
+		$saved_containers[$data['id']] = $container;
+
+		$arr['obj_inst']->set_meta('containers', $saved_containers);
+		$arr['obj_inst']->set_meta('containers_lut', $containers_lut);
+		return PROP_OK;
+	}
+
+	function _get_container_rows($arr)
+	{
+		$id = $arr['request']['container_id'];
+		if (!isset($id))
+		{
+			return PROP_IGNORE;
+		}
+
+		$t  = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'img_url',
+			'caption' => t('Pildi URL')
+		));
+		$t->define_field(array(
+			'name' => 'link_text',
+			'caption' => t('Lingi tekst')
+		));
+		$t->define_field(array(
+			'name' => 'link_url',
+			'caption' => t('Lingi URL')
+		));
+		$t->define_field(array(
+			'name' => 'no_line_breaks',
+			'caption' => t('Ilma reavahetusteta'),
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'delete',
+			'caption' => t('Kustuta'),
+			'align' => 'center'
+		));
+
+		$saved_containers = $arr['obj_inst']->meta('containers');
+		$container = $saved_containers[$id];
+
+		$counter = 1;
+		foreach (safe_array($container['rows']) as $row_key => $row_value)
+		{
+			$t->define_data(array(
+				'img_url' => html::textbox(array(
+					'name' => 'container[rows]['.$counter.'][img_url]',
+					'value' => $row_value['img_url']
+				)),
+				'link_text' => html::textbox(array(
+					'name' => 'container[rows]['.$counter.'][link_text]',
+					'value' => $row_value['link_text']
+				)),
+				'link_url' => html::textbox(array(
+					'name' => 'container[rows]['.$counter.'][link_url]',
+					'value' => $row_value['link_url']
+				)),
+				'no_line_breaks' => html::checkbox(array(
+					'name' => 'container[rows]['.$counter.'][no_line_breaks]',
+					'value' => 1,
+					'checked' => ($row_value['no_line_breaks']) ? true : false
+				)),
+				'delete' => html::checkbox(array(
+					'name' => 'container[rows]['.$counter.'][delete]',
+					'value' => 1,
+				)),
+
+			));
+			$counter++;
+		}
+
+		$t->define_data(array(
+			'img_url' => html::textbox(array(
+				'name' => 'container[rows]['.$counter.'][img_url]',
+			)),
+			'link_text' => html::textbox(array(
+				'name' => 'container[rows]['.$counter.'][link_text]',
+			)),
+			'link_url' => html::textbox(array(
+				'name' => 'container[rows]['.$counter.'][link_url]',
+			)),
+			'no_line_breaks' => html::checkbox(array(
+				'name' => 'container[rows]['.$counter.'][no_line_breaks]',
+				'value' => 1
+			)),
+			'delete' => ''
+		));
+
+		return PROP_OK;
 	}
 
 	/**
@@ -657,15 +989,16 @@ class otto_import extends class_base
 
 
 				// subrequest for two images
-				//die($html);
+				// die($html);
 				if (!preg_match_all("/<\/table>\n<a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
-		//$data = array("");
 				{
-					preg_match_all("/<td valign=\"middle\" align=\"center\" height=\"\d+\" width=\"\d+\"><a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
+					if (!preg_match_all("/<td valign=\"middle\" align=\"center\" height=\"\d+\" width=\"\d+\"><a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
+					{
+						preg_match_all("/<a id=\"silkhref\" href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
+					}
 				}
-
 				$urld = array();
-				//echo (dbg::dump($mt));
+				// echo (dbg::dump($mt));
 				foreach($mt[1] as $url)
 				{
 					$url = $url."&SearchDetail=one&stype=N&Orengelet.sortPipelet.sortResultSetSize=15&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=".$pcode;
@@ -673,12 +1006,22 @@ class otto_import extends class_base
 					$urld[$url] = $url;
 				}
 //die(dbg::dump($urld));
+				//arr($urld);
 				foreach($urld as $url)
 				{
 					echo "url = $url <br>";
 					$html = $this->file_get_contents($url);
 //echo "got html $html <br>";
-					preg_match_all("/Javascript:setImage\('(.*)\.jpg', '(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER);
+					if (!preg_match_all("/Javascript:setImage\('(.*)\.jpg', '(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER))
+					{
+						if (!preg_match_all("/<img id=\"mainimage\" src=\"(.*)\.jpg\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
+						{
+							// if we can't find image from the product view, then this should try to search the image from the other sites:
+							echo "Let's try to search from the baur.de page: <br />\n";
+							$this->read_img_from_baur($pcode);
+							break;
+						}
+					}
 					$f_imnr = NULL;
 //echo "mt = ".dbg::dump($mt)." \n";
 //flush();
@@ -720,7 +1063,7 @@ class otto_import extends class_base
 //echo dbg::dump($t_imnr);
 							if (!$t_imnr)
 							{
-								echo "insert new image $imnr <br>\n";
+								echo "-- insert new image $imnr <br>\n";
 								flush();
 								$q = ("
 									INSERT INTO 
@@ -730,6 +1073,10 @@ class otto_import extends class_base
 								//echo "q = $q <br>";
 								$this->db_query($q);
 								$this->added_images[] = $mt[2][$idx];
+							}
+							else
+							{
+								echo "-- image $imnr for product $pcode is already in db<br />\n";
 							}
 						}
 					}
@@ -1972,14 +2319,13 @@ class otto_import extends class_base
 
 		// clear cache
 		$cache = get_instance("cache");
- 		$mt->file_clear_pt("menu_area_cache");
-		$mt->file_clear_pt("storage_search");
-		$mt->file_clear_pt("storage_object_data");
-		$mt->file_clear_pt("html");
-		$mt->file_clear_pt("acl");
+ 		$cache->file_clear_pt("menu_area_cache");
+		$cache->file_clear_pt("storage_search");
+		$cache->file_clear_pt("storage_object_data");
+		$cache->file_clear_pt("html");
+		$cache->file_clear_pt("acl");
 
 		$fld = aw_ini_get("site_basedir")."/prod_cache";
-		$cache = get_instance("cache");
 		$cache->_get_cache_files($fld);
 		echo 'about to delete '.count($cache->cache_files2).' files<br />';
 
@@ -2797,12 +3143,27 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 */
 		$count = 0;
 		$saved_data = $args['obj_inst']->meta('bubble_pictures');
+
+		$show_data = array();
 		foreach (safe_array($saved_data) as $category => $data)
 		{
+			$show_data[$data['image_url']]['category'][] = $category;
+			$show_data[$data['image_url']]['image_url'] = $data['image_url'];
+			$show_data[$data['image_url']]['title'] = $data['title'];
+
+		}
+
+	//	arr($saved_data);
+	//	arr($show_data);
+
+	//	foreach (safe_array($saved_data) as $category => $data)
+		foreach ( $show_data as $data )
+		{
+			$categories_str = implode(',', $data['category']);
 			$t->define_data(array(
 				'category' => html::textbox(array(
 					'name' => 'bubble_data['.$count.'][category]',
-					'value' => $category
+					'value' => $categories_str
 				)),
 				'image_url' => html::textbox(array(
 					'name' => 'bubble_data['.$count.'][image_url]',
@@ -2841,10 +3202,15 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		{
 			if (!empty($data['category']) && !empty($data['image_url']))
 			{
-				$valid_data[$data['category']] = array(
-					'image_url' => $data['image_url'], 
-					'title' => $data['title']
-				);
+				$categories = explode(',', $data['category']);
+				foreach ($categories as $category)
+				{
+				//	$valid_data[$data['category']] = array(
+					$valid_data[$category] = array(
+						'image_url' => $data['image_url'], 
+						'title' => $data['title']
+					);
+				}
 			}
 		}
 		$args['obj_inst']->set_meta('bubble_pictures', $valid_data);
@@ -2868,15 +3234,28 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			'name' => 'title',
 			'caption' => t('Nimetus'),
 		));
+
 		$count = 0;
 		$saved_data = $args['obj_inst']->meta('firm_pictures');
 
+		$show_data = array();
 		foreach (safe_array($saved_data) as $category => $data)
 		{
+			$show_data[$data['image_url']]['category'][] = $category;
+			$show_data[$data['image_url']]['image_url'] = $data['image_url'];
+			$show_data[$data['image_url']]['title'] = $data['title'];
+
+		}
+
+//		foreach (safe_array($saved_data) as $category => $data)
+		foreach ($show_data as $data)
+		{
+			$categories_str = implode(',', $data['category']);
 			$t->define_data(array(
 				'category' => html::textbox(array(
 					'name' => 'firm_data['.$count.'][category]',
-					'value' => $category
+				//	'value' => $category
+					'value' => $categories_str
 				)),
 				'image_url' => html::textbox(array(
 					'name' => 'firm_data['.$count.'][image_url]',
@@ -2911,10 +3290,15 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		{
 			if (!empty($data['category']) && !empty($data['image_url']))
 			{
-				$valid_data[$data['category']] = array(
-					'image_url' => $data['image_url'],
-					'title' => $data['title']
-				);
+				$categories = explode(',', $data['category']);
+				foreach ($categories as $category)
+				{
+				//	$valid_data[$data['category']] = array(
+					$valid_data[$category] = array(
+						'image_url' => $data['image_url'],
+						'title' => $data['title']
+					);
+				}
 			}
 		}
 		$args['obj_inst']->set_meta('firm_pictures', $valid_data);
@@ -2928,7 +3312,7 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		arr($url);
 		$fc = $this->file_get_contents($url);
 //		if (strpos($fc, "leider keine Artikel gefunden") !== false)
-		if (strpos($fc, "search/topcontent/noresult_slogan.gif") !== false)
+		if ( (strpos($fc, "search/topcontent/noresult_slogan.gif") !== false) || (strpos($fc, "Entschuldigung,<br>diese Seite konnte nicht gefunden werden.") !== false) )
 		{
 			echo "can't find a product for <b>$pcode</b> from baur.de, so searching from schwab<br>\n";
 			return $this->read_img_from_schwab($pcode);
@@ -3021,14 +3405,14 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 
 		if (strpos($fc, "Wir konnten leider keine Ergebnisse") !== false)
 		{
-			echo "can't find a product for <b>$pcode</b> from schwab.de, so searching from albamoda<br>\n";
+			echo "[schwab] can't find a product for <b>$pcode</b> from schwab.de, so searching from albamoda<br>\n";
 			return $this->read_img_from_albamoda($pcode);
 		}
 
 		// match prod urls
 		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
 		$pcs = array_unique($mt[1]);
-		//echo "got pcs as ".dbg::dump($pcs)."\n";
+		echo "[schwab] got pcs as ".dbg::dump($pcs)."\n";
 
 		foreach($pcs as $prodref)
 		{
@@ -3038,8 +3422,9 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			}
 
 
-			$prod_url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/SchwabDe/de_DE/-/EUR/SV_DisplayProductInformation-ProductRef;sid=CUEKcPjDjXgLcLrISj06UONvQYLj_AIgPN2HQ_xO?ls=&ProductRef=".$prodref."&SearchDetail=1&aktPage=&Query_Text=371388&ArtikelID_Text=&Personen_Text=&PreisMin_Text=&PreisMax_Text=&Hersteller_Text=&Artikel_Text=&Stichwoerter_Text=&Artikel=&Hersteller=&Trend=";
-
+//			$prod_url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/SchwabDe/de_DE/-/EUR/SV_DisplayProductInformation-ProductRef;sid=CUEKcPjDjXgLcLrISj06UONvQYLj_AIgPN2HQ_xO?ls=&ProductRef=".$prodref."&SearchDetail=1&aktPage=&Query_Text=371388&ArtikelID_Text=&Personen_Text=&PreisMin_Text=&PreisMax_Text=&Hersteller_Text=&Artikel_Text=&Stichwoerter_Text=&Artikel=&Hersteller=&Trend=";
+			$prod_url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/Schwab-SchwabDe-Site/de_DE/-/EUR/SV_DisplayProductInformation-ProductRef;sid=Tk4bsAx5e3E7sEiXlcw0kBfV9c4JypIszkKxAg7F2xHxVkXqRnRWsaWbfmq0NJCohr5LSNgR?ProductRef=".$prodref."&ls=0&SearchDetail=1&SearchDetail=one&stype=&Orengelet.sortPipelet.sortResultSetSize=10&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=";
+			echo "[schwab] product url: $prod_url <br />";
 			$fc2 = $this->file_get_contents($prod_url);
 
 			// get first image
@@ -3049,7 +3434,7 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
 			if (!$imnr)
 			{
-				echo "insert new image $first_im <br>\n";
+				echo "[schwab] insert new image $first_im <br>\n";
 				flush();
 				$q = ("
 					INSERT INTO 
@@ -3076,7 +3461,7 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
 				if (!$imnr)
 				{
-					echo "insert new image $im <br>\n";
+					echo "[schwab] insert new image $im <br>\n";
 					flush();
 					$q = ("
 						INSERT INTO 
