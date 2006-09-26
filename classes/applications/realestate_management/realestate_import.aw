@@ -280,7 +280,20 @@ class realestate_import extends class_base
 		// $import_url = "http://erivaldused:erivaldused@maakler.city24.ee/broker/city24broker/xml?lang=EST&search_count=10000";
 		// $import_url = "/www/dev/voldemar/test.xml";
 		// $fp = fopen ($import_url, "r");
-		$xml = file_get_contents ($import_url);
+		// $xml = file_get_contents ($import_url);// doesn't work with https [voldemar 9/26/2006]
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $import_url);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 600);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 100);
+		$xml = curl_exec($ch);
+		curl_close($ch);
+
 		$parser = xml_parser_create(REALESTATE_IMPORT_CHARSET_FROM);
 		xml_parse_into_struct($parser, $xml, $xml_data, $xml_index);
 
@@ -470,7 +483,7 @@ class realestate_import extends class_base
 		if (count ($duplicates) and (1 != $arr["quiet"]))
 		{
 			$duplicates = implode (",", $duplicates);
-			$error_msg = t("NB! Loetletud City24 id-ga objekte on AW objektisüsteemis rohkem kui üks:") . $duplicates . REALESTATE_NEWLINE;
+			$error_msg = t("Loetletud City24 id-ga objekte on AW objektisüsteemis rohkem kui üks:") . $duplicates . REALESTATE_NEWLINE;
 			echo $error_msg;
 			$status = REALESTATE_IMPORT_ERR4;
 			$import_log[] = $error_msg;
@@ -509,7 +522,7 @@ class realestate_import extends class_base
 			{ ### finish last processed property import
 				if (is_object ($property))
 				{
-					if (1 != $arr["quiet"]) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; flush(); 
+					if (1 != $arr["quiet"]) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; flush();
 					}
 
 					// if ($property_status === REALESTATE_IMPORT_OK)
@@ -1140,12 +1153,12 @@ class realestate_import extends class_base
 				$value = iconv(REALESTATE_IMPORT_CHARSET_FROM, (REALESTATE_IMPORT_CHARSET_TO."//TRANSLIT")
 				,$this->property_data["LISAINFO_INFO"]);
 				$property->set_prop ("additional_info_et", $value);
-		
+
 				#### property_area
 				if($property->is_property("property_area"))$property->set_prop ("property_area", $this->property_data["KRUNT"]);
 				arr($this->property_data["KRUNT"]);
 				arr($property->prop("property_area"));
-		
+
 				#### picture_icon
 				if ($property->prop ("picture_icon_city24") != $this->property_data["IKOONI_URL"])
 				{
@@ -1155,7 +1168,7 @@ class realestate_import extends class_base
 					}
 					# delete old
 					$image = $property->get_first_obj_by_reltype("RELTYPE_REALESTATE_PICTUREICON");
-				
+
 					if (is_object($image))
 					{
 						$file = $image->prop ("file");
@@ -1448,11 +1461,11 @@ class realestate_import extends class_base
 						#### has_lift
 						$value = (int) (bool) strstr ($this->property_data["SEISUKORD_LIFT"], "Y");
 						$property->set_prop ("has_lift", $value);
-						
+
 						#### property_area
 						$value = round ($this->property_data["KRUNT"]);
 						$property->set_prop ("property_area", $value);
-						
+
 						break;
 				}
 
