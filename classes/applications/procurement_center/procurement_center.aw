@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.11 2006/09/27 14:37:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.12 2006/09/27 18:57:29 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -151,6 +151,7 @@
 	@property products_tb type=toolbar no_caption=1 store=no	
 	@layout products_l type=hbox width=30%:70%
 		@property products_tr type=treeview no_caption=1 store=no parent=products_l
+		property products_list type=text no_caption=1 store=no parent=products_l
 		@property products_tbl type=table no_caption=1 store=no parent=products_l
 @groupinfo products_find caption="Otsing" parent=products
 @default group=products_find
@@ -192,7 +193,7 @@ class procurement_center extends class_base
 			"clid" => CL_PROCUREMENT_CENTER
 		));
 	}
-
+	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -569,10 +570,11 @@ class procurement_center extends class_base
 					"class_id" => array(CL_PROCUREMENT_OFFER),
 					"offerer" => $o->id(),
 					"lang_id" => array(),
-					"site_id" => array()
+					"site_id" => array(),
+					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, time(), 99999999999999 ),
 				));
 				$sum = sizeof($offers->arr());
-				$arr["prop"]["vcl_inst"]->add_item($menu_tree_id, array(
+				if($sum) $arr["prop"]["vcl_inst"]->add_item($menu_tree_id, array(
 					"id" => $x,
 					"name" => $o->name()." (".$sum.")",
 					"url" => $this->mk_my_orb("change",array(
@@ -606,11 +608,12 @@ class procurement_center extends class_base
 					"class_id" => array(CL_PROCUREMENT_OFFER),
 					"offerer" => $o->id(),
 					"lang_id" => array(),
-					"site_id" => array()
+					"site_id" => array(),
+					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, 0, time()),
 				));
 				$sum = sizeof($offers->arr());
 				
-				$arr["prop"]["vcl_inst"]->add_item($menu_tree_id, array(
+				if($sum) $arr["prop"]["vcl_inst"]->add_item($menu_tree_id, array(
 					"id" => $x,
 					"name" => $o->name()." (".$sum.")",
 					"url" => $this->mk_my_orb("change",array(
@@ -725,6 +728,7 @@ class procurement_center extends class_base
 					"parent" => $arr["request"]["p_id"],
 				));
 				$filter["offerer"] = $offerers->ids();
+				if(!sizeof($filter["offerer"])) $filter["offerer"] = array(0);
 			}
 			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
 		}
@@ -859,7 +863,7 @@ class procurement_center extends class_base
 		$this->_init_buyings_tbl($t);
 		$filter = array(
 			"class_id" => array(CL_PURCHASE),
-			"parent" => $parent,
+//			"parent" => $parent,
 			"lang_id" => array(),
 			"site_id" => array()
 		);
@@ -875,7 +879,8 @@ class procurement_center extends class_base
 					"site_id" => array(),
 					"parent" => $arr["request"]["p_id"],
 				));
-				$filter["offerer"] = $offerers->ids();
+				$offerers_array = $offerers->ids();
+				if(!sizeof($offerers_array)) $offerers_array=array("x" => "x");
 			}
 		}
 
@@ -887,12 +892,11 @@ class procurement_center extends class_base
 			$arr["obj_inst"]->save();
 		}
 		else $ol = new object_list($filter);
-		
 		$offer_inst = get_instance(CL_PURCHASE);
 		$statuses = $offer_inst->stats;
-		
 		foreach($ol->arr() as $o)
 		{
+			if((sizeof($offerers_array)) && (!in_array($o->prop("offerer") , $offerers_array))) continue;
 			$offerer_name = html::obj_change_url($o);
 			$offerer_area = "";
 			if(is_oid($o->prop("offerer")) && $this->can("view" , $o->prop("offerer")))
@@ -1407,8 +1411,8 @@ class procurement_center extends class_base
 
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
-			'text'=> t('Pakkuja/Organisatsioon'),
-			'link'=> html::get_new_url(CL_CRM_COMPANY, $parent, array(
+			'text'=> t('Hankijagrupp'),
+			'link'=> html::get_new_url(CL_MENU, $parent, array(
 				"return_url" => get_ru(),
 				"pseh" => aw_register_ps_event_handler(
 						CL_PROCUREMENT_CENTER, 
@@ -1417,6 +1421,15 @@ class procurement_center extends class_base
 						CL_CRM_COMPANY
 				)
 			))
+		));
+
+		$tb->add_menu_item(array(
+			'parent'=>'add_item',
+			'text'=> t('Pakkuja/Organisatsioon'),
+			'link'=> html::get_new_url(CL_CRM_COMPANY, $parent, array(
+				"return_url" => get_ru(),
+				array("id" => $arr["obj_inst"]->id()),
+			)),
 		));
 
 		$tb->add_menu_item(array(
@@ -1471,7 +1484,7 @@ class procurement_center extends class_base
 			if($data["products__find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
 			$offerer_list = new object_list($offerer_filter);
 			foreach($offerer_list->arr() as $offerer)
-			{arr($offerer->name());
+			{
 				$row_filter = array(
 					"class_id" => array(CL_PROCUREMENT_OFFER_ROW),
 					"lang_id" => array(),
@@ -1491,12 +1504,189 @@ class procurement_center extends class_base
 
 		$offerer_list = new object_list($offerer_filter);
 	
-		arr($filter);
+
 		$ol = new object_list($filter);
 		return $ol;
 	}	
 	
-	function _products_tbl($arr)
+	function _products_tbl(&$arr)
+	{
+		classload("core/icons");
+		$tb =& $arr["prop"]["vcl_inst"];		
+		$this->_init_prod_list_list_tbl($tb);
+
+		// get items 
+		if (!$_GET["tree_filter"])
+		{
+			$ot = new object_list();
+		}
+		else
+		{
+			$ot = new object_list(array(
+				"parent" => $_GET["tree_filter"],
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
+			));
+		}
+
+		classload("core/icons");
+
+		//$ol = $ot->to_list();
+		$ol = $ot->arr();
+		foreach($ol as $o)
+		{
+
+			if ($o->class_id() == CL_MENU)
+			{
+				$tp = t("Kaust");
+			}
+			else
+			if (is_oid($o->prop("item_type")))
+			{
+				$tp = obj($o->prop("item_type"));
+				$tp = $tp->name();
+			}
+			else
+			{
+				$tp = "";
+			}
+
+			$get = "";
+			if ($o->prop("item_count") > 0)
+			{
+				$get = html::href(array(
+					"url" => $this->mk_my_orb("create_export", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => t("V&otilde;ta laost")
+				));
+			}
+
+			$put = "";
+			if ($o->class_id() != CL_MENU)
+			{
+				$put = html::href(array(
+					"url" => $this->mk_my_orb("create_reception", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => t("Vii lattu")
+				));
+			}
+
+			$name = $o->path_str(array("to" => $this->prod_fld));
+			if ($o->class_id() == CL_MENU)
+			{
+				$name = html::href(array(
+					"url" => aw_url_change_var("tree_filter", $o->id()),
+					"caption" => $name
+				));
+			}
+
+			$tb->define_data(array(
+				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
+				"name" => $name,
+				"cnt" => $o->prop("item_count"),
+				"item_type" => $tp,
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $o->id(),
+						"return_url" => get_ru()
+					), $o->class_id()),
+					"caption" => t("Muuda")
+				)),
+				"get" => $get,
+				"put" => $put,
+				"del" => html::checkbox(array(
+					"name" => "sel[]",
+					"value" => $o->id()
+				)),
+				"is_menu" => ($o->class_id() == CL_MENU ? 0 : 1),
+				"ord" => html::textbox(array(
+					"name" => "set_ord[".$o->id()."]",
+					"value" => $o->ord(),
+					"size" => 5
+				)).html::hidden(array(
+					"name" => "old_ord[".$o->id()."]",
+					"value" => $o->ord()
+				)),
+				"hidden_ord" => $o->ord()
+			));
+		}
+
+		$tb->set_numeric_field("hidden_ord");				
+		$tb->set_default_sortby(array("is_menu", "hidden_ord"));
+		$tb->sort_by();
+
+		return $tb->draw(array(
+			"pageselector" => "text",
+			"records_per_page" => 50,
+			"has_pages" => 1
+		));
+	}
+
+	function _init_prod_list_list_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("&nbsp;"),
+			"sortable" => 0,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "item_type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "cnt",
+			"caption" => t("Kogus laos"),
+			"align" => "center",
+			"type" => "int"
+		));
+
+		$t->define_field(array(
+			"name" => "get",
+			"caption" => t("V&otilde;ta laost"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "put",
+			"caption" => t("Vii lattu"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "del",
+			"caption" => "<a href='javascript:aw_sel_chb(document.changeform,\"sel\")'>".t("Vali")."</a>",
+			"align" => "center",
+		));
+	}	
+	
+/*	function _products_tbl($arr)
 	{
 		classload("core/icons");
 		$t =& $arr["prop"]["vcl_inst"];
@@ -1604,8 +1794,8 @@ class procurement_center extends class_base
 		
 		}
 	}
-	
-	function _products_tr(&$arr)
+*/	
+	function _products_tr($arr)
 	{
 		$co = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
 		$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
@@ -1628,8 +1818,7 @@ class procurement_center extends class_base
 			"ot" => $arr["prop"]["vcl_inst"],
 			"var" => "tree_filter"
 		));
-		return $tv->finalize_tree();
-	
+		$arr["prop"]["value"] = $tv->finalize_tree();
 	}
 	
 	function _init_products_tbl(&$t)
@@ -1696,6 +1885,18 @@ class procurement_center extends class_base
 	{
 		$tb =& $data["prop"]["toolbar"];
 
+ $ol = new object_list(array("class_id" => CL_SHOP_PRODUCT_TYPE, "lang_id" => array(), "site_id" => array()));
+ foreach($ol->arr() as $o)
+ {
+ 	if($o->id() < 676) $o->set_parent(636); $o->save(); arr($o->parent());
+ }
+		$co = $data["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+		$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+		$warehouse->config = obj($warehouse->prop("conf"));
+		$this->warehouse = $warehouse;
+		$this->prod_type_fld = $warehouse->config->prop("prod_type_fld");
+		$this->prod_tree_root = isset($_GET["tree_filter"]) ? $_GET["tree_filter"] : $warehouse->config->prop("prod_fld");
+			
 		$tb->add_menu_button(array(
 			"name" => "crt_".$this->prod_type_fld,
 			"tooltip" => t("Uus")
@@ -1753,7 +1954,7 @@ class procurement_center extends class_base
 					"link" => $this->mk_my_orb("new", array(
 						"item_type" => $o->id(),
 						"parent" => $this->prod_tree_root,
-						"alias_to" => $data["obj_inst"]->id(),
+						"alias_to" => $this->warehouse->id(),
 						"reltype" => 2, //RELTYPE_PRODUCT,
 						"return_url" => get_ru(),
 						"cfgform" => $o->prop("sp_cfgform"),
