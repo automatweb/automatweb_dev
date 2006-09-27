@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.503 2006/09/26 18:01:33 tarvo Exp $
+// $Id: class_base.aw,v 2.504 2006/09/27 07:36:26 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -621,6 +621,8 @@ class class_base extends aw_template
 				{
 					$tmpval = $val;
 					$tmpval["name"] = $key;
+					$tmpval["obj_inst"] = &$this->inst;
+					$tmpval["request"] = &$_GET;
 					if(!$this->inst->callback_mod_layout($tmpval))
 					{
 						$this->_get_sub_layouts($key);
@@ -668,7 +670,8 @@ class class_base extends aw_template
 		
 		// why the hell for is this next thing here???... the exact same code is ~50lines upwards also?
 		// .. serves it any meaning or what??.. i kind'a dont think this is a code back-up :P --- taiu
-
+		// anyway.. i commented it out for now.. i don't see any purpose to it.. --- taiu
+		/*
 		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
 		{
 			$tmp = array();
@@ -695,6 +698,7 @@ class class_base extends aw_template
 			};
 			$cli->set_layout($tmp);
 		};
+		*/
 		
 
 		$awt->start("add-property");
