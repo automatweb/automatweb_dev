@@ -25,6 +25,13 @@
 			</function>
 		</action>
 
+		<action name="insert_purchase">
+			<function name="insert_purchase">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_cos">
 			<function name="delete_cos">
 				<arguments>

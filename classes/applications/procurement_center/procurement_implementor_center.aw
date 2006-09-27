@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_implementor_center.aw,v 1.3 2006/06/01 15:10:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_implementor_center.aw,v 1.4 2006/09/27 14:37:10 markop Exp $
 // procurement_implementor_center.aw - Hanngete keskkond pakkujale 
 /*
 
@@ -338,7 +338,7 @@ class procurement_implementor_center extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'section',
-			'caption' => t('Üksus'),
+			'caption' => t('&Uuml;ksus'),
 			'sortable' => '1',
 		));
 		$t->define_field(array(

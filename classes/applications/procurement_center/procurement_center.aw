@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.10 2006/09/19 14:04:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.11 2006/09/27 14:37:10 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -840,7 +840,8 @@ class procurement_center extends class_base
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text'=> t('Ost'),
-			'link'=> html::get_new_url(CL_PURCHASE, $parent, array("return_url" => get_ru()))
+//			'link'=> html::get_new_url(CL_PURCHASE, $parent, array("return_url" => get_ru()))
+			'action'=> "insert_purchase",
 		));
 
 		$tb->add_button(array(
@@ -990,7 +991,7 @@ class procurement_center extends class_base
 			'tooltip'=> t('Uus')
 		));
 
-		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->id();
+		$parent = $this->can("view" , $arr["request"]["p_id"]) ? $arr["request"]["p_id"] : $arr["obj_inst"]->id();
 
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
@@ -2040,6 +2041,44 @@ class procurement_center extends class_base
 		$o->set_class_id(CL_PROCUREMENT_OFFER);
 		$o->set_name(sprintf(t("pakkumine %s"), $o->id()));
 		$o->save();
+		return html::get_change_url($o->id());
+	}
+	
+	/**
+		@attrib name=insert_purchase
+	**/
+	function insert_purchase($arr)
+	{
+		$o = obj();
+		$o->set_parent($arr["id"]);
+		$o->set_class_id(CL_PURCHASE);
+		$o->set_name(sprintf(t("ost "), $o->id()));
+		$o->set_prop("buyer" , $arr["id"]);
+		$o->save();
+		$o->connect(array(
+			"to" => $arr["id"],
+			"reltype" => "RELTYPE_BUYER"
+		));
+		foreach(safe_array($arr["sel"]) as $id)
+		{
+			$o->connect(array(
+				"to" => $id,
+				"reltype" => "RELTYPE_OFFER"
+			));
+			if(is_oid($id))
+			{
+				$offer = obj($id);
+				$o->set_name($o->name() . ", " . $offer->name());
+				$o->save();
+				if(is_oid($offer->prop("offerer")))
+				{
+					$o->connect(array(
+						"to" => $offer->prop("offerer"),
+						"reltype" => "RELTYPE_OFFERER",
+					));
+				}
+			}
+		}
 		return html::get_change_url($o->id());
 	}
 	

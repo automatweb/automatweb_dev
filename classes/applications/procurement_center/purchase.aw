@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.5 2006/09/19 14:04:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.6 2006/09/27 14:37:10 markop Exp $
 // purchase.aw - Ost 
 /*
 
@@ -123,14 +123,19 @@ class purchase extends class_base
 						"multiple" => "",
 					), "popup_search");
 
+				$url = $this->mk_my_orb("do_search", array(
+						"pn" => "offers",
+						"clid" => array(
+							CL_PROCUREMENT_OFFER,
+						),
+						"multiple" => 1,
+						), "popup_search");
+				
 				$tb->add_button(array(
-					'name' => 'search',
-					'img' => 'search.gif',
+					"name" => "search",
+					"img" => "search.gif",
+					"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 					'tooltip' => t('Otsi'),
-					//"action" => "find_offers"
-					'url' => 'javascript:void(0)',
-					"onClick" => "aw_popup_scroll('".$search_url."','_spop',600,500)",
-
 				));
 
 				$tb->add_button(array(
@@ -345,6 +350,7 @@ class purchase extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		$arr["offers"] = 0;
 		$arr["post_ru"] = post_ru();
 	}
 
@@ -635,7 +641,21 @@ class purchase extends class_base
 	}
 
 
-
+	function callback_post_save($arr)
+	{
+		if ($_POST["offers"] > 0)
+		{
+			foreach(explode(",", $_POST["offers"]) as $proj)
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $proj,
+					"type" => "RELTYPE_OFFER"
+				));
+			}
+		}
+	
+	
+	}
 
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.11 2006/09/19 14:04:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.12 2006/09/27 14:37:10 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -278,8 +278,9 @@ class procurement_offer extends class_base
 				$o->set_prop("accept", $product["accept"]);
 				if(array_key_exists($key , $_SESSION["procurement"]["accept"])) $o->set_prop("accept",1);
 				else $o->set_prop("accept",null);
-				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
-				foreach($product as $key=>$val)
+				if(is_array($product["shipment"])) $product["shipment"] = mktime(0,0,0,$product["shipment"]["month"], $product["shipment"]["day"] , $product["shipment"]["year"]);
+//				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
+					foreach($product as $key=>$val)
 				{
 					switch ($key)
 					{
@@ -292,8 +293,7 @@ class procurement_offer extends class_base
 				}
 				$o->save();
 			}
-			
-			$_SESSION["procurement"] = null;
+				$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
 			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
 			window.close();
@@ -348,7 +348,9 @@ class procurement_offer extends class_base
 				$o->set_prop("accept", $product["accept"]);
 				if(array_key_exists($product["row_id"] , $_SESSION["procurement"]["accept"])) $o->set_prop("accept",1);
 				else $o->set_prop("accept",null);
-				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
+				if(is_array($product["shipment"])) $product["shipment"] = mktime(0,0,0,$product["shipment"]["month"], $product["shipment"]["day"] , $product["shipment"]["year"]);
+//	
+//				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
 				foreach($product as $key=>$val)
 				{
 					switch ($key)
@@ -714,6 +716,10 @@ class procurement_offer extends class_base
 					"checked" => $row->prop("accept"),
 				));
 			}
+			
+			$date = date("d.m.Y", $row->prop("shipment"));
+			$shipment =  $date . " vali";
+			
 			$t->define_data(array(
 				"jrk"		=> $x+1,
 				"row_id" 	=> $row->id(),
@@ -747,11 +753,13 @@ class procurement_offer extends class_base
 							"options" => $curr_opts,
 							"value" => $row->prop("currency"),
 							)),
-				'shipment'	=> html::textbox(array(
-							"name" => "products[".$x."][shipment]",
-							"size" => "6",
-							"value" => $row->prop("shipment"),
-							)),
+				'shipment'	=> $shipment,
+				
+	//			html::textbox(array(
+	//						"name" => "products[".$x."][shipment]",
+	//						"size" => "6",
+	//						"value" => $row->prop("shipment"),
+	//						)),
 				'accept'	=> $accept,
 				"oid"		=> $row->id(),
 			
@@ -789,9 +797,10 @@ class procurement_offer extends class_base
 							"options" => $curr_opts,
 							"value" => $curr_val,
 							)),
-				'shipment'	=> html::textbox(array(
+				'shipment'	=> html::date_select(array(
 							"name" => "products[".$x."][shipment]",
-							"size" => "6",
+							"value" => $this_obj->prop("shipment_date"),
+						//	"size" => "6",
 							)),
 //				'accept'	=> html::checkbox(array(
 //							"name" => "products[".$x."][accept]",
