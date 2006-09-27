@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.38 2006/09/18 11:24:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.39 2006/09/27 15:03:21 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -103,7 +103,7 @@ class mysql
 		};
 		$this->qID = @mysql_query($qtext, $this->dbh);
 		$e_cnt = 0;
-		while (!$this->qID && $this->_proc_error($qtext, mysql_error($this->dbh)) && $e_cnt < 200)
+		while (!$this->qID && $this->_proc_error($qtext, $errstr = mysql_error($this->dbh)) && $e_cnt < 200)
 		{
 			$this->qID = @mysql_query($qtext, $this->dbh);
 			$e_cnt++;
@@ -753,7 +753,7 @@ class mysql
 				preg_match("/Unknown column '(.*)' in 'field list'/imsU" , $errstr, $mt);
 				if (!preg_match("/UPDATE (.*) SET/imsU", $q, $mt_a))
 				{
-					preg_match("/INSERT INTO (.+) \(/ims", $q, $mt_a);
+					preg_match("/INSERT INTO (.+) \(/imsU", $q, $mt_a);
 				}
 				$mt[2] = $mt[1];
 				$mt[1] = $mt_a[1];
@@ -784,6 +784,10 @@ class mysql
 					}
 				}
 			}
+
+			// if not found, then call the static upgrader
+			$cv = get_instance("admin/converters");
+			return $cv->do_db_upgrade($mt[1], $mt[2], $q, $errstr);
 		}
 
 		if (strpos($errstr, "doesn't exist") !== false)
@@ -815,6 +819,10 @@ class mysql
 					}
 				}
 			}
+
+			// if not found, then call the static upgrader
+			$cv = get_instance("admin/converters");
+			return $cv->do_db_upgrade($mt[2], "", $q, $errstr);
 		}
 		return false;
 	}

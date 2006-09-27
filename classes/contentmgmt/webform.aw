@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.99 2006/09/15 07:14:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.100 2006/09/27 15:03:13 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1825,7 +1825,7 @@ class webform extends class_base
 			}
 		}
 		$id = $arr["obj_inst"]->id();
-		$aliasmgr = get_instance("aliasmgr");
+		$aliasmgr = get_instance("alias_parser");
 		$tmp = $els;
 
 		foreach($tmp as $key => $val)

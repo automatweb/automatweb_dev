@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.18 2006/04/06 10:00:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.19 2006/09/27 15:03:13 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -197,7 +197,7 @@ class newsfeed extends class_base
 		//arr($o->properties());
 		$res = array();
 
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 
 
 		$limittype = $feedobj->prop("limittype") == "days" ? "days" : "last";

@@ -10,6 +10,16 @@
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
       <property>
+            <name>unit_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>&amp;amp;Uuml;hikud</caption>
+      </property>
+      <property>
             <name>sort</name>
             <table>objects</table>
             <group>general</group>

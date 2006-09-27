@@ -124,7 +124,7 @@ class layout extends class_base
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
 		//$tmp = str_replace("\n", "<br/>", $tmp);
 
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 		if ($ob->prop("header") != "")
 		{
 			$h_tmp = create_email_links(nl2br($ob->prop("header")));

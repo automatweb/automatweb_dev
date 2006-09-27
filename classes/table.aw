@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.63 2006/09/20 11:16:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.64 2006/09/27 15:03:02 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -1895,7 +1895,7 @@ class table extends aw_template
 			$table.= $footer_style ? $stc->get_text_begin_str($footer_style).$footer.$stc->get_text_end_str($footer_style) : $footer;
 		}
 
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 		$al->parse_oo_aliases($id,&$table,array());
 
 		$retval = $table;

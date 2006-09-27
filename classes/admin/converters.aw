@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.67 2006/09/19 09:09:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.68 2006/09/27 15:03:03 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -951,98 +951,6 @@ class converters extends aw_template
 			}
 			$this->restore_handle();
 		}
-	}
-
-	/**  
-		
-		@attrib name=convert_seealso_menus params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function convert_seealso_menus()
-	{
-		/*
-		$q = "SELECT oid,metadata FROM objects WHERE class_id = 1 ORDER BY oid";
-		$this->db_query($q);
-		$sao = array();
-		while($row = $this->db_next())
-		{
-			$unmet = aw_unserialize($row["metadata"]);
-			if (is_array($unmet["seealso_refs"]))
-			{
-				$sao[$row["oid"]] = $unmet["seealso_refs"];
-				print "<pre>";
-				print_r($row);
-				print "</pre>";
-			};		
-		}
-
-		print "<pre>";
-		print_r($sao);
-		print "</pre>";
-		*/
-
-		$q = "SELECT id,seealso FROM menu WHERE seealso IS NOT NULL";
-		$this->db_query($q);
-		$oas = array();
-		while($row = $this->db_next())
-		{
-			$unser_seealso = aw_unserialize($row["seealso"]);
-			if (is_array($unser_seealso))
-			{
-				$res = array();
-				foreach($unser_seealso as $key => $val)
-				{
-					if (is_array($val))
-					{
-						$res = $res + $val;
-					}
-					else
-					{
-						$res[$key] = 0;
-					};
-				};
-				if (sizeof($res) > 0)
-				{
-					$oas[$row["id"]] = $res;
-				};
-			};
-		};
-
-		print "<pre>";
-		print_r($oas);
-		print "</pre>";
-
-		$almgr = get_instance("aliasmgr");
-
-		// now we cycle over oas, and create an assload of relations
-		foreach($oas as $key => $val)
-		{
-			// $oas'i keyd on targetid
-			// $val'i keyd on sourced .. ja kuhu pekki ma jrk panen?
-			foreach($val as $vkey => $vval)
-			{
-				print "creating relation from $vkey to $key with jrk $vval<br />";
-				flush();
-				$almgr->create_alias(array(
-					"id" => $vkey,
-					"alias" => $key,
-					"data" => $vval,
-					"reltype" => 5,
-				));
-				print "done<br />";
-				flush();
-				// and just if I my ask do I put the freaking jrk?
-				// no other way than to serialize it into "data"
-			}
-
-		}
-
 	}
 
 	/** creates the active_documents list for each folder in the system. the shitty part about this is, of course that 
@@ -2029,6 +1937,47 @@ echo "mod ".$con["to.name"]."<br>";
 		}
 		echo "could save ".number_format($sz)." bytes <br>";
 		die("all done");
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($t)
+		{
+			case "syslog":
+				switch($f)
+				{
+					case "object_name":
+						$this->db_query("ALTER TABLE syslog ADD object_name varchar(255)");
+						return true;
+
+					case "session_id":
+						$this->db_query("ALTER TABLE syslog ADD session_id char(32)");
+						return true;
+
+					case "mail_id":
+						$this->db_query("ALTER TABLE syslog ADD mail_id int");
+						return true;
+				}
+				break;
+
+			case "syslog_archive":
+				switch($f)
+				{
+					case "":
+						$this->db_query("CREATE TABLE `syslog_archive` (  `id` int(11) NOT NULL auto_increment,  `tm` int(11) default NULL,  `uid` varchar(50) default NULL,  `type` varchar(100) default NULL,  `action` varchar(255) default NULL,  `ip` varchar(100) default NULL,  `oid` int(11) default NULL,  `created_hour` int(11) default NULL,  `created_day` int(11) default NULL,  `created_week` int(11) default NULL,  `created_month` int(11) default NULL,  `created_year` int(11) default NULL,  `site_id` int(11) NOT NULL default '0',  `act_id` int(11) default NULL,  `referer` varchar(255) default NULL,  `lang_id` int(11) default '0',  `object_name` varchar(255) default NULL,  `mail_id` int(11) default NULL,  `session_id` varchar(32) default NULL,io_resolved varchar(255), country varchar(255), created_wd int, g_oid int  PRIMARY KEY  (`id`),  KEY `type` (`type`),  KEY `tm` (`tm`),  KEY `uid` (`uid`),  KEY `ip` (`ip`),  KEY `oid` (`oid`),  KEY `created_hour` (`created_hour`),  KEY `created_day` (`created_day`),  KEY `created_week` (`created_week`),  KEY `created_month` (`created_month`),  KEY `created_year` (`created_year`),  KEY `site_id` (`site_id`),  KEY `site_id_2` (`site_id`))");
+						return true;
+				}
+				break;
+
+			case "syslog_archive_sessions":
+				switch($f)
+				{
+					case "":
+						$this->db_query("create table syslog_archive_sessions (id int primary key auto_increment, session_id char(32), entry_page varchar(255), exit_page varchar(255),tm_s int, tm_e int)");
+						return true;
+				}
+				break;
+		}
 	}
 };
 ?>

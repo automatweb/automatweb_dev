@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.19 2006/07/11 13:21:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.20 2006/09/27 15:03:12 kristo Exp $
 
 /*
 
@@ -38,10 +38,9 @@ class classificator extends class_base
 	function get_property(&$arr)
 	{
 		$prop =& $arr["prop"];
-		classload("aliasmgr");
 		if ($prop['name'] == "clids")
 		{
-			$prop['options'] = aliasmgr::get_clid_picker();
+			$prop['options'] = get_class_picker();
 		}
 
 		return PROP_OK;

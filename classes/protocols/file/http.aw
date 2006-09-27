@@ -20,12 +20,14 @@ class http
 	@comment
 		gets requested data from url
 	**/
-	function get($url)
+	function get($url, $sess = null)
 	{
 		enter_function("http::get");
 		$data = parse_url($url);
 
 		$host = !empty($data["host"]) ? $data["host"] : aw_ini_get("baseurl");
+		$host = str_replace("http://", "", $host);
+		$host = str_replace("https://", "", $host);
 
 		$port = (!empty($data["port"]) ? $data["port"] : 80);
 
@@ -38,17 +40,21 @@ class http
 		$req  = "GET $y_url HTTP/1.0\r\n";
 		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
 		$req .= "User-agent: AW-http-fetch\r\n";
-		$req .= "\r\n";
+		if ($sess !== null)
+		{
+			$req .= "Cookie: automatweb=".$sess."\r\n";
+		}
+		$req .= "\r\n\r\n";
 		classload("protocols/socket");
 		$socket = new socket(array(
 			"host" => $host,
 			"port" => $port,
 		));
-		//echo "req = ".dbg::dump($req)." <br>";
 		$socket->write($req);
 		$ipd = "";
-		while($data = $socket->read(10000000))
+		while($data = $socket->read(10000))
 		{
+			echo "data = $data <br>";
 			$ipd .= $data;
 		};
 		list($headers,$data) = explode("\r\n\r\n",$ipd,2);
@@ -500,7 +506,10 @@ class http
 		$op .= $request;
 		fputs($fp, $op, strlen($op));
 
-		$str = fread($fp, 10000);
+		while($dat = fread($fp, 100000))
+		{
+			$str .= $dat;
+		}
 		fclose($fp);
 		return $str;
 	}

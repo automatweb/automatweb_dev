@@ -645,6 +645,75 @@ class relationmgr extends aw_template
 		}
 		return implode(',', $alls);
 	}
+
+	/**
+		@attrib name=list_aliases all_args=1
+	**/
+	function list_aliases($arr)
+	{
+		$o = obj($arr["id"]);
+		$arr = array(
+			"obj_inst" => $o,
+			"request" => $arr
+		);
+		if(in_array($arr["obj_inst"]->class_id() , get_container_classes()))
+		{
+			$this->parent = $arr["obj_inst"]->id();
+		}
+		else
+		{
+			$this->parent = $arr["obj_inst"]->parent();
+		}
+		$this->_init_relations($arr);
+		if($arr["request"]["srch"] == 1)
+		{
+			$d = $this->_show_search($arr);
+			$res = "<br><br><br>";
+			/*foreach($d as $nm => $da)
+			{
+				if ($da["type"] == "toolbar")
+				{
+					$res .= $da["vcl_inst"]->get_toolbar()."<br>";
+				}
+				else
+				{
+					if ($da["type"] == "chooser")
+					{
+						$da["type"] = "select";
+					}
+					$res .= html::$da["type"]($da)."<br>";
+				}
+			}*/
+			$htmlc = get_instance("cfg/htmlclient");
+			$htmlc->start_output();
+			
+			foreach($d as $nm => $da)
+			{
+				$htmlc->add_property($da);
+			}
+			$clss = aw_ini_get("classes");
+			$htmlc->finish_output(array("data" => array(
+					"class" => basename($clss[$arr["obj_inst"]->class_id()]["class"]),
+					"action" => "submit_srch",
+					"id" => $arr["id"],
+				),
+			));
+
+			$res = "<br><br><br><br><br><br>".$htmlc->get_result(array(
+				"form_only" => 1
+			));
+
+		}
+		else
+		{
+			$d = $this->_show_relations($arr);
+			$res = "<Br><br><br>".$d["rel_toolbar"]["vcl_inst"]->get_toolbar();
+			$res .= $d["rel_table"]["vcl_inst"]->draw();
+		}
+		$this->read_template("aliases.tpl");
+		$this->vars(array("mgr" => $res));
+		return $this->parse();
+	}
 	
 	function _show_relations($arr)
 	{

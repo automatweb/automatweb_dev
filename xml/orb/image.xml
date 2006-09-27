@@ -48,6 +48,7 @@
 				<arguments>
 					<required name="url" type="string" />
 					<optional name="alt" type="string" />
+					<optional name="size" type="array" />
 				</arguments>
 			</function>
 		</action>
@@ -144,6 +145,7 @@
 					<required name="id" type="int" />
 					<optional name="alt" type="string" default="NULL" />
 					<optional name="has_big_alt" type="string" default="NULL" />
+					<optional name="size" type="array" />
 				</arguments>
 			</function>
 		</action>

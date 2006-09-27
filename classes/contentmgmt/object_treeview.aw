@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.51 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.52 2006/09/27 15:03:13 kristo Exp $
 
 /*
 
@@ -720,8 +720,7 @@ class object_treeview extends class_base
 		$clids = $arr["obj_inst"]->meta("clids");
 
 		$ret = array();
-		classload("aliasmgr");
-		$a = aliasmgr::get_clid_picker();
+		$a = get_class_picker();
 		foreach($a as $clid => $clname)
 		{
 			$rt = "clid_".$clid;
@@ -744,8 +743,7 @@ class object_treeview extends class_base
 		if ($prop['name'] == 'clids')
 		{
 			$_clids = array();
-			classload("aliasmgr");
-			$a = aliasmgr::get_clid_picker();
+			$a = get_class_picker();
 			foreach($a as $clid => $clname)
 			{
 				$rt = "clid_".$clid;

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.208 2006/09/18 12:35:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.209 2006/09/27 15:03:02 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -28,7 +28,6 @@ class aliasmgr extends aw_template
 	function search($args = array())
 	{
 		extract($args);
-
 		$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
 
 		$GLOBALS['site_title'] = "Seostehaldur";

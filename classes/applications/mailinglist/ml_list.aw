@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.85 2006/08/29 07:26:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.86 2006/09/27 15:03:06 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -670,7 +670,7 @@ class ml_list extends class_base
 		$msg_obj = new object($arr["msg_id"]);
 		$message = $msg_obj->prop("message");
 		if(!$msg_obj->prop("html_mail")) $message = nl2br($message);
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 		$al->parse_oo_aliases($msg_obj->id(), &$message);
 		
 		$c_title = $msg_obj->prop("msg_contener_title");

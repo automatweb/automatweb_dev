@@ -116,8 +116,12 @@ class core extends acl_base
 			$this->quote(&$type);
 			$ref = aw_global_get("HTTP_REFERER");
 			$this->quote(&$ref);
-			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer");
-			$values = array($t,aw_global_get("uid"),$type,$text,$ip,(int)$oid,$action,$ref);
+			$session_id = session_id();
+			$object_name = $this->db_fetch_field("SELECT name FROM objects where oid = '$oid'", "name");
+			$this->quote(&$object_name);
+			$mail_id = (int)$_GET["mlx"];
+			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer", "object_name", "session_id", "mail_id");
+			$values = array($t,aw_global_get("uid"),$type,$text,$ip,(int)$oid,$action,$ref,$object_name, $session_id, $mail_id);
 			if (aw_ini_get("users.tafkap"))
 			{
 				$fields[] = "tafkap";
@@ -145,6 +149,8 @@ class core extends acl_base
 
 			if (!$this->db_query($q,false))
 			{
+				echo dbg::process_backtrace(debug_backtrace());
+				echo "q = $q <br>";
 				die("cannot write to syslog: " . $this->db_last_error["error_string"]);
 			};
 		}

@@ -1,0 +1,5 @@
+<?xml version='1.0'?>
+<schedule>
+	<repeat class="stats_model" action="nightly_move" type="daily" time="01:00" />
+	<repeat class="stats_model" action="nightly_move" type="monthly" day="1" time="02:00" />
+</schedule>

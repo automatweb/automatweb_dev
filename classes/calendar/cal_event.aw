@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.15 2006/03/03 11:15:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.16 2006/09/27 15:03:10 kristo Exp $
 
 /*
 	@default table=objects
@@ -692,7 +692,6 @@ class cal_event extends class_base
 	function search($args = array())
 	{
 		extract($args);
-		$amgr = get_instance("aliasmgr");
 		$this->read_template("search_doc.tpl");
 		$obj = obj($id);
 		$par_obj = obj($obj->parent());
@@ -707,7 +706,6 @@ class cal_event extends class_base
 			$back_link = $this->mk_my_orb("change",array("id" => $id));
 		};
 		$this->mk_path(0,"<a href='$back_link'>Tagasi</a> | <b>Otsi objekti</b>");
-		$amgr->make_alias_typearr();
 		if ($s_name != "" || $s_comment != "" || $s_type > 0)
 		{
 			$se = array();
@@ -725,7 +723,7 @@ class cal_event extends class_base
 			}
 			else
 			{
-				$se[] = " objects.class_id IN (".join(",",$amgr->typearr).") ";
+				$se[] = " objects.class_id like '%' ";
 			}
 
 			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby
@@ -756,7 +754,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$s_type = 0;
 		}
 
-		$amgr->make_alias_classarr();
 		$this->vars(array("id" => $id,
 			"class" => ($parent_class == CL_CALENDAR) ? "planner" : "cal_event",
 			"action" => ($parent_class == CL_CALENDAR) ? "event_object_search" : "search",
@@ -764,7 +761,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			"s_type"  => $s_type,
 			"s_comment" => $s_comment,
 			"pick_link" => $this->mk_my_orb("pick",array("id" => $id)),
-			"types" => $this->picker($s_type, array(0 => LC_OBJECTS_ALL) + $amgr->classarr)
+			"types" => $this->picker($s_type, array(0 => LC_OBJECTS_ALL) + get_class_picker())
 		));
 		return $this->parse();
 	}	

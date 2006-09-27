@@ -79,13 +79,6 @@
 			</function>
 		</action>
 
-		<action name="convert_seealso_menus" nologin="1">
-			<function name="convert_seealso_menus">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="convert_active_documents_list" nologin="1">
 			<function name="convert_active_documents_list">
 				<arguments>

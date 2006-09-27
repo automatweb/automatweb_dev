@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.146 2006/09/14 09:11:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.147 2006/09/27 15:03:19 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1686,7 +1686,7 @@ class crm_person extends class_base
 			"id" => $to->id(),
 		));
 
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 		$notes = $to->prop("notes");
 
 		$al->parse_oo_aliases($to->id(), &$notes);

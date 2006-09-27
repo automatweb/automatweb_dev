@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.27 2006/05/17 12:36:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.28 2006/09/27 15:03:18 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -88,8 +88,7 @@ class rate extends class_base
 
 			case "objects_from_clid":
 				$myc = is_null($myc) ? OBJECTS_FROM_CLID : $myc;
-				classload("aliasmgr");
-				$prop['options'] = aliasmgr::get_clid_picker();
+				$prop['options'] = get_class_picker();
 			case "objects_from_folder":
 				$myc = is_null($myc) ? OBJECTS_FROM_FOLDER : $myc;
 			case "objects_from_oid":

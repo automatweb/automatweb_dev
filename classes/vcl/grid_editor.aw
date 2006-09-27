@@ -1425,7 +1425,7 @@ class grid_editor extends class_base
 		$d = get_instance(CL_DOCUMENT);
 		$d->create_relative_links($table);
 
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 		$al->parse_oo_aliases($oid,&$table,array("templates" => $tpls));
 
 		return $table;
@@ -1726,9 +1726,7 @@ class grid_editor extends class_base
 
 		$table = $this->parse();
 
-		$al = get_instance("aliasmgr");
-		//$al->parse_oo_aliases($oid,&$table,array());
-		
+	
 		return $table;
 	}
 

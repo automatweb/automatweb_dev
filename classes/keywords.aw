@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.68 2006/09/20 21:53:53 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.69 2006/09/27 15:03:02 kristo Exp $
 // keywords.aw - dokumentide v&otilde;tmes&otilde;nad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -100,7 +100,7 @@ class keywords extends class_base
 					}
 					else
 					{
-						$al = get_instance("aliasmgr");
+						$al = get_instance("alias_parser");
 						$lead = $doc->prop("lead");
 						$meta = $doc->meta();
 						$al->parse_oo_aliases($doc->id(),&$lead,array("templates" => &$this->templates,"meta" => &$meta));

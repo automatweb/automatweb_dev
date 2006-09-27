@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.16 2005/12/14 13:01:26 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.17 2006/09/27 15:03:18 kristo Exp $
 
 /*
 
@@ -61,8 +61,7 @@ class rate_scale extends class_base
 				$prop["options"] = array(1 => "");
 				break;
 			case "rate_clid":
-				classload("aliasmgr");
-				$prop['options'] = aliasmgr::get_clid_picker();
+				$prop['options'] = get_class_picker();
 				break;
 		}
 		return PROP_OK;

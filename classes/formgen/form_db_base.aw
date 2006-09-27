@@ -32,7 +32,7 @@
 // - duke
 
 
-class form_db_base extends aw_template
+class form_db_base extends class_base
 {
 	function form_db_base()
 	{

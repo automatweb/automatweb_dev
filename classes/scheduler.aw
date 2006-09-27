@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.39 2006/05/15 08:10:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.40 2006/09/27 15:03:02 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -773,5 +773,50 @@ class scheduler extends aw_template
 
 
 	}
+
+	/**
+		@attrib name=static_sched
+	**/
+	function static_sched($arr)
+	{
+		// let the user continue with their business
+		header("Content-Type: image/gif");
+		header("Content-Length: 43");
+		header("Connection: close");
+		echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
+		flush();
+		// basically, what this thing should do, is:
+		// read the static scheduler definition file and if the time for something is about to come, then 
+		// generate the correct url and add it to the real scheduler
+		$p = xml_parser_create();
+		xml_parse_into_struct($p, file_get_contents(aw_ini_get("basedir")."/xml/static_scheduler.xml"), $vals, $index);
+		xml_parser_free($p);
+		foreach($vals as $val)
+		{
+			if ($val["tag"] == "REPEAT" && $val["type"] == "complete")
+			{
+				list($hr, $min) = explode(":", $val["attributes"]["TIME"]);
+				if ($val["attributes"]["TYPE"] == "daily" && date("H") == ($hr-1))
+				{
+					// add to scheduler
+					$this->add(array(
+						"event" => str_replace("automatweb/", "", $this->mk_my_orb($val["attributes"]["ACTION"], array(), $val["attributes"]["CLASS"])),
+						"time" => mktime($hr,$min,0, date("m"), date("d")+ ($hr < date("H") ? 1 : 0), date("Y"))
+					));
+				}
+				else
+				if ($val["attributes"]["TYPE"] == "monthly" && date("H") == ($hr-1) && date("d") == $val["attributes"]["DAY"])
+				{
+					// add to scheduler
+					$this->add(array(
+						"event" => str_replace("automatweb/", "", $this->mk_my_orb($val["attributes"]["ACTION"], array(), $val["attributes"]["CLASS"])),
+						"time" => mktime($hr,$min,0, date("m"), date("d")+ ($hr < date("H") ? 1 : 0), date("Y"))
+					));
+				}
+			}
+		}
+		die("all done");
+	}
+
 }
 ?>

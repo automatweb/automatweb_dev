@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.133 2006/09/25 13:46:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.134 2006/09/27 15:03:02 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -320,7 +320,6 @@ class file extends class_base
 					$file_name = $_FILES["file"]["name"];
 					$file_type = $_FILES["file"]["type"];
 				};
-
 				if (is_uploaded_file($file))
 				{
 					if ($this->cfg["upload_virus_scan"])
@@ -350,6 +349,20 @@ class file extends class_base
 					$arr["obj_inst"]->set_name($file_name);
 					$arr["obj_inst"]->set_prop("type", $file_type);
 					$this->file_type = $file_type;
+				}
+				else
+				if (is_array($data["value"]) && $data["value"]["content"] != "")
+				{
+					$final_name = $this->generate_file_path(array(
+						"type" => "text/html",
+					));
+					$fc = fopen($final_name, "w");
+					fwrite($fc, $data["value"]["content"]);
+					fclose($f);
+					$data["value"] = $final_name;
+					$arr["obj_inst"]->set_name($data["value"]["name"]);
+					$arr["obj_inst"]->set_prop("type", "text/html");
+					$this->file_type = "text/html";
 				}
 				else
 				{

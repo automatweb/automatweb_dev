@@ -302,6 +302,48 @@
             <caption>Kaustade nimed impordi jaoks</caption>
       </property>
       <property>
+            <name>containers_toolbar</name>
+            <table>objects</table>
+            <group>containers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Konteinerite t&amp;amp;oouml;&amp;amp;ouml;riisariba</caption>
+      </property>
+      <property>
+            <name>containers_list</name>
+            <table>objects</table>
+            <group>containers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Konteinerite nimekiri</caption>
+      </property>
+      <property>
+            <name>container_info</name>
+            <table>objects</table>
+            <group>containers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Konteineri info</caption>
+      </property>
+      <property>
+            <name>container_rows</name>
+            <table>objects</table>
+            <group>containers</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Konteineri read</caption>
+      </property>
+      <property>
             <name>force_7_view</name>
             <table>objects</table>
             <group>views</group>
@@ -472,6 +514,9 @@
                   <caption>Kaustade nimed (deprecated)</caption>
                   <parent>foldersa</parent>
             </foldersnames>
+            <containers>
+                  <caption>Konteinerid</caption>
+            </containers>
             <views>
                   <caption>Vaated</caption>
             </views>

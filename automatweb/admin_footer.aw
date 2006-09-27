@@ -180,14 +180,24 @@ if ($_SESSION["last_cache_clear"] < (time() - 3600))
 {
 	$str .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&action=cache_update' alt='' height='1' width='1'>";
 	$_SESSION["last_cache_clear"] = time();
+	file_get_contents(aw_ini_get("baseurl")."/orb.aw?class=scheduler&action=static_sched");
 }
-echo $str;
 //};
 
 if (!$styles_done)
 {
-	echo $styles;
+	$str .= $styles;
 };
+
+if ($GLOBALS["__aw_op_handler"])
+{
+	$f = $GLOBALS["__aw_op_handler"][1];
+	$GLOBALS["__aw_op_handler"][0]->$f($str);
+}
+else
+{
+	echo $str;
+}
 aw_shutdown();
 
 flush();

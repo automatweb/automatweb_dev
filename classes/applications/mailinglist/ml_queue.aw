@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.27 2006/06/28 14:42:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.28 2006/09/27 15:03:06 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -572,7 +572,7 @@ class ml_queue extends aw_template
 //		}
 		$c_title = $msg_obj->prop("msg_contener_title");
 		$c_content = $msg_obj->prop("msg_contener_content");
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 		$al->parse_oo_aliases($msg["mail"], &$message);
 		$tpl = $msg_obj->meta("template_selector");
 		if(is_oid($tpl) && $this->can("view", $tpl))

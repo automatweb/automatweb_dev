@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.48 2006/08/29 07:41:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.49 2006/09/27 15:03:14 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -128,8 +128,7 @@ class otv_ds_obj extends class_base
 
 			case "clids":
 				$_clids = array();
-				classload("aliasmgr");
-				$a = aliasmgr::get_clid_picker();
+				$a = get_class_picker();
 				foreach($a as $clid => $clname)
 				{
 					$rt = "clid_".$clid;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.86 2006/05/21 20:08:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.87 2006/09/27 15:03:04 kristo Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1162,7 +1162,7 @@ class event_search extends class_base
 			}
 			exit_function("event_search::search_speed");
 			$res = "";
-			$aliasmrg = get_instance("aliasmgr");
+			$aliasmrg = get_instance("alias_parser");
 			foreach($groups as $gkey => $edata)
 			{
 				if(count($groups) > 1)
