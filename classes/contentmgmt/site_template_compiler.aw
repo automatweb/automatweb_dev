@@ -2078,7 +2078,7 @@ class site_template_compiler extends aw_template
 		
 
 		// if % count
-		$res .= $this->_gi()."if (($loop_counter_name > 0 && ($loop_counter_name % $arr[grp_cnt]) == 1) || ($loop_counter_name == (".$list_name."->count() - 1)) )\n";
+		$res .= $this->_gi()."if (($loop_counter_name > 0 && ($loop_counter_name % $arr[grp_cnt]) == ".($arr["grp_cnt"] - 1).") || ($loop_counter_name == (".$list_name."->count() - 1)) )\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 
