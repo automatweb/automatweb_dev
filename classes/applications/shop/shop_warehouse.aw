@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.40 2006/04/11 11:58:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.41 2006/09/28 09:58:48 dragut Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2485,7 +2485,7 @@ class shop_warehouse extends class_base
 
 	/** returns an object_tree of warehouse folders
 
-		@attrib param=name
+		@attrib param=name api=1
 
 		@param id required
 
@@ -2505,7 +2505,7 @@ class shop_warehouse extends class_base
 
 	/** returns a list of packets in the warehouse $id, optionally under folder $parent
 
-		@attrib param=name
+		@attrib param=name api=1
 
 		@param id required
 		@param parent optional
@@ -2572,6 +2572,13 @@ class shop_warehouse extends class_base
 		return $ret;
 	}
 
+	/** Gives the folder oid where the orders are saved
+
+		@attrib name=get_order_folder api=1
+
+		@param id required type=object acl=view
+			Warehouse object
+	**/
 	function get_order_folder($w)
 	{
 		error::raise_if(!$w->prop("conf"), array(
@@ -2592,7 +2599,7 @@ class shop_warehouse extends class_base
 
 	/** adds the selected items to the basket
 
-		@attrib name=add_to_cart
+		@attrib name=add_to_cart api=1
 
 		@param id required type=int acl=view
 		@param sel optional
@@ -2644,7 +2651,7 @@ class shop_warehouse extends class_base
 
 	/** sends the current order to the orderer's e-mail
 
-		@attrib name=send_cur_order
+		@attrib name=send_cur_order api=1
 
 	**/
 	function sent_cur_order($arr)
@@ -2701,7 +2708,7 @@ class shop_warehouse extends class_base
 
 	/** clears the current order 
 
-		@attrib name=clear_order
+		@attrib name=clear_order api=1
 
 	**/
 	function clear_order($arr)
@@ -2742,7 +2749,7 @@ class shop_warehouse extends class_base
 	}
 
 	/** returns a list of config forms that can be used to enter products
-	
+
 		@comment
 			takes warehouse oid as parameter
 
