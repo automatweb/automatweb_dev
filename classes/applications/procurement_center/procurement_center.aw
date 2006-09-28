@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.12 2006/09/27 18:57:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.13 2006/09/28 16:50:31 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -1533,6 +1533,16 @@ class procurement_center extends class_base
 
 		//$ol = $ot->to_list();
 		$ol = $ot->arr();
+	
+		//otsingust
+		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
+		{
+			$ol = $this->search_products($arr["obj_inst"]);
+			$arr["obj_inst"]->set_meta("search_data", null);
+			$arr["obj_inst"]->save();
+			$ol = $ol->arr(); 
+		}
+		
 		foreach($ol as $o)
 		{
 
@@ -1885,11 +1895,11 @@ class procurement_center extends class_base
 	{
 		$tb =& $data["prop"]["toolbar"];
 
- $ol = new object_list(array("class_id" => CL_SHOP_PRODUCT_TYPE, "lang_id" => array(), "site_id" => array()));
- foreach($ol->arr() as $o)
- {
- 	if($o->id() < 676) $o->set_parent(636); $o->save(); arr($o->parent());
- }
+ //$ol = new object_list(array("class_id" => CL_SHOP_PRODUCT, "lang_id" => array(), "site_id" => array()));
+ //foreach($ol->arr() as $o)
+ //{
+// 	if($o->id() < 676) $o->set_parent(831); $o->save(); arr($o->parent());
+ //}
 		$co = $data["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
 		$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
 		$warehouse->config = obj($warehouse->prop("conf"));
@@ -1912,6 +1922,15 @@ class procurement_center extends class_base
 				"return_url" => get_ru(),
 			), CL_MENU)
 		));
+		
+		$tb->add_menu_item(array(
+			"parent" => "crt_".$this->prod_type_fld,
+			"text" => t("Lisa tootekategooria"),
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->prod_tree_root,
+				"return_url" => get_ru(),
+			), CL_SHOP_PRODUCT_TYPE)
+		));
 
 		$tb->add_button(array(
 			"name" => "del",
@@ -1920,13 +1939,13 @@ class procurement_center extends class_base
 			'action' => 'delete_cos',
 		));
 
-		$tb->add_button(array(
+/*		$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
 			"tooltip" => t("Lisa korvi"),
 			"action" => "add_to_cart"
 		));
-		
+*/		
 		$tb->add_button(array(
 			"name" => "compare",
 			"img" => "rte_table.gif",
@@ -1940,7 +1959,7 @@ class procurement_center extends class_base
 	{
 		$ol = new object_list(array(
 			"parent" => $parent,
-			"class_id" => array(CL_MENU, CL_SHOP_PRODUCT_TYPE),
+			"class_id" => array(CL_SHOP_PRODUCT_TYPE),
 			"lang_id" => array(),
 			"site_id" => array()
 		));
