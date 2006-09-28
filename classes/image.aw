@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.179 2006/09/20 16:16:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.180 2006/09/28 17:45:13 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -193,6 +193,10 @@ class image extends class_base
 				$row["link"] = $this->trans_get_val($o, "link");
 				$row["meta"]["author"] = $this->trans_get_val($o, "author");
 				$row["meta"]["alt"] = $this->trans_get_val($o, "alt");
+				if ($row["meta"]["alt"] == "")
+				{
+					$row["meta"]["alt"] = $row["name"];
+				}
 			}
 		}
 		return $row;
