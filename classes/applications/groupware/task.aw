@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.143 2006/09/25 14:34:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.144 2006/09/28 13:12:20 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2969,9 +2969,12 @@ class task extends class_base
 		));
 		$cur = get_current_company();
 		$s = array("co" => array($cur->id() => $cur->id()));
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		if (is_oid($arr["obj_inst"]->id()))
 		{
-			$s["co"][$c->prop("to")] = $c->prop("to");
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+			{
+				$s["co"][$c->prop("to")] = $c->prop("to");
+			}
 		}
 		$url = $this->mk_my_orb("do_search", array("pn" => "participants_h", "clid" => CL_CRM_PERSON,"multiple" => 1, "s" => $s), "crm_participant_search");
 		$tb->add_menu_item(array(
