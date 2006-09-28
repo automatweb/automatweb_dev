@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.104 2006/09/25 09:10:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.105 2006/09/28 15:27:28 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -53,22 +53,23 @@ caption Tellija
 @property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
 caption Teostajad
 
-	@layout center_bit type=vbox parent=up_bit  closeable=1 no_padding=1
+	@layout center_bit type=vbox parent=up_bit no_padding=1
 
-		@property start type=date_select table=aw_projects field=aw_start parent=center_bit
+		@layout project_time type=vbox parent=center_bit closeable=1 no_padding=1
+		@property start type=date_select table=aw_projects field=aw_start parent=project_time
 		@caption Algus
 	
-		@property end type=date_select table=aw_projects field=aw_end parent=center_bit
+		@property end type=date_select table=aw_projects field=aw_end parent=project_time
 		@caption L&otilde;pp
 	
-		@property deadline type=date_select table=aw_projects field=aw_deadline parent=center_bit
+		@property deadline type=date_select table=aw_projects field=aw_deadline parent=project_time
 		@caption Deadline
 
-		@property parts_tb type=toolbar no_caption=1 store=no parent=center_bit
-
-		@property orderer_table type=table no_caption=1 store=no parent=center_bit
-		@property part_table type=table no_caption=1 store=no parent=center_bit
-		@property impl_table type=table no_caption=1 store=no parent=center_bit
+		@layout project_people type=vbox parent=center_bit closeable=1 no_padding=1  area_caption=Osalejad
+		@property parts_tb type=toolbar no_caption=1 store=no parent=project_people
+		@property orderer_table type=table no_caption=1 store=no parent=project_people
+		@property part_table type=table no_caption=1 store=no parent=project_people
+		@property impl_table type=table no_caption=1 store=no parent=project_people
 
 		@property implementor type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_IMPLEMENTOR
 		@caption Teostajad
@@ -86,9 +87,6 @@ caption Teostajad
 	property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1 table=objects field=meta method=serialize no_caption=1 parent=parts
 	caption Osalejad
 
-
-
-
 @default group=info_t
 
 	@property description type=textarea rows=10 cols=50 table=aw_projects field=aw_description 
@@ -99,7 +97,6 @@ caption Teostajad
 
 	@property create_task type=checkbox ch_value=1 store=no 
 	@caption Moodusta &uuml;lesanne
-
 
 
 @default group=web_settings
@@ -204,12 +201,14 @@ caption Teostajad
 
 	@property team_tb type=toolbar no_caption=1 store=no
 
-	@layout team type=hbox width=30%:70% closeable=1 
+	@layout team type=hbox width=30%:70%
 
-		@layout team_search parent=team type=vbox 
+		@layout team_left parent=team type=vbox 
 	
-			@property team_team_tree type=treeview store=no no_caption=1 parent=team_search
+			@layout team_tree parent=team_left closeable=1 type=vbox area_caption=Meeskond
+			@property team_team_tree type=treeview store=no no_caption=1 parent=team_tree
 				
+			@layout team_search parent=team_left closeable=1 type=vbox area_caption=Isikute&nbsp;otsing
 			@property team_search_co type=textbox captionside=top parent=team_search
 			@caption Firma
 	
@@ -260,8 +259,8 @@ caption Teostajad
 
 @default group=strat_a
 
-	@property strat_a_tb type=toolbar store=no no_caption=1
-	@property strat_a type=table no_caption=1 store=no
+	property strat_a_tb type=toolbar store=no no_caption=1
+	property strat_a type=table no_caption=1 store=no
 
 @default group=risks
 
@@ -270,8 +269,8 @@ caption Teostajad
 
 @default group=risks_eval
 
-	@property risks_eval_tb type=toolbar no_caption=1 store=no
-	@property risks_eval type=table no_caption=1 store=no
+	property risks_eval_tb type=toolbar no_caption=1 store=no
+	property risks_eval type=table no_caption=1 store=no
 
 @default group=req
 
@@ -284,13 +283,10 @@ caption Teostajad
 	
 @default group=analysis
 
-	@property analysis_tb type=toolbar no_caption=1 store=no
-	@property analysis_table type=table no_caption=1 store=no
+	property analysis_tb type=toolbar no_caption=1 store=no
+	property analysis_table type=table no_caption=1 store=no
 
 
-@groupinfo info caption="Projekti info"
-	@groupinfo info_t caption="Projekti info" parent=info
-	
 @groupinfo general2 parent=general caption="‹ldine"
 	@groupinfo web_settings parent=general caption="Veebiseadistused"
 	@groupinfo prj_image parent=general caption="Pilt"
@@ -304,17 +300,21 @@ caption Teostajad
 
 groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
 
-@groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
+@groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no parent=event_list
 @groupinfo event_list_premise caption="Tegevused eeldustegevuste pıhiselt" submit=no
+
+	@groupinfo info caption="Projekti info"
+	@groupinfo info_t caption="Projekti info" parent=general
+	
 
 
 @groupinfo valuation caption="Hindamine" submit=no
-	@groupinfo strat caption="Eesm&auml;rgid" parent=valuation submit=no
-	@groupinfo strat_a caption="Eesm&auml;rkide hindamine" parent=valuation submit=no
+	@groupinfo strat caption="Eesm&auml;rgid" parent=general submit=no
+	groupinfo strat_a caption="Eesm&auml;rkide hindamine" parent=valuation submit=no
 	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=valuation store=no submit=no
-	@groupinfo analysis caption="Anal&uuml;&uuml;sid" parent=valuation store=no submit=no
-	@groupinfo risks caption="Riskid" parent=valuation submit=no
-	@groupinfo risks_eval caption="Riskide hindamine" parent=valuation submit=no
+	groupinfo analysis caption="Anal&uuml;&uuml;sid" parent=valuation store=no submit=no
+	@groupinfo risks caption="Riskid" parent=general submit=no
+	groupinfo risks_eval caption="Riskide hindamine" parent=valuation submit=no
 	
 @groupinfo add_event caption="Muuda s¸ndmust"
 @groupinfo files caption="Dokumendid" submit=no
@@ -332,8 +332,6 @@ groupinfo risks_t caption="Riskid"
 @groupinfo req caption="N&otilde;uded" submit=no parent=event_list
 
 @groupinfo transl caption=T&otilde;lgi
-
-	
 
 @reltype SUBPROJECT clid=CL_PROJECT value=1
 @caption alamprojekt
@@ -452,7 +450,7 @@ class project extends class_base
 			case "impl_table":
 				$this->_impl_table($arr);
 				break;
-				
+/*				
 			case "analysis_tb":
 			case "analysis_table":
 				static $ib;
@@ -463,7 +461,7 @@ class project extends class_base
 				$fn = "_get_".$data["name"];
 				return $ib->$fn($arr);
 				break;
-
+*/
 			case "files_tb":
 			case "files_tree":
 			case "files_table":
@@ -513,11 +511,11 @@ class project extends class_base
 			case "strat_tb":
 				$this->_strat_tb($arr);
 				break;
-
+/*
 			case "strat_a_tb":
 				$this->_strat_a_tb($arr);
 				break;
-
+*/
 			case "strat":
 				$this->_strat($arr);
 				break;
@@ -525,7 +523,7 @@ class project extends class_base
 			case "risks":
 				$data["direct_links"] = 1;
 				break;
-
+/*
 			case "risks_eval":
 				$this->_risks_eval($arr);
 				break;
@@ -537,7 +535,7 @@ class project extends class_base
 			case "strat_a":
 				$this->_strat_a($arr);
 				break;
-
+*/
 			case "strat_res":
 				$this->_strat_res($arr);
 				break;
@@ -841,11 +839,11 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "risks_eval":
+/*			case "risks_eval":
 				$this->_save_risks_eval($arr);
 				break;
 
-			case "transl":
+*/			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
 
@@ -2965,8 +2963,10 @@ class project extends class_base
 		classload("core/icons");
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
-			"project" => $arr["obj_inst"]->id(),
+//			"project" => $arr["obj_inst"]->id(),
+			"CL_TASK.RELTYPE_PROJECT.id" => $arr["obj_inst"]->id(),
 			"is_goal" => 1,
+//			"lang_id" => 1,
 			"brother_of" => new obj_predicate_prop("id")
 		));
 		$ids = $this->make_keys($ol->ids());
@@ -3055,13 +3055,27 @@ class project extends class_base
 		$this->_init_goal_table($t);
 
 		$parent = is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : new obj_predicate_compare(OBJ_COMP_NULL);
+		
 		$goals = new object_list(array(
 			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
 			"project" => $arr["obj_inst"]->id(),
 			"predicates" => $parent,
 			"brother_of" => new obj_predicate_prop("id")
 		));
-
+		
+		$goals = new object_list(array(
+			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
+//			"project" => $arr["obj_inst"]->id(),
+			"CL_TASK.RELTYPE_PROJECT.id" => $arr["obj_inst"]->id(),
+//			"predicates" => $parent,
+//			"brother_of" => new obj_predicate_prop("id")
+		));
+		
+		//kuna n¸¸d asi peaks toimuma nii et mis omab connectionit, on 
+		foreach($arr["obj_inst"]->connections_to(array("type" => 4)) as $c)
+		{
+			$goals->add($c->prop("from"));
+		}
 		$t->data_from_ol($goals, array("change_col" => "name"));
 	}
 
@@ -3083,12 +3097,37 @@ class project extends class_base
 
 	function _goals_gantt($arr)
 	{
+		$columns = $arr["request"]["column_n"];
+		if(!$columns) $columns = 10;
 		$time =  time();
 		$this_object =& $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
 
-		$columns = 7;
-
+		//kıigepealt default v‰‰rtused ... mis siis muutuvad kui tegu on kuude vıi n‰dalatega
+		$subdivisions = 1;
+		$days = array ("P", "E", "T", "K", "N", "R", "L");
+		$column_length = 86400;
+		
+		if($arr["request"]["units"] == "months")
+		{
+			$days = array (t("Jaanuar"), t("Veebruar"), t("M&auml;rts"), t("Aprill"), t("Mai"), t("Juuni"), t("Juuli"), t("August"), t("September"), t("Oktoober"), t("November"), t("Detsember"));
+			$subdivisions = 1;
+			$column_length = 86400*30.5;
+		}
+		
+		if($arr["request"]["units"] == "weeks")
+		{
+			$days = array();
+			$x = 0;
+			while($x<54)
+			{
+				$days[$x] = $x.'. '.t("N&auml;dal");
+				$x++;
+			}
+			$subdivisions = 7;
+			$column_length = 86400*7;
+		}
+		
 		// get all goals/tasks
 		$ot = new object_tree(array(
 			"parent" => $arr["obj_inst"]->id(),
@@ -3103,9 +3142,7 @@ class project extends class_base
 			$range_start = min($gt->prop("start1"), $range_start);
 			$range_end = max($gt->prop("end"), $range_end);
 		}
-
-		$subdivisions = 1;
-
+		if($arr["request"]["start"]) $range_start = $arr["request"]["start"];
 		foreach($gt_list->arr() as $gt)
 		{
 			$chart->add_row (array (
@@ -3117,7 +3154,6 @@ class project extends class_base
 				)
 			));
 		}
-
 		
 		foreach ($gt_list->arr() as $gt)
 		{
@@ -3143,31 +3179,181 @@ class project extends class_base
 			"end" => $range_end,
 			"columns" => $columns,
 			"subdivisions" => $subdivisions,
-			"timespans" => $subdivisions,
+		//	"timespans" => $subdivisions,
 			"width" => 950,
 			"row_height" => 10,
+			"column_length" => $column_length,
 		));
 
 		### define columns
 		$i = 0;
-		$days = array ("P", "E", "T", "K", "N", "R", "L");
-
+		
 		while ($i < $columns)
 		{
 			$day_start = ($range_start + ($i * 86400));
 			$day = date ("w", $day_start);
 			$date = date ("j/m/Y", $day_start);
+			$title = $days[$day] . " - " . $date;
+			if($arr["request"]["units"] == "weeks")
+			{
+				$day_start = ($range_start + ($i * 86400*7));
+				$day = (int)date ("W", $day_start);
+				$date = date ("j/m/Y", $day_start);
+				$date.= " - " .date ("j/m/Y", $day_start+ 86400*6);
+				$title = $days[$day] . " " . $date;
+			}
+			if($arr["request"]["units"] == "months")
+			{
+				$day_start = ($range_start + ($i * 86400*30.5));
+				$day = (int)date ("m", $day_start) - 1;
+				$date = date ("m/Y", $day_start);
+				$title = $days[$day] . " " . $date;
+			}
 			$uri = aw_url_change_var ("mrp_chart_length", 1);
 			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
 			$chart->define_column (array (
+				"title" => $title,	
 				"col" => ($i + 1),
-				"title" => $days[$day] . " - " . $date,
 				"uri" => $uri,
 			));
 			$i++;
 		}
+		$links = $this->gen_gantt_header_links(array(
+			"column_n" => $arr["request"]["column_n"],
+			"id" => $arr["request"]["id"],
+			"units" => $arr["request"]["units"],
+			"start" => $range_start,
+		));
+		
+		return $links.'<br>'.$chart->draw_chart ();
+	}
 
-		return $chart->draw_chart ();
+	function gen_gantt_header_links($args)
+	{
+		extract($args);
+		$next = $start;
+		$last = $start;
+		$columns = 10;
+		if(!$column_n) $column_n = $columns;
+		if($units == "days")
+		{
+			$columns = 7;
+			if(!$column_n) $column_n = $columns;
+			$last = $last - 86400*$column_n;
+			$next = $next + 86400*$column_n;
+		}
+		if($units == "weeks")
+		{
+			$columns = 8;
+			if(!$column_n) $column_n = $columns;
+			$last = $last - 86400*7*$column_n;
+			$next = $next + 86400*7*$column_n;
+		}
+		if($units == "months")
+		{
+			$columns = 6;
+			if(!$column_n) $column_n = $columns;
+			$last = $last - 86400*30.5*$column_n;
+			$next = $next + 86400*30.5*$column_n;
+		}
+		$links = "";
+		$x = 0;
+		$links.= html::href(array(
+			"url" => html::get_change_url(
+				$id,
+				array(
+					"id" => $id,
+					"start" => $last,
+					"group" => "goals_gantt",
+					"units" => $units,
+					"column_n" => $columns,
+					"return_url" => get_ru(),
+					"previous" => 1,
+					"column_n" => $column_n,
+				)
+			),
+			"caption" => t("<< Eelmine"),
+		));
+
+		while ($x < $columns)
+		{
+			$url =  html::get_change_url(
+					$id,
+					array(
+					"id" => $id,
+						"start" => $start,
+						"group" => "goals_gantt",
+						"column_n" => $x+1,
+						"units" => $units,
+						"return_url" => get_ru(),
+					)
+			);
+			$links.= " ".html::href(array(
+				"url" => $url,
+				"caption" => $x+1,
+			));
+			$x++;
+		}
+
+		$links.= " ".html::href(array(
+			"url" => html::get_change_url(
+				$id,
+				array(
+					"id" => $id,
+					"start" => $start,
+					"group" => "goals_gantt",
+					"units" => "days",
+					"return_url" => get_ru(),
+				)
+			),
+			"caption" => t("P&auml;evad"),
+		));
+
+		$links.= " ".html::href(array(
+			"url" => html::get_change_url(
+				$id,
+				array(
+					"start" => $start,
+					"id" => $id,
+					"group" => "goals_gantt",
+					"units" => "weeks",
+					"return_url" => get_ru(),
+				)
+			),
+			"caption" => t("N&auml;dalad"),
+		));
+		
+		$links.= " ".html::href(array(
+			"url" => html::get_change_url(
+				$id,
+				array(
+					"id" => $id,
+					"start" => $start,
+					"group" => "goals_gantt",
+					"units" => "months",
+					"return_url" => get_ru(),
+				)
+			),
+			"caption" => t("Kuud"),
+		));
+
+		$links.= " ".html::href(array(
+			"url" => html::get_change_url(
+				$id,
+				array(
+					"id" => $id,
+					"start" => $next,
+					"group" => "goals_gantt",
+					"units" => $units,
+					"column_n" => $columns,
+					"return_url" => get_ru(),
+					"after" => 1,
+					"column_n" => $column_n,
+				)
+			),
+			"caption" => t("J&auml;rgmine >>"),
+		));
+		return $links;
 	}
 
 	function generate_html($o, $item)
@@ -3352,6 +3538,8 @@ class project extends class_base
 			$o->disconnect(array(
 				"from" => $id
 			));
+			/*					"onClick" => "aw_popup_scroll('".$search_url."','_spop',600,500)",*/
+
 		}
 
 		return $arr["post_ru"];
@@ -4123,7 +4311,7 @@ class project extends class_base
 			return $o;
 		}
 	}
-
+/*
 	function _save_risks_eval($arr)
 	{
 		// see if there is an eval for this person already, if not, create it , if it is, update it
@@ -4180,7 +4368,7 @@ class project extends class_base
 			));
 		}
 	}
-
+*/
 	function _init_strat_t(&$t)
 	{
 		$t->define_field(array(
@@ -4254,7 +4442,7 @@ class project extends class_base
 			"tooltip" => t("Kustuta"),
 		));
 	}
-
+/*
 	function _strat_a_tb($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -4341,7 +4529,7 @@ class project extends class_base
 			));
 		}
 	}
-
+*/
 	function _init_risks_t(&$t)
 	{
 		$t->define_field(array(

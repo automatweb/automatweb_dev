@@ -122,7 +122,7 @@
             <group>general2</group>
             <type>date_select</type>
             <field>aw_start</field>
-            <parent>center_bit</parent>
+            <parent>project_time</parent>
             <caption>Algus</caption>
       </property>
       <property>
@@ -131,7 +131,7 @@
             <group>general2</group>
             <type>date_select</type>
             <field>aw_end</field>
-            <parent>center_bit</parent>
+            <parent>project_time</parent>
             <caption>L&amp;amp;otilde;pp</caption>
       </property>
       <property>
@@ -140,7 +140,7 @@
             <group>general2</group>
             <type>date_select</type>
             <field>aw_deadline</field>
-            <parent>center_bit</parent>
+            <parent>project_time</parent>
             <caption>Deadline</caption>
       </property>
       <property>
@@ -150,7 +150,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit</parent>
+            <parent>project_people</parent>
             <field>parts_tb</field>
       </property>
       <property>
@@ -160,7 +160,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit</parent>
+            <parent>project_people</parent>
             <field>orderer_table</field>
       </property>
       <property>
@@ -170,7 +170,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit</parent>
+            <parent>project_people</parent>
             <field>part_table</field>
       </property>
       <property>
@@ -180,7 +180,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>center_bit</parent>
+            <parent>project_people</parent>
             <field>impl_table</field>
       </property>
       <property>
@@ -506,7 +506,7 @@
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>team_search</parent>
+            <parent>team_tree</parent>
             <field>team_team_tree</field>
       </property>
       <property>
@@ -626,24 +626,6 @@
             <field>strat</field>
       </property>
       <property>
-            <name>strat_a_tb</name>
-            <table>objects</table>
-            <group>strat_a</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>strat_a_tb</field>
-      </property>
-      <property>
-            <name>strat_a</name>
-            <table>objects</table>
-            <group>strat_a</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>strat_a</field>
-      </property>
-      <property>
             <name>risks_tb</name>
             <table>objects</table>
             <group>risks</group>
@@ -660,24 +642,6 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>risks</field>
-      </property>
-      <property>
-            <name>risks_eval_tb</name>
-            <table>objects</table>
-            <group>risks_eval</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>risks_eval_tb</field>
-      </property>
-      <property>
-            <name>risks_eval</name>
-            <table>objects</table>
-            <group>risks_eval</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>risks_eval</field>
       </property>
       <property>
             <name>req_tb</name>
@@ -708,36 +672,11 @@
             <parent>req_l</parent>
             <field>req_tbl</field>
       </property>
-      <property>
-            <name>analysis_tb</name>
-            <table>objects</table>
-            <group>analysis</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>analysis_tb</field>
-      </property>
-      <property>
-            <name>analysis_table</name>
-            <table>objects</table>
-            <group>analysis</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>analysis_table</field>
-      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <info>
-                  <caption>Projekti info</caption>
-            </info>
-            <info_t>
-                  <caption>Projekti info</caption>
-                  <parent>info</parent>
-            </info_t>
             <general2>
                   <parent>general</parent>
                   <caption>&amp;Uuml;ldine</caption>
@@ -776,47 +715,39 @@
             <event_list_cal>
                   <caption>Tegevused kalendaarselt</caption>
                   <submit>no</submit>
+                  <parent>event_list</parent>
             </event_list_cal>
             <event_list_premise>
                   <caption>Tegevused eeldustegevuste p&amp;otilde;hiselt</caption>
                   <submit>no</submit>
             </event_list_premise>
+            <info>
+                  <caption>Projekti info</caption>
+            </info>
+            <info_t>
+                  <caption>Projekti info</caption>
+                  <parent>general</parent>
+            </info_t>
             <valuation>
                   <caption>Hindamine</caption>
                   <submit>no</submit>
             </valuation>
             <strat>
                   <caption>Eesm&amp;amp;auml;rgid</caption>
-                  <parent>valuation</parent>
+                  <parent>general</parent>
                   <submit>no</submit>
             </strat>
-            <strat_a>
-                  <caption>Eesm&amp;amp;auml;rkide hindamine</caption>
-                  <parent>valuation</parent>
-                  <submit>no</submit>
-            </strat_a>
             <strat_res>
                   <caption>Eesm&amp;amp;auml;rkide hindamise tulemused</caption>
                   <parent>valuation</parent>
                   <store>no</store>
                   <submit>no</submit>
             </strat_res>
-            <analysis>
-                  <caption>Anal&amp;amp;uuml;&amp;amp;uuml;sid</caption>
-                  <parent>valuation</parent>
-                  <store>no</store>
-                  <submit>no</submit>
-            </analysis>
             <risks>
                   <caption>Riskid</caption>
-                  <parent>valuation</parent>
+                  <parent>general</parent>
                   <submit>no</submit>
             </risks>
-            <risks_eval>
-                  <caption>Riskide hindamine</caption>
-                  <parent>valuation</parent>
-                  <submit>no</submit>
-            </risks_eval>
             <add_event>
                   <caption>Muuda s&amp;uuml;ndmust</caption>
             </add_event>
@@ -1002,10 +933,24 @@
             <center_bit>
                   <type>vbox</type>
                   <parent>up_bit</parent>
-                  <closeable>1</closeable>
                   <no_padding>1</no_padding>
                   <group>general2</group>
             </center_bit>
+            <project_time>
+                  <type>vbox</type>
+                  <parent>center_bit</parent>
+                  <closeable>1</closeable>
+                  <no_padding>1</no_padding>
+                  <group>general2</group>
+            </project_time>
+            <project_people>
+                  <type>vbox</type>
+                  <parent>center_bit</parent>
+                  <closeable>1</closeable>
+                  <no_padding>1</no_padding>
+                  <area_caption>Osalejad</area_caption>
+                  <group>general2</group>
+            </project_people>
             <files_lay>
                   <type>hbox</type>
                   <width>20%:80%</width>
@@ -1014,12 +959,25 @@
             <team>
                   <type>hbox</type>
                   <width>30%:70%</width>
-                  <closeable>1</closeable>
                   <group>team</group>
             </team>
-            <team_search>
+            <team_left>
                   <parent>team</parent>
                   <type>vbox</type>
+                  <group>team</group>
+            </team_left>
+            <team_tree>
+                  <parent>team_left</parent>
+                  <closeable>1</closeable>
+                  <type>vbox</type>
+                  <area_caption>Meeskond</area_caption>
+                  <group>team</group>
+            </team_tree>
+            <team_search>
+                  <parent>team_left</parent>
+                  <closeable>1</closeable>
+                  <type>vbox</type>
+                  <area_caption>Isikute&amp;nbsp;otsing</area_caption>
                   <group>team</group>
             </team_search>
             <team_r>

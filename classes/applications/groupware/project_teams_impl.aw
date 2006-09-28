@@ -167,7 +167,7 @@ class project_teams_impl extends class_base
 	function _get_team($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		
+		$t->set_header("<b>".t("Isikud ja meeskonnad")."<b>");
 		//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
 		if(($arr["request"]["no_search"]) && $arr["request"]["team"] == "teams")
 		{
@@ -282,6 +282,20 @@ class project_teams_impl extends class_base
 		}
 		else
 		{
+			//võimalikud organisatsioonid
+			if(!is_array($arr["request"]["team_search_co"])) {$arr["request"]["team_search_co"] = array($arr["request"]["team_search_co"]);}
+			if(substr_count($arr["request"]["team_search_co"], ',') > 0 ) $arr["request"]["team_search_co"] = explode(',' , $arr["request"]["team_search_co"]);
+			$org_ids = array();
+			foreach($arr["request"]["team_search_co"] as $co)
+			{
+				$org_list = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"name" => "%".$co."%",
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$org_ids = $org_ids+$org_list->ids();
+			}
 			if ($arr["request"]["team_search_person"] == "" && $arr["request"]["team_search_co"] == "")
 			{
 				$ol = new object_list();
@@ -291,11 +305,29 @@ class project_teams_impl extends class_base
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_PERSON,
 					"name" => "%".$arr["request"]["team_search_person"]."%",
-					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%",
+//					"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%",
+					"CL_CRM_PERSON.RELTYPE_WORK.id" => $org_ids,
 					"lang_id" => array(),
 					"site_id" => array()
 				));
 			}
+			//juhuks kui otsitakse mitut isikut komaga eraldatud
+			if(substr_count($arr["request"]["team_search_person"], ',') > 0 )
+			{
+				$arr["request"]["team_search_person"] = explode(',' , $arr["request"]["team_search_person"]);
+				foreach($arr["request"]["team_search_person"] as $person)
+				{
+					$pl = new object_list(array(
+						"class_id" => CL_CRM_PERSON,
+						"name" => "%".$person."%",
+						"CL_CRM_PERSON.RELTYPE_WORK.id" => $org_ids,
+						"lang_id" => array(),
+						"site_id" => array()
+					));
+					$ol->add($pl);
+				}
+			}
+			
 			foreach($ol->arr() as $o)
 			{
 				$t->define_data(array(

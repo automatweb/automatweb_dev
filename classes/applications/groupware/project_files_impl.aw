@@ -19,7 +19,10 @@ class project_files_impl extends class_base
 			CL_CRM_MEMO => t("Memo"),
 			CL_CRM_DOCUMENT => t("CRM Dokument"),
 			CL_CRM_DEAL => t("Leping"),
-			CL_CRM_OFFER => t("Pakkumine")
+			CL_CRM_OFFER => t("Pakkumine"),
+			CL_PROJECT_STRAT_GOAL_EVAL_WS => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
+			CL_PROJECT_RISK_EVAL_WS => t("Riskide hindamise t&ouml;&ouml;laud"),
+			CL_PROJECT_ANALYSIS_WS => t("Anal&uuml;&uuml;si t&ouml;&ouml;laud"),
 		);
 
 		$tb->add_menu_button(array(
@@ -191,7 +194,7 @@ class project_files_impl extends class_base
 			$filters,
 			"parent" => $pt,
 //			"project" => $pr,
-			"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER),
+			"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER , CL_PROJECT_STRAT_GOAL_EVAL_WS ,CL_PROJECT_RISK_EVAL_WS ,CL_PROJECT_ANALYSIS_WS),
 			"lang_id" => array(),
 		);
 		$filter[] = new object_list_filter(array(
