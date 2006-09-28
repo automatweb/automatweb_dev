@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.105 2006/09/28 15:27:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.106 2006/09/28 16:15:06 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -278,8 +278,11 @@ caption Teostajad
 
 	@layout req_l type=hbox width=30%:70%
 
-		@property req_tree type=treeview store=no no_caption=1 parent=req_l
-		@property req_tbl type=table store=no no_caption=1 parent=req_l
+		@layout req_tree_l type=vbox parent=req_l closeable=1 no_padding=1 area_caption=N&otilde;uded&nbsp;puu&nbsp;kujul
+		@property req_tree type=treeview store=no no_caption=1 parent=req_tree_l
+		
+		@layout req_tbl_l type=vbox parent=req_l no_padding=1
+		@property req_tbl type=table store=no no_caption=1 parent=req_tbl_l
 	
 @default group=analysis
 

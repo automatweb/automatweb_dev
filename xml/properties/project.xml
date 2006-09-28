@@ -659,7 +659,7 @@
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>req_l</parent>
+            <parent>req_tree_l</parent>
             <field>req_tree</field>
       </property>
       <property>
@@ -669,7 +669,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>req_l</parent>
+            <parent>req_tbl_l</parent>
             <field>req_tbl</field>
       </property>
       <classinfo>
@@ -997,6 +997,20 @@
                   <width>30%:70%</width>
                   <group>req</group>
             </req_l>
+            <req_tree_l>
+                  <type>vbox</type>
+                  <parent>req_l</parent>
+                  <closeable>1</closeable>
+                  <no_padding>1</no_padding>
+                  <area_caption>N&amp;otilde;uded&amp;nbsp;puu&amp;nbsp;kujul</area_caption>
+                  <group>req</group>
+            </req_tree_l>
+            <req_tbl_l>
+                  <type>vbox</type>
+                  <parent>req_l</parent>
+                  <no_padding>1</no_padding>
+                  <group>req</group>
+            </req_tbl_l>
       </layout>
 </properties>
 
