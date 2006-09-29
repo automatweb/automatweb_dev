@@ -1156,8 +1156,6 @@ class realestate_import extends class_base
 
 				#### property_area
 				if($property->is_property("property_area"))$property->set_prop ("property_area", $this->property_data["KRUNT"]);
-				arr($this->property_data["KRUNT"]);
-				arr($property->prop("property_area"));
 
 				#### picture_icon
 				if ($property->prop ("picture_icon_city24") != $this->property_data["IKOONI_URL"])
@@ -2074,6 +2072,8 @@ class realestate_import extends class_base
 **/
 	function city24_xml ($arr)
 	{
+		header ("Content-Type: application/xml");
+
 		$out_charset = "ISO-8859-4";
 		$this_object = obj ($arr["id"]);
 		$import_url = $this_object->prop ("city24_import_url");
@@ -2081,8 +2081,20 @@ class realestate_import extends class_base
 		// $xml = iconv ("UTF-8", $out_charset, $xml);
 		// $xml = preg_replace ('/encoding\=\"UTF\-8\"/Ui', 'encoding="' . $out_charset . '"', $xml, 1);
 
-		header ("Content-Type: application/xml");
-		echo $xml;
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $import_url);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 600);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 100);
+		// $xml = curl_exec($ch);
+		curl_exec($ch);
+		curl_close($ch);
+
+		// echo $xml;
 		exit;
 	}
 }
