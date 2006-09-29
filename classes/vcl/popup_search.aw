@@ -331,6 +331,7 @@ class popup_search extends aw_template
 					"name" => "s[submit]",
 					"type" => "submit",
 					"value" => "Vali",
+					"class" => "sbtbutton"
 				));
 
 				$htmlc->finish_output(array(

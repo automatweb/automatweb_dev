@@ -26,7 +26,7 @@
   <!-- SUB: disabled_tab_L1 -->
   <!-- END SUB: disabled_tab_L1 -->
 
-
+<!-- SUB: HAS_TABS -->
 	<br class="clear" />
 	<div class="toiming">
 		{VAR:qa_pop}
@@ -35,6 +35,7 @@
 <!--		<a href="#" class="nupp"><img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />Ajalugu <img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a> -->
 		<a href="{VAR:srch_link}" class="nupp"><img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_luup.gif" alt="" width="13" height="13" border="0" class="ikoon" />Otsi <img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>
 	</div>
+
 </div>
 <!-- //päis -->
 
@@ -69,6 +70,10 @@
 		<br class="clear" />
 	</div>
 
+<!-- END SUB: HAS_TABS -->
+<!-- SUB: NO_TABS -->
+</div>
+<!-- END SUB: NO_TABS -->
 
 <div id="help_layer" style="background-color: #F7F7F7; border: 1px solid #91DA52; display: none; padding: 5px;">
 <div id="helptext_layer" style="font-family: verdana, sans-serif; font-size: 11px; font-weight: normal; color: #000000; height: 28px; background-color: #F7F7F7; ">

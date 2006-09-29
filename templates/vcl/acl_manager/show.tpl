@@ -1,4 +1,3 @@
-<br><br><br>
 <form name="changeform" method="POST" action="orb.{VAR:ext}">
 <table border="0" width="100%" bgcolor="#efefef" cellpadding="0" cellspacing="0">
 	<tr>

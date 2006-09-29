@@ -178,13 +178,16 @@
 }
 
 .awmenuedittabletext {
+	font-size: 12px;
 	background: #e1e1e1;
 	padding: 3px 7px;
 }
 .awmenuedittabletext a {
+	font-size: 12px;
 	color: #0018af;
 }
 .awmenuedittablehead {
+	font-size: 12px;
 	background: #05a6e9;
 	font-weight: bold;
 	color: #fff;
@@ -192,9 +195,11 @@
 	text-align: center
 }
 .awmenuedittablehead a {
+	font-size: 12px;
 	color: #ffffff;
 }
 .awmenuedittablerow {
+	font-size: 12px;
 	background: #e1e1e1;
 	padding: 3px 7px;
 }

@@ -101,9 +101,10 @@ $sf->vars(array(
 		"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 	)),
 ));
-
+$shwy = (empty($site_title) || aw_global_get("hide_yah")) && $_GET["class"] != "admin_if";
 $sf->vars(array(
-	"YAH" => empty($site_title) || aw_global_get("hide_yah") ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH"),
+	"YAH" => $shwy ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH"),
+	"YAH2" => $shwy ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH2"),
 ));
 
 $tmp = array();

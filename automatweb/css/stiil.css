@@ -260,7 +260,6 @@ a:hover {text-decoration: underline}
 }
 /* sisu kast */
 #sisu {
-	min-width: 1005px;
 	background: #fff;
 	margin-left: 5px;
 	border-top: 1px solid #0373ac;
@@ -401,7 +400,6 @@ span.kast {
 }
 /* jalus */ 
 #jalus {
-	min-width: 998px;
 	background: #05a6e9 url('/automatweb/images/aw06/jalus_t.gif') repeat-x left bottom;
 	padding: 7px 0 9px 12px;
 	color: #82d2f3;

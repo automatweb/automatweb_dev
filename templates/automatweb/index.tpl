@@ -76,6 +76,7 @@ function check_generic_unloader()
 
 <body onResize="document.execCommand('Refresh')" onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
 <!-- päis -->
+		<!-- SUB: YAH -->
 <div id="pais">
 	<div class="logo">
 		<span>{VAR:prod_family}</span>
@@ -90,19 +91,19 @@ function check_generic_unloader()
 		<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" class="logout">Logi välja</a>
 	</div>
 	<div class="olekuriba">Asukoht:
-		<!-- SUB: YAH -->
 		{VAR:site_title}
-		<!-- END SUB: YAH -->
 	</div>
+		<!-- END SUB: YAH -->
 
 	{VAR:content}
 <!-- //sisu -->
 <!-- jalus -->
+<!-- SUB: YAH2 -->
 	<div id="jalus">
 		AutomatWeb&reg; on Struktuur Meedia registreeritud kaubamärk. Kõik õigused kaitstud, &copy; 1999-2006. <br />
 		Palun külasta meie kodulehekülgi: <a href="http://www.struktuur.ee">Struktuur Meedia</a>, <a href="http://www.automatweb.com">AutomatWeb</a>.
 	</div>
+<!-- END SUB: YAH2 -->
 <!--//jalus -->
-<img src="{VAR:baseurl}/automatweb/images/aw06/blank.gif" alt="#" width="1010" height="1" />
 </body>
 </html>
