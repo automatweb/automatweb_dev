@@ -28,20 +28,20 @@ class quick_add extends class_base
 			$ret[$pn]["value"] = "";
 		}
 		$ret[$prop["name"]."[sbt]"] = array(
+			"type" => "text",
 			"name" => $prop["name"]."[sbt]",
-			"type" => "submit",
-			"caption" => t("Lisa"),
 			"parent" => $prop["parent"],
 			"no_caption" => 1,
-			"store" => "no"
-		);
-		$ret[$prop["name"]."[sbtm]"] = array(
-			"name" => $prop["name"]."[sbtm]",
-			"type" => "submit",
-			"caption" => t("Lisa ja muuda"),
-			"parent" => $prop["parent"],
-			"no_caption" => 1,
-			"store" => "no"
+			"store" => "no",
+			"value" => html::submit(array(
+				"name" => $prop["name"]."[sbt]",
+				"class" => "sbtbutton",
+				"value" => t("Lisa")
+			))." ".html::submit(array(
+				"name" => $prop["name"]."[sbtm]",
+				"value" => t("Lisa ja t&auml;ienda"),
+				"class" => "sbtbutton"
+			))
 		);
 		return $ret;
 	}
@@ -61,18 +61,23 @@ class quick_add extends class_base
 
 		if ($add)
 		{
-			$o = obj();
-			$o->set_class_id(@constant($prop["clid"]));
-			$o->set_parent($arr["obj_inst"]->id());
+			$clss = aw_ini_get("classes");
+			$class = basename($clss[@constant($prop["clid"])]["file"]);
+			$d = array(
+				"class" => $class,
+				"action" => "submit",
+				"parent" => $arr["obj_inst"]->id(),
+			);
 			foreach($prop["props"] as $p)
 			{
-				$o->set_prop($p, $prop["value"][$p]);
+				$d[$p] = $prop["value"][$p];
 			}
-			$o->save();
+			$i = get_instance(@constant($prop["clid"]));
+			$rv = $i->submit($d);
 
 			if ($prop["value"]["sbtm"] != "")
 			{
-				header("Location: ".$this->mk_my_orb("change", array("id" => $o->id(), "return_url" => $arr["request"]["post_ru"]), $o->class_id()));
+				header("Location: ".$rv);
 				die();
 			}
 

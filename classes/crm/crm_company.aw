@@ -474,14 +474,17 @@ default group=org_objects
 
 				@layout all_proj_search_b_top type=vbox parent=all_proj_search_b
 
+					@property all_proj_search_name type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
+					@caption Projekti nimi
+
 					@property all_proj_search_cust type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
 					@caption Klient
 
 					@property all_proj_search_part type=text size=28 parent=all_proj_search_b_top store=no captionside=top
 					@caption Osaleja
 
-					@property all_proj_search_name type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
-					@caption Projekti nimi
+					@property all_proj_search_state type=chooser store=no parent=all_proj_search_b_top  captionside=top
+					@caption Staatus
 
 					@property all_proj_search_code type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
 					@caption Projekti kood
@@ -511,8 +514,6 @@ default group=org_objects
 					@property all_proj_search_end_to type=date_select store=no parent=all_proj_search_b_end  captionside=top format=day_textbox,month_textbox,year_textbox
 					@caption L&otilde;pp kuni
 
-					@property all_proj_search_state type=select store=no parent=all_proj_search_b  captionside=top
-					@caption Staatus
 
 			@layout all_proj_search_but_row type=hbox parent=projects_tree
 
@@ -521,9 +522,6 @@ default group=org_objects
 
 				@property all_proj_search_change_mode_sbt type=submit  parent=all_proj_search_but_row no_caption=1
 				@caption Otsi ja muuda vormi
-
-				@property all_proj_search_clear type=submit  parent=all_proj_search_but_row no_caption=1
-				@caption T&uuml;hista otsing
 
 		@layout projects_table type=vbox parent=projects_main
 			@property projects_listing_table type=table no_caption=1 parent=projects_table no_caption=1
@@ -541,14 +539,17 @@ default group=org_objects
 
 				@layout my_proj_search_b_top type=vbox parent=my_proj_search_b
 
+					@property proj_search_name type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
+					@caption Projekti nimi
+
 					@property proj_search_cust type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
 					@caption Klient
 
 					@property proj_search_part type=text size=18 parent=my_proj_search_b_top store=no captionside=top
 					@caption Osaleja
 
-					@property proj_search_name type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
-					@caption Projekti nimi
+					@property proj_search_state type=chooser store=no parent=my_proj_search_b_top  captionside=top
+					@caption Staatus
 
 					@property proj_search_code type=textbox store=no parent=my_proj_search_b_top size=18 captionside=top
 					@caption Projekti kood
@@ -567,8 +568,6 @@ default group=org_objects
 					@property proj_search_dl_to type=date_select store=no parent=my_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox
 					@caption T&auml;htaeg kuni
 
-			@property proj_search_state type=select store=no parent=my_proj_search_b  captionside=top
-			@caption Staatus
 
 			@layout my_proj_search_but_row type=hbox parent=my_proj_search
 
@@ -577,9 +576,6 @@ default group=org_objects
 
 				@property proj_search_change_mode_sbt type=submit  parent=my_proj_search_but_row no_caption=1
 				@caption Otsi ja muuda vormi
-
-				@property proj_search_clear type=submit  parent=my_proj_search_but_row no_caption=1
-				@caption T&uuml;hista otsing
 
 		@layout my_proj_qadd type=vbox parent=my_proj_search_group closeable=1 area_caption=Kiirlisamine
 
@@ -1888,7 +1884,7 @@ class crm_company extends class_base
 			case "proj_search_state":
 
 				$proj_i = get_instance(CL_PROJECT);
-				$data["options"] = array("" => "") + $proj_i->states;
+				$data["options"] = array("" => t("K&otilde;ik")) + $proj_i->states;
 				if (!isset($arr["request"]["proj_search_state"]))
 				{
 					$data["value"] = PROJ_IN_PROGRESS;
@@ -1898,7 +1894,14 @@ class crm_company extends class_base
 					$data["value"] = $arr["request"][$data["name"]];
 				}
 				break;
+
 			case "proj_search_cust":
+				if ($arr["request"]["do_proj_search"])
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				break;
+
 			case "proj_search_code":
 			case "proj_search_contact_person":
 			case "proj_search_task_name":
@@ -1967,6 +1970,16 @@ class crm_company extends class_base
 				break;
 
 			case "all_proj_search_cust":
+				if (!$arr["request"]["search_all_proj"])
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "all_proj_search_code":
 			case "all_proj_search_arh_code":
 			case "all_proj_search_contact_person":

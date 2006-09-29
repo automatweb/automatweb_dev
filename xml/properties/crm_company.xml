@@ -1328,6 +1328,18 @@
             <field>projects_listing_tree</field>
       </property>
       <property>
+            <name>all_proj_search_name</name>
+            <table>objects</table>
+            <group>org_projects_archive</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>all_proj_search_b_top</parent>
+            <size>33</size>
+            <captionside>top</captionside>
+            <field>all_proj_search_name</field>
+            <caption>Projekti nimi</caption>
+      </property>
+      <property>
             <name>all_proj_search_cust</name>
             <table>objects</table>
             <group>org_projects_archive</group>
@@ -1352,16 +1364,15 @@
             <caption>Osaleja</caption>
       </property>
       <property>
-            <name>all_proj_search_name</name>
+            <name>all_proj_search_state</name>
             <table>objects</table>
             <group>org_projects_archive</group>
-            <type>textbox</type>
+            <type>chooser</type>
             <store>no</store>
             <parent>all_proj_search_b_top</parent>
-            <size>33</size>
             <captionside>top</captionside>
-            <field>all_proj_search_name</field>
-            <caption>Projekti nimi</caption>
+            <field>all_proj_search_state</field>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>all_proj_search_code</name>
@@ -1476,17 +1487,6 @@
             <caption>L&amp;amp;otilde;pp kuni</caption>
       </property>
       <property>
-            <name>all_proj_search_state</name>
-            <table>objects</table>
-            <group>org_projects_archive</group>
-            <type>select</type>
-            <store>no</store>
-            <parent>all_proj_search_b</parent>
-            <captionside>top</captionside>
-            <field>all_proj_search_state</field>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>all_proj_search_sbt</name>
             <table>objects</table>
             <group>org_projects_archive</group>
@@ -1509,17 +1509,6 @@
             <caption>Otsi ja muuda vormi</caption>
       </property>
       <property>
-            <name>all_proj_search_clear</name>
-            <table>objects</table>
-            <group>org_projects_archive</group>
-            <type>submit</type>
-            <parent>all_proj_search_but_row</parent>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>all_proj_search_clear</field>
-            <caption>T&amp;amp;uuml;hista otsing</caption>
-      </property>
-      <property>
             <name>projects_listing_table</name>
             <table>objects</table>
             <group>org_projects_archive</group>
@@ -1528,6 +1517,18 @@
             <parent>projects_table</parent>
             <store>no</store>
             <field>projects_listing_table</field>
+      </property>
+      <property>
+            <name>proj_search_name</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>my_proj_search_b_top</parent>
+            <size>18</size>
+            <captionside>top</captionside>
+            <field>proj_search_name</field>
+            <caption>Projekti nimi</caption>
       </property>
       <property>
             <name>proj_search_cust</name>
@@ -1554,16 +1555,15 @@
             <caption>Osaleja</caption>
       </property>
       <property>
-            <name>proj_search_name</name>
+            <name>proj_search_state</name>
             <table>objects</table>
             <group>my_projects</group>
-            <type>textbox</type>
+            <type>chooser</type>
             <store>no</store>
             <parent>my_proj_search_b_top</parent>
-            <size>18</size>
             <captionside>top</captionside>
-            <field>proj_search_name</field>
-            <caption>Projekti nimi</caption>
+            <field>proj_search_state</field>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>proj_search_code</name>
@@ -1634,17 +1634,6 @@
             <caption>T&amp;amp;auml;htaeg kuni</caption>
       </property>
       <property>
-            <name>proj_search_state</name>
-            <table>objects</table>
-            <group>my_projects</group>
-            <type>select</type>
-            <store>no</store>
-            <parent>my_proj_search_b</parent>
-            <captionside>top</captionside>
-            <field>proj_search_state</field>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>proj_search_sbt</name>
             <table>objects</table>
             <group>my_projects</group>
@@ -1665,17 +1654,6 @@
             <store>no</store>
             <field>proj_search_change_mode_sbt</field>
             <caption>Otsi ja muuda vormi</caption>
-      </property>
-      <property>
-            <name>proj_search_clear</name>
-            <table>objects</table>
-            <group>my_projects</group>
-            <type>submit</type>
-            <parent>my_proj_search_but_row</parent>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>proj_search_clear</field>
-            <caption>T&amp;amp;uuml;hista otsing</caption>
       </property>
       <property>
             <name>my_proj_qadd</name>

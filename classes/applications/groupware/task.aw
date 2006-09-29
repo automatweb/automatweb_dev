@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.144 2006/09/28 13:12:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.145 2006/09/29 15:12:03 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2754,7 +2754,7 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "deal_price",
 			"caption" => t("Kokkuleppehind"),
-			"align" => "right"
+			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "hr_price_currency",
@@ -2850,19 +2850,21 @@ class task extends class_base
 				"value" => $arr["obj_inst"]->prop("hr_price"),
 				"size" => 5
 			)),
-			"deal_price" => t("Hind")." ".html::textbox(array(
+			"deal_price" => 
+				"<table border=0><tr><td>".t("Hind")."</td><td>".t("Kogus")."</td><td>".t("&Uuml;hik")."</td></tr><tr>".
+				"<td>".html::textbox(array(
 				"name" => "deal_price",
 				"value" => $arr["obj_inst"]->prop("deal_price"),
 				"size" => 5
-			))."<br>".t("Kogus")." ".html::textbox(array(
+			))."</td><td>".html::textbox(array(
 				"name" => "deal_amount",
 				"value" => $arr["obj_inst"]->prop("deal_amount"),
 				"size" => 5
-			))."<br>".t("&Uuml;hik")." ".html::textbox(array(
+			))."</td><td>".html::textbox(array(
 				"name" => "deal_unit",
 				"value" => $arr["obj_inst"]->prop("deal_unit"),
 				"size" => 5
-			))."<br>",
+			))."</td></tr></table>",
 			"hr_price_currency" => html::select(array(
 				"name" => "hr_price_currency",
 				"options" => $curs,

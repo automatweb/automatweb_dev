@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.106 2006/09/28 16:15:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.107 2006/09/29 15:12:03 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -602,6 +602,10 @@ class project extends class_base
 				break;
 
 			case "contact_person_orderer":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
 				$data["options"] = array("" => t("--Vali--"));
 				foreach($arr["obj_inst"]->connections_from(array("type" => 9)) as $c)
 				{
@@ -638,6 +642,10 @@ class project extends class_base
 				break;
 
 			case "contact_person_implementor":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
 				$data["options"] = array("" => t("--Vali--"));
 				foreach($arr["obj_inst"]->connections_from(array("type" => 10)) as $c)
 				{
@@ -864,6 +872,14 @@ class project extends class_base
 			case "orderer":
 			case "implementor":
 			case "implementor_person":
+				if ($arr["request"]["connect_orderer"] && $prop["name"] == "orderer")
+				{
+					$prop["value"] = $arr["request"]["connect_orderer"];
+				}		
+				if ($arr["request"]["connect_impl"] && $prop["name"] == "implementor")
+				{
+					$prop["value"] = $arr["request"]["connect_impl"];
+				}		
 				if (count(explode(",", $prop["value"])) > 1)
 				{
 					$prop["value"] = $this->make_keys(explode(",", $prop["value"]));
@@ -927,6 +943,23 @@ class project extends class_base
 					$this->do_write_times_to_cal($arr);
 				}
 				break;*/
+
+			case "participants":
+				if ($arr["new"])
+				{
+					$p = get_current_person();
+					$prop["value"] = array(
+						$p->id() => $p->id(),
+					);
+				}
+				break;
+
+			case "state":
+				if (!$prop["value"])
+				{
+					$prop["value"] = PROJ_IN_PROGRESS ;
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -2578,6 +2611,8 @@ class project extends class_base
 		$arr["orderer"] = "0";
 		$arr["tf"] = $_GET["tf"];
 		$arr["team"] = $_GET["team"];
+		$arr["connect_orderer"] = $_GET["connect_orderer"];
+		$arr["connect_impl"] = $_GET["connect_impl"];
 	}
 
 	function request_execute($o)
