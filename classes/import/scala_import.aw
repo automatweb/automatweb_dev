@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.3 2006/10/02 12:04:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.4 2006/10/02 19:39:21 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -484,6 +484,9 @@ class scala_import extends class_base
 		// import categories and availability (availability)
 		if ( $arr['categories'] || $arr['availability'] )
 		{
+			// lets disable the acl checks for better performance during import
+			aw_disable_acl();
+
 			$warehouse_inst = get_instance(CL_SHOP_WAREHOUSE);
 			$warehouse = $o->prop('warehouse');
 			
@@ -552,6 +555,8 @@ class scala_import extends class_base
 					'warehouse_inst' => $warehouse_inst
 				));
 			}
+			// lets restore the acl checking after import
+			aw_restore_acl();
 		}
 		
 		$this->write_log(array(
