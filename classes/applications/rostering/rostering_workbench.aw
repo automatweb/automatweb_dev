@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.2 2006/09/20 12:04:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.3 2006/10/02 12:19:01 kristo Exp $
 // rostering_workbench.aw - T&ouml;&ouml;aja planeerimine 
 /*
 
@@ -791,27 +791,38 @@ class rostering_workbench extends class_base
 		$m = get_instance("applications/rostering/rostering_model");		
 		$start = get_week_start();
 		$end = get_week_start()+24*7*3600;
+		if ($arr["request"]["rostering_chart_start"])
+		{
+			$start = $arr["request"]["rostering_chart_start"];
+		}
+		if ($arr["request"]["rostering_chart_length"])
+		{
+			$end = $start + 24*$arr["request"]["rostering_chart_length"]*3600;
+		}
+		$columns = $arr["request"]["rostering_chart_length"] ? $arr["request"]["rostering_chart_length"] : 7;
 
 		$chart = get_instance("vcl/gantt_chart");
 		$chart->configure_chart (array (
 			"chart_id" => "person_wh",
 			"style" => "aw",
+			"subdivisions" => $columns > 1 ? 3 : 24,
+			"timespans" => $columns > 1 ? 3 : 24,
 			"start" => $start,
 			"end" => $end,
 			"width" => 850,
 			"row_height" => 10,
+			"columns" => $columns
 		));
 
 		$i = 0;
 		$days = array ("P", "E", "T", "K", "N", "R", "L");
-		$columns = 7;
 		while ($i < $columns)
 		{
-			$day_start = (get_day_start() + ($i * 86400));
+			$day_start = ($start + ($i * 86400));
 			$day = date ("w", $day_start);
 			$date = date ("j/m/Y", $day_start);
-			$uri = aw_url_change_var ("mrp_chart_length", 1);
-			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
+			$uri = aw_url_change_var ("rostering_chart_length", 1);
+			$uri = aw_url_change_var ("rostering_chart_start", $day_start, $uri);
 			$chart->define_column (array (
 				"col" => ($i + 1),
 				"title" => $days[$day] . " - " . $date,
@@ -856,8 +867,134 @@ class rostering_workbench extends class_base
 			}
 		}
 
-	
-		$arr["prop"]["value"] = $chart->draw_chart();
+		$arr["prop"]["value"] = $this->create_chart_navigation($arr);	
+		$arr["prop"]["value"] .= $chart->draw_chart();
+	}
+
+    // @attrib name=get_time_days_away
+	// @param days required type=int
+	// @param direction optional type=int
+	// @param time optional
+	// @returns UNIX timestamp for time of day start $days away from day start of $time
+	// @comment DST safe if cumulated error doesn't exceed 12h. If $direction is negative, time is computed for days back otherwise days to.
+	function get_time_days_away ($days, $time = false, $direction = 1)
+	{
+		if (false === $time)
+		{
+			$time = time ();
+		}
+
+		$time_daystart = mktime (0, 0, 0, date ("m", $time), date ("d", $time), date("Y", $time));
+		$day_start = ($direction < 0) ? ($time_daystart - $days*86400) : ($time_daystart + $days*86400);
+		$nodst_hour = (int) date ("H", $day_start);
+
+		if ($nodst_hour)
+		{
+			if ($nodst_hour < 13)
+			{
+				$dst_error = $nodst_hour;
+				$day_start = $day_start - $dst_error*3600;
+			}
+			else
+			{
+				$dst_error = 24 - $nodst_hour;
+				$day_start = $day_start + $dst_error*3600;
+			}
+		}
+
+		return $day_start;
+	}
+
+	function get_week_start ($time = false) //!!! somewhat dst safe (safe if error doesn't exceed 12h)
+	{
+		if (!$time)
+		{
+			$time = time ();
+		}
+
+		$date = getdate ($time);
+		$wday = $date["wday"] ? ($date["wday"] - 1) : 6;
+		$week_start = $time - ($wday * 86400 + $date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
+		$nodst_hour = (int) date ("H", $week_start);
+
+		if ($nodst_hour)
+		{
+			if ($nodst_hour < 13)
+			{
+				$dst_error = $nodst_hour;
+				$week_start = $week_start - $dst_error*3600;
+			}
+			else
+			{
+				$dst_error = 24 - $nodst_hour;
+				$week_start = $week_start + $dst_error*3600;
+			}
+		}
+
+		return $week_start;
+	}
+
+	function create_chart_navigation ($arr)
+	{
+		$start = (int) ($arr["request"]["rostering_chart_start"] ? $arr["request"]["rostering_chart_start"] : time ());
+		$columns = (int) ($arr["request"]["rostering_chart_length"] ? $arr["request"]["rostering_chart_length"] : 7);
+		$start = ($columns == 7) ? $this->get_week_start ($start) : $start;
+		$period_length = $columns * 86400;
+		$length_nav = array ();
+		$start_nav = array ();
+
+		for ($days = 1; $days < 8; $days++)
+		{
+			if ($columns == $days)
+			{
+				$length_nav[] = $days;
+			}
+			else
+			{
+				$length_nav[] = html::href (array (
+					"caption" => $days,
+					"url" => aw_url_change_var ("rostering_chart_length", $days),
+				));
+			}
+		}
+
+		$start_nav[] = html::href (array (
+			"caption" => t("<<"),
+			"title" => t("5 tagasi"),
+			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away (5*$columns, $start, -1))),
+		));
+		$start_nav[] = html::href (array (
+			"caption" => t("Eelmine"),
+			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away ($columns, $start, -1))),
+		));
+		$start_nav[] = html::href (array (
+			"caption" => t("Täna"),
+			"url" => aw_url_change_var ("rostering_chart_start", $this->get_week_start ()),
+		));
+		$start_nav[] = html::href (array (
+			"caption" => t("Järgmine"),
+			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away ($columns, $start))),
+		));
+		$start_nav[] = html::href (array (
+			"caption" => t(">>"),
+			"title" => t("5 edasi"),
+			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away (5*$columns, $start))),
+		));
+
+		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
+
+		if (is_oid ($arr["request"]["rostering_hilight"]))
+		{
+			$project = obj ($arr["request"]["rostering_hilight"]);
+			$deselect = html::href (array (
+				"caption" => t("Kaota valik"),
+				"url" => aw_url_change_var ("rostering_hilight", ""),
+			));
+			$change_url = html::obj_change_url ($project);
+			$navigation .= t(' &nbsp;&nbsp;Valitud projekt: ') . $change_url . ' (' . $deselect . ')';
+		}
+
+		return $navigation;
 	}
 
 	function _op_act_sel($arr)
