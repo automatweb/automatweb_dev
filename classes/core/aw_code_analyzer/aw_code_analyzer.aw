@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.3 2006/07/07 11:09:38 tarvo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.4 2006/10/02 11:54:43 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -915,6 +915,7 @@ class aw_code_analyzer extends class_base
 						break;
 
 					case T_VARIABLE:
+					case "@":
 						// the string is in the variable, mark as depend on all
 						$class = "variable dependency!";
 						$is_var = true;
