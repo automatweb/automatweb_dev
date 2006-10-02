@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.41 2006/09/28 09:58:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.42 2006/10/02 12:04:25 dragut Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2503,13 +2503,19 @@ class shop_warehouse extends class_base
 		return array(obj($config->prop("pkt_fld")), $ot);
 	}	
 
-	/** returns a list of packets in the warehouse $id, optionally under folder $parent
+	/** Returns a list of packets/products in the warehouse $id, optionally under folder $parent
 
 		@attrib param=name api=1
 
-		@param id required
-		@param parent optional
-		@param only_active optional
+		@param id required type=int
+			Warehouse object id
+		@param parent optional type=int
+			Parent folder id
+		@param only_active optional type=bool
+			To get only active packets/products
+
+		@returns Array of packet/product objects
+			
 	**/
 	function get_packet_list($arr)
 	{
@@ -2547,9 +2553,17 @@ class shop_warehouse extends class_base
 		{
 			$po = $po->get_original();
 		}
+		// maybe there are folders under the products folder, and this case, we need all those folder ids 
+		// so we can get the products from all of them:
+		$folders_tree = new object_tree(array(
+			'parent' => $po->id(),
+			'class_id' => CL_MENU
+		));
+		$folders_list = $folders_tree->to_list();
+		$product_parents = $folders_list->ids();
 		enter_function("warehouse::object_list");
 		$ol = new object_list(array(
-			"parent" => $po->id(),
+			"parent" => $products_parents,
 			"class_id" => CL_SHOP_PRODUCT,
 		));
 		$ret = array_merge($ret, $ol->arr());
@@ -2574,7 +2588,7 @@ class shop_warehouse extends class_base
 
 	/** Gives the folder oid where the orders are saved
 
-		@attrib name=get_order_folder api=1
+		@attrib name=get_order_folder params=pos api=1
 
 		@param id required type=object acl=view
 			Warehouse object
@@ -2597,6 +2611,30 @@ class shop_warehouse extends class_base
 		return $tmp;
 	}
 
+	/** Returns the products folder id
+
+		@attrib name=get_products_folder params=pos api=1
+
+		@param id required type=object acl=view
+			Warehouse object
+	**/
+	function get_products_folder($w)
+	{
+		error::raise_if(!$w->prop("conf"), array(
+			"id" => ERR_FATAL,
+			"msg" => sprintf(t("shop_warehouse::get_products_folder(%s): the warehouse has not configuration object set!"), $w)
+		));
+
+		$conf = obj($w->prop("conf"));
+		$tmp = $conf->prop("prod_fld");
+
+		error::raise_if(empty($tmp), array(
+			"id" => ERR_FATAL,
+			"msg" => sprintf(t("shop_warehouse::get_products_folder(%s): the warehouse configuration has no products folder set!"), $w)
+		));
+
+		return $tmp;
+	}
 	/** adds the selected items to the basket
 
 		@attrib name=add_to_cart api=1

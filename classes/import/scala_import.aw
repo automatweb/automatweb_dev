@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.2 2006/09/13 14:46:57 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.3 2006/10/02 12:04:01 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -21,6 +21,12 @@
 	@caption Seadete vorm
 	@comment Seadete vorm toote sisestamiseks
 
+	@property import_sections type=chooser multiple=1 field=meta method=serialize
+	@caption Mida importida
+
+	@property do_import type=text store=no
+	@caption Teosta import
+
 @groupinfo ftp_config caption="FTP seaded"
 @default group=ftp_config
 
@@ -36,14 +42,14 @@
 	@caption FTP parool
 	@comment Parool FTP kasutajale
 
-	@property ftp_file_location_pricing type=textbox table=scala_import
-	@caption pricing.xml
+	@property ftp_file_location_pricing type=textbox table=scala_import size=70
+	@caption Pricing.xml
 
-	@property ftp_file_location_customer type=textbox table=scala_import
-	@caption customer.xml
+	@property ftp_file_location_customer type=textbox table=scala_import size=70
+	@caption Customers.xml
 
-	@property ftp_file_location_availability type=textbox table=scala_import
-	@caption availability.xml 
+	@property ftp_file_location_availability type=textbox table=scala_import size=70
+	@caption Availability.xml 
 
 @groupinfo import_config caption="Impordi seaded"
 @default group=import_config
@@ -66,10 +72,10 @@
 		@property categories_config_table type=table
 		@caption Kategooriate seadete tabel
 
-	@groupinfo warehouse_status caption="Laoseis" parent=import_config
-	@default group=warehouse_status
+	@groupinfo availability caption="Laoseis" parent=import_config
+	@default group=availability
 
-		@property warehouse_status_config_table type=table
+		@property availability_config_table type=table
 		@caption Laoseisu seadete tabel
 
 @groupinfo recurrence_config caption="Korduste seadistamine"
@@ -94,12 +100,23 @@
 
 class scala_import extends class_base
 {
+
+	var $db_table_name = 'scala_prices_to_customers';
+	var $import_sections;
+
 	function scala_import()
 	{
 		$this->init(array(
 			"tpldir" => "import/scala_import",
 			"clid" => CL_SCALA_IMPORT
 		));
+
+		$this->import_sections = array(
+			'pricing' => t('Hinnad'),
+			'users' => t('Kasutajad'),
+			'categories' => t('Kategooriad'),
+			'availability' => t('Lao seis'),
+		);
 	}
 
 	function get_property($arr)
@@ -108,7 +125,25 @@ class scala_import extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case 'import_sections':
+				$prop['options'] = $this->import_sections;
+				break;
+			case 'do_import':
+				$saved_import_sections = $arr['obj_inst']->prop('import_sections');
+				$url_params = array();
+				foreach ($saved_import_sections as $key => $value)
+				{
+					$sections[$key] = $this->import_sections[$key];
+					$url_params[$key] = 1;
+					
+				}
+				$prop['value'] = html::href(array(
+					'caption' => sprintf(t('Impordi %s'), implode(', ', $sections)),
+					'url' => $this->mk_my_orb('do_import', array(
+						'id' => $arr['obj_inst']->id()
+					) + $url_params, CL_SCALA_IMPORT)
+				));
+				break;
 		};
 		return $retval;
 	}
@@ -140,12 +175,12 @@ class scala_import extends class_base
 		));
 
 		$xml_file = $arr['obj_inst']->prop('ftp_file_location_pricing');
-		$db_table_name = 'scala_prices_to_customers';
+//		$this->db_table_name = 'scala_prices_to_customers';
 
 		// if the database table doesn't exist, then we are going to create it:
-		if ( $this->db_table_exists($db_table_name) === false )
+		if ( $this->db_table_exists($this->db_table_name) === false )
 		{
-			$this->db_query('create table '.$db_table_name.' (
+			$this->db_query('create table '.$this->db_table_name.' (
 				id int primary key auto_increment not null,
 				client_code varchar(255),
 				product_code varchar(255),
@@ -153,10 +188,10 @@ class scala_import extends class_base
 			)');
 		}
 
-		$db_table_desc = $this->db_get_table($db_table_name);
+		$db_table_desc = $this->db_get_table($this->db_table_name);
 	
 		$format = t('Andmebaasi tabel (%s) >> XML fail (%s)');
-		$t->set_caption(sprintf($format, $db_table_name, basename($xml_file)));
+		$t->set_caption(sprintf($format, $this->db_table_name, basename($xml_file)));
 	
 		$saved_config = $arr['obj_inst']->meta('prices_config');
 
@@ -281,7 +316,7 @@ class scala_import extends class_base
 		return PROP_OK;
 	}
 
-	function _get_warehouse_status_config_table($arr)
+	function _get_availability_config_table($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
@@ -310,14 +345,14 @@ class scala_import extends class_base
 			'item_count'
 		);
 		
-		$saved_config = $arr['obj_inst']->meta('warehouse_status_config');
+		$saved_config = $arr['obj_inst']->meta('availability_config');
 
 		foreach ( $show_properties as $name )
 		{
 			$t->define_data(array(
 				'property' => $all_properties[$name]['caption'],
 				'xml_tag' => html::textbox(array(
-					'name' => 'warehouse_status_config['.$name.']',
+					'name' => 'availability_config['.$name.']',
 					'value' => $saved_config[$name]	
 				))
 			));
@@ -326,9 +361,9 @@ class scala_import extends class_base
 		return PROP_OK;
 	}
 
-	function _set_warehouse_status_config_table($arr)
+	function _set_availability_config_table($arr)
 	{
-		$arr['obj_inst']->set_meta('warehouse_status_config', $arr['request']['warehouse_status_config']);
+		$arr['obj_inst']->set_meta('availability_config', $arr['request']['availability_config']);
 		return PROP_OK;
 	}
 
@@ -352,9 +387,513 @@ class scala_import extends class_base
 		return $this->parse();
 	}
 
-	function do_db_upgrade($table, $field, $query, $error)
+	/** 
+		@attrib name=do_import nologin=1 all_args=1
+		@param id required type=int acl=view
+			Scala import object id
+		@param pricing optional type=int 
+			Import pricing data
+		@param users optional type=int 
+			Import users
+		@param categories optional type=int
+			Import categories
+		@param availability optional type=int 
+			Import availability data
+        **/
+	function do_import($arr)
 	{
 
+		$log_str = '';
+		$log_file_name = 'scala_import_log_'.date('d-m-Y-H-i-s').'.log';
+		if ( $this->can('view', $arr['id']) )
+		{
+			$o = new object($arr['id']);
+		}
+		else
+		{
+			$log_str .= "[ error ] Scala Import object is not accessible\n";
+			$this->write_log(array(
+				'log_str' => $log_str,
+				'file_name' => $log_file_name
+			));
+			return false;
+		}
+
+/*
+	NOTES
+
+		- asjalik oleks pidada ka mingit logi selle kohta, et kuidas import kulges
+		- see logi võiks tekkida kuskile faili, aga seda peaks olema võimalik 
+		vaadata ka läbi impordi liidese
+*/	
+		// import prices
+		// we need ftp connection
+
+		$ftp = get_instance('protocols/file/ftp');
+
+		$connection = $ftp->connect(array(
+			'host' => $o->prop('ftp_host'),
+			'user' => $o->prop('ftp_user'),
+			'pass' => $o->prop('ftp_password')
+		));
+		
+		// import pricing
+		if ( $arr['pricing'] )
+		{
+			$log_str .= "[ info ] Import pricing\n";
+			$pricing_xml = $o->prop('ftp_file_location_pricing');
+		//	$raw_xml = file_get_contents($pricing_xml);
+			$raw_xml = $ftp->get_file($pricing_xml);
+
+			if ( !empty($raw_xml) )
+			{
+				$this->_import_prices(array(
+					'raw_xml' => $raw_xml,
+					'obj_inst' => $o
+				));
+			}
+			else
+			{
+				$log_str .= "[ error ] Couldn\"t get the ".$pricing_xml." file, so will not import pricing data\n";
+			}
+			
+		}
+
+		// import users
+		if ( $arr['users'] )
+		{
+			$log_str .= "[ info ] Import users\n";
+			$customer_xml = $o->prop('ftp_file_location_customer');
+		//	$raw_xml = file_get_contents($customer_xml);
+			$raw_xml = $ftp->get_file($customer_xml);
+
+			if ( !empty($raw_xml) )
+			{
+				$this->_import_users(array(
+					'raw_xml' => $raw_xml,
+					'obj_inst' => $o
+				));
+			}
+			else
+			{
+				$log_str .= "[ error ] Couldn\"t get the ".$customer_xml." file, so will not import users\n";
+			}
+		}
+
+
+		// import categories and availability (availability)
+		if ( $arr['categories'] || $arr['availability'] )
+		{
+			$warehouse_inst = get_instance(CL_SHOP_WAREHOUSE);
+			$warehouse = $o->prop('warehouse');
+			
+			if ( $this->can('view', $warehouse) )
+			{
+				$warehouse = new object($warehouse);
+			}
+			else
+			{
+				$log_str .= "[ error ] Warehouse object is not accessible\n";
+				$this->write_log(array(
+					'log_str' => $log_str,
+					'file_name' => $log_file_name
+				));
+			}
+
+			$products_folder = $warehouse_inst->get_products_folder($warehouse);
+			// exit if the products folder isn't found
+			if ( empty($products_folder) )
+			{
+				$log_str .= "[ error ] Products folder object is not accessible\n";
+				$this->write_log(array(
+					'log_str' => $log_str,
+					'file_name' => $log_file_name
+				));
+				return false;
+			//	$products_folder = 7544;
+			}
+
+
+			$availability_xml = $o->prop('ftp_file_location_availability');
+		//	$raw_xml = file_get_contents($availability_xml);
+			$raw_xml = $ftp->get_file($availability_xml);
+
+			// exit if the xml file content isn't available
+			if ( empty($raw_xml) )
+			{
+				$log_str .= "[ error ] Couldn\"t get the ".$availability_xml." file, so will not import availability (warehouse status) data\n";
+				$this->write_log(array(
+					'log_str' => $log_str,
+					'file_name' => $log_file_name
+				));
+				return false;
+			}
+
+			// import categories
+			if ( $arr['categories'] )
+			{
+				$log_str .= "[ info ] Import categories\n";
+				$this->_import_categories(array(
+					'obj_inst' => $o,
+					'raw_xml' => $raw_xml,
+					'products_folder' => $products_folder
+				));
+			}
+
+			// import warehouse status
+			if ( $arr['availability'] )
+			{
+				$log_str .= "[ info ] Import availability\n";
+				$this->_import_availability(array(
+					'obj_inst' => $o,
+					'raw_xml' => $raw_xml,
+					'products_folder' => $products_folder,
+					'warehouse' => $warehouse,
+					'warehouse_inst' => $warehouse_inst
+				));
+			}
+		}
+		
+		$this->write_log(array(
+			'log_str' => $log_str,
+			'file_name' => $log_file_name
+		));
+
+	}
+
+	function _import_prices($arr)
+	{
+		list($parsed_xml['values'], $parsed_xml['tags']) = parse_xml_def(array('xml' => $arr['raw_xml']));
+
+		$config = array_flip($arr['obj_inst']->meta('prices_config'));
+
+		$this->db_query('delete from '.$this->db_table_name);
+		$this->db_query('alter table '.$this->db_table_name.' auto_increment=1');
+		foreach ($parsed_xml['values'] as $data)
+		{
+			if ($data['tag'] == 'Line' && $data['type'] == 'open')
+			{
+				$fields = array();
+			}
+
+			if ($data['type'] == 'complete')
+			{
+
+				if ( array_key_exists($data['tag'], $config) )
+				{
+					$fields[] = ' '.$config[$data['tag']].' = \''.$data['value'].'\' ';
+				}
+			}
+
+			if ($data['tag'] == 'Line' && $data['type'] == 'close')
+			{
+				$sql = 'insert into '.$this->db_table_name.' set '.implode(',', $fields);
+				$this->db_query($sql);
+			}
+		}
+
+		return true;
+	}
+
+	function _import_users($arr)
+	{
+		// mh, xml parser don't like plain '&' characters, so i'll replace them with entities:
+		$arr['raw_xml'] = str_replace('&', '&amp;', $arr['raw_xml']);
+
+		list($xml_values, $xml_tags) = parse_xml_def(array('xml' => $arr['raw_xml']));
+		
+		$config = array_flip($arr['obj_inst']->meta('users_config'));
+
+		$user_inst = get_instance(CL_USER);
+		$group_inst = get_instance(CL_GROUP);
+
+		$group = $arr['obj_inst']->prop('user_group');
+		if ( $this->can('view', $group) )
+		{
+			$group = new object($group);
+		}
+		else
+		{
+			// so exit if the group isn't set
+			// lets write the log thingie later, i need a better way to keep log anyway
+			return false;
+		}
+
+		$data = $this->_parse_data_from_xml(array(
+			'xml_values' => $xml_values,
+			'config' => $config,
+			'key' => 'uid'
+		));
+		foreach ($data as $user_data)
+		{
+			if (!$user_inst->username_is_taken($user_data['uid']))
+			{
+				$user = $user_inst->add_user($user_data);
+				$group_inst->add_user_to_group($user, $group);
+			}
+		}
+
+		return true;
+	}
+
+	function _import_categories($arr)
+	{
+		$arr['raw_xml'] = str_replace('&', '&amp;', $arr['raw_xml']);
+		list($xml_values, $xml_tags) = parse_xml_def(array('xml' => $arr['raw_xml']));
+		$config = array_flip($arr['obj_inst']->meta('categories_config'));
+		$data = $this->_parse_data_from_xml(array(
+			'xml_values' => $xml_values,
+			'config' => $config,
+			'key' => 'name'
+		));
+
+		// new categories
+		$categories = array();
+		foreach ($data as $cat)
+		{
+			preg_match('/^\D+/', $cat['name'], $matches);
+			$categories[$matches[0]][] = $cat;
+		}
+
+		// existing categories:
+		$existing_categories = $this->get_categories(array(
+			'parent' => $arr['products_folder']
+		));
+
+		foreach ($categories as $cat_name => $sub_categories)
+		{
+			$parent = array_search($cat_name, $existing_categories);
+			if (!$parent)
+			{
+				// create folder
+				$o = new object();
+				$o->set_parent($arr['products_folder']);
+				$o->set_class_id(CL_MENU);
+				$o->set_name($cat_name);
+				$o->set_status(STAT_ACTIVE);
+				$parent = $o->save();
+			}
+			else
+			{
+				$o = new object($parent);
+				if ($o->status() != STAT_ACTIVE)
+				{
+					$o->set_status(STAT_ACTIVE);
+					$o->save();
+				}
+				
+				unset($existing_categories[$parent]);
+			}
+
+			foreach ($sub_categories as $sub_category)
+			{
+				$sub_cat = array_search($sub_category['name'], $existing_categories);
+				if (!$sub_cat)
+				{
+					// create folder
+					$o = new object();
+					$o->set_parent($parent);
+					$o->set_class_id(CL_MENU);
+					$o->set_name($sub_category['name']);
+					$o->set_status(STAT_ACTIVE);
+					$o->save();
+				}
+				else
+				{
+					$o = new object($sub_cat);
+					if ($o->status() != STAT_ACTIVE)
+					{
+						$o->set_status(STAT_ACTIVE);
+						$o->save();
+					}
+					unset($existing_categories[$sub_cat]);
+				}
+			}
+
+		}
+
+		// those categories which are in aw but not in xml, we set their status to not active
+		foreach ($existing_categories as $oid => $name)
+		{
+			$o = new object($oid);
+			if ($o->status() == STAT_ACTIVE)
+			{
+				$o->set_status(STAT_NOTACTIVE);
+				$o->save();
+			}
+		}
+
+		return true;
+	}
+
+	function _import_availability($arr)
+	{
+		$arr['raw_xml'] = str_replace('&', '&amp;', $arr['raw_xml']);
+		list($xml_values, $xml_tags) = parse_xml_def(array('xml' => $arr['raw_xml']));
+		$config = array_flip($arr['obj_inst']->meta('availability_config'));
+		$product_config_form = $arr['obj_inst']->prop('config_form');
+
+		// category name and product name both go into the objects name property, so
+		// i add prefix cat_ to category config property name, so they won't conflict
+		// while parsing xml
+		$cat_config = array_flip($arr['obj_inst']->meta('categories_config'));
+		foreach ($cat_config as $key => $value)
+		{
+			$config[$key] = 'cat_'.$value;
+		}
+
+		$data = $this->_parse_data_from_xml(array(
+			'xml_values' => $xml_values,
+			'config' => $config,
+			'key' => 'code'
+		));
+
+		// categories
+		$categories = $this->get_categories(array(
+			'parent' => $arr['products_folder']
+		));
+
+		// existing products 
+		$existing_products = array();
+
+		$warehouse_products = $arr['warehouse_inst']->get_packet_list(array(
+			'id' => $arr['warehouse']->id()
+		));
+
+		foreach ($warehouse_products as $o)
+		{
+			$existing_products[$o->id()] = $o->prop('code');
+			echo "-- existing product: ".$o->id().", code: ".$o->prop('code').", name: ".$o->name()."<br>\n";
+
+			// lets set the config form here roght now, just to make sure all the existing products have it
+		//	$o->set_meta('cfgform_id', $product_config_form);
+		//	$o->save();
+		}
+		// products from xml
+		foreach ($data as $product_code => $product_data)
+		{
+			$product = array_search($product_code, $existing_products);
+			if (!$product)
+			{
+				$category = array_search($product_data['cat_name'], $categories);
+				if ($category)
+				{
+					echo "## creating new product ".$product_data['name']."<br>\n";
+					// create a new product
+					$o = new object();
+					$o->set_class_id(CL_SHOP_PRODUCT);
+					$o->set_name($product_data['name']);
+					$o->set_parent($category);
+					$o->set_prop('code', $product_data['code']);
+					$o->set_prop('item_count', $product_data['item_count']);
+					$o->set_status(STAT_ACTIVE);
+					$o->set_meta('cfgform_id', $product_config_form);
+					$o->save();
+				}
+			}
+			else
+			{
+				// product exists, set it active
+				$o = new object($product);
+				if ($o->status() != STAT_ACTIVE)
+				{
+					$o->set_status(STAT_ACTIVE);
+					$o->save();
+				}
+				echo "## product exists: ".$product_data['name']." <br>\n";	
+				unset($existing_products[$product]);
+			}
+		}
+		echo "end of new products<br>\n";
+		echo "setting others not active<br>\n";
+		// those products which are in aw but not in xml, we set their status to not active
+		foreach ($existing_products as $oid => $code)
+		{
+			$o = new object($oid);
+			if ($o->status() == STAT_ACTIVE)
+			{
+				$o->set_status(STAT_NOTACTIVE);
+				$o->save();
+			}
+		}
+		arr('availability import complete');
+		return true;
+	}
+
+	function _parse_data_from_xml($arr)
+	{
+		$xml_values = $arr['xml_values']; // xml values
+		$config = $arr['config']; // xml to prop name mapping
+		$key = $arr['key']; // the property name, which value is going to be the key in the result array
+		$data = array();
+		foreach ( $xml_values as $value )
+		{
+			if ($value['tag'] == 'Line' && $value['type'] == 'open')
+			{
+				$params = array();
+			}
+
+			if ($value['type'] == 'complete')
+			{
+				if ( array_key_exists($value['tag'], $config) )
+				{
+					$params[ $config[ $value['tag'] ] ] = $value['value'];
+				}
+			}
+
+			if ($value['tag'] == 'Line' && $value['type'] == 'close')
+			{
+				if (empty($key))
+				{
+					$data[] = $params;
+				}
+				else
+				{
+					$data[$params[$key]] = $params;
+				}
+			}
+		}
+		return $data;
+	}
+
+	function get_categories($arr)
+	{
+		$categories = array();
+		$ot = new object_tree(array(
+			'class_id' => CL_MENU,
+			'parent' => $arr['parent'],
+		));
+
+		$ol = $ot->to_list();
+		
+		foreach ($ol->arr() as $o)
+		{
+			$categories[$o->id()] = $o->name();
+		}
+
+		return $categories;
+	}
+
+	function write_log($arr)
+	{
+		// write the log file:
+		$logs_dir = aw_ini_get('site_basedir').'/files/scala_import_logs';
+		if ( !is_dir($logs_dir) )
+		{
+			mkdir($logs_dir);
+		}
+		$log_file = $logs_dir.'/'.$arr['file_name'];
+
+		$file = fopen($log_file, 'a');
+		fwrite($file, $arr['log_str']);
+		fclose($file);
+
+		return true;
+	}
+
+
+	function do_db_upgrade($table, $field, $query, $error)
+	{
 		$int = array(
 			'warehouse',
 			'user_group',
@@ -403,35 +942,7 @@ class scala_import extends class_base
 			));
 			return true;
 		}
-/*
-		switch ($field)
-		{
-			case 'manufacturer':
-				$this->db_add_col($table, array(
-					'name' => $field,
-					'type' => 'int'
-				));
-                                return true;
-			case 'engine_power':
-				$this->db_add_col($table, array(
-					'name' => $field,
-					'type' => 'float'
-				));
-                                return true;
-			case 'mast_material_other':
-				$this->db_add_col($table, array(
-					'name' => $field,
-					'type' => 'varchar(255)'
-				));
-                                return true;
-			case 'additional_equipment_info':
-				$this->db_add_col($table, array(
-					'name' => $field,
-					'type' => 'text'
-				));
-                                return true;
-                }
-*/
+
 		return false;
 	}
 }

@@ -29,6 +29,22 @@
 			</function>
 		</action>
 
+		<action name="get_order_folder">
+			<function name="get_order_folder">
+				<arguments>
+					<required name="id" type="object" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_products_folder">
+			<function name="get_products_folder">
+				<arguments>
+					<required name="id" type="object" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="add_to_cart">
 			<function name="add_to_cart">
 				<arguments>

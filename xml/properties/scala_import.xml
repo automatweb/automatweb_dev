@@ -31,6 +31,25 @@
             <comment>Seadete vorm toote sisestamiseks</comment>
       </property>
       <property>
+            <name>import_sections</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mida importida</caption>
+      </property>
+      <property>
+            <name>do_import</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>do_import</field>
+            <caption>Teosta import</caption>
+      </property>
+      <property>
             <name>ftp_host</name>
             <table>scala_import</table>
             <group>ftp_config</group>
@@ -62,24 +81,27 @@
             <table>scala_import</table>
             <group>ftp_config</group>
             <type>textbox</type>
+            <size>70</size>
             <field>ftp_file_location_pricing</field>
-            <caption>pricing.xml</caption>
+            <caption>Pricing.xml</caption>
       </property>
       <property>
             <name>ftp_file_location_customer</name>
             <table>scala_import</table>
             <group>ftp_config</group>
             <type>textbox</type>
+            <size>70</size>
             <field>ftp_file_location_customer</field>
-            <caption>customer.xml</caption>
+            <caption>Customers.xml</caption>
       </property>
       <property>
             <name>ftp_file_location_availability</name>
             <table>scala_import</table>
             <group>ftp_config</group>
             <type>textbox</type>
+            <size>70</size>
             <field>ftp_file_location_availability</field>
-            <caption>availability.xml </caption>
+            <caption>Availability.xml </caption>
       </property>
       <property>
             <name>prices_config_table</name>
@@ -109,12 +131,12 @@
             <caption>Kategooriate seadete tabel</caption>
       </property>
       <property>
-            <name>warehouse_status_config_table</name>
+            <name>availability_config_table</name>
             <table>objects</table>
-            <group>warehouse_status</group>
+            <group>availability</group>
             <type>table</type>
             <store>no</store>
-            <field>warehouse_status_config_table</field>
+            <field>availability_config_table</field>
             <caption>Laoseisu seadete tabel</caption>
       </property>
       <property>
@@ -154,10 +176,10 @@
                   <caption>Kategooriad</caption>
                   <parent>import_config</parent>
             </categories>
-            <warehouse_status>
+            <availability>
                   <caption>Laoseis</caption>
                   <parent>import_config</parent>
-            </warehouse_status>
+            </availability>
             <recurrence_config>
                   <caption>Korduste seadistamine</caption>
             </recurrence_config>
