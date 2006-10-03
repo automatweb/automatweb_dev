@@ -1640,7 +1640,7 @@ class crm_company extends class_base
 
 			case "reg_nr":
 				// append link to go to thingie
-				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://info.eer.ee/ari/ariweb_package1.lihtparingu_vastus METHOD=POST name=kraaks><INPUT TYPE=text NAME=paritud_arinimi><INPUT TYPE=text NAME=paritud_arir_kood><input type=submit></form>\" );win.document.kraaks.paritud_arinimi.value = document.changeform.name.value;win.document.kraaks.paritud_arir_kood.value = document.changeform.reg_nr.value;win.document.kraaks.submit();'>&Auml;riregistri p&auml;ring</a>";
+				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://ar.eer.ee/lihtparing.py METHOD=POST name=liht><INPUT TYPE=text NAME=nimi><INPUT TYPE=text NAME=rkood><input type=submit><input type=hidden name=search value=1><input type=hidden name=lang value=est></form>\" );win.document.liht.nimi.value = document.changeform.name.value;win.document.liht.rkood.value = document.changeform.reg_nr.value;win.document.liht.submit();'>&Auml;riregistri p&auml;ring</a>";
 				break;
 
 			case "tax_nr":
