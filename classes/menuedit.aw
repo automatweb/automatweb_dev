@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.368 2006/06/19 16:56:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.369 2006/10/03 13:48:53 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -305,8 +305,19 @@ class menuedit extends aw_template
 		//	$section = aw_ini_get("frontpage");
 		//}
 
-		$realsect = $this->check_section($section);
 		$set_lang_id = false;
+		if (aw_ini_get("menuedit.language_in_url"))
+		{
+			list($lc, $section) = explode("/", $section, 2);
+			if ($lc != aw_global_get("LC"))
+			{
+				// switch to lang
+				$l = get_instance("languages");
+				$set_lang_id = $l->get_langid_for_code($lc);
+			}
+		}
+
+		$realsect = $this->check_section($section);
 		if ($this->can("view",$realsect))
 		{
 			$_obj = obj($realsect);
@@ -325,7 +336,7 @@ class menuedit extends aw_template
 			$class_id = $_obj->class_id();
 			if ($class_id == CL_MENU)
 			{
-				if (!($_obj->prop("type") == MN_CLIENT || aw_ini_get("config.object_translation") == 1))
+				if (!($_obj->prop("type") == MN_CLIENT || aw_ini_get("config.object_translation") == 1) && !$set_lang_id)
 				{
 					$set_lang_id = $_obj->lang_id();
 				};
@@ -336,7 +347,7 @@ class menuedit extends aw_template
 				if ($class_id == CL_DOCUMENT)
 				{
 					$pt = obj($_obj->parent());
-					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT))
+					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id)
 					{
 						$set_lang_id = $_obj->lang_id();
 					}
@@ -426,7 +437,6 @@ class menuedit extends aw_template
 			$c = get_instance("config");
 			$c->show_favicon(array());
 		}
-
 
 		// sektsioon ei olnud numbriline
 		if (!is_oid($section))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.198 2006/07/02 10:33:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.199 2006/10/03 13:49:04 kristo Exp $
 
 /*
 
@@ -2526,6 +2526,10 @@ class site_show extends class_base
 		else
 		{
 			$link = $this->cfg["baseurl"] ."/";
+			if (aw_ini_get("menuedit.language_in_url"))
+			{
+				$link .= aw_global_get("LC")."/";
+			}
 			if (aw_ini_get("menuedit.long_section_url"))
 			{
 				if ($o->alias() != "")
