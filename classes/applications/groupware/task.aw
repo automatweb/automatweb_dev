@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.145 2006/09/29 15:12:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.146 2006/10/03 13:59:29 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1540,10 +1540,16 @@ class task extends class_base
 		$u = get_instance(CL_USER);
 		$def_impl = $u->get_current_person();
 		$o_def_impl = array($def_impl => $def_impl);
-//		if($arr["obj_inst"]->id() > 0)	$cs = $arr["obj_inst"]->connections_from(array(
-//				"type" => "RELTYPE_ROW",
-//			));
-//		else $cs = array();	
+		if($arr["obj_inst"]->id() > 0)	
+		{
+			$cs = $arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_ROW",
+			));
+		}
+		else 
+		{
+			$cs = array();	
+		}
 		foreach ($cs as $key => $ro)
 		{
 			$ob = $ro->to();
