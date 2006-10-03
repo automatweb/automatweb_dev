@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.13 2006/09/28 16:50:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.14 2006/10/03 15:21:43 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -54,7 +54,7 @@
 	
 
 @groupinfo offerers_find caption="Otsing" parent=offerers
-@default group=offerers_find
+@default group=offerers_find$this_object->prop("procurement")
 	
 	@property offerers_find_tb type=toolbar no_caption=1 store=no
 	@layout offerers_find_l type=hbox width=20%:80%
@@ -414,6 +414,15 @@ class procurement_center extends class_base
 		));
 	}
 
+	function _get_first_cust_cat($o)
+	{
+		$ol = new object_list($o->connections_from(array(
+			"type" => "RELTYPE_CATEGORY",
+		)));
+		$ol->sort_by(array("prop" => "ord"));
+		return $ol->begin();
+	}
+
 	function _offerers_tr($arr)
 	{
 		classload("core/icons");
@@ -433,6 +442,53 @@ class procurement_center extends class_base
 			"var" => "p_id",
 			"icon" => icons::get_icon_url(CL_MENU)
 		));
+		
+		$cat_l = new object_list(array(
+			"class_id" => CL_CRM_CATEGORY,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		
+		foreach($cat_l->arr() as $cat)
+		{
+			$arr["prop"]["vcl_inst"]->add_item($arr["obj_inst"]->prop("offerers_folder"), array(
+				"id" => $cat->id(),
+				"name" => $cat->name(),
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $arr["obj_inst"]->id(),
+					"group" => "offerers",
+					"p_id" => $cat->id(),
+				)),
+			));
+		}
+		
+
+		
+/*		$arr["prop"]["vcl_inst"]->set_only_one_level_opened(1);
+		$node_id = 0;
+
+		if (!is_oid($arr['request']['category']))
+		{
+			$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
+			if ($f_cat)
+			{
+				$arr['request']['category'] = $f_cat->id();
+			}
+		}
+		$i = get_instance(CL_CRM_COMPANY);
+		$i->active_node = (int)$arr['request']['category'];
+		$i->generate_tree(array(
+			'tree_inst' => &$arr["prop"]["vcl_inst"],
+			'obj_inst' => $arr['obj_inst'],
+			'node_id' => &$node_id,
+			'conn_type' => 'RELTYPE_CATEGORY',
+			'skip' => array(CL_CRM_COMPANY),
+			'attrib' => 'category',
+			'leafs' => false,
+			'style' => 'nodetextbuttonlike',
+			"edit_mode" => 1
+		));		
+*/		
 		
 		$arr["prop"]["vcl_inst"]->add_item(0, array(
 			"id" => 1,
@@ -1168,11 +1224,22 @@ class procurement_center extends class_base
 			$arr["obj_inst"]->set_meta("search_data", null);
 			$arr["obj_inst"]->save();
 		}
-		else $ol = new object_list(array(
-			"class_id" => array(CL_FOLDER, CL_CRM_COMPANY, CL_CRM_PERSON),
-			"parent" => $parent,
-			"lang_id" => array(),
+		else 
+		{	
+			$ol = new object_list(array(
+				"class_id" => array(CL_FOLDER, CL_CRM_COMPANY, CL_CRM_PERSON),
+				"parent" => $parent,
+				"lang_id" => array(),
+				));
+			$cat_l = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"CL_CRM_COMPANY.RELTYPE_CATEGORY.id" => $arr["request"]["p_id"],
 			));
+			$ol->add($cat_l);
+			
+		}
 		$p_inst = get_instance(CL_CRM_PERSON);
 		foreach($ol->arr() as $o)
 		{
@@ -1409,6 +1476,46 @@ class procurement_center extends class_base
 
 		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->prop("offerers_folder");
 
+		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+		if ($o)
+		{
+			$co = $o->id();
+			$alias = $o->id();
+		}
+		else $co = $arr["obj_inst"]->id();
+
+
+		$tb->add_sub_menu(array(
+			"parent" => "add_item",
+			"name" => "add_cust_co",
+			"text" => t("Organisatsioon")
+		));
+		$link = $this->mk_my_orb('new',array(
+				'parent' => $co,
+				'alias_to' => "%s",
+				'reltype' => 3, // crm_company.CUSTOMER,
+				'return_url' => get_ru()
+			),
+			'crm_company'
+		);
+		$this->_do_cust_cat_tb_submenus($tb, $link, $arr["obj_inst"], "add_cust_co");
+
+		$link = $this->mk_my_orb('new',array(
+				'parent' => $co,
+				'alias_to' => "%s",
+				'reltype' => 3, // crm_company.CUSTOMER,
+				'return_url' => get_ru()
+			),
+			CL_CRM_PERSON
+		);
+		$tb->add_sub_menu(array(
+			"parent" => "add_item",
+			"name" => "add_cust_p",
+			"text" => t("Eraisik")
+		));
+		$this->_do_cust_cat_tb_submenus($tb, $link, $arr["obj_inst"], "add_cust_p");
+
+/*
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text'=> t('Hankijagrupp'),
@@ -1453,6 +1560,20 @@ class procurement_center extends class_base
 				"return_url" => get_ru(),
 			))
 		));
+*/
+
+		$tb->add_menu_item(array(
+			'parent'=>'add_item',
+			'text' => t('Hankija kategooria'),
+			'link' => $this->mk_my_orb('new',array(
+					'parent' => $parent,
+					'alias_to' => $alias,
+					'reltype' => 30, //RELTYPE_CATEGORY
+					'return_url' => get_ru()
+				),
+				'crm_category'
+			)
+		));
 
 		$tb->add_button(array(
 			'name' => 'del',
@@ -1462,6 +1583,65 @@ class procurement_center extends class_base
 			'confirm' => t("Kas oled kindel et soovid valitud pakkujad kustudada?")
 		));
 	}
+	
+	function _do_cust_cat_tb_submenus(&$tb, $link, $p, $p_str, $oncl = null)
+	{
+		$cnt = 0;
+		
+		$cat_l = new object_list(array(
+			"class_id" => CL_CRM_CATEGORY,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		
+		foreach($cat_l->arr() as $cat)
+		{
+			$cnt++;
+			$name = $p_str."_".$cat->id();
+//			if ($this->_do_cust_cat_tb_submenus($tb, $link, $cat->id(), $name, $oncl) > 0)
+//			{
+//				$tb->add_sub_menu(array(
+//					'parent'=> $p_str,
+//					"name" => $name,
+//					'text' => $cat->name(),
+//				));
+//			}
+			
+//			else
+//			{
+				$parm = array(
+					'parent'=>$p_str,
+					'text' => $cat->name(),
+					'link' => str_replace(urlencode("%s"), $cat->id(), str_replace("%s", $cat->id(), $link)),
+//					'url' => $this->mk_my_orb("change",array(
+//						"id" => $arr["obj_inst"]->id(),
+//						"group" => "offerers",
+//						"p_id" => $cat->id(),
+//					)),
+				);
+				
+//				if ($oncl !== NULL)
+//				{
+//					$parm["onClick"] = str_replace(urlencode("%s"), $cat->id(), str_replace("%s", $cat->id(), $oncl));
+//					$parm["link"] = "#";
+//				}
+				$tb->add_menu_item($parm);
+//			}
+			
+/*			$arr["prop"]["vcl_inst"]->add_item($arr["obj_inst"]->prop("offerers_folder"), array(
+				"id" => $cat->id(),
+				"name" => $cat->name(),
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $arr["obj_inst"]->id(),
+					"group" => "offerers",
+					"p_id" => $cat->id(),
+				)),
+			));
+*/		}
+		return $cnt;
+	}
+
+	
 	
 	function search_products($this_obj)
 	{
@@ -1946,12 +2126,15 @@ class procurement_center extends class_base
 			"action" => "add_to_cart"
 		));
 */		
+//		aw_global_set("changeform_target",  "_blank");
 		$tb->add_button(array(
 			"name" => "compare",
 			"img" => "rte_table.gif",
 			"tooltip" => t("Lisa v&otilde;rdlusesse"),
-			"action" => "add_to_compare",
-		//	"target" => "asdasdasd",
+//			"action" => "add_to_compare",
+			"url" => "javascript:document.changeform.target='_blank';javascript:submit_changeform('add_to_compare')",
+//			"onClick" => "javascridocument.changeform.target='_blank';submit_changeform('add_to_compare')"
+		//	"target" => "New window",
 		));
 	}
 	
@@ -2122,7 +2305,7 @@ class procurement_center extends class_base
 		$data = array("product" => t("Ajalugu"));
 		foreach($offerers->arr() as $offerer)
 		{
-			$data["offerer".$offerer->id()] = "ajalugu";
+			$data["offerer".$offerer->id()] = html::href(array("url" => html::get_change_url($offerer->id(), array("group" => "")), "caption" => t("Ajalugu")));
 		}
 		$t_offerer->define_data($data);
 
@@ -2155,10 +2338,13 @@ class procurement_center extends class_base
 		extract($arr);
 		$t_names = new vcl_table;
 //		$this->_init_compare_t($t_offerer);
-		$t_names->define_field(array("name" => "name", "caption" => t("Toote nimetus")));
+		$t_names->define_field(array("name" => "name", "caption" => t("Toote nimetus"), "nowrap" => 1,));
+		//$t_names->rowdefs["nowrap"] = 1;
 		foreach($products as $product)
 		{
-			if($product->prop("item_type") == $category) $t_names->define_data(array("name" => $product->name()));
+			//teeb stringi lühemaks, juhul kui on üle 100 tähemärgi
+			$name = substr($product->name(), 0, 100);
+			if($product->prop("item_type") == $category) $t_names->define_data(array("name" => $name));
 		}
 		return $t_names->draw();
 	}
@@ -2168,22 +2354,23 @@ class procurement_center extends class_base
 		extract($arr);
 		$t_products = new vcl_table;
 //		$this->_init_compare_t($t_offerer);
-		$t_products->define_field(array("name" => "price","caption" => t("Hind")));
-		$t_products->define_field(array("name" => "amount","caption" => t("Kogus")));
-		$t_products->define_field(array("name" => "unit","caption" => t("&Uuml;hik")));
-		$t_products->define_field(array("name" => "date","caption" => t("Kuup&auml;ev")));
+		$t_products->define_field(array("name" => "price","caption" => t("Hind") , "chgbgcolor" => "cutcopied"));
+		$t_products->define_field(array("name" => "amount","caption" => t("Kogus") ,"chgbgcolor" => "cutcopied"));
+		$t_products->define_field(array("name" => "unit","caption" => t("&Uuml;hik") ,"chgbgcolor" => "cutcopied"));
+		$t_products->define_field(array("name" => "date","caption" => t("Kuup&auml;ev") ,"chgbgcolor" => "cutcopied"));
 		
 		foreach($products as $product)
 		{
 			if($product->prop("item_type") == $category)
 			{
-				$date=$amount=$unit=$price="";
+				$date=$amount=$unit=$price=$cutcopied="";
 				$offers_list = new object_list(array(
 					"class_id" => CL_PROCUREMENT_OFFER,
 					"lang_id" => array(),
 					"procurement.orderer" => $this->buyer,
 					"offerer" => $offerer->id(),
 				));
+				$cutcopied = "";
 				foreach($offers_list->arr() as $offer)
 				{
 					$row_list = new object_list(array(
@@ -2200,14 +2387,25 @@ class procurement_center extends class_base
 						$unit_obj = obj($row->prop("unit"));
 						$unit = $unit_obj->prop("unit_code");
 						$date = date("d.m.Y",$row->prop("shipment"));
+					
+						$buyings_list = new object_list(array(
+							"class_id" => CL_PURCHASE,
+							"lang_id" => array(),
+							"CL_PURCHASE.RELTYPE_OFFER.id" => $offer->id(),
+						));
+						foreach($buyings_list->arr() as $purchase)
+						{
+							$cutcopied = "yellow";
+						}
 					}
 				}
-				
+
 				$t_products->define_data(array(
 					"price" => $price,
 					"amount" => $amount,
 					"unit" => $unit,
 					"date" => $date,
+					"cutcopied" => $cutcopied,
 				));
 			}
 		}
