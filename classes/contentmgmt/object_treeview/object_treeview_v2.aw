@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.105 2006/07/13 18:40:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.106 2006/10/03 10:52:26 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -293,6 +293,7 @@ class object_treeview_v2 extends class_base
 				$prop["options"] = array(
 					TREE_DHTML => t("DHTML"),
 					TREE_TABLE => t("Tabel"),
+					TREE_COMBINED => t("Kombineeritud")
 				);
 				// if tree_type isn't set, TREE_DHTML will be used 
 				// eh, i definitely need a better solution to handle existing objects
@@ -585,7 +586,6 @@ class object_treeview_v2 extends class_base
 		}
 
 		$fld = $d_inst->get_folders($d_o, $tree_type);
-
 		// get all objects to show
 		// if is checked, that objects won't be shown by default, then don't show them, unless
 		// there are set some url params (tv_sel, char)
@@ -652,9 +652,21 @@ class object_treeview_v2 extends class_base
 			}
 		}
 
+		$fld_str = "";
+		if ($tree_type == 'TREE_COMBINED')
+		{
+			$table_folders = $d_inst->get_folders($d_o, 'TREE_TABLE');
+			$fld_str = $this->_draw_folders($ob, $ol, $table_folders, $oid, $ih_ob, 'TREE_TABLE');
+			$fld_str .= $this->_draw_folders($ob, $ol, $fld, $oid, $ih_ob, 'TREE_DHTML');
+		}
+		else
+		{
+			$fld_str = $this->_draw_folders($ob, $ol, $fld, $oid, $ih_ob, $tree_type);
+		}
+
 		// make folders
 		$this->vars(array(
-			"FOLDERS" => $this->_draw_folders($ob, $ol, $fld, $oid, $ih_ob)
+			"FOLDERS" => $fld_str
 		));
 
 		// get all related object types
@@ -1439,14 +1451,14 @@ class object_treeview_v2 extends class_base
 		return $ret;
 	}
 
-	function _draw_folders($ob, $ol, $folders, $oid, $ih_ob)
+	function _draw_folders($ob, $ol, $folders, $oid, $ih_ob, $tree_type = "")
 	{
 		if (!$ih_ob->meta('show_folders'))
 		{
 			return;
 		}
 		enter_function("object_treeview_v2::_draw_folders");
-		$tree_type = $ob->prop("tree_type");
+	//	$tree_type = $ob->prop("tree_type");
 		if (empty($tree_type))
 		{
 			$tree_type = TREE_DHTML;
@@ -2176,7 +2188,7 @@ class object_treeview_v2 extends class_base
 			"hidden_cols" => ($ih_ob->prop("show_hidden_cols") == 1) ? true : false,
 		));
 //		$tmp = $arr["obj_inst"]->meta("sel_columns");
-		$cols = array_merge(array("" => "") + $all_cols);
+		$cols = array_merge(array("" => "","parent" => t("Asukoht")) + $all_cols);
 		$saved_filters = new aw_array($arr['obj_inst']->meta("saved_filters"));
 
 		$max_id = 0;

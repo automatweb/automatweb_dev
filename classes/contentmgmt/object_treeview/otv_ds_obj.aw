@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.49 2006/09/27 15:03:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.50 2006/10/03 10:52:26 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -317,8 +317,14 @@ class otv_ds_obj extends class_base
 
 				if ($tree_type == "TREE_TABLE")
 				{
-					$_ot->filter(array("parent" => $this->first_folder), false);
+					$_ot->filter(array("parent" => $c_o->id()), false);
 				}
+
+				if ($tree_type == "TREE_COMBINED" && $_GET['tv_sel'])
+				{
+					$_ot = $_ot->subtree((int)$_GET['tv_sel']);
+				}
+
 				$cur_ids = $_ot->ids();
 			}
 
@@ -651,7 +657,6 @@ class otv_ds_obj extends class_base
 		{
 			$_ft["site_id"] = array();
 		}
-
 		enter_function("otv_ds_obj::get_objects::list");
 		$ol = new object_list($_ft);
 		//$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
