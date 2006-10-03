@@ -122,6 +122,13 @@ class project_teams_impl extends class_base
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 
+		//default tuleks tabelisse projekti meeskond
+		if(!$arr["request"]["team_search_co"] && !$arr["request"]["team_search_person"] && !$arr["request"]["team"])
+		{
+			$arr["request"]["team"] = "all_parts";
+			$arr["request"]["no_search"] = 1;
+		}
+
 		classload("core/icons");
 		$nm = t("T&ouml;&ouml;perekonnad");
 		if ($arr["request"]["team"] == "")
@@ -176,7 +183,7 @@ class project_teams_impl extends class_base
 		//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
 		if(($arr["request"]["no_search"]) && $arr["request"]["team"] == "teams")
 		{
-			$t->set_header("<b>".t("T&ouml;&ouml;perekonnad")."<b>");
+			$t->set_caption("<b>".t("T&ouml;&ouml;perekonnad")."<b>");
 			$this->_init_teams_t($t);
 			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TEAM")) as $c)
 			{
@@ -193,14 +200,14 @@ class project_teams_impl extends class_base
 		if(($arr["request"]["no_search"]) && ($arr["request"]["team"] == "all_parts" || is_oid($arr["request"]["team"])))
 		{
 			//tabelile pealkiri
-			if(($arr["request"]["no_search"]) && ($arr["request"]["team"] =="all_parts")) $t->set_header("<b>".t("Projekti meeskond")."<b>");
+			if(($arr["request"]["no_search"]) && ($arr["request"]["team"] =="all_parts")) $t->set_caption("<b>".t("Projekti meeskond")."<b>");
 		
 			$connectons = array();
 			if(is_oid($arr["request"]["team"]))
 			{
 				$team = obj($arr["request"]["team"]);
 				$connections = $team->connections_from(array("type" => "RELTYPE_TEAM_MEMBER"));
-				$t->set_header("<b>".t("T&ouml;&ouml;perekonna")." \"".$team->name()."\" ".t("liikmed")."<b>");
+				$t->set_caption("<b>".t("T&ouml;&ouml;perekonna")." \"".$team->name()."\" ".t("liikmed")."<b>");
 			}
 			else $connections = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
 			
@@ -292,7 +299,7 @@ class project_teams_impl extends class_base
 		}
 		else
 		{
-			$t->set_header("<b>".t("Otsingu tulemused")."<b>");
+			$t->set_caption("<b>".t("Otsingu tulemused")."<b>");
 			//võimalikud organisatsioonid
 			if(substr_count($arr["request"]["team_search_co"], ',') > 0 )
 			{
