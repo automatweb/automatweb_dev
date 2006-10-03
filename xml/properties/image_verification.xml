@@ -55,6 +55,20 @@
             <caption>Tausta v&amp;amp;auml;rv</caption>
       </property>
       <property>
+            <name>font_size</name>
+            <table>image_verification</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
+            <field>font_size</field>
+            <caption>Kirja suurus</caption>
+      </property>
+      <property>
             <name>image_preview</name>
             <table>objects</table>
             <group>general</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.1 2006/08/16 08:32:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.2 2006/10/03 09:26:41 dragut Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
@@ -20,6 +20,9 @@
 
 @property background_color type=colorpicker table=image_verification form=+emb
 @caption Tausta v&auml;rv
+
+@property font_size type=textbox size=5 table=image_verification form=+emb
+@caption Kirja suurus
 
 @property image_preview type=text store=no form=+emb
 @caption Eelvaade
@@ -64,6 +67,12 @@ class image_verification extends class_base
 				if ( empty($prop['value']) )
 				{
 					$prop['value'] = 'FFFFFF';
+				}
+				break;
+			case 'font_size':
+				if ( empty($prop['value']) )
+				{
+					$prop['value'] = '10';
 				}
 				break;
 			case 'image_preview':
@@ -134,26 +143,50 @@ class image_verification extends class_base
 		$text_color = $this->convert_color( $arr['obj_inst']->prop('text_color') );
 		$text_color = imagecolorallocate($im, $text_color['red'], $text_color['green'], $text_color['blue']);
 
-		// lets write the code on the picture and place it to the center
-		$code = rand(1000, 9999);
+		putenv('GDFONTPATH=' . aw_ini_get('basedir').'/classes/core/util/image_verification');
+		$font_file = 'Vera.ttf';
 
-		// use of ttf fonts (not completely implemented yet):
-		//imagettftext($im, 10, 0, 0, $im_height, $text_color, '/www/dev/terryf/site.default/public/vv_testid/courbd.ttf', 'f00bar');
+		$font_size = $arr['obj_inst']->prop('font_size');
+		$angle = 0;
 
+		$codes = array(
+			'left' => array('str' => t('Sisesta vasakpoolsed 4 numbrit:'), 'code' => rand(1000, 9999)),
+			'center' => array('str' => t('Sisesta keskmised 4 numbrit:'), 'code' => rand(1000, 9999)),
+			'right' => array('str' => t('Sisesta parempoolsed 4 numbrit:'), 'code' => rand(1000, 9999)),
+		);
+
+		$random_key = array_rand($codes);
+		$question_str = $codes[$random_key]['str'];
+		$code = $codes[$random_key]['code'];
+
+	// for debug:
+	//	$codes[$random_key]['code'] = '_'.$codes[$random_key]['code'].'_';
+
+		$code_str = $codes['left']['code'].'   '.$codes['center']['code'].'   '.$codes['right']['code'];
+		
+		$start_x = 10;
+		$start_y = $im_height / 3; 
+		
+		imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $question_str);
+
+		$start_y = (2 * ($im_height / 3)) + (($im_height / 3) / 2); 
+
+		imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $code_str);
 
 		// use of non-ttf fonts 
-		$font = 5;
-		$x = (int)(($im_width - (imagefontwidth($font) * strlen($code))) / 2);
-		$y = (int)(($im_height - imagefontheight($font)) / 2);
+	//	$font = 5;
+	//	$x = (int)(($im_width - (imagefontwidth($font) * strlen($code))) / 2);
+	//	$y = (int)(($im_height - imagefontheight($font)) / 2);
 
-		imagestring($im, $font, $x, $y, $code, $text_color);
-
+	//	imagestring($im, $font, $x, $y, $code, $text_color);
+	/*
 		// draw lines:
 		for ($i=0; $i < rand(4,5); $i++) {
 			$linecolor = ImageColorAllocate($im, rand(111,255), rand(111,255), rand(111,255));
 			//$x1, $y1, $x2, $y2
 			imageline($im, rand(1,33), rand(1,33), rand(33,88), rand(1,44), $linecolor);
 		}
+	*/
 		// register the code in session:
 		$_SESSION['verification_code'] = $code;
 
@@ -163,6 +196,16 @@ class image_verification extends class_base
 		imagedestroy($im);
 	}
 
+	/** Validates the code
+		@attrib name=validate api=1 params=pos 
+
+		@param code required type=string acl=view
+			Code which is checked against the one which is in session.
+		@returns
+			true, if the code matches
+			false, if the code doesn't match
+		
+	**/
 	function validate($code)
 	{
 		if ($code == $_SESSION['verification_code'])
@@ -196,6 +239,7 @@ class image_verification extends class_base
 		{
 			case 'width':
 			case 'height':
+			case 'font_size':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
