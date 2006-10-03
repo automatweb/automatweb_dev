@@ -74,7 +74,7 @@ function check_generic_unloader()
 
 </head>
 
-<body onResize="document.execCommand('Refresh')" onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
+<body  onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
 <!-- päis -->
 		<!-- SUB: YAH -->
 <div id="pais">
