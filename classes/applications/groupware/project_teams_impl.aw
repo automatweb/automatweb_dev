@@ -167,10 +167,10 @@ class project_teams_impl extends class_base
 	function _get_team($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$t->set_header("<b>".t("Isikud ja meeskonnad")."<b>");
-		//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
+				//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
 		if(($arr["request"]["no_search"]) && $arr["request"]["team"] == "teams")
 		{
+			$t->set_header("<b>".t("T&ouml;&ouml;perekonnad")."<b>");
 			$this->_init_teams_t($t);
 			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TEAM")) as $c)
 			{
@@ -186,11 +186,15 @@ class project_teams_impl extends class_base
 		
 		if(($arr["request"]["no_search"]) && ($arr["request"]["team"] == "all_parts" || is_oid($arr["request"]["team"])))
 		{
+			//tabelile pealkiri
+			if(($arr["request"]["no_search"]) && ($arr["request"]["team"] =="all_parts")) $t->set_header("<b>".t("Projekti meeskond")."<b>");
+		
 			$connectons = array();
 			if(is_oid($arr["request"]["team"]))
 			{
 				$team = obj($arr["request"]["team"]);
 				$connections = $team->connections_from(array("type" => "RELTYPE_TEAM_MEMBER"));
+				$t->set_header("<b>".t("T&ouml;&ouml;perekonna")." ".$team->name()." ".t("liikmed")."<b>");
 			}
 			else $connections = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
 			
@@ -282,6 +286,7 @@ class project_teams_impl extends class_base
 		}
 		else
 		{
+			$t->set_header("<b>".t("Otsingu tulemused")."<b>");
 			//võimalikud organisatsioonid
 			if(!is_array($arr["request"]["team_search_co"])) {$arr["request"]["team_search_co"] = array($arr["request"]["team_search_co"]);}
 			if(substr_count($arr["request"]["team_search_co"], ',') > 0 ) $arr["request"]["team_search_co"] = explode(',' , $arr["request"]["team_search_co"]);
