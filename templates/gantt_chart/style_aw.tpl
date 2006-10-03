@@ -62,6 +62,12 @@ a.VclGanttHeader
 	border-top: none;
 }
 
+.VclGanttRowName a.VclGanttLink
+{
+	font-size: {VAR:row_text_height}px;
+	text-decoration: none;
+}
+
 .VclGanttColumn img, .VclGanttSubdivision img
 {
 	position: relative;

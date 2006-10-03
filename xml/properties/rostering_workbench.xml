@@ -222,6 +222,33 @@
             <parent>skl_main</parent>
             <field>skl_table</field>
       </property>
+      <property>
+            <name>skg_tbl</name>
+            <table>objects</table>
+            <group>skills_g</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>skg_tbl</field>
+      </property>
+      <property>
+            <name>shifts_g_tbl</name>
+            <table>objects</table>
+            <group>shifts_g</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>shifts_g_tbl</field>
+      </property>
+      <property>
+            <name>day_g_tbl</name>
+            <table>objects</table>
+            <group>day_g</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>day_g_tbl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_ROSTERING_WORKBENCH</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -292,6 +319,20 @@
                   <caption>Operatiivsed tegevused</caption>
                   <parent>graph</parent>
             </op_act>
+            <skills_g>
+                  <caption>P&amp;amp;auml;devused</caption>
+                  <parent>graph</parent>
+            </skills_g>
+            <shifts_g>
+                  <caption>Vahetused</caption>
+                  <parent>graph</parent>
+                  <submit>no</submit>
+            </shifts_g>
+            <day_g>
+                  <caption>P&amp;amp;auml;eva vaade</caption>
+                  <parent>graph</parent>
+                  <submit>no</submit>
+            </day_g>
       </groupinfo>
       <tableinfo>
             <aw_rostering>

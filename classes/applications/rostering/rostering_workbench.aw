@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.3 2006/10/02 12:19:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.4 2006/10/03 18:27:12 kristo Exp $
 // rostering_workbench.aw - T&ouml;&ouml;aja planeerimine 
 /*
 
@@ -94,6 +94,17 @@
 
 		@property skl_table type=table no_caption=1 store=no parent=skl_main
 
+@default group=skills_g
+
+	@property skg_tbl type=table no_caption=1 store=no
+
+@default group=shifts_g
+
+	@property shifts_g_tbl type=table no_caption=1 store=no
+
+@default group=day_g
+
+	@property day_g_tbl type=table no_caption=1 store=no
 
 @groupinfo ppl caption="Isikud" submit=no
 
@@ -112,6 +123,9 @@
 @groupinfo graph caption="Graafikud"
 	@groupinfo admin_act caption="Administratiivsed tegevused" parent=graph submit=no
 	@groupinfo op_act caption="Operatiivsed tegevused" parent=graph
+	@groupinfo skills_g caption="P&auml;devused" parent=graph
+	@groupinfo shifts_g caption="Vahetused" parent=graph submit=no
+	@groupinfo day_g caption="P&auml;eva vaade" parent=graph submit=no
 
 @reltype OWNER value=1 clid=CL_CRM_COMPANY
 @caption Omanik
@@ -141,6 +155,7 @@ class rostering_workbench extends class_base
 			"tpldir" => "applications/rostering/rostering_workbench",
 			"clid" => CL_ROSTERING_WORKBENCH
 		));
+		classload("core/date/date_calc");
 	}
 
 	function get_property($arr)
@@ -149,6 +164,18 @@ class rostering_workbench extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "day_g_tbl":
+				$this->_day_g_tbl($arr);
+				break;
+
+			case "shifts_g_tbl":
+				$this->_shifts_g_tbl($arr);
+				break;
+
+			case "skg_tbl":
+				$this->_skg_tbl($arr);
+				break;
+
 			case "cedit_tb":
 			case "cedit_tree":
 			case "cedit_table":
@@ -810,8 +837,9 @@ class rostering_workbench extends class_base
 			"start" => $start,
 			"end" => $end,
 			"width" => 850,
-			"row_height" => 10,
-			"columns" => $columns
+			"row_height" => 12,
+			"columns" => $columns,
+			"row_dfn" => t("T&ouml;&ouml;post")
 		));
 
 		$i = 0;
@@ -831,24 +859,10 @@ class rostering_workbench extends class_base
 			$i++;
 		}
 
-
-		$ol = new object_list(array(
-			"class_id" => CL_ROSTERING_WORKPLACE,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		foreach($ol->arr() as $wpl)
-		{
-			$chart->add_row (array (
-				"name" => $wpl->id(),
-				"title" => $wpl->name(),
-				"uri" => html::obj_change_url($wpl)
-			));
-		}
-
 		$co = get_instance(CL_CRM_COMPANY);
 		$ppl = $co->get_employee_picker(obj($arr["obj_inst"]->prop("owner")));
 		static $wtid;
+		$wpl2p = array();
 		foreach($ppl as $p_id => $p_n)
 		{
 			$work_times = $m->get_schedule_for_person(obj($p_id), $start, $end);
@@ -864,11 +878,55 @@ class rostering_workbench extends class_base
 				);
 
 				$chart->add_bar ($bar);
+				$wpl2p[$wt_item["workplace"]][$p_id] = $bar;
+				$bar["row"] = $wt_item["workplace"]."_".$p_id;
+				$chart->add_bar ($bar);
 			}
 		}
 
-		$arr["prop"]["value"] = $this->create_chart_navigation($arr);	
-		$arr["prop"]["value"] .= $chart->draw_chart();
+
+		$ol = new object_list(array(
+			"class_id" => CL_ROSTERING_WORKPLACE,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $wpl)
+		{
+			//html::get_change_url($wpl->id(), array("return_url" => get_ru()))
+			$bar = array (
+				"name" => $wpl->id(),
+				"title" => "<b>".$wpl->name()."</b>",
+				"uri" => aw_url_change_var("show_p", $wpl->id())
+			);
+			$chart->add_row ($bar);
+
+			// get ppl for workpost
+			foreach($wpl2p[$wpl->id()] as $p_id => $sets)
+			{
+				$po= obj($p_id);
+				$chart->add_row (array (
+					"name" => $wpl->id()."_".$p_id,
+					"title" => " -&gt; ".$po->name(),
+					"uri" => html::get_change_url($p_id, array("return_url" => get_ru()))
+				));
+			}
+		}
+
+
+		$arr["prop"]["value"] = '<div id="tablebox">
+		    <div class="pais">
+			<div class="caption">'.$this->create_chart_navigation($arr).'</div>
+			<div class="navigaator">
+			</div>
+		    </div>
+		    <div class="sisu">
+		    <!-- SUB: GRID_TABLEBOX_ITEM -->
+			'.$chart->draw_chart().'
+		    <!-- END SUB: GRID_TABLEBOX_ITEM -->
+		    </div>
+		    <div>
+		    </div>	
+		</div>';	
 	}
 
     // @attrib name=get_time_days_away
@@ -1029,12 +1087,12 @@ class rostering_workbench extends class_base
 			"name" => "no_laiki",
 			"ch_value" => 1,
 			"checked" => true
-		))." sest ta ei meeldi eriti programmile <br>";
+		))." t&ouml;&ouml;tunnid &uuml;letatud <br>";
 		$rv .= html::checkbox(array(
 			"name" => "stupid",
 			"ch_value" => 1,
 			"checked" => true
-		))." sest ta on nac loll <br>";
+		))." teises vahetuses <br>";
 		$arr["prop"]["value"] = $rv;
 		return PROP_OK;
 	}
@@ -1138,6 +1196,251 @@ class rostering_workbench extends class_base
 			$row["skill"] = $sks;
 			$t->set_data($idx, $row);
 		}		
+	}
+
+	function _init_skg_tbl(&$t, &$wpl2skill)
+	{
+		// list all wp's and for those, needed skills
+		$ol = new object_list(array(
+			"class_id" => CL_ROSTERING_WORKPLACE,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$t->define_field(array(
+			"name" => "empl",
+			"caption" => t("T&ouml;&ouml;taja"),
+			"align" => "left"
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_field(array(
+				"name" => $o->id(),
+				"caption" => $o->name(),
+				"align" => "center"
+			));
+			foreach($o->connections_from(array("type" => "RELTYPE_SKILL")) as $c)
+			{
+				$skill_id = $c->prop("to");
+				$skill = obj($skill_id);
+				$t->define_field(array(
+					"name" => $skill_id,
+					"parent" => $o->id(),
+					"caption" => $skill->name(),
+					"align" => "center"
+				));
+				$wpl2skill[$o->id()][$skill_id] = $skill_id;
+			}
+		}
+	}
+
+	function _skg_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_skg_tbl($t, $wpl2skill);
+
+		$co = obj($arr["obj_inst"]->prop("owner"));
+		$co_i = $co->instance();
+		$empl = $co_i->get_employee_picker($co);
+
+		$sects = $this->get_all_org_sections($co, $t, $empl);
+		$t->set_sortable(false);
+	}
+
+	function get_all_org_sections($obj, &$t, $empl)
+	{
+		static $retval, $level;
+		$level++;
+		foreach ($obj->connections_from(array("type" => "RELTYPE_SECTION")) as $section)
+		{
+			$retval[$obj->id()][] = $section->prop("to");
+			$section_obj = $section->to();
+			$t->define_data(array(
+				"empl" => str_repeat("&nbsp;", $level*3).$section_obj->name()
+			));
+
+			// get all employees for this
+			foreach($section_obj->connections_from(array("type" => "RELTYPE_WORKERS")) as $w_c)
+			{
+				$emplo = $w_c->to();
+
+				$d = array(
+					"empl" => str_repeat("&nbsp;", ($level+1)*3).html::obj_change_url($emplo)
+				);
+				// read the skills each person has
+				foreach($emplo->connections_from(array("type" => "RELTYPE_HAS_SKILL")) as $c)
+				{
+					$hs = $c->to();
+					$d[$hs->prop("skill")] = "x";
+				}
+				$t->define_data($d);
+			}
+
+			$this->get_all_org_sections($section_obj, $t, $empl);
+
+		}
+		$level--;
+		return $retval;
+	}
+
+	function _init_shifts_g_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "shift",
+			"caption" => t("Vahetus"),
+			"align" => "left"
+		));
+		$ws = get_week_start();
+		for($i = 0; $i < 7; $i++)
+		{
+			$t->define_field(array(
+				"name" => "d".$i,
+				"caption" => date("d.m.Y", $ws + $i * 24 * 3600),
+				"align" => "center"
+			));
+		}
+	}
+
+	function _shifts_g_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_shifts_g_tbl($t);
+
+		$m = get_instance("applications/rostering/rostering_model");
+		$co = obj($arr["obj_inst"]->prop("owner"));
+		$co_i = $co->instance();
+		$ppl = $co_i->get_employee_picker($co);
+
+		$wt = array();
+		foreach($ppl as $p_id => $p_nm)
+		{
+			$wts = $m->get_schedule_for_person(obj($p_id), get_week_start(), get_week_start() + 24 * 7 * 3600);
+			foreach($wts as $wtm)
+			{
+				$wt[$wtm["workplace"]][date("d.m.Y", $wtm["start"])][$p_id] = $wtm;
+			}
+		}
+		$shift_list = new object_list(array(
+			"class_id" => CL_ROSTERING_SHIFT,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$wpl2shift = array();
+		$start = get_week_start();
+		foreach($shift_list->arr() as $shift)
+		{
+			foreach($shift->connections_from(array("type" => "RELTYPE_WORKPLACE")) as $c)
+			{
+				$wpl = $c->to();
+				$wpl2shift[$wpl->id()][] = $shift;
+			}
+		}
+
+		foreach($wpl2shift as $wpl_id => $shifts)
+		{
+			$t->define_data(array(
+				"shift" => html::obj_change_url($wpl_id)
+			));
+			foreach($shifts as $shift)
+			{
+				$d = array(
+					"shift" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($shift)
+				);
+
+				for ($i = 0; $i < 7; $i++)
+				{
+					$tm = date("d.m.Y", $start + $i * 24 * 3600);
+					$wpl_data = $wt[$wpl_id][$tm];
+					list($p_id) = each($wpl_data);
+					if (!$p_id)
+					{
+						$d["d".$i] = t("Puudu inimene");
+					}
+					else
+					{
+						$d["d".$i] = html::obj_change_url($p_id);
+					}
+				}
+				$t->define_data($d);
+			}
+		}
+		$t->set_sortable(false);
+	}
+
+	function _init_day_g_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "hr",
+			"caption" => t("Aeg"),
+			"align" => "left"
+		));
+		
+		$wpl_list = new object_list(array(
+			"class_id" => CL_ROSTERING_WORKPLACE,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		foreach($wpl_list->arr() as $wpl)
+		{
+			$t->define_field(array(
+				"name" => $wpl->id(),
+				"caption" => $wpl->name(),
+				"align" => "center"
+			));
+		}
+	}
+
+	function _day_g_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_day_g_tbl($t);
+
+		$m = get_instance("applications/rostering/rostering_model");
+		$co = obj($arr["obj_inst"]->prop("owner"));
+		$co_i = $co->instance();
+		$ppl = $co_i->get_employee_picker($co);
+
+		$wt = array();
+		foreach($ppl as $p_id => $p_nm)
+		{
+			$wts = $m->get_schedule_for_person(obj($p_id), get_week_start(), get_week_start() + 24 * 7 * 3600);
+			foreach($wts as $wtm)
+			{
+				$wtm["person_id"] = $p_id;
+				$wt[date("H", $wtm["start"])][] = $wtm;
+			}
+		}
+
+		$shift_list = new object_list(array(
+			"class_id" => CL_ROSTERING_SHIFT,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		$shift_list->sort_by(array("prop" => "start_time"));
+		foreach($shift_list->arr() as $shift)
+		{
+			$t->define_data(array(
+				"hr" => html::obj_change_url($shift)
+			));
+			list($endt) = explode(":", $shift->prop("end_time"));
+			list($st) = explode(":", $shift->prop("start_time"));
+			if ($endt < $st)
+			{
+				$endt = 24;
+			}
+			for($i = $st; $i < $endt; $i++)
+			{
+				$d = array(
+					"hr" => sprintf("&nbsp;&nbsp;&nbsp;&nbsp;%02d:00 - %02d:00", $i, $i+1)
+				);
+				foreach($wt[date("H", get_day_start() + $i * 3600)] as $item)
+				{
+					$d[$item["workplace"]] = html::obj_change_url($item["person_id"]);
+				}
+				$t->define_data($d);
+				
+			}
+		}
+		$t->set_sortable(false);
 	}
 }
 ?>

@@ -4,6 +4,7 @@ class rostering_model extends core
 {
 	function rostering_model()
 	{
+		classload("core/date/date_calc");
 		$this->init();
 	}
 
@@ -100,13 +101,31 @@ class rostering_model extends core
 		));
 		$cycle_ids = $cycle_list->ids();
 
-		$rv = array();
-		for($i = 0; $i < 5; $i++)
+		static $times_taken;
+		if (!is_array($times_taken))
 		{
-			$start = rand($from, $to);
+			$times_taken = array();
+		}
+
+		$rv = array();
+		for($i = 0; $i < 3; $i++)
+		{
+			$cnt = 0;
+			do {
+				$start = rand($from, $to);
+				$end = $start + rand(1,8) * 3600;
+				$overlap = false;
+				foreach(safe_array($times_taken[$person->id()]) as $tse)
+				{
+					$tmp = timespans_overlap($start, $end, $tse["start"], $tse["end"]);
+					$overlap |= $tmp;
+				}
+			} while($overlap && ++$cnt < 10);
+			$times_taken[$person->id()][] = array("start" => $start, "end" => $end);
+
 			$rv[] = array(
 				"start" => $start,
-				"end" => $start + rand(1,8) * 3600,
+				"end" => $end,
 				"skill" => $skill_ids[array_rand($skill_ids)],
 				"workplace" => $workplace_ids[array_rand($workplace_ids)],
 				"shift" => $shift_ids[array_rand($shift_ids)],
@@ -114,6 +133,7 @@ class rostering_model extends core
 			);
 		}
 
+		usort($rv, create_function('$a,$b', 'return $a["start"] - $b["start"];'));
 		return $rv;
 	}
 }
