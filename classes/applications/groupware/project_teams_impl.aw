@@ -166,8 +166,14 @@ class project_teams_impl extends class_base
 
 	function _get_team($arr)
 	{
+		//default tuleks tabelisse projekti meeskond
+		if(!$arr["request"]["team_search_co"] && !$arr["request"]["team_search_person"] && !$arr["request"]["team"])
+		{
+			$arr["request"]["team"] = "all_parts";
+			$arr["request"]["no_search"] = 1;
+		}
 		$t =& $arr["prop"]["vcl_inst"];
-				//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
+		//näitab vaid meeskondi... juhul kui vajutatakse "Tiimid" peale
 		if(($arr["request"]["no_search"]) && $arr["request"]["team"] == "teams")
 		{
 			$t->set_header("<b>".t("T&ouml;&ouml;perekonnad")."<b>");
@@ -194,7 +200,7 @@ class project_teams_impl extends class_base
 			{
 				$team = obj($arr["request"]["team"]);
 				$connections = $team->connections_from(array("type" => "RELTYPE_TEAM_MEMBER"));
-				$t->set_header("<b>".t("T&ouml;&ouml;perekonna")." ".$team->name()." ".t("liikmed")."<b>");
+				$t->set_header("<b>".t("T&ouml;&ouml;perekonna")." \"".$team->name()."\" ".t("liikmed")."<b>");
 			}
 			else $connections = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
 			
@@ -288,9 +294,16 @@ class project_teams_impl extends class_base
 		{
 			$t->set_header("<b>".t("Otsingu tulemused")."<b>");
 			//võimalikud organisatsioonid
-			if(!is_array($arr["request"]["team_search_co"])) {$arr["request"]["team_search_co"] = array($arr["request"]["team_search_co"]);}
-			if(substr_count($arr["request"]["team_search_co"], ',') > 0 ) $arr["request"]["team_search_co"] = explode(',' , $arr["request"]["team_search_co"]);
+			if(substr_count($arr["request"]["team_search_co"], ',') > 0 )
+			{
+				$arr["request"]["team_search_co"] = explode(',' , $arr["request"]["team_search_co"]);
+			}
 			$org_ids = array();
+			
+			if(!is_array($arr["request"]["team_search_co"])) {
+				$arr["request"]["team_search_co"] = array($arr["request"]["team_search_co"]);
+			}
+			
 			foreach($arr["request"]["team_search_co"] as $co)
 			{
 				$org_list = new object_list(array(
@@ -301,7 +314,7 @@ class project_teams_impl extends class_base
 				));
 				$org_ids = $org_ids+$org_list->ids();
 			}
-			if ($arr["request"]["team_search_person"] == "" && $arr["request"]["team_search_co"] == "")
+			if (($arr["request"]["team_search_person"] == "" && $arr["request"]["team_search_co"] == "") || (is_array($org_ids) && !sizeof($org_ids)))
 			{
 				$ol = new object_list();
 			}
@@ -317,7 +330,7 @@ class project_teams_impl extends class_base
 				));
 			}
 			//juhuks kui otsitakse mitut isikut komaga eraldatud
-			if(substr_count($arr["request"]["team_search_person"], ',') > 0 )
+			if(substr_count($arr["request"]["team_search_person"], ',') > 0 && !(is_array($org_ids) && !sizeof($org_ids)))
 			{
 				$arr["request"]["team_search_person"] = explode(',' , $arr["request"]["team_search_person"]);
 				foreach($arr["request"]["team_search_person"] as $person)
