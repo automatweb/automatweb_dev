@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.6 2006/09/27 14:37:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.7 2006/10/03 17:17:07 markop Exp $
 // purchase.aw - Ost 
 /*
 
@@ -21,6 +21,9 @@
 @property stat type=select 
 @caption Staatus
 
+@property deal_no type=textbox
+@caption Lepingu/arve nr
+
 @groupinfo offers caption=Pakkumised submit=no
 @default group=offers
 
@@ -32,10 +35,13 @@
 
 @property files type=text  no_caption=1
 @caption Manused
+
+@property files_table type=table no_caption=1
+
 property files type=fileupload no_caption=1 store=yes table=objects field=meta method=serialize form=+emb
 caption Failid 
 
-@groupinfo purchases caption=Ostud  submit=no
+@groupinfo purchases caption=Ostud
 @default group=purchases
 
 @property purchases type=table no_caption=1
@@ -109,8 +115,11 @@ class purchase extends class_base
 				
 			case "files":
 				$this->_get_files($arr);
-			break;
+				break;
 	
+			case "files_table":
+				$this->_get_files_table($arr);
+				break;	
 				
 			case "offers_add":
 				$tb =&$arr["prop"]["vcl_inst"];
@@ -129,6 +138,8 @@ class purchase extends class_base
 							CL_PROCUREMENT_OFFER,
 						),
 						"multiple" => 1,
+		//				"tbl_props" => array(0 => "offerer"),
+		//				"search_props" => array("offerer"),
 						), "popup_search");
 				
 				$tb->add_button(array(
@@ -148,6 +159,12 @@ class purchase extends class_base
 				
 			case "offers":
 				$t =& $arr["prop"]["vcl_inst"];
+				$t->define_field(array(
+					"name" => "name",
+					"caption" => t("Nimi"),
+					"align" => "center",
+					"sortable" => 1
+				));
 				$t->define_field(array(
 					"name" => "date",
 					"caption" => t("Kuup&auml;ev"),
@@ -203,6 +220,7 @@ class purchase extends class_base
 						}
 					}
 					$t->define_data(array(
+						"name" => $offer_obj->name(),
 						"date" => date('d-m-y/h:m', $offer_obj->prop("accept_date")),
 						"files" => $files,
 						"oid" => $offer_obj->id(),
@@ -216,6 +234,140 @@ class purchase extends class_base
 		return $retval;
 	}
 
+		function _init_files_tbl(&$t)
+	{	
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "icon",
+			"align" => "center",
+			"sortable" => 0,
+			"width" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Nimi"),
+			"name" => "name",
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Looja"),
+			"name" => "createdby",
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Loodud"),
+			"name" => "created",
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"caption" => t("Muudetud"),
+			"name" => "modified",
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "pop",
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _get_files_table($arr)
+	{
+		$pt = $this->_get_files_pt($arr);
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_files_tbl($t);
+
+
+		$ol = new object_list($arr["obj_inst"]->connections_from(array()));
+		
+		classload("core/icons");
+		$clss = aw_ini_get("classes");
+		get_instance(CL_FILE);
+		foreach($ol->arr() as $o)
+		{
+			if(!(($o->class_id() == CL_FILE) || ($o->class_id() == CL_CRM_DOCUMENT) || ($o->class_id() == CL_CRM_DEAL) || ($o->class_id() == CL_CRM_OFFER) || ($o->class_id() == CL_CRM_MEMO))) continue;
+			$pm = get_instance("vcl/popup_menu");
+			$pm->begin_menu("sf".$o->id());
+
+
+			if ($o->class_id() == CL_FILE)
+			{
+				$pm->add_item(array(
+					"text" => $o->name(),
+					"link" => file::get_url($o->id(), $o->name())
+				));
+			}
+			else
+			{
+				foreach($o->connections_from(array("type" => "RELTYPE_FILE")) as $c)
+				{
+					$pm->add_item(array(
+						"text" => $c->prop("to.name"),
+						"link" => file::get_url($c->prop("to"), $c->prop("to.name"))
+					));
+				}
+			}
+			
+			$t->define_data(array(
+				"icon" => $pm->get_menu(array(
+					"icon" => icons::get_icon_url($o)
+				)),
+				"name" => html::obj_change_url($o),
+				"class_id" => $clss[$o->class_id()]["name"],
+				"createdby" => $o->createdby(),
+				"created" => $o->created(),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"oid" => $o->id()
+			));
+		}
+
+		$t->set_default_sortby("created");
+		$t->set_default_sorder("desc");
+	}
+	
+	function _get_files_pt($arr)
+	{
+		if ($arr["request"]["tf"] && $arr["request"]["tf"] != "unsorted")
+		{
+			return $arr["request"]["tf"];
+		}
+		$ff = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FILES_FLD");
+		if (!$ff)
+		{
+			$ff = obj();
+			$ff->set_class_id(CL_MENU);
+			$ff->set_parent($arr["obj_inst"]->id());
+			$ff->set_name(sprintf(t("%s failid"), $arr["obj_inst"]->name()));
+			$ff->save();
+			$arr["obj_inst"]->connect(array(
+				"to" => $ff->id(),
+				"type" => "RELTYPE_FILES_FLD"
+			));
+		}
+		return $ff->id();
+	}
+
+	
 	
 	function rows_table(&$t , $this_obj)
 	{
@@ -234,6 +386,10 @@ class purchase extends class_base
 		$t->define_field(array(
         		'name' => 'price',
 			'caption' => t('Hind'),
+		));
+		$t->define_field(array(
+        		'name' => 'sum',
+			'caption' => t('Summa'),
 		));
 		$t->define_field(array(
 			'name' => 'currency',
@@ -287,9 +443,20 @@ class purchase extends class_base
 			$t->define_data(array(
 				"row_id" 	=> $row->id(),
 				"product"	=> $row->prop("product"),
-				"amount"	=> $row->prop("amount"),
+				"amount"	=> html::textbox(array(
+								"name" => "buyings[".$row->id()."][amount]",
+								"value" => $row->prop("amount"),
+								"size" => 5
+							)),
+							//$row->prop("amount"),
 				'unit'		=> $unit,
-				'price'		=> $row->prop("price"),
+				'price'		=> html::textbox(array(
+								"name" => "buyings[".$row->id()."][price]",
+								"value" => $row->prop("price"),
+								"size" => 5
+							)),
+							//$row->prop("price"),
+				'sum'		=> $row->prop("amount")*$row->prop("price"),
 				'currency'	=> $currency,
 				'shipment'	=> date("d.m.Y", $row->prop("shipment")),
 			));
@@ -341,12 +508,29 @@ class purchase extends class_base
 */
 			case "files":
 				$this->_set_files($arr);
-			break;
+				break;
 		
+			case "purchases":
+				$this->_save_buyings($arr);
+				break;
 			//-- set_property --//
 		}
 		return $retval;
 	}	
+
+	function _save_buyings($arr)
+	{
+		foreach($arr["request"]["buyings"] as $key => $offer_row)
+		{
+			if(is_oid($key) && $this->can("view" , $key))
+			{
+				$row = obj($key);
+				$row->set_prop("amount" ,$offer_row["amount"]);
+				$row->set_prop("price", $offer_row["price"]);
+				$row->save();
+			}
+		}
+	}
 
 	function callback_mod_reforb($arr)
 	{

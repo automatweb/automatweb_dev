@@ -35,6 +35,14 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>deal_no</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>Lepingu/arve nr</caption>
+      </property>
+      <property>
             <name>offers_add</name>
             <table>objects</table>
             <group>offers</group>
@@ -63,6 +71,15 @@
             <caption>Manused</caption>
       </property>
       <property>
+            <name>files_table</name>
+            <table>objects</table>
+            <group>files</group>
+            <field>meta</field>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>purchases</name>
             <table>objects</table>
             <group>purchases</group>
@@ -88,7 +105,6 @@
             </files>
             <purchases>
                   <caption>Ostud</caption>
-                  <submit>no</submit>
             </purchases>
       </groupinfo>
       <reltypes>
