@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.8 2006/10/04 14:14:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.9 2006/10/04 15:02:18 markop Exp $
 // purchase.aw - Ost 
 /*
 
@@ -32,6 +32,8 @@
 
 @groupinfo files caption=Failid 
 @default group=files
+
+@property files_tb type=toolbar no_caption=1 store=no
 
 @property files type=text  no_caption=1
 @caption Manused
@@ -121,6 +123,16 @@ class purchase extends class_base
 				$this->_get_files_table($arr);
 				break;	
 				
+			case "files_tb":
+				$tb =&$arr["prop"]["vcl_inst"];
+				$tb->add_button(array(
+					'name' => 'delete',
+					'img' => 'delete.gif',
+					'tooltip' => t('Kustuta'),
+					"action" => "remove_offers",
+				));
+				break;
+			
 			case "offers_add":
 				$tb =&$arr["prop"]["vcl_inst"];
 				$pps = get_instance("applications/procurement_center/procurement_offer_search");
@@ -154,7 +166,6 @@ class purchase extends class_base
 		//				"tbl_props" => array(0 => "offerer"),
 		//				"search_props" => array("offerer"),
 						));
-				arr($arr["obj_inst"]->prop_str("offerer"));
 				$tb->add_button(array(
 					"name" => "search",
 					"img" => "search.gif",
@@ -394,13 +405,21 @@ class purchase extends class_base
 			'caption' => t('Kogus'),
 		));
 		$t->define_field(array(
+        		'name' => 'price',
+			'caption' => t('Hind'),
+		));
+		$t->define_field(array(
 			'name' => 'unit',
 			'caption' => t('&Uuml;hik'),
 		));
 		$t->define_field(array(
-        		'name' => 'price',
-			'caption' => t('Hind'),
+			'name' => 'b_amount',
+			'caption' => t('Ostetav kogus'),
 		));
+		$t->define_field(array(
+        		'name' => 'b_price',
+			'caption' => t('&Uuml;hiku ostu hind'),
+		));		
 		$t->define_field(array(
         		'name' => 'sum',
 			'caption' => t('Summa'),
@@ -454,23 +473,34 @@ class purchase extends class_base
 				$currency = obj($row->prop("currency"));
 				$currency = $currency->name();
 			}
+			if(!$row->prop("b_price"))
+			{
+				$row->set_prop("b_price" ,$row->prop("price"));
+			}
+			if(!$row->prop("b_amount"))
+			{
+				$row->set_prop("b_amount" ,$row->prop("amount"));
+			}
 			$t->define_data(array(
 				"row_id" 	=> $row->id(),
 				"product"	=> $row->prop("product"),
-				"amount"	=> html::textbox(array(
-								"name" => "buyings[".$row->id()."][amount]",
-								"value" => $row->prop("amount"),
-								"size" => 5
-							)),
-							//$row->prop("amount"),
+				"amount"	=> $row->prop("amount"),
+				'price'		=> $row->prop("price"),
 				'unit'		=> $unit,
-				'price'		=> html::textbox(array(
-								"name" => "buyings[".$row->id()."][price]",
-								"value" => $row->prop("price"),
+				
+				'b_amount'	=>html::textbox(array(
+								"name" => "buyings[".$row->id()."][amount]",
+								"value" => $row->prop("b_amount"),
 								"size" => 5
 							)),
-							//$row->prop("price"),
-				'sum'		=> $row->prop("amount")*$row->prop("price"),
+						//$row->prop("amount"),
+				'b_price'	=> html::textbox(array(
+								"name" => "buyings[".$row->id()."][price]",
+								"value" => $row->prop("b_price"),
+								"size" => 5
+							)),
+						//$row->prop("price"),
+				'sum'		=> $row->prop("b_amount")*$row->prop("b_price"),
 				'currency'	=> $currency,
 				'shipment'	=> date("d.m.Y", $row->prop("shipment")),
 			));
@@ -536,11 +566,13 @@ class purchase extends class_base
 	{
 		foreach($arr["request"]["buyings"] as $key => $offer_row)
 		{
+//			$arr["obj_inst"]->set_meta("buyings" , $arr["request"]["buyings"]);
+//			$arr["obj_inst"]->save();
 			if(is_oid($key) && $this->can("view" , $key))
 			{
 				$row = obj($key);
-				$row->set_prop("amount" ,$offer_row["amount"]);
-				$row->set_prop("price", $offer_row["price"]);
+				$row->set_prop("b_amount" ,$offer_row["amount"]);
+				$row->set_prop("b_price", $offer_row["price"]);
 				$row->save();
 			}
 		}

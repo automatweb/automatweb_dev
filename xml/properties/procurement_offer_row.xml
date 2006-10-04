@@ -18,6 +18,22 @@
             <caption>Kogus</caption>
       </property>
       <property>
+            <name>b_amount</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>Ostetav kogus</caption>
+      </property>
+      <property>
+            <name>b_price</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>Ostu hind</caption>
+      </property>
+      <property>
             <name>unit</name>
             <table>objects</table>
             <group>general</group>

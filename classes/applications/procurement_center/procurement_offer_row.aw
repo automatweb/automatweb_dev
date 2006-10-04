@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer_row.aw,v 1.2 2006/08/21 15:18:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer_row.aw,v 1.3 2006/10/04 15:02:18 markop Exp $
 // procurement_offer_row.aw - Pakkumise rida 
 /*
 
@@ -14,6 +14,12 @@
 
 	@property amount type=textbox 
 	@caption Kogus
+
+	@property b_amount type=textbox 
+	@caption Ostetav kogus
+	
+	@property b_price type=textbox 
+	@caption Ostu hind
 
 	@property unit type=select
 	@caption &Uuml;hik
