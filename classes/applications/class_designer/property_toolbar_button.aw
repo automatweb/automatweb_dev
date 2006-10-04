@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar_button.aw,v 1.6 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar_button.aw,v 1.7 2006/10/04 13:34:49 kristo Exp $
 // property_toolbar_button.aw - Taoolbari nupp 
 /*
 
@@ -153,24 +153,6 @@ class property_toolbar_button extends class_base
 		));
 
 		$items = safe_array($but->meta("but_items"));
-
-		// we need to check if the active tree item has add object settings
-		if (is_array($_GET["demot"]))
-		{
-			foreach($_GET["demot"] as $trid => $selmid)
-			{
-				if (is_oid($selmid) && $this->can("view", $selmid))
-				{
-					$mb = obj($selmid);
-					$mb_i = $mb->instance();
-					$addt = $mb_i->get_add_menu($mb);
-					if (count($addt))
-					{
-						$items = $addt;
-					}
-				}
-			}
-		}
 
 		uasort($items, array(&$this, "__itemsorter"));
 		$this->_req_menu_button($tb, $items, 0);

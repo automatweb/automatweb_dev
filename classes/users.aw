@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.167 2006/09/19 12:45:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.168 2006/10/04 13:34:48 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1027,7 +1027,6 @@ class users extends users_user
 				$_oid = $this->get_oid_for_gid($hig);
 				if ($_oid)
 				{
-					obj_set_opt("no_auto_translation", 1);
 					aw_disable_acl();
 					$o = obj($_oid);
 					aw_restore_acl();
@@ -1044,7 +1043,6 @@ class users extends users_user
 					{
 						aw_ini_set("","frontpage",$gf[$lang_id]);
 					}
-					obj_set_opt("no_auto_translation", 0);
 				}
 			}
 
@@ -1053,7 +1051,6 @@ class users extends users_user
 				$_oid = $this->get_oid_for_gid($hig_w_u);
 				if ($_oid)
 				{
-					obj_set_opt("no_auto_translation", 1);
 					aw_disable_acl();
 					$o = obj($_oid);
 					aw_restore_acl();
@@ -1070,7 +1067,6 @@ class users extends users_user
 					{
 						aw_ini_set("","frontpage",$gf[$lang_id]);
 					}
-					obj_set_opt("no_auto_translation", 0);
 				}
 			}
 
@@ -1080,7 +1076,6 @@ class users extends users_user
 				foreach($gidlist_pri as $_gid => $_pri)
 				{
 					$_oid = $this->get_oid_for_gid($_gid);
-					obj_set_opt("no_auto_translation", 1);
 					aw_disable_acl();
 					$o = obj($_oid);
 					aw_restore_acl();
@@ -1094,7 +1089,6 @@ class users extends users_user
 							$admr[] = $v;
 						}
 					}
-					obj_set_opt("no_auto_translation", 0);
 					$admr = array_unique($admr);
 				}
 				if (count($admr))

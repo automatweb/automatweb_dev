@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.199 2006/10/03 13:49:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.200 2006/10/04 13:34:50 kristo Exp $
 
 /*
 
@@ -80,15 +80,7 @@ class site_show extends class_base
 
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
-		if (aw_ini_get("config.object_translation"))
-		{
-			$ot = get_instance("translate/object_translation");
-			$this->sel_section_real = $ot->get_original($this->sel_section);
-		}
-		else
-		{
-			$this->sel_section_real = $this->sel_section;
-		}
+		$this->sel_section_real = $this->sel_section;
 		$this->sel_section_obj = obj($this->sel_section);
 
 		$this->site_title = $this->sel_section_obj->name();
@@ -1742,137 +1734,6 @@ class site_show extends class_base
 	}
 	
 
-	////
-	// !basically works like the above thingie .. but only shows languages
-	// into which the current document has been translated to
-	function make_context_langs()
-	{
-		if ($this->active_doc)
-		{
-			$obj = obj($this->active_doc);
-		}
-		else
-		{
-			$obj = $this->section_obj;
-		}
-
-		// make language id => acceptlang lut
-		$l_inst = get_instance("languages");
-		$lref = $l_inst->get_list(array(
-			"key" => "id",
-			"all_data" => true
-		));
-
-		// ok, if the obj has any connections FROM, of type RELTYPE_TRANSLATION
-		// it is the original, so get all the relations and mark the translations
-		// IF it does NOT, then find connection of type RELTYPE_ORIGINAL from the object
-		// if there is ONE, then ot points to the original. 
-		// if there are none, then the object is not translated
-
-		// check the other way - if there is a ORIGINAL then it si translated
-		$c = new connection();
-		$conn = $c->find(array(
-			"from" => $obj->id(),
-			"type" => RELTYPE_ORIGINAL
-		));
-
-		if (count($conn) == 0)
-		{
-			$orig_id = $obj->id();
-			$orig_lang = $obj->lang();
-		}
-		else
-		{
-			reset($conn);
-			list(,$f_conn) = each($conn);
-
-			$orig_id = $f_conn["to"];
-			$orig_lang = $lref[$f_conn["to.lang_id"]]["acceptlang"];
-		}
-
-		// now $conn contains all the translation relations from the original obj to the translated objs
-		$lang2trans = array(
-			$orig_lang => $orig_id
-		);
-
-		$conn = $c->find(array(
-			"from" => $orig_id,
-			"type" => RELTYPE_TRANSLATION
-		));
-
-		foreach($conn as $c)
-		{
-			$lang2trans[$lref[$c["to.lang_id"]]["acceptlang"]] = $c["to"];
-		}
-
-		$lang_id = aw_global_get("LC");
-		$l_inst->init_cache(true);
-		$ldat = $l_inst->get_list(array(
-			"key" => "acceptlang",
-			"all_data" => true
-		));
-		$l = "";
-		foreach($ldat as $lc => $ld)
-		{
-			$name = $ld["name"];
-			$url = $this->cfg["baseurl"] . "/" . $lang2trans[$lc]."?set_lang_id=".$ld["id"];
-
-			if (!$lang2trans[$lc])
-			{
-				$url = $this->mk_my_orb("show_trans", array("set_lang_id" => $ld["id"], "section" => $obj->id()), "object_translation");
-			}
-
-			$sel_img_url = "";
-			$img_url = "";
-
-			// if the language has an image
-			if ($ld["meta"]["lang_img"])
-			{
-				if ($lc == $lang_id && $ld["meta"]["lang_img_act"])
-				{
-					$sel_img_url = $this->image->make_img_tag(
-						$this->image->get_url_by_id($ld["meta"]["lang_img_act"]),
-						$name
-					);
-				}
-
-				$img_url = $this->image->make_img_tag(
-					$this->image->get_url_by_id($ld["meta"]["lang_img"]),
-					$name
-				);
-			}
-
-			$this->vars(array(
-				"name" => $name,
-				"lang_url" => $url,
-				"img_url" => $img_url,
-				"sel_img_url" => $sel_img_url
-			));
-
-			if ($lc == $lang_id)
-			{
-				$l .= $this->parse("SEL_LANG");
-				$this->vars(array(
-					"sel_lang_img_url" => $img_url,
-					"sel_lang_sel_img_url" => $sel_img_url,
-				));
-				$sel_lang = $ld;
-			}
-			else
-			{
-				$l.=$this->parse("LANG");
-			}
-		}
-
-		$this->vars(array(
-			"LANG" => $l,
-			"SEL_LANG" => "",
-			"sel_charset" => $sel_lang["charset"],
-			"lang_fp_text" => $sel_lang["meta"]["fp_text"],
-			"se_lang_id" => aw_global_get("lang_id")
-		));
-	}
-
 	///////////////////////////////////////////////
 	// template compiler runtime functions
 
@@ -1975,11 +1836,6 @@ class site_show extends class_base
 
 	function do_draw_menus($arr, $filename = NULL, $tpldir = NULL, $tpl = NULL)
 	{
-		if (aw_ini_get("config.menus_not_translated"))
-		{
-			obj_set_opt("no_auto_translation", 1);
-		}
-
 		if ($filename == NULL)
 		{
 			$filename = $this->compiled_filename;
@@ -2028,11 +1884,6 @@ class site_show extends class_base
 			include_once($this->compiled_filename);
 		}
 		exit_function("site_show::do_draw_menus");
-
-		if (aw_ini_get("config.menus_not_translated"))
-		{
-			obj_set_opt("no_auto_translation", 0);
-		}
 
 		$this->path_ids = $path_bak;
 
@@ -2697,14 +2548,7 @@ class site_show extends class_base
 		$this->do_menu_images();
 		$this->make_yah();
 
-		if (aw_ini_get("menuedit.context_langs") == 1)
-		{
-			$this->make_context_langs();
-		}
-		else
-		{
-			$this->make_langs();
-		};
+		$this->make_langs();
 		
 		// execute menu drawing code
 		$awt->start("part2");

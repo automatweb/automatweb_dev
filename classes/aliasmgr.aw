@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.209 2006/09/27 15:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.210 2006/10/04 13:34:48 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -477,12 +477,6 @@ class aliasmgr extends aw_template
 
 		//$this->recover_idx_enumeration($id);
 
-		if (aw_ini_get("config.object_translation") == 1)
-		{
-			$l = get_instance("languages");
-			$langinfo = $l->get_list();
-		};
-
 		// fetch a list of all the aliases for this object
 
 		$alinks = $obj->meta("aliaslinks");
@@ -562,18 +556,6 @@ class aliasmgr extends aw_template
 			));
 
 			$type_str = $this->reltypes[$reltype_id];
-			// shoot me. 
-			// you fool, "shoot me" is just a good string to locate this place quickly later on.
-			//  -- duke
-			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_TRANSLATION))
-			{
-				$type_str = "tõlge (" . $langinfo[$alias->prop("to.lang_id")] . ")";
-			};
-			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_ORIGINAL))
-			{
-				$type_str = "originaal (" . $langinfo[$alias->prop("to.lang_id")] . ")";
-			};
-
 			if ($alias->prop("relobj_id") && 
 			   ($reltype_id != RELTYPE_ACL || $this->can("admin", $obj->id())))
 			{
@@ -1017,19 +999,6 @@ HTM;
 		//$return_url = aw_global_get('REQUEST_URI');
 				
 		$return_url = urlencode($return_url);
-
-		if (aw_ini_get("config.object_translation") == 1)
-		{
-			$toolbar->add_button(array(
-				"name" => "translate",
-				"tooltip" => t("T&otilde;lgi"),
-				"url" => $this->mk_my_orb("create",array("id" => $this->id,"return_url" => $return_url),"object_translation"),
-				"target" => "_blank",
-				"img" => "edit.gif",
-			));
-			
-			$toolbar->add_separator();
-		};
 
 		$toolbar->add_button(array(
 			"name" => "refresh",

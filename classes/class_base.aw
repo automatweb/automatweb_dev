@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.504 2006/09/27 07:36:26 tarvo Exp $
+// $Id: class_base.aw,v 2.505 2006/10/04 13:34:48 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -366,35 +366,8 @@ class class_base extends aw_template
 			$this->no_active_tab = 1;
 		};
 
-		// Now I need to deal with relation elements
-		// it's the bloody run order .. FUCK
-		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
-		{
-			$o_t = get_instance("translate/object_translation");
-			$t_list = $o_t->translation_list($this->id, true);
-
-			if (in_array($this->id, $t_list))
-			{
-				$this->is_translated = 1;
-				$tmp = $properties;
-				foreach($tmp as $pkey => $pval)
-				{
-					if ($pval["trans"] != 1 && $pval["name"] != "is_translated")
-					{
-						unset($properties[$pkey]);
-					};
-				};
-			}
-			else
-			{
-				//unset($properties["is_translated"]);
-			};
-		}
-		if (!aw_ini_get("config.object_translation"))
-		{
-			unset($properties["is_translated"]);
-			unset($properties["needs_translation"]);
-		}
+		unset($properties["is_translated"]);
+		unset($properties["needs_translation"]);
 
 
 		// XXX: temporary -- duke
@@ -1537,15 +1510,6 @@ class class_base extends aw_template
 				else
 				{
 					$link = !empty($val["active"]) ? "#" : "";
-				};
-
-				if (isset($this->tr) && is_object($this->tr))
-				{
-					$commtrans = $this->tr->get_by_id("group",$key,"caption");
-					if (!empty($commtrans))
-					{
-						$val["caption"] = $commtrans;
-					};
 				};
 
 
@@ -2692,20 +2656,6 @@ class class_base extends aw_template
 			};
 
 
-			if (is_object($this->tr))
-			{
-				$commtrans = $this->tr->get_by_id("prop",$val["name"],"comment");
-				if (!empty($commtrans))
-				{
-					$val["comment"] = $commtrans;
-				};
-				$trans = $this->tr->get_by_id("prop",$val["name"],"caption");
-				if (!empty($trans))
-				{
-					$val["caption"] = $trans;
-				};
-			}
-
 			$argblock["prop"] = &$val;
 
 			if ($val["type"] == "select")
@@ -3408,7 +3358,6 @@ class class_base extends aw_template
 			));
 		}
 
-		// object_translation depends on getting the id from here
 		return $this->id;
 	}
 
@@ -3610,17 +3559,6 @@ class class_base extends aw_template
 			$this->id = $id;
 
 		};
-
-		// new object should not have any translation connections, so skip it
-		if (!$new && $this->classinfo["trans"] == 1)
-		{
-			$o_t = get_instance("translate/object_translation");
-			$t_list = $o_t->translation_list($this->id, true);
-			if (in_array($this->id, $t_list))
-			{
-				$this->is_translated = 1;
-			}
-		}
 
 		$args["new"] = $this->new = $new;
 

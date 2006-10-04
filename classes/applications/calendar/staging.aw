@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.21 2006/03/03 10:47:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.22 2006/10/04 13:34:49 kristo Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -275,7 +275,6 @@ class staging extends class_base
 	function fixxer($arr)
 	{
 		print "fixing events, eh?";
-		obj_set_opt("no_auto_translation", 1);
 		$ol = new object_list(array(
 			"class_id" => CL_STAGING,
 		));
@@ -360,8 +359,6 @@ class staging extends class_base
 			$blist[$bparent] = 1;
 		};
 
-		$object_translations = $this->_get_translations_for($o->id());
-
 
 		// siin loome (mitte ei uuenda) koopiaid - koopia tegemisel
 		// 1. teha uus objekt
@@ -425,48 +422,12 @@ class staging extends class_base
 						"reltype" => 2 //"RELTYPE_COPY",
 					));
 
-					obj_set_opt("no_auto_translation",1);
 					foreach($xblist as $orig_brother_id => $items)
 					{
 						// loome vennad sinna kuhu vaja
 						$new_obj->create_brother($orig_brother_id);
 					};
 
-					foreach($object_translations as $lang_id => $item)
-					{
-						// nüüd tuleb teha iga asja jaoks tõlge
-						$translation_obj = new object($item);
-						$translation_obj->set_lang($lang_id);
-						$translation_obj->save_new();
-						
-						$new_obj->connect(array(
-							"to" => $translation_obj->id(),
-							"reltype" => RELTYPE_TRANSLATION,
-						));
-
-						$translation_obj->connect(array(
-							"to" => $new_obj->id(),
-							"reltype" => RELTYPE_ORIGINAL,
-						));
-
-						// ja nüüd kui tõlked on tehtud, tuleb tõlkest teha veel vennad
-						// sinna kuhu vaja.
-
-						foreach($xblist as $xb_key => $xb_val)
-						{
-							// sest see on juba tehtud
-							if ($xb_key != $original_parent)
-							{
-								$prx = $xb_val[$lang_id];
-								$brot_id = $translation_obj->create_brother($prx);
-								$brot_obj = new object($brot_id);
-								$brot_obj->set_lang($lang_id);
-								$brot_obj->save();
-
-							}
-						};
-					};
-					obj_set_opt("no_auto_translation",0);
 				};
 					
 
@@ -487,7 +448,6 @@ class staging extends class_base
 	function _get_translations_for($id,$ids = false)
 	{
 		$obj = new object($id);
-		obj_set_opt("no_auto_translation", 1);
 
 		$tr_conns = $obj->connections_from(array(
 			"type" => RELTYPE_TRANSLATION,
@@ -502,7 +462,6 @@ class staging extends class_base
 			$rv[$argstr] = $tr_obj->id();
 		};
 
-		obj_set_opt("no_auto_translation",0);
 
 		return $rv;
 	}

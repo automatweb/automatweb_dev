@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.107 2006/09/29 15:12:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.108 2006/10/04 13:34:50 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -991,14 +991,11 @@ class project extends class_base
 
 		// event translations have the id of the object in original language
 		$o = $arr["obj_inst"];
-		obj_set_opt("no_auto_translation", 1);
 		$fx = $o->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
 		if ($fx)
 		{
 			$o = $fx;
 		};
-
-		obj_set_opt("no_auto_translation", 0);
 
 		$this->overview = array();
 		
@@ -1333,9 +1330,7 @@ class project extends class_base
 		if (1 != $o->prop("skip_subproject_events"))
 		{
 			$this->used = array();
-			#obj_set_opt("no_auto_translation", 1);
 			$this->_recurse_projects(0,$arr["id"]);
-			#obj_set_opt("no_auto_translation", 0);
 		};
 
 		if (is_array($this->prj_map))
@@ -1447,7 +1442,6 @@ class project extends class_base
 		$pl = get_instance(CL_PLANNER);
 		$ids = array();
 		$projects = $by_parent = array();
-		obj_set_opt("no_auto_translation", 0);
 		$lang_id = aw_global_get("lang_id");
 		// weblingi jaoks on vaja küsida connectioneid selle projekti juurde!
 		while($row = $this->db_next())
@@ -1490,7 +1484,6 @@ class project extends class_base
 			$projects[$prid] = $prid;
 
 			// äkki ma saan siis siin ka kasutada seda tsüklite ühendamist?
-			obj_set_opt("no_auto_translation",0);
 
 			$eid = $e_obj->id();
 
@@ -1551,7 +1544,6 @@ class project extends class_base
 		// now i have a list of all projects .. I need to figure out which menus connect to those projects
 		$web_pages = $project_images = array();
 		$c = new connection();
-		obj_set_opt("no_auto_translation",1);
 
 		$conns = $c->find(array(
 			"from" => $projects,
@@ -1634,8 +1626,6 @@ class project extends class_base
 			};
 			*/
 		};
-
-		obj_set_opt("no_auto_translation",0);
 
 		$lc = aw_global_get("LC");
 		$current_charset = aw_global_get("charset");
@@ -2271,7 +2261,6 @@ class project extends class_base
 	// it should create a list of connections starting from those projects
 	function _recurse_projects($parent,$prj_id)
 	{
-		#obj_set_opt("no_auto_translation", 1);
 		if ($this->used[$parent])
 		{
 			return false;
@@ -2316,10 +2305,6 @@ class project extends class_base
 			//};
 			$this->prj_level--;
 		}
-		
-
-		#obj_set_opt("no_auto_translation", 0);
-
 	}
 	
 	function callback_get_add_event($args = array())
@@ -2718,12 +2703,9 @@ class project extends class_base
 		// it is possible to attach a document containing detailed description of
 		// the project to the project. If the connection is present show the document
 		// in the web
-		$otrans = get_instance("translate/object_translation");
-		$others = $otrans->translation_list($prj_obj->id());
 
 		$lang_id = aw_global_get("lang_id");
 
-		//obj_set_opt("no_auto_translation", 1);
 		/*
 		if (aw_global_get("uid") == "meff")
 		{
@@ -2746,12 +2728,11 @@ class project extends class_base
 		
 		$c = new connection();
 		$conns = $c->find(array(
-			"from" => $others,
+			"from" => $prj_obj->id(),
 			"from.class_id" => CL_PROJECT,
 			//"type" => 7,
 			"to.lang_id" => $lang_id,
 		));
-		//obj_set_opt("no_auto_translation", 0);
 
 		/*
 		$conns = $prj_obj->connections_from(array(

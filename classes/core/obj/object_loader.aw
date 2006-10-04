@@ -251,11 +251,9 @@ class _int_object_loader extends core
 		{
 			$ob = $GLOBALS["objects"][$oid];
 		}
-		if (!isset($ob) || !is_object($ob) || 
-			($ob->obj_sys_flags["no_auto_translation"] != $GLOBALS["__obj_sys_opts"]["no_auto_translation"]))
+		if (!isset($ob) || !is_object($ob))
 		{
 			$ref = &new _int_object($oid);
-			$ref->obj_sys_flags = $GLOBALS["__obj_sys_opts"];
 			if ($ref->id() === NULL)
 			{
 				error::raise(array(

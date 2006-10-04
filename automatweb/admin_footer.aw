@@ -116,16 +116,8 @@ if ($site_title != "")	// weird, but lots of places rely on the yah line being e
 	$li = $l->get_list();
 	foreach($li as $lid => $ln)
 	{
-		if (false && aw_ini_get("config.object_translation"))
-		{
-			$url = aw_url_change_var("set_lang_id", $lid);//$l->mk_my_orb("right_frame", array("parent" => $GLOBALS["parent"], "period" => $GLOBALS["period"], "set_lang_id" => $lid), "admin_menus");
-			$target = "";
-		}
-		else
-		{
-			$url = $baseurl."/automatweb/index.aw?set_lang_id=".$lid;
-			$target = "_top";
-		}
+		$url = $baseurl."/automatweb/index.aw?set_lang_id=".$lid;
+		$target = "_top";
 		$tmp[] = html::href(array(
 			"url" => $url,
 			"target" => $target,

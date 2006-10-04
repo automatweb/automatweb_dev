@@ -1955,7 +1955,6 @@ function &obj($param = NULL)
 
 @comment
 currently possible options:
-no_auto_translation - 1/0 - if 1, no auto object translation is performed
 no_cache - 1/0 - if 1, ds_cache is not used even if it is loaded
 **/
 function obj_set_opt($opt, $val)

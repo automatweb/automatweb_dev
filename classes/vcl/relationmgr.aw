@@ -584,18 +584,6 @@ class relationmgr extends aw_template
 		
 		$tb->add_separator();
 		
-		if (aw_ini_get("config.object_translation") == 1)
-		{
-			$tb->add_button(array(
-				"name" => "translate",
-				"tooltip" => t("Tõlgi"),
-				"url" => $this->mk_my_orb("create", array("id" => $arr["obj_inst"]->id(), "return_url" => get_ru()), "object_translation"),
-				"target" => "_blank",
-				"img" => "edit.gif",
-			));
-			$tb->add_separator();
-		}
-		
 		$tb->add_button(array(
 			"name" => "refresh",
 			"img" => "refresh.gif",
@@ -889,14 +877,6 @@ class relationmgr extends aw_template
 			));
 			
 			$type_str = $this->reltypes[$reltype_id];
-			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_TRANSLATION))
-			{
-				$type_str = "tõlge (".$langinfo[$alias->prop("to.lang_id")].")";
-			}
-			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_ORIGINAL))
-			{
-				$type_str = "originaal (".$langinfo[$alias->prop("to.lang_id")].")";
-			}
 
 			if ($alias->prop("relobj_id"))
 			{

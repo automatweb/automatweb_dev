@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.369 2006/10/03 13:48:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.370 2006/10/04 13:34:48 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -336,7 +336,7 @@ class menuedit extends aw_template
 			$class_id = $_obj->class_id();
 			if ($class_id == CL_MENU)
 			{
-				if (!($_obj->prop("type") == MN_CLIENT || aw_ini_get("config.object_translation") == 1) && !$set_lang_id)
+				if (!($_obj->prop("type") == MN_CLIENT) && !$set_lang_id)
 				{
 					$set_lang_id = $_obj->lang_id();
 				};
@@ -383,7 +383,6 @@ class menuedit extends aw_template
 				// we must reset the objcache here, because
 				// it already contains the section obj
 				// and after the language switch it contains the old language
-				// objects and that messes up the auto_translation
 				// anyway, tyhis does not add much overhead, 
 				// because here we should only have the section object loaded
 			}
@@ -595,27 +594,6 @@ class menuedit extends aw_template
 			header("X-AW-Section: ".$section);
 		}
 
-		if (aw_ini_get("config.object_translation"))
-		{
-			// check the lang_id of the section object.
-			// if it is different from the current language, then that means
-			// that the object exists, but in another language.
-			// in that case, redirect the user to no trans page
-			$o = obj($section);
-			$lid = $o->lang_id();
-			if ($lid != aw_global_get("lang_id") && $o->prop("type") != MN_CLIENT)
-			{
-				// only redirect of we are not in trans msg already
-				if (aw_global_get("action") == "")
-				{
-					header("Location: ".$this->mk_my_orb("show_trans", array(
-						"section" => $section,
-						"set_lang_id" => aw_global_get("lang_id")
-					), "object_translation"));
-					die();
-				}
-			}
-		}
 		return $section;
 	}
 

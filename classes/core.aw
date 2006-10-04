@@ -1330,19 +1330,6 @@ class core extends acl_base
 		{
 			$this->clid = $args["clid"];
 		}
-		if (is_array($args) && isset($args["trid"]))
-		{
-			if (!is_object($this->tr))
-			{
-				$this->tr = get_instance("translate/class_translator");
-			}
-			$this->tr->load_catalog($this->clid);
-		}
-	}
-
-	function tr($arg)
-	{
-		return $this->tr->get($this->trid,$arg);
 	}
 
 	////

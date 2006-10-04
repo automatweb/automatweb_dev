@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.224 2006/09/15 11:17:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.225 2006/10/04 13:34:48 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -989,7 +989,7 @@ if (!defined("DEFS"))
 		// why? well, then you can't override server vars from the url.
 
 		// known variables - these can be modified by the user and are not to be trusted, so we get them first 
-		$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order","cal","date","trid", "project", "view");
+		$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order","cal","date", "project", "view");
 		foreach($impvars as $k)
 		{
 			if (isset($GLOBALS[$k]))

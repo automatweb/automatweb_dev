@@ -192,7 +192,6 @@ class promo_display
 				$awt->start("def-doc");
 				if ($o->prop("trans_all_langs"))
 				{
-					obj_set_opt("no_auto_translation", 1);
 					obj_set_opt("no_cache", 1);
 				}
 
@@ -250,7 +249,6 @@ class promo_display
 
 				if ($o->prop("trans_all_langs"))
 				{
-					obj_set_opt("no_auto_translation", 0);
 					obj_set_opt("no_cache", 0);
 				}
 				$awt->stop("def-doc");
