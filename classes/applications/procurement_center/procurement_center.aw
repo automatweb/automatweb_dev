@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.14 2006/10/03 15:21:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.15 2006/10/04 14:14:24 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -54,7 +54,7 @@
 	
 
 @groupinfo offerers_find caption="Otsing" parent=offerers
-@default group=offerers_find$this_object->prop("procurement")
+@default group=offerers_find
 	
 	@property offerers_find_tb type=toolbar no_caption=1 store=no
 	@layout offerers_find_l type=hbox width=20%:80%

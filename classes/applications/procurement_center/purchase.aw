@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.7 2006/10/03 17:17:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.8 2006/10/04 14:14:24 markop Exp $
 // purchase.aw - Ost 
 /*
 
@@ -123,29 +123,43 @@ class purchase extends class_base
 				
 			case "offers_add":
 				$tb =&$arr["prop"]["vcl_inst"];
-				$pps = get_instance("vcl/popup_search");
+				$pps = get_instance("applications/procurement_center/procurement_offer_search");
+				$prop["value"] = $pps->get_popup_search_link(array(
+					"pn" => "rows[$id][person]",
+					"multiple" => 1,
+					"clid" => array(CL_CRM_PERSON)
+				)).$prop["value"];
+				
 
-				$search_url = $this->mk_my_orb("do_search", array(
-						"id" => $arr["obj_inst"]->id(),
-						"pn" => "offers",
-						"clid" => array(CL_PROCUREMENT_OFFER),
-						"multiple" => "",
-					), "popup_search");
-
-				$url = $this->mk_my_orb("do_search", array(
+//				$search_url = $this->mk_my_orb("do_search", array(
+//						"id" => $arr["obj_inst"]->id(),
+//						"pn" => "offers",
+//						"clid" => array(CL_PROCUREMENT_OFFER),
+//						"multiple" => "",
+//					), "popup_search");
+//
+/*				$url = $pps->get_popup_search_link(array(
+					"pn" => "offers",
+					"multiple" => 1,
+					"clid" => array(CL_PROCUREMENT_OFFER)
+				));
+				
+*/				$url = $pps->mk_my_orb("do_search", array(
 						"pn" => "offers",
 						"clid" => array(
 							CL_PROCUREMENT_OFFER,
 						),
 						"multiple" => 1,
+						"s" => array("offerer" => $arr["obj_inst"]->prop_str("offerer")),
 		//				"tbl_props" => array(0 => "offerer"),
 		//				"search_props" => array("offerer"),
-						), "popup_search");
-				
+						));
+				arr($arr["obj_inst"]->prop_str("offerer"));
 				$tb->add_button(array(
 					"name" => "search",
 					"img" => "search.gif",
 					"url" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+//					"url" => $url,
 					'tooltip' => t('Otsi'),
 				));
 
@@ -841,11 +855,5 @@ class purchase extends class_base
 	
 	}
 
-
-
-
-
-
-//-- methods --//
 }
 ?>
