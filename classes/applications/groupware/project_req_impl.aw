@@ -92,6 +92,21 @@ class project_req_impl extends class_base
 			"text" => t("N&otilde;ue"),
 		));
 
+		$t->add_menu_item(array(
+			"name" => "new_cat",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_MENU, 
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $arr["obj_inst"]->prop("orderer"),
+					"set_proj" => $arr["obj_inst"]->id()
+				)
+			),
+			"text" => t("Kategooria"),
+		));
+
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -128,6 +143,7 @@ class project_req_impl extends class_base
 
 	function _init_req_tbl(&$t)
 	{	
+		$t->set_header( "<b>". t("N&otilde;uded") . "</b>");
 		$t->define_field(array(
 			"name" => "icon",
 			"width" => 1,
@@ -177,7 +193,7 @@ class project_req_impl extends class_base
 		}
 		$ol = new object_list(array(
 			"parent" => $arr["request"]["tf"],
-			"class_id" => array(CL_BUG,CL_TASK,CL_CRM_CALL,CL_CRM_MEETING)
+			"class_id" => array(CL_BUG,CL_TASK,CL_CRM_CALL,CL_CRM_MEETING, CL_PROCUREMENT_REQUIREMENT, CL_MENU)
 		));
 		classload("core/icons");
 		$u = get_instance(CL_USER);

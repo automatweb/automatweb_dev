@@ -86,12 +86,36 @@ class project_files_impl extends class_base
 		return $ff->id();
 	}
 
+	
+	function _get_parent_folders($obj)
+	{
+		$parents = array();
+		if($obj->class_id() == CL_PROJECT)
+		{
+			$obj = $obj->get_first_obj_by_reltype("RELTYPE_FILES_FLD");
+//			$parents[] = $obj->id();
+		}
+		$ol = new object_list(array(
+			"lang_id" => array(),
+			"parent" => $obj->id(),
+			"class_id" => CL_MENU,
+		));
+		$parents[] = $obj->id();
+		foreach($ol->arr() as $folder)
+		{
+			$parents = array_merge($parents,$this->_get_parent_folders($folder));
+		}
+		return $parents;
+	}
+
 	function _get_files_tree($arr)
 	{
 		$otf = $arr["request"]["tf"];
 		unset($arr["request"]["tf"]);
 		$pt = $this->_get_files_pt($arr);
 		classload("core/icons");
+		$parent_folders = $this->_get_parent_folders($arr["obj_inst"]);
+		
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML, 
@@ -109,7 +133,7 @@ class project_files_impl extends class_base
 			"icon" => icons::get_icon_url(CL_MENU)
 		));
 
-		$nm = t("Sorteerimata");
+		$nm = t("Sorteerimata") ;
 		if ($otf == "unsorted")
 		{
 			$nm = "<b>".$nm."</b>";
@@ -117,8 +141,59 @@ class project_files_impl extends class_base
 		$arr["prop"]["vcl_inst"]->add_item(0, array(
 			"id" => "unsorted",
 			"name" => $nm,
-			"url" => aw_url_change_var("tf", "unsorted")
+			"url" => aw_url_change_var("tf", "unsorted"),
 		));
+		
+		$nm = t("T&uuml;&uuml;bi j&auml;rgi");
+		if ($otf == "by_type")
+		{
+			$nm = "<b>".$nm."</b>";
+		}
+		$arr["prop"]["vcl_inst"]->add_item(0, array(
+			"id" => "by_type",
+			"name" => $nm,
+			"url" => aw_url_change_var("tf", "by_type"),
+		));
+		
+		$types = array(
+			CL_FILE => t("Fail"),
+			CL_CRM_MEMO => t("Memo"),
+			CL_CRM_DOCUMENT => t("CRM Dokument"),
+			CL_CRM_DEAL => t("Leping"),
+			CL_CRM_OFFER => t("Pakkumine"),
+			CL_PROJECT_STRAT_GOAL_EVAL_WS => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
+			CL_PROJECT_RISK_EVAL_WS => t("Riskide hindamise t&ouml;&ouml;laud"),
+			CL_PROJECT_ANALYSIS_WS => t("Anal&uuml;&uuml;si t&ouml;&ouml;laud"),
+		);
+		$pr = $arr["obj_inst"]->id();
+		foreach($types as $clid => $capt)
+		{
+			$filter = array(
+				"class_id" => $clid,
+				"lang_id" => array(),
+			);
+			if(in_array($clid ,array(CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_MEMO,CL_CRM_OFFER)))
+			{
+				$filter["project"] = $pr;
+			}
+			
+			if(in_array($clid ,array(CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
+			{
+				$filter["parent"] = $parent_folders;
+			}
+			$ol = new object_list($filter);
+			$nm = $capt."(".sizeof($ol->ids()).")";
+			if ($otf == $clid)
+			{
+				$nm = "<b>".$nm."</b>";
+			}
+			$arr["prop"]["vcl_inst"]->add_item("by_type", array(
+				"id" => $clid,
+				"name" => $nm,
+				"url" => aw_url_change_var("tf", $clid),
+			));
+		}	
+		
 	}
 
 	function _init_files_tbl(&$t)
@@ -186,9 +261,11 @@ class project_files_impl extends class_base
 		$pr = NULL;
 		if ($arr["request"]["tf"] == "unsorted")
 		{
-			$ot = new object_tree(array("class_id" => CL_MENU, "parent" => $pt, "lang_id" => array(), "site_id" => array()));
-			$pt = new obj_predicate_not(array($pt, $pt) + $ot->ids());
+//			$ot = new object_tree(array("class_id" => CL_MENU, "parent" => $pt, "lang_id" => array(), "site_id" => array()));
+//			$pt = new obj_predicate_not(array($pt, $pt) + $ot->ids());
 			$pr = $arr["obj_inst"]->id();
+			$pt = new obj_predicate_not($this->_get_parent_folders($arr["obj_inst"]));
+		
 		}
 		$filter = array(
 			$filters,
@@ -207,6 +284,23 @@ class project_files_impl extends class_base
 				"CL_CRM_OFFER.project" => $pr,
 			))
 		);
+
+		if(in_array($arr["request"]["tf"], array(CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
+		{
+			$pr = $arr["obj_inst"]->id();
+			$filter = array(
+				"class_id" => $arr["request"]["tf"],
+				"lang_id" => array(),
+			);
+			if(in_array($arr["request"]["tf"] ,array(CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_MEMO,CL_CRM_OFFER)))
+			{
+				$filter["project"] = $pr;
+			}
+			if(in_array($clid ,array(CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
+			{
+				$filter["parent"] = $parent_folders;
+			}	
+		}
 
 		$ol = new object_list($filter);
 		classload("core/icons");
