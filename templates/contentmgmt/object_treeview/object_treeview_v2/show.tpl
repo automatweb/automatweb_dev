@@ -44,6 +44,14 @@ text-decoration: none;
 	</tr>
 	<!-- END SUB: FILE_GROUP -->
 </table>
+<p>
+<!-- SUB: PAGE -->
+<a href="{VAR:url}">{VAR:page}</a>
+<!-- END SUB: PAGE -->
+<!-- SUB: PAGE_SEL -->
+<strong><a href="{VAR:url}">{VAR:page}</a></strong>
+<!-- END SUB: PAGE_SEL -->
+</p>
 <center>
 <!-- SUB: ALPHABET -->
 <a href="{VAR:char_url}">{VAR:char}</a>&nbsp;&nbsp; 
