@@ -105,6 +105,24 @@
             <caption>Konfiguratsioonivorm</caption>
       </property>
       <property>
+            <name>change_time</name>
+            <table>objects</table>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced_settings</group>
+            <caption>Sisu uuendamise sagedus</caption>
+      </property>
+      <property>
+            <name>change_pri</name>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced_settings</group>
+            <caption>Sisu t&amp;amp;auml;htsus (0-1.0)</caption>
+      </property>
+      <property>
             <name>no_export</name>
             <table>objects</table>
             <type>checkbox</type>

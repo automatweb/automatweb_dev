@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.170 2006/08/24 10:15:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.171 2006/10/04 16:18:38 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -48,6 +48,12 @@
 
 		@property cfgmanager type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize group=advanced_settings
 		@caption Konfiguratsioonivorm
+
+		@property change_time type=select field=meta method=serialize group=advanced_settings
+		@caption Sisu uuendamise sagedus
+
+		@property change_pri type=textbox field=meta method=serialize group=advanced_settings
+		@caption Sisu t&auml;htsus (0-1.0)
 
 	@groupinfo import_export caption=Eksport submit=no parent=general
 
@@ -457,6 +463,18 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "change_time":
+				$arr = array(
+					"always" => t("Alati muutuv"),
+					"hourly" => t("Tunnis korra"),
+					"daily" => t("P&auml;evas korra"),
+					"weekly" => t("N&auml;dalas korra"),
+					"monthly" => t("Kuus korra"),
+					"yearly" => t("Aastas korra"),
+					"never" => t("Ei muudeta (arhiveeritud)"),
+				);
+				$data["options"] = $arr;
+				break;
 			case "set_doc_content_type":
 				$ol = new object_list(array("class_id" => CL_DOCUMENT_CONTENT_TYPE, "lang_id" => array(), "site_id" => array()));
 				$data["options"] = array("" => t("Vali t&uuml;hjaks")) + $ol->names();
