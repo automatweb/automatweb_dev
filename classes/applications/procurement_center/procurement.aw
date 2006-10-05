@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.7 2006/08/28 13:40:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.8 2006/10/05 12:17:25 markop Exp $
 // procurement.aw - Hange 
 /*
 
@@ -310,6 +310,22 @@ class procurement extends class_base
 	//	$t->set_default_sortby("jrk");
 	}
 
+	function _get_sub_folders($obj)
+	{
+		$parents = array();
+		$ol = new object_list(array(
+			"lang_id" => array(),
+			"parent" => $obj->id(),
+			"class_id" => CL_MENU,
+		));
+		$parents[] = $obj->id();
+		foreach($ol->arr() as $folder)
+		{
+			$parents = array_merge($parents,$this->_get_sub_folders($folder));
+		}
+		return $parents;
+	}
+
 	/**
 		@attrib name=product_autocomplete_source
 		@param product optional
@@ -326,19 +342,18 @@ class procurement extends class_base
 			foreach($co->connections_from(array("type" => "RELTYPE_WAREHOUSE")) as $conn)
 			{
 				$warehouse = obj($conn->prop("to"));
-				foreach($warehouse->connections_from(array("type" => "RELTYPE_PRODUCT")) as $product_conn)
-				{
-					if(is_oid($product_conn->prop("to"))) $ol->add($product_conn->prop("to"));
-				}
+				$warehouse->config = obj($warehouse->prop("conf"));
+				$folder = obj($warehouse->config->prop("prod_fld"));
+				$parents = $this->_get_sub_folders($folder);
 			}
 		}
-		else
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
 			"name" => $arr["product"]."%",
 			"lang_id" => array(),
 			"site_id" => array(),
-			"limit" => 200
+			"limit" => 2000,
+			"parent" => $parents,
 		));
 		return $ac->finish_ac($ol->names());
 	}
