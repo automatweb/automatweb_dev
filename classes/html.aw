@@ -18,6 +18,9 @@ class html extends aw_template
 		if true, selection is disabled
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
+	@param tabindex optional type=string
+		tab inde
+			
 	@returns string / html select
 
 	@comment creates html select
@@ -33,7 +36,7 @@ class html extends aw_template
 		{
 			$selected = $value;
 		};
-
+		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		if (isset($size))
 		{
 			$sz = "size=\"$size\" ";
@@ -93,7 +96,7 @@ class html extends aw_template
 			$id = $name;
 		}
 
-		return "<select name=\"$name\" $cl id=\"$id\" $sz $mz $onc $disabled $textsize>\n$optstr</select>$post_append_text\n";
+		return "<select name=\"$name\" $cl id=\"$id\" $sz $mz $onc $disabled $textsize{$ti}>\n$optstr</select>$post_append_text\n";
 	}
 
 	/**
@@ -155,6 +158,8 @@ class html extends aw_template
 	@param option_is_tuple optional type=bool
 		Indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. If set to TRUE then the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered. Note that user may type an option without selecting it from autocomplete list in which case posted value will not be $key.
 
+	@param tabindex optional type=string
+		tab index
 
 	@returns string / html textbox
 
@@ -176,6 +181,7 @@ class html extends aw_template
 		$onkeypress = isset($onkeypress) ? ' onkeypress="'.$onkeypress.'"' : "";
 		$onFocus = isset($onFocus) ? ' onFocus="'.$onFocus.'"' : '';
 		$onBlur = isset($onBlur) ? ' onBlur="'.$onBlur.'"' : '';
+		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$autocomplete = "";
 		$js_name = str_replace(array("[", "]", "-"), "_", $name);
 
@@ -266,8 +272,7 @@ class html extends aw_template
 				$value = $content;
 			}
 		}
-
-		return "<input type=\"text\" id=\"$id\" $ac_off name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize} />$post_append_text\n{$value_elem}{$autocomplete}";
+		return "<input type=\"text\" id=\"$id\" $ac_off name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti} />$post_append_text\n{$value_elem}{$autocomplete}";
 	}
 
 	/**

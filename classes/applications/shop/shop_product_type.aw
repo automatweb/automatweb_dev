@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.5 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.6 2006/10/05 12:01:29 markop Exp $
 // shop_product_type.aw - Toote t&uuml;&uuml;p 
 /*
 
@@ -23,6 +23,8 @@
 @property file_folder type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Toodete failide kataloog
 
+@property default_product_folder type=select field=meta method=serialize
+@caption Vaikimisi toodete kataloog
 
 @reltype SP_CFGFORM value=1 clid=CL_CFGFORM
 @caption seadete vorm
@@ -51,9 +53,38 @@ class shop_product_type extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-
+			case "default_product_folder":
+				if($arr["new"])
+				{
+					$options = $this->_get_sub_folders(obj($arr["request"]["parent"]));
+				}
+				else
+				{
+					$options = $this->_get_sub_folders(obj($arr["obj_inst"]->parent()));
+				}
+				foreach($options as $opt)
+				{
+					$data["options"][$opt->id()] = $opt->name(); 
+				}arr($data["options"]);
+				break;
 		};
 		return $retval;
+	}
+
+	function _get_sub_folders($obj)
+	{
+		$parents = array();
+		$ol = new object_list(array(
+			"lang_id" => array(),
+			"parent" => $obj->id(),
+			"class_id" => CL_MENU,
+		));
+		$parents[] = $obj;
+		foreach($ol->arr() as $folder)
+		{
+			$parents = array_merge($parents,$this->_get_sub_folders($folder));
+		}
+		return $parents;
 	}
 
 	function set_property($arr = array())

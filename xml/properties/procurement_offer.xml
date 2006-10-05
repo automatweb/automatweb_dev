@@ -46,6 +46,14 @@
             <caption>Hind</caption>
       </property>
       <property>
+            <name>currency</name>
+            <table>aw_procurement_offers</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_currency</field>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
             <name>accept_date</name>
             <table>aw_procurement_offers</table>
             <group>general</group>
@@ -87,6 +95,15 @@
             <field>products</field>
       </property>
       <property>
+            <name>files_tb</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>files_tb</field>
+      </property>
+      <property>
             <name>files</name>
             <table>objects</table>
             <group>files</group>
@@ -94,6 +111,15 @@
             <no_caption>1</no_caption>
             <field>files</field>
             <caption>Manused</caption>
+      </property>
+      <property>
+            <name>files_table</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>files_table</field>
       </property>
       <property>
             <name>p_tb</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.12 2006/09/27 14:37:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.13 2006/10/05 12:01:27 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -25,6 +25,9 @@
 	@property price type=textbox size=10 table=aw_procurement_offers field=aw_price
 	@caption Hind
 
+	@property currency type=select table=aw_procurement_offers field=aw_currency
+	@caption Valuuta
+
 	@property accept_date type=date_select table=aw_procurement_offers field=aw_accept_date
 	@caption Aktsepteerimist&auml;htaeg
 	
@@ -39,13 +42,17 @@
 
 @groupinfo products caption="Tooted"
 @default group=products
-@property products type=table no_caption=1
+	@property products type=table no_caption=1
 
 @groupinfo files caption="Failid" 
 @default group=files
 
+	@property files_tb type=toolbar no_caption=1 store=no
+	
 	@property files type=text  no_caption=1
 	@caption Manused
+	
+	@property files_table type=table no_caption=1
 	
 @default group=r_list
 	@property p_tb type=toolbar no_caption=1 store=no
@@ -101,14 +108,59 @@ class procurement_offer extends class_base
 		);
 	}
 
+	/**
+		@attrib name=remove_conn
+	**/
+	function remove_conn($arr)
+	{
+		$this_obj = obj($arr["id"]);
+		foreach($arr["sel"] as $offer)
+		{
+			$off_obj = obj($offer);
+			$this_obj->disconnect(array("from" => $offer));
+		}
+		return $arr["post_ru"];
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "currency":
+				$curr_object_list = new object_list(array(
+					"class_id" => CL_CURRENCY,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				foreach($curr_object_list->arr() as $curr)
+				{
+					$prop["options"][$curr->id()] = $curr->name();
+				}
+				$u = get_instance(CL_USER);
+				$company = obj($u->get_current_company());
+				if(!$arr["obj_inst"]->prop("currency") && $arr["obj_inst"]->class_id())
+				{
+					$arr["obj_inst"]->set_prop("currency", $company->prop("currency"));
+				}
+				break;
 			case "files":
 				$this->_get_files($arr);
+				break;
+				
+			case "files_table":
+				$this->_get_files_table($arr);
+				break;	
+				
+			case "files_tb":
+				$tb =&$arr["prop"]["vcl_inst"];
+				$tb->add_button(array(
+					'name' => 'delete',
+					'img' => 'delete.gif',
+					'tooltip' => t('Kustuta'),
+					"action" => "remove_conn",
+				));
 				break;
 
 			case "rejected_table":
@@ -192,12 +244,145 @@ class procurement_offer extends class_base
 			case "products":
 				$_SESSION["procurement"]["accept"] = $arr["request"]["accept"];
 				$_SESSION["procurement"]["val"] = $arr["request"]["products"];
-				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("id" => $arr["obj_inst"]->id()))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
+				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("id" => $arr["obj_inst"]->id(), "return_url" => $arr["request"]["return_url"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
 				</script>";
 				die($popup);
 				break;
 		}
 		return $retval;
+	}
+
+	function _init_files_tbl(&$t)
+	{	
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "icon",
+			"align" => "center",
+			"sortable" => 0,
+			"width" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Nimi"),
+			"name" => "name",
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Looja"),
+			"name" => "createdby",
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Loodud"),
+			"name" => "created",
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"caption" => t("Muudetud"),
+			"name" => "modified",
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "pop",
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _get_files_table($arr)
+	{
+		$pt = $this->_get_files_pt($arr);
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_files_tbl($t);
+
+
+		$ol = new object_list($arr["obj_inst"]->connections_from(array()));
+		
+		classload("core/icons");
+		$clss = aw_ini_get("classes");
+		get_instance(CL_FILE);
+		foreach($ol->arr() as $o)
+		{
+			if(!(($o->class_id() == CL_FILE) || ($o->class_id() == CL_CRM_DOCUMENT) || ($o->class_id() == CL_CRM_DEAL) || ($o->class_id() == CL_CRM_OFFER) || ($o->class_id() == CL_CRM_MEMO))) continue;
+			$pm = get_instance("vcl/popup_menu");
+			$pm->begin_menu("sf".$o->id());
+
+
+			if ($o->class_id() == CL_FILE)
+			{
+				$pm->add_item(array(
+					"text" => $o->name(),
+					"link" => file::get_url($o->id(), $o->name())
+				));
+			}
+			else
+			{
+				foreach($o->connections_from(array("type" => "RELTYPE_FILE")) as $c)
+				{
+					$pm->add_item(array(
+						"text" => $c->prop("to.name"),
+						"link" => file::get_url($c->prop("to"), $c->prop("to.name"))
+					));
+				}
+			}
+			
+			$t->define_data(array(
+				"icon" => $pm->get_menu(array(
+					"icon" => icons::get_icon_url($o)
+				)),
+				"name" => html::obj_change_url($o),
+				"class_id" => $clss[$o->class_id()]["name"],
+				"createdby" => $o->createdby(),
+				"created" => $o->created(),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"oid" => $o->id()
+			));
+		}
+
+		$t->set_default_sortby("created");
+		$t->set_default_sorder("desc");
+	}
+	
+	function _get_files_pt($arr)
+	{
+		if ($arr["request"]["tf"] && $arr["request"]["tf"] != "unsorted")
+		{
+			return $arr["request"]["tf"];
+		}
+		$ff = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FILES_FLD");
+		if (!$ff)
+		{
+			$ff = obj();
+			$ff->set_class_id(CL_MENU);
+			$ff->set_parent($arr["obj_inst"]->id());
+			$ff->set_name(sprintf(t("%s failid"), $arr["obj_inst"]->name()));
+			$ff->save();
+			$arr["obj_inst"]->connect(array(
+				"to" => $ff->id(),
+				"type" => "RELTYPE_FILES_FLD"
+			));
+		}
+		return $ff->id();
 	}
 
 	/**
@@ -229,11 +414,19 @@ class procurement_offer extends class_base
 		$options = $types->names();
 		asort($options);
 		
-		$co = obj($this_object->prop("offerer"));
-		$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
-		if(is_object($warehouse)) $parent = $warehouse->id();
+		if(is_oid($this_object->prop("procurement")) && $this->can("view" , $this_object->prop("procurement")))
+		{
+			$procurement = obj($this_object->prop("procurement"));
+			$co = obj($procurement->prop("orderer"));
+			$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+		}
+		if(is_object($warehouse))
+		{
+			$warehouse->config = obj($warehouse->prop("conf"));
+			$parent = $warehouse->config->prop("prod_fld");
+		}	
 		else $parent = $_GET["id"];
-		
+	
 		if($_POST["types"])
 		{
 			foreach($_SESSION["procurement"]["val"] as $key=>$product)
@@ -247,6 +440,18 @@ class procurement_offer extends class_base
 
 				if (!$ol->count())
 				{
+				if(is_oid($_POST["types"][$product["product"]]))
+					{
+						$type_object = obj($_POST["types"][$product["product"]]);
+						if(is_oid($type_object->prop("default_product_folder")))
+						{
+							$folder = obj($type_object->prop("default_product_folder"));
+							if($folder->class_id() == CL_MENU)
+							{
+								$parent = $folder->id();
+							}
+						}
+					}
 					$p = obj();
 					$p->set_class_id(CL_SHOP_PRODUCT);
 					$p->set_parent($parent);
@@ -295,21 +500,20 @@ class procurement_offer extends class_base
 			}
 				$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
-			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
+			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products", "return_url" => $_GET["return_url"]))."';
 			window.close();
 			</script>");
 		}
-		
 		$new_products = 0;
 		foreach($_SESSION["procurement"]["val"] as $product)
 		{
+			if($product["product"] == "") continue;
 			$ol = new object_list(array(
 				"class_id" => array(CL_SHOP_PRODUCT),
 				"name" => $product["product"],
 				"lang_id" => array(),
 				"site_id" => array(),
 			));
-			
 			if (!$ol->count())
 			{
 				$new_products = 1;
@@ -328,6 +532,12 @@ class procurement_offer extends class_base
 				if(is_oid($product["row_id"]))
 				{
 					$o = obj($product["row_id"]);
+					if($product["product"] == "")
+					{
+						$o->disconnect(array(
+							"from" => $this_object->id(),
+						));
+					}
 				}
 				else
 				{
@@ -337,6 +547,7 @@ class procurement_offer extends class_base
 						$o->set_class_id(CL_PROCUREMENT_OFFER_ROW);
 						$o->set_parent($this_object->id());
 						$o->set_name(sprintf(t("%s rida"), $this_object->name()));
+						$o->set_prop("shipment", $this_object->prop("shipment_date"));
 						$o->save();
 						$o->connect(array(
 							"to" => $this_object->id(),
@@ -349,7 +560,8 @@ class procurement_offer extends class_base
 				if(array_key_exists($product["row_id"] , $_SESSION["procurement"]["accept"])) $o->set_prop("accept",1);
 				else $o->set_prop("accept",null);
 				if(is_array($product["shipment"])) $product["shipment"] = mktime(0,0,0,$product["shipment"]["month"], $product["shipment"]["day"] , $product["shipment"]["year"]);
-//	
+				if(!$product["shipment"]) $product["shipment"] = $o->prop("shipment");
+				
 //				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
 				foreach($product as $key=>$val)
 				{
@@ -366,13 +578,17 @@ class procurement_offer extends class_base
 			}
 			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
-			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
+			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products", "return_url" => $_GET["return_url"]))."';
 			window.close();
 			</script>");
 		}
 		$t->define_data(array("type" => html::submit(array("name" => "submit", "class" => "submit" , "value" => "submit" , "onclick"=>"self.disabled=true;submit_changeform(''); return false;") )));
 		$t->set_sortable(false);
-		return "<form action='".$this->mk_my_orb("set_type", array("val" => $_GET["val"], "id" => $_GET["id"] , "accept" => $_GET["accept"]))."' method='POST' name='changeform' enctype='multipart/form-data' >".$t->draw()."</form>";
+		return "<form action='".$this->mk_my_orb("set_type", array(
+			"val" => $_GET["val"], 
+			"id" => $_GET["id"] , 
+			"accept" => $_GET["accept"], 
+			"return_url" => $_GET["return_url"]))."' method='POST' name='changeform' enctype='multipart/form-data' >".$t->draw()."</form>";
 	}
 	
 	function callback_mod_reforb($arr)
@@ -396,6 +612,7 @@ class procurement_offer extends class_base
 			case "aw_state":
 			case "aw_completion_date":
 			case "aw_accept_date":
+			case "aw_currency":
 			case "aw_shipment_date":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
@@ -637,11 +854,12 @@ class procurement_offer extends class_base
 			if(is_oid($company_id) && $this->can("view", $company_id)) $co = obj($company_id);
 		}
 		
-		$t->define_field(array(
-			"name" => "jrk",
-			"caption" => t("Id"),
-			"numeric" => 1,
-		));
+	//	$t->set_id("products_table");
+	//	$t->define_field(array(
+	//		"name" => "jrk",
+	//		"caption" => t("Id"),
+	//		"numeric" => 1,
+	//	));
 
 		$t->define_field(array(
 			"name" => "product",
@@ -700,7 +918,33 @@ class procurement_offer extends class_base
 			'class' => CL_PROCUREMENT_OFFER_ROW,
 		));
 		$procurement_inst = get_instance(CL_PROCUREMENT);
-		$max_x = 0;
+		$max_x = 0;$x = 0;
+		$prod_rows_data = array();
+		if(!sizeof($conns) && is_oid($this_obj->prop("procurement")))
+		{
+			$procurement = obj($this_obj->prop("procurement"));
+			foreach($procurement->meta("products") as $product)
+			{
+				if(!$product["product"]) continue;
+				$prod_rows_data[] = array(
+					"x" => $x,
+					"max_x" => $max_x,
+				//	"row" => $row,
+					"product" => $product["product"],
+				//	"id" => $row->id(),
+					"amount" => $product["amount"],
+					"unit" => $product["unit"],
+				//	"price" => $row->prop("price"),
+					"currency" => $this_obj->prop("currency"),
+					"shipment" => $this_obj->prop("shipment_date"),
+					"accept" =>  html::checkbox(array(
+						"name" => "products[".$x."][accept]",
+					)),
+				);
+				$x++;
+				$max_x++;
+			}
+		}
 		foreach($conns as $conn)
 		{
 			if(is_oid($conn->prop("from")))$row = obj($conn->prop("from"));
@@ -716,52 +960,74 @@ class procurement_offer extends class_base
 					"checked" => $row->prop("accept"),
 				));
 			}
-			
-			$date = date("d.m.Y", $row->prop("shipment"));
-			$shipment =  $date . " vali";
-			
+			$prod_rows_data[] = array(
+				"date" => date("d.m.Y", $row->prop("shipment")),
+				"accept" => $accept,	
+				"x" => $x,
+				"max_x" => $max_x,
+				"row" => $row,
+				"product" => $row->prop("product"),
+				"id" => $row->id(),
+				"amount" => $row->prop("amount"),
+				"unit" => $row->prop("unit"),
+				"price" => $row->prop("price"),
+				"currency" => $row->prop("currency"),
+				"shipment" => $row->prop("shipment"),
+			);
+		}
+		foreach($prod_rows_data as $prod_row_data)	
+		{
+			extract($prod_row_data);
 			$t->define_data(array(
 				"jrk"		=> $x+1,
-				"row_id" 	=> $row->id(),
+//				"row_id" 	=> $row->id(),
 				"product"	=> html::textbox(array(
 							"name" => "products[".$x."][product]",
 							"size" => "25",
-							"value" => $row->prop("product"),
+							"value" => $product,
 							"autocomplete_source" => $procurement_inst->mk_my_orb ("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
 							"autocomplete_params" => "products[".$x."][product]",
-							)).html::hidden(array(
-								"name" => "products[".$x."][row_id]", 
-								"value" => $row->id())),
+							"tabindex" => $x,
+							))
+						.html::hidden(array(
+								"name" => "products[".$x."][row_id]",
+								"value" => $id)),
 							
 				"amount"	=> html::textbox(array(
 							"name" => "products[".$x."][amount]",
 							"size" => "6",
-							"value" => $row->prop("amount"),
+							"value" =>  $amount,
+							"tabindex" => $x,
 							)),
 				'unit'		=> html::select(array(
 							"name" => "products[".$x."][unit]",
 							"options" => $unit_opts,
-							"value" => $row->prop("unit"),
+							"value" => $unit,
+							"tabindex" => $x,
 							)),
 				'price'		=> html::textbox(array(
 							"name" => "products[".$x."][price]",
 							"size" => "6",
-							"value" => $row->prop("price"),
+							"value" => $price,
+							"tabindex"=>$x,
 							)),
 				'currency'	=> html::select(array(
 							"name" => "products[".$x."][currency]",
 							"options" => $curr_opts,
-							"value" => $row->prop("currency"),
+							"value" => $currency,
 							)),
-				'shipment'	=> $shipment,
-				
+				'shipment'	=> html::date_select(array(
+							"name" => "products[".$id."][shipment]",
+							"value" => $shipment,
+						//	"size" => "6",
+							)),
 	//			html::textbox(array(
 	//						"name" => "products[".$x."][shipment]",
 	//						"size" => "6",
 	//						"value" => $row->prop("shipment"),
 	//						)),
 				'accept'	=> $accept,
-				"oid"		=> $row->id(),
+				"oid"		=> $id,
 			
 			));
 		}
@@ -1106,7 +1372,7 @@ class procurement_offer extends class_base
 
 	function callback_generate_scripts($arr)
 	{
-		if($arr["obj_inst"]->id() > 0)
+/*		if($arr["obj_inst"]->id() > 0)
 		$conns = $arr["obj_inst"]->connections_to(array(
 			'class' => CL_PROCUREMENT_OFFER_ROW,
 		));
@@ -1122,6 +1388,13 @@ class procurement_offer extends class_base
 		}
 		
 		$ret = "
+		
+		function changeContent(id,sb_val)
+		{
+		var x=document.getElementById(id).rows[0].cells
+		x[0].innerHTML=sb_val
+		}
+		
 		function aw_submit_handler() {".
 		""."var url = '".$procurement_inst->mk_my_orb("check_existing")."';";
 		// fetch list of companies with that name and ask user if count > 0
@@ -1154,7 +1427,7 @@ class procurement_offer extends class_base
 		"return true;}
 		";
 		return $ret;
-	}
+*/	}
 
 }
 ?>

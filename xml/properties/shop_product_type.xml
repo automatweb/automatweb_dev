@@ -50,6 +50,15 @@
             <method>serialize</method>
             <caption>Toodete failide kataloog</caption>
       </property>
+      <property>
+            <name>default_product_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi toodete kataloog</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT_TYPE</syslog_type>
             <relationmgr>yes</relationmgr>
