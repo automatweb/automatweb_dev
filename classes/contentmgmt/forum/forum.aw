@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.7 2006/09/20 10:30:02 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.8 2006/10/05 15:15:48 dragut Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1288,6 +1288,35 @@ topic");
 			$subj = "Re: " . $subj;
 		};
 
+		$error_str = '';
+		if (isset($_SESSION['aw_mb_error']) && is_array($_SESSION['aw_mb_error']))
+		{
+/*
+				'name' => 
+				'comment' => (strlen($comment) > 1) ? '' : 
+				'image_verification' => ($image_verification_result === true) ? '' : D
+*/
+			if ($_SESSION['aw_mb_error']['error']['name'] == 1)
+			{
+				$error_str .= t('Nime v&auml;li peab olema t&auml;idetud')."<br />";
+			}
+			if ($_SESSION['aw_mb_error']['error']['comment'] == 1)
+			{
+				$error_str .= t('Kommentaari v&auml;li peab olema t&auml;idetud')."<br />";
+			}
+			if ($_SESSION['aw_mb_error']['error']['image_verification'] == 1)
+			{
+				$error_str .= t('Sisestatud kontrollkood on vale');
+			}
+			$aw_mb_name = $_SESSION['aw_mb_error']['values']['name'];
+			$aw_mb_mail = $_SESSION['aw_mb_error']['values']['email'];
+			$args['comment'] = $_SESSION['aw_mb_error']['values']['comment'];
+			$subj = $_SESSION['aw_mb_error']['values']['subj'];
+			$this->vars(array(
+				'error_msg' => $error_str
+			));
+		}
+
 		$image_verification_oid = aw_ini_get('document.image_verification');
 		$image_verification_str = '';
 		if ( $this->can( 'view', $image_verification_oid ) )
@@ -1311,6 +1340,7 @@ topic");
 			"subj" => $subj,
 			"reply" => $reply,
 			"IMAGE_VERIFICATION" => $image_verification_str,
+			"ERROR" => $this->parse('ERROR'),
 			"reforb" => $this->mk_reforb("submit_comment",array("board" => $board,"parent" => $parent,"section" => $section,"act" => $act,"no_comments" => $args["no_comments"])),
 		));
 		return $this->parse();
@@ -1377,6 +1407,8 @@ topic");
 			$image_verification_inst = get_instance( CL_IMAGE_VERIFICATION );
 			$image_verification_result =  $image_verification_inst->validate($args['ver_code']); // returns true or false
 		}
+		
+		unset($_SESSION['aw_mb_error']);
 
 		if ( (strlen($name) > 0) && (strlen($comment) > 1) && ($image_verification_result === true) )
 		{
@@ -1434,6 +1466,17 @@ topic");
 
 			// need to flush cache here
 			$this->flush_cache();	
+		}
+		else
+		{
+			$_SESSION['aw_mb_error'] = array( 
+				'error' => array(
+					'name' => (strlen($name) > 0) ? 0 : 1,
+					'comment' => (strlen($comment) > 1) ? 0 : 1,
+					'image_verification' => ($image_verification_result === true) ? 0 : 1,
+				),
+				'values' => $args
+			);
 		}
 
 		if (not($act))
