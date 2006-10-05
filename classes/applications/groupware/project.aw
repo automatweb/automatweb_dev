@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.109 2006/10/05 13:21:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.110 2006/10/05 14:29:24 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -113,12 +113,8 @@ caption Teostajad
 	@property skip_subproject_events type=checkbox ch_value=1 table=aw_projects field=aw_skip_subproject_events
 	@caption Ära näita alamprojektide sündmusi
 
-
-@default group=prj_image
-
 	@property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize
 	@caption Pilt
-
 
 @default group=event_list_cal
 
@@ -303,11 +299,19 @@ caption Teostajad
 	property analysis_table type=table no_caption=1 store=no
 
 
-@groupinfo general2 parent=general caption="Üldine"
+@groupinfo general2 parent=general caption="&Uuml;ldandmed"
+	@groupinfo info_t caption="Lisainfo" parent=general
+	@groupinfo strat caption="Eesm&auml;rgid" parent=general submit=no
+	@groupinfo risks caption="Riskid" parent=general submit=no
 	@groupinfo web_settings parent=general caption="Veebiseadistused"
-	@groupinfo prj_image parent=general caption="Pilt"
-	@groupinfo participants parent=general caption="Osalejad"
 	@groupinfo sides parent=general caption="Konfliktianal&uuml;&uuml;s" submit=no
+	@groupinfo userdefined caption="Kasutaja defineeritud andmed" parent=general
+
+
+
+	groupinfo prj_image parent=general caption="Pilt"
+	@groupinfo participants parent=general caption="Osalejad"
+
 
 @groupinfo event_list caption="Tegevused" submit=no
 
@@ -320,23 +324,19 @@ groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
 @groupinfo event_list_premise caption="Tegevused eeldustegevuste põhiselt" submit=no
 
 	@groupinfo info caption="Projekti info"
-	@groupinfo info_t caption="Projekti info" parent=general
+
 	
 
 
 @groupinfo valuation caption="Hindamine" submit=no
-	@groupinfo strat caption="Eesm&auml;rgid" parent=general submit=no
 	groupinfo strat_a caption="Eesm&auml;rkide hindamine" parent=valuation submit=no
 	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=valuation store=no submit=no
 	groupinfo analysis caption="Anal&uuml;&uuml;sid" parent=valuation store=no submit=no
-	@groupinfo risks caption="Riskid" parent=general submit=no
 	groupinfo risks_eval caption="Riskide hindamine" parent=valuation submit=no
 	
 @groupinfo add_event caption="Muuda sündmust"
 @groupinfo files caption="Dokumendid" submit=no
 @groupinfo trans caption="Tõlkimine"
-
-@groupinfo userdefined caption="Andmed"
 
 @groupinfo team caption="Meeskond" submit=no
 
@@ -3154,6 +3154,7 @@ class project extends class_base
 
 		//kõigepealt default väärtused ... mis siis muutuvad kui tegu on kuude või nädalatega
 		$subdivisions = 1;
+		$subdivisions = ((int)6/$columns)*4;
 		$days = array ("P", "E", "T", "K", "N", "R", "L");
 		$column_length = 86400;
 		
@@ -3161,6 +3162,7 @@ class project extends class_base
 		{
 			$days = array (t("Jaanuar"), t("Veebruar"), t("M&auml;rts"), t("Aprill"), t("Mai"), t("Juuni"), t("Juuli"), t("August"), t("September"), t("Oktoober"), t("November"), t("Detsember"));
 			$subdivisions = 1;
+			$subdivisions = (int)(10/$columns)*3;
 			$column_length = 86400*30.5;
 		}
 		
@@ -3173,7 +3175,7 @@ class project extends class_base
 				$days[$x] = $x.'. '.t("N&auml;dal");
 				$x++;
 			}
-			$subdivisions = 7;
+			$subdivisions = (int)(4/$columns)*7;
 			$column_length = 86400*7;
 		}
 		
@@ -3326,65 +3328,93 @@ class project extends class_base
 
 		while ($x < $columns)
 		{
-			$url =  html::get_change_url(
-					$id,
-					array(
-					"id" => $id,
-						"start" => $start,
-						"group" => "goals_gantt",
-						"column_n" => $x+1,
-						"units" => $units,
-						"return_url" => get_ru(),
-					)
-			);
-			$links.= " ".html::href(array(
-				"url" => $url,
-				"caption" => $x+1,
-			));
+			if($column_n == $x+1)
+			{
+				$links.= " <b>". ($x+1)."</b>";
+			}
+			else
+			{
+				$url =  html::get_change_url(
+						$id,
+						array(
+						"id" => $id,
+							"start" => $start,
+							"group" => "goals_gantt",
+							"column_n" => $x+1,
+							"units" => $units,
+							"return_url" => get_ru(),
+						)
+				);
+				$links.= " ".html::href(array(
+					"url" => $url,
+					"caption" => $x+1,
+				));
+			}
 			$x++;
 		}
 
-		$links.= " ".html::href(array(
-			"url" => html::get_change_url(
-				$id,
-				array(
-					"id" => $id,
-					"start" => $start,
-					"group" => "goals_gantt",
-					"units" => "days",
-					"return_url" => get_ru(),
-				)
-			),
-			"caption" => t("P&auml;evad"),
-		));
-
-		$links.= " ".html::href(array(
-			"url" => html::get_change_url(
-				$id,
-				array(
-					"start" => $start,
-					"id" => $id,
-					"group" => "goals_gantt",
-					"units" => "weeks",
-					"return_url" => get_ru(),
-				)
-			),
-			"caption" => t("N&auml;dalad"),
-		));
+		if($units == "days")
+		{
+			$links.= " <b>".t("P&auml;evad")."</b>";
+		}
+		else
+		{
+			$links.= " ".html::href(array(
+				"url" => html::get_change_url(
+					$id,
+					array(
+						"id" => $id,
+						"start" => $start,
+						"group" => "goals_gantt",
+						"units" => "days",
+						"return_url" => get_ru(),
+					)
+				),
+				"caption" => t("P&auml;evad"),
+			));
+		}
 		
-		$links.= " ".html::href(array(
-			"url" => html::get_change_url(
-				$id,
-				array(
-					"id" => $id,
-					"start" => $start,
-					"group" => "goals_gantt",
-					"units" => "months",
-					"return_url" => get_ru(),
-				)
-			),
-			"caption" => t("Kuud"),
-		));
+		if($units == "weeks")
+		{
+			$links.= " <b>". t("N&auml;dalad")."</b>";
+		}
+		else
+		{
+			$links.= " ".html::href(array(
+				"url" => html::get_change_url(
+					$id,
+					array(
+						"start" => $start,
+						"id" => $id,
+						"group" => "goals_gantt",
+						"units" => "weeks",
+						"return_url" => get_ru(),
+					)
+				),
+				"caption" => t("N&auml;dalad"),
+			));
+		}
+		
+		if($units == "months")
+		{
+			$links.= " <b>". t("Kuud")."</b>";
+		}
+		else
+		{
+			$links.= " ".html::href(array(
+				"url" => html::get_change_url(
+					$id,
+					array(
+						"id" => $id,
+						"start" => $start,
+						"group" => "goals_gantt",
+						"units" => "months",
+						"return_url" => get_ru(),
+					)
+				),
+				"caption" => t("Kuud"),
+			));
+		}
 
 		$links.= " ".html::href(array(
 			"url" => html::get_change_url(
@@ -4472,6 +4502,9 @@ class project extends class_base
 				"oid" => $c->prop("to")
 			));
 		}
+		$t->set_default_sorder("asc");
+		$t->set_default_sortby("ord");
+		$t->sort_by();
 	}
 
 	function _strat_tb($arr)
@@ -4726,6 +4759,19 @@ class project extends class_base
 	**/
 	function paste_team_mem($arr)
 	{
+		if($arr["team"] == "all_parts")
+		{
+			$project = obj($arr["id"]);
+			foreach(safe_array($_SESSION["proj_team_member_copy"]) as $mem_id)
+			{
+				$project->connect(array(
+					"to" => $mem_id,
+					"type" => "RELTYPE_PARTICIPANT",
+				));
+			}
+			$_SESSION["proj_team_member_copy"] = null;
+			return $arr["post_ru"];
+		}
 		if (!$this->can("view", $arr["team"]))
 		{
 			return $arr["post_ru"];

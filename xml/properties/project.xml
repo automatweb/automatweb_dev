@@ -262,7 +262,7 @@
       <property>
             <name>prj_image</name>
             <table>objects</table>
-            <group>prj_image</group>
+            <group>web_settings</group>
             <type>releditor</type>
             <reltype>RELTYPE_PRJ_IMAGE</reltype>
             <use_form>emb</use_form>
@@ -720,25 +720,39 @@
       <groupinfo>
             <general2>
                   <parent>general</parent>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldandmed</caption>
             </general2>
+            <info_t>
+                  <caption>Lisainfo</caption>
+                  <parent>general</parent>
+            </info_t>
+            <strat>
+                  <caption>Eesm&amp;amp;auml;rgid</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </strat>
+            <risks>
+                  <caption>Riskid</caption>
+                  <parent>general</parent>
+                  <submit>no</submit>
+            </risks>
             <web_settings>
                   <parent>general</parent>
                   <caption>Veebiseadistused</caption>
             </web_settings>
-            <prj_image>
-                  <parent>general</parent>
-                  <caption>Pilt</caption>
-            </prj_image>
-            <participants>
-                  <parent>general</parent>
-                  <caption>Osalejad</caption>
-            </participants>
             <sides>
                   <parent>general</parent>
                   <caption>Konfliktianal&amp;amp;uuml;&amp;amp;uuml;s</caption>
                   <submit>no</submit>
             </sides>
+            <userdefined>
+                  <caption>Kasutaja defineeritud andmed</caption>
+                  <parent>general</parent>
+            </userdefined>
+            <participants>
+                  <parent>general</parent>
+                  <caption>Osalejad</caption>
+            </participants>
             <event_list>
                   <caption>Tegevused</caption>
                   <submit>no</submit>
@@ -765,30 +779,16 @@
             <info>
                   <caption>Projekti info</caption>
             </info>
-            <info_t>
-                  <caption>Projekti info</caption>
-                  <parent>general</parent>
-            </info_t>
             <valuation>
                   <caption>Hindamine</caption>
                   <submit>no</submit>
             </valuation>
-            <strat>
-                  <caption>Eesm&amp;amp;auml;rgid</caption>
-                  <parent>general</parent>
-                  <submit>no</submit>
-            </strat>
             <strat_res>
                   <caption>Eesm&amp;amp;auml;rkide hindamise tulemused</caption>
                   <parent>valuation</parent>
                   <store>no</store>
                   <submit>no</submit>
             </strat_res>
-            <risks>
-                  <caption>Riskid</caption>
-                  <parent>general</parent>
-                  <submit>no</submit>
-            </risks>
             <add_event>
                   <caption>Muuda s&amp;uuml;ndmust</caption>
             </add_event>
@@ -799,9 +799,6 @@
             <trans>
                   <caption>T&amp;otilde;lkimine</caption>
             </trans>
-            <userdefined>
-                  <caption>Andmed</caption>
-            </userdefined>
             <team>
                   <caption>Meeskond</caption>
                   <submit>no</submit>
