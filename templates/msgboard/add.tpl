@@ -1,3 +1,6 @@
+<!-- SUB ERROR -->
+{VAR:error_msg}
+<!-- END SUB ERROR -->
 <table width="100%" border="0" cellspacing="0" cellpadding="1">
 <form method="post" action="reforb.{VAR:ext}">
   <tr>
