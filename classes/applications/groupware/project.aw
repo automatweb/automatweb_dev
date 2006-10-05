@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.108 2006/10/04 13:34:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.109 2006/10/05 13:21:14 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -140,7 +140,20 @@ caption Teostajad
 
 	@layout files_lay type=hbox width=20%:80%
 
-		@property files_tree type=treeview store=no no_caption=1 parent=files_lay
+		@layout files_left_lay type=vbox parent=files_lay
+		@layout files_tree_lay closeable=1 type=vbox area_caption=Projekti&nbsp;dokumendid parent=files_left_lay
+			@property files_tree type=treeview store=no no_caption=1 parent=files_tree_lay
+		
+		@layout files_find_lay closeable=1 type=vbox area_caption=Dokumentide&nbsp;otsing parent=files_left_lay
+			@property files_find_name type=textbox parent=files_find_lay size=30
+			@caption Nimi
+			@property files_find_type type=select parent=files_find_lay
+			@caption T&uuml;&uuml;p
+			@property files_find_comment type=textbox parent=files_find_lay size=30
+			@caption Kirjeldus
+			@property files_search_sbt type=submit captionside=top parent=files_find_lay no_caption=1
+			@caption Otsi	
+	
 		@property files_table type=table store=no no_caption=1 parent=files_lay
 
 @default group=trans
@@ -573,8 +586,22 @@ class project extends class_base
 				$this->_get_sides_conflict($arr);
 				break;
 
+			case "files_find_type":
+				$data["options"] = array(
+					"" => "",
+					CL_FILE => t("Fail"),
+					CL_CRM_MEMO => t("Memo"),
+					CL_CRM_DOCUMENT => t("CRM Dokument"),
+					CL_CRM_DEAL => t("Leping"),
+					CL_CRM_OFFER => t("Pakkumine"),
+					CL_PROJECT_STRAT_GOAL_EVAL_WS => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
+					CL_PROJECT_RISK_EVAL_WS => t("Riskide hindamise t&ouml;&ouml;laud"),
+					CL_PROJECT_ANALYSIS_WS => t("Anal&uuml;&uuml;si t&ouml;&ouml;laud"),
+				);
 			case "team_search_co":
 			case "team_search_person":
+			case "files_find_name":
+			case "files_find_comment":
 				$data["value"] = $arr["request"][$data["name"]];
 				break;
 
@@ -2586,6 +2613,9 @@ class project extends class_base
 		}
 		$args["team_search_person"] = $arr["request"]["team_search_person"];
 		$args["team_search_co"] = $arr["request"]["team_search_co"];
+		$args["files_find_name"] = $arr["request"]["files_find_name"];
+		$args["files_find_type"] = $arr["request"]["files_find_type"];
+		$args["files_find_comment"] = $arr["request"]["files_find_comment"];
 	}
 
 	function callback_mod_reforb($arr)

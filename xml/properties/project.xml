@@ -316,8 +316,49 @@
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>files_lay</parent>
+            <parent>files_tree_lay</parent>
             <field>files_tree</field>
+      </property>
+      <property>
+            <name>files_find_name</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>textbox</type>
+            <parent>files_find_lay</parent>
+            <size>30</size>
+            <field>files_find_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>files_find_type</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>select</type>
+            <parent>files_find_lay</parent>
+            <field>files_find_type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>files_find_comment</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>textbox</type>
+            <parent>files_find_lay</parent>
+            <size>30</size>
+            <field>files_find_comment</field>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>files_search_sbt</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>submit</type>
+            <captionside>top</captionside>
+            <parent>files_find_lay</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>files_search_sbt</field>
+            <caption>Otsi	</caption>
       </property>
       <property>
             <name>files_table</name>
@@ -956,6 +997,25 @@
                   <width>20%:80%</width>
                   <group>files</group>
             </files_lay>
+            <files_left_lay>
+                  <type>vbox</type>
+                  <parent>files_lay</parent>
+                  <group>files</group>
+            </files_left_lay>
+            <files_tree_lay>
+                  <closeable>1</closeable>
+                  <type>vbox</type>
+                  <area_caption>Projekti&amp;nbsp;dokumendid</area_caption>
+                  <parent>files_left_lay</parent>
+                  <group>files</group>
+            </files_tree_lay>
+            <files_find_lay>
+                  <closeable>1</closeable>
+                  <type>vbox</type>
+                  <area_caption>Dokumentide&amp;nbsp;otsing</area_caption>
+                  <parent>files_left_lay</parent>
+                  <group>files</group>
+            </files_find_lay>
             <team>
                   <type>hbox</type>
                   <width>30%:70%</width>

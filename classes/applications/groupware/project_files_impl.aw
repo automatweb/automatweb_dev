@@ -30,6 +30,20 @@ class project_files_impl extends class_base
 			"img" => "new.gif",
 			"tooltip" => t("Uus"),
 		));
+		if(!is_oid($pt) || !$this->can("view" , $pt))
+		{
+			$ff = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FILES_FLD");
+			$pt = $ff->id();
+		}
+		else
+		{
+			$parent_obj = obj($pt);
+			if($parent_obj->class_id() != CL_MENU)
+			{
+				$ff = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FILES_FLD");
+				$pt = $ff->id();
+			}
+		}
 		foreach($types as $type => $desc)
 		{
 			$tb->add_menu_item(array(
@@ -254,54 +268,79 @@ class project_files_impl extends class_base
 
 	function _get_files_table($arr)
 	{
-		$pt = $this->_get_files_pt($arr);
+		if($arr["request"])
+		{
+			$pt = $this->_get_files_pt($arr);
+		}	
+		
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_files_tbl($t);
-
 		$pr = NULL;
-		if ($arr["request"]["tf"] == "unsorted")
-		{
-//			$ot = new object_tree(array("class_id" => CL_MENU, "parent" => $pt, "lang_id" => array(), "site_id" => array()));
-//			$pt = new obj_predicate_not(array($pt, $pt) + $ot->ids());
-			$pr = $arr["obj_inst"]->id();
-			$pt = new obj_predicate_not($this->_get_parent_folders($arr["obj_inst"]));
 		
-		}
-		$filter = array(
-			$filters,
-			"parent" => $pt,
-//			"project" => $pr,
-			"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER , CL_PROJECT_STRAT_GOAL_EVAL_WS ,CL_PROJECT_RISK_EVAL_WS ,CL_PROJECT_ANALYSIS_WS),
-			"lang_id" => array(),
-		);
-		$filter[] = new object_list_filter(array(
-			"logic" => "OR",
-			"conditions" => array(
-//				"CL_FILE.project" => $pr, // enne oli rõõmsalt ka fail sees, kuid ei ole seni faili kuidagi projektiga seostatud.
-				"CL_CRM_DOCUMENT.project" => $pr,
-				"CL_CRM_DEAL.project" => $pr,
-				"CL_CRM_MEMO.project" => $pr,
-				"CL_CRM_OFFER.project" => $pr,
-			))
-		);
-
-		if(in_array($arr["request"]["tf"], array(CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
+		//otsingust
+		if(!$arr["request"]["tf"] && ($arr["request"]["files_find_name"] || $arr["request"]["files_find_type"] || $arr["request"]["files_find_comment"]))
 		{
-			$pr = $arr["obj_inst"]->id();
 			$filter = array(
-				"class_id" => $arr["request"]["tf"],
+				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER , CL_PROJECT_STRAT_GOAL_EVAL_WS ,CL_PROJECT_RISK_EVAL_WS ,CL_PROJECT_ANALYSIS_WS),
+				"lang_id" => array(),
+				"name" => "%".$arr["request"]["files_find_name"]."%",
+				
+			);
+			if($arr["request"]["files_find_comment"])
+			{
+				$filter["comment"] = "%".$arr["request"]["files_find_comment"]."%";
+			}
+			if($arr["request"]["files_find_type"])
+			{
+				$filter["class_id"] = $arr["request"]["files_find_type"];
+			}
+		}
+		//puust ja igaltpoolt mujalt
+		else
+		{
+			if ($arr["request"]["tf"] == "unsorted")
+			{
+	//			$ot = new object_tree(array("class_id" => CL_MENU, "parent" => $pt, "lang_id" => array(), "site_id" => array()));
+	//			$pt = new obj_predicate_not(array($pt, $pt) + $ot->ids());
+				$pr = $arr["obj_inst"]->id();
+				$pt = new obj_predicate_not($this->_get_parent_folders($arr["obj_inst"]));
+			
+			}
+			$filter = array(
+				$filters,
+				"parent" => $pt,
+	//			"project" => $pr,
+				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER , CL_PROJECT_STRAT_GOAL_EVAL_WS ,CL_PROJECT_RISK_EVAL_WS ,CL_PROJECT_ANALYSIS_WS),
 				"lang_id" => array(),
 			);
-			if(in_array($arr["request"]["tf"] ,array(CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_MEMO,CL_CRM_OFFER)))
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+	//				"CL_FILE.project" => $pr, // enne oli rõõmsalt ka fail sees, kuid ei ole seni faili kuidagi projektiga seostatud.
+					"CL_CRM_DOCUMENT.project" => $pr,
+					"CL_CRM_DEAL.project" => $pr,
+					"CL_CRM_MEMO.project" => $pr,
+					"CL_CRM_OFFER.project" => $pr,
+				))
+			);
+	
+			if(in_array($arr["request"]["tf"], array(CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
 			{
-				$filter["project"] = $pr;
+				$pr = $arr["obj_inst"]->id();
+				$filter = array(
+					"class_id" => $arr["request"]["tf"],
+					"lang_id" => array(),
+				);
+				if(in_array($arr["request"]["tf"] ,array(CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_MEMO,CL_CRM_OFFER)))
+				{
+					$filter["project"] = $pr;
+				}
+				if(in_array($clid ,array(CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
+				{
+					$filter["parent"] = $parent_folders;
+				}	
 			}
-			if(in_array($clid ,array(CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
-			{
-				$filter["parent"] = $parent_folders;
-			}	
 		}
-
 		$ol = new object_list($filter);
 		classload("core/icons");
 		$clss = aw_ini_get("classes");
