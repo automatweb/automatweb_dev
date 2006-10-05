@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.506 2006/10/05 13:29:03 kristo Exp $
+// $Id: class_base.aw,v 2.507 2006/10/05 14:29:56 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5306,5 +5306,66 @@ class class_base extends aw_template
 		}
 		return $val;
 	}	
+
+	/**
+		@attrib name=rel_cut
+	**/
+	function rel_cut($arr)
+	{
+		$_SESSION["rel_cut"] = $arr["check"];
+		$_SESSION["rel_copied"] = null;
+		$url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"group" => $arr["group"],
+			"return_url" => $arr["return_url"]
+		), $arr["class"]);
+		return $url;
+	}
+
+	/**
+		@attrib name=rel_copy
+	**/
+	function rel_copy($arr)
+	{
+		$_SESSION["rel_copied"] = $arr["check"];
+		$_SESSION["rel_cut"] = null;
+		$url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"group" => $arr["group"],
+			"return_url" => $arr["return_url"]
+		), $arr["class"]);
+		return $url;
+	}
+
+	/**
+		@attrib name=rel_paste
+	**/
+	function rel_paste($arr)
+	{
+		foreach(safe_array($_SESSION["rel_cut"]) as $cut_item)
+		{
+			$c = new connection($cut_item);
+			$c->change(array(
+				"from" => $arr["id"]
+			));
+		}
+		foreach(safe_array($_SESSION["rel_copied"]) as $c_item)
+		{
+			$c = new connection($c_item);
+			$o = obj($arr["id"]);
+			$o->connect(array(
+				"to" => $c->prop("to"),
+				"type" => $c->prop("reltype")
+			));
+		}
+		$_SESSION["rel_copied"] = null;
+		$_SESSION["rel_cut"] = null;
+		$url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"group" => $arr["group"],
+			"return_url" => $arr["return_url"]
+		), $arr["class"]);
+		return $url;
+	}
 };
 ?>

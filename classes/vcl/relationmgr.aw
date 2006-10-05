@@ -619,6 +619,30 @@ class relationmgr extends aw_template
 				"url" => "javascript:awdelete()",
 			));
 		}
+
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "rel_cut",
+			"img" => "cut.gif",
+			"tooltip" => t("L&otilde;ika seos(ed)"),
+			"action" => "rel_cut",
+		));
+		$tb->add_button(array(
+			"name" => "rel_copy",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri seos(ed)"),
+			"action" => "rel_copy",
+		));
+		if ((is_array($_SESSION["rel_cut"]) && count($_SESSION["rel_cut"])) || (is_array($_SESSION["rel_copied"]) && count($_SESSION["rel_copied"])))
+		{
+			$tb->add_button(array(
+				"name" => "rel_paste",
+				"img" => "paste.gif",
+				"tooltip" => t("Kleebi seos(ed)"),
+				"action" => "rel_paste",
+			));
+		}
+
 		//$tb->add_cdata("[[ Seostehaldur V3 ]]");
 		return $tb;
 	}

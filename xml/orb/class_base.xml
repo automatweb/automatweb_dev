@@ -80,5 +80,26 @@
 			</function>
 		</action>
 
+		<action name="rel_cut">
+			<function name="rel_cut">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="rel_copy">
+			<function name="rel_copy">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="rel_paste">
+			<function name="rel_paste">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
