@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.146 2006/10/03 13:59:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.147 2006/10/05 15:16:34 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -531,9 +531,12 @@ class task extends class_base
 				break;
 				
 			case "end":
+	//			$dayend = mktime($prop["value"]["hour"],$prop["value"]["minute"],0,$prop["value"]["month"],$prop["value"]["day"],$prop["value"]["year"]);
+				$daystart = mktime($arr["request"]["start1"]["hour"],$arr["request"]["start1"]["minute"],0,$arr["request"]["start1"]["month"],$arr["request"]["start1"]["day"],$arr["request"]["start1"]["year"]);
+				if($daystart > $data["value"]) $data["value"] = $daystart;
 				$p = get_instance(CL_PLANNER);
-				$cal = $p->get_calendar_for_user();
-				if ($cal)
+				$cal = $p->get_calendar_for_user();//arr($data["value"]);
+				if ($cal && !($daystart > 0))
 				{
 					$calo = obj($cal);
 					if ($data["name"] == "end" && (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id())))
@@ -873,6 +876,11 @@ class task extends class_base
 		{
 			case "predicates":
 				return PROP_IGNORE;
+			case "end":
+				$dayend = mktime($prop["value"]["hour"],$prop["value"]["minute"],0,$prop["value"]["month"],$prop["value"]["day"],$prop["value"]["year"]);
+				$daystart = mktime($arr["request"]["start1"]["hour"],$arr["request"]["start1"]["minute"],0,$arr["request"]["start1"]["month"],$arr["request"]["start1"]["day"],$arr["request"]["start1"]["year"]);
+				if($daystart > $dayend) $prop["value"] = $daystart;
+				break;
 			case "add_clauses":
 				$arr["obj_inst"]->set_status($prop["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
 				$arr["obj_inst"]->set_prop("is_done", $prop["value"]["is_done"] ? 8 : 0);
@@ -1540,6 +1548,7 @@ class task extends class_base
 		$u = get_instance(CL_USER);
 		$def_impl = $u->get_current_person();
 		$o_def_impl = array($def_impl => $def_impl);
+
 		if($arr["obj_inst"]->id() > 0)	
 		{
 			$cs = $arr["obj_inst"]->connections_from(array(
@@ -1787,23 +1796,46 @@ class task extends class_base
 				"col" => $col
 			));
 		}
+		if(is_oid($arr["obj_inst"]->prop("hr_price_currency")))
+		{
+			$sad = obj($arr["obj_inst"]->prop("hr_price_currency"));
+			$curr = $sad->name();
+		}
+		if($arr["obj_inst"]->prop("deal_price"))
+		{
+			$sum = $arr["obj_inst"]->prop("deal_amount");
+			$cash = $arr["obj_inst"]->prop("deal_price");
+		}
+		else
+		{
+			$cash = $sum * $arr["obj_inst"]->prop("hr_price");
+		}
+		$t->define_data(array(
+			"time" => "<b>".t("Kokku:").$sum." ".$arr["obj_inst"]->prop("deal_unit")." (".$cash." ".$curr.")",
+		));
 	}
 
 	function __ord_format($val)
 	{
-		return html::textbox(array(
-					"name" => "rows[".$val["idx"]."][ord]",
-					"value" => $val["ord_val"],
-					"size" => 3,
-		));
+		if($val["date_val"])
+		{
+			return html::textbox(array(
+						"name" => "rows[".$val["idx"]."][ord]",
+						"value" => $val["ord_val"],
+						"size" => 3,
+			));
+		}
 	}
 	function __date_format($val)
 	{
-		return html::textbox(array(
-				"name" => "rows[".$val["idx"]."][date]",
-				"value" => $val["date_val"],
-				"size" => 7
+		if($val["date_val"])
+		{
+			return html::textbox(array(
+					"name" => "rows[".$val["idx"]."][date]",
+					"value" => $val["date_val"],
+					"size" => 7
 			)).$val["date_sel"];
+		}
 	}
 	function __id_format($val)
 	{
@@ -2977,6 +3009,7 @@ class task extends class_base
 		));
 		$cur = get_current_company();
 		$s = array("co" => array($cur->id() => $cur->id()));
+
 		if (is_oid($arr["obj_inst"]->id()))
 		{
 			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
