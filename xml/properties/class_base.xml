@@ -41,17 +41,6 @@
             <ch_value>2</ch_value>
             <caption>Vajab t&amp;amp;otilde;lget</caption>
       </property>
-      <property>
-            <name>is_translated</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <field>flags</field>
-            <method>bitmask</method>
-            <ch_value>4</ch_value>
-            <trans>1</trans>
-            <caption>T&amp;amp;otilde;lge kinnitatud</caption>
-      </property>
       <groupinfo>
             <general>
                   <caption>&amp;amp;Uuml;ldine</caption>

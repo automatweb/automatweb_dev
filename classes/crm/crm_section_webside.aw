@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.10 2006/03/23 13:33:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.11 2006/10/05 13:29:04 kristo Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -87,7 +87,7 @@ class crm_section_webside extends class_base
 					return PROP_IGNORE;
 				}
 				$org = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_ORG');
-				if($org && aw_global_get("uid") == "sven")
+				if($org)
 				{
 					$org_inst = get_instance(CL_CRM_COMPANY);
 					$sections = $org_inst->get_all_org_sections($org);

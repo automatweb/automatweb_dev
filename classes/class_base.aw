@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.505 2006/10/04 13:34:48 kristo Exp $
+// $Id: class_base.aw,v 2.506 2006/10/05 13:29:03 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -32,8 +32,8 @@
 	@caption Vajab t&otilde;lget
 
 	// see peaks olemas olema ainult siis, kui sellel objekt on _actually_ mingi asja t&otilde;lge
-	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
-	@caption T&otilde;lge kinnitatud
+	property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
+	caption T&otilde;lge kinnitatud
 
 	@groupinfo general caption=&Uuml;ldine default=1 icon=edit focus=name
 
@@ -367,7 +367,10 @@ class class_base extends aw_template
 		};
 
 		unset($properties["is_translated"]);
-		unset($properties["needs_translation"]);
+		if (!aw_ini_get("user_interface.content_trans"))
+		{
+			unset($properties["needs_translation"]);
+		}
 
 
 		// XXX: temporary -- duke
@@ -5100,11 +5103,21 @@ class class_base extends aw_template
 			{
 				continue;
 			}
-
+			$mod = false;
 			foreach($props as $p)
 			{
 				$nm = "trans_".$lid."_".$p;
-				$all_vals[$lid][$p] = iconv("UTF-8", $lang["charset"], $arr["request"][$nm]);
+				$nv = iconv("UTF-8", $lang["charset"], $arr["request"][$nm]);
+				if ($nv != $all_vals[$lid][$p])
+				{
+					$mod = true;
+				}
+				$all_vals[$lid][$p] = $nv;
+			}
+			$arr["obj_inst"]->set_meta("trans_".$lid."_status", $arr["request"]["act_".$lid]);
+			if ($mod)
+			{
+				$arr["obj_inst"]->set_meta("trans_".$lid."_modified", time());
 			}
 		}
 		$arr["obj_inst"]->set_meta("translations", $all_vals);
@@ -5130,7 +5143,6 @@ class class_base extends aw_template
 			$cf = get_instance(CL_CFGFORM);
 			$pl = $cf->get_props_from_cfgform(array("id" => $cfgform_id));
 		}
-
 		$all_vals = $arr["obj_inst"]->meta("translations");
 		foreach($ll as $lid => $lang)
 		{
@@ -5157,6 +5169,14 @@ class class_base extends aw_template
 					"value" => iconv($lang["charset"], "UTF-8", $vals[$p])
 				);
 			}
+			$nm = "act_".$lid;
+			$ret[$nm] = array(
+				"name" => $nm,
+				"caption" => t("T&otilde;lge aktiivne"),
+				"type" => "checkbox",
+				"ch_value" => 1,
+				"value" => $arr["obj_inst"]->meta("trans_".$lid."_status") 
+			);
 		}
 
 		return $ret;

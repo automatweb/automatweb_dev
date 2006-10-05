@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.225 2006/10/04 13:34:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.226 2006/10/05 13:29:03 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -435,7 +435,7 @@ if (!defined("DEFS"))
 	function aw_url_change_var($arg1, $arg2 = false, $url = false)
 	{
 		$arg_list = func_get_args();
-		if (sizeof($arg_list) > 1)
+		if (sizeof($arg_list) > 1 && $arg2 !== false)
 		{
 			$arg_list[0] = array($arg1 => $arg2);
 		};
