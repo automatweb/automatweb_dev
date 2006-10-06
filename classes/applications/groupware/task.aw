@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.149 2006/10/06 13:30:22 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.150 2006/10/06 13:40:11 tarvo Exp $
 // task.aw - TODO item
 /*
 
@@ -308,6 +308,7 @@ class task extends class_base
 			"e_str" => t("L&otilde;peta"),
 			"d_str" => t("Kustuta"),
 		));
+
 		foreach(safe_array($_SESSION["crm_stoppers"]) as $_id => $stopper)
 		{
 			if ($stopper["state"] == "running")
