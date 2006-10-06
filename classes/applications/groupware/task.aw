@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.148 2006/10/06 12:56:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.149 2006/10/06 13:30:22 tarvo Exp $
 // task.aw - TODO item
 /*
 
@@ -81,7 +81,7 @@
 @caption Tehtud
 
 @layout personal type=hbox
-@caption Kestab terve päeva
+@caption Kestab terve p&auml;eva
 
 	@property whole_day type=checkbox ch_value=1 field=meta method=serialize parent=personal no_caption=1
 
@@ -972,7 +972,7 @@ class task extends class_base
 			case "whole_day":
 				if ($prop["value"])
 				{
-					// ahaa! võtab terve päeva!
+					// ahaa! v&otilde;tab terve p&auml;eva!
 					$start = $arr["obj_inst"]->prop("start1");
 					list($m,$d,$y) = explode("-",date("m-d-Y",$start));
 					$daystart = mktime(9,0,0,$m,$d,$y);

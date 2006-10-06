@@ -767,7 +767,7 @@
             <personal>
                   <type>hbox</type>
                   <group>general</group>
-                  <caption>Kestab terve p&amp;auml;eva</caption>
+                  <caption>Kestab terve p&amp;amp;auml;eva</caption>
             </personal>
             <hr_price_layout>
                   <type>hbox</type>
