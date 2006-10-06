@@ -62,6 +62,15 @@
             <reltype>RELTYPE_OFFER</reltype>
       </property>
       <property>
+            <name>files_tb</name>
+            <table>objects</table>
+            <group>files</group>
+            <field>meta</field>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>files</name>
             <table>objects</table>
             <group>files</group>

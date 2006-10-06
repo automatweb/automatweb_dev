@@ -1452,6 +1452,78 @@ class _int_object
 		$GLOBALS["object_loader"]->ds->originalize($this->obj["oid"]);
 	}
 
+	function trans_get_val($prop)
+	{
+		switch($prop)
+		{
+			case "name":
+				if ($this->class_id() == CL_LANGUAGE)
+				{
+					$val = $this->prop("lang_name");
+					$prop = "lang_name";
+				}
+				else
+				{
+					$val = $this->$prop();
+				}
+				break;
+	
+			default:
+				$val = $this->prop($prop);
+		}
+		
+		$trans = false;
+		$cur_lid = false;
+		if ($GLOBALS["cfg"]["user_interface"]["content_trans"] == 1 && ($cur_lid = aw_global_get("lang_id")) != $this->lang_id())
+		{
+			$trans = true;
+		}
+
+		if ($GLOBALS["cfg"]["user_interface"]["full_content_trans"] == 1 && ($cl = aw_global_get("ct_lang_id")) != $this->lang_id())
+		{
+			$trans = true;
+			$cur_lid = $cl;
+		}
+
+		if ($trans)
+		{
+			$trs = $this->obj["meta"]["translations"];
+			if (isset($trs[$cur_lid]) && $this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
+			{
+				if ($trs[$cur_lid][$prop] == "")
+				{
+					return $val;
+				}
+				$val = $trs[$cur_lid][$prop];
+			}
+		}
+		
+		return $val;	
+	}
+
+	function trans_get_val_str($prop)
+	{
+		$val = $this->prop_str($prop);
+		if ($val === "0" || $val === 0)
+		{
+			$val = "";
+		}
+
+		if ($GLOBALS["cfg"]["user_interface"]["content_trans"] == 1 && ($cur_lid = aw_global_get("lang_id")) != $this->lang_id())
+		{
+			$trs = $this->obj["meta"]["translations"];
+			if (isset($trs[$cur_lid]))
+			{
+				if ($trs[$cur_lid][$prop] == "")
+				{
+					return $val;
+				}
+				$val = $trs[$cur_lid][$prop];
+			}
+		}
+		return $val;
+	}	
+
 	/////////////////////////////////////////////////////////////////
 	// private functions
 	

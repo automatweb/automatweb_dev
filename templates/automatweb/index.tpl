@@ -100,8 +100,8 @@ function check_generic_unloader()
 <!-- jalus -->
 <!-- SUB: YAH2 -->
 	<div id="jalus">
-		AutomatWeb&reg; on Struktuur Meedia registreeritud kaubamärk. Kõik õigused kaitstud, &copy; 1999-2006. <br />
-		Palun külasta meie kodulehekülgi: <a href="http://www.struktuur.ee">Struktuur Meedia</a>, <a href="http://www.automatweb.com">AutomatWeb</a>.
+		AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006. <br />
+		Palun k&uuml;lasta meie kodulehek&uuml;lgi: <a href="http://www.struktuur.ee">Struktuur Meedia</a>, <a href="http://www.automatweb.com">AutomatWeb</a>.
 	</div>
 <!-- END SUB: YAH2 -->
 <!--//jalus -->

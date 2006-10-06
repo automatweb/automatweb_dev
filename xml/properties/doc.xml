@@ -860,6 +860,16 @@
             <no_caption>1</no_caption>
             <field>versions</field>
       </property>
+      <property>
+            <name>transl</name>
+            <table>documents</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <no_comment>1</no_comment>
@@ -883,6 +893,9 @@
             <versions>
                   <caption>Versioonid</caption>
             </versions>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
             <relationmgr>
                   <caption>Seostehaldur</caption>
                   <submit>no</submit>

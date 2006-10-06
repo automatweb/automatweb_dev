@@ -1038,7 +1038,15 @@ class site_template_compiler extends aw_template
 
 		$ret  = $this->_gi()."\$this->vars(array(\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\"text\" => ".$o_name."->name(),\n";
+
+		if (aw_ini_get("user_interface.content_trans") == 1)
+		{
+			$ret .= $this->_gi()."\"text\" => ".$o_name."->trans_get_val(\"name\"),\n";
+		}
+		else
+		{
+			$ret .= $this->_gi()."\"text\" => ".$o_name."->name(),\n";
+		}
 		$ret .= $this->_gi()."\"link\" => ".$inst_name."->".$fun_name."($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
 		$ret .= $this->_gi()."\"section\" => ".$o_name."->".$this->id_func."(),\n";
@@ -1584,8 +1592,13 @@ class site_template_compiler extends aw_template
 		// assumes cache inst of $this->cache
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
 
+		$lang_var = "lang_id";
+		if (aw_ini_get("user_interfacce.full_content_trans") == 1)
+		{
+			$lang_var = "ct_lang_id";
+		}
 		$res = "";
-		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_pt_oid_ts(\"menu_area_cache\", aw_global_get(\"section\"), \"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\"),\$this->_helper_get_objlastmod())) == \"\")\n";
+		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_pt_oid_ts(\"menu_area_cache\", aw_global_get(\"section\"), \"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"".$lang_var."\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\"),\$this->_helper_get_objlastmod())) == \"\")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 		return $res;
@@ -1598,11 +1611,16 @@ class site_template_compiler extends aw_template
 		$cache_name = $dat["cache_name"];
 
 		$res = "";
+		$lang_var = "lang_id";
+		if (aw_ini_get("user_interfacce.full_content_trans") == 1)
+		{
+			$lang_var = "ct_lang_id";
+		}
 
 		$res .= $this->_gi()."if (".$cache_name.")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$res .= $this->_gi()."\$this->cache->file_set_pt_oid(\"menu_area_cache\", aw_global_get(\"section\"), \"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\"), ".$content_name.");\n";
+		$res .= $this->_gi()."\$this->cache->file_set_pt_oid(\"menu_area_cache\", aw_global_get(\"section\"), \"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"".$lang_var."\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\"), ".$content_name.");\n";
 		$this->brace_level --;
 		$res .= $this->_gi()."}\n";
 		$this->brace_level --;
@@ -1647,7 +1665,14 @@ class site_template_compiler extends aw_template
 				$varname = "sel_menu_".$area."_L".$level."_text";
 				if ($this->template_has_var_full($varname))
 				{
-					$vres .= $this->_gi()."\$vars[\"$varname\"] = \$tmp_o->name();\n";
+					if (aw_ini_get("user_interface.content_trans"))
+					{
+						$vres .= $this->_gi()."\$vars[\"$varname\"] = \$tmp_o->trans_get_val(\"name\");\n";
+					}
+					else
+					{
+						$vres .= $this->_gi()."\$vars[\"$varname\"] = \$tmp_o->name();\n";
+					}
 					$has_vars = true;
 				}
 		

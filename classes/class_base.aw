@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.507 2006/10/05 14:29:56 kristo Exp $
+// $Id: class_base.aw,v 2.508 2006/10/06 10:13:24 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5168,6 +5168,10 @@ class class_base extends aw_template
 					"type" => $pl[$p]["type"],
 					"value" => iconv($lang["charset"], "UTF-8", $vals[$p])
 				);
+				if ($pl[$p]["richtext"] == 1)
+				{
+					$ret[$nm]["richtext"] = 1;
+				}
 			}
 			$nm = "act_".$lid;
 			$ret[$nm] = array(
@@ -5184,37 +5188,7 @@ class class_base extends aw_template
 
 	function trans_get_val($obj, $prop)
 	{
-		switch($prop)
-		{
-			case "name":
-				if ($obj->class_id() == CL_LANGUAGE)
-				{
-					$val = $obj->prop("lang_name");
-					$prop = "lang_name";
-				}
-				else
-				{
-					$val = $obj->$prop();
-				}
-				break;
-	
-			default:
-				$val = $obj->prop($prop);
-		}
-
-		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $obj->lang_id())
-		{
-			$trs = $obj->meta("translations");
-			if (isset($trs[$cur_lid]))
-			{
-				if ((true || $prop == "url" || $prop == "author") && $trs[$cur_lid][$prop] == "")
-				{
-					return $val;
-				}
-				$val = $trs[$cur_lid][$prop];
-			}
-		}
-		return $val;	
+		return $obj->trans_get_val($prop);
 	}
 
 	function trans_get_val_str($obj, $prop)

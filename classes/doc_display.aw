@@ -81,7 +81,7 @@ class doc_display extends aw_template
 		$this->vars(array(
 			"text" => $text,
 			"text_no_aliases" => $text_no_aliases,
-			"title" => $doc->prop("title"),
+			"title" => $doc->trans_get_val("title"),
 			"author" => $doc->prop("author"),
 			"channel" => $doc->prop("channel"),
 			"docid" => $doc->id(),
@@ -105,7 +105,7 @@ class doc_display extends aw_template
 			"userta5" => $doc->prop("userta5"),
 			"userta6" => $doc->prop("userta6"),
 			"link_text" => $doc->prop("link_text"),
-			"page_title" => strip_tags($doc->prop("title")),			
+			"page_title" => strip_tags($doc->trans_get_val("title")),			
 			"date" => $_date,
 			"edit_doc" => $em,
 			"doc_link" => $doc_link,
@@ -198,13 +198,13 @@ class doc_display extends aw_template
 	{
 		if ($arr["leadonly"] > -1)
 		{
-			$text = $doc->prop("lead");
+			$text = $doc->trans_get_val("lead");
 		}
 		else
 		{
 			if ($doc->prop("showlead") || $arr["showlead"])
 			{
-				$lead = $doc->prop("lead");
+				$lead = $doc->trans_get_val("lead");
 				if (trim(strtolower($lead)) == "<br>")
 				{
 					$lead = "";
@@ -213,11 +213,11 @@ class doc_display extends aw_template
 				{
 					$lead = "<b>".$lead."</b>";
 				}
-				$text = $lead.aw_ini_get("document.lead_splitter").$doc->prop("content");
+				$text = $lead.aw_ini_get("document.lead_splitter").$doc->trans_get_val("content");
 			}
 			else
 			{
-				$text = $doc->prop("content");
+				$text = $doc->trans_get_val("content");
 			}
 		}
 

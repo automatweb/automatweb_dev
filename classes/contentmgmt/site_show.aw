@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.200 2006/10/04 13:34:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.201 2006/10/06 10:13:26 kristo Exp $
 
 /*
 
@@ -1533,7 +1533,7 @@ class site_show extends class_base
 
 			$this->vars(array(
 				"link" => $link,
-				"text" => str_replace("&nbsp;"," ",strip_tags($ref->name())),
+				"text" => str_replace("&nbsp;"," ",strip_tags($ref->trans_get_val("name"))),
 				"comment" =>  str_replace("&nbsp;"," ",strip_tags($ref->comment())),
 				"ysection" => $ref->id()
 			));
@@ -1615,6 +1615,12 @@ class site_show extends class_base
 	function make_langs()
 	{
 		$lang_id = aw_global_get("lang_id");
+		$var = "set_lang_id";
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$var = "set_ct_lang_id";
+			$lang_id = aw_global_get("ct_lang_id");
+		}
 		$langs = get_instance("languages");
 		$lar = $langs->listall();
 		$l = array();
@@ -1656,7 +1662,7 @@ class site_show extends class_base
 				$img_url = $this->image->get_url_by_id($row["meta"]["lang_img"]);
 			}
 
-			$url = $this->cfg["baseurl"] . "/?set_lang_id=$row[id]";
+			$url = $this->cfg["baseurl"] . "/?".$var."=$row[id]";
 			if ($row["meta"]["temp_redir_url"] != "" && $uid == "")
 			{
 				$url = $row["meta"]["temp_redir_url"];
@@ -2379,7 +2385,7 @@ class site_show extends class_base
 			$link = $this->cfg["baseurl"] ."/";
 			if (aw_ini_get("menuedit.language_in_url"))
 			{
-				$link .= aw_global_get("LC")."/";
+				$link .= aw_global_get("ct_lang_lc")."/";
 			}
 			if (aw_ini_get("menuedit.long_section_url"))
 			{

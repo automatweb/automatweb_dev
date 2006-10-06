@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.370 2006/10/04 13:34:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.371 2006/10/06 10:13:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -306,14 +306,15 @@ class menuedit extends aw_template
 		//}
 
 		$set_lang_id = false;
+		$set_ct_lang_id = $_GET["set_ct_lang_id"];
 		if (aw_ini_get("menuedit.language_in_url"))
 		{
 			list($lc, $section) = explode("/", $section, 2);
-			if ($lc != aw_global_get("LC"))
+			if ($lc != aw_global_get("LC") && $lc != "")
 			{
 				// switch to lang
 				$l = get_instance("languages");
-				$set_lang_id = $l->get_langid_for_code($lc);
+				$set_ct_lang_id = $l->get_langid_for_code($lc);
 			}
 		}
 
@@ -366,6 +367,15 @@ class menuedit extends aw_template
 				}
 			};
 		};
+
+		if ($set_ct_lang_id)
+		{
+			$_SESSION["ct_lang_id"] = $set_ct_lang_id;
+			$l = get_instance("languages");
+			$_SESSION["ct_lang_lc"] = $l->get_langid($set_ct_lang_id);
+			aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
+			aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
+		}
 
 		if ($set_lang_id)
 		{

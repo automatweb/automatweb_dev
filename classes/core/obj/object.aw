@@ -1944,6 +1944,16 @@ class object
 	{
 		return $GLOBALS["objects"][$this->oid]->originalize();
 	}
+
+	function trans_get_val($prop)
+	{
+		return $GLOBALS["objects"][$this->oid]->trans_get_val($prop);
+	}
+
+	function trans_get_val_str($prop)
+	{
+		return $GLOBALS["objects"][$this->oid]->trans_get_val_str($prop);
+	}
 }
 
 function &obj($param = NULL)

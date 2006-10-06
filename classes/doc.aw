@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.137 2006/09/15 09:29:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.138 2006/10/06 10:13:24 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -271,11 +271,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property versions_tb type=toolbar store=no no_caption=1
 	@property versions type=table store=no no_caption=1
 
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
 @groupinfo settings caption=Seadistused icon=archive.gif
 @groupinfo kws caption="M&auml;rks&otilde;nad" 
 @groupinfo versions caption="Versioonid" 
+@groupinfo transl caption=T&otilde;lgi
 @groupinfo relationmgr caption=Seostehaldur submit=no
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
@@ -321,6 +327,9 @@ class doc extends class_base
 			"clid" => CL_DOCUMENT,
 			"tpldir" => "automatweb/documents",
 		));
+		$this->trans_props = array(
+			"title","lead","content"
+		);
 	}
 
 	function get_property($arr)
@@ -484,6 +493,10 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "transl":
+				$this->trans_save($args, $this->trans_props);
+				break;
+
 			case "create_new_version":
 				
 				break;
@@ -1555,6 +1568,11 @@ class doc extends class_base
 		}
 
 		return $arr["post_ru"];
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 };
 ?>

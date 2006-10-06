@@ -105,9 +105,7 @@
       <property>
             <name>offerers_find_tb</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -116,9 +114,7 @@
       <property>
             <name>offerers_find_name</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>textbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -128,9 +124,7 @@
       <property>
             <name>offerers_find_address</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>textbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -140,9 +134,7 @@
       <property>
             <name>offerers_find_groups</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>select</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -152,9 +144,7 @@
       <property>
             <name>offerers_find_done</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>checkbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -165,9 +155,7 @@
       <property>
             <name>offerers_find_start</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>date_select</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -177,9 +165,7 @@
       <property>
             <name>offerers_find_end</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>date_select</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -189,9 +175,7 @@
       <property>
             <name>offerers_find_product</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>textbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -201,9 +185,7 @@
       <property>
             <name>offerers_find_only_buy</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>checkbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -214,9 +196,7 @@
       <property>
             <name>do_find_offerers</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>submit</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
@@ -227,9 +207,7 @@
       <property>
             <name>offerers_find_tbl</name>
             <table>objects</table>
-            <group>
-            <![CDATA[offerers_find$this_object->prop("procurement")]]>
-            </group>
+            <group>offerers_find</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -713,16 +691,12 @@
             <offerers_find_l>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>
-                  <![CDATA[offerers_find$this_object->prop("procurement")]]>
-                  </group>
+                  <group>offerers_find</group>
             </offerers_find_l>
             <offerers_find_params>
                   <type>vbox</type>
                   <parent>offerers_find_l</parent>
-                  <group>
-                  <![CDATA[offerers_find$this_object->prop("procurement")]]>
-                  </group>
+                  <group>offerers_find</group>
             </offerers_find_params>
             <offers_l>
                   <type>hbox</type>
