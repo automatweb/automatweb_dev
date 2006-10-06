@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.4 2006/10/02 19:39:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.5 2006/10/06 11:18:24 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -103,6 +103,8 @@ class scala_import extends class_base
 
 	var $db_table_name = 'scala_prices_to_customers';
 	var $import_sections;
+	var $log_str = '';
+	var $log_file_name = '';
 
 	function scala_import()
 	{
@@ -175,7 +177,6 @@ class scala_import extends class_base
 		));
 
 		$xml_file = $arr['obj_inst']->prop('ftp_file_location_pricing');
-//		$this->db_table_name = 'scala_prices_to_customers';
 
 		// if the database table doesn't exist, then we are going to create it:
 		if ( $this->db_table_exists($this->db_table_name) === false )
@@ -402,20 +403,16 @@ class scala_import extends class_base
         **/
 	function do_import($arr)
 	{
-
-		$log_str = '';
-		$log_file_name = 'scala_import_log_'.date('d-m-Y-H-i-s').'.log';
+		$this->log_str = '';
+		$this->log_file_name = 'scala_import_log_'.date('d-m-Y-H-i-s').'.log';
 		if ( $this->can('view', $arr['id']) )
 		{
 			$o = new object($arr['id']);
 		}
 		else
 		{
-			$log_str .= "[ error ] Scala Import object is not accessible\n";
-			$this->write_log(array(
-				'log_str' => $log_str,
-				'file_name' => $log_file_name
-			));
+			$this->log_str .= "[ error ] Scala Import object is not accessible\n";
+			$this->write_log();
 			return false;
 		}
 
@@ -440,13 +437,14 @@ class scala_import extends class_base
 		// import pricing
 		if ( $arr['pricing'] )
 		{
-			$log_str .= "[ info ] Import pricing\n";
+			$this->log_str .= "[ info ] Import pricing\n";
 			$pricing_xml = $o->prop('ftp_file_location_pricing');
 		//	$raw_xml = file_get_contents($pricing_xml);
 			$raw_xml = $ftp->get_file($pricing_xml);
 
 			if ( !empty($raw_xml) )
 			{
+				$this->log_str .= "[ info ] Got the XML file (".$pricing_xml.")\n";
 				$this->_import_prices(array(
 					'raw_xml' => $raw_xml,
 					'obj_inst' => $o
@@ -454,7 +452,7 @@ class scala_import extends class_base
 			}
 			else
 			{
-				$log_str .= "[ error ] Couldn\"t get the ".$pricing_xml." file, so will not import pricing data\n";
+				$this->log_str .= "[ error ] Couldn\"t get the ".$pricing_xml." file, so will not import pricing data\n";
 			}
 			
 		}
@@ -462,13 +460,14 @@ class scala_import extends class_base
 		// import users
 		if ( $arr['users'] )
 		{
-			$log_str .= "[ info ] Import users\n";
+			$this->log_str .= "[ info ] Import users\n";
 			$customer_xml = $o->prop('ftp_file_location_customer');
 		//	$raw_xml = file_get_contents($customer_xml);
 			$raw_xml = $ftp->get_file($customer_xml);
 
 			if ( !empty($raw_xml) )
 			{
+				$this->log_str .= "[ info ] Got the XML file (".$customer_xml.")\n";
 				$this->_import_users(array(
 					'raw_xml' => $raw_xml,
 					'obj_inst' => $o
@@ -476,7 +475,7 @@ class scala_import extends class_base
 			}
 			else
 			{
-				$log_str .= "[ error ] Couldn\"t get the ".$customer_xml." file, so will not import users\n";
+				$this->log_str .= "[ error ] Couldn\"t get the ".$customer_xml." file, so will not import users\n";
 			}
 		}
 
@@ -496,24 +495,17 @@ class scala_import extends class_base
 			}
 			else
 			{
-				$log_str .= "[ error ] Warehouse object is not accessible\n";
-				$this->write_log(array(
-					'log_str' => $log_str,
-					'file_name' => $log_file_name
-				));
+				$this->log_str .= "[ error ] Warehouse object is not accessible\n";
+				$this->write_log();
 			}
 
 			$products_folder = $warehouse_inst->get_products_folder($warehouse);
 			// exit if the products folder isn't found
 			if ( empty($products_folder) )
 			{
-				$log_str .= "[ error ] Products folder object is not accessible\n";
-				$this->write_log(array(
-					'log_str' => $log_str,
-					'file_name' => $log_file_name
-				));
+				$this->log_str .= "[ error ] Products folder object is not accessible\n";
+				$this->write_log();
 				return false;
-			//	$products_folder = 7544;
 			}
 
 
@@ -524,18 +516,18 @@ class scala_import extends class_base
 			// exit if the xml file content isn't available
 			if ( empty($raw_xml) )
 			{
-				$log_str .= "[ error ] Couldn\"t get the ".$availability_xml." file, so will not import availability (warehouse status) data\n";
-				$this->write_log(array(
-					'log_str' => $log_str,
-					'file_name' => $log_file_name
-				));
+				$this->log_str .= "[ error ] Couldn\"t get the ".$availability_xml." file, so will not import availability (warehouse status) data\n";
+				$this->write_log();
 				return false;
 			}
-
+			else
+			{
+				$this->log_str .= "[ info ] Got the XML file (".$availability_xml.")\n";
+			}
 			// import categories
 			if ( $arr['categories'] )
 			{
-				$log_str .= "[ info ] Import categories\n";
+				$this->log_str .= "[ info ] Import categories\n";
 				$this->_import_categories(array(
 					'obj_inst' => $o,
 					'raw_xml' => $raw_xml,
@@ -546,7 +538,7 @@ class scala_import extends class_base
 			// import warehouse status
 			if ( $arr['availability'] )
 			{
-				$log_str .= "[ info ] Import availability\n";
+				$this->log_str .= "[ info ] Import availability\n";
 				$this->_import_availability(array(
 					'obj_inst' => $o,
 					'raw_xml' => $raw_xml,
@@ -559,10 +551,7 @@ class scala_import extends class_base
 			aw_restore_acl();
 		}
 		
-		$this->write_log(array(
-			'log_str' => $log_str,
-			'file_name' => $log_file_name
-		));
+		$this->write_log();
 
 	}
 
@@ -596,7 +585,7 @@ class scala_import extends class_base
 				$this->db_query($sql);
 			}
 		}
-
+		$this->log_str .= "[ ok ] Pricing info import is complete\n";
 		return true;
 	}
 
@@ -620,7 +609,7 @@ class scala_import extends class_base
 		else
 		{
 			// so exit if the group isn't set
-			// lets write the log thingie later, i need a better way to keep log anyway
+			$this->log_str .= "[ error ] Users group isn't set \n";
 			return false;
 		}
 
@@ -637,7 +626,7 @@ class scala_import extends class_base
 				$group_inst->add_user_to_group($user, $group);
 			}
 		}
-
+		$this->log_str .= "[ ok ] Users import is complete\n";
 		return true;
 	}
 
@@ -727,7 +716,7 @@ class scala_import extends class_base
 				$o->save();
 			}
 		}
-
+		$this->log_str .= "[ ok ] Categories import is complete\n";
 		return true;
 	}
 
@@ -769,10 +758,6 @@ class scala_import extends class_base
 		{
 			$existing_products[$o->id()] = $o->prop('code');
 			echo "-- existing product: ".$o->id().", code: ".$o->prop('code').", name: ".$o->name()."<br>\n";
-
-			// lets set the config form here roght now, just to make sure all the existing products have it
-		//	$o->set_meta('cfgform_id', $product_config_form);
-		//	$o->save();
 		}
 		// products from xml
 		foreach ($data as $product_code => $product_data)
@@ -822,6 +807,7 @@ class scala_import extends class_base
 			}
 		}
 		arr('availability import complete');
+		$this->log_str .= "[ ok ] Availability import is complete\n";
 		return true;
 	}
 
@@ -887,10 +873,10 @@ class scala_import extends class_base
 		{
 			mkdir($logs_dir);
 		}
-		$log_file = $logs_dir.'/'.$arr['file_name'];
+		$log_file = $logs_dir.'/'.$this->log_file_name;
 
 		$file = fopen($log_file, 'a');
-		fwrite($file, $arr['log_str']);
+		fwrite($file, $this->log_str);
 		fclose($file);
 
 		return true;
