@@ -54,7 +54,7 @@ class crm_company_bills_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$format = t('%s maksmata t&ouml;&ouml;d');
-		$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
+		//$t->set_caption(sprintf($format, $arr['obj_inst']->name()));
 
 		// list all task rows that are not billed yet
 		$rows = new object_list(array(
@@ -138,7 +138,7 @@ class crm_company_bills_impl extends class_base
 			$projs[$row->prop("project")] = $row->prop("project");
 			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
 		}
-		
+
 		$other_expenses = new object_list(array(
 			"class_id" => CL_CRM_EXPENSE,
 //			"on_bill" => 1,
@@ -157,6 +157,10 @@ class crm_company_bills_impl extends class_base
 			{
 				$task = obj($conn["from"]);
 				$row = obj($conn["to"]);
+				if(!$task->prop("send_bill"))
+				{	
+					continue;
+				}
 				$projs[$task->prop("project")] = $task->prop("project");
 				$sum2proj[$task->prop("project")] += $row->prop("cost");
 			}
@@ -375,7 +379,7 @@ class crm_company_bills_impl extends class_base
 						"conditions" => array(
 							"class_id" => CL_CRM_EXPENSE,
 //							"send_bill" => 1,
-//							"bill_id" => '',
+//							"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
 //							"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
 						)
 					))
@@ -412,7 +416,7 @@ class crm_company_bills_impl extends class_base
 				$hr2task[$row->id()] += str_replace(",", ".", $row->prop("deal_amt"));
 			}
 		}
-
+		
 		if ($rows->count())
 		{
 			$c = new connection();
@@ -466,6 +470,10 @@ class crm_company_bills_impl extends class_base
 
 		foreach($tasks->arr() as $o)
 		{
+			if(!$o->prop("send_bill"))
+			{	
+				continue;
+			}
 			$rs = $task2row[$o->id()];
 			if (count($rs))
 			{
@@ -593,6 +601,7 @@ class crm_company_bills_impl extends class_base
 			}
 		}
 	}
+
 
 	function _get_bill_tb($arr)
 	{
