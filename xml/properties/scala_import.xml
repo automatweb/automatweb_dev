@@ -139,17 +139,6 @@
             <field>availability_config_table</field>
             <caption>Laoseisu seadete tabel</caption>
       </property>
-      <property>
-            <name>recurrence</name>
-            <table>objects</table>
-            <group>recurrence_config</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_RECURRENCE</reltype>
-            <use_form>emb</use_form>
-            <rel_id>first</rel_id>
-            <field>recurrence</field>
-            <caption>Kordused</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_SCALA_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -180,9 +169,6 @@
                   <caption>Laoseis</caption>
                   <parent>import_config</parent>
             </availability>
-            <recurrence_config>
-                  <caption>Korduste seadistamine</caption>
-            </recurrence_config>
       </groupinfo>
       <tableinfo>
             <scala_import>

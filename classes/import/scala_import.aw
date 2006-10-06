@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.5 2006/10/06 11:18:24 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.6 2006/10/06 14:15:27 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -77,12 +77,6 @@
 
 		@property availability_config_table type=table
 		@caption Laoseisu seadete tabel
-
-@groupinfo recurrence_config caption="Korduste seadistamine"
-@default group=recurrence_config
-
-	@property recurrence type=releditor reltype=RELTYPE_RECURRENCE use_form=emb rel_id=first
-	@caption Kordused
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption Ladu
