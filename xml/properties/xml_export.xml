@@ -62,6 +62,15 @@
             <comment>Objekti ID'd arendatakse objektide nimedega</comment>
       </property>
       <property>
+            <name>filter</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>table</type>
+            <store>no</store>
+            <field>filter</field>
+            <caption>Andmete filter</caption>
+      </property>
+      <property>
             <name>local_file</name>
             <table>objects</table>
             <group>locations</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.7 2006/09/15 11:08:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.8 2006/10/06 12:50:26 kristo Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
@@ -33,6 +33,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 	@property user_readable_output type=checkbox ch_value=1 field=meta method=serialize
 	@caption Loetav v&auml;ljund
 	@comment Objekti ID'd arendatakse objektide nimedega
+
+	@property filter type=table store=no
+	@caption Andmete filter
 
 @groupinfo locations caption="Asukohad"
 @default group=locations
@@ -110,6 +113,10 @@ class xml_export extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "filter":
+				$this->_filter($arr);
+				break;
+
 			case "do_export":
 				$prop['value'] = html::href(array(
 					"caption" => t("Teosta eksport"),
@@ -207,6 +214,10 @@ class xml_export extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "filter":
+				$this->_save_filter($arr);
+				break;
+
 			case "local_file_location":
 				// if file should be exported into local server folder, then lets check, if there 
 				// is only folder set, if it is, then i add file name by myself, which is xml export
@@ -665,6 +676,7 @@ class xml_export extends class_base
 			$params['limit'] = $exp_objects_count;
 		}
 
+		$params = $this->_get_ol_filt($o, $params);
 		$all_objects = new object_list($params);
 
 		$xml_root_tag_name = $o->prop("xml_root_tag_name");
@@ -889,5 +901,94 @@ class xml_export extends class_base
 		return $props;
 	}
 
+	function _init_filter_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "prop",
+			"caption" => t("Omadus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "value",
+			"caption" => t("V&auml;&auml;rtus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "exact",
+			"caption" => t("T&auml;pne"),
+			"align" => "center"
+		));
+	}
+
+	function _filter($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_filter_t($t);
+
+		$ot = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EXP_OBJECT_TYPE");
+		if (!$ot)
+		{
+			return;
+		}
+		$o = obj();
+		$o->set_class_id($ot->subclass());
+		$ps = $o->get_property_list();
+		$props = array("" => t("--vali--"));
+		foreach($ps as $pn => $pd)
+		{
+			$props[$pn] = $pd["caption"];
+		}
+		$filt = $arr["obj_inst"]->meta("filter");
+		$filt[] = array();
+		foreach($filt as $idx => $filt_row)
+		{
+			$t->define_data(array(
+				"prop" => html::select(array(
+					"name" => "filts[$idx][prop]",
+					"value" => $filt_row["prop"],
+					"options" => $props
+				)),
+				"value" => html::textbox(array(
+					"name" => "filts[$idx][value]",
+					"value" => $filt_row["value"],
+				)),
+				"exact" => html::checkbox(array(
+					"name" => "filts[$idx][exact]",
+					"value" => 1,
+					"checked" => $filt_row["exact"]
+				)),
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	function _save_filter($arr)
+	{
+		$f = array();
+		foreach(safe_array($arr["request"]["filts"]) as $f_row)
+		{
+			if ($f_row["prop"] != "" && $f_row["value"] != "")
+			{
+				$f[] = $f_row;
+			}
+		}
+		$arr["obj_inst"]->set_meta("filter", $f);
+	}
+
+	function _get_ol_filt($o, $ret)
+	{
+		foreach(safe_array($o->meta("filter")) as $f_row)
+		{
+			if ($f_row["exact"])
+			{
+				$ret[$f_row["prop"]] = explode(",", trim($f_row["value"]));
+			}
+			else
+			{
+				$ret[$f_row["prop"]] = map('%%%s%%', explode(",", trim($f_row["value"])));
+			}
+		}	
+		return $ret;
+	}
 }
 ?>
