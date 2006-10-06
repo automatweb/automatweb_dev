@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.13 2006/01/19 22:40:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.14 2006/10/06 15:17:11 markop Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -101,9 +101,21 @@ class crm_deal extends class_base
 		return $retval;
 	}	
 
+	function callback_post_save($arr)
+	{
+		if($arr["new"]==1 && is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
+		{
+			$arr["obj_inst"]->set_prop("project" , $arr["request"]["project"]);
+		}
+	}
+	
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["project"] = $_GET["project"];
 	}
+	
+	
 }
 ?>

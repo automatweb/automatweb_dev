@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.51 2006/07/10 17:32:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.52 2006/10/06 15:17:11 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -243,6 +243,19 @@ class crm_offer extends class_base
 			break;
 		
 			case "orderer":
+				if($arr["new"] && is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
+				{
+					$project = obj($arr["request"]["project"]);
+					$orderers = new object_list(array(
+						"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+						"oid" => $project->prop("orderer"),
+						"lang_id" => array(),
+						"site_id" => array()
+					));
+					$prop["options"] = $orderers->names();
+					break;
+				}
+
 				$my_org = false;
 
 				if(!($arr["new"] == 1) && is_object($arr["obj_inst"]))
@@ -547,6 +560,17 @@ class crm_offer extends class_base
 					$arr["obj_inst"]->create_brother($parent);
 				}
 			}
+			
+			if(is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
+			{
+				$project = obj($arr["request"]["project"]);
+				foreach($project->prop("orderer") as $orderer)
+				{
+					$arr["obj_inst"]->connect(array("to" => $arr["request"]["project"], "reltype" => "ORDERER"));
+				}
+				$arr["obj_inst"]->connect(array("to" => $arr["request"]["project"], "reltype" => "PROJECT"));
+				$arr["obj_inst"]->set_prop("project" , $arr["request"]["project"]);
+			}
 		}
 
 		$pl = get_instance(CL_PLANNER);
@@ -829,9 +853,11 @@ class crm_offer extends class_base
 		return $arr["post_ru"];
 	}
 
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["project"] = $_GET["project"];
 	}
 
 	function _get_wh($o)

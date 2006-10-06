@@ -63,17 +63,6 @@ class project_teams_impl extends class_base
 	function _get_team_tb($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-
-		if($arr["request"]["team"] != "teams" && !is_oid($arr["request"]["team"]) && $arr["request"]["team"] != "all_parts" || !$arr["request"]["no_search"])
-		{
-			$t->add_button(array(
-				"name" => "save",
-				"img" => "save.gif",
-				"action" => "add_participants",
-				"tooltip" => t("Lisa valitud isikud meeskonda"),
-			));
-		}
-
 		$t->add_button(array(
 				"name" => "new",
 				"img" => "new.gif",
@@ -87,6 +76,16 @@ class project_teams_impl extends class_base
 			));
 //		}
 
+/*		if($arr["request"]["team"] != "teams" && !is_oid($arr["request"]["team"]) && $arr["request"]["team"] != "all_parts" || !$arr["request"]["no_search"])
+		{
+			$t->add_button(array(
+				"name" => "save",
+				"img" => "save.gif",
+				"action" => "add_participants",
+				"tooltip" => t("Lisa valitud isikud meeskonda"),
+			));
+		}
+*/
 		if ($arr["request"]["team"] == "teams" || is_oid($arr["request"]["team"]) && $arr["request"]["no_search"])
 		{
 			$t->add_button(array(

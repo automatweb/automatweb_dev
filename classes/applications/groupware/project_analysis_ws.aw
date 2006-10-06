@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_ws.aw,v 1.2 2006/07/12 13:09:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_ws.aw,v 1.3 2006/10/06 15:14:48 markop Exp $
 // project_analysis_ws.aw - Projekti anal&uuml;&uuml;si t&ouml;&ouml;laud 
 /*
 
@@ -141,6 +141,17 @@ class project_analysis_ws extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["project"] = $_GET["project"];
+	}
+
+
+	function callback_post_save($arr)
+	{
+		if($arr["new"] == 1 && is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
+		{
+			$project = obj($arr["request"]["project"]);
+			$project->connect(array("to" => $arr["id"], "reltype" => "ANALYSIS_WS"));
+		}
 	}
 
 	function _init_strat_wt_t(&$t)
@@ -170,6 +181,7 @@ class project_analysis_ws extends class_base
 		$pi = get_instance(CL_PROJECT);
 		$conns = $arr["obj_inst"]->connections_to(array("from.class_id" => CL_PROJECT));
 		$c = reset($conns);
+		if(!$c) return;
 		$proj  = $c->from();
 
 		// get project team

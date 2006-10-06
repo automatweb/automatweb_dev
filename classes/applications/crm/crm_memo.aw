@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.9 2006/01/19 13:25:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.10 2006/10/06 15:16:07 markop Exp $
 // crm_memo.aw - Memo 
 /*
 
@@ -111,9 +111,19 @@ class crm_memo extends class_base
 		return $retval;
 	}	
 
+	function callback_post_save($arr)
+	{
+		if($arr["new"]==1 && is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
+		{
+			$arr["obj_inst"]->set_prop("project" , $arr["request"]["project"]);
+		}
+	}
+	
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["project"] = $_GET["project"];
 	}
 }
 ?>

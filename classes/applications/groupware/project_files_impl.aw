@@ -49,7 +49,7 @@ class project_files_impl extends class_base
 			$tb->add_menu_item(array(
 				"parent" => "new",
 				"text" => $desc,
-				"link" => html::get_new_url($type, $pt, array("return_url" => get_ru())),
+				"link" => html::get_new_url($type, $pt, array("project" => $arr["obj_inst"]->id() , "return_url" => get_ru())),
 			));
 		}
 		$tb->add_button(array(

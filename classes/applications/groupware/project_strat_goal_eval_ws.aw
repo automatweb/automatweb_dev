@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_strat_goal_eval_ws.aw,v 1.2 2006/07/05 10:06:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_strat_goal_eval_ws.aw,v 1.3 2006/10/06 15:14:48 markop Exp $
 // project_strat_goal_eval_ws.aw - Projekti eesm&auml;rkide hindamislaud 
 /*
 
@@ -98,6 +98,17 @@ class project_strat_goal_eval_ws extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["project"] = $_GET["project"];
+	}
+
+
+	function callback_post_save($arr)
+	{
+		if($arr["new"] == 1 && is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
+		{
+			$project = obj($arr["request"]["project"]);
+			$project->connect(array("to" => $arr["id"], "reltype" => "STRAT_EVAL"));
+		}
 	}
 
 
