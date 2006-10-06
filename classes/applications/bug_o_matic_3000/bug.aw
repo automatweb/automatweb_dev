@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.59 2006/10/06 16:29:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.60 2006/10/06 16:30:30 markop Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -881,7 +881,6 @@ class bug extends class_base
 		$o->set_prop("new_state", $new_state);
 		$o->set_prop("add_wh", $add_wh);
 		$o->save();
-
 		$bug->connect(array(
 			"to" => $o->id(),
 			"type" => "RELTYPE_COMMENT"
