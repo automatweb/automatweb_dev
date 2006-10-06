@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.57 2006/09/21 13:58:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.58 2006/10/06 15:20:08 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -919,6 +919,8 @@ class bug extends class_base
 		if ($arr["new"])
 		{
 			$this->notify_monitors($arr["obj_inst"], $arr["obj_inst"]->prop("bug_content"));
+			// if this is a new bug, then parse the content and create sub/subsub bugs from it
+			$this->_parse_add_bug_content($arr["obj_inst"]);
 		}
 	}
 
@@ -1068,6 +1070,89 @@ class bug extends class_base
 			"link" => html::get_new_url(CL_BUG, $arr["obj_inst"]->id(), array("return_url" => $arr["request"]["return_url"])),
 			"href_id" => "add_bug_hrefp"
 		));
+	}
+
+	function _parse_add_bug_content($o)
+	{
+		$c = $o->prop("bug_content");
+		if (strpos($c, "1)") === false)
+		{
+			return;
+		}
+
+		$ls = explode("\n", $c);
+		$bugs = array();
+		foreach($ls as $line)
+		{
+			if (trim($line) == "")
+			{
+				continue;
+			}
+
+			if (preg_match("/([0-9\.]+)\)/imsU", $line, $mt))
+			{
+				if ($cur_b != "")
+				{
+					$bugs[$cur_num] = $cur_b;
+				}
+				$cur_num = $mt[1];
+				$cur_b = str_replace($mt[0], "", $line);
+			}
+			else
+			{
+				$cur_b .= $line;
+			}
+		}
+		if ($cur_b != "")
+		{
+			$bugs[$mt[1]] = $cur_b;
+		}
+
+		ksort($bugs);
+		foreach($bugs as $pt => $ct)
+		{
+			if (strpos($pt, ".") === false)
+			{
+				$parent = $o->id();
+			}
+			else
+			{
+				// find the parent by the sub-bug number
+				$parts = explode(".", $pt);
+				foreach($num2bug as $num => $bug_id)
+				{
+					$tparts = explode(".", $num);
+					if (count($tparts) == (count($parts) - 1) && substr($pt, 0, strlen($num)) == $num)
+					{
+						$parent = $bug_id;
+					}
+				}
+			}
+
+			$b = obj();
+			$b->set_parent($parent);
+			$b->set_class_id(CL_BUG);
+			$b->set_name(substr($ct, 0, 50));
+			$b->set_prop("bug_content", $ct);
+			$b->set_prop("bug_status", $o->prop("bug_status"));
+			$b->set_prop("bug_priority", $o->prop("bug_priority"));
+			$b->set_prop("who", $o->prop("who"));
+			$b->set_prop("bug_type", $o->prop("bug_type"));
+			$b->set_prop("bug_class", $o->prop("bug_class"));
+			$b->set_prop("bug_severity", $o->prop("bug_severity"));
+			$b->set_prop("monitors", $o->prop("monitors"));
+			$b->set_prop("deadline", $o->prop("deadline"));
+			$b->set_prop("num_hrs_guess", $o->prop("num_hrs_guess"));
+			$b->set_prop("num_hrs_real", $o->prop("num_hrs_real"));
+			$b->set_prop("num_hrs_to_cust", $o->prop("num_hrs_to_cust"));
+			$b->set_prop("customer", $o->prop("customer"));
+			$b->set_prop("project", $o->prop("project"));
+			$b->set_prop("bug_component", $o->prop("bug_component"));
+			$b->set_prop("bug_mail", $o->prop("bug_mail"));
+			$b->set_prop("bug_property", $o->prop("bug_property"));
+			$b->save();
+			$num2bug[$pt] = $b->id();
+		} 
 	}
 }
 ?>
