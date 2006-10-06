@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.147 2006/10/05 15:16:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.148 2006/10/06 12:56:10 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -195,7 +195,6 @@ caption Osalejad
 
 	@property rows_tb type=toolbar store=no no_caption=1 method=serialize
 	@property rows type=table store=no no_caption=1 method=serialize
-
 @default group=resources
 
 	@property sel_resources type=table no_caption=1 method=serialize
@@ -1406,6 +1405,8 @@ class task extends class_base
 			"caption" => t("Tunde"),
 			"align" => "left",
 			"nowrap" => 1,
+			"callback" =>  array(&$this, "__time_format"),
+			"callb_pass_row" => true,
 		));
 
 		/*$t->define_field(array(
@@ -1605,6 +1606,12 @@ class task extends class_base
 		$row_ids[] = NULL;
 		$row_ids[] = NULL;
 		$not_sorted=true;
+		
+		//statistikasse nende ridade tunnid, mida reaalselt tabelis näha (kliendile)
+		$this->visible_rows_sum = 0;
+		//kõikide ridade tundide summa (kliendile)
+		$this->sum = 0;
+		
 		foreach($row_ids as $ro)
 		{
 			if ($ro === NULL)
@@ -1748,6 +1755,7 @@ class task extends class_base
 			}
 			$t->define_data(array(
 				"idx" => $idx,
+				"sum_val" => $row->prop("time_to_cust"),
 				"ord_val" => $row->prop("ord"),
 				"date_val" => $date,
 				"date_sel" => $date_sel,
@@ -1796,7 +1804,7 @@ class task extends class_base
 				"col" => $col
 			));
 		}
-		if(is_oid($arr["obj_inst"]->prop("hr_price_currency")))
+/*		if(is_oid($arr["obj_inst"]->prop("hr_price_currency")))
 		{
 			$sad = obj($arr["obj_inst"]->prop("hr_price_currency"));
 			$curr = $sad->name();
@@ -1809,14 +1817,16 @@ class task extends class_base
 		else
 		{
 			$cash = $sum * $arr["obj_inst"]->prop("hr_price");
-		}
+		}*/
 		$t->define_data(array(
-			"time" => "<b>".t("Kokku:").$sum." ".$arr["obj_inst"]->prop("deal_unit")." (".$cash." ".$curr.")",
+			"result_sum" => 1,
+			"task_object" => $arr["obj_inst"],
 		));
 	}
 
 	function __ord_format($val)
 	{
+		$this->visible_rows_sum += $val["sum_val"];
 		if($val["date_val"])
 		{
 			return html::textbox(array(
@@ -1826,6 +1836,35 @@ class task extends class_base
 			));
 		}
 	}
+	
+	
+	function __time_format($val)
+	{
+		if($val["result_sum"])
+		{
+			if(is_oid($val["task_object"]->prop("hr_price_currency")))
+			{
+				$sad = obj($val["task_object"]->prop("hr_price_currency"));
+				$curr = $sad->name();
+			}
+			if($val["task_object"]->prop("deal_price"))
+			{
+				$sum = $val["task_object"]->prop("deal_amount");
+				$cash = $val["task_object"]->prop("deal_price");
+			}
+			else
+			{
+				$sum = $this->visible_rows_sum;
+				$cash = $sum * $val["task_object"]->prop("hr_price");
+			}
+			$unit = $val["task_object"]->prop("deal_unit");
+			//defauldiks oleks tunnid
+			if($unit) $unit = t("h");
+			return "<b>".t("Kokku:").$sum." ".$unit." (".$cash." ".$curr.")";
+		}	
+		return $val["time"];
+	}
+	
 	function __date_format($val)
 	{
 		if($val["date_val"])
