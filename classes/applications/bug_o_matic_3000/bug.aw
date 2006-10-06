@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.58 2006/10/06 15:20:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.59 2006/10/06 16:29:30 markop Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -817,6 +817,9 @@ class bug extends class_base
 			// replace #675656 with link to bug
 			$comt = preg_replace("/#([0-9]+)/ims", "<a href='http://intranet.automatweb.com/\\1'>#\\1</a>", $comt);
 
+
+//			$comt = $this->parse_commited_msg($comt);
+
 			$this->vars(array(
 				"com_adder" => $com->createdby(),
 				"com_date" => date("d.m.Y H:i", $com->created()),
@@ -924,6 +927,28 @@ class bug extends class_base
 		}
 	}
 
+	function parse_commited_msg($msg){
+		
+		$row =  explode("\n" , $msg);
+		//arr($row);
+		$result = array("diff" => $row[0], "files" =>  str_replace("<br />" , "" ,$row[6]), "bug" => str_replace("<br />" , "" , $row[8]));
+		$time_arr = explode(":" , $row[9]);
+		if($time_arr[1])
+		{
+			$result["time"] = $time_arr[1];
+		}
+		
+		$by1 = strpos($row[1], 'by') + 3;//arr($by1);
+		$by2 = strpos($row[1], ' ', $by1+5);//arr($by2);
+		$result["by"] = substr($row[1], $by1, $by2-$by1 );
+	//	arr($row[1]);
+	//	arr($result);
+		
+		$msg = $result["bug"]." ".$result["diff"]."\n".t("Failid: ").$result["files"];
+		if($result["time"]) $msg.="\n".t("Aeg:").$result["time"];
+		return $msg;
+	}
+
 	/**
 		@attrib name=handle_commit nologin=1
 		@param bugno required type=int 
@@ -936,6 +961,9 @@ class bug extends class_base
 		aw_disable_acl();
 		$bug = obj($arr["bugno"]);
 		$msg = trim($this->hexbin($arr["msg"]));
+		
+		$msg = $this->parse_commited_msg($msg);
+		
 		$ostat = $nstat = $bug->prop("bug_status");
 		if ($arr["set_fixed"] == 1)
 		{
