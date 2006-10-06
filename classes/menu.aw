@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.171 2006/10/04 16:18:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.172 2006/10/06 16:13:37 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -21,6 +21,9 @@
 		@property status type=status trans=1 default=1 group=general_sub
 		@caption Aktiivne
 		@comment Kas objekt on aktiivne
+
+		@property alias_ch type=checkbox ch_value=1 default=1 group=general_sub field=meta method=serialize
+		@caption Genereeri alias automaatselt
 
 		@property alias type=textbox group=general_sub
 		@caption Alias
@@ -1340,7 +1343,7 @@ class menu extends class_base
 		$m = get_instance("menuedit");
 		$m->invalidate_menu_cache($this->updmenus);
 		$request = &$arr["request"];
-		if($request["group"] == "general_sub" && aw_ini_get("menu.automatic_aliases"))
+		if($request["group"] == "general_sub" && aw_ini_get("menu.automatic_aliases")  && $arr["obj_inst"]->prop("alias_ch") == 1)
 		{
 			if(!strlen($arr["obj_inst"]->alias()))
 			{

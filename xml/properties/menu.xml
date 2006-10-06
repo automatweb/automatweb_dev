@@ -32,6 +32,17 @@
             <comment>Kas objekt on aktiivne</comment>
       </property>
       <property>
+            <name>alias_ch</name>
+            <table>objects</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <group>general_sub</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Genereeri alias automaatselt</caption>
+      </property>
+      <property>
             <name>alias</name>
             <table>objects</table>
             <type>textbox</type>
