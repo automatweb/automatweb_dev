@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.6 2006/10/06 14:15:27 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.7 2006/10/06 16:16:02 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -94,7 +94,6 @@
 
 class scala_import extends class_base
 {
-
 	var $db_table_name = 'scala_prices_to_customers';
 	var $import_sections;
 	var $log_str = '';
