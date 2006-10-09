@@ -54,73 +54,78 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 			@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1 parent=co_top_right 
 			@caption Asutatud
+	
+	@layout co_bottom_buyer type=hbox width=50%:50% closeable=1 area_caption=Kliendisuhe&#44;&nbsp;Ostja no_caption=1
+		@layout co_bottom_buyer_l type=vbox parent=co_bottom_buyer
 
-	@layout co_bottom type=hbox closeable=1 area_caption=Kliendisuhe width=50%:50%
-
-		@layout co_bottom_left type=vbox parent=co_bottom
-
-			@property buyer type=relpicker reltype=RELTYPE_BUYER table=kliendibaas_firma parent=co_bottom_left
+			@property buyer type=relpicker reltype=RELTYPE_BUYER table=kliendibaas_firma parent=co_bottom_buyer_l
 			@caption Ostja
 
-			@property buyer_contract_creator type=select table=kliendibaas_firma parent=co_bottom_left
+			@property buyer_contract_creator type=select table=kliendibaas_firma parent=co_bottom_buyer_l
 			@caption Hankijasuhte looja
 
-			@property buyer_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_left 
+			@property buyer_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_buyer_l
 			@caption Hankijasuhte alguskuup&auml;ev
-
-			@property buyer_contract_person type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_left
-			@caption Ostja kontaktisik 1
 			
-			@property buyer_contract_person2 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_left
-			@caption Ostja kontaktisik 2
-
-			@property buyer_contract_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_left
-			@caption Ostja kontaktisik 3
-
-			@property buyer_priority type=textbox table=kliendibaas_firma  parent=co_bottom_left
-			@caption Ostja prioriteet
-
-			@property client_category type=text store=no  parent=co_bottom_left 
+			@property client_category type=text store=no  parent=co_bottom_buyer_l
 			@caption Kliendikategooria
 
+		@layout co_bottom_buyer_r type=vbox parent=co_bottom_buyer
 
-		@layout co_bottom_right type=vbox parent=co_bottom
+			@property buyer_contract_person type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_buyer_r
+			@caption Ostja kontaktisik 1
 			
-			@property cust type=relpicker reltype=RELTYPE_BUYER table=kliendibaas_firma parent=co_bottom_right
+			@property buyer_contract_person2 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_buyer_r
+			@caption Ostja kontaktisik 2
+
+			@property buyer_contract_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=kliendibaas_firma parent=co_bottom_buyer_r
+			@caption Ostja kontaktisik 3
+
+			@property buyer_priority type=textbox table=kliendibaas_firma  parent=co_bottom_buyer_r
+			@caption Ostja prioriteet
+
+
+	@layout co_bottom_seller area_caption=Kliendisuhe&#44;&nbsp;M&uuml;&uuml;ja closeable=1 type=hbox width=50%:50%
+			
+		@layout co_bottom_seller_l type=vbox parent=co_bottom_seller
+
+			@property cust type=relpicker reltype=RELTYPE_BUYER table=kliendibaas_firma parent=co_bottom_seller_l
 			@caption M&uuml;&uuml;ja
 
-			@property cust_contract_creator type=select table=kliendibaas_firma parent=co_bottom_right 
+			@property cust_contract_creator type=select table=kliendibaas_firma parent=co_bottom_seller_l
 			@caption Kliendisuhte looja
 
-			@property cust_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_right 
+			@property cust_contract_date type=date_select table=kliendibaas_firma parent=co_bottom_seller_l
 			@caption Kliendisuhte alguskuup&auml;ev
 
-			@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype  parent=co_bottom_right 
+			@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype=  parent=co_bottom_seller_l
 			@caption Kliendpoolne kontaktisik 1
 
-			@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right 
+			@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_seller_l
 			@caption Kliendpoolne kontaktisik 2
 
-			@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_right 
+			@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1  parent=co_bottom_seller_l
 			@caption Kliendpoolne kontaktisik 3
 
-			@property cust_priority type=textbox table=kliendibaas_firma  parent=co_bottom_right 
+		@layout co_bottom_seller_r type=vbox parent=co_bottom_seller
+
+			@property cust_priority type=textbox table=kliendibaas_firma  parent=co_bottom_seller_r
 			@caption Kliendi prioriteet
 
-			@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE parent=co_bottom_right 
+			@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE parent=co_bottom_seller_r
 			@caption Sissetuleku meetod
 
-			@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager parent=co_bottom_right 
+			@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager parent=co_bottom_seller_r
 			@caption Kliendihaldur
 
-			@property bill_due_date_days type=textbox size=5 table=kliendibaas_firma parent=co_bottom_right 
+			@property bill_due_date_days type=textbox size=5 table=kliendibaas_firma parent=co_bottom_seller_r
 			@caption Makset&auml;htaeg (p&auml;evi)
 
-			@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5  parent=co_bottom_right 
+			@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5  parent=co_bottom_seller_r
 			@caption Arve viivise %
 
 
-	@property extern_id type=hidden table=kliendibaas_firma field=extern_id
+	@property extern_id type=hidden table=kliendibaas_firma field=extern_id no_caption=1
 
 
 
