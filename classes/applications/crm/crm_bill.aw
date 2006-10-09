@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.103 2006/09/26 13:06:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.104 2006/10/09 13:23:12 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -76,6 +76,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 table=objects field=meta method=serialize style=relpicker
 	@caption Allkirjastajad
+
+	@property adr_text type=textbox table=objects field=meta method=serialize
+	@caption Aadress vabatekstina
 
 	@property udef1 type=checkbox ch_value=1 field=meta method=serialize
 	@caption Kasutajadefineeritud muutuja 1
@@ -964,6 +967,11 @@ class crm_bill extends class_base
 					$country_obj = obj($ct->prop("riik"));
 					if($country_obj->prop("name_en") && $lc == "en") $ord_country = $country_obj->prop("name_en");
 				}
+			}
+
+			if ($b->prop("adr_text") != "")
+			{
+				$ord_addr = $b->prop("adr_text");
 			}
 
 			if ($this->can("view", $ord->prop("currency")))
