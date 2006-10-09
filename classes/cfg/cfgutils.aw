@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.80 2006/08/23 10:00:19 tarvo Exp $
+// $Id: cfgutils.aw,v 1.81 2006/10/09 15:45:29 dragut Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -273,9 +273,16 @@ class cfgutils extends aw_template
 				};
 			};
 		}
-
 		$properties = $propdef["property"];
 		$classinfo = $this->tableinfo = $relinfo = $groupinfo = array();
+		if (is_array($propdef['layout']))
+		{
+			foreach ($propdef['layout'] as $k => $d)
+			{
+				$propdef['layout'][$k]['caption'] = html_entity_decode($d['caption']);
+			}
+		
+		}
 
 		$this->propdef = $propdef;
 
@@ -319,6 +326,8 @@ class cfgutils extends aw_template
 		{
 			$groupinfo[$k]["caption"] = html_entity_decode($d["caption"]);
 		}
+
+
 
 		if (is_array($relinfo))
 		{
