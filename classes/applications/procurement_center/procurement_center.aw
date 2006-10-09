@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.15 2006/10/04 14:14:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.16 2006/10/09 14:52:37 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -369,10 +369,12 @@ class procurement_center extends class_base
 			'link'=> html::get_new_url(CL_MENU, $parent, array("return_url" => get_ru()))
 		));
 
+		$owner = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text'=> t('Hange'),
-			'link'=> html::get_new_url(CL_PROCUREMENT, $parent, array("return_url" => get_ru()))
+			'link'=> html::get_new_url(CL_PROCUREMENT, $parent, array("return_url" => get_ru(), "orderer" => $owner->id()))
 		));
 
 		$tb->add_button(array(

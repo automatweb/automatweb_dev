@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.8 2006/10/05 12:17:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.9 2006/10/09 14:52:37 markop Exp $
 // procurement.aw - Hange 
 /*
 
@@ -215,7 +215,15 @@ class procurement extends class_base
 			case "products":
 				$prop["value"] = $this->products_table(&$arr["prop"]["vcl_inst"],$arr["obj_inst"]);
 				break;
-		};
+			case "orderer":
+				if($arr["request"]["action"] == "new" && is_oid($arr["request"]["orderer"]) && $this->can("view" ,$arr["request"]["orderer"]))
+				{
+					$orderer = obj($arr["request"]["orderer"]);
+					$prop["value"] = $arr["request"]["orderer"];
+					$prop["options"] = array($orderer->id() => $orderer->name());
+				}
+				break;
+		}; 
 		return $retval;
 	}
 
@@ -373,9 +381,10 @@ class procurement extends class_base
 				break;
 			case "products":
 				//liidab need tooted juurde mida veel ei eksisteeri
-				$_SESSION["procurement"]["val"] = $prop["value"];
-				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("val" => $prop["value"] , "id" => $arr["obj_inst"]->id()))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
-					</script>";
+				$_SESSION["procurement"]["accept"] = $arr["request"]["accept"];
+				$_SESSION["procurement"]["val"] = $arr["request"]["products"];
+				$popup = "<script name= javascript>window.open('".$this->mk_my_orb("set_type", array("id" => $arr["obj_inst"]->id(), "return_url" => $arr["request"]["return_url"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600')
+				</script>";
 				die($popup);
 				break;
 		}
@@ -410,9 +419,21 @@ class procurement extends class_base
 		));
 		$options = $types->names();
 		asort($options);
+		
+		$co = obj($this_object->prop("orderer"));
+		$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+		
+		if(is_object($warehouse))
+		{
+			$warehouse->config = obj($warehouse->prop("conf"));
+			$parent = $warehouse->config->prop("prod_fld");
+		}	
+		else $parent = $_GET["id"];
+		
+		
 		if($_POST["types"])
 		{
-			foreach($_GET["val"] as $product)
+			foreach($_SESSION["procurement"]["val"] as $key=>$product)
 			{
 				$ol = new object_list(array(
 					"class_id" => array(CL_SHOP_PRODUCT),
@@ -421,11 +442,20 @@ class procurement extends class_base
 					"site_id" => array(),
 				));
 
-				$co = obj($this_object->prop("orderer"));
-				$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
-				$parent = $warehouse->id();
 				if (!$ol->count())
 				{
+				if(is_oid($_POST["types"][$product["product"]]))
+					{
+						$type_object = obj($_POST["types"][$product["product"]]);
+						if(is_oid($type_object->prop("default_product_folder")))
+						{
+							$folder = obj($type_object->prop("default_product_folder"));
+							if($folder->class_id() == CL_MENU)
+							{
+								$parent = $folder->id();
+							}
+						}
+					}
 					$p = obj();
 					$p->set_class_id(CL_SHOP_PRODUCT);
 					$p->set_parent($parent);
@@ -434,6 +464,7 @@ class procurement extends class_base
 					$p->save();
 				}
 			}
+			
 			$this_object->set_meta("products",$_SESSION["procurement"]["val"]);
 			$this_object->save();
 			$_SESSION["procurement"] = null;
@@ -446,16 +477,13 @@ class procurement extends class_base
 		$new_products = 0;
 		foreach($_SESSION["procurement"]["val"] as $product)
 		{
+			if($product["product"] == "") continue;
 			$ol = new object_list(array(
 				"class_id" => array(CL_SHOP_PRODUCT),
 				"name" => $product["product"],
 				"lang_id" => array(),
 				"site_id" => array(),
 			));
-			
-			$co = obj($this_object->prop("orderer"));
-			$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
-			$parent = $warehouse->id();
 			if (!$ol->count())
 			{
 				$new_products = 1;
