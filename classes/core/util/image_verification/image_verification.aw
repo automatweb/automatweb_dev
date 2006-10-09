@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.2 2006/10/03 09:26:41 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.3 2006/10/09 15:42:54 dragut Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
@@ -48,7 +48,7 @@ class image_verification extends class_base
 			case 'width':
 				if ( empty($prop['value']) )
 				{
-					$prop['value'] = 100;
+					$prop['value'] = 250;
 				}
 				break;
 			case 'height':
