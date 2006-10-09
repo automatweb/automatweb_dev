@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.16 2006/10/09 14:52:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.17 2006/10/09 17:54:54 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -27,8 +27,20 @@
 	
 	@layout p_l type=hbox width=30%:70%
 		
-		@property p_tr type=treeview no_caption=1 store=no parent=p_l
-
+		@layout p_left type=vbox parent=p_l
+		
+		@layout p_tree type=vbox parent=p_left closeable=1 area_caption=Hangete&nbsp;puu
+			@property p_tr type=treeview no_caption=1 store=no parent=p_tree
+		
+		@layout p_search type=vbox parent=p_left closeable=1 area_caption=Hangete&nbsp;otsing
+			@property procurements_find_status type=select store=no parent=p_search captionside=top
+			@caption Staatus
+			@property procurements_find_offerer type=textbox store=no parent=p_search size=20 captionside=top
+			@caption Pakkuja
+			@property procurements_find_product type=textbox store=no parent=p_search size=20 captionside=top
+			@caption Toode
+			@property do_find_procurements type=submit store=no parent=p_search no_caption=1
+			@caption Otsi
 		@property p_tbl type=table no_caption=1 store=no parent=p_l
 
 @default group=team
@@ -43,42 +55,36 @@
 
 @groupinfo offerers caption="Pakkujad"
 @default group=offerers
-@groupinfo offerers_tree caption="Puuvaates" parent=offerers
-@default group=offerers_tree
+groupinfo offerers_tree caption="Puuvaates" parent=offerers
+default group=offerers_tree
 	
 	@property offerers_tb type=toolbar no_caption=1 store=no
 	
-	@layout offerers_l type=hbox width=30%:70%
-		@property offerers_tr type=treeview no_caption=1 store=no parent=offerers_l
-		@property offerers_tbl type=table no_caption=1 store=no parent=offerers_l
+	@layout offerers_lay type=hbox width=20%:80%
 	
-
-@groupinfo offerers_find caption="Otsing" parent=offerers
-@default group=offerers_find
-	
-	@property offerers_find_tb type=toolbar no_caption=1 store=no
-	@layout offerers_find_l type=hbox width=20%:80%
-		@layout offerers_find_params type=vbox parent=offerer_find_l parent=offerers_find_l
-			@property offerers_find_name type=textbox store=no parent=offerers_find_params
-			@caption Nimi
-			@property offerers_find_address type=textbox store=no parent=offerers_find_params
-			@caption Aadress
-			@property offerers_find_groups type=select store=no parent=offerers_find_params
-			@caption Hankijagruppid
-			@property offerers_find_done type=checkbox store=no parent=offerers_find_params no_caption=1
-			@caption Teostanud hankeid
-			@property offerers_find_start type=date_select store=no parent=offerers_find_params
-			@caption Alates
-			@property offerers_find_end type=date_select store=no parent=offerers_find_params
-			@caption Kuni
-			@property offerers_find_product type=textbox store=no parent=offerers_find_params
-			@caption pakutud Toode
-			@property offerers_find_only_buy type=checkbox store=no parent=offerers_find_params no_caption=1
-			@caption Ainult ostudega
-			@property do_find_offerers type=submit store=no parent=offerers_find_params no_caption=1
-			@caption Otsi
-
-		@property offerers_find_tbl type=table no_caption=1 store=no parent=offerers_find_l
+		@layout offerers_l type=vbox parent=offerers_lay
+			@layout offerers_tree_l type=vbox parent=offerers_l closeable=1 area_caption=Pakkujate&nbsp;puu
+				@property offerers_tr type=treeview no_caption=1 store=no parent=offerers_tree_l
+			@layout offerers_find_params type=vbox parent=offerers_l closeable=1 area_caption=Pakkujate&nbsp;otsing
+				@property offerers_find_name type=textbox store=no parent=offerers_find_params captionside=top
+				@caption Nimi
+				@property offerers_find_address type=textbox store=no parent=offerers_find_params captionside=top
+				@caption Aadress
+				@property offerers_find_groups type=select store=no parent=offerers_find_params captionside=top
+				@caption Hankijagruppid
+				@property offerers_find_done type=checkbox store=no parent=offerers_find_params captionside=top no_caption=1
+				@caption Teostanud hankeid
+				@property offerers_find_start type=date_select store=no parent=offerers_find_params captionside=top
+				@caption Alates
+				@property offerers_find_end type=date_select store=no parent=offerers_find_params captionside=top
+				@caption Kuni
+				@property offerers_find_product type=textbox store=no parent=offerers_find_params captionside=top
+				@caption pakutud Toode
+				@property offerers_find_only_buy type=checkbox store=no parent=offerers_find_params captionside=top no_caption=1
+				@caption Ainult ostudega
+				@property do_find_offerers type=submit store=no parent=offerers_find_params captionside=top no_caption=1
+				@caption Otsi
+		@property offerers_tbl type=table no_caption=1 store=no parent=offerers_lay
 
 @groupinfo offers caption="Pakkumised"
 @groupinfo offers_tree caption="Puuvaates" parent=offers
@@ -304,6 +310,8 @@ class procurement_center extends class_base
 			case "products_find_product_name":
 			case "products_find_name":
 			case "products_find_address":
+			case "procurements_find_offerer":
+			case "procurements_find_product":
 			case "products_find_apply":
 				$search_data = $arr["obj_inst"]->meta("search_data");
 				$prop["value"] = $search_data[$prop["name"]];
@@ -314,10 +322,26 @@ class procurement_center extends class_base
 			case "products_find_groups":
 				$search_data = $arr["obj_inst"]->meta("search_data");
 				$prop["value"] = $search_data[$prop["name"]];
-				$ol = new object_list(array("parent" => $arr["obj_inst"]->prop("offerers_folder") , "class_id" => array(CL_MENU)));
+				$ol = new object_list(array(
+				//	"parent" => $arr["obj_inst"]->prop("offerers_folder"),
+					"class_id" => array(CL_CRM_CATEGORY),
+					"lang_id" => array())
+				);
 				$prop["options"][""] = "";
 				$prop["options"] += $ol->names();
 
+				break;
+			case "procurements_find_status":
+				$search_data = $arr["obj_inst"]->meta("search_data");
+				$prop["value"] = $search_data[$prop["name"]];
+				$prop["options"] = array(
+					"" => "",
+					PROCUREMENT_NEW => t("Uus"),
+					PROCUREMENT_PUBLIC => t("Avaldatud"),
+					PROCUREMENT_INPROGRESS => t("T&ouml;&ouml;s"),
+					PROCUREMENT_DONE => t("Valmis"),
+					PROCUREMENT_CLOSED => t("Suletud")
+				);
 				break;
 		};
 		return $retval;
@@ -340,6 +364,7 @@ class procurement_center extends class_base
 			case "offers_find_name":
 			case "buyings_find_name":
 			case "products_find_name":
+			case "procurements_find_product":	
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				break;
 		}
@@ -519,8 +544,52 @@ class procurement_center extends class_base
 					"p_id" => $id,
 					)),
 			));
+		
+		//siit edasi peaks kärpima, kui vaja, et see puu kiiremini lahti tuleks
+			$areas = new object_list(array(
+				"class_id" => CL_CRM_AREA,
+				"sort_by" => "name",
+				"lang_id" => array(),
+				"country" => $id
+			));
+			foreach($areas->names() as $area_id => $area_name)
+			{
+				$arr["prop"]["vcl_inst"]->add_item($id, array(
+					"id" => $area_id,
+					"name" => $area_name,
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $arr["obj_inst"]->id(),
+						"group" => "offerers",
+						"country" => $id,
+						"area" => $area_id,
+						"p_id" => $area_id,
+					)),
+				));
+				
+				$city = new object_list(array(
+					"class_id" => CL_CRM_CITY,
+					"sort_by" => "name",
+					"lang_id" => array(),
+					"area" => $area_id
+				));
+				foreach($city->names() as $city_id => $city_name)
+				{
+					$arr["prop"]["vcl_inst"]->add_item($area_id, array(
+						"id" => $city_id,
+						"name" => $city_name,
+						"url" => $this->mk_my_orb("change",array(
+							"id" => $arr["obj_inst"]->id(),
+							"group" => "offerers",
+							"country" => $id,
+							"area" => $area_id,
+							"city" => $city_id,
+							"p_id" => $city_id,
+						)),
+					));
+				}
+			}
 		}
-		if(is_oid($arr["request"]["country"]))
+/*		if(is_oid($arr["request"]["country"]))
 		{
 			$areas = new object_list(array(
 				"class_id" => CL_CRM_AREA,
@@ -543,8 +612,8 @@ class procurement_center extends class_base
 				));
 			}
 		}
-		
-		if(is_oid($arr["request"]["area"]))
+*/		
+/*		if(is_oid($arr["request"]["area"]))
 		{
 			$city = new object_list(array(
 				"class_id" => CL_CRM_CITY,
@@ -568,6 +637,7 @@ class procurement_center extends class_base
 				));
 			}
 		}
+		*/
 	}
 
 	function _offers_tr($arr)
@@ -1226,38 +1296,51 @@ class procurement_center extends class_base
 			$arr["obj_inst"]->set_meta("search_data", null);
 			$arr["obj_inst"]->save();
 		}
-		else 
-		{	
-			$ol = new object_list(array(
+		else
+		{
+			$ol = new object_list();
+			if(is_oid($arr["request"]["p_id"]))
+			{
+				$cat_obj = obj($arr["request"]["p_id"]);
+				
+				if($cat_obj->class_id() == CL_CRM_CATEGORY)
+				{
+					foreach($cat_obj->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+					{
+						$ol->add($c->prop("to"));
+					}
+				}
+				if($cat_obj->class_id() == CL_CRM_AREA || $cat_obj->class_id() == CL_CRM_COUNTRY ||$cat_obj->class_id() == CL_CRM_CITY)
+				{
+					$ol = $this->is_in_area(array("req" => $arr["request"]));
+				}
+			}
+			
+			
+/*			$ol = new object_list(array(
 				"class_id" => array(CL_FOLDER, CL_CRM_COMPANY, CL_CRM_PERSON),
 				"parent" => $parent,
 				"lang_id" => array(),
 				));
-			$cat_l = new object_list(array(
-				"class_id" => CL_CRM_COMPANY,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"CL_CRM_COMPANY.RELTYPE_CATEGORY.id" => $arr["request"]["p_id"],
-			));
-			$ol->add($cat_l);
+*///			$cat_l = new object_list(array(
+	//			"class_id" => CL_CRM_COMPANY,
+	//			"lang_id" => array(),
+	//			"site_id" => array(),
+	//			"CL_CRM_COMPANY.RELTYPE_CATEGORY.id" => $arr["request"]["p_id"],
+	//		));
+//			$ol->add($cat_l);
+//			arr($cat_l);
 			
 		}
 		$p_inst = get_instance(CL_CRM_PERSON);
 		foreach($ol->arr() as $o)
 		{
-			if(($arr["request"]["country"]) && !$this->is_in_area(array("o" => $o, "req" => $arr["request"]))) continue;
+//			if(($arr["request"]["country"]) && !$this->is_in_area(array("o" => $o, "req" => $arr["request"]))) continue;
 			$adress = "";
 			$contacts = "";
-			if($o->class_id() == CL_CRM_PERSON)
-			{
-				$contacts = $p_inst->get_short_description($o->id());
-				if(is_oid($o->prop("address")) && $this->can("view" , $o->prop("address")))
-				{
-					
-					$address_obj = obj($o->prop("address"));
-					$adress = $address_obj->name();
-				}
-			}
+			$oid = $o->id();
+			$name = html::obj_change_url($o);
+			
 			if($o->class_id() == CL_CRM_COMPANY)
 			{
 				if(is_oid($o->prop("contact")) && $this->can("view" , $o->prop("contact")))
@@ -1266,12 +1349,30 @@ class procurement_center extends class_base
 					$adress = $address_obj->name();
 				}
 				$contacts = $this->get_company_contacts($o);
+				if(is_object($o->get_first_obj_by_reltype("CONTACT_PERSON")))
+				{
+					$o = $o->get_first_obj_by_reltype("CONTACT_PERSON");
+				}
 			}
+			
+			if($o->class_id() == CL_CRM_PERSON)
+			{
+				if(!$contacts)
+				{
+					$contacts = $p_inst->get_short_description($o->id());
+				}
+				if(is_oid($o->prop("address")) && $this->can("view" , $o->prop("address")) && !$address)
+				{
+					$address_obj = obj($o->prop("address"));
+					$adress = $address_obj->name();
+				}
+			}
+
 			$t->define_data(array(
-				"name" => html::obj_change_url($o),
+				"name" => $name,
 				"address" => $adress,
 				"contacts" => $contacts,
-				"oid" => $o->id()
+				"oid" => $oid,
 			));
 		}
 	}
@@ -1289,7 +1390,7 @@ class procurement_center extends class_base
 			"CL_CRM_PERSON.address.name" => "%".$data["offerers_find_address"]."%",
 			)
 		));
-		if($data["offerers_find_groups"]) $filter["parent"] = $data["offerers_find_groups"];
+//		if($data["offerers_find_groups"]) $filter["parent"] = $data["offerers_find_groups"];
 		if($data["offerers_find_done"])
 		{
 			$owner = $this_obj->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
@@ -1358,6 +1459,25 @@ class procurement_center extends class_base
 			}
 			if(!sizeof($filter["oid"]) > 0) return $ol;
 		}
+		
+		if($data["offerers_find_groups"])
+		{
+			if(sizeof($filter["oid"]) > 0)
+			{
+				$ids = $filter["oid"];
+				$filter["oid"] = null;
+			}
+			$category = obj($data["offerers_find_groups"]);
+			foreach($category->connections_from(array('type' => "RELTYPE_CUSTOMER")) as $c)
+			{
+				if(!(sizeof($ids) && !in_array($c->prop("to") , $ids)))
+				{
+					$filter["oid"][$c->prop("to")] = $c->prop("to");
+				}
+			}
+			if(!sizeof($filter["oid"]) > 0) return $ol;
+		}
+		
 		$ol = new object_list($filter);
 		return $ol;
 	}
@@ -1366,6 +1486,40 @@ class procurement_center extends class_base
 	{
 		extract($args);
 		extract($req);
+		$ol = new object_list();
+		$filter_person = array(
+			"lang_id" => array(),
+			"class_id" => array(CL_CRM_PERSON),
+		);
+		$filter_company = array(
+			"lang_id" => array(),
+			"class_id" => array(CL_CRM_COMPANY),
+		);
+	
+		if($city)
+		{
+			$filter_person["CL_CRM_PERSON.address.linn"] = $city;
+			$filter_company["CL_CRM_COMAPNY.contact.linn"] = $city;
+		}
+		
+		if($area)
+		{
+			$filter_person["CL_CRM_PERSON.address.piirkond"] = $area;
+			$filter_company["CL_CRM_COMAPNY.contact.piirkond"] = $area;
+		}
+		
+		if($country)
+		{
+			$filter_person["CL_CRM_PERSON.address.riik"] = $country;
+			$filter_company["CL_CRM_COMAPNY.contact.riik"] = $country;
+		}
+		$persons = new object_list($filter_person);
+		$companys =  new object_list($filter_company);
+		$ol->add($persons);
+		$ol->add($companys);
+		
+		/*
+
 		if($o->class_id() == CL_CRM_PERSON && is_oid($o->prop("address")) && $this->can("view", $o->prop("address")))
 		{
 			$adress = obj($o->prop("address"));
@@ -1386,8 +1540,8 @@ class procurement_center extends class_base
 		elseif(is_oid($country))
 		{
 			if($adress->prop("riik")  == $country) return true;
-		}
-		return false;
+		}*/
+		return $ol;
 	}
 
 	function get_company_contacts($company)
@@ -1458,14 +1612,67 @@ class procurement_center extends class_base
 		$this->_init_p_tbl($t);
 
 		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->id();
-
-		$ol = new object_list(array(
-			"class_id" => CL_PROCUREMENT,
-			"parent" => $parent,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
+		
+		//otsingust
+		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
+		{
+			$ol = $this->search_procurements($arr["obj_inst"]);
+			$arr["obj_inst"]->set_meta("search_data", null);
+			$arr["obj_inst"]->save();
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_PROCUREMENT,
+				"parent" => $parent,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
 		$t->data_from_ol($ol, array("change_col" => "name"));
+	}
+	
+	function search_procurements($this_obj)
+	{
+		$ol = new object_list();
+		$filter = array("class_id" => array(CL_PROCUREMENT), "lang_id" => array());
+		$data = $this_obj->meta("search_data");
+		if($data["procurements_find_status"])
+		{
+			$filter["state"] = $data["procurement_find_status"];
+		}
+		if($data["procurements_find_offerer"])
+		{
+			$filter["CL_PROCUREMENT.RELTYPE_OFFERER.name"] = "%".$data["procurements_find_offerer"]."%";
+		}
+		
+		$ol = new object_list($filter);
+		//tõenäoliselt on see asi ka kiiremaks vaja tea.... kuid hetkel ei tuld paremat pähe... arvatavasti peab hanke ka siduma tootega... 
+		if($data["procurements_find_product"])
+		{
+			foreach($ol->arr() as $procurement)
+			{
+				if($data["procurements_find_product"])
+				{
+					$products = $procurement->meta("products");
+					$there_is_no_that_cool_product = 1;
+					foreach($products as $product)
+					{
+						if(substr_count($product["product"], $data["procurements_find_product"]))
+						{
+							$there_is_no_that_cool_product = 0;
+							break;
+						}
+					}
+					if($there_is_no_that_cool_product)
+					{
+						$ol->remove($procurement->id());
+						continue;
+					}
+				}
+			}
+		}
+		return $ol;
 	}
 	
 	function _offerers_tb($arr)
@@ -1642,8 +1849,6 @@ class procurement_center extends class_base
 */		}
 		return $cnt;
 	}
-
-	
 	
 	function search_products($this_obj)
 	{
