@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.7 2006/10/06 16:16:02 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.8 2006/10/09 15:41:01 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -409,14 +409,6 @@ class scala_import extends class_base
 			return false;
 		}
 
-/*
-	NOTES
-
-		- asjalik oleks pidada ka mingit logi selle kohta, et kuidas import kulges
-		- see logi võiks tekkida kuskile faili, aga seda peaks olema võimalik 
-		vaadata ka läbi impordi liidese
-*/	
-		// import prices
 		// we need ftp connection
 
 		$ftp = get_instance('protocols/file/ftp');
