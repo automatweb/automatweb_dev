@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.150 2006/10/06 13:40:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.151 2006/10/09 10:48:00 tarvo Exp $
 // task.aw - TODO item
 /*
 
@@ -311,6 +311,7 @@ class task extends class_base
 
 		foreach(safe_array($_SESSION["crm_stoppers"]) as $_id => $stopper)
 		{
+			
 			if ($stopper["state"] == "running")
 			{
 				$el = (time() - $stopper["start"]) + $stopper["base"];
@@ -367,6 +368,25 @@ class task extends class_base
 					"START" => $this->parse("START"),
 					"RUNNER" => "",
 					"PAUSER" => $this->parse("PAUSER"),
+				));
+			}
+			// extra info depending on class
+			if(call_user_func(array(($bug = obj($_id)),"class_id")) == CL_BUG)
+			{
+				$inst = get_instance(CL_BUG);
+				$bug_status_url = $this->mk_my_orb("handle_bug_change_status", array(
+					"bug" => $_id,
+					"status" => 'ehh',
+				), CL_BUG);
+				$this->vars(array(
+					"extra_info" => html::select(array(
+						"name" => "bug_status",
+						"options" => $inst->bug_statuses,
+						"selected" => $bug->prop("bug_status"),
+						"id" => "bug_status_".$_id,
+						//"onChange" => "current_status = 'juhuu';"
+					))."<br>",
+					"extra_javascript_on_stop" => sprintf("aw_get_url_contents(\"%s\"); ", $bug_status_url),
 				));
 			}
 
@@ -3217,9 +3237,17 @@ class task extends class_base
 		foreach($arr["obj_inst"]->connections_to(array("type" => $types)) as $c)
 		{
 			$c = $c->from();
+			$name = obj($c);
+			$name = $name->name();
+			$oid = $c->prop("work_contact");
+			if($oid)
+			{
+				$obj = obj($oid);
+				$name = strlen($tmp = $obj->prop("short_name"))?$name." (".$tmp.")":$name;
+			}
 			$t->define_data(array(
 				"oid" => $c->id(),
-				"part" => html::obj_change_url($c),
+				"part" => html::obj_change_url($c, $name),
 				"prof" => html::obj_change_url($c->prop("rank")),
 				"phone" => html::obj_change_url($c->prop("phone"))
 			));
