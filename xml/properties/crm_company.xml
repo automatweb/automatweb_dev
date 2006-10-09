@@ -2958,6 +2958,12 @@
                   <focus>customer_search_name</focus>
                   <save>no</save>
             </relorg>
+            <relorg_t>
+                  <caption>K&amp;amp;otilde;ik</caption>
+                  <parent>relorg</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </relorg_t>
             <relorg_s>
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;jad</caption>
                   <focus>customer_search_name</focus>
@@ -2972,12 +2978,6 @@
                   <submit>no</submit>
                   <save>no</save>
             </relorg_b>
-            <relorg_t>
-                  <caption>K&amp;amp;otilde;ik</caption>
-                  <parent>relorg</parent>
-                  <submit>no</submit>
-                  <save>no</save>
-            </relorg_t>
             <org_images>
                   <caption>Pildid</caption>
                   <submit>yes</submit>

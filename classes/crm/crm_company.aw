@@ -941,9 +941,9 @@ default group=org_objects
 	@groupinfo all_reports caption="K&otilde;ik raportid" submit=no parent=projs save=no
 
 @groupinfo relorg caption="Kliendid" focus=customer_search_name save=no
+	@groupinfo relorg_t caption="K&otilde;ik" parent=relorg submit=no save=no
 	@groupinfo relorg_s caption="M&uuml;&uuml;jad" focus=customer_search_name parent=relorg submit=no save=no
 	@groupinfo relorg_b caption="Ostjad" focus=customer_search_name parent=relorg submit=no save=no
-	@groupinfo relorg_t caption="K&otilde;ik" parent=relorg submit=no save=no
 
 groupinfo org_objects_main caption="Objektid" submit=no
 
@@ -2041,7 +2041,7 @@ class crm_company extends class_base
 					$overview_impl = get_instance("applications/crm/crm_company_overview_impl");
 				}
 				$fn = "_get_".$data["name"];
-			//	$arr["request"]["group"] = "ovrv_offers";
+				$arr["request"]["group"] = "ovrv_offers";
 				return $overview_impl->$fn($arr);
 
 			case "act_s_dl_from":
@@ -6006,6 +6006,15 @@ class crm_company extends class_base
 			$o->save();
 			return $o;
 		}
+	}
+
+	function callback_mod_layout($arr)
+	{
+		if($arr["name"] == "all_act_search" && aw_global_get("crm_task_view") == CRM_TASK_VIEW_CAL)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	function callback_mod_tab($arr)

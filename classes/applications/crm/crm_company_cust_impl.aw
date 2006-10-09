@@ -1941,10 +1941,13 @@ class crm_company_cust_impl extends class_base
 			{
 				$from = $arr["obj_inst"];
 			}
+			/*
+				don't need categories -- taiu
 			foreach($from->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 			{
 				$orglist[] = $c->prop("to");
 			}
+			*/
 			$this->_finish_org_tbl($arr, $orglist);
 		}
 	}
