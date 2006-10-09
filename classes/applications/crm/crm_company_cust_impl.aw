@@ -1540,7 +1540,7 @@ class crm_company_cust_impl extends class_base
 		$org = obj($arr["request"]["id"]);
 		$format_s = t("%s kliendid");
 		$format_t = t("%s kliendid: %s");
-		$format = ($arr["request"]["group"] == "relorg_t")?$format_t:$format_s;
+		$format = (($tmp = $arr["request"]["group"]) == "relorg_t" || $tmp = "relorg")?$format_t:$format_s;
 		$tf->table_caption = sprintf($format, $org->name(), $arr["obj_inst"]->name());
 		$this->_org_table_header(&$tf);
 		$default_cfg = true;
@@ -1887,7 +1887,7 @@ class crm_company_cust_impl extends class_base
 
 	function _get_my_customers_table($arr)
 	{
-		if($arr["request"]["customer_search_submit"])
+		if($arr["request"]["customer_search_submit"] || $arr["request"]["customer_search_submit_and_change"])
 		{
 			$this->_get_customer(&$arr);
 		}

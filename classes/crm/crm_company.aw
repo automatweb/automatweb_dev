@@ -390,45 +390,51 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 				@caption R&uuml;hmade puu
 
 			@layout vbox_customers_left type=vbox parent=tree_search_split closeable=1 area_caption=Otsing
+				@layout vbox_customers_left_top type=vbox parent=vbox_customers_left
 
-				@property customer_search_name type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-				@caption Nimi
+					@property customer_search_name type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Nimi
 
-				@property customer_search_reg type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-				@caption Reg nr.
+					@property customer_search_reg type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Reg nr.
 
-				@property customer_search_worker type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-				@caption T&ouml;&ouml;taja
+					@property customer_search_worker type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption T&ouml;&ouml;taja
 
-				@property customer_search_address type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-				@caption Aadress
+					@property customer_search_address type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Aadress
 
-				@property customer_search_city type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-				@caption Linn/Vald/Alev
+					@property customer_search_city type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Linn/Vald/Alev
 
-				@property customer_search_county type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-				@caption Maakond
+					@property customer_search_county type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption Maakond
 
-				@property customer_search_ev type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-				@caption &Otilde;iguslik vorm
+					@property customer_search_ev type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption &Otilde;iguslik vorm
 
-				@property customer_search_keywords type=textbox size=30 store=no parent=vbox_customers_left captionside=top
-				@caption M&auml;rks&otilde;nad
+					@property customer_search_keywords type=textbox size=30 store=no parent=vbox_customers_left_top captionside=top
+					@caption M&auml;rks&otilde;nad
 
-				@property customer_search_is_co type=chooser  store=no parent=vbox_customers_left multiple=1 no_caption=1
-				@caption Organisatsioon
+					@property customer_search_is_co type=chooser  store=no parent=vbox_customers_left_top multiple=1 no_caption=1
+					@caption Organisatsioon
 
-				@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left captionside=top
-				@caption Kliendihaldur
+					@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left_top captionside=top
+					@caption Kliendihaldur
 
-				@property customer_search_cust_grp type=select store=no parent=vbox_customers_left captionside=top
-				@caption Kliendigrupp
+					@property customer_search_cust_grp type=select store=no parent=vbox_customers_left_top captionside=top
+					@caption Kliendigrupp
 
-				@property customer_search_print_view type=checkbox parent=vbox_customers_left store=no captionside=top ch_value=1 no_caption=1
-				@caption Printvaade
+					@property customer_search_print_view type=checkbox parent=vbox_customers_left_top store=no captionside=top ch_value=1 no_caption=1
+					@caption Printvaade
+				
+				@layout vbox_customers_left_search_btn type=hbox parent=vbox_customers_left
 
-				@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_left no_caption=1
-				@caption Otsi
+					@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_left_search_btn no_caption=1
+					@caption Otsi
+
+					@property customer_search_submit_and_change type=submit parent=vbox_customers_left_search_btn no_caption=1
+					@caption Otsi ja muuda
 
 		@property my_customers_table type=table store=no no_caption=1 parent=my_cust_bot
 		@caption Kliendid
@@ -1204,6 +1210,9 @@ define("CRM_TASK_VIEW_CAL", 1);
 define("CRM_PROJECTS_SEARCH_SIMPLE", 1);
 define("CRM_PROJECTS_SEARCH_DETAIL", 2);
 
+define("CRM_CUSTOMERS_SEARCH_SIMPLE", 0);
+define("CRM_CUSTOMERS_SEARCH_DETAIL", 1);
+
 define("CRM_COMMENT_POSITIVE", 1);
 define("CRM_COMMENT_NEUTRAL", 2);
 define("CRM_COMMENT_NEGATIVE", 3);
@@ -1794,7 +1803,6 @@ class crm_company extends class_base
 			/// CUSTOMER tab
 			case "my_projects":
 			case "customer_search_cust_mgr":
-			case "customer_search_cust_grp":
 			case "customer_search_is_co":
 			case "my_customers_toolbar":
 			case "my_customers_listing_tree":
@@ -1821,29 +1829,64 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $cust_impl->$fn($arr);
+			case "customer_search_cust_grp":
+				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				{
+					return PROP_IGNORE;
+				}			
+				static $cust_impl;
+				if (!$cust_impl)
+				{
+					$cust_impl = get_instance("applications/crm/crm_company_cust_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $cust_impl->$fn($arr);
+				break;
+			case "customer_search_print_view":
+				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				{
+					return PROP_IGNORE;
+				}
+				$data['value'] = $arr['request'][$data["name"]];
+				$data["onclick"] = "document.changeform.target=\"_blank\"";
+				break;
 
 			case "customer_search_keywords":
 				$data["autocomplete_source_method"] = "keywords_autocomplete_source";
 				$data["autocomplete_params"] = array("customer_search_keywords");
 				$data["autocomplete_delimiters"] = array(",");
-
-			case "customer_search_name":
-			case "customer_search_reg":
 			case "customer_search_worker":
-			case "customer_search_county":
 			case "customer_search_city":
+			case "customer_search_county":
 			case "customer_search_address":
 			case "customer_search_ev":
-			case "customer_search_submit":
-			case "customer_search":
+			case "customer_search_cust_grp":
+				if ( aw_global_get('crm_customers_search_mode') != CRM_PROJECTS_SEARCH_SIMPLE )
+				{
+					return PROP_IGNORE;
+				}
 				$s = $arr['request'][$data["name"]];
 				$this->dequote(&$s);
 				$data['value'] = $s;
 				break;
 
-			case "customer_search_print_view":
-				$data['value'] = $arr['request'][$data["name"]];
-				$data["onclick"] = "document.changeform.target=\"_blank\"";
+			case "customer_search_submit_and_change":
+				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_DETAIL  )
+				{
+					$data['caption'] = t('Otsi ja t&auml;ienda');
+				}
+				else
+				{
+					$data['caption'] = t('Lihtne otsing');
+				}
+			case "customer_search_reg":
+			case "customer_search_name":
+			case "customer_search_submit":
+			case "customer_search":
+			case "customer_search_submit":
+				$s = $arr['request'][$data["name"]];
+				$this->dequote(&$s);
+				$data['value'] = $s;
 				break;
 
 			case "proj_search_dl_from":
@@ -3498,6 +3541,11 @@ class crm_company extends class_base
 			$_SESSION['crm_projects_search_mode'] = CRM_PROJECTS_SEARCH_DETAIL;
 			aw_global_set('crm_projects_search_mode', CRM_PROJECTS_SEARCH_DETAIL);
 		}
+		if($this->get_cval(aw_global_get('uid').'_crm_customers_search_mode') == CRM_CUSTOMERS_SEARCH_DETAIL )
+		{
+			$_SESSION['crm_customers_search_mode'] = CRM_CUSTOMERS_SEARCH_DETAIL;
+			aw_global_set('crm_customers_search_mode', CRM_CUSTOMERS_SEARCH_DETAIL);
+		}
 
 	}
 
@@ -3745,6 +3793,25 @@ class crm_company extends class_base
 				$_SESSION['crm_projects_search_mode'] = CRM_PROJECTS_SEARCH_DETAIL;
 				$this->set_cval( aw_global_get('uid').'_crm_projects_search_mode', CRM_PROJECTS_SEARCH_DETAIL );
 			}
+		}
+		if($arr["request"]["customer_search_submit_and_change"])
+		{
+			$arr['args']['customer_search_name'] = ($arr['request']['customer_search_name']);
+			$arr['args']['customer_search_cust_grp'] = ($arr['request']['customer_search_cust_grp']);
+			$arr['args']['customer_search_reg'] = ($arr['request']['customer_search_reg']);
+			$arr['args']['customer_search_is_co'] = $arr['request']['customer_search_is_co'];
+			$arr['args']['customer_search_submit_and_change'] = $arr['request']['customer_search_submit_and_change'];
+
+			if ( aw_global_get('crm_customers_search_mode') == CRM_CUSTOMERS_SEARCH_DETAIL )
+			{
+				$_SESSION['crm_customers_search_mode'] = CRM_CUSTOMERS_SEARCH_SIMPLE;
+				$this->set_cval( aw_global_get('uid').'_crm_customers_search_mode', CRM_CUSTOMERS_SEARCH_SIMPLE );
+			}
+			else
+			{
+				$_SESSION['crm_customers_search_mode'] = CRM_CUSTOMERS_SEARCH_DETAIL;
+				$this->set_cval( aw_global_get('uid').'_crm_customers_search_mode', CRM_CUSTOMERS_SEARCH_DETAIL );
+			}		
 		}
 
 		if ($arr["request"]["all_proj_search_change_mode_sbt"])
