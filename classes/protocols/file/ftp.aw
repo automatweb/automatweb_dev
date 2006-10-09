@@ -187,7 +187,7 @@ class ftp extends class_base
 		{
 			if ($this->verbose)
 			{
-				echo "cannot find $file on servr ";
+				echo "cannot find $file on server ";
 			};
 			return false;
 		};
