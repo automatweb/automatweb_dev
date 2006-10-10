@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.371 2006/10/06 10:13:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.372 2006/10/10 12:26:39 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -310,7 +310,7 @@ class menuedit extends aw_template
 		if (aw_ini_get("menuedit.language_in_url"))
 		{
 			list($lc, $section) = explode("/", $section, 2);
-			if ($lc != aw_global_get("LC") && $lc != "")
+			if ($lc != aw_global_get("ct_lang_lc") && $lc != "")
 			{
 				// switch to lang
 				$l = get_instance("languages");
@@ -337,7 +337,7 @@ class menuedit extends aw_template
 			$class_id = $_obj->class_id();
 			if ($class_id == CL_MENU)
 			{
-				if (!($_obj->prop("type") == MN_CLIENT) && !$set_lang_id)
+				if (!($_obj->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id)
 				{
 					$set_lang_id = $_obj->lang_id();
 				};
@@ -348,7 +348,7 @@ class menuedit extends aw_template
 				if ($class_id == CL_DOCUMENT)
 				{
 					$pt = obj($_obj->parent());
-					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id)
+					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id )
 					{
 						$set_lang_id = $_obj->lang_id();
 					}
