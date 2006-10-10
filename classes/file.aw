@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.134 2006/09/27 15:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.135 2006/10/10 09:58:38 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -407,9 +407,9 @@ class file extends class_base
 			$fi = $this->get_file_by_id($alias["target"], true);
 			// so what if we have it twice?
 			$this->dequote(&$fi["content"]);
-			$fi["content"] .= "</body>";
 			if (strpos(strtolower($fi["content"]),"<body"))
 			{
+				$fi["content"] .= "</body>";
 				preg_match("/<body(.*)>(.*)<\/body>/imsU",$fi["content"],$map);
 				// return only the body of the file
    				$replacement = str_replace("\n","",$map[2]);
@@ -435,9 +435,9 @@ class file extends class_base
     
 				// so what if we have it twice?
 				$this->dequote(&$fi["content"]);
-				$fi["content"] .= "</body>";
 				if (strpos(strtolower($fi["content"]),"<body>"))
 				{
+					$fi["content"] .= "</body>";
 					preg_match("/<body(.*)>(.*)<\/body>/imsU",$fi["content"],$map);
 					// return only the body of the file
 	     				$replacement = str_replace("\n","",$map[2]);
