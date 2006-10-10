@@ -1861,7 +1861,7 @@ class crm_company extends class_base
 			case "customer_search_address":
 			case "customer_search_ev":
 			case "customer_search_cust_grp":
-				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_SIMPLE )
+				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_DETAIL )
 				{
 					return PROP_IGNORE;
 				}
@@ -2089,7 +2089,7 @@ class crm_company extends class_base
 					$overview_impl = get_instance("applications/crm/crm_company_overview_impl");
 				}
 				$fn = "_get_".$data["name"];
-				$arr["request"]["group"] = "ovrv_offers";
+				//$arr["request"]["group"] = "ovrv_offers";
 				return $overview_impl->$fn($arr);
 
 			case "act_s_dl_from":
