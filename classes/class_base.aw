@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.508 2006/10/06 10:13:24 kristo Exp $
+// $Id: class_base.aw,v 2.509 2006/10/10 12:29:35 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -934,11 +934,11 @@ class class_base extends aw_template
 
 	function _get_sub_layouts($lay)
 	{
+		$this->leftout_layouts[$lay] = $lay;
 		foreach($this->layoutinfo as $key => $val)
 		{
 			if($val["parent"] == $lay)
 			{
-				$this->leftout_layouts[$key] = $key;
 				$this->_get_sub_layouts($key);
 			}
 		}
