@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.17 2006/10/09 17:54:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.18 2006/10/10 16:17:07 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -86,98 +86,96 @@ default group=offerers_tree
 				@caption Otsi
 		@property offerers_tbl type=table no_caption=1 store=no parent=offerers_lay
 
+
 @groupinfo offers caption="Pakkumised"
-@groupinfo offers_tree caption="Puuvaates" parent=offers
-@default group=offers_tree
+@default group=offers
+
 	@property offers_tb type=toolbar no_caption=1 store=no
+	
 	@layout offers_l type=hbox width=30%:70%
-		@property offers_tr type=treeview no_caption=1 store=no parent=offers_l
-		@property offers_tbl type=table no_caption=1 store=no parent=offers_l
-@groupinfo offers_find caption="Otsing" parent=offers
-@default group=offers_find
-	@property offers_find_tb type=toolbar no_caption=1 store=no
-	@layout offers_find_l type=hbox width=20%:80%
-		@layout offers_find_params type=vbox parent=offer_find_l parent=offers_find_l
-			@property offers_find_name type=textbox store=no parent=offers_find_params
-			@caption Hankija nimetus
-			@property offers_find_address type=textbox store=no parent=offers_find_params
-			@caption Aadress
-			@property offers_find_groups type=select store=no parent=offers_find_params
-			@caption Hankijagruppide valik
-			@property offers_find_start type=date_select store=no parent=offers_find_params
-			@caption Alates
-			@property offers_find_end type=date_select store=no parent=offers_find_params
-			@caption Kuni
-			@property offers_find_product type=textbox store=no parent=offers_find_params
-			@caption Pakutud Toode
-			@property offers_find_only_buy type=checkbox store=no parent=offers_find_params no_caption=1
-			@caption Ainult ostudega
-			@property offers_find_archived type=checkbox store=no parent=offers_find_params no_caption=1
-			@caption Sh arhiveeritud
-			@property do_find_offers type=submit store=no parent=offers_find_params no_caption=1
-			@caption Otsi
 		
-		@property offers_find_tbl type=table no_caption=1 store=no parent=offers_find_l
+		@layout offers_left type=vbox parent=offers_l
+		
+		@layout offers_tree type=vbox parent=offers_left closeable=1 area_caption=Pakkumiste&nbsp;puu
+			@property offers_tr type=treeview no_caption=1 store=no parent=offers_tree
+		
+		@layout offers_find_params type=vbox parent=offers_left closeable=1 area_caption=Pakkumiste&nbsp;otsing
+			@property offers_find_name type=textbox store=no parent=offers_find_params captionside=top
+			@caption Hankija nimetus
+			@property offers_find_address type=textbox store=no parent=offers_find_params captionside=top
+			@caption Aadress
+			@property offers_find_groups type=select store=no parent=offers_find_params captionside=top
+			@caption Hankijagruppide valik
+			@property offers_find_start type=date_select store=no parent=offers_find_params captionside=top
+			@caption Alates
+			@property offers_find_end type=date_select store=no parent=offers_find_params captionside=top
+			@caption Kuni
+			@property offers_find_product type=textbox store=no parent=offers_find_params captionside=top
+			@caption Pakutud Toode
+			@property offers_find_only_buy type=checkbox store=no parent=offers_find_params no_caption=1 captionside=top
+			@caption Ainult ostudega
+			@property offers_find_archived type=checkbox store=no parent=offers_find_params no_caption=1 captionside=top
+			@caption Sh arhiveeritud
+			@property do_find_offers type=submit store=no parent=offers_find_params no_caption=1 captionside=top
+			@caption Otsi
+	@property offers_tbl type=table no_caption=1 store=no parent=offers_l
 
 @groupinfo buyings caption="Ostud"
 @default group=buyings
-@groupinfo buyings_tree caption="Puuvaates" parent=buyings
-@default group=buyings_tree
+
 	@property buyings_tb type=toolbar no_caption=1 store=no	
+	
 	@layout buyings_l type=hbox width=30%:70%
-		@property buyings_tr type=treeview no_caption=1 store=no parent=buyings_l
-		@property buyings_tbl type=table no_caption=1 store=no parent=buyings_l
-@groupinfo buyings_find caption="Otsing" parent=buyings
-@default group=buyings_find
-	@property buyings_find_tb type=toolbar no_caption=1 store=no
-	@layout buyings_find_l type=hbox width=20%:80%
-		@layout buyings_find_params type=vbox parent=buyings_find_l parent=buyings_find_l
-			@property buyings_find_name type=textbox store=no parent=buyings_find_params
+		
+		@layout buyings_left type=vbox parent=buyings_l
+		
+		@layout buyings_tree type=vbox parent=buyings_left closeable=1 area_caption=Ostude&nbsp;puu
+			@property buyings_tr type=treeview no_caption=1 store=no parent=buyings_tree
+	
+		@layout buyings_find_params type=vbox parent=buyings_left closeable=1 area_caption=Ostude&nbsp;otsing
+			@property buyings_find_name type=textbox store=no parent=buyings_find_params captionside=top
 			@caption Hankija nimetus
-			@property buyings_find_address type=textbox store=no parent=buyings_find_params
+			@property buyings_find_address type=textbox store=no parent=buyings_find_params captionside=top
 			@caption Aadress
-			@property buyings_find_groups type=select store=no parent=buyings_find_params
+			@property buyings_find_groups type=select store=no parent=buyings_find_params captionside=top
 			@caption Hankijagruppide valik
-			@property buyings_find_start type=date_select store=no parent=buyings_find_params
+			@property buyings_find_start type=date_select store=no parent=buyings_find_params captionside=top
 			@caption Alates
-			@property buyings_find_end type=date_select store=no parent=buyings_find_params
+			@property buyings_find_end type=date_select store=no parent=buyings_find_params captionside=top
 			@caption Kuni
-			@property buyings_find_product type=textbox store=no parent=buyings_find_params
+			@property buyings_find_product type=textbox store=no parent=buyings_find_params captionside=top
 			@caption Pakutud Toode
 			@property buyings_find_archived type=checkbox store=no parent=buyings_find_params no_caption=1
 			@caption Sh arhiveeritud
 			@property do_find_buyings type=submit store=no parent=buyings_find_params no_caption=1
 			@caption Otsi
-		@property buyings_find_tbl type=table no_caption=1 store=no parent=buyings_find_l
+	@property buyings_tbl type=table no_caption=1 store=no parent=buyings_l
 
 @groupinfo products caption="Tooted"
 @default group=products
-@groupinfo products_tree caption="Puuvaates" parent=products
-@default group=products_tree
 	@property products_tb type=toolbar no_caption=1 store=no	
+
 	@layout products_l type=hbox width=30%:70%
-		@property products_tr type=treeview no_caption=1 store=no parent=products_l
-		property products_list type=text no_caption=1 store=no parent=products_l
-		@property products_tbl type=table no_caption=1 store=no parent=products_l
-@groupinfo products_find caption="Otsing" parent=products
-@default group=products_find
-	@property products_find_tb type=toolbar no_caption=1 store=no	
-	@property products_find_tb type=toolbar no_caption=1 store=no
-	@layout products_find_l type=hbox width=20%:80%
-		@layout products_find_params type=vbox parent=products_find_l
-			@property products_find_product_name type=textbox store=no parent=products_find_params
+		
+		@layout products_left type=vbox parent=products_l
+		
+		@layout products_tree type=vbox parent=products_left closeable=1 area_caption=Toodete&nbsp;puu
+			@property products_tr type=treeview no_caption=1 store=no parent=products_tree
+	
+		@layout products_find_params type=vbox parent=products_left closeable=1 area_caption=Toodete&nbsp;otsing
+			@property products_find_product_name type=textbox store=no parent=products_find_params captionside=top
 			@caption Toote nimetus
-			@property products_find_name type=textbox store=no parent=products_find_params
+			@property products_find_name type=textbox store=no parent=products_find_params captionside=top
 			@caption Hankija
-			@property products_find_address type=textbox store=no parent=products_find_params
+			@property products_find_address type=textbox store=no parent=products_find_params captionside=top
 			@caption Aadress
-			@property products_find_groups type=select store=no parent=products_find_params
+			@property products_find_groups type=select store=no parent=products_find_params captionside=top
 			@caption Hankijagrupp
 			@property products_find_apply type=checkbox store=no parent=products_find_params no_caption=1
 			@caption Ainult kehtivad Ostud
 			@property do_find_products type=submit store=no parent=products_find_params no_caption=1
 			@caption Otsi
-		@property products_find_tbl type=table no_caption=1 store=no parent=products_find_l
+	@property products_tbl type=table no_caption=1 store=no parent=products_l
 
 @reltype MANAGER_CO value=1 clid=CL_CRM_COMPANY
 @caption Haldaja firma
@@ -248,7 +246,7 @@ class procurement_center extends class_base
 				$this->_offers_tr($arr);
 				break;
 			case "buyings_tr":
-				$this->_buyings_tr($arr);
+				$this->_p_tr($arr);
 				break;
 			case "products_tr":
 				$this->_products_tr($arr);
@@ -661,101 +659,240 @@ class procurement_center extends class_base
 				"result" => "archived",
 			)),
 		));
-		
-		$menu_objects = new object_list(array(
-			"class_id" => CL_MENU,
-			"parent" => $arr["obj_inst"]->prop("offerers_folder")
-			));
-		
-		$x = 3;
-		//Hankijagrupid
-		foreach($menu_objects->arr() as $menu)
-		{
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => "valid_offerers",
+			"name" => t('Pakkujad'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "offers",
+				"result" => "valid",
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(1, array(
+			"id" => "valid_procurements",
+			"name" => t('Hanked'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "offers",
+				"result" => "archived",
+			)),
+		));
 			
-			$ol = new object_list(array(
-				"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-				"parent" => $menu->id(),
-				"lang_id" => array(),
-				"site_id" => array()
-			));
-			$arr["prop"]["vcl_inst"]->add_item(1, array(
-				"id" => $x,
-				"name" => $menu->name(),
+		$arr["prop"]["vcl_inst"]->add_item(2, array(
+			"id" => "archived_offerers",
+			"name" => t('Pakkujad'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "offers",
+				"result" => "valid",
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(2, array(
+			"id" => "archived_procurements",
+			"name" => t('Hanked'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "offers",
+				"result" => "archived",
+			)),
+		));	
+		
+		$this->add_offerers_to_offers_tree(&$arr["prop"]["vcl_inst"],array(
+			"vcl" => &$arr["prop"]["vcl_inst"],
+			"parent" => "offerers",
+//			"result" => "archived",
+			"menu" => $arr["obj_inst"]->id(),
+			"obj" => $arr["obj_inst"]->id(),
+		));
+
+		$this->add_procurements_to_offers_tree(&$arr["prop"]["vcl_inst"],array(
+			"vcl" => &$arr["prop"]["vcl_inst"],
+			"parent" => "procurements",
+//			"result" => "archived",
+			"menu" => $arr["obj_inst"]->id(),
+			"obj" => $arr["obj_inst"]->id(),
+		));
+	}
+
+
+	function add_offerers_to_offers_tree(&$vcl,$arr)
+	{
+		extract($arr);
+		
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_CATEGORY),
+//			"parent" => $menu,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			$ol2 = new object_list();
+			foreach($o->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+			{
+				$ol2->add($c->prop("to"));
+			}
+			$vcl->add_item("valid_".$parent, array(
+				"id" => "valid_".$o->id(),
+				"name" => $o->name(),
 				"url" => $this->mk_my_orb("change",array(
-					"id" => $arr["obj_inst"]->id(),
+					"id" => $obj,
 					"group" => "offers",
-					"p_id" => $menu->id(),
+					"p_id" => "valid_".$o->id(),
 					"result" => "valid",
 				)),
 			));
-			$menu_tree_id = $x;	
-			$x++;
 			
-			//hankijad puusse
-			foreach($ol->arr() as $o)
-			{
-				$offers = new object_list(array(
-					"class_id" => array(CL_PROCUREMENT_OFFER),
-					"offerer" => $o->id(),
-					"lang_id" => array(),
-					"site_id" => array(),
-					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, time(), 99999999999999 ),
-				));
-				$sum = sizeof($offers->arr());
-				if($sum) $arr["prop"]["vcl_inst"]->add_item($menu_tree_id, array(
-					"id" => $x,
-					"name" => $o->name()." (".$sum.")",
-					"url" => $this->mk_my_orb("change",array(
-						"id" => $arr["obj_inst"]->id(),
-						"group" => "offers",
-						"p_id" => $o->id(),
-						"result" => "valid",
-					)),
-					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
-				));
-				$x++;
-			}
-			
-			$arr["prop"]["vcl_inst"]->add_item(2, array(
-				"id" => $x,
-				"name" => $menu->name(),
+			$vcl->add_item("archived_".$parent, array(
+				"id" => "archived_".$o->id(),
+				"name" => $o->name(),
 				"url" => $this->mk_my_orb("change",array(
-					"id" => $arr["obj_inst"]->id(),
+					"id" => $obj,
 					"group" => "offers",
-					"p_id" => $menu->id(),
+					"p_id" => "archived_".$o->id(),
 					"result" => "archived",
 				)),
 			));
-			$menu_tree_id = $x;
-			$x++;
-			
-			//hankijad puusse
-			foreach($ol->arr() as $o)
+					
+			//pakkujad puusse
+			foreach($ol2->arr() as $o2)
 			{
-				$offers = new object_list(array(
+				$offers_list = new object_list(array(
 					"class_id" => array(CL_PROCUREMENT_OFFER),
-					"offerer" => $o->id(),
 					"lang_id" => array(),
 					"site_id" => array(),
-					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, 0, time()),
+					"CL_PROCUREMENT_OFFER.offerer" => $o2->id(),
+					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, 1, time()),
 				));
-				$sum = sizeof($offers->arr());
 				
-				if($sum) $arr["prop"]["vcl_inst"]->add_item($menu_tree_id, array(
-					"id" => $x,
-					"name" => $o->name()." (".$sum.")",
+				$vcl->add_item("archived_".$o->id(), array(
+					"id" => "archived_".$o2->id(),
+					"name" => $o2->name()."(".count($offers_list->ids()).")",
 					"url" => $this->mk_my_orb("change",array(
-						"id" => $arr["obj_inst"]->id(),
+						"id" => $obj,
 						"group" => "offers",
-						"p_id" => $o->id(),
+						"p_id" => "archived_".$o2->id(),
 						"result" => "archived",
 					)),
 					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
 				));
-				$x++;
+				
+				$offers_list2 = new object_list(array(
+					"class_id" => array(CL_PROCUREMENT_OFFER),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"CL_PROCUREMENT_OFFER.offerer" => $o2->id(),
+					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, time(), 99999999999999 ),
+				));
+				
+				$vcl->add_item("valid_".$o->id(), array(
+					"id" => "valid_".$o2->id(),
+					"name" => $o2->name()."(".count($offers_list2->ids()).")",
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $obj,
+						"group" => "offers",
+						"p_id" => "valid_".$o2->id(),
+						"result" => "valid",
+					)),
+					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
+				));
 			}
 		}
 	}
+
+	function add_procurements_to_offers_tree(&$vcl,$arr)
+	{
+		extract($arr);
+		
+		$ol = new object_list(array(
+			"class_id" => array(CL_MENU),
+			"parent" => $menu,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			$ol2 = new object_list(array(
+				"class_id" => array(CL_PROCUREMENT),
+				"parent" => $o->id(),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			
+			$vcl->add_item("valid_".$parent, array(
+				"id" => "valid_".$o->id(),
+				"name" => $o->name(),
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $obj,
+					"group" => "offers",
+					"p_id" => "valid_".$o->id(),
+					"result" => "valid",
+				)),
+			));
+			
+			$vcl->add_item("archived_".$parent, array(
+				"id" => "archived_".$o->id(),
+				"name" => $o->name(),
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $obj,
+					"group" => "offers",
+					"p_id" => "archived_".$o->id(),
+					"result" => "archived",
+				)),
+			));
+
+			//pakkumised puusse
+			foreach($ol2->arr() as $o2)
+			{
+				$offers_list = new object_list(array(
+					"class_id" => array(CL_PROCUREMENT_OFFER),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"CL_PROCUREMENT_OFFER.RELTYPE_PROCUREMENT.id" => $o2->id(),
+					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, 1, time()),
+				));
+				
+				$vcl->add_item("archived_".$o->id(), array(
+					"id" => "archived_".$o2->id(),
+					"name" => $o2->name()."(".count($offers_list->ids()).")",
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $obj,
+						"group" => "offers",
+						"p_id" => "archived_".$o2->id(),
+						"result" => "archived",
+					)),
+					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
+				));
+				
+				$offers_list2 = new object_list(array(
+					"class_id" => array(CL_PROCUREMENT_OFFER),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"CL_PROCUREMENT_OFFER.RELTYPE_PROCUREMENT.id" => $o2->id(),
+					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, time(), 99999999999999 ),
+				));
+				
+				$vcl->add_item("valid_".$o->id(), array(
+					"id" => "valid_".$o2->id(),
+					"name" => $o2->name()."(".count($offers_list2->ids()).")",
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $obj,
+						"group" => "offers",
+						"p_id" => "valid_".$o2->id(),
+						"result" => "valid",
+					)),
+					"iconurl" => icons::get_icon_url(CL_CRM_COMPANY),
+				));
+			}
+
+			$this->add_procurements_to_offers_tree(&$vcl,array(
+				"parent" => $o->id(),
+				"menu" => $o->id(),
+				"obj" => $obj,
+			));
+		}
+	}
+
 
 	function search_offers($this_obj)
 	{
@@ -834,6 +971,10 @@ class procurement_center extends class_base
 
 	function _offers_tbl($arr)
 	{
+		//võtab igast jama eest ära... tabelis seda enam vaja pole
+		$arr["request"]["p_id"] = str_replace("valid_" , "" , $arr["request"]["p_id"]);
+		$arr["request"]["p_id"] = str_replace("archived_" , "" , $arr["request"]["p_id"]);
+
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_offers_tbl($t);
 
@@ -859,6 +1000,13 @@ class procurement_center extends class_base
 				if(!sizeof($filter["offerer"])) $filter["offerer"] = array(0);
 			}
 			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
+			if($p_obj->class_id() == CL_CRM_CATEGORY)
+			{
+				foreach($p_obj->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+				{
+					$filter["offerer"][$c->prop("to")] = $c->prop("to");
+				}
+			}
 		}
 		
 		//otsingust
@@ -869,6 +1017,7 @@ class procurement_center extends class_base
 			$arr["obj_inst"]->save();
 		}
 		else $ol = new object_list($filter);
+		
 		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
 		$statuses = $offer_inst->offer_states;
 		$result = $arr["request"]["result"];
@@ -876,7 +1025,7 @@ class procurement_center extends class_base
 		{
 			if($o->prop("accept_date") < time() && $result == "valid" && $o->prop("accept_date")>0) continue;
 			if($o->prop("accept_date") > time() && $result == "archived") continue;
-			$offerer_name = html::obj_change_url($o);
+//			$offerer_name = html::obj_change_url($o);
 			$offerer_area = "";
 			if(is_oid($o->prop("offerer")) && $this->can("view" , $o->prop("offerer")))
 			{
@@ -896,8 +1045,9 @@ class procurement_center extends class_base
 			}
 			
 			$t->define_data(array(
+				"name" => html::obj_change_url($o),
 				"date" => date("d.m.Y",$o->prop("accept_date")),
-				"name" => $offerer_name,
+				"offerer_name" => $offerer_name,
 				"area" => $offerer_area,
 				"status" => $statuses[$o->prop("state")],
 				"sum" => $o->prop("price"),
@@ -910,14 +1060,21 @@ class procurement_center extends class_base
 	function _init_offers_tbl(&$t)
 	{
 		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimetus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
+		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Pakkumise kuup&auml;ev"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Hankija nimetus"),
+			"name" => "offerer_name",
+			"caption" => t("Pakkuja"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -998,20 +1155,26 @@ class procurement_center extends class_base
 		if(is_oid($arr["request"]["p_id"]) && $this->can("view", $arr["request"]["p_id"]))
 		{
 			$p_obj = obj($arr["request"]["p_id"]);
-			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
+		//	if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
 			if($p_obj->class_id() == CL_MENU)
 			{
-				$offerers = new object_list(array(
+/*				$procurements = new object_list(array(
+					"class_id" => array(CL_PROCUREMENT),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"parent" => $arr["request"]["p_id"],
+				));
+				$offers = new object_list(array(
 					"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
 					"lang_id" => array(),
 					"site_id" => array(),
 					"parent" => $arr["request"]["p_id"],
 				));
-				$offerers_array = $offerers->ids();
-				if(!sizeof($offerers_array)) $offerers_array=array("x" => "x");
+*/				$filter["CL_PURCHASE.RELTYPE_OFFER.procurement.parent"] = $arr["request"]["p_id"];
+				//$offerers_array = $offerers->ids();
+			//	if(!sizeof($offerers_array)) $offerers_array=array("x" => "x");
 			}
 		}
-
 		//otsingust
 		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
@@ -1020,12 +1183,15 @@ class procurement_center extends class_base
 			$arr["obj_inst"]->save();
 		}
 		else $ol = new object_list($filter);
-		$offer_inst = get_instance(CL_PURCHASE);
-		$statuses = $offer_inst->stats;
+		$buy_inst = get_instance(CL_PURCHASE);
+		$statuses = $buy_inst->stats;
 		foreach($ol->arr() as $o)
 		{
-			if((sizeof($offerers_array)) && (!in_array($o->prop("offerer") , $offerers_array))) continue;
-			$offerer_name = html::obj_change_url($o);
+			
+			if((sizeof($offerers_array)) && (!in_array($o->prop("offerer") , $offerers_array)))
+			{
+				continue;
+			}
 			$offerer_area = "";
 			if(is_oid($o->prop("offerer")) && $this->can("view" , $o->prop("offerer")))
 			{
@@ -1043,13 +1209,14 @@ class procurement_center extends class_base
 					}
 				}
 			}
-		
+	
 			$t->define_data(array(
 				"date" => date("d.m.Y",$o->prop("date")),
-				"name" => $offerer_name,
+				"name" => html::obj_change_url($o),
+				"offerer_name" => $offerer_name,
 				"area" => $offerer_area,
 				"status" => $statuses[$o->prop("stat")],
-//				"sum" => ,
+				"sum" => $buy_inst->get_sum($o),
 				"address" => $adress,
 				"contacts" => $contacts,
 				"oid" => $o->id()
@@ -1143,14 +1310,20 @@ class procurement_center extends class_base
 	function _init_buyings_tbl(&$t)
 	{
 		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Ostu nimetus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Ostu kuup&auml;ev"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Hankija nimetus"),
+			"name" => "offerer_name",
+			"caption" => t("Pakkuja"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -1857,7 +2030,7 @@ class procurement_center extends class_base
 		$data = $this_obj->meta("search_data");
 		if($data["products_find_product_name"]) $filter["name"] = array("%".$data["products_find_product_name"]."%");
 		
-		if($data["products_find_name"] || $data["products_find_address"] || $data["products__find_groups"] || $data["products_find_apply"])
+		if($data["products_find_name"] || $data["products_find_address"] || $data["products_find_groups"] || $data["products_find_apply"])
 		{
 			$offerer_filter = array("class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON), "lang_id" => array());
 			if($data["products_find_name"]) $offerer_filter["name"] = "%".$data["products_find_name"]."%";
@@ -1868,7 +2041,7 @@ class procurement_center extends class_base
 				"CL_CRM_PERSON.address.name" => "%".$data["products_find_address"]."%",
 				)
 			));
-			if($data["products__find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
+			if($data["products_find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
 			$offerer_list = new object_list($offerer_filter);
 			foreach($offerer_list->arr() as $offerer)
 			{
@@ -1883,14 +2056,16 @@ class procurement_center extends class_base
 				
 				foreach($offer_rows->arr() as $row)
 				{
-					$filter["name"][] = $row->prop("product");
+					$prod_object = new object_list($row->prop("product"));
+					$row->prop("product");
+					$filter["oid"][] = $row->prop("product");
+				
 				}
 			}
-			if(!(sizeof($filter["name"])>1)) return new object_list();
+			if(!(sizeof($filter["oid"])>1)) return new object_list();
 		}
 
 		$offerer_list = new object_list($offerer_filter);
-	
 
 		$ol = new object_list($filter);
 		return $ol;
@@ -1972,14 +2147,18 @@ class procurement_center extends class_base
 				));
 			}
 
-			$name = $o->path_str(array("to" => $this->prod_fld));
+			$name = $o->name();
 			if ($o->class_id() == CL_MENU)
 			{
-				$name = html::href(array(
+				$name =  html::href(array(
+					"url" => html::get_change_url($o->id()),
+					"caption" => $name
+				));
+/*				$name = html::href(array(
 					"url" => aw_url_change_var("tree_filter", $o->id()),
 					"caption" => $name
 				));
-			}
+*/			}
 
 			$tb->define_data(array(
 				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
@@ -2677,8 +2856,9 @@ class procurement_center extends class_base
 		$o = obj();
 		$o->set_parent($arr["id"]);
 		$o->set_class_id(CL_PURCHASE);
-		$o->set_name(sprintf(t("ost "), $o->id()));
+		$o->set_name(sprintf(t("ost: "), $o->id()));
 		$o->set_prop("buyer" , $arr["id"]);
+		$o->set_prop("date" , time());
 		$o->save();
 		$o->connect(array(
 			"to" => $arr["id"],

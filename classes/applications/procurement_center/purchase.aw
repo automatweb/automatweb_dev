@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.9 2006/10/04 15:02:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.10 2006/10/10 16:17:41 markop Exp $
 // purchase.aw - Ost 
 /*
 
@@ -23,6 +23,9 @@
 
 @property deal_no type=textbox
 @caption Lepingu/arve nr
+
+@property sum type=textbox
+@caption Summa
 
 @groupinfo offers caption=Pakkumised submit=no
 @default group=offers
@@ -259,8 +262,8 @@ class purchase extends class_base
 		return $retval;
 	}
 
-		function _init_files_tbl(&$t)
-	{	
+	function _init_files_tbl(&$t)
+	{
 		$t->define_field(array(
 			"caption" => t(""),
 			"name" => "icon",
@@ -509,6 +512,57 @@ class purchase extends class_base
 		$t->set_sortable(false);
 	}
 
+	/**gives you sum of buyings
+		@attrib name=get_sum
+	**/
+	function get_sum($o)
+	{
+		if(is_oid($o) && $this->can("view" , $o))
+		{
+			$o=obj($o);
+		}
+		if(!is_object($o))
+		{
+			return "";
+		}
+		if($o->prop("sum"))
+		{
+			return $o->prop("sum");
+		}
+		else 
+		{
+			$sum = 0;
+			$offers = $o->connections_from(array(
+				'type' => "RELTYPE_OFFER",
+			));
+			foreach($offers as $offer_conn)
+			{
+				$offer_obj = obj($offer_conn->prop("to"));
+				$conns = $offer_obj->connections_to(array(
+					'reltype' => 1,
+					'class' => CL_PROCUREMENT_OFFER_ROW,
+				));
+				foreach($conns as $conn)
+				{
+					if(is_oid($conn->prop("from")))
+					{
+						$row = obj($conn->prop("from"));
+						if(!$row->prop("accept")) continue;
+						if(!$row->prop("b_price"))
+						{
+							$sum = $sum + $row->prop("price") + $row->prop("amount");
+						}
+						else
+						{
+							$sum = $sum + $row->prop("b_amount")*$row->prop("b_price");
+						}
+					}
+				}
+			}
+		}
+		return $sum;
+	}
+
 	/**
 		@attrib name=remove_offers
 	**/
@@ -598,10 +652,6 @@ class purchase extends class_base
 		));
 		return $this->parse();
 	}
-
-
-
-
 
 	function _get_files($arr)
 	{
