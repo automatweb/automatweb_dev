@@ -72,6 +72,20 @@ class doc_display extends aw_template
 		{
 			$doc_link = aw_url_change_var("docid", $doc->id(), obj_link(aw_global_get("section")));
 		}
+		if ($doc->prop("alias") != "")
+		{
+			$doc_link = obj_link($doc->prop("alias"));
+		}
+
+		if (aw_ini_get("menuedit.language_in_url"))
+		{
+			static $ss_i;
+			if (!$ss_i)
+			{
+				$ss_i = get_instance("contentmgmt/site_show");
+			}
+			$doc_link = $ss_i->make_menu_link($doc);
+		}
 
 		if ($this->template_has_var_full("edit_doc"))
 		{
@@ -143,7 +157,6 @@ class doc_display extends aw_template
 		{
 			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
 		}
-
 		$this->vars(array(
 			"SHOW_TITLE" => ($doc->prop("show_title") == 1 && $doc->prop("title") != "") ? $this->parse("SHOW_TITLE") : "",
 			"PRINTANDSEND" => $ps,

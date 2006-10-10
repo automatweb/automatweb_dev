@@ -132,6 +132,8 @@ class languages extends aw_template
 		{
 			aw_session_set("LC",$row["acceptlang"]);
 			aw_global_set("LC",$row["acceptlang"]);
+			aw_session_set("ct_lang_lc",$row["acceptlang"]);
+			aw_global_set("ct_lang_lc",$row["acceptlang"]);
 		}
 		$uid = aw_global_get("uid");
 		if (!empty($uid))

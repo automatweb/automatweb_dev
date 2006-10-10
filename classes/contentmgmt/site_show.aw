@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.202 2006/10/10 13:49:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.203 2006/10/10 13:54:40 kristo Exp $
 
 /*
 
@@ -1672,6 +1672,18 @@ class site_show extends class_base
 			if ($row["meta"]["temp_redir_url"] != "" && $uid == "")
 			{
 				$url = $row["meta"]["temp_redir_url"];
+			}
+			if (aw_ini_get("user_interface.full_content_trans"))
+			{
+				$url = get_ru();
+				if (strpos($url, "/".aw_global_get("ct_lang_lc")."/") === false)
+				{
+					$url = aw_ini_get("baseurl")."/".$row["acceptlang"];
+				}
+				else
+				{
+					$url = str_replace("/".aw_global_get("ct_lang_lc")."/", "/".$row["acceptlang"]."/", $url);
+				}
 			}
 			$this->vars(array(
 				"name" => $row["name"],
