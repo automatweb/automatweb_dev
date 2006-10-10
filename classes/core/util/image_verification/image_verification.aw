@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.3 2006/10/09 15:42:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.4 2006/10/10 14:20:03 dragut Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
@@ -54,7 +54,7 @@ class image_verification extends class_base
 			case 'height':
 				if ( empty($prop['value']) )
 				{
-					$prop['value'] = 50;
+					$prop['value'] = 60;
 				}
 				break;
 			case 'text_color':
@@ -150,9 +150,8 @@ class image_verification extends class_base
 		$angle = 0;
 
 		$codes = array(
-			'left' => array('str' => t('Sisesta vasakpoolsed 4 numbrit:'), 'code' => rand(1000, 9999)),
-			'center' => array('str' => t('Sisesta keskmised 4 numbrit:'), 'code' => rand(1000, 9999)),
-			'right' => array('str' => t('Sisesta parempoolsed 4 numbrit:'), 'code' => rand(1000, 9999)),
+			'left' => array('str' => t('Sisesta vasakpoolsed neli numbrit'), 'code' => rand(1000, 9999)),
+			'right' => array('str' => t('Sisesta parempoolsed neli numbrit'), 'code' => rand(1000, 9999)),
 		);
 
 		$random_key = array_rand($codes);
@@ -162,31 +161,70 @@ class image_verification extends class_base
 	// for debug:
 	//	$codes[$random_key]['code'] = '_'.$codes[$random_key]['code'].'_';
 
-		$code_str = $codes['left']['code'].'   '.$codes['center']['code'].'   '.$codes['right']['code'];
+		/**
+			Ok, lets put this additional string thingie here
+			Maybe i should implement several versions of which 
+			picture is shown and how the code will be generated
+		**/
+
+		$numbers = array(
+			0 => t('null'),
+			1 => t('üks'),
+			2 => t('kaks'),
+			3 => t('kolm'),
+			4 => t('neli'),
+			5 => t('viis'),
+			6 => t('kuus'),
+			7 => t('seitse'),
+			8 => t('kaheksa'),
+			9 => t('üheksa'),
+		);
+
+		$random_nr = array_rand($numbers);
+		$adds = array(
+			'start' => sprintf(t('Lisa algusesse %s'), $numbers[$random_nr]),
+			'end' => sprintf(t('Lisa lõppu %s'), $numbers[$random_nr]),
+		);
+
+		$random_add = array_rand($adds);
+		if ($random_add == 'start')
+		{
+			$code = (string)$random_nr.(string)$code;
+		}
+		else
+		{
+			$code = (string)$code.(string)$random_nr;
+		}
+
+		$add_str = $adds[$random_add];
 		
-		$start_x = 10;
-		$start_y = $im_height / 3; 
+
+		/****/
+
+		$code_str = $codes['left']['code'].$codes['right']['code'];
 		
+		$line_height = $im_height / 4;
+
+		$text_box = imagettfbbox($font_size, $angle, $font_file, $question_str);
+		$start_x = ($im_width / 2) - (abs($text_box[4] - $text_box[6]) / 2);
+		$start_y = $line_height + ($line_height / 4);
+
 		imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $question_str);
 
-		$start_y = (2 * ($im_height / 3)) + (($im_height / 3) / 2); 
+
+		// additional question:
+		$text_box = imagettfbbox($font_size, $angle, $font_file, $add_str);
+		$start_x = ($im_width / 2) - (abs($text_box[4] - $text_box[6]) / 2);
+		$start_y = (2 * $line_height) + ($line_height / 4);
+
+		imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $add_str);
+
+		$text_box = imagettfbbox($font_size, $angle, $font_file, $code_str);
+		$start_x = ($im_width / 2) - (abs($text_box[4] - $text_box[6]) / 2);
+		$start_y = (3 * $line_height) + ($line_height / 4);
 
 		imagettftext($im, $font_size, $angle, $start_x, $start_y, $text_color, $font_file, $code_str);
 
-		// use of non-ttf fonts 
-	//	$font = 5;
-	//	$x = (int)(($im_width - (imagefontwidth($font) * strlen($code))) / 2);
-	//	$y = (int)(($im_height - imagefontheight($font)) / 2);
-
-	//	imagestring($im, $font, $x, $y, $code, $text_color);
-	/*
-		// draw lines:
-		for ($i=0; $i < rand(4,5); $i++) {
-			$linecolor = ImageColorAllocate($im, rand(111,255), rand(111,255), rand(111,255));
-			//$x1, $y1, $x2, $y2
-			imageline($im, rand(1,33), rand(1,33), rand(33,88), rand(1,44), $linecolor);
-		}
-	*/
 		// register the code in session:
 		$_SESSION['verification_code'] = $code;
 
@@ -208,7 +246,13 @@ class image_verification extends class_base
 	**/
 	function validate($code)
 	{
-		if ($code == $_SESSION['verification_code'])
+		$correct_code = $_SESSION['verification_code'];
+
+		// XXX when the code is validated, then lets remove the code from session
+		// maybe there should be separate method for that in the future --dragut
+		unset($_SESSION['verification_code']);
+
+		if ($code == $correct_code)
 		{
 			return true;
 		}
