@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.5 2006/09/25 12:41:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.6 2006/10/10 09:23:01 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -153,8 +153,264 @@
 @groupinfo additional_equipment caption="Lisavarustus"
 @default group=additional_equipment
 
-	@property additional_equipment_table type=table no_caption=1
-	@caption Lisavarustus
+	property additional_equipment_table type=table no_caption=1
+	caption Lisavarustus
+
+			'electricity_110V' => array( 'caption' => t('Elekter 110V'), 'amount' => null ),
+	@layout electricity_110V_row type=hbox width=10%:90% 
+	@caption Elekter 110V
+
+		@property electricity_110V_sel type=checkbox ch_value=1 table=watercraft parent=electricity_110V_row no_caption=1
+		caption Olemas
+
+		@property electricity_110V_info type=textbox table=watercraft parent=electricity_110V_row no_caption=1
+		@caption Info
+
+			'electricity_220V' => array( 'caption' => t('Elekter 220V'), 'amount' => null ),
+	@layout electricity_220V_row type=hbox width=10%:90% 
+	@caption Elekter 220V
+
+		@property electricity_220V_sel type=checkbox ch_value=1 table=watercraft parent=electricity_220V_row no_caption=1
+		caption Olemas
+
+		@property electricity_220V_info type=textbox table=watercraft parent=electricity_220V_row no_caption=1
+		@caption Info
+
+			'radio_station' => array( 'caption' => t('Raadiojaam'), 'amount' => null),
+	@layout radio_station_row type=hbox width=10%:90% 
+	@caption Raadiojaam
+
+		@property radio_station_sel type=checkbox ch_value=1 table=watercraft parent=radio_station_row no_caption=1
+		caption Olemas
+
+		@property radio_station_info type=textbox table=watercraft parent=radio_station_row no_caption=1
+		@caption Info
+
+			'stereo' => array( 'caption' => t('Stereo'), 'amount' => null ),
+	@layout stereo_row type=hbox width=10%:90% 
+	@caption Stereo
+
+		@property stereo_sel type=checkbox ch_value=1 table=watercraft parent=stereo_row no_caption=1
+		caption Olemas
+
+		@property stereo_info type=textbox table=watercraft parent=stereo_row no_caption=1
+		@caption Info
+
+			'cd' => array( 'caption' => t('CD'), 'amount' => null ),
+	@layout cd_row type=hbox width=10%:90% 
+	@caption CD
+
+		@property cd_sel type=checkbox ch_value=1 table=watercraft parent=cd_row no_caption=1
+		caption Olemas
+
+		@property cd_info type=textbox table=watercraft parent=cd_row no_caption=1
+		@caption Info
+
+			'waterproof_speakers' => array( 'caption' => t('Veekindlad k&otilde;larid'), 'amount' => null ),
+	@layout waterproof_speakers_row type=hbox width=10%:90% 
+	@caption Veekindlad k&otilde;larid
+
+		@property waterproof_speakers_sel type=checkbox ch_value=1 table=watercraft parent=waterproof_speakers_row no_caption=1
+		caption Olemas
+
+		@property waterproof_speakers_info type=textbox table=watercraft parent=waterproof_speakers_row no_caption=1
+		@caption Info
+
+			'burglar_alarm' => array( 'caption' => t('Signalisatsioon'), 'amount' => null ),
+	@layout burglar_alarm_row type=hbox width=10%:90% 
+	@caption Signalisatsioon
+
+		@property burglar_alarm_sel type=checkbox ch_value=1 table=watercraft parent=burglar_alarm_row no_caption=1
+		caption Olemas
+
+		@property burglar_alarm_info type=textbox table=watercraft parent=burglar_alarm_row no_caption=1
+		@caption Info
+
+			'navigation_system' => array( 'caption' => t('Navigatsioonis&uuml;steem'), 'amount' => null ),
+	@layout navigation_system_row type=hbox width=10%:90% 
+	@caption Navigatsioonis&uuml;steem
+
+		@property navigation_system_sel type=checkbox ch_value=1 table=watercraft parent=navigation_system_row no_caption=1
+		caption Olemas
+
+		@property navigation_system_info type=textbox table=watercraft parent=navigation_system_row no_caption=1
+		@caption Info
+
+			'navigation_lights' => array( 'caption' => t('Navigatsioonituled'), 'amount' => null ),
+	@layout navigation_lights_row type=hbox width=10%:90% 
+	@caption Navigatsioonituled
+
+		@property navigation_lights_sel type=checkbox ch_value=1 table=watercraft parent=navigation_lights_row no_caption=1
+		caption Olemas
+
+		@property navigation_lights_info type=textbox table=watercraft parent=navigation_lights_row no_caption=1
+		@caption Info
+
+			'trailer' => array( 'caption' => t('Treiler'), 'amount' => null ),
+	@layout trailer_row type=hbox width=10%:90% 
+	@caption Treiler
+
+		@property trailer_sel type=checkbox ch_value=1 table=watercraft parent=trailer_row no_caption=1
+		caption Olemas
+
+		@property trailer_info type=textbox table=watercraft parent=trailer_row no_caption=1
+		@caption Info
+
+			'toilet' => array( 'caption' => t('Tualett'), 'amount' => null ),
+	@layout toilet_row type=hbox width=10%:90% 
+	@caption Tualett
+
+		@property toilet_sel type=checkbox ch_value=1 table=watercraft parent=toilet_row no_caption=1
+		caption Olemas
+
+		@property toilet_info type=textbox table=watercraft parent=toilet_row no_caption=1
+		@caption Info
+
+			'shower' => array( 'caption' => t('Dush'), 'amount' => null ),
+	@layout shower_row type=hbox width=10%:90% 
+	@caption Dush
+
+		@property shower_sel type=checkbox ch_value=1 table=watercraft parent=shower_row no_caption=1
+		caption Olemas
+
+		@property shower_info type=textbox table=watercraft parent=shower_row no_caption=1
+		@caption Info
+
+			'lifejacket' => array( 'caption' => t('P&auml;&auml;stevest'), 'amount' => t('tk') ),
+	@layout lifejacket_row type=hbox width=10%:45%:45%
+	@caption P&auml;&auml;stevest
+
+		@property lifejacket_sel type=checkbox ch_value=1 table=watercraft parent=lifejacket_row no_caption=1
+		caption Olemas
+
+		@property lifejacket_info type=textbox table=watercraft parent=lifejacket_row no_caption=1
+		@caption Info
+
+		@property lifejacket_amount type=textbox table=watercraft parent=lifejacket_row
+		@caption Kogus (tk)
+
+			'swimming_ladder' => array( 'caption' => t('Ujumisredel'), 'amount' => null ),
+	@layout swimming_ladder_row type=hbox width=10%:90% 
+	@caption Ujumisredel
+
+		@property swimming_ladder_sel type=checkbox ch_value=1 table=watercraft parent=swimming_ladder_row no_caption=1
+		caption Olemas
+
+		@property swimming_ladder_info type=textbox table=watercraft parent=swimming_ladder_row no_caption=1
+		@caption Info
+
+			'awning' => array( 'caption' => t('Varikatus'), 'amount' => null ),
+	@layout awning_row type=hbox width=10%:90% 
+	@caption Varikatus
+
+		@property awning_sel type=checkbox ch_value=1 table=watercraft parent=awning_row no_caption=1
+		caption Olemas
+
+		@property awning_info type=textbox table=watercraft parent=awning_row no_caption=1
+		@caption Info
+
+			'kitchen_cooker' => array( 'caption' => t('K&ouml;&ouml;k/Pliit'), 'amount' => null ),
+	@layout kitchen_cooker_row type=hbox width=10%:90% 
+	@caption K&ouml;&ouml;k/Pliit
+
+		@property kitchen_cooker_sel type=checkbox ch_value=1 table=watercraft parent=kitchen_cooker_row no_caption=1
+		caption Olemas
+
+		@property kitchen_cooker_info type=textbox table=watercraft parent=kitchen_cooker_row no_caption=1
+		@caption Info
+
+			'vendrid' => array( 'caption' => t('Vendrid'), 'amount' => t('tk') ),
+	@layout vendrid_row type=hbox width=10%:45%:45%
+	@caption Vendrid
+
+		@property vendrid_sel type=checkbox ch_value=1 table=watercraft parent=vendrid_row no_caption=1
+		caption Olemas
+
+		@property vendrid_info type=textbox table=watercraft parent=vendrid_row no_caption=1
+		@caption Info
+
+		@property vendrid_amount type=textbox table=watercraft parent=vendrid_row
+		@caption Kogus (tk)
+
+			'fridge' => array( 'caption' => t('K&uuml;lmkapp'), 'amount' => null ),
+	@layout fridge_row type=hbox width=10%:90% 
+	@caption K&uuml;lmkapp
+
+		@property fridge_sel type=checkbox ch_value=1 table=watercraft parent=fridge_row no_caption=1
+		caption Olemas
+
+		@property fridge_info type=textbox table=watercraft parent=fridge_row no_caption=1
+		@caption Info
+
+			'anchor' => array( 'caption' => t('Ankur'), 'amount' => null ),
+	@layout anchor_row type=hbox width=10%:90% 
+	@caption Ankur
+
+		@property anchor_sel type=checkbox ch_value=1 table=watercraft parent=anchor_row no_caption=1
+		caption Olemas
+
+		@property anchor_info type=textbox table=watercraft parent=anchor_row no_caption=1
+		@caption Info
+
+			'oars' => array( 'caption' => t('Aerud'), 'amount' => t('tk') ),
+	@layout oars_row type=hbox width=10%:45%:45%
+	@caption Aerud
+
+		@property oars_sel type=checkbox ch_value=1 table=watercraft parent=oars_row no_caption=1
+		caption Olemas
+
+		@property oars_info type=textbox table=watercraft parent=oars_row no_caption=1
+		@caption Info
+
+		@property oars_amount type=textbox table=watercraft parent=oars_row
+		@caption Kogus (tk)
+
+			'tv_video' => array( 'caption' => t('TV-video'), 'amount' => null ),
+	@layout tv_video_row type=hbox width=10%:90% 
+	@caption TV-video
+
+		@property tv_video_sel type=checkbox ch_value=1 table=watercraft parent=tv_video_row no_caption=1
+		caption Olemas
+
+		@property tv_video_info type=textbox table=watercraft parent=tv_video_row no_caption=1
+		@caption Info
+
+			'fuel' => array( 'caption' => t('K&uuml;te'), 'amount' => null ),
+	@layout fuel_row type=hbox width=10%:90% 
+	@caption K&uuml;te
+
+		@property fuel_sel type=checkbox ch_value=1 table=watercraft parent=fuel_row no_caption=1
+		caption Olemas
+
+		@property fuel_info type=textbox table=watercraft parent=fuel_row no_caption=1
+		@caption Info
+
+			'water_tank' => array( 'caption' => t('Veepaak'), 'amount' => t('liitrit') ),
+	@layout water_tank_row type=hbox width=10%:45%:45%
+	@caption Veepaak
+
+		@property water_tank_sel type=checkbox ch_value=1 table=watercraft parent=water_tank_row no_caption=1
+		caption Olemas
+
+		@property water_tank_info type=textbox table=watercraft parent=water_tank_row no_caption=1
+		@caption Info
+
+		@property water_tank_amount type=textbox table=watercraft parent=water_tank_row
+		@caption Maht (l)
+
+			'life_boat' => array( 'caption' => t('P&auml;&auml;stepaat'), 'amount' => null),
+	@layout life_boat_row type=hbox width=10%:45%:45%
+	@caption P&auml;&auml;stepaat
+
+		@property life_boat_sel type=checkbox ch_value=1 table=watercraft parent=life_boat_row no_caption=1
+		caption Olemas
+
+		@property life_boat_info type=textbox table=watercraft parent=life_boat_row no_caption=1
+		@caption Info
+
+		@property life_boat_amount type=textbox table=watercraft parent=life_boat_row 
+		@caption Kogus (tk)
+
 
 	@property additional_equipment_info type=textarea table=watercraft
 	@caption T&auml;iendav info
@@ -817,6 +1073,30 @@ class watercraft extends class_base
 				mast_material int,
 				mast_count int,
 				manufacturer int,
+				electricity_110V_sel int,
+				electricity_220V_sel int,
+				radio_station_sel int,
+				stereo_sel int,
+				cd_sel int,
+				waterproof_speakers_sel int,
+				burglar_alarm_sel int,
+				navigation_system_sel int,
+				navigation_lights_sel int,
+				trailer_sel int,
+				toilet_sel int,
+				shower_sel int,
+				lifejacket_sel int,
+				swimming_ladder_sel int,
+				awning_sel int,
+				kitchen_cooker_sel int,
+				vendrid_sel int,
+				fridge_sel int,
+				anchor_sel int,
+				oars_sel int,
+				tv_video_sel int,
+				fuel_sel int,
+				water_tank_sel int,
+				life_boat_sel int,
 
 				length float,
 				width float,
@@ -836,6 +1116,35 @@ class watercraft extends class_base
 				engine_model varchar(255),
 				engine_capacity varchar(255),
 				mast_material_other varchar(255),
+				electricity_110V_info varchar(255),
+				electricity_220V_info varchar(255),
+				radio_station_info varchar(255),
+				stereo_info varchar(255),
+				cd_info varchar(255),
+				waterproof_speakers_info varchar(255),
+				burglar_alarm_info varchar(255),
+				navigation_system_info varchar(255),
+				navigation_lights_info varchar(255),
+				trailer_info varchar(255),
+				toilet_info varchar(255),
+				shower_info varchar(255),
+				lifejacket_info varchar(255),
+				lifejacket_amount varchar(255),
+				swimming_ladder_info varchar(255),
+				awning_info varchar(255),
+				kitchen_cooker_info varchar(255),
+				vendrid_info varchar(255),
+				vendrid_amount varchar(255),
+				fridge_info varchar(255),
+				anchor_info varchar(255),
+				oars_info varchar(255),
+				oars_amount varchar(255),
+				tv_video_info varchar(255),
+				fuel_info varchar(255),
+				water_tank_info varchar(255),
+				water_tank_amount varchar(255),
+				life_boat_info varchar(255),
+				life_boat_amount varchar(255),
 
 				sail_info text,
 				additional_equipment_info text
@@ -864,6 +1173,30 @@ class watercraft extends class_base
 			case 'mast_material':
 			case 'mast_count':
 			case 'manufacturer':
+			case 'electricity_110V_sel':
+			case 'electricity_220V_sel':
+			case 'radio_station_sel':
+			case 'stereo_sel':
+			case 'cd_sel':
+			case 'waterproof_speakers_sel':
+			case 'burglar_alarm_sel':
+			case 'navigation_system_sel':
+			case 'navigation_lights_sel':
+			case 'trailer_sel':
+			case 'toilet_sel':
+			case 'shower_sel':
+			case 'lifejacket_sel':
+			case 'swimming_ladder_sel':
+			case 'awning_sel':
+			case 'kitchen_cooker_sel':
+			case 'vendrid_sel':
+			case 'fridge_sel':
+			case 'anchor_sel':
+			case 'oars_sel':
+			case 'tv_video_sel':
+			case 'fuel_sel':
+			case 'water_tank_sel':
+			case 'life_boat_sel':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
@@ -891,6 +1224,35 @@ class watercraft extends class_base
 			case 'engine_model':
 			case 'engine_capacity':
 			case 'mast_material_other':
+			case 'electricity_110V_info':
+			case 'electricity_220V_info':
+			case 'radio_station_info':
+			case 'stereo_info':
+			case 'cd_info':
+			case 'waterproof_speakers_info':
+			case 'burglar_alarm_info':
+			case 'navigation_system_info':
+			case 'navigation_lights_info':
+			case 'trailer_info':
+			case 'toilet_info':
+			case 'shower_info':
+			case 'lifejacket_info':
+			case 'lifejacket_amount':
+			case 'swimming_ladder_info':
+			case 'awning_info':
+			case 'kitchen_cooker_info':
+			case 'vendrid_info':
+			case 'vendrid_amount':
+			case 'fridge_info':
+			case 'anchor_info':
+			case 'oars_info':
+			case 'oars_amount':
+			case 'tv_video_info':
+			case 'fuel_info':
+			case 'water_tank_info':
+			case 'water_tank_amount':
+			case 'life_boat_info':
+			case 'life_boat_amount':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'varchar(255)'
