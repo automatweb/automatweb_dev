@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.82 2006/10/10 09:07:06 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.82 2006/10/10 09:07:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.83 2006/10/10 10:43:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.83 2006/10/10 10:43:51 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -490,8 +490,15 @@ class bug_tracker extends class_base
 				'comment_count' => count($comments),
 				'working_hours' => $working_hours
 			));
+			$sum+=$working_hours;
 		}
 
+		$t->sort_by();
+		$t->set_sortable(false);
+		$t->define_data(array(
+			"name" => t("Summa"),
+			"working_hours" => $sum
+		));
 		return PROP_OK;
 	}
 
@@ -2933,7 +2940,32 @@ class bug_tracker extends class_base
 			&$this, "__gantt_sort"
 		));
 
-		return $gt_list->arr();		
+		$rv = $gt_list->arr();		
+		foreach($rv as $idx => $bug)
+		{
+			if ($bug->prop("bug_predicates") != "")
+			{
+				$preds = explode(",", $bug->prop("bug_predicates"));
+				$preds_done = true;
+				foreach($preds as $pred_id)
+				{
+					$pred_id = str_replace("#", "", $pred_id);
+					if ($this->can("view", $pred_id))
+					{
+						$predo = obj($pred_id);
+						if ($predo->prop("bug_status") < 3 || $predo->prop("bug_status") == 11)
+						{
+							$preds_done = false;
+						}
+					}
+				}
+				if (!$preds_done)
+				{
+					unset($rv[$idx]);
+				}
+			}
+		}
+		return $rv;
 	}
 
 	/**
@@ -3106,7 +3138,7 @@ echo "<hr>";
 		));
 //		echo "com count = ".$coms->count()." <br>";
 echo "<div style='font-size: 10px;'>";
-		$i = array("marko" => "", "dragut" => "", "tarvo" => "");
+		$i = array("marko" => "", "dragut" => "", "tarvo" => "", "sander" => "");
 		foreach($coms->arr() as $com)
 		{
 			if ($com->createdby() == "")

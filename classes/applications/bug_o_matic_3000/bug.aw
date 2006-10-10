@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.61 2006/10/10 09:07:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.62 2006/10/10 10:43:51 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -101,6 +101,9 @@ define("BUG_STATUS_CLOSED", 5);
 	
 		@property bug_property type=select parent=data captionside=top field=aw_bug_property
 		@caption Klassi omadus
+
+		@property bug_predicates type=textbox parent=data captionside=top field=aw_bug_predicates
+		@caption Eeldusbugid
 
 
 @default group=cust
@@ -576,6 +579,14 @@ class bug extends class_base
 				}
 				break;
 
+			case "bug_predicates":
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
+				{
+					$com = sprintf(t("Eeldusbugid muudeti %s => %s"), $old, $prop["value"]);
+					$this->add_comments[] = $com;
+				}
+				break;
+
 			case "bug_content_comm":
 				if (trim($prop["value"]) != "")
 				{
@@ -1012,6 +1023,7 @@ class bug extends class_base
 		switch($f)
 		{
 			case "aw_bug_property":
+			case "aw_bug_predicates":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "varchar",

@@ -252,6 +252,16 @@
             <caption>Klassi omadus</caption>
       </property>
       <property>
+            <name>bug_predicates</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>aw_bug_predicates</field>
+            <caption>Eeldusbugid</caption>
+      </property>
+      <property>
             <name>team</name>
             <group>cust</group>
             <table>aw_bugs</table>
