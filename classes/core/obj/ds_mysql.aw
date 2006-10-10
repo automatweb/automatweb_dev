@@ -2083,6 +2083,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$cur_prop = array("name" => "id", "table" => "objects", "field" => "class_id");
 			}
 			else
+			if ($pp == "parent")
+			{
+				$cur_prop = array("name" => "parent", "table" => "objects", "field" => "parent");
+			}
+			else
 			{
 				$cur_prop = $GLOBALS["properties"][$cur_clid][$pp];
 			}
