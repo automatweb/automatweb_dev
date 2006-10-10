@@ -1816,13 +1816,18 @@ class crm_company_cust_impl extends class_base
 		}
 		else
 		{
-			if($arr["request"]["group"] != "relorg_t")
+			if($arr["request"]["group"] != "relorg_t" && $arr["request"]["group"] != "relorg")
 			{
 				$ol2 = new object_list(array(
 					"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
 					(($arr["request"]["group"] == "relorg_s")?"buyer":"seller") => $arr["obj_inst"]->id(),
 				));
-				$ol2 = $ol2->ids();
+				foreach($ol2->arr() as $oid => $obj)
+				{
+					$ids[] = $obj->prop(($arr["request"]["group"] == "relorg_s")?"seller":"buyer");
+				}
+				$ol2 = $ids;
+				//$ol2 = $ol2->ids();
 			}
 			else
 			{
@@ -1906,7 +1911,6 @@ class crm_company_cust_impl extends class_base
 					$arr['request']['category'] = $f_cat->id();
 				}
 			}
-
 			if($arr['request']['category']!='parent' && is_oid($arr['request']['category']))
 			{
 				$organization = new object($arr['request']['category']);
@@ -1914,25 +1918,37 @@ class crm_company_cust_impl extends class_base
 
 
 			$conn_filt = array(
-				"type" => 'RELTYPE_CUSTOMER',
+				"type" => "RELTYPE_CUSTOMER",
+				"class" => CL_CRM_COMPANY,
 			);
-			if($arr["request"]["group"] != "relorg_t")
+			if($arr["request"]["group"] != "relorg_t" && $arr["request"]["group"] != "relorg")
 			{
 				$ol2 = new object_list(array(
 					"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
 					(($arr["request"]["group"] == "relorg_s")?"buyer":"seller") => $org_old->id(),
 				));
-				$conn_filt["to"] = $ol2->ids();
-			}
-			$orgs = $organization->connections_from($conn_filt);
 
+				if($ol2->count() == 0)
+				{
+					$conn_filt = array();
+				}
+				else{
+					foreach($ol2->arr() as $id => $obj)
+					{
+						$something[] = $obj->prop(($arr["request"]["group"] == "relorg_s")?"seller":"buyer");
+					}
+					$conn_filt["to"] = $something;
+				}
+			}
+			$orgs = (count($conn_filt))?$organization->connections_from($conn_filt):array();
 			$orglist = array();
 			foreach($orgs as $org)
 			{
 				$orglist[$org->prop("to")] = $org->prop("to");
 			}
 
-			// add the sections from the selected section to edit
+			/*
+			//don't need categories in the table any more -- taiu
 			if ($arr["request"]["category"])
 			{
 				$from = obj($arr["request"]["category"]);
@@ -1941,8 +1957,6 @@ class crm_company_cust_impl extends class_base
 			{
 				$from = $arr["obj_inst"];
 			}
-			/*
-				don't need categories -- taiu
 			foreach($from->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 			{
 				$orglist[] = $c->prop("to");
