@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.62 2006/10/10 10:43:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.63 2006/10/10 14:59:37 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -67,10 +67,10 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@layout bc type=vbox parent=content closeable=1 area_caption=Sisu
 
-		@property bug_content type=textarea rows=23 cols=60 parent=bc
+		@property bug_content type=textarea rows=23 cols=60 parent=bc captionside=top no_caption=1
 		@caption Sisu
 
-		@property bug_content_comm type=textarea rows=18 cols=60 parent=bc store=no editonly=1
+		@property bug_content_comm type=textarea rows=18 cols=60 parent=bc store=no editonly=1 captionside=top
 		@caption Lisa kommentaar
 
 	@layout data type=vbox parent=content closeable=1 area_caption=Aeg
@@ -844,7 +844,7 @@ class bug extends class_base
 			$com_str .= $this->parse("COMMENT");
 		}
 
-		$main_c = $o->createdby()." @ ".date("d.m.Y H:i", $o->created())."<br>".$this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("bug_content")))));
+		$main_c = "<b>".$o->createdby()." @ ".date("d.m.Y H:i", $o->created())."</b><br>".$this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("bug_content")))));
 		$this->vars(array(
 			"main_text" => $so == "asc" ? $main_c : "",
 			"main_text_after" => $so == "asc" ? "" : $main_c,

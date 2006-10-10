@@ -137,6 +137,8 @@
             <rows>23</rows>
             <cols>60</cols>
             <parent>bc</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
             <field>bug_content</field>
             <caption>Sisu</caption>
       </property>
@@ -150,6 +152,7 @@
             <parent>bc</parent>
             <store>no</store>
             <editonly>1</editonly>
+            <captionside>top</captionside>
             <field>bug_content_comm</field>
             <caption>Lisa kommentaar</caption>
       </property>
