@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.60 2006/10/06 16:30:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.61 2006/10/10 09:07:06 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -15,11 +15,13 @@ define("BUG_STATUS_CLOSED", 5);
 
 @property bug_tb type=toolbar no_caption=1 save=no
 
-@property name type=textbox table=objects
-@caption Lühikirjeldus
+@layout name type=vbox closeable=1 area_caption=L&uuml;hikirjeldus
 
-@layout settings type=hbox
-@caption Määrangud
+	@property name type=textbox table=objects parent=name no_caption=1
+
+@layout settings_wrap type=vbox closeable=1 area_caption=M&auml;&auml;rangud
+@layout settings type=hbox parent=settings_wrap
+
 
 	@layout settings_col1 type=vbox parent=settings
 		@property bug_status type=select parent=settings_col1 captionside=top
@@ -54,21 +56,24 @@ define("BUG_STATUS_CLOSED", 5);
 		@property deadline type=date_select default=-1 parent=settings_col3 captionside=top
 		@caption T&auml;htaeg
 
-@property bug_url type=textbox size=80
-@caption URL
+	@property vb_d1 type=hidden store=no no_caption=1 parent=settings
+
+@layout url type=vbox closeable=1 area_caption=URL
+
+	@property bug_url type=textbox size=80 no_caption=1 parent=url
+	@caption URL
 
 @layout content type=hbox width=20%:80%
-@caption Sisu
 
-	@layout bc type=vbox parent=content
+	@layout bc type=vbox parent=content closeable=1 area_caption=Sisu
 
 		@property bug_content type=textarea rows=23 cols=60 parent=bc
 		@caption Sisu
 
-		@property bug_content_comm type=textarea rows=10 cols=60 parent=bc store=no editonly=1
+		@property bug_content_comm type=textarea rows=18 cols=60 parent=bc store=no editonly=1
 		@caption Lisa kommentaar
 
-	@layout data type=vbox parent=content
+	@layout data type=vbox parent=content closeable=1 area_caption=Aeg
 
 		@property num_hrs_guess type=textbox size=5 parent=data captionside=top
 		@caption Prognoositav tundide arv 	
@@ -472,7 +477,7 @@ class bug extends class_base
 				break;
 
 			case "bug_url":
-				$prop["post_append_text"] = "<a href='javascript:void(0)' onClick='window.location=document.changeform.bug_url.value'>Ava</a>";
+				$prop["post_append_text"] = " <a href='javascript:void(0)' onClick='window.location=document.changeform.bug_url.value'>Ava</a>";
 				break;
 
 			case "bug_property":

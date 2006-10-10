@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.81 2006/09/19 12:59:13 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.81 2006/09/19 12:59:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.82 2006/10/10 09:07:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.82 2006/10/10 09:07:06 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -31,8 +31,14 @@ define("BUG_STATUS_CLOSED", 5);
 	@property cat type=hidden store=no
 
 	@layout bug type=hbox width=15%:85%
-		@property bug_tree type=treeview parent=bug no_caption=1
-		@property bug_list type=text parent=bug no_caption=1 group=by_monitor,bugs,archive,by_default,by_project,by_who,by_class,by_cust
+
+		@layout bug_tree type=vbox parent=bug closeable=1 area_caption=Arendus&uuml;lesanded
+
+			@property bug_tree type=treeview parent=bug_tree no_caption=1 
+
+		@layout bug_table type=vbox parent=bug closeable=1
+
+			@property bug_list type=text parent=bug_table no_caption=1 group=by_monitor,bugs,archive,by_default,by_project,by_who,by_class,by_cust
 
 
 @default group=unestimated_bugs
@@ -47,66 +53,75 @@ define("BUG_STATUS_CLOSED", 5);
 	@property search_tb type=toolbar store=no no_caption=1 
 	@caption Otsingu toolbar
 
-	@layout s_name_lay type=vbox closeable=1 area_caption=Sisu
+@layout s_top_v type=hbox 
 
-		@property s_name type=textbox store=no parent=s_name_lay size=15 
+	@layout s_name_lay type=vbox closeable=1 area_caption=Sisu parent=s_top_v
+
+		@property s_name type=textbox store=no parent=s_name_lay size=15 captionside=top
 		@caption Nimi
 
-		@property s_bug_content type=textbox store=no parent=s_name_lay 
+		@property s_bug_content type=textbox store=no parent=s_name_lay captionside=top
 		@caption Sisu
 
-		@property s_find_parens type=checkbox ch_value=1 store=no parent=s_name_lay 
+		@property s_find_parens type=checkbox ch_value=1 store=no parent=s_name_lay no_caption=1 captionside=top
 		@caption Leia ka buge, millel on alambuge
 
-	@layout s_status_lay type=vbox closeable=1 area_caption=Staatus
+@layout s_top type=hbox width=50%:50%
 
-		@property s_bug_status type=select store=no multiple=1 parent=s_status_lay size=3
-		@caption Staatus
+	@layout s_type_lay type=vbox closeable=1 area_caption=Klass parent=s_top
 
-		@property s_bug_priority type=select store=no parent=s_status_lay 
-		@caption Prioriteet
-
-		@property s_bug_severity type=select store=no parent=s_status_lay 
-		@caption T&otilde;sidus
-
-	@layout s_who_l type=vbox closeable=1 area_caption=Osalejad
-
-		@property s_who type=textbox store=no parent=s_who_l size=15
-		@caption Kellele
-
-		@property s_who_empty type=checkbox ch_value=1 store=no parent=s_who_l 
-		@caption T&uuml;hi
-
-		@property s_monitors type=textbox store=no parent=s_who_l 
-		@caption J&auml;lgijad
-
-		@property s_bug_mail type=textbox store=no parent=s_who_l 
-		@caption Bugmail CC
-
-		@property s_createdby type=textbox store=no size=15 parent=s_who_l
-		@caption Looja
-
-	@layout s_type_lay type=vbox closeable=1 area_caption=Klass
-
-		@property s_bug_type type=textbox store=no parent=s_type_lay size=15
+		@property s_bug_type type=textbox store=no parent=s_type_lay size=15 captionside=top
 		@caption T&uuml;&uuml;p
 
-		@property s_bug_class type=select store=no parent=s_type_lay
+		@property s_bug_class type=select store=no parent=s_type_lay captionside=top
 		@caption Klass
 
-		@property s_bug_component type=textbox store=no parent=s_type_lay
+		@property s_bug_component type=textbox store=no parent=s_type_lay captionside=top
 		@caption Komponent
 
-	@layout s_cut_lay type=vbox closeable=1 area_caption=Klient
+	@layout s_cut_lay type=vbox closeable=1 area_caption=Klient parent=s_top
 
-		@property s_customer type=textbox store=no parent=s_cut_lay size=15
+		@property s_customer type=textbox store=no parent=s_cut_lay size=15 captionside=top
 		@caption Klient
 
-		@property s_project type=textbox store=no parent=s_cut_lay
+		@property s_project type=textbox store=no parent=s_cut_lay captionside=top
 		@caption Projekt
 
-		@property s_deadline type=date_select default=-1 store=no parent=s_cut_lay
+		@property s_deadline type=date_select default=-1 store=no parent=s_cut_lay captionside=top
 		@caption T&auml;htaeg
+
+@layout s_bott type=hbox width=50%:50%
+
+	@layout s_status_lay type=vbox closeable=1 area_caption=Staatus parent=s_bott
+
+		@property s_bug_status type=select store=no multiple=1 parent=s_status_lay size=3 captionside=top
+		@caption Staatus
+
+		@property s_bug_priority type=select store=no parent=s_status_lay captionside=top
+		@caption Prioriteet
+
+		@property s_bug_severity type=select store=no parent=s_status_lay captionside=top
+		@caption T&otilde;sidus
+
+	@layout s_who_l type=vbox closeable=1 area_caption=Osalejad parent=s_bott
+
+		@layout s_who_empty_l type=hbox parent=s_who_l
+
+			@property s_who type=textbox store=no parent=s_who_empty_l size=15 captionside=top 
+			@caption Kellele
+
+			@property s_who_empty type=checkbox ch_value=1 store=no parent=s_who_empty_l captionside=top no_caption=1
+			@caption T&uuml;hi
+
+		@property s_monitors type=textbox store=no parent=s_who_l captionside=top
+		@caption J&auml;lgijad
+
+		@property s_bug_mail type=textbox store=no parent=s_who_l captionside=top
+		@caption Bugmail CC
+
+		@property s_createdby type=textbox store=no size=15 parent=s_who_l captionside=top
+		@caption Looja
+
 
 	@property s_sbt type=submit store=no no_caption=1 
 	@caption Otsi

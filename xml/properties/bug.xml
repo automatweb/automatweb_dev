@@ -15,8 +15,9 @@
             <group>general</group>
             <table>objects</table>
             <type>textbox</type>
+            <parent>name</parent>
+            <no_caption>1</no_caption>
             <field>name</field>
-            <caption>L&amp;uuml;hikirjeldus</caption>
       </property>
       <property>
             <name>bug_status</name>
@@ -108,11 +109,23 @@
             <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
+            <name>vb_d1</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>settings</parent>
+            <field>vb_d1</field>
+      </property>
+      <property>
             <name>bug_url</name>
             <group>general</group>
             <table>aw_bugs</table>
             <type>textbox</type>
             <size>80</size>
+            <no_caption>1</no_caption>
+            <parent>url</parent>
             <field>bug_url</field>
             <caption>URL</caption>
       </property>
@@ -132,7 +145,7 @@
             <group>general</group>
             <table>aw_bugs</table>
             <type>textarea</type>
-            <rows>10</rows>
+            <rows>18</rows>
             <cols>60</cols>
             <parent>bc</parent>
             <store>no</store>
@@ -396,10 +409,22 @@
             </CUST_TESTER>
       </reltypes>
       <layout>
+            <name>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>L&amp;uuml;hikirjeldus</area_caption>
+                  <group>general</group>
+            </name>
+            <settings_wrap>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>M&amp;auml;&amp;auml;rangud</area_caption>
+                  <group>general</group>
+            </settings_wrap>
             <settings>
                   <type>hbox</type>
+                  <parent>settings_wrap</parent>
                   <group>general</group>
-                  <caption>M&amp;auml;&amp;auml;rangud</caption>
             </settings>
             <settings_col1>
                   <type>vbox</type>
@@ -416,20 +441,29 @@
                   <parent>settings</parent>
                   <group>general</group>
             </settings_col3>
+            <url>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>URL</area_caption>
+                  <group>general</group>
+            </url>
             <content>
                   <type>hbox</type>
                   <width>20%:80%</width>
                   <group>general</group>
-                  <caption>Sisu</caption>
             </content>
             <bc>
                   <type>vbox</type>
                   <parent>content</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Sisu</area_caption>
                   <group>general</group>
             </bc>
             <data>
                   <type>vbox</type>
                   <parent>content</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Aeg</area_caption>
                   <group>general</group>
             </data>
       </layout>
