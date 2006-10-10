@@ -1830,7 +1830,7 @@ class crm_company extends class_base
 				$fn = "_get_".$data["name"];
 				return $cust_impl->$fn($arr);
 			case "customer_search_cust_grp":
-				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_DETAIL )
 				{
 					return PROP_IGNORE;
 				}			
@@ -1843,7 +1843,7 @@ class crm_company extends class_base
 				return $cust_impl->$fn($arr);
 				break;
 			case "customer_search_print_view":
-				if ( aw_global_get('crm_projects_search_mode') != CRM_PROJECTS_SEARCH_DETAIL )
+				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_DETAIL )
 				{
 					return PROP_IGNORE;
 				}
@@ -1861,7 +1861,7 @@ class crm_company extends class_base
 			case "customer_search_address":
 			case "customer_search_ev":
 			case "customer_search_cust_grp":
-				if ( aw_global_get('crm_customers_search_mode') != CRM_PROJECTS_SEARCH_SIMPLE )
+				if ( aw_global_get('crm_customers_search_mode') != CRM_CUSTOMERS_SEARCH_SIMPLE )
 				{
 					return PROP_IGNORE;
 				}
