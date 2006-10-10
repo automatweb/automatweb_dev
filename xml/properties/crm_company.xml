@@ -1033,7 +1033,7 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_name</field>
             <caption>Nimi</caption>
@@ -1049,7 +1049,7 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_reg</field>
             <caption>Reg nr.</caption>
@@ -1065,7 +1065,7 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_worker</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
@@ -1081,7 +1081,7 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_address</field>
             <caption>Aadress</caption>
@@ -1097,7 +1097,7 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_city</field>
             <caption>Linn/Vald/Alev</caption>
@@ -1113,7 +1113,7 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_county</field>
             <caption>Maakond</caption>
@@ -1129,7 +1129,7 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_ev</field>
             <caption>&amp;amp;Otilde;iguslik vorm</caption>
@@ -1145,7 +1145,7 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_keywords</field>
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
@@ -1160,7 +1160,7 @@
             </group>
             <type>chooser</type>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <multiple>1</multiple>
             <no_caption>1</no_caption>
             <field>customer_search_is_co</field>
@@ -1177,7 +1177,7 @@
             <type>text</type>
             <size>25</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_cust_mgr</field>
             <caption>Kliendihaldur</caption>
@@ -1192,7 +1192,7 @@
             </group>
             <type>select</type>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <captionside>top</captionside>
             <field>customer_search_cust_grp</field>
             <caption>Kliendigrupp</caption>
@@ -1206,7 +1206,7 @@
                   <num_2>relorg_t</num_2>
             </group>
             <type>checkbox</type>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_top</parent>
             <store>no</store>
             <captionside>top</captionside>
             <ch_value>1</ch_value>
@@ -1225,10 +1225,25 @@
             <type>submit</type>
             <size>15</size>
             <store>no</store>
-            <parent>vbox_customers_left</parent>
+            <parent>vbox_customers_left_search_btn</parent>
             <no_caption>1</no_caption>
             <field>customer_search_submit</field>
             <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>customer_search_submit_and_change</name>
+            <table>objects</table>
+            <group>
+                  <num_0>relorg_s</num_0>
+                  <num_1>relorg_b</num_1>
+                  <num_2>relorg_t</num_2>
+            </group>
+            <type>submit</type>
+            <parent>vbox_customers_left_search_btn</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>customer_search_submit_and_change</field>
+            <caption>Otsi ja muuda</caption>
       </property>
       <property>
             <name>my_customers_table</name>
@@ -3621,6 +3636,24 @@
                         <num_2>relorg_t</num_2>
                   </group>
             </vbox_customers_left>
+            <vbox_customers_left_top>
+                  <type>vbox</type>
+                  <parent>vbox_customers_left</parent>
+                  <group>
+                        <num_0>relorg_s</num_0>
+                        <num_1>relorg_b</num_1>
+                        <num_2>relorg_t</num_2>
+                  </group>
+            </vbox_customers_left_top>
+            <vbox_customers_left_search_btn>
+                  <type>hbox</type>
+                  <parent>vbox_customers_left</parent>
+                  <group>
+                        <num_0>relorg_s</num_0>
+                        <num_1>relorg_b</num_1>
+                        <num_2>relorg_t</num_2>
+                  </group>
+            </vbox_customers_left_search_btn>
             <projects_main>
                   <type>hbox</type>
                   <width>20%:80%</width>
