@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.19 2006/10/11 17:18:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.20 2006/10/11 17:55:37 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -1592,39 +1592,35 @@ class procurement_center extends class_base
 					$ids = $filter["oid"];
 					$filter["oid"] = null;
 				}
-				$procurements = new object_list(array(
-					"class_id" => array(CL_PROCUREMENT),
-					"parent" => $this_obj->id(),
+
+				$offers = new object_list(array(
+					"class_id" => array(CL_PROCUREMENT_OFFER),
+					"CL_PROCUREMENT_OFFER.procurement.orderer" => $owner->id(),
 					"lang_id" => array(),
 				));
-				foreach($procurements->arr() as $procurement)
+				foreach($offers->arr() as $offer)
 				{
-					$offers = new object_list(array(
-						"class_id" => array(CL_PROCUREMENT_OFFER),
-						"CL_PROCUREMENT_OFFER.procurement" => $procurement->id(),
-						"lang_id" => array(),
+					$row_conns = $offer->connections_to(array(
+						'reltype' => 1,
+						'class' => CL_PROCUREMENT_OFFER_ROW,
 					));
-					foreach($offers->arr() as $offer)
+					foreach($row_conns as $row_conn)
 					{
-						$row_conns = $offer->connections_to(array(
-							'reltype' => 1,
-							'class' => CL_PROCUREMENT_OFFER_ROW,
-						));
-						foreach($row_conns as $row_conn)
+						if(is_oid($row_conn->prop("from")))
 						{
-							if(is_oid($row_conn->prop("from")))$row = obj($row_conn->prop("from"));
-							else continue;
-							if((substr_count($row->prop("product") , $data["offerers_find_product"]) > 0)
-							&&(!(sizeof($ids) && !in_array($offer->prop("offerer") , $ids))))
-							{
-								//kui pole seotud ühtegi ostu
-								$ps = $offer->connections_to(array(
-									'reltype' => 2,
-									'class' => CL_PURCHASE,
-								));
-								if($data["offerers_find_only_buy"] && !(sizeof($ps)>0)) break;
-								$filter["oid"][$offer->prop("offerer")] = $offer->prop("offerer");
-							}
+							$row = obj($row_conn->prop("from"));
+						}
+						else continue;
+						if((substr_count(strtolower($row->prop("product")) , strtolower($data["offerers_find_product"])) > 0)
+						&&(!(sizeof($ids) && !in_array($offer->prop("offerer") , $ids))))
+						{
+							//kui pole seotud ühtegi ostu
+							$ps = $offer->connections_to(array(
+								'reltype' => 2,
+								'class' => CL_PURCHASE,
+							));
+							if($data["offerers_find_only_buy"] && !(sizeof($ps)>0)) continue;
+							$filter["oid"][$offer->prop("offerer")] = $offer->prop("offerer");arr($offer->prop("offerer"));
 						}
 					}
 				}
@@ -1632,7 +1628,7 @@ class procurement_center extends class_base
 			}
 			if(!sizeof($filter["oid"]) > 0) return $ol;
 		}
-		
+	
 		if($data["offerers_find_groups"])
 		{
 			if(sizeof($filter["oid"]) > 0)
