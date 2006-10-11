@@ -108,7 +108,6 @@ a.VclGanttHeader
 	font-size: 9px;
 	font-weight: normal;
 	border-left: 1px solid white;
-	padding-left: 2px;
 }
 
 img.VclGanttStartBar

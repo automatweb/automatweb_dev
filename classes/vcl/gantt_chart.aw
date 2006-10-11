@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.20 2006/05/26 13:06:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.21 2006/10/11 13:06:45 kristo Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -670,7 +670,14 @@ class gantt_chart extends class_base
 
 			for ($i = 0; $i < $this->timespans; $i++)
 			{
-				$division = date("H:i", $this->start + $time);
+				if ($step >= (24*3600))
+				{
+					$division = date("d", $this->start + $time);
+				}
+				else
+				{
+					$division = date("H:i", $this->start + $time);
+				}
 				$align = "left";
 				$this->vars(array(
 					"time" => $division,

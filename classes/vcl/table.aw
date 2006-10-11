@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.91 2006/09/18 09:47:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.92 2006/10/11 13:06:45 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -2619,6 +2619,38 @@ class vcl_table extends aw_table
 		}
 	}
 
+	function table_from_ol(&$ol, $props, $clid)
+	{
+		$tmp = obj();
+		$tmp->set_class_id($clid);
+		$ps = $tmp->get_property_list();
+		$ps["name"]["caption"] = t("Nimi");
+		$ps["createdby"]["caption"] = t("Looja");
+		$ps["created"]["caption"] = t("Loodud");
+		$ps["modifiedby"]["caption"] = t("Muutja");
+		$ps["modified"]["caption"] = t("Muudetud");
+		foreach($props as $prop)
+		{
+			$d = array(
+				"name" => $prop,
+				"caption" => $ps[$prop]["caption"],
+				"align" => "center",
+				"sortable" => 1
+			);
+			if ($prop == "created" || $prop == "modified")
+			{
+				$d["type"] = "time";
+				$d["numeric"] = 1;
+				$d["format"] = "d.m.Y H:i";
+			}
+			$this->define_field($d);
+		}
+		$this->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+		$this->data_from_ol($ol, array("change_col" => "name"));
+	}
 }
 
 ?>

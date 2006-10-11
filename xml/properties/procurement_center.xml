@@ -42,8 +42,54 @@
             <type>treeview</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>p_l</parent>
+            <parent>p_tree</parent>
             <field>p_tr</field>
+      </property>
+      <property>
+            <name>procurements_find_status</name>
+            <table>objects</table>
+            <group>p</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>p_search</parent>
+            <captionside>top</captionside>
+            <field>procurements_find_status</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>procurements_find_offerer</name>
+            <table>objects</table>
+            <group>p</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>p_search</parent>
+            <size>20</size>
+            <captionside>top</captionside>
+            <field>procurements_find_offerer</field>
+            <caption>Pakkuja</caption>
+      </property>
+      <property>
+            <name>procurements_find_product</name>
+            <table>objects</table>
+            <group>p</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>p_search</parent>
+            <size>20</size>
+            <captionside>top</captionside>
+            <field>procurements_find_product</field>
+            <caption>Toode</caption>
+      </property>
+      <property>
+            <name>do_find_procurements</name>
+            <table>objects</table>
+            <group>p</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>p_search</parent>
+            <no_caption>1</no_caption>
+            <field>do_find_procurements</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>p_tbl</name>
@@ -76,7 +122,7 @@
       <property>
             <name>offerers_tb</name>
             <table>objects</table>
-            <group>offerers_tree</group>
+            <group>offerers</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -85,69 +131,54 @@
       <property>
             <name>offerers_tr</name>
             <table>objects</table>
-            <group>offerers_tree</group>
+            <group>offerers</group>
             <type>treeview</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>offerers_l</parent>
+            <parent>offerers_tree_l</parent>
             <field>offerers_tr</field>
-      </property>
-      <property>
-            <name>offerers_tbl</name>
-            <table>objects</table>
-            <group>offerers_tree</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <parent>offerers_l</parent>
-            <field>offerers_tbl</field>
-      </property>
-      <property>
-            <name>offerers_find_tb</name>
-            <table>objects</table>
-            <group>offerers_find</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>offerers_find_tb</field>
       </property>
       <property>
             <name>offerers_find_name</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>textbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <field>offerers_find_name</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>offerers_find_address</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>textbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <field>offerers_find_address</field>
             <caption>Aadress</caption>
       </property>
       <property>
             <name>offerers_find_groups</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>select</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <field>offerers_find_groups</field>
             <caption>Hankijagruppid</caption>
       </property>
       <property>
             <name>offerers_find_done</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>checkbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <no_caption>1</no_caption>
             <field>offerers_find_done</field>
             <caption>Teostanud hankeid</caption>
@@ -155,40 +186,44 @@
       <property>
             <name>offerers_find_start</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>date_select</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <field>offerers_find_start</field>
             <caption>Alates</caption>
       </property>
       <property>
             <name>offerers_find_end</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>date_select</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <field>offerers_find_end</field>
             <caption>Kuni</caption>
       </property>
       <property>
             <name>offerers_find_product</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>textbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <field>offerers_find_product</field>
             <caption>pakutud Toode</caption>
       </property>
       <property>
             <name>offerers_find_only_buy</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>checkbox</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <no_caption>1</no_caption>
             <field>offerers_find_only_buy</field>
             <caption>Ainult ostudega</caption>
@@ -196,23 +231,24 @@
       <property>
             <name>do_find_offerers</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>submit</type>
             <store>no</store>
             <parent>offerers_find_params</parent>
+            <captionside>top</captionside>
             <no_caption>1</no_caption>
             <field>do_find_offerers</field>
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>offerers_find_tbl</name>
+            <name>offerers_tbl</name>
             <table>objects</table>
-            <group>offerers_find</group>
+            <group>offerers</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>offerers_find_l</parent>
-            <field>offerers_find_tbl</field>
+            <parent>offerers_lay</parent>
+            <field>offerers_tbl</field>
       </property>
       <property>
             <name>offers_tb</name>
@@ -618,14 +654,6 @@
             <offerers>
                   <caption>Pakkujad</caption>
             </offerers>
-            <offerers_tree>
-                  <caption>Puuvaates</caption>
-                  <parent>offerers</parent>
-            </offerers_tree>
-            <offerers_find>
-                  <caption>Otsing</caption>
-                  <parent>offerers</parent>
-            </offerers_find>
             <offers>
                   <caption>Pakkumised</caption>
             </offers>
@@ -683,20 +711,48 @@
                   <width>30%:70%</width>
                   <group>p</group>
             </p_l>
-            <offerers_l>
-                  <type>hbox</type>
-                  <width>30%:70%</width>
-                  <group>offerers_tree</group>
-            </offerers_l>
-            <offerers_find_l>
+            <p_left>
+                  <type>vbox</type>
+                  <parent>p_l</parent>
+                  <group>p</group>
+            </p_left>
+            <p_tree>
+                  <type>vbox</type>
+                  <parent>p_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Hangete&amp;nbsp;puu</area_caption>
+                  <group>p</group>
+            </p_tree>
+            <p_search>
+                  <type>vbox</type>
+                  <parent>p_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Hangete&amp;nbsp;otsing</area_caption>
+                  <group>p</group>
+            </p_search>
+            <offerers_lay>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>offerers_find</group>
-            </offerers_find_l>
+                  <group>offerers</group>
+            </offerers_lay>
+            <offerers_l>
+                  <type>vbox</type>
+                  <parent>offerers_lay</parent>
+                  <group>offerers</group>
+            </offerers_l>
+            <offerers_tree_l>
+                  <type>vbox</type>
+                  <parent>offerers_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Pakkujate&amp;nbsp;puu</area_caption>
+                  <group>offerers</group>
+            </offerers_tree_l>
             <offerers_find_params>
                   <type>vbox</type>
-                  <parent>offerers_find_l</parent>
-                  <group>offerers_find</group>
+                  <parent>offerers_l</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Pakkujate&amp;nbsp;otsing</area_caption>
+                  <group>offerers</group>
             </offerers_find_params>
             <offers_l>
                   <type>hbox</type>

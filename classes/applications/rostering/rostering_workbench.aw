@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.4 2006/10/03 18:27:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.5 2006/10/11 13:06:42 kristo Exp $
 // rostering_workbench.aw - T&ouml;&ouml;aja planeerimine 
 /*
 
@@ -67,22 +67,6 @@
 
 	@property stats_overtime type=table no_caption=1 store=no
 
-@default group=admin_act
-
-	@property admin_act_tb type=toolbar no_caption=1 store=no
-	
-	@property admin_act_cal type=calendar no_caption=1 store=no
-
-@default group=op_act
-
-	@property op_act_sel type=text store=no
-	@caption Stsenaarium
-
-	@property op_act_cal type=text no_caption=1 store=no
-
-	@property op_act_problems type=text store=no
-	@caption Takistused
-
 
 @default group=skills_losing
 
@@ -94,17 +78,27 @@
 
 		@property skl_table type=table no_caption=1 store=no parent=skl_main
 
-@default group=skills_g
+@default group=graph
 
-	@property skg_tbl type=table no_caption=1 store=no
+	@property g_tb type=toolbar no_caption=1 store=no
 
-@default group=shifts_g
+	@layout graph_split type=hbox width=20%:80%
 
-	@property shifts_g_tbl type=table no_caption=1 store=no
+		@layout graph_tree type=vbox parent=graph_split closeable=1 area_caption=Graafikud
 
-@default group=day_g
+			@property graph_tree type=treeview no_caption=1 store=no parent=graph_tree
 
-	@property day_g_tbl type=table no_caption=1 store=no
+		@property graph_tbl type=table no_caption=1 store=no parent=graph_split
+
+@default group=work_hrs
+
+	@property work_hrs_tb type=toolbar store=no no_caption=1
+	@property work_hrs type=table store=no no_caption=1
+
+@default group=payment_types
+
+	@property payment_types_tb type=toolbar no_caption=1 store=no
+	@property payment_types type=table store=no no_caption=1
 
 @groupinfo ppl caption="Isikud" submit=no
 
@@ -115,17 +109,14 @@
 	@groupinfo shifts caption="Vahetused" parent=settings submit=no
 	@groupinfo skills caption="P&auml;devused" parent=settings submit=no 
 	@groupinfo skills_losing caption="P&auml;devuste kadumine" parent=settings submit=no 
+	@groupinfo payment_types caption="Tasu liigid" parent=settings submit=no 
 
 @groupinfo stats caption="Statistika"
 	@groupinfo stats_wp caption="T&ouml;&ouml;postid" parent=stats submit=no
 	@groupinfo stats_overtime caption="&Uuml;letunnid" parent=stats submit=no
 
-@groupinfo graph caption="Graafikud"
-	@groupinfo admin_act caption="Administratiivsed tegevused" parent=graph submit=no
-	@groupinfo op_act caption="Operatiivsed tegevused" parent=graph
-	@groupinfo skills_g caption="P&auml;devused" parent=graph
-	@groupinfo shifts_g caption="Vahetused" parent=graph submit=no
-	@groupinfo day_g caption="P&auml;eva vaade" parent=graph submit=no
+@groupinfo graph caption="Graafikud" submit=no
+@groupinfo work_hrs caption="T&ouml;&ouml;aruanded" 
 
 @reltype OWNER value=1 clid=CL_CRM_COMPANY
 @caption Omanik
@@ -144,6 +135,12 @@
 
 @reltype SKILL value=6 clid=CL_PERSON_SKILL
 @caption P&auml;devus
+
+@reltype GRAPH_FOLDER value=7 clid=CL_MENU
+@caption Graafikute kataloog
+
+@reltype PAYMENT_TYPE value=8 clid=CL_ROSTERING_PAYMENT_TYPE
+@caption Tasu liik
 
 */
 
@@ -164,18 +161,6 @@ class rostering_workbench extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "day_g_tbl":
-				$this->_day_g_tbl($arr);
-				break;
-
-			case "shifts_g_tbl":
-				$this->_shifts_g_tbl($arr);
-				break;
-
-			case "skg_tbl":
-				$this->_skg_tbl($arr);
-				break;
-
 			case "cedit_tb":
 			case "cedit_tree":
 			case "cedit_table":
@@ -233,31 +218,40 @@ class rostering_workbench extends class_base
 				$this->_stats_overtime($arr);
 				break;
 
-			case "admin_act_tb":
-				$this->_admin_act_tb($arr);
-				break;
-
-			case "admin_act_cal":
-				$this->_admin_act_cal($arr);
-				break;
-
-			case "op_act_cal":
-				$this->_op_act_cal($arr);
-				break;
-
-			case "op_act_sel":
-				$this->_op_act_sel($arr);
-				break;
-
-			case "op_act_problems":
-				return $this->_op_act_problems($arr);
-
 			case "skl_tree":
 				$this->_skl_tree($arr);
 				break;
 
 			case "skl_table":
 				$this->_skl_table($arr);
+				break;
+
+			case "graph_tree":
+				$this->_graph_tree($arr);
+				break;
+
+			case "graph_tbl":
+				$this->_graph_tbl($arr);
+				break;
+
+			case "g_tb":
+				$this->_g_tb($arr);
+				break;
+
+			case "work_hrs":
+				$this->_work_hrs($arr);
+				break;
+
+			case "work_hrs_tb":
+				$this->_work_hrs_tb($arr);
+				break;
+
+			case "payment_types_tb":
+				$this->_payment_types_tb($arr);
+				break;
+
+			case "payment_types":
+				$this->_payment_types($arr);
 				break;
 		};
 		return $retval;
@@ -748,355 +742,6 @@ class rostering_workbench extends class_base
 		}
 	}
 
-	function _admin_act_tb($arr)
-	{
-		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_menu_button(array(
-			"name" => "new",
-		));
-	
-		$clss = aw_ini_get("classes");
-		foreach(array(CL_TASK, CL_CRM_MEETING) as $clid)
-		{
-			$tb->add_menu_item(array(
-				"parent" => "new",
-				"text" => $clss[$clid]["name"],
-				"link" => html::get_new_url($clid, $arr["obj_inst"]->id(), array("return_url" => get_ru()))
-			));
-		}
-	}
-
-	function _admin_act_cal($arr)
-	{
-		$t = &$arr["prop"]["vcl_inst"];
-
-		$arr["prop"]["vcl_inst"]->configure(array(
-			"overview_func" => array(&$this,"get_overview"),
-		));
-
-		if (!$arr["request"]["viewtype"])
-		{
-			$arr["request"]["viewtype"] = "month";
-		}
-
-		$range = $arr["prop"]["vcl_inst"]->get_range(array(
-			"date" => $arr["request"]["date"],
-			"viewtype" => !empty($arr["request"]["viewtype"]) ? $arr["request"]["viewtype"] : $arr["prop"]["viewtype"],
-		));
-
-		$start = $range["start"];
-		$end = $range["end"];
-
-		$events = new object_list(array(
-			"parent" => $arr["obj_inst"]->id(),
-			"class_id" => array(CL_TASK, CL_CRM_MEETING),
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		classload("core/icons");
-		foreach($events->arr() as $o)
-		{
-			$icon = icons::get_icon_url($o);
-			$t->add_item(array(
-				"timestamp" => $o->prop("start1"),
-				"item_start" => ($o->class_id() == CL_CRM_MEETING ? $o->prop("start1") : NULL),
-				"item_end" => ($o->class_id() == CL_CRM_MEETING ? $o->prop("end") : NULL),
-				"data" => array(
-					"name" => $o->name(),
-					"link" => html::get_change_url($o->id(), array("return_url" => get_ru())),
-					"modifiedby" => $o->prop("modifiedby"),
-					"icon" => $icon,
-					'comment' => $o->comment(),
-				),
-			));
-		}
-	}
-
-	function _op_act_cal($arr)
-	{
-		classload("core/date/date_calc");
-		$m = get_instance("applications/rostering/rostering_model");		
-		$start = get_week_start();
-		$end = get_week_start()+24*7*3600;
-		if ($arr["request"]["rostering_chart_start"])
-		{
-			$start = $arr["request"]["rostering_chart_start"];
-		}
-		if ($arr["request"]["rostering_chart_length"])
-		{
-			$end = $start + 24*$arr["request"]["rostering_chart_length"]*3600;
-		}
-		$columns = $arr["request"]["rostering_chart_length"] ? $arr["request"]["rostering_chart_length"] : 7;
-
-		$chart = get_instance("vcl/gantt_chart");
-		$chart->configure_chart (array (
-			"chart_id" => "person_wh",
-			"style" => "aw",
-			"subdivisions" => $columns > 1 ? 3 : 24,
-			"timespans" => $columns > 1 ? 3 : 24,
-			"start" => $start,
-			"end" => $end,
-			"width" => 850,
-			"row_height" => 12,
-			"columns" => $columns,
-			"row_dfn" => t("T&ouml;&ouml;post")
-		));
-
-		$i = 0;
-		$days = array ("P", "E", "T", "K", "N", "R", "L");
-		while ($i < $columns)
-		{
-			$day_start = ($start + ($i * 86400));
-			$day = date ("w", $day_start);
-			$date = date ("j/m/Y", $day_start);
-			$uri = aw_url_change_var ("rostering_chart_length", 1);
-			$uri = aw_url_change_var ("rostering_chart_start", $day_start, $uri);
-			$chart->define_column (array (
-				"col" => ($i + 1),
-				"title" => $days[$day] . " - " . $date,
-				"uri" => $uri,
-			));
-			$i++;
-		}
-
-		$co = get_instance(CL_CRM_COMPANY);
-		$ppl = $co->get_employee_picker(obj($arr["obj_inst"]->prop("owner")));
-		static $wtid;
-		$wpl2p = array();
-		foreach($ppl as $p_id => $p_n)
-		{
-			$work_times = $m->get_schedule_for_person(obj($p_id), $start, $end);
-			foreach($work_times as $wt_item)
-			{
-				$bar = array (
-					"id" => ++$wtid,
-					"row" => $wt_item["workplace"],
-					"start" => $wt_item["start"],
-					"length" => $wt_item["end"] - $wt_item["start"],
-					"title" => $p_n.": ".date("d.m.Y H:i", $wt_item["start"])." - ".date("d.m.Y H:i", $wt_item["end"]),
-					"uri" => aw_url_change_var("problem_id", $wtid)
-				);
-
-				$chart->add_bar ($bar);
-				$wpl2p[$wt_item["workplace"]][$p_id] = $bar;
-				$bar["row"] = $wt_item["workplace"]."_".$p_id;
-				$chart->add_bar ($bar);
-			}
-		}
-
-
-		$ol = new object_list(array(
-			"class_id" => CL_ROSTERING_WORKPLACE,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		foreach($ol->arr() as $wpl)
-		{
-			//html::get_change_url($wpl->id(), array("return_url" => get_ru()))
-			$bar = array (
-				"name" => $wpl->id(),
-				"title" => "<b>".$wpl->name()."</b>",
-				"uri" => aw_url_change_var("show_p", $wpl->id())
-			);
-			$chart->add_row ($bar);
-
-			// get ppl for workpost
-			foreach($wpl2p[$wpl->id()] as $p_id => $sets)
-			{
-				$po= obj($p_id);
-				$chart->add_row (array (
-					"name" => $wpl->id()."_".$p_id,
-					"title" => " -&gt; ".$po->name(),
-					"uri" => html::get_change_url($p_id, array("return_url" => get_ru()))
-				));
-			}
-		}
-
-
-		$arr["prop"]["value"] = '<div id="tablebox">
-		    <div class="pais">
-			<div class="caption">'.$this->create_chart_navigation($arr).'</div>
-			<div class="navigaator">
-			</div>
-		    </div>
-		    <div class="sisu">
-		    <!-- SUB: GRID_TABLEBOX_ITEM -->
-			'.$chart->draw_chart().'
-		    <!-- END SUB: GRID_TABLEBOX_ITEM -->
-		    </div>
-		    <div>
-		    </div>	
-		</div>';	
-	}
-
-    // @attrib name=get_time_days_away
-	// @param days required type=int
-	// @param direction optional type=int
-	// @param time optional
-	// @returns UNIX timestamp for time of day start $days away from day start of $time
-	// @comment DST safe if cumulated error doesn't exceed 12h. If $direction is negative, time is computed for days back otherwise days to.
-	function get_time_days_away ($days, $time = false, $direction = 1)
-	{
-		if (false === $time)
-		{
-			$time = time ();
-		}
-
-		$time_daystart = mktime (0, 0, 0, date ("m", $time), date ("d", $time), date("Y", $time));
-		$day_start = ($direction < 0) ? ($time_daystart - $days*86400) : ($time_daystart + $days*86400);
-		$nodst_hour = (int) date ("H", $day_start);
-
-		if ($nodst_hour)
-		{
-			if ($nodst_hour < 13)
-			{
-				$dst_error = $nodst_hour;
-				$day_start = $day_start - $dst_error*3600;
-			}
-			else
-			{
-				$dst_error = 24 - $nodst_hour;
-				$day_start = $day_start + $dst_error*3600;
-			}
-		}
-
-		return $day_start;
-	}
-
-	function get_week_start ($time = false) //!!! somewhat dst safe (safe if error doesn't exceed 12h)
-	{
-		if (!$time)
-		{
-			$time = time ();
-		}
-
-		$date = getdate ($time);
-		$wday = $date["wday"] ? ($date["wday"] - 1) : 6;
-		$week_start = $time - ($wday * 86400 + $date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
-		$nodst_hour = (int) date ("H", $week_start);
-
-		if ($nodst_hour)
-		{
-			if ($nodst_hour < 13)
-			{
-				$dst_error = $nodst_hour;
-				$week_start = $week_start - $dst_error*3600;
-			}
-			else
-			{
-				$dst_error = 24 - $nodst_hour;
-				$week_start = $week_start + $dst_error*3600;
-			}
-		}
-
-		return $week_start;
-	}
-
-	function create_chart_navigation ($arr)
-	{
-		$start = (int) ($arr["request"]["rostering_chart_start"] ? $arr["request"]["rostering_chart_start"] : time ());
-		$columns = (int) ($arr["request"]["rostering_chart_length"] ? $arr["request"]["rostering_chart_length"] : 7);
-		$start = ($columns == 7) ? $this->get_week_start ($start) : $start;
-		$period_length = $columns * 86400;
-		$length_nav = array ();
-		$start_nav = array ();
-
-		for ($days = 1; $days < 8; $days++)
-		{
-			if ($columns == $days)
-			{
-				$length_nav[] = $days;
-			}
-			else
-			{
-				$length_nav[] = html::href (array (
-					"caption" => $days,
-					"url" => aw_url_change_var ("rostering_chart_length", $days),
-				));
-			}
-		}
-
-		$start_nav[] = html::href (array (
-			"caption" => t("<<"),
-			"title" => t("5 tagasi"),
-			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away (5*$columns, $start, -1))),
-		));
-		$start_nav[] = html::href (array (
-			"caption" => t("Eelmine"),
-			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away ($columns, $start, -1))),
-		));
-		$start_nav[] = html::href (array (
-			"caption" => t("Täna"),
-			"url" => aw_url_change_var ("rostering_chart_start", $this->get_week_start ()),
-		));
-		$start_nav[] = html::href (array (
-			"caption" => t("Järgmine"),
-			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away ($columns, $start))),
-		));
-		$start_nav[] = html::href (array (
-			"caption" => t(">>"),
-			"title" => t("5 edasi"),
-			"url" => aw_url_change_var ("rostering_chart_start", ($this->get_time_days_away (5*$columns, $start))),
-		));
-
-		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
-
-		if (is_oid ($arr["request"]["rostering_hilight"]))
-		{
-			$project = obj ($arr["request"]["rostering_hilight"]);
-			$deselect = html::href (array (
-				"caption" => t("Kaota valik"),
-				"url" => aw_url_change_var ("rostering_hilight", ""),
-			));
-			$change_url = html::obj_change_url ($project);
-			$navigation .= t(' &nbsp;&nbsp;Valitud projekt: ') . $change_url . ' (' . $deselect . ')';
-		}
-
-		return $navigation;
-	}
-
-	function _op_act_sel($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_ROSTERING_SCENARIO,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		$ns = array();
-		foreach($ol->names() as $id => $nm)
-		{
-			$ns[aw_url_change_var("set_scenario", $id)] = $nm;
-		}
-		$arr["prop"]["value"] = html::select(array(
-			"options" => $ns,
-			"name" => "set_scenario",
-			"value" => aw_url_change_var("set_scenario", $arr["request"]["set_scenario"]),
-			"onchange" => "window.location.href=document.changeform.set_scenario.options[document.changeform.set_scenario. selectedIndex].value;"
-		));
-	}
-
-	function _op_act_problems($arr)
-	{
-		if (!$arr["request"]["problem_id"])
-		{
-			return PROP_IGNORE;
-		}
-		// list some sort of problems
-		$rv = "";
-		$rv .= html::checkbox(array(
-			"name" => "no_laiki",
-			"ch_value" => 1,
-			"checked" => true
-		))." t&ouml;&ouml;tunnid &uuml;letatud <br>";
-		$rv .= html::checkbox(array(
-			"name" => "stupid",
-			"ch_value" => 1,
-			"checked" => true
-		))." teises vahetuses <br>";
-		$arr["prop"]["value"] = $rv;
-		return PROP_OK;
-	}
-
 	function _sk_tree($arr)
 	{
 		classload("vcl/treeview");
@@ -1198,249 +843,184 @@ class rostering_workbench extends class_base
 		}		
 	}
 
-	function _init_skg_tbl(&$t, &$wpl2skill)
+
+
+	function _graph_tree($arr)
 	{
-		// list all wp's and for those, needed skills
+		classload("core/icons");
+		$pt = $this->_get_graph_pt($arr["obj_inst"]);
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML, 
+				"persist_state" => true,
+				"tree_id" => "graph_tree",
+			),
+			"root_item" => obj($pt),
+			"ot" => new object_tree(array(
+				"class_id" => CL_MENU,
+				"parent" => $pt,
+				"lang_id" => array(),
+				"site_id" => array()
+			)),
+			"var" => "pt",
+			"icon" => icons::get_icon_url(CL_MENU)
+		));
+	}
+
+	function _init_graph_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Graafiku nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _graph_tbl($arr)
+	{	
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_graph_t($t);
+
+		$pt = $arr["request"]["pt"] ? $arr["request"]["pt"] : $this->_get_graph_pt($arr["obj_inst"]);
 		$ol = new object_list(array(
-			"class_id" => CL_ROSTERING_WORKPLACE,
+			"class_id" => CL_ROSTERING_SCHEDULE,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"parent" => $pt
 		));
-		$t->define_field(array(
-			"name" => "empl",
-			"caption" => t("T&ouml;&ouml;taja"),
-			"align" => "left"
+		$t->data_from_ol($ol, array("change_col" => "name"));
+	}
+
+	function _get_graph_pt($o)
+	{
+		$pt = $o->get_first_obj_by_reltype("RELTYPE_GRAPH_FOLDER");
+		if (!$pt)
+		{
+			$f = obj();
+			$f->set_class_id(CL_MENU);
+			$f->set_name(sprintf(t("%s graafikud"), $o->name()));
+			$f->set_parent($o->id());
+			$f->save();
+			$o->connect(array(
+				"to" => $f->id(),
+				"type" => "RELTYPE_GRAPH_FOLDER"
+			));
+			$pt = $f;
+		}
+		return $pt->id();
+	}
+
+	function _g_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$pt = $arr["request"]["pt"] ? $arr["request"]["pt"] : $this->_get_graph_pt($arr["obj_inst"]);
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa")
 		));
-		foreach($ol->arr() as $o)
-		{
-			$t->define_field(array(
-				"name" => $o->id(),
-				"caption" => $o->name(),
-				"align" => "center"
-			));
-			foreach($o->connections_from(array("type" => "RELTYPE_SKILL")) as $c)
-			{
-				$skill_id = $c->prop("to");
-				$skill = obj($skill_id);
-				$t->define_field(array(
-					"name" => $skill_id,
-					"parent" => $o->id(),
-					"caption" => $skill->name(),
-					"align" => "center"
-				));
-				$wpl2skill[$o->id()][$skill_id] = $skill_id;
-			}
-		}
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Kaust"),
+			"url" => html::get_new_url(CL_MENU, $pt, array("return_url" => get_ru(), "wp" => $arr["obj_inst"]->id()))
+		));
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Graafik"),
+			"url" => html::get_new_url(CL_ROSTERING_SCHEDULE, $pt, array("return_url" => get_ru(), "wp" => $arr["obj_inst"]->id()))
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_cycles",
+			"tooltip" => t("Kustuta graafikud")
+		));
 	}
 
-	function _skg_tbl($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_skg_tbl($t, $wpl2skill);
-
-		$co = obj($arr["obj_inst"]->prop("owner"));
-		$co_i = $co->instance();
-		$empl = $co_i->get_employee_picker($co);
-
-		$sects = $this->get_all_org_sections($co, $t, $empl);
-		$t->set_sortable(false);
-	}
-
-	function get_all_org_sections($obj, &$t, $empl)
-	{
-		static $retval, $level;
-		$level++;
-		foreach ($obj->connections_from(array("type" => "RELTYPE_SECTION")) as $section)
-		{
-			$retval[$obj->id()][] = $section->prop("to");
-			$section_obj = $section->to();
-			$t->define_data(array(
-				"empl" => str_repeat("&nbsp;", $level*3).$section_obj->name()
-			));
-
-			// get all employees for this
-			foreach($section_obj->connections_from(array("type" => "RELTYPE_WORKERS")) as $w_c)
-			{
-				$emplo = $w_c->to();
-
-				$d = array(
-					"empl" => str_repeat("&nbsp;", ($level+1)*3).html::obj_change_url($emplo)
-				);
-				// read the skills each person has
-				foreach($emplo->connections_from(array("type" => "RELTYPE_HAS_SKILL")) as $c)
-				{
-					$hs = $c->to();
-					$d[$hs->prop("skill")] = "x";
-				}
-				$t->define_data($d);
-			}
-
-			$this->get_all_org_sections($section_obj, $t, $empl);
-
-		}
-		$level--;
-		return $retval;
-	}
-
-	function _init_shifts_g_tbl(&$t)
+	function _init_work_hrs_t(&$t)
 	{
 		$t->define_field(array(
-			"name" => "shift",
-			"caption" => t("Vahetus"),
-			"align" => "left"
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
 		));
-		$ws = get_week_start();
-		for($i = 0; $i < 7; $i++)
-		{
-			$t->define_field(array(
-				"name" => "d".$i,
-				"caption" => date("d.m.Y", $ws + $i * 24 * 3600),
-				"align" => "center"
-			));
-		}
-	}
-
-	function _shifts_g_tbl($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_shifts_g_tbl($t);
-
-		$m = get_instance("applications/rostering/rostering_model");
-		$co = obj($arr["obj_inst"]->prop("owner"));
-		$co_i = $co->instance();
-		$ppl = $co_i->get_employee_picker($co);
-
-		$wt = array();
-		foreach($ppl as $p_id => $p_nm)
-		{
-			$wts = $m->get_schedule_for_person(obj($p_id), get_week_start(), get_week_start() + 24 * 7 * 3600);
-			foreach($wts as $wtm)
-			{
-				$wt[$wtm["workplace"]][date("d.m.Y", $wtm["start"])][$p_id] = $wtm;
-			}
-		}
-		$shift_list = new object_list(array(
-			"class_id" => CL_ROSTERING_SHIFT,
-			"site_id" => array(),
-			"lang_id" => array()
-		));
-		$wpl2shift = array();
-		$start = get_week_start();
-		foreach($shift_list->arr() as $shift)
-		{
-			foreach($shift->connections_from(array("type" => "RELTYPE_WORKPLACE")) as $c)
-			{
-				$wpl = $c->to();
-				$wpl2shift[$wpl->id()][] = $shift;
-			}
-		}
-
-		foreach($wpl2shift as $wpl_id => $shifts)
-		{
-			$t->define_data(array(
-				"shift" => html::obj_change_url($wpl_id)
-			));
-			foreach($shifts as $shift)
-			{
-				$d = array(
-					"shift" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($shift)
-				);
-
-				for ($i = 0; $i < 7; $i++)
-				{
-					$tm = date("d.m.Y", $start + $i * 24 * 3600);
-					$wpl_data = $wt[$wpl_id][$tm];
-					list($p_id) = each($wpl_data);
-					if (!$p_id)
-					{
-						$d["d".$i] = t("Puudu inimene");
-					}
-					else
-					{
-						$d["d".$i] = html::obj_change_url($p_id);
-					}
-				}
-				$t->define_data($d);
-			}
-		}
-		$t->set_sortable(false);
-	}
-
-	function _init_day_g_tbl(&$t)
-	{
 		$t->define_field(array(
-			"name" => "hr",
-			"caption" => t("Aeg"),
-			"align" => "left"
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"align" => "center",
+			"sortable" => 1
 		));
-		
-		$wpl_list = new object_list(array(
-			"class_id" => CL_ROSTERING_WORKPLACE,
-			"site_id" => array(),
-			"lang_id" => array()
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
 		));
-		foreach($wpl_list->arr() as $wpl)
-		{
-			$t->define_field(array(
-				"name" => $wpl->id(),
-				"caption" => $wpl->name(),
-				"align" => "center"
-			));
-		}
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
 	}
 
-	function _day_g_tbl($arr)
+	function _work_hrs($arr)
+	{
+		$t =&  $arr["prop"]["vcl_inst"];
+		$this->_init_work_hrs_t($t);
+		$ol = new object_list(array(
+			"class_id" => CL_ROSTERING_WORK_ENTRY,
+			"parent" => $arr["obj_inst"]->id()
+		));
+		$t->data_from_ol($ol, array("change_col" => "name"));
+	}
+
+	function _work_hrs_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"url" => html::get_new_url(CL_ROSTERING_WORK_ENTRY, $arr["obj_inst"]->id(), array(
+				"return_url" => get_ru(), 
+				"wp" => $arr["obj_inst"]->id()
+			)),
+			"tooltip" => t("Lisa")
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_cycles",
+			"tooltip" => t("Kustuta")
+		));
+	}
+
+	function _payment_types($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_day_g_tbl($t);
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_PAYMENT_TYPE"
+			))), 
+			array(
+				"name", "createdby", "created", "hr_price"
+			),
+			CL_ROSTERING_PAYMENT_TYPE
+		);
+	}
 
-		$m = get_instance("applications/rostering/rostering_model");
-		$co = obj($arr["obj_inst"]->prop("owner"));
-		$co_i = $co->instance();
-		$ppl = $co_i->get_employee_picker($co);
-
-		$wt = array();
-		foreach($ppl as $p_id => $p_nm)
-		{
-			$wts = $m->get_schedule_for_person(obj($p_id), get_week_start(), get_week_start() + 24 * 7 * 3600);
-			foreach($wts as $wtm)
-			{
-				$wtm["person_id"] = $p_id;
-				$wt[date("H", $wtm["start"])][] = $wtm;
-			}
-		}
-
-		$shift_list = new object_list(array(
-			"class_id" => CL_ROSTERING_SHIFT,
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
-		$shift_list->sort_by(array("prop" => "start_time"));
-		foreach($shift_list->arr() as $shift)
-		{
-			$t->define_data(array(
-				"hr" => html::obj_change_url($shift)
-			));
-			list($endt) = explode(":", $shift->prop("end_time"));
-			list($st) = explode(":", $shift->prop("start_time"));
-			if ($endt < $st)
-			{
-				$endt = 24;
-			}
-			for($i = $st; $i < $endt; $i++)
-			{
-				$d = array(
-					"hr" => sprintf("&nbsp;&nbsp;&nbsp;&nbsp;%02d:00 - %02d:00", $i, $i+1)
-				);
-				foreach($wt[date("H", get_day_start() + $i * 3600)] as $item)
-				{
-					$d[$item["workplace"]] = html::obj_change_url($item["person_id"]);
-				}
-				$t->define_data($d);
-				
-			}
-		}
-		$t->set_sortable(false);
+	function _payment_types_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_ROSTERING_PAYMENT_TYPE), $arr["obj_inst"]->id(), 8);
+		$tb->add_delete_button();
 	}
 }
 ?>

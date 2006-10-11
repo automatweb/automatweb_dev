@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workplace.aw,v 1.1 2006/09/14 09:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workplace.aw,v 1.2 2006/10/11 13:06:42 kristo Exp $
 // rostering_workplace.aw - T&ouml;&ouml;koht 
 /*
 
@@ -15,6 +15,9 @@
 
 	@property address type=relpicker reltype=RELTYPE_ADDRESS table=aw_rostering_workplace field=aw_address
 	@caption Aadress
+
+	@property num_empl type=textbox table=aw_rostering_workplace field=aw_num_empl size=5
+	@caption Mitu t&ouml;&ouml;tajat korraga
 
 @default group=stats
 
@@ -74,6 +77,16 @@ class rostering_workplace extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_rostering_workplace(aw_oid int primary key, aw_address int)");
 			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_num_empl":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
 		}
 	}
 

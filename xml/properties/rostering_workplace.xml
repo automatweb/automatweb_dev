@@ -22,6 +22,15 @@
             <caption>Aadress</caption>
       </property>
       <property>
+            <name>num_empl</name>
+            <table>aw_rostering_workplace</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_num_empl</field>
+            <size>5</size>
+            <caption>Mitu t&amp;amp;ouml;&amp;amp;ouml;tajat korraga</caption>
+      </property>
+      <property>
             <name>stats_tbl</name>
             <table>objects</table>
             <group>stats</group>

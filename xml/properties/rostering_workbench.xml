@@ -158,51 +158,6 @@
             <field>stats_overtime</field>
       </property>
       <property>
-            <name>admin_act_tb</name>
-            <table>objects</table>
-            <group>admin_act</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>admin_act_tb</field>
-      </property>
-      <property>
-            <name>admin_act_cal</name>
-            <table>objects</table>
-            <group>admin_act</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>admin_act_cal</field>
-      </property>
-      <property>
-            <name>op_act_sel</name>
-            <table>objects</table>
-            <group>op_act</group>
-            <type>text</type>
-            <store>no</store>
-            <field>op_act_sel</field>
-            <caption>Stsenaarium</caption>
-      </property>
-      <property>
-            <name>op_act_cal</name>
-            <table>objects</table>
-            <group>op_act</group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>op_act_cal</field>
-      </property>
-      <property>
-            <name>op_act_problems</name>
-            <table>objects</table>
-            <group>op_act</group>
-            <type>text</type>
-            <store>no</store>
-            <field>op_act_problems</field>
-            <caption>Takistused</caption>
-      </property>
-      <property>
             <name>skl_tree</name>
             <table>objects</table>
             <group>skills_losing</group>
@@ -223,31 +178,69 @@
             <field>skl_table</field>
       </property>
       <property>
-            <name>skg_tbl</name>
+            <name>g_tb</name>
             <table>objects</table>
-            <group>skills_g</group>
-            <type>table</type>
+            <group>graph</group>
+            <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>skg_tbl</field>
+            <field>g_tb</field>
       </property>
       <property>
-            <name>shifts_g_tbl</name>
+            <name>graph_tree</name>
             <table>objects</table>
-            <group>shifts_g</group>
-            <type>table</type>
+            <group>graph</group>
+            <type>treeview</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>shifts_g_tbl</field>
+            <parent>graph_tree</parent>
+            <field>graph_tree</field>
       </property>
       <property>
-            <name>day_g_tbl</name>
+            <name>graph_tbl</name>
             <table>objects</table>
-            <group>day_g</group>
+            <group>graph</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>day_g_tbl</field>
+            <parent>graph_split</parent>
+            <field>graph_tbl</field>
+      </property>
+      <property>
+            <name>work_hrs_tb</name>
+            <table>objects</table>
+            <group>work_hrs</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>work_hrs_tb</field>
+      </property>
+      <property>
+            <name>work_hrs</name>
+            <table>objects</table>
+            <group>work_hrs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>work_hrs</field>
+      </property>
+      <property>
+            <name>payment_types_tb</name>
+            <table>objects</table>
+            <group>payment_types</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>payment_types_tb</field>
+      </property>
+      <property>
+            <name>payment_types</name>
+            <table>objects</table>
+            <group>payment_types</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>payment_types</field>
       </property>
       <classinfo>
             <syslog_type>ST_ROSTERING_WORKBENCH</syslog_type>
@@ -294,6 +287,11 @@
                   <parent>settings</parent>
                   <submit>no</submit>
             </skills_losing>
+            <payment_types>
+                  <caption>Tasu liigid</caption>
+                  <parent>settings</parent>
+                  <submit>no</submit>
+            </payment_types>
             <stats>
                   <caption>Statistika</caption>
             </stats>
@@ -309,30 +307,11 @@
             </stats_overtime>
             <graph>
                   <caption>Graafikud</caption>
+                  <submit>no</submit>
             </graph>
-            <admin_act>
-                  <caption>Administratiivsed tegevused</caption>
-                  <parent>graph</parent>
-                  <submit>no</submit>
-            </admin_act>
-            <op_act>
-                  <caption>Operatiivsed tegevused</caption>
-                  <parent>graph</parent>
-            </op_act>
-            <skills_g>
-                  <caption>P&amp;amp;auml;devused</caption>
-                  <parent>graph</parent>
-            </skills_g>
-            <shifts_g>
-                  <caption>Vahetused</caption>
-                  <parent>graph</parent>
-                  <submit>no</submit>
-            </shifts_g>
-            <day_g>
-                  <caption>P&amp;amp;auml;eva vaade</caption>
-                  <parent>graph</parent>
-                  <submit>no</submit>
-            </day_g>
+            <work_hrs>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;aruanded</caption>
+            </work_hrs>
       </groupinfo>
       <tableinfo>
             <aw_rostering>
@@ -372,6 +351,16 @@
                   <clid>CL_PERSON_SKILL</clid>
                   <caption>P&amp;amp;auml;devus</caption>
             </SKILL>
+            <GRAPH_FOLDER>
+                  <value>7</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Graafikute kataloog</caption>
+            </GRAPH_FOLDER>
+            <PAYMENT_TYPE>
+                  <value>8</value>
+                  <clid>CL_ROSTERING_PAYMENT_TYPE</clid>
+                  <caption>Tasu liik</caption>
+            </PAYMENT_TYPE>
       </reltypes>
       <layout>
             <contacts_edit>
@@ -414,6 +403,18 @@
                   <area_caption>Organisatsiooni&amp;nbsp;struktuur</area_caption>
                   <group>skills_losing</group>
             </skl_tree>
+            <graph_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>graph</group>
+            </graph_split>
+            <graph_tree>
+                  <type>vbox</type>
+                  <parent>graph_split</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Graafikud</area_caption>
+                  <group>graph</group>
+            </graph_tree>
       </layout>
 </properties>
 

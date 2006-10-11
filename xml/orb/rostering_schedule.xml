@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="rostering_schedule" folder="applications/rostering" extends="class_base">
+	</class>
+</orb>
+		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.18 2006/09/19 12:59:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.19 2006/10/11 13:06:45 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -500,5 +500,66 @@ class toolbar extends aw_template
 		return $rv;
 	}
 
+	/** Adds a button to the toolbar for adding objects
+		@attrib api=1 params=pos
+
+		@param clids required type=array
+			Array of class_id's that can be added via the button	
+
+		@param pt required type=oid
+			Parent where to add the objects to 
+	**/
+	function add_new_button($clids, $pt, $rt = null)
+	{
+		$params = array(
+			"return_url" => get_ru(), 
+		);
+		if ($rt)
+		{
+			$params["alias_to"] = $pt;
+			$params["reltype"] = $rt;
+		}
+		if (count($clids) == 1)
+		{
+			$clid = reset($clids);
+			$this->add_button(array(
+				"name" => "new",
+				"img" => "new.gif",
+				"url" => html::get_new_url($clid, $pt, $params),
+				"tooltip" => t("Lisa")
+			));
+		}
+		else
+		{
+			$this->add_menu_button(array(
+				"name" => "new",
+				"img" => "new.gif",
+				"tooltip" => t("Lisa")
+			));
+			$clss = aw_ini_get("classes");
+			foreach($clids as $clid)
+			{
+				$this->add_menu_item(array(
+					"parent" => "new",
+					"text" => $clss[$clid]["name"],
+					"url" => html::get_new_url($clid, $pt, $params)
+				));
+			}
+		}
+	}
+
+	/** Adds a delete objects button to the toolbar
+		@attrib api=1
+	**/
+	function add_delete_button()
+	{
+		$this->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_objects",
+			"tooltip" => t("Kustuta valitud objektid")
+		));
+		
+	}
 };
 ?>
