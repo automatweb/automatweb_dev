@@ -918,6 +918,9 @@ default group=org_objects
 
 	@property versions type=version_manager store=no no_caption=1
 
+@default group=sell_offers
+	@property sell_offers type=table store=no no_caption=1
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldandmed" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
@@ -966,6 +969,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	@groupinfo documents_all caption="Dokumendid" submit=no save=no
 		@groupinfo documents_all_browse caption="Dokumendid" parent=documents_all submit=no save=no
 		@groupinfo documents_all_manage caption="Haldus" parent=documents_all submit=no save=no
+		@groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
 
 	@groupinfo documents_news caption="Siseuudised" submit=no parent=general submit_method=get save=no
 	@groupinfo documents_forum caption="Foorum" submit=no parent=people
@@ -2438,6 +2442,13 @@ class crm_company extends class_base
 			case "my_view":
 				$i = get_instance("applications/crm/crm_company_my_view");
 				$data["value"] = $i->_get_my_view($arr);
+				break;
+			case "sell_offers":
+				if(!$arr["request"]["buyer"])
+				{
+					return PROP_IGNORE;
+				}
+				$this->_sell_offers_table($arr);
 				break;
 		};
 		return $retval;
@@ -6097,6 +6108,14 @@ class crm_company extends class_base
 			return false;
 		}
 
+		if($arr["id"] == "sell_offers")
+		{
+			if(!is_oid($arr["request"]["buyer"]))
+			{
+				return false;
+			}
+		}
+
 		if($arr["id"] == "relorg_t")
 		{
 			$u = get_instance(CL_USER);
@@ -7007,6 +7026,104 @@ class crm_company extends class_base
 		$o->connect(array("to" => $arr["def_poll"], "type" => "RELTYPE_DEF_POLL"));
 		return $arr["post_ru"];
 	}
+
+	function _sell_offers_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_offers_tbl($t);
+
+		$filter = array(
+			"class_id" => array(CL_PURCHASE),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"buyer" => $arr["request"]["buyer"],
+			"offerer" => $arr["obj_inst"]->id(),
+		);
+		$ol = new object_list($filter);
+		foreach($ol->arr() as $o)
+		{
+			$deal_no = $o->prop("deal_no");
+			
+			$offers = $o->connections_from(array(
+				'type' => "RELTYPE_OFFER",
+			));
+			foreach($offers as $offer_conn)
+			{
+				$offer_obj = obj($offer_conn->prop("to"));
+				$conns = $offer_obj->connections_to(array(
+					'reltype' => 1,
+					'class' => CL_PROCUREMENT_OFFER_ROW,
+				));
+				foreach($conns as $conn)
+				{
+					if(is_oid($conn->prop("from")))$row = obj($conn->prop("from"));
+					else continue;
+					if(!$row->prop("accept")) continue;
+					$unit = ""; $currency = "";
+					if(is_oid($row->prop("unit")))
+					{
+						$unit_obj = obj($row->prop("unit"));
+						$unit = $unit_obj->prop("unit_code");
+					}
+					if(is_oid($row->prop("currency")))
+					{
+						$currency = obj($row->prop("currency"));
+						$currency = $currency->name();
+					}
+					if(!$row->prop("b_price"))
+					{
+						$row->set_prop("b_price" ,$row->prop("price"));
+					}
+					if(!$row->prop("b_amount"))
+					{
+						$row->set_prop("b_amount" ,$row->prop("amount"));
+					}
+					$t->define_data(array(
+						"deal" => $deal_no,
+						"product"	=> $row->prop("product"),
+						"amount"	=> $row->prop("b_amount"),
+						'price'		=> $row->prop("b_price"),
+						'date'		=> date("d.m.Y", $row->prop("shipment")),
+						'oid'		=> $row->id(),
+					));
+				}
+			}
+		}
+	}
+
+	function _init_offers_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "deal",
+			"caption" => t("Leping"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Pakkumise kuup&auml;ev"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Toode"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
 }
 
 ?>
