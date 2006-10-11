@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.152 2006/10/11 13:41:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.153 2006/10/11 14:16:20 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3022,18 +3022,21 @@ class task extends class_base
 			"text" => t("Osaleja"),
 		));
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		if (is_oid($arr["obj_inst"]->id()))
 		{
-			$cust = $c->to();
-			$tb->add_menu_item(array(
-				"parent" => "part",
-				"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cust->name()),
-				"link" => html::get_new_url(CL_CRM_PERSON, $cust->id(), array(
-					"return_url" => get_ru(), 
-					"add_to_task" => $arr["obj_inst"]->id(),
-					"add_to_co" => $cust->id(),
-				))
-			));
+			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+			{
+				$cust = $c->to();
+				$tb->add_menu_item(array(
+					"parent" => "part",
+					"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cust->name()),
+					"link" => html::get_new_url(CL_CRM_PERSON, $cust->id(), array(
+						"return_url" => get_ru(), 
+						"add_to_task" => $arr["obj_inst"]->id(),
+						"add_to_co" => $cust->id(),
+					))
+				));
+			}
 		}
 
 		$cur_co = get_current_company();
