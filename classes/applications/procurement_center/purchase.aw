@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.10 2006/10/10 16:17:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.11 2006/10/11 17:18:12 markop Exp $
 // purchase.aw - Ost 
 /*
+@tableinfo aw_purchase index=aw_oid master_index=brother_of master_table=objects
 
 @classinfo syslog_type=ST_PURCHASE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
@@ -933,8 +934,15 @@ class purchase extends class_base
 				));
 			}
 		}
-	
-	
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "" && $t == "aw_purchase")
+		{
+			$this->db_query("CREATE TABLE aw_purchase (aw_oid int primary key)");
+			return true;
+		}
 	}
 
 }

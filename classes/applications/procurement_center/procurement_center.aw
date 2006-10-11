@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.18 2006/10/10 16:17:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.19 2006/10/11 17:18:12 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -334,11 +334,11 @@ class procurement_center extends class_base
 				$prop["value"] = $search_data[$prop["name"]];
 				$prop["options"] = array(
 					"" => "",
-					PROCUREMENT_NEW => t("Uus"),
-					PROCUREMENT_PUBLIC => t("Avaldatud"),
-					PROCUREMENT_INPROGRESS => t("T&ouml;&ouml;s"),
-					PROCUREMENT_DONE => t("Valmis"),
-					PROCUREMENT_CLOSED => t("Suletud")
+					0 => t("Uus"),
+					1 => t("Avaldatud"),
+					2 => t("T&ouml;&ouml;s"),
+					3 => t("Valmis"),
+					4 => t("Suletud")
 				);
 				break;
 		};
@@ -1144,6 +1144,7 @@ class procurement_center extends class_base
 	
 	function _buyings_tbl($arr)
 	{
+		$ol = new object_list();
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_buyings_tbl($t);
 		$filter = array(
@@ -1152,29 +1153,7 @@ class procurement_center extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		);
-		if(is_oid($arr["request"]["p_id"]) && $this->can("view", $arr["request"]["p_id"]))
-		{
-			$p_obj = obj($arr["request"]["p_id"]);
-		//	if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
-			if($p_obj->class_id() == CL_MENU)
-			{
-/*				$procurements = new object_list(array(
-					"class_id" => array(CL_PROCUREMENT),
-					"lang_id" => array(),
-					"site_id" => array(),
-					"parent" => $arr["request"]["p_id"],
-				));
-				$offers = new object_list(array(
-					"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-					"lang_id" => array(),
-					"site_id" => array(),
-					"parent" => $arr["request"]["p_id"],
-				));
-*/				$filter["CL_PURCHASE.RELTYPE_OFFER.procurement.parent"] = $arr["request"]["p_id"];
-				//$offerers_array = $offerers->ids();
-			//	if(!sizeof($offerers_array)) $offerers_array=array("x" => "x");
-			}
-		}
+		
 		//otsingust
 		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
@@ -1182,7 +1161,28 @@ class procurement_center extends class_base
 			$arr["obj_inst"]->set_meta("search_data", null);
 			$arr["obj_inst"]->save();
 		}
-		else $ol = new object_list($filter);
+		elseif(is_oid($arr["request"]["p_id"]) && $this->can("view", $arr["request"]["p_id"]))
+		{
+			$p_obj = obj($arr["request"]["p_id"]);
+			if($p_obj->class_id() == CL_MENU)
+			{
+				$procurements = new object_list(array(
+					"class_id" => array(CL_PROCUREMENT),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"parent" => $arr["request"]["p_id"],
+				));
+			
+				if(!sizeof($procurements->ids()))
+				$filter["CL_PURCHASE.RELTYPE_OFFER.procurement"] = $procurements->ids();
+			
+				if(sizeof($procurements->ids()))
+				{
+					$ol = new object_list($filter);
+				}
+			}
+		}
+
 		$buy_inst = get_instance(CL_PURCHASE);
 		$statuses = $buy_inst->stats;
 		foreach($ol->arr() as $o)
@@ -1810,38 +1810,34 @@ class procurement_center extends class_base
 		$ol = new object_list();
 		$filter = array("class_id" => array(CL_PROCUREMENT), "lang_id" => array());
 		$data = $this_obj->meta("search_data");
-		if($data["procurements_find_status"])
+		if($data["procurements_find_status"] != "")
 		{
-			$filter["state"] = $data["procurement_find_status"];
+			$filter["state"] = $data["procurements_find_status"];
 		}
-		if($data["procurements_find_offerer"])
+		if($data["procurements_find_offerer"] != "")
 		{
 			$filter["CL_PROCUREMENT.RELTYPE_OFFERER.name"] = "%".$data["procurements_find_offerer"]."%";
 		}
-		
 		$ol = new object_list($filter);
 		//tõenäoliselt on see asi ka kiiremaks vaja tea.... kuid hetkel ei tuld paremat pähe... arvatavasti peab hanke ka siduma tootega... 
-		if($data["procurements_find_product"])
+		if($data["procurements_find_product"] != "")
 		{
 			foreach($ol->arr() as $procurement)
 			{
-				if($data["procurements_find_product"])
+				$products = $procurement->meta("products");
+				$there_is_no_that_cool_product = 1;
+				foreach($products as $product)
 				{
-					$products = $procurement->meta("products");
-					$there_is_no_that_cool_product = 1;
-					foreach($products as $product)
+					if(substr_count(strtolower($product["product"]), strtolower($data["procurements_find_product"])))
 					{
-						if(substr_count($product["product"], $data["procurements_find_product"]))
-						{
-							$there_is_no_that_cool_product = 0;
-							break;
-						}
+						$there_is_no_that_cool_product = 0;
+						break;
 					}
-					if($there_is_no_that_cool_product)
-					{
-						$ol->remove($procurement->id());
-						continue;
-					}
+				}
+				if($there_is_no_that_cool_product)
+				{
+					$ol->remove($procurement->id());
+					continue;
 				}
 			}
 		}
@@ -2572,7 +2568,8 @@ class procurement_center extends class_base
 	{
 		$this->id = $arr["id"];
 		$this_obj = obj($arr["id"]);
-		$this->buyer = $this_obj->prop("owner");
+		$owner = $this_obj->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+		$this->buyer = $owner->id();
 		classload("vcl/table");
 		$ret = "";
 		$t = new vcl_table;
@@ -2587,7 +2584,11 @@ class procurement_center extends class_base
 		foreach($categorys as  $category => $products)
 		{
 			$offerers = $this->get_offerers($products);
-			$ret.= $this->make_category_table(array("products" => $products, "category" => $category, "offerers" => $offerers));
+			$ret.= $this->make_category_table(array(
+				"products" => $products,
+				"category" => $category,
+				"offerers" => $offerers
+			));
 		}
 
 		$sf = new aw_template;
@@ -2619,7 +2620,7 @@ class procurement_center extends class_base
 		$offers_list = new object_list(array(
 			"class_id" => CL_PROCUREMENT_OFFER,
 			"lang_id" => array(),
-			"procurement.orderer" => $this->buyer,
+			"CL_PROCUREMENT_OFFER.procurement.orderer" => $this->buyer,
 		));
 		$products_names = array();
 		foreach($products as $product)
@@ -2691,7 +2692,7 @@ class procurement_center extends class_base
 		$data = array("product" => t("Ajalugu"));
 		foreach($offerers->arr() as $offerer)
 		{
-			$data["offerer".$offerer->id()] = html::href(array("url" => html::get_change_url($offerer->id(), array("group" => "")), "caption" => t("Ajalugu")));
+			$data["offerer".$offerer->id()] = html::href(array("url" => html::get_change_url($offerer->id(), array("group" => "sell_offers", "buyer" => $this->buyer)), "caption" => t("Ajalugu")));
 		}
 		$t_offerer->define_data($data);
 
@@ -2753,7 +2754,7 @@ class procurement_center extends class_base
 				$offers_list = new object_list(array(
 					"class_id" => CL_PROCUREMENT_OFFER,
 					"lang_id" => array(),
-					"procurement.orderer" => $this->buyer,
+					"CL_PROCUREMENT_OFFER.procurement.orderer" => $this->buyer,
 					"offerer" => $offerer->id(),
 				));
 				$cutcopied = "";
