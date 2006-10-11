@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.10 2006/10/06 15:16:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.11 2006/10/11 16:39:37 markop Exp $
 // crm_memo.aw - Memo 
 /*
 
@@ -123,7 +123,10 @@ class crm_memo extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		$arr["project"] = $_GET["project"];
+		if(!$arr["id"])
+		{
+			$arr["project"] = $_GET["project"];
+		}
 	}
 }
 ?>
