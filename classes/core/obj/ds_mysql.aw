@@ -152,7 +152,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$objtblprops[] = $data;
 			}
 		}
-      $conn_prop_vals = array();
+		$conn_prop_vals = array();
                 $conn_prop_fetch = array();
 
 		// import object table properties in the props array
@@ -243,16 +243,22 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$conn_prop_fetch[$prop["name"]] = $_co_reltype;
 					}
 				}
+
+				else
+				if ($prop['type'] == 'range')
+				{
+					$fields[] = $table.".`".$prop["field"]."_from` AS `".$prop["name"]."_from`";
+					$fields[] = $table.".`".$prop["field"]."_to` AS `".$prop["name"]."_to`";
+				}
+
 				else
 				{
 					$fields[] = $table.".`".$prop["field"]."` AS `".$prop["name"]."`";
 				}
 			}
-
 			if (count($fields) > 0)
 			{
 				$q = "SELECT ".join(",", $fields)." FROM $table WHERE `".$tableinfo[$table]["index"]."` = '".$object_id."'";
-				
 				if (isset($this->read_properties_data_cache[$object_id]))
 				{
 					$data = $this->read_properties_data_cache[$object_id];
@@ -265,7 +271,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$ret += $data;
 				}
-
 				foreach($tbl2prop[$table] as $prop)
 				{
 					if ($prop["method"] == "serialize")
@@ -285,10 +290,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{
 						$ret[$prop["name"]] = "0";
 					}
+
+					if ($prop["type"] == "range")
+					{
+						$ret[$prop['name']] = array(
+							'from' => $ret[$prop['name'].'_from'],
+							'to' => $ret[$prop['name'].'_to']
+						);
+						unset($ret[$prop['name'].'_from'], $ret[$prop['name'].'_to']);
+
+					}
 				}
 			}
 		}
-
 
 		if (count($conn_prop_fetch))
 		{
@@ -698,7 +712,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		return $oid;
 	}
 
-	// saves object prtoperties, including all object table fields, 
+	// saves object properties, including all object table fields, 
 	// just stores the data, does not update or check it in any way, 
 	// except for db quoting of course
 	// params:
@@ -840,6 +854,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$mask |= $val;
 						
 						$seta[$prop["field"]] = $mask;;
+					}
+					else
+					if ($prop['type'] == 'range') // range support by dragut
+					{
+						$seta[$prop['field'].'_from'] = (int)$propvalues[$prop['name']]['from'];
+						$seta[$prop['field'].'_to'] = (int)$propvalues[$prop['name']]['to'];
 					}
 					else
 					{
