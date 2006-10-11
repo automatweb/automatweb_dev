@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_products_list.aw,v 1.1 2005/04/13 12:49:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_products_list.aw,v 1.2 2006/10/11 17:09:10 markop Exp $
 // crm_offer_products_list.aw - Pakkumise toodete nimekiri 
 /*
 
@@ -281,6 +281,7 @@ class crm_offer_products_list extends class_base
 
 	function generate_html($o, $item)
 	{
+		classload('vcl/table');
 		$t = new vcl_table(array("layout" => "generic"));
 		$t->define_field(array(
 			"name" => "name",

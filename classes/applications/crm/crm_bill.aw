@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.105 2006/10/09 13:47:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.106 2006/10/11 17:06:49 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -853,7 +853,7 @@ class crm_bill extends class_base
 				$new_line = 1;
 				foreach($new_rows as $n_key => $new_row)
 				{
-					if($new_row["price"] == $row["price"] && ($new_row["comment"] == $row["comment"] || !$row["comment"])&& ($key == $new_row["key"] || !($key>0)))
+					if($new_row["price"] == $row["price"] && ($new_row["comment"] == $row["comment"] || !$row["comment"])&& ($key == $new_row["key"]))
 					{
 						$new_rows[$n_key]["sum_wo_tax"] = $new_rows[$n_key]["sum_wo_tax"] + $row["sum_wo_tax"];
 						$new_rows[$n_key]["tax"] = $new_rows[$n_key]["tax"] + $row["tax"];
@@ -1906,6 +1906,7 @@ class crm_bill extends class_base
 		{
 			foreach($arr["request"]["agreement_price"] as $key => $agreement_price)
 			{
+				$arr["request"]["agreement_price"][$key]["comment"] = $agreement_price["name"];
 				//vaikimisi artikkel ka
 				$seti = get_instance(CL_CRM_SETTINGS);
 				$sts = $seti->get_current_settings();

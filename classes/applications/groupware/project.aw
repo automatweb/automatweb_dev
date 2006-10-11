@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.110 2006/10/05 14:29:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.111 2006/10/11 17:05:15 markop Exp $
 // project.aw - Projekt 
 /*
 
@@ -141,12 +141,12 @@ caption Teostajad
 			@property files_tree type=treeview store=no no_caption=1 parent=files_tree_lay
 		
 		@layout files_find_lay closeable=1 type=vbox area_caption=Dokumentide&nbsp;otsing parent=files_left_lay
-			@property files_find_name type=textbox parent=files_find_lay size=30
+			@property files_find_name type=textbox parent=files_find_lay size=27 captionside=top
 			@caption Nimi
-			@property files_find_type type=select parent=files_find_lay
-			@caption T&uuml;&uuml;p
-			@property files_find_comment type=textbox parent=files_find_lay size=30
+			@property files_find_comment type=textbox parent=files_find_lay size=27 captionside=top
 			@caption Kirjeldus
+			@property files_find_type type=select parent=files_find_lay captionside=top
+			@caption T&uuml;&uuml;p
 			@property files_search_sbt type=submit captionside=top parent=files_find_lay no_caption=1
 			@caption Otsi	
 	

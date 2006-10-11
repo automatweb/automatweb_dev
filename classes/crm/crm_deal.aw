@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.14 2006/10/06 15:17:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.15 2006/10/11 17:09:10 markop Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -113,9 +113,11 @@ class crm_deal extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		$arr["project"] = $_GET["project"];
+		if(!$arr["id"])
+		{
+			$arr["project"] = $_GET["project"];
+		}
 	}
-	
 	
 }
 ?>

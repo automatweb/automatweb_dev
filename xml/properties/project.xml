@@ -325,18 +325,10 @@
             <group>files</group>
             <type>textbox</type>
             <parent>files_find_lay</parent>
-            <size>30</size>
+            <size>27</size>
+            <captionside>top</captionside>
             <field>files_find_name</field>
             <caption>Nimi</caption>
-      </property>
-      <property>
-            <name>files_find_type</name>
-            <table>objects</table>
-            <group>files</group>
-            <type>select</type>
-            <parent>files_find_lay</parent>
-            <field>files_find_type</field>
-            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>files_find_comment</name>
@@ -344,9 +336,20 @@
             <group>files</group>
             <type>textbox</type>
             <parent>files_find_lay</parent>
-            <size>30</size>
+            <size>27</size>
+            <captionside>top</captionside>
             <field>files_find_comment</field>
             <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>files_find_type</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>select</type>
+            <parent>files_find_lay</parent>
+            <captionside>top</captionside>
+            <field>files_find_type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>files_search_sbt</name>

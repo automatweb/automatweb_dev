@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.52 2006/10/06 15:17:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.53 2006/10/11 17:09:10 markop Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -857,7 +857,10 @@ class crm_offer extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		$arr["project"] = $_GET["project"];
+		if(!$arr["id"])
+		{
+			$arr["project"] = $_GET["project"];
+		}
 	}
 
 	function _get_wh($o)

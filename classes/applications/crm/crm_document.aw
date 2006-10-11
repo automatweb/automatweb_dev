@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.10 2006/01/19 22:41:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.11 2006/10/11 17:06:49 markop Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
@@ -103,9 +103,21 @@ class crm_document extends class_base
 		return $retval;
 	}	
 
+	function callback_post_save($arr)
+	{
+		if($arr["new"]==1 && is_oid($arr["request"]["project"]) && $this->can("view" , $arr["request"]["project"]))
+		{
+			$arr["obj_inst"]->set_prop("project" , $arr["request"]["project"]);
+		}
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		if(!$arr["id"])
+		{
+			$arr["project"] = $_GET["project"];
+		}
 	}
 }
 ?>
