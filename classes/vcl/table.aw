@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.92 2006/10/11 13:06:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.93 2006/10/11 13:32:04 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -2316,6 +2316,16 @@ class aw_table extends aw_template
 			$url = preg_replace("/.{$this->filter_name}=[^&]*/", "", $ru);
 			$sep = (strpos($url, "?") === false) ? "?" : "&";
 
+			if ($this->use_chooser)
+			{
+				$tbl2 .= $this->opentag(array(
+					"name" => "td",
+					"align" => "center",
+					"classid" => $this->filter_normal,
+				));
+				$tbl2 .= "&nbsp;";
+				$tbl2 .= "</td>\n";
+			}
 			foreach($this->rowdefs as $k => $v)
 			{
 				$filter_style = "filter_normal";
@@ -2368,7 +2378,7 @@ class aw_table extends aw_template
 				$cell_count--;
 			}
 
-			while ($cell_count--)
+			while ($cell_count-- > 1)
 			{
 				$tbl2 .= $this->opentag(array(
 					"name" => "td",
