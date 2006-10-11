@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.151 2006/10/09 10:48:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.152 2006/10/11 13:41:30 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3021,16 +3021,17 @@ class task extends class_base
 			"name" => "part",
 			"text" => t("Osaleja"),
 		));
-		
-		if ($arr["obj_inst"]->prop("customer"))
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 		{
+			$cust = $c->to();
 			$tb->add_menu_item(array(
 				"parent" => "part",
-				"text" => sprintf(t("Lisa isik organisatsiooni %s"), $arr["obj_inst"]->prop("customer.name")),
-				"link" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->prop("customer"), array(
+				"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cust->name()),
+				"link" => html::get_new_url(CL_CRM_PERSON, $cust->id(), array(
 					"return_url" => get_ru(), 
 					"add_to_task" => $arr["obj_inst"]->id(),
-					"add_to_co" => $arr["obj_inst"]->prop("customer"),
+					"add_to_co" => $cust->id(),
 				))
 			));
 		}
