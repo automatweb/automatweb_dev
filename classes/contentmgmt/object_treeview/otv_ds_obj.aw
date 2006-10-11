@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.50 2006/10/03 10:52:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.51 2006/10/11 14:11:58 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -266,7 +266,6 @@ class otv_ds_obj extends class_base
 	**/
 	function get_folders($ob, $tree_type = NULL)
 	{
-
 		if (!is_oid($ob->id()))
 		{
 			return;
@@ -303,13 +302,13 @@ class otv_ds_obj extends class_base
 			{
 				$this->first_folder = $c_o->id();
 			}
-
+			$root_id = $c_o->id();
 			$cur_ids = array();
-			if ($sub[$c_o->id()])
+			if ($sub[$root_id])
 			{
 				$_ot = new object_tree(array(
 					"class_id" => $opts['class'],
-					"parent" => $c_o->id(),
+					"parent" => $root_id,
 					"status" => $ob->prop("show_notact_folder") ? array(STAT_ACTIVE,STAT_NOTACTIVE) : STAT_ACTIVE,
 					"lang_id" => array(),
 					"sort_by" => "objects.jrk"
@@ -317,31 +316,33 @@ class otv_ds_obj extends class_base
 
 				if ($tree_type == "TREE_TABLE")
 				{
-					$_ot->filter(array("parent" => $c_o->id()), false);
+					$_ot->filter(array("parent" => $root_id), false);
 				}
 
-				if ($tree_type == "TREE_COMBINED" && $_GET['tv_sel'])
+				if ($tree_type == "TREE_COMBINED" && ($_GET['tv_sel'] || $_GET['table']))
 				{
-					$_ot = $_ot->subtree((int)$_GET['tv_sel']);
-				}
+				//	$root_id = (int)($_GET['tv_sel']);
+					$root_id = (int)($_GET['table_sel']);
 
+					$_ot = $_ot->subtree($root_id);
+				}
 				$cur_ids = $_ot->ids();
 			}
 
-			if (!$igns[$c_o->id()])
+			if (!$igns[$root_id])
 			{
-				$cur_ids[] = $c_o->id();
+				$cur_ids[] = $root_id;
 			}
 
 			foreach($cur_ids as $t_id)
 			{
 				$t = obj($t_id);
-				if ($igns[$c_o->id()] && $t->parent() == $c_o->id())
+				if ($igns[$root_id] && $t->parent() == $root_id)
 				{
 					$pt = 0;
 				}
 				else
-				if ($t_id == $c_o->id())
+				if ($t_id == $root_id)
 				{
 					$pt = 0;
 				}
@@ -363,9 +364,7 @@ class otv_ds_obj extends class_base
 				);
 			}
 		}
-
 		uasort($ret, create_function('$a,$b', 'return ($a["jrk"] == $b["jrk"] ? 0 : ($a["jrk"] > $b["jrk"] ? 1 : -1));'));
-
 		return $ret;
 	}
 
@@ -487,7 +486,8 @@ class otv_ds_obj extends class_base
 					$ot = new object_tree(array(
 						"parent" => $c->prop("to"),
 						"lang_id" => array(),
-						"site_id" => array()
+						"site_id" => array(),
+						"class_id" => CL_MENU
 					));
 					foreach($ot->ids() as $p_id)
 					{
