@@ -154,6 +154,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property set_ui_lang type=select store=no
 	@caption Liidese keel
 
+	@property ui_language type=hidden table=objects field=meta method=serialize
+
 	@property lg_hd type=text subtitle=1 store=no
 	@caption T&otilde;lkekeskkond
 
@@ -1194,6 +1196,11 @@ class user extends class_base
 		}
 
 		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop("uid"));
+
+		if ($arr["request"]["group"] == "settings")
+		{
+			$arr["obj_inst"]->set_prop("ui_language", $arr["request"]["set_ui_lang"]);
+		}
 	}
 
 	function callback_post_save($arr)

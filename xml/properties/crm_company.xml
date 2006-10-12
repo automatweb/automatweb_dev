@@ -2835,6 +2835,15 @@
             <no_caption>1</no_caption>
             <field>versions</field>
       </property>
+      <property>
+            <name>sell_offers</name>
+            <table>objects</table>
+            <group>sell_offers</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>sell_offers</field>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
             <no_status>1</no_status>
@@ -3016,6 +3025,12 @@
                   <submit>no</submit>
                   <save>no</save>
             </documents_all_manage>
+            <sell_offers>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gipakkumised</caption>
+                  <parent>documents_all</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </sell_offers>
             <documents_news>
                   <caption>Siseuudised</caption>
                   <submit>no</submit>

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.83 2006/10/10 10:43:51 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.83 2006/10/10 10:43:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.84 2006/10/12 20:32:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.84 2006/10/12 20:32:33 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -171,6 +171,11 @@ define("BUG_STATUS_CLOSED", 5);
 	@property sp_s_res type=table store=no 
 	@caption Otsingu tulemused
 
+@default group=settings_g
+
+	@property def_notify_list type=textbox table=objects field=meta method=serialize
+	@caption Bugi kommentaaride CC
+
 @groupinfo bugs caption="Arendus&uuml;lesanded" submit=no
 	@groupinfo by_default caption="Arendus&uuml;lesanded" parent=bugs submit=no
 	@groupinfo by_project caption="Projektid" parent=bugs submit=no
@@ -190,6 +195,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@groupinfo my_bugs_stat caption="Minu Bugide stat" parent=charts
 @groupinfo settings caption="Seaded" submit=no
 	@groupinfo settings_people caption="Isikud" submit=no parent=settings
+	@groupinfo settings_g caption="Muud seaded" parent=settings
 
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON

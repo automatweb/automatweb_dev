@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.63 2006/10/10 14:59:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.64 2006/10/12 20:32:33 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -699,6 +699,12 @@ class bug extends class_base
 
 		// I should add a way to send CC-s to arbitraty e-mail addresses as well
 		$notify_addresses = array();
+		$bt = $this->_get_bt($bug);
+		if ($bt && $bt->prop("def_notify_list") != "")
+		{
+			$notify_addresses[] = $bt->prop("def_notify_list");
+		}
+
 		foreach(array_unique($monitors) as $person)
 		{
 			if(!$this->can("view", $person))
@@ -1197,6 +1203,19 @@ class bug extends class_base
 			$b->save();
 			$num2bug[$pt] = $b->id();
 		} 
+	}
+
+	function _get_bt($o)
+	{
+		$pt = $o->path();
+		foreach($pt as $pt_o)
+		{
+			if ($pt_o->class_id() == CL_BUG_TRACKER)
+			{
+				return $pt_o;
+			}
+		}
+		return null;
 	}
 }
 ?>

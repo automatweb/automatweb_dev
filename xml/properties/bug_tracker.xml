@@ -451,6 +451,15 @@
             <field>sp_s_res</field>
             <caption>Otsingu tulemused</caption>
       </property>
+      <property>
+            <name>def_notify_list</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Bugi kommentaaride CC</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -538,6 +547,10 @@
                   <submit>no</submit>
                   <parent>settings</parent>
             </settings_people>
+            <settings_g>
+                  <caption>Muud seaded</caption>
+                  <parent>settings</parent>
+            </settings_g>
       </groupinfo>
       <reltypes>
             <MONITOR>

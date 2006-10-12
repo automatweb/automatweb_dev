@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.510 2006/10/12 13:49:17 kristo Exp $
+// $Id: class_base.aw,v 2.511 2006/10/12 20:32:32 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5102,6 +5102,20 @@ class class_base extends aw_template
 		$l = get_instance("languages");
 		$ll = $l->get_list(array("all_data" => true));
 		$all_vals = $arr["obj_inst"]->meta("translations");
+		$repls = array(
+			chr(197).chr(161) => "&scaron;",
+			chr(197).chr(160) => "&Scaron;",
+			chr(197).chr(190) => "&#158;",
+			chr(197).chr(189) => "&#142;",
+			chr(195).chr(182) => "&ouml;",
+			chr(195).chr(164) => "&auml;",
+			chr(195).chr(188) => "&uuml;",
+			chr(195).chr(181) => "&otilde;",
+			chr(195).chr(156) => "&Uuml;",
+			chr(195).chr(149) => "&Otilde;",
+			chr(195).chr(150) => "&Ouml;",
+			chr(195).chr(132) => "&Auml;",
+		);
 		foreach($ll as $lid => $lang)
 		{
 			if ($lid == $arr["obj_inst"]->lang_id())
@@ -5112,7 +5126,18 @@ class class_base extends aw_template
 			foreach($props as $p)
 			{
 				$nm = "trans_".$lid."_".$p;
-				$nv = iconv("UTF-8", $lang["charset"], $arr["request"][$nm]);
+				//dbg::str_dbg($arr["request"][$nm]);
+				// replace estonian chars in other languages woth entities
+				$str = $arr["request"][$nm];
+				if ($lang["acceptlang"] != "et")
+				{
+					foreach($repls as $r1 => $r2)
+					{
+						$str = str_replace($r1, $r2, $str);
+					}
+				}
+			
+				$nv = iconv("UTF-8", $lang["charset"], $str);
 				if ($nv != $all_vals[$lid][$p])
 				{
 					$mod = true;

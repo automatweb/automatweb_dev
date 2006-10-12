@@ -357,6 +357,14 @@
             <caption>Liidese keel</caption>
       </property>
       <property>
+            <name>ui_language</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>lg_hd</name>
             <table>users</table>
             <group>settings</group>
