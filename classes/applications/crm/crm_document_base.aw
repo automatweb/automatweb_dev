@@ -77,7 +77,15 @@ class crm_document_base extends class_base
 
 			case "customer":
 				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_customers()));
+				$cs = $i->get_my_customers();
+				if (!count($cs))
+				{
+					$ol = new object_list();
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $i->get_my_customers()));
+				}
 				$prop["options"] = array("" => "") + $ol->names();
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
