@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.4 2006/10/10 14:20:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/image_verification/image_verification.aw,v 1.5 2006/10/12 14:52:08 dragut Exp $
 // image_verification.aw - Kontrollpilt 
 /*
 
@@ -249,10 +249,13 @@ class image_verification extends class_base
 		$correct_code = $_SESSION['verification_code'];
 
 		// XXX when the code is validated, then lets remove the code from session
+		// with this it should be possible to get only one code from an image and
+		// and try to validate with it - it is not possible to get the picture, parse several
+		// variants and then try them all
 		// maybe there should be separate method for that in the future --dragut
 		unset($_SESSION['verification_code']);
 
-		if ($code == $correct_code)
+		if (!empty($correct_code) && !empty($code) && $code == $correct_code)
 		{
 			return true;
 		}
