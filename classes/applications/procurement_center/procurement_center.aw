@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.20 2006/10/11 17:55:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.21 2006/10/12 12:15:10 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -1571,12 +1571,13 @@ class procurement_center extends class_base
 			{
 				$buyings = new object_list(array(
 					"class_id" => array(CL_PURCHASE),
-					"CL_PURCHASE.RELTYPE_BUYER" => $owner->id(),
+					"CL_PURCHASE.buyer" => $owner->id(),
 					"lang_id" => array(),
+					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, date_edit::get_timestamp($data["offerers_find_start"]), date_edit::get_timestamp($data["offerers_find_end"])),
 				));
 				foreach($buyings->arr() as $buying)
 				{
-					if((!((date_edit::get_timestamp($data["offerers_find_start"] > 1)) && date_edit::get_timestamp($data["offerers_find_start"]) > $buying->prop("date"))) && (!(date_edit::get_timestamp($data["offerers_find_end"]) > 1 && date_edit::get_timestamp($data["offerers_find_end"]) < $buying->prop("date")))) 
+//					if((!((date_edit::get_timestamp( > 1)) && date_edit::get_timestamp($data["offerers_find_start"]) > $buying->prop("date"))) && (!(date_edit::get_timestamp($data["offerers_find_end"]) > 1 && date_edit::get_timestamp($data["offerers_find_end"]) < $buying->prop("date")))) 
 					$filter["oid"][$buying->prop("offerer")] = $buying->prop("offerer");
 				}
 				if(!sizeof($filter["oid"]) > 0) return $ol;
@@ -2741,7 +2742,7 @@ class procurement_center extends class_base
 		$t_products->define_field(array("name" => "amount","caption" => t("Kogus") ,"chgbgcolor" => "cutcopied"));
 		$t_products->define_field(array("name" => "unit","caption" => t("&Uuml;hik") ,"chgbgcolor" => "cutcopied"));
 		$t_products->define_field(array("name" => "date","caption" => t("Kuup&auml;ev") ,"chgbgcolor" => "cutcopied"));
-		
+		$file_inst = get_instance(CL_FILE);
 		foreach($products as $product)
 		{
 			if($product->prop("item_type") == $category)
@@ -2753,6 +2754,7 @@ class procurement_center extends class_base
 					"CL_PROCUREMENT_OFFER.procurement.orderer" => $this->buyer,
 					"offerer" => $offerer->id(),
 				));
+				
 				$cutcopied = "";
 				foreach($offers_list->arr() as $offer)
 				{
@@ -2762,10 +2764,59 @@ class procurement_center extends class_base
 						"product" => $product->name(),
 						"CL_PROCUREMENT_OFFER_ROW.RELTYPE_OFFER" => $offer->id(),
 					));
+					
+					if(!sizeof($row_list->ids()))
+					{
+						continue;
+					}
+					
+					$document_connections =  $offer->connections_from(array(
+						"class" => array(CL_CRM_DOCUMENT, CL_CRM_MEMO, CL_CRM_DEAL, CL_FILE, CL_CRM_OFFER),
+						"sort_by" => "id",
+						"sort_by_num" => 1,
+					));
+					$doc_connection = reset($document_connections);
+					if($doc_connection)
+					{
+						$doc = obj($doc_connection->prop("to"));
+						$last_offer_file = $doc->name();
+						if($doc->class_id() == CL_CRM_MEMO || $doc->class_id() == CL_CRM_DEAL || $doc->class_id() == CL_CRM_OFFER || $doc->class_id() == CL_CRM_DOCUMENT)
+						{
+							if($doc->get_first_obj_by_reltype("RELTYPE_FILE"))
+							{
+								$doc = $doc->get_first_obj_by_reltype("RELTYPE_FILE");
+							}
+						}
+						
+						if($doc->class_id() == CL_FILE)
+						{
+						//	$file = $file_inst->get_file_by_id($doc->id());
+							$last_offer_file = $file_inst->get_url($doc->id());
+						}
+						else
+						{
+							$last_offer_file = html::get_change_url($doc->id());
+						}
+					}
+					else 
+					{
+						$last_offer_file = "";
+					}
+					
 					foreach($row_list->arr() as $row)
 					{
 //						arr($row->prop("product") . " - " . $o->name());
-						$price = $row->prop("price");
+						if($last_offer_file)
+						{
+							$price = html::href(array(
+								"caption" => $row->prop("price"),
+								"url" => $last_offer_file
+							));
+						}
+						else
+						{
+							$price = $row->prop("price");
+						}
 						$amount = $row->prop("amount");
 						$unit_obj = obj($row->prop("unit"));
 						$unit = $unit_obj->prop("unit_code");
@@ -2776,7 +2827,7 @@ class procurement_center extends class_base
 							"lang_id" => array(),
 							"CL_PURCHASE.RELTYPE_OFFER.id" => $offer->id(),
 						));
-						foreach($buyings_list->arr() as $purchase)
+						if($row->prop("accept") && sizeof($buyings_list->arr()))
 						{
 							$cutcopied = "yellow";
 						}
