@@ -82,10 +82,12 @@ $l = get_instance("languages");
 if (aw_ini_get("user_interface.full_content_trans"))
 {
 	$ld = $l->fetch(aw_global_get("ct_lang_id"));
+	$page_charset = $charset = $ld["charset"];
 }
 else
 {
 	$ld = $l->fetch(aw_global_get("lang_id"));
+	$page_charset = $charset = aw_global_get("charset");
 }
 
 $sf->vars(array(
@@ -145,7 +147,7 @@ if ($site_title != "")	// weird, but lots of places rely on the yah line being e
 }
 
 
-$page_charset = $charset = $l->get_charset();
+
 
 // if you set this global variable in your code, then the whole page will be converted and shown
 // in the requested charset. This will be handy for translation forms .. and hey .. perhaps one
