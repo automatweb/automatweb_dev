@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.6 2006/10/12 13:49:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.7 2006/10/12 13:57:55 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -208,7 +208,7 @@ class admin_if extends class_base
 				$tree->add_item(0,array(
 					"id" => $rn_i,
 					"parent" => 0,
-					"name" => parse_obj_name($rn_o->name()),
+					"name" => parse_obj_name($rn_o->trans_get_val("name")),
 					"iconurl" => icons::get_icon_url($rn_o),
 					"url" => aw_url_change_var("parent", $rn_o->id(), $this->curl)
 				));
@@ -372,7 +372,7 @@ class admin_if extends class_base
 		{
 			$arr["url"] = "about:blank";
 		};
-		$arr["name"] = parse_obj_name($m->name());
+		$arr["name"] = parse_obj_name($m->trans_get_val("name"));
 		if ($this->selp == $m->id())
 		{
 			$arr["name"] = "<b>".$arr["name"]."</b>";
@@ -415,7 +415,7 @@ class admin_if extends class_base
 		$this->tree->add_item(is_array($rn) ? reset($rn) : $rn,array(
 			"id" => $hf->id(),
 			"parent" => $this->force_0_parent ? 0 : (is_array($rn) ? reset($rn) : $rn),
-			"name" => parse_obj_name($hf->name()),
+			"name" => parse_obj_name($hf->trans_get_val("name")),
 			"iconurl" => icons::get_icon_url("homefolder",""),
 			"url" => aw_url_change_var("parent",$hf->id(), $this->curl),
 		));
@@ -689,12 +689,19 @@ class admin_if extends class_base
 //		$this->read_template('js_popup_menu.tpl');
 		$clss = aw_ini_get("classes");
 
+		$trans = false;
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$trans = true;
+		}
+
 		while ($row = $this->db_next())
 		{
 			if (!$this->can("view", $row["oid"]))
 			{
 				continue;
 			}
+			$row_o = obj($row["oid"]);
 			$can_change = $this->can("edit", $row["oid"]);
 			$can_delete = $this->can("delete", $row["oid"]);
 			$can_admin = $this->can("admin", $row["oid"]);
@@ -708,16 +715,21 @@ class admin_if extends class_base
 			}
 			else
 			{
+				$grp = null;
+				if ($trans)
+				{
+					$grp = "transl";
+				}
 				if ($can_change)
 				{
-					$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period),$row["class_id"]);
+					$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
 				}
 				else
 				{
-					$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period),$row["class_id"]);
+					$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period, "group" => $grp),$row["class_id"]);
 				}
 			}
-			$caption = parse_obj_name($row["name"]);
+			$caption = parse_obj_name($row_o->trans_get_val("name"));
 			$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'">'.$caption."</a>";
 
 			if (isset($sel_objs[$row["oid"]]))
@@ -817,6 +829,11 @@ class admin_if extends class_base
 			"link" => aw_url_change_var("parent", $id)
 		));
 
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$grp = "transl";
+		}
+
 		if ($this->can("edit", $id))
 		{
 			$pm->add_item(array(
@@ -824,7 +841,8 @@ class admin_if extends class_base
 					"id" => $id, 
 					"parent" => $parent,
 					"period" => $period,
-					"return_url" => get_ru()
+					"return_url" => get_ru(),
+					"group" => $grp
 				), $clid,true,true),
 				"text" => t("Muuda")
 			));

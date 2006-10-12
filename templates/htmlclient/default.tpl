@@ -42,7 +42,7 @@
 
 	<!-- SUB: CONTENT -->
 	<tr>
-	    <td colspan="2" id="content">{VAR:value}</td>
+	    <td colspan="2" id="sitecontent">{VAR:value}</td>
 	</tr>
 	<!-- END SUB: CONTENT -->
 

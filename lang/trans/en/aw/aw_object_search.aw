@@ -1,0 +1,32 @@
+<?php
+$GLOBALS["TRANS"]["Omaduse Nimi (s_name) kommentaar"] = "Name";
+$GLOBALS["TRANS"]["Omaduse Kommentaar (s_comment) caption"] = "Comment";
+$GLOBALS["TRANS"]["Omaduse T&uuml;&uuml;p (s_clid) caption"] = "Type";
+$GLOBALS["TRANS"]["Omaduse OID (s_oid) caption"] = "Object ID";
+$GLOBALS["TRANS"]["Omaduse Looja (s_creator) caption"] = "Created by";
+$GLOBALS["TRANS"]["Omaduse Muutja (s_modifier) caption"] = "Modified by";
+$GLOBALS["TRANS"]["Omaduse Aktiivsus (s_status) caption"] = "Status";
+$GLOBALS["TRANS"]["Omaduse Alias (s_alias) caption"] = "Alias";
+$GLOBALS["TRANS"]["Omaduse Keel (s_language) caption"] = "Language";
+$GLOBALS["TRANS"]["Omaduse Periood (s_period) caption"] = "Period";
+$GLOBALS["TRANS"]["Omaduse Saidi ID (s_site_id) caption"] = "Site ID";
+$GLOBALS["TRANS"]["Omaduse Leia vendi (s_find_bros) caption"] = "Find brothers";
+$GLOBALS["TRANS"]["Omaduse Otsi (s_sbt) caption"] = "Search";
+$GLOBALS["TRANS"]["Grupi Otsing (srch) pealkiri"] = "Search";
+$GLOBALS["TRANS"]["K&otilde;ik"] = "All";
+$GLOBALS["TRANS"]["Aktiivsed"] = "Active";
+$GLOBALS["TRANS"]["Deaktiivsed"] = "Deactive";
+$GLOBALS["TRANS"]["Igalt poolt"] = "Everywhere";
+$GLOBALS["TRANS"]["Kustuta"] = "Delete";
+$GLOBALS["TRANS"]["Oled kindel et soovid valitud objektid kustutada?"] = "Are You sure You want to delete selected objects?";
+$GLOBALS["TRANS"]["OID"] = "Object ID";
+$GLOBALS["TRANS"]["Nimi"] = "Name";
+$GLOBALS["TRANS"]["Keel"] = "Language";
+$GLOBALS["TRANS"]["T&uuml;&uuml;p"] = "Type";
+$GLOBALS["TRANS"]["Asukoht"] = "Location";
+$GLOBALS["TRANS"]["Loodud"] = "Created";
+$GLOBALS["TRANS"]["Looja"] = "Created by";
+$GLOBALS["TRANS"]["Muudetud"] = "Modified";
+$GLOBALS["TRANS"]["Muutja"] = "Modified by";
+$GLOBALS["TRANS"]["AW Objektide otsing"] = "Search for objects";
+?>

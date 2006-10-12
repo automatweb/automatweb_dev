@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.24 2006/10/12 09:58:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.25 2006/10/12 13:57:55 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -407,6 +407,7 @@ class language extends class_base
 
 	/**
 		@attrib name=lang_pop
+		@param url optional
 	**/
 	function lang_pop($arr)
 	{
@@ -420,7 +421,7 @@ class language extends class_base
 			{
 				$pm->add_item(array(
 					"text" => $ld,
-					"link" => aw_url_change_var("set_ct_lang_id", $lid),
+					"link" => aw_url_change_var("set_ct_lang_id", $lid, $arr["url"]),
 				));
 			}
 			else
@@ -432,7 +433,14 @@ class language extends class_base
 			}
 		}
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
-		$ld = $l->fetch(aw_global_get("lang_id"));
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$ld = $l->fetch(aw_global_get("ct_lang_id"));
+		}
+		else
+		{
+			$ld = $l->fetch(aw_global_get("lang_id"));
+		}
 		die($pm->get_menu(array(
 			"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 		)));

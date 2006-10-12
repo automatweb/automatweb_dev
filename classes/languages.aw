@@ -306,6 +306,14 @@ class languages extends aw_template
 			}
 		}
 
+		if (!aw_global_get("ct_lang_id") && aw_ini_get("user_interface.full_content_trans") && ($ct_lc = aw_ini_get("user_interface.default_language")))
+		{
+			$ct_id = $this->get_langid_for_code($ct_lc);
+			$_SESSION["ct_lang_id"] = $ct_lc;
+			$_SESSION["ct_lang_lc"] = $ct_id;
+			aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
+			aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
+		}
 		if (!$lang_id && aw_ini_get("languages.default"))
 		{
 			$lang_id = aw_ini_get("languages.default");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.48 2006/02/14 10:42:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.49 2006/10/12 13:57:55 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1059,7 +1059,11 @@ class shop_order_cart extends class_base
 			foreach(safe_array($el_inf["view_controllers"]) as $v_ctr_id)
 			{
 				$vc = get_instance(CL_CFG_VIEW_CONTROLLER);
-				$vc->check_property($els[$el_pn], $v_ctr_id, array());
+				$rv = $vc->check_property($els[$el_pn], $v_ctr_id, array());
+				if ($rv == PROP_IGNORE)
+				{
+					unset($els[$el_pn]);
+				}
 			}
 		}
 
@@ -1189,7 +1193,7 @@ class shop_order_cart extends class_base
 		$total = 0;
 		
 		$cart = $this->get_cart($oc);
-		
+
 		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quantx)
 		{

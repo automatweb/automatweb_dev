@@ -1,0 +1,36 @@
+<?php
+$GLOBALS["TRANS"]["Omaduse Reeglid (rules) caption"] = "Rules";
+$GLOBALS["TRANS"]["Omaduse Isik (person_t) caption"] = "Person";
+$GLOBALS["TRANS"]["Omaduse Organisatsioon (co_t) caption"] = "Organisation";
+$GLOBALS["TRANS"]["Omaduse Klassi t&uuml;&uuml;p (fb_class) caption"] = "Object type";
+$GLOBALS["TRANS"]["Omaduse Objekti nimi (fb_object) caption"] = "Object name";
+$GLOBALS["TRANS"]["Omaduse Objekti grupp (fb_object_grp) caption"] = "Object group";
+$GLOBALS["TRANS"]["Omaduse Kommentaar (comment_ta) caption"] = "Comment";
+$GLOBALS["TRANS"]["Omaduse Failid (file_1) caption"] = "Files";
+$GLOBALS["TRANS"]["Omaduse T&otilde;sidus (seriousness) caption"] = "Seriousness";
+$GLOBALS["TRANS"]["Omaduse Soovin tagasisidet (fb_type) caption"] = "Need feedback";
+$GLOBALS["TRANS"]["Omaduse Tagasiside meiliaadress (fb_email) caption"] = "Feedback e-mail";
+$GLOBALS["TRANS"]["Omaduse Tagasiside telefon (fb_phone) caption"] = "Feedback phone";
+$GLOBALS["TRANS"]["Omaduse Arendaja staatus (dev_status) caption"] = "Developer status";
+$GLOBALS["TRANS"]["Omaduse Arendaja t&auml;htaeg (dev_deadline) caption"] = "Developer deadline";
+$GLOBALS["TRANS"]["Grupi Arendaja andmed (dev_status) pealkiri"] = "Developer data";
+$GLOBALS["TRANS"]["Seose Isik (RELTYPE_PERSON) tekst"] = "Person";
+$GLOBALS["TRANS"]["Seose Organisatsioon (RELTYPE_CO) tekst"] = "Organisation";
+$GLOBALS["TRANS"]["Fataalne viga"] = "Fatal error";
+$GLOBALS["TRANS"]["Segav viga"] = "Disturbing error";
+$GLOBALS["TRANS"]["Tr&uuml;kiviga"] = "Syntax error";
+$GLOBALS["TRANS"]["Soovitus"] = "Suggestion";
+$GLOBALS["TRANS"]["Meilile"] = "E-mail";
+$GLOBALS["TRANS"]["Telefonile"] = "Phone";
+$GLOBALS["TRANS"]["Ei soovi"] = "Do not need";
+$GLOBALS["TRANS"]["Lahtine"] = "Open";
+$GLOBALS["TRANS"]["Tegemisel"] = "In progress";
+$GLOBALS["TRANS"]["Valmis"] = "Ready";
+$GLOBALS["TRANS"]["Testitud"] = "Tested";
+$GLOBALS["TRANS"]["Suletud"] = "Closed";
+$GLOBALS["TRANS"]["Vale teade"] = "Wrong message";
+$GLOBALS["TRANS"]["Kordamatu"] = "Unrepeatable";
+$GLOBALS["TRANS"]["Parandamatu"] = "No solution";
+$GLOBALS["TRANS"]["Ei paranda"] = "Do not fix";
+$GLOBALS["TRANS"]["Vajab tagasisidet"] = "Needs feedback";
+?>

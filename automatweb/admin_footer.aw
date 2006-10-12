@@ -24,7 +24,7 @@ $apd = get_instance("layout/active_page_data");
 $styles = $apd->on_shutdown_get_styles();
 $styles_done = false;
 
-$pm = get_instance("vcl/popup_menu");
+/*$pm = get_instance("vcl/popup_menu");
 $pm->begin_menu("ui_lang");
 
 $i = get_instance("core/trans/pot_scanner");
@@ -34,7 +34,7 @@ foreach($i->get_langs() as $_uil)
 		"text" => $_uil,
 		"link" => aw_url_change_var("set_ui_lang", $_uil)
 	));
-}
+}*/
 
 // check the url for classes and if any of those are in a prod family, then set that
 $pf = "";
@@ -79,7 +79,14 @@ $bml = get_instance("vcl/popup_menu");
 $bml->begin_menu("lang_pop");
 
 $l = get_instance("languages");
-$ld = $l->fetch(aw_global_get("lang_id"));
+if (aw_ini_get("user_interface.full_content_trans"))
+{
+	$ld = $l->fetch(aw_global_get("ct_lang_id"));
+}
+else
+{
+	$ld = $l->fetch(aw_global_get("lang_id"));
+}
 
 $sf->vars(array(
 	"prod_family" => $pf,
@@ -92,9 +99,9 @@ $sf->vars(array(
 	"cur_class" => $clss[clid_for_name($_GET["class"])]["name"],
 	"cur_obj_name" => $cur_obj->name(),
 	"site_title" => $site_title,
-	"ui_lang" => $pm->get_menu(array(
+/*	"ui_lang" => $pm->get_menu(array(
 		"text" => t("[Liidese keel]")
-	)),
+	)),*/
 	"settings_pop" => $bmb->get_menu(array(
 		"load_on_demand_url" => $sf->mk_my_orb("settings_lod", array("url" => get_ru()), "user"),
 		"text" => '<img src="/automatweb/images/aw06/ikoon_seaded.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />'.t("Seaded").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'

@@ -1,5 +1,5 @@
 <!-- SUB: start -->
-<div class="toimingud">
+<div id="toimingud">
 <!-- END SUB: start -->
 	<div class="v">
 		<!-- SUB: button -->
@@ -98,3 +98,4 @@
 	<br class="clear" />
 <!-- SUB: real_end -->
 <!-- END SUB: real_end -->
+</div>

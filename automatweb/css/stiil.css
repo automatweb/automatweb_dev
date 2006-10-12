@@ -271,7 +271,7 @@ a:hover {text-decoration: underline}
 	padding-right: 10px;
 	padding-bottom: 20px;
 }
-#sisu .toimingud {
+#toimingud {
 	background: #e1e1e1;
 	border-top: 1px solid #fff;
 	border-right: 1px solid #bdbdbd;
@@ -282,22 +282,22 @@ a:hover {text-decoration: underline}
 	margin-bottom: 10px;
 	margin-right: -10px;
 }
-#sisu .toimingud .v {
+#toimingud .v {
 	float: left;
 	padding: 3px 0 0 2px
 	vertical-align: middle;
 }
-#sisu .toimingud .tb_but {
+#toimingud .tb_but {
 	border: solid 1px #e1e1e1;
 	float: left;
 	padding: 4px;
 	margin-right: 2px;
 }
-#sisu .toimingud .cdata {
+#toimingud .cdata {
 	float: left;
 	margin-top: 2px;
 }
-#sisu .toimingud .tb_but_ov {
+#toimingud .tb_but_ov {
 	border: solid 1px #05a6e9;
 	float: left;
 	padding: 4px;
@@ -313,12 +313,12 @@ a:hover {text-decoration: underline}
 	position: relative
 }
 */
-#sisu .toimingud .p {
+#toimingud .p {
 	float: right;
 	margin-right: 5px;
 	margin-top: 2px;
 }
-#sisu .toimingud .p .nupp {
+#toimingud .p .nupp {
 	background: #05a6e9;
 	border-top: 1px solid #fff;
 	border-left: 1px solid #fff;

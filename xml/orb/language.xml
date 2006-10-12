@@ -4,6 +4,7 @@
 		<action name="lang_pop">
 			<function name="lang_pop">
 				<arguments>
+					<optional name="url" />
 				</arguments>
 			</function>
 		</action>

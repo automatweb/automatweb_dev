@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Styles>
-	<Style name="Eemalda laad" element="span">
+	<Style name="Remove style" element="span">
 		<Attribute name="style" value="font-weight: normal; font-style:none;font-size:12px;color:black;text-decoration:none;" />
 	</Style>
-	<Style name="Pilt vasakul" element="img">
+	<Style name="Image on left" element="img">
 		<Attribute name="style" value="padding: 5px; margin-right: 5px" />
 		<Attribute name="border" value="2" />
 		<Attribute name="align" value="left" />
 	</Style>
-	<Style name="Pilt paremal" element="img">
+	<Style name="Image on right" element="img">
 		<Attribute name="style" value="padding: 5px; margin-left: 5px" />
 		<Attribute name="border" value="2" />
 		<Attribute name="align" value="right" />
 	</Style>
-	<Style name="Vahepealkiri 1" element="h1" />
-	<Style name="Vahepealkiri 2" element="h2" />
-	<Style name="Vahepealkiri 3" element="h3" />
-	<Style name="Tavaline bold" element="span">
+	<Style name="Heading 1" element="h1" />
+	<Style name="Heading 2" element="h2" />
+	<Style name="Heading 3" element="h3" />
+	<Style name="Regular bold" element="span">
 		<Attribute name="style" value="font-weight: bold;" />
 	</Style>
-	<Style name="Tavaline kursiiv" element="em" />
+	<Style name="Regular italic" element="em" />
 	<Style name="Title" element="span">
 		<Attribute name="class" value="Title" />
 	</Style>
 	<Style name="Code" element="span">
 		<Attribute name="class" value="Code" />
 	</Style>
-	<Style name="Vahejoon" element="hr">
+	<Style name="Horisontal ruler" element="hr">
 		<Attribute name="size" value="1" />
 		<Attribute name="color" value="#ff0000" />
 	</Style>

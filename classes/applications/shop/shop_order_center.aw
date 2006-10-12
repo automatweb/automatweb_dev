@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.37 2006/05/04 09:04:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.38 2006/10/12 13:57:55 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -1031,14 +1031,17 @@ class shop_order_center extends class_base
 			$ret[$pn]["caption"] = $pd["caption"];
 			$ret[$pn]["name"] = "user_data[$pn]";
 
-			if (($fld = array_search($pn, $ps_pmap)))
+			if (aw_global_get("uid") != "")
 			{
-				$cud[$pn] = $cur_p->prop($fld);
-			}
+				if (($fld = array_search($pn, $ps_pmap)))
+				{
+					$cud[$pn] = $cur_p->prop($fld);
+				}
 
-			if (($fld = array_search($pn, $org_pmap)))
-			{
-				$cud[$pn] = $cur_co->prop($fld);
+				if (($fld = array_search($pn, $org_pmap)))
+				{
+					$cud[$pn] = $cur_co->prop($fld);
+				}
 			}
 
 			if ($ret[$pn]["type"] == "date_select")

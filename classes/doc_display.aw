@@ -147,6 +147,11 @@ class doc_display extends aw_template
 			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : ""),
 		));
 
+		$this->vars(array(
+                        "SHOW_MODIFIED" => ($doc->prop("show_modified") ? $this->parse("SHOW_MODIFIED") : ""),
+                ));
+
+
 		$ps = "";
 		if (( ($doc->prop("show_print")) && (!$_GET["print"]) && $arr["leadonly"] != 1))
 		{
