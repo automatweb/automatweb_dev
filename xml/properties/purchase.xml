@@ -43,6 +43,14 @@
             <caption>Lepingu/arve nr</caption>
       </property>
       <property>
+            <name>sum</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>Summa</caption>
+      </property>
+      <property>
             <name>offers_add</name>
             <table>objects</table>
             <group>offers</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.5 2006/09/18 10:22:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.6 2006/10/12 13:49:17 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1131,6 +1131,17 @@ class admin_if extends class_base
 			return false;
 		}
 		return true;
+	}
+
+	function insert_texts(&$t)
+	{
+		$t->vars(array(
+			"logout_text" => t("Logi v&auml;lja"),
+			"location_text" => t("Asukoht:"),
+			"footer_l1" => t("AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."),
+			"footer_l2" => t("Palun k&uuml;lasta meie kodulehek&uuml;lgi:"),
+			"st" => t("Seaded")
+		));
 	}
 }
 ?>

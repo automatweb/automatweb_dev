@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.509 2006/10/10 12:29:35 tarvo Exp $
+// $Id: class_base.aw,v 2.510 2006/10/12 13:49:17 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4295,7 +4295,12 @@ class class_base extends aw_template
 			"lang_id" => array(),
 			"subclass" => $this->clid
 		));
-		return $ol->names();
+		$rv = array();
+		foreach($ol->arr() as $o)
+		{
+			$rv[$o->id()] = $o->trans_get_val("name");
+		}
+		return $rv;
 	}
 
 	// needs either clid or clfile

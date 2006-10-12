@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.1 2006/10/11 13:06:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.2 2006/10/12 13:49:17 kristo Exp $
 // rostering_work_entry.aw - T&ouml;&ouml;aegade sisestus 
 /*
 
@@ -63,6 +63,10 @@ class rostering_work_entry extends class_base
 				break;
 
 			case "unit":
+				if ($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				$wp = obj($arr["obj_inst"]->prop("g_wp"));
 				$co = obj($wp->prop("owner"));
 				$co_i = $co->instance();

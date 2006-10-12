@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.172 2006/10/06 16:13:37 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.173 2006/10/12 13:49:17 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -308,11 +308,6 @@
 		@caption META description
 
 
-@groupinfo transl caption=T&otilde;lgi
-@default group=transl
-	
-	@property transl type=callback callback=callback_get_transl
-	@caption T&otilde;lgi
 
 @groupinfo acl caption=&Otilde;igused
 @default group=acl

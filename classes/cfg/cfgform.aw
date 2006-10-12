@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.94 2006/09/05 09:56:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.95 2006/10/12 13:49:18 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -125,6 +125,13 @@
 
 	@classinfo relationmgr=yes syslog_type=ST_CFGFORM
 
+@groupinfo transl caption="T&otilde;lgi nime"
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
+
 	@reltype PROP_GROUP value=1 clid=CL_MENU
 	@caption omaduste kataloog
 
@@ -157,6 +164,9 @@ class cfgform extends class_base
 			"clid" => CL_CFGFORM,
 			"tpldir" => "cfgform",
 		));
+		$this->trans_props = array(
+			"name"
+		);
 	}
 
 	function get_property($arr)
@@ -646,6 +656,10 @@ class cfgform extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "group_movement":
 				$arr["obj_inst"]->set_meta("buttons", $arr["request"]["bts"]);
 				break;
@@ -868,8 +882,17 @@ class cfgform extends class_base
 		return true;
 	}
 
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
+
 	function callback_mod_tab($arr)
 	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
 		if (!isset($this->lang_inf))
 		{
 			$l = get_instance("languages");

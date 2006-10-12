@@ -353,6 +353,16 @@
             <parent>mlist</parent>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>
@@ -453,6 +463,9 @@
             <show_props>
                   <caption>Omaduste maha keeramine</caption>
             </show_props>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi nime</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <PROP_GROUP>

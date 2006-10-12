@@ -88,9 +88,9 @@ function check_generic_unloader()
 		{VAR:lang_pop}
 		{VAR:settings_pop}
 
-		<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" class="logout">Logi välja</a>
+		<a href="{VAR:baseurl}/orb.aw?class=users&action=logout" class="logout">{VAR:logout_text}</a>
 	</div>
-	<div class="olekuriba">Asukoht:
+	<div class="olekuriba">{VAR:location_text}
 		{VAR:site_title}
 	</div>
 		<!-- END SUB: YAH -->
@@ -100,8 +100,8 @@ function check_generic_unloader()
 <!-- jalus -->
 <!-- SUB: YAH2 -->
 	<div id="jalus">
-		AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006. <br />
-		Palun k&uuml;lasta meie kodulehek&uuml;lgi: <a href="http://www.struktuur.ee">Struktuur Meedia</a>, <a href="http://www.automatweb.com">AutomatWeb</a>.
+		{VAR:footer_l1} <br />
+		{VAR:footer_l2} <a href="http://www.struktuur.ee">Struktuur Meedia</a>, <a href="http://www.automatweb.com">AutomatWeb</a>.
 	</div>
 <!-- END SUB: YAH2 -->
 <!--//jalus -->

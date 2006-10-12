@@ -4,6 +4,9 @@
 global $awt;
 $sf->read_template("index.tpl");
 
+$i = get_instance(CL_ADMIN_IF);
+$i->insert_texts($sf);
+
 $ta = aw_global_get("title_action");
 if ($ta != "")
 {
