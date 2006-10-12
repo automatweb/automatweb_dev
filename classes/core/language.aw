@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.23 2006/09/05 09:40:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.24 2006/10/12 09:58:58 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -416,10 +416,20 @@ class language extends class_base
 		$ll = $l->get_list();
 		foreach($ll as $lid => $ld)
 		{
-			$pm->add_item(array(
-				"text" => $ld,
-				"link" => aw_ini_get("baseurl")."/automatweb/?set_lang_id=".$lid,
-			));
+			if (aw_ini_get("user_interface.full_content_trans"))
+			{
+				$pm->add_item(array(
+					"text" => $ld,
+					"link" => aw_url_change_var("set_ct_lang_id", $lid),
+				));
+			}
+			else
+			{
+				$pm->add_item(array(
+					"text" => $ld,
+					"link" => aw_ini_get("baseurl")."/automatweb/?set_lang_id=".$lid,
+				));
+			}
 		}
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		$ld = $l->fetch(aw_global_get("lang_id"));
