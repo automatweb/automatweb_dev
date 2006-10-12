@@ -1,0 +1,768 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/stats/stats_viewer.aw:class_1145_help
+msgid "Klassi Statistika help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_data_table
+msgid "Omaduse  (data_table) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_data_table_comment
+msgid "Omaduse  (data_table) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_data_table_help
+msgid "Omaduse  (data_table) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_tb
+msgid "Omaduse  (s_tb) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_tb_comment
+msgid "Omaduse  (s_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_tb_help
+msgid "Omaduse  (s_tb) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_date_from
+msgid "Omaduse Alates (s_date_from) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_date_from_comment
+msgid "Omaduse Alates (s_date_from) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_date_from_help
+msgid "Omaduse Alates (s_date_from) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_date_to
+msgid "Omaduse Kuni (s_date_to) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_date_to_comment
+msgid "Omaduse Kuni (s_date_to) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_date_to_help
+msgid "Omaduse Kuni (s_date_to) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_hr_from
+msgid "Omaduse Kellaaeg alates (s_hr_from) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_hr_from_comment
+msgid "Omaduse Kellaaeg alates (s_hr_from) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_hr_from_help
+msgid "Omaduse Kellaaeg alates (s_hr_from) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_hr_to
+msgid "Omaduse Kellaaeg kuni (s_hr_to) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_hr_to_comment
+msgid "Omaduse Kellaaeg kuni (s_hr_to) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_hr_to_help
+msgid "Omaduse Kellaaeg kuni (s_hr_to) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_wd
+msgid "Omaduse N&auml;dalap&auml;ev (s_wd) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_wd_comment
+msgid "Omaduse N&auml;dalap&auml;ev (s_wd) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_wd_help
+msgid "Omaduse N&auml;dalap&auml;ev (s_wd) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_username
+msgid "Omaduse Kasutajanimi (s_username) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_username_comment
+msgid "Omaduse Kasutajanimi (s_username) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_username_help
+msgid "Omaduse Kasutajanimi (s_username) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_username_except
+msgid "Omaduse Kasutajanimi v&auml;ljaarvatud (s_username_except) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_username_except_comment
+msgid "Omaduse Kasutajanimi v&auml;ljaarvatud (s_username_except) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_username_except_help
+msgid "Omaduse Kasutajanimi v&auml;ljaarvatud (s_username_except) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_user_group
+msgid "Omaduse Kasutajagrupp (s_user_group) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_user_group_comment
+msgid "Omaduse Kasutajagrupp (s_user_group) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_user_group_help
+msgid "Omaduse Kasutajagrupp (s_user_group) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_user_group_except
+msgid "Omaduse Kasutajagrupp v&auml;ljaarvatud (s_user_group_except) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_user_group_except_comment
+msgid "Omaduse Kasutajagrupp v&auml;ljaarvatud (s_user_group_except) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_user_group_except_help
+msgid "Omaduse Kasutajagrupp v&auml;ljaarvatud (s_user_group_except) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_vis1
+msgid "Omaduse  (vis1) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_vis1_comment
+msgid "Omaduse  (vis1) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_vis1_help
+msgid "Omaduse  (vis1) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_root_o
+msgid "Omaduse Juurobjekt (s_root_o) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_root_o_comment
+msgid "Omaduse Juurobjekt (s_root_o) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_root_o_help
+msgid "Omaduse Juurobjekt (s_root_o) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_clid
+msgid "Omaduse Objektit&uuml;&uuml;p (s_clid) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_clid_comment
+msgid "Omaduse Objektit&uuml;&uuml;p (s_clid) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_clid_help
+msgid "Omaduse Objektit&uuml;&uuml;p (s_clid) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_vis2
+msgid "Omaduse  (vis2) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_vis2_comment
+msgid "Omaduse  (vis2) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_vis2_help
+msgid "Omaduse  (vis2) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_action
+msgid "Omaduse Tegevus (s_action) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_action_comment
+msgid "Omaduse Tegevus (s_action) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_action_help
+msgid "Omaduse Tegevus (s_action) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_action_except
+msgid "Omaduse Tegevus v&auml;ljaarvatud (s_action_except) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_action_except_comment
+msgid "Omaduse Tegevus v&auml;ljaarvatud (s_action_except) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_action_except_help
+msgid "Omaduse Tegevus v&auml;ljaarvatud (s_action_except) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_country
+msgid "Omaduse Asukohamaa (s_country) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_country_comment
+msgid "Omaduse Asukohamaa (s_country) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_country_help
+msgid "Omaduse Asukohamaa (s_country) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_country_except
+msgid "Omaduse Asukohamaa v&auml;ljaarvatud (s_country_except) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_country_except_comment
+msgid "Omaduse Asukohamaa v&auml;ljaarvatud (s_country_except) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_country_except_help
+msgid "Omaduse Asukohamaa v&auml;ljaarvatud (s_country_except) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_sessid
+msgid "Omaduse Sessiooni ID (s_sessid) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_sessid_comment
+msgid "Omaduse Sessiooni ID (s_sessid) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_sessid_help
+msgid "Omaduse Sessiooni ID (s_sessid) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_ip
+msgid "Omaduse IP Aadress (s_ip) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_ip_comment
+msgid "Omaduse IP Aadress (s_ip) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_ip_help
+msgid "Omaduse IP Aadress (s_ip) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_ip_except
+msgid "Omaduse IP Aadress v&auml;ljaarvatud (s_ip_except) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_ip_except_comment
+msgid "Omaduse IP Aadress v&auml;ljaarvatud (s_ip_except) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_ip_except_help
+msgid "Omaduse IP Aadress v&auml;ljaarvatud (s_ip_except) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_type
+msgid "Omaduse Tulemused kuva (s_res_type) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_type_comment
+msgid "Omaduse Tulemused kuva (s_res_type) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_type_help
+msgid "Omaduse Tulemused kuva (s_res_type) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_add_res_type
+msgid "Omaduse Lisaks kuva (s_add_res_type) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_add_res_type_comment
+msgid "Omaduse Lisaks kuva (s_add_res_type) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_add_res_type_help
+msgid "Omaduse Lisaks kuva (s_add_res_type) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_limit
+msgid "Omaduse Mitu rida (s_limit) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_limit_comment
+msgid "Omaduse Mitu rida (s_limit) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_limit_help
+msgid "Omaduse Mitu rida (s_limit) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_tb
+msgid "Omaduse  (s_res_tb) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_tb_comment
+msgid "Omaduse  (s_res_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_tb_help
+msgid "Omaduse  (s_res_tb) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res
+msgid "Omaduse  (s_res) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_comment
+msgid "Omaduse  (s_res) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_help
+msgid "Omaduse  (s_res) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_add
+msgid "Omaduse  (s_res_add) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_add_comment
+msgid "Omaduse  (s_res_add) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_add_help
+msgid "Omaduse  (s_res_add) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_add_2
+msgid "Omaduse  (s_res_add_2) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_add_2_comment
+msgid "Omaduse  (s_res_add_2) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_s_res_add_2_help
+msgid "Omaduse  (s_res_add_2) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_eex_from
+msgid "Omaduse Alates (eex_from) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_eex_from_comment
+msgid "Omaduse Alates (eex_from) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_eex_from_help
+msgid "Omaduse Alates (eex_from) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_eex_to
+msgid "Omaduse Kuni (eex_to) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_eex_to_comment
+msgid "Omaduse Kuni (eex_to) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_eex_to_help
+msgid "Omaduse Kuni (eex_to) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_inf
+msgid "Omaduse Unikaalseid k&uuml;lastusi (stats_eex_inf) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_inf_comment
+msgid "Omaduse Unikaalseid k&uuml;lastusi (stats_eex_inf) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_inf_help
+msgid "Omaduse Unikaalseid k&uuml;lastusi (stats_eex_inf) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_entry
+msgid "Omaduse  (stats_eex_entry) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_entry_comment
+msgid "Omaduse  (stats_eex_entry) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_entry_help
+msgid "Omaduse  (stats_eex_entry) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_exit
+msgid "Omaduse  (stats_eex_exit) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_exit_comment
+msgid "Omaduse  (stats_eex_exit) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_stats_eex_exit_help
+msgid "Omaduse  (stats_eex_exit) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tb
+msgid "Omaduse  (browser_tb) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tb_comment
+msgid "Omaduse  (browser_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tb_help
+msgid "Omaduse  (browser_tb) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tree
+msgid "Omaduse  (browser_tree) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tree_comment
+msgid "Omaduse  (browser_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tree_help
+msgid "Omaduse  (browser_tree) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tbl
+msgid "Omaduse  (browser_tbl) caption"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tbl_comment
+msgid "Omaduse  (browser_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:prop_browser_tbl_help
+msgid "Omaduse  (browser_tbl) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_data
+msgid "Grupi Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_stats
+msgid "Grupi Statistika (stats) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_stats_help
+msgid "Grupi Statistika (stats) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_stats_filter
+msgid "Grupi Koosta filter (stats_filter) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_stats_filter_help
+msgid "Grupi Koosta filter (stats_filter) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_stats_disp
+msgid "Grupi Tulemused (stats_disp) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_stats_disp_help
+msgid "Grupi Tulemused (stats_disp) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_stats_eex
+msgid "Grupi Entry & Exit pages (stats_eex) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_stats_eex_help
+msgid "Grupi Entry & Exit pages (stats_eex) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_browser
+msgid "Grupi Salvestatud p&auml;ringud (browser) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:group_browser_help
+msgid "Grupi Salvestatud p&auml;ringud (browser) help"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_OBJ
+msgid "Seose Objekt (RELTYPE_OBJ) tekst"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_USER
+msgid "Seose Kasutaja (RELTYPE_USER) tekst"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_GROUP
+msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_HTML
+msgid "Seose Aruanne (RELTYPE_HTML) tekst"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:193
+msgid "Detailselt"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:194
+msgid "P&auml;evade l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:195
+msgid "N&auml;dalap&auml;evade l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:196
+msgid "Kuude l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:197
+msgid "Kellaaja j&auml;rgi"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:198
+msgid "Objektide l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:199
+msgid "Kasutajate l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:200
+msgid "Kasutajagruppide l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:201
+msgid "Tegevuste l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:202
+msgid "Objektit&uuml;&uuml;pide l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:203
+msgid "IP aadressite l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:204
+msgid "Asukohamaade l&otilde;ikes"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:235
+msgid "Esmasp&auml;ev"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:236
+msgid "Teisip&auml;ev"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:237
+msgid "Kolmap&auml;ev"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:238
+msgid "Neljap&auml;ev"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:239
+msgid "Reede"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:240
+msgid "Laup&auml;ev"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:241
+msgid "P&uuml;hap&auml;ev"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:247
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:315
+msgid "Top 30 asukohamaad"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:316
+msgid "Top 30 IP-d"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:383
+msgid "Ajavahemik"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:388
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:393
+msgid "&nbsp;"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:412
+msgid "Too on-line"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:417
+msgid "On-line"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:417
+msgid "Arhiveeritud"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:444 classes/applications/stats/stats_viewer.aw:482 classes/applications/stats/stats_viewer.aw:509
+msgid "Objekti nimi"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:449
+msgid "Ka alamobjektid"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:456 classes/applications/stats/stats_viewer.aw:545
+msgid "Juurobjekt"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:537 classes/applications/stats/stats_viewer.aw:546 classes/applications/stats/stats_viewer.aw:553 classes/applications/stats/stats_viewer.aw:559
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:552 classes/applications/stats/stats_viewer.aw:678 classes/applications/stats/stats_viewer.aw:1457
+msgid "Kasutaja"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:558 classes/applications/stats/stats_viewer.aw:683
+msgid "Kasutajagrupp"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:564 classes/applications/stats/stats_viewer.aw:2289
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:654 classes/applications/stats/stats_viewer.aw:1348
+msgid "Objekt"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:659 classes/applications/stats/stats_viewer.aw:1670
+msgid "Tegevus"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:664
+msgid "Aeg"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:673 classes/applications/stats/stats_viewer.aw:1882
+msgid "IP Aadress"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:688
+msgid "Sessioon"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:693
+msgid "Riik"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:698 classes/applications/stats/stats_viewer.aw:913
+msgid "Referer"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:703
+msgid "E-maili tuvastus"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:928
+msgid "P&auml;ev"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:935 classes/applications/stats/stats_viewer.aw:1042 classes/applications/stats/stats_viewer.aw:1147 classes/applications/stats/stats_viewer.aw:1251 classes/applications/stats/stats_viewer.aw:1355 classes/applications/stats/stats_viewer.aw:1464 classes/applications/stats/stats_viewer.aw:1569 classes/applications/stats/stats_viewer.aw:1677 classes/applications/stats/stats_viewer.aw:1783 classes/applications/stats/stats_viewer.aw:1889 classes/applications/stats/stats_viewer.aw:1996
+msgid "Vaatamisi"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:943 classes/applications/stats/stats_viewer.aw:959 classes/applications/stats/stats_viewer.aw:1050 classes/applications/stats/stats_viewer.aw:1066 classes/applications/stats/stats_viewer.aw:1155 classes/applications/stats/stats_viewer.aw:1171 classes/applications/stats/stats_viewer.aw:1259 classes/applications/stats/stats_viewer.aw:1275 classes/applications/stats/stats_viewer.aw:1363 classes/applications/stats/stats_viewer.aw:1379 classes/applications/stats/stats_viewer.aw:1472 classes/applications/stats/stats_viewer.aw:1488 classes/applications/stats/stats_viewer.aw:1577 classes/applications/stats/stats_viewer.aw:1593 classes/applications/stats/stats_viewer.aw:1685 classes/applications/stats/stats_viewer.aw:1701 classes/applications/stats/stats_viewer.aw:1791 classes/applications/stats/stats_viewer.aw:1807 classes/applications/stats/stats_viewer.aw:1897 classes/applications/stats/stats_viewer.aw:1913 classes/applications/stats/stats_viewer.aw:2004 classes/applications/stats/stats_viewer.aw:2020
+msgid "%"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:951 classes/applications/stats/stats_viewer.aw:1058 classes/applications/stats/stats_viewer.aw:1163 classes/applications/stats/stats_viewer.aw:1267 classes/applications/stats/stats_viewer.aw:1371 classes/applications/stats/stats_viewer.aw:1480 classes/applications/stats/stats_viewer.aw:1585 classes/applications/stats/stats_viewer.aw:1693 classes/applications/stats/stats_viewer.aw:1799 classes/applications/stats/stats_viewer.aw:1905 classes/applications/stats/stats_viewer.aw:2012
+msgid "K&uuml;lastusi"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:1035
+msgid "N&auml;dalap&auml;ev"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:1140
+msgid "Kuu"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:1244
+msgid "Kellaaeg"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:1562
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:1776
+msgid "Objektit&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:1989
+msgid "Maa"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:2096
+msgid "Ekspordi CSV fail"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:2101
+msgid "Salvesta HTML"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:2119 classes/applications/stats/stats_viewer.aw:2193
+msgid "Lehek&uuml;lg"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:2125
+msgid "Sisenemisi"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:2199
+msgid "V&auml;ljumisi"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:2356
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:2364
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:2369 classes/applications/stats/stats_viewer.aw:2404
+msgid "Vaata"
+msgstr ""
+
