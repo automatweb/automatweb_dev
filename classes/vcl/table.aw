@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.93 2006/10/11 13:32:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.94 2006/10/12 13:19:29 tarvo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -2158,11 +2158,16 @@ class aw_table extends aw_template
 
 		if ($this->use_chooser)
 		{
-			$tbl .= $this->opentag(array(
+			$opentag = array(
 				"name" => "td",
 				"align" => "center",
 				"classid" => $this->header_normal,
-			));
+			);
+			if(($tmp = $this->chooser_config["width"]))
+			{
+				$opentag["width"] = $tmp;
+			}
+			$tbl .= $this->opentag($opentag);
 			$name = $this->chooser_config["name"];
 			$caption = isset($this->chooser_config["caption"]) ? $this->chooser_config["caption"] : t('Vali');
 			$tbl .= "<a href='javascript:selall(\"${name}\")'>" . $caption . "</a>";
