@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.373 2006/10/10 13:54:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.374 2006/10/12 14:10:53 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -363,12 +363,13 @@ class menuedit extends aw_template
 				if ($class_id == CL_DOCUMENT)
 				{
 					$pt = obj($_obj->parent());
-					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id )
+					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT) && !$set_lang_id && !$set_ct_lang_id)
 					{
 						$set_lang_id = $_obj->lang_id();
 					}
 				}
 				else
+				if (!$set_ct_lang_id)
 				{
 					$set_lang_id = $_obj->lang_id();
 				}
