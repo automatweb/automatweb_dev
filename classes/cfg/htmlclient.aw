@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.157 2006/09/25 09:33:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.158 2006/10/12 12:46:09 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -801,7 +801,11 @@ class htmlclient extends aw_template
 					"object_grp" => $_GET["group"],
 					"url" => get_ru()
 				), "customer_feedback_entry"),
+				"feedback_text" => t("Tagasiside"),
 				"feedback_m_link" => $this->mk_my_orb("redir_m", array("url" => get_ru()), "customer_feedback_manager"),
+				"feedback_m_text" => t("Kasutajatugi"),
+				"help_text" => t("Abi"),
+				"search_text" => t("Otsi"),
 				"bm_pop" => $bm->get_menu(array(
 					"load_on_demand_url" => $this->mk_my_orb("pm_lod", array("url" => get_ru()), "user_bookmarks"),
 					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
