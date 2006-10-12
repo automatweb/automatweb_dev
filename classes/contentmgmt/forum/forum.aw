@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.8 2006/10/05 15:15:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.9 2006/10/12 14:09:30 dragut Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -824,7 +824,6 @@ topic");
 				$level1comments++;
 			};
 		};
-
 		$this->from = isset($args["from"]) ? $args["from"] : 0;
 		$this->level1comments = $level1comments;
 		$this->level1comments_done = 0;
@@ -836,7 +835,7 @@ topic");
 			"onpage" => $this->commentsonpage,
 			"active" => $this->from,
 		));
-		
+
 		if ($no_response)
 		{
 			$this->count_replies(0);
@@ -848,7 +847,6 @@ topic");
 			$this->aw_mb_read = unserialize($HTTP_COOKIE_VARS["aw_mb_read"]);
 			if ($cid)
 			{
-
 				$q = "SELECT * FROM comments WHERE id = '$cid'";
 				$this->db_query($q);
 				$crow = $this->db_next();
@@ -863,6 +861,7 @@ topic");
 			}
 			$this->rec_comments($start_from);
 		};
+
 		$this->mk_links(array(
 			"board" => $board,
 			"id" => $forum_obj->id(),
@@ -1031,6 +1030,7 @@ topic");
 		$icons = "";
 
 		$commcount = sizeof($this->_comments[$level]);
+
 		$icon_prefix = "";
 
 		if ($this->level > 0)
@@ -1061,6 +1061,7 @@ topic");
 			$val["icons"] = $icons . $icon_prefix . "<img src='".$this->cfg["baseurl"]."/img/forum/$icon_sufix.gif'>";
 			if ($this->level == 0)
 			{
+//arr($this->level1comments_done);
 				if ($this->level1comments_done >= $this->from)
 				{
 					$this->content .= $this->display_comment($val);
@@ -1073,12 +1074,12 @@ topic");
 			};
 			if ($this->level == 0)
 			{
-				if ($this->level1comments_done == ($this->to) + 1)
+			//	if ($this->level1comments_done == ($this->to) + 1) // xxx why was that so ? --dragut
+				if ($this->level1comments_done == $this->to)
 				{
 					return;	
 				};
 			};
-				
 			$this->level++;
 			$this->rec_comments($val["id"]);
 			$this->level--;
@@ -1402,7 +1403,8 @@ topic");
 		};
 
 		$image_verification_result = true;
-		if ( isset( $args['ver_code'] ) )
+		$image_verification_oid = aw_ini_get('document.image_verification');
+		if ( !empty( $image_verification_oid ) )
 		{
 			$image_verification_inst = get_instance( CL_IMAGE_VERIFICATION );
 			$image_verification_result =  $image_verification_inst->validate($args['ver_code']); // returns true or false
@@ -2205,8 +2207,7 @@ topic");
 		{
 			$onpage = 5;
 		};
-		$num_pages = (int)(($total / $onpage));
-
+		$num_pages = ceil($total / $onpage);
 		// no pager, if we have less entries than will fit on one page
 		if ($total < ($onpage - 1))
 		{
