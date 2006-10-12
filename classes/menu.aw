@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.173 2006/10/12 13:49:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.174 2006/10/12 14:27:19 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -314,6 +314,13 @@
 	
 	@property acl type=acl_manager store=no
 	@caption &Otilde;igused
+
+
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 
 	@classinfo relationmgr=yes
