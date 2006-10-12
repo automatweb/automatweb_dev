@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.21 2006/10/12 12:15:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.22 2006/10/12 16:04:54 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -901,12 +901,20 @@ class procurement_center extends class_base
 		$data = $this_obj->meta("search_data");
 		if($data["offers_find_name"]) $filter["CL_PROCUREMENT_OFFER.offerer.name"] = "%".$data["offers_find_name"]."%";
 //		if($data["offers_find_groups"]) $filter["CL_PROCUREMENT_OFFER.offerer.parent"] = $data["offers_find_groups"];
-		
+	
  		if((date_edit::get_timestamp($data["offers_find_start"]) > 1)|| (date_edit::get_timestamp($data["offers_find_end"]) > 1))
  		{
- 			if(date_edit::get_timestamp($data["offers_find_start"]) > 1) $from = date_edit::get_timestamp($data["offers_find_start"]); else $from = 0;
- 			if(date_edit::get_timestamp($data["offers_find_end"]) > 1) $to = date_edit::get_timestamp($data["offers_find_end"]); else $to = time()*666;
- 		 	$filter["accept_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
+ 			if(date_edit::get_timestamp($data["offers_find_start"]) > 1)
+ 			{
+ 				$from = date_edit::get_timestamp($data["offers_find_start"]);
+ 			}
+ 			else $from = 1;
+ 			if(date_edit::get_timestamp($data["offers_find_end"]) > 1)
+ 			{
+ 				$to = date_edit::get_timestamp($data["offers_find_end"]);
+ 			}
+ 			else $to = time()*66;
+ 		 	$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
  		}
 		if(!$data["offers_find_archived"]) $filter["accept_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, 1,  time());
 
@@ -915,55 +923,74 @@ class procurement_center extends class_base
 			$owner = $this_obj->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
 			if(is_object($owner))
 			{
-				$procurements = new object_list(array(
-					"class_id" => array(CL_PROCUREMENT),
-					"parent" => $this_obj->id(),
+				$row_ol = new object_list(array(
+					"class_id" => array(CL_PROCUREMENT_OFFER_ROW),
 					"lang_id" => array(),
+					"CL_PROCUREMENT_OFFER_ROW.product" => "%".$data["offers_find_product"]."%",
+				//	"parent" => $this_obj->id(),
 				));
-				foreach($procurements->arr() as $procurement)
-				{
-					$offers = new object_list(array(
-						"class_id" => array(CL_PROCUREMENT_OFFER),
-						"CL_PROCUREMENT_OFFER.procurement" => $procurement->id(),
-						"lang_id" => array(),
-					));
-					foreach($offers->arr() as $offer)
-					{
-						$row_conns = $offer->connections_to(array(
-							'reltype' => 1,
-							'class' => CL_PROCUREMENT_OFFER_ROW,
-						));
-						foreach($row_conns as $row_conn)
-						{
-							if(is_oid($row_conn->prop("from")))$row = obj($row_conn->prop("from"));
-							else continue;
-							if((substr_count($row->prop("product") , $data["offers_find_product"]) > 0))
-							{
-								//kui pole seotud ühtegi ostu
-								$ps = $offer->connections_to(array(
-									'reltype' => 2,
-									'class' => CL_PURCHASE,
-								));
-								if($data["offers_find_only_buy"] && !(sizeof($ps)>0)) break;
-								$filter["oid"][$offer->id] = $offer->id();
-							}
-						}
-					}
-				}
 				
+				foreach($row_ol->arr() as $row)
+				{
+					$offer = $row->get_first_obj_by_reltype("RELTYPE_OFFER");
+					if(!is_object($offer))
+					{
+						continue;
+					}
+					if($data["offers_find_only_buy"])
+					{
+						$ps = $offer->connections_to(array(
+							'reltype' => 2,
+							'class' => CL_PURCHASE,
+						));
+						if(!(sizeof($ps)>0)) continue;
+					}
+					$filter["oid"][$offer->id] = $offer->id();
+				}
 			}
 			if(!sizeof($filter["oid"]) > 0) return $ol;
 		}
-		if($data["offers_find_address"])
+		if($data["offers_find_address"] || $data["offers_find_groups"])
 		{
-			$offerers = new object_list(array(new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-				"CL_CRM_COMPANY.contact.name" => "%".$data["offers_find_address"]."%",
-				"CL_CRM_PERSON.address.name" => "%".$data["offers_find_address"]."%",
-				)
-			))));
+			$offerers_filter = array(
+				"lang_id" => array(),
+				"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+			);
+			
+			if($data["offers_find_groups"])
+			{
+				if(is_oid($data["offers_find_groups"]))
+				{
+					$p_obj = obj($data["offers_find_groups"]);
+					if($p_obj->class_id() == CL_CRM_CATEGORY)
+					{
+						foreach($p_obj->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+						{
+							$offerers_filter["oid"][$c->prop("to")] = $c->prop("to");
+						}
+					}
+				}
+				if(!sizeof($offerers_filter["oid"]))
+				{
+					return $ol;
+				}
+			}
+			
+			if($data["offers_find_address"])
+			{
+				$offerers_filter[] =
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+						"CL_CRM_COMPANY.contact.name" => "%".$data["offers_find_address"]."%",
+						"CL_CRM_PERSON.address.name" => "%".$data["offers_find_address"]."%",
+					)
+				));
+			}
+			$offerers = new object_list($offerers_filter);
+			arr($offerers_filter);
 			$filter["offerer"] = $offerers->ids();
+			if(!sizeof($filter["offerer"])) return $ol;
 		}
 		$ol = new object_list($filter);
 		return $ol;
@@ -1046,7 +1073,7 @@ class procurement_center extends class_base
 			
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
-				"date" => date("d.m.Y",$o->prop("accept_date")),
+				"date" => date("d.m.Y",$o->created()),//$o->prop("accept_date")),
 				"offerer_name" => $offerer_name,
 				"area" => $offerer_area,
 				"status" => $statuses[$o->prop("state")],
@@ -1228,7 +1255,7 @@ class procurement_center extends class_base
 		$ol = new object_list();
 		$filter = array("class_id" => array(CL_PURCHASE), "lang_id" => array());
 		$data = $this_obj->meta("search_data");
-//		if($data["buyings_find_name"]) $filter["CL_PURCHASE.RELTYPE_OFFER.name"] = "%".$data["buyings_find_name"]."%";
+		if($data["buyings_find_name"]) $filter["CL_PURCHASE.offerer.name"] = "%".$data["buyings_find_name"]."%";
 
 //		if($data["buyings_find_groups"]) $filter["CL_PURCHASE.offerer.parent"] = $data["buyings_find_groups"];
 		
@@ -1236,47 +1263,71 @@ class procurement_center extends class_base
  		{
  			if(date_edit::get_timestamp($data["buyings_find_start"]) > 1) $from = date_edit::get_timestamp($data["buyings_find_start"]); else $from = 0;
  			if(date_edit::get_timestamp($data["buyings_find_end"]) > 1) $to = date_edit::get_timestamp($data["buyings_find_end"]); else $to = time()*666;
- 		 	$filter["CL_PURCHASE.RELTYPE_OFFER.accept_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
+ 		 	$filter["date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
  		}
  		
-		if(!$data["offers_find_archived"]) $filter["CL_PURCHASE.RELTYPE_OFFER.accept_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, 1,  time());
+		if(!$data["offers_find_archived"]) $filter["CL_PURCHASE.RELTYPE_OFFER.accept_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, time(),  time()*66);
 
-		if($data["buyings_find_product"])
+		if($data["buyings_find_groups"])
 		{
-			$offers = new object_list(array(
-				"class_id" => array(CL_PROCUREMENT_OFFER),
-				"lang_id" => array(),
-			));
-			foreach($offers->arr() as $offer)
+			if(is_oid($data["buyings_find_groups"]))
 			{
-				$row_conns = $offer->connections_to(array(
-					'reltype' => 1,
-					'class' => CL_PROCUREMENT_OFFER_ROW,
-				));
-				foreach($row_conns as $row_conn)
+				$p_obj = obj($data["buyings_find_groups"]);
+				if($p_obj->class_id() == CL_CRM_CATEGORY)
 				{
-					if(is_oid($row_conn->prop("from")))$row = obj($row_conn->prop("from"));
-					else continue;
-					if((substr_count($row->prop("product") , $data["offers_find_product"]) > 0))
+					foreach($p_obj->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 					{
-						$filter["CL_PURCHASE.RELTYPE_OFFER"][$offer->id] = $offer->id();
+						$filter["offerer"][$c->prop("to")] = $c->prop("to");
 					}
 				}
 			}
-			if(!sizeof($filter["CL_PURCHASE.RELTYPE_OFFER"]) > 0) return $ol;
+			if(!sizeof($filter["offerer"]))
+			{
+				return $ol;
+			}
 		}
 
 		if($data["buyings_find_address"])
 		{
-			$offerers = new object_list(array(new object_list_filter(array(
+			$filter[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-				"CL_CRM_COMPANY.contact.name" => "%".$data["buyings_find_address"]."%",
-				"CL_CRM_PERSON.address.name" => "%".$data["buyings_find_address"]."%",
+			//		"CL_PURCHASE.offerer.contact.name" => "%".$data["buyings_find_address"]."%",
+					"CL_PURCHASE.offerer.address.name" => "%".$data["buyings_find_address"]."%",
 				)
-			))));
-			$filter["CL_PURCHASE.offerer"] = $offerers->ids();
-			if(!(sizeof($filter["CL_PURCHASE.offerer"]) > 0)) return $ol;
+			));
+		}
+		
+		if($data["buyings_find_product"])
+		{
+			$owner = $this_obj->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+			if(is_object($owner))
+			{
+				$row_ol = new object_list(array(
+					"class_id" => array(CL_PROCUREMENT_OFFER_ROW),
+					"lang_id" => array(),
+					"CL_PROCUREMENT_OFFER_ROW.product" => "%".$data["buyings_find_product"]."%",
+				//	"parent" => $this_obj->id(),
+				));
+				
+				foreach($row_ol->arr() as $row)
+				{
+					$offer = $row->get_first_obj_by_reltype("RELTYPE_OFFER");
+					if(!is_object($offer))
+					{
+						continue;
+					}
+					$ps = $offer->connections_to(array(
+						'reltype' => 2,
+						'class' => CL_PURCHASE,
+					));
+					foreach($ps as $conn)
+					{
+						$filter["oid"][$conn->prop("from")] = $conn->prop("from");
+					}
+				}
+			}
+			if(!sizeof($filter["oid"]) > 0) return $ol;
 		}
 		$ol = new object_list($filter);
 		return $ol;
@@ -1571,9 +1622,9 @@ class procurement_center extends class_base
 			{
 				$buyings = new object_list(array(
 					"class_id" => array(CL_PURCHASE),
-					"CL_PURCHASE.buyer" => $owner->id(),
+		//			"buyer" => $owner->id(),
 					"lang_id" => array(),
-					"accept_date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, date_edit::get_timestamp($data["offerers_find_start"]), date_edit::get_timestamp($data["offerers_find_end"])),
+					"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, date_edit::get_timestamp($data["offerers_find_start"]), date_edit::get_timestamp($data["offerers_find_end"])),
 				));
 				foreach($buyings->arr() as $buying)
 				{
@@ -1621,7 +1672,7 @@ class procurement_center extends class_base
 								'class' => CL_PURCHASE,
 							));
 							if($data["offerers_find_only_buy"] && !(sizeof($ps)>0)) continue;
-							$filter["oid"][$offer->prop("offerer")] = $offer->prop("offerer");arr($offer->prop("offerer"));
+							$filter["oid"][$offer->prop("offerer")] = $offer->prop("offerer");
 						}
 					}
 				}
@@ -2021,8 +2072,7 @@ class procurement_center extends class_base
 		$ol = new object_list();
 		$filter = array("class_id" => array(CL_SHOP_PRODUCT), "lang_id" => array());
 		$data = $this_obj->meta("search_data");
-		if($data["products_find_product_name"]) $filter["name"] = array("%".$data["products_find_product_name"]."%");
-		
+		if($data["products_find_product_name"]) $filter["name"] = "%".$data["products_find_product_name"]."%";
 		if($data["products_find_name"] || $data["products_find_address"] || $data["products_find_groups"] || $data["products_find_apply"])
 		{
 			$offerer_filter = array("class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON), "lang_id" => array());
@@ -2034,8 +2084,27 @@ class procurement_center extends class_base
 				"CL_CRM_PERSON.address.name" => "%".$data["products_find_address"]."%",
 				)
 			));
-			if($data["products_find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
+			if($data["products_find_groups"])
+			{
+				if(is_oid($data["products_find_groups"]))
+				{
+					$p_obj = obj($data["products_find_groups"]);
+					if($p_obj->class_id() == CL_CRM_CATEGORY)
+					{
+						foreach($p_obj->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+						{
+							$offerer_filter["oid"][$c->prop("to")] = $c->prop("to");
+						}
+					}
+				}
+				if(!sizeof($offerer_filter["oid"]))
+				{
+					return $ol;
+				}
+			}
+//			if($data["products_find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
 			$offerer_list = new object_list($offerer_filter);
+			$filter["name"] = array();
 			foreach($offerer_list->arr() as $offerer)
 			{
 				$row_filter = array(
@@ -2043,23 +2112,19 @@ class procurement_center extends class_base
 					"lang_id" => array(),
 					"CL_PROCUREMENT_OFFER_ROW.RELTYPE_OFFER.offerer" => $offerer->id(),
 				);
-				if($data["products_find_apply"])
-				$row_filter["accept"] = $data["products_find_apply"];
+				if($data["products_find_apply"]) $row_filter["accept"] = 1;
 				$offer_rows = new object_list($row_filter);
-				
 				foreach($offer_rows->arr() as $row)
 				{
-					$prod_object = new object_list($row->prop("product"));
-					$row->prop("product");
-					$filter["oid"][] = $row->prop("product");
-				
+					if($data["products_find_product_name"] && !(substr_count(strtolower($row->prop("product")) , strtolower($data["products_find_product_name"]))))
+					{
+						continue;
+					}
+					$filter["name"][] = $row->prop("product");
 				}
 			}
-			if(!(sizeof($filter["oid"])>1)) return new object_list();
+			if(!(sizeof($filter["name"]))) return $ol;
 		}
-
-		$offerer_list = new object_list($offerer_filter);
-
 		$ol = new object_list($filter);
 		return $ol;
 	}	
@@ -2901,15 +2966,17 @@ class procurement_center extends class_base
 	**/
 	function insert_purchase($arr)
 	{
+		$center_obj = obj($arr["id"]);
+		$buyer = $center_obj->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
 		$o = obj();
 		$o->set_parent($arr["id"]);
 		$o->set_class_id(CL_PURCHASE);
 		$o->set_name(sprintf(t("ost: "), $o->id()));
-		$o->set_prop("buyer" , $arr["id"]);
+		$o->set_prop("buyer" , $buyer->id());
 		$o->set_prop("date" , time());
 		$o->save();
 		$o->connect(array(
-			"to" => $arr["id"],
+			"to" => $buyer->id(),
 			"reltype" => "RELTYPE_BUYER"
 		));
 		foreach(safe_array($arr["sel"]) as $id)
@@ -2921,7 +2988,8 @@ class procurement_center extends class_base
 			if(is_oid($id))
 			{
 				$offer = obj($id);
-				$o->set_name($o->name() . ", " . $offer->name());
+				$o->set_name($o->name() . " " . $offer->name());
+				$o->set_prop("offerer" , $offer->prop("offerer"));
 				$o->save();
 				if(is_oid($offer->prop("offerer")))
 				{
@@ -2932,7 +3000,7 @@ class procurement_center extends class_base
 				}
 			}
 		}
-		return html::get_change_url($o->id());
+		return html::get_change_url($o->id(), array("return_url" => $arr["post_ru"]));
 	}
 	
 	/**

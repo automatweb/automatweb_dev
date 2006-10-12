@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.11 2006/10/11 17:18:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.12 2006/10/12 16:04:54 markop Exp $
 // purchase.aw - Ost 
 /*
+
 @tableinfo aw_purchase index=aw_oid master_index=brother_of master_table=objects
 
 @classinfo syslog_type=ST_PURCHASE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -10,25 +11,25 @@
 @default group=general
 @default field=meta
 
-@property date type=date_select
+@property date type=date_select table=aw_purchase field=aw_date
 @caption Kuup&auml;ev
 
-@property buyer type=relpicker reltype=RELTYPE_BUYER
+@property buyer type=relpicker reltype=RELTYPE_BUYER table=aw_purchase field=aw_buyer
 @caption Ostja
 
-@property offerer type=relpicker reltype=RELTYPE_OFFERER
+@property offerer type=relpicker reltype=RELTYPE_OFFERER table=aw_purchase field=aw_offerer
 @caption Hankija
 
-@property stat type=select 
+@property stat type=select table=aw_purchase field=aw_stat
 @caption Staatus
 
-@property deal_no type=textbox
+@property deal_no type=textbox table=aw_purchase field=aw_deal_no
 @caption Lepingu/arve nr
 
-@property sum type=textbox
+@property sum type=textbox table=aw_purchase field=aw_sum
 @caption Summa
 
-@groupinfo offers caption=Pakkumised submit=no
+@groupinfo offers caption=Pakkumised submit=no 
 @default group=offers
 
 @property offers_add type=toolbar no_caption=1 store=no
@@ -485,6 +486,11 @@ class purchase extends class_base
 			{
 				$row->set_prop("b_amount" ,$row->prop("amount"));
 			}
+			$b_amount = $row->prop("b_amount");
+			$b_price = $row->prop("b_price");
+			if(is_array($b_amount))$b_amount = $b_price["amount"];
+			if(is_array($b_price))$b_price = $b_price["price"];
+
 			$t->define_data(array(
 				"row_id" 	=> $row->id(),
 				"product"	=> $row->prop("product"),
@@ -504,7 +510,7 @@ class purchase extends class_base
 								"size" => 5
 							)),
 						//$row->prop("price"),
-				'sum'		=> $row->prop("b_amount")*$row->prop("b_price"),
+				'sum'		=> $b_amount*$b_price,
 				'currency'	=> $currency,
 				'shipment'	=> date("d.m.Y", $row->prop("shipment")),
 			));
@@ -551,11 +557,15 @@ class purchase extends class_base
 						if(!$row->prop("accept")) continue;
 						if(!$row->prop("b_price"))
 						{
-							$sum = $sum + $row->prop("price") + $row->prop("amount");
+							$sum = $sum + (int)($row->prop("price") + $row->prop("amount"));
 						}
 						else
 						{
-							$sum = $sum + $row->prop("b_amount")*$row->prop("b_price");
+							$b_amount = $row->prop("b_amount");
+							$b_price = $row->prop("b_price");
+							if(is_array($b_amount))$b_amount = $b_price["amount"];
+							if(is_array($b_price))$b_price = $b_price["price"];
+							$sum = $sum + $b_amount*$b_price;
 						}
 					}
 				}
@@ -938,10 +948,20 @@ class purchase extends class_base
 
 	function do_db_upgrade($t, $f)
 	{
-		if ($f == "" && $t == "aw_purchase")
+		if ($t == "aw_purchase")
 		{
-			$this->db_query("CREATE TABLE aw_purchase (aw_oid int primary key)");
+			$this->db_query("CREATE TABLE aw_purchase (aw_oid int primary key, aw_sum double)");
 			return true;
+		}
+		switch($f)
+		{
+			case "aw_date":
+			case "aw_buyer":
+			case "aw_offerer":
+			case "aw_stat":
+			case "aw_deal_no":
+				$this->db_add_col($t, array("name" => $f, "type" => "int"));
+				return true;
 		}
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.13 2006/10/05 12:01:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.14 2006/10/12 16:04:54 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -49,11 +49,11 @@
 
 	@property files_tb type=toolbar no_caption=1 store=no
 	
-	@property files type=text  no_caption=1
-	@caption Manused
-	
 	@property files_table type=table no_caption=1
 	
+	@property files type=text  no_caption=1
+	@caption Manused
+
 @default group=r_list
 	@property p_tb type=toolbar no_caption=1 store=no
 	@layout p_l type=hbox width=30%:70%
@@ -310,6 +310,12 @@ class procurement_offer extends class_base
 
 	function _get_files_table($arr)
 	{
+		if(!sizeof($arr["obj_inst"]->connections_from(array(
+			"class" => array(CL_CRM_DOCUMENT, CL_CRM_MEMO, CL_CRM_DEAL, CL_FILE, CL_CRM_OFFER),
+		))))
+		{
+			return ;
+		}
 		$pt = $this->_get_files_pt($arr);
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_files_tbl($t);
@@ -1326,7 +1332,7 @@ class procurement_offer extends class_base
 					if ($entry["type"] != CL_FILE)
 					{
 						$o->set_prop("project", $t->id());
-						$o->set_prop("customer", reset($procurement->prop("orderer")));
+					//	$o->set_prop("customer", reset($procurement->prop("orderer")));
 					}
 					$o->save();
 
