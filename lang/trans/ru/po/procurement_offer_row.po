@@ -9,8 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/procurement_center/procurement_offer_row.aw:class__help
-msgid "Klassi  help"
+#: classes/applications/procurement_center/procurement_offer_row.aw:class_1127_help
+msgid "Klassi Pakkumise rida help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_product
@@ -35,6 +35,30 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_amount_help
 msgid "Omaduse Kogus (amount) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_amount
+msgid "Omaduse Ostetav kogus (b_amount) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_amount_comment
+msgid "Omaduse Ostetav kogus (b_amount) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_amount_help
+msgid "Omaduse Ostetav kogus (b_amount) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_price
+msgid "Omaduse Ostu hind (b_price) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_price_comment
+msgid "Omaduse Ostu hind (b_price) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_price_help
+msgid "Omaduse Ostu hind (b_price) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_unit

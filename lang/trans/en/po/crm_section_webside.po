@@ -81,8 +81,7 @@ msgstr "Which of the following properies to show"
 
 # classes/crm/crm_section_webside.aw:prop_show_label_comment
 #: classes/crm/crm_section_webside.aw:prop_show_label_comment
-msgid ""
-"Omaduse Milliseid alljärgnevaid omadusi näidata?  (show_label) kommentaar"
+msgid "Omaduse Milliseid alljärgnevaid omadusi näidata?  (show_label) kommentaar"
 msgstr ""
 
 # classes/crm/crm_section_webside.aw:prop_show_label_help
@@ -185,9 +184,10 @@ msgstr "Display"
 msgid "Grupi Näitamine (view) help"
 msgstr ""
 
+# classes/crm/crm_section_webside.aw:rel_RELTYPE_SECTION
 #: classes/crm/crm_section_webside.aw:rel_RELTYPE_SECTION
-msgid "Seose &amp;uuml;ksus (RELTYPE_SECTION) tekst"
-msgstr ""
+msgid "Seose &uuml;ksus (RELTYPE_SECTION) tekst"
+msgstr "Section"
 
 # classes/crm/crm_section_webside.aw:rel_RELTYPE_ORG
 #: classes/crm/crm_section_webside.aw:rel_RELTYPE_ORG
@@ -209,7 +209,3 @@ msgstr "Name"
 #: classes/crm/crm_section_webside.aw:145
 msgid "Järjekord"
 msgstr "Order"
-
-# classes/crm/crm_section_webside.aw:rel_RELTYPE_SECTION
-#~ msgid "Seose &uuml;ksus (RELTYPE_SECTION) tekst"
-#~ msgstr "Section"

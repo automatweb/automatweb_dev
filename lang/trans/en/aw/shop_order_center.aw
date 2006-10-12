@@ -39,6 +39,7 @@ $GLOBALS["TRANS"]["Seose toodete tabeli kujundus (RELTYPE_TABLE_LAYOUT) tekst"] 
 $GLOBALS["TRANS"]["Seose toote kujundus (RELTYPE_ITEM_LAYOUT) tekst"] = "product layout";
 $GLOBALS["TRANS"]["Seose ostukorv (RELTYPE_CART) tekst"] = "cart";
 $GLOBALS["TRANS"]["Seose vorm tellija andmete jaoks (RELTYPE_ORDER_FORM) tekst"] = "form for orderer data";
+$GLOBALS["TRANS"]["Seose n&auml;itamise kontroller (RELTYPE_CONTROLLER) tekst"] = "display controller";
 $GLOBALS["TRANS"]["Sessionipõhine"] = "Per session";
 $GLOBALS["TRANS"]["Kasutajapõhine"] = "Per user";
 $GLOBALS["TRANS"]["Kataloog"] = "Folder";

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_field_conference_room.aw:class_1031_help
 msgid "Klassi Konverentsiruum (valdkond) help"
 msgstr ""
@@ -74,6 +73,18 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
+#: classes/applications/crm/crm_field_conference_room.aw:prop_rooms
+msgid "Omaduse  (rooms) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_field_conference_room.aw:prop_rooms_comment
+msgid "Omaduse  (rooms) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_field_conference_room.aw:prop_rooms_help
+msgid "Omaduse  (rooms) help"
+msgstr ""
+
 #: classes/applications/crm/crm_field_conference_room.aw:group_cedit
 msgid "Grupi Kontaktandmed (cedit) pealkiri"
 msgstr ""
@@ -88,6 +99,14 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:group_images_help
 msgid "Grupi Pildid (images) help"
+msgstr ""
+
+#: classes/applications/crm/crm_field_conference_room.aw:group_rooms
+msgid "Grupi Ruumid (rooms) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_field_conference_room.aw:group_rooms_help
+msgid "Grupi Ruumid (rooms) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_EMAIL
@@ -106,3 +125,6 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_ROOM
+msgid "Seose Ruum (RELTYPE_ROOM) tekst"
+msgstr ""

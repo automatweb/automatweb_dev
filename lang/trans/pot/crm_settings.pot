@@ -122,6 +122,42 @@ msgstr ""
 msgid "Omaduse Kohtumise kontroller (controller_meeting) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_default_tasks_view
+msgid "Omaduse Tegevused vaikimisi vaade (default_tasks_view) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_tasks_view_comment
+msgid "Omaduse Tegevused vaikimisi vaade (default_tasks_view) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_tasks_view_help
+msgid "Omaduse Tegevused vaikimisi vaade (default_tasks_view) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_view_task_rows_open
+msgid "Omaduse Vaikimisi avatakse toimetuse nimel klikkides kohe read (view_task_rows_open) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_view_task_rows_open_comment
+msgid "Omaduse Vaikimisi avatakse toimetuse nimel klikkides kohe read (view_task_rows_open) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_view_task_rows_open_help
+msgid "Omaduse Vaikimisi avatakse toimetuse nimel klikkides kohe read (view_task_rows_open) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_task_rows_bills_filter
+msgid "Omaduse Toimetuse ridades valitud Arve tulba vaikimisi filter (default_task_rows_bills_filter) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_task_rows_bills_filter_comment
+msgid "Omaduse Toimetuse ridades valitud Arve tulba vaikimisi filter (default_task_rows_bills_filter) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_default_task_rows_bills_filter_help
+msgid "Omaduse Toimetuse ridades valitud Arve tulba vaikimisi filter (default_task_rows_bills_filter) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:prop_tables_toolbar
 msgid "Omaduse  (tables_toolbar) caption"
 msgstr ""
@@ -302,51 +338,75 @@ msgstr ""
 msgid "Seose Kontroller (RELTYPE_CTR) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:191
+#: classes/applications/crm/crm_settings.aw:180
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:181
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:182
+msgid "Arvel"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:183
+msgid "Arveta"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:196
+msgid "Tabelvaade"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:197
+msgid "Kalendervaade"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:217
 msgid "Salvesta tabeli seaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:212
+#: classes/applications/crm/crm_settings.aw:238
 msgid "Taasta algseaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:213
+#: classes/applications/crm/crm_settings.aw:239
 msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:226
+#: classes/applications/crm/crm_settings.aw:252
 msgid "Minu t&ouml;&ouml;koht"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:233
+#: classes/applications/crm/crm_settings.aw:259
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:240
+#: classes/applications/crm/crm_settings.aw:266
 msgid "Eraisikust klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:247
+#: classes/applications/crm/crm_settings.aw:273
 msgid "T&ouml;&ouml;kaaslane"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:254
+#: classes/applications/crm/crm_settings.aw:280
 msgid "Kliendi t&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:304
+#: classes/applications/crm/crm_settings.aw:330
 msgid "Veeru nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:308
+#: classes/applications/crm/crm_settings.aw:334
 msgid "Järjekord"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:312
+#: classes/applications/crm/crm_settings.aw:338
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:316
+#: classes/applications/crm/crm_settings.aw:342
 msgid "Pealkiri"
 msgstr ""
 

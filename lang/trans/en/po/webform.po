@@ -819,12 +819,12 @@ msgid "--vali--"
 msgstr "--select--"
 
 #: classes/contentmgmt/webform.aw:1162
-msgid "Jï¿½jekord (kasvav)"
-msgstr "Order (ascending)"
+msgid "Järjekord (kasvav)"
+msgstr ""
 
 #: classes/contentmgmt/webform.aw:1163
-msgid "Jï¿½jekord (kahanev)"
-msgstr "Order (descending)"
+msgid "Järjekord (kahanev)"
+msgstr ""
 
 #: classes/contentmgmt/webform.aw:1164
 msgid "Nimi (kasvav)"
@@ -917,6 +917,12 @@ msgstr "Send"
 #: classes/contentmgmt/webform.aw:2282
 msgid "Liigu edasi &raquo;"
 msgstr "Go on &raquo;"
+
+#~ msgid "Jï¿½jekord (kasvav)"
+#~ msgstr "Order (ascending)"
+
+#~ msgid "Jï¿½jekord (kahanev)"
+#~ msgstr "Order (descending)"
 
 #~ msgid "'elemendinimi' peab olema t&auml;idetud"
 #~ msgstr "field 'elemendinimi' must be filled out"

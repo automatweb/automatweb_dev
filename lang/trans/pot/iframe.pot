@@ -63,15 +63,15 @@ msgid "Omaduse Kõrgus (height) help"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_frameborder
-msgid "Omaduse Ümbritseda raamiga (frameborder) caption"
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) caption"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_frameborder_comment
-msgid "Omaduse Ümbritseda raamiga (frameborder) kommentaar"
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_frameborder_help
-msgid "Omaduse Ümbritseda raamiga (frameborder) help"
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) help"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_scrolling

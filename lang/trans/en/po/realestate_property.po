@@ -25,18 +25,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_property.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_property.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_property.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_property.aw:prop_header
 msgid "Omaduse  (header) caption"
 msgstr ""
@@ -362,19 +350,15 @@ msgid "Omaduse T&auml;nukiri (title5) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_appreciation_note_date
-msgid ""
-"Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) caption"
+msgid "Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_appreciation_note_date_comment
-msgid ""
-"Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) "
-"kommentaar"
+msgid "Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_appreciation_note_date_help
-msgid ""
-"Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) help"
+msgid "Omaduse T&auml;nukirja saatmise kuup&auml;ev (appreciation_note_date) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_appreciation_note_type
@@ -382,8 +366,7 @@ msgid "Omaduse T&auml;nukirja t&uuml;&uuml;p (appreciation_note_type) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_appreciation_note_type_comment
-msgid ""
-"Omaduse T&auml;nukirja t&uuml;&uuml;p (appreciation_note_type) kommentaar"
+msgid "Omaduse T&auml;nukirja t&uuml;&uuml;p (appreciation_note_type) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_appreciation_note_type_help
@@ -475,19 +458,15 @@ msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_house_number_on_web
-msgid ""
-"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
+msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
 msgstr "Show house number on the webpage"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_house_number_on_web_comment
-msgid ""
-"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) "
-"kommentaar"
+msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_house_number_on_web_help
-msgid ""
-"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
+msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_special_homepage
@@ -503,19 +482,15 @@ msgid "Omaduse Objekti koduleht (special_homepage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_special_status
-msgid ""
-"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) caption"
+msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) caption"
 msgstr "Special status"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_special_status_comment
-msgid ""
-"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) "
-"kommentaar"
+msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_special_status_help
-msgid ""
-"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) help"
+msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_project
@@ -651,21 +626,15 @@ msgid "Omaduse V&auml;ike pilt (picture_icon_image) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_map_create
-msgid ""
-"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
-"caption"
+msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) caption"
 msgstr "Create a map image"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_map_create_comment
-msgid ""
-"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
-"kommentaar"
+msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_map_create_help
-msgid ""
-"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
-"help"
+msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_map_url
@@ -773,8 +742,7 @@ msgid "Seose Aadress (RELTYPE_REALESTATE_ADDRESS) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:rel_RELTYPE_REALESTATE_SELLER
-msgid ""
-"Seose Klient (M&amp;uuml;&amp;uuml;ja) (RELTYPE_REALESTATE_SELLER) tekst"
+msgid "Seose Klient (M&uuml;&uuml;ja) (RELTYPE_REALESTATE_SELLER) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:rel_RELTYPE_REALESTATE_BUYER
@@ -798,13 +766,11 @@ msgid "Seose Pilt (RELTYPE_REALESTATE_PICTURE) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:rel_RELTYPE_REALESTATE_PICTUREICON
-msgid "Seose V&amp;auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
+msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:365
-msgid ""
-"Kinnisvarahalduskeskkond objekti jaoks m&auml;&auml;ramata v&otilde;i puudub "
-"juurdep&auml;&auml;su&otilde;igus"
+msgid "Kinnisvarahalduskeskkond objekti jaoks m&auml;&auml;ramata v&otilde;i puudub juurdep&auml;&auml;su&otilde;igus"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:444
@@ -838,9 +804,7 @@ msgid "Isikukood ei vasta Eesti Vabariigi isikukoodi standardile."
 msgstr "Personal code is not valid by Estonian standards"
 
 #: classes/applications/realestate_management/realestate_property.aw:828
-msgid ""
-"Isikukoodis leiduv s&uuml;nnikuup&auml;evateave ei vasta &uuml;helegi "
-"kuup&auml;evale Gregoriuse kalendris."
+msgid "Isikukoodis leiduv s&uuml;nnikuup&auml;evateave ei vasta &uuml;helegi kuup&auml;evale Gregoriuse kalendris."
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:901
@@ -892,32 +856,19 @@ msgid "Salvesta muudatused"
 msgstr "Save changes"
 
 #: classes/applications/realestate_management/realestate_property.aw:1084
-msgid ""
-"Uue kinnisvaraobjekti loomisel vaikimisi riik defineerimata. Tekitati "
-"objekt, millel puudub aadress."
-msgstr ""
-"Creating a new real estate object the country is undefined by default. An "
-"object without addess has been created."
+msgid "Uue kinnisvaraobjekti loomisel vaikimisi riik defineerimata. Tekitati objekt, millel puudub aadress."
+msgstr "Creating a new real estate object the country is undefined by default. An object without addess has been created."
 
 #: classes/applications/realestate_management/realestate_property.aw:1093
-msgid ""
-"Uue kinnisvaraobjekti loomisel kinnsvarahalduskeskkond defineerimata. "
-"Tekitati orbobjekt."
-msgstr ""
-"Creating a new real estate object the real estate administration environment "
-"is undefined. An orphan object has been created."
+msgid "Uue kinnisvaraobjekti loomisel kinnsvarahalduskeskkond defineerimata. Tekitati orbobjekt."
+msgstr "Creating a new real estate object the real estate administration environment is undefined. An orphan object has been created."
 
 #: classes/applications/realestate_management/realestate_property.aw:1102
-msgid ""
-"Uue kinnisvaraobjekti loomisel ei antud argumendina kaasa loodud obj. id-d."
-msgstr ""
-"Creating a new real estate object the object´s id was not included as an "
-"argument."
+msgid "Uue kinnisvaraobjekti loomisel ei antud argumendina kaasa loodud obj. id-d."
+msgstr "Creating a new real estate object the object´s id was not included as an argument."
 
 #: classes/applications/realestate_management/realestate_property.aw:1419
-msgid ""
-"Kinnisvaraobjektil halduskeskkond defineerimata v&otilde;i puudub "
-"juurdep&auml;&auml;su&otilde;igus (oid: %s)."
+msgid "Kinnisvaraobjektil halduskeskkond defineerimata v&otilde;i puudub juurdep&auml;&auml;su&otilde;igus (oid: %s)."
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:1676
@@ -1039,10 +990,7 @@ msgid "Salvestatud"
 msgstr "Saved"
 
 #: classes/applications/realestate_management/realestate_property.aw:2538
-msgid ""
-"Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal "
-"kustutada. Viga &otilde;iguste seadetes. J&auml;&auml;b orbobjekt, mille id "
-"on %s"
+msgid "Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal kustutada. Viga &otilde;iguste seadetes. J&auml;&auml;b orbobjekt, mille id on %s"
 msgstr ""
 
 #~ msgid "Omaduse Vajab tõlget (needs_translation) caption"
@@ -1081,19 +1029,11 @@ msgstr ""
 #~ msgid "Omaduse Väike pilt (picture_icon_image) caption"
 #~ msgstr "Small picture"
 
-#~ msgid ""
-#~ "Kinnisvarahalduskeskkond objekti jaoks määramata või puudub "
-#~ "juurdepääsuõigus"
-#~ msgstr ""
-#~ "For the object the real estate administration environment is not "
-#~ "definited or access is denied"
+#~ msgid "Kinnisvarahalduskeskkond objekti jaoks määramata või puudub juurdepääsuõigus"
+#~ msgstr "For the object the real estate administration environment is not definited or access is denied"
 
-#~ msgid ""
-#~ "Isikukoodis leiduv sünnikuupäevateave ei vasta ühelegi kuupäevale "
-#~ "Gregoriuse kalendris."
-#~ msgstr ""
-#~ "The information about birth date in personal code is not square with "
-#~ "Gregorius calendar"
+#~ msgid "Isikukoodis leiduv sünnikuupäevateave ei vasta ühelegi kuupäevale Gregoriuse kalendris."
+#~ msgstr "The information about birth date in personal code is not square with Gregorius calendar"
 
 #~ msgid "Müüja andmetega/piltidega"
 #~ msgstr "With data of seller and pictures"
@@ -1101,12 +1041,8 @@ msgstr ""
 #~ msgid "Müüja andmetega/piltideta"
 #~ msgstr "With data of seller and without pictures"
 
-#~ msgid ""
-#~ "Kinnisvaraobjektil halduskeskkond defineerimata või puudub "
-#~ "juurdepääsuõigus (oid: %s)."
-#~ msgstr ""
-#~ "Real estate object´s administration environment is undefined or access is "
-#~ "denied."
+#~ msgid "Kinnisvaraobjektil halduskeskkond defineerimata või puudub juurdepääsuõigus (oid: %s)."
+#~ msgstr "Real estate object´s administration environment is undefined or access is denied."
 
 #~ msgid "Tänav"
 #~ msgstr "Street"

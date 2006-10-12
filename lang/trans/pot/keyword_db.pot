@@ -15,26 +15,26 @@ msgid "Klassi V&otilde;tmes&otilde;nade baas help"
 msgstr ""
 
 #: classes/keyword_db.aw:prop_keyw_cats
-msgid "Omaduse Kataloogid, mille alt võtmesõnad kuuluvad sellesse baasi (keyw_cats) caption"
+msgid "Omaduse Kataloogid, mille alt v&otilde;tmes&otilde;nad kuuluvad sellesse baasi (keyw_cats) caption"
 msgstr ""
 
 #: classes/keyword_db.aw:prop_keyw_cats_comment
-msgid "Omaduse Kataloogid, mille alt võtmesõnad kuuluvad sellesse baasi (keyw_cats) kommentaar"
+msgid "Omaduse Kataloogid, mille alt v&otilde;tmes&otilde;nad kuuluvad sellesse baasi (keyw_cats) kommentaar"
 msgstr ""
 
 #: classes/keyword_db.aw:prop_keyw_cats_help
-msgid "Omaduse Kataloogid, mille alt võtmesõnad kuuluvad sellesse baasi (keyw_cats) help"
+msgid "Omaduse Kataloogid, mille alt v&otilde;tmes&otilde;nad kuuluvad sellesse baasi (keyw_cats) help"
 msgstr ""
 
 #: classes/keyword_db.aw:prop_bro_cats
-msgid "Omaduse Kataloogid, mille alla saab selle baasi võtmesõnu vennastada (bro_cats) caption"
+msgid "Omaduse Kataloogid, mille alla saab selle baasi v&otilde;tmes&otilde;nu vennastada (bro_cats) caption"
 msgstr ""
 
 #: classes/keyword_db.aw:prop_bro_cats_comment
-msgid "Omaduse Kataloogid, mille alla saab selle baasi võtmesõnu vennastada (bro_cats) kommentaar"
+msgid "Omaduse Kataloogid, mille alla saab selle baasi v&otilde;tmes&otilde;nu vennastada (bro_cats) kommentaar"
 msgstr ""
 
 #: classes/keyword_db.aw:prop_bro_cats_help
-msgid "Omaduse Kataloogid, mille alla saab selle baasi võtmesõnu vennastada (bro_cats) help"
+msgid "Omaduse Kataloogid, mille alla saab selle baasi v&otilde;tmes&otilde;nu vennastada (bro_cats) help"
 msgstr ""
 

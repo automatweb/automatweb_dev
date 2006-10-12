@@ -357,10 +357,9 @@ msgstr ""
 msgid "Seose celli stiilide kataloog (RELTYPE_CELLSTYLE_FOLDER) tekst"
 msgstr "cell style folder"
 
-# classes/layout.aw:rel_RELTYPE_SHOW_FOLDER
 #: classes/contentmgmt/layout.aw:rel_RELTYPE_SHOW_FOLDER
-msgid "Seose nï¿½ta selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
-msgstr "display in this folder"
+msgid "Seose näita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
+msgstr ""
 
 #: classes/contentmgmt/layout.aw:394
 msgid "%d tulba laius"
@@ -369,3 +368,7 @@ msgstr "Row %d width"
 #: classes/contentmgmt/layout.aw:416
 msgid "%d tulba k&otilde;rgus"
 msgstr "Row %d height"
+
+# classes/layout.aw:rel_RELTYPE_SHOW_FOLDER
+#~ msgid "Seose nï¿½ta selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
+#~ msgstr "display in this folder"

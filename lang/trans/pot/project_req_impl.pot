@@ -19,7 +19,7 @@ msgid "Toimetus"
 msgstr ""
 
 #: classes/applications/groupware/project_req_impl.aw:46
-msgid "K&amp;otilde;ne"
+msgid "K&otilde;ne"
 msgstr ""
 
 #: classes/applications/groupware/project_req_impl.aw:61
@@ -27,34 +27,42 @@ msgid "Kohtumine"
 msgstr ""
 
 #: classes/applications/groupware/project_req_impl.aw:76
-msgid "Arendus&amp;uuml;lesanne"
+msgid "Arendus&uuml;lesanne"
 msgstr ""
 
 #: classes/applications/groupware/project_req_impl.aw:92
-msgid "N&amp;otilde;ue"
+msgid "N&otilde;ue"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:99
+#: classes/applications/groupware/project_req_impl.aw:107
+msgid "Kategooria"
+msgstr ""
+
+#: classes/applications/groupware/project_req_impl.aw:114
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:134
-msgid ""
-msgstr ""
-
-#: classes/applications/groupware/project_req_impl.aw:138
-msgid "Nimi"
-msgstr ""
-
-#: classes/applications/groupware/project_req_impl.aw:144
-msgid "Looja"
+#: classes/applications/groupware/project_req_impl.aw:146
+msgid "N&otilde;uded"
 msgstr ""
 
 #: classes/applications/groupware/project_req_impl.aw:150
+msgid ""
+msgstr ""
+
+#: classes/applications/groupware/project_req_impl.aw:154
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/groupware/project_req_impl.aw:160
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/groupware/project_req_impl.aw:166
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:159
+#: classes/applications/groupware/project_req_impl.aw:175
 msgid "Osalejad"
 msgstr ""
 

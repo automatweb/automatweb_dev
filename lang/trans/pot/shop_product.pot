@@ -991,7 +991,7 @@ msgid "Seose link (RELTYPE_LNK) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_KW
-msgid "Seose v&amp;otilde;tmes&amp;otilde;na (RELTYPE_KW) tekst"
+msgid "Seose v&otilde;tmes&otilde;na (RELTYPE_KW) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM6
@@ -1019,7 +1019,7 @@ msgid "Seose kasutajadefineeritud muutuja 10 (RELTYPE_VARUSERM10) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_TAX_RATE
-msgid "Seose Maksum&amp;auml;&amp;auml;r (RELTYPE_TAX_RATE) tekst"
+msgid "Seose Maksum&auml;&auml;r (RELTYPE_TAX_RATE) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:534

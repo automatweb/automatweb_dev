@@ -74,6 +74,18 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
+#: classes/applications/crm/crm_field_conference_room.aw:prop_rooms
+msgid "Omaduse  (rooms) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_field_conference_room.aw:prop_rooms_comment
+msgid "Omaduse  (rooms) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_field_conference_room.aw:prop_rooms_help
+msgid "Omaduse  (rooms) help"
+msgstr ""
+
 #: classes/applications/crm/crm_field_conference_room.aw:group_cedit
 msgid "Grupi Kontaktandmed (cedit) pealkiri"
 msgstr ""
@@ -90,6 +102,14 @@ msgstr ""
 msgid "Grupi Pildid (images) help"
 msgstr ""
 
+#: classes/applications/crm/crm_field_conference_room.aw:group_rooms
+msgid "Grupi Ruumid (rooms) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_field_conference_room.aw:group_rooms_help
+msgid "Grupi Ruumid (rooms) help"
+msgstr ""
+
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_EMAIL
 msgid "Seose E-post (RELTYPE_EMAIL) tekst"
 msgstr ""
@@ -104,5 +124,9 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_ROOM
+msgid "Seose Ruum (RELTYPE_ROOM) tekst"
 msgstr ""
 

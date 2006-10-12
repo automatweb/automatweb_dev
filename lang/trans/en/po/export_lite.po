@@ -10,8 +10,5 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/export/export_lite.aw:52
-msgid "eksport juba k&amp;auml;ib!"
-msgstr ""
-
-#~ msgid "eksport juba k&auml;ib!"
-#~ msgstr "export already running"
+msgid "eksport juba k&auml;ib!"
+msgstr "export already running"

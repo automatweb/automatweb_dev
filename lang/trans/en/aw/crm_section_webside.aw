@@ -10,6 +10,7 @@ $GLOBALS["TRANS"]["Omaduse Telefon (show_phone) caption"] = "Phone";
 $GLOBALS["TRANS"]["Omaduse E-mail (show_email) caption"] = "E-mail";
 $GLOBALS["TRANS"]["Grupi Järjekord (order) pealkiri"] = "Order";
 $GLOBALS["TRANS"]["Grupi Näitamine (view) pealkiri"] = "Display";
+$GLOBALS["TRANS"]["Seose &uuml;ksus (RELTYPE_SECTION) tekst"] = "Section";
 $GLOBALS["TRANS"]["Seose Organisatsioon (RELTYPE_ORG) tekst"] = "Organisation";
 $GLOBALS["TRANS"]["Piltidega vaade"] = "Image view";
 $GLOBALS["TRANS"]["Tabelina"] = "As table";

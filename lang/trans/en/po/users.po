@@ -22,22 +22,13 @@ msgid "Sellist kasutajat pole registreeritud"
 msgstr "No such user"
 
 #: classes/users.aw:797
-msgid "Sellist v&otilde;tit pole v&auml;ljastatud"
-msgstr ""
+msgid "Sellist võtit pole väljastatud"
+msgstr "No such key"
 
 #: classes/users.aw:809
-msgid "See v&otilde;ti on juba aegunud"
-msgstr ""
+msgid "See võti on juba aegunud"
+msgstr "This key has expired"
 
 #: classes/users.aw:809
-msgid "Telli uusi v&amp;otilde;ti"
-msgstr ""
-
-#~ msgid "Sellist võtit pole väljastatud"
-#~ msgstr "No such key"
-
-#~ msgid "See võti on juba aegunud"
-#~ msgstr "This key has expired"
-
-#~ msgid "Telli uusi v&otilde;ti"
-#~ msgstr "Order new key"
+msgid "Telli uusi v&otilde;ti"
+msgstr "Order new key"

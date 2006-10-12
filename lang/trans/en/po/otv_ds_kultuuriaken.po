@@ -76,8 +76,7 @@ msgid "Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) caption"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_all_comment
-msgid ""
-"Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) kommentaar"
+msgid "Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_all_help
@@ -204,9 +203,10 @@ msgstr "Automatic import"
 msgid "Grupi Automaatne import (recurrence_config) help"
 msgstr ""
 
+# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_EVENT_FORM
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_EVENT_FORM
-msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
-msgstr ""
+msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
+msgstr "Event form"
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_PARENT
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_PARENT
@@ -261,10 +261,6 @@ msgstr ""
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text
 #~ msgid "Omaduse J&auml;rgmine import (next_import_text) caption"
 #~ msgstr "Next import"
-
-# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_EVENT_FORM
-#~ msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
-#~ msgstr "Event form"
 
 #~ msgid "Impordi s&uuml;ndmused"
 #~ msgstr "Import events"

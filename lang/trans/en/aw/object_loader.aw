@@ -8,4 +8,5 @@ $GLOBALS["TRANS"]["object_loader::load(%s): no such object!"] = "object_loader::
 $GLOBALS["TRANS"]["object_loader::save(%s): no object with oid $oid exists in the global list"] = "object_loader::save(%s): no object with oid $oid exists in the global list";
 $GLOBALS["TRANS"]["object_loader::save_new(%s): no object with oid %s exists in the global list"] = "object_loader::save_new(%s): no object with oid %s exists in the global list";
 $GLOBALS["TRANS"]["object_loader::switch_db_connection(%s): could nto find root connection!"] = "object_loader::switch_db_connection(%s): could nto find root connection!";
+$GLOBALS["TRANS"]["object_loader->can(%s, %s): error in object hierarchy, count exceeded!"] = "object_loader->can(%s, %s): error in object hierarchy, count exceeded!";
 ?>

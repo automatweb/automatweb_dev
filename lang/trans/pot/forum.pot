@@ -162,15 +162,27 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2352
+#: classes/contentmgmt/forum/forum.aw:1301
+msgid "Nime v&auml;li peab olema t&auml;idetud"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum.aw:1305
+msgid "Kommentaari v&auml;li peab olema t&auml;idetud"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum.aw:1309
+msgid "Sisestatud kontrollkood on vale"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum.aw:2418
 msgid "Näita"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2360
+#: classes/contentmgmt/forum/forum.aw:2426
 msgid "Ekspordi XML"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2366
+#: classes/contentmgmt/forum/forum.aw:2432
 msgid "E-posti aadressid"
 msgstr ""
 

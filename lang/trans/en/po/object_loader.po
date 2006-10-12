@@ -14,57 +14,37 @@ msgid "object_loader::param_to_oid(%s): no object with alias $param!"
 msgstr "object_loader::param_to_oid(%s): no object with alias $param!"
 
 #: classes/core/obj/object_loader.aw:152
-msgid ""
-"object_loader::param_to_oid(): parameter must be either: oid , string "
-"(alias) or object instance!"
-msgstr ""
-"object_loader::param_to_oid(): parameter must be either: oid , string "
-"(alias) or object instance!"
+msgid "object_loader::param_to_oid(): parameter must be either: oid , string (alias) or object instance!"
+msgstr "object_loader::param_to_oid(): parameter must be either: oid , string (alias) or object instance!"
 
 #: classes/core/obj/object_loader.aw:172
 msgid "no object with alias %s!"
 msgstr "no object with alias %s!"
 
 #: classes/core/obj/object_loader.aw:218
-msgid ""
-"parameter must be either: oid , string (alias), object instance or object "
-"list instance!"
-msgstr ""
-"parameter must be either: oid , string (alias), object instance or object "
-"list instance!"
+msgid "parameter must be either: oid , string (alias), object instance or object list instance!"
+msgstr "parameter must be either: oid , string (alias), object instance or object list instance!"
 
 #: classes/core/obj/object_loader.aw:245
 msgid "object_loader::load(%s): parameter is not object id!"
 msgstr "object_loader::load(%s): parameter is not object id!"
 
-#: classes/core/obj/object_loader.aw:263
+#: classes/core/obj/object_loader.aw:261
 msgid "object_loader::load(%s): no such object!"
 msgstr "object_loader::load(%s): no such object!"
 
-#: classes/core/obj/object_loader.aw:291
-msgid ""
-"object_loader::save(%s): no object with oid $oid exists in the global list"
-msgstr ""
-"object_loader::save(%s): no object with oid $oid exists in the global list"
+#: classes/core/obj/object_loader.aw:289
+msgid "object_loader::save(%s): no object with oid $oid exists in the global list"
+msgstr "object_loader::save(%s): no object with oid $oid exists in the global list"
 
-#: classes/core/obj/object_loader.aw:340
-msgid ""
-"object_loader::save_new(%s): no object with oid %s exists in the global list"
-msgstr ""
-"object_loader::save_new(%s): no object with oid %s exists in the global list"
+#: classes/core/obj/object_loader.aw:338
+msgid "object_loader::save_new(%s): no object with oid %s exists in the global list"
+msgstr "object_loader::save_new(%s): no object with oid %s exists in the global list"
 
-#: classes/core/obj/object_loader.aw:418
-msgid ""
-"object_loader::switch_db_connection(%s): could nto find root connection!"
-msgstr ""
-"object_loader::switch_db_connection(%s): could nto find root connection!"
+#: classes/core/obj/object_loader.aw:416
+msgid "object_loader::switch_db_connection(%s): could nto find root connection!"
+msgstr "object_loader::switch_db_connection(%s): could nto find root connection!"
 
-#: classes/core/obj/object_loader.aw:564
-msgid ""
-"object_loader-&gt;can(%s, %s): error in object hierarchy, count exceeded!"
-msgstr ""
-
-#~ msgid ""
-#~ "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
-#~ msgstr ""
-#~ "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
+#: classes/core/obj/object_loader.aw:539
+msgid "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
+msgstr "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"

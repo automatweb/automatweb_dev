@@ -15,6 +15,7 @@ $GLOBALS["TRANS"]["Omaduse Eeldustööd (prerequisites) caption"] = "Prerequisite 
 $GLOBALS["TRANS"]["Omaduse Soovitav algusaeg (advised_starttime) caption"] = "Advised start time";
 $GLOBALS["TRANS"]["Grupi Andmed (data) pealkiri"] = "Data";
 $GLOBALS["TRANS"]["Grupi Töövoog (workflow) pealkiri"] = "Workflow";
+$GLOBALS["TRANS"]["Seose Tööks kasutatav ressurss (RELTYPE_MRP_RESOURCE) tekst"] = "Resource used for job";
 $GLOBALS["TRANS"]["Seose Projekt (RELTYPE_MRP_PROJECT) tekst"] = "Project";
 $GLOBALS["TRANS"]["Uus"] = "New";
 $GLOBALS["TRANS"]["Planeeritud"] = "Planned";

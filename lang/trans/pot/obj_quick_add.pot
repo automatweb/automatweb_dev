@@ -70,7 +70,7 @@ msgstr ""
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:71 classes/applications/customer_satisfaction_center/obj_quick_add.aw:121
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:71 classes/applications/customer_satisfaction_center/obj_quick_add.aw:208
 msgid "Objekti t&uuml;&uuml;p"
 msgstr ""
 
@@ -78,23 +78,43 @@ msgstr ""
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:116
-msgid "Objekti nimi"
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:85
+msgid "Kopeeri"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:189
-msgid "Pane kiirmen&uuml;&uuml;sse"
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:92
+msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:193
-msgid "Eemalda kiirmen&uuml;&uuml;st"
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:101
+msgid "Kleebi"
 msgstr ""
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:197
+msgid "Ikoon"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:203
+msgid "Objekti nimi"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:315
+msgid "Pane kiirmen&uuml;&uuml;sse"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:319
+msgid "Eemalda kiirmen&uuml;&uuml;st"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:323
 msgid "Toimeta kiirmen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:250
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:329
+msgid "Lisa kiiresti"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:347
 msgid "%s kiirlisamine"
 msgstr ""
 

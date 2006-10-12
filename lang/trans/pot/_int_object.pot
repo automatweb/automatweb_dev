@@ -150,19 +150,19 @@ msgstr ""
 msgid "object::create_brother(%s): no parent!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1514
+#: classes/core/obj/_int_object.aw:1586
 msgid "object::load(%s): no view access for object %s!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1854
+#: classes/core/obj/_int_object.aw:1925
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1903
+#: classes/core/obj/_int_object.aw:1974
 msgid "object::save(): no acess to save object %s under %s !"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1918
+#: classes/core/obj/_int_object.aw:1989
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr ""
 

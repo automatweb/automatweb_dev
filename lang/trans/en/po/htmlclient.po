@@ -37,25 +37,37 @@ msgstr "Not active"
 msgid "Vali"
 msgstr "Select"
 
-#: classes/cfg/htmlclient.aw:423 classes/cfg/htmlclient.aw:564
+#: classes/cfg/htmlclient.aw:429 classes/cfg/htmlclient.aw:570
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/cfg/htmlclient.aw:572
-msgid "&lt;&lt;&lt; Tagasi"
-msgstr ""
-
-#: classes/cfg/htmlclient.aw:573
-msgid "submit_and_back"
-msgstr ""
-
-#: classes/cfg/htmlclient.aw:583
-msgid "Edasi &gt;&gt;&gt;"
-msgstr ""
-
 #: classes/cfg/htmlclient.aw:584
+msgid "&lt;&lt;&lt; Tagasi"
+msgstr "&lt;&lt;&lt; Go back"
+
+#: classes/cfg/htmlclient.aw:585
+msgid "submit_and_back"
+msgstr "Submit and go back"
+
+#: classes/cfg/htmlclient.aw:595
+msgid "Edasi &gt;&gt;&gt;"
+msgstr "Forward &gt;&gt;&gt;"
+
+#: classes/cfg/htmlclient.aw:596
 msgid "submit_and_forward"
-msgstr ""
+msgstr "Submit and go forward"
+
+#: classes/cfg/htmlclient.aw:807
+msgid "J&auml;rjehoidja"
+msgstr "Bookmarks"
+
+#: classes/cfg/htmlclient.aw:811
+msgid "Ajalugu"
+msgstr "History"
+
+#: classes/cfg/htmlclient.aw:815
+msgid "Lisa kiiresti"
+msgstr "Add quickly"
 
 #~ msgid "Toimetus"
 #~ msgstr "Task"

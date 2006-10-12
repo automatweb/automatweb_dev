@@ -26,18 +26,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_header
 msgid "Omaduse  (header) caption"
 msgstr ""
@@ -2135,7 +2123,7 @@ msgid "Seose Aadress (RELTYPE_REALESTATE_ADDRESS) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:rel_RELTYPE_REALESTATE_SELLER
-msgid "Seose Klient (M&amp;uuml;&amp;uuml;ja) (RELTYPE_REALESTATE_SELLER) tekst"
+msgid "Seose Klient (M&uuml;&uuml;ja) (RELTYPE_REALESTATE_SELLER) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:rel_RELTYPE_REALESTATE_BUYER
@@ -2159,7 +2147,7 @@ msgid "Seose Pilt (RELTYPE_REALESTATE_PICTURE) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:rel_RELTYPE_REALESTATE_PICTUREICON
-msgid "Seose V&amp;auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
+msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:395

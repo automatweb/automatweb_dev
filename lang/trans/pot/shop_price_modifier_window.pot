@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Lahtise osa tabel (open_part_table) help"
 msgstr ""
 
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:prop_extra_charge_percentage
+msgid "Omaduse Juurdehindlus (%) (extra_charge_percentage) caption"
+msgstr ""
+
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:prop_extra_charge_percentage_comment
+msgid "Omaduse Juurdehindlus (%) (extra_charge_percentage) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:prop_extra_charge_percentage_help
+msgid "Omaduse Juurdehindlus (%) (extra_charge_percentage) help"
+msgstr ""
+
 #: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:prop_open_part_add_price
 msgid "Omaduse Lahtise osa lisatasu kaldp&ouml;&ouml;rdavanemise korral  (open_part_add_price) caption"
 msgstr ""
@@ -338,14 +350,6 @@ msgstr ""
 msgid "Omaduse Kinnine kilp lisab X EEK (door_closed_shield) help"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:group_parts
 msgid "Grupi Aken (parts) pealkiri"
 msgstr ""
@@ -403,58 +407,58 @@ msgid "Grupi Allahindlus (discount) help"
 msgstr ""
 
 #: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:group_door
-msgid "Grupi Rõduuks (door) pealkiri"
+msgid "Grupi R&otilde;duuks (door) pealkiri"
 msgstr ""
 
 #: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:group_door_help
-msgid "Grupi Rõduuks (door) help"
+msgid "Grupi R&otilde;duuks (door) help"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:239
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:242
 msgid "K&otilde;rgus/Laius"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:282
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:285
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:288
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:291
 msgid "PVC"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:294
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:297
 msgid "KSL"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:300
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:303
 msgid "T&auml;ispuit"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:341
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:344
 msgid "Pikkuse vahemik"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:347
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:350
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:385
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:388
 msgid "Aknaid"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:391
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:394
 msgid "Allahindluse % plastikaken"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:397
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:400
 msgid "Allahindluse % puitaken"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:440
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:443
 msgid "Ruutmeetreid"
 msgstr ""
 
-#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:446
+#: classes/applications/shop/price_modifiers/shop_price_modifier_window.aw:449
 msgid "hind"
 msgstr ""
 

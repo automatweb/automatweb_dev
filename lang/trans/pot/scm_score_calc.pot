@@ -150,15 +150,15 @@ msgstr ""
 msgid "&Uuml;lej&auml;&auml;nud:"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:277
+#: classes/applications/scm/scm_score_calc.aw:279
 msgid "Esimesed 5 (10p alates, astmega 2)"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:278
+#: classes/applications/scm/scm_score_calc.aw:280
 msgid "Esimesed 3 (15p alates, astmega 4)"
 msgstr ""
 
-#: classes/applications/scm/scm_score_calc.aw:279
+#: classes/applications/scm/scm_score_calc.aw:281
 msgid "Esimesed 3 (5p alates, astmega 2)"
 msgstr ""
 

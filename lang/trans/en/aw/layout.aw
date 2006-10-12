@@ -25,7 +25,6 @@ $GLOBALS["TRANS"]["Grupi P&auml;is ja jalus (hfoot) pealkiri"] = "Header and foo
 $GLOBALS["TRANS"]["Grupi Import (import) pealkiri"] = "Import";
 $GLOBALS["TRANS"]["Grupi Eelvaade (preview) pealkiri"] = "Preview";
 $GLOBALS["TRANS"]["Seose celli stiilide kataloog (RELTYPE_CELLSTYLE_FOLDER) tekst"] = "cell style folder";
-$GLOBALS["TRANS"]["Seose n�ta selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"] = "display in this folder";
 $GLOBALS["TRANS"]["%d tulba laius"] = "Row %d width";
 $GLOBALS["TRANS"]["%d tulba k&otilde;rgus"] = "Row %d height";
 ?>

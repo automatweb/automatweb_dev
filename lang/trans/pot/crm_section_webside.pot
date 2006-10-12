@@ -151,7 +151,7 @@ msgid "Grupi Näitamine (view) help"
 msgstr ""
 
 #: classes/crm/crm_section_webside.aw:rel_RELTYPE_SECTION
-msgid "Seose &amp;uuml;ksus (RELTYPE_SECTION) tekst"
+msgid "Seose &uuml;ksus (RELTYPE_SECTION) tekst"
 msgstr ""
 
 #: classes/crm/crm_section_webside.aw:rel_RELTYPE_ORG

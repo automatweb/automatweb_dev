@@ -286,218 +286,215 @@ msgstr "Workflow"
 msgid "Grupi Töövoog (workflow) help"
 msgstr ""
 
+# classes/mrp/mrp_job.aw:rel_RELTYPE_MRP_RESOURCE
 #: classes/mrp/mrp_job.aw:rel_RELTYPE_MRP_RESOURCE
-msgid "Seose T&ouml;&ouml;ks kasutatav ressurss (RELTYPE_MRP_RESOURCE) tekst"
-msgstr ""
+msgid "Seose Tööks kasutatav ressurss (RELTYPE_MRP_RESOURCE) tekst"
+msgstr "Resource used for job"
 
 # classes/mrp/mrp_job.aw:rel_RELTYPE_MRP_PROJECT
 #: classes/mrp/mrp_job.aw:rel_RELTYPE_MRP_PROJECT
 msgid "Seose Projekt (RELTYPE_MRP_PROJECT) tekst"
 msgstr "Project"
 
-#: classes/mrp/mrp_job.aw:177
+#: classes/mrp/mrp_job.aw:138
 msgid "Uus"
 msgstr "New"
 
-#: classes/mrp/mrp_job.aw:178
+#: classes/mrp/mrp_job.aw:139
 msgid "Planeeritud"
 msgstr "Planned"
 
-#: classes/mrp/mrp_job.aw:179
+#: classes/mrp/mrp_job.aw:140
 msgid "Töös"
 msgstr "In progress"
 
-#: classes/mrp/mrp_job.aw:180
+#: classes/mrp/mrp_job.aw:141
 msgid "Katkestatud"
 msgstr "Aborted"
 
-#: classes/mrp/mrp_job.aw:181 classes/mrp/mrp_job.aw:440
+#: classes/mrp/mrp_job.aw:142 classes/mrp/mrp_job.aw:401
 msgid "Valmis"
 msgstr "Done"
 
-#: classes/mrp/mrp_job.aw:182
+#: classes/mrp/mrp_job.aw:143
 msgid "Lukustatud"
 msgstr "Locked"
 
-#: classes/mrp/mrp_job.aw:183 classes/mrp/mrp_job.aw:447
+#: classes/mrp/mrp_job.aw:144 classes/mrp/mrp_job.aw:408
 msgid "Paus"
 msgstr "Pause"
 
-#: classes/mrp/mrp_job.aw:184
+#: classes/mrp/mrp_job.aw:145
 msgid "Kustutatud"
 msgstr "Deleted"
 
-#: classes/mrp/mrp_job.aw:185
+#: classes/mrp/mrp_job.aw:146
 msgid "Plaanist väljas"
 msgstr "Out of planning"
 
-#: classes/mrp/mrp_job.aw:186
+#: classes/mrp/mrp_job.aw:147
 msgid "Arhiveeritud"
 msgstr "Archived"
 
-#: classes/mrp/mrp_job.aw:210
+#: classes/mrp/mrp_job.aw:171
 msgid "Uut tööd saab luua vaid ressursihalduskeskkonnas. "
 msgstr "New job can only be created via the manager"
 
-#: classes/mrp/mrp_job.aw:226
+#: classes/mrp/mrp_job.aw:187
 msgid "Tööl puudub ressurss, projekt või ressursihalduskeskkond. "
 msgstr "Job has no resource, case or manager"
 
-#: classes/mrp/mrp_job.aw:233
+#: classes/mrp/mrp_job.aw:194
 msgid "Tööl puudub ressurss. "
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:237
+#: classes/mrp/mrp_job.aw:198
 msgid "Tööl puudub projekt. "
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:241
+#: classes/mrp/mrp_job.aw:202
 msgid "Tööl puudub ressurss ja projekt. "
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:248
+#: classes/mrp/mrp_job.aw:209
 msgid "Viga! "
 msgstr "Error! "
 
-#: classes/mrp/mrp_job.aw:303
+#: classes/mrp/mrp_job.aw:264
 msgid "Esinenud tõrked: "
 msgstr "Problems:"
 
-#: classes/mrp/mrp_job.aw:325
+#: classes/mrp/mrp_job.aw:286
 msgid "Määramata"
 msgstr "Undefined"
 
-#: classes/mrp/mrp_job.aw:329
+#: classes/mrp/mrp_job.aw:290
 msgid "Planeerimata"
 msgstr "Not planned"
 
-#: classes/mrp/mrp_job.aw:333
+#: classes/mrp/mrp_job.aw:294
 msgid "Tööd pole veel alustatud"
 msgstr "Job has not been started yet"
 
-#: classes/mrp/mrp_job.aw:337
+#: classes/mrp/mrp_job.aw:298
 msgid "Tööd pole veel lõpetatud"
 msgstr "Job is not finished yet"
 
-#: classes/mrp/mrp_job.aw:422
+#: classes/mrp/mrp_job.aw:383
 msgid "Alusta"
 msgstr "Start"
 
-#: classes/mrp/mrp_job.aw:424
+#: classes/mrp/mrp_job.aw:385
 msgid "Oled kindel et soovid t&ouml;&ouml;d alustada?"
 msgstr "Are you sure you wish to start the job?"
 
-#: classes/mrp/mrp_job.aw:442
+#: classes/mrp/mrp_job.aw:403
 msgid "Oled kindel et soovid t&ouml;&ouml;d l&otilde;petada?"
 msgstr "Are you sure you wish to finish the job?"
 
-#: classes/mrp/mrp_job.aw:450
+#: classes/mrp/mrp_job.aw:411
 msgid "Oled kindel et soovid t&ouml;&ouml;d pausile panna?"
 msgstr "Are you sure you wish to pause the job?"
 
-#: classes/mrp/mrp_job.aw:454
+#: classes/mrp/mrp_job.aw:415
 msgid "Lõpeta vahetus ja logi v&auml;lja?"
 msgstr "End shift and log out?"
 
-#: classes/mrp/mrp_job.aw:455
+#: classes/mrp/mrp_job.aw:416
 msgid "Vahetuse l&otilde;pp"
 msgstr "End shift"
 
-#: classes/mrp/mrp_job.aw:478
+#: classes/mrp/mrp_job.aw:439
 msgid "J&auml;tka"
 msgstr "Continue"
 
-#: classes/mrp/mrp_job.aw:481
+#: classes/mrp/mrp_job.aw:442
 msgid "Oled kindel et soovid t&ouml;&ouml;d j&auml;tkata?"
 msgstr "Are you sure you wish to continue the job?"
 
-#: classes/mrp/mrp_job.aw:486
+#: classes/mrp/mrp_job.aw:447
 msgid "Katkesta"
 msgstr "Abort"
 
-#: classes/mrp/mrp_job.aw:489
+#: classes/mrp/mrp_job.aw:450
 msgid "Katkesta t&ouml;&ouml;?"
 msgstr "Abort job?"
 
-#: classes/mrp/mrp_job.aw:490
+#: classes/mrp/mrp_job.aw:451
 msgid "Kommentaar peab olema t&auml;idetud!"
 msgstr "Comment must not be empty!"
 
-#: classes/mrp/mrp_job.aw:584 classes/mrp/mrp_job.aw:726
-#: classes/mrp/mrp_job.aw:861 classes/mrp/mrp_job.aw:954
-#: classes/mrp/mrp_job.aw:1023 classes/mrp/mrp_job.aw:1099
-#: classes/mrp/mrp_job.aw:1220
+#: classes/mrp/mrp_job.aw:545 classes/mrp/mrp_job.aw:687
+#: classes/mrp/mrp_job.aw:822 classes/mrp/mrp_job.aw:915
+#: classes/mrp/mrp_job.aw:984 classes/mrp/mrp_job.aw:1060
+#: classes/mrp/mrp_job.aw:1181
 msgid "Töö id vale"
 msgstr "Wrong job id"
 
-#: classes/mrp/mrp_job.aw:600
+#: classes/mrp/mrp_job.aw:561
 msgid "Projekt pole töös ega planeeritud"
 msgstr "Case is not in progress nor planned"
 
-#: classes/mrp/mrp_job.aw:605
+#: classes/mrp/mrp_job.aw:566
 msgid "Töö pole planeeritud"
 msgstr "Job is not planned"
 
-#: classes/mrp/mrp_job.aw:623 classes/mrp/mrp_job.aw:1143
+#: classes/mrp/mrp_job.aw:584 classes/mrp/mrp_job.aw:1104
 msgid "Eeldustööd tegemata"
 msgstr "Prerequisites not done"
 
-#: classes/mrp/mrp_job.aw:629 classes/mrp/mrp_job.aw:1149
+#: classes/mrp/mrp_job.aw:590 classes/mrp/mrp_job.aw:1110
 msgid "Eeldustöö definitsioon on katki"
 msgstr "Prerequisite definitions broken"
 
-#: classes/mrp/mrp_job.aw:643 classes/mrp/mrp_job.aw:1163
+#: classes/mrp/mrp_job.aw:604 classes/mrp/mrp_job.aw:1124
 msgid "Ressurss kinni"
 msgstr "Resource is busy"
 
-#: classes/mrp/mrp_job.aw:671
+#: classes/mrp/mrp_job.aw:632
 msgid "Projekti alustamine ebaõnnestus"
 msgstr "Project start failed"
 
-#: classes/mrp/mrp_job.aw:738
+#: classes/mrp/mrp_job.aw:699
 msgid "Töö staatus sobimatu"
 msgstr "Job status invalid"
 
-#: classes/mrp/mrp_job.aw:753 classes/mrp/mrp_job.aw:888
+#: classes/mrp/mrp_job.aw:714 classes/mrp/mrp_job.aw:849
 msgid "Ressursi vabastamine ebaõnnestus"
 msgstr "Freeing the resource failed"
 
-#: classes/mrp/mrp_job.aw:755 classes/mrp/mrp_job.aw:890
+#: classes/mrp/mrp_job.aw:716 classes/mrp/mrp_job.aw:851
 msgid "Ressursi vabastamine ebaõnnestus. Job: %s, res: %s"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:782 classes/mrp/mrp_job.aw:916
-#: classes/mrp/mrp_job.aw:1492
+#: classes/mrp/mrp_job.aw:743 classes/mrp/mrp_job.aw:877
+#: classes/mrp/mrp_job.aw:1453
 msgid "Ressursihalduskeskkond defineerimata."
 msgstr "Resource manager undefined."
 
-#: classes/mrp/mrp_job.aw:873 classes/mrp/mrp_job.aw:966
-#: classes/mrp/mrp_job.aw:1232
+#: classes/mrp/mrp_job.aw:834 classes/mrp/mrp_job.aw:927
+#: classes/mrp/mrp_job.aw:1193
 msgid "Töö pole tegemisel"
 msgstr "Job is not in progress"
 
-#: classes/mrp/mrp_job.aw:1038
+#: classes/mrp/mrp_job.aw:999
 msgid "Töö pole pausil"
 msgstr "Job is not paused"
 
-#: classes/mrp/mrp_job.aw:1043 classes/mrp/mrp_job.aw:1115
+#: classes/mrp/mrp_job.aw:1004 classes/mrp/mrp_job.aw:1076
 msgid "Projekt pole jätkatav"
 msgstr "Case can not be continued"
 
-#: classes/mrp/mrp_job.aw:1120
+#: classes/mrp/mrp_job.aw:1081
 msgid "Töö pole katkestatud"
 msgstr "Job is not aborted"
 
-#: classes/mrp/mrp_job.aw:1512
+#: classes/mrp/mrp_job.aw:1473
 msgid "Lisas kommentaari"
 msgstr "Added comment"
 
 #~ msgid "Tööl puudub ressurss või projekt. "
 #~ msgstr "Job has no case or resource"
-
-# classes/mrp/mrp_job.aw:rel_RELTYPE_MRP_RESOURCE
-#~ msgid "Seose Tööks kasutatav ressurss (RELTYPE_MRP_RESOURCE) tekst"
-#~ msgstr "Resource used for job"
 
 #~ msgid "Projekti lõpetamine ebaõnnestus"
 #~ msgstr "Case finishing unsuccessful"

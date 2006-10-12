@@ -18,23 +18,19 @@ msgid "acl_base::add_acl_group_to_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
 #: classes/core/obj/acl_base.aw:108
-msgid ""
-"acl_base::add_acl_group_to_new_obj(%s, %s,..): the given gid is incorrect"
+msgid "acl_base::add_acl_group_to_new_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
 #: classes/core/obj/acl_base.aw:115
-msgid ""
-"acl_base::add_acl_group_to_new_obj(%s, %s,..): the given oid is incorrect"
+msgid "acl_base::add_acl_group_to_new_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
 #: classes/core/obj/acl_base.aw:140
-msgid ""
-"acl_base::remove_acl_group_from_obj(%s, %s,..): the given gid is incorrect"
+msgid "acl_base::remove_acl_group_from_obj(%s, %s,..): the given gid is incorrect"
 msgstr ""
 
 #: classes/core/obj/acl_base.aw:147
-msgid ""
-"acl_base::remove_acl_group_from_obj(%s, %s,..): the given oid is incorrect"
+msgid "acl_base::remove_acl_group_from_obj(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
 #: classes/core/obj/acl_base.aw:176
@@ -53,17 +49,10 @@ msgstr ""
 msgid "acl_base::save_acl_masked(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:409
-msgid "acl_base-&gt;can(%s, %s): error in object hierarchy, count exceeded!"
-msgstr ""
+#: classes/core/obj/acl_base.aw:407
+msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
+msgstr "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 
-#: classes/core/obj/acl_base.aw:578
-msgid ""
-"acl_base::prog_acl(%s, %s): the only program you can get access rights for "
-"is PRG_MENUEDIT, all others are deprecated!"
-msgstr ""
-"acl_base::prog_acl(%s, %s): the only program you can get access rights for "
-"is PRG_MENUEDIT, all others are deprecated!"
-
-#~ msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
-#~ msgstr "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
+#: classes/core/obj/acl_base.aw:585
+msgid "acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
+msgstr "acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"

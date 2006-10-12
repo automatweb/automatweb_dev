@@ -171,7 +171,7 @@ msgid "E-post"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:341
-msgid "Üksus"
+msgid "&Uuml;ksus"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:346

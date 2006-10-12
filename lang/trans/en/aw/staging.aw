@@ -1,6 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Vajab tõlget (needs_translation) caption"] = "Needs translation";
-$GLOBALS["TRANS"]["Omaduse Tõlge kinnitatud (is_translated) caption"] = "Translation confirmed";
 $GLOBALS["TRANS"]["Omaduse Algab (start1) caption"] = "Start";
 $GLOBALS["TRANS"]["Omaduse Pilt (img) caption"] = "Image";
 $GLOBALS["TRANS"]["Omaduse Kirjeldus (utextarea1) caption"] = "Description";

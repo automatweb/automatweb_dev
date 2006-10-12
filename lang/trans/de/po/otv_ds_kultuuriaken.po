@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:class_890_help
 msgid "Klassi Import Kultuuriaknast help"
 msgstr ""
@@ -171,7 +170,7 @@ msgid "Grupi Automaatne import (recurrence_config) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_EVENT_FORM
-msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
+msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_PARENT
@@ -221,4 +220,3 @@ msgstr ""
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:370
 msgid "You don't have view access to eventform object!"
 msgstr ""
-

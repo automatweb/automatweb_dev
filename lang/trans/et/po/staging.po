@@ -14,34 +14,16 @@ msgstr ""
 msgid "Klassi Lavastus help"
 msgstr ""
 
-# classes/applications/calendar/staging.aw:prop_needs_translation
 #: classes/applications/calendar/staging.aw:prop_needs_translation
-msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr ""
 
-# classes/applications/calendar/staging.aw:prop_needs_translation_comment
 #: classes/applications/calendar/staging.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
-# classes/applications/calendar/staging.aw:prop_needs_translation_help
 #: classes/applications/calendar/staging.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tõlget (needs_translation) help"
-msgstr ""
-
-# classes/applications/calendar/staging.aw:prop_is_translated
-#: classes/applications/calendar/staging.aw:prop_is_translated
-msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
-
-# classes/applications/calendar/staging.aw:prop_is_translated_comment
-#: classes/applications/calendar/staging.aw:prop_is_translated_comment
-msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-# classes/applications/calendar/staging.aw:prop_is_translated_help
-#: classes/applications/calendar/staging.aw:prop_is_translated_help
-msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
 # classes/applications/calendar/staging.aw:prop_start1

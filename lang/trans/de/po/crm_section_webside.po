@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_section_webside.aw:class_832_help
 msgid "Klassi Üksus veebis help"
 msgstr ""
@@ -158,19 +157,18 @@ msgstr ""
 msgid "Seose Organisatsioon (RELTYPE_ORG) tekst"
 msgstr ""
 
-#: classes/crm/crm_section_webside.aw:104
+#: classes/crm/crm_section_webside.aw:108
 msgid "Piltidega vaade"
 msgstr ""
 
-#: classes/crm/crm_section_webside.aw:105
+#: classes/crm/crm_section_webside.aw:109
 msgid "Tabelina"
 msgstr ""
 
-#: classes/crm/crm_section_webside.aw:135
+#: classes/crm/crm_section_webside.aw:139
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_section_webside.aw:141
+#: classes/crm/crm_section_webside.aw:145
 msgid "Järjekord"
 msgstr ""
-

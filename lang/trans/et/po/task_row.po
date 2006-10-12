@@ -138,12 +138,23 @@ msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) caption"
 msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_to_bill_date_comment
-msgid ""
-"Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) kommentaar"
+msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_to_bill_date_help
 msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_ord
+msgid "Omaduse Jrk (ord) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_ord_comment
+msgid "Omaduse Jrk (ord) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_ord_help
+msgid "Omaduse Jrk (ord) help"
 msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_comments

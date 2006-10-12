@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_rules
 msgid "Omaduse Reeglid (rules) caption"
-msgstr ""
+msgstr "Rules"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_rules_comment
 msgid "Omaduse Reeglid (rules) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_person_t
 msgid "Omaduse Isik (person_t) caption"
-msgstr ""
+msgstr "Person"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_person_t_comment
 msgid "Omaduse Isik (person_t) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_co_t
 msgid "Omaduse Organisatsioon (co_t) caption"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_co_t_comment
 msgid "Omaduse Organisatsioon (co_t) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_class
 msgid "Omaduse Klassi t&uuml;&uuml;p (fb_class) caption"
-msgstr ""
+msgstr "Object type"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_class_comment
 msgid "Omaduse Klassi t&uuml;&uuml;p (fb_class) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_object
 msgid "Omaduse Objekti nimi (fb_object) caption"
-msgstr ""
+msgstr "Object name"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_object_comment
 msgid "Omaduse Objekti nimi (fb_object) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_object_grp
 msgid "Omaduse Objekti grupp (fb_object_grp) caption"
-msgstr ""
+msgstr "Object group"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_object_grp_comment
 msgid "Omaduse Objekti grupp (fb_object_grp) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_comment_ta
 msgid "Omaduse Kommentaar (comment_ta) caption"
-msgstr ""
+msgstr "Comment"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_comment_ta_comment
 msgid "Omaduse Kommentaar (comment_ta) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_1
 msgid "Omaduse Failid (file_1) caption"
-msgstr ""
+msgstr "Files"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_file_1_comment
 msgid "Omaduse Failid (file_1) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_seriousness
 msgid "Omaduse T&otilde;sidus (seriousness) caption"
-msgstr ""
+msgstr "Seriousness"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_seriousness_comment
 msgid "Omaduse T&otilde;sidus (seriousness) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_type
 msgid "Omaduse Soovin tagasisidet (fb_type) caption"
-msgstr ""
+msgstr "Need feedback"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_type_comment
 msgid "Omaduse Soovin tagasisidet (fb_type) kommentaar"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_email
 msgid "Omaduse Tagasiside meiliaadress (fb_email) caption"
-msgstr ""
+msgstr "Feedback e-mail"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_email_comment
 msgid "Omaduse Tagasiside meiliaadress (fb_email) kommentaar"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_phone
 msgid "Omaduse Tagasiside telefon (fb_phone) caption"
-msgstr ""
+msgstr "Feedback phone"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_fb_phone_comment
 msgid "Omaduse Tagasiside telefon (fb_phone) kommentaar"
@@ -159,7 +159,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_dev_status
 msgid "Omaduse Arendaja staatus (dev_status) caption"
-msgstr ""
+msgstr "Developer status"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_dev_status_comment
 msgid "Omaduse Arendaja staatus (dev_status) kommentaar"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_dev_deadline
 msgid "Omaduse Arendaja t&auml;htaeg (dev_deadline) caption"
-msgstr ""
+msgstr "Developer deadline"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:prop_dev_deadline_comment
 msgid "Omaduse Arendaja t&auml;htaeg (dev_deadline) kommentaar"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:group_dev_status
 msgid "Grupi Arendaja andmed (dev_status) pealkiri"
-msgstr ""
+msgstr "Developer data"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:group_dev_status_help
 msgid "Grupi Arendaja andmed (dev_status) help"
@@ -191,11 +191,11 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:rel_RELTYPE_PERSON
 msgid "Seose Isik (RELTYPE_PERSON) tekst"
-msgstr ""
+msgstr "Person"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:rel_RELTYPE_CO
 msgid "Seose Organisatsioon (RELTYPE_CO) tekst"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:rel_RELTYPE_OBJECT
 msgid "Seose Objekti (RELTYPE_OBJECT) tekst"
@@ -215,71 +215,71 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:93
 msgid "Fataalne viga"
-msgstr ""
+msgstr "Fatal error"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:94
 msgid "Segav viga"
-msgstr ""
+msgstr "Disturbing error"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:95
 msgid "Tr&uuml;kiviga"
-msgstr ""
+msgstr "Syntax error"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:96
 msgid "Soovitus"
-msgstr ""
+msgstr "Suggestion"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:100
 msgid "Meilile"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:101
 msgid "Telefonile"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:102
 msgid "Ei soovi"
-msgstr ""
+msgstr "Do not need"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:107
 msgid "Lahtine"
-msgstr ""
+msgstr "Open"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:108
 msgid "Tegemisel"
-msgstr ""
+msgstr "In progress"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:109
 msgid "Valmis"
-msgstr ""
+msgstr "Ready"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:110
 msgid "Testitud"
-msgstr ""
+msgstr "Tested"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:111
 msgid "Suletud"
-msgstr ""
+msgstr "Closed"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:112
 msgid "Vale teade"
-msgstr ""
+msgstr "Wrong message"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:113
 msgid "Kordamatu"
-msgstr ""
+msgstr "Unrepeatable"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:114
 msgid "Parandamatu"
-msgstr ""
+msgstr "No solution"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:115
 msgid "Ei paranda"
-msgstr ""
+msgstr "Do not fix"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:116
 msgid "Vajab tagasisidet"
-msgstr ""
+msgstr "Needs feedback"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:132
 msgid "&Auml;ra jama, mees! m&otilde;tled ka mis teed v&auml;?"

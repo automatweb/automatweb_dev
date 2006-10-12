@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/iframe.aw:class_95_help
 msgid "Klassi Siseraam help"
 msgstr ""
@@ -63,15 +62,15 @@ msgid "Omaduse Kõrgus (height) help"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_frameborder
-msgid "Omaduse Ümbritseda raamiga (frameborder) caption"
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) caption"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_frameborder_comment
-msgid "Omaduse Ümbritseda raamiga (frameborder) kommentaar"
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_frameborder_help
-msgid "Omaduse Ümbritseda raamiga (frameborder) help"
+msgid "Omaduse &Uuml;mbritseda raamiga (frameborder) help"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_scrolling
@@ -89,4 +88,3 @@ msgstr ""
 #: classes/contentmgmt/iframe.aw:rel_RELTYPE_CONTENT
 msgid "Seose sisu (RELTYPE_CONTENT) tekst"
 msgstr ""
-

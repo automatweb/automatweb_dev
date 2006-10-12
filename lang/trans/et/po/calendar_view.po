@@ -81,8 +81,7 @@ msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_show_days_with_events_comment
 #: classes/calendar/calendar_view.aw:prop_show_days_with_events_comment
-msgid ""
-"Omaduse Näita ainult sündmustega päevi (show_days_with_events) kommentaar"
+msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) kommentaar"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_show_days_with_events_help
@@ -92,21 +91,17 @@ msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_show_event_content
 #: classes/calendar/calendar_view.aw:prop_show_event_content
-msgid ""
-"Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
+msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_show_event_content_comment
 #: classes/calendar/calendar_view.aw:prop_show_event_content_comment
-msgid ""
-"Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) "
-"kommentaar"
+msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) kommentaar"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_show_event_content_help
 #: classes/calendar/calendar_view.aw:prop_show_event_content_help
-msgid ""
-"Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) help"
+msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) help"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_show_event_days
@@ -141,23 +136,17 @@ msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_fix_links
 #: classes/calendar/calendar_view.aw:prop_fix_links
-msgid ""
-"Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale "
-"(fix_links) caption"
+msgid "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) caption"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_fix_links_comment
 #: classes/calendar/calendar_view.aw:prop_fix_links_comment
-msgid ""
-"Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale "
-"(fix_links) kommentaar"
+msgid "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) kommentaar"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_fix_links_help
 #: classes/calendar/calendar_view.aw:prop_fix_links_help
-msgid ""
-"Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale "
-"(fix_links) help"
+msgid "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) help"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_minical_day_with_events
@@ -386,11 +375,11 @@ msgid "Grupi Sündmused (show_events) help"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_EVENT_SOURCE
-msgid "Seose V&otilde;ta s&uuml;ndmusi (RELTYPE_EVENT_SOURCE) tekst"
+msgid "Seose Võta sündmusi (RELTYPE_EVENT_SOURCE) tekst"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_OUTPUT
-msgid "Seose v&auml;ljund (RELTYPE_OUTPUT) tekst"
+msgid "Seose väljund (RELTYPE_OUTPUT) tekst"
 msgstr ""
 
 # classes/calendar/calendar_view.aw:rel_RELTYPE_STYLE

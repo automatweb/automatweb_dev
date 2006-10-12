@@ -61,14 +61,12 @@ msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_multi_items
 #: classes/applications/shop/shop_order_center.aw:prop_multi_items
-msgid ""
-"Omaduse Ostukorvis võib olla mitu sama ID-ga toodet (multi_items) caption"
+msgid "Omaduse Ostukorvis võib olla mitu sama ID-ga toodet (multi_items) caption"
 msgstr "Cart can have several items with same ID"
 
 # classes/applications/shop/shop_order_center.aw:prop_multi_items_comment
 #: classes/applications/shop/shop_order_center.aw:prop_multi_items_comment
-msgid ""
-"Omaduse Ostukorvis võib olla mitu sama ID-ga toodet (multi_items) kommentaar"
+msgid "Omaduse Ostukorvis võib olla mitu sama ID-ga toodet (multi_items) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_multi_items_help
@@ -78,63 +76,47 @@ msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed
 #: classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed
-msgid ""
-"Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi "
-"(show_unconfirmed) caption"
+msgid "Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi (show_unconfirmed) caption"
 msgstr "Display only unconfirmed orders in orders list"
 
 # classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed_comment
 #: classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed_comment
-msgid ""
-"Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi "
-"(show_unconfirmed) kommentaar"
+msgid "Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi (show_unconfirmed) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed_help
 #: classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed_help
-msgid ""
-"Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi "
-"(show_unconfirmed) help"
+msgid "Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi (show_unconfirmed) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_no_change_button
 #: classes/applications/shop/shop_order_center.aw:prop_no_change_button
-msgid ""
-"Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu "
-"(no_change_button) caption"
+msgid "Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu (no_change_button) caption"
 msgstr "Do not display change button next to product in order center"
 
 # classes/applications/shop/shop_order_center.aw:prop_no_change_button_comment
 #: classes/applications/shop/shop_order_center.aw:prop_no_change_button_comment
-msgid ""
-"Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu "
-"(no_change_button) kommentaar"
+msgid "Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu (no_change_button) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_no_change_button_help
 #: classes/applications/shop/shop_order_center.aw:prop_no_change_button_help
-msgid ""
-"Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu "
-"(no_change_button) help"
+msgid "Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu (no_change_button) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_only_prods
 #: classes/applications/shop/shop_order_center.aw:prop_only_prods
-msgid ""
-"Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) caption"
+msgid "Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) caption"
 msgstr "In order cart, products have no packagings or images"
 
 # classes/applications/shop/shop_order_center.aw:prop_only_prods_comment
 #: classes/applications/shop/shop_order_center.aw:prop_only_prods_comment
-msgid ""
-"Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) "
-"kommentaar"
+msgid "Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_only_prods_help
 #: classes/applications/shop/shop_order_center.aw:prop_only_prods_help
-msgid ""
-"Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) help"
+msgid "Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_pdf_template
@@ -184,34 +166,27 @@ msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_data_form_company
 #: classes/applications/shop/shop_order_center.aw:prop_data_form_company
-msgid ""
-"Omaduse Organisatsiooni nime element andmete vormis (data_form_company) "
-"caption"
+msgid "Omaduse Organisatsiooni nime element andmete vormis (data_form_company) caption"
 msgstr "Company name element in data form"
 
 # classes/applications/shop/shop_order_center.aw:prop_data_form_company_comment
 #: classes/applications/shop/shop_order_center.aw:prop_data_form_company_comment
-msgid ""
-"Omaduse Organisatsiooni nime element andmete vormis (data_form_company) "
-"kommentaar"
+msgid "Omaduse Organisatsiooni nime element andmete vormis (data_form_company) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_data_form_company_help
 #: classes/applications/shop/shop_order_center.aw:prop_data_form_company_help
-msgid ""
-"Omaduse Organisatsiooni nime element andmete vormis (data_form_company) help"
+msgid "Omaduse Organisatsiooni nime element andmete vormis (data_form_company) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_data_form_discount
 #: classes/applications/shop/shop_order_center.aw:prop_data_form_discount
-msgid ""
-"Omaduse Allahindluse element andmete vormis (data_form_discount) caption"
+msgid "Omaduse Allahindluse element andmete vormis (data_form_discount) caption"
 msgstr "Discount element in data form"
 
 # classes/applications/shop/shop_order_center.aw:prop_data_form_discount_comment
 #: classes/applications/shop/shop_order_center.aw:prop_data_form_discount_comment
-msgid ""
-"Omaduse Allahindluse element andmete vormis (data_form_discount) kommentaar"
+msgid "Omaduse Allahindluse element andmete vormis (data_form_discount) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_data_form_discount_help
@@ -241,8 +216,7 @@ msgstr "Display via controller"
 
 # classes/applications/shop/shop_order_center.aw:prop_use_controller_comment
 #: classes/applications/shop/shop_order_center.aw:prop_use_controller_comment
-msgid ""
-"Omaduse N&auml;itamiseks kasuta kontrollerit (use_controller) kommentaar"
+msgid "Omaduse N&auml;itamiseks kasuta kontrollerit (use_controller) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_use_controller_help
@@ -324,39 +298,29 @@ msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_mail_cust_content
 #: classes/applications/shop/shop_order_center.aw:prop_mail_cust_content
-msgid ""
-"Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) "
-"caption"
+msgid "Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) caption"
 msgstr "E-mail content"
 
 # classes/applications/shop/shop_order_center.aw:prop_mail_cust_content_comment
 #: classes/applications/shop/shop_order_center.aw:prop_mail_cust_content_comment
-msgid ""
-"Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) "
-"kommentaar"
+msgid "Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_mail_cust_content_help
 #: classes/applications/shop/shop_order_center.aw:prop_mail_cust_content_help
-msgid ""
-"Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) help"
+msgid "Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mail_to_seller_in_el
-msgid ""
-"Omaduse Saada meil aadressile, mis on elemendis (mail_to_seller_in_el) "
-"caption"
+msgid "Omaduse Saada meil aadressile, mis on elemendis (mail_to_seller_in_el) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mail_to_seller_in_el_comment
-msgid ""
-"Omaduse Saada meil aadressile, mis on elemendis (mail_to_seller_in_el) "
-"kommentaar"
+msgid "Omaduse Saada meil aadressile, mis on elemendis (mail_to_seller_in_el) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mail_to_seller_in_el_help
-msgid ""
-"Omaduse Saada meil aadressile, mis on elemendis (mail_to_seller_in_el) help"
+msgid "Omaduse Saada meil aadressile, mis on elemendis (mail_to_seller_in_el) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_mail_group_by
@@ -375,21 +339,15 @@ msgid "Omaduse Toodete grupeerimine meilis (mail_group_by) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mails_sep_by_el
-msgid ""
-"Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) "
-"caption"
+msgid "Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mails_sep_by_el_comment
-msgid ""
-"Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) "
-"kommentaar"
+msgid "Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mails_sep_by_el_help
-msgid ""
-"Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) "
-"help"
+msgid "Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_send_attach
@@ -453,20 +411,15 @@ msgid "Omaduse v&auml;&auml;rtus j&auml;relmaksuks (rent_prop_val) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_no_show_cart_contents
-msgid ""
-"Omaduse &Auml;ra n&auml;ita korvi kinnitusvaadet (no_show_cart_contents) "
-"caption"
+msgid "Omaduse &Auml;ra n&auml;ita korvi kinnitusvaadet (no_show_cart_contents) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_no_show_cart_contents_comment
-msgid ""
-"Omaduse &Auml;ra n&auml;ita korvi kinnitusvaadet (no_show_cart_contents) "
-"kommentaar"
+msgid "Omaduse &Auml;ra n&auml;ita korvi kinnitusvaadet (no_show_cart_contents) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_no_show_cart_contents_help
-msgid ""
-"Omaduse &Auml;ra n&auml;ita korvi kinnitusvaadet (no_show_cart_contents) help"
+msgid "Omaduse &Auml;ra n&auml;ita korvi kinnitusvaadet (no_show_cart_contents) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_controller
@@ -531,44 +484,32 @@ msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_psfieldmap
 #: classes/applications/shop/shop_order_center.aw:prop_psfieldmap
-msgid ""
-"Omaduse Vali millised elemendid tellimuse andmete vormis vastavad "
-"isukuandmetele (psfieldmap) caption"
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele (psfieldmap) caption"
 msgstr "Select elements that match person data in data form"
 
 # classes/applications/shop/shop_order_center.aw:prop_psfieldmap_comment
 #: classes/applications/shop/shop_order_center.aw:prop_psfieldmap_comment
-msgid ""
-"Omaduse Vali millised elemendid tellimuse andmete vormis vastavad "
-"isukuandmetele (psfieldmap) kommentaar"
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele (psfieldmap) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_psfieldmap_help
 #: classes/applications/shop/shop_order_center.aw:prop_psfieldmap_help
-msgid ""
-"Omaduse Vali millised elemendid tellimuse andmete vormis vastavad "
-"isukuandmetele (psfieldmap) help"
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele (psfieldmap) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_orgfieldmap
 #: classes/applications/shop/shop_order_center.aw:prop_orgfieldmap
-msgid ""
-"Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma "
-"andmetele (orgfieldmap) caption"
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) caption"
 msgstr "Select elements that match company data fields in data form"
 
 # classes/applications/shop/shop_order_center.aw:prop_orgfieldmap_comment
 #: classes/applications/shop/shop_order_center.aw:prop_orgfieldmap_comment
-msgid ""
-"Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma "
-"andmetele (orgfieldmap) kommentaar"
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_orgfieldmap_help
 #: classes/applications/shop/shop_order_center.aw:prop_orgfieldmap_help
-msgid ""
-"Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma "
-"andmetele (orgfieldmap) help"
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:group_mail_settings
@@ -661,9 +602,10 @@ msgstr "cart"
 msgid "Seose vorm tellija andmete jaoks (RELTYPE_ORDER_FORM) tekst"
 msgstr "form for orderer data"
 
+# classes/applications/shop/shop_order_center.aw:rel_RELTYPE_CONTROLLER
 #: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_CONTROLLER
-msgid "Seose n&amp;auml;itamise kontroller (RELTYPE_CONTROLLER) tekst"
-msgstr ""
+msgid "Seose n&auml;itamise kontroller (RELTYPE_CONTROLLER) tekst"
+msgstr "display controller"
 
 #: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_ORDER_NAME_CTR
 msgid "Seose tellimuse nime kontroller (RELTYPE_ORDER_NAME_CTR) tekst"
@@ -698,7 +640,7 @@ msgid "Paketi teise vaate kujundus"
 msgstr "Package other view layout"
 
 #: classes/applications/shop/shop_order_center.aw:369
-#: classes/applications/shop/shop_order_center.aw:1234
+#: classes/applications/shop/shop_order_center.aw:1237
 msgid "--vali--"
 msgstr "--select--"
 
@@ -714,26 +656,18 @@ msgstr "Ascending / Descending"
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/applications/shop/shop_order_center.aw:1063
+#: classes/applications/shop/shop_order_center.aw:1066
 msgid "&nbsp"
 msgstr "&nbsp;"
 
-#: classes/applications/shop/shop_order_center.aw:1078
+#: classes/applications/shop/shop_order_center.aw:1081
 msgid "Vali t&uuml;hjaks"
 msgstr "Select one"
 
-#: classes/applications/shop/shop_order_center.aw:1181
+#: classes/applications/shop/shop_order_center.aw:1184
 msgid "Tellija andmete vorm valimata!"
 msgstr "Orderer data form not selected!"
 
-#: classes/applications/shop/shop_order_center.aw:1208
-msgid ""
-"shop_order_center::get_property_map(%s, %s): the options for type are "
-"'person' and 'org'"
-msgstr ""
-"shop_order_center::get_property_map(%s, %s): the options for type are "
-"'person' and 'org'"
-
-# classes/applications/shop/shop_order_center.aw:rel_RELTYPE_CONTROLLER
-#~ msgid "Seose n&auml;itamise kontroller (RELTYPE_CONTROLLER) tekst"
-#~ msgstr "display controller"
+#: classes/applications/shop/shop_order_center.aw:1211
+msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
+msgstr "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"

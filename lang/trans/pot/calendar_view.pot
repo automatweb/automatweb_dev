@@ -303,11 +303,11 @@ msgid "Grupi Sündmused (show_events) help"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_EVENT_SOURCE
-msgid "Seose V&otilde;ta s&uuml;ndmusi (RELTYPE_EVENT_SOURCE) tekst"
+msgid "Seose Võta sündmusi (RELTYPE_EVENT_SOURCE) tekst"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_OUTPUT
-msgid "Seose v&auml;ljund (RELTYPE_OUTPUT) tekst"
+msgid "Seose väljund (RELTYPE_OUTPUT) tekst"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:rel_RELTYPE_STYLE

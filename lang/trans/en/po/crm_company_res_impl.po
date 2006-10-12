@@ -39,7 +39,7 @@ msgid "Nimi"
 msgstr "Name"
 
 #: classes/applications/crm/crm_company_res_impl.aw:100
-#: classes/applications/crm/crm_company_res_impl.aw:160
+#: classes/applications/crm/crm_company_res_impl.aw:163
 msgid "Kalender"
 msgstr ""
 
@@ -59,10 +59,11 @@ msgstr "Modifier"
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/applications/crm/crm_company_res_impl.aw:178
+#: classes/applications/crm/crm_company_res_impl.aw:149
+#: classes/applications/crm/crm_company_res_impl.aw:181
 msgid "%s ressursid"
 msgstr "%s resources"
 
-#: classes/applications/crm/crm_company_res_impl.aw:196
+#: classes/applications/crm/crm_company_res_impl.aw:199
 msgid "%s ressursihalduskeskkond"
 msgstr "%s resource management"

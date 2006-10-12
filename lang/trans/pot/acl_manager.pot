@@ -38,15 +38,19 @@ msgstr ""
 msgid "Juurkaust"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:179 classes/vcl/acl_manager.aw:263
+#: classes/vcl/acl_manager.aw:140
+msgid "M&auml;&auml;ra"
+msgstr ""
+
+#: classes/vcl/acl_manager.aw:184 classes/vcl/acl_manager.aw:273
 msgid "no group for user %s!"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:214
-msgid "Salvesta &amp;otilde;igused"
+#: classes/vcl/acl_manager.aw:224
+msgid "Salvesta &otilde;igused"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:236
-msgid "Teil ei ole &amp;otilde;igust muuta objekti %s &amp;otilde;igusi!"
+#: classes/vcl/acl_manager.aw:246
+msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
 msgstr ""
 

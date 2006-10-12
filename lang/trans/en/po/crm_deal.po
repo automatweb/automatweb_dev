@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 21:56+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 #: classes/crm/crm_deal.aw:class_222_help
 msgid "Klassi Leping help"
@@ -98,6 +98,18 @@ msgstr ""
 msgid "Omaduse Kirjeldus (comment) help"
 msgstr ""
 
+#: classes/crm/crm_deal.aw:prop_sides
+msgid "Omaduse Osapooled (sides) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_sides_comment
+msgid "Omaduse Osapooled (sides) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_sides_help
+msgid "Omaduse Osapooled (sides) help"
+msgstr ""
+
 #: classes/crm/crm_deal.aw:prop_files
 msgid "Omaduse Failid (files) caption"
 msgstr "Files"
@@ -110,12 +122,28 @@ msgstr ""
 msgid "Omaduse Failid (files) help"
 msgstr ""
 
-#: classes/crm/crm_deal.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
+#: classes/crm/crm_deal.aw:prop_parts_tb
+msgid "Omaduse  (parts_tb) caption"
+msgstr ""
 
-#: classes/crm/crm_deal.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/crm/crm_deal.aw:prop_parts_tb_comment
+msgid "Omaduse  (parts_tb) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_parts_tb_help
+msgid "Omaduse  (parts_tb) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_acts
+msgid "Omaduse Tegevused (acts) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_acts_comment
+msgid "Omaduse Tegevused (acts) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_acts_help
+msgid "Omaduse Tegevused (acts) help"
 msgstr ""
 
 #: classes/crm/crm_deal.aw:group_files
@@ -126,7 +154,33 @@ msgstr ""
 msgid "Grupi Failid (files) help"
 msgstr ""
 
+#: classes/crm/crm_deal.aw:group_parts
+msgid "Grupi Osalejad (parts) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:group_parts_help
+msgid "Grupi Osalejad (parts) help"
+msgstr ""
+
 #: classes/crm/crm_deal.aw:rel_RELTYPE_FILE
 msgid "Seose fail (RELTYPE_FILE) tekst"
 msgstr ""
 
+#: classes/crm/crm_deal.aw:rel_RELTYPE_CREATOR
+msgid "Seose looja (RELTYPE_CREATOR) tekst"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:rel_RELTYPE_READER
+msgid "Seose lugeja (RELTYPE_READER) tekst"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:rel_RELTYPE_SIDE
+msgid "Seose Osapool (RELTYPE_SIDE) tekst"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:rel_RELTYPE_ACTION
+msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
+msgstr ""
+
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"

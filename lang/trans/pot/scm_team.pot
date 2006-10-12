@@ -143,122 +143,122 @@ msgid "Grupi V&otilde;istlused (registered) help"
 msgstr ""
 
 #: classes/applications/scm/scm_team.aw:rel_RELTYPE_SCM_TEAM_MEMBER
-msgid "Seose V&amp;otilde;istkonna liige (RELTYPE_SCM_TEAM_MEMBER) tekst"
+msgid "Seose V&otilde;istkonna liige (RELTYPE_SCM_TEAM_MEMBER) tekst"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:83
+#: classes/applications/scm/scm_team.aw:91
 msgid "Lisa liige"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:104 classes/applications/scm/scm_team.aw:219 classes/applications/scm/scm_team.aw:871 classes/applications/scm/scm_team.aw:1053
+#: classes/applications/scm/scm_team.aw:119 classes/applications/scm/scm_team.aw:234 classes/applications/scm/scm_team.aw:886 classes/applications/scm/scm_team.aw:1068
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:104 classes/applications/scm/scm_team.aw:219 classes/applications/scm/scm_team.aw:872 classes/applications/scm/scm_team.aw:1053
+#: classes/applications/scm/scm_team.aw:119 classes/applications/scm/scm_team.aw:234 classes/applications/scm/scm_team.aw:887 classes/applications/scm/scm_team.aw:1068
 msgid "Naine"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:104 classes/applications/scm/scm_team.aw:105 classes/applications/scm/scm_team.aw:107 classes/applications/scm/scm_team.aw:218 classes/applications/scm/scm_team.aw:220 classes/applications/scm/scm_team.aw:1066 classes/applications/scm/scm_team.aw:1067 classes/applications/scm/scm_team.aw:1068
+#: classes/applications/scm/scm_team.aw:119 classes/applications/scm/scm_team.aw:120 classes/applications/scm/scm_team.aw:122 classes/applications/scm/scm_team.aw:233 classes/applications/scm/scm_team.aw:235 classes/applications/scm/scm_team.aw:1081 classes/applications/scm/scm_team.aw:1082 classes/applications/scm/scm_team.aw:1083
 msgid "M&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:125
+#: classes/applications/scm/scm_team.aw:140
 msgid "M&auml;&auml;ra v&otilde;istkonnale klass"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:126
+#: classes/applications/scm/scm_team.aw:141
 msgid "Eemalda v&otilde;istkond klassist"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:138
+#: classes/applications/scm/scm_team.aw:153
 msgid "Organisaatorid"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:156
+#: classes/applications/scm/scm_team.aw:171
 msgid "Palun vali v&otilde;istlus"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:171
+#: classes/applications/scm/scm_team.aw:186
 msgid "V&otilde;istluse '%s' haldamine"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:219
+#: classes/applications/scm/scm_team.aw:234
 msgid "Sugu m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:229
+#: classes/applications/scm/scm_team.aw:244
 msgid "V&otilde;istlus"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:235 classes/applications/scm/scm_team.aw:861
+#: classes/applications/scm/scm_team.aw:250 classes/applications/scm/scm_team.aw:876
 msgid "V&otilde;istluse staatus"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:239
+#: classes/applications/scm/scm_team.aw:254
 msgid "Toimumisaeg"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:245
+#: classes/applications/scm/scm_team.aw:260
 msgid "Korraldaja"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:302
+#: classes/applications/scm/scm_team.aw:317
 msgid "Liikmed"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:751
+#: classes/applications/scm/scm_team.aw:766
 msgid "Spordiala m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:762
+#: classes/applications/scm/scm_team.aw:777
 msgid "Individuaalsed v&otilde;istlused"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:818
+#: classes/applications/scm/scm_team.aw:833
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:823 classes/applications/scm/scm_team.aw:1000
+#: classes/applications/scm/scm_team.aw:838 classes/applications/scm/scm_team.aw:1015
 msgid "Sugu"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:828 classes/applications/scm/scm_team.aw:878 classes/applications/scm/scm_team.aw:1005
+#: classes/applications/scm/scm_team.aw:843 classes/applications/scm/scm_team.aw:893 classes/applications/scm/scm_team.aw:1020
 msgid "S&uuml;nniaeg (vanus)"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:835 classes/applications/scm/scm_team.aw:996
+#: classes/applications/scm/scm_team.aw:850 classes/applications/scm/scm_team.aw:1011
 msgid "Firma"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:850
+#: classes/applications/scm/scm_team.aw:865
 msgid "Liige"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:855
+#: classes/applications/scm/scm_team.aw:870
 msgid "Registreerunud"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:867
+#: classes/applications/scm/scm_team.aw:882
 msgid "sugu"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:885 classes/applications/scm/scm_team.aw:1011
+#: classes/applications/scm/scm_team.aw:900 classes/applications/scm/scm_team.aw:1026
 msgid "V&otilde;istlusklassid"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:890
+#: classes/applications/scm/scm_team.aw:905
 msgid "S&uuml;nniaeg"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:992
+#: classes/applications/scm/scm_team.aw:1007
 msgid "V&otilde;istleja"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:1017
+#: classes/applications/scm/scm_team.aw:1032
 msgid "S&auml;rgi nr"
 msgstr ""
 
-#: classes/applications/scm/scm_team.aw:1054
+#: classes/applications/scm/scm_team.aw:1069
 msgid "S&uuml;nniaeg m&auml;&auml;ramata"
 msgstr ""
 

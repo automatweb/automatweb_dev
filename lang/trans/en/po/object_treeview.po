@@ -91,23 +91,17 @@ msgstr ""
 
 # classes/contentmgmt/object_treeview.aw:prop_groupfolder_acl
 #: classes/contentmgmt/object_treeview.aw:prop_groupfolder_acl
-msgid ""
-"Omaduse &Otilde;igused piiratud grupi kataloogide j&auml;rgi "
-"(groupfolder_acl) caption"
+msgid "Omaduse &Otilde;igused piiratud grupi kataloogide j&auml;rgi (groupfolder_acl) caption"
 msgstr "Access set by group folders"
 
 # classes/contentmgmt/object_treeview.aw:prop_groupfolder_acl_comment
 #: classes/contentmgmt/object_treeview.aw:prop_groupfolder_acl_comment
-msgid ""
-"Omaduse &Otilde;igused piiratud grupi kataloogide j&auml;rgi "
-"(groupfolder_acl) kommentaar"
+msgid "Omaduse &Otilde;igused piiratud grupi kataloogide j&auml;rgi (groupfolder_acl) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview.aw:prop_groupfolder_acl_help
 #: classes/contentmgmt/object_treeview.aw:prop_groupfolder_acl_help
-msgid ""
-"Omaduse &Otilde;igused piiratud grupi kataloogide j&auml;rgi "
-"(groupfolder_acl) help"
+msgid "Omaduse &Otilde;igused piiratud grupi kataloogide j&auml;rgi (groupfolder_acl) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview.aw:prop_show_notact
@@ -320,9 +314,10 @@ msgstr ""
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr "folder"
 
+# classes/contentmgmt/object_treeview.aw:rel_RELTYPE_ADD_TYPE
 #: classes/contentmgmt/object_treeview.aw:rel_RELTYPE_ADD_TYPE
-msgid "Seose lisatav objektit&amp;uuml;&amp;uuml;p (RELTYPE_ADD_TYPE) tekst"
-msgstr ""
+msgid "Seose lisatav objektit&uuml;&uuml;p (RELTYPE_ADD_TYPE) tekst"
+msgstr "addable object type"
 
 # classes/contentmgmt/object_treeview.aw:rel_RELTYPE_ALL_ACSS_GRP
 #: classes/contentmgmt/object_treeview.aw:rel_RELTYPE_ALL_ACSS_GRP
@@ -344,7 +339,7 @@ msgid "Ikoon"
 msgstr "Icon"
 
 #: classes/contentmgmt/object_treeview.aw:96
-#: classes/contentmgmt/object_treeview.aw:795
+#: classes/contentmgmt/object_treeview.aw:793
 msgid "Nimi"
 msgstr "Name"
 
@@ -372,42 +367,38 @@ msgstr "Modify"
 msgid "Vali"
 msgstr "Select"
 
-#: classes/contentmgmt/object_treeview.aw:787
+#: classes/contentmgmt/object_treeview.aw:785
 msgid "ID"
 msgstr "ID"
 
-#: classes/contentmgmt/object_treeview.aw:800
+#: classes/contentmgmt/object_treeview.aw:798
 msgid "k.a. alammenüüd"
 msgstr "incl. submenus"
 
-#: classes/contentmgmt/object_treeview.aw:807
+#: classes/contentmgmt/object_treeview.aw:805
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr "do not display main menu"
 
-#: classes/contentmgmt/object_treeview.aw:872
+#: classes/contentmgmt/object_treeview.aw:870
 msgid "Uus"
 msgstr "New"
 
-#: classes/contentmgmt/object_treeview.aw:900
+#: classes/contentmgmt/object_treeview.aw:898
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/contentmgmt/object_treeview.aw:902
+#: classes/contentmgmt/object_treeview.aw:900
 msgid "Oled kindel et soovid objekte kustutada?"
 msgstr "Are you sure you want to delete objects?"
 
-#: classes/contentmgmt/object_treeview.aw:926
+#: classes/contentmgmt/object_treeview.aw:924
 msgid "object_treeview::obj_delete(): no object id specified!"
 msgstr "object_treeview::obj_delete(): no object id specified!"
 
-#: classes/contentmgmt/object_treeview.aw:1017
+#: classes/contentmgmt/object_treeview.aw:1015
 msgid "Objekti muutmise kuup&auml;eva j&auml;rgi"
 msgstr "Object change date"
 
-#: classes/contentmgmt/object_treeview.aw:1018
+#: classes/contentmgmt/object_treeview.aw:1016
 msgid "Objektide j&auml;rjekorra j&auml;rgi"
 msgstr "Object order"
-
-# classes/contentmgmt/object_treeview.aw:rel_RELTYPE_ADD_TYPE
-#~ msgid "Seose lisatav objektit&uuml;&uuml;p (RELTYPE_ADD_TYPE) tekst"
-#~ msgstr "addable object type"

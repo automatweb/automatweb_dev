@@ -37,22 +37,34 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:423 classes/cfg/htmlclient.aw:564
+#: classes/cfg/htmlclient.aw:429 classes/cfg/htmlclient.aw:570
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:572
+#: classes/cfg/htmlclient.aw:584
 msgid "&lt;&lt;&lt; Tagasi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:573
+#: classes/cfg/htmlclient.aw:585
 msgid "submit_and_back"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:583
+#: classes/cfg/htmlclient.aw:595
 msgid "Edasi &gt;&gt;&gt;"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:584
+#: classes/cfg/htmlclient.aw:596
 msgid "submit_and_forward"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:807
+msgid "J&auml;rjehoidja"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:811
+msgid "Ajalugu"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:815
+msgid "Lisa kiiresti"
 msgstr ""

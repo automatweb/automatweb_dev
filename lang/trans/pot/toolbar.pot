@@ -10,43 +10,55 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/toolbar.aw:49 classes/vcl/toolbar.aw:94 classes/vcl/toolbar.aw:151 classes/vcl/toolbar.aw:176 classes/vcl/toolbar.aw:338
+#: classes/vcl/toolbar.aw:51 classes/vcl/toolbar.aw:96 classes/vcl/toolbar.aw:153 classes/vcl/toolbar.aw:178 classes/vcl/toolbar.aw:344
 msgid "Kustuta"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:99
+#: classes/vcl/toolbar.aw:101
 msgid "fail"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:100
+#: classes/vcl/toolbar.aw:102
 msgid "kustuta fail"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:181
+#: classes/vcl/toolbar.aw:183
 msgid "text"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:182
+#: classes/vcl/toolbar.aw:184
 msgid "tiitel"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:187
+#: classes/vcl/toolbar.aw:189
 msgid "suubmenuuu"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:191
+#: classes/vcl/toolbar.aw:193
 msgid "teine tekst"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:192
+#: classes/vcl/toolbar.aw:194
 msgid "teine tiitel"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:249
+#: classes/vcl/toolbar.aw:251
 msgid "neti.ee"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:250
+#: classes/vcl/toolbar.aw:252
 msgid "Oled sa kindel et tahad ikka sinna saidile minna?"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:493
+msgid "Otsi"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:529 classes/vcl/toolbar.aw:537
+msgid "Lisa"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:560
+msgid "Kustuta valitud objektid"
 msgstr ""
 

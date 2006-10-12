@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:class_1133_help
 msgid "Klassi Kiirlisamine help"
 msgstr ""
@@ -52,7 +51,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:group_bms
 msgid "Grupi Kiirmen&uuml;&uuml; (bms) pealkiri"
-msgstr ""
+msgstr "Quick add"
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:group_bms_help
 msgid "Grupi Kiirmen&uuml;&uuml; (bms) help"
@@ -64,37 +63,57 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:62
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:66
 msgid "Kataloog"
-msgstr ""
+msgstr "Folder"
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:71 classes/applications/customer_satisfaction_center/obj_quick_add.aw:121
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:71
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:208
 msgid "Objekti t&uuml;&uuml;p"
-msgstr ""
+msgstr "Object type"
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:78
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:116
-msgid "Objekti nimi"
-msgstr ""
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:85
+msgid "Kopeeri"
+msgstr "Copy"
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:189
-msgid "Pane kiirmen&uuml;&uuml;sse"
-msgstr ""
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:92
+msgid "L&otilde;ika"
+msgstr "Cut"
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:193
-msgid "Eemalda kiirmen&uuml;&uuml;st"
-msgstr ""
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:101
+msgid "Kleebi"
+msgstr "Paste"
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:197
+msgid "Ikoon"
+msgstr "Icon"
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:203
+msgid "Objekti nimi"
+msgstr "Object name"
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:315
+msgid "Pane kiirmen&uuml;&uuml;sse"
+msgstr "Add to quick add"
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:319
+msgid "Eemalda kiirmen&uuml;&uuml;st"
+msgstr "Remove from quick add"
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:323
 msgid "Toimeta kiirmen&uuml;&uuml;d"
-msgstr ""
+msgstr "Edit quick add"
 
-#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:250
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:329
+msgid "Lisa kiiresti"
+msgstr "Add quickly"
+
+#: classes/applications/customer_satisfaction_center/obj_quick_add.aw:347
 msgid "%s kiirlisamine"
-msgstr ""
-
+msgstr "%s quick adding"

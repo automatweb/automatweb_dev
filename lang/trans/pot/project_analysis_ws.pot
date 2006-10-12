@@ -11,19 +11,19 @@ msgstr ""
 
 
 #: classes/applications/groupware/project_analysis_ws.aw:class_1110_help
-msgid "Klassi Projekti anal&amp;uuml;&amp;uuml;si t&amp;ouml;&amp;ouml;laud help"
+msgid "Klassi Projekti anal&uuml;&uuml;si t&ouml;&ouml;laud help"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_ws.aw:prop_eval_dl
-msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) caption"
+msgid "Omaduse Hindamise t&auml;htaeg (eval_dl) caption"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_ws.aw:prop_eval_dl_comment
-msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) kommentaar"
+msgid "Omaduse Hindamise t&auml;htaeg (eval_dl) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_ws.aw:prop_eval_dl_help
-msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) help"
+msgid "Omaduse Hindamise t&auml;htaeg (eval_dl) help"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_ws.aw:prop_strat_a
@@ -198,79 +198,79 @@ msgstr ""
 msgid "Seose Rida (RELTYPE_ROW) tekst"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:150
+#: classes/applications/groupware/project_analysis_ws.aw:161
 msgid "Meeskonna liige"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:155
+#: classes/applications/groupware/project_analysis_ws.aw:166
 msgid "Hindaja?"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:160
+#: classes/applications/groupware/project_analysis_ws.aw:171
 msgid "Hindaja hinde kaal protsentides"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:223 classes/applications/groupware/project_analysis_ws.aw:334
+#: classes/applications/groupware/project_analysis_ws.aw:235 classes/applications/groupware/project_analysis_ws.aw:346
 msgid "Tulp"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:230 classes/applications/groupware/project_analysis_ws.aw:341
+#: classes/applications/groupware/project_analysis_ws.aw:242 classes/applications/groupware/project_analysis_ws.aw:353
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:238
+#: classes/applications/groupware/project_analysis_ws.aw:250
 msgid "Tulba nimi"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:244
-msgid "J&amp;auml;rjekord"
-msgstr ""
-
-#: classes/applications/groupware/project_analysis_ws.aw:251
-msgid "Grupi nimi"
-msgstr ""
-
-#: classes/applications/groupware/project_analysis_ws.aw:257
-msgid "Prioriteet"
+#: classes/applications/groupware/project_analysis_ws.aw:256
+msgid "J&auml;rjekord"
 msgstr ""
 
 #: classes/applications/groupware/project_analysis_ws.aw:263
+msgid "Grupi nimi"
+msgstr ""
+
+#: classes/applications/groupware/project_analysis_ws.aw:269
+msgid "Prioriteet"
+msgstr ""
+
+#: classes/applications/groupware/project_analysis_ws.aw:275
 msgid "Kaal"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:269 classes/applications/groupware/project_analysis_ws.aw:361
+#: classes/applications/groupware/project_analysis_ws.aw:281 classes/applications/groupware/project_analysis_ws.aw:373
 msgid "Looja nimi"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:275 classes/applications/groupware/project_analysis_ws.aw:367
-msgid "Kuup&amp;auml;ev"
+#: classes/applications/groupware/project_analysis_ws.aw:287 classes/applications/groupware/project_analysis_ws.aw:379
+msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:349
+#: classes/applications/groupware/project_analysis_ws.aw:361
 msgid "Rea nimi"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:355
+#: classes/applications/groupware/project_analysis_ws.aw:367
 msgid "Rea kirjeldus"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:405 classes/applications/groupware/project_analysis_ws.aw:410 classes/applications/groupware/project_analysis_ws.aw:449 classes/applications/groupware/project_analysis_ws.aw:454 classes/applications/groupware/project_analysis_ws.aw:716 classes/applications/groupware/project_analysis_ws.aw:721
+#: classes/applications/groupware/project_analysis_ws.aw:417 classes/applications/groupware/project_analysis_ws.aw:422 classes/applications/groupware/project_analysis_ws.aw:461 classes/applications/groupware/project_analysis_ws.aw:466 classes/applications/groupware/project_analysis_ws.aw:728 classes/applications/groupware/project_analysis_ws.aw:733
 msgid ""
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:490
+#: classes/applications/groupware/project_analysis_ws.aw:502
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:504
-msgid "Teie ei ole m&amp;auml;&amp;auml;ratud hindajaks!"
+#: classes/applications/groupware/project_analysis_ws.aw:516
+msgid "Teie ei ole m&auml;&auml;ratud hindajaks!"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:558
+#: classes/applications/groupware/project_analysis_ws.aw:570
 msgid "Hinnang projektile %s"
 msgstr ""
 
-#: classes/applications/groupware/project_analysis_ws.aw:708 classes/applications/groupware/project_analysis_ws.aw:740
-msgid "&lt;b&gt;Summa&lt;/b&gt;"
+#: classes/applications/groupware/project_analysis_ws.aw:720 classes/applications/groupware/project_analysis_ws.aw:752
+msgid "<b>Summa</b>"
 msgstr ""
 

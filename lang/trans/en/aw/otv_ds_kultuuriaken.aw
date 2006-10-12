@@ -11,6 +11,7 @@ $GLOBALS["TRANS"]["Omaduse Parool (auto_import_passwd) caption"] = "Password";
 $GLOBALS["TRANS"]["Grupi Seaded (config) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Grupi Vaade XML (xml_view) pealkiri"] = "XML View";
 $GLOBALS["TRANS"]["Grupi Automaatne import (recurrence_config) pealkiri"] = "Automatic import";
+$GLOBALS["TRANS"]["Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"] = "Event form";
 $GLOBALS["TRANS"]["Seose Parent (RELTYPE_PARENT) tekst"] = "Parent";
 $GLOBALS["TRANS"]["Seose Kordus (RELTYPE_RECURRENCE) tekst"] = "recurrence";
 $GLOBALS["TRANS"]["Parent"] = "Parent";

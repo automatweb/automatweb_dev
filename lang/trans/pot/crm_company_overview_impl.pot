@@ -34,12 +34,12 @@ msgstr ""
 msgid "Projekt"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:364 classes/applications/crm/crm_company_overview_impl.aw:1621
+#: classes/applications/crm/crm_company_overview_impl.aw:364 classes/applications/crm/crm_company_overview_impl.aw:1679
 msgid "Aeg"
 msgstr ""
 
 #: classes/applications/crm/crm_company_overview_impl.aw:380
-msgid "Prioriteet"
+msgid "Pri"
 msgstr ""
 
 #: classes/applications/crm/crm_company_overview_impl.aw:391
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Ava read"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:496 classes/applications/crm/crm_company_overview_impl.aw:1088 classes/applications/crm/crm_company_overview_impl.aw:1113
+#: classes/applications/crm/crm_company_overview_impl.aw:496 classes/applications/crm/crm_company_overview_impl.aw:1127 classes/applications/crm/crm_company_overview_impl.aw:1152
 msgid "Kustuta"
 msgstr ""
 
@@ -58,7 +58,7 @@ msgstr ""
 msgid "Olete kindel et soovide toimetust kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:510 classes/applications/crm/crm_company_overview_impl.aw:1042
+#: classes/applications/crm/crm_company_overview_impl.aw:510 classes/applications/crm/crm_company_overview_impl.aw:1081
 msgid "M&auml;rgi tehtuks"
 msgstr ""
 
@@ -82,59 +82,99 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:992
+#: classes/applications/crm/crm_company_overview_impl.aw:665
+msgid "%s toimetused"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:668
+msgid "%s kohtumised"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:671
+msgid "%s k&otilde;ned"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:674
+msgid "%s mailid"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:677
+msgid "%s dokumendid: haldus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:680
+msgid "%s k&otilde;ik tegemised"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:687 classes/applications/crm/crm_company_overview_impl.aw:695 classes/applications/crm/crm_company_overview_impl.aw:1526
+msgid ", milles on %s osaline"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:1031
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1027
+#: classes/applications/crm/crm_company_overview_impl.aw:1066
 msgid "P&auml;eva raport"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1049
+#: classes/applications/crm/crm_company_overview_impl.aw:1088
 msgid "Kustuta toimetused"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1050
+#: classes/applications/crm/crm_company_overview_impl.aw:1089
 msgid "Oled kindel et soovid valitud toimetusi kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1061
+#: classes/applications/crm/crm_company_overview_impl.aw:1100
 msgid "Kalendrivaade"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1070
+#: classes/applications/crm/crm_company_overview_impl.aw:1109
 msgid "Tabelivaade"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1606
+#: classes/applications/crm/crm_company_overview_impl.aw:1520
+msgid "%s dokumendid"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:1534
+msgid "%s dokumendid, milles on %s osaline"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:1664
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1611
+#: classes/applications/crm/crm_company_overview_impl.aw:1669
 msgid "Teostaja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1616
+#: classes/applications/crm/crm_company_overview_impl.aw:1674
 msgid "Millal"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1626
+#: classes/applications/crm/crm_company_overview_impl.aw:1684
 msgid "Tehtud?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1653
+#: classes/applications/crm/crm_company_overview_impl.aw:1712
 msgid "Toimetuse rida"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1656
+#: classes/applications/crm/crm_company_overview_impl.aw:1715
 msgid "Stopper"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1663
+#: classes/applications/crm/crm_company_overview_impl.aw:1722
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:1663
+#: classes/applications/crm/crm_company_overview_impl.aw:1722
 msgid "Ei"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:1727
+msgid "Kokku:"
 msgstr ""
 

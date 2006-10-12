@@ -14,5 +14,5 @@ $GLOBALS["TRANS"]["Loodud"] = "Created";
 $GLOBALS["TRANS"]["Autor"] = "Author";
 $GLOBALS["TRANS"]["Muudetud"] = "Modified";
 $GLOBALS["TRANS"]["Muutja"] = "Modifiedby";
-$GLOBALS["TRANS"]["Faili %s ei saanud kirjutamiseks avada! <br>-------------------<br><br>"] = "File %s could not be opened for writing! <br>-------------------<br><br>";
+$GLOBALS["TRANS"]["Faili %s ei saanud kirjutamiseks avada! <br>-------------------<br><br>"] = "File %s could not be opened for writing! <br />-------------------<br /><br />";
 ?>

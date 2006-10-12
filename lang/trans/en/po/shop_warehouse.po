@@ -784,9 +784,10 @@ msgstr "packet"
 msgid "Seose lao sissetulek (RELTYPE_STORAGE_INCOME) tekst"
 msgstr "warehouse reception"
 
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_STORAGE_EXPORT
 #: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_STORAGE_EXPORT
-msgid "Seose lao v&amp;auml;jaminek (RELTYPE_STORAGE_EXPORT) tekst"
-msgstr ""
+msgid "Seose lao v&auml;jaminek (RELTYPE_STORAGE_EXPORT) tekst"
+msgstr "warehouse export"
 
 # classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_ORDER
 #: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_ORDER
@@ -1079,29 +1080,25 @@ msgstr "Add to offer"
 msgid "Moodusta pakkumine"
 msgstr "Create offer"
 
-#: classes/applications/shop/shop_warehouse.aw:2579
-msgid ""
-"shop_warehouse::get_order_folder(%s): the warehouse has not configuration "
-"object set!"
-msgstr ""
-"shop_warehouse::get_order_folder(%s): the warehouse has not configuration "
-"object set!"
+#: classes/applications/shop/shop_warehouse.aw:2600
+msgid "shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"
+msgstr "shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"
 
-#: classes/applications/shop/shop_warehouse.aw:2587
-msgid ""
-"shop_warehouse::get_order_folder(%s): the warehouse configuration has no "
-"order folder set!"
-msgstr ""
-"shop_warehouse::get_order_folder(%s): the warehouse configuration has no "
-"order folder set!"
+#: classes/applications/shop/shop_warehouse.aw:2608
+msgid "shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"
+msgstr "shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"
 
-#: classes/applications/shop/shop_warehouse.aw:2690
+#: classes/applications/shop/shop_warehouse.aw:2625
+msgid "shop_warehouse::get_products_folder(%s): the warehouse has not configuration object set!"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:2633
+msgid "shop_warehouse::get_products_folder(%s): the warehouse configuration has no products folder set!"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:2735
 msgid "Tellimus laost %s"
 msgstr "Order from warehouse %s"
-
-# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_STORAGE_EXPORT
-#~ msgid "Seose lao v&auml;jaminek (RELTYPE_STORAGE_EXPORT) tekst"
-#~ msgstr "warehouse export"
 
 # classes/applications/shop/shop_warehouse.aw:prop_search_tb
 #~ msgid "Omaduse Otsingo toolbar (search_tb) caption"

@@ -25,6 +25,18 @@ msgstr ""
 msgid "Omaduse &Uuml;hik (unit) help"
 msgstr ""
 
+#: classes/applications/scm/scm_result_type.aw:prop_unit_type
+msgid "Omaduse &Uuml;hikud (unit_type) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:prop_unit_type_comment
+msgid "Omaduse &Uuml;hikud (unit_type) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:prop_unit_type_help
+msgid "Omaduse &Uuml;hikud (unit_type) help"
+msgstr ""
+
 #: classes/applications/scm/scm_result_type.aw:prop_sort
 msgid "Omaduse Sorteerimine (sort) caption"
 msgstr ""
@@ -37,59 +49,59 @@ msgstr ""
 msgid "Omaduse Sorteerimine (sort) help"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:48
+#: classes/applications/scm/scm_result_type.aw:84
 msgid "Kasvav"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:49
+#: classes/applications/scm/scm_result_type.aw:85
 msgid "Kahanev"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:196
+#: classes/applications/scm/scm_result_type.aw:241
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:198
+#: classes/applications/scm/scm_result_type.aw:243
 msgid "p"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:199
+#: classes/applications/scm/scm_result_type.aw:244
 msgid "t"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:200
-#: classes/applications/scm/scm_result_type.aw:217
+#: classes/applications/scm/scm_result_type.aw:245
+#: classes/applications/scm/scm_result_type.aw:262
 msgid "m"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:201
+#: classes/applications/scm/scm_result_type.aw:246
 msgid "s"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:202
+#: classes/applications/scm/scm_result_type.aw:247
 msgid "ms"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:207
+#: classes/applications/scm/scm_result_type.aw:252
 msgid "Punktid"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:209
+#: classes/applications/scm/scm_result_type.aw:254
 msgid "punkti"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:214
+#: classes/applications/scm/scm_result_type.aw:259
 msgid "Pikkus/Kaugus"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:216
+#: classes/applications/scm/scm_result_type.aw:261
 msgid "km"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:218
+#: classes/applications/scm/scm_result_type.aw:263
 msgid "cm"
 msgstr ""
 
-#: classes/applications/scm/scm_result_type.aw:219
+#: classes/applications/scm/scm_result_type.aw:264
 msgid "mm"
 msgstr ""

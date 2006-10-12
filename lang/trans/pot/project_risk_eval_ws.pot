@@ -11,19 +11,19 @@ msgstr ""
 
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:class_1089_help
-msgid "Klassi Riskide hindamise t&amp;ouml;&amp;ouml;laud help"
+msgid "Klassi Riskide hindamise t&ouml;&ouml;laud help"
 msgstr ""
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:prop_eval_dl
-msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) caption"
+msgid "Omaduse Hindamise t&auml;htaeg (eval_dl) caption"
 msgstr ""
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:prop_eval_dl_comment
-msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) kommentaar"
+msgid "Omaduse Hindamise t&auml;htaeg (eval_dl) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:prop_eval_dl_help
-msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) help"
+msgid "Omaduse Hindamise t&auml;htaeg (eval_dl) help"
 msgstr ""
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:prop_risks
@@ -111,7 +111,7 @@ msgid "Risk"
 msgstr ""
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:81
-msgid "M&amp;otilde;ju"
+msgid "M&otilde;ju"
 msgstr ""
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:87

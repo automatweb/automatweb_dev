@@ -14,19 +14,16 @@ msgstr ""
 msgid "Klassi V&otilde;tmes&otilde;na help"
 msgstr ""
 
-# classes/keywords.aw:prop_keyword
 #: classes/keywords.aw:prop_keyword
-msgid "Omaduse Märksõna (keyword) caption"
+msgid "Omaduse M&auml;rks&otilde;na (keyword) caption"
 msgstr ""
 
-# classes/keywords.aw:prop_keyword_comment
 #: classes/keywords.aw:prop_keyword_comment
-msgid "Omaduse Märksõna (keyword) kommentaar"
+msgid "Omaduse M&auml;rks&otilde;na (keyword) kommentaar"
 msgstr ""
 
-# classes/keywords.aw:prop_keyword_help
 #: classes/keywords.aw:prop_keyword_help
-msgid "Omaduse Märksõna (keyword) help"
+msgid "Omaduse M&auml;rks&otilde;na (keyword) help"
 msgstr ""
 
 # classes/keywords.aw:rel_RELTYPE_KEYWORD

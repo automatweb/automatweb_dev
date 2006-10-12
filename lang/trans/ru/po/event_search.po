@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/event_search.aw:class_850_help
 msgid "Klassi Sündmuste otsing help"
 msgstr ""
@@ -203,15 +202,15 @@ msgid "Grupi Tulemuste seadistamine (ftresults) help"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_CFGFORM
-msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_EVENT_CFGFORM) tekst"
+msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_CFGFORM) tekst"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_SOURCE
-msgid "Seose S&amp;uuml;ndmuste allikas (RELTYPE_EVENT_SOURCE) tekst"
+msgid "Seose S&uuml;ndmuste allikas (RELTYPE_EVENT_SOURCE) tekst"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_SHOW
-msgid "Seose N&amp;auml;itamise vorm (RELTYPE_EVENT_SHOW) tekst"
+msgid "Seose N&auml;itamise vorm (RELTYPE_EVENT_SHOW) tekst"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_STYLE
@@ -222,11 +221,13 @@ msgstr ""
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:142 classes/applications/calendar/event_search.aw:365
+#: classes/applications/calendar/event_search.aw:142
+#: classes/applications/calendar/event_search.aw:365
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:147 classes/applications/calendar/event_search.aw:369
+#: classes/applications/calendar/event_search.aw:147
+#: classes/applications/calendar/event_search.aw:369
 msgid "Pealkiri"
 msgstr ""
 
@@ -234,7 +235,8 @@ msgstr ""
 msgid "Sisu"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:157 classes/applications/calendar/event_search.aw:373
+#: classes/applications/calendar/event_search.aw:157
+#: classes/applications/calendar/event_search.aw:373
 msgid "Aktiivne"
 msgstr ""
 
@@ -254,11 +256,13 @@ msgstr ""
 msgid "Kuup&auml;ev, kellaajad"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:198 classes/applications/calendar/event_search.aw:201
+#: classes/applications/calendar/event_search.aw:198
+#: classes/applications/calendar/event_search.aw:201
 msgid "Alguskuup&auml;ev"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:212 classes/applications/calendar/event_search.aw:215
+#: classes/applications/calendar/event_search.aw:212
+#: classes/applications/calendar/event_search.aw:215
 msgid "L&otilde;ppkuup&auml;ev"
 msgstr ""
 
@@ -266,15 +270,18 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:238 classes/applications/calendar/event_search.aw:241
+#: classes/applications/calendar/event_search.aw:238
+#: classes/applications/calendar/event_search.aw:241
 msgid "Projekt 1"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:257 classes/applications/calendar/event_search.aw:260
+#: classes/applications/calendar/event_search.aw:257
+#: classes/applications/calendar/event_search.aw:260
 msgid "Projekt 2"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:275 classes/applications/calendar/event_search.aw:278
+#: classes/applications/calendar/event_search.aw:275
+#: classes/applications/calendar/event_search.aw:278
 msgid "Otsi nupp"
 msgstr ""
 
@@ -338,11 +345,14 @@ msgstr ""
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:826 classes/applications/calendar/event_search.aw:832 classes/applications/calendar/event_search.aw:833 classes/applications/calendar/event_search.aw:849 classes/applications/calendar/event_search.aw:855
+#: classes/applications/calendar/event_search.aw:820
+#: classes/applications/calendar/event_search.aw:826
+#: classes/applications/calendar/event_search.aw:827
+#: classes/applications/calendar/event_search.aw:843
+#: classes/applications/calendar/event_search.aw:849
 msgid "k&otilde;ik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:862
+#: classes/applications/calendar/event_search.aw:856
 msgid "Otsi"
 msgstr ""
-

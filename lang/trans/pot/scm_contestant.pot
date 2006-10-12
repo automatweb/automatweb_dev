@@ -75,27 +75,15 @@ msgid "Omaduse voistlused (comp_tbl) help"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_comp_caption
-msgid "Omaduse V&otilde;istlus (comp_caption) caption"
+msgid "Omaduse Minu meeskonnad (comp_caption) caption"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_comp_caption_comment
-msgid "Omaduse V&otilde;istlus (comp_caption) kommentaar"
+msgid "Omaduse Minu meeskonnad (comp_caption) kommentaar"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_comp_caption_help
-msgid "Omaduse V&otilde;istlus (comp_caption) help"
-msgstr ""
-
-#: classes/applications/scm/scm_contestant.aw:prop_sel_teams
-msgid "Omaduse Minu meeskonnad (sel_teams) caption"
-msgstr ""
-
-#: classes/applications/scm/scm_contestant.aw:prop_sel_teams_comment
-msgid "Omaduse Minu meeskonnad (sel_teams) kommentaar"
-msgstr ""
-
-#: classes/applications/scm/scm_contestant.aw:prop_sel_teams_help
-msgid "Omaduse Minu meeskonnad (sel_teams) help"
+msgid "Omaduse Minu meeskonnad (comp_caption) help"
 msgstr ""
 
 #: classes/applications/scm/scm_contestant.aw:prop_teams_submit
@@ -142,51 +130,95 @@ msgstr ""
 msgid "Seose V&otilde;istleja (RELTYPE_CONTESTANT) tekst"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:128 classes/applications/scm/scm_contestant.aw:164
+#: classes/applications/scm/scm_contestant.aw:132 classes/applications/scm/scm_contestant.aw:168
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:128 classes/applications/scm/scm_contestant.aw:192
+#: classes/applications/scm/scm_contestant.aw:132 classes/applications/scm/scm_contestant.aw:196
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:174
+#: classes/applications/scm/scm_contestant.aw:178
 msgid "Meeskonnad m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:190
+#: classes/applications/scm/scm_contestant.aw:194
 msgid "M&auml;&auml;ra meeskond"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:208
+#: classes/applications/scm/scm_contestant.aw:212
 msgid "-Vali meeskond-"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:346
+#: classes/applications/scm/scm_contestant.aw:367
+msgid "Meeskond"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:381
+msgid "Eesnimi"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:387
+msgid "Perekonnanimi"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:393
+msgid "Sugu"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:395
+msgid "Mees"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:396
+msgid "Naine"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:404
+msgid "S&uuml;nniaeg"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:416
+msgid "V&otilde;istlusklass"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:422
+msgid "S&auml;rgi number"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:438
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:444
+msgid "E-Mail"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:631
 msgid "V&otilde;istlus"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:351
+#: classes/applications/scm/scm_contestant.aw:636
 msgid "Spordiala"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:356
+#: classes/applications/scm/scm_contestant.aw:641
 msgid "Meeskondlik"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:362
+#: classes/applications/scm/scm_contestant.aw:647
 msgid "Toimumiskoht"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:367
+#: classes/applications/scm/scm_contestant.aw:652
 msgid "Toimumisaeg"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:373
+#: classes/applications/scm/scm_contestant.aw:658
 msgid "Korraldaja"
 msgstr ""
 
-#: classes/applications/scm/scm_contestant.aw:378
+#: classes/applications/scm/scm_contestant.aw:663
 msgid "V&otilde;istlussari"
 msgstr ""
 

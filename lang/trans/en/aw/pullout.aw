@@ -1,6 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Vali grupid, kellele pullouti näidatakse (groups) caption"] = "Select groups to show pullout to";
-$GLOBALS["TRANS"]["Omaduse Vali dokument, mida näidata (docs) caption"] = "Select document to display";
 $GLOBALS["TRANS"]["Omaduse Align (align) caption"] = "Align";
 $GLOBALS["TRANS"]["Omaduse Paremalt (right) caption"] = "From the right";
 $GLOBALS["TRANS"]["Omaduse Laius (width) caption"] = "Width";

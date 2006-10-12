@@ -15,27 +15,27 @@ msgid "Klassi Pullout help"
 msgstr ""
 
 #: classes/pullout.aw:prop_groups
-msgid "Omaduse Vali grupid, kellele pullouti näidatakse (groups) caption"
+msgid "Omaduse Vali grupid, kellele pullouti n&auml;idatakse (groups) caption"
 msgstr ""
 
 #: classes/pullout.aw:prop_groups_comment
-msgid "Omaduse Vali grupid, kellele pullouti näidatakse (groups) kommentaar"
+msgid "Omaduse Vali grupid, kellele pullouti n&auml;idatakse (groups) kommentaar"
 msgstr ""
 
 #: classes/pullout.aw:prop_groups_help
-msgid "Omaduse Vali grupid, kellele pullouti näidatakse (groups) help"
+msgid "Omaduse Vali grupid, kellele pullouti n&auml;idatakse (groups) help"
 msgstr ""
 
 #: classes/pullout.aw:prop_docs
-msgid "Omaduse Vali dokument, mida näidata (docs) caption"
+msgid "Omaduse Vali dokument, mida n&auml;idata (docs) caption"
 msgstr ""
 
 #: classes/pullout.aw:prop_docs_comment
-msgid "Omaduse Vali dokument, mida näidata (docs) kommentaar"
+msgid "Omaduse Vali dokument, mida n&auml;idata (docs) kommentaar"
 msgstr ""
 
 #: classes/pullout.aw:prop_docs_help
-msgid "Omaduse Vali dokument, mida näidata (docs) help"
+msgid "Omaduse Vali dokument, mida n&auml;idata (docs) help"
 msgstr ""
 
 #: classes/pullout.aw:prop_align

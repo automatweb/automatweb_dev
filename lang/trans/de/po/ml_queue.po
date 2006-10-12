@@ -36,5 +36,5 @@ msgstr ""
 #: classes/applications/mailinglist/ml_queue.aw:548
 msgid ""
 "done\n"
-"&lt;br&gt;"
+"<br>"
 msgstr ""

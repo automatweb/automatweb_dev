@@ -32,7 +32,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_name_comment
 msgid "Omaduse Nimi (s_name) kommentaar"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_name_help
 msgid "Omaduse Nimi (s_name) help"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_comment
 msgid "Omaduse Kommentaar (s_comment) caption"
-msgstr ""
+msgstr "Comment"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_comment_comment
 msgid "Omaduse Kommentaar (s_comment) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_clid
 msgid "Omaduse T&uuml;&uuml;p (s_clid) caption"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_clid_comment
 msgid "Omaduse T&uuml;&uuml;p (s_clid) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_oid
 msgid "Omaduse OID (s_oid) caption"
-msgstr ""
+msgstr "Object ID"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_oid_comment
 msgid "Omaduse OID (s_oid) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_creator
 msgid "Omaduse Looja (s_creator) caption"
-msgstr ""
+msgstr "Created by"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_creator_comment
 msgid "Omaduse Looja (s_creator) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_modifier
 msgid "Omaduse Muutja (s_modifier) caption"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_modifier_comment
 msgid "Omaduse Muutja (s_modifier) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_status
 msgid "Omaduse Aktiivsus (s_status) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_status_comment
 msgid "Omaduse Aktiivsus (s_status) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_alias
 msgid "Omaduse Alias (s_alias) caption"
-msgstr ""
+msgstr "Alias"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_alias_comment
 msgid "Omaduse Alias (s_alias) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_language
 msgid "Omaduse Keel (s_language) caption"
-msgstr ""
+msgstr "Language"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_language_comment
 msgid "Omaduse Keel (s_language) kommentaar"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_period
 msgid "Omaduse Periood (s_period) caption"
-msgstr ""
+msgstr "Period"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_period_comment
 msgid "Omaduse Periood (s_period) kommentaar"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_site_id
 msgid "Omaduse Saidi ID (s_site_id) caption"
-msgstr ""
+msgstr "Site ID"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_site_id_comment
 msgid "Omaduse Saidi ID (s_site_id) kommentaar"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_find_bros
 msgid "Omaduse Leia vendi (s_find_bros) caption"
-msgstr ""
+msgstr "Find brothers"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_find_bros_comment
 msgid "Omaduse Leia vendi (s_find_bros) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_sbt
 msgid "Omaduse Otsi (s_sbt) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:prop_s_sbt_comment
 msgid "Omaduse Otsi (s_sbt) kommentaar"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:group_srch
 msgid "Grupi Otsing (srch) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:group_srch_help
 msgid "Grupi Otsing (srch) help"
@@ -204,31 +204,31 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:81 classes/applications/customer_satisfaction_center/aw_object_search.aw:99
 msgid "K&otilde;ik"
-msgstr ""
+msgstr "All"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:82
 msgid "Aktiivsed"
-msgstr ""
+msgstr "Active"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:83
 msgid "Deaktiivsed"
-msgstr ""
+msgstr "Deactive"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:118 classes/applications/customer_satisfaction_center/aw_object_search.aw:131
 msgid "Igalt poolt"
-msgstr ""
+msgstr "Everywhere"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:157
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:158
 msgid "Oled kindel et soovid valitud objektid kustutada?"
-msgstr ""
+msgstr "Are You sure You want to delete selected objects?"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:175
 msgid "OID"
-msgstr ""
+msgstr "Object ID"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:182
 msgid ""
@@ -236,37 +236,37 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:187
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:193
 msgid "Keel"
-msgstr ""
+msgstr "Language"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:199
 msgid "T&uuml;&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:205
 msgid "Asukoht"
-msgstr ""
+msgstr "Location"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:211
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:220
 msgid "Looja"
-msgstr ""
+msgstr "Created by"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:226
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:235
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/applications/customer_satisfaction_center/aw_object_search.aw:355
 msgid "AW Objektide otsing"
-msgstr ""
+msgstr "Search for objects"
 

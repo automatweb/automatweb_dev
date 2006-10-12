@@ -291,7 +291,7 @@ msgid "Grupi Paremusj&auml;rjestuse t&uuml;&uuml;bid (result_types) help"
 msgstr ""
 
 #: classes/applications/scm/scm_organizer.aw:rel_RELTYPE_COMPETITION
-msgid "Seose V&amp;otilde;istlus (RELTYPE_COMPETITION) tekst"
+msgid "Seose V&otilde;istlus (RELTYPE_COMPETITION) tekst"
 msgstr ""
 
 #: classes/applications/scm/scm_organizer.aw:rel_RELTYPE_ORGANIZER
@@ -342,79 +342,79 @@ msgstr ""
 msgid "Lisa uus v&otilde;istlusklass"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:547 classes/applications/scm/scm_organizer.aw:617
+#: classes/applications/scm/scm_organizer.aw:543 classes/applications/scm/scm_organizer.aw:613
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:551
+#: classes/applications/scm/scm_organizer.aw:547
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:555
+#: classes/applications/scm/scm_organizer.aw:551
 msgid "Paremusj&auml;rjestuse t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:563
+#: classes/applications/scm/scm_organizer.aw:559
 msgid "&Uuml;rituse nimi"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:568
+#: classes/applications/scm/scm_organizer.aw:564
 msgid "Spordiala"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:573
+#: classes/applications/scm/scm_organizer.aw:569
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:578
+#: classes/applications/scm/scm_organizer.aw:574
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:583
+#: classes/applications/scm/scm_organizer.aw:579
 msgid "V&otilde;istlussari"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:600
+#: classes/applications/scm/scm_organizer.aw:596
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:604
+#: classes/applications/scm/scm_organizer.aw:600
 msgid "M&ouml;&ouml;detav &Uuml;hik"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:608
+#: classes/applications/scm/scm_organizer.aw:604
 msgid "Sorteeritakse"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:621
+#: classes/applications/scm/scm_organizer.aw:617
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:625
+#: classes/applications/scm/scm_organizer.aw:621
 msgid "Kaart"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:629
+#: classes/applications/scm/scm_organizer.aw:625
 msgid "Foto"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:638
+#: classes/applications/scm/scm_organizer.aw:634
 msgid "V&otilde;istlussarja nimi"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:642
+#: classes/applications/scm/scm_organizer.aw:638
 msgid "V&otilde;istlusi"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:651
+#: classes/applications/scm/scm_organizer.aw:647
 msgid "Algoritm"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:660
+#: classes/applications/scm/scm_organizer.aw:656
 msgid "V&otilde;istlusklassi nimi"
 msgstr ""
 
-#: classes/applications/scm/scm_organizer.aw:664
+#: classes/applications/scm/scm_organizer.aw:660
 msgid "L&uuml;hend"
 msgstr ""
 

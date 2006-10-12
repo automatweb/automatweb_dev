@@ -21,8 +21,7 @@ msgstr ""
 
 # classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid_comment
 #: classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid_comment
-msgid ""
-"Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) kommentaar"
+msgid "Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid_help
@@ -132,6 +131,6 @@ msgstr ""
 msgid "Seose Kehtiv kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate_scale.aw:186
+#: classes/contentmgmt/rate/rate_scale.aw:185
 msgid "ei hinda"
 msgstr ""

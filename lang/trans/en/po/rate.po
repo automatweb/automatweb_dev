@@ -155,31 +155,31 @@ msgstr "By folder"
 msgid "Objektist"
 msgstr "From object"
 
-#: classes/contentmgmt/rate/rate.aw:108
+#: classes/contentmgmt/rate/rate.aw:107
 msgid "K&otilde;rgeima hinde j&auml;rgi"
 msgstr "Highest rating"
 
-#: classes/contentmgmt/rate/rate.aw:109
+#: classes/contentmgmt/rate/rate.aw:108
 msgid "Keskmise hinde j&auml;rgi"
 msgstr "Average rating"
 
-#: classes/contentmgmt/rate/rate.aw:110
+#: classes/contentmgmt/rate/rate.aw:109
 msgid "Vaatamiste j&auml;rgi"
 msgstr "Number of views"
 
-#: classes/contentmgmt/rate/rate.aw:111
+#: classes/contentmgmt/rate/rate.aw:110
 msgid "Madalaima hinde j&auml;rgi"
 msgstr "Lowest rating"
 
-#: classes/contentmgmt/rate/rate.aw:112
+#: classes/contentmgmt/rate/rate.aw:111
 msgid "V&auml;him vaadatud"
 msgstr "Least viewed"
 
-#: classes/contentmgmt/rate/rate.aw:515
+#: classes/contentmgmt/rate/rate.aw:514
 msgid "H&auml;&auml;leta"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:533
+#: classes/contentmgmt/rate/rate.aw:532
 msgid "Hinda"
 msgstr ""
 

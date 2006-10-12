@@ -30,23 +30,23 @@ msgstr ""
 msgid "object_loader::load(%s): parameter is not object id!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:263
+#: classes/core/obj/object_loader.aw:261
 msgid "object_loader::load(%s): no such object!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:291
+#: classes/core/obj/object_loader.aw:289
 msgid "object_loader::save(%s): no object with oid $oid exists in the global list"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:340
+#: classes/core/obj/object_loader.aw:338
 msgid "object_loader::save_new(%s): no object with oid %s exists in the global list"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:418
+#: classes/core/obj/object_loader.aw:416
 msgid "object_loader::switch_db_connection(%s): could nto find root connection!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:564
-msgid "object_loader-&gt;can(%s, %s): error in object hierarchy, count exceeded!"
+#: classes/core/obj/object_loader.aw:539
+msgid "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr ""
 

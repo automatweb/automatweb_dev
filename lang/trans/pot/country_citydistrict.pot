@@ -87,6 +87,6 @@ msgid "Omaduse  (administrative_structure_oid) help"
 msgstr ""
 
 #: classes/common/country/country_citydistrict.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_UNIT
-msgid "Seose K&otilde;rgem halduspiirkond (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
+msgid "Seose Kõrgem halduspiirkond (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
 msgstr ""
 

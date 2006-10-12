@@ -266,7 +266,11 @@ msgstr ""
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/aw_object_search.aw:355
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:241 classes/applications/customer_satisfaction_center/aw_object_search.aw:278
+msgid "Ava"
+msgstr ""
+
+#: classes/applications/customer_satisfaction_center/aw_object_search.aw:364
 msgid "AW Objektide otsing"
 msgstr ""
 

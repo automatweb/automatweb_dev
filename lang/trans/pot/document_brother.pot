@@ -15,27 +15,15 @@ msgid "Klassi Dokument(vend) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_needs_translation
-msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tõlget (needs_translation) help"
-msgstr ""
-
-#: classes/document_brother.aw:prop_is_translated
-msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/document_brother.aw:prop_is_translated_comment
-msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/document_brother.aw:prop_is_translated_help
-msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_navtoolbar
@@ -147,15 +135,15 @@ msgid "Omaduse Alias (alias) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_keywords
-msgid "Omaduse Võtmesõnad (keywords) caption"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_keywords_comment
-msgid "Omaduse Võtmesõnad (keywords) kommentaar"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_keywords_help
-msgid "Omaduse Võtmesõnad (keywords) help"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_names
@@ -231,27 +219,27 @@ msgid "Omaduse Foorum (is_forum) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_showlead
-msgid "Omaduse Näita leadi (showlead) caption"
+msgid "Omaduse N&auml;ita leadi (showlead) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_showlead_comment
-msgid "Omaduse Näita leadi (showlead) kommentaar"
+msgid "Omaduse N&auml;ita leadi (showlead) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_showlead_help
-msgid "Omaduse Näita leadi (showlead) help"
+msgid "Omaduse N&auml;ita leadi (showlead) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_show_modified
-msgid "Omaduse Näita muutmise kuupäeva (show_modified) caption"
+msgid "Omaduse N&auml;ita muutmise kuup&auml;eva (show_modified) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_show_modified_comment
-msgid "Omaduse Näita muutmise kuupäeva (show_modified) kommentaar"
+msgid "Omaduse N&auml;ita muutmise kuup&auml;eva (show_modified) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_show_modified_help
-msgid "Omaduse Näita muutmise kuupäeva (show_modified) help"
+msgid "Omaduse N&auml;ita muutmise kuup&auml;eva (show_modified) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_no_right_pane
@@ -291,27 +279,27 @@ msgid "Omaduse Pealkiri klikitav (title_clickable) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_clear_styles
-msgid "Omaduse Tühista stiilid (clear_styles) caption"
+msgid "Omaduse T&uuml;hista stiilid (clear_styles) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_clear_styles_comment
-msgid "Omaduse Tühista stiilid (clear_styles) kommentaar"
+msgid "Omaduse T&uuml;hista stiilid (clear_styles) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_clear_styles_help
-msgid "Omaduse Tühista stiilid (clear_styles) help"
+msgid "Omaduse T&uuml;hista stiilid (clear_styles) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_link_keywords
-msgid "Omaduse Lingi võtmesõnad (link_keywords) caption"
+msgid "Omaduse Lingi v&otilde;tmes&otilde;nad (link_keywords) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_link_keywords_comment
-msgid "Omaduse Lingi võtmesõnad (link_keywords) kommentaar"
+msgid "Omaduse Lingi v&otilde;tmes&otilde;nad (link_keywords) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_link_keywords_help
-msgid "Omaduse Lingi võtmesõnad (link_keywords) help"
+msgid "Omaduse Lingi v&otilde;tmes&otilde;nad (link_keywords) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_esilehel
@@ -399,27 +387,27 @@ msgid "Omaduse  (num_ratings) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_show_title
-msgid "Omaduse Näita pealkirja (show_title) caption"
+msgid "Omaduse N&auml;ita pealkirja (show_title) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_show_title_comment
-msgid "Omaduse Näita pealkirja (show_title) kommentaar"
+msgid "Omaduse N&auml;ita pealkirja (show_title) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_show_title_help
-msgid "Omaduse Näita pealkirja (show_title) help"
+msgid "Omaduse N&auml;ita pealkirja (show_title) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_no_search
-msgid "Omaduse Jäta otsingust välja (no_search) caption"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_no_search_comment
-msgid "Omaduse Jäta otsingust välja (no_search) kommentaar"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_no_search_help
-msgid "Omaduse Jäta otsingust välja (no_search) help"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_cite
@@ -435,15 +423,15 @@ msgid "Omaduse Tsitaat (cite) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_tm
-msgid "Omaduse Kuupäev (tm) caption"
+msgid "Omaduse Kuup&auml;ev (tm) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_tm_comment
-msgid "Omaduse Kuupäev (tm) kommentaar"
+msgid "Omaduse Kuup&auml;ev (tm) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_tm_help
-msgid "Omaduse Kuupäev (tm) help"
+msgid "Omaduse Kuup&auml;ev (tm) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_show_print
@@ -627,27 +615,27 @@ msgid "Omaduse Dok. modified (doc_modified) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_link_calendars
-msgid "Omaduse Vali kalendrid, millesse see sündmus veel salvestatakse. (link_calendars) caption"
+msgid "Omaduse Vali kalendrid, millesse see s&uuml;ndmus veel salvestatakse. (link_calendars) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_link_calendars_comment
-msgid "Omaduse Vali kalendrid, millesse see sündmus veel salvestatakse. (link_calendars) kommentaar"
+msgid "Omaduse Vali kalendrid, millesse see s&uuml;ndmus veel salvestatakse. (link_calendars) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_link_calendars_help
-msgid "Omaduse Vali kalendrid, millesse see sündmus veel salvestatakse. (link_calendars) help"
+msgid "Omaduse Vali kalendrid, millesse see s&uuml;ndmus veel salvestatakse. (link_calendars) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_calendar_relation
-msgid "Omaduse Põhikalender (calendar_relation) caption"
+msgid "Omaduse P&otilde;hikalender (calendar_relation) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_calendar_relation_comment
-msgid "Omaduse Põhikalender (calendar_relation) kommentaar"
+msgid "Omaduse P&otilde;hikalender (calendar_relation) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_calendar_relation_help
-msgid "Omaduse Põhikalender (calendar_relation) help"
+msgid "Omaduse P&otilde;hikalender (calendar_relation) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_gen_static
@@ -663,15 +651,15 @@ msgid "Omaduse Genereeri staatiline (gen_static) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_no_last
-msgid "Omaduse Ära arvesta muutmist (no_last) caption"
+msgid "Omaduse &Auml;ra arvesta muutmist (no_last) caption"
 msgstr ""
 
 #: classes/document_brother.aw:prop_no_last_comment
-msgid "Omaduse Ära arvesta muutmist (no_last) kommentaar"
+msgid "Omaduse &Auml;ra arvesta muutmist (no_last) kommentaar"
 msgstr ""
 
 #: classes/document_brother.aw:prop_no_last_help
-msgid "Omaduse Ära arvesta muutmist (no_last) help"
+msgid "Omaduse &Auml;ra arvesta muutmist (no_last) help"
 msgstr ""
 
 #: classes/document_brother.aw:prop_show_last_changed

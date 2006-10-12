@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/protocols/file/ftp.aw:class_195_help
 msgid "Klassi FTP sissep&auml;&auml;s help"
 msgstr ""
@@ -49,12 +48,3 @@ msgstr ""
 #: classes/protocols/file/ftp.aw:prop_password_help
 msgid "Omaduse Parool (password) help"
 msgstr ""
-
-#: classes/protocols/file/ftp.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/protocols/file/ftp.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-

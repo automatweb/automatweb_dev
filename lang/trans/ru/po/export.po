@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/export/export.aw:237
 msgid "Folder %s does not exist on server!"
 msgstr ""
@@ -26,7 +25,6 @@ msgstr ""
 msgid "VIGA, tyhi url!"
 msgstr ""
 
-#: classes/export/export.aw:783
+#: classes/export/export.aw:778
 msgid "VIGA! EI LEIDNUD ext for type %s"
 msgstr ""
-

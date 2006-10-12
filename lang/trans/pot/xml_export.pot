@@ -74,6 +74,30 @@ msgstr ""
 msgid "Omaduse Eemalda aliased (remove_aliases) help"
 msgstr ""
 
+#: classes/export/xml_export.aw:prop_user_readable_output
+msgid "Omaduse Loetav v&auml;ljund (user_readable_output) caption"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_user_readable_output_comment
+msgid "Omaduse Loetav v&auml;ljund (user_readable_output) kommentaar"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_user_readable_output_help
+msgid "Omaduse Loetav v&auml;ljund (user_readable_output) help"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_filter
+msgid "Omaduse Andmete filter (filter) caption"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_filter_comment
+msgid "Omaduse Andmete filter (filter) kommentaar"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_filter_help
+msgid "Omaduse Andmete filter (filter) help"
+msgstr ""
+
 #: classes/export/xml_export.aw:prop_local_file
 msgid "Omaduse Fail salvestatakse kohalikku serverisse (local_file) caption"
 msgstr ""
@@ -239,58 +263,74 @@ msgid "Seose Faili genereerimise kordus (RELTYPE_EXP_RECURRENCE) tekst"
 msgstr ""
 
 #: classes/export/xml_export.aw:rel_RELTYPE_PARENT
-msgid "Seose S&amp;uuml;ndmuste asukoht (RELTYPE_PARENT) tekst"
+msgid "Seose S&uuml;ndmuste asukoht (RELTYPE_PARENT) tekst"
 msgstr ""
 
-#: classes/export/xml_export.aw:111
+#: classes/export/xml_export.aw:122
 msgid "Teosta eksport"
 msgstr ""
 
-#: classes/export/xml_export.aw:116
+#: classes/export/xml_export.aw:127
 msgid "Ekspordi AW objektid"
 msgstr ""
 
-#: classes/export/xml_export.aw:134
+#: classes/export/xml_export.aw:145
 msgid "Faili/kausta ei saa kirjutada"
 msgstr ""
 
-#: classes/export/xml_export.aw:172
+#: classes/export/xml_export.aw:183
 msgid "Faili ei saa kirjutada"
 msgstr ""
 
-#: classes/export/xml_export.aw:324
+#: classes/export/xml_export.aw:339
 msgid "Kaust"
 msgstr ""
 
-#: classes/export/xml_export.aw:329
+#: classes/export/xml_export.aw:344
 msgid "Kaasaarvatud alamkaustad"
 msgstr ""
 
-#: classes/export/xml_export.aw:361
+#: classes/export/xml_export.aw:376
 msgid "Vali"
 msgstr ""
 
-#: classes/export/xml_export.aw:365
+#: classes/export/xml_export.aw:380
 msgid "Seadete vormi v&auml;li"
 msgstr ""
 
-#: classes/export/xml_export.aw:370
+#: classes/export/xml_export.aw:385
 msgid "jrk"
 msgstr ""
 
-#: classes/export/xml_export.aw:378
+#: classes/export/xml_export.aw:393
 msgid "XML v&auml;lja nimetus"
 msgstr ""
 
-#: classes/export/xml_export.aw:383
+#: classes/export/xml_export.aw:398
 msgid "XML v&auml;lja sisu"
 msgstr ""
 
-#: classes/export/xml_export.aw:388
+#: classes/export/xml_export.aw:403
 msgid "Parameetrid"
 msgstr ""
 
-#: classes/export/xml_export.aw:393
+#: classes/export/xml_export.aw:408
 msgid "CDATA"
+msgstr ""
+
+#: classes/export/xml_export.aw:908
+msgid "Omadus"
+msgstr ""
+
+#: classes/export/xml_export.aw:913
+msgid "V&auml;&auml;rtus"
+msgstr ""
+
+#: classes/export/xml_export.aw:918
+msgid "T&auml;pne"
+msgstr ""
+
+#: classes/export/xml_export.aw:936
+msgid "--vali--"
 msgstr ""
 
