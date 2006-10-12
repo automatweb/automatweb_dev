@@ -33,7 +33,7 @@
 		{VAR:bm_pop}
 		{VAR:history_pop}
 <!--		<a href="#" class="nupp"><img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />Ajalugu <img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a> -->
-		<a href="{VAR:srch_link}" class="nupp"><img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_luup.gif" alt="" width="13" height="13" border="0" class="ikoon" />Otsi <img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>
+		<a href="{VAR:srch_link}" class="nupp"><img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_luup.gif" alt="" width="13" height="13" border="0" class="ikoon" />{VAR:search_text} <img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>
 	</div>
 
 </div>
@@ -61,11 +61,11 @@
 		</div>
 		<!-- END SUB: tabs_L2 -->
 		<div class="p">
-			<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_tagasiside.gif" name="ico1" alt="tagasiside" width="19" height="16" vspace="2" /><a href="{VAR:feedback_link}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ico1','','{VAR:baseurl}/automatweb/images/aw06/ikoon_tagasiside_ov.gif',1)">Tagasiside</a>
+			<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_tagasiside.gif" name="ico1" alt="tagasiside" width="19" height="16" vspace="2" /><a href="{VAR:feedback_link}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ico1','','{VAR:baseurl}/automatweb/images/aw06/ikoon_tagasiside_ov.gif',1)">{VAR:feedback_text}</a>
 			
-			<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_kasutajatugi.gif" name="ico2" alt="kasutajatugi" width="16" height="16" /><a href="{VAR:feedback_m_link}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ico2','','{VAR:baseurl}/automatweb/images/aw06/ikoon_kasutajatugi_ov.gif',1)">Kasutajatugi</a>
+			<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_kasutajatugi.gif" name="ico2" alt="kasutajatugi" width="16" height="16" /><a href="{VAR:feedback_m_link}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ico2','','{VAR:baseurl}/automatweb/images/aw06/ikoon_kasutajatugi_ov.gif',1)">{VAR:feedback_m_text}</a>
 			
-			<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_abi.gif" name="ico3" alt="abi" width="16" height="16" /><a href="javascript:showhide_help();"  onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ico3','','{VAR:baseurl}/automatweb/images/aw06/ikoon_abi_ov.gif',1)">Abi</a>
+			<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_abi.gif" name="ico3" alt="abi" width="16" height="16" /><a href="javascript:showhide_help();"  onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ico3','','{VAR:baseurl}/automatweb/images/aw06/ikoon_abi_ov.gif',1)">{VAR:help_text}</a>
 		</div>
 		<br class="clear" />
 	</div>
