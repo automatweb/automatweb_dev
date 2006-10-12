@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/Attic/room.aw,v 1.3 2006/09/20 14:10:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_conference_room.aw,v 1.1 2006/10/12 11:25:34 tarvo Exp $
 // room.aw - Ruum 
 /*
 
-@classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_CONFERENCE_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 @tableinfo room index=oid master_table=objects master_index=oid
 
 @default table=room
@@ -42,13 +42,13 @@
 
 */
 
-class room extends class_base
+class crm_conference_room extends class_base
 {
-	function room()
+	function crm_conference_room()
 	{
 		$this->init(array(
-			"tpldir" => "crm/room",
-			"clid" => CL_ROOM
+			"tpldir" => "crm/crm_conference_room",
+			"clid" => CL_CRM_CONFERENCE_ROOM
 		));
 	}
 
@@ -110,7 +110,6 @@ class room extends class_base
 					"type" => "text"
 				));
 				return true;
-				break;
 			case "area":
 			case "type_chair":
 			case "type_chair_table":

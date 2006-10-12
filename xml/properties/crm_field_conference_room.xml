@@ -138,8 +138,8 @@
             </IMAGE>
             <ROOM>
                   <value>5</value>
-                  <clid>CL_ROOM</clid>
-                  <caption>Ruum</caption>
+                  <clid>CL_CRM_CONFERENCE_ROOM</clid>
+                  <caption>Konverentsiruum</caption>
             </ROOM>
       </reltypes>
 </properties>

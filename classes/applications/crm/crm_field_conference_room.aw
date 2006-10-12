@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_conference_room.aw,v 1.4 2006/09/13 12:34:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_conference_room.aw,v 1.5 2006/10/12 11:25:36 tarvo Exp $
 // crm_field_conference_room.aw - Konverentsiruum (valdkond) 
 /*
 
@@ -49,8 +49,8 @@
 @reltype IMAGE value=4 clid=CL_IMAGE
 @caption Pilt
 
-@reltype ROOM value=5 clid=CL_ROOM
-@caption Ruum
+@reltype ROOM value=5 clid=CL_CRM_CONFERENCE_ROOM
+@caption Konverentsiruum
 
 */
 
