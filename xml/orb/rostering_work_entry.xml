@@ -3,4 +3,3 @@
 	<class name="rostering_work_entry" folder="applications/rostering" extends="class_base">
 	</class>
 </orb>
-		

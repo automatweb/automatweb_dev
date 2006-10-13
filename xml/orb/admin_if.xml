@@ -48,7 +48,7 @@
 			</function>
 		</action>
 
-		<action name="if_delete">
+		<action name="if_delete" all_args="1">
 			<function name="if_delete">
 				<arguments>
 				</arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.7 2006/10/12 13:57:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.8 2006/10/13 10:55:26 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1087,7 +1087,7 @@ class admin_if extends class_base
 	}
 
 	/**  
-		@attrib name=if_delete params=name default="0"
+		@attrib name=if_delete params=name default="0" all_args=1
 	**/
 	function if_delete($arr)
 	{
@@ -1107,7 +1107,11 @@ class admin_if extends class_base
 				}
 			}
 		}
-		return $arr["post_ru"];
+		return $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"parent" => $arr["parent"],
+			"period" => $arr["period"]
+		));
 	}
 
 	/**
