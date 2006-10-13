@@ -41,9 +41,12 @@ else
 // do a cache clean every hour for this session
 if ($_SESSION["last_cache_clear"] < (time() - 3600))
 {
-	$str .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&action=cache_update' alt='' height='1' width='1'>";
+	$astr = "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&amp;action=cache_update' alt='' height='1' width='1'/>";
+	$astr .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=scheduler&amp;action=static_sched' alt='' height='1' width='1'/>";
+
+	$str = str_replace("</body>", $astr."</body>", $str);
+	$str = str_replace("</BODY>", $astr."</BODY>", $str);
 	$_SESSION["last_cache_clear"] = time();
-	file_get_contents(aw_ini_get("baseurl")."/orb.aw?class=scheduler&action=static_sched");
 }
 ob_start();
 echo $str;
