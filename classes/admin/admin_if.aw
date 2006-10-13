@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.9 2006/10/13 10:59:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.10 2006/10/13 11:20:06 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -716,7 +716,7 @@ class admin_if extends class_base
 			else
 			{
 				$grp = null;
-				if ($trans)
+				if ($trans && aw_global_get("ct_lang_id") != $row_o->lang_id())
 				{
 					$grp = "transl";
 				}
@@ -829,7 +829,7 @@ class admin_if extends class_base
 			"link" => aw_url_change_var("parent", $id)
 		));
 
-		if (aw_ini_get("user_interface.full_content_trans"))
+		if (aw_ini_get("user_interface.full_content_trans")  && aw_global_get("ct_lang_id") != $obj->lang_id())
 		{
 			$grp = "transl";
 		}
