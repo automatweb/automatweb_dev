@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.6 2006/10/10 09:23:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.7 2006/10/13 13:24:20 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -1105,13 +1105,13 @@ class watercraft extends class_base
 				draught float,
 				fuel_tank float,
 				engine_power float,
+				price float,
 
 				watercraft_type_other varchar(255),
 				body_material_other varchar(255),
 				location_other varchar(255),
 				condition_info varchar(255),
 				brand varchar(255),
-				price varchar(255),
 				engine_manufacturer varchar(255),
 				engine_model varchar(255),
 				engine_capacity varchar(255),
@@ -1209,6 +1209,7 @@ class watercraft extends class_base
 			case 'draught':
 			case 'fuel_tank':
 			case 'engine_power':
+			case 'price':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'float'
@@ -1219,7 +1220,6 @@ class watercraft extends class_base
 			case 'location_other':
 			case 'condition_info':
 			case 'brand':
-			case 'price':
 			case 'engine_manufacturer':
 			case 'engine_model':
 			case 'engine_capacity':

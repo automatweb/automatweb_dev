@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.4 2006/08/31 14:36:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.5 2006/10/13 13:24:20 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -78,6 +78,7 @@ class watercraft_search extends class_base
 {
 
 	var $search_form_elements;
+	var $additional_equipment_elements;
 
 	function watercraft_search()
 	{
@@ -102,6 +103,66 @@ class watercraft_search extends class_base
 			'seller' => t('M&uuml;&uuml;ja'),
 			'price' => t('Hind')
 		);
+	
+
+		// XXX siia peaks panem chooserid, info ja koguse propid ka
+		// ja kuidagi peab siis raalima, et mis sinna tekstikasti pandi
+		// ja otsima selle järgi nii selle j2rgi, et kas see prop on valitud
+		// see s6na leidub info v2ljas, v6is matchib kogus.	
+		$this->additional_equipment_elements = array(
+			'electricity_110V_sel' => t('Elekter 110V'),
+			'electricity_220V_sel' => t('Elekter 220V'),
+			'radio_station_sel' => t('Raadiojaam'),
+			'stereo_sel' => t('Stereo'),
+			'cd_sel' => t('CD'),
+			'waterproof_speakers_sel' => t('Veekindlad k&otilde;larid'),
+			'burglar_alarm_sel' => t('Signalisatsioon'),
+			'navigation_system_sel' => t('Navigatsioonis&uuml;steem'),
+			'navigation_lights_sel' => t('Navigatsioonituled'),
+			'trailer_sel' => t('Treiler'),
+			'toilet_sel' => t('Tualett'),
+			'shower_sel' => t('Dush'),
+			'lifejacket_sel' => t('P&auml;&auml;stevest'),
+			'swimming_ladder_sel' => t('Ujumisredel'),
+			'awning_sel' => t('Varikatus'),
+			'kitchen_cooker_sel' => t('K&ouml;&ouml;k/Pliit'),
+			'vendrid_sel' => t('Vendrid'),
+			'fridge_sel' => t('K&uuml;lmkapp'),
+			'anchor_sel' => t('Ankur'),
+			'oars_sel' => t('Aerud'),
+			'tv_video_sel' => t('TV-video'),
+			'fuel_sel' => t('K&uuml;te'),
+			'water_tank_sel' => t('Veepaak'),
+			'life_boat_sel' => t('P&auml;&auml;stepaat'),
+
+			'electricity_110V_info' => t('Elekter 110V'),
+			'electricity_220V_info' => t('Elekter 220V'),
+			'radio_station_info' => t('Raadiojaam'),
+			'stereo_info' => t('Stereo'),
+			'cd_info' => t('CD'),
+			'waterproof_speakers_info' => t('Veekindlad k&otilde;larid'),
+			'burglar_alarm_info' => t('Signalisatsioon'),
+			'navigation_system_info' => t('Navigatsioonis&uuml;steem'),
+			'navigation_lights_info' => t('Navigatsioonituled'),
+			'trailer_info' => t('Treiler'),
+			'toilet_info' => t('Tualett'),
+			'shower_info' => t('Dush'),
+			'lifejacket_info' => t('P&auml;&auml;stevest'),
+			'swimming_ladder_info' => t('Ujumisredel'),
+			'awning_info' => t('Varikatus'),
+			'kitchen_cooker_info' => t('K&ouml;&ouml;k/Pliit'),
+			'vendrid_info' => t('Vendrid'),
+			'fridge_info' => t('K&uuml;lmkapp'),
+			'anchor_info' => t('Ankur'),
+			'oars_info' => t('Aerud'),
+			'tv_video_info' => t('TV-video'),
+			'fuel_info' => t('K&uuml;te'),
+			'water_tank_info' => t('Veepaak'),
+			'life_boat_info' => t('P&auml;&auml;stepaat'),
+
+			
+		);
+
 	}
 
 	function get_property($arr)
@@ -160,6 +221,70 @@ class watercraft_search extends class_base
 		return $this->parse();
 	}
 
+	// searches the watercrafts
+	function search($arr)
+	{
+		$filter = array(
+			'class_id' => CL_WATERCRAFT,
+			'parent' => $arr['obj_inst']->prop('data')
+		);
+		foreach ($this->search_form_elements as $name => $caption)
+		{
+			// if it is range:
+			if ( is_array($arr['request'][$name]) )
+			{
+				$from = (int)$arr['request'][$name]['from'];
+				$to = (int)$arr['request'][$name]['to'];
+
+				// if both are empty, then don't need to search by that:
+				if ( empty($from) && empty($to) )
+				{
+					continue;
+				}
+				else
+				if ( empty($from) ) 
+				{
+					// we have only $to value:
+					$filter[$name] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
+				}
+				else
+				if ( empty($to) )
+				{
+					// we have only $from value
+					$filter[$name] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
+				}
+				else
+				{
+					// and finally we have them both:
+					$filter[$name] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from, $to);
+				}
+			}
+			else
+			{
+				if ( !empty($arr['request'][$name]) )
+				{
+					if ($name == 'seller')
+					{
+						$filter['CL_WATERCRAFT.RELTYPE_SELLER.class_id'] = $arr['request'][$name];
+					}
+					else
+					if ($name == 'additional_equipment')
+					{
+						// we have this additional equipment search field, which content have to searched from
+						// all additional equipment fields
+					}
+					else
+					{
+						$filter[$name] = $arr['request'][$name];
+					}
+				}
+			}
+		}
+
+		$watercrafts = new object_list($filter);
+		return $watercrafts;
+	}
+
 	function do_db_upgrade($table, $field, $query, $error)
 	{
 		if (empty($field))
@@ -173,20 +298,6 @@ class watercraft_search extends class_base
 			case 'results_on_page':
 			case 'max_results':
 			case 'no_search_form':
-		//	case 'watercraft_type':
-		//	case 'condition':
-		//	case 'body_material':
-		//	case 'location':
-		//	case 'length':
-		//	case 'width':
-		//	case 'height':
-		//	case 'weight':
-		//	case 'draught':
-		//	case 'creation_year':
-		//	case 'passanger_count':
-		//	case 'additional_equipment':
-		//	case 'seller':
-		//	case 'price':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'

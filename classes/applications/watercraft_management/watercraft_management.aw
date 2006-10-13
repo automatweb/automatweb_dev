@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.8 2006/09/25 12:41:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.9 2006/10/13 13:24:20 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -72,48 +72,48 @@
 
 		@layout watercraft_search_frame_left type=vbox parent=watercraft_search_frame
 
-			@property watercraft_type type=select store=no parent=watercraft_search_frame_left
+			@property watercraft_type type=select store=no captionside=top parent=watercraft_search_frame_left
 			@caption Aluse t&uuml;&uuml;p
 
-			@property condition type=select store=no parent=watercraft_search_frame_left
+			@property condition type=select store=no captionside=top parent=watercraft_search_frame_left
 			@caption Seisukord
 
-			@property body_material type=select store=no parent=watercraft_search_frame_left
+			@property body_material type=select store=no captionside=top parent=watercraft_search_frame_left
 			@caption Kerematerjal
 
-			@property location type=select store=no parent=watercraft_search_frame_left
+			@property location type=select store=no captionside=top parent=watercraft_search_frame_left
 			@caption Asukoht
 
-			@property length type=range store=no parent=watercraft_search_frame_left 
+			@property length type=range store=no captionside=top parent=watercraft_search_frame_left 
 			@caption Pikkus
 
-			@property width type=range store=no parent=watercraft_search_frame_left
+			@property width type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption Laius
 
-			@property height type=range store=no parent=watercraft_search_frame_left
+			@property height type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption K&otilde;rgus
 
-			@property weight type=range store=no parent=watercraft_search_frame_left
+			@property weight type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption Raskus
 
-			@property draught type=range store=no parent=watercraft_search_frame_left
+			@property draught type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption S&uuml;vis
 
-			@property creation_year type=range store=no parent=watercraft_search_frame_left
+			@property creation_year type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption Valmistamisaasta
 
-			@property passanger_count type=range store=no parent=watercraft_search_frame_left
+			@property passanger_count type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption Reisijaid
 
-			@property additional_equipment type=textbox size=20 store=no parent=watercraft_search_frame_left
+			@property additional_equipment type=textbox size=20 store=no captionside=top parent=watercraft_search_frame_left
 			@caption Lisavarustus
 
-			@property seller type=select store=no parent=watercraft_search_frame_left
+			@property seller type=select store=no captionside=top parent=watercraft_search_frame_left
 			@caption M&uuml;&uuml;ja
 			
-			@property price type=range store=no parent=watercraft_search_frame_left
+			@property price type=range store=no captionside=top parent=watercraft_search_frame_left
 			@caption Hind
-			
+
 			@property watercraft_search_submit type=submit store=no no_caption=1 parent=watercraft_search_frame_left
 			@caption Otsi
 
@@ -215,6 +215,7 @@ class watercraft_management extends class_base
 			case 'price':
 				$range = &$prop['vcl_inst'];
 				$range->set_range($arr['request'][$prop['name']]);
+				
 				break;
 		//	case 'additional_equipment':
 		//
@@ -358,49 +359,21 @@ class watercraft_management extends class_base
 			'width' => '5%'
 		));
 
-		$filter = array(
-			'class_id' => CL_WATERCRAFT,
-			'parent' => $arr['obj_inst']->prop('data')
-		);
 
 		if ( $arr['request']['group'] == 'search' )
 		{
-			foreach ($this->watercraft_search_inst->search_form_elements as $name => $caption)
-			{
-				// if it is range:
-				if ( is_array($arr['request'][$name]) )
-				{
-					$from = (int)$arr['request'][$name]['from'];
-					$to = (int)$arr['request'][$name]['to'];
-
-					if ( empty($from) && empty($to) )
-					{
-						continue;
-					} 
-					$filter[$name] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from, $to);
-				}
-				else
-				{
-					if ( !empty($arr['request'][$name]) )
-					{
-						if ($name == 'seller')
-						{
-							$filter['CL_WATERCRAFT.RELTYPE_SELLER.class_id'] = $arr['request'][$name];
-						}
-						else
-						{
-							$filter[$name] = $arr['request'][$name];
-						}
-					}
-				}
-			}
+			$watercrafts = $this->watercraft_search_inst->search($arr);
 		}
 		else
 		{
-			$filter['watercraft_type'] = constant('WATERCRAFT_TYPE_'.strtoupper($arr['request']['group']));
+			$filter = array(
+				'class_id' => CL_WATERCRAFT,
+				'parent' => $arr['obj_inst']->prop('data'),
+				'watercraft_type' => constant('WATERCRAFT_TYPE_'.strtoupper($arr['request']['group']))
+			);
+			$watercrafts = new object_list($filter);
 		}
 
-		$watercrafts = new object_list($filter);
 
 		foreach ($watercrafts->arr() as $id => $watercraft)
 		{
