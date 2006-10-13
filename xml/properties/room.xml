@@ -96,7 +96,7 @@
             <caption>Kasutustingimused</caption>
       </property>
       <property>
-            <name>dummy__</name>
+            <name>calendar</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -105,10 +105,41 @@
                   <num_1>parent</num_1>
             </group>
             <parent>general_down</parent>
-            <type>hidden</type>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <viewtype>relative</viewtype>
+            <store>no</store>
       </property>
       <property>
-            <name>dummy_</name>
+            <name>images_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>images</num_0>
+                  <num_1>parent</num_1>
+            </group>
+            <parent>general_down</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>images_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>images</num_0>
+                  <num_1>parent</num_1>
+            </group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>images_search</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -118,18 +149,97 @@
             </group>
             <parent>general_down</parent>
             <type>hidden</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
-            <name>dummy</name>
+            <name>currency</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>prices</num_0>
-                  <num_1>parent</num_1>
-            </group>
+            <group>prices_general</group>
             <parent>general_down</parent>
-            <type>hidden</type>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_CURRENCY</reltype>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
+            <name>price</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>general_down</parent>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <ch_value>1</ch_value>
+            <caption>Hind</caption>
+      </property>
+      <property>
+            <name>time_unit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>general_down</parent>
+            <type>chooser</type>
+            <caption>Aja&amp;amp;uuml;hik</caption>
+      </property>
+      <property>
+            <name>time_from</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>time_step</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>time_to</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>time_step</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>kuni</caption>
+      </property>
+      <property>
+            <name>time_step</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>time_step</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>, sammuga</caption>
+      </property>
+      <property>
+            <name>prices_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_price</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>bargain_prices_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_bargain_price</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <classinfo>
             <syslog_type>ST_ROOM</syslog_type>
@@ -151,6 +261,18 @@
             <prices>
                   <caption>Hinnad</caption>
             </prices>
+            <prices_general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>prices</parent>
+            </prices_general>
+            <prices_price>
+                  <caption>Hinnad</caption>
+                  <parent>prices</parent>
+            </prices_price>
+            <prices_bargain_price>
+                  <caption>Soodushinnad</caption>
+                  <parent>prices</parent>
+            </prices_bargain_price>
       </groupinfo>
       <reltypes>
             <LOCATION>
@@ -178,6 +300,26 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Kasutustingimused</caption>
             </CONDITIONS>
+            <IMAGE>
+                  <value>6</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Pilt</caption>
+            </IMAGE>
+            <CURRENCY>
+                  <value>7</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>Valuuta</caption>
+            </CURRENCY>
+            <CALENDAR>
+                  <value>8</value>
+                  <clid>CL_PLANNER</clid>
+                  <caption>Kalender</caption>
+            </CALENDAR>
+            <ROOM_PRICE>
+                  <value>9</value>
+                  <clid>CL_ROOM_PRICE</clid>
+                  <caption>Ruumi hind</caption>
+            </ROOM_PRICE>
       </reltypes>
       <layout>
             <general_split>
@@ -199,6 +341,12 @@
                   <parent>general_split</parent>
                   <group>general</group>
             </general_down>
+            <time_step>
+                  <type>hbox</type>
+                  <width>5%:5%:80%</width>
+                  <group>prices_general</group>
+                  <caption>Aja samm</caption>
+            </time_step>
       </layout>
 </properties>
 
