@@ -159,10 +159,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property lg_hd type=text subtitle=1 store=no
 	@caption T&otilde;lkekeskkond
 
-	@property base_lang type=select field=meta method=serialize table=objects
-	@caption Baaskeel
-
-	@property target_lang type=select field=meta method=serialize table=objects
+	@property target_lang type=select field=meta method=serialize table=objects multiple=1
 	@caption Sihtkeel
 
 @reltype GRP value=1 clid=CL_GROUP
@@ -239,7 +236,6 @@ class user extends class_base
 				$prop['value'] = $this->time2date($prop['value'],2);
 				break;
 
-			case "base_lang":
 			case "target_lang":
 				$l = get_instance("languages");
 				$prop["options"] = $l->get_list();

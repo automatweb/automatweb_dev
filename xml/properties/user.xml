@@ -375,21 +375,13 @@
             <caption>T&amp;amp;otilde;lkekeskkond</caption>
       </property>
       <property>
-            <name>base_lang</name>
-            <table>objects</table>
-            <group>settings</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Baaskeel</caption>
-      </property>
-      <property>
             <name>target_lang</name>
             <table>objects</table>
             <group>settings</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
+            <multiple>1</multiple>
             <caption>Sihtkeel</caption>
       </property>
       <classinfo>

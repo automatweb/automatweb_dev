@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.511 2006/10/12 20:32:32 kristo Exp $
+// $Id: class_base.aw,v 2.512 2006/10/13 11:42:31 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5174,9 +5174,16 @@ class class_base extends aw_template
 			$pl = $cf->get_props_from_cfgform(array("id" => $cfgform_id));
 		}
 		$all_vals = $arr["obj_inst"]->meta("translations");
+
+		$uo = obj(aw_global_get("uid_oid"));
+		$uo = $uo->prop("target_lang");
 		foreach($ll as $lid => $lang)
 		{
 			if ($lid == $arr["obj_inst"]->lang_id())
+			{
+				continue;
+			}
+			if (is_array($uo) && count($uo) && !isset($uo[$lid]))
 			{
 				continue;
 			}
