@@ -50,6 +50,15 @@
             <caption>Teosta import</caption>
       </property>
       <property>
+            <name>import_time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>import_time</field>
+            <caption>Viimase impordi l&amp;amp;otilde;ppemise aeg:</caption>
+      </property>
+      <property>
             <name>ftp_host</name>
             <table>scala_import</table>
             <group>ftp_config</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.8 2006/10/09 15:41:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.9 2006/10/13 10:20:32 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -26,6 +26,9 @@
 
 	@property do_import type=text store=no
 	@caption Teosta import
+
+	@property import_time type=text store=no
+	@caption Viimase impordi l&otilde;ppemise aeg:
 
 @groupinfo ftp_config caption="FTP seaded"
 @default group=ftp_config
@@ -132,12 +135,17 @@ class scala_import extends class_base
 					$url_params[$key] = 1;
 					
 				}
+				$import_url = $this->mk_my_orb('do_import', array(
+					'id' => $arr['obj_inst']->id()
+				) + $url_params, CL_SCALA_IMPORT);
+
 				$prop['value'] = html::href(array(
 					'caption' => sprintf(t('Impordi %s'), implode(', ', $sections)),
-					'url' => $this->mk_my_orb('do_import', array(
-						'id' => $arr['obj_inst']->id()
-					) + $url_params, CL_SCALA_IMPORT)
+					'url' => str_replace('automatweb/', '', $import_url),
 				));
+				break;
+			case 'import_time':
+				$prop['value'] = date('d.m.Y H:m:s', $arr['obj_inst']->meta('import_end_time'));
 				break;
 		};
 		return $retval;
@@ -382,7 +390,8 @@ class scala_import extends class_base
 	}
 
 	/** 
-		@attrib name=do_import nologin=1 all_args=1
+		@attrib name=do_import nologin=1
+
 		@param id required type=int acl=view
 			Scala import object id
 		@param pricing optional type=int 
@@ -396,6 +405,7 @@ class scala_import extends class_base
         **/
 	function do_import($arr)
 	{
+
 		$this->log_str = '';
 		$this->log_file_name = 'scala_import_log_'.date('d-m-Y-H-i-s').'.log';
 		if ( $this->can('view', $arr['id']) )
@@ -442,6 +452,7 @@ class scala_import extends class_base
 			
 		}
 
+		aw_disable_acl();
 		// import users
 		if ( $arr['users'] )
 		{
@@ -469,7 +480,6 @@ class scala_import extends class_base
 		if ( $arr['categories'] || $arr['availability'] )
 		{
 			// lets disable the acl checks for better performance during import
-			aw_disable_acl();
 
 			$warehouse_inst = get_instance(CL_SHOP_WAREHOUSE);
 			$warehouse = $o->prop('warehouse');
@@ -533,9 +543,13 @@ class scala_import extends class_base
 				));
 			}
 			// lets restore the acl checking after import
-			aw_restore_acl();
 		}
 		
+		// save the import ending time into meta, so we can show it in interface and provide
+		// an easy way to check if the cron has executed the import and has it completed or not
+		$o->set_meta('import_end_time', time());
+		$o->save();
+		aw_restore_acl();
 		$this->write_log();
 
 	}
