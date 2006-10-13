@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.8 2006/10/13 10:55:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.9 2006/10/13 10:59:50 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -866,7 +866,7 @@ class admin_if extends class_base
 
 		if ($this->can("delete", $id))
 		{
-			$delurl = $this->mk_my_orb("if_delete", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_if",true,true);
+			$delurl = $this->mk_my_orb("if_delete", array("ret_id" => $_GET["id"], "reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_if",true,true);
 			$delurl = "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){window.location='$delurl';};";
 
 			$pm->add_item(array(
@@ -1108,9 +1108,10 @@ class admin_if extends class_base
 			}
 		}
 		return $this->mk_my_orb("change", array(
-			"id" => $arr["id"],
+			"id" => $arr["ret_id"],
 			"parent" => $arr["parent"],
-			"period" => $arr["period"]
+			"period" => $arr["period"],
+			"group" => "o"
 		));
 	}
 
