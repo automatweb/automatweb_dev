@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.130 2006/09/13 10:42:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.131 2006/10/13 16:17:45 markop Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -181,7 +181,7 @@ define("REP_YEAR",4);
 @reltype EVENT_SOURCE value=2 clid=CL_PLANNER,CL_PROJECT
 @caption võta s&uuml;ndmusi
 
-@reltype EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING
+@reltype EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING,CL_RESERVATION
 @caption s&uuml;ndmus
 
 @reltype DC_RELATION value=4 clid=CL_RELATION
@@ -241,9 +241,9 @@ class planner extends class_base
 
 
 		//  list all clids here, that can be added to the calendar (those should at least have a referenfe to planner.start)
-		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS, CL_STAGING, CL_BUG);
+		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS, CL_STAGING, CL_BUG,CL_RESERVATION);
 		// list all clids, that should be shown by default
-		$this->default_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_MEETING);
+		$this->default_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_MEETING,CL_RESERVATION);
 
 		$this->default_day_start = array(
 			"hour" => 9,
@@ -459,6 +459,7 @@ class planner extends class_base
 					CL_CRM_CALL => t("Kõne"),
 					CL_TASK => t("Toimetus"),
 					CL_CRM_MEETING => t("Kohtumine"),
+					CL_RESERVATION => t("Broneering"),
 				);
 				
 				if($arr["request"]["event_search_type"])
@@ -472,6 +473,7 @@ class planner extends class_base
 						CL_CRM_CALL => 1,
 						CL_TASK => 1,
 						CL_CRM_MEETING => 1,
+						CL_RESERVATION => 1,
 					);
 				}
 				

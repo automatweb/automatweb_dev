@@ -1,5 +1,84 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>start1</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>start</field>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>L&amp;amp;otilde;peb</caption>
+      </property>
+      <property>
+            <name>deadline</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>deadline</field>
+            <caption>T&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>customer</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>customer</field>
+            <reltype>RELTYPE_CUSTOMER</reltype>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>project</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>project</field>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>send_bill</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>send_bill</field>
+            <caption>Saata arve</caption>
+      </property>
+      <property>
+            <name>bill_no</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>bill_no</field>
+            <caption>Arve number</caption>
+      </property>
+      <property>
+            <name>content</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textarea</type>
+            <no_caption>1</no_caption>
+            <cols>50</cols>
+            <rows>5</rows>
+            <field>description</field>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>code</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>hidden</type>
+            <size>5</size>
+            <field>code</field>
+            <caption>Kood</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_RESERVATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +86,27 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <tableinfo>
+            <planner>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </planner>
+      </tableinfo>
+      <reltypes>
+            <CUSTOMER>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>Klient</caption>
+            </CUSTOMER>
+            <PROJECT>
+                  <value>2</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Projekt</caption>
+            </PROJECT>
+      </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.2 2006/10/13 13:02:52 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.3 2006/10/13 16:12:01 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -54,6 +54,7 @@
 
 @groupinfo calendar caption="Kalender"
 @default group=calendar,parent=
+	@property calendar_tb type=toolbar no_caption=1 submit=no
 	@property calendar type=calendar no_caption=1 viewtype=relative
 
 # TAB IMAGES
@@ -159,6 +160,11 @@ class room extends class_base
 					2 => t("Kasutusaja kohta"),
 				);
 				break;
+			
+			case "calendar_tb":
+				$this->_calendar_tb($arr);
+				break;
+			
 			case "time_unit":
 				$prop["options"] = array(
 					1 => t("minutitites"),
@@ -169,7 +175,7 @@ class room extends class_base
 			# TAB CALENDAR
 			case "calendar":
 				//$cal = $this->get_calendar($arr["obj_inst"]->id());
-				$c = &$prop["vcl_inst"];
+/*				$c = &$prop["vcl_inst"];
 				$c->add_item(array(
 					"timestamp" => time(),
 					"item_start" => time()-3000,
@@ -194,7 +200,7 @@ class room extends class_base
 					"overview_range" => 1,
 				));
 				$prop["value"] = "s"; //$c->draw_month();
-				break;
+*/				break;
 		};
 		return $retval;
 	}
@@ -464,6 +470,36 @@ class room extends class_base
 			$ret[$to->id()] = $to;
 		}
 		return $ret;
+	}
+	
+	function _calendar_tb($arr)
+	{
+		$arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR");
+		if(is_object($arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
+		{
+			$cal_obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR");
+			$cal = $cal_obj->id();
+			$parent = $cal_obj->prop("event_folder");
+		}
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "new_reservation",
+			"img" => "new.gif",
+			"tooltip" => t("Broneering"),
+			"url" => $this->mk_my_orb(
+				"new", 
+				array(
+					"parent" => $parent,
+					"return_url" => get_ru(),
+					"calendar" => $cal,
+		//			"alias_to" => $arr["obj_inst"]->id(),
+	//				"reltype" => 9,
+//					"alias_to_org" => $arr["obj_inst"]->prop("customer"),
+//					"set_proj" => $arr["obj_inst"]->prop("project")
+				),
+				CL_RESERVATION
+			)
+		));
 	}
 }
 ?>

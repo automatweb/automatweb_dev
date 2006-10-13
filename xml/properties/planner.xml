@@ -479,6 +479,7 @@
                         <num_0>CL_TASK</num_0>
                         <num_1>CL_CRM_CALL</num_1>
                         <num_2>CL_CRM_MEETING</num_2>
+                        <num_3>CL_RESERVATION</num_3>
                   </clid>
                   <caption>s&amp;amp;uuml;ndmus</caption>
             </EVENT>
