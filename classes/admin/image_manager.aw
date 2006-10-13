@@ -76,7 +76,9 @@ class image_manager extends aw_template
 		}
 		$this->vars(array(
 			"img_new" => html::get_new_url(CL_IMAGE, $parent),
-			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id()))
+			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id())),
+			"new_img_t" => t("Uus pilt"),
+			"existing_img_t" => t("Vali olemasolev pilt")
 		));
 		die($this->parse());
 	}

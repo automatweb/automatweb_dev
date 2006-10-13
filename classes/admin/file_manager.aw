@@ -80,7 +80,9 @@ class file_manager extends aw_template
 		}
 		$this->vars(array(
 			"img_new" => html::get_new_url(CL_FILE, $parent),
-			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id()))
+			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id())),
+			"new_file_t" => t("Uus fail"),
+			"existing_file_t" => t("Vali olemasolev fail")
 		));
 		die($this->parse());
 	}

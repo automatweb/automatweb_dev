@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.203 2006/10/10 13:54:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.204 2006/10/13 08:25:45 kristo Exp $
 
 /*
 
@@ -2112,7 +2112,9 @@ class site_show extends class_base
 			$this->vars(array(
 				"path_menu_image_".$nr."_url" => $url,
 				"path_menu_image_".$nr => html::img(array(
-					"url" => $url
+					"url" => $url,
+					"alt" => " ",
+					"title" => " "
 				))
 			));
 		}

@@ -94,7 +94,9 @@ class link_manager extends aw_template
 		}
 		$this->vars(array(
 			"img_new" => html::get_new_url(CL_EXTLINK, $parent),
-			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id()))
+			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id())),
+			"new_link_t" => t("Uus link"),
+			"existing_link_t" => t("Vali olemasolev link")
 		));
 		die($this->parse());
 	}
