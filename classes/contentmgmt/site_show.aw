@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.205 2006/10/13 10:48:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.206 2006/10/13 11:13:21 kristo Exp $
 
 /*
 
@@ -2084,7 +2084,8 @@ class site_show extends class_base
 			"cur_section" => aw_global_get("section"),
 			"section_name" => $this->section_obj->name(),
 			"meta_description" => $this->section_obj->prop("description"),
-			"meta_keywords" => $this->section_obj->prop("keywords")
+			"meta_keywords" => $this->section_obj->prop("keywords"),
+			"trans_lc" => aw_global_get("ct_lang_lc")
 		));
 
 		if ($this->is_parent_tpl("logged", "IS_NOT_FRONTPAGE"))
