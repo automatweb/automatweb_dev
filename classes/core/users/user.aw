@@ -162,6 +162,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property target_lang type=select field=meta method=serialize table=objects multiple=1
 	@caption Sihtkeel
 
+	@property rd_hd type=text subtitle=1 store=no
+	@caption Suunamine
+
+	@property after_login_redir type=textbox field=meta method=serialize table=objects 
+	@caption P&auml;rast sisse logimist suunamine
+
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
 

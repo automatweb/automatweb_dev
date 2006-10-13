@@ -384,6 +384,25 @@
             <multiple>1</multiple>
             <caption>Sihtkeel</caption>
       </property>
+      <property>
+            <name>rd_hd</name>
+            <table>users</table>
+            <group>settings</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>rd_hd</field>
+            <caption>Suunamine</caption>
+      </property>
+      <property>
+            <name>after_login_redir</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>P&amp;amp;auml;rast sisse logimist suunamine</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_USERS</syslog_type>
             <relationmgr>yes</relationmgr>
