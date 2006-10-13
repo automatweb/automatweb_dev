@@ -861,6 +861,15 @@
             <field>versions</field>
       </property>
       <property>
+            <name>trans_tb</name>
+            <table>documents</table>
+            <group>transl</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>trans_tb</field>
+      </property>
+      <property>
             <name>transl</name>
             <table>documents</table>
             <group>transl</group>

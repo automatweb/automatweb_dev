@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.138 2006/10/06 10:13:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.139 2006/10/13 10:48:49 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -272,6 +272,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property versions type=table store=no no_caption=1
 
 @default group=transl
+
+	@property trans_tb type=toolbar no_caption=1 store=no
 	
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
@@ -482,6 +484,10 @@ class doc extends class_base
 
 			case "versions_tb":
 				$this->_versions_tb($arr);
+				break;
+
+			case "trans_tb":
+				$this->_trans_tb($arr);
 				break;
 		};
 		return $retval;
@@ -823,7 +829,8 @@ class doc extends class_base
 	
 		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->id())
 		{
-			$url = obj_link($arr["obj_inst"]->id());
+			$dd = get_instance("doc_display");
+			$url = $dd->get_doc_link($arr["obj_inst"]);
 			if ($arr["request"]["edit_version"] != "")
 			{
 				$url = aw_url_change_var("docversion", $arr["request"]["edit_version"], $url);
@@ -1573,6 +1580,33 @@ class doc extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function _trans_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "preview", 
+			"tooltip" => t("Eelvaade"),
+			"img" => "preview.gif"
+		));
+		$l = get_instance("languages");
+		$ll = $l->get_list(array(/*"ignore_status" => true,*/ "all_data" => true));
+		
+		$dd = get_instance("doc_display");
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $arr["obj_inst"]->lang_id())
+			{
+				continue;
+			}
+			$tb->add_menu_item(array(
+				"parent" => "preview",
+				"text" => t($lang["name"]),
+				"url" => $dd->get_doc_link($arr["obj_inst"], $lang["acceptlang"]),
+				"target" => "_blank"
+			));
+		}
 	}
 };
 ?>

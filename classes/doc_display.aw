@@ -67,25 +67,7 @@ class doc_display extends aw_template
 			$modf_eml = $p->prop("email.mail");
 		}
 
-		$doc_link = obj_link($doc->id());
-		if (aw_ini_get("document.links_to_same_section"))
-		{
-			$doc_link = aw_url_change_var("docid", $doc->id(), obj_link(aw_global_get("section")));
-		}
-		if ($doc->prop("alias") != "")
-		{
-			$doc_link = obj_link($doc->prop("alias"));
-		}
-
-		if (aw_ini_get("menuedit.language_in_url"))
-		{
-			static $ss_i;
-			if (!$ss_i)
-			{
-				$ss_i = get_instance("contentmgmt/site_show");
-			}
-			$doc_link = $ss_i->make_menu_link($doc);
-		}
+		$doc_link = $this->get_doc_link($doc);
 
 		if ($this->template_has_var_full("edit_doc"))
 		{
@@ -407,5 +389,29 @@ class doc_display extends aw_template
 		$this->vars(array(
 			"user1_sub" => $u1s
 		));
+	}
+
+	function get_doc_link($doc, $lc = null)
+	{
+		$doc_link = obj_link($doc->id());
+		if (aw_ini_get("document.links_to_same_section"))
+		{
+			$doc_link = aw_url_change_var("docid", $doc->id(), obj_link(aw_global_get("section")));
+		}
+		if ($doc->prop("alias") != "")
+		{
+			$doc_link = obj_link($doc->prop("alias"));
+		}
+
+		if (aw_ini_get("menuedit.language_in_url"))
+		{
+			static $ss_i;
+			if (!$ss_i)
+			{
+				$ss_i = get_instance("contentmgmt/site_show");
+			}
+			$doc_link = $ss_i->make_menu_link($doc, $lc);
+		}
+		return $doc_link;
 	}
 }

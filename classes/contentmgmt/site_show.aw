@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.204 2006/10/13 08:25:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.205 2006/10/13 10:48:52 kristo Exp $
 
 /*
 
@@ -2306,7 +2306,7 @@ class site_show extends class_base
 
 	////
 	// !Creates a link for the menu
-	function make_menu_link($o)
+	function make_menu_link($o, $lc = null)
 	{
 		$this->skip = false;
 		if ($o->prop("type") == MN_PMETHOD)
@@ -2402,10 +2402,14 @@ class site_show extends class_base
 		}
 		else
 		{
+			if ($lc === null)
+			{
+				$lc = aw_global_get("ct_lang_lc");
+			}
 			$link = $this->cfg["baseurl"] ."/";
 			if (aw_ini_get("menuedit.language_in_url"))
 			{
-				$link .= aw_global_get("ct_lang_lc")."/";
+				$link .= $lc."/";
 			}
 			if (aw_ini_get("menuedit.long_section_url"))
 			{

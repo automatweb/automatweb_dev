@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.64 2006/10/12 20:32:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.65 2006/10/13 10:48:50 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -744,7 +744,7 @@ class bug extends class_base
 			return false;
 		};
 
-		foreach($notify_addresses as $adr)
+		foreach(array_unique($notify_addresses) as $adr)
 		{
 			$oid = $bug->id();
 			$name = $bug->name();
