@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.513 2006/10/16 10:34:42 kristo Exp $
+// $Id: class_base.aw,v 2.514 2006/10/16 22:02:31 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2568,6 +2568,10 @@ class class_base extends aw_template
 		// where needed and then cycle over the result and generate
 		// the output
 
+		if (isset($properties["needs_translation"]) && $this->new )
+		{
+			$properties["needs_translation"]["value"] = 2;
+		}
 
 		foreach($properties as $key => $val)
 		{
