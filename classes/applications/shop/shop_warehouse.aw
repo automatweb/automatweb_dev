@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.43 2006/10/16 10:34:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.44 2006/10/16 13:37:17 dragut Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2509,8 +2509,8 @@ class shop_warehouse extends class_base
 
 		@param id required type=int
 			Warehouse object id
-		@param parent optional type=int
-			Parent folder id
+		@param parent optional type=var
+			Parent folder id or array of parent folders
 		@param only_active optional type=bool
 			To get only active packets/products
 
@@ -2532,7 +2532,7 @@ class shop_warehouse extends class_base
 
 		$ret = array();
 
-		if($conf->prop("no_packets") != 1)
+		if($conf->prop("no_packets") != 1 && !is_array($arr['parent']))
 		{
 			$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")));
 			if ($po->is_brother())
@@ -2547,23 +2547,24 @@ class shop_warehouse extends class_base
 			));
 			$ret = $ol->arr();
 		}
-
-		$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("prod_fld")));	
-		if ($po->is_brother())
+		
+		if (is_array($arr['parent']))
 		{
-			$po = $po->get_original();
+			$parent = $arr['parent'];
 		}
-		// maybe there are folders under the products folder, and this case, we need all those folder ids 
-		// so we can get the products from all of them:
-		$folders_tree = new object_tree(array(
-			'parent' => $po->id(),
-			'class_id' => CL_MENU
-		));
-		$folders_list = $folders_tree->to_list();
-		$product_parents = $folders_list->ids();
+		else
+		{
+			$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("prod_fld")));	
+			if ($po->is_brother())
+			{
+				$po = $po->get_original();
+			}
+			$parent = $po->id();
+		}
+		
 		enter_function("warehouse::object_list");
 		$ol = new object_list(array(
-			"parent" => $po->id(),
+			"parent" => $parent,
 			"class_id" => CL_SHOP_PRODUCT,
 		));
 		$ret = array_merge($ret, $ol->arr());

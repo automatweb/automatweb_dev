@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.9 2006/10/13 10:20:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.10 2006/10/16 13:35:10 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -750,7 +750,8 @@ class scala_import extends class_base
 		$existing_products = array();
 
 		$warehouse_products = $arr['warehouse_inst']->get_packet_list(array(
-			'id' => $arr['warehouse']->id()
+			'id' => $arr['warehouse']->id(),
+			'parent' => array_keys($categories) 
 		));
 
 		foreach ($warehouse_products as $o)
