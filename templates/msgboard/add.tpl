@@ -29,7 +29,7 @@
   <!-- SUB: IMAGE_VERIFICATION -->
   <tr>
     <td align="right" class="textmiddle">{VAR:LC_MSGBOARD_IMAGE_VERIFICATION}:</td>
-    <td class="textmiddle"><img src="{VAR:image_verification_url}" width="{VAR:image_verification_width}" height="{VAR:image_verification_height}" /></td>
+    <td class="textmiddle"><img src="{VAR:image_verification_url}" width="{VAR:image_verification_width}" height="{VAR:image_verification_height}" /><input type="text" name="ver_code" size="5" /></td>
   </tr>
   <!-- END SUB: IMAGE_VERIFICATION -->
   <tr>
