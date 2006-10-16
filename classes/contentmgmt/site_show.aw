@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.206 2006/10/13 11:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.207 2006/10/16 11:07:49 kristo Exp $
 
 /*
 
@@ -2083,8 +2083,8 @@ class site_show extends class_base
 			"current_period" => aw_global_get("current_period"),
 			"cur_section" => aw_global_get("section"),
 			"section_name" => $this->section_obj->name(),
-			"meta_description" => $this->section_obj->prop("description"),
-			"meta_keywords" => $this->section_obj->prop("keywords"),
+			"meta_description" => $this->section_obj->trans_get_val("description"),
+			"meta_keywords" => $this->section_obj->trans_get_val("keywords"),
 			"trans_lc" => aw_global_get("ct_lang_lc")
 		));
 
@@ -2310,6 +2310,7 @@ class site_show extends class_base
 	function make_menu_link($o, $lc = null)
 	{
 		$this->skip = false;
+		$link_str = $o->trans_get_val("link");
 		if ($o->prop("type") == MN_PMETHOD)
 		{
 			// I should retrieve orb definitions for the requested class
@@ -2393,9 +2394,9 @@ class site_show extends class_base
 			};
 		}
 		else 
-		if ($o->prop("link") != "")
+		if ($link_str != "")
 		{
-			$link = $o->prop("link");
+			$link = $link_str;
 			if (is_numeric($link)) // link is without preceding / 
 			{
 				$link = obj_link($link);
