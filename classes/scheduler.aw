@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.40 2006/09/27 15:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.41 2006/10/16 10:31:30 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -775,7 +775,7 @@ class scheduler extends aw_template
 	}
 
 	/**
-		@attrib name=static_sched
+		@attrib name=static_sched nologin="1"
 	**/
 	function static_sched($arr)
 	{
