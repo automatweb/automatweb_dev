@@ -265,6 +265,17 @@
             <caption>Eeldusbugid</caption>
       </property>
       <property>
+            <name>bug_feedback_p</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FEEDBACK_P</reltype>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>aw_bug_feedback_p</field>
+            <caption>Tagasiside kellelt</caption>
+      </property>
+      <property>
             <name>team</name>
             <group>cust</group>
             <table>aw_bugs</table>
@@ -420,6 +431,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Kliendipoolne testija</caption>
             </CUST_TESTER>
+            <FEEDBACK_P>
+                  <value>10</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Tagasiside isik</caption>
+            </FEEDBACK_P>
       </reltypes>
       <layout>
             <name>

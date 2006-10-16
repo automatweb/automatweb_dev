@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.65 2006/10/13 10:48:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.66 2006/10/16 10:33:26 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -105,6 +105,9 @@ define("BUG_STATUS_CLOSED", 5);
 		@property bug_predicates type=textbox parent=data captionside=top field=aw_bug_predicates
 		@caption Eeldusbugid
 
+		@property bug_feedback_p type=relpicker reltype=RELTYPE_FEEDBACK_P parent=data captionside=top field=aw_bug_feedback_p
+		@caption Tagasiside kellelt
+
 
 @default group=cust
 
@@ -167,6 +170,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype CUST_TESTER value=9 clid=CL_CRM_PERSON
 @caption Kliendipoolne testija
+
+@reltype FEEDBACK_P value=10 clid=CL_CRM_PERSON
+@caption Tagasiside isik
 */
 
 define("BUG_OPEN", 1);
@@ -263,6 +269,13 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "bug_feedback_p":
+				if ($arr["obj_inst"]->prop("bug_status") != BUG_FEEDBACK)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "team":
 				if ($this->can("view", $arr["obj_inst"]->prop("project")))
 				{
@@ -1045,6 +1058,7 @@ class bug extends class_base
 			case "aw_cust_status":
 			case "aw_cust_tester":
 			case "aw_cust_live_date":
+			case "aw_bug_feedback_p":
 			case "project":
 				$this->db_add_col($tbl, array(
 					"name" => $f,

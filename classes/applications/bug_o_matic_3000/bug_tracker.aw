@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.84 2006/10/12 20:32:33 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.84 2006/10/12 20:32:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.85 2006/10/16 10:33:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.85 2006/10/16 10:33:26 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -3031,20 +3031,35 @@ echo "<hr>";
 		$bug2uid = array();
 		foreach($ol->arr() as $o)
 		{
-			$bug2uid[$o->createdby()][] = $o;
+			if ($this->can("view", $o->prop("bug_feedback_p")))
+			{
+				$bug2uid[$o->prop("bug_feedback_p")][] = $o;
+			}
+			else
+			{
+				$bug2uid[$o->createdby()][] = $o;
+			}
 		}
 
 		$u = get_instance("users");
 		foreach($bug2uid as $b_uid => $bugs)
 		{
-			$u_oid = $u->get_oid_for_uid($b_uid);
-			if (!$this->can("view", $u_oid))
+			if (is_oid($b_uid))
 			{
-				continue;
-			}			
-			$uo = obj($u_oid);
+				$b_person = obj($b_person);
+				$eml = $b_person->prop_str("email");
+			}
+			else
+			{
+				$u_oid = $u->get_oid_for_uid($b_uid);
+				if (!$this->can("view", $u_oid))
+				{
+					continue;
+				}			
+				$uo = obj($u_oid);
 			
-			$eml = $uo->prop("email");
+				$eml = $uo->prop("email");
+			}
 
 			$ct = "Tere!\nMina olen AW Bugtrack. Sul on vastamata vajab tagasisidet buge:\n";
 			foreach($bugs as $bug)
