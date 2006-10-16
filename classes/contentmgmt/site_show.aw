@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.208 2006/10/16 11:24:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.209 2006/10/16 14:32:26 kristo Exp $
 
 /*
 
@@ -2453,7 +2453,7 @@ class site_show extends class_base
 						{
 							if ($p_o->alias() != "")
 							{
-								$alp[] = $p_o->alias();
+								$alp[] = urlencode($p_o->alias());
 							}
 						}
 						
@@ -2473,7 +2473,7 @@ class site_show extends class_base
 						}
 						else
 						{
-							$link .= $o->alias();
+							$link .= urlencode($o->alias());
 						}
 					}
 				}

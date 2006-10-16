@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.175 2006/10/16 11:07:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.176 2006/10/16 14:32:36 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1862,6 +1862,34 @@ class menu extends class_base
 				return true;
 				break;
 		}
+	}
+
+	function get_sitemap()
+	{
+		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.google.com/schemas/sitemap/0.84\">\n";
+		$ot = new object_tree(array(
+			"class_id" => CL_MENU,
+			"parent" => aw_ini_get("site_rootmenu"),
+		));
+		$ol = $ot->to_list();
+		$si = get_instance("contentmgmt/site_show");
+		foreach($ol->arr() as $item)
+		{
+			$xml .= "<url><loc>".str_replace("&", "&amp;", $si->make_menu_link($item))."</loc><lastmod>".date("Y-m-d", $item->created())."</lastmod>";
+			$xml .= "<changefreq>".$item->prop("change_time")."</changefreq><priority>".$item->prop("change_pri")."</priority></url>\n";
+
+		}
+		$xml .= "</urlset>";
+		$tmpf = aw_ini_get("cache.page_cache")."/sitemap.xml";
+		$this->put_file(array("file" => $tmpf, "content" => $xml));
+		$cmd = aw_ini_get("server.gzip_path")." $tmpf";
+		$res = `$cmd`;
+		header("Content-Type: text/html");
+		header("Content-Encoding: x-gzip");
+		echo file_get_contents($tmpf.".gz");
+		unlink($tmpf);
+		unlink($tmpf.".gz");
+		die();
 	}
 };
 ?>
