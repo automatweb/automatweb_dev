@@ -119,91 +119,27 @@
             <caption>Asutatud</caption>
       </property>
       <property>
-            <name>buyer</name>
-            <table>kliendibaas_firma</table>
-            <group>general_sub</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_BUYER</reltype>
-            <parent>co_bottom_buyer_l</parent>
-            <field>buyer</field>
-            <caption>Ostja</caption>
-      </property>
-      <property>
-            <name>buyer_contract_creator</name>
-            <table>kliendibaas_firma</table>
-            <group>general_sub</group>
-            <type>select</type>
-            <parent>co_bottom_buyer_l</parent>
-            <field>buyer_contract_creator</field>
-            <caption>Hankijasuhte looja</caption>
-      </property>
-      <property>
-            <name>buyer_contract_date</name>
-            <table>kliendibaas_firma</table>
-            <group>general_sub</group>
-            <type>date_select</type>
-            <parent>co_bottom_buyer_l</parent>
-            <field>buyer_contract_date</field>
-            <caption>Hankijasuhte alguskuup&amp;amp;auml;ev</caption>
-      </property>
-      <property>
             <name>client_category</name>
             <table>objects</table>
             <group>general_sub</group>
             <type>text</type>
             <store>no</store>
-            <parent>co_bottom_buyer_l</parent>
+            <parent>co_top_right</parent>
             <field>client_category</field>
             <caption>Kliendikategooria</caption>
       </property>
       <property>
-            <name>buyer_contract_person</name>
-            <table>kliendibaas_firma</table>
+            <name>co_is_cust</name>
+            <table>objects</table>
             <group>general_sub</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <parent>co_bottom_buyer_r</parent>
-            <field>buyer_contract_person</field>
-            <caption>Ostja kontaktisik 1</caption>
-      </property>
-      <property>
-            <name>buyer_contract_person2</name>
-            <table>kliendibaas_firma</table>
-            <group>general_sub</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <parent>co_bottom_buyer_r</parent>
-            <field>buyer_contract_person2</field>
-            <caption>Ostja kontaktisik 2</caption>
-      </property>
-      <property>
-            <name>buyer_contract_person3</name>
-            <table>kliendibaas_firma</table>
-            <group>general_sub</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <parent>co_bottom_buyer_r</parent>
-            <field>buyer_contract_person3</field>
-            <caption>Ostja kontaktisik 3</caption>
-      </property>
-      <property>
-            <name>buyer_priority</name>
-            <table>kliendibaas_firma</table>
-            <group>general_sub</group>
-            <type>textbox</type>
-            <parent>co_bottom_buyer_r</parent>
-            <field>buyer_priority</field>
-            <caption>Ostja prioriteet</caption>
-      </property>
-      <property>
-            <name>cust</name>
-            <table>kliendibaas_firma</table>
-            <group>general_sub</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_BUYER</reltype>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
             <parent>co_bottom_seller_l</parent>
-            <field>cust</field>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
+            <no_caption>1</no_caption>
+            <prop_cb>1</prop_cb>
+            <field>co_is_cust</field>
+            <caption>Kehtib</caption>
       </property>
       <property>
             <name>cust_contract_creator</name>
@@ -302,6 +238,158 @@
             <parent>co_bottom_seller_r</parent>
             <field>bill_penalty_pct</field>
             <caption>Arve viivise %</caption>
+      </property>
+      <property>
+            <name>buyer_contract_person</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <parent>co_bottom_seller_r</parent>
+            <field>buyer_contract_person</field>
+            <caption>Ostja kontaktisik 1</caption>
+      </property>
+      <property>
+            <name>co_is_buyer</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>co_bottom_buyer_l</parent>
+            <no_caption>1</no_caption>
+            <prop_cb>1</prop_cb>
+            <field>co_is_buyer</field>
+            <caption>Kehtib</caption>
+      </property>
+      <property>
+            <name>cust_buyer_contract_creator</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>co_bottom_buyer_l</parent>
+            <prop_cb>1</prop_cb>
+            <field>cust_buyer_contract_creator</field>
+            <caption>Kliendisuhte looja</caption>
+      </property>
+      <property>
+            <name>cust_buyer_contract_date</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>co_bottom_buyer_l</parent>
+            <prop_cb>1</prop_cb>
+            <field>cust_buyer_contract_date</field>
+            <caption>Kliendisuhte alguskuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>buyer_contact_person</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <parent>co_bottom_buyer_l</parent>
+            <prop_cb>1</prop_cb>
+            <field>buyer_contact_person</field>
+            <caption>Kliendpoolne kontaktisik 1</caption>
+      </property>
+      <property>
+            <name>buyer_contact_person2</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <parent>co_bottom_buyer_l</parent>
+            <prop_cb>1</prop_cb>
+            <field>buyer_contact_person2</field>
+            <caption>Kliendpoolne kontaktisik 2</caption>
+      </property>
+      <property>
+            <name>buyer_contact_person3</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <parent>co_bottom_buyer_l</parent>
+            <prop_cb>1</prop_cb>
+            <field>buyer_contact_person3</field>
+            <caption>Kliendpoolne kontaktisik 3</caption>
+      </property>
+      <property>
+            <name>cust_buyer_priority</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>co_bottom_buyer_r</parent>
+            <prop_cb>1</prop_cb>
+            <field>cust_buyer_priority</field>
+            <caption>Kliendi prioriteet</caption>
+      </property>
+      <property>
+            <name>buyer_referal_type</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>classificator</type>
+            <store>connect</store>
+            <reltype>RELTYPE_BUYER_REFERAL_TYPE</reltype>
+            <parent>co_bottom_buyer_r</parent>
+            <prop_cb>1</prop_cb>
+            <field>buyer_referal_type</field>
+            <caption>Sissetuleku meetod</caption>
+      </property>
+      <property>
+            <name>buyer_client_manager</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CLIENT_MANAGER</reltype>
+            <store>no</store>
+            <field>client_manager</field>
+            <parent>co_bottom_buyer_r</parent>
+            <prop_cb>1</prop_cb>
+            <caption>Kliendihaldur</caption>
+      </property>
+      <property>
+            <name>buyer_bill_due_date_days</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <size>5</size>
+            <store>no</store>
+            <parent>co_bottom_buyer_r</parent>
+            <prop_cb>1</prop_cb>
+            <field>buyer_bill_due_date_days</field>
+            <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
+      </property>
+      <property>
+            <name>buyer_bill_penalty_pct</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <store>no</store>
+            <size>5</size>
+            <parent>co_bottom_buyer_r</parent>
+            <prop_cb>1</prop_cb>
+            <field>buyer_bill_penalty_pct</field>
+            <caption>Arve viivise %</caption>
+      </property>
+      <property>
+            <name>buyer_buyer_contract_person</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <store>no</store>
+            <parent>co_bottom_buyer_r</parent>
+            <prop_cb>1</prop_cb>
+            <field>buyer_buyer_contract_person</field>
+            <caption>Ostja kontaktisik 1</caption>
       </property>
       <property>
             <name>extern_id</name>
@@ -2849,6 +2937,7 @@
             <no_status>1</no_status>
             <confirm_save_data>1</confirm_save_data>
             <versioned>1</versioned>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <general_sub>
@@ -3460,6 +3549,11 @@
                   <clid>CL_CRM_BANK</clid>
                   <caption>Pank</caption>
             </BANK>
+            <BUYER_REFERAL_TYPE>
+                  <value>64</value>
+                  <clid>CL_META</clid>
+                  <caption>sissetuleku meetod</caption>
+            </BUYER_REFERAL_TYPE>
       </reltypes>
       <layout>
             <co_top>
@@ -3479,26 +3573,8 @@
                   <parent>co_top</parent>
                   <group>general_sub</group>
             </co_top_right>
-            <co_bottom_buyer>
-                  <type>hbox</type>
-                  <width>50%:50%</width>
-                  <closeable>1</closeable>
-                  <area_caption>Kliendisuhe&amp;#44;&amp;nbsp;Ostja</area_caption>
-                  <no_caption>1</no_caption>
-                  <group>general_sub</group>
-            </co_bottom_buyer>
-            <co_bottom_buyer_l>
-                  <type>vbox</type>
-                  <parent>co_bottom_buyer</parent>
-                  <group>general_sub</group>
-            </co_bottom_buyer_l>
-            <co_bottom_buyer_r>
-                  <type>vbox</type>
-                  <parent>co_bottom_buyer</parent>
-                  <group>general_sub</group>
-            </co_bottom_buyer_r>
             <co_bottom_seller>
-                  <area_caption>Kliendisuhe&amp;#44;&amp;nbsp;M&amp;uuml;&amp;uuml;ja</area_caption>
+                  <area_caption>Kliendisuhe&amp;#44;&amp;nbsp;tema_ostab_meilt</area_caption>
                   <closeable>1</closeable>
                   <type>hbox</type>
                   <width>50%:50%</width>
@@ -3514,6 +3590,23 @@
                   <parent>co_bottom_seller</parent>
                   <group>general_sub</group>
             </co_bottom_seller_r>
+            <co_bottom_buyer>
+                  <area_caption>Kliendisuhe&amp;#44;&amp;nbsp;meie_ostame_talt</area_caption>
+                  <closeable>1</closeable>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <group>general_sub</group>
+            </co_bottom_buyer>
+            <co_bottom_buyer_l>
+                  <type>vbox</type>
+                  <parent>co_bottom_buyer</parent>
+                  <group>general_sub</group>
+            </co_bottom_buyer_l>
+            <co_bottom_buyer_r>
+                  <type>vbox</type>
+                  <parent>co_bottom_buyer</parent>
+                  <group>general_sub</group>
+            </co_bottom_buyer_r>
             <hbox_toolbar>
                   <type>hbox</type>
                   <group>contacts2</group>

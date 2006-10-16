@@ -47,7 +47,7 @@
 			</function>
 		</action>
 
-		<action name="static_sched">
+		<action name="static_sched" nologin="1">
 			<function name="static_sched">
 				<arguments>
 				</arguments>

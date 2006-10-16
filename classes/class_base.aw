@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.512 2006/10/13 11:42:31 kristo Exp $
+// $Id: class_base.aw,v 2.513 2006/10/16 10:34:42 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -597,12 +597,17 @@ class class_base extends aw_template
 				{
 					$tmpval = $val;
 					$tmpval["name"] = $key;
-					$tmpval["obj_inst"] = &$this->inst;
+					$tmpval["obj_inst"] = &$this->obj_inst;
 					$tmpval["request"] = &$_GET;
 					if(!$this->inst->callback_mod_layout($tmpval))
 					{
 						$this->_get_sub_layouts($key);
 						continue;
+					}
+					if ($tmpval["area_caption"] != $val["area_caption"])
+					{
+						$this->layoutinfo[$key]["area_caption"] = $tmpval["area_caption"];
+						$val["area_caption"] = $tmpval["area_caption"];
 					}
 				}
 				$_lgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);

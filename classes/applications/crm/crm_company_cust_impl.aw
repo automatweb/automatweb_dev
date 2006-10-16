@@ -352,36 +352,51 @@ class crm_company_cust_impl extends class_base
 			'tooltip'=> t('Uus')
 		));
 
-		$tb->add_sub_menu(array(
-			"parent" => "add_item",
-			"name" => "add_cust_co",
-			"text" => t("Organisatsioon")
-		));
-		$link = $this->mk_my_orb('new',array(
-				'parent' => $arr['obj_inst']->id(),
-				'alias_to' => "%s",
-				'reltype' => 3, // crm_company.CUSTOMER,
-				'return_url' => get_ru()
-			),
-			'crm_company'
-		);
-		$this->_do_cust_cat_tb_submenus($tb, $link, $arr["obj_inst"], "add_cust_co");
+		$cat = $arr["request"]["category"];
+		if (!$cat)
+		{
+			$cat = $this->_get_first_cust_cat($arr["obj_inst"]);
+			$cat = $cat->id();
+		}
 
-		$link = $this->mk_my_orb('new',array(
-				'parent' => $arr['obj_inst']->id(),
-				'alias_to' => "%s",
-				'reltype' => 3, // crm_company.CUSTOMER,
-				'return_url' => get_ru()
-			),
-			CL_CRM_PERSON
+		$lp = array(
+			'parent' => $arr['obj_inst']->id(),
+			'alias_to' => $cat,
+			'reltype' => 3, // crm_company.CUSTOMER,
+			'return_url' => get_ru(),
 		);
-		$tb->add_sub_menu(array(
-			"parent" => "add_item",
-			"name" => "add_cust_p",
-			"text" => t("Eraisik")
+		if ($arr["request"]["group"] == "relorg_b")
+		{
+			$lp["set_as_is_buyer"] = 1;
+		}
+		else
+		if ($arr["request"]["group"] == "relorg_s")
+		{
+			$lp["set_as_is_cust"] = 1;
+		}
+		$tb->add_menu_item(array(
+			'parent'=> "add_item",
+			'text' => t("Organisatsioon"),
+			'link' => $this->mk_my_orb('new',$lp,
+				'crm_company'
+			)
 		));
 
-		$this->_do_cust_cat_tb_submenus($tb, $link, $arr["obj_inst"], "add_cust_p");
+
+		$tb->add_menu_item(array(
+			'parent'=> "add_item",
+			'text' => t("Erasik"),
+			'link' => $this->mk_my_orb('new',array(
+					'parent' => $arr['obj_inst']->id(),
+					'alias_to' => $cat,
+					'reltype' => 3, // crm_company.CUSTOMER,
+					'return_url' => get_ru()
+				),
+				CL_CRM_PERSON
+			)
+		));
+
+
 
 		$tb->add_sub_menu(array(
 			"parent" => "add_item",
