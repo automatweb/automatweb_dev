@@ -122,6 +122,7 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>watercraft_type</field>
             <caption>Aluse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
@@ -132,6 +133,7 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>condition</field>
             <caption>Seisukord</caption>
@@ -142,6 +144,7 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>body_material</field>
             <caption>Kerematerjal</caption>
@@ -152,6 +155,7 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>location</field>
             <caption>Asukoht</caption>
@@ -162,6 +166,7 @@
             <group>search</group>
             <type>range</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>length</field>
             <caption>Pikkus</caption>
@@ -172,6 +177,7 @@
             <group>search</group>
             <type>range</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>width</field>
             <caption>Laius</caption>
@@ -182,6 +188,7 @@
             <group>search</group>
             <type>range</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>height</field>
             <caption>K&amp;amp;otilde;rgus</caption>
@@ -192,6 +199,7 @@
             <group>search</group>
             <type>range</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>weight</field>
             <caption>Raskus</caption>
@@ -202,6 +210,7 @@
             <group>search</group>
             <type>range</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>draught</field>
             <caption>S&amp;amp;uuml;vis</caption>
@@ -212,6 +221,7 @@
             <group>search</group>
             <type>range</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>creation_year</field>
             <caption>Valmistamisaasta</caption>
@@ -222,6 +232,7 @@
             <group>search</group>
             <type>range</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>passanger_count</field>
             <caption>Reisijaid</caption>
@@ -233,6 +244,7 @@
             <type>textbox</type>
             <size>20</size>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>additional_equipment</field>
             <caption>Lisavarustus</caption>
@@ -243,6 +255,7 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>seller</field>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
@@ -253,6 +266,7 @@
             <group>search</group>
             <type>range</type>
             <store>no</store>
+            <captionside>top</captionside>
             <parent>watercraft_search_frame_left</parent>
             <field>price</field>
             <caption>Hind</caption>

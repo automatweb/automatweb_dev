@@ -2,51 +2,51 @@
 <properties>
       <property>
             <name>date</name>
-            <table>objects</table>
+            <table>aw_purchase</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_date</field>
             <type>date_select</type>
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>buyer</name>
-            <table>objects</table>
+            <table>aw_purchase</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_buyer</field>
             <type>relpicker</type>
             <reltype>RELTYPE_BUYER</reltype>
             <caption>Ostja</caption>
       </property>
       <property>
             <name>offerer</name>
-            <table>objects</table>
+            <table>aw_purchase</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_offerer</field>
             <type>relpicker</type>
             <reltype>RELTYPE_OFFERER</reltype>
             <caption>Hankija</caption>
       </property>
       <property>
             <name>stat</name>
-            <table>objects</table>
+            <table>aw_purchase</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_stat</field>
             <type>select</type>
             <caption>Staatus</caption>
       </property>
       <property>
             <name>deal_no</name>
-            <table>objects</table>
+            <table>aw_purchase</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_deal_no</field>
             <type>textbox</type>
             <caption>Lepingu/arve nr</caption>
       </property>
       <property>
             <name>sum</name>
-            <table>objects</table>
+            <table>aw_purchase</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_sum</field>
             <type>textbox</type>
             <caption>Summa</caption>
       </property>
@@ -124,6 +124,13 @@
                   <caption>Ostud</caption>
             </purchases>
       </groupinfo>
+      <tableinfo>
+            <aw_purchase>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </aw_purchase>
+      </tableinfo>
       <reltypes>
             <BUYER>
                   <value>1</value>

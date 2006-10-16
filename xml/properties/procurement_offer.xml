@@ -104,15 +104,6 @@
             <field>files_tb</field>
       </property>
       <property>
-            <name>files</name>
-            <table>objects</table>
-            <group>files</group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <field>files</field>
-            <caption>Manused</caption>
-      </property>
-      <property>
             <name>files_table</name>
             <table>objects</table>
             <group>files</group>
@@ -120,6 +111,15 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>files_table</field>
+      </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <field>files</field>
+            <caption>Manused</caption>
       </property>
       <property>
             <name>p_tb</name>

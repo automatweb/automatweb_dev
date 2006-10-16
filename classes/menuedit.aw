@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.374 2006/10/12 14:10:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.375 2006/10/16 21:20:28 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -654,6 +654,27 @@ class menuedit extends aw_template
 
 	function _do_error_redir($section)
 	{
+		// check site config
+		$pl = new object_list(array(
+			"class_id" => CL_CONFIG_OLD_REDIRECT,
+			"flags" => array(
+				"mask" => OBJ_FLAG_IS_SELECTED,
+				"flags" => OBJ_FLAG_IS_SELECTED
+			)
+		));	
+		$gr = aw_global_get("REQUEST_URI");
+		foreach($pl->arr() as $item)
+		{
+			foreach(safe_array($item->meta("d")) as $row)
+			{
+				if ("/".$row["old"] == $gr)
+				{
+					header("Location: ".aw_ini_get("baseurl")."/".$row["new"]);
+					die();
+				}
+			}
+		}
+
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si, "handle_error_redir"))
 		{

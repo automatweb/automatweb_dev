@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>url_table</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>url_table</field>
+      </property>
+      <property>
+            <name>activity</name>
+            <table>objects</table>
+            <group>activity</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>activity</field>
+            <caption>Aktiivsus</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CONFIG_OLD_REDIRECT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <groupinfo>
+            <activity>
+                  <caption>Aktiivsus</caption>
+            </activity>
+      </groupinfo>
+</properties>
+

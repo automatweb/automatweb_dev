@@ -2,75 +2,75 @@
 <properties>
       <property>
             <name>product</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_product</field>
             <type>textbox</type>
             <size>10</size>
             <caption>Toode</caption>
       </property>
       <property>
             <name>amount</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_amount</field>
             <type>textbox</type>
             <caption>Kogus</caption>
       </property>
       <property>
             <name>b_amount</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_b_amount</field>
             <type>textbox</type>
             <caption>Ostetav kogus</caption>
       </property>
       <property>
             <name>b_price</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_b_price</field>
             <type>textbox</type>
             <caption>Ostu hind</caption>
       </property>
       <property>
             <name>unit</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_unit</field>
             <type>select</type>
             <caption>&amp;amp;Uuml;hik</caption>
       </property>
       <property>
             <name>price</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_price</field>
             <type>textbox</type>
             <caption>Hind</caption>
       </property>
       <property>
             <name>currency</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_currency</field>
             <type>select</type>
             <caption>Valuuta</caption>
       </property>
       <property>
             <name>shipment</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_shipment</field>
             <type>textbox</type>
             <size>10</size>
             <caption>Tarneaeg</caption>
       </property>
       <property>
             <name>accept</name>
-            <table>objects</table>
+            <table>aw_procurement_offer_rows</table>
             <group>general</group>
-            <field>meta</field>
+            <field>aw_accept</field>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Aktsepteeritud</caption>
@@ -82,6 +82,13 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <tableinfo>
+            <aw_procurement_offer_rows>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_procurement_offer_rows>
+      </tableinfo>
       <reltypes>
             <OFFER>
                   <value>1</value>
