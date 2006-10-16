@@ -74,7 +74,7 @@ function check_generic_unloader()
 
 </head>
 
-<body  onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
+<body  onscroll="el=document.getElementById('floatlayer');if (el) {el.style.position='absolute';el.style.left=document.body.scrollLeft+800;el.style.top=document.body.scrollTop+200;}" onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
 <!-- päis -->
 		<!-- SUB: YAH -->
 <div id="pais">

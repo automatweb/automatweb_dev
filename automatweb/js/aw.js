@@ -344,3 +344,4 @@ function aw_add_list_el(list, value, text)
 {
 	list.options[list.options.length] = new Option(text,""+value,false,false);
 }
+

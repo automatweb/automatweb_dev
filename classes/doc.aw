@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.140 2006/10/16 12:04:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.141 2006/10/16 13:55:14 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1596,7 +1596,22 @@ class doc extends class_base
 
 	function callback_get_transl($arr)
 	{
-		return $this->trans_callback($arr, $this->trans_props);
+		$val = '<div id="floatlayer" style="left: 800px; top: 200px; width: 200px; border:solid black 1px;padding:5px; background: #dddddd;overflow: -moz-scrollbars-vertical;">'.
+			$arr["obj_inst"]->prop("content").'</div>';
+		$val .= '<script language="javascript">el=document.getElementById(\'floatlayer\');if (el) {el.style.position=\'absolute\';el.style.left=800;el.style.top=200;}</script>';
+
+
+		
+		$rv = $this->trans_callback($arr, $this->trans_props);
+		$rvv = array();
+		$nm = "origt";
+		$rvv[$nm] = array(
+			"name" => $nm,
+			"no_caption" => 1,
+			"type" => "text",
+			"value" => $val,
+		);
+		return $rvv + $rv;
 	}
 
 	function _trans_tb($arr)
