@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.2 2006/10/16 10:18:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.3 2006/10/16 13:07:09 tarvo Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -10,13 +10,22 @@
 @default field=meta
 @default method=serialize
 
+	@property type type=chooser default=1
+	@caption Hinna t&uuml;&uuml;p
+
+	@property recur type=checkbox ch_value=1
+	@caption Kordub
+
+	@property active type=checkbox ch_value=1
+	@caption Kehtib
+
 	@property date_from type=date_select
 	@caption Alates
 
 	@property date_to type=date_select
 	@caption Kuni
 
-	@property weekdays type=chooser multiple=1
+	@property weekdays type=chooser multiple=1 captionside=top
 	@caption N&auml;dalap&auml;evad
 
 	@property nr type=select
@@ -28,10 +37,13 @@
 	@property time_to type=time_select
 	@caption Kuni
 
-	@property time type=select
+	@property time type=select editonly=1
 	@caption Aeg
 
 	@property prices type=callback callback=gen_prices_props
+
+	@property bargain_percent type=textbox
+	@caption Soodustuse protsent
 
 */
 
@@ -73,8 +85,34 @@ class room_price extends class_base
 				$prop["options"] = $opts;
 				break;
 			case "time":
+				if($arr["obj_inst"]->prop("type") == 2)
+				{
+					return PROP_IGNORE;
+				}
 				$prop["options"] = $this->get_time_selections($arr["obj_inst"]->id());
 				break;
+
+			case "type":
+				$prop["options"] = array(
+					1 => t("Hind"),
+					2 => t("Soodushind"),
+				);
+				if(!$arr["obj_inst"]->prop("type"))
+				{
+					$prop["value"] = ($arr["request"]["ba"]==1)?2:1;
+				}
+				break;
+
+			// ignore's for normal price
+			case "recur":
+			case "active":
+			case "bargain_percent":
+				if($arr["obj_inst"]->prop("type") == 1)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			// ignore's for bargain price
 		};
 		return $retval;
 	}
@@ -86,6 +124,9 @@ class room_price extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "type":
+				$prop["value"] = $prop["value"]?$prop["value"]:$prop["default"];
+				break;
 		}
 		return $retval;
 	}	
@@ -144,6 +185,11 @@ class room_price extends class_base
 
 	function gen_prices_props($arr)
 	{
+		if($arr["obj_inst"]->prop("type") == 2)
+		{
+			return PROP_IGNORE;
+		}
+
 		$curs = $this->get_currencys($arr["obj_inst"]->id());
 		$prices = $this->get_prices($arr["obj_inst"]->id());
 		$retval = array();
@@ -159,6 +205,7 @@ class room_price extends class_base
 				"type" => "textbox",
 				"caption" => $c->prop("unit_name"),
 				"value" => $prices[$cur],
+				"editonly" => 1,
 			);
 		}
 		if(!count($retval))
@@ -168,6 +215,7 @@ class room_price extends class_base
 				"type" => "text",
 				"caption" => t("Valuutad"),
 				"value" => t("Hind ei ole seotud &uuml;hegi ruumiga v&otilde;i on valuutad m&auml;&auml;ramata"),
+				"editonly" => 1,
 			);
 		}
 		return $retval;

@@ -96,6 +96,21 @@
             <caption>Kasutustingimused</caption>
       </property>
       <property>
+            <name>calendar_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>calendar</num_0>
+                  <num_1>parent</num_1>
+            </group>
+            <parent>general_down</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <submit>no</submit>
+            <store>no</store>
+      </property>
+      <property>
             <name>calendar</name>
             <table>objects</table>
             <field>meta</field>
@@ -224,7 +239,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>prices_price</group>
+            <group>
+                  <num_0>prices_price</num_0>
+                  <num_1>prices_bargain_price</num_1>
+            </group>
             <parent>general_down</parent>
             <type>hidden</type>
             <no_caption>1</no_caption>
@@ -235,7 +253,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>prices_price</group>
+            <group>
+                  <num_0>prices_price</num_0>
+                  <num_1>prices_bargain_price</num_1>
+            </group>
             <parent>general_down</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
@@ -246,18 +267,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>prices_price</group>
-            <parent>general_down</parent>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>bargain_prices_tbl</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>prices_bargain_price</group>
+            <group>
+                  <num_0>prices_price</num_0>
+                  <num_1>prices_bargain_price</num_1>
+            </group>
             <parent>general_down</parent>
             <type>table</type>
             <no_caption>1</no_caption>

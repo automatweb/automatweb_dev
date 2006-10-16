@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.4 2006/10/16 10:18:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.5 2006/10/16 13:07:09 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -95,15 +95,13 @@
 			@caption , sammuga
 	
 	@groupinfo prices_price caption="Hinnad" parent=prices
-	@default group=prices_price
+	@default group=prices_price,prices_bargain_price
 		@property prices_search type=hidden no_caption=1 store=no
 		@property prices_tb type=toolbar no_caption=1
 		@property prices_tbl type=table no_caption=1
 
 	@groupinfo prices_bargain_price caption="Soodushinnad" parent=prices
 	@default group=prices_bargain_price
-
-		@property bargain_prices_tbl type=table no_caption=1
 
 # RELTYPES
 
@@ -375,6 +373,7 @@ class room extends class_base
 	function _get_prices_tb($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
+		$ba = ($arr["request"]["group"] == "prices_price")?false:true;
 		$tb->add_button(array(
 			"name" => "new",
 			"tooltip" => t("Uus hind"),
@@ -383,6 +382,7 @@ class room extends class_base
 				"parent" => $arr["obj_inst"]->id(),
 				"alias_to" => $arr["obj_inst"]->id(),
 				"reltype" => 9, 
+				"ba" => $ba,
 				"return_url" => get_ru(),
 			), CL_ROOM_PRICE),
 		));
@@ -406,6 +406,21 @@ class room extends class_base
 	function _get_prices_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+
+		$ba = ($arr["request"]["group"] == "prices_price")?false:true;
+		if($ba)
+		{
+			$t->define_field(array(
+				"name" => "active",
+				"caption" => t("Kehtib"),
+				"align" => "center",
+			));
+			$t->define_field(array(
+				"name" => "recur",
+				"caption" => t("Kordub"),
+				"align" => "center",
+			));
+		}
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "selected",
@@ -427,24 +442,35 @@ class room extends class_base
 			"name" => "time",
 			"caption" => t("Kellaaeg"),
 		));
-		$t->define_field(array(
-			"name" => "time_step",
-			"caption" => t("Aeg"),
-		));
-		
-		$cur = $arr["obj_inst"]->prop("currency");
-		foreach($cur as $c)
+		if(!$ba)
 		{
-			if(!is_oid($c))
-			{
-				continue;
-			}
-			$cobj = obj($c);
 			$t->define_field(array(
-				"name" => "currency_".$cobj->id(),
-				"caption" => $cobj->prop("unit_name"),
+				"name" => "time_step",
+				"caption" => t("Aeg"),
 			));
+	
+			$cur = $arr["obj_inst"]->prop("currency");
+			foreach($cur as $c)
+			{
+				if(!is_oid($c))
+				{
+					continue;
+				}
+				$cobj = obj($c);
+				$t->define_field(array(
+					"name" => "currency_".$cobj->id(),
+					"caption" => $cobj->prop("unit_name"),
+				));
+			}
 		}
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"width" => "30px",
+			"align" => "center",
+		));
+
+
 		$ds = get_instance("vcl/date_edit");
 		$ds->configure(array(
 			"year" => "year",
@@ -453,7 +479,7 @@ class room extends class_base
 		));
 
 		# getting data
-		$price_objs = $this->get_prices($arr["obj_inst"]->id());
+		$price_objs = $this->get_prices($arr["obj_inst"]->id(), $ba);
 		$price_inst = get_instance(CL_ROOM_PRICE);
 		$caption = $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		foreach($price_objs as $oid => $obj)
@@ -473,16 +499,23 @@ class room extends class_base
 			$t_to = $obj->prop("time_to");
 			$data = array(
 				"dates" => date("d/m/Y", $obj->prop("date_from"))." kuni ".date("d/m/Y", $obj->prop("date_to")),
-				"time" => str_pad($t_from["hour"], 2, "0", STR_PAD_RIGHT).":".str_pad($t_from["minute"], 2, "0", STR_PAD_RIGHT)." - ".str_pad($t_to["hour"], 2, "0", STR_PAD_RIGHT).":".str_pad($t_to["minute"], 2, "0", STR_PAD_RIGHT),
+				"time" => str_pad($t_from["hour"], 2, "0", STR_PAD_LEFT).":".str_pad($t_from["minute"], 2, "0", STR_PAD_LEFT)." - ".str_pad($t_to["hour"], 2, "0", STR_PAD_LEFT).":".str_pad($t_to["minute"], 2, "0", STR_PAD_LEFT),
 				"weekdays" => join(",", $wds),
-				"nr" => html::href(array(
-					"caption" => $obj->prop("nr"),
+				"nr" => $obj->prop("nr"),
+				"selected" => $oid,
+				"time_step" => $obj->prop("time")." ".$caption,
+				"active" => $obj->prop("active")?t("Jah"):t("Ei"),
+				"recur" => $obj->prop("recur")?t("Jah"):t("Ei"),
+				"change" => html::href(array(
+					"caption" => html::img(array(
+						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif",
+						"border" => 0,
+						"alt" => t("Muuda"),
+					)),
 					"url" => html::get_change_url($oid, array(
 						"return_url" => get_ru(),
 					)),
 				)),
-				"selected" => $oid,
-				"time_step" => $obj->prop("time")." ".$caption,
 			);
 			$data = array_merge($data, $prc);
 			$t->define_data($data);
@@ -516,7 +549,7 @@ class room extends class_base
 		@comment
 			returns array of CL_ROOM_PRICE objects
 	**/
-	function get_prices($oid)
+	function get_prices($oid, $bargain_prices = false)
 	{
 		if(!is_oid($oid))
 		{
@@ -530,7 +563,10 @@ class room extends class_base
 		foreach($cs as $c)
 		{
 			$to = $c->to();
-			$ret[$to->id()] = $to;
+			if(($to->prop("type") == 2 && $bargain_prices) || ($to->prop("type") == 1 && !$bargain_prices))
+			{
+				$ret[$to->id()] = $to;
+			}
 		}
 		return $ret;
 	}

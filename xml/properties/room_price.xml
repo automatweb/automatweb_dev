@@ -1,6 +1,36 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <default>1</default>
+            <caption>Hinna t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>recur</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kordub</caption>
+      </property>
+      <property>
+            <name>active</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kehtib</caption>
+      </property>
+      <property>
             <name>date_from</name>
             <table>objects</table>
             <group>general</group>
@@ -26,6 +56,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <multiple>1</multiple>
+            <captionside>top</captionside>
             <caption>N&amp;amp;auml;dalap&amp;amp;auml;evad</caption>
       </property>
       <property>
@@ -62,6 +93,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <editonly>1</editonly>
             <caption>Aeg</caption>
       </property>
       <property>
@@ -72,6 +104,15 @@
             <method>serialize</method>
             <type>callback</type>
             <callback>gen_prices_props</callback>
+      </property>
+      <property>
+            <name>bargain_percent</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Soodustuse protsent</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ROOM_PRICE</syslog_type>
