@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.42 2006/10/02 12:04:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.43 2006/10/16 10:34:03 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2563,7 +2563,7 @@ class shop_warehouse extends class_base
 		$product_parents = $folders_list->ids();
 		enter_function("warehouse::object_list");
 		$ol = new object_list(array(
-			"parent" => $products_parents,
+			"parent" => $po->id(),
 			"class_id" => CL_SHOP_PRODUCT,
 		));
 		$ret = array_merge($ret, $ol->arr());
