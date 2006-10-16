@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.119 2006/09/06 12:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.120 2006/10/16 11:56:30 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -315,6 +315,50 @@ class admin_menus extends aw_template
 	{
 		extract($arr);
 		$this->mk_path($parent,LC_MENUEDIT_IMPORT_MENU);
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		$htmlc->add_property(array(
+			"name" => "fail",
+			"type" => "fileupload",
+			"caption" => t("Vali fail"),
+		));
+		$htmlc->add_property(array(
+			"name" => "file_type",
+			"type" => "chooser",
+			"caption" => t("Vali faili t&uuml;&uuml;p"),
+			"options" => array(
+				"aw" => t("Eksporditud AW'st"),
+				"text" => t("Tekstifail")
+			)
+		));
+		$htmlc->add_property(array(
+			"name" => "sbt",
+			"type" => "submit",
+			"caption" => t("Impordi"),
+		));
+		$htmlc->finish_output(array("data" => array(
+				"class" => get_class($this),
+				"action" => "submit_import",
+				"id" => $id,
+				"parent" => $arr["parent"]
+			),
+		));
+
+		$html = $htmlc->get_result(array(
+			"form_only" => 1
+		));
+
+		$tp = get_instance("vcl/tabpanel");
+		$tp->add_tab(array(
+			"active" => true,
+			"caption" => t("Impordi"),
+			"link" => get_ru(),
+		));		
+
+		return $tp->get_tabpanel(array(
+			"content" => $html
+		));
 		$this->read_template("import.tpl");
 		$this->vars(array("reforb" => $this->mk_reforb("submit_import", array("parent" => $parent))));
 		return $this->parse();
