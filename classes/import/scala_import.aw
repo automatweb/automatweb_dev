@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.10 2006/10/16 13:35:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.11 2006/10/16 14:01:28 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -145,7 +145,7 @@ class scala_import extends class_base
 				));
 				break;
 			case 'import_time':
-				$prop['value'] = date('d.m.Y H:m:s', $arr['obj_inst']->meta('import_end_time'));
+				$prop['value'] = date('d.m.Y H:i:s', $arr['obj_inst']->meta('import_end_time'));
 				break;
 		};
 		return $retval;
