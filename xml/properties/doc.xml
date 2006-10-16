@@ -43,6 +43,17 @@
             <caption>Alapealkiri</caption>
       </property>
       <property>
+            <name>alias_ch</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Genereeri alias automaatselt</caption>
+      </property>
+      <property>
             <name>alias</name>
             <table>objects</table>
             <group>general</group>

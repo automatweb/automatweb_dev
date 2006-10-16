@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.139 2006/10/13 10:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.140 2006/10/16 12:04:20 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -24,6 +24,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property subtitle type=textbox size=60 trans=1
 	@caption Alapealkiri
 
+	@property alias_ch type=checkbox ch_value=1 default=1 field=meta method=serialize table=objects
+	@caption Genereeri alias automaatselt
+	
 	@property alias type=textbox size=60 table=objects field=alias
 	@caption Alias
 
@@ -801,6 +804,20 @@ class doc extends class_base
 		if ($this->_save_versions)
 		{
 			$this->_save_versions($args);
+		}
+
+		if(aw_ini_get("menu.automatic_aliases")  && $args["obj_inst"]->prop("alias_ch") == 1)
+		{
+			if(!strlen($args["obj_inst"]->alias()))
+			{
+				$m = get_instance(CL_MENU);
+				$new_alias = $m->_gen_nice_alias($args["request"]["title"]);
+				if ($new_alias != $args["obj_inst"]->alias())
+				{
+					$args["obj_inst"]->set_alias($new_alias);
+					$args["obj_inst"]->save();
+				}
+			}
 		}
 
 		$this->flush_cache();
