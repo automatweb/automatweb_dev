@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.129 2006/09/20 11:16:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.130 2006/10/16 10:32:00 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -222,6 +222,10 @@ class users_user extends aw_template
 			{
 				$this->url = $this->get_cval("after_login");
 			}
+		}
+		if ($user_obj->prop("after_login_redir") != "")
+		{
+			$this->url = $user_obj->prop("after_login_redir");
 		}
 		$this->url = (strlen($this->url) > 0) ? $this->url : ($return != "" ? $return : $this->cfg["baseurl"]);
 		$this->login_successful = true;
