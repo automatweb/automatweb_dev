@@ -11,7 +11,7 @@ msgstr ""
 
 #: classes/admin/admin_if.aw:class_1134_help
 msgid "Klassi Administreerimisliides help"
-msgstr ""
+msgstr "This view is for editing content objects. To edit folders, You have to select Change from action-button on the object row. To edit other objects You can click on the name of the object.<br><br>To add a new object, use the green button on the left of the toolbar.<br><br>You can move in site structure by clicking on the tree or on folder names.<br><br>You can see preview of the current location on the web by clickin Preview button on the right of the toolbar"
 
 #: classes/admin/admin_if.aw:prop_o_tb
 msgid "Omaduse  (o_tb) caption"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/admin/admin_if.aw:prop_o_tree
 msgid "Omaduse  (o_tree) caption"
-msgstr ""
+msgstr "Folders"
 
 #: classes/admin/admin_if.aw:prop_o_tree_comment
 msgid "Omaduse  (o_tree) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/admin/admin_if.aw:prop_o_tbl
 msgid "Omaduse  (o_tbl) caption"
-msgstr ""
+msgstr "Content objects"
 
 #: classes/admin/admin_if.aw:prop_o_tbl_comment
 msgid "Omaduse  (o_tbl) kommentaar"
@@ -55,7 +55,7 @@ msgstr "Objects"
 
 #: classes/admin/admin_if.aw:group_o_help
 msgid "Grupi Objektid (o) help"
-msgstr ""
+msgstr "This view is for editing content objects. To edit folders, You have to select Change from action-button on the object row. To edit other objects You can click on the name of the object.<br><br>To add a new object, use the green button on the left of the toolbar.<br><br>You can move in site structure by clicking on the tree or on folder names.<br><br>You can see preview of the current location on the web by clickin Preview button on the right of the toolbar"
 
 #: classes/admin/admin_if.aw:86
 msgid "Lisa"
@@ -148,3 +148,23 @@ msgstr "Change"
 #: classes/admin/admin_if.aw:1137
 msgid "Administreerimisliides"
 msgstr "Administrative interface"
+
+#: classes/admin/admin_if.aw:1157
+msgid "Logi v&auml;lja"
+msgstr "Log out"
+
+#: classes/admin/admin_if.aw:1158
+msgid "Asukoht:"
+msgstr "You are here:"
+
+#: classes/admin/admin_if.aw:1159
+msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
+msgstr "AutomatWeb&reg; is the registered trademark of Struktuur Meedia. All rights reserved, &copy; 1999-2006."
+
+#: classes/admin/admin_if.aw:1160
+msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
+msgstr "Please visit our websites"
+
+#: classes/admin/admin_if.aw:1161
+msgid "Seaded"
+msgstr "Settings"

@@ -10,11 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core.aw:790
+#: classes/core.aw:800
 msgid "ACL error saidil %s: CAN_%s denied for oid %s"
 msgstr ""
 
-#: classes/core.aw:1122
+#: classes/core.aw:1132
 msgid "Couldn't open file '%s' for writing"
 msgstr ""
 

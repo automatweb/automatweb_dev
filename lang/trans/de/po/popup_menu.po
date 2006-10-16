@@ -33,6 +33,6 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/vcl/popup_menu.aw:47 classes/vcl/popup_menu.aw:157
+#: classes/vcl/popup_menu.aw:47 classes/vcl/popup_menu.aw:160
 msgid "Valik"
 msgstr ""

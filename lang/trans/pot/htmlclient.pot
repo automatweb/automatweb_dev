@@ -58,15 +58,31 @@ msgstr ""
 msgid "submit_and_forward"
 msgstr ""
 
+#: classes/cfg/htmlclient.aw:804
+msgid "Tagasiside"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:806
+msgid "Kasutajatugi"
+msgstr ""
+
 #: classes/cfg/htmlclient.aw:807
-msgid "J&auml;rjehoidja"
+msgid "Abi"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:808
+msgid "Otsi"
 msgstr ""
 
 #: classes/cfg/htmlclient.aw:811
-msgid "Ajalugu"
+msgid "J&auml;rjehoidja"
 msgstr ""
 
 #: classes/cfg/htmlclient.aw:815
+msgid "Ajalugu"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:819
 msgid "Lisa kiiresti"
 msgstr ""
 

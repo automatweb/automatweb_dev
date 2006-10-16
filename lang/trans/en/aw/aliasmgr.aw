@@ -17,7 +17,6 @@ $GLOBALS["TRANS"]["&Otilde;igus"] = "Permission";
 $GLOBALS["TRANS"]["Objekti t&uuml;&uuml;p"] = "Object type";
 $GLOBALS["TRANS"]["Lisa uus objekt"] = "Add new object";
 $GLOBALS["TRANS"]["Otsi"] = "Search";
-$GLOBALS["TRANS"]["T&otilde;lgi"] = "Translate";
 $GLOBALS["TRANS"]["Reload"] = "Reload";
 $GLOBALS["TRANS"]["Loo seos(ed)"] = "Add connection(s)";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";

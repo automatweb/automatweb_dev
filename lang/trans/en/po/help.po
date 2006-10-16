@@ -28,16 +28,16 @@ msgstr "No such group"
 
 #: classes/core/help/help.aw:465 classes/core/help/help.aw:498
 msgid "t&otilde;lgitud nimi puudub"
-msgstr ""
+msgstr "translated name is missing"
 
 #: classes/core/help/help.aw:466 classes/core/help/help.aw:499
 msgid "kommentaar puudub"
-msgstr ""
+msgstr "comment is missing"
 
 #: classes/core/help/help.aw:467 classes/core/help/help.aw:500
 msgid "abitekst puudub"
-msgstr ""
+msgstr "help is missing"
 
 #: classes/core/help/help.aw:509
 msgid "Omadused"
-msgstr ""
+msgstr "Properties"

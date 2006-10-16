@@ -26,18 +26,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/image.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/image.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/image.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
-
 #: classes/image.aw:prop_subclass
 msgid "Omaduse  (subclass) caption"
 msgstr ""
@@ -370,27 +358,27 @@ msgstr ""
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr ""
 
-#: classes/image.aw:305
+#: classes/image.aw:309
 msgid "kommentaar"
 msgstr ""
 
-#: classes/image.aw:305
+#: classes/image.aw:309
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:881
+#: classes/image.aw:894
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/image.aw:882
+#: classes/image.aw:895
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/image.aw:895
+#: classes/image.aw:908
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
 
-#: classes/image.aw:1448
+#: classes/image.aw:1461
 msgid "Lisa"
 msgstr ""
 

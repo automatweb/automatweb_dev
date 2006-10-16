@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/popup_search.aw:149 classes/vcl/popup_search.aw:465 classes/vcl/popup_search.aw:859
+#: classes/vcl/popup_search.aw:149 classes/vcl/popup_search.aw:466 classes/vcl/popup_search.aw:866
 msgid "Otsi"
 msgstr ""
 
@@ -34,47 +34,47 @@ msgstr ""
 msgid "Vali eemaldatavad objektid"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:413
+#: classes/vcl/popup_search.aw:414
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:443 classes/vcl/popup_search.aw:568
+#: classes/vcl/popup_search.aw:444 classes/vcl/popup_search.aw:575
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:450
+#: classes/vcl/popup_search.aw:451
 msgid "Objekti id"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:535
+#: classes/vcl/popup_search.aw:542
 msgid ""
 msgstr ""
 
-#: classes/vcl/popup_search.aw:561
+#: classes/vcl/popup_search.aw:568
 msgid "OID"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:574
+#: classes/vcl/popup_search.aw:581
 msgid "Asukoht"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:580
+#: classes/vcl/popup_search.aw:587
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:584
+#: classes/vcl/popup_search.aw:591
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:592
+#: classes/vcl/popup_search.aw:599
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:596
+#: classes/vcl/popup_search.aw:603
 msgid "<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\"sel\")'>Vali</a>"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:658
+#: classes/vcl/popup_search.aw:665
 msgid "Vali see"
 msgstr ""
 

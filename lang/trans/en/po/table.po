@@ -21,31 +21,31 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/table.aw:2167
+#: classes/vcl/table.aw:2172
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/table.aw:2426
+#: classes/vcl/table.aw:2431
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/vcl/table.aw:2637
+#: classes/vcl/table.aw:2642
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/table.aw:2638
+#: classes/vcl/table.aw:2643
 msgid "Looja"
 msgstr ""
 
-#: classes/vcl/table.aw:2639
+#: classes/vcl/table.aw:2644
 msgid "Loodud"
 msgstr ""
 
-#: classes/vcl/table.aw:2640
+#: classes/vcl/table.aw:2645
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/table.aw:2641
+#: classes/vcl/table.aw:2646
 msgid "Muudetud"
 msgstr ""
 

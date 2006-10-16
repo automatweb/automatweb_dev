@@ -74,7 +74,7 @@ msgstr ""
 msgid "no warhoos"
 msgstr ""
 
-#: classes/crm/crm_offer_products_list.aw:129 classes/crm/crm_offer_products_list.aw:287
+#: classes/crm/crm_offer_products_list.aw:129 classes/crm/crm_offer_products_list.aw:288
 msgid "Nimi"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr ""
 msgid "Eemalda pakkumisest"
 msgstr ""
 
-#: classes/crm/crm_offer_products_list.aw:293
+#: classes/crm/crm_offer_products_list.aw:294
 msgid "Hind"
 msgstr ""
 

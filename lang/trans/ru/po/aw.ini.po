@@ -513,20 +513,12 @@ msgstr ""
 msgid "Klassi Ekomar (212) nimi"
 msgstr ""
 
-#: aw.ini:class_213
-msgid "Klassi Klassi t&otilde;lge (213) nimi"
-msgstr ""
-
 #: aw.ini:class_214
 msgid "Klassi Men&uuml;&uuml; eraldusjoon (214) nimi"
 msgstr ""
 
 #: aw.ini:class_215
 msgid "Klassi Shortcut (215) nimi"
-msgstr ""
-
-#: aw.ini:class_217
-msgid "Klassi T&otilde;lkekeskkond (217) nimi"
 msgstr ""
 
 #: aw.ini:class_218
@@ -2009,6 +2001,94 @@ msgstr ""
 msgid "Klassi Kiirlisamine (1133) nimi"
 msgstr ""
 
+#: aw.ini:class_1134
+msgid "Klassi Administreerimisliides (1134) nimi"
+msgstr ""
+
+#: aw.ini:class_1135
+msgid "Klassi T&ouml;&ouml;aja planeerimine (1135) nimi"
+msgstr ""
+
+#: aw.ini:class_1136
+msgid "Klassi P&auml;devus (1136) nimi"
+msgstr ""
+
+#: aw.ini:class_1137
+msgid "Klassi Scala import (1137) nimi"
+msgstr ""
+
+#: aw.ini:class_1138
+msgid "Klassi P&auml;devuse kehtivus (1138) nimi"
+msgstr ""
+
+#: aw.ini:class_1139
+msgid "Klassi T&ouml;&ouml;ts&uuml;kkel (1139) nimi"
+msgstr ""
+
+#: aw.ini:class_1140
+msgid "Klassi Planeerimise stsenaarium (1140) nimi"
+msgstr ""
+
+#: aw.ini:class_1141
+msgid "Klassi Vahetus (1141) nimi"
+msgstr ""
+
+#: aw.ini:class_1142
+msgid "Klassi T&ouml;&ouml;koht (1142) nimi"
+msgstr ""
+
+#: aw.ini:class_1143
+msgid "Klassi Ruum (1143) nimi"
+msgstr ""
+
+#: aw.ini:class_1144
+msgid "Klassi Kulu (1144) nimi"
+msgstr ""
+
+#: aw.ini:class_1145
+msgid "Klassi Statistika (1145) nimi"
+msgstr ""
+
+#: aw.ini:class_1146
+msgid "Klassi Statistika arhiivi staatus (1146) nimi"
+msgstr ""
+
+#: aw.ini:class_1153
+msgid "Klassi K&uuml;simustik (1153) nimi"
+msgstr ""
+
+#: aw.ini:class_1154
+msgid "Klassi K&uml;simustegrupp (1154) nimi"
+msgstr ""
+
+#: aw.ini:class_1155
+msgid "Klassi K&uml;simus (1155) nimi"
+msgstr ""
+
+#: aw.ini:class_1157
+msgid "Klassi T&otilde;lkimise t&ouml;&ouml;laud (1157) nimi"
+msgstr ""
+
+#: aw.ini:class_1158
+msgid "Klassi K&uuml;simustiku vastus (1158) nimi"
+msgstr ""
+
+#: aw.ini:class_1159
+msgid "Klassi Rostering graafik (1159) nimi"
+msgstr ""
+
+#: aw.ini:class_1160
+msgid "Klassi T&ouml;&ouml;aegade sisestus (1160) nimi"
+msgstr ""
+
+#: aw.ini:class_1161
+msgid "Klassi Tasu liik (1161) nimi"
+msgstr ""
+
+#: aw.ini:class_1162
+msgid "Klassi Ruum (1162) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""
@@ -2251,4 +2331,8 @@ msgstr ""
 
 #: aw.ini:classfolder_63
 msgid "Klassi kataloogi Spordiv&otilde;istluste haldus (63) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_64
+msgid "Klassi kataloogi T&ouml;&ouml;aja planeerimine (64) nimi"
 msgstr ""

@@ -127,6 +127,6 @@ msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_ROOM
-msgid "Seose Ruum (RELTYPE_ROOM) tekst"
+msgid "Seose Konverentsiruum (RELTYPE_ROOM) tekst"
 msgstr ""
 

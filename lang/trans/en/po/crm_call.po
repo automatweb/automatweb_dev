@@ -90,6 +90,18 @@ msgstr ""
 msgid "Omaduse  (hrs_table) help"
 msgstr ""
 
+#: classes/crm/crm_call.aw:prop_center_bit_vis
+msgid "Omaduse  (center_bit_vis) caption"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_center_bit_vis_comment
+msgid "Omaduse  (center_bit_vis) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_center_bit_vis_help
+msgid "Omaduse  (center_bit_vis) help"
+msgstr ""
+
 # classes/crm/crm_call.aw:prop_content
 #: classes/crm/crm_call.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
@@ -579,67 +591,67 @@ msgstr ""
 msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
-#: classes/crm/crm_call.aw:267
+#: classes/crm/crm_call.aw:270
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_call.aw:268
+#: classes/crm/crm_call.aw:271
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_call.aw:269
+#: classes/crm/crm_call.aw:272
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_call.aw:270
+#: classes/crm/crm_call.aw:273
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_call.aw:452
+#: classes/crm/crm_call.aw:455
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/crm/crm_call.aw:461
+#: classes/crm/crm_call.aw:464
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/crm/crm_call.aw:470
+#: classes/crm/crm_call.aw:473
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_call.aw:545
+#: classes/crm/crm_call.aw:548
 msgid "Uee k&otilde;ne aeg ei tohi olla minevikus!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:719
+#: classes/crm/crm_call.aw:722
 msgid "Millal"
 msgstr ""
 
-#: classes/crm/crm_call.aw:726
+#: classes/crm/crm_call.aw:729
 msgid "Sisu"
 msgstr ""
 
-#: classes/crm/crm_call.aw:731
+#: classes/crm/crm_call.aw:734
 msgid "Vaata"
 msgstr ""
 
-#: classes/crm/crm_call.aw:810
+#: classes/crm/crm_call.aw:813
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:815
+#: classes/crm/crm_call.aw:818
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:820
+#: classes/crm/crm_call.aw:823
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_call.aw:825
+#: classes/crm/crm_call.aw:828
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_call.aw:859
+#: classes/crm/crm_call.aw:862
 msgid "Loo uus arve"
 msgstr ""
 

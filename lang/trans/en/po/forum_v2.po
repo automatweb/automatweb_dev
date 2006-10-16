@@ -843,8 +843,8 @@ msgid "Teemade kaust on valimata"
 msgstr "Topic folder is not selected"
 
 #: classes/contentmgmt/forum/forum_v2.aw:1474
-msgid "Sisestatud kontrollkood on vale! <br />"
-msgstr "Entered verification-code is wront"
+msgid "Sisestatud kontrollnumber on vale! <br />"
+msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:1478
 msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
@@ -882,21 +882,24 @@ msgstr "New topic"
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1950
+#: classes/contentmgmt/forum/forum_v2.aw:1951
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1973
+#: classes/contentmgmt/forum/forum_v2.aw:1974
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2389
+#: classes/contentmgmt/forum/forum_v2.aw:2390
 msgid " teemade kaust"
 msgstr " topic folder"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2396
+#: classes/contentmgmt/forum/forum_v2.aw:2397
 msgid " aadresside kaust"
 msgstr " address folder"
+
+#~ msgid "Sisestatud kontrollkood on vale! <br />"
+#~ msgstr "Entered verification-code is wront"
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth
 #~ msgid "Omaduse Teemade sgavus (topic_depth) caption"

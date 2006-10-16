@@ -17,6 +17,18 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr "Needs translation"
 
+#: classes/menu.aw:prop_needs_translation
+msgid "Omaduse Genereeri alias automaatselt (alias_ch) caption"
+msgstr "Generate user-friendly URL"
+
+#: classes/menu.aw:prop_needs_translation
+msgid "Omaduse Sisu uuendamise sagedus (change_time) caption"
+msgstr "Change interval"
+
+#: classes/menu.aw:prop_needs_translation
+msgid "Omaduse Sisu t&auml;htsus (0-1.0) (change_pri) caption"
+msgstr "Content priority (0-1.0)"
+
 #: classes/menu.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
@@ -993,7 +1005,7 @@ msgstr ""
 
 #: classes/menu.aw:group_advanced_settings
 msgid "Grupi S&uuml;vaseaded (advanced_settings) pealkiri"
-msgstr "Deep settings"
+msgstr "Advanced settings"
 
 #: classes/menu.aw:group_advanced_settings_help
 msgid "Grupi S&uuml;vaseaded (advanced_settings) help"

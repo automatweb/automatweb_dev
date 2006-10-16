@@ -10,54 +10,67 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/crm/crm_offer_products_list.aw:class_910_help
+#: classes/crm/crm_offer_products_list.aw:class_910_help
 msgid "Klassi Pakkumise toodete nimekiri help"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_toolbar
+#: classes/crm/crm_offer_products_list.aw:prop_pk_toolbar
 msgid "Omaduse  (pk_toolbar) caption"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_toolbar_comment
+#: classes/crm/crm_offer_products_list.aw:prop_pk_toolbar_comment
 msgid "Omaduse  (pk_toolbar) kommentaar"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_toolbar_help
+#: classes/crm/crm_offer_products_list.aw:prop_pk_toolbar_help
 msgid "Omaduse  (pk_toolbar) help"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_tree
+#: classes/crm/crm_offer_products_list.aw:prop_pk_tree
 msgid "Omaduse Puu (pk_tree) caption"
 msgstr "Tree"
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_tree_comment
+#: classes/crm/crm_offer_products_list.aw:prop_pk_tree_comment
 msgid "Omaduse Puu (pk_tree) kommentaar"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_tree_help
+#: classes/crm/crm_offer_products_list.aw:prop_pk_tree_help
 msgid "Omaduse Puu (pk_tree) help"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_list
+#: classes/crm/crm_offer_products_list.aw:prop_pk_list
 msgid "Omaduse Pakkumised (pk_list) caption"
 msgstr "Offers"
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_list_comment
+#: classes/crm/crm_offer_products_list.aw:prop_pk_list_comment
 msgid "Omaduse Pakkumised (pk_list) kommentaar"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_list_help
+#: classes/crm/crm_offer_products_list.aw:prop_pk_list_help
 msgid "Omaduse Pakkumised (pk_list) help"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:group_packages_show
+#: classes/crm/crm_offer_products_list.aw:group_packages_show
 msgid "Grupi Paketid (packages_show) pealkiri"
 msgstr "Packages"
 
 # classes/crm/crm_offer_products_list.aw:group_packages_show_help
+#: classes/crm/crm_offer_products_list.aw:group_packages_show_help
 msgid "Grupi Paketid (packages_show) help"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:rel_RELTYPE_PACKET
+#: classes/crm/crm_offer_products_list.aw:rel_RELTYPE_PACKET
 msgid "Seose pakett (RELTYPE_PACKET) tekst"
 msgstr "package"
 
@@ -74,7 +87,7 @@ msgid "no warhoos"
 msgstr "no warehouse"
 
 #: classes/crm/crm_offer_products_list.aw:129
-#: classes/crm/crm_offer_products_list.aw:287
+#: classes/crm/crm_offer_products_list.aw:288
 msgid "Nimi"
 msgstr "Name"
 
@@ -90,6 +103,6 @@ msgstr "Offered price"
 msgid "Eemalda pakkumisest"
 msgstr "Remove from offer"
 
-#: classes/crm/crm_offer_products_list.aw:293
+#: classes/crm/crm_offer_products_list.aw:294
 msgid "Hind"
 msgstr "Price"

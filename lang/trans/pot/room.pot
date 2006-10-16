@@ -10,103 +10,183 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/crm/room.aw:class_1143_help
+#: classes/common/room.aw:class_1162_help
 msgid "Klassi Ruum help"
 msgstr ""
 
-#: classes/crm/room.aw:prop_area
-msgid "Omaduse Pindala (area) caption"
+#: classes/common/room.aw:prop_location
+msgid "Omaduse Asukoht (location) caption"
 msgstr ""
 
-#: classes/crm/room.aw:prop_area_comment
-msgid "Omaduse Pindala (area) kommentaar"
+#: classes/common/room.aw:prop_location_comment
+msgid "Omaduse Asukoht (location) kommentaar"
 msgstr ""
 
-#: classes/crm/room.aw:prop_area_help
-msgid "Omaduse Pindala (area) help"
+#: classes/common/room.aw:prop_location_help
+msgid "Omaduse Asukoht (location) help"
 msgstr ""
 
-#: classes/crm/room.aw:prop_description
-msgid "Omaduse Kirjeldus (description) caption"
+#: classes/common/room.aw:prop_owner
+msgid "Omaduse Omanik (owner) caption"
 msgstr ""
 
-#: classes/crm/room.aw:prop_description_comment
-msgid "Omaduse Kirjeldus (description) kommentaar"
+#: classes/common/room.aw:prop_owner_comment
+msgid "Omaduse Omanik (owner) kommentaar"
 msgstr ""
 
-#: classes/crm/room.aw:prop_description_help
-msgid "Omaduse Kirjeldus (description) help"
+#: classes/common/room.aw:prop_owner_help
+msgid "Omaduse Omanik (owner) help"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair
-msgid "Omaduse Toolid (type_chair) caption"
+#: classes/common/room.aw:prop_inventory
+msgid "Omaduse Varustuse kataloog (inventory) caption"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair_comment
-msgid "Omaduse Toolid (type_chair) kommentaar"
+#: classes/common/room.aw:prop_inventory_comment
+msgid "Omaduse Varustuse kataloog (inventory) kommentaar"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair_help
-msgid "Omaduse Toolid (type_chair) help"
+#: classes/common/room.aw:prop_inventory_help
+msgid "Omaduse Varustuse kataloog (inventory) help"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair_table
-msgid "Omaduse Tool + Laud (type_chair_table) caption"
+#: classes/common/room.aw:prop_area
+msgid "Omaduse Valdkond (area) caption"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair_table_comment
-msgid "Omaduse Tool + Laud (type_chair_table) kommentaar"
+#: classes/common/room.aw:prop_area_comment
+msgid "Omaduse Valdkond (area) kommentaar"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair_table_help
-msgid "Omaduse Tool + Laud (type_chair_table) help"
+#: classes/common/room.aw:prop_area_help
+msgid "Omaduse Valdkond (area) help"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_conference_table
-msgid "Omaduse N&otilde;upidamislaud (type_conference_table) caption"
+#: classes/common/room.aw:prop_square_meters
+msgid "Omaduse Suurus(ruutmeetrites) (square_meters) caption"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_conference_table_comment
-msgid "Omaduse N&otilde;upidamislaud (type_conference_table) kommentaar"
+#: classes/common/room.aw:prop_square_meters_comment
+msgid "Omaduse Suurus(ruutmeetrites) (square_meters) kommentaar"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_conference_table_help
-msgid "Omaduse N&otilde;upidamislaud (type_conference_table) help"
+#: classes/common/room.aw:prop_square_meters_help
+msgid "Omaduse Suurus(ruutmeetrites) (square_meters) help"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_u_table
-msgid "Omaduse U-kujuline laud (type_u_table) caption"
+#: classes/common/room.aw:prop_normal_capacity
+msgid "Omaduse Normaalne mahutavus (normal_capacity) caption"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_u_table_comment
-msgid "Omaduse U-kujuline laud (type_u_table) kommentaar"
+#: classes/common/room.aw:prop_normal_capacity_comment
+msgid "Omaduse Normaalne mahutavus (normal_capacity) kommentaar"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_u_table_help
-msgid "Omaduse U-kujuline laud (type_u_table) help"
+#: classes/common/room.aw:prop_normal_capacity_help
+msgid "Omaduse Normaalne mahutavus (normal_capacity) help"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_oval_table
-msgid "Omaduse &Uuml;marlaud (type_oval_table) caption"
+#: classes/common/room.aw:prop_max_capacity
+msgid "Omaduse Maksimaalne mahutavus (max_capacity) caption"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_oval_table_comment
-msgid "Omaduse &Uuml;marlaud (type_oval_table) kommentaar"
+#: classes/common/room.aw:prop_max_capacity_comment
+msgid "Omaduse Maksimaalne mahutavus (max_capacity) kommentaar"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_oval_table_help
-msgid "Omaduse &Uuml;marlaud (type_oval_table) help"
+#: classes/common/room.aw:prop_max_capacity_help
+msgid "Omaduse Maksimaalne mahutavus (max_capacity) help"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair_diag
-msgid "Omaduse Ainult toolid diagonaalis (type_chair_diag) caption"
+#: classes/common/room.aw:prop_conditions
+msgid "Omaduse Kasutustingimused (conditions) caption"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair_diag_comment
-msgid "Omaduse Ainult toolid diagonaalis (type_chair_diag) kommentaar"
+#: classes/common/room.aw:prop_conditions_comment
+msgid "Omaduse Kasutustingimused (conditions) kommentaar"
 msgstr ""
 
-#: classes/crm/room.aw:prop_type_chair_diag_help
-msgid "Omaduse Ainult toolid diagonaalis (type_chair_diag) help"
+#: classes/common/room.aw:prop_conditions_help
+msgid "Omaduse Kasutustingimused (conditions) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy__
+msgid "Omaduse  (dummy__) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy___comment
+msgid "Omaduse  (dummy__) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy___help
+msgid "Omaduse  (dummy__) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy_
+msgid "Omaduse  (dummy_) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy__comment
+msgid "Omaduse  (dummy_) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy__help
+msgid "Omaduse  (dummy_) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy
+msgid "Omaduse  (dummy) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy_comment
+msgid "Omaduse  (dummy) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_dummy_help
+msgid "Omaduse  (dummy) help"
+msgstr ""
+
+#: classes/common/room.aw:group_calendar
+msgid "Grupi Kalender (calendar) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_calendar_help
+msgid "Grupi Kalender (calendar) help"
+msgstr ""
+
+#: classes/common/room.aw:group_images
+msgid "Grupi Pildid (images) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_images_help
+msgid "Grupi Pildid (images) help"
+msgstr ""
+
+#: classes/common/room.aw:group_prices
+msgid "Grupi Hinnad (prices) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_prices_help
+msgid "Grupi Hinnad (prices) help"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_LOCATION
+msgid "Seose Asukoht (RELTYPE_LOCATION) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_OWNER
+msgid "Seose Omanik (RELTYPE_OWNER) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_INVENTORY
+msgid "Seose Varustuse kataloog (RELTYPE_INVENTORY) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_AREA
+msgid "Seose Valdkond (RELTYPE_AREA) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_CONDITIONS
+msgid "Seose Kasutustingimused (RELTYPE_CONDITIONS) tekst"
 msgstr ""
 

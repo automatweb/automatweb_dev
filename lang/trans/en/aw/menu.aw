@@ -1,5 +1,8 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Vajab t&otilde;lget (needs_translation) caption"] = "Needs translation";
+$GLOBALS["TRANS"]["Omaduse Genereeri alias automaatselt (alias_ch) caption"] = "Generate user-friendly URL";
+$GLOBALS["TRANS"]["Omaduse Sisu uuendamise sagedus (change_time) caption"] = "Change interval";
+$GLOBALS["TRANS"]["Omaduse Sisu t&auml;htsus (0-1.0) (change_pri) caption"] = "Content priority (0-1.0)";
 $GLOBALS["TRANS"]["Omaduse T&otilde;lge kinnitatud (is_translated) caption"] = "Translation confirmed";
 $GLOBALS["TRANS"]["Omaduse Alias (alias) caption"] = "Alias";
 $GLOBALS["TRANS"]["Omaduse Jrk (jrk) caption"] = "Order";
@@ -75,7 +78,7 @@ $GLOBALS["TRANS"]["Omaduse META description (description) caption"] = "META desc
 $GLOBALS["TRANS"]["Omaduse T&otilde;lgi (transl) caption"] = "Translate";
 $GLOBALS["TRANS"]["Omaduse &Otilde;igused (acl) caption"] = "Permissions";
 $GLOBALS["TRANS"]["Grupi &Uuml;ldine (general_sub) pealkiri"] = "General";
-$GLOBALS["TRANS"]["Grupi S&uuml;vaseaded (advanced_settings) pealkiri"] = "Deep settings";
+$GLOBALS["TRANS"]["Grupi S&uuml;vaseaded (advanced_settings) pealkiri"] = "Advanced settings";
 $GLOBALS["TRANS"]["Grupi Eksport (import_export) pealkiri"] = "Export";
 $GLOBALS["TRANS"]["Grupi Kasutajad (users) pealkiri"] = "Users";
 $GLOBALS["TRANS"]["Grupi N&auml;itamine (show) pealkiri"] = "Display";

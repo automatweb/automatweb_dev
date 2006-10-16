@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Vajab t&otilde;lget (needs_translation) caption"] = "Needs translation";
 $GLOBALS["TRANS"]["Omaduse Pilt (file) caption"] = "Image";
 $GLOBALS["TRANS"]["Omaduse M&otilde;&otilde;tmed (dimensions) caption"] = "Dimensions";
 $GLOBALS["TRANS"]["Omaduse Pildi allkiri (comment) caption"] = "Image comment";
@@ -21,6 +22,7 @@ $GLOBALS["TRANS"]["Omaduse M&otilde;&otilde;tmed (dimensions_big) caption"] = "D
 $GLOBALS["TRANS"]["Omaduse Uus laius (suur) (new_w_big) caption"] = "New width (big)";
 $GLOBALS["TRANS"]["Omaduse Uus k&otilde;rgus (suur) (new_h_big) caption"] = "New height (big)";
 $GLOBALS["TRANS"]["Omaduse Info (resize_warn) caption"] = "Info";
+$GLOBALS["TRANS"]["Omaduse T&otilde;lgi (transl) caption"] = "Translate";
 $GLOBALS["TRANS"]["Grupi N&auml;itamine (show) pealkiri"] = "Display";
 $GLOBALS["TRANS"]["Grupi Suur pilt (img2) pealkiri"] = "Big image";
 $GLOBALS["TRANS"]["Grupi Muuda suurust (resize) pealkiri"] = "Change size";

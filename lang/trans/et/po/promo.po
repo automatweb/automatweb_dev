@@ -27,18 +27,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
-
 # classes/contentmgmt/promo.aw:prop_caption
 #: classes/contentmgmt/promo.aw:prop_caption
 msgid "Omaduse Pealkiri (caption) caption"
@@ -659,26 +647,26 @@ msgstr ""
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:340 classes/contentmgmt/promo.aw:389
-#: classes/contentmgmt/promo.aw:436
+#: classes/contentmgmt/promo.aw:330 classes/contentmgmt/promo.aw:379
+#: classes/contentmgmt/promo.aw:426
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:348 classes/contentmgmt/promo.aw:397
-#: classes/contentmgmt/promo.aw:445
+#: classes/contentmgmt/promo.aw:338 classes/contentmgmt/promo.aw:387
+#: classes/contentmgmt/promo.aw:435
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:353 classes/contentmgmt/promo.aw:402
-#: classes/contentmgmt/promo.aw:459
+#: classes/contentmgmt/promo.aw:343 classes/contentmgmt/promo.aw:392
+#: classes/contentmgmt/promo.aw:449
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:452
+#: classes/contentmgmt/promo.aw:442
 msgid "Pane pealkirjaks"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1084
+#: classes/contentmgmt/promo.aw:1072
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 

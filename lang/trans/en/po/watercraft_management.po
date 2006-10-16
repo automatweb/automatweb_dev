@@ -498,14 +498,14 @@ msgid "Salvesta"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:279
-#: classes/applications/watercraft_management/watercraft_management.aw:489
-#: classes/applications/watercraft_management/watercraft_management.aw:555
+#: classes/applications/watercraft_management/watercraft_management.aw:484
+#: classes/applications/watercraft_management/watercraft_management.aw:550
 msgid "Kustuta"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_management.aw:281
-#: classes/applications/watercraft_management/watercraft_management.aw:491
-#: classes/applications/watercraft_management/watercraft_management.aw:557
+#: classes/applications/watercraft_management/watercraft_management.aw:486
+#: classes/applications/watercraft_management/watercraft_management.aw:552
 msgid "Oled kindel et soovid valitud objektid kustutada?"
 msgstr ""
 
@@ -514,64 +514,75 @@ msgstr ""
 msgid "Otsingu seaded"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:318
-#: classes/applications/watercraft_management/watercraft_management.aw:504
-#: classes/applications/watercraft_management/watercraft_management.aw:570
+#: classes/applications/watercraft_management/watercraft_management.aw:322
+#: classes/applications/watercraft_management/watercraft_management.aw:499
+#: classes/applications/watercraft_management/watercraft_management.aw:565
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:322
+#: classes/applications/watercraft_management/watercraft_management.aw:326
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:326
+#: classes/applications/watercraft_management/watercraft_management.aw:330
 msgid "Tootja"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:330
+#: classes/applications/watercraft_management/watercraft_management.aw:334
 msgid "Mark"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:334
+#: classes/applications/watercraft_management/watercraft_management.aw:338
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:338
+#: classes/applications/watercraft_management/watercraft_management.aw:342
 msgid "M&uuml;&uuml;ja"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:342
+#: classes/applications/watercraft_management/watercraft_management.aw:346
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:346
+#: classes/applications/watercraft_management/watercraft_management.aw:350
 msgid "N&auml;htav"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:352
+#: classes/applications/watercraft_management/watercraft_management.aw:356
 msgid "Arhiivis"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:358
-#: classes/applications/watercraft_management/watercraft_management.aw:508
-#: classes/applications/watercraft_management/watercraft_management.aw:574
-msgid "Vali"
-msgstr ""
-
+#: classes/applications/watercraft_management/watercraft_management.aw:459
 #: classes/applications/watercraft_management/watercraft_management.aw:460
-#: classes/applications/watercraft_management/watercraft_management.aw:461
 msgid "Jah"
 msgstr ""
 
+#: classes/applications/watercraft_management/watercraft_management.aw:459
 #: classes/applications/watercraft_management/watercraft_management.aw:460
-#: classes/applications/watercraft_management/watercraft_management.aw:461
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:479
+#: classes/applications/watercraft_management/watercraft_management.aw:474
 msgid "Uus Tootja"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_management.aw:545
+#: classes/applications/watercraft_management/watercraft_management.aw:503
+#: classes/applications/watercraft_management/watercraft_management.aw:569
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:540
 msgid "Uus asukoht"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:650
+msgid "Vees&otilde;idukid"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:661
+msgid "Tootjad"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_management.aw:672
+msgid "Asukohad"
 msgstr ""

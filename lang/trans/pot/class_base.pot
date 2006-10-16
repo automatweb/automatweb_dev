@@ -62,18 +62,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/class_base.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/class_base.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/class_base.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
-
 #: classes/class_base.aw:group_general
 msgid "Grupi &Uuml;ldine (general) pealkiri"
 msgstr ""
@@ -82,55 +70,59 @@ msgstr ""
 msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
-#: classes/class_base.aw:575
-msgid "Tõlgi"
+#: classes/class_base.aw:551
+msgid "T&otilde;lgi"
 msgstr ""
 
-#: classes/class_base.aw:598
+#: classes/class_base.aw:574
 msgid "Rohkem infot"
 msgstr ""
 
-#: classes/class_base.aw:599
-msgid "Peida ära"
+#: classes/class_base.aw:575
+msgid "Peida &auml;ra"
 msgstr ""
 
-#: classes/class_base.aw:600
+#: classes/class_base.aw:576
 msgid "Abiinfo"
 msgstr ""
 
-#: classes/class_base.aw:646
+#: classes/class_base.aw:635
 msgid "tab panel"
 msgstr ""
 
-#: classes/class_base.aw:855
+#: classes/class_base.aw:866
 msgid "Lisainfo grupi kohta puudub"
 msgstr ""
 
-#: classes/class_base.aw:1367
+#: classes/class_base.aw:1390
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1375
+#: classes/class_base.aw:1398
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1402
+#: classes/class_base.aw:1425
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1592 classes/class_base.aw:4909 classes/class_base.aw:4920
+#: classes/class_base.aw:1614 classes/class_base.aw:4927 classes/class_base.aw:4938
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:3430
-msgid "See väli ei tohi olla tühi!"
+#: classes/class_base.aw:3448
+msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/class_base.aw:3439
+#: classes/class_base.aw:3457
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4806
+#: classes/class_base.aw:4824
 msgid "%s is not a valid configuration form!"
+msgstr ""
+
+#: classes/class_base.aw:5209
+msgid "T&otilde;lge aktiivne"
 msgstr ""
 

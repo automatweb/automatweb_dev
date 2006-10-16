@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Vajab t&otilde;lget (needs_translation) caption"] = "Needs translation";
-$GLOBALS["TRANS"]["Omaduse T&otilde;lge kinnitatud (is_translated) caption"] = "Translation confirmed";
 $GLOBALS["TRANS"]["Omaduse Pealkiri (caption) caption"] = "Caption";
 $GLOBALS["TRANS"]["Omaduse Kasti t&uuml;&uuml;p (type) caption"] = "Type of container";
 $GLOBALS["TRANS"]["Omaduse Link (link) caption"] = "Link";

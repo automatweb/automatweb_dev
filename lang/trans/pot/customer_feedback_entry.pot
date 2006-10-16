@@ -282,7 +282,7 @@ msgstr ""
 msgid "Vajab tagasisidet"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:132
+#: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:133
 msgid "&Auml;ra jama, mees! m&otilde;tled ka mis teed v&auml;?"
 msgstr ""
 

@@ -778,22 +778,6 @@ msgstr "used"
 msgid "alles"
 msgstr "unused"
 
-#: classes/contentmgmt/webform.aw:1147
-msgid "Vasakul"
-msgstr "Left"
-
-#: classes/contentmgmt/webform.aw:1148
-msgid "Paremal"
-msgstr "Right"
-
-#: classes/contentmgmt/webform.aw:1149
-msgid "Peal"
-msgstr "Top"
-
-#: classes/contentmgmt/webform.aw:1150
-msgid "All"
-msgstr "Bottom"
-
 #: classes/contentmgmt/webform.aw:1154
 msgid "-- vali --"
 msgstr "-- select --"
@@ -914,9 +898,21 @@ msgstr "Register"
 msgid "Saada"
 msgstr "Send"
 
-#: classes/contentmgmt/webform.aw:2282
+#: classes/contentmgmt/webform.aw:2339
 msgid "Liigu edasi &raquo;"
 msgstr "Go on &raquo;"
+
+#~ msgid "Vasakul"
+#~ msgstr "Left"
+
+#~ msgid "Paremal"
+#~ msgstr "Right"
+
+#~ msgid "Peal"
+#~ msgstr "Top"
+
+#~ msgid "All"
+#~ msgstr "Bottom"
 
 #~ msgid "J�jekord (kasvav)"
 #~ msgstr "Order (ascending)"

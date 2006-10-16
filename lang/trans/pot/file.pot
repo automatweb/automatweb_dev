@@ -26,18 +26,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/file.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/file.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
-
 #: classes/file.aw:prop_filename
 msgid "Omaduse Faili nimi (filename) caption"
 msgstr ""
@@ -250,7 +238,7 @@ msgstr ""
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:1115
+#: classes/file.aw:1132
 msgid "Need either id or parent"
 msgstr ""
 

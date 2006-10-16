@@ -13,6 +13,8 @@ $GLOBALS["TRANS"]["Omaduse T&uuml;hista stiilid (clear_styles) kommentaar"] = "t
 $GLOBALS["TRANS"]["Omaduse T&uuml;hista stiilid (clear_styles) help"] = "tühistab väljaspoolt süsteemi kopeeritud tekstises mittevajalikud stiilid.";
 $GLOBALS["TRANS"]["Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) kommentaar"] = "võimalus eguleerida, kas dokumendis leiduvad võtmesõnad on lingitud või mitte";
 $GLOBALS["TRANS"]["Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) help"] = "võimalus eguleerida, kas dokumendis leiduvad võtmesõnad on lingitud või mitte";
+$GLOBALS["TRANS"]["Omaduse Esilehel (esilehel) kommentaar"] = "võimaldab määrata dokumendi ilmuma esilehele";
+$GLOBALS["TRANS"]["Omaduse Esilehel (esilehel) help"] = "võimaldab määrata dokumendi ilmuma esilehele";
 $GLOBALS["TRANS"]["Omaduse Cache otsingu jaoks (dcache) kommentaar"] = "kui märkeruut on valitud, siis jäetaks dokumendi sisu veebilehe üldotsingu jaoks jaoks mällu";
 $GLOBALS["TRANS"]["Omaduse Cache otsingu jaoks (dcache) help"] = "kui märkeruut on valitud, siis jäetaks dokumendi sisu veebilehe üldotsingu jaoks jaoks mällu";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita pealkirja (show_title) kommentaar"] = "reguleerib, kas dokumendi pealkirja näidatakse veebilehel või mitte";
@@ -25,6 +27,4 @@ $GLOBALS["TRANS"]["Omaduse Ilma vasaku paanita (no_left_pane) kommentaar"] = "ju
 $GLOBALS["TRANS"]["Omaduse Ilma vasaku paanita (no_left_pane) help"] = "juhul, kui veebilehel on kasutausel parem paan, siis võimaldab see määrang antud dokumendi juurest vasaku paani ära võtta. Vajalik, kui dokumendi sisu ei mahu muidu dokumendile märatud ruumi sisse laiupidi ära.";
 $GLOBALS["TRANS"]["Omaduse Pealkiri klikitav (title_clickable) kommentaar"] = "võimaldab reguleerida, kas Dokumendi pealkiri on lühikeses dokumendi vaates klikitav või mitte";
 $GLOBALS["TRANS"]["Omaduse Pealkiri klikitav (title_clickable) help"] = "võimaldab reguleerida, kas Dokumendi pealkiri on lühikeses dokumendi vaates klikitav või mitte";
-$GLOBALS["TRANS"]["Omaduse Esilehel (esilehel) kommentaar"] = "võimaldab määrata dokumendi ilmuma esilehele";
-$GLOBALS["TRANS"]["Omaduse Esilehel (esilehel) help"] = "võimaldab määrata dokumendi ilmuma esilehele";
 ?>

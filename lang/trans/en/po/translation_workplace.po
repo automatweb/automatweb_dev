@@ -12,11 +12,11 @@ msgstr ""
 
 #: classes/translate/translation_workplace.aw:class_1157_help
 msgid "Klassi T&otilde;lkimise t&ouml;&ouml;laud help"
-msgstr ""
+msgstr "Translation environment"
 
 #: classes/translate/translation_workplace.aw:prop_objtypes
 msgid "Omaduse Objektit&uuml;&uuml;bid, mida t&otilde;lkida (objtypes) caption"
-msgstr ""
+msgstr "Object types for translation"
 
 #: classes/translate/translation_workplace.aw:prop_objtypes_comment
 msgid "Omaduse Objektit&uuml;&uuml;bid, mida t&otilde;lkida (objtypes) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/translate/translation_workplace.aw:prop_tr_tree
 msgid "Omaduse  (tr_tree) caption"
-msgstr ""
+msgstr "Filter"
 
 #: classes/translate/translation_workplace.aw:prop_tr_tree_comment
 msgid "Omaduse  (tr_tree) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/translate/translation_workplace.aw:prop_s_oid
 msgid "Omaduse Objekti id (s_oid) caption"
-msgstr ""
+msgstr "Object ID"
 
 #: classes/translate/translation_workplace.aw:prop_s_oid_comment
 msgid "Omaduse Objekti id (s_oid) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/translate/translation_workplace.aw:prop_s_name
 msgid "Omaduse Nimi (s_name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/translate/translation_workplace.aw:prop_s_name_comment
 msgid "Omaduse Nimi (s_name) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/translate/translation_workplace.aw:prop_s_clid
 msgid "Omaduse T&uuml;&uuml;p (s_clid) caption"
-msgstr ""
+msgstr "Type"
 
 #: classes/translate/translation_workplace.aw:prop_s_clid_comment
 msgid "Omaduse T&uuml;&uuml;p (s_clid) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/translate/translation_workplace.aw:prop_s_sbt
 msgid "Omaduse Otsi (s_sbt) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/translate/translation_workplace.aw:prop_s_sbt_comment
 msgid "Omaduse Otsi (s_sbt) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/translate/translation_workplace.aw:group_translatable
 msgid "Grupi T&otilde;lgitavad objektid (translatable) pealkiri"
-msgstr ""
+msgstr "Translatable objects"
 
 #: classes/translate/translation_workplace.aw:group_translatable_help
 msgid "Grupi T&otilde;lgitavad objektid (translatable) help"
@@ -120,85 +120,85 @@ msgstr ""
 
 #: classes/translate/translation_workplace.aw:rel_RELTYPE_OBJT
 msgid "Seose Objektit&uuml;&uuml;p (RELTYPE_OBJT) tekst"
-msgstr ""
+msgstr "Object type"
 
 #: classes/translate/translation_workplace.aw:101
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/translate/translation_workplace.aw:107
 msgid "Looja"
-msgstr ""
+msgstr "Created by"
 
 #: classes/translate/translation_workplace.aw:113
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/translate/translation_workplace.aw:122
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/translate/translation_workplace.aw:128 classes/translate/translation_workplace.aw:169 classes/translate/translation_workplace.aw:287
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/translate/translation_workplace.aw:137
 msgid "T&uuml;&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/translate/translation_workplace.aw:143
 msgid "T&otilde;lke staatus"
-msgstr ""
+msgstr "Translation status"
 
 #: classes/translate/translation_workplace.aw:162
 msgid "Aktiivne"
-msgstr ""
+msgstr "Active"
 
 #: classes/translate/translation_workplace.aw:204
 msgid "T&auml;na muudetud"
-msgstr ""
+msgstr "Modified today"
 
 #: classes/translate/translation_workplace.aw:209
 msgid "Eile muudetud"
-msgstr ""
+msgstr "Modified yesterday"
 
 #: classes/translate/translation_workplace.aw:214
 msgid "Sel n&auml;dalal muudetud"
-msgstr ""
+msgstr "Modified this week"
 
 #: classes/translate/translation_workplace.aw:223
 msgid "Objektit&uuml;&uuml;p: %s"
-msgstr ""
+msgstr "Object type: %s"
 
 #: classes/translate/translation_workplace.aw:257 classes/translate/translation_workplace.aw:262
 msgid "Jah"
-msgstr ""
+msgstr "Yes"
 
 #: classes/translate/translation_workplace.aw:257 classes/translate/translation_workplace.aw:262
 msgid "Ei"
-msgstr ""
+msgstr "No"
 
 #: classes/translate/translation_workplace.aw:285
 msgid "Kataloogid"
-msgstr ""
+msgstr "Folders"
 
 #: classes/translate/translation_workplace.aw:286
 msgid "Objektit&uuml;&uuml;bid"
-msgstr ""
+msgstr "Object types"
 
 #: classes/translate/translation_workplace.aw:333
 msgid "T&auml;na"
-msgstr ""
+msgstr "Today"
 
 #: classes/translate/translation_workplace.aw:342
 msgid "Eile"
-msgstr ""
+msgstr "Yesterday"
 
 #: classes/translate/translation_workplace.aw:351
 msgid "See n&auml;dal"
-msgstr ""
+msgstr "This week"
 
 #: classes/translate/translation_workplace.aw:486
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 

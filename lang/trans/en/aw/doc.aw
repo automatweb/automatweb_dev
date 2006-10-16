@@ -20,6 +20,7 @@ $GLOBALS["TRANS"]["Omaduse T&uuml;hista stiilid (clear_styles) caption"] = "Clea
 $GLOBALS["TRANS"]["Omaduse Lingi v&otilde;tmes&otilde;nad (link_keywords) caption"] = "Link keywords";
 $GLOBALS["TRANS"]["Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) caption"] = "Keywords are links";
 $GLOBALS["TRANS"]["Omaduse Esilehel tulbas (frontpage_left) caption"] = "In front page column";
+$GLOBALS["TRANS"]["Omaduse Esilehel (esilehel) caption"] = "On front page";
 $GLOBALS["TRANS"]["Omaduse Cache otsingu jaoks (dcache) caption"] = "Cache for search";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita pealkirja (show_title) caption"] = "Show title";
 $GLOBALS["TRANS"]["Omaduse J&auml;ta otsingust v&auml;lja (no_search) caption"] = "Exclude from search results";
@@ -42,7 +43,6 @@ $GLOBALS["TRANS"]["Omaduse &Auml;ra tee Samal teemal linke (no_topic_links) capt
 $GLOBALS["TRANS"]["Omaduse Ilma parema paanita (no_right_pane) caption"] = "No right pane";
 $GLOBALS["TRANS"]["Omaduse Ilma vasaku paanita (no_left_pane) caption"] = "No left pane";
 $GLOBALS["TRANS"]["Omaduse Pealkiri klikitav (title_clickable) caption"] = "Title clickable";
-$GLOBALS["TRANS"]["Omaduse Esilehel (esilehel) caption"] = "On front page";
 $GLOBALS["TRANS"]["Omaduse Cache otsingu jaoks (salvestub) (dcache_save) caption"] = "Cache for search (saved)";
 $GLOBALS["TRANS"]["Omaduse &Auml;ra arvesta muutmist (no_last) caption"] = "Do not change modified date";
 $GLOBALS["TRANS"]["Omaduse Muutmise kuupaev dokumendi sees (show_last_changed) caption"] = "Last modified date in document";

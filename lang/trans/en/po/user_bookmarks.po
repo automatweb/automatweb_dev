@@ -51,53 +51,73 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:group_bms
 msgid "Grupi J&auml;rjehoidja (bms) pealkiri"
-msgstr ""
+msgstr "Bookmark"
 
 #: classes/applications/customer_satisfaction_center/user_bookmarks.aw:group_bms_help
 msgid "Grupi J&auml;rjehoidja (bms) help"
 msgstr ""
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:88
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:89
 msgid "%s j&auml;rjehoidja"
-msgstr ""
+msgstr "%s bookmark"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:104
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:105
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:108
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:109
 msgid "Kataloog"
-msgstr ""
+msgstr "Folder"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:113
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:191
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:114
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:278
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:126
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:127
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:132
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:133
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:186
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:140
+msgid "Kopeeri"
+msgstr "Copy"
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:147
+msgid "L&otilde;ika"
+msgstr "Cut"
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:156
+msgid "Kleebi"
+msgstr "Paste"
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:267
+msgid "Ikoon"
+msgstr "Icon"
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:273
 msgid "Objekti nimi"
-msgstr ""
+msgstr "Object name"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:196
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:283
 msgid "Grupp"
-msgstr ""
+msgstr "Group"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:262
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:406
 msgid "Pane j&auml;rjehoidjasse"
-msgstr ""
+msgstr "Add bookmark"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:266
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:410
 msgid "Eemalda j&auml;rjehoidjast"
-msgstr ""
+msgstr "Remove bookmark"
 
-#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:270
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:414
 msgid "Toimeta j&auml;rjehoidjat"
-msgstr ""
+msgstr "Edit bookmarks"
+
+#: classes/applications/customer_satisfaction_center/user_bookmarks.aw:420
+msgid "J&auml;rjehoidja"
+msgstr "Bookmark"

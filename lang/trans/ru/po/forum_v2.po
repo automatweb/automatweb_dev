@@ -726,7 +726,7 @@ msgid "Teemade kaust on valimata"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:1474
-msgid "Sisestatud kontrollkood on vale! <br />"
+msgid "Sisestatud kontrollnumber on vale! <br />"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:1478
@@ -765,18 +765,18 @@ msgstr ""
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1950
+#: classes/contentmgmt/forum/forum_v2.aw:1951
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1973
+#: classes/contentmgmt/forum/forum_v2.aw:1974
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2389
+#: classes/contentmgmt/forum/forum_v2.aw:2390
 msgid " teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2396
+#: classes/contentmgmt/forum/forum_v2.aw:2397
 msgid " aadresside kaust"
 msgstr ""

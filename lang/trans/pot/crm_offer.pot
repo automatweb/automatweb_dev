@@ -534,11 +534,11 @@ msgstr ""
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:757 classes/crm/crm_offer.aw:1236
+#: classes/crm/crm_offer.aw:757 classes/crm/crm_offer.aw:1239
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:763 classes/crm/crm_offer.aw:1246
+#: classes/crm/crm_offer.aw:763 classes/crm/crm_offer.aw:1249
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
@@ -554,35 +554,35 @@ msgstr ""
 msgid "Tee t&uuml;&uuml;pkomponendiks"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1115 classes/crm/crm_offer.aw:1256
+#: classes/crm/crm_offer.aw:1118 classes/crm/crm_offer.aw:1259
 msgid ""
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1116
+#: classes/crm/crm_offer.aw:1119
 msgid "Memo"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1117
+#: classes/crm/crm_offer.aw:1120
 msgid "CRM Dokument"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1118
+#: classes/crm/crm_offer.aw:1121
 msgid "Leping"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1119
+#: classes/crm/crm_offer.aw:1122
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1199
+#: classes/crm/crm_offer.aw:1202
 msgid "Kustuta"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1241
+#: classes/crm/crm_offer.aw:1244
 msgid "Fail"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:1251
+#: classes/crm/crm_offer.aw:1254
 msgid "Kataloog"
 msgstr ""
 

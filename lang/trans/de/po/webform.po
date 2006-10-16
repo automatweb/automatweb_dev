@@ -673,22 +673,6 @@ msgstr ""
 msgid "alles"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1147
-msgid "Vasakul"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1148
-msgid "Paremal"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1149
-msgid "Peal"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:1150
-msgid "All"
-msgstr ""
-
 #: classes/contentmgmt/webform.aw:1154
 msgid "-- vali --"
 msgstr ""
@@ -809,6 +793,6 @@ msgstr ""
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2282
+#: classes/contentmgmt/webform.aw:2339
 msgid "Liigu edasi &raquo;"
 msgstr ""

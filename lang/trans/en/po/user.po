@@ -31,7 +31,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_link_to_p
 msgid "Omaduse Isik (link_to_p) caption"
-msgstr ""
+msgstr "Person"
 
 #: classes/core/users/user.aw:prop_link_to_p_comment
 msgid "Omaduse Isik (link_to_p) kommentaar"
@@ -73,7 +73,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_lastaction
 msgid "Omaduse Viimane sisse logimine (lastaction) caption"
-msgstr ""
+msgstr "Last login"
 
 #: classes/core/users/user.aw:prop_lastaction_comment
 msgid "Omaduse Viimane sisse logimine (lastaction) kommentaar"
@@ -130,7 +130,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_real_name
 msgid "Omaduse Nimi (real_name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/core/users/user.aw:prop_real_name_comment
 msgid "Omaduse Nimi (real_name) kommentaar"
@@ -157,7 +157,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_notify
 msgid "Omaduse Uuest mailist teavitamine (notify) caption"
-msgstr ""
+msgstr "Notify about new e-mail"
 
 #: classes/core/users/user.aw:prop_notify_comment
 msgid "Omaduse Uuest mailist teavitamine (notify) kommentaar"
@@ -205,28 +205,28 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_passwd
 #: classes/core/users/user.aw:prop_passwd
-msgid "Omaduse Salasõna (passwd) caption"
+msgid "Omaduse Salas?na (passwd) caption"
 msgstr "Password"
 
 #: classes/core/users/user.aw:prop_passwd_comment
-msgid "Omaduse Salasõna (passwd) kommentaar"
+msgid "Omaduse Salas?na (passwd) kommentaar"
 msgstr ""
 
 #: classes/core/users/user.aw:prop_passwd_help
-msgid "Omaduse Salasõna (passwd) help"
+msgid "Omaduse Salas?na (passwd) help"
 msgstr ""
 
 # classes/core/users/user.aw:prop_passwd_again
 #: classes/core/users/user.aw:prop_passwd_again
-msgid "Omaduse Salasõna uuesti (passwd_again) caption"
+msgid "Omaduse Salas?na uuesti (passwd_again) caption"
 msgstr "Password again"
 
 #: classes/core/users/user.aw:prop_passwd_again_comment
-msgid "Omaduse Salasõna uuesti (passwd_again) kommentaar"
+msgid "Omaduse Salas?na uuesti (passwd_again) kommentaar"
 msgstr ""
 
 #: classes/core/users/user.aw:prop_passwd_again_help
-msgid "Omaduse Salasõna uuesti (passwd_again) help"
+msgid "Omaduse Salas?na uuesti (passwd_again) help"
 msgstr ""
 
 # classes/core/users/user.aw:prop_password
@@ -292,7 +292,7 @@ msgstr ""
 # classes/core/users/user.aw:prop_groups
 #: classes/core/users/user.aw:prop_groups
 msgid "Omaduse  (groups) caption"
-msgstr ""
+msgstr "Groups"
 
 # classes/core/users/user.aw:prop_groups_comment
 #: classes/core/users/user.aw:prop_groups_comment
@@ -486,7 +486,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_lg_hdh
 msgid "Omaduse Ajaloo seaded (lg_hdh) caption"
-msgstr ""
+msgstr "History settings"
 
 #: classes/core/users/user.aw:prop_lg_hdh_comment
 msgid "Omaduse Ajaloo seaded (lg_hdh) kommentaar"
@@ -498,7 +498,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_history_size
 msgid "Omaduse Mitu viimati k&uuml;lastatud objekti on ajaloos (history_size) caption"
-msgstr ""
+msgstr "How many last visited objects are in history"
 
 #: classes/core/users/user.aw:prop_history_size_comment
 msgid "Omaduse Mitu viimati k&uuml;lastatud objekti on ajaloos (history_size) kommentaar"
@@ -510,7 +510,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_history_has_folders
 msgid "Omaduse Ajalugu on jagatud kataloogideks (history_has_folders) caption"
-msgstr ""
+msgstr "History is divided into folders"
 
 #: classes/core/users/user.aw:prop_history_has_folders_comment
 msgid "Omaduse Ajalugu on jagatud kataloogideks (history_has_folders) kommentaar"
@@ -522,7 +522,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_lg_hdl
 msgid "Omaduse Keeleseaded (lg_hdl) caption"
-msgstr ""
+msgstr "Language settings"
 
 #: classes/core/users/user.aw:prop_lg_hdl_comment
 msgid "Omaduse Keeleseaded (lg_hdl) kommentaar"
@@ -534,7 +534,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_set_ui_lang
 msgid "Omaduse Liidese keel (set_ui_lang) caption"
-msgstr ""
+msgstr "User interface language"
 
 #: classes/core/users/user.aw:prop_set_ui_lang_comment
 msgid "Omaduse Liidese keel (set_ui_lang) kommentaar"
@@ -544,9 +544,21 @@ msgstr ""
 msgid "Omaduse Liidese keel (set_ui_lang) help"
 msgstr ""
 
+#: classes/core/users/user.aw:prop_ui_language
+msgid "Omaduse  (ui_language) caption"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_ui_language_comment
+msgid "Omaduse  (ui_language) kommentaar"
+msgstr ""
+
+#: classes/core/users/user.aw:prop_ui_language_help
+msgid "Omaduse  (ui_language) help"
+msgstr ""
+
 #: classes/core/users/user.aw:prop_lg_hd
 msgid "Omaduse T&otilde;lkekeskkond (lg_hd) caption"
-msgstr ""
+msgstr "Translation environment"
 
 #: classes/core/users/user.aw:prop_lg_hd_comment
 msgid "Omaduse T&otilde;lkekeskkond (lg_hd) kommentaar"
@@ -588,7 +600,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:group_chpwd
 msgid "Grupi Salas&otilde;na muutmine (chpwd) pealkiri"
-msgstr ""
+msgstr "Change password"
 
 #: classes/core/users/user.aw:group_chpwd_help
 msgid "Grupi Salas&otilde;na muutmine (chpwd) help"
@@ -596,7 +608,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:group_groups
 msgid "Grupi Kasutajagrupid (groups) pealkiri"
-msgstr ""
+msgstr "User groups"
 
 #: classes/core/users/user.aw:group_groups_help
 msgid "Grupi Kasutajagrupid (groups) help"
@@ -604,7 +616,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/core/users/user.aw:group_settings_help
 msgid "Grupi Seaded (settings) help"
@@ -674,133 +686,141 @@ msgstr ""
 msgid "Seose liitumise andmed (RELTYPE_JOIN_SITE) tekst"
 msgstr ""
 
-#: classes/core/users/user.aw:283
+#: classes/core/users/user.aw:285
 msgid "Genereeri parool"
 msgstr "Generate password"
 
-#: classes/core/users/user.aw:356
+#: classes/core/users/user.aw:358
 msgid "Selline kasutaja on juba olemas!"
 msgstr "User with that uid already exists!:"
 
-#: classes/core/users/user.aw:361
+#: classes/core/users/user.aw:363
 msgid "Selline kasutajanimi pole lubatud!"
 msgstr "Username contains invalid characters!"
 
-#: classes/core/users/user.aw:380
+#: classes/core/users/user.aw:382
 msgid "Paroolid pole samad!"
 msgstr "Passwords do not match!"
 
-#: classes/core/users/user.aw:386
+#: classes/core/users/user.aw:388
 msgid "Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!"
 msgstr "Password contains invalid characters or is too short!"
 
-#: classes/core/users/user.aw:425
+#: classes/core/users/user.aw:427
 msgid "Sellist kasutajat pole!"
 msgstr "No such user!"
 
-#: classes/core/users/user.aw:469
+#: classes/core/users/user.aw:471
 msgid "D&uuml;naamiline"
 msgstr "Dynamic"
 
-#: classes/core/users/user.aw:474
+#: classes/core/users/user.aw:476
 msgid "Tavaline"
 msgstr "Regular"
 
-#: classes/core/users/user.aw:477
+#: classes/core/users/user.aw:479
 msgid "Jah"
-msgstr ""
+msgstr "Yes"
 
-#: classes/core/users/user.aw:477
+#: classes/core/users/user.aw:479
 msgid "Ei"
-msgstr ""
+msgstr "No"
 
-#: classes/core/users/user.aw:640
+#: classes/core/users/user.aw:642
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/core/users/user.aw:646
+#: classes/core/users/user.aw:648
 msgid "Liige?"
 msgstr "Member?"
 
-#: classes/core/users/user.aw:652
+#: classes/core/users/user.aw:654
 msgid "Prioriteet"
 msgstr "Priority"
 
-#: classes/core/users/user.aw:660
+#: classes/core/users/user.aw:662
 msgid "Mitu liiget"
 msgstr "Number of members"
 
-#: classes/core/users/user.aw:667
+#: classes/core/users/user.aw:669
 msgid "Muutja"
 msgstr "Modified by"
 
-#: classes/core/users/user.aw:675
+#: classes/core/users/user.aw:677
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/core/users/user.aw:683 classes/core/users/user.aw:1100
+#: classes/core/users/user.aw:685 classes/core/users/user.aw:1102
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/core/users/user.aw:1077
+#: classes/core/users/user.aw:1079
 msgid "Nr"
 msgstr "Nr"
 
-#: classes/core/users/user.aw:1081
+#: classes/core/users/user.aw:1083
 msgid "Millal"
 msgstr "When"
 
-#: classes/core/users/user.aw:1090
+#: classes/core/users/user.aw:1092
 msgid "Kes"
 msgstr "Who"
 
-#: classes/core/users/user.aw:1095
+#: classes/core/users/user.aw:1097
 msgid "IP"
 msgstr "IP"
 
-#: classes/core/users/user.aw:1105
+#: classes/core/users/user.aw:1107
 msgid "Tegevus"
 msgstr "Action"
 
-#: classes/core/users/user.aw:1112
+#: classes/core/users/user.aw:1114
 msgid "Saidi ID"
 msgstr "Site ID"
 
-#: classes/core/users/user.aw:1118
+#: classes/core/users/user.aw:1120
 msgid "OID"
 msgstr "OID"
 
-#: classes/core/users/user.aw:1123
+#: classes/core/users/user.aw:1125
 msgid "Mida"
 msgstr "What"
 
-#: classes/core/users/user.aw:1576
+#: classes/core/users/user.aw:1583
 msgid "users::add_user(%s): no uid specified"
 msgstr "users::add_user(%s): no uid specified"
 
-#: classes/core/users/user.aw:1648
+#: classes/core/users/user.aw:1655
 msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
-msgstr ""
+msgstr "Object $oid is brother, rights are read from object %s."
 
-#: classes/core/users/user.aw:1656
+#: classes/core/users/user.aw:1663
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr "Object has been deleted, permission denied!"
 
-#: classes/core/users/user.aw:1661
+#: classes/core/users/user.aw:1668
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr "Object does not exist and never has, permission denied!"
 
-#: classes/core/users/user.aw:1666
+#: classes/core/users/user.aw:1673
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr "Object's parent object (%s) is deleted. No access!"
 
-#: classes/core/users/user.aw:1676
+#: classes/core/users/user.aw:1683
 msgid "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;igus ainult."
-msgstr ""
+msgstr "View right only"
 
-#: classes/core/users/user.aw:1712
+#: classes/core/users/user.aw:1719
 msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr "Info on object's acl:<br><br>Access is set by access-relation between object %s and group %s<br><br>ACL set for that relation are: %s"
+
+#: classes/core/users/user.aw:2112
+msgid "Seaded"
+msgstr "Settings"
+
+#: classes/core/users/user.aw:2159
+msgid "Ajalugu"
+msgstr "History"
 
 # classes/core/users/user.aw:prop_admin_lang
 #~ msgid "Omaduse Admin keel (admin_lang) caption"
@@ -849,7 +869,7 @@ msgstr "Info on object's acl:<br><br>Access is set by access-relation between ob
 #~ msgstr "Modify object %s acl"
 
 # classes/core/users/user.aw:group_general
-#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgid "Grupi ?ldine (general) pealkiri"
 #~ msgstr "General"
 
 # classes/core/users/user.aw:prop_online
