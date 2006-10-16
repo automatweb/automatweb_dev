@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.3 2006/10/13 16:12:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.4 2006/10/16 10:18:46 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -96,8 +96,8 @@
 	
 	@groupinfo prices_price caption="Hinnad" parent=prices
 	@default group=prices_price
-		
-		/@property prices_manager type=releditor mode=manager reltype=RELTYPE_ROOM_PRICE props=name,date_from,date_to,weekdays,nr table_fields=name,date_from,date_to,weekdays,nr no_caption=1
+		@property prices_search type=hidden no_caption=1 store=no
+		@property prices_tb type=toolbar no_caption=1
 		@property prices_tbl type=table no_caption=1
 
 	@groupinfo prices_bargain_price caption="Soodushinnad" parent=prices
@@ -143,6 +143,12 @@ class room extends class_base
 			"tpldir" => "common/room",
 			"clid" => CL_ROOM
 		));
+
+		$this->unit_step = array(
+			1 => t("minutit"),
+			2 => t("tundi"),
+			3 => t("p&auml;eva"),
+		);
 	}
 
 	function get_property($arr)
@@ -222,6 +228,10 @@ class room extends class_base
 		{
 			$this->_handle_img_search_result(&$arr);
 		}
+		if($arr["request"]["prices_search"])
+		{
+			$this->_handle_prc_search_result(&$arr);
+		}
 		if($arr["request"]["img"])
 		{
 			$this->_save_img_ord(&$arr);
@@ -264,9 +274,12 @@ class room extends class_base
 	function remove_images($arr)
 	{
 		$o = obj($arr["id"]);
-		$o->disconnect(array(
-			"from" => $arr["sel"]
-		));
+		if(count($arr["sel"]))
+		{
+			$o->disconnect(array(
+				"from" => $arr["sel"]
+			));
+		}
 		return $arr["post_ru"];
 	}
 
@@ -274,6 +287,11 @@ class room extends class_base
 	{
 		$p = get_instance("vcl/popup_search");
 		$p->do_create_rels(obj($arr["args"]["id"]), $arr["request"]["images_search"], 6);
+	}
+	function _handle_prc_search_result($arr)
+	{
+		$p = get_instance("vcl/popup_search");
+		$p->do_create_rels(obj($arr["args"]["id"]), $arr["request"]["prices_search"], 9);
 	}
 	
 	function _save_img_ord($arr)
@@ -325,6 +343,7 @@ class room extends class_base
 		));
 		$t->define_field(array(
 			"name" => "image_ord",
+			
 			"caption" => t("jrk"),
 			"width" => "20px",
 		));
@@ -353,9 +372,45 @@ class room extends class_base
 		}
 	}
 
+	function _get_prices_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "new",
+			"tooltip" => t("Uus hind"),
+			"img" => "new.gif",
+			"url" => $this->mk_my_orb("new", array(
+				"parent" => $arr["obj_inst"]->id(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 9, 
+				"return_url" => get_ru(),
+			), CL_ROOM_PRICE),
+		));
+
+		$popup_search = get_instance("vcl/popup_search");
+		$search_butt = $popup_search->get_popup_search_link(array(
+			"pn" => "prices_search",
+			"clid" => CL_ROOM_PRICE,
+		));
+		$tb->add_cdata($search_butt);
+
+		$tb->add_button(array(
+			"name" => "remove_image",
+			"tooltip" => t("Eemalda hinnad"),
+			"img" => "delete.gif",
+			"action" => "remove_images",
+		));
+		return PROP_OK;
+	}
+
 	function _get_prices_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "selected",
+			"width" => "30px",
+		));
 		$t->define_field(array(
 			"name" => "dates",
 			"caption" => t("Kuup&auml;evad"),
@@ -389,10 +444,6 @@ class room extends class_base
 				"name" => "currency_".$cobj->id(),
 				"caption" => $cobj->prop("unit_name"),
 			));
-			$cur_fields["currency_".$cobj->id()] = html::textbox(array(
-				"name" => "",
-				"size" => 5,
-			)). $cobj->prop("unit_name");
 		}
 		$ds = get_instance("vcl/date_edit");
 		$ds->configure(array(
@@ -403,27 +454,39 @@ class room extends class_base
 
 		# getting data
 		$price_objs = $this->get_prices($arr["obj_inst"]->id());
+		$price_inst = get_instance(CL_ROOM_PRICE);
+		$caption = $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		foreach($price_objs as $oid => $obj)
 		{
-			$t->define_data(array(
-				"dates" => $obj->prop("date_from")." kuni ".$obj->prop("date_to"),
-				"weekdays" => $obj->prop("weekdays"),
-				"nr" => $obj->prop("nr"),
-			));
+			$wd = $obj->prop("weekdays");
+			$wds = array();
+			foreach($wd as $nr)
+			{
+				$wds[$nr] = $price_inst->weekdays[$nr];
+			}
+			$prices = $price_inst->get_prices($oid);
+			foreach($prices as $cur_oid => $price)
+			{
+				$prc["currency_".$cur_oid] = $price;
+			}
+			$t_from = $obj->prop("time_from");
+			$t_to = $obj->prop("time_to");
+			$data = array(
+				"dates" => date("d/m/Y", $obj->prop("date_from"))." kuni ".date("d/m/Y", $obj->prop("date_to")),
+				"time" => str_pad($t_from["hour"], 2, "0", STR_PAD_RIGHT).":".str_pad($t_from["minute"], 2, "0", STR_PAD_RIGHT)." - ".str_pad($t_to["hour"], 2, "0", STR_PAD_RIGHT).":".str_pad($t_to["minute"], 2, "0", STR_PAD_RIGHT),
+				"weekdays" => join(",", $wds),
+				"nr" => html::href(array(
+					"caption" => $obj->prop("nr"),
+					"url" => html::get_change_url($oid, array(
+						"return_url" => get_ru(),
+					)),
+				)),
+				"selected" => $oid,
+				"time_step" => $obj->prop("time")." ".$caption,
+			);
+			$data = array_merge($data, $prc);
+			$t->define_data($data);
 		}
-	
-		/*
-		$add_new_row = array(
-			"dates" => $ds->gen_edit_form("date_from", "", 2005, 2010, true).t(" kuni ").$ds->gen_edit_form("date_to", "", 2005, 2010, true),
-			"weekdays" => "wk",
-			"nr" => "nr",
-			"time" => "time",
-			"time_step" => "time_step",
-		);
-		$add_new_row = array_merge($add_new_row, $cur_fields);
-		*/
-
-		$t->define_data($add_new_row);
 	}
 
 	function get_calendar($oid)
@@ -462,7 +525,7 @@ class room extends class_base
 		$o = obj($oid);
 		$cs = $o->connections_from(array(
 			"class_id" => CL_ROOM_PRICE,
-			"reltype" => "RELTYPE_ROOM_PRICE",
+			"type" => "RELTYPE_ROOM_PRICE",
 		));
 		foreach($cs as $c)
 		{

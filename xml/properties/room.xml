@@ -220,6 +220,28 @@
             <caption>, sammuga</caption>
       </property>
       <property>
+            <name>prices_search</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_price</group>
+            <parent>general_down</parent>
+            <type>hidden</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>prices_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_price</group>
+            <parent>general_down</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>prices_tbl</name>
             <table>objects</table>
             <field>meta</field>

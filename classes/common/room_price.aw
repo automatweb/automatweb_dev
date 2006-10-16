@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.1 2006/10/13 13:02:52 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.2 2006/10/16 10:18:46 tarvo Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -22,6 +22,15 @@
 	@property nr type=select
 	@caption Mitmes
 
+	@property time_from type=time_select
+	@caption Alates
+
+	@property time_to type=time_select
+	@caption Kuni
+
+	@property time type=select
+	@caption Aeg
+
 	@property prices type=callback callback=gen_prices_props
 
 */
@@ -34,6 +43,16 @@ class room_price extends class_base
 			"tpldir" => "common/room_price",
 			"clid" => CL_ROOM_PRICE
 		));
+		
+		$this->weekdays = array(
+			1 => t("E"),
+			2 => t("T"),
+			3 => t("K"),
+			4 => t("N"),
+			5 => t("R"),
+			6 => t("L"),
+			7 => t("P"),
+		); 
 	}
 
 	function get_property($arr)
@@ -44,18 +63,17 @@ class room_price extends class_base
 		{
 			//-- get_property --//
 			case "weekdays":
-				$prop["options"] = array(
-					1 => "E",
-					2 => "T",
-					3 => "K",
-				);
+				$prop["options"] = $this->weekdays;
 				break;
 			case "nr":
-				$prop["options"] = array(
-					1 => 1,
-					2 => 2,
-					3 => 3,
-				);
+				for($i=1;$i<11;$i++)
+				{
+					$opts[$i] = $i;
+				}
+				$prop["options"] = $opts;
+				break;
+			case "time":
+				$prop["options"] = $this->get_time_selections($arr["obj_inst"]->id());
 				break;
 		};
 		return $retval;
@@ -103,7 +121,8 @@ class room_price extends class_base
 
 //-- methods --//
 
-	function get_currencys($oid)
+
+	function get_room($oid)
 	{
 		if(!is_oid($oid))
 		{
@@ -115,8 +134,12 @@ class room_price extends class_base
 			"reltype" => "RELTYPE_ROOM_PRICE",
 		));
 		$c = reset($cs);
-		$room = $c->from();
-		return $room->prop("currency");
+		return $c->from();
+	}
+
+	function get_currencys($oid)
+	{
+		return ($room = $this->get_room($oid))?$room->prop("currency"):$room;
 	}
 
 	function gen_prices_props($arr)
@@ -169,6 +192,67 @@ class room_price extends class_base
 		$o->set_meta("prices", $prices);
 		$o->save();
 		return true;
+	}
+
+	/**
+		@comment
+			Gets time caption from room object, if room is connected
+	**/
+	function get_time_caption($oid)
+	{
+		$room = $this->get_room($oid);
+		if(!$room)
+		{
+			return $room;
+		}
+		$room_inst = get_instance(CL_ROOM);
+		return $room_inst->unit_step[$room->prop("time_unit")];
+	}
+	
+	/**
+		@comment
+			Generates array of available options for booking the room
+			array(
+				nr_of_units => nr_of_units unit_caption,
+			)
+	**/
+	function get_time_selections($oid)
+	{
+		$data = $this->get_time_step($oid);
+		if(!$data)
+		{
+			return false;
+		}
+		$caption = $this->get_time_caption($oid);
+		for($i = $data["from"]; $i <= $data["to"]; $i += $data["step"])
+		{
+			$ret[$i] = $i." ".$caption;
+		}
+		return $ret;
+	}
+
+	/**
+		@comment
+			gets time_step information from the room that price is connected to
+
+		@returns
+			array(
+				from => ,
+				to => ,
+				step => ,
+			)
+			.. or false if this price isn't connected to any room
+	**/
+	function get_time_step($oid)
+	{
+		if(!($room = $this->get_room($oid)))
+		{
+			return $room;
+		}
+		$ret["from"] = $room->prop("time_from");
+		$ret["to"] = $room->prop("time_to");
+		$ret["step"] = $room->prop("time_step");
+		return $ret;
 	}
 
 	function get_prices($oid)

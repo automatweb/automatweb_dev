@@ -38,6 +38,33 @@
             <caption>Mitmes</caption>
       </property>
       <property>
+            <name>time_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>time_select</type>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>time_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>time_select</type>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>time</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Aeg</caption>
+      </property>
+      <property>
             <name>prices</name>
             <table>objects</table>
             <group>general</group>
