@@ -56,6 +56,7 @@ class doc_display extends aw_template
 		
 		$this->vars(array("image_inplace" => ""));
 		$this->vars($al->get_vars());
+		$docmod = $doc->prop("doc_modified");
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
 		$modf = $doc->modifiedby();
 		$modf_eml = "";
@@ -75,6 +76,7 @@ class doc_display extends aw_template
 		}
 
 		$this->vars(array(
+			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
 			"text_no_aliases" => $text_no_aliases,
 			"title" => $doc->trans_get_val("title"),
