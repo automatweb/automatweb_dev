@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.176 2006/10/16 14:32:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.177 2006/10/16 21:37:44 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1873,11 +1873,25 @@ class menu extends class_base
 		));
 		$ol = $ot->to_list();
 		$si = get_instance("contentmgmt/site_show");
+		$l = get_instance("languages");
+		$l_list = $l->get_list(array("all_data" => true));
 		foreach($ol->arr() as $item)
 		{
-			$xml .= "<url><loc>".str_replace("&", "&amp;", $si->make_menu_link($item))."</loc><lastmod>".date("Y-m-d", $item->created())."</lastmod>";
-			$xml .= "<changefreq>".$item->prop("change_time")."</changefreq><priority>".$item->prop("change_pri")."</priority></url>\n";
-
+			$ct = $item->prop("change_time");
+			$cpri = $item->prop("change_pri");
+			if (!$ct)
+			{
+				foreach($item->path() as $path_item)
+				{
+					$ct = $path_item->prop("change_time") != "" ? $path_item->prop("change_time") : $ct;
+					$cpri = $path_item->prop("change_pri") != "" ? $path_item->prop("change_pri") : $cpri;
+				}
+			}
+			foreach($l_list as $lid => $ldat)
+			{
+				$xml .= "<url><loc>".str_replace("&", "&amp;", $si->make_menu_link($item, $ldat["acceptlang"]))."</loc><lastmod>".date("Y-m-d", $item->created())."</lastmod>";
+				$xml .= "<changefreq>".$ct."</changefreq><priority>".$cpri."</priority></url>\n";
+			}
 		}
 		$xml .= "</urlset>";
 		$tmpf = aw_ini_get("cache.page_cache")."/sitemap.xml";
