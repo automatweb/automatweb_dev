@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.2 2006/10/12 13:49:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.3 2006/10/16 10:37:48 kristo Exp $
 // rostering_work_entry.aw - T&ouml;&ouml;aegade sisestus 
 /*
 
@@ -140,44 +140,65 @@ class rostering_work_entry extends class_base
 	function _init_entry_t(&$t)
 	{
 		$t->define_field(array(
+			"name" => "def",
+			"caption" => t("Planeeritud"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "wpl",
 			"caption" => t("T&ouml;&ouml;post"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "def"
 		));
 		$t->define_field(array(
 			"name" => "person",
 			"caption" => t("Isik"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "def"
 		));
 		$t->define_field(array(
 			"name" => "hrs",
 			"caption" => t("Aeg"),
+			"align" => "center",
+			"parent" => "def"
+		));
+
+		$t->define_field(array(
+			"name" => "real",
+			"caption" => t("Tegelik"),
 			"align" => "center"
 		));
+
 		$t->define_field(array(
 			"name" => "correct",
 			"caption" => t("Graafik korrektne"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "real"
 		));
 		$t->define_field(array(
 			"name" => "set_person",
 			"caption" => t("T&ouml;&ouml;taja"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "real"
 		));
 		$t->define_field(array(
 			"name" => "set_hrs_from",
 			"caption" => t("Alates"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "real"
 		));
 		$t->define_field(array(
 			"name" => "set_hrs_to",
 			"caption" => t("Kuni"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "real"
 		));
 		$t->define_field(array(
 			"name" => "pay_type",
 			"caption" => t("Tasu liik"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "real"
 		));
 	}
 

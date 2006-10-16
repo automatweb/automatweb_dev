@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.5 2006/10/11 13:06:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.6 2006/10/16 10:37:48 kristo Exp $
 // rostering_workbench.aw - T&ouml;&ouml;aja planeerimine 
 /*
 
@@ -524,6 +524,24 @@ class rostering_workbench extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
+		$t->define_field(array(
+			"name" => "pdv",
+			"caption" => t("P&auml;devused"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "adr",
+			"caption" => t("Aadress"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "num_empl",
+			"caption" => t("Mitu t&ouml;&ouml;tajat"),
+			"align" => "center",
+			"sortable" => 1
+		));
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"
@@ -540,7 +558,10 @@ class rostering_workbench extends class_base
 			$o = $c->to();
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
-				"oid" => $o->id()
+				"oid" => $o->id(),
+				"pdv" => html::obj_change_url($o->prop("skills")),
+				"adr" => html::obj_change_url($o->prop("address")),
+				"num_empl" => $o->prop("num_empl")
 			));
 		}
 	}
@@ -574,6 +595,24 @@ class rostering_workbench extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "start_time",
+			"caption" => t("Algus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "end_time",
+			"caption" => t("L&otilde;pp"),
+			"align" => "center",
+			"sortable" => 1
+		));
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"
@@ -585,12 +624,16 @@ class rostering_workbench extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sh_t($t);
 
+		$i = get_instance(CL_ROSTERING_SHIFT);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SHIFT")) as $c)
 		{
 			$o = $c->to();
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
-				"oid" => $o->id()
+				"oid" => $o->id(),
+				"type" => $i->types[$o->prop("type")],
+				"start_time" => $o->prop("start_time"),
+				"end_time" => $o->prop("end_time")
 			));
 		}
 	}
