@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.207 2006/10/16 11:07:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.208 2006/10/16 11:24:44 kristo Exp $
 
 /*
 
@@ -188,7 +188,6 @@ class site_show extends class_base
 		);
 
 		$ni = aw_ini_get("menuedit.num_menu_images");
-
 		$cnt = count($this->path);
 		for ($i = $cnt-1; $i > -1; $i--)
 		{
@@ -2098,18 +2097,10 @@ class site_show extends class_base
 			}
 		}
 
-		$isfp = $section == $frontpage && !$_GET["class"];
-		$this->vars(array(
-			"IS_FRONTPAGE" => ($isfp ? $this->parse("IS_FRONTPAGE") : ""),
-			"IS_FRONTPAGE2" => ($isfp ? $this->parse("IS_FRONTPAGE2") : ""),
-			"IS_NOT_FRONTPAGE" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE") : ""),
-			"IS_NOT_FRONTPAGE2" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
-		));
-
 		// insert sel images
 		foreach(safe_array($this->properties["images"]) as $nr => $id)
 		{
-			$url = $this->image->get_url_by_id($id);
+			$url = $this->image->get_url_by_id($id);	
 			$this->vars(array(
 				"path_menu_image_".$nr."_url" => $url,
 				"path_menu_image_".$nr => html::img(array(
@@ -2119,7 +2110,16 @@ class site_show extends class_base
 				))
 			));
 		}
-		
+
+		$isfp = $section == $frontpage && !$_GET["class"];
+		$this->vars(array(
+			"IS_FRONTPAGE" => ($isfp ? $this->parse("IS_FRONTPAGE") : ""),
+			"IS_FRONTPAGE2" => ($isfp ? $this->parse("IS_FRONTPAGE2") : ""),
+			"IS_NOT_FRONTPAGE" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE") : ""),
+			"IS_NOT_FRONTPAGE2" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
+		));
+
+	
 		if (aw_global_get("uid") == "")
 		{
 			$this->vars(array(
