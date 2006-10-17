@@ -451,7 +451,7 @@ class mrp_resource extends class_base
 					}
 
 					$start =  mktime(0, 0, 0, $prop["value"]["start"]["month"], $prop["value"]["start"]["day"], $prop["value"]["start"]["year"]);
-					$end =  mktime(0, 0, 0, $prop["value"]["end"]["month"], $prop["value"]["end"]["day"], $prop["value"]["end"]["year"]);
+					$end =  mktime(1, 0, 0, $prop["value"]["end"]["month"], $prop["value"]["end"]["day"], $prop["value"]["end"]["year"]);
 
 					if ($start >= $end)
 					{
