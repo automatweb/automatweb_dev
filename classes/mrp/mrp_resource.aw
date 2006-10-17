@@ -6,11 +6,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1
 
 @groupinfo grp_resource_schedule caption="Kalender"
-@groupinfo grp_resource_joblist caption="Tööleht" submit=no
+@groupinfo grp_resource_joblist caption="T&ouml;&ouml;leht" submit=no
 @groupinfo grp_resource_settings caption="Seaded"
 @groupinfo grp_resource_maintenance caption="Hooldus"
-@groupinfo grp_resource_unavailable caption="Tööajad"
-	@groupinfo grp_resource_unavailable_work caption="Tööajad" parent=grp_resource_unavailable
+@groupinfo grp_resource_unavailable caption="T&ouml;&ouml;ajad"
+	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
 	@groupinfo grp_resource_unavailable_una caption="Kinnised ajad" parent=grp_resource_unavailable
 
 
@@ -28,12 +28,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@property cal_tb type=toolbar store=no no_caption=1
 
 	@property resource_calendar type=text store=no no_caption=1
-	@caption Tööd
+	@caption T&ouml;&ouml;d
 
 
 @default group=grp_resource_joblist
 	@property job_list type=table store=no editonly=1 no_caption=1
-	@caption Tööleht
+	@caption T&ouml;&ouml;leht
 
 
 @default group=grp_resource_maintenance
@@ -46,26 +46,26 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 
 @default group=grp_resource_settings
 	@property type type=select
-	@caption Tüüp
+	@caption T&uuml;&uuml;p
 
 	@property thread_data type=textbox default=1
-	@comment Positiivne täisarv
-	@caption Samaaegseid töid enim
+	@comment Positiivne t&auml;isarv
+	@caption Samaaegseid t&ouml;id enim
 
 	@property default_pre_buffer type=textbox
 	@caption Vaikimisi eelpuhveraeg (h)
 
 	@property default_post_buffer type=textbox
-	@caption Vaikimisi järelpuhveraeg (h)
+	@caption Vaikimisi j&auml;relpuhveraeg (h)
 
 	@property global_buffer type=textbox default=14400
-	@caption Päeva üldpuhver (h)
+	@caption P&auml;eva &uuml;ldpuhver (h)
 
 
 @default group=grp_resource_unavailable_work
 
 	@property work_hrs_recur type=releditor reltype=RELTYPE_RECUR_WRK mode=manager props=name,start,end,time,length table_fields=name,start,end,time,length
-	@caption Tööajad
+	@caption T&ouml;&ouml;ajad
 
 @default group=grp_resource_unavailable_una
 
@@ -73,11 +73,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@caption Kinnised ajad
 
 	@property unavailable_weekends type=checkbox ch_value=1
-	@caption Ei tööta nädalavahetustel
+	@caption Ei t&ouml;&ouml;ta n&auml;dalavahetustel
 
 	@property unavailable_dates type=textarea rows=5 cols=50
-	@comment Formaat: alguskuupäev.kuu, tund:minut - lõppkuupäev.kuu, tund:minut; alguskuupäev.kuu, ...
-	@caption Kinnised päevad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...)
+	@comment Formaat: alguskuup&auml;ev.kuu, tund:minut - l&otilde;ppkuup&auml;ev.kuu, tund:minut; alguskuup&auml;ev.kuu, ...
+	@caption Kinnised p&auml;evad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...)
 
 // --------------- RELATION TYPES ---------------------
 
@@ -91,7 +91,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @caption Kordus
 
 @reltype RECUR_WRK value=5 clid=CL_RECURRENCE
-@caption Tööaja kordus
+@caption T&ouml;&ouml;aja kordus
 
 */
 
@@ -112,13 +112,13 @@ class mrp_resource extends class_base
 		$this->states = array (
 			MRP_STATUS_NEW => t("Uus"),
 			MRP_STATUS_PLANNED => t("Planeeritud"),
-			MRP_STATUS_INPROGRESS => t("Töös"),
+			MRP_STATUS_INPROGRESS => t("T&ouml;&ouml;s"),
 			MRP_STATUS_ABORTED => t("Katkestatud"),
 			MRP_STATUS_DONE => t("Valmis"),
 			MRP_STATUS_LOCKED => t("Lukustatud"),
 			MRP_STATUS_PAUSED => t("Paus"),
 			MRP_STATUS_DELETED => t("Kustutatud"),
-			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
+			MRP_STATUS_ONHOLD => t("Plaanist v&auml;ljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
 		);
 
@@ -160,7 +160,7 @@ class mrp_resource extends class_base
 
 			if (!$this->workspace)
 			{
-				$this->mrp_error .= t("Ressurss ei kuulu ühessegi ressursihaldussüsteemi. ");
+				$this->mrp_error .= t("Ressurss ei kuulu &uuml;hessegi ressursihalduss&uuml;steemi. ");
 			}
 		}
 
@@ -319,14 +319,14 @@ class mrp_resource extends class_base
 		switch ($prop["name"])
 		{
 			case "thread_data":
-				if (count ($this_object->prop ($prop["name"])) != $prop["value"])
+				if (count ($this_object->prop ($prop["name"])) != $prop["value"] && $this->workspace->is_property("rescheduling_needed"))
 				{
 					$this->workspace->set_prop("rescheduling_needed", 1);
 				}
 				break;
 
 			case "global_buffer":
-				if ($this_object->prop ($prop["name"]) != $prop["value"])
+				if ($this_object->prop ($prop["name"]) != $prop["value"] && $this->workspace->is_property("rescheduling_needed"))
 				{
 					$this->workspace->set_prop("rescheduling_needed", 1);
 				}
@@ -338,7 +338,10 @@ class mrp_resource extends class_base
 			case "grp_resource_unavailable_work":
 			case "grp_resource_unavailable_una":
 			case "grp_resource_unavailable":
-				$this->workspace->set_prop("rescheduling_needed", 1);
+				if($this->workspace->is_property("rescheduling_needed"))
+				{
+					$this->workspace->set_prop("rescheduling_needed", 1);
+				}
 				break;
 		}
 
@@ -410,7 +413,7 @@ class mrp_resource extends class_base
 
 					if (!in_array ($prop["value"]["recur_type"], $applicable_types))
 					{
-						$prop["error"] .= t("Seda tüüpi kordust ei saa kasutada. ") . MRP_NEWLINE;
+						$prop["error"] .= t("Seda t&uuml;&uuml;pi kordust ei saa kasutada. ") . MRP_NEWLINE;
 					}
 
 					### validate
@@ -426,7 +429,7 @@ class mrp_resource extends class_base
 					### check for user errors
 					if ((23 < $time_h) or (59 < $time_min) or (count ($time) < 2))
 					{
-						$prop["error"] .= t("Viga kellaaja määrangus. ") . MRP_NEWLINE;
+						$prop["error"] .= t("Viga kellaaja m&auml;&auml;rangus. ") . MRP_NEWLINE;
 					}
 
 					$interval_daily = $prop["value"]["interval_daily"] ? $prop["value"]["interval_daily"] : 1;
@@ -521,10 +524,10 @@ class mrp_resource extends class_base
 		/*||
 			Ava | Staatus |
 		    Projekti nr. | Klient |
-			Projekti nimetus | Trükitud (ehk algus ehk esimese töö töösse minek) [dd-kuu-yyyy] |
-			Tähtaeg [dd-kuu-yyyy] |
-			Trükiarv: |
-			Tükiarv Notes: ||*/
+			Projekti nimetus | Tr&uuml;kitud (ehk algus ehk esimese t&ouml;&ouml; t&ouml;&ouml;sse minek) [dd-kuu-yyyy] |
+			T&auml;htaeg [dd-kuu-yyyy] |
+			Tr&uuml;kiarv: |
+			T&uuml;kiarv Notes: ||*/
 
 		$table->define_field(array(
 			"name" => "modify",
