@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.8 2006/10/17 16:26:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.9 2006/10/17 22:08:40 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -251,6 +251,12 @@ class room extends class_base
 
 	function callback_pre_edit($arr)
 	{
+		/*
+		$o = obj(1331);
+		$o->set_prop("started", time()-7200);
+		$o->set_prop("finished", time()+7200);
+		$o->save();
+		*/
 		if(!$this->get_calendar($arr["obj_inst"]->id()))
 		{
 			$this->_create_calendar($arr["obj_inst"]);
@@ -717,6 +723,44 @@ class room extends class_base
 			"parent" => $obj->prop("resources_fld"),
 		));
 		return $ol->arr();
+	}
+
+	/**
+		@attrib params=name
+		@param start required type=int
+			start time of the period(unix timestamp)
+		@param end required type=int
+			end time of the period(unix timestamp)
+		@param resource required type=oid
+			resource objects oid to be checked
+		@comment
+			checks if given resource can be used during that time. If it can be used, then returns how many instances of it can be used.
+	**/
+	function check_resource($arr)
+	{
+		if(!$arr["start"] || !$arr["end"] || !$arr["resource"])
+		{
+			return false;
+		}
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_PAUSED,
+			MRP_STATUS_INPROGRESS,
+		);
+
+		$list = new object_list(array(
+			"class_id" => CL_MRP_JOB,
+			"resource" => $arr["resource"],
+			"state" => $applicable_states,
+			"started" => new obj_predicate_compare(OBJ_COMP_LESS, $arr["end"]),
+			"finished" => new obj_predicate_compare(OBJ_COMP_GREATER, $arr["start"]),
+		));
+		/**
+			sealt see list->count() tuleb ümber teha.. see võiks olla mingi data slle ressursi kohta ja on talletatud konverentsi objektis.. mitu nagu seda kasutuses on.. siis ei peaks iga selle pagana tooli jaoks eraldi mrp_job objekti tegema ntx ?? .. sounds good??
+		**/
+		$conference_inst = get_instance(CL_CONFERENCE);
+		$obj = obj($arr["resource"]);
+		return count($obj->prop("thread_data")) - $list->count();
 	}
 }
 ?>
