@@ -1,20 +1,10 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>general_tb</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
             <name>name</name>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>name</field>
+            <method>none</method>
             <group>general</group>
             <parent>general_up</parent>
             <type>textbox</type>
@@ -127,6 +117,28 @@
             <type>calendar</type>
             <no_caption>1</no_caption>
             <viewtype>relative</viewtype>
+            <store>no</store>
+      </property>
+      <property>
+            <name>resources_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>resources</group>
+            <parent>general_down</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>resources_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>resources</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
             <store>no</store>
       </property>
       <property>
@@ -295,6 +307,9 @@
                   <caption>Kalender</caption>
                   <submit>no</submit>
             </calendar>
+            <resources>
+                  <caption>Ressursid</caption>
+            </resources>
             <images>
                   <caption>Pildid</caption>
             </images>

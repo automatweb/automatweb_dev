@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.7 2006/10/17 13:26:12 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.8 2006/10/17 16:26:29 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -15,14 +15,13 @@
 @groupinfo general caption="&Uuml;ldine"
 @default group=general
 
-	@property general_tb type=toolbar no_caption=1
 
 	@layout general_split type=hbox width=50%:50%
 
 	@layout general_up type=vbox closeable=1 area_caption=&Uuml;ldinfo parent=general_split
 	@default parent=general_up
 
-		@property name type=textbox
+		@property name type=textbox field=name method=none
 		@caption Nimi
 
 		@property location type=relpicker reltype=RELTYPE_LOCATION
@@ -58,6 +57,14 @@
 @default group=calendar
 	@property calendar_tb type=toolbar no_caption=1 submit=no
 	@property calendar type=calendar no_caption=1 viewtype=relative store=no
+
+#TAB RESOURCES
+@groupinfo resources caption="Ressursid"
+@default group=resources
+
+	@property resources_tb type=toolbar no_caption=1
+	@property resources_tbl type=table no_caption=1
+
 # TAB IMAGES
 
 @groupinfo images caption="Pildid"
@@ -657,7 +664,7 @@ class room extends class_base
 		return $calendar->get_html ();
 	}
 
-	function _get_general_tb($arr)
+	function _get_resources_tb($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
 		if($arr["obj_inst"]->prop("resources_fld"))
@@ -674,6 +681,42 @@ class room extends class_base
 				"img" => "new.gif",
 			));
 		}
+	}
+
+	function _get_resources_tbl($arr)
+	{
+		if(!$arr["obj_inst"]->prop("resources_fld"))
+		{
+			$arr["prop"]["value"] = t("Ressursside kataloog m&auml;&auml;ramata");
+			return PROP_OK;
+		}
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+
+		foreach($this->get_room_resources($arr["obj_inst"]->id()) as $oid => $obj)
+		{
+			$t->define_data(array(
+				"name" => $obj->name(),
+			));
+		}
+	}
+
+	function get_room_resources($oid)
+	{
+		if(!is_oid($oid))
+		{
+			return array();
+		}
+		$obj = obj($oid);
+
+		$ol = new object_list(array(
+			"class_id" => CL_MRP_RESOURCE,
+			"parent" => $obj->prop("resources_fld"),
+		));
+		return $ol->arr();
 	}
 }
 ?>
