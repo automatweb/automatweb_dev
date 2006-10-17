@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.5 2006/10/16 13:07:09 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.6 2006/10/17 12:56:59 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -52,11 +52,10 @@
 
 # TAB CALENDAR
 
-@groupinfo calendar caption="Kalender"
-@default group=calendar,parent=
+@groupinfo calendar caption="Kalender" submit=no
+@default group=calendar
 	@property calendar_tb type=toolbar no_caption=1 submit=no
-	@property calendar type=calendar no_caption=1 viewtype=relative
-
+	@property calendar type=calendar no_caption=1 viewtype=relative store=no
 # TAB IMAGES
 
 @groupinfo images caption="Pildid"
@@ -178,6 +177,11 @@ class room extends class_base
 				break;
 			# TAB CALENDAR
 			case "calendar":
+				### update schedule
+				$prop["value"] = $this->create_room_calendar ($arr);
+				break;
+				
+				
 				//$cal = $this->get_calendar($arr["obj_inst"]->id());
 /*				$c = &$prop["vcl_inst"];
 				$c->add_item(array(
@@ -529,7 +533,20 @@ class room extends class_base
 			return false;
 		}
 		$o = obj($oid);
-		return $o->get_first_obj_by_reltype("RELTYPE_CALENDAR");
+		$cal = $o->get_first_obj_by_reltype("RELTYPE_CALENDAR");
+		if(is_object($cal))
+		{
+			return $cal->id;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	
+	function get_overview($arr = array())
+	{
+		return $this->overview;
 	}
 
 	function _create_calendar($room)
@@ -599,6 +616,43 @@ class room extends class_base
 				CL_RESERVATION
 			)
 		));
+	}
+	
+	function create_room_calendar ($arr)
+	{
+		$this_object =& $arr["obj_inst"];
+
+		$calendar = &$arr["prop"]["vcl_inst"];
+		classload("vcl/calendar");
+//		$calendar = new vcalendar (array ("tpldir" => "mrp_calendar"));
+//		$calendar->init_calendar (array ());
+//		$calendar->configure (array (
+//			"overview_func" => array (&$this, "get_overview"),
+//			"full_weeks" => true,
+//		));
+		$range = $calendar->get_range (array (
+			"date" => $arr["request"]["date"],
+			"viewtype" => $arr["request"]["viewtype"],
+		));
+
+		$list = new object_list(array(
+			"class_id" => array(CL_RESERVATION),
+//			"parent" => $this_object->id(),
+			"resource" => $this_object->id(),
+		));
+		foreach($list->arr() as $task)
+		{
+			$calendar->add_item (array (
+				"item_start" => $task->prop("start1"),
+				"item_end" => $task->prop("end"),
+				"data" => array(
+					"name" => $task->name(),
+					"link" => html::get_change_url($task->id(), array("return_url" => get_ru())),
+				),
+			));
+			$this->cal_items[$task->prop("start1")] = html::get_change_url($task->id(), array("return_url" => get_ru()));
+		}
+		return $calendar->get_html ();
 	}
 }
 ?>
