@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.2 2006/10/13 16:13:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.3 2006/10/17 12:41:35 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -20,6 +20,9 @@
 
 @property deadline type=datetime_select table=planner field=deadline
 @caption T&auml;htaeg
+		
+@property resource type=relpicker reltype=RELTYPE_RESOURCE
+@caption Ressurss
 		
 @property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
 @caption Klient
@@ -52,6 +55,8 @@ caption Kokkuvõte
 @reltype PROJECT value=2 clid=CL_PROJECT
 @caption Projekt
 
+@reltype RESOURCE value=3 clid=CL_ROOM
+@caption Ressurss
 */
 
 class reservation extends class_base
