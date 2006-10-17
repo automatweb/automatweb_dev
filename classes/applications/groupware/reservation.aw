@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.3 2006/10/17 12:41:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.4 2006/10/17 12:48:41 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -9,7 +9,6 @@
 
 @default table=objects
 @default group=general
-
 #GENERAL
 	
 @property start1 type=datetime_select field=start table=planner
@@ -21,7 +20,7 @@
 @property deadline type=datetime_select table=planner field=deadline
 @caption T&auml;htaeg
 		
-@property resource type=relpicker reltype=RELTYPE_RESOURCE
+@property resource type=relpicker reltype=RELTYPE_RESOURCE field=meta method=serialize
 @caption Ressurss
 		
 @property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER

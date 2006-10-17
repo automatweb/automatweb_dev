@@ -30,7 +30,8 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_RESOURCE</reltype>
-            <field>resource</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Ressurss</caption>
       </property>
       <property>
