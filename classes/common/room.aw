@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.6 2006/10/17 12:56:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.7 2006/10/17 13:26:12 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -15,6 +15,8 @@
 @groupinfo general caption="&Uuml;ldine"
 @default group=general
 
+	@property general_tb type=toolbar no_caption=1
+
 	@layout general_split type=hbox width=50%:50%
 
 	@layout general_up type=vbox closeable=1 area_caption=&Uuml;ldinfo parent=general_split
@@ -29,8 +31,8 @@
 		@property owner type=relpicker reltype=RELTYPE_OWNER
 		@caption Omanik
 
-		@property inventory type=relpicker reltype=RELTYPE_INVENTORY
-		@caption Varustuse kataloog
+		@property resources_fld type=relpicker reltype=RELTYPE_INVENTORY_FOLDER
+		@caption Ressursside kataloog
 
 		@property area type=relpicker reltype=RELTYPE_AREA
 		@caption Valdkond
@@ -110,8 +112,8 @@
 @reltype OWNER value=2 clid=CL_CRM_COMPANY
 @caption Omanik
 
-@reltype INVENTORY value=3 clid=CL_SHOP_WAREHOUSE
-@caption Varustuse kataloog
+@reltype INVENTORY_FOLDER value=3 clid=CL_MENU
+@caption Ressursside kataloog
 
 @reltype AREA value=4 clid=CL_CRM_FIELD_CONFERENCE_ROOM
 @caption Valdkond
@@ -653,6 +655,25 @@ class room extends class_base
 			$this->cal_items[$task->prop("start1")] = html::get_change_url($task->id(), array("return_url" => get_ru()));
 		}
 		return $calendar->get_html ();
+	}
+
+	function _get_general_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		if($arr["obj_inst"]->prop("resources_fld"))
+		{
+			$tb->add_button(array(
+				"name" => "add_resource",
+				"tooltip" => t("Lisa ressurss"),
+				"url" => $this->mk_my_orb("new", array(
+					"mrp_workspace" => $arr["obj_inst"]->id(),
+					"mrp_parent" => $arr["obj_inst"]->prop("resources_fld"),
+					"return_url" => get_ru(),
+					"parent" => $arr["obj_inst"]->prop("resources_fld"),
+				), CL_MRP_RESOURCE),
+				"img" => "new.gif",
+			));
+		}
 	}
 }
 ?>

@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>general_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <field>meta</field>
@@ -33,15 +43,15 @@
             <caption>Omanik</caption>
       </property>
       <property>
-            <name>inventory</name>
+            <name>resources_fld</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <parent>general_up</parent>
             <type>relpicker</type>
-            <reltype>RELTYPE_INVENTORY</reltype>
-            <caption>Varustuse kataloog</caption>
+            <reltype>RELTYPE_INVENTORY_FOLDER</reltype>
+            <caption>Ressursside kataloog</caption>
       </property>
       <property>
             <name>area</name>
@@ -100,10 +110,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>calendar</num_0>
-                  <num_1>parent</num_1>
-            </group>
+            <group>calendar</group>
             <parent>general_down</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
@@ -115,10 +122,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>
-                  <num_0>calendar</num_0>
-                  <num_1>parent</num_1>
-            </group>
+            <group>calendar</group>
             <parent>general_down</parent>
             <type>calendar</type>
             <no_caption>1</no_caption>
@@ -289,6 +293,7 @@
             </general>
             <calendar>
                   <caption>Kalender</caption>
+                  <submit>no</submit>
             </calendar>
             <images>
                   <caption>Pildid</caption>
@@ -320,11 +325,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Omanik</caption>
             </OWNER>
-            <INVENTORY>
+            <INVENTORY_FOLDER>
                   <value>3</value>
-                  <clid>CL_SHOP_WAREHOUSE</clid>
-                  <caption>Varustuse kataloog</caption>
-            </INVENTORY>
+                  <clid>CL_MENU</clid>
+                  <caption>Ressursside kataloog</caption>
+            </INVENTORY_FOLDER>
             <AREA>
                   <value>4</value>
                   <clid>CL_CRM_FIELD_CONFERENCE_ROOM</clid>
