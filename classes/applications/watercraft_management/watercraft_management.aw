@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.9 2006/10/13 13:24:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_management.aw,v 1.10 2006/10/17 15:00:24 dragut Exp $
 // watercraft_management.aw - Veesõidukite haldus 
 /*
 
@@ -217,9 +217,9 @@ class watercraft_management extends class_base
 				$range->set_range($arr['request'][$prop['name']]);
 				
 				break;
-		//	case 'additional_equipment':
-		//
-		//		break;
+			case 'additional_equipment':
+				$prop['value'] = $arr['request']['additional_equipment'];
+				break;
 			case 'seller':
 				$prop['options'] = array(t('K&otilde;ik')) + $this->seller_type;
 				$prop['selected'] = $arr['request']['seller_type'];
@@ -611,6 +611,7 @@ class watercraft_management extends class_base
 		$arr['args']['passanger_count'] = $arr['request']['passanger_count'];
 		$arr['args']['price'] = $arr['request']['price'];
 		$arr['args']['seller'] = $arr['request']['seller'];
+		$arr['args']['additional_equipment'] = $arr['request']['additional_equipment'];
 	}
 
 	function callback_post_save($arr)

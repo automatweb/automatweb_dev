@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.5 2006/10/13 13:24:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.6 2006/10/17 15:00:24 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -109,6 +109,7 @@ class watercraft_search extends class_base
 		// ja kuidagi peab siis raalima, et mis sinna tekstikasti pandi
 		// ja otsima selle järgi nii selle j2rgi, et kas see prop on valitud
 		// see s6na leidub info v2ljas, v6is matchib kogus.	
+/*
 		$this->additional_equipment_elements = array(
 			'electricity_110V_sel' => t('Elekter 110V'),
 			'electricity_220V_sel' => t('Elekter 220V'),
@@ -162,7 +163,33 @@ class watercraft_search extends class_base
 
 			
 		);
-
+*/
+		$this->additional_equipment_elements = array(
+			'electricity_110V' => t('Elekter 110V'),
+			'electricity_220V' => t('Elekter 220V'),
+			'radio_station' => t('Raadiojaam'),
+			'stereo' => t('Stereo'),
+			'cd' => t('CD'),
+			'waterproof_speakers' => t('Veekindlad k&otilde;larid'),
+			'burglar_alarm' => t('Signalisatsioon'),
+			'navigation_system' => t('Navigatsioonis&uuml;steem'),
+			'navigation_lights' => t('Navigatsioonituled'),
+			'trailer' => t('Treiler'),
+			'toilet' => t('Tualett'),
+			'shower' => t('Dush'),
+			'lifejacket' => t('P&auml;&auml;stevest'),
+			'swimming_ladder' => t('Ujumisredel'),
+			'awning' => t('Varikatus'),
+			'kitchen_cooker' => t('K&ouml;&ouml;k/Pliit'),
+			'vendrid' => t('Vendrid'),
+			'fridge' => t('K&uuml;lmkapp'),
+			'anchor' => t('Ankur'),
+			'oars' => t('Aerud'),
+			'tv_video' => t('TV-video'),
+			'fuel' => t('K&uuml;te'),
+			'water_tank' => t('Veepaak'),
+			'life_boat' => t('P&auml;&auml;stepaat'),
+		);
 	}
 
 	function get_property($arr)
@@ -263,24 +290,56 @@ class watercraft_search extends class_base
 			{
 				if ( !empty($arr['request'][$name]) )
 				{
-					if ($name == 'seller')
+
+					switch ($name)
 					{
-						$filter['CL_WATERCRAFT.RELTYPE_SELLER.class_id'] = $arr['request'][$name];
+						case 'seller':
+							$filter['CL_WATERCRAFT.RELTYPE_SELLER.class_id'] = $arr['request'][$name];
+							break;
+						case 'additional_equipment':
+
+							$value = trim($arr['request'][$name]);
+							$conditions = array();
+							// we have this additional equipment search field, which content have to searched from
+							// all additional equipment fields
+							foreach ($this->additional_equipment_elements as $element_name => $element_caption)
+							{
+								// if the search string is present in the elements caption
+								// this should cover that when the additional equipment element
+								// is only selected, then it will be found, and maybe there are more 
+								// than one word:
+								$words = array();
+								foreach (explode(' ', $value) as $word)
+								{
+									if (stristr($element_caption, htmlentities($word)) !== false)
+									{
+										$conditions[$element_name.'_sel'] = 1;
+									}
+									else
+									{
+										$conditions[] = new object_list_filter(array(
+											'logic' => 'AND',
+											'conditions' => array(
+												$element_name.'_info' => '%'.$word.'%',
+												$element_name.'_sel' => 1
+											),
+										));
+									}
+								}
+							}
+
+							break;
+						default:
+							$filter[$name] = $arr['request'][$name];
 					}
-					else
-					if ($name == 'additional_equipment')
-					{
-						// we have this additional equipment search field, which content have to searched from
-						// all additional equipment fields
-					}
-					else
-					{
-						$filter[$name] = $arr['request'][$name];
-					}
+
 				}
 			}
 		}
-
+		$filter[] = new object_list_filter(array(
+			'logic' => 'OR',
+			'conditions' => $conditions
+		));
 		$watercrafts = new object_list($filter);
 		return $watercrafts;
 	}
