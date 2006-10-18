@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.12 2006/10/18 12:16:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.13 2006/10/18 12:33:03 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -57,11 +57,12 @@
 @groupinfo import_config caption="Impordi seaded"
 @default group=import_config
 
-	@groupinfo prices caption="Hinnad" parent=import_config
-	@default group=prices
+	// This is not going to be at the moment, so commenting out
+	groupinfo prices caption="Hinnad" parent=import_config
+	default group=prices
 
-		@property prices_config_table type=table 
-		@caption Hindade seadete tabel
+		property prices_config_table type=table 
+		caption Hindade seadete tabel
 
 	@groupinfo users caption="Kasutajad" parent=import_config
 	@default group=users
@@ -110,7 +111,7 @@ class scala_import extends class_base
 		));
 
 		$this->import_sections = array(
-			'pricing' => t('Hinnad'),
+		//	'pricing' => t('Hinnad'),
 			'users' => t('Kasutajad'),
 			'categories' => t('Kategooriad'),
 			'availability' => t('Lao seis'),
@@ -161,7 +162,7 @@ class scala_import extends class_base
 		}
 		return $retval;
 	}	
-
+/*
 	function _get_prices_config_table($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -222,7 +223,7 @@ class scala_import extends class_base
 		$arr['obj_inst']->set_meta('prices_config', $arr['request']['prices_config']);
 		return PROP_OK;
 	}
-
+*/
 	function _get_users_config_table($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -403,7 +404,7 @@ class scala_import extends class_base
 
 		@param id required type=int acl=view
 			Scala import object id
-		@param pricing optional type=int 
+		param pricing optional type=int 
 			Import pricing data
 		@param users optional type=int 
 			Import users
@@ -437,7 +438,7 @@ class scala_import extends class_base
 			'user' => $o->prop('ftp_user'),
 			'pass' => $o->prop('ftp_password')
 		));
-		
+/*		
 		// import pricing
 		if ( $arr['pricing'] )
 		{
@@ -460,7 +461,7 @@ class scala_import extends class_base
 			}
 			
 		}
-
+*/
 		aw_disable_acl();
 		// import users
 		if ( $arr['users'] )
@@ -562,7 +563,7 @@ class scala_import extends class_base
 		$this->write_log();
 
 	}
-
+/*
 	function _import_prices($arr)
 	{
 		list($parsed_xml['values'], $parsed_xml['tags']) = parse_xml_def(array('xml' => $arr['raw_xml']));
@@ -596,7 +597,7 @@ class scala_import extends class_base
 		$this->log_str .= "[ ok ] Pricing info import is complete\n";
 		return true;
 	}
-
+*/
 	function _import_users($arr)
 	{
 		// mh, xml parser don't like plain '&' characters, so i'll replace them with entities:
