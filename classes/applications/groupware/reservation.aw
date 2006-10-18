@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.4 2006/10/17 12:48:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.5 2006/10/18 14:06:48 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -127,5 +127,61 @@ class reservation extends class_base
 	}
 
 //-- methods --//
+
+	/**
+		@param resource
+		@param start
+		@param end
+		@comment
+			basically what this does, is checks if this reservation can use given resource object in given time perion, and if can how many isntances of it
+	**/
+	function resource_availability($arr)
+	{
+		$res = $arr["resource"];
+		if(!is_oid($res))
+		{
+			arr("ehh");
+			return 0;
+		}
+		$list = new object_list(array(
+			"class_id" => CL_RESERVATION,
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $arr["end"]),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $arr["start"]),
+		));
+		$total_usage = 0;
+		foreach($list->arr() as $oid => $obj)
+		{
+			$inf = $this->resource_info($oid);
+			foreach($inf as $resource => $count)
+			{
+				$total_usage = ($resource == $res)?($total_usage+$count):$total_usage;
+			}
+		}
+		$res = obj($res);
+		$total_count = count($res->prop("thread_data"));
+		return ($total_count-$total_usage);
+	}
+
+	function resource_info($reservation)
+	{
+		if(!is_oid($reservation))
+		{
+			return false;
+		}
+		$reservation = obj($reservation);
+		return $reservation->meta("resource_info");
+	}
+	
+	function set_resource_info($reservation, $info)
+	{
+		if(!is_oid($reservation))
+		{
+			false;
+		}
+		$reservation = obj($reservation);
+		$reservation->set_meta("resource_info", $info);
+		$reservation->save();
+		return true;
+	}
 }
 ?>

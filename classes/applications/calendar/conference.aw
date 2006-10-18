@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.3 2006/10/17 22:08:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.4 2006/10/18 14:06:49 tarvo Exp $
 // conference.aw - Konverents 
 /*
 
@@ -163,6 +163,10 @@ class conference extends class_base
 	}
 
 //-- methods --//
+	/**
+		@comment
+			returns reservations connected to given conference
+	**/
 	function get_reservations($oid)
 	{
 		if(!is_oid($oid))
@@ -209,9 +213,10 @@ class conference extends class_base
 		));
 		$res = $this->get_reservations($arr["obj_inst"]->id());
 		$room_inst = get_instance(CL_ROOM);
-		$reserved_resources = $this->get_reserved_room_resources($arr["obj_inst"]->id());
+		$reservation_inst = get_instance(CL_RESERVATION);
 		foreach($res as $oid => $obj)
 		{
+			$reserved_resources = $reservation_inst->resource_info($oid);
 			$start = $obj->prop("start1");
 			$end = $obj->prop("end");
 
@@ -220,11 +225,12 @@ class conference extends class_base
 			$resources = $room_inst->get_room_resources($room);
 			foreach($resources as $res_id => $res_obj)
 			{
-				$free = $room_inst->check_resource(array(
-					"start" => $start,
-					"end" => $end,
+				$free =  $reservation_inst->resource_availability(array(
 					"resource" => $res_id,
+					"start" => $obj->prop("start1"),
+					"end" => $obj->prop("end"),
 				));
+
 				$t->define_data(array(
 					"free_resources" => $free,
 					"name" => $res_obj->name(),
@@ -232,7 +238,7 @@ class conference extends class_base
 					"book_resources" => html::textbox(array(
 						"name" => "reservations[".$oid."][".$res_id."]",
 						"size" => 3,
-						"value" => $reserved_resources[$oid][$res_id],
+						"value" => $reserved_resources[$res_id],
 					)),
 				));
 			}
@@ -255,50 +261,32 @@ class conference extends class_base
 		
 	}
 
-	/**
-		@comment
-			fetches reserved room resource
-	**/
-	function get_reserved_room_resources($oid)
-	{
-		if(!is_oid($oid))
-		{
-			return array();
-		}
-		$obj = obj($oid);
-		return $obj->meta("room_reservations");
-	}
-
 	function reserve_room_resources($resources, $oid)
 	{
 		/*
-			täis krdi gemüüse funktsioon !! 
+			t&auml;is krdi geyymüüse funktsioon !! 
 		*/
 		if(!is_array($resources) || !is_oid($oid))
 		{
 			return false;
 		}
 		$obj = obj($oid);
-		$reserved = $this->get_reserved_room_resources($oid);
-		$room_inst = get_instance(CL_ROOM);
+		$reservation_inst = get_instance(CL_RESERVATION);
 		foreach($resources as $reservation => $resources)
 		{
 			$reservation_obj = obj($reservation);
-			$room = $reservation_obj->prop("resource");
+			$info = $reservation_inst->resource_info($reservation);
 			foreach($resources as $resource => $count)
 			{
-				$available_before = $room_inst->check_resource(array(
+				$available_before = $reservation_inst->resource_availability(array(
+					"resource" => $resource,
 					"start" => $reservation_obj->prop("start1"),
 					"end" => $reservation_obj->prop("end"),
-					"resource" => $resource,
 				));
-				$resource_obj = obj($resource);
-				$total_resources = count($resource_obj->prop("thread_data"));
-				if($available_before >= $count)
+				if(($count-$info[$resource]) <= $available_before && $count >= 0)
 				{
-					// requested resource is available and is reserved now!!
-					$reserved[$reservation][$resource] = $count;
-					$obj->set_meta("room_reservations", $reserved);
+					$info[$resource] = $count;
+					$reservation_inst->set_resource_info($reservation, $info);
 				}
 			}
 		}

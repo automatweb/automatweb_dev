@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.10 2006/10/18 12:37:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.11 2006/10/18 14:06:47 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -909,42 +909,5 @@ class room extends class_base
 		return $ol->arr();
 	}
 
-	/**
-		@attrib params=name
-		@param start required type=int
-			start time of the period(unix timestamp)
-		@param end required type=int
-			end time of the period(unix timestamp)
-		@param resource required type=oid
-			resource objects oid to be checked
-		@comment
-			checks if given resource can be used during that time. If it can be used, then returns how many instances of it can be used.
-	**/
-	function check_resource($arr)
-	{
-		if(!$arr["start"] || !$arr["end"] || !$arr["resource"])
-		{
-			return false;
-		}
-		$applicable_states = array (
-			MRP_STATUS_PLANNED,
-			MRP_STATUS_PAUSED,
-			MRP_STATUS_INPROGRESS,
-		);
-
-		$list = new object_list(array(
-			"class_id" => CL_MRP_JOB,
-			"resource" => $arr["resource"],
-			"state" => $applicable_states,
-			"started" => new obj_predicate_compare(OBJ_COMP_LESS, $arr["end"]),
-			"finished" => new obj_predicate_compare(OBJ_COMP_GREATER, $arr["start"]),
-		));
-		/**
-			sealt see list->count() tuleb ümber teha.. see võiks olla mingi data slle ressursi kohta ja on talletatud konverentsi objektis.. mitu nagu seda kasutuses on.. siis ei peaks iga selle pagana tooli jaoks eraldi mrp_job objekti tegema ntx ?? .. sounds good??
-		**/
-		$conference_inst = get_instance(CL_CONFERENCE);
-		$obj = obj($arr["resource"]);
-		return count($obj->prop("thread_data")) - $list->count();
-	}
 }
 ?>
