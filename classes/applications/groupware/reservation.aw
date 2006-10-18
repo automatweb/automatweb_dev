@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.6 2006/10/18 16:28:22 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.7 2006/10/18 17:06:15 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -43,6 +43,11 @@
 
 property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
 caption Kokkuvõte
+
+@groupinfo reserved_resources caption="Ressursid"
+@default group=reserved_resources
+	
+	@property resources_tbl type=table no_caption=1
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -192,6 +197,28 @@ class reservation extends class_base
 		$reservation->set_meta("resource_info", $info);
 		$reservation->save();
 		return true;
+	}
+
+	function _get_resources_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+		));
+		$res = $this->resource_info($arr["obj_inst"]->id());
+		foreach($res as $res => $count)
+		{
+			$o = obj($res);
+			$t->define_data(array(
+				"name" => $o->name(),
+				"amount" => $count,
+			));
+		}
 	}
 }
 ?>

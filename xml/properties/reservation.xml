@@ -89,6 +89,15 @@
             <field>code</field>
             <caption>Kood</caption>
       </property>
+      <property>
+            <name>resources_tbl</name>
+            <table>objects</table>
+            <group>reserved_resources</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>resources_tbl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_RESERVATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -96,6 +105,11 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <reserved_resources>
+                  <caption>Ressursid</caption>
+            </reserved_resources>
+      </groupinfo>
       <tableinfo>
             <planner>
                   <index>id</index>
