@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.2 2006/10/05 16:10:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.3 2006/10/18 21:32:39 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -20,7 +20,11 @@
 
 @groupinfo results caption=Vastatud
 @default group=results
-	@property results_tbl type=text no_caption=1
+	@property results type=text
+	@caption Vastuseid
+	
+	@property get_results type=text
+	@caption Ekspordi vastused
 
 @reltype GROUP value=1 clid=CL_QUESTION_GROUP
 @caption K&uml;simustegrupp
@@ -35,6 +39,7 @@ class questionary extends class_base
 			"tpldir" => "questionary",
 			"clid" => CL_QUESTIONARY
 		));
+		$this->init_data();
 	}
 
 	function get_property($arr)
@@ -78,7 +83,9 @@ class questionary extends class_base
 					));
 				}
 			break;
-			case "results_tbl":
+			case "results":
+				$prop["value"] = count($this->get_results($arr["obj_inst"]->id()));
+				/*
 				$results = $this->get_results($arr["obj_inst"]->id());
 				classload("vcl/table");
 				foreach($results as $result => $answers)
@@ -127,6 +134,23 @@ class questionary extends class_base
 					$t->define_data($data);
 				}
 				$prop["value"] = $t->draw();
+				*/
+				break;
+			case "get_results":
+				$prop["value"] = html::href(array(
+					"caption" => t("Ekspordi tulemused"),
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $arr["obj_inst"]->id(),
+						"return_url" => get_ru(),
+						"group" => $arr["request"]["group"],
+						"export" => 1,
+					), CL_QUESTIONARY),
+				));
+				if($arr["request"]["export"])
+				{
+					$res = $this->get_results($arr["obj_inst"]->id());
+					$this->gen_csv_output($res);
+				}
 				break;
 		};
 		return $retval;
@@ -157,6 +181,7 @@ class questionary extends class_base
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
+		$questionary_id = $arr["id"];
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
@@ -220,6 +245,7 @@ class questionary extends class_base
 				));
 				$rows .= $this->parse("TOPIC");
 			}
+
 			$this->vars(array(
 				"span" => ($no_answer)?(count($questions) + 1):(count($questions) + 2),
 				"name" => $obj->name(),
@@ -228,12 +254,76 @@ class questionary extends class_base
 			));
 			$groups .= $this->parse("GROUP");
 		}
+
+		// SICK FUCK PART
+		// area
+
+		foreach($this->pers["area"] as $k => $el)
+		{
+			$this->vars(array(
+				"caption" => $el,
+				"value" => $k,
+			));
+			$areas .= $this->parse("PERS_AREA");
+		}
+		// schools
+		foreach($this->pers["school"] as $k => $el)
+		{
+			$this->vars(array(
+				"caption" => $el,
+				"value" => $k,
+			));
+			$schs .= $this->parse("PERS_SCHOOL");
+		}
+
+		// intrests
+		foreach($this->pers["intrests"] as $k => $el)
+		{
+			$this->vars(array(
+				"caption" => $el,
+				"value" => $k,
+			));
+			$area2 .= $this->parse("S_AREA");
+		}
+
+		// visites to library
+		foreach($this->pers["visits"] as $k => $el)
+		{
+			$this->vars(array(
+				"caption" => $el,
+				"value" => $k,
+			));
+			$visits .= $this->parse("VISITS");
+		}
+
+		// usage
+
+		foreach($this->pers["usage"] as $k => $el)
+		{
+			$this->vars(array(
+				"caption" => $el,
+				"value" => $k,
+			));
+			$usage .= $this->parse("USAGE");
+		}
 		
+		$this->vars(array(
+			"PERS_AREA" => $areas,
+			"PERS_SCHOOL" => $schs,
+			"S_AREA" => $area2,
+			"VISITS" => $visits,
+			"USAGE" => $usage,
+		));
+		$formdata = $this->parse("PERS_DATA");
+	
+
+		// END OF SICK FUCK PART
 		$this->vars(array(
 			"GROUP" => $groups,
 			"name" => $ob->prop("name"),
+			"PERS_DATA" => $formdata,
 			"reforb" => $this->mk_reforb("add_result", array(
-				"questionary" => $arr["id"],
+				"questionary" => $questionary_id,
 				"return_url" => post_ru(),
 			)),
 			"submit_caption" => t("Vasta"),
@@ -287,8 +377,84 @@ class questionary extends class_base
 	**/
 	function add_result($arr)
 	{
+		$o = obj();
+		$o->set_class_id(CL_ANSWERER);
+		$o->set_parent($arr["questionary"]);
+		$o->set_name("Küsimustikule vastaja");
+		$o->save();
+		$o->set_prop("questionary", $arr["questionary"]);
+		$o->set_prop("gender", $this->pers["gender"][$arr["pers"]["gender"]]);
+		$o->set_prop("age", $this->pers["age"][$arr["pers"]["age"]]);
+		if(!($a = $arr["pers"]["area_radio"]))
+		{
+			foreach($arr["pers"]["area_text"] as $k => $v)
+			{
+				if(strlen($v))
+				{
+					$area = $this->pers["area"][$k].", ".$v;
+					break;
+				}
+			}
+		}
+		elseif($a == count($this->pers["area"]))
+		{
+			$area = "muu,´".$arr["pers"]["area_text"][$a];
+		}
+		else
+		{
+			$area = $this->pers["area"][$a].", Tallinnast";
+		}
+		$o->set_prop("area", $area);
+		# SHCOOL
+		if((!$a = $arr["pers"]["school_radio"]))
+		{
+			foreach($arr["pers"]["school_text"] as $k => $v)
+			{
+				if(strlen($v))
+				{
+					$school = $this->pers["school"][$k].", ".$v;
+					break;
+				}
+			}
+		}
+		elseif($a == count($this->pers["area"]))
+		{
+			$school = "muu, ".$arr["pers"]["school_text"][$a];
+		}
+		else
+		{
+			$school = $this->pers["school"][$a].", ".$arr["pers"]["school_text"][$a];
+		}
+		$o->set_prop("school", $school);
+
+		# INTRESTS
+		if((!$a = $arr["pers"]["intrest_radio"]))
+		{
+			foreach($arr["pers"]["intrest_text"] as $k => $v)
+			{
+				if(strlen($v))
+				{
+					$intrest = $this->pers["intrests"][$k].", ".$v;
+					break;
+				}
+			}
+		}
+		elseif($a == count($this->pers["intrests"]))
+		{
+			$intrest = "muu, ".$arr["intrest"]["intrest_text"][$a];
+		}
+		else
+		{
+			$intrest = $this->pers["intrests"][$a].", ".$arr["pers"]["intrest_text"][$a];
+		}
+		$o->set_prop("intrests", $intrest);
+
+		# VISITS etc...
+		$o->set_prop("visit_recur", $this->pers["visits"][$arr["pers"]["visits"]]);
+		$o->set_prop("usage", $this->pers["usage"][$arr["pers"]["usage"]]);
+		$o->save();
+
 		$ans_inst = get_instance(CL_QUESTIONARY_RESULT);
-		$uniq_id = gen_uniq_id();
 		foreach($arr["answer"] as $group_id => $topics)
 		{
 			foreach($topics as $topic_id => $questions)
@@ -303,7 +469,7 @@ class questionary extends class_base
 							"group" => $group_id,
 							"topic" => $topic_id,
 							"answer" => $answer,
-							"relation_id" => $uniq_id,
+							"answerer" => $o->id(),
 						));
 					}
 				}
@@ -319,24 +485,166 @@ class questionary extends class_base
 	**/
 	function get_results($id)
 	{
-		if(!$id)
+		if(!is_oid($id))
 		{
 			return false;
 		}
 		$ol = new object_list(array(
-			"class_id" => CL_QUESTIONARY_RESULT,
+			"class_id" => CL_ANSWERER,
 			"questionary" => $id,
 		));
-		foreach($ol->arr() as $ans_id => $obj)
+		foreach($ol->arr() as $oid => $obj)
 		{
-			$ret[$obj->prop("relation_id")][$obj->id()] = array(
-				"question" => $obj->prop("question"),
-				"topic" => $obj->prop("question_topic"),
-				"group" => $obj->prop("question_group"),
-				"answer" => $obj->prop("answer"),
-			);
+			$conns = $obj->connections_from(array(
+				"type" => "RELTYPE_ANSWER",
+			));
+			foreach($conns as $data)
+			{
+				$result = $data->to();
+				$ret[$oid][$result->id()] = array(
+					"question" => $result->prop("question"),
+					"topic" => $result->prop("question_topic"),
+					"group" => $result->prop("question_group"),
+					"answer" => $result->prop("answer"),
+				);
+			}
+
 		}
 		return $ret;
+	}
+
+	/**
+		@attrib name=gen_csv_output params=name all_args=1
+	**/
+	function gen_csv_output($results)
+	{
+		foreach($results as $result => $answers)
+		{
+			$group_no = 0;
+			$group_id = null;
+			$topic_no = 0;
+			$topic_id = null;
+			$question_no = 0;
+			$question_id = null;
+			$answerer = obj($result);
+			$struct[] = "Sugu";
+			$struct[] = "Vanus";
+			$struct[] = "Tegevusala";
+			$struct[] = "Õppimine/töötamine kõrgkoolis";
+			$struct[] = "Huvivaldkond";
+			$struct[] = "Rahvusraamatukogu külastan";
+			$struct[] = "Raamatukogu teenuseid kasutan";
+
+			$res[$result][] = $answerer->prop("gender");
+			$res[$result][] = $answerer->prop("age");
+			$res[$result][] = html_entity_decode($answerer->prop("area"));
+			$res[$result][] = html_entity_decode($answerer->prop("school"));
+			$res[$result][] = html_entity_decode($answerer->prop("intrests"));
+			$res[$result][] = html_entity_decode($answerer->prop("visits"));
+			$res[$result][] = html_entity_decode($answerer->prop("usage"));
+
+
+			foreach($answers as $ans_id => $data)
+			{
+				if($data["group"] != $group_id)
+				{
+					$group_id = $data["group"];
+					$group_no++;
+					$topic_no = 0;
+					$question_no = 0;
+				}
+				if($data["topic"] != $topic_id)
+				{
+					$topic_id = $data["topic"];
+					$topic_no++;
+					$question_no = 0;
+				}
+				if($data["question"] != $question_id)
+				{
+					$question_id = $data["question"];
+					$question_no++;
+				}
+				$tmp = $group_no."-".$topic_no."-".$question_no;
+				$res[$result][$tmp] = $data["answer"];
+				$struct[] = $tmp;
+			}
+		}
+
+		
+		// sick fuck
+
+		$file[] = $struct;
+		foreach($res as $row)
+		{
+				$file[] = $row;
+		}
+
+		foreach($file as $row_nr => $row)
+		{
+			$row_str = join(";",$row);
+			$tot_str .= $row_str."\n";
+		}
+		header('Content-type: text/csv');
+		header('Content-Disposition: attachment; filename="vastused.csv"');
+		die($tot_str);
+	}
+
+	function init_data()
+	{
+		$this->pers["gender"] = array(
+			1 => "Mees",
+			2 => "Naine",
+		);
+		$this->pers["age"] = array(
+			1 => "18 või noorem",
+			2 => "19-29",
+			3 => "30-39",
+			4 => "40-49",
+			5 => "50-59",
+			6 => "60 või vanem",
+		);
+		$this->pers["area"] = array(
+			1 => "riigiteenistuja",
+			2 => "teadlane, &otilde;ppej&otilde;ud",
+			3 => "loomeinimene",
+			4 => "spetsialist, juhtiv t&ouml;&ouml;taja",
+			5 => "doktorant",
+			6 => "magistrant",
+			7 => "bakalaurus&otilde;ppe &uuml;li&otilde;pilane",
+			8 => "&otilde;pilane",
+			9 => "muu (t&auml;psustage)",
+		);
+		$this->pers["school"] = array(
+			1 => "Tallinna &Uuml;likool",
+			2 => "Tallinna tehnika&uuml;likool",
+			3 => "Eesti Muusikaakadeemia",
+			4 => "Eesti Kunstiakadeemia",
+			5 => "Tartu &Uuml;likool",
+			6 => "Eesti Maa&uuml;likool",
+			7 => "Muu (milline)",
+		);
+		$this->pers["intrests"] = array(
+			1 => "Humanitaarteadused (milline?)",
+			2 => "Sotsiaalteadused (milline?)",
+			3 => "Loodus ja t&auml;ppisteadused (milline?)",
+			4 => "Tehnikateadused (milline?)",
+			5 => "Meditsiiin",
+			6 => "P&otilde;llumajandus, aiandus, metsandus",
+			7 => "Muu (milline?)"
+		);
+		$this->pers["visits"] = array(
+			1 => "Iga p&auml;ev",
+			2 => "M&otilde;ne korra n&auml;dalas",
+			3 => "M&otilde;ne korra kuus",
+			4 => "M&otilde;ne korra aastas",
+		);
+		$this->pers["usage"] = array(
+			1 => "Ainult E-raamatukogu RR-i kodulehel",
+			2 => "Peamiselt E-raamatukogu RR-i kodulehel",
+			3 => "Ainult raamatukoguhoones",
+			4 => "Peamiselt raamatukoguhoones",
+			5 => "Kasutan k&otilde;iki v&otilde;imalusi",
+		);
 	}
 }
 ?>

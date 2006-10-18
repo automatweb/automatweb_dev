@@ -30,13 +30,22 @@
             <store>no</store>
       </property>
       <property>
-            <name>results_tbl</name>
+            <name>results</name>
             <table>objects</table>
             <group>results</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <no_caption>1</no_caption>
+            <caption>Vastuseid</caption>
+      </property>
+      <property>
+            <name>get_results</name>
+            <table>objects</table>
+            <group>results</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Ekspordi vastused</caption>
       </property>
       <classinfo>
             <syslog_type>ST_QUESTIONARY</syslog_type>

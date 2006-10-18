@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/answerer.aw,v 1.1 2006/10/18 18:28:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/answerer.aw,v 1.2 2006/10/18 21:32:39 tarvo Exp $
 // answerer.aw - Vastaja 
 /*
 
@@ -7,7 +7,38 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
+@property gender type=text
+@caption Sugu
+
+@property age type=text
+@caption Vanus
+
+@property area type=text
+@caption Tegevusala
+
+@property school type=text
+@caption &Otilde;ppimine/T&ouml;&ouml;tamine k&otilde;rgkoolis
+
+@property intrests type=text
+@caption Huvivaldkond
+
+@property visit_recur type=text
+@caption Rahvusraamatukogu k&uuml;lastan
+
+@property usage type=text
+@caption Raamatukogu teenuseid kasutan
+
+@property questionary type=relpicker
+@caption K&uuml;simustik
+
+@reltype ANSWER value=1 clid=CL_QUESTIONARY_RESULT
+@caption Vastus
+
+@reltype QUESTIONARY value=2 clid=CL_QUESTIONARY
+@caption K&uuml;simustik
 */
 
 class answerer extends class_base

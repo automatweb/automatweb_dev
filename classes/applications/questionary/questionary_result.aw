@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary_result.aw,v 1.1 2006/10/05 16:10:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary_result.aw,v 1.2 2006/10/18 21:32:39 tarvo Exp $
 // questionary_result.aw - K&uuml;simustiku vastus 
 /*
 
@@ -103,8 +103,8 @@ class questionary_result extends class_base
 			question objects oid
 		@param topic optional type=oid
 		@param answer required type=string
-		@param relation_id required type=int
-			id that bounds different answers together to generate one whole questinary result
+		@param answerer required type=int
+			answerer's id.. to that this answer connected.. 
 		
 		@comment
 			adds new answer to specified questionary and question.
@@ -112,7 +112,8 @@ class questionary_result extends class_base
 	**/
 	function add_answer($arr)
 	{
-		if(!$arr["relation_id"] || !$arr["questionary"] || !$arr["question"])
+	
+		if(!$arr["answerer"] || !$arr["questionary"] || !$arr["question"])
 		{
 			return false;
 		}
@@ -126,9 +127,14 @@ class questionary_result extends class_base
 		$obj->set_prop("question", $arr["question"]);
 		$obj->set_prop("question_group", $arr["group"]);
 		$obj->set_prop("question_topic", $arr["topic"]);
-		$obj->set_prop("relation_id", $arr["relation_id"]);
 		$obj->set_prop("answer", $arr["answer"]);
 		$id = $obj->save();
+		$answerer = obj($arr["answerer"]);
+		$answerer->connect(array(
+			"to" => $id,
+			"type" => "RELTYPE_ANSWER",
+		));
+		$answerer->save();
 		return $id;
 	}
 }

@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="gen_csv_output" all_args="1">
+			<function name="gen_csv_output">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
