@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.14 2006/10/18 14:45:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.15 2006/10/18 18:47:27 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -774,7 +774,7 @@ class scala_import extends class_base
 		foreach ($warehouse_products as $o)
 		{
 			$existing_products[$o->id()] = $o->prop('code');
-			echo "-- existing product: ".$o->id().", code: ".$o->prop('code').", name: ".$o->name()."<br>\n";
+			echo "-- existing product: ".$o->id().", code: ".$o->prop('code').", name: ".$o->name()." [".$o->status()."]<br>\n";
 		}
 		// products from xml
 		foreach ($data as $product_code => $product_data)
@@ -795,12 +795,8 @@ class scala_import extends class_base
 					$o->set_name($product_data['name']);
 					foreach ($properties as $property)
 					{
-						$o->set_prop($property, $product_data[$property]);
+						$o->set_prop($property, $product_data[$property]." ");
 					}
-				//	$o->set_prop('code', $product_data['code']);
-				//	$o->set_prop('item_count', $product_data['item_count']);
-				//	$o->set_prop('user5', $product_data['user5']);
-
 					$o->save();
 				}
 			}
@@ -809,6 +805,7 @@ class scala_import extends class_base
 				// product exists
 				$data_changed = false; // lets check if data has been changed
 
+				echo "## product exists: ".$product_data['name']." <br />\n";
 				$o = new object($product);
 				if ($o->name() != $product_data['name'])
 				{
@@ -824,9 +821,9 @@ class scala_import extends class_base
 				// the properties:
 				foreach ($properties as $property)
 				{
-					if ($o->prop($property) != $product_data[$property])
+					if ($o->prop($property) != $product_data[$property] || true)
 					{
-						$o->set_prop($property, $product_data[$property]);
+						$o->set_prop($property, $product_data[$property]." ");
 						$data_changed = true;
 					}
 				}
@@ -836,7 +833,6 @@ class scala_import extends class_base
 				{
 					$o->save();
 				}
-				echo "## product exists: ".$product_data['name']." <br>\n";	
 				unset($existing_products[$product]);
 			}
 		}
