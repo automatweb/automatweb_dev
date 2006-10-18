@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.3 2006/10/18 21:32:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.4 2006/10/18 22:05:10 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -518,6 +518,7 @@ class questionary extends class_base
 	**/
 	function gen_csv_output($results)
 	{
+		$first = true;
 		foreach($results as $result => $answers)
 		{
 			$group_no = 0;
@@ -527,13 +528,17 @@ class questionary extends class_base
 			$question_no = 0;
 			$question_id = null;
 			$answerer = obj($result);
-			$struct[] = "Sugu";
-			$struct[] = "Vanus";
-			$struct[] = "Tegevusala";
-			$struct[] = "Õppimine/töötamine kõrgkoolis";
-			$struct[] = "Huvivaldkond";
-			$struct[] = "Rahvusraamatukogu külastan";
-			$struct[] = "Raamatukogu teenuseid kasutan";
+
+			if($first)
+			{
+				$struct[] = "Sugu";
+				$struct[] = "Vanus";
+				$struct[] = "Tegevusala";
+				$struct[] = "Õppimine/töötamine kõrgkoolis";
+				$struct[] = "Huvivaldkond";
+				$struct[] = "Rahvusraamatukogu külastan";
+				$struct[] = "Raamatukogu teenuseid kasutan";
+			}
 
 			$res[$result][] = $answerer->prop("gender");
 			$res[$result][] = $answerer->prop("age");
@@ -542,7 +547,6 @@ class questionary extends class_base
 			$res[$result][] = html_entity_decode($answerer->prop("intrests"));
 			$res[$result][] = html_entity_decode($answerer->prop("visits"));
 			$res[$result][] = html_entity_decode($answerer->prop("usage"));
-
 
 			foreach($answers as $ans_id => $data)
 			{
@@ -564,19 +568,26 @@ class questionary extends class_base
 					$question_id = $data["question"];
 					$question_no++;
 				}
-				$tmp = $group_no."-".$topic_no."-".$question_no;
+				$tmp = $group_no."_".$topic_no."_".$question_no;
 				$res[$result][$tmp] = $data["answer"];
-				$struct[] = $tmp;
+				$struct[$tmp] = $tmp;
 			}
+			$first = false;
 		}
 
 		
 		// sick fuck
 
+		
 		$file[] = $struct;
-		foreach($res as $row)
+		foreach($res as $key => $row)
 		{
-				$file[] = $row;
+			unset($newrow);
+			foreach($struct as $skey => $srow)
+			{
+				$newrow[$skey] = $row[$skey];
+			}
+			$file[] = $newrow;
 		}
 
 		foreach($file as $row_nr => $row)
