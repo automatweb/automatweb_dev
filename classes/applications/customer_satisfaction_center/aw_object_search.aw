@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.6 2006/10/18 14:04:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.7 2006/10/18 14:18:48 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -157,6 +157,18 @@ class aw_object_search extends class_base
 			"tooltip" => t("Kustuta"),
 			"confirm" => t("Oled kindel et soovid valitud objektid kustutada?")
 		));
+		$tb->add_button(array(
+			"name" => "cut",
+			"action" => "cut",
+			"img" => "cut.gif",
+			"tooltip" => t("L&otilde;ika"),
+		));
+		$tb->add_button(array(
+			"name" => "copy",
+			"action" => "copy",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri"),
+		));
 	}
 
 	/**
@@ -261,7 +273,14 @@ class aw_object_search extends class_base
 		$clss = aw_ini_get("classes");
 		foreach($ol->arr() as $o)
 		{
-			$po = obj($o->parent());
+			if (!$this->can("view", $o->parent()))
+			{
+				$po = obj();
+			}
+			else
+			{
+				$po = obj($o->parent());
+			}
 			$t->define_data(array(
 				"oid" => $o->id(),
 				"icon" => icons::get_icon($o),
@@ -378,6 +397,34 @@ class aw_object_search extends class_base
 	{
 		$so = $this->init_search();
 		return html::get_change_url($so->id(), array("group" => "srch", "return_url" => $arr["url"], "s_name" => $arr["s_name"], "s_clid" => $arr["s_clid"], "MAX_FILE_SIZE" => $arr["MAX_FILE_SIZE"]));
+	}
+
+	/** cuts the selected objects 
+		
+		@attrib name=cut params=name default="0"
+		
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function cut($arr)
+	{
+		$i = get_instance(CL_ADMIN_IF);
+		$i->if_cut($_GET);
+		die("<script>window.back();</script>");
+	}
+
+	/** copies the selected objects 
+		@attrib name=copy params=name default="0"
+	**/
+	function copy($arr)
+	{
+		$i = get_instance(CL_ADMIN_IF);
+		$i->if_copy($_GET);
+		die("<script>window.back();</script>");
 	}
 }
 ?>
