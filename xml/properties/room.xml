@@ -120,6 +120,17 @@
             <store>no</store>
       </property>
       <property>
+            <name>calendar_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>calendar</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>resources_tb</name>
             <table>objects</table>
             <field>meta</field>

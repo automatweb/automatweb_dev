@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.9 2006/10/17 22:08:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.10 2006/10/18 12:37:16 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -57,6 +57,9 @@
 @default group=calendar
 	@property calendar_tb type=toolbar no_caption=1 submit=no
 	@property calendar type=calendar no_caption=1 viewtype=relative store=no
+	@property calendar_tbl type=table no_caption=1
+
+
 
 #TAB RESOURCES
 @groupinfo resources caption="Ressursid"
@@ -64,6 +67,7 @@
 
 	@property resources_tb type=toolbar no_caption=1
 	@property resources_tbl type=table no_caption=1
+
 
 # TAB IMAGES
 
@@ -187,10 +191,12 @@ class room extends class_base
 			# TAB CALENDAR
 			case "calendar":
 				### update schedule
+				return PROP_IGNORE;
 				$prop["value"] = $this->create_room_calendar ($arr);
 				break;
-				
-				
+			case "calendar_tbl":
+				$this->_get_calendar_tbl($arr);
+				break;	
 				//$cal = $this->get_calendar($arr["obj_inst"]->id());
 /*				$c = &$prop["vcl_inst"];
 				$c->add_item(array(
@@ -617,6 +623,7 @@ class room extends class_base
 			"name" => "new_reservation",
 			"img" => "new.gif",
 			"tooltip" => t("Broneering"),
+			"action" => "do_add_reservation",
 			"url" => $this->mk_my_orb(
 				"new", 
 				array(
@@ -632,7 +639,7 @@ class room extends class_base
 			)
 		));
 	}
-	
+/*	
 	function create_room_calendar ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
@@ -641,10 +648,10 @@ class room extends class_base
 		classload("vcl/calendar");
 //		$calendar = new vcalendar (array ("tpldir" => "mrp_calendar"));
 //		$calendar->init_calendar (array ());
-//		$calendar->configure (array (
-//			"overview_func" => array (&$this, "get_overview"),
-//			"full_weeks" => true,
-//		));
+		$calendar->configure (array (
+			"overview_func" => array (&$this, "get_overview"),
+			"full_weeks" => true,
+		));
 		$range = $calendar->get_range (array (
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"],
@@ -655,6 +662,8 @@ class room extends class_base
 //			"parent" => $this_object->id(),
 			"resource" => $this_object->id(),
 		));
+		
+		$calendar->init_output(array("event_template" => "my_new_templ.tpl"));
 		foreach($list->arr() as $task)
 		{
 			$calendar->add_item (array (
@@ -663,11 +672,186 @@ class room extends class_base
 				"data" => array(
 					"name" => $task->name(),
 					"link" => html::get_change_url($task->id(), array("return_url" => get_ru())),
+					"comment" => "asd",
+					"utextarea1" => "asdd",
 				),
 			));
 			$this->cal_items[$task->prop("start1")] = html::get_change_url($task->id(), array("return_url" => get_ru()));
 		}
 		return $calendar->get_html ();
+	}
+	*/
+
+	function _get_calendar_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_calendar_t($t);
+		
+		$reservations = new object_list(array(
+			"class_id" => array(CL_RESERVATION),
+			"lang_id" => array(),
+			"resource" => $arr["obj_inst"]->id(),
+			1 => new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, (time()-86400), (time()+86400* 7)),
+					"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, (time()-86400), (time()+86400* 7))
+				)
+			)),
+		));
+		$booked = array();
+		//et siis broneeringud ühte massiivi... ei suut paremat moment välja mõelda kui et võrdleb pärast kõik elemendid läbi
+		foreach($reservations->arr() as $res)
+		{
+			//date("l d/m/Y", time())
+			$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
+		}
+	//	arr($booked);
+		$today_start = mktime(0, 0, 0, date("m", time()), date("d", time()), date("y", time()));
+		$step = $arr["obj_inst"]->prop("time_from");
+		while($step < $arr["obj_inst"]->prop("time_to"))
+		{
+			$d = $col = array();
+			$x = 0;
+			$start_step = $today_start + $step * 3600;
+			$end_step = $start_step + $arr["obj_inst"]->prop("time_step");
+			//arr(date("d.m.Y H:i",  $start_step)); arr($start_step);
+			while($x<7)
+			{
+				$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba");
+				$col[$x] = "";
+				foreach($booked as $b)
+				{
+					//if($x == 6)arr($b["start"] . " " . $start_step . " " . $end_step . " " . $b["end"] . " " .($start_step -  $b["start"]). " " . ($end_step - $b["end"]));
+					if(($b["start"] <= $start_step &&  $start_step < $b["start"]) || ($b["start"] < $end_step && $b["end"] >= $end_step))
+					{
+						$d[$x] = t("BRON");
+						$col[$x] = "red";
+					}
+				}
+				$x++;
+				$start_step = $start_step + 86400;
+				$end_step = $end_step + 86400;
+			}
+			$t->define_data(array(
+				"time" => $step.":00-".($step + $arr["obj_inst"]->prop("time_step")).":00".html::hidden(array("name" => "step" , "value" => $step)),
+				"d0" => $d[0],
+				"d1" => $d[1],
+				"d2" => $d[2],
+				"d3" => $d[3],
+				"d4" => $d[4],
+				"d5" => $d[5],
+				"d6" => $d[6],
+				"col0" => $col[0],
+				"col1" => $col[1],
+				"col2" => $col[2],
+				"col3" => $col[3],
+				"col4" => $col[4],
+				"col5" => $col[5],
+				"col6" => $col[6],
+			
+			));
+			$step = $step + $arr["obj_inst"]->prop("time_step");
+		}
+	}
+
+	function _init_calendar_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+			"width" => "20px",
+		));
+		$t->define_field(array(
+			"name" => "d0",
+			"caption" => date("l d/m/Y", time()),
+			"width" => "20px",
+			"chgbgcolor" => "col0",
+		));
+		$t->define_field(array(
+			"name" => "d1",
+			"caption" => date("l d/m/Y", time() + 86400),
+			"width" => "20px",
+			"chgbgcolor" => "col1",
+		));
+		$t->define_field(array(
+			"name" => "d2",
+			"caption" => date("l d/m/Y", time() + 86400*2),
+			"width" => "20px",
+			"chgbgcolor" => "col2",
+		));
+		$t->define_field(array(
+			"name" => "d3",
+			"caption" => date("l d/m/Y", time() + 86400*3),
+			"chgbgcolor" => "col3",
+			"width" => "20px",
+		));
+		$t->define_field(array(
+			"name" => "d4",
+			"caption" => date("l d/m/Y", time() + 86400*4),
+			"width" => "20px",
+			"chgbgcolor" => "col4",
+		));
+		$t->define_field(array(
+			"name" => "d5",
+			"caption" => date("l d/m/Y", time() + 86400*5),
+			"width" => "20px",
+			"chgbgcolor" => "col5",
+		));
+		$t->define_field(array(
+			"name" => "d6",
+			"caption" => date("l d/m/Y", time() + 86400*6),
+			"chgbgcolor" => "col6",
+			"width" => "20px",
+		));
+		$t->table_caption = t("Broneerimine");
+		$t->set_sortable(false);
+	}
+
+	/**
+		@attrib name=do_add_reservation params=name all_args=1
+	**/
+	function do_add_reservation($arr)
+	{
+		if(is_oid($arr["id"]))
+		{
+			$room = obj($arr["id"]);
+			if(is_object($room->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
+			{
+				$cal_obj = $room->get_first_obj_by_reltype("RELTYPE_CALENDAR");
+				$cal = $cal_obj->id();
+				$parent = $cal_obj->prop("event_folder");
+				$step = $room->prop("time_step");
+			}
+		}
+		$end = $arr["bron"][0];
+		foreach($arr["bron"] as $bron => $val)
+		{
+			if(!$start)
+			{
+				$start = $bron;
+				$end = $start+$step*3600-1;
+			}
+			if(($end+1) == $bron)
+			{
+				$end = $bron + $step*3600-1;
+			}
+		}
+		//arr($arr); arr($start); arr($end);
+		//die();
+		return $this->mk_my_orb(
+			"new",
+			array(
+				"parent" => $parent,
+				"return_url" => get_ru(),
+				"calendar" => $cal,
+				"start1" => $start,
+				"end" => $end,
+				"resource" => $arr["id"],
+				"return_url" => $arr["post_ru"],
+			),
+			CL_RESERVATION
+		);
 	}
 
 	function _get_resources_tb($arr)
