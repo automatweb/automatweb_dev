@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.11 2006/10/18 14:06:47 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.12 2006/10/18 16:06:50 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -38,18 +38,30 @@
 
 	@layout general_down type=vbox closeable=1 area_caption=Mahutavus&#44;&nbsp;kasutustingimused parent=general_split
 	@default parent=general_down
-
-		@property square_meters type=textbox
-		@caption Suurus(ruutmeetrites)
-
-		@property normal_capacity type=textbox
-		@caption Normaalne mahutavus
-
-		@property max_capacity type=textbox
-		@caption Maksimaalne mahutavus
-
+		
 		@property conditions type=relpicker reltype=RELTYPE_CONDITIONS
 		@caption Kasutustingimused
+		
+		@property square_meters type=textbox size=5
+		@caption Suurus(ruutmeetrites)
+
+		@property normal_capacity type=textbox size=5
+		@caption Normaalne mahutavus
+
+		@property max_capacity type=textbox size=5
+		@caption Maksimaalne mahutavus
+
+		@property buffer_before type=textbox size=5
+		@caption Puhveraeg enne
+		
+		@property buffer_after type=textbox size=5
+		@caption Puhveraeg p&auml;rast
+		
+		
+valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva täiendava info selle valdkonna objektitüübi kaudu, nt konverentsid).
+- puhveraeg enne (mitu tundi enne reserveeringu algust lisaks bronnitakse ruumide ettevalmistamiseks)
+- puhveraeg pärast (mitu tundi peale reserveeringu lõppu broneeritakse ruumide korrastamiseks
+
 
 # TAB CALENDAR
 
@@ -77,6 +89,25 @@
 	@property images_tbl type=table no_caption=1
 	@property images_search type=hidden no_caption=1 store=no
 
+# TAB PRODUCTS
+@groupinfo products caption="Tooted"
+@default group=products
+	@property products_tb type=toolbar no_caption=1 store=no	
+
+	@layout products_l type=hbox width=30%:70%
+		
+		@layout products_left type=vbox parent=products_l
+		
+		@layout products_tree type=vbox parent=products_left closeable=1 area_caption=Toodete&nbsp;puu
+			@property products_tr type=treeview no_caption=1 store=no parent=products_tree
+	
+		@layout products_find_params type=vbox parent=products_left closeable=1 area_caption=Toodete&nbsp;otsing
+			@property products_find_product_name type=textbox store=no parent=products_find_params captionside=top size=10
+			@caption Toote nimetus
+			@property do_find_products type=submit store=no parent=products_find_params no_caption=1
+			@caption Otsi
+	@property products_tbl type=table no_caption=1 store=no parent=products_l
+
 # TAB PRICES
 
 @groupinfo prices caption="Hinnad"
@@ -90,6 +121,10 @@
 
 		@property price type=chooser multiple=1 ch_value=1
 		@caption Hind
+
+		@property price_per_face_if_too_many type=textbox size=5
+		@caption Lisanduv hind &uuml;le normaalse mahutavuse oleva inimese kohta
+		
 
 		@property time_unit type=chooser
 		@caption Aja&uuml;hik
@@ -224,6 +259,15 @@ class room extends class_base
 				));
 				$prop["value"] = "s"; //$c->draw_month();
 */				break;
+				case "products_tr":
+					$this->_products_tr($arr);
+					break;	
+				case "products_tbl":
+					$this->_products_tbl($arr);
+					break;
+				case "products_tb":
+					$this->_products_tb($arr);
+					break;		
 		};
 		return $retval;
 	}
@@ -234,6 +278,14 @@ class room extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "products_find_product_name":
+				
+				if($arr["request"]["sel_imp"]);
+				if($arr["request"]["products_find_product_name"])
+				{
+					$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
+				}
+				break;
 			//-- set_property --//
 		}
 		return $retval;
@@ -908,6 +960,361 @@ class room extends class_base
 		));
 		return $ol->arr();
 	}
+	
+	function search_products($this_obj)
+	{
+		$ol = new object_list();
+		$filter = array("class_id" => array(CL_SHOP_PRODUCT), "lang_id" => array());
+		$data = $this_obj->meta("search_data");
+		if($data["products_find_product_name"]) $filter["name"] = "%".$data["products_find_product_name"]."%";
+		$ol = new object_list($filter);
+		return $ol;
+	}	
+	
+	function _products_tbl(&$arr)
+	{
+		classload("core/icons");
+		$tb =& $arr["prop"]["vcl_inst"];		
+		$this->_init_prod_list_list_tbl($tb);
 
+		// get items 
+		if (!$_GET["tree_filter"])
+		{
+			$ot = new object_list();
+		}
+		else
+		{
+			$ot = new object_list(array(
+				"parent" => $_GET["tree_filter"],
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
+			));
+		}
+
+		classload("core/icons");
+
+		//$ol = $ot->to_list();
+		$ol = $ot->arr();
+	
+		//otsingust
+		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
+		{
+			$ol = $this->search_products($arr["obj_inst"]);
+			$arr["obj_inst"]->set_meta("search_data", null);
+			$arr["obj_inst"]->save();
+			$ol = $ol->arr(); 
+		}
+		
+		foreach($ol as $o)
+		{
+
+			if ($o->class_id() == CL_MENU)
+			{
+				$tp = t("Kaust");
+			}
+			else
+			if (is_oid($o->prop("item_type")))
+			{
+				$tp = obj($o->prop("item_type"));
+				$tp = $tp->name();
+			}
+			else
+			{
+				$tp = "";
+			}
+
+			$get = "";
+			if ($o->prop("item_count") > 0)
+			{
+				$get = html::href(array(
+					"url" => $this->mk_my_orb("create_export", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => t("V&otilde;ta laost")
+				));
+			}
+
+			$name = $o->name();
+			if ($o->class_id() == CL_MENU)
+			{
+				$name =  html::href(array(
+					"url" => html::get_change_url($o->id()),
+					"caption" => $name
+				));
+			}
+
+			$tb->define_data(array(
+				"oid" => $o->id(),
+				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
+				"name" => $name,
+				"cnt" => $o->prop("item_count"),
+				"item_type" => $tp,
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $o->id(),
+						"return_url" => get_ru()
+					), $o->class_id()),
+					"caption" => t("Muuda")
+				)),
+				"get" => $get,
+				"put" => $put,
+				"del" => html::checkbox(array(
+					"name" => "sel[]",
+					"value" => $o->id()
+				)),
+				"is_menu" => ($o->class_id() == CL_MENU ? 0 : 1),
+				"ord" => html::textbox(array(
+					"name" => "set_ord[".$o->id()."]",
+					"value" => $o->ord(),
+					"size" => 5
+				)).html::hidden(array(
+					"name" => "old_ord[".$o->id()."]",
+					"value" => $o->ord()
+				)),
+				"hidden_ord" => $o->ord()
+			));
+		}
+
+		$tb->set_numeric_field("hidden_ord");				
+		$tb->set_default_sortby(array("is_menu", "hidden_ord"));
+		$tb->sort_by();
+
+		return $tb->draw(array(
+			"pageselector" => "text",
+			"records_per_page" => 50,
+			"has_pages" => 1
+		));
+	}
+
+	function _init_prod_list_list_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("&nbsp;"),
+			"sortable" => 0,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "item_type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "cnt",
+			"caption" => t("Kogus laos"),
+			"align" => "center",
+			"type" => "int"
+		));
+
+		$t->define_field(array(
+			"name" => "get",
+			"caption" => t("V&otilde;ta laost"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel_imp",
+			"caption" => t("Aktiivne"),
+		));
+
+		$t->define_field(array(
+			"name" => "del",
+			"caption" => t("Vali"),
+			"align" => "center",
+		));
+	}	
+
+	function _products_tr($arr)
+	{
+		$arr["prop"]["vcl_inst"] = new object_tree(array(
+			"parent" => $arr["obj_inst"]->prop("resources_fld"),
+			"class_id" => CL_MENU,
+			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
+			"sort_by" => "objects.jrk"
+		));
+		
+		classload("vcl/treeview");
+		$tv = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML,
+				"tree_id" => "prods",
+				"persist_state" => true,
+			),
+			"root_item" => obj($arr["obj_inst"]->prop("resources_fld")),
+			"ot" => $arr["prop"]["vcl_inst"],
+			"var" => "tree_filter"
+		));
+		$arr["prop"]["value"] = $tv->finalize_tree();
+	}
+	
+	function _init_products_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t("&nbsp;"),
+			"sortable" => 0,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "item_type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"sortable" => 1,
+			"name" => "cnt",
+			"caption" => t("Kogus laos"),
+			"align" => "center",
+			"type" => "int"
+		));
+
+		$t->define_field(array(
+			"name" => "get",
+			"caption" => t("V&otilde;ta laost"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "put",
+			"caption" => t("Vii lattu"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "del",
+			"caption" => "<a href='javascript:aw_sel_chb(document.changeform,\"sel\")'>".t("Vali")."</a>",
+			"align" => "center",
+		));
+	}
+	
+	function _products_tb(&$data)
+	{
+		$tb =& $data["prop"]["toolbar"];
+
+		$this->prod_type_fld = $data["obj_inst"]->prop("resources_fld");
+		$this->prod_tree_root = isset($_GET["tree_filter"]) ? $_GET["tree_filter"] : $data["obj_inst"]->prop("resources_fld");
+			
+		$tb->add_menu_button(array(
+			"name" => "crt_".$this->prod_type_fld,
+			"tooltip" => t("Uus")
+		));
+
+		$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
+
+		$tb->add_menu_item(array(
+			"parent" => "crt_".$this->prod_type_fld,
+			"text" => t("Lisa kaust"),
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->prod_tree_root,
+				"return_url" => get_ru(),
+			), CL_MENU)
+		));
+		
+		$tb->add_menu_item(array(
+			"parent" => "crt_".$this->prod_type_fld,
+			"text" => t("Lisa tootekategooria"),
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->prod_tree_root,
+				"return_url" => get_ru(),
+			), CL_SHOP_PRODUCT_TYPE)
+		));
+
+		$tb->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"tooltip" => t("Salvesta"),
+			'action' => 'submit',
+		));
+
+		$tb->add_button(array(
+			"name" => "del",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta valitud"),
+			'action' => 'delete_cos',
+		));
+
+	}
+	
+	function _req_add_itypes(&$tb, $parent, &$data)
+	{
+		$ol = new object_list(array(
+			"parent" => $parent,
+			"class_id" => array(CL_SHOP_PRODUCT_TYPE),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			if ($o->class_id() != CL_MENU)
+			{
+				$tb->add_menu_item(array(
+					"parent" => "crt_".$parent,
+					"text" => $o->name(),
+					"link" => $this->mk_my_orb("new", array(
+						"item_type" => $o->id(),
+						"parent" => $this->prod_tree_root,
+						//"alias_to" => $this->warehouse->id(),
+						"reltype" => 2, //RELTYPE_PRODUCT,
+						"return_url" => get_ru(),
+						"cfgform" => $o->prop("sp_cfgform"),
+						"object_type" => $o->prop("sp_object_type")
+					), CL_SHOP_PRODUCT)
+				));
+			}
+			else
+			{
+				$tb->add_sub_menu(array(
+					"parent" => "crt_".$parent,
+					"name" => "crt_".$o->id(),
+					"text" => $o->name()
+				));
+				$this->_req_add_itypes($tb, $o->id(), $data);
+			}
+		}
+	}
+	
 }
 ?>

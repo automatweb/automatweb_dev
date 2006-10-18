@@ -55,6 +55,17 @@
             <caption>Valdkond</caption>
       </property>
       <property>
+            <name>conditions</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONDITIONS</reltype>
+            <caption>Kasutustingimused</caption>
+      </property>
+      <property>
             <name>square_meters</name>
             <table>objects</table>
             <field>meta</field>
@@ -62,6 +73,7 @@
             <group>general</group>
             <parent>general_down</parent>
             <type>textbox</type>
+            <size>5</size>
             <caption>Suurus(ruutmeetrites)</caption>
       </property>
       <property>
@@ -72,6 +84,7 @@
             <group>general</group>
             <parent>general_down</parent>
             <type>textbox</type>
+            <size>5</size>
             <caption>Normaalne mahutavus</caption>
       </property>
       <property>
@@ -82,18 +95,30 @@
             <group>general</group>
             <parent>general_down</parent>
             <type>textbox</type>
+            <size>5</size>
             <caption>Maksimaalne mahutavus</caption>
       </property>
       <property>
-            <name>conditions</name>
+            <name>buffer_before</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <parent>general_down</parent>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONDITIONS</reltype>
-            <caption>Kasutustingimused</caption>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Puhveraeg enne</caption>
+      </property>
+      <property>
+            <name>buffer_after</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Puhveraeg p&amp;amp;auml;rast</caption>
       </property>
       <property>
             <name>calendar_tb</name>
@@ -195,6 +220,64 @@
             <store>no</store>
       </property>
       <property>
+            <name>products_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>products</group>
+            <parent>general_down</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no	</store>
+      </property>
+      <property>
+            <name>products_tr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>products</group>
+            <parent>products_tree</parent>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>products_find_product_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>products</group>
+            <parent>products_find_params</parent>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <size>10</size>
+            <caption>Toote nimetus</caption>
+      </property>
+      <property>
+            <name>do_find_products</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>products</group>
+            <parent>products_find_params</parent>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>products_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>products</group>
+            <parent>products_l</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>currency</name>
             <table>objects</table>
             <field>meta</field>
@@ -217,6 +300,17 @@
             <multiple>1</multiple>
             <ch_value>1</ch_value>
             <caption>Hind</caption>
+      </property>
+      <property>
+            <name>price_per_face_if_too_many</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>general_down</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Lisanduv hind &amp;amp;uuml;le normaalse mahutavuse oleva inimese kohta</caption>
       </property>
       <property>
             <name>time_unit</name>
@@ -324,6 +418,9 @@
             <images>
                   <caption>Pildid</caption>
             </images>
+            <products>
+                  <caption>Tooted</caption>
+            </products>
             <prices>
                   <caption>Hinnad</caption>
             </prices>
@@ -407,6 +504,30 @@
                   <parent>general_split</parent>
                   <group>general</group>
             </general_down>
+            <products_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>products</group>
+            </products_l>
+            <products_left>
+                  <type>vbox</type>
+                  <parent>products_l</parent>
+                  <group>products</group>
+            </products_left>
+            <products_tree>
+                  <type>vbox</type>
+                  <parent>products_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Toodete&amp;nbsp;puu</area_caption>
+                  <group>products</group>
+            </products_tree>
+            <products_find_params>
+                  <type>vbox</type>
+                  <parent>products_left</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Toodete&amp;nbsp;otsing</area_caption>
+                  <group>products</group>
+            </products_find_params>
             <time_step>
                   <type>hbox</type>
                   <width>5%:5%:80%</width>
