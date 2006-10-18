@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.5 2006/10/18 14:06:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.6 2006/10/18 16:28:22 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -134,6 +134,8 @@ class reservation extends class_base
 		@param end
 		@comment
 			basically what this does, is checks if this reservation can use given resource object in given time perion, and if can how many isntances of it
+		@returns
+			returns number instances that this resource can be used in this time period
 	**/
 	function resource_availability($arr)
 	{
@@ -171,7 +173,15 @@ class reservation extends class_base
 		$reservation = obj($reservation);
 		return $reservation->meta("resource_info");
 	}
-	
+
+	/**
+		@param reservation
+			reservation object oid
+		@param info
+			array(
+				resource object oid => number of resource instances used
+			)
+	**/
 	function set_resource_info($reservation, $info)
 	{
 		if(!is_oid($reservation))
