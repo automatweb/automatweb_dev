@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.11 2006/10/16 14:01:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.12 2006/10/18 12:16:53 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -334,25 +334,34 @@ class scala_import extends class_base
 
 		$o = new object();
 		$o->set_class_id(CL_SHOP_PRODUCT);
-		$all_properties = $o->get_property_list();
+
+		$config_form = $arr['obj_inst']->prop('config_form');
+		if (!empty($config_form))
+		{
+			$cfgform_inst = get_instance('cfg/cfgform');
+			$all_properties = $cfgform_inst->get_props_from_cfgform(array(
+				'id' => $arr['obj_inst']->prop('config_form'),
+			));
+			
+		}
+		else
+		{
+			$all_properties = $o->get_property_list();
+		}
+
 
 		$xml_file = $arr['obj_inst']->prop('ftp_file_location_availability');
 
 		$format = t('Lao toote objektid XML faili %s p&otilde;hjal');
 		$t->set_caption(sprintf($format, basename($xml_file)));
 
-		$show_properties = array(
-			'name',
-			'code',
-			'item_count'
-		);
 		
 		$saved_config = $arr['obj_inst']->meta('availability_config');
 
-		foreach ( $show_properties as $name )
+		foreach ( $all_properties as $name => $data)
 		{
 			$t->define_data(array(
-				'property' => $all_properties[$name]['caption'],
+				'property' => $data['caption'],
 				'xml_tag' => html::textbox(array(
 					'name' => 'availability_config['.$name.']',
 					'value' => $saved_config[$name]	
