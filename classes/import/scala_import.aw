@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.13 2006/10/18 12:33:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.14 2006/10/18 14:45:21 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -733,7 +733,12 @@ class scala_import extends class_base
 	{
 		$arr['raw_xml'] = str_replace('&', '&amp;', $arr['raw_xml']);
 		list($xml_values, $xml_tags) = parse_xml_def(array('xml' => $arr['raw_xml']));
-		$config = array_flip($arr['obj_inst']->meta('availability_config'));
+
+		$availability_config = $arr['obj_inst']->meta('availability_config');
+		$config = array_flip($availability_config);
+
+		$properties = $config; // in properties array, there will be only properties that can be saved via $o->set_prop() method
+
 		$product_config_form = $arr['obj_inst']->prop('config_form');
 
 		// category name and product name both go into the objects name property, so
@@ -743,14 +748,16 @@ class scala_import extends class_base
 		foreach ($cat_config as $key => $value)
 		{
 			$config[$key] = 'cat_'.$value;
+			unset($properties[$key]);
 		}
+		// other elements that will not be saved:
+		unset($properties[''], $properties[$availability_config['name']]);
 
 		$data = $this->_parse_data_from_xml(array(
 			'xml_values' => $xml_values,
 			'config' => $config,
 			'key' => 'code'
 		));
-
 		// categories
 		$categories = $this->get_categories(array(
 			'parent' => $arr['products_folder']
@@ -782,22 +789,51 @@ class scala_import extends class_base
 					// create a new product
 					$o = new object();
 					$o->set_class_id(CL_SHOP_PRODUCT);
-					$o->set_name($product_data['name']);
 					$o->set_parent($category);
-					$o->set_prop('code', $product_data['code']);
-					$o->set_prop('item_count', $product_data['item_count']);
 					$o->set_status(STAT_ACTIVE);
 					$o->set_meta('cfgform_id', $product_config_form);
+					$o->set_name($product_data['name']);
+					foreach ($properties as $property)
+					{
+						$o->set_prop($property, $product_data[$property]);
+					}
+				//	$o->set_prop('code', $product_data['code']);
+				//	$o->set_prop('item_count', $product_data['item_count']);
+				//	$o->set_prop('user5', $product_data['user5']);
+
 					$o->save();
 				}
 			}
 			else
 			{
-				// product exists, set it active
+				// product exists
+				$data_changed = false; // lets check if data has been changed
+
 				$o = new object($product);
+				if ($o->name() != $product_data['name'])
+				{
+					$o->set_name($product_data['name']);
+					$data_changed = true;
+				}
 				if ($o->status() != STAT_ACTIVE)
 				{
 					$o->set_status(STAT_ACTIVE);
+					$data_changed = true;
+				}
+				
+				// the properties:
+				foreach ($properties as $property)
+				{
+					if ($o->prop($property) != $product_data[$property])
+					{
+						$o->set_prop($property, $product_data[$property]);
+						$data_changed = true;
+					}
+				}
+
+				// save the object only when data is changed
+				if ($data_changed)
+				{
 					$o->save();
 				}
 				echo "## product exists: ".$product_data['name']." <br>\n";	
