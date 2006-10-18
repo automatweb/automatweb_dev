@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.12 2006/10/18 16:06:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.13 2006/10/18 16:16:28 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -609,7 +609,7 @@ class room extends class_base
 		$cal = $o->get_first_obj_by_reltype("RELTYPE_CALENDAR");
 		if(is_object($cal))
 		{
-			return $cal->id;
+			return $cal->id();
 		}
 		else 
 		{
@@ -1265,7 +1265,7 @@ class room extends class_base
 		$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
-			"tooltip" => t("Salvesta"),
+			"tooltip" => t("Aktiivseks"),
 			'action' => 'submit',
 		));
 
