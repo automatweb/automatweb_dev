@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.12 2006/10/12 16:04:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/purchase.aw,v 1.13 2006/10/19 07:43:05 kristo Exp $
 // purchase.aw - Ost 
 /*
 
@@ -948,7 +948,7 @@ class purchase extends class_base
 
 	function do_db_upgrade($t, $f)
 	{
-		if ($t == "aw_purchase")
+		if ($t == "aw_purchase" && $f == "")
 		{
 			$this->db_query("CREATE TABLE aw_purchase (aw_oid int primary key, aw_sum double)");
 			return true;
