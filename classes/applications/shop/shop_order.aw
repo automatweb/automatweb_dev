@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.43 2006/10/17 15:04:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.44 2006/10/19 13:51:43 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -843,6 +843,13 @@ class shop_order extends class_base
 					"id" => $oi->id(),
 					"template" => "show_cust.tpl"
 				));
+				if (strpos($html, "<?php") !== false)
+				{
+					ob_start();
+					eval("?>".$html);
+					$html = ob_get_contents();
+					ob_end_clean();
+				}
 			}
 
 			//echo "sent to $_send_to content = $html <br>";

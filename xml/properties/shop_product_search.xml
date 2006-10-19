@@ -126,6 +126,11 @@
                   <clid>CL_SHOP_ORDER_CENTER</clid>
                   <caption>tellimiskeskkond</caption>
             </OC>
+            <TRANSFORM>
+                  <value>4</value>
+                  <clid>CL_OTV_DATA_FILTER</clid>
+                  <caption>Muundaja</caption>
+            </TRANSFORM>
       </reltypes>
 </properties>
 

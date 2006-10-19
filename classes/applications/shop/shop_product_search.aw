@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.5 2005/06/27 11:01:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.6 2006/10/19 13:51:44 kristo Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -52,6 +52,9 @@
 
 @reltype OC value=3 clid=CL_SHOP_ORDER_CENTER
 @caption tellimiskeskkond
+
+@reltype TRANSFORM value=4 clid=CL_OTV_DATA_FILTER
+@caption Muundaja
 */
 
 class shop_product_search extends class_base
@@ -345,6 +348,11 @@ class shop_product_search extends class_base
 			"caption" => t("Tulba pealkiri"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "transform",
+			"caption" => t("Muundaja"),
+			"align" => "center"
+		));
 	}
 
 	function _s_tbl($arr)
@@ -354,6 +362,12 @@ class shop_product_search extends class_base
 
 		$props = $this->_get_prod_props($arr["obj_inst"]);
 		$dat = $arr["obj_inst"]->meta("s_tbl");
+
+		$transforms = array("" => t("--vali--"));
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
+		{
+			$transforms[$c->prop("to")] = $c->prop("to.name");
+		}
 
 		$clss = aw_ini_get("classes");
 		foreach($props as $clid => $ps)
@@ -384,6 +398,11 @@ class shop_product_search extends class_base
 						"name" => "dat[$clid][$pn][ord]",
 						"value" => $dat[$clid][$pn]["ord"],
 						"size" => 5
+					)),
+					"transform" => html::select(array(
+						"name" => "dat[$clid][$pn][transform]",
+						"value" => $dat[$clid][$pn]["transform"],
+						"options" => $transforms
 					))
 				));
 			}
@@ -443,6 +462,7 @@ class shop_product_search extends class_base
 
 		$cols = safe_array($arr["obj_inst"]->meta("s_tbl"));
 		$flds = array();
+		$transforms = array();
 		foreach($cols as $clid => $cold)
 		{
 			foreach($cold as $coln => $coli)
@@ -454,6 +474,10 @@ class shop_product_search extends class_base
 						"caption" => $coli["caption"],
 						"_ord" => $coli["ord"]
 					);
+					if ($this->can("view", $coli["transform"]))
+					{
+						$transforms[$clid."_".$coln] = obj($coli["transform"]);
+					}
 				}
 			}
 		}
@@ -472,8 +496,9 @@ class shop_product_search extends class_base
 		{
 			$ctr = $ctr_id;
 		}
-		$ctr_i = get_instance(CL_FORM_CONTROLLER);
 
+		$ctr_i = get_instance(CL_FORM_CONTROLLER);
+		$tr_i = get_instance(CL_OTV_DATA_FILTER);
 		if ($arr["request"]["MAX_FILE_SIZE"] != "")
 		{
 			$results = $this->get_search_results($arr["obj_inst"], $arr["request"]["s"]);
@@ -587,6 +612,10 @@ class shop_product_search extends class_base
 				if ($ctr)
 				{
 					$ctr_i->eval_controller_ref($ctr, $cols, $data, $data);
+				}
+				foreach($transforms as $coln => $tr)
+				{
+					$tr_i->transform($tr, &$data[$coln], $data);
 				}
 				$t->define_data($data);
 			}
