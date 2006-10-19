@@ -19,6 +19,7 @@ class crm_participant_search extends popup_search
 		));
 		$cur_co = get_current_company();
 		$opts = array();
+		$def = array("cur_co" => 1, $cur_co->id() => 1);
 		if (is_array($arr["s"]["co"]))
 		{
 			foreach($arr["s"]["co"] as $co)
@@ -27,6 +28,7 @@ class crm_participant_search extends popup_search
 				{
 					$coo = obj($co);
 					$opts[$co] = $coo->name();
+					$def[$co] = $co;
 					if ($coo->id() == $cur_co->id())
 					{
 						$has_cur = true;
@@ -43,10 +45,11 @@ class crm_participant_search extends popup_search
 		$opts["imp"] = t("Olulised");
 	//	$opts["def"] = t("Esimesed kolmkümmend");
 
+
 		$htmlc->add_property(array(
 			"name" => "s[show_vals]",
 			"type" => "chooser",
-			"value" => isset($_GET["MAX_FILE_SIZE"]) ? $arr["s"]["show_vals"] : array("cur_co" => 1, $cur_co->id() => 1),
+			"value" => isset($_GET["MAX_FILE_SIZE"]) ? $arr["s"]["show_vals"] : $def,
 			"caption" => t("N&auml;ita"),
 			"multiple" => 1,
 			"orient" => "vertical",
@@ -68,6 +71,16 @@ class crm_participant_search extends popup_search
 		if (!$_GET["MAX_FILE_SIZE"])
 		{
 			$arr["s"]["show_vals"]["cur_co"] = 1;
+			if (is_array($arr["s"]["co"]))
+			{
+				foreach($arr["s"]["co"] as $co)
+				{
+					if ($this->can("view", $co))
+					{
+						$arr["s"]["show_vals"][$co] = $co;
+					}
+				}
+			}
 		}
 
 		if ($arr["s"]["search_co"] != "")
@@ -100,7 +113,10 @@ class crm_participant_search extends popup_search
 					{
 						$filter["oid"] = array();
 					}
-					$filter["oid"] += $ol->ids();
+					foreach($ol->ids() as $_id)
+					{
+						$filter["oid"][$_id] = $_id;
+					}
 				}
 			}
 
@@ -111,7 +127,10 @@ class crm_participant_search extends popup_search
 				{
 					$filter["oid"] = array();
 				}
-				$filter["oid"] += array_keys($c->get_employee_picker(obj($u->get_current_company()), false, true));
+				foreach(array_keys($c->get_employee_picker(obj($u->get_current_company()), false, true)) as $_id)
+				{
+					$filter["oid"][$_id] = $_id;
+				}
 			}
 
 			if ($arr["s"]["show_vals"]["def"])
@@ -121,7 +140,11 @@ class crm_participant_search extends popup_search
 					$filter["oid"] = array();
 				}
 				$ol = new object_list(array("class_id" => CL_CRM_PERSON, "lang_id" => array(), "site_id" => array(), "limit" => 30));
-				$filter["oid"] += $ol->ids();
+			
+				foreach($ol->ids() as $_id)
+				{
+					$filter["oid"][$_id] = $_id;
+				}
 			}
 
 			if (is_array($arr["s"]["show_vals"]))
@@ -134,7 +157,11 @@ class crm_participant_search extends popup_search
 						{
 							$filter["oid"] = array();
 						}
-						$filter["oid"] += array_keys($c->get_employee_picker(obj($k)));
+						$tmp = $c->get_employee_picker(obj($k));
+						foreach(array_keys($tmp) as $_id)
+						{
+							$filter["oid"][$_id] = $_id;
+						}
 					}
 				}
 			}
