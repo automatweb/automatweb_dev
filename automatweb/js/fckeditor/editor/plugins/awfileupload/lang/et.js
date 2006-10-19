@@ -22,4 +22,4 @@ FCKLang.PlaceholderDlgName		= 'Placeholder Name' ;
 FCKLang.PlaceholderErrNoName	= 'Please type the placeholder name' ;
 FCKLang.PlaceholderErrNameInUse	= 'The specified name is already in use' ;
 
-FCKLang.AWFileUpload  = "File upload";
+FCKLang.AWFileUpload  = "Failide &uuml;leslaadimine";

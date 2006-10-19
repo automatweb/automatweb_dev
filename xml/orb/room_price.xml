@@ -3,4 +3,3 @@
 	<class name="room_price" folder="common" extends="class_base">
 	</class>
 </orb>
-		

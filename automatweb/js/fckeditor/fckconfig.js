@@ -42,7 +42,7 @@ FCKConfig.ProtectedSource.Add( /<script[\s\S]*?\/script>/gi ) ;	// <SCRIPT> tags
 // FCKConfig.ProtectedSource.Add( /<\?[\s\S]*?\?>/g ) ;	// PHP style server side code <?...?>
 // FCKConfig.ProtectedSource.Add( /(<asp:[^\>]+>[\s|\S]*?<\/asp:[^\>]+>)|(<asp:[^\>]+\/>)/gi ) ;	// ASP.Net style tags <asp:control>
 
-FCKConfig.AutoDetectLanguage	= true ;
+FCKConfig.AutoDetectLanguage	= false ;
 FCKConfig.DefaultLanguage		= 'en' ;
 FCKConfig.ContentLangDirection	= 'ltr' ;
 
@@ -76,9 +76,9 @@ FCKConfig.PreserveSessionOnFileBrowser = false ;
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 
 
-FCKConfig.Plugins.Add( 'awlup', 'en' ) ;
-FCKConfig.Plugins.Add( 'awfup', 'en' ) ;
-FCKConfig.Plugins.Add( 'awimageupload', 'en' ) ;
+FCKConfig.Plugins.Add( 'awlup', 'en,et' ) ;
+FCKConfig.Plugins.Add( 'awfup', 'en,et' ) ;
+FCKConfig.Plugins.Add( 'awimageupload', 'en,et' ) ;
 
 FCKConfig.ToolbarSets["aw"] = [
        ['Source','Cut','Copy','Paste','PasteText','PasteWord'],

@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.8 2006/07/05 15:20:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.9 2006/10/19 10:33:31 kristo Exp $
 // fck_editor.aw - FCKeditor
 
-class fck_editor
+class fck_editor extends core
 {
 	function get_rte_toolbar($arr)
 	{
@@ -93,7 +93,7 @@ window.onload = function()
 		fck'.$nm.'.Width = "'.$w.'px";
 		fck'.$nm.'.Height = "'.$h.'px";
 		fck'.$nm.'.Config["AutoDetectLanguage"] = false;
-		fck'.$nm.'.Config["DefaultLanguage"] = "'.(!empty($arr["lang"]) ? $arr["lang"] : "et").'";
+		fck'.$nm.'.Config["DefaultLanguage"] = "'.(!empty($arr["lang"]) ? $arr["lang"] : ($_SESSION["user_adm_ui_lc"] != "" ? $_SESSION["user_adm_ui_lc"] : "et")).'";
 		fck'.$nm.'.ReplaceTextarea();';
 	}
 	$retval .= '

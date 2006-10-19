@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="do_add_reservation" all_args="1">
+			<function name="do_add_reservation">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

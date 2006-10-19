@@ -477,5 +477,10 @@ DlgAboutAboutTab	: "About",	//MISSING
 DlgAboutBrowserInfoTab	: "Browser Info",	//MISSING
 DlgAboutVersion		: "versioon",
 DlgAboutLicense		: "Litsenseeritud GNU Lesser General Public License litsentsiga",
-DlgAboutInfo		: "Täpsema info saamiseks mine"
+DlgAboutInfo		: "Täpsema info saamiseks mine",
+
+// aw plugins
+AWUploadImage		: "Pildi &uuml;leslaadimine",
+AWFileUpload		: "Faili &uuml;leslaadimine",
+AWLinkUpload		: "Sisesta Link"
 }

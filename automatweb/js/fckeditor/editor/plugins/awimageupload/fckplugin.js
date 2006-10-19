@@ -6,7 +6,7 @@ InsertAWImageCommand.Execute=function() {
 					'InsertAWImageCommand', 'width=500,height=400,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awimageupload', InsertAWImageCommand ); 
-var oawimageuploadItem = new FCKToolbarButton('awimageupload', 'Pildi &uuml;leslaadimine');
+var oawimageuploadItem = new FCKToolbarButton('awimageupload', FCKLang.AWUploadImage);
 oawimageuploadItem.IconPath = '/automatweb/js/fckeditor/editor/plugins/awimageupload/image.gif' ;
 
 

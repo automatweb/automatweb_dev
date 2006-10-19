@@ -6,7 +6,7 @@ InsertAWFupCommand.Execute=function() {
 					'InsertAWFupCommand', 'width=500,height=400,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awfup', InsertAWFupCommand ); 
-var oawfupItem = new FCKToolbarButton('awfup', 'Faili &uuml;leslaadimine');
+var oawfupItem = new FCKToolbarButton('awfup', FCKLang.AWFileUpload);
 oawfupItem.IconPath = '/automatweb/js/fckeditor/editor/plugins/awfup/image.gif' ;
 
 

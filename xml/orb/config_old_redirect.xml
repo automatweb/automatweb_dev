@@ -3,4 +3,3 @@
 	<class name="config_old_redirect" folder="admin/config" extends="class_base">
 	</class>
 </orb>
-		

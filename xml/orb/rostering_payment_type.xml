@@ -3,4 +3,3 @@
 	<class name="rostering_payment_type" folder="applications/rostering" extends="class_base">
 	</class>
 </orb>
-		

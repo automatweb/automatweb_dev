@@ -399,5 +399,13 @@ class languages extends aw_template
 			}
 		}
 	}
+	
+	/**
+		@attrib name=get_trans_lc
+	**/
+	function get_trans_lc($arr)
+	{
+		die($_SESSION["user_adm_ui_lc"] != "" ? $_SESSION["user_adm_ui_lc"] : "et");
+	}
 };
 ?>

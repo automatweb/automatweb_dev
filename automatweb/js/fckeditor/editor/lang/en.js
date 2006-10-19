@@ -477,5 +477,7 @@ DlgAboutAboutTab	: "About",
 DlgAboutBrowserInfoTab	: "Browser Info",
 DlgAboutVersion		: "version",
 DlgAboutLicense		: "Licensed under the terms of the GNU Lesser General Public License",
-DlgAboutInfo		: "For further information go to"
+DlgAboutInfo		: "For further information go to",
+
+// aw plugins
 }

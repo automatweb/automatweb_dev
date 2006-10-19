@@ -19,5 +19,19 @@
 			</function>
 		</action>
 
+		<action name="cut">
+			<function name="cut">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="copy">
+			<function name="copy">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
