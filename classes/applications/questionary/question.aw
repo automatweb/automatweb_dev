@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/question.aw,v 1.1 2006/10/02 12:31:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/question.aw,v 1.2 2006/10/20 08:35:29 tarvo Exp $
 // question.aw - K&uml;simus 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property jrk type=textbox field=jrk size=3
+@caption Jrk
 
 */
 

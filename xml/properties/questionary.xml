@@ -10,6 +10,16 @@
             <caption>Valikvastuste arv</caption>
       </property>
       <property>
+            <name>thank_you_doc</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DOC</reltype>
+            <caption>T&amp;amp;auml;nudokument</caption>
+      </property>
+      <property>
             <name>gr_tb</name>
             <table>objects</table>
             <group>groups</group>
@@ -68,6 +78,11 @@
                   <clid>CL_QUESTION_GROUP</clid>
                   <caption>K&amp;amp;uml;simustegrupp</caption>
             </GROUP>
+            <DOC>
+                  <value>2</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>T&amp;amp;auml;nudokument</caption>
+            </DOC>
       </reltypes>
 </properties>
 

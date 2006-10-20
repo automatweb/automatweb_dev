@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.4 2006/10/18 22:05:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.5 2006/10/20 08:35:29 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -12,6 +12,9 @@
 
 	@property answer_count type=textbox
 	@caption Valikvastuste arv
+	
+	@property thank_you_doc type=relpicker reltype=RELTYPE_DOC
+	@caption T&auml;nudokument
 
 @groupinfo groups caption=Grupid
 @default group=groups
@@ -28,6 +31,9 @@
 
 @reltype GROUP value=1 clid=CL_QUESTION_GROUP
 @caption K&uml;simustegrupp
+
+@reltype DOC value=2 clid=CL_DOCUMENT
+@caption T&auml;nudokument
 
 */
 
@@ -85,56 +91,7 @@ class questionary extends class_base
 			break;
 			case "results":
 				$prop["value"] = count($this->get_results($arr["obj_inst"]->id()));
-				/*
-				$results = $this->get_results($arr["obj_inst"]->id());
-				classload("vcl/table");
-				foreach($results as $result => $answers)
-				{
-					$group_no = 0;
-					$group_id = null;
-					$topic_no = 0;
-					$topic_id = null;
-					$question_no = 0;
-					$question_id = null;
-					foreach($answers as $ans_id => $data)
-					{
-						if($data["group"] != $group_id)
-						{
-							$group_id = $data["group"];
-							$group_no++;
-							$topic_no = 0;
-							$question_no = 0;
-						}
-						if($data["topic"] != $topic_id)
-						{
-							$topic_id = $data["topic"];
-							$topic_no++;
-							$question_no = 0;
-						}
-						if($data["question"] != $question_id)
-						{
-							$question_id = $data["question"];
-							$question_no++;
-						}
-						$tmp = $group_no."-".$topic_no."-".$question_no;
-						$res[$result][$tmp] = $data["answer"];
-						$struct[] = $tmp;
-					}
-				}
-				$t = new vcl_table();
-				foreach($struct as $name)
-				{
-					$t->define_field(array(
-						"name" => $name,
-						"caption" => $name,
-					));
-				}
-				foreach($res as $data)
-				{
-					$t->define_data($data);
-				}
-				$prop["value"] = $t->draw();
-				*/
+
 				break;
 			case "get_results":
 				$prop["value"] = html::href(array(
@@ -181,16 +138,29 @@ class questionary extends class_base
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
+		$t = $GLOBALS["_GET"];
 		$questionary_id = $arr["id"];
+		if($t["questionary_submitted"])
+		{
+			$o = obj($questionary_id);
+			$docid = $o->prop("thank_you_doc");
+			if(!$docid)
+			{
+				$this->read_template("thank_you.tpl");
+				return $this->parse();
+			}
+			header("Location:".aw_ini_get("baseurl")."/".$docid);
+		}
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
 		$gr = $this->get_groups($arr["id"]);
 		$gr_inst = get_instance(CL_QUESTION_GROUP);
 		$size = 10;
-		foreach($gr as $oid => $obj)
+		foreach($gr as $jrk_ => $obj)
 		{
-			$no_answer = $obj->prop("no_answer");
+			$oid = $obj->id();
+			$no_answer = !$obj->prop("no_answer");
 			unset($header, $rows);
 			// table header
 			$questions = $gr_inst->get_questions($oid);
@@ -367,8 +337,10 @@ class questionary extends class_base
 		));
 		foreach($conns as $cdata)
 		{
-			$ret[$cdata["to"]] = obj($cdata["to"]);
+			$o = obj($cdata["to"]);
+			$ret[$o->prop("jrk")] = obj($cdata["to"]);
 		}
+		ksort($ret);
 		return $ret;
 	}
 
@@ -428,26 +400,13 @@ class questionary extends class_base
 		$o->set_prop("school", $school);
 
 		# INTRESTS
-		if((!$a = $arr["pers"]["intrest_radio"]))
+		arr($arr);
+		foreach($arr["pers"]["intrest_check"] as $nr => $pointless)
 		{
-			foreach($arr["pers"]["intrest_text"] as $k => $v)
-			{
-				if(strlen($v))
-				{
-					$intrest = $this->pers["intrests"][$k].", ".$v;
-					break;
-				}
-			}
+			$intrests[] = $this->pers["intrests"][$nr].(strlen(($tmp = $arr["pers"]["intrest_text"][$nr]))?"(".$tmp.")":"");
 		}
-		elseif($a == count($this->pers["intrests"]))
-		{
-			$intrest = "muu, ".$arr["intrest"]["intrest_text"][$a];
-		}
-		else
-		{
-			$intrest = $this->pers["intrests"][$a].", ".$arr["pers"]["intrest_text"][$a];
-		}
-		$o->set_prop("intrests", $intrest);
+
+		$o->set_prop("intrests", join(", ", $intrests));
 
 		# VISITS etc...
 		$o->set_prop("visit_recur", $this->pers["visits"][$arr["pers"]["visits"]]);
@@ -476,7 +435,7 @@ class questionary extends class_base
 			}
 		}
 
-		return $arr["return_url"];
+		return $arr["return_url"]."?questionary_submitted=1";
 	}
 
 	/**
@@ -627,7 +586,7 @@ class questionary extends class_base
 		);
 		$this->pers["school"] = array(
 			1 => "Tallinna &Uuml;likool",
-			2 => "Tallinna tehnika&uuml;likool",
+			2 => "Tallinna Tehnika&uuml;likool",
 			3 => "Eesti Muusikaakadeemia",
 			4 => "Eesti Kunstiakadeemia",
 			5 => "Tartu &Uuml;likool",
@@ -635,13 +594,13 @@ class questionary extends class_base
 			7 => "Muu (milline)",
 		);
 		$this->pers["intrests"] = array(
-			1 => "Humanitaarteadused (milline?)",
-			2 => "Sotsiaalteadused (milline?)",
-			3 => "Loodus ja t&auml;ppisteadused (milline?)",
-			4 => "Tehnikateadused (milline?)",
+			1 => "Humanitaarteadused",
+			2 => "Sotsiaalteadused",
+			3 => "Loodus ja t&auml;ppisteadused",
+			4 => "Tehnikateadused",
 			5 => "Meditsiiin",
 			6 => "P&otilde;llumajandus, aiandus, metsandus",
-			7 => "Muu (milline?)"
+			7 => "Muu"
 		);
 		$this->pers["visits"] = array(
 			1 => "Iga p&auml;ev",
