@@ -531,7 +531,7 @@ class mrp_job extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_job");
@@ -673,7 +673,7 @@ class mrp_job extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_job");
