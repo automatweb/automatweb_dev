@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.210 2006/10/04 13:34:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.211 2006/10/20 11:15:18 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -30,7 +30,7 @@ class aliasmgr extends aw_template
 		extract($args);
 		$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
 
-		$GLOBALS['site_title'] = "Seostehaldur";
+//		$GLOBALS['site_title'] = "Seostehaldur";
 		$search = get_instance(CL_SEARCH);
 
 		$reltypes[0] = "alias";
@@ -400,7 +400,7 @@ class aliasmgr extends aw_template
 	function list_aliases($args)
 	{
 		extract($args);
-		$GLOBALS['site_title'] = "Seostehaldur | ".html::get_change_url($id, array(),"Objekti muutmine");
+//		$GLOBALS['site_title'] = "Seostehaldur | ".html::get_change_url($id, array(),"Objekti muutmine");
 		classload('core/icons');
 
 		$obj = obj($id);
