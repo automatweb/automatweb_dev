@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/person_skill.aw,v 1.1 2006/09/14 09:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/person_skill.aw,v 1.2 2006/10/20 10:35:27 kristo Exp $
 // person_skill.aw - Oskus 
 /*
 
@@ -12,6 +12,9 @@
 
 	@property hrs_per_week_to_keep type=textbox size=5 table=aw_person_skill field=aw_hrs_per_week_to_keep
 	@caption Tunde n&auml;dalas, mis on p&auml;devuse hoidmiseks vajalikud
+
+	@property short_name type=textbox  table=aw_person_skill field=aw_short_name
+	@caption L&uuml;hend
 
 */
 
@@ -56,6 +59,15 @@ class person_skill extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_person_skill (aw_oid int primary key, aw_hrs_per_week_to_keep int)");
 			return true;
+		}
+		switch($f)
+		{
+			case "aw_short_name":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(255)"
+				));
+				return true;
 		}
 	}
 }

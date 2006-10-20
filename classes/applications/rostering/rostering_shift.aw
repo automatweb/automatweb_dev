@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_shift.aw,v 1.1 2006/09/14 09:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_shift.aw,v 1.2 2006/10/20 10:35:27 kristo Exp $
 // rostering_shift.aw - Vahetus 
 /*
 
@@ -9,6 +9,9 @@
 
 @default table=objects
 @default group=general
+
+	@property short_name type=textbox  table=aw_rostering_shift field=aw_short_name
+	@caption L&uuml;hend
 
 	@property type type=select table=aw_rostering_shift field=aw_type
 	@caption T&uuml;&uuml;p
@@ -86,6 +89,13 @@ class rostering_shift extends class_base
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
+				));
+				return true;
+
+			case "aw_short_name":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "varchar(255)"
 				));
 				return true;
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.1 2006/10/11 13:06:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.2 2006/10/20 10:35:27 kristo Exp $
 // rostering_schedule.aw - Rostering graafik 
 /*
 
@@ -57,6 +57,10 @@
 
 	@property day_g_tbl type=table no_caption=1 store=no
 
+@default group=mn_g
+
+	@property mn_g_tbl type=table no_caption=1 store=no
+
 @default group=work_hrs
 
 	@property work_hrs type=table store=no no_caption=1
@@ -72,6 +76,7 @@
 	@groupinfo shifts_g_2 caption="Vahetuste kaupa" parent=shifts_g submit=no
 
 @groupinfo day_g caption="P&auml;eva vaade" submit=no
+@groupinfo mn_g caption="Kuu vaade" submit=no
 @groupinfo work_hrs caption="T&ouml;&ouml;aruanded" 
 
 @reltype SCENARIO value=1 clid=CL_ROSTERING_SCENARIO
@@ -135,6 +140,10 @@ class rostering_schedule extends class_base
 				{
 					$prop["value"] = $arr["request"]["wp"];
 				}
+				break;
+
+			case "mn_g_tbl":
+				$this->_mn_g_tbl($arr);
 				break;
 		};
 		return $retval;
@@ -927,6 +936,109 @@ class rostering_schedule extends class_base
 		}
 		$level--;
 		return $retval;
+	}
+
+	function _init_mn_g_t(&$t, $g)
+	{
+		$t->define_field(array(
+			"name" => "num",
+			"caption" => "N",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "p",
+			"caption" => t("Isik"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "s",
+			"caption" => t("P&auml;devused"),
+			"align" => "center"
+		));
+
+		$ol = new object_list(array(
+			"class_id" => CL_PERSON_SKILL,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_field(array(
+				"name" => "skill_".$o->id(),
+				"caption" => $o->prop("short_name"),
+				"align" => "center",
+				"parent" => "s"
+			));
+		}
+
+		$tm = $g->prop("g_start");
+		while ($tm < $g->prop("g_end"))
+		{
+			$t->define_field(array(
+				"name" => "tm".date("d.m.Y", $tm),
+				"caption" => sprintf("%02d", date("d", $tm)),
+				"align" => "center",
+				"parent" => "m"
+			));
+			$tm += 24 * 3600;
+		}
+		$t->define_field(array(
+			"name" => "m",
+			"caption" => date("d.m.Y", $g->prop("g_start"))." - ".date("d.m.Y", $g->prop("g_end")),
+			"align" => "center"
+		));
+	}
+
+	function _mn_g_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_mn_g_t($t, $arr["obj_inst"]);
+
+		$skills = new object_list(array(
+			"class_id" => CL_PERSON_SKILL,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+
+		$m = get_instance("applications/rostering/rostering_model");		
+
+		$o = obj($arr["obj_inst"]->prop("g_wp"));
+
+		$co = get_instance(CL_CRM_COMPANY);
+		$ppl = $co->get_employee_picker(obj($o->prop("owner")));
+		foreach($ppl as $p_id => $p_nm)
+		{
+			$d = array(
+				"p" => html::obj_change_url($p_id),
+				"num" => ++$num
+			);
+
+			$p_obj = obj($p_id);
+			$p_skills = $p_obj->connections_from(array(
+				"type" => "RELTYPE_HAS_SKILL"
+			));
+			foreach($p_skills as $c)
+			{
+				$has_skill = $c->to();
+				$d["skill_".$has_skill->prop("skill")] = html::href(array(
+					"caption" => $has_skill->prop("skill.short_name"),
+					"url" => html::get_change_url($has_skill->id(), array("return_url" => get_ru()))
+				));
+			}
+
+			$work_times = $m->get_schedule_for_person($p_obj, $arr["obj_inst"]->prop("g_start"), $arr["obj_inst"]->prop("g_end"));
+			foreach($work_times as $wt_item)
+			{
+				$shift = obj($wt_item["shift"]);
+				$d["tm".date("d.m.Y", $wt_item["start"])] = html::href(array(
+					"caption" => $shift->prop("short_name"),
+					"url" => html::get_change_url($shift->id(), array("return_url" => get_ru()))
+				));
+			}
+			$t->define_data($d);
+		}
+		$t->set_sortable(false);
 	}
 }
 ?>
