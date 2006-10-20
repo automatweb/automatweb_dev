@@ -866,23 +866,23 @@ msgstr ""
 msgid "Moodusta pakkumine"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2600
+#: classes/applications/shop/shop_warehouse.aw:2601
 msgid "shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2608
+#: classes/applications/shop/shop_warehouse.aw:2609
 msgid "shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2625
+#: classes/applications/shop/shop_warehouse.aw:2626
 msgid "shop_warehouse::get_products_folder(%s): the warehouse has not configuration object set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2633
+#: classes/applications/shop/shop_warehouse.aw:2634
 msgid "shop_warehouse::get_products_folder(%s): the warehouse configuration has no products folder set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2735
+#: classes/applications/shop/shop_warehouse.aw:2736
 msgid "Tellimus laost %s"
 msgstr ""
 

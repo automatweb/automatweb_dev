@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/import/scala_import.aw:class_1137_help
 msgid "Klassi Scala import help"
 msgstr ""
@@ -72,6 +71,18 @@ msgstr ""
 
 #: classes/import/scala_import.aw:prop_do_import_help
 msgid "Omaduse Teosta import (do_import) help"
+msgstr ""
+
+#: classes/import/scala_import.aw:prop_import_time
+msgid "Omaduse Viimase impordi l&otilde;ppemise aeg: (import_time) caption"
+msgstr ""
+
+#: classes/import/scala_import.aw:prop_import_time_comment
+msgid "Omaduse Viimase impordi l&otilde;ppemise aeg: (import_time) kommentaar"
+msgstr ""
+
+#: classes/import/scala_import.aw:prop_import_time_help
+msgid "Omaduse Viimase impordi l&otilde;ppemise aeg: (import_time) help"
 msgstr ""
 
 #: classes/import/scala_import.aw:prop_ftp_host
@@ -258,47 +269,48 @@ msgstr ""
 msgid "Seose Kordused (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
-#: classes/import/scala_import.aw:110
+#: classes/import/scala_import.aw:113
 msgid "Hinnad"
 msgstr ""
 
-#: classes/import/scala_import.aw:111
+#: classes/import/scala_import.aw:114
 msgid "Kasutajad"
 msgstr ""
 
-#: classes/import/scala_import.aw:112
+#: classes/import/scala_import.aw:115
 msgid "Kategooriad"
 msgstr ""
 
-#: classes/import/scala_import.aw:113
+#: classes/import/scala_import.aw:116
 msgid "Lao seis"
 msgstr ""
 
-#: classes/import/scala_import.aw:136
+#: classes/import/scala_import.aw:143
 msgid "Impordi %s"
 msgstr ""
 
-#: classes/import/scala_import.aw:164
+#: classes/import/scala_import.aw:172
 msgid "Andmebaasi tabeli v&auml;ljad"
 msgstr ""
 
-#: classes/import/scala_import.aw:169 classes/import/scala_import.aw:229 classes/import/scala_import.aw:279 classes/import/scala_import.aw:324
+#: classes/import/scala_import.aw:177 classes/import/scala_import.aw:237
+#: classes/import/scala_import.aw:287 classes/import/scala_import.aw:332
 msgid "XML tagide nimed"
 msgstr ""
 
-#: classes/import/scala_import.aw:187
+#: classes/import/scala_import.aw:195
 msgid "Andmebaasi tabel (%s) >> XML fail (%s)"
 msgstr ""
 
-#: classes/import/scala_import.aw:225 classes/import/scala_import.aw:275 classes/import/scala_import.aw:320
+#: classes/import/scala_import.aw:233 classes/import/scala_import.aw:283
+#: classes/import/scala_import.aw:328
 msgid "AW objekti v&auml;ljad"
 msgstr ""
 
-#: classes/import/scala_import.aw:234
+#: classes/import/scala_import.aw:242
 msgid "Kasutaja objektid XML faili %s p&otilde;hjal"
 msgstr ""
 
-#: classes/import/scala_import.aw:333
+#: classes/import/scala_import.aw:341
 msgid "Lao toote objektid XML faili %s p&otilde;hjal"
 msgstr ""
-

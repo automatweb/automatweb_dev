@@ -110,40 +110,172 @@ msgstr ""
 msgid "Omaduse Kasutustingimused (conditions) help"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy__
-msgid "Omaduse  (dummy__) caption"
+#: classes/common/room.aw:prop_calendar_tb
+msgid "Omaduse  (calendar_tb) caption"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy___comment
-msgid "Omaduse  (dummy__) kommentaar"
+#: classes/common/room.aw:prop_calendar_tb_comment
+msgid "Omaduse  (calendar_tb) kommentaar"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy___help
-msgid "Omaduse  (dummy__) help"
+#: classes/common/room.aw:prop_calendar_tb_help
+msgid "Omaduse  (calendar_tb) help"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy_
-msgid "Omaduse  (dummy_) caption"
+#: classes/common/room.aw:prop_calendar
+msgid "Omaduse  (calendar) caption"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy__comment
-msgid "Omaduse  (dummy_) kommentaar"
+#: classes/common/room.aw:prop_calendar_comment
+msgid "Omaduse  (calendar) kommentaar"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy__help
-msgid "Omaduse  (dummy_) help"
+#: classes/common/room.aw:prop_calendar_help
+msgid "Omaduse  (calendar) help"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy
-msgid "Omaduse  (dummy) caption"
+#: classes/common/room.aw:prop_images_tb
+msgid "Omaduse  (images_tb) caption"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy_comment
-msgid "Omaduse  (dummy) kommentaar"
+#: classes/common/room.aw:prop_images_tb_comment
+msgid "Omaduse  (images_tb) kommentaar"
 msgstr ""
 
-#: classes/common/room.aw:prop_dummy_help
-msgid "Omaduse  (dummy) help"
+#: classes/common/room.aw:prop_images_tb_help
+msgid "Omaduse  (images_tb) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_images_tbl
+msgid "Omaduse  (images_tbl) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_images_tbl_comment
+msgid "Omaduse  (images_tbl) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_images_tbl_help
+msgid "Omaduse  (images_tbl) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_images_search
+msgid "Omaduse  (images_search) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_images_search_comment
+msgid "Omaduse  (images_search) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_images_search_help
+msgid "Omaduse  (images_search) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_currency
+msgid "Omaduse Valuuta (currency) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_currency_comment
+msgid "Omaduse Valuuta (currency) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_currency_help
+msgid "Omaduse Valuuta (currency) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_price
+msgid "Omaduse Hind (price) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_price_comment
+msgid "Omaduse Hind (price) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_price_help
+msgid "Omaduse Hind (price) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_unit
+msgid "Omaduse Aja&uuml;hik (time_unit) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_unit_comment
+msgid "Omaduse Aja&uuml;hik (time_unit) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_unit_help
+msgid "Omaduse Aja&uuml;hik (time_unit) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_from
+msgid "Omaduse Alates (time_from) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_from_comment
+msgid "Omaduse Alates (time_from) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_from_help
+msgid "Omaduse Alates (time_from) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_to
+msgid "Omaduse kuni (time_to) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_to_comment
+msgid "Omaduse kuni (time_to) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_to_help
+msgid "Omaduse kuni (time_to) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_step
+msgid "Omaduse , sammuga (time_step) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_step_comment
+msgid "Omaduse , sammuga (time_step) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_time_step_help
+msgid "Omaduse , sammuga (time_step) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_search
+msgid "Omaduse  (prices_search) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_search_comment
+msgid "Omaduse  (prices_search) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_search_help
+msgid "Omaduse  (prices_search) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_tb
+msgid "Omaduse  (prices_tb) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_tb_comment
+msgid "Omaduse  (prices_tb) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_tb_help
+msgid "Omaduse  (prices_tb) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_tbl
+msgid "Omaduse  (prices_tbl) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_tbl_comment
+msgid "Omaduse  (prices_tbl) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_prices_tbl_help
+msgid "Omaduse  (prices_tbl) help"
 msgstr ""
 
 #: classes/common/room.aw:group_calendar
@@ -170,6 +302,30 @@ msgstr ""
 msgid "Grupi Hinnad (prices) help"
 msgstr ""
 
+#: classes/common/room.aw:group_prices_general
+msgid "Grupi &Uuml;ldine (prices_general) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_prices_general_help
+msgid "Grupi &Uuml;ldine (prices_general) help"
+msgstr ""
+
+#: classes/common/room.aw:group_prices_price
+msgid "Grupi Hinnad (prices_price) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_prices_price_help
+msgid "Grupi Hinnad (prices_price) help"
+msgstr ""
+
+#: classes/common/room.aw:group_prices_bargain_price
+msgid "Grupi Soodushinnad (prices_bargain_price) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_prices_bargain_price_help
+msgid "Grupi Soodushinnad (prices_bargain_price) help"
+msgstr ""
+
 #: classes/common/room.aw:rel_RELTYPE_LOCATION
 msgid "Seose Asukoht (RELTYPE_LOCATION) tekst"
 msgstr ""
@@ -188,5 +344,125 @@ msgstr ""
 
 #: classes/common/room.aw:rel_RELTYPE_CONDITIONS
 msgid "Seose Kasutustingimused (RELTYPE_CONDITIONS) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_IMAGE
+msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_CURRENCY
+msgid "Seose Valuuta (RELTYPE_CURRENCY) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_CALENDAR
+msgid "Seose Kalender (RELTYPE_CALENDAR) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_ROOM_PRICE
+msgid "Seose Ruumi hind (RELTYPE_ROOM_PRICE) tekst"
+msgstr ""
+
+#: classes/common/room.aw:146
+msgid "minutit"
+msgstr ""
+
+#: classes/common/room.aw:147
+msgid "tundi"
+msgstr ""
+
+#: classes/common/room.aw:148
+msgid "p&auml;eva"
+msgstr ""
+
+#: classes/common/room.aw:163
+msgid "Inimese kohta"
+msgstr ""
+
+#: classes/common/room.aw:164
+msgid "Kasutusaja kohta"
+msgstr ""
+
+#: classes/common/room.aw:174
+msgid "minutitites"
+msgstr ""
+
+#: classes/common/room.aw:175
+msgid "tundides"
+msgstr ""
+
+#: classes/common/room.aw:176
+msgid "p&auml;evades"
+msgstr ""
+
+#: classes/common/room.aw:307
+msgid "Lisa pilt"
+msgstr ""
+
+#: classes/common/room.aw:326
+msgid "Eemalda pildid"
+msgstr ""
+
+#: classes/common/room.aw:345
+msgid "jrk"
+msgstr ""
+
+#: classes/common/room.aw:350
+msgid "Pilt"
+msgstr ""
+
+#: classes/common/room.aw:352
+msgid "Pildid"
+msgstr ""
+
+#: classes/common/room.aw:379
+msgid "Uus hind"
+msgstr ""
+
+#: classes/common/room.aw:399
+msgid "Eemalda hinnad"
+msgstr ""
+
+#: classes/common/room.aw:415
+msgid "Kehtib"
+msgstr ""
+
+#: classes/common/room.aw:420
+msgid "Kordub"
+msgstr ""
+
+#: classes/common/room.aw:431
+msgid "Kuup&auml;evad"
+msgstr ""
+
+#: classes/common/room.aw:435
+msgid "N&auml;dalap&auml;evad"
+msgstr ""
+
+#: classes/common/room.aw:439
+msgid "Mitmes"
+msgstr ""
+
+#: classes/common/room.aw:443
+msgid "Kellaaeg"
+msgstr ""
+
+#: classes/common/room.aw:449
+msgid "Aeg"
+msgstr ""
+
+#: classes/common/room.aw:468 classes/common/room.aw:513
+msgid "Muuda"
+msgstr ""
+
+#: classes/common/room.aw:507 classes/common/room.aw:508
+msgid "Jah"
+msgstr ""
+
+#: classes/common/room.aw:507 classes/common/room.aw:508
+msgid "Ei"
+msgstr ""
+
+#: classes/common/room.aw:587
+msgid "Broneering"
 msgstr ""
 

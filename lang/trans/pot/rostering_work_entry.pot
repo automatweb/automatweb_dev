@@ -90,39 +90,47 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;laud (RELTYPE_WORKBENCH) tekst"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:74 classes/applications/rostering/rostering_work_entry.aw:91 classes/applications/rostering/rostering_work_entry.aw:244 classes/applications/rostering/rostering_work_entry.aw:259
+#: classes/applications/rostering/rostering_work_entry.aw:74 classes/applications/rostering/rostering_work_entry.aw:91 classes/applications/rostering/rostering_work_entry.aw:265 classes/applications/rostering/rostering_work_entry.aw:280
 msgid "--vali--"
 msgstr ""
 
 #: classes/applications/rostering/rostering_work_entry.aw:144
+msgid "Planeeritud"
+msgstr ""
+
+#: classes/applications/rostering/rostering_work_entry.aw:150
 msgid "T&ouml;&ouml;post"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:149
+#: classes/applications/rostering/rostering_work_entry.aw:156
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:154
+#: classes/applications/rostering/rostering_work_entry.aw:162
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:159
+#: classes/applications/rostering/rostering_work_entry.aw:169
+msgid "Tegelik"
+msgstr ""
+
+#: classes/applications/rostering/rostering_work_entry.aw:175
 msgid "Graafik korrektne"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:164
+#: classes/applications/rostering/rostering_work_entry.aw:181
 msgid "T&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:169
+#: classes/applications/rostering/rostering_work_entry.aw:187
 msgid "Alates"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:174
+#: classes/applications/rostering/rostering_work_entry.aw:193
 msgid "Kuni"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:179
+#: classes/applications/rostering/rostering_work_entry.aw:199
 msgid "Tasu liik"
 msgstr ""
 

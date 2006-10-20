@@ -203,30 +203,28 @@ msgstr ""
 msgid "Omaduse  (join_grp) help"
 msgstr ""
 
-# classes/core/users/user.aw:prop_passwd
 #: classes/core/users/user.aw:prop_passwd
-msgid "Omaduse Salas?na (passwd) caption"
-msgstr "Password"
+msgid "Omaduse Salasõna (passwd) caption"
+msgstr ""
 
 #: classes/core/users/user.aw:prop_passwd_comment
-msgid "Omaduse Salas?na (passwd) kommentaar"
+msgid "Omaduse Salasõna (passwd) kommentaar"
 msgstr ""
 
 #: classes/core/users/user.aw:prop_passwd_help
-msgid "Omaduse Salas?na (passwd) help"
+msgid "Omaduse Salasõna (passwd) help"
 msgstr ""
 
-# classes/core/users/user.aw:prop_passwd_again
 #: classes/core/users/user.aw:prop_passwd_again
-msgid "Omaduse Salas?na uuesti (passwd_again) caption"
-msgstr "Password again"
+msgid "Omaduse Salasõna uuesti (passwd_again) caption"
+msgstr ""
 
 #: classes/core/users/user.aw:prop_passwd_again_comment
-msgid "Omaduse Salas?na uuesti (passwd_again) kommentaar"
+msgid "Omaduse Salasõna uuesti (passwd_again) kommentaar"
 msgstr ""
 
 #: classes/core/users/user.aw:prop_passwd_again_help
-msgid "Omaduse Salas?na uuesti (passwd_again) help"
+msgid "Omaduse Salasõna uuesti (passwd_again) help"
 msgstr ""
 
 # classes/core/users/user.aw:prop_password
@@ -821,6 +819,14 @@ msgstr "Settings"
 #: classes/core/users/user.aw:2159
 msgid "Ajalugu"
 msgstr "History"
+
+# classes/core/users/user.aw:prop_passwd
+#~ msgid "Omaduse Salas?na (passwd) caption"
+#~ msgstr "Password"
+
+# classes/core/users/user.aw:prop_passwd_again
+#~ msgid "Omaduse Salas?na uuesti (passwd_again) caption"
+#~ msgstr "Password again"
 
 # classes/core/users/user.aw:prop_admin_lang
 #~ msgid "Omaduse Admin keel (admin_lang) caption"

@@ -145,26 +145,26 @@ msgstr "Open"
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/admin/admin_if.aw:1137
+#: classes/admin/admin_if.aw:1146
 msgid "Administreerimisliides"
 msgstr "Administrative interface"
 
-#: classes/admin/admin_if.aw:1157
+#: classes/admin/admin_if.aw:1166
 msgid "Logi v&auml;lja"
 msgstr "Log out"
 
-#: classes/admin/admin_if.aw:1158
+#: classes/admin/admin_if.aw:1167
 msgid "Asukoht:"
 msgstr "You are here:"
 
-#: classes/admin/admin_if.aw:1159
+#: classes/admin/admin_if.aw:1168
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
 msgstr "AutomatWeb&reg; is the registered trademark of Struktuur Meedia. All rights reserved, &copy; 1999-2006."
 
-#: classes/admin/admin_if.aw:1160
+#: classes/admin/admin_if.aw:1169
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr "Please visit our websites"
 
-#: classes/admin/admin_if.aw:1161
+#: classes/admin/admin_if.aw:1170
 msgid "Seaded"
 msgstr "Settings"
