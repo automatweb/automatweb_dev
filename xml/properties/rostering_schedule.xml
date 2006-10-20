@@ -124,6 +124,15 @@
             <field>day_g_tbl</field>
       </property>
       <property>
+            <name>mn_g_tbl</name>
+            <table>aw_rostering_schedule</table>
+            <group>mn_g</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mn_g_tbl</field>
+      </property>
+      <property>
             <name>work_hrs</name>
             <table>aw_rostering_schedule</table>
             <group>work_hrs</group>
@@ -173,6 +182,10 @@
                   <caption>P&amp;amp;auml;eva vaade</caption>
                   <submit>no</submit>
             </day_g>
+            <mn_g>
+                  <caption>Kuu vaade</caption>
+                  <submit>no</submit>
+            </mn_g>
             <work_hrs>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;aruanded</caption>
             </work_hrs>

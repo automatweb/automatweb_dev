@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.2 2006/10/20 10:35:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.3 2006/10/20 11:19:35 kristo Exp $
 // rostering_schedule.aw - Rostering graafik 
 /*
 
@@ -1022,7 +1022,7 @@ class rostering_schedule extends class_base
 			{
 				$has_skill = $c->to();
 				$d["skill_".$has_skill->prop("skill")] = html::href(array(
-					"caption" => $has_skill->prop("skill.short_name"),
+					"caption" => "X",
 					"url" => html::get_change_url($has_skill->id(), array("return_url" => get_ru()))
 				));
 			}

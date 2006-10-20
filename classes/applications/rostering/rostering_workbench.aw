@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.6 2006/10/16 10:37:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.7 2006/10/20 11:19:35 kristo Exp $
 // rostering_workbench.aw - T&ouml;&ouml;aja planeerimine 
 /*
 
@@ -596,6 +596,12 @@ class rostering_workbench extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kommentaar"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "type",
 			"caption" => t("T&uuml;&uuml;p"),
 			"align" => "center",
@@ -633,7 +639,8 @@ class rostering_workbench extends class_base
 				"oid" => $o->id(),
 				"type" => $i->types[$o->prop("type")],
 				"start_time" => $o->prop("start_time"),
-				"end_time" => $o->prop("end_time")
+				"end_time" => $o->prop("end_time"),
+				"comment" => $o->comment()
 			));
 		}
 	}
