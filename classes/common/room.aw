@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.18 2006/10/20 13:38:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.19 2006/10/20 13:40:40 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1435,7 +1435,7 @@ class room extends class_base
 		}
 		
 		$ol = new object_list(array(
-			"class_id" => CL_ROOM,
+			"class_id" => CL_SHOP_PRODUCT,
 			"lang_id" => array(),
 			"parent" => $parent,
 		));
