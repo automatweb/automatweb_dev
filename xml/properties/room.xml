@@ -33,14 +33,26 @@
             <caption>Omanik</caption>
       </property>
       <property>
-            <name>resources_fld</name>
+            <name>warehouse</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <parent>general_up</parent>
             <type>relpicker</type>
+            <reltype>RELTYPE_SHOP_WAREHOUSE</reltype>
+            <caption>Ladu</caption>
+      </property>
+      <property>
+            <name>resources_fld</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>hidden</type>
             <reltype>RELTYPE_INVENTORY_FOLDER</reltype>
+            <no_caption>1</no_caption>
             <caption>Ressursside kataloog</caption>
       </property>
       <property>
@@ -483,6 +495,11 @@
                   <clid>CL_ROOM_PRICE</clid>
                   <caption>Ruumi hind</caption>
             </ROOM_PRICE>
+            <SHOP_WAREHOUSE>
+                  <value>10</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ruumi hind</caption>
+            </SHOP_WAREHOUSE>
       </reltypes>
       <layout>
             <general_split>

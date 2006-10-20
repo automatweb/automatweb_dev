@@ -1,10 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.13 2006/10/18 16:16:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.14 2006/10/20 11:18:17 markop Exp $
 // room.aw - Ruum 
 /*
 
 @classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1
-
 
 @default table=objects
 @default field=meta
@@ -14,7 +13,6 @@
 
 @groupinfo general caption="&Uuml;ldine"
 @default group=general
-
 
 	@layout general_split type=hbox width=50%:50%
 
@@ -30,7 +28,10 @@
 		@property owner type=relpicker reltype=RELTYPE_OWNER
 		@caption Omanik
 
-		@property resources_fld type=relpicker reltype=RELTYPE_INVENTORY_FOLDER
+		@property warehouse type=relpicker reltype=RELTYPE_SHOP_WAREHOUSE
+		@caption Ladu
+		
+		@property resources_fld type=hidden reltype=RELTYPE_INVENTORY_FOLDER no_caption=1
 		@caption Ressursside kataloog
 
 		@property area type=relpicker reltype=RELTYPE_AREA
@@ -62,7 +63,6 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 - puhveraeg enne (mitu tundi enne reserveeringu algust lisaks bronnitakse ruumide ettevalmistamiseks)
 - puhveraeg pärast (mitu tundi peale reserveeringu lõppu broneeritakse ruumide korrastamiseks
 
-
 # TAB CALENDAR
 
 @groupinfo calendar caption="Kalender" submit=no
@@ -71,15 +71,12 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 	@property calendar type=calendar no_caption=1 viewtype=relative store=no
 	@property calendar_tbl type=table no_caption=1
 
-
-
 #TAB RESOURCES
 @groupinfo resources caption="Ressursid"
 @default group=resources
 
 	@property resources_tb type=toolbar no_caption=1
 	@property resources_tbl type=table no_caption=1
-
 
 # TAB IMAGES
 
@@ -178,6 +175,10 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 @reltype ROOM_PRICE value=9 clid=CL_ROOM_PRICE
 @caption Ruumi hind
+
+@reltype SHOP_WAREHOUSE value=10 clid=CL_SHOP_WAREHOUSE
+@caption Ruumi hind
+
 */
 
 class room extends class_base
@@ -260,6 +261,11 @@ class room extends class_base
 				$prop["value"] = "s"; //$c->draw_month();
 */				break;
 				case "products_tr":
+					if(!$arr["obj_inst"]->prop("resources_fld"))
+					{
+						$prop["error"] = t("Pole valitud lao toodete kataloogi");
+						return PROP_ERROR;
+					}
 					$this->_products_tr($arr);
 					break;	
 				case "products_tbl":
@@ -284,6 +290,17 @@ class room extends class_base
 				if($arr["request"]["products_find_product_name"])
 				{
 					$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
+				}
+				break;
+			case "resources_fld":
+				if(is_oid($arr["request"]["warehouse"]) && $this->can("view" ,$arr["request"]["warehouse"]))
+				{
+					$warehouse = obj($arr["request"]["warehouse"]);
+					if(is_oid($warehouse->prop("conf")) && $this->can("view" ,$warehouse->prop("conf")))
+					{
+						$warehouse->config = obj($warehouse->prop("conf"));
+						$prop["value"] = $warehouse->config->prop("prod_fld");
+					}
 				}
 				break;
 			//-- set_property --//
