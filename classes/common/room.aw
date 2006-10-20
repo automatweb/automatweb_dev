@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.17 2006/10/20 13:24:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.18 2006/10/20 13:38:57 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -298,6 +298,12 @@ class room extends class_base
 
 	function set_property($arr = array())
 	{
+		$doc = obj(9314);
+		$doc->connect(array(
+			"to" => $arr["obj_inst"]->id(),
+			"reltype" => "RELTYPE_ALIAS",
+		));
+	
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -1423,7 +1429,7 @@ class room extends class_base
 		}
 		else
 		{
-			$menu_tree = $this->get_product_tree($o);
+			$menu_tree = $this->get_prod_tree($o);
 			$menu_list = $menu_tree->to_list();
 			$parent = $menu_list->ids();
 		}
