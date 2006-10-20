@@ -12,7 +12,7 @@ class links_display
 
 		list($url,$target,$caption) = $this->draw_link($alias["target"]);
 
-		if (strpos($url, 0, 3) == "www")
+		if (substr($url, 0, 3) == "www")
 		{
 			$url = "http://".$url;
 		}
@@ -91,7 +91,7 @@ class links_display
 		elseif (aw_ini_get("extlinks.directlink") == 1)
 		{
 			$linksrc = $url_pv;
-			if (strpos($linksrc, 0, 3) == "www")
+			if (substr($linksrc, 0, 3) == "www")
 			{
 				$linksrc = "http://".$linksrc;
 			}

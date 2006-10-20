@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.29 2006/10/13 08:25:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.30 2006/10/20 11:06:10 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -229,7 +229,7 @@ class links extends class_base
 		$link = obj($id);
 		$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
 		$url = $this->trans_get_val($link, "url");
-		if (strpos($url, 0, 3) == "www")
+		if (substr(trim($url), 0, 3) == "www")
 		{
 			$url = "http://".$url;
 		}
@@ -325,7 +325,7 @@ class links extends class_base
 					if (aw_ini_get("extlinks.directlink") == 1)
 					{
 						$link_url = $arr["obj_inst"]->prop("url");
-						if (strpos($link_url, 0, 3) == "www")
+						if (substr($link_url, 0, 3) == "www")
 						{
 							$link_url = "http://".$link_url;
 						}
