@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/question_group.aw,v 1.3 2006/10/20 08:35:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/question_group.aw,v 1.4 2006/10/20 12:30:06 tarvo Exp $
 // question_group.aw - K&uml;simustegrupp 
 /*
 
@@ -10,7 +10,7 @@
 @default field=meta
 @default method=serialize
 
-	@property jrk type=textbox field=jrk size=3
+	@property jrk type=textbox field=jrk method=none size=3
 	@caption Jrk
 
 	@property no_answer type=checkbox ch_value=1

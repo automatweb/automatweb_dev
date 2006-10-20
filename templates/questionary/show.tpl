@@ -109,10 +109,10 @@
 		<tr>
 			<td>{VAR:caption}</td>
 			<td>
-				<input type="checkbox" value="{VAR:value}" name="pers[intrest_radio]"/>
+				<input type="checkbox" name="pers[intrest_check][{VAR:value}]"/>
 			</td>
 			<td>
-				<input type="textbox" name="pers[intrest_text]"/>
+				<input type="textbox" name="pers[intrest_text][{VAR:value}]"/>
 			</td>
 		</tr>
 		<!-- END SUB: S_AREA -->

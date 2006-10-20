@@ -5,7 +5,7 @@
             <table>objects</table>
             <group>general</group>
             <field>jrk</field>
-            <method>serialize</method>
+            <method>none</method>
             <type>textbox</type>
             <size>3</size>
             <caption>Jrk</caption>

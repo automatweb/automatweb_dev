@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.5 2006/10/20 08:35:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.6 2006/10/20 12:30:06 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -139,6 +139,7 @@ class questionary extends class_base
 	function show($arr)
 	{
 		$t = $GLOBALS["_GET"];
+
 		$questionary_id = $arr["id"];
 		if($t["questionary_submitted"])
 		{
@@ -157,9 +158,8 @@ class questionary extends class_base
 		$gr = $this->get_groups($arr["id"]);
 		$gr_inst = get_instance(CL_QUESTION_GROUP);
 		$size = 10;
-		foreach($gr as $jrk_ => $obj)
+		foreach($gr as $oid => $obj)
 		{
-			$oid = $obj->id();
 			$no_answer = !$obj->prop("no_answer");
 			unset($header, $rows);
 			// table header
@@ -306,13 +306,18 @@ class questionary extends class_base
 	function _get_answer_element($arr)
 	{
 		$o = obj($arr["id"]);
+		$ans = $GLOBALS["_GET"]["answer"];
+		//arr($ans);
+		//arr($arr["group"]."/".$arr["topic"]."/".$arr["question"]);
 		$a_count = $o->prop("answer_count");
 		for($i=1; $i <= $a_count; $i++)
 		{
+			$sel = ($ans[$arr["group"]][$arr["topic"]][$arr["question"]] == $i)?true:false;
 			$this->vars(array(
 				"nr" => $i,
 				"html_element" => html::radiobutton(array(
 					"name" => "answer[".$arr["group"]."][".$arr["topic"]."][".$arr["question"]."]",
+					"checked" => $sel, 
 					"value" => $i,
 				)),
 			));
@@ -334,13 +339,13 @@ class questionary extends class_base
 			"from.class_id" => CL_QUESTIONARY,
 			"to.class_id" => CL_QUESTION_GROUP,
 			"type" => "RELTYPE_GROUP",
+			"sort" => "to.jrk"
 		));
 		foreach($conns as $cdata)
 		{
-			$o = obj($cdata["to"]);
-			$ret[$o->prop("jrk")] = obj($cdata["to"]);
+			$ret[$cdata["to"]] = obj($cdata["to"]);
 		}
-		ksort($ret);
+		uasort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("jrk"), $b->prop("jrk"));'));
 		return $ret;
 	}
 
