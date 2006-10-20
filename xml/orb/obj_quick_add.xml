@@ -53,5 +53,12 @@
 			</function>
 		</action>
 
+		<action name="save_bms">
+			<function name="save_bms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

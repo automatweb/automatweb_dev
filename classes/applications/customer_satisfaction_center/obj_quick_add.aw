@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.6 2006/09/19 09:34:22 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.7 2006/10/20 10:57:28 kristo Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -10,9 +10,11 @@
 
 	@property bm_tb type=toolbar store=no no_caption=1 
 
-	@layout bm_tt type=hbox width=30%:70% closeable=1
+	@layout bm_tt type=hbox width=30%:70% 
 
-		@property bm_tree type=treeview store=no no_caption=1 parent=bm_tt
+		@layout bm_tree type=vbox parent=bm_tt closeable=1 area_caption=Puu
+
+			@property bm_tree type=treeview store=no no_caption=1 parent=bm_tree
 
 		@property bm_table type=table store=no no_caption=1 parent=bm_tt
 
@@ -72,12 +74,18 @@ class obj_quick_add extends class_base
 			"link" => html::get_new_url(CL_OBJECT_TYPE, $pt, array("return_url" => get_ru()))
 		));		
 		$tb->add_button(array(
+			"name" => "saveb",
+			"action" => "save_bms",
+			"img" => "save.gif",
+			"tooltip" => t("Salvesta")
+		));
+		$tb->add_button(array(
 			"name" => "delb",
 			"action" => "delete_bms",
 			"img" => "delete.gif",
 			"tooltip" => t("Kustuta")
 		));
-
+		$tb->add_separator();
 		$tb->add_button(array(
 			"name" => "copy_quick_adds",
 			"action" => "copy_quick_adds",
@@ -208,6 +216,23 @@ class obj_quick_add extends class_base
 			"caption" => t("Objekti t&uuml;&uuml;p"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "user_text",
+			"caption" => t("Kasutaja tekst"),
+			"align" => "center",
+			"width" => 15
+		));
+		$t->define_field(array(
+			"name" => "location",
+			"caption" => t("Objektid pannakse"),
+			"align" => "center",
+			"width" => 15
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid",
@@ -230,6 +255,7 @@ class obj_quick_add extends class_base
 		));
 		$mt = $arr["obj_inst"]->meta("grp_sets");
 		$clss = aw_ini_get("classes");
+		$ps = get_instance("vcl/popup_search");
 		foreach($ol->arr() as $o)
 		{
 			$clid = "";
@@ -239,11 +265,31 @@ class obj_quick_add extends class_base
 			}
 			$t->define_data(array(
 				"icon" => html::img(array(
-					'url' => icons::get_icon_url($o->class_id())
+					'url' => icons::get_icon_url($o->class_id() == CL_OBJECT_TYPE ? $o->subclass() : $o->class_id())
 				)),
 				"name" => html::obj_change_url($o),
 				"oid" => $o->id(),
 				"clid" => $clid,
+				"ord" => html::textbox(array(
+					"name" => "dat[".$o->id()."][ord]",
+					"size" => 5,
+					"value" => $o->ord()
+				)),
+				"user_text" => html::textbox(array(
+					"name" => "dat[".$o->id()."][comment]",
+					"value" => $o->comment(),
+					"size" => 15
+				)),
+				"location" => 
+					html::obj_change_url($o->meta("object_parent")).
+					html::hidden(array(
+						"name" => "dat[".$o->id()."][location]",
+						"value" => $o->meta("object_parent"),
+					)).
+					$ps->get_popup_search_link(array(
+						"pn" => "dat[".$o->id()."][location]",
+						"clid" => CL_MENU						
+					))
 			));
 		}
 	}
@@ -254,6 +300,9 @@ class obj_quick_add extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bm_table":
+				$this->save_bms($arr["request"]);
+				break;
 		}
 		return $retval;
 	}	
@@ -283,7 +332,8 @@ class obj_quick_add extends class_base
 		$ot = new object_tree(array(
 			"parent" => $bm->id(),
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
 		));
 		$list = $ot->to_list();
 		foreach($list->arr() as $li)
@@ -302,23 +352,28 @@ class obj_quick_add extends class_base
 			}
 			else
 			{
+				$pto = $td["id"];
+				if ($this->can("add", $li->meta("object_parent")))
+				{
+					$pto = $li->meta("object_parent");
+				}
 				$pm->add_item(array(
-					"text" => $li->name(),
-					"link" => html::get_new_url($li->prop("type"), $td["id"], array("return_url" => $arr["url"])),
+					"text" => $li->comment() != "" ? $li->comment() : $li->name(),
+					"link" => html::get_new_url($li->prop("type"), $pto, array("return_url" => $arr["url"])),
 					"parent" => $pt
 				));
 			}
 		}
 
 		$pm->add_separator();
-		$pm->add_item(array(
+		/*$pm->add_item(array(
 			"text" => t("Pane kiirmen&uuml;&uuml;sse"),
 			"link" => $this->mk_my_orb("add_to_bm", array("url" => $arr["url"]))
 		));
 		$pm->add_item(array(
 			"text" => t("Eemalda kiirmen&uuml;&uuml;st"),
 			"link" => $this->mk_my_orb("remove_from_bm", array("url" => $arr["url"]))
-		));
+		));*/
 		$pm->add_item(array(
 			"text" => t("Toimeta kiirmen&uuml;&uuml;d"),
 			"link" => html::get_change_url($bm->id(), array("return_url" => $arr["url"], "group" => "bms"))
@@ -418,9 +473,36 @@ class obj_quick_add extends class_base
 		return $arr["url"];
 	}
 
-	function callback_mod_retval($arr)
+	/**
+		@attrib name=save_bms
+	**/
+	function save_bms($arr)
 	{
-		$arr["args"]["tf"] = $arr["request"]["tf"];
+		foreach(safe_array($arr["dat"]) as $oid => $dat)
+		{
+			$o = obj($oid);
+			$mod = false;
+			if ($dat["ord"] != $o->ord())
+			{
+				$o->set_ord($dat["ord"]);
+				$mod = true;
+			}
+			if ($dat["comment"] != $o->comment())
+			{
+				$o->set_comment($dat["comment"]);
+				$mod = true;
+			}
+			if ($dat["location"] != $o->meta("object_parent"))
+			{
+				$o->set_meta("object_parent", $dat["location"]);
+				$mod = true;
+			}
+			if ($mod)
+			{
+				$o->save();
+			}
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

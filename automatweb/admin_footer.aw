@@ -212,6 +212,7 @@ if ($_SESSION["user_history_count"] > 0)
 	if (!is_array($_SESSION["user_history"]))
 	{
 		$_SESSION["user_history"] = array();
+		$_SESSION["user_history_sets"] = array();
 	}
 	$pu = parse_url(get_ru());
 	parse_str($pu["query"], $bits);
@@ -231,7 +232,23 @@ if ($_SESSION["user_history_count"] > 0)
 	{
 		if ($_SESSION["user_history_has_folders"])
 		{
-			$_SESSION["user_history"][$bits["class"]][get_ru()] = strip_tags($st);
+			$has = false;
+			foreach(safe_array($_SESSION["user_history"][$bits["class"]]) as $_url => $_t)
+			{
+				$_pu = parse_url($_url);
+				parse_str($_pu["query"], $_bits);
+				if ($_bits["class"] == $bits["class"] && $_bits["id"] == $bits["id"] && $_bits["group"] == $bits["group"])
+				{
+					$has = true;
+					break;
+				}
+			}
+
+			if (!$has)
+			{
+				$_SESSION["user_history"][$bits["class"]][get_ru()] = strip_tags($st);
+			}
+
 			if (count($_SESSION["user_history"][$bits["class"]]) > $_SESSION["user_history_count"])
 			{
 				array_shift($_SESSION["user_history"][$bits["class"]]);
@@ -239,7 +256,22 @@ if ($_SESSION["user_history_count"] > 0)
 		}
 		else
 		{
-			$_SESSION["user_history"][get_ru()] = strip_tags($st);
+			$has = false;
+			foreach(safe_array($_SESSION["user_history"]) as $_url => $_t)
+			{
+				$_pu = parse_url($_url);
+				parse_str($_pu["query"], $_bits);
+				if ($_bits["class"] == $bits["class"] && $_bits["id"] == $bits["id"] && $_bits["group"] == $bits["group"])
+				{
+					$has = true;
+					break;
+				}
+			}
+
+			if (!$has)
+			{
+				$_SESSION["user_history"][get_ru()] = strip_tags($st);
+			}
 			if (count($_SESSION["user_history"]) > $_SESSION["user_history_count"])
 			{
 				array_shift($_SESSION["user_history"]);

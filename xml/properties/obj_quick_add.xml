@@ -16,7 +16,7 @@
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>bm_tt</parent>
+            <parent>bm_tree</parent>
             <field>bm_tree</field>
       </property>
       <property>
@@ -53,9 +53,15 @@
             <bm_tt>
                   <type>hbox</type>
                   <width>30%:70%</width>
-                  <closeable>1</closeable>
                   <group>bms</group>
             </bm_tt>
+            <bm_tree>
+                  <type>vbox</type>
+                  <parent>bm_tt</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Puu</area_caption>
+                  <group>bms</group>
+            </bm_tree>
       </layout>
 </properties>
 

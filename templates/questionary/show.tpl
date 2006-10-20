@@ -1,16 +1,16 @@
 <form method="post">
-{VAR:name}<br>
+<!--{VAR:name}<br>-->
 <!-- SUB: GROUP -->
 
-	<table>
-	<tr><td colspan="{VAR:span}" bgcolor="silver">{VAR:name}</td></tr>
+	<table border="1" width="800" style="border:1px solid black;">
+	<tr><td colspan="{VAR:span}" bgcolor="silver" style="font-size:13px; border:1px solid black;"><b>{VAR:name}</b></td></tr>
 	<!-- SUB: HEADER -->
 		<tr>
 			<td>
-				{VAR:corner_caption}
+				Teema/küsimus<!--{VAR:corner_caption}-->
 			</td>
 		<!-- SUB: QUESTION -->
-			<td style="font-size:10px;border:1px solid black;">
+			<td style="font-size:10px;">
 				{VAR:question_name}
 			</td>
 		<!-- END SUB: QUESTION -->
@@ -18,7 +18,7 @@
 	<!-- END SUB: HEADER -->
 	<!-- SUB: TOPIC -->
 		<tr>
-			<td style="font-size:10px;border:1px solid gray;">
+			<td  width="250" style="font-size:10px;border:1px solid gray;">
 				{VAR:topic_name}
 			</td>
 			<!-- SUB: ANSWER -->
@@ -32,34 +32,40 @@
 <!-- END SUB: GROUP -->
 <!-- SUB: PERS_DATA -->
 <table style="font-size:12px;">
-	Sugu:<br/>
+	<tr>
+	<td>
+	<span style="font-size:13px;">Informatsioon Teie kohta (tehke palun märge sobivasse lahtrisse):</span><br><br>
+	<span style="font-size:12px; font-weight:bold;">Sugu:</span><br/>
 	<input type="radio" value="1" name="pers[gender]"/>mees
 	<input type="radio" value="2" name="pers[gender]"/>naine
 	<br/>
-	Vanus:<br/>
+	<span style="font-size:12px; font-weight:bold;">Vanus:</span><br/>
 	<input type="radio" value="1" name="pers[age]"/>18 v&otilde;i noorem<br/>
 	<input type="radio" value="2" name="pers[age]"/>19-29<br/>
 	<input type="radio" value="3" name="pers[age]"/>30-39<br/>
 	<input type="radio" value="4" name="pers[age]"/>40-49<br/>
 	<input type="radio" value="5" name="pers[age]"/>50-59<br/>
-	<input type="radio" value="6" name="pers[age]"/>60 v&otilde; vanem<br/>
+	<input type="radio" value="6" name="pers[age]"/>60 v&otilde;i vanem<br/>
 	<br/>
-	Tegevusala:<br/><br/>
+	<span style="font-size:12px; font-weight:bold;">Tegevusala:</span><br/><br/>
+</td>
+</tr>
+</table>
 	<table>
 		<tr>
-			<td>
-				tegevusala	
+			<td width="250">
+				<span style="font-size:12px; font-weight:bold;">tegevusala</span>	
 			</td>
 			<td>
-				tallinnast
+				<span style="font-size:12px; font-weight:bold;">tallinnast</span>
 			</td>
 			<td>
-				mujalt
+				<span style="font-size:12px; font-weight:bold;">mujalt</span>
 			</td>
 		</tr>
 		<!-- SUB: PERS_AREA -->
 		<tr>
-			<td>
+			<td width="250">
 				{VAR:caption}
 			</td>
 			<td>
@@ -74,11 +80,11 @@
 
 </table>
 <br/>
-Kui &otilde;pite v&otilde;i t&ouml;&ouml;tate &uuml;likoolis, siis millises?<br/><br/>
+<span style="font-size:12px; font-weight:bold;">Kui &otilde;pite v&otilde;i t&ouml;&ouml;tate &uuml;likoolis, siis millises?</span><br/><br/>
 <table>
 		<tr>
-			<td>&uuml;likool</td>
-			<td colspan="2">teaduskond(instituut/kolledz)</td>
+			<td width="250"><span style="font-size:12px; font-weight:bold;">&uuml;likool</span></td>
+			<td colspan="2"><span style="font-size:12px; font-weight:bold;">teaduskond(instituut/kolledz)</span></td>
 		<tr>
 		<!-- SUB: PERS_SCHOOL -->
 		<tr>
@@ -93,17 +99,17 @@ Kui &otilde;pite v&otilde;i t&ouml;&ouml;tate &uuml;likoolis, siis millises?<br/
 		<!-- END SUB: PERS_SCHOOL -->
 </table>
 <br/>
-Teie t&ouml;&ouml;-, &otilde;pingu v&otilde;i huvivaldkond (t&auml;psustage)?<br/><br/>
+<span style="font-size:12px; font-weight:bold;">Teie t&ouml;&ouml;-, &otilde;pingu v&otilde;i huvivaldkond (t&auml;psustage)?</span><br/><br/>
 <table>
 		<tr>
-			<td>valdkond</td>
-			<td colspan="2">t&auml;psustus</td>
+			<td width="250"><span style="font-size:12px; font-weight:bold;">valdkond</span></td>
+			<td colspan="2"><span style="font-size:12px; font-weight:bold;">t&auml;psustus</span></td>
 		<tr>
 		<!-- SUB: S_AREA -->
 		<tr>
 			<td>{VAR:caption}</td>
 			<td>
-				<input type="radio" value="{VAR:value}" name="pers[intrest_radio]"/>
+				<input type="checkbox" value="{VAR:value}" name="pers[intrest_radio]"/>
 			</td>
 			<td>
 				<input type="textbox" name="pers[intrest_text]"/>
@@ -112,11 +118,11 @@ Teie t&ouml;&ouml;-, &otilde;pingu v&otilde;i huvivaldkond (t&auml;psustage)?<br
 		<!-- END SUB: S_AREA -->
 </table>
 <br/>
-Kui sageli k&uuml;lastate Rahvusraamatukogu?<br/><br/>
+<span style="font-size:12px; font-weight:bold;">Kui sageli k&uuml;lastate Rahvusraamatukogu?</span><br/><br/>
 <table>
 		<!-- SUB: VISITS -->
 		<tr>
-			<td>{VAR:caption}</td>
+			<td width="250">{VAR:caption}</td>
 			<td>
 				<input type="radio" value="{VAR:value}" name="pers[visits]"/>
 			</td>
@@ -124,11 +130,11 @@ Kui sageli k&uuml;lastate Rahvusraamatukogu?<br/><br/>
 		<!-- END SUB: VISITS -->
 </table>
 <br/>
-Kuidas raamatukogu teenuseid kasutate?<br/><br/>
+<span style="font-size:12px; font-weight:bold;">Kuidas raamatukogu teenuseid kasutate?</span><br/><br/>
 <table>
 		<!-- SUB: USAGE -->
 		<tr>
-			<td>{VAR:caption}</td>
+			<td width="250">{VAR:caption}</td>
 			<td>
 				<input type="radio" value="{VAR:value}" name="pers[usage]"/>
 			</td>

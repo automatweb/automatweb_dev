@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.7 2006/09/18 15:01:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.8 2006/10/20 10:57:28 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -10,9 +10,11 @@
 
 	@property bm_tb type=toolbar store=no no_caption=1 
 
-	@layout bm_tt type=hbox width=30%:70% closeable=1
+	@layout bm_tt type=hbox width=30%:70% 
 
-		@property bm_tree type=treeview store=no no_caption=1 parent=bm_tt
+		@layout bm_tree type=vbox parent=bm_tt closeable=1 area_caption=Puu
+
+			@property bm_tree type=treeview store=no no_caption=1 parent=bm_tree
 
 		@property bm_table type=table store=no no_caption=1 parent=bm_tt
 
@@ -169,6 +171,26 @@ class user_bookmarks extends class_base
 		{
 			$mt[$oid] = $gp;
 		}
+		foreach(safe_array($arr["dat"]) as $oid => $com)
+		{
+			$do = obj($oid);
+			$mod = false;
+			if ($com["ord"] != $do->ord())
+			{
+				$do->set_ord($com["ord"]);
+				$mod = true;
+			}
+			if ($do->comment() != $com["comment"])
+			{
+				$do->set_meta("user_text", $com["comment"]);
+				$mod = true;
+			}
+
+			if ($mod)
+			{
+				$do->save();
+			}
+		}
 		$o->set_meta("grp_sets", $mt);
 		$o->save();
 		return $arr["post_ru"];
@@ -283,6 +305,17 @@ class user_bookmarks extends class_base
 			"caption" => t("Grupp"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "user_text",
+			"caption" => t("Kasutaja tekst"),
+			"align" => "center",
+			"width" => 15
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid",
@@ -337,7 +370,17 @@ class user_bookmarks extends class_base
 				"name" => html::obj_change_url($o),
 				"oid" => $o->id(),
 				"link" => $link,
-				"group" => $grp
+				"group" => $grp,
+				"user_text" => html::textbox(array(
+					"name" => "dat[".$o->id()."][comment]",
+					"value" => $o->meta("user_text"),
+					"size" => 15
+				)),
+				"ord" => html::textbox(array(
+					"name" => "dat[".$o->id()."][ord]",
+					"size" => 5,
+					"value" => $o->ord()
+				)),
 			));
 		}
 	}
@@ -357,7 +400,8 @@ class user_bookmarks extends class_base
 		$ot = new object_tree(array(
 			"parent" => $bm->id(),
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
 		));
 		$list = $ot->to_list();
 		$mt = $bm->meta("grp_sets");
@@ -372,14 +416,14 @@ class user_bookmarks extends class_base
 			{
 				$pm->add_sub_menu(array(
 					"name" => "mn".$li->id(),
-					"text" => $li->name()
+					"text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name()
 				));
 			}
 			else
 			if ($li->class_id() == CL_EXTLINK)
 			{
 				$pm->add_item(array(
-					"text" => $li->name(),
+					"text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name(),
 					"link" => $li->prop("url"),
 					"parent" => $pt
 				));
@@ -394,7 +438,7 @@ class user_bookmarks extends class_base
 					$ga = " - ".$gl[$grp]["caption"];
 				}
 				$pm->add_item(array(
-					"text" => $li->name().$ga,
+					"text" => $li->meta("user_text") != "" ? $li->meta("user_text") : $li->name().$ga,
 					"link" => html::get_change_url($li->id(), array("return_url" => $arr["url"], "group" => $grp)),
 					"parent" => $pt
 				));

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.514 2006/10/16 22:02:31 kristo Exp $
+// $Id: class_base.aw,v 2.515 2006/10/20 10:57:23 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -288,7 +288,7 @@ class class_base extends aw_template
 		//$cfgform_id = $args["cfgform"];
 		if (empty($cfgform_id) && is_object($this->obj_inst))
 		{
-			$cfgform_id = $this->obj_inst->meta("cfgform_id");
+			///$cfgform_id = $this->obj_inst->meta("cfgform_id");
 		};
 
 		$this->cfgform_id = $cfgform_id;
@@ -1425,11 +1425,21 @@ class class_base extends aw_template
 			{
 				$target = "_self";
 			};
-			$title = html::href(array(
+			$title = "";
+			if (is_oid($_GET["id"]))
+			{
+				$tmp = obj($_GET["id"]);
+				$title = html::href(array(
+					"url" => $this->mk_my_orb("right_frame", array("parent" => $_GET["id"]), "admin_menus"),
+					"caption" => $tmp->name(),
+					"target" => $target,
+				))." / ";
+			}
+			$title .= html::href(array(
 				"url" => $_GET["return_url"],
 				"caption" => t("Tagasi"),
 				"target" => $target,
-			));// . " / " . $title;
+			));
 		}
 		else
 		{
@@ -4586,7 +4596,10 @@ class class_base extends aw_template
 					"request" => $args,
 				));
 			}
-			else $use_group = $default_group;
+			else 
+			{
+				$use_group = $default_group;
+			}
 		};
 
 		if (!$use_group)
@@ -4611,7 +4624,6 @@ class class_base extends aw_template
 			list($use_group,) = each($this->grpmap[$use_group]);
 			$this->active_groups[] = $use_group;
 		};
-
 
 		$grpinfo = $this->groupinfo[$use_group];
 		// and climb back down again, e.g. make sure we always have _all_ active groups
@@ -4681,7 +4693,6 @@ class class_base extends aw_template
 
 			$property_groups[$key] = $propgroups;
 		};
-
 
 		foreach($cfg_props as $key => $val)
 		{
