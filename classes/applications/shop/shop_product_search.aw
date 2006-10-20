@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.6 2006/10/19 13:51:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.7 2006/10/20 10:19:51 kristo Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -463,6 +463,7 @@ class shop_product_search extends class_base
 		$cols = safe_array($arr["obj_inst"]->meta("s_tbl"));
 		$flds = array();
 		$transforms = array();
+		$clids = array();
 		foreach($cols as $clid => $cold)
 		{
 			foreach($cold as $coln => $coli)
@@ -478,9 +479,11 @@ class shop_product_search extends class_base
 					{
 						$transforms[$clid."_".$coln] = obj($coli["transform"]);
 					}
+					$clids[$clid] = 1;
 				}
 			}
 		}
+
 		uasort($flds, create_function('$a,$b', 'return $a["_ord"] - $b["_ord"];'));
 		foreach($flds as $fld)
 		{
@@ -532,14 +535,21 @@ class shop_product_search extends class_base
 					
 					case CL_SHOP_PRODUCT:
 						$prod = $o;
-						$packet = reset($o->connections_to(array(
-							"from.class_id" => CL_SHOP_PACKET
-						)));
-						if ($packet)
+						if ($clids[CL_SHOP_PACKET])
 						{
-							$packet = $packet->from();
+							$packet = reset($o->connections_to(array(
+								"from.class_id" => CL_SHOP_PACKET
+							)));
+							if ($packet)
+							{
+								$packet = $packet->from();
+							}
 						}
-						$pk = $prod->get_first_obj_by_reltype("RELTYPE_PACKAGING");
+
+						if ($clids[CL_SHOP_PRODUCT_PACKAGING])
+						{
+							$pk = $prod->get_first_obj_by_reltype("RELTYPE_PACKAGING");
+						}
 						if (!$packet)
 						{
 							$packet = obj();
