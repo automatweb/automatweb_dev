@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.15 2006/10/20 11:47:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.16 2006/10/20 12:22:41 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -36,6 +36,9 @@
 
 		@property area type=relpicker reltype=RELTYPE_AREA
 		@caption Valdkond
+
+		@property reservation_template type=select
+		@caption Broneeringu template
 
 	@layout general_down type=vbox closeable=1 area_caption=Mahutavus&#44;&nbsp;kasutustingimused parent=general_split
 	@default parent=general_down
@@ -179,6 +182,9 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 @reltype SHOP_WAREHOUSE value=10 clid=CL_SHOP_WAREHOUSE
 @caption Ruumi hind
 
+reltype TEMPLATE value=11 clid=CL_SHOP_WAREHOUSE
+caption Ruumi hind
+
 */
 
 class room extends class_base
@@ -259,8 +265,7 @@ class room extends class_base
 					"overview_range" => 1,
 				));
 				$prop["value"] = "s"; //$c->draw_month();
-*/				break;
-				case "products_tr":
+*/				case "products_tr":
 					if(!$arr["obj_inst"]->prop("resources_fld"))
 					{
 						$prop["error"] = t("Pole valitud lao toodete kataloogi");
@@ -268,6 +273,19 @@ class room extends class_base
 					}
 					$this->_products_tr($arr);
 					break;	
+				case "reservation_template":
+					$tm = get_instance("templatemgr");
+					$prop["options"] = $tm->template_picker(array(
+						"folder" => "common/room"
+					));
+					if(!sizeof($prop["options"]))
+					{//arr($prop);
+						$prop["caption"] .= t("\n".$this->site_template_dir."");
+		//				$prop["type"] = "text";
+		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
+					}
+					break;
+				
 				case "products_tbl":
 					$this->_products_tbl($arr);
 					break;
