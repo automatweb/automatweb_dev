@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer_row.aw,v 1.4 2006/10/12 16:04:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer_row.aw,v 1.5 2006/10/20 15:06:04 markop Exp $
 // procurement_offer_row.aw - Pakkumise rida 
 /*
 
@@ -30,6 +30,9 @@
 	@property price type=textbox  table=aw_procurement_offer_rows field=aw_price
 	@caption Hind
 
+	@property price_amount type=textbox  table=aw_procurement_offer_rows field=aw_price_amount
+	@caption Hind koguse puhul
+	
 	@property currency type=select  table=aw_procurement_offer_rows field=aw_currency
 	@caption Valuuta
 
@@ -128,6 +131,7 @@ class procurement_offer_row extends class_base
 			case "aw_b_amount":
 			case "aw_price":
 			case "aw_b_price":
+			case "aw_price_amount":	
 				$this->db_add_col($t, array("name" => $f, "type" => "double"));
 				return true;	
 

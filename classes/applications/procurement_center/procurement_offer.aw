@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.14 2006/10/12 16:04:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.15 2006/10/20 15:06:04 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -885,6 +885,12 @@ class procurement_offer extends class_base
         		'name' => 'price',
 			'caption' => t('Hind'),
 		));
+		
+		$t->define_field(array(
+        		'name' => 'price_amount',
+			'caption' => t('Hind kehtib &uuml;hiku korral'),
+		));
+		
 		$t->define_field(array(
 			'name' => 'currency',
 			'caption' => t('Valuuta'),
@@ -979,6 +985,7 @@ class procurement_offer extends class_base
 				"price" => $row->prop("price"),
 				"currency" => $row->prop("currency"),
 				"shipment" => $row->prop("shipment"),
+				"price_amount" => $row->prop("price_amount"),
 			);
 		}
 		foreach($prod_rows_data as $prod_row_data)	
@@ -1017,6 +1024,12 @@ class procurement_offer extends class_base
 							"value" => $price,
 							"tabindex"=>$x,
 							)),
+				'price_amount'		=> html::textbox(array(
+							"name" => "products[".$x."][price_amount]",
+							"size" => "6",
+							"value" => $price_amount,
+							"tabindex"=>$x,
+							)),
 				'currency'	=> html::select(array(
 							"name" => "products[".$x."][currency]",
 							"options" => $curr_opts,
@@ -1042,6 +1055,10 @@ class procurement_offer extends class_base
 		$x = $max_x + 1;
 		$lisa = $x + 10;
 		if(is_object($co))$curr_val = $co->prop("currency");
+		if($this_obj->prop("currency"))
+		{
+			$curr_val = $this_obj->prop("currency");
+		}
 		while($x < $lisa)
 		{
 			$t->define_data(array(
@@ -1064,6 +1081,11 @@ class procurement_offer extends class_base
 							"name" => "products[".$x."][price]",
 							"size" => "6",
 							)),
+				'price_amount'	=> html::textbox(array(
+							"name" => "products[".$x."][price_amount]",
+							"size" => "6",
+							)),
+							
 				'currency'	=> html::select(array(
 							"name" => "products[".$x."][currency]",
 							"options" => $curr_opts,
