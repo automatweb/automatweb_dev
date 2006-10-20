@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.111 2006/10/11 17:05:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.112 2006/10/20 11:22:59 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -299,6 +299,14 @@ caption Teostajad
 	property analysis_table type=table no_caption=1 store=no
 
 
+@default group=stats
+
+	@property proj_price type=textbox table=objects field=meta method=serialize
+	@caption Projekti hind
+
+	@property stats type=text store=no
+	@caption T&ouml;&ouml;tunnid
+
 @groupinfo general2 parent=general caption="&Uuml;ldandmed"
 	@groupinfo info_t caption="Lisainfo" parent=general
 	@groupinfo strat caption="Eesm&auml;rgid" parent=general submit=no
@@ -346,6 +354,7 @@ groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
 groupinfo risks_t caption="Riskid"
 
 @groupinfo req caption="N&otilde;uded" submit=no parent=event_list
+@groupinfo stats caption="Statistika" submit=no parent=event_list
 
 @groupinfo transl caption=T&otilde;lgi
 
@@ -866,6 +875,10 @@ class project extends class_base
 						"caption" => t("Loo arve")
 					));
 				}
+				break;
+
+			case "stats":
+				$data["value"] = $this->_get_stats($arr["obj_inst"]);
 				break;
 		}
 		return $retval;
@@ -5212,6 +5225,51 @@ class project extends class_base
 		}
 		return $arr["post_ru"];
 	}
-	
+
+	function _get_stats($o)
+	{
+		// bugs
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"project" => $o->id()
+		));
+		$hrs = 0;
+		foreach($ol->arr() as $b)
+		{
+			$hrs += $b->prop("num_hrs_real");
+		}
+		$res = "Bugid: ".$hrs." tundi <br>";
+		// tasks
+		$ol = new object_list(array(
+			"class_id" => array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"project" => $o->id(),
+			"brother_of" => new obj_predicate_prop("id")
+		));
+		$tot_h = $hrs;
+		$hrs = 0;
+		foreach($ol->arr() as $b)
+		{
+			$hrs += $b->prop("num_hrs_real");
+			foreach($b->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+			{
+				$r = $c->to();
+				$hrs += $r->prop("time_real");
+			}
+		}
+
+
+		$res .= "Taskid & k6ned & kohtumised: $hrs tundi <br>";
+		$tot_h += $hrs;
+
+		$hrs_price = $tot_h * 500;
+
+		$res .= "Projekti kasum: ".($o->prop("proj_price") - $hrs_price)." <br>";		
+
+		return $res;
+	}	
 };
 ?>

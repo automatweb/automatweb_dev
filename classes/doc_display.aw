@@ -211,18 +211,24 @@ class doc_display extends aw_template
 				{
 					$lead = "";
 				}
-				if (aw_ini_get("document.boldlead"))
+				if ($lead != "")
 				{
-					$lead = "<b>".$lead."</b>";
+					if (aw_ini_get("document.boldlead"))
+					{
+						$lead = "<b>".$lead."</b>";
+					}
+					$text = $lead.aw_ini_get("document.lead_splitter").$doc->trans_get_val("content");
 				}
-				$text = $lead.aw_ini_get("document.lead_splitter").$doc->trans_get_val("content");
+				else
+				{
+					$text = $doc->trans_get_val("content");
+				}
 			}
 			else
 			{
 				$text = $doc->trans_get_val("content");
 			}
 		}
-
 		// line break conversion between wysiwyg and not
 		$cb_nb = $doc->meta("cb_nobreaks");
 		if (!($doc->prop("nobreaks") || $cb_nb["content"]))	

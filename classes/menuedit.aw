@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.375 2006/10/16 21:20:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.376 2006/10/20 11:22:57 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -461,6 +461,12 @@ class menuedit extends aw_template
 			// if user requested favicon, then just show the thing here and be done with it
 			$c = get_instance("config");
 			$c->show_favicon(array());
+		}
+		if ($section == 'sitemap.gz')
+		{
+			// if user requested favicon, then just show the thing here and be done with it
+			$c = get_instance(CL_MENU);
+			$c->get_sitemap();
 		}
 
 		// sektsioon ei olnud numbriline

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.16 2006/07/03 13:57:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.17 2006/10/20 11:22:59 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -1032,12 +1032,15 @@ class orb extends aw_template
 			}
 			if ($action == "new")
 			{
-				$tmp = obj(aw_global_get("section"));
-				if ($tmp->class_id() == CL_DOCUMENT)
+				if ($this->can("view", aw_global_get("section")))
 				{
-					$tmp = obj($tmp->parent());
+					$tmp = obj(aw_global_get("section"));
+					if ($tmp->class_id() == CL_DOCUMENT)
+					{
+						$tmp = obj($tmp->parent());
+					}
+					$meth["values"]["parent"] = $tmp->id();
 				}
-				$meth["values"]["parent"] = $tmp->id();
 			}
 		};
 		if ($id == "doc")
@@ -1059,13 +1062,16 @@ class orb extends aw_template
 		};
 		if ($id == "menu")
 		{
-			$so = obj(aw_global_get("section"));
-			if ($so->class_id() != CL_MENU)
+			if ($this->can("view", aw_global_get("section")))
 			{
-				$so = obj($so->parent());
+				$so = obj(aw_global_get("section"));
+				if ($so->class_id() != CL_MENU)
+				{
+					$so = obj($so->parent());
+				}
+				$meth["values"]["parent"] = $so->id();
+				$meth["values"]["id"] = $so->id();
 			}
-			$meth["values"]["parent"] = $so->id();
-			$meth["values"]["id"] = $so->id();
 		}
 		else
 		if ($id == "file")

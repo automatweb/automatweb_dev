@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.11 2006/10/16 10:50:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.12 2006/10/20 11:22:58 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -633,6 +633,7 @@ class admin_if extends class_base
 		}
 
 		$per_page = 100;
+
 		$ft_page = $GLOBALS["ft_page"];
 		$lim = "LIMIT ".($ft_page * $per_page).",".$per_page;
 
@@ -668,9 +669,13 @@ class admin_if extends class_base
 		// total count
 		$q = "SELECT count(*) as cnt $query";
 		$t->d_row_cnt = $this->db_fetch_field($q, "cnt");
-
 		if ($t->d_row_cnt > $per_page)
 		{
+			$t->define_pageselector(array(
+				"type" => "lb",
+				"records_per_page" => $per_page,
+				"d_row_cnt" => $t->d_row_cnt
+			));
 			$pageselector = $t->draw_lb_pageselector(array(
 				"records_per_page" => $per_page
 			));

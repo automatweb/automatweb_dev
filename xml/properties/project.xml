@@ -716,6 +716,24 @@
             <parent>req_tbl_l</parent>
             <field>req_tbl</field>
       </property>
+      <property>
+            <name>proj_price</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Projekti hind</caption>
+      </property>
+      <property>
+            <name>stats</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>text</type>
+            <store>no</store>
+            <field>stats</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tunnid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -811,6 +829,11 @@
                   <submit>no</submit>
                   <parent>event_list</parent>
             </req>
+            <stats>
+                  <caption>Statistika</caption>
+                  <submit>no</submit>
+                  <parent>event_list</parent>
+            </stats>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

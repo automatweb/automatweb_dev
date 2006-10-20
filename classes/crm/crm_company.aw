@@ -7255,8 +7255,11 @@ class crm_company extends class_base
 		}
 		$cur = get_current_company();
 		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-		$crel->set_prop("cust_contract_creator", $arr["prop"]["value"]);
-		$crel->save();
+		if ($crel)
+		{
+			$crel->set_prop("cust_contract_creator", $arr["prop"]["value"]);
+			$crel->save();
+		}
 	}
 
 	function _get_cust_buyer_contract_date($arr)
@@ -7277,8 +7280,11 @@ class crm_company extends class_base
 		}
 		$cur = get_current_company();
 		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-		$crel->set_prop("cust_contract_date", $arr["prop"]["value"]);
-		$crel->save();
+		if ($crel)
+		{
+			$crel->set_prop("cust_contract_date", $arr["prop"]["value"]);
+			$crel->save();
+		}
 	}
 
 	function _get_buyer_contact_person($arr)
@@ -7397,8 +7403,11 @@ class crm_company extends class_base
 		}
 		$cur = get_current_company();
 		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-		$crel->set_prop("priority", $arr["prop"]["value"]);
-		$crel->save();
+		if ($crel)
+		{
+			$crel->set_prop("priority", $arr["prop"]["value"]);
+			$crel->save();
+		}
 	}
 
 	function _get_referal_type($arr)
@@ -7419,8 +7428,11 @@ class crm_company extends class_base
 		}
 		$cur = get_current_company();
 		$crel = $this->get_cust_rel($cur, true, $arr["obj_inst"]);
-		$crel->set_prop("referal_type", $arr["prop"]["value"]);
-		$crel->save();
+		if ($crel)
+		{
+			$crel->set_prop("referal_type", $arr["prop"]["value"]);
+			$crel->save();
+		}
 	}
 
 	function _get_buyer_client_manager($arr)
@@ -7448,8 +7460,11 @@ class crm_company extends class_base
 		}
 		$cur = get_current_company();
 		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-		$crel->set_prop("client_manager", $arr["prop"]["value"]);
-		$crel->save();
+		if ($crel)
+		{
+			$crel->set_prop("client_manager", $arr["prop"]["value"]);
+			$crel->save();
+		}
 	}
 
 	function _get_buyer_bill_due_date_days($arr)
@@ -7470,8 +7485,11 @@ class crm_company extends class_base
 		}
 		$cur = get_current_company();
 		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-		$crel->set_prop("bill_due_date_days", $arr["prop"]["value"]);
-		$crel->save();
+		if ($crel)
+		{
+			$crel->set_prop("bill_due_date_days", $arr["prop"]["value"]);
+			$crel->save();
+		}
 	}
 
 	function _get_buyer_bill_penalty_pct($arr)
@@ -7492,8 +7510,11 @@ class crm_company extends class_base
 		}
 		$cur = get_current_company();
 		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-		$crel->set_prop("bill_penalty_pct", $arr["prop"]["value"]);
-		$crel->save();
+		if ($crel)
+		{
+			$crel->set_prop("bill_penalty_pct", $arr["prop"]["value"]);
+			$crel->save();
+		}
 	}
 
 	function _get_buyer_buyer_contract_person($arr)
@@ -7519,8 +7540,11 @@ class crm_company extends class_base
 		}
 		$cur = get_current_company();
 		$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-		$crel->set_prop("buyer_contact_person", $arr["prop"]["value"]);
-		$crel->save();
+		if ($crel)
+		{
+			$crel->set_prop("buyer_contact_person", $arr["prop"]["value"]);
+			$crel->save();
+		}
 	}
 }
 

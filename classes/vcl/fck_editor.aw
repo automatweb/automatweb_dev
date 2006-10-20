@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.9 2006/10/19 10:33:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.10 2006/10/20 11:23:01 kristo Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor extends core
@@ -95,6 +95,8 @@ window.onload = function()
 		fck'.$nm.'.Config["AutoDetectLanguage"] = false;
 		fck'.$nm.'.Config["DefaultLanguage"] = "'.(!empty($arr["lang"]) ? $arr["lang"] : ($_SESSION["user_adm_ui_lc"] != "" ? $_SESSION["user_adm_ui_lc"] : "et")).'";
 		fck'.$nm.'.ReplaceTextarea();';
+
+		$retval .= 'fck'.$nm.'.Config["CustomConfigurationsPath"] = "'.$this->mk_my_orb("get_fck_config").'" + ( new Date() * 1 ) ;\n';
 	}
 	$retval .= '
  	if (oldload)
@@ -106,6 +108,17 @@ window.onload = function()
 </script>
 ';
 		return $retval;
+	}
+
+	/**
+		@attrib name=get_fck_config
+	**/
+	function get_fck_config($arr)
+	{
+		die("
+			FCKConfig.AutoDetectLanguage	= false ;
+			FCKConfig.DefaultLanguage		= '".($_SESSION["user_adm_ui_lc"] != "" ? $_SESSION["user_adm_ui_lc"] : "et")."' ;
+		");
 	}
 }
 ?>
