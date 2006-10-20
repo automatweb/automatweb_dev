@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.14 2006/10/20 11:18:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.15 2006/10/20 11:47:40 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1022,6 +1022,7 @@ class room extends class_base
 			$ol = $ol->arr(); 
 		}
 		
+		$prod_data = $arr["obj_inst"]->meta("prod_data");
 		foreach($ol as $o)
 		{
 
@@ -1060,8 +1061,20 @@ class room extends class_base
 					"caption" => $name
 				));
 			}
-
+			
+			//järjekorda kui pole, siis võtab objektist selle järjekorra mis on laos jne
+			$ord = $o->ord();
+			if($prod_data[$o->id()]["ord"]) 
+			{
+				$ord = $prod_data[$o->id()]["ord"];
+			}
+			
 			$tb->define_data(array(
+				"active" =>  html::checkbox(array(
+					"name" => "sel_imp[".$o->id()."]",
+					"value" => $o->id(),
+					"checked" => $prod_data[$o->id()]["active"],
+				)),
 				"oid" => $o->id(),
 				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
 				"name" => $name,
@@ -1083,13 +1096,13 @@ class room extends class_base
 				"is_menu" => ($o->class_id() == CL_MENU ? 0 : 1),
 				"ord" => html::textbox(array(
 					"name" => "set_ord[".$o->id()."]",
-					"value" => $o->ord(),
+					"value" => $ord,
 					"size" => 5
 				)).html::hidden(array(
 					"name" => "old_ord[".$o->id()."]",
 					"value" => $o->ord()
 				)),
-				"hidden_ord" => $o->ord()
+				"hidden_ord" => $ord
 			));
 		}
 
@@ -1106,6 +1119,11 @@ class room extends class_base
 
 	function _init_prod_list_list_tbl(&$t)
 	{
+		$t->define_field(array(
+			"name" => "active",
+			"caption" => t("Aktiivne"),
+		));
+		
 		$t->define_field(array(
 			"name" => "icon",
 			"caption" => t("&nbsp;"),
@@ -1149,12 +1167,6 @@ class room extends class_base
 			"name" => "change",
 			"caption" => t("Muuda"),
 			"align" => "center"
-		));
-
-		$t->define_chooser(array(
-			"field" => "oid",
-			"name" => "sel_imp",
-			"caption" => t("Aktiivne"),
 		));
 
 		$t->define_field(array(
@@ -1283,7 +1295,7 @@ class room extends class_base
 			"name" => "save",
 			"img" => "save.gif",
 			"tooltip" => t("Aktiivseks"),
-			'action' => 'submit',
+			'action' => 'save_products',
 		));
 
 		$tb->add_button(array(
@@ -1293,6 +1305,23 @@ class room extends class_base
 			'action' => 'delete_cos',
 		));
 
+	}
+	
+	/**
+		@attrib name=save_products params=name all_args=1
+	**/
+	function save_products($arr)
+	{
+		$this_obj = obj($arr["id"]);
+		$prod_data = $this_obj->meta("prod_data");
+		foreach($arr["set_ord"] as $id => $ord)
+		{
+			$prod_data[$id]["ord"] = $ord;
+			$prod_data[$id]["active"] = $arr["sel_imp"][$id];
+		}
+		$this_obj->set_meta("prod_data" , $prod_data);
+		$this_obj->save();
+		return $arr["post_ru"];
 	}
 	
 	function _req_add_itypes(&$tb, $parent, &$data)
