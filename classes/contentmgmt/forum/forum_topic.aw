@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.20 2006/09/04 17:40:40 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.21 2006/10/20 09:51:04 kristo Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1
@@ -62,13 +62,12 @@ class forum_topic extends class_base
 		if($arr["request"]["answers_to_mail"] && is_email($arr["request"]["author_email"]))
 		{
 
-			$mail_addres = new object(array(
-				"class_id" => CL_ML_MEMBER,
-				"name" => $arr["request"]["author_name"],
-				"parent" => $arr["obj_inst"]->id(),
-			));
+			$mail_addres = new object();
 			//It fucking sucks, i have to save this object twice, to set mail property
-			$mail_addres->save();
+			// no, you really don't - terryf
+			$mail_addres->set_name($arr["request"]["author_name"]);
+			$mail_addres->set_parent($arr["obj_inst"]->id());
+			$mail_addres->set_class_id(CL_ML_MEMBER);
 			$mail_addres->set_prop("mail", $arr["request"]["author_email"]);
 			$mail_addres->save();
 
