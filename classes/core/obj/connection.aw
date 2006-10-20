@@ -236,6 +236,20 @@ class connection
 		}
 
 		$retval =  $GLOBALS["object_loader"]->ds->find_connections($param);
+
+		if ($param["sort_by"] != "")
+		{
+			uasort($retval, create_function('$a,$b', 'return strcasecmp($a["'.$param["sort_by"].'"], $["'.$param["sort_by"].'"]);'));
+		}
+		if ($param["sort_by_num"] != "")
+		{
+			uasort($retval, create_function('$a,$b', 'return ($a["'.$param["sort_by_num"].'"] == $b["'.$param["sort_by_num"].'"] ? 0 : ($a["'.$param["sort_by_num"].'"] > $b["'.$param["sort_by_num"].'"] ? 1 : -1 ));'));
+		}
+		if($param['sort_dir'] == 'desc')
+		{
+			$retval = array_reverse($retval);
+		}
+
 		$rv = array();
 		foreach($retval as $k => $v)
 		{
