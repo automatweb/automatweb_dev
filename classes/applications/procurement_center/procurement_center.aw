@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.22 2006/10/12 16:04:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.23 2006/10/20 14:31:25 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -173,6 +173,10 @@ default group=offerers_tree
 			@caption Hankijagrupp
 			@property products_find_apply type=checkbox store=no parent=products_find_params no_caption=1
 			@caption Ainult kehtivad Ostud
+			@property products_find_start type=date_select store=no parent=products_find_params captionside=top
+			@caption Pakutud alates
+			@property products_find_end type=date_select store=no parent=products_find_params captionside=top
+			@caption Pakutud kuni
 			@property do_find_products type=submit store=no parent=products_find_params no_caption=1
 			@caption Otsi
 	@property products_tbl type=table no_caption=1 store=no parent=products_l
@@ -311,6 +315,9 @@ class procurement_center extends class_base
 			case "procurements_find_offerer":
 			case "procurements_find_product":
 			case "products_find_apply":
+			case "products_find_start":
+			case "products_find_end":
+				
 				$search_data = $arr["obj_inst"]->meta("search_data");
 				$prop["value"] = $search_data[$prop["name"]];
 				break;
@@ -2072,8 +2079,19 @@ class procurement_center extends class_base
 		$ol = new object_list();
 		$filter = array("class_id" => array(CL_SHOP_PRODUCT), "lang_id" => array());
 		$data = $this_obj->meta("search_data");
-		if($data["products_find_product_name"]) $filter["name"] = "%".$data["products_find_product_name"]."%";
-		if($data["products_find_name"] || $data["products_find_address"] || $data["products_find_groups"] || $data["products_find_apply"])
+		if($data["products_find_product_name"])
+		{
+			$filter["name"] = "%".$data["products_find_product_name"]."%";
+		}
+		
+		if(
+			    $data["products_find_name"]
+			 || $data["products_find_address"]
+			 || $data["products_find_groups"]
+			 || $data["products_find_apply"]
+			 || $data["products_find_start"]
+			 || $data["products_find_start"]
+		)
 		{
 			$offerer_filter = array("class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON), "lang_id" => array());
 			if($data["products_find_name"]) $offerer_filter["name"] = "%".$data["products_find_name"]."%";
@@ -2113,6 +2131,23 @@ class procurement_center extends class_base
 					"CL_PROCUREMENT_OFFER_ROW.RELTYPE_OFFER.offerer" => $offerer->id(),
 				);
 				if($data["products_find_apply"]) $row_filter["accept"] = 1;
+				
+				//otsimine pakkumise aja järgi
+				if((date_edit::get_timestamp($data["products_find_start"]) > 1)|| (date_edit::get_timestamp($data["products_find_end"]) > 1))
+				{
+					if(date_edit::get_timestamp($data["products_find_start"]) > 1)
+					{
+						$from = date_edit::get_timestamp($data["products_find_start"]);
+					}
+					else $from = 1;
+					if(date_edit::get_timestamp($data["products_find_end"]) > 1)
+					{
+						$to = date_edit::get_timestamp($data["products_find_end"]);
+					}
+					else $to = time()*66;
+					$row_filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
+				}
+				
 				$offer_rows = new object_list($row_filter);
 				foreach($offer_rows->arr() as $row)
 				{
