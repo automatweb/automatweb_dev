@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.16 2006/10/20 12:22:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.17 2006/10/20 13:24:06 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1378,6 +1378,83 @@ class room extends class_base
 				$this->_req_add_itypes($tb, $o->id(), $data);
 			}
 		}
+	}
+	
+	function get_prod_tree($o)
+	{
+		if(is_oid($o))
+		{
+			$o = obj($o);
+		}
+		if(is_oid($o->prop("resources_fld")) && $this->can("view" , $o->prop("resources_fld")))
+		{
+			$tree = new object_tree(array(
+				"parent" => $o->prop("resources_fld"),
+				"class_id" => CL_MENU,
+				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
+				"sort_by" => "objects.jrk"
+			));
+			return $tree;
+		}
+		else
+		{
+			return "";
+		}
+	}
+	 
+	function get_prod_list($o)
+	{
+		
+		$ol = new object_list();
+		
+		if(is_oid($o))
+		{
+			$o = obj($o);
+		}
+		
+		if(!is_object($o))
+		{
+			return new object_list();
+		}
+		
+		if($o->class_id() == CL_MENU)
+		{
+			$parent = $o->id();
+		}
+		else
+		{
+			$menu_tree = $this->get_product_tree($o);
+			$menu_list = $menu_tree->to_list();
+			$parent = $menu_list->ids();
+		}
+		
+		$ol = new object_list(array(
+			"class_id" => CL_ROOM,
+			"lang_id" => array(),
+			"parent" => $parent,
+		));
+	
+		return $ol;
+	}
+	
+	
+	/** Change the realestate object info.
+		
+		@attrib name=parse_alias is_public="1" caption="Change"
+	
+	**/
+	function parse_alias($arr)
+	{
+		enter_function("room::parse_alias");
+		$tpl = "kolm.tpl";
+		$this->read_template($tpl);
+		lc_site_load("room", &$this);
+		
+		$data = array("joga" => "jogajoga");
+		$this->vars($data);
+		//property väärtuse saatmine kujul "property_nimi"_value
+		exit_function("room::parse_alias");
+		return $this->parse();
 	}
 	
 }
