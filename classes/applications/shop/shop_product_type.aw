@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.6 2006/10/05 12:01:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.7 2006/10/20 14:59:25 markop Exp $
 // shop_product_type.aw - Toote t&uuml;&uuml;p 
 /*
 
@@ -65,7 +65,7 @@ class shop_product_type extends class_base
 				foreach($options as $opt)
 				{
 					$data["options"][$opt->id()] = $opt->name(); 
-				}arr($data["options"]);
+				}
 				break;
 		};
 		return $retval;
