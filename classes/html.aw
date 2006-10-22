@@ -499,6 +499,9 @@ class html extends aw_template
 		Checkbox caption
 	@param onclick optional type=string
 		stuff what will happen if you click on checkbox - javascript
+
+	@param title optional
+		title
 	@returns string/html checkbox
 	**/
 	function checkbox($args = array())
@@ -524,11 +527,15 @@ class html extends aw_template
 		{
 			$capt = '<span style="font-size: ' . $textsize . ';">' . $capt . '</span>';
 		}
+		if(isset($title))
+		{
+			$title = "title='".$title."'";
+		}
 		if (isset($onclick))
 		{
 			$onc = "onClick='$onclick'";
 		}
-		$rv = "<input type='checkbox' id='$name' name='$name' value='$value' $onc $checked $disabled /> $capt\n";
+		$rv = "<input type='checkbox' id='$name' $title name='$name' value='$value' $onc $checked $disabled /> $capt\n";
 		return $rv;
 	}
 
