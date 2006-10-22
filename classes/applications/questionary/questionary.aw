@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.7 2006/10/22 20:57:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.8 2006/10/22 22:00:49 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -201,14 +201,13 @@ class questionary extends class_base
 				}
 				if(!$no_answer)
 				{
-					$this->vars(array(
-						"answer_element" => html::checkbox(array(
+					$checkbox = html::checkbox(array(
 							"name" => "no_answer[".$oid."][".$arr["topic"]."]",
 							"value" => false,
-							//"onclick" => "javascript:alert(34);"
-							//"onclick" => "javasript:ch_radio(".$arr["group"].", ".$arr["topic"].");",	
-							//"onclick" => "ch_radio(".$arr["group"].", ".$arr["topic"].", new Array(".join(",", $topic_questions).", -1));",
-						)),
+							"title" => "Group ".$arr["group"]."_".$arr["topic"]." Master",
+					));
+					$this->vars(array(
+						"answer_element" => "<span title=\"Group".$arr["group"]."_".$arr["topic"]."f7_Master\">".$checkbox."</span>",
 					));
 					$answer .= $this->parse("ANSWER");
 				}
@@ -317,14 +316,13 @@ class questionary extends class_base
 		for($i=1; $i <= $a_count; $i++)
 		{
 			$sel = ($ans[$arr["group"]][$arr["topic"]][$arr["question"]] == $i)?true:false;
+			$radio = html::radiobutton(array(
+					"name" => "answer[".$arr["group"]."][".$arr["topic"]."][".$arr["question"]."]",
+					"value" => $i,
+			));
 			$this->vars(array(
 				"nr" => $i,
-				"html_element" => html::radiobutton(array(
-					"name" => "answer[".$arr["group"]."][".$arr["topic"]."][".$arr["question"]."]",
-					//"checked" => $sel, 
-					//"id" => "answer_".$arr["group"]."_".$arr["topic"]."_".$arr["question"],
-					"value" => $i,
-				)),
+				"html_element" => "<span title=\"Group".$arr["group"]."_".$arr["topic"]."\">".$radio."</span>",
 			));
 			$elements .= $this->parse("INPUT");
 		}
