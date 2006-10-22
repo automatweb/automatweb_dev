@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/answerer.aw,v 1.2 2006/10/18 21:32:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/answerer.aw,v 1.3 2006/10/22 20:57:31 tarvo Exp $
 // answerer.aw - Vastaja 
 /*
 
@@ -30,6 +30,9 @@
 
 @property usage type=text
 @caption Raamatukogu teenuseid kasutan
+
+@property questionary_comment type=textarea cols=50 rows=6
+@caption comment
 
 @property questionary type=relpicker
 @caption K&uuml;simustik

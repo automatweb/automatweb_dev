@@ -64,6 +64,17 @@
             <caption>Raamatukogu teenuseid kasutan</caption>
       </property>
       <property>
+            <name>questionary_comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <cols>50</cols>
+            <rows>6</rows>
+            <caption>comment</caption>
+      </property>
+      <property>
             <name>questionary</name>
             <table>objects</table>
             <group>general</group>

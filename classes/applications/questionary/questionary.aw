@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.6 2006/10/20 12:30:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.7 2006/10/22 20:57:31 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -174,7 +174,7 @@ class questionary extends class_base
 			if(!$no_answer)
 			{
 				$this->vars(array(
-					"question_name" => t("Ei vasta"),
+					"question_name" => t("Ei oska &ouml;elda"),
 				));
 				$header .= $this->parse("QUESTION");
 			}
@@ -189,14 +189,15 @@ class questionary extends class_base
 			{
 				unset($answer);
 				$arr["topic"] = $o->id();
+				$arr["group"] = $oid;
 				foreach($questions as $q_o)
 				{
 					$arr["question"] = $q_o->id();
-					$arr["group"] = $oid;
 					$this->vars(array(
 						"answer_element" => $this->_get_answer_element($arr),
 					));
 					$answer .= $this->parse("ANSWER");
+					//$topic_questions[] = $q_o->id();
 				}
 				if(!$no_answer)
 				{
@@ -204,11 +205,14 @@ class questionary extends class_base
 						"answer_element" => html::checkbox(array(
 							"name" => "no_answer[".$oid."][".$arr["topic"]."]",
 							"value" => false,
+							//"onclick" => "javascript:alert(34);"
+							//"onclick" => "javasript:ch_radio(".$arr["group"].", ".$arr["topic"].");",	
+							//"onclick" => "ch_radio(".$arr["group"].", ".$arr["topic"].", new Array(".join(",", $topic_questions).", -1));",
 						)),
 					));
 					$answer .= $this->parse("ANSWER");
 				}
-
+				//unset($topic_questions);
 				$this->vars(array(
 					"topic_name" => $o->name(),
 					"ANSWER" => $answer,
@@ -317,7 +321,8 @@ class questionary extends class_base
 				"nr" => $i,
 				"html_element" => html::radiobutton(array(
 					"name" => "answer[".$arr["group"]."][".$arr["topic"]."][".$arr["question"]."]",
-					"checked" => $sel, 
+					//"checked" => $sel, 
+					//"id" => "answer_".$arr["group"]."_".$arr["topic"]."_".$arr["question"],
 					"value" => $i,
 				)),
 			));
@@ -362,6 +367,7 @@ class questionary extends class_base
 		$o->set_prop("questionary", $arr["questionary"]);
 		$o->set_prop("gender", $this->pers["gender"][$arr["pers"]["gender"]]);
 		$o->set_prop("age", $this->pers["age"][$arr["pers"]["age"]]);
+		$o->set_prop("questionary_comment", $arr["pers"]["comment"]);
 		if(!($a = $arr["pers"]["area_radio"]))
 		{
 			foreach($arr["pers"]["area_text"] as $k => $v)
@@ -405,7 +411,6 @@ class questionary extends class_base
 		$o->set_prop("school", $school);
 
 		# INTRESTS
-		arr($arr);
 		foreach($arr["pers"]["intrest_check"] as $nr => $pointless)
 		{
 			$intrests[] = $this->pers["intrests"][$nr].(strlen(($tmp = $arr["pers"]["intrest_text"][$nr]))?"(".$tmp.")":"");
@@ -461,6 +466,7 @@ class questionary extends class_base
 		{
 			$conns = $obj->connections_from(array(
 				"type" => "RELTYPE_ANSWER",
+				"to.class_id" => CL_QUESTIONARY_RESULT,
 			));
 			foreach($conns as $data)
 			{
@@ -474,7 +480,6 @@ class questionary extends class_base
 			}
 
 		}
-		return $ret;
 	}
 
 	/**
@@ -502,6 +507,7 @@ class questionary extends class_base
 				$struct[] = "Huvivaldkond";
 				$struct[] = "Rahvusraamatukogu külastan";
 				$struct[] = "Raamatukogu teenuseid kasutan";
+				$struct[] = "Kommentaar";
 			}
 
 			$res[$result][] = $answerer->prop("gender");
@@ -511,6 +517,7 @@ class questionary extends class_base
 			$res[$result][] = html_entity_decode($answerer->prop("intrests"));
 			$res[$result][] = html_entity_decode($answerer->prop("visits"));
 			$res[$result][] = html_entity_decode($answerer->prop("usage"));
+			$res[$result][] = html_entity_decode($answerer->prop("questionary_comment"));
 
 			foreach($answers as $ans_id => $data)
 			{
