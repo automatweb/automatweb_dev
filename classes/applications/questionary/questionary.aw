@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.8 2006/10/22 22:00:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.9 2006/10/22 22:18:45 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -353,7 +353,7 @@ class questionary extends class_base
 	}
 
 	/**
-		@attrib params=name name=add_result all_args=1
+		@attrib params=name name=add_result all_args=1 nologin=1
 	**/
 	function add_result($arr)
 	{
