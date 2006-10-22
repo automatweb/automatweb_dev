@@ -950,11 +950,17 @@ class mrp_workspace extends class_base
 						$this->create_aborted_jobs_list ($arr);
 						break;
 
-					default:
+					case "all":
+					case "planned":
+					case "inwork":
+					case "planned_overdue":
+					case "overdue":
+					case "subcontracts":
 						### update schedule
 						$schedule = get_instance (CL_MRP_SCHEDULE);
 						$schedule->create (array("mrp_workspace" => $this_object->id()));
 
+					default:
 						$this->create_projects_list ($arr);
 						break;
 				}
