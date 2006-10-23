@@ -340,6 +340,15 @@
             <table>objects</table>
             <caption>Kasuta dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;bi m&amp;amp;auml;&amp;amp;auml;rangut</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
@@ -391,6 +400,9 @@
                   <parent>menus</parent>
                   <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
             </kws>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <menu>

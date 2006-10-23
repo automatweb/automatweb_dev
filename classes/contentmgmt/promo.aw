@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.93 2006/10/04 13:34:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.94 2006/10/23 10:41:18 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -157,6 +157,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 
 
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 
 	@classinfo relationmgr=yes
@@ -193,6 +198,9 @@ class promo extends class_base
 		));
 		lc_load("definition");
 		$this->lc_load("promo","lc_promo");
+		$this->trans_props = array(
+			"name","comment","caption","link","link_caption"
+		);
 	}
 
 
@@ -302,6 +310,10 @@ class promo extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "section":
 				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["request"]["include_submenus"]);
 				break;
@@ -694,7 +706,7 @@ class promo extends class_base
 			if ($this->can("view",$as_name))
 			{
 				$as_n_o = obj($as_name);
-				$ob->set_meta('caption',$as_n_o->name());
+				$ob->set_prop('caption',$as_n_o->name());
 			}
 		}
 
@@ -710,14 +722,14 @@ class promo extends class_base
 
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$this->vars(array(
-			"title" => $ob->meta("caption"),
+			"title" => $ob->trans_get_val("caption"),
 			"content" => $content,
 			"align" => $align[$args["matches"][4]],
-			"link" => $ob->prop("link"),
-			"link_caption" => $ob->prop("link_caption"),
+			"link" => $ob->trans_get_val("link"),
+			"link_caption" => $ob->trans_get_val("link_caption"),
 			"image" => $image,
 			"image_url" => $image_url,
-			"image_or_title" => ($image == "" ? $ob->meta("caption") : $image),
+			"image_or_title" => ($image == "" ? $ob->trans_get_val("caption") : $image),
 		));
 
 		if (!$ob->meta('no_title'))
@@ -1074,6 +1086,20 @@ class promo extends class_base
 			"img" => "new.gif",
 		));
 		$tb->closed = 1;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

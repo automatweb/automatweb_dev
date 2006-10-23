@@ -80,7 +80,7 @@ class promo_display
 				));
 			}
 			
-			$promo_link = $o->prop("link");
+			$promo_link = $o->trans_get_val("link");
 
 			$found = false;
 
@@ -319,17 +319,17 @@ class promo_display
 				}
 
 				$inst->vars(array(
-					"comment" => $o->comment(),
-					"title" => $o->name(), 
-					"caption" => $o->meta("caption"),
+					"comment" => $o->trans_get_val("comment"),
+					"title" => $o->trans_get_val("name"), 
+					"caption" => $o->trans_get_val("caption"),
 					"content" => $pr_c,
 					"url" => $promo_link,
 					"link" => $promo_link,
-					"link_caption" => $o->meta("link_caption"),
+					"link_caption" => $o->trans_get_val("link_caption"),
 					"promo_doc_count" => (int)$d_cnt,
 					"image" => $image, 
 					"image_url" => $image_url,
-					"image_or_title" => ($image == "" ? $o->meta("caption") : $image),
+					"image_or_title" => ($image == "" ? $o->trans_get_val("caption") : $image),
 					
 				));
 
@@ -363,11 +363,11 @@ class promo_display
 				$inst->vars(array(
 					$use_tpl."_image" => $image,
 					$use_tpl."_image_url" => $image_url,
-					$use_tpl."_image_or_title" => ($image == "" ? $o->meta("caption") : $image),
+					$use_tpl."_image_or_title" => ($image == "" ? $o->trans_get_val("caption") : $image),
 				));
 
 				$hlc = "";
-				if ($o->meta("link_caption") != "")
+				if ($o->trans_get_val("link_caption") != "")
 				{
 					$hlc = $inst->parse($use_tpl.".HAS_LINK_CAPTION");
 				}
