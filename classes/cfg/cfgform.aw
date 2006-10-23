@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.95 2006/10/12 13:49:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.96 2006/10/23 12:25:47 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -428,6 +428,7 @@ class cfgform extends class_base
 		$trans = $arr["obj_inst"]->meta("translations");
 
 		$ps = $arr["obj_inst"]->meta("cfg_proplist");
+		uasort($ps, create_function('$a, $b','return $a["ord"] - $b["ord"];'));
 		foreach($ps as $pn => $pd)
 		{
 			$t->define_data(array(
