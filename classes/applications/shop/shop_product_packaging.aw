@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.20 2005/07/05 08:35:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.21 2006/10/23 13:56:19 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -16,6 +16,9 @@
 
 @property price type=textbox size=5 field=aw_price
 @caption Hind
+
+@property price_cur type=table store=no
+@caption Hinnad valuutades
 
 @groupinfo data caption="Andmed"
 @groupinfo file caption="Failid"
@@ -161,7 +164,9 @@ class shop_product_packaging extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "price_cur":
+				$this->_price_cur($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -172,7 +177,9 @@ class shop_product_packaging extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "price_cur":
+				$arr["obj_inst"]->set_meta("cur_prices", $arr["request"]["cur_prices"]);
+				break;
 		}
 		return $retval;
 	}	
@@ -431,6 +438,39 @@ class shop_product_packaging extends class_base
 			$prod = $prod->from();
 			$prod_i = $prod->instance();
 			return $prod_i->get_must_order_num($prod);
+		}
+	}
+
+	function _price_cur($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "pr",
+			"caption" => t("Hind"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "cur",
+			"caption" => t("Valuuta"),
+			"align" => "center"
+		));
+
+		$ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$prs = $arr["obj_inst"]->meta("cur_prices");
+		foreach($ol->arr() as $cur)
+		{
+			$t->define_data(array(
+				"pr" => html::textbox(array(
+					"name" => "cur_prices[".$cur->id()."]",
+					"size" => 5,
+					"value" => $prs[$cur->id()]
+				)),
+				"cur" => $cur->name()
+			));
 		}
 	}
 }
