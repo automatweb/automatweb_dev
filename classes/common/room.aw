@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.19 2006/10/20 13:40:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.20 2006/10/23 09:31:28 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1430,7 +1430,7 @@ class room extends class_base
 		else
 		{
 			$menu_tree = $this->get_prod_tree($o);
-			$menu_list = $menu_tree->to_list();
+			$menu_list = $menu_tree->to_list(true);
 			$parent = $menu_list->ids();
 		}
 		
