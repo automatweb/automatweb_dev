@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.89 2006/09/04 12:18:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.90 2006/10/23 12:56:24 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -21,7 +21,6 @@ class releditor extends core
 		$this->elname = $prop["name"];
 		$obj = $arr["obj_inst"];
 		$obj_inst = $obj;
-
 		$clid = $arr["prop"]["clid"][0];
 		if (empty($clid) && is_object($arr["obj_inst"]))
 		{
@@ -213,7 +212,8 @@ class releditor extends core
 		if(is_oid($cfgform_id) && $this->can("view", $cfgform_id))
 		{
 			$cfg = get_instance(CL_CFGFORM);
-			$act_props = $act_props + $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
+			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
+			$act_props = $act_props + $this->cfg_act_props;
 		}
 
 		if (!empty($prop["choose_default"]))
@@ -691,9 +691,15 @@ class releditor extends core
 			));
 			foreach($ed_fields as $field)
 			{
+				$caption = $this->all_props[$field]["caption"];
+				if (isset($this->cfg_act_props[$field]["caption"]))
+                                {
+					$caption = $this->cfg_act_props[$field]["caption"];
+				}
+													
 				$awt->define_field(array(
 					"name" => $field,
-					"caption" => $this->all_props[$field]["caption"],
+					"caption" => $caption,
 				));
 			}
 		}
@@ -713,6 +719,11 @@ class releditor extends core
 				else if (isset($this->auto_fields[$table_field]))
 				{
 					$caption = $this->auto_fields[$table_field];
+				}
+				else
+				if (isset($this->cfg_act_props[$table_field]["caption"]))
+				{
+					$caption = $this->cfg_act_props[$table_field]["caption"];
 				}
 				$awt->define_field(array(
 					"name" => $table_field,
