@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="site_template_trans" folder="admin" extends="class_base">
+	</class>
+</orb>
+		

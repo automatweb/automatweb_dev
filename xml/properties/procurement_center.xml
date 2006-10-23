@@ -573,6 +573,28 @@
             <caption>Ainult kehtivad Ostud</caption>
       </property>
       <property>
+            <name>products_find_start</name>
+            <table>objects</table>
+            <group>products</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>products_find_params</parent>
+            <captionside>top</captionside>
+            <field>products_find_start</field>
+            <caption>Pakutud alates</caption>
+      </property>
+      <property>
+            <name>products_find_end</name>
+            <table>objects</table>
+            <group>products</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>products_find_params</parent>
+            <captionside>top</captionside>
+            <field>products_find_end</field>
+            <caption>Pakutud kuni</caption>
+      </property>
+      <property>
             <name>do_find_products</name>
             <table>objects</table>
             <group>products</group>

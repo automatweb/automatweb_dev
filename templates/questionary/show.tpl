@@ -2,12 +2,12 @@
 <!--{VAR:name}<br>-->
 <!-- SUB: GROUP -->
 
-	<table border="1" width="800" style="border:1px solid black;">
+	<table border="1" width="770" style="border:1px solid black;">
 	<tr><td colspan="{VAR:span}" bgcolor="silver" style="font-size:13px; border:1px solid black;"><b>{VAR:name}</b></td></tr>
 	<!-- SUB: HEADER -->
 		<tr>
 			<td>
-				Teema/küsimus<!--{VAR:corner_caption}-->
+				<b>Teema/küsimus</b><!--{VAR:corner_caption}-->
 			</td>
 		<!-- SUB: QUESTION -->
 			<td style="font-size:10px;">
@@ -30,10 +30,19 @@
 	<!-- END SUB: TOPIC -->
 	</table>
 <!-- END SUB: GROUP -->
+<table>
+	<tr>
+		<td>
+			<span style="font-size:13px;"><br/>Kommentaarid:</span><br/>
+			<textarea name="pers[comment]" cols='50' rows='5'></textarea>
+		</td>
+	</tr>
+</table>
+
 <!-- SUB: PERS_DATA -->
 <table style="font-size:12px;">
 	<tr>
-	<td>
+	<td><br/><br/>
 	<span style="font-size:13px;">Informatsioon Teie kohta (tehke palun märge sobivasse lahtrisse):</span><br><br>
 	<span style="font-size:12px; font-weight:bold;">Sugu:</span><br/>
 	<input type="radio" value="1" name="pers[gender]"/>mees
@@ -47,19 +56,19 @@
 	<input type="radio" value="5" name="pers[age]"/>50-59<br/>
 	<input type="radio" value="6" name="pers[age]"/>60 v&otilde;i vanem<br/>
 	<br/>
-	<span style="font-size:12px; font-weight:bold;">Tegevusala:</span><br/><br/>
-</td>
+	</td>
 </tr>
 </table>
 	<table>
 		<tr>
-			<td width="250">
-				<span style="font-size:12px; font-weight:bold;">tegevusala</span>	
+			<td colspan=3><span style="font-size:12px; font-weight:bold;">Tegevusala:</span></td></tr>
+			<tr>
+			<td width="250">&nbsp;
 			</td>
 			<td>
-				<span style="font-size:12px; font-weight:bold;">tallinnast</span>
+				<span style="font-size:12px; font-weight:bold;">Tallinnast</span>
 			</td>
-			<td>
+			<td align="center">
 				<span style="font-size:12px; font-weight:bold;">mujalt</span>
 			</td>
 		</tr>
@@ -84,7 +93,8 @@
 <table>
 		<tr>
 			<td width="250"><span style="font-size:12px; font-weight:bold;">&uuml;likool</span></td>
-			<td colspan="2"><span style="font-size:12px; font-weight:bold;">teaduskond(instituut/kolledz)</span></td>
+			<td>&nbsp;</td>
+			<td><span style="font-size:12px; font-weight:bold;">teaduskond(instituut/kolledz)</span></td>
 		<tr>
 		<!-- SUB: PERS_SCHOOL -->
 		<tr>
@@ -103,7 +113,8 @@
 <table>
 		<tr>
 			<td width="250"><span style="font-size:12px; font-weight:bold;">valdkond</span></td>
-			<td colspan="2"><span style="font-size:12px; font-weight:bold;">t&auml;psustus</span></td>
+			<td>&nbsp;</td>
+			<td><span style="font-size:12px; font-weight:bold;">t&auml;psustus</span></td>
 		<tr>
 		<!-- SUB: S_AREA -->
 		<tr>
@@ -142,7 +153,8 @@
 		<!-- END SUB: USAGE -->
 </table>
 <!-- END SUB: PERS_DATA -->
-<input type="submit" value="{VAR:submit_caption}">
+<input type="submit" value="Saadan ankeedi ära">
+<!-- {VAR:submit_caption} -->
 {VAR:reforb}
 </form>
 <!-- SUB: A_ELEMENT -->

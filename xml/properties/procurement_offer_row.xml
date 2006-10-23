@@ -50,6 +50,14 @@
             <caption>Hind</caption>
       </property>
       <property>
+            <name>price_amount</name>
+            <table>aw_procurement_offer_rows</table>
+            <group>general</group>
+            <field>aw_price_amount</field>
+            <type>textbox</type>
+            <caption>Hind koguse puhul</caption>
+      </property>
+      <property>
             <name>currency</name>
             <table>aw_procurement_offer_rows</table>
             <group>general</group>
