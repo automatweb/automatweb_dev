@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.8 2006/10/23 13:04:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.9 2006/10/23 15:56:31 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -51,6 +51,13 @@ caption Kokkuvõte
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
+@groupinfo products caption="Tooted"
+@default group=products
+	
+	@property products_tbl type=table no_caption=1
+
+@tableinfo planner index=id master_table=objects master_index=brother_of
+
 #RELTYPES
 
 @reltype CUSTOMER value=1 clid=CL_CRM_COMPANY,CL_CRM_PERSON
@@ -81,6 +88,17 @@ class reservation extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "start1":
+			case "end":
+			case "resource":
+				if($arr["new"] && $arr["request"][$prop["name"]])
+				{
+					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				break;
+			case "products_tbl":
+				$this->get_products_tbl;
+				break;
 		};
 		return $retval;
 	}
@@ -91,6 +109,9 @@ class reservation extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "products_tbl":
+				$arr["obj_inst"]->set_meta("amount", $arr["request"]["amount"]);
+				break;
 			//-- set_property --//
 		}
 		return $retval;
@@ -103,6 +124,10 @@ class reservation extends class_base
 		{
 			$arr["calendar"] = $_GET["calendar"];
 		}
+		if(!$arr["id"])
+		{
+			$arr["resource"] = $_GET["resource"];
+		}
 	}
 
 	function callback_post_save($arr)
@@ -114,6 +139,11 @@ class reservation extends class_base
 				"to" => $arr["obj_inst"]->id(),
 				"reltype" => "RELTYPE_EVENT"
 			));
+		}
+		if($arr["new"] && is_oid($arr["request"]["resource"]) && $this->can("view" , $arr["request"]["resource"]))
+		{
+			$arr["obj_inst"]->set_prop("resource" ,$arr["request"]["resource"]);
+			$arr["obj_inst"]->save();
 		}
 	}
 
@@ -218,6 +248,64 @@ class reservation extends class_base
 			$t->define_data(array(
 				"name" => $o->name(),
 				"amount" => $count,
+			));
+		}
+	}
+	
+	function get_room_products($room)
+	{
+		$ol = new object_list();
+		if(is_oid($room))
+		{
+			$room = obj($room);
+		}
+		if(is_object($room))
+		{
+			$room_instance = get_instance(CL_ROOM);
+			$ol = $room_instance->get_prod_list($room);
+			$prod_data = $room->meta("prod_data");
+			foreach($ol->arr() as $id => $o)
+			{
+				if(!$prod_data[$id]["active"])
+				{
+					$ol->remove($id);
+				}
+			}
+		}
+		return $ol;
+	}
+	
+	function _get_products_tbl($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "picture",
+			"caption" => t(""),
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+		));
+		$prod_list = $this->get_room_products($arr["obj_inst"]->prop("resource"));
+		$amount = $arr["obj_inst"]->meta("amount");
+		foreach($prod_list->arr() as $prod)
+		{
+			$image = "";
+			if(is_object($prod->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"))))
+			{
+			
+			}
+			$t->define_data(array(
+				"picture" => $image,
+				"name" => $prod->name(),
+				"amount" =>  html::textbox(array(
+					"name"=>'amount['.$prod->id().']',
+					"value" => $amount[$prod->id()],
+				)),
 			));
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.153 2006/10/11 14:16:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.154 2006/10/23 16:00:05 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -3565,6 +3565,65 @@ class task extends class_base
 			"img" => "delete.gif",
 			"action" => "delete_rels"
 		));
+	}
+	
+	//Toimima peaks see siis nii, et kui Toimetuses on ainult 1 rida, siis pannakse kokkuleppehind
+	// sinna rea taha kirja. Kui on kaks või rohkem 0 tundidega rida, siis jagatakse kokkuleppehind 
+	//võrdselt nendele ridadele. Kui on osa ridu tundidega ja osa ilma, siis jagatakse kokkuleppehind 
+	//ainult tundidega ridade vahel ära.
+	function get_row_ageement_price($row, $task = null)
+	{
+		if(is_oid($row))
+		{
+			$row = obj($row);
+		}
+		if(is_object($row))
+		{
+			$row_cnt = 0;
+			$time_cnt =0;
+			if(is_oid($task))
+			{
+				$task = obj($task);
+			}
+			if(!is_object($task))
+			{
+				$task_conn = reset($row->connections_to(array(
+					"type" => 7,
+				)));
+				$task = obj($task_conn->from());
+			}
+			if(!is_object($task))
+			{
+				return 0;
+			}
+			$sum = $task->prop("deal_price");
+			$cs = $task->connections_from(array(
+				"type" => "RELTYPE_ROW",
+			));
+			foreach ($cs as $key => $ro)
+			{
+				$ob = $ro->to();
+				$row_cnt ++;
+				$time_cnt = $time_cnt + $ob->prop("time_to_cust");
+			
+			}
+			//kui on ainuke rida
+			if($row_cnt == 1)
+			{
+				return $sum;
+			}
+			//kui on mitu rida , mille aeg näitab 0
+			if($row_cnt > 1 && $time_cnt == 0)
+			{
+				return $sum / $row_cnt;
+			}
+			//kui on mitu rida ja mõnel on aeg, teistel mitte
+			if($row_cnt > 1 && $time_cnt > 0)
+			{
+				return ($row->prop("time_to_cust")/$time_cnt) * $sum;
+			}
+		}
+		return 0;
 	}
 }
 ?>
