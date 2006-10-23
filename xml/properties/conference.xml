@@ -23,14 +23,14 @@
             <caption>Korraldajad</caption>
       </property>
       <property>
-            <name>catering_warehouse</name>
+            <name>webform</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CATERING_WAREHOUSE</reltype>
-            <caption>Toitlustuse ladu</caption>
+            <reltype>RELTYPE_WEBFORM</reltype>
+            <caption>Veebivorm</caption>
       </property>
       <property>
             <name>start_time</name>
@@ -38,8 +38,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <value>ehitatakse_mujalt</value>
+            <type>datetime_select</type>
             <caption>Algusaeg</caption>
       </property>
       <property>
@@ -48,8 +47,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <value>ehitatakase_mujalt</value>
+            <type>datetime_select</type>
             <caption>L&amp;amp;otilde;puaeg</caption>
       </property>
       <property>
@@ -79,7 +77,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>file</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FILE</reltype>
             <caption>Konverenrtsikava failina</caption>
       </property>
       <property>
@@ -94,22 +93,24 @@
             <caption>Lisainfo</caption>
       </property>
       <property>
-            <name>presenters</name>
+            <name>presenters_tb</name>
             <table>objects</table>
             <group>presenters</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <reltype>RELTYPE_PRESENTER</reltype>
-            <props>
-                  <num_0>firstname</num_0>
-                  <num_1>lastname</num_1>
-            </props>
-            <table_fields>
-                  <num_0>firstname</num_0>
-                  <num_1>lastname</num_1>
-            </table_fields>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>presenters_tbl</name>
+            <table>objects</table>
+            <group>presenters</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>participants</name>
@@ -130,6 +131,36 @@
             </table_fields>
       </property>
       <property>
+            <name>rooms_tb</name>
+            <table>objects</table>
+            <group>rooms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>rooms_tbl</name>
+            <table>objects</table>
+            <group>rooms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>room_search_results</name>
+            <table>objects</table>
+            <group>rooms</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>hidden</type>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>room_resources</name>
             <table>objects</table>
             <group>room_resources</group>
@@ -141,13 +172,14 @@
             <caption>Ruumide ressursid</caption>
       </property>
       <property>
-            <name>catering_resources</name>
+            <name>catering_resources_tbl</name>
             <table>objects</table>
             <group>catering_resources</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>table</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Toitlustuse ressursid</caption>
       </property>
       <property>
@@ -201,8 +233,12 @@
             <resources>
                   <caption>Ressursid</caption>
             </resources>
+            <rooms>
+                  <caption>Ruumid</caption>
+                  <parent>resources</parent>
+            </rooms>
             <room_resources>
-                  <caption>Ruumi ressursid</caption>
+                  <caption>Ruumide ressursid</caption>
                   <parent>resources</parent>
             </room_resources>
             <catering_resources>
@@ -249,16 +285,20 @@
                   </clid>
                   <caption>Sponsor</caption>
             </SPONSOR>
-            <CATERING_WAREHOUSE>
+            <WEBFORM>
                   <value>6</value>
-                  <clid>CL_SHOP_WAREHOUSE</clid>
-                  <caption>Toitlustuse ladu</caption>
-            </CATERING_WAREHOUSE>
+                  <clid>CL_WEBFORM</clid>
+            </WEBFORM>
             <RESERVATION>
                   <value>7</value>
                   <clid>CL_RESERVATION</clid>
                   <caption>Ruumi reservatsioon</caption>
             </RESERVATION>
+            <FILE>
+                  <value>8</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Konverentsikava</caption>
+            </FILE>
       </reltypes>
 </properties>
 

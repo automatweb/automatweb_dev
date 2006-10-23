@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.7 2006/10/18 17:06:15 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.8 2006/10/23 13:04:10 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -22,7 +22,7 @@
 		
 @property resource type=relpicker reltype=RELTYPE_RESOURCE field=meta method=serialize
 @caption Ressurss
-		
+
 @property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
 @caption Klient
 			
@@ -61,6 +61,7 @@ caption Kokkuvõte
 
 @reltype RESOURCE value=3 clid=CL_ROOM
 @caption Ressurss
+
 */
 
 class reservation extends class_base
@@ -219,6 +220,34 @@ class reservation extends class_base
 				"amount" => $count,
 			));
 		}
+	}
+
+	function add_order($reservation, $order, $time = false)
+	{
+		if(!is_oid($reservation) || !is_oid($order))
+		{
+			return false;
+		}
+		$reservation = obj($reservation);
+
+		$orders = $this->get_orders($reservation->id());
+		if(!$time || ($time < $reservation->prop("start1") && $time > $reservation->prop("end")))
+		{
+			$time = $reservation->prop("start1");
+		}
+		$orders[$order] = $time;
+		$reservation->set_meta("order_times", $orders);
+		$reservation->save();
+	}
+
+	function get_orders($reservation)
+	{
+		if(!is_oid($reservation))
+		{
+			return false;
+		}
+		$reservation = obj($reservation);
+		return $reservation->meta("order_times");
 	}
 }
 ?>

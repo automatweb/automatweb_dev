@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.20 2006/10/23 09:31:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.21 2006/10/23 13:04:04 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1443,7 +1443,70 @@ class room extends class_base
 		return $ol;
 	}
 	
-	
+	/**
+		@attrib params=pos
+		@param prod_list required type=Array
+			array of product id's and amount of them
+			array(
+				prod_oid => amount,
+			)
+
+		@param reservation required type=oid
+			rervations oid with what these products where ordered
+		@param time optional type=int
+			the time, when this order needs to be in order :) .. basically this is needed to cover cross-day reservations and different orders for each day..
+			If not set, reservation start time is set instead.
+
+	**/
+	function order_products($prod_list, $reservation, $time)
+	{
+		if(!is_array($prod_list) || !is_oid($reservation))
+		{
+			return false;
+		}
+		$reservation = obj($reservation);
+		$room = $reservation->prop("resource");
+		if(is_oid($room))
+		{
+			$room = obj($room);
+		}
+		else
+		{
+			return false;
+		}
+		$warehouse = $room->prop("warehouse");
+		if(is_oid($warehouse))
+		{
+			$warehouse = obj($warehouse);
+		}
+		else
+		{
+			return false;
+		}
+		$so = get_instance(CL_SHOP_ORDER);
+		$so->start_order($warehouse);
+		foreach($prod_list as $prod_id => $amount)
+		{
+			if(!is_oid($prod_id) || $amount < 1)
+			{
+				continue;
+			}
+			$so->add_item(array(
+				"iid" => $prod_id,
+				array(
+					"items" => $warehouse,
+				),
+			));
+		}
+		$order_id = $so->finish_order();
+		$reserv = get_instance(CL_RESERVATION);
+		if(!$reserv->add_order($reservation->id(), $order_id, $time))
+		{
+			return false;
+		}
+		return true;
+	}
+
 	/** Change the realestate object info.
 		
 		@attrib name=parse_alias is_public="1" caption="Change"

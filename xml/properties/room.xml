@@ -67,6 +67,16 @@
             <caption>Valdkond</caption>
       </property>
       <property>
+            <name>reservation_template</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>select</type>
+            <caption>Broneeringu template</caption>
+      </property>
+      <property>
             <name>conditions</name>
             <table>objects</table>
             <field>meta</field>
