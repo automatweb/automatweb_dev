@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.44 2006/10/19 13:51:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.45 2006/10/23 13:37:23 tarvo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -335,7 +335,7 @@ class shop_order extends class_base
 				{
 					if($key == "duedate" || $key == "tduedate")
 					{
-						$vals[$key] .= '<a href="javascript:void(0);" onClick="cal.select(changeform.prod_data_'.$id.'__'.$x.'__'.$key.'_,\'anchor'.$id.'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$id.'" id="anchor'.$id.'">vali</a>';
+						$vals[$key] .= '<a href="javascript:void(0);" onClick="cal.select(changeform.prod_data_'.$id.'__'.$x.'__'.$key.'_,\'anchor'.$id.'\',\'dd/MM/yy\'); return false;" title="Vali kuup&auml;ev" name="anchor'.$id.'" id="anchor'.$id.'">vali</a>';
 					}
 					if($key == "tduedate")
 					{
@@ -656,222 +656,225 @@ class shop_order extends class_base
 				$mail_from_name = $order_center->prop("mail_from_name");
 			}
 		}
-		$awm = get_instance("protocols/mail/aw_mail");
-
-		$ud = $oi->meta("user_data");
-
-		// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
-		$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
-		//echo "emails = ".dbg::dump($emails)." <br>";
-		$at = $this->order_center->prop("send_attach");
-
-//echo "hier <br>";
-		$html = "";
-		if (($_el = $this->order_center->prop("mail_to_seller_in_el")))
+		if($this->order_center)
 		{
-			//echo "_el = $_el <br>";
-			$val = $ud[$_el];
-			if (is_oid($val) && $this->can("view", $val))
-			{
-				$_tmp = obj($val);
-				$val = $_tmp->comment();
-			}
-			if (is_email($val))
-			{
-				$html = $this->show(array(
-					"id" => $oi->id()
-				));
-//echo "send to $val , from = $mail_from_addr , content = $html <br>";
-				foreach(explode(",", $val) as $_to)
-				{
-					$awm->clean();
-					$awm->create_message(array(
-						"froma" => $mail_from_addr,
-						"fromn" => $mail_from_name,
-						"subject" => $email_subj,
-						"to" => $_to,
-						"body" => "see on html kiri",
-					));
-					$awm->htmlbodyattach(array(
-						"data" => $html,
-					));
-					$awm->gen_mail();
-					//echo "sent to $_to , from $mail_from_addr <br>";
-				}
-			}
-		}
+			$awm = get_instance("protocols/mail/aw_mail");
 
-		if (count($emails) > 0)
-		{
-			// if send mails by grp el is set, do this crap different
-			if ($this->order_center->prop("mails_sep_by_el"))
-			{
-				// go over prods, gather mail => prods relations and get html and do the whole mailing things
-				$eml2prod = array();
-				$__fld = $this->order_center->prop("mail_group_by");
-				foreach($this->order_items as $iid => $quantx)
-				{
-					$_po = obj($iid);
-					$eml2prod[$_po->prop($__fld)][] = $iid;
-				}
+			$ud = $oi->meta("user_data");
 
-				$to_send = array();
-				foreach($eml2prod as $eml => $_prods)
-				{
-					if ($eml == "")
-					{
-						// make content for empty prods
-						$_html = $this->show(array(
-							"id" => $oi->id(),
-							"show_only_prods_with_val" => $eml
-						));
-						foreach($emails as $c)
-						{
-							$eml = $c->to();
-							$to_send[$eml->prop("mail")] = array($_html, "");
-						}
-					}
-					else
-					{
-						$_html = $this->show(array(
-							"id" => $oi->id(),
-							"show_only_prods_with_val" => $eml
-						));
-						$eml_o = obj($eml);
-						$to_send[$eml_o->comment()] = array($_html, $eml);
-					}
-				}
+			// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
+			$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
+			//echo "emails = ".dbg::dump($emails)." <br>";
+			$at = $this->order_center->prop("send_attach");
 
-				foreach($to_send as $eml => $html)
-				{
-					$awm->clean();
-					$awm->create_message(array(
-						"froma" => $mail_from_addr,
-						"fromn" => $mail_from_name,
-						"subject" => $email_subj,
-						"to" => $eml,
-						"body" => "see on html kiri",
-					));
-					$awm->htmlbodyattach(array(
-						"data" => $html[0],
-					));
-					if($at == 1)
-					{
-						$vars = array(
-							"id" => $oi->id(),
-							"show_only_prods_with_val" => $html[1]
-						);
-						if(file_exists($this->site_template_dir."/show_attach.tpl"))
-						{
-							$vars["template"] = "show_attach.tpl";
-						}
-						$org = obj($c_com_id);
-						$htmla = $this->show($vars);
-						$awm->fattach(array(
-							"contenttype" => "application/vnd.ms-excel",
-							"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
-							"content" => $htmla,
-						));
-					}
-					//strip_tags(str_replace("<br>", "\n",$html))
-					$awm->gen_mail();
-					//echo "sent to $eml , from $mail_from_addr <br>";
-				}
-			}
-			else
+	//echo "hier <br>";
+			$html = "";
+			if (($_el = $this->order_center->prop("mail_to_seller_in_el")))
 			{
-				if ($html == "")
+				//echo "_el = $_el <br>";
+				$val = $ud[$_el];
+				if (is_oid($val) && $this->can("view", $val))
+				{
+					$_tmp = obj($val);
+					$val = $_tmp->comment();
+				}
+				if (is_email($val))
 				{
 					$html = $this->show(array(
 						"id" => $oi->id()
 					));
-				}
-			
-
-				foreach($emails as $c)
-				{
-					$eml = $c->to();
-					$awm->clean();
-					$awm->create_message(array(
-						"froma" => $mail_from_addr,
-						"fromn" => $mail_from_name,
-						"subject" => $email_subj,
-						"to" => $eml->prop("mail"),
-						"body" => "see on html kiri",
-					));
-					$awm->htmlbodyattach(array(
-						"data" => $html,
-					));
-					if($at == 1)
+	//echo "send to $val , from = $mail_from_addr , content = $html <br>";
+					foreach(explode(",", $val) as $_to)
 					{
-						$vars = array(
-							"id" => $oi->id(),
-						);
-						if(file_exists($this->site_template_dir."/show_attach.tpl"))
+						$awm->clean();
+						$awm->create_message(array(
+							"froma" => $mail_from_addr,
+							"fromn" => $mail_from_name,
+							"subject" => $email_subj,
+							"to" => $_to,
+							"body" => "see on html kiri",
+						));
+						$awm->htmlbodyattach(array(
+							"data" => $html,
+						));
+						$awm->gen_mail();
+						//echo "sent to $_to , from $mail_from_addr <br>";
+					}
+				}
+			}
+
+			if (count($emails) > 0)
+			{
+				// if send mails by grp el is set, do this crap different
+				if ($this->order_center->prop("mails_sep_by_el"))
+				{
+					// go over prods, gather mail => prods relations and get html and do the whole mailing things
+					$eml2prod = array();
+					$__fld = $this->order_center->prop("mail_group_by");
+					foreach($this->order_items as $iid => $quantx)
+					{
+						$_po = obj($iid);
+						$eml2prod[$_po->prop($__fld)][] = $iid;
+					}
+
+					$to_send = array();
+					foreach($eml2prod as $eml => $_prods)
+					{
+						if ($eml == "")
 						{
-							$vars["template"] = "show_attach.tpl";
+							// make content for empty prods
+							$_html = $this->show(array(
+								"id" => $oi->id(),
+								"show_only_prods_with_val" => $eml
+							));
+							foreach($emails as $c)
+							{
+								$eml = $c->to();
+								$to_send[$eml->prop("mail")] = array($_html, "");
+							}
 						}
-						$org = obj($c_com_id);
-						$htmla = $this->show($vars);
-						$awm->fattach(array(
-							"contenttype" => "application/vnd.ms-excel",
-							"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
-							"content" => $htmla,
+						else
+						{
+							$_html = $this->show(array(
+								"id" => $oi->id(),
+								"show_only_prods_with_val" => $eml
+							));
+							$eml_o = obj($eml);
+							$to_send[$eml_o->comment()] = array($_html, $eml);
+						}
+					}
+
+					foreach($to_send as $eml => $html)
+					{
+						$awm->clean();
+						$awm->create_message(array(
+							"froma" => $mail_from_addr,
+							"fromn" => $mail_from_name,
+							"subject" => $email_subj,
+							"to" => $eml,
+							"body" => "see on html kiri",
+						));
+						$awm->htmlbodyattach(array(
+							"data" => $html[0],
+						));
+						if($at == 1)
+						{
+							$vars = array(
+								"id" => $oi->id(),
+								"show_only_prods_with_val" => $html[1]
+							);
+							if(file_exists($this->site_template_dir."/show_attach.tpl"))
+							{
+								$vars["template"] = "show_attach.tpl";
+							}
+							$org = obj($c_com_id);
+							$htmla = $this->show($vars);
+							$awm->fattach(array(
+								"contenttype" => "application/vnd.ms-excel",
+								"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+								"content" => $htmla,
+							));
+						}
+						//strip_tags(str_replace("<br>", "\n",$html))
+						$awm->gen_mail();
+						//echo "sent to $eml , from $mail_from_addr <br>";
+					}
+				}
+				else
+				{
+					if ($html == "")
+					{
+						$html = $this->show(array(
+							"id" => $oi->id()
 						));
 					}
-					//strip_tags(str_replace("<br>", "\n",$html))
-					$awm->gen_mail();
-					//echo "sent to ".$eml->prop("mail")." from $mail_from_addr <br>";
+				
+
+					foreach($emails as $c)
+					{
+						$eml = $c->to();
+						$awm->clean();
+						$awm->create_message(array(
+							"froma" => $mail_from_addr,
+							"fromn" => $mail_from_name,
+							"subject" => $email_subj,
+							"to" => $eml->prop("mail"),
+							"body" => "see on html kiri",
+						));
+						$awm->htmlbodyattach(array(
+							"data" => $html,
+						));
+						if($at == 1)
+						{
+							$vars = array(
+								"id" => $oi->id(),
+							);
+							if(file_exists($this->site_template_dir."/show_attach.tpl"))
+							{
+								$vars["template"] = "show_attach.tpl";
+							}
+							$org = obj($c_com_id);
+							$htmla = $this->show($vars);
+							$awm->fattach(array(
+								"contenttype" => "application/vnd.ms-excel",
+								"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+								"content" => $htmla,
+							));
+						}
+						//strip_tags(str_replace("<br>", "\n",$html))
+						$awm->gen_mail();
+						//echo "sent to ".$eml->prop("mail")." from $mail_from_addr <br>";
+					}
 				}
 			}
-		}
 
-		// if the order center has an e-mail element selected, send the order to that one as well
-		// but using a different template
-		//echo "mail to el = ".$this->order_center->prop("mail_to_el")." <br>";
-		// this is one ugly mess and i don't really want to sort it out, so i'll just make
-		// a backdoor for myself -- ahz
-		if ((!$arr["no_send_mail"] && $this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "") || ($this->order_center->prop("mail_to_client") == 1 && is_oid($pers_id) && $this->can("view", $pers_id)))
-		{
-			if ($this->order_center->prop("mail_cust_content") != "")
+			// if the order center has an e-mail element selected, send the order to that one as well
+			// but using a different template
+			//echo "mail to el = ".$this->order_center->prop("mail_to_el")." <br>";
+			// this is one ugly mess and i don't really want to sort it out, so i'll just make
+			// a backdoor for myself -- ahz
+			if ((!$arr["no_send_mail"] && $this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "") || ($this->order_center->prop("mail_to_client") == 1 && is_oid($pers_id) && $this->can("view", $pers_id)))
 			{
-				$html = nl2br($this->order_center->prop("mail_cust_content"));
-			}
-			else
-			{
-				$html = $this->show(array(
-					"id" => $oi->id(),
-					"template" => "show_cust.tpl"
-				));
-				if (strpos($html, "<?php") !== false)
+				if ($this->order_center->prop("mail_cust_content") != "")
 				{
-					ob_start();
-					eval("?>".$html);
-					$html = ob_get_contents();
-					ob_end_clean();
+					$html = nl2br($this->order_center->prop("mail_cust_content"));
 				}
+				else
+				{
+					$html = $this->show(array(
+						"id" => $oi->id(),
+						"template" => "show_cust.tpl"
+					));
+					if (strpos($html, "<?php") !== false)
+					{
+						ob_start();
+						eval("?>".$html);
+						$html = ob_get_contents();
+						ob_end_clean();
+					}
+				}
+
+				//echo "sent to $_send_to content = $html <br>";
+				if ($_send_to == "" && aw_global_get("uid") != "")
+				{
+					$uo = obj(aw_global_get("uid_oid"));
+					$_send_to = $uo->prop("email");
+				}
+				
+				$awm->create_message(array(
+					"froma" => $mail_from_addr,
+					"fromn" => $mail_from_name,
+					"subject" => $email_subj,
+					"to" => $_send_to,
+					"body" => strip_tags(str_replace("<br>", "\n",$html)),
+				));
+				$awm->htmlbodyattach(array(
+					"data" => $html
+				));
+				$awm->gen_mail();
 			}
 
-			//echo "sent to $_send_to content = $html <br>";
-			if ($_send_to == "" && aw_global_get("uid") != "")
-			{
-				$uo = obj(aw_global_get("uid_oid"));
-				$_send_to = $uo->prop("email");
-			}
-			
-			$awm->create_message(array(
-				"froma" => $mail_from_addr,
-				"fromn" => $mail_from_name,
-				"subject" => $email_subj,
-				"to" => $_send_to,
-				"body" => strip_tags(str_replace("<br>", "\n",$html)),
-			));
-			$awm->htmlbodyattach(array(
-				"data" => $html
-			));
-			$awm->gen_mail();
-		}
-
+		} // if(this->order_center) end
 		return $oi->id();
 	}
 
