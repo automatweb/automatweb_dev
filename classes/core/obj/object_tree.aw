@@ -106,7 +106,7 @@ class object_tree extends _int_obj_container_base
 	}
 
 	/** returns an object_list instance that contains all the objects in the current tree
-		@attrib api=1 params=pos
+		@attrib api=1 params=name
 	
 		@param add_root optional type=bool
 			wheather to add root item to list or not
@@ -125,8 +125,9 @@ class object_tree extends _int_obj_container_base
 			));
 			$ol = $ot->to_list();
 	**/
-	function to_list($root = false)
+	function to_list($arr = array())
 	{
+		$root = isset($arr["add_root"])?$arr["add_root"]:false;
 		$ol = new object_list();
 		foreach($this->tree as $pt => $objs)
 		{
