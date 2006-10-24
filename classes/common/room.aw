@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.23 2006/10/24 08:08:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.24 2006/10/24 14:18:58 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1529,5 +1529,106 @@ class room extends class_base
 		return $this->parse();
 	}
 	
+	/**
+		@attrib params=name
+		@param room required type=oid
+			room id
+		@param people optional type=int
+			number of people
+		@param start required type=int
+			whenever that stuff , you need room for, starts
+		@param end required type=int
+			when the event, you need room for, ends
+		@param products optional type=array
+			products you want to order with room
+	**/
+	function cal_room_price($arr)
+	{
+		extract($arr);		
+		if(!is_oid($room))
+		{
+			return 0;
+		}
+		$room = obj($room);
+		
+		$this_price = "";
+		$prices = $room->connections_from(array(
+			"class_id" => CL_ROOM_PRICE,
+			"type" => "RELTYPE_ROOM_PRICE",
+		));
+		foreach($prices as $conn)
+		{
+			$price = $conn->to();
+			if(($price->prop("date_from") < $start) && $price->prop("date_to") > $end)
+			{
+				if(in_array(date("w", $start) , $price->prop("weekdays")))
+				{
+					$this_price = $price;
+					break;
+				}
+			}
+		}
+		if(is_object($price))
+		{
+			$sum = array();
+			$price_inst = get_instance(CL_ROOM_PRICE);
+			//arvan , et õige oleks 1 maha võtta.... et saaks panna lõpptähtajaks järgmise broneeringu algustähtaeg... et siis 10:00 -11:00 10:00 - 10:59 asemel
+			$end = $end-1;
+			
+			//siin teeb asjad täistundideks....
+			$hr_start = mktime(date("G", $start), 0, 0, date("m", $start), date("d", $start), date("y", $start));
+			$hr_end = mktime(date("G", $end), 0, 0, date("m", $end), date("d", $end), date("y", $end));
+			foreach($price_inst->get_prices($price->id()) as $currency => $hr_price)
+			{
+				$sum[$currency] = $hr_price*(int)(($hr_end-$hr_start)/3600 + 1);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
+				if($people > $room->prop("normal_capacity"))
+				{
+					$sum[$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
+				}
+				if(is_array($products) && sizeof($products))
+				{
+					$sum[$currency] += $this->cal_products_price(array(
+						"products" => $products,
+						"currency" => $currency,
+						"warehouse" => $room->prop("warehouse"),
+					));
+				}
+			}
+		}
+		return $sum;
+	}
+	
+	/**
+		@attrib params=name
+		@param products required type=array
+			products and their amounts
+		@param currency optional type=oid
+			if you want result in not the same currency the company uses.
+		@return int
+			price of all products
+	**/
+	function cal_products_price($arr)
+	{
+		extract($arr);
+		$sum = 0;
+		foreach($products as $id => $amt)
+		{
+			if($amt && is_oid($id))
+			{
+				$product = obj($id);
+				if(is_oid($currency))
+				{
+					$cur_pr = $product->meta("cur_prices");
+					if($cur_pr[$currency])
+					{
+						$sum += $cur_pr[$currency] *  $amt;
+					}
+					else $sum += $product->prop("price") * $amt;
+				}
+				
+			}
+		}
+		return $sum;
+	}
 }
 ?>

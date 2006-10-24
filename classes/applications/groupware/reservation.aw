@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.9 2006/10/23 15:56:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.10 2006/10/24 14:18:19 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -9,37 +9,54 @@
 
 @default table=objects
 @default group=general
-#GENERAL
+#TAB GENERAL
+
+@layout general_split type=hbox
+
+@layout general_up type=vbox closeable=1 area_caption=&Uuml;ldinfo parent=general_split
+@default parent=general_up
+
+	@property name type=textbox field=name method=none size=20
+	@caption Nimi
 	
-@property start1 type=datetime_select field=start table=planner
-@caption Algus
-
-@property end type=datetime_select table=planner
-@caption L&otilde;peb
-
-@property deadline type=datetime_select table=planner field=deadline
-@caption T&auml;htaeg
-		
-@property resource type=relpicker reltype=RELTYPE_RESOURCE field=meta method=serialize
-@caption Ressurss
-
-@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
-@caption Klient
+	property deadline type=datetime_select table=planner field=deadline
+	caption T&auml;htaeg
 			
-@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
-@caption Projekt
-
-@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
-@caption Saata arve
-
-@property bill_no type=hidden table=planner 
-@caption Arve number
+	@property resource type=relpicker reltype=RELTYPE_RESOURCE field=meta method=serialize
+	@caption Ressurss
 	
-@property content type=textarea no_caption=1 cols=50 rows=5 field=description table=planner
-@caption Sisu
+	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
+	@caption Klient
+				
+	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
+	@caption Projekt
+	
+	@property send_bill type=checkbox ch_value=1 table=planner field=send_bill no_caption=1
+	@caption Saata arve
+	
+	@property bill_no type=hidden table=planner 
+	@caption Arve number
+	
+	@property content type=textarea cols=40 rows=5 field=description table=planner
+	@caption Sisu	
 
-@property code type=hidden size=5 table=planner field=code
-@caption Kood
+@layout general_down type=vbox closeable=1 area_caption=Aeg&#44;&nbsp;ja&nbsp;hind parent=general_split
+@default parent=general_down
+	
+	@property people_count type=textbox size=3 field=meta method=serialize
+	@caption Inimesi
+		
+	@property start1 type=datetime_select field=start table=planner
+	@caption Algus
+
+	@property end type=datetime_select table=planner
+	@caption L&otilde;peb
+	
+	property code type=hidden size=5 table=planner field=code
+	caption Kood
+
+	@property sum type=text field=meta method=serialize
+	@caption Summa
 
 property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
 caption Kokkuvõte
@@ -88,6 +105,12 @@ class reservation extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "bill_no":
+				if(!is_oid($prop["value"]))
+				{
+					return PROP_IGNORE;
+				}
+				break;
 			case "start1":
 			case "end":
 			case "resource":
@@ -99,6 +122,24 @@ class reservation extends class_base
 			case "products_tbl":
 				$this->get_products_tbl;
 				break;
+			case "sum":
+				$room_instance = get_instance(CL_ROOM);
+				$sum = $room_instance->cal_room_price(array(
+					"room" => $arr["obj_inst"]->prop("resource"),
+					"start" => $arr["obj_inst"]->prop("start1"),
+					"end" => $arr["obj_inst"]->prop("end"),
+					"people" => $arr["obj_inst"]->prop("people_count"),
+					"products" => $arr["obj_inst"]->meta("amount"),
+				));
+				foreach($sum as $cur=>$price)
+				{
+					$cur = obj($cur);
+					$prop["value"].= $price." ".$cur->name()."<br>";
+				}
+				break;
+
+//			case "sum":
+//				break;
 		};
 		return $retval;
 	}
@@ -116,6 +157,43 @@ class reservation extends class_base
 		}
 		return $retval;
 	}	
+
+/*	function set_sum($arr)
+	{
+		extract($arr);		
+		$this_obj = obj($id);
+		if(!is_oid($resource))
+		{
+			return 0;
+		}
+		$room = obj($resource);
+
+		$prices = $room->connections_from(array(
+			"class_id" => CL_ROOM_PRICE,
+			"type" => "RELTYPE_ROOM_PRICE",
+		));
+		foreach($prices as $conn)
+		{
+			$price = $conn->to();
+			if(($price->prop("date_from") < $this_obj->prop("start1")) && $price->prop("date_to") > $this_obj->prop("end"))
+			{
+//				if()
+//				{
+					arr($price->prop("weekdays"));
+//				}
+			}
+		
+		}
+			
+//		if($people_count <= $room->prop("normal_capacity"))
+//		{
+//			$sum = $people_count * 
+//		}
+		$sum = 0;
+		$this_obj->set_prop("sum" , $sum);
+		$this_obj->save();
+		return $sum;
+	}*/
 
 	function callback_mod_reforb($arr)
 	{
@@ -292,22 +370,52 @@ class reservation extends class_base
 		));
 		$prod_list = $this->get_room_products($arr["obj_inst"]->prop("resource"));
 		$amount = $arr["obj_inst"]->meta("amount");
+		$image_inst = get_instance(CL_IMAGE);
 		foreach($prod_list->arr() as $prod)
 		{
 			$image = "";
 			if(is_object($prod->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"))))
 			{
-			
+				$pic = $prod->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"));
+				if(is_object($pic))
+				{
+					$image = $image_inst->make_img_tag_wl($pic->id());
+				}
 			}
 			$t->define_data(array(
 				"picture" => $image,
-				"name" => $prod->name(),
-				"amount" =>  html::textbox(array(
-					"name"=>'amount['.$prod->id().']',
-					"value" => $amount[$prod->id()],
-				)),
+				"name" => "<b>".$prod->name()."<b>",
+//				"amount" =>  html::textbox(array(
+//					"name"=>'amount['.$prod->id().']',
+//					"value" => $amount[$prod->id()],
+//				)),
 			));
+			$packages = $prod->connections_from(array(
+				"type" => "RELTYPE_PACKAGING",
+			));
+			foreach($packages as $conn)
+			{
+				$package = $conn->to();
+				$image = "";
+				if(is_object($package->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"))))
+				{
+					$pic = $package->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"));
+					if(is_object($pic))
+					{
+						$image = $image_inst->make_img_tag_wl($pic->id());
+					}
+				}
+				$t->define_data(array(
+					"picture" => $image,
+					"name" => "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$package->name(),
+					"amount" =>  html::textbox(array(
+						"name"=>'amount['.$package->id().']',
+						"value" => $amount[$package->id()],
+					)),
+				));
+			}
 		}
+		$t->set_sortable(false);
 	}
 
 	function add_order($reservation, $order, $time = false)
