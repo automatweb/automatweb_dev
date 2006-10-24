@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.10 2006/10/24 13:33:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.11 2006/10/24 13:58:10 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -430,12 +430,14 @@ class questionary extends class_base
 				{
 					foreach($questions as $question_id => $answer)
 					{
+						/*
 						$anses[] = array(
 							"group" => $group_id,
 							"topic" => $topic_id,
 							"question" => $question_id,
 							"answer" => $answer,
 						);
+						*/
 						$ans_inst->add_answer(array(
 							"questionary" => $arr["questionary"],
 							"question" => $question_id,
@@ -448,9 +450,10 @@ class questionary extends class_base
 				}
 			}
 		}
+		/*
 		$o->set_prop("answers", $anses);
 		$o->save();
-
+		*/
 		return $arr["return_url"]."?questionary_submitted=1";
 	}
 
