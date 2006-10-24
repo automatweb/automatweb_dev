@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.9 2006/10/22 22:18:45 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.10 2006/10/24 13:33:21 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -106,7 +106,7 @@ class questionary extends class_base
 				if($arr["request"]["export"])
 				{
 					$res = $this->get_results($arr["obj_inst"]->id());
-					$this->gen_csv_output($res);
+					$this->gen_csv_output($res, $arr["obj_inst"]->id());
 				}
 				break;
 		};
@@ -430,6 +430,12 @@ class questionary extends class_base
 				{
 					foreach($questions as $question_id => $answer)
 					{
+						$anses[] = array(
+							"group" => $group_id,
+							"topic" => $topic_id,
+							"question" => $question_id,
+							"answer" => $answer,
+						);
 						$ans_inst->add_answer(array(
 							"questionary" => $arr["questionary"],
 							"question" => $question_id,
@@ -442,6 +448,8 @@ class questionary extends class_base
 				}
 			}
 		}
+		$o->set_prop("answers", $anses);
+		$o->save();
 
 		return $arr["return_url"]."?questionary_submitted=1";
 	}
@@ -460,6 +468,22 @@ class questionary extends class_base
 			"class_id" => CL_ANSWERER,
 			"questionary" => $id,
 		));
+
+		$ol2 = $ol;
+		foreach($ol2->arr() as $oid => $obj)
+		{
+			$ans = $obj->prop("answer");
+			foreach($ans as $ans)
+			{
+				$rets[$oid][] = array(
+					"question" => $ans["question"],
+					"topic" => $ans["question_topic"],
+					"group" => $ans["question_group"],
+					"answer" => $ans["answer"],
+				);
+			}
+		}
+
 		foreach($ol->arr() as $oid => $obj)
 		{
 			$conns = $obj->connections_from(array(
@@ -478,26 +502,80 @@ class questionary extends class_base
 			}
 
 		}
+		/*
+		$fun .= '$g_a = call_user_func(array(obj($a["group"]), "ord"));';
+		$fun .= '$t_a = call_user_func(array(obj($a["topic"]), "ord"));';
+		$fun .= '$q_a = call_user_func(array(obj($a["question"]), "ord"));';
+		$fun .= '$g_b = call_user_func(array(obj($b["group"]), "ord"));';
+		$fun .= '$t_b = call_user_func(array(obj($b["topic"]), "ord"));';
+		$fun .= '$q_b = call_user_func(array(obj($b["question"]), "ord"));';
+		$fun .= 'if($g_a < $g_b) { return -1; }';
+		$fun .= 'elseif($g_a > $g_b) { return 1; }';
+		$fun .= 'elseif($t_a < $t_b) { return -1; }';
+		$fun .= 'elseif($t_a > $t_b) { return 1; }';
+		$fun .= 'elseif($q_a < $t_b) { return -1; }';
+		$fun .= 'elseif($q_a > $q_b) { return 1; }';
+		$fun .= 'else return 0;';
+		// same thing in one line
+		//$fun_line = '$g_a = call_user_func(array(obj($a["group"]), "ord")); $t_a = call_user_func(array(obj($a["topic"]), "ord")); $q_a = call_user_func(array(obj($a["question"]), "ord")); $g_b = call_user_func(array(obj($b["group"]), "ord")); $t_b = call_user_func(array(obj($b["topic"]), "ord")); $q_b = call_user_func(array(obj($b["question"]), "ord")); if($g_a < $g_b) { return -1; } elseif($g_a > $g_b) { return 1; } elseif($t_a < $t_b) { return -1; } elseif($t_a > $t_b) { return 1; } elseif($q_a < $t_b) { return -1; } elseif($q_a > $q_b) { return 1; } else return 0;';
+
+		//foreach($ret as $answerer => $results){ uasort($results, create_function('$a, $b', '$g_a = call_user_func(array(obj($a["group"]), "ord")); $t_a = call_user_func(array(obj($a["topic"]), "ord")); $q_a = call_user_func(array(obj($a["question"]), "ord")); $g_b = call_user_func(array(obj($b["group"]), "ord")); $t_b = call_user_func(array(obj($b["topic"]), "ord")); $q_b = call_user_func(array(obj($b["question"]), "ord")); if($g_a < $g_b) { return -1; } elseif($g_a > $g_b) { return 1; } elseif($t_a < $t_b) { return -1; } elseif($t_a > $t_b) { return 1; } elseif($q_a < $t_b) { return -1; } elseif($q_a > $q_b) { return 1; } else return 0;')); $nret[$answerer] = $results; }
+		foreach($ret as $answerer => $results)
+		{
+			uasort($results, create_function('$a, $b', $fun));
+			$nret[$answerer] = $results;
+		}
+		*/
+		return $ret;
+	}
+/*
+	function cmp($a, $b)
+	{
+		echo "<br/>".$a;
+		return $b-$a;
+	}
+*/
+
+	function group_ord($g, $quest)
+	{
+		$gr = $this->get_groups($quest);
+		$k = array_keys($gr);
+		return (array_search($g, $k) + 1);
+	}
+
+	function topic_ord($g, $t, $quest)
+	{
+		$g_inst = get_instance(CL_QUESTION_GROUP);
+		$ehh = $g_inst->get_topics($g); 
+		$k = array_keys($ehh);
+		return (array_search($t, $k) + 1);
+	}
+
+	function question_ord($g, $q, $quest)
+	{
+		$g_inst = get_instance(CL_QUESTION_GROUP);
+		$ehh = $g_inst->get_questions($g);
+		$k = array_keys($ehh);
+		return (array_search($q, $k) + 1);
+
 	}
 
 	/**
 		@attrib name=gen_csv_output params=name all_args=1
 	**/
-	function gen_csv_output($results)
+	function gen_csv_output($results, $questionary)
 	{
 		$first = true;
+		classload("vcl/table");
+		$t = new vcl_table();
 		foreach($results as $result => $answers)
 		{
-			$group_no = 0;
-			$group_id = null;
-			$topic_no = 0;
-			$topic_id = null;
-			$question_no = 0;
-			$question_id = null;
+			unset($res, $tres);
 			$answerer = obj($result);
 
 			if($first)
 			{
+				/* old style
 				$struct[] = "Sugu";
 				$struct[] = "Vanus";
 				$struct[] = "Tegevusala";
@@ -506,8 +584,52 @@ class questionary extends class_base
 				$struct[] = "Rahvusraamatukogu k�lastan";
 				$struct[] = "Raamatukogu teenuseid kasutan";
 				$struct[] = "Kommentaar";
+				*/
+				
+				// this is new.. through vcl table tryout
+				$t->define_field(array(
+					"name" => "date",
+					"caption" => t("Aeg"),
+				));
+				$t->define_field(array(
+					"name" => "id",
+					"caption" => t("ID"),
+				));
+				$t->define_field(array(
+					"name" => "gender",
+					"caption" => t("Sugu"),
+				));
+				$t->define_field(array(
+					"name" => "age",
+					"caption" => t("Vanus"),
+				));
+				$t->define_field(array(
+					"name" => "area",
+					"caption" => t("Tegevusala"),
+				));
+				$t->define_field(array(
+					"name" => "school",
+					"caption" => t("Õimine/&oõpetamine koolis"),
+				));
+				$t->define_field(array(
+					"name" => "intrests",
+					"caption" => t("Huvivaldkond"),
+				));
+				$t->define_field(array(
+					"name" => "visits",
+					"caption" => t("Rahvusraamatukogu külastan"),
+				));
+				$t->define_field(array(
+					"name" => "usage",
+					"caption" => t("Rahvusraamatukogu teenuseid kasutan"),
+				));
+				$t->define_field(array(
+					"name" => "comment",
+					"caption" => t("Kommentaar"),
+				));
 			}
-
+			/*
+				old crap.. i leave it here just in case ..
 			$res[$result][] = $answerer->prop("gender");
 			$res[$result][] = $answerer->prop("age");
 			$res[$result][] = html_entity_decode($answerer->prop("area"));
@@ -516,38 +638,54 @@ class questionary extends class_base
 			$res[$result][] = html_entity_decode($answerer->prop("visits"));
 			$res[$result][] = html_entity_decode($answerer->prop("usage"));
 			$res[$result][] = html_entity_decode($answerer->prop("questionary_comment"));
-
+			*/
+			// new vcl table approach
+			$tres["date"] = date("d.m.y", $answerer->created());
+			$tres["id"] = $answerer->id();
+			$tres["gender"] = $answerer->prop("gender");
+			$tres["age"] = $answerer->prop("age");
+			$tres["area"] = html_entity_decode($answerer->prop("area"));
+			$tres["school"] = html_entity_decode($answerer->prop("school"));
+			$tres["intrests"] = html_entity_decode($answerer->prop("intrests"));
+			$tres["visits"] = html_entity_decode($answerer->prop("visits"));
+			$tres["usage"] = html_entity_decode($answerer->prop("usage"));
+			$tres["comment"] = html_entity_decode($answerer->prop("questionary_comment"));
 			foreach($answers as $ans_id => $data)
 			{
-				if($data["group"] != $group_id)
+				$g_no = $this->group_ord($data["group"], $questionary);
+				$t_no = $this->topic_ord($data["group"], $data["topic"], $questionary);
+				$q_no = $this->question_ord($data["group"], $data["question"], $questionary);
+				$tmp = $g_no."_".$t_no."_".$q_no;
+				if(!$t->field_exists($tmp))
 				{
-					$group_id = $data["group"];
-					$group_no++;
-					$topic_no = 0;
-					$question_no = 0;
+					$endkey = $t->define_field(array(
+						"name" => $tmp,
+						"caption" => $tmp,
+					));
+					if(!$startkey)
+					{
+						$startkey = $endkey;
+					}
 				}
-				if($data["topic"] != $topic_id)
-				{
-					$topic_id = $data["topic"];
-					$topic_no++;
-					$question_no = 0;
-				}
-				if($data["question"] != $question_id)
-				{
-					$question_id = $data["question"];
-					$question_no++;
-				}
-				$tmp = $group_no."_".$topic_no."_".$question_no;
+
 				$res[$result][$tmp] = $data["answer"];
+				$tres[$tmp] = $data["answer"];
 				$struct[$tmp] = $tmp;
 			}
+			$t->define_data($tres);
 			$first = false;
 		}
+		// sorts table answer fields by name
+		$t->sort_fields($startkey, $endkey);
+
+		header('Content-type: application/octet-stream');
+		header('Content-disposition: root_access; filename="csv_output.csv"');
+		print $t->get_csv_file();
+		die();
 
 		
-		// sick fuck
+		/* old style
 
-		
 		$file[] = $struct;
 		foreach($res as $key => $row)
 		{
@@ -567,6 +705,7 @@ class questionary extends class_base
 		header('Content-type: text/csv');
 		header('Content-Disposition: attachment; filename="vastused.csv"');
 		die($tot_str);
+		*/
 	}
 
 	function init_data()

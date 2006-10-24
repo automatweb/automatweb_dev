@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.94 2006/10/12 13:19:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.95 2006/10/24 13:33:32 tarvo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1727,6 +1727,38 @@ class aw_table extends aw_template
 				}
 			}
 		}
+		return count($this->rowdefs)-1;
+	}
+
+	/**
+		@comment
+			sorts defined fields by name
+	**/
+	function sort_fields($startkey = 0, $endkey = false)
+	{
+		$endkey = $endkey?$endkey:count($this->rowdefs)-1;
+		$tmp = array_flip($this->rowdefs_key_index);
+		for($j = $startkey;$j < $endkey;$j++)
+		{
+			for($i = $startkey;$i<$endkey;$i++)
+			{
+				$cmp = strcasecmp(($a_name = $this->rowdefs[$i]["name"]), ($b_name = $this->rowdefs[$i+1]["name"]));
+				if($cmp > 0)
+				{
+					$tmp_rowdefs = $this->rowdefs[$i];
+					$this->rowdefs[$i] = $this->rowdefs[$i+1];
+					$this->rowdefs[$i+1] = $tmp_rowdefs;
+					$tmp[$i] = $b_name;
+					$tmp[$i+1] = $a_name;
+				}
+			}
+		}
+		$this->rowdefs_key_index = array_flip($tmp);
+	}
+	
+	function field_exists($field)
+	{
+		return isset($this->rowdefs_key_index[$field]);
 	}
 
 	function remove_field($name)
