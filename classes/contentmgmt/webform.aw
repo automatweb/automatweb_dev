@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.100 2006/09/27 15:03:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.101 2006/10/24 07:08:57 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -148,6 +148,12 @@
 ------------- end: get_controllers -------------
 
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 ------------- relations -------------
 
 @reltype METAMGR value=1 clid=CL_METAMGR
@@ -234,6 +240,10 @@ class webform extends class_base
 			CL_SHOP_PRODUCT => t("Toode"),
 		);
 		$this->no_props = $this->make_keys(array("status", "name", "comment", "register_id", "person_id"));
+
+		$this->trans_props = array(
+			"redirect"
+		);
 	}
 	
 	function callback_on_load($arr)
@@ -268,6 +278,10 @@ class webform extends class_base
 	
 	function callback_mod_tab($arr)
 	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
 		if($arr["id"] == "show_entries")
 		{
 			if($arr["obj_inst"]->prop("form_type") == CL_REGISTER_DATA)
@@ -280,6 +294,12 @@ class webform extends class_base
 			}
 		}
 	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
+
 	
 	function callback_pre_save($arr)
 	{
@@ -405,6 +425,10 @@ class webform extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "on_init":
 				if(!$arr["new"])
 				{
@@ -2083,7 +2107,7 @@ class webform extends class_base
 		// we need a solid copy of arr, cause we alter the actual input many times
 		$subaction = $arr["subaction"];
 		$obj_inst = obj($arr["id"]);
-		$redirect = $obj_inst->prop("redirect");
+		$redirect = $obj_inst->trans_get_val("redirect");
 		$rval = (strpos(strtolower($redirect), "http://") !== false ? $redirect : (substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect));
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$cfgform = $obj_inst->get_first_obj_by_reltype("RELTYPE_CFGFORM");

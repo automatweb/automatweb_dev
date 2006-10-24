@@ -282,6 +282,17 @@
             <no_caption>1</no_caption>
             <caption>Kontrollerid</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_WEBFORM</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -329,6 +340,9 @@
                   <caption>N&amp;amp;auml;itamine</caption>
                   <parent>controllers</parent>
             </get_controllers>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <METAMGR>
