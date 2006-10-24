@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.516 2006/10/24 06:44:57 kristo Exp $
+// $Id: class_base.aw,v 2.517 2006/10/24 09:40:19 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4314,9 +4314,20 @@ class class_base extends aw_template
 			"subclass" => $this->clid
 		));
 		$rv = array();
+		$l = get_instance("languages");
+		$lid = $l->get_langid_for_code(aw_global_get("user_adm_ui_lc"));
 		foreach($ol->arr() as $o)
 		{
-			$rv[$o->id()] = $o->trans_get_val("name");
+			// this must use user interface language, not site content language
+			$trs = $o->meta("translations");
+			if ($lid && isset($trs[$lid]) && $lid != $o->lang_id())
+			{
+				$rv[$o->id()] = $trs[$lid]["name"];
+			}
+			else
+			{
+				$rv[$o->id()] = $o->name();
+			}
 		}
 		return $rv;
 	}
