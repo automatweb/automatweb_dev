@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.147 2006/09/27 15:03:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.148 2006/10/24 08:51:01 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1984,7 +1984,7 @@ class crm_person extends class_base
 
 
 	function on_disconnect_section_from_person($arr)
-	{
+	{arr($arr);
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON)
@@ -3485,12 +3485,15 @@ class crm_person extends class_base
 			"name" => "content",
 			"caption" => t("Rea sisu"),
 			"align" => "center",
-			"callback" =>  array(&$this, "__content_format"),
-			"callb_pass_row" => true,
 		));
 		$t->define_field(array(
 			"name" => "length",
 			"caption" => t("Kestvus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "length_cust",
+			"caption" => t("Kestvus Kliendile"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -3582,16 +3585,25 @@ class crm_person extends class_base
 			}
 			$row2task[$c["to"]] = $c["from"];
 		}
-
+//arr($row2task);
+		$stat_inst = get_instance("applications/crm/crm_company_stats_impl");
+		$task_inst = get_instance("applications/groupware/task");
+		$row_inst = get_instance("applications/groupware/task_row");
+		$company_curr = $stat_inst->get_company_currency();
 		$bi = get_instance(CL_BUG);
+		
+		$l_cus_s = 0;
+		
 		foreach($ol->arr() as $o)
 		{
 			$check = "";
 			$bs = "";
+			$agreement = array();
 			if ($this->can("view", $o->prop("bill_id")))
 			{
 				$b = obj($o->prop("bill_id"));
 				$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
+				$agreement = $b->meta("agreement_price");
 			}
 			else
 			if ($o->prop("on_bill"))
@@ -3611,15 +3623,28 @@ class crm_person extends class_base
 
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
+			
+			//kui on kokkuleppehind kas arvel, või kui arvet ei ole, siis toimetusel... tuleb vähe arvutada
+			if((is_object($b) && sizeof($agreement)) || (!is_object($b) && $task->prop("deal_price")))
+			{
+				$sum = $row_inst->get_row_ageement_price($o);
+			}
+			
+			//õigesse valuutasse
+			$sum = $stat_inst->convert_to_company_currency(array(
+				"sum"=>$sum,
+				"o"=>$task,
+				"company_curr" => $company_curr,
+			));
+			
 			$t->define_data(array(
-				"content_val" => $bi->_split_long_words($o->prop("content")),				
-				"content" => $o->prop("ord"),
 				"date" => $o->prop("date"),
 				"cust" => html::obj_change_url($task->prop("customer")),
 				"proj" => html::obj_change_url($task->prop("project")),
 				"task" => html::obj_change_url($task),
-			//	"content" => $bi->_split_long_words($o->prop("content")),
-				"length" => $o->prop("time_real"),
+				"content" => $bi->_split_long_words($o->prop("content")),
+				"length" => number_format($o->prop("time_real"), 2, ',', ''),
+				"length_cust" => number_format($o->prop("time_to_cust"), 2, ',', ''),
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
 				"check" => $check,
@@ -3627,20 +3652,17 @@ class crm_person extends class_base
 			));
 			$l_sum += $o->prop("time_real");
 			$s_sum += $sum;
+			$l_cus_s += $o->prop("time_to_cust");
 		}
-		$t->sort_by(array(
-			"field" => array("date" , "content"),
-			"order" => array("asc", "asc"),
-		));
-		$t->set_sortable(false);
-		
+
 		$t->set_default_sortby("date");
 		$t->sort_by();
 
 		$t->define_data(array(
 			"content" => t("<b>Summa</b>"),
 			"length" => number_format($l_sum, 2, ',', ''),
-			"sum" => number_format($s_sum, 2, ',', '')
+			"sum" => number_format($s_sum, 2, ',', ''),
+			"length_cust" => number_format($l_cus_s, 2, ',', ''),
 		));
 		$arr["prop"]["value"] = $t->draw();
 	}
