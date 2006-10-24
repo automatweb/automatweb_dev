@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.21 2006/10/23 13:56:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.22 2006/10/24 10:42:25 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -239,6 +239,17 @@ class shop_product_packaging extends class_base
 		}
 		while($parent_fld->class_id() != CL_MENU && $parent_fld->parent());
 
+		$rp_all_cur = "";
+		foreach(safe_array($pi->meta("cur_prices")) as $cur_id => $cur_price)
+		{
+			if (!cur_price != "")
+			{
+				$cur_obj = obj($cur_id);
+				$rp_all_cur .= " ".number_format($cur_price, 2)." ".$cur_obj->name();
+			}
+		}
+														
+
 		$soc = get_instance(CL_SHOP_ORDER_CART);
 		$soc->get_cart($oc_obj);
 		$inf = $soc->get_item_in_cart($pi->id());
@@ -254,6 +265,7 @@ class shop_product_packaging extends class_base
 			"price" => $this->get_price($prod),
 			"tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($prod)), 2),
 			"obj_price" => $this->get_price($pi),
+			"obj_price_all_cur" => $rp_all_cur,
 			"obj_tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($pi)), 2),
 			"read_price_total" => number_format(((int)($arr["quantity"]) * str_replace(",", "", $inf["data"]["read_price"])), 2),
 			"id" => $prod->id(),
