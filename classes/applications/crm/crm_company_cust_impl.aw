@@ -356,7 +356,10 @@ class crm_company_cust_impl extends class_base
 		if (!$cat)
 		{
 			$cat = $this->_get_first_cust_cat($arr["obj_inst"]);
-			$cat = $cat->id();
+			if ($cat)
+			{
+				$cat = $cat->id();
+			}
 		}
 
 		$lp = array(
