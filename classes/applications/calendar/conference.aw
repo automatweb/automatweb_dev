@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.5 2006/10/23 13:04:07 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.6 2006/10/24 08:08:48 tarvo Exp $
 // conference.aw - Konverents 
 /*
 
@@ -302,6 +302,9 @@ class conference extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$room_inst = get_instance(CL_ROOM);
+		$reservation_inst = get_instance(CL_RESERVATION);
+		$order_inst = get_instance(CL_SHOP_ORDER);
+		$prod_inst = get_instance(CL_SHOP_PRODUCT);
 		$rooms = $this->get_rooms($arr["obj_inst"]->id());
 		$room = reset($rooms);
 		$list = $room_inst->get_prod_list((($tmp = $arr["request"]["tree_filter"])?$tmp:$room->id()));
@@ -328,8 +331,10 @@ class conference extends class_base
 		));
 
 
-		// generating the extra row for adding an order
 		$res = $this->get_reservations($arr["obj_inst"]->id());
+
+
+		// generating the extra row for adding an order
 		foreach($res as $obj)
 		{
 			$s = $obj->prop("start1");
@@ -342,10 +347,13 @@ class conference extends class_base
 			}
 			for($time = $s;$time<$e;$time += 86400)
 			{
-				$times[$time.".".$tmp] = date("d/m/Y",$time).", ruum:".$rooms[$tmp];
+				$times[$time.".".$obj->id()] = date("d/m/Y",$time).", ruum:".$rooms[$tmp];
 			}
 
 		}
+		$products = array(
+			"0" => t("-- Vali toode --"),
+		);
 		foreach($prods as $oid => $obj)
 		{
 			$products[$obj->id()] = $obj->name();
@@ -363,7 +371,6 @@ class conference extends class_base
 			"options" => $rooms,
 		));
 		*/
-		$products = array_merge(array(0 => t("-- Vali toode --")), $products);
 		$prod_select = html::select(array(
 			"name" => "order[product]",
 			"options" => $products,
@@ -378,12 +385,36 @@ class conference extends class_base
 			)),
 		);
 		$t->define_data($extra_row);
+
+
+		// defining orders data
+		foreach($res as $oid => $obj)
+		{
+			$ord = $reservation_inst->get_orders($oid);
+			foreach($ord as $order => $time)
+			{
+				$order = obj($order);
+				$prods = $order_inst->get_items_from_order($order);
+				foreach($prods as $prod_id => $amount)
+				{
+					$room = obj($obj->prop("resource"));
+					$prod = obj($prod_id);
+					$t->define_data(array(
+						"product" => $prod->name(),
+						"day" => date("d/m/Y", $time),
+						"amount" => $amount,
+						"room" => $room->name(),
+						"price" => ($amount * ($pr = $prod_inst->get_price($prod)))." (".$pr.")",
+					));
+				}
+			}
+		}
 		
 	}
 	
 	function _handle_new_order($arr)
 	{
-		list($day, $room) = split("[.]", $arr["request"]["order"]["day"]);
+		list($day, $reservation) = split("[.]", $arr["request"]["order"]["day"]);
 		$amount = $arr["request"]["order"]["amount"];
 		$product = $arr["request"]["order"]["product"];
 		$prod_list = array(

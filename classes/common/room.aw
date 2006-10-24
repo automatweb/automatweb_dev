@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.22 2006/10/23 13:43:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.23 2006/10/24 08:08:46 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1495,10 +1495,11 @@ class room extends class_base
 			}
 			$so->add_item(array(
 				"iid" => $prod_id,
-				array(
-					"items" => $warehouse,
+				"item_data" => array(
+					"items" => $amount,
 				),
 			));
+
 		}
 		$order_id = $so->finish_order();
 		$reserv = get_instance(CL_RESERVATION);
