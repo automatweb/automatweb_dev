@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.515 2006/10/20 10:57:23 kristo Exp $
+// $Id: class_base.aw,v 2.516 2006/10/24 06:44:57 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2415,7 +2415,6 @@ class class_base extends aw_template
 		}
 
 		$properties = $resprops;
-
 		$resprops = array();
 
 		// First we resolve all callback properties, so that get_property calls will

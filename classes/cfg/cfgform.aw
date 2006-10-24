@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.96 2006/10/23 12:25:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.97 2006/10/24 06:44:59 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -440,6 +440,7 @@ class cfgform extends class_base
 				))
 			));
 		}
+		$t->set_sortable(false);
 	}
 
 	function _trans_tbl_grps($arr)
@@ -1684,7 +1685,14 @@ class cfgform extends class_base
 
 			if ($arr["site_lang"])
 			{
-				$lc = aw_global_get("LC");
+				if (aw_ini_get("user_interface.full_content_trans"))
+				{
+					$lc = aw_global_get("ct_lang_lc");
+				}
+				else
+				{
+					$lc = aw_global_get("LC");
+				}
 			}
 			else
 			{

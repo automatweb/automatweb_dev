@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.20 2006/09/27 15:03:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.21 2006/10/24 06:44:59 kristo Exp $
 
 /*
 
@@ -340,6 +340,10 @@ class classificator extends class_base
 			$olx = new object_list($vars);
 		}
 		$langid = aw_global_get("lang_id");
+		if (!is_admin() && aw_ini_get("user_interface.full_content_trans"))
+		{
+			$langid = aw_global_get("ct_lang_id"); 
+		}
 
 		$ret = array(
 			"list" => $olx->ids(),
@@ -359,6 +363,7 @@ class classificator extends class_base
 				}
 			}
 		}
+
 		return array($olx, $ofto->name(), $use_type, $default_value, $ret);
 	}
 
