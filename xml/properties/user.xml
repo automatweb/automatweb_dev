@@ -73,7 +73,7 @@
             <name>real_name</name>
             <table>users</table>
             <group>general</group>
-            <type>hidden</type>
+            <type>textbox</type>
             <field>config</field>
             <method>serialize</method>
             <caption>Nimi</caption>
@@ -83,7 +83,7 @@
             <table>users</table>
             <group>general</group>
             <field>email</field>
-            <type>hidden</type>
+            <type>textbox</type>
             <caption>E-mail</caption>
       </property>
       <property>

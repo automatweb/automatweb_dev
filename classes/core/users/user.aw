@@ -57,10 +57,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property blocked field=blocked type=checkbox ch_value=1
 	@caption Blokeeritud
 
-	@property real_name type=hidden table=users field=config method=serialize
+	@property real_name type=textbox table=users field=config method=serialize
 	@caption Nimi
 
-	@property email field=email type=hidden
+	@property email field=email type=textbox
 	@caption E-mail
 
 	@property notify field=notify type=checkbox ch_value=1
