@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.87 2006/09/27 15:03:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.88 2006/10/25 09:38:05 kristo Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -87,7 +87,7 @@ class event_search extends class_base
 			"clid" => CL_EVENT_SEARCH,
 		));
 
-		$this->fields = array("fulltext","fulltext2", "start_date","end_date","project1","project2", "active", "format");
+		$this->fields = array("fulltext","fulltext2", "start_date","end_date","project1","project2", "active", "format", "search_btn");
 		lc_site_load("event_search", &$this);
 	}
 
@@ -331,7 +331,6 @@ class event_search extends class_base
 		{
 			case "ftform":
 				$fdata = array();
-				
 				foreach($this->fields as $fname)
 				{
 					if ($arr["request"][$fname])
@@ -853,7 +852,7 @@ class event_search extends class_base
 		
 		$htmlc->add_property(array(
 			"name" => "sbt",
-			"caption" => t("Otsi"),
+			"caption" => $formconfig["search_btn"]["caption"] != "" ? $formconfig["search_btn"]["caption"] : t("Otsi"),
 			"type" => "submit",
 		));
 		$do_search = true;
