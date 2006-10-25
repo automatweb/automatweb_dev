@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.24 2006/10/24 14:18:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.25 2006/10/25 15:34:37 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -200,6 +200,12 @@ class room extends class_base
 			1 => t("minutit"),
 			2 => t("tundi"),
 			3 => t("p&auml;eva"),
+		);
+		$this->step_lengths = array(
+			"" => 3600, //default
+			1 => 60,
+			2 => 3600,
+			3 => 86400,
 		);
 	}
 
@@ -801,33 +807,38 @@ class room extends class_base
 		}
 	//	arr($booked);
 		$today_start = mktime(0, 0, 0, date("m", time()), date("d", time()), date("y", time()));
-		$step = $arr["obj_inst"]->prop("time_from");
-		while($step < $arr["obj_inst"]->prop("time_to"))
+	
+		$step = 0;
+		
+		$step_length = $this->step_lengths[$arr["obj_inst"]->prop("time_unit")];
+		
+		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
+//			$today_start = mktime(0, 0, 0, date("m", time()), date("d", time()), date("y", time()));
 			$d = $col = array();
 			$x = 0;
-			$start_step = $today_start + $step * 3600;
-			$end_step = $start_step + $arr["obj_inst"]->prop("time_step");
-			//arr(date("d.m.Y H:i",  $start_step)); arr($start_step);
+			$start_step = $today_start + $step * $step_length * $arr["obj_inst"]->prop("time_step");
+			$end_step = $start_step + $step_length * $arr["obj_inst"]->prop("time_step");
 			while($x<7)
 			{
 				$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba");
 				$col[$x] = "";
 				foreach($booked as $b)
 				{
-					//if($x == 6)arr($b["start"] . " " . $start_step . " " . $end_step . " " . $b["end"] . " " .($start_step -  $b["start"]). " " . ($end_step - $b["end"]));
-					if(($b["start"] <= $start_step &&  $start_step < $b["start"]) || ($b["start"] < $end_step && $b["end"] >= $end_step))
+					if((($b["start"] <= $start_step) &&  ($start_step < $b["end"])) || (($b["start"] < $end_step) && ($b["end"] > $end_step)) || (($b["start"] < $end_step) && ($b["start"] >= $start_step)))
 					{
 						$d[$x] = t("BRON");
 						$col[$x] = "red";
+						break;
 					}
 				}
 				$x++;
-				$start_step = $start_step + 86400;
-				$end_step = $end_step + 86400;
+				$start_step += 86400;
+				$end_step += 86400;
+//				$today_start += 86400;
 			}
 			$t->define_data(array(
-				"time" => $step.":00-".($step + $arr["obj_inst"]->prop("time_step")).":00".html::hidden(array("name" => "step" , "value" => $step)),
+				"time" => date("G:i" , $today_start+ $step*$step_length*$arr["obj_inst"]->prop("time_step"))." - ".date("G:i" , $today_start+ ($step+1)*$step_length*$arr["obj_inst"]->prop("time_step")), //$step.":00-".($step + $arr["obj_inst"]->prop("time_step")).":00".html::hidden(array("name" => "step" , "value" => $step)),
 				"d0" => $d[0],
 				"d1" => $d[1],
 				"d2" => $d[2],
@@ -842,9 +853,9 @@ class room extends class_base
 				"col4" => $col[4],
 				"col5" => $col[5],
 				"col6" => $col[6],
-			
 			));
-			$step = $step + $arr["obj_inst"]->prop("time_step");
+		//	$step = $step + $arr["obj_inst"]->prop("time_step");
+			$step = $step + 1;
 		}
 	}
 
@@ -903,12 +914,18 @@ class room extends class_base
 
 	/**
 		@attrib name=do_add_reservation params=name all_args=1
+		@param id required oid
+			room id
+		@param bron optional array
+			keys are start timestamps
 	**/
 	function do_add_reservation($arr)
 	{
 		if(is_oid($arr["id"]))
 		{
 			$room = obj($arr["id"]);
+			$length = $this->step_lengths[$room->prop("time_unit")] * $room->prop("time_step") ;
+					
 			if(is_object($room->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
 			{
 				$cal_obj = $room->get_first_obj_by_reltype("RELTYPE_CALENDAR");
@@ -916,18 +933,19 @@ class room extends class_base
 				$parent = $cal_obj->prop("event_folder");
 				$step = $room->prop("time_step");
 			}
-		}
-		$end = $arr["bron"][0];
-		foreach($arr["bron"] as $bron => $val)
-		{
-			if(!$start)
+
+			$end = $arr["bron"][0];
+			foreach($arr["bron"] as $bron => $val)
 			{
-				$start = $bron;
-				$end = $start+$step*3600-1;
-			}
-			if(($end+1) == $bron)
-			{
-				$end = $bron + $step*3600-1;
+				if(!$start)
+				{
+					$start = $bron;
+					$end = $start + $length-1;
+				}
+				if(($end+1) == $bron)
+				{
+					$end = $bron + $length-1;
+				}
 			}
 		}
 		//arr($arr); arr($start); arr($end);
@@ -1551,7 +1569,12 @@ class room extends class_base
 		}
 		$room = obj($room);
 		
+		$this->step_length = $this->step_lengths[$room->prop("time_unit")];
+		$sum = array();
+		
+		$price_inst = get_instance(CL_ROOM_PRICE);
 		$this_price = "";
+		$this_prices = array();
 		$prices = $room->connections_from(array(
 			"class_id" => CL_ROOM_PRICE,
 			"type" => "RELTYPE_ROOM_PRICE",
@@ -1561,26 +1584,71 @@ class room extends class_base
 			$price = $conn->to();
 			if(($price->prop("date_from") < $start) && $price->prop("date_to") > $end)
 			{
-				if(in_array(date("w", $start) , $price->prop("weekdays")))
+				if(in_array((date("w", $start) + 1) , $price->prop("weekdays")))
 				{
 					$this_price = $price;
-					break;
+					$this_prices[$price->prop("nr")][$price->prop("time")] = $price;
+//					break;
 				}
 			}
 		}
-		if(is_object($price))
+		
+		$step = 1;
+		$time = $end-$start + 60;//+60 seepärast et oleks nagu täisminutid ja täistunnid jne
+		while($time > 60)//alla minuti ei ole oluline aeg eriti... et toimiks nii 00, kui ka minut enne.. siis peaks igaks juhuks 60sek otsas olema
 		{
-			$sum = array();
-			$price_inst = get_instance(CL_ROOM_PRICE);
+			if(is_array($this_prices[$step]))
+			{
+				$price = $this->get_best_time_in_prices(array(
+					"time" => $time,
+					"prices" => $this_prices[$step],
+					"end" => $end,
+				));
+			}
+			if(!is_object($price))//kõvemal tasemel enam ei ole hindu.... laseb vanaga edasi
+			{
+				$price = $this->get_best_time_in_prices(array(
+					"time" => $time,
+					"prices" => $this_prices[$step-1],
+					"end" => $end,
+				));
+			}
+			else
+			{
+				$step++;
+			}
+			
+			if(!is_object($price))//juhul kui miski uus aeg vms... hakkab otsast peale
+			{
+				$price = $this->get_best_time_in_prices(array(
+					"time" => $time,
+					"prices" => $this_prices[1],
+					"end" => $end,
+				));
+			}
+
+			if(!is_object($price) || !($price->prop("time") > 0) || !$this->step_length)//igaks juhuks... ei taha et asi tsüklisse jääks
+			{
+				break;
+			}
+			foreach($price_inst->get_prices($price->id()) as $currency => $hr_price)
+			{
+				$sum[$currency] += $hr_price;//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
+			}
+			$time = $time - ($price->prop("time") * $this->step_length);
+		}
+		if(is_object($this_price))
+		{
+			
 			//arvan , et õige oleks 1 maha võtta.... et saaks panna lõpptähtajaks järgmise broneeringu algustähtaeg... et siis 10:00 -11:00 10:00 - 10:59 asemel
 			$end = $end-1;
 			
 			//siin teeb asjad täistundideks....
-			$hr_start = mktime(date("G", $start), 0, 0, date("m", $start), date("d", $start), date("y", $start));
-			$hr_end = mktime(date("G", $end), 0, 0, date("m", $end), date("d", $end), date("y", $end));
-			foreach($price_inst->get_prices($price->id()) as $currency => $hr_price)
+		//	$hr_start = mktime(date("G", $start), 0, 0, date("m", $start), date("d", $start), date("y", $start));
+		//	$hr_end = mktime(date("G", $end), 0, 0, date("m", $end), date("d", $end), date("y", $end));
+			foreach($price_inst->get_prices($this_price->id()) as $currency => $hr_price)
 			{
-				$sum[$currency] = $hr_price*(int)(($hr_end-$hr_start)/3600 + 1);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
+			//	$sum[$currency] = $hr_price*(int)(($hr_end-$hr_start)/3600 + 1);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
 				if($people > $room->prop("normal_capacity"))
 				{
 					$sum[$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
@@ -1596,6 +1664,51 @@ class room extends class_base
 			}
 		}
 		return $sum;
+	}
+	
+	/**
+		@attrib params=name
+		@param prices required type=array
+			price objects.... keys are price->prop(time)
+		@param time optional type=oid
+			time left ... still without tax
+		@return object
+			price object... largest of smaller time... or smallest with larger time
+	**/
+	function get_best_time_in_prices($arr)
+	{
+		extract($arr);
+		$largest = "";
+		$smaller = "";
+		foreach($prices as $key => $price)
+		{
+			//jube porno.... testib kas hinna ajastus kattub järgneva ajaga
+			$time_from = $price->prop("time_from");
+			$time_to = $price->prop("time_to");
+			$start = $end - $time;
+			$end = $start + $price->prop("time") * $this->step_length;
+			if(!(($time_from["hour"] <= date("G" , $start)) && ($time_to["hour"] >= date("G" , $end))))
+			{
+				continue; //siia tuleb mingi eriti sünge kood, mis peaks hindu ajaliselt tükeldama hakkama ....
+			}
+
+			if($time >= ($price->prop("time") * $this->step_length) && (!$smaller || ($smaller->prop("time") < $price->prop("time"))))
+			{
+				$smaller = $price;
+			}
+			if($time <= ($price->prop("time") * $this->step_length) && (!$larger || ($larger->prop("time") > $price->prop("time"))))
+			{
+				$larger = $price;
+			}
+		}
+		if(is_object($smaller))
+		{
+			return $smaller;
+		}
+		else
+		{
+			return $larger;
+		}
 	}
 	
 	/**

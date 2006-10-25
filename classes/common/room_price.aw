@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.3 2006/10/16 13:07:09 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.4 2006/10/25 15:34:37 markop Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -78,6 +78,10 @@ class room_price extends class_base
 				$prop["options"] = $this->weekdays;
 				break;
 			case "nr":
+				if($arr["obj_inst"]->prop("type") == 2)
+				{
+					return PROP_IGNORE;
+				}
 				for($i=1;$i<11;$i++)
 				{
 					$opts[$i] = $i;
