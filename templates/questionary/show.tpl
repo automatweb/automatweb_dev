@@ -1,3 +1,41 @@
+<script type="text/javascript">
+
+var f7_cks;
+
+function f7_DisableCBGroup(){
+	alert(453);
+ f7_cks=document.getElementsByTagName('INPUT');
+ for (f7_0=0;f7_0<f7_cks.length;f7_0++){
+  if (f7_cks[f7_0].type=='checkbox'){
+   if (f7_cks[f7_0].parentNode.title.match('f7_Master')){
+    f7_cks[f7_0].parentNode.state=f7_cks[f7_0].parentNode.title.split('f7_Master')[1];
+    f7_cks[f7_0].parentNode.title=f7_cks[f7_0].parentNode.title.replace(f7_cks[f7_0].parentNode.state,'')
+    f7_Disable(f7_cks[f7_0])
+    f7_cks[f7_0].onclick=function(){ f7_Disable(this); }
+   }
+  }
+ }
+}
+
+function f7_Disable(f7_obj){
+ for (f7_1=0;f7_1<f7_cks.length;f7_1++){
+  if (f7_cks[f7_1].parentNode.title==f7_obj.parentNode.title.replace('f7_Master','')){
+   if (f7_obj.checked){
+    f7_cks[f7_1].setAttribute('disabled',true)
+    if (f7_obj.parentNode.state=='CHECK'){
+     f7_cks[f7_1].checked=true;
+    }
+    if (f7_obj.parentNode.state=='UNCHECK'){
+     f7_cks[f7_1].checked=false;
+    }
+   }
+   else {
+    f7_cks[f7_1].removeAttribute('disabled')
+   }
+  }
+ }
+}
+</script>
 <form method="post">
 <!--{VAR:name}<br>-->
 <!-- SUB: GROUP -->
@@ -103,7 +141,7 @@
 				<input type="radio" value="{VAR:value}" name="pers[school_radio]"/>
 			</td>
 			<td>
-				<input type="textbox" name="pers[school_text]"/>
+				<input type="textbox" name="pers[school_text][{VAR:value}]"/>
 			</td>
 		</tr>
 		<!-- END SUB: PERS_SCHOOL -->

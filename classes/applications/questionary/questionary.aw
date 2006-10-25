@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.11 2006/10/24 13:58:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.12 2006/10/25 13:01:40 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -21,7 +21,7 @@
 	@property gr_tb type=toolbar no_caption=1
 	@property groups type=table no_caption=1
 
-@groupinfo results caption=Vastatud
+@groupinfo results caption=Vastatud submit=no
 @default group=results
 	@property results type=text
 	@caption Vastuseid
@@ -387,7 +387,7 @@ class questionary extends class_base
 		}
 		$o->set_prop("area", $area);
 		# SHCOOL
-		if((!$a = $arr["pers"]["school_radio"]))
+		if(!($a = $arr["pers"]["school_radio"]))
 		{
 			foreach($arr["pers"]["school_text"] as $k => $v)
 			{
@@ -650,7 +650,7 @@ class questionary extends class_base
 			$tres["area"] = html_entity_decode($answerer->prop("area"));
 			$tres["school"] = html_entity_decode($answerer->prop("school"));
 			$tres["intrests"] = html_entity_decode($answerer->prop("intrests"));
-			$tres["visits"] = html_entity_decode($answerer->prop("visits"));
+			$tres["visits"] = html_entity_decode($answerer->prop("visit_recur"));
 			$tres["usage"] = html_entity_decode($answerer->prop("usage"));
 			$tres["comment"] = html_entity_decode($answerer->prop("questionary_comment"));
 			foreach($answers as $ans_id => $data)
