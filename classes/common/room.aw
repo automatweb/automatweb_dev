@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.25 2006/10/25 15:34:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.26 2006/10/26 14:37:36 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1582,21 +1582,22 @@ class room extends class_base
 		foreach($prices as $conn)
 		{
 			$price = $conn->to();
-			if(($price->prop("date_from") < $start) && $price->prop("date_to") > $end)
+			if(($price->prop("date_from") < $start) && $price->prop("date_to") > $end && $price->prop("type") == 1)
 			{
 				if(in_array((date("w", $start) + 1) , $price->prop("weekdays")))
 				{
 					$this_price = $price;
-					$this_prices[$price->prop("nr")][$price->prop("time")] = $price;
+					$this_prices[$price->prop("nr")][] = $price;
 //					break;
 				}
 			}
 		}
 		
 		$step = 1;
-		$time = $end-$start + 60;//+60 seepärast et oleks nagu täisminutid ja täistunnid jne
+		$time = $end-$start;//+60 seepärast et oleks nagu täisminutid ja täistunnid jne
 		while($time > 60)//alla minuti ei ole oluline aeg eriti... et toimiks nii 00, kui ka minut enne.. siis peaks igaks juhuks 60sek otsas olema
-		{
+		{//arr($end);
+			$price = "";
 			if(is_array($this_prices[$step]))
 			{
 				$price = $this->get_best_time_in_prices(array(
@@ -1631,9 +1632,16 @@ class room extends class_base
 			{
 				break;
 			}
-			foreach($price_inst->get_prices($price->id()) as $currency => $hr_price)
+			//otsib, kas mõni soodushind kattub 
+			$bargain = $this->get_bargain(array(
+				"price" => $price,
+				"room" => $room,
+				"time" => $price->prop("time") * $this->step_length,
+				"start" => $end-$time,
+			));
+			foreach($price->meta("prices") as $currency => $hr_price)
 			{
-				$sum[$currency] += $hr_price;//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
+				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
 		}
@@ -1641,7 +1649,7 @@ class room extends class_base
 		{
 			
 			//arvan , et õige oleks 1 maha võtta.... et saaks panna lõpptähtajaks järgmise broneeringu algustähtaeg... et siis 10:00 -11:00 10:00 - 10:59 asemel
-			$end = $end-1;
+		//	$end = $end-1;
 			
 			//siin teeb asjad täistundideks....
 		//	$hr_start = mktime(date("G", $start), 0, 0, date("m", $start), date("d", $start), date("y", $start));
@@ -1666,37 +1674,117 @@ class room extends class_base
 		return $sum;
 	}
 	
+	//annab soodustuse juhul kui see täpselt kattub hinna ajaga või kui üks soodustus lõppeb kas enne aja lõppu , või algab alles poole pealt
+	//inimliku lolluse vastu kahjuks see funktsioon ei aita, kui kellelgi on tahtmist mitmeid poolikult kattuvaid soodustusi ühele ajale paigutada... palun väga, kuid resultaati ei oska ette ennustada
+	function get_bargain($arr)
+	{
+		extract($arr);
+		if(is_object($price) && is_object($room))
+		{
+			$bargains = array();
+			$bargain_conns = $room->connections_from(array(
+				"class_id" => CL_ROOM_PRICE,
+				"type" => "RELTYPE_ROOM_PRICE",
+			));
+			$end = $start+$time;
+			foreach($bargain_conns as $conn)
+			{
+				$bargain = $conn->to();//kui järgnevas iffis midagi ei tööta.... siis edu... mulle vist 
+				if(
+					($bargain->prop("active") == 1) &&
+					($bargain->prop("type") == 2) &&
+					(in_array((date("w", $start) + 1) , $bargain->prop("weekdays"))) && 
+					(
+						(
+							$bargain->prop("date_from") <= ($start+60) &&
+							($bargain->prop("date_to") + 60) >= ($start+$time)
+						)||
+						(
+							$bargain->prop("recur")	&&
+							(
+								(
+									(100*date("n",$bargain->prop("date_from")) + date("j",$bargain->prop("date_from"))) <= (100*date("n",$start) + date("j",$start)) && 
+									(100*date("n",$bargain->prop("date_to")) + date("j",$bargain->prop("date_to"))) >= (100*date("n",($start+$time)) + date("j",($start+$time)))
+								) || 
+								(
+									(100*date("n",$bargain->prop("date_from")) + date("j",$bargain->prop("date_from")) >= 100*date("n",$bargain->prop("date_to")) + date("j",$bargain->prop("date_to"))) &&
+										(
+											((100*date("n",$bargain->prop("date_from")) + date("j",$bargain->prop("date_from"))) <= (100*date("n",$start) + date("j",$start)))||
+											((100*date("n",$bargain->prop("date_to")) + date("j",$bargain->prop("date_to"))) >= (100*date("n",($start+$time)) + date("j",($start+$time)))
+										)
+									)
+								)
+							)
+						)
+					)
+				)
+				{
+					$from = $bargain->prop("time_from");
+					$to = $bargain->prop("time_to");//arr(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start))); arr(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))); arr($start);arr($end);
+					//juhul kui aeg mahub täpselt soodushinna sisse
+					if(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start && mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end)
+					{
+						return 0.01*$bargain->prop("bargain_percent");
+					}
+					//juhul kui mõni kattub poolikult... esimene siis , et kui allahindlus algul on,... teine, et allahindlus tuleb poolepealt
+					if((mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start) && (mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) > $start))
+					{
+						return 0.01*$bargain->prop("bargain_percent")*(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) - $start)/($end-$start);
+					}
+					if((mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end) && (mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) < $end))
+					{
+						return 0.01*$bargain->prop("bargain_percent")*($end - mktime($from["hour"], $from["minute"], 0, date("m",$from), date("d",$from), date("y",$from)))/($end-$start);
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	
 	/**
 		@attrib params=name
 		@param prices required type=array
 			price objects.... keys are price->prop(time)
-		@param time optional type=oid
+		@param time required type=int
 			time left ... still without tax
+		@param end required type=int
+			event ending time
 		@return object
-			price object... largest of smaller time... or smallest with larger time
+			price object... largest of smaller times... or smallest of larger times
 	**/
 	function get_best_time_in_prices($arr)
 	{
 		extract($arr);
 		$largest = "";
 		$smaller = "";
+		$prices_to_use_when_situation_is_hopeless = array();
+		$start = $arr["end"] - $time;//arr($start); arr($end);arr()
+		//arr($start);arr(date("G:i",$start));
 		foreach($prices as $key => $price)
-		{
+		{//arr($time);
 			//jube porno.... testib kas hinna ajastus kattub järgneva ajaga
 			$time_from = $price->prop("time_from");
 			$time_to = $price->prop("time_to");
-			$start = $end - $time;
-			$end = $start + $price->prop("time") * $this->step_length;
-			if(!(($time_from["hour"] <= date("G" , $start)) && ($time_to["hour"] >= date("G" , $end))))
+			$end = $start + $price->prop("time") * $this->step_length;//arr("/");arr($end);arr("\\");
+			if(!((mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <= $start) && 
+			     (mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))>= ($start + $price->prop("time") * $this->step_length))
+			))
 			{
+				if((mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <= $start) || 
+					(mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))>= ($start + $price->prop("time") * $this->step_length))
+				)//kui miskeid täis aegu ei ole, siis lähevad poolikud hiljem kasutusse
+				{
+					$prices_to_use_when_situation_is_hopeless[] = $price;
+				}
 				continue; //siia tuleb mingi eriti sünge kood, mis peaks hindu ajaliselt tükeldama hakkama ....
 			}
-
-			if($time >= ($price->prop("time") * $this->step_length) && (!$smaller || ($smaller->prop("time") < $price->prop("time"))))
+			//	arr(date("G:i",mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start))));arr(date("G:i",$start)); arr(date("G:i",$start + $price->prop("time") * $this->step_length));  arr(date("G:i",mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))));
+			//arr($price->prop("time") * $this->step_length); arr($time);
+			if($time + 60 >= ($price->prop("time") * $this->step_length) && (!$smaller || ($smaller->prop("time") < $price->prop("time"))))
 			{
 				$smaller = $price;
 			}
-			if($time <= ($price->prop("time") * $this->step_length) && (!$larger || ($larger->prop("time") > $price->prop("time"))))
+			if(($time <= ($price->prop("time") * $this->step_length)+ 60) && (!$larger || ($larger->prop("time") > $price->prop("time"))))
 			{
 				$larger = $price;
 			}
@@ -1705,10 +1793,50 @@ class room extends class_base
 		{
 			return $smaller;
 		}
-		else
+		elseif(is_object($larger))
 		{
 			return $larger;
 		}
+		else
+		{
+			$arr["prices"] = $prices_to_use_when_situation_is_hopeless;
+			return $this->get_half_prices($arr);
+		}
+	}
+	
+	//parem ära ürita aru saada mis see pooletoobine funktsioon teeb.... loodame lihtsalt, et kunagi seda vaja ei lähe
+	function get_half_prices($arr)
+	{	
+		extract($arr);
+		$sum = 0;
+		$start = $arr["end"] - $time;
+		$half_obj = "";
+		foreach($arr["prices"] as $price)
+		{
+			$time_from = $price->prop("time_from");
+			$time_to = $price->prop("time_to");
+			$end = $start + $price->prop("time") * $this->step_length;
+			if(mktime($time_from["hour"], $time_from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <= $start)
+			{
+				//p näitab kui suur osa summast ja ajast kasutusse läheb
+				$p = (mktime($time_to["hour"], $time_to["minute"], 0, date("m",$start), date("d",$start), date("y",$start))-$start)/($price->prop("time") * $this->step_length);
+				$half_obj = new object();
+				$half_obj->set_parent($price->id());
+				$half_obj->set_class_id(CL_ROOM_PRICE);
+				$meta_prices = ($price->meta("prices"));
+				$half_obj->set_prop("time", (mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))-$start)/$this->step_length);
+				foreach($meta_prices as $curr => $sum)
+				{
+					$meta_prices[$curr] = $sum * $p;
+					$half_obj->set_meta("prices", $meta_prices);
+ 				}
+			}
+			if(mktime($time_to["hour"], $time_to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))>= ($start + $price->prop("time") * $this->step_length))
+			{
+				;//kui loomingulisem hoog peale tuleb, saab siia miskit toredat lisada
+			}
+		}
+		return $half_obj;
 	}
 	
 	/**
@@ -1738,7 +1866,6 @@ class room extends class_base
 					}
 					else $sum += $product->prop("price") * $amt;
 				}
-				
 			}
 		}
 		return $sum;
