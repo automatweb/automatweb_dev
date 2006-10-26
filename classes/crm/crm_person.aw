@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.148 2006/10/24 08:51:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.149 2006/10/26 14:43:35 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -198,6 +198,10 @@ caption Kodused kontaktandmed
 
 @property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
 @caption Keeled
+
+@property bill_due_date_days type=textbox size=5 table=objects field=meta method=serialize
+@caption Makset&auml;htaeg (p&auml;evi)
+
 
 -----------------------
 @groupinfo work_hrs caption="T&ouml;&ouml;ajad" parent=general
@@ -3625,7 +3629,7 @@ class crm_person extends class_base
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
 			
 			//kui on kokkuleppehind kas arvel, või kui arvet ei ole, siis toimetusel... tuleb vähe arvutada
-			if((is_object($b) && sizeof($agreement)) || (!is_object($b) && $task->prop("deal_price")))
+			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
 				$sum = $row_inst->get_row_ageement_price($o);
 			}
