@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.12 2006/10/25 13:01:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.13 2006/10/26 15:49:22 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -139,6 +139,8 @@ class questionary extends class_base
 	function show($arr)
 	{
 		$t = $GLOBALS["_GET"];
+		$_unans = $t["questionary_unanswered"]?aw_unserialize(aw_global_get("questionary_unanswered")):array();
+		$_answers = $t["questionary_unanswered"]?aw_unserialize(aw_global_get("questionary_answers")):array();
 
 		$questionary_id = $arr["id"];
 		if($t["questionary_submitted"])
@@ -152,12 +154,14 @@ class questionary extends class_base
 			}
 			header("Location:".aw_ini_get("baseurl")."/".$docid);
 		}
+
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
 		$gr = $this->get_groups($arr["id"]);
 		$gr_inst = get_instance(CL_QUESTION_GROUP);
 		$size = 10;
+
 		foreach($gr as $oid => $obj)
 		{
 			$no_answer = !$obj->prop("no_answer");
@@ -194,7 +198,7 @@ class questionary extends class_base
 				{
 					$arr["question"] = $q_o->id();
 					$this->vars(array(
-						"answer_element" => $this->_get_answer_element($arr),
+						"answer_element" => $this->_get_answer_element($arr, $_answers),
 					));
 					$answer .= $this->parse("ANSWER");
 					//$topic_questions[] = $q_o->id();
@@ -203,7 +207,7 @@ class questionary extends class_base
 				{
 					$checkbox = html::checkbox(array(
 							"name" => "no_answer[".$oid."][".$arr["topic"]."]",
-							"value" => false,
+							"checked" => $_answers["no_answer"][$oid][$o->id()],
 							"title" => "Group ".$arr["group"]."_".$arr["topic"]." Master",
 					));
 					$this->vars(array(
@@ -215,6 +219,7 @@ class questionary extends class_base
 				$this->vars(array(
 					"topic_name" => $o->name(),
 					"ANSWER" => $answer,
+					"row_color" => $_unans[$oid][$o->id()]?"#FFDFE0":"",
 				));
 				$rows .= $this->parse("TOPIC");
 			}
@@ -236,6 +241,8 @@ class questionary extends class_base
 			$this->vars(array(
 				"caption" => $el,
 				"value" => $k,
+				"checked" => ($_answers["pers"]["area_radio"] == $k)?"CHECKED":"",
+				"prev_value" => $_answers["pers"]["area_text"][$k],
 			));
 			$areas .= $this->parse("PERS_AREA");
 		}
@@ -245,6 +252,8 @@ class questionary extends class_base
 			$this->vars(array(
 				"caption" => $el,
 				"value" => $k,
+				"checked" => ($_answers["pers"]["school_radio"] == $k)?"CHECKED":"",
+				"prev_value" => $_answers["pers"]["school_text"][$k],
 			));
 			$schs .= $this->parse("PERS_SCHOOL");
 		}
@@ -255,6 +264,8 @@ class questionary extends class_base
 			$this->vars(array(
 				"caption" => $el,
 				"value" => $k,
+				"checked" => ($_answers["pers"]["intrest_check"][$k])?"CHECKED":"",
+				"prev_value" => $_answers["pers"]["intrest_text"][$k],
 			));
 			$area2 .= $this->parse("S_AREA");
 		}
@@ -265,6 +276,7 @@ class questionary extends class_base
 			$this->vars(array(
 				"caption" => $el,
 				"value" => $k,
+				"checked" => ($_answers["pers"]["visits"] == $k)?"CHECKED":"",
 			));
 			$visits .= $this->parse("VISITS");
 		}
@@ -276,6 +288,7 @@ class questionary extends class_base
 			$this->vars(array(
 				"caption" => $el,
 				"value" => $k,
+				"checked" => ($_answers["pers"]["usage"] == $k)?"CHECKED":"",
 			));
 			$usage .= $this->parse("USAGE");
 		}
@@ -286,6 +299,8 @@ class questionary extends class_base
 			"S_AREA" => $area2,
 			"VISITS" => $visits,
 			"USAGE" => $usage,
+			"gender_".$_answers["pers"]["gender"] => "CHECKED",
+			"age_".$_answers["pers"]["age"] => "CHECKED",
 		));
 		$formdata = $this->parse("PERS_DATA");
 	
@@ -300,13 +315,16 @@ class questionary extends class_base
 				"return_url" => post_ru(),
 			)),
 			"submit_caption" => t("Vasta"),
+			"ANSWERS_MISSING" => ($t["questionary_unanswered"])?$this->parse("ANSWERS_MISSING"):"",
+			"pers_comment" => $_answers["pers"]["comment"],
+
 		));
 		return $this->parse();
 	}
 	
 //-- methods --//
 
-	function _get_answer_element($arr)
+	function _get_answer_element($arr, $_answers)
 	{
 		$o = obj($arr["id"]);
 		$ans = $GLOBALS["_GET"]["answer"];
@@ -317,8 +335,9 @@ class questionary extends class_base
 		{
 			$sel = ($ans[$arr["group"]][$arr["topic"]][$arr["question"]] == $i)?true:false;
 			$radio = html::radiobutton(array(
-					"name" => "answer[".$arr["group"]."][".$arr["topic"]."][".$arr["question"]."]",
-					"value" => $i,
+				"name" => "answer[".$arr["group"]."][".$arr["topic"]."][".$arr["question"]."]",
+				"value" => $i,
+				"checked" => ($_answers["answer"][$arr["group"]][$arr["topic"]][$arr["question"]] == $i)?true:false,
 			));
 			$this->vars(array(
 				"nr" => $i,
@@ -352,11 +371,56 @@ class questionary extends class_base
 		return $ret;
 	}
 
+
+	function check_answers($arr)
+	{
+		$gr = $this->get_groups($arr["questionary"]);
+		$gr_inst = get_instance(CL_QUESTION_GROUP);
+		foreach($gr as $oid => $obj)
+		{
+			$topics = $gr_inst->get_topics($oid);
+			$questions = $gr_inst->get_questions($oid);
+			foreach($topics as $topic_id => $topic_obj)
+			{
+				if(!$arr["no_answer"][$oid][$topic_id])
+				{
+					// no_answer wasn't checked.. lets check now if all questions were answered then
+					foreach($questions as $question_id => $question_obj)
+					{
+						if(!in_array($question_id, array_keys($arr["answer"][$oid][$topic_id])))
+						{
+							$wrong[$oid][$topic_id] = 1;
+						}
+					}
+				}
+			}
+		}
+		if(count($wrong))
+		{
+			aw_session_set("questionary_answers", aw_serialize($arr, SERIALIZE_NATIVE));
+			aw_session_set("questionary_unanswered", aw_serialize($wrong, SERIALIZE_NATIVE));
+			return false;
+		}
+		else
+		{
+			aw_session_set("questionary_answers", "");
+			aw_session_set("questionary_unanswered", "");
+		}
+
+		return true;
+	}
+
 	/**
 		@attrib params=name name=add_result all_args=1 nologin=1
 	**/
 	function add_result($arr)
 	{
+		if(!$this->check_answers($arr))
+		{
+			$url = parse_url($arr["return_url"]);
+			return $url["scheme"]."://".$url["host"].$url["path"]."?questionary_unanswered=1";
+		}
+
 		$o = obj();
 		$o->set_class_id(CL_ANSWERER);
 		$o->set_parent($arr["questionary"]);
@@ -454,9 +518,9 @@ class questionary extends class_base
 		$o->set_prop("answers", $anses);
 		$o->save();
 		*/
-		return $arr["return_url"]."?questionary_submitted=1";
+		$url = parse_url($arr["return_url"]);
+		return $url["scheme"]."://".$url["host"].$url["path"]."?questionary_submitted=1";
 	}
-
 	/**
 		@attrib params=pos api=1
 		@param id required type=oid

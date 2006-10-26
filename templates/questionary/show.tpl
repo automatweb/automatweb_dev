@@ -3,7 +3,6 @@
 var f7_cks;
 
 function f7_DisableCBGroup(){
-	alert(453);
  f7_cks=document.getElementsByTagName('INPUT');
  for (f7_0=0;f7_0<f7_cks.length;f7_0++){
   if (f7_cks[f7_0].type=='checkbox'){
@@ -36,6 +35,11 @@ function f7_Disable(f7_obj){
  }
 }
 </script>
+<!-- SUB: ANSWERS_MISSING -->
+	<table width="100%">
+		<td width="100%" style="border:1px solid red;font-size:12px;color:red;font-weight:bold;">Osa vastuseid on puudu, palun vastake k&otilde;ik k&uuml;simused!</td>
+	</table>
+<!-- END SUB: ANSWERS_MISSING -->
 <form method="post">
 <!--{VAR:name}<br>-->
 <!-- SUB: GROUP -->
@@ -55,7 +59,7 @@ function f7_Disable(f7_obj){
 		</tr>
 	<!-- END SUB: HEADER -->
 	<!-- SUB: TOPIC -->
-		<tr>
+		<tr bgcolor="{VAR:row_color}">
 			<td  width="250" style="font-size:10px;border:1px solid gray;">
 				{VAR:topic_name}
 			</td>
@@ -72,7 +76,7 @@ function f7_Disable(f7_obj){
 	<tr>
 		<td>
 			<span style="font-size:13px;"><br/>Kommentaarid:</span><br/>
-			<textarea name="pers[comment]" cols='50' rows='5'></textarea>
+			<textarea name="pers[comment]" cols='50' rows='5'>{VAR:pers_comment}</textarea>
 		</td>
 	</tr>
 </table>
@@ -83,16 +87,16 @@ function f7_Disable(f7_obj){
 	<td><br/><br/>
 	<span style="font-size:13px;">Informatsioon Teie kohta (tehke palun märge sobivasse lahtrisse):</span><br><br>
 	<span style="font-size:12px; font-weight:bold;">Sugu:</span><br/>
-	<input type="radio" value="1" name="pers[gender]"/>mees
-	<input type="radio" value="2" name="pers[gender]"/>naine
+	<input type="radio" {VAR:gender_1} value="1" name="pers[gender]"/>mees
+	<input type="radio" {VAR:gender_2} value="2" name="pers[gender]"/>naine
 	<br/>
 	<span style="font-size:12px; font-weight:bold;">Vanus:</span><br/>
-	<input type="radio" value="1" name="pers[age]"/>18 v&otilde;i noorem<br/>
-	<input type="radio" value="2" name="pers[age]"/>19-29<br/>
-	<input type="radio" value="3" name="pers[age]"/>30-39<br/>
-	<input type="radio" value="4" name="pers[age]"/>40-49<br/>
-	<input type="radio" value="5" name="pers[age]"/>50-59<br/>
-	<input type="radio" value="6" name="pers[age]"/>60 v&otilde;i vanem<br/>
+	<input type="radio" {VAR:age_1} value="1" name="pers[age]"/>18 v&otilde;i noorem<br/>
+	<input type="radio" {VAR:age_2} value="2" name="pers[age]"/>19-29<br/>
+	<input type="radio" {VAR:age_3} value="3" name="pers[age]"/>30-39<br/>
+	<input type="radio" {VAR:age_4} value="4" name="pers[age]"/>40-49<br/>
+	<input type="radio" {VAR:age_5} value="5" name="pers[age]"/>50-59<br/>
+	<input type="radio" {VAR:age_6} value="6" name="pers[age]"/>60 v&otilde;i vanem<br/>
 	<br/>
 	</td>
 </tr>
@@ -116,10 +120,10 @@ function f7_Disable(f7_obj){
 				{VAR:caption}
 			</td>
 			<td>
-				<input type="radio" value="{VAR:value}" name="pers[area_radio]"/>
+				<input type="radio" {VAR:checked} value="{VAR:value}" name="pers[area_radio]"/>
 			</td>
 			<td>
-				<input type="textbox" name="pers[area_text][{VAR:value}]"/>
+				<input type="textbox" value="{VAR:prev_value}" name="pers[area_text][{VAR:value}]"/>
 			</td>
 		</tr>
 		<!-- END SUB: PERS_AREA -->
@@ -138,10 +142,10 @@ function f7_Disable(f7_obj){
 		<tr>
 			<td>{VAR:caption}</td>
 			<td>
-				<input type="radio" value="{VAR:value}" name="pers[school_radio]"/>
+				<input type="radio" {VAR:checked} value="{VAR:value}" name="pers[school_radio]"/>
 			</td>
 			<td>
-				<input type="textbox" name="pers[school_text][{VAR:value}]"/>
+				<input type="textbox" value="{VAR:prev_value}" name="pers[school_text][{VAR:value}]"/>
 			</td>
 		</tr>
 		<!-- END SUB: PERS_SCHOOL -->
@@ -158,10 +162,10 @@ function f7_Disable(f7_obj){
 		<tr>
 			<td>{VAR:caption}</td>
 			<td>
-				<input type="checkbox" name="pers[intrest_check][{VAR:value}]"/>
+				<input type="checkbox" {VAR:checked} name="pers[intrest_check][{VAR:value}]"/>
 			</td>
 			<td>
-				<input type="textbox" name="pers[intrest_text][{VAR:value}]"/>
+				<input type="textbox" value="{VAR:prev_value}" name="pers[intrest_text][{VAR:value}]"/>
 			</td>
 		</tr>
 		<!-- END SUB: S_AREA -->
@@ -173,7 +177,7 @@ function f7_Disable(f7_obj){
 		<tr>
 			<td width="250">{VAR:caption}</td>
 			<td>
-				<input type="radio" value="{VAR:value}" name="pers[visits]"/>
+				<input type="radio" {VAR:checked} value="{VAR:value}" name="pers[visits]"/>
 			</td>
 		</tr>
 		<!-- END SUB: VISITS -->
@@ -185,7 +189,7 @@ function f7_Disable(f7_obj){
 		<tr>
 			<td width="250">{VAR:caption}</td>
 			<td>
-				<input type="radio" value="{VAR:value}" name="pers[usage]"/>
+				<input type="radio" {VAR:checked} value="{VAR:value}" name="pers[usage]"/>
 			</td>
 		</tr>
 		<!-- END SUB: USAGE -->
