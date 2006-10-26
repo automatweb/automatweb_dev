@@ -1073,7 +1073,11 @@ class html extends aw_template
 	{
 		if (!$this)
 		{
-			$this = get_instance(CL_FILE);
+			$inst = get_instance(CL_FILE);
+		}
+		else
+		{
+			$inst = $this;
 		}
 		if (is_array($o))
 		{
@@ -1087,7 +1091,7 @@ class html extends aw_template
 
 		if (!is_object($o))
 		{
-			if ($this->can("view", $o))
+			if ($inst->can("view", $o))
 			{
 				$o = obj($o);
 			}
@@ -1162,9 +1166,13 @@ class html extends aw_template
 	{
 		if (!$this)
 		{
-			$this = get_instance(CL_FILE);
+			$inst = get_instance(CL_FILE);
 		}
-		if (!$this->can("view", $oid))
+		else
+		{
+			$inst = $this;
+		}
+		if (!$inst->can("view", $oid))
 		{
 			if ($caption != "")
 			{
@@ -1174,7 +1182,7 @@ class html extends aw_template
 		}
 		$obj = &obj($oid);
 		$params["id"] = $obj->id();
-		if ($_GET["action"] != "view" && $this->can("edit", $oid))
+		if ($_GET["action"] != "view" && $inst->can("edit", $oid))
 		{
 			$act = "change";
 		}
@@ -1182,7 +1190,7 @@ class html extends aw_template
 		{
 			$act = "view";
 		}
-		$retval = $this->mk_my_orb($act, $params, $obj->class_id());
+		$retval = $inst->mk_my_orb($act, $params, $obj->class_id());
 		if($caption || (is_integer($caption) && $caption == 0))
 		{
 			$retval = html::href(array(
