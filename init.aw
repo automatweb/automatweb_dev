@@ -138,6 +138,12 @@ function parse_config($file)
 							$code = substr($code, 0, $i)."\"".substr($code, $i);
 						}
 					}
+
+					if (!isset($res[$arrname]) || !is_array($res[$arrname]))
+					{
+						$res[$arrname] = array();
+					}
+
 					$code2 = "\$res".substr($code,28);
 					eval($code2);
 					eval($code);
