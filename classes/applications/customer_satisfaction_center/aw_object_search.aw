@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.7 2006/10/18 14:18:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/aw_object_search.aw,v 1.8 2006/10/26 12:12:07 kristo Exp $
 // aw_object_search.aw - AW Objektide otsing 
 /*
 
@@ -423,7 +423,7 @@ class aw_object_search extends class_base
 	function copy($arr)
 	{
 		$i = get_instance(CL_ADMIN_IF);
-		$i->if_copy($_GET);
+		return $i->if_copy($_GET);
 		die("<script>window.back();</script>");
 	}
 }
