@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.26 2006/10/26 14:37:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.27 2006/10/26 19:43:45 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -304,11 +304,13 @@ class room extends class_base
 
 	function set_property($arr = array())
 	{
+		/*
 		$doc = obj(9314);
 		$doc->connect(array(
 			"to" => $arr["obj_inst"]->id(),
 			"reltype" => "RELTYPE_ALIAS",
 		));
+		*/
 	
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
