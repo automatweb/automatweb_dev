@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.517 2006/10/24 09:40:19 kristo Exp $
+// $Id: class_base.aw,v 2.518 2006/10/27 12:43:53 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -288,7 +288,7 @@ class class_base extends aw_template
 		//$cfgform_id = $args["cfgform"];
 		if (empty($cfgform_id) && is_object($this->obj_inst))
 		{
-			///$cfgform_id = $this->obj_inst->meta("cfgform_id");
+			$cfgform_id = $this->obj_inst->meta("cfgform_id");
 		};
 
 		$this->cfgform_id = $cfgform_id;
