@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.77 2006/04/11 16:15:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.78 2006/10/27 13:46:14 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -721,7 +721,11 @@ class aw_template extends core
 	**/
 	function vars($params)
 	{
-		$this->vars = array_merge($this->vars,$params);
+		foreach($params as $k => $v)
+		{
+			$this->vars[$k] = str_replace("<?php", "&lt;?php", $v);
+		}
+		//$this->vars = array_merge($this->vars,$params);
 	}
 
 	/** imports variables into the current template, appending to the previous variables of the same name
