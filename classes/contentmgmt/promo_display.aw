@@ -207,7 +207,7 @@ class promo_display
 					$has_rand = true;
 				}
 			
-				if (!$has_rand && $o->meta("version") == 2 && (aw_ini_get("promo.version") == 2))
+				if (!$has_rand && $o->meta("version") == 2 && (aw_ini_get("promo.version") == 2) && !$o->prop("auto_period"))
 				{
 					enter_function("mainc-contentmgmt/promo-read_docs");
 					$docid = array_values(safe_array($o->meta("content_documents")));
