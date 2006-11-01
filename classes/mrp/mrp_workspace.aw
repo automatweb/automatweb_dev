@@ -1457,6 +1457,7 @@ class mrp_workspace extends class_base
 				}
 			}
 		}
+
 		$_SESSION["mrp"]["do_pv_proj_s"] = $arr["request"]["do_pv_proj_s"];
 	}
 
@@ -1484,48 +1485,6 @@ class mrp_workspace extends class_base
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
 		));
-
-
-/* dbg */
-if ($_GET['show_thread_data'] == 1)
-{
-	$list = $resource_tree->to_list();
-	$list = $list->arr();
-
-	foreach ($list as $res_id => $r)
-	{
-		if ($r->class_id() == CL_MRP_RESOURCE)
-		{
-			### fix
-			// $thread_data = $r->prop("thread_data");
-			// $available = false;
-
-			// foreach ($thread_data as $key => $value)
-			// {
-				// if ($value["state"] == MRP_STATUS_RESOURCE_AVAILABLE)
-				// {
-					// $available = true;
-				// }
-			// }
-
-			// if ($available)
-			// {
-				// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
-				// $r->save();
-			// }
-			// else
-			// {
-				// $r->set_prop("state", MRP_STATUS_RESOURCE_INUSE);
-				// $r->save();
-			// }
-
-			### show
-			echo "res id: " . $res_id ." state:" .$r->prop("state");
-			arr($r->prop("thread_data"));
-		}
-	}
-}
-/* dbg */
 
 		classload("vcl/treeview");
 		$tree = treeview::tree_from_objects(array(
@@ -3478,7 +3437,8 @@ if ($_GET['show_thread_data'] == 1)
 			)),
 		));
 
-		if (false && is_oid($arr["request"]["cat"]))
+		// if (false && is_oid($arr["request"]["cat"]))
+		if (is_oid($arr["request"]["cat"]))
 		{
 			$t->add_menu_item(array(
 				"parent" => "add_menu",
