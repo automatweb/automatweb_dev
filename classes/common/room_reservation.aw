@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.1 2006/10/27 15:03:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.2 2006/11/01 12:13:59 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -32,6 +32,11 @@ class room_reservation extends class_base
 			"tpldir" => "common/room",
 			"clid" => CL_ROOM_RESERVATION
 		));
+		$this->banks = array(
+			"hansa" => "Hansapank",
+			"seb" => "Ühispank",
+			"sampo" => "Sampopank",
+		);
 	}
 
 	function get_property($arr)
@@ -51,7 +56,7 @@ class room_reservation extends class_base
 						"folder" => "common/room"
 					));
 					if(!sizeof($prop["options"]))
-					{//arr($prop);
+					{
 						$prop["caption"] .= t("\n".$this->site_template_dir."");
 		//				$prop["type"] = "text";
 		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
@@ -248,6 +253,7 @@ class room_reservation extends class_base
 			return "";
 		}
 		$levels = $targ->meta("levels");
+		$this->vars($this->get_level_urls($levels));
 		if(!isset($level))
 		{
 			$level=0;
@@ -256,7 +262,6 @@ class room_reservation extends class_base
 		{
 			$level++;
 		}
-		//arr()
 		$tpl = $levels[$level]["template"];
 
 		$this->read_template($tpl);
@@ -281,6 +286,7 @@ class room_reservation extends class_base
 				"clid"		=> $clid,
 				"default"	=> $default,
 			)),
+			"back_url" => aw_global_get("section")."?level=".($level-2),
 			"url" => aw_global_get("section")."?level=".$level,
 			"submit" => $this->mk_my_orb('submit',array(
 				'id' => $arr["alias"]["target"],
@@ -288,6 +294,12 @@ class room_reservation extends class_base
 				'url' => aw_global_get("section")."?level=".$level,
 				"return_to"	=> post_ru(),
 			), CL_ROOM_RESERVATION),
+			"affirm_url" => $this->mk_my_orb("affirm_reservation", array(
+				"section" => aw_global_get("section"),
+				"level" => $level,
+				"id" => $id,
+				"room" => $room->id(),
+			)),
 		));
 		
 		//property väärtuse saatmine kujul "property_nimi"_value
@@ -295,10 +307,32 @@ class room_reservation extends class_base
 		return $this->parse();
 	}
 	
+	
+	//returns url for each level
+	function get_level_urls($levels)
+	{
+		$data = array();
+		foreach($levels as $key => $level)
+		{
+
+			if(!($key))
+			{
+				$data[$level["name"]."_url"] = aw_global_get("section");
+			}
+			else
+			{
+				$data[$level["name"]."_url"] = aw_global_get("section")."?level=".($key-1);
+			}
+		}
+		
+		$data["pay_url"] = "http://link.maksmisesse.aw";
+		$data["revoke_url"] = $this->mk_my_orb("revoke_reservation", array());
+		
+		return $data;
+	}
 	function get_site_props($arr)
 	{
 		extract($arr);
-		
 		$data = array();
 		$people_opts = array();
 		$x=0;
@@ -329,15 +363,85 @@ class room_reservation extends class_base
 			"name" => "phone",
 		));
 		
-		$data["pay_link"] = "http://link.maksmisesse.aw";
-		$data["products_link"] = "http://link.produktide_juurde.aw";
-		$data["calendar_link"] = "http://link.kalendri.aw";
-		$data["sum"] = $_SESSION["room_reservation"]["people"]*$_SESSION["room_reservation"]["price"];
+		foreach($this->banks as $key=>$bank)
+		{
+			$checked=0;
+			if($_SESSION["room_reservation"]["bank"] == $key)
+			{
+				$checked = 1;
+			}
+			$data["bank_".$key] = html::radiobutton(array(
+				"value" => $key,
+				"checked" => $checked,
+				"name" => "bank",
+			));
+		}
+		$data["products_link"] = html::popup(array(
+			"url" 	=> $this->mk_my_orb("get_web_products_table", array(
+					"id" => $id,
+					"room" => $room->id(),
+				)),
+			"no_link" => 1,
+		));
+		//"http://link.produktide_juurde.aw";
+		$data["calendar_link"] = html::popup(array(
+			"url" 	=> $this->mk_my_orb("get_web_calendar_table", array(
+					"id" => $id,
+					"room" => $room->id(),
+				)),
+			"no_link" => 1,
+			"scrollbars" => 1,
+		));
+		$room_inst = get_instance(CL_ROOM);
+		
+		$data["sum"] = $room_inst->cal_room_price(array(
+			"room" => $room->id(),
+			"people" => $_SESSION["room_reservation"]["people"],
+			"start" => $_SESSION["room_reservation"]["start"],
+			"end" => $_SESSION["room_reservation"]["end"],
+			"products" => $_SESSION["room_reservation"]["products"],
+		));
+		//muidu annab massiivi kõikide valuutade hindadega... et eks selgub, kuda seda hiljem tahetakse
+		$data["sum"] = reset($data["sum"]);
+		if(!$data["sum"])
+		{
+			$data["sum"] = 0;
+		}
+		
+		$data["bargain"] = $room_inst->bargain_value;
+		$data["sum_wb"] = (double)$data["sum"] + (double)$room_inst->bargain_value;
+		
+		$data["time_from"] = "";
+		$data["time_to"] = "";
+		$data["time_day"] = "";
+		$data["time"] = "";
+		$data["hours"] = (int)(($_SESSION["room_reservation"]["end"]-$_SESSION["room_reservation"]["start"] + 60) / 3600);
+		$data["minutes"] = (int)(($_SESSION["room_reservation"]["end"]-$_SESSION["room_reservation"]["start"]) / 60);
+		$data["time_str"] = $this->get_time_str(array(
+			"start" => $_SESSION["room_reservation"]["start"],
+			"end" => $_SESSION["room_reservation"]["end"]
+		));
 		foreach($_SESSION["room_reservation"] as $key => $val)
 		{
 			$data[$key."_value"] = $val;
 		}
+			$data["bank_value"] = $this->banks[$_SESSION["room_reservation"]["bank"]];
 		return $data;
+	}
+
+	function get_time_str($arr)
+	{
+		$room_inst = get_instance(CL_ROOM);
+		extract($arr);
+		$res = "";
+		$res.= $room_inst->weekdays[(int)date("w" , $arr["start"])];
+		$res.= ", ";
+		$res.= date("d:m:Y" , $arr["start"]);
+		$res.= ", ";
+		$res.= date("h:i" , $arr["start"]);
+		$res.= " - ";
+		$res.= date("h:i" , $arr["end"]);
+		return $res;
 	}
 
 	/** submit
@@ -358,6 +462,167 @@ class room_reservation extends class_base
 			return aw_url_change_var("", "" , $args["return_to"])."?level=".$level;
 		}
 		return aw_url_change_var("level", $level , $args["return_to"]);//."?level=".$level;
+	}
+	
+	/**
+	@attrib name=get_web_products_table api=1 params=name nologin=1
+		@param room required type=int
+	**/
+	function get_web_products_table($arr)
+	{
+		extract($arr);
+		if(is_oid($room) && $this->can("view", $room))
+		{
+			$room = obj($room);
+		}
+		else
+		{
+			return false;
+		}
+		classload("vcl/table");
+		$t = new vcl_table;
+		$res_inst = get_instance(CL_RESERVATION);
+		$res_inst->_get_products_tbl(array(
+			"prop" => array("vcl_inst" => &$t),
+			"web" => 1,
+			"room" => $room->id(),
+		));
+		
+		$sf = new aw_template;
+		$sf->db_init();
+		$sf->tpl_init("automatweb");
+		$sf->read_template("index.tpl");
+			
+		$action = $this->mk_my_orb("submit_web_products_table", array());
+		$sf->vars(array(
+			"content" => "<form name='products_form' action=".$action." method=POST>".$t->draw()."<br>".html::submit()."</form>",
+			"uid" => aw_global_get("uid"),
+			"charset" => aw_global_get("charset")
+		));
+//		die($ret);
+		die($sf->parse());
+		die($t->draw()."<br>".html::submit());
+	}
+	
+	/**
+	@attrib name=submit_web_products_table api=1 params=name nologin=1
+		@param amount optional type=array
+	**/
+	function submit_web_products_table($arr)
+	{
+
+		$_SESSION["room_reservation"]["products"] = $arr["amount"];
+		$ret.= '<script language="javascript">
+			window.opener.location.reload();
+			window.close();
+		</script>';
+		//return $ret;
+		die($ret);
+	}
+	
+	/**
+	@attrib name=get_web_calendar_table api=1 params=name nologin=1
+		@param room required type=int
+	**/
+	function get_web_calendar_table($arr)
+	{
+		classload("vcl/table");
+		$t = new vcl_table;
+		$res_inst = get_instance(CL_ROOM);
+		$res_inst->_get_calendar_tbl(array(
+			"prop" => array("vcl_inst" => &$t),
+			"room" => $arr["room"],
+			"web" => 1,
+		));
+				$sf = new aw_template;
+		$sf->db_init();
+		$sf->tpl_init("automatweb");
+		$sf->read_template("index.tpl");
+			
+		$action = $this->mk_my_orb("submit_web_calendar_table", array("room" => $arr["room"]));
+		$sf->vars(array(
+			"content" => "<form name='products_form' action=".$action." method=POST>".$t->draw()."<br>".html::submit()."</form>",
+			"uid" => aw_global_get("uid"),
+			"charset" => aw_global_get("charset")
+		));
+//		die($ret);
+		die($sf->parse());
+
+		die($t->draw());
+	}
+	
+	/**
+	@attrib name=submit_web_calendar_table api=1 params=name nologin=1
+		@param bron optional type=array
+		@param room required type=oid
+	**/
+	function submit_web_calendar_table($arr)
+	{
+		$room_inst = get_instance(CL_ROOM);
+		$times = $room_inst->_get_bron_time(array(
+			"bron" => $arr["bron"],
+			"id" => $arr["room"],
+		));
+		$_SESSION["room_reservation"]["start"] = $times["start"];
+		$_SESSION["room_reservation"]["end"] = $times["end"];
+		$ret.= '<script language="javascript">
+			window.opener.location.reload();
+			window.close();
+		</script>';
+		//return $ret;
+		die($ret);
+	}
+	
+	//makes the reservation object ... then this stuff is ready for paying and stuff
+	/**
+	@attrib name=affirm_reservation api=1 params=name nologin=1
+		@param bron_id optional type=array
+			reservation id
+		@param room required type=oid
+			room id
+		@param section optional type=string
+			aw section
+		@param level optional type=int	
+			web reservarion level	
+	**/
+	function affirm_reservation($arr)
+	{
+		extract($arr);
+		$room_inst = get_instance(CL_ROOM);
+		$bron_id;
+		if(!$bron_id)
+		{
+			$bron_id = $_SESSION["room_reservation"]["bron_id"];
+		}
+		$_SESSION["room_reservation"]["bron_id"] = $room_inst->make_reservation(array(
+			"id" => $room,
+			"res_id" => $bron_id,
+			"data" => $_SESSION["room_reservation"],
+		));
+		arr($_SESSION["room_reservation"]["bron_id"]);
+		//return $section."?level=".$level;
+	}
+
+	//makes the reservation object ... then this stuff is ready for paying and stuff
+	/**
+	@attrib name=revoke_reservation api=1 params=name nologin=1
+		@param bron_id optional type=array
+			reservation id
+	**/
+	function revoke_reservation($arr)
+	{
+		extract($arr);
+		if(!$bron_id)
+		{
+			$bron_id = $_SESSION["room_reservation"]["bron_id"];
+		}
+		if(is_oid($bron_id))
+		{
+			$bron = obj($bron_id);
+			$bron->delete();
+		}
+		$_SESSION["room_reservation"] = null;
+		return $section;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.10 2006/10/24 14:18:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.11 2006/11/01 12:13:00 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -19,8 +19,11 @@
 	@property name type=textbox field=name method=none size=20
 	@caption Nimi
 	
-	property deadline type=datetime_select table=planner field=deadline
-	caption T&auml;htaeg
+	@property deadline type=datetime_select table=planner field=deadline
+	@caption Maksmistähtaeg
+			
+	@property verified type=checkbox ch_value=1 field=meta method=serialize no_caption=1
+	@caption Kinnitatud
 			
 	@property resource type=relpicker reltype=RELTYPE_RESOURCE field=meta method=serialize
 	@caption Ressurss
@@ -137,7 +140,12 @@ class reservation extends class_base
 					$prop["value"].= $price." ".$cur->name()."<br>";
 				}
 				break;
-
+			case "deadline":
+				if($arr["obj_inst"]->prop("verified"))
+				{
+					return PROP_IGNORE; 
+				}
+				break;
 //			case "sum":
 //				break;
 		};
@@ -368,8 +376,17 @@ class reservation extends class_base
 			"name" => "amount",
 			"caption" => t("Kogus"),
 		));
-		$prod_list = $this->get_room_products($arr["obj_inst"]->prop("resource"));
-		$amount = $arr["obj_inst"]->meta("amount");
+		//kui veebipoolne
+		if($arr["web"])
+		{
+			$prod_list = $this->get_room_products($arr["room"]);
+			$amount = $arr["obj_inst"]->$_SESSION["room_reservation"]["products"];
+		}
+		else
+		{
+			$prod_list = $this->get_room_products($arr["obj_inst"]->prop("resource"));
+			$amount = $arr["obj_inst"]->meta("amount");
+		}
 		$image_inst = get_instance(CL_IMAGE);
 		foreach($prod_list->arr() as $prod)
 		{
@@ -416,6 +433,7 @@ class reservation extends class_base
 			}
 		}
 		$t->set_sortable(false);
+		return $t;
 	}
 
 	function add_order($reservation, $order, $time = false)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.27 2006/10/26 19:43:45 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.28 2006/11/01 12:13:59 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -206,6 +206,10 @@ class room extends class_base
 			1 => 60,
 			2 => 3600,
 			3 => 86400,
+		);
+	
+		$this->weekdays = array(
+			"P&uuml;hap&auml;ev" , "Esmasp&auml;ev" , "Teisip&auml;ev", "Kolmap&auml;ev" , "Neljap&auml;ev" , "Reede", "Laup&auml;ev"
 		);
 	}
 
@@ -785,9 +789,13 @@ class room extends class_base
 
 	function _get_calendar_tbl($arr)
 	{
+		//kkui asi tuleb veebist
+		if(is_oid($arr["room"]) && $this->can("view" , $arr["room"]))
+		{
+			$arr["obj_inst"] = obj($arr["room"]);
+		}
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_calendar_t($t);
-		
 		$reservations = new object_list(array(
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
@@ -914,6 +922,7 @@ class room extends class_base
 		$t->set_sortable(false);
 	}
 
+	//see ruumi sees tehes, eeldusel, et pärast liigub edasi reserveerimise objekti vaatesse, kus valib asju
 	/**
 		@attrib name=do_add_reservation params=name all_args=1
 		@param id required oid
@@ -925,29 +934,19 @@ class room extends class_base
 	{
 		if(is_oid($arr["id"]))
 		{
+			$times = $this->_get_bron_time(array(
+				"bron" => $arr["bron"],
+				"id" => $arr["id"],
+			));
+			extract($times);
+		
 			$room = obj($arr["id"]);
-			$length = $this->step_lengths[$room->prop("time_unit")] * $room->prop("time_step") ;
-					
 			if(is_object($room->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
 			{
-				$cal_obj = $room->get_first_obj_by_reltype("RELTYPE_CALENDAR");
-				$cal = $cal_obj->id();
-				$parent = $cal_obj->prop("event_folder");
-				$step = $room->prop("time_step");
-			}
-
-			$end = $arr["bron"][0];
-			foreach($arr["bron"] as $bron => $val)
-			{
-				if(!$start)
-				{
-					$start = $bron;
-					$end = $start + $length-1;
-				}
-				if(($end+1) == $bron)
-				{
-					$end = $bron + $length-1;
-				}
+					$cal_obj = $room->get_first_obj_by_reltype("RELTYPE_CALENDAR");
+					$cal = $cal_obj->id();
+					$parent = $cal_obj->prop("event_folder");
+					$step = $room->prop("time_step");
 			}
 		}
 		//arr($arr); arr($start); arr($end);
@@ -965,6 +964,113 @@ class room extends class_base
 			),
 			CL_RESERVATION
 		);
+	}
+	
+	/**
+		@attrib name=make_reservation params=name all_args=1
+		@param id required oid
+			room id
+		@param res_id optional oid
+			reservationid
+		@param data required array
+			propertys and stuff 
+	**/
+	function make_reservation($arr)
+	{
+		extract($arr);
+		if(is_oid($id) && $this->can("view", $id))
+		{
+			$room = obj($id);
+			if(is_object($room->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
+			{
+					$cal_obj = $room->get_first_obj_by_reltype("RELTYPE_CALENDAR");
+					$cal = $cal_obj->id();
+					$parent = $cal_obj->prop("event_folder");
+					$step = $room->prop("time_step");
+			}
+			else return "";
+		}
+		else return "";
+
+		if(is_oid($res_id))
+		{
+			$reservation = obj($res_id);
+		}
+		else
+		{
+			$reservation = new object();
+			$reservation->set_class_id(CL_RESERVATION);
+			$reservation->set_name($room->name()." bron ".date("d:m:Y" ,time()));
+			$reservation->set_parent($parent);
+			$reservation->set_prop("deadline", (time() + 15*60));
+			$reservation->set_prop("resource" , $room->id());
+			$reservation->save();
+		}
+		foreach($data as $prop => $val)
+		{
+			switch($prop)
+			{
+				case "products":
+					$reservation->set_meta("amount" , $val);
+					break;
+				case "start":
+					$reservation->set_prop("start1" , $val);
+					break;
+				case "end":
+					$reservation->set_prop($prop , $val);
+					break;
+				case "comment":
+					$reservation->set_prop("content" , $val);
+					break;
+				case "people":
+					$reservation->set_prop("people_count" , $val);
+					break;
+			}
+		}
+		if($data["name"])
+		{
+			$customer = new object();
+			$customer->set_class_id(CL_CRM_PERSON);
+			$customer->set_name($data["name"]);
+			$customer->set_parent($parent);
+			$customer->save();
+			$reservation->set_prop("customer" , $customer->id());
+			$reservation->save();
+		}
+		return $reservation->id();
+	}
+
+	/**
+		@attrib name=get_bron_time params=name all_args=1 nologin=1
+		@param id required oid
+			room id
+		@param bron optional array
+			keys are start timestamps
+	**/
+	function _get_bron_time($arr)
+	{
+		extract($arr);
+		if(is_oid($arr["id"]))
+		{
+			$room = obj($arr["id"]);
+			$length = $this->step_lengths[$room->prop("time_unit")] * $room->prop("time_step") ;
+
+			$end = $arr["bron"][0];
+			foreach($arr["bron"] as $bron => $val)
+			{
+				if(!$start)
+				{
+					$start = $bron;
+					$end = $start + $length-1;
+				}
+				if(($end+1) == $bron)
+				{
+					$end = $bron + $length-1;
+				}
+			}
+		}
+		return array("start" => $start, "end" => $end);
+		
 	}
 
 	function _get_resources_tb($arr)
@@ -1108,7 +1214,7 @@ class room extends class_base
 			
 			//järjekorda kui pole, siis võtab objektist selle järjekorra mis on laos jne
 			$ord = $o->ord();
-			if($prod_data[$o->id()]["ord"]) 
+			if($prod_data[$o->id()]["ord"])
 			{
 				$ord = $prod_data[$o->id()]["ord"];
 			}
@@ -1218,7 +1324,7 @@ class room extends class_base
 			"caption" => t("Vali"),
 			"align" => "center",
 		));
-	}	
+	}
 
 	function _products_tr($arr)
 	{
@@ -1348,7 +1454,6 @@ class room extends class_base
 			"tooltip" => t("Kustuta valitud"),
 			'action' => 'delete_cos',
 		));
-
 	}
 	
 	/**
@@ -1570,7 +1675,7 @@ class room extends class_base
 			return 0;
 		}
 		$room = obj($room);
-		
+		$this->bargain_value = 0;
 		$this->step_length = $this->step_lengths[$room->prop("time_unit")];
 		$sum = array();
 		
@@ -1594,7 +1699,6 @@ class room extends class_base
 				}
 			}
 		}
-		
 		$step = 1;
 		$time = $end-$start;//+60 seepärast et oleks nagu täisminutid ja täistunnid jne
 		while($time > 60)//alla minuti ei ole oluline aeg eriti... et toimiks nii 00, kui ka minut enne.. siis peaks igaks juhuks 60sek otsas olema
@@ -1644,33 +1748,23 @@ class room extends class_base
 			foreach($price->meta("prices") as $currency => $hr_price)
 			{
 				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
+				$this->bargain_value = $this->bargain_value + $bargain*$hr_price;
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
 		}
-		if(is_object($this_price))
+		foreach($room->prop("currency") as $currency)
 		{
-			
-			//arvan , et õige oleks 1 maha võtta.... et saaks panna lõpptähtajaks järgmise broneeringu algustähtaeg... et siis 10:00 -11:00 10:00 - 10:59 asemel
-		//	$end = $end-1;
-			
-			//siin teeb asjad täistundideks....
-		//	$hr_start = mktime(date("G", $start), 0, 0, date("m", $start), date("d", $start), date("y", $start));
-		//	$hr_end = mktime(date("G", $end), 0, 0, date("m", $end), date("d", $end), date("y", $end));
-			foreach($price_inst->get_prices($this_price->id()) as $currency => $hr_price)
+			if($people > $room->prop("normal_capacity"))
 			{
-			//	$sum[$currency] = $hr_price*(int)(($hr_end-$hr_start)/3600 + 1);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
-				if($people > $room->prop("normal_capacity"))
-				{
-					$sum[$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
-				}
-				if(is_array($products) && sizeof($products))
-				{
-					$sum[$currency] += $this->cal_products_price(array(
-						"products" => $products,
-						"currency" => $currency,
-						"warehouse" => $room->prop("warehouse"),
-					));
-				}
+				$sum[$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
+			}
+			if(is_array($products) && sizeof($products))
+			{
+				$sum[$currency] += $this->cal_products_price(array(
+					"products" => $products,
+					"currency" => $currency,
+					"warehouse" => $room->prop("warehouse"),
+				));
 			}
 		}
 		return $sum;
@@ -1808,7 +1902,7 @@ class room extends class_base
 	
 	//parem ära ürita aru saada mis see pooletoobine funktsioon teeb.... loodame lihtsalt, et kunagi seda vaja ei lähe
 	function get_half_prices($arr)
-	{	
+	{
 		extract($arr);
 		$sum = 0;
 		$start = $arr["end"] - $time;
