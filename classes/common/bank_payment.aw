@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.10 2006/06/28 12:28:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.11 2006/11/01 13:25:24 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -7,11 +7,17 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
+
+groupinfo bank caption="Pankade info"
+default group=bank
 
 */
 
 class bank_payment extends class_base
 {	//olemasolevad panga
+	
 	var $banks = array (
 		"hansapank"	=> "Hansapank",
 		"seb"		=> "SEB Eesti &Uuml;hispank",
@@ -83,6 +89,44 @@ class bank_payment extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
+	
+		//tekitab võimalike pankade ja propertyte nimekirja
+	function callback_bank($arr)
+	{
+		$bank_payment = get_instance(CL_BANK_PAYMENT);
+		$meta = $arr["obj_inst"]->meta("bank");
+		foreach($bank_payment->for_all_banks as $key => $val)
+		{	
+			$ret[] = array(
+				"name" => "meta[".$key."]",
+				"caption" => $val,
+				"type" => "textbox" ,
+				"value" => $meta[$key],
+			);
+		}
+		
+		foreach($bank_payment->banks as $key => $val)
+		{	
+			$ret[] = array(
+				"name" => "meta[".$key."][use]",
+				"type" => "chechbox" ,
+				"ch_value" => 1 ,
+				"value" => $meta["key"],
+				"caption" => $val,
+			);
+			foreach($bank_payment->bank_props as $prop=>$caption)
+			{
+				$ret[] = array(
+					"name" => "meta[".$key."][".$prop."]",
+					"type" => "textbox",
+					"value" => $meta[$key][$prop],
+					"caption" => $caption
+				);
+			}
+		}
+		return $ret;
+	}
+
 	
 	/**
 	@attrib api=1 params=name
