@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.28 2006/11/01 12:13:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.29 2006/11/01 15:58:46 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -813,6 +813,13 @@ class room extends class_base
 		foreach($reservations->arr() as $res)
 		{
 			//date("l d/m/Y", time())
+			//filtriga asja ei saand tööle, niiet kasutab kirvemeetodit.... kuna asi toimub ühes nädalas, siis miskit hullu kiirusejama ei tohiks tulla
+			//poogib siis mitte kinnitatud ja maksetähtaja ületanud välja
+			if(!$res->prop("verified") && !($res->prop("deadline") > time()))
+			{
+				continue;
+			}
+			
 			$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
 		}
 	//	arr($booked);
@@ -974,6 +981,14 @@ class room extends class_base
 			reservationid
 		@param data required array
 			propertys and stuff 
+			products - array(product_id=> amount)
+			start - reservation starts
+			end - reservation ends
+			comment
+			people - number of people
+			name - contact persons name
+			email - contact persons email
+			phone - contact persons phone
 	**/
 	function make_reservation($arr)
 	{
@@ -1000,7 +1015,7 @@ class room extends class_base
 		{
 			$reservation = new object();
 			$reservation->set_class_id(CL_RESERVATION);
-			$reservation->set_name($room->name()." bron ".date("d:m:Y" ,time()));
+			$reservation->set_name($room->name()." bron ".date("d:m:Y" ,$data["start"]));
 			$reservation->set_parent($parent);
 			$reservation->set_prop("deadline", (time() + 15*60));
 			$reservation->set_prop("resource" , $room->id());
@@ -1034,6 +1049,26 @@ class room extends class_base
 			$customer->set_name($data["name"]);
 			$customer->set_parent($parent);
 			$customer->save();
+			if($data["phone"])
+			{
+				$phone = new object();
+				$phone->set_class_id(CL_CRM_PHONE);
+				$phone->set_name($data["phone"]);
+				$phone->set_prop("type" , "mobile");
+				$phone->set_parent($parent);
+				$phone->save();
+				$customer->connect(array("to"=> $phone->id(), "type" => "RELTYPE_PHONE"));
+			}
+			if($data["email"])
+			{
+				$email = new object();
+				$email->set_class_id(CL_ML_MEMBER);
+				$email->set_name($data["email"]);
+				$email->set_prop("mail" , $data["email"]);
+				$email->set_parent($parent);
+				$email->save();
+				$customer->connect(array("to"=> $email->id(), "type" => "RELTYPE_EMAIL"));
+			}
 			$reservation->set_prop("customer" , $customer->id());
 			$reservation->save();
 		}
