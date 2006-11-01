@@ -30,6 +30,16 @@
             <reltype>RELTYPE_PHOTO</reltype>
             <caption>Foto kohast</caption>
       </property>
+      <property>
+            <name>bank_payment</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BANK_PAYMENT</reltype>
+            <caption>Pangamakse</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_LOCATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -53,6 +63,11 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>Aadress</caption>
             </ADDRESS>
+            <BANK_PAYMENT>
+                  <value>4</value>
+                  <clid>CL_BANK_PAYMENT</clid>
+                  <caption>Pangalink</caption>
+            </BANK_PAYMENT>
       </reltypes>
 </properties>
 
