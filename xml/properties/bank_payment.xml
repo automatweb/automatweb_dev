@@ -1,5 +1,34 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>default_unit_sum</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>Vaikimisi &amp;amp;uuml;hiku summa</caption>
+      </property>
+      <property>
+            <name>expl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>Selgitus</caption>
+      </property>
+      <property>
+            <name>bank</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>bank</group>
+            <type>callback</type>
+            <callback>callback_bank</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BANK_PAYMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +36,10 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <bank>
+                  <caption>Pankade info</caption>
+            </bank>
+      </groupinfo>
 </properties>
 

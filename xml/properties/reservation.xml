@@ -1,33 +1,42 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>start1</name>
-            <table>planner</table>
+            <name>name</name>
+            <table>objects</table>
             <group>general</group>
-            <type>datetime_select</type>
-            <field>start</field>
-            <caption>Algus</caption>
-      </property>
-      <property>
-            <name>end</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>datetime_select</type>
-            <field>end</field>
-            <caption>L&amp;amp;otilde;peb</caption>
+            <parent>general_up</parent>
+            <type>textbox</type>
+            <field>name</field>
+            <method>none</method>
+            <size>20</size>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>deadline</name>
             <table>planner</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>datetime_select</type>
             <field>deadline</field>
-            <caption>T&amp;amp;auml;htaeg</caption>
+            <caption>Maksmist&amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>verified</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <no_caption>1</no_caption>
+            <caption>Kinnitatud</caption>
       </property>
       <property>
             <name>resource</name>
             <table>objects</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>relpicker</type>
             <reltype>RELTYPE_RESOURCE</reltype>
             <field>meta</field>
@@ -38,6 +47,7 @@
             <name>customer</name>
             <table>planner</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>relpicker</type>
             <field>customer</field>
             <reltype>RELTYPE_CUSTOMER</reltype>
@@ -47,6 +57,7 @@
             <name>project</name>
             <table>planner</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>relpicker</type>
             <field>project</field>
             <reltype>RELTYPE_PROJECT</reltype>
@@ -56,15 +67,18 @@
             <name>send_bill</name>
             <table>planner</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>send_bill</field>
+            <no_caption>1</no_caption>
             <caption>Saata arve</caption>
       </property>
       <property>
             <name>bill_no</name>
             <table>planner</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>hidden</type>
             <field>bill_no</field>
             <caption>Arve number</caption>
@@ -73,30 +87,71 @@
             <name>content</name>
             <table>planner</table>
             <group>general</group>
+            <parent>general_up</parent>
             <type>textarea</type>
-            <no_caption>1</no_caption>
-            <cols>50</cols>
+            <cols>40</cols>
             <rows>5</rows>
             <field>description</field>
-            <caption>Sisu</caption>
+            <caption>Sisu	</caption>
       </property>
       <property>
-            <name>code</name>
+            <name>people_count</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>textbox</type>
+            <size>3</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Inimesi</caption>
+      </property>
+      <property>
+            <name>start1</name>
             <table>planner</table>
             <group>general</group>
-            <type>hidden</type>
-            <size>5</size>
-            <field>code</field>
-            <caption>Kood</caption>
+            <parent>general_down</parent>
+            <type>datetime_select</type>
+            <field>start</field>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>L&amp;amp;otilde;peb</caption>
+      </property>
+      <property>
+            <name>sum</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Summa</caption>
       </property>
       <property>
             <name>resources_tbl</name>
             <table>objects</table>
             <group>reserved_resources</group>
+            <parent>general_down</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>resources_tbl</field>
+      </property>
+      <property>
+            <name>products_tbl</name>
+            <table>objects</table>
+            <group>products</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>products_tbl</field>
       </property>
       <classinfo>
             <syslog_type>ST_RESERVATION</syslog_type>
@@ -109,6 +164,9 @@
             <reserved_resources>
                   <caption>Ressursid</caption>
             </reserved_resources>
+            <products>
+                  <caption>Tooted</caption>
+            </products>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -137,5 +195,25 @@
                   <caption>Ressurss</caption>
             </RESOURCE>
       </reltypes>
+      <layout>
+            <general_split>
+                  <type>hbox</type>
+                  <group>general</group>
+            </general_split>
+            <general_up>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>&amp;Uuml;ldinfo</area_caption>
+                  <parent>general_split</parent>
+                  <group>general</group>
+            </general_up>
+            <general_down>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Aeg&amp;#44;&amp;nbsp;ja&amp;nbsp;hind</area_caption>
+                  <parent>general_split</parent>
+                  <group>general</group>
+            </general_down>
+      </layout>
 </properties>
 

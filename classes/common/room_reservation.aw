@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.2 2006/11/01 12:13:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.3 2006/11/01 15:08:04 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -33,9 +33,9 @@ class room_reservation extends class_base
 			"clid" => CL_ROOM_RESERVATION
 		));
 		$this->banks = array(
-			"hansa" => "Hansapank",
+			"hansapank" => "Hansapank",
 			"seb" => "Ühispank",
-			"sampo" => "Sampopank",
+			"sampopank" => "Sampopank",
 		);
 	}
 
@@ -300,6 +300,12 @@ class room_reservation extends class_base
 				"id" => $id,
 				"room" => $room->id(),
 			)),
+			"pay_url" => $this->mk_my_orb("pay_reservation", array(
+//				"section" => aw_global_get("section"),
+//				"level" => $level,
+				"bron_id" => $_SESSION["room_reservation"]["bron_id"],
+				"room" => $room->id(),
+			)),
 		));
 		
 		//property väärtuse saatmine kujul "property_nimi"_value
@@ -363,19 +369,31 @@ class room_reservation extends class_base
 			"name" => "phone",
 		));
 		
-		foreach($this->banks as $key=>$bank)
+		$loc = obj($room->prop("location"));
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		$bank_payment = $loc->prop("bank_payment");
+		if(is_oid($bank_payment))
 		{
-			$checked=0;
-			if($_SESSION["room_reservation"]["bank"] == $key)
+			$payment = obj($bank_payment);
+			foreach($payment->meta("bank") as $key => $val)
 			{
-				$checked = 1;
+				if(!$val["sender_id"])
+				{
+					continue;
+				}
+				$checked=0;
+				if($_SESSION["room_reservation"]["bank"] == $key)
+				{
+					$checked = 1;
+				}
+				$data["bank_".$key] = html::radiobutton(array(
+					"value" => $key,
+					"checked" => $checked,
+					"name" => "bank",
+				));
 			}
-			$data["bank_".$key] = html::radiobutton(array(
-				"value" => $key,
-				"checked" => $checked,
-				"name" => "bank",
-			));
 		}
+
 		$data["products_link"] = html::popup(array(
 			"url" 	=> $this->mk_my_orb("get_web_products_table", array(
 					"id" => $id,
@@ -599,7 +617,56 @@ class room_reservation extends class_base
 			"res_id" => $bron_id,
 			"data" => $_SESSION["room_reservation"],
 		));
-		arr($_SESSION["room_reservation"]["bron_id"]);
+		//return $section."?level=".$level;
+	}
+
+	//makes the reservation object ... then this stuff is ready for paying and stuff
+	/**
+	@attrib name=pay_reservation api=1 params=name nologin=1
+		@param bron_id optional type=array
+			reservation id
+		@param room required type=oid
+			room id
+		@param section optional type=string
+			aw section
+		@param level optional type=int	
+			web reservarion level	
+	**/
+	function pay_reservation($arr)
+	{
+		extract($arr);
+		$room_inst = get_instance(CL_ROOM);
+		$room = obj($room);
+		$bron_id;
+		if(!$bron_id)
+		{
+			$bron_id = $_SESSION["room_reservation"]["bron_id"];
+		}
+		
+		$_SESSION["room_reservation"]["bron_id"] = $room_inst->make_reservation(array(
+			"id" => $room->id(),
+			"res_id" => $bron_id,
+			"data" => $_SESSION["room_reservation"],
+		));
+		$bron = obj($_SESSION["room_reservation"]["bron_id"]);
+		if(!is_oid($room->prop("location")))
+		{
+			return;
+		}
+		$loc = obj($room->prop("location"));
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		$bank_payment = $loc->prop("bank_payment");
+		$_SESSION["bank_payment"]["url"] = "lahe link kuhu vastuseid saada";
+		$ret = $bank_inst->do_payment(array(
+			"bank_id" => $_SESSION["room_reservation"]["bank"],
+			"amount" => $_SESSION["room_reservation"]["sum"],
+			"reference_nr" => $_SESSION["room_reservation"]["bron_id"],
+			"payment_id" => $bank_payment,
+			"expl" => $bron->name(),
+		));
+		//kuna siiani asi ei jõua, siis makse kontrollis peaks vist sessiooni ära nullima... või ma ei tea
+		$_SESSION["room_reservation"] = null;;
+		return $ret;
 		//return $section."?level=".$level;
 	}
 

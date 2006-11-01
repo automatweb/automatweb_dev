@@ -1,17 +1,26 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.11 2006/11/01 13:25:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.12 2006/11/01 15:08:04 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
 @classinfo syslog_type=ST_BANK_PAYMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
-@default group=general
 @default field=meta
 @default method=serialize
 
-groupinfo bank caption="Pankade info"
-default group=bank
+@default group=general
+	@property default_unit_sum type=textbox
+	@caption Vaikimisi &uuml;hiku summa
+	
+	@property expl type=textbox
+	@caption Selgitus
+
+@groupinfo bank caption="Pankade info"
+
+@default group=bank
+	@property bank type=callback callback=callback_bank store=no no_caption=1
+
 
 */
 
@@ -24,6 +33,7 @@ class bank_payment extends class_base
 		"nordeapank"	=> "Nordea Pank",
 		"krediidipank"	=> "Krediidipank",
 		"sampopank"	=> "Sampo Pank",
+		"hansapank_lv"	=> "L&Auml;ti Hansapank",
 	);
 	//kõikidele pankadele ühine info
 	var $for_all_banks = array(
@@ -43,6 +53,7 @@ class bank_payment extends class_base
 		"sampopank"	=> "https://www.sampo.ee/cgi-bin/pizza",
 		"krediidipank"	=> "https://i-pank.krediidipank.ee/teller/maksa",
 		"nordeapank"	=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
+		"hansapank_lv"	=> "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
@@ -81,6 +92,9 @@ class bank_payment extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+					case "bank":
+				$this->submit_meta($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -90,21 +104,22 @@ class bank_payment extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 	
+	
+	function submit_meta($arr = array())
+	{
+		$meta = $arr["request"]["meta"];
+		if (is_array($meta))
+		{
+			$arr["obj_inst"]->set_meta($arr["prop"]["name"], $meta);
+			$arr["obj_inst"]->save();
+		};
+	}
+	
 		//tekitab võimalike pankade ja propertyte nimekirja
 	function callback_bank($arr)
 	{
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
 		$meta = $arr["obj_inst"]->meta("bank");
-		foreach($bank_payment->for_all_banks as $key => $val)
-		{	
-			$ret[] = array(
-				"name" => "meta[".$key."]",
-				"caption" => $val,
-				"type" => "textbox" ,
-				"value" => $meta[$key],
-			);
-		}
-		
 		foreach($bank_payment->banks as $key => $val)
 		{	
 			$ret[] = array(
@@ -126,12 +141,19 @@ class bank_payment extends class_base
 		}
 		return $ret;
 	}
-
 	
 	/**
 	@attrib api=1 params=name
 	@param bank_id required type=string
 		bank id. possible choices: "seb", "hansapank" , "sampopank", "nordeapank" , "krediidipank" 
+	@param amount optional type=int
+		Amount to be paid. Max length=17
+	@param units optional type=int
+		if amount is not set, you give how many units, ... payment_id must be set then and payment objects prop default_unit_price also
+	@param reference_nr optional type=int
+		Reference number of payment order. Max length=19
+	@param payment_id optional type=oid
+		if set, takes sender_id,explanation and ...  data from bank payment object	
 	@param service optional type=int default=1002
 		Number of service. Length=4
 	@param version optional type=int default=008
@@ -140,12 +162,8 @@ class bank_payment extends class_base
 		ID of compiler of query (merchant's ID). Max length=10
 	@param stamp optional type=string
 		Query ID. Max length=20
-	@param amount optional type=int
-		Amount to be paid. Max length=17
 	@param currency optional type=string default="EEK"
 		Name of currency: EEK/DEM/FIM etc. Length=3
-	@param reference_nr optional type=int
-		Reference number of payment order. Max length=19
 	@param expl optional type=string
 		Explanation of payment order. Max length=70
 	@param return_url optional type=string default=aw_ini_get("baseurl")."/automatweb/bank_return.aw"
@@ -160,7 +178,6 @@ class bank_payment extends class_base
 		If form is set, function returns html form, else returns to bank site.
 	@param test optional type=int
 		If test is set, the function uses the bank test site if it exists
-	
 	@returns bank web page, or string/html form
 	
 	@comment
@@ -190,6 +207,10 @@ class bank_payment extends class_base
 				$arr = $this->check_args($arr);
 				return $this->seb($arr);
 				break;
+			case "hansapank_vl":
+				$arr = $this->check_args($arr);
+				return $this->hansa_lv($arr);
+				break;
 			case "hansapank":
 				$arr = $this->check_args($arr);
 				return $this->hansa($arr);
@@ -211,6 +232,19 @@ class bank_payment extends class_base
 	
 	function check_args($arr)
 	{
+		if(is_oid($arr["payment_id"]))
+		{
+			$payment = obj($arr["payment"]);
+			$payment_data = $payment->meta("bank");
+			$arr["sender_id"] = $payment_data[$arr["bank_id"]]["sender_id"];
+			$arr["stamp"] = $payment_data[$arr["bank_id"]]["stamp"];
+			$arr["expl"] = $arr["expl"].$payment->prop("expl");
+			if($arr["units"])
+			{
+				$arr["amount"] = $arr["units"]*$payment->prop("default_unit_sum");
+			}
+		}
+		
 		if(!$arr["service"]) $arr["service"] = "1002";
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
@@ -231,7 +265,7 @@ class bank_payment extends class_base
 	}
 		
 	//if form = 1, returns hrml input tags in form.
-	function submit($args)
+	function submit_bank_info($args)
 	{
 		extract($args);
 		$return = "";
@@ -295,7 +329,45 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
-		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
+	//	return $http->post_request($link, $handler, $params, $port = 80);
+	}
+
+	function hansa_lv($args) 
+	{
+		extract($args);
+		$VK_message = sprintf("%03d",strlen($service)).$service;
+		$VK_message.= sprintf("%03d",strlen($version)).$version;
+		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
+		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
+		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
+		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
+		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
+		$VK_signature = "";
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($VK_message, $VK_signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$VK_MAC = base64_encode( $VK_signature);
+
+		$http = get_instance("protocols/file/http");
+		$link = "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp";
+		$handler = "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp";
+		$params = array(
+			"VK_SERVICE"	=> $service,	//"1002"
+			"VK_VERSION"	=> $version,	//"008"
+			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST"
+			"VK_STAMP"	=> $stamp,	//row["arvenr"]
+			"VK_AMOUNT"	=> $amount,	//$row["summa"];
+			"VK_CURR"	=> $curr,	//"EEK"
+			"VK_REF"	=> $reference_nr,
+			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
+			"VK_MAC" 	=> $VK_MAC,
+			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_LANG" 	=> $lang,	//"EST"
+		);
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
@@ -333,7 +405,7 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
-		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
@@ -371,7 +443,7 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
-		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
@@ -409,7 +481,7 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
-		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}	
 
@@ -476,7 +548,7 @@ class bank_payment extends class_base
 			"SOLOPMT_KEYVERS"     => $version,// 17.   Key Version    SOLOPMT_KEYVERS   E.g. 0001   N 4   O 
 			"SOLOPMT_CUR"         => $curr,// 18.   Currency Code  SOLOPMT_CUR    EUR   A 3   O 
 		);
-		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);	
 	}
 
