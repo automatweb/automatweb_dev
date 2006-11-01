@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.9 2006/10/09 14:52:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.10 2006/11/01 16:44:55 markop Exp $
 // procurement.aw - Hange 
 /*
 
@@ -391,11 +391,32 @@ class procurement extends class_base
 		return $retval;
 	}	
 	
+	
+	function _get_sub_folder_objects($obj)
+	{
+		$parents = array();
+		$ol = new object_list(array(
+			"lang_id" => array(),
+			"parent" => $obj->id(),
+			"class_id" => CL_MENU,
+		));
+		$parents[] = $obj;
+		foreach($ol->arr() as $folder)
+		{
+			$parents = array_merge($parents,$this->_get_sub_folder_objects($folder));
+		}
+		return $parents;
+	}
+	
 	/**
 		@attrib name=set_type
 	**/
 	function set_type($arr)
 	{
+		if($_GET["return_url"])
+		{
+			$_SESSION["return_url"] = $_GET["return_url"];
+		}
 		$this_object = obj($_GET["id"]);
 		classload("vcl/table");
 		$t = new aw_table(array(
@@ -411,14 +432,14 @@ class procurement extends class_base
 			"sortable" => 1,
 			"caption" => t("T&uuml;&uuml;p")
 		));
-		$t->set_default_sortby("name");
-		$types = new object_list(array(
-				"class_id" => array(CL_SHOP_PRODUCT_TYPE),
-				"lang_id" => array(),
-				"site_id" => array(),
+		
+		$t->define_field(array(
+			"name" => "menu",
+			"sortable" => 1,
+			"caption" => t("Kataloog")
 		));
-		$options = $types->names();
-		asort($options);
+		$t->set_default_sortby("name");
+		
 		
 		$co = obj($this_object->prop("orderer"));
 		$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
@@ -430,6 +451,21 @@ class procurement extends class_base
 		}	
 		else $parent = $_GET["id"];
 		
+		$types = new object_list(array(		
+				"class_id" => array(CL_SHOP_PRODUCT_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+		));
+		$options = $types->names();
+		
+		$menu_opt = $this->_get_sub_folder_objects(obj($parent));
+		foreach($menu_opt as $opt)
+		{
+			$menu_options[$opt->id()] = $opt->name(); 
+		}
+
+		asort($menu_options);
+		asort($options);
 		
 		if($_POST["types"])
 		{
@@ -444,7 +480,7 @@ class procurement extends class_base
 
 				if (!$ol->count())
 				{
-				if(is_oid($_POST["types"][$product["product"]]))
+					if(is_oid($_POST["types"][$product["product"]]))
 					{
 						$type_object = obj($_POST["types"][$product["product"]]);
 						if(is_oid($type_object->prop("default_product_folder")))
@@ -455,6 +491,10 @@ class procurement extends class_base
 								$parent = $folder->id();
 							}
 						}
+					}
+					if(is_oid($_POST["parent"][$product["product"]]))
+					{
+						$parent = $_POST["parent"][$product["product"]];
 					}
 					$p = obj();
 					$p->set_class_id(CL_SHOP_PRODUCT);
@@ -469,7 +509,7 @@ class procurement extends class_base
 			$this_object->save();
 			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
-			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
+			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products" , "return_url" => $_SESSION["return_url"]))."';
 			window.close();
 			</script>");
 		}
@@ -490,6 +530,7 @@ class procurement extends class_base
 				$dat = array(
 					"name" => $product["product"],
 					"type" => html::select(array("options" => $options, "name" => "types[".$product["product"]."]")),
+					"menu" => html::select(array("options" => $menu_options, "name" => "parent[".$product["product"]."]")),
 				);
 				if(strlen($product["product"]) > 0) $t->define_data($dat);
 			}
@@ -501,13 +542,13 @@ class procurement extends class_base
 			$this_object->save();
 			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
-			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products"))."';
+			window.opener.location.href='".$this->mk_my_orb("change", array("id"=>$_GET["id"] , "group" => "products" , "return_url" => $_SESSION["return_url"]))."';
 			window.close();
 			</script>");
 		}
 		$t->define_data(array("type" => html::submit(array("name" => "submit", "class" => "submit" , "value" => "submit" , "onclick"=>"self.disabled=true;submit_changeform(''); return false;") )));
 		$t->set_sortable(false);
-		return "<form action='".$this->mk_my_orb("set_type", array("id" => $_GET["id"]))."' method='POST' name='changeform' enctype='multipart/form-data' >".$t->draw()."</form>";
+		return "<form action='".$this->mk_my_orb("set_type", array("id" => $_GET["id"] , "return_url" => $_SESSION["return_url"]))."' method='POST' name='changeform' enctype='multipart/form-data' >".$t->draw()."</form>";
 	}
 
 
