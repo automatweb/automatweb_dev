@@ -7084,10 +7084,10 @@ class crm_company extends class_base
 		$this->_init_offers_tbl($t);
 
 		$filter = array(
-			"class_id" => array(CL_PURCHASE),
+			"class_id" => array(CL_PURCHASE, CL_PROCUREMENT_OFFER),
 			"lang_id" => array(),
 			"site_id" => array(),
-			"buyer" => $arr["request"]["buyer"],
+		//	"buyer" => $arr["request"]["buyer"],
 			"offerer" => $arr["obj_inst"]->id(),
 		);
 		$ol = new object_list($filter);
@@ -7098,7 +7098,35 @@ class crm_company extends class_base
 			$offers = $o->connections_from(array(
 				'type' => "RELTYPE_OFFER",
 			));
-			foreach($offers as $offer_conn)
+
+			if($o->class_id() == CL_PURCHASE)
+			{
+				$type = t("Ost");
+				$deal = $o->prop("deal_no");
+				$date = $o->prop("date");
+			}
+			else
+			{
+				$type = t("Pakkumine");
+				$deal = "";
+				$date = $o->prop("accept_date");
+			}
+			$t->define_data(array(
+				"deal" => $deal_no,
+//				"product"	=> $row->prop("product"),
+//				"amount"	=> $row->prop("b_amount"),
+//				'price'		=> $row->prop("b_price"),
+				'date'		=> date("d.m.Y", $date),
+				"name" 		=> html::href(array(
+						"url" => html::get_change_url(
+							$o->id(),
+							array("return_url" => get_ru())),
+						"caption" => $o->name())),
+				'oid'		=> $o->id(),
+				"type" 		=> $type,
+			));
+
+/*			foreach($offers as $offer_conn)
 			{
 				$offer_obj = obj($offer_conn->prop("to"));
 				$conns = $offer_obj->connections_to(array(
@@ -7139,33 +7167,46 @@ class crm_company extends class_base
 					));
 				}
 			}
-		}
+*/		}
 	}
 
 	function _init_offers_tbl(&$t)
 	{
+		//pakkumine või ost
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Liik"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
+		//klikitav, lingi alt tekst on Hange: hanke nimi, millele pakkumine vastab)
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Pakkumise nimetus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		//Lepingu nr (see mis on märgitud ostu juurde, mitte ID)
 		$t->define_field(array(
 			"name" => "deal",
 			"caption" => t("Leping"),
 			"align" => "center",
 			"sortable" => 1
 		));
-		
+		//Kuupäev
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => t("Pakkumise kuup&auml;ev"),
+			"caption" => t("Kuup&auml;ev"),
 			"align" => "center",
 			"sortable" => 1
 		));
-		$t->define_field(array(
-			"name" => "amount",
-			"caption" => t("Kogus"),
-			"align" => "center",
-			"sortable" => 1
-		));
+		
+		//(nimekiri reavahega eraldatult nendest toodetest, mis olid võrdlusvaates ja on selles pakkumises/ostus, toote taga on sulgudes hind koos valuutaga)
 		$t->define_field(array(
 			"name" => "product",
-			"caption" => t("Toode"),
+			"caption" => t("Tooted"),
 			"align" => "center",
 			"sortable" => 1
 		));
