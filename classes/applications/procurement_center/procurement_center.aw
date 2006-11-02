@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.23 2006/10/20 14:31:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.24 2006/11/02 18:18:54 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -647,7 +647,19 @@ class procurement_center extends class_base
 
 	function _offers_tr($arr)
 	{
+/*		//teeb siis p_id jälle arusaadavaks, et puust saaks neid va pakkumisi lisada hangetele jne
+		if(substr_count($arr["request"]["p_id"], 'valid_'))
+		{
+			$arr["request"]["p_id"] = str_replace('valid_' , "" , $arr["request"]["p_id"]);
+		};
+		if(substr_count($arr["request"]["p_id"], 'archived_'))
+		{
+			$arr["request"]["p_id"] = str_replace('archived_' , "" , $arr["request"]["p_id"]);
+		};
+*/
+		
 		classload("core/icons");
+		//$arr["prop"]["vcl_inst"]->features[LOAD_ON_DEMAND] = 1;
 		$arr["prop"]["vcl_inst"]->add_item(0, array(
 			"id" => 1,
 			"name" => t('Kehtivad'),
@@ -1033,7 +1045,15 @@ class procurement_center extends class_base
 				$filter["offerer"] = $offerers->ids();
 				if(!sizeof($filter["offerer"])) $filter["offerer"] = array(0);
 			}
-			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY) $filter["offerer"] = $arr["request"]["p_id"];
+			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY)
+			{
+				$filter["offerer"] = $arr["request"]["p_id"];
+			}
+			if($p_obj->class_id() == CL_PROCUREMENT)
+			{
+				$filter["procurement"] = $arr["request"]["p_id"];
+			}
+			
 			if($p_obj->class_id() == CL_CRM_CATEGORY)
 			{
 				foreach($p_obj->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
@@ -1041,6 +1061,7 @@ class procurement_center extends class_base
 					$filter["offerer"][$c->prop("to")] = $c->prop("to");
 				}
 			}
+			
 		}
 		
 		//otsingust
@@ -1051,7 +1072,6 @@ class procurement_center extends class_base
 			$arr["obj_inst"]->save();
 		}
 		else $ol = new object_list($filter);
-		
 		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
 		$statuses = $offer_inst->offer_states;
 		$result = $arr["request"]["result"];
@@ -1151,13 +1171,33 @@ class procurement_center extends class_base
 			'tooltip'=> t('Uus')
 		));
 
+		$arr["request"]["p_id"] = str_replace("valid_" , "" , $arr["request"]["p_id"]);
+		$arr["request"]["p_id"] = str_replace("archived_" , "" , $arr["request"]["p_id"]);
+
 		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->prop("offerers_folder");
 
+		$proc = $offerer = "";
+		if(is_oid($parent))
+		{
+			$parent_obj = obj($parent);
+			if($parent_obj->class_id() == CL_PROCUREMENT)
+			{
+				$proc = $parent;
+			}
+			if($parent_obj->class_id() == CL_CRM_COMPANY || $parent_obj->class_id() == CL_CRM_PERSON)
+			{
+				$offerer = $parent;
+			}
+		}
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text'=> t('Pakkumine'),
 //			'link'=> $this->mk_my_orb("insert_offer" , array("return_url" => get_ru(), "parent" => $parent)),
-			'link'=> html::get_new_url(CL_PROCUREMENT_OFFER, $parent, array("return_url" => get_ru()))
+			'link'=> html::get_new_url(CL_PROCUREMENT_OFFER, $parent, array(
+				"return_url" => get_ru(),
+				"proc" => $proc,
+				"offerer" => $offerer,
+			))
 		));
 
 		$tb->add_menu_item(array(
@@ -2785,11 +2825,16 @@ class procurement_center extends class_base
 		}
 		$t_offerer->define_data($data);
 
+		$prod_ids = array();
+		foreach($products as $product)
+		{
+			$prod_ids[] = $product->id();
+		}
 
 		$data = array("product" => t("Ajalugu"));
 		foreach($offerers->arr() as $offerer)
 		{
-			$data["offerer".$offerer->id()] = html::href(array("url" => html::get_change_url($offerer->id(), array("group" => "sell_offers", "buyer" => $this->buyer)), "caption" => t("Ajalugu")));
+			$data["offerer".$offerer->id()] = html::href(array("url" => html::get_change_url($offerer->id(), array("group" => "sell_offers", "buyer" => $this->buyer , "products" => $prod_ids)), "caption" => t("Ajalugu")));
 		}
 		$t_offerer->define_data($data);
 

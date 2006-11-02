@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.15 2006/10/20 15:06:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.16 2006/11/02 18:18:54 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -140,9 +140,9 @@ class procurement_offer extends class_base
 				}
 				$u = get_instance(CL_USER);
 				$company = obj($u->get_current_company());
-				if(!$arr["obj_inst"]->prop("currency") && $arr["obj_inst"]->class_id())
+				if(!$arr["obj_inst"]->prop("currency"))
 				{
-					$arr["obj_inst"]->set_prop("currency", $company->prop("currency"));
+					$prop["value"] = $company->prop("currency");
 				}
 				break;
 			case "files":
@@ -241,6 +241,7 @@ class procurement_offer extends class_base
 					return PROP_IGNORE;
 				}
 				break;
+		
 			case "products":
 				$_SESSION["procurement"]["accept"] = $arr["request"]["accept"];
 				$_SESSION["procurement"]["val"] = $arr["request"]["products"];
@@ -601,6 +602,10 @@ class procurement_offer extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["d_id"] = $_GET["d_id"];
+		if(!$arr["id"])
+		{
+			$arr["offerer"] = $_GET["offerer"];
+		}
 	}
 
 	function do_db_upgrade($t, $f)
@@ -1110,6 +1115,17 @@ class procurement_offer extends class_base
 		//$t->set_default_sortby("jrk");
 	}
 
+
+	function callback_post_save($arr)
+	{
+		if($arr["new"]==1 && is_oid($arr["request"]["offerer"]) && $this->can("view" , $arr["request"]["offerer"]))
+		{
+			$arr["obj_inst"]->set_prop("offerer" , $arr["request"]["offerer"]);
+// 		arr($arr); 
+// 		arr($arr["obj_inst"]->prop("procurement"));
+		}
+	}
+	
 	function get_avg_score($offer)
 	{
 		// get all prefered solutions in offer and their scores

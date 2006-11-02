@@ -7082,7 +7082,12 @@ class crm_company extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_offers_tbl($t);
-
+		$products = new object_list();
+		$products->add($arr["request"]["products"]);
+		$prod_names = $products->names();
+		
+		$purchase_inst = get_instance(CL_PURCHASE);
+		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
 		$filter = array(
 			"class_id" => array(CL_PURCHASE, CL_PROCUREMENT_OFFER),
 			"lang_id" => array(),
@@ -7094,7 +7099,7 @@ class crm_company extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$deal_no = $o->prop("deal_no");
-			
+			$prod_inf = $alt = "";	
 			$offers = $o->connections_from(array(
 				'type' => "RELTYPE_OFFER",
 			));
@@ -7104,16 +7109,77 @@ class crm_company extends class_base
 				$type = t("Ost");
 				$deal = $o->prop("deal_no");
 				$date = $o->prop("date");
+				
+				
+				$offers = $o->connections_from(array(
+					'type' => "RELTYPE_OFFER",
+				));
+				$alt = t("Hange:");
+				foreach($offers as $offer_conn)
+				{
+					$offer_obj = obj($offer_conn->prop("to"));
+					$procurement = obj($offer_obj->prop("procurement"));
+					if(is_object($procurement))
+					{
+						$alt.= $procurement->name();
+					}
+					$conns = $offer_obj->connections_to(array(
+						'reltype' => 1,
+						'class' => CL_PROCUREMENT_OFFER_ROW,
+					));
+					foreach($conns as $conn)
+					{
+						if(is_oid($conn->prop("from")))
+						{
+							$row = obj($conn->prop("from"));
+						}
+						else continue;
+						if(!$row->prop("accept"))
+						{
+							continue;
+						}
+						if(in_array($row->prop("product") , $prod_names))
+						{
+							$curr = obj($row->prop("currency"));
+							$prod_inf.= $row->prop("product")." (".$row->prop("b_price").$curr->name().")\n";
+						}
+					}
+				}
 			}
 			else
 			{
 				$type = t("Pakkumine");
 				$deal = "";
 				$date = $o->prop("accept_date");
+				$procurement = obj($o->prop("procurement"));
+				if(is_object($procurement))
+				{
+					$alt = t("Hange:")." ".$procurement->name();
+				}
+				$conns = $o->connections_to(array(
+					'reltype' => 1,
+					'class' => CL_PROCUREMENT_OFFER_ROW,
+				));
+				foreach($conns as $conn)
+				{
+					if(is_oid($conn->prop("from")))
+					{
+						$row = obj($conn->prop("from"));
+					}	
+					else continue;
+					
+					
+					
+					if(in_array($row->prop("product") , $prod_names))
+					{
+						$curr = obj($row->prop("currency"));
+						$prod_inf.= $row->prop("product")." (".$row->prop("price").$curr->name().")\n";
+					}
+				}
 			}
 			$t->define_data(array(
 				"deal" => $deal_no,
-//				"product"	=> $row->prop("product"),
+				"products"	=> $prod_inf,
 //				"amount"	=> $row->prop("b_amount"),
 //				'price'		=> $row->prop("b_price"),
 				'date'		=> date("d.m.Y", $date),
@@ -7121,7 +7187,9 @@ class crm_company extends class_base
 						"url" => html::get_change_url(
 							$o->id(),
 							array("return_url" => get_ru())),
-						"caption" => $o->name())),
+						"caption" => $o->name(),
+						"title" => $alt,
+						)),
 				'oid'		=> $o->id(),
 				"type" 		=> $type,
 			));
@@ -7183,7 +7251,7 @@ class crm_company extends class_base
 		//klikitav, lingi alt tekst on Hange: hanke nimi, millele pakkumine vastab)
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Pakkumise nimetus"),
+			"caption" => t("Pakkumise/ostu nimetus"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -7205,7 +7273,7 @@ class crm_company extends class_base
 		
 		//(nimekiri reavahega eraldatult nendest toodetest, mis olid võrdlusvaates ja on selles pakkumises/ostus, toote taga on sulgudes hind koos valuutaga)
 		$t->define_field(array(
-			"name" => "product",
+			"name" => "products",
 			"caption" => t("Tooted"),
 			"align" => "center",
 			"sortable" => 1
