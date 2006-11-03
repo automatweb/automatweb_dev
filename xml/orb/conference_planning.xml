@@ -1,6 +1,40 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="conference_planning" folder="applications/calendar" extends="class_base">
+		<action name="submit_back" all_args="1">
+			<function name="submit_back">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_forward" all_args="1">
+			<function name="submit_forward">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_catering" all_args="1">
+			<function name="add_catering">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_dates" all_args="1">
+			<function name="add_dates">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_function" all_args="1">
+			<function name="add_function">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
-		

@@ -1,0 +1,72 @@
+<form method="post" action="orb.aw" name="changeform">
+<table border="1" width="100%">
+	<!-- SUB: FIRST_RFP_YAH -->
+	<!-- END SUB: FIRST_RFP_YAH -->
+	<!-- SUB: OTHER_RFP_YAH -->
+	<tr>
+		<td align="center">
+			<!-- SUB: YAH_BAR -->
+				<!-- SUB: YAH_FIRST_BTN -->
+					[ {VAR:step_nr}
+				<!-- END SUB: YAH_FIRST_BTN -->
+				<!-- SUB: ACT_YAH_FIRST_BTN -->
+					[ <b>{VAR:step_nr}</b>
+				<!-- END SUB: ACT_YAH_FIRST_BTN -->
+
+				<!-- SUB: YAH_BTN -->
+					{VAR:step_nr}
+				<!-- END SUB: YAH_BTN -->
+				<!-- SUB: ACT_YAH_BTN -->
+					<b>{VAR:step_nr}</b>
+				<!-- END SUB: ACT_YAH_BTN -->
+				
+				<!-- SUB: YAH_LAST_BTN -->
+					{VAR:step_nr} ]
+				<!-- END SUB: YAH_LAST_BTN -->
+				<!-- SUB: ACT_YAH_LAST_BTN -->
+					<b>{VAR:step_nr}</b> ]
+				<!-- END SUB: ACT_YAH_LAST_BTN -->
+			<!-- END SUB: YAH_BAR -->
+		</td>
+	</tr>
+	<!-- END SUB: OTHER_RFP_YAH -->
+	<tr>
+		<td>
+			{VAR:sub_contents}
+		</td>
+	</tr>
+	<!-- SUB: FIRST_RFP_SUBMIT -->
+	<tr>
+		<td align="center">
+			<input type="button" onClick="javascript:submit_changeform('submit_forward');" value="continue" />
+		</td>
+	</tr>
+	<!-- END SUB: FIRST_RFP_SUBMIT -->
+	<!-- SUB: OTHER_RFP_SUBMIT -->
+	<tr>
+		<td align="center">
+			<input type="button" onClick="javascript:submit_changeform('submit_back');" value="back" />&nbsp;<input type="button" onClick="javascript:submit_changeform('submit_forward');" value="continue" />
+		</td>
+	</tr>
+	<!-- END SUB: OTHER_RFP_SUBMIT -->
+</table>
+{VAR:reforb}
+<script type="text/javascript">
+	function submit_changeform(action)
+	{
+		changed = 0;
+		if (typeof(aw_submit_handler) != "undefined")
+		{
+			if (aw_submit_handler() == false)
+			{
+				return false;
+			}
+		}
+		if (typeof action == "string" && action.length>0)
+		{
+			document.changeform.action.value = action;
+		};
+		document.changeform.submit();
+	}
+</script>
+</form>
