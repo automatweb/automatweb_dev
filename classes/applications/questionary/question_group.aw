@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/question_group.aw,v 1.5 2006/10/24 13:33:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/question_group.aw,v 1.6 2006/11/03 14:13:58 tarvo Exp $
 // question_group.aw - K&uml;simustegrupp 
 /*
 
@@ -171,7 +171,7 @@ class question_group extends class_base
 		{
 			$ret[$cdata["to"]] = obj($cdata["to"]);
 		}
-		uasort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("jrk"), $b->prop("jrk"));'));
+		uasort($ret, create_function('$a,$b', 'return $a->prop("jrk") - $b->prop("jrk");'));
 		return $ret;
 	}
 
