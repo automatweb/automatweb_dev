@@ -1165,9 +1165,15 @@ class crm_company_bills_impl extends class_base
 				else $penalty = str_replace("." , "," , $co->prop("bill_penalty_pct"));
 			}
 
-			if($b->prop("bill_trans_date")) $date = date("d.m.Y", $b->prop("bill_trans_date"));
-			else $date = date("d.m.Y", $b->prop("bill_date"));
-
+			if($b->prop("bill_trans_date")>1)
+			{
+				$date = date("d.m.Y", $b->prop("bill_trans_date"));
+			}
+			else
+			{
+				$date = date("d.m.Y", $b->prop("bill_date"));
+			}
+			
 			$min = min($min, $date);
 			$max = max($max, $date);
 
