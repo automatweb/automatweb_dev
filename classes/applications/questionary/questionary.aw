@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.13 2006/10/26 15:49:22 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/questionary/questionary.aw,v 1.14 2006/11/03 14:17:18 tarvo Exp $
 // questionary.aw - K&uuml;simustik 
 /*
 
@@ -367,7 +367,7 @@ class questionary extends class_base
 		{
 			$ret[$cdata["to"]] = obj($cdata["to"]);
 		}
-		uasort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("jrk"), $b->prop("jrk"));'));
+		uasort($ret, create_function('$a,$b', 'return $a->prop("jrk") - $b->prop("jrk");'));
 		return $ret;
 	}
 
