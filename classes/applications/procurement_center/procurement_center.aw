@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.24 2006/11/02 18:18:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.25 2006/11/06 17:44:52 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -1092,7 +1092,7 @@ class procurement_center extends class_base
 					$address = obj($address_id);
 					if(is_oid($address->prop("piirkond")) && $this->can("view" , $address->prop("piirkond")))
 					{
-						$area = obj($address->prop("linn"));
+						$area = obj($address->prop("piiskond"));
 						$offerer_area = $area->name();
 					}
 				}
@@ -1247,7 +1247,6 @@ class procurement_center extends class_base
 					"parent" => $arr["request"]["p_id"],
 				));
 			
-				if(!sizeof($procurements->ids()))
 				$filter["CL_PURCHASE.RELTYPE_OFFER.procurement"] = $procurements->ids();
 			
 				if(sizeof($procurements->ids()))
@@ -1278,7 +1277,7 @@ class procurement_center extends class_base
 					$address = obj($address_id);
 					if(is_oid($address->prop("piirkond")) && $this->can("view" , $address->prop("piirkond")))
 					{
-						$area = obj($address->prop("linn"));
+						$area = obj($address->prop("piirkond"));
 						$offerer_area = $area->name();
 					}
 				}
@@ -2841,9 +2840,18 @@ class procurement_center extends class_base
 		$data = array("product" => t("Piirkond"));
 		foreach($offerers->arr() as $offerer)
 		{
-			if($offerer->class_id == CL_CRM_COMPANY) $address = $offerer->prop("contact");
-			else $address = $offerer->prop("address");
-			if(is_oid($offerer->prop("address")) && $this->can("view" , $offerer->prop("address"))) $address_object = obj($offerer->prop("address"));
+			if($offerer->class_id() == CL_CRM_COMPANY)
+			{
+				$address = $offerer->prop("contact");
+			}
+			else
+			{
+				$address = $offerer->prop("address");
+			}
+			if(is_oid($address) && $this->can("view" , $address))
+			{
+				$address_object = obj($address);
+			}
 			if(is_object($address_object) && is_oid($address_object->prop("piirkond")) && $this->can("view", $address_object->prop("piirkond")))
 			{
 				$area = obj($address_object->prop("piirkond"));
@@ -2951,18 +2959,9 @@ class procurement_center extends class_base
 					foreach($row_list->arr() as $row)
 					{
 //						arr($row->prop("product") . " - " . $o->name());
-						if($last_offer_file)
-						{
-							$price = html::href(array(
-								"caption" => $row->prop("price"),
-								"url" => $last_offer_file
-							));
-						}
-						else
-						{
-							$price = $row->prop("price");
-						}
 						$amount = $row->prop("amount");
+						$price = $row->prop("price");
+						
 						$unit_obj = obj($row->prop("unit"));
 						$unit = $unit_obj->prop("unit_code");
 						$date = date("d.m.Y",$row->prop("shipment"));
@@ -2974,7 +2973,17 @@ class procurement_center extends class_base
 						));
 						if($row->prop("accept") && sizeof($buyings_list->arr()))
 						{
+							$amount = $row->prop("b_amount");
+							$price = $row->prop("b_price");
 							$cutcopied = "yellow";
+						}
+						
+						if($last_offer_file)
+						{
+							$price = html::href(array(
+								"caption" => $price,
+								"url" => $last_offer_file
+							));
 						}
 					}
 				}
