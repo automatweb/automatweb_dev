@@ -761,8 +761,11 @@ class html extends aw_template
 
 	@param name optional type=string
 		Date selector name
-	@param format optional type=string
-		if day = "text" then day is shown as textbox, not selectbox
+	@param format optional type=array
+		Via this you can configure, which parts of dateselect will be shown and how it is drawed 
+		Possible array elements are:
+			day, month, year, hour, minute (displayed as selects)
+			day_textbox, month_textbox, year_textbox, hour_textbox, minute_textbox (displayed as textbox)
 	@param mon_for optional type=string
 		if set, 0 appears before every month's signifier witch has value < 10
 	@param value optional type=array/int/string
@@ -780,16 +783,27 @@ class html extends aw_template
 		If set, the date selector is disabled
 	@param textsize optional type=string
 		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled
+	@param buttons optional type=bool
+		Enables the "popup calendar" and "clear date select" buttons to the end of the select. 
 
 	@returns string/html date selector
 
 	@comments
-		draws several selectboxes , can be used for selecting time and date
+		draws several selectboxes and/or textboxes, can be used for selecting time and date
 	**/
 	function date_select($args = array())
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
+
+		if ($args['buttons'])
+		{
+			$buttons = true;
+		}
+		else
+		{
+			$buttons = false;
+		}
 
 		if (!empty($args["format"]) && is_array($args["format"]) && count($args["format"]))
 		{
@@ -847,7 +861,7 @@ class html extends aw_template
 			$name = $args["name"];
 		}
 
-		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true);
+		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true, $buttons);
 		$res .= $args["post_append_text"];
 		return $res;
 	}

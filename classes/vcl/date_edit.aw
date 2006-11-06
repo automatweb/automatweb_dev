@@ -94,7 +94,7 @@ class date_edit
 		@returns
 		The form elements html code to be printed on page
 	**/
-	function gen_edit_form($varname, $timestamp, $range1 = 2003, $range2 = 2010, $add_empty = false)
+	function gen_edit_form($varname, $timestamp, $range1 = 2003, $range2 = 2010, $add_empty = false, $buttons = false)
 	{
 		if (is_array ($varname))
 		{
@@ -180,7 +180,7 @@ class date_edit
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
-			        $mnames = array(
+					$mnames = array(
 						"1" => t("Jaanuar"),
 						"2" => t("Veebruar"),
 						"3" => t("M&auml;rts"),
@@ -277,7 +277,7 @@ class date_edit
 			}; // end switch
 		}; // end while
 
-		if (is_admin())
+		if (is_admin() || $buttons === true)
 		{
 			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."'>";
 			$retval .= "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/class_126.gif' border='0'></a> ";	

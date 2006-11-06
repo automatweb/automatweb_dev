@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.101 2006/10/24 07:08:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.102 2006/11/06 11:31:14 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -531,6 +531,10 @@ class webform extends class_base
 				if (!isset($val["invisible_name"]))
 				{
 					$val["invisible_name"] = 0;
+				}
+				if (!isset($val["buttons"]))
+				{
+					$val["buttons"] = 0;
 				}
 				foreach($val as $key2 => $val2)
 				{
@@ -1355,6 +1359,52 @@ class webform extends class_base
 							"options" => $mon_fors,
 							"value" => $property["mon_for"],
 						)),
+						"buttons" => html::checkbox(array(
+							"name" => "prp_opts[".$prpdata["name"]."][buttons]",
+							"value" => 1,
+							"checked" => ( $property["buttons"] == 1 ) ? true : false
+						)),
+/*
+						"day_format" => html::checkbox(array(
+							"name" => "prp_opts[".$prpdata["name"]."][format][day_textbox]",
+							"value" => "day_textbox",
+							"checked" => ( $property["format"]["day_textbox"] ) ? true : false
+						)),
+						"month_format" => html::checkbox(array(
+							"name" => "prp_opts[".$prpdata["name"]."][format][month_textbox]",
+							"value" => "month_textbox",
+							"checked" => ( $property["format"]["month_textbox"] ) ? true : false
+						)),
+						"year_format" => html::checkbox(array(
+							"name" => "prp_opts[".$prpdata["name"]."][format][year_textbox]",
+							"value" => "year_textbox",
+							"checked" => ( $property["format"]["year_textbox"] ) ? true : false
+						))
+*/
+						"day_format" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][format][day_format]",
+							"options" => array(
+								"day" => t("Valik"),
+								"day_textbox" => t("Tekstikast")
+							),
+							"selected" => $property["format"]["day_format"]
+						)),
+						"month_format" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][format][month_format]",
+							"options" => array(
+								"month" => t("Valik"),
+								"month_textbox" => t("Tekstikast")
+							),
+							"selected" => $property["format"]["month_format"]
+						)),
+						"year_format" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][format][year_format]",
+							"options" => array(
+								"year" => t("Valik"),
+								"year_textbox" => t("Tekstikast")
+							),
+							"selected" => $property["format"]["year_format"]
+						)),
 					));
 					$clf4 = $this->parse("CLF4");
 				}
@@ -1695,7 +1745,14 @@ class webform extends class_base
 		$ret = $errs2 = $errs1 = $sbz = array();
 		$no_sbt = true;
 		$nms = array();
-		$chk_prps = array("default" => "defaultx", "year_from" => "year_from", "year_to" => "year_to", "mon_for" => "mon_for");
+		$chk_prps = array(
+			"default" => "defaultx", 
+			"year_from" => "year_from", 
+			"year_to" => "year_to", 
+			"mon_for" => "mon_for",
+			"buttons" => "buttons",
+			"format" => "format"
+		);
 		
 		$user_group_list = aw_global_get("gidlist_oid");//kõik grupid kus kasutaja on
 		$hidden_stuff = $cfgform->meta("show_to_groups");//juhul kui omadusi on teatud gruppidele maha keeratud, näitab 
@@ -1767,6 +1824,7 @@ class webform extends class_base
 						$pd[$ke] = $all_props[$pn][$vad];
 					}
 				}
+
 			}
 			$num = 0;
 			if (isset($errs[$pn]))
@@ -2077,7 +2135,6 @@ class webform extends class_base
 						$pd["onBlur"] = "if (this.value == '')this.value='".$pd['value']."'";
 				}
 				
-//		arr($pd);	
 			}
 			$htmlc->add_property($pd);
 		}

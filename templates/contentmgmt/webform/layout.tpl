@@ -139,8 +139,12 @@ function selall()
 		Aasta kuni: {VAR:year_to}
 		</td>
 	</tr>
+	<tr>
+		<td colspan="7">Formaat: P&auml;ev: {VAR:day_format} / Kuu: {VAR:month_format} / Aasta: {VAR:year_format}</td>
+	</tr>
 	<tr bgcolor="{VAR:bgcolor}">
-		<td colspan="7">Kuu formaat: {VAR:mon_for}</td>
+		<td colspan="2">Kuu formaat: {VAR:mon_for}</td>
+		<td colspan="5">N&auml;ita nuppe: {VAR:buttons}</td>
 	</tr>
 	<!-- END SUB: CLF4 -->
 	<!-- END SUB: property -->
