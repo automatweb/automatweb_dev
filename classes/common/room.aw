@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.32 2006/11/06 14:41:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.33 2006/11/06 17:24:43 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -55,12 +55,21 @@
 		@property max_capacity type=textbox size=5
 		@caption Maksimaalne mahutavus
 
+		@layout buffer_before_l type=hbox width=30%:70% parent=general_down
+		@default parent=buffer_before_l
+
 		@property buffer_before type=textbox size=5
 		@caption Puhveraeg enne
+		
+		@property buffer_before_unit type=select no_caption=1
+		
+		@layout buffer_after_l type=hbox  width=30%:70% parent=general_down
+		@default parent=buffer_after_l
 		
 		@property buffer_after type=textbox size=5
 		@caption Puhveraeg p&auml;rast
 		
+		@property buffer_after_unit type=select no_caption=1
 		
 valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva täiendava info selle valdkonna objektitüübi kaudu, nt konverentsid).
 - puhveraeg enne (mitu tundi enne reserveeringu algust lisaks bronnitakse ruumide ettevalmistamiseks)
@@ -207,7 +216,13 @@ class room extends class_base
 			2 => 3600,
 			3 => 86400,
 		);
-	
+		
+		$this->time_units = array(
+			1 => t("Sekundit"), //default
+			60 => t("Minutit"),
+			3600 => t("Tundi"),
+			86400 => t("P&auml;eva"),
+		);
 		$this->weekdays = array(
 			"P&uuml;hap&auml;ev" , "Esmasp&auml;ev" , "Teisip&auml;ev", "Kolmap&auml;ev" , "Neljap&auml;ev" , "Reede", "Laup&auml;ev"
 		);
@@ -229,6 +244,10 @@ class room extends class_base
 				);
 				break;
 			
+			case "buffer_before_unit":
+			case "buffer_after_unit":
+				$prop["options"] = $this->time_units;
+				break;
 			case "calendar_tb":
 				$this->_calendar_tb($arr);
 				break;
@@ -796,32 +815,32 @@ class room extends class_base
 		}
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_calendar_t($t);
-		$reservations = new object_list(array(
-			"class_id" => array(CL_RESERVATION),
-			"lang_id" => array(),
-			"resource" => $arr["obj_inst"]->id(),
-			1 => new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, (time()-86400), (time()+86400* 7)),
-					"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, (time()-86400), (time()+86400* 7))
-				)
-			)),
-		));
-		$booked = array();
-		//et siis broneeringud ühte massiivi... ei suut paremat moment välja mõelda kui et võrdleb pärast kõik elemendid läbi
-		foreach($reservations->arr() as $res)
-		{
+//		$reservations = new object_list(array(
+//			"class_id" => array(CL_RESERVATION),
+//			"lang_id" => array(),
+//			"resource" => $arr["obj_inst"]->id(),
+//			1 => new object_list_filter(array(
+//				"logic" => "OR",
+//				"conditions" => array(
+//					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, (time()-86400), (time()+86400* 7)),
+//					"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, (time()-86400), (time()+86400* 7))
+//				)
+//			)),
+//		));
+//		$booked = array();
+//		//et siis broneeringud ühte massiivi... ei suut paremat moment välja mõelda kui et võrdleb pärast kõik elemendid läbi
+//		foreach($reservations->arr() as $res)
+//		{
 			//date("l d/m/Y", time())
 			//filtriga asja ei saand tööle, niiet kasutab kirvemeetodit.... kuna asi toimub ühes nädalas, siis miskit hullu kiirusejama ei tohiks tulla
 			//poogib siis mitte kinnitatud ja maksetähtaja ületanud välja
-			if(!$res->prop("verified") && !($res->prop("deadline") > time()))
-			{
-				continue;
-			}
-			
-			$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
-		}
+//			if(!$res->prop("verified") && !($res->prop("deadline") > time()))
+//			{
+//				continue;
+//			}
+//			
+//			$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
+//		}
 	//	arr($booked);
 		$today_start = mktime(0, 0, 0, date("m", time()), date("d", time()), date("y", time()));
 	
@@ -838,17 +857,25 @@ class room extends class_base
 			$end_step = $start_step + $step_length * $arr["obj_inst"]->prop("time_step");
 			while($x<7)
 			{
-				$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba");
-				$col[$x] = "";
-				foreach($booked as $b)
+//				foreach($booked as $b)
+//				{
+//					if((($b["start"] <= $start_step) &&  ($start_step < $b["end"])) || (($b["start"] < $end_step) && ($b["end"] > $end_step)) || (($b["start"] < $end_step) && ($b["start"] >= $start_step)))
+				if($this->check_if_available(array(
+					"room" => $arr["obj_inst"]->id(),
+					"start" => $start_step,
+					"end" => $end_step,
+					
+				)))
 				{
-					if((($b["start"] <= $start_step) &&  ($start_step < $b["end"])) || (($b["start"] < $end_step) && ($b["end"] > $end_step)) || (($b["start"] < $end_step) && ($b["start"] >= $start_step)))
-					{
-						$d[$x] = t("BRON");
-						$col[$x] = "red";
-						break;
-					}
+					$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba");
+					$col[$x] = "";
 				}
+				else
+				{
+					$d[$x] = t("BRON");
+					$col[$x] = "red";
+				}
+//				}
 				$x++;
 				$start_step += 86400;
 				$end_step += 86400;
@@ -2017,13 +2044,17 @@ class room extends class_base
 		{
 			return false;
 		}
+		$room = obj($room);
+		$buff_before = $room->prop("buffer_before")*$room->prop("buffer_before_unit");
+		$buff_after = $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+		$buffer = $buff_before+$buff_after;
 		$reservations = new object_list(array(
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
-			"resource" => $room,
-			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
-			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
-			
+			"resource" => $room->id(),
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ($end+$buffer)),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, ($start-$buffer)),
+//			"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
 /*			1 => new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -2033,14 +2064,31 @@ class room extends class_base
 				)
 			
 			)),
-			2 => new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time()),
-					"verified" => 1
-				)
-			)),
-*/		));
+	*/		
+//			new object_list_filter(array(
+//				"logic" => "OR",
+//				"conditions" => array(
+//					"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+//					"verified" => 1
+//				)
+//			)),
+		));
+		
+		//ueh... filter ei tööta, niiet .... oehjah
+		foreach($reservations->arr() as $res)
+		{
+			//date("l d/m/Y", time())
+			//filtriga asja ei saand tööle, niiet kasutab kirvemeetodit.... kuna asi toimub ühes nädalas, siis miskit hullu kiirusejama ei tohiks tulla
+			//poogib siis mitte kinnitatud ja maksetähtaja ületanud välja
+			if(!$res->prop("verified") && !($res->prop("deadline") > time()))
+			{
+				$reservations->remove($res->id());
+			}
+			
+	//		$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
+		}
+		
+		
 		if(!sizeof($reservations->arr()))
 		{
 			return true;

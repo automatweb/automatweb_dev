@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.1 2006/07/18 06:05:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.2 2006/11/06 17:24:04 markop Exp $
 // location.aw - Asukoht 
 /*
 
@@ -19,6 +19,9 @@
 @property photo type=relpicker reltype=RELTYPE_PHOTO
 @caption Foto kohast
 
+@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
+@caption Pangamakse
+
 @reltype MAP value=1 clid=CL_IMAGE
 @caption Kaart
 
@@ -27,6 +30,10 @@
 
 @reltype ADDRESS value=3 clid=CL_CRM_ADDRESS
 @caption Aadress
+
+@reltype BANK_PAYMENT value=4 clid=CL_BANK_PAYMENT
+@caption Pangalink
+
 
 */
 
