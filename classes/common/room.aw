@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.29 2006/11/01 15:58:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.30 2006/11/06 13:57:27 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2000,6 +2000,46 @@ class room extends class_base
 			}
 		}
 		return $sum;
+	}
+
+	/**
+		@attrib params=name
+		@param id required type=oid
+			room id
+		@param start required type=array
+			products and their amounts
+		@param end optional type=oid
+			if you want result in not the same currency the company uses.
+		@return int
+			price of all products
+	**/
+	function check_if_available($arr)
+	{
+		extract($arr);
+		if(!(is_oid($room) && $this->can("view" , $room)))
+		{
+			return false;
+		}
+		$reservations = new object_list(array(
+			"class_id" => array(CL_RESERVATION),
+			"lang_id" => array(),
+			"resource" => $room,
+			1 => new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start, $end),
+					"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start ,$end)
+				)
+			)),
+		));
+		if(!sizeof($reservations))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 ?>
