@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.30 2006/11/06 13:57:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.31 2006/11/06 14:12:21 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2006,12 +2006,9 @@ class room extends class_base
 		@attrib params=name
 		@param id required type=oid
 			room id
-		@param start required type=array
-			products and their amounts
-		@param end optional type=oid
-			if you want result in not the same currency the company uses.
-		@return int
-			price of all products
+		@param start required type=int
+		@param end required type=int
+		@return boolean
 	**/
 	function check_if_available($arr)
 	{
@@ -2029,6 +2026,14 @@ class room extends class_base
 				"conditions" => array(
 					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start, $end),
 					"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start ,$end)
+				)
+			
+			)),
+			2 => new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time()),
+					"verified" => 1
 				)
 			)),
 		));
