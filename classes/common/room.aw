@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.31 2006/11/06 14:12:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.32 2006/11/06 14:41:17 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2021,10 +2021,14 @@ class room extends class_base
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
 			"resource" => $room,
-			1 => new object_list_filter(array(
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
+			
+/*			1 => new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start, $end),
+					"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time()),
+//					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start, $end),
 					"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start ,$end)
 				)
 			
@@ -2036,8 +2040,8 @@ class room extends class_base
 					"verified" => 1
 				)
 			)),
-		));
-		if(!sizeof($reservations))
+*/		));
+		if(!sizeof($reservations->arr()))
 		{
 			return true;
 		}
