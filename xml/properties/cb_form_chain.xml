@@ -51,6 +51,17 @@
             <caption>V&amp;amp;auml;ljundi kontroller </caption>
       </property>
       <property>
+            <name>webforms_toolbar</name>
+            <table>objects</table>
+            <group>cfs_tbl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Vormide t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
             <name>cfs</name>
             <table>objects</table>
             <group>cfs_tbl</group>

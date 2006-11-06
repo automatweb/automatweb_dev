@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.34 2006/07/31 15:00:08 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.35 2006/11/06 12:22:11 dragut Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -26,6 +26,9 @@
 	@caption V&auml;ljundi kontroller 
 
 @default group=cfs_tbl
+
+	@property webforms_toolbar type=toolbar no_caption=1
+	@caption Vormide t&ouml;&ouml;riistariba
 
 	@property cfs type=table no_caption=1
 
@@ -168,6 +171,10 @@ class cb_form_chain extends class_base
 				$this->_search_res($arr);
 				break;
 
+			case "webforms_toolbar":
+				$this->draw_webforms_toolbar($arr);
+				break;
+
 			case "cfs":
 				$this->_cfs($arr);
 				break;
@@ -216,6 +223,22 @@ class cb_form_chain extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function draw_webforms_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Uus veebivorm'),
+			'url' => $this->mk_my_orb('new', array(
+				'parent' => $arr['obj_inst']->parent(),
+				'reltype' => 1, // CF (webform)
+				'alias_to' => $arr['obj_inst']->id(),
+				'return_url' => get_ru()
+			), CL_WEBFORM),
+		));
 	}
 
 	function get_el_picker_from_wf($wf)
@@ -330,6 +353,7 @@ class cb_form_chain extends class_base
 	function _cfs($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$t->set_caption(t('Vormiahela veebivormid'));
 		$this->_init_cfs_t($t);
 
 		$rep_ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_REP_CTR")));
@@ -746,7 +770,6 @@ class cb_form_chain extends class_base
 		$errors = array();
 
 		$_SESSION["no_cache"] = 1;
-
 		foreach(safe_array($arr) as $k => $data)
 		{
 			if ($k{0} == "f" && $k{1} == "_")
@@ -760,7 +783,6 @@ class cb_form_chain extends class_base
 					$wf_i = $wf->instance();
 					$ps[$wf_id] = $wf_i->get_props_from_wf(array("id" => $wf_id));
 				}
-
 				foreach($ps[$wf_id] as $pn => $pd)
 				{
 					$ctr = safe_array($pd["controllers"]);
@@ -1646,7 +1668,6 @@ class cb_form_chain extends class_base
 					active_page_data::add_site_css_style($style_id);
 				}
 			}
-
 			$htmlc->start_output();
 			foreach($els as $pn => $pd)
 			{
@@ -1679,6 +1700,12 @@ class cb_form_chain extends class_base
 					{
 						$pd["caption"] = $this->parse("FU_CAPTION");
 						$pd["comment"] = "";
+					}
+					else
+					{
+
+						$element_name_parts = explode('_', $pn);
+						$pd['caption'] = $props[$element_name_parts[3]]['caption'];
 					}
 				}
 
