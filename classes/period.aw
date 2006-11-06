@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.36 2006/06/26 08:51:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.37 2006/11/06 10:16:07 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -518,7 +518,14 @@ class period extends class_base
 		$_t = aw_global_get("act_period");
 
 		$imc = get_instance(CL_IMAGE);
-		$imdata = $imc->get_image_by_id($_t["data"]["image"]);
+		if (!$this->can("view", $_t["data"]["image"]) && $this->can("view", $_t["data"]["perimage"]))
+		{
+			$imdata = $imc->get_image_by_id($_t["data"]["perimage"]);
+		}
+		else
+		{
+			$imdata = $imc->get_image_by_id($_t["data"]["image"]);
+		}
 		$arr["inst"]->vars(array(
 			"per_string" => $_t["name"],
 			"act_per_id" => $_t["id"],
