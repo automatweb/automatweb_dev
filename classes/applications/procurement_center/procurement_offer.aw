@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.16 2006/11/02 18:18:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.17 2006/11/08 15:12:58 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -223,7 +223,34 @@ class procurement_offer extends class_base
 				$t = &$arr["prop"]["vcl_inst"];
 				return $this->products_table($t , $arr["obj_inst"]);
 				break;
-		};
+			
+// 			case "procurement":
+// 				if($arr["new"])
+// 				{
+// 					$arr["obj_inst"]->set_parent($arr["request"]["parent"]);
+// 					$arr["obj_inst"]->set_class_id(CL_PROCUREMENT_OFFER);
+// 				if(is_oid($arr["request"]["proc"]) && $this->can("view" , $arr["request"]["proc"]))
+// 					{
+// 						$arr["obj_inst"]->set_prop("procurement" , $arr["request"]["proc"]);
+// 					}
+// 					$_GET["action"] = "change";
+// 					$arr["obj_inst"]->save();
+// 				}
+// 				break;
+// 			case "offerer":
+// 				if($arr["new"])
+// 				{
+// 					$arr["obj_inst"]->set_parent($arr["request"]["parent"]);
+// 					$arr["obj_inst"]->set_class_id(CL_PROCUREMENT_OFFER);					if(is_oid($arr["request"]["offerer"]) && $this->can("view" , $arr["request"]["offerer"]))
+// 					{
+// 						$arr["obj_inst"]->set_prop("offerer" , $arr["request"]["offerer"]);
+// 					}
+// 
+// 					$arr["obj_inst"]->save();
+// 					$_GET["action"] = "change";
+// 				}
+// 				break;
+		}
 		return $retval;
 	}
 
@@ -391,12 +418,32 @@ class procurement_offer extends class_base
 		}
 		return $ff->id();
 	}
+	
+	function _get_sub_folder_objects($obj)
+	{
+		$parents = array();
+		$ol = new object_list(array(
+			"lang_id" => array(),
+			"parent" => $obj->id(),
+			"class_id" => CL_MENU,
+		));
+		$parents[] = $obj;
+		foreach($ol->arr() as $folder)
+		{
+			$parents = array_merge($parents,$this->_get_sub_folder_objects($folder));
+		}
+		return $parents;
+	}
 
 	/**
 		@attrib name=set_type
 	**/
 	function set_type($arr)
 	{
+		if($_GET["return_url"])
+		{
+			$_SESSION["return_url"] = $_GET["return_url"];
+		}
 		$this_object = obj($_GET["id"]);
 		classload("vcl/table");
 		$t = new aw_table(array(
@@ -412,15 +459,14 @@ class procurement_offer extends class_base
 			"sortable" => 1,
 			"caption" => t("T&uuml;&uuml;p")
 		));
-		$t->set_default_sortby("name");
-		$types = new object_list(array(
-				"class_id" => array(CL_SHOP_PRODUCT_TYPE),
-				"lang_id" => array(),
-				"site_id" => array(),
-		));
-		$options = $types->names();
-		asort($options);
 		
+		$t->define_field(array(
+			"name" => "menu",
+			"sortable" => 1,
+			"caption" => t("Kataloog")
+		));
+		$t->set_default_sortby("name");
+			
 		if(is_oid($this_object->prop("procurement")) && $this->can("view" , $this_object->prop("procurement")))
 		{
 			$procurement = obj($this_object->prop("procurement"));
@@ -433,7 +479,22 @@ class procurement_offer extends class_base
 			$parent = $warehouse->config->prop("prod_fld");
 		}	
 		else $parent = $_GET["id"];
-	
+		
+		$types = new object_list(array(
+				"class_id" => array(CL_SHOP_PRODUCT_TYPE),
+				"lang_id" => array(),
+				"site_id" => array(),
+		));
+		$options = $types->names();
+		$menu_opt = $this->_get_sub_folder_objects(obj($parent));
+		foreach($menu_opt as $opt)
+		{
+			$menu_options[$opt->id()] = $opt->name(); 
+		}
+
+		asort($menu_options);
+		asort($options);
+
 		if($_POST["types"])
 		{
 			foreach($_SESSION["procurement"]["val"] as $key=>$product)
@@ -447,7 +508,7 @@ class procurement_offer extends class_base
 
 				if (!$ol->count())
 				{
-				if(is_oid($_POST["types"][$product["product"]]))
+					if(is_oid($_POST["types"][$product["product"]]))
 					{
 						$type_object = obj($_POST["types"][$product["product"]]);
 						if(is_oid($type_object->prop("default_product_folder")))
@@ -458,6 +519,10 @@ class procurement_offer extends class_base
 								$parent = $folder->id();
 							}
 						}
+					}
+					if(is_oid($_POST["parent"][$product["product"]]))
+					{
+						$parent = $_POST["parent"][$product["product"]];
 					}
 					$p = obj();
 					$p->set_class_id(CL_SHOP_PRODUCT);
@@ -488,11 +553,20 @@ class procurement_offer extends class_base
 					else continue;
 				}
 				$o->set_prop("accept", $product["accept"]);
-				if(array_key_exists($key , $_SESSION["procurement"]["accept"])) $o->set_prop("accept",1);
-				else $o->set_prop("accept",null);
-				if(is_array($product["shipment"])) $product["shipment"] = mktime(0,0,0,$product["shipment"]["month"], $product["shipment"]["day"] , $product["shipment"]["year"]);
+				if(array_key_exists($key , $_SESSION["procurement"]["accept"]))
+				{
+					$o->set_prop("accept",1);
+				}
+				else
+				{
+					$o->set_prop("accept",null);
+				}
+				if(is_array($product["shipment"]))
+				{
+					$product["shipment"] = mktime(0,0,0,$product["shipment"]["month"], $product["shipment"]["day"] , $product["shipment"]["year"]);
+				}
 //				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
-					foreach($product as $key=>$val)
+				foreach($product as $key=>$val)
 				{
 					switch ($key)
 					{
@@ -527,6 +601,7 @@ class procurement_offer extends class_base
 				$dat = array(
 					"name" => $product["product"],
 					"type" => html::select(array("options" => $options, "name" => "types[".$product["product"]."]")),
+					"menu" => html::select(array("options" => $menu_options, "name" => "parent[".$product["product"]."]")),
 				);
 				if(strlen($product["product"]) > 0) $t->define_data($dat);
 			}
@@ -564,11 +639,22 @@ class procurement_offer extends class_base
 					else continue;
 				}
 				$o->set_prop("accept", $product["accept"]);
-				if(array_key_exists($product["row_id"] , $_SESSION["procurement"]["accept"])) $o->set_prop("accept",1);
-				else $o->set_prop("accept",null);
-				if(is_array($product["shipment"])) $product["shipment"] = mktime(0,0,0,$product["shipment"]["month"], $product["shipment"]["day"] , $product["shipment"]["year"]);
-				if(!$product["shipment"]) $product["shipment"] = $o->prop("shipment");
-				
+				if(array_key_exists($product["row_id"] , $_SESSION["procurement"]["accept"]))
+				{
+					$o->set_prop("accept",1);
+				}
+				else
+				{
+					$o->set_prop("accept",null);
+				}
+				if(is_array($product["shipment"]))
+				{
+					$product["shipment"] = mktime(0,0,0,$product["shipment"]["month"], $product["shipment"]["day"] , $product["shipment"]["year"]);
+				}
+				if(!$product["shipment"])
+				{
+					$product["shipment"] = $o->prop("shipment");
+				}
 //				if(!$product["shipment"]) $product["shipment"] = $this_object->prop("shipment_date");
 				foreach($product as $key=>$val)
 				{
@@ -886,14 +972,15 @@ class procurement_offer extends class_base
 			'name' => 'unit',
 			'caption' => t('&Uuml;hik'),
 		));
-		$t->define_field(array(
-        		'name' => 'price',
-			'caption' => t('Hind'),
-		));
 		
 		$t->define_field(array(
         		'name' => 'price_amount',
-			'caption' => t('Hind kehtib &uuml;hiku korral'),
+			'caption' => t('Nii palju &uuml;hikuid tooteid peaks ostma et antud hind kehtiks'),
+		));
+		
+		$t->define_field(array(
+        		'name' => 'price',
+			'caption' => t('Hind'),
 		));
 		
 		$t->define_field(array(
@@ -935,7 +1022,7 @@ class procurement_offer extends class_base
 			'class' => CL_PROCUREMENT_OFFER_ROW,
 		));
 		$procurement_inst = get_instance(CL_PROCUREMENT);
-		$max_x = 0;$x = 0;
+		$max_x = 1;$x = 1;
 		$prod_rows_data = array();
 		if(!sizeof($conns) && is_oid($this_obj->prop("procurement")))
 		{
@@ -946,9 +1033,9 @@ class procurement_offer extends class_base
 				$prod_rows_data[] = array(
 					"x" => $x,
 					"max_x" => $max_x,
-				//	"row" => $row,
+// 				//	"row" => $x,
 					"product" => $product["product"],
-				//	"id" => $row->id(),
+				//	"id" => $x,
 					"amount" => $product["amount"],
 					"unit" => $product["unit"],
 				//	"price" => $row->prop("price"),
@@ -956,6 +1043,7 @@ class procurement_offer extends class_base
 					"shipment" => $this_obj->prop("shipment_date"),
 					"accept" =>  html::checkbox(array(
 						"name" => "products[".$x."][accept]",
+						"value" => 1,
 					)),
 				);
 				$x++;
@@ -1041,7 +1129,7 @@ class procurement_offer extends class_base
 							"value" => $currency,
 							)),
 				'shipment'	=> html::date_select(array(
-							"name" => "products[".$id."][shipment]",
+							"name" => "products[".$x."][shipment]",
 							"value" => $shipment,
 						//	"size" => "6",
 							)),
