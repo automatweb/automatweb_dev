@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.1 2006/11/08 13:58:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.2 2006/11/08 14:23:53 kristo Exp $
 // mrp_prisma_browser.aw - Reusneri andmete sirvimine 
 /*
 
@@ -30,8 +30,16 @@
 
 	@property s_res type=table no_caption=1 store=no
 
+@default group=view_hp
+
+	@property view_hp type=text store=no
+
 @groupinfo hinnap caption="Hinnapakkumised" submit_method=get
 @groupinfo tellim caption="Tellimused" submit_method=get
+
+@groupinfo view_hp caption="Vaata hinnapakkumist" submit_method=get
+@groupinfo view_tm caption="Vaata tellimust" submit_method=get
+
 */
 
 class mrp_prisma_browser extends class_base
@@ -187,6 +195,54 @@ Fdd
 		}
 		$t->set_default_sorder("desc");
 		$t->set_default_sortby("nr");
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "view_hp" && $_GET["group"] != "view_hp")
+		{
+			return false;
+		}
+		if ($arr["id"] == "view_tm" && $_GET["group"] != "view_tm")
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function _get_view_hp($arr)
+	{
+	
+		$i = get_instance("mrp/mrp_prisma_import");
+		$db = $i->_get_conn();
+		$d = $db->db_fetch_row("SELECT * FROM hinnapakkumine");
+
+		$v = "<table border=1>
+			<tr><td>&nbsp;</td><td>A</td><td>B</td><td>C</td><td>D</td></tr>
+			<tr>
+				<td>TIRAAZH</td><td>".$d["a)TIRAAZH"]."</td><td>".$d["b)TIRAAZH"]."</td><td>".$b["c)TIRAAZH"]."</td><td>".$d["d)TIRAAZH"]."</td>
+			</tr>
+			<tr>
+				<td>KÜLJENDUS</td><td>".$d["a)KÜLJENDUS"]."</td><td>".$d["b)KÜLJENDUS"]."</td><td>".$b["c)KÜLJENDUS"]."</td><td>".$d["d)KÜLJENDUS"]."</td>
+			</tr>
+			<tr>
+				<td>SKANEERIMINE</td><td>".$d["a)SKANEERIMINE"]."</td><td>".$d["b)SKANEERIMINE"]."</td><td>".$b["c)SKANEERIMINE"]."</td><td>".$d["d)SKANEERIMINE"]."</td>
+			</tr>
+			<tr>
+				<td>boonus</td><td>".$d["a)boonus"]."</td><td>".$d["b)boonus"]."</td><td>".$b["c)boonus"]."</td><td>".$d["d)boonus"]."</td>
+			</tr>
+			<tr>
+				<td>hind</td><td>".$d["A_hind"]."</td><td>".$d["B_hind"]."</td><td>".$b["C_hind"]."</td><td>".$d["D_hind"]."</td>
+			</tr>
+			<tr>
+				<td>SalesDiscount</td><td>".$d["SalesDiscountA"]."</td><td>".$d["SalesDiscountB"]."</td><td>".$b["SalesDiscountC"]."</td><td>".$d["SalesDiscountD"]."</td>
+			</tr>
+		</table>";
+		foreach($d as $k => $v)
+		{
+			$v .= "$k: $v<br>";
+		}
+		$arr["prop"]["value"] = $v;
 	}
 }
 ?>
