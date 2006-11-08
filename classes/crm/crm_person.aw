@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.149 2006/10/26 14:43:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.150 2006/11/08 16:01:54 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -199,9 +199,8 @@ caption Kodused kontaktandmed
 @property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
 @caption Keeled
 
-@property bill_due_date_days type=textbox size=5 table=objects field=meta method=serialize
+@property bill_due_days type=textbox size=5  table=objects field=meta method=serialize
 @caption Makset&auml;htaeg (p&auml;evi)
-
 
 -----------------------
 @groupinfo work_hrs caption="T&ouml;&ouml;ajad" parent=general
@@ -2344,7 +2343,6 @@ class crm_person extends class_base
 				$obj->set_prop("writing", $arr["request"]["writing"][$lang]);
 				$obj->set_prop("understanding", $arr["request"]["understanding"][$lang]);
 				$obj->set_prop("kogemusi", $arr["request"]["kogemusi"][$lang]);
-
 
 				$lang_obj = &obj($lang);
 				$obj->set_prop("name", $lang_obj->name());

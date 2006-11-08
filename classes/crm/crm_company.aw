@@ -996,7 +996,8 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	@groupinfo documents_all caption="Dokumendid" submit=no save=no
 		@groupinfo documents_all_browse caption="Dokumendid" parent=documents_all submit=no save=no
 		@groupinfo documents_all_manage caption="Haldus" parent=documents_all submit=no save=no
-		@groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
+
+@groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
 
 	@groupinfo documents_news caption="Siseuudised" submit=no parent=general submit_method=get save=no
 	@groupinfo documents_forum caption="Foorum" submit=no parent=people
@@ -5061,6 +5062,14 @@ class crm_company extends class_base
 				}
 			}
 			$bill->set_prop("customer", $c_r_t_o->prop("customer"));
+			if(!$c_r_t_o->prop("customer"))
+			{
+				$cust = $c_r_t_o->get_first_obj_by_reltype("RELTYPE_CUSTOMER");
+				if(is_object($cust))
+				{
+					$bill->set_prop("customer", $cust->id());
+				}
+			}
 		}
 		if (!$bill->prop("impl"))
 		{
@@ -5136,6 +5145,7 @@ class crm_company extends class_base
 					"amt" => $to->prop("deal_amount"),
 					"name" => $deal_name,
 					"prod" => $prod,
+					"comment" => $deal_name,
 				);
 				$bill->set_meta("agreement_price" , $agreement);
 				$bill->save();

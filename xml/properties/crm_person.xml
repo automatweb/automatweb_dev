@@ -520,6 +520,16 @@
             <caption>Keeled</caption>
       </property>
       <property>
+            <name>bill_due_days</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
+      </property>
+      <property>
             <name>work_hrs</name>
             <table>objects</table>
             <group>work_hrs</group>

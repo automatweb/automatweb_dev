@@ -32,7 +32,8 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_DESC_FILE</reltype>
-            <field>directive</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Ametijuhend</caption>
       </property>
       <property>
