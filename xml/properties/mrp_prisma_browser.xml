@@ -66,6 +66,71 @@
             <field>s_res</field>
       </property>
       <property>
+            <name>ts_cust_n</name>
+            <table>objects</table>
+            <group>tellim</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>ts_cust_n</field>
+            <caption>Kliendi nimi</caption>
+      </property>
+      <property>
+            <name>ts_ord_num</name>
+            <table>objects</table>
+            <group>tellim</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>ts_ord_num</field>
+            <caption>Number</caption>
+      </property>
+      <property>
+            <name>ts_date_from</name>
+            <table>objects</table>
+            <group>tellim</group>
+            <type>date_select</type>
+            <store>no</store>
+            <default>-1</default>
+            <field>ts_date_from</field>
+            <caption>Kuup&amp;amp;auml;ev alates</caption>
+      </property>
+      <property>
+            <name>ts_date_to</name>
+            <table>objects</table>
+            <group>tellim</group>
+            <type>date_select</type>
+            <store>no</store>
+            <default>-1</default>
+            <field>ts_date_to</field>
+            <caption>Kuup&amp;amp;auml;ev kuni</caption>
+      </property>
+      <property>
+            <name>ts_salesp_name</name>
+            <table>objects</table>
+            <group>tellim</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>ts_salesp_name</field>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gimehe nimi</caption>
+      </property>
+      <property>
+            <name>ts_btn</name>
+            <table>objects</table>
+            <group>tellim</group>
+            <type>submit</type>
+            <caption>Otsi</caption>
+            <store>no</store>
+            <field>ts_btn</field>
+      </property>
+      <property>
+            <name>ts_res</name>
+            <table>objects</table>
+            <group>tellim</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>ts_res</field>
+      </property>
+      <property>
             <name>view_hp</name>
             <table>objects</table>
             <group>view_hp</group>
