@@ -1,0 +1,7 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="mrp_prisma_browser" folder="mrp" extends="class_base">
+	</class>
+</orb>
+		
+
