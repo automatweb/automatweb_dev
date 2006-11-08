@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.2 2006/11/08 14:23:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.3 2006/11/08 14:58:03 kristo Exp $
 // mrp_prisma_browser.aw - Reusneri andmete sirvimine 
 /*
 
@@ -217,7 +217,9 @@ Fdd
 		$db = $i->_get_conn();
 		$d = $db->db_fetch_row("SELECT * FROM hinnapakkumine");
 
-		$v = "<table border=1>
+		$v = "<table width=100% border=2><tr><td width=50% rowspan=2>";
+
+		$v .= "<table border=1>
 			<tr><td>&nbsp;</td><td>A</td><td>B</td><td>C</td><td>D</td></tr>
 			<tr>
 				<td>TIRAAZH</td><td>".$d["a)TIRAAZH"]."</td><td>".$d["b)TIRAAZH"]."</td><td>".$b["c)TIRAAZH"]."</td><td>".$d["d)TIRAAZH"]."</td>
@@ -238,10 +240,29 @@ Fdd
 				<td>SalesDiscount</td><td>".$d["SalesDiscountA"]."</td><td>".$d["SalesDiscountB"]."</td><td>".$b["SalesDiscountC"]."</td><td>".$d["SalesDiscountD"]."</td>
 			</tr>
 		</table>";
-		foreach($d as $k => $v)
+		foreach($d as $k => $duh)
 		{
-			$v .= "$k: $v<br>";
+			if (strpos($k, ")") !== false || strpos($k, "SalesDiscount") !== false || strpos($k, "_hind") !== false)
+			{
+				continue;
+			}
+			$v .= "$k: $duh<br>";
 		}
+
+		$cust_data = "";
+		$cust = $db->db_fetch_row("SELECT * FROM kliendid WHERE KliendiID = $d[KliendiID]");
+		foreach($cust as $k => $cd)
+		{
+			$cust_data .= $k.": ".$cd." <br>";
+		}
+
+		$cust_cont = "";
+		$db->db_query("SELECT * FROM `kliendi kontaktisikud` WHERE kliendiID = $d[KliendiID]");
+		while ($row = $db->db_next())
+		{
+			$cust_cont .= $row["eesnimi"]." ".$row["perekonnanimi"]." Mob:".$row["mobiil"]." e-mail:".$row["e-mail"]." Telefon:".$row["telefon"]." Fax:".$row["fax"]." M&auml;rkused:" .$row["märkused"]."<br>";
+		}
+		$v .= "</td><td width=50%>$cust_data</td></tr><tr><td width=50%>$cust_cont</td></tr></table>";
 		$arr["prop"]["value"] = $v;
 	}
 }
