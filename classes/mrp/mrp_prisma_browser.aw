@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.4 2006/11/08 15:14:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.5 2006/11/08 19:31:01 kristo Exp $
 // mrp_prisma_browser.aw - Reusneri andmete sirvimine 
 /*
 
@@ -247,9 +247,9 @@ Fdd
 	
 		$i = get_instance("mrp/mrp_prisma_import");
 		$db = $i->_get_conn();
-		$d = $db->db_fetch_row("SELECT * FROM hinnapakkumine");
+		$d = $db->db_fetch_row("SELECT * FROM hinnapakkumine WHERE `HINNAPAKKUMINE NR` = ".$arr["request"]["hp_id"]);
 
-		$v = "<table width=100% border=2><tr><td width=50% rowspan=2>";
+		$v = "<table width=100% border=2><tr><td width=50% rowspan=2><b>Hinnapakkumise andmed:</b><br><br>";
 
 		$v .= "<table border=1>
 			<tr><td>&nbsp;</td><td>A</td><td>B</td><td>C</td><td>D</td></tr>
@@ -278,23 +278,23 @@ Fdd
 			{
 				continue;
 			}
-			$v .= "$k: $duh<br>";
+			$v .= "<b>$k</b>: $duh<br>";
 		}
 
 		$cust_data = "";
 		$cust = $db->db_fetch_row("SELECT * FROM kliendid WHERE KliendiID = $d[KliendiID]");
 		foreach($cust as $k => $cd)
 		{
-			$cust_data .= $k.": ".$cd." <br>";
+			$cust_data .= "<b>".$k."</b>: ".$cd." <br>";
 		}
 
 		$cust_cont = "";
 		$db->db_query("SELECT * FROM `kliendi kontaktisikud` WHERE kliendiID = $d[KliendiID]");
 		while ($row = $db->db_next())
 		{
-			$cust_cont .= $row["eesnimi"]." ".$row["perekonnanimi"]." Mob:".$row["mobiil"]." e-mail:".$row["e-mail"]." Telefon:".$row["telefon"]." Fax:".$row["fax"]." M&auml;rkused:" .$row["märkused"]."<br>";
+			$cust_cont .= "<b>".$row["eesnimi"]." ".$row["perekonnanimi"]."</b> Mob:".$row["mobiil"]." e-mail:".$row["e-mail"]." Telefon:".$row["telefon"]." Fax:".$row["fax"]." M&auml;rkused:" .$row["märkused"]."<br><br>";
 		}
-		$v .= "</td><td width=50%>$cust_data</td></tr><tr><td width=50%>$cust_cont</td></tr></table>";
+		$v .= "</td><td width=50% valign=top><b>Kliendi andmed:</b><br><br>$cust_data</td></tr><tr><td width=50%><b>Kontaktisikud:</b><br><br> $cust_cont</td></tr></table>";
 		$arr["prop"]["value"] = $v;
 	}
 
@@ -360,33 +360,33 @@ Fdd
 		$sr = array("1=1");
 
 		$this->quote(&$arr["request"]);
-		if ($arr["request"]["s_cust_n"] != "")
+		if ($arr["request"]["ts_cust_n"] != "")
 		{
-			$sr[] = " cust.KliendiNimi LIKE '%".trim($arr["request"]["s_cust_n"])."%' ";
+			$sr[] = " cust.KliendiNimi LIKE '%".trim($arr["request"]["ts_cust_n"])."%' ";
 		}
 
-		if ($arr["request"]["s_ord_num"] != "")
+		if ($arr["request"]["ts_ord_num"] != "")
 		{
-			$sr[] = " h.TellimuseNr = '".trim($arr["request"]["s_ord_num"])."' ";
+			$sr[] = " h.TellimuseNr = '".trim($arr["request"]["ts_ord_num"])."' ";
 		}
 
-		$df = date_edit::get_timestamp($arr["request"]["s_date_from"]);
+		$df = date_edit::get_timestamp($arr["request"]["ts_date_from"]);
 		if ($df > -1)
 		{
 			$sr[] = " h.TellimuseKuup >= FROM_UNIXTIME($df) ";
 		}
 
-		$dt = date_edit::get_timestamp($arr["request"]["s_date_to"]);
+		$dt = date_edit::get_timestamp($arr["request"]["ts_date_to"]);
 		if ($dt > -1)
 		{
 			$sr[] = " h.TellimuseKuup <= FROM_UNIXTIME($dt) ";
 		}
 
-		if ($arr["request"]["s_salesp_name"] != "")
+		if ($arr["request"]["ts_salesp_name"] != "")
 		{
-			$sr[] = " salesp.`Müügimees/naine` LIKE '%".trim($arr["request"]["s_salesp_name"])."%' ";
+			$sr[] = " salesp.`MüügimeheNimi` LIKE '%".trim($arr["request"]["ts_salesp_name"])."%' ";
 		}
-
+		
 		if (count($sr) == 1)
 		{
 			return;
@@ -401,7 +401,7 @@ Fdd
 				h.`TööAlgus` as job_start,
 				h.`TellimuseTähtaeg` as job_dead
 			FROM tellimused h 
-			LEFT JOIN Tellija cust ON cust.KliendiID = h.KliendiID
+			LEFT JOIN kliendid cust ON cust.KliendiID = h.Tellija
 			LEFT JOIN muugimehed salesp ON salesp.`MüügimeheID` = h.`Müügimees/naine`
 			WHERE $sr
 			order by h.`TellimuseKuup` desc
@@ -430,54 +430,29 @@ Fdd
 	
 		$i = get_instance("mrp/mrp_prisma_import");
 		$db = $i->_get_conn();
-		$d = $db->db_fetch_row("SELECT * FROM tellimused");
+		$d = $db->db_fetch_row("SELECT * FROM tellimused WHERE TellimuseNr = ".$arr["request"]["hp_id"]);
 
-		$v = "<table width=100% border=2><tr><td width=50% rowspan=2>";
+		$v = "<table width=100% border=2><tr><td width=50% rowspan=2><b>Tellimuse andmed:</b><br><br>";
 
-		/*$v .= "<table border=1>
-			<tr><td>&nbsp;</td><td>A</td><td>B</td><td>C</td><td>D</td></tr>
-			<tr>
-				<td>TIRAAZH</td><td>".$d["a)TIRAAZH"]."</td><td>".$d["b)TIRAAZH"]."</td><td>".$b["c)TIRAAZH"]."</td><td>".$d["d)TIRAAZH"]."</td>
-			</tr>
-			<tr>
-				<td>KÜLJENDUS</td><td>".$d["a)KÜLJENDUS"]."</td><td>".$d["b)KÜLJENDUS"]."</td><td>".$b["c)KÜLJENDUS"]."</td><td>".$d["d)KÜLJENDUS"]."</td>
-			</tr>
-			<tr>
-				<td>SKANEERIMINE</td><td>".$d["a)SKANEERIMINE"]."</td><td>".$d["b)SKANEERIMINE"]."</td><td>".$b["c)SKANEERIMINE"]."</td><td>".$d["d)SKANEERIMINE"]."</td>
-			</tr>
-			<tr>
-				<td>boonus</td><td>".$d["a)boonus"]."</td><td>".$d["b)boonus"]."</td><td>".$b["c)boonus"]."</td><td>".$d["d)boonus"]."</td>
-			</tr>
-			<tr>
-				<td>hind</td><td>".$d["A_hind"]."</td><td>".$d["B_hind"]."</td><td>".$b["C_hind"]."</td><td>".$d["D_hind"]."</td>
-			</tr>
-			<tr>
-				<td>SalesDiscount</td><td>".$d["SalesDiscountA"]."</td><td>".$d["SalesDiscountB"]."</td><td>".$b["SalesDiscountC"]."</td><td>".$d["SalesDiscountD"]."</td>
-			</tr>
-		</table>";*/
 		foreach($d as $k => $duh)
 		{
-			/*if (strpos($k, ")") !== false || strpos($k, "SalesDiscount") !== false || strpos($k, "_hind") !== false)
-			{
-				continue;
-			}*/
-			$v .= "$k: $duh<br>";
+			$v .= "<b>$k</b>: $duh<br>";
 		}
 
 		$cust_data = "";
 		$cust = $db->db_fetch_row("SELECT * FROM kliendid WHERE KliendiID = $d[Tellija]");
 		foreach($cust as $k => $cd)
 		{
-			$cust_data .= $k.": ".$cd." <br>";
+			$cust_data .= "<b>".$k."</b>: ".$cd." <br>";
 		}
 
 		$cust_cont = "";
 		$db->db_query("SELECT * FROM `kliendi kontaktisikud` WHERE kliendiID = $d[Tellija]");
 		while ($row = $db->db_next())
 		{
-			$cust_cont .= $row["eesnimi"]." ".$row["perekonnanimi"]." Mob:".$row["mobiil"]." e-mail:".$row["e-mail"]." Telefon:".$row["telefon"]." Fax:".$row["fax"]." M&auml;rkused:" .$row["märkused"]."<br>";
+			$cust_cont .= "<b>".$row["eesnimi"]." ".$row["perekonnanimi"]."</b> Mob:".$row["mobiil"]." e-mail:".$row["e-mail"]." Telefon:".$row["telefon"]." Fax:".$row["fax"]." M&auml;rkused:" .$row["märkused"]."<br><br>";
 		}
-		$v .= "</td><td width=50%>$cust_data</td></tr><tr><td width=50%>$cust_cont</td></tr></table>";
+		$v .= "</td><td width=50% valign=top><b>Kliendi andmed:<br><br><br>$cust_data</td></tr><tr><td width=50% valign=top><b>Kontaktisikud</b><br><br><br>$cust_cont</td></tr></table>";
 		$arr["prop"]["value"] = $v;
 	}
 }
