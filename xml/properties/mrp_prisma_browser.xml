@@ -138,6 +138,14 @@
             <store>no</store>
             <field>view_hp</field>
       </property>
+      <property>
+            <name>view_tm</name>
+            <table>objects</table>
+            <group>view_tm</group>
+            <type>text</type>
+            <store>no</store>
+            <field>view_tm</field>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_PRISMA_BROWSER</syslog_type>
             <relationmgr>yes</relationmgr>
