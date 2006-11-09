@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.12 2006/11/09 15:58:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.13 2006/11/09 16:19:01 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -381,6 +381,18 @@ class reservation extends class_base
 						"parent" => $room_obj->prop("resources_fld"),
 						"only_active" => $soc->prop("only_active_items")
 					));
+					
+					//peksab need välja mis ruumi juures aktiivseks pole läinud
+					$prod_data = $room_obj->meta("prod_data");
+					foreach($pl as $key=> $val)
+					{
+						if(!$prod_data[$val->id()]["active"])
+						{
+							unset($pl[$key]);
+						}
+					}
+					
+					
 					$shop_order_center->do_sort_packet_list($pl, $soc->meta("itemsorts"));
 				
 					// get the template for products for this folder
