@@ -102,7 +102,7 @@ msgstr ""
 msgid "Seose K&uuml;simuste teema (RELTYPE_TOPIC) tekst"
 msgstr ""
 
-#: classes/applications/questionary/questionary_result.aw:122
+#: classes/applications/questionary/questionary_result.aw:123
 msgid "Vastus k&uuml;simusele: \""
 msgstr ""
 

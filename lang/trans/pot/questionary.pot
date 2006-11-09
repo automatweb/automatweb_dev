@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Valikvastuste arv (answer_count) help"
 msgstr ""
 
+#: classes/applications/questionary/questionary.aw:prop_thank_you_doc
+msgid "Omaduse T&auml;nudokument (thank_you_doc) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:prop_thank_you_doc_comment
+msgid "Omaduse T&auml;nudokument (thank_you_doc) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:prop_thank_you_doc_help
+msgid "Omaduse T&auml;nudokument (thank_you_doc) help"
+msgstr ""
+
 #: classes/applications/questionary/questionary.aw:prop_gr_tb
 msgid "Omaduse  (gr_tb) caption"
 msgstr ""
@@ -50,16 +62,28 @@ msgstr ""
 msgid "Omaduse  (groups) help"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:prop_results_tbl
-msgid "Omaduse  (results_tbl) caption"
+#: classes/applications/questionary/questionary.aw:prop_results
+msgid "Omaduse Vastuseid (results) caption"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:prop_results_tbl_comment
-msgid "Omaduse  (results_tbl) kommentaar"
+#: classes/applications/questionary/questionary.aw:prop_results_comment
+msgid "Omaduse Vastuseid (results) kommentaar"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:prop_results_tbl_help
-msgid "Omaduse  (results_tbl) help"
+#: classes/applications/questionary/questionary.aw:prop_results_help
+msgid "Omaduse Vastuseid (results) help"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:prop_get_results
+msgid "Omaduse Ekspordi vastused (get_results) caption"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:prop_get_results_comment
+msgid "Omaduse Ekspordi vastused (get_results) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:prop_get_results_help
+msgid "Omaduse Ekspordi vastused (get_results) help"
 msgstr ""
 
 #: classes/applications/questionary/questionary.aw:group_groups
@@ -82,23 +106,31 @@ msgstr ""
 msgid "Seose K&uml;simustegrupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:52
+#: classes/applications/questionary/questionary.aw:rel_RELTYPE_DOC
+msgid "Seose T&auml;nudokument (RELTYPE_DOC) tekst"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:63
 msgid "Uus grupp"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:65
+#: classes/applications/questionary/questionary.aw:76
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:182
-msgid "Ei vasta"
+#: classes/applications/questionary/questionary.aw:98
+msgid "Ekspordi tulemused"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:187
+#: classes/applications/questionary/questionary.aw:177
+msgid "Ei oska &ouml;elda"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:182
 msgid "topic\question"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:239
+#: classes/applications/questionary/questionary.aw:302
 msgid "Vasta"
 msgstr ""
 

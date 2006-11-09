@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/questionary/questionary_result.aw:class_1158_help
 msgid "Klassi K&uuml;simustiku vastus help"
 msgstr ""
@@ -102,7 +101,6 @@ msgstr ""
 msgid "Seose K&uuml;simuste teema (RELTYPE_TOPIC) tekst"
 msgstr ""
 
-#: classes/applications/questionary/questionary_result.aw:122
+#: classes/applications/questionary/questionary_result.aw:123
 msgid "Vastus k&uuml;simusele: \""
 msgstr ""
-

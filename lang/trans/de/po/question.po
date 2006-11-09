@@ -9,8 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/questionary/question.aw:class_1155_help
 msgid "Klassi K&uml;simus help"
 msgstr ""
 
+#: classes/applications/questionary/question.aw:prop_jrk
+msgid "Omaduse Jrk (jrk) caption"
+msgstr ""
+
+#: classes/applications/questionary/question.aw:prop_jrk_comment
+msgid "Omaduse Jrk (jrk) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/question.aw:prop_jrk_help
+msgid "Omaduse Jrk (jrk) help"
+msgstr ""

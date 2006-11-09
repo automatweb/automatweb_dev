@@ -10,28 +10,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/releditor.aw:46
+#: classes/vcl/releditor.aw:45
 msgid "Klassi ID"
 msgstr "Class ID"
 
-#: classes/vcl/releditor.aw:47
+#: classes/vcl/releditor.aw:46
 msgid "Klass"
 msgstr "Class"
 
-#: classes/vcl/releditor.aw:64 classes/vcl/releditor.aw:74
-#: classes/vcl/releditor.aw:110
+#: classes/vcl/releditor.aw:63 classes/vcl/releditor.aw:73
+#: classes/vcl/releditor.aw:109
 msgid " "
 msgstr " "
 
-#: classes/vcl/releditor.aw:65
+#: classes/vcl/releditor.aw:64
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr "Error in the definition of %s (properties not defined!)"
 
-#: classes/vcl/releditor.aw:75
+#: classes/vcl/releditor.aw:74
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr "Error in the definition of %s (connection type undefined!)"
 
-#: classes/vcl/releditor.aw:111
+#: classes/vcl/releditor.aw:110
 msgid "Seda seost ei saa redigeerida!"
 msgstr "This connection can not be edited"
 
@@ -64,7 +64,7 @@ msgstr "Delete selected relations?"
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:558 classes/vcl/releditor.aw:741
+#: classes/vcl/releditor.aw:558 classes/vcl/releditor.aw:752
 msgid "Muuda"
 msgstr "Change"
 
@@ -72,10 +72,10 @@ msgstr "Change"
 msgid "Vali üks"
 msgstr "Pick one"
 
-#: classes/vcl/releditor.aw:690 classes/vcl/releditor.aw:728
+#: classes/vcl/releditor.aw:690 classes/vcl/releditor.aw:739
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:733
+#: classes/vcl/releditor.aw:744
 msgid "Nimi"
 msgstr "Name"

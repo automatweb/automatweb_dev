@@ -18,27 +18,27 @@ msgstr ""
 msgid "object_tree::filter(): filter parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_tree.aw:176
+#: classes/core/obj/object_tree.aw:182
 msgid "object_tree::foreach_o(): parameter must be an array"
 msgstr ""
 
-#: classes/core/obj/object_tree.aw:189
+#: classes/core/obj/object_tree.aw:195
 msgid "object_tree::foreach_o(): %s is not a member function of the object class!"
 msgstr ""
 
-#: classes/core/obj/object_tree.aw:258
+#: classes/core/obj/object_tree.aw:264
 msgid "object_tree::foreach_cb(): parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_tree.aw:273
+#: classes/core/obj/object_tree.aw:279
 msgid "object_tree::foreach_cb(): callback method %s does not exist in class %s!"
 msgstr ""
 
-#: classes/core/obj/object_tree.aw:282
+#: classes/core/obj/object_tree.aw:288
 msgid "object_tree::foreach_cb(): callback function %s does not exist!"
 msgstr ""
 
-#: classes/core/obj/object_tree.aw:558
+#: classes/core/obj/object_tree.aw:564
 msgid "object_tree::filter(): parent filter parameter mut always be passed!"
 msgstr ""
 

@@ -9,9 +9,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/rostering/rostering_shift.aw:class_1141_help
 msgid "Klassi Vahetus help"
+msgstr ""
+
+#: classes/applications/rostering/rostering_shift.aw:prop_short_name
+msgid "Omaduse L&uuml;hend (short_name) caption"
+msgstr ""
+
+#: classes/applications/rostering/rostering_shift.aw:prop_short_name_comment
+msgid "Omaduse L&uuml;hend (short_name) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/rostering_shift.aw:prop_short_name_help
+msgid "Omaduse L&uuml;hend (short_name) help"
 msgstr ""
 
 #: classes/applications/rostering/rostering_shift.aw:prop_type
@@ -66,15 +77,14 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;post (RELTYPE_WORKPLACE) tekst"
 msgstr ""
 
-#: classes/applications/rostering/rostering_shift.aw:41
+#: classes/applications/rostering/rostering_shift.aw:44
 msgid "P&otilde;hivahetus"
 msgstr ""
 
-#: classes/applications/rostering/rostering_shift.aw:42
+#: classes/applications/rostering/rostering_shift.aw:45
 msgid "Abivahetus"
 msgstr ""
 
-#: classes/applications/rostering/rostering_shift.aw:43
+#: classes/applications/rostering/rostering_shift.aw:46
 msgid "Valvevahetus"
 msgstr ""
-

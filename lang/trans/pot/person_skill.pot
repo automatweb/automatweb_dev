@@ -26,3 +26,15 @@ msgstr ""
 msgid "Omaduse Tunde n&auml;dalas, mis on p&auml;devuse hoidmiseks vajalikud (hrs_per_week_to_keep) help"
 msgstr ""
 
+#: classes/applications/rostering/person_skill.aw:prop_short_name
+msgid "Omaduse L&uuml;hend (short_name) caption"
+msgstr ""
+
+#: classes/applications/rostering/person_skill.aw:prop_short_name_comment
+msgid "Omaduse L&uuml;hend (short_name) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/person_skill.aw:prop_short_name_help
+msgid "Omaduse L&uuml;hend (short_name) help"
+msgstr ""
+

@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi K&uml;simustegrupp help"
 msgstr ""
 
+#: classes/applications/questionary/question_group.aw:prop_jrk
+msgid "Omaduse Jrk (jrk) caption"
+msgstr ""
+
+#: classes/applications/questionary/question_group.aw:prop_jrk_comment
+msgid "Omaduse Jrk (jrk) kommentaar"
+msgstr ""
+
+#: classes/applications/questionary/question_group.aw:prop_jrk_help
+msgid "Omaduse Jrk (jrk) help"
+msgstr ""
+
 #: classes/applications/questionary/question_group.aw:prop_no_answer
 msgid "Omaduse Kas n&auml;idata \"ei vasta\" v&auml;lja (no_answer) caption"
 msgstr ""
@@ -98,11 +110,11 @@ msgstr ""
 msgid "Seose K&uuml;simus (RELTYPE_QUESTION) tekst"
 msgstr ""
 
-#: classes/applications/questionary/question_group.aw:58 classes/applications/questionary/question_group.aw:92
+#: classes/applications/questionary/question_group.aw:61 classes/applications/questionary/question_group.aw:95
 msgid "Uus teema"
 msgstr ""
 
-#: classes/applications/questionary/question_group.aw:71 classes/applications/questionary/question_group.aw:105
+#: classes/applications/questionary/question_group.aw:74 classes/applications/questionary/question_group.aw:108
 msgid "Nimi"
 msgstr ""
 

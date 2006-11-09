@@ -162,6 +162,6 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_topic.aw:107
-msgid "Sisestatud kontrollkood on vale!"
+#: classes/contentmgmt/forum/forum_topic.aw:106
+msgid "Sisestatud kontrollnumber on vale!"
 msgstr ""
