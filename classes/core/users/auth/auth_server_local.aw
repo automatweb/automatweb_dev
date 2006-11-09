@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.7 2006/01/20 11:39:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.8 2006/11/09 10:55:14 kristo Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 
@@ -50,6 +50,17 @@ class auth_server_local extends class_base
 
 		$udata = NULL;
 		$_uid = $credentials["uid"];
+
+		if (!is_valid("password",$credentials["password"]))
+		{
+			return array(false, t("Vigane v&otilde;i vale parool"));
+		}
+		else
+		if (!is_valid("uid",$_uid))
+		{
+			return array(false, t("Vigane kasutajanimi"));
+		};
+
 		$this->quote(&$_uid);
 		$q = "SELECT * FROM users WHERE uid = '$_uid' AND blocked = 0";
 		$this->db_query($q);
