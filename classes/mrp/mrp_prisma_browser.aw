@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.5 2006/11/08 19:31:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.6 2006/11/09 08:43:38 kristo Exp $
 // mrp_prisma_browser.aw - Reusneri andmete sirvimine 
 /*
 
@@ -96,6 +96,7 @@ class mrp_prisma_browser extends class_base
 			case "ts_date_from":
 			case "ts_date_to":
 			case "ts_salesp_name":
+				$this->dequote(&$arr["request"][$prop["name"]]);
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 		};
@@ -114,7 +115,7 @@ class mrp_prisma_browser extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["post_ru"] = post_ru();
+	//	$arr["post_ru"] = post_ru();
 	}
 
 	function _init_s_res(&$t)
@@ -165,7 +166,6 @@ Fdd
 
 		$sr = array("1=1");
 
-		$this->quote(&$arr["request"]);
 		if ($arr["request"]["s_cust_n"] != "")
 		{
 			$sr[] = " cust.KliendiNimi LIKE '%".trim($arr["request"]["s_cust_n"])."%' ";
@@ -249,7 +249,7 @@ Fdd
 		$db = $i->_get_conn();
 		$d = $db->db_fetch_row("SELECT * FROM hinnapakkumine WHERE `HINNAPAKKUMINE NR` = ".$arr["request"]["hp_id"]);
 
-		$v = "<table width=100% border=2><tr><td width=50% rowspan=2><b>Hinnapakkumise andmed:</b><br><br>";
+		$v = "<table width=100% border=2><tr><td width=50% rowspan=2 valign=top><b>Hinnapakkumise andmed:</b><br><br>";
 
 		$v .= "<table border=1>
 			<tr><td>&nbsp;</td><td>A</td><td>B</td><td>C</td><td>D</td></tr>
@@ -359,7 +359,6 @@ Fdd
 
 		$sr = array("1=1");
 
-		$this->quote(&$arr["request"]);
 		if ($arr["request"]["ts_cust_n"] != "")
 		{
 			$sr[] = " cust.KliendiNimi LIKE '%".trim($arr["request"]["ts_cust_n"])."%' ";
@@ -432,7 +431,7 @@ Fdd
 		$db = $i->_get_conn();
 		$d = $db->db_fetch_row("SELECT * FROM tellimused WHERE TellimuseNr = ".$arr["request"]["hp_id"]);
 
-		$v = "<table width=100% border=2><tr><td width=50% rowspan=2><b>Tellimuse andmed:</b><br><br>";
+		$v = "<table width=100% border=2><tr><td width=50% valign=top rowspan=2><b>Tellimuse andmed:</b><br><br>";
 
 		foreach($d as $k => $duh)
 		{
