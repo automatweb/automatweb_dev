@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.11 2006/11/01 12:13:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.12 2006/11/09 15:58:54 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -359,6 +359,51 @@ class reservation extends class_base
 			}
 		}
 		return $ol;
+	}
+	
+	function _get_products_order_view($arr)
+	{
+		extract($arr);
+		$shop_order_center = get_instance(CL_SHOP_ORDER_CENTER);
+		$wh = get_instance(CL_SHOP_WAREHOUSE);
+		if(is_oid($room) && $this->can("view" , $room))
+		{
+			$room_obj = obj($room);
+			$warehouse = $room_obj->prop("warehouse");
+			if(is_oid($warehouse) && $this->can("view" , $warehouse))
+			{
+				$w_obj = obj($warehouse);
+				if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
+				{
+					$soc = obj($w_obj->prop("order_center"));
+					$pl = $wh->get_packet_list(array(
+						"id" => $wh_id,
+						"parent" => $room_obj->prop("resources_fld"),
+						"only_active" => $soc->prop("only_active_items")
+					));
+					$shop_order_center->do_sort_packet_list($pl, $soc->meta("itemsorts"));
+				
+					// get the template for products for this folder
+					$layout = $shop_order_center->get_prod_layout_for_folder($soc, $room_obj->prop("resources_fld"));
+		
+					// get the table layout for this folder
+					$t_layout = $shop_order_center->get_prod_table_layout_for_folder($soc, $room_obj->prop("resources_fld"));
+					$html .= $shop_order_center->do_draw_prods_with_layout(array(
+						"t_layout" => $t_layout, 
+						"layout" => $layout, 
+						"pl" =>  $pl,
+						"soc" => $soc,
+					));
+					return $html;	
+				}
+			}
+		}
+		$this->_get_products_tbl(array(
+			"prop" => array("vcl_inst" => &$arr["prop"]["vcl_inst"]),
+			"web" => $arr["web"],
+			"room" => $arr["room"],
+		));
+		return 0;
 	}
 	
 	function _get_products_tbl($arr)

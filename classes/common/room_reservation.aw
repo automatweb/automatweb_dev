@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.3 2006/11/01 15:08:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.4 2006/11/09 15:58:15 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -500,11 +500,16 @@ class room_reservation extends class_base
 		classload("vcl/table");
 		$t = new vcl_table;
 		$res_inst = get_instance(CL_RESERVATION);
-		$res_inst->_get_products_tbl(array(
+		$html = $res_inst->_get_products_order_view(array(
 			"prop" => array("vcl_inst" => &$t),
 			"web" => 1,
 			"room" => $room->id(),
 		));
+		//kui tuleb kuskilt kaugelt müstilisest templatest tellimise vaade, siis jääb asi nii nagu on... muidu teeb tabeli
+		if(!$html)
+		{
+			$html = $t->draw();
+		}
 		
 		$sf = new aw_template;
 		$sf->db_init();
@@ -513,7 +518,7 @@ class room_reservation extends class_base
 			
 		$action = $this->mk_my_orb("submit_web_products_table", array());
 		$sf->vars(array(
-			"content" => "<form name='products_form' action=".$action." method=POST>".$t->draw()."<br>".html::submit()."</form>",
+			"content" => "<form name='products_form' action=".$action." method=POST>".$html."<br>".html::submit()."</form>",
 			"uid" => aw_global_get("uid"),
 			"charset" => aw_global_get("charset")
 		));
@@ -528,8 +533,18 @@ class room_reservation extends class_base
 	**/
 	function submit_web_products_table($arr)
 	{
-
-		$_SESSION["room_reservation"]["products"] = $arr["amount"];
+		//see siis variant kui info tuleb templatest jne
+		if(is_array($arr["add_to_cart"]))
+		{
+			$_SESSION["room_reservation"]["products"] = $arr["add_to_cart"];
+			$_SESSION["soc_err"] = $arr["add_to_cart"];
+//			"quantity" => $soce[$oid]["ordered_num_enter"],
+//			aw_global_set("quantity" => $soce[$oid]["ordered_num_enter"],
+		}
+		else
+		{
+			$_SESSION["room_reservation"]["products"] = $arr["amount"];
+		}
 		$ret.= '<script language="javascript">
 			window.opener.location.reload();
 			window.close();
