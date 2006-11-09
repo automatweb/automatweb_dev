@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.130 2006/10/16 10:32:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.131 2006/11/09 11:33:29 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -46,7 +46,7 @@ class users_user extends aw_template
 		$do_auth = true;
 
 		// eelnevad kommentaarid kaivad ka parooli kontrollimise kohta
-		if (!is_valid("password",$password))
+		/*if (!is_valid("password",$password))
 		{
 			$msg = "Vigane v&otilde;i vale parool";
 			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
@@ -60,7 +60,7 @@ class users_user extends aw_template
 			$this->_log(ST_USERS, SA_LOGIN_FAILED, $msg);
 			$load_user = false;
 			$do_auth = false;
-		};
+		};*/
 		
 		$auth = get_instance(CL_AUTH_CONFIG);
 		if ($do_auth && ($auth_id = $auth->has_config()))

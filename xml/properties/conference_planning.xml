@@ -1,5 +1,41 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>single_count</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;amp;Uuml;hekohaliste tubade arv</caption>
+      </property>
+      <property>
+            <name>double_count</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kahekohaliste tubade arv</caption>
+      </property>
+      <property>
+            <name>suite_count</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sviitide arv</caption>
+      </property>
+      <property>
+            <name>meeting_pattern_max_days</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Koosoleku aja mustri p&amp;amp;auml;evade arv</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CONFERENCE_PLANNING</syslog_type>
             <relationmgr>yes</relationmgr>

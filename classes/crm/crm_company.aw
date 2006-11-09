@@ -6930,6 +6930,10 @@ class crm_company extends class_base
 	function _save_ext_sys_t($arr)
 	{
 		$crel = $this->get_cust_rel($arr["obj_inst"], true);
+		if (!$crel)
+		{
+			return;
+		}
 		$ol = new object_list(array(
 			"class_id" => CL_EXTERNAL_SYSTEM,
 			"lang_id" => array(),
