@@ -2050,6 +2050,10 @@ class user extends class_base
 	function callback_jdata($arr)
 	{
 		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_JOIN_SITE");
+		if (!$o)
+		{
+			return;
+		}
 		$i = get_instance(CL_JOIN_SITE);
 
 		return $i->get_elements_from_obj($o, array(
