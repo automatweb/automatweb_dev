@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.102 2006/11/06 11:31:14 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.103 2006/11/09 12:50:36 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -8,9 +8,21 @@
 @default table=objects
 
 ------------- general -------------
-@default group=general
+
+@groupinfo general_sub caption="&Uuml;ldine" parent=general
+@groupinfo general_redir caption="Suunamine" parent=general
+
+@default group=general_sub
 @default method=serialize
 @default field=meta
+
+@property name type=textbox rel=1 trans=1
+@caption Nimi
+@comment Objekti nimi
+
+@property comment type=textbox
+@caption Kommentaar
+@comment Vabas vormis tekst objekti kohta
 
 @property on_init type=hidden newonly=1
 @caption Initsialiseeri objekt
@@ -30,11 +42,18 @@
 @property obj_name type=select multiple=1 size=3
 @caption Millised sisestatud v&auml;&auml;rtused pannakse nimeks
 
-@property redirect type=textbox
-@caption Kuhu suunata peale t&auml;tmist
-
 @property error_location type=chooser multiple=1 default=0
 @caption Kuva veateateid
+
+@default group=general_redir
+
+	@property redirect type=textbox
+	@caption Kuhu suunata peale t&auml;tmist
+
+	@property disp_after_entry type=select
+	@caption L&otilde;puvaade template
+	@comment Kui valitud, siis n&auml;idatakse l&otilde;puvaadet
+
 ------------- end: general -------------
 
 
@@ -414,6 +433,10 @@ class webform extends class_base
 				
 			case "availtoolbar":
 				$this->cfgform_i->gen_availtoolbar($arr);
+				break;
+
+			case "disp_after_entry":
+				$prop["options"] = array("" => t("--vali--")) + $this->get_directory(array("dir" => aw_ini_get("site_tpldir")."/contentmgmt/webform/disp"));
 				break;
 		};
 		return $retval;
@@ -2342,6 +2365,11 @@ class webform extends class_base
 				) + $prx);
 				$awm->gen_mail();
 			}
+
+			if ($obj_inst->prop("disp_after_entry") != "")
+			{
+				return $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => $rval), CL_WEBFORM, false, false, "&", false);
+			}
 			return !empty($subaction) ? $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => $rval), CL_WEBFORM) : $rval;
 		}
 	}
@@ -2398,6 +2426,19 @@ class webform extends class_base
 	function show_form($arr)
 	{
 		$obj = obj($arr["fid"]);
+		$wf = obj($arr["id"]);
+		if ($wf->prop("disp_after_entry") != "")
+		{
+			$this->read_template("disp/".$wf->prop("disp_after_entry"));
+			foreach($obj->properties() as $pn => $pv)
+			{
+				$this->vars(array(
+					$pn => $obj->prop_str($pn)
+				));
+			}
+			return $this->parse();
+		}
+
 		$form = $obj->instance();
 		$form->init_class_base();
 		

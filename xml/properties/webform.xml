@@ -1,9 +1,31 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <rel>1</rel>
+            <trans>1</trans>
+            <caption>Nimi</caption>
+            <comment>Objekti nimi</comment>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
+            <caption>Kommentaar</caption>
+            <comment>Vabas vormis tekst objekti kohta</comment>
+      </property>
+      <property>
             <name>on_init</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <method>serialize</method>
             <field>meta</field>
             <type>hidden</type>
@@ -13,7 +35,7 @@
       <property>
             <name>form_type</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <method>serialize</method>
             <field>meta</field>
             <type>select</type>
@@ -23,7 +45,7 @@
       <property>
             <name>form_type_value</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <method>serialize</method>
             <field>meta</field>
             <type>text</type>
@@ -33,7 +55,7 @@
       <property>
             <name>def_name</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <method>serialize</method>
             <field>meta</field>
             <type>textbox</type>
@@ -42,7 +64,7 @@
       <property>
             <name>def_mail</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <method>serialize</method>
             <field>meta</field>
             <type>textbox</type>
@@ -51,7 +73,7 @@
       <property>
             <name>obj_name</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <method>serialize</method>
             <field>meta</field>
             <type>select</type>
@@ -60,23 +82,33 @@
             <caption>Millised sisestatud v&amp;amp;auml;&amp;amp;auml;rtused pannakse nimeks</caption>
       </property>
       <property>
+            <name>error_location</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>Kuva veateateid</caption>
+      </property>
+      <property>
             <name>redirect</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_redir</group>
             <method>serialize</method>
             <field>meta</field>
             <type>textbox</type>
             <caption>Kuhu suunata peale t&amp;amp;auml;tmist</caption>
       </property>
       <property>
-            <name>error_location</name>
+            <name>disp_after_entry</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_redir</group>
             <method>serialize</method>
             <field>meta</field>
-            <type>chooser</type>
-            <multiple>1</multiple>
-            <caption>Kuva veateateid</caption>
+            <type>select</type>
+            <caption>L&amp;amp;otilde;puvaade template</caption>
+            <comment>Kui valitud, siis n&amp;amp;auml;idatakse l&amp;amp;otilde;puvaadet</comment>
       </property>
       <property>
             <name>navtoolbar</name>
@@ -299,6 +331,14 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <general_sub>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>general</parent>
+            </general_sub>
+            <general_redir>
+                  <caption>Suunamine</caption>
+                  <parent>general</parent>
+            </general_redir>
             <form>
                   <caption>Vorm</caption>
             </form>
