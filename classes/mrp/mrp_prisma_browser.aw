@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.6 2006/11/09 08:43:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_browser.aw,v 1.7 2006/11/09 08:54:04 kristo Exp $
 // mrp_prisma_browser.aw - Reusneri andmete sirvimine 
 /*
 
-@classinfo syslog_type=ST_MRP_PRISMA_BROWSER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_MRP_PRISMA_BROWSER no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
@@ -115,8 +115,29 @@ class mrp_prisma_browser extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		aw_register_header_text_cb(array(&$this, "make_aw_header"));
 	//	$arr["post_ru"] = post_ru();
 	}
+
+	function make_aw_header()
+        {
+                // current user name, logout link
+                $us = get_instance(CL_USER);
+
+                $p_id = $us->get_current_person();
+                if (!$p_id)
+                {
+                        return "";
+                }
+
+                $person = obj($p_id);
+                $hdr = "<span style=\"font-size: 18px; color: red;\">".$person->prop("name")." | ".html::href(array(
+                                "url" => $this->mk_my_orb("logout", array(), "users"),
+                                "caption" => t("Logi v&auml;lja")
+                        ))."  </span>";
+
+                return $hdr;
+        }
 
 	function _init_s_res(&$t)
 	{
@@ -231,6 +252,10 @@ Fdd
 
 	function callback_mod_tab($arr)
 	{
+		if ($arr["id"] == "general")
+		{
+			return false;
+		}
 		if ($arr["id"] == "view_hp" && $_GET["group"] != "view_hp")
 		{
 			return false;
