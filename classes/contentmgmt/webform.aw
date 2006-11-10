@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.103 2006/11/09 12:50:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.104 2006/11/10 10:05:15 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -44,6 +44,13 @@
 
 @property error_location type=chooser multiple=1 default=0
 @caption Kuva veateateid
+
+@property show_confirm_page type=checkbox ch_value=1
+@caption Kinnitusvaade?
+
+@property confirm_page_template type=select
+@caption Kinnitusvaate templeit
+
 
 @default group=general_redir
 
@@ -363,7 +370,40 @@ class webform extends class_base
 					"no_form" => 1,
 				));
 				break;
-				
+			
+			case "confirm_page_template":
+				$site_tpl_dir = $this->cfg['site_tpldir'];
+				$admin_tpl_dir = $this->cfg['tpldir'];
+
+				$options = array();
+				$handle = opendir($this->site_template_dir);
+				if ($handle !== false)
+				{
+					while (false !== ($file = readdir($handle)))
+					{
+						if (!is_dir($file) && $file{0} != '.')
+						{
+							$options[$file] = $file;
+						}
+					}
+					closedir($handle);
+				}
+				$handle = opendir($this->adm_template_dir);
+				if ($handle !== false)
+				{
+					while (false !== ($file = readdir($handle)))
+					{
+						if (!is_dir($file) && $file{0} != '.')
+						{
+							$options[$file] = $file;
+						}
+					}
+					closedir($handle);
+				}
+				$prop['options'] = $options;
+
+				break;	
+
 			case "entries_toolbar":
 				$this->entries_toolbar($arr);
 				break;
@@ -1700,6 +1740,12 @@ class webform extends class_base
 				}
 			}
 		}
+
+		if ($_GET['confirm'] == 1)
+		{
+			return $this->draw_confirm_page($arr);
+		}
+
 		if ($arr["link"] == 1 && $_GET["show"] != 1 && is_oid($ef_id))
 		{
 			$this->vars(array(
@@ -2166,12 +2212,19 @@ class webform extends class_base
 		$html = $htmlc->get_result(array(
 			"raw_output" => 1,
 		));
+
+		if ($arr['obj_inst']->prop('show_confirm_page'))
+		{
+			$arr['reforb']['show_confirm_page'] = 1;
+		}
+
 		$this->vars(array(
 			"faction" => $arr["action"],
 			"form" => $html,
 			"webform_form" => "st".$arr["obj_inst"]->prop("def_form_style"),
 			"reforb" => $this->mk_reforb($arr["action"], $arr["reforb"]),
 		));
+
 		return $this->parse();
 	}
 	
@@ -2184,6 +2237,7 @@ class webform extends class_base
 	**/
 	function save_form_data($arr)
 	{
+
 		// we need a solid copy of arr, cause we alter the actual input many times
 		$subaction = $arr["subaction"];
 		$obj_inst = obj($arr["id"]);
@@ -2205,6 +2259,21 @@ class webform extends class_base
 				$arr[$name] = 1;
 			};
 		};
+
+		if ($obj_inst->prop('show_confirm_page'))
+		{
+			if (isset($arr['confirmed']))
+			{
+				$arr = array_merge((array)$_SESSION['wf_data'], (array)$arr);
+				unset($arr['show_confirm_page'], $_SESSION['wf_data']);
+			}
+			else
+			if (isset($arr['not_confirmed']))
+			{
+				return $arr['return_url'];
+			}
+		}
+		
 		$is_valid = $register_data_i->validate_data(array(
 			//"props" => $props,
 			"request" => &$arr,
@@ -2219,6 +2288,13 @@ class webform extends class_base
 		}
 		else
 		{
+
+			if ($obj_inst->prop('show_confirm_page') && $arr['show_confirm_page'] == 1)
+			{
+				$_SESSION['wf_data'] = $arr;
+				return aw_url_change_var('confirm', 1, $arr['return_url']);
+			}
+
 			$register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER");
 			$o = obj();
 			$o->set_class_id(CL_REGISTER_DATA);
@@ -2373,7 +2449,70 @@ class webform extends class_base
 			return !empty($subaction) ? $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => $rval), CL_WEBFORM) : $rval;
 		}
 	}
-	
+
+	function draw_confirm_page($arr)
+	{
+
+		if ($this->can('view', $arr['id']))
+		{
+			$o = new object($arr['id']);
+		}
+		else
+		{
+			return false;
+		}
+
+		$this->read_template($o->prop('confirm_page_template'));
+		$cfgform = $o->get_first_obj_by_reltype('RELTYPE_CFGFORM');
+		$props = safe_array($cfgform->meta("cfg_proplist"));
+		$form_data = $_SESSION['wf_data'];
+
+		$vars = array();
+
+		foreach ($form_data as $name => $value)
+		{
+			switch ($props[$name]['type'])
+			{
+				case 'date_select':	
+					foreach ($value as $k => $v)
+					{
+						$vars[$name.'_'.$k] = $v;
+					}
+					break;
+				case 'classificator':
+					if ($this->can('view', $value))
+					{
+						$classificator_obj = obj($value);
+						$vars[$name] = $classificator_obj->name();
+					}
+					break;
+				default:
+					$vars[$name] = $value;
+					
+			}
+
+			$vars[$name.'_caption'] = $props[$name]['caption'];
+		}
+		$vars['reforb'] = $this->mk_reforb('save_form_data', array(
+			'id' => $arr['id'],
+			'return_url' => aw_ini_get('baseurl').'/'.$arr['doc_id'],
+		), 'webform');
+
+		$vars['confirmed_button'] = html::submit(array(
+			'name' => 'confirmed',
+			'value' => t('Kinnita'),
+			'class' => 'confirm_button'
+		));
+		$vars['not_confirmed_button'] = html::submit(array(
+			'name' => 'not_confirmed',
+			'value' => t('Ei kinnitatud'),
+			'class' => 'confirm_button'
+		));
+		$this->vars($vars);
+
+		return $this->parse();
+	}
+
 	function _insert_event_inf($e, $o)
 	{
 		$start = $e->prop("start");
