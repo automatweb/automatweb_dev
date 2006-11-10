@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.154 2006/10/23 16:00:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.155 2006/11/10 14:28:48 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1641,7 +1641,7 @@ class task extends class_base
 				$row = obj();
 				$def_impl = $o_def_impl;
 				if($not_sorted)	$t->sort_by(array(
-					"field" => array("ord", "date" , "id"),
+					"field" => array("date", "ord" , "id"),
 					"order" => array("asc", "asc" , "asc"),
 				));
 				$t->set_sortable(false);
@@ -1788,7 +1788,7 @@ class task extends class_base
 					"rows" => 5,
 					"cols" => 45
 				)).$app,
-				"date" => $row->prop("date"),
+				"date" => $row->prop("date") - ($row->prop("date")%3600),
 				"impl" => html::select(array(
 					"name" => "rows[$idx][impl]",
 					"options" => $impls,
