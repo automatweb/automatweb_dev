@@ -20,10 +20,9 @@ function form_plus(ID) {
 	</td>
 	<td>
 		<select name="sub[0][country]"> 
-			<option value="0">Choose</option>
-			<option value="1" selected="selected">Estonia</option>
-			<option value="2">Latvia</option>
-			<option value="3">Lithuania</option>
+			<!-- SUB: COUNTRY -->
+			<option value="{VAR:value}" {VAR:country}>{VAR:caption}</option>
+			<!-- END SUB: COUNTRY -->
 		</select>
 	</td>
 </tr>

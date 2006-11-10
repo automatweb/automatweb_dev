@@ -3,4 +3,3 @@
 	<class name="rfp" folder="applications/calendar" extends="class_base">
 	</class>
 </orb>
-		

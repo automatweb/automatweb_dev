@@ -36,6 +36,27 @@
             <method>serialize</method>
             <caption>Koosoleku aja mustri p&amp;amp;auml;evade arv</caption>
       </property>
+      <property>
+            <name>countries</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_COUNTRIES</reltype>
+            <caption>Riigid</caption>
+      </property>
+      <property>
+            <name>redir_doc</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_REDIR_DOC</reltype>
+            <caption>Edasisuunamise dokument</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CONFERENCE_PLANNING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -43,5 +64,17 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <REDIR_DOC>
+                  <value>2</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Edasisuunamise dokument</caption>
+            </REDIR_DOC>
+            <COUNTRIES>
+                  <value>1</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Riik</caption>
+            </COUNTRIES>
+      </reltypes>
 </properties>
 

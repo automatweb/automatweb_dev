@@ -81,4 +81,23 @@
 			<input type="text" name="sub[6][billing_email]" value="{VAR:billing_email}"/>
 		</td>
 	</tr>
+	<tr>
+		<td colspan="2">OTSINGUTULEMUSED</td>
+	</tr>
+	<!-- SUB: SEARCH_RESULT -->
+	<tr>
+		<td colspan="2">
+			<input type="checkbox" name="sub[6][search_result][{VAR:value}]"/>{VAR:caption}
+		</td>
+	</tr>
+	<!-- END SUB: SEARCH_RESULT -->
+	<!-- SUB: SEARCH_RESULT_ERROR -->
+	<tr>
+		<td colspan="2" style="font-size:10px;color:red;">
+			&nbsp;&nbsp;&nbsp;NB! {VAR:caption}
+		</td>
+	</tr>
+	<!-- END SUB: SEARCH_RESULT_ERROR -->
+	{VAR:all_search_results}
+	</td>
 </table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.2 2006/11/03 14:29:58 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.3 2006/11/10 14:01:41 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -20,6 +20,17 @@
 @property meeting_pattern_max_days type=textbox field=meta method=serialize
 @caption Koosoleku aja mustri p&auml;evade arv
 
+@property countries type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_COUNTRIES
+@caption Riigid
+
+@property redir_doc type=relpicker field=meta method=serialize reltype=RELTYPE_REDIR_DOC
+@caption Edasisuunamise dokument
+
+@reltype REDIR_DOC value=2 clid=CL_DOCUMENT
+@caption Edasisuunamise dokument
+
+@reltype COUNTRIES value=1 clid=CL_CRM_COUNTRY
+@caption Riik
 */
 
 class conference_planning extends class_base
@@ -324,7 +335,7 @@ class conference_planning extends class_base
 				$c_inst = get_instance(CL_CONFERENCE);
 				$c_types = $c_inst->conference_types();
 				$values = array();
-				if($_GET["act_evt_no"])
+				if(strlen($_GET["act_evt_no"]))
 				{
 					$values = $sd["additional_functions"][$_GET["act_evt_no"]];
 				}
@@ -385,6 +396,7 @@ class conference_planning extends class_base
 					"event_type_chooser_".$values["event_type_chooser"] => "CHECKED",
 					"event_type_text" => $values["event_type_text"],
 					"delegates_no" => $values["delegates_no"],
+					"persons_no" => $values["persons_no"],
 					"door_sign" => $values["door_sign"],
 					"function_start_date" => $values["function_start_date"],
 					"function_start_time" => $values["function_start_time"],
@@ -404,8 +416,50 @@ class conference_planning extends class_base
 					));
 					$ctr .= $sc->parse("COUNTRY");
 				}
+				// search !!!
+				$altern_dates[] = array(
+					"start" => $this->_gen_to_timestamp($sd["function_start_date"], $sd["function_start_time"]),
+					"end" => $this->_gen_to_timestamp($sd["function_end_date"], $sd["function_end_time"]),
+					"persons" => $sd["persons_no"],
+				);
+				foreach($sd["additional_functions"] as $fun)
+				{
+					$altern_dates[] = array(
+						"start" => $this->_gen_to_timestamp($fun["function_start_date"], $fun["function_start_time"]),
+						"end" => $this->_gen_to_timestamp($fun["function_end_date"], $fun["function_end_time"]),
+						"persons" => $fun["persons_no"],
+					);
+				}
+				$res = $this->all_mighty_search_engine(array(
+					"single_rooms" => ($sd["needs_rooms"])?$sd["single_count"]:false,
+					"double_rooms" => ($sd["needs_rooms"])?$sd["double_count"]:false,
+					"suites" => ($sd["needs_rooms"])?$sd["suite_count"]:false,
+					"attendees_count" => $sd["attendees_no"],
+					"dates" => $altern_dates,
+				));
+				foreach($res as $loc_id => $data)
+				{
+					$loc = obj($loc_id);
+					$sc->vars(array(
+						"caption" => $loc->name(),
+						"value" => $loc_id,
+					));
+					$s_results .= $sc->parse("SEARCH_RESULT");
+					$hid_rows .= html::hidden(array(
+						"name" => "sub[6][all_search][".$loc_id."]", 
+						"value" => 1,
+					));
+					foreach($data["errors"] as $err)
+					{
+						$sc->vars(array(
+							"caption" => $err,
+						));
+						$s_results .= $sc->parse("SEARCH_RESULT_ERROR");
+					}
+				}
 				$sc->vars(array(
 					"COUNTRY" => $ctr,
+					"SEARCH_RESULT" => $s_results,
 					"billing_company" => $sd["billing_company"],
 					"billing_contact" => $sd["billing_contact"],
 					"billing_street" => $sd["billing_street"],
@@ -414,15 +468,201 @@ class conference_planning extends class_base
 					"billing_name" => $sd["billing_name"],
 					"billing_phone_number" => $sd["billing_phone_number"],
 					"billing_email" => $sd["billing_email"],
+					"all_search_results" => $hid_rows,
+				));
+				break;
+			case "7":
+				$sc->read_template("sub_conference_rfp7.tpl");
+				// #0
+				$sc->vars(array(
+					"country" => call_user_func(array(obj($sd["country"]), "name")),
+				));
+				// #1
+				$sc->vars(array(
+					"function_name" => $sd["function_name"],
+					"organisation_company" => $sd["organisation_company"],
+					"response_date" => $sd["dates"][0]["response_date"],
+					"decision_date" => $sd["dates"][0]["decision_date"],
+					"arrival_date" => $sd["dates"][0]["arrival_date"],
+					"departure_date" => $sd["dates"][0]["departure_date"],
+					"open_for_alternative_dates" => ($sd["open_for_alternative_dates"])?t("Yes"):t("No"),
+					"accommondation_requirements" => ($sd["accommondation_requirements"])?t("Yes"):t("No"),
+				));
+				// #2
+				// tablerows
+				foreach($sd["dates"] as $row_no => $date)
+				{
+					$sc->vars(array(
+						"date_type" => ($date["type"] == 0)?t("Normal"):t("Alternative"),
+						"arrival_date" => $date["arrival_date"],
+						"departure_date" => $date["departure_date"],
+					));
+					$dates_rows .= $sc->parse("DATES_ROW");
+				}
+			
+				// flexible dates
+				if($sd["dates_are_flexible"])
+				{
+					if($sd["meeting_pattern"] == 1)
+					{
+						$cont = $sc->parse("PATTERN_NO_APP");
+					}
+					elseif($sd["meeting_pattern"] == 2)
+					{
+						$sc->vars(array(
+							"wday_from" => $this->wd[$sd["pattern_wday_from"]],
+							"wday_to" => $this->wd[$sd["pattern_wday_to"]],
+						));
+						$cont = $sc->parse("PATTERN_WDAY");
+					}
+					elseif($sd["meeting_pattern"] == 3)
+					{
+						$sc->vars(array(
+							"days" => $sd["pattern_day"],
+						));
+						$cont = $sc->parse("PATTERN_DAYS");
+					}
+					$sc->vars(array(
+						"PATTERN_NO_APP" => $cont,
+					));
+					$flexible_dates = $sc->parse("FLEXIBLE_DATES");
+				}
+
+				$sc->vars(array(
+					"DATES_ROW" => $dates_rows,
+					"date_comments" => $sd["date_comments"],
+					"FLEXIBLE_DATES" => $flexible_dates,
+				));
+				// #3
+				if($sd["needs_rooms"])
+				{
+					$sc->vars(array(
+						"single_count" => $sd["single_count"],
+						"double_count" => $sd["double_count"],
+						"suite_count" => $sd["suite_count"],
+					));
+					$sc->vars(array(
+						"NEEDS_ROOMS" => $sc->parse("NEEDS_ROOMS"),
+					));
+				}
+				// # 4
+				$c_inst = get_instance(CL_CONFERENCE);
+				$conf_types = $c_inst->conference_types();
+				$evt_type = ($sd["event_type_chooser"] == 1)?$conf_types[$sd["event_type_select"]]:$sd["event_type_text"];
+				
+				foreach($sd["tech"] as $k => $capt)
+				{
+					$sc->vars(array("value" => $this->tech_equip[$k]));
+					$tech_equip .= $sc->parse("MAIN_TECH_EQUIP");
+				}
+				foreach($sd["main_catering"] as $k => $data)
+				{
+					if(!count($data))
+					{
+						continue;
+					}
+					$cat_type = ($data["catering_type_chooser"] == 1)?$this->catering_types[$data["catering_type_select"]]:$data["catering_type_text"];
+					$sc->vars(array(
+						"type" => $cat_type,
+						"start_time" => $data["catering_start_time"],
+						"end_time" => $data["catering_end_time"],
+						"attendee_no" => $data["catering_attendees_no"],
+					));
+					$rows .= $sc->parse("TIMES_ROW");
+				}
+				$sc->vars(array("TIMES_ROW" => $rows));
+				$main_catering = $sc->parse("MAIN_CATERING");
+				$sc->vars(array(
+					"main_event_type" => $evt_type,
+					"main_delegates_no" => $sd["delegates_no"],
+					"main_table_form" => $this->table_forms[$sd["table_form"]],
+					"MAIN_TECH_EQUIP" => $tech_equip,
+					"MAIN_CATERING" => $cats,
+					"main_door_sign" => $sd["door_sign"],
+					"main_person_no" => $sd["persons_no"],
+					"main_start" => $sd["function_start_date"]." ".$sd["function_start_time"],
+					"main_end" => $sd["function_end_date"]." ".$sd["function_end_time"],
+					"main_24h" => $sd["24h"]?t("Yes"):t("No"),
+					"MAIN_CATERING" => $main_catering,
+				));
+				unset($rows);
+				// #5
+				foreach($sd["additional_functions"] as $k => $data)
+				{
+					if(!count($data))
+					{
+						continue;
+					}
+					$cat_type = ($data["event_type_chooser"] == 1)?$this->catering_types[$data["event_type_select"]]:$data["event_type_text"];
+					$sc->vars(array(
+						"type" => $cat_type,
+						"start_time" => $data["function_start_date"]." ".$data["function_start_time"],
+						"end_time" => $data["function_end_date"]." ".$data["function_end_time"],
+						"attendee_no" => $data["persons_no"],
+					));
+					$rows .= $sc->parse("ADD_FUNCTION_ROW");
+				}
+				$sc->vars(array("ADD_FUNCTION_ROW" => $rows));
+				$add_functions = $sc->parse("ADDITIONAL_FUNCTIONS");
+				$sc->vars(array(
+					"ADDITIONAL_FUNCTIONS" => $add_functions,
+				));
+
+				// #6
+				$sc->vars(array(
+					"billing_company" => $sd["billing_company"],
+					"billing_contact" => $sd["billing_contact"],
+					"billing_street" => $sd["billing_street"],
+					"billing_city" => $sd["billing_city"],
+					"billing_zip" => $sd["billing_zip"],
+					"billing_country" => $sd["billing_country"],
+					"billing_name" => $sd["billing_name"],
+					"billing_phone_number" => $sd["billing_phone_number"],
+					"billing_email" => $sd["billing_email"],
+				));
+				// search res
+				unset($rows);
+				foreach($sd["selected_search_result"] as $location)
+				{
+					$sc->vars(array("caption" => call_user_func(array(obj($location), "name"))));
+					$rows .= $sc->parse("SEARCH_RESULT");
+				}
+				$sc->vars(array(
+					"SEARCH_RESULT" => $rows,
 				));
 				break;
 			case "qa":
 				$sc->read_template("sub_conference_qa.tpl");
+				$sc->vars(array(
+					"salutation_".$sd["user_salutation"] => "SELECTED",
+					"firstname" => $sd["user_firstname"],
+					"lastname" => $sd["user_lastname"],
+					"company_assocation" => $sd["user_company_assocation"],
+					"title" => $sd["user_title"],
+					"phone_number" => $sd["user_phone_number"],
+					"fax_number" => $sd["user_fax_number"],
+					"email" => $sd["user_email"],
+					"contact_preference_".$sd["user_contact_preference"] => "SELECTED",
+				));
 				break;
 
 			case 0:
 			default:
 				$sc->read_template("sub_conference.tpl");
+				foreach($this->get_countries($c_obj->id()) as $cnt)
+				{
+					if(!is_oid($cnt))
+					{
+						break;
+					}
+					$o = obj($cnt);
+					$sc->vars(array(
+						"value" => $cnt,
+						"caption" => $o->name(), 
+						"country" => ($cnt == $sd["country"])?"SELECTED":"",
+					));
+					$countries .= $sc->parse("COUNTRY");
+				}
 				foreach(array("single", "double", "suite") as $loop_item)
 				{
 					for($i = 1; $i <= $c_obj->prop($loop_item."_count"); $i++)
@@ -438,6 +678,7 @@ class conference_planning extends class_base
 				$sc->vars(array(
 					"ATTENDES_JS" => $sc->parse("ATTENDES_JS"),
 					"name" => $ob->prop("name"),
+					"COUNTRY" => $countries,
 				));
 				break;
 		}
@@ -451,9 +692,13 @@ class conference_planning extends class_base
 		{
 			$first = "OTHER";
 		}
+		elseif($no == 7)
+		{
+			$first = "LAST";
+		}
 		
 		// yah bar
-		for($i = 1; $i < 7; $i++)
+		for($i = 1; $i <= 7; $i++)
 		{
 			$act = ($i == $no)?"ACT_":"";
 			if($i == 1)
@@ -463,7 +708,7 @@ class conference_planning extends class_base
 				));
 				$yah[] = $this->parse($act."YAH_FIRST_BTN");
 			}
-			elseif($i < 6)
+			elseif($i < 7)
 			{
 				$this->vars(array(
 					"step_nr" => $i,
@@ -499,6 +744,7 @@ class conference_planning extends class_base
 				"id" => $ob->id(),
 				"current_sub" => $no,
 				"act_event_no" => $act_evt_no,
+				"conference_planner" => $c_obj->id(),
 			)),
 		));
 		return $this->parse();
@@ -506,7 +752,7 @@ class conference_planning extends class_base
 
 //-- methods --//
 	/**
-		@attrib params=name name=submit_back all_args=1
+		@attrib params=name name=submit_back all_args=1 nologin=1
 	**/
 	function submit_back($arr)
 	{
@@ -515,12 +761,269 @@ class conference_planning extends class_base
 	}
 	
 	/**
-		@attrib params=name name=submit_forward all_args=1
+		@attrib params=name name=submit_forward all_args=1 nologin=1
 	**/
 	function submit_forward($arr)
 	{
 		$this->save_form_data($arr);
+		if($arr["current_sub"] == 0 && strlen(trim(aw_global_get("uid"))) == 0)
+		{
+			// in case the user hasn't logged in yet.. 
+			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=qa";
+		}
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".($arr["current_sub"]+1);
+	}
+
+	
+	/**
+		@attrib params=name name=submit_final all_args=1
+	**/
+	function submit_final($arr)
+	{
+		$data = $this->get_form_data();
+		//arr($data);
+		//die();
+		$obj = new object();
+		$obj->set_class_id(CL_RFP);
+		$obj->set_parent($arr["conference_planner"]);
+		$users = get_instance("users");
+		$obj->set_prop("submitter", $users->get_oid_for_uid(aw_global_get("uid")));
+		$obj->set_prop("contact_preference", $data["user_contact_preference"]);
+		$obj->set_prop("country", call_user_func(array(obj($data["country"]), "name")));
+		$obj->set_prop("organisation", $data["organisation_company"]);
+		$obj->set_prop("function_name", $data["function_name"]);
+		$obj->set_prop("attendees_no", $data["attendees_no"]);
+		$obj->set_prop("response_date", $data["dates"][0]["response_date"]);
+		$obj->set_prop("decision_date", $data["dates"][0]["decision_date"]);
+		$obj->set_prop("arrival_date", $data["dates"][0]["arrival_date"]);
+		$obj->set_prop("departure_date", $data["dates"][0]["departure_date"]);
+		$obj->set_prop("open_for_alternative_dates", $data["open_for_alternative_dates"]?1:0);
+		$obj->set_prop("accommondation_requirements", $data["accommondation_requirements"]?1:0);
+		$obj->set_prop("needs_rooms", $data["needs_rooms"]?1:0);
+		$obj->set_prop("single_rooms", $data["single_count"]);
+		$obj->set_prop("double_rooms", $data["double_count"]);
+		$obj->set_prop("suites", $data["suite_count"]);
+
+		if($data["dates_are_flexible"])
+		{
+			if($data["meeting_pattern"] == 1)
+			{
+				$flex = t("Not Applicable");
+			}
+			elseif($data["meeting_pattern"] == 2)
+			{
+				$flex = sprintf(t("From %s to %s"), $this->wd[$data["pattern_wday_from"]], $this->wd[$data["pattern_wday_to"]]);
+			}
+			elseif($data["meeting_pattern"] == 3)
+			{
+				$flex = sprintf(t("%s days"), $data["pattern_days"]);
+			}
+			else
+			{
+				$flex = t("No");
+			}
+		}
+		else
+		{
+			$flex = t("No");
+		}
+
+		$obj->set_prop("flexible_dates", $flex);
+		// main fun
+
+		$conf_inst = get_instance(CL_CONFERENCE);
+		$evt_type = $conf_inst->conference_types();
+		$tmptech = array();
+		foreach($data["tech"] as $k => $pnt)
+		{
+			$tmptech[] = $this->tech_equip[$k];
+		}
+		$tmpcatering = array();
+		foreach($data["main_catering"] as $k => $pnt)
+		{
+			$tmpcatering[] = array(
+				"type" => ($pnt["catering_type_chooser"] == 1)?$this->catering_types[$pnt["catering_type_select"]]:$pnt["catering_type_text"],
+				"start" => $this->_gen_to_timestamp(false, $pnt["catering_start_time"]),
+				"end" => $this->_gen_to_timestamp(false, $pnt["catering_end_time"]),
+				"attendees" => $pnt["catering_attendees_no"],
+			);
+		}
+
+		$obj->set_prop("event_type", ($data["event_type_chooser"] == 1)?$evt_type[$data["event_type_select"]]:$data["event_type_select"]);
+		$obj->set_prop("delegates_no", $data["delegates_no"]);
+		$obj->set_prop("table_form", $this->table_forms[$data["table_form"]]);
+		$obj->set_prop("tech", join(", ", $tmptech));
+		$obj->set_prop("door_sign", $data["door_sign"]);
+		$obj->set_prop("person_no", $data["persons_no"]);
+		$obj->set_prop("start_date", $this->_gen_to_timestamp($data["function_start_date"], $data["function_start_time"]));
+		$obj->set_prop("end_date", $this->_gen_to_timestamp($data["function_end_date"], $data["function_end_time"]));
+		$obj->set_prop("24h", $data["24h"]?1:0);
+		$obj->set_prop("catering_for_main", aw_serialize($tmpcatering, SERIALIZE_NATIVE));
+
+		// additional dates
+		unset($data["dates"][0]);
+		if(count($data["dates"]))
+		{
+			foreach($data["dates"] as $tmp)
+			{
+				$tmpdates[] = array(
+					"type" => ($tmp["type"] == 0)?t("Normal"):t("Alternative"),
+					"start" =>  $this->_gen_to_timestamp($tmp["arrival_date"]),
+					"end" => $this->_gen_to_timestamp($tmp["departure_date"]),
+				);
+			}
+			$obj->set_prop("additional_dates", aw_serialize($tmpdates, SERIALIZE_NATIVE));
+		}
+		// additional functions
+		foreach($data["additional_functions"] as $tmp)
+		{
+			$tmptech = array();
+			foreach($tmp["tech"] as $k => $pnt)
+			{
+				$tmptech[] = $this->tech_equip[$k];
+			}
+			$tmpfunctions[] = array(
+				"type" => ($tmp["event_type_chooser"] == 1)?$evt_type[$tmp["event_type_select"]]:$tmp["event_type_text"],
+				"delegates_no" => $tmp["delegates_no"],
+				"table_form" => $this->table_forms[$tmp["table_form"]],
+				"tech" => join(", ", $tmptech),
+				"door_sign" => $tmp["door_sign"],
+				"persons_no" => $tmp["persons_no"],
+				"start" => $tmp["function_start_date"]." ".$tmp["function_start_time"],
+				"end" => $tmp["function_end_date"]." ".$tmp["function_end_time"],
+				"24h" => ($tmp["24h"])?t("Yes"):t("No"),
+				"catering_type" => ($tmp["catering_type_chooser"] == 1)?$this->catering_types[$tmp["catering_type_select"]]:$tmp["catering_type_text"],
+				"catering_start" => $tmp["catering_start_time"],
+				"catering_end" => $tmp["catering_end_time"],
+			);
+		}
+		$obj->set_prop("additional_functions", aw_serialize($tmpfunctions, SERIALIZE_NATIVE));
+
+
+		// billing
+
+		$obj->set_prop("billing_company", $data["billing_company"]);
+		$obj->set_prop("billing_contact", $data["billing_company"]);
+		$obj->set_prop("billing_street", $data["billing_street"]);
+		$obj->set_prop("billing_city", $data["billing_city"]);
+		$obj->set_prop("billing_zip", $data["billing_zip"]);
+		$obj->set_prop("billing_country", $data["billing_country"]);
+		$obj->set_prop("billing_name", $data["billing_name"]);
+		$obj->set_prop("billing_phone_number", $data["billing_phone_number"]);
+		$obj->set_prop("billing_email", $data["billing_email"]);
+
+		// search_results
+		$tmpsearch = array();
+		foreach($data["all_search_results"] as $id)
+		{
+			$tmpsearch[] = array(
+				"location" => call_user_func(array(obj($id), "name")),
+				"selected" => in_array($id ,$data["selected_search_result"])?1:0,
+			);
+		}
+		$obj->set_prop("search_result", aw_serialize($tmpsearch, SERIALIZE_NATIVE));
+		$obj->save();
+		$url = aw_ini_get("baseurl");
+		$c_obj = obj($arr["conference_planner"]);
+		$url .= ($c_obj->prop("redir_doc"))?"/".$c_obj->prop("redir_doc"):"";
+		aw_session_set("tmp_conference_data", array());
+		return $url;
+	}
+
+	/**
+		@attrib params=name name=submit_user_data all_args=1 nologin=1
+	**/
+	function submit_user_data($arr)
+	{
+		if(strlen(trim(aw_global_get("uid"))))
+		{
+			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=1";
+		}
+		$data = $arr["sub"]["qa"];
+		$this->save_form_data($arr);
+		if(!strlen($data["email"]) || !strstr($data["email"], "@"))
+		{
+			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=qa";
+		}
+		$us = get_instance(CL_USER);
+		classload("users");
+		$password = substr(gen_uniq_id(),0,8);
+
+		$user = $us->add_user(array(
+			"uid" => $data["email"],
+			"email" => $data["email"],
+			"password" => $password,
+			"real_name" => $data["firstname"]." ".$data["lastname"],
+		));
+
+		$person_obj = new object();
+		$person_obj->set_class_id(145);
+		$person_obj->set_parent(2);
+		$person_obj->set_name($data["firstname"]." ".$data["lastname"]);
+		$person_obj->set_prop("firstname",$data["firstname"]);
+		$person_obj->set_prop("lastname",$data["lastname"]);
+		$person_obj->set_prop("title", ($data["salutation"]-1));
+		$person_obj->save_new();
+
+		if($data["company_assoction"])
+		{
+			$org = new object();
+			$org->set_class_id(CL_CRM_COMPANY);
+			$org->set_parent($person_obj->id());
+			$org->set_name($data["company_assocation"]);
+			$org->save();
+			$person_obj->connect(array(
+				"to" => $org->id(),
+				"type" => "RELTYPE_WORK",
+			));
+			$person_obj->set_prop("work_contact", $org->id());
+		}
+		
+		$phone = new object();
+		$phone->set_class_id(219);
+		$phone->set_parent($person_obj->id());
+		$phone->set_name($data["phone_number"]);
+		$phone->set_prop("type", "work");
+		$phone->save();
+
+		$fax = new object();
+		$fax->set_class_id(219);
+		$fax->set_parent($person_obj->id());
+		$fax->set_name($data["fax_number"]);
+		$fax->set_prop("type", "fax");
+		$fax->save();
+
+		$email = new object();
+		$email->set_class_id(73);
+		$email->set_parent($person_obj->id());
+		$email->set_name($data["email"]);
+		$email->set_prop("mail", $data["email"]);
+		$email->save();
+
+		$person_obj->connect(array(
+			"to" => $phone->id(),
+			"type" => "RELTYPE_PHONE",
+		));
+		$person_obj->connect(array(
+			"to" => $fax->id(),
+			"type" => "RELTYPE_PHONE",
+		));
+		$person_obj->connect(array(
+			"to" => $email->id(),
+			"type" => "RELTYPE_EMAIL",
+		));
+		// i have to create company also :S
+		// we are logging in
+		$hash = gen_uniq_id();
+		$q = "INSERT INTO user_hashes (hash, hash_time, uid) VALUES('".$hash."','".(time()+60)."','".$data["email"]."')";
+		$res = $this->db_query($q);
+		$users =get_instance("users");
+		return $users->login(array(
+			"hash" => $hash ,
+			"uid" => $data["email"],
+			"return_url" => aw_ini_get("baseurl")."/".$arr["id"]."?sub=1",
+		));
+		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=1";
 	}
 
 	/**
@@ -617,14 +1120,25 @@ class conference_planning extends class_base
 			// new method
 			switch($k)
 			{
-				case 0:
+				case "0":
 					$data["country"] = $val["country"];
 					$data["attendees_no"] = $val["attendees_no"];
 					$data["single_count"] = $val["single_count"];
 					$data["double_count"] = $val["double_count"];
 					$data["suite_count"] = $val["suite_count"];
 					break;
-				case 1:
+				case "qa":
+					$data["user_firstname"] = $val["firstname"];
+					$data["user_lastname"] = $val["lastname"];
+					$data["user_salutation"] = $val["salutation"];
+					$data["user_company_assocation"] = $val["company_assocation"];
+					$data["user_title"] = $val["title"];
+					$data["user_phone_number"] = $val["phone_number"];
+					$data["user_fax_number"] = $val["fax_number"];
+					$data["user_email"] = $val["email"];
+					$data["user_contact_preference"] = $val["contact_preference"];
+					break;
+				case "1":
 					$data["function_name"] = $val["function_name"];
 					$data["organisation_company"] = $val["organisation_company"];
 					$data["dates"][0]["response_date"] = $val["response_date"];
@@ -635,7 +1149,7 @@ class conference_planning extends class_base
 					$data["open_for_alternative_dates"] = $val["open_for_alternative_dates"];
 					$data["accommondation_requirements"] = $val["accommondation_requirements"];
 					break;
-				case 2:
+				case "2":
 
 					$data["dates_are_flexible"] = $val["dates_are_flexible"];
 					$data["meeting_pattern"] = $val["meeting_pattern"];
@@ -651,7 +1165,7 @@ class conference_planning extends class_base
 					}
 
 					break;
-				case 3:
+				case "3":
 					$data["needs_rooms"] = $val["needs_rooms"];
 					$data["single_count"] = $val["single_count"];
 					$data["double_count"] = $val["double_count"];
@@ -659,7 +1173,7 @@ class conference_planning extends class_base
 					$data["dates"][0]["arrival_date"] = $val["main_arrival_date"];
 					$data["dates"][0]["departure_date"] = $val["main_departure_date"];
 					break;
-				case 4:
+				case "4":
 					$data["event_type_chooser"] = $val["event_type_chooser"];
 					$data["event_type_select"] = $val["event_type_select"];
 					$data["event_type_text"] = $val["event_type_text"];
@@ -676,7 +1190,7 @@ class conference_planning extends class_base
 					// actually some catering shit is missing
 					$data["main_catering"] = $val["main_catering"];
 					break;
-				case 5:
+				case "5":
 					$additional_function["event_type_chooser"] = $val["event_type_chooser"];
 					$additional_function["event_type_select"] = $val["event_type_select"];
 					$additional_function["event_type_text"] = $val["event_type_text"];
@@ -709,7 +1223,7 @@ class conference_planning extends class_base
 						$data["additional_functions"][$no] = $additional_function;
 					}
 					break;
-				case 6:
+				case "6":
 					$data["billing_company"] = $val["billing_company"];
 					$data["billing_contact"] = $val["billing_contact"];
 					$data["billing_street"] = $val["billing_street"];
@@ -719,6 +1233,10 @@ class conference_planning extends class_base
 					$data["billing_name"] = $val["billing_name"];
 					$data["billing_phone_number"] = $val["billing_phone_number"];
 					$data["billing_email"] = $val["billing_email"];
+					$data["selected_search_result"] = array_keys($val["search_result"]);
+					$data["all_search_results"] = array_keys($val["all_search"]);
+					break;
+				case "7":
 					break;
 			}
 		}
@@ -729,6 +1247,104 @@ class conference_planning extends class_base
 	{
 		return aw_global_get("tmp_conference_data");
 	}
+	
+	function get_countries($oid)
+	{
+		if(!is_oid($oid))
+		{
+			return false;
+		}
+		$o = obj($oid);
+		return $o->prop("countries");
+	}
 
+	/**
+		@param country
+		@param single_rooms
+		@param double_rooms
+		@param suites
+		@param attendees_count
+		@param dates optional type=array
+			array(
+				start => function start time
+				end => function end time
+				persons => number of persons in this function
+			)
+		@param pattern_type
+		@param pattern_wday_from
+		@param pattern_wday_to
+		@param pattern_days
+
+	**/
+	function all_mighty_search_engine($arr)
+	{
+		//arr($arr);
+		// okay, i need to get all locations, then check the locations single, double and suite counts
+		// from these, which match, .. i need to get all ther rooms ... and check availability..
+		// if there are any available rooms.. i need to check if the rooms can accommodate needed peoples
+		// locations, which rooms can do this.. are the search results ???
+
+
+		// tsiish, basically i can't filter out any locations... but i have to put warings to them(there are not enough suites, or these rooms aren't available in these periods etc.. 
+		$room_inst = get_instance(CL_ROOM);
+		$ol = new object_list(array(
+			"class_id" => CL_LOCATION,
+		));
+		$biggest_event = $arr["attendees_count"];
+		// loop over locations
+		foreach($arr["dates"] as $data)
+		{
+			$biggest_event = ($biggest_event < $data["persons"])?$data["persons"]:$biggest_event;
+		}
+		foreach($ol->arr() as $location_oid => $location)
+		{
+			$locations[$location_oid] = array();
+			$element = &$locations[$location_oid];
+			if($arr["single_rooms"] && $location->prop("single_count") < $arr["single_rooms"])
+			{
+				$element["errors"][] = t("There aren't enough single rooms");
+			}
+			if($arr["double_rooms"] && $location->prop("double_count") < $arr["double_rooms"])
+			{
+				$element["errors"][] = t("There aren't enough double rooms");
+			}
+			if($arr["suites"] && $location->prop("suite_count") < $arr["suites"])
+			{
+				$element["errors"][] = t("There aren't enough suites");
+			}
+			// find rooms
+			$rooms = new object_list(array(
+				"class_id" => CL_ROOM,
+				"location" => $location_oid,
+			));
+			// loop over location rooms
+			$biggest_room = false;
+			foreach($rooms->arr() as $room_id => $room)
+			{
+				/*
+					actually this is the place where sould be a really nasty code, which checks if these events can be put into those roooms somehow.
+					If they can be put, then when .. etc..
+					Congratualations to anyone who's gonna do this.. and i do hope i'm not congratulating myself
+						taiu
+				*/
+
+				$biggest_room = (!$biggest_room || ($biggest_room < $room->prop("normal_capacity")))?$room->prop("normal_capacity"):$biggest_room;
+			}
+			if($biggest_event > $biggest_room)
+			{
+				$element["errors"][] = t("There aren't as big rooms as needed");
+				break;
+			}
+
+		}
+		return $locations;
+	}
+
+	function _gen_to_timestamp($date = false, $time = false)
+	{
+		$spl = $date?split("[.]", $date):array(1,1,1970);
+		$splt = $time?split(":", $time):array(0,0);
+		return mktime($splt[0], $splt[1], 0, $spl[1], $spl[0], $spl[2]);
+	}
 }
 ?>

@@ -1,5 +1,358 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>submitter</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Submitter</caption>
+      </property>
+      <property>
+            <name>contact_preference</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Contact preference</caption>
+      </property>
+      <property>
+            <name>country</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Country</caption>
+      </property>
+      <property>
+            <name>organisation</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Organisation</caption>
+      </property>
+      <property>
+            <name>function_name</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Function name</caption>
+      </property>
+      <property>
+            <name>attendees_no</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Number of attendees</caption>
+      </property>
+      <property>
+            <name>response_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Response date</caption>
+      </property>
+      <property>
+            <name>decision_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Decision date</caption>
+      </property>
+      <property>
+            <name>arrival_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Arrival date</caption>
+      </property>
+      <property>
+            <name>departure_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Departure date</caption>
+      </property>
+      <property>
+            <name>open_for_alternative_dates</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Open for alternative dates</caption>
+      </property>
+      <property>
+            <name>accommondation_requirements</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>I have accomonndation requirements</caption>
+      </property>
+      <property>
+            <name>needs_rooms</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Needs rooms</caption>
+      </property>
+      <property>
+            <name>single_rooms</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Single rooms</caption>
+      </property>
+      <property>
+            <name>double_rooms</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Double rooms</caption>
+      </property>
+      <property>
+            <name>suites</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Suites</caption>
+      </property>
+      <property>
+            <name>flexible_dates</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Dates are flexible</caption>
+      </property>
+      <property>
+            <name>additional_dates</name>
+            <table>objects</table>
+            <group>add_dates</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <caption>Additional_dates</caption>
+      </property>
+      <property>
+            <name>event_type</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Event type</caption>
+      </property>
+      <property>
+            <name>delegates_no</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Number of delegates</caption>
+      </property>
+      <property>
+            <name>table_form</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Table form</caption>
+      </property>
+      <property>
+            <name>tech</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Table form</caption>
+      </property>
+      <property>
+            <name>door_sign</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Door sign/group name</caption>
+      </property>
+      <property>
+            <name>person_no</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Number of persons</caption>
+      </property>
+      <property>
+            <name>start_date</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Start time</caption>
+      </property>
+      <property>
+            <name>end_date</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>End time</caption>
+      </property>
+      <property>
+            <name>24h</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>24h hold</caption>
+      </property>
+      <property>
+            <name>catering_for_main</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Catering for main function</caption>
+      </property>
+      <property>
+            <name>additional_functions</name>
+            <table>objects</table>
+            <group>add_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <caption>Additional functions</caption>
+      </property>
+      <property>
+            <name>billing_company</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Company</caption>
+      </property>
+      <property>
+            <name>billing_contact</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Contact</caption>
+      </property>
+      <property>
+            <name>billing_street</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Street</caption>
+      </property>
+      <property>
+            <name>billing_city</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>City</caption>
+      </property>
+      <property>
+            <name>billing_zip</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Zip</caption>
+      </property>
+      <property>
+            <name>billing_country</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Country</caption>
+      </property>
+      <property>
+            <name>billing_name</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Name</caption>
+      </property>
+      <property>
+            <name>billing_phone_number</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Phone number</caption>
+      </property>
+      <property>
+            <name>billing_email</name>
+            <table>objects</table>
+            <group>billing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>E-mail</caption>
+      </property>
+      <property>
+            <name>search_result</name>
+            <table>objects</table>
+            <group>search_res</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Search results</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_RFP</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +360,22 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <add_dates>
+                  <caption>Additional dates</caption>
+            </add_dates>
+            <main_fun>
+                  <caption>Main function</caption>
+            </main_fun>
+            <add_fun>
+                  <caption>Additional functions</caption>
+            </add_fun>
+            <billing>
+                  <caption>Billing info</caption>
+            </billing>
+            <search_res>
+                  <caption>Selected results</caption>
+            </search_res>
+      </groupinfo>
 </properties>
 

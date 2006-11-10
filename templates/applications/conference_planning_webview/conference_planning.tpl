@@ -49,6 +49,13 @@
 		</td>
 	</tr>
 	<!-- END SUB: OTHER_RFP_SUBMIT -->
+	<!-- SUB: LAST_RFP_SUBMIT -->
+	<tr>
+		<td align="center">
+			<input type="button" onClick="javascript:submit_changeform('submit_back');" value="Change data" />&nbsp;<input type="button" onClick="javascript:submit_changeform('submit_final');" value="Submit" />
+		</td>
+	</tr>
+	<!-- END SUB: LAST_RFP_SUBMIT -->
 </table>
 {VAR:reforb}
 <script type="text/javascript">

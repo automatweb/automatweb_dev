@@ -1,15 +1,29 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="conference_planning" folder="applications/calendar" extends="class_base">
-		<action name="submit_back" all_args="1">
+		<action name="submit_back" nologin="1" all_args="1">
 			<function name="submit_back">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_forward" all_args="1">
+		<action name="submit_forward" nologin="1" all_args="1">
 			<function name="submit_forward">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_final" all_args="1">
+			<function name="submit_final">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_user_data" nologin="1" all_args="1">
+			<function name="submit_user_data">
 				<arguments>
 				</arguments>
 			</function>

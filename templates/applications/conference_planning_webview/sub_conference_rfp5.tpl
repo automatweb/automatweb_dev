@@ -85,7 +85,7 @@
 			{VAR:LC_PERSON_NO}:
 		</td>
 		<td>
-			<input type="text" name="sub[5][persons_no]" value="{VAR:door_sign}"/>
+			<input type="text" name="sub[5][persons_no]" value="{VAR:persons_no}"/>
 		</td>
 	</tr>
 	<tr>

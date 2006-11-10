@@ -5,9 +5,9 @@
 		</td>
 		<td>
 			<select name="sub[qa][salutation]">
-				<option value="1">Mr</option>
-				<option value="2">Mrs</option>
-				<option value="3">Ms</option>
+				<option value="1" {VAR:salutation_1}>Mr</option>
+				<option value="2" {VAR:salutation_2}>Mrs</option>
+				<option value="3" {VAR:salutation_3}>Ms</option>
 			</select>
 		</td>
 	</tr>
@@ -16,7 +16,7 @@
 			{VAR:LC_FIRSTNAME}:
 		</td>
 		<td>
-			<input name="sub[qa][firstname]" type="text"/>
+			<input name="sub[qa][firstname]" type="text" value="{VAR:firstname}"/>
 		</td>
 	</tr>
 	<tr>
@@ -24,7 +24,7 @@
 			{VAR:LC_LASTNAME}:
 		</td>
 		<td>
-			<input name="sub[qa][lastname]" type="text"/>
+			<input name="sub[qa][lastname]" type="text" value="{VAR:lastname}"/>
 		</td>
 	</tr>
 
@@ -33,7 +33,7 @@
 			{VAR:LC_COMPANY_ASSOCATION}:
 		</td>
 		<td>
-			<input name="sub[qa][company_assocation]" type="text"/>
+			<input name="sub[qa][company_assocation]" type="text" value="{VAR:company_assocation}"/>
 		</td>
 	</tr>
 	<tr>
@@ -41,7 +41,7 @@
 			{VAR:LC_TITLE}:
 		</td>
 		<td>
-			<input name="sub[qa][title]" type="text"/>
+			<input name="sub[qa][title]" type="text" value="{VAR:title}"/>
 		</td>
 	</tr>
 	<tr>
@@ -49,7 +49,7 @@
 			{VAR:LC_PHONE_NUMBER}:
 		</td>
 		<td>
-			<input name="sub[qa][phone_number]" type="text"/>
+			<input name="sub[qa][phone_number]" type="text" value="{VAR:phone_number}"/>
 		</td>
 	</tr>
 	<tr>
@@ -57,7 +57,7 @@
 			{VAR:LC_FAX_NUMBER}:
 		</td>
 		<td>
-			<input name="sub[qa][fax_number]" type="text"/>
+			<input name="sub[qa][fax_number]" type="text" value="{VAR:fax_number}"/>
 		</td>
 	</tr>
 	<tr>
@@ -65,7 +65,7 @@
 			{VAR:LC_EMAIL}:
 		</td>
 		<td>
-			<input name="sub[qa][email]" type="text"/>
+			<input name="sub[qa][email]" type="text" value="{VAR:email}"/>
 		</td>
 	</tr>
 	<tr>
@@ -74,10 +74,11 @@
 		</td>
 		<td>
 			<select name="sub[qa][contact_preference]">
-				<option value="1">{VAR:LC_EMAIL}</option>
-				<option value="2">{VAR:LC_PHONE}</option>
-				<option value="3">{VAR:LC_FAX}</option>
+				<option value="1" {VAR:contact_preference_1}>{VAR:LC_EMAIL}</option>
+				<option value="2" {VAR:contact_preference_2}>{VAR:LC_PHONE}</option>
+				<option value="3" {VAR:contact_preference_3}>{VAR:LC_FAX}</option>
 			</select>
 		</td>
 	</tr>
 </table>
+<input type="button" onClick="javascript:submit_changeform('submit_user_data');" value="{VAR:LC_SEARCH}" />

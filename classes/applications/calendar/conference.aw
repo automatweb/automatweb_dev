@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.6 2006/10/24 08:08:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.7 2006/11/10 14:01:41 tarvo Exp $
 // conference.aw - Konverents 
 /*
 
@@ -12,6 +12,9 @@
 
 	@property topic_comment type=textarea cols=50 rows=6
 	@caption L&uuml;hikirjeldus/teema
+
+	@property type type=select
+	@caption T&uuml;&uuml;p
 
 	@property organizers type=relpicker reltype=RELTYPE_ORGANIZER multiple=1
 	@caption Korraldajad
@@ -121,6 +124,21 @@ class conference extends class_base
 			"tpldir" => "applications/calendar/conference",
 			"clid" => CL_CONFERENCE
 		));
+
+		$this->conference_types = array(
+			1 => t("Meeting"),
+			2 => t("Seminar"),
+			3 => t("Conference"),
+			4 => t("Training"),
+			5 => t("Product introduction / lunch"),
+			6 => t("Info"),
+			7 => t("Breakfast"),
+			8 => t("Luncheon"),
+			9 => t("Dinner"),
+			10 => t("Party"),
+			11 => t("Wedding"),
+			12 => t("Other"),
+		);
 	}
 
 	function get_property($arr)
@@ -130,6 +148,9 @@ class conference extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "type":
+				$prop["options"] = $this->conference_types();
+				break;
 		};
 		return $retval;
 	}
@@ -733,6 +754,11 @@ class conference extends class_base
 			"img" => "delete.gif",
 			"action" => "rem_presenters",
 		));
+	}
+
+	function conference_types()
+	{
+		return $this->conference_types;
 	}
 }
 ?>
