@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.13 2006/11/09 16:19:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.14 2006/11/10 11:55:07 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -349,14 +349,14 @@ class reservation extends class_base
 		{
 			$room_instance = get_instance(CL_ROOM);
 			$ol = $room_instance->get_prod_list($room);
-			$prod_data = $room->meta("prod_data");
-			foreach($ol->arr() as $id => $o)
-			{
-				if(!$prod_data[$id]["active"])
-				{
-					$ol->remove($id);
-				}
-			}
+//			$prod_data = $room->meta("prod_data");
+//			foreach($ol->arr() as $id => $o)
+//			{
+//				if(!$prod_data[$id]["active"])
+//				{
+//					$ol->remove($id);
+//				}
+//			}
 		}
 		return $ol;
 	}
@@ -444,6 +444,11 @@ class reservation extends class_base
 			$prod_list = $this->get_room_products($arr["obj_inst"]->prop("resource"));
 			$amount = $arr["obj_inst"]->meta("amount");
 		}
+		$room = obj($arr["obj_inst"]->prop("resource"));
+		if(is_object($room))
+		{
+			$prod_data = $room->meta("prod_data");
+		}
 		$image_inst = get_instance(CL_IMAGE);
 		foreach($prod_list->arr() as $prod)
 		{
@@ -470,6 +475,10 @@ class reservation extends class_base
 			foreach($packages as $conn)
 			{
 				$package = $conn->to();
+				if(!$prod_data[$package->id()]["active"])
+				{
+					continue;
+				}
 				$image = "";
 				if(is_object($package->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"))))
 				{
