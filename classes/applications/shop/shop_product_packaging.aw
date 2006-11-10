@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.22 2006/10/24 10:42:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.23 2006/11/10 15:26:20 markop Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -19,6 +19,20 @@
 
 @property price_cur type=table store=no
 @caption Hinnad valuutades
+
+@layout reservation type=hbox width=20%:80%
+
+	@property reservation_time type=textbox size=5 table=objects field=meta method=serialize parent=reservation
+	@caption Broneeritav aeg
+	@property reservation_time_unit type=select table=objects field=meta method=serialize parent=reservation no_caption=1
+	
+@layout buffer type=hbox width=20%:80%
+
+	@property buffer_time type=textbox size=5 table=objects field=meta method=serialize parent=buffer
+	@caption Puhveraeg
+	@property buffer_time_unit type=select  table=objects field=meta method=serialize parent=buffer no_caption=1
+
+
 
 @groupinfo data caption="Andmed"
 @groupinfo file caption="Failid"
@@ -166,6 +180,13 @@ class shop_product_packaging extends class_base
 		{
 			case "price_cur":
 				$this->_price_cur($arr);
+				break;
+			case "buffer_time_unit":
+			case "reservation_time_unit":
+				$prop["options"] = array(
+					60 => t("Minutit"),
+					3600 => t("Tundi"),
+				);
 				break;
 		};
 		return $retval;

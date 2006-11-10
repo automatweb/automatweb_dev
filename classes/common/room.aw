@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.34 2006/11/09 16:18:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.35 2006/11/10 15:27:09 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -70,6 +70,9 @@
 		@caption Puhveraeg p&auml;rast
 		
 		@property buffer_after_unit type=select no_caption=1
+		
+		@property use_product_times type=checkbox parent=general_down no_caption=1
+		@caption Kasuta toodetele määratud aegu
 		
 valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva täiendava info selle valdkonna objektitüübi kaudu, nt konverentsid).
 - puhveraeg enne (mitu tundi enne reserveeringu algust lisaks bronnitakse ruumide ettevalmistamiseks)
