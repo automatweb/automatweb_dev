@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.133 2006/09/12 10:40:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.134 2006/11/12 08:50:39 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -247,6 +247,10 @@ class mrp_schedule extends class_base
 	{
 /* dbg */ list($micro,$sec) = split(" ",microtime());
 /* dbg */ $ts_s = $sec + $micro;
+/* dbg */ $fp = @fopen("mrpdbgschedlog", "a");
+/* dbg */ @fwrite($fp, $ts_s . "\n");
+/* dbg */ @fclose($fp);
+/* dbg */ unset($fp);
 
 		$workspace_id = (int) $arr["mrp_workspace"];
 
