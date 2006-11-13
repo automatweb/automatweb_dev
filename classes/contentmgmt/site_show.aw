@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.209 2006/10/16 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.210 2006/11/13 09:43:00 kristo Exp $
 
 /*
 
@@ -83,7 +83,7 @@ class site_show extends class_base
 		$this->sel_section_real = $this->sel_section;
 		$this->sel_section_obj = obj($this->sel_section);
 
-		$this->site_title = $this->sel_section_obj->name();
+		$this->site_title = $this->sel_section_obj->trans_get_val("name");
 		
 		// read the left/right pane props from the sel menu
 		if (!$this->sel_section_obj->prop("left_pane"))
@@ -1235,7 +1235,7 @@ class site_show extends class_base
 			));
 		}
 
-		$this->vars(array(
+		$this->vars_safe(array(
 			"doc_content" => $docc
 		));
 
