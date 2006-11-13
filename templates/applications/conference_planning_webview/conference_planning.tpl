@@ -1,4 +1,4 @@
-<form method="post" action="orb.aw" name="changeform">
+<form method="post" action="{VAR:action}" name="changeform">
 <table border="1" width="100%">
 	<!-- SUB: FIRST_RFP_YAH -->
 	<!-- END SUB: FIRST_RFP_YAH -->

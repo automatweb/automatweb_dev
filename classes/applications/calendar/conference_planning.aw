@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.3 2006/11/10 14:01:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.4 2006/11/13 09:26:40 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -740,6 +740,7 @@ class conference_planning extends class_base
 			"sub_contents" => $sc->parse(),
 			$first."_RFP_YAH" => $yah_bar,
 			$first."_RFP_SUBMIT" => $submit,
+			"action" => aw_ini_get("baseurl"),
 			"reforb" => $this->mk_reforb("submit_back", array(
 				"id" => $ob->id(),
 				"current_sub" => $no,
