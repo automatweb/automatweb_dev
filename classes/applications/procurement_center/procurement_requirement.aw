@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.5 2006/07/06 13:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.6 2006/11/13 10:29:05 kristo Exp $
 // procurement_requirement.aw - N&otilde;ue 
 /*
 
@@ -16,11 +16,23 @@
 	@property desc type=textarea rows=20 cols=50 table=procuremnent_requirements field=aw_desc
 	@caption Kirjeldus
 
-	@property req_co type=relpicker reltype=RELTYPE_CO field=aw_req_co
+	@property req_co type=relpicker reltype=RELTYPE_CO table=procuremnent_requirements field=aw_req_co
 	@caption Tellija organisatsioon
 
-	@property req_p type=relpicker reltype=RELTYPE_P field=aw_req_p
+	@property req_p type=relpicker reltype=RELTYPE_P table=procuremnent_requirements field=aw_req_p
 	@caption Tellija isik
+
+	@property project type=relpicker reltype=RELTYPE_PROJECT table=procuremnent_requirements field=aw_req_proj
+	@caption Projekt
+
+	@property state type=select table=procuremnent_requirements field=aw_req_state
+	@caption Staatus
+
+	@property planned_time type=date_select table=procuremnent_requirements field=aw_planned_time
+	@caption Planeeritud t&auml;htaeg
+
+	@property process type=relpicker reltype=RELTYPE_PROCESS table=procuremnent_requirements field=aw_planned_time
+	@caption Protsess
 
 @default group=offers
 
@@ -30,15 +42,29 @@
 
 	@property comments type=comments 
 
+@default group=bugs
+
+	@property bugs_toolbar type=toolbar store=no no_caption=1
+	@property bugs_table type=table store=no no_caption=1
 
 @groupinfo offers caption="Lahendused n&otilde;udele"
 @groupinfo comments caption="Kommentaarid"
+@groupinfo bugs caption="Arendus&uuml;lesanded"
 
 @reltype CO value=1 clid=CL_CRM_COMPANY
 @caption Organisatsioon
 
 @reltype P value=2 clid=CL_CRM_PERSON
 @caption Isik
+
+@reltype PROJECT value=3 clid=CL_PROJECT
+@caption Projekt
+
+@reltype PROCESS value=4 clid=CL_PROCUREMENT_PROCESS
+@caption Protsess
+
+@reltype BUG value=5 clid=CL_BUG
+@caption Arendus&uuml;lesanne
 
 */
 
@@ -51,6 +77,12 @@ class procurement_requirement extends class_base
 			"clid" => CL_PROCUREMENT_REQUIREMENT
 		));
 		$this->model = get_instance("applications/procurement_center/procurements_model");
+		$this->statuses = array(
+			0 => t("Avatud"),
+			1 => t("Spetsifitseerimisel"),
+			2 => t("&Uuml;le antud"),
+			3 => t("Testimisel")
+		);
 	}
 
 	function get_property($arr)
@@ -60,15 +92,7 @@ class procurement_requirement extends class_base
 		switch($prop["name"])
 		{
 			case "pri":
-				if (!is_oid($arr["obj_inst"]->id()))
-				{
-					
-					$prop["options"] = $this->model->get_pris_from_procurement($this->model->get_procurement_from_requirement(obj($arr["request"]["parent"])));
-				}
-				else
-				{
-					$prop["options"] = array("" => t("--vali--")) + $this->model->get_pris_for_requirement($arr["obj_inst"]);
-				}
+				$prop["options"] = array("" => t("--vali--")) + $this->get_priority_list($arr["obj_inst"]);
 				break;
 
 			case "offer_t":
@@ -135,7 +159,10 @@ class procurement_requirement extends class_base
 		switch($f)
 		{
 			case "aw_pri":
+			case "aw_planned_time":
+			case "aw_req_proj":
 			case "aw_req_co":
+			case "aw_req_state":
 			case "aw_req_p":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
@@ -305,6 +332,63 @@ class procurement_requirement extends class_base
 			$ass_cnt++;
 		}
 		return $ass_sum / $ass_cnt;
+	}
+
+	function get_status_list()
+	{
+		return $this->statuses;
+	}
+
+	function get_priority_list($o)
+	{
+		if (!is_oid($o->id()) && $this->can("view", $arr["request"]["parent"]))
+		{
+			return $this->model->get_pris_from_procurement($this->model->get_procurement_from_requirement(obj($_GET["parent"])));
+		}
+		else
+		{
+			$rv = array();
+			if (is_oid($o->id()))
+			{
+				$rv = $this->model->get_pris_for_requirement($o);
+			}
+			if (count($rv) == 0)
+			{
+				$rv = $this->make_keys(range(1, 10));
+			}
+			return $rv;
+		}
+	}
+
+	function _get_bugs_toolbar($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "add_bug",
+			"tooltip" => t("Lisa"),
+			"url" => html::get_new_url(CL_BUG, $arr["obj_inst"]->id(), array(
+				"return_url" => get_ru(),
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 5
+			)),
+			"img" => "new.gif",
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta"),
+			"img" => "delete.gif",
+			"action" => "delete",
+			"confirm" => t("Oled kindel, et soovid bugi kustutada?"),
+		));
+	}
+
+	function _get_bugs_table($arr)
+	{
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BUG")));
+		$t =& $arr["prop"]["vcl_inst"];
+		$bt = get_instance(CL_BUG_TRACKER);
+		$bt->_init_bug_list_tbl_no_edit($t);
+		$bt->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));
 	}
 }
 ?>

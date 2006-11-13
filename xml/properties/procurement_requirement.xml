@@ -20,7 +20,7 @@
       </property>
       <property>
             <name>req_co</name>
-            <table>objects</table>
+            <table>procuremnent_requirements</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CO</reltype>
@@ -29,12 +29,46 @@
       </property>
       <property>
             <name>req_p</name>
-            <table>objects</table>
+            <table>procuremnent_requirements</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_P</reltype>
             <field>aw_req_p</field>
             <caption>Tellija isik</caption>
+      </property>
+      <property>
+            <name>project</name>
+            <table>procuremnent_requirements</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <field>aw_req_proj</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>state</name>
+            <table>procuremnent_requirements</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_req_state</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>planned_time</name>
+            <table>procuremnent_requirements</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_planned_time</field>
+            <caption>Planeeritud t&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>process</name>
+            <table>procuremnent_requirements</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROCESS</reltype>
+            <field>aw_planned_time</field>
+            <caption>Protsess</caption>
       </property>
       <property>
             <name>offer_t</name>
@@ -52,6 +86,24 @@
             <type>comments</type>
             <field>comments</field>
       </property>
+      <property>
+            <name>bugs_toolbar</name>
+            <table>objects</table>
+            <group>bugs</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bugs_toolbar</field>
+      </property>
+      <property>
+            <name>bugs_table</name>
+            <table>objects</table>
+            <group>bugs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bugs_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROCUREMENT_REQUIREMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -66,6 +118,9 @@
             <comments>
                   <caption>Kommentaarid</caption>
             </comments>
+            <bugs>
+                  <caption>Arendus&amp;amp;uuml;lesanded</caption>
+            </bugs>
       </groupinfo>
       <tableinfo>
             <procuremnent_requirements>
@@ -85,6 +140,21 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Isik</caption>
             </P>
+            <PROJECT>
+                  <value>3</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Projekt</caption>
+            </PROJECT>
+            <PROCESS>
+                  <value>4</value>
+                  <clid>CL_PROCUREMENT_PROCESS</clid>
+                  <caption>Protsess</caption>
+            </PROCESS>
+            <BUG>
+                  <value>5</value>
+                  <clid>CL_BUG</clid>
+                  <caption>Arendus&amp;amp;uuml;lesanne</caption>
+            </BUG>
       </reltypes>
 </properties>
 
