@@ -1,9 +1,12 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse P&auml;rast liitumist mine aadressile (after_join_url) caption"] = "Go to address after joining";
 $GLOBALS["TRANS"]["Omaduse Kataloog, kuhu salvestatakse objektid (obj_folder) caption"] = "Folder where objects are stored";
 $GLOBALS["TRANS"]["Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) caption"] = "Log the user in automatically after join";
 $GLOBALS["TRANS"]["Omaduse Kas liitumisel saadetakse meil (send_join_mail) caption"] = "Send e-mail on join";
+$GLOBALS["TRANS"]["Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) caption"] = "Join data properties";
 $GLOBALS["TRANS"]["Omaduse Eraldi lehtedel (join_sep_pages) caption"] = "Seprate pages";
 $GLOBALS["TRANS"]["Omaduse Liitumise nupu tekst (join_but_text) caption"] = "Join button text";
+$GLOBALS["TRANS"]["Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) caption"] = "Join properties pages";
 $GLOBALS["TRANS"]["Omaduse Liitumise Lehtede Pealkirjad (join_properties_page_titles) caption"] = "Join properties page titles";
 $GLOBALS["TRANS"]["Omaduse Vahepealkirjad (join_seps) caption"] = "Separators";
 $GLOBALS["TRANS"]["Omaduse Reeglid (rules_show) caption"] = "Rules";
@@ -30,9 +33,15 @@ $GLOBALS["TRANS"]["Reegel"] = "Rule";
 $GLOBALS["TRANS"]["Grupp"] = "Group";
 $GLOBALS["TRANS"]["Muuda"] = "Change";
 $GLOBALS["TRANS"]["Omadus"] = "Property";
+$GLOBALS["TRANS"]["T&auml;idetav"] = "Fillable";
+$GLOBALS["TRANS"]["N&otilde;utav"] = "Required";
+$GLOBALS["TRANS"]["Lehek&uuml;lg"] = "Page";
+$GLOBALS["TRANS"]["J&auml;rjekord"] = "Order";
 $GLOBALS["TRANS"]["Sisestatud number"] = "Number entered";
 $GLOBALS["TRANS"]["Lehe nimi"] = "Page name";
 $GLOBALS["TRANS"]["Tekst"] = "Text";
+$GLOBALS["TRANS"]["<b>Vahepealkirjad</b>"] = "<b>Subtitles</b>";
+$GLOBALS["TRANS"]["<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"] = "<font color='#FF0000'>Following field must be filled!</font>";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Liitun"] = "Join";
 $GLOBALS["TRANS"]["Liitumise meili from aadress (%s)"] = "Join mail from address (%s)";

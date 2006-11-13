@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_num_places
 msgid "Omaduse Kohtade arv (num_places) caption"
-msgstr ""
+msgstr "Number of places"
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_num_places_comment
 msgid "Omaduse Kohtade arv (num_places) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_phone_id
 msgid "Omaduse Telefon (phone_id) caption"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_phone_id_comment
 msgid "Omaduse Telefon (phone_id) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_telefax_id
 msgid "Omaduse Faks (telefax_id) caption"
-msgstr ""
+msgstr "Fax"
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_telefax_id_comment
 msgid "Omaduse Faks (telefax_id) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_email_id
 msgid "Omaduse E-posti aadressid (email_id) caption"
-msgstr ""
+msgstr "E-mail addresses"
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_email_id_comment
 msgid "Omaduse E-posti aadressid (email_id) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_images
 msgid "Omaduse Pildid (images) caption"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/crm/crm_field_conference_room.aw:prop_images_comment
 msgid "Omaduse Pildid (images) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:group_cedit
 msgid "Grupi Kontaktandmed (cedit) pealkiri"
-msgstr ""
+msgstr "Contact data"
 
 #: classes/applications/crm/crm_field_conference_room.aw:group_cedit_help
 msgid "Grupi Kontaktandmed (cedit) help"
@@ -95,7 +95,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:group_images
 msgid "Grupi Pildid (images) pealkiri"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/crm/crm_field_conference_room.aw:group_images_help
 msgid "Grupi Pildid (images) help"
@@ -103,7 +103,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:group_rooms
 msgid "Grupi Ruumid (rooms) pealkiri"
-msgstr ""
+msgstr "Rooms"
 
 #: classes/applications/crm/crm_field_conference_room.aw:group_rooms_help
 msgid "Grupi Ruumid (rooms) help"
@@ -111,20 +111,20 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_EMAIL
 msgid "Seose E-post (RELTYPE_EMAIL) tekst"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_PHONE
 msgid "Seose Telefon (RELTYPE_PHONE) tekst"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_TELEFAX
 msgid "Seose Fax (RELTYPE_TELEFAX) tekst"
-msgstr ""
+msgstr "Fax"
 
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/crm/crm_field_conference_room.aw:rel_RELTYPE_ROOM
 msgid "Seose Konverentsiruum (RELTYPE_ROOM) tekst"
-msgstr ""
+msgstr "Conference room"

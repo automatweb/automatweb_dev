@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:group_fb
 msgid "Grupi Tagasiside (fb) pealkiri"
-msgstr ""
+msgstr "Feedback"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:group_fb_help
 msgid "Grupi Tagasiside (fb) help"
@@ -59,7 +59,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:group_unsolved
 msgid "Grupi Lahendamisel (unsolved) pealkiri"
-msgstr ""
+msgstr "Unsolved"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:group_unsolved_help
 msgid "Grupi Lahendamisel (unsolved) help"
@@ -67,7 +67,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:group_solved
 msgid "Grupi Lahendatud (solved) pealkiri"
-msgstr ""
+msgstr "Solved"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:group_solved_help
 msgid "Grupi Lahendatud (solved) help"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:group_contact
 msgid "Grupi Kontaktid (contact) pealkiri"
-msgstr ""
+msgstr "Contacts"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:group_contact_help
 msgid "Grupi Kontaktid (contact) help"
@@ -87,46 +87,46 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:107
 msgid "Isik"
-msgstr ""
+msgstr "Person"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:113
 msgid "ORG"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:119
 msgid "Domeen"
-msgstr ""
+msgstr "Domen"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:125
 msgid "Klass"
-msgstr ""
+msgstr "Class"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:131
 msgid "Objekt"
-msgstr ""
+msgstr "Object"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:137
 msgid "Lisatud"
-msgstr ""
+msgstr "Added"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:146
 msgid "T&otilde;sidus"
-msgstr ""
+msgstr "Seriousness"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:152
 msgid "Staatus"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:158
 msgid "Lahendamise aeg"
-msgstr ""
+msgstr "Solving time"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:167
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:223
 msgid "Vaata"
-msgstr ""
+msgstr "View"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:174
 #: classes/applications/customer_satisfaction_center/customer_feedback_manager.aw:227
 msgid "Muuda"
-msgstr ""
+msgstr "Change"

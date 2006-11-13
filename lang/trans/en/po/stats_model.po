@@ -16,5 +16,5 @@ msgstr ""
 
 #: classes/applications/stats/stats_model.aw:408
 msgid "Syslogi arhiivi staatus"
-msgstr ""
+msgstr "Syslog archive status"
 

@@ -35,32 +35,32 @@ msgstr "No ACL error messages defined! no can_view access for object %s"
 
 #: classes/contentmgmt/site_show.aw:2837
 msgid "Lisa uus k&otilde;rvale"
-msgstr ""
+msgstr "Add new on same level"
 
 #: classes/contentmgmt/site_show.aw:2847
 msgid "Lisa uus alamkaust"
-msgstr ""
+msgstr "Add new subfolder"
 
 #: classes/contentmgmt/site_show.aw:2857
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/contentmgmt/site_show.aw:2867
 msgid "Muuda &otilde;igusi"
-msgstr ""
+msgstr "Change rights"
 
 #: classes/contentmgmt/site_show.aw:2876
 msgid "Peida"
-msgstr ""
+msgstr "Hide"
 
 #: classes/contentmgmt/site_show.aw:2880
 msgid "L&otilde;ika"
-msgstr ""
+msgstr "Cut"
 
 #: classes/contentmgmt/site_show.aw:2888 classes/contentmgmt/site_show.aw:2920
 msgid "Kleebi"
-msgstr ""
+msgstr "Paste"
 
 #: classes/contentmgmt/site_show.aw:2908
 msgid "Lisa uus"
-msgstr ""
+msgstr "Add new"

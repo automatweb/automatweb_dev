@@ -226,7 +226,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_prods_are_folders
 msgid "Omaduse Veebis tooted on kataloogid (prods_are_folders) caption"
-msgstr ""
+msgstr "Products are folders in web"
 
 #: classes/applications/shop/shop_order_center.aw:prop_prods_are_folders_comment
 msgid "Omaduse Veebis tooted on kataloogid (prods_are_folders) kommentaar"
@@ -313,7 +313,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mail_to_seller_in_el
 msgid "Omaduse Saada meil aadressile, mis on elemendis (mail_to_seller_in_el) caption"
-msgstr ""
+msgstr "Send e-mail to address which is in element"
 
 #: classes/applications/shop/shop_order_center.aw:prop_mail_to_seller_in_el_comment
 msgid "Omaduse Saada meil aadressile, mis on elemendis (mail_to_seller_in_el) kommentaar"
@@ -340,7 +340,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mails_sep_by_el
 msgid "Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) caption"
-msgstr ""
+msgstr "Send separate e-mails according to classificators"
 
 #: classes/applications/shop/shop_order_center.aw:prop_mails_sep_by_el_comment
 msgid "Omaduse Saada eraldi meilid vastavalt klassifikaatorile (mails_sep_by_el) kommentaar"
@@ -412,7 +412,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_no_show_cart_contents
 msgid "Omaduse &Auml;ra n&auml;ita korvi kinnitusvaadet (no_show_cart_contents) caption"
-msgstr ""
+msgstr "Do not show basket confirmation view"
 
 #: classes/applications/shop/shop_order_center.aw:prop_no_show_cart_contents_comment
 msgid "Omaduse &Auml;ra n&auml;ita korvi kinnitusvaadet (no_show_cart_contents) kommentaar"
@@ -495,7 +495,7 @@ msgstr ""
 # classes/applications/shop/shop_order_center.aw:prop_psfieldmap_help
 #: classes/applications/shop/shop_order_center.aw:prop_psfieldmap_help
 msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele (psfieldmap) help"
-msgstr ""
+msgstr "Choose elements in order that correspond personal data"
 
 # classes/applications/shop/shop_order_center.aw:prop_orgfieldmap
 #: classes/applications/shop/shop_order_center.aw:prop_orgfieldmap
@@ -510,7 +510,7 @@ msgstr ""
 # classes/applications/shop/shop_order_center.aw:prop_orgfieldmap_help
 #: classes/applications/shop/shop_order_center.aw:prop_orgfieldmap_help
 msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) help"
-msgstr ""
+msgstr "Choose elements in order that correspond organisational data"
 
 # classes/applications/shop/shop_order_center.aw:group_mail_settings
 #: classes/applications/shop/shop_order_center.aw:group_mail_settings
@@ -524,7 +524,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:group_mail_settings_orderer
 msgid "Grupi Tellijale (mail_settings_orderer) pealkiri"
-msgstr ""
+msgstr "To orderer"
 
 #: classes/applications/shop/shop_order_center.aw:group_mail_settings_orderer_help
 msgid "Grupi Tellijale (mail_settings_orderer) help"
@@ -532,7 +532,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:group_mail_settings_seller
 msgid "Grupi Pakkujale (mail_settings_seller) pealkiri"
-msgstr ""
+msgstr "To seller"
 
 #: classes/applications/shop/shop_order_center.aw:group_mail_settings_seller_help
 msgid "Grupi Pakkujale (mail_settings_seller) help"
@@ -609,7 +609,7 @@ msgstr "display controller"
 
 #: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_ORDER_NAME_CTR
 msgid "Seose tellimuse nime kontroller (RELTYPE_ORDER_NAME_CTR) tekst"
-msgstr ""
+msgstr "order name controller"
 
 #: classes/applications/shop/shop_order_center.aw:182
 msgid "Sessionipõhine"

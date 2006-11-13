@@ -1,0 +1,76 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/common/room_reservation.aw:class_1174_help
+msgid "Klassi Ruumi broneerimine help"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_rooms
+msgid "Omaduse Ruumid (rooms) caption"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_rooms_comment
+msgid "Omaduse Ruumid (rooms) kommentaar"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_rooms_help
+msgid "Omaduse Ruumid (rooms) help"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_reservation_template
+msgid "Omaduse Broneeringu template (reservation_template) caption"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_reservation_template_comment
+msgid "Omaduse Broneeringu template (reservation_template) kommentaar"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_reservation_template_help
+msgid "Omaduse Broneeringu template (reservation_template) help"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_levels
+msgid "Omaduse  (levels) caption"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_levels_comment
+msgid "Omaduse  (levels) kommentaar"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_levels_help
+msgid "Omaduse  (levels) help"
+msgstr ""
+
+#: classes/common/room_reservation.aw:rel_RELTYPE_ROOM
+msgid "Seose  (RELTYPE_ROOM) tekst"
+msgstr ""
+
+#: classes/common/room_reservation.aw:60
+msgid "\n"
+msgstr ""
+
+#: classes/common/room_reservation.aw:62
+msgid "Template fail peab asuma kataloogis :"
+msgstr ""
+
+#: classes/common/room_reservation.aw:115
+msgid "Tase"
+msgstr ""
+
+#: classes/common/room_reservation.aw:120
+msgid "Etapi nimi"
+msgstr ""
+
+#: classes/common/room_reservation.aw:140
+msgid "Template"
+msgstr ""
+

@@ -13,52 +13,52 @@ msgstr ""
 #: classes/vcl/toolbar.aw:153 classes/vcl/toolbar.aw:178
 #: classes/vcl/toolbar.aw:344
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/vcl/toolbar.aw:101
 msgid "fail"
-msgstr ""
+msgstr "file"
 
 #: classes/vcl/toolbar.aw:102
 msgid "kustuta fail"
-msgstr ""
+msgstr "delet file"
 
 #: classes/vcl/toolbar.aw:183
 msgid "text"
-msgstr ""
+msgstr "text"
 
 #: classes/vcl/toolbar.aw:184
 msgid "tiitel"
-msgstr ""
+msgstr "title"
 
 #: classes/vcl/toolbar.aw:189
 msgid "suubmenuuu"
-msgstr ""
+msgstr "subfolder"
 
 #: classes/vcl/toolbar.aw:193
 msgid "teine tekst"
-msgstr ""
+msgstr "other text"
 
 #: classes/vcl/toolbar.aw:194
 msgid "teine tiitel"
-msgstr ""
+msgstr "other title"
 
 #: classes/vcl/toolbar.aw:251
 msgid "neti.ee"
-msgstr ""
+msgstr "neti.ee"
 
 #: classes/vcl/toolbar.aw:252
 msgid "Oled sa kindel et tahad ikka sinna saidile minna?"
-msgstr ""
+msgstr "Are You sure You want to go on this site?"
 
 #: classes/vcl/toolbar.aw:493
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/vcl/toolbar.aw:529 classes/vcl/toolbar.aw:537
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/vcl/toolbar.aw:560
 msgid "Kustuta valitud objektid"
-msgstr ""
+msgstr "Delete selected objects"

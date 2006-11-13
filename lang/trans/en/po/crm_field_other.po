@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_location
 msgid "Omaduse Asukoht (location) caption"
-msgstr ""
+msgstr "Location"
 
 #: classes/applications/crm/crm_field_other.aw:prop_location_comment
 msgid "Omaduse Asukoht (location) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_languages
 msgid "Omaduse Teeninduskeeled (languages) caption"
-msgstr ""
+msgstr "Service languages"
 
 #: classes/applications/crm/crm_field_other.aw:prop_languages_comment
 msgid "Omaduse Teeninduskeeled (languages) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_price_level
 msgid "Omaduse Hinnaklass (price_level) caption"
-msgstr ""
+msgstr "Price level"
 
 #: classes/applications/crm/crm_field_other.aw:prop_price_level_comment
 msgid "Omaduse Hinnaklass (price_level) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_comment
 msgid "Omaduse Kirjeldus (comment) caption"
-msgstr ""
+msgstr "Description"
 
 #: classes/applications/crm/crm_field_other.aw:prop_comment_comment
 msgid "Omaduse Kirjeldus (comment) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_crm_field
 msgid "Omaduse Tegevusala (crm_field) caption"
-msgstr ""
+msgstr "Field"
 
 #: classes/applications/crm/crm_field_other.aw:prop_crm_field_comment
 msgid "Omaduse Tegevusala (crm_field) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_phone_id
 msgid "Omaduse Telefon (phone_id) caption"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/crm/crm_field_other.aw:prop_phone_id_comment
 msgid "Omaduse Telefon (phone_id) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_telefax_id
 msgid "Omaduse Faks (telefax_id) caption"
-msgstr ""
+msgstr "Fax"
 
 #: classes/applications/crm/crm_field_other.aw:prop_telefax_id_comment
 msgid "Omaduse Faks (telefax_id) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_email_id
 msgid "Omaduse E-posti aadressid (email_id) caption"
-msgstr ""
+msgstr "E-mail addresses"
 
 #: classes/applications/crm/crm_field_other.aw:prop_email_id_comment
 msgid "Omaduse E-posti aadressid (email_id) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:prop_images
 msgid "Omaduse Pildid (images) caption"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/crm/crm_field_other.aw:prop_images_comment
 msgid "Omaduse Pildid (images) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:group_cedit
 msgid "Grupi Kontaktandmed (cedit) pealkiri"
-msgstr ""
+msgstr "Contact data"
 
 #: classes/applications/crm/crm_field_other.aw:group_cedit_help
 msgid "Grupi Kontaktandmed (cedit) help"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:group_images
 msgid "Grupi Pildid (images) pealkiri"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/crm/crm_field_other.aw:group_images_help
 msgid "Grupi Pildid (images) help"
@@ -140,7 +140,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:rel_RELTYPE_EMAIL
 msgid "Seose E-post (RELTYPE_EMAIL) tekst"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/crm/crm_field_other.aw:rel_RELTYPE_PHONE
 msgid "Seose Telefon (RELTYPE_PHONE) tekst"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:rel_RELTYPE_TELEFAX
 msgid "Seose Fax (RELTYPE_TELEFAX) tekst"
-msgstr ""
+msgstr "Fax"
 
 #: classes/applications/crm/crm_field_other.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
@@ -156,33 +156,33 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_other.aw:77
 msgid "Kesklinnas"
-msgstr ""
+msgstr "Centre"
 
 #: classes/applications/crm/crm_field_other.aw:78
 msgid "V&amp;auml;ljaspool kesklinna"
-msgstr ""
+msgstr "Outside centre"
 
 #: classes/applications/crm/crm_field_other.aw:79
 msgid "V&amp;auml;ljaspool linna"
-msgstr ""
+msgstr "Outside town"
 
 #: classes/applications/crm/crm_field_other.aw:84
 msgid "A"
-msgstr ""
+msgstr "A"
 
 #: classes/applications/crm/crm_field_other.aw:85
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: classes/applications/crm/crm_field_other.aw:86
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: classes/applications/crm/crm_field_other.aw:87
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: classes/applications/crm/crm_field_other.aw:88
 msgid "E"
-msgstr ""
+msgstr "E"
 

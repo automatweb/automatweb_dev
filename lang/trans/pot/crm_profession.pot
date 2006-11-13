@@ -15,15 +15,15 @@ msgid "Klassi Ametinimetus help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_ext_id
-msgid "Omaduse Siduss&uuml;steemi ID (ext_id) caption"
+msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_ext_id_comment
-msgid "Omaduse Siduss&uuml;steemi ID (ext_id) kommentaar"
+msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_ext_id_help
-msgid "Omaduse Siduss&uuml;steemi ID (ext_id) help"
+msgid "Omaduse Sidussüsteemi ID (ext_id) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_hr_price
@@ -39,15 +39,15 @@ msgid "Omaduse Tunnihind (hr_price) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk
-msgid "Omaduse J&auml;rk (jrk) caption"
+msgid "Omaduse Järk (jrk) caption"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk_comment
-msgid "Omaduse J&auml;rk (jrk) kommentaar"
+msgid "Omaduse Järk (jrk) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_jrk_help
-msgid "Omaduse J&auml;rk (jrk) help"
+msgid "Omaduse Järk (jrk) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_directive
@@ -75,23 +75,23 @@ msgid "Omaduse Nimi mitmuses (name_in_plural) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_trans
-msgid "Omaduse T&otilde;lkimine (trans) caption"
+msgid "Omaduse Tõlkimine (trans) caption"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_trans_comment
-msgid "Omaduse T&otilde;lkimine (trans) kommentaar"
+msgid "Omaduse Tõlkimine (trans) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_trans_help
-msgid "Omaduse T&otilde;lkimine (trans) help"
+msgid "Omaduse Tõlkimine (trans) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:group_trans
-msgid "Grupi T&otilde;lkimine (trans) pealkiri"
+msgid "Grupi Tõlkimine (trans) pealkiri"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:group_trans_help
-msgid "Grupi T&otilde;lkimine (trans) help"
+msgid "Grupi Tõlkimine (trans) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:rel_RELTYPE_SIMILARPROFESSION

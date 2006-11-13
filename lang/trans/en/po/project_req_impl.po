@@ -12,23 +12,23 @@ msgstr ""
 
 #: classes/applications/groupware/project_req_impl.aw:16
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/applications/groupware/project_req_impl.aw:31
 msgid "Toimetus"
-msgstr ""
+msgstr "Task"
 
 #: classes/applications/groupware/project_req_impl.aw:46
 msgid "K&amp;otilde;ne"
-msgstr ""
+msgstr "Call"
 
 #: classes/applications/groupware/project_req_impl.aw:61
 msgid "Kohtumine"
-msgstr ""
+msgstr "Meeting"
 
 #: classes/applications/groupware/project_req_impl.aw:76
 msgid "Arendus&amp;uuml;lesanne"
-msgstr ""
+msgstr "Development task"
 
 #: classes/applications/groupware/project_req_impl.aw:92
 msgid "N&amp;otilde;ue"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/groupware/project_req_impl.aw:99
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/groupware/project_req_impl.aw:134
 msgid ""
@@ -44,17 +44,17 @@ msgstr ""
 
 #: classes/applications/groupware/project_req_impl.aw:138
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/groupware/project_req_impl.aw:144
 msgid "Looja"
-msgstr ""
+msgstr "Created by"
 
 #: classes/applications/groupware/project_req_impl.aw:150
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/applications/groupware/project_req_impl.aw:159
 msgid "Osalejad"
-msgstr ""
+msgstr "Participants"
 

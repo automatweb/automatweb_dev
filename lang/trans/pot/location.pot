@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Foto kohast (photo) help"
 msgstr ""
 
+#: classes/applications/scm/location.aw:prop_bank_payment
+msgid "Omaduse Pangamakse (bank_payment) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_bank_payment_comment
+msgid "Omaduse Pangamakse (bank_payment) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_bank_payment_help
+msgid "Omaduse Pangamakse (bank_payment) help"
+msgstr ""
+
 #: classes/applications/scm/location.aw:rel_RELTYPE_MAP
 msgid "Seose Kaart (RELTYPE_MAP) tekst"
 msgstr ""
@@ -60,5 +72,9 @@ msgstr ""
 
 #: classes/applications/scm/location.aw:rel_RELTYPE_ADDRESS
 msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_BANK_PAYMENT
+msgid "Seose Pangalink (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
 

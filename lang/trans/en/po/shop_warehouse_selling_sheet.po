@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_selling_sheet.aw:prop_date
 msgid "Omaduse Kuup&auml;ev (date) caption"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/shop/shop_warehouse_selling_sheet.aw:prop_date_comment
 msgid "Omaduse Kuup&auml;ev (date) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_selling_sheet.aw:prop_buyer
 msgid "Omaduse Ostja (buyer) caption"
-msgstr ""
+msgstr "Buyer"
 
 #: classes/applications/shop/shop_warehouse_selling_sheet.aw:prop_buyer_comment
 msgid "Omaduse Ostja (buyer) kommentaar"

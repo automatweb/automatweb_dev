@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/vcl/quick_add.aw:39
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/vcl/quick_add.aw:42
 msgid "Lisa ja t&auml;ienda"
-msgstr ""
+msgstr "Add and modify"
 

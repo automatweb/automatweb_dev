@@ -11,20 +11,20 @@ msgstr ""
 
 #: classes/doc_display.aw:335
 msgid "Lisa uus"
-msgstr ""
+msgstr "Add new"
 
 #: classes/doc_display.aw:341
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/doc_display.aw:346
 msgid "Peida"
-msgstr ""
+msgstr "Hide"
 
 #: classes/doc_display.aw:350
 msgid "L&otilde;ika"
-msgstr ""
+msgstr "Cut"
 
 #: classes/doc_display.aw:356
 msgid "Kleebi"
-msgstr ""
+msgstr "Paste"

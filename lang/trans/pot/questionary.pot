@@ -122,15 +122,55 @@ msgstr ""
 msgid "Ekspordi tulemused"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:177
+#: classes/applications/questionary/questionary.aw:181
 msgid "Ei oska &ouml;elda"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:182
+#: classes/applications/questionary/questionary.aw:186
 msgid "topic\question"
 msgstr ""
 
-#: classes/applications/questionary/questionary.aw:302
+#: classes/applications/questionary/questionary.aw:317
 msgid "Vasta"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:659
+msgid "Aeg"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:663
+msgid "ID"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:667
+msgid "Sugu"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:671
+msgid "Vanus"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:675
+msgid "Tegevusala"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:679
+msgid "Õimine/&oõpetamine koolis"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:683
+msgid "Huvivaldkond"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:687
+msgid "Rahvusraamatukogu külastan"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:691
+msgid "Rahvusraamatukogu teenuseid kasutan"
+msgstr ""
+
+#: classes/applications/questionary/questionary.aw:695
+msgid "Kommentaar"
 msgstr ""
 

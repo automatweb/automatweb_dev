@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_area
 msgid "Omaduse Pindala (area) caption"
-msgstr ""
+msgstr "Area"
 
 #: classes/crm/crm_conference_room.aw:prop_area_comment
 msgid "Omaduse Pindala (area) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_description
 msgid "Omaduse Kirjeldus (description) caption"
-msgstr ""
+msgstr "Description"
 
 #: classes/crm/crm_conference_room.aw:prop_description_comment
 msgid "Omaduse Kirjeldus (description) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_type_chair
 msgid "Omaduse Toolid (type_chair) caption"
-msgstr ""
+msgstr "Chairs"
 
 #: classes/crm/crm_conference_room.aw:prop_type_chair_comment
 msgid "Omaduse Toolid (type_chair) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_type_chair_table
 msgid "Omaduse Tool + Laud (type_chair_table) caption"
-msgstr ""
+msgstr "Chair + table"
 
 #: classes/crm/crm_conference_room.aw:prop_type_chair_table_comment
 msgid "Omaduse Tool + Laud (type_chair_table) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_type_conference_table
 msgid "Omaduse N&otilde;upidamislaud (type_conference_table) caption"
-msgstr ""
+msgstr "Conference atble"
 
 #: classes/crm/crm_conference_room.aw:prop_type_conference_table_comment
 msgid "Omaduse N&otilde;upidamislaud (type_conference_table) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_type_u_table
 msgid "Omaduse U-kujuline laud (type_u_table) caption"
-msgstr ""
+msgstr "U-shaped table"
 
 #: classes/crm/crm_conference_room.aw:prop_type_u_table_comment
 msgid "Omaduse U-kujuline laud (type_u_table) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_type_oval_table
 msgid "Omaduse &Uuml;marlaud (type_oval_table) caption"
-msgstr ""
+msgstr "Round table"
 
 #: classes/crm/crm_conference_room.aw:prop_type_oval_table_comment
 msgid "Omaduse &Uuml;marlaud (type_oval_table) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/crm/crm_conference_room.aw:prop_type_chair_diag
 msgid "Omaduse Ainult toolid diagonaalis (type_chair_diag) caption"
-msgstr ""
+msgstr "Only chairs in diagonal"
 
 #: classes/crm/crm_conference_room.aw:prop_type_chair_diag_comment
 msgid "Omaduse Ainult toolid diagonaalis (type_chair_diag) kommentaar"

@@ -10,5 +10,49 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/common/bank_payment.aw:class_1077_help
-msgid "Klassi Bank Payment help"
+msgid "Klassi Pangamakse help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_default_unit_sum
+msgid "Omaduse Vaikimisi &uuml;hiku summa (default_unit_sum) caption"
+msgstr "Default unit sum"
+
+#: classes/common/bank_payment.aw:prop_default_unit_sum_comment
+msgid "Omaduse Vaikimisi &uuml;hiku summa (default_unit_sum) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_default_unit_sum_help
+msgid "Omaduse Vaikimisi &uuml;hiku summa (default_unit_sum) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_expl
+msgid "Omaduse Selgitus (expl) caption"
+msgstr "Explanation"
+
+#: classes/common/bank_payment.aw:prop_expl_comment
+msgid "Omaduse Selgitus (expl) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_expl_help
+msgid "Omaduse Selgitus (expl) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank
+msgid "Omaduse  (bank) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank_comment
+msgid "Omaduse  (bank) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank_help
+msgid "Omaduse  (bank) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:group_bank
+msgid "Grupi Pankade info (bank) pealkiri"
+msgstr "Bank info"
+
+#: classes/common/bank_payment.aw:group_bank_help
+msgid "Grupi Pankade info (bank) help"
 msgstr ""

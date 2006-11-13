@@ -17,7 +17,7 @@ msgstr ""
 
 #: classes/file.aw:prop_needs_translation
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/file.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
@@ -29,7 +29,7 @@ msgstr ""
 
 #: classes/file.aw:prop_is_translated
 msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/file.aw:prop_is_translated_comment
 msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"

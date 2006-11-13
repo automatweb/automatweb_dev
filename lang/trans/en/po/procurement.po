@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_orderer
 msgid "Omaduse Tellija (orderer) caption"
-msgstr ""
+msgstr "Orderer"
 
 #: classes/applications/procurement_center/procurement.aw:prop_orderer_comment
 msgid "Omaduse Tellija (orderer) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_state
 msgid "Omaduse Staatus (state) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/procurement_center/procurement.aw:prop_state_comment
 msgid "Omaduse Staatus (state) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_offerers
 msgid "Omaduse Pakkujad (offerers) caption"
-msgstr ""
+msgstr "Offerers"
 
 #: classes/applications/procurement_center/procurement.aw:prop_offerers_comment
 msgid "Omaduse Pakkujad (offerers) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_winning_offer
 msgid "Omaduse V&otilde;itnud pakkumine (winning_offer) caption"
-msgstr ""
+msgstr "Winning offer"
 
 #: classes/applications/procurement_center/procurement.aw:prop_winning_offer_comment
 msgid "Omaduse V&otilde;itnud pakkumine (winning_offer) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_proj
 msgid "Omaduse Projekt (proj) caption"
-msgstr ""
+msgstr "Project"
 
 #: classes/applications/procurement_center/procurement.aw:prop_proj_comment
 msgid "Omaduse Projekt (proj) kommentaar"
@@ -159,7 +159,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_publish_date
 msgid "Omaduse Avaldamise kuup&auml;ev (publish_date) caption"
-msgstr ""
+msgstr "Publishing date"
 
 #: classes/applications/procurement_center/procurement.aw:prop_publish_date_comment
 msgid "Omaduse Avaldamise kuup&auml;ev (publish_date) kommentaar"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_offers_date
 msgid "Omaduse Pakkumiste esitamise kuup&auml;ev (offers_date) caption"
-msgstr ""
+msgstr "Offer date"
 
 #: classes/applications/procurement_center/procurement.aw:prop_offers_date_comment
 msgid "Omaduse Pakkumiste esitamise kuup&auml;ev (offers_date) kommentaar"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_completion_date
 msgid "Omaduse Valmimiskuup&auml;ev (completion_date) caption"
-msgstr ""
+msgstr "Completion date"
 
 #: classes/applications/procurement_center/procurement.aw:prop_completion_date_comment
 msgid "Omaduse Valmimiskuup&auml;ev (completion_date) kommentaar"
@@ -195,7 +195,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_compl_date_req
 msgid "Omaduse Lahenduse valmimist&auml;htaeg n&otilde;utud (compl_date_req) caption"
-msgstr ""
+msgstr "Completion date required"
 
 #: classes/applications/procurement_center/procurement.aw:prop_compl_date_req_comment
 msgid "Omaduse Lahenduse valmimist&auml;htaeg n&otilde;utud (compl_date_req) kommentaar"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_pri_t
 msgid "Omaduse Prioriteedid (pri_t) caption"
-msgstr ""
+msgstr "Priorities"
 
 #: classes/applications/procurement_center/procurement.aw:prop_pri_t_comment
 msgid "Omaduse Prioriteedid (pri_t) kommentaar"
@@ -231,7 +231,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_crit_tb
 msgid "Omaduse Kriteeriumite toolbar (crit_tb) caption"
-msgstr ""
+msgstr "Criterias toolbar"
 
 #: classes/applications/procurement_center/procurement.aw:prop_crit_tb_comment
 msgid "Omaduse Kriteeriumite toolbar (crit_tb) kommentaar"
@@ -243,7 +243,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_crit_t
 msgid "Omaduse Kriteeriumid (crit_t) caption"
-msgstr ""
+msgstr "Criterias"
 
 #: classes/applications/procurement_center/procurement.aw:prop_crit_t_comment
 msgid "Omaduse Kriteeriumid (crit_t) kommentaar"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_d
 msgid "Grupi N&otilde;uete nimekiri (d) pealkiri"
-msgstr ""
+msgstr "Requirements list"
 
 #: classes/applications/procurement_center/procurement.aw:group_d_help
 msgid "Grupi N&otilde;uete nimekiri (d) help"
@@ -263,7 +263,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_products
 msgid "Grupi Toodete nimekiri (products) pealkiri"
-msgstr ""
+msgstr "Products list"
 
 #: classes/applications/procurement_center/procurement.aw:group_products_help
 msgid "Grupi Toodete nimekiri (products) help"
@@ -271,7 +271,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_s
 msgid "Grupi Hanke tingimused (s) pealkiri"
-msgstr ""
+msgstr "Procurement conditions"
 
 #: classes/applications/procurement_center/procurement.aw:group_s_help
 msgid "Grupi Hanke tingimused (s) help"
@@ -279,7 +279,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_s_general
 msgid "Grupi M&auml;&auml;rangud (s_general) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/applications/procurement_center/procurement.aw:group_s_general_help
 msgid "Grupi M&auml;&auml;rangud (s_general) help"
@@ -287,7 +287,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_s_pris
 msgid "Grupi Prioriteedid (s_pris) pealkiri"
-msgstr ""
+msgstr "Priorities"
 
 #: classes/applications/procurement_center/procurement.aw:group_s_pris_help
 msgid "Grupi Prioriteedid (s_pris) help"
@@ -295,7 +295,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_team
 msgid "Grupi Meeskond (team) pealkiri"
-msgstr ""
+msgstr "Team"
 
 #: classes/applications/procurement_center/procurement.aw:group_team_help
 msgid "Grupi Meeskond (team) help"
@@ -303,7 +303,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_crit
 msgid "Grupi Kriteeriumid (crit) pealkiri"
-msgstr ""
+msgstr "Criterias"
 
 #: classes/applications/procurement_center/procurement.aw:group_crit_help
 msgid "Grupi Kriteeriumid (crit) help"
@@ -311,7 +311,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_o
 msgid "Grupi Tehtud pakkumised (o) pealkiri"
-msgstr ""
+msgstr "Made offers"
 
 #: classes/applications/procurement_center/procurement.aw:group_o_help
 msgid "Grupi Tehtud pakkumised (o) help"
@@ -319,174 +319,174 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:rel_RELTYPE_OFFERER
 msgid "Seose Pakkuja (RELTYPE_OFFERER) tekst"
-msgstr ""
+msgstr "Offerer"
 
 #: classes/applications/procurement_center/procurement.aw:rel_RELTYPE_TEAM_MEMBER
 msgid "Seose Meeskonna liige (RELTYPE_TEAM_MEMBER) tekst"
-msgstr ""
+msgstr "Team member"
 
 #: classes/applications/procurement_center/procurement.aw:rel_RELTYPE_ORDERER
 msgid "Seose Tellija (RELTYPE_ORDERER) tekst"
-msgstr ""
+msgstr "Orderer"
 
 #: classes/applications/procurement_center/procurement.aw:rel_RELTYPE_WINNING_OFFER
 msgid "Seose V&otilde;tnud pakkumine (RELTYPE_WINNING_OFFER) tekst"
-msgstr ""
+msgstr "Winning offer"
 
 #: classes/applications/procurement_center/procurement.aw:rel_RELTYPE_PRI
 msgid "Seose Prioriteet (RELTYPE_PRI) tekst"
-msgstr ""
+msgstr "Priority"
 
 #: classes/applications/procurement_center/procurement.aw:rel_RELTYPE_CRITERIA
 msgid "Seose Kriteerium (RELTYPE_CRITERIA) tekst"
-msgstr ""
+msgstr "Criteria"
 
 #: classes/applications/procurement_center/procurement.aw:129
 #: classes/applications/procurement_center/procurement.aw:525
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/procurement_center/procurement.aw:130
 msgid "Avaldatud"
-msgstr ""
+msgstr "Published"
 
 #: classes/applications/procurement_center/procurement.aw:131
 msgid "T&ouml;&ouml;s"
-msgstr ""
+msgstr "In progress"
 
 #: classes/applications/procurement_center/procurement.aw:132
 msgid "Valmis"
-msgstr ""
+msgstr "Ready"
 
 #: classes/applications/procurement_center/procurement.aw:133
 msgid "Suletud"
-msgstr ""
+msgstr "Closed"
 
 #: classes/applications/procurement_center/procurement.aw:178
 msgid "Valimata"
-msgstr ""
+msgstr "Not selected"
 
 #: classes/applications/procurement_center/procurement.aw:235
 msgid "Jrk"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/procurement_center/procurement.aw:242
 msgid "Toode"
-msgstr ""
+msgstr "Product"
 
 #: classes/applications/procurement_center/procurement.aw:246
 msgid "Kogus"
-msgstr ""
+msgstr "Quantity"
 
 #: classes/applications/procurement_center/procurement.aw:250
 msgid "&Uuml;hik"
-msgstr ""
+msgstr "Unit"
 
 #: classes/applications/procurement_center/procurement.aw:407
 #: classes/applications/procurement_center/procurement.aw:825
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/procurement_center/procurement.aw:412
 msgid "T&uuml;&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/procurement_center/procurement.aw:532
 msgid "Kataloog"
-msgstr ""
+msgstr "Folder"
 
 #: classes/applications/procurement_center/procurement.aw:538
 msgid "N&otilde;ue"
-msgstr ""
+msgstr "Requirement"
 
 #: classes/applications/procurement_center/procurement.aw:545
 msgid "Kustuta valitud n&otilde;uded"
-msgstr ""
+msgstr "Delete selected requirements"
 
 #: classes/applications/procurement_center/procurement.aw:547
 msgid "Kas oled kindel et soovid valitud n&otilde;uded kustudada?"
-msgstr ""
+msgstr "Are You sure You want to delete selected requirements"
 
 #: classes/applications/procurement_center/procurement.aw:575
 msgid "N&otilde;ude nimi"
-msgstr ""
+msgstr "Requirement"
 
 #: classes/applications/procurement_center/procurement.aw:581
 #: classes/applications/procurement_center/procurement.aw:831
 msgid "Looja"
-msgstr ""
+msgstr "Created by"
 
 #: classes/applications/procurement_center/procurement.aw:587
 #: classes/applications/procurement_center/procurement.aw:837
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/applications/procurement_center/procurement.aw:596
 #: classes/applications/procurement_center/procurement.aw:846
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/applications/procurement_center/procurement.aw:602
 #: classes/applications/procurement_center/procurement.aw:852
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/applications/procurement_center/procurement.aw:671
 msgid "Vali v&otilde;itjapakkumine"
-msgstr ""
+msgstr "Select winning offer"
 
 #: classes/applications/procurement_center/procurement.aw:673
 msgid "Kas oled kindel et soovid valitud pakkumise v&auml;lja valida?"
-msgstr ""
+msgstr "Are You sure You want to select winning offer"
 
 #: classes/applications/procurement_center/procurement.aw:693
 msgid "Edetabel"
-msgstr ""
+msgstr "Top"
 
 #: classes/applications/procurement_center/procurement.aw:702
 msgid "Pakkumise nimi"
-msgstr ""
+msgstr "Offer"
 
 #: classes/applications/procurement_center/procurement.aw:708
 msgid "Pakkuja"
-msgstr ""
+msgstr "Offerer"
 
 #: classes/applications/procurement_center/procurement.aw:714
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/procurement_center/procurement.aw:721
 msgid "Punktid"
-msgstr ""
+msgstr "Points"
 
 #: classes/applications/procurement_center/procurement.aw:861
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
 #: classes/applications/procurement_center/procurement.aw:965
 msgid "Kriteeriumi nimi"
-msgstr ""
+msgstr "Criteria"
 
 #: classes/applications/procurement_center/procurement.aw:972
 msgid "T&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/procurement_center/procurement.aw:978
 msgid "Protsent"
-msgstr ""
+msgstr "Percent"
 
 #: classes/applications/procurement_center/procurement.aw:1015
 msgid "Lisa kriteerium"
-msgstr ""
+msgstr "Add criteria"
 
 #: classes/applications/procurement_center/procurement.aw:1021
 msgid "Kustuta kriteeriumid"
-msgstr ""
+msgstr "Delete criterias"
 
 #: classes/applications/procurement_center/procurement.aw:1022
 msgid "Oled kindel et soovid valitud kriteeriumid kustutada?"
-msgstr ""
+msgstr "Are You sure You want to delete selected criterias"
 
 #: classes/applications/procurement_center/procurement.aw:1083
 msgid "Toodet nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
-msgstr ""
+msgstr "There is no product named %s, it will be added if You click OK"

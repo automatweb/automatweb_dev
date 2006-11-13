@@ -276,7 +276,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_search
 msgid "Omaduse Otsi (search) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_search_comment
 msgid "Omaduse Otsi (search) kommentaar"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_results
 msgid "Omaduse Tulemused (results) caption"
-msgstr ""
+msgstr "Results"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_results_comment
 msgid "Omaduse Tulemused (results) kommentaar"
@@ -300,7 +300,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_c_srch_els
 msgid "Omaduse Komplekotsingu elemendid (c_srch_els) caption"
-msgstr ""
+msgstr "Elements of detailed search"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_c_srch_els_comment
 msgid "Omaduse Komplekotsingu elemendid (c_srch_els) kommentaar"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_c_search
 msgid "Omaduse Otsi (c_search) caption"
-msgstr ""
+msgstr "Otsi"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_c_search_comment
 msgid "Omaduse Otsi (c_search) kommentaar"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_c_results
 msgid "Omaduse Tulemused (c_results) caption"
-msgstr ""
+msgstr "Results"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_c_results_comment
 msgid "Omaduse Tulemused (c_results) kommentaar"
@@ -410,11 +410,11 @@ msgstr "search group"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_CPLX_EL_CTR
 msgid "Seose kompleksotsingu elementide kontroller (RELTYPE_CPLX_EL_CTR) tekst"
-msgstr ""
+msgstr "detailed search elements controller"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_CPLX_RES_CTR
 msgid "Seose kompleksotsingu tulemuste kontroller (RELTYPE_CPLX_RES_CTR) tekst"
-msgstr ""
+msgstr "detailed search results controller"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:160
 msgid "&uuml;ksk&otilde;ik milline s&otilde;nadest (v&otilde;i)"
@@ -516,35 +516,35 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:1897
 msgid "Mitu korda sisaldab"
-msgstr ""
+msgstr "How many in results"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:1912
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:1922
 msgid "Sisu"
-msgstr ""
+msgstr "Content"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:2066
 msgid "t&auml;psuse"
-msgstr ""
+msgstr "by accuracy"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:2067
 msgid "kuup&auml;eva alusel"
-msgstr ""
+msgstr "by date"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:2068
 msgid "pealkirja alusel"
-msgstr ""
+msgstr "by title"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:2359
 msgid "Lihtne otsing"
-msgstr ""
+msgstr "Simple search"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:2364
 msgid "Detailotsing"
-msgstr ""
+msgstr "Advanced search"
 
 # classes/contentmgmt/site_search/site_search_content.aw:prop_default_order
 #~ msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) caption"

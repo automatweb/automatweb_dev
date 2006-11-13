@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/crm/building_management/crm_building_management_unit.aw:prop_code
 msgid "Omaduse Kood (code) caption"
-msgstr ""
+msgstr "Code"
 
 #: classes/applications/crm/building_management/crm_building_management_unit.aw:prop_code_comment
 msgid "Omaduse Kood (code) kommentaar"

@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/groupware/task_row.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_time
 msgid "Omaduse Aeg (time) caption"
-msgstr ""
+msgstr "Time"
 
 #: classes/applications/groupware/task_row.aw:prop_time_comment
 msgid "Omaduse Aeg (time) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_date
 msgid "Omaduse Kuup&auml;ev (date) caption"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/groupware/task_row.aw:prop_date_comment
 msgid "Omaduse Kuup&auml;ev (date) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_impl
 msgid "Omaduse Teostaja (impl) caption"
-msgstr ""
+msgstr "Implementor"
 
 #: classes/applications/groupware/task_row.aw:prop_impl_comment
 msgid "Omaduse Teostaja (impl) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_time_guess
 msgid "Omaduse Prognoositud tunde (time_guess) caption"
-msgstr ""
+msgstr "Guessed hours"
 
 #: classes/applications/groupware/task_row.aw:prop_time_guess_comment
 msgid "Omaduse Prognoositud tunde (time_guess) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_time_real
 msgid "Omaduse Kulunud tunde (time_real) caption"
-msgstr ""
+msgstr "Actual hours"
 
 #: classes/applications/groupware/task_row.aw:prop_time_real_comment
 msgid "Omaduse Kulunud tunde (time_real) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_time_to_cust
 msgid "Omaduse Tunde kliendile (time_to_cust) caption"
-msgstr ""
+msgstr "Hours for client"
 
 #: classes/applications/groupware/task_row.aw:prop_time_to_cust_comment
 msgid "Omaduse Tunde kliendile (time_to_cust) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_done
 msgid "Omaduse Tehtud (done) caption"
-msgstr ""
+msgstr "Done"
 
 #: classes/applications/groupware/task_row.aw:prop_done_comment
 msgid "Omaduse Tehtud (done) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_on_bill
 msgid "Omaduse Arvele (on_bill) caption"
-msgstr ""
+msgstr "To invoice"
 
 #: classes/applications/groupware/task_row.aw:prop_on_bill_comment
 msgid "Omaduse Arvele (on_bill) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_bill_id
 msgid "Omaduse Arve (bill_id) caption"
-msgstr ""
+msgstr "Invoice"
 
 #: classes/applications/groupware/task_row.aw:prop_bill_id_comment
 msgid "Omaduse Arve (bill_id) kommentaar"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_to_bill_date
 msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) caption"
-msgstr ""
+msgstr "Sent on invoice"
 
 #: classes/applications/groupware/task_row.aw:prop_to_bill_date_comment
 msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) kommentaar"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_ord
 msgid "Omaduse Jrk (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/groupware/task_row.aw:prop_ord_comment
 msgid "Omaduse Jrk (ord) kommentaar"
@@ -159,7 +159,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_comments
 msgid "Omaduse Kommentaarid (comments) caption"
-msgstr ""
+msgstr "Comments"
 
 #: classes/applications/groupware/task_row.aw:prop_comments_comment
 msgid "Omaduse Kommentaarid (comments) kommentaar"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
-msgstr ""
+msgstr "Comments"
 
 #: classes/applications/groupware/task_row.aw:group_comments_help
 msgid "Grupi Kommentaarid (comments) help"
@@ -179,8 +179,8 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:rel_RELTYPE_BILL
 msgid "Seose Arve (RELTYPE_BILL) tekst"
-msgstr ""
+msgstr "Invoice"
 
 #: classes/applications/groupware/task_row.aw:rel_RELTYPE_IMPL
 msgid "Seose Teostaja (RELTYPE_IMPL) tekst"
-msgstr ""
+msgstr "Implementor"

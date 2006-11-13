@@ -1,0 +1,188 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/calendar/conference_planning.aw:class_1171_help
+msgid "Klassi Konverentsi planeerimine help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_single_count
+msgid "Omaduse &Uuml;hekohaliste tubade arv (single_count) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_single_count_comment
+msgid "Omaduse &Uuml;hekohaliste tubade arv (single_count) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_single_count_help
+msgid "Omaduse &Uuml;hekohaliste tubade arv (single_count) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_double_count
+msgid "Omaduse Kahekohaliste tubade arv (double_count) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_double_count_comment
+msgid "Omaduse Kahekohaliste tubade arv (double_count) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_double_count_help
+msgid "Omaduse Kahekohaliste tubade arv (double_count) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_suite_count
+msgid "Omaduse Sviitide arv (suite_count) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_suite_count_comment
+msgid "Omaduse Sviitide arv (suite_count) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_suite_count_help
+msgid "Omaduse Sviitide arv (suite_count) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_meeting_pattern_max_days
+msgid "Omaduse Koosoleku aja mustri p&auml;evade arv (meeting_pattern_max_days) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_meeting_pattern_max_days_comment
+msgid "Omaduse Koosoleku aja mustri p&auml;evade arv (meeting_pattern_max_days) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_meeting_pattern_max_days_help
+msgid "Omaduse Koosoleku aja mustri p&auml;evade arv (meeting_pattern_max_days) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:35
+msgid "Mon"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:36
+msgid "Tue"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:37
+msgid "Wed"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:38
+msgid "Thu"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:39
+msgid "Fri"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:40
+msgid "Sat"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:41
+msgid "Sun"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:45
+msgid "Theatre"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:46
+msgid "Diplomat"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:47
+msgid "Banquet"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:48
+msgid "School"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:49
+msgid "Fishbone"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:50
+msgid "U-Shape"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:51
+msgid "Cabaret"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:52
+msgid "Dinner"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:53
+msgid "Coctail"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:57
+msgid "Data projector"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:58
+msgid "TV/DVD"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:59
+msgid "Slide projector"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:60
+msgid "Mircophones"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:61
+msgid "OHP"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:65
+msgid "Morning coffe break"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:66
+msgid "Lunch"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:67
+msgid "Afternoon coffe break"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:68
+msgid "Fruit assortment in the room"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:69
+msgid "Sodas"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:70
+msgid "Non-stop coffee"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:74
+msgid "Estionia"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:75
+msgid "Latvia"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:76
+msgid "Lietuva"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:180 classes/applications/calendar/conference_planning.aw:195
+msgid "-"
+msgstr ""
+

@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/menu_alias.aw:74
 msgid "Muuda men&uuml;&uuml; linki"
-msgstr ""
+msgstr "Edit folder link"
 
 #: classes/menu_alias.aw:79
 msgid "Lisa men&uuml;&uuml; link"
-msgstr ""
+msgstr "Add folder link"
 

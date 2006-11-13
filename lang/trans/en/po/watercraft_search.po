@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_results_on_page
 msgid "Omaduse Tulemuste arv lehel (results_on_page) caption"
-msgstr ""
+msgstr "Results on page"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_results_on_page_comment
 msgid "Omaduse Tulemuste arv lehel (results_on_page) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_max_results
 msgid "Omaduse Maksimaalne tulemuste arv (max_results) caption"
-msgstr ""
+msgstr "Max results"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_max_results_comment
 msgid "Omaduse Maksimaalne tulemuste arv (max_results) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_no_search_form
 msgid "Omaduse &Auml;ra kuva otsinguvormi (no_search_form) caption"
-msgstr ""
+msgstr "Do not show search form"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_no_search_form_comment
 msgid "Omaduse &Auml;ra kuva otsinguvormi (no_search_form) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_saved_searches
 msgid "Omaduse Salvestatud otsing (saved_searches) caption"
-msgstr ""
+msgstr "Saved search"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_saved_searches_comment
 msgid "Omaduse Salvestatud otsing (saved_searches) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_search_form_conf
 msgid "Omaduse Otsinguvormis kuvatavad v&auml;ljad (search_form_conf) caption"
-msgstr ""
+msgstr "Properties to show in search form"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:prop_search_form_conf_comment
 msgid "Omaduse Otsinguvormis kuvatavad v&auml;ljad (search_form_conf) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:group_parameters
 msgid "Grupi Parameetrid (parameters) pealkiri"
-msgstr ""
+msgstr "Parameters"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:group_parameters_help
 msgid "Grupi Parameetrid (parameters) help"
@@ -83,167 +83,167 @@ msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_search.aw:91
 msgid "Aluse t&uuml;&uuml;p"
-msgstr ""
+msgstr "Watercraft type"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:92
 msgid "Seisukord"
-msgstr ""
+msgstr "State"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:93
 msgid "Kerematerjal"
-msgstr ""
+msgstr "Material"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:94
 msgid "Asukoht"
-msgstr ""
+msgstr "Location"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:95
 msgid "Pikkus"
-msgstr ""
+msgstr "Lenght"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:96
 msgid "Laius"
-msgstr ""
+msgstr "Width"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:97
 msgid "K&otilde;rgus"
-msgstr ""
+msgstr "Height"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:98
 msgid "Raskus"
-msgstr ""
+msgstr "Weight"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:99
 msgid "S&uuml;vis"
-msgstr ""
+msgstr "Depth"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:100
 msgid "Valmistamisaasta"
-msgstr ""
+msgstr "Building year"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:101
 msgid "Reisijaid"
-msgstr ""
+msgstr "Max passengers"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:102
 msgid "Lisavarustus"
-msgstr ""
+msgstr "Additional equipment"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:103
 msgid "M&uuml;&uuml;ja"
-msgstr ""
+msgstr "Seller"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:104
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:114
 #: classes/applications/watercraft_management/watercraft_search.aw:139
 #: classes/applications/watercraft_management/watercraft_search.aw:168
 msgid "Elekter 110V"
-msgstr ""
+msgstr "Electricity 110V"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:115
 #: classes/applications/watercraft_management/watercraft_search.aw:140
 #: classes/applications/watercraft_management/watercraft_search.aw:169
 msgid "Elekter 220V"
-msgstr ""
+msgstr "Electricity 220V"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:116
 #: classes/applications/watercraft_management/watercraft_search.aw:141
 #: classes/applications/watercraft_management/watercraft_search.aw:170
 msgid "Raadiojaam"
-msgstr ""
+msgstr "Radio"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:117
 #: classes/applications/watercraft_management/watercraft_search.aw:142
 #: classes/applications/watercraft_management/watercraft_search.aw:171
 msgid "Stereo"
-msgstr ""
+msgstr "Stereo"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:118
 #: classes/applications/watercraft_management/watercraft_search.aw:143
 #: classes/applications/watercraft_management/watercraft_search.aw:172
 msgid "CD"
-msgstr ""
+msgstr "CD"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:119
 #: classes/applications/watercraft_management/watercraft_search.aw:144
 #: classes/applications/watercraft_management/watercraft_search.aw:173
 msgid "Veekindlad k&otilde;larid"
-msgstr ""
+msgstr "Waterproofed speakers"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:120
 #: classes/applications/watercraft_management/watercraft_search.aw:145
 #: classes/applications/watercraft_management/watercraft_search.aw:174
 msgid "Signalisatsioon"
-msgstr ""
+msgstr "Alarm"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:121
 #: classes/applications/watercraft_management/watercraft_search.aw:146
 #: classes/applications/watercraft_management/watercraft_search.aw:175
 msgid "Navigatsioonis&uuml;steem"
-msgstr ""
+msgstr "Navigation system"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:122
 #: classes/applications/watercraft_management/watercraft_search.aw:147
 #: classes/applications/watercraft_management/watercraft_search.aw:176
 msgid "Navigatsioonituled"
-msgstr ""
+msgstr "Navigation lights"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:123
 #: classes/applications/watercraft_management/watercraft_search.aw:148
 #: classes/applications/watercraft_management/watercraft_search.aw:177
 msgid "Treiler"
-msgstr ""
+msgstr "Trailer"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:124
 #: classes/applications/watercraft_management/watercraft_search.aw:149
 #: classes/applications/watercraft_management/watercraft_search.aw:178
 msgid "Tualett"
-msgstr ""
+msgstr "WC"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:125
 #: classes/applications/watercraft_management/watercraft_search.aw:150
 #: classes/applications/watercraft_management/watercraft_search.aw:179
 msgid "Dush"
-msgstr ""
+msgstr "Shower"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:126
 #: classes/applications/watercraft_management/watercraft_search.aw:151
 #: classes/applications/watercraft_management/watercraft_search.aw:180
 msgid "P&auml;&auml;stevest"
-msgstr ""
+msgstr "Life-guard"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:127
 #: classes/applications/watercraft_management/watercraft_search.aw:152
 #: classes/applications/watercraft_management/watercraft_search.aw:181
 msgid "Ujumisredel"
-msgstr ""
+msgstr "Swimming-ladder"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:128
 #: classes/applications/watercraft_management/watercraft_search.aw:153
 #: classes/applications/watercraft_management/watercraft_search.aw:182
 msgid "Varikatus"
-msgstr ""
+msgstr "Shelter-roof"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:129
 #: classes/applications/watercraft_management/watercraft_search.aw:154
 #: classes/applications/watercraft_management/watercraft_search.aw:183
 msgid "K&ouml;&ouml;k/Pliit"
-msgstr ""
+msgstr "Kitchen/stove"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:130
 #: classes/applications/watercraft_management/watercraft_search.aw:155
 #: classes/applications/watercraft_management/watercraft_search.aw:184
 msgid "Vendrid"
-msgstr ""
+msgstr "Vendors"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:131
 #: classes/applications/watercraft_management/watercraft_search.aw:156
 #: classes/applications/watercraft_management/watercraft_search.aw:185
 msgid "K&uuml;lmkapp"
-msgstr ""
+msgstr "Fridge"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:132
 #: classes/applications/watercraft_management/watercraft_search.aw:157
@@ -261,22 +261,22 @@ msgstr ""
 #: classes/applications/watercraft_management/watercraft_search.aw:159
 #: classes/applications/watercraft_management/watercraft_search.aw:188
 msgid "TV-video"
-msgstr ""
+msgstr "TV-video"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:135
 #: classes/applications/watercraft_management/watercraft_search.aw:160
 #: classes/applications/watercraft_management/watercraft_search.aw:189
 msgid "K&uuml;te"
-msgstr ""
+msgstr "Heating"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:136
 #: classes/applications/watercraft_management/watercraft_search.aw:161
 #: classes/applications/watercraft_management/watercraft_search.aw:190
 msgid "Veepaak"
-msgstr ""
+msgstr "Water-tank"
 
 #: classes/applications/watercraft_management/watercraft_search.aw:137
 #: classes/applications/watercraft_management/watercraft_search.aw:162
 #: classes/applications/watercraft_management/watercraft_search.aw:191
 msgid "P&auml;&auml;stepaat"
-msgstr ""
+msgstr "Saving-boat"

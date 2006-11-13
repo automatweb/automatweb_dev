@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/room_price.aw:class_1164_help
 msgid "Klassi Ruumi hind help"
 msgstr ""
@@ -186,19 +185,18 @@ msgstr ""
 msgid "P"
 msgstr ""
 
-#: classes/common/room_price.aw:97
+#: classes/common/room_price.aw:101
 msgid "Hind"
 msgstr ""
 
-#: classes/common/room_price.aw:98
+#: classes/common/room_price.aw:102
 msgid "Soodushind"
 msgstr ""
 
-#: classes/common/room_price.aw:216
+#: classes/common/room_price.aw:220
 msgid "Valuutad"
 msgstr ""
 
-#: classes/common/room_price.aw:217
+#: classes/common/room_price.aw:221
 msgid "Hind ei ole seotud &uuml;hegi ruumiga v&otilde;i on valuutad m&auml;&auml;ramata"
 msgstr ""
-

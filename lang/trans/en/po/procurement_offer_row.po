@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_product
 msgid "Omaduse Toode (product) caption"
-msgstr ""
+msgstr "Product"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_product_comment
 msgid "Omaduse Toode (product) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_amount
 msgid "Omaduse Kogus (amount) caption"
-msgstr ""
+msgstr "Amount"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_amount_comment
 msgid "Omaduse Kogus (amount) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_amount
 msgid "Omaduse Ostetav kogus (b_amount) caption"
-msgstr ""
+msgstr "Buying amount"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_amount_comment
 msgid "Omaduse Ostetav kogus (b_amount) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_price
 msgid "Omaduse Ostu hind (b_price) caption"
-msgstr ""
+msgstr "Buying price"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_b_price_comment
 msgid "Omaduse Ostu hind (b_price) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_unit
 msgid "Omaduse &Uuml;hik (unit) caption"
-msgstr ""
+msgstr "Unit"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_unit_comment
 msgid "Omaduse &Uuml;hik (unit) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_price
 msgid "Omaduse Hind (price) caption"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_price_comment
 msgid "Omaduse Hind (price) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_currency
 msgid "Omaduse Valuuta (currency) caption"
-msgstr ""
+msgstr "Currency"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_currency_comment
 msgid "Omaduse Valuuta (currency) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_shipment
 msgid "Omaduse Tarneaeg (shipment) caption"
-msgstr ""
+msgstr "Shipment time"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_shipment_comment
 msgid "Omaduse Tarneaeg (shipment) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_accept
 msgid "Omaduse Aktsepteeritud (accept) caption"
-msgstr ""
+msgstr "Accepted"
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_accept_comment
 msgid "Omaduse Aktsepteeritud (accept) kommentaar"
@@ -123,4 +123,4 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_row.aw:rel_RELTYPE_OFFER
 msgid "Seose Pakkumine (RELTYPE_OFFER) tekst"
-msgstr ""
+msgstr "Offer"

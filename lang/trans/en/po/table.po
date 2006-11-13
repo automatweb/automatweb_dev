@@ -11,7 +11,7 @@ msgstr ""
 
 #: classes/vcl/table.aw:750
 msgid "Vaata/Muuda"
-msgstr ""
+msgstr "View/Modify"
 
 #: classes/vcl/table.aw:754
 msgid "Sisseastuja Nr."
@@ -19,35 +19,35 @@ msgstr ""
 
 #: classes/vcl/table.aw:766
 msgid "Muuda"
-msgstr ""
+msgstr "Modify"
 
 #: classes/vcl/table.aw:2172
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
 #: classes/vcl/table.aw:2431
 msgid "K&otilde;ik"
-msgstr ""
+msgstr "All"
 
 #: classes/vcl/table.aw:2642
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/vcl/table.aw:2643
 msgid "Looja"
-msgstr ""
+msgstr "Created by"
 
 #: classes/vcl/table.aw:2644
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/vcl/table.aw:2645
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/vcl/table.aw:2646
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #~ msgid "no such table %s (tables.class->load_table)!"
 #~ msgstr "no such table %s (tables.class->load_table)!"

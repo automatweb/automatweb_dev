@@ -12,20 +12,20 @@ msgstr ""
 #: classes/vcl/server_folder_selector.aw:22
 #: classes/vcl/server_folder_selector.aw:61
 msgid "Vali"
-msgstr ""
+msgstr "Choose"
 
 #: classes/vcl/server_folder_selector.aw:40
 msgid "Kataloog"
-msgstr ""
+msgstr "Folder"
 
 #: classes/vcl/server_folder_selector.aw:45
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/vcl/server_folder_selector.aw:51
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/vcl/server_folder_selector.aw:106
 msgid "Vali see"
-msgstr ""
+msgstr "Pick this"

@@ -31,7 +31,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus
 msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d (menus) caption"
-msgstr ""
+msgstr "Choose folders"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_comment
 msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d (menus) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
 msgid "Seose Otsingu l&amp;auml;htekoht (RELTYPE_SEARCH_LOCATION) tekst"
-msgstr ""
+msgstr "Search from folder(s)"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:90
 msgid "Klass"
@@ -76,7 +76,7 @@ msgstr "Name"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:107
 msgid "k.a. alammen&uuml;&uuml;d"
-msgstr ""
+msgstr "incl. sub-folders"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:115
 msgid "mitteaktiivsed"

@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_show_season_from
 msgid "Omaduse Kuvatav hooaeg alates (show_season_from) caption"
-msgstr ""
+msgstr "Show season from"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_show_season_from_comment
 msgid "Omaduse Kuvatav hooaeg alates (show_season_from) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_show_season_to
 msgid "Omaduse Kuvatav hooaeg kuni (show_season_to) caption"
-msgstr ""
+msgstr "Show season till"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_show_season_to_comment
 msgid "Omaduse Kuvatav hooaeg kuni (show_season_to) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_languages
 msgid "Omaduse Keeled (languages) caption"
-msgstr ""
+msgstr "Languages"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_languages_comment
 msgid "Omaduse Keeled (languages) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_languages_to_folders
 msgid "Omaduse Keelte seosed kaustadega (languages_to_folders) caption"
-msgstr ""
+msgstr "Languages related to folders"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_languages_to_folders_comment
 msgid "Omaduse Keelte seosed kaustadega (languages_to_folders) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_organisations_folder
 msgid "Omaduse Organisatsioonide kaust (organisations_folder) caption"
-msgstr ""
+msgstr "Folder for organisations"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_organisations_folder_comment
 msgid "Omaduse Organisatsioonide kaust (organisations_folder) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_management_toolbar
 msgid "Omaduse Haldamise t&ouml;&ouml;riistariba  (management_toolbar) caption"
-msgstr ""
+msgstr "Management toolbar"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_management_toolbar_comment
 msgid "Omaduse Haldamise t&ouml;&ouml;riistariba  (management_toolbar) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_events_tree
 msgid "Omaduse &Uuml;rituste puu (events_tree) caption"
-msgstr ""
+msgstr "Events tree"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_events_tree_comment
 msgid "Omaduse &Uuml;rituste puu (events_tree) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_events_table
 msgid "Omaduse &Uuml;rituste puu (events_table) caption"
-msgstr ""
+msgstr "Events table"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_events_table_comment
 msgid "Omaduse &Uuml;rituste puu (events_table) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_genres_table
 msgid "Omaduse &zcaron;anrite tabel (genres_table) caption"
-msgstr ""
+msgstr "Genres table"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_genres_table_comment
 msgid "Omaduse &zcaron;anrite tabel (genres_table) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_add_genre
 msgid "Omaduse &#142;anr (add_genre) caption"
-msgstr ""
+msgstr "Genre"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_add_genre_comment
 msgid "Omaduse &#142;anr (add_genre) kommentaar"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_places_table
 msgid "Omaduse Toimumiskohtade tabel (places_table) caption"
-msgstr ""
+msgstr "Places table"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_places_table_comment
 msgid "Omaduse Toimumiskohtade tabel (places_table) kommentaar"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_organisers
 msgid "Omaduse Korraldajad (organisers) caption"
-msgstr ""
+msgstr "Organisers"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_organisers_comment
 msgid "Omaduse Korraldajad (organisers) kommentaar"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_add_item
 msgid "Omaduse Uus (add_item) caption"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/where_to_go/where_to_go.aw:prop_add_item_comment
 msgid "Omaduse Uus (add_item) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/applications/where_to_go/where_to_go.aw:group_settings_help
 msgid "Grupi Seaded (settings) help"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:group_management
 msgid "Grupi Haldamine (management) pealkiri"
-msgstr ""
+msgstr "Management"
 
 #: classes/applications/where_to_go/where_to_go.aw:group_management_help
 msgid "Grupi Haldamine (management) help"
@@ -188,7 +188,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:group_events
 msgid "Grupi &Uuml;ritused (events) pealkiri"
-msgstr ""
+msgstr "Events"
 
 #: classes/applications/where_to_go/where_to_go.aw:group_events_help
 msgid "Grupi &Uuml;ritused (events) help"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:group_genres
 msgid "Grupi &#142;anrid (genres) pealkiri"
-msgstr ""
+msgstr "Genres"
 
 #: classes/applications/where_to_go/where_to_go.aw:group_genres_help
 msgid "Grupi &#142;anrid (genres) help"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:group_places
 msgid "Grupi Toimumiskohad (places) pealkiri"
-msgstr ""
+msgstr "Places"
 
 #: classes/applications/where_to_go/where_to_go.aw:group_places_help
 msgid "Grupi Toimumiskohad (places) help"
@@ -212,7 +212,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:group_organisers
 msgid "Grupi Korraldajad (organisers) pealkiri"
-msgstr ""
+msgstr "Organisers"
 
 #: classes/applications/where_to_go/where_to_go.aw:group_organisers_help
 msgid "Grupi Korraldajad (organisers) help"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:group_add_item
 msgid "Grupi Uus (add_item) pealkiri"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/where_to_go/where_to_go.aw:group_add_item_help
 msgid "Grupi Uus (add_item) help"
@@ -228,73 +228,73 @@ msgstr ""
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_PLACES_FOLDER
 msgid "Seose Toimumispaikade kaust (RELTYPE_PLACES_FOLDER) tekst"
-msgstr ""
+msgstr "Folder for places"
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_EVENTS_FOLDER
 msgid "Seose &amp;Uuml;rituste kaust (RELTYPE_EVENTS_FOLDER) tekst"
-msgstr ""
+msgstr "Folder for events"
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_FORUM
 msgid "Seose Foorum (RELTYPE_FORUM) tekst"
-msgstr ""
+msgstr "Forum"
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_ORGANISATIONS_FOLDER
 msgid "Seose Organisatsioonide kaust (RELTYPE_ORGANISATIONS_FOLDER) tekst"
-msgstr ""
+msgstr "Folder for organisatsions"
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_ORGANISER
 msgid "Seose Korraldaja (RELTYPE_ORGANISER) tekst"
-msgstr ""
+msgstr "Organiser"
 
 #: classes/applications/where_to_go/where_to_go.aw:rel_RELTYPE_GENRE
 msgid "Seose &amp;#142;anr (RELTYPE_GENRE) tekst"
-msgstr ""
+msgstr "Genre"
 
 #: classes/applications/where_to_go/where_to_go.aw:186
 msgid "Keel"
-msgstr ""
+msgstr "Language"
 
 #: classes/applications/where_to_go/where_to_go.aw:191
 msgid "Toimumispaigad"
-msgstr ""
+msgstr "Locations"
 
 #: classes/applications/where_to_go/where_to_go.aw:196
 msgid "&Uuml;ritused"
-msgstr ""
+msgstr "Events"
 
 #: classes/applications/where_to_go/where_to_go.aw:201
 msgid "Foorum"
-msgstr ""
+msgstr "Forum"
 
 #: classes/applications/where_to_go/where_to_go.aw:314
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/applications/where_to_go/where_to_go.aw:319
 msgid "&#142;anr"
-msgstr ""
+msgstr "Genre"
 
 #: classes/applications/where_to_go/where_to_go.aw:328
 msgid "Toimumiskoht"
-msgstr ""
+msgstr "Location"
 
 #: classes/applications/where_to_go/where_to_go.aw:337
 msgid "Lavastus"
-msgstr ""
+msgstr "Play"
 
 #: classes/applications/where_to_go/where_to_go.aw:349
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/where_to_go/where_to_go.aw:356
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/where_to_go/where_to_go.aw:363
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/where_to_go/where_to_go.aw:440
 msgid "Sellist klassi ei saa lisada!"
-msgstr ""
+msgstr "Object not addable"
 

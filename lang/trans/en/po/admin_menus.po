@@ -35,19 +35,19 @@ msgstr "Delete"
 
 #: classes/admin/admin_menus.aw:324
 msgid "Vali fail"
-msgstr ""
+msgstr "Select file"
 
 #: classes/admin/admin_menus.aw:329
 msgid "Vali faili t&uuml;&uuml;p"
-msgstr ""
+msgstr "Select file type"
 
 #: classes/admin/admin_menus.aw:331
 msgid "Eksporditud AW'st"
-msgstr ""
+msgstr "Exported from AW"
 
 #: classes/admin/admin_menus.aw:332
 msgid "Tekstifail"
-msgstr ""
+msgstr "Text-file"
 
 #: classes/admin/admin_menus.aw:338 classes/admin/admin_menus.aw:355
 #: classes/admin/admin_menus.aw:1490

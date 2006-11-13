@@ -106,7 +106,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_controller
 msgid "Omaduse Pildi muundamise kontroller (controller) caption"
-msgstr ""
+msgstr "Controller for transforming images"
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_controller_comment
 msgid "Omaduse Pildi muundamise kontroller (controller) kommentaar"
@@ -722,4 +722,4 @@ msgstr "gallery page layout"
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:rel_RELTYPE_CONTROLLER
 msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
-msgstr ""
+msgstr "Controller"

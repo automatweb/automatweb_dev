@@ -9,14 +9,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/room_price.aw:class_1164_help
 msgid "Klassi Ruumi hind help"
 msgstr ""
 
 #: classes/common/room_price.aw:prop_type
 msgid "Omaduse Hinna t&uuml;&uuml;p (type) caption"
-msgstr ""
+msgstr "Price type"
 
 #: classes/common/room_price.aw:prop_type_comment
 msgid "Omaduse Hinna t&uuml;&uuml;p (type) kommentaar"
@@ -28,7 +27,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_recur
 msgid "Omaduse Kordub (recur) caption"
-msgstr ""
+msgstr "Reccures"
 
 #: classes/common/room_price.aw:prop_recur_comment
 msgid "Omaduse Kordub (recur) kommentaar"
@@ -40,7 +39,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_active
 msgid "Omaduse Kehtib (active) caption"
-msgstr ""
+msgstr "Active"
 
 #: classes/common/room_price.aw:prop_active_comment
 msgid "Omaduse Kehtib (active) kommentaar"
@@ -52,7 +51,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_date_from
 msgid "Omaduse Alates (date_from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/common/room_price.aw:prop_date_from_comment
 msgid "Omaduse Alates (date_from) kommentaar"
@@ -64,7 +63,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_date_to
 msgid "Omaduse Kuni (date_to) caption"
-msgstr ""
+msgstr "Till"
 
 #: classes/common/room_price.aw:prop_date_to_comment
 msgid "Omaduse Kuni (date_to) kommentaar"
@@ -76,7 +75,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_weekdays
 msgid "Omaduse N&auml;dalap&auml;evad (weekdays) caption"
-msgstr ""
+msgstr "Weekdays"
 
 #: classes/common/room_price.aw:prop_weekdays_comment
 msgid "Omaduse N&auml;dalap&auml;evad (weekdays) kommentaar"
@@ -88,7 +87,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_nr
 msgid "Omaduse Mitmes (nr) caption"
-msgstr ""
+msgstr "Count"
 
 #: classes/common/room_price.aw:prop_nr_comment
 msgid "Omaduse Mitmes (nr) kommentaar"
@@ -100,7 +99,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_time_from
 msgid "Omaduse Alates (time_from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/common/room_price.aw:prop_time_from_comment
 msgid "Omaduse Alates (time_from) kommentaar"
@@ -112,7 +111,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_time_to
 msgid "Omaduse Kuni (time_to) caption"
-msgstr ""
+msgstr "Till"
 
 #: classes/common/room_price.aw:prop_time_to_comment
 msgid "Omaduse Kuni (time_to) kommentaar"
@@ -124,7 +123,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_time
 msgid "Omaduse Aeg (time) caption"
-msgstr ""
+msgstr "Time"
 
 #: classes/common/room_price.aw:prop_time_comment
 msgid "Omaduse Aeg (time) kommentaar"
@@ -148,7 +147,7 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_bargain_percent
 msgid "Omaduse Soodustuse protsent (bargain_percent) caption"
-msgstr ""
+msgstr "Discount %"
 
 #: classes/common/room_price.aw:prop_bargain_percent_comment
 msgid "Omaduse Soodustuse protsent (bargain_percent) kommentaar"
@@ -160,45 +159,44 @@ msgstr ""
 
 #: classes/common/room_price.aw:60
 msgid "E"
-msgstr ""
+msgstr "Mo"
 
 #: classes/common/room_price.aw:61
 msgid "T"
-msgstr ""
+msgstr "Tu"
 
 #: classes/common/room_price.aw:62
 msgid "K"
-msgstr ""
+msgstr "We"
 
 #: classes/common/room_price.aw:63
 msgid "N"
-msgstr ""
+msgstr "Th"
 
 #: classes/common/room_price.aw:64
 msgid "R"
-msgstr ""
+msgstr "Fr"
 
 #: classes/common/room_price.aw:65
 msgid "L"
-msgstr ""
+msgstr "Sa"
 
 #: classes/common/room_price.aw:66
 msgid "P"
-msgstr ""
+msgstr "Su"
 
-#: classes/common/room_price.aw:97
+#: classes/common/room_price.aw:101
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
-#: classes/common/room_price.aw:98
+#: classes/common/room_price.aw:102
 msgid "Soodushind"
-msgstr ""
+msgstr "Discount"
 
-#: classes/common/room_price.aw:216
+#: classes/common/room_price.aw:220
 msgid "Valuutad"
-msgstr ""
+msgstr "Currencies"
 
-#: classes/common/room_price.aw:217
+#: classes/common/room_price.aw:221
 msgid "Hind ei ole seotud &uuml;hegi ruumiga v&otilde;i on valuutad m&auml;&auml;ramata"
-msgstr ""
-
+msgstr "Price is not connected to any room or currencies are not selected"

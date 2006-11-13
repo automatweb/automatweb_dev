@@ -16,5 +16,5 @@ msgstr ""
 
 #: classes/applications/groupware/project_team.aw:rel_RELTYPE_TEAM_MEMBER
 msgid "Seose Tiimi liige (RELTYPE_TEAM_MEMBER) tekst"
-msgstr ""
+msgstr "Team member"
 

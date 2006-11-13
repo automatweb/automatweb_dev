@@ -182,7 +182,7 @@ msgstr ""
 # classes/applications/shop/shop_product_search.aw:group_search
 #: classes/applications/shop/shop_product_search.aw:group_search
 msgid "Grupi Otsi (search) pealkiri"
-msgstr "Seearch"
+msgstr "Search"
 
 # classes/applications/shop/shop_product_search.aw:group_search_help
 #: classes/applications/shop/shop_product_search.aw:group_search_help
@@ -206,7 +206,7 @@ msgstr "order center"
 
 #: classes/applications/shop/shop_product_search.aw:rel_RELTYPE_TRANSFORM
 msgid "Seose Muundaja (RELTYPE_TRANSFORM) tekst"
-msgstr ""
+msgstr "Transformer"
 
 #: classes/applications/shop/shop_product_search.aw:187
 #: classes/applications/shop/shop_product_search.aw:324
@@ -241,11 +241,11 @@ msgstr "Column heading"
 
 #: classes/applications/shop/shop_product_search.aw:353
 msgid "Muundaja"
-msgstr ""
+msgstr "Transformer"
 
 #: classes/applications/shop/shop_product_search.aw:366
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
 #: classes/applications/shop/shop_product_search.aw:494
 msgid "Vali"

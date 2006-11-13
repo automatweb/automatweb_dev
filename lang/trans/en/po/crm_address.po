@@ -17,7 +17,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_aadress
 msgid "Omaduse T&auml;nav/K&uuml;la (aadress) caption"
-msgstr ""
+msgstr "Street/village"
 
 #: classes/crm/crm_address.aw:prop_aadress_comment
 msgid "Omaduse T&auml;nav/K&uuml;la (aadress) kommentaar"
@@ -71,7 +71,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_piirkond
 msgid "Omaduse Piirkond (piirkond) caption"
-msgstr ""
+msgstr "Area"
 
 #: classes/crm/crm_address.aw:prop_piirkond_comment
 msgid "Omaduse Piirkond (piirkond) kommentaar"
@@ -132,7 +132,7 @@ msgstr "belongs to"
 
 #: classes/crm/crm_address.aw:102
 msgid "Otsi postiindeksit"
-msgstr ""
+msgstr "Search postal index"
 
 #: classes/crm/crm_address.aw:148
 msgid "tel:"

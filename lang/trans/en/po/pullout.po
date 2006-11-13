@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/pullout.aw:prop_groups
 msgid "Omaduse Vali grupid, kellele pullouti n&auml;idatakse (groups) caption"
-msgstr ""
+msgstr "Select groups to show pullout"
 
 #: classes/pullout.aw:prop_groups_comment
 msgid "Omaduse Vali grupid, kellele pullouti n&auml;idatakse (groups) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/pullout.aw:prop_docs
 msgid "Omaduse Vali dokument, mida n&auml;idata (docs) caption"
-msgstr ""
+msgstr "Select document to show"
 
 #: classes/pullout.aw:prop_docs_comment
 msgid "Omaduse Vali dokument, mida n&auml;idata (docs) kommentaar"

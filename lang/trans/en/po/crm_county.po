@@ -43,7 +43,7 @@ msgstr ""
 
 #: classes/crm/crm_county.aw:prop_area
 msgid "Omaduse Piirkond (area) caption"
-msgstr ""
+msgstr "Area"
 
 #: classes/crm/crm_county.aw:prop_area_comment
 msgid "Omaduse Piirkond (area) kommentaar"
@@ -55,8 +55,8 @@ msgstr ""
 
 #: classes/crm/crm_county.aw:rel_RELTYPE_COUNTRY
 msgid "Seose Riik\t (RELTYPE_COUNTRY) tekst"
-msgstr ""
+msgstr "Country"
 
 #: classes/crm/crm_county.aw:rel_RELTYPE_AREA
 msgid "Seose Piirkond\t\t (RELTYPE_AREA) tekst"
-msgstr ""
+msgstr "Area"

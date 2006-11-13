@@ -576,7 +576,7 @@ msgstr "Event form config"
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_AFTER_SAVE_CONTROLLER
 msgid "Seose p&auml;rast salvestamist kontroller (RELTYPE_AFTER_SAVE_CONTROLLER) tekst"
-msgstr ""
+msgstr "Controller for after save view"
 
 #: classes/contentmgmt/webform.aw:209
 msgid "Tekst"
@@ -804,11 +804,11 @@ msgstr "--select--"
 
 #: classes/contentmgmt/webform.aw:1162
 msgid "Järjekord (kasvav)"
-msgstr ""
+msgstr "Order (increasing)"
 
 #: classes/contentmgmt/webform.aw:1163
 msgid "Järjekord (kahanev)"
-msgstr ""
+msgstr "Order (decreasing)"
 
 #: classes/contentmgmt/webform.aw:1164
 msgid "Nimi (kasvav)"
@@ -914,10 +914,10 @@ msgstr "Go on &raquo;"
 #~ msgid "All"
 #~ msgstr "Bottom"
 
-#~ msgid "Jï¿½jekord (kasvav)"
+#~ msgid "Jï¿?jekord (kasvav)"
 #~ msgstr "Order (ascending)"
 
-#~ msgid "Jï¿½jekord (kahanev)"
+#~ msgid "Jï¿?jekord (kahanev)"
 #~ msgstr "Order (descending)"
 
 #~ msgid "'elemendinimi' peab olema t&auml;idetud"
@@ -939,7 +939,7 @@ msgstr "Go on &raquo;"
 #~ msgstr "Groups table"
 
 # classes/contentmgmt/webform.aw:prop_form_output_style
-#~ msgid "Omaduse Vï¿½jundi tekstide stiil (form_output_style) caption"
+#~ msgid "Omaduse Vï¿?jundi tekstide stiil (form_output_style) caption"
 #~ msgstr "Output text style"
 
 # classes/contentmgmt/webform.aw:group_special
@@ -949,7 +949,7 @@ msgstr "Go on &raquo;"
 #~ msgid "Nimi"
 #~ msgstr "Name"
 
-#~ msgid "Jï¿½jekord"
+#~ msgid "Jï¿?jekord"
 #~ msgstr "Order"
 
 #~ msgid "Lisa grupp"
@@ -961,7 +961,7 @@ msgstr "Go on &raquo;"
 #~ msgid "Oled kindel, et tahad antud grupid kustutada?"
 #~ msgstr "Are you sure you want to delete selected groups?"
 
-#~ msgid "ï¿½tegi gruppi pole veel!"
+#~ msgid "ï¿?tegi gruppi pole veel!"
 #~ msgstr "No groups created yet!"
 
 #~ msgid "Liiguta"

@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/common/unit.aw:prop_unit_code
 msgid "Omaduse &Uuml;hiku kood (unit_code) caption"
-msgstr ""
+msgstr "Unit code"
 
 #: classes/common/unit.aw:prop_unit_code_comment
 msgid "Omaduse &Uuml;hiku kood (unit_code) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/common/unit.aw:prop_unit_sort
 msgid "Omaduse &Uuml;hiku liik (unit_sort) caption"
-msgstr ""
+msgstr "Unit type"
 
 #: classes/common/unit.aw:prop_unit_sort_comment
 msgid "Omaduse &Uuml;hiku liik (unit_sort) kommentaar"
@@ -40,21 +40,21 @@ msgstr ""
 
 #: classes/common/unit.aw:37
 msgid "pikkus&uuml;hik"
-msgstr ""
+msgstr "lenght unit"
 
 #: classes/common/unit.aw:37
 msgid "massi&uuml;hik"
-msgstr ""
+msgstr "weight unit"
 
 #: classes/common/unit.aw:37
 msgid "koguse&uuml;hik"
-msgstr ""
+msgstr "amount unit"
 
 #: classes/common/unit.aw:37
 msgid "mahu&uuml;hik"
-msgstr ""
+msgstr "capacity unit"
 
 #: classes/common/unit.aw:37
 msgid "aja&uuml;hik"
-msgstr ""
+msgstr "time unit"
 

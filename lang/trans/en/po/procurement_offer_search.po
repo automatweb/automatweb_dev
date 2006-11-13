@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer_search.aw:25
 msgid "Pakkuja"
-msgstr ""
+msgstr "Offerer"
 

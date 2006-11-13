@@ -234,47 +234,47 @@ msgstr "Are you sure you wish to remove the selected products from the order?"
 
 #: classes/applications/shop/shop_order.aw:142
 msgid "Kliendi nr: %s<br />"
-msgstr ""
+msgstr "Client no: %s<br />"
 
 #: classes/applications/shop/shop_order.aw:143
 msgid "Eesnimi:<b> %s</b><br />"
-msgstr ""
+msgstr "First name:<b> %s</b><br />"
 
 #: classes/applications/shop/shop_order.aw:144
 msgid "Perekonnanimi:<b> %s</b><br />"
-msgstr ""
+msgstr "Last name:<b> %s</b><br />"
 
 #: classes/applications/shop/shop_order.aw:146
 msgid "Aadress: <b>%s</b><br />"
-msgstr ""
+msgstr "Address:"
 
 #: classes/applications/shop/shop_order.aw:147
 msgid "Postiindeks: <b>%s</b><br />"
-msgstr ""
+msgstr "Postal index:"
 
 #: classes/applications/shop/shop_order.aw:148
 msgid "Linn: <b>%s</b><br />"
-msgstr ""
+msgstr "City:"
 
 #: classes/applications/shop/shop_order.aw:149
 msgid "E-mail: <b>%s</b><br />"
-msgstr ""
+msgstr "E-mail:"
 
 #: classes/applications/shop/shop_order.aw:150
 msgid "Telefon kodus: <b>%s</b><br />"
-msgstr ""
+msgstr "Home phone:"
 
 #: classes/applications/shop/shop_order.aw:151
 msgid "Telefon t&ouml;&ouml;l: <b>%s</b><br />"
-msgstr ""
+msgstr "Office phone:"
 
 #: classes/applications/shop/shop_order.aw:152
 msgid "Mobiil: <b>%s</b><br />"
-msgstr ""
+msgstr "Mobile phone:"
 
 #: classes/applications/shop/shop_order.aw:153
 msgid "Isikukood: <b>%s</b><br />"
-msgstr ""
+msgstr "Personal ID: <b>%s</b><br />"
 
 #: classes/applications/shop/shop_order.aw:225
 msgid "Nimi"

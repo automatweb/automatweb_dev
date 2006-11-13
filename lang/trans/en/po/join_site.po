@@ -14,18 +14,17 @@ msgstr ""
 msgid "Klassi Saidiga Liitumine help"
 msgstr ""
 
+# classes/contentmgmt/join/join_site.aw:prop_after_join_url
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url
-msgid ""
-"Omaduse P&amp;auml;rast liitumist mine aadressile (after_join_url) caption"
-msgstr ""
+msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) caption"
+msgstr "Go to address after joining"
 
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url_comment
-msgid ""
-"Omaduse P&amp;auml;rast liitumist mine aadressile (after_join_url) kommentaar"
+msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url_help
-msgid "Omaduse P&amp;auml;rast liitumist mine aadressile (after_join_url) help"
+msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) help"
 msgstr ""
 
 # classes/contentmgmt/join/join_site.aw:prop_obj_folder
@@ -45,22 +44,17 @@ msgstr ""
 
 # classes/contentmgmt/join/join_site.aw:prop_autologin
 #: classes/contentmgmt/join/join_site.aw:prop_autologin
-msgid ""
-"Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) "
-"caption"
+msgid "Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) caption"
 msgstr "Log the user in automatically after join"
 
 # classes/contentmgmt/join/join_site.aw:prop_autologin_comment
 #: classes/contentmgmt/join/join_site.aw:prop_autologin_comment
-msgid ""
-"Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) "
-"kommentaar"
+msgid "Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/join/join_site.aw:prop_autologin_help
 #: classes/contentmgmt/join/join_site.aw:prop_autologin_help
-msgid ""
-"Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) help"
+msgid "Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) help"
 msgstr ""
 
 # classes/contentmgmt/join/join_site.aw:prop_send_join_mail
@@ -79,34 +73,28 @@ msgid "Omaduse Kas liitumisel saadetakse meil (send_join_mail) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_users_blocked_by_default
-msgid ""
-"Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) caption"
-msgstr ""
+msgid "Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) caption"
+msgstr "Users are blocked by default"
 
 #: classes/contentmgmt/join/join_site.aw:prop_users_blocked_by_default_comment
-msgid ""
-"Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) kommentaar"
+msgid "Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_users_blocked_by_default_help
 msgid "Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) help"
 msgstr ""
 
+# classes/contentmgmt/join/join_site.aw:prop_join_properties
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties
-msgid ""
-"Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties) "
-"caption"
-msgstr ""
+msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) caption"
+msgstr "Join data properties"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_comment
-msgid ""
-"Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties) "
-"kommentaar"
+msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_help
-msgid ""
-"Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties) help"
+msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) help"
 msgstr ""
 
 # classes/contentmgmt/join/join_site.aw:prop_join_sep_pages
@@ -139,34 +127,27 @@ msgstr ""
 msgid "Omaduse Liitumise nupu tekst (join_but_text) help"
 msgstr ""
 
+# classes/contentmgmt/join/join_site.aw:prop_join_properties_pages
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_pages
-msgid ""
-"Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad "
-"(join_properties_pages) caption"
-msgstr ""
+msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) caption"
+msgstr "Join properties pages"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_pages_comment
-msgid ""
-"Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad "
-"(join_properties_pages) kommentaar"
+msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_pages_help
-msgid ""
-"Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad "
-"(join_properties_pages) help"
+msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) help"
 msgstr ""
 
 # classes/contentmgmt/join/join_site.aw:prop_join_properties_page_titles
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_page_titles
-msgid ""
-"Omaduse Liitumise Lehtede Pealkirjad (join_properties_page_titles) caption"
+msgid "Omaduse Liitumise Lehtede Pealkirjad (join_properties_page_titles) caption"
 msgstr "Join properties page titles"
 
 # classes/contentmgmt/join/join_site.aw:prop_join_properties_page_titles_comment
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_page_titles_comment
-msgid ""
-"Omaduse Liitumise Lehtede Pealkirjad (join_properties_page_titles) kommentaar"
+msgid "Omaduse Liitumise Lehtede Pealkirjad (join_properties_page_titles) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/join/join_site.aw:prop_join_properties_page_titles_help
@@ -280,24 +261,20 @@ msgid "Omaduse Meili legend (joinmail_legend) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_requires_confirm
-msgid ""
-"Omaduse Liitumine n&amp;otilde;uab kinnitust (join_requires_confirm) caption"
-msgstr ""
+msgid "Omaduse Liitumine n&otilde;uab kinnitust (join_requires_confirm) caption"
+msgstr "Joining requires confirmation"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_requires_confirm_comment
-msgid ""
-"Omaduse Liitumine n&amp;otilde;uab kinnitust (join_requires_confirm) "
-"kommentaar"
+msgid "Omaduse Liitumine n&otilde;uab kinnitust (join_requires_confirm) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_requires_confirm_help
-msgid ""
-"Omaduse Liitumine n&amp;otilde;uab kinnitust (join_requires_confirm) help"
+msgid "Omaduse Liitumine n&otilde;uab kinnitust (join_requires_confirm) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_legend
 msgid "Omaduse Kinnitusmeili legend (confirm_mail_legend) caption"
-msgstr ""
+msgstr "Legend for confirmation mail"
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_legend_comment
 msgid "Omaduse Kinnitusmeili legend (confirm_mail_legend) kommentaar"
@@ -309,7 +286,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_from_name
 msgid "Omaduse Kinnitusmeili kellelt nimi (confirm_mail_from_name) caption"
-msgstr ""
+msgstr "Confirmation mail from-name"
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_from_name_comment
 msgid "Omaduse Kinnitusmeili kellelt nimi (confirm_mail_from_name) kommentaar"
@@ -321,7 +298,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_from
 msgid "Omaduse Kinnitusmeili kellelt (confirm_mail_from) caption"
-msgstr ""
+msgstr "Confirmation mail from-mail"
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_from_comment
 msgid "Omaduse Kinnitusmeili kellelt (confirm_mail_from) kommentaar"
@@ -333,7 +310,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_subj
 msgid "Omaduse Kinnitusmeili teema (confirm_mail_subj) caption"
-msgstr ""
+msgstr "Confirmation mail subject"
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_subj_comment
 msgid "Omaduse Kinnitusmeili teema (confirm_mail_subj) kommentaar"
@@ -345,7 +322,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail
 msgid "Omaduse Kinnitusmeili sisu (confirm_mail) caption"
-msgstr ""
+msgstr "Confirmation mail content"
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_comment
 msgid "Omaduse Kinnitusmeili sisu (confirm_mail) kommentaar"
@@ -356,21 +333,20 @@ msgid "Omaduse Kinnitusmeili sisu (confirm_mail) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_redir
-msgid "Omaduse Kuhu suunata p&amp;auml;rast liitumist (confirm_redir) caption"
-msgstr ""
+msgid "Omaduse Kuhu suunata p&auml;rast liitumist (confirm_redir) caption"
+msgstr "Where to direct after joining"
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_redir_comment
-msgid ""
-"Omaduse Kuhu suunata p&amp;auml;rast liitumist (confirm_redir) kommentaar"
+msgid "Omaduse Kuhu suunata p&auml;rast liitumist (confirm_redir) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_redir_help
-msgid "Omaduse Kuhu suunata p&amp;auml;rast liitumist (confirm_redir) help"
+msgid "Omaduse Kuhu suunata p&auml;rast liitumist (confirm_redir) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_addr
 msgid "Omaduse From aadress (mf_mail_from_addr) caption"
-msgstr ""
+msgstr "From address"
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_addr_comment
 msgid "Omaduse From aadress (mf_mail_from_addr) kommentaar"
@@ -382,7 +358,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_name
 msgid "Omaduse From nimi (mf_mail_from_name) caption"
-msgstr ""
+msgstr "From name"
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_name_comment
 msgid "Omaduse From nimi (mf_mail_from_name) kommentaar"
@@ -394,7 +370,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_to
 msgid "Omaduse Kellele saata (mf_mail_to) caption"
-msgstr ""
+msgstr "Send to"
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_to_comment
 msgid "Omaduse Kellele saata (mf_mail_to) kommentaar"
@@ -406,7 +382,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_subj
 msgid "Omaduse Meili teema (mf_mail_subj) caption"
-msgstr ""
+msgstr "Mail subject"
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_subj_comment
 msgid "Omaduse Meili teema (mf_mail_subj) kommentaar"
@@ -418,7 +394,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail
 msgid "Omaduse Meili sisu (mf_mail) caption"
-msgstr ""
+msgstr "Mail content"
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_comment
 msgid "Omaduse Meili sisu (mf_mail) kommentaar"
@@ -430,7 +406,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_legend
 msgid "Omaduse Legend (mf_mail_legend) caption"
-msgstr ""
+msgstr "Legend"
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_legend_comment
 msgid "Omaduse Legend (mf_mail_legend) kommentaar"
@@ -547,7 +523,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_mails
 msgid "Grupi Meilid (mails) pealkiri"
-msgstr ""
+msgstr "Mails"
 
 #: classes/contentmgmt/join/join_site.aw:group_mails_help
 msgid "Grupi Meilid (mails) help"
@@ -555,7 +531,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_joinmail
 msgid "Grupi Meil liitujale (joinmail) pealkiri"
-msgstr ""
+msgstr "Mail to joiner"
 
 #: classes/contentmgmt/join/join_site.aw:group_joinmail_help
 msgid "Grupi Meil liitujale (joinmail) help"
@@ -563,7 +539,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_confirm_mail
 msgid "Grupi Kinnitamine (confirm_mail) pealkiri"
-msgstr ""
+msgstr "Confirmation"
 
 #: classes/contentmgmt/join/join_site.aw:group_confirm_mail_help
 msgid "Grupi Kinnitamine (confirm_mail) help"
@@ -571,7 +547,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_notify_mail
 msgid "Grupi Meil administraatorile (notify_mail) pealkiri"
-msgstr ""
+msgstr "Mail to administrator"
 
 #: classes/contentmgmt/join/join_site.aw:group_notify_mail_help
 msgid "Grupi Meil administraatorile (notify_mail) help"
@@ -604,20 +580,15 @@ msgstr "default connection objects"
 
 #: classes/contentmgmt/join/join_site.aw:rel_RELTYPE_MAILADDR
 msgid "Seose Kellele (RELTYPE_MAILADDR) tekst"
-msgstr ""
+msgstr "To"
 
 #: classes/contentmgmt/join/join_site.aw:173
 msgid "#edit_link# - link kasutajale"
-msgstr ""
+msgstr "#edit_link# - link to user"
 
 #: classes/contentmgmt/join/join_site.aw:211
-msgid ""
-"E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias "
-"#kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias "
-"#pwd_hash#)."
-msgstr ""
-"E-mail content that gets sent on join (username alias #kasutaja#, password "
-"alias #parool#, password change link alias #pwd_hash#)."
+msgid "E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#)."
+msgstr "E-mail content that gets sent on join (username alias #kasutaja#, password alias #parool#, password change link alias #pwd_hash#)."
 
 #: classes/contentmgmt/join/join_site.aw:294
 msgid "Reegel"
@@ -638,20 +609,20 @@ msgid "Omadus"
 msgstr "Property"
 
 #: classes/contentmgmt/join/join_site.aw:341
-msgid "T&amp;auml;idetav"
-msgstr ""
+msgid "T&auml;idetav"
+msgstr "Fillable"
 
 #: classes/contentmgmt/join/join_site.aw:346
-msgid "N&amp;otilde;utav"
-msgstr ""
+msgid "N&otilde;utav"
+msgstr "Required"
 
 #: classes/contentmgmt/join/join_site.aw:360
-msgid "Lehek&amp;uuml;lg"
-msgstr ""
+msgid "Lehek&uuml;lg"
+msgstr "Page"
 
 #: classes/contentmgmt/join/join_site.aw:365
-msgid "J&amp;auml;rjekord"
-msgstr ""
+msgid "J&auml;rjekord"
+msgstr "Order"
 
 #: classes/contentmgmt/join/join_site.aw:375
 msgid "Sisestatud number"
@@ -666,15 +637,13 @@ msgid "Tekst"
 msgstr "Text"
 
 #: classes/contentmgmt/join/join_site.aw:513
-msgid "&lt;b&gt;Vahepealkirjad&lt;/b&gt;"
-msgstr ""
+msgid "<b>Vahepealkirjad</b>"
+msgstr "<b>Subtitles</b>"
 
 #: classes/contentmgmt/join/join_site.aw:759
 #: classes/contentmgmt/join/join_site.aw:763
-msgid ""
-"&lt;font color='#FF0000'&gt;J&amp;auml;rgnev v&amp;auml;li peab olema t&amp;"
-"auml;idetud!&lt;/font&gt;"
-msgstr ""
+msgid "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
+msgstr "<font color='#FF0000'>Following field must be filled!</font>"
 
 #: classes/contentmgmt/join/join_site.aw:847
 msgid "Salvesta"
@@ -698,43 +667,7 @@ msgstr "Join mail (%s)"
 
 #: classes/contentmgmt/join/join_site.aw:1853
 msgid "Sellise koodiga kasutajat pole olemas!"
-msgstr ""
-
-# classes/contentmgmt/join/join_site.aw:prop_after_join_url
-#~ msgid ""
-#~ "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) caption"
-#~ msgstr "Go to address after joining"
-
-# classes/contentmgmt/join/join_site.aw:prop_join_properties
-#~ msgid ""
-#~ "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) caption"
-#~ msgstr "Join data properties"
-
-# classes/contentmgmt/join/join_site.aw:prop_join_properties_pages
-#~ msgid ""
-#~ "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) "
-#~ "caption"
-#~ msgstr "Join properties pages"
-
-#~ msgid "T&auml;idetav"
-#~ msgstr "Fillable"
-
-#~ msgid "N&otilde;utav"
-#~ msgstr "Required"
-
-#~ msgid "Lehek&uuml;lg"
-#~ msgstr "Page"
-
-#~ msgid "J&auml;rjekord"
-#~ msgstr "Order"
-
-#~ msgid "<b>Vahepealkirjad</b>"
-#~ msgstr "<b>Subtitles</b>"
-
-#~ msgid ""
-#~ "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</"
-#~ "font>"
-#~ msgstr "<font color='#FF0000'>Following field must be filled!</font>"
+msgstr "A user with this code does not exist"
 
 # classes/contentmgmt/join/join_site.aw:group_joinmail
 #~ msgid "Grupi Meil (joinmail) pealkiri"

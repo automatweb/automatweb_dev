@@ -9,14 +9,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/scm/location.aw:class_1116_help
 msgid "Klassi Asukoht help"
 msgstr ""
 
 #: classes/applications/scm/location.aw:prop_address
 msgid "Omaduse Aadress (address) caption"
-msgstr ""
+msgstr "Address"
 
 #: classes/applications/scm/location.aw:prop_address_comment
 msgid "Omaduse Aadress (address) kommentaar"
@@ -28,7 +27,7 @@ msgstr ""
 
 #: classes/applications/scm/location.aw:prop_map
 msgid "Omaduse Asukohakaart (map) caption"
-msgstr ""
+msgstr "Location map"
 
 #: classes/applications/scm/location.aw:prop_map_comment
 msgid "Omaduse Asukohakaart (map) kommentaar"
@@ -40,7 +39,7 @@ msgstr ""
 
 #: classes/applications/scm/location.aw:prop_photo
 msgid "Omaduse Foto kohast (photo) caption"
-msgstr ""
+msgstr "Photo"
 
 #: classes/applications/scm/location.aw:prop_photo_comment
 msgid "Omaduse Foto kohast (photo) kommentaar"
@@ -50,15 +49,30 @@ msgstr ""
 msgid "Omaduse Foto kohast (photo) help"
 msgstr ""
 
+#: classes/applications/scm/location.aw:prop_bank_payment
+msgid "Omaduse Pangamakse (bank_payment) caption"
+msgstr "Bank payment"
+
+#: classes/applications/scm/location.aw:prop_bank_payment_comment
+msgid "Omaduse Pangamakse (bank_payment) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_bank_payment_help
+msgid "Omaduse Pangamakse (bank_payment) help"
+msgstr ""
+
 #: classes/applications/scm/location.aw:rel_RELTYPE_MAP
 msgid "Seose Kaart (RELTYPE_MAP) tekst"
-msgstr ""
+msgstr "Map"
 
 #: classes/applications/scm/location.aw:rel_RELTYPE_PHOTO
 msgid "Seose Foto (RELTYPE_PHOTO) tekst"
-msgstr ""
+msgstr "Photo"
 
 #: classes/applications/scm/location.aw:rel_RELTYPE_ADDRESS
 msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
-msgstr ""
+msgstr "Address"
 
+#: classes/applications/scm/location.aw:rel_RELTYPE_BANK_PAYMENT
+msgid "Seose Pangalink (RELTYPE_BANK_PAYMENT) tekst"
+msgstr "Bank payment"

@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:prop_owner
 msgid "Omaduse Omanik (owner) caption"
-msgstr ""
+msgstr "Owner"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:prop_owner_comment
 msgid "Omaduse Omanik (owner) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:group_p
 msgid "Grupi Hanked (p) pealkiri"
-msgstr ""
+msgstr "Procurements"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:group_p_help
 msgid "Grupi Hanked (p) help"
@@ -95,7 +95,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:group_team
 msgid "Grupi Meeskond (team) pealkiri"
-msgstr ""
+msgstr "Team"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:group_team_help
 msgid "Grupi Meeskond (team) help"
@@ -103,81 +103,81 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:rel_RELTYPE_MANAGER_CO
 msgid "Seose Haldaja firma (RELTYPE_MANAGER_CO) tekst"
-msgstr ""
+msgstr "Managing company"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:rel_RELTYPE_TEAM_MEMBER
 msgid "Seose Meeskonna liige (RELTYPE_TEAM_MEMBER) tekst"
-msgstr ""
+msgstr "Team member"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:125
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:130
 msgid "Pakkumine"
-msgstr ""
+msgstr "Offer"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:138
 msgid "Kustuta valitud pakkumised"
-msgstr ""
+msgstr "Delete selected offers"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:140
 msgid "Kas oled kindel et soovid valitud pakkumised kustudada?"
-msgstr ""
+msgstr "Are You sure You want to delete selected offers?"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:163
 #: classes/applications/procurement_center/procurement_implementor_center.aw:326
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:169
 msgid "Looja"
-msgstr ""
+msgstr "Created by"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:175
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:184
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:190
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:230
 msgid "Lisa isik"
-msgstr ""
+msgstr "Add person"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:246
 msgid "Otsi isikuid isikud meeskonnast"
-msgstr ""
+msgstr "Search persons from team"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:257
 msgid "Kustuta isikud meeskonnast"
-msgstr ""
+msgstr "Remove persons from team"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:259
 msgid "Kas oled kindel et soovid isikud meeskonnast eemaldada?"
-msgstr ""
+msgstr "Are You sure You want to remove these persons from team?"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:331
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:336
 msgid "E-post"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:341
 msgid "&Uuml;ksus"
-msgstr ""
+msgstr "Unit"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:346
 msgid "Ametinimetus"
-msgstr ""
+msgstr "Title"
 
 #: classes/applications/procurement_center/procurement_implementor_center.aw:351
 msgid "Tunnihind"
-msgstr ""
+msgstr "Hour price"

@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/core/icons.aw:98 classes/core/icons.aw:99
 msgid "Objekti id on %s"
-msgstr ""
+msgstr "Object id is %s"
 

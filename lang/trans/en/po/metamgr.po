@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/meta/metamgr.aw:prop_transyes
 msgid "Omaduse Vajab t&amp;otilde;lget (transyes) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/meta/metamgr.aw:prop_transyes_comment
 msgid "Omaduse Vajab t&amp;otilde;lget (transyes) kommentaar"
@@ -121,7 +121,7 @@ msgstr "Name"
 
 #: classes/meta/metamgr.aw:175
 msgid "V&amp;auml;&amp;auml;rtus"
-msgstr ""
+msgstr "Value"
 
 #: classes/meta/metamgr.aw:182
 msgid "Jrk"
@@ -141,11 +141,11 @@ msgstr "Move selected properties to group"
 
 #: classes/meta/metamgr.aw:470
 msgid "Export"
-msgstr ""
+msgstr "Export"
 
 #: classes/meta/metamgr.aw:479
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 #: classes/meta/metamgr.aw:488
 msgid "Kustuta valitud muutujad"

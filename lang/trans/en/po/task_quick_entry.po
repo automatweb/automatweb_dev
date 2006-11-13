@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_date
 msgid "Omaduse Aeg (date) caption"
-msgstr ""
+msgstr "Time"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_date_comment
 msgid "Omaduse Aeg (date) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_cust_type
 msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) caption"
-msgstr ""
+msgstr "Client type"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_cust_type_comment
 msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
-msgstr ""
+msgstr "Client"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_customer_comment
 msgid "Omaduse Klient (customer) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_custp_fn
 msgid "Omaduse Eesnimi (custp_fn) caption"
-msgstr ""
+msgstr "First name"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_custp_fn_comment
 msgid "Omaduse Eesnimi (custp_fn) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_custp_ln
 msgid "Omaduse Perenimi (custp_ln) caption"
-msgstr ""
+msgstr "Last name"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_custp_ln_comment
 msgid "Omaduse Perenimi (custp_ln) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_project
 msgid "Omaduse Projekt (project) caption"
-msgstr ""
+msgstr "Project"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_project_comment
 msgid "Omaduse Projekt (project) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_task
 msgid "Omaduse Toimetus (task) caption"
-msgstr ""
+msgstr "Task"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_task_comment
 msgid "Omaduse Toimetus (task) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_duration
 msgid "Omaduse Kestvus (duration) caption"
-msgstr ""
+msgstr "Duration"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_duration_comment
 msgid "Omaduse Kestvus (duration) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_submit_but
 msgid "Omaduse Salvesta (submit_but) caption"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/groupware/task_quick_entry.aw:prop_submit_but_comment
 msgid "Omaduse Salvesta (submit_but) kommentaar"
@@ -147,32 +147,32 @@ msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:67
 msgid "Salvesta ja lisa uus"
-msgstr ""
+msgstr "Submit and add new"
 
 #: classes/applications/groupware/task_quick_entry.aw:97
 msgid "Organisatsioon"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/groupware/task_quick_entry.aw:97
 msgid "Isik"
-msgstr ""
+msgstr "Person"
 
 #: classes/applications/groupware/task_quick_entry.aw:127
 msgid "--Vali--"
-msgstr ""
+msgstr "--Select--"
 
 #: classes/applications/groupware/task_quick_entry.aw:155
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
-msgstr ""
+msgstr "All fields should be filled"
 
 #: classes/applications/groupware/task_quick_entry.aw:605
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
-msgstr ""
+msgstr "Client named %s does not exist, if You click OK, it will be added\n"
 
 #: classes/applications/groupware/task_quick_entry.aw:622
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
-msgstr ""
+msgstr "Project named %s does not exist, if You click OK, it will be added\n"
 
 #: classes/applications/groupware/task_quick_entry.aw:641
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
-msgstr ""
+msgstr "Task named %s does not exist, if You click OK, it will be added\n"

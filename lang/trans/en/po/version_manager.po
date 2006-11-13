@@ -11,36 +11,36 @@ msgstr ""
 
 #: classes/vcl/version_manager.aw:36
 msgid "Versioon loodud"
-msgstr ""
+msgstr "Version created"
 
 #: classes/vcl/version_manager.aw:45
 msgid "Versiooni looja"
-msgstr ""
+msgstr "Version created by"
 
 #: classes/vcl/version_manager.aw:51 classes/vcl/version_manager.aw:85
 msgid "Vaata erinevusi"
-msgstr ""
+msgstr "Check differences"
 
 #: classes/vcl/version_manager.aw:57 classes/vcl/version_manager.aw:105
 msgid "M&amp;auml;&amp;auml;ra aktiivseks"
-msgstr ""
+msgstr "Set to active"
 
 #: classes/vcl/version_manager.aw:111
 msgid "Kustuta versioonid"
-msgstr ""
+msgstr "Delete versions"
 
 #: classes/vcl/version_manager.aw:112
 msgid "Oled kindel et soovid valitud versioonid kustutada?"
-msgstr ""
+msgstr "Are You sure You want to delete selected versions"
 
 #: classes/vcl/version_manager.aw:189
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 
 #: classes/vcl/version_manager.aw:194
 msgid "Aktiivne versioon"
-msgstr ""
+msgstr "Active version"
 
 #: classes/vcl/version_manager.aw:199
 msgid "Valitud versioon"
-msgstr ""
+msgstr "Selected version"

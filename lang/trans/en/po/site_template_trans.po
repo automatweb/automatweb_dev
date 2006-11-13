@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/admin/site_template_trans.aw:group_t
 msgid "Grupi T&otilde;lkimine (t) pealkiri"
-msgstr ""
+msgstr "Translation"
 
 #: classes/admin/site_template_trans.aw:group_t_help
 msgid "Grupi T&otilde;lkimine (t) help"
@@ -60,17 +60,17 @@ msgstr ""
 
 #: classes/admin/site_template_trans.aw:79
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/admin/site_template_trans.aw:136
 msgid "Selgitus"
-msgstr ""
+msgstr "Explanation"
 
 #: classes/admin/site_template_trans.aw:141
 msgid "Konstant"
-msgstr ""
+msgstr "Constant"
 
 #: classes/admin/site_template_trans.aw:146
 msgid "T&otilde;lge"
-msgstr ""
+msgstr "Translation"
 

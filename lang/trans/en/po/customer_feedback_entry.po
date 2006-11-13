@@ -199,19 +199,19 @@ msgstr "Organisation"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:rel_RELTYPE_OBJECT
 msgid "Seose Objekti (RELTYPE_OBJECT) tekst"
-msgstr ""
+msgstr "Object"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:rel_RELTYPE_FILE1
 msgid "Seose Fail 1 (RELTYPE_FILE1) tekst"
-msgstr ""
+msgstr "File 1"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:rel_RELTYPE_FILE2
 msgid "Seose Fail 2 (RELTYPE_FILE2) tekst"
-msgstr ""
+msgstr "File 2"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:rel_RELTYPE_FILE3
 msgid "Seose Fail 3 (RELTYPE_FILE3) tekst"
-msgstr ""
+msgstr "File 3"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:93
 msgid "Fataalne viga"
@@ -283,4 +283,4 @@ msgstr "Needs feedback"
 
 #: classes/applications/customer_satisfaction_center/customer_feedback_entry.aw:133
 msgid "&Auml;ra jama, mees! m&otilde;tled ka mis teed v&auml;?"
-msgstr ""
+msgstr "Do not do it!"

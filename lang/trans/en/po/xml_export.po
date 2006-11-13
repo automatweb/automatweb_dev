@@ -17,7 +17,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_do_export
 #: classes/export/xml_export.aw:prop_do_export
 msgid "Omaduse Teosta eksport (do_export) caption"
-msgstr ""
+msgstr "Do export"
 
 # classes/export/xml_export.aw:prop_do_export_comment
 #: classes/export/xml_export.aw:prop_do_export_comment
@@ -32,7 +32,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_last_export
 #: classes/export/xml_export.aw:prop_last_export
 msgid "Omaduse Viimane eksport (last_export) caption"
-msgstr ""
+msgstr "Last export"
 
 # classes/export/xml_export.aw:prop_last_export_comment
 #: classes/export/xml_export.aw:prop_last_export_comment
@@ -47,7 +47,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_last_object_change_time
 #: classes/export/xml_export.aw:prop_last_object_change_time
 msgid "Omaduse Esimese objekti muutmise kuup&auml;ev (last_object_change_time) caption"
-msgstr ""
+msgstr "First object modified"
 
 # classes/export/xml_export.aw:prop_last_object_change_time_comment
 #: classes/export/xml_export.aw:prop_last_object_change_time_comment
@@ -62,7 +62,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_last_changed_obj_count
 #: classes/export/xml_export.aw:prop_last_changed_obj_count
 msgid "Omaduse Mitu viimati muudeetud objekti exportida (last_changed_obj_count) caption"
-msgstr ""
+msgstr "How many last modified objects to export"
 
 # classes/export/xml_export.aw:prop_last_changed_obj_count_comment
 #: classes/export/xml_export.aw:prop_last_changed_obj_count_comment
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/export/xml_export.aw:prop_remove_aliases
 msgid "Omaduse Eemalda aliased (remove_aliases) caption"
-msgstr ""
+msgstr "Remove aliases"
 
 #: classes/export/xml_export.aw:prop_remove_aliases_comment
 msgid "Omaduse Eemalda aliased (remove_aliases) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/export/xml_export.aw:prop_user_readable_output
 msgid "Omaduse Loetav v&auml;ljund (user_readable_output) caption"
-msgstr ""
+msgstr "Readable output"
 
 #: classes/export/xml_export.aw:prop_user_readable_output_comment
 msgid "Omaduse Loetav v&auml;ljund (user_readable_output) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/export/xml_export.aw:prop_filter
 msgid "Omaduse Andmete filter (filter) caption"
-msgstr ""
+msgstr "Data filter"
 
 #: classes/export/xml_export.aw:prop_filter_comment
 msgid "Omaduse Andmete filter (filter) kommentaar"
@@ -113,7 +113,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_local_file
 #: classes/export/xml_export.aw:prop_local_file
 msgid "Omaduse Fail salvestatakse kohalikku serverisse (local_file) caption"
-msgstr ""
+msgstr "File will be saved into local server"
 
 # classes/export/xml_export.aw:prop_local_file_comment
 #: classes/export/xml_export.aw:prop_local_file_comment
@@ -128,7 +128,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_local_file_location
 #: classes/export/xml_export.aw:prop_local_file_location
 msgid "Omaduse Serveri kataloog (local_file_location) caption"
-msgstr ""
+msgstr "Server folder"
 
 # classes/export/xml_export.aw:prop_local_file_location_comment
 #: classes/export/xml_export.aw:prop_local_file_location_comment
@@ -143,7 +143,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_ftp_file
 #: classes/export/xml_export.aw:prop_ftp_file
 msgid "Omaduse Fail salvestatakse FTP-kataloogi (ftp_file) caption"
-msgstr ""
+msgstr "File will be saved into FTP"
 
 # classes/export/xml_export.aw:prop_ftp_file_comment
 #: classes/export/xml_export.aw:prop_ftp_file_comment
@@ -158,7 +158,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_ftp_host
 #: classes/export/xml_export.aw:prop_ftp_host
 msgid "Omaduse FTP aadress (ftp_host) caption"
-msgstr ""
+msgstr "FTP host"
 
 # classes/export/xml_export.aw:prop_ftp_host_comment
 #: classes/export/xml_export.aw:prop_ftp_host_comment
@@ -173,7 +173,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_ftp_user
 #: classes/export/xml_export.aw:prop_ftp_user
 msgid "Omaduse FTP kasutaja (ftp_user) caption"
-msgstr ""
+msgstr "FTP user"
 
 # classes/export/xml_export.aw:prop_ftp_user_comment
 #: classes/export/xml_export.aw:prop_ftp_user_comment
@@ -188,7 +188,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_ftp_password
 #: classes/export/xml_export.aw:prop_ftp_password
 msgid "Omaduse FTP parool (ftp_password) caption"
-msgstr ""
+msgstr "FTP password"
 
 # classes/export/xml_export.aw:prop_ftp_password_comment
 #: classes/export/xml_export.aw:prop_ftp_password_comment
@@ -203,7 +203,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_ftp_file_location
 #: classes/export/xml_export.aw:prop_ftp_file_location
 msgid "Omaduse FTP kataloog (ftp_file_location) caption"
-msgstr ""
+msgstr "FTP server folder"
 
 # classes/export/xml_export.aw:prop_ftp_file_location_comment
 #: classes/export/xml_export.aw:prop_ftp_file_location_comment
@@ -218,7 +218,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_parents_table
 #: classes/export/xml_export.aw:prop_parents_table
 msgid "Omaduse Kaustad, mille alt objekte v&otilde;etakse (parents_table) caption"
-msgstr ""
+msgstr "Folders to export objects from"
 
 # classes/export/xml_export.aw:prop_parents_table_comment
 #: classes/export/xml_export.aw:prop_parents_table_comment
@@ -232,7 +232,7 @@ msgstr ""
 
 #: classes/export/xml_export.aw:prop_xml_root_tag_name
 msgid "Omaduse Juur m&auml;rgendi nimi (xml_root_tag_name) caption"
-msgstr ""
+msgstr "Root tag name"
 
 #: classes/export/xml_export.aw:prop_xml_root_tag_name_comment
 msgid "Omaduse Juur m&auml;rgendi nimi (xml_root_tag_name) kommentaar"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: classes/export/xml_export.aw:prop_xml_object_tag_name
 msgid "Omaduse Objekti m&auml;rgendi nimi (xml_object_tag_name) caption"
-msgstr ""
+msgstr "Object tag name"
 
 #: classes/export/xml_export.aw:prop_xml_object_tag_name_comment
 msgid "Omaduse Objekti m&auml;rgendi nimi (xml_object_tag_name) kommentaar"
@@ -257,7 +257,7 @@ msgstr ""
 # classes/export/xml_export.aw:prop_xml_struct_table
 #: classes/export/xml_export.aw:prop_xml_struct_table
 msgid "Omaduse Seadete vormi v&auml;ljad (xml_struct_table) caption"
-msgstr ""
+msgstr "Configuration form fields"
 
 # classes/export/xml_export.aw:prop_xml_struct_table_comment
 #: classes/export/xml_export.aw:prop_xml_struct_table_comment
@@ -272,7 +272,7 @@ msgstr ""
 # classes/export/xml_export.aw:group_config
 #: classes/export/xml_export.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
-msgstr ""
+msgstr "Configurations"
 
 # classes/export/xml_export.aw:group_config_help
 #: classes/export/xml_export.aw:group_config_help
@@ -282,7 +282,7 @@ msgstr ""
 # classes/export/xml_export.aw:group_locations
 #: classes/export/xml_export.aw:group_locations
 msgid "Grupi Asukohad (locations) pealkiri"
-msgstr ""
+msgstr "Locations"
 
 # classes/export/xml_export.aw:group_locations_help
 #: classes/export/xml_export.aw:group_locations_help
@@ -292,91 +292,91 @@ msgstr ""
 # classes/export/xml_export.aw:group_xml_struct
 #: classes/export/xml_export.aw:group_xml_struct
 msgid "Grupi XML struktuur (xml_struct) pealkiri"
-msgstr ""
+msgstr "XML structure"
 
 # classes/export/xml_export.aw:group_xml_struct_help
 #: classes/export/xml_export.aw:group_xml_struct_help
 msgid "Grupi XML struktuur (xml_struct) help"
-msgstr ""
+msgstr "XML structure"
 
 # classes/export/xml_export.aw:rel_RELTYPE_EXP_OBJECT_TYPE
 #: classes/export/xml_export.aw:rel_RELTYPE_EXP_OBJECT_TYPE
 msgid "Seose Eksporditav objekt (RELTYPE_EXP_OBJECT_TYPE) tekst"
-msgstr ""
+msgstr "Exportable object"
 
 # classes/export/xml_export.aw:rel_RELTYPE_EXP_RECURRENCE
 #: classes/export/xml_export.aw:rel_RELTYPE_EXP_RECURRENCE
 msgid "Seose Faili genereerimise kordus (RELTYPE_EXP_RECURRENCE) tekst"
-msgstr ""
+msgstr "File generation recurrence"
 
 #: classes/export/xml_export.aw:rel_RELTYPE_PARENT
 msgid "Seose S&uuml;ndmuste asukoht (RELTYPE_PARENT) tekst"
-msgstr ""
+msgstr "Location of events"
 
 #: classes/export/xml_export.aw:122
 msgid "Teosta eksport"
-msgstr ""
+msgstr "Do export"
 
 #: classes/export/xml_export.aw:127
 msgid "Ekspordi AW objektid"
-msgstr ""
+msgstr "Export AW objects"
 
 #: classes/export/xml_export.aw:145
 msgid "Faili/kausta ei saa kirjutada"
-msgstr ""
+msgstr "File/folder not writable"
 
 #: classes/export/xml_export.aw:183
 msgid "Faili ei saa kirjutada"
-msgstr ""
+msgstr "File not writable"
 
 #: classes/export/xml_export.aw:339
 msgid "Kaust"
-msgstr ""
+msgstr "Folder"
 
 #: classes/export/xml_export.aw:344
 msgid "Kaasaarvatud alamkaustad"
-msgstr ""
+msgstr "Include subfolders"
 
 #: classes/export/xml_export.aw:376
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
 #: classes/export/xml_export.aw:380
 msgid "Seadete vormi v&auml;li"
-msgstr ""
+msgstr "Configuration form field"
 
 #: classes/export/xml_export.aw:385
 msgid "jrk"
-msgstr ""
+msgstr "order"
 
 #: classes/export/xml_export.aw:393
 msgid "XML v&auml;lja nimetus"
-msgstr ""
+msgstr "XML field"
 
 #: classes/export/xml_export.aw:398
 msgid "XML v&auml;lja sisu"
-msgstr ""
+msgstr "XML field content"
 
 #: classes/export/xml_export.aw:403
 msgid "Parameetrid"
-msgstr ""
+msgstr "Parameters"
 
 #: classes/export/xml_export.aw:408
 msgid "CDATA"
-msgstr ""
+msgstr "CDATA"
 
 #: classes/export/xml_export.aw:908
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 
 #: classes/export/xml_export.aw:913
 msgid "V&auml;&auml;rtus"
-msgstr ""
+msgstr "Value"
 
 #: classes/export/xml_export.aw:918
 msgid "T&auml;pne"
-msgstr ""
+msgstr "Exact value"
 
 #: classes/export/xml_export.aw:936
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"

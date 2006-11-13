@@ -179,7 +179,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_group
 msgid "Omaduse Grupp (lang_group) caption"
-msgstr ""
+msgstr "Group"
 
 #: classes/core/language.aw:prop_lang_group_comment
 msgid "Omaduse Grupp (lang_group) kommentaar"
@@ -234,7 +234,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
-msgstr ""
+msgstr "Translate"
 
 #: classes/core/language.aw:prop_transl_comment
 msgid "Omaduse T&otilde;lgi (transl) kommentaar"
@@ -265,7 +265,7 @@ msgstr ""
 
 #: classes/core/language.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
-msgstr ""
+msgstr "Translate"
 
 #: classes/core/language.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"

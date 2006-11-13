@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_root
 msgid "Omaduse Juurkaust/-grupp (root) caption"
-msgstr ""
+msgstr "Root folder"
 
 #: classes/core/users/user_manager.aw:prop_root_comment
 msgid "Omaduse Juurkaust/-grupp (root) kommentaar"
@@ -29,7 +29,7 @@ msgstr ""
 msgid ""
 "Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) "
 "caption"
-msgstr ""
+msgstr "Default login-menu for new groups"
 
 #: classes/core/users/user_manager.aw:prop_default_loginmenu_comment
 msgid ""
@@ -47,7 +47,7 @@ msgstr ""
 msgid ""
 "Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) "
 "caption"
-msgstr ""
+msgstr "User automatic deactivation time"
 
 #: classes/core/users/user_manager.aw:prop_inactive_period_comment
 msgid ""
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_search_txt
 msgid "Omaduse Otsi gruppi (search_txt) caption"
-msgstr ""
+msgstr "Search groups"
 
 #: classes/core/users/user_manager.aw:prop_search_txt_comment
 msgid "Omaduse Otsi gruppi (search_txt) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_groups_tree
 msgid "Omaduse Puu (groups_tree) caption"
-msgstr ""
+msgstr "Tree"
 
 #: classes/core/users/user_manager.aw:prop_groups_tree_comment
 msgid "Omaduse Puu (groups_tree) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_table_selected_groups
 msgid "Omaduse Grupid  (table_selected_groups) caption"
-msgstr ""
+msgstr "Groups"
 
 #: classes/core/users/user_manager.aw:prop_table_selected_groups_comment
 msgid "Omaduse Grupid  (table_selected_groups) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_table_groups
 msgid "Omaduse Grupid  (table_groups) caption"
-msgstr ""
+msgstr "Groups"
 
 #: classes/core/users/user_manager.aw:prop_table_groups_comment
 msgid "Omaduse Grupid  (table_groups) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_table_users
 msgid "Omaduse Kasutajad  (table_users) caption"
-msgstr ""
+msgstr "Users"
 
 #: classes/core/users/user_manager.aw:prop_table_users_comment
 msgid "Omaduse Kasutajad  (table_users) kommentaar"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_submit_save
 msgid "Omaduse Salvesta (submit_save) caption"
-msgstr ""
+msgstr "Save"
 
 #: classes/core/users/user_manager.aw:prop_submit_save_comment
 msgid "Omaduse Salvesta (submit_save) kommentaar"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:group_users
 msgid "Grupi Kasutajad (users) pealkiri"
-msgstr ""
+msgstr "Users"
 
 #: classes/core/users/user_manager.aw:group_users_help
 msgid "Grupi Kasutajad (users) help"
@@ -179,7 +179,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:group_inactive_users
 msgid "Grupi Mitteaktiivsed kasutajad (inactive_users) pealkiri"
-msgstr ""
+msgstr "Deactive users"
 
 #: classes/core/users/user_manager.aw:group_inactive_users_help
 msgid "Grupi Mitteaktiivsed kasutajad (inactive_users) help"
@@ -192,276 +192,276 @@ msgstr ""
 #: classes/core/users/user_manager.aw:rel_RELTYPE_LOGIN_ROOT
 msgid ""
 "Seose Loginmen&amp;uuml;&amp;uuml;de juurkaust (RELTYPE_LOGIN_ROOT) tekst"
-msgstr ""
+msgstr "Root folder for login-menus"
 
 #: classes/core/users/user_manager.aw:rel_RELTYPE_LOGIN_CONF
 msgid ""
 "Seose Loginmen&amp;uuml;&amp;uuml; seadete objekt  (RELTYPE_LOGIN_CONF) tekst"
-msgstr ""
+msgstr "Login-menu configuration"
 
 #: classes/core/users/user_manager.aw:80
 msgid "Vali õigused"
-msgstr ""
+msgstr "Select rights"
 
 #: classes/core/users/user_manager.aw:82
 msgid "Vaatamine"
-msgstr ""
+msgstr "View"
 
 #: classes/core/users/user_manager.aw:86
 msgid "Muutmine"
-msgstr ""
+msgstr "Edit"
 
 #: classes/core/users/user_manager.aw:90
 msgid "Kustutamine"
-msgstr ""
+msgstr "Delete"
 
 #: classes/core/users/user_manager.aw:94
 msgid "Lisamine"
-msgstr ""
+msgstr "Add"
 
 #: classes/core/users/user_manager.aw:98
 msgid "ACL Muutmine"
-msgstr ""
+msgstr "Modify ACL"
 
 #: classes/core/users/user_manager.aw:139
 msgid "Juurkaust/-grupp valimata"
-msgstr ""
+msgstr "Root folder or group is not selected"
 
 #: classes/core/users/user_manager.aw:144
 #: classes/core/users/user_manager.aw:608
 msgid "Grupid"
-msgstr ""
+msgstr "Groups"
 
 #: classes/core/users/user_manager.aw:185
 msgid "p&auml;ev"
-msgstr ""
+msgstr "day"
 
 #: classes/core/users/user_manager.aw:186
 msgid "n&auml;dal"
-msgstr ""
+msgstr "week"
 
 #: classes/core/users/user_manager.aw:187
 msgid "kuu"
-msgstr ""
+msgstr "month"
 
 #: classes/core/users/user_manager.aw:188
 #: classes/core/users/user_manager.aw:189
 #: classes/core/users/user_manager.aw:190
 msgid "kuud"
-msgstr ""
+msgstr "months"
 
 #: classes/core/users/user_manager.aw:191
 msgid "aasta"
-msgstr ""
+msgstr "year"
 
 #: classes/core/users/user_manager.aw:265
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/core/users/user_manager.aw:288
 #: classes/core/users/user_manager.aw:956
 msgid "Impordi"
-msgstr ""
+msgstr "Import"
 
 #: classes/core/users/user_manager.aw:305
 msgid "Kustuta valitud"
-msgstr ""
+msgstr "Delete selected"
 
 #: classes/core/users/user_manager.aw:307
 msgid "Kustutada valitud objektid?"
-msgstr ""
+msgstr "Delete selected objects?"
 
 #: classes/core/users/user_manager.aw:328
 #: classes/core/users/user_manager.aw:734
 #: classes/core/users/user_manager.aw:951
 msgid "L&otilde;ika"
-msgstr ""
+msgstr "Cut"
 
 #: classes/core/users/user_manager.aw:334
 #: classes/core/users/user_manager.aw:735
 msgid "Kopeeri"
-msgstr ""
+msgstr "Copy"
 
 #: classes/core/users/user_manager.aw:354
 msgid "L&otilde;igatud"
-msgstr ""
+msgstr "Cut"
 
 #: classes/core/users/user_manager.aw:365
 msgid "Kopeeritud"
-msgstr ""
+msgstr "Copied"
 
 #: classes/core/users/user_manager.aw:372
 msgid "Aseta"
-msgstr ""
+msgstr "Paste"
 
 #: classes/core/users/user_manager.aw:485
 #: classes/core/users/user_manager.aw:751
 #: classes/core/users/user_manager.aw:855
 #: classes/core/users/user_manager.aw:986
 msgid "nimetu"
-msgstr ""
+msgstr "nameless"
 
 #: classes/core/users/user_manager.aw:518
 #: classes/core/users/user_manager.aw:560
 msgid "Grupp '%s'"
-msgstr ""
+msgstr "Group '%s'"
 
 #: classes/core/users/user_manager.aw:556
 msgid "Ei leitud midagi"
-msgstr ""
+msgstr "Nothing found"
 
 #: classes/core/users/user_manager.aw:565
 msgid "Leitud grupid"
-msgstr ""
+msgstr "Found groups"
 
 #: classes/core/users/user_manager.aw:583
 msgid "Kasutajanimi"
-msgstr ""
+msgstr "Username"
 
 #: classes/core/users/user_manager.aw:587
 msgid "P&auml;risnimi"
-msgstr ""
+msgstr "Person name"
 
 #: classes/core/users/user_manager.aw:591
 msgid "Organisatsioon"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/core/users/user_manager.aw:595
 msgid "E-post"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/core/users/user_manager.aw:599
 msgid "Viimane tegevus"
-msgstr ""
+msgstr "Last action"
 
 #: classes/core/users/user_manager.aw:603
 msgid "Blokeeritud"
-msgstr ""
+msgstr "Blocked"
 
 #: classes/core/users/user_manager.aw:604
 msgid "Kasutaja blokeerimine s&uuml;steemist"
-msgstr ""
+msgstr "Block user from system"
 
 #: classes/core/users/user_manager.aw:612
 #: classes/core/users/user_manager.aw:834
 msgid "Tegevus"
-msgstr ""
+msgstr "Action"
 
 #: classes/core/users/user_manager.aw:650
 msgid "Mitteaktiivsed kasutajad"
-msgstr ""
+msgstr "Non-active users"
 
 #: classes/core/users/user_manager.aw:732
 #: classes/core/users/user_manager.aw:949
 msgid "Muuda"
-msgstr ""
+msgstr "Modify"
 
 #: classes/core/users/user_manager.aw:733
 msgid "Blokeering maha"
-msgstr ""
+msgstr "Remove blocking"
 
 #: classes/core/users/user_manager.aw:733
 msgid "Blokeeri"
-msgstr ""
+msgstr "Block"
 
 #: classes/core/users/user_manager.aw:740
 msgid "Muuda parooli"
-msgstr ""
+msgstr "Change password"
 
 #: classes/core/users/user_manager.aw:745
 msgid "Vaata statistikat"
-msgstr ""
+msgstr "Look statistics"
 
 #: classes/core/users/user_manager.aw:760
 #: classes/core/users/user_manager.aw:997
 #: classes/core/users/user_manager.aw:998
 msgid "Jah"
-msgstr ""
+msgstr "Yes"
 
 #: classes/core/users/user_manager.aw:760
 #: classes/core/users/user_manager.aw:997
 #: classes/core/users/user_manager.aw:998
 msgid "Ei"
-msgstr ""
+msgstr "No"
 
 #: classes/core/users/user_manager.aw:791
 msgid "Grupi ID"
-msgstr ""
+msgstr "Group ID"
 
 #: classes/core/users/user_manager.aw:796
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/core/users/user_manager.aw:800
 msgid "Prioriteet"
-msgstr ""
+msgstr "Priority"
 
 #: classes/core/users/user_manager.aw:804
 msgid "Muutmise aeg"
-msgstr ""
+msgstr "Modified"
 
 #: classes/core/users/user_manager.aw:808
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/core/users/user_manager.aw:812
 msgid "AW"
-msgstr ""
+msgstr "AW"
 
 #: classes/core/users/user_manager.aw:813
 msgid "Lubada administreerimiskeskkonda"
-msgstr ""
+msgstr "Can use administrative interface"
 
 #: classes/core/users/user_manager.aw:817
 msgid "Aktiivne"
-msgstr ""
+msgstr "Active"
 
 #: classes/core/users/user_manager.aw:821
 msgid "Liikmeid"
-msgstr ""
+msgstr "Members"
 
 #: classes/core/users/user_manager.aw:826
 msgid "Juurkaustad"
-msgstr ""
+msgstr "Root folders"
 
 #: classes/core/users/user_manager.aw:830
 #: classes/core/users/user_manager.aw:971
 msgid "Loginmen&uuml;&uuml;"
-msgstr ""
+msgstr "Login-menus"
 
 #: classes/core/users/user_manager.aw:854
 msgid "'%s' alamgrupid"
-msgstr ""
+msgstr "'%s' subgroups"
 
 #: classes/core/users/user_manager.aw:917
 msgid "Kustutada valitud objekt?"
-msgstr ""
+msgstr "Delete selected objects?"
 
 #: classes/core/users/user_manager.aw:942
 msgid "M&auml;&auml;ra &otilde;igused"
-msgstr ""
+msgstr "Apply rights"
 
 #: classes/core/users/user_manager.aw:950
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/core/users/user_manager.aw:957
 msgid "Juurkaust"
-msgstr ""
+msgstr "Root folder"
 
 #: classes/core/users/user_manager.aw:958
 msgid "Objektid"
-msgstr ""
+msgstr "Objects"
 
 #: classes/core/users/user_manager.aw:968
 #: classes/core/users/user_manager.aw:1207
 msgid "Vali loginmen&uuml;&uuml;"
-msgstr ""
+msgstr "Select login-menu"
 
 #: classes/core/users/user_manager.aw:1161
 msgid "Seostamata menyyde juurikas"
-msgstr ""
+msgstr "Root for nonrelated folders"
 
 #: classes/core/users/user_manager.aw:1170
 msgid "Seostamata confiobject"
-msgstr ""
+msgstr "Nonrelated configuration object"

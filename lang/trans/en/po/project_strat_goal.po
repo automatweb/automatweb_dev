@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/groupware/project_strat_goal.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/groupware/project_strat_goal.aw:prop_ord_comment
 msgid "Omaduse J&auml;rjekord (ord) kommentaar"

@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:prop_desc
 msgid "Omaduse Kirjeldus (desc) caption"
-msgstr ""
+msgstr "Description"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:prop_desc_comment
 msgid "Omaduse Kirjeldus (desc) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:group_offers
 msgid "Grupi Pakkumised (offers) pealkiri"
-msgstr ""
+msgstr "Offers"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:group_offers_help
 msgid "Grupi Pakkumised (offers) help"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
-msgstr ""
+msgstr "Comments"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:group_comments_help
 msgid "Grupi Kommentaarid (comments) help"
@@ -68,47 +68,47 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:85
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:90
 msgid "Lahendus"
-msgstr ""
+msgstr "Solution"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:95
 msgid "Pakkuja"
-msgstr ""
+msgstr "Offerer"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:100
 msgid "Eelistatud"
-msgstr ""
+msgstr "Preferred"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:105
 msgid "Hinne"
-msgstr ""
+msgstr "Mark"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:110
 msgid "Sobiv"
-msgstr ""
+msgstr "Suitable"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:115
 msgid "Tagasi l&uuml;katud"
-msgstr ""
+msgstr "Rejected"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:120
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:125
 msgid "Tundide arv"
-msgstr ""
+msgstr "Hours"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:130
 msgid "Valmidus"
-msgstr ""
+msgstr "Readyness"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:158
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: classes/applications/procurement_center/procurement_requirement.aw:158
 msgid ""
@@ -116,5 +116,5 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:188
 msgid "<b>Keskmine:</b>"
-msgstr ""
+msgstr "<b>Average:</b>"
 

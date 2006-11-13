@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_priority.aw:prop_pri
 msgid "Omaduse Prioriteet (pri) caption"
-msgstr ""
+msgstr "Priority"
 
 #: classes/applications/procurement_center/procurement_priority.aw:prop_pri_comment
 msgid "Omaduse Prioriteet (pri) kommentaar"

@@ -10,44 +10,44 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/groupware/reservation.aw:class__help
-msgid "Klassi  help"
-msgstr ""
-
-#: classes/applications/groupware/reservation.aw:prop_start1
-msgid "Omaduse Algus (start1) caption"
-msgstr ""
-
-#: classes/applications/groupware/reservation.aw:prop_start1_comment
-msgid "Omaduse Algus (start1) kommentaar"
-msgstr ""
-
-#: classes/applications/groupware/reservation.aw:prop_start1_help
-msgid "Omaduse Algus (start1) help"
-msgstr ""
-
-#: classes/applications/groupware/reservation.aw:prop_end
-msgid "Omaduse L&otilde;peb (end) caption"
-msgstr ""
-
-#: classes/applications/groupware/reservation.aw:prop_end_comment
-msgid "Omaduse L&otilde;peb (end) kommentaar"
-msgstr ""
-
-#: classes/applications/groupware/reservation.aw:prop_end_help
-msgid "Omaduse L&otilde;peb (end) help"
+#: classes/applications/groupware/reservation.aw:class_1165_help
+msgid "Klassi Broneering help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_deadline
-msgid "Omaduse T&auml;htaeg (deadline) caption"
+msgid "Omaduse Maksmistähtaeg (deadline) caption"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_deadline_comment
-msgid "Omaduse T&auml;htaeg (deadline) kommentaar"
+msgid "Omaduse Maksmistähtaeg (deadline) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_deadline_help
-msgid "Omaduse T&auml;htaeg (deadline) help"
+msgid "Omaduse Maksmistähtaeg (deadline) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_verified
+msgid "Omaduse Kinnitatud (verified) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_verified_comment
+msgid "Omaduse Kinnitatud (verified) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_verified_help
+msgid "Omaduse Kinnitatud (verified) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_resource
+msgid "Omaduse Ressurss (resource) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_resource_comment
+msgid "Omaduse Ressurss (resource) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_resource_help
+msgid "Omaduse Ressurss (resource) help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_customer
@@ -99,27 +99,103 @@ msgid "Omaduse Arve number (bill_no) help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_content
-msgid "Omaduse Sisu (content) caption"
+msgid "Omaduse Sisu	 (content) caption"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_content_comment
-msgid "Omaduse Sisu (content) kommentaar"
+msgid "Omaduse Sisu	 (content) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_content_help
-msgid "Omaduse Sisu (content) help"
+msgid "Omaduse Sisu	 (content) help"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:prop_code
-msgid "Omaduse Kood (code) caption"
+#: classes/applications/groupware/reservation.aw:prop_people_count
+msgid "Omaduse Inimesi (people_count) caption"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:prop_code_comment
-msgid "Omaduse Kood (code) kommentaar"
+#: classes/applications/groupware/reservation.aw:prop_people_count_comment
+msgid "Omaduse Inimesi (people_count) kommentaar"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:prop_code_help
-msgid "Omaduse Kood (code) help"
+#: classes/applications/groupware/reservation.aw:prop_people_count_help
+msgid "Omaduse Inimesi (people_count) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_start1
+msgid "Omaduse Algus (start1) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_start1_comment
+msgid "Omaduse Algus (start1) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_start1_help
+msgid "Omaduse Algus (start1) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_end
+msgid "Omaduse L&otilde;peb (end) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_end_comment
+msgid "Omaduse L&otilde;peb (end) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_end_help
+msgid "Omaduse L&otilde;peb (end) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_sum
+msgid "Omaduse Summa (sum) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_sum_comment
+msgid "Omaduse Summa (sum) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_sum_help
+msgid "Omaduse Summa (sum) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_resources_tbl
+msgid "Omaduse  (resources_tbl) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_resources_tbl_comment
+msgid "Omaduse  (resources_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_resources_tbl_help
+msgid "Omaduse  (resources_tbl) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_products_tbl
+msgid "Omaduse  (products_tbl) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_products_tbl_comment
+msgid "Omaduse  (products_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_products_tbl_help
+msgid "Omaduse  (products_tbl) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:group_reserved_resources
+msgid "Grupi Ressursid (reserved_resources) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:group_reserved_resources_help
+msgid "Grupi Ressursid (reserved_resources) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:group_products
+msgid "Grupi Tooted (products) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:group_products_help
+msgid "Grupi Tooted (products) help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:rel_RELTYPE_CUSTOMER
@@ -128,5 +204,21 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:rel_RELTYPE_PROJECT
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:rel_RELTYPE_RESOURCE
+msgid "Seose Ressurss (RELTYPE_RESOURCE) tekst"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:324 classes/applications/groupware/reservation.aw:373
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:328 classes/applications/groupware/reservation.aw:377
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:369
+msgid ""
 msgstr ""
 

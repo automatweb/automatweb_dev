@@ -11,7 +11,7 @@ msgstr ""
 
 #: classes/users_user.aw:100
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: classes/users_user.aw:136
 msgid "uid is empty!"
@@ -31,7 +31,7 @@ msgstr "user object is of wrong type! %s props = %s"
 
 #: classes/users_user.aw:195
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: classes/users_user.aw:990
 msgid "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"

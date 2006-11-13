@@ -59,7 +59,7 @@ msgstr ""
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:rel_RELTYPE_PERSON
 msgid "Seose Omanik (RELTYPE_PERSON) tekst"
-msgstr ""
+msgstr "Owner"
 
 #: classes/applications/customer_satisfaction_center/obj_quick_add.aw:62
 msgid "Uus"

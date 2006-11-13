@@ -42,7 +42,7 @@ msgstr "New"
 
 #: classes/vcl/releditor.aw:318 classes/vcl/releditor.aw:480
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/vcl/releditor.aw:444
 msgid "Uus "

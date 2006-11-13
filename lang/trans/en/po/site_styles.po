@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_styles.aw:prop_alias
 msgid "Omaduse Alias (alias) caption"
-msgstr ""
+msgstr "Alias"
 
 #: classes/contentmgmt/site_styles.aw:prop_alias_comment
 msgid "Omaduse Alias (alias) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_styles.aw:prop_styles
 msgid "Omaduse Stiilifailide URLid (styles) caption"
-msgstr ""
+msgstr "Style-files URLs"
 
 #: classes/contentmgmt/site_styles.aw:prop_styles_comment
 msgid "Omaduse Stiilifailide URLid (styles) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_styles.aw:prop_default_style
 msgid "Omaduse Vaikimisi stiili jrk. (default_style) caption"
-msgstr ""
+msgstr "Default style order"
 
 #: classes/contentmgmt/site_styles.aw:prop_default_style_comment
 msgid "Omaduse Vaikimisi stiili jrk. (default_style) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_styles.aw:prop_random
 msgid "Omaduse Juhuslik valik (random) caption"
-msgstr ""
+msgstr "Random choice"
 
 #: classes/contentmgmt/site_styles.aw:prop_random_comment
 msgid "Omaduse Juhuslik valik (random) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_styles.aw:group_test
 msgid "Grupi Muutujad (test) pealkiri"
-msgstr ""
+msgstr "Variables"
 
 #: classes/contentmgmt/site_styles.aw:group_test_help
 msgid "Grupi Muutujad (test) help"
@@ -83,23 +83,23 @@ msgstr ""
 
 #: classes/contentmgmt/site_styles.aw:74
 msgid "Ei valita juhuslikult"
-msgstr ""
+msgstr "Not random"
 
 #: classes/contentmgmt/site_styles.aw:75
 msgid "Juhuslik sessiooniti"
-msgstr ""
+msgstr "Random by session"
 
 #: classes/contentmgmt/site_styles.aw:76
 msgid "Juhuslik igal laadimisel"
-msgstr ""
+msgstr "Random by each view"
 
 #: classes/contentmgmt/site_styles.aw:185
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/contentmgmt/site_styles.aw:197
 msgid "Nr"
-msgstr ""
+msgstr "No"
 
 #: classes/contentmgmt/site_styles.aw:201
 msgid "CSS url"
@@ -107,11 +107,11 @@ msgstr ""
 
 #: classes/contentmgmt/site_styles.aw:245
 msgid "Uus muutuja"
-msgstr ""
+msgstr "New variable"
 
 #: classes/contentmgmt/site_styles.aw:254
 msgid "jrk"
-msgstr ""
+msgstr "order"
 
 #: classes/contentmgmt/site_styles.aw:259
 msgid "url"
@@ -119,4 +119,4 @@ msgstr ""
 
 #: classes/contentmgmt/site_styles.aw:263
 msgid "Men&uuml;&uuml;pildi nr"
-msgstr ""
+msgstr "Folder image no"

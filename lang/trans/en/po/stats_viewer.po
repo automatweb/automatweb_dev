@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_date_from
 msgid "Omaduse Alates (s_date_from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_date_from_comment
 msgid "Omaduse Alates (s_date_from) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_date_to
 msgid "Omaduse Kuni (s_date_to) caption"
-msgstr ""
+msgstr "Till"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_date_to_comment
 msgid "Omaduse Kuni (s_date_to) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_hr_from
 msgid "Omaduse Kellaaeg alates (s_hr_from) caption"
-msgstr ""
+msgstr "Time from"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_hr_from_comment
 msgid "Omaduse Kellaaeg alates (s_hr_from) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_hr_to
 msgid "Omaduse Kellaaeg kuni (s_hr_to) caption"
-msgstr ""
+msgstr "Time till"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_hr_to_comment
 msgid "Omaduse Kellaaeg kuni (s_hr_to) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_wd
 msgid "Omaduse N&auml;dalap&auml;ev (s_wd) caption"
-msgstr ""
+msgstr "Weekday"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_wd_comment
 msgid "Omaduse N&auml;dalap&auml;ev (s_wd) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_username
 msgid "Omaduse Kasutajanimi (s_username) caption"
-msgstr ""
+msgstr "Username"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_username_comment
 msgid "Omaduse Kasutajanimi (s_username) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_username_except
 msgid "Omaduse Kasutajanimi v&auml;ljaarvatud (s_username_except) caption"
-msgstr ""
+msgstr "Except username"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_username_except_comment
 msgid "Omaduse Kasutajanimi v&auml;ljaarvatud (s_username_except) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_user_group
 msgid "Omaduse Kasutajagrupp (s_user_group) caption"
-msgstr ""
+msgstr "User group"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_user_group_comment
 msgid "Omaduse Kasutajagrupp (s_user_group) kommentaar"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_user_group_except
 msgid "Omaduse Kasutajagrupp v&auml;ljaarvatud (s_user_group_except) caption"
-msgstr ""
+msgstr "Except user group"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_user_group_except_comment
 msgid "Omaduse Kasutajagrupp v&auml;ljaarvatud (s_user_group_except) kommentaar"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_root_o
 msgid "Omaduse Juurobjekt (s_root_o) caption"
-msgstr ""
+msgstr "Root object"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_root_o_comment
 msgid "Omaduse Juurobjekt (s_root_o) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_clid
 msgid "Omaduse Objektit&uuml;&uuml;p (s_clid) caption"
-msgstr ""
+msgstr "Object type"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_clid_comment
 msgid "Omaduse Objektit&uuml;&uuml;p (s_clid) kommentaar"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_action
 msgid "Omaduse Tegevus (s_action) caption"
-msgstr ""
+msgstr "Action"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_action_comment
 msgid "Omaduse Tegevus (s_action) kommentaar"
@@ -208,7 +208,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_action_except
 msgid "Omaduse Tegevus v&auml;ljaarvatud (s_action_except) caption"
-msgstr ""
+msgstr "Except action"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_action_except_comment
 msgid "Omaduse Tegevus v&auml;ljaarvatud (s_action_except) kommentaar"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_country
 msgid "Omaduse Asukohamaa (s_country) caption"
-msgstr ""
+msgstr "Country"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_country_comment
 msgid "Omaduse Asukohamaa (s_country) kommentaar"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_country_except
 msgid "Omaduse Asukohamaa v&auml;ljaarvatud (s_country_except) caption"
-msgstr ""
+msgstr "Except country"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_country_except_comment
 msgid "Omaduse Asukohamaa v&auml;ljaarvatud (s_country_except) kommentaar"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_sessid
 msgid "Omaduse Sessiooni ID (s_sessid) caption"
-msgstr ""
+msgstr "Session ID"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_sessid_comment
 msgid "Omaduse Sessiooni ID (s_sessid) kommentaar"
@@ -256,7 +256,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_ip
 msgid "Omaduse IP Aadress (s_ip) caption"
-msgstr ""
+msgstr "IP address"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_ip_comment
 msgid "Omaduse IP Aadress (s_ip) kommentaar"
@@ -272,7 +272,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_ip_except_comment
 msgid "Omaduse IP Aadress v&auml;ljaarvatud (s_ip_except) kommentaar"
-msgstr ""
+msgstr "Except IP address"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_ip_except_help
 msgid "Omaduse IP Aadress v&auml;ljaarvatud (s_ip_except) help"
@@ -280,7 +280,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_res_type
 msgid "Omaduse Tulemused kuva (s_res_type) caption"
-msgstr ""
+msgstr "Show results"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_res_type_comment
 msgid "Omaduse Tulemused kuva (s_res_type) kommentaar"
@@ -292,7 +292,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_add_res_type
 msgid "Omaduse Lisaks kuva (s_add_res_type) caption"
-msgstr ""
+msgstr "Show additionally"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_add_res_type_comment
 msgid "Omaduse Lisaks kuva (s_add_res_type) kommentaar"
@@ -304,7 +304,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_limit
 msgid "Omaduse Mitu rida (s_limit) caption"
-msgstr ""
+msgstr "How many rows"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_limit_comment
 msgid "Omaduse Mitu rida (s_limit) kommentaar"
@@ -364,7 +364,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_eex_from
 msgid "Omaduse Alates (eex_from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/stats/stats_viewer.aw:prop_eex_from_comment
 msgid "Omaduse Alates (eex_from) kommentaar"
@@ -376,7 +376,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_eex_to
 msgid "Omaduse Kuni (eex_to) caption"
-msgstr ""
+msgstr "Till"
 
 #: classes/applications/stats/stats_viewer.aw:prop_eex_to_comment
 msgid "Omaduse Kuni (eex_to) kommentaar"
@@ -388,7 +388,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_stats_eex_inf
 msgid "Omaduse Unikaalseid k&uuml;lastusi (stats_eex_inf) caption"
-msgstr ""
+msgstr "Unique visits"
 
 #: classes/applications/stats/stats_viewer.aw:prop_stats_eex_inf_comment
 msgid "Omaduse Unikaalseid k&uuml;lastusi (stats_eex_inf) kommentaar"
@@ -460,7 +460,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
-msgstr ""
+msgstr "Data"
 
 #: classes/applications/stats/stats_viewer.aw:group_data_help
 msgid "Grupi Andmed (data) help"
@@ -468,7 +468,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:group_stats
 msgid "Grupi Statistika (stats) pealkiri"
-msgstr ""
+msgstr "Statistics"
 
 #: classes/applications/stats/stats_viewer.aw:group_stats_help
 msgid "Grupi Statistika (stats) help"
@@ -476,7 +476,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:group_stats_filter
 msgid "Grupi Koosta filter (stats_filter) pealkiri"
-msgstr ""
+msgstr "Filter"
 
 #: classes/applications/stats/stats_viewer.aw:group_stats_filter_help
 msgid "Grupi Koosta filter (stats_filter) help"
@@ -492,7 +492,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:group_stats_eex
 msgid "Grupi Entry & Exit pages (stats_eex) pealkiri"
-msgstr ""
+msgstr "Entry & exit pages"
 
 #: classes/applications/stats/stats_viewer.aw:group_stats_eex_help
 msgid "Grupi Entry & Exit pages (stats_eex) help"
@@ -500,7 +500,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:group_browser
 msgid "Grupi Salvestatud p&auml;ringud (browser) pealkiri"
-msgstr ""
+msgstr "Saved querys"
 
 #: classes/applications/stats/stats_viewer.aw:group_browser_help
 msgid "Grupi Salvestatud p&auml;ringud (browser) help"
@@ -508,115 +508,115 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_OBJ
 msgid "Seose Objekt (RELTYPE_OBJ) tekst"
-msgstr ""
+msgstr "Object"
 
 #: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_USER
 msgid "Seose Kasutaja (RELTYPE_USER) tekst"
-msgstr ""
+msgstr "User"
 
 #: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_GROUP
 msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
-msgstr ""
+msgstr "User group"
 
 #: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_HTML
 msgid "Seose Aruanne (RELTYPE_HTML) tekst"
-msgstr ""
+msgstr "Statement"
 
 #: classes/applications/stats/stats_viewer.aw:193
 msgid "Detailselt"
-msgstr ""
+msgstr "Detailed"
 
 #: classes/applications/stats/stats_viewer.aw:194
 msgid "P&auml;evade l&otilde;ikes"
-msgstr ""
+msgstr "By days"
 
 #: classes/applications/stats/stats_viewer.aw:195
 msgid "N&auml;dalap&auml;evade l&otilde;ikes"
-msgstr ""
+msgstr "By weekdays"
 
 #: classes/applications/stats/stats_viewer.aw:196
 msgid "Kuude l&otilde;ikes"
-msgstr ""
+msgstr "By months"
 
 #: classes/applications/stats/stats_viewer.aw:197
 msgid "Kellaaja j&auml;rgi"
-msgstr ""
+msgstr "By time"
 
 #: classes/applications/stats/stats_viewer.aw:198
 msgid "Objektide l&otilde;ikes"
-msgstr ""
+msgstr "By objects"
 
 #: classes/applications/stats/stats_viewer.aw:199
 msgid "Kasutajate l&otilde;ikes"
-msgstr ""
+msgstr "By users"
 
 #: classes/applications/stats/stats_viewer.aw:200
 msgid "Kasutajagruppide l&otilde;ikes"
-msgstr ""
+msgstr "By user groups"
 
 #: classes/applications/stats/stats_viewer.aw:201
 msgid "Tegevuste l&otilde;ikes"
-msgstr ""
+msgstr "By actions"
 
 #: classes/applications/stats/stats_viewer.aw:202
 msgid "Objektit&uuml;&uuml;pide l&otilde;ikes"
-msgstr ""
+msgstr "By object types"
 
 #: classes/applications/stats/stats_viewer.aw:203
 msgid "IP aadressite l&otilde;ikes"
-msgstr ""
+msgstr "By IP addresses"
 
 #: classes/applications/stats/stats_viewer.aw:204
 msgid "Asukohamaade l&otilde;ikes"
-msgstr ""
+msgstr "By countries"
 
 #: classes/applications/stats/stats_viewer.aw:235
 msgid "Esmasp&auml;ev"
-msgstr ""
+msgstr "Monday"
 
 #: classes/applications/stats/stats_viewer.aw:236
 msgid "Teisip&auml;ev"
-msgstr ""
+msgstr "Tuesday"
 
 #: classes/applications/stats/stats_viewer.aw:237
 msgid "Kolmap&auml;ev"
-msgstr ""
+msgstr "Wednesday"
 
 #: classes/applications/stats/stats_viewer.aw:238
 msgid "Neljap&auml;ev"
-msgstr ""
+msgstr "Thursday"
 
 #: classes/applications/stats/stats_viewer.aw:239
 msgid "Reede"
-msgstr ""
+msgstr "Friday"
 
 #: classes/applications/stats/stats_viewer.aw:240
 msgid "Laup&auml;ev"
-msgstr ""
+msgstr "Saturday"
 
 #: classes/applications/stats/stats_viewer.aw:241
 msgid "P&uuml;hap&auml;ev"
-msgstr ""
+msgstr "Sunday"
 
 #: classes/applications/stats/stats_viewer.aw:247
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
 #: classes/applications/stats/stats_viewer.aw:315
 msgid "Top 30 asukohamaad"
-msgstr ""
+msgstr "TOP 30 countries"
 
 #: classes/applications/stats/stats_viewer.aw:316
 msgid "Top 30 IP-d"
-msgstr ""
+msgstr "TOP 30 IP-s"
 
 #: classes/applications/stats/stats_viewer.aw:383
 msgid "Ajavahemik"
-msgstr ""
+msgstr "Time gap"
 
 #: classes/applications/stats/stats_viewer.aw:388
 msgid "Staatus"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/stats/stats_viewer.aw:393
 msgid "&nbsp;"
@@ -624,7 +624,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:412
 msgid "Too on-line"
-msgstr ""
+msgstr "Bring on-line"
 
 #: classes/applications/stats/stats_viewer.aw:417
 msgid "On-line"
@@ -632,137 +632,137 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:417
 msgid "Arhiveeritud"
-msgstr ""
+msgstr "Archived"
 
 #: classes/applications/stats/stats_viewer.aw:444 classes/applications/stats/stats_viewer.aw:482 classes/applications/stats/stats_viewer.aw:509
 msgid "Objekti nimi"
-msgstr ""
+msgstr "Object name"
 
 #: classes/applications/stats/stats_viewer.aw:449
 msgid "Ka alamobjektid"
-msgstr ""
+msgstr "Incl. subobjects"
 
 #: classes/applications/stats/stats_viewer.aw:456 classes/applications/stats/stats_viewer.aw:545
 msgid "Juurobjekt"
-msgstr ""
+msgstr "Root object"
 
 #: classes/applications/stats/stats_viewer.aw:537 classes/applications/stats/stats_viewer.aw:546 classes/applications/stats/stats_viewer.aw:553 classes/applications/stats/stats_viewer.aw:559
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/stats/stats_viewer.aw:552 classes/applications/stats/stats_viewer.aw:678 classes/applications/stats/stats_viewer.aw:1457
 msgid "Kasutaja"
-msgstr ""
+msgstr "User"
 
 #: classes/applications/stats/stats_viewer.aw:558 classes/applications/stats/stats_viewer.aw:683
 msgid "Kasutajagrupp"
-msgstr ""
+msgstr "User group"
 
 #: classes/applications/stats/stats_viewer.aw:564 classes/applications/stats/stats_viewer.aw:2289
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/stats/stats_viewer.aw:654 classes/applications/stats/stats_viewer.aw:1348
 msgid "Objekt"
-msgstr ""
+msgstr "Object"
 
 #: classes/applications/stats/stats_viewer.aw:659 classes/applications/stats/stats_viewer.aw:1670
 msgid "Tegevus"
-msgstr ""
+msgstr "Action"
 
 #: classes/applications/stats/stats_viewer.aw:664
 msgid "Aeg"
-msgstr ""
+msgstr "Time"
 
 #: classes/applications/stats/stats_viewer.aw:673 classes/applications/stats/stats_viewer.aw:1882
 msgid "IP Aadress"
-msgstr ""
+msgstr "IP address"
 
 #: classes/applications/stats/stats_viewer.aw:688
 msgid "Sessioon"
-msgstr ""
+msgstr "Session"
 
 #: classes/applications/stats/stats_viewer.aw:693
 msgid "Riik"
-msgstr ""
+msgstr "Country"
 
 #: classes/applications/stats/stats_viewer.aw:698 classes/applications/stats/stats_viewer.aw:913
 msgid "Referer"
-msgstr ""
+msgstr "Referer"
 
 #: classes/applications/stats/stats_viewer.aw:703
 msgid "E-maili tuvastus"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/stats/stats_viewer.aw:928
 msgid "P&auml;ev"
-msgstr ""
+msgstr "Day"
 
 #: classes/applications/stats/stats_viewer.aw:935 classes/applications/stats/stats_viewer.aw:1042 classes/applications/stats/stats_viewer.aw:1147 classes/applications/stats/stats_viewer.aw:1251 classes/applications/stats/stats_viewer.aw:1355 classes/applications/stats/stats_viewer.aw:1464 classes/applications/stats/stats_viewer.aw:1569 classes/applications/stats/stats_viewer.aw:1677 classes/applications/stats/stats_viewer.aw:1783 classes/applications/stats/stats_viewer.aw:1889 classes/applications/stats/stats_viewer.aw:1996
 msgid "Vaatamisi"
-msgstr ""
+msgstr "Views"
 
 #: classes/applications/stats/stats_viewer.aw:943 classes/applications/stats/stats_viewer.aw:959 classes/applications/stats/stats_viewer.aw:1050 classes/applications/stats/stats_viewer.aw:1066 classes/applications/stats/stats_viewer.aw:1155 classes/applications/stats/stats_viewer.aw:1171 classes/applications/stats/stats_viewer.aw:1259 classes/applications/stats/stats_viewer.aw:1275 classes/applications/stats/stats_viewer.aw:1363 classes/applications/stats/stats_viewer.aw:1379 classes/applications/stats/stats_viewer.aw:1472 classes/applications/stats/stats_viewer.aw:1488 classes/applications/stats/stats_viewer.aw:1577 classes/applications/stats/stats_viewer.aw:1593 classes/applications/stats/stats_viewer.aw:1685 classes/applications/stats/stats_viewer.aw:1701 classes/applications/stats/stats_viewer.aw:1791 classes/applications/stats/stats_viewer.aw:1807 classes/applications/stats/stats_viewer.aw:1897 classes/applications/stats/stats_viewer.aw:1913 classes/applications/stats/stats_viewer.aw:2004 classes/applications/stats/stats_viewer.aw:2020
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: classes/applications/stats/stats_viewer.aw:951 classes/applications/stats/stats_viewer.aw:1058 classes/applications/stats/stats_viewer.aw:1163 classes/applications/stats/stats_viewer.aw:1267 classes/applications/stats/stats_viewer.aw:1371 classes/applications/stats/stats_viewer.aw:1480 classes/applications/stats/stats_viewer.aw:1585 classes/applications/stats/stats_viewer.aw:1693 classes/applications/stats/stats_viewer.aw:1799 classes/applications/stats/stats_viewer.aw:1905 classes/applications/stats/stats_viewer.aw:2012
 msgid "K&uuml;lastusi"
-msgstr ""
+msgstr "Visits"
 
 #: classes/applications/stats/stats_viewer.aw:1035
 msgid "N&auml;dalap&auml;ev"
-msgstr ""
+msgstr "Weekday"
 
 #: classes/applications/stats/stats_viewer.aw:1140
 msgid "Kuu"
-msgstr ""
+msgstr "Month"
 
 #: classes/applications/stats/stats_viewer.aw:1244
 msgid "Kellaaeg"
-msgstr ""
+msgstr "Time"
 
 #: classes/applications/stats/stats_viewer.aw:1562
 msgid "Grupp"
-msgstr ""
+msgstr "Group"
 
 #: classes/applications/stats/stats_viewer.aw:1776
 msgid "Objektit&uuml;&uuml;p"
-msgstr ""
+msgstr "Object type"
 
 #: classes/applications/stats/stats_viewer.aw:1989
 msgid "Maa"
-msgstr ""
+msgstr "Country"
 
 #: classes/applications/stats/stats_viewer.aw:2096
 msgid "Ekspordi CSV fail"
-msgstr ""
+msgstr "Export CSV-file"
 
 #: classes/applications/stats/stats_viewer.aw:2101
 msgid "Salvesta HTML"
-msgstr ""
+msgstr "Save HTML"
 
 #: classes/applications/stats/stats_viewer.aw:2119 classes/applications/stats/stats_viewer.aw:2193
 msgid "Lehek&uuml;lg"
-msgstr ""
+msgstr "Page"
 
 #: classes/applications/stats/stats_viewer.aw:2125
 msgid "Sisenemisi"
-msgstr ""
+msgstr "Entries"
 
 #: classes/applications/stats/stats_viewer.aw:2199
 msgid "V&auml;ljumisi"
-msgstr ""
+msgstr "Exits"
 
 #: classes/applications/stats/stats_viewer.aw:2356
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/applications/stats/stats_viewer.aw:2364
 msgid "Looja"
-msgstr ""
+msgstr "Created by"
 
 #: classes/applications/stats/stats_viewer.aw:2369 classes/applications/stats/stats_viewer.aw:2404
 msgid "Vaata"
-msgstr ""
+msgstr "View"
 

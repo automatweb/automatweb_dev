@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_start1
 msgid "Omaduse Algus (start1) caption"
-msgstr ""
+msgstr "Start"
 
 #: classes/applications/groupware/reservation.aw:prop_start1_comment
 msgid "Omaduse Algus (start1) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_end
 msgid "Omaduse L&otilde;peb (end) caption"
-msgstr ""
+msgstr "End"
 
 #: classes/applications/groupware/reservation.aw:prop_end_comment
 msgid "Omaduse L&otilde;peb (end) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_deadline
 msgid "Omaduse T&auml;htaeg (deadline) caption"
-msgstr ""
+msgstr "Deadline"
 
 #: classes/applications/groupware/reservation.aw:prop_deadline_comment
 msgid "Omaduse T&auml;htaeg (deadline) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
-msgstr ""
+msgstr "Client"
 
 #: classes/applications/groupware/reservation.aw:prop_customer_comment
 msgid "Omaduse Klient (customer) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_project
 msgid "Omaduse Projekt (project) caption"
-msgstr ""
+msgstr "Project"
 
 #: classes/applications/groupware/reservation.aw:prop_project_comment
 msgid "Omaduse Projekt (project) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_send_bill
 msgid "Omaduse Saata arve (send_bill) caption"
-msgstr ""
+msgstr "Send invoice"
 
 #: classes/applications/groupware/reservation.aw:prop_send_bill_comment
 msgid "Omaduse Saata arve (send_bill) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_bill_no
 msgid "Omaduse Arve number (bill_no) caption"
-msgstr ""
+msgstr "Invoice no"
 
 #: classes/applications/groupware/reservation.aw:prop_bill_no_comment
 msgid "Omaduse Arve number (bill_no) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/groupware/reservation.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_code
 msgid "Omaduse Kood (code) caption"
-msgstr ""
+msgstr "Code"
 
 #: classes/applications/groupware/reservation.aw:prop_code_comment
 msgid "Omaduse Kood (code) kommentaar"
@@ -124,9 +124,9 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:rel_RELTYPE_CUSTOMER
 msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
-msgstr ""
+msgstr "Client"
 
 #: classes/applications/groupware/reservation.aw:rel_RELTYPE_PROJECT
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
-msgstr ""
+msgstr "Project"
 

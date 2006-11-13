@@ -11,12 +11,12 @@ msgstr ""
 
 #: classes/scheduler.aw:743
 msgid "Aeg"
-msgstr ""
+msgstr "Time"
 
 #: classes/scheduler.aw:748
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: classes/scheduler.aw:753
 msgid "Kordus"
-msgstr ""
+msgstr "Recurrence"

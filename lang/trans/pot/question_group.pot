@@ -11,7 +11,7 @@ msgstr ""
 
 
 #: classes/applications/questionary/question_group.aw:class_1154_help
-msgid "Klassi K&uml;simustegrupp help"
+msgid "Klassi K&uuml;simustegrupp help"
 msgstr ""
 
 #: classes/applications/questionary/question_group.aw:prop_jrk

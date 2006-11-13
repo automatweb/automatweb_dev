@@ -91,7 +91,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_type.aw:prop_default_product_folder
 msgid "Omaduse Vaikimisi toodete kataloog (default_product_folder) caption"
-msgstr ""
+msgstr "Default products folder"
 
 #: classes/applications/shop/shop_product_type.aw:prop_default_product_folder_comment
 msgid "Omaduse Vaikimisi toodete kataloog (default_product_folder) kommentaar"

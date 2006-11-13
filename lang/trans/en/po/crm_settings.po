@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_s_cfgform
 msgid "Omaduse Kliendi seadete vorm (s_cfgform) caption"
-msgstr ""
+msgstr "Clients configuration form"
 
 #: classes/applications/crm/crm_settings.aw:prop_s_cfgform_comment
 msgid "Omaduse Kliendi seadete vorm (s_cfgform) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_s_p_cfgform
 msgid "Omaduse Eraisikust kliendi seadete vorm (s_p_cfgform) caption"
-msgstr ""
+msgstr "Private person client configuration form"
 
 #: classes/applications/crm/crm_settings.aw:prop_s_p_cfgform_comment
 msgid "Omaduse Eraisikust kliendi seadete vorm (s_p_cfgform) kommentaar"
@@ -39,7 +39,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_work_cfgform
 msgid "Omaduse Minu t&ouml;&ouml;koha seadete vorm (work_cfgform) caption"
-msgstr ""
+msgstr "My workplace configuration form"
 
 #: classes/applications/crm/crm_settings.aw:prop_work_cfgform_comment
 msgid "Omaduse Minu t&ouml;&ouml;koha seadete vorm (work_cfgform) kommentaar"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_coworker_cfgform
 msgid "Omaduse T&ouml;&ouml;kaaslaste seadete vorm (coworker_cfgform) caption"
-msgstr ""
+msgstr "My workmates configuration form"
 
 #: classes/applications/crm/crm_settings.aw:prop_coworker_cfgform_comment
 msgid "Omaduse T&ouml;&ouml;kaaslaste seadete vorm (coworker_cfgform) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_customer_employer_cfgform
 msgid "Omaduse Kliendi t&ouml;&ouml;taja seadete vorm (customer_employer_cfgform) caption"
-msgstr ""
+msgstr "Clients workers configuration form"
 
 #: classes/applications/crm/crm_settings.aw:prop_customer_employer_cfgform_comment
 msgid "Omaduse Kliendi t&ouml;&ouml;taja seadete vorm (customer_employer_cfgform) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_bill_def_prod
 msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) caption"
-msgstr ""
+msgstr "Default article in task rows"
 
 #: classes/applications/crm/crm_settings.aw:prop_bill_def_prod_comment
 msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_controller_proj
 msgid "Omaduse Projekti kontroller (controller_proj) caption"
-msgstr ""
+msgstr "Project controller"
 
 #: classes/applications/crm/crm_settings.aw:prop_controller_proj_comment
 msgid "Omaduse Projekti kontroller (controller_proj) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_controller_task
 msgid "Omaduse Toimetuse kontroller (controller_task) caption"
-msgstr ""
+msgstr "Task controller"
 
 #: classes/applications/crm/crm_settings.aw:prop_controller_task_comment
 msgid "Omaduse Toimetuse kontroller (controller_task) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_controller_meeting
 msgid "Omaduse Kohtumise kontroller (controller_meeting) caption"
-msgstr ""
+msgstr "Meeting controller"
 
 #: classes/applications/crm/crm_settings.aw:prop_controller_meeting_comment
 msgid "Omaduse Kohtumise kontroller (controller_meeting) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_default_tasks_view
 msgid "Omaduse Tegevused vaikimisi vaade (default_tasks_view) caption"
-msgstr ""
+msgstr "Default view for actions"
 
 #: classes/applications/crm/crm_settings.aw:prop_default_tasks_view_comment
 msgid "Omaduse Tegevused vaikimisi vaade (default_tasks_view) kommentaar"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_view_task_rows_open
 msgid "Omaduse Vaikimisi avatakse toimetuse nimel klikkides kohe read (view_task_rows_open) caption"
-msgstr ""
+msgstr "By default rows will be open by clicking task name"
 
 #: classes/applications/crm/crm_settings.aw:prop_view_task_rows_open_comment
 msgid "Omaduse Vaikimisi avatakse toimetuse nimel klikkides kohe read (view_task_rows_open) kommentaar"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_default_task_rows_bills_filter
 msgid "Omaduse Toimetuse ridades valitud Arve tulba vaikimisi filter (default_task_rows_bills_filter) caption"
-msgstr ""
+msgstr "Task rows default invoice status filter"
 
 #: classes/applications/crm/crm_settings.aw:prop_default_task_rows_bills_filter_comment
 msgid "Omaduse Toimetuse ridades valitud Arve tulba vaikimisi filter (default_task_rows_bills_filter) kommentaar"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_tables_treemenu
 msgid "Omaduse Tabelite valik (tables_treemenu) caption"
-msgstr ""
+msgstr "Tables"
 
 #: classes/applications/crm/crm_settings.aw:prop_tables_treemenu_comment
 msgid "Omaduse Tabelite valik (tables_treemenu) kommentaar"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_table_cfg
 msgid "Omaduse Tabeli konfiguratsioon (table_cfg) caption"
-msgstr ""
+msgstr "Table configuration"
 
 #: classes/applications/crm/crm_settings.aw:prop_table_cfg_comment
 msgid "Omaduse Tabeli konfiguratsioon (table_cfg) kommentaar"
@@ -195,7 +195,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_users
 msgid "Omaduse Kasutajad (users) caption"
-msgstr ""
+msgstr "Users"
 
 #: classes/applications/crm/crm_settings.aw:prop_users_comment
 msgid "Omaduse Kasutajad (users) kommentaar"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_persons
 msgid "Omaduse Isikud (persons) caption"
-msgstr ""
+msgstr "Persons"
 
 #: classes/applications/crm/crm_settings.aw:prop_persons_comment
 msgid "Omaduse Isikud (persons) kommentaar"
@@ -219,7 +219,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_cos
 msgid "Omaduse Organisatsioonid (cos) caption"
-msgstr ""
+msgstr "Organisations"
 
 #: classes/applications/crm/crm_settings.aw:prop_cos_comment
 msgid "Omaduse Organisatsioonid (cos) kommentaar"
@@ -231,7 +231,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_sects
 msgid "Omaduse Osakonnad (sects) caption"
-msgstr ""
+msgstr "Sections"
 
 #: classes/applications/crm/crm_settings.aw:prop_sects_comment
 msgid "Omaduse Osakonnad (sects) kommentaar"
@@ -243,7 +243,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_profs
 msgid "Omaduse Ametinimetused (profs) caption"
-msgstr ""
+msgstr "Titles"
 
 #: classes/applications/crm/crm_settings.aw:prop_profs_comment
 msgid "Omaduse Ametinimetused (profs) kommentaar"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_everyone
 msgid "Omaduse K&otilde;ik (everyone) caption"
-msgstr ""
+msgstr "All"
 
 #: classes/applications/crm/crm_settings.aw:prop_everyone_comment
 msgid "Omaduse K&otilde;ik (everyone) kommentaar"
@@ -267,7 +267,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:prop_person_img_settings
 msgid "Omaduse Isiku piltide seaded (person_img_settings) caption"
-msgstr ""
+msgstr "Persons image settings"
 
 #: classes/applications/crm/crm_settings.aw:prop_person_img_settings_comment
 msgid "Omaduse Isiku piltide seaded (person_img_settings) kommentaar"
@@ -279,7 +279,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:group_tables
 msgid "Grupi Tabelid (tables) pealkiri"
-msgstr ""
+msgstr "Tables"
 
 #: classes/applications/crm/crm_settings.aw:group_tables_help
 msgid "Grupi Tabelid (tables) help"
@@ -287,7 +287,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:group_whom
 msgid "Grupi Kellele kehtib (whom) pealkiri"
-msgstr ""
+msgstr "To whom"
 
 #: classes/applications/crm/crm_settings.aw:group_whom_help
 msgid "Grupi Kellele kehtib (whom) help"
@@ -295,7 +295,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:group_img
 msgid "Grupi Pildid (img) pealkiri"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/crm/crm_settings.aw:group_img_help
 msgid "Grupi Pildid (img) help"
@@ -303,108 +303,108 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_USER
 msgid "Seose Kasutaja (RELTYPE_USER) tekst"
-msgstr ""
+msgstr "User"
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_CFGFORM
 msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
-msgstr ""
+msgstr "Configuration form"
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_PERSON
 msgid "Seose Isik (RELTYPE_PERSON) tekst"
-msgstr ""
+msgstr "Person"
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_COMPANY
 msgid "Seose Organisatsioon (RELTYPE_COMPANY) tekst"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_SECTION
 msgid "Seose Osakond (RELTYPE_SECTION) tekst"
-msgstr ""
+msgstr "Unit/section"
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_PROFESSION
 msgid "Seose Ametinimetus (RELTYPE_PROFESSION) tekst"
-msgstr ""
+msgstr "Title/profession"
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_PROD
 msgid "Seose Toode (RELTYPE_PROD) tekst"
-msgstr ""
+msgstr "Article"
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_GALLERY_CONF
 msgid "Seose Galerii seaded (RELTYPE_GALLERY_CONF) tekst"
-msgstr ""
+msgstr "Gallery configuration"
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_CTR
 msgid "Seose Kontroller (RELTYPE_CTR) tekst"
-msgstr ""
+msgstr "Controller"
 
 #: classes/applications/crm/crm_settings.aw:180
 msgid "Jah"
-msgstr ""
+msgstr "Yes"
 
 #: classes/applications/crm/crm_settings.aw:181
 msgid "Ei"
-msgstr ""
+msgstr "No"
 
 #: classes/applications/crm/crm_settings.aw:182
 msgid "Arvel"
-msgstr ""
+msgstr "On invoice"
 
 #: classes/applications/crm/crm_settings.aw:183
 msgid "Arveta"
-msgstr ""
+msgstr "No Invoice"
 
 #: classes/applications/crm/crm_settings.aw:196
 msgid "Tabelvaade"
-msgstr ""
+msgstr "Table view"
 
 #: classes/applications/crm/crm_settings.aw:197
 msgid "Kalendervaade"
-msgstr ""
+msgstr "Calendar view"
 
 #: classes/applications/crm/crm_settings.aw:217
 msgid "Salvesta tabeli seaded"
-msgstr ""
+msgstr "Save table settings"
 
 #: classes/applications/crm/crm_settings.aw:238
 msgid "Taasta algseaded"
-msgstr ""
+msgstr "Restore defaults"
 
 #: classes/applications/crm/crm_settings.aw:239
 msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
-msgstr ""
+msgstr "Modified settings will be lost when You restore defaults, continue?"
 
 #: classes/applications/crm/crm_settings.aw:252
 msgid "Minu t&ouml;&ouml;koht"
-msgstr ""
+msgstr "My workplace"
 
 #: classes/applications/crm/crm_settings.aw:259
 msgid "Klient"
-msgstr ""
+msgstr "Client"
 
 #: classes/applications/crm/crm_settings.aw:266
 msgid "Eraisikust klient"
-msgstr ""
+msgstr "Private person client"
 
 #: classes/applications/crm/crm_settings.aw:273
 msgid "T&ouml;&ouml;kaaslane"
-msgstr ""
+msgstr "Workmate"
 
 #: classes/applications/crm/crm_settings.aw:280
 msgid "Kliendi t&ouml;&ouml;taja"
-msgstr ""
+msgstr "Clients worker"
 
 #: classes/applications/crm/crm_settings.aw:330
 msgid "Veeru nimi"
-msgstr ""
+msgstr "Column name"
 
 #: classes/applications/crm/crm_settings.aw:334
 msgid "Järjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/crm/crm_settings.aw:338
 msgid "Kasutusel"
-msgstr ""
+msgstr "Used"
 
 #: classes/applications/crm/crm_settings.aw:342
 msgid "Pealkiri"
-msgstr ""
+msgstr "Title"

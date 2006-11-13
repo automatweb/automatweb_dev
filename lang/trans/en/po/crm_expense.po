@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_cost
 msgid "Omaduse Maksumus (cost) caption"
-msgstr ""
+msgstr "Cost"
 
 #: classes/applications/crm/crm_expense.aw:prop_cost_comment
 msgid "Omaduse Maksumus (cost) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_date
 msgid "Omaduse Kuup&auml;ev (date) caption"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/crm/crm_expense.aw:prop_date_comment
 msgid "Omaduse Kuup&auml;ev (date) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_on_bill
 msgid "Omaduse Arvele (on_bill) caption"
-msgstr ""
+msgstr "To Invoice"
 
 #: classes/applications/crm/crm_expense.aw:prop_on_bill_comment
 msgid "Omaduse Arvele (on_bill) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_bill_id
 msgid "Omaduse Arve (bill_id) caption"
-msgstr ""
+msgstr "Invoice"
 
 #: classes/applications/crm/crm_expense.aw:prop_bill_id_comment
 msgid "Omaduse Arve (bill_id) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:prop_to_bill_date
 msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) caption"
-msgstr ""
+msgstr "Date selected to invoice"
 
 #: classes/applications/crm/crm_expense.aw:prop_to_bill_date_comment
 msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) kommentaar"
@@ -76,5 +76,5 @@ msgstr ""
 
 #: classes/applications/crm/crm_expense.aw:rel_RELTYPE_BILL
 msgid "Seose Arve (RELTYPE_BILL) tekst"
-msgstr ""
+msgstr "Invoice"
 

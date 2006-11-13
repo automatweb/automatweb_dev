@@ -1298,7 +1298,7 @@ msgstr "Right"
 
 #: classes/menu.aw:576
 msgid "kasuta parenti valikut"
-msgstr "use parent's settings""
+msgstr "use parent's settings"
 
 #: classes/menu.aw:612
 msgid "(no icon set)"

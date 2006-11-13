@@ -205,7 +205,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_passwd
 msgid "Omaduse Salasõna (passwd) caption"
-msgstr ""
+msgstr "Password"
 
 #: classes/core/users/user.aw:prop_passwd_comment
 msgid "Omaduse Salasõna (passwd) kommentaar"
@@ -217,7 +217,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_passwd_again
 msgid "Omaduse Salasõna uuesti (passwd_again) caption"
-msgstr ""
+msgstr "Password again"
 
 #: classes/core/users/user.aw:prop_passwd_again_comment
 msgid "Omaduse Salasõna uuesti (passwd_again) kommentaar"
@@ -678,11 +678,11 @@ msgstr "FG profile"
 
 #: classes/core/users/user.aw:rel_RELTYPE_ACCESS_FROM_IP
 msgid "Seose ligip&auml;&auml;su aadress (RELTYPE_ACCESS_FROM_IP) tekst"
-msgstr ""
+msgstr "IP access"
 
 #: classes/core/users/user.aw:rel_RELTYPE_JOIN_SITE
 msgid "Seose liitumise andmed (RELTYPE_JOIN_SITE) tekst"
-msgstr ""
+msgstr "Join data"
 
 #: classes/core/users/user.aw:285
 msgid "Genereeri parool"

@@ -187,7 +187,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs
 msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"
-msgstr ""
+msgstr "Show content in all languages"
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs_comment
 msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) kommentaar"
