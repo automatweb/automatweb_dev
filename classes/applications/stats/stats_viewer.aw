@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.1 2006/09/27 15:03:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.2 2006/11/13 08:20:19 kristo Exp $
 // stats_viewer.aw - Statistika 
 /*
 
@@ -2134,13 +2134,22 @@ class stats_viewer extends class_base
 
 		$from = 0;
 		$to = time();
+		$where = array(" 1 = 1 ");
 		if ($arr["obj_inst"]->prop("eex_from") != -1)
 		{
 			$from = $arr["obj_inst"]->prop("eex_from");
+			if ($from)
+			{
+				$where[] = " tm_s >= ".$from." ";
+			}
 		}
 		if ($arr["obj_inst"]->prop("eex_to") != -1)
 		{
 			$to = $arr["obj_inst"]->prop("eex_to");
+			if ($to)
+			{
+				$where[] = " tm_s <= ".$to." ";
+			}
 		}
 		$this->db_query("SELECT 
 				count(*) as cnt,
@@ -2148,7 +2157,7 @@ class stats_viewer extends class_base
 			FROM 
 				syslog_archive_sessions
 			WHERE
-				tm_s >= $from AND tm_s <= $to 
+				".join(" AND ", $where)."
 			GROUP BY
 				entry_page
 			ORDER BY
@@ -2208,13 +2217,22 @@ class stats_viewer extends class_base
 
 		$from = 0;
 		$to = time();
+		$where = array(" 1 = 1 ");
 		if ($arr["obj_inst"]->prop("eex_from") != -1)
 		{
 			$from = $arr["obj_inst"]->prop("eex_from");
+			if ($from)
+			{
+				$where[] = " tm_e >= ".$from." ";
+			}
 		}
 		if ($arr["obj_inst"]->prop("eex_to") != -1)
 		{
 			$to = $arr["obj_inst"]->prop("eex_to");
+			if ($to)
+			{
+				$where[] = " tm_e <= ".$to." ";
+			}
 		}
 		$this->db_query("SELECT 
 				count(*) as cnt,
@@ -2222,7 +2240,7 @@ class stats_viewer extends class_base
 			FROM 
 				syslog_archive_sessions
 			WHERE
-				tm_e >= $from AND tm_e <= $to 
+				".join(" AND ", $where)."
 			GROUP BY
 				exit_page
 			ORDER BY
@@ -2264,20 +2282,30 @@ class stats_viewer extends class_base
 	{
 		$from = 0;
 		$to = time();
+		$where = array(" 1 = 1 ");
 		if ($arr["obj_inst"]->prop("eex_from") != -1)
 		{
 			$from = $arr["obj_inst"]->prop("eex_from");
+			if ($from)
+			{
+				$where[] = " tm_e >= ".$from." ";
+			}
 		}
 		if ($arr["obj_inst"]->prop("eex_to") != -1)
 		{
 			$to = $arr["obj_inst"]->prop("eex_to");
+			if ($to)
+			{
+				$where[] = " tm_e <= ".$to." ";
+			}
 		}
+		$where = join(" AND ", $where);
 		$arr["prop"]["value"] = $this->db_fetch_field("SELECT 
 				count(*) as cnt
 			FROM 
 				syslog_archive_sessions
 			WHERE
-				tm_e >= $from AND tm_e <= $to 
+				$where
 		","cnt");
 	}
 
