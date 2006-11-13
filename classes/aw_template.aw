@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.78 2006/10/27 13:46:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.79 2006/11/13 13:12:16 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -723,9 +723,17 @@ class aw_template extends core
 	{
 		foreach($params as $k => $v)
 		{
+			/*if (strpos($v, "?php") !== false)
+			{
+				echo "$k => ".dbg::short_backtrace()." <br>";
+			}*/
 			$this->vars[$k] = str_replace("<?php", "&lt;?php", $v);
 		}
-		//$this->vars = array_merge($this->vars,$params);
+	}
+
+	function vars_safe($params)
+	{
+		$this->vars = array_merge($this->vars,$params);
 	}
 
 	/** imports variables into the current template, appending to the previous variables of the same name
