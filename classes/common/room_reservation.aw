@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.4 2006/11/09 15:58:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.5 2006/11/14 12:09:10 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -573,8 +573,9 @@ class room_reservation extends class_base
 		$sf->read_template("index.tpl");
 			
 		$action = $this->mk_my_orb("submit_web_calendar_table", array("room" => $arr["room"]));
+		$select = $res_inst->_get_calendar_select($arr);
 		$sf->vars(array(
-			"content" => "<form name='products_form' action=".$action." method=POST>".$t->draw()."<br>".html::submit()."</form>",
+			"content" => "<form name='products_form' action=".$action." method=POST>".$select.$t->draw()."<br>".html::submit()."</form>",
 			"uid" => aw_global_get("uid"),
 			"charset" => aw_global_get("charset")
 		));

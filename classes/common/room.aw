@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.35 2006/11/10 15:27:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.36 2006/11/14 12:09:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -84,6 +84,8 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 @default group=calendar
 	@property calendar_tb type=toolbar no_caption=1 submit=no
 	@property calendar type=calendar no_caption=1 viewtype=relative store=no
+	
+	@property calendar_select type=text no_caption=1
 	@property calendar_tbl type=table no_caption=1
 
 #TAB RESOURCES
@@ -268,6 +270,10 @@ class room extends class_base
 				return PROP_IGNORE;
 				$prop["value"] = $this->create_room_calendar ($arr);
 				break;
+			case "calendar_select":
+				$prop["value"] = $this->_get_calendar_select($arr);
+				break;
+			
 			case "calendar_tbl":
 				$this->_get_calendar_tbl($arr);
 				break;	
@@ -808,6 +814,46 @@ class room extends class_base
 		return $calendar->get_html ();
 	}
 	*/
+
+	function _get_calendar_select($arr)
+	{
+		$ret = "";
+		$ret.= t("Vali sobiv ajavahemik: ");
+		
+		$x=0;
+		$options = array();
+		$week = date("W" , time());
+		$weekstart = mktime(0,0,0,0,0,date("Y" , time())) + (date("z" , time()) - date("N" , time()))*86400;
+		while($x<20)
+		{
+			$options[$weekstart] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
+			$weekstart = $weekstart + 604800;
+			$x++;
+		};
+		
+		$ret.= html::select(array(
+			"name" => "room_reservation_select",
+			"options" => $options,
+		));
+		
+		$ret.= t("Vali broneeringu kestvus: ");
+		
+		$options = array();
+		$x = 1;
+		while($x<7)
+		{
+			$options[$x] = $x;
+			$x++;
+		};
+		
+		$ret.= html::select(array(
+			"name" => "room_reservation_length",
+			"options" => $options,
+		));
+		
+		$arr["prop"]["value"] = $ret;
+		return $ret;
+	}
 
 	function _get_calendar_tbl($arr)
 	{
