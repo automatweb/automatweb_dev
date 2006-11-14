@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.1 2006/11/10 10:43:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.2 2006/11/14 15:03:40 dragut Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -8,16 +8,42 @@
 @default table=objects
 @default group=general
 
+	@property csv_file_location type=textbox size=100 method=serialize field=meta
+	@caption CSV faili asukoht
+
+	@property info type=text store=no
+	@caption Info
+
+	@property update_db type=text store=no
+	@caption Uuenda andmebaasi
+
+@groupinfo search caption="Otsing"
+@default group=search
+
+	@property ip type=textbox store=no
+	@caption IP aadress
+
+	@property search_result type=text store=no
+	@caption Tulemus
+
+	@property search_ip type=submit store=no
+	@caption Otsi 
+
 */
 
 class ip_locator extends class_base
 {
+
+	var $db_table_name;
+
 	function ip_locator()
 	{
 		$this->init(array(
 			"tpldir" => "core/util/ip_locator/ip_locator",
 			"clid" => CL_IP_LOCATOR
 		));
+
+		$this->db_table_name = 'ip2country';
 	}
 
 	function get_property($arr)
@@ -26,11 +52,29 @@ class ip_locator extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case 'info':
+				$csv_file = $arr['obj_inst']->prop('csv_file_location');
+				if (is_readable($csv_file))
+				{
+					$prop['value'] = t('Faili viimate muudetud: ').date('d.m.Y', filemtime($csv_file));
+				}
+				break;
+			case 'update_db':
+				$prop['value'] = html::href(array(
+					'caption' => t('Uuenda baasi'),
+					'url' => $this->mk_my_orb('update_db', array(
+						'id' => $arr['obj_inst']->id(),
+						'debug' => 1
+					))
+				));
+				break;
+			case 'ip':
+				$prop['value'] = $arr['request']['ip'];
+				break;
 		};
 		return $retval;
 	}
-
+/*
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -41,10 +85,39 @@ class ip_locator extends class_base
 		}
 		return $retval;
 	}	
+*/
+
+	function _get_search_result($arr)
+	{
+		$ip = $arr['request']['ip'];
+		$country = $this->search($ip);
+		
+		if (empty($ip))
+		{
+			return PROP_OK;
+		}
+		if ($country === false)
+		{
+			$arr['prop']['value'] = t('Sellist IP-d ei leitud andmebaasist');
+		}
+		else
+		{
+			$arr['prop']['value'] .= sprintf(t('Maa: <strong>%s</strong> <br />'), $country['country_name']);
+			$arr['prop']['value'] .= sprintf(t('Kahekohaline kood: <strong>%s</strong> <br />'), $country['country_code2']);
+			$arr['prop']['value'] .= sprintf(t('Kolmekohaline kood: <strong>%s</strong> <br />'), $country['country_code3']);
+			$arr['prop']['value'] .= t('Vastavalt ISO 3166 standardile');
+		}
+		return PROP_OK;
+	}
 
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr['args']['ip'] = $arr['request']['ip'];
 	}
 
 	////////////////////////////////////
@@ -62,6 +135,96 @@ class ip_locator extends class_base
 		return $this->parse();
 	}
 
-//-- methods --//
+	// searches the country data according to ip
+	function search($ip)
+	{
+		$ip_number = ip2long($ip);
+		if ($ip_number != -1)
+		{
+			$sql = "select * from ".$this->db_table_name." where ip_from <= ".$ip_number." and ip_to >= ".$ip_number;
+			$data = $this->db_fetch_row($sql);
+			if (empty($data))
+			{
+				return false;
+			}
+			else
+			{
+				return $data;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+		@attrib name=update_db
+		
+		@param id required type=int
+		@param debug optional type=int
+	**/
+	function update_db($arr)
+	{
+		$debug = $arr['debug'];
+
+		// peaks supportima zip-ist lahti pakkimsit - v6i mis iagnes formaadist seda scv-d saab
+	
+		// samuti v6iks toetada seda, et annan selle zip-i urli ette ja siis ta t6mbab selle ise alla ja 
+		// ja uuendab baasi tabeli ära
+		
+	//	$file = '/www/dev/dragut/site/files/ip-to-country.csv';
+		if ($this->can('view', $arr['id']))
+		{
+			$obj_inst = new object($arr['id']);
+			$file = $obj_inst->prop('csv_file_location');
+		}
+		$db_table_name = 'ip2country';
+		
+		if ($this->db_table_exists($this->db_table_name) === false)
+		{
+			$this->db_query('create table '.$this->db_table_name.' (
+				id int not null primary key auto_increment,
+				ip_from double,
+				ip_to double,
+				country_code2 char(2),
+				country_code3 char(3),
+				country_name varchar(255)
+			)');
+		}
+
+		$this->db_query("delete from ".$this->db_table_name);
+
+		$lines = file($file);
+		foreach ($lines as $line)
+		{
+			$line = str_replace('"', '', $line);
+			$fields = explode(',', $line);
+
+			$sql = "insert into ".$this->db_table_name." (
+					ip_from, 
+					ip_to, 
+					country_code2, 
+					country_code3, 
+					country_name
+				) values (
+					".(double)$fields[0].", 
+					".(double)$fields[1].", 
+					'".addslashes($fields[2])."', 
+					'".addslashes($fields[3])."', 
+					'".addslashes($fields[4])."'
+			)";
+
+			$this->db_query($sql);
+
+			if ($debug){
+				echo $sql."<br />";
+			}
+		}
+
+		return $this->mk_my_orb('change', array(
+			'id' => $arr['id']
+		));
+	}
 }
 ?>
