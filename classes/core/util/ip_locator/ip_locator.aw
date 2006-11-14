@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.2 2006/11/14 15:03:40 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.3 2006/11/14 15:58:53 dragut Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -135,7 +135,41 @@ class ip_locator extends class_base
 		return $this->parse();
 	}
 
-	// searches the country data according to ip
+	/** Searches the supplied IP address from ip-to-country database
+		@attrib name=search api=1 params=pos 
+
+		@param ip required type=string
+			IP address to search as dotted string
+		@errors none
+		@returns array with the data about the IP 
+			false if the IP is not correctly formed
+			false if the IP isn't found in the database
+		@comment
+			This search is based on an ip-to-country database provaided by
+			http://ip-to-country.webhosting.info/
+			It is possible that it isn't 100% accurate, so it is needed to check for newer version of the database when want to use it.
+		@examples
+			$locator = get_instance('core/util/ip_locator/ip_locator');
+			$locator->search('62.65.36.186');
+			var_dump($f);
+
+			// prints out:
+			// 	array(6) {
+			//		["id"]=>
+			//		string(6) "362013"
+			//		["ip_from"]=>
+			//		string(10) "1044455424"
+			//		["ip_to"]=>
+			//		string(10) "1044463615"
+			//		["country_code2"]=>
+			//		string(2) "EE"
+			//		["country_code3"]=>
+			//		string(3) "EST"
+			//		["country_name"]=>
+			//		string(9) "ESTONIA"
+			//	}
+	
+	**/
 	function search($ip)
 	{
 		$ip_number = ip2long($ip);
