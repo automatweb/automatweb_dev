@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.115 2006/09/14 10:19:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.116 2006/11/14 15:08:50 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -74,6 +74,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property show_logged type=checkbox ch_value=1
 		@caption Luba kasutajal oma andmeid muuta
+
+		@property limit_anonymous_posting type=checkbox ch_value=1
+		@caption Anon&uuml;&uuml;mse postitamise piiramine
 
 @groupinfo look caption="V&auml;limus"
 
@@ -1489,6 +1492,10 @@ class forum_v2 extends class_base
 				{
 					$error_msg .= t('Kommentaari v&auml;li peab olema t&auml;idetud!');
 				}
+				if ( $_SESSION['forum_comment_error']['ip_limit'] )
+				{
+					$error_msg .= t('Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt');
+				}
 
 				$this->vars(array(
 					'error_message' => $error_msg
@@ -2136,6 +2143,17 @@ class forum_v2 extends class_base
 			}
 
 			$uid = aw_global_get("uid");
+
+			if ( $obj_inst->prop('limit_anonymous_posting') && empty($uid) )
+			{
+				$ip_locator = get_instance('core/util/ip_locator/ip_locator');
+				$country = $ip_locator->search($_SERVER['REMOTE_ADDR']);
+				if ($country['country_code3'] != 'EST')
+				{
+					$errors['ip_limit'] = 1;
+				}
+			}
+
 			if($obj_inst->prop("show_logged") != 1 && !empty($uid))
 			{
 				$uid_oid = users::get_oid_for_uid($uid);

@@ -124,6 +124,16 @@
             <caption>Luba kasutajal oma andmeid muuta</caption>
       </property>
       <property>
+            <name>limit_anonymous_posting</name>
+            <table>objects</table>
+            <group>users</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Anon&amp;amp;uuml;&amp;amp;uuml;mse postitamise piiramine</caption>
+      </property>
+      <property>
             <name>style_general_subtitle</name>
             <table>objects</table>
             <group>styles</group>

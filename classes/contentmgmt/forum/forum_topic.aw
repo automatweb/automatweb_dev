@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.21 2006/10/20 09:51:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.22 2006/11/14 15:08:50 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC no_status=1
@@ -84,15 +84,40 @@ class forum_topic extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "name":
 			case "author_name":
 			case "author_email":
-			case "comment":
-			case "name":
 				if (empty($prop["value"]))
 				{
 					$prop["error"] = $prop["caption"] . " ei tohi olla tühi!";
 					$retval = PROP_FATAL_ERROR;
 				};
+			
+				break;
+			case "comment":
+				if (empty($prop["value"]))
+				{
+					$prop["error"] = $prop["caption"] . " ei tohi olla tühi!";
+					$retval = PROP_FATAL_ERROR;
+				};
+
+				// there has to be comment field in topic adding ... everything else seems to be optional
+				// so i put this ip2country check here:
+				if ($this->can('view', $arr['request']['forum_id']))
+				{
+					$forum_obj = new object($arr['request']['forum_id']);
+					$uid = aw_global_get('uid');
+					if ( $forum_obj->prop('limit_anonymous_posting') && empty($uid) )
+					{
+						$ip_locator = get_instance('core/util/ip_locator/ip_locator');
+						$country = $ip_locator->search($_SERVER['REMOTE_ADDR']);
+						if ($country['country_code3'] != 'EST')
+						{       $prop['error'] = t('Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt');
+							$retval = PROP_FATAL_ERROR;
+						}
+						
+					}
+				}
 				break;
 			case 'image_verification':
 				if ($this->can('view', $arr['request']['forum_id']))
@@ -106,7 +131,7 @@ class forum_topic extends class_base
 							$prop['error'] = t('Sisestatud kontrollnumber on vale!');
 							$retval = PROP_FATAL_ERROR;
 						}
-					}	
+					}
 				}
 				break;
 
