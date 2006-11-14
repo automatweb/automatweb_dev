@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.37 2006/11/14 13:59:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.38 2006/11/14 17:46:56 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -905,7 +905,7 @@ class room extends class_base
 		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
 //			$today_start = mktime(0, 0, 0, date("m", time()), date("d", time()), date("y", time()));
-			$d = $col = array();
+			$d = $col = $ids = $onclick= array();
 			$x = 0;
 			$start_step = $today_start + $step * $step_length * $arr["obj_inst"]->prop("time_step");
 			$end_step = $start_step + $step_length * $arr["obj_inst"]->prop("time_step");
@@ -921,15 +921,19 @@ class room extends class_base
 					
 				)))
 				{
-					$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba") . " " . $prod_menu;
-					$col[$x] = "";
+//					$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba") . " " . $prod_menu;
+//					$col[$x] = "";
+					$d[$x] = "<span>Vaba</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'0')). " " . $prod_menu;
 				}
 				else
 				{
-					$d[$x] = t("BRON");
-					$col[$x] = "red";
+					$d[$x] = html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'1' )). " " . $prod_menu;
+//					$d[$x] = t("BRON");
+//					$col[$x] = "red";
 				}
 //				}
+				$onclick[$x] = "doBron(this);";
+				$ids[$x] = $start_step;
 				$x++;
 				$start_step += 86400;
 				$end_step += 86400;
@@ -951,6 +955,20 @@ class room extends class_base
 				"col4" => $col[4],
 				"col5" => $col[5],
 				"col6" => $col[6],
+				"id0" => $ids[0],
+				"id1" => $ids[1],
+				"id2" => $ids[2],
+				"id3" => $ids[3],
+				"id4" => $ids[4],
+				"id5" => $ids[5],
+				"id6" => $ids[6],
+				"onclick0" => $onclick[0],
+				"onclick1" => $onclick[1],
+				"onclick2" => $onclick[2],
+				"onclick3" => $onclick[3],
+				"onclick4" => $onclick[4],
+				"onclick5" => $onclick[5],
+				"onclick6" => $onclick[6],
 			));
 		//	$step = $step + $arr["obj_inst"]->prop("time_step");
 			$step = $step + 1;
@@ -1012,42 +1030,56 @@ class room extends class_base
 			"caption" => date("l d/m/Y", time()),
 			"width" => "20px",
 			"chgbgcolor" => "col0",
+			"id" => "id0",
+			"onclick" => "onclick0",
 		));
 		$t->define_field(array(
 			"name" => "d1",
 			"caption" => date("l d/m/Y", time() + 86400),
 			"width" => "20px",
 			"chgbgcolor" => "col1",
+			"id" => "id1",
+			"onclick" => "onclick1",
 		));
 		$t->define_field(array(
 			"name" => "d2",
 			"caption" => date("l d/m/Y", time() + 86400*2),
 			"width" => "20px",
 			"chgbgcolor" => "col2",
+			"id" => "id2",
+			"onclick" => "onclick2",
 		));
 		$t->define_field(array(
 			"name" => "d3",
 			"caption" => date("l d/m/Y", time() + 86400*3),
 			"chgbgcolor" => "col3",
 			"width" => "20px",
+			"id" => "id3",
+			"onclick" => "onclick3",
 		));
 		$t->define_field(array(
 			"name" => "d4",
 			"caption" => date("l d/m/Y", time() + 86400*4),
 			"width" => "20px",
 			"chgbgcolor" => "col4",
+			"id" => "id4",
+			"onclick" => "onclick4",		
 		));
 		$t->define_field(array(
 			"name" => "d5",
 			"caption" => date("l d/m/Y", time() + 86400*5),
 			"width" => "20px",
 			"chgbgcolor" => "col5",
+			"id" => "id5",
+			"onclick" => "onclick5",		
 		));
 		$t->define_field(array(
 			"name" => "d6",
 			"caption" => date("l d/m/Y", time() + 86400*6),
 			"chgbgcolor" => "col6",
 			"width" => "20px",
+			"id" => "id6",
+			"onclick" => "onclick6",
 		));
 		$t->table_caption = t("Broneerimine");
 		$t->set_sortable(false);
