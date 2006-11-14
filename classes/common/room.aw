@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.36 2006/11/14 12:09:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.37 2006/11/14 13:59:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -893,6 +893,11 @@ class room extends class_base
 	//	arr($booked);
 		$today_start = mktime(0, 0, 0, date("m", time()), date("d", time()), date("y", time()));
 	
+		if($arr["obj_inst"]->prop("use_product_times"))
+		{
+			$prod_menu = $this->get_prod_menu($arr);
+		}
+	
 		$step = 0;
 		
 		$step_length = $this->step_lengths[$arr["obj_inst"]->prop("time_unit")];
@@ -916,7 +921,7 @@ class room extends class_base
 					
 				)))
 				{
-					$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba");
+					$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba") . " " . $prod_menu;
 					$col[$x] = "";
 				}
 				else
@@ -950,6 +955,49 @@ class room extends class_base
 		//	$step = $step + $arr["obj_inst"]->prop("time_step");
 			$step = $step + 1;
 		}
+	}
+
+	function get_prod_menu($arr)
+	{
+		classload("core/icons");
+		$prod_list = $this->get_prod_list($arr["obj_inst"]->id());
+		$ret = "";
+		$pm = get_instance("vcl/popup_menu");
+		$room = $arr["obj_inst"];
+		if(is_object($room))
+		{
+			$prod_data = $room->meta("prod_data");
+		}
+		
+		$image_inst = get_instance(CL_IMAGE);
+		$pm->begin_menu("sf"."234234");
+		foreach($prod_list->arr() as $prod)
+		{
+			$packages = $prod->connections_from(array(
+				"type" => "RELTYPE_PACKAGING",
+			));
+			
+			foreach($packages as $conn)
+			{
+				$package = $conn->to();
+				if(!$prod_data[$package->id()]["active"])
+				{
+					continue;
+				}
+				
+				$pm->add_item(array(
+					"text" => $package->name(),
+					"link" => $this->mk_my_orb('cal_product_reserved_time',array(
+						"id" => $room->id(),
+						"oid" => $package->id(),
+					)),
+				),"CL_ROOM");
+			}
+		}
+		$ret.= $pm->get_menu(array(
+			"icon" => icons::get_icon_url($package),
+		));	
+		return $ret;
 	}
 
 	function _init_calendar_t(&$t)
@@ -1244,7 +1292,10 @@ class room extends class_base
 		$ol = new object_list();
 		$filter = array("class_id" => array(CL_SHOP_PRODUCT), "lang_id" => array());
 		$data = $this_obj->meta("search_data");
-		if($data["products_find_product_name"]) $filter["name"] = "%".$data["products_find_product_name"]."%";
+		if($data["products_find_product_name"])
+		{
+			$filter["name"] = "%".$data["products_find_product_name"]."%";
+		}
 		$ol = new object_list($filter);
 		return $ol;
 	}	
@@ -2047,6 +2098,24 @@ class room extends class_base
 	}
 	
 	/**
+		@attrib name=cal_product_reserved_time params=name all_args=1 nologin=1
+		@param oid required type=oid
+			products and their amounts
+		@return int
+			min time to reserve
+	**/
+	function cal_product_reserved_time($arr)
+	{
+		extract($arr);
+		if(is_oid($arr["oid"]) && $this->can("view", $arr["oid"]))
+		{
+			$product=obj($arr["oid"]);
+			return $product->prop("reservation_time")*$product->prop("reservation_time_unit");
+		}
+		return 0;
+	}
+	
+	/**
 		@attrib params=name
 		@param products required type=array
 			products and their amounts
@@ -2136,7 +2205,6 @@ class room extends class_base
 			
 	//		$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
 		}
-		
 		
 		if(!sizeof($reservations->arr()))
 		{
