@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.95 2006/10/24 13:33:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.96 2006/11/14 17:38:01 markop Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1100,6 +1100,7 @@ class aw_table extends aw_template
 
 					// moodustame celli
 					$rowspan = isset($this->actionrows) ? $this->actionrows : $rowspan;
+
 					$tbl .= $this->opentag(array(
 						"name"    => "td",
 						"classid" => $style,
@@ -1110,6 +1111,8 @@ class aw_table extends aw_template
 						"valign" => isset($v1["valign"]) ? $v1["valign"] : "",
 						"nowrap" => isset($v1["nowrap"]) ? 1 : "",
 						"bgcolor" => isset($v["bgcolor"]) ? $v["bgcolor"] : $bgcolor,
+						"domid" => isset($v[$v1["id"]]) ? $v[$v1["id"]] : "",
+						"onclick" => isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
 					));
 
 					if ($v1["name"] == "rec")
@@ -1399,6 +1402,10 @@ class aw_table extends aw_template
 			{
 				$attr_list .= " title='$v'";
 			}
+			elseif ($k == "onclick" and !empty ($v))
+			{
+				$attr_list .= " onClick='$v'";
+			}
 			elseif ($v != "")
 			{
 				if ($k == "nowrap")
@@ -1634,11 +1641,9 @@ class aw_table extends aw_template
 		@param format optional type=string
 			Field format
 		@param numeric optional type=bool
-
-		@param filter_compare optional
-
+		@param filter_compare optional array
 		@param order optional
-
+			
 		@param filter optional
 
 		@param filter_options optional
@@ -1681,7 +1686,6 @@ class aw_table extends aw_template
 			aw_session_set ($this->filter_name . "Saved", aw_serialize ($this->selected_filters));
 			$this->filters_updated = true;
 		}
-
 		$this->filter_comparators[$args["name"]] = $args["filter_compare"];
 		$this->rowdefs_key_index[$args["name"]] = count($this->rowdefs);
 		$this->rowdefs[] = $args;
