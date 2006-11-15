@@ -36,6 +36,12 @@ class msg_dispatch extends class_base
 
 			$inst->$func($arr["params"]);
 		}
+
+		$si = __get_site_instance();
+		if (method_exists($si, "aw_message_handler"))
+		{
+			$si->aw_message_handler($arr);
+		}
 	}
 
 	////
@@ -74,6 +80,12 @@ class msg_dispatch extends class_base
 				));
 				$inst->$func($arr["params"]);
 			}
+		}
+
+		$si = __get_site_instance();
+		if (method_exists($si, "aw_message_handler"))
+		{
+			$si->aw_message_handler($arr);
 		}
 	}
 
