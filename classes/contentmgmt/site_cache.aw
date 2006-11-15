@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.36 2006/10/06 10:13:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.37 2006/11/15 12:58:40 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -203,6 +203,7 @@ class site_cache extends aw_template
 		if (strpos($res, "<?php") !== false)
 		{
 			ob_start();
+			$res = str_replace("<?xml", "&lt;?xml", $res);
 			eval("?>".$res);
 			$res = ob_get_contents();
 			ob_end_clean();

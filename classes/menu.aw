@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.177 2006/10/16 21:37:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.178 2006/11/15 12:58:39 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1715,7 +1715,7 @@ class menu extends class_base
 				$str[$tpl][$c->prop("to")] = $c->prop("to.jrk");
 			}
 		}
-
+		
 		// also parents
 		$pt = $sect->path();
 		foreach($pt as $o)

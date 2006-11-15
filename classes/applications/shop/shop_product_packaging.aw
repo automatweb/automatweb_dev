@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.23 2006/11/10 15:26:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.24 2006/11/15 12:58:40 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -214,7 +214,7 @@ class shop_product_packaging extends class_base
 	{
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
-		$this->vars(array(
+		$this->vars_safe(array(
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
@@ -298,7 +298,7 @@ class shop_product_packaging extends class_base
 			"obj_id" => $pi->id(),
 			"obj_parent" => $parent_fld->id()
 		);
-		$l_inst->vars($ivs);
+		$l_inst->vars_safe($ivs);
 		$proc_ivs = $ivs;
 
 		// insert images
@@ -313,7 +313,7 @@ class shop_product_packaging extends class_base
 		foreach($imgc as $c)
 		{
 			$u = $i->get_url_by_id($c->prop("to"));
-			$l_inst->vars(array(
+			$l_inst->vars_safe(array(
 				"image".$cnt => image::make_img_tag($u, $c->prop("to.name")),
 				"image".$cnt."_url" => $u
 			));
@@ -324,7 +324,7 @@ class shop_product_packaging extends class_base
 		foreach($imgc as $c)
 		{
 			$u = $i->get_url_by_id($c->prop("to"));
-			$l_inst->vars(array(
+			$l_inst->vars_safe(array(
 				"packaging_image".$cnt => image::make_img_tag($u, $c->prop("to.name")),
 				"packaging_image".$cnt."_url" => $u
 			));
@@ -374,7 +374,7 @@ class shop_product_packaging extends class_base
 				$ivar["userch".$i] = $prod->prop("userch".$i);
 			}
 
-			$l_inst->vars($ivar);
+			$l_inst->vars_safe($ivar);
 			$proc_ivs += $ivar;
 		}
 		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
@@ -392,25 +392,25 @@ class shop_product_packaging extends class_base
 			$vs = array(
 				"order_data_".$datan => $datav
 			);
-			$l_inst->vars($vs);
+			$l_inst->vars_safe($vs);
 			$proc_ivs += $vs;
 		}
 		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
 
 		if ($awa["url"] != "")
 		{
-			$l_inst->vars(Array(
+			$l_inst->vars_safe(Array(
 				"URL_IN_DATA" => $l_inst->parse("URL_IN_DATA")
 			));
 		}
 		else
 		{
-			$l_inst->vars(Array(
+			$l_inst->vars_safe(Array(
 				"NO_URL_IN_DATA" => $l_inst->parse("NO_URL_IN_DATA")
 			));
 		}
 
-		$l_inst->vars(array(
+		$l_inst->vars_safe(array(
 			"logged" => (aw_global_get("uid") == "" ? "" : $l_inst->parse("logged"))
 		));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.51 2006/10/11 14:11:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.52 2006/11/15 12:58:40 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -458,6 +458,7 @@ class otv_ds_obj extends class_base
 		enter_function("otv_ds_obj::get_objects");
 		$ret = array();
 
+		enter_function("otv_ds_obj::get_objects::init");
 		// if the folder is specified in the url, then show that
 		// if use_meta_as_folders option is set, then ignore tv_sel here
 		$use_meta_as_folders = $ob->prop("use_meta_as_folders");
@@ -553,7 +554,9 @@ class otv_ds_obj extends class_base
 			$sby = $ob->prop("sort_by");
 		}
 // seems that if i want to filter something - i need to do it here:
+		exit_function("otv_ds_obj::get_objects::init");
 
+		enter_function("otv_ds_obj::get_objects::make_filter");
 		$clss = aw_ini_get("classes");
 		$_ft = array(
 			"parent" => $parent,
@@ -657,12 +660,19 @@ class otv_ds_obj extends class_base
 		{
 			$_ft["site_id"] = array();
 		}
+		exit_function("otv_ds_obj::get_objects::make_filter");
+
 		enter_function("otv_ds_obj::get_objects::list");
 		$ol = new object_list($_ft);
 		//$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
 		exit_function("otv_ds_obj::get_objects::list");
+
+		
+		enter_function("otv_ds_obj::get_objects::get_fields");
 		$classlist = aw_ini_get("classes");
 		$fields = $this->get_fields($ob, true);
+		exit_function("otv_ds_obj::get_objects::get_fields");
+	
 
 		$ret = array();
 		classload("core/icons", "image");
@@ -815,12 +825,14 @@ class otv_ds_obj extends class_base
 		}
 		exit_function("otv_ds_obj::get_objects::loop");
 
+		enter_function("otv_ds_obj::transform");
 		foreach($ob->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
 		{
 			$tr = $c->to();
 			$tr_i = $tr->instance();
 			$tr_i->transform($tr, $ret);
 		}
+		exit_function("otv_ds_obj::transform");
 
 		exit_function("otv_ds_obj::get_objects");
 

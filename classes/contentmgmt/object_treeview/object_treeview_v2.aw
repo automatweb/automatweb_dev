@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.106 2006/10/03 10:52:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.107 2006/11/15 12:58:40 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1659,15 +1659,18 @@ class object_treeview_v2 extends class_base
 			)),
 		);
 
-		$del = "";
-		if ($drv->check_acl("delete", $d_o, $arr["id"]))
+		if ($this->is_template("DELETE"))
 		{
-			$del = $this->parse("DELETE");
-		}
+			$del = "";
+			if ($drv->check_acl("delete", $d_o, $arr["id"]))
+			{
+				$del = $this->parse("DELETE");
+			}
 
-		$this->vars(array(
-			"DELETE" => $del
-		));
+			$this->vars(array(
+				"DELETE" => $del
+			));
+		}
 
 		$tb = "";
 		$no_tb = "";
@@ -2117,13 +2120,13 @@ class object_treeview_v2 extends class_base
 			}
 		}
 
+		exit_function("object_treeview_v2::__is_sorter");
 		// sort by that element
 		if ($comp_a  == $comp_b)
 		{
 			return 0;
 		}
 
-		exit_function("object_treeview_v2::__is_sorter");
 		if ($ord == "asc")
 		{
 			return $comp_a > $comp_b ? 1 : -1;

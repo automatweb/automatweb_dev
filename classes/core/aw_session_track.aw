@@ -22,7 +22,7 @@ class aw_session_track extends class_base
 
 		$data = $this->get_track_data();
 
-		$this->mk_path(0, t("Saidid"));
+		//$this->mk_path(0, t("Saidid"));
 
 		$c_ts = time();
 
@@ -167,10 +167,10 @@ class aw_session_track extends class_base
 		));
 		$this->_init_show_site_t($t);
 
-		$this->mk_path(0, html::href(array(
+		/*$this->mk_path(0, html::href(array(
 			"url" => $this->mk_my_orb("list"),
 			"caption" => t("Saidid")
-		))." / $arr[url] ");
+		))." / $arr[url] ");*/
 
 
 		$data = $this->get_track_data(array(

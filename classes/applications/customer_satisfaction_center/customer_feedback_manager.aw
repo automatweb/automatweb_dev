@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.4 2006/09/05 13:55:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/customer_feedback_manager.aw,v 1.5 2006/11/15 12:58:39 kristo Exp $
 // customer_feedback_manager.aw - Kliendi tagasiside 
 /*
 
@@ -182,7 +182,7 @@ class customer_feedback_manager extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_fb_t($t);
 
-		if ($arr["request"]["group"] == "unsolved")
+		if ($arr["request"]["group"] == "unsolved" || $arr["request"]["group"] == "fb")
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_CUSTOMER_FEEDBACK_ENTRY,
@@ -213,7 +213,7 @@ class customer_feedback_manager extends class_base
 			$t->define_data(array(
 				"person" => html::obj_change_url($p),
 				"co" => html::get_change_url($co->id(), array("return_url" => get_ru()), parse_obj_name($co->prop("short_name"))),
-				"class" => $clss[$ob->class_id()]["name"],
+				"class" => $ob ? $clss[$ob->class_id()]["name"] : "",
 				"object" => html::obj_change_url($ob),
 				"severity" => $e->severities[$o->prop("seriousness")],
 				"dev_status" => $e->statuses[$o->prop("dev_status")],

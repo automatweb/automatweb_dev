@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.112 2006/10/20 11:22:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.113 2006/11/15 12:58:40 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -5253,7 +5253,7 @@ class project extends class_base
 		$hrs = 0;
 		foreach($ol->arr() as $b)
 		{
-			$hrs += $b->prop("num_hrs_real");
+			$hrs += $b->prop("num_hrs_real") + $b->prop("time_real");
 			foreach($b->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 			{
 				$r = $c->to();

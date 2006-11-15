@@ -460,6 +460,67 @@
             <method>serialize</method>
             <caption>Bugi kommentaaride CC</caption>
       </property>
+      <property>
+            <name>cvs2uidmap</name>
+            <table>objects</table>
+            <group>settings_g</group>
+            <type>textarea</type>
+            <rows>7</rows>
+            <cols>20</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajanimede kaart</caption>
+            <comment>Formaat: cvs_kasutaja=aw_kasutaja\ncvs_kasutaja=aw_kasutaja</comment>
+      </property>
+      <property>
+            <name>reqs_tb</name>
+            <table>objects</table>
+            <group>reqs</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>reqs_tb</field>
+      </property>
+      <property>
+            <name>reqs_tree</name>
+            <table>objects</table>
+            <group>reqs</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>reqs_tree</parent>
+            <field>reqs_tree</field>
+      </property>
+      <property>
+            <name>reqs_table</name>
+            <table>objects</table>
+            <group>reqs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>reqs_tt</parent>
+            <field>reqs_table</field>
+      </property>
+      <property>
+            <name>reqs_p_tree</name>
+            <table>objects</table>
+            <group>reqs_proj</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>reqs_p_tree</parent>
+            <field>reqs_p_tree</field>
+      </property>
+      <property>
+            <name>reqs_p_table</name>
+            <table>objects</table>
+            <group>reqs_proj</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>reqs_p_tt</parent>
+            <field>reqs_p_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -468,6 +529,17 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <reqs_main>
+                  <caption>N&amp;amp;otilde;uded</caption>
+            </reqs_main>
+            <reqs>
+                  <parent>reqs_main</parent>
+                  <caption>Sisestamine</caption>
+            </reqs>
+            <reqs_proj>
+                  <caption>Projektid</caption>
+                  <parent>reqs_main</parent>
+            </reqs_proj>
             <bugs>
                   <caption>Arendus&amp;amp;uuml;lesanded</caption>
                   <submit>no</submit>
@@ -673,6 +745,30 @@
                   <parent>s_who_l</parent>
                   <group>search</group>
             </s_who_empty_l>
+            <reqs_tt>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>reqs</group>
+            </reqs_tt>
+            <reqs_tree>
+                  <type>vbox</type>
+                  <parent>reqs_tt</parent>
+                  <closeable>1</closeable>
+                  <area_caption>N&amp;otilde;uded</area_caption>
+                  <group>reqs</group>
+            </reqs_tree>
+            <reqs_p_tt>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>reqs_proj</group>
+            </reqs_p_tt>
+            <reqs_p_tree>
+                  <type>vbox</type>
+                  <parent>reqs_p_tt</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Projektid</area_caption>
+                  <group>reqs_proj</group>
+            </reqs_p_tree>
       </layout>
 </properties>
 
