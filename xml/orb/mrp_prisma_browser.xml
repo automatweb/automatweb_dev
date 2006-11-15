@@ -3,5 +3,3 @@
 	<class name="mrp_prisma_browser" folder="mrp" extends="class_base">
 	</class>
 </orb>
-		
-

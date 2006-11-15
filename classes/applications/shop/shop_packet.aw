@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.13 2005/07/11 12:55:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.14 2006/11/15 13:07:21 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -19,7 +19,8 @@
 
 @groupinfo packet caption="Paketi sisu"
 
-@property packet group=packet field=meta method=serialize type=table no_caption=1
+	@property packet_tb group=packet field=meta method=serialize type=toolbar no_caption=1
+	@property packet group=packet field=meta method=serialize type=table no_caption=1
 
 @groupinfo data caption="Toote info"
 
@@ -101,6 +102,10 @@ class shop_packet extends class_base
 			case "packet":
 				$this->do_packet_table($arr);
 				break;
+
+			case "packet_tb":
+				$this->_packet_tb($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -130,6 +135,11 @@ class shop_packet extends class_base
 			"caption" => t("Mitu paketis"),
 			"align" => "center"
 		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
 	}
 
 	function do_packet_table(&$arr)
@@ -137,16 +147,16 @@ class shop_packet extends class_base
 		$pd = $arr["obj_inst"]->meta("packet_content");
 
 		$this->_init_packet_table($arr["prop"]["vcl_inst"]);
-
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			$arr["prop"]["vcl_inst"]->define_data(array(
-				"name" => $c->prop("to.name"),
+				"name" => html::obj_change_url($c->to()),
 				"count" => html::textbox(array(
 					"name" => "pd[".$c->prop("to")."]",
 					"value" => $pd[$c->prop("to")],
 					"size" => 5
-				))
+				)),
+				"oid" => $c->prop("to")
 			));
 		}
 	}
@@ -434,6 +444,66 @@ class shop_packet extends class_base
 	function get_must_order_num($o)
 	{
 		return 0;
+	}
+
+	/** returns an array of products that are in the package
+		@attrib api=1 params=pos
+
+		@param o required type=object
+		 the packet to get prods for
+	**/
+	function get_products_for_package($o)
+	{
+		$ret = array();
+		foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
+		{
+			$ret[] = $c->to();
+		}
+		return $ret;
+	}
+
+	function _packet_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$ps = get_instance("vcl/popup_search");
+		$tb->add_cdata(
+			$ps->get_popup_search_link(array(
+				"pn" => "set_prods",
+				"multiple" => 1,
+				"clid" => CL_SHOP_PRODUCT
+			))
+		);
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta tooted paketist"),
+			"action" => "del_from_pkt"
+		));
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["set_prods"] = "0";
+		$arr["post_ru"] = post_ru();
+	}
+
+	function callback_pre_save($arr)
+	{
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["set_prods"], "RELTYPE_PRODUCT");
+	}
+
+	/**
+		@attrib name=del_from_pkt
+	**/
+	function del_from_pkt($arr)
+	{
+		$o = obj($arr["id"]);
+		foreach(safe_array($arr["sel"]) as $item)
+		{
+			$o->disconnect(array("from" => $item));
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

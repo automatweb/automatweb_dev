@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.44 2006/10/16 13:37:17 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.45 2006/11/15 13:07:21 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -831,7 +831,7 @@ class shop_warehouse extends class_base
 	{
 		classload("vcl/table");
 		$tb = new aw_table(array("layout" => "generic"));
-		$this->_init_prod_list_list_tbl($tb);
+		$this->_init_prod_list_list_tbl($tb, $arr["obj_inst"]);
 
 		// get items 
 		if (!$_GET["tree_filter"])
@@ -944,7 +944,7 @@ class shop_warehouse extends class_base
 		));
 	}
 
-	function _init_prod_list_list_tbl(&$t)
+	function _init_prod_list_list_tbl(&$t, $o)
 	{
 		$t->define_field(array(
 			"name" => "icon",
@@ -971,25 +971,29 @@ class shop_warehouse extends class_base
 			"align" => "center"
 		));
 
-		$t->define_field(array(
-			"sortable" => 1,
-			"name" => "cnt",
-			"caption" => t("Kogus laos"),
-			"align" => "center",
-			"type" => "int"
-		));
+		$conf = obj($o->prop("conf"));
+		if (!$conf->prop("no_count"))
+		{
+			$t->define_field(array(
+				"sortable" => 1,
+				"name" => "cnt",
+				"caption" => t("Kogus laos"),
+				"align" => "center",
+				"type" => "int"
+			));
 
-		$t->define_field(array(
-			"name" => "get",
-			"caption" => t("V&otilde;ta laost"),
-			"align" => "center"
-		));
+			$t->define_field(array(
+				"name" => "get",
+				"caption" => t("V&otilde;ta laost"),
+				"align" => "center"
+			));
 
-		$t->define_field(array(
-			"name" => "put",
-			"caption" => t("Vii lattu"),
-			"align" => "center"
-		));
+			$t->define_field(array(
+				"name" => "put",
+				"caption" => t("Vii lattu"),
+				"align" => "center"
+			));
+		}
 
 		$t->define_field(array(
 			"name" => "change",
@@ -1108,7 +1112,7 @@ class shop_warehouse extends class_base
 	{
 		classload("vcl/table");
 		$tb = new aw_table(array("layout" => "generic"));
-		$this->_init_pkt_list_list_tbl($tb);
+		$this->_init_pkt_list_list_tbl($tb, $arr["obj_inst"]);
 
 		// get items 
 		$ot = new object_tree(array(
@@ -1160,7 +1164,7 @@ class shop_warehouse extends class_base
 		return $tb->draw();
 	}
 
-	function _init_pkt_list_list_tbl(&$t)
+	function _init_pkt_list_list_tbl(&$t, $o)
 	{
 		$t->define_field(array(
 			"sortable" => 1,
@@ -1168,25 +1172,29 @@ class shop_warehouse extends class_base
 			"caption" => t("Nimi")
 		));
 
-		$t->define_field(array(
-			"sortable" => 1,
-			"name" => "cnt",
-			"caption" => t("Kogus laos"),
-			"align" => "center",
-			"type" => "int"
-		));
+		$conf = obj($o->prop("conf"));
+		if (!$conf->prop("no_count"))
+		{
+			$t->define_field(array(
+				"sortable" => 1,
+				"name" => "cnt",
+				"caption" => t("Kogus laos"),
+				"align" => "center",
+				"type" => "int"
+			));
 
-		$t->define_field(array(
-			"name" => "get",
-			"caption" => t("V&otilde;ta laost"),
-			"align" => "center"
-		));
+			$t->define_field(array(
+				"name" => "get",
+				"caption" => t("V&otilde;ta laost"),
+				"align" => "center"
+			));
 
-		$t->define_field(array(
-			"name" => "put",
-			"caption" => t("Vii lattu"),
-			"align" => "center"
-		));
+			$t->define_field(array(
+				"name" => "put",
+				"caption" => t("Vii lattu"),
+				"align" => "center"
+			));
+		}
 
 		$t->define_field(array(
 			"name" => "change",
@@ -2780,6 +2788,15 @@ class shop_warehouse extends class_base
 				$o->save();
 			}
 		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "storage" && $arr["obj_inst"]->prop("conf.no_count") == 1)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	function callback_mod_reforb($arr)

@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.2 2006/03/03 13:20:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.3 2006/11/15 13:07:22 kristo Exp $
 
 /** returns timestamps for the beginning and end of the given date range
 
@@ -339,6 +339,9 @@ function get_day_diff($time1,$time2)
 
 	@attrib api=1 
 
+	@param timestamp optional type=int
+		Timestamp to return the week start for
+
 	@returns the timestamp for 00:00 on the last monday
 
 	@example
@@ -346,12 +349,16 @@ function get_day_diff($time1,$time2)
 		echo date("d.m.Y", get_week_start()); // echos the date for last monday
 	
 **/
-function get_week_start()
+function get_week_start($timestamp = null)
 {
+	if ($timestamp === null)
+	{
+		$timestamp = time();
+	}
 	$wd_lut = array(0 => 6, 1 => 0, 2 => 1, 3 => 2, 4 => 3, 5 => 4, 6 => 5);
-	$wday = $wd_lut[date("w")];
+	$wday = $wd_lut[date("w",$timestamp )];
 
-	return mktime(0,0,0, date("m"), date("d")-$wday, date("Y"));
+	return mktime(0,0,0, date("m",$timestamp ), date("d",$timestamp )-$wday, date("Y",$timestamp ));
 }
 
 

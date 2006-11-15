@@ -11,6 +11,49 @@
 		<action name="do_add_reservation" all_args="1">
 			<function name="do_add_reservation">
 				<arguments>
+					<required name="id" />
+					<optional name="bron" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="make_reservation" all_args="1">
+			<function name="make_reservation">
+				<arguments>
+					<required name="id" />
+					<optional name="res_id" />
+					<required name="data" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_bron_time" nologin="1" all_args="1">
+			<function name="_get_bron_time">
+				<arguments>
+					<required name="id" />
+					<optional name="bron" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_products" all_args="1">
+			<function name="save_products">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="parse_alias" is_public="1" caption="Change">
+			<function name="parse_alias">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cal_product_reserved_time" nologin="1" all_args="1">
+			<function name="cal_product_reserved_time">
+				<arguments>
+					<required name="oid" type="oid" />
 				</arguments>
 			</function>
 		</action>

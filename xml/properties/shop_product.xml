@@ -36,6 +36,48 @@
             <caption>Ostu hind</caption>
       </property>
       <property>
+            <name>reservation_time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>reservation</parent>
+            <caption>Broneeritav aeg</caption>
+      </property>
+      <property>
+            <name>reservation_time_unit</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>reservation</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>buffer_time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>buffer</parent>
+            <caption>Puhveraeg</caption>
+      </property>
+      <property>
+            <name>buffer_time_unit</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>buffer</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>must_order_num</name>
             <table>aw_shop_products</table>
             <group>general</group>
@@ -851,5 +893,17 @@
                   <caption>Maksum&amp;amp;auml;&amp;amp;auml;r</caption>
             </TAX_RATE>
       </reltypes>
+      <layout>
+            <reservation>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>general</group>
+            </reservation>
+            <buffer>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>general</group>
+            </buffer>
+      </layout>
 </properties>
 

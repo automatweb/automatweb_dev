@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.9 2005/04/18 12:17:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.10 2006/11/15 13:07:21 kristo Exp $
 // shop_warehouse_config.aw - Lao konfiguratsioon 
 /*
 
@@ -48,6 +48,9 @@
 
 @property no_packets type=checkbox ch_value=1
 @caption Ladu ei müü pakette
+
+@property no_count type=checkbox ch_value=1
+@caption Toodetel puudub laoseis
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog

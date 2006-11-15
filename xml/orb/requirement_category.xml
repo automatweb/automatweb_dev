@@ -3,4 +3,3 @@
 	<class name="requirement_category" folder="applications/procurement_center" extends="class_base">
 	</class>
 </orb>
-		

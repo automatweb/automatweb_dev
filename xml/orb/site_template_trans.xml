@@ -3,4 +3,3 @@
 	<class name="site_template_trans" folder="admin" extends="class_base">
 	</class>
 </orb>
-		

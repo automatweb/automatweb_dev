@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="spa_bookigs_entry" folder="applications/spa_bookings" extends="class_base">
+		<action name="select_room_booking">
+			<function name="select_room_booking">
+				<arguments>
+					<required name="booking" type="int" />
+					<required name="prod" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="make_reservation">
+			<function name="make_reservation">
+				<arguments>
+					<required name="start" type="int" />
+					<required name="end" type="int" />
+					<required name="prod" type="int" />
+					<required name="booking" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

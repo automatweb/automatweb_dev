@@ -126,10 +126,20 @@
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
-            <parent>general_down</parent>
+            <parent>buffer_before_l</parent>
             <type>textbox</type>
             <size>5</size>
             <caption>Puhveraeg enne</caption>
+      </property>
+      <property>
+            <name>buffer_before_unit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>buffer_before_l</parent>
+            <type>select</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>buffer_after</name>
@@ -137,10 +147,31 @@
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>textbox</type>
             <size>5</size>
             <caption>Puhveraeg p&amp;amp;auml;rast</caption>
+      </property>
+      <property>
+            <name>buffer_after_unit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>buffer_after_l</parent>
+            <type>select</type>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>use_product_times</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>checkbox</type>
+            <no_caption>1</no_caption>
+            <caption>Kasuta toodetele m&amp;auml;&amp;auml;ratud aegu</caption>
       </property>
       <property>
             <name>calendar_tb</name>
@@ -148,7 +179,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>calendar</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <submit>no</submit>
@@ -160,11 +191,21 @@
             <field>meta</field>
             <method>serialize</method>
             <group>calendar</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>calendar</type>
             <no_caption>1</no_caption>
             <viewtype>relative</viewtype>
             <store>no</store>
+      </property>
+      <property>
+            <name>calendar_select</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>calendar</group>
+            <parent>buffer_after_l</parent>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>calendar_tbl</name>
@@ -172,7 +213,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>calendar</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -183,7 +224,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>resources</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -194,7 +235,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>resources</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -208,7 +249,7 @@
                   <num_0>images</num_0>
                   <num_1>parent</num_1>
             </group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -222,7 +263,7 @@
                   <num_0>images</num_0>
                   <num_1>parent</num_1>
             </group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -236,7 +277,7 @@
                   <num_0>images</num_0>
                   <num_1>parent</num_1>
             </group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>hidden</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -247,7 +288,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>products</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no	</store>
@@ -305,7 +346,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>prices_general</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_CURRENCY</reltype>
@@ -317,7 +358,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>prices_general</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>chooser</type>
             <multiple>1</multiple>
             <ch_value>1</ch_value>
@@ -329,7 +370,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>prices_general</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>textbox</type>
             <size>5</size>
             <caption>Lisanduv hind &amp;amp;uuml;le normaalse mahutavuse oleva inimese kohta</caption>
@@ -340,7 +381,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>prices_general</group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>chooser</type>
             <caption>Aja&amp;amp;uuml;hik</caption>
       </property>
@@ -386,7 +427,7 @@
                   <num_0>prices_price</num_0>
                   <num_1>prices_bargain_price</num_1>
             </group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>hidden</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -400,7 +441,7 @@
                   <num_0>prices_price</num_0>
                   <num_1>prices_bargain_price</num_1>
             </group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -414,10 +455,24 @@
                   <num_0>prices_price</num_0>
                   <num_1>prices_bargain_price</num_1>
             </group>
-            <parent>general_down</parent>
+            <parent>buffer_after_l</parent>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+      </property>
+      <property>
+            <name>openhours</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>open_hrs</group>
+            <parent>buffer_after_l</parent>
+            <type>releditor</type>
+            <reltype>RELTYPE_OPENHOURS</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Avamisajad</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ROOM</syslog_type>
@@ -458,6 +513,9 @@
                   <caption>Soodushinnad</caption>
                   <parent>prices</parent>
             </prices_bargain_price>
+            <open_hrs>
+                  <caption>Avamisajad</caption>
+            </open_hrs>
       </groupinfo>
       <reltypes>
             <LOCATION>
@@ -510,6 +568,11 @@
                   <clid>CL_SHOP_WAREHOUSE</clid>
                   <caption>Ruumi hind</caption>
             </SHOP_WAREHOUSE>
+            <OPENHOURS>
+                  <value>44</value>
+                  <clid>CL_OPENHOURS</clid>
+                  <caption>Avamisajad</caption>
+            </OPENHOURS>
       </reltypes>
       <layout>
             <general_split>
@@ -531,6 +594,18 @@
                   <parent>general_split</parent>
                   <group>general</group>
             </general_down>
+            <buffer_before_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <parent>general_down</parent>
+                  <group>general</group>
+            </buffer_before_l>
+            <buffer_after_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <parent>general_down</parent>
+                  <group>general</group>
+            </buffer_after_l>
             <products_l>
                   <type>hbox</type>
                   <width>30%:70%</width>

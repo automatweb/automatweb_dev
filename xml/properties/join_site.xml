@@ -105,6 +105,15 @@
             <caption>Vahepealkirjad</caption>
       </property>
       <property>
+            <name>prop_settings</name>
+            <table>objects</table>
+            <group>prop_settings</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>prop_settings</field>
+      </property>
+      <property>
             <name>rules_show</name>
             <table>objects</table>
             <group>rules_show</group>
@@ -320,6 +329,10 @@
                   <parent>props</parent>
                   <caption>Vahepealkirjad</caption>
             </seps>
+            <prop_settings>
+                  <parent>props</parent>
+                  <caption>Elementide seaded</caption>
+            </prop_settings>
             <rules>
                   <caption>Reeglid</caption>
             </rules>

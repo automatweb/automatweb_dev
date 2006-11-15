@@ -3,4 +3,3 @@
 	<class name="procurement_process" folder="applications/procurement_center" extends="class_base">
 	</class>
 </orb>
-		

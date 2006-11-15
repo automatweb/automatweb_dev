@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.3 2005/12/14 12:46:32 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.4 2006/11/15 13:07:19 kristo Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -322,6 +322,28 @@ class openhours extends class_base
 			'm2'	=> $m2,
 		);
 		
+	}
+
+	/** returns array(start_time, end_time) for the given date 
+		@attrib api=1
+		@param oh required type=object
+			The openhours object to check
+
+		@param tm required type=int
+			Date to check
+	**/
+	function get_times_for_date($oh, $tm)
+	{
+		$wd = date("w", $tm);
+		$m = $oh->meta("openhours");
+		foreach($m as $row)
+		{
+			if ($row["day1"] <= $wd || $row["day2"] >= $wd)
+			{
+				return array($row["h1"]*3600+$row["m1"]*60, $row["h2"]*3600+$row["m2"]*60);
+			}
+		}
+		return array(0, 24*3600);
 	}
 }
 ?>

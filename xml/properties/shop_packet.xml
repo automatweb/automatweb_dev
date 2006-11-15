@@ -26,6 +26,16 @@
             <caption>Hind</caption>
       </property>
       <property>
+            <name>packet_tb</name>
+            <table>objects</table>
+            <group>packet</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>packet</name>
             <table>objects</table>
             <group>packet</group>

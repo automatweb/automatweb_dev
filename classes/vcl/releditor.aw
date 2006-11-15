@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.90 2006/10/23 12:56:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.91 2006/11/15 13:07:22 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -252,7 +252,6 @@ class releditor extends core
 		}
 
 		$obj_inst = false;
-
 
 		// load the first connection.
 		// It should be relatively simple to extend this so that it can load
@@ -513,6 +512,7 @@ class releditor extends core
 			$ed_fields = new aw_array($arr["prop"]["table_edit_fields"]);
 			$ed_fields = $ed_fields->get();
 		};
+
 		if($arr["prop"]["filt_edit_fields"] == 1)
 		{
 			$ed_fields = array("name" => "name");
@@ -592,6 +592,7 @@ class releditor extends core
 					{
 						continue;
 					};
+
 					/*
 					if (empty($fdata[$_pn]))
 					{
@@ -641,7 +642,7 @@ class releditor extends core
 					}
 					$export_props[$_pn] = $prop["value"];
 				}
-				$ed_fields["name"] = 1;
+				$ed_fields["name"] = "name";
 				//$export_props = $target->properties();
 				if ($ed_fields && ($this->form_type != $target->id()))
 				{
@@ -689,6 +690,7 @@ class releditor extends core
 				"name" => "id",
 				"caption" => t("ID"),
 			));
+
 			foreach($ed_fields as $field)
 			{
 				$caption = $this->all_props[$field]["caption"];
@@ -696,7 +698,6 @@ class releditor extends core
                                 {
 					$caption = $this->cfg_act_props[$field]["caption"];
 				}
-													
 				$awt->define_field(array(
 					"name" => $field,
 					"caption" => $caption,

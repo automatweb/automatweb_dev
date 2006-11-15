@@ -720,7 +720,14 @@ class html extends aw_template
 		{
 			$set["month"] = 1;
 		};
-		$set["year"] = 1;
+		if (!empty($args["year"]) && $args["year"] == "text")
+		{
+			$set["year_textbox"] = 1;
+		}
+		else
+		{
+			$set["year"] = 1;
+		};
 		$set["hour"] = 1;
 		$set["minute"] = 1;
 
