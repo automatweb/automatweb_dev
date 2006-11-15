@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.106 2006/10/11 17:06:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.107 2006/11/15 15:47:08 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -952,13 +952,15 @@ class crm_bill extends class_base
 				if ($ct->prop("linn"))
 				{
 					$ap[] = $ct->prop_str("linn");
+					$ord_city = $ct->prop_str("linn");
 				}
 				$aps = join(", ", $ap)."<br>";
 				$aps .= $ct->prop_str("maakond");
 				$aps .= " ".$ct->prop("postiindeks");
 				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
 				$ord_country = $ct->prop_str("riik");
-			
+				$ord_index = $ct->prop("postiindeks");
+				$ord_county = $ct->prop_str("maakond");
 				//riigi tõlge, kui on inglise keeles
 				if($b->prop("language") && is_oid($ct->prop("riik")))
 				{
@@ -1023,11 +1025,14 @@ class crm_bill extends class_base
 				$ap = array($ct->prop("aadress"));
 				if ($ct->prop("linn"))
 				{
+					$impl_city = $ct->prop_str("linn");
 					$ap[] = $ct->prop_str("linn");
 				}
 				$aps = join(", ", $ap)."<br>";
 				$aps .= $ct->prop_str("maakond");
 				$aps .= " ".$ct->prop("postiindeks");
+				$impl_index = $ct->prop("postiindeks");
+				$impl_county = $ct->prop_str("maakond");
 				$impl_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
 				if ($this->can("view", $ct->prop("riik")))
 				{
@@ -1037,6 +1042,7 @@ class crm_bill extends class_base
 //					{
 //						$ord_addr .= " ".$ord_country;
 //					}
+					$impl_country = $riik->name();
 					$impl_phone = $riik->prop("area_code")." ".$impl_phone;
 				}
 			}
@@ -1065,6 +1071,15 @@ class crm_bill extends class_base
 			"ord_penalty_pct" => number_format($bpct, 2),
 			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
 			"orderer_addr" => $ord_addr,
+			"orderer_city" => $ord_city,
+			"orderer_county" => $ord_county,
+			"orderer_index" => $ord_index,
+			"orderer_country" => $ord_country,
+			"impl_city" => $impl_city,
+			"impl_county" => $impl_county,
+			"impl_index" => $impl_index,
+			"impl_country" => $impl_country,
+			
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),
 			"impl_logo" => $logo,
