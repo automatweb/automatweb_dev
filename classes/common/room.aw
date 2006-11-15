@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.39 2006/11/15 10:38:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.40 2006/11/15 15:13:34 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -830,14 +830,15 @@ class room extends class_base
 	{
 		$ret = "";
 		$ret.= t("Vali sobiv ajavahemik: ");
-		
 		$x=0;
 		$options = array();
 		$week = date("W" , time());
-		$weekstart = mktime(0,0,0,0,0,date("Y" , time())) + (date("z" , time()) - date("N" , time()))*86400;
+		$weekstart = mktime(0,0,0,1,1,date("Y" , time())) + (date("z" , time()) - date("w" , time()) + 1)*86400;
 		while($x<20)
 		{
-			$options[$weekstart] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
+			$url = aw_url_change_var("start",$weekstart,get_ru());
+			$options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
+			if($arr["request"]["start"] == $weekstart) $selected = $url;
 			$weekstart = $weekstart + 604800;
 			$x++;
 		};
@@ -845,6 +846,8 @@ class room extends class_base
 		$ret.= html::select(array(
 			"name" => "room_reservation_select",
 			"options" => $options,
+			"onchange" => " window.location = this.value;",
+			"selected" => $selected,
 		));
 		
 		$ret.= t("Vali broneeringu kestvus: ");
@@ -872,126 +875,129 @@ class room extends class_base
 		if(is_oid($arr["room"]) && $this->can("view" , $arr["room"]))
 		{
 			$arr["obj_inst"] = obj($arr["room"]);
+			if($_GET["start"])
+			{
+				$arr["request"]["start"] = $_GET["start"];
+			}
 		}
 		$t = &$arr["prop"]["vcl_inst"];
-		$this->_init_calendar_t($t);
 		
 		if(is_oid($arr["obj_inst"]->prop("openhours")) && $this->can("view" , $arr["obj_inst"]->prop("openhours")))
 		{
-			$openhours = obj($arr["obj_inst"]->prop("openhours"));
-			//arr($openhours->meta("openhours"));
+			$this->openhours = obj($arr["obj_inst"]->prop("openhours"));
+			$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
+ 			$open = $open_inst->get_times_for_date($this->openhours, $time);
 		}
-//		$reservations = new object_list(array(
-//			"class_id" => array(CL_RESERVATION),
-//			"lang_id" => array(),
-//			"resource" => $arr["obj_inst"]->id(),
-//			1 => new object_list_filter(array(
-//				"logic" => "OR",
-//				"conditions" => array(
-//					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, (time()-86400), (time()+86400* 7)),
-//					"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, (time()-86400), (time()+86400* 7))
-//				)
-//			)),
-//		));
-//		$booked = array();
-//		//et siis broneeringud ühte massiivi... ei suut paremat moment välja mõelda kui et võrdleb pärast kõik elemendid läbi
-//		foreach($reservations->arr() as $res)
-//		{
-			//date("l d/m/Y", time())
-			//filtriga asja ei saand tööle, niiet kasutab kirvemeetodit.... kuna asi toimub ühes nädalas, siis miskit hullu kiirusejama ei tohiks tulla
-			//poogib siis mitte kinnitatud ja maksetähtaja ületanud välja
-//			if(!$res->prop("verified") && !($res->prop("deadline") > time()))
-//			{
-//				continue;
-//			}
-//			
-//			$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
-//		}
-	//	arr($booked);
-		$today_start = mktime(0, 0, 0, date("m", time()), date("d", time()), date("y", time()));
-	
-		if($arr["obj_inst"]->prop("use_product_times"))
+		
+		$this->_init_calendar_t($t,$arr["request"]["start"]);
+
+		//see siis näitab miskeid valitud muid nädalaid
+		if($arr["request"]["start"])
 		{
-			$prod_menu = $this->get_prod_menu($arr);
+			$today_start = $arr["request"]["start"];
 		}
-	
+		else
+		{
+			$today_start = mktime(0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
+		}
+
 		$step = 0;
-		
 		$step_length = $this->step_lengths[$arr["obj_inst"]->prop("time_unit")];
-		
 		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
-//			$today_start = mktime(0, 0, 0, date("m", time()), date("d", time()), date("y", time()));
 			$d = $col = $ids = $onclick= array();
 			$x = 0;
 			$start_step = $today_start + $step * $step_length * $arr["obj_inst"]->prop("time_step");
 			$end_step = $start_step + $step_length * $arr["obj_inst"]->prop("time_step");
+			$visible = 0;
 			while($x<7)
 			{
-//				foreach($booked as $b)
-//				{
-//					if((($b["start"] <= $start_step) &&  ($start_step < $b["end"])) || (($b["start"] < $end_step) && ($b["end"] > $end_step)) || (($b["start"] < $end_step) && ($b["start"] >= $start_step)))
-				if($this->check_if_available(array(
-					"room" => $arr["obj_inst"]->id(),
-					"start" => $start_step,
-					"end" => $end_step,
-					
-				)))
+				if(!is_object($this->openhours) || $this->is_open($start_step,$end_step))
 				{
-//					$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba") . " " . $prod_menu;
-//					$col[$x] = "";
-					$d[$x] = "<span>".t("Vaba")."</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'0')). " " . $prod_menu;
-				$onclick[$x] = "doBron(this);";
+					$visible=1;
+					if($this->check_if_available(array(
+						"room" => $arr["obj_inst"]->id(),
+						"start" => $start_step,
+						"end" => $end_step,
+						
+					)))
+					{
+						$arr["timestamp"] = $start_step;
+						if($arr["obj_inst"]->prop("use_product_times"))
+						{
+							$prod_menu = $this->get_prod_menu($arr);
+						}
+						$d[$x] = "<span>".t("Vaba")."</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'0')). " " . $prod_menu;
+						$onclick[$x] = "doBron(this);";
+					}
+					else
+					{
+						if(is_oid($this->last_bron_id) && !$arr["web"])
+						{
+							 $d[$x] = html::href(array(
+								"url" => html::get_change_url($this->last_bron_id),
+								"caption" => "<span>".t("Broneeritud")."</span>",
+							));
+						}
+						else
+						{
+					 		$d[$x] ="<span>".t("Broneeritud")."</span>";
+						}
+						$onclick[$x] = "";
+					}
 				}
 				else
 				{
-					$d[$x] = "<span>".t("Broneeritud")."</span>";//.html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'1' )). " " . $prod_menu;
-//					$d[$x] = t("BRON");
-//					$col[$x] = "red";
-					$onclick[$x] = "";
+					$d[$x] = "<span>".t("Suletud")."</span>";
 				}
-//				}
-				
 				$ids[$x] = $start_step;
 				$x++;
 				$start_step += 86400;
 				$end_step += 86400;
 //				$today_start += 86400;
 			}
-			$t->define_data(array(
-				"time" => date("G:i" , $today_start+ $step*$step_length*$arr["obj_inst"]->prop("time_step")),//." - ".date("G:i" , $today_start+ ($step+1)*$step_length*$arr["obj_inst"]->prop("time_step")), //$step.":00-".($step + $arr["obj_inst"]->prop("time_step")).":00".html::hidden(array("name" => "step" , "value" => $step)),
-				"d0" => $d[0],
-				"d1" => $d[1],
-				"d2" => $d[2],
-				"d3" => $d[3],
-				"d4" => $d[4],
-				"d5" => $d[5],
-				"d6" => $d[6],
-				"col0" => $col[0],
-				"col1" => $col[1],
-				"col2" => $col[2],
-				"col3" => $col[3],
-				"col4" => $col[4],
-				"col5" => $col[5],
-				"col6" => $col[6],
-				"id0" => $ids[0],
-				"id1" => $ids[1],
-				"id2" => $ids[2],
-				"id3" => $ids[3],
-				"id4" => $ids[4],
-				"id5" => $ids[5],
-				"id6" => $ids[6],
-				"onclick0" => $onclick[0],
-				"onclick1" => $onclick[1],
-				"onclick2" => $onclick[2],
-				"onclick3" => $onclick[3],
-				"onclick4" => $onclick[4],
-				"onclick5" => $onclick[5],
-				"onclick6" => $onclick[6],
-			));
-		//	$step = $step + $arr["obj_inst"]->prop("time_step");
+			if($visible){
+				$t->define_data(array(
+					"time" => date("G:i" , $today_start+ $step*$step_length*$arr["obj_inst"]->prop("time_step")),//." - ".date("G:i" , $today_start+ ($step+1)*$step_length*$arr["obj_inst"]->prop("time_step")), //$step.":00-".($step + $arr["obj_inst"]->prop("time_step")).":00".html::hidden(array("name" => "step" , "value" => $step)),
+					"d0" => $d[0],
+					"d1" => $d[1],
+					"d2" => $d[2],
+					"d3" => $d[3],
+					"d4" => $d[4],
+					"d5" => $d[5],
+					"d6" => $d[6],
+					"id0" => $ids[0],
+					"id1" => $ids[1],
+					"id2" => $ids[2],
+					"id3" => $ids[3],
+					"id4" => $ids[4],
+					"id5" => $ids[5],
+					"id6" => $ids[6],
+					"onclick0" => $onclick[0],
+					"onclick1" => $onclick[1],
+					"onclick2" => $onclick[2],
+					"onclick3" => $onclick[3],
+					"onclick4" => $onclick[4],
+					"onclick5" => $onclick[5],
+					"onclick6" => $onclick[6],
+				));
+			}
 			$step = $step + 1;
 		}
+	}
+	
+	function is_open($start,$end)
+	{
+		if(!$this->open_inst)
+		{
+			$this->open_inst = get_instance(CL_OPENHOURS);
+		}
+		$open = $this->open_inst->get_times_for_date($this->openhours, $start);
+		if(is_array($open) && ($open[0] || $open[1]) && ($open[1]-1 >= ((date("H" , $end-1)*3600 + date("i" , $end-1)*60))) && ($open[0] <= ((date("H" , $start)*3600 + date("i" , $start)*60))))
+		{
+			return true;
+		}
+		else return false;
 	}
 
 	function get_prod_menu($arr)
@@ -1010,6 +1016,15 @@ class room extends class_base
 		$pm->begin_menu("sf"."234234");
 		foreach($prod_list->arr() as $prod)
 		{
+			if($prod_data[$prod->id()]["active"])
+			{
+				$pm->add_item(array(
+					"text" => $prod->name(),
+					"link" => "javascript: dontExecutedoBron=1;void(0)",
+					"onClick" => " dontExecutedoBron=1;onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"].");",
+				),"CL_ROOM");
+			}
+		
 			$packages = $prod->connections_from(array(
 				"type" => "RELTYPE_PACKAGING",
 			));
@@ -1024,11 +1039,8 @@ class room extends class_base
 				
 				$pm->add_item(array(
 					"text" => $package->name(),
-					"link" => $this->mk_my_orb('cal_product_reserved_time',array(
-						"id" => $room->id(),
-						"oid" => $package->id(),
-						"onClick" => "tee_midagi();",
-					)),
+					"link" => "javascript: dontExecutedoBron=1;void(0)",
+					"onClick" => "onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $package->id()))." , ".$arr["timestamp"].");",
 				),"CL_ROOM");
 			}
 		}
@@ -1038,64 +1050,89 @@ class room extends class_base
 		return $ret;
 	}
 
-	function _init_calendar_t(&$t)
+	function is_open_day($time)
 	{
+		if(!is_object($this->openhours))
+		{
+			return true;
+		}
+		if(!$this->open_inst)
+		{
+			$this->open_inst = get_instance(CL_OPENHOURS);
+		}
+		$open = $this->open_inst->get_times_for_date($this->openhours, $time);
+		if($open[0] || $open[1])
+		{
+			return true;
+		}
+		else return false;
+		
+	}
+
+	function _init_calendar_t(&$t,$time=0)
+	{
+		if(!$time)
+		{
+			$time = time();
+		}
+		
 		$t->define_field(array(
 			"name" => "time",
 			"caption" => t("Aeg"),
 			"width" => "20px",
 		));
+		if($this->is_open_day($time))
 		$t->define_field(array(
 			"name" => "d0",
-			"caption" => date("l d/m/Y", time()),
+			"caption" => date("l d/m/Y", $time),
 			"width" => "20px",
 			"chgbgcolor" => "col0",
 			"id" => "id0",
 			"onclick" => "onclick0",
 		));
-		$t->define_field(array(
+		if($this->is_open_day($time + 86400))$t->define_field(array(
 			"name" => "d1",
-			"caption" => date("l d/m/Y", time() + 86400),
+			"caption" => date("l d/m/Y", $time + 86400),
 			"width" => "20px",
 			"chgbgcolor" => "col1",
 			"id" => "id1",
 			"onclick" => "onclick1",
 		));
-		$t->define_field(array(
+		if($this->is_open_day($time + 86400*2))$t->define_field(array(
 			"name" => "d2",
-			"caption" => date("l d/m/Y", time() + 86400*2),
+			"caption" => date("l d/m/Y", $time + 86400*2),
 			"width" => "20px",
 			"chgbgcolor" => "col2",
 			"id" => "id2",
 			"onclick" => "onclick2",
 		));
-		$t->define_field(array(
+		if($this->is_open_day($time + 86400*3))$t->define_field(array(
 			"name" => "d3",
-			"caption" => date("l d/m/Y", time() + 86400*3),
+			"caption" => date("l d/m/Y", $time + 86400*3),
 			"chgbgcolor" => "col3",
 			"width" => "20px",
 			"id" => "id3",
 			"onclick" => "onclick3",
 		));
-		$t->define_field(array(
+		if($this->is_open_day($time + 86400*4))$t->define_field(array(
 			"name" => "d4",
-			"caption" => date("l d/m/Y", time() + 86400*4),
+			"caption" => date("l d/m/Y", $time + 86400*4),
 			"width" => "20px",
 			"chgbgcolor" => "col4",
 			"id" => "id4",
 			"onclick" => "onclick4",		
 		));
-		$t->define_field(array(
+		if($this->is_open_day($time + 86400*5))$t->define_field(array(
 			"name" => "d5",
-			"caption" => date("l d/m/Y", time() + 86400*5),
+			"caption" => date("l d/m/Y", $time + 86400*5),
 			"width" => "20px",
 			"chgbgcolor" => "col5",
 			"id" => "id5",
 			"onclick" => "onclick5",		
 		));
-		$t->define_field(array(
+		if($this->is_open_day($time + 86400*6))$t->define_field(array(
 			"name" => "d6",
-			"caption" => date("l d/m/Y", time() + 86400*6),
+			"caption" => date("l d/m/Y", $time + 86400*6),
 			"chgbgcolor" => "col6",
 			"width" => "20px",
 			"id" => "id6",
@@ -1115,10 +1152,6 @@ class room extends class_base
 	**/
 	function do_add_reservation($arr)
 	{
-		foreach($arr["bron"] as $key => $val)
-		{
-			if(!$val) unset($arr["bron"][$key]);
-		}
 		if(is_oid($arr["id"]))
 		{
 			$times = $this->_get_bron_time(array(
@@ -1182,6 +1215,10 @@ class room extends class_base
 					$cal = $cal_obj->id();
 					$parent = $cal_obj->prop("event_folder");
 					$step = $room->prop("time_step");
+				if (!$parent)
+				{
+			       		$parent = $cal_obj->id();
+			      	}
 			}
 			else return "";
 		}
@@ -1250,8 +1287,8 @@ class room extends class_base
 				$customer->connect(array("to"=> $email->id(), "type" => "RELTYPE_EMAIL"));
 			}
 			$reservation->set_prop("customer" , $customer->id());
-			$reservation->save();
 		}
+		$reservation->save();
 		return $reservation->id();
 	}
 
@@ -1264,6 +1301,10 @@ class room extends class_base
 	**/
 	function _get_bron_time($arr)
 	{
+		foreach($arr["bron"] as $key => $val)
+		{
+			if(!$val) unset($arr["bron"][$key]);
+		}
 		extract($arr);
 		if(is_oid($arr["id"]))
 		{
@@ -2251,7 +2292,6 @@ class room extends class_base
 		//ueh... filter ei tööta, niiet .... oehjah
 		foreach($reservations->arr() as $res)
 		{
-			//date("l d/m/Y", time())
 			//filtriga asja ei saand tööle, niiet kasutab kirvemeetodit.... kuna asi toimub ühes nädalas, siis miskit hullu kiirusejama ei tohiks tulla
 			//poogib siis mitte kinnitatud ja maksetähtaja ületanud välja
 			if(!$res->prop("verified") && !($res->prop("deadline") > time()))
@@ -2268,8 +2308,16 @@ class room extends class_base
 		}
 		else
 		{
+			$bron = reset($reservations->arr());
+			$this->last_bron_id = $bron->id();
 			return false;
 		}
 	}
+	
+	function callback_generate_scripts($arr)
+	{
+		return '';
+	}
+
 }
 ?>

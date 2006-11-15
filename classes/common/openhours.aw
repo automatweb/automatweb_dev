@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.4 2006/11/15 13:07:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.5 2006/11/15 15:13:34 markop Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -306,6 +306,7 @@ class openhours extends class_base
 			list ($day1, $day2) = array($day2, $day1);
 		}
 		
+		//miks see hea on?
 		if ($day1 == $day2)
 		{
 			$day2 = 0;
@@ -338,12 +339,13 @@ class openhours extends class_base
 		$m = $oh->meta("openhours");
 		foreach($m as $row)
 		{
-			if ($row["day1"] <= $wd || $row["day2"] >= $wd)
-			{
+			if (($row["day1"] <= $wd && $row["day2"] >= $wd) || ($row["day1"] == $wd && !$row["day2"]))
+			{//arr($row); arr($wd);
 				return array($row["h1"]*3600+$row["m1"]*60, $row["h2"]*3600+$row["m2"]*60);
 			}
 		}
-		return array(0, 24*3600);
+		return array(0, 0);
 	}
+
 }
 ?>
