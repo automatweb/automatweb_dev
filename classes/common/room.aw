@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.38 2006/11/14 17:46:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.39 2006/11/15 10:38:18 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -164,6 +164,14 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 	@groupinfo prices_bargain_price caption="Soodushinnad" parent=prices
 	@default group=prices_bargain_price
 
+@groupinfo open_hrs caption="Avamisajad"
+@default group=open_hrs
+
+	@property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
+	@caption Avamisajad
+
+
+
 # RELTYPES
 
 @reltype LOCATION value=1 clid=CL_LOCATION
@@ -198,6 +206,9 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 reltype TEMPLATE value=11 clid=CL_SHOP_WAREHOUSE
 caption Ruumi hind
+
+@reltype OPENHOURS value=44 clid=CL_OPENHOURS
+@caption Avamisajad
 
 */
 
@@ -864,6 +875,12 @@ class room extends class_base
 		}
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_calendar_t($t);
+		
+		if(is_oid($arr["obj_inst"]->prop("openhours")) && $this->can("view" , $arr["obj_inst"]->prop("openhours")))
+		{
+			$openhours = obj($arr["obj_inst"]->prop("openhours"));
+			//arr($openhours->meta("openhours"));
+		}
 //		$reservations = new object_list(array(
 //			"class_id" => array(CL_RESERVATION),
 //			"lang_id" => array(),
@@ -923,16 +940,18 @@ class room extends class_base
 				{
 //					$d[$x] = html::checkbox(array("name"=>'bron['.$start_step.']' , "value" =>'1')).t("Vaba") . " " . $prod_menu;
 //					$col[$x] = "";
-					$d[$x] = "<span>Vaba</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'0')). " " . $prod_menu;
+					$d[$x] = "<span>".t("Vaba")."</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'0')). " " . $prod_menu;
+				$onclick[$x] = "doBron(this);";
 				}
 				else
 				{
-					$d[$x] = html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'1' )). " " . $prod_menu;
+					$d[$x] = "<span>".t("Broneeritud")."</span>";//.html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'1' )). " " . $prod_menu;
 //					$d[$x] = t("BRON");
 //					$col[$x] = "red";
+					$onclick[$x] = "";
 				}
 //				}
-				$onclick[$x] = "doBron(this);";
+				
 				$ids[$x] = $start_step;
 				$x++;
 				$start_step += 86400;
@@ -940,7 +959,7 @@ class room extends class_base
 //				$today_start += 86400;
 			}
 			$t->define_data(array(
-				"time" => date("G:i" , $today_start+ $step*$step_length*$arr["obj_inst"]->prop("time_step"))." - ".date("G:i" , $today_start+ ($step+1)*$step_length*$arr["obj_inst"]->prop("time_step")), //$step.":00-".($step + $arr["obj_inst"]->prop("time_step")).":00".html::hidden(array("name" => "step" , "value" => $step)),
+				"time" => date("G:i" , $today_start+ $step*$step_length*$arr["obj_inst"]->prop("time_step")),//." - ".date("G:i" , $today_start+ ($step+1)*$step_length*$arr["obj_inst"]->prop("time_step")), //$step.":00-".($step + $arr["obj_inst"]->prop("time_step")).":00".html::hidden(array("name" => "step" , "value" => $step)),
 				"d0" => $d[0],
 				"d1" => $d[1],
 				"d2" => $d[2],
@@ -1008,6 +1027,7 @@ class room extends class_base
 					"link" => $this->mk_my_orb('cal_product_reserved_time',array(
 						"id" => $room->id(),
 						"oid" => $package->id(),
+						"onClick" => "tee_midagi();",
 					)),
 				),"CL_ROOM");
 			}
@@ -1095,6 +1115,10 @@ class room extends class_base
 	**/
 	function do_add_reservation($arr)
 	{
+		foreach($arr["bron"] as $key => $val)
+		{
+			if(!$val) unset($arr["bron"][$key]);
+		}
 		if(is_oid($arr["id"]))
 		{
 			$times = $this->_get_bron_time(array(
