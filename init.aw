@@ -824,6 +824,8 @@ function aw_shutdown()
 	// whotta fook, this messenger thingie goes here then?:S
 	if($_SESSION["current_user_has_messenger"] && is_oid($_SESSION["uid_oid"]))
 	{
+		$i = get_instance("file");
+		{
 		$cur_usr = new object($_SESSION["uid_oid"]);
 		if ((time() - $_SESSION["current_user_last_m_check"]) > (5 * 60) && $cur_usr->prop("notify") == 1)
 		{
@@ -855,6 +857,7 @@ function aw_shutdown()
 				$_SESSION["aw_session_track"]["aw"]["do_message"] = $sisu;
 			}
 			$_SESSION["current_user_last_m_check"] = time();
+		}
 		}
 	}
 	// end of that messenger new mail notifiaction crap
