@@ -291,21 +291,21 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "obj_fetch-$query_hash";
 
-		$ret = aw_unserialize($this->cache->file_get_pt(
+		/*$ret = aw_unserialize($this->cache->file_get_pt(
 			"storage_search",
 			$query_hash[0],
 			$c_fn
-		));
+		));*/
 
-		if (true || !is_array($ret))
+		if (!is_array($ret))
 		{
 			$ret = $this->contained->fetch_list($param);
-			$this->cache->file_set_pt(
+		/*	$this->cache->file_set_pt(
 				"storage_search",
 				$query_hash[0],
 				$c_fn,
 				aw_serialize($ret, SERIALIZE_PHP_FILE)
-			);
+			);*/
 		}
 		else
 		{
