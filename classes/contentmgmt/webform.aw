@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.104 2006/11/10 10:05:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.105 2006/11/15 14:43:18 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -13,12 +13,13 @@
 @groupinfo general_redir caption="Suunamine" parent=general
 
 @default group=general_sub
-@default method=serialize
-@default field=meta
 
 @property name type=textbox rel=1 trans=1
 @caption Nimi
 @comment Objekti nimi
+
+@default method=serialize
+@default field=meta
 
 @property comment type=textbox
 @caption Kommentaar

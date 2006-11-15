@@ -4,11 +4,10 @@
             <name>name</name>
             <table>objects</table>
             <group>general_sub</group>
-            <method>serialize</method>
-            <field>meta</field>
             <type>textbox</type>
             <rel>1</rel>
             <trans>1</trans>
+            <field>name</field>
             <caption>Nimi</caption>
             <comment>Objekti nimi</comment>
       </property>
