@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.2 2006/11/16 12:25:47 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.3 2006/11/16 13:37:27 tarvo Exp $
 // ddoc_parser.aw - DigiDoc Parser 
 /*
 
@@ -396,4 +396,365 @@ class ddoc_parser extends class_base
 	} // end func
 
 }
+
+/*
+	okey, shit solution, but for test purposes it does shit solution. if nessecary i'll make a separate class in the future or smth..
+*/
+
+
+
+/**
+ * File::DirMake Status: OK
+ */
+DEFINE ("DIR_ERR_OK",0);
+
+/**
+ * File::DirMake Status:	Path exists but not as directory
+ */
+DEFINE ("DIR_ERR_NOTDIR",1);
+
+/**
+ * File::DirMake Status:	Syntax error in path
+ */
+DEFINE ("DIR_ERR_SYNTAX",2);
+
+/**
+ * File::DirMake Status:	"mkdir" error with no parent
+ */
+DEFINE ("DIR_ERR_EMKDIR_1",3);
+
+/**
+ * File::DirMake Status:	"mkdir" error and parent exists
+ */
+DEFINE ("DIR_ERR_EMKDIR_2",4);
+
+/**
+ * File::DirMake Status:	"mkdir" error after creating parent
+ */
+DEFINE ("DIR_ERR_EMKDIR_3",5);
+
+/**
+ * Failide funktsioonid
+ *
+ * Klass sisaldab kõiki failidega seotud funktsioone, nagu üleslaadimine, 
+ * salvestamine, nimede genereerimine, kaustade loomine.
+ *
+ * @package      DigiDoc
+ */
+class File{
+	
+		
+	/**
+	 * constructor
+	 */
+	function File(){
+	    return true;
+	} // end func
+	
+	/**
+	 * Kaustade/alamkaustade loomiseks
+	 *
+	 * Loob kausta etteantud kohta, vajadusel ka kogu kaustapuu, kui 
+	 * on õigused olemas selleks!
+	 * @param     string	$strPath	Kausta nimi
+	 * @access    public
+	 * @return    integer	Tegevuse staatus
+	 */
+	function DirMake($strPath){
+			   // If path exists nothing else can be done
+		if ( file_exists($strPath) )
+		   return is_dir($strPath) ? DIR_ERR_OK : DIR_ERR_NOTDIR;
+			   // Backwards references are not allowed
+		if (ereg("\.\.",$strPath) != 0) return DIR_ERR_SYNTAX;
+			   // If it can create the directory that's all. If not then either path
+			   // contains several dirs or error such as "permission denied" happened
+		if (@mkdir($strPath)) return DIR_ERR_OK;
+			   // Gets the parent path. If none then there was a severe error
+		$nPos = strrpos($strPath,"/");
+		if (!($nPos > 0)) return DIR_ERR_EMKDIR_1;
+		$strParent = substr($strPath,0,$nPos);
+			   // If parent exists then there was a severe error
+		if (file_exists($strParent)) return DIR_ERR_EMKDIR_2;
+			   // If it can make the parent
+		$nRet = File::DirMake($strParent);
+		if ($nRet == DIR_ERR_OK)
+		   return mkdir($strPath) ? DIR_ERR_OK : DIR_ERR_EMKDIR_3;
+		return $nRet;
+	}
+
+	
+	/**
+	 * Saadab antud faili brauserisse salvestamiseks
+	 *
+	 * Saadab etteantud faili brauserile salvestamiseks. Sunnib alati 
+	 * brauserit avama salvestamise akent, sõltumata saadetava faili
+	 * MIME-tüübist.
+	 * @param     string      $name      Salvestatava faili nimi
+	 * @param     mixed       $content   Salvestatava faili sisu
+	 * @param     string      $MIME      Salvestatava faili MIME tüüp
+	 * @param     string      $charset   Kasutatav koodileht. Vaikimis Western
+	 * @access    public
+	 * @return    boolean
+	 */
+	function saveAs($name, $content, $MIME = 'text/plain', $charset = ''){
+		ob_clean();
+		$browser = File::getBrowser();
+		if ($browser['BROWSER_AGENT'] == 'IE') {		
+			$susisevad = array("š","ž","Š","Ž");
+			$eisusise = array("sh","zh","Sh","Zh");
+			$name = str_replace($susisevad, $eisusise,$name);
+			$name = mb_convert_encoding($name, 'ISO-8859-1','UTF-8');
+		}
+
+		if($charset){
+			header( 'Content-Type:' . $MIME . '; charset='.$charset );
+		} else {
+			header( 'Content-Type:' . $MIME );
+		} //else
+		header( 'Expires:' . gmdate('D, d M Y H:i:s') . ' GMT' ); #Alati aegunud, et ei loetaks cache-st
+		$browser = File::getBrowser();
+#		File::VarDump($browser);
+		// IE need specific headers
+		if ($browser['BROWSER_AGENT'] == 'IE') {		
+			header('Cache-Control:must-revalidate, post-check=0, pre-check=0');
+			header('Pragma:public');
+		} else {
+
+			header('Pragma:no-cache');
+		}
+			header('Content-Disposition:attachment; filename="'.$name.'"');
+			Header("Content-Disposition-type: attachment"); 
+		    Header("Content-Transfer-Encoding: binary");
+//		echo utf8_decode( $content );
+		echo $content;
+		exit;
+
+	} // end func
+
+	
+	/**
+	 * Leiab kasutaja brauseri ja Op.sļæ½steemi
+	 *
+	 * Tagastab vektorina info kasutaja Op.süsteemi ja brauseri kohta
+	 * - OS             : Operatsiooni süsteem (Win,Mac,Linux,Unix,OS/2,Other)
+	 * - BROWSER_AGENT  : Kasutatav brauser
+	 * - BROWSER_VER    : Brauseri versioon
+	 * @access    public
+	 * @return    array
+	 */
+	function getBrowser(){
+		if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+			$HTTP_USER_AGENT = $_SERVER['HTTP_USER_AGENT'];
+		} else if (!isset($HTTP_USER_AGENT)) {
+			$HTTP_USER_AGENT = '';
+		}
+		$res=array();
+
+		// 1. Platform
+		if (strstr($HTTP_USER_AGENT, 'Win')) {
+			$res['OS'] = 'Win';
+		} else if (strstr($HTTP_USER_AGENT, 'Mac')) {
+			$res['OS'] = 'Mac';
+		} else if (strstr($HTTP_USER_AGENT, 'Linux')) {
+			$res['OS'] = 'Linux';
+		} else if (strstr($HTTP_USER_AGENT, 'Unix')) {
+			$res['OS'] = 'Unix';
+		} else if (strstr($HTTP_USER_AGENT, 'OS/2')) {
+			$res['OS'] = 'OS/2';
+		} else {
+			$res['OS'] = 'Other';
+		}
+
+		// 2. browser and version
+		if (preg_match('@Opera(/| )([0-9].[0-9]{1,2})@', $HTTP_USER_AGENT, $log_version)) {
+			$res['BROWSER_VER'] = $log_version[2];
+			$res['BROWSER_AGENT'] = 'OPERA';
+		} else if (preg_match('@MSIE ([0-9].[0-9]{1,2})@', $HTTP_USER_AGENT, $log_version)) {
+			$res['BROWSER_VER'] = $log_version[1];
+			$res['BROWSER_AGENT'] = 'IE';
+		} else if (preg_match('@OmniWeb/([0-9].[0-9]{1,2})@', $HTTP_USER_AGENT, $log_version)) {
+			$res['BROWSER_VER'] = $log_version[1];
+			$res['BROWSER_AGENT'] = 'OMNIWEB';
+		//} else if (ereg('Konqueror/([0-9].[0-9]{1,2})', $HTTP_USER_AGENT, $log_version)) {
+		// Konqueror 2.2.2 says Konqueror/2.2.2
+		// Konqueror 3.0.3 says Konqueror/3
+		} else if (preg_match('@(Konqueror/)(.*)(;)@', $HTTP_USER_AGENT, $log_version)) {
+			$res['BROWSER_VER'] = $log_version[2];
+			$res['BROWSER_AGENT'] = 'KONQUEROR';
+		} else if (preg_match('@Mozilla/([0-9].[0-9]{1,2})@', $HTTP_USER_AGENT, $log_version)
+				   && preg_match('@Safari/([0-9]*)@', $HTTP_USER_AGENT, $log_version2)) {
+			$res['BROWSER_VER'] = $log_version[1] . '.' . $log_version2[1];
+			$res['BROWSER_AGENT'] = 'SAFARI';
+		} else if (preg_match('@Mozilla/([0-9].[0-9]{1,2})@', $HTTP_USER_AGENT, $log_version)) {
+			$res['BROWSER_VER'] = $log_version[1];
+			$res['BROWSER_AGENT'] = 'MOZILLA';
+		} else {
+			$res['BROWSER_VER'] = 0;
+			$res['BROWSER_AGENT'] = 'OTHER';
+		}
+		return $res;
+	} //function
+
+	
+	
+	/**
+	 * ajutise faili nimi
+	 *
+	 * tagastab genereeritud ajutise faili nime.
+	 * @param     string     $ext      Faili laiend
+	 * @access    public
+	 * @return    string               Faili nimi
+	 */
+	function tempFile(){
+	    return date('Ymd_His').'$'.substr('000'.rand(0,999), -3).'.'.$ext;
+	} // end func
+
+	
+	/**
+	 * loeb kohalikult ketalt faili sisu
+	 *
+	 * Loeb kohalikus arvutis oleva faili sisu ja tagastab selle.
+	 * @param     string     $name     Faili nimi, mida lugeda
+	 * @access    public
+	 * @return    mixed
+	 */
+	function readLocalFile($name){
+		$name = File::FixEstFileName($name);
+		if(is_readable($name)){
+			$content = file_get_contents($name);
+			return $content;
+		} else {
+			return FALSE;
+		} //else
+	} // end func
+
+	
+	/**
+	 * Salvestab lokaalseks failiks
+	 *
+	 * Salvestab antud sisu antud nimega faili, kui ei õnnestu 
+	 * tagastatakse FALSE.
+	 * @param     string     $name     Failinimi
+	 * @param     string     $content  Faili sisu
+	 * @access    public
+	 * @return    mixed
+	 */
+	function saveLocalFile($name, $content){
+		$name = File::FixEstFileName($name);
+		if(touch($name)){
+			$fh = fopen($name, 'wb');
+			fwrite($fh, $content);
+			fclose($fh);
+			return TRUE;
+		} else {
+			return FALSE;
+		} //else
+	} // end func
+
+	
+	/**
+	 * Tagastab etteantud nimega väljalt üleslaetud faili
+	 *
+	 * Tagastab faili, mis saadeti parameetris näidatud nimega formi 
+	 * väljalt.
+	 * @param     string     $name     Formi välja nimi, millega fail saadeti
+	 * @access    public
+	 * @return    array
+	 */
+	function getUploadedFile($name){
+		if(isset($_FILES[$name])){
+			$ret = array();
+			$ret['type'] = $name;
+
+			if (!is_dir(DD_UPLOAD_DIR))
+				File::DirMake(DD_UPLOAD_DIR);
+
+//				if(File::DirMake(DD_UPLOAD_DIR) != DIR_ERR_OK)
+
+			if( move_uploaded_file($_FILES[$name]['tmp_name'], DD_UPLOAD_DIR.$_FILES[$name]['name']) ){
+					$ret['name'] = $_FILES[$name]['name'];
+					$ret['size'] = $_FILES[$name]['size'];
+					$ret['MIME'] = $_FILES[$name]['type']!=""?$_FILES[$name]['type']:" ";
+					$ret['error'] = $_FILES[$name]['error'];
+					$ret['content'] = File::readLocalFile( DD_UPLOAD_DIR.$_FILES[$name]['name'] );
+					unlink(DD_UPLOAD_DIR.$_FILES[$name]['name']);
+			} else {
+				$ret['error'] = '999: Cannot move uploaded file !!!';
+			} //else
+			return $ret;
+		} else {
+			return FALSE;
+		} //else
+	    
+	} // end func
+
+	
+	/**
+	 * Short description.
+	 *
+	 * Detail description
+	 * @param     
+	 * @since     1.0
+	 * @access    private
+	 * @return    void
+	 * @throws    
+	 */
+	function FixEstFileName($name){
+		//ļæ½ļæ½ļæ½ļæ½ ļæ½ļæ½ļæ½ļæ½
+
+		$nameX = $name;
+		#preg_match("'(.*)([^/\\\\]*)(\.\w+)$'U", $name, $match);
+		#$nameX = $match[1].base64_encode($match[2]).$match[3];
+
+		$name = preg_replace("'[^a-z0-9]'", "X", utf8_decode($name));
+	    /*$name = str_replace('ļæ½','#otilde;', $name);
+	    $name = str_replace('ļæ½','#auml;', $name);
+	    $name = str_replace('ļæ½','#ouml;', $name);
+	    $name = str_replace('ļæ½','#uuml;', $name);
+	    $name = str_replace('ļæ½','#zacut;', $name);
+	    $name = str_replace('ļæ½','#sacut;', $name);
+
+	    $name = str_replace('ļæ½','#Otilde;', $name);
+	    $name = str_replace('ļæ½','#Auml;', $name);
+	    $name = str_replace('ļæ½','#Ouml;', $name);
+	    $name = str_replace('ļæ½','#Uuml;', $name);
+	    $name = str_replace('ļæ½','#Zacut;', $name);
+	    $name = str_replace('ļæ½','#Sacut;', $name);
+		if($name==$nameX){
+			$name = utf8_decode($name);
+			$name = str_replace('ļæ½','#otilde;', $name);
+			$name = str_replace('ļæ½','#auml;', $name);
+			$name = str_replace('ļæ½','#ouml;', $name);
+			$name = str_replace('ļæ½','#uuml;', $name);
+
+			$name = str_replace('ļæ½','#Otilde;', $name);
+			$name = str_replace('ļæ½','#Auml;', $name);
+			$name = str_replace('ļæ½','#Ouml;', $name);
+			$name = str_replace('ļæ½','#Uuml;', $name);
+		} 
+		*/
+		return $nameX;
+	} // end func
+
+	/**
+	 * Abifunktsioon debug-info väljastamiseks
+	 * @param      mixed    $var     Muutuja mille väärtus väljastatakse
+	 * @access     public
+	 */
+	function VarDump( $var ){
+		#echo '<pre>';print_r($var);echo '</pre>';
+		echo '
+<pre>
+=================================================================
+';
+		print_r($var);
+		echo '
+=================================================================
+</pre>
+';
+	} //function
+
+
+} // end class
+
 ?>
