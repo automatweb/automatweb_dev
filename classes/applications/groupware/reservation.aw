@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.14 2006/11/10 11:55:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.15 2006/11/16 14:58:30 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -366,6 +366,7 @@ class reservation extends class_base
 		extract($arr);
 		$shop_order_center = get_instance(CL_SHOP_ORDER_CENTER);
 		$wh = get_instance(CL_SHOP_WAREHOUSE);
+		$room_instance = get_instance(CL_ROOM);
 		if(is_oid($room) && $this->can("view" , $room))
 		{
 			$room_obj = obj($room);
@@ -373,25 +374,28 @@ class reservation extends class_base
 			if(is_oid($warehouse) && $this->can("view" , $warehouse))
 			{
 				$w_obj = obj($warehouse);
+				$w_cnf = obj($w_obj->prop("conf"));
 				if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
 				{
 					$soc = obj($w_obj->prop("order_center"));
-					$pl = $wh->get_packet_list(array(
-						"id" => $wh_id,
-						"parent" => $room_obj->prop("resources_fld"),
-						"only_active" => $soc->prop("only_active_items")
-					));
+					$pl_ol =  $room_instance->get_active_items($room);
+					$pl = $pl_ol->arr();
+//					$pl = $wh->get_packet_list(array(
+//						"id" => $wh_id,
+//						"parent" => $room_obj->prop("resources_fld"),
+//						"only_active" => $soc->prop("only_active_items")
+//					));
 					
 					//peksab need välja mis ruumi juures aktiivseks pole läinud
-					$prod_data = $room_obj->meta("prod_data");
-					foreach($pl as $key=> $val)
-					{
-						if(!$prod_data[$val->id()]["active"])
-						{
-							unset($pl[$key]);
-						}
-					}
-					
+// 					$prod_data = $room_obj->meta("prod_data");
+// 					foreach($pl as $key=> $val)
+// 					{
+// 						if(!$prod_data[$val->id()]["active"])
+// 						{
+// 							unset($pl[$key]);
+// 						}
+// 					}
+// 					
 					
 					$shop_order_center->do_sort_packet_list($pl, $soc->meta("itemsorts"));
 				
@@ -445,6 +449,17 @@ class reservation extends class_base
 			$amount = $arr["obj_inst"]->meta("amount");
 		}
 		$room = obj($arr["obj_inst"]->prop("resource"));
+		
+		$warehouse = obj($room->prop("warehouse"));
+		if(is_oid($warehouse->prop("conf")))
+		{
+			$conf = obj($warehouse->prop("conf"));
+			if($conf->prop("sell_prods"))
+			{
+				$sell_products = 1;
+			}
+		}
+		
 		if(is_object($room))
 		{
 			$prod_data = $room->meta("prod_data");
@@ -461,41 +476,55 @@ class reservation extends class_base
 					$image = $image_inst->make_img_tag_wl($pic->id());
 				}
 			}
-			$t->define_data(array(
-				"picture" => $image,
-				"name" => "<b>".$prod->name()."<b>",
-//				"amount" =>  html::textbox(array(
-//					"name"=>'amount['.$prod->id().']',
-//					"value" => $amount[$prod->id()],
-//				)),
-			));
-			$packages = $prod->connections_from(array(
-				"type" => "RELTYPE_PACKAGING",
-			));
-			foreach($packages as $conn)
-			{
-				$package = $conn->to();
-				if(!$prod_data[$package->id()]["active"])
-				{
-					continue;
-				}
-				$image = "";
-				if(is_object($package->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"))))
-				{
-					$pic = $package->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"));
-					if(is_object($pic))
-					{
-						$image = $image_inst->make_img_tag_wl($pic->id());
-					}
-				}
+			if($sell_products)
+			{			
 				$t->define_data(array(
 					"picture" => $image,
-					"name" => "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$package->name(),
+					"name" => "<b>".$prod->name()."<b>",
 					"amount" =>  html::textbox(array(
-						"name"=>'amount['.$package->id().']',
-						"value" => $amount[$package->id()],
+						"name"=>'amount['.$prod->id().']',
+						"value" => $amount[$prod->id()],
 					)),
 				));
+			}
+			else
+			{
+				$t->define_data(array(
+					"picture" => $image,
+					"name" => "<b>".$prod->name()."<b>",
+	//				"amount" =>  html::textbox(array(
+	//					"name"=>'amount['.$prod->id().']',
+	//					"value" => $amount[$prod->id()],
+	//				)),
+				));
+				$packages = $prod->connections_from(array(
+					"type" => "RELTYPE_PACKAGING",
+				));
+				foreach($packages as $conn)
+				{
+					$package = $conn->to();
+					if(!$prod_data[$package->id()]["active"])
+					{
+						continue;
+					}
+					$image = "";
+					if(is_object($package->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"))))
+					{
+						$pic = $package->get_first_obj_by_reltype(array("type" => "RELTYPE_IMAGE"));
+						if(is_object($pic))
+						{
+							$image = $image_inst->make_img_tag_wl($pic->id());
+						}
+					}
+					$t->define_data(array(
+						"picture" => $image,
+						"name" => "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$package->name(),
+						"amount" =>  html::textbox(array(
+							"name"=>'amount['.$package->id().']',
+							"value" => $amount[$package->id()],
+						)),
+					));
+				}
 			}
 		}
 		$t->set_sortable(false);

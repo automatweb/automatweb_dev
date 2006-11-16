@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.40 2006/11/15 15:13:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.41 2006/11/16 14:57:20 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -873,7 +873,7 @@ class room extends class_base
 	{
 		//kkui asi tuleb veebist
 		if(is_oid($arr["room"]) && $this->can("view" , $arr["room"]))
-		{
+		{	
 			$arr["obj_inst"] = obj($arr["room"]);
 			if($_GET["start"])
 			{
@@ -1003,50 +1003,47 @@ class room extends class_base
 	function get_prod_menu($arr)
 	{
 		classload("core/icons");
-		$prod_list = $this->get_prod_list($arr["obj_inst"]->id());
+//		$prod_list = $this->get_prod_list($arr["obj_inst"]->id());
+		$item_list = $this->get_active_items($arr["obj_inst"]->id());
 		$ret = "";
 		$pm = get_instance("vcl/popup_menu");
 		$room = $arr["obj_inst"];
-		if(is_object($room))
-		{
-			$prod_data = $room->meta("prod_data");
-		}
+		$this->prod_data = $room->meta("prod_data");
 		
 		$image_inst = get_instance(CL_IMAGE);
 		$pm->begin_menu("sf"."234234");
-		foreach($prod_list->arr() as $prod)
-		{
-			if($prod_data[$prod->id()]["active"])
-			{
-				$pm->add_item(array(
-					"text" => $prod->name(),
-					"link" => "javascript: dontExecutedoBron=1;void(0)",
-					"onClick" => " dontExecutedoBron=1;onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"].");",
-				),"CL_ROOM");
-			}
+//		foreach($prod_list->arr() as $prod)
+//		{
+/*			$pm->add_item(array(
+				"text" => $prod->name(),
+				"link" => "javascript: dontExecutedoBron=1;void(0)",
+				"onClick" => " dontExecutedoBron=1;onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"].");",
+			),"CL_ROOM");
 		
-			$packages = $prod->connections_from(array(
-				"type" => "RELTYPE_PACKAGING",
-			));
+			$packages = $this->get_package_list($prod->id());
 			
-			foreach($packages as $conn)
+			foreach($packages->arr() as $package)
 			{
-				$package = $conn->to();
-				if(!$prod_data[$package->id()]["active"])
-				{
-					continue;
-				}
-				
 				$pm->add_item(array(
 					"text" => $package->name(),
 					"link" => "javascript: dontExecutedoBron=1;void(0)",
 					"onClick" => "onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $package->id()))." , ".$arr["timestamp"].");",
 				),"CL_ROOM");
 			}
+		*/
+//		}
+		foreach($item_list->arr() as $prod)
+		{
+			$pm->add_item(array(
+				"text" => $prod->name(),
+				"link" => "javascript: dontExecutedoBron=1;void(0)",
+				"onClick" => "onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"].");",
+			),"CL_ROOM");
 		}
+
 		$ret.= $pm->get_menu(array(
 			"icon" => icons::get_icon_url($package),
-		));	
+		));
 		return $ret;
 	}
 
@@ -1770,7 +1767,7 @@ class room extends class_base
 		}
 	}
 	
-	function get_prod_tree($o)
+	function get_prod_tree_ids($o)
 	{
 		if(is_oid($o))
 		{
@@ -1784,19 +1781,111 @@ class room extends class_base
 				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
 				"sort_by" => "objects.jrk"
 			));
-			return $tree;
+			
+			$menu_list = $tree->to_list(array(
+				"add_root" => true,
+			));
+			$parents = $menu_list->ids();
+			foreach($parents as $key => $parent)
+			{
+				if(!$this->prod_data[$parent]["active"] && !($o->prop("resources_fld") == $parent))
+				{
+					unset($parents[$key]);
+				}
+			}
+			return $parents;
 		}
 		else
 		{
 			return "";
 		}
 	}
-	 
+	
+	//returns active packages
+	function get_package_list($o)
+	{
+		$ol = new object_list();
+		if(is_oid($o))
+		{
+			$o = obj($o);
+		}
+		if(!is_object($o))
+		{
+			return new object_list();
+		}
+		
+		if($o->class_id() == CL_SHOP_PRODUCT)
+		{
+			$packages = $o->connections_from(array(
+				"type" => "RELTYPE_PACKAGING",
+			));
+			foreach($packages as $conn)
+			{
+				$package = $conn->to();
+				if($this->prod_data[$package->id()]["active"])
+				{
+					$ol->add($package->id());
+				}
+			}
+		}
+		if($o->class_id() == CL_ROOM)
+		{
+			$this->prod_data = $o->meta("prod_data");
+			$parents = $this->get_prod_tree_ids($o);
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT_PACKAGING,
+				"lang_id" => array(),
+				"parent" => $parents,
+			));
+			foreach($ol->arr() as $package)
+			{
+				if(!$this->prod_data[$package->id()]["active"])
+				{
+					$ol->remove($package->id());
+				}
+			}
+		
+		}
+		return $ol;
+	}
+
+	//annab vastavalt ruumile siis kas pakendite või toodete object listi, mis on aktiivsed
+	function get_active_items($o)
+	{
+		$ol = new object_list();
+		if(is_oid($o))
+		{
+			$o = obj($o);
+		}
+		if(!is_object($o) || !$o->class_id() == CL_ROOM)
+		{
+			return $ol;
+		}
+		$warehouse = obj($o->prop("warehouse"));
+		if(!is_oid($warehouse->prop("conf")))
+		{
+			return $ol;
+		}
+		$conf = obj($warehouse->prop("conf"));
+		if($conf->prop("sell_prods"))
+		{
+			return $this->get_prod_list($o);
+		}
+		else
+		{
+			$prods = $this->get_prod_list($o);
+			foreach($prods->arr() as $product)
+			{
+				$ol->add($this->get_package_list($product));
+			}
+		}
+		return $ol;
+	}
+	
+	//returns active products
 	function get_prod_list($o)
 	{
-		
 		$ol = new object_list();
-		
 		if(is_oid($o))
 		{
 			$o = obj($o);
@@ -1809,23 +1898,26 @@ class room extends class_base
 		
 		if($o->class_id() == CL_MENU)
 		{
-			$parent = $o->id();
+			$parents = $o->id();
 		}
 		else
 		{
-			$menu_tree = $this->get_prod_tree($o);
-			$menu_list = $menu_tree->to_list(array(
-				"add_root" => true,
-			));
-			$parent = $menu_list->ids();
+			$this->prod_data = $o->meta("prod_data");
+			$parents = $this->get_prod_tree_ids($o);
 		}
 		
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
 			"lang_id" => array(),
-			"parent" => $parent,
+			"parent" => $parents,
 		));
-	
+		foreach($ol->arr() as $prod)
+		{
+			if(!$this->prod_data[$prod->id()]["active"])
+			{
+				$ol->remove($prod->id());
+			}
+		}
 		return $ol;
 	}
 	

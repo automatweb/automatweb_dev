@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.5 2006/11/14 12:09:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.6 2006/11/16 14:57:20 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -597,8 +597,14 @@ class room_reservation extends class_base
 			"bron" => $arr["bron"],
 			"id" => $arr["room"],
 		));
-		$_SESSION["room_reservation"]["start"] = $times["start"];
-		$_SESSION["room_reservation"]["end"] = $times["end"];
+		if(!$_SESSION["room_reservation"]["start"]) 
+		{
+			$_SESSION["room_reservation"]["start"] = $times["start"];
+		}
+		if(!$_SESSION["room_reservation"]["end"])
+		{
+			$_SESSION["room_reservation"]["end"] = $times["end"];
+		}
 		$ret.= '<script language="javascript">
 			window.opener.location.reload();
 			window.close();
