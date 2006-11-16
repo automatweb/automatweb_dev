@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.6 2006/11/13 10:29:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.7 2006/11/16 15:40:46 kristo Exp $
 // procurement_requirement.aw - N&otilde;ue 
 /*
 
@@ -31,8 +31,11 @@
 	@property planned_time type=date_select table=procuremnent_requirements field=aw_planned_time
 	@caption Planeeritud t&auml;htaeg
 
-	@property process type=relpicker reltype=RELTYPE_PROCESS table=procuremnent_requirements field=aw_planned_time
+	@property process type=relpicker reltype=RELTYPE_PROCESS table=procuremnent_requirements field=aw_process
 	@caption Protsess
+
+	@property budget type=textbox table=procuremnent_requirements field=aw_budget
+	@caption Eelarve
 
 @default group=offers
 
@@ -91,6 +94,10 @@ class procurement_requirement extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "state":
+				$prop["options"] = $this->get_status_list();
+				break;
+
 			case "pri":
 				$prop["options"] = array("" => t("--vali--")) + $this->get_priority_list($arr["obj_inst"]);
 				break;
@@ -163,8 +170,13 @@ class procurement_requirement extends class_base
 			case "aw_req_proj":
 			case "aw_req_co":
 			case "aw_req_state":
+			case "aw_process":
 			case "aw_req_p":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
+				return true;
+
+			case "aw_budget":
+				$this->db_add_col($t, array("name" => $f, "type" => "double"));
 				return true;
 		}
 	}
@@ -369,7 +381,8 @@ class procurement_requirement extends class_base
 			"url" => html::get_new_url(CL_BUG, $arr["obj_inst"]->id(), array(
 				"return_url" => get_ru(),
 				"alias_to" => $arr["obj_inst"]->id(),
-				"reltype" => 5
+				"reltype" => 5,
+				"from_req" => $arr["obj_inst"]->id()
 			)),
 			"img" => "new.gif",
 		));

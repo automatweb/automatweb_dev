@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.113 2006/11/15 12:58:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.114 2006/11/16 15:40:44 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -281,7 +281,7 @@ caption Teostajad
 	property risks_eval_tb type=toolbar no_caption=1 store=no
 	property risks_eval type=table no_caption=1 store=no
 
-@default group=req
+@default group=req,req_process
 
 	@property req_tb type=toolbar store=no no_caption=1
 
@@ -354,6 +354,7 @@ groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
 groupinfo risks_t caption="Riskid"
 
 @groupinfo req caption="N&otilde;uded" submit=no parent=event_list
+@groupinfo req_process caption="N&otilde;uded protsessidega" submit=no parent=event_list
 @groupinfo stats caption="Statistika" submit=no parent=event_list
 
 @groupinfo transl caption=T&otilde;lgi

@@ -521,6 +521,73 @@
             <parent>reqs_p_tt</parent>
             <field>reqs_p_table</field>
       </property>
+      <property>
+            <name>dev_orders_tb</name>
+            <table>objects</table>
+            <group>dev_orders</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>dev_orders_tb</field>
+      </property>
+      <property>
+            <name>dev_orders_tree</name>
+            <table>objects</table>
+            <group>dev_orders</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>dev_orders_tree_v</parent>
+            <field>dev_orders_tree</field>
+      </property>
+      <property>
+            <name>dev_orders_table</name>
+            <table>objects</table>
+            <group>dev_orders</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>dev_orders_h</parent>
+            <field>dev_orders_table</field>
+      </property>
+      <property>
+            <name>problems_tb</name>
+            <table>objects</table>
+            <group>problems</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>problems_tb</field>
+      </property>
+      <property>
+            <name>problems_table</name>
+            <table>objects</table>
+            <group>problems</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>problems_table</field>
+      </property>
+      <property>
+            <name>reqs_c_tree</name>
+            <table>objects</table>
+            <group>reqs_cust</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>reqs_c_tree</parent>
+            <field>reqs_c_tree</field>
+      </property>
+      <property>
+            <name>reqs_c_table</name>
+            <table>objects</table>
+            <group>reqs_cust</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>reqs_c_tt</parent>
+            <field>reqs_c_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -540,6 +607,16 @@
                   <caption>Projektid</caption>
                   <parent>reqs_main</parent>
             </reqs_proj>
+            <reqs_cust>
+                  <caption>Tellijad</caption>
+                  <parent>reqs_main</parent>
+            </reqs_cust>
+            <dev_orders>
+                  <caption>Arendustellimused</caption>
+            </dev_orders>
+            <problems>
+                  <caption>Probleemid</caption>
+            </problems>
             <bugs>
                   <caption>Arendus&amp;amp;uuml;lesanded</caption>
                   <submit>no</submit>
@@ -769,6 +846,30 @@
                   <area_caption>Projektid</area_caption>
                   <group>reqs_proj</group>
             </reqs_p_tree>
+            <dev_orders_h>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>dev_orders</group>
+            </dev_orders_h>
+            <dev_orders_tree_v>
+                  <type>vbox</type>
+                  <parent>dev_orders_h</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Arendustellimused</area_caption>
+                  <group>dev_orders</group>
+            </dev_orders_tree_v>
+            <reqs_c_tt>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>reqs_cust</group>
+            </reqs_c_tt>
+            <reqs_c_tree>
+                  <type>vbox</type>
+                  <parent>reqs_c_tt</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Tellijad</area_caption>
+                  <group>reqs_cust</group>
+            </reqs_c_tree>
       </layout>
 </properties>
 

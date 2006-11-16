@@ -116,8 +116,59 @@ class project_req_impl extends class_base
 		
 	}
 
+	function _get_req_tree_process($arr)
+	{
+		$proc = $this->get_proc($arr["obj_inst"]);
+		if (!$proc)
+		{
+			$proc = $arr["obj_inst"]->id();
+		}
+		classload("core/icons");
+		// get all procurements and list them in the tree by process
+		$ot = new object_tree(array(
+			"class_id" => array(CL_MENU, CL_PROCUREMENT_REQUIREMENT),
+			"parent" => $proc,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$processes = array();
+		$ol = $ot->to_list();
+		foreach($ol->arr() as $o)
+		{
+			$processes[$o->prop("process")]++;
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		foreach($processes as $proc => $cnt)
+		{
+			if (!is_oid($proc))
+			{
+				continue;
+			}
+			$po = obj($proc);
+			$nm = $po->name()." ($cnt)";
+			if ($arr["request"]["proc"] == $proc)
+			{
+				$nm = "<b>".$nm."</b>";
+			}
+			$t->add_item(0, array(
+				"id" => "p_".$proc,
+				"parent" => 0,
+				"name" => $nm,
+				"url" => aw_url_change_var(array(
+					"proc" => $proc,
+					"empl" => null,
+				))
+			));
+		}
+	}
+
 	function _get_req_tree($arr)
 	{
+		if ($arr["request"]["group"] == "req_process")
+		{
+			return $this->_get_req_tree_process($arr);
+		}
 		$proc = $this->get_proc($arr["obj_inst"]);
 		if (!$proc)
 		{
@@ -187,14 +238,25 @@ class project_req_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_req_tbl($t);
 
-		if (!$arr["request"]["tf"])
+		if (!$arr["request"]["tf"] && !$arr["request"]["proc"])
 		{	
 			return;
 		}
-		$ol = new object_list(array(
-			"parent" => $arr["request"]["tf"],
-			"class_id" => array(CL_BUG,CL_TASK,CL_CRM_CALL,CL_CRM_MEETING, CL_PROCUREMENT_REQUIREMENT, CL_MENU)
-		));
+
+		if ($arr["request"]["proc"])
+		{
+			$ol = new object_list(array(
+				"process" => $arr["request"]["proc"],
+				"class_id" => array(CL_PROCUREMENT_REQUIREMENT),
+			));
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"parent" => $arr["request"]["tf"],
+				"class_id" => array(CL_BUG,CL_TASK,CL_CRM_CALL,CL_CRM_MEETING, CL_PROCUREMENT_REQUIREMENT, CL_MENU)
+			));
+		}
 		classload("core/icons");
 		$u = get_instance(CL_USER);
 		foreach($ol->arr() as $o)

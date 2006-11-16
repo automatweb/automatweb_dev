@@ -67,8 +67,16 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PROCESS</reltype>
-            <field>aw_planned_time</field>
+            <field>aw_process</field>
             <caption>Protsess</caption>
+      </property>
+      <property>
+            <name>budget</name>
+            <table>procuremnent_requirements</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_budget</field>
+            <caption>Eelarve</caption>
       </property>
       <property>
             <name>offer_t</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.66 2006/10/16 10:33:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.67 2006/11/16 15:40:43 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -269,6 +269,14 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "deadline":
+				if ($arr["request"]["from_req"])
+				{
+					$r = obj($arr["request"]["from_req"]);
+					$prop["value"] = $r->prop("planned_time");
+				}
+				break;
+
 			case "bug_feedback_p":
 				if ($arr["obj_inst"]->prop("bug_status") != BUG_FEEDBACK)
 				{
@@ -324,6 +332,13 @@ class bug extends class_base
 					$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
 					$crea = sprintf(t("Looja: %s"), $p->name());
 				}
+				else
+				if ($arr["request"]["from_req"])
+				{
+					$r = obj($arr["request"]["from_req"]);
+					$prop["value"] = $r->name();
+				}
+				
 				$link = html::href(array(
 					"caption" => t("Link"),
 					"url" => obj_link($arr["obj_inst"]->id())
@@ -337,6 +352,11 @@ class bug extends class_base
 					$prop["value"] = "<br>".$this->_get_comment_list($arr["obj_inst"])."<br>";
 					$prop["type"] = "text";
 				}
+				if ($arr["request"]["from_req"])
+				{
+					$r = obj($arr["request"]["from_req"]);
+					$prop["value"] = $r->prop("desc");
+				}
 				break;
 
 			case "bug_status":	
@@ -346,6 +366,11 @@ class bug extends class_base
 			case "bug_priority":
 			case "bug_severity":
 				$prop["options"] = $this->get_priority_list();
+				if ($arr["request"]["from_req"])
+				{
+					$r = obj($arr["request"]["from_req"]);
+					$prop["value"] = (int)($r->prop("pri")/2);
+				}
 				break;
 				
 			case "who":
@@ -387,6 +412,12 @@ class bug extends class_base
 				{
 					$tmp = obj($prop["value"]);
 					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+
+				if ($arr["request"]["from_req"])
+				{
+					$r = obj($arr["request"]["from_req"]);
+					$prop["options"][$r->prop("req_p")] = $r->prop("req_p.name");
 				}
 				break;
 
@@ -439,6 +470,12 @@ class bug extends class_base
 						$prop["options"][$key] = $val;
 					}
 				}
+
+				if ($arr["request"]["from_req"])
+				{
+					$r = obj($arr["request"]["from_req"]);
+					$prop["value"] = $r->prop("project");
+				}
 				break;
 
 			case "customer":
@@ -479,6 +516,11 @@ class bug extends class_base
 					{
 						$prop["options"][$key] = $val;
 					}
+				}
+				if ($arr["request"]["from_req"])
+				{
+					$r = obj($arr["request"]["from_req"]);
+					$prop["value"] = $r->prop("req_co");
 				}
 				break;
 
@@ -961,7 +1003,8 @@ class bug extends class_base
 		}
 	}
 
-	function parse_commited_msg($msg){
+	function parse_commited_msg($msg)
+	{
 		
 		$row =  explode("\n" , $msg);
 		//arr($row);
@@ -996,6 +1039,7 @@ class bug extends class_base
 		$bug = obj($arr["bugno"]);
 		$msg = trim($this->hexbin($arr["msg"]));
 		
+		$orig_msg = $msg;
 		$msg = $this->parse_commited_msg($msg);
 		
 		$ostat = $nstat = $bug->prop("bug_status");
@@ -1029,12 +1073,31 @@ class bug extends class_base
 		}
 		if ($save)
 		{
+			// get the cvs uid to aw uid map and switch user if the map has it
+			$bt = $this->_get_bt($bug);
+			if ($bt)
+			{
+				$uid_map = $bt->prop("cvs2uidmap");
+				if (preg_match("/cvs commit by ([^ ]+) in/imsU", $orig_msg, $mt))
+				{
+					$cvs_uid = $mt[1];
+					foreach(explode("\n", $uid_map) as $map_line)
+					{
+						list($map_cvs_uid, $map_aw_uid) = explode("=", $map_line);
+						if ($map_cvs_uid == $cvs_uid)
+						{
+							aw_switch_user($map_aw_uid);
+							break;
+						}
+					}
+				}
+			}
 			$bug->save();
 		}
 
 		$this->_add_comment($bug, $msg, $ostat, $nstat, $add_wh);
 		aw_restore_acl();
-		die(sprintf(t("Added comment to bug %s"), $arr[bugno]));
+		die(sprintf(t("Added comment to bug %s"), $arr["bugno"]));
 	}
 
 	function do_db_upgrade($tbl, $f)

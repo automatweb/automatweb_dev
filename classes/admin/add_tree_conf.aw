@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.37 2006/05/17 12:36:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.38 2006/11/16 15:40:43 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -123,12 +123,8 @@ class add_tree_conf extends class_base
 			$tmp = aw_ini_get("classes");
 			foreach($tmp as $cl_id => $cld)
 			{
-				if (!isset($cld["parents"]))
-				{
-					continue;
-				}
 
-				if ($cld["parents"] == 0)
+				if ($cld["parents"] == 0 || !isset($cld["parents"]))
 				{
 					$ala = "";
 					if (true || $cld["alias"] != "")
@@ -386,7 +382,14 @@ class add_tree_conf extends class_base
 			// also, if the class is in some groups and for all those groups access has been turned off
 			// do not show the alias
 			$grp = explode(",",$clss[$class_id]["parents"]);
-			$show = false;
+			if (!isset($clss[$class_id]["parents"]))
+			{
+				$show = true;
+			}
+			else
+			{
+				$show = false;
+			}
 			foreach($grp as $g)
 			{
 				// must check group parents as well :(
