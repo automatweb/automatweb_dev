@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.17 2006/11/08 15:12:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.18 2006/11/17 15:34:33 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -538,7 +538,7 @@ class procurement_offer extends class_base
 				}
 				else
 				{
-					if(strlen($product["product"]) > 1)
+					if((strlen($product["product"]) > 1) && ($product["available"]))
 					{
 						$o = obj();
 						$o->set_class_id(CL_PROCUREMENT_OFFER_ROW);
@@ -623,7 +623,7 @@ class procurement_offer extends class_base
 				}
 				else
 				{
-					if(strlen($product["product"]) > 1)
+					if((strlen($product["product"]) > 1) && ($product["available"]))
 					{
 						$o = obj();
 						$o->set_class_id(CL_PROCUREMENT_OFFER_ROW);
@@ -957,7 +957,7 @@ class procurement_offer extends class_base
 	//		"caption" => t("Id"),
 	//		"numeric" => 1,
 	//	));
-
+		
 		$t->define_field(array(
 			"name" => "product",
 			"caption" => t("Toode"),
@@ -975,7 +975,7 @@ class procurement_offer extends class_base
 		
 		$t->define_field(array(
         		'name' => 'price_amount',
-			'caption' => t('Nii palju &uuml;hikuid tooteid peaks ostma et antud hind kehtiks'),
+			'caption' => t('Min. kogus'),
 		));
 		
 		$t->define_field(array(
@@ -1001,7 +1001,10 @@ class procurement_offer extends class_base
 			"field" => "oid",
 			'caption' => t('Aktsepteeritud'),
 		));
-
+		$t->define_field(array(
+			"name" => "available",
+			"caption" => t("Olemas"),
+		));
 
 		$unit_list = new object_list(array(
 			"class_id" => CL_UNIT
@@ -1041,10 +1044,7 @@ class procurement_offer extends class_base
 				//	"price" => $row->prop("price"),
 					"currency" => $this_obj->prop("currency"),
 					"shipment" => $this_obj->prop("shipment_date"),
-					"accept" =>  html::checkbox(array(
-						"name" => "products[".$x."][accept]",
-						"value" => 1,
-					)),
+					"oid" => $x
 				);
 				$x++;
 				$max_x++;
@@ -1087,6 +1087,7 @@ class procurement_offer extends class_base
 			$t->define_data(array(
 				"jrk"		=> $x+1,
 //				"row_id" 	=> $row->id(),
+				"available" 	=> $available,
 				"product"	=> html::textbox(array(
 							"name" => "products[".$x."][product]",
 							"size" => "25",
@@ -1140,6 +1141,11 @@ class procurement_offer extends class_base
 	//						)),
 				'accept'	=> $accept,
 				"oid"		=> $id,
+				"available" => html::checkbox(array(
+					"name" => "products[".$x."][available]",
+					"value" => 1,
+					"checked" => 1,
+				)),			
 			
 			));
 		}
@@ -1193,6 +1199,11 @@ class procurement_offer extends class_base
 //							"name" => "products[".$x."][accept]",
 //							)),
 				'oid'		=> $x,
+				"available" => html::checkbox(array(
+					"name" => "products[".$x."][available]",
+					"value" => 1,
+					"checked" => 1,
+				)),
 			));
 			$x++;
 		}
