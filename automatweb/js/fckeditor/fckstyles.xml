@@ -5,12 +5,12 @@
 	</Style>
 	<Style name="Image on left" element="img">
 		<Attribute name="style" value="padding: 5px; margin-right: 5px" />
-		<Attribute name="border" value="2" />
+		<Attribute name="border" value="0" />
 		<Attribute name="align" value="left" />
 	</Style>
 	<Style name="Image on right" element="img">
 		<Attribute name="style" value="padding: 5px; margin-left: 5px" />
-		<Attribute name="border" value="2" />
+		<Attribute name="border" value="0" />
 		<Attribute name="align" value="right" />
 	</Style>
 	<Style name="Heading 1" element="h1" />
@@ -29,5 +29,8 @@
 	<Style name="Horisontal ruler" element="hr">
 		<Attribute name="size" value="1" />
 		<Attribute name="color" value="#ff0000" />
+	</Style>
+	<Style name="Vahepealkiri" element="span">
+		<Attribute name="class" value="vahepealkiri" />
 	</Style>
 </Styles>
