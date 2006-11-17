@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.2 2006/11/14 17:56:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.3 2006/11/17 13:07:28 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -101,8 +101,8 @@
 	@caption Riigi kood
 
 #riigil&otilde;iv
-@groupinfo priority caption="Prioriteet"
-@default group=priority
+@groupinfo fee caption="Riigil&otilde;iv"
+@default group=fee
 
 @property request_fee type=textbox 
 @caption Taotlusl&otilde;iv
@@ -155,9 +155,11 @@ class patent extends class_base
 	function patent()
 	{
 		$this->init(array(
-			"tpldir" => "applications/clients/patent_office/patent",
+			"tpldir" => "applications/patent",
 			"clid" => CL_PATENT
 		));
+	
+		$this->info_levels = array("applicant","trademark","products_and_services","priority","fee","check");
 	}
 
 	function get_property($arr)
@@ -202,6 +204,85 @@ class patent extends class_base
 		return $this->parse();
 	}
 
-//-- methods --//
+	
+	/** 
+		
+		@attrib name=parse_alias is_public="1" caption="Change"
+	
+	**/
+	function parse_alias($arr)
+	{
+		enter_function("patent::parse_alias");
+		
+		if(!$_SESSION["patent"])
+		{
+			$_SESSION["patent"]["data_type"] = 0;
+		}		
+		if(isset($_GET["data_type"]))
+		{
+			$arr["data_type"] = $_GET["data_type"];
+		}
+		else
+		{
+			$arr["data_type"] = $_SESSION["patent"]["data_type"];
+		}
+		$tpl = $this->info_levels[$arr["data_type"]].".tpl";
+		$this->read_template($tpl);
+		lc_site_load("patent", &$this);
+		$this->vars($this->web_data($arr["data_type"]));
+		
+		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
+				"data_type"	=> $arr["data_type"],
+				"return_url" 	=> get_ru(),
+			)),
+		));
+		//lõpetab ja salvestab
+		if($arr["data_type"] == 5)
+		{
+			$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
+					"save" => 1,
+					"return_url" 	=> get_ru(),
+				)),
+			));
+		}
+		
+		exit_function("realestate_add::parse_alias");
+		return $this->parse();
+	}
+
+	function web_data($arr)
+	{
+		$data = array();
+		
+		$data["data_type"] = $arr["data_type"];
+		$data["data_type_name"] = $this->info_levels[$arr["data_type"]];
+		foreach($_SESSION["patent"] as $key => $val)
+		{
+			$data[$key."_value"] =  $val;
+		}
+		return $data;
+	}
+	
+	/** 
+		@attrib name=submit_data is_public="1" caption="Change"
+	**/
+	function submit_data($arr)
+	{
+		foreach($arr as $data => $val)
+		{
+			$_SESSION["patent"][$data] = $val;
+		}
+		if($arr["save"])
+		{
+			$this->save_data();
+		}
+		return aw_url_change_var("data_type" , ($arr["data_type"]+1) , $arr["return_url"]);
+	}
+
+	function save_data()
+	{
+		;
+		unset($_SESSION["patent"]);
+	}
 }
 ?>

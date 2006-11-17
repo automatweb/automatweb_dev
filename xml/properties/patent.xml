@@ -222,7 +222,7 @@
       <property>
             <name>request_fee</name>
             <table>objects</table>
-            <group>priority</group>
+            <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -231,7 +231,7 @@
       <property>
             <name>classes_fee</name>
             <table>objects</table>
-            <group>priority</group>
+            <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -240,7 +240,7 @@
       <property>
             <name>payer</name>
             <table>objects</table>
-            <group>priority</group>
+            <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -249,7 +249,7 @@
       <property>
             <name>doc_nr</name>
             <table>objects</table>
-            <group>priority</group>
+            <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -258,7 +258,7 @@
       <property>
             <name>payment_date</name>
             <table>objects</table>
-            <group>priority</group>
+            <group>fee</group>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
@@ -281,6 +281,9 @@
             <priority>
                   <caption>Prioriteet</caption>
             </priority>
+            <fee>
+                  <caption>Riigil&amp;amp;otilde;iv</caption>
+            </fee>
       </groupinfo>
       <reltypes>
             <APPLICANT>
