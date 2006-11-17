@@ -1,16 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.26 2006/11/08 15:12:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.27 2006/11/17 15:02:59 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
 @classinfo syslog_type=ST_PROCUREMENT_CENTER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
-@default group=general
 
-@groupinfo settings caption="Seaded" parent=general
-@default group=settings
-	
+#GENERAL
+@default group=general
+@groupinfo general2 caption="&Uuml;ldinfo" parent=general
+@default group=general2
+
 	@property name type=textbox
 	@caption Nimetus
 
@@ -20,6 +21,15 @@
 	@property offerers_folder type=relpicker field=meta reltype=RELTYPE_PROCUREMENT_CENTER_FOLDERS
 	@caption Pakkujate kataloog
 
+@groupinfo settings caption="Seaded" parent=general
+@default group=settings
+	
+@layout settings_l type=hbox
+		
+	@property search_date_subtract type=textbox size=3 parent=settings_l field=meta method=serialize
+	@caption default kuup&auml;ev otsungus tagasi
+		
+	@property search_date_subtract_unit type=select no_caption=1 parent=settings_l field=meta method=serialize
 
 @default group=p
 
@@ -219,7 +229,14 @@ class procurement_center extends class_base
 					$prop["value"] = html::obj_change_url($o);
 				}
 				break;
-
+			case "search_date_subtract_unit":
+				$prop["options"] = array(
+					86400	=> t("P&auml;eva"),
+					604800	=> t("N&auml;dalat"),
+					2648000	=> t("Kuud"),
+					31536000=> t("Aastat"),
+				);
+				break;
 			case "p_tb":
 				$this->_p_tb($arr);
 				break;
@@ -292,20 +309,17 @@ class procurement_center extends class_base
 			case "offerers_find_name":
 			case "offerers_find_address":
 			case "offerers_find_done":
-			case "offerers_find_start":
 			case "offerers_find_end":
 			case "offerers_find_product":
 			case "offerers_find_only_buy":
 			case "offers_find_name":
 			case "offers_find_address":
-			case "offers_find_start":
 			case "offers_find_end":
 			case "offers_find_product":
 			case "offers_find_only_buy":
 			case "offers_find_archived":
 			case "buyings_find_name":
 			case "buyings_find_address":
-			case "buyings_find_start":
 			case "buyings_find_end":
 			case "buyings_find_product":
 			case "buyings_find_archived":
@@ -315,12 +329,23 @@ class procurement_center extends class_base
 			case "procurements_find_offerer":
 			case "procurements_find_product":
 			case "products_find_apply":
-			case "products_find_start":
 			case "products_find_end":
 				
 				$search_data = $arr["obj_inst"]->meta("search_data");
 				$prop["value"] = $search_data[$prop["name"]];
 				break;
+			case "buyings_find_start":
+			case "products_find_start":	
+			case "offerers_find_start":
+			case "offers_find_start":
+				$search_data = $arr["obj_inst"]->meta("search_data");
+				$prop["value"] = $search_data[$prop["name"]];
+				if(!$prop["value"])
+				{
+					$prop["value"] = time() - $arr["obj_inst"]->prop("search_date_subtract")* $arr["obj_inst"]->prop("search_date_subtract_unit");
+				}
+				break;
+			
 			case "offers_find_groups":
 			case "offerers_find_groups":
 			case "buyings_find_groups":
