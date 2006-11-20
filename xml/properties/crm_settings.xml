@@ -108,6 +108,15 @@
             <caption>Vaikimisi avatakse toimetuse nimel klikkides kohe read</caption>
       </property>
       <property>
+            <name>send_mail_feature</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <caption>V&amp;amp;otilde;imalus saata CRMis maile</caption>
+      </property>
+      <property>
             <name>default_task_rows_bills_filter</name>
             <table>objects</table>
             <group>general</group>

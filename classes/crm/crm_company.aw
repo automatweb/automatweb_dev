@@ -5094,7 +5094,7 @@ class crm_company extends class_base
 				$cust_rel = $cust_rel_list->begin();
 				$bill->set_prop("bill_due_date_days", $cust_rel->prop("bill_due_date_days"));
 			}
-			else
+			if(!$bill->prop("bill_due_date_days"))
 			{
 				$bill->set_prop("bill_due_date_days", $bill->prop("customer.bill_due_days"));
 			}
@@ -7091,6 +7091,54 @@ class crm_company extends class_base
 		$o->connect(array("to" => $arr["def_poll"], "type" => "RELTYPE_DEF_POLL"));
 		return $arr["post_ru"];
 	}
+
+	/**
+		@attrib name=send_mails
+	**/
+	function send_mails($arr)
+	{
+		$send_to = "";
+		$mails = array();
+		foreach($arr["check"] as $cust)
+		{
+			$email = "";
+			if($this->can("view" , $cust))
+			{
+				$customer = obj($cust);
+				$email = $customer->get_first_obj_by_reltype("RELTYPE_EMAIL");
+				if(is_oid($customer->prop("email")))
+				{
+					$email = obj($customer->prop("email"));
+				}
+				if(!is_object($email))
+				{
+					$email = $customer->get_first_obj_by_reltype("RELTYPE_EMAIL");
+				}
+				if(is_object($email))
+				{
+					$mails[] = $email->prop("mail");
+				}
+			}
+		}
+		$send_to = join($mails , ", ");
+//		$user = aw_global_get("uid");
+		
+		$mfrom = aw_global_get("uid_oid");
+		$user_obj = obj($mfrom);
+		$person = $user_obj->get_first_obj_by_reltype("RELTYPE_PERSON");
+		if(is_object($person))
+		{
+			$mfrom = $person->id();
+		}
+		return $this->mk_my_orb('new',array(
+			'parent' => $arr['id'],
+			"return_url" => $arr["post_ru"],
+		 	"mto" => $send_to,
+		 	"mfrom" => $mfrom,
+		 ),CL_MESSAGE);
+	}
+
+	
 
 	function _sell_offers_table($arr)
 	{
