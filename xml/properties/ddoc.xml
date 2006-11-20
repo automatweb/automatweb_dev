@@ -1,5 +1,49 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>ddoc</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>fileupload</type>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <caption>Vali fail</caption>
+      </property>
+      <property>
+            <name>ddoc_location</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>asukoht</caption>
+      </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>files</field>
+      </property>
+      <property>
+            <name>signatures</name>
+            <table>objects</table>
+            <group>signatures</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>signatures</field>
+      </property>
       <classinfo>
             <syslog_type>ST_DDOC</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +51,13 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <files>
+                  <caption>Failid</caption>
+            </files>
+            <signatures>
+                  <caption>Allkirjad</caption>
+            </signatures>
+      </groupinfo>
 </properties>
 
