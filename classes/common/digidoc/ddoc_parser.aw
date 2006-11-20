@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.3 2006/11/16 13:37:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.4 2006/11/20 06:17:48 tarvo Exp $
 // ddoc_parser.aw - DigiDoc Parser 
 /*
 
@@ -69,11 +69,14 @@ class ddoc_parser extends class_base
 		
 		// ddoc crap
 		//session_start(); //i dont think i need this one in here
-
+		
+		// a temporary fix here.. i dont know how or where i'm gonna put the fucking conf file
+		include_once(aw_ini_get("basedir")."/automatweb/vv_digidoc/conf.php");
 		$this->xml = $xml;
 		$this->xmlarray = $xml?$this->Parse($this->xml):false;
 		$this->setDigiDocFormatAndVersion();
-		$this->workPath = DD_FILES;//.session_id().'/';
+		//$this->workPath = DD_FILES;//.session_id().'/';
+		$this->workPath = "/tmp/";//.session_id().'/';
 		if (!is_dir($this->workPath))
 			if(File::DirMake($this->workPath) != DIR_ERR_OK)
 				die('Error accessing workpath:'.$this->workPath);
@@ -184,6 +187,16 @@ class ddoc_parser extends class_base
 		return $ret;
 	} // end func
 
+	function files($xml)
+	{
+		$p = xml_parser_create();
+		xml_parse_into_struct($p, $xml, $vals, $index);
+		foreach($index["DATAFILE"] as $v)
+		{
+			$ret[$vals[$v]["attributes"]["ID"]] = $vals[$v]["attributes"];
+		}
+		return $ret;
+	}
 
 	/**
 	 * Määrab digidoc-i failiformaadi ja versiooni XML põhjal.
@@ -225,6 +238,19 @@ class ddoc_parser extends class_base
 		} //foreach
 		return $ret;
 	} // end func
+
+	function signs($xml)
+	{
+		$p = xml_parser_create();
+		xml_parse_into_struct($p, $xml, $vals, $index);
+		arr($vals);
+		arr($index);
+		foreach($index["SIGNATURE"] as $v)
+		{
+			$ret[] = $vals[$v];
+		}
+		return $ret;
+	}
 
 	
 	
@@ -441,7 +467,7 @@ DEFINE ("DIR_ERR_EMKDIR_3",5);
  *
  * @package      DigiDoc
  */
-class File{
+class digidocFile{
 	
 		
 	/**
