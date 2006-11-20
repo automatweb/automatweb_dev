@@ -52,7 +52,10 @@
       <property>
             <name>s_fn</name>
             <table>objects</table>
-            <group>cust</group>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
             <type>textbox</type>
             <captionside>top</captionside>
             <store>no</store>
@@ -64,7 +67,10 @@
       <property>
             <name>s_ln</name>
             <table>objects</table>
-            <group>cust</group>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
             <type>textbox</type>
             <captionside>top</captionside>
             <store>no</store>
@@ -74,9 +80,27 @@
             <caption>Perenimi</caption>
       </property>
       <property>
+            <name>s_tb</name>
+            <table>objects</table>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
+            <type>textbox</type>
+            <captionside>top</captionside>
+            <store>no</store>
+            <parent>search</parent>
+            <size>23</size>
+            <field>s_tb</field>
+            <caption>Reisib&amp;amp;uuml;roo</caption>
+      </property>
+      <property>
             <name>s_date_from</name>
             <table>objects</table>
-            <group>cust</group>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
             <type>date_select</type>
             <captionside>top</captionside>
             <store>no</store>
@@ -92,7 +116,10 @@
       <property>
             <name>s_date_to</name>
             <table>objects</table>
-            <group>cust</group>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
             <type>date_select</type>
             <captionside>top</captionside>
             <store>no</store>
@@ -106,9 +133,27 @@
             <caption>Kuni</caption>
       </property>
       <property>
+            <name>s_date_not_set</name>
+            <table>objects</table>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <captionside>top</captionside>
+            <store>no</store>
+            <parent>search</parent>
+            <field>s_date_not_set</field>
+            <caption>Ajad m&amp;amp;auml;&amp;amp;auml;ramata</caption>
+      </property>
+      <property>
             <name>s_package</name>
             <table>objects</table>
-            <group>cust</group>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
             <type>select</type>
             <captionside>top</captionside>
             <store>no</store>
@@ -119,7 +164,10 @@
       <property>
             <name>s_btn</name>
             <table>objects</table>
-            <group>cust</group>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
             <type>submit</type>
             <store>no</store>
             <parent>search</parent>
@@ -130,7 +178,10 @@
       <property>
             <name>s_res</name>
             <table>objects</table>
-            <group>cust</group>
+            <group>
+                  <num_0>cust</num_0>
+                  <num_1>all_bookings</num_1>
+            </group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -170,6 +221,9 @@
             <my_bookings_agent>
                   <caption>Klientide broneeringud</caption>
             </my_bookings_agent>
+            <all_bookings>
+                  <caption>K&amp;amp;otilde;ik</caption>
+            </all_bookings>
       </groupinfo>
       <reltypes>
             <PFL_FOLDER>
@@ -192,14 +246,20 @@
             <ver_split>
                   <type>hbox</type>
                   <width>10%:90%</width>
-                  <group>cust</group>
+                  <group>
+                        <num_0>cust</num_0>
+                        <num_1>all_bookings</num_1>
+                  </group>
             </ver_split>
             <search>
                   <type>vbox</type>
                   <area_caption>Otsing</area_caption>
                   <parent>ver_split</parent>
                   <closeable>1</closeable>
-                  <group>cust</group>
+                  <group>
+                        <num_0>cust</num_0>
+                        <num_1>all_bookings</num_1>
+                  </group>
             </search>
       </layout>
 </properties>

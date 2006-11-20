@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.1 2006/11/15 13:07:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.2 2006/11/20 14:19:41 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -25,7 +25,7 @@
 	@property cust_entry type=table store=no no_caption=1
 
 
-@default group=cust
+@default group=cust,all_bookings
 
 	@layout ver_split type=hbox width=10%:90%
 
@@ -37,11 +37,17 @@
 			@property s_ln type=textbox captionside=top store=no parent=search size=23
 			@caption Perenimi
 
+			@property s_tb type=textbox captionside=top store=no parent=search size=23
+			@caption Reisib&uuml;roo
+
 			@property s_date_from type=date_select captionside=top store=no parent=search format=day_textbox,month_textbox,year_textbox
 			@caption Alates
 
 			@property s_date_to type=date_select captionside=top store=no parent=search format=day_textbox,month_textbox,year_textbox
 			@caption Kuni
+
+			@property s_date_not_set type=checkbox ch_value=1 captionside=top store=no parent=search
+			@caption Ajad m&auml;&auml;ramata
 
 			@property s_package type=select captionside=top store=no parent=search
 			@caption Pakett
@@ -60,6 +66,7 @@
 @groupinfo cust caption="Kliendid" submit=no
 @groupinfo my_bookings caption="Minu broneeringud" 
 @groupinfo my_bookings_agent caption="Klientide broneeringud" 
+@groupinfo all_bookings caption="K&otilde;ik" 
 
 @reltype PFL_FOLDER value=1 clid=CL_MENU
 @caption Tootepakettide kaust
@@ -88,6 +95,12 @@ class spa_bookigs_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "s_tb":
+				if ($arr["request"]["group"] == "cust")
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -114,6 +127,8 @@ class spa_bookigs_entry extends class_base
 		$arr["args"]["s_date_from"] = $arr["request"]["s_date_from"];
 		$arr["args"]["s_date_to"] = $arr["request"]["s_date_to"];
 		$arr["args"]["s_package"] = $arr["request"]["s_package"];
+		$arr["args"]["s_date_not_set"] = $arr["request"]["s_date_not_set"];
+		$arr["args"]["s_tb"] = $arr["request"]["s_tb"];
 	}	
 
 	function _init_cust_entry_t(&$t)
@@ -416,9 +431,31 @@ class spa_bookigs_entry extends class_base
 			"class_id" => CL_SPA_BOOKING,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"createdby" => aw_global_get("uid")
 		);
+
+		$cnt = 3;
+		if ($r["group"] == "cust")
+		{
+			$d["createdby"] = aw_global_get("uid");
+			$cnt = 4;
+		}
 //echo dbg::dump($r);
+
+		if ($r["s_tb"] && !isset($d["createdby"]))
+		{
+			$d["createdby"] = "%".$r["s_tb"]."%";
+		}
+
+		if ($r["s_date_not_set"])
+		{
+			$d[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"start" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+					"end" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
+				)
+			));
+		}
 
 		if ($r["s_fn"] != "")
 		{
@@ -456,7 +493,7 @@ class spa_bookigs_entry extends class_base
 		}
 
 //die(dbg::dump($d));
-		if (count($d) > 3)
+		if (count($d) > $cnt)
 		{
 			$ol = new object_list($d);
 			return $ol->arr();
@@ -465,6 +502,16 @@ class spa_bookigs_entry extends class_base
 	}
 
 	function _get_s_fn($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_s_tb($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_s_date_not_set($arr)
 	{
 		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 	}
