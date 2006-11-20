@@ -87,6 +87,18 @@ class crm_company_people_impl extends class_base
 			"tooltip" => t("Oluliseks"),
 			"action" => "mark_p_as_important",
 		));
+	
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		if ($sts && $sts->prop("send_mail_feature"))
+		{
+			$tb->add_button(array(
+				'name'=>'send_email',
+				'tooltip'=> t('Saada kiri'),
+				"img" => "mail_send.gif",
+				'action' => 'send_mails',
+			));
+		}
 	}
 
 	function _get_unit_listing_tree($arr)

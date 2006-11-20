@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.15 2006/09/11 17:22:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.16 2006/11/20 17:06:21 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -44,6 +44,9 @@
 
 	@property view_task_rows_open type=checkbox ch_value=1 table=objects field=meta
 	@caption Vaikimisi avatakse toimetuse nimel klikkides kohe read
+
+	@property send_mail_feature type=checkbox ch_value=1 table=objects field=meta
+	@caption V&otilde;imalus saata CRMis maile
 
 	@property default_task_rows_bills_filter type=select table=objects field=meta
 	@caption Toimetuse ridades valitud Arve tulba vaikimisi filter
@@ -563,13 +566,13 @@ class crm_settings extends class_base
 		$u = get_instance(CL_USER);
 		$curp = $u->get_current_person();
 		$curco = $u->get_current_company();
-
 		$cd = get_instance("applications/crm/crm_data");
 		$cursec = $cd->get_current_section();
 		$curprof = $cd->get_current_profession();
 
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_SETTINGS,
+			"lang_id" => array(),
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
