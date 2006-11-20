@@ -26,6 +26,7 @@
 					<required name="id" type="int" acl="view" />
 					<required name="fid" type="int" acl="view" />
 					<required name="url" />
+					<optional name="format" />
 				</arguments>
 			</function>
 		</action>

@@ -129,6 +129,15 @@
             <comment>Kui valitud, siis n&amp;amp;auml;idatakse l&amp;amp;otilde;puvaadet</comment>
       </property>
       <property>
+            <name>disp_after_entry_print</name>
+            <table>objects</table>
+            <group>general_redir</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
+            <caption>L&amp;amp;otilde;pu printvaate template</caption>
+      </property>
+      <property>
             <name>navtoolbar</name>
             <table>objects</table>
             <group>form</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.105 2006/11/15 14:43:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.106 2006/11/20 13:50:17 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -61,6 +61,9 @@
 	@property disp_after_entry type=select
 	@caption L&otilde;puvaade template
 	@comment Kui valitud, siis n&auml;idatakse l&otilde;puvaadet
+
+	@property disp_after_entry_print type=select
+	@caption L&otilde;pu printvaate template
 
 ------------- end: general -------------
 
@@ -477,6 +480,7 @@ class webform extends class_base
 				break;
 
 			case "disp_after_entry":
+			case "disp_after_entry_print":
 				$prop["options"] = array("" => t("--vali--")) + $this->get_directory(array("dir" => aw_ini_get("site_tpldir")."/contentmgmt/webform/disp"));
 				break;
 		};
@@ -2562,6 +2566,7 @@ class webform extends class_base
 		@param id required type=int acl=view
 		@param fid required type=int acl=view
 		@param url required
+		@param format optional 
 	**/
 	function show_form($arr)
 	{
@@ -2569,12 +2574,33 @@ class webform extends class_base
 		$wf = obj($arr["id"]);
 		if ($wf->prop("disp_after_entry") != "")
 		{
-			$this->read_template("disp/".$wf->prop("disp_after_entry"));
+			if (($arr["format"] == "print" || $arr["format"] == "pdf") && $wf->prop("disp_after_entry_print")) 
+			{
+				$this->read_template("disp/".$wf->prop("disp_after_entry_print"));
+			}
+			else
+			{
+				$this->read_template("disp/".$wf->prop("disp_after_entry"));
+			}
 			foreach($obj->properties() as $pn => $pv)
 			{
 				$this->vars(array(
 					$pn => $obj->prop_str($pn)
 				));
+			}
+			$this->vars(array(
+				"print_url" => aw_url_change_var("format", "print"),
+				"pdf_url" => aw_url_change_var("format", "pdf"),
+			));
+
+			if ($arr["format"] == "print")
+			{
+				die($this->parse());
+			}
+			if ($arr["format"] == "pdf") 
+			{
+				$conv = get_instance("core/converters/html2pdf");
+				$conv->gen_pdf(array("source" => $this->parse()));
 			}
 			return $this->parse();
 		}
