@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.107 2006/11/15 15:47:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.108 2006/11/20 14:15:01 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -961,6 +961,8 @@ class crm_bill extends class_base
 				$ord_country = $ct->prop_str("riik");
 				$ord_index = $ct->prop("postiindeks");
 				$ord_county = $ct->prop_str("maakond");
+				$ord_no = substr(strrchr($ct->prop("aadress"), " "), 1 );
+				$ord_street = str_replace($ord_no , "" ,$ct->prop("aadress"));
 				//riigi tõlge, kui on inglise keeles
 				if($b->prop("language") && is_oid($ct->prop("riik")))
 				{
@@ -1034,6 +1036,8 @@ class crm_bill extends class_base
 				$impl_index = $ct->prop("postiindeks");
 				$impl_county = $ct->prop_str("maakond");
 				$impl_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+				$impl_no = substr(strrchr($ct->prop("aadress"), " "), 1 );
+				$impl_street = str_replace($impl_no , "" ,$ct->prop("aadress"));
 				if ($this->can("view", $ct->prop("riik")))
 				{
 					$riik = obj($ct->prop("riik"));
@@ -1079,7 +1083,8 @@ class crm_bill extends class_base
 			"impl_county" => $impl_county,
 			"impl_index" => $impl_index,
 			"impl_country" => $impl_country,
-			
+			"orderer_street" => $ord_street,
+			"impl_street" => $impl_street,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),
 			"impl_logo" => $logo,
