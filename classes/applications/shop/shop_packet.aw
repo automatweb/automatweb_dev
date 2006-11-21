@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.15 2006/11/21 12:18:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.16 2006/11/21 15:01:18 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -16,6 +16,13 @@
 
 @property price type=textbox table=aw_shop_packets field=aw_price
 @caption Hind
+
+@property max_usage_in_time type=textbox size=5 table=objects field=meta method=serialize
+@caption Maksimaalne toodete kasutamise arv
+
+@property max_usage_in_time_type type=select  table=objects field=meta method=serialize
+@caption Aja&uuml;hik
+
 
 @groupinfo packet caption="Paketi sisu"
 
@@ -99,6 +106,14 @@ class shop_packet extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "max_usage_in_time_type":
+				$data["options"] = array(
+					"day" => t("P&auml;ev"),
+					"week" => t("N&auml;dal"),
+					"mon" => t("Kuu")
+				);
+				break;
+
 			case "packet":
 				$this->do_packet_table($arr);
 				break;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.2 2006/11/20 14:19:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.3 2006/11/21 15:01:19 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -600,7 +600,7 @@ class spa_bookigs_entry extends class_base
 					$date .= sprintf("Ruum %s, ajal %s - %s", $room->name(), date("d.m.Y H:i", $sets["from"]), date("d.m.Y H:i", $sets["to"]));
 				}
 				$date .= " ".html::popup(array(
-					"url" => $this->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod->id())),
+					"url" => $this->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod->id(), "pkt" => $package->id())),
 					"caption" => t("M&auml;&auml;ra aeg"),
 					"height" => 400,
 					"width" => 550,
@@ -622,6 +622,7 @@ class spa_bookigs_entry extends class_base
 		@attrib name=select_room_booking
 		@param booking required type=int
 		@param prod required type=int
+		@param pkt optional type=int
 	**/
 	function select_room_booking($arr)
 	{
@@ -654,7 +655,7 @@ class spa_bookigs_entry extends class_base
 				"name" => "range_select",
 				"options" => $opts,
 			));
-			if (!$_GET["range_from"])
+			if (!$_fGET["range_from"])
 			{
 				$range_from = get_week_start($ranges[0]["from"]);
 				$range_to = $ranges[0]["to"];
@@ -711,6 +712,35 @@ class spa_bookigs_entry extends class_base
 			die(t("Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"));
 		}
 
+		$pkt = obj($arr["pkt"]);
+		$reserved_days = array();
+		if ($pkt->prop("max_usage_in_time") > 0)
+		{
+			// get reservations in the selected timespan. 
+			// if on some days the count is iver the edge
+			// block that day
+			$rvs = new object_list(array(
+				"class_id" => CL_RESERVATION,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ,$range_from),
+				"end" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ,$range_to),
+			));
+			$count_by_day = array();
+			foreach($rvs->arr() as $rv)
+			{
+				$count_by_day[date("d.m.Y", $rv->prop("start1"))]++;
+			}
+
+			foreach($count_by_day as $date => $count)
+			{
+				if ($count >= $pkt->prop("max_usage_in_time"))
+				{
+					$reserved_days[$date] = 1;
+				}
+			}
+		}
+
 		// get reservation length from product
 		$prod_obj = obj($arr["prod"]);
 		$prod_inst = $prod_obj->instance();
@@ -746,6 +776,12 @@ class spa_bookigs_entry extends class_base
 					{
 						$avail = true;
 					}
+				}
+
+				$date_str = date("d.m.Y", $range_from+($i*24*3600));
+				if ($reserved_days[$date_str])
+				{
+					$avail = false;
 				}
 				if ($h*$time_step < $d_from || $h*$time_step > $d_to)
 				{

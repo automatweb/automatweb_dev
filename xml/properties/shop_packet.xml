@@ -26,6 +26,25 @@
             <caption>Hind</caption>
       </property>
       <property>
+            <name>max_usage_in_time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Maksimaalne toodete kasutamise arv</caption>
+      </property>
+      <property>
+            <name>max_usage_in_time_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Aja&amp;amp;uuml;hik</caption>
+      </property>
+      <property>
             <name>packet_tb</name>
             <table>objects</table>
             <group>packet</group>

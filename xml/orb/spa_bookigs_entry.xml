@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="booking" type="int" />
 					<required name="prod" type="int" />
+					<optional name="pkt" type="int" />
 				</arguments>
 			</function>
 		</action>
