@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.14 2006/11/15 13:07:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.15 2006/11/21 12:18:53 markop Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -149,11 +149,19 @@ class shop_packet extends class_base
 		$this->_init_packet_table($arr["prop"]["vcl_inst"]);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
+			if(isset($pd[$c->prop("to")]))
+			{
+				$value = $pd[$c->prop("to")];
+			} 
+			else
+			{
+				$value = 1;
+			}
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"name" => html::obj_change_url($c->to()),
 				"count" => html::textbox(array(
 					"name" => "pd[".$c->prop("to")."]",
-					"value" => $pd[$c->prop("to")],
+					"value" => $value,
 					"size" => 5
 				)),
 				"oid" => $c->prop("to")
