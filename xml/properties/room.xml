@@ -11,6 +11,16 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>short_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>textbox</type>
+            <caption>Nime l&amp;amp;uuml;hend</caption>
+      </property>
+      <property>
             <name>location</name>
             <table>objects</table>
             <field>meta</field>
@@ -67,14 +77,16 @@
             <caption>Valdkond</caption>
       </property>
       <property>
-            <name>reservation_template</name>
+            <name>professions</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <parent>general_up</parent>
-            <type>select</type>
-            <caption>Broneeringu template</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROFESSION</reltype>
+            <multiple>1</multiple>
+            <caption>Ametinimetused</caption>
       </property>
       <property>
             <name>conditions</name>
@@ -573,6 +585,11 @@
                   <clid>CL_OPENHOURS</clid>
                   <caption>Avamisajad</caption>
             </OPENHOURS>
+            <PROFESSION>
+                  <value>12</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Ametinimetus</caption>
+            </PROFESSION>
       </reltypes>
       <layout>
             <general_split>

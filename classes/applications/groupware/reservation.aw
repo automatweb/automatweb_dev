@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.15 2006/11/16 14:58:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.16 2006/11/21 12:05:47 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -57,6 +57,9 @@
 	
 	property code type=hidden size=5 table=planner field=code
 	caption Kood
+
+	@property people type=select field=meta method=serialize
+	@caption Org. esindajad
 
 	@property sum type=text field=meta method=serialize
 	@caption Summa
@@ -146,6 +149,32 @@ class reservation extends class_base
 					return PROP_IGNORE; 
 				}
 				break;
+			case "people":
+				if(is_oid($arr["obj_inst"]->meta("resource")))
+				{
+					$room = obj($arr["obj_inst"]->meta("resource"));
+				}
+				else
+				{
+					if(is_oid($arr["request"]["resource"]))
+					{
+						$room = obj($arr["request"]["resource"]);
+					}
+				}
+				if(is_object($room))
+				{
+					$professions = $room->prop("professions");
+					if(is_array($professions) && sizeof($professions))
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_CRM_PERSON,
+							"lang_id" => array(),
+							"CL_CRM_PERSON.RELTYPE_RANK" => $professions,
+						));
+						$prop["options"] = $ol->names();
+					}
+				}
+				
 //			case "sum":
 //				break;
 		};

@@ -124,6 +124,16 @@
             <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
+            <name>people</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Org. esindajad</caption>
+      </property>
+      <property>
             <name>sum</name>
             <table>objects</table>
             <group>general</group>

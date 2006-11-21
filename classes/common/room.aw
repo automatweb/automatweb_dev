@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.41 2006/11/16 14:57:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.42 2006/11/21 12:05:45 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -22,6 +22,9 @@
 		@property name type=textbox field=name method=none
 		@caption Nimi
 
+		@property short_name type=textbox
+		@caption Nime l&uuml;hend
+
 		@property location type=relpicker reltype=RELTYPE_LOCATION
 		@caption Asukoht
 
@@ -37,8 +40,11 @@
 		@property area type=relpicker reltype=RELTYPE_AREA
 		@caption Valdkond
 
-		@property reservation_template type=select
-		@caption Broneeringu template
+		@property professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1
+		@caption Ametinimetused
+	
+		property reservation_template type=select
+		caption Broneeringu template
 
 	@layout general_down type=vbox closeable=1 area_caption=Mahutavus&#44;&nbsp;kasutustingimused parent=general_split
 	@default parent=general_down
@@ -210,6 +216,8 @@ caption Ruumi hind
 @reltype OPENHOURS value=44 clid=CL_OPENHOURS
 @caption Avamisajad
 
+@reltype PROFESSION value=12 clid=CL_CRM_PROFESSION
+@caption Ametinimetus
 */
 
 class room extends class_base
