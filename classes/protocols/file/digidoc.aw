@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/file/digidoc.aw,v 1.2 2006/11/16 12:27:12 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/file/digidoc.aw,v 1.3 2006/11/21 14:29:44 tarvo Exp $
 // digidoc.aw - DigiDoc 
 /*
 
@@ -41,9 +41,9 @@ class digidoc extends class_base
 		$connection = $this->getconnect();
 		$this->client = new soap_client ( dd_wsdl, true, false, $connection);
 		
-		$this->wsdl = new webservice_digidocservice_digidocservice();
+		$this->WSDL = new webservice_digidocservice_digidocservice();
 				
-		$this->browser = file::getbrowser();
+		$this->browser = digidocFile::getbrowser();
 		
 		$this->ns = $this->client->_wsdl->definition['targetnamespace'];
 	}
@@ -105,7 +105,7 @@ class digidoc extends class_base
 				$wsdl = new SOAP_WSDL( DD_WSDL, $connection );
 				$wcode = $wsdl->generateProxyCode();
 				eval( $wcode );
-				File::saveLocalFile( DD_WSDL_FILE, "<?php\n".$wcode."\n?".">");	
+				digidocFile::saveLocalFile( DD_WSDL_FILE, "<?php\n".$wcode."\n?".">");	
 			} 
 	}
 

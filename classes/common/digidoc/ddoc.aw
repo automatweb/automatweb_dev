@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.2 2006/11/20 06:17:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.3 2006/11/21 14:29:43 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -25,6 +25,7 @@
 @groupinfo signatures caption="Allkirjad"
 @default group=signatures
 
+	@property sig_tb type=toolbar no_caption=1
 	@property signatures type=table no_caption=1
 */
 
@@ -36,6 +37,17 @@ class ddoc extends class_base
 			"tpldir" => "common/digidoc//ddoc",
 			"clid" => CL_DDOC
 		));
+
+		// a temporary fix here.. i dont know how or where i'm gonna put the fucking conf file
+		$loc = aw_ini_get("basedir")."/../public/vv_files/digidoctest/conf.php";
+		include_once($loc);
+		include_once(aw_ini_get("basedir")."/addons/pear/SOAP/WSDL.php");
+
+		// total mess.. sick fuck, etc..
+		classload("protocols/file/digidoc");
+		classload("common/digidoc/ddoc_parser");
+		digidoc::load_WSDL();
+		$this->digidoc = get_instance("protocols/file/digidoc");
 	}
 
 	function get_property($arr)
@@ -64,8 +76,8 @@ class ddoc extends class_base
 				));
 				include_once("automatweb/vv_digidoc/conf.php");
 				$ddoc_parser = get_instance(CL_DDOC_PARSER);
-				//$files = $ddoc_parser->getFilesInfo($this->get_ddoc($arr["obj_inst"]->id()));
-				//$files = $ddoc_parser->Parse($this->get_ddoc($arr["obj_inst"]->id()), "");
+
+				$files = isset($xml['SignedDocInfo']['DataFileInfo'][0]) ? $xml['SignedDocInfo']['DataFileInfo'] : (isset($xml['SignedDocInfo']['DataFileInfo'])? array(0=>$xml['SignedDocInfo']['DataFileInfo']): array() ); 
 				$files = $ddoc_parser->files($this->get_ddoc($arr["obj_inst"]->id()), "");
 				foreach($files as $id => $data)
 				{
@@ -76,37 +88,58 @@ class ddoc extends class_base
 					));
 				}
 				break;
+			case "sig_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_cdata("siia siis tulevad allkirjade eemaldamise && lisamise nupud");
+				break;
 			case "signatures":
 				$t = &$prop["vcl_inst"];
 				$t->define_field(array(
 					"name" => "name",
-					"caption" => t("Fail"),
+					"caption" => t("Allkirjastaja"),
 				));
 				$t->define_field(array(
-					"name" => "type",
-					"caption" => t("T&uuml;&uuml;p"),
+					"name" => "time",
+					"caption" => t("Allkirjastamise aeg"),
 				));
 				$t->define_field(array(
-					"name" => "size",
-					"caption" => t("Suurus"),
+					"name" => "location",
+					"caption" => t("Allkirjastamise asukoht"),
 				));
 				
+				// well, basically what this does is that it initializes wsdl session with webservice(if not done already)
+				// thing is that maybe i should put a better check here.. not just session variable check? ... in the other hand, this is tehe most fool-proof
+				unset($_SESSION["scode"]);
+				if(!$_SESSION["scode"])
+				{
+					$this->_start_ddoc_session($arr["obj_inst"]->id());
+				}
+
 				$ddoc_parser = get_instance(CL_DDOC_PARSER);
-				classload("protocols/file/digidoc");
-				digidoc::load_WSDL();
-				$dd = new digidoc();
-				$dd->addHeader('SessionCode', $_SESSION['scode']);
-				$ret = $dd->WSDL->GetSignedDocInfo();
+
+				$xml = $ddoc_parser->Parse($this->digidoc->WSDL->xml, 'body');
+				//$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+				//$ret = $this->digidoc->WSDL->GetSignedDocInfo();
 				if(PEAR::isError($ret))
 				{
+					arr();arr();arr();
+					arr("ERROR: " . htmlentities($ret->getMessage()) . "<br>\n", FALSE);
 					return PROP_IGNORE;
-					//message("ERROR: " . htmlentities($ret->getMessage()) . "<br>\n", FALSE);
 					//echo back(TRUE);
 				}
-				include_once("automatweb/vv_digidoc/conf.php");
 				//$signs = $ddoc_parser->getSignaturesInfo($this->get_ddoc($arr["obj_inst"]->id()), "");
-				$signs = $ddoc_parser->getSignaturesInfo($ret);
-				arr($signs);
+				//$signs = $ddoc_parser->getSignaturesInfo($ret);
+
+
+				$signatures = isset($xml['SignedDocInfo']['SignatureInfo'][0]) ? $xml['SignedDocInfo']['SignatureInfo'] : (isset($xml['SignedDocInfo']['SignatureInfo']) ? array(0=>$xml['SignedDocInfo']['SignatureInfo']) : array() );
+				foreach($signatures as $sig)
+				{
+					$t->define_data(array(
+						"name" => $sig["Signer"]["CommonName"],
+						"time" => $sig["SigningTime"],
+						"location" => strlen($sig["SignatureProductionPlace"]["City"])?$sig["SignatureProductionPlace"]["City"]:t("M&aauml;&aauml;ramata"),
+					));
+				}
 				break;
 
 		};
@@ -147,6 +180,7 @@ class ddoc extends class_base
 				}
 
 				$cl_file = get_instance(CL_FILE);
+
 				if (is_uploaded_file($file))
 				{
 					
@@ -183,8 +217,12 @@ class ddoc extends class_base
 				}
 				else
 				{
-					$retval = PROP_IGNORE;
+					return PROP_IGNORE;
+					//$retval = PROP_IGNORE;
 				};
+
+				$this->_clear_old();
+				$this->_create_aw_files_from_ddoc($arr["obj_inst"]->id());
 				break;
 			case "ddoc_location":
 				$retval = PROP_IGNORE;
@@ -224,6 +262,72 @@ class ddoc extends class_base
 		}
 		$o = obj($oid);
 		return file_get_contents($o->prop("ddoc_location"));
+	}
+
+	/**
+		@comment
+			starts ddoc session
+		@returns
+			if everything is ok, returns false. otherwise error string will be returned.
+	**/
+	function _start_ddoc_session($oid)
+	{
+		if(!is_oid($oid))
+		{
+			return false;
+		}
+		$o = obj($oid);
+		# laadime sisu digidoc parserisse
+		$ddoc = new ddoc_parser($this->get_ddoc($oid));
+		# alustame sessiooni, saates parsitud digidoci
+		$ret = $this->digidoc->WSDL->startSession($ddoc->getDigiDoc( LOCAL_FILES ), TRUE, '');
+		if(!PEAR::isError($ret))
+		{ # kui operatsioon oli edukas
+			$_SESSION['scode'] = $xml['sesscode'];
+			$_SESSION["ddoc_name"] = $o->name();
+			return false;
+		}
+		else
+		{
+			return htmlentities($ret->getMessage());;
+		} //else
+	}
+	function close_ddoc_session()
+	{
+		$ret = $this->digidoc->WSDL->closeSession($_SESSION["scode"]);
+		if(!PEAR::isError($ret))
+		{
+			unset($_SESSION["scode"], $_SESSION["ddoc_name"]);
+			return false;
+		}
+		else
+		{
+			return htmlentities($ret->getMessage());
+		}
+	}
+
+	function _create_aw_files_from_ddoc($oid)
+	{
+		$this->_start_ddoc_session($oid);
+		$parser = get_instance(CL_DDOC_PARSER);
+		$data = $parser->Parse($this->digidoc->WSDL->xml, 'body');
+		arr($data);
+		/*
+		file::create_file_from_string(array(
+			id,
+			parent,
+			content,
+			name,
+		));
+		*/
+		$this->_close_ddoc_session();
+	}
+
+	function _clear_old()
+	{
+		// clear relations to files, docus
+		// clear thingies from metadata
+		// realtions to persons (signatures)
 	}
 }
 ?>

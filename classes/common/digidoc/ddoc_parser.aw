@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.4 2006/11/20 06:17:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.5 2006/11/21 14:29:43 tarvo Exp $
 // ddoc_parser.aw - DigiDoc Parser 
 /*
 
@@ -60,7 +60,7 @@ class ddoc_parser extends class_base
 	
 
 
-	function ddoc_parser()
+	function ddoc_parser($xml)
 	{
 		$this->init(array(
 			"tpldir" => "common/digidoc/ddoc_parser",
@@ -70,8 +70,6 @@ class ddoc_parser extends class_base
 		// ddoc crap
 		//session_start(); //i dont think i need this one in here
 		
-		// a temporary fix here.. i dont know how or where i'm gonna put the fucking conf file
-		include_once(aw_ini_get("basedir")."/automatweb/vv_digidoc/conf.php");
 		$this->xml = $xml;
 		$this->xmlarray = $xml?$this->Parse($this->xml):false;
 		$this->setDigiDocFormatAndVersion();
@@ -267,7 +265,6 @@ class ddoc_parser extends class_base
 		$files = $this->_getFilesXML($this->xml);
 		$nXML = $this->xml;
 		$func = $withLocalFiles ? 'file2hash' : 'hash2file';
-	
 		while(list(,$file) = each($files)){
 			$nXML = str_replace($file, $this->$func($file), $nXML);
 		} //while
@@ -298,10 +295,10 @@ class ddoc_parser extends class_base
 			return $xml;
 		} else {
 			preg_match("'Id=\"(.*)\"'Us", $xml, $match);	$Id = $match[1]; // Saame teada faili identifikaatori
-			File::SaveLocalFile( $this->workPath.$_SESSION['doc_id'].'_'.$Id, $xml); // salvestame algfaili
+			digidocFile::SaveLocalFile( $this->workPath.$_SESSION['doc_id'].'_'.$Id, $xml); // salvestame algfaili
 			$hash = base64_encode(pack("H*", sha1(str_replace("\r\n","\n",$xml) ) ) ); // Arvutame andmefaili bloki räsi
-
 			$hashonlyxml = preg_replace('/>((.|\n|\r)*)<\//', ' DigestValue="'.$hash.'"></', $xml); // Moodustame serverisse saadetava andmefaili bloki eemaldades andmefaili sisu
+
 			$hashonlyxml = str_replace('ContentType="EMBEDDED_BASE64"', 'ContentType="HASHCODE"', $hashonlyxml);
 
 			$hashonlyxml=$xml; // Urmo ajutiselt niikauaks kui teenus verifitseerimisel DigestValue väärtust korralikult ei kontrolli
@@ -666,7 +663,7 @@ class digidocFile{
 	 * @return    mixed
 	 */
 	function saveLocalFile($name, $content){
-		$name = File::FixEstFileName($name);
+		$name = digidocFile::FixEstFileName($name);
 		if(touch($name)){
 			$fh = fopen($name, 'wb');
 			fwrite($fh, $content);
@@ -693,7 +690,7 @@ class digidocFile{
 			$ret['type'] = $name;
 
 			if (!is_dir(DD_UPLOAD_DIR))
-				File::DirMake(DD_UPLOAD_DIR);
+				digidocFile::DirMake(DD_UPLOAD_DIR);
 
 //				if(File::DirMake(DD_UPLOAD_DIR) != DIR_ERR_OK)
 
@@ -702,7 +699,7 @@ class digidocFile{
 					$ret['size'] = $_FILES[$name]['size'];
 					$ret['MIME'] = $_FILES[$name]['type']!=""?$_FILES[$name]['type']:" ";
 					$ret['error'] = $_FILES[$name]['error'];
-					$ret['content'] = File::readLocalFile( DD_UPLOAD_DIR.$_FILES[$name]['name'] );
+					$ret['content'] = digidocFile::readLocalFile( DD_UPLOAD_DIR.$_FILES[$name]['name'] );
 					unlink(DD_UPLOAD_DIR.$_FILES[$name]['name']);
 			} else {
 				$ret['error'] = '999: Cannot move uploaded file !!!';
