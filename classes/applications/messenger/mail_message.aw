@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.36 2006/06/20 16:13:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.37 2006/11/21 11:23:29 markop Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -232,6 +232,23 @@ class mail_message extends class_base
 			{
 				$name = $adr->name();
 			}
+			
+			if($adr->class_id() == CL_CRM_PERSON)
+			{
+				if(is_oid($address))
+				{
+					$address_obj = obj($address);
+				}
+				else 
+				{
+					$address_obj = $adr->get_first_obj_by_reltype("RELTYPE_EMAIL");
+				}
+				if(is_object($address_obj))
+				{
+					$address = $address_obj->prop("mail");
+				}
+			}
+			
 		}		
 		
 		// jesus fucking christ, I hate this approach
@@ -286,9 +303,6 @@ class mail_message extends class_base
 			Header("Location: $url");
 			die();
 		};
-
-
-
 		if ($msgobj->prop("html_mail") == 1)
 		{
 			$this->awm->create_message(array(
@@ -306,6 +320,18 @@ class mail_message extends class_base
 		}
 		else
 		{
+			if(!$msgobj->prop("message") && $this->message)
+			{
+				$this->awm->create_message(array(
+					"froma" => $address,
+					"fromn" => $name,
+					"subject" => $msgobj->name(),
+					"to" => $msgobj->prop("mto"),
+					"cc" => $msgobj->prop("cc"),
+					"bcc" => $msgobj->prop("bcc"),
+					"body" => $this->message,
+				));
+			}
 			$this->awm->create_message(array(
 				"froma" => $address,
 				"fromn" => $name,
@@ -492,10 +518,40 @@ class mail_message extends class_base
 					$prop["autocomplete_source"] = $this->mk_my_orb ("get_autocomplete");
 					$prop["autocomplete_params"] = array("mto");
 				};
+				
+				//loodan, et see mujal toimuvat ei mõjuta
+				//crmist maili saatmisel seda vaja siis
+				if($arr["request"]["mto"])
+				{
+					$prop["type"] = "textbox";
+					$prop["value"] = $arr["request"]["mto"];
+				}
+				
 				break;
 
 			case "mfrom":
 				$this->gen_identities(&$arr);
+				if(is_oid($arr["request"]["mfrom"]))
+				{
+					$prop["value"] = $arr["request"]["mfrom"];
+					$mfrom_obj = obj($arr["request"]["mfrom"]);
+					$email = $mfrom_obj->prop("email");
+					if(is_oid($email))
+					{
+						$email_obj = obj($email);
+					}
+					else
+					{
+						$email_obj = $mfrom_obj->get_first_obj_by_reltype("RELTYPE_EMAIL");
+					}
+					if(is_object($email_obj))
+					{
+						$email_obj_str = $email_obj->prop("mail");
+					}
+					$prop["options"] = array(
+						$prop["value"] => $mfrom_obj->prop("name"),
+					);
+				}
 				break;
 
 			case "edit_toolbar":
@@ -531,7 +587,7 @@ class mail_message extends class_base
 						"message",
 					),
 				));
-				
+				//
 			break;
 
 		}
@@ -1246,10 +1302,12 @@ class mail_message extends class_base
 		{
 			$msgid = $arr["msgid"];
 		}
+		$this->message = $arr["message"];
 		$this->send_message(array(
 			"id" => $msgid,
 		));
-
+		
+		
 		// I'll also have to move the message from drafts folder to the outbox
 		// if there is such a thing that is
 
@@ -1268,7 +1326,7 @@ class mail_message extends class_base
 			{
 				$from = $adr->name();
 			}
-		}	
+		}
 		$msgr->drv_inst->store_message(array(
 			"from" => $from,
 			"date" => time(),
@@ -1277,10 +1335,14 @@ class mail_message extends class_base
 			"subject" => $arr["name"],
 			"message" => $this->awm->bodytext,
 		));
-                
+               
 		
 		//print t("saadetud<p>");
-		//print "<a href='javascript:window.close();'>".t("sulge aken")."</a>";
+		if($adr->class_id() == CL_CRM_PERSON && $arr["return_url"])
+		{
+			return $arr["return_url"];
+		//	print '<script type="text/JavaScript">window.close();</script>';
+		}
 	}
 
 	////
