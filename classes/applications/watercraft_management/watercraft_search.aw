@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.6 2006/10/17 15:00:24 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.7 2006/11/21 14:12:54 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -104,66 +104,6 @@ class watercraft_search extends class_base
 			'price' => t('Hind')
 		);
 	
-
-		// XXX siia peaks panem chooserid, info ja koguse propid ka
-		// ja kuidagi peab siis raalima, et mis sinna tekstikasti pandi
-		// ja otsima selle järgi nii selle j2rgi, et kas see prop on valitud
-		// see s6na leidub info v2ljas, v6is matchib kogus.	
-/*
-		$this->additional_equipment_elements = array(
-			'electricity_110V_sel' => t('Elekter 110V'),
-			'electricity_220V_sel' => t('Elekter 220V'),
-			'radio_station_sel' => t('Raadiojaam'),
-			'stereo_sel' => t('Stereo'),
-			'cd_sel' => t('CD'),
-			'waterproof_speakers_sel' => t('Veekindlad k&otilde;larid'),
-			'burglar_alarm_sel' => t('Signalisatsioon'),
-			'navigation_system_sel' => t('Navigatsioonis&uuml;steem'),
-			'navigation_lights_sel' => t('Navigatsioonituled'),
-			'trailer_sel' => t('Treiler'),
-			'toilet_sel' => t('Tualett'),
-			'shower_sel' => t('Dush'),
-			'lifejacket_sel' => t('P&auml;&auml;stevest'),
-			'swimming_ladder_sel' => t('Ujumisredel'),
-			'awning_sel' => t('Varikatus'),
-			'kitchen_cooker_sel' => t('K&ouml;&ouml;k/Pliit'),
-			'vendrid_sel' => t('Vendrid'),
-			'fridge_sel' => t('K&uuml;lmkapp'),
-			'anchor_sel' => t('Ankur'),
-			'oars_sel' => t('Aerud'),
-			'tv_video_sel' => t('TV-video'),
-			'fuel_sel' => t('K&uuml;te'),
-			'water_tank_sel' => t('Veepaak'),
-			'life_boat_sel' => t('P&auml;&auml;stepaat'),
-
-			'electricity_110V_info' => t('Elekter 110V'),
-			'electricity_220V_info' => t('Elekter 220V'),
-			'radio_station_info' => t('Raadiojaam'),
-			'stereo_info' => t('Stereo'),
-			'cd_info' => t('CD'),
-			'waterproof_speakers_info' => t('Veekindlad k&otilde;larid'),
-			'burglar_alarm_info' => t('Signalisatsioon'),
-			'navigation_system_info' => t('Navigatsioonis&uuml;steem'),
-			'navigation_lights_info' => t('Navigatsioonituled'),
-			'trailer_info' => t('Treiler'),
-			'toilet_info' => t('Tualett'),
-			'shower_info' => t('Dush'),
-			'lifejacket_info' => t('P&auml;&auml;stevest'),
-			'swimming_ladder_info' => t('Ujumisredel'),
-			'awning_info' => t('Varikatus'),
-			'kitchen_cooker_info' => t('K&ouml;&ouml;k/Pliit'),
-			'vendrid_info' => t('Vendrid'),
-			'fridge_info' => t('K&uuml;lmkapp'),
-			'anchor_info' => t('Ankur'),
-			'oars_info' => t('Aerud'),
-			'tv_video_info' => t('TV-video'),
-			'fuel_info' => t('K&uuml;te'),
-			'water_tank_info' => t('Veepaak'),
-			'life_boat_info' => t('P&auml;&auml;stepaat'),
-
-			
-		);
-*/
 		$this->additional_equipment_elements = array(
 			'electricity_110V' => t('Elekter 110V'),
 			'electricity_220V' => t('Elekter 220V'),

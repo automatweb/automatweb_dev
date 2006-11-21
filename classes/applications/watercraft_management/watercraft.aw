@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.7 2006/10/13 13:24:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.8 2006/11/21 14:12:54 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -703,7 +703,6 @@ class watercraft extends class_base
 		}
 		return $retval;
 	}	
-
 	
 	function _get_images_toolbar($arr)
 	{
@@ -1039,7 +1038,7 @@ class watercraft extends class_base
 			if (is_oid($id) && $this->can("delete", $id))
 			{
 				$object = new object($id);
-				$object->delete();
+				$object->delete(true);
 			}
 		}
 		return $arr['post_ru'];
@@ -1098,14 +1097,14 @@ class watercraft extends class_base
 				water_tank_sel int,
 				life_boat_sel int,
 
-				length float,
-				width float,
-				height float,
-				weight float,
-				draught float,
-				fuel_tank float,
-				engine_power float,
-				price float,
+				length double,
+				width double,
+				height double,
+				weight double,
+				draught double,
+				fuel_tank double,
+				engine_power double,
+				price double,
 
 				watercraft_type_other varchar(255),
 				body_material_other varchar(255),
@@ -1212,7 +1211,7 @@ class watercraft extends class_base
 			case 'price':
 				$this->db_add_col($table, array(
 					'name' => $field,
-					'type' => 'float'
+					'type' => 'double'
 				));
                                 return true;
 			case 'watercraft_type_other':
