@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.3 2006/11/21 15:01:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.4 2006/11/21 15:43:34 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -84,7 +84,7 @@ class spa_bookigs_entry extends class_base
 	function spa_bookigs_entry()
 	{
 		$this->init(array(
-			"tpldir" => "applications/spa_bookings/spa_bookigs_entry",
+			"tpldir" => "applications/spa_bookings/spa_bookings_entry",
 			"clid" => CL_SPA_BOOKIGS_ENTRY
 		));
 	}
@@ -372,6 +372,11 @@ class spa_bookigs_entry extends class_base
 			"caption" => t("Lisa"),
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "print",
+			"caption" => t("Prindi"),
+			"align" => "center",
+		));
 	}
 
 	function _get_s_res($arr)
@@ -398,6 +403,10 @@ class spa_bookigs_entry extends class_base
 				"add_p" => html::href(array(
 					"url" => html::get_new_url(CL_SPA_BOOKING, $arr["obj_inst"]->prop("persons_folder"), array("return_url" => get_ru(), "from_b" => $item->id())),
 					"caption" => t("Lisa samale isikule uus")
+				)),
+				"print" => html::href(array(
+					"caption" => t("Prindi"),
+					"url" => $this->mk_my_orb("print_booking", array("id" => $item->id()))
 				))
 			));
 		}
@@ -608,7 +617,10 @@ class spa_bookigs_entry extends class_base
 					"resizable" => 1
 				));
 				$t->define_data(array(
-					"booking" => $o->name(),
+					"booking" => $o->name()." ".html::href(array(
+						"url" => $this->mk_my_orb("print_booking", array("id" => $o->id())),
+						"caption" => t("Prindi")
+					)),
 					"name" => $prod->name(),
 					"when" => $date
 				));
@@ -874,6 +886,42 @@ class spa_bookigs_entry extends class_base
 			}
 		}
 		die(t("Vahepeal on valitud aeg broneeritud!"));
+	}
+
+	/**
+		@attrib name=print_booking
+		@param id required
+	**/
+	function print_booking($arr)
+	{
+		$b = obj($arr["id"]);
+		$this->read_template("booking.tpl");
+
+		$this->vars(array(
+			"bureau" => $b->createdby(),
+			"person" => $b->prop_str("person"),
+			"package" => $b->prop_str("package"),
+			"from" => date("d.m.Y", $b->prop("start")),
+			"to" => date("d.m.Y", $b->prop("end"))
+		));
+
+		// now, list all bookings for rooms 
+		$dates = $b->meta("booking_dates");
+		$books = "";
+		foreach($dates as $entry)
+		{
+			$ro = obj($entry["room"]);
+			$this->vars(array(
+				"r_from" => date("d.m.Y H:i", $entry["from"]),
+				"r_to" =>  date("d.m.Y H:i", $entry["to"]),
+				"r_room" => $ro->name()
+			));
+			$books .= $this->parse("BOOKING");
+		}
+		$this->vars(array(
+			"BOOKING" => $books
+		));
+		die($this->parse());
 	}
 }
 ?>

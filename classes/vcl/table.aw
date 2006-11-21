@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.96 2006/11/14 17:38:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.97 2006/11/21 15:43:34 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1960,6 +1960,12 @@ class aw_table extends aw_template
 		foreach($rgroupby as $rgel)
 		{
 			$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v[$rgel]);
+			$links = true;
+			if (strpos($_a, "http") === false)
+			{
+				$links = false;
+				$_a = $v[$rgel];
+			}
 			if ($this->lgrpvals[$rgel] != $_a)
 			{
 				// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
@@ -1979,7 +1985,14 @@ class aw_table extends aw_template
 						"name" => "span",
 						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
 					));
-					$tbl.= create_links($_a);
+					if ($links)
+					{
+						$tbl.= create_links($_a);
+					}
+					else
+					{
+						$tbl .= $_a;
+					}
 					$tbl .= "</span>";
 				}
 				else
@@ -1993,7 +2006,14 @@ class aw_table extends aw_template
 					{
 						$tbl .= $rgroupby_sep[$rgel]["real_sep_before"];
 					}
-					$tbl.= create_links($_a);
+					if ($links)
+					{
+						$tbl.= create_links($_a);
+					}
+					else
+					{
+						$tbl .= $_a;
+					}
 				}
 
 				$this->lgrpvals[$rgel] = $_a;
