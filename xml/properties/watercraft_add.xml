@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>watercraft_type</name>
+            <table>watercraft_add</table>
+            <group>general</group>
+            <type>select</type>
+            <field>watercraft_type</field>
+            <caption>Aluse t&amp;amp;uuml;&amp;amp;uuml;p </caption>
+      </property>
+      <property>
             <name>watercraft_management</name>
             <table>watercraft_add</table>
             <group>general</group>
@@ -9,6 +17,26 @@
             <field>watercraft_management</field>
             <caption>Vees&amp;amp;otilde;idukite haldus</caption>
       </property>
+      <property>
+            <name>required_fields_table</name>
+            <table>objects</table>
+            <group>required_fields</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>required_fields_table</field>
+            <caption>Kohustuslikud v&amp;amp;auml;ljad</caption>
+      </property>
+      <property>
+            <name>pages_table</name>
+            <table>objects</table>
+            <group>pages</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>pages_table</field>
+            <caption>Lehek&amp;amp;uuml;ljed</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_WATERCRAFT_ADD</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -16,6 +44,14 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <required_fields>
+                  <caption>Kohustuslikud v&amp;amp;auml;ljad</caption>
+            </required_fields>
+            <pages>
+                  <caption>Lehek&amp;amp;uuml;ljed</caption>
+            </pages>
+      </groupinfo>
       <tableinfo>
             <watercraft_add>
                   <index>oid</index>
