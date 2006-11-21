@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.3 2006/11/21 14:29:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.4 2006/11/21 14:36:42 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -20,13 +20,19 @@
 @groupinfo files caption="Failid"
 @default group=files
 	
+	@property file_tb type=toolbar no_caption=1
 	@property files type=table no_caption=1
+
 
 @groupinfo signatures caption="Allkirjad"
 @default group=signatures
 
-	@property sig_tb type=toolbar no_caption=1
+	@property signature_tb type=toolbar no_caption=1
 	@property signatures type=table no_caption=1
+
+# hidden meta fields for 'cacheing'
+@property files type=hidden field=meta method=serialize
+@property signatures type=hidden field=meta method=serialize
 */
 
 class ddoc extends class_base

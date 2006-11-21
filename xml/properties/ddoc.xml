@@ -27,22 +27,38 @@
             <caption>asukoht</caption>
       </property>
       <property>
-            <name>files</name>
+            <name>file_tb</name>
             <table>objects</table>
             <group>files</group>
-            <type>table</type>
+            <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>files</field>
+            <field>file_tb</field>
+      </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>signatures</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>signature_tb</name>
+            <table>objects</table>
+            <group>signatures</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>signature_tb</field>
       </property>
       <property>
             <name>signatures</name>
             <table>objects</table>
             <group>signatures</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>signatures</field>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
       </property>
       <classinfo>
             <syslog_type>ST_DDOC</syslog_type>
