@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.16 2006/11/21 12:05:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.17 2006/11/21 16:34:28 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -57,6 +57,9 @@
 	
 	property code type=hidden size=5 table=planner field=code
 	caption Kood
+
+	@property client_arrived type=chooser field=meta method=serialize
+	@caption Klient saabus
 
 	@property people type=select field=meta method=serialize
 	@caption Org. esindajad
@@ -148,6 +151,13 @@ class reservation extends class_base
 				{
 					return PROP_IGNORE; 
 				}
+				break;
+			case "client_arrived":
+				$prop["options"] = array("Ei" , "Jah");
+//				if(!$prop["value"])
+//				{
+//					$prop["value"] = 0;
+//				}
 				break;
 			case "people":
 				if(is_oid($arr["obj_inst"]->meta("resource")))
@@ -587,5 +597,36 @@ class reservation extends class_base
 		$reservation = obj($reservation);
 		return $reservation->meta("order_times");
 	}
+	
+	/**
+		@attrib name=mark_arrived_popup params=name all_args=1
+		@param bron required type=oid
+			products and their amounts
+	**/
+	function mark_arrived_popup($arr)
+	{
+		extract($arr);
+		if(is_oid($bron) && $this->can("view" , $bron))
+		{
+			$bron_obj = obj($bron);
+			if(isset($_POST[$bron]))
+			{
+				$bron_obj->set_prop("client_arrived" , $_POST[$bron]);
+				$bron_obj->save();
+				die("<script type='text/javascript'>window.close();</script>");
+			}
+			$ret = "<form method=POST action=".get_ru().">";
+			$ret.= t("Broneering : ");
+			$ret.= date("h:i" , $bron_obj->prop("start1"));
+			$ret.= "-";
+			$ret.= date("h:i" , $bron_obj->prop("end"));
+			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 0 , "caption" => t("Klient ei ilmunud kohale")));
+			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 1 , "caption" => t("Klient ilmus kohale")));
+			$ret.= "\n<br>".html::submit(array("name" => "submit", "value" => t("M&auml;rgi")));
+			$ret.="</form>";
+		}
+		die($ret);
+	}
+	
 }
 ?>

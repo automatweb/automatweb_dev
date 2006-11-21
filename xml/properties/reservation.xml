@@ -124,6 +124,16 @@
             <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
+            <name>client_arrived</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klient saabus</caption>
+      </property>
+      <property>
             <name>people</name>
             <table>objects</table>
             <group>general</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.42 2006/11/21 12:05:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.43 2006/11/21 16:37:13 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -353,6 +353,38 @@ class room extends class_base
 		return $retval;
 	}
 
+	function last_reservation_arrived_not_set($room)
+	{
+		if(!(is_object($room)))
+		{
+			return false;
+		}
+		
+		$reservations = new object_list(array(
+			"class_id" => array(CL_RESERVATION),
+			"lang_id" => array(),
+			"resource" => $room->id(),
+			"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, time() - 84600, time()),
+		));
+ 		$result = array();
+  		foreach($reservations->arr() as $res)
+  		{
+			if(($res->prop("client_arrived") == null)  && ($res->prop("verified") || $res->prop("deadline") > time()))
+			{
+				$result[$res->prop("end")] = $res->id();
+			}
+  		}
+		usort($result);
+		if(sizeof($result))
+		{
+			return end($result);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	function set_property($arr = array())
 	{
 		/*
@@ -385,6 +417,9 @@ class room extends class_base
 						$prop["value"] = $warehouse->config->prop("prod_fld");
 					}
 				}
+				break;
+			case "deadline": 
+				$prop["value"] = time() + 15*60;
 				break;
 			//-- set_property --//
 		}
@@ -837,6 +872,12 @@ class room extends class_base
 	function _get_calendar_select($arr)
 	{
 		$ret = "";
+		if($bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]))
+		{
+			$reservaton_inst = get_instance(CL_RESERVATION);
+			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=300')
+			</script>";
+		}
 		$ret.= t("Vali sobiv ajavahemik: ");
 		$x=0;
 		$options = array();
@@ -930,13 +971,15 @@ class room extends class_base
 						
 					)))
 					{
+						$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
 						$arr["timestamp"] = $start_step;
 						if($arr["obj_inst"]->prop("use_product_times"))
 						{
+							$arr["menu_id"] = "menu_".$start_step;
 							$prod_menu = $this->get_prod_menu($arr);
 						}
 						$d[$x] = "<span>".t("Vaba")."</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'0')). " " . $prod_menu;
-						$onclick[$x] = "doBron(this);";
+						$onclick[$x] = "doBron(this,".($step_length * $arr["obj_inst"]->prop("time_step")).")";
 					}
 					else
 					{
@@ -958,6 +1001,7 @@ class room extends class_base
 				{
 					$d[$x] = "<span>".t("Suletud")."</span>";
 				}
+				//$ids[$x] = $arr["room"]."_".$start_step;
 				$ids[$x] = $start_step;
 				$x++;
 				$start_step += 86400;
@@ -1019,7 +1063,7 @@ class room extends class_base
 		$this->prod_data = $room->meta("prod_data");
 		
 		$image_inst = get_instance(CL_IMAGE);
-		$pm->begin_menu("sf"."234234");
+		$pm->begin_menu($arr["menu_id"]);
 //		foreach($prod_list->arr() as $prod)
 //		{
 /*			$pm->add_item(array(
@@ -1044,8 +1088,8 @@ class room extends class_base
 		{
 			$pm->add_item(array(
 				"text" => $prod->name(),
-				"link" => "javascript: dontExecutedoBron=1;void(0)",
-				"onClick" => "onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"].");",
+				"link" => "javascript:dontExecutedoBron=1;void(0)",
+				"onClick" => "doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"]." , ".$arr["step_length"].");",
 			),"CL_ROOM");
 		}
 
@@ -1172,10 +1216,20 @@ class room extends class_base
 					$cal = $cal_obj->id();
 					$parent = $cal_obj->prop("event_folder");
 					$step = $room->prop("time_step");
+					if (!$parent)
+					{
+						$parent = $cal_obj->id();
+					}
+					
+					
 			}
 		}
 		//arr($arr); arr($start); arr($end);
 		//die();
+		if (!$parent)
+		{
+			$parent = $arr["id"];
+		}
 		return $this->mk_my_orb(
 			"new",
 			array(
@@ -1563,7 +1617,7 @@ class room extends class_base
 			"align" => "center"
 		));
 
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"sortable" => 1,
 			"name" => "cnt",
 			"caption" => t("Kogus laos"),
@@ -1576,7 +1630,7 @@ class room extends class_base
 			"caption" => t("V&otilde;ta laost"),
 			"align" => "center"
 		));
-
+*/
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),
@@ -2416,8 +2470,17 @@ class room extends class_base
 	
 	function callback_generate_scripts($arr)
 	{
-		return '';
+		return 'doLoad(600000);
+			var sURL = unescape(window.location.href);
+			function doLoad()
+			{
+			setTimeout( "refresh()", 600000 );
+			}
+			function refresh()
+			{
+				window.location.href = sURL;
+			}
+		';
 	}
-
 }
 ?>
