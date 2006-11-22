@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.108 2006/11/22 13:59:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.109 2006/11/22 14:08:50 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2473,7 +2473,6 @@ class webform extends class_base
 		$form_data = $_SESSION['wf_data'];
 
 		$vars = array();
-//		foreach ($form_data as $name => $value)
 		foreach ($props as $name => $prop_data)
 		{
 			switch ($prop_data['type'])
