@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.107 2006/11/22 12:17:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.108 2006/11/22 13:59:45 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2473,30 +2473,33 @@ class webform extends class_base
 		$form_data = $_SESSION['wf_data'];
 
 		$vars = array();
-
-		foreach ($form_data as $name => $value)
+//		foreach ($form_data as $name => $value)
+		foreach ($props as $name => $prop_data)
 		{
-			switch ($props[$name]['type'])
+			switch ($prop_data['type'])
 			{
 				case 'date_select':	
-					foreach ($value as $k => $v)
+					foreach ($form_data['value'] as $k => $v)
 					{
 						$vars[$name.'_'.$k] = $v;
 					}
 					break;
 				case 'classificator':
-					if ($this->can('view', $value))
+					if ($this->can('view', $form_data['value']))
 					{
-						$classificator_obj = obj($value);
+						$classificator_obj = obj($form_data['value']);
 						$vars[$name] = $classificator_obj->name();
 					}
 					break;
+				case 'text':
+					$vars[$name] = $prop_data['value'];
+					break;
 				default:
-					$vars[$name] = $value;
+					$vars[$name] = $form_data[$name];
 					
 			}
 
-			$vars[$name.'_caption'] = $props[$name]['caption'];
+			$vars[$name.'_caption'] = $prop_data['caption'];
 		}
 		$vars['reforb'] = $this->mk_reforb('save_form_data', array(
 			'id' => $arr['id'],
