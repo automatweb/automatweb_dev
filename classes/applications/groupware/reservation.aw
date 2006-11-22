@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.17 2006/11/21 16:34:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.18 2006/11/22 15:28:28 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -63,6 +63,9 @@
 
 	@property people type=select field=meta method=serialize
 	@caption Org. esindajad
+
+	@property products_text type=text submit=no
+	@caption Toode
 
 	@property sum type=text field=meta method=serialize
 	@caption Summa
@@ -151,6 +154,10 @@ class reservation extends class_base
 				{
 					return PROP_IGNORE; 
 				}
+				if(!$prop["value"])
+				{
+					$prop["value"] = time() + 15*60;
+				}
 				break;
 			case "client_arrived":
 				$prop["options"] = array("Ei" , "Jah");
@@ -159,6 +166,20 @@ class reservation extends class_base
 //					$prop["value"] = 0;
 //				}
 				break;
+				
+			case "products_text":
+				$amount = $arr["obj_inst"]->meta("amount");
+				$val = array();
+				foreach($amount as $product => $amt)
+				{
+					if($amt)
+					{
+						$prod=obj($product);
+						$val[] = $prod->name();
+					}
+				}
+				$prop["value"] = join($val , ",");
+				break;	
 			case "people":
 				if(is_oid($arr["obj_inst"]->meta("resource")))
 				{
@@ -181,7 +202,7 @@ class reservation extends class_base
 							"lang_id" => array(),
 							"CL_CRM_PERSON.RELTYPE_RANK" => $professions,
 						));
-						$prop["options"] = $ol->names();
+						$prop["options"] = array("") + $ol->names();
 					}
 				}
 				
@@ -627,6 +648,6 @@ class reservation extends class_base
 		}
 		die($ret);
 	}
-	
+
 }
 ?>

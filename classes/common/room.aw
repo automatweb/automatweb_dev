@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.43 2006/11/21 16:37:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.44 2006/11/22 15:27:13 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -826,6 +826,259 @@ class room extends class_base
 			)
 		));
 	}
+	
+	/**
+		@attrib name=admin_add_bron_popup params=name all_args=1
+		@param start1 required type=int
+			start
+		@param parent required type=oid
+			parent
+		@param end required type=int
+			end
+		@param resource required type=int
+			room
+		@param product optional type=int
+			chosen product
+		@param return_url optional type=string
+			url for opener window
+	**/
+	function admin_add_bron_popup($arr)
+	{
+		extract($arr);
+//		arr($arr);
+		extract($_POST["bron"]);
+		
+		
+		$room = obj($resource);
+		$professions = $room->prop("professions");
+		if(is_array($professions) && sizeof($professions))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"CL_CRM_PERSON.RELTYPE_RANK" => $professions,
+			));
+			$people_opts = array("") + $ol->names();
+		}
+		
+		if(is_array($_POST["bron"]))
+		{
+			$room_inst = get_instance(CL_ROOM);
+			$start1 = mktime($start1["hour"], $start1["minute"], 0, $start1["month"], $start1["day"], $start1["year"]);
+			$end = mktime($end["hour"], $end["minute"], 0, $end["month"], $end["day"], $end["year"]);
+			
+			if(!$room_inst->check_if_available(array(
+				"room" => $resource,
+				"start" => $start1,
+				"end" => $end,
+			)) && $room_inst->last_bron_id !=$id)
+			{
+				$err = t("Sellisele ajale pole broneerida v&otilde;imalik");
+			}
+			else
+			{
+				if(is_oid($id) && $this->can("view" , $id))
+				{
+					$bron = obj($id);
+				}
+				else
+				{
+					$bron = new object();
+					$bron->set_class_id(CL_RESERVATION);
+					$bron->set_parent($parent);
+					$bron->set_prop("resource", $resource);
+					if($product)
+					{
+						$bron->set_meta("amount" ,array($product => 1));
+					}
+				}
+				$bron->set_prop("start1", $start1);
+				$bron->set_prop("end" ,$end);
+				$bron->set_prop("content" , $comment);
+				$bron->set_prop("verified" , 1);
+				if(is_oid($people) && $this->can("view" , $people))
+				{
+					$bron->set_prop("people" , $people);
+				}
+				if(strlen($phone))
+				{
+					$phones = new object_list(array(
+						"lang_id" => array(),
+						"class_id" => CL_CRM_PHONE,
+						"name" => $phone,
+					));
+					if(!sizeof($phones->arr()))
+					{
+						$phone_obj = new object();
+						$phone_obj->set_class_id(CL_CRM_PHONE);
+						$phone_obj->set_name($phone);
+						$phone_obj->set_prop("type" , "mobile");
+						$phone_obj->set_parent($parent);
+						$phone_obj->save();
+					}
+					else
+					{
+						$phone_obj = reset($phones->arr());
+					}
+				}
+				
+				if(strlen($firstname) || strlen($lastname))
+				{
+					$persons = new object_list(array(
+						"lang_id" => array(),
+						"class_id" => CL_CRM_PERSON,
+						"firstname" => $firstname,
+						"lastname" => $lastname,
+					));
+					if(!sizeof($persons->arr()))
+					{
+						$person = new object();
+						$person->set_class_id(CL_CRM_PERSON);
+						$person->set_parent($parent);
+						$person->set_name($firstname." ".$lastname);
+						$person->set_prop("firstname" , $firstname);
+						$person->set_prop("lastname" , $lastname);
+						$person->save();
+					}
+					else
+					{
+						$person = reset($persons->arr());
+					}
+					$bron->set_prop("customer",$person->id());
+					$bron->connect(array("to" => $person->id(), "reltype" => 1));
+					if(strlen($phone))
+					{
+						$person->connect(array("to"=> $phone_obj->id(), "type" => "RELTYPE_PHONE"));
+					}
+				}
+				
+				if(strlen($company))
+				{
+					$companys = new object_list(array(
+						"lang_id" => array(),
+						"class_id" => CL_CRM_Company,
+						"name" => $company,
+					));
+					if(!sizeof($companys->arr()))
+					{
+						$co = new object();
+						$co->set_class_id(CL_CRM_COMPANY);
+						$co->set_parent($parent);
+						$co->set_name($company);
+						$co->save();
+					}
+					else
+					{
+						$co = reset($companys->arr());
+					}
+					$bron->set_prop("customer",$co->id());
+					$bron->connect(array("to" => $co->id(), "reltype" => 1));
+					if(strlen($phone))
+					{
+						$co->connect(array("to"=> $phone_obj->id(), "type" => "RELTYPE_PHONE"));
+					}
+				}
+				$bron->save();
+				$id = $bron->id();
+			}
+		}
+		
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));
+		
+		$t->define_field(array(
+			"name" => "caption",
+		));
+		$t->define_field(array(
+			"name" => "value",
+		));
+
+		$t->define_data(array(
+			"caption" => t("Algusaeg"),
+			"value" => html::datetime_select(array(
+				"name" => "bron[start1]",
+				"value" => $start1,
+			)),
+		));
+		$t->define_data(array(
+			"caption" => t("L&otilde;ppaeg"),
+			"value" => html::datetime_select(array(
+				"name" => "bron[end]",
+				"value" => $end,
+			)),
+		));
+			
+		$t->define_data(array(
+			"caption" => t("Eesnimi"),
+			"value" => html::textbox(array(
+				"name" => "bron[firstname]",
+				"size" => 5,
+				"value" => $firstname,
+			)),
+		));
+			
+		$t->define_data(array(
+			"caption" => t("Perenimi"),
+			"value" => html::textbox(array(
+				"name" => "bron[lastname]",
+				"size" => 5,
+				"value" => $lastname,
+			)),
+		));
+			
+		$t->define_data(array(
+			"caption" => t("Organisatsioon"),
+			"value" => html::textbox(array(
+				"name" => "bron[company]",
+				"size" => 5,
+				"value" => $company,
+			)),
+		));
+		
+		$t->define_data(array(
+			"caption" => t("Telefon"),
+			"value" => html::textbox(array(
+				"name" => "bron[phone]",
+				"size" => 5,
+				"value" => $phone,
+			)),
+		));
+			
+		$t->define_data(array(
+			"caption" => t("Märkused"),
+			"value" => html::textarea(array(
+				"name" => "bron[comment]",
+				"size" => 5,
+				"value" => $comment,
+			)),
+		));	
+			
+		$t->define_data(array(
+			"caption" => t("Meie esindaja"),
+			"value" => html::select(array(
+				"name" => "bron[people]",
+				"value" => $people,
+				"options" => $people_opts,
+			)),
+		));	
+		
+		$t->define_data(array(
+			"value" => html::submit(array(
+				"value" => t("Salvesta"),
+			)),
+		));	
+		
+		$t->define_data(array(
+			"value" => html::hidden(array(
+				"name" => "bron[id]",
+				"value" => $id,
+			)),
+		));
+		die($err.html::form(array("method" => "POST", "content" => $t->draw())));
+	}
+	
 /*	
 	function create_room_calendar ($arr)
 	{
@@ -1191,7 +1444,7 @@ class room extends class_base
 		$t->set_sortable(false);
 	}
 
-	//see ruumi sees tehes, eeldusel, et pärast liigub edasi reserveerimise objekti vaatesse, kus valib asju
+	//see ruumi sees tehes, eeldusel, et pärast liigub edasi reserveerimise objekti vaatesse, kus valib asju... tregelt nüüd juba popup kõigepealt
 	/**
 		@attrib name=do_add_reservation params=name all_args=1
 		@param id required oid
@@ -1224,12 +1477,28 @@ class room extends class_base
 					
 			}
 		}
+		$product = $_SESSION[$id]["product"];
 		//arr($arr); arr($start); arr($end);
 		//die();
 		if (!$parent)
 		{
 			$parent = $arr["id"];
 		}
+		
+		die("<script type='text/javascript'>
+			window.open('".$this->mk_my_orb("admin_add_bron_popup", array(
+				"parent" => $parent,
+				"calendar" => $cal,
+				"start1" => $start,
+				"end" => $end,
+				"resource" => $arr["id"],
+				"return_url" => $arr["post_ru"],
+				"product" => $product,
+			))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=600');
+			 
+			window.location.href='".$arr["post_ru"]."';
+		</script>");
+		
 		return $this->mk_my_orb(
 			"new",
 			array(
@@ -2400,7 +2669,7 @@ class room extends class_base
 
 	/**
 		@attrib params=name
-		@param id required type=oid
+		@param room required type=oid
 			room id
 		@param start required type=int
 		@param end required type=int
