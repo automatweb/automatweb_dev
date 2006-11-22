@@ -23,6 +23,15 @@
             <caption>Pluginad</caption>
       </property>
       <property>
+            <name>brother_warning</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>brother_warning</field>
+      </property>
+      <property>
             <name>title</name>
             <table>documents</table>
             <group>general</group>

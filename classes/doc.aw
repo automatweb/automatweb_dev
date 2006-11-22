@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.142 2006/10/16 21:43:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.143 2006/11/22 13:17:19 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -17,6 +17,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 	@property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize trans=1
 	@caption Pluginad
+
+	@property brother_warning type=text store=no no_caption=1
 
 	@property title type=textbox size=60 trans=1
 	@caption Pealkiri
@@ -353,6 +355,17 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "brother_warning":
+				if ($arr["obj_inst"]->is_brother())
+				{
+					$data["value"] = t("NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik!");
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "doc_content_type":
 				$ol = new object_list(array("class_id" => CL_DOCUMENT_CONTENT_TYPE, "lang_id" => array(), "site_id" => array()));
 				$data["options"] = $ol->names();
