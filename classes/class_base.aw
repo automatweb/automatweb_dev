@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.518 2006/10/27 12:43:53 kristo Exp $
+// $Id: class_base.aw,v 2.519 2006/11/22 13:38:17 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4703,7 +4703,7 @@ class class_base extends aw_template
 
 			$property_groups[$key] = $propgroups;
 		};
-
+		
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
@@ -4718,6 +4718,10 @@ class class_base extends aw_template
 			};
 
 			$propdata = array_merge($all_properties[$key],$val);
+			if ($propdata["type"] == "submit")
+			{
+				$propdata["value"] = $propdata["caption"];
+			}
 			// XXX: cfgform defaults are supported for checkboxes only right now
 			if ($propdata["type"] == "checkbox" && empty($val["default"]))
 			{
@@ -4767,7 +4771,6 @@ class class_base extends aw_template
 			// shouldn't I do some kind of overriding?
 			$tmp[$key] = $propdata;
 		};
-
 		$this->use_group = $use_group;
 		return $tmp;
 
@@ -4905,7 +4908,6 @@ class class_base extends aw_template
 				};
 				$tmp[$gkey] = $gval;
 			};
-
 			$this->groupinfo = $tmp;
 			// if the class has a default config file, then load
 			// that as well
