@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.5 2006/11/21 14:29:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.6 2006/11/22 14:30:48 tarvo Exp $
 // ddoc_parser.aw - DigiDoc Parser 
 /*
 
@@ -60,7 +60,7 @@ class ddoc_parser extends class_base
 	
 
 
-	function ddoc_parser($xml)
+	function ddoc_parser($xml = false)
 	{
 		$this->init(array(
 			"tpldir" => "common/digidoc/ddoc_parser",
@@ -139,7 +139,6 @@ class ddoc_parser extends class_base
 
 		$xml2 = $us->getUnserializedData();
 
-
 		$body = $xml2['SOAP-ENV:Body'];
 
 		$body = @current($body);
@@ -192,6 +191,7 @@ class ddoc_parser extends class_base
 		foreach($index["DATAFILE"] as $v)
 		{
 			$ret[$vals[$v]["attributes"]["ID"]] = $vals[$v]["attributes"];
+			$ret[$vals[$v]["attributes"]["ID"]]["VALUE"] = $vals[$v]["value"];
 		}
 		return $ret;
 	}
@@ -241,8 +241,6 @@ class ddoc_parser extends class_base
 	{
 		$p = xml_parser_create();
 		xml_parse_into_struct($p, $xml, $vals, $index);
-		arr($vals);
-		arr($index);
 		foreach($index["SIGNATURE"] as $v)
 		{
 			$ret[] = $vals[$v];

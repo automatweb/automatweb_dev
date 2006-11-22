@@ -27,13 +27,40 @@
             <caption>asukoht</caption>
       </property>
       <property>
-            <name>file_tb</name>
+            <name>files_tb</name>
             <table>objects</table>
             <group>files</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>file_tb</field>
+            <field>files_tb</field>
+      </property>
+      <property>
+            <name>files_tbl</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>files_tbl</field>
+      </property>
+      <property>
+            <name>signatures_tb</name>
+            <table>objects</table>
+            <group>signatures</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>signatures_tb</field>
+      </property>
+      <property>
+            <name>signatures_tbl</name>
+            <table>objects</table>
+            <group>signatures</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>signatures_tbl</field>
       </property>
       <property>
             <name>files</name>
@@ -42,15 +69,6 @@
             <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-      </property>
-      <property>
-            <name>signature_tb</name>
-            <table>objects</table>
-            <group>signatures</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>signature_tb</field>
       </property>
       <property>
             <name>signatures</name>
