@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.109 2006/11/22 14:08:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.110 2006/11/22 14:50:06 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2458,6 +2458,7 @@ class webform extends class_base
 	function draw_confirm_page($arr)
 	{
 
+		// webform object
 		if ($this->can('view', $arr['id']))
 		{
 			$o = new object($arr['id']);
@@ -2468,8 +2469,14 @@ class webform extends class_base
 		}
 
 		$this->read_template($o->prop('confirm_page_template'));
-		$cfgform = $o->get_first_obj_by_reltype('RELTYPE_CFGFORM');
-		$props = safe_array($cfgform->meta("cfg_proplist"));
+//		$cfgform = $o->get_first_obj_by_reltype('RELTYPE_CFGFORM');
+//		$props = safe_array($cfgform->meta("cfg_proplist"));
+
+		$object_type = $o->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
+		$cfgform_i = get_instance(CL_CFGFORM);
+		$props = $cfgform_i->get_props_from_ot(array(
+			"ot" => $object_type->id()
+		));
 		$form_data = $_SESSION['wf_data'];
 
 		$vars = array();
