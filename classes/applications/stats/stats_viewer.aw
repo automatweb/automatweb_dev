@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.2 2006/11/13 08:20:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.3 2006/11/22 13:57:13 kristo Exp $
 // stats_viewer.aw - Statistika 
 /*
 
@@ -111,6 +111,9 @@
 
 			@property s_ip_except type=checkbox ch_value=1  parent=s_left no_caption=1
 			@caption IP Aadress v&auml;ljaarvatud
+
+			@property s_referer type=textbox parent=s_left
+			@caption Referer
 
 		@layout s_right type=vbox closeable=1 area_caption=Tulemused parent=s
 
@@ -762,6 +765,11 @@ class stats_viewer extends class_base
 			{
 				$sql[] = " s.ip = '".$r["s_ip"]."' ";
 			}
+		}
+
+		if ($r["s_referer"] != "")
+		{
+			$sql[] = " s.referer like '".$r["s_referer"]."' ";
 		}
 
 		if (count($r["s_objs"]))
