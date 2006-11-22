@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.136 2006/10/13 08:25:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.137 2006/11/22 11:36:44 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -359,9 +359,9 @@ class file extends class_base
 					$fc = fopen($final_name, "w");
 					fwrite($fc, $data["value"]["content"]);
 					fclose($f);
-					$data["value"] = $final_name;
 					$arr["obj_inst"]->set_name($data["value"]["name"]);
 					$arr["obj_inst"]->set_prop("type", "text/html");
+					$data["value"] = $final_name;
 					$this->file_type = "text/html";
 				}
 				else
