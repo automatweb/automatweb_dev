@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.106 2006/11/20 13:50:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.107 2006/11/22 12:17:11 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2582,10 +2582,18 @@ class webform extends class_base
 			{
 				$this->read_template("disp/".$wf->prop("disp_after_entry"));
 			}
+
+			$object_type = $wf->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
+			$cfgform_i = get_instance(CL_CFGFORM);
+			$els = $cfgform_i->get_props_from_ot(array(
+				"ot" => $object_type->id()
+			));
+		
 			foreach($obj->properties() as $pn => $pv)
 			{
 				$this->vars(array(
-					$pn => $obj->prop_str($pn)
+					$pn => $els[$pn]["type"] == "text" ? $els[$pn]["value"] : $obj->prop_str($pn),
+					$pn."_caption" => $els[$pn]["caption"]
 				));
 			}
 			$this->vars(array(
