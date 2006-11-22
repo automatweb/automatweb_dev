@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.44 2006/11/22 15:27:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.45 2006/11/22 16:01:14 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1194,13 +1194,21 @@ class room extends class_base
 		$this->_init_calendar_t($t,$arr["request"]["start"]);
 
 		//see siis näitab miskeid valitud muid nädalaid
+		
+		$start_hour = 0;
+		$start_minute = 0;
+		if(is_object($this->openhours))
+		{
+			extract($this->get_when_opens());
+		}
+		
 		if($arr["request"]["start"])
 		{
 			$today_start = $arr["request"]["start"];
 		}
 		else
 		{
-			$today_start = mktime(0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
+			$today_start = mktime($start_hour, $start_minute, 0, date("n", time()), date("j", time()), date("Y", time()));
 		}
 
 		$step = 0;
@@ -1289,6 +1297,18 @@ class room extends class_base
 			}
 			$step = $step + 1;
 		}
+	}
+	
+	function get_when_opens()
+	{
+		if(!$this->open_inst)
+		{
+			$this->open_inst = get_instance(CL_OPENHOURS);
+		}
+		$start_hour = 0;
+		$start_minute = 0;
+		$opens = $this->open_inst->get_opening_time($this->openhours);
+		return array("start_hour" => $opens["hour"], "start_minute" => $opens["minute"]);
 	}
 	
 	function is_open($start,$end)
