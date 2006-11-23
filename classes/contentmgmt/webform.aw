@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.110 2006/11/22 14:50:06 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.111 2006/11/23 12:27:36 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2469,8 +2469,6 @@ class webform extends class_base
 		}
 
 		$this->read_template($o->prop('confirm_page_template'));
-//		$cfgform = $o->get_first_obj_by_reltype('RELTYPE_CFGFORM');
-//		$props = safe_array($cfgform->meta("cfg_proplist"));
 
 		$object_type = $o->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$cfgform_i = get_instance(CL_CFGFORM);
@@ -2519,7 +2517,7 @@ class webform extends class_base
 		));
 		$vars['not_confirmed_button'] = html::submit(array(
 			'name' => 'not_confirmed',
-			'value' => t('Ei kinnitatud'),
+			'value' => t('Tagasi'),
 			'class' => 'confirm_button'
 		));
 		$this->vars($vars);
