@@ -279,9 +279,21 @@ class date_edit
 
 		if (is_admin() || $buttons === true)
 		{
+			// make those date button images configurable
+			$date_choose_img_url = aw_ini_get('date_edit.date_choose_img_url');
+			if (empty($date_choose_img_url))
+			{
+				$date_choose_img_url = '/automatweb/images/icons/class_126.gif';
+			}
+			$date_clear_img_url = aw_ini_get('date_edit.date_clear_img_url');
+			if (empty($date_clear_img_url))
+			{
+				$date_clear_img_url = '/automatweb/images/icons/delete.gif';
+			}
+
 			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."'>";
-			$retval .= "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/class_126.gif' border='0'></a> ";	
-			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+			$retval .= "<img src='".aw_ini_get('baseurl').$date_choose_img_url."' border='0'></a> ";	
+			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'><img src='".aw_ini_get('baseurl').$date_clear_img_url."' border=0></a>";
 		}
 
 		return $retval;
