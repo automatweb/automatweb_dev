@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.22 2006/10/04 13:34:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.23 2006/11/23 13:07:22 dragut Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -25,29 +25,29 @@ default field=meta
 default method=serialize
 
 
-property utextbox1 type=textbox table=planner
-caption Userdefined textbox 1
+@property utextbox1 type=textbox table=planner
+@caption Userdefined textbox 1
 
-property utextbox2 type=textbox table=planner
-caption Userdefined textbox 2
+@property utextbox2 type=textbox table=planner
+@caption Userdefined textbox 2
 
-property utextbox3 type=textbox table=planner
-caption Userdefined textbox 3
+@property utextbox3 type=textbox table=planner
+@caption Userdefined textbox 3
 
-property utextbox4 type=textbox table=planner
-caption Userdefined textbox 4
+@property utextbox4 type=textbox table=planner
+@caption Userdefined textbox 4
 
-property utextbox5 type=textbox table=planner
-caption Userdefined textbox 5
+@property utextbox5 type=textbox table=planner
+@caption Userdefined textbox 5
 
-property utextbox6 type=textbox table=planner
-caption Userdefined textbox 6
+@property utextbox6 type=textbox table=planner
+@caption Userdefined textbox 6
 
-property utextbox7 type=textbox table=planner
-caption Userdefined textbox 7
+@property utextbox7 type=textbox table=planner
+@caption Userdefined textbox 7
 
-property utextbox8 type=textbox table=planner
-caption Userdefined textbox 8
+@property utextbox8 type=textbox table=planner
+@caption Userdefined textbox 8
 
 // saving the place and price property values to planner table right now
 // to utextbox9 and utextbox10 so i can save those utextbox properties above

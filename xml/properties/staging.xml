@@ -39,6 +39,70 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
+            <name>utextbox1</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>utextbox1</field>
+            <caption>Userdefined textbox 1</caption>
+      </property>
+      <property>
+            <name>utextbox2</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>utextbox2</field>
+            <caption>Userdefined textbox 2</caption>
+      </property>
+      <property>
+            <name>utextbox3</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>utextbox3</field>
+            <caption>Userdefined textbox 3</caption>
+      </property>
+      <property>
+            <name>utextbox4</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>utextbox4</field>
+            <caption>Userdefined textbox 4</caption>
+      </property>
+      <property>
+            <name>utextbox5</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>utextbox5</field>
+            <caption>Userdefined textbox 5</caption>
+      </property>
+      <property>
+            <name>utextbox6</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>utextbox6</field>
+            <caption>Userdefined textbox 6</caption>
+      </property>
+      <property>
+            <name>utextbox7</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>utextbox7</field>
+            <caption>Userdefined textbox 7</caption>
+      </property>
+      <property>
+            <name>utextbox8</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>utextbox8</field>
+            <caption>Userdefined textbox 8</caption>
+      </property>
+      <property>
             <name>place</name>
             <table>planner</table>
             <group>general</group>
