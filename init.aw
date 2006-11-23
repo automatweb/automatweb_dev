@@ -138,12 +138,6 @@ function parse_config($file)
 							$code = substr($code, 0, $i)."\"".substr($code, $i);
 						}
 					}
-
-					if (!isset($res[$arrname]) || !is_array($res[$arrname]))
-					{
-						$res[$arrname] = array();
-					}
-
 					$code2 = "\$res".substr($code,28);
 					eval($code2);
 					eval($code);
@@ -461,7 +455,16 @@ function lc_load($file)
 function lc_site_load($file,&$obj)
 {
 //	enter_function("__global::lc_site_load",array());
-	$LC = aw_global_get("admin_lang_lc");
+	//$LC = aw_global_get("admin_lang_lc");
+
+	if (aw_ini_get("user_interface.full_content_trans") == 1)
+	{
+		$LC = aw_global_get("ct_lang_lc");
+	}
+	else
+	{
+		$LC = aw_global_get("LC");
+	}
 	if ($LC == "")
 	{
 		$LC = "et";
