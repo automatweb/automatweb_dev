@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.8 2006/10/06 12:50:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.9 2006/11/23 15:05:03 dragut Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
@@ -669,6 +669,7 @@ class xml_export extends class_base
 			"parent" => $parent_ids,
 			"class_id" => $object_type_subclass_id,
 			"modified" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $last_modified),
+			"site_id" => array(),
 			"sort_by" => "objects.modified",
 		);
 		if (!empty($exp_objects_count))
