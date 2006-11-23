@@ -7,11 +7,7 @@
 		</tr>
 		<tr>
 			<td>Tehingu t&uuml;&uuml;p</td>
-			<td>{VAR:deal_type}{VAR:eal_type_error}</td>
-		</tr>
-		<tr>
-			<td>Aluse t&uuml;&uuml;p</td>
-			<td>{VAR:watercraft_type}{VAR:watercraft_type_error}</td>
+			<td>{VAR:deal_type}{VAR:deal_type_error}</td>
 		</tr>
 		<tr>
 			<td>Tootja</td>
