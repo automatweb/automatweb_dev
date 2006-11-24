@@ -1343,6 +1343,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->has_lang_id = true;
 			}
 
+			
 			$tbl = "objects";
 			$fld = $key;
 
@@ -1471,13 +1472,23 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 									$v_data = "";
 									break;
 
+								case OBJ_COMP_IN_TIMESPAN:
+									break;
+
 								default:
 									error::raise(array(
 										"id" => ERR_OBJ_COMPARATOR,
-										"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value supplied, was: %s!"), $val->comparator)
+										"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ,OBJ_COMP_NULL,OBJ_COMP_IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
 									));
 							}
 		
+							if ($val->comparator == OBJ_COMP_IN_TIMESPAN)
+							{
+								$tbl_fld1 = $this->_get_tablefield_from_prop($val->data[0]);
+								$tbl_fld2 = $this->_get_tablefield_from_prop($val->data[1]);
+								$sql[] = " (NOT ($tbl_fld1 >= '".$val->data2[1]."' OR $tbl_fld2 <= '".$val->data2[0]."')) ";
+							}
+							else
 							if ($val->comparator == OBJ_COMP_NULL)
 							{
 								$sql[] = $tf." & ".((int)$this->properties[$key]["ch_value"])." IS NULL ";
@@ -1628,13 +1639,23 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$v_data = "";
 							break;
 
+						case OBJ_COMP_IN_TIMESPAN:
+							break;
+
 						default:
 							error::raise(array(
 								"id" => ERR_OBJ_COMPARATOR,
-								"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value supplied, was: %s!"), $val->comparator)
+								"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ,OBJ_COMP_NULL,OBJ_COMP_IN_TIMESPAN. the value supplied, was: %s!"), $val->comparator)
 							));
 					}
 
+					if ($val->comparator == OBJ_COMP_IN_TIMESPAN)
+					{
+						$tbl_fld1 = $this->_get_tablefield_from_prop($val->data[0]);
+						$tbl_fld2 = $this->_get_tablefield_from_prop($val->data[1]);
+						$sql[] = " (NOT ($tbl_fld1 >= '".$val->data2[1]."' OR $tbl_fld2 <= '".$val->data2[0]."')) ";
+					}
+					else
 					if ($val->comparator == OBJ_COMP_NULL)
 					{
 						$sql[] = $tf." IS NULL ";
@@ -2893,6 +2914,52 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("UPDATE objects SET brother_of = '$oid' WHERE brother_of = '$brof'");
 		$this->db_query("UPDATE aliases SET source = '$oid' WHERE source = '$brof'");
 		$this->db_query("UPDATE aliases SET target = '$oid' WHERE target = '$brof'");
+	}
+
+	/** returns table.field, for the given prop **/
+	function _get_tablefield_from_prop($key, $val=null, $p_tmp=null)
+	{
+		$tbl = "objects";
+		$fld = $key;
+
+		// check for dots in key. if there are any, then we gots some join thingie
+		if (strpos($key, ".") !== false)
+		{
+			list($tbl, $fld) = $this->_do_proc_complex_param(array(
+				"key" => &$key, 
+				"val" => $val, 
+				"params" => $p_tmp
+			));
+		}
+		else
+		if (isset($this->properties[$key]) && $this->properties[$key]["store"] != "no")
+		{
+			$tbl = $this->properties[$key]["table"];
+			$fld = $this->properties[$key]["field"];
+			if ($fld == "meta")
+			{
+				if ($this->properties[$key]["store"] != "connect")
+				{
+					$this->meta_filter[$key] = $val;
+					continue;
+				}
+			}
+			else
+			if ($this->properties[$key]["method"] == "serialize")
+			{
+				error::raise(array(
+					"id" => ERR_FIELD,
+					"msg" => sprintf(t("filter cannot contain properties (%s) that are in serialized fields other than metadata!"), $key)
+				));
+			}
+			$this->used_tables[$tbl] = $tbl;
+		}
+
+		if ($tbl != "objects")
+		{
+			$this->has_data_table_filter = true;
+		}
+		return $tbl.".`".$fld."`";
 	}
 }
 

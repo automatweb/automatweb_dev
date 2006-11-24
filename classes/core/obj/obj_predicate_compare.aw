@@ -8,6 +8,7 @@ define("OBJ_COMP_BETWEEN", 16);
 define("OBJ_COMP_EQUAL", 32);
 define("OBJ_COMP_BETWEEN_INCLUDING", 64);
 define("OBJ_COMP_NULL", 128);
+define("OBJ_COMP_IN_TIMESPAN", 256);
 
 class obj_predicate_compare
 {
@@ -25,6 +26,7 @@ class obj_predicate_compare
 		OBJ_COMP_EQUAL (32) - values equal to $data
 		OBJ_COMP_BETWEEN_INCLUDING (64) - values between and $data and $data2, including $data & $data2 themselves
 		OBJ_COMP_NULL (128) - value NULL
+		OBJ_COMP_IN_TIMESPAN (256) - takes two arrays as parameters, first has two entries containing the properties defining the timespan, second is an array containing two elements, defining the searchable timespan
 		
 		@param data required type=string
 		data to compared
