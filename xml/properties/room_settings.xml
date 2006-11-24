@@ -1,5 +1,83 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>max_times_per_day</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Maksimaalne aegade arv samal p&amp;amp;auml;eval</caption>
+      </property>
+      <property>
+            <name>users</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_USER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajad</caption>
+      </property>
+      <property>
+            <name>persons</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_PERSON</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Isikud</caption>
+      </property>
+      <property>
+            <name>cos</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_COMPANY</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Organisatsioonid</caption>
+      </property>
+      <property>
+            <name>sects</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_SECTION</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Osakonnad</caption>
+      </property>
+      <property>
+            <name>profs</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_PROFESSION</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ametinimetused</caption>
+      </property>
+      <property>
+            <name>everyone</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>flags</field>
+            <caption>K&amp;amp;otilde;ik</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ROOM_SETTINGS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +85,37 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <whom>
+                  <caption>Kellele kehtib</caption>
+            </whom>
+      </groupinfo>
+      <reltypes>
+            <USER>
+                  <value>1</value>
+                  <clid>CL_USER</clid>
+                  <caption>Kasutaja</caption>
+            </USER>
+            <PERSON>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Isik</caption>
+            </PERSON>
+            <COMPANY>
+                  <value>4</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Organisatsioon</caption>
+            </COMPANY>
+            <SECTION>
+                  <value>5</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Osakond</caption>
+            </SECTION>
+            <PROFESSION>
+                  <value>6</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Ametinimetus</caption>
+            </PROFESSION>
+      </reltypes>
 </properties>
 

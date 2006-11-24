@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.49 2006/11/24 15:25:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.50 2006/11/24 15:59:49 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -79,6 +79,9 @@
 		
 		@property use_product_times type=checkbox parent=general_down no_caption=1
 		@caption Kasuta toodetele määratud aegu
+		
+		@property settings type=relpicker parent=general_down multiple=1 reltype=RELTYPE_SETTINGS
+		@caption Seaded
 		
 valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva täiendava info selle valdkonna objektitüübi kaudu, nt konverentsid).
 - puhveraeg enne (mitu tundi enne reserveeringu algust lisaks bronnitakse ruumide ettevalmistamiseks)
@@ -218,6 +221,10 @@ caption Ruumi hind
 
 @reltype PROFESSION value=12 clid=CL_CRM_PROFESSION
 @caption Ametinimetus
+
+@reltype SETTINGS value=13 clid=CL_ROOM_SETTINGS
+@caption Ametinimetus
+
 */
 
 class room extends class_base
