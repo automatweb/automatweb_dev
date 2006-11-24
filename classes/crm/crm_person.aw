@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.150 2006/11/08 16:01:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.151 2006/11/24 14:27:47 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -128,6 +128,9 @@ caption Kodused kontaktandmed
 
 @property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type reltype=RELTYPE_PHONE choose_default=1 always_show_add=1 no_toolbar=1
 @caption Telefoninumbrid
+
+@property fax type=releditor table=objects field=meta method=serialize mode=manager props=name table_fields=name reltype=RELTYPE_FAX choose_default=1 always_show_add=1 no_toolbar=1
+@caption Faksinumbrid
 
 @property url type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_URL props=url table_fields=url choose_default=1 always_show_add=1 no_toolbar=1
 @caption Veebiaadressid
@@ -363,6 +366,15 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 @property udef_ta5 type=textarea rows=5 cols=50
 @caption Kasutajadefineeritud TA5
 
+@property uservar1 type=classificator field=aw_varuser1 reltype=RELTYPE_VARUSER1 store=connect
+@caption User-defined var 1
+
+@property uservar2 type=classificator field=aw_varuser2 reltype=RELTYPE_VARUSER2 store=connect
+@caption User-defined var 2
+
+@property uservar3 type=classificator field=aw_varuser3 reltype=RELTYPE_VARUSER3 store=connect
+@caption User-defined var 3
+
 ------------------------------------------------------------------
 
 @groupinfo my_stats caption="Minu statistika" submit=no submit_method=get
@@ -563,6 +575,17 @@ caption Sõbragrupid
 @reltype HAS_SKILL value=53 clid=CL_PERSON_HAS_SKILL
 @caption P&auml;devus
 
+@reltype FAX value=54 clid=CL_CRM_PHONE
+@caption Faks
+
+@reltype VARUSER1 value=55 clid=CL_META
+@caption kasutajadefineeritud muutuja 1
+
+@reltype VARUSER2 value=56 clid=CL_META
+@caption kasutajadefineeritud muutuja 2
+
+@reltype VARUSER3 value=57 clid=CL_META
+@caption kasutajadefineeritud muutuja 3
 
 */
 

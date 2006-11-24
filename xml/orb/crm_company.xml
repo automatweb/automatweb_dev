@@ -430,5 +430,12 @@
 			</function>
 		</action>
 
+		<action name="send_mails">
+			<function name="send_mails">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

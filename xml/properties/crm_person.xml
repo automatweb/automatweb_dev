@@ -334,6 +334,22 @@
             <caption>Telefoninumbrid</caption>
       </property>
       <property>
+            <name>fax</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>releditor</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>name</props>
+            <table_fields>name</table_fields>
+            <reltype>RELTYPE_FAX</reltype>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
+            <no_toolbar>1</no_toolbar>
+            <caption>Faksinumbrid</caption>
+      </property>
+      <property>
             <name>url</name>
             <table>objects</table>
             <group>contact</group>
@@ -1028,6 +1044,39 @@
             <caption>Kasutajadefineeritud TA5</caption>
       </property>
       <property>
+            <name>uservar1</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser1</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER1</reltype>
+            <store>connect</store>
+            <caption>User-defined var 1</caption>
+      </property>
+      <property>
+            <name>uservar2</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser2</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER2</reltype>
+            <store>connect</store>
+            <caption>User-defined var 2</caption>
+      </property>
+      <property>
+            <name>uservar3</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser3</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER3</reltype>
+            <store>connect</store>
+            <caption>User-defined var 3</caption>
+      </property>
+      <property>
             <name>stats_s_from</name>
             <table>objects</table>
             <group>my_stats</group>
@@ -1424,6 +1473,26 @@
                   <clid>CL_PERSON_HAS_SKILL</clid>
                   <caption>P&amp;amp;auml;devus</caption>
             </HAS_SKILL>
+            <FAX>
+                  <value>54</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Faks</caption>
+            </FAX>
+            <VARUSER1>
+                  <value>55</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 1</caption>
+            </VARUSER1>
+            <VARUSER2>
+                  <value>56</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 2</caption>
+            </VARUSER2>
+            <VARUSER3>
+                  <value>57</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 3</caption>
+            </VARUSER3>
       </reltypes>
       <layout>
             <docs_lt>

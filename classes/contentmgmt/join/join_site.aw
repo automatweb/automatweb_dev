@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.29 2006/07/02 10:26:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.30 2006/11/24 14:27:48 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -29,6 +29,7 @@
 @groupinfo mk_pages parent=props caption="Koosta lehed"
 @groupinfo page_titles parent=props caption="Lehtede Pealkirjad"
 @groupinfo seps parent=props caption="Vahepealkirjad"
+@groupinfo prop_settings parent=props caption="Elementide seaded"
 
 @property join_properties type=table store=no group=sel_props
 @caption Liitumisel k&uuml;sitavad v&auml;ljad
@@ -47,6 +48,10 @@
 
 @property join_seps type=table store=no group=seps
 @caption Vahepealkirjad
+
+@default group=prop_settings
+
+	@property prop_settings type=table store=no no_caption=1
 
 
 @groupinfo rules caption="Reeglid"
@@ -159,7 +164,9 @@ class join_site extends class_base
 			"relmanager" => 1,
 			"relpicker" => 1,
 			"date_select" => 1,
-			"chooser" => 1
+			"chooser" => 1,
+			"releditor" => 1,
+			"classificator" => 1
 		);
 	}
 
@@ -169,6 +176,10 @@ class join_site extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "prop_settings":
+				$this->_get_prop_settings($arr);
+				break;
+
 			case "mf_mail_legend":
 				$data["value"] = t("#edit_link# - link kasutajale");
 				break;
@@ -220,6 +231,10 @@ class join_site extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "prop_settings":
+				$this->_set_prop_settings($arr);
+				break;
+
 			case "join_properties":
 				$this->_save_join_properties($arr);
 				break;	
@@ -661,7 +676,7 @@ class join_site extends class_base
 		$visible = $ob->meta("visible");
 		$required = $ob->meta("required");
 		$propn = $ob->meta("propn");
-
+		$el_types = $ob->meta("types");
 		$cfgu = get_instance("cfg/cfgutils");
 		
 		$ret = "";
@@ -676,9 +691,9 @@ class join_site extends class_base
 
 		$clss = aw_ini_get("classes");
 
-			$htmlc = get_instance("cfg/htmlclient");
-			$htmlc->start_output();
-			$klomp = array();
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		$klomp = array();
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
 		{
@@ -714,7 +729,66 @@ class join_site extends class_base
 					$tp[$pid] = $prop;
 					if ($tp[$pid]["type"] != "password")
 					{
-						$tp[$pid]["type"] = "textbox";
+						// handle person address separately
+						if ($clid == CL_CRM_PERSON && $pid == "address")
+						{
+							// address has: * Street address: * City: * Zip code: * Country:	
+							$adr_inst = get_instance(CL_CRM_ADDRESS);
+							$tp["p_adr_ctry"] = array(
+								"name" => "p_adr_ctry",
+								"caption" => t("Maa"),
+								"type" => "select",
+								"options" => $adr_inst->get_country_list()
+							);
+							$tp["p_adr_zip"] = array(
+								"name" => "p_adr_zip",
+								"caption" => t("Postiindeks"),
+								"type" => "textbox",
+							);
+							$tp["p_adr_city"] = array(
+								"name" => "p_adr_city",
+								"caption" => t("Linn"),
+								"type" => "textbox",
+							);
+							$tp["p_adr_str"] = array(
+								"name" => "p_adr_str",
+								"caption" => t("T&auml;nava nimi"),
+								"type" => "textbox",
+							);
+							unset($tp["address"]);
+						}
+						else
+						if (!empty($el_types[$clid][$pid]))
+						{
+							if ($tp[$pid]["type"] == "chooser")
+							{
+								// load options before messing with things
+								$tmp_do = obj();
+								$tmp_do->set_class_id($clid);
+								$tmp_param = array(
+									"obj_inst" => &$tmp_do,
+									"prop" => &$tp[$pid],
+									"request" => array()
+								);
+								$class_inst = get_instance($clid);
+								$class_inst->get_property($tmp_param);
+							}
+							else
+							if ($tp[$pid]["type"] == "classificator")
+							{
+								$clf_inst = get_instance(CL_CLASSIFICATOR);
+								$tp[$pid]["options"] = $clf_inst->get_options_for(array(
+									"name" => $pid,
+									"clid" => $clid
+								));
+							}
+							$tp[$pid]["type"] = $el_types[$clid][$pid];
+						}
+						else
+						{
+							$tp[$pid]["type"] = "textbox";
+						}
+						unset($tp[$pid]["size"]);
 					}
 				}
 			}
@@ -1257,6 +1331,8 @@ class join_site extends class_base
 
 		$clss = aw_ini_get("classes");
 
+		$set_el_types = $ob->meta("types");
+
 		$tp = array();
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
@@ -1442,7 +1518,6 @@ class join_site extends class_base
 						$cf_sd = $sessd[$wn];
 						$prop["value"] = $cf_sd[$oldn];
 					}
-
 					$pid = "typo_".$clid."[".$oldn."]";
 					$prop["name"] = $pid;
 					if ($propn[$clid][$oldn] != "")
@@ -1456,11 +1531,16 @@ class join_site extends class_base
 						$prop["rows"] = 5;
 						$prop["cols"] = 30;
 					}
+
+					if (!empty($set_el_types[$clid][$oldn]))
+					{
+						$prop["type"] = $set_el_types[$clid][$oldn];
+					}
 					$tp[$pid] = $prop;
 				}
 			}
 		}
-		
+
 		// add seprator props
 		$seps = new aw_array($ob->meta("join_seps"));
 		foreach($seps->get() as $sepid => $sepn)
@@ -1660,6 +1740,11 @@ class join_site extends class_base
 					if (is_oid($p_oid) && $this->can("view", $p_oid))
 					{
 						$p_obj = obj($p_oid);
+						// if this is the address thingamajig, then create the address from the separate props
+						if ($prop["name"] == "address")
+						{
+							$this->_update_address_from_req($p_obj, $_POST);
+						}
 						$p_obj->set_name($cf_sd[$oldn]);
 						$p_obj->save();
 					}
@@ -1670,6 +1755,11 @@ class join_site extends class_base
 						$p_obj->set_class_id($reli[$prop["reltype"]]["clid"][0]);
 						$p_obj->set_name($cf_sd[$oldn]);
 						$p_obj->save();
+						if ($prop["name"] == "address")
+						{
+							$this->_update_address_from_req($p_obj, $_POST);
+							$p_obj->save();
+						}
 
 						$data_o->connect(array(
 							"to" => $p_obj->id(),
@@ -1679,7 +1769,13 @@ class join_site extends class_base
 					}
 				}
 				else
+				if ($prop["type"] == "classificator" || $prop["group"] != "general")
 				{
+					$data_o->set_prop($prop["name"] , $cf_sd[$oldn]);
+				}
+				else
+				{
+	
 					$submit_data[$pid] = $cf_sd[$oldn];
 				}
 			}
@@ -1703,9 +1799,17 @@ class join_site extends class_base
 		preg_match("/typo_(.*)\[(.*)\]/U", $b["name"], $b_mt);	
 		$a_clid = $a_mt[1];
 		$a_prop = $a_mt[2];
+		if (strpos($a_prop, "p_adr") !== false)
+		{
+			$a_prop = "address";
+		}
 
 		$b_clid = $b_mt[1];
 		$b_prop = $b_mt[2];
+		if (strpos($b_prop, "p_adr") !== false)
+		{
+			$b_prop = "address";
+		}
 
 		if ($a_clid == "sep")
 		{
@@ -1871,6 +1975,101 @@ class join_site extends class_base
 			"uid" => $row["uid"],
 			"password" => $pwd
 		));
+	}
+	
+	function _init_prop_settings(&$t)
+	{
+		$t->define_field(array(
+			"name" => "prop",
+			"caption" => t("Omadus"),
+			"align" => "left",
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center",
+		));
+	}
+
+	function _get_prop_settings($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_prop_settings($t);
+		$clss = aw_ini_get("classes");
+		$types = $arr["obj_inst"]->meta("types");
+		$type_list = array(
+			"" => t("--vali--"),
+			"textbox" => t("Tekstikast"),
+			"select" => t("Listbox"),
+			"radiobutton" => t("Raadionupp"),
+			"checkbox" => t("Checkbox"),
+		);
+		foreach($arr["obj_inst"]->meta("visible") as $clid => $items)
+		{
+			$tmp = obj();
+			$tmp->set_class_id($clid);
+			$property_list = $tmp->get_property_list();
+
+			$t->define_data(array(
+				"prop" => $clss[$clid]["name"]
+			));
+
+			foreach($items as $pn => $one)
+			{
+				$t->define_data(array(
+					"prop" => str_repeat("&nbsp;", 10).$property_list[$pn]["caption"],
+					"type" => html::select(array(
+						"value" => $types[$clid][$pn],
+						"options" => $type_list,
+						"name" => "types[$clid][$pn]"
+					))
+				));
+			}
+		}
+		$t->set_sortable(false);
+	}
+
+	function _set_prop_settings($arr)
+	{
+		$arr["obj_inst"]->set_meta("types", $arr["request"]["types"]);
+	}
+
+	function _update_address_from_req($o, $r)
+	{
+		$o->set_prop("aadress", $r["typo_145"]["p_adr_str"]);
+		$o->set_prop("postiindeks", $r["typo_145"]["p_adr_zip"]);
+		$this->set_rel_by_val($o, "linn", $r["typo_145"]["p_adr_city"]);
+		$adr_i = $o->instance();
+		$riiks = $adr_i->get_country_list();
+		$this->set_rel_by_val($o, "riik", $riiks[$r["typo_145"]["p_adr_ctry"]]);
+		$o->set_name($adr_i->get_name_from_adr($o));
+	}
+
+	function set_rel_by_val($o, $prop, $val)
+	{
+		$pl = $o->get_property_list();
+		$reli = $o->get_relinfo();
+		$p = $pl[$prop];
+		$clid = $reli[$p["reltype"]]["clid"][0];
+		$ol = new object_list(array(
+			"class_id" => $clid,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $val
+		)); 
+		if ($ol->count())
+		{
+			$fo = $ol->begin();
+		}
+		else
+		{
+			$fo = obj();
+			$fo->set_class_id($clid);
+			$fo->set_parent($o->id());
+			$fo->set_name($val);
+			$fo->save();
+		}
+		$o->set_prop($prop, $fo->id());
 	}
 }
 ?>
