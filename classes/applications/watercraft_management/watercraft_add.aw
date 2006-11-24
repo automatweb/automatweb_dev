@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.2 2006/11/21 14:12:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.3 2006/11/24 12:33:21 dragut Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -465,7 +465,7 @@ class watercraft_add extends class_base
 		$saved_pages = $_SESSION['watercraft_input_data']['saved_pages'];
 		$pages_diff = array_diff($page_keys, $saved_pages);
 		// so, if the diff is empty, then all the pages have been saved
-		if (empty($pages_diff))
+		if (empty($pages_diff) && isset($arr['send']))
 		{
 			$watercraft_obj->set_status(STAT_ACTIVE);
 			$watercraft_obj->save();
