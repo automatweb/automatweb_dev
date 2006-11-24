@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.24 2006/11/15 12:58:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.25 2006/11/24 13:16:23 markop Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -28,8 +28,10 @@
 	
 @layout buffer type=hbox width=20%:80%
 
-	@property buffer_time type=textbox size=5 table=objects field=meta method=serialize parent=buffer
-	@caption Puhveraeg
+	@property buffer_time_before type=textbox size=5 table=objects field=meta method=serialize parent=buffer
+	@caption Puhveraeg enne
+	@property buffer_time_after type=textbox size=5 table=objects field=meta method=serialize parent=buffer
+	@caption Puhveraeg p&auml;rast
 	@property buffer_time_unit type=select  table=objects field=meta method=serialize parent=buffer no_caption=1
 
 

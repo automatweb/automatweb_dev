@@ -49,7 +49,7 @@
             <no_caption>1</no_caption>
       </property>
       <property>
-            <name>buffer_time</name>
+            <name>buffer_time_before</name>
             <table>objects</table>
             <group>general</group>
             <type>textbox</type>
@@ -57,7 +57,18 @@
             <field>meta</field>
             <method>serialize</method>
             <parent>buffer</parent>
-            <caption>Puhveraeg</caption>
+            <caption>Puhveraeg enne</caption>
+      </property>
+      <property>
+            <name>buffer_time_after</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>buffer</parent>
+            <caption>Puhveraeg p&amp;amp;auml;rast</caption>
       </property>
       <property>
             <name>buffer_time_unit</name>

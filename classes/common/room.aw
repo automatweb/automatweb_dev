@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.46 2006/11/24 11:06:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.47 2006/11/24 13:14:54 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1208,6 +1208,10 @@ class room extends class_base
 		}
 		else
 		{
+			if($start_hour = 24)
+			{
+				$start_hour = 0;
+			}
 			$today_start = mktime($start_hour, $start_minute, 0, date("n", time()), date("j", time()), date("Y", time()));
 		}
 
@@ -2727,14 +2731,29 @@ class room extends class_base
 		$room = obj($room);
 		$buff_before = $room->prop("buffer_before")*$room->prop("buffer_before_unit");
 		$buff_after = $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+	
+		//tootepõhisel ruumi broneerimisel
+		if($room->prop("use_product_times"))
+		{
+			$last_bron = $this->get_last_bron(array("room" => $room , "start" => $start));
+			$next_bron = $this->get_next_bron(array("room" => $room , "end" => $end));
+			$buffer_start = $this->get_products_buffer(array("bron" => $last_bron, "time" => "after"));
+			$buffer_end = $this->get_products_buffer(array("bron" => $next_bron, "time" => "before"));
+		}
+		else
+		{
+			$buffer = $buffer_end = $buffer_start = $buff_before + $buff_after;
+		}
 		$buffer = $buff_before+$buff_after;
+		
 		$filt = array(
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
 			"resource" => $room->id(),
-			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ($end+$buffer)),
-			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, ($start-$buffer)),
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ($end+$buffer_end)),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, ($start-$buffer_start)),
 		);
+
 		if (!empty($arr["ignore_booking"]))
 		{
 			$filt["oid"] = new obj_predicate_not($arr["ignore_booking"]);
@@ -2764,6 +2783,103 @@ class room extends class_base
 			$this->last_bron_id = $bron->id();
 			return false;
 		}
+	}
+	
+	/** returns int (reservation products buffer time)
+		@attrib api=1 params=name
+		@param $bron required type=object
+			The reservation object
+		@param $time optional type=string
+			if "before" , calculates before buffer times, if "after", calculates after buffer times, if not set, calculates both
+	**/
+	function get_products_buffer($arr)
+	{
+		extract($arr);
+		if(!is_object($bron))
+		{
+			return 0;
+		}
+		$products = $bron->meta("amount");
+		$ret = 0;
+		if(is_array($products))
+		{
+			foreach($products as $product=> $amount)
+			{
+				if($amount && $this->can("view" , $product))
+				{
+					$prod = obj($product);
+					if(!$time)
+					{
+						$ret = $ret + $prod->prop("buffer_time_before") + $prod->prop("buffer_time_after")*$prod->prop("buffer_time_unit");
+					}
+					else
+					{
+						$ret = $ret + $prod->prop("buffer_time_".$time)*$prod->prop("buffer_time_unit");
+					}
+				}
+			}
+		}
+		return $ret;
+	}
+	
+	/** returns object (last bron object before start time)
+		@attrib api=1 params=name
+		@param $room required type=object
+			The room object
+		@param $start required type=int
+			last reservation before that timestamp
+	**/
+	function get_last_bron($arr)
+	{
+	
+		extract($arr);
+		$ret = ""; $max = $start - 24*3600;
+		$reservations = new object_list(array(
+			"class_id" => array(CL_RESERVATION),
+			"lang_id" => array(),
+			"resource" => $room->id(),
+			"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, ($start - 24*3600) , $start),
+			"verified" => 1,
+		));
+		
+		foreach($reservations->arr() as $res)
+		{
+			if($res->prop("end") > $max)
+			{
+				$ret = $res; $max = $res->prop("end");
+			}
+		}
+		return $ret;
+	}
+	
+	/** returns object (first reservation object after end time)
+		@attrib api=1 params=name
+		@param $room required type=object
+			The room object
+		@param $end required type=int
+			first reservation object after that timestamp
+	**/
+	function get_next_bron($arr)
+	{
+		extract($arr);
+		$ret = ""; $min = $end + 24*3600;
+		$reservations = new object_list(array(
+			"class_id" => array(CL_RESERVATION),
+			"lang_id" => array(),
+			"resource" => $room->id(),
+			"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $end, ($end + 24*3600)),
+		//	"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ()),//24h hiljem pole ka vaja enam
+			"verified" => 1,
+		));
+		foreach($reservations->arr() as $res)
+		{
+			if($res->prop("start1") < $min && $res->prop("start1")>100)
+			{
+				$ret = $res; $min = $res->prop("start1");
+			}
+		}
+		return $ret;
+		
 	}
 	
 	function callback_generate_scripts($arr)
