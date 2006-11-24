@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.47 2006/11/24 13:14:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.48 2006/11/24 14:50:45 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1250,14 +1250,46 @@ class room extends class_base
 					{
 						if(is_oid($this->last_bron_id) && !$arr["web"])
 						{
-							 $d[$x] = html::href(array(
+							$last_bron = obj($this->last_bron_id);
+							$cus = t("Broneeritud");
+							$title = "";
+							$codes = array();
+							if(is_oid($last_bron->prop("customer")) && $this->can("view", $last_bron->prop("customer")))
+							{
+								$customer = obj($last_bron->prop("customer"));
+								$cus = $customer->name();
+								$products = $last_bron->meta("amount");
+								$title = $last_bron->prop("content");
+								foreach($products as $prod => $val)
+								{
+									if($val)
+									{
+										if($this->can("view" , $prod))
+										{
+											$product = obj($prod);
+											$codes[] = $product->prop("code");
+										}
+									}
+								}
+							}
+							$d[$x] = html::href(array(
 								"url" => html::get_change_url($this->last_bron_id),
-								"caption" => "<span>".t("Broneeritud")."</span>",
+								"caption" => "<span><font color=#26466D>".$cus . " " . join($codes , ",")."</FONT></span>",
+								"title" => $title,
 							));
+							if($last_bron->prop("verified"))
+							{
+								$col[$x] = "#EE6363";
+							}
+							else
+							{
+								$col[$x] = "#FFE4B5";
+							}
 						}
 						else
 						{
-					 		$d[$x] ="<span>".t("Broneeritud")."</span>";
+							$col[$x] = "#EE6363";
+					 		$d[$x] ="<span><font color=#26466D>".t("Broneeritud")."</FONT></span>";
 						}
 						$onclick[$x] = "";
 					}
@@ -1297,6 +1329,13 @@ class room extends class_base
 					"onclick4" => $onclick[4],
 					"onclick5" => $onclick[5],
 					"onclick6" => $onclick[6],
+					"col0" => $col[0],
+					"col1" => $col[1],
+					"col2" => $col[2],
+					"col3" => $col[3],
+					"col4" => $col[4],
+					"col5" => $col[5],
+					"col6" => $col[6],
 				));
 			}
 			$step = $step + 1;
@@ -2761,15 +2800,16 @@ class room extends class_base
 		$reservations = new object_list($filt);
 		
 		//ueh... filter ei tööta, niiet .... oehjah
+		$verified_reservations = new object_list();
 		foreach($reservations->arr() as $res)
 		{
 			//filtriga asja ei saand tööle, niiet kasutab kirvemeetodit.... kuna asi toimub ühes nädalas, siis miskit hullu kiirusejama ei tohiks tulla
 			//poogib siis mitte kinnitatud ja maksetähtaja ületanud välja
-			if(!$res->prop("verified") && !($res->prop("deadline") > time()))
+			if($res->prop("verified") || ($res->prop("deadline") > time()))
 			{
-				$reservations->remove($res->id());
+				$verified_reservations->add($res->id());
+				//$reservations->remove($res->id());
 			}
-			
 	//		$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
 		}
 		
@@ -2779,7 +2819,14 @@ class room extends class_base
 		}
 		else
 		{
-			$bron = reset($reservations->arr());
+			if(sizeof($verified_reservations->arr()))
+			{
+				$bron = reset($verified_reservations->arr());
+			}
+			else
+			{
+				$bron = reset($reservations->arr());
+			}	
 			$this->last_bron_id = $bron->id();
 			return false;
 		}

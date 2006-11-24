@@ -8,8 +8,8 @@
 			</function>
 		</action>
 
-		<action name="submit" nologin="1">
-			<function name="submit">
+		<action name="submit_data" nologin="1">
+			<function name="submit_data">
 				<arguments>
 					<required name="id" type="int" />
 					<required name="return_to" type="string" />
@@ -30,6 +30,7 @@
 			<function name="submit_web_products_table">
 				<arguments>
 					<optional name="amount" type="array" />
+					<required name="room" type="oid" />
 				</arguments>
 			</function>
 		</action>
@@ -77,6 +78,7 @@
 			<function name="revoke_reservation">
 				<arguments>
 					<optional name="bron_id" type="array" />
+					<required name="room" type="oid" />
 				</arguments>
 			</function>
 		</action>

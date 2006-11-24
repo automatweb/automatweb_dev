@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.7 2006/11/17 11:40:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.8 2006/11/24 14:50:45 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -9,17 +9,17 @@
 
 @classinfo syslog_type=ST_ROOM_RESERVATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
-@property rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM
+@property rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM store=connect field=meta method=serialize
 @caption Ruumid
 
 @property reservation_template type=select 
 @caption Broneeringu template
 
-@property levels type=table no_caption=1 
-@Tasemed
+@property levels type=table no_caption=1 store=no
+@caption Tasemed
 
 @reltype ROOM value=1 clid=CL_ROOM
-@Ruum mida broneerida
+@caption Ruum mida broneerida
 
 
 */
@@ -290,7 +290,7 @@ class room_reservation extends class_base
 			)),
 			"back_url" => aw_global_get("section")."?level=".($level-2),
 			"url" => aw_global_get("section")."?level=".$level,
-			"submit" => $this->mk_my_orb('submit',array(
+			"submit" => $this->mk_my_orb('submit_data',array(
 				'id' => $arr["alias"]["target"],
 				'level' => $level,
 				'url' => aw_global_get("section")."?level=".$level,
@@ -462,13 +462,13 @@ class room_reservation extends class_base
 		return $res;
 	}
 
-	/** submit
-		@attrib name=submit nologin="1" 
+	/** submit_data
+		@attrib name=submit_data nologin="1" 
 		@param id required type=int 
 		@param return_to required type=string 
 		@param level optional type=int
 	**/
-	function submit($args = array())//tegeleb postitatud infoga
+	function submit_data($args = array())//tegeleb postitatud infoga
 	{
 		$bron_obj = obj($args["id"]);
 		$room = reset($bron_obj->prop("rooms"));
