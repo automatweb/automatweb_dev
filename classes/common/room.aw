@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.48 2006/11/24 14:50:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.49 2006/11/24 15:25:59 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1158,7 +1158,11 @@ class room extends class_base
 		$x = 1;
 		while($x<7)
 		{
-			$options[$x] = $x;
+			$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+			if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+			{
+				$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
+			}
 			$x++;
 		};
 		
@@ -1166,7 +1170,7 @@ class room extends class_base
 			"name" => "room_reservation_length",
 			"options" => $options,
 		));
-		
+		$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		$arr["prop"]["value"] = $ret;
 		return $ret;
 	}
