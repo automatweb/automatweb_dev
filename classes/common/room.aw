@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.45 2006/11/22 16:01:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.46 2006/11/24 11:06:23 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1550,6 +1550,10 @@ class room extends class_base
 			name - contact persons name
 			email - contact persons email
 			phone - contact persons phone
+			customer - If the person object already exists, then connect the booking to this person, if given 
+
+		@param meta optional type=array
+			Any key=>value paris given here, will be written to the objects metadata
 	**/
 	function make_reservation($arr)
 	{
@@ -1572,9 +1576,13 @@ class room extends class_base
 		}
 		else return "";
 
-		if(is_oid($res_id))
+		if($this->can("view", $res_id))
 		{
 			$reservation = obj($res_id);
+			$reservation->set_name($room->name()." bron ".date("d:m:Y" ,$data["start"]));
+			$reservation->set_parent($parent);
+			$reservation->set_prop("deadline", (time() + 15*60));
+			$reservation->set_prop("resource" , $room->id());
 		}
 		else
 		{
@@ -1586,6 +1594,15 @@ class room extends class_base
 			$reservation->set_prop("resource" , $room->id());
 			$reservation->save();
 		}
+
+		if (is_array($arr["meta"]))
+		{
+			foreach($arr["meta"] as $meta_k => $meta_v)
+			{
+				$reservation->set_meta($meta_k, $meta_v);
+			}
+		}
+
 		foreach($data as $prop => $val)
 		{
 			switch($prop)
@@ -1604,6 +1621,9 @@ class room extends class_base
 					break;
 				case "people":
 					$reservation->set_prop("people_count" , $val);
+					break;
+				case "customer":
+					$reservation->set_prop("customer", $val);
 					break;
 			}
 		}
@@ -2693,6 +2713,8 @@ class room extends class_base
 			room id
 		@param start required type=int
 		@param end required type=int
+		@param ignore_booking optional type=int
+			If given, the booking with this id will be ignored in the checking - this can be used for changing booking times for instance
 		@return boolean
 	**/
 	function check_if_available($arr)
@@ -2706,31 +2728,18 @@ class room extends class_base
 		$buff_before = $room->prop("buffer_before")*$room->prop("buffer_before_unit");
 		$buff_after = $room->prop("buffer_after")*$room->prop("buffer_after_unit");
 		$buffer = $buff_before+$buff_after;
-		$reservations = new object_list(array(
+		$filt = array(
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
 			"resource" => $room->id(),
 			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ($end+$buffer)),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, ($start-$buffer)),
-//			"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
-/*			1 => new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, time()),
-//					"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start, $end),
-					"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start ,$end)
-				)
-			
-			)),
-	*/		
-//			new object_list_filter(array(
-//				"logic" => "OR",
-//				"conditions" => array(
-//					"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
-//					"verified" => 1
-//				)
-//			)),
-		));
+		);
+		if (!empty($arr["ignore_booking"]))
+		{
+			$filt["oid"] = new obj_predicate_not($arr["ignore_booking"]);
+		}
+		$reservations = new object_list($filt);
 		
 		//ueh... filter ei tööta, niiet .... oehjah
 		foreach($reservations->arr() as $res)

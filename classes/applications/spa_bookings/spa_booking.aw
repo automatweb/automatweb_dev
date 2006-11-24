@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.1 2006/11/15 13:07:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.2 2006/11/24 11:06:26 kristo Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -27,6 +27,9 @@
 
 @reltype PACKAGE value=2 clid=CL_SHOP_PACKET
 @caption Pakett
+
+@reltype ROOM_BRON value=3 clid=CL_RESERVATION
+@caption Ruumi broneering
 */
 
 class spa_booking extends class_base
@@ -98,6 +101,53 @@ class spa_booking extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_spa_bookings (aw_oid int primary key, aw_person int, aw_start int, aw_end int, aw_package int)");
 			return true;
+		}
+	}
+
+	/** checks if all necessary reservation objects are connected to this booking object and creates empty ones if needed
+		@attrib api=1
+	**/
+	function check_reservation_conns($booking)
+	{
+		if (!$this->can("view", $booking->prop("package")))
+		{
+			return;
+		}
+
+		$rv2prod = array();
+		foreach($booking->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+		{
+			$room_bron = $c->to();
+			$rv2prod[$room_bron->meta("product_for_bron")] = $room_bron;
+		}
+
+		$package = obj($booking->prop("package"));
+		$pk = $package->instance();
+		$entry_inst = get_instance(CL_SPA_BOOKIGS_ENTRY);
+		$dates = $entry_inst->get_booking_data_from_booking($booking);
+		foreach($pk->get_products_for_package($package) as $prod)
+		{
+			if (!isset($rv2prod[$prod->id()]))
+			{
+				$rooms = $entry_inst->get_rooms_for_product($prod->id());
+				if (count($rooms))
+				{
+					$room_inst = get_instance(CL_ROOM);
+					$rv_id = $room_inst->make_reservation(array(
+						"id" => reset(array_keys($rooms)),
+						"data" => array(
+							"customer" => $booking->prop("person")
+						),
+						"meta" => array(
+							"product_for_bron" => $prod->id()
+						)
+					));
+					$booking->connect(array(
+						"to" => $rv_id,
+						"type" => "RELTYPE_ROOM_BRON"
+					));
+				}
+			}
 		}
 	}
 }

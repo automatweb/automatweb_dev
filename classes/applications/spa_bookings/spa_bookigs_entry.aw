@@ -1,12 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.4 2006/11/21 15:43:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.5 2006/11/24 11:06:26 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
 @classinfo syslog_type=ST_SPA_BOOKIGS_ENTRY relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
-@default group=general
+@default group=general_sub
+
+	@property name type=textbox field=name
+	@caption Nimi
 
 	@property packet_folder_list type=relpicker reltype=RELTYPE_PFL_FOLDER multiple=1 field=meta method=serialize
 	@caption Tootepakettide kaustad
@@ -16,6 +19,26 @@
 
 	@property persons_folder type=relpicker reltype=RELTYPE_PERSONS_FOLDER field=meta method=serialize
 	@caption Isikute asukoht
+
+@default group=settings_mail
+
+	@property b_send_mail_to_user type=checkbox ch_value=1 field=meta method=serialize
+	@caption Saata kasutajale meil broneeringu tegemisel?
+
+	@property b_mail_from_name type=textbox field=meta method=serialize
+	@caption Meili from nimi
+
+	@property b_mail_from_addr type=textbox field=meta method=serialize
+	@caption Meili from aadress
+
+	@property b_mail_subject type=textbox field=meta method=serialize
+	@caption Meili subjekt
+
+	@property b_mail_content type=textarea rows=10 cols=50 field=meta method=serialize
+	@caption Meili sisu
+
+	@property b_mail_legend type=text store=no 
+	@caption Meili sisu legend
 
 
 @default group=ppl_entry
@@ -46,7 +69,7 @@
 			@property s_date_to type=date_select captionside=top store=no parent=search format=day_textbox,month_textbox,year_textbox
 			@caption Kuni
 
-			@property s_date_not_set type=checkbox ch_value=1 captionside=top store=no parent=search
+			@property s_date_not_set type=checkbox ch_value=1 captionside=top store=no parent=search no_caption=1
 			@caption Ajad m&auml;&auml;ramata
 
 			@property s_package type=select captionside=top store=no parent=search
@@ -61,6 +84,9 @@
 @default group=my_bookings,my_bookings_agent
 
 	@property my_bookings type=table store=no no_caption=1
+
+@groupinfo general_sub caption="&Uuml;ldine" parent=general
+@groupinfo settings_mail caption="Meiliseaded" parent=general
 
 @groupinfo ppl_entry caption="Isikud"
 @groupinfo cust caption="Kliendid" submit=no
@@ -95,12 +121,6 @@ class spa_bookigs_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "s_tb":
-				if ($arr["request"]["group"] == "cust")
-				{
-					return PROP_IGNORE;
-				}
-				break;
 		};
 		return $retval;
 	}
@@ -193,16 +213,10 @@ class spa_bookigs_entry extends class_base
 				"start" => html::date_select(array(
 					"name" => "d[$i][start]",
 					"format" => array("day_textbox", "month_textbox", "year_textbox")
-/*					"day" => "text",
-					"month" => "text",
-					"year" => "text"*/
 				)),
 				"end" => html::date_select(array(
 					"name" => "d[$i][end]",
 					"format" => array("day_textbox", "month_textbox", "year_textbox")
-/*					"day" => "text",
-					"month" => "text",
-					"year" => "text"*/
 				)),
 				"package" => html::select(array(
 					"name" => "d[$i][package]",
@@ -229,20 +243,11 @@ class spa_bookigs_entry extends class_base
 				$end = date_edit::get_timestamp($d["end"]);
 				// create person, user, booking
 
-				$eml = obj();
-				$eml->set_class_id(CL_ML_MEMBER);
-				$eml->set_name($d["fn"]." ".$d["ln"]." <".$d["email"].">");
-				$eml->set_prop("name", $d["fn"]." ".$d["ln"]);
-				$eml->set_prop("mail", $d["email"]);
-				$eml->set_parent($arr["obj_inst"]->prop("persons_folder"));
-				$eml->save();
-
 				// check if person exists
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_PERSON,
 					"lang_id" => array(),
 					"site_id" => array(),
-					"parent" => $arr["obj_inst"]->prop("persons_folder"),
 					"firstname" => $d["fn"],
 					"lastname" => $d["ln"]
 				));
@@ -254,6 +259,14 @@ class spa_bookigs_entry extends class_base
 				}
 				else
 				{
+					$eml = obj();
+					$eml->set_class_id(CL_ML_MEMBER);
+					$eml->set_name($d["fn"]." ".$d["ln"]." <".$d["email"].">");
+					$eml->set_prop("name", $d["fn"]." ".$d["ln"]);
+					$eml->set_prop("mail", $d["email"]);
+					$eml->set_parent($arr["obj_inst"]->prop("persons_folder"));
+					$eml->save();
+	
 					$p = obj();
 					$p->set_class_id(CL_CRM_PERSON);
 					$p->set_parent($arr["obj_inst"]->prop("persons_folder"));
@@ -303,6 +316,10 @@ class spa_bookigs_entry extends class_base
 				$booking->set_prop("package", $d["package"]);
 				$booking->save();
 
+				// for this booking, create empty reservations for all products so we can search by them
+				$booking_inst = $booking->instance();
+				$booking_inst->check_reservation_conns($booking);
+
 				$po = obj($d["packet"]);
 				$feedback .= sprintf("Lisasin kasutaja %s, isiku %s ja <a href='%s'>broneeringu</a> paketile %s algusega %s ja l&otilde;puga %s<br>", 
 					html::obj_change_url($user->id()),
@@ -313,7 +330,15 @@ class spa_bookigs_entry extends class_base
 					date("d.m.Y H:i", $end)
 				);
 
-				mail($d["email"], t("Teile on broneeritud aeg"), sprintf("Tere!\n\nOma broneeringu vaatamiseks klikkige siia: %s\nja sisestage kasutajanimi %s ja parool %s.\n\nHead kasutamist!", aw_ini_get("baseurl")."/login.aw", $user->prop("uid"), $d["pass"])); 
+				if ($arr["obj_inst"]->prop("b_send_mail_to_user"))
+				{
+					send_mail(
+						$d["email"], 
+						$arr["obj_inst"]->prop("b_mail_subject"), 
+						str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_mail_content")),
+						"From: ".$this->_get_from_addr($arr["obj_inst"])
+					);
+				}
 			}
 		}
 		$_SESSION["spa_bookings_entry_fb"] = $feedback;
@@ -381,6 +406,7 @@ class spa_bookigs_entry extends class_base
 
 	function _get_s_res($arr)
 	{
+		return $this->_get_my_bookings($arr);
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_s_res($t);
 
@@ -391,11 +417,7 @@ class spa_bookigs_entry extends class_base
 				"email" => html::obj_change_url($item->prop("person.email")),
 				"start" => $item->prop("start"),
 				"end" => $item->prop("end"),
-				"package" => html::obj_change_url($item->prop("package")) /*html::select(array(
-					"name" => "p[".$item->id()."]",
-					"options" => $this->_get_pk_list($arr["obj_inst"]),
-					"value" => $item->prop("package")
-				))*/,
+				"package" => html::obj_change_url($item->prop("package")),
 				"change" => html::href(array(
 					"url" => html::get_change_url($item->id(), array("return_url" => get_ru())),
 					"caption" => t("Muuda")
@@ -457,11 +479,12 @@ class spa_bookigs_entry extends class_base
 
 		if ($r["s_date_not_set"])
 		{
+			// we need to list all bookings that the person has not set times for
 			$d[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					"start" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
-					"end" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
+					"CL_SPA_BOOKING.RELTYPE_ROOM_BRON.start1" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
+					"CL_SPA_BOOKING.RELTYPE_ROOM_BRON.end" => new obj_predicate_compare(OBJ_COMP_LESS, 1),
 				)
 			));
 		}
@@ -476,16 +499,11 @@ class spa_bookigs_entry extends class_base
 		}
 		$from = date_edit::get_timestamp($r["s_date_from"]);
 		$to = date_edit::get_timestamp($r["s_date_to"]);
-		/*if ($from > 100 && $to > 100)
+		if ($from > 100 && $to > 100)
 		{
-			$d[] = new object_list_filter(array(
-				"logic" => "AND",
-				"conditions" => array(
-					"start" => new obj_predicate_compare(OBJ_COMP_
-				)
-			));
+			$d[] = new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start", "end"), array($from, $to));
 		}
-		else*/
+		else
 		if ($from > 100)
 		{
 			$d["start"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
@@ -498,10 +516,9 @@ class spa_bookigs_entry extends class_base
 
 		if ($r["s_package"])
 		{
-			$d["s_package"] = $r["s_package"];
+			$d["package"] = $r["s_package"];
 		}
 
-//die(dbg::dump($d));
 		if (count($d) > $cnt)
 		{
 			$ol = new object_list($d);
@@ -517,6 +534,10 @@ class spa_bookigs_entry extends class_base
 
 	function _get_s_tb($arr)
 	{
+		if ($arr["request"]["group"] == "cust")
+		{
+			return PROP_IGNORE;
+		}
 		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 	}
 
@@ -537,7 +558,8 @@ class spa_bookigs_entry extends class_base
 
 	function _get_s_package($arr)
 	{
-		$arr["prop"]["value"] = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		$arr["prop"]["options"] = array("" => t("--vali--")) +  $this->_get_pk_list($arr["obj_inst"]);
 	}
 
 	function _get_s_date_to($arr)
@@ -550,7 +572,7 @@ class spa_bookigs_entry extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Toode"),
-			"align" => "center"
+			"align" => "right"
 		));
 		$t->define_field(array(
 			"name" => "when",
@@ -576,6 +598,12 @@ class spa_bookigs_entry extends class_base
 			));
 		}
 		else
+		if ($arr["request"]["group"] == "cust" || $arr["request"]["group"] == "all_bookings")
+		{
+			$ol = new object_list();
+			$ol->add($this->get_search_results($arr["request"], $arr["obj_inst"]));
+		}
+		else
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_SPA_BOOKING,
@@ -598,11 +626,12 @@ class spa_bookigs_entry extends class_base
 			}
 			$package = obj($o->prop("package"));
 			$pk = $package->instance();
-			$dates = $o->meta("booking_dates");
+			$dates = $this->get_booking_data_from_booking($o);
+
 			foreach($pk->get_products_for_package($package) as $prod)
 			{
 				$date = "";
-				if ($dates[$prod->id()])
+				if ($dates[$prod->id()] && $dates[$prod->id()]["from"] > 1)
 				{
 					$sets = $dates[$prod->id()];
 					$room = obj($sets["room"]);
@@ -616,11 +645,25 @@ class spa_bookigs_entry extends class_base
 					"scrollbars" => 1,
 					"resizable" => 1
 				));
-				$t->define_data(array(
-					"booking" => $o->name()." ".html::href(array(
-						"url" => $this->mk_my_orb("print_booking", array("id" => $o->id())),
-						"caption" => t("Prindi")
+
+				$booking_str = sprintf(t("Broneering %s, %s - %s, pakett %s"), html::href(array(
+						"url" => "mailto:".$o->prop("person.email.mail"),
+						"caption" => $o->prop("person.name")
 					)),
+					date("d.m.Y", $o->prop("start")),
+					date("d.m.Y", $o->prop("end")),
+					$o->prop("package.name")
+				);
+				$booking_str .= " ".html::href(array(
+					"url" => $this->mk_my_orb("print_booking", array("id" => $o->id())),
+					"caption" => t("Prindi")
+				));
+				if ($arr["request"]["group"] == "cust")
+				{
+					$booking_str .= " ".html::get_change_url($o->id(), array("return_url" => get_ru()), t("Muuda"));
+				}
+				$t->define_data(array(
+					"booking" => $booking_str,
 					"name" => $prod->name(),
 					"when" => $date
 				));
@@ -704,53 +747,20 @@ class spa_bookigs_entry extends class_base
 			));
 		}
 
-		// list all rooms and find the ones for this product
-		$p_rooms = array();
-		$rooms = new object_list(array(
-			"class_id" => CL_ROOM,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		foreach($rooms->arr() as $room)
-		{
-			$pd = $room->meta("prod_data");
-			if ($pd[$arr["prod"]]["active"])
-			{
-				$p_rooms[$room->id()] = $room;
-			}
-		}
+		$p_rooms = $this->get_rooms_for_product($arr["prod"]);
 		if (count($p_rooms) == 0)
 		{
 			die(t("Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"));
 		}
 
-		$pkt = obj($arr["pkt"]);
-		$reserved_days = array();
-		if ($pkt->prop("max_usage_in_time") > 0)
-		{
-			// get reservations in the selected timespan. 
-			// if on some days the count is iver the edge
-			// block that day
-			$rvs = new object_list(array(
-				"class_id" => CL_RESERVATION,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ,$range_from),
-				"end" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ,$range_to),
-			));
-			$count_by_day = array();
-			foreach($rvs->arr() as $rv)
-			{
-				$count_by_day[date("d.m.Y", $rv->prop("start1"))]++;
-			}
+		$reserved_days = $this->get_reserved_days_for_pkt($arr["pkt"], $range_from, $range_to, $arr["booking"], $current_booking);
 
-			foreach($count_by_day as $date => $count)
-			{
-				if ($count >= $pkt->prop("max_usage_in_time"))
-				{
-					$reserved_days[$date] = 1;
-				}
-			}
+		// get the current booking for this prod so we can ignore it in the taken checks
+		$book_dates = $this->get_booking_data_from_booking($b);
+		$current_booking = null;
+		if (isset($book_dates[$arr["prod"]]))
+		{
+			$current_booking = $book_dates[$arr["prod"]]["reservation_id"];
 		}
 
 		// get reservation length from product
@@ -758,7 +768,6 @@ class spa_bookigs_entry extends class_base
 		$prod_inst = $prod_obj->instance();
 		$time_step = $prod_inst->get_reservation_length($prod_obj);
 		$num_steps = (24*3600) / $time_step;
-
 		$p = get_current_person();
 		for ($h = 0; $h < $num_steps; $h++)
 		{
@@ -769,7 +778,10 @@ class spa_bookigs_entry extends class_base
 				$d_to = 0;
 
 				$tmd = $h*$time_step;
-				$tmd2 = ($h+1)*$time_step;
+				$tmd2 = min(3600*24, ($h+1)*$time_step);
+
+				$cur_step_start = $range_from+($i*24*3600)+$h*$time_step;
+				$cur_step_end = $range_from+($i*24*3600)+($h+1)*$time_step;
 
 				$avail = false;
 				foreach($p_rooms as $room)
@@ -784,7 +796,7 @@ class spa_bookigs_entry extends class_base
 						$d_to = max($d_to, $d_end);
 					}
 					$room_inst = $room->instance();
-					if ($room_inst->check_if_available(array("room" => $room->id(), "start" => $range_from+($i*24*3600)+$h*$time_step, "end" => $range_from+($i*24*3600)+($h+1)*$time_step)))
+					if ($room_inst->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => $cur_step_end)))
 					{
 						$avail = true;
 					}
@@ -800,8 +812,8 @@ class spa_bookigs_entry extends class_base
 					continue;
 				}
 				$url = $this->mk_my_orb("make_reservation",array(
-					"start" => $range_from+($i*24*3600)+$h*$time_step,
-					"end" => $range_from+($i*24*3600)+($h+1)*$time_step,
+					"start" => $cur_step_start,
+					"end" => $cur_step_end,
 					"prod" => $arr["prod"],
 					"booking" => $arr["booking"],
 				));
@@ -811,9 +823,11 @@ class spa_bookigs_entry extends class_base
 				}
 				else
 				{
+					$tmd_h = floor($tmd / 3600);
+					$tmd2_h = floor($tmd2 / 3600);
 					$d["aa".$i] = html::href(array(
 						"url" => $url,
-						"caption" => sprintf("%02d:%02d-%02d:%02d", floor($tmd / 3600), floor(($tmd - floor($tmd / 3600)*3600) / 60), floor($tmd2 / 3600), floor(($tmd2 - floor($tmd2 / 3600)*3600) / 60))
+						"caption" => sprintf("%02d:%02d-%02d:%02d", $tmd_h, floor(($tmd - $tmd_h*3600) / 60), $tmd2_h, floor(($tmd2 - $tmd2_h*3600) / 60))
 					));
 				}
 			}
@@ -835,24 +849,20 @@ class spa_bookigs_entry extends class_base
 	**/
 	function make_reservation($arr)
 	{
-		// list all rooms and find the ones for this product
-		$p_rooms = array();
-		$rooms = new object_list(array(
-			"class_id" => CL_ROOM,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		foreach($rooms->arr() as $room)
-		{
-			$pd = $room->meta("prod_data");
-			if ($pd[$arr["prod"]]["active"])
-			{
-				$p_rooms[$room->id()] = $room;
-			}
-		}
+		$p_rooms = $this->get_rooms_for_product($arr["prod"]);
 		if (count($p_rooms) == 0)
 		{
 			die(t("Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"));
+		}
+
+		$bron = obj($arr["booking"]);
+
+		// if there is a previous booking for the same package for the same product, then we need to remove that one first
+		$cur_bookings = $this->get_booking_data_from_booking($bron);
+		$current_booking = null;
+		if (isset($cur_bookings[$arr["prod"]]) && $this->can("view", $cur_bookings[$arr["prod"]]["reservation_id"]))
+		{
+			$current_booking = $cur_bookings[$arr["prod"]]["reservation_id"];
 		}
 
 		// go over all rooms and the first one that is available, we book
@@ -861,26 +871,23 @@ class spa_bookigs_entry extends class_base
 			$room_inst = $room->instance();
 			if ($room_inst->check_if_available(array("room" => $room->id(), "start" => $arr["start"], "end" => $arr["end"])))
 			{
-				$bron = obj($arr["booking"]);
-				$dates = $bron->meta("booking_dates");
-				if (!is_array($dates))
-				{
-					$dates = array();
-				}
-				$dates[$arr["prod"]] = array(
-					"room" => $room->id(),
-					"from" => $arr["start"],
-					"to" => $arr["end"]
-				);
-				$bron->set_meta("booking_dates", $dates);
-				$bron->save();
-				$room_inst->make_reservation(array(
+				$rv_id = $room_inst->make_reservation(array(
 					"id" => $room->id(),
+					"res_id" => $current_booking,
 					"data" => array(
 						"start" => $arr["start"],
 						"end" => $arr["end"],
+						"customer" => $bron->prop("person")
+					),
+					"meta" => array(
+						"product_for_bron" => $arr["prod"]
 					)
 				));
+				$bron->connect(array(
+					"to" => $rv_id,
+					"type" => "RELTYPE_ROOM_BRON"
+				));
+
 				return aw_ini_get("baseurl")."/automatweb/closewin.html";
 
 			}
@@ -906,10 +913,14 @@ class spa_bookigs_entry extends class_base
 		));
 
 		// now, list all bookings for rooms 
-		$dates = $b->meta("booking_dates");
+		$dates = $this->get_booking_data_from_booking($b);
 		$books = "";
 		foreach($dates as $entry)
 		{
+			if ($entry["from"] < 1)
+			{
+				continue;
+			}
 			$ro = obj($entry["room"]);
 			$this->vars(array(
 				"r_from" => date("d.m.Y H:i", $entry["from"]),
@@ -922,6 +933,106 @@ class spa_bookigs_entry extends class_base
 			"BOOKING" => $books
 		));
 		die($this->parse());
+	}
+
+	function _get_b_mail_legend($arr)
+	{
+		$arr["prop"]["value"] = t("Meili sisus kasutatavad muutujad:<br>#uid# - kasutajanimi<br>#pwd# - parool<br>#login_url# - sisse logimise aadress<br>");
+	}
+
+	function _get_from_addr($o)
+	{
+		if ($o->prop("b_mail_from_name") != "")
+		{
+			return $o->prop("b_mail_from_name")." <".$o->prop("b_mail_from_addr").">";
+		}
+		return $o->prop("b_mail_from_addr");
+	}
+
+	function get_booking_data_from_booking($o)
+	{
+		$dates = array();
+		foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $conn)
+		{
+			$room_bron = $conn->to();
+			if ($room_bron->meta("product_for_bron"))
+			{
+				$dates[$room_bron->meta("product_for_bron")] = array(
+					"room" => $room_bron->prop("resource"),
+					"from" => $room_bron->prop("start1"),
+					"to" => $room_bron->prop("end"),
+					"reservation_id" => $room_bron->id()
+				);
+			}
+		}
+		return $dates;
+	}
+
+	function get_rooms_for_product($prod)
+	{
+		// list all rooms and find the ones for this product
+		$p_rooms = array();
+		$rooms = new object_list(array(
+			"class_id" => CL_ROOM,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($rooms->arr() as $room)
+		{
+			$pd = $room->meta("prod_data");
+			if ($pd[$prod]["active"])
+			{
+				$p_rooms[$room->id()] = $room;
+			}
+		}
+		return $p_rooms;
+	}
+
+	function get_reserved_days_for_pkt($pkt, $range_from, $range_to, $booking, $current_booking = null)
+	{
+		$bo = obj($booking);
+		$conn_ol = new object_list($bo->connections_from(array("type" => "RELTYPE_ROOM_BRON")));
+		$rv_ids = $this->make_keys($conn_ol->ids());
+		if (!count($rv_ids))
+		{
+			return array();
+		}
+		
+		$pkt = obj($pkt);
+		$reserved_days = array();
+		if ($pkt->prop("max_usage_in_time") > 0)
+		{
+			// get reservations in the selected timespan. 
+			// if on some days the count is over the edge
+			// block that day
+			$filt = array(
+				"class_id" => CL_RESERVATION,
+				"oid" => $rv_ids,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ,$range_from),
+				"end" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ,$range_to),
+			);
+			if ($current_booking)
+			{
+				unset($filt["oid"][$current_booking]);
+			}
+			$rvs = new object_list($filt);
+			$count_by_day = array();
+			foreach($rvs->arr() as $rv)
+			{
+				$count_by_day[date("d.m.Y", $rv->prop("start1"))]++;
+			}
+
+			foreach($count_by_day as $date => $count)
+			{
+				if ($count >= $pkt->prop("max_usage_in_time"))
+				{
+					$reserved_days[$date] = 1;
+				}
+			}
+		}
+		return $reserved_days;
 	}
 }
 ?>

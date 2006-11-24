@@ -1,9 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>packet_folder_list</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PFL_FOLDER</reltype>
             <multiple>1</multiple>
@@ -14,7 +22,7 @@
       <property>
             <name>user_group</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>relpicker</type>
             <reltype>RELTYPE_GROUP</reltype>
             <field>meta</field>
@@ -24,12 +32,69 @@
       <property>
             <name>persons_folder</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PERSONS_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
             <caption>Isikute asukoht</caption>
+      </property>
+      <property>
+            <name>b_send_mail_to_user</name>
+            <table>objects</table>
+            <group>settings_mail</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Saata kasutajale meil broneeringu tegemisel?</caption>
+      </property>
+      <property>
+            <name>b_mail_from_name</name>
+            <table>objects</table>
+            <group>settings_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili from nimi</caption>
+      </property>
+      <property>
+            <name>b_mail_from_addr</name>
+            <table>objects</table>
+            <group>settings_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili from aadress</caption>
+      </property>
+      <property>
+            <name>b_mail_subject</name>
+            <table>objects</table>
+            <group>settings_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili subjekt</caption>
+      </property>
+      <property>
+            <name>b_mail_content</name>
+            <table>objects</table>
+            <group>settings_mail</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili sisu</caption>
+      </property>
+      <property>
+            <name>b_mail_legend</name>
+            <table>objects</table>
+            <group>settings_mail</group>
+            <type>text</type>
+            <store>no</store>
+            <field>b_mail_legend</field>
+            <caption>Meili sisu legend</caption>
       </property>
       <property>
             <name>cust_entry_fb</name>
@@ -144,6 +209,7 @@
             <captionside>top</captionside>
             <store>no</store>
             <parent>search</parent>
+            <no_caption>1</no_caption>
             <field>s_date_not_set</field>
             <caption>Ajad m&amp;amp;auml;&amp;amp;auml;ramata</caption>
       </property>
@@ -208,6 +274,14 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <general_sub>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>general</parent>
+            </general_sub>
+            <settings_mail>
+                  <caption>Meiliseaded</caption>
+                  <parent>general</parent>
+            </settings_mail>
             <ppl_entry>
                   <caption>Isikud</caption>
             </ppl_entry>

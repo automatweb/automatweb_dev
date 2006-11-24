@@ -60,6 +60,11 @@
                   <clid>CL_SHOP_PACKET</clid>
                   <caption>Pakett</caption>
             </PACKAGE>
+            <ROOM_BRON>
+                  <value>3</value>
+                  <clid>CL_RESERVATION</clid>
+                  <caption>Ruumi broneering</caption>
+            </ROOM_BRON>
       </reltypes>
 </properties>
 
