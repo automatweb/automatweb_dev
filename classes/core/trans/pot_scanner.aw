@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.40 2006/08/22 13:04:08 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.41 2006/11/25 12:20:03 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -311,6 +311,19 @@ class pot_scanner extends core
 				$strings[] = array(
 					"line" => "rel_".$gn,
 					"str" => "Seose ".$gd["caption"]." ($gn) tekst",
+				);
+			}
+		}
+
+		// 6) layout area_captions
+		$li = $cu->get_layoutinfo();
+		foreach($li as $gn => $gd)
+		{
+			if(strlen($gd["area_caption"]))
+			{
+				$strings[] = array(
+					"line" => "layout_".$gn,
+					"str" => "Kujundusosa ".$gd["area_caption"]." (".$gn.") pealkiri",
 				);
 			}
 		}

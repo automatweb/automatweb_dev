@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.81 2006/10/09 15:45:29 dragut Exp $
+// $Id: cfgutils.aw,v 1.82 2006/11/25 12:20:04 tarvo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -305,6 +305,11 @@ class cfgutils extends aw_template
 		{
 			$groupinfo = $propdef["groupinfo"];
 		};
+		// new
+		if(isset($propdef["layout"]))
+		{
+			$layout = $propdef["layout"];
+		};
 
 		foreach($properties as $k => $d)
 		{
@@ -338,6 +343,12 @@ class cfgutils extends aw_template
 					$relinfo[$k]["caption"] = html_entity_decode($dat["caption"]);
 				}		
 			}
+		}
+
+		// new
+		foreach($layout as $k => $dat)
+		{
+			$layout[$k]["area_caption"] = html_entity_decode(str_replace("&nbsp;"," ", $dat["area_caption"]));
 		}
 		// translate
 
@@ -419,6 +430,19 @@ class cfgutils extends aw_template
 					
 				}
 			};
+			// new
+			if(is_array($layout))
+			{
+				foreach($layout as $k => $dat)
+				{
+					$tmp = "Kujundusosa ".$dat["area_caption"]." (".$k.") pealkiri";
+					$tmp = t2($tmp);
+					if($tmp !== NULL)
+					{
+						$layout[$k]["area_caption"] = $tmp;
+					}
+				}
+			}
 		};
 
 		$this->classinfo = $classinfo;
@@ -435,6 +459,10 @@ class cfgutils extends aw_template
 		{
 			$this->groupinfo = $groupinfo;
 		};
+		// new
+		$this->layout = $layout;
+		$this->propdef["layout"] = $layout;
+
 		$tmp = array();
 		if (is_array($relinfo))
 		{
