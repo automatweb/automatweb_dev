@@ -144,6 +144,16 @@
             <caption>Veebis tooted on kataloogid</caption>
       </property>
       <property>
+            <name>web_discount</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Veebis allahindlus (%)</caption>
+      </property>
+      <property>
             <name>mail_to_client</name>
             <group>mail_settings_orderer</group>
             <table>objects</table>

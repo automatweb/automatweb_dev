@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.39 2006/10/17 15:04:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.40 2006/11/27 17:54:05 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -57,6 +57,9 @@
 
 @property prods_are_folders type=checkbox ch_value=1
 @caption Veebis tooted on kataloogid
+
+@property web_discount type=textbox size=5
+@caption Veebis allahindlus (%)
 
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
