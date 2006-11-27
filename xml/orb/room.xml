@@ -8,6 +8,19 @@
 			</function>
 		</action>
 
+		<action name="admin_add_bron_popup" all_args="1">
+			<function name="admin_add_bron_popup">
+				<arguments>
+					<required name="start1" type="int" />
+					<required name="parent" type="oid" />
+					<required name="end" type="int" />
+					<required name="resource" type="int" />
+					<optional name="product" />
+					<optional name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_add_reservation" all_args="1">
 			<function name="do_add_reservation">
 				<arguments>
@@ -23,6 +36,7 @@
 					<required name="id" />
 					<optional name="res_id" />
 					<required name="data" />
+					<optional name="meta" type="array" />
 				</arguments>
 			</function>
 		</action>
