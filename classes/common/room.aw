@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.53 2006/11/27 16:41:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.54 2006/11/27 16:46:38 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1025,7 +1025,7 @@ class room extends class_base
 			"caption" => t("Eesnimi"),
 			"value" => html::textbox(array(
 				"name" => "bron[firstname]",
-				"size" => 5,
+				"size" => 40,
 				"value" => $firstname,
 			)),
 		));
@@ -1034,7 +1034,7 @@ class room extends class_base
 			"caption" => t("Perenimi"),
 			"value" => html::textbox(array(
 				"name" => "bron[lastname]",
-				"size" => 5,
+				"size" => 40,
 				"value" => $lastname,
 			)),
 		));
@@ -1043,7 +1043,7 @@ class room extends class_base
 			"caption" => t("Organisatsioon"),
 			"value" => html::textbox(array(
 				"name" => "bron[company]",
-				"size" => 5,
+				"size" => 40,
 				"value" => $company,
 			)),
 		));
@@ -1052,7 +1052,7 @@ class room extends class_base
 			"caption" => t("Telefon"),
 			"value" => html::textbox(array(
 				"name" => "bron[phone]",
-				"size" => 5,
+				"size" => 40,
 				"value" => $phone,
 			)),
 		));
@@ -1061,7 +1061,7 @@ class room extends class_base
 			"caption" => t("Märkused"),
 			"value" => html::textarea(array(
 				"name" => "bron[comment]",
-				"size" => 5,
+				"size" => 40,
 				"value" => $comment,
 			)),
 		));	
