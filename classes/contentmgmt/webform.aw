@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.111 2006/11/23 12:27:36 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.112 2006/11/27 15:08:02 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -376,34 +376,42 @@ class webform extends class_base
 				break;
 			
 			case "confirm_page_template":
-				$site_tpl_dir = $this->cfg['site_tpldir'];
-				$admin_tpl_dir = $this->cfg['tpldir'];
+			//	$site_tpl_dir = $this->cfg['site_tpldir'];
+			//	$admin_tpl_dir = $this->cfg['tpldir'];
 
 				$options = array();
-				$handle = opendir($this->site_template_dir);
-				if ($handle !== false)
+				if (is_dir($this->site_template_dir) === true)
 				{
-					while (false !== ($file = readdir($handle)))
+					$handle = opendir($this->site_template_dir);
+					if ($handle !== false)
 					{
-						if (!is_dir($file) && $file{0} != '.')
+						while (false !== ($file = readdir($handle)))
 						{
-							$options[$file] = $file;
+							if (!is_dir($file) && $file{0} != '.')
+							{
+								$options[$file] = $file;
+							}
 						}
+						closedir($handle);
 					}
-					closedir($handle);
 				}
-				$handle = opendir($this->adm_template_dir);
-				if ($handle !== false)
+
+				if (is_dir($this->adm_template_dir) === true)
 				{
-					while (false !== ($file = readdir($handle)))
+					$handle = opendir($this->adm_template_dir);
+					if ($handle !== false)
 					{
-						if (!is_dir($file) && $file{0} != '.')
+						while (false !== ($file = readdir($handle)))
 						{
-							$options[$file] = $file;
+							if (!is_dir($file) && $file{0} != '.')
+							{
+								$options[$file] = $file;
+							}
 						}
+						closedir($handle);
 					}
-					closedir($handle);
 				}
+
 				$prop['options'] = $options;
 
 				break;	

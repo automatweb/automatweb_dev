@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.158 2006/10/12 12:46:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.159 2006/11/27 15:08:02 dragut Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1148,7 +1148,7 @@ class htmlclient extends aw_template
 	{
 		$layout_items = array();
 		$sub_layouts = array();
-		foreach($this->layout_by_parent[$layout_name] as $lkey => $lval)
+		foreach(safe_array($this->layout_by_parent[$layout_name]) as $lkey => $lval)
 		{
 			$html = $this->parse_layouts($lkey);
 
@@ -1213,7 +1213,7 @@ class htmlclient extends aw_template
 		else
 		{
 			// this deals with  deepers levels
-			foreach($this->properties_by_parent[$layout_name] as $pkey => $pval)
+			foreach(safe_array($this->properties_by_parent[$layout_name]) as $pkey => $pval)
 			{
 				$layout_items[] = $this->put_griditem($this->proplist[$pkey]);
 				$this->proplist[$pkey]["__ignore"] = 1;
