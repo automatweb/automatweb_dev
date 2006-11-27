@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.50 2006/11/24 15:59:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.51 2006/11/27 14:58:42 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1177,6 +1177,7 @@ class room extends class_base
 			"name" => "room_reservation_length",
 			"options" => $options,
 		));
+		$ret.= html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
 		$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		$arr["prop"]["value"] = $ret;
 		return $ret;
@@ -1416,7 +1417,7 @@ class room extends class_base
 			$pm->add_item(array(
 				"text" => $prod->name(),
 				"link" => "javascript:dontExecutedoBron=1;void(0)",
-				"onClick" => "doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"]." , ".$arr["step_length"].");",
+				"onClick" => "doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"]." , ".$arr["step_length"]." , ".$prod->id().");",
 			),"CL_ROOM");
 		}
 
