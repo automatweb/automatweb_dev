@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.8 2006/11/24 14:50:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.9 2006/11/27 15:30:10 kristo Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -101,7 +101,7 @@ class room_reservation extends class_base
 			$so = new object($arr["obj_inst"]->id());
 			$so->set_name($arr["obj_inst"]->name());
 			$so->set_meta($arr["prop"]["name"], $meta);
-			$so->save();
+		//	$so->save();
 		};
 	}
 	
