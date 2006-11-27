@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.29 2006/11/06 17:24:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.30 2006/11/27 15:34:17 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -446,8 +446,14 @@ class ml_queue extends aw_template
 			if (!($r["delay"] && $patch_size))
 			{
 				// everything at once
+				
+				//$all_at_once = true;
+				//paneb maksimumiks 5000, et üle selle võib sql pange joosta
 				$patch_size = $r["total"];
-				$all_at_once = true;
+				if($patch_size > 5000)
+				{
+					$patch_size = 5000;
+				}
 			};
 
 			//kontrollib, et 'kki vahepeal mõni teine queue on otsa jooksnud ja konkreetset maili juba saatma hakanud.... siis on admed muutunud ju... lukusatatud ju pole... ja alguses kõik ära lukustada pole ka hea mõte... 
@@ -467,9 +473,6 @@ class ml_queue extends aw_template
 				)
 			)
 			continue;
-			//võibolla pold ka eelnevast kasu, igaks juhuks uuendab viimati saadetud aja ära, isegi kui miskit pole saadetud, et oleks näha, et miski on selle maili saatmisega tegelenud vähemalt
-			$update_q = "UPDATE ml_queue SET last_sent='$tm' WHERE qid='$qid'";
-			$this->db_query($update_q);echo $update_q;
 
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
