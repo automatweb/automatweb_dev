@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.24 2006/08/07 12:42:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.25 2006/11/27 11:29:21 kristo Exp $
 
 class templatemgr extends aw_template
 {
@@ -155,7 +155,7 @@ class templatemgr extends aw_template
 			foreach($path as $path_item)
 			{
 				$tpl_view = $path_item->prop("tpl_view");
-				if (empty($template) && is_oid($tpl_view))
+				if (empty($template) && is_oid($tpl_view) && ($section == $path_item->id() || !$path_item->prop("tpl_view_no_inherit")))
 				{
 					$template = $this->get_template_file_by_id(array("id" => $tpl_view));
 				};
@@ -185,7 +185,7 @@ class templatemgr extends aw_template
 			foreach($path as $path_item)
 			{
 				$tpl_lead = $path_item->prop("tpl_lead");
-				if (empty($template) && is_oid($tpl_lead))
+				if (empty($template) && is_oid($tpl_lead) && ($section == $path_item->id() || !$path_item->prop("tpl_lead_no_inherit")))
 				{
 					$template = $this->get_template_file_by_id(array("id" => $tpl_lead));
 				};
