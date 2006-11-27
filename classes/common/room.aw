@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.52 2006/11/27 16:34:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.53 2006/11/27 16:41:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1288,7 +1288,7 @@ class room extends class_base
 								}
 							}
 							$d[$x] = html::href(array(
-								"url" => html::get_change_url($this->last_bron_id),
+								"url" => html::get_change_url($this->last_bron_id,array("return_url" => get_ru(),)),
 								"caption" => "<span><font color=#26466D>".$cus . " " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
 							));
