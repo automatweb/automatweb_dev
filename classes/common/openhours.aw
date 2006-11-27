@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.7 2006/11/22 16:01:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.8 2006/11/27 16:34:58 markop Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -33,7 +33,7 @@ class openhours extends class_base
 		switch($data["name"])
 		{
 			//-- get_property --//
-			case 'openhours':
+			case 'openhours':arr($arr["obj_inst"]->parent());
 				$prefix = $data['name'];
 				if (isset($arr['name_prefix']))
 				{
@@ -336,6 +336,10 @@ class openhours extends class_base
 	function get_times_for_date($oh, $tm)
 	{
 		$wd = date("w", $tm);
+		if($wd == 0)
+		{
+			$wd = 7;
+		}
 		$m = $oh->meta("openhours");
 		if($wd == 0)
 		{
@@ -358,10 +362,10 @@ class openhours extends class_base
 	**/
 	function get_opening_time($o)
 	{
-		$m = $o->meta("openhours");
+		$meta = $o->meta("openhours");
 		$h = 24;
 		$m = 60;
-		foreach($m as $row)
+		foreach($meta as $row)
 		{
 			if(100*$row["h1"]+$row["m1"] < 100*$h+$m)
 			{
@@ -372,6 +376,30 @@ class openhours extends class_base
 		return array("hour" => $h, "minute" => $m);
 	}
 
+	/** returns int, timestamp for the given date midday 
+		@attrib api=1
+		@param o required type=object
+			The openhours object to check
 
+		@param tm required type=int
+			Date to check
+	**/
+	function get_midday($o,$tm)
+	{
+		$wd = date("w", $tm);
+		if($wd == 0)
+		{
+			$wd = 7;
+		}
+		$m = $o->meta("openhours");
+		foreach($m as $row)
+		{
+			if (($row["day1"] <= $wd && $row["day2"] >= $wd) || ($row["day1"] == $wd && !$row["day2"]))
+			{
+				return mktime(($row["h1"] + $row["h2"])/2,($row["m1"] + $row["m2"])/2 ,0,date("n" , $tm),date("j" , $tm),date("Y" , $tm));
+			}
+		}
+		return mktime(date("h" , $tm),(int)date("i" , $tm) ,0,date("n" , $tm),date("j" , $tm),date("Y" , $tm));
+	}
 }
 ?>

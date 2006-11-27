@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.51 2006/11/27 14:58:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.52 2006/11/27 16:34:58 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -425,9 +425,13 @@ class room extends class_base
 					}
 				}
 				break;
-			case "deadline": 
+			case "deadline":
 				$prop["value"] = time() + 15*60;
 				break;
+			case "openhours":
+				$prop["parent"] = $arr["obj_inst"]->id();
+				break;
+				//$prop[""]
 			//-- set_property --//
 		}
 		return $retval;
@@ -1213,14 +1217,13 @@ class room extends class_base
 		{
 			extract($this->get_when_opens());
 		}
-		
 		if($arr["request"]["start"])
 		{
 			$today_start = $arr["request"]["start"];
 		}
 		else
 		{
-			if($start_hour = 24)
+			if($start_hour == 24)
 			{
 				$start_hour = 0;
 			}
