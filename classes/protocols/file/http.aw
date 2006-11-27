@@ -54,7 +54,7 @@ class http
 		$ipd = "";
 		while($data = $socket->read(10000))
 		{
-			echo "data = $data <br>";
+			//echo "data = $data <br>";
 			$ipd .= $data;
 		};
 		list($headers,$data) = explode("\r\n\r\n",$ipd,2);
