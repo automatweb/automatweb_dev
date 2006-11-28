@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.10 2005/04/18 12:31:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.11 2006/11/28 11:26:36 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -193,6 +193,8 @@ class shop_product_table_layout extends class_base
 		{
 			$so = obj($so->parent());
 		}
+		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
+		$cart_val = $cart_inst->get_cart_value();
 		$this->ft_str .= $this->parse($this->r_template);
 		$this->vars(array(
 			"ROW" => $this->ft_str,
@@ -200,7 +202,11 @@ class shop_product_table_layout extends class_base
 			"ROW2" => "",
 			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "oc" => $this->oc->id(), "return_url" => aw_global_get("REQUEST_URI")), "shop_order_cart"),
 			"HAS_ITEMS" => $hi,
-			"sel_menu_text" => $so->name()
+			"sel_menu_text" => $so->name(),
+			"web_discount" => $this->oc->prop("web_discount"),
+			"cart_total" => $cart_val,
+			"cart_discount_sum" => $cart_val*($this->oc->prop("web_discount")/100),
+			"cart_value_w_disc" => $cart_val - ($cart_val*($this->oc->prop("web_discount")/100))
 		));
 
 		if ($this->cnt)

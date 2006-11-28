@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.45 2006/10/23 13:37:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.46 2006/11/28 11:26:36 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -476,6 +476,10 @@ class shop_order extends class_base
 	**/
 	function finish_order($params = array())
 	{
+		if (!$params["user_data"] && $_POST["user_data"])
+		{
+			$params["user_data"] = $_POST["user_data"];
+		}
 		extract($params);
 
 		$wh = $this->order_warehouse->instance();
@@ -505,7 +509,7 @@ class shop_order extends class_base
 		{
 			$oi->set_prop("oc", $this->order_center->id());
 			$oi->set_meta("prod_group_by", $this->order_center->prop("mail_group_by"));
-
+			$oi->set_meta("discount", $this->order_center->prop("web_discount"));
 			$name_ctr = $this->order_center->get_first_obj_by_reltype("RELTYPE_ORDER_NAME_CTR");
 			if ($name_ctr)
 			{
@@ -1118,7 +1122,6 @@ class shop_order extends class_base
 		$tmp_register_data_obj = obj();
 		$tmp_register_data_obj->set_class_id(CL_REGISTER_DATA);
 		$register_data_prop_info = $tmp_register_data_obj->get_property_list();
-
 		foreach($awa->get() as $ud_k => $ud_v)
 		{
 			if (is_array($ud_v) && $ud_v["year"] != "")
@@ -1204,6 +1207,7 @@ class shop_order extends class_base
 			"id" => $o->id(),
 			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id())),
 			"discount" => $o->meta("discount"),
+			"discount_value" => number_format(($total * ($o->meta("discount") / 100.0)),2),
 			"postal_price" => number_format($o->meta("postal_price"))
 		));
 

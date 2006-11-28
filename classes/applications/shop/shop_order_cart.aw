@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.49 2006/10/12 13:57:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.50 2006/11/28 11:26:36 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -251,7 +251,13 @@ class shop_order_cart extends class_base
 			$this->vars($vars);
 		}
 
+		$cart_total = $this->get_cart_value();
+		$cart_discount = $cart_total * ($oc->prop("web_discount")/100);
+		
 		$this->vars(array(
+			"cart_total" => number_format($cart_total, 2),
+			"cart_discount" => number_format($cart_discount, 2),
+			"cart_val_w_disc" => number_format($cart_total - $cart_discount),
 			"user_data_form" => $html,
 			"PROD" => $str,
 			"total" => number_format($total, 2),
@@ -1226,10 +1232,16 @@ class shop_order_cart extends class_base
 
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
 		$wh_o = obj($oc->prop("warehouse"));
-
+		
 		// fake user data
 		$wh_o->set_meta("order_cur_ud", $cart["user_data"]);
 
+		foreach(safe_array($cart["user_data"]) as $k => $v)
+		{
+			$this->vars(array(
+				"user_data_".$k => $v
+			));
+		}
 		$els = $swh->callback_get_order_current_form(array(
 			"obj_inst" => $wh_o
 		));
@@ -1304,12 +1316,19 @@ class shop_order_cart extends class_base
 			$this->vars($vars);
 		}
 
+		$cart_total = $this->get_cart_value();
+                $cart_discount = $cart_total * ($oc->prop("web_discount")/100);
+				
 		$this->vars(array(
+			"cart_total" => number_format($cart_total, 2),
+	                "cart_discount" => number_format($cart_discount, 2),
+        	        "cart_val_w_disc" => number_format($cart_total - $cart_discount),
 			"user_data_form" => $html,
 			"PROD" => $str,
 			"total" => number_format($total, 2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"], "from" => "confirm")),
-			"postal_price" => number_format($cart_o->prop("postal_price"))
+			"postal_price" => number_format($cart_o->prop("postal_price")),
+			"clear_cart_url" => $this->mk_my_orb("clear_cart", array("oc" => $arr["oc"]))
 		));
 
 		if ($cart_o->prop("postal_price") > 0)
