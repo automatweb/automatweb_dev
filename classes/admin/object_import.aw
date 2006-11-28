@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.43 2006/02/08 10:53:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.44 2006/11/28 11:48:48 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -418,7 +418,7 @@ class object_import extends class_base
 				));
 			}
 			$df = "";
-			if ($pd["type"] == "datetime_select")
+			if ($pd["type"] == "datetime_select" || $pd["type"] == "date_select")
 			{
 				$df = html::textbox(array(
 					"name" => "dateformat[$pn]",
@@ -582,7 +582,7 @@ class object_import extends class_base
 	**/
 	function do_check_import($arr = array())
 	{	
-		if (date("H") > 8 && date("H") < 19)
+		if (false && date("H") > 8 && date("H") < 19)
 		{
 			echo "not during the day! <br>";
 			$sc = get_instance("scheduler");
@@ -806,7 +806,7 @@ class object_import extends class_base
 					if($dat->is_property($pn))
 					{
 						$dat->set_prop($pn, $line[$idx]);
-						if ($properties[$pn]["store"] == "connect" && $line[$idx])
+						if ($properties[$pn]["store"] == "connect" && $this->can("view", $line[$idx]))
 						{
 							$rid = $relinfo[$properties[$pn]["reltype"]]["value"];
 							$dat->connect(array(
@@ -947,8 +947,9 @@ class object_import extends class_base
 				return $clf_id;
 			}
 		}
+		echo "Hoiatus! ei leidnud vastet klassifikaatori v&auml;&auml;rtusele $str!<Br>Praegused variandid: ".join(",", $this->classif_cache[$arr["name"]])."<br><hr><br>";
 		return NULL;
-	}
+	}	
 
 	function _get_uniq_existing($o, $properties, $tableinfo)
 	{
