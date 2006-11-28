@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.210 2006/11/13 09:43:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.211 2006/11/28 11:59:17 kristo Exp $
 
 /*
 
@@ -1497,7 +1497,14 @@ class site_show extends class_base
 					$linktext = join("/",$alias_path);
 				};
 
-				$link = $this->cfg["baseurl"]."/".$linktext;
+				if (aw_ini_get("user_interface.full_content_trans"))
+				{
+					$link = $this->cfg["baseurl"]."/".aw_global_get("ct_lang_lc")."/".$linktext;
+				}
+				else
+				{
+					$link = $this->cfg["baseurl"]."/".$linktext;
+				}
 			}
 			else
 			{
