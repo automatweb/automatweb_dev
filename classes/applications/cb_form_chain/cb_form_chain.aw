@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.38 2006/11/28 13:56:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.39 2006/11/28 13:59:00 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -69,6 +69,9 @@
 	@property mail_subj type=textbox
 	@caption Teema
 
+	@property mail_add_pdf type=checkbox ch_value=1
+	@caption Lisa meilile pdf
+
 	@property mail_content_ctr type=relpicker reltype=RELTYPE_CONTROLLER
 	@caption Meili sisu kontroller
 
@@ -88,9 +91,6 @@
 
 	@property confirm_mail_to_prop type=select 
 	@caption Element, milles on saaja aadress	
-
-	@property confirm_mail_add_pdf type=checkbox ch_value=1
-	@caption Lisa meilile pdf
 
 	@property confirm_mail_content_ctr type=relpicker reltype=RELTYPE_CONTROLLER
 	@caption Kinnitusmeili sisu kontroller
