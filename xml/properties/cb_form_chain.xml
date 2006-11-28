@@ -69,6 +69,15 @@
             <caption>L&amp;amp;otilde;puvaate template</caption>
       </property>
       <property>
+            <name>print_view_tpl</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Printvaate template</caption>
+      </property>
+      <property>
             <name>webforms_toolbar</name>
             <table>objects</table>
             <group>cfs_tbl</group>

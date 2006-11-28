@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.36 2006/11/28 13:15:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.37 2006/11/28 13:26:47 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -30,6 +30,9 @@
 
 	@property show_view_tpl type=select 
 	@caption L&otilde;puvaate template
+
+	@property print_view_tpl type=select 
+	@caption Printvaate template
 
 @default group=cfs_tbl
 
@@ -229,11 +232,8 @@ class cb_form_chain extends class_base
 				break;
 	
 			case "confirm_view_tpl":
-				$t = get_instance("templatemgr");
-				$prop["options"] = array("" => t("--vali--")) + $t->template_picker(array("folder" => "applications/cb_form_chain"));
-				break;	
-
 			case "show_view_tpl":
+			case "print_view_tpl":
 				$t = get_instance("templatemgr");
 				$prop["options"] = array("" => t("--vali--")) + $t->template_picker(array("folder" => "applications/cb_form_chain"));
 				break;	
