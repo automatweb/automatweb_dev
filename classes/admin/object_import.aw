@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.44 2006/11/28 11:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.45 2006/11/28 14:45:22 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -761,6 +761,7 @@ class object_import extends class_base
 					}
 				}
 
+				$dat->set_meta("object_type", $type_o->id());
 				$dat->set_class_id($class_id);
 				$dat->set_parent($folder);
 			
