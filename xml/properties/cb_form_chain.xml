@@ -233,6 +233,16 @@
             <caption>Element, milles on saaja aadress	</caption>
       </property>
       <property>
+            <name>confirm_mail_add_pdf</name>
+            <table>objects</table>
+            <group>mail_settings_confirm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lisa meilile pdf</caption>
+      </property>
+      <property>
             <name>confirm_mail_content_ctr</name>
             <table>objects</table>
             <group>mail_settings_confirm</group>
