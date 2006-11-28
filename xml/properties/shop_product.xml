@@ -778,6 +778,16 @@
             </table_fields>
             <caption>Lingid</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -801,6 +811,9 @@
             <lnk>
                   <caption>Lingid</caption>
             </lnk>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <aw_shop_products>

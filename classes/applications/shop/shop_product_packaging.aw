@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.25 2006/11/24 13:16:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.26 2006/11/28 15:14:46 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -140,6 +140,11 @@
 @property userch5 type=checkbox ch_value=1  field=userch5 group=data datatype=int
 @caption User-defined checkbox 5
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption pilt 
@@ -172,6 +177,9 @@ class shop_product_packaging extends class_base
 			"tpldir" => "applications/shop/shop_product_packaging",
 			"clid" => CL_SHOP_PRODUCT_PACKAGING
 		));
+		$this->trans_props = array(
+			"name","comment"
+		);
 	}
 
 	function get_property($arr)
@@ -202,6 +210,10 @@ class shop_product_packaging extends class_base
 		{
 			case "price_cur":
 				$arr["obj_inst"]->set_meta("cur_prices", $arr["request"]["cur_prices"]);
+				break;
+
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
 				break;
 		}
 		return $retval;
@@ -279,12 +291,12 @@ class shop_product_packaging extends class_base
 		$ivs = array(
 			"it" => $it,
 			"bgcolor" => $bgcolor,
-			"packaging_name" => $pi->name(),
+			"packaging_name" => $pi->trans_get_val("name"),
 			"packaging_price" => $this->get_price($pi),
 			"packaging_id" => $pi->id(),
 			"packaging_quantity" => (int)($arr["quantity"]),
 			"packaging_view_link" => obj_link($pi->id().":".$oc_obj->id()),
-			"name" => $prod->name(),
+			"name" => $prod->trans_get_val("name"),
 			"price" => $this->get_price($prod),
 			"tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($prod)), 2),
 			"obj_price" => $this->get_price($pi),
@@ -507,6 +519,20 @@ class shop_product_packaging extends class_base
 				"cur" => $cur->name()
 			));
 		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

@@ -377,6 +377,16 @@
             <datatype>int</datatype>
             <caption>User-defined checkbox 5</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>aw_shop_packaging</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT_PACKAGING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -388,6 +398,9 @@
             <file>
                   <caption>Failid</caption>
             </file>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <aw_shop_packaging>
