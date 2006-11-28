@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.39 2006/11/28 13:59:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.40 2006/11/28 14:21:49 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -372,7 +372,10 @@ class cb_form_chain extends class_base
 	function _cfs($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$t->set_caption(t('Vormiahela veebivormid'));
+		if (method_exists($t, "set_caption"))
+		{
+			$t->set_caption(t('Vormiahela veebivormid'));
+		}
 		$this->_init_cfs_t($t);
 
 		$rep_ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_REP_CTR")));
@@ -585,7 +588,6 @@ class cb_form_chain extends class_base
 	function _get_page($o)
 	{
 		$pgs = $this->_get_page_list($o);
-
 		if (!empty($_GET["cbfc_pg"]) && isset($pgs[$_GET["cbfc_pg"]]))
 		{
 			return $_GET["cbfc_pg"];
@@ -926,8 +928,8 @@ class cb_form_chain extends class_base
 		{
 			$fc = get_instance(CL_FORM_CONTROLLER);
 			$form_str = $fc->eval_controller(
-				$o->prop("confirm_view_ctl")
-			//	$o
+				$o->prop("confirm_view_ctl"),
+				$o
 			);
 		}
 		else
@@ -1167,7 +1169,8 @@ class cb_form_chain extends class_base
 
 		$i = $entry->instance();
 		$html = $i->show(array(
-			"id" => $entry->id()
+			"id" => $entry->id(),
+			"from" => "mail"
 		));
 
 		$to_arr = array();
@@ -1225,6 +1228,17 @@ class cb_form_chain extends class_base
 			$mailer->htmlbodyattach(array(
 				"data" => $html,
 			));
+
+			if ($o->prop("mail_add_pdf"))
+			{
+				$pdf_c = get_instance("core/converters/html2pdf");
+				$pdf_content = $pdf_c->convert(array("source" => $html));
+				$mailer->fattach(array(
+					"content" => $pdf_content,
+					"contenttype" => "application/pdf",
+					"name" => "andmed.pdf"
+				));
+			}
 
 			if ($this->can("view", $o->prop("mail_content_ctr")))
 			{
@@ -1315,6 +1329,10 @@ class cb_form_chain extends class_base
 
 	function _display_data_table($o, $fd)
 	{
+		if ($this->is_template("FORM_MUL"))
+		{
+			return $this->_display_data_table_tpl($o, $fd);
+		}
 		// make table via component
 		classload("vcl/table");
 		$t = new aw_table(array("layout" => "generic"));
@@ -1351,6 +1369,43 @@ class cb_form_chain extends class_base
 		return $ret;
 	}
 
+	function _display_data_table_tpl($o, $fd)
+	{
+		$wf = get_instance(CL_WEBFORM);
+		$props = $wf->get_props_from_wf(array(
+			"id" => $fd["form"]
+		));
+		$fe_str = "";
+		for($i = 0; $i < $fd["rep_cnt"]; $i++)
+		{
+			$pr_str = "";
+			$inf = $_SESSION["cbfc_data"][$fd["form"]][$i];
+			if (!$this->_is_empty($inf))
+			{
+				foreach($props as $pn => $pd)
+				{
+					$this->vars(array(
+						"caption" => $pd["caption"],
+						"value" => $this->_value_from_data($pd,$inf[$pn]) 
+					));
+					$pr_str .= $this->parse("E_PROPERTY");
+				}
+				$this->vars(array(
+					"E_PROPERTY" => $pr_str
+				));
+				$fe_str .= $this->parse("FORM_ENTRY");
+			}
+		}
+		$form_obj = obj($fd["form"]);
+		$this->vars(array(
+			"form_name" => $form_obj->name(),
+			"FORM_ENTRY" => $fe_str
+		));
+		$ret = $this->parse("FORM_MUL");
+		$this->vars(array("FORM_MUL" => ""));
+		return $ret;
+	}
+
 	function _display_data($o, $fd)
 	{
 		$wf = get_instance(CL_WEBFORM);
@@ -1377,8 +1432,10 @@ class cb_form_chain extends class_base
 			$ret .= $this->parse("PROPERTY");
 		}
 
+		$form_obj = obj($fd["form"]);
 		$this->vars(array(
-			"PROPERTY" => $ret
+			"PROPERTY" => $ret,
+			"form_name" => $form_obj->name()
 		));
 		return $this->parse("FORM");
 	}

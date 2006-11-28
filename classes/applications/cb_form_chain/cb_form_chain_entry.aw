@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.15 2006/04/24 06:44:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.16 2006/11/28 14:21:49 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus
 /*
 
@@ -77,6 +77,16 @@ class cb_form_chain_entry extends class_base
 	}
 
 	/**
+		@attrib name=show_print
+		@param id required type=int acl=view
+	**/
+	function show_print($arr)
+	{
+		$html = $this->show($arr);
+		die($html);
+	}
+
+	/**
 		@attrib name=show
 		@param id required type=int acl=view
 	**/
@@ -91,8 +101,16 @@ class cb_form_chain_entry extends class_base
 			$di = safe_array($form->meta("d"));
 		}
 
-		$this->read_template("show.tpl");
-
+		$tpl = "show.tpl";
+		if ($form && $form->prop("show_view_tpl"))
+		{
+			$tpl = $form->prop("show_view_tpl");			
+		}
+		if (($arr["from"] == "mail" || $_GET["action"] == "show_pdf" || $_GET["action"] == "show_print") && $form && $form->prop("show_view_tpl"))
+		{
+			$tpl = $form->prop("print_view_tpl");
+		}
+		$this->read_template($tpl);
 		$form_str = "";
 
 		// make a list of form -> entry, then display either table or form
@@ -121,6 +139,8 @@ class cb_form_chain_entry extends class_base
 		$this->vars(array(
 			"forms" => $form_str,
 			"gen_ctr_res" => $_SESSION['gen_ctr_res_value'],
+			"pdf_url" => $this->mk_my_orb("show_pdf", array("id" => $o->id())),
+			"print_url" => $this->mk_my_orb("show_print", array("id" => $o->id())) 
 		));
 
 		return $this->parse();
@@ -231,6 +251,16 @@ class cb_form_chain_entry extends class_base
 		}
 
 		$ret = $t->draw();
+		if ($this->is_template("FORM_MUL"))
+		{
+			$form_obj = obj($wf_id);	
+			$this->vars(array(
+				"FORM_ENTRY" => $ret,
+				"form_name" => $form_obj->name()
+			));
+			$ret = $this->parse("FORM_MUL");
+			$this->vars(array("FORM_MUL" => ""));
+		}
 		return $ret;
 	}
 
@@ -295,8 +325,10 @@ class cb_form_chain_entry extends class_base
 			$ret .= $this->parse("PROPERTY");
 		}
 
+		$form_obj = obj($wf_id);
 		$this->vars(array(
-			"PROPERTY" => $ret
+			"PROPERTY" => $ret,
+			"form_name" => $form_obj->name()
 		));
 		return $this->parse("FORM");
 	}
