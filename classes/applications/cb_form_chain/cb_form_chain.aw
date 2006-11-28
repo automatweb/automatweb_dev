@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.35 2006/11/06 12:22:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.36 2006/11/28 13:15:48 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -24,6 +24,12 @@
 
 	@property disp_view_ctl type=relpicker reltype=RELTYPE_CONTROLLER
 	@caption V&auml;ljundi kontroller 
+
+	@property confirm_view_tpl type=select 
+	@caption Kinnitusvaate template
+
+	@property show_view_tpl type=select 
+	@caption L&otilde;puvaate template
 
 @default group=cfs_tbl
 
@@ -221,6 +227,16 @@ class cb_form_chain extends class_base
 			case "cfs_entry_tbl":
 				$this->_cfs_entry_tbl($arr);
 				break;
+	
+			case "confirm_view_tpl":
+				$t = get_instance("templatemgr");
+				$prop["options"] = array("" => t("--vali--")) + $t->template_picker(array("folder" => "applications/cb_form_chain"));
+				break;	
+
+			case "show_view_tpl":
+				$t = get_instance("templatemgr");
+				$prop["options"] = array("" => t("--vali--")) + $t->template_picker(array("folder" => "applications/cb_form_chain"));
+				break;	
 		};
 		return $retval;
 	}

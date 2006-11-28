@@ -51,6 +51,24 @@
             <caption>V&amp;amp;auml;ljundi kontroller </caption>
       </property>
       <property>
+            <name>confirm_view_tpl</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kinnitusvaate template</caption>
+      </property>
+      <property>
+            <name>show_view_tpl</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>L&amp;amp;otilde;puvaate template</caption>
+      </property>
+      <property>
             <name>webforms_toolbar</name>
             <table>objects</table>
             <group>cfs_tbl</group>
