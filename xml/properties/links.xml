@@ -15,6 +15,7 @@
             <group>general</group>
             <type>textbox</type>
             <table>extlinks</table>
+            <default>http://</default>
             <field>url</field>
             <caption>URL</caption>
       </property>

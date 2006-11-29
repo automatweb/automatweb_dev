@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.30 2006/10/20 11:06:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.31 2006/11/29 10:14:54 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -10,7 +10,7 @@
 	@property comment type=textarea cols=30 rows=5 table=objects 
 	@caption Kommentaar lingikogusse
 
-	@property url type=textbox table=extlinks 
+	@property url type=textbox table=extlinks default=http://
 	@caption URL
 
 	@property docid type=hidden table=extlinks 
