@@ -1709,7 +1709,14 @@ class crm_company extends class_base
 				// read from rel
 				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
 				{
-					$data["value"] = $rel->prop($data["name"]);
+					if ($arr["request"]["action"] == "view")
+					{
+						$data["value"] = $rel->prop_str($data["name"]);
+					}
+					else
+					{
+						$data["value"] = $rel->prop($data["name"]);
+					}
 				}
 				if (isset($data["options"]) && !isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
 				{
