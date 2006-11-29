@@ -10,6 +10,15 @@
             <caption>Maksimaalne aegade arv samal p&amp;amp;auml;eval</caption>
       </property>
       <property>
+            <name>hold_not_verifyed</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kinnitamata broneeringut tuleb hoida kinni x minutit</caption>
+      </property>
+      <property>
             <name>users</name>
             <table>objects</table>
             <group>whom</group>

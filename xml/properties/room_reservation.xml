@@ -9,6 +9,7 @@
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_ROOM</reltype>
+            <store>connect</store>
             <caption>Ruumid</caption>
       </property>
       <property>
@@ -29,6 +30,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <caption>Tasemed</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ROOM_RESERVATION</syslog_type>
@@ -41,6 +43,7 @@
             <ROOM>
                   <value>1</value>
                   <clid>CL_ROOM</clid>
+                  <caption>Ruum mida broneerida</caption>
             </ROOM>
       </reltypes>
 </properties>

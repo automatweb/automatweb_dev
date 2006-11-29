@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.18 2006/11/22 15:28:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.19 2006/11/29 16:18:44 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -638,9 +638,15 @@ class reservation extends class_base
 			}
 			$ret = "<form method=POST action=".get_ru().">";
 			$ret.= t("Broneering : ");
-			$ret.= date("h:i" , $bron_obj->prop("start1"));
+			$ret.= date("G:i" , $bron_obj->prop("start1"));
 			$ret.= "-";
-			$ret.= date("h:i" , $bron_obj->prop("end"));
+			$ret.= date("G:i" , $bron_obj->prop("end"));
+			
+			if(is_oid($bron_obj->prop("customer")))
+			{
+				$customer = obj($bron_obj->prop("customer"));
+				$ret.= "\n<br>".$customer->name();
+			}
 			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 0 , "caption" => t("Klient ei ilmunud kohale")));
 			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 1 , "caption" => t("Klient ilmus kohale")));
 			$ret.= "\n<br>".html::submit(array("name" => "submit", "value" => t("M&auml;rgi")));

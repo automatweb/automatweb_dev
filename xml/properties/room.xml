@@ -590,7 +590,7 @@
             <SHOP_WAREHOUSE>
                   <value>10</value>
                   <clid>CL_SHOP_WAREHOUSE</clid>
-                  <caption>Ruumi hind</caption>
+                  <caption>Ladu</caption>
             </SHOP_WAREHOUSE>
             <OPENHOURS>
                   <value>44</value>
@@ -605,7 +605,7 @@
             <SETTINGS>
                   <value>13</value>
                   <clid>CL_ROOM_SETTINGS</clid>
-                  <caption>Ametinimetus</caption>
+                  <caption>Seaded</caption>
             </SETTINGS>
       </reltypes>
       <layout>

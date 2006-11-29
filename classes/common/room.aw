@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.54 2006/11/27 16:46:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.55 2006/11/29 16:17:39 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -211,10 +211,10 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 @caption Ruumi hind
 
 @reltype SHOP_WAREHOUSE value=10 clid=CL_SHOP_WAREHOUSE
-@caption Ruumi hind
+@caption Ladu
 
 reltype TEMPLATE value=11 clid=CL_SHOP_WAREHOUSE
-caption Ruumi hind
+caption Templeit
 
 @reltype OPENHOURS value=44 clid=CL_OPENHOURS
 @caption Avamisajad
@@ -223,7 +223,7 @@ caption Ruumi hind
 @caption Ametinimetus
 
 @reltype SETTINGS value=13 clid=CL_ROOM_SETTINGS
-@caption Ametinimetus
+@caption Seaded
 
 */
 
@@ -1136,7 +1136,7 @@ class room extends class_base
 	function _get_calendar_select($arr)
 	{
 		$ret = "";
-		if($bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]))
+		if($arr["user"] != 1 &&  $bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]))
 		{
 			$reservaton_inst = get_instance(CL_RESERVATION);
 			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=300')
@@ -1258,8 +1258,17 @@ class room extends class_base
 							$arr["menu_id"] = "menu_".$start_step;
 							$prod_menu = $this->get_prod_menu($arr);
 						}
-						$d[$x] = "<span>".t("Vaba")."</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>'0')). " " . $prod_menu;
+						$val = 0;
+						$string = t("Vaba");
+						if($_SESSION["room_reservation"][$arr["obj_inst"]->id()]["start"]<=$start_step && $_SESSION["room_reservation"][$arr["obj_inst"]->id()]["end"]>=$end_step)
+						{
+							$val = 1;
+							$col[$x] = "red";
+							$string = t("Broneeri");
+						}
+						$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
 						$onclick[$x] = "doBron(this,".($step_length * $arr["obj_inst"]->prop("time_step")).")";
+						
 					}
 					else
 					{
@@ -1743,11 +1752,11 @@ class room extends class_base
 				if(!$start)
 				{
 					$start = $bron;
-					$end = $start + $length-1;
+					$end = $start + $length;
 				}
-				if(($end+1) == $bron)
+				if(($end) == $bron)
 				{
-					$end = $bron + $length-1;
+					$end = $bron + $length;
 				}
 			}
 		}
@@ -2818,12 +2827,14 @@ class room extends class_base
 		$verified_reservations = new object_list();
 		foreach($reservations->arr() as $res)
 		{
-			//filtriga asja ei saand tööle, niiet kasutab kirvemeetodit.... kuna asi toimub ühes nädalas, siis miskit hullu kiirusejama ei tohiks tulla
-			//poogib siis mitte kinnitatud ja maksetähtaja ületanud välja
-			if($res->prop("verified") || ($res->prop("deadline") > time()))
+			if($res->prop("verified"))
 			{
 				$verified_reservations->add($res->id());
 				//$reservations->remove($res->id());
+			}
+			elseif(!($res->prop("deadline") > time()))
+			{
+				$reservations->remove($res->id());
 			}
 	//		$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
 		}

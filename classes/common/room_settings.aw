@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.2 2006/11/24 15:59:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.3 2006/11/29 16:17:39 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -11,6 +11,8 @@
 @property max_times_per_day type=textbox field=meta method=serialize
 @caption Maksimaalne aegade arv samal p&auml;eval
 
+@property hold_not_verifyed type=textbox field=meta method=serialize
+@caption Kinnitamata broneeringut tuleb hoida kinni x minutit
 
 @groupinfo whom caption="Kellele kehtib"
 @default group=whom
@@ -123,7 +125,7 @@ class room_settings extends class_base
 		$curprof = $cd->get_current_profession();
 
 		$ol = new object_list(array(
-			"class_id" => CL_CRM_SETTINGS,
+			"class_id" => CL_ROOM_SETTINGS,
 			"lang_id" => array(),
 			"oid" => $oids,
 			new object_list_filter(array(
