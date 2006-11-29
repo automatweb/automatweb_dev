@@ -45,6 +45,7 @@ if (!empty($_GET["class"]))
 	if (!empty($clss[$clid]["prod_family"]))
 	{
 		$pf = $clss[$clid]["prod_family"];
+		$pf_url = aw_global_get("REQUEST_URI");
 	}
 }
 $ru = $_GET["return_url"];
@@ -59,6 +60,7 @@ while (!empty($ru))
 		if (!empty($clss[$clid]["prod_family"]))
 		{
 			$pf = $clss[$clid]["prod_family"];
+			$pf_url = $ru;
 		}
 	}
 	$ru = $vals["return_url"];
@@ -90,8 +92,14 @@ else
 	$page_charset = $charset = aw_global_get("charset");
 }
 
+if ($pf_url == "")
+{
+	$pf_url = aw_ini_get("baseurl")."/automatweb/";
+}
+
 $sf->vars(array(
 	"prod_family" => $pf,
+	"prod_family_href" => $pf_url,
 	"cur_p_name" => $p->name(),
 //	"cur_p_url" => html::obj_change_url($p),
 	"cur_p_url" => html::get_change_url($p->id(), array('return_url' => get_ru())),
