@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.97 2006/10/24 06:44:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.98 2006/11/29 09:34:36 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -2112,7 +2112,7 @@ class cfgform extends class_base
 			{
 				$ctl = obj($gd["grp_d_ctl"]);
 				$ctli = $ctl->instance();
-				$rv = $ctli->check_property($gd, $ctl->id(), $gd);
+				$rv = $ctli->check_property($ret[$gn], $ctl->id(), $gd);
 				if ($rv == PROP_IGNORE)
 				{
 					unset($ret[$gn]);

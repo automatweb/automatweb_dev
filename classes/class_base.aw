@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.519 2006/11/22 13:38:17 kristo Exp $
+// $Id: class_base.aw,v 2.520 2006/11/29 09:34:34 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1531,6 +1531,10 @@ class class_base extends aw_template
 				};
 
 
+				if ($val["set_link"])
+				{
+					$link = $val["set_link"];
+				}
 				$tabinfo = array(
 					"link" => &$link,
 					"caption" => &$val["caption"],
