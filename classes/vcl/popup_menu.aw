@@ -37,6 +37,8 @@ class popup_menu extends aw_template
 			Item's caption
 		@param link required type=string
 			Item's link
+		@param target optional type=string
+			If true, link iopens in new window
 
 		@comment
 			adds new item to popup menu
@@ -82,13 +84,18 @@ class popup_menu extends aw_template
 			$id = "id='$arr[href_id]'";
 		}
 
+		if (!empty($target))
+		{
+			$target = " target=\"_blank\" ";
+		}
+
 		if (empty($arr["disabled"]))
 		{
-			$rv ='<a '.$id.' class="menuItem" href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
+			$rv ='<a '.$id.' class="menuItem" $target href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
 		}
 		else
 		{
-			$rv = '<a '.$id.' class="menuItem" href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
+			$rv = '<a '.$id.' class="menuItem" $target href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
 		}
 		$this->menus[$arr["parent"]] .= $rv;
 	}

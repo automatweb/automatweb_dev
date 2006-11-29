@@ -332,7 +332,8 @@ class crm_company_docs_impl extends class_base
 				{
 					$pm->add_item(array(
 						"text" => $c->prop("to.name"),
-						"link" => file::get_url($c->prop("to"), $c->prop("to.name"))
+						"link" => file::get_url($c->prop("to"), $c->prop("to.name")),
+						"target" => 1
 					));
 				}
 			}
