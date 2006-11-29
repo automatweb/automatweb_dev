@@ -36,6 +36,16 @@
             <field>aw_bank</field>
             <caption>Pank</caption>
       </property>
+      <property>
+            <name>currency</name>
+            <table>aw_crm_bank_account</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CURRENCY</reltype>
+            <automatic>1</automatic>
+            <field>aw_currency</field>
+            <caption>Valuuta</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_BANK_ACCOUNT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -56,6 +66,11 @@
                   <clid>CL_CRM_BANK</clid>
                   <caption>pank</caption>
             </BANK>
+            <CURRENCY>
+                  <value>2</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>Valuuta</caption>
+            </CURRENCY>
       </reltypes>
 </properties>
 

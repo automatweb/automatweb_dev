@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank_account.aw,v 1.3 2006/03/28 16:24:30 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank_account.aw,v 1.4 2006/11/29 11:56:57 kristo Exp $
 // crm_bank_account.aw - CRM Pangakonto
 /*
 
@@ -22,8 +22,14 @@
 	@property bank type=relpicker reltype=RELTYPE_BANK automatic=1 table=aw_crm_bank_account field=aw_bank
 	@caption Pank
 
+	@property currency type=relpicker reltype=RELTYPE_CURRENCY automatic=1 table=aw_crm_bank_account field=aw_currency
+	@caption Valuuta
+
 @reltype BANK value=1 clid=CL_CRM_BANK
 @caption pank
+
+@reltype CURRENCY value=2 clid=CL_CURRENCY
+@caption Valuuta
 
 */
 
@@ -60,6 +66,19 @@ class crm_bank_account extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "aw_currency":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+		}
 	}
 }
 ?>
