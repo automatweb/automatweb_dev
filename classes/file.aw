@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.137 2006/11/22 11:36:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.138 2006/11/29 11:13:30 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -87,6 +87,12 @@
 @groupinfo settings caption=Seadistused
 @groupinfo dates caption=Ajad
 @groupinfo transl caption=T&otilde;lgi
+
+@groupinfo acl caption=&Otilde;igused
+@default group=acl
+	
+	@property acl type=acl_manager store=no
+	@caption &Otilde;igused
 
 @reltype KEYWORD value=2 clid=CL_KEYWORD
 @caption M&auml;rks&otilde;na

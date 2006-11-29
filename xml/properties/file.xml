@@ -147,6 +147,16 @@
             <callback>callback_get_transl</callback>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
+      <property>
+            <name>acl</name>
+            <table>objects</table>
+            <group>acl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>acl_manager</type>
+            <store>no</store>
+            <caption>&amp;amp;Otilde;igused</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
@@ -162,6 +172,9 @@
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
+            <acl>
+                  <caption>&amp;amp;Otilde;igused</caption>
+            </acl>
       </groupinfo>
       <tableinfo>
             <files>

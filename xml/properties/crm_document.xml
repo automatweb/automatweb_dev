@@ -126,6 +126,15 @@
             <field>acts</field>
             <caption>Tegevused</caption>
       </property>
+      <property>
+            <name>acl</name>
+            <table>objects</table>
+            <group>acl</group>
+            <type>acl_manager</type>
+            <store>no</store>
+            <field>acl</field>
+            <caption>&amp;amp;Otilde;igused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_DOCUMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -133,6 +142,9 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <acl>
+                  <caption>&amp;amp;Otilde;igused</caption>
+            </acl>
             <files>
                   <caption>Failid</caption>
             </files>

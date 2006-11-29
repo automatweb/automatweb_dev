@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.11 2006/10/11 17:06:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.12 2006/11/29 11:13:14 kristo Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
@@ -52,6 +52,12 @@
 
 	@property acts type=table store=no no_caption=1
 	@caption Tegevused
+
+@groupinfo acl caption=&Otilde;igused
+@default group=acl
+	
+	@property acl type=acl_manager store=no
+	@caption &Otilde;igused
 
 @groupinfo files caption="Failid"
 @groupinfo parts caption="Osalejad" 

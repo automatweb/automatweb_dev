@@ -104,6 +104,15 @@
             <field>acts</field>
             <caption>Tegevused</caption>
       </property>
+      <property>
+            <name>acl</name>
+            <table>objects</table>
+            <group>acl</group>
+            <type>acl_manager</type>
+            <store>no</store>
+            <field>acl</field>
+            <caption>&amp;amp;Otilde;igused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_MEMO</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -118,6 +127,9 @@
             <parts>
                   <caption>Osalejad</caption>
             </parts>
+            <acl>
+                  <caption>&amp;amp;Otilde;igused</caption>
+            </acl>
       </groupinfo>
       <tableinfo>
             <aw_crm_memo>

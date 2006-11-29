@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.15 2006/10/11 17:09:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.16 2006/11/29 11:12:16 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -51,6 +51,11 @@
 
 @groupinfo files caption="Failid"
 @groupinfo parts caption="Osalejad" 
+@groupinfo acl caption=&Otilde;igused
+@default group=acl
+	
+	@property acl type=acl_manager store=no
+	@caption &Otilde;igused
 
 @reltype FILE value=1 clid=CL_FILE
 @caption fail

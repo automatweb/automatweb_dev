@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.53 2006/10/11 17:09:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.54 2006/11/29 11:12:16 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -116,6 +116,11 @@
 @groupinfo history caption=Ajalugu submit=no
 @groupinfo offer caption="Pakkumine" submit=no
 @groupinfo parts caption="Osalejad" 
+@groupinfo acl caption=&Otilde;igused
+@default group=acl
+	
+	@property acl type=acl_manager store=no
+	@caption &Otilde;igused
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
