@@ -1017,6 +1017,16 @@ class core extends acl_base
 			// path() always return an array
 			$chain = array_reverse($current->path());
 
+			if (count($chain) == 0)
+			{
+				$admrm = aw_ini_get("admin_rootmenu2");
+				if (is_array($admrm))
+				{
+					$admrm = reset($admrm);
+				}
+				$chain = array(obj($admrm));
+			}
+
 			foreach($chain as $obj)
 			{
 				$name = $obj->name();
