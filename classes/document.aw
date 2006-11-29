@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.360 2006/07/12 09:28:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.361 2006/11/29 11:49:34 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2079,7 +2079,10 @@ class document extends aw_template
 			// hook for site specific document parsing
 			if (is_object($si))
 			{
-				$si->parse_search_result_document(&$row);
+				if ($si->parse_search_result_document(&$row) == -1)
+				{
+					continue;
+				}
 			}
 
 			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
