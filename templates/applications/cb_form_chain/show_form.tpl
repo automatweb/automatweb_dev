@@ -61,7 +61,9 @@ function submit_changeform(action)
 <input type="submit" name="goto_prev" value="<< Tagasi">
 <!-- END SUB: PREV_PAGE -->
 
+<!-- SUB: SAVE_BUTTON -->
 <input type="submit" value="Salvesta">
+<!-- END SUB: SAVE_BUTTON -->
 
 <!-- SUB: NEXT_PAGE -->
 <input type="submit" name="goto_next" value="Edasi >>">
