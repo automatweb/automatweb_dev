@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.12 2006/10/20 11:22:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.13 2006/11/29 12:09:47 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -556,13 +556,18 @@ class admin_if extends class_base
 			"chgbgcolor" => "cutcopied",
 		));
 
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "select",
 			"caption" => "<a href='javascript:selall()'>".t("Vali")."</a>",
 			"width" => 30,
 			"align" => "center",
 			"talign" => "center",
 			"chgbgcolor" => "cutcopied",
+		));*/
+		$t->define_chooser(array(
+			"name" => "sel",
+			"chgbgcolor" => "cutcopied",
+			"field" => "oid"
 		));
 	}
 
