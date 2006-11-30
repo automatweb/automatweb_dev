@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.10 2006/11/29 16:17:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.11 2006/11/30 13:23:16 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -274,6 +274,7 @@ class room_reservation extends class_base
 
 		$this->vars($this->get_site_props(array(
 			"room" => $room,
+			"id" => $arr["alias"]["target"],
 		)));
 		$this->vars($data);
 		
@@ -525,7 +526,7 @@ class room_reservation extends class_base
 			
 		$action = $this->mk_my_orb("submit_web_products_table", array("room" => $room->id()));
 		$sf->vars(array(
-			"content" => "<form name='products_form' action=".$action." method=POST>".$html."<br>".html::submit(array("value" => t("Salvesta")))."</form>",
+			"content" => "<form name='products_form' action=".$action." method=POST>".$html."<br></form>",
 			"uid" => aw_global_get("uid"),
 			"charset" => aw_global_get("charset")
 		));
@@ -546,6 +547,7 @@ class room_reservation extends class_base
 		{
 			$_SESSION["room_reservation"][$arr["room"]]["products"] = $arr["add_to_cart"];
 			$_SESSION["soc_err"] = $arr["add_to_cart"];
+//			aw_global_set("soc_err", $arr["add_to_cart"]);
 //			"quantity" => $soce[$oid]["ordered_num_enter"],
 //			aw_global_set("quantity" => $soce[$oid]["ordered_num_enter"],
 		}
@@ -563,31 +565,46 @@ class room_reservation extends class_base
 	
 	/**
 	@attrib name=get_web_calendar_table api=1 params=name nologin=1
-		@param room required type=int
+		@param room optional type=int
+		@param id optional type=int
 	**/
 	function get_web_calendar_table($arr)
 	{
+		if(is_oid($arr["id"]))
+		{
+			$room_res = obj($arr["id"]);
+			$rooms = $room_res->prop("rooms");
+		}
+		else
+		{
+			$rooms = array($arr["room"]);
+		}
+		$tables = "";
 		classload("vcl/table");
-		$t = new vcl_table;
-		$res_inst = get_instance(CL_ROOM);
-		$res_inst->_get_calendar_tbl(array(
-			"prop" => array("vcl_inst" => &$t),
-			"room" => $arr["room"],
-			"web" => 1,
-		));
-				$sf = new aw_template;
+		foreach($rooms as $room)
+		{
+			$t = new vcl_table();
+			$res_inst = get_instance(CL_ROOM);
+			$res_inst->_get_calendar_tbl(array(
+				"prop" => array("vcl_inst" => &$t),
+				"room" => $room,
+				"web" => 1,
+			));
+			$tables.= $t->draw();
+		}
+		$sf = new aw_template;
 		$sf->db_init();
 		$sf->tpl_init("automatweb");
 		$sf->read_template("index.tpl");
-			
 		$action = $this->mk_my_orb("submit_web_calendar_table", array("room" => $arr["room"]));
 		$arr["obj_inst"] = obj($arr["room"]);
 		$select = $res_inst->_get_calendar_select($arr);
 		$sf->vars(array(
-			"content" => "<form name='products_form' action=".$action." method=POST>".$select.$t->draw()."<br>".html::submit(array("value" => t("Salvesta")))."</form>",
+			"content" => "<form name='products_form' action=".$action." method=POST>".$select.$tables."<br>".html::submit(array("value" => t("Salvesta")))."</form>",
 			"uid" => aw_global_get("uid"),
 			"charset" => aw_global_get("charset")
 		));
+		
 //		die($ret);
 		die($sf->parse());
 
