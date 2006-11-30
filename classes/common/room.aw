@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.55 2006/11/29 16:17:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.56 2006/11/30 10:20:02 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -878,6 +878,12 @@ class room extends class_base
 			$start1 = mktime($start1["hour"], $start1["minute"], 0, $start1["month"], $start1["day"], $start1["year"]);
 			$end = mktime($end["hour"], $end["minute"], 0, $end["month"], $end["day"], $end["year"]);
 			
+			if(is_oid($product))
+			{
+				$product_obj = obj($product);
+				$end = $start1 + $product_obj->prop("reservation_time")*$product_obj->prop("reservation_time_unit");
+			}
+			
 			if(!$room_inst->check_if_available(array(
 				"room" => $resource,
 				"start" => $start1,
@@ -991,8 +997,20 @@ class room extends class_base
 				}
 				$bron->save();
 				$id = $bron->id();
+				die("<script type='text/javascript'>
+					window.opener.location.href='".$arr['return_url']."';
+					window.close();
+					</script>
+				");
 			}
 		}
+		
+		if(is_oid($product) && $start1>1)
+		{
+			$product_obj = obj($product);
+			$end = $start1 + $product_obj->prop("reservation_time")*$product_obj->prop("reservation_time_unit");
+		}
+
 		
 		classload("vcl/table");
 		$t = new vcl_table(array(
@@ -1163,26 +1181,30 @@ class room extends class_base
 			"selected" => $selected,
 		));
 		
-		$ret.= t("Vali broneeringu kestvus: ");
-		
-		$options = array();
-		$x = 1;
-		while($x<7)
+		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
 		{
-			$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-			if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+			$ret.= t("Vali broneeringu kestvus: ");
+			
+			$options = array();
+			$x = 1;
+			while($x<7)
 			{
-				$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
-			}
-			$x++;
-		};
+				$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+				if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+				{
+					$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
+				}
+				$x++;
+			};
 		
-		$ret.= html::select(array(
-			"name" => "room_reservation_length",
-			"options" => $options,
-		));
+			$ret.= html::select(array(
+				"name" => "room_reservation_length",
+				"options" => $options,
+			));
+			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
+			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
+		}
 		$ret.= html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
-		$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		$arr["prop"]["value"] = $ret;
 		return $ret;
 	}
@@ -1564,7 +1586,7 @@ class room extends class_base
 					
 			}
 		}
-		$product = $_SESSION[$id]["product"];
+		$product = $arr["product"];
 		//arr($arr); arr($start); arr($end);
 		//die();
 		if (!$parent)
@@ -2737,7 +2759,7 @@ class room extends class_base
 		if(is_oid($arr["oid"]) && $this->can("view", $arr["oid"]))
 		{
 			$product=obj($arr["oid"]);
-			return $product->prop("reservation_time")*$product->prop("reservation_time_unit");
+			return ($product->prop("reservation_time")*$product->prop("reservation_time_unit")+$product->prop("buffer_time_after")*$product->prop("buffer_time_unit"));
 		}
 		return 0;
 	}
@@ -2805,10 +2827,11 @@ class room extends class_base
 		}
 		else
 		{
-			$buffer = $buffer_end = $buffer_start = $buff_before + $buff_after;
+		//	$buffer = $buffer_end = $buffer_start = $buff_before + $buff_after;
+			$buffer_end = $buff_before;
+			$buffer_start =$buff_after;
 		}
 		$buffer = $buff_before+$buff_after;
-		
 		$filt = array(
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
