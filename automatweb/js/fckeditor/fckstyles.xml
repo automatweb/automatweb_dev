@@ -33,4 +33,7 @@
 	<Style name="Vahepealkiri" element="span">
 		<Attribute name="class" value="vahepealkiri" />
 	</Style>
+	<Style name="Quotation" element="p">
+		<Attribute name="class" value="quote" />
+	</Style>
 </Styles>

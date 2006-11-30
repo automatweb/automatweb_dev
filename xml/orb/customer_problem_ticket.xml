@@ -3,4 +3,3 @@
 	<class name="customer_problem_ticket" folder="applications/bug_o_matic_3000" extends="class_base">
 	</class>
 </orb>
-		

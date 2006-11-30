@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.67 2006/11/16 15:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.68 2006/11/30 11:02:45 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -941,14 +941,17 @@ class bug extends class_base
 		return $comt;
 	}
 
-	function _add_comment($bug, $comment, $old_state = null, $new_state = null, $add_wh = null)
+	function _add_comment($bug, $comment, $old_state = null, $new_state = null, $add_wh = null, $notify = true)
 	{
 		if (!is_oid($bug->id()))
 		{
 			return;
 		}
 		// email any persons interested in status changes of that bug
-		$this->notify_monitors($bug, $comment);
+		if ($notify)
+		{
+			$this->notify_monitors($bug, $comment);
+		}
 
 		$o = obj();
 		$o->set_parent($bug->id());
@@ -1041,7 +1044,8 @@ class bug extends class_base
 		
 		$orig_msg = $msg;
 		$msg = $this->parse_commited_msg($msg);
-		
+
+		$com = false;		
 		$ostat = $nstat = $bug->prop("bug_status");
 		if ($arr["set_fixed"] == 1)
 		{
@@ -1049,6 +1053,7 @@ class bug extends class_base
 			$bug->set_prop("bug_status", BUG_DONE);
 			$nstat = BUG_DONE;
 			$save = true;
+			$com = true;
 		}
 
 		if ($arr["time_add"])
@@ -1070,32 +1075,34 @@ class bug extends class_base
 			$bug->set_prop("num_hrs_real", $bug->prop("num_hrs_real") + $hrs);
 			$add_wh = $hrs;
 			$save = true;
+			$com = true;
 		}
-		if ($save)
+
+		// get the cvs uid to aw uid map and switch user if the map has it
+		$bt = $this->_get_bt($bug);
+		if ($bt)
 		{
-			// get the cvs uid to aw uid map and switch user if the map has it
-			$bt = $this->_get_bt($bug);
-			if ($bt)
+			$uid_map = $bt->prop("cvs2uidmap");
+			if (preg_match("/cvs commit by ([^ ]+) in/imsU", $orig_msg, $mt))
 			{
-				$uid_map = $bt->prop("cvs2uidmap");
-				if (preg_match("/cvs commit by ([^ ]+) in/imsU", $orig_msg, $mt))
+				$cvs_uid = $mt[1];
+				foreach(explode("\n", $uid_map) as $map_line)
 				{
-					$cvs_uid = $mt[1];
-					foreach(explode("\n", $uid_map) as $map_line)
+					list($map_cvs_uid, $map_aw_uid) = explode("=", $map_line);
+					if ($map_cvs_uid == $cvs_uid)
 					{
-						list($map_cvs_uid, $map_aw_uid) = explode("=", $map_line);
-						if ($map_cvs_uid == $cvs_uid)
-						{
-							aw_switch_user($map_aw_uid);
-							break;
-						}
+						aw_switch_user(array("uid" => trim($map_aw_uid)));
 					}
 				}
 			}
+		}
+
+		if ($save)
+		{
 			$bug->save();
 		}
 
-		$this->_add_comment($bug, $msg, $ostat, $nstat, $add_wh);
+		$this->_add_comment($bug, $msg, $ostat, $nstat, $add_wh, $com);
 		aw_restore_acl();
 		die(sprintf(t("Added comment to bug %s"), $arr["bugno"]));
 	}

@@ -46,6 +46,24 @@
             <caption>Arendus&amp;amp;uuml;lesanne</caption>
       </property>
       <property>
+            <name>orderer_co</name>
+            <table>aw_problem_tickets</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>ORDERER_CO</reltype>
+            <field>aw_orderer_co</field>
+            <caption>Tellija organisatsioon</caption>
+      </property>
+      <property>
+            <name>orderer_unit</name>
+            <table>aw_problem_tickets</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>UNIT</reltype>
+            <field>aw_orderer_unit</field>
+            <caption>Tellija &amp;amp;uuml;ksus</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>aw_problem_tickets</table>
             <group>general</group>
@@ -197,6 +215,16 @@
                   <clid>CL_PROCUREMENT_REQUIREMENT</clid>
                   <caption>N&amp;amp;otilde;ue</caption>
             </HAS_REQ>
+            <ORDERER_CO>
+                  <value>11</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Organisatsioon</caption>
+            </ORDERER_CO>
+            <UNIT>
+                  <value>12</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>&amp;amp;Uuml;ksus</caption>
+            </UNIT>
       </reltypes>
 </properties>
 

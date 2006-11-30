@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.1 2006/11/16 15:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.2 2006/11/30 11:02:45 kristo Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -14,6 +14,12 @@
 	@property project type=relpicker reltype=RELTYPE_PROJECT field=aw_project
 	@caption Projekt
 
+	@property orderer_co type=relpicker reltype=ORDERER_CO field=aw_orderer_co
+	@caption Tellija organisatsioon
+
+	@property orderer_unit type=relpicker reltype=UNIT field=aw_orderer_unit
+	@caption Tellija &uuml;ksus
+
 	@property content type=textarea rows=20 cols=50 field=aw_content
 	@caption Sisu
 
@@ -25,6 +31,20 @@
 
 	@property fileupload3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=aw_f3
 	@caption Fail3
+
+@default group=reqs
+
+	@property reqs_tb type=toolbar no_caption=1 store=no
+	@property reqs_table type=table store=no no_caption=1
+
+@default group=problems
+
+	@property problems_tb type=toolbar no_caption=1 store=no
+	@property problems_table type=table store=no no_caption=1
+
+@groupinfo reqs caption="N&otilde;uded"
+@groupinfo problems caption="Probleemid"
+
 
 @reltype CUSTOMER value=1 clid=CL_CRM_COMPANY
 @caption Klient
@@ -41,6 +61,17 @@
 @reltype FILE3 value=5 clid=CL_FILE
 @caption Fail3
 
+@reltype ORDERER_CO value=11 clid=CL_CRM_COMPANY
+@caption Organisatsioon
+
+@reltype UNIT value=12 clid=CL_CRM_SECTION
+@caption &Uuml;ksus
+
+@reltype REQ value=13 clid=CL_PROCUREMENT_REQUIREMENT
+@caption N&otilde;ue
+
+@reltype PROBLEM value=14 clid=CL_CUSTOMER_PROBLEM_TICKET
+@caption Probleem
 */
 
 class development_order extends class_base
@@ -59,6 +90,36 @@ class development_order extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "orderer_co":
+				if ($arr["new"])
+				{
+					$co = get_current_company();
+					$prop["options"] = array("" => t("--vali--"), $co->id() => $co->name());
+					$prop["value"] = $co->id();
+				}
+				else
+				{
+					$co = get_current_company();
+					$prop["options"][$co->id()] = $co->name();
+				}
+				break;
+
+			case "orderer_unit":
+				$co = get_current_company();
+				$co_i = $co->instance();
+				$sects = $co_i->get_all_org_sections($co);
+				$prop["options"] = array("" => t("--vali--"));
+				if (count($sects))
+				{
+					$ol = new object_list(array("oid" => $sects));
+					$prop["options"] += $ol->names();
+				}
+				$p = get_current_person();
+				if ($arr["new"])
+				{
+					$prop["value"] = $p->prop("org_section");
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -76,6 +137,8 @@ class development_order extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["set_req"] = "0";
+		$arr["set_problems"] = "0";
 	}
 
 	function do_db_upgrade($t, $f)
@@ -91,12 +154,62 @@ class development_order extends class_base
 			case "aw_f1":
 			case "aw_f2":
 			case "aw_f3":
+			case "aw_orderer_co":
+			case "aw_orderer_unit":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
 				));
 				return true;
 		}
+	}
+
+	function _get_reqs_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$ps = get_instance("vcl/popup_search");
+		$tb->add_cdata($ps->get_popup_search_link(array(
+			"pn" => "set_req",
+			"clid" => CL_PROCUREMENT_REQUIREMENT
+		)));
+		$tb->add_delete_rels_button();
+	}
+
+	function _get_reqs_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_REQ")));
+		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
+	}
+
+	function _set_reqs_table($arr)
+	{
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["set_req"], "RELTYPE_REQ");
+	}
+
+	function _get_problems_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$ps = get_instance("vcl/popup_search");
+		$tb->add_cdata($ps->get_popup_search_link(array(
+			"pn" => "set_problems",
+			"clid" => CL_CUSTOMER_PROBLEM_TICKET
+		)));
+		$tb->add_delete_rels_button();
+	}
+
+	function _get_problems_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROBLEM")));
+		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+	}
+
+	function _set_problems_table($arr)
+	{
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["set_problems"], "RELTYPE_PROBLEM");
 	}
 }
 ?>

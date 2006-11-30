@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/customer_problem_ticket.aw,v 1.1 2006/11/16 15:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/customer_problem_ticket.aw,v 1.2 2006/11/30 11:02:45 kristo Exp $
 // customer_problem_ticket.aw - Probleem 
 /*
 
@@ -22,6 +22,12 @@
 
 	@property from_bug type=relpicker reltype=RELTYPE_FROM_BUG field=aw_from_bug
 	@caption Arendus&uuml;lesanne
+
+	@property orderer_co type=relpicker reltype=ORDERER_CO field=aw_orderer_co
+	@caption Tellija organisatsioon
+
+	@property orderer_unit type=relpicker reltype=UNIT field=aw_orderer_unit
+	@caption Tellija &uuml;ksus
 
 	@property content type=textarea rows=20 cols=50 field=aw_content
 	@caption Sisu
@@ -81,6 +87,12 @@
 @reltype HAS_REQ value=10 clid=CL_PROCUREMENT_REQUIREMENT
 @caption N&otilde;ue
 
+@reltype ORDERER_CO value=11 clid=CL_CRM_COMPANY
+@caption Organisatsioon
+
+@reltype UNIT value=12 clid=CL_CRM_SECTION
+@caption &Uuml;ksus
+
 */
 
 class customer_problem_ticket extends class_base
@@ -99,6 +111,36 @@ class customer_problem_ticket extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "orderer_co":
+				if ($arr["new"])
+				{
+					$co = get_current_company();
+					$prop["options"] = array("" => t("--vali--"), $co->id() => $co->name());
+					$prop["value"] = $co->id();
+				}
+				else
+				{
+					$co = get_current_company();
+					$prop["options"][$co->id()] = $co->name();
+				}
+				break;
+
+			case "orderer_unit":
+				$co = get_current_company();
+				$co_i = $co->instance();
+				$sects = $co_i->get_all_org_sections($co);
+				$prop["options"] = array("" => t("--vali--"));
+				if (count($sects))
+				{
+					$ol = new object_list(array("oid" => $sects));
+					$prop["options"] += $ol->names();
+				}
+				$p = get_current_person();
+				if ($arr["new"])
+				{
+					$prop["value"] = $p->prop("org_section");
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -134,6 +176,8 @@ class customer_problem_ticket extends class_base
 			case "aw_requirement":
 			case "aw_from_dev_order":
 			case "aw_from_bug":
+			case "aw_orderer_co":
+			case "aw_orderer_unit":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"

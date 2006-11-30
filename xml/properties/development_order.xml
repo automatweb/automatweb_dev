@@ -19,6 +19,24 @@
             <caption>Projekt</caption>
       </property>
       <property>
+            <name>orderer_co</name>
+            <table>aw_dev_orders</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>ORDERER_CO</reltype>
+            <field>aw_orderer_co</field>
+            <caption>Tellija organisatsioon</caption>
+      </property>
+      <property>
+            <name>orderer_unit</name>
+            <table>aw_dev_orders</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>UNIT</reltype>
+            <field>aw_orderer_unit</field>
+            <caption>Tellija &amp;amp;uuml;ksus</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>aw_dev_orders</table>
             <group>general</group>
@@ -61,6 +79,42 @@
             <field>aw_f3</field>
             <caption>Fail3</caption>
       </property>
+      <property>
+            <name>reqs_tb</name>
+            <table>aw_dev_orders</table>
+            <group>reqs</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>reqs_tb</field>
+      </property>
+      <property>
+            <name>reqs_table</name>
+            <table>aw_dev_orders</table>
+            <group>reqs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>reqs_table</field>
+      </property>
+      <property>
+            <name>problems_tb</name>
+            <table>aw_dev_orders</table>
+            <group>problems</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>problems_tb</field>
+      </property>
+      <property>
+            <name>problems_table</name>
+            <table>aw_dev_orders</table>
+            <group>problems</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>problems_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_DEVELOPMENT_ORDER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -68,6 +122,14 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <reqs>
+                  <caption>N&amp;amp;otilde;uded</caption>
+            </reqs>
+            <problems>
+                  <caption>Probleemid</caption>
+            </problems>
+      </groupinfo>
       <tableinfo>
             <aw_dev_orders>
                   <master_table>objects</master_table>
@@ -101,6 +163,26 @@
                   <clid>CL_FILE</clid>
                   <caption>Fail3</caption>
             </FILE3>
+            <ORDERER_CO>
+                  <value>11</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Organisatsioon</caption>
+            </ORDERER_CO>
+            <UNIT>
+                  <value>12</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>&amp;amp;Uuml;ksus</caption>
+            </UNIT>
+            <REQ>
+                  <value>13</value>
+                  <clid>CL_PROCUREMENT_REQUIREMENT</clid>
+                  <caption>N&amp;amp;otilde;ue</caption>
+            </REQ>
+            <PROBLEM>
+                  <value>14</value>
+                  <clid>CL_CUSTOMER_PROBLEM_TICKET</clid>
+                  <caption>Probleem</caption>
+            </PROBLEM>
       </reltypes>
 </properties>
 

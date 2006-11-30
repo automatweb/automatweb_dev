@@ -1,9 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>object_type</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>relpicker</type>
             <reltype>RELTYPE_OBJECT_TYPE</reltype>
             <field>meta</field>
@@ -13,7 +21,7 @@
       <property>
             <name>bug_folder</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
@@ -23,7 +31,7 @@
       <property>
             <name>bug_by_class_parent</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>relpicker</type>
             <reltype>RELTYPE_BUG</reltype>
             <field>meta</field>
@@ -553,7 +561,7 @@
       <property>
             <name>problems_tb</name>
             <table>objects</table>
-            <group>problems</group>
+            <group>problems_list</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -562,7 +570,7 @@
       <property>
             <name>problems_table</name>
             <table>objects</table>
-            <group>problems</group>
+            <group>problems_list</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -588,6 +596,35 @@
             <parent>reqs_c_tt</parent>
             <field>reqs_c_table</field>
       </property>
+      <property>
+            <name>pu_tb</name>
+            <table>objects</table>
+            <group>problems_units</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>pu_tb</field>
+      </property>
+      <property>
+            <name>pu_tree</name>
+            <table>objects</table>
+            <group>problems_units</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>pu_tree_b</parent>
+            <field>pu_tree</field>
+      </property>
+      <property>
+            <name>pu_table</name>
+            <table>objects</table>
+            <group>problems_units</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>pu_h</parent>
+            <field>pu_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -596,6 +633,28 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <general_sub>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </general_sub>
+            <settings_people>
+                  <caption>Isikud</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </settings_people>
+            <settings_g>
+                  <caption>Muud seaded</caption>
+                  <parent>general</parent>
+            </settings_g>
+            <unestimated_bugs>
+                  <caption>Ennustamata bugid</caption>
+                  <parent>general</parent>
+            </unestimated_bugs>
+            <reminders>
+                  <caption>Teavitused</caption>
+                  <parent>general</parent>
+            </reminders>
             <reqs_main>
                   <caption>N&amp;amp;otilde;uded</caption>
             </reqs_main>
@@ -608,7 +667,7 @@
                   <parent>reqs_main</parent>
             </reqs_proj>
             <reqs_cust>
-                  <caption>Tellijad</caption>
+                  <caption>Tellijad isikud</caption>
                   <parent>reqs_main</parent>
             </reqs_cust>
             <dev_orders>
@@ -617,6 +676,16 @@
             <problems>
                   <caption>Probleemid</caption>
             </problems>
+            <problems_list>
+                  <caption>Nimekiri</caption>
+                  <parent>problems</parent>
+                  <submit>no</submit>
+            </problems_list>
+            <problems_units>
+                  <caption>Osakondade kaupa</caption>
+                  <parent>problems</parent>
+                  <submit>no</submit>
+            </problems_units>
             <bugs>
                   <caption>Arendus&amp;amp;uuml;lesanded</caption>
                   <submit>no</submit>
@@ -651,28 +720,20 @@
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_monitor>
-            <unestimated_bugs>
-                  <caption>Ennustamata bugid</caption>
-                  <parent>bugs</parent>
-            </unestimated_bugs>
-            <search_t>
-                  <caption>Otsing</caption>
-                  <submit_method>get</submit_method>
-                  <save>no</save>
-            </search_t>
             <search>
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>
                   <save>no</save>
-                  <parent>search_t</parent>
+                  <parent>bugs</parent>
             </search>
             <search_list>
                   <caption>Salvestatud otsingud</caption>
-                  <parent>search_t</parent>
+                  <parent>bugs</parent>
             </search_list>
             <archive>
                   <caption>Arhiiv</caption>
                   <submit>no</submit>
+                  <parent>bugs</parent>
             </archive>
             <charts>
                   <caption>Kaardid</caption>
@@ -687,19 +748,6 @@
                   <caption>Minu Bugide stat</caption>
                   <parent>charts</parent>
             </my_bugs_stat>
-            <settings>
-                  <caption>Seaded</caption>
-                  <submit>no</submit>
-            </settings>
-            <settings_people>
-                  <caption>Isikud</caption>
-                  <submit>no</submit>
-                  <parent>settings</parent>
-            </settings_people>
-            <settings_g>
-                  <caption>Muud seaded</caption>
-                  <parent>settings</parent>
-            </settings_g>
       </groupinfo>
       <reltypes>
             <MONITOR>
@@ -870,6 +918,18 @@
                   <area_caption>Tellijad</area_caption>
                   <group>reqs_cust</group>
             </reqs_c_tree>
+            <pu_h>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>problems_units</group>
+            </pu_h>
+            <pu_tree_b>
+                  <type>vbox</type>
+                  <parent>pu_h</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Osakonnad</area_caption>
+                  <group>problems_units</group>
+            </pu_tree_b>
       </layout>
 </properties>
 

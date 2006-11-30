@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.97 2006/11/21 15:43:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.98 2006/11/30 11:02:45 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -2670,6 +2670,11 @@ class vcl_table extends aw_table
 					$val = html::get_change_url($o->id(), array("return_url" => get_ru()), "Muuda");
 				}
 				else
+				if ($v["_type"] == "rel")
+				{
+					$val = html::obj_change_url($o->prop($v["name"]));
+				}
+				else
 				{
 					$val = $o->prop_str($v["name"]);
 				}
@@ -2708,11 +2713,22 @@ class vcl_table extends aw_table
 				"align" => "center",
 				"sortable" => 1
 			);
-			if ($prop == "created" || $prop == "modified")
+			if ($prop == "created" || $prop == "modified" || $ps[$prop]["type"] == "datetime_select")
 			{
 				$d["type"] = "time";
 				$d["numeric"] = 1;
 				$d["format"] = "d.m.Y H:i";
+			}
+			else
+			if ($ps[$prop]["type"] == "date_select")
+			{
+				$d["type"] = "time";
+				$d["numeric"] = 1;
+				$d["format"] = "d.m.Y";
+			}
+			if ($ps[$prop]["type"] == "relpicker")
+			{
+				$d["_type"] = "rel";
 			}
 			$this->define_field($d);
 		}

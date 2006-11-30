@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.86 2006/11/16 15:40:43 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.86 2006/11/16 15:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.87 2006/11/30 11:02:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.87 2006/11/30 11:02:45 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -12,7 +12,10 @@ define("BUG_STATUS_CLOSED", 5);
 @classinfo syslog_type=ST_BUG_TRACKER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
-@default group=general
+@default group=general_sub
+
+	@property name type=textbox table=objects field=name
+	@caption Nimi
 
 	@property object_type type=relpicker reltype=RELTYPE_OBJECT_TYPE table=objects field=meta method=serialize
 	@caption Bugi objekti t&uuml;&uuml;p
@@ -214,7 +217,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property dev_orders_table type=table store=no no_caption=1 parent=dev_orders_h
 
-@default group=problems
+@default group=problems_list
 
 	@property problems_tb type=toolbar store=no no_caption=1
 	@property problems_table type=table store=no no_caption=1
@@ -230,36 +233,57 @@ define("BUG_STATUS_CLOSED", 5);
 		@property reqs_c_table type=table store=no no_caption=1 parent=reqs_c_tt
 
 
+@groupinfo general_sub caption="&Uuml;ldine" submit=no parent=general
+@groupinfo settings_people caption="Isikud" submit=no parent=general
+@groupinfo settings_g caption="Muud seaded" parent=general
+@groupinfo unestimated_bugs caption="Ennustamata bugid" parent=general
+@groupinfo reminders caption="Teavitused" parent=general
+
+@default group=problems_units
+
+	@property pu_tb type=toolbar no_caption=1 store=no
+
+	@layout pu_h type=hbox width=30%:70% 
+
+		@layout pu_tree_b type=vbox parent=pu_h closeable=1 area_caption=Osakonnad
+
+			@property pu_tree type=treeview store=no no_caption=1 parent=pu_tree_b
+
+		@property pu_table type=table store=no no_caption=1 parent=pu_h
+	
 
 @groupinfo reqs_main caption="N&otilde;uded"
 
 	@groupinfo reqs parent=reqs_main caption="Sisestamine"
 	@groupinfo reqs_proj caption="Projektid" parent=reqs_main
-	@groupinfo reqs_cust caption="Tellijad" parent=reqs_main
+	@groupinfo reqs_cust caption="Tellijad isikud" parent=reqs_main
 
 @groupinfo dev_orders caption="Arendustellimused"
 @groupinfo problems caption="Probleemid"
 
+	@groupinfo problems_list caption="Nimekiri" parent=problems submit=no
+	@groupinfo problems_units caption="Osakondade kaupa" parent=problems submit=no
+
 @groupinfo bugs caption="Arendus&uuml;lesanded" submit=no
+
+
 	@groupinfo by_default caption="Arendus&uuml;lesanded" parent=bugs submit=no
 	@groupinfo by_project caption="Projektid" parent=bugs submit=no
 	@groupinfo by_who caption="Kellele" parent=bugs submit=no
 	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
 	@groupinfo by_cust caption="Kliendid" parent=bugs submit=no
 	@groupinfo by_monitor caption="J&auml;lgijad" parent=bugs submit=no
-	@groupinfo unestimated_bugs caption="Ennustamata bugid" parent=bugs 
 
-@groupinfo search_t caption="Otsing" submit_method=get save=no
-	@groupinfo search caption="Otsing" submit_method=get save=no parent=search_t
-	@groupinfo search_list caption="Salvestatud otsingud" parent=search_t
+groupinfo search_t caption="Otsing" submit_method=get save=no
 
-@groupinfo archive caption="Arhiiv" submit=no
+	@groupinfo search caption="Otsing" submit_method=get save=no parent=bugs
+	@groupinfo search_list caption="Salvestatud otsingud" parent=bugs
+
+	@groupinfo archive caption="Arhiiv" submit=no parent=bugs
 @groupinfo charts caption="Kaardid" submit=no
 	@groupinfo gantt_chart caption="Gantti diagramm" parent=charts submit=no
 	@groupinfo my_bugs_stat caption="Minu Bugide stat" parent=charts
-@groupinfo settings caption="Seaded" submit=no
-	@groupinfo settings_people caption="Isikud" submit=no parent=settings
-	@groupinfo settings_g caption="Muud seaded" parent=settings
+
 
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
@@ -3349,6 +3373,22 @@ die();
 			"action" => "delete",
 			"confirm" => t("Oled kindel, et soovid n&otilde;udeid kustutada?"),
 		));
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "cut",
+			"tooltip" => t("L&otilde;ika"),
+			"img" => "cut.gif",
+			"action" => "cut_b",
+		));
+		if (is_array($_SESSION["bt"]["cut_bugs"]) && count($_SESSION["bt"]["cut_bugs"]))
+		{
+			$tb->add_button(array(
+				"name" => "paste",
+				"tooltip" => t("Kleebi"),
+				"img	" => "paste.gif",
+				"action" => "paste_b",
+			));
+		}
 	}
 	
 	function _get_reqs_tree($arr)
@@ -3411,7 +3451,7 @@ die();
 			"site_id" => array(),
 			"parent" => $pt
 		));
-		$t->table_from_ol($ol, array("name", "createdby", "created"), CL_PROCUREMENT_REQUIREMENT);
+		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
 	}
 
 	function _get_reqs_p_tree($arr)
@@ -3547,7 +3587,7 @@ die();
 		}
 
 		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "createdby", "created"), CL_PROCUREMENT_REQUIREMENT);
+		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
 	}
 
 	function _get_bug_tree_req($arr)
@@ -3603,7 +3643,7 @@ return;
 			"parent" => $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id()
 		);
 		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "createdby", "created"), CL_PROCUREMENT_REQUIREMENT);
+		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
 	}
 
 	function _get_dev_orders_tb($arr)
@@ -3636,6 +3676,22 @@ return;
 			"action" => "delete",
 			"confirm" => t("Oled kindel, et soovid tellimusi kustutada?"),
 		));
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "cut",
+			"tooltip" => t("L&otilde;ika"),
+			"img" => "cut.gif",
+			"action" => "cut_b",
+		));
+		if (is_array($_SESSION["bt"]["cut_bugs"]) && count($_SESSION["bt"]["cut_bugs"]))
+		{
+			$tb->add_button(array(
+				"name" => "paste",
+				"tooltip" => t("Kleebi"),
+				"img" => "paste.gif",
+				"action" => "paste_b",
+			));
+		}
 	}
 
 	function _get_problems_tb($arr)
@@ -3653,7 +3709,7 @@ return;
 			"lang_id" => array(),
 			"site_id" => array(),
 		));
-		$t->table_from_ol($ol, array("name", "createdby", "created"), CL_CUSTOMER_PROBLEM_TICKET);
+		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
 	}
 
 	function _get_reqs_c_tree($arr)
@@ -3737,7 +3793,91 @@ return;
 		}
 
 		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "createdby", "created"), CL_PROCUREMENT_REQUIREMENT);
+		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
+	}
+
+	function _get_pu_tree($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$cos = array();
+		$co2sect = array();
+		foreach($ol->arr() as $o)
+		{
+			$cos[$o->prop("orderer_co")]++;
+			$co2sect[$o->prop("orderer_co")][$o->prop("orderer_unit")]++;
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		$i = get_instance(CL_CUSTOMER_PROBLEM_TICKET);
+		foreach($cos as $co => $cnt)
+		{
+			if (!is_oid($co))
+			{
+				continue;
+			}
+			$po = obj($co);
+			$nm = $po->name()." ($cnt)";
+			if ($arr["request"]["co"] == $co && !$arr["request"]["asect"])
+			{
+				$nm = "<b>".$nm."</b>";
+			}
+			$t->add_item(0, array(
+				"id" => "p_".$co,
+				"parent" => 0,
+				"name" => $nm,
+				"url" => aw_url_change_var(array(
+					"co" => $co,
+					"asect" => null,
+				))
+			));
+
+			// add al org sections under the tree
+			foreach($co2sect[$co] as $sect => $s_cnt)
+			{
+				$po = obj($sect);
+				$nm = $po->name()." ($cnt)";
+				if ($arr["request"]["co"] == $co && $arr["request"]["asect"] == $sect)
+				{
+					$nm = "<b>".$nm."</b>";
+				}
+				$t->add_item("p_".$co, array(
+					"id" => "s_".$sect,
+					"parent" => "p_".$co,
+					"name" => $nm,
+					"url" => aw_url_change_var(array(
+						"co" => $co,
+						"asect" => $sect,
+					))
+				));
+				
+			}
+		}
+	}
+
+	function _get_pu_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$f = array(
+			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		if ($arr["request"]["co"])
+		{
+			$f["orderer_co"] = $arr["request"]["orderer_co"];
+		}
+		if ($arr["request"]["asect"])
+		{
+			$f["orderer_unit"] = $arr["request"]["asect"];
+		}
+
+		$ol = new object_list($f);
+		$t->table_from_ol($ol, array("name", "createdby", "created", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
 	}
 }
 ?>

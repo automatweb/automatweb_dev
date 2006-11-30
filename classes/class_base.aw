@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.520 2006/11/29 09:34:34 kristo Exp $
+// $Id: class_base.aw,v 2.521 2006/11/30 11:02:45 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5413,6 +5413,42 @@ class class_base extends aw_template
 			"return_url" => $arr["return_url"]
 		), $arr["class"]);
 		return $url;
+	}
+
+	/**
+	@attrib name=delete_objects
+	**/
+	function delete_objects($arr)
+	{
+		if (!is_array($arr["sel"]) && is_array($arr["check"]))
+		{
+			$arr["sel"] = $arr["check"];
+		}
+		foreach (safe_array($arr["sel"]) as $del_obj)
+		{
+			$obj = obj($del_obj);
+			$obj->delete();
+		}
+		return  $arr["post_ru"];
+	}
+
+	/**
+	@attrib name=delete_rels
+	**/
+	function delete_rels($arr)
+	{
+		if (!is_array($arr["sel"]) && is_array($arr["check"]))
+		{
+			$arr["sel"] = $arr["check"];
+		}
+		$from = obj($arr["id"]);
+		foreach (safe_array($arr["sel"]) as $del_obj)
+		{
+			$from->disconnect(array(
+				"from" => $del_obj
+			));
+		}
+		return  $arr["post_ru"];
 	}
 };
 ?>

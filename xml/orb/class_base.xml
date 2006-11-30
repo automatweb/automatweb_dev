@@ -101,5 +101,19 @@
 			</function>
 		</action>
 
+		<action name="delete_objects">
+			<function name="delete_objects">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_rels">
+			<function name="delete_rels">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
