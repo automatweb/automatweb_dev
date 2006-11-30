@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.8 2006/11/27 16:34:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.9 2006/11/30 10:42:33 markop Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -33,7 +33,7 @@ class openhours extends class_base
 		switch($data["name"])
 		{
 			//-- get_property --//
-			case 'openhours':arr($arr["obj_inst"]->parent());
+			case 'openhours':
 				$prefix = $data['name'];
 				if (isset($arr['name_prefix']))
 				{

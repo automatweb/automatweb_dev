@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.56 2006/11/30 10:20:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.57 2006/11/30 10:37:45 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -848,7 +848,7 @@ class room extends class_base
 			end
 		@param resource required type=int
 			room
-		@param product optional type=int
+		@param product optional
 			chosen product
 		@param return_url optional type=string
 			url for opener window
