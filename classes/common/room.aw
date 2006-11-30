@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.59 2006/11/30 12:30:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.60 2006/11/30 14:45:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1334,7 +1334,7 @@ class room extends class_base
 							}
 							if(($last_bron->prop("end") - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step")) > 1)
 							{
-								$rowspan[$x] = (($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step"))) ;
+								$rowspan[$x] = (int)(($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step"))) ;
 								if((($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) % ($step_length * $arr["obj_inst"]->prop("time_step"))))
 								{
 									$rowspan[$x]++;
