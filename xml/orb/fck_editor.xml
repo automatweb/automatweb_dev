@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="fck_editor" folder="vcl" extends="core">
+		<action name="get_fck_config">
+			<function name="get_fck_config">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
