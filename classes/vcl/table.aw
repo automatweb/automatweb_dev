@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.98 2006/11/30 11:02:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.99 2006/11/30 11:29:00 markop Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -55,6 +55,8 @@ class aw_table extends aw_template
 		$this->filters = array();
 		$this->selected_filters = array();
 		$this->filter_index = array();
+		$this->rowspans = array();
+		
 		if ($data["prop_name"] != "")
 		{
 			$this->filter_name = $data["prop_name"].$_GET["id"];
@@ -1100,7 +1102,17 @@ class aw_table extends aw_template
 
 					// moodustame celli
 					$rowspan = isset($this->actionrows) ? $this->actionrows : $rowspan;
-
+					//järgnev peaks suutma tulpi kokku liita ja järgmised vastavald ära blokeerima
+					if($this->rowspans[$v1["name"]]>1)
+					{
+						$this->rowspans[$v1["name"]]--;
+						continue;
+					}
+					elseif(isset($v[$v1["rowspan"]]))
+					{
+						$rowspan = $v[$v1["rowspan"]];
+						$this->rowspans[$v1["name"]] = $v[$v1["rowspan"]];
+					}
 					$tbl .= $this->opentag(array(
 						"name"    => "td",
 						"classid" => $style,
@@ -1113,6 +1125,7 @@ class aw_table extends aw_template
 						"bgcolor" => isset($v["bgcolor"]) ? $v["bgcolor"] : $bgcolor,
 						"domid" => isset($v[$v1["id"]]) ? $v[$v1["id"]] : "",
 						"onclick" => isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
+	//					"onclick" => isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
 					));
 
 					if ($v1["name"] == "rec")
@@ -1643,6 +1656,11 @@ class aw_table extends aw_template
 		@param numeric optional type=bool
 		@param filter_compare optional array
 		@param order optional
+		
+		@param onclick optional type=string
+			variable name for onClick actions in define_field function
+		@param rowspan optional type=string
+			variable name for roswpan in define_field function
 			
 		@param filter optional
 
