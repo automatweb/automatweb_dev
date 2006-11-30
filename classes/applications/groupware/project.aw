@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.114 2006/11/16 15:40:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.115 2006/11/30 11:19:26 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -14,7 +14,7 @@
 
 	@layout up_bit type=hbox width=50%:50%
 
-		@layout left_bit type=vbox parent=up_bit
+		@layout left_bit type=vbox parent=up_bit closeable=1 area_caption=&Uuml;ldandmed
 	
 		@property name type=textbox parent=left_bit
 		@caption Nimi
@@ -35,9 +35,6 @@
 		@caption Loe lähemalt
 
 
-	@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5 parent=left_bit
-	@caption  Prognoositav tundide arv
-
 	@property prepayment type=textbox table=aw_projects field=aw_prepayment size=5 parent=left_bit
 	@caption Ettemaks
 
@@ -53,9 +50,9 @@ caption Tellija
 @property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
 caption Teostajad
 
-	@layout center_bit type=vbox parent=up_bit no_padding=1
+	@layout center_bit type=vbox parent=up_bit no_padding=1 
 
-		@layout project_time type=vbox parent=center_bit closeable=1 no_padding=1
+		@layout project_time type=vbox parent=center_bit closeable=1 no_padding=1 area_caption=Ajad
 		@property start type=date_select table=aw_projects field=aw_start parent=project_time
 		@caption Algus
 	
@@ -64,6 +61,9 @@ caption Teostajad
 	
 		@property deadline type=date_select table=aw_projects field=aw_deadline parent=project_time
 		@caption Deadline
+
+		@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5 parent=project_time
+		@caption  Prognoositav tundide arv
 
 		@layout project_people type=vbox parent=center_bit closeable=1 no_padding=1  area_caption=Osalejad
 		@property parts_tb type=toolbar no_caption=1 store=no parent=project_people
@@ -210,7 +210,7 @@ caption Teostajad
 
 	@property team_tb type=toolbar no_caption=1 store=no
 
-	@layout team type=hbox width=30%:70%
+	@layout team type=hbox width=20%:80%
 
 		@layout team_left parent=team type=vbox 
 	
@@ -218,10 +218,10 @@ caption Teostajad
 			@property team_team_tree type=treeview store=no no_caption=1 parent=team_tree
 				
 			@layout team_search parent=team_left closeable=1 type=vbox area_caption=Isikute&nbsp;otsing
-			@property team_search_co type=textbox captionside=top parent=team_search
+			@property team_search_co type=textbox captionside=top parent=team_search size=22
 			@caption Firma
 	
-			@property team_search_person type=textbox captionside=top parent=team_search
+			@property team_search_person type=textbox captionside=top parent=team_search size=22
 			@caption Isik
 	
 			@property hidden_team type=hidden parent=team_search no_caption=1
@@ -236,7 +236,7 @@ caption Teostajad
 
 	property team_team_tb type=toolbar no_caption=1 store=no
 
-	layout team_team_l type=hbox width=30%:70%
+	layout team_team_l type=hbox width=20%:80%
 
 
 		property team_team_tbl type=table store=no no_caption=1 parent=team_team_l
@@ -247,7 +247,9 @@ caption Teostajad
 
 	@layout goal_vb type=hbox width="20%:80%"
 
-		@property goal_tree type=treeview parent=goal_vb no_caption=1
+		@layout goal_tree_lay type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=goal_vb
+
+			@property goal_tree type=treeview parent=goal_vb no_caption=1 parent=goal_tree_lay
 
 		@property goal_table type=table parent=goal_vb no_caption=1
 
@@ -285,7 +287,7 @@ caption Teostajad
 
 	@property req_tb type=toolbar store=no no_caption=1
 
-	@layout req_l type=hbox width=30%:70%
+	@layout req_l type=hbox width=20%:80%
 
 		@layout req_tree_l type=vbox parent=req_l closeable=1 no_padding=1 area_caption=N&otilde;uded&nbsp;puu&nbsp;kujul
 		@property req_tree type=treeview store=no no_caption=1 parent=req_tree_l
