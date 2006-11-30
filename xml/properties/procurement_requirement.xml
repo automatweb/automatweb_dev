@@ -79,6 +79,15 @@
             <caption>Eelarve</caption>
       </property>
       <property>
+            <name>offer_tb</name>
+            <table>objects</table>
+            <group>offers</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>offer_tb</field>
+      </property>
+      <property>
             <name>offer_t</name>
             <table>objects</table>
             <group>offers</group>

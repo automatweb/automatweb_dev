@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.7 2006/11/16 15:40:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.8 2006/11/30 16:18:50 kristo Exp $
 // procurement_requirement.aw - N&otilde;ue 
 /*
 
@@ -39,6 +39,7 @@
 
 @default group=offers
 
+	@property offer_tb type=toolbar store=no no_caption=1
 	@property offer_t type=table store=no no_caption=1
 
 @default group=comments
@@ -402,6 +403,13 @@ class procurement_requirement extends class_base
 		$bt = get_instance(CL_BUG_TRACKER);
 		$bt->_init_bug_list_tbl_no_edit($t);
 		$bt->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));
+	}
+
+	function _get_offer_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_PROCUREMENT_REQUIREMENT_SOLUTION), $arr["obj_inst"]->id(), null, array("set_requirement" => $arr["obj_inst"]->id()));
+		$tb->add_delete_button();
 	}
 }
 ?>
