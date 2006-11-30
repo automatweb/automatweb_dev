@@ -36,6 +36,15 @@
             <caption>Ostu hind</caption>
       </property>
       <property>
+            <name>price_cur</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <store>no</store>
+            <field>price_cur</field>
+            <caption>Hinnad valuutades</caption>
+      </property>
+      <property>
             <name>reservation_time</name>
             <table>objects</table>
             <group>general</group>
