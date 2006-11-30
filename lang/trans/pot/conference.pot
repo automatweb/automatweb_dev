@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse L&uuml;hikirjeldus/teema (topic_comment) help"
 msgstr ""
 
+#: classes/applications/calendar/conference.aw:prop_type
+msgid "Omaduse T&uuml;&uuml;p (type) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:prop_type_comment
+msgid "Omaduse T&uuml;&uuml;p (type) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:prop_type_help
+msgid "Omaduse T&uuml;&uuml;p (type) help"
+msgstr ""
+
 #: classes/applications/calendar/conference.aw:prop_organizers
 msgid "Omaduse Korraldajad (organizers) caption"
 msgstr ""
@@ -350,83 +362,131 @@ msgstr ""
 msgid "Seose Konverentsikava (RELTYPE_FILE) tekst"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:244
+#: classes/applications/calendar/conference.aw:129
+msgid "Meeting"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:130
+msgid "Seminar"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:131
+msgid "Conference"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:132
+msgid "Training"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:133
+msgid "Product introduction / lunch"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:134
+msgid "Info"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:135
+msgid "Breakfast"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:136
+msgid "Luncheon"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:137
+msgid "Dinner"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:138
+msgid "Party"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:139
+msgid "Wedding"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:140
+msgid "Other"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:265
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:249
+#: classes/applications/calendar/conference.aw:270
 msgid "reserveeri"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:255
+#: classes/applications/calendar/conference.aw:276
 msgid "vabu ressursse"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:261 classes/applications/calendar/conference.aw:318 classes/applications/calendar/conference.aw:541
+#: classes/applications/calendar/conference.aw:282 classes/applications/calendar/conference.aw:339 classes/applications/calendar/conference.aw:562
 msgid "Ruum"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:314
+#: classes/applications/calendar/conference.aw:335
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:322
+#: classes/applications/calendar/conference.aw:343
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:326
+#: classes/applications/calendar/conference.aw:347
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:330
+#: classes/applications/calendar/conference.aw:351
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:355
+#: classes/applications/calendar/conference.aw:376
 msgid "-- Vali toode --"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:362
+#: classes/applications/calendar/conference.aw:383
 msgid "-- Vali p&auml;ev ja ruum -- "
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:368
+#: classes/applications/calendar/conference.aw:389
 msgid "-- Vali ruum --"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:512
+#: classes/applications/calendar/conference.aw:533
 msgid "Lisa ruum"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:526
+#: classes/applications/calendar/conference.aw:547
 msgid "Eemalda ruum"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:545
+#: classes/applications/calendar/conference.aw:566
 msgid "Algusaeg"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:549
+#: classes/applications/calendar/conference.aw:570
 msgid "L&otilde;puaeg"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:632
+#: classes/applications/calendar/conference.aw:653
 msgid "nimetu"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:657
+#: classes/applications/calendar/conference.aw:678
 msgid "Esineja"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:661
+#: classes/applications/calendar/conference.aw:682
 msgid "Teema"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:721
+#: classes/applications/calendar/conference.aw:742
 msgid "Lisa esineja"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:732
+#: classes/applications/calendar/conference.aw:753
 msgid "Eemalda esineja"
 msgstr ""
 

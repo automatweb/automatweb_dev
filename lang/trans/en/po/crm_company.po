@@ -1197,6 +1197,18 @@ msgstr ""
 msgid "Omaduse Otsi (customer_search_submit) help"
 msgstr ""
 
+#: classes/crm/crm_company.aw:prop_customer_search_submit_and_change
+msgid "Omaduse Otsi ja muuda (customer_search_submit_and_change) caption"
+msgstr "Advanced search"
+
+#: classes/crm/crm_company.aw:prop_customer_search_submit_and_change_comment
+msgid "Omaduse Otsi ja muuda (customer_search_submit_and_change) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_customer_search_submit_and_change_help
+msgid "Omaduse Otsi ja muuda (customer_search_submit_and_change) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:prop_my_customers_table
 #: classes/crm/crm_company.aw:prop_my_customers_table
 msgid "Omaduse Kliendid (my_customers_table) caption"
@@ -3356,25 +3368,32 @@ msgstr "Receptionist's name"
 
 #: classes/crm/crm_company.aw:5211 classes/crm/crm_company.aw:5265
 msgid "K&otilde;ne"
-msgstr ""
+msgstr "Call"
 
 #: classes/crm/crm_company.aw:5259
 msgid "T&ouml;&ouml;"
-msgstr ""
+msgstr "Work"
 
 #: classes/crm/crm_company.aw:5260
 msgid "Organisatsioon"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/crm/crm_company.aw:5261
 msgid "Eraisik"
-msgstr ""
+msgstr "Individual"
 
 #: classes/crm/crm_company.aw:5262
 msgid "Projekt"
-msgstr ""
+msgstr "Project"
 
 #: classes/crm/crm_company.aw:5264
 msgid "Arve"
-msgstr ""
+msgstr "Invoice"
 
+#: classes/crm/crm_company.aw:1880 classes/crm/crm_company.aw:1974
+msgid "Otsi ja t&auml;ienda"
+msgstr "Advanced search"
+
+#: classes/crm/crm_company.aw:1884 classes/crm/crm_company.aw:1978
+msgid "Lihtne otsing"
+msgstr "Simple search"

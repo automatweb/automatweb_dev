@@ -1,0 +1,108 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:class_1183_help
+msgid "Klassi Arendustellimus help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_content
+msgid "Omaduse Sisu (content) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_content_comment
+msgid "Omaduse Sisu (content) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_content_help
+msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload
+msgid "Omaduse Fail1 (fileupload) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload_comment
+msgid "Omaduse Fail1 (fileupload) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload_help
+msgid "Omaduse Fail1 (fileupload) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload2
+msgid "Omaduse Fail2 (fileupload2) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload2_comment
+msgid "Omaduse Fail2 (fileupload2) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload2_help
+msgid "Omaduse Fail2 (fileupload2) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload3
+msgid "Omaduse Fail3 (fileupload3) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload3_comment
+msgid "Omaduse Fail3 (fileupload3) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_fileupload3_help
+msgid "Omaduse Fail3 (fileupload3) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_PROJECT
+msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_FILE1
+msgid "Seose Fail1 (RELTYPE_FILE1) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_FILE2
+msgid "Seose Fail2 (RELTYPE_FILE2) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:rel_RELTYPE_FILE3
+msgid "Seose Fail3 (RELTYPE_FILE3) tekst"
+msgstr ""
+

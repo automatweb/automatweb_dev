@@ -6,6 +6,7 @@ $GLOBALS["TRANS"]["Viga %s definitsioonis (omadused defineerimata!)"] = "Error i
 $GLOBALS["TRANS"]["Viga %s definitsioonis (seose tüüp defineerimata!)"] = "Error in the definition of %s (connection type undefined!)";
 $GLOBALS["TRANS"]["Seda seost ei saa redigeerida!"] = "This connection can not be edited";
 $GLOBALS["TRANS"]["Uus"] = "New";
+$GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Uus "] = "New";
 $GLOBALS["TRANS"]["Lisa %s"] = "Add %s";
 $GLOBALS["TRANS"]["Kustutada valitud objektid?"] = "Delete selected objects?";

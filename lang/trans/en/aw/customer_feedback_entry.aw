@@ -16,6 +16,10 @@ $GLOBALS["TRANS"]["Omaduse Arendaja t&auml;htaeg (dev_deadline) caption"] = "Dev
 $GLOBALS["TRANS"]["Grupi Arendaja andmed (dev_status) pealkiri"] = "Developer data";
 $GLOBALS["TRANS"]["Seose Isik (RELTYPE_PERSON) tekst"] = "Person";
 $GLOBALS["TRANS"]["Seose Organisatsioon (RELTYPE_CO) tekst"] = "Organisation";
+$GLOBALS["TRANS"]["Seose Objekti (RELTYPE_OBJECT) tekst"] = "Object";
+$GLOBALS["TRANS"]["Seose Fail 1 (RELTYPE_FILE1) tekst"] = "File 1";
+$GLOBALS["TRANS"]["Seose Fail 2 (RELTYPE_FILE2) tekst"] = "File 2";
+$GLOBALS["TRANS"]["Seose Fail 3 (RELTYPE_FILE3) tekst"] = "File 3";
 $GLOBALS["TRANS"]["Fataalne viga"] = "Fatal error";
 $GLOBALS["TRANS"]["Segav viga"] = "Disturbing error";
 $GLOBALS["TRANS"]["Tr&uuml;kiviga"] = "Syntax error";
@@ -33,4 +37,5 @@ $GLOBALS["TRANS"]["Kordamatu"] = "Unrepeatable";
 $GLOBALS["TRANS"]["Parandamatu"] = "No solution";
 $GLOBALS["TRANS"]["Ei paranda"] = "Do not fix";
 $GLOBALS["TRANS"]["Vajab tagasisidet"] = "Needs feedback";
+$GLOBALS["TRANS"]["&Auml;ra jama, mees! m&otilde;tled ka mis teed v&auml;?"] = "Do not do it!";
 ?>

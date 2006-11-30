@@ -170,6 +170,18 @@ msgstr ""
 msgid "Omaduse Ladu ei müü pakette (no_packets) help"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count
+msgid "Omaduse Toodetel puudub laoseis (no_count) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count_comment
+msgid "Omaduse Toodetel puudub laoseis (no_count) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_count_help
+msgid "Omaduse Toodetel puudub laoseis (no_count) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""

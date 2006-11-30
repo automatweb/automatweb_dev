@@ -49,6 +49,7 @@ $GLOBALS["TRANS"]["Seose Kontrollerite kaust (RELTYPE_CONTROLLER_FOLDER) tekst"]
 $GLOBALS["TRANS"]["Seose Objektide eksport (RELTYPE_OBJECT_EXPORT) tekst"] = "Object export";
 $GLOBALS["TRANS"]["Seose S&uuml;ndmuse vorm (RELTYPE_CAL_REG_FORM) tekst"] = "Event form";
 $GLOBALS["TRANS"]["Seose S&uuml;ndmuse vormi konf (RELTYPE_CAL_REG_FORM_CONF) tekst"] = "Event form config";
+$GLOBALS["TRANS"]["Seose p&auml;rast salvestamist kontroller (RELTYPE_AFTER_SAVE_CONTROLLER) tekst"] = "Controller for after save view";
 $GLOBALS["TRANS"]["Tekst"] = "Text";
 $GLOBALS["TRANS"]["V&auml;ike tekstikast"] = "Small textbox";
 $GLOBALS["TRANS"]["Valikv&auml;li"] = "Select";
@@ -105,6 +106,8 @@ $GLOBALS["TRANS"]["Rippmen&uuml;&uuml;"] = "Select";
 $GLOBALS["TRANS"]["M&auml;rkeruut"] = "Checkbox";
 $GLOBALS["TRANS"]["Raadionupp"] = "Radio button";
 $GLOBALS["TRANS"]["--vali--"] = "--select--";
+$GLOBALS["TRANS"]["Järjekord (kasvav)"] = "Order (increasing)";
+$GLOBALS["TRANS"]["Järjekord (kahanev)"] = "Order (decreasing)";
 $GLOBALS["TRANS"]["Nimi (kasvav)"] = "Name (ascending)";
 $GLOBALS["TRANS"]["Nimi (kahanev)"] = "Name (descending)";
 $GLOBALS["TRANS"]["Loomisaeg (kasvav)"] = "Created (ascending)";

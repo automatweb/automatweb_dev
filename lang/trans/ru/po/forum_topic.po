@@ -137,6 +137,10 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_topic.aw:106
+#: classes/contentmgmt/forum/forum_topic.aw:115
+msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_topic.aw:131
 msgid "Sisestatud kontrollnumber on vale!"
 msgstr ""

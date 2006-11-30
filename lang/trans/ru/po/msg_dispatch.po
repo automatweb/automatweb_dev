@@ -9,20 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/core/msg/msg_dispatch.aw:22 classes/core/msg/msg_dispatch.aw:51
+#: classes/core/msg/msg_dispatch.aw:22 classes/core/msg/msg_dispatch.aw:57
 msgid "msg_dispatch::post_message - no message posted!"
 msgstr ""
 
-#: classes/core/msg/msg_dispatch.aw:34 classes/core/msg/msg_dispatch.aw:73
+#: classes/core/msg/msg_dispatch.aw:34 classes/core/msg/msg_dispatch.aw:79
 msgid "msg_dispatch::post_message - no handler function (%s) in class (%s) for message %s!"
 msgstr ""
 
-#: classes/core/msg/msg_dispatch.aw:56
+#: classes/core/msg/msg_dispatch.aw:62
 msgid "msg_dispatch::post_message - no parameter for message posted!"
 msgstr ""
 
-#: classes/core/msg/msg_dispatch.aw:88
+#: classes/core/msg/msg_dispatch.aw:100
 msgid "msg_dispatch::post_message - no such message (%s) defined!"
 msgstr ""
-

@@ -1,5 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["Grupi Kiirmen&uuml;&uuml; (bms) pealkiri"] = "Quick add";
+$GLOBALS["TRANS"]["Seose Omanik (RELTYPE_PERSON) tekst"] = "Owner";
 $GLOBALS["TRANS"]["Uus"] = "New";
 $GLOBALS["TRANS"]["Kataloog"] = "Folder";
 $GLOBALS["TRANS"]["Objekti t&uuml;&uuml;p"] = "Object type";

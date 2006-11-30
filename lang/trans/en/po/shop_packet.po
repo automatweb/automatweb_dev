@@ -59,6 +59,42 @@ msgstr ""
 msgid "Omaduse Hind (price) help"
 msgstr ""
 
+#: classes/applications/shop/shop_packet.aw:prop_max_usage_in_time
+msgid "Omaduse Maksimaalne toodete kasutamise arv (max_usage_in_time) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_max_usage_in_time_comment
+msgid "Omaduse Maksimaalne toodete kasutamise arv (max_usage_in_time) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_max_usage_in_time_help
+msgid "Omaduse Maksimaalne toodete kasutamise arv (max_usage_in_time) help"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_max_usage_in_time_type
+msgid "Omaduse Aja&uuml;hik (max_usage_in_time_type) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_max_usage_in_time_type_comment
+msgid "Omaduse Aja&uuml;hik (max_usage_in_time_type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_max_usage_in_time_type_help
+msgid "Omaduse Aja&uuml;hik (max_usage_in_time_type) help"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_packet_tb
+msgid "Omaduse  (packet_tb) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_packet_tb_comment
+msgid "Omaduse  (packet_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_packet_tb_help
+msgid "Omaduse  (packet_tb) help"
+msgstr ""
+
 # classes/applications/shop/shop_packet.aw:prop_packet
 #: classes/applications/shop/shop_packet.aw:prop_packet
 msgid "Omaduse  (packet) caption"
@@ -314,14 +350,6 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_packet.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/shop/shop_packet.aw:group_packet
 #: classes/applications/shop/shop_packet.aw:group_packet
 msgid "Grupi Paketi sisu (packet) pealkiri"
@@ -362,10 +390,26 @@ msgstr "product"
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr "image"
 
-#: classes/applications/shop/shop_packet.aw:125
+#: classes/applications/shop/shop_packet.aw:111
+msgid "P&auml;ev"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:112
+msgid "N&auml;dal"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:113
+msgid "Kuu"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:145
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/shop/shop_packet.aw:130
+#: classes/applications/shop/shop_packet.aw:150
 msgid "Mitu paketis"
 msgstr "Amount"
+
+#: classes/applications/shop/shop_packet.aw:502
+msgid "Kustuta tooted paketist"
+msgstr ""

@@ -1,4 +1,6 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Vajab t&otilde;lget (needs_translation) caption"] = "Needs translation";
+$GLOBALS["TRANS"]["Omaduse T&otilde;lge kinnitatud (is_translated) caption"] = "Translation confirmed";
 $GLOBALS["TRANS"]["Omaduse Faili nimi (filename) caption"] = "File name";
 $GLOBALS["TRANS"]["Omaduse Vali fail (file) caption"] = "Select file";
 $GLOBALS["TRANS"]["Omaduse J&auml;rjekord (ord) caption"] = "Order";

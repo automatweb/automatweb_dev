@@ -1,0 +1,433 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:class_1179_help
+msgid "Klassi SPA Reisib&uuml;roo liides help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_packet_folder_list
+msgid "Omaduse Tootepakettide kaustad (packet_folder_list) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_packet_folder_list_comment
+msgid "Omaduse Tootepakettide kaustad (packet_folder_list) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_packet_folder_list_help
+msgid "Omaduse Tootepakettide kaustad (packet_folder_list) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_user_group
+msgid "Omaduse Kasutajagrupp, millesse pannakse selle liidese kaudu sisestatud kasutajad (user_group) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_user_group_comment
+msgid "Omaduse Kasutajagrupp, millesse pannakse selle liidese kaudu sisestatud kasutajad (user_group) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_user_group_help
+msgid "Omaduse Kasutajagrupp, millesse pannakse selle liidese kaudu sisestatud kasutajad (user_group) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_persons_folder
+msgid "Omaduse Isikute asukoht (persons_folder) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_persons_folder_comment
+msgid "Omaduse Isikute asukoht (persons_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_persons_folder_help
+msgid "Omaduse Isikute asukoht (persons_folder) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_send_mail_to_user
+msgid "Omaduse Saata kasutajale meil broneeringu tegemisel? (b_send_mail_to_user) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_send_mail_to_user_comment
+msgid "Omaduse Saata kasutajale meil broneeringu tegemisel? (b_send_mail_to_user) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_send_mail_to_user_help
+msgid "Omaduse Saata kasutajale meil broneeringu tegemisel? (b_send_mail_to_user) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_from_name
+msgid "Omaduse Meili from nimi (b_mail_from_name) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_from_name_comment
+msgid "Omaduse Meili from nimi (b_mail_from_name) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_from_name_help
+msgid "Omaduse Meili from nimi (b_mail_from_name) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_from_addr
+msgid "Omaduse Meili from aadress (b_mail_from_addr) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_from_addr_comment
+msgid "Omaduse Meili from aadress (b_mail_from_addr) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_from_addr_help
+msgid "Omaduse Meili from aadress (b_mail_from_addr) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_subject
+msgid "Omaduse Meili subjekt (b_mail_subject) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_subject_comment
+msgid "Omaduse Meili subjekt (b_mail_subject) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_subject_help
+msgid "Omaduse Meili subjekt (b_mail_subject) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_content
+msgid "Omaduse Meili sisu (b_mail_content) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_content_comment
+msgid "Omaduse Meili sisu (b_mail_content) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_content_help
+msgid "Omaduse Meili sisu (b_mail_content) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_legend
+msgid "Omaduse Meili sisu legend (b_mail_legend) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_legend_comment
+msgid "Omaduse Meili sisu legend (b_mail_legend) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_b_mail_legend_help
+msgid "Omaduse Meili sisu legend (b_mail_legend) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_cust_entry_fb
+msgid "Omaduse  (cust_entry_fb) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_cust_entry_fb_comment
+msgid "Omaduse  (cust_entry_fb) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_cust_entry_fb_help
+msgid "Omaduse  (cust_entry_fb) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_cust_entry
+msgid "Omaduse  (cust_entry) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_cust_entry_comment
+msgid "Omaduse  (cust_entry) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_cust_entry_help
+msgid "Omaduse  (cust_entry) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_fn
+msgid "Omaduse Eesnimi (s_fn) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_fn_comment
+msgid "Omaduse Eesnimi (s_fn) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_fn_help
+msgid "Omaduse Eesnimi (s_fn) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_ln
+msgid "Omaduse Perenimi (s_ln) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_ln_comment
+msgid "Omaduse Perenimi (s_ln) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_ln_help
+msgid "Omaduse Perenimi (s_ln) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_tb
+msgid "Omaduse Reisib&uuml;roo (s_tb) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_tb_comment
+msgid "Omaduse Reisib&uuml;roo (s_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_tb_help
+msgid "Omaduse Reisib&uuml;roo (s_tb) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_from
+msgid "Omaduse Alates (s_date_from) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_from_comment
+msgid "Omaduse Alates (s_date_from) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_from_help
+msgid "Omaduse Alates (s_date_from) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_to
+msgid "Omaduse Kuni (s_date_to) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_to_comment
+msgid "Omaduse Kuni (s_date_to) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_to_help
+msgid "Omaduse Kuni (s_date_to) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_not_set
+msgid "Omaduse Ajad m&auml;&auml;ramata (s_date_not_set) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_not_set_comment
+msgid "Omaduse Ajad m&auml;&auml;ramata (s_date_not_set) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_date_not_set_help
+msgid "Omaduse Ajad m&auml;&auml;ramata (s_date_not_set) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_package
+msgid "Omaduse Pakett (s_package) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_package_comment
+msgid "Omaduse Pakett (s_package) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_package_help
+msgid "Omaduse Pakett (s_package) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_btn
+msgid "Omaduse Otsi (s_btn) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_btn_comment
+msgid "Omaduse Otsi (s_btn) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_btn_help
+msgid "Omaduse Otsi (s_btn) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_res
+msgid "Omaduse  (s_res) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_res_comment
+msgid "Omaduse  (s_res) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_s_res_help
+msgid "Omaduse  (s_res) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_my_bookings
+msgid "Omaduse  (my_bookings) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_my_bookings_comment
+msgid "Omaduse  (my_bookings) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:prop_my_bookings_help
+msgid "Omaduse  (my_bookings) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_general_sub
+msgid "Grupi &Uuml;ldine (general_sub) pealkiri"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_general_sub_help
+msgid "Grupi &Uuml;ldine (general_sub) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_settings_mail
+msgid "Grupi Meiliseaded (settings_mail) pealkiri"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_settings_mail_help
+msgid "Grupi Meiliseaded (settings_mail) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_ppl_entry
+msgid "Grupi Isikud (ppl_entry) pealkiri"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_ppl_entry_help
+msgid "Grupi Isikud (ppl_entry) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_cust
+msgid "Grupi Kliendid (cust) pealkiri"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_cust_help
+msgid "Grupi Kliendid (cust) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_my_bookings
+msgid "Grupi Minu broneeringud (my_bookings) pealkiri"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_my_bookings_help
+msgid "Grupi Minu broneeringud (my_bookings) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_my_bookings_agent
+msgid "Grupi Klientide broneeringud (my_bookings_agent) pealkiri"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_my_bookings_agent_help
+msgid "Grupi Klientide broneeringud (my_bookings_agent) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_all_bookings
+msgid "Grupi K&otilde;ik (all_bookings) pealkiri"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:group_all_bookings_help
+msgid "Grupi K&otilde;ik (all_bookings) help"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:rel_RELTYPE_PFL_FOLDER
+msgid "Seose Tootepakettide kaust (RELTYPE_PFL_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:rel_RELTYPE_GROUP
+msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:rel_RELTYPE_PERSONS_FOLDER
+msgid "Seose Isikute asukoht (RELTYPE_PERSONS_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:158
+msgid "Eesnimi"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:163
+msgid "Perenimi"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:168
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:366
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:173
+msgid "Algus"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:178
+msgid "L&otilde;pp"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:183
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:387
+msgid "Pakett"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:188
+msgid "Parool"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:361
+msgid "Isik"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:371
+msgid "Alates"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:379
+msgid "Kuni"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:392
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:423
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:663
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:397
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:402
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:430
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:659
+msgid "Prindi"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:427
+msgid "Lisa samale isikule uus"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:562
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:574
+msgid "Toode"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:579
+msgid "Millal"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:642
+msgid "M&auml;&auml;ra aeg"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:649
+msgid "Broneering %s, %s - %s, pakett %s"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:753
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:855
+msgid "Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:822
+msgid "Broneeritud"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:895
+msgid "Vahepeal on valitud aeg broneeritud!"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:940
+msgid "Meili sisus kasutatavad muutujad:<br>#uid# - kasutajanimi<br>#pwd# - parool<br>#login_url# - sisse logimise aadress<br>"
+msgstr ""

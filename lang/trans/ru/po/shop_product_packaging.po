@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_product_packaging.aw:class_327_help
 msgid "Klassi Toote pakend help"
 msgstr ""
@@ -48,6 +47,66 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_price_cur_help
 msgid "Omaduse Hinnad valuutades (price_cur) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_reservation_time
+msgid "Omaduse Broneeritav aeg (reservation_time) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_reservation_time_comment
+msgid "Omaduse Broneeritav aeg (reservation_time) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_reservation_time_help
+msgid "Omaduse Broneeritav aeg (reservation_time) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_reservation_time_unit
+msgid "Omaduse  (reservation_time_unit) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_reservation_time_unit_comment
+msgid "Omaduse  (reservation_time_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_reservation_time_unit_help
+msgid "Omaduse  (reservation_time_unit) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_before
+msgid "Omaduse Puhveraeg enne (buffer_time_before) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_before_comment
+msgid "Omaduse Puhveraeg enne (buffer_time_before) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_before_help
+msgid "Omaduse Puhveraeg enne (buffer_time_before) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_after
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_after_comment
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_after_help
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_unit
+msgid "Omaduse  (buffer_time_unit) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_unit_comment
+msgid "Omaduse  (buffer_time_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_buffer_time_unit_help
+msgid "Omaduse  (buffer_time_unit) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_user1
@@ -486,11 +545,18 @@ msgstr ""
 msgid "Seose muutuja5 (RELTYPE_USERVAR5) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:461
+#: classes/applications/shop/shop_product_packaging.aw:189
+msgid "Minutit"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:190
+msgid "Tundi"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:484
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:466
+#: classes/applications/shop/shop_product_packaging.aw:489
 msgid "Valuuta"
 msgstr ""
-

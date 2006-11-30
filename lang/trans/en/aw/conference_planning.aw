@@ -1,0 +1,37 @@
+<?php
+$GLOBALS["TRANS"]["Omaduse &Uuml;hekohaliste tubade arv (single_count) caption"] = "Single rooms";
+$GLOBALS["TRANS"]["Omaduse Kahekohaliste tubade arv (double_count) caption"] = "Double rooms";
+$GLOBALS["TRANS"]["Omaduse Sviitide arv (suite_count) caption"] = "Suites";
+$GLOBALS["TRANS"]["Omaduse Koosoleku aja mustri p&auml;evade arv (meeting_pattern_max_days) caption"] = "Meeting pattern days";
+$GLOBALS["TRANS"]["Mon"] = "Mon";
+$GLOBALS["TRANS"]["Tue"] = "Tue";
+$GLOBALS["TRANS"]["Wed"] = "Wed";
+$GLOBALS["TRANS"]["Thu"] = "Thu";
+$GLOBALS["TRANS"]["Fri"] = "Fri";
+$GLOBALS["TRANS"]["Sat"] = "Sat";
+$GLOBALS["TRANS"]["Sun"] = "Sun";
+$GLOBALS["TRANS"]["Theatre"] = "Theatre";
+$GLOBALS["TRANS"]["Diplomat"] = "Diplomat";
+$GLOBALS["TRANS"]["Banquet"] = "Banquet";
+$GLOBALS["TRANS"]["School"] = "School";
+$GLOBALS["TRANS"]["Fishbone"] = "Fishbone";
+$GLOBALS["TRANS"]["U-Shape"] = "U-Shape";
+$GLOBALS["TRANS"]["Cabaret"] = "Cabaret";
+$GLOBALS["TRANS"]["Dinner"] = "Dinner";
+$GLOBALS["TRANS"]["Coctail"] = "Coctail";
+$GLOBALS["TRANS"]["Data projector"] = "Data projector";
+$GLOBALS["TRANS"]["TV/DVD"] = "TV/DVD";
+$GLOBALS["TRANS"]["Slide projector"] = "Slide projector";
+$GLOBALS["TRANS"]["Mircophones"] = "Mircophones";
+$GLOBALS["TRANS"]["OHP"] = "OHP";
+$GLOBALS["TRANS"]["Morning coffe break"] = "Morning coffe break";
+$GLOBALS["TRANS"]["Lunch"] = "Lunch";
+$GLOBALS["TRANS"]["Afternoon coffe break"] = "Afternoon coffe break";
+$GLOBALS["TRANS"]["Fruit assortment in the room"] = "Fruit assortment in the room";
+$GLOBALS["TRANS"]["Sodas"] = "Sodas";
+$GLOBALS["TRANS"]["Non-stop coffee"] = "Non-stop coffee";
+$GLOBALS["TRANS"]["Estionia"] = "Estonia";
+$GLOBALS["TRANS"]["Latvia"] = "Latvia";
+$GLOBALS["TRANS"]["Lietuva"] = "Lietuva";
+$GLOBALS["TRANS"]["-"] = "-";
+?>

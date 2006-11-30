@@ -12,6 +12,7 @@ $GLOBALS["TRANS"]["Omaduse N&auml;ita igal pool (all_menus) caption"] = "Display
 $GLOBALS["TRANS"]["Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"] = "Don't display on the page of search result";
 $GLOBALS["TRANS"]["Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) caption"] = "Don't display in document's long view";
 $GLOBALS["TRANS"]["Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) caption"] = "Content is displayed in all languages";
+$GLOBALS["TRANS"]["Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"] = "Show content in all languages";
 $GLOBALS["TRANS"]["Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) caption"] = "Select folders where the container will be displayed";
 $GLOBALS["TRANS"]["Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) caption"] = "Select folders where the container will NOT be displayed";
 $GLOBALS["TRANS"]["Omaduse Dokumente j&auml;rjestatakse (sort_by) caption"] = "Ordering documents by";
