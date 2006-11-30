@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.2 2006/11/24 11:06:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.3 2006/11/30 10:55:00 kristo Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -125,27 +125,32 @@ class spa_booking extends class_base
 		$pk = $package->instance();
 		$entry_inst = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		$dates = $entry_inst->get_booking_data_from_booking($booking);
-		foreach($pk->get_products_for_package($package) as $prod)
+		foreach($pk->get_products_for_package($package) as $prod_id => $count)
 		{
+			$prod = obj($prod_id);
 			if (!isset($rv2prod[$prod->id()]))
 			{
 				$rooms = $entry_inst->get_rooms_for_product($prod->id());
 				if (count($rooms))
 				{
-					$room_inst = get_instance(CL_ROOM);
-					$rv_id = $room_inst->make_reservation(array(
-						"id" => reset(array_keys($rooms)),
-						"data" => array(
-							"customer" => $booking->prop("person")
-						),
-						"meta" => array(
-							"product_for_bron" => $prod->id()
-						)
-					));
-					$booking->connect(array(
-						"to" => $rv_id,
-						"type" => "RELTYPE_ROOM_BRON"
-					));
+					for ($i = 0; $i < $count; $i++)
+					{
+						$room_inst = get_instance(CL_ROOM);
+						$rv_id = $room_inst->make_reservation(array(
+							"id" => reset(array_keys($rooms)),
+							"data" => array(
+								"customer" => $booking->prop("person")
+							),
+							"meta" => array(
+								"product_for_bron" => $prod->id(),
+								"product_count_for_bron" => $i
+							)
+						));
+						$booking->connect(array(
+							"to" => $rv_id,
+							"type" => "RELTYPE_ROOM_BRON"
+						));
+					}
 				}
 			}
 		}

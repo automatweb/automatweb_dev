@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.50 2006/11/28 11:26:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.51 2006/11/30 10:55:00 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -253,7 +253,7 @@ class shop_order_cart extends class_base
 
 		$cart_total = $this->get_cart_value();
 		$cart_discount = $cart_total * ($oc->prop("web_discount")/100);
-		
+
 		$this->vars(array(
 			"cart_total" => number_format($cart_total, 2),
 			"cart_discount" => number_format($cart_discount, 2),
@@ -1318,7 +1318,7 @@ class shop_order_cart extends class_base
 
 		$cart_total = $this->get_cart_value();
                 $cart_discount = $cart_total * ($oc->prop("web_discount")/100);
-				
+			
 		$this->vars(array(
 			"cart_total" => number_format($cart_total, 2),
 	                "cart_discount" => number_format($cart_discount, 2),

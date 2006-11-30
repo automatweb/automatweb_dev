@@ -3,7 +3,7 @@
       <property>
             <name>name</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>general2</group>
             <type>textbox</type>
             <field>name</field>
             <caption>Nimetus</caption>
@@ -11,7 +11,7 @@
       <property>
             <name>owner</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>general2</group>
             <type>text</type>
             <store>no</store>
             <field>owner</field>
@@ -20,11 +20,32 @@
       <property>
             <name>offerers_folder</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>general2</group>
             <type>relpicker</type>
             <field>meta</field>
             <reltype>RELTYPE_PROCUREMENT_CENTER_FOLDERS</reltype>
             <caption>Pakkujate kataloog</caption>
+      </property>
+      <property>
+            <name>search_date_subtract</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <size>3</size>
+            <parent>settings_l</parent>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>default kuup&amp;amp;auml;ev otsungus tagasi</caption>
+      </property>
+      <property>
+            <name>search_date_subtract_unit</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>select</type>
+            <no_caption>1</no_caption>
+            <parent>settings_l</parent>
+            <field>meta</field>
+            <method>serialize</method>
       </property>
       <property>
             <name>p_tb</name>
@@ -623,6 +644,10 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <general2>
+                  <caption>&amp;amp;Uuml;ldinfo</caption>
+                  <parent>general</parent>
+            </general2>
             <settings>
                   <caption>Seaded</caption>
                   <parent>general</parent>
@@ -666,6 +691,10 @@
             </PROCUREMENT_CENTER_FOLDERS>
       </reltypes>
       <layout>
+            <settings_l>
+                  <type>hbox</type>
+                  <group>settings</group>
+            </settings_l>
             <p_l>
                   <type>hbox</type>
                   <width>30%:70%</width>

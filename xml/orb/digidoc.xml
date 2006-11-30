@@ -3,4 +3,3 @@
 	<class name="digidoc" folder="protocols/file" extends="class_base">
 	</class>
 </orb>
-		

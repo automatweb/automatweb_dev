@@ -3,4 +3,3 @@
 	<class name="ddoc_parser" folder="common/digidoc" extends="class_base">
 	</class>
 </orb>
-		

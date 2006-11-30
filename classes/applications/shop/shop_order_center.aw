@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.41 2006/11/28 11:26:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.42 2006/11/30 10:55:00 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -722,7 +722,7 @@ class shop_order_center extends class_base
 	{
 		extract($arr);
 		$soce = aw_global_get("soc_err");
-
+//arr($_SESSION["soc_err"]);
 		$tl_inst = $t_layout->instance();
 		$tl_inst->start_table($t_layout, $soc);
 

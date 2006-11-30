@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.46 2006/11/28 11:26:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.47 2006/11/30 10:55:00 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -1303,7 +1303,6 @@ class shop_order extends class_base
 					'order_data_size' => $_oid[$prod->id()][0]['size'],
 					'order_data_price' => $_oid[$prod->id()][0]['price'],
 				));
-
 				//$pr_price= ($_pr * $tp[$prod->id()]);
 
 				$p .= $this->parse("PROD");

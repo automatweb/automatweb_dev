@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.16 2006/11/21 15:01:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.17 2006/11/30 10:55:00 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -151,6 +151,12 @@ class shop_packet extends class_base
 			"align" => "center"
 		));
 
+		$t->define_field(array(
+			"name" => "group",
+			"caption" => t("Grupp"),
+			"align" => "center"
+		));
+
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -160,6 +166,7 @@ class shop_packet extends class_base
 	function do_packet_table(&$arr)
 	{
 		$pd = $arr["obj_inst"]->meta("packet_content");
+		$pg = $arr["obj_inst"]->meta("packet_groups");
 
 		$this->_init_packet_table($arr["prop"]["vcl_inst"]);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
@@ -179,6 +186,11 @@ class shop_packet extends class_base
 					"value" => $value,
 					"size" => 5
 				)),
+				"group" => html::textbox(array(
+					"name" => "pg[".$c->prop("to")."]",
+					"value" => $pg[$c->prop("to")],
+					"size" => 5
+				)),
 				"oid" => $c->prop("to")
 			));
 		}
@@ -187,6 +199,7 @@ class shop_packet extends class_base
 	function save_packet_table(&$arr)
 	{
 		$arr["obj_inst"]->set_meta("packet_content", $arr["request"]["pd"]);
+		$arr["obj_inst"]->set_meta("packet_groups", $arr["request"]["pg"]);
 	}
 
 	function get_price($o)
@@ -474,13 +487,43 @@ class shop_packet extends class_base
 
 		@param o required type=object
 		 the packet to get prods for
+
+		 @returns 
+			array of product id -> count in packet
 	**/
 	function get_products_for_package($o)
 	{
+		$pd = $o->meta("packet_content");
 		$ret = array();
 		foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
-			$ret[] = $c->to();
+			$ret[$c->prop("to")] = max(1, $pd[$c->prop("to")]);
+		}
+		return $ret;
+	}
+
+	/**
+		@attrib api=1
+	**/
+	function get_group_list($o)
+	{
+		$pg = $o->meta("packet_groups");
+		return array_unique(array_values(safe_array($pg)));
+	}
+
+	/**
+		@attrib api=1
+	**/
+	function get_products_in_group($o, $grp)
+	{
+		$pg = $o->meta("packet_groups");
+		$ret = array();
+		foreach($pg as $prod => $p_grp)
+		{
+			if ($p_grp == $grp)
+			{
+				$ret[] = $prod;
+			}
 		}
 		return $ret;
 	}

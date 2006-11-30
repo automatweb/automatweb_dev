@@ -248,6 +248,16 @@
             <caption>IP Aadress v&amp;amp;auml;ljaarvatud</caption>
       </property>
       <property>
+            <name>s_referer</name>
+            <table>objects</table>
+            <group>stats_filter</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <parent>s_left</parent>
+            <caption>Referer</caption>
+      </property>
+      <property>
             <name>s_res_type</name>
             <table>objects</table>
             <group>stats_filter</group>

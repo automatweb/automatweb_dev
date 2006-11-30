@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="booking" type="int" />
 					<required name="prod" type="int" />
+					<required name="prod_num" type="int" />
 					<optional name="pkt" type="int" />
 				</arguments>
 			</function>
@@ -17,6 +18,7 @@
 					<required name="start" type="int" />
 					<required name="end" type="int" />
 					<required name="prod" type="int" />
+					<required name="prod_num" type="int" />
 					<required name="booking" type="int" />
 				</arguments>
 			</function>
@@ -26,6 +28,15 @@
 			<function name="print_booking">
 				<arguments>
 					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="clear_booking">
+			<function name="clear_booking">
+				<arguments>
+					<required name="return_url" />
+					<required name="booking" type="int" />
 				</arguments>
 			</function>
 		</action>
