@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.87 2006/11/30 11:02:45 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.87 2006/11/30 11:02:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.88 2006/11/30 15:25:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.88 2006/11/30 15:25:30 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -33,7 +33,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property cat type=hidden store=no
 
-	@layout bug type=hbox width=15%:85%
+	@layout bug type=hbox width=20%:80%
 
 		@layout bug_tree type=vbox parent=bug closeable=1 area_caption=Arendus&uuml;lesanded
 
@@ -205,7 +205,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property reqs_p_table type=table store=no no_caption=1 parent=reqs_p_tt
 
-@default group=dev_orders
+@default group=devo
 
 	@property dev_orders_tb type=toolbar store=no no_caption=1 
 
@@ -232,12 +232,26 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property reqs_c_table type=table store=no no_caption=1 parent=reqs_c_tt
 
+@default group=devo_proj
 
-@groupinfo general_sub caption="&Uuml;ldine" submit=no parent=general
-@groupinfo settings_people caption="Isikud" submit=no parent=general
-@groupinfo settings_g caption="Muud seaded" parent=general
-@groupinfo unestimated_bugs caption="Ennustamata bugid" parent=general
-@groupinfo reminders caption="Teavitused" parent=general
+	@layout devo_p_tt type=hbox width=30%:70% 
+
+		@layout devo_p_tree type=vbox parent=devo_p_tt closeable=1 area_caption=Projektid
+
+			@property devo_p_tree type=treeview store=no no_caption=1 parent=devo_p_tree
+
+		@property devo_p_table type=table store=no no_caption=1 parent=devo_p_tt
+
+
+@default group=devo_cust
+
+	@layout devo_c_tt type=hbox width=30%:70% 
+
+		@layout devo_c_tree type=vbox parent=devo_c_tt closeable=1 area_caption=Tellijad
+
+			@property devo_c_tree type=treeview store=no no_caption=1 parent=devo_c_tree
+
+		@property devo_c_table type=table store=no no_caption=1 parent=devo_c_tt
 
 @default group=problems_units
 
@@ -250,19 +264,57 @@ define("BUG_STATUS_CLOSED", 5);
 			@property pu_tree type=treeview store=no no_caption=1 parent=pu_tree_b
 
 		@property pu_table type=table store=no no_caption=1 parent=pu_h
-	
+
+@default group=problems_proj
+
+	@property pp_tb type=toolbar no_caption=1 store=no
+
+	@layout pp_h type=hbox width=30%:70% 
+
+		@layout pp_tree_b type=vbox parent=pp_h closeable=1 area_caption=Projektid
+
+			@property pp_tree type=treeview store=no no_caption=1 parent=pp_tree_b
+
+		@property pp_table type=table store=no no_caption=1 parent=pp_h
+
+@default group=problems_req
+
+	@property pr_tb type=toolbar no_caption=1 store=no
+
+	@layout pr_h type=hbox width=30%:70% 
+
+		@layout pr_tree_b type=vbox parent=pr_h closeable=1 area_caption=N&otilde;uded
+
+			@property pr_tree type=treeview store=no no_caption=1 parent=pr_tree_b
+
+		@property pr_table type=table store=no no_caption=1 parent=pr_h
+
+
+@groupinfo general_sub caption="&Uuml;ldine" submit=no parent=general
+@groupinfo settings_people caption="Isikud" submit=no parent=general
+@groupinfo settings_g caption="Muud seaded" parent=general
+@groupinfo unestimated_bugs caption="Ennustamata bugid" parent=general
+@groupinfo reminders caption="Teavitused" parent=general
+
 
 @groupinfo reqs_main caption="N&otilde;uded"
 
-	@groupinfo reqs parent=reqs_main caption="Sisestamine"
-	@groupinfo reqs_proj caption="Projektid" parent=reqs_main
-	@groupinfo reqs_cust caption="Tellijad isikud" parent=reqs_main
+	@groupinfo reqs parent=reqs_main caption="Sisestamine" submit=no
+	@groupinfo reqs_proj caption="Projektid" parent=reqs_main submit=no
+	@groupinfo reqs_cust caption="Tellijad isikud" parent=reqs_main submit=no
 
 @groupinfo dev_orders caption="Arendustellimused"
+
+	@groupinfo devo parent=dev_orders caption="Sisestamine" submit=no
+	@groupinfo devo_proj caption="Projektid" parent=dev_orders submit=no
+	@groupinfo devo_cust caption="Tellijad isikud" parent=dev_orders submit=no
+
 @groupinfo problems caption="Probleemid"
 
 	@groupinfo problems_list caption="Nimekiri" parent=problems submit=no
 	@groupinfo problems_units caption="Osakondade kaupa" parent=problems submit=no
+	@groupinfo problems_proj caption="Projektide kaupa" parent=problems submit=no
+	@groupinfo problems_req caption="N&otilde;uete kaupa" parent=problems submit=no
 
 @groupinfo bugs caption="Arendus&uuml;lesanded" submit=no
 
@@ -3878,6 +3930,240 @@ return;
 
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "createdby", "created", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+	}
+
+	function _get_devo_p_tree($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_DEVELOPMENT_ORDER,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		// get all projects from those
+		$p2req = array();
+		foreach($ol->arr() as $r)
+		{
+			$p2req[(int)$r->prop("project")] ++;
+		}
+		$p2req[(int)null]++;
+		$p2req[(int)null]--;
+		$t =& $arr["prop"]["vcl_inst"];
+		$i = get_instance(CL_DEVELOPMENT_ORDER);
+		foreach($p2req as $proj => $cnt)
+		{
+			/*if (!is_oid($proj))
+			{
+				continue;
+			}*/
+			$po = obj($proj);
+			$nm = (is_oid($proj) ? $po->name() : t("Muud t&ouml;&ouml;d"))." ($cnt)";
+			if ($arr["request"]["proj"] == $proj && !$arr["request"]["state"] && !$arr["request"]["pri"] )
+			{
+				$nm = "<b>".$nm."</b>";
+			}
+			$t->add_item(0, array(
+				"id" => "p_".$proj,
+				"parent" => 0,
+				"name" => $nm,
+				"url" => aw_url_change_var(array(
+					"proj" => $proj,
+					"state" => null,
+					"pri" => null
+				))
+			));
+		}
+	}
+
+	function _get_devo_p_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		if ($arr["request"]["proj"])
+		{
+			$p = $arr["request"]["proj"];
+		}
+		else
+		{
+			$p = new obj_predicate_compare(OBJ_COMP_NULL);
+		}
+		$f = array(
+			"class_id" => CL_DEVELOPMENT_ORDER,
+			"project" => $p,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		$ol = new object_list($f);
+		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
+	}
+
+	function _get_devo_c_tree($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_DEVELOPMENT_ORDER,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		// get all projects from those
+		$p2req = array();
+		foreach($ol->arr() as $r)
+		{
+			$p2req[(int)$r->prop("customer")] ++;
+		}
+		$p2req[(int)null]++;
+		$p2req[(int)null]--;
+		$t =& $arr["prop"]["vcl_inst"];
+		$i = get_instance(CL_DEVELOPMENT_ORDER);
+		foreach($p2req as $proj => $cnt)
+		{
+			/*if (!is_oid($proj))
+			{
+				continue;
+			}*/
+			$po = obj($proj);
+			$nm = (is_oid($proj) ? $po->name() : t("Muud t&ouml;&ouml;d"))." ($cnt)";
+			if ($arr["request"]["cust"] == $proj )
+			{
+				$nm = "<b>".$nm."</b>";
+			}
+			$t->add_item(0, array(
+				"id" => "p_".$proj,
+				"parent" => 0,
+				"name" => $nm,
+				"url" => aw_url_change_var(array(
+					"cust" => $proj,
+					"state" => null,
+					"pri" => null
+				))
+			));
+		}
+	}
+
+	function _get_devo_c_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		if ($arr["request"]["cust"])
+		{
+			$p = $arr["request"]["cust"];
+		}
+		else
+		{
+			$p = new obj_predicate_compare(OBJ_COMP_NULL);
+		}
+		$f = array(
+			"class_id" => CL_DEVELOPMENT_ORDER,
+			"customer" => $p,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		$ol = new object_list($f);
+		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
+	}
+
+	function _get_pp_tree($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		// get all projects from those
+		$p2req = array();
+		foreach($ol->arr() as $r)
+		{
+			$p2req[(int)$r->prop("project")] ++;
+		}
+		$p2req[(int)null]++;
+		$p2req[(int)null]--;
+		$t =& $arr["prop"]["vcl_inst"];
+		$i = get_instance(CL_CUSTOMER_PROBLEM_TICKET);
+		foreach($p2req as $proj => $cnt)
+		{
+			/*if (!is_oid($proj))
+			{
+				continue;
+			}*/
+			$po = obj($proj);
+			$nm = (is_oid($proj) ? $po->name() : t("Muud t&ouml;&ouml;d"))." ($cnt)";
+			if ($arr["request"]["proj"] == $proj && !$arr["request"]["state"] && !$arr["request"]["pri"] )
+			{
+				$nm = "<b>".$nm."</b>";
+			}
+			$t->add_item(0, array(
+				"id" => "p_".$proj,
+				"parent" => 0,
+				"name" => $nm,
+				"url" => aw_url_change_var(array(
+					"proj" => $proj,
+					"state" => null,
+					"pri" => null
+				))
+			));
+		}
+	}
+
+	function _get_pp_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		if ($arr["request"]["proj"])
+		{
+			$p = $arr["request"]["proj"];
+		}
+		else
+		{
+			$p = new obj_predicate_compare(OBJ_COMP_NULL);
+		}
+		$f = array(
+			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
+			"project" => $p,
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		$ol = new object_list($f);
+		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+	}
+
+	function _get_pr_tree($arr)
+	{
+		classload("core/icons");
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML, 
+				"persist_state" => true,
+				"tree_id" => "bt_pr_reqs",
+			),
+			"root_item" => $arr["obj_inst"],
+			"ot" => new object_tree(array(
+				"parent" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"class_id" => array(CL_REQUIREMENT_CATEGORY,CL_PROCUREMENT_REQUIREMENT)
+			)),
+			"var" => "tf",
+			"icon" => icons::get_icon_url(CL_MENU)
+		));
+	}
+
+	function _get_pr_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		if (!$arr["request"]["tf"])
+		{
+			return;
+		}
+		/*$req_tree = new object_tree(array(
+			"parent" => $arr["request"]["tf"],
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => array(CL_REQUIREMENT_CATEGORY,CL_PROCUREMENT_REQUIREMENT)
+		));*/
+
+		$f = array(
+			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
+			"requirement" => $arr["request"]["tf"], //$req_tree->ids(),
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		$ol = new object_list($f);
+		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
 	}
 }
 ?>

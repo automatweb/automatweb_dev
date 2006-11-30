@@ -52,6 +52,16 @@
             <caption>Kellele</caption>
       </property>
       <property>
+            <name>bug_mail</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <parent>settings_col1</parent>
+            <captionside>top</captionside>
+            <field>bug_mail</field>
+            <caption>Bugmail CC</caption>
+      </property>
+      <property>
             <name>bug_type</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -64,16 +74,6 @@
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>bug_class</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>select</type>
-            <parent>settings_col2</parent>
-            <captionside>top</captionside>
-            <field>bug_class</field>
-            <caption>Klass</caption>
-      </property>
-      <property>
             <name>bug_severity</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -84,13 +84,33 @@
             <caption>T&amp;amp;otilde;sidus</caption>
       </property>
       <property>
+            <name>bug_class</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>select</type>
+            <parent>settings_col2</parent>
+            <captionside>top</captionside>
+            <field>bug_class</field>
+            <caption>Klass</caption>
+      </property>
+      <property>
+            <name>bug_property</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>select</type>
+            <parent>settings_col2</parent>
+            <captionside>top</captionside>
+            <field>aw_bug_property</field>
+            <caption>Klassi omadus</caption>
+      </property>
+      <property>
             <name>monitors</name>
             <group>general</group>
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_MONITOR</reltype>
             <multiple>1</multiple>
-            <size>4</size>
+            <size>5</size>
             <store>connect</store>
             <parent>settings_col3</parent>
             <captionside>top</captionside>
@@ -162,10 +182,10 @@
             <table>aw_bugs</table>
             <type>textbox</type>
             <size>5</size>
-            <parent>data</parent>
+            <parent>data_time</parent>
             <captionside>top</captionside>
             <field>num_hrs_guess</field>
-            <caption>Prognoositav tundide arv 	</caption>
+            <caption>Prognoositav </caption>
       </property>
       <property>
             <name>num_hrs_real</name>
@@ -173,10 +193,10 @@
             <table>aw_bugs</table>
             <type>textbox</type>
             <size>5</size>
-            <parent>data</parent>
+            <parent>data_time</parent>
             <captionside>top</captionside>
             <field>num_hrs_real</field>
-            <caption>Tegelik tundide arv</caption>
+            <caption>Tegelik </caption>
       </property>
       <property>
             <name>num_hrs_to_cust</name>
@@ -184,10 +204,10 @@
             <table>aw_bugs</table>
             <type>textbox</type>
             <size>5</size>
-            <parent>data</parent>
+            <parent>data_time</parent>
             <captionside>top</captionside>
             <field>num_hrs_to_cust</field>
-            <caption>Tundide arv kliendile</caption>
+            <caption>Kliendile</caption>
       </property>
       <property>
             <name>customer</name>
@@ -195,10 +215,65 @@
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_CUSTOMER</reltype>
-            <parent>data</parent>
+            <parent>data_cust_hb</parent>
             <captionside>top</captionside>
             <field>customer</field>
-            <caption>Klient</caption>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>customer_unit</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER_UNIT</reltype>
+            <parent>data_cust_hb</parent>
+            <captionside>top</captionside>
+            <field>customer_unit</field>
+            <caption>&amp;amp;Uuml;ksus</caption>
+      </property>
+      <property>
+            <name>customer_person</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER_PERSON</reltype>
+            <parent>data_cust_hb</parent>
+            <captionside>top</captionside>
+            <field>customer_person</field>
+            <caption>Isik</caption>
+      </property>
+      <property>
+            <name>orderer</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDERER</reltype>
+            <parent>data_ord_hb</parent>
+            <captionside>top</captionside>
+            <field>orderer</field>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>orderer_unit</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDERER_UNIT</reltype>
+            <parent>data_ord_hb</parent>
+            <captionside>top</captionside>
+            <field>orderer_unit</field>
+            <caption>&amp;amp;Uuml;ksus</caption>
+      </property>
+      <property>
+            <name>orderer_person</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDERER_PERSON</reltype>
+            <parent>data_ord_hb</parent>
+            <captionside>top</captionside>
+            <field>orderer_person</field>
+            <caption>Isik</caption>
       </property>
       <property>
             <name>project</name>
@@ -206,7 +281,7 @@
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_PROJECT</reltype>
-            <parent>data</parent>
+            <parent>data_r_bot</parent>
             <captionside>top</captionside>
             <field>project</field>
             <caption>Projekt</caption>
@@ -216,20 +291,10 @@
             <group>general</group>
             <table>aw_bugs</table>
             <type>textbox</type>
-            <parent>data</parent>
+            <parent>data_r_bot</parent>
             <captionside>top</captionside>
             <field>bug_component</field>
             <caption>Komponent</caption>
-      </property>
-      <property>
-            <name>bug_mail</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>textbox</type>
-            <parent>data</parent>
-            <captionside>top</captionside>
-            <field>bug_mail</field>
-            <caption>Bugmail CC</caption>
       </property>
       <property>
             <name>fileupload</name>
@@ -239,27 +304,17 @@
             <reltype>RELTYPE_FILE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
-            <parent>data</parent>
+            <parent>data_r_bot</parent>
             <captionside>top</captionside>
             <field>fileupload</field>
             <caption>Fail</caption>
-      </property>
-      <property>
-            <name>bug_property</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>select</type>
-            <parent>data</parent>
-            <captionside>top</captionside>
-            <field>aw_bug_property</field>
-            <caption>Klassi omadus</caption>
       </property>
       <property>
             <name>bug_predicates</name>
             <group>general</group>
             <table>aw_bugs</table>
             <type>textbox</type>
-            <parent>data</parent>
+            <parent>data_r_bot</parent>
             <captionside>top</captionside>
             <field>aw_bug_predicates</field>
             <caption>Eeldusbugid</caption>
@@ -270,7 +325,7 @@
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_FEEDBACK_P</reltype>
-            <parent>data</parent>
+            <parent>data_r_bot</parent>
             <captionside>top</captionside>
             <field>aw_bug_feedback_p</field>
             <caption>Tagasiside kellelt</caption>
@@ -363,6 +418,24 @@
             <size>5</size>
             <caption>Eelarve</caption>
       </property>
+      <property>
+            <name>problems_tb</name>
+            <group>problems</group>
+            <table>aw_bugs</table>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>problems_tb</field>
+      </property>
+      <property>
+            <name>problems_table</name>
+            <group>problems</group>
+            <table>aw_bugs</table>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>problems_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -374,6 +447,9 @@
             <cust>
                   <caption>Kliendi andmed</caption>
             </cust>
+            <problems>
+                  <caption>Probleemid</caption>
+            </problems>
       </groupinfo>
       <tableinfo>
             <aw_bugs>
@@ -436,6 +512,36 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Tagasiside isik</caption>
             </FEEDBACK_P>
+            <CUSTOMER_UNIT>
+                  <value>11</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Kliendi &amp;amp;uuml;ksus</caption>
+            </CUSTOMER_UNIT>
+            <CUSTOMER_PERSON>
+                  <value>12</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kliendi isik</caption>
+            </CUSTOMER_PERSON>
+            <ORDERER>
+                  <value>13</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Tellija</caption>
+            </ORDERER>
+            <ORDERER_UNIT>
+                  <value>14</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Tellija &amp;amp;uuml;ksus</caption>
+            </ORDERER_UNIT>
+            <ORDERER_PERSON>
+                  <value>15</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Tellija isik</caption>
+            </ORDERER_PERSON>
+            <FROM_PROBLEM>
+                  <value>16</value>
+                  <clid>CL_CUSTOMER_PROBLEM_TICKET</clid>
+                  <caption>Probleem</caption>
+            </FROM_PROBLEM>
       </reltypes>
       <layout>
             <name>
@@ -488,13 +594,57 @@
                   <area_caption>Sisu</area_caption>
                   <group>general</group>
             </bc>
-            <data>
+            <content_right>
                   <type>vbox</type>
                   <parent>content</parent>
+                  <group>general</group>
+            </content_right>
+            <data>
+                  <type>vbox</type>
+                  <parent>content_right</parent>
                   <closeable>1</closeable>
-                  <area_caption>Aeg</area_caption>
+                  <area_caption>Tundide&amp;nbsp;arv</area_caption>
                   <group>general</group>
             </data>
+            <data_time>
+                  <type>hbox</type>
+                  <parent>data</parent>
+                  <width>40%:40%:20%</width>
+                  <group>general</group>
+            </data_time>
+            <data_cust>
+                  <type>vbox</type>
+                  <parent>content_right</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Klient</area_caption>
+                  <group>general</group>
+            </data_cust>
+            <data_cust_hb>
+                  <type>hbox</type>
+                  <parent>data_cust</parent>
+                  <width>40%:40%:20%</width>
+                  <group>general</group>
+            </data_cust_hb>
+            <data_ord>
+                  <type>vbox</type>
+                  <parent>content_right</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Tellija</area_caption>
+                  <group>general</group>
+            </data_ord>
+            <data_ord_hb>
+                  <type>hbox</type>
+                  <parent>data_ord</parent>
+                  <width>40%:40%:20%</width>
+                  <group>general</group>
+            </data_ord_hb>
+            <data_r_bot>
+                  <type>vbox</type>
+                  <parent>content_right</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Andmed</area_caption>
+                  <group>general</group>
+            </data_r_bot>
       </layout>
 </properties>
 

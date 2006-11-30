@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.68 2006/11/30 11:02:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.69 2006/11/30 15:25:30 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -33,6 +33,8 @@ define("BUG_STATUS_CLOSED", 5);
 		@property who type=crm_participant_search style=relpicker reltype=RELTYPE_MONITOR table=aw_bugs field=who parent=settings_col1 captionside=top
 		@caption Kellele
 
+		@property bug_mail type=textbox parent=settings_col1 captionside=top
+		@caption Bugmail CC
 
 	@layout settings_col2 type=vbox parent=settings
 
@@ -40,17 +42,18 @@ define("BUG_STATUS_CLOSED", 5);
 		@property bug_type type=classificator store=connect reltype=RELTYPE_BUGTYPE parent=settings_col2 captionside=top
 		@caption T&uuml;&uuml;p
 
-		@property bug_class type=select parent=settings_col2 captionside=top
-		@caption Klass
-
 		@property bug_severity type=select parent=settings_col2 captionside=top
 		@caption T&otilde;sidus
 
+		@property bug_class type=select parent=settings_col2 captionside=top
+		@caption Klass
 
+		@property bug_property type=select parent=settings_col2 captionside=top field=aw_bug_property
+		@caption Klassi omadus
 	
 	@layout settings_col3 type=vbox parent=settings
 
-		@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=4 store=connect parent=settings_col3 captionside=top
+		@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 store=connect parent=settings_col3 captionside=top
 		@caption J&auml;lgijad
 
 		@property deadline type=date_select default=-1 parent=settings_col3 captionside=top
@@ -73,40 +76,64 @@ define("BUG_STATUS_CLOSED", 5);
 		@property bug_content_comm type=textarea rows=18 cols=60 parent=bc store=no editonly=1 captionside=top
 		@caption Lisa kommentaar
 
-	@layout data type=vbox parent=content closeable=1 area_caption=Aeg
+	@layout content_right type=vbox parent=content
 
-		@property num_hrs_guess type=textbox size=5 parent=data captionside=top
-		@caption Prognoositav tundide arv 	
+		@layout data type=vbox parent=content_right closeable=1 area_caption=Tundide&nbsp;arv
 
-		@property num_hrs_real type=textbox size=5 parent=data captionside=top
-		@caption Tegelik tundide arv
+			@layout data_time type=hbox parent=data width=40%:40%:20%
 
-		@property num_hrs_to_cust type=textbox size=5 parent=data captionside=top
-		@caption Tundide arv kliendile
+				@property num_hrs_guess type=textbox size=5 parent=data_time captionside=top
+				@caption Prognoositav 
 
-		@property customer type=relpicker reltype=RELTYPE_CUSTOMER parent=data captionside=top
-		@caption Klient
+				@property num_hrs_real type=textbox size=5 parent=data_time captionside=top
+				@caption Tegelik 
 
-		@property project type=relpicker reltype=RELTYPE_PROJECT  parent=data captionside=top
-		@caption Projekt
+				@property num_hrs_to_cust type=textbox size=5 parent=data_time captionside=top
+				@caption Kliendile
 
-		@property bug_component type=textbox parent=data captionside=top
-		@caption Komponent
+		@layout data_cust type=vbox parent=content_right closeable=1 area_caption=Klient
 
-		@property bug_mail type=textbox parent=data captionside=top
-		@caption Bugmail CC
+			@layout data_cust_hb type=hbox parent=data_cust width=40%:40%:20%
+
+				@property customer type=relpicker reltype=RELTYPE_CUSTOMER parent=data_cust_hb captionside=top
+				@caption Organisatsioon
+
+				@property customer_unit type=relpicker reltype=RELTYPE_CUSTOMER_UNIT parent=data_cust_hb captionside=top
+				@caption &Uuml;ksus
+
+				@property customer_person type=relpicker reltype=RELTYPE_CUSTOMER_PERSON parent=data_cust_hb captionside=top
+				@caption Isik
+
+		@layout data_ord type=vbox parent=content_right closeable=1 area_caption=Tellija
+
+			@layout data_ord_hb type=hbox parent=data_ord width=40%:40%:20%
+
+				@property orderer type=relpicker reltype=RELTYPE_ORDERER parent=data_ord_hb captionside=top
+				@caption Organisatsioon
+
+				@property orderer_unit type=relpicker reltype=RELTYPE_ORDERER_UNIT parent=data_ord_hb captionside=top
+				@caption &Uuml;ksus
+
+				@property orderer_person type=relpicker reltype=RELTYPE_ORDERER_PERSON parent=data_ord_hb captionside=top
+				@caption Isik
+
+		@layout data_r_bot type=vbox parent=content_right closeable=1 area_caption=Andmed
+
+			@property project type=relpicker reltype=RELTYPE_PROJECT  parent=data_r_bot captionside=top
+			@caption Projekt
+
+			@property bug_component type=textbox parent=data_r_bot captionside=top
+			@caption Komponent
+
 	
-		@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb parent=data captionside=top
-		@caption Fail
+			@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb parent=data_r_bot captionside=top
+			@caption Fail
 	
-		@property bug_property type=select parent=data captionside=top field=aw_bug_property
-		@caption Klassi omadus
+			@property bug_predicates type=textbox parent=data_r_bot captionside=top field=aw_bug_predicates
+			@caption Eeldusbugid
 
-		@property bug_predicates type=textbox parent=data captionside=top field=aw_bug_predicates
-		@caption Eeldusbugid
-
-		@property bug_feedback_p type=relpicker reltype=RELTYPE_FEEDBACK_P parent=data captionside=top field=aw_bug_feedback_p
-		@caption Tagasiside kellelt
+			@property bug_feedback_p type=relpicker reltype=RELTYPE_FEEDBACK_P parent=data_r_bot captionside=top field=aw_bug_feedback_p
+			@caption Tagasiside kellelt
 
 
 @default group=cust
@@ -142,7 +169,14 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Eelarve
 	
 
+@default group=problems
+
+	@property problems_tb type=toolbar no_caption=1 store=no
+
+	@property problems_table type=table no_caption=1 store=no
+
 @groupinfo cust caption="Kliendi andmed"
+@groupinfo problems caption="Probleemid"
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption Jälgija
@@ -173,6 +207,25 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype FEEDBACK_P value=10 clid=CL_CRM_PERSON
 @caption Tagasiside isik
+
+@reltype CUSTOMER_UNIT value=11 clid=CL_CRM_SECTION
+@caption Kliendi &uuml;ksus
+
+@reltype CUSTOMER_PERSON value=12 clid=CL_CRM_PERSON
+@caption Kliendi isik
+
+@reltype ORDERER value=13 clid=CL_CRM_COMPANY
+@caption Tellija
+
+@reltype ORDERER_UNIT value=14 clid=CL_CRM_SECTION
+@caption Tellija &uuml;ksus
+
+@reltype ORDERER_PERSON value=15 clid=CL_CRM_PERSON
+@caption Tellija isik
+
+@reltype FROM_PROBLEM value=16 clid=CL_CUSTOMER_PROBLEM_TICKET
+@caption Probleem
+
 */
 
 define("BUG_OPEN", 1);
@@ -222,6 +275,11 @@ class bug extends class_base
 		);
 	}
 
+	function callback_mod_reforb($arr)
+	{
+		$arr["from_problem"] = $_GET["from_problem"];
+	}
+
 	function callback_on_load($arr)
 	{
 		$this->cx = get_instance("cfg/cfgutils");
@@ -269,6 +327,56 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "customer_unit":
+				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+				{
+					$co = obj($arr["obj_inst"]->prop("customer"));
+				}
+				else
+				if ($arr["request"]["from_problem"])
+				{
+					$tmp = obj($arr["request"]["from_problem"]);
+					$co = obj($tmp->prop("customer"));
+				}
+				else
+				{
+					$co = get_current_company();
+				}
+				$co_i = $co->instance();
+				$sects = $co_i->get_all_org_sections($co);
+				$prop["options"] = array("" => t("--vali--"));
+				if (count($sects))
+				{
+					$ol = new object_list(array("oid" => $sects, "lang_id" => array(), "site_id" => array()));
+					$prop["options"] += $ol->names();
+				}
+				$p = get_current_person();
+				if ($arr["new"])
+				{
+					if ($arr["request"]["from_problem"])
+					{
+						$tmp = obj($arr["request"]["from_problem"]);
+						$prop["value"] = $tmp->prop("orderer_unit");
+					}
+					else
+					{
+						$prop["value"] = $p->prop("org_section");
+					}
+				}
+				break;
+
+			case "customer_person":
+				return $this->_get_customer_person($arr);
+
+			case "orderer":
+				return $this->_get_orderer($arr);
+
+			case "orderer_unit":
+				return $this->_get_orderer_unit($arr);
+
+			case "orderer_person":
+				return $this->_get_orderer_person($arr);
+
 			case "deadline":
 				if ($arr["request"]["from_req"])
 				{
@@ -338,6 +446,12 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->name();
 				}
+				else
+				if ($arr["request"]["from_problem"])
+				{
+					$r = obj($arr["request"]["from_problem"]);
+					$prop["value"] = $r->name();
+				}
 				
 				$link = html::href(array(
 					"caption" => t("Link"),
@@ -356,6 +470,11 @@ class bug extends class_base
 				{
 					$r = obj($arr["request"]["from_req"]);
 					$prop["value"] = $r->prop("desc");
+				}
+				if ($arr["request"]["from_problem"])
+				{
+					$r = obj($arr["request"]["from_problem"]);
+					$prop["value"] = $r->prop("content");
 				}
 				break;
 
@@ -379,7 +498,11 @@ class bug extends class_base
 				{
 					foreach($this->parent_options[$prop["name"]] as $key => $val)
 					{
-						$tmp[$key] = $val;
+						$key_o = obj($key);
+						if ($key_o->class_id() == CL_CRM_PERSON)
+						{
+							$tmp[$key] = $val;
+						}
 					}
 					// also, the current person
 					$u = get_instance(CL_USER);
@@ -548,6 +671,9 @@ class bug extends class_base
 			case "bug_tb":
 				$this->_bug_tb($arr);
 				break;
+
+			case "problems_table":
+				return $this->_get_problems_table($arr);
 		};
 		return $retval;
 	}
@@ -1003,6 +1129,13 @@ class bug extends class_base
 			$this->notify_monitors($arr["obj_inst"], $arr["obj_inst"]->prop("bug_content"));
 			// if this is a new bug, then parse the content and create sub/subsub bugs from it
 			$this->_parse_add_bug_content($arr["obj_inst"]);
+			if ($arr["request"]["from_problem"])
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $arr["request"]["from_problem"],
+					"type" => "RELTYPE_FROM_PROBLEM"
+				));
+			}
 		}
 	}
 
@@ -1130,6 +1263,11 @@ class bug extends class_base
 			case "aw_cust_live_date":
 			case "aw_bug_feedback_p":
 			case "project":
+			case "customer_unit":
+			case "customer_person":
+			case "orderer":
+			case "orderer_unit":
+			case "orderer_person":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",
@@ -1300,6 +1438,138 @@ class bug extends class_base
 			}
 		}
 		return null;
+	}
+
+	function _get_customer_person($arr)
+	{
+		// list all ppl for the selected co
+		if ($arr["new"])
+		{
+			if ($arr["request"]["from_problem"])
+			{
+				$pr = obj($arr["request"]["from_problem"]);
+				$cust = $pr->prop("customer");
+			}
+		}
+		else
+		{
+			$cust = $arr["obj_inst"]->prop("customer");
+			$unit = $arr["obj_inst"]->prop("customer_unit");
+		}
+		if ($this->can("view", $cust) && $this->can("view", $unit))
+		{
+			// get all ppl for the section
+			$sect = get_instance(CL_CRM_SECTION);
+			$work_ol = $sect->get_section_workers($unit, true);
+			$arr["prop"]["options"] = array("" => t("--vali--")) + $work_ol->names();
+		}
+		else
+		if ($this->can("view", $cust))
+		{
+			$co = get_instance(CL_CRM_COMPANY);
+			$arr["prop"]["options"] = $co->get_employee_picker(obj($cust), true);
+		}
+	}
+
+	function _get_orderer($arr)
+	{
+		if ($arr["new"])
+		{
+			if ($arr["request"]["from_problem"])
+			{
+				$pr = obj($arr["request"]["from_problem"]);
+				$cust = $pr->prop("orderer_co");
+			}
+		}
+
+		if ($cust)
+		{
+			$arr["prop"]["value"] = $cust;
+		}
+
+		if (!is_array($arr["prop"]["options"]))
+		{
+			$arr["prop"]["options"] = array("" => t("--vali--"));
+		}
+
+		if (!isset($arr["prop"]["options"][$arr["prop"]["value"]]))
+		{
+			$tmp = obj($arr["prop"]["value"]);
+			$arr["prop"]["options"][$arr["prop"]["value"]] = $tmp->name();
+		}
+	}
+
+	function _get_orderer_unit($arr)
+	{
+		$prop =& $arr["prop"];
+		if ($this->can("view", $arr["obj_inst"]->prop("orderer")))
+		{
+			$co = obj($arr["obj_inst"]->prop("orderer"));
+		}
+		else
+		{
+			$co = get_current_company();
+		}
+		$co_i = $co->instance();
+		$sects = $co_i->get_all_org_sections($co);
+		$prop["options"] = array("" => t("--vali--"));
+		if (count($sects))
+		{
+			$ol = new object_list(array("oid" => $sects, "lang_id" => array(), "site_id" => array()));
+			$prop["options"] += $ol->names();
+		}
+		$p = get_current_person();
+		if ($arr["new"])
+		{
+			if ($arr["request"]["from_problem"])
+			{
+				$tmp = obj($arr["request"]["from_problem"]);
+				$prop["value"] = $tmp->prop("orderer_unit");
+			}
+			else
+			{
+				$prop["value"] = $p->prop("org_section");
+			}
+		}
+	}
+
+	function _get_orderer_person($arr)
+	{
+		// list all ppl for the selected co
+		if ($arr["new"])
+		{
+			if ($arr["request"]["from_problem"])
+			{
+				$pr = obj($arr["request"]["from_problem"]);
+				$cust = $pr->prop("orderer_co");
+				$unit = $pr->prop("orderer_unit");
+			}
+		}
+		else
+		{
+			$cust = $arr["obj_inst"]->prop("orderer");
+			$unit = $arr["obj_inst"]->prop("orderer_unit");
+		}
+		if ($this->can("view", $cust) && $this->can("view", $unit))
+		{
+			// get all ppl for the section
+			$sect = get_instance(CL_CRM_SECTION);
+			$work_ol = $sect->get_section_workers($unit, true);
+			$arr["prop"]["options"] = array("" => t("--vali--")) + $work_ol->names();
+		}
+		else
+		if ($this->can("view", $cust))
+		{
+			$co = get_instance(CL_CRM_COMPANY);
+			$arr["prop"]["options"] = $co->get_employee_picker(obj($cust), true);
+		}
+	}
+
+	function _get_problems_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FROM_PROBLEM")));
+		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
 	}
 }
 ?>

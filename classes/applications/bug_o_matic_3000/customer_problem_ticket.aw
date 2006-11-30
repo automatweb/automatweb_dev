@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/customer_problem_ticket.aw,v 1.2 2006/11/30 11:02:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/customer_problem_ticket.aw,v 1.3 2006/11/30 15:25:30 kristo Exp $
 // customer_problem_ticket.aw - Probleem 
 /*
 
@@ -126,13 +126,20 @@ class customer_problem_ticket extends class_base
 				break;
 
 			case "orderer_unit":
-				$co = get_current_company();
+				if ($this->can("view", $arr["obj_inst"]->prop("orderer_co")))
+				{
+					$co = obj($arr["obj_inst"]->prop("orderer_co"));
+				}
+				else
+				{
+					$co = get_current_company();
+				}
 				$co_i = $co->instance();
 				$sects = $co_i->get_all_org_sections($co);
 				$prop["options"] = array("" => t("--vali--"));
 				if (count($sects))
 				{
-					$ol = new object_list(array("oid" => $sects));
+					$ol = new object_list(array("oid" => $sects, "lang_id" => array(), "site_id" => array()));
 					$prop["options"] += $ol->names();
 				}
 				$p = get_current_person();
@@ -189,18 +196,23 @@ class customer_problem_ticket extends class_base
 	function _get_bug_toolbar($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_new_button(array(CL_BUG), $arr["obj_inst"]->id(), 6 /* RELTYPE_BUG */);
+		$tb->add_new_button(array(CL_BUG), $arr["obj_inst"]->id(), 6 /* RELTYPE_BUG */, array("from_problem" => $arr["obj_inst"]->id()));
 		$tb->add_delete_button();
 	}
 
 	function _get_bug_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$t->table_from_ol(
-			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BUG"))),
+		/*$t->table_from_ol(
+			,
 			array("name", "createdby", "created"),
 			CL_BUG
-		);
+		);*/
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BUG")));
+		$bt = get_instance(CL_BUG_TRACKER);
+		$bt->_init_bug_list_tbl($t);
+		$bt->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));		
+		$t->set_caption(t("Probleemist tulenenud &uuml;lesanded"));
 	}
 
 	function _get_req_toolbar($arr)
@@ -218,6 +230,7 @@ class customer_problem_ticket extends class_base
 			array("name", "createdby", "created"),
 			CL_PROCUREMENT_REQUIREMENT
 		);
+		$t->set_caption(t("Probleemist tulenenud n&otilde;uded"));
 	}
 }
 ?>
