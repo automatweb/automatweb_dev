@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.58 2006/11/30 10:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.59 2006/11/30 12:30:42 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1256,7 +1256,7 @@ class room extends class_base
 		$step_length = $this->step_lengths[$arr["obj_inst"]->prop("time_unit")];
 		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
-			$d = $col = $ids = $onclick= array();
+			$d = $col = $ids = $rowspan = $onclick = array();
 			$x = 0;
 			$start_step = $today_start + $step * $step_length * $arr["obj_inst"]->prop("time_step");
 			$end_step = $start_step + $step_length * $arr["obj_inst"]->prop("time_step");
@@ -1266,6 +1266,7 @@ class room extends class_base
 				if(!is_object($this->openhours) || $this->is_open($start_step,$end_step))
 				{
 					$visible=1;
+					$rowspan[$x] = 1;
 					if($this->check_if_available(array(
 						"room" => $arr["obj_inst"]->id(),
 						"start" => $start_step,
@@ -1331,6 +1332,14 @@ class room extends class_base
 							{
 								$col[$x] = "#FFE4B5";
 							}
+							if(($last_bron->prop("end") - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step")) > 1)
+							{
+								$rowspan[$x] = (($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step"))) ;
+								if((($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) % ($step_length * $arr["obj_inst"]->prop("time_step"))))
+								{
+									$rowspan[$x]++;
+								}
+							}
 						}
 						else
 						{
@@ -1382,12 +1391,56 @@ class room extends class_base
 					"col4" => $col[4],
 					"col5" => $col[5],
 					"col6" => $col[6],
+					"rowspan0" => $rowspan[0],
+					"rowspan1" => $rowspan[1],
+					"rowspan2" => $rowspan[2],
+					"rowspan3" => $rowspan[3],
+					"rowspan4" => $rowspan[4],
+					"rowspan5" => $rowspan[5],
+					"rowspan6" => $rowspan[6],
 				));
 			}
 			$step = $step + 1;
 		}
+		//$t->set_rgroupby(array("group" => "d2"));
 	}
 	
+	function get_after_buffer($arr)
+	{
+		extract($arr);
+		if(!is_object($room))
+		{
+			return 0;
+		}
+		
+		if(is_object($room) && $room->prop("use_product_times") && is_object($bron))
+		{
+			return $this->get_products_buffer(array("bron" => $bron, "time" => "after"));
+		}
+		elseif(is_object($room))
+		{
+			return $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+		}
+	}
+	
+	function get_before_buffer($arr)
+	{
+		extract($arr);
+		if(!is_object($room))
+		{
+			return 0;
+		}
+		
+		if(is_object($room) && $room->prop("use_product_times") && is_object($bron))
+		{
+			return $this->get_products_buffer(array("bron" => $bron, "time" => "before"));
+		}
+		elseif(is_object($room))
+		{
+			return $room->prop("buffer_before")*$room->prop("buffer_before_unit");
+		}
+	}
+		
 	function get_when_opens()
 	{
 		if(!$this->open_inst)
@@ -1500,6 +1553,7 @@ class room extends class_base
 			"chgbgcolor" => "col0",
 			"id" => "id0",
 			"onclick" => "onclick0",
+			"rowspan" => "rowspan0",
 		));
 		if($this->is_open_day($time + 86400))$t->define_field(array(
 			"name" => "d1",
@@ -1508,6 +1562,7 @@ class room extends class_base
 			"chgbgcolor" => "col1",
 			"id" => "id1",
 			"onclick" => "onclick1",
+			"rowspan" => "rowspan1",
 		));
 		if($this->is_open_day($time + 86400*2))$t->define_field(array(
 			"name" => "d2",
@@ -1516,6 +1571,7 @@ class room extends class_base
 			"chgbgcolor" => "col2",
 			"id" => "id2",
 			"onclick" => "onclick2",
+			"rowspan" => "rowspan2",
 		));
 		if($this->is_open_day($time + 86400*3))$t->define_field(array(
 			"name" => "d3",
@@ -1524,6 +1580,7 @@ class room extends class_base
 			"width" => "20px",
 			"id" => "id3",
 			"onclick" => "onclick3",
+			"rowspan" => "rowspan3",
 		));
 		if($this->is_open_day($time + 86400*4))$t->define_field(array(
 			"name" => "d4",
@@ -1531,7 +1588,8 @@ class room extends class_base
 			"width" => "20px",
 			"chgbgcolor" => "col4",
 			"id" => "id4",
-			"onclick" => "onclick4",		
+			"onclick" => "onclick4",
+			"rowspan" => "rowspan4",
 		));
 		if($this->is_open_day($time + 86400*5))$t->define_field(array(
 			"name" => "d5",
@@ -1539,7 +1597,8 @@ class room extends class_base
 			"width" => "20px",
 			"chgbgcolor" => "col5",
 			"id" => "id5",
-			"onclick" => "onclick5",		
+			"onclick" => "onclick5",
+			"rowspan" => "rowspan5",
 		));
 		if($this->is_open_day($time + 86400*6))$t->define_field(array(
 			"name" => "d6",
@@ -1548,6 +1607,7 @@ class room extends class_base
 			"width" => "20px",
 			"id" => "id6",
 			"onclick" => "onclick6",
+			"rowspan" => "rowspan6",
 		));
 		$t->table_caption = t("Broneerimine");
 		$t->set_sortable(false);
@@ -2951,6 +3011,7 @@ class room extends class_base
 		}
 		return $ret;
 	}
+	
 	
 	/** returns object (first reservation object after end time)
 		@attrib api=1 params=name
