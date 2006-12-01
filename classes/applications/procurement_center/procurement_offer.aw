@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.18 2006/11/17 15:34:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.19 2006/12/01 14:23:51 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -27,6 +27,9 @@
 
 	@property currency type=select table=aw_procurement_offers field=aw_currency
 	@caption Valuuta
+
+	@property date type=date_select table=aw_procurement_offers field=aw_date
+	@caption Pakkumise kuup&auml;ev
 
 	@property accept_date type=date_select table=aw_procurement_offers field=aw_accept_date
 	@caption Aktsepteerimist&auml;htaeg
@@ -711,6 +714,7 @@ class procurement_offer extends class_base
 			case "aw_accept_date":
 			case "aw_currency":
 			case "aw_shipment_date":
+			case "aw_date":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
 

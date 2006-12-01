@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.27 2006/11/17 15:02:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.28 2006/12/01 14:23:51 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -3392,7 +3392,12 @@ class procurement_center extends class_base
 						
 						$unit_obj = obj($row->prop("unit"));
 						$unit = $unit_obj->prop("unit_code");
-						$date = date("d.m.Y",$row->prop("shipment"));
+						$time = $offer->prop("date");
+						if(!$time)
+						{
+							$time = $row->prop("shipment");
+						}
+						$date = date("d.m.Y",$time);
 					
 						$buyings_list = new object_list(array(
 							"class_id" => CL_PURCHASE,
