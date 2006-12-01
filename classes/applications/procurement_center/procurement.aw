@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.10 2006/11/01 16:44:55 markop Exp $
-// procurement.aw - Hange 
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.11 2006/12/01 13:59:06 markop Exp $
+// procurement.aw - Hange
 /*
 
 @classinfo syslog_type=ST_PROCUREMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -269,7 +269,7 @@ class procurement extends class_base
 	//			"jrk"		=> $x+1,
 				"product"	=> html::textbox(array(
 							"name" => "products[".$x."][product]",
-							"size" => "15",
+							"size" => "100",
 							"value" => $product["product"],
 							"autocomplete_source" => $this->mk_my_orb ("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
 							"autocomplete_params" => "products[".$x."][product]",
