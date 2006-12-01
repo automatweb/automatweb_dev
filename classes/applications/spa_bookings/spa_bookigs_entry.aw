@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.6 2006/11/30 10:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.7 2006/12/01 07:47:23 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1025,7 +1025,20 @@ class spa_bookigs_entry extends class_base
 		}
 		foreach($data as $d)
 		{
-		 	$t->define_data($d);
+			// skip all rows that either have all days empty or all days booked
+			$has_free = false;
+			foreach($d as $v)
+			{
+				if (strpos($v, "href") !== false)
+				{
+					$has_free = true;
+				}
+			}
+
+			if ($has_free)
+			{
+		 		$t->define_data($d);
+			}
 		}
 		
 		$html .= $t->draw();
