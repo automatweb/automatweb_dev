@@ -656,6 +656,11 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		if ($err_type == 31 && strpos($_REQUEST["class"], "%27") !== false)
+		{
+			$send_mail= false;
+		}
+
 		if ($err_type == 31 && strpos($_REQUEST["class"], "@") !== false)
 		{
 			$send_mail = false;
