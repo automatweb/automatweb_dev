@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.86 2006/09/27 15:03:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.87 2006/12/01 15:32:11 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -46,6 +46,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @groupinfo search caption=Otsi parent=membership
 @default group=search
 
+@property search_tb type=toolbar no_caption=1
+@caption Otsingu toolbar
+
 @property search_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Kaustad kust otsida
 
@@ -55,8 +58,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property search_name type=textbox
 @caption Nimi
 
+@property search_submit type=submit store=no no_caption=1
+@caption Otsi
+
 @property search type=table store=no no_caption=1
 @caption Otsing
+
+
 
 -----------------------------------------------------------------------
 @groupinfo subscribing caption=Liitumine parent=membership
@@ -707,6 +715,16 @@ class ml_list extends class_base
 
 		switch($prop["name"])
 		{
+			case "search_tb":
+				$toolbar = &$prop["vcl_inst"];
+				$toolbar->add_button(array(
+					"name" => "delete",
+					"tooltip" => t("Kustuta"),
+					"action" => "delete_members",
+					"confirm" => t("Kustutan valitud tegelased listist?"),
+					"img" => "delete.gif",
+				));
+				
 			/*
 			case "msg_folder":
 				if(empty($prop["value"]) && !$arr["new"])
@@ -2782,6 +2800,11 @@ class ml_list extends class_base
 		die(t("all done"));
 	}
 	
+	function search_tb($arr)
+	{
+	
+	}
+	
 	function member_search($arr)
 	{
 		if(strlen($arr["obj_inst"]->prop("search_mail")) > 1 || strlen($arr["obj_inst"]->prop("search_name")) > 1)
@@ -2823,6 +2846,12 @@ class ml_list extends class_base
 				"format" => "H:i d-m-Y",
 				"smart" => 1,
 			));
+			
+			$t->define_chooser(array(
+				"name" => "sel",
+				"field" => "id",
+			));
+			
 			$t->set_default_sortby("id");
 			$t->set_default_sorder("desc");
 			$cfg = $arr["obj_inst"]->prop("member_config");
@@ -2868,9 +2897,15 @@ class ml_list extends class_base
 			{
 				foreach($ml_list_members as $key => $val)
 				{
-					if((strlen($arr["obj_inst"]->prop("search_name")) > 1) && (substr_count($val["name"], $arr["obj_inst"]->prop("search_name")) < 1)) continue;
+					if((strlen($arr["obj_inst"]->prop("search_name")) > 1) && (substr_count(strtolower($val["name"]), strtolower($arr["obj_inst"]->prop("search_name"))) < 1))
+					{
+						continue;
+					}
 					
-					if((strlen($arr["obj_inst"]->prop("search_mail")) > 1) && (substr_count($val["mail"], $arr["obj_inst"]->prop("search_mail")) < 1)) continue;
+					if((strlen($arr["obj_inst"]->prop("search_mail")) > 1) && (substr_count($val["mail"], $arr["obj_inst"]->prop("search_mail")) < 1)) 
+					{
+						continue;
+					}
 				
 					$is_oid = 0;
 					if(is_oid($val["oid"]))

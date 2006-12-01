@@ -96,6 +96,17 @@
             <caption>Listi liikmete seadetevorm</caption>
       </property>
       <property>
+            <name>search_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Otsingu toolbar</caption>
+      </property>
+      <property>
             <name>search_menu</name>
             <table>objects</table>
             <field>meta</field>
@@ -124,6 +135,17 @@
             <group>search</group>
             <type>textbox</type>
             <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>search_submit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>search</name>
