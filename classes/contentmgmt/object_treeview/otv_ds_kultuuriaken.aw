@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.9 2006/06/08 12:19:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.10 2006/12/01 12:14:10 dragut Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -421,7 +421,6 @@ class otv_ds_kultuuriaken extends class_base
 			));
 			echo "parent: ".$conn_to_parent->prop("to")." <strong>".$conn_to_parent->prop('to.name')."</strong> [".$ol->count()."]<br>";
 			flush();
-
 			// creating an array of existing objects:
 			$imported_events = array();
 			if ($ol->count() != 0)
@@ -489,7 +488,10 @@ class otv_ds_kultuuriaken extends class_base
 					unset($event_data['comment']);
 					foreach ($event_data as $k => $v)
 					{
-						$event_obj->set_prop($k, $v);
+						if (!empty($k))
+						{
+							$event_obj->set_prop($k, $v);
+						}
 					}
 					$event_obj->save();
 					echo " ".$event_data['name']." [ saved ]<br>";
