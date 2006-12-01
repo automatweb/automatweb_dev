@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.12 2006/11/01 15:08:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.13 2006/12/01 13:37:44 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -16,17 +16,34 @@
 	@property expl type=textbox
 	@caption Selgitus
 
+	@property template type=select
+	@caption Pangaformide template
+
+	@property private_key type=relpicker reltype=RELTYPE_KEY
+	@caption Privaatv&otilde;ti
+	
+	@property return_url type=textbox
+	@caption Url, kuhu tagasi tulla eduka makse puhul
+	
+	@property cancel_url type=textbox
+	@caption Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul
+	
+	
+	
 @groupinfo bank caption="Pankade info"
 
 @default group=bank
 	@property bank type=callback callback=callback_bank store=no no_caption=1
 
+#RELTYPES
+
+@reltype KEY value=2 clid=CL_FILE
+@caption Privaatv&otilde;ti
 
 */
 
 class bank_payment extends class_base
 {	//olemasolevad panga
-	
 	var $banks = array (
 		"hansapank"	=> "Hansapank",
 		"seb"		=> "SEB Eesti &Uuml;hispank",
@@ -66,12 +83,214 @@ class bank_payment extends class_base
 		"seb"	=> "vesta.key.key",
 	);
 
+	/** 
+		@attrib api=1
+
+ 	**/
 	function bank_payment()
 	{
 		$this->init(array(
 			"tpldir" => "common/bank_payment",
 			"clid" => CL_BANK_PAYMENT
 		));
+		
+	}
+
+	/** 
+		@attrib name=form_test_case nologin=1 is_public=1 all_args=1
+
+ 	**/
+	function form_test_case($arr)
+	{
+		die('
+			<form name="makse" id="makse" method="post" action="http://marko.dev.struktuur.ee/orb.aw?class=bank_payment&id=10580">
+			<br>
+			<input type="textbox" name="amount" value=3000000>
+			<input type=submit value="maksa ilgelt pappi">
+			</form>'
+		);
+	}
+	
+	/** 
+		@attrib name=bank_forms api=1 default=1 nologin=1 is_public=1 all_args=1
+	/**
+	@attrib api=1 params=name
+	@param id optional type=oid
+		bank_payment object ID 
+	@param amount optional type=int
+		Amount to be paid. Max length=17
+	@param units optional type=int
+		if amount is not set, you give how many units, ... payment_id must be set then and payment objects prop default_unit_price also
+	@param reference_nr optional type=int
+		Reference number of payment order. Max length=19
+	@param service optional type=int default=1002
+		Number of service. Length=4
+	@param sender_id optional type=string
+		if no ID is set, can find a payment object by sender_id
+	@param stamp optional type=string
+		Query ID. Max length=20
+	@param expl optional type=string
+		Explanation of payment order. Max length=70
+	@param return_url optional type=string
+		URL to which response is sent in performing the transaction. Max length=60. 
+	@param cancel_url optional type=string default=$return_url
+		URL to which response is sent when the transaction is unsuccessful. Max length=60
+	@param lang optional type=string default="EST"
+		Preferred language of communication. Length=3
+	@returns String/html - the bank payment site or correct form.
+
+	@comment
+		calculates the reference number and digital signature VK_MAC
+		Returns the bank payment site or correct form.
+	@example
+		<form name="makse" id="makse" method="post" action="http://marko.dev.struktuur.ee/orb.aw?class=bank_payment&id=10580">
+		<input type="textbox" name="amount" value=3000000>
+		<input type=submit value="maksa ilgelt pappi">
+		</form>'
+	**/
+
+	function bank_forms($arr = array())
+	{
+		$data = $_GET+$_POST+$arr;
+		$payment = $this->_get_payment_object($data);
+		if(!is_object($payment))
+		{
+			return "";
+		}
+		
+		if($payment->prop("template"))
+		{
+			$tpl = $payment->prop("template");
+		}
+		else
+		{
+			$tpl = "bank_forms.tpl";
+		}
+		
+		if(!$this->read_template($tpl, $silent=1))
+		{
+			return "";	
+		}
+		//võtab objekti seest mõningad puuduvad väärtused
+		$data = $this->_add_object_data($payment,$data);
+		//lisab puuduvad default väärtused
+		$data = $this->_add_default_data($data);
+		//paneb panga crapi templatesse
+		$this->_init_banks($payment,$data);
+
+		return $this->parse();
+	}
+
+	function _add_object_data($payment,$data)
+	{
+		if(!$data["priv_key"] && $payment->prop("private_key"))
+		{
+			$file_inst = get_instance(CL_FILE);
+			$file = $file_inst->get_file_by_id($payment->prop("private_key"));
+			$data["priv_key"] = $file["content"];
+		}
+		if(!$data["expl"])
+		{
+			$data["expl"] = $payment->prop("expl");
+		}
+		if(!$data["return_url"])
+		{
+			$data["return_url"] = $payment->prop("return_url");
+		}
+		if(!$data["cancel_url"])
+		{
+			$data["cancel_url"] = $payment->prop("cancel_url");
+		}
+		
+		if(!$data["amount"] && $data["units"] && $payment->prop("default_unit_sum"))
+		{
+			$data["amount"] = $data["units"]*$payment->prop("default_unit_sum");
+		}
+		return $data;
+	}
+	
+	function _add_default_data($data)
+	{
+		return $data;
+	}
+
+	function _init_banks($payment,$data)
+	{
+		$bank_data = $payment->meta("bank");
+		foreach($this->banks as $bank => $name)
+		{
+			if(array_key_exists($bank , $bank_data) && $bank_data[$bank]["sender_id"])
+			{
+				$c = "";
+				$bank_form = $this->do_payment(array(
+					"form"		=> 1,
+					"bank_id"	=> $bank,
+					"service"	=> $data["service"],
+					"lang" 		=> $data["lang"],
+					"sender_id"	=> $bank_data[$bank]["sender_id"],
+					"stamp"		=> $bank_data[$bank]["stamp"],
+					"amount"	=> $data["amount"],
+					"reference_nr"	=> $data["reference_nr"],
+					"expl"		=> $data["expl"],
+					"priv_key" 	=> $data["priv_key"],
+					"cancel_url"	=> $data["cancel_url"],
+					"return_url"	=> $data["return_url"],
+				));
+				$link = $this->bank_link[$bank];
+				$this->vars(array(
+					"data" => $bank_form,
+					"link" => $link,
+				));
+				$c .= $this->parse($bank);
+				$this->vars(array(
+					$bank => $c,
+				));
+			}
+		}
+	}
+
+	function _get_payment_object($arr)
+	{
+		extract($arr);
+				
+		if(is_oid($id) && $this->can("view" , $id))
+		{
+			$payment_object = obj($id);
+		}
+		else 
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_BANK_PAYMENT,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => $name,
+			));
+			if(sizeof($ol->arr() == 1))
+			{
+				$payment_object = reset($ol->arr());
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_BANK_PAYMENT,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				foreach($ol->arr() as $payment)
+				{
+					$meta = $payment->meta("bank");
+					foreach($meta as $data)
+					{
+						if($data["sender_id"] == $sender_id)
+						{
+							$payment_object = $payment;
+							break;
+						}
+					}
+				}
+			}
+		}
+		return $payment_object;
 	}
 
 	function get_property($arr)
@@ -80,6 +299,16 @@ class bank_payment extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "common/bank_payment"
+				));
+				if(!sizeof($prop["options"]))
+				{
+					$prop["caption"] .= t("\n".$this->site_template_dir."");
+				}
+				break;
 			//-- get_property --//
 		};
 		return $retval;
@@ -104,7 +333,6 @@ class bank_payment extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 	
-	
 	function submit_meta($arr = array())
 	{
 		$meta = $arr["request"]["meta"];
@@ -121,7 +349,7 @@ class bank_payment extends class_base
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
 		$meta = $arr["obj_inst"]->meta("bank");
 		foreach($bank_payment->banks as $key => $val)
-		{	
+		{
 			$ret[] = array(
 				"name" => "meta[".$key."][use]",
 				"type" => "chechbox" ,
@@ -249,13 +477,19 @@ class bank_payment extends class_base
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
 		if(!$arr["lang"]) $arr["lang"] = "EST";
-		if(!$arr["stamp"]) $arr["stamp"] = "XXX";
+		if(!$arr["stamp"]) $arr["stamp"] = "666";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["priv_key"])
 		{
-			if($arr["test"] && $this->test_priv_keys[$arr["bank_id"]]) $file = $this->test_priv_keys[$arr["bank_id"]];
-			else $file = "privkey.pem";
+			if($arr["test"] && $this->test_priv_keys[$arr["bank_id"]])
+			{
+				$file = $this->test_priv_keys[$arr["bank_id"]];
+			}
+			else
+			{
+				$file = "privkey.pem";
+			}
 			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
 			$arr["priv_key"] = fread($fp, 8192);
 			fclose($fp);

@@ -19,6 +19,43 @@
             <caption>Selgitus</caption>
       </property>
       <property>
+            <name>template</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>select</type>
+            <caption>Pangaformide template</caption>
+      </property>
+      <property>
+            <name>private_key</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_KEY</reltype>
+            <caption>Privaatv&amp;amp;otilde;ti</caption>
+      </property>
+      <property>
+            <name>return_url</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>Url, kuhu tagasi tulla eduka makse puhul</caption>
+      </property>
+      <property>
+            <name>cancel_url</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>Url, kuhu tagasi tulla eba&amp;amp;otilde;nnestunud makse puhul</caption>
+      </property>
+      <property>
             <name>bank</name>
             <table>objects</table>
             <field>meta</field>
@@ -41,5 +78,12 @@
                   <caption>Pankade info</caption>
             </bank>
       </groupinfo>
+      <reltypes>
+            <KEY>
+                  <value>2</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Privaatv&amp;amp;otilde;ti</caption>
+            </KEY>
+      </reltypes>
 </properties>
 
