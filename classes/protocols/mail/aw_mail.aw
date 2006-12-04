@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.9 2006/05/05 09:20:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.10 2006/12/04 08:48:02 kristo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -429,7 +429,7 @@ class aw_mail {
 	**/
 	function gen_htmlbody($body)
 	{
-		return (substr($body,0,6)=="<html>")?$body:
+		return ((substr($body,0,6)=="<html>") || (strpos($body, "<!DOCTYPE") !== false))?$body:
 			"<html><head><title></title></head><body>$body</body></html>";
 	}
 
