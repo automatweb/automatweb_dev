@@ -194,7 +194,7 @@ class project_req_impl extends class_base
 
 	function _init_req_tbl(&$t)
 	{	
-		$t->set_header( "<b>". t("N&otilde;uded") . "</b>");
+		$t->set_caption( "<b>". t("N&otilde;uded") . "</b>");
 		$t->define_field(array(
 			"name" => "icon",
 			"width" => 1,

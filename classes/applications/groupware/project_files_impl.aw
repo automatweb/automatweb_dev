@@ -23,6 +23,7 @@ class project_files_impl extends class_base
 			CL_PROJECT_STRAT_GOAL_EVAL_WS => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
 			CL_PROJECT_RISK_EVAL_WS => t("Riskide hindamise t&ouml;&ouml;laud"),
 			CL_PROJECT_ANALYSIS_WS => t("Anal&uuml;&uuml;si t&ouml;&ouml;laud"),
+			CL_DEVELOPMENT_ORDER => t("Arendustellimus")
 		);
 
 		$tb->add_menu_button(array(
@@ -178,6 +179,7 @@ class project_files_impl extends class_base
 			CL_PROJECT_STRAT_GOAL_EVAL_WS => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
 			CL_PROJECT_RISK_EVAL_WS => t("Riskide hindamise t&ouml;&ouml;laud"),
 			CL_PROJECT_ANALYSIS_WS => t("Anal&uuml;&uuml;si t&ouml;&ouml;laud"),
+			CL_DEVELOPMENT_ORDER => t("Arendustellimus")
 		);
 		$pr = $arr["obj_inst"]->id();
 		foreach($types as $clid => $capt)
@@ -186,7 +188,7 @@ class project_files_impl extends class_base
 				"class_id" => $clid,
 				"lang_id" => array(),
 			);
-			if(in_array($clid ,array(CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_MEMO,CL_CRM_OFFER)))
+			if(in_array($clid ,array(CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_MEMO,CL_CRM_OFFER,CL_DEVELOPMENT_ORDER)))
 			{
 				$filter["project"] = $pr;
 			}
@@ -276,12 +278,12 @@ class project_files_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_files_tbl($t);
 		$pr = NULL;
-		
+
 		//otsingust
 		if(!$arr["request"]["tf"] && ($arr["request"]["files_find_name"] || $arr["request"]["files_find_type"] || $arr["request"]["files_find_comment"]))
 		{
 			$filter = array(
-				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER , CL_PROJECT_STRAT_GOAL_EVAL_WS ,CL_PROJECT_RISK_EVAL_WS ,CL_PROJECT_ANALYSIS_WS),
+				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER , CL_PROJECT_STRAT_GOAL_EVAL_WS ,CL_PROJECT_RISK_EVAL_WS ,CL_PROJECT_ANALYSIS_WS,CL_DEVELOPMENT_ORDER),
 				"lang_id" => array(),
 				"name" => "%".$arr["request"]["files_find_name"]."%",
 				
@@ -310,7 +312,7 @@ class project_files_impl extends class_base
 				$filters,
 				"parent" => $pt,
 	//			"project" => $pr,
-				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER , CL_PROJECT_STRAT_GOAL_EVAL_WS ,CL_PROJECT_RISK_EVAL_WS ,CL_PROJECT_ANALYSIS_WS),
+				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER , CL_PROJECT_STRAT_GOAL_EVAL_WS ,CL_PROJECT_RISK_EVAL_WS ,CL_PROJECT_ANALYSIS_WS,CL_DEVELOPMENT_ORDER),
 				"lang_id" => array(),
 			);
 			$filter[] = new object_list_filter(array(
@@ -324,14 +326,14 @@ class project_files_impl extends class_base
 				))
 			);
 	
-			if(in_array($arr["request"]["tf"], array(CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS)))
+			if(in_array($arr["request"]["tf"], array(CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_PROJECT_STRAT_GOAL_EVAL_WS,CL_PROJECT_RISK_EVAL_WS,CL_PROJECT_ANALYSIS_WS,CL_DEVELOPMENT_ORDER)))
 			{
 				$pr = $arr["obj_inst"]->id();
 				$filter = array(
 					"class_id" => $arr["request"]["tf"],
 					"lang_id" => array(),
 				);
-				if(in_array($arr["request"]["tf"] ,array(CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_MEMO,CL_CRM_OFFER)))
+				if(in_array($arr["request"]["tf"] ,array(CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_MEMO,CL_CRM_OFFER,CL_DEVELOPMENT_ORDER)))
 				{
 					$filter["project"] = $pr;
 				}
