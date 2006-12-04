@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.521 2006/11/30 11:02:45 kristo Exp $
+// $Id: class_base.aw,v 2.522 2006/12/04 17:58:53 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5135,9 +5135,14 @@ class class_base extends aw_template
 	// sorta-automatic translation helpers
 	function trans_save($arr, $props)
 	{
+		$o = $arr["obj_inst"];
+		if ($o->is_brother())
+		{
+			$o = $o->get_original();
+		}
 		$l = get_instance("languages");
 		$ll = $l->get_list(array("all_data" => true));
-		$all_vals = $arr["obj_inst"]->meta("translations");
+		$all_vals = $o->meta("translations");
 		$repls = array(
 			chr(197).chr(161) => "&scaron;",
 			chr(197).chr(160) => "&Scaron;",
@@ -5154,7 +5159,7 @@ class class_base extends aw_template
 		);
 		foreach($ll as $lid => $lang)
 		{
-			if ($lid == $arr["obj_inst"]->lang_id())
+			if ($lid == $o->lang_id())
 			{
 				continue;
 			}
@@ -5180,12 +5185,16 @@ class class_base extends aw_template
 				}
 				$all_vals[$lid][$p] = $nv;
 			}
+			$o->set_meta("trans_".$lid."_status", $arr["request"]["act_".$lid]);
 			$arr["obj_inst"]->set_meta("trans_".$lid."_status", $arr["request"]["act_".$lid]);
 			if ($mod)
 			{
+				$o->set_meta("trans_".$lid."_modified", time());
 				$arr["obj_inst"]->set_meta("trans_".$lid."_modified", time());
 			}
 		}
+		$o->set_meta("translations", $all_vals);
+		$o->save();
 		$arr["obj_inst"]->set_meta("translations", $all_vals);
 	}
 
@@ -5209,13 +5218,14 @@ class class_base extends aw_template
 			$cf = get_instance(CL_CFGFORM);
 			$pl = $cf->get_props_from_cfgform(array("id" => $cfgform_id));
 		}
-		$all_vals = $arr["obj_inst"]->meta("translations");
-
+		$o = $arr["obj_inst"];
+		$o = $o->get_original();
+		$all_vals = $o->meta("translations");
 		$uo = obj(aw_global_get("uid_oid"));
 		$uo = $uo->prop("target_lang");
 		foreach($ll as $lid => $lang)
 		{
-			if ($lid == $arr["obj_inst"]->lang_id())
+			if ($lid == $o->lang_id())
 			{
 				continue;
 			}
@@ -5252,7 +5262,7 @@ class class_base extends aw_template
 				"caption" => t("T&otilde;lge aktiivne"),
 				"type" => "checkbox",
 				"ch_value" => 1,
-				"value" => $arr["obj_inst"]->meta("trans_".$lid."_status") 
+				"value" => $o->meta("trans_".$lid."_status") 
 			);
 		}
 
@@ -5261,11 +5271,19 @@ class class_base extends aw_template
 
 	function trans_get_val($obj, $prop)
 	{
+		if ($obj->is_brother())
+		{
+			$obj = $obj->get_original();
+		}
 		return $obj->trans_get_val($prop);
 	}
 
 	function trans_get_val_str($obj, $prop)
 	{
+		if ($obj->is_brother())
+		{
+			$obj = $obj->get_original();
+		}
 		$pd = $GLOBALS["properties"][$obj->class_id()][$prop];
 		$type = $pd["type"];
 		$val = $obj->prop($prop);
