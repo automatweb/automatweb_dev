@@ -54,21 +54,6 @@
             <field>bug_tb</field>
       </property>
       <property>
-            <name>cat</name>
-            <table>objects</table>
-            <group>
-                  <num_0>by_default</num_0>
-                  <num_1>by_project</num_1>
-                  <num_2>by_who</num_2>
-                  <num_3>by_class</num_3>
-                  <num_4>by_cust</num_4>
-                  <num_5>by_monitor</num_5>
-            </group>
-            <type>hidden</type>
-            <store>no</store>
-            <field>cat</field>
-      </property>
-      <property>
             <name>bug_tree</name>
             <table>objects</table>
             <group>
@@ -99,7 +84,7 @@
                   <num_7>by_cust</num_7>
             </group>
             <type>text</type>
-            <parent>bug_table</parent>
+            <parent>bug</parent>
             <no_caption>1</no_caption>
             <field>bug_list</field>
       </property>
@@ -772,7 +757,7 @@
                   <submit>no</submit>
             </reqs_cust>
             <dev_orders>
-                  <caption>Arendustellimused</caption>
+                  <caption>Tellimused</caption>
             </dev_orders>
             <devo>
                   <parent>dev_orders</parent>
@@ -789,35 +774,12 @@
                   <parent>dev_orders</parent>
                   <submit>no</submit>
             </devo_cust>
-            <problems>
-                  <caption>Probleemid</caption>
-            </problems>
-            <problems_list>
-                  <caption>Nimekiri</caption>
-                  <parent>problems</parent>
-                  <submit>no</submit>
-            </problems_list>
-            <problems_units>
-                  <caption>Osakondade kaupa</caption>
-                  <parent>problems</parent>
-                  <submit>no</submit>
-            </problems_units>
-            <problems_proj>
-                  <caption>Projektide kaupa</caption>
-                  <parent>problems</parent>
-                  <submit>no</submit>
-            </problems_proj>
-            <problems_req>
-                  <caption>N&amp;amp;otilde;uete kaupa</caption>
-                  <parent>problems</parent>
-                  <submit>no</submit>
-            </problems_req>
             <bugs>
-                  <caption>Arendus&amp;amp;uuml;lesanded</caption>
+                  <caption>&amp;amp;Uuml;lesanded</caption>
                   <submit>no</submit>
             </bugs>
             <by_default>
-                  <caption>Arendus&amp;amp;uuml;lesanded</caption>
+                  <caption>&amp;amp;Uuml;lesanded</caption>
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_default>
@@ -861,6 +823,29 @@
                   <submit>no</submit>
                   <parent>bugs</parent>
             </archive>
+            <problems>
+                  <caption>Probleemid</caption>
+            </problems>
+            <problems_list>
+                  <caption>Nimekiri</caption>
+                  <parent>problems</parent>
+                  <submit>no</submit>
+            </problems_list>
+            <problems_units>
+                  <caption>Osakondade kaupa</caption>
+                  <parent>problems</parent>
+                  <submit>no</submit>
+            </problems_units>
+            <problems_proj>
+                  <caption>Projektide kaupa</caption>
+                  <parent>problems</parent>
+                  <submit>no</submit>
+            </problems_proj>
+            <problems_req>
+                  <caption>N&amp;amp;otilde;uete kaupa</caption>
+                  <parent>problems</parent>
+                  <submit>no</submit>
+            </problems_req>
             <charts>
                   <caption>Kaardid</caption>
                   <submit>no</submit>
@@ -929,19 +914,6 @@
                         <num_5>by_monitor</num_5>
                   </group>
             </bug_tree>
-            <bug_table>
-                  <type>vbox</type>
-                  <parent>bug</parent>
-                  <closeable>1</closeable>
-                  <group>
-                        <num_0>by_default</num_0>
-                        <num_1>by_project</num_1>
-                        <num_2>by_who</num_2>
-                        <num_3>by_class</num_3>
-                        <num_4>by_cust</num_4>
-                        <num_5>by_monitor</num_5>
-                  </group>
-            </bug_table>
             <s_top_v>
                   <type>hbox</type>
                   <group>search</group>
@@ -1005,7 +977,7 @@
                   <type>vbox</type>
                   <parent>reqs_tt</parent>
                   <closeable>1</closeable>
-                  <area_caption>N&amp;otilde;uded</area_caption>
+                  <area_caption>N&amp;otilde;uete&amp;nbsp;kategooriad</area_caption>
                   <group>reqs</group>
             </reqs_tree>
             <reqs_p_tt>
@@ -1029,7 +1001,7 @@
                   <type>vbox</type>
                   <parent>dev_orders_h</parent>
                   <closeable>1</closeable>
-                  <area_caption>Arendustellimused</area_caption>
+                  <area_caption>Arendustellimuste&amp;nbsp;kategooriad</area_caption>
                   <group>devo</group>
             </dev_orders_tree_v>
             <reqs_c_tt>

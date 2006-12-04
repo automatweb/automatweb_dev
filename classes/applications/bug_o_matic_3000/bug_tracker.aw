@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.89 2006/12/04 11:31:40 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.89 2006/12/04 11:31:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.90 2006/12/04 13:35:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.90 2006/12/04 13:35:07 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -31,17 +31,15 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who,by_class
 
-	@property cat type=hidden store=no
-
 	@layout bug type=hbox width=20%:80%
 
 		@layout bug_tree type=vbox parent=bug closeable=1 area_caption=Arendus&uuml;lesanded
 
 			@property bug_tree type=treeview parent=bug_tree no_caption=1 
 
-		@layout bug_table type=vbox parent=bug closeable=1
+		layout bug_table type=vbox parent=bug 
 
-			@property bug_list type=text parent=bug_table no_caption=1 group=by_monitor,bugs,archive,by_default,by_project,by_who,by_class,by_cust
+			@property bug_list type=text parent=bug no_caption=1 group=by_monitor,bugs,archive,by_default,by_project,by_who,by_class,by_cust
 
 
 @default group=unestimated_bugs
@@ -189,7 +187,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@layout reqs_tt type=hbox width=30%:70% 
 
-		@layout reqs_tree type=vbox parent=reqs_tt closeable=1 area_caption=N&otilde;uded
+		@layout reqs_tree type=vbox parent=reqs_tt closeable=1 area_caption=N&otilde;uete&nbsp;kategooriad
 
 			@property reqs_tree type=treeview store=no no_caption=1 parent=reqs_tree
 
@@ -211,7 +209,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@layout dev_orders_h type=hbox width=30%:70% 
 
-		@layout dev_orders_tree_v type=vbox parent=dev_orders_h closeable=1 area_caption=Arendustellimused
+		@layout dev_orders_tree_v type=vbox parent=dev_orders_h closeable=1 area_caption=Arendustellimuste&nbsp;kategooriad
 
 			@property dev_orders_tree type=treeview store=no no_caption=1 parent=dev_orders_tree_v
 
@@ -299,15 +297,27 @@ define("BUG_STATUS_CLOSED", 5);
 
 @groupinfo reqs_main caption="N&otilde;uded"
 
-	@groupinfo reqs parent=reqs_main caption="Sisestamine" submit=no
+	@groupinfo reqs parent=reqs_main caption="N&otilde;uete puu" submit=no
 	@groupinfo reqs_proj caption="Projektid" parent=reqs_main submit=no
 	@groupinfo reqs_cust caption="Tellijad isikud" parent=reqs_main submit=no
 
-@groupinfo dev_orders caption="Arendustellimused"
+@groupinfo dev_orders caption="Tellimused"
 
 	@groupinfo devo parent=dev_orders caption="Sisestamine" submit=no
 	@groupinfo devo_proj caption="Projektid" parent=dev_orders submit=no
 	@groupinfo devo_cust caption="Tellijad isikud" parent=dev_orders submit=no
+
+@groupinfo bugs caption="&Uuml;lesanded" submit=no
+
+	@groupinfo by_default caption="&Uuml;lesanded" parent=bugs submit=no
+	@groupinfo by_project caption="Projektid" parent=bugs submit=no
+	@groupinfo by_who caption="Kellele" parent=bugs submit=no
+	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
+	@groupinfo by_cust caption="Kliendid" parent=bugs submit=no
+	@groupinfo by_monitor caption="J&auml;lgijad" parent=bugs submit=no
+	@groupinfo search caption="Otsing" submit_method=get save=no parent=bugs
+	@groupinfo search_list caption="Salvestatud otsingud" parent=bugs
+	@groupinfo archive caption="Arhiiv" submit=no parent=bugs
 
 @groupinfo problems caption="Probleemid"
 
@@ -316,22 +326,6 @@ define("BUG_STATUS_CLOSED", 5);
 	@groupinfo problems_proj caption="Projektide kaupa" parent=problems submit=no
 	@groupinfo problems_req caption="N&otilde;uete kaupa" parent=problems submit=no
 
-@groupinfo bugs caption="Arendus&uuml;lesanded" submit=no
-
-
-	@groupinfo by_default caption="Arendus&uuml;lesanded" parent=bugs submit=no
-	@groupinfo by_project caption="Projektid" parent=bugs submit=no
-	@groupinfo by_who caption="Kellele" parent=bugs submit=no
-	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
-	@groupinfo by_cust caption="Kliendid" parent=bugs submit=no
-	@groupinfo by_monitor caption="J&auml;lgijad" parent=bugs submit=no
-
-groupinfo search_t caption="Otsing" submit_method=get save=no
-
-	@groupinfo search caption="Otsing" submit_method=get save=no parent=bugs
-	@groupinfo search_list caption="Salvestatud otsingud" parent=bugs
-
-	@groupinfo archive caption="Arhiiv" submit=no parent=bugs
 @groupinfo charts caption="Kaardid" submit=no
 	@groupinfo gantt_chart caption="Gantti diagramm" parent=charts submit=no
 	@groupinfo my_bugs_stat caption="Minu Bugide stat" parent=charts
@@ -1829,7 +1823,8 @@ class bug_tracker extends class_base
 
 		$this->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));		
 		$t->sort_by();
-		$arr["prop"]["value"] = "<span id=\"bug_table\">".$t->draw()."</table>";
+		$t->set_caption(t("Nimekiri arendus&uuml;lesannetest"));
+		$arr["prop"]["value"] = "<span id=\"bug_table\">".$t->get_html()."</table>";
 		if ($arr["request"]["tb_only"] == 1)
 		{
 			die($t->draw());
@@ -3271,6 +3266,7 @@ echo "<hr>";
 				))
 			));
 		}
+		$t->set_caption(t("Esimesed 10 ennustamata bugi"));
 		$t->set_sortable(false);
 	}
 
@@ -3504,6 +3500,7 @@ die();
 		//$this->_init_reqs_table($t);
 
 		$pt = $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
+		$pto = obj($pt);
 		$ol = new object_list(array(
 			"class_id" => CL_PROCUREMENT_REQUIREMENT,
 			"lang_id" => array(),
@@ -3511,6 +3508,7 @@ die();
 			"parent" => $pt
 		));
 		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
+		$t->set_caption(sprintf(t("N&otilde;uded kategoorias %s"), $pto->name()));
 	}
 
 	function _get_reqs_p_tree($arr)
@@ -3522,9 +3520,16 @@ die();
 		));
 		// get all projects from those
 		$p2req = array();
+		$ps2req = array();
+		$pp2req = array();
 		foreach($ol->arr() as $r)
 		{
-			$p2req[(int)$r->prop("project")] ++;
+			if ($this->can("view", $r->prop("project")))
+			{
+				$p2req[(int)$r->prop("project")] ++;
+				$ps2req[(int)$r->prop("project")][$r->prop("state")]++;
+				$pp2req[(int)$r->prop("project")][$r->prop("pri")]++;
+			}
 		}
 		$p2req[(int)null]++;
 		$p2req[(int)null]--;
@@ -3574,7 +3579,7 @@ die();
 				$t->add_item($proj."_states", array(
 					"id" => $proj."_state_".$s_id,
 					"parent" => $proj."_states",
-					"name" => $s_nm,
+					"name" => $s_nm." (".(int)$ps2req[$proj][$s_id].")",
 					"url" => aw_url_change_var(array(
 						"proj" => $proj,
 						"state" => "s_".$s_id,
@@ -3605,7 +3610,7 @@ die();
 				$t->add_item($proj."_pris", array(
 					"id" => $proj."_pri_".$s_id,
 					"parent" => $proj."_pris",
-					"name" => $s_nm,
+					"name" => $s_nm." (".(int)$pp2req[$proj][$s_id].")",
 					"url" => aw_url_change_var(array(
 						"proj" => $proj,
 						"state" => null,
@@ -3626,6 +3631,7 @@ die();
 			"lang_id" => array(),
 			"site_id" => array(),
 		);
+		$po = obj();
 		if (!$arr["request"]["proj"])
 		{
 			$f["project"] = new obj_predicate_compare(OBJ_COMP_LESS, 1);
@@ -3633,6 +3639,7 @@ die();
 		else
 		{
 			$f["project"] = $arr["request"]["proj"];
+			$po = obj($f["project"]);
 		}
 
 		if ($arr["request"]["state"])
@@ -3647,6 +3654,7 @@ die();
 
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
+		$t->set_caption(sprintf(t("N&otilde;uded projektis %s"), $po->name()));
 	}
 
 	function _get_bug_tree_req($arr)
@@ -3695,14 +3703,17 @@ return;
 	function _get_dev_orders_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$pt = $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
+		$pto = obj($pt);
 		$f = array(
 			"class_id" => CL_DEVELOPMENT_ORDER,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"parent" => $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id()
+			"parent" => $pt
 		);
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
+		$t->set_caption(sprintf(t("Arendustellimused kategoorias %s"), $pto->name()));
 	}
 
 	function _get_dev_orders_tb($arr)
@@ -3769,6 +3780,7 @@ return;
 			"site_id" => array(),
 		));
 		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+		$t->set_caption(t("Nimekiri probleemidest"));
 	}
 
 	function _get_reqs_c_tree($arr)
@@ -3833,6 +3845,10 @@ return;
 
 	function _get_reqs_c_table($arr)
 	{
+		if (!$arr["request"]["empl"] && !$arr["request"]["co"])
+		{
+			return;
+		}
 		$t =& $arr["prop"]["vcl_inst"];
 		//$this->_init_reqs_table($t);
 
@@ -3846,13 +3862,16 @@ return;
 			$f["req_p"] = $arr["request"]["empl"];
 		}
 
+		$coo = obj();
 		if ($arr["request"]["co"])
 		{
 			$f["req_co"] = $arr["request"]["co"];
+			$coo = obj($f["req_co"]);
 		}
 
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
+		$t->set_caption(sprintf(t("N&otilde;uded organisatsioonile %s"), $coo->name()));
 	}
 
 	function _get_pu_tree($arr)
@@ -3926,9 +3945,11 @@ return;
 			"lang_id" => array(),
 			"site_id" => array(),
 		);
+		$pto = obj();
 		if ($arr["request"]["co"])
 		{
-			$f["orderer_co"] = $arr["request"]["orderer_co"];
+			$f["orderer_co"] = $arr["request"]["co"];
+			$pto = obj($f["orderer_co"]);
 		}
 		if ($arr["request"]["asect"])
 		{
@@ -3937,6 +3958,7 @@ return;
 
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "createdby", "created", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+		$t->set_caption(sprintf(t("Probleemid organisatsioonil %s"), $pto->name()));
 	}
 
 	function _get_devo_p_tree($arr)
@@ -3950,7 +3972,10 @@ return;
 		$p2req = array();
 		foreach($ol->arr() as $r)
 		{
-			$p2req[(int)$r->prop("project")] ++;
+			if ($this->can("view", $r->prop("project")))
+			{
+				$p2req[(int)$r->prop("project")] ++;
+			}
 		}
 		$p2req[(int)null]++;
 		$p2req[(int)null]--;
@@ -3984,9 +4009,11 @@ return;
 	function _get_devo_p_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$pto = obj();
 		if ($arr["request"]["proj"])
 		{
 			$p = $arr["request"]["proj"];
+			$pto = obj($p);
 		}
 		else
 		{
@@ -4000,6 +4027,7 @@ return;
 		);
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
+		$t->set_caption(sprintf(t("Arendustellimused projektile %s"), $pto->name()));
 	}
 
 	function _get_devo_c_tree($arr)
@@ -4013,7 +4041,10 @@ return;
 		$p2req = array();
 		foreach($ol->arr() as $r)
 		{
-			$p2req[(int)$r->prop("customer")] ++;
+			if ($this->can("view", $r->prop("customer")))
+			{
+				$p2req[(int)$r->prop("customer")] ++;
+			}
 		}
 		$p2req[(int)null]++;
 		$p2req[(int)null]--;
@@ -4047,9 +4078,11 @@ return;
 	function _get_devo_c_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$pto = obj();
 		if ($arr["request"]["cust"])
 		{
 			$p = $arr["request"]["cust"];
+			$pto = obj($p);
 		}
 		else
 		{
@@ -4063,6 +4096,7 @@ return;
 		);
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
+		$t->set_caption(sprintf(t("Arendustellimused tellijale %s"), $pto->name()));
 	}
 
 	function _get_pp_tree($arr)
@@ -4076,7 +4110,10 @@ return;
 		$p2req = array();
 		foreach($ol->arr() as $r)
 		{
-			$p2req[(int)$r->prop("project")] ++;
+			if ($this->can("view", $r->prop("project")))
+			{
+				$p2req[(int)$r->prop("project")] ++;
+			}
 		}
 		$p2req[(int)null]++;
 		$p2req[(int)null]--;
@@ -4110,9 +4147,11 @@ return;
 	function _get_pp_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
+		$pto = obj();
 		if ($arr["request"]["proj"])
 		{
 			$p = $arr["request"]["proj"];
+			$pto = obj($p);
 		}
 		else
 		{
@@ -4126,6 +4165,7 @@ return;
 		);
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+		$t->set_caption(sprintf(t("Probleemid projektis %s"), $pto->name()));
 	}
 
 	function _get_pr_tree($arr)
@@ -4163,6 +4203,7 @@ return;
 			"class_id" => array(CL_REQUIREMENT_CATEGORY,CL_PROCUREMENT_REQUIREMENT)
 		));*/
 
+		$pto = obj($arr["request"]["tf"]);
 		$f = array(
 			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
 			"requirement" => $arr["request"]["tf"], //$req_tree->ids(),
@@ -4171,6 +4212,7 @@ return;
 		);
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+		$t->set_caption(sprintf(t("Probleemid n&otilde;udel %s"), $pto->name()));
 	}
 
 	/**
