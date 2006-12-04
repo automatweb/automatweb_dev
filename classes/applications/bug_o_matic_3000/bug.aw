@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.70 2006/12/04 11:34:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.71 2006/12/04 11:39:47 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -610,13 +610,22 @@ class bug extends class_base
 				}
 				else
 				{
-					$ol = new object_list(array("oid" => $cst));
+					$ol = new object_list(array("oid" => $cst, "lang_id" => array(), "site_id" => array()));
 					$opts = array();
 					foreach($ol->arr() as $_co)
 					{
-						$opts[$_co->id()] = $co->prop("short_name");
+						$nm = $_co->prop("short_name");
+						if ($nm == "")
+						{
+							$nm = $_co->name();
+							if (strlen($nm) > 15)
+							{
+								$nm = substr($nm, 0, 15)."...";
+							}	
+						}
+						$opts[$_co->id()] = $nm;
 					}
-					$prop["options"] = array("" => t("--vali--")) + $_opts;
+					$prop["options"] = array("" => t("--vali--")) + $opts;
 				}
 
 				if ($this->can("view", $arr["request"]["alias_to_org"]))
