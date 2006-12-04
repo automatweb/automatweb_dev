@@ -73,9 +73,11 @@ function doBron (that, intCalendarIntervall)
 }
 
 
-function clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarIntervall )
+function clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarIntervall,rid,ts )
 {
 		intTimestampNext = intCurrentBron;
+		nr=1;
+		tmp = intCurrentBronts;
 		while (intCurrentBronLength>0)
 		{
 			document.getElementById(intTimestampNext).style.background = "#e1e1e1";
@@ -90,9 +92,11 @@ function clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarInte
 				document.getElementById(intTimestampNext).childNodes[1].innerHTML = "Vaba";
 				document.getElementById(intTimestampNext).childNodes[2].value = 0;
 			}
-
-			intTimestampNext += intCalendarIntervall;
+			tmp += intCalendarIntervall;
+			//intTimestampNext += intCalendarIntervall;
+			intTimestampNext = rid+"_"+tmp;//(ts + nr*intCalendarIntervall);
 			intCurrentBronLength -= intCalendarIntervall;
+			nr++;
 		}
 		
 
@@ -103,21 +107,23 @@ function clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarInte
 /**
  * Basically as doBron but ment for activating from any link. doBron on the otherhand needs to get this as a parameter
  */
-function doBronWithProduct (that, intRoomReservationLength, intTimestamp, intCalendarIntervall, intProduct )
+function doBronWithProduct (that, intRoomReservationLength, intTimestamp, intCalendarIntervall, intProduct, rid, ts )
 {
 	dontExecutedoBron = 1;
-	if (checkBrons(intTimestamp, intRoomReservationLength, intCalendarIntervall ))
+	if (checkBrons(intTimestamp, intRoomReservationLength, intCalendarIntervall, rid, ts ))
 	{
 		document.getElementById("product").value = intProduct;
 	
 		document.getElementById(intTimestamp).style.background = "red";
 		
 		if (intCurrentBron)
-			clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarIntervall);
+			clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarIntervall, rid, ts);
 		
 		intCurrentBron = intTimestampNext= intTimestamp;
+		intCurrentBronts = ts;
 		intCurrentBronLength = intRoomReservationLength;
 		
+		nr=1;
 		while (intRoomReservationLength>0)
 		{
 			document.getElementById(intTimestampNext).style.background = "red";
@@ -133,8 +139,9 @@ function doBronWithProduct (that, intRoomReservationLength, intTimestamp, intCal
 				document.getElementById(intTimestampNext).childNodes[2].value = 1;
 			}
 
-			intTimestampNext = intTimestampNext + intCalendarIntervall;
+			intTimestampNext = rid+"_"+(ts+intCalendarIntervall*nr); //intTimestampNext + intCalendarIntervall;
 			intRoomReservationLength -= intCalendarIntervall;
+			nr++;
 		}
 		return true;
 	}
@@ -151,9 +158,9 @@ function doBronWithProduct (that, intRoomReservationLength, intTimestamp, intCal
  *
  *
  */
-function checkBrons (intCurrBronn, intRoomReservationL, intCalendarIntervall)
+function checkBrons (intCurrBronn, intRoomReservationL, intCalendarIntervall, rid, ts)
 {
-	var strNextId = intCurrBronn*1.0;
+	var strNextId = intCurrBronn/*1.0*/;
 	var i=1;
 	while (intRoomReservationL>0)
 	{
@@ -161,7 +168,8 @@ function checkBrons (intCurrBronn, intRoomReservationL, intCalendarIntervall)
 		{
 			return false;
 		}
-		strNextId = (intCurrBronn*1.0)+(i*intCalendarIntervall);
+		//strNextId = (intCurrBronn*1.0)+(i*intCalendarIntervall);
+		strNextId = rid+"_"+(ts+i*intCalendarIntervall); //(intCurrBronn*1.0)+(i*intCalendarIntervall);
 		intRoomReservationL -= intCalendarIntervall;
 		i++;
 	}

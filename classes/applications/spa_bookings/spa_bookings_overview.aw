@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.1 2006/11/30 10:59:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.2 2006/12/04 13:44:47 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -231,7 +231,7 @@ class spa_bookings_overview extends class_base
 			}
 			$t->define_data(array(
 				"cal" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "calendar"), icons::get_icon($o)),
-				"room" => html::obj_change_url($o),
+				"room" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "calendar"), $o->name()),
 				"bron" => join("<br>", $brons),
 				"oid" => $o->id()
 			));

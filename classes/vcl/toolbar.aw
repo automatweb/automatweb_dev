@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.20 2006/11/30 11:02:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.21 2006/12/04 13:44:48 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -508,12 +508,21 @@ class toolbar extends aw_template
 
 		@param pt required type=oid
 			Parent where to add the objects to 
+
+		@param rt optional type=int
+			The relation type to connect the new object with. currently myst be integer :(
+
+		@param params optional type=array
+			If set, these will get added to the new object links
 	**/
-	function add_new_button($clids, $pt, $rt = null)
+	function add_new_button($clids, $pt, $rt = null, $params = null)
 	{
-		$params = array(
-			"return_url" => get_ru(), 
-		);
+		if (!is_array($params))
+		{
+			$params = array();
+		}
+		$params["return_url"] = get_ru();
+
 		if ($rt)
 		{
 			$params["alias_to"] = $pt;
@@ -573,7 +582,19 @@ class toolbar extends aw_template
 			"action" => "delete_rels",
 			"tooltip" => t("Kustuta valitud seosed")
 		));
-		
+	}
+	
+	/** Adds the save button to the toolbar
+		@attrib api=1
+	**/
+	function add_save_button($arr)
+	{
+		$this->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"action" => "",
+			"tooltip" => t("Salvesta")
+		));
 	}
 };
 ?>

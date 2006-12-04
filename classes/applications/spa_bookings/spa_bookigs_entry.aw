@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.7 2006/12/01 07:47:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.8 2006/12/04 13:44:47 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -773,9 +773,11 @@ class spa_bookigs_entry extends class_base
 		$b = obj($arr["booking"]);
 		$from = $b->prop("start");
 		$to = $b->prop("end");
+		$range_from = $from;
+		$range_to = $to;
 		// split into weeks, and if more than 1, let the user select range
 		$rs = get_week_start($from) + 24*7*3600;
- 		if (($to - get_week_start($from)) > (7*24*3600))
+ 		/*if (($to - get_week_start($from)) > (7*24*3600))
 		{
 			$ranges = array();
 			$re = $to;
@@ -815,11 +817,12 @@ class spa_bookigs_entry extends class_base
 		{
 			$range_from = $_GET["range_from"];
 			$range_to = $_GET["range_to"];
-		}
+		}*/
 		// now, draw table for the active range
 		classload("vcl/table");
 		$t = new aw_table();
-		for ($i = 0; $i < 7; $i++)
+		$num_days = floor(($range_to - $range_from) / (24*3600)+1);
+		for ($i = 0; $i < $num_days; $i++)
 		{
 			$s = $range_from + ($i * 24 * 3600);
 			if ($s < $from || $s > $to)
@@ -866,7 +869,7 @@ class spa_bookigs_entry extends class_base
 		for ($h = 0; $h < $num_steps; $h++)
 		{
 			$d = array();
-			for ($i = 0; $i < 7; $i++)
+			for ($i = 0; $i < $num_days; $i++)
 			{
 				$s = $range_from + ($i * 24 * 3600);
 				if ($s < $from || $s > $to)
@@ -1085,7 +1088,8 @@ class spa_bookigs_entry extends class_base
 						"start" => $arr["start"],
 						"end" => $arr["end"],
 						"customer" => $bron->prop("person"),
-						"verified" => 1
+						"verified" => 1,
+						"products" => array($arr["prod"] => 1)
 					),
 					"meta" => array(
 						"product_for_bron" => $arr["prod"],
