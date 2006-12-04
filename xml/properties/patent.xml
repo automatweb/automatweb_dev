@@ -264,6 +264,16 @@
             <type>date_select</type>
             <caption>Makse kuup&amp;amp;auml;ev</caption>
       </property>
+      <property>
+            <name>procurator_menu</name>
+            <table>objects</table>
+            <group>web</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROCURATOR_MENU</reltype>
+            <caption>Volinike kaust</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PATENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -284,6 +294,9 @@
             <fee>
                   <caption>Riigil&amp;amp;otilde;iv</caption>
             </fee>
+            <web>
+                  <caption>Saidilt lisamine</caption>
+            </web>
       </groupinfo>
       <reltypes>
             <APPLICANT>
@@ -324,6 +337,11 @@
                   <clid>CL_CRM_COUNTRY</clid>
                   <caption>P&amp;amp;auml;riltolumaa</caption>
             </COUNTRY>
+            <PROCURATOR_MENU>
+                  <value>8</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Volinike kaust</caption>
+            </PROCURATOR_MENU>
       </reltypes>
 </properties>
 

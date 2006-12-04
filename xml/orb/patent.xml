@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="submit_data" is_public="1" caption="Change">
+		<action name="submit_data" is_public="1" all_args="1" caption="Change">
 			<function name="submit_data">
 				<arguments>
 				</arguments>

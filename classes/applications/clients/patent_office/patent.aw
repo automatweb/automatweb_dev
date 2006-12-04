@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.3 2006/11/17 13:07:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.4 2006/12/04 17:32:33 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -120,8 +120,11 @@
 @caption Makse kuup&auml;ev
 
 
+@groupinfo web caption="Saidilt lisamine"
+@default group=web
 
-
+@property procurator_menu type=relpicker reltype=RELTYPE_PROCURATOR_MENU
+@caption Volinike kaust
 #RELTYPES
 @reltype APPLICANT value=1 clid=CL_CRM_PERSON,CL_CRM_COMPANY
 @caption Taotleja
@@ -144,8 +147,8 @@
 @reltype COUNTRY value=7 clid=CL_CRM_COUNTRY
 @caption P&auml;riltolumaa
 
-
-
+@reltype PROCURATOR_MENU value=8 clid=CL_MENU
+@caption Volinike kaust
 
 
 */
@@ -160,6 +163,9 @@ class patent extends class_base
 		));
 	
 		$this->info_levels = array("applicant","trademark","products_and_services","priority","fee","check");
+		$this->text_vars = array("firstname" , "lastname" ,  "code" , "street", "city" ,"index", "country_code" , "phone" , "email" , "fax" ,  "undefended_parts" , "wordmark");
+		$this->text_area_vars = array("colors" , "trademark_character", "element_translation");
+		$this->file_upload_vars = array("warrant" , "reptoduction");
 	}
 
 	function get_property($arr)
@@ -229,7 +235,7 @@ class patent extends class_base
 		$tpl = $this->info_levels[$arr["data_type"]].".tpl";
 		$this->read_template($tpl);
 		lc_site_load("patent", &$this);
-		$this->vars($this->web_data($arr["data_type"]));
+		$this->vars($this->web_data($arr));
 		
 		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
 				"data_type"	=> $arr["data_type"],
@@ -252,10 +258,33 @@ class patent extends class_base
 
 	function web_data($arr)
 	{
-		$data = array();
+		$data = $this->get_vars($arr);
 		
 		$data["data_type"] = $arr["data_type"];
 		$data["data_type_name"] = $this->info_levels[$arr["data_type"]];
+		
+		$this->get_vars($arr);
+		
+		foreach ($this->text_vars as $var)
+		{
+			$data[$var] = html::textbox(array(
+				"name" => $var,
+				"value" => $_SESSION["patent"][$var],
+				"size" => 40,
+			));
+		}
+		foreach($this->text_area_vars as $var)
+		{
+			$data[$var] = html::textarea(array(
+				"name" => $var,
+				"value" => $_SESSION["patent"][$var],
+				"height"=> 4,
+			));
+		}
+		foreach($this->file_upload_vars as $var)
+		{
+			$data[$var] = html::fileupload(array("name" => $var));
+		}
 		foreach($_SESSION["patent"] as $key => $val)
 		{
 			$data[$key."_value"] =  $val;
@@ -263,16 +292,83 @@ class patent extends class_base
 		return $data;
 	}
 	
+	function get_vars($arr)
+	{
+		$data = array();
+		$data["country"] = t("Eesti :").html::radiobutton(array(
+			"value" => 0,
+			"checked" => !$_SESSION["patent"]["country"],
+			"name" => "country",
+		)).t(" V&auml;lismaa :").html::radiobutton(array(
+			"value" => 1,
+			"checked" => $_SESSION["patent"]["country"],
+			"name" => "country",
+		));
+		$data["type"] = t("F&uuml;&uuml;siline isik :").html::radiobutton(array(
+			"value" => 0,
+			"checked" => !$_SESSION["patent"]["type"],
+			"name" => "type",
+		)).t("Juriidiline isik :").html::radiobutton(array(
+			"value" => 1,
+			"checked" => $_SESSION["patent"]["type"],
+			"name" => "type",
+		));
+
+		$data["unknown_stuff"] = html::radiobutton(array(
+			"value" => 0,
+			"checked" => !$_SESSION["patent"]["unknown_stuff"],
+			"name" => "unknown_stuff",
+			)).t("Sõnamärk").html::radiobutton(array(
+				"value" => 1,
+				"checked" => ($_SESSION["patent"]["unknown_stuff"] == 1) ? 1 : 0,
+				"name" => "unknown_stuff",
+			)).t("Kujutismärk").html::radiobutton(array(
+				"value" => 2,
+				"checked" => ($_SESSION["patent"]["unknown_stuff"] == 2) ? 1 : 0,
+				"name" => "unknown_stuff",
+			)).t("Kombineeritud märk").html::radiobutton(array(
+				"value" => 3,
+				"checked" => ($_SESSION["patent"]["unknown_stuff"] == 3) ? 1 : 0,
+				"name" => "unknown_stuff",
+			)).t("Ruumiline märk");
+		
+		$data["trademark_type"] = html::checkbox(array(
+			"value" => 1,
+			"checked" => $_SESSION["patent"]["co_trademark"],
+			"name" => "co_trademark",
+			)).t("Kollektiivkaubam&auml;rk").
+			html::checkbox(array(
+				"value" => 1,
+				"checked" => $_SESSION["patent"]["guaranty_trademark"],
+				"name" => "guaranty_trademark",
+			)).t("Garantiim&auml;rk");
+		$dummy = obj($arr["alias"]["to"]);
+		$parent = $dummy->prop("procurator_menu");
+		$procurator_l = new object_list(array(
+			"lang_id" => array(),
+			"parent" => $parent, 
+			"class_id" => CL_CRM_PERSON,
+		));
+		$options = $procurator_l->names();
+		$data["procurator"] = html::select(array(
+			"options" => $options,
+			"name" => "procurator",
+			"value" => $_SESSION["patent"]["procurator"]
+		));
+
+		return $data;
+	}
+	
 	/** 
-		@attrib name=submit_data is_public="1" caption="Change"
+		@attrib name=submit_data is_public="1" caption="Change" all_args=1
 	**/
 	function submit_data($arr)
 	{
-		foreach($arr as $data => $val)
+		foreach($_POST as $data => $val)
 		{
 			$_SESSION["patent"][$data] = $val;
 		}
-		if($arr["save"])
+		if($_POST["save"])
 		{
 			$this->save_data();
 		}
@@ -282,7 +378,7 @@ class patent extends class_base
 	function save_data()
 	{
 		;
-		unset($_SESSION["patent"]);
+		//unset($_SESSION["patent"]);
 	}
 }
 ?>
