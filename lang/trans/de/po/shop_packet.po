@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/shop/shop_packet.aw:class_297_help
 msgid "Klassi Pakett help"
 msgstr ""
@@ -342,7 +341,10 @@ msgstr ""
 msgid "Mitu paketis"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:502
-msgid "Kustuta tooted paketist"
+#: classes/applications/shop/shop_packet.aw:156
+msgid "Grupp"
 msgstr ""
 
+#: classes/applications/shop/shop_packet.aw:545
+msgid "Kustuta tooted paketist"
+msgstr ""

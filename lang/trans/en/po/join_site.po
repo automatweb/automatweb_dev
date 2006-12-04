@@ -663,19 +663,19 @@ msgstr "<b>Subtitles</b>"
 
 #: classes/contentmgmt/join/join_site.aw:739
 msgid "Maa"
-msgstr ""
+msgstr "Country"
 
 #: classes/contentmgmt/join/join_site.aw:745
 msgid "Postiindeks"
-msgstr ""
+msgstr "Postal index"
 
 #: classes/contentmgmt/join/join_site.aw:750
 msgid "Linn"
-msgstr ""
+msgstr "City"
 
 #: classes/contentmgmt/join/join_site.aw:755
 msgid "T&auml;nava nimi"
-msgstr ""
+msgstr "Street address"
 
 #: classes/contentmgmt/join/join_site.aw:833
 #: classes/contentmgmt/join/join_site.aw:837
@@ -708,27 +708,27 @@ msgstr "A user with this code does not exist"
 
 #: classes/contentmgmt/join/join_site.aw:1989
 msgid "T&uuml;&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/contentmgmt/join/join_site.aw:2001
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
 #: classes/contentmgmt/join/join_site.aw:2002
 msgid "Tekstikast"
-msgstr ""
+msgstr "Texbox"
 
 #: classes/contentmgmt/join/join_site.aw:2003
 msgid "Listbox"
-msgstr ""
+msgstr "Listbox"
 
 #: classes/contentmgmt/join/join_site.aw:2004
 msgid "Raadionupp"
-msgstr ""
+msgstr "Radiobutton"
 
 #: classes/contentmgmt/join/join_site.aw:2005
 msgid "Checkbox"
-msgstr ""
+msgstr "Checkbox"
 
 # classes/contentmgmt/join/join_site.aw:group_joinmail
 #~ msgid "Grupi Meil (joinmail) pealkiri"

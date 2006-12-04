@@ -246,6 +246,14 @@ msgstr ""
 msgid "Seose Ressurss (RELTYPE_RESOURCE) tekst"
 msgstr ""
 
+#: classes/applications/groupware/reservation.aw:layout_general_up
+msgid "Kujundusosa Üldinfo (general_up) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:layout_general_down
+msgid "Kujundusosa Aeg&#44; ja hind (general_down) pealkiri"
+msgstr ""
+
 #: classes/applications/groupware/reservation.aw:384 classes/applications/groupware/reservation.aw:494
 msgid "Nimi"
 msgstr ""
@@ -262,15 +270,15 @@ msgstr ""
 msgid "Broneering : "
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:644
+#: classes/applications/groupware/reservation.aw:650
 msgid "Klient ei ilmunud kohale"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:645
+#: classes/applications/groupware/reservation.aw:651
 msgid "Klient ilmus kohale"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:646
+#: classes/applications/groupware/reservation.aw:652
 msgid "M&auml;rgi"
 msgstr ""
 

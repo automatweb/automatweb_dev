@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/common/room_settings.aw:class_1188_help
+msgid "Klassi Ruumi seaded help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_max_times_per_day
+msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_max_times_per_day_comment
+msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_max_times_per_day_help
+msgid "Omaduse Maksimaalne aegade arv samal p&auml;eval (max_times_per_day) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_hold_not_verifyed
+msgid "Omaduse Kinnitamata broneeringut tuleb hoida kinni x minutit (hold_not_verifyed) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_hold_not_verifyed_comment
+msgid "Omaduse Kinnitamata broneeringut tuleb hoida kinni x minutit (hold_not_verifyed) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_hold_not_verifyed_help
+msgid "Omaduse Kinnitamata broneeringut tuleb hoida kinni x minutit (hold_not_verifyed) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_users
+msgid "Omaduse Kasutajad (users) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_users_comment
+msgid "Omaduse Kasutajad (users) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_users_help
+msgid "Omaduse Kasutajad (users) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_persons
+msgid "Omaduse Isikud (persons) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_persons_comment
+msgid "Omaduse Isikud (persons) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_persons_help
+msgid "Omaduse Isikud (persons) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cos
+msgid "Omaduse Organisatsioonid (cos) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cos_comment
+msgid "Omaduse Organisatsioonid (cos) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cos_help
+msgid "Omaduse Organisatsioonid (cos) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_sects
+msgid "Omaduse Osakonnad (sects) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_sects_comment
+msgid "Omaduse Osakonnad (sects) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_sects_help
+msgid "Omaduse Osakonnad (sects) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_profs
+msgid "Omaduse Ametinimetused (profs) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_profs_comment
+msgid "Omaduse Ametinimetused (profs) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_profs_help
+msgid "Omaduse Ametinimetused (profs) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_everyone
+msgid "Omaduse K&otilde;ik (everyone) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_everyone_comment
+msgid "Omaduse K&otilde;ik (everyone) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_everyone_help
+msgid "Omaduse K&otilde;ik (everyone) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_whom
+msgid "Grupi Kellele kehtib (whom) pealkiri"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_whom_help
+msgid "Grupi Kellele kehtib (whom) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:rel_RELTYPE_USER
+msgid "Seose Kasutaja (RELTYPE_USER) tekst"
+msgstr ""
+
+#: classes/common/room_settings.aw:rel_RELTYPE_PERSON
+msgid "Seose Isik (RELTYPE_PERSON) tekst"
+msgstr ""
+
+#: classes/common/room_settings.aw:rel_RELTYPE_COMPANY
+msgid "Seose Organisatsioon (RELTYPE_COMPANY) tekst"
+msgstr ""
+
+#: classes/common/room_settings.aw:rel_RELTYPE_SECTION
+msgid "Seose Osakond (RELTYPE_SECTION) tekst"
+msgstr ""
+
+#: classes/common/room_settings.aw:rel_RELTYPE_PROFESSION
+msgid "Seose Ametinimetus (RELTYPE_PROFESSION) tekst"
+msgstr ""
+

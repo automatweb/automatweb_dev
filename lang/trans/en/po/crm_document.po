@@ -170,6 +170,26 @@ msgstr ""
 msgid "Omaduse Tegevused (acts) help"
 msgstr ""
 
+#: classes/applications/crm/crm_document.aw:prop_acl
+msgid "Omaduse &Otilde;igused (acl) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_acl_comment
+msgid "Omaduse &Otilde;igused (acl) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_acl_help
+msgid "Omaduse &Otilde;igused (acl) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
+msgstr ""
+
 #: classes/applications/crm/crm_document.aw:group_files
 msgid "Grupi Failid (files) pealkiri"
 msgstr ""

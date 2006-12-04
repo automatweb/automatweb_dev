@@ -300,7 +300,7 @@ msgstr "shop_order::do_confirm(): could not find parent folder for warehouse exp
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr "Warehouse export based on order %s"
 
-#: classes/applications/shop/shop_order.aw:486
-#: classes/applications/shop/shop_order.aw:634
+#: classes/applications/shop/shop_order.aw:490
+#: classes/applications/shop/shop_order.aw:638
 msgid "Tellimus laost %s"
 msgstr "Order from warehouse %s"

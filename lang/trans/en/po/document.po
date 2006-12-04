@@ -14,8 +14,8 @@ msgid "Viimati muudetud:"
 msgstr "Last modified"
 
 #: classes/document.aw:686
-msgid "&lt;br /&gt;&lt;B&gt;Edasi loe ajakirjast!&lt;/b&gt;&lt;/font&gt;"
-msgstr ""
+msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
+msgstr "<br /><B>continue reading from the magazine!</b></font>"
 
 #: classes/document.aw:710
 msgid "Loe edasi"
@@ -29,50 +29,33 @@ msgstr "See also"
 msgid "Samal teemal:"
 msgstr "On the same subject:"
 
-#: classes/document.aw:2350
+#: classes/document.aw:2353
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/document.aw:2357
-msgid "Kuup&amp;auml;ev"
-msgstr ""
+#: classes/document.aw:2360
+msgid "Kuup&auml;ev"
+msgstr "Date"
 
-#: classes/document.aw:2365
+#: classes/document.aw:2368
 msgid "Autor"
 msgstr "Author"
 
-#: classes/document.aw:2895
+#: classes/document.aw:2898
 msgid ""
-"&lt;font face='arial'&gt;Toimub staatiliste lehtede\tgenereerimine, palun "
-"oodake!&lt;br /&gt;&lt;br /&gt;\n"
+"<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
 msgstr ""
+"<font face='arial'>Static page generation is taking place, please wait!<br /><br />\n"
+"\n"
 
-#: classes/document.aw:2925
-msgid "Staatilised lehek&amp;uuml;ljed loodud!&lt;br /&gt;\n"
-msgstr ""
+#: classes/document.aw:2928
+msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
+msgstr "Static pages created"
 
-#: classes/document.aw:2927
+#: classes/document.aw:2930
 msgid "tagasi dokumendi muutmise juurde"
 msgstr "back to document editing"
-
-#~ msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
-#~ msgstr "<br /><B>continue reading from the magazine!</b></font>"
-
-#~ msgid "Kuup&auml;ev"
-#~ msgstr "Date"
-
-#~ msgid ""
-#~ "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun "
-#~ "oodake!<br /><br />\n"
-#~ "\n"
-#~ msgstr ""
-#~ "<font face='arial'>Static page generation is taking place, please wait!"
-#~ "<br /><br />\n"
-#~ "\n"
-
-#~ msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
-#~ msgstr "Static pages created"
 
 #~ msgid "Lead"
 #~ msgstr "Lead"

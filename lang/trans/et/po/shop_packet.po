@@ -410,6 +410,10 @@ msgstr ""
 msgid "Mitu paketis"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:502
+#: classes/applications/shop/shop_packet.aw:156
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:545
 msgid "Kustuta tooted paketist"
 msgstr ""

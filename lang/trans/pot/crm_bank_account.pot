@@ -62,7 +62,23 @@ msgstr ""
 msgid "Omaduse Pank (bank) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bank_account.aw:prop_currency
+msgid "Omaduse Valuuta (currency) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bank_account.aw:prop_currency_comment
+msgid "Omaduse Valuuta (currency) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bank_account.aw:prop_currency_help
+msgid "Omaduse Valuuta (currency) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bank_account.aw:rel_RELTYPE_BANK
 msgid "Seose pank (RELTYPE_BANK) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bank_account.aw:rel_RELTYPE_CURRENCY
+msgid "Seose Valuuta (RELTYPE_CURRENCY) tekst"
 msgstr ""
 

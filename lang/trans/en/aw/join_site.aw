@@ -61,6 +61,10 @@ $GLOBALS["TRANS"]["Sisestatud number"] = "Number entered";
 $GLOBALS["TRANS"]["Lehe nimi"] = "Page name";
 $GLOBALS["TRANS"]["Tekst"] = "Text";
 $GLOBALS["TRANS"]["<b>Vahepealkirjad</b>"] = "<b>Subtitles</b>";
+$GLOBALS["TRANS"]["Maa"] = "Country";
+$GLOBALS["TRANS"]["Postiindeks"] = "Postal index";
+$GLOBALS["TRANS"]["Linn"] = "City";
+$GLOBALS["TRANS"]["T&auml;nava nimi"] = "Street address";
 $GLOBALS["TRANS"]["<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"] = "<font color='#FF0000'>Following field must be filled!</font>";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Liitun"] = "Join";
@@ -68,4 +72,10 @@ $GLOBALS["TRANS"]["Liitumise meili from aadress (%s)"] = "Join mail from address
 $GLOBALS["TRANS"]["Liitumise meili subjekt (%s)"] = "Join mail subject (%s)";
 $GLOBALS["TRANS"]["Liitumise meil (%s)"] = "Join mail (%s)";
 $GLOBALS["TRANS"]["Sellise koodiga kasutajat pole olemas!"] = "A user with this code does not exist";
+$GLOBALS["TRANS"]["T&uuml;&uuml;p"] = "Type";
+$GLOBALS["TRANS"]["--vali--"] = "--select--";
+$GLOBALS["TRANS"]["Tekstikast"] = "Texbox";
+$GLOBALS["TRANS"]["Listbox"] = "Listbox";
+$GLOBALS["TRANS"]["Raadionupp"] = "Radiobutton";
+$GLOBALS["TRANS"]["Checkbox"] = "Checkbox";
 ?>

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_memo.aw:class_1008_help
 msgid "Klassi Memo help"
 msgstr ""
@@ -134,6 +133,18 @@ msgstr ""
 msgid "Omaduse Tegevused (acts) help"
 msgstr ""
 
+#: classes/applications/crm/crm_memo.aw:prop_acl
+msgid "Omaduse &Otilde;igused (acl) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_memo.aw:prop_acl_comment
+msgid "Omaduse &Otilde;igused (acl) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_memo.aw:prop_acl_help
+msgid "Omaduse &Otilde;igused (acl) help"
+msgstr ""
+
 #: classes/applications/crm/crm_memo.aw:group_files
 msgid "Grupi Failid (files) pealkiri"
 msgstr ""
@@ -148,6 +159,14 @@ msgstr ""
 
 #: classes/applications/crm/crm_memo.aw:group_parts_help
 msgid "Grupi Osalejad (parts) help"
+msgstr ""
+
+#: classes/applications/crm/crm_memo.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_memo.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
 msgstr ""
 
 #: classes/applications/crm/crm_memo.aw:rel_RELTYPE_FILE
@@ -165,4 +184,3 @@ msgstr ""
 #: classes/applications/crm/crm_memo.aw:rel_RELTYPE_ACTION
 msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
 msgstr ""
-

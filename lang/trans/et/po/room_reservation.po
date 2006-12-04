@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/room_reservation.aw:class_1174_help
 msgid "Klassi Ruumi broneerimine help"
 msgstr ""
@@ -39,19 +38,19 @@ msgid "Omaduse Broneeringu template (reservation_template) help"
 msgstr ""
 
 #: classes/common/room_reservation.aw:prop_levels
-msgid "Omaduse  (levels) caption"
+msgid "Omaduse Tasemed (levels) caption"
 msgstr ""
 
 #: classes/common/room_reservation.aw:prop_levels_comment
-msgid "Omaduse  (levels) kommentaar"
+msgid "Omaduse Tasemed (levels) kommentaar"
 msgstr ""
 
 #: classes/common/room_reservation.aw:prop_levels_help
-msgid "Omaduse  (levels) help"
+msgid "Omaduse Tasemed (levels) help"
 msgstr ""
 
 #: classes/common/room_reservation.aw:rel_RELTYPE_ROOM
-msgid "Seose  (RELTYPE_ROOM) tekst"
+msgid "Seose Ruum mida broneerida (RELTYPE_ROOM) tekst"
 msgstr ""
 
 #: classes/common/room_reservation.aw:60
@@ -74,3 +73,7 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
+#: classes/common/room_reservation.aw:528
+#: classes/common/room_reservation.aw:587
+msgid "Salvesta"
+msgstr ""

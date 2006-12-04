@@ -74,6 +74,30 @@ msgstr ""
 msgid "Omaduse Arendus&uuml;lesanne (from_bug) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:prop_orderer_co
+msgid "Omaduse Tellija organisatsioon (orderer_co) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:prop_orderer_co_comment
+msgid "Omaduse Tellija organisatsioon (orderer_co) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:prop_orderer_co_help
+msgid "Omaduse Tellija organisatsioon (orderer_co) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:prop_orderer_unit
+msgid "Omaduse Tellija &uuml;ksus (orderer_unit) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:prop_orderer_unit_comment
+msgid "Omaduse Tellija &uuml;ksus (orderer_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:prop_orderer_unit_help
+msgid "Omaduse Tellija &uuml;ksus (orderer_unit) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
 msgstr ""
@@ -224,5 +248,25 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:rel_RELTYPE_HAS_REQ
 msgid "Seose N&otilde;ue (RELTYPE_HAS_REQ) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:rel_RELTYPE_ORDERER_CO
+msgid "Seose Organisatsioon (RELTYPE_ORDERER_CO) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:rel_RELTYPE_UNIT
+msgid "Seose &Uuml;ksus (RELTYPE_UNIT) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:118 classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:139
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:215
+msgid "Probleemist tulenenud &uuml;lesanded"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/customer_problem_ticket.aw:233
+msgid "Probleemist tulenenud n&otilde;uded"
 msgstr ""
 

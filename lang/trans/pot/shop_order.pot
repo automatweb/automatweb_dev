@@ -258,7 +258,7 @@ msgstr ""
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:486 classes/applications/shop/shop_order.aw:634
+#: classes/applications/shop/shop_order.aw:490 classes/applications/shop/shop_order.aw:638
 msgid "Tellimus laost %s"
 msgstr ""
 

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:class_1187_help
 msgid "Klassi Reserveeringute &uuml;levaade help"
 msgstr ""
@@ -150,6 +149,14 @@ msgstr ""
 msgid "Seose Omanik (RELTYPE_OWNER) tekst"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:layout_r_tree
+msgid "Kujundusosa Ruumid (r_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:layout_r_srch
+msgid "Kujundusosa Otsing (r_srch) pealkiri"
+msgstr ""
+
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:123
 msgid "&nbsp;"
 msgstr ""
@@ -177,4 +184,3 @@ msgstr ""
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:302
 msgid "Kalender"
 msgstr ""
-

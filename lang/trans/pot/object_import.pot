@@ -382,55 +382,55 @@ msgstr ""
 msgid "leidsin juba olemasoleva objekti %s, kasutan olemasolevat objekti <br>"
 msgstr ""
 
-#: classes/admin/object_import.aw:855
+#: classes/admin/object_import.aw:856
 msgid "importisin objekti %s (%s) kataloogi %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:865
+#: classes/admin/object_import.aw:866
 msgid "Imporditud %s objekti"
 msgstr ""
 
-#: classes/admin/object_import.aw:874
+#: classes/admin/object_import.aw:875
 msgid "Valmis! <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:890
+#: classes/admin/object_import.aw:891
 msgid "Import edukalt l&otilde;ppenud"
 msgstr ""
 
-#: classes/admin/object_import.aw:1007
+#: classes/admin/object_import.aw:1009
 msgid "create uniq filter for delete <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1013
+#: classes/admin/object_import.aw:1015
 msgid "got filter <Br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1024
+#: classes/admin/object_import.aw:1026
 msgid "unset keys <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1053
+#: classes/admin/object_import.aw:1055
 msgid "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1054
+#: classes/admin/object_import.aw:1056
 msgid "VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:1064
+#: classes/admin/object_import.aw:1066
 msgid "delete object %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1070
+#: classes/admin/object_import.aw:1072
 msgid "delete done. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1072
+#: classes/admin/object_import.aw:1074
 msgid "Edukalt kustutatud %s objekti!"
 msgstr ""
 
-#: classes/admin/object_import.aw:1110
+#: classes/admin/object_import.aw:1112
 msgid "Importi alustati "
 msgstr ""
 
