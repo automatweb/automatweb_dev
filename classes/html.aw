@@ -186,7 +186,7 @@ class html extends aw_template
 		$js_name = str_replace(array("[", "]", "-"), "_", $name);
 
 		### compose autocompletes source url
-		if ($autocomplete_source or is_array($options) or $autocomplete_source_method)
+		if (is_admin() && ($autocomplete_source or is_array($options) or $autocomplete_source_method))
 		{
 			if (!defined("AW_AUTOCOMPLETE_INITIALIZED"))
 			{

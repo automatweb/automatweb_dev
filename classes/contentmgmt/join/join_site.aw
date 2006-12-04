@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.30 2006/11/24 14:27:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.31 2006/12/04 17:24:42 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1383,14 +1383,14 @@ class join_site extends class_base
 			{	
 				if ($visible[$clid][$pid])
 				{
-					if ($prop["name"] == "phone")
+					if ($prop["name"] == "phone" || $prop["name"] == "fax")
 					{
 						$prop["type"] = "textbox";
 					}
 					$ttp[$pid] = $prop;
 				}
 			}
-			
+
 			$class_inst = get_instance($clid);
 			$class_inst->init_class_base();
 			$ttp = $class_inst->parse_properties(array("properties" => $ttp, "obj_inst" => $data_o));
@@ -1405,6 +1405,39 @@ class join_site extends class_base
 				{
 					$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
 
+					if ($clid == CL_CRM_PERSON && $pid == "address")
+					{
+						// address has: * Street address: * City: * Zip code: * Country:	
+						$adr_inst = get_instance(CL_CRM_ADDRESS);
+						$opts = $adr_inst->get_country_list();
+						$tp["p_adr_ctry"] = array(
+							"name" => "p_adr_ctry",
+							"caption" => t("Maa"),
+							"type" => "select",
+							"options" => $opts,
+							"value" => array_search($data_o->prop("address.riik.name"), $opts)
+						);
+						$tp["p_adr_zip"] = array(
+							"name" => "p_adr_zip",
+							"caption" => t("Postiindeks"),
+							"type" => "textbox",
+							"value" => $data_o->prop("address.postiindeks")
+						);
+						$tp["p_adr_city"] = array(
+							"name" => "p_adr_city",
+							"caption" => t("Linn"),
+							"type" => "textbox",
+							"value" => $data_o->prop("address.linn.name")
+						);
+						$tp["p_adr_str"] = array(
+							"name" => "p_adr_str",
+							"caption" => t("T&auml;nava nimi"),
+							"type" => "textbox",
+							"value" => $data_o->prop("address.aadress")
+						);
+						unset($ttp[$pid]);
+						continue;
+					}
 					if ($clid == CL_USER && $oldn == "uid_entry")
 					{
 						if ($je["gen"] != "")
@@ -1444,9 +1477,21 @@ class join_site extends class_base
 					}
 					// if it's a relpicker, get the rels from the default rel object
 					// and insert them in there
+					if ($oldn == "rank")
+					{
+						$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
+                                        	if ($c)
+                                        	{
+                                                	$tdata_o = $c->to();
+							$prop["value"] = $tdata_o->prop("rank.name");
+						}
+						$prop["type"] = "textbox";
+						$prop["post_append_text"] = "";
+					}
+					else
 					if ($props[$pid]["type"] == "relpicker")
 					{
-						$tmp = reset($ob->connections_from(array(
+						/*$tmp = reset($ob->connections_from(array(
 							"type" => "RELTYPE_REL_OBJ", 
 							"to.class_id" => $clid
 						)));
@@ -1460,7 +1505,10 @@ class join_site extends class_base
 								$data[$c->prop("to")] = $c->prop("to.name");
 							}
 							$prop["options"] = $data;
-						}
+						}*/
+						$prop["type"] = "textbox";
+						$prop["value"] = $ob->prop($oldn);
+						$prop["post_append_text"] = "";
 					}
 					else
 					if ($oldn == "phone")
@@ -1469,34 +1517,19 @@ class join_site extends class_base
                                         	if ($c)
                                         	{
                                                 	$tdata_o = $c->to();
-							$to = $tdata_o->get_first_obj_by_reltype("RELTYPE_PHONE");
-							if ($to)
-							{
-								$prop["value"] = $to->name();
-							}
+							$prop["value"] = $tdata_o->prop("phone.name");
 						}
-					}
-					/*else
-					if ($prop["type"] == "relmanager" && $data_o)
-					{
-						$prop["real_obj"] = $data_o;
 					}
 					else
-					if ($prop["type"] == "chooser")
+					if ($oldn == "fax")
 					{
-						$tmp_do = $data_o;
-						if (!is_object($tmp_do))
-						{
-							$tmp_do = obj();
-							$tmp_do->set_class_id($clid);
+						$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
+                                        	if ($c)
+                                        	{
+                                                	$tdata_o = $c->to();
+							$prop["value"] = $tdata_o->prop("fax.name");
 						}
-						$tmp_param = array(
-							"obj_inst" => &$tmp_do,
-							"prop" => &$prop,
-							"request" => $params
-						);
-						$class_inst->get_property($tmp_param);
-					}*/
+					}
 
 					// set value in property
 					if ($data_o)
@@ -1506,7 +1539,7 @@ class join_site extends class_base
 							$prop["value"] = $data_o->name();
 						}
 						else
-						if ($oldn != "phone")
+						if ($oldn != "phone" && $oldn != "fax" && $oldn != "rank")
 						{
 							$prop["value"] = $data_o->prop($pid);
 						}
@@ -1518,6 +1551,7 @@ class join_site extends class_base
 						$cf_sd = $sessd[$wn];
 						$prop["value"] = $cf_sd[$oldn];
 					}
+
 					$pid = "typo_".$clid."[".$oldn."]";
 					$prop["name"] = $pid;
 					if ($propn[$clid][$oldn] != "")
@@ -1540,7 +1574,6 @@ class join_site extends class_base
 				}
 			}
 		}
-
 		// add seprator props
 		$seps = new aw_array($ob->meta("join_seps"));
 		foreach($seps->get() as $sepid => $sepn)
@@ -1737,7 +1770,7 @@ class join_site extends class_base
 					// if not, create new 
 					// set the object's id as the submit value
 					$p_oid = $data_o->prop($prop["name"]);
-					if (is_oid($p_oid) && $this->can("view", $p_oid))
+					if (is_oid($p_oid) && $this->can("view", $p_oid) && ($prop["name"] == "address" || $data_o->prop($prop["name"].".name") == $cf_sd[$oldn]))
 					{
 						$p_obj = obj($p_oid);
 						// if this is the address thingamajig, then create the address from the separate props
@@ -1772,6 +1805,7 @@ class join_site extends class_base
 				if ($prop["type"] == "classificator" || $prop["group"] != "general")
 				{
 					$data_o->set_prop($prop["name"] , $cf_sd[$oldn]);
+					$submit_data[$pid] = $cf_sd[$oldn];
 				}
 				else
 				{
@@ -1780,7 +1814,6 @@ class join_site extends class_base
 				}
 			}
 		}
-
 		if ($clid == CL_USER)
 		{
 			$data_o->save();
@@ -1795,10 +1828,21 @@ class join_site extends class_base
 	function __prop_sorter($a, $b)
 	{
 		// get order from prop name
-		preg_match("/typo_(.*)\[(.*)\]/U", $a["name"], $a_mt);
-		preg_match("/typo_(.*)\[(.*)\]/U", $b["name"], $b_mt);	
+		if (!preg_match("/typo_(.*)\[(.*)\]/U", $a["name"], $a_mt))
+		{
+			$a_mt = array();
+			$a_mt[2] = $a["name"];
+			$a_mt[1] = CL_CRM_PERSON;
+		}
+		if (!preg_match("/typo_(.*)\[(.*)\]/U", $b["name"], $b_mt))
+		{
+			$b_mt = array();
+			$b_mt[2] = $b["name"];
+			$b_mt[1] = CL_CRM_PERSON;
+		}
 		$a_clid = $a_mt[1];
 		$a_prop = $a_mt[2];
+
 		if (strpos($a_prop, "p_adr") !== false)
 		{
 			$a_prop = "address";
@@ -2036,12 +2080,12 @@ class join_site extends class_base
 
 	function _update_address_from_req($o, $r)
 	{
-		$o->set_prop("aadress", $r["typo_145"]["p_adr_str"]);
-		$o->set_prop("postiindeks", $r["typo_145"]["p_adr_zip"]);
-		$this->set_rel_by_val($o, "linn", $r["typo_145"]["p_adr_city"]);
+		$o->set_prop("aadress", isset($r["typo_145"]["p_adr_str"]) ? $r["typo_145"]["p_adr_str"] : $r["p_adr_str"]);
+		$o->set_prop("postiindeks", isset($r["typo_145"]["p_adr_zip"]) ? $r["typo_145"]["p_adr_zip"] : $r["p_adr_zip"]);
+		$this->set_rel_by_val($o, "linn", isset($r["typo_145"]["p_adr_city"]) ? $r["typo_145"]["p_adr_city"] : $r["p_adr_city"]);
 		$adr_i = $o->instance();
 		$riiks = $adr_i->get_country_list();
-		$this->set_rel_by_val($o, "riik", $riiks[$r["typo_145"]["p_adr_ctry"]]);
+		$this->set_rel_by_val($o, "riik", $riiks[isset($r["typo_145"]["p_adr_ctry"]) ? $r["typo_145"]["p_adr_ctry"] : $r["p_adr_ctry"]]);
 		$o->set_name($adr_i->get_name_from_adr($o));
 	}
 
