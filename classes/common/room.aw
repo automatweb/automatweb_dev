@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.60 2006/11/30 14:45:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.61 2006/12/04 13:44:35 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1289,7 +1289,7 @@ class room extends class_base
 							$col[$x] = "red";
 							$string = t("Broneeri");
 						}
-						$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
+						$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$arr["obj_inst"]->id().']['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
 						$onclick[$x] = "doBron(this,".($step_length * $arr["obj_inst"]->prop("time_step")).")";
 						
 					}
@@ -1315,7 +1315,9 @@ class room extends class_base
 										{
 											$product = obj($prod);
 											$codes[] = $product->prop("code");
-										}
+								
+$title .= " ".$product->name();
+		}
 									}
 								}
 							}
@@ -1354,7 +1356,7 @@ class room extends class_base
 					$d[$x] = "<span>".t("Suletud")."</span>";
 				}
 				//$ids[$x] = $arr["room"]."_".$start_step;
-				$ids[$x] = $start_step;
+				$ids[$x] = $arr["obj_inst"]->id()."_".$start_step;
 				$x++;
 				$start_step += 86400;
 				$end_step += 86400;
@@ -1471,7 +1473,12 @@ class room extends class_base
 	{
 		classload("core/icons");
 //		$prod_list = $this->get_prod_list($arr["obj_inst"]->id());
-		$item_list = $this->get_active_items($arr["obj_inst"]->id());
+		static $item_list;
+
+		if ($item_list == null)
+		{
+			$item_list = $this->get_active_items($arr["obj_inst"]->id());
+		}
 		$ret = "";
 		$pm = get_instance("vcl/popup_menu");
 		$room = $arr["obj_inst"];
@@ -1484,10 +1491,10 @@ class room extends class_base
 /*			$pm->add_item(array(
 				"text" => $prod->name(),
 				"link" => "javascript: dontExecutedoBron=1;void(0)",
-				"onClick" => " dontExecutedoBron=1;onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"].");",
+				"onClick" => " dontExecutedoBron=1;onClick=doBronWithProduct(this, '".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))."' , '".$arr["timestamp"]."');",
 			),"CL_ROOM");
 		
-			$packages = $this->get_package_list($prod->id());
+			$packages = new object_list(); //$this->get_package_list($prod->id());
 			
 			foreach($packages->arr() as $package)
 			{
@@ -1504,7 +1511,7 @@ class room extends class_base
 			$pm->add_item(array(
 				"text" => $prod->name(),
 				"link" => "javascript:dontExecutedoBron=1;void(0)",
-				"onClick" => "doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , ".$arr["timestamp"]." , ".$arr["step_length"]." , ".$prod->id().");",
+				"onClick" => "doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , '".$arr["obj_inst"]->id()."_".$arr["timestamp"]."' , ".$arr["step_length"]." , ".$prod->id().", ".$arr["obj_inst"]->id().", ".$arr["timestamp"].");",
 			),"CL_ROOM");
 		}
 
@@ -1616,21 +1623,29 @@ class room extends class_base
 	//see ruumi sees tehes, eeldusel, et pärast liigub edasi reserveerimise objekti vaatesse, kus valib asju... tregelt nüüd juba popup kõigepealt
 	/**
 		@attrib name=do_add_reservation params=name all_args=1
-		@param id required oid
+		@param id optional oid
 			room id
 		@param bron optional array
 			keys are start timestamps
 	**/
 	function do_add_reservation($arr)
 	{
+		extract($arr);
 		if(is_oid($arr["id"]))
 		{
-			$times = $this->_get_bron_time(array(
-				"bron" => $arr["bron"],
-				"id" => $arr["id"],
-			));
+			foreach($bron as $room => $val)
+			{
+				$times = $this->_get_bron_time(array(
+					"bron" => $val,
+					"id" => $room,
+				));
+				if(!$arr["id"])
+				{
+					$arr["id"] = $room;
+				}
+			}
 			extract($times);
-		
+
 			$room = obj($arr["id"]);
 			if(is_object($room->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
 			{
@@ -1831,7 +1846,6 @@ class room extends class_base
 		{
 			$room = obj($arr["id"]);
 			$length = $this->step_lengths[$room->prop("time_unit")] * $room->prop("time_step") ;
-
 			$end = $arr["bron"][0];
 			foreach($arr["bron"] as $bron => $val)
 			{
