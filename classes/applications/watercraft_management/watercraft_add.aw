@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.3 2006/11/24 12:33:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.4 2006/12/04 16:16:47 dragut Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -213,7 +213,11 @@ class watercraft_add extends class_base
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
+	/** Change the realestate object info.
+			
+		@attrib name=parse_alias is_public="1" caption="Change"
 
+	**/
 	function parse_alias($arr)
 	{
 		return $this->show(array(
@@ -225,21 +229,15 @@ class watercraft_add extends class_base
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
+		enter_function('watercraft_add::show');
 
 		/*
 			so this is how it works ...
 			i'll create  a new object when user passes the first page
 			i'll save the properties everytime form is submitted and passed (no errors)
 			while showing already submitted forms, i'll ask the object the properties
-			images are saved under watercraft object, no connection at the moment 			
+			images are saved under watercraft object, no connections at the moment 
 		*/
-
-		if (!empty($_SESSION['watercraft_input_data']['watercraft_id']))
-		{
-			$watercraft_obj = new object($_SESSION['watercraft_input_data']['watercraft_id']);
-		}
-
-		enter_function('watercraft_add::show');
 
 		// watercraft_add object
 		$o = new object($arr["id"]);
@@ -252,7 +250,28 @@ class watercraft_add extends class_base
 			'type' => $type,
 		));
 
-		// add 10 imageupload field also
+		$pages = $o->meta('pages');
+		$saved_pages = $_SESSION['watercraft_input_data']['saved_pages'];
+		$page = (int)$_GET['page'];
+		$vars = array();
+
+		if ($this->can('view', $_SESSION['watercraft_input_data']['watercraft_id']))
+		{
+			$watercraft_obj = new object($_SESSION['watercraft_input_data']['watercraft_id']);
+		}
+		else
+		{
+
+			if ($this->can('view', $_GET['watercraft_id']))
+			{
+				$watercraft_obj = new object($_GET['watercraft_id']);
+				$_SESSION['watercraft_input_data']['watercraft_id'] = $_GET['watercraft_id'];
+				$saved_pages = array_keys($pages);
+				$_SESSION['watercraft_input_data']['saved_pages'] = $saved_pages;
+			}
+		}
+
+		// add 10 imageupload fields also
 		for ($i = 1; $i <= 10; $i++)
 		{
 			$elements['image_upload_'.$i] = array(
@@ -262,12 +281,10 @@ class watercraft_add extends class_base
 			);
 		}
 
-		$pages = $o->meta('pages');
-		$page = (int)$_GET['page'];
-		$vars = array();
 
 		// draw pages: 
 		$vars['pages'] = $this->draw_pages(array(
+			'saved_pages' => $saved_pages,
 			'pages' => $pages,
 			'page' => $page
 		));
@@ -419,6 +436,7 @@ class watercraft_add extends class_base
 		
 
 		$return_url = aw_url_change_var('page', $page, $return_url);
+		$return_url = aw_url_change_var('watercraft_id', NULL, $return_url);
 
 		// save object when everything is ok
 		if (empty($_SESSION['watercraft_input_data']['watercraft_id']))
@@ -432,6 +450,7 @@ class watercraft_add extends class_base
 			$watercraft_obj = new object();
 			$watercraft_obj->set_class_id(CL_WATERCRAFT);
 			$watercraft_obj->set_parent($watercraft_management_obj->prop('data'));
+			$watercraft_obj->set_meta('added_from_section', aw_global_get('section'));
 			$watercraft_obj->set_prop('watercraft_type', $o->prop('watercraft_type'));
 		}
 		else
@@ -484,6 +503,7 @@ class watercraft_add extends class_base
 	function draw_pages($arr)
 	{
 
+		$saved_pages = $arr['saved_pages'];
 		$pages = (array)$arr['pages'];
 		$page = $arr['page'];
 
@@ -501,7 +521,7 @@ class watercraft_add extends class_base
 				$pages_str .= $this->parse('PAGE_ACT');
 			}
 			else
-			if ($page > $key || isset($_SESSION['watercraft_input_data']['saved_pages'][$key]))
+			if ($page > $key || isset($saved_pages[$key]))
 			{
 				$pages_str .= $this->parse('PAGE');
 			}
@@ -510,6 +530,7 @@ class watercraft_add extends class_base
 				$pages_str .= $this->parse('PAGE_DISABLED');
 			}
 		}
+
 		$this->vars(array(
 			'PAGE' => $pages_str
 		));
@@ -544,6 +565,38 @@ class watercraft_add extends class_base
 			}
 		}
 		return $elements;
+	}
+	/** Generate a list of realestate objects added by user 
+		
+		@attrib name=my_watercraft_list is_public="1" caption="Minu vees&otilde;idukid"
+
+	**/
+	function my_watercraft_list($arr)
+	{
+		$this->read_template('list.tpl');
+
+		$uid = aw_global_get('uid');
+
+		$ol = new object_list(array(
+			'class_id' => CL_WATERCRAFT,
+			'createdby' => $uid,
+		));
+		foreach ($ol->arr() as $o)
+		{
+			$watercraft_name = $o->name();
+			$this->vars(array(
+				'name' => ( empty($watercraft_name) ) ? t('(Nimetu)') : $watercraft_name,
+				'change_url' => aw_ini_get('baseurl').'/'.$o->meta('added_from_section').'?watercraft_id='.$o->id()
+			));
+
+			$result .= $this->parse('ITEM'); 
+		}
+
+		$this->vars(array(
+			'ITEM' => $result
+		));
+
+		return $this->parse();
 	}
 
 	function do_db_upgrade($table, $field, $query, $error)
