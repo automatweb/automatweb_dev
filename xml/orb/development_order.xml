@@ -8,5 +8,19 @@
 			</function>
 		</action>
 
+		<action name="add_to_cart">
+			<function name="add_to_cart">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_from_cart">
+			<function name="remove_from_cart">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

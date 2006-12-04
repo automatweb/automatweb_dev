@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.3 2006/12/04 11:31:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.4 2006/12/04 12:09:07 kristo Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -37,12 +37,18 @@
 	@property reqs_tb type=toolbar no_caption=1 store=no
 	@property reqs_table type=table store=no no_caption=1
 
+@default group=reqs_cart
+
+	@property reqs_cart_tb type=toolbar no_caption=1 store=no
+	@property reqs_cart_table type=table store=no no_caption=1
+
 @default group=problems
 
 	@property problems_tb type=toolbar no_caption=1 store=no
 	@property problems_table type=table store=no no_caption=1
 
-@groupinfo reqs caption="N&otilde;uded"
+@groupinfo reqs caption="K&otilde;ik n&otilde;uded" submit=no
+@groupinfo reqs_cart caption="Tellimuste korv" submit=no
 @groupinfo problems caption="Probleemid"
 
 
@@ -180,6 +186,13 @@ class development_order extends class_base
 			"img" => "export.gif",
 			"action" => "export_req",
 		));
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "add_to_cart",
+			"tooltip" => t("Lisa korvi"),
+//			"img" => "export.gif",
+			"action" => "add_to_cart",
+		));
 	}
 
 	function _get_reqs_table($arr)
@@ -233,6 +246,108 @@ class development_order extends class_base
 		header('Content-disposition: root_access; filename="req.csv"');
 		print $t->get_csv_file();
 		die();
+	}
+
+	function _get_reqs_cart_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "remove_from_cart",
+			"tooltip" => t("Eemalda korvist"),
+			"img" => "delete.gif",
+			"action" => "remove_from_cart",
+		));
+		$tb->add_save_button();
+	}
+
+	function _set_reqs_cart_table($arr)
+	{
+		$arr["obj_inst"]->set_meta("cart", $arr["request"]["d"]);
+	}
+
+	function _get_reqs_cart_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$all_ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_REQ")));
+		$ol = new object_list();
+		$cart = $arr["obj_inst"]->meta("cart");
+		foreach($all_ol->arr() as $o)
+		{
+			if ($cart[$o->id()])
+			{
+				$ol->add($o);
+			}
+		}
+		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
+		$t->define_field(array(
+			"name" => "hrs",
+			"caption" => t("T&ouml;&ouml;tunde"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("L&otilde;ppt&auml;htaeg"),
+			"align" => "center"
+		));
+		foreach($t->get_data() as $idx => $row)
+		{
+			$row["hrs"] = html::textbox(array(
+				"name" => "d[".$row["oid"]."][hrs]",
+				"size" => 5,
+				"value" => $cart[$row["oid"]]["hrs"]
+			));
+			$row["price"] = html::textbox(array(
+				"name" => "d[".$row["oid"]."][price]",
+				"size" => 5,
+				"value" => $cart[$row["oid"]]["price"]
+			));
+			$row["date"] = html::date_select(array(
+				"format" => array("day_textbox", "month_textbox","year_textbox"),
+				"value" => $cart[$row["oid"]]["date"] > 10 ? $cart[$row["oid"]]["date"] : -1,
+				"name" => "d[".$row["oid"]."][date]"
+			));
+			$t->set_data($idx, $row);
+		}
+	}
+
+	/**
+		@attrib name=add_to_cart
+	**/
+	function add_to_cart($arr)
+	{
+		$o = obj($arr["id"]);
+		$cart = $o->meta("cart");
+		foreach(safe_array($arr["sel"]) as $id)
+		{
+			if (!isset($cart[$id]))
+			{
+				$cart[$id] = array();
+			}
+		}
+		$o->set_meta("cart", $cart);
+		$o->save();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=remove_from_cart
+	**/
+	function remove_from_cart($arr)
+	{
+		$o = obj($arr["id"]);
+		$cart = $o->meta("cart");
+		foreach(safe_array($arr["sel"]) as $id)
+		{
+			unset($cart[$id]);
+		}
+		$o->set_meta("cart", $cart);
+		$o->save();
+		return $arr["post_ru"];
 	}
 }
 ?>

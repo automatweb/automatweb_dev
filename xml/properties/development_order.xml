@@ -98,6 +98,24 @@
             <field>reqs_table</field>
       </property>
       <property>
+            <name>reqs_cart_tb</name>
+            <table>aw_dev_orders</table>
+            <group>reqs_cart</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>reqs_cart_tb</field>
+      </property>
+      <property>
+            <name>reqs_cart_table</name>
+            <table>aw_dev_orders</table>
+            <group>reqs_cart</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>reqs_cart_table</field>
+      </property>
+      <property>
             <name>problems_tb</name>
             <table>aw_dev_orders</table>
             <group>problems</group>
@@ -124,8 +142,13 @@
       </classinfo>
       <groupinfo>
             <reqs>
-                  <caption>N&amp;amp;otilde;uded</caption>
+                  <caption>K&amp;amp;otilde;ik n&amp;amp;otilde;uded</caption>
+                  <submit>no</submit>
             </reqs>
+            <reqs_cart>
+                  <caption>Tellimuste korv</caption>
+                  <submit>no</submit>
+            </reqs_cart>
             <problems>
                   <caption>Probleemid</caption>
             </problems>
