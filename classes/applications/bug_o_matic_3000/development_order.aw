@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.2 2006/11/30 11:02:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.3 2006/12/04 11:31:40 kristo Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -173,6 +173,13 @@ class development_order extends class_base
 			"clid" => CL_PROCUREMENT_REQUIREMENT
 		)));
 		$tb->add_delete_rels_button();
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "export",
+			"tooltip" => t("Ekspordi"),
+			"img" => "export.gif",
+			"action" => "export_req",
+		));
 	}
 
 	function _get_reqs_table($arr)
@@ -210,6 +217,22 @@ class development_order extends class_base
 	{
 		$ps = get_instance("vcl/popup_search");
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["set_problems"], "RELTYPE_PROBLEM");
+	}
+
+	/**
+		@attrib name=export_req
+	**/
+	function export_req($arr)
+	{
+		$o = obj($arr["id"]);
+		$ol = new object_list($o->connections_from(array("type" => "RELTYPE_REQ")));
+		classload("vcl/table");
+		$t = new vcl_table();
+		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time", "desc", "state", "budget"), CL_PROCUREMENT_REQUIREMENT);
+		header('Content-type: application/octet-stream');
+		header('Content-disposition: root_access; filename="req.csv"');
+		print $t->get_csv_file();
+		die();
 	}
 }
 ?>

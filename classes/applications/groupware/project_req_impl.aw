@@ -114,6 +114,13 @@ class project_req_impl extends class_base
 			"tooltip" => t("Kustuta"),
 		));
 		
+		$t->add_separator();
+		$t->add_button(array(
+			"name" => "export",
+			"tooltip" => t("Ekspordi"),
+			"img" => "export.gif",
+			"action" => "export_req",
+		));
 	}
 
 	function _get_req_tree_process($arr)

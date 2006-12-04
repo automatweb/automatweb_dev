@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.115 2006/11/30 11:19:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.116 2006/12/04 11:31:37 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -5274,5 +5274,39 @@ class project extends class_base
 
 		return $res;
 	}	
+
+	/**
+		@attrib name=export_req
+	**/
+	function export_req($arr)
+	{
+		$o = obj($arr["id"]);
+		if (!$arr["tf"] && !$arr["proc"])
+		{	
+			return;
+		}
+
+		if ($arr["proc"])
+		{
+			$ol = new object_list(array(
+				"process" => $arr["proc"],
+				"class_id" => array(CL_PROCUREMENT_REQUIREMENT),
+			));
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"parent" => $arr["tf"],
+				"class_id" => array(CL_PROCUREMENT_REQUIREMENT)
+			));
+		}
+		classload("vcl/table");
+		$t = new vcl_table();
+		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time", "desc", "state", "budget"), CL_PROCUREMENT_REQUIREMENT);
+		header('Content-type: application/octet-stream');
+		header('Content-disposition: root_access; filename="req.csv"');
+		print $t->get_csv_file();
+		die();
+	}
 };
 ?>

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.88 2006/11/30 15:25:30 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.88 2006/11/30 15:25:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.89 2006/12/04 11:31:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.89 2006/12/04 11:31:40 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -3441,6 +3441,13 @@ die();
 				"action" => "paste_b",
 			));
 		}
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "export",
+			"tooltip" => t("Ekspordi"),
+			"img" => "export.gif",
+			"action" => "export_req",
+		));
 	}
 	
 	function _get_reqs_tree($arr)
@@ -4164,6 +4171,28 @@ return;
 		);
 		$ol = new object_list($f);
 		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+	}
+
+	/**
+		@attrib name=export_req
+	**/
+	function export_req($arr)
+	{
+		$o = obj($arr["id"]);
+		$pt = $arr["tf"] ? $arr["tf"] : $o->id();
+		$ol = new object_list(array(
+			"class_id" => CL_PROCUREMENT_REQUIREMENT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"parent" => $pt
+		));
+		classload("vcl/table");
+		$t = new vcl_table();
+		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time", "desc", "state", "budget"), CL_PROCUREMENT_REQUIREMENT);
+		header('Content-type: application/octet-stream');
+		header('Content-disposition: root_access; filename="req.csv"');
+		print $t->get_csv_file();
+		die();
 	}
 }
 ?>

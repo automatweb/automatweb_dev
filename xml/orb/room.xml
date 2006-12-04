@@ -24,7 +24,7 @@
 		<action name="do_add_reservation" all_args="1">
 			<function name="do_add_reservation">
 				<arguments>
-					<required name="id" />
+					<optional name="id" />
 					<optional name="bron" />
 				</arguments>
 			</function>
