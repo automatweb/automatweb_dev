@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.4 2006/12/04 17:32:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.5 2006/12/05 16:03:40 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -18,7 +18,7 @@
 @property applicant type=relpicker reltype=RELTYPE_APPLICANT
 @caption Taotleja
 
-@property country type=relpicker reltype=RELTYPE_COUNTRY
+@property country type=textbox
 @caption P&auml;riltolumaa
 
 @property procurator type=relpicker reltype=RELTYPE_PROCURATOR
@@ -27,14 +27,20 @@
 @property warrant type=fileupload
 @caption Volikiri
 
-@property phone type=relpicker reltype=RELTYPE_PHONE
-@caption Telefon
+@property authorized_person type=relpicker reltype=RELTYPE_AUTHORIZED_PERSON
+@caption Volitatud isik
 
-@property fax type=relpicker reltype=RELTYPE_FAX
-@caption Fax
+@property additional_info type=textarea 
+@caption Lisainfo
 
-@property email type=relpicker reltype=RELTYPE_EMAIL
-@caption E-mail
+property phone type=textbox
+caption Telefon
+
+property fax type=textbox
+caption Fax
+
+property email type=textbox
+caption E-mail
 
 #TRADEMARK
 @groupinfo name=trademark caption=Kaubam&auml;rk
@@ -44,8 +50,9 @@
 @caption T&uuml;&uuml;p
 
 
-@property trademark_type type=select
-@caption T&uuml;&uuml;p
+@property undefended_parts type=textbox
+@caption Mittekaitstavad osad
+
 
 @property word_mark type=textbox
 @caption S&otilde;nam&auml;rk
@@ -57,9 +64,9 @@
 @caption Kaubam&auml;rgi iseloomustus
 
 @property element_translation type=textarea
-@caption V&otilde;&otlide;rkeelsete elementide t&otilde;lge 
+@caption V&otilde;&otilde;rkeelsete elementide t&otilde;lge 
 
-@property reproduction type=fileupload
+@property reproduction type=fileupload reltype=RELTYPE_REPRODUCTION
 @caption Lisa reproduktsioon
 
 @property trademark_type type=select multiple=1
@@ -94,7 +101,7 @@
 	@property exhibition_name type=textbox
 	@caption Näituse nimi
 	
-	@property exhibition_date type=textbox
+	@property exhibition_date type=date_select
 	@caption Kuupäev
 	
 	@property exhibition_country type=textbox
@@ -135,6 +142,9 @@
 @reltype WARRANT value=3 clid=CL_FILE
 @caption Volikiri
 
+@reltype REPRODUCTION value=9 clid=CL_FILE
+@caption Volikiri
+
 @reltype PHONE value=4 clid=CL_CRM_PHONE
 @caption Telefon
 
@@ -150,6 +160,9 @@
 @reltype PROCURATOR_MENU value=8 clid=CL_MENU
 @caption Volinike kaust
 
+@reltype AUTHORIZED_PERSON calue=10 clid=CL_CRM_PERSON
+@caption Volitatud isik
+
 
 */
 
@@ -163,9 +176,12 @@ class patent extends class_base
 		));
 	
 		$this->info_levels = array("applicant","trademark","products_and_services","priority","fee","check");
-		$this->text_vars = array("firstname" , "lastname" ,  "code" , "street", "city" ,"index", "country_code" , "phone" , "email" , "fax" ,  "undefended_parts" , "wordmark");
-		$this->text_area_vars = array("colors" , "trademark_character", "element_translation");
-		$this->file_upload_vars = array("warrant" , "reptoduction");
+		$this->text_vars = array("name" , "firstname" , "lastname" ,  "code" , "street", "city" ,"index", "country_code" , "phone" , "email" , "fax" ,  "undefended_parts" , "wordmark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "payer" , "doc_nr","authorized_person_firstname", "authorized_person_lastname","authorized_person_code");
+		$this->text_area_vars = array("colors" , "trademark_character", "element_translation", "additional_info");
+		$this->file_upload_vars = array("warrant" , "reproduction");
+		$this->date_vars = array("payment_date" , "exhibition_date", "convention_date");
+		$this->types = array(t("Sõnamärk"),t("Kujutismärk"),t("Kombineeritud märk"),t("Ruumiline märk"));
+		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
 	}
 
 	function get_property($arr)
@@ -174,6 +190,12 @@ class patent extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "type":
+				$prop["options"] = $this->types;
+				break;
+			case "trademark_type":
+				$prop["options"] = $this->trademark_types;
+				break;
 			//-- get_property --//
 		};
 		return $retval;
@@ -283,7 +305,23 @@ class patent extends class_base
 		}
 		foreach($this->file_upload_vars as $var)
 		{
-			$data[$var] = html::fileupload(array("name" => $var));
+			$data[$var] = html::fileupload(array("name" => $var."_upload"));
+		}
+		foreach($this->date_vars as $var)
+		{
+			if($_SESSION["patent"][$var])
+			{
+				$val = $_SESSION["patent"][$var];
+			}
+			else
+			{
+				$val = "dd/mm/yyyy";
+			}
+			$data[$var] = html::textbox(array(
+				"name" => $var,
+				"value" => $val,
+				"size" => 40,
+			));
 		}
 		foreach($_SESSION["patent"] as $key => $val)
 		{
@@ -304,7 +342,7 @@ class patent extends class_base
 			"checked" => $_SESSION["patent"]["country"],
 			"name" => "country",
 		));
-		$data["type"] = t("F&uuml;&uuml;siline isik :").html::radiobutton(array(
+		$data["applicant_type"] = t("F&uuml;&uuml;siline isik :").html::radiobutton(array(
 			"value" => 0,
 			"checked" => !$_SESSION["patent"]["type"],
 			"name" => "type",
@@ -314,7 +352,7 @@ class patent extends class_base
 			"name" => "type",
 		));
 
-		$data["unknown_stuff"] = html::radiobutton(array(
+		$data["type"] = html::radiobutton(array(
 			"value" => 0,
 			"checked" => !$_SESSION["patent"]["unknown_stuff"],
 			"name" => "unknown_stuff",
@@ -355,7 +393,7 @@ class patent extends class_base
 			"name" => "procurator",
 			"value" => $_SESSION["patent"]["procurator"]
 		));
-
+		$data["parent"] = $arr["alias"]["to"];
 		return $data;
 	}
 	
@@ -368,17 +406,235 @@ class patent extends class_base
 		{
 			$_SESSION["patent"][$data] = $val;
 		}
+		$this->save_uploads($_FILES);
+		
 		if($_POST["save"])
 		{
 			$this->save_data();
+			$_SESSION["patent"] = null;
+		}
+		//viimasest lehest edasi
+		if($arr["data_type"] == 5)
+		{
+			return aw_url_change_var("data_type" , null , $arr["return_url"]);
 		}
 		return aw_url_change_var("data_type" , ($arr["data_type"]+1) , $arr["return_url"]);
+	}
+	
+	function save_uploads($uploads)
+	{
+		foreach($this->file_upload_vars as $var)
+		{
+			if(array_key_exists($var."_upload" , $uploads))
+			{
+				$image_inst = get_instance(CL_IMAGE);
+				$upload_image = $image_inst->add_upload_image($var."_upload", $_SESSION["patent"]["parent"]);
+				// if there is image uploaded:
+				$_SESSION["patent"][$var] = $upload_image['id'];
+			}
+		}
 	}
 
 	function save_data()
 	{
-		;
+		$patent = new object();
+		$patent->set_class_id(CL_PATENT);
+		$patent->set_parent($_SESSION["patent"]["parent"]);
+		$patent->save();
+		$patent->set_name("Patent nr. ".$patent->id());
+		$this->save_trademark($patent);
+		$this->save_priority($patent);
+		$this->save_fee($patent);
+		$this->save_applicants($patent);
+		$this->final_save($patent);
+		$patent->save();arr($patent->id());
 		//unset($_SESSION["patent"]);
+	}
+	
+	function save_applicants($patent)
+	{
+		$patent->set_prop("country" ,$_SESSION["patent"]["country"]);
+		$applicant = new object();
+		$applicant->set_parent($patent->id());
+		if($_SESSION["patent"]["applicant_type"])
+		{
+			$applicant->set_class_id(CL_CRM_COMPANY);
+			$type=1;
+		}
+		else
+		{
+			$applicant->set_class_id(CL_CRM_PERSON);
+		}
+		$applicant->save();
+
+	
+		$address = new object();
+		$address->set_class_id(CL_CRM_ADDRESS);
+		$address->set_parent($applicant->id());
+		
+		$address->set_prop("aadress", $_SESSION["patent"]["street"]);
+		$address->set_prop("postiindeks" , $_SESSION["patent"]["index"]);
+		if($_SESSION["patent"]["city"])
+		{
+			$citys = new object_list(array("lang_id" => 1, "class_id" => CL_CRM_CITY, "name" => $_SESSION["patent"]["city"]));
+			if(!is_object($city = reset($citys->arr())))
+			{
+				$city = new object();
+				$city->set_parent($applicant->id());
+				$city->set_class_id(CL_CRM_CITY);
+				$city->save();
+			}
+			$address->set_prop("linn" ,$city->id());
+		}
+		
+		$address->save();
+
+		if($type)
+		{
+			$applicant->set_name($_SESSION["patent"]["name"]);
+			$applicant->set_prop("contact" , $address->id());
+			$applicant->set_prop("reg_nr",$_SESSION["patent"]["code"]);
+		}
+		else
+		{
+			$applicant->set_prop("firstname" , $_SESSION["patent"]["firstname"]);
+			$applicant->set_prop("lastname" , $_SESSION["patent"]["lastname"]);
+			$applicant->set_name($_SESSION["patent"]["firstname"]." ".$_SESSION["patent"]["lastname"]);
+			$applicant->set_prop("address" , $address->id());
+			$applicant->set_prop("personal_id" , $_SESSION["patent"]["code"]);
+		}
+		$applicant->connect(array("to"=> $address->id(), "type" => "RELTYPE_ADDRESS"));
+		$applicant->save();
+		
+		if($_SESSION["patent"]["phone"])
+		{
+			$phone = new object();
+			$phone->set_class_id(CL_CRM_PHONE);
+			$phone->set_name($_SESSION["patent"]["phone"]);
+			$phone->set_prop("type" , "mobile");
+			$phone->set_parent($applicant->id());
+			$phone->save();
+			$applicant->connect(array("to"=> $phone->id(), "type" => "RELTYPE_PHONE"));
+		}
+		if($_SESSION["patent"]["email"])
+		{
+			$email = new object();
+			$email->set_class_id(CL_ML_MEMBER);
+			$email->set_name($_SESSION["patent"]["email"]);
+			$email->set_prop("mail" , $_SESSION["patent"]["email"]);
+			$email->set_parent($applicant->id());
+			$email->save();
+			$applicant->connect(array("to"=> $email->id(), "type" => "RELTYPE_EMAIL"));
+		}
+		if($_SESSION["patent"]["fax"])
+		{
+			$phone = new object();
+			$phone->set_class_id(CL_CRM_PHONE);
+			$phone->set_name($_SESSION["patent"]["fax"]);
+			$phone->set_parent($applicant->id());
+			$phone->save();
+			if($type)
+			{
+				$applicant->connect(array("to"=> $phone->id(), "type" => "RELTYPE_TELEFAX"));
+			}
+			else
+			{
+				$applicant->connect(array("to"=> $phone->id(), "type" => "RELTYPE_FAX"));
+				$applicant->set_prop("fax" , $phone->id());
+			}
+		}
+		
+		
+		$patent->set_prop("applicant" , $applicant->id());
+		$patent->set_prop("country" , $_SESSION["patent"]["country_code"]);
+		$patent->set_prop("procurator", $_SESSION["patent"]["procurator"]);
+		
+		if(is_oid($_SESSION["patent"]["warrant"]))
+		{
+			$patent->set_prop("warrant", $_SESSION["patent"]["warrant"]);
+			$patent->connect(array("to" => $_SESSION["patent"]["warrant"], "type" => "RELTYPE_WARRANT"));
+		}
+		$patent->save();
+	}
+	
+	function final_save($patent)
+	{
+		if(	$_SESSION["patent"]["authorized_person_firstname"] || 
+			$_SESSION["patent"]["authoirized_person_person_lastname"] || 
+			$_SESSION["patent"]["authoirized_person_code"])
+		{
+			$applicant = new object();
+			$applicant->set_parent($patent->id());
+			$applicant->set_class_id(CL_CRM_PERSON);
+			$applicant->save();
+			$applicant->set_prop("firstname" , 	$_SESSION["patent"]["authorized_person_firstname"]);
+			$applicant->set_prop("lastname" , 	$_SESSION["patent"]["authorized_person_lastname"]);
+			$applicant->set_prop("personal_id" , 	$_SESSION["patent"]["authorized_person_code"]);
+			$applicant->set_name($_SESSION["patent"]["authorized_person_firstname"]." ".$_SESSION["patent"]["authorized_person_lastname"]);
+			$applicant->save();
+			$patent->set_prop("authorized_person" , $applicant->id());
+			$parent->connect(array("to" => $applicant->id(), "type" => "RELTYPE_AUTHORIZED_PERSON"));
+			$patent->save();
+		}
+	}
+	
+	
+	
+	function save_fee($patent)
+	{
+		$vars = array("request_fee" , "classes_fee" , "payer" , "doc_nr" , "payment_date");
+		foreach($vars as $var)
+		{
+			if($_SESSION["patent"][$var])
+			{
+				$patent->set_prop($var,$_SESSION["patent"][$var]);
+			}
+		}
+		
+		$patent->save();
+	}
+	
+	
+	
+	function save_priority($patent)
+	{
+		$convention_time = explode("/" , $_SESSION["patent"]["convention_date"]);
+		$patent->set_prop("convention_nr" , $_SESSION["patent"]["convention_nr"]);
+		$patent->set_prop("convention_date" , mktime(0,0,0,$convention_time[1], $convention_time[0],$convention_time[2]));
+		$patent->set_prop("convention_country" , $_SESSION["patent"]["convention_country"]);
+	
+		$exhibition_time = explode("/" , $_SESSION["patent"]["exhibition_date"]);
+		$patent->set_prop("exhibition_name" , $_SESSION["patent"]["exhibition_name"]);
+		$patent->set_prop("exhibition_date" , mktime(0,0,0,$exhibition_time[1], $exhibition_time[0],$exhibition_time[2]));
+		$patent->set_prop("exhibition_country" , $_SESSION["patent"]["exhibition_country"]);
+		
+		$patent->save();
+	}
+	
+	function save_trademark($patent)
+	{
+		$patent->set_prop("word_mark" , $_SESSION["patent"]["wordmark"]);
+		$patent->set_prop("colors" , $_SESSION["patent"]["colors"]);
+		$patent->set_prop("trademark_character" , $_SESSION["patent"]["trademark_character"]);
+		$patent->set_prop("element_translation" , $_SESSION["patent"]["element_translation"]);
+		$patent->set_prop("type" , $_SESSION["patent"]["type"]);
+		$patent->set_prop("undefended_parts" , $_SESSION["patent"]["undefended_parts"]);
+		$tr_type = array();
+		if($_SESSION["patent"]["co_trademark"])
+		{
+			$tr_type[] = 0;
+		}
+		if($_SESSION["patent"]["guaranty_trademark"])
+		{
+			$tr_type[] = 1;
+		}
+		$patent->set_prop("trademark_type" , $tr_type);
+		if(is_oid($_SESSION["patent"]["reproduction"]))
+		{
+			$patent->set_prop("reproduction" , $_SESSION["patent"]["reproduction"]);
+			$patent->connect(array("to" => $_SESSION["patent"]["reproduction"], "type" => "RELTYPE_REPRODUCTION"));
+		}
+		$patent->save();
 	}
 }
 ?>

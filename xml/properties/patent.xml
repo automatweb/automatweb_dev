@@ -16,8 +16,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_COUNTRY</reltype>
+            <type>textbox</type>
             <caption>P&amp;amp;auml;riltolumaa</caption>
       </property>
       <property>
@@ -40,34 +39,23 @@
             <caption>Volikiri</caption>
       </property>
       <property>
-            <name>phone</name>
+            <name>authorized_person</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_PHONE</reltype>
-            <caption>Telefon</caption>
+            <reltype>RELTYPE_AUTHORIZED_PERSON</reltype>
+            <caption>Volitatud isik</caption>
       </property>
       <property>
-            <name>fax</name>
+            <name>additional_info</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FAX</reltype>
-            <caption>Fax</caption>
-      </property>
-      <property>
-            <name>email</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_EMAIL</reltype>
-            <caption>E-mail</caption>
+            <type>textarea</type>
+            <caption>Lisainfo</caption>
       </property>
       <property>
             <name>type</name>
@@ -79,14 +67,13 @@
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>trademark_type</name>
+            <name>undefended_parts</name>
             <table>objects</table>
             <group>trademark</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <multiple>1</multiple>
-            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            <type>textbox</type>
+            <caption>Mittekaitstavad osad</caption>
       </property>
       <property>
             <name>word_mark</name>
@@ -122,7 +109,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <caption>V&amp;amp;otilde;&amp;amp;otlide;rkeelsete elementide t&amp;amp;otilde;lge </caption>
+            <caption>V&amp;amp;otilde;&amp;amp;otilde;rkeelsete elementide t&amp;amp;otilde;lge </caption>
       </property>
       <property>
             <name>reproduction</name>
@@ -131,7 +118,18 @@
             <field>meta</field>
             <method>serialize</method>
             <type>fileupload</type>
+            <reltype>RELTYPE_REPRODUCTION</reltype>
             <caption>Lisa reproduktsioon</caption>
+      </property>
+      <property>
+            <name>trademark_type</name>
+            <table>objects</table>
+            <group>trademark</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>products_and_services_tbl</name>
@@ -207,7 +205,7 @@
             <group>priority</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>date_select</type>
             <caption>Kuup&amp;auml;ev</caption>
       </property>
       <property>
@@ -317,6 +315,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Volikiri</caption>
             </WARRANT>
+            <REPRODUCTION>
+                  <value>9</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Volikiri</caption>
+            </REPRODUCTION>
             <PHONE>
                   <value>4</value>
                   <clid>CL_CRM_PHONE</clid>
@@ -342,6 +345,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Volinike kaust</caption>
             </PROCURATOR_MENU>
+            <AUTHORIZED_PERSON>
+                  <calue>10</calue>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Volitatud isik</caption>
+            </AUTHORIZED_PERSON>
       </reltypes>
 </properties>
 
