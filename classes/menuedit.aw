@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.377 2006/12/05 10:12:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.378 2006/12/05 12:46:52 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -487,7 +487,7 @@ class menuedit extends aw_template
 				// calculate all possible aliases and then select one
 				$flt = array(
 					"alias" => $last,
-					"status" => STAT_ACTIVE,
+					//"status" => STAT_ACTIVE,
 					"site_id" => aw_ini_get("site_id"),
 					"lang_id" => array(),
 				);
@@ -538,7 +538,7 @@ class menuedit extends aw_template
 				$this->quote(&$section);
 				$ol = new object_list(array(
 					"alias" => $section,
-					"status" => STAT_ACTIVE,
+					//"status" => STAT_ACTIVE,
 					"site_id" => aw_ini_get("site_id"),
 					"lang_id" => array()
 				));
