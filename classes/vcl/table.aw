@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.99 2006/11/30 11:29:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.100 2006/12/05 12:20:44 markop Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1417,7 +1417,7 @@ class aw_table extends aw_template
 			}
 			elseif ($k == "onclick" and !empty ($v))
 			{
-				$attr_list .= " onClick='$v'";
+				$attr_list .= ' onClick="'.$v.'"';
 			}
 			elseif ($v != "")
 			{
