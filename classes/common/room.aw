@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.61 2006/12/04 13:44:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.62 2006/12/05 12:00:25 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1202,7 +1202,7 @@ class room extends class_base
 				"options" => $options,
 			));
 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
-			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
+		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		}
 		$ret.= html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
 		$arr["prop"]["value"] = $ret;
@@ -1278,8 +1278,12 @@ class room extends class_base
 						$arr["timestamp"] = $start_step;
 						if($arr["obj_inst"]->prop("use_product_times"))
 						{
-							$arr["menu_id"] = "menu_".$start_step;
+							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
 							$prod_menu = $this->get_prod_menu($arr);
+						}
+						else
+						{
+							$onclick[$x] = "doBron('".$arr["obj_inst"]->id()."_".$start_step."' , ".($step_length * $arr["obj_inst"]->prop("time_step")).")";
 						}
 						$val = 0;
 						$string = t("Vaba");
@@ -1290,8 +1294,6 @@ class room extends class_base
 							$string = t("Broneeri");
 						}
 						$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$arr["obj_inst"]->id().']['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
-						$onclick[$x] = "doBron(this,".($step_length * $arr["obj_inst"]->prop("time_step")).")";
-						
 					}
 					else
 					{
@@ -1511,7 +1513,11 @@ $title .= " ".$product->name();
 			$pm->add_item(array(
 				"text" => $prod->name(),
 				"link" => "javascript:dontExecutedoBron=1;void(0)",
-				"onClick" => "doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." , '".$arr["obj_inst"]->id()."_".$arr["timestamp"]."' , ".$arr["step_length"]." , ".$prod->id().", ".$arr["obj_inst"]->id().", ".$arr["timestamp"].");",
+				"onClick" => "doBron(
+					'".$arr["obj_inst"]->id()."_".$arr["timestamp"]."' ,
+					".$arr["step_length"]." ,
+					".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." ,
+					".$prod->id().");",
 			),"CL_ROOM");
 		}
 
