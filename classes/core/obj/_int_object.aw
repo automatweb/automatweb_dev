@@ -1241,6 +1241,17 @@ class _int_object
 			}
 			else
 			{
+				// if this has store=connect, then we need to remove other conns
+				if (is_oid($this->id()) && $propi["store"] == "connect")
+				{
+					foreach($this->connections_from(array("type" => $_rt)) as $c)
+					{
+						if ($c->prop("to") != $val)
+						{
+							$this->disconnect(array("from" => $c->prop("to"), "type" => $_rt));
+						}
+					}
+				}
 				if (is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
 				{
 					$this->connect(array(
@@ -1454,6 +1465,12 @@ class _int_object
 
 	function trans_get_val($prop)
 	{
+		if ($this->obj["oid"] != $this->obj["brother_of"])
+		{
+			$tmp = $this->get_original();
+			return $tmp->trans_get_val($prop);
+		}
+		
 		switch($prop)
 		{
 			case "name":
@@ -1503,6 +1520,12 @@ class _int_object
 
 	function trans_get_val_str($prop)
 	{
+		if ($this->obj["oid"] != $this->obj["brother_of"])
+                {
+                        $tmp = $this->get_original();
+                        return $tmp->trans_get_val_str($prop);
+                }
+												
 		$val = $this->prop_str($prop);
 		if ($val === "0" || $val === 0)
 		{
