@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.376 2006/10/20 11:22:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.377 2006/12/05 10:12:58 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -675,6 +675,7 @@ class menuedit extends aw_template
 			{
 				if ("/".$row["old"] == $gr)
 				{
+					header("HTTP/1.0 301 Moved Permanently");
 					header("Location: ".aw_ini_get("baseurl")."/".$row["new"]);
 					die();
 				}
