@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.31 2006/12/04 17:24:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.32 2006/12/05 12:06:14 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -986,7 +986,8 @@ class join_site extends class_base
 		{
 			return $sessd;
 		}
-		aw_session_set("site_join_status", 	$sessd);
+		aw_global_set("site_join_status", $sessd);
+		$_SESSION["site_join_status"] = $sessd;
 	}
 
 	/** submitting a join form will get you here
@@ -996,6 +997,9 @@ class join_site extends class_base
 	**/
 	function submit_join_form($arr)
 	{
+//		$GLOBALS["INTENSE_DUKE"] = 1;
+		obj_set_opt("no_cache", 1);
+
 		$obj = obj($arr["id"]);
 		// update session data in sess[site_join_status]
 		$this->_update_sess_data($arr);
@@ -1005,7 +1009,7 @@ class join_site extends class_base
 
 		// check if all required fields are filled
 		$req = $obj->meta("required");
-		$sessd = aw_global_get("site_join_status");
+		$sessd = $_SESSION["site_join_status"];
 
 		$filled = true;
 		$nf = array();
