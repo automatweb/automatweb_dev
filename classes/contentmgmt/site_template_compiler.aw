@@ -1690,6 +1690,13 @@ class site_template_compiler extends aw_template
 					$has_vars = true;
 				}
 
+				$varname = "sel_menu_".$area."_L".$level."_url";
+				if ($this->template_has_var_full($varname))
+				{
+					$vres .= $this->_gi()."\$vars[\"$varname\"] = \$this->make_menu_link(\$tmp_o);\n";
+					$has_vars = true;
+				}
+
 				// insert image urls
 				for($i = 0; $i < $ni; $i++)
 				{
