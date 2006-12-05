@@ -1,177 +1,196 @@
-var intCurrentBron=false;
-var intCurrentBronLength=false;
-var intRoomReservationLength;
-var dontExecutedoBron = 0;
+var arrBronsTry = Array(); // make the array for checkBrons(), if all's ok, then copy to arrBronsActive and draw
+var arrBronsActive = Array(); // currently red on the screen
+var bronTexts = Array();
+bronTexts["BRON"] = "Broneeri";
+bronTexts["FREE"] = "Vaba";
 var bronErrors = Array();
 bronErrors["CANT_BRON"] = "Ei saa broneerida";
 
-function doBron (that, intCalendarIntervall)
+/**
+ * Does the bronning work
+ *
+ * @param strId 
+ * @param intCalendarIntervall
+ * @param intRoomReservationLength optional
+ * @param intProduct optional
+ *
+ * For bronning with product all 4 params have to be set. 
+ */
+function doBron (strId, intCalendarIntervall, intRoomReservationLength, intProduct)
 {
-	var strNextId;
-	if (dontExecutedoBron == 0)
+	if (!intRoomReservationLength)
 	{
 		sel = document.getElementById("room_reservation_length");
-	
-		if (!intRoomReservationLength && sel)
-		{
-			intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
-		}
-		
-		if (intCurrentBron)
-		{
-			if ( checkBrons (intCurrentBron, intRoomReservationLength , intCalendarIntervall) )
-			{
-				if (intCurrentBron)
-					clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarIntervall);
-			}
-			intCurrentBron=false;
-		}
-		
-		if (sel)
-		{
-			intCurrentBronLength = intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
-		}
-		
-		if (intCurrentBron==false)
-		{
-			strNextId = intCurrentBron = that.id*1.0;
-			
-
-			
-			// kas saab broneerida?
-			if ( checkBrons (intCurrentBron, intRoomReservationLength , intCalendarIntervall) )
-			{
-				i=1;
-				while (intRoomReservationLength>0)
-				{
-							
-					document.getElementById(strNextId).style.background = "red";
-					document.getElementById(strNextId).parentNode.firstChild.style.background = "red";
-					if (navigator.userAgent.indexOf("MSIE") > 0)
-					{
-						document.getElementById(strNextId).childNodes[0].innerHTML = "Broneeri";
-						//document.getElementById(strNextId).childNodes[1].value = 1;
-					}
-					else
-					{
-						document.getElementById(strNextId).childNodes[1].innerHTML = "Broneeri";
-						document.getElementById(strNextId).childNodes[2].value = 1;
-					}
-				
-					strNextId = intCurrentBron+(i*intCalendarIntervall);
-					intRoomReservationLength -= intCalendarIntervall;
-					i++;
-				}
-			}
-			else
-			{
-				alert (bronErrors["CANT_BRON"]);
-			}
-		}
+		intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
 	}
-	dontExecutedoBron = 0;
-}
-
-
-function clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarIntervall,rid,ts )
-{
-		intTimestampNext = intCurrentBron;
-		nr=1;
-		tmp = intCurrentBronts;
-		while (intCurrentBronLength>0)
-		{
-			document.getElementById(intTimestampNext).style.background = "#e1e1e1";
-			document.getElementById(intTimestampNext).parentNode.firstChild.style.background = "#e1e1e1";
-			if (navigator.userAgent.indexOf("MSIE") > 0)
-			{
-				document.getElementById(intTimestampNext).childNodes[0].innerHTML = "Vaba";
-				document.getElementById(intTimestampNext).childNodes[1].value = 0;
-			}
-			else
-			{
-				document.getElementById(intTimestampNext).childNodes[1].innerHTML = "Vaba";
-				document.getElementById(intTimestampNext).childNodes[2].value = 0;
-			}
-			tmp += intCalendarIntervall;
-			//intTimestampNext += intCalendarIntervall;
-			intTimestampNext = rid+"_"+tmp;//(ts + nr*intCalendarIntervall);
-			intCurrentBronLength -= intCalendarIntervall;
-			nr++;
-		}
-		
-
-		
-	intCurrentBron=false;
+	
+	if (intProduct)
+		document.getElementById("product").value = intProduct;
+	
+	setBrons (strId, intCalendarIntervall, intRoomReservationLength);
 }
 
 /**
- * Basically as doBron but ment for activating from any link. doBron on the otherhand needs to get this as a parameter
+ * @param obj that element td
+ * @param integer intCalendarIntervall length of one unit in millisecond
+ * @return bool
  */
-function doBronWithProduct (that, intRoomReservationLength, intTimestamp, intCalendarIntervall, intProduct, rid, ts )
+function doBronWithProduct (that, intRoomReservationLength, strId, intCalendarIntervall, intProduct, rid, ts, nice )
 {
-	dontExecutedoBron = 1;
-	if (checkBrons(intTimestamp, intRoomReservationLength, intCalendarIntervall, rid, ts ))
-	{
-		document.getElementById("product").value = intProduct;
-	
-		document.getElementById(intTimestamp).style.background = "red";
-		
-		if (intCurrentBron)
-			clearCurrentBron (intCurrentBron, intCurrentBronLength, intCalendarIntervall, rid, ts);
-		
-		intCurrentBron = intTimestampNext= intTimestamp;
-		intCurrentBronts = ts;
-		intCurrentBronLength = intRoomReservationLength;
-		
-		nr=1;
-		while (intRoomReservationLength>0)
-		{
-			document.getElementById(intTimestampNext).style.background = "red";
-			document.getElementById(intTimestampNext).parentNode.firstChild.style.background = "red";
-			if (navigator.userAgent.indexOf("MSIE") > 0)
-			{
-				document.getElementById(intTimestampNext).childNodes[0].innerHTML = "Broneeri";
-				document.getElementById(intTimestampNext).childNodes[1].value = 1;
-			}
-			else
-			{
-				document.getElementById(intTimestampNext).childNodes[1].innerHTML = "Broneeri";
-				document.getElementById(intTimestampNext).childNodes[2].value = 1;
-			}
+	//setBrons (strId, intCalendarIntervall, intRoomReservationLength);
+}
 
-			intTimestampNext = rid+"_"+(ts+intCalendarIntervall*nr); //intTimestampNext + intCalendarIntervall;
-			intRoomReservationLength -= intCalendarIntervall;
-			nr++;
-		}
-		return true;
-	}
-	else
+
+function setBrons (strId, intCalendarIntervall, intRoomReservationLength)
+{
+	setArrBronsTry (strId, intCalendarIntervall, intRoomReservationLength);
+	
+	if (canBron())
 	{
-		alert (bronErrors["CANT_BRON"]);
-		return false;
+		drawBrons();
+	}
+		
+}
+
+/**
+ * Draws nice colored boxed on calendar... and also sets value for the hidden formelement
+ */
+function drawBrons()
+{
+	var i;
+	var strId;
+	clearBrons ();
+	arrBronsActive = arrBronsTry;
+	
+	for (i=0;i<arrBronsActive.length;i++)
+	{
+		strId = arrBronsActive[i];
+		document.getElementById(strId).style.background = "red";
+		document.getElementById(strId).parentNode.firstChild.style.background = "red";
+		if (navigator.userAgent.indexOf("MSIE") > 0)
+		{
+			document.getElementById(strId).childNodes[0].innerHTML = bronTexts["BRON"];
+			document.getElementById(strId).childNodes[1].value = 1;
+		}
+		else
+		{
+			document.getElementById(strId).childNodes[1].innerHTML = bronTexts["BRON"];
+			document.getElementById(strId).childNodes[2].value = 1;
+		}
+	}
+}
+
+/**
+ * @return bool
+ * Uses global variable arrCurrentBrons to turn bronned times to not bronned
+ */
+function clearBrons ()
+{
+	if (arrBronsActive.length==0)
+		return true;
+
+	var strNextId;
+	
+	for (i=0;i<arrBronsActive.length;i++)
+	{
+		strNextId = arrBronsActive[i];
+		document.getElementById(strNextId).style.background = "#e1e1e1";
+		document.getElementById(strNextId).parentNode.firstChild.style.background = "#e1e1e1";
+		if (navigator.userAgent.indexOf("MSIE") > 0)
+		{
+			document.getElementById(strNextId).childNodes[0].innerHTML = bronTexts["FREE"];
+			document.getElementById(strNextId).childNodes[1].value = 0;
+		}
+		else
+		{
+			document.getElementById(strNextId).childNodes[1].innerHTML = bronTexts["FREE"];
+			document.getElementById(strNextId).childNodes[2].value = 0;
+		}
+	}
+	arrBronsActive = Array(); // reset
+	return true;
+}
+
+/**
+ * Checks if clicked elements exist and, if so, then if it is not bronned
+ * Matches id's in  arrBronsTry to ones on page
+ */
+function canBron ()
+{
+	var i;
+
+	for (i=0;i<arrBronsTry.length;i++)
+	{
+		if (isTimeBronned(arrBronsTry[i]) )
+		{
+			alert (bronErrors["CANT_BRON"]);
+			return false;
+		}
 	}
 	return true;
 }
 
-/** 
- * Checks if bron can be made
- *
- *
+/**
+ * @param strId fields id - td's id
+ * Checks if field exists, has hidden form element (which has id)
  */
-function checkBrons (intCurrBronn, intRoomReservationL, intCalendarIntervall, rid, ts)
+function isTimeBronned (strId)
 {
-	var strNextId = intCurrBronn/*1.0*/;
+	try {
+		if (document.getElementById(strId).childNodes[2].id)
+			return false
+	}
+	catch (e) {return true;}
+}
+
+/**
+ * Before anything, arrBronsTry will be set with id of html elements.
+ * arrBronsTry is used by canBron() to see if all indexes exist on page thus meaning if times ar 
+ * availabe for bronning.
+ */
+function setArrBronsTry (strId, intCalendarIntervall, intRoomReservationLength)
+{
+	arrBronsTry = Array();
+	var strNextId = strId;
+	var intTS = getTSFromPrefixAndTimestamp(strId) ;
+	var intRID = getRIDFromPrefixAndTimestamp (strId);
+	var tmp;
 	var i=1;
-	while (intRoomReservationL>0)
+	while (intRoomReservationLength>0)
 	{
-		if (!document.getElementById(strNextId).childNodes[2])
-		{
-			return false;
-		}
-		//strNextId = (intCurrBronn*1.0)+(i*intCalendarIntervall);
-		strNextId = rid+"_"+(ts+i*intCalendarIntervall); //(intCurrBronn*1.0)+(i*intCalendarIntervall);
-		intRoomReservationL -= intCalendarIntervall;
+		arrBronsTry[arrBronsTry.length] = strNextId;
+		
+		tmp = intCalendarIntervall+getTSFromPrefixAndTimestamp(strNextId);
+		strNextId = intRID+"_"+tmp;
+		intRoomReservationLength -= intCalendarIntervall;
 		i++;
 	}
-	return true;
+}
+ 
+ 
+
+
+function splitPrefixAndTimestamp (str)
+{
+	arrOutput = new Array ();
+	str = str+"";
+	
+	intSplitI = str.indexOf("_");
+	arrOutput["prefix"] = str.substring(0,intSplitI);
+	arrOutput["timestamp"] = str.substring(intSplitI+1);
+	return arrOutput;
+}
+
+function getTSFromPrefixAndTimestamp (str)
+{
+	t = new Array ();
+	t = splitPrefixAndTimestamp (str);
+	return t["timestamp"]*1.0;
+}
+
+function getRIDFromPrefixAndTimestamp (str)
+{
+	t = new Array ();
+	t = splitPrefixAndTimestamp (str);
+	return t["prefix"];
 }
