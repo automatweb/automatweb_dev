@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.19 2006/12/01 14:23:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.20 2006/12/06 11:02:03 kristo Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -884,7 +884,42 @@ class procurement_offer extends class_base
 			}
 		}
 
-		return $pr + ($o->prop("hr_price") * $hrs);
+		$retval =  $pr + ($o->prop("hr_price") * $hrs);
+
+		// also add the products list price
+		$this_obj = $o;
+		$conns = $this_obj->connections_to(array(
+			'reltype' => 1,
+			'class' => CL_PROCUREMENT_OFFER_ROW,
+		));
+		$procurement_inst = get_instance(CL_PROCUREMENT);
+		$total_sum = 0;
+		if(!sizeof($conns) && is_oid($this_obj->prop("procurement")))
+		{
+			$procurement = obj($this_obj->prop("procurement"));
+			foreach($procurement->meta("products") as $product)
+			{
+				if(!$product["product"])
+				{
+					continue;
+				}
+				$total_sum += $product["amount"] * $row->prop("price");
+			}
+		}
+		foreach($conns as $conn)
+		{
+			if(is_oid($conn->prop("from")))
+			{
+				$row = obj($conn->prop("from"));
+			}
+			else 
+			{
+				continue;
+			}
+			$total_sum += $row->prop("amount") * $row->prop("price");
+		}
+
+		return $retval + $total_sum;
 	}
 
 	/**
@@ -992,6 +1027,10 @@ class procurement_offer extends class_base
 			'caption' => t('Valuuta'),
 		));
 		$t->define_field(array(
+			'name' => 'total',
+			'caption' => t('Kogusumma'),
+		));
+		$t->define_field(array(
 			'name' => 'shipment',
 			'caption' => t('Tarneaeg'),
 		));
@@ -1007,7 +1046,7 @@ class procurement_offer extends class_base
 		));
 		$t->define_field(array(
 			"name" => "available",
-			"caption" => t("Olemas"),
+			"caption" => sprintf("<a href='javascript:aw_sel_chb(document.changeform,\"products\")'>%s</a>", t("Olemas")),
 		));
 
 		$unit_list = new object_list(array(
@@ -1048,7 +1087,7 @@ class procurement_offer extends class_base
 				//	"price" => $row->prop("price"),
 					"currency" => $this_obj->prop("currency"),
 					"shipment" => $this_obj->prop("shipment_date"),
-					"oid" => $x
+					"oid" => $x,
 				);
 				$x++;
 				$max_x++;
@@ -1135,6 +1174,7 @@ class procurement_offer extends class_base
 							)),
 				'shipment'	=> html::date_select(array(
 							"name" => "products[".$x."][shipment]",
+							"format" => array("day_textbox", "month_textbox", "year_textbox"),
 							"value" => $shipment,
 						//	"size" => "6",
 							)),
@@ -1145,6 +1185,7 @@ class procurement_offer extends class_base
 	//						)),
 				'accept'	=> $accept,
 				"oid"		=> $id,
+				"total" => number_format($amount * $price, 2, ".", " "),
 				"available" => html::checkbox(array(
 					"name" => "products[".$x."][available]",
 					"value" => 1,
@@ -1152,6 +1193,7 @@ class procurement_offer extends class_base
 				)),			
 			
 			));
+			$total_sum += $amount * $price;
 		}
 		//lisaread
 		//$x = -10;
@@ -1196,7 +1238,7 @@ class procurement_offer extends class_base
 							)),
 				'shipment'	=> html::date_select(array(
 							"name" => "products[".$x."][shipment]",
-							"value" => $this_obj->prop("shipment_date"),
+							"format" => array("day_textbox", "month_textbox", "year_textbox"),							"value" => $this_obj->prop("shipment_date"),
 						//	"size" => "6",
 							)),
 //				'accept'	=> html::checkbox(array(
@@ -1215,6 +1257,11 @@ class procurement_offer extends class_base
 	/*	
 Ühik (lb, süsteemi Ühikute koodidega), Valuuta (lb, süsteemi valuutadega, vaikimisi Minu Organisatsiooni vaikimisi valitud valuuta), Tarneaeg (kp tekstiväljana, kus lõpus on ?vali? link), Aktsept (cb). Tooteväli on Autocomplete põhimõttel ehitatud, loetakse tooteid seotud laost. Kui sisestatakse tootenimetus, mida varem laos ei ole, siis salvestatakse see uue tootena, kuid enne küsitakse popup aknas tootekategooria (kui mitu uut toodet, siis on küsimise tabelis mitu rida). Tootekategooria kuvatakse listboxina, erinevad tasemed on trepitud (tähestiku järjekord). Peale 10 rea salvestamist tekib võimalus uue 10 rea sisestamiseks. Juhul, kui Tarneaeg jäetakse toote taga tühjaks, kuvatakse peale salvestamist sinna sama kuupäev, kui Pakkumises määratud tarne tähtaeg. */
 		$t->set_sortable(false);
+
+		$t->define_data(array(
+			"currency" => t("<b>Summa:</b>"),
+			"total" => number_format($total_sum, 2, ".", " ")
+		));
 		//$t->set_default_sortby("jrk");
 	}
 
