@@ -1691,9 +1691,15 @@ class crm_company_cust_impl extends class_base
 				# url
 				if (($default_cfg or in_array("url", $visible_fields)) and ($this->can("view", $o->prop("url_id"))))
 				{
+					$url_o = obj($o->prop("url_id"));
+					$url_str = $url_o->name();
+					if (strpos($url_str, "http:") !== false && substr($url_str, 0, 3) == "www")
+					{
+						$url_str = "http://".$url_str;
+					}
 					$url = html::href(array(
-						"url" => $o->prop_str("url_id"),
-						"caption" => $o->prop_str("url_id"),
+						"url" => $url_str,
+						"caption" => $url_str,
 					));
 				}
 			}
