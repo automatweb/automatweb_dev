@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.37 2006/11/21 11:23:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.38 2006/12/06 09:14:39 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -1327,16 +1327,19 @@ class mail_message extends class_base
 				$from = $adr->name();
 			}
 		}
-		$msgr->drv_inst->store_message(array(
-			"from" => $from,
-			"date" => time(),
-			"to" => $arr["mto"],
-			"cc" => $arr["cc"],
-			"subject" => $arr["name"],
-			"message" => $this->awm->bodytext,
-		));
-               
-		
+
+		if ($msgr->drv_inst)
+		{
+			$msgr->drv_inst->store_message(array(
+				"from" => $from,
+				"date" => time(),
+				"to" => $arr["mto"],
+				"cc" => $arr["cc"],
+				"subject" => $arr["name"],
+				"message" => $this->awm->bodytext,
+			));
+		}
+               		
 		//print t("saadetud<p>");
 		if($adr->class_id() == CL_CRM_PERSON && $arr["return_url"])
 		{
