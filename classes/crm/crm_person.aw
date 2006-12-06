@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.151 2006/11/24 14:27:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.152 2006/12/06 18:01:54 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -105,38 +105,64 @@ caption Msn/yahoo/aol/icq
 
 @property ct_rel_tb type=toolbar no_caption=1 store=no
 
-@property contact_desc_text type=text store=no 
-@caption Kontaktandmed
+	
+	@layout ct_super type=vbox  closeable=1 area_caption=Kontaktid
 
-@property work_contact type=relpicker reltype=RELTYPE_WORK
-@caption Organisatsioon
+		@layout contact_l type=hbox parent=ct_super width=30%:30%:30%
 
-@property org_section type=relpicker reltype=RELTYPE_SECTION multiple=1 table=objects field=meta method=serialize store=connect
-@caption Osakond
+			@property contact_desc_text type=text store=no parent=contact_l captionside=top
+			@caption Kontaktandmed
 
-@property rank type=relpicker reltype=RELTYPE_RANK automatic=1
-@caption Ametinimetus
+			@property address type=relpicker reltype=RELTYPE_ADDRESS parent=contact_l captionside=top
+			@caption Aadress
 
-property personal_contact type=relpicker reltype=RELTYPE_ADDRESS
-caption Kodused kontaktandmed
+			@property comment type=textarea cols=40 rows=3 table=objects field=comment parent=contact_l captionside=top
+			@caption Kontakt
 
-@property address type=relpicker reltype=RELTYPE_ADDRESS
-@caption Aadress
 
-@property email type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_EMAIL props=mail table_fields=mail choose_default=1 always_show_add=1 no_toolbar=1
-@caption Meiliaadressid
+	@layout work_super type=vbox  closeable=1 area_caption=T&ouml;&ouml;koht
 
-@property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type reltype=RELTYPE_PHONE choose_default=1 always_show_add=1 no_toolbar=1
-@caption Telefoninumbrid
+		@layout work type=hbox parent=work_super width=30%:30%:30%
 
-@property fax type=releditor table=objects field=meta method=serialize mode=manager props=name table_fields=name reltype=RELTYPE_FAX choose_default=1 always_show_add=1 no_toolbar=1
-@caption Faksinumbrid
+			@property work_contact type=relpicker reltype=RELTYPE_WORK parent=work captionside=top
+			@caption Organisatsioon
 
-@property url type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_URL props=url table_fields=url choose_default=1 always_show_add=1 no_toolbar=1
-@caption Veebiaadressid
+			@property org_section type=relpicker reltype=RELTYPE_SECTION parent=work multiple=1 table=objects field=meta method=serialize store=connect captionside=top
+			@caption Osakond
 
-@property comment type=textarea cols=40 rows=3 table=objects field=comment
-@caption Kontakt
+			@property rank type=relpicker reltype=RELTYPE_RANK automatic=1 parent=work captionside=top
+			@caption Ametinimetus
+
+
+
+		@layout ceditphf type=hbox width=50%:50%
+
+			@layout cedit_phone type=vbox parent=ceditphf closeable=1 area_caption=Telefonid
+
+				@property cedit_phone_tbl type=table no_caption=1 parent=cedit_phone store=no
+
+			@layout cedit_fax type=vbox parent=ceditphf closeable=1 area_caption=Faksid
+
+				@property cedit_telefax_tbl type=table no_caption=1 parent=cedit_fax store=no
+
+
+
+
+		@layout ceditemlurl type=hbox width=50%:50%
+
+			@layout cedit_email type=vbox parent=ceditemlurl closeable=1 area_caption=E-mail
+
+				@property cedit_email_tbl type=table store=no no_caption=1 parent=cedit_email store=no
+
+			@layout cedit_url type=vbox parent=ceditemlurl closeable=1 area_caption=URL
+
+				@property cedit_url_tbl type=table store=no no_caption=1 parent=cedit_url store=no
+
+
+@property email type=hidden table=objects field=meta method=serialize
+@property phone type=hidden table=objects field=meta method=serialize
+@property fax type=hidden table=objects field=meta method=serialize
+@property url type=hidden table=objects field=meta method=serialize
 
 ------------------------------------------------------------------
 @groupinfo description caption="Kirjeldus" parent=general
@@ -614,6 +640,25 @@ class crm_person extends class_base
 		$form = &$arr["request"];
 		switch($prop["name"])
 		{
+			case "phone":
+			case "fax":
+			case "url":
+			case "email":
+				return PROP_IGNORE;
+
+			case "cedit_phone_tbl":
+			case "cedit_telefax_tbl":
+			case "cedit_url_tbl":
+			case "cedit_email_tbl":
+				static $i;
+				if (!$i)
+				{
+					$i = get_instance("applications/crm/crm_company_cedit_impl");
+				}
+				$fn = "_set_".$prop["name"];
+				$i->$fn($arr);
+				break;
+
 			case "ext_sys_t":
 				$this->_save_ext_sys_t($arr);
 				break;
@@ -1177,6 +1222,47 @@ class crm_person extends class_base
 					}
 				}
 				return PROP_IGNORE;
+				break;
+
+			case "cedit_phone_tbl":
+				$i = get_instance("applications/crm/crm_company_cedit_impl");
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"number" => t("Telefoninumber"),
+					"type" => t("Telefoninumbri t&uuml;&uuml;p"),
+				);
+				$i->init_cedit_tables(&$t, $fields);
+				$i->_get_phone_tbl($t, $arr);
+				break;
+
+			case "cedit_telefax_tbl":
+				$i = get_instance("applications/crm/crm_company_cedit_impl");
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"number" => t("Faksi number"),
+				);
+				$i->init_cedit_tables(&$t, $fields);
+				$i->_get_fax_tbl($t, $arr);
+				break;
+
+			case "cedit_url_tbl":
+				$i = get_instance("applications/crm/crm_company_cedit_impl");
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"url" => t("Veebiaadress"),
+				);
+				$i->init_cedit_tables(&$t, $fields);
+				$i->_get_url_tbl($t, $arr);
+				break;
+
+			case "cedit_email_tbl":
+				$i = get_instance("applications/crm/crm_company_cedit_impl");
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"email" => t("Emaili aadress"),
+				);
+				$i->init_cedit_tables(&$t, $fields);
+				$i->_get_email_tbl($t, $arr);
 				break;
 		}
 		return $retval;
@@ -2212,13 +2298,21 @@ class crm_person extends class_base
 		{
 			$arr["sel"] = $arr["check"];
 		}
+		if (!is_array($arr["sel"]) && is_array($arr["select"]))
+		{
+			foreach ($arr["select"] as $oid)
+			{
+				$obj = obj($oid);
+				$obj->delete();
+			}
+		}
 		foreach ($arr["sel"] as $del_conn)
 		{
 			$conn = new connection($del_conn);
 			$obj = $conn->to();
 			$obj->delete();
 		}
-		return  $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), CL_CRM_PERSON);
+		return  $arr["post_ru"];
 	}
 
 	function callback_post_save($arr)

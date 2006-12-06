@@ -851,7 +851,6 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>cedit_layout</parent>
             <field>cedit_toolbar</field>
       </property>
       <property>
@@ -860,7 +859,7 @@
             <group>cedit</group>
             <type>table</type>
             <no_caption>1</no_caption>
-            <parent>cedit_layout</parent>
+            <parent>cedit_phone</parent>
             <store>no</store>
             <field>cedit_phone_tbl</field>
       </property>
@@ -870,19 +869,9 @@
             <group>cedit</group>
             <type>table</type>
             <no_caption>1</no_caption>
-            <parent>cedit_layout</parent>
+            <parent>cedit_fax</parent>
             <store>no</store>
             <field>cedit_telefax_tbl</field>
-      </property>
-      <property>
-            <name>cedit_url_tbl</name>
-            <table>objects</table>
-            <group>cedit</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>cedit_layout</parent>
-            <field>cedit_url_tbl</field>
       </property>
       <property>
             <name>cedit_email_tbl</name>
@@ -891,8 +880,18 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>cedit_layout</parent>
+            <parent>cedit_email</parent>
             <field>cedit_email_tbl</field>
+      </property>
+      <property>
+            <name>cedit_url_tbl</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cedit_url</parent>
+            <field>cedit_url_tbl</field>
       </property>
       <property>
             <name>cedit_bank_account_tbl</name>
@@ -901,17 +900,8 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>cedit_layout</parent>
+            <parent>ceditbank</parent>
             <field>cedit_bank_account_tbl</field>
-      </property>
-      <property>
-            <name>cedit_add_change</name>
-            <table>objects</table>
-            <group>cedit</group>
-            <type>callback</type>
-            <callback>gen_cedit_props</callback>
-            <parent>cedit_layout</parent>
-            <field>cedit_add_change</field>
       </property>
       <property>
             <name>contact</name>
@@ -919,9 +909,21 @@
             <group>cedit</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS</reltype>
-            <parent>cedit_layout_other</parent>
+            <parent>ce_other_top</parent>
+            <captionside>top</captionside>
             <field>contact</field>
             <caption>Vaikimisi aadress</caption>
+      </property>
+      <property>
+            <name>receptionist_name</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>ce_other_top</parent>
+            <captionside>top</captionside>
+            <caption>Telefoni v&amp;amp;otilde;tab vastu</caption>
       </property>
       <property>
             <name>currency</name>
@@ -930,7 +932,8 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CURRENCY</reltype>
             <field>aw_currency</field>
-            <parent>cedit_layout_other</parent>
+            <parent>ce_other_bot</parent>
+            <captionside>top</captionside>
             <caption>Valuuta</caption>
       </property>
       <property>
@@ -940,18 +943,9 @@
             <type>textbox</type>
             <method>serialize</method>
             <field>meta</field>
-            <parent>cedit_layout_other</parent>
+            <parent>ce_other_bot</parent>
+            <captionside>top</captionside>
             <caption>&amp;amp;Uuml;marda</caption>
-      </property>
-      <property>
-            <name>receptionist_name</name>
-            <table>objects</table>
-            <group>cedit</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <parent>cedit_layout_other</parent>
-            <caption>Telefoni v&amp;amp;otilde;tab vastu</caption>
       </property>
       <property>
             <name>bill_due_days</name>
@@ -960,7 +954,8 @@
             <type>textbox</type>
             <size>5</size>
             <field>aw_bill_due_days</field>
-            <parent>cedit_layout_other</parent>
+            <parent>ce_other_bot</parent>
+            <captionside>top</captionside>
             <caption>Makset&amp;amp;auml;htaeg p&amp;amp;auml;evades</caption>
       </property>
       <property>
@@ -968,7 +963,7 @@
             <table>kliendibaas_firma</table>
             <group>cedit</group>
             <type>hidden</type>
-            <parent>cedit_master</parent>
+            <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>phone_id</field>
       </property>
@@ -977,7 +972,7 @@
             <table>kliendibaas_firma</table>
             <group>cedit</group>
             <type>hidden</type>
-            <parent>cedit_master</parent>
+            <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>telefax_id</field>
       </property>
@@ -986,7 +981,7 @@
             <table>kliendibaas_firma</table>
             <group>cedit</group>
             <type>hidden</type>
-            <parent>cedit_master</parent>
+            <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>url_id</field>
       </property>
@@ -995,7 +990,7 @@
             <table>kliendibaas_firma</table>
             <group>cedit</group>
             <type>hidden</type>
-            <parent>cedit_master</parent>
+            <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>email_id</field>
       </property>
@@ -1004,7 +999,7 @@
             <table>kliendibaas_firma</table>
             <group>cedit</group>
             <type>hidden</type>
-            <parent>cedit_master</parent>
+            <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>aw_bank_account</field>
       </property>
@@ -3644,24 +3639,71 @@
                   <parent>contacts_edit</parent>
                   <group>contacts_edit</group>
             </contacts_edit_table>
-            <cedit_master>
-                  <type>vbox</type>
+            <ceditphf>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
                   <group>cedit</group>
-            </cedit_master>
-            <cedit_layout>
+            </ceditphf>
+            <cedit_phone>
                   <type>vbox</type>
-                  <area_caption>Vaikeseaded</area_caption>
+                  <parent>ceditphf</parent>
                   <closeable>1</closeable>
-                  <parent>cedit_master</parent>
+                  <area_caption>Telefonid</area_caption>
                   <group>cedit</group>
-            </cedit_layout>
+            </cedit_phone>
+            <cedit_fax>
+                  <type>vbox</type>
+                  <parent>ceditphf</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Faksid</area_caption>
+                  <group>cedit</group>
+            </cedit_fax>
+            <ceditemlurl>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <group>cedit</group>
+            </ceditemlurl>
+            <cedit_email>
+                  <type>vbox</type>
+                  <parent>ceditemlurl</parent>
+                  <closeable>1</closeable>
+                  <area_caption>E-mail</area_caption>
+                  <group>cedit</group>
+            </cedit_email>
+            <cedit_url>
+                  <type>vbox</type>
+                  <parent>ceditemlurl</parent>
+                  <closeable>1</closeable>
+                  <area_caption>URL</area_caption>
+                  <group>cedit</group>
+            </cedit_url>
+            <ceditbank>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Pangaarved</area_caption>
+                  <group>cedit</group>
+            </ceditbank>
             <cedit_layout_other>
                   <type>vbox</type>
                   <area_caption>Andmed</area_caption>
                   <closeable>1</closeable>
-                  <parent>cedit_master</parent>
                   <group>cedit</group>
             </cedit_layout_other>
+            <ce_oth_split>
+                  <type>hbox</type>
+                  <parent>cedit_layout_other</parent>
+                  <group>cedit</group>
+            </ce_oth_split>
+            <ce_other_top>
+                  <type>vbox</type>
+                  <parent>ce_oth_split</parent>
+                  <group>cedit</group>
+            </ce_other_top>
+            <ce_other_bot>
+                  <type>vbox</type>
+                  <parent>ce_oth_split</parent>
+                  <group>cedit</group>
+            </ce_other_bot>
             <personal_toolbar>
                   <type>hbox</type>
                   <group>personal_offers</group>

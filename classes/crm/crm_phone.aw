@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.8 2006/06/27 21:52:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.9 2006/12/06 18:01:54 kristo Exp $
 // phone.aw - Telefon
 /*
 
@@ -38,6 +38,20 @@ class crm_phone extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_PHONE
 		));
+		$this->phone_types = array(
+			"work" => t("tööl"),
+			"home" => t("kodus"),
+			"short" => t("lühinumber"),
+			"mobile" => t("mobiil"),
+			// "fax" => t("faks"),
+			"skype" => t("skype"),
+			"extension" => t("sisetelefon"),
+		);
+	}
+
+	function get_phone_types()
+	{
+		return $this->phone_types;
 	}
 
 	function get_property($arr)
@@ -47,15 +61,7 @@ class crm_phone extends class_base
 		switch($prop["name"])
 		{
 			case "type":
-				$prop["options"] = array(
-					"work" => t("tööl"),
-					"home" => t("kodus"),
-					"short" => t("lühinumber"),
-					"mobile" => t("mobiil"),
-					// "fax" => t("faks"),
-					"skype" => t("skype"),
-					"extension" => t("sisetelefon"),
-				);
+				$prop["options"] = $this->phone_types;
 				break;
 		};
 		return $retval;

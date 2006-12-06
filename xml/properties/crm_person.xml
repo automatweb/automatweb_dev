@@ -252,39 +252,10 @@
             <group>contact</group>
             <type>text</type>
             <store>no</store>
+            <parent>contact_l</parent>
+            <captionside>top</captionside>
             <field>contact_desc_text</field>
             <caption>Kontaktandmed</caption>
-      </property>
-      <property>
-            <name>work_contact</name>
-            <table>kliendibaas_isik</table>
-            <group>contact</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_WORK</reltype>
-            <field>work_contact</field>
-            <caption>Organisatsioon</caption>
-      </property>
-      <property>
-            <name>org_section</name>
-            <table>objects</table>
-            <group>contact</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SECTION</reltype>
-            <multiple>1</multiple>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>connect</store>
-            <caption>Osakond</caption>
-      </property>
-      <property>
-            <name>rank</name>
-            <table>kliendibaas_isik</table>
-            <group>contact</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_RANK</reltype>
-            <automatic>1</automatic>
-            <field>rank</field>
-            <caption>Ametinimetus</caption>
       </property>
       <property>
             <name>address</name>
@@ -292,78 +263,10 @@
             <group>contact</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS</reltype>
+            <parent>contact_l</parent>
+            <captionside>top</captionside>
             <field>address</field>
             <caption>Aadress</caption>
-      </property>
-      <property>
-            <name>email</name>
-            <table>objects</table>
-            <group>contact</group>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_EMAIL</reltype>
-            <props>mail</props>
-            <table_fields>mail</table_fields>
-            <choose_default>1</choose_default>
-            <always_show_add>1</always_show_add>
-            <no_toolbar>1</no_toolbar>
-            <caption>Meiliaadressid</caption>
-      </property>
-      <property>
-            <name>phone</name>
-            <table>objects</table>
-            <group>contact</group>
-            <type>releditor</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>type</num_1>
-            </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>type</num_1>
-            </table_fields>
-            <reltype>RELTYPE_PHONE</reltype>
-            <choose_default>1</choose_default>
-            <always_show_add>1</always_show_add>
-            <no_toolbar>1</no_toolbar>
-            <caption>Telefoninumbrid</caption>
-      </property>
-      <property>
-            <name>fax</name>
-            <table>objects</table>
-            <group>contact</group>
-            <type>releditor</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>name</props>
-            <table_fields>name</table_fields>
-            <reltype>RELTYPE_FAX</reltype>
-            <choose_default>1</choose_default>
-            <always_show_add>1</always_show_add>
-            <no_toolbar>1</no_toolbar>
-            <caption>Faksinumbrid</caption>
-      </property>
-      <property>
-            <name>url</name>
-            <table>objects</table>
-            <group>contact</group>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_URL</reltype>
-            <props>url</props>
-            <table_fields>url</table_fields>
-            <choose_default>1</choose_default>
-            <always_show_add>1</always_show_add>
-            <no_toolbar>1</no_toolbar>
-            <caption>Veebiaadressid</caption>
       </property>
       <property>
             <name>comment</name>
@@ -373,7 +276,118 @@
             <cols>40</cols>
             <rows>3</rows>
             <field>comment</field>
+            <parent>contact_l</parent>
+            <captionside>top</captionside>
             <caption>Kontakt</caption>
+      </property>
+      <property>
+            <name>work_contact</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WORK</reltype>
+            <parent>work</parent>
+            <captionside>top</captionside>
+            <field>work_contact</field>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>org_section</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTION</reltype>
+            <parent>work</parent>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>connect</store>
+            <captionside>top</captionside>
+            <caption>Osakond</caption>
+      </property>
+      <property>
+            <name>rank</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RANK</reltype>
+            <automatic>1</automatic>
+            <parent>work</parent>
+            <captionside>top</captionside>
+            <field>rank</field>
+            <caption>Ametinimetus</caption>
+      </property>
+      <property>
+            <name>cedit_phone_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>cedit_phone</parent>
+            <store>no</store>
+            <field>cedit_phone_tbl</field>
+      </property>
+      <property>
+            <name>cedit_telefax_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>cedit_fax</parent>
+            <store>no</store>
+            <field>cedit_telefax_tbl</field>
+      </property>
+      <property>
+            <name>cedit_email_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cedit_email</parent>
+            <field>cedit_email_tbl</field>
+      </property>
+      <property>
+            <name>cedit_url_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>cedit_url</parent>
+            <field>cedit_url_tbl</field>
+      </property>
+      <property>
+            <name>email</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>phone</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>fax</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>url</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
       </property>
       <property>
             <name>notes</name>
@@ -1495,6 +1509,68 @@
             </VARUSER3>
       </reltypes>
       <layout>
+            <ct_super>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Kontaktid</area_caption>
+                  <group>contact</group>
+            </ct_super>
+            <contact_l>
+                  <type>hbox</type>
+                  <parent>ct_super</parent>
+                  <width>30%:30%:30%</width>
+                  <group>contact</group>
+            </contact_l>
+            <work_super>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;ouml;&amp;ouml;koht</area_caption>
+                  <group>contact</group>
+            </work_super>
+            <work>
+                  <type>hbox</type>
+                  <parent>work_super</parent>
+                  <width>30%:30%:30%</width>
+                  <group>contact</group>
+            </work>
+            <ceditphf>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <group>contact</group>
+            </ceditphf>
+            <cedit_phone>
+                  <type>vbox</type>
+                  <parent>ceditphf</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Telefonid</area_caption>
+                  <group>contact</group>
+            </cedit_phone>
+            <cedit_fax>
+                  <type>vbox</type>
+                  <parent>ceditphf</parent>
+                  <closeable>1</closeable>
+                  <area_caption>Faksid</area_caption>
+                  <group>contact</group>
+            </cedit_fax>
+            <ceditemlurl>
+                  <type>hbox</type>
+                  <width>50%:50%</width>
+                  <group>contact</group>
+            </ceditemlurl>
+            <cedit_email>
+                  <type>vbox</type>
+                  <parent>ceditemlurl</parent>
+                  <closeable>1</closeable>
+                  <area_caption>E-mail</area_caption>
+                  <group>contact</group>
+            </cedit_email>
+            <cedit_url>
+                  <type>vbox</type>
+                  <parent>ceditemlurl</parent>
+                  <closeable>1</closeable>
+                  <area_caption>URL</area_caption>
+                  <group>contact</group>
+            </cedit_url>
             <docs_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>
