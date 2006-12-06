@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.6 2006/12/06 09:12:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.7 2006/12/06 09:49:33 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -461,6 +461,10 @@ class conference_planning extends class_base
 					$loc = obj($loc_id);
 					$sc->vars(array(
 						"caption" => $loc->name(),
+						"address" => $loc->prop_str("address"),
+						"single_count" => $loc->prop("single_count"),
+						"double_count" => $loc->prop("double_count"),
+						"suite_count" => $loc->prop("suite_count"),
 						"value" => $loc_id,
 					));
 					$s_results .= $sc->parse("SEARCH_RESULT");
@@ -645,7 +649,14 @@ class conference_planning extends class_base
 				unset($rows);
 				foreach($sd["selected_search_result"] as $location)
 				{
-					$sc->vars(array("caption" => call_user_func(array(obj($location), "name"))));
+					$o = obj($location);
+					$sc->vars(array(
+						"caption" => $o->name(),
+						"address" => $o->prop_str("address"),
+						"single_count" => $o->prop("single_count"),
+						"double_count" => $o->prop("double_count"),
+						"suite_count" => $o->prop("suite_count"),
+					));
 					$rows .= $sc->parse("SEARCH_RESULT");
 				}
 				$sc->vars(array(

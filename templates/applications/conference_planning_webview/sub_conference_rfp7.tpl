@@ -287,7 +287,7 @@
 	</tr>
 	<!-- SUB: SEARCH_RESULT -->
 	<tr>
-		<td colspan="2">{VAR:caption}</td>
+		<td colspan="2">{VAR:caption} ({VAR:address}) - {VAR:single_count}/{VAR:double_count}/{VAR:suite_count}</td>
 	</tr>
 	<!-- END SUB: SEARCH_RESULT -->
 	</td>
