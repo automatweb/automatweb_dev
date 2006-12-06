@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.40 2006/11/28 14:21:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.41 2006/12/06 12:07:25 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1423,6 +1423,14 @@ class cb_form_chain extends class_base
 				continue;
 			}
 			$val = $this->_value_from_data($pd,$inf[$pn]);
+
+			if (strpos($pn, "userfile") !== false)
+			{
+				$val = html::href(array(
+					"url" => $this->mk_my_orb("show_up_file", array("wfid" => $fd["form"], "i" => 0, "rpn" => $pn)),
+					"caption" => $_SESSION["cbfc_file_data"][$fd["form"]][0][$pn]["name"]
+				));
+			}
 
 			$this->vars(array(
 				"caption" => $pd["caption"],
