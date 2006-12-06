@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.20 2006/12/06 11:02:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.21 2006/12/06 11:14:30 kristo Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -576,6 +576,11 @@ class procurement_offer extends class_base
 						case "accept":
 			//			case "shipment":
 							break;
+
+						case "price":
+							$o->set_prop($key, str_replace(",", ".", $val));
+							break;
+
 						default:
 							if($o->is_property($key)) $o->set_prop($key, $val);
 					}
@@ -666,6 +671,11 @@ class procurement_offer extends class_base
 						case "accept":
 				//			case "shipment":
 							break;
+
+						case "price":
+							$o->set_prop($key, str_replace(",", ".", $val));
+							break;
+						
 						default:
 							if($o->is_property($key)) $o->set_prop($key, $val);
 					}
@@ -1158,7 +1168,7 @@ class procurement_offer extends class_base
 				'price'		=> html::textbox(array(
 							"name" => "products[".$x."][price]",
 							"size" => "6",
-							"value" => $price,
+							"value" => number_format($price, 2, ".", " "),
 							"tabindex"=>$x,
 							)),
 				'price_amount'		=> html::textbox(array(
