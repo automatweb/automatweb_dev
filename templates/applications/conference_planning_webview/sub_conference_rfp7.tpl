@@ -119,7 +119,27 @@
 			{VAR:LC_SUITES}:
 		</td>
 		<td>{VAR:suite_count}</td>
-	</tr>		<td>{VAR:dates_comments}</td>
+	</tr>
+	<tr>
+		<td>
+			{VAR:LC_ARR_DATE}
+		</td>
+		<td>
+			{VAR:arrival_date}
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			{VAR:LC_DEP_DATE}
+		</td>
+		<td>
+			{VAR:departure_date}
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">{VAR:dates_comments}</td>
+	</tr>
 
 	<!-- END SUB: NEEDS_ROOMS -->
 
