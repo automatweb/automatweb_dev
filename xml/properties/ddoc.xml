@@ -45,6 +45,14 @@
             <field>files_tbl</field>
       </property>
       <property>
+            <name>search_result_file</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>search_result_file</field>
+      </property>
+      <property>
             <name>signatures_tb</name>
             <table>objects</table>
             <group>signatures</group>
@@ -88,10 +96,24 @@
       <groupinfo>
             <files>
                   <caption>Failid</caption>
+                  <submit>no</submit>
             </files>
             <signatures>
                   <caption>Allkirjad</caption>
+                  <submit>no</submit>
             </signatures>
       </groupinfo>
+      <reltypes>
+            <SIGNED_FILE>
+                  <value>1</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Allkirjastatud fail</caption>
+            </SIGNED_FILE>
+            <SIGNER>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Allkirjastaja</caption>
+            </SIGNER>
+      </reltypes>
 </properties>
 

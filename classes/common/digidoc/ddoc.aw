@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.6 2006/12/06 17:16:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.7 2006/12/06 17:59:42 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -22,6 +22,7 @@
 	
 	@property files_tb type=toolbar no_caption=1
 	@property files_tbl type=table no_caption=1
+	@property popup_search_res type=hidden name=search_result_file store=no
 
 
 @groupinfo signatures caption="Allkirjad" submit=no
@@ -93,7 +94,7 @@ class ddoc extends class_base
 				$tb->add_button(array(
 					"name" => "add_file",
 					"tooltip" => t("Lisa fail"),
-					"onClick" => "aw_popup_scroll('".$url."', 'caption', 500, 400);",
+					"onClick" => "aw_popup_scroll('".$url."', 'caption', 300, 100);",
 					"img" => "new.gif",
 				));
 				$tb->add_button(array(
@@ -102,6 +103,12 @@ class ddoc extends class_base
 					"action" => "rem_file",
 					"img" => "delete.gif",
 				));
+				$popup_search = get_instance("vcl/popup_search");
+				$search_butt = $popup_search->get_popup_search_link(array(
+					"pn" => "search_result_file",
+					"clid" => CL_FILE,
+				));
+				$tb->add_cdata($search_butt);
 				break;
 			case "files_tbl":
 				$t = &$prop["vcl_inst"];
@@ -234,7 +241,7 @@ class ddoc extends class_base
 					$file_type = $_FILES["ddoc"]["type"];
 				};
 				
-				$parser = get_instance(CL_DDOC_PARSER);
+				$parser = new ddoc2_parser();
 				$parser->setDigiDocFormatAndVersion(file_get_contents($file));
 				if(!strlen($parser->format) || !strlen($parser->version))
 				{
@@ -311,6 +318,15 @@ class ddoc extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 	
+	function callback_pre_save($arr)
+	{
+		if($arr["request"]["search_result_file"])
+		{
+			$files = split(",", $arr["request"]["search_result_file"]);
+			arr($files);
+		}	
+	}
+
 	function callback_post_save($arr)
 	{
 		// if we are dealing with a new ddoc instance and no ddoc file is set, we maka a new empty ddoc container!:)
@@ -835,7 +851,7 @@ arr($hash);
 			$file = $this->digidoc->WSDL->GetDataFile($std_obj->Id);
 			
 			$files[$file["DataFileData"]->Id] = array(
-				"content" => "mingi savi mula",base64_decode($file["DataFileData"]->DfData),
+				"content" => base64_decode($file["DataFileData"]->DfData),
 				"name" => $file["DataFileData"]->Filename,
 				"type" => $file["DataFileData"]->MimeType,
 				"size" => $file["DataFileData"]->Size,
