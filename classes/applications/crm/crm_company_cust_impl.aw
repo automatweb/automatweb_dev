@@ -1384,7 +1384,8 @@ class crm_company_cust_impl extends class_base
 			"site_id" => array(),
 			"lang_id" => array(),
 		);
-		
+
+		$has_params = false;
 		if($within)
 		{
 			$ret["oid"] = $within;
@@ -1393,40 +1394,48 @@ class crm_company_cust_impl extends class_base
 		if ($r["customer_search_name"] != "")
 		{
 			$ret["name"] = "%".$r["customer_search_name"]."%";
+			$has_params = true;
 		}
 
 		if ($r["customer_search_reg"] != "")
 		{
 			$ret["reg_nr"] = "%".$r["customer_search_reg"]."%";
+			$has_params = true;
 		}
 
 		if ($r["customer_search_worker"] != "")
 		{
 			$ret["CL_CRM_COMPANY.RELTYPE_WORKERS.name"] = "%".$r["customer_search_worker"]."%";
+			$has_params = true;
 		}
 
 		if ($r["customer_search_address"] != "")
 		{
 			$ret["CL_CRM_COMPANY.contact.name"] = "%".$r["customer_search_address"]."%";
+			$has_params = true;
 		}
 
 		if ($r["customer_search_city"] != "")
 		{
 			$ret["CL_CRM_COMPANY.contact.linn.name"] = "%".$r["customer_search_city"]."%";
+			$has_params = true;
 		}
 
 		if ($r["customer_search_county"] != "")
 		{
 			$ret["CL_CRM_COMPANY.contact.maakond.name"] = "%".$r["customer_search_county"]."%";
+			$has_params = true;
 		}
 
 		if ($r["customer_search_ev"] != "")
 		{
 			$ret["CL_CRM_COMPANY.ettevotlusvorm.name"] = "%".$r["customer_search_ev"]."%";
+			$has_params = true;
 		}
 
 		if (trim($r["customer_search_keywords"]))
 		{
+			$has_params = true;
 			$keywords= explode(",", $r["customer_search_keywords"]);
 
 			foreach ($keywords as $keyword)
@@ -1445,6 +1454,7 @@ class crm_company_cust_impl extends class_base
 
 		if ($r["customer_search_cust_grp"] != "")
 		{
+			$has_params = true;
 			// get all customers for group and stick into oid list
 			$sectlist = array();
 			$this->_req_get_sects(obj($r["customer_search_cust_grp"]), $sectlist);
@@ -1491,6 +1501,7 @@ class crm_company_cust_impl extends class_base
 
 		if ($r["customer_search_cust_mgr"] != "")
 		{
+			$has_params = true;
 			// seems this should also search from roles. so, get all role entries for that person and collect the cos from those
 			$relist = new object_list(array(
 				"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
@@ -1512,6 +1523,12 @@ class crm_company_cust_impl extends class_base
 				)
 			));
 		}
+
+		if (!$has_params)
+		{
+			$ret["oid"] = -1;
+		}
+
 		return $ret;
 	}
 
