@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.22 2006/06/26 14:30:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.23 2006/12/06 11:37:54 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -385,9 +385,13 @@ class recycle_bin extends class_base
 			$o2n[$row["parent"]] = array(NULL, NULL);
 		}
 
+		$max_cnt = 50 + count($o2n);
 		while ($this->_fetch($o2n))
 		{
-			;
+			if (--$max_cnt < 1)
+			{
+				break;
+			}
 		}
 
 		$adm = cfg_get_admin_rootmenu2();
