@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.7 2006/12/06 17:59:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.8 2006/12/06 19:00:25 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -323,7 +323,13 @@ class ddoc extends class_base
 		if($arr["request"]["search_result_file"])
 		{
 			$files = split(",", $arr["request"]["search_result_file"]);
-			arr($files);
+			foreach($files as $file)
+			{
+				$this->add_file(array(
+					"oid" => $arr["id"],
+					"file_oid" => $file,
+				));
+			}
 		}	
 	}
 
@@ -687,7 +693,7 @@ class ddoc extends class_base
 		@returns
 			true/false depending if the operation succeeded or not.
 	**/
-	function set_ddoc($oid, $contents)
+	function set_ddoc($oid, $contents, $reload_ddoc = true)
 	{
 		if(!is_oid($oid) || !strlen($contents))
 		{
@@ -701,7 +707,10 @@ class ddoc extends class_base
 		}
 		fwrite($h, $contents);
 		fclose($contents);
-		$this->_do_reset_ddoc($oid);
+		if($reload_ddoc)
+		{
+			$this->_do_reset_ddoc($oid);
+		}
 		return true;
 	}
 
@@ -733,47 +742,121 @@ class ddoc extends class_base
 		}
 
 
-		$this->_s($arr["oid"]);
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		if(LOCAL_FILES)
+		if($arr["file_oid"])
 		{
+			// aw failiobjekti lisamine
+			$f_inst = get_instance(CL_FILE);
+			$f2 = $f_inst->get_file_by_id($arr["file_oid"], true);
+			$file = array(
+				"name" => $f2["properties"]["name"],
+				"size" => @filesize($f2["properties"]["file"]),
+				"MIME" => $f2["properties"]["type"],
+				"content" => $f2["content"],
+			);
+
+			$this->_s($arr["oid"]);
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+
 			$p = new ddoc2_parser();
 			$o = obj($arr["oid"]);
 			$n = count(aw_unserialize($o->prop("files")));
-			$hash = $p->getFileHash($arr["file"], "D".$n);
-arr($hash);
-			$ret = $this->digidoc->WSDL->addDataFile($hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
+			$hash = $p->getFileHash($file, "D".$n);
+
+			if(LOCAL_FILES)
+			{
+				$ret = $this->digidoc->WSDL->addDataFile($hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
+			}
+			else
+			{
+				$f = $file;
+				$ret = $this->digidoc->WSDL->addDataFile($f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
+			}
+			if(PEAR::isError($ret))
+			{
+				error::raise(array(
+					"msg" => t("Ei saanud lisada faili konteinerisse:".$ret->getMessage()),
+				));
+			}
+			// datafile added now
+
+			// lets get the new and improved ddoc file
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret = $this->digidoc->WSDL->GetSignedDoc();
+			if(PEAR::isError($ret))
+			{
+				error::raise(array(
+					"msg" => t("Ei saanud DigiDoc konteinerit k&auml;tte:".$ret->getMessage()),
+				));
+			}
+			$p = new ddoc2_parser($ret["SignedDocData"]);
+			$content = $p->getDigiDoc();
+			if(!$this->set_ddoc($arr["oid"], $content, false))
+			{
+				error::raise(array(
+					"msg" => t("DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"),
+				));
+			}
+			// we do this manually, so the bastard wouldn't do a new file in reser_ddoc()
+			$this->_write_file_metainfo(array(
+				"ddoc_id" => "D".$n,
+				"oid" => $arr["oid"],
+				"file" => $arr["file_oid"],
+				"size" => $file["size"],
+				"type" => $file["MIME"],
+				"name" => $file["name"],
+			));
+			
+			$this->_e();
+		}
+		elseif($arr["file"]["name"] || $arr["file"]["size"] || $arr["file"]["MIME"] || $arr["file"]["content"])
+		{
+			// uploaditud faili lisamine
+			$this->_s($arr["oid"]);
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			if(LOCAL_FILES)
+			{
+				$p = new ddoc2_parser();
+				$o = obj($arr["oid"]);
+				$n = count(aw_unserialize($o->prop("files")));
+				$hash = $p->getFileHash($arr["file"], "D".$n);
+				$ret = $this->digidoc->WSDL->addDataFile($hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
+			}
+			else
+			{
+				$f = $arr["file"];
+				$ret = $this->digidoc->WSDL->addDataFile($f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
+			}
+			if(PEAR::isError($ret))
+			{
+				error::raise(array(
+					"msg" => t("Ei saanud lisada faili konteinerisse:".$ret->getMessage()),
+				));
+			}
+			
+			// lets get the new and improved ddoc file
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret = $this->digidoc->WSDL->GetSignedDoc();
+			if(PEAR::isError($ret))
+			{
+				error::raise(array(
+					"msg" => t("Ei saanud DigiDoc konteinerit k&auml;tte:".$ret->getMessage()),
+				));
+			}
+			$p = new ddoc2_parser($ret["SignedDocData"]);
+			$content = $p->getDigiDoc();
+			if(!$this->set_ddoc($arr["oid"], $content))
+			{
+				error::raise(array(
+					"msg" => t("DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"),
+				));
+			}
+			$this->_e();
 		}
 		else
 		{
-			$f = $arr["file"];
-			$ret = $this->digidoc->WSDL->addDataFile($f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
+			// et parameetrid valed siis vist 
+			return false;
 		}
-		if(PEAR::isError($ret))
-		{
-			error::raise(array(
-				"msg" => t("Ei saanud lisada faili konteinerisse:".$ret->getMessage()),
-			));
-		}
-		
-		// lets get the new and improved ddoc file
-		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret = $this->digidoc->WSDL->GetSignedDoc();
-		if(PEAR::isError($ret))
-		{
-			error::raise(array(
-				"msg" => t("Ei saanud DigiDoc konteinerit k&auml;tte:".$ret->getMessage()),
-			));
-		}
-		$p = new ddoc2_parser($ret["SignedDocData"]);
-		$content = $p->getDigiDoc();
-		if(!$this->set_ddoc($arr["oid"], $content))
-		{
-			error::raise(array(
-				"msg" => t("DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"),
-			));
-		}
-		$this->_e();
 		return true;
 	}
 	
