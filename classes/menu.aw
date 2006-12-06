@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.178 2006/11/15 12:58:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.179 2006/12/06 07:02:31 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1728,7 +1728,7 @@ class menu extends class_base
 			$sad_opts = $o->meta("sad_opts");
 			foreach(safe_array($sad_opts) as $docid => $dat)
 			{
-				if ($dat["submenus"] == $docid)
+				if ($this->can("view", $docid) && $dat["submenus"] == $docid)
 				{
 					$tpl = isset($dat["tpl"]) ? $dat["tpl"] : "SEEALSO_DOCUMENT";
 					$doco = obj($docid);
