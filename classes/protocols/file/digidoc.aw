@@ -1,17 +1,22 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/file/digidoc.aw,v 1.3 2006/11/21 14:29:44 tarvo Exp $
-// digidoc.aw - DigiDoc 
-/*
 
-@classinfo syslog_type=ST_DIGIDOC relationmgr=yes no_comment=1 no_status=1 prop_cb=1
-
-@default table=objects
-@default group=general
-
-*/
-
-class digidoc extends class_base
-{
+###########################################################################
+###########################################################################
+###########################################################################
+/**
+ * DigiDoc klass
+ *
+ * Klass DigiDoc teenuse kasutamiseks. Sisaldab vajalikke meetodeid 
+ * infovahetuse pidamiseks DigiDoc teenust pakkuva serveriga.
+ * 
+ * @category	SOAP
+ * @package		DigiDoc
+ * @version		1.0.0
+ * @author		Roomet Kirotarp <Roomet.Kirotarp@hot.ee>
+ * @since		2004.05.01
+ * @access		public
+ */
+class digidoc {
 
 	/**
 	 * Soap kliendi ühenduse objekt
@@ -29,69 +34,6 @@ class digidoc extends class_base
 	var $browser;
 
 
-	function digidoc()
-	{
-		$this->init(array(
-			"tpldir" => "protocols/file/digidoc",
-			"clid" => CL_DIGIDOC
-		));
-		
-		// digidoc crap
-		session_start(); // <-- dont think i need this here in aw ?
-		$connection = $this->getconnect();
-		$this->client = new soap_client ( dd_wsdl, true, false, $connection);
-		
-		$this->WSDL = new webservice_digidocservice_digidocservice();
-				
-		$this->browser = digidocFile::getbrowser();
-		
-		$this->ns = $this->client->_wsdl->definition['targetnamespace'];
-	}
-
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- get_property --//
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- set_property --//
-		}
-		return $retval;
-	}	
-
-	function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
-
 	/*
 	 * funktsioon class WebService_DigiDocService_DigiDocService definitsiooni
 	 * laadimiseks _enne_ sessiooni alustamist et oleks võimalik Base_DigiDoc
@@ -105,9 +47,25 @@ class digidoc extends class_base
 				$wsdl = new SOAP_WSDL( DD_WSDL, $connection );
 				$wcode = $wsdl->generateProxyCode();
 				eval( $wcode );
-				digidocFile::saveLocalFile( DD_WSDL_FILE, "<?php\n".$wcode."\n?".">");	
+				ddFile::saveLocalFile( DD_WSDL_FILE, "<?php\n".$wcode."\n?".">");	
 			} 
 	}
+	
+	/**
+	 * Constructor
+	 */
+	function digidoc() {
+		//session_start();
+		$connection = $this->getConnect();
+		$this->Client = new SOAP_Client ( DD_WSDL, TRUE, FALSE, $connection);
+		
+		$this->WSDL = new WebService_DigiDocService_DigiDocService();
+				
+		$this->browser = ddFile::getBrowser();
+		
+		$this->NS = $this->Client->_wsdl->definition['targetNamespace'];
+	} //function
+
 
 	/**
 	 * Lisab vastava parameetri ja väärtuse SOAP headerisse
@@ -177,7 +135,7 @@ class digidoc extends class_base
 	function saveCertAs($file){
 		$filename = uniqid('certificate').'.cer';
 		$content = "-----BEGIN CERTIFICATE-----\n".$file."\n-----END CERTIFICATE-----\n";
-		File::SaveAs($filename, $content, 'application/certificate', 'utf-8');
+		ddFile::SaveAs($filename, $content, 'application/certificate', 'utf-8');
 	} //function
 
 
@@ -187,7 +145,7 @@ class digidoc extends class_base
 	function saveNotaryAs($file){
 		$filename = uniqid('ocsp').'.ocsp';
 		$content = base64_decode($file);
-		File::SaveAs($filename, $content, 'application/notary-ocsp', 'utf-8');
+		ddFile::SaveAs($filename, $content, 'application/notary-ocsp', 'utf-8');
 	} //function
 
 	
@@ -236,5 +194,9 @@ class digidoc extends class_base
 		if(defined('DD_TIMEOUT') && DD_TIMEOUT) $ret['timeout'] = DD_TIMEOUT;
 		return $ret;
 	} // end func
-}
-?>
+
+	
+	
+} //class
+
+

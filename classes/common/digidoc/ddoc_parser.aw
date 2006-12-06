@@ -1,17 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc_parser.aw,v 1.6 2006/11/22 14:30:48 tarvo Exp $
-// ddoc_parser.aw - DigiDoc Parser 
-/*
 
-@classinfo syslog_type=ST_DDOC_PARSER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+###########################################################################
+###########################################################################
+###########################################################################
+/**
+ * DigiDoc XML faili parser
+ *
+ * Loeb DigiDoc faili komponendid. Teisendab ta failidega kujult failideta
+ * kujule ja vastupidi.
+ * @access       public
+ * @package      DigiDoc
+ * @todo         Lisada kõik funktsioonid, mis on seotud ddoc konteineriga
+ * ja xml-i töötlusega selles koos failide lisamise eemaldamise 
+ * funktsioonidega
+ */
 
-@default table=objects
-@default group=general
+//class Parser_DigiDoc{
+class ddoc2_parser{
 
-*/
-
-class ddoc_parser extends class_base
-{
 	/**
 	 * DigiDoc XML faili hoidja
 	 * @var       string
@@ -59,70 +65,23 @@ class ddoc_parser extends class_base
 	var $_workPath;
 	
 
+	/**
+	 * Constructor.
+	 * @param      string  $xml       Parsitava DDoc faili XML sisu
+	 */
+	//function Parser_DigiDoc($xml=''){
+	function ddoc2_parser($xml=''){
+		session_start();
 
-	function ddoc_parser($xml = false)
-	{
-		$this->init(array(
-			"tpldir" => "common/digidoc/ddoc_parser",
-			"clid" => CL_DDOC_PARSER
-		));
-		
-		// ddoc crap
-		//session_start(); //i dont think i need this one in here
-		
 		$this->xml = $xml;
 		$this->xmlarray = $xml?$this->Parse($this->xml):false;
 		$this->setDigiDocFormatAndVersion();
-		//$this->workPath = DD_FILES;//.session_id().'/';
-		$this->workPath = "/tmp/";//.session_id().'/';
+		$this->workPath = DD_FILES;//.session_id().'/';
 		if (!is_dir($this->workPath))
-			if(File::DirMake($this->workPath) != DIR_ERR_OK)
+			if(ddFile::DirMake($this->workPath) != DIR_ERR_OK)
 				die('Error accessing workpath:'.$this->workPath);
-	}
+	} // end func
 
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- get_property --//
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- set_property --//
-		}
-		return $retval;
-	}	
-
-	function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
 	
 	/**
 	 * Teisendab XML-i array kujule
@@ -138,6 +97,7 @@ class ddoc_parser extends class_base
 		$us->unserialize($xml, FALSE);
 
 		$xml2 = $us->getUnserializedData();
+
 
 		$body = $xml2['SOAP-ENV:Body'];
 
@@ -184,17 +144,6 @@ class ddoc_parser extends class_base
 		return $ret;
 	} // end func
 
-	function files($xml)
-	{
-		$p = xml_parser_create();
-		xml_parse_into_struct($p, $xml, $vals, $index);
-		foreach($index["DATAFILE"] as $v)
-		{
-			$ret[$vals[$v]["attributes"]["ID"]] = $vals[$v]["attributes"];
-			$ret[$vals[$v]["attributes"]["ID"]]["VALUE"] = $vals[$v]["value"];
-		}
-		return $ret;
-	}
 
 	/**
 	 * Määrab digidoc-i failiformaadi ja versiooni XML põhjal.
@@ -237,17 +186,6 @@ class ddoc_parser extends class_base
 		return $ret;
 	} // end func
 
-	function signs($xml)
-	{
-		$p = xml_parser_create();
-		xml_parse_into_struct($p, $xml, $vals, $index);
-		foreach($index["SIGNATURE"] as $v)
-		{
-			$ret[] = $vals[$v];
-		}
-		return $ret;
-	}
-
 	
 	
 	/**
@@ -263,6 +201,7 @@ class ddoc_parser extends class_base
 		$files = $this->_getFilesXML($this->xml);
 		$nXML = $this->xml;
 		$func = $withLocalFiles ? 'file2hash' : 'hash2file';
+	
 		while(list(,$file) = each($files)){
 			$nXML = str_replace($file, $this->$func($file), $nXML);
 		} //while
@@ -293,10 +232,10 @@ class ddoc_parser extends class_base
 			return $xml;
 		} else {
 			preg_match("'Id=\"(.*)\"'Us", $xml, $match);	$Id = $match[1]; // Saame teada faili identifikaatori
-			digidocFile::SaveLocalFile( $this->workPath.$_SESSION['doc_id'].'_'.$Id, $xml); // salvestame algfaili
+			ddFile::SaveLocalFile( $this->workPath.$_SESSION['doc_id'].'_'.$Id, $xml); // salvestame algfaili
 			$hash = base64_encode(pack("H*", sha1(str_replace("\r\n","\n",$xml) ) ) ); // Arvutame andmefaili bloki räsi
-			$hashonlyxml = preg_replace('/>((.|\n|\r)*)<\//', ' DigestValue="'.$hash.'"></', $xml); // Moodustame serverisse saadetava andmefaili bloki eemaldades andmefaili sisu
 
+			$hashonlyxml = preg_replace('/>((.|\n|\r)*)<\//', ' DigestValue="'.$hash.'"></', $xml); // Moodustame serverisse saadetava andmefaili bloki eemaldades andmefaili sisu
 			$hashonlyxml = str_replace('ContentType="EMBEDDED_BASE64"', 'ContentType="HASHCODE"', $hashonlyxml);
 
 			$hashonlyxml=$xml; // Urmo ajutiselt niikauaks kui teenus verifitseerimisel DigestValue väärtust korralikult ei kontrolli
@@ -316,7 +255,7 @@ class ddoc_parser extends class_base
 	function hash2file($xml){
 		if( preg_match("'ContentType\=\"HASHCODE\"'s", $xml) ){
 			 preg_match("'Id=\"(.*)\"'Us", $xml, $match);		$Id = $match[1];
-			 $nXML = File::readLocalFile($this->workPath.$_SESSION['doc_id'].'_'.$Id);			 
+			 $nXML = ddFile::readLocalFile($this->workPath.$_SESSION['doc_id'].'_'.$Id);			 
 			return $nXML;
 		} else {
 			return $xml;
@@ -338,7 +277,7 @@ class ddoc_parser extends class_base
 	function getFileHash($file, $Id='D0'){
 		$xml = sprintf($this->getXMLtemplate('file'), $file['name'], $Id, $file['MIME'], $file['size'], chunk_split(base64_encode($file['content']), 64, "\n") );
 		$sh = base64_encode(pack("H*", sha1( str_replace("\r\n","\n",$xml))));
-		File::SaveLocalFile($this->workPath.$_SESSION['doc_id'].'_'.$Id, $xml);
+		ddFile::SaveLocalFile($this->workPath.$_SESSION['doc_id'].'_'.$Id, $xml);
 		//File::SaveLocalFile($this->workPath.$_SESSION['doc_id'].'_'."test1.xml", $xml);
 		$ret['Filename'] = $file['name'];
 		$ret['MimeType'] = $file['MIME'];
@@ -416,14 +355,14 @@ class ddoc_parser extends class_base
 	    } //switch
 	} // end func
 
-}
 
-/*
-	okey, shit solution, but for test purposes it does shit solution. if nessecary i'll make a separate class in the future or smth..
-*/
+} // end class
 
 
 
+###########################################################################
+###########################################################################
+###########################################################################
 /**
  * File::DirMake Status: OK
  */
@@ -462,13 +401,13 @@ DEFINE ("DIR_ERR_EMKDIR_3",5);
  *
  * @package      DigiDoc
  */
-class digidocFile{
+class ddFile{
 	
 		
 	/**
 	 * constructor
 	 */
-	function File(){
+	function ddFile(){
 	    return true;
 	} // end func
 	
@@ -497,7 +436,7 @@ class digidocFile{
 			   // If parent exists then there was a severe error
 		if (file_exists($strParent)) return DIR_ERR_EMKDIR_2;
 			   // If it can make the parent
-		$nRet = File::DirMake($strParent);
+		$nRet = ddFile::DirMake($strParent);
 		if ($nRet == DIR_ERR_OK)
 		   return mkdir($strPath) ? DIR_ERR_OK : DIR_ERR_EMKDIR_3;
 		return $nRet;
@@ -519,7 +458,7 @@ class digidocFile{
 	 */
 	function saveAs($name, $content, $MIME = 'text/plain', $charset = ''){
 		ob_clean();
-		$browser = File::getBrowser();
+		$browser = ddFile::getBrowser();
 		if ($browser['BROWSER_AGENT'] == 'IE') {		
 			$susisevad = array("š","ž","Š","Ž");
 			$eisusise = array("sh","zh","Sh","Zh");
@@ -533,7 +472,7 @@ class digidocFile{
 			header( 'Content-Type:' . $MIME );
 		} //else
 		header( 'Expires:' . gmdate('D, d M Y H:i:s') . ' GMT' ); #Alati aegunud, et ei loetaks cache-st
-		$browser = File::getBrowser();
+		$browser = ddFile::getBrowser();
 #		File::VarDump($browser);
 		// IE need specific headers
 		if ($browser['BROWSER_AGENT'] == 'IE') {		
@@ -640,7 +579,7 @@ class digidocFile{
 	 * @return    mixed
 	 */
 	function readLocalFile($name){
-		$name = File::FixEstFileName($name);
+		$name = ddFile::FixEstFileName($name);
 		if(is_readable($name)){
 			$content = file_get_contents($name);
 			return $content;
@@ -661,7 +600,7 @@ class digidocFile{
 	 * @return    mixed
 	 */
 	function saveLocalFile($name, $content){
-		$name = digidocFile::FixEstFileName($name);
+		$name = ddFile::FixEstFileName($name);
 		if(touch($name)){
 			$fh = fopen($name, 'wb');
 			fwrite($fh, $content);
@@ -688,7 +627,7 @@ class digidocFile{
 			$ret['type'] = $name;
 
 			if (!is_dir(DD_UPLOAD_DIR))
-				digidocFile::DirMake(DD_UPLOAD_DIR);
+				ddFile::DirMake(DD_UPLOAD_DIR);
 
 //				if(File::DirMake(DD_UPLOAD_DIR) != DIR_ERR_OK)
 
@@ -697,7 +636,7 @@ class digidocFile{
 					$ret['size'] = $_FILES[$name]['size'];
 					$ret['MIME'] = $_FILES[$name]['type']!=""?$_FILES[$name]['type']:" ";
 					$ret['error'] = $_FILES[$name]['error'];
-					$ret['content'] = digidocFile::readLocalFile( DD_UPLOAD_DIR.$_FILES[$name]['name'] );
+					$ret['content'] = ddFile::readLocalFile( DD_UPLOAD_DIR.$_FILES[$name]['name'] );
 					unlink(DD_UPLOAD_DIR.$_FILES[$name]['name']);
 			} else {
 				$ret['error'] = '999: Cannot move uploaded file !!!';
@@ -777,5 +716,4 @@ class digidocFile{
 
 
 } // end class
-
 ?>

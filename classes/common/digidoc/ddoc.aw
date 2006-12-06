@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.5 2006/11/22 14:30:47 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.6 2006/12/06 17:16:43 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -17,14 +17,14 @@
 	@property ddoc_location type=hidden field=meta method=serialize
 	@caption asukoht
 
-@groupinfo files caption="Failid"
+@groupinfo files caption="Failid" submit=no
 @default group=files
 	
 	@property files_tb type=toolbar no_caption=1
 	@property files_tbl type=table no_caption=1
 
 
-@groupinfo signatures caption="Allkirjad"
+@groupinfo signatures caption="Allkirjad" submit=no
 @default group=signatures
 
 	@property signatures_tb type=toolbar no_caption=1
@@ -33,27 +33,41 @@
 # hidden meta fields for 'cacheing'
 @property files type=hidden field=meta method=serialize
 @property signatures type=hidden field=meta method=serialize
+
+@reltype SIGNED_FILE value=1 clid=CL_FILE
+@caption Allkirjastatud fail
+
+@reltype SIGNER value=2 clid=CL_CRM_PERSON 
+@caption Allkirjastaja
 */
+
+
+define("USER_DEFAULT_DIR", 2);
+define("DEFAULT_DDOC_TYPE", "DIGIDOC-XML");
+define("DEFAULT_DDOC_VERSION", "1.3");
 
 class ddoc extends class_base
 {
 	function ddoc()
 	{
 		$this->init(array(
-			"tpldir" => "common/digidoc//ddoc",
+			"tpldir" => "common/digidoc",
 			"clid" => CL_DDOC
 		));
 
 		// a temporary fix here.. i dont know how or where i'm gonna put the fucking conf file
-		$loc = aw_ini_get("basedir")."/../public/vv_files/digidoctest/conf.php";
+		//$loc = aw_ini_get("basedir")."/../public/vv_files/digidoctest/conf.php";
+		$loc = aw_ini_get("basedir")."/classes/common/digidoc/conf.php";
 		include_once($loc);
-		include_once(aw_ini_get("basedir")."/addons/pear/SOAP/WSDL.php");
 
 		// total mess.. sick fuck, etc..
-		classload("protocols/file/digidoc");
-		classload("common/digidoc/ddoc_parser");
+		//classload("protocols/file/digidoc");
+		//classload("common/digidoc/ddoc_parser");
+		//include_once("/var/www/juurutus.epa.ee/public/vv_files/teine/digidoc2.aw");
+		include_once(aw_ini_get("basedir")."/classes/common/digidoc/ddoc_parser.aw");
+		include_once(aw_ini_get("basedir")."/classes/protocols/file/digidoc.aw");
 		digidoc::load_WSDL();
-		$this->digidoc = get_instance("protocols/file/digidoc");
+		$this->digidoc = new digidoc(); //get_instance("protocols/file/digidoc");
 	}
 
 	function get_property($arr)
@@ -64,14 +78,37 @@ class ddoc extends class_base
 		{
 			//-- get_property --//
 			case "name":
-				$prop["value"] = $prop["value"]." @ ".$arr["obj_inst"]->prop("ddoc_location");
+				$prop["value"] = html::href(array(
+					"caption" => $prop["value"],
+					"url" => $this->mk_my_orb("get_file", array(
+						"oid" => $arr["obj_inst"]->id(),
+					)),
+				));
 				break;
 			case "files_tb":
 				$tb = &$prop["vcl_inst"];
-				$tb->add_cdata("siia tulevad nupud");
+				$url = $this->mk_my_orb("upload_new_file", array(
+					"ddoc" => $arr["obj_inst"]->id(),
+				));
+				$tb->add_button(array(
+					"name" => "add_file",
+					"tooltip" => t("Lisa fail"),
+					"onClick" => "aw_popup_scroll('".$url."', 'caption', 500, 400);",
+					"img" => "new.gif",
+				));
+				$tb->add_button(array(
+					"name" => "remove_file",
+					"tooltip" => t("Eemalda fail"),
+					"action" => "rem_file",
+					"img" => "delete.gif",
+				));
 				break;
 			case "files_tbl":
 				$t = &$prop["vcl_inst"];
+				$t->define_chooser(array(
+					"name" => "sel",
+					"field" => "file_id",
+				));
 				$t->define_field(array(
 					"name" => "name",
 					"caption" => t("Fail"),
@@ -89,6 +126,7 @@ class ddoc extends class_base
 				foreach($files as $id => $data)
 				{
 					$t->define_data(array(
+						"file_id" => $id,
 						"name" => html::href(array(
 							"caption" => $data["name"],
 							"url" => $file_inst->get_url($data["file"], $data["name"]),
@@ -100,10 +138,31 @@ class ddoc extends class_base
 				break;
 			case "signatures_tb":
 				$tb = &$prop["vcl_inst"];
-				$tb->add_cdata("siia siis tulevad allkirjade eemaldamise && lisamise nupud");
+				
+				$sign_url = $this->sign_url(array(
+					"ddoc_oid" => $arr["obj_inst"]->id(),
+				));
+				$tb->add_button(array(
+					"name" => "add_signature",
+					"tooltip" => t("Lisa allkiri"),
+					"img" => "new.gif",
+					"url" => "#",
+					"onClick" => "aw_popup_scroll('".$sign_url."','Allkirjastamine', 410,250);",
+				));
+				$tb->add_button(array(
+					"name" => "remove_signature",
+					"tooltip" => t("Eemalda allkiri"),
+					"action" => "rem_sig",
+					"img" => "delete.gif",
+				));
+				
 				break;
 			case "signatures_tbl":
 				$t = &$prop["vcl_inst"];
+				$t->define_chooser(array(
+					"name" => "sel",
+					"field" => "sig_id",
+				));
 				$t->define_field(array(
 					"name" => "firstname",
 					"caption" => t("Eesnimi"),
@@ -138,6 +197,7 @@ class ddoc extends class_base
 					$loc[] = $sig["signing_index"];
 					$loc[] = $sig["signing_country"];
 					$t->define_data(array(
+						"sig_id" => $sig_id,
 						"firstname" => $sig["signer_fn"],
 						"lastname" => $sig["signer_ln"],
 						"pid" => $sig["signer_pid"],
@@ -160,8 +220,6 @@ class ddoc extends class_base
 		{
 			//-- set_property --//
 			case "ddoc":
-				// see asi eeldab ajutise faili tegemist eksole?
-
 				// actually i should check wheather it is a correct ddoc file
 				if (is_array($data["value"]))
 				{
@@ -175,7 +233,7 @@ class ddoc extends class_base
 					$file_name = $_FILES["ddoc"]["name"];
 					$file_type = $_FILES["ddoc"]["type"];
 				};
-
+				
 				$parser = get_instance(CL_DDOC_PARSER);
 				$parser->setDigiDocFormatAndVersion(file_get_contents($file));
 				if(!strlen($parser->format) || !strlen($parser->version))
@@ -201,6 +259,8 @@ class ddoc extends class_base
 						
 					move_uploaded_file($file, $final_name);
 					$arr["obj_inst"]->set_name($file_name);
+					// vetax vana faili 2ra igaks-juhuks
+					unlink($arr["obj_inst"]->prop("ddoc_location"));
 					$arr["obj_inst"]->set_prop("ddoc_location", $final_name);
 					//$arr["obj_inst"]->set_prop("type", $file_type);
 					$this->file_type = $file_type;
@@ -214,6 +274,8 @@ class ddoc extends class_base
 					$fc = fopen($final_name, "w");
 					fwrite($fc, $data["value"]["content"]);
 					fclose($f);
+					// vetax vana faili 2ra igaks-juhuks
+					unlink($arr["obj_inst"]->prop("ddoc_location"));
 					$arr["obj_inst"]->set_prop("ddoc_location", $final_name);
 					$arr["obj_inst"]->set_name($data["value"]["name"]);
 					//$arr["obj_inst"]->set_prop("type", "text/html");
@@ -224,9 +286,17 @@ class ddoc extends class_base
 					return PROP_IGNORE;
 					//$retval = PROP_IGNORE;
 				};
-				
-				//$this->_clear_old();
 				$this->_do_reset_ddoc($arr["obj_inst"]->id());
+//arr($_SESSION["scode"]);
+				/*
+				$this->_start_ddoc_session($arr["obj_inst"]->id());
+				$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+				$ret = $this->digidoc->WSDL->GetSignedDocInfo();
+				arr("enne teist closet ja enne arri");
+				arr($ret);
+				arr($this->_close_ddoc_session());
+				*/
+				//$this->do_a_fucking_test($arr["obj_inst"]->id());
 				break;
 			case "ddoc_location":
 				$retval = PROP_IGNORE;
@@ -239,6 +309,15 @@ class ddoc extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+	
+	function callback_post_save($arr)
+	{
+		// if we are dealing with a new ddoc instance and no ddoc file is set, we maka a new empty ddoc container!:)
+		if($arr["new"] == 1 && !strlen($arr["obj_inst"]->prop("ddoc_location")))
+		{
+			$this->create_empty($arr["obj_inst"]->id());
+		}
 	}
 
 	////////////////////////////////////
@@ -256,8 +335,321 @@ class ddoc extends class_base
 		return $this->parse();
 	}
 
+//-- orb methods --//
+
+	/**
+		@attrib params=name all_args=1 name=rem_sig
+		@comment
+			removes signatures selected from signatures table
+	**/
+	function rem_sig($arr)
+	{
+		foreach($arr["sel"] as $sig_id)
+		{
+			$this->remove_signature($sig_id, $arr["id"]);
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib params=name all_args=1 name=rem_file
+		@commen
+			removes files selected from files table
+	**/
+	function rem_file($arr)
+	{
+		foreach($arr["sel"] as $file_id)
+		{
+			// do something
+			$this->remove_file($file_id, $arr["id"]);
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib params=name name=upload_new_file all_args=1
+		@param ddoc required type=oid
+		@comment
+			genereates new file upload form to ddoc
+	**/
+	function upload_new_file($arr)
+	{
+
+		$tpl = new aw_template();
+		$tpl->init(array(
+			"tpldir" => "common/digidoc",
+		));
+		$tpl->read_template("new_file.tpl");
+
+		if(is_array($_FILES["new_file"]))
+		{
+			if(is_uploaded_file($_FILES["new_file"]["tmp_name"]))
+			{
+				if($this->is_signed($arr["ddoc"]))
+				{
+					$this->remove_signatures($arr["ddoc"]);
+				}
+				// TODO check for signatures, if any exist, delete them brutally!!
+				if(!$this->add_file(array(
+					"oid" => $arr["ddoc"],
+					"file" => array(
+						"name" => $_FILES["new_file"]["name"],
+						"size" => $_FILES["new_file"]["size"],
+						"MIME" => $_FILES["new_file"]["type"],
+						"error" => $_FILES["new_file"]["error"],
+						"content" => file_get_contents($_FILES["new_file"]["tmp_name"]),
+					),
+				)))
+				{
+					error::raise(array(
+						"msg" => t("Faili lisamine eba&otilde;nnestus!"),
+					));
+				}
+			
+			}
+			$contents = $tpl->parse("DONE");
+		}
+		else
+		{
+			$tpl->vars(array(
+				"ddoc" => $arr["ddoc"],
+			));
+			$contents = $tpl->parse("UPLOAD");
+		}
+		
+		die($contents);
+
+	}
+
 //-- methods --//
 
+	/**
+		@attrib name=get_file params=name all_args=1 api=1
+		@comment
+			saves the ddoc file (browser save popup)
+	**/
+	function get_file($arr)
+	{
+		$content = $this->get_ddoc($arr["oid"]);
+		$o = obj($arr["oid"]);
+		ddFile::saveAs($o->name(), $content);
+	}
+
+	/*
+		@attrib params=pos api=1
+		@param oid required type=oid
+			ddoc object oid.
+		@param name optional type=string
+			new ddoc object name(default is:'Digidoc (dd/mm/yyyy hh:mm)')
+		@comment
+			creates a new empty container.
+	*/
+	function create_empty($oid, $name = false)
+	{
+		if(!is_oid($oid))
+		{
+			return false;
+		}
+		$name = $name?$name:"Digidoc (".date("d/m/Y H:i").")";
+
+		$this->_s(false);
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->CreateSignedDoc(DEFAULT_DDOC_TYPE, DEFAULT_DDOC_VERSION);
+		if(PEAR::isError($ret))
+		{
+			error::raise(array(
+				"msg" => t("Uue DigiDoc konteineri loomine eba&otilde;nnestus: ".$ret->getMessage()),
+			));
+		}
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDoc();
+		if(PEAR::isError($ret))
+		{
+			error::raise(array(
+				"msg" => t("Ei saanud k&auml;tte DigiDoc konteinerit:".$ret->getMessage()),
+			));
+		}
+		$p = new ddoc2_parser($ret["SignedDocData"]);
+		$content = $p->getDigiDoc();
+		if(!$this->set_ddoc($oid, $content))
+		{
+			$cl_file = get_instance(CL_FILE);
+			$final_loc = $cl_file->generate_file_path(array(
+				"type" => "xml/ddoc",
+			));
+			$o = obj($oid);
+			$o->set_prop("ddoc_location", $final_loc);
+			$o->save();
+			if(!$this->set_ddoc($oid, $content))
+			{
+				error::raise(array(
+					"msg" => t("DigiDoc'i faili sisu seadmine eba&otilde;nnestus"),
+				));
+			}
+		}
+		$o = obj($oid);
+		$o->set_name($name);
+		$o->save();
+		$this->_e();
+		return false;
+	}
+
+	/**
+		@attrib params=pos api=1
+		@param id required type=string
+			file id in the ddoc container
+		@param oid required type=oid
+			ddoc object oid.
+		@comment
+			Removes file from ddoc container. Given ddoc can't be signed.
+		@returns
+			true if given file was removed, false otherwise.
+		@errors
+			If this given ddoc is still signed, error will be raised.
+			Error is raised also if params aren't correct.
+	**/
+	function remove_file($id, $oid)
+	{
+		if(substr($id,0,1) != "D" || !is_numeric(substr($id,1)))
+		{
+			error::raise(array(
+				"msg" => t("Eemaldatava faili id ei ole korrektne"),
+			));
+		}
+		if(!is_oid($oid))
+		{
+			error::raise(array(
+				"msg" => t("Vale objekti id!"),
+			));
+		}
+		if($this->is_signed($oid))
+		{
+			error::raise(array(
+				"msg" => t("Ei saa eemaldada faile allkirjastatud DigiDoc'ilt"),
+			));
+		}
+		$this->_s($oid);
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->RemoveDataFile($id);
+		if(PEAR::isError($ret))
+		{
+			$this->_e();
+			return false;
+		}
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDoc();
+		if(PEAR::isError($ret))
+		{
+			error::raise(array(
+				"msg" => t("Ei saanud DigiDoc'i sisu k&auml;tte:".$ret->getMessage()),
+			));
+		}
+		$p = new ddoc2_parser($ret["SignedDocData"]);
+		if(!$this->set_ddoc($oid, $p->getDigiDoc()))
+		{
+			error::raise(array(
+				"msg" => t("DigiDoc'i faili sisu seadmine eba&otilde;nnestus"),
+			));
+		}
+		$this->_e();
+		return true;
+	}
+
+	/**
+		@attrib params=pos api=1
+		@param ddoc required type=oid
+			the ddoc object oid
+		@comment
+			finds out if this document is signed or not
+		@returns 
+			true if document is signed, false otherwise
+		@errors
+			error will be raised if oid is wrong.
+	**/
+	function is_signed($oid)
+	{
+		if(!is_oid($oid))
+		{
+			error::raise(array(
+				"msg" => t("Vale objetki id!"),
+			));
+		}
+		$o = obj($oid);
+		$sign = count(aw_unserialize($o->prop("signatures")));
+		return $sign > 0?true:false;
+	}
+
+	/**
+		@attrib params=pos api=1
+		@param oid required type=oid
+			the ddoc object oid
+		@comment
+			removes all the signatures from given ddoc.
+		@returns
+			true or false depending on the success of the opertaion(true - succeeded)
+	**/
+	function remove_signatures($oid)
+	{
+		if(!is_oid($oid))
+		{
+			return false;
+		}
+		$this->_s($oid);
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDocInfo();
+		if(PEAR::isError($ret))
+		{
+			die("error@_remove_sigantures:getsigneddocinfo:".$ret->getMessage());
+		}
+		$this->_e();
+		if(!is_array($ret["SignedDocInfo"]->SignatureInfo))
+		{
+			$ret["SignedDocInfo"]->SignatureInfo = array(0 => $ret["SignedDocInfo"]->SignatureInfo);
+		}
+		foreach($ret["SignedDocInfo"]->SignatureInfo as $sign)
+		{
+			$this->remove_signature($sign->Id, $oid);
+		}
+		return true;
+	}
+
+	function _s($oid = false)
+	{
+		$cont = $oid?$this->get_ddoc($oid):"";
+		$p = new ddoc2_parser($cont);
+		$ret = $this->digidoc->WSDL->StartSession($oid?$p->GetDigiDoc(LOCAL_FILES):"", TRUE, '');
+		if(PEAR::isError($ret))
+		{
+			die("error@_s:".$ret->getMessage());
+		}
+		else
+		{
+			$xml = $p->Parse($this->digidoc->WSDL->xml, 'body');
+			$_SESSION["scode"] = $xml["sesscode"];
+			$_SESSION["ddoc_name"] = $oid;
+		}
+	}
+
+	function _e()
+	{
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->CloseSession();
+		if(PEAR::isError($ret))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	/**
+		@attrib api=1 params=pos
+		@param oid required type=oid
+			CL_DDOC object oid
+		@comment
+			Enables you to get ddoc contents if needed
+		@returns
+			Retursn ddoc file contents.
+	**/
 	function get_ddoc($oid)
 	{
 		if(!is_oid($oid))
@@ -267,72 +659,106 @@ class ddoc extends class_base
 		$o = obj($oid);
 		return file_get_contents($o->prop("ddoc_location"));
 	}
-
+	
 	/**
+		@attrib api=1 params=pos
+		@param oid required type=oid
+			CL_DDOC objects oid
+		@param contents required type=string
+			DDoc file contents
 		@comment
-			starts ddoc session
+			Sets ddoc object($oid) contents(overwrites). All the cache data is renrewed automagically.
 		@returns
-			if everything is ok, returns false. otherwise error string will be returned.
+			true/false depending if the operation succeeded or not.
 	**/
-	function _start_ddoc_session($oid)
+	function set_ddoc($oid, $contents)
 	{
-		if(!is_oid($oid))
+		if(!is_oid($oid) || !strlen($contents))
 		{
 			return false;
 		}
 		$o = obj($oid);
-		# laadime sisu digidoc parserisse
-		$ddoc = new ddoc_parser($this->get_ddoc($oid));
-		# alustame sessiooni, saates parsitud digidoci
-		$ret = $this->digidoc->WSDL->startSession($ddoc->getDigiDoc( LOCAL_FILES ), TRUE, '');
-		if(!PEAR::isError($ret))
-		{ # kui operatsioon oli edukas
-			$_SESSION['scode'] = $xml['sesscode'];
-			$_SESSION["ddoc_name"] = $o->name();
+		$f = $o->prop("ddoc_location");
+		if(!($h = @fopen($f,"w")))
+		{
 			return false;
 		}
-		else
-		{
-			return htmlentities($ret->getMessage());;
-		} //else
-	}
-	function _close_ddoc_session()
-	{
-		$ret = $this->digidoc->WSDL->closeSession($_SESSION["scode"]);
-		if(!PEAR::isError($ret))
-		{
-			unset($_SESSION["scode"], $_SESSION["ddoc_name"]);
-			return false;
-		}
-		else
-		{
-			return htmlentities($ret->getMessage());
-		}
+		fwrite($h, $contents);
+		fclose($contents);
+		$this->_do_reset_ddoc($oid);
+		return true;
 	}
 
 	/**
 		@attrib api=1
 		@param oid required type=oid
 			ddoc object oid
-		@param file optional type=oid
+		@param file_oid optional type=oid
 		@param name optional type=string
-		@param contents optional type=string
+		@param file optional type=array
 
 		@comment
 			Basically this adds file to ddoc container.
-			Either $file or ($name and $contents) must be set. if $file is set, then corresponding CL_FILE object is takend and added to ddoc, otherwise file with given $name and $content is added, and the CL_FILE object is created automagically.
+			Either $file_oid or $file must be set. if $file is set, then corresponding CL_FILE object is takend and added to ddoc, otherwise file with given $name and $content is added, and the CL_FILE object is created automagically.
 	**/
 	function add_file($arr)
 	{
-		if(!is_oid($arr["oid"]) || (!is_oid($arr["file"]) && !(strlen($arr["name"]) && strlen($arr["contents"]))))
+		if(!is_oid($arr["oid"]))
 		{
 			return false;
 		}
-		// if any previous signatures occurs, drop the act(return false)
-		// if file name & contents are given(not aw object oid), create new aw file object and get a oid. otherwise get file contents from aw object.
-		// add file contents to ddoc container
-		// write file metainfo ( file object oid & file container id .. name too, and size, and mime type?)(mime type and container id from sk?)
-		// the end?
+		if(!is_oid($arr["file_oid"]) && (!$arr["file"]["name"] || !$arr["file"]["size"] || !$arr["file"]["MIME"] || !$arr["file"]["content"]))
+		{
+			return false;
+		}
+		if($this->is_signed($arr["oid"]))
+		{
+			return false;
+		}
+
+
+		$this->_s($arr["oid"]);
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		if(LOCAL_FILES)
+		{
+			$p = new ddoc2_parser();
+			$o = obj($arr["oid"]);
+			$n = count(aw_unserialize($o->prop("files")));
+			$hash = $p->getFileHash($arr["file"], "D".$n);
+arr($hash);
+			$ret = $this->digidoc->WSDL->addDataFile($hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
+		}
+		else
+		{
+			$f = $arr["file"];
+			$ret = $this->digidoc->WSDL->addDataFile($f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
+		}
+		if(PEAR::isError($ret))
+		{
+			error::raise(array(
+				"msg" => t("Ei saanud lisada faili konteinerisse:".$ret->getMessage()),
+			));
+		}
+		
+		// lets get the new and improved ddoc file
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDoc();
+		if(PEAR::isError($ret))
+		{
+			error::raise(array(
+				"msg" => t("Ei saanud DigiDoc konteinerit k&auml;tte:".$ret->getMessage()),
+			));
+		}
+		$p = new ddoc2_parser($ret["SignedDocData"]);
+		$content = $p->getDigiDoc();
+		if(!$this->set_ddoc($arr["oid"], $content))
+		{
+			error::raise(array(
+				"msg" => t("DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"),
+			));
+		}
+		$this->_e();
+		return true;
 	}
 	
 	/**
@@ -370,6 +796,11 @@ class ddoc extends class_base
 	}
 	
 	/**
+		@attrib params=pos
+		@param oid required type=oid
+			the CL_DDOC object's oid which data is to be resetted.
+		@param save optional 
+			not used right now
 		@comment
 			does the nessecary things if uploading new ddoc.
 	**/
@@ -379,114 +810,389 @@ class ddoc extends class_base
 		{
 			return false;
 		}
-		$o = obj($oid);
-		$this->_start_ddoc_session($oid);
-		$ddoc_parser = get_instance(CL_DDOC_PARSER);
-		$xml = $ddoc_parser->Parse($this->digidoc->WSDL->xml, 'body');
+		
+		$this->_clear_old($oid);
 
+		$o = obj($oid);
+
+		$this->_s($oid);
+		
+		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+		$ret2 =  $this->digidoc->WSDL->GetSignedDocInfo();
+		if(!is_array($ret2["SignedDocInfo"]->DataFileInfo))
+		{
+			$ret2["SignedDocInfo"]->DataFileInfo = array(0 => $ret2["SignedDocInfo"]->DataFileInfo);
+		}
+		if(!is_array($ret2["SignedDocInfo"]->SignatureInfo))
+		{
+			$ret2["SignedDocInfo"]->SignatureInfo = array(0 => $ret2["SignedDocInfo"]->SignatureInfo);
+		}
+		
+		// get files
+		foreach($ret2["SignedDocInfo"]->DataFileInfo as $std_obj)
+		{
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$file = $this->digidoc->WSDL->GetDataFile($std_obj->Id);
+			
+			$files[$file["DataFileData"]->Id] = array(
+				"content" => "mingi savi mula",base64_decode($file["DataFileData"]->DfData),
+				"name" => $file["DataFileData"]->Filename,
+				"type" => $file["DataFileData"]->MimeType,
+				"size" => $file["DataFileData"]->Size,
+			);
+		}
 		// set files
-		$files = $ddoc_parser->files($this->get_ddoc($oid));
 		$file_inst = get_instance(CL_FILE);
 		// i don't use the parser results here because i don't get the file contents from there so easily
 		foreach($files as $ddoc_id => $data)
 		{
 			$id = $file_inst->create_file_from_string(array(
 				"parent" => $oid,
-				"content" => base64_decode($data["VALUE"]),
-				"name" => $data["FILENAME"],
-				"type" => $data["MIMETYPE"],
+				"content" => $data["content"],
+				"name" => $data["name"],
+				"type" => $data["type"],
 			));
 
 			$this->_write_file_metainfo(array(
 				"ddoc_id" => $ddoc_id,
 				"oid" => $oid,
 				"file" => $id,
-				"size" => $data["SIZE"],
-				"type" => $data["MIMETYPE"],
-				"name" => $data["FILENAME"],
+				"size" => $data["size"],
+				"type" => $data["type"],
+				"name" => $data["name"],
+			));
+			$o->connect(array(
+				"type" => "RELTYPE_SIGNED_FILE",
+				"to" => $id,
 			));
 		}
-		
+		$o->save();
 		// set signatures
-		$signatures = isset($xml['SignedDocInfo']['SignatureInfo'][0]) ? $xml['SignedDocInfo']['SignatureInfo'] : (isset($xml['SignedDocInfo']['SignatureInfo']) ? array(0=>$xml['SignedDocInfo']['SignatureInfo']) : array() );
-		foreach($signatures as $sign)
+		foreach($ret2["SignedDocInfo"]->SignatureInfo as $sign)
 		{
-			$name = $sign["Signer"]["CommonName"];
+			$name = $sign->Signer->CommonName;
 			$name = split(",", $name);
 			// why the hell do they put the T in the middle???.. 
-			$signing_time = strtotime(str_replace("T", " ",$sign["SigningTime"]));
+			$signing_time = strtotime(str_replace("T", " ",$sign->SigningTime));
 
-			$p_obj = new object();
-			$p_obj->set_class_id(CL_CRM_PERSON);
-			$p_obj->set_parent($oid);
-			$p_obj->set_name(($fn = ucfirst(strtolower($name[1])))." ".($ln = ucfirst(strtolower($name[0]))));
-			$p_obj->set_prop("firstname", $fn);
-			$p_obj->set_prop("lastname", $ln);
-			$p_obj->set_prop("personal_id", $sign["Signer"]["IDCode"]);
-			$p_obj->save();
-			
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"firstname" => ($fn = ucfirst(strtolower($name[1]))),
+				"lastname" => ($ln = ucfirst(strtolower($name[0]))),
+				"personal_id" => $sign->Signer->IDCode,
+			));
+			if($ol->count())
+			{
+				$p_obj = $ol->begin();
+			}
+			else
+			{
+				$p_obj = new object();
+				$p_obj->set_class_id(CL_CRM_PERSON);
+				$p_obj->set_parent(USER_DEFAULT_DIR);
+				$p_obj->set_name($fn." ".$ln);
+				$p_obj->set_prop("firstname", $fn);
+				$p_obj->set_prop("lastname", $ln);
+				$p_obj->set_prop("personal_id", $sign->Signer->IDCode);
+				$p_obj->save();
+			}
 			$this->_write_signature_metainfo(array(
-				"ddoc_id" => $sign["Id"],
+				"ddoc_id" => $sign->Id,
 				"oid" => $oid,
 				"signer" => $p_obj->id(),
 				"signer_fn" => $fn,
 				"signer_ln" => $ln,
-				"signer_pid" => $sign["Signer"]["IDCode"],
+				"signer_pid" => $sign->Signer->IDCode,
 				"signing_time" => $signing_time,
-				"signing_town" => $sign["SignatureProductionPlace"]["City"],
-				"signing_state" => $sign["SignatureProductionPlace"]["StateOrProvince"],
-				"signing_index" => $sign["SignatureProductionPlace"]["PostalCode"],
-				"signing_country" => $sign["SignatureProductionPlace"]["CountryName"],
-				"signing_role" => $sign["SignerRole"]["Role"],
+				"signing_town" => $sign->SignatureProductionPlace->City,
+				"signing_state" => $sign->SignatureProductionPlace->StateOrProvince,
+				"signing_index" => $sign->SignatureProductionPlace->PostalCode,
+				"signing_country" => $sign->SignatureProductionPlace->CountryName,
+				"signing_role" => $sign->SignerRole->Role,
 			));
+			$o->connect(array(
+				"type" => "RELTYPE_SIGNER",
+				"to" => $p_obj->id(),
+			));
+			
+			// close the session
+			$this->_e();
 		}
-
-		$this->_close_ddoc_session();
+		$o->save();
 	}
 
 /// SIGNING PROCESS
 
 	/**
 		@attrib api=1
-		@param oid required type=oid
+		@param ddoc_oid optional type=oid
 			aw CL_DDOC object oid
+		@param file_oid optional type=oid
+		@param doc_oid optional type=oid
 		
 		@comment
 			Well, this method gives a link that pop's up the singing window!!
 			This is the function to use when you want to sign something!!
 	**/
-	function sign_link($arr)
+	function sign_url($arr)
 	{
-		if(!is_oid($arr["oid"]))
+		if(!is_oid($arr["ddoc_oid"]) && !is_oid($arr["file_oid"]) && !is_oid($arr["doc_oid"]))
 		{
-			return t("! Error !");
+			return t("#");
 		}
-	}
-
-	/**
-		@comment
-			this little motherfucker does the first step of signing...
-	**/
-	function _prepare_signature($arr)
-	{
 		
+		return $this->mk_my_orb("sign", $arr, CL_DDOC);
+	}
+	
+	/**
+		@attrib params=name name=sign all_args=1
+		@param step optional type=string
+			Signing procedure step: PREPARE, FINALIZE or END
+		@param ddoc_oid
+		@param file_oid
+		@param doc_oid
+	**/
+	function sign($arr)
+	{
+		/*
+			siin peaks siis olema k6igepealt paramite kontroll.
+			Siis peaks PREPARE staadiumis (kui on tegemist aw faili v6i aw docuga) tegema ddoc faili.
+			ja ylej22nud on nagu ikka vist.. vms..
+		*/
+		if($arr["step"] != "PREPARE" && $arr["step"] != "FINALIZE" && $arr["step"] != "END")
+		{
+			$arr["step"] = "PREPARE";
+		}
+
+		// TODO
+		// OKEI SIIN MA PEAKS SIIS PREPARE STAADIUMIS VAATAMA MIDA TAHEKTASE ALLKIRJASTADA(kas ddoc v6i midagi muud
+		$ddoc_oid = $arr["ddoc_oid"];
+
+
+		// lets start session if needed
+		if($arr["step"] == "PREPARE")
+		{
+			$this->_s($ddoc_oid);
+		}
+
+		$tpl = new aw_template();
+		$tpl->init(array(
+			"tpldir" => "common/digidoc",
+		));
+		if($arr["step"] == "PREPARE" || $arr["step"] == "FINALIZE")
+		{
+			$browser = ddFile::getBrowser();
+			$brow_os = ($browser['OS'] == 'Win' ? 'WIN32' : 'LINUX').'-'.($browser['BROWSER_AGENT']=='IE' ? 'IE' : 'MOZILLA');
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret = $this->digidoc->WSDL->getSignatureModules($brow_os, $arr["step"], "HTML");
+			if(PEAR::isError($ret))
+			{
+				die("Failed getting signature modules: ".$ret->getMessage());
+			}
+			else
+			{
+				$mod = $ret["modules"];
+				while(list($k, $v) = each($mod))
+				{
+					$name = $v->location;
+					$mods[$name]["html"] = base64_decode($v->content);
+				}
+			}
+		}
+
+
+		// wierd crap
+
+		$rep = array(
+			"{0}" => DD_DEF_LANG,
+			"{1}" => isset($arr["signCertId"])?$arr["signCertId"]:"",
+			"{2}" => "",
+			"{3}" => "",
+			"{4}" => isset($arr["signCertHex"])?$arr["signCertHex"]:"",
+			"{5}" => $arr["step"],
+			"{6}" => "",
+			"driver_errror.jsp" => "?wtf=error",
+			"documents.jsp" => "?wtf=documents",
+			// for ff
+			"SignApplet_sig.jar,iaikPkcs11Wrapper_sig.jar" => "estid/SignApplet_sig.jar,estid/iaikPkcs11Wrapper_sig.jar",
+			// for ie
+			"EIDCard.cab" => "estid/EIDCard.cab",
+		);
+		switch($arr["step"])
+		{
+			case "PREPARE":
+				$tpl->read_template("sign_prepare.tpl");
+				$tpl->vars(array(
+					"HTML_HEAD_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-HEAD"]["html"]),
+					"HTML_FORM_BEGIN_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-FORM-BEGIN"]["html"]),
+					"HTML_FORM_END_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-FORM-END"]["html"]),
+					"HTML_BODY_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-BODY"]["html"]),
+					"reforb" => $this->mk_reforb("sign", array(
+						"step" => "FINALIZE",
+						"ddoc_oid" => $ddoc_oid,
+					)),
+				));
+				$html = $tpl->parse();
+			break;
+			case "FINALIZE":
+				$tpl->read_template("sign_finalize.tpl");
+				
+				// viimati finalize etapi l2binud korra kontroll
+				$use_prev = false;
+				if(isset($_SESSION["prev_sign_mark"]))
+				{
+					$use_prev = ((time() - $_SESSION["prev_sign_mark"]) < 3);
+				}
+				if(!$use_prev)
+				{
+					$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+					$ret = $this->digidoc->WSDL->PrepareSignature($arr["signCertHex"], $arr["signCertId"], $arr["role"], $arr["city"], $arr["state"], $arr["postalcode"], $arr["country"]);
+					$_SESSION["prev_sign_value"] = aw_serialize($ret, SERIALIZE_NATIVE);
+				}
+				else
+				{
+					$ret = aw_unserialize($_SESSION["prev_sign_value"]);
+				}
+
+				// chekking preparation results
+				if(PEAR::isError($ret))
+				{
+					die("preparation step chrashed: ".$ret->getMessage());
+				}
+				else
+				{
+					$_SESSION["signatureId"] = !isset($_SESSION["signatureId"])?$ret["SignatureId"]:$_SESSION["signatureId"];
+					$_SESSION['signedInfoDigest'] = !isset($_SESSION['signedInfoDigest'])?$ret['SignedInfoDigest']:$_SESSION['signedInfoDigest'];
+					$rep['{2}'] = $_SESSION['signedInfoDigest'];
+
+					$tpl->vars(array(
+						"HTML_HEAD_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-HEAD"]["html"]),
+						"HTML_FORM_BEGIN_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-FORM-BEGIN"]["html"]),
+						"HTML_FORM_END_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-FORM-END"]["html"]),
+						"HTML_BODY_HTML" => str_replace(array_keys($rep), array_values($rep), $mods["HTML-BODY"]["html"]),
+						"reforb" => $this->mk_reforb("FINALIZE", array(
+							"signatureId" => $_SESSION["signatureId"],
+							"signedInfoDigest" => $_SESSION["signedInfoDigest"],
+							"step" => "END",
+							"ddoc_oid" => $ddoc_oid,
+						)),
+					));
+					$html = $tpl->parse();
+				}
+
+
+			break;
+			case "END":
+				unset($_SESSION["signatureId"]);
+				unset($_SESSION["signedInfoDigest"]);
+				$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+				$ret = $this->digidoc->WSDL->FinalizeSignature($arr["signatureId"], $arr["signValueHex"]);
+				if(PEAR::isError($ret))
+				{
+					die("finalize step made a mess!: ".$ret->getMessage());
+				}
+				else
+				{
+					$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+					$ret = $this->digidoc->WSDL->GetSignedDoc();
+					if(PEAR::isError($ret))
+					{
+						die("Uue ddoc'i saamine eba6nnestus: ".$ret->getMessage());
+					}
+					$p = new ddoc2_parser($ret["SignedDocData"]);
+					$content = $p->getDigiDoc();
+					if(!$this->set_ddoc($ddoc_oid, $content))
+					{
+						die("uue ddoc'i sisu m22ramine eba6nnestus");
+					}
+
+					/*
+					tra mai saa aru, closesession ei t66ta, no sess error
+
+					$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+					$ret = $this->digidoc->WSDL->CloseSession($_SESSION["scode"]);
+					if(PEAR::isError($ret))
+					{
+						die("closesssion m2daneb endi juures:".$ret->getMessage());
+					}
+					*/
+					$tpl->read_template("sign_end.tpl");
+					$html = $tpl->parse();	
+				}
+
+
+			break;
+		}
+		die($html);
 	}
 
 	/**
+		@attrib api=1 params=pos
+		@param id required type=string
+			Can be CL_CRM_PERSON oid or signature id itself(in ddoc container. Format: 'Sxx' where the x's are numbers).
+		@param oid required type=oid
+			The CL_DDOC object oid
 		@comment
-			.. and this little motherfucker does the second step of signing.
+			Removes signature from $oid. Param $id can be either the CL_CRM_PERSON oid attached to the signature, or signature id itself.
 	**/
-	function _finalize_signature($arr)
+	function remove_signature($id, $oid)
 	{
-	}
+		if(!is_oid($oid))
+		{
+			return false;
+		}
+		if(substr($id, 0, 1) == "S" && is_numeric(substr($id, 1)))
+		{
+			$_oid = false;
+		}
+		elseif(is_oid($id))
+		{
+			$_oid = true;
+		}
+		else
+		{
+			return false;
+		}
+		if($_oid)
+		{
+			$o = obj($oid);
+			foreach(aw_unserialize($o->prop("signatures")) as $ddoc_id => $data)
+			{
+				if($data["signer"] == $id)
+				{
+					$id = $ddoc_id;
+					break;
+				}
+			}
+		}
+		// start session
+		$this->_s($oid);
 
-	/**
-		@comment
-			here, the signing process will come to an end.. finally and hopefully.. 
-	**/
-	function _end_signature($arr)
-	{
-	}	
+		$this->digidoc->addHeader('SessionCode', $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->RemoveSignature($id);
+		if(PEAR::isError($ret))
+		{
+			die("rem.sig.re.sig.rotting:".$ret->getMessage());
+		}
+		$this->digidoc->addHeader('SessionCode', $_SESSION["scode"]);
+		$ret = $this->digidoc->WSDL->GetSignedDoc();
+		if(PEAR::isError($ret))
+		{
+			die("rem.sig.get.new.doc.rotting:".$ret->getMessage());
+		}
+		else
+		{
+			$ddoc = new ddoc2_parser( $ret['SignedDocData'] );
+			$ddcontent = ($ddoc->getDigiDoc());
+			if(!$this->set_ddoc($oid, $ddcontent))
+			{
+				die("rem.sig.set_ddoc.rotting:");
+			}
+		}
+		// end session
+		$this->_e();
+		return true;
+	}
 
 
 	/**
@@ -530,7 +1236,7 @@ class ddoc extends class_base
 
 	/**
 		@comment
-			clears all cached data from object. Used internally, wher new ddoc file is uploaded.
+			clears all cached data from object. Used internally, when new ddoc file is uploaded, or just the info needs to refreshed shomewhy..
 	**/
 	function _clear_old($oid)
 	{
@@ -539,12 +1245,66 @@ class ddoc extends class_base
 			return false;
 		}
 		$o = obj($oid);
-		// clear relations to files, docus
-		// clear thingies from metadata
+		// deleting file objects
+		foreach(aw_unserialize($o->prop("files")) as $data)
+		{
+			if(!is_oid($data["file"]))
+			{
+				continue;
+			}
+			$to = obj($data["file"]);
+			$to->delete(true);
+		}
+		// removing connections to signers
+		foreach(aw_unserialize($o->prop("signatures")) as $data)
+		{
+			$o->disconnect(array(
+				"from" => $data["signer"],
+			));
+		}
+		// clear metadata
 		$o->set_prop("files", aw_serialize(array(), SERIALIZE_NATIVE));
 		$o->set_prop("signatures", aw_serialize(array(), SERIALIZE_NATIVE));
 		$o->save();
-		// realtions to persons (signatures)
+		return true;
+	}
+
+
+
+	function do_a_fucking_test($id)
+	{
+		//digidoc::load_WSDL();
+		$dd = new digidoc();
+
+		$p = new ddoc2_parser($this->get_ddoc($id));
+		
+		$ret = $this->digidoc->WSDL->StartSession($p->GetDigiDoc(LOCAL_FILES), TRUE, ''); 
+		//$ret = $dd->WSDL->StartSession($p->GetDigiDoc(LOCAL_FILES), TRUE, ''); 
+		if(!PEAR::isError($ret))
+		{
+			$xml = $p->Parse($this->digidoc->WSDL->xml, 'body');
+			//$xml = $p->Parse($dd->WSDL->xml, 'body');
+			$_SESSION["scode"] = $xml["sesscode"];
+			$_SESSION["ddoc_name"] = $xml[$id];
+			// do dha test
+
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret2 =  $this->digidoc->WSDL->GetSignedDocInfo();
+			//$dd->addHeader("SessionCode", $_SESSION["scode"]);
+			//$ret2 =  $dd->WSDL->GetSignedDocInfo();
+			if(!PEAR::isError($ret2))
+			{
+				arr($ret2);
+			}
+			else
+			{
+				arr($ret2->getMessage());
+			}
+		}
+		else
+		{
+			arr("error");
+		}
 	}
 }
 ?>
