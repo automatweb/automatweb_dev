@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.42 2006/06/21 13:48:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.43 2006/12/06 08:49:38 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -353,6 +353,7 @@ class register_search extends class_base
 	// !shows the search
 	function show($arr)
 	{
+		aw_global_set("no_cache", 1);
 		$ob = new object($arr["id"]);
 		$request = array("rsf" => $GLOBALS["rsf"]);
 		if ($GLOBALS["search_butt"])
@@ -867,7 +868,7 @@ class register_search extends class_base
 				}
 				else
 				{
-					$tmp[$pn] = array("%".mb_strtolower($request["rsf"][$this->fts_name], aw_global_get("charset"))."%", "%".mb_strtoupper($request["rsf"][$this->fts_name], aw_global_get("charset"))."%");
+					$tmp[$pn] = "%".$request["rsf"][$this->fts_name]."%";
 				}
 			}
 			$filter[] = new object_list_filter(array(
@@ -877,7 +878,6 @@ class register_search extends class_base
 		}
 		$filter[] = new object_list_filter(array("non_filter_classes" => CL_REGISTER_DATA));
 		exit_function("register_search::show::dsrt::gsr::loop");
-
 		enter_function("register_search::show::dsrt::gsr::finit");
 		$tdata = $o->meta("tdata");
 
