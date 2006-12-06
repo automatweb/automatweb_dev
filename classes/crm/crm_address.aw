@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.20 2006/11/24 14:27:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.21 2006/12/06 16:04:16 markop Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -591,5 +591,57 @@ class crm_address extends class_base
 			"ZW" => "Zimbabwe",
 		);
 	}
+	
+	
+	/** returns oid, country object id with given $code
+		@attrib api=1
+		@param code required type=string
+			Country code
+		@param parent optional type=oid
+			if set, makes a new country object if no results
+	**/
+	
+	function get_country_by_code($code, $parent)
+	{
+		$countrys = $this->get_country_list();
+		$name = $countrys[$code];
+		if(!$name)
+		{
+			return null;
+		}
+		$o_l = new object_list(array("lang_id" => array(), "class_id" => CL_CRM_COUNTRY, "name" => $name));
+		if(!sizeof($o_l->arr()))
+		{
+			if(!is_oid($parent))
+			{
+				return null;
+			}
+			$o = new object();
+			$o->set_class_id(CL_CRM_COUNTRY);
+			$o->set_parent($parent);
+			$o->set_name($name);
+		}
+		return $o->id();
+	}
+	
+	/** returns string, country code 
+		@attrib api=1
+		@param o required type=object/oid
+			Country object
+	**/
+	function get_country_code($o)
+	{
+		if(!is_oid($o) || $this->can("view" ,$o ))
+		{
+			$o = obj($o);
+		}
+		if(!is_object($o))
+		{
+			return "";
+		}
+		$countrys = $this->get_country_list();
+		return array_search($o->name(), $countrys);
+	}
+
 };
 ?>
