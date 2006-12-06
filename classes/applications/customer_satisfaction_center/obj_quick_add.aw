@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.7 2006/10/20 10:57:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.8 2006/12/06 15:55:45 kristo Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -288,7 +288,7 @@ class obj_quick_add extends class_base
 					)).
 					$ps->get_popup_search_link(array(
 						"pn" => "dat[".$o->id()."][location]",
-						"clid" => CL_MENU						
+//						"clid" => CL_MENU
 					))
 			));
 		}
