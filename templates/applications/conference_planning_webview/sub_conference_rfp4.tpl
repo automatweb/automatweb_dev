@@ -93,7 +93,51 @@
 	<tr>
 		<td colspan="2"><b>{VAR:LC_MAIN_CATERING}<b/></td>
 	</tr>
-	<!-- SUB: MAIN_CATERING -->
+	
+	<tr>
+		<td colspan="2">
+		<table>
+		<tr>
+			<td>
+			{VAR:LC_TYPE}
+			</td>
+			<td>
+			{VAR:LC_START_TIME}
+			</td>
+			<td>
+			{VAR:LC_END_TIME}
+			</td>
+			<td>
+			{VAR:LC_NO_ATTENDEES}
+			</td>
+			<td>
+			</td>
+		</tr>
+		<!-- SUB: MAIN_CATERING_ROW -->
+		<tr>
+			<td>
+				{VAR:catering_row_type}
+			</td>
+			<td>
+				{VAR:catering_row_start_time}
+			</td>
+			<td>
+				{VAR:catering_row_end_time}
+			</td>
+			<td>
+				{VAR:catering_row_attendees_no}
+			</td>
+			<td>
+				<a href="{VAR:remove_url}">{VAR:LC_REMOVE}</a>&nbsp;&nbsp;&nbsp;<a href="{VAR:edit_url}">{VAR:LC_EDIT}</a>
+			</td>
+		</tr>
+		<!-- END SUB: MAIN_CATERING_ROW -->
+		</table>
+		</td>
+	</tr>
+
+	<!-- start catering form -->
+	<input type="hidden" name="main_catering_id" value="{VAR:catering_id}"/> 
 	<tr width="100%" height="1" bgcolor="silver"><td width="100%" colspan="2" bgbolor="silver" height="1"></td></tr>
 	<tr>
 		<td>
@@ -136,17 +180,12 @@
 			<input type="text" name="sub[4][main_catering][{VAR:catering_no}][catering_attendees_no]" value="{VAR:catering_attendees_no}"/>
 		</td>
 	</tr>
-	<tr>
-		<td>
-		</td>
-		<td>
-			<a href="{VAR:remove_url}">{VAR:LC_REMOVE}</a>
-		</td>
-	</tr>
-	<!-- END SUB: MAIN_CATERING -->
+
+	<!-- end main catering -->
+	
 	<tr>
 		<td colspan="2" align="right">
-			<input type="button" onClick="javascript:submit_changeform('add_catering');" value="Add catering"/>
+			<input type="button" onClick="javascript:submit_changeform('add_catering');" value="Add/Save catering"/>
 		</td>
 	</tr>
 </table>

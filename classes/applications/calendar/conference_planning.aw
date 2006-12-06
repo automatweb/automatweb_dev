@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.4 2006/11/13 09:26:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.5 2006/12/06 09:02:40 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -150,10 +150,6 @@ class conference_planning extends class_base
 		$sc->lc_load("conference_planning", "lc_conference_planning");
 		$sd = $this->get_form_data();
 		$no = $_GET["sub"];
-		if(!is_array($sd["main_catering"]))
-		{
-			$this->do_actions($arr, "add_first_catering");
-		}
 		$sd = $this->get_form_data();
 		switch($no)
 		{
@@ -288,36 +284,58 @@ class conference_planning extends class_base
 
 
 				// catering crap
-				foreach($sd["main_catering"] as $cat_no => $cat_data)
+				$edit = false;
+				$tmp = $sd["main_catering"];
+				krsort($tmp);
+				$catering_no = key($tmp) + 1;
+				if($_GET["action"] == "edit" && strlen($_GET["id"]))
 				{
-					unset($catering);
-					foreach($this->catering_types as $k => $capt)
-					{
-						$sc->vars(array(
-							"value" => $k,
-							"caption" => $capt,
-							"catering_type_select" => ($k == $cat_data["catering_type_select"])?"SELECTED":"",
-						));
-						$catering .= $sc->parse("CATERING_TYPE");
-					}
-					$sc->vars(array(
-						"catering_no" => $cat_no,
-						"catering_type_chooser_".$cat_data["catering_type_chooser"] => "CHECKED",
-						"catering_type_text" => $cat_data["catering_type_text"],
-						"catering_start_time" => $cat_data["catering_start_time"],
-						"catering_end_time" => $cat_data["catering_end_time"],
-						"catering_attendees_no" => $cat_data["catering_attendees_no"],
-						"remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&id=".$cat_no,
-						"CATERING_TYPE" => $catering,
-					));
-					$cats .= $sc->parse("MAIN_CATERING");
+					$catering_no = $_GET["id"];
+					$edit = true;
 				}
-				
+
+				foreach($sd["main_catering"] as $cat_no => $cat_data)
+				{					
+					$sc->vars(array(
+						"catering_row_type" => ($cat_data["catering_type_chooser"] == 1)?$this->catering_types[$cat_data["catering_type_select"]]:$cat_data["catering_type_text"],
+						"catering_row_start_time" => $cat_data["catering_start_time"],
+						"catering_row_end_time" => $cat_data["catering_end_time"],
+						"remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&id=".$cat_no,
+						"edit_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=edit&id=".$cat_no,
+						"catering_row_attendees_no" => $cat_data["catering_attendees_no"],
+					));
+					$cat_rows .= $sc->parse("MAIN_CATERING_ROW");
+				}
+
+				// catering types for dropdown
+				foreach($this->catering_types as $k => $capt)
+				{
+					$sc->vars(array(
+						"value" => $k,
+						"caption" => $capt,
+						"catering_type_select" => ($k == $sd["main_catering"][$catering_no]["catering_type_select"] && $edit)?"SELECTED":"",
+					));
+					$catering_types .= $sc->parse("CATERING_TYPE");
+				}
+
+				if($edit)
+				{
+					$sc->vars(array(
+						"catering_id" => $_GET["id"],
+						"catering_type_chooser_".$sd["main_catering"][$_GET["id"]]["catering_type_chooser"] => "CHECKED",
+						"catering_type_text" => $sd["main_catering"][$_GET["id"]]["catering_type_text"],
+						"catering_start_time" => $sd["main_catering"][$_GET["id"]]["catering_start_time"],
+						"catering_end_time" => $sd["main_catering"][$_GET["id"]]["catering_end_time"],
+						"catering_attendees_no" => $sd["main_catering"][$_GET["id"]]["catering_attendees_no"],
+					));
+				}
+
 				$sc->vars(array(
 					"EVT_TYPE" => $evt_type,
 					"TABLE_FORM" => $tab_forms,
 					"TECH_EQUIP" => $tech,
-					"MAIN_CATERING" => $cats,
+					"CATERING_TYPE" => $catering_types,
+					"MAIN_CATERING_ROW" => $cat_rows,
 					"event_type_text" => $sd["event_type_text"],
 					"event_type_chooser_".$sd["event_type_chooser"] => "CHECKED",
 					"delegates_no" => $sd["delegates_no"],
@@ -328,6 +346,7 @@ class conference_planning extends class_base
 					"function_start_time" => $sd["function_start_time"],
 					"function_end_time" => $sd["function_end_time"],
 					"24h" => $sd["24h"]?"CHECKED":"",
+					"catering_no" => $catering_no,
 				));
 				break;
 			case 5:
@@ -766,6 +785,7 @@ class conference_planning extends class_base
 	**/
 	function submit_forward($arr)
 	{
+		//arr($arr);
 		$this->save_form_data($arr);
 		if($arr["current_sub"] == 0 && strlen(trim(aw_global_get("uid"))) == 0)
 		{
@@ -1033,7 +1053,6 @@ class conference_planning extends class_base
 	function add_catering($arr)
 	{
 		$this->save_form_data($arr);
-		$this->do_actions($arr, "add_catering");
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$arr["current_sub"];
 	}
 
@@ -1085,16 +1104,6 @@ class conference_planning extends class_base
 				break;
 
 			case 4:
-				if($act == "add_first_catering")
-				{
-					$data["main_catering"] = array(
-						0 => array()	
-					);
-				}
-				if($act == "add_catering")
-				{
-					$data["main_catering"][] = array();
-				}
 				if($act == "remove")
 				{
 					unset($data["main_catering"][$_GET["id"]]);
@@ -1188,8 +1197,11 @@ class conference_planning extends class_base
 					$data["function_end_date"] = $val["function_end_date"];
 					$data["function_end_time"] = $val["function_end_time"];
 					$data["24h"] = $val["24h"];
-					// actually some catering shit is missing
-					$data["main_catering"] = $val["main_catering"];
+					// catering shit 
+					foreach($val["main_catering"] as $k => $tmp)
+					{
+						$data["main_catering"][$k] = $tmp;
+					}
 					break;
 				case "5":
 					$additional_function["event_type_chooser"] = $val["event_type_chooser"];
