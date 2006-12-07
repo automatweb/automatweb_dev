@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.14 2006/12/07 12:22:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.15 2006/12/07 12:26:41 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -554,6 +554,8 @@ class patent extends class_base
 			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("find_products", array("ru" => get_ru(), "print" => 1)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			
 		));
+		$_SESSION["patent"]["prod_ru"] = get_ru();
+		
 		$data["results_table"] = $this->get_results_table();
 		return $data;
 	}
@@ -601,6 +603,7 @@ class patent extends class_base
 			}
 			$_SESSION["patent"]["prod_selection"] = null;
 		}		
+		
 		if(is_array($_SESSION["patent"]["products"]))
 		{
 			foreach($_SESSION["patent"]["products"] as $key=> $val)
@@ -626,14 +629,14 @@ class patent extends class_base
 	**/
 	function find_products($arr)
 	{
-		arr($_GET["ru"]);
+	//	arr($_GET["ru"]);
 		
 		if($_POST["do_post"])
 		{
 			$_SESSION["patent"]["prod_selection"] =  $_POST["oid"];
 			die("
 				<script type='text/javascript'>
-				window.opener.location.href='".$arr["ru"]."';
+				window.opener.location.href='".$_SESSION["patent"]["prod_ru"]."';
 				window.close();
 				</script>"
 			);
