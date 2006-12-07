@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.10 2006/12/07 12:11:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.11 2006/12/07 12:16:24 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -548,6 +548,7 @@ class patent extends class_base
 		));
 		$bank_inst = get_instance("common/bank_payment");
 		$data["banks"] = $bank_inst->bank_forms(array("id" =>10580 , "amount" => 10));
+		arr(get_ru());
 		$data["find_products"] = html::href(array(
 			"caption" => t("Otsi klassifikaatorit") ,
 			"url"=> "javascript:void(0);",
