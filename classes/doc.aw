@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.144 2006/11/29 11:12:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.145 2006/12/07 11:44:02 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1074,8 +1074,15 @@ class doc extends class_base
 			if (!empty($request["edit_version"]))
 			{
 				$out = array();
-				parse_str($request["edit_version"], $out);
-				$args["edit_version"] = $out["edit_version"];
+				if (strlen($request["edit_version"]) == 32)
+				{
+					$args["edit_version"] = $request["edit_version"];
+				}
+				else
+				{
+					parse_str($request["edit_version"], $out);
+					$args["edit_version"] = $out["edit_version"];
+				}
 			};
 			
 			if ($request["create_new_version"] == 1 || $this->force_new_version)
@@ -1099,6 +1106,10 @@ class doc extends class_base
 			$args["cb_part"] = $_REQUEST["cb_part"];
 		};
 		$args["post_ru"] = post_ru();
+		if ($_GET["edit_version"])
+		{
+			$args["edit_version"] = $_GET["edit_version"];
+		}
 	}
 
 	/** Shows the pic1 element. Well, I think I could use a generic solution for displaying different 
@@ -1659,6 +1670,14 @@ class doc extends class_base
 				"url" => $dd->get_doc_link($arr["obj_inst"], $lang["acceptlang"]),
 				"target" => "_blank"
 			));
+		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($_GET["edit_version"])
+		{
+			$arr["link"] = aw_url_change_var("edit_version", $_GET["edit_version"], $arr["link"]);
 		}
 	}
 };
