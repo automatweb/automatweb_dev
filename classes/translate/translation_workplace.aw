@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.2 2006/12/07 14:17:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.3 2006/12/07 15:01:46 kristo Exp $
 // translation_workplace.aw - T&otilde;lkimise t&ouml;&ouml;laud 
 /*
 
@@ -147,7 +147,7 @@ class translation_workplace extends class_base
 		));
 
 		$l = get_instance("languages");
-		$ll = $l->get_list();
+		$ll = $l->get_list(array("set_for_user" => true));
 		foreach($ll as $lid => $lang)
 		{
 			$t->define_field(array(

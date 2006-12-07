@@ -37,11 +37,13 @@ class languages extends aw_template
 	// ignore_status - if true, returns also inactive languages
 	// addempty - if true, empty element is added in the beginning
 	// key - use that field as keys of the return array
+	// set_for_user - boolean option if you only want the languyages set for the user
 	function get_list($arr = array())
 	{
 		extract($arr);
 		$dat = $this->listall(isset($ignore_status) ? $ignore_status : false);
 
+		
 		if (isset($addempty))
 		{
 			$ret = array("0" => "");
@@ -53,6 +55,15 @@ class languages extends aw_template
 		$use_key = isset($key) ? $key : "id";
 		foreach($dat as $ldat)
 		{
+			if ($set_for_user)
+			{
+				$uo = obj(aw_global_get("uid_oid"));
+				$tr_ls = $uo->prop("target_lang");
+				if (!$tr_ls[$ldat["id"]])
+				{
+					continue;
+				}
+			}
 			if (isset($all_data))
 			{
 				$ret[$ldat[$use_key]] = $ldat;
