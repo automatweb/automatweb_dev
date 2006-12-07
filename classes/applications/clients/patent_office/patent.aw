@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.15 2006/12/07 12:26:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.16 2006/12/07 13:56:53 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -180,6 +180,7 @@ class patent extends class_base
 		$this->date_vars = array("payment_date" , "exhibition_date", "convention_date");
 		$this->types = array(t("Sõnamärk"),t("Kujutismärk"),t("Kombineeritud märk"),t("Ruumiline märk"));
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
+		$this->country_popup_link_vars = array("convention_country", "exhibition_country", "country_code");
 	}
 
 	function get_property($arr)
@@ -471,6 +472,28 @@ class patent extends class_base
 			$_SESSION["patent"]["applicant_id"] = null;
 		}
 		
+		if(!$_SESSION["patent"]["request_fee"])
+		{
+			$_SESSION["patent"]["request_fee"]=2300;
+			if($_SESSION["patent"]["co_trademark"] || $_SESSION["patent"]["guaranty_trademark"])
+			{
+				$_SESSION["patent"]["request_fee"]=3000;
+			}
+		}
+		if(!$_SESSION["patent"]["classes_fee"])
+		{
+			$classes = array();
+			if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
+			{
+				foreach($_SESSION["patent"]["products"] as $key=> $val)
+				{
+					$prod = obj($key);
+					$classes[$prod->parent()] = $prod->parent(); 
+				}
+				$_SESSION["patent"]["classes_fee"]= (sizeof($_SESSION["patent"]["products"]) - 1 )*700;
+			}
+			$_SESSION["patent"]["classes_fee"]= (sizeof($classes) - 1 )*700;
+		}
 		
 		$data["country"] = t("Eesti :").html::radiobutton(array(
 			"value" => 0,
@@ -540,20 +563,35 @@ class patent extends class_base
 		));
 		$data["applicant_no"] = sizeof($_SESSION["patent"]["applicants"]) + 1;
 		$data["applicants_table"] = $this->_get_applicants_table();
-		$data["country_popup_link"] = html::href(array(
+		
+		foreach($this->country_popup_link_vars as $var)
+		{
+			$data[$var."_popup_link"] = html::href(array(
 			"caption" => t("Vali") ,
 			"url"=> "javascript:void(0);",
-			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("country_popup", array()).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("country_popup", array("print" => 1 , "var" => $var)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			
 		));
+		}
+
 		$bank_inst = get_instance("common/bank_payment");
-		$data["banks"] = $bank_inst->bank_forms(array("id" =>10580 , "amount" => 10));
-			$data["find_products"] = html::href(array(
+		$data["banks"] = $bank_inst->bank_forms(array("id" =>599 , "amount" => 10));
+			
+		$data["find_products"] = html::href(array(
 			"caption" => t("Otsi klassifikaatorit") ,
 			"url"=> "javascript:void(0);",
 			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("find_products", array("ru" => get_ru(), "print" => 1)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			
 		));
+		
+		$data["payer_popup_link"] = html::href(array(
+			"caption" => t("Vali") ,
+			"url"=> "javascript:void(0);",
+			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("payer_popup", array("print" => 1)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+			
+		));
+
+		
 		$_SESSION["patent"]["prod_ru"] = get_ru();
 		
 		$data["results_table"] = $this->get_results_table();
@@ -698,15 +736,32 @@ class patent extends class_base
 	
 	/**
 		@attrib name=country_popup
+		@param var required type=string
 	**/
-	function country_popup()
+	function country_popup($arr)
 	{
 		$address_inst = get_instance(CL_CRM_ADDRESS);
 		$ret = "";
 		foreach($address_inst->get_country_list() as $key=> $val)
 		{
 			
-			$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.document.exhibition_country.value=".$key."'>".$val."</a><br>";
+			$ret .= "<a href='javascript:void(0);' onClick='javascript:window.opener.document.changeform.".$arr["var"].".value=\"".$key."\";window.close()'>".$val." </a><br>";
+		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
+		}
+		return $ret;
+	}
+	
+		
+	/**
+		@attrib name=payer_popup
+	**/
+	function payer_popup()
+	{
+		$ret = " ";
+		foreach($_SESSION["patent"]["applicants"] as $key=> $applicant)
+		{
+			$ret = " ";
+			$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.document.changeform.payer.value=\"".$applicant["firstname"]." " . $applicant["lastname"]."\";window.close()'>".$applicant["firstname"]." " . $applicant["lastname"]."</a><br>";
 		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
 		}
 		return $ret;
