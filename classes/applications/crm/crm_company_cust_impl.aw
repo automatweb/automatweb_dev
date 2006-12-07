@@ -1717,6 +1717,7 @@ class crm_company_cust_impl extends class_base
 					$url = html::href(array(
 						"url" => $url_str,
 						"caption" => $url_str,
+						"target" => "_blank"
 					));
 				}
 			}
