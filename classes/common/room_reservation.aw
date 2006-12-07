@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.11 2006/11/30 13:23:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.12 2006/12/07 20:02:07 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -581,24 +581,62 @@ class room_reservation extends class_base
 		}
 		$tables = "";
 		classload("vcl/table");
-		foreach($rooms as $room)
-		{
-			$t = new vcl_table();
-			$res_inst = get_instance(CL_ROOM);
-			$res_inst->_get_calendar_tbl(array(
-				"prop" => array("vcl_inst" => &$t),
-				"room" => $room,
-				"web" => 1,
-			));
-			$tables.= $t->draw();
-		}
+
 		$sf = new aw_template;
 		$sf->db_init();
-		$sf->tpl_init("automatweb");
-		$sf->read_template("index.tpl");
+
+		if($room_res->prop("reservation_template"))
+		{
+			$sf->tpl_init("common/room");
+			$tpl = $room_res->prop("reservation_template");
+		}
+		else
+		{
+			$sf->tpl_init("automatweb");
+			$tpl = "index.tpl";
+		}
+		$sf->read_template($tpl);
 		$action = $this->mk_my_orb("submit_web_calendar_table", array("room" => $arr["room"]));
 		$arr["obj_inst"] = obj($arr["room"]);
+		$res_inst = get_instance(CL_ROOM);
 		$select = $res_inst->_get_calendar_select($arr);
+		if($sf->is_template("CALENDAR"))
+		{
+			$c = "";
+			foreach($rooms as $room)
+			{
+				$t = new vcl_table();
+
+				$res_inst->_get_calendar_tbl(array(
+					"prop" => array("vcl_inst" => &$t),
+					"room" => $room,
+					"web" => 1,
+				));
+				$sf->vars(array("calendar" => $t->draw()));
+				$c.= $sf->parse("CALENDAR");
+			}
+			$sf->vars(array(
+				"CALENDAR" => $c,
+				"select" => $select,
+				"time_select" => $res_inst->_get_time_select($arr),
+				"length_select" => $res_inst->_get_length_select($arr),
+			));
+			$sf->vars(array("SELECT" => $sf->parse("SELECT")));
+		
+		}
+		else
+		{
+			foreach($rooms as $room)
+			{
+				$t = new vcl_table();
+				$res_inst->_get_calendar_tbl(array(
+					"prop" => array("vcl_inst" => &$t),
+					"room" => $room,
+					"web" => 1,
+				));
+				$tables.= $t->draw();
+			}
+		}
 		$sf->vars(array(
 			"content" => "<form name='products_form' action=".$action." method=POST>".$select.$tables."<br>".html::submit(array("value" => t("Salvesta")))."</form>",
 			"uid" => aw_global_get("uid"),
@@ -620,7 +658,7 @@ class room_reservation extends class_base
 	{
 		$room_inst = get_instance(CL_ROOM);
 		$times = $room_inst->_get_bron_time(array(
-			"bron" => $arr["bron"],
+			"bron" => $arr["bron"][$arr["room"]],
 			"id" => $arr["room"],
 		));
 		$_SESSION["room_reservation"][$arr["room"]]["start"] = $times["start"];

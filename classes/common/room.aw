@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.62 2006/12/05 12:00:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.63 2006/12/07 20:02:07 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1151,6 +1151,61 @@ class room extends class_base
 	}
 	*/
 
+	function _get_time_select($arr)
+	{
+			$x=0;
+		$options = array();
+		$week = date("W" , time());
+		$weekstart = mktime(0,0,0,1,1,date("Y" , time())) + (date("z" , time()) - date("w" , time()) + 1)*86400;
+		while($x<20)
+		{
+			$url = aw_url_change_var("start",$weekstart,get_ru());
+			$options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
+			if($arr["request"]["start"] == $weekstart) $selected = $url;
+			$weekstart = $weekstart + 604800;
+			$x++;
+		};
+		
+		$ret.= html::select(array(
+			"name" => "room_reservation_select",
+			"options" => $options,
+			"onchange" => " window.location = this.value;",
+			"selected" => $selected,
+		));
+		return $ret;
+	}
+
+	function _get_length_select($arr)
+	{
+		$ret = "";
+		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
+		{
+
+			$options = array();
+			$x = 1;
+			while($x<7)
+			{
+				$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+				if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+				{
+					$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
+				}
+				$x++;
+			};
+		
+			$ret.= html::select(array(
+				"name" => "room_reservation_length",
+				"options" => $options,
+				"onchange" => "changeRoomReservationLength(this);",
+			));
+			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
+		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
+		}
+		$ret.= html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
+		return $ret;
+
+	}
+
 	function _get_calendar_select($arr)
 	{
 		$ret = "";
@@ -1200,6 +1255,7 @@ class room extends class_base
 			$ret.= html::select(array(
 				"name" => "room_reservation_length",
 				"options" => $options,
+				"onchange" => "changeRoomReservationLength(this);",
 			));
 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
@@ -1286,7 +1342,8 @@ class room extends class_base
 							$onclick[$x] = "doBron('".$arr["obj_inst"]->id()."_".$start_step."' , ".($step_length * $arr["obj_inst"]->prop("time_step")).")";
 						}
 						$val = 0;
-						$string = t("Vaba");
+						$string = t("VABA");
+						$col[$x] = "#E1E1E1";
 						if($_SESSION["room_reservation"][$arr["obj_inst"]->id()]["start"]<=$start_step && $_SESSION["room_reservation"][$arr["obj_inst"]->id()]["end"]>=$end_step)
 						{
 							$val = 1;
@@ -1300,7 +1357,7 @@ class room extends class_base
 						if(is_oid($this->last_bron_id) && !$arr["web"])
 						{
 							$last_bron = obj($this->last_bron_id);
-							$cus = t("Broneeritud");
+							$cus = t("BRON");
 							$title = "";
 							$codes = array();
 							if(is_oid($last_bron->prop("customer")) && $this->can("view", $last_bron->prop("customer")))
@@ -1348,7 +1405,7 @@ $title .= " ".$product->name();
 						else
 						{
 							$col[$x] = "#EE6363";
-					 		$d[$x] ="<span><font color=#26466D>".t("Broneeritud")."</FONT></span>";
+					 		$d[$x] ="<span><font color=#26466D>".t("BRON")."</FONT></span>";
 						}
 						$onclick[$x] = "";
 					}
@@ -1561,7 +1618,7 @@ $title .= " ".$product->name();
 		if($this->is_open_day($time))
 		$t->define_field(array(
 			"name" => "d0",
-			"caption" => date("l d/m/Y", $time),
+			"caption" => substr(date("l" , $time) , 0 , 2).date(" d/m/y" , $time),// d/m/Y", $time)//date("l d/m/Y", $time),
 			"width" => "20px",
 			"chgbgcolor" => "col0",
 			"id" => "id0",
@@ -1570,7 +1627,7 @@ $title .= " ".$product->name();
 		));
 		if($this->is_open_day($time + 86400))$t->define_field(array(
 			"name" => "d1",
-			"caption" => date("l d/m/Y", $time + 86400),
+			"caption" => substr(date("l" ,($time + 86400)) , 0 , 2).date(" d/m/y" , ($time + 86400)),//date("l d/m/Y", ($time + 86400),
 			"width" => "20px",
 			"chgbgcolor" => "col1",
 			"id" => "id1",
@@ -1579,7 +1636,7 @@ $title .= " ".$product->name();
 		));
 		if($this->is_open_day($time + 86400*2))$t->define_field(array(
 			"name" => "d2",
-			"caption" => date("l d/m/Y", $time + 86400*2),
+			"caption" => substr(date("l" ,$time + 86400*2) , 0 , 2).date(" d/m/y" , $time + 86400*2),//date("l d/m/Y", $time + 86400*2),
 			"width" => "20px",
 			"chgbgcolor" => "col2",
 			"id" => "id2",
@@ -1588,7 +1645,7 @@ $title .= " ".$product->name();
 		));
 		if($this->is_open_day($time + 86400*3))$t->define_field(array(
 			"name" => "d3",
-			"caption" => date("l d/m/Y", $time + 86400*3),
+			"caption" => substr(date("l" , $time + 86400*3) , 0 , 2).date(" d/m/y" ,$time + 86400*3),//date("l d/m/Y", $time + 86400*3),
 			"chgbgcolor" => "col3",
 			"width" => "20px",
 			"id" => "id3",
@@ -1597,7 +1654,7 @@ $title .= " ".$product->name();
 		));
 		if($this->is_open_day($time + 86400*4))$t->define_field(array(
 			"name" => "d4",
-			"caption" => date("l d/m/Y", $time + 86400*4),
+			"caption" => substr(date("l" , $time + 86400*4) , 0 , 2).date(" d/m/y" , $time + 86400*4),//date("l d/m/Y", $time + 86400*4),
 			"width" => "20px",
 			"chgbgcolor" => "col4",
 			"id" => "id4",
@@ -1606,7 +1663,7 @@ $title .= " ".$product->name();
 		));
 		if($this->is_open_day($time + 86400*5))$t->define_field(array(
 			"name" => "d5",
-			"caption" => date("l d/m/Y", $time + 86400*5),
+			"caption" => substr(date("l" , $time + 86400*5) , 0 , 2).date(" d/m/y" , $time + 86400*5),//date("l d/m/Y", $time + 86400*5),
 			"width" => "20px",
 			"chgbgcolor" => "col5",
 			"id" => "id5",
@@ -1615,7 +1672,7 @@ $title .= " ".$product->name();
 		));
 		if($this->is_open_day($time + 86400*6))$t->define_field(array(
 			"name" => "d6",
-			"caption" => date("l d/m/Y", $time + 86400*6),
+			"caption" => substr(date("l" ,$time + 86400*6) , 0 , 2).date(" d/m/y" , $time + 86400*6),//date("l d/m/Y", $time + 86400*6),
 			"chgbgcolor" => "col6",
 			"width" => "20px",
 			"id" => "id6",
