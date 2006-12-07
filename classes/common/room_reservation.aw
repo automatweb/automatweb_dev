@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.13 2006/12/07 20:27:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.14 2006/12/07 20:40:17 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -620,6 +620,7 @@ class room_reservation extends class_base
 				"select" => $select,
 				"time_select" => $res_inst->_get_time_select($arr),
 				"length_select" => $res_inst->_get_length_select($arr),
+				"submit_url" => $action,
 			));
 			$sf->vars(array("SELECT" => $sf->parse("SELECT")));
 		
@@ -633,7 +634,7 @@ class room_reservation extends class_base
 					"prop" => array("vcl_inst" => &$t),
 					"room" => $room,
 					"web" => 1,
-					"submit_url" => $action,
+	//				
 				));
 				$tables.= $t->draw();
 			}
