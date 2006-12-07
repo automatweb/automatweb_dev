@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.17 2006/09/29 15:46:50 kristo Exp $
+// $Id: tabpanel.aw,v 1.18 2006/12/07 14:32:34 kristo Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -66,7 +66,10 @@ class tabpanel extends aw_template
 	function add_tab($args = array())
 	{
 		$tab_prefix = isset($args["tabgroup"]) ? $args["tabgroup"] . "_" : "";
-
+		if (aw_global_get("output_charset") != aw_global_get("charset"))
+		{
+			$args["caption"] = iconv(aw_global_get("charset"), aw_global_get("output_charset"), $args["caption"]);
+		}
 		if (isset($args["active"]) && $args["active"])
 		{
 			$subtpl = "sel_tab";
