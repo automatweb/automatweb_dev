@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.9 2006/12/07 12:08:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.10 2006/12/07 12:11:34 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -551,7 +551,7 @@ class patent extends class_base
 		$data["find_products"] = html::href(array(
 			"caption" => t("Otsi klassifikaatorit") ,
 			"url"=> "javascript:void(0);",
-			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("find_products", array("ru" => get_ru())).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("find_products", array("ru" => get_ru(), "print" => 1)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			
 		));
 		$data["results_table"] = $this->get_results_table();
@@ -621,7 +621,7 @@ class patent extends class_base
 	}
 	
 	/**
-		@attrib name=find_products
+		@attrib name=find_products nologin=1
 		@param ru required type=string
 	**/
 	function find_products($arr)
@@ -680,7 +680,7 @@ class patent extends class_base
 		//$products = nee object_list(array("class_id" => CL_SHOP_PRODUCT,"lang_id" => array()));
 //		$address_inst = get_instance(CL_CRM_ADDRESS);
 		$ret = "<form action='' method=POST>Klassi nr:".
-		html::textbox(array("name" => "class"))." Kauba/teenuse nimetus".html::textbox(array("name" => "product"))
+		html::textbox(array("name" => "class"))."<br> Kauba/teenuse nimetus".html::textbox(array("name" => "product"))
 		
 		."<input type=hidden value=".$arr["ru"]." name=ru><input type=submit value='otsi'></form>";
 //		foreach($address_inst->get_country_list() as $key=> $val)
