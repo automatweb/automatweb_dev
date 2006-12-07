@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.7 2006/06/26 11:25:52 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.8 2006/12/07 14:55:17 kristo Exp $
 
 // more ideas --- I might want to keep the help open when switching between tabs... for this I need to 
 // set a cookie
@@ -462,7 +462,7 @@ class help extends aw_template
 			}
 		}
 		$this->vars(array(
-			"group_name" => strlen($contents["caption"])?$contents["caption"]:t("tõlgitud nimi puudub"),
+			"group_name" => strlen($contents["caption"])?$contents["caption"]:t("t&otilde;lgitud nimi puudub"),
 			"group_comment" => strlen($contents["comment"])?$contents["comment"]:t("kommentaar puudub"),
 			"group_help" => strlen($contents["help"])?$contents["help"]:t("abitekst puudub"),
 		));
@@ -500,6 +500,10 @@ class help extends aw_template
 				"property_help" => strlen($pval["help"])?$pval["help"]:t("abitekst puudub"),
 			));
 
+			if (!strlen($pval["kommentaar"]) && !strlen($pval["help"]))
+			{
+				continue;
+			}
 			$this->parse("PROPERTY_HELP");
 		};
 
