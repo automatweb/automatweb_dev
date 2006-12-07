@@ -7,25 +7,48 @@
 		<td align="center">
 			<!-- SUB: YAH_BAR -->
 				<!-- SUB: YAH_FIRST_BTN -->
-					[ {VAR:step_nr}
+					[ {VAR:step_nr}.
 				<!-- END SUB: YAH_FIRST_BTN -->
+				<!-- SUB: YAH_FIRST_BTN_HREF -->
+					[ <a href="{VAR:url}">{VAR:step_nr}.</a>
+				<!-- END SUB: YAH_FIRST_BTN_HREF -->
+
 				<!-- SUB: ACT_YAH_FIRST_BTN -->
-					[ <b>{VAR:step_nr}</b>
+					[ <b>{VAR:step_nr}.</b>
 				<!-- END SUB: ACT_YAH_FIRST_BTN -->
+				<!-- SUB: ACT_YAH_FIRST_BTN_HREF -->
+					[ <b></a href="{VAR:url}">{VAR:step_nr}.</a></b>
+				<!-- END SUB: ACT_YAH_FIRST_BTN_HREF -->
+
 
 				<!-- SUB: YAH_BTN -->
-					{VAR:step_nr}
+					{VAR:step_nr}.
 				<!-- END SUB: YAH_BTN -->
+				<!-- SUB: YAH_BTN_HREF -->
+					<a href="{VAR:url}">{VAR:step_nr}.</a>
+				<!-- END SUB: YAH_BTN_HREF -->
+
 				<!-- SUB: ACT_YAH_BTN -->
-					<b>{VAR:step_nr}</b>
+					<b>{VAR:step_nr}. {VAR:caption}</b>
 				<!-- END SUB: ACT_YAH_BTN -->
 				
+				<!-- SUB: ACT_YAH_BTN_HREF -->
+					<b><a href="{VAR:url}">{VAR:step_nr}.</a></b>
+				<!-- END SUB: ACT_YAH_BTN_HREF -->
+				
 				<!-- SUB: YAH_LAST_BTN -->
-					{VAR:step_nr} ]
+					{VAR:step_nr}.]
 				<!-- END SUB: YAH_LAST_BTN -->
+				<!-- SUB: YAH_LAST_BTN_HREF -->
+					<a href="{VAR:url}">{VAR:step_nr}.</a> ]
+				<!-- END SUB: YAH_LAST_BTN_HREF -->
+
 				<!-- SUB: ACT_YAH_LAST_BTN -->
-					<b>{VAR:step_nr}</b> ]
+					<b>{VAR:step_nr}.</b> ]
 				<!-- END SUB: ACT_YAH_LAST_BTN -->
+				<!-- SUB: ACT_YAH_LAST_BTN_HREF -->
+					<b><a href="{VAR:url}">{VAR:step_nr}.</a></b> ]
+				<!-- END SUB: ACT_YAH_LAST_BTN_HREF -->
 			<!-- END SUB: YAH_BAR -->
 		</td>
 	</tr>
