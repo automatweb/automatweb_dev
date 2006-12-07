@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.77 2006/09/05 09:56:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.78 2006/12/07 12:49:53 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1366,6 +1366,7 @@ class site_search_content extends class_base
 		$results = $tr;
 		
 		$si = __get_site_instance();
+		$di = get_instance("doc_display");
 
 		for ($i = $from; $i < $to; $i++)
 		{
@@ -1387,11 +1388,22 @@ class site_search_content extends class_base
 			{
 				$md = "";
 			}
+			if ($this->can("view", $results[$i]["docid"]))
+			{
+				$doc_text = strip_tags(str_replace(">", "> ", $di->_get_text(array(), obj($results[$i]["docid"]))));
+			}
+			else
+			{
+				$doc_text = strip_tags(str_replace(">", "> ", $results[$i]["lead"]." ".$results[$i]["content"]));
+			}
+			$doc_text = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc_text);
 			$this->vars(array(
 				"link" => $results[$i]["url"],
 				"title" => $results[$i]["title"],
+				"title_high" => $this->_get_content_high($results[$i]["title"], $_GET["str"]),
 				"modified" => $md,
 				"content" => $this->_get_content($results[$i]["content"]),
+				"content_high" => $this->_get_content_high($doc_text, $_GET["str"]),
 				"lead" => preg_replace("/#(.*)#/","",$results[$i]["lead"]),
 				"tm" => ($results[$i]["tm"] != "" ? $results[$i]["tm"] : date("d.m.Y", $results[$i]["modified"])),
 				"user1" => $results[$i]["user1"],
@@ -2197,7 +2209,12 @@ class site_search_content extends class_base
 		{
 			return $hl;
 		}
-		return substr(trim($c), 0, strpos(trim($c), " ", 200));
+		$pos = strpos(trim($c), " ", 200);
+		if (!$pos)
+		{
+			return $c;
+		}
+		return substr(trim($c), 0, $pos);
 	}
 
 	function _hgl($c, $str, $_pos, $other = array())
