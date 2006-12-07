@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.7 2006/12/07 12:01:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.8 2006/12/07 12:07:06 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -378,21 +378,24 @@ class patent extends class_base
 	//	arr($_SESSION["patent"]);
 		$us = get_instance(CL_USER);
 		$this->users_person = new object($us->get_current_person());
-		$_SESSION["patent"]["firstname"] = $this->users_person->prop("firstname");
-		$_SESSION["patent"]["lastname"] = $this->users_person->prop("lastname");
-		$_SESSION["patent"]["code"] = $this->users_person->prop("personal_id");
-		$_SESSION["patent"]["fax"] = $this->users_person->prop_str("fax");
-		$_SESSION["patent"]["email"] = $this->users_person->prop_str("email");
-		$_SESSION["patent"]["phone"] = $this->users_person->prop_str("phone");
-		$address = $this->users_person->get_first_obj_by_reltype("RELTYPE_ADDRESS");
-		if(is_object($address))
+		if(is_object($this->users_person))
 		{
-			$_SESSION["patent"]["index"] = $address->prop_str("postiindeks");
-			$_SESSION["patent"]["city"] = $address->prop_str("linn");
-			$_SESSION["patent"]["street"] = $address->prop("aadress");
-			if($address->prop("riik"))
+			$_SESSION["patent"]["firstname"] = $this->users_person->prop("firstname");
+			$_SESSION["patent"]["lastname"] = $this->users_person->prop("lastname");
+			$_SESSION["patent"]["code"] = $this->users_person->prop("personal_id");
+			$_SESSION["patent"]["fax"] = $this->users_person->prop_str("fax");
+			$_SESSION["patent"]["email"] = $this->users_person->prop_str("email");
+			$_SESSION["patent"]["phone"] = $this->users_person->prop_str("phone");
+			$address = $this->users_person->get_first_obj_by_reltype("RELTYPE_ADDRESS");
+			if(is_object($address))
 			{
-				$_SESSION["patent"]["country_code"] = $adr->get_country_code($address->prop("riik"));
+				$_SESSION["patent"]["index"] = $address->prop_str("postiindeks");
+				$_SESSION["patent"]["city"] = $address->prop_str("linn");
+				$_SESSION["patent"]["street"] = $address->prop("aadress");
+				if($address->prop("riik"))
+				{
+					$_SESSION["patent"]["country_code"] = $adr->get_country_code($address->prop("riik"));
+				}
 			}
 		}
 	}
