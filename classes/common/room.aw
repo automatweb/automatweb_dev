@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.63 2006/12/07 20:02:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.64 2006/12/07 23:54:03 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1346,9 +1346,13 @@ class room extends class_base
 						$col[$x] = "#E1E1E1";
 						if($_SESSION["room_reservation"][$arr["obj_inst"]->id()]["start"]<=$start_step && $_SESSION["room_reservation"][$arr["obj_inst"]->id()]["end"]>=$end_step)
 						{
-							$val = 1;
-							$col[$x] = "red";
-							$string = t("Broneeri");
+							//teeb selle kontrolli ka , et äkki tüübid ültse teist ruumi tahavad juba... et siis läheks sassi
+							if(!$_SESSION["room_reservation"]["room_id"] || $_SESSION["room_reservation"]["room_id"] == $arr["obj_inst"]->id())
+							{
+								$val = 1;
+								$col[$x] = "red";
+								$string = t("Broneeri");
+							}
 						}
 						$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$arr["obj_inst"]->id().']['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
 					}

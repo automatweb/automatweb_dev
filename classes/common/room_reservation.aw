@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.17 2006/12/07 21:49:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.18 2006/12/07 23:54:03 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -673,15 +673,19 @@ class room_reservation extends class_base
 	function submit_web_calendar_table($arr)
 	{
 		$room_inst = get_instance(CL_ROOM);
-		$room=$arr["room"];
-		foreach($arr["bron"] as $room => $bron)
-			$times = $room_inst->_get_bron_time(array(
-			"bron" => $bron,
-			"id" => $room,
-		));
-
-		//teised ruumid 'ra nullida oleks vaja
-		$_SESSION["room_reservation"][$room];
+		$room = $arr["room"];
+		foreach($arr["bron"] as $id => $bron)
+		{
+			if(array_sum($bron))//v]tab esimese kalendri kus oli miskit valitud
+			{
+				$times = $room_inst->_get_bron_time(array(
+					"bron" => $bron,
+					"id" => $id,
+				));
+				$room = $id;//et siis nyyd juhul kui oli tegutsetud teise ruumiga... siis nyyd see k]ik muutud... paremuse poole kindlasti
+			}
+		}
+		//tegelt teised ruumid 'ra nullida oleks vaja ... vist.... jätame selle tuleviku tarkadele otsustada
 		$_SESSION["room_reservation"]["room_id"] = $room;
 		$_SESSION["room_reservation"][$room]["start"] = $times["start"];
 		$_SESSION["room_reservation"][$room]["end"] = $times["end"];
