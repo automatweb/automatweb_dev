@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.1 2006/10/05 13:29:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.2 2006/12/07 14:17:01 kristo Exp $
 // translation_workplace.aw - T&otilde;lkimise t&ouml;&ouml;laud 
 /*
 
@@ -259,8 +259,17 @@ class translation_workplace extends class_base
 				}
 				else
 				{
-					$d[$lang."_state"] = $o->meta("trans_".$lid."_status") ? t("Jah") : t("Ei");
-					$d[$lang."_mod"] = $o->meta("trans_".$lid."_modified");
+					$t_state = $o->meta("trans_".$lid."_status") ? t("Jah") : t("Ei");
+					$t_mod = $o->meta("trans_".$lid."_modified");
+					if ($t_mod < $o->modified() && $t_mod > 100)
+					{
+						$t_state = html::href(array(
+							"url" => $this->mk_my_orb("change", array("id" => $o->id(), "group" => "tlgi"), "doc")."#".$lid,
+							"caption" => "<font color='red'>".$t_state."</font>"
+						));
+					}
+					$d[$lang."_state"] = $t_state;
+					$d[$lang."_mod"] = $t_mod;
 				}
 			}
 			$t->define_data($d);
