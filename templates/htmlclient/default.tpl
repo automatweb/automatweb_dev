@@ -248,7 +248,7 @@ function generic_unloader()
 {
 	if (changed)
 	{
-		if (confirm("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"))
+		if (confirm("{VAR:confirm_unchanged_text}"))
 		{
 			document.changeform.submit();
 		}

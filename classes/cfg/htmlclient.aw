@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.159 2006/11/27 15:08:02 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.160 2006/12/07 12:08:55 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -750,6 +750,9 @@ class htmlclient extends aw_template
 		}
 		if ($arr["confirm_save_data"] == 1 && !($_GET["action"] == "check_leave_page" || $_GET["group"] == "relationmgr"))
 		{
+			$this->vars(array(
+				"confirm_unchanged_text" => t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?")
+			));
 			$this->vars(array(
 				"CHECK_LEAVE_PAGE" => $this->parse("CHECK_LEAVE_PAGE")
 			));
