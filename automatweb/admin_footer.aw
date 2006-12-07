@@ -225,6 +225,7 @@ if ($_SESSION["user_history_count"] > 0)
 	$pu = parse_url(get_ru());
 	parse_str($pu["query"], $bits);
 	$st = $site_title;
+	$o = obj();
 	if ($bits["id"])
 	{
 		$o = obj($bits["id"]);
