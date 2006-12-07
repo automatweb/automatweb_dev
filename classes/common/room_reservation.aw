@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.16 2006/12/07 21:45:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.17 2006/12/07 21:49:50 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -420,7 +420,7 @@ class room_reservation extends class_base
 				)),
 			"no_link" => 1,
 			"scrollbars" => 1,
-			"width" => 600,
+			"width" => 770,
 			"height" => 600,
 		));
 		$room_inst = get_instance(CL_ROOM);
