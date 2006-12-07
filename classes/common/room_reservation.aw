@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.14 2006/12/07 20:40:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.15 2006/12/07 20:53:54 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -462,9 +462,9 @@ class room_reservation extends class_base
 		$res.= ", ";
 		$res.= date("d.m.Y" , $arr["start"]);
 		$res.= ", ";
-		$res.= date("h:i" , $arr["start"]);
+		$res.= date("H:i" , $arr["start"]);
 		$res.= " - ";
-		$res.= date("h:i" , $arr["end"]);
+		$res.= date("H:i" , $arr["end"]);
 		return $res;
 	}
 
