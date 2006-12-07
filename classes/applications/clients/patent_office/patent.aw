@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.13 2006/12/07 12:21:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.14 2006/12/07 12:22:44 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -626,7 +626,7 @@ class patent extends class_base
 	**/
 	function find_products($arr)
 	{
-		arr($arr["ru"]);
+		arr($_GET["ru"]);
 		
 		if($_POST["do_post"])
 		{
