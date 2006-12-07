@@ -122,6 +122,18 @@ msgstr ""
 msgid "Omaduse Eelarve (budget) help"
 msgstr ""
 
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_offer_tb
+msgid "Omaduse  (offer_tb) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_offer_tb_comment
+msgid "Omaduse  (offer_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_offer_tb_help
+msgid "Omaduse  (offer_tb) help"
+msgstr ""
+
 #: classes/applications/procurement_center/procurement_requirement.aw:prop_offer_t
 msgid "Omaduse  (offer_t) caption"
 msgstr ""
@@ -214,91 +226,91 @@ msgstr ""
 msgid "Seose Arendus&uuml;lesanne (RELTYPE_BUG) tekst"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:84
+#: classes/applications/procurement_center/procurement_requirement.aw:85
 msgid "Avatud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:85
+#: classes/applications/procurement_center/procurement_requirement.aw:86
 msgid "Spetsifitseerimisel"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:86
+#: classes/applications/procurement_center/procurement_requirement.aw:87
 msgid "&Uuml;le antud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:87
+#: classes/applications/procurement_center/procurement_requirement.aw:88
 msgid "Testimisel"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:102
+#: classes/applications/procurement_center/procurement_requirement.aw:103
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:188
+#: classes/applications/procurement_center/procurement_requirement.aw:189
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:193
+#: classes/applications/procurement_center/procurement_requirement.aw:194
 msgid "Lahendus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:198
+#: classes/applications/procurement_center/procurement_requirement.aw:199
 msgid "Pakkuja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:203
+#: classes/applications/procurement_center/procurement_requirement.aw:204
 msgid "Eelistatud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:208
+#: classes/applications/procurement_center/procurement_requirement.aw:209
 msgid "Hinne"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:213
+#: classes/applications/procurement_center/procurement_requirement.aw:214
 msgid "Sobiv"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:218
+#: classes/applications/procurement_center/procurement_requirement.aw:219
 msgid "L&auml;bir&auml;&auml;kimistele"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:223
+#: classes/applications/procurement_center/procurement_requirement.aw:224
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:230 classes/applications/procurement_center/procurement_requirement.aw:244
+#: classes/applications/procurement_center/procurement_requirement.aw:231 classes/applications/procurement_center/procurement_requirement.aw:245
 msgid "+/-"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:237
+#: classes/applications/procurement_center/procurement_requirement.aw:238
 msgid "Tundide arv"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:251
+#: classes/applications/procurement_center/procurement_requirement.aw:252
 msgid "Valmidus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:295
+#: classes/applications/procurement_center/procurement_requirement.aw:296
 msgid "X"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:295
+#: classes/applications/procurement_center/procurement_requirement.aw:296
 msgid ""
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:323
+#: classes/applications/procurement_center/procurement_requirement.aw:324
 msgid "<b>Keskmine:</b>"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:380
+#: classes/applications/procurement_center/procurement_requirement.aw:381
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:391
+#: classes/applications/procurement_center/procurement_requirement.aw:392
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_requirement.aw:394
+#: classes/applications/procurement_center/procurement_requirement.aw:395
 msgid "Oled kindel, et soovid bugi kustutada?"
 msgstr ""
 

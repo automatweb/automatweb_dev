@@ -1794,7 +1794,7 @@ msgid "Klassi Pakkumise hindamise kriteerium (1076) nimi"
 msgstr ""
 
 #: aw.ini:class_1077
-msgid "Klassi Bank Payment (1077) nimi"
+msgid "Klassi Pangamakse (1077) nimi"
 msgstr ""
 
 #: aw.ini:class_950
@@ -2038,7 +2038,7 @@ msgid "Klassi T&ouml;&ouml;koht (1142) nimi"
 msgstr ""
 
 #: aw.ini:class_1143
-msgid "Klassi Ruum (1143) nimi"
+msgid "Klassi Konverentsiruum (1143) nimi"
 msgstr ""
 
 #: aw.ini:class_1144
@@ -2058,11 +2058,11 @@ msgid "Klassi K&uuml;simustik (1153) nimi"
 msgstr ""
 
 #: aw.ini:class_1154
-msgid "Klassi K&uml;simustegrupp (1154) nimi"
+msgid "Klassi K&uuml;simustegrupp (1154) nimi"
 msgstr ""
 
 #: aw.ini:class_1155
-msgid "Klassi K&uml;simus (1155) nimi"
+msgid "Klassi K&uuml;simus (1155) nimi"
 msgstr ""
 
 #: aw.ini:class_1157
@@ -2087,6 +2087,106 @@ msgstr ""
 
 #: aw.ini:class_1162
 msgid "Klassi Ruum (1162) nimi"
+msgstr ""
+
+#: aw.ini:class_1164
+msgid "Klassi Ruumi hind (1164) nimi"
+msgstr ""
+
+#: aw.ini:class_1165
+msgid "Klassi Broneering (1165) nimi"
+msgstr ""
+
+#: aw.ini:class_1166
+msgid "Klassi Konverents (1166) nimi"
+msgstr ""
+
+#: aw.ini:class_1167
+msgid "Klassi Vanade aadresside suunamine (1167) nimi"
+msgstr ""
+
+#: aw.ini:class_1168
+msgid "Klassi Vees&otilde;iduki lisamine (1168) nimi"
+msgstr ""
+
+#: aw.ini:class_1169
+msgid "Klassi Vastaja (1169) nimi"
+msgstr ""
+
+#: aw.ini:class_1170
+msgid "Klassi Saidi templatede t&otilde;lkimine (1170) nimi"
+msgstr ""
+
+#: aw.ini:class_1171
+msgid "Klassi Konverentsi planeerimine (1171) nimi"
+msgstr ""
+
+#: aw.ini:class_1172
+msgid "Klassi N&otilde;ude kategooria (1172) nimi"
+msgstr ""
+
+#: aw.ini:class_1173
+msgid "Klassi N&otilde;ude protsess (1173) nimi"
+msgstr ""
+
+#: aw.ini:class_1174
+msgid "Klassi Ruumi broneerimine (1174) nimi"
+msgstr ""
+
+#: aw.ini:class_1175
+msgid "Klassi Pakkumise saamise palve (1175) nimi"
+msgstr ""
+
+#: aw.ini:class_1176
+msgid "Klassi Reusneri andmete sirvimine (1176) nimi"
+msgstr ""
+
+#: aw.ini:class_1177
+msgid "Klassi IP lokaator (1177) nimi"
+msgstr ""
+
+#: aw.ini:class_1178
+msgid "Klassi DigiDoci OSCP teenus (1178) nimi"
+msgstr ""
+
+#: aw.ini:class_1179
+msgid "Klassi SPA Reisib&uuml;roo liides (1179) nimi"
+msgstr ""
+
+#: aw.ini:class_1180
+msgid "Klassi Turismipakett (1180) nimi"
+msgstr ""
+
+#: aw.ini:class_1181
+msgid "Klassi Patent (1181) nimi"
+msgstr ""
+
+#: aw.ini:class_1182
+msgid "Klassi DigiDoc Parser (1182) nimi"
+msgstr ""
+
+#: aw.ini:class_1183
+msgid "Klassi Arendustellimus (1183) nimi"
+msgstr ""
+
+#: aw.ini:class_1184
+msgid "Klassi Arendustellimuste kataloog (1184) nimi"
+msgstr ""
+
+#: aw.ini:class_1185
+msgid "Klassi Probleem (1185) nimi"
+msgstr ""
+
+#: aw.ini:class_1186
+msgid "Klassi DigiDoc (1186) nimi"
+msgstr ""
+
+#: aw.ini:class_1187
+msgid "Klassi Reserveeringute &uuml;levaade (1187) nimi"
+msgstr ""
+
+#: aw.ini:class_1188
+msgid "Klassi Ruumi seaded (1188) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29

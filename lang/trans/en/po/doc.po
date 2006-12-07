@@ -70,7 +70,7 @@ msgstr ""
 # classes/doc.aw:prop_title_help
 #: classes/doc.aw:prop_title_help
 msgid "Omaduse Pealkiri (title) help"
-msgstr ""
+msgstr "the document´s heading (works as a object name in the system). The heading is displayed in bigger format than usual text on web."
 
 # classes/doc.aw:prop_subtitle
 #: classes/doc.aw:prop_subtitle
@@ -100,7 +100,7 @@ msgstr ""
 # classes/doc.aw:prop_alias_help
 #: classes/doc.aw:prop_alias_help
 msgid "Omaduse Alias (alias) help"
-msgstr ""
+msgstr "option for giving the document´s web address a user friendly form. That means replacing the document´s ID with a word or phrase that could be seen and entered also from web. The spaces and letters with diaeresis can not be used."
 
 # classes/doc.aw:prop_author
 #: classes/doc.aw:prop_author
@@ -115,7 +115,7 @@ msgstr ""
 # classes/doc.aw:prop_author_help
 #: classes/doc.aw:prop_author_help
 msgid "Omaduse Autor (author) help"
-msgstr ""
+msgstr "option for writing the author´s name under the document."
 
 # classes/doc.aw:prop_photos
 #: classes/doc.aw:prop_photos
@@ -173,7 +173,7 @@ msgstr ""
 # classes/doc.aw:prop_lead_help
 #: classes/doc.aw:prop_lead_help
 msgid "Omaduse Lead (lead) help"
-msgstr ""
+msgstr "one of two main text fields. On web the introduction is displayed a little separated from the content text. It gives an opportunity to add the document an introduction or short description what the document is all about. The introduction is also displayed in the document´s short view, where other content is not displayed. The introduction can also include different AW objects (image, link, table, etc.) added with Connection manager. (See also: Connection manager > Relation type: Alias)."
 
 # classes/doc.aw:prop_content
 #: classes/doc.aw:prop_content
@@ -188,7 +188,7 @@ msgstr ""
 # classes/doc.aw:prop_content_help
 #: classes/doc.aw:prop_content_help
 msgid "Omaduse Sisu (content) help"
-msgstr ""
+msgstr "The main text field. This field is meant for the main and most voluminous info. As in the introduction, here could also different AW objects be added with Connection manager. (See also: Connection manager > Relation type: Alias)."
 
 # classes/doc.aw:prop_moreinfo
 #: classes/doc.aw:prop_moreinfo
@@ -246,7 +246,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_showlead_help
 msgid "Omaduse N&auml;ita leadi (showlead) help"
-msgstr ""
+msgstr "option for showing or not showing the document´s introduction on web in case of the document´s long view."
 
 # classes/doc.aw:prop_show_modified
 #: classes/doc.aw:prop_show_modified
@@ -259,7 +259,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_show_modified_help
 msgid "Omaduse N&auml;ita muutmise kuup&auml;eva (show_modified) help"
-msgstr ""
+msgstr "option for showing or not showing the date when the document was last hanged or the date that is written in the document."
 
 # classes/doc.aw:prop_doc_modified
 #: classes/doc.aw:prop_doc_modified
@@ -313,7 +313,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_link_keywords2_help
 msgid "Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) help"
-msgstr ""
+msgstr "option for regulating if the keywords in document are linked or not."
 
 # classes/doc.aw:prop_frontpage_left
 #: classes/doc.aw:prop_frontpage_left
@@ -367,7 +367,7 @@ msgstr ""
 # classes/doc.aw:prop_esilehel_help
 #: classes/doc.aw:prop_esilehel_help
 msgid "Omaduse Esilehel (esilehel) help"
-msgstr ""
+msgstr "option for  regulating if the Document´s headline could be clicked on in the short view."
 
 #: classes/doc.aw:prop_jrk1
 msgid "Omaduse Jrk1 (jrk1) caption"
@@ -476,7 +476,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_show_title_help
 msgid "Omaduse N&auml;ita pealkirja (show_title) help"
-msgstr ""
+msgstr "option for showing or not showing the headline on web."
 
 #: classes/doc.aw:prop_no_search
 msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) caption"
@@ -488,7 +488,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_no_search_help
 msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) help"
-msgstr ""
+msgstr "option for excluding the finding of the document with search."
 
 # classes/doc.aw:prop_cite
 #: classes/doc.aw:prop_cite
@@ -531,7 +531,7 @@ msgstr ""
 # classes/doc.aw:prop_show_print_help
 #: classes/doc.aw:prop_show_print_help
 msgid "Omaduse 'Prindi' nupp (show_print) help"
-msgstr ""
+msgstr "option for showing or not showing the print button on web under the document."
 
 # classes/doc.aw:prop_createdby
 #: classes/doc.aw:prop_createdby
@@ -962,7 +962,7 @@ msgstr ""
 # classes/doc.aw:prop_no_right_pane_help
 #: classes/doc.aw:prop_no_right_pane_help
 msgid "Omaduse Ilma parema paanita (no_right_pane) help"
-msgstr ""
+msgstr "if the web page uses the right pane, it makes it able to loose the right pane from the document. It could be necessary in case the document´s content does not fit in the given  space otherwise."
 
 # classes/doc.aw:prop_no_left_pane
 #: classes/doc.aw:prop_no_left_pane
@@ -977,7 +977,7 @@ msgstr ""
 # classes/doc.aw:prop_no_left_pane_help
 #: classes/doc.aw:prop_no_left_pane_help
 msgid "Omaduse Ilma vasaku paanita (no_left_pane) help"
-msgstr ""
+msgstr "if the web page uses the left pane, it makes it able to loose the right pane from the document. It could be necessary in case the document´s content does not fit in the given  space otherwise."
 
 # classes/doc.aw:prop_title_clickable
 #: classes/doc.aw:prop_title_clickable
@@ -992,7 +992,7 @@ msgstr ""
 # classes/doc.aw:prop_title_clickable_help
 #: classes/doc.aw:prop_title_clickable_help
 msgid "Omaduse Pealkiri klikitav (title_clickable) help"
-msgstr ""
+msgstr "option for  regulating if the Document´s headline could be clicked on in the short view."
 
 # classes/doc.aw:prop_dcache_save
 #: classes/doc.aw:prop_dcache_save
@@ -1007,7 +1007,7 @@ msgstr ""
 # classes/doc.aw:prop_dcache_save_help
 #: classes/doc.aw:prop_dcache_save_help
 msgid "Omaduse Cache otsingu jaoks (salvestub) (dcache_save) help"
-msgstr ""
+msgstr "if the box is checked, then the document´s content will be remembered for the general search of the web page."
 
 # classes/doc.aw:prop_no_last
 #: classes/doc.aw:prop_no_last
@@ -1048,7 +1048,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_no_show_in_promo_help
 msgid "Omaduse &Auml;ra n&auml;ita konteineris (no_show_in_promo) help"
-msgstr ""
+msgstr "option for not showing the document through containers."
 
 # classes/doc.aw:prop_show_in_iframe
 #: classes/doc.aw:prop_show_in_iframe
@@ -1117,7 +1117,10 @@ msgstr ""
 # classes/doc.aw:prop_aliasmgr_help
 #: classes/doc.aw:prop_aliasmgr_help
 msgid "Omaduse Aliastehaldur (aliasmgr) help"
-msgstr ""
+msgstr "Time -  option for telling the document when to activate and when to deactivate. 
+Reminder -  option for telling the system to send a certain reminder-document about some activity in certain date and time to a certain e-mail address. 
+Alias – the most important relationship type in a document. Alias-typed relations allow to display different objects inside the document and on the web-page. For that has to be made an alias-typed connection between the document and the object. After that the created alias (f. e. #pict1#, #link3#, #file2#) has to be copied or written in the document in the desired place. 
+Permission – option for regulating different user-group´s permission´s associated with this document."
 
 # classes/doc.aw:prop_start
 #: classes/doc.aw:prop_start

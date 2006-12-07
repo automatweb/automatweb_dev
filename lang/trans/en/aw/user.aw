@@ -26,7 +26,6 @@ $GLOBALS["TRANS"]["Omaduse Ajalugu on jagatud kataloogideks (history_has_folders
 $GLOBALS["TRANS"]["Omaduse Keeleseaded (lg_hdl) caption"] = "Language settings";
 $GLOBALS["TRANS"]["Omaduse Liidese keel (set_ui_lang) caption"] = "User interface language";
 $GLOBALS["TRANS"]["Omaduse T&otilde;lkekeskkond (lg_hd) caption"] = "Translation environment";
-$GLOBALS["TRANS"]["Omaduse Baaskeel (base_lang) caption"] = "Base langugage";
 $GLOBALS["TRANS"]["Omaduse Sihtkeel (target_lang) caption"] = "Target language";
 $GLOBALS["TRANS"]["Grupi Salas&otilde;na muutmine (chpwd) pealkiri"] = "Change password";
 $GLOBALS["TRANS"]["Grupi Kasutajagrupid (groups) pealkiri"] = "User groups";

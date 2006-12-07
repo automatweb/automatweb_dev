@@ -144,6 +144,18 @@ msgstr ""
 msgid "Omaduse Luba kasutajal oma andmeid muuta (show_logged) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:prop_limit_anonymous_posting
+msgid "Omaduse Anon&uuml;&uuml;mse postitamise piiramine (limit_anonymous_posting) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_limit_anonymous_posting_comment
+msgid "Omaduse Anon&uuml;&uuml;mse postitamise piiramine (limit_anonymous_posting) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_limit_anonymous_posting_help
+msgid "Omaduse Anon&uuml;&uuml;mse postitamise piiramine (limit_anonymous_posting) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_general_subtitle
 msgid "Omaduse &Uuml;ldine (style_general_subtitle) caption"
 msgstr ""
@@ -823,79 +835,83 @@ msgstr ""
 msgid "Seose Kontrollpilt (RELTYPE_IMAGE_VERIFICATION) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:261
+#: classes/contentmgmt/forum/forum_v2.aw:264
 msgid "Uuemad teemad eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:262
+#: classes/contentmgmt/forum/forum_v2.aw:265
 msgid "T&auml;hestikulises j&auml;rjekorras (A-Z)"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:263
+#: classes/contentmgmt/forum/forum_v2.aw:266
 msgid "Viimati kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:264
+#: classes/contentmgmt/forum/forum_v2.aw:267
 msgid "Enim kommenteeritud eespool"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:302
+#: classes/contentmgmt/forum/forum_v2.aw:305
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1474
+#: classes/contentmgmt/forum/forum_v2.aw:1477
 msgid "Sisestatud kontrollnumber on vale! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1478
+#: classes/contentmgmt/forum/forum_v2.aw:1481
 msgid "Pealkirja v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1482
+#: classes/contentmgmt/forum/forum_v2.aw:1485
 msgid "Nime v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1486
+#: classes/contentmgmt/forum/forum_v2.aw:1489
 msgid "E-maili v&auml;li peab olema t&auml;idetud! <br />"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1490
+#: classes/contentmgmt/forum/forum_v2.aw:1493
 msgid "Kommentaari v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1705
+#: classes/contentmgmt/forum/forum_v2.aw:1497
+msgid "Anon&uuml;&uuml;mselt saab postitada ainult Eesti IP-lt"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1712
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1710
+#: classes/contentmgmt/forum/forum_v2.aw:1717
 msgid "J&auml;ta v&auml;lja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1717
+#: classes/contentmgmt/forum/forum_v2.aw:1724
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1890
+#: classes/contentmgmt/forum/forum_v2.aw:1897
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1939
+#: classes/contentmgmt/forum/forum_v2.aw:1946
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1951
+#: classes/contentmgmt/forum/forum_v2.aw:1958
 msgid "Kontrollnumber"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1974
+#: classes/contentmgmt/forum/forum_v2.aw:1981
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2390
+#: classes/contentmgmt/forum/forum_v2.aw:2408
 msgid " teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:2397
+#: classes/contentmgmt/forum/forum_v2.aw:2415
 msgid " aadresside kaust"
 msgstr ""
 

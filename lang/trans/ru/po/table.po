@@ -9,42 +9,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/table.aw:750
+#: classes/vcl/table.aw:752
 msgid "Vaata/Muuda"
 msgstr ""
 
-#: classes/vcl/table.aw:754
+#: classes/vcl/table.aw:756
 msgid "Sisseastuja Nr."
 msgstr ""
 
-#: classes/vcl/table.aw:766
+#: classes/vcl/table.aw:768
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/table.aw:2172
+#: classes/vcl/table.aw:2246
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/table.aw:2431
+#: classes/vcl/table.aw:2505
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/vcl/table.aw:2642
+#: classes/vcl/table.aw:2721
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/table.aw:2643
+#: classes/vcl/table.aw:2722
 msgid "Looja"
 msgstr ""
 
-#: classes/vcl/table.aw:2644
+#: classes/vcl/table.aw:2723
 msgid "Loodud"
 msgstr ""
 
-#: classes/vcl/table.aw:2645
+#: classes/vcl/table.aw:2724
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/table.aw:2646
+#: classes/vcl/table.aw:2725
 msgid "Muudetud"
 msgstr ""

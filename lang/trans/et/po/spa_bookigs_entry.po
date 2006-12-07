@@ -426,23 +426,23 @@ msgstr ""
 msgid "M&auml;&auml;ra aeg"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:839
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1049
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:842
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1065
 msgid "Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:858
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:861
 msgid "Tootele %s pole m&auml;&auml;ratud broneeringu pikkust!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:944
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:947
 msgid "Broneeritud"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1092
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1109
 msgid "Vahepeal on valitud aeg broneeritud!"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1144
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1161
 msgid "Meili sisus kasutatavad muutujad:<br>#uid# - kasutajanimi<br>#pwd# - parool<br>#login_url# - sisse logimise aadress<br>"
 msgstr ""

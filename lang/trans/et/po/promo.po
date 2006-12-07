@@ -466,6 +466,18 @@ msgstr ""
 msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) help"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/contentmgmt/promo.aw:group_general_sub
 msgid "Grupi &Uuml;ldine (general_sub) pealkiri"
 msgstr ""
@@ -562,6 +574,14 @@ msgstr ""
 msgid "Grupi M&auml;rks&otilde;nad (kws) help"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU
 msgid "Seose n&auml;ita men&uuml;&uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
 msgstr ""
@@ -587,86 +607,86 @@ msgstr ""
 msgid "Seose ignoreeri dokumente selle men&uuml;&uuml; alt (RELTYPE_DOC_IGNORE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:222
+#: classes/contentmgmt/promo.aw:230
 msgid "Vali template"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:239
+#: classes/contentmgmt/promo.aw:247
 msgid "Vasakul"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:240
+#: classes/contentmgmt/promo.aw:248
 msgid "Paremal"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:241
+#: classes/contentmgmt/promo.aw:249
 msgid "&Uuml;leval"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:242
+#: classes/contentmgmt/promo.aw:250
 msgid "All"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:243
+#: classes/contentmgmt/promo.aw:251
 msgid "Skrolliv"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:261
+#: classes/contentmgmt/promo.aw:269
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:262
+#: classes/contentmgmt/promo.aw:270
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:263
+#: classes/contentmgmt/promo.aw:271
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:264
+#: classes/contentmgmt/promo.aw:272
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:265
+#: classes/contentmgmt/promo.aw:273
 msgid "Objekti nime j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:266
+#: classes/contentmgmt/promo.aw:274
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:267
+#: classes/contentmgmt/promo.aw:275
 msgid "Random"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:275
+#: classes/contentmgmt/promo.aw:283
 msgid "Suurem (uuem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:276
+#: classes/contentmgmt/promo.aw:284
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:330 classes/contentmgmt/promo.aw:379
-#: classes/contentmgmt/promo.aw:426
+#: classes/contentmgmt/promo.aw:342 classes/contentmgmt/promo.aw:391
+#: classes/contentmgmt/promo.aw:438
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:338 classes/contentmgmt/promo.aw:387
-#: classes/contentmgmt/promo.aw:435
+#: classes/contentmgmt/promo.aw:350 classes/contentmgmt/promo.aw:399
+#: classes/contentmgmt/promo.aw:447
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:343 classes/contentmgmt/promo.aw:392
-#: classes/contentmgmt/promo.aw:449
+#: classes/contentmgmt/promo.aw:355 classes/contentmgmt/promo.aw:404
+#: classes/contentmgmt/promo.aw:461
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:442
+#: classes/contentmgmt/promo.aw:454
 msgid "Pane pealkirjaks"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1072
+#: classes/contentmgmt/promo.aw:1084
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 

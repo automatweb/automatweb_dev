@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse  (files_tbl) help"
 msgstr ""
 
+#: classes/common/digidoc/ddoc.aw:prop_search_result_file
+msgid "Omaduse  (search_result_file) caption"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_search_result_file_comment
+msgid "Omaduse  (search_result_file) kommentaar"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:prop_search_result_file_help
+msgid "Omaduse  (search_result_file) help"
+msgstr ""
+
 #: classes/common/digidoc/ddoc.aw:prop_signatures_tb
 msgid "Omaduse  (signatures_tb) caption"
 msgstr ""
@@ -126,55 +138,127 @@ msgstr ""
 msgid "Grupi Allkirjad (signatures) help"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:77
-msgid "Fail"
+#: classes/common/digidoc/ddoc.aw:rel_RELTYPE_SIGNED_FILE
+msgid "Seose Allkirjastatud fail (RELTYPE_SIGNED_FILE) tekst"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:81
-msgid "T&uuml;&uuml;p"
+#: classes/common/digidoc/ddoc.aw:rel_RELTYPE_SIGNER
+msgid "Seose Allkirjastaja (RELTYPE_SIGNER) tekst"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:85
-msgid "Suurus"
+#: classes/common/digidoc/ddoc.aw:96
+msgid "Lisa fail"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:97
-msgid "kB"
-msgstr ""
-
-#: classes/common/digidoc/ddoc.aw:97
-msgid "B"
-msgstr ""
-
-#: classes/common/digidoc/ddoc.aw:109
-msgid "Eesnimi"
-msgstr ""
-
-#: classes/common/digidoc/ddoc.aw:113
-msgid "Perekonnanimi"
-msgstr ""
-
-#: classes/common/digidoc/ddoc.aw:117
-msgid "Isikukood"
+#: classes/common/digidoc/ddoc.aw:102
+msgid "Eemalda fail"
 msgstr ""
 
 #: classes/common/digidoc/ddoc.aw:121
-msgid "Aeg"
+msgid "Fail"
 msgstr ""
 
 #: classes/common/digidoc/ddoc.aw:125
-msgid "Roll"
+msgid "T&uuml;&uuml;p"
 msgstr ""
 
 #: classes/common/digidoc/ddoc.aw:129
+msgid "Suurus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:142
+msgid "kB"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:142
+msgid "B"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:154
+msgid "Lisa allkiri"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:161
+msgid "Eemalda allkiri"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:175
+msgid "Eesnimi"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:179
+msgid "Perekonnanimi"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:183
+msgid "Isikukood"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:187
+msgid "Aeg"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:191
+msgid "Roll"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:195
 msgid "Asukoht"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:146
+#: classes/common/digidoc/ddoc.aw:213
 msgid "M&aauml;&aauml;ramata"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:462
-msgid "! Error !"
+#: classes/common/digidoc/ddoc.aw:427
+msgid "Faili lisamine eba&otilde;nnestus!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:483
+msgid "Uue DigiDoc konteineri loomine eba&otilde;nnestus: "
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:491
+msgid "Ei saanud k&auml;tte DigiDoc konteinerit:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:508 classes/common/digidoc/ddoc.aw:573
+msgid "DigiDoc'i faili sisu seadmine eba&otilde;nnestus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:538
+msgid "Eemaldatava faili id ei ole korrektne"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:544
+msgid "Vale objekti id!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:550
+msgid "Ei saa eemaldada faile allkirjastatud DigiDoc'ilt"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:566
+msgid "Ei saanud DigiDoc'i sisu k&auml;tte:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:596
+msgid "Vale objetki id!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:777 classes/common/digidoc/ddoc.aw:832
+msgid "Ei saanud lisada faili konteinerisse:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:788 classes/common/digidoc/ddoc.aw:842
+msgid "Ei saanud DigiDoc konteinerit k&auml;tte:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:796 classes/common/digidoc/ddoc.aw:850
+msgid "DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1040
+msgid "#"
 msgstr ""
 

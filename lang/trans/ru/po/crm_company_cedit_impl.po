@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:57 classes/applications/crm/crm_company_cedit_impl.aw:70 classes/applications/crm/crm_company_cedit_impl.aw:143 classes/applications/crm/crm_company_cedit_impl.aw:155 classes/applications/crm/crm_company_cedit_impl.aw:321 classes/applications/crm/crm_company_cedit_impl.aw:333 classes/applications/crm/crm_company_cedit_impl.aw:443 classes/applications/crm/crm_company_cedit_impl.aw:455 classes/applications/crm/crm_company_cedit_impl.aw:582 classes/applications/crm/crm_company_cedit_impl.aw:597 classes/applications/crm/crm_company_cedit_impl.aw:714
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:545
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:720
+msgid "Vali &uuml;ks"
+msgstr ""
+

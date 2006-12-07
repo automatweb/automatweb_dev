@@ -554,7 +554,7 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:352 classes/contentmgmt/join/join_site.aw:371 classes/contentmgmt/join/join_site.aw:1984
+#: classes/contentmgmt/join/join_site.aw:352 classes/contentmgmt/join/join_site.aw:371 classes/contentmgmt/join/join_site.aw:2032
 msgid "Omadus"
 msgstr ""
 
@@ -590,19 +590,19 @@ msgstr ""
 msgid "<b>Vahepealkirjad</b>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:739
+#: classes/contentmgmt/join/join_site.aw:739 classes/contentmgmt/join/join_site.aw:1419
 msgid "Maa"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:745
+#: classes/contentmgmt/join/join_site.aw:745 classes/contentmgmt/join/join_site.aw:1426
 msgid "Postiindeks"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:750
+#: classes/contentmgmt/join/join_site.aw:750 classes/contentmgmt/join/join_site.aw:1432
 msgid "Linn"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:755
+#: classes/contentmgmt/join/join_site.aw:755 classes/contentmgmt/join/join_site.aw:1438
 msgid "T&auml;nava nimi"
 msgstr ""
 
@@ -618,43 +618,43 @@ msgstr ""
 msgid "Liitun"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1865
+#: classes/contentmgmt/join/join_site.aw:1913
 msgid "Liitumise meili from aadress (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1876
+#: classes/contentmgmt/join/join_site.aw:1924
 msgid "Liitumise meili subjekt (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1889
+#: classes/contentmgmt/join/join_site.aw:1937
 msgid "Liitumise meil (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1957
+#: classes/contentmgmt/join/join_site.aw:2005
 msgid "Sellise koodiga kasutajat pole olemas!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1989
+#: classes/contentmgmt/join/join_site.aw:2037
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2001
+#: classes/contentmgmt/join/join_site.aw:2049
 msgid "--vali--"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2002
+#: classes/contentmgmt/join/join_site.aw:2050
 msgid "Tekstikast"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2003
+#: classes/contentmgmt/join/join_site.aw:2051
 msgid "Listbox"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2004
+#: classes/contentmgmt/join/join_site.aw:2052
 msgid "Raadionupp"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2005
+#: classes/contentmgmt/join/join_site.aw:2053
 msgid "Checkbox"
 msgstr ""
 

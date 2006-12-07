@@ -16,7 +16,7 @@ msgstr "Needs translation"
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation_help
 msgid "Omaduse Vajab tõlget (needs_translation) help"
@@ -32,7 +32,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_is_translated_help
 msgid "Omaduse Tõlge kinnitatud (is_translated) help"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/contentmgmt/poll.aw:prop_clicks
 msgid "Omaduse Klikid (clicks) caption"
@@ -56,7 +56,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_clicks_stats_help
 msgid "Omaduse Statistika (clicks_stats) help"
-msgstr ""
+msgstr "Statistics – displays the answers in a table, clicks that was made on the poll, the results as a percentage and a trend-line for visual overview."
 
 #: classes/contentmgmt/poll.aw:prop_in_archive
 msgid "Omaduse Arhiivis (in_archive) caption"
@@ -80,7 +80,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_question_help
 msgid "Omaduse K&uuml;simus (question) help"
-msgstr ""
+msgstr "the question that is shown on web to the visitor."
 
 #: classes/contentmgmt/poll.aw:prop_answers
 msgid "Omaduse Vastused (answers) caption"
@@ -92,7 +92,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_answers_help
 msgid "Omaduse Vastused (answers) help"
-msgstr ""
+msgstr "the multiple-choice answers to the questions."
 
 #: classes/contentmgmt/poll.aw:prop_activity
 msgid "Omaduse Aktiivsus (activity) caption"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_activity_help
 msgid "Omaduse Aktiivsus (activity) help"
-msgstr ""
+msgstr "Option for choosing the poll that is going to be active on web and defined by the web-site´s design.  After making the choice “save” button must be pressed."
 
 #: classes/contentmgmt/poll.aw:prop_translate
 msgid "Omaduse T&otilde;lgi (translate) caption"
@@ -116,7 +116,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_translate_help
 msgid "Omaduse T&otilde;lgi (translate) help"
-msgstr ""
+msgstr "Text fields for translating the questions and the answers to the web-site´s active language."
 
 #: classes/contentmgmt/poll.aw:group_clicks
 msgid "Grupi Klikke (clicks) pealkiri"

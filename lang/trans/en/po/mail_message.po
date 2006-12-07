@@ -344,11 +344,11 @@ msgstr "deleted!"
 msgid "sulge aken"
 msgstr "close window"
 
-#: classes/applications/messenger/mail_message.aw:1340
+#: classes/applications/messenger/mail_message.aw:1343
 msgid "saadetud<p>"
 msgstr "sent<p>"
 
-#: classes/applications/messenger/mail_message.aw:1459
+#: classes/applications/messenger/mail_message.aw:1462
 msgid "----Forwarded message-----\n"
 msgstr "----Forwarded message-----\n"
 

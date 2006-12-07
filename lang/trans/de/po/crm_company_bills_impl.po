@@ -199,6 +199,6 @@ msgstr ""
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:1201
+#: classes/applications/crm/crm_company_bills_impl.aw:1207
 msgid "EEK"
 msgstr ""

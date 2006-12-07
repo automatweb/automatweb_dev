@@ -25,7 +25,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_needs_translation_help
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
-msgstr ""
+msgstr "võimalus ära märkida, et antud dokument vajab tõlkimist."
 
 # classes/doc.aw:prop_navtoolbar
 #: classes/doc.aw:prop_navtoolbar
@@ -125,12 +125,12 @@ msgstr ""
 # classes/doc.aw:prop_photos_comment
 #: classes/doc.aw:prop_photos_comment
 msgid "Omaduse Fotode autor (photos) kommentaar"
-msgstr ""
+msgstr "võimalus välja tuua dokumendis kasutatavate fotode autor."
 
 # classes/doc.aw:prop_photos_help
 #: classes/doc.aw:prop_photos_help
 msgid "Omaduse Fotode autor (photos) help"
-msgstr ""
+msgstr "võimalus välja tuua dokumendis kasutatavate fotode autor."
 
 #: classes/doc.aw:prop_keywords
 msgid "Omaduse V&otilde;tmes&otilde;nad (keywords) caption"
@@ -142,7 +142,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_keywords_help
 msgid "Omaduse V&otilde;tmes&otilde;nad (keywords) help"
-msgstr ""
+msgstr "võimalus määrata dokumendile võtmesõnu, mis seostaks dokumenti mingi teemaga."
 
 # classes/doc.aw:prop_names
 #: classes/doc.aw:prop_names
@@ -172,7 +172,7 @@ msgstr ""
 # classes/doc.aw:prop_lead_help
 #: classes/doc.aw:prop_lead_help
 msgid "Omaduse Lead (lead) help"
-msgstr ""
+msgstr "Sissejuhatus - üks kahest põhilisest tekstiväljast. Kuvatakse veebilehel tavaliselt veebilehel muust tekstist väheke eraldatult. Võimaldab dokumendile lisada niiöelda sissejuhatuse e. lühikirjelduse, mida dokumendist leida võib. Ühtlasi kuvatakse sissejuhatust enamasti ka lühikesest dokumendi vaates, kus muud sisu ei kuvata. Sissejuhatusse saab lisada Seostehalduri abil ka erinevaid AW objekte(Pilt, link, fail, Tabel, jne)."
 
 # classes/doc.aw:prop_content
 #: classes/doc.aw:prop_content
@@ -227,12 +227,12 @@ msgstr ""
 # classes/doc.aw:prop_is_forum_comment
 #: classes/doc.aw:prop_is_forum_comment
 msgid "Omaduse Foorum (is_forum) kommentaar"
-msgstr ""
+msgstr "võimalus määrata dokument kommenteeritavaks."
 
 # classes/doc.aw:prop_is_forum_help
 #: classes/doc.aw:prop_is_forum_help
 msgid "Omaduse Foorum (is_forum) help"
-msgstr ""
+msgstr "võimalus määrata dokument kommenteeritavaks."
 
 #: classes/doc.aw:prop_showlead
 msgid "Omaduse N&auml;ita leadi (showlead) caption"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_showlead_help
 msgid "Omaduse N&auml;ita leadi (showlead) help"
-msgstr ""
+msgstr "võimalus reguleerida, kas pikas dokumendivaates Sissejuhatuse(Leadi) välja kuvatakse."
 
 #: classes/doc.aw:prop_show_modified
 msgid "Omaduse N&auml;ita muutmise kuup&auml;eva (show_modified) caption"
@@ -273,7 +273,7 @@ msgstr ""
 # classes/doc.aw:prop_doc_modified_help
 #: classes/doc.aw:prop_doc_modified_help
 msgid "Omaduse Dok. modified (doc_modified) help"
-msgstr ""
+msgstr "Võimlus kirjutada dokumendile sobilik veebilehel kuvatav kuupäev."
 
 #: classes/doc.aw:prop_clear_styles
 msgid "Omaduse T&uuml;hista stiilid (clear_styles) caption"
@@ -299,7 +299,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_link_keywords_help
 msgid "Omaduse Lingi v&otilde;tmes&otilde;nad (link_keywords) help"
-msgstr ""
+msgstr "võimalus muuta dokumendi sees olevad süsteemis defineeritud võtmesõnad aktiivseks-lingitavaks. Link viitab nende võtmesõnadega seotud objektide nimekirjale."
 
 #: classes/doc.aw:prop_link_keywords2
 msgid "Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) caption"
@@ -313,7 +313,7 @@ msgstr "võimalus eguleerida, kas dokumendis leiduvad võtmesõnad on lingitud või 
 # classes/doc.aw:prop_link_keywords2_help
 #: classes/doc.aw:prop_link_keywords2_help
 msgid "Omaduse V&otilde;tmes&otilde;nad lingina (link_keywords2) help"
-msgstr "võimalus eguleerida, kas dokumendis leiduvad võtmesõnad on lingitud või mitte"
+msgstr "võimalus reguleerida, kas dokumendis leiduvad võtmesõnad on lingitud või mitte."
 
 # classes/doc.aw:prop_frontpage_left
 #: classes/doc.aw:prop_frontpage_left
@@ -328,7 +328,7 @@ msgstr ""
 # classes/doc.aw:prop_frontpage_left_help
 #: classes/doc.aw:prop_frontpage_left_help
 msgid "Omaduse Esilehel tulbas (frontpage_left) help"
-msgstr ""
+msgstr "võimalus määrata dokument esilehele vasakusse tulpa - juhul, kui veebileht on vastavalt kujundatud ja seadistatud."
 
 #: classes/doc.aw:prop_frontpage_right
 msgid "Omaduse Esilehel tulbas paremal (frontpage_right) caption"
@@ -340,7 +340,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_frontpage_right_help
 msgid "Omaduse Esilehel tulbas paremal (frontpage_right) help"
-msgstr ""
+msgstr "võimalus määrata dokument esilehele paremasse tulpa - juhul, kui veebileht on vastavalt kujundatud ja seadistatud."
 
 #: classes/doc.aw:prop_frontpage_center
 msgid "Omaduse Esilehel keskel (frontpage_center) caption"
@@ -352,7 +352,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_frontpage_center_help
 msgid "Omaduse Esilehel keskel (frontpage_center) help"
-msgstr ""
+msgstr "võimalus määrata dokument esilehele keskmisesse tulpa - juhul, kui veebileht on vastavalt kujundatud ja seadistatud."
 
 # classes/doc.aw:prop_esilehel
 #: classes/doc.aw:prop_esilehel
@@ -362,12 +362,12 @@ msgstr ""
 # classes/doc.aw:prop_esilehel_comment
 #: classes/doc.aw:prop_esilehel_comment
 msgid "Omaduse Esilehel (esilehel) kommentaar"
-msgstr "võimaldab määrata dokumendi ilmuma esilehele"
+msgstr "võimaldab määrata dokumendi ilmuma esilehele - juhul, kui veebileht on vastavalt kujundatud ja seadistatud."
 
 # classes/doc.aw:prop_esilehel_help
 #: classes/doc.aw:prop_esilehel_help
 msgid "Omaduse Esilehel (esilehel) help"
-msgstr "võimaldab määrata dokumendi ilmuma esilehele"
+msgstr "võimaldab määrata dokumendi ilmuma esilehele - juhul, kui veebileht on vastavalt kujundatud ja seadistatud."
 
 #: classes/doc.aw:prop_jrk1
 msgid "Omaduse Jrk1 (jrk1) caption"
@@ -379,7 +379,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_jrk1_help
 msgid "Omaduse Jrk1 (jrk1) help"
-msgstr ""
+msgstr "saab määrata dokumentide järjekorda defineeritud piirkonnas - juhul, kui veebileht on vastavalt kujundatud ja seadistatud.."
 
 #: classes/doc.aw:prop_esilehel_uudis
 msgid "Omaduse Esilehel uudis (esilehel_uudis) caption"
@@ -391,7 +391,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_esilehel_uudis_help
 msgid "Omaduse Esilehel uudis (esilehel_uudis) help"
-msgstr ""
+msgstr "võimalus määrata uudist esilehele - juhul, kui veebileht on vastavalt kujundatud ja seadistatud.."
 
 #: classes/doc.aw:prop_jrk2
 msgid "Omaduse Jrk2 (jrk2) caption"
@@ -403,7 +403,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_jrk2_help
 msgid "Omaduse Jrk2 (jrk2) help"
-msgstr ""
+msgstr "saab määrata dokumentide järjekorda defineeritud piirkonnas - juhul, kui veebileht on vastavalt kujundatud ja seadistatud.."
 
 # classes/doc.aw:prop_dcache
 #: classes/doc.aw:prop_dcache
@@ -533,7 +533,7 @@ msgstr ""
 # classes/doc.aw:prop_show_print_help
 #: classes/doc.aw:prop_show_print_help
 msgid "Omaduse 'Prindi' nupp (show_print) help"
-msgstr ""
+msgstr "reguleerib, kas veebilehel kuvatakse dokumendi juures printimise vaatesse viivat nuppu või mitte."
 
 # classes/doc.aw:prop_createdby
 #: classes/doc.aw:prop_createdby
@@ -1115,7 +1115,11 @@ msgstr ""
 # classes/doc.aw:prop_aliasmgr_help
 #: classes/doc.aw:prop_aliasmgr_help
 msgid "Omaduse Aliastehaldur (aliasmgr) help"
-msgstr ""
+msgstr "Seose tüübid:
+Aeg - võimaldab dokumendile öelda, millal ta peaks aktiveeruma ja millal deaktiveeruma
+Meeldetuletus - võimalus öelda süsteemile, et ta saadaks teatud e-maili aadressidele soovitud päeval ja kellaajal meeldetuletuse dokumendiga seotud toimingu kohta.
+Alias - kõige tähtsam seose tüüp dokumendi juures. Alias tüüpi seose kaudu käib erinevate objektide kuvamine veebilehel dokumendi sees. Selleks tuleb luua alias tüüpi seos dokumendi ja objekti vahel ja seejärel tekkinud alias(N: #pict1#, #link3#, #file2#) kopeerida või kirjutada dokumendi sisse soovitud koha peale.
+Õigus - võimaldab reguleerida erinevate kautajagruppide õigusi antud dokumendile"
 
 # classes/doc.aw:prop_start
 #: classes/doc.aw:prop_start
@@ -1220,7 +1224,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_transl_help
 msgid "Omaduse T&otilde;lgi (transl) help"
-msgstr ""
+msgstr "v&otilde;imalus t&otilde;lkida objekt teise keelde. Vajalik juhul, kui kasutatakse erinevate keelte all sama objekti. Tõlkimiseks tuleb kirjutada vastavanimelistesse tekstiväljadesse sobilikud võõrkeelsed vasted. Kui see tehtud, siis teha märge välja Tõlge aktiivne."
 
 # classes/doc.aw:group_calendar
 #: classes/doc.aw:group_calendar

@@ -1,12 +1,11 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Asukoht (location) caption"] = "Location";
 $GLOBALS["TRANS"]["Omaduse Omanik (owner) caption"] = "Owner";
-$GLOBALS["TRANS"]["Omaduse Varustuse kataloog (inventory) caption"] = "Inventory folder";
 $GLOBALS["TRANS"]["Omaduse Valdkond (area) caption"] = "Area";
+$GLOBALS["TRANS"]["Omaduse Kasutustingimused (conditions) caption"] = "Usage conditions";
 $GLOBALS["TRANS"]["Omaduse Suurus(ruutmeetrites) (square_meters) caption"] = "Size in square-meters";
 $GLOBALS["TRANS"]["Omaduse Normaalne mahutavus (normal_capacity) caption"] = "Normal capacity";
 $GLOBALS["TRANS"]["Omaduse Maksimaalne mahutavus (max_capacity) caption"] = "Maximum capacity";
-$GLOBALS["TRANS"]["Omaduse Kasutustingimused (conditions) caption"] = "Usage conditions";
 $GLOBALS["TRANS"]["Omaduse Valuuta (currency) caption"] = "Currency";
 $GLOBALS["TRANS"]["Omaduse Hind (price) caption"] = "Price";
 $GLOBALS["TRANS"]["Omaduse Aja&uuml;hik (time_unit) caption"] = "Time unit";
@@ -21,7 +20,6 @@ $GLOBALS["TRANS"]["Grupi Hinnad (prices_price) pealkiri"] = "Prices";
 $GLOBALS["TRANS"]["Grupi Soodushinnad (prices_bargain_price) pealkiri"] = "Discount prices";
 $GLOBALS["TRANS"]["Seose Asukoht (RELTYPE_LOCATION) tekst"] = "Location";
 $GLOBALS["TRANS"]["Seose Omanik (RELTYPE_OWNER) tekst"] = "Owner";
-$GLOBALS["TRANS"]["Seose Varustuse kataloog (RELTYPE_INVENTORY) tekst"] = "Equipment";
 $GLOBALS["TRANS"]["Seose Valdkond (RELTYPE_AREA) tekst"] = "Area";
 $GLOBALS["TRANS"]["Seose Kasutustingimused (RELTYPE_CONDITIONS) tekst"] = "Usage conditons";
 $GLOBALS["TRANS"]["Seose Pilt (RELTYPE_IMAGE) tekst"] = "Image";

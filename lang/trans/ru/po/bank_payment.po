@@ -37,6 +37,54 @@ msgstr ""
 msgid "Omaduse Selgitus (expl) help"
 msgstr ""
 
+#: classes/common/bank_payment.aw:prop_template
+msgid "Omaduse Pangaformide template (template) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_template_comment
+msgid "Omaduse Pangaformide template (template) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_template_help
+msgid "Omaduse Pangaformide template (template) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_private_key
+msgid "Omaduse Privaatv&otilde;ti (private_key) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_private_key_comment
+msgid "Omaduse Privaatv&otilde;ti (private_key) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_private_key_help
+msgid "Omaduse Privaatv&otilde;ti (private_key) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_return_url
+msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (return_url) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_return_url_comment
+msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (return_url) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_return_url_help
+msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (return_url) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_cancel_url
+msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_cancel_url_comment
+msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_cancel_url_help
+msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) help"
+msgstr ""
+
 #: classes/common/bank_payment.aw:prop_bank
 msgid "Omaduse  (bank) caption"
 msgstr ""
@@ -55,4 +103,12 @@ msgstr ""
 
 #: classes/common/bank_payment.aw:group_bank_help
 msgid "Grupi Pankade info (bank) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:rel_RELTYPE_KEY
+msgid "Seose Privaatv&otilde;ti (RELTYPE_KEY) tekst"
+msgstr ""
+
+#: classes/common/bank_payment.aw:309
+msgid "\n"
 msgstr ""

@@ -42,27 +42,31 @@ msgstr ""
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:146
+#: classes/applications/groupware/project_req_impl.aw:120
+msgid "Ekspordi"
+msgstr ""
+
+#: classes/applications/groupware/project_req_impl.aw:204
 msgid "N&otilde;uded"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:150
+#: classes/applications/groupware/project_req_impl.aw:208
 msgid ""
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:154
+#: classes/applications/groupware/project_req_impl.aw:212
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:160
+#: classes/applications/groupware/project_req_impl.aw:218
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:166
+#: classes/applications/groupware/project_req_impl.aw:224
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/groupware/project_req_impl.aw:175
+#: classes/applications/groupware/project_req_impl.aw:233
 msgid "Osalejad"
 msgstr ""
 

@@ -294,10 +294,10 @@ msgstr ""
 msgid "sulge aken"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1340
+#: classes/applications/messenger/mail_message.aw:1343
 msgid "saadetud<p>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:1459
+#: classes/applications/messenger/mail_message.aw:1462
 msgid "----Forwarded message-----\n"
 msgstr ""

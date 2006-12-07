@@ -342,7 +342,7 @@ msgid "Seose Kriteerium (RELTYPE_CRITERIA) tekst"
 msgstr "Criteria"
 
 #: classes/applications/procurement_center/procurement.aw:129
-#: classes/applications/procurement_center/procurement.aw:525
+#: classes/applications/procurement_center/procurement.aw:566
 msgid "Uus"
 msgstr "New"
 
@@ -382,111 +382,112 @@ msgstr "Quantity"
 msgid "&Uuml;hik"
 msgstr "Unit"
 
-#: classes/applications/procurement_center/procurement.aw:407
-#: classes/applications/procurement_center/procurement.aw:825
+#: classes/applications/procurement_center/procurement.aw:428
+#: classes/applications/procurement_center/procurement.aw:866
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/procurement_center/procurement.aw:412
+#: classes/applications/procurement_center/procurement.aw:433
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/applications/procurement_center/procurement.aw:532
+#: classes/applications/procurement_center/procurement.aw:439
+#: classes/applications/procurement_center/procurement.aw:573
 msgid "Kataloog"
 msgstr "Folder"
 
-#: classes/applications/procurement_center/procurement.aw:538
+#: classes/applications/procurement_center/procurement.aw:579
 msgid "N&otilde;ue"
 msgstr "Requirement"
 
-#: classes/applications/procurement_center/procurement.aw:545
+#: classes/applications/procurement_center/procurement.aw:586
 msgid "Kustuta valitud n&otilde;uded"
 msgstr "Delete selected requirements"
 
-#: classes/applications/procurement_center/procurement.aw:547
+#: classes/applications/procurement_center/procurement.aw:588
 msgid "Kas oled kindel et soovid valitud n&otilde;uded kustudada?"
 msgstr "Are You sure You want to delete selected requirements"
 
-#: classes/applications/procurement_center/procurement.aw:575
+#: classes/applications/procurement_center/procurement.aw:616
 msgid "N&otilde;ude nimi"
 msgstr "Requirement"
 
-#: classes/applications/procurement_center/procurement.aw:581
-#: classes/applications/procurement_center/procurement.aw:831
+#: classes/applications/procurement_center/procurement.aw:622
+#: classes/applications/procurement_center/procurement.aw:872
 msgid "Looja"
 msgstr "Created by"
 
-#: classes/applications/procurement_center/procurement.aw:587
-#: classes/applications/procurement_center/procurement.aw:837
+#: classes/applications/procurement_center/procurement.aw:628
+#: classes/applications/procurement_center/procurement.aw:878
 msgid "Loodud"
 msgstr "Created"
 
-#: classes/applications/procurement_center/procurement.aw:596
-#: classes/applications/procurement_center/procurement.aw:846
+#: classes/applications/procurement_center/procurement.aw:637
+#: classes/applications/procurement_center/procurement.aw:887
 msgid "Muutja"
 msgstr "Modified by"
 
-#: classes/applications/procurement_center/procurement.aw:602
-#: classes/applications/procurement_center/procurement.aw:852
+#: classes/applications/procurement_center/procurement.aw:643
+#: classes/applications/procurement_center/procurement.aw:893
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/applications/procurement_center/procurement.aw:671
+#: classes/applications/procurement_center/procurement.aw:712
 msgid "Vali v&otilde;itjapakkumine"
 msgstr "Select winning offer"
 
-#: classes/applications/procurement_center/procurement.aw:673
+#: classes/applications/procurement_center/procurement.aw:714
 msgid "Kas oled kindel et soovid valitud pakkumise v&auml;lja valida?"
 msgstr "Are You sure You want to select winning offer"
 
-#: classes/applications/procurement_center/procurement.aw:693
+#: classes/applications/procurement_center/procurement.aw:734
 msgid "Edetabel"
 msgstr "Top"
 
-#: classes/applications/procurement_center/procurement.aw:702
+#: classes/applications/procurement_center/procurement.aw:743
 msgid "Pakkumise nimi"
 msgstr "Offer"
 
-#: classes/applications/procurement_center/procurement.aw:708
+#: classes/applications/procurement_center/procurement.aw:749
 msgid "Pakkuja"
 msgstr "Offerer"
 
-#: classes/applications/procurement_center/procurement.aw:714
+#: classes/applications/procurement_center/procurement.aw:755
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/procurement_center/procurement.aw:721
+#: classes/applications/procurement_center/procurement.aw:762
 msgid "Punktid"
 msgstr "Points"
 
-#: classes/applications/procurement_center/procurement.aw:861
+#: classes/applications/procurement_center/procurement.aw:902
 msgid "Vali"
 msgstr "Select"
 
-#: classes/applications/procurement_center/procurement.aw:965
+#: classes/applications/procurement_center/procurement.aw:1006
 msgid "Kriteeriumi nimi"
 msgstr "Criteria"
 
-#: classes/applications/procurement_center/procurement.aw:972
+#: classes/applications/procurement_center/procurement.aw:1013
 msgid "T&uuml;p"
 msgstr "Type"
 
-#: classes/applications/procurement_center/procurement.aw:978
+#: classes/applications/procurement_center/procurement.aw:1019
 msgid "Protsent"
 msgstr "Percent"
 
-#: classes/applications/procurement_center/procurement.aw:1015
+#: classes/applications/procurement_center/procurement.aw:1056
 msgid "Lisa kriteerium"
 msgstr "Add criteria"
 
-#: classes/applications/procurement_center/procurement.aw:1021
+#: classes/applications/procurement_center/procurement.aw:1062
 msgid "Kustuta kriteeriumid"
 msgstr "Delete criterias"
 
-#: classes/applications/procurement_center/procurement.aw:1022
+#: classes/applications/procurement_center/procurement.aw:1063
 msgid "Oled kindel et soovid valitud kriteeriumid kustutada?"
 msgstr "Are You sure You want to delete selected criterias"
 
-#: classes/applications/procurement_center/procurement.aw:1083
+#: classes/applications/procurement_center/procurement.aw:1124
 msgid "Toodet nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr "There is no product named %s, it will be added if You click OK"

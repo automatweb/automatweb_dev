@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/clients/patent_office/patent.aw:class__help
-msgid "Klassi  help"
+#: classes/applications/clients/patent_office/patent.aw:class_1181_help
+msgid "Klassi Patent help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_applicant
@@ -62,40 +62,28 @@ msgstr ""
 msgid "Omaduse Volikiri (warrant) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_phone
-msgid "Omaduse Telefon (phone) caption"
+#: classes/applications/clients/patent_office/patent.aw:prop_authorized_person
+msgid "Omaduse Volitatud isik (authorized_person) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_phone_comment
-msgid "Omaduse Telefon (phone) kommentaar"
+#: classes/applications/clients/patent_office/patent.aw:prop_authorized_person_comment
+msgid "Omaduse Volitatud isik (authorized_person) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_phone_help
-msgid "Omaduse Telefon (phone) help"
+#: classes/applications/clients/patent_office/patent.aw:prop_authorized_person_help
+msgid "Omaduse Volitatud isik (authorized_person) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_fax
-msgid "Omaduse Fax (fax) caption"
+#: classes/applications/clients/patent_office/patent.aw:prop_additional_info
+msgid "Omaduse Lisainfo (additional_info) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_fax_comment
-msgid "Omaduse Fax (fax) kommentaar"
+#: classes/applications/clients/patent_office/patent.aw:prop_additional_info_comment
+msgid "Omaduse Lisainfo (additional_info) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_fax_help
-msgid "Omaduse Fax (fax) help"
-msgstr ""
-
-#: classes/applications/clients/patent_office/patent.aw:prop_email
-msgid "Omaduse E-mail (email) caption"
-msgstr ""
-
-#: classes/applications/clients/patent_office/patent.aw:prop_email_comment
-msgid "Omaduse E-mail (email) kommentaar"
-msgstr ""
-
-#: classes/applications/clients/patent_office/patent.aw:prop_email_help
-msgid "Omaduse E-mail (email) help"
+#: classes/applications/clients/patent_office/patent.aw:prop_additional_info_help
+msgid "Omaduse Lisainfo (additional_info) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_type
@@ -110,16 +98,16 @@ msgstr ""
 msgid "Omaduse T&uuml;&uuml;p (type) help"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_trademark_type
-msgid "Omaduse T&uuml;&uuml;p (trademark_type) caption"
+#: classes/applications/clients/patent_office/patent.aw:prop_undefended_parts
+msgid "Omaduse Mittekaitstavad osad (undefended_parts) caption"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_trademark_type_comment
-msgid "Omaduse T&uuml;&uuml;p (trademark_type) kommentaar"
+#: classes/applications/clients/patent_office/patent.aw:prop_undefended_parts_comment
+msgid "Omaduse Mittekaitstavad osad (undefended_parts) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/patent_office/patent.aw:prop_trademark_type_help
-msgid "Omaduse T&uuml;&uuml;p (trademark_type) help"
+#: classes/applications/clients/patent_office/patent.aw:prop_undefended_parts_help
+msgid "Omaduse Mittekaitstavad osad (undefended_parts) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_word_mark
@@ -159,15 +147,15 @@ msgid "Omaduse Kaubam&auml;rgi iseloomustus (trademark_character) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_element_translation
-msgid "Omaduse V&otilde;&otlide;rkeelsete elementide t&otilde;lge  (element_translation) caption"
+msgid "Omaduse V&otilde;&otilde;rkeelsete elementide t&otilde;lge  (element_translation) caption"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_element_translation_comment
-msgid "Omaduse V&otilde;&otlide;rkeelsete elementide t&otilde;lge  (element_translation) kommentaar"
+msgid "Omaduse V&otilde;&otilde;rkeelsete elementide t&otilde;lge  (element_translation) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_element_translation_help
-msgid "Omaduse V&otilde;&otlide;rkeelsete elementide t&otilde;lge  (element_translation) help"
+msgid "Omaduse V&otilde;&otilde;rkeelsete elementide t&otilde;lge  (element_translation) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_reproduction
@@ -180,6 +168,18 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_reproduction_help
 msgid "Omaduse Lisa reproduktsioon (reproduction) help"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:prop_trademark_type
+msgid "Omaduse T&uuml;&uuml;p (trademark_type) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:prop_trademark_type_comment
+msgid "Omaduse T&uuml;&uuml;p (trademark_type) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:prop_trademark_type_help
+msgid "Omaduse T&uuml;&uuml;p (trademark_type) help"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:prop_products_and_services_tbl
@@ -350,6 +350,18 @@ msgstr ""
 msgid "Omaduse Makse kuup&auml;ev (payment_date) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/patent.aw:prop_procurator_menu
+msgid "Omaduse Volinike kaust (procurator_menu) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:prop_procurator_menu_comment
+msgid "Omaduse Volinike kaust (procurator_menu) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:prop_procurator_menu_help
+msgid "Omaduse Volinike kaust (procurator_menu) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/patent.aw:group_trademark
 msgid "Grupi Kaubam&auml;rk (trademark) pealkiri"
 msgstr ""
@@ -382,6 +394,14 @@ msgstr ""
 msgid "Grupi Riigil&otilde;iv (fee) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/patent.aw:group_web
+msgid "Grupi Saidilt lisamine (web) pealkiri"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:group_web_help
+msgid "Grupi Saidilt lisamine (web) help"
+msgstr ""
+
 #: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_APPLICANT
 msgid "Seose Taotleja (RELTYPE_APPLICANT) tekst"
 msgstr ""
@@ -392,6 +412,10 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_WARRANT
 msgid "Seose Volikiri (RELTYPE_WARRANT) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_REPRODUCTION
+msgid "Seose Volikiri (RELTYPE_REPRODUCTION) tekst"
 msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_PHONE
@@ -408,5 +432,93 @@ msgstr ""
 
 #: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_COUNTRY
 msgid "Seose P&auml;riltolumaa (RELTYPE_COUNTRY) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_PROCURATOR_MENU
+msgid "Seose Volinike kaust (RELTYPE_PROCURATOR_MENU) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:rel_RELTYPE_AUTHORIZED_PERSON
+msgid "Seose Volitatud isik (RELTYPE_AUTHORIZED_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:181 classes/applications/clients/patent_office/patent.aw:495
+msgid "Sõnamärk"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:181 classes/applications/clients/patent_office/patent.aw:499
+msgid "Kujutismärk"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:181 classes/applications/clients/patent_office/patent.aw:503
+msgid "Kombineeritud märk"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:181 classes/applications/clients/patent_office/patent.aw:507
+msgid "Ruumiline märk"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:182 classes/applications/clients/patent_office/patent.aw:513
+msgid "Kollektiivkaubam&auml;rk"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:182 classes/applications/clients/patent_office/patent.aw:518
+msgid "Garantiim&auml;rk"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:472
+msgid "Eesti :"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:476
+msgid " V&auml;lismaa :"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:481
+msgid "F&uuml;&uuml;siline isik :"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:485
+msgid "Juriidiline isik :"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:541 classes/applications/clients/patent_office/patent.aw:656
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:549
+msgid "Otsi klassifikaatorit"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:573 classes/applications/clients/patent_office/patent.aw:647
+msgid "Klass"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:577
+msgid "Klassi nimi"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:581 classes/applications/clients/patent_office/patent.aw:651
+msgid "Toode/teenus"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:717
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:721
+msgid "Isikukood/reg.kood"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:725
+msgid "Esindaja"
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:729
+msgid ""
+msgstr ""
+
+#: classes/applications/clients/patent_office/patent.aw:754 classes/applications/clients/patent_office/patent.aw:755
+msgid "Muuda"
 msgstr ""
 

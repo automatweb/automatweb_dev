@@ -14,23 +14,23 @@ msgstr ""
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:40
+#: classes/applications/crm/crm_participant_search.aw:42
 msgid "Meie firma"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:42
+#: classes/applications/crm/crm_participant_search.aw:44
 msgid "Minu kliendid"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:43
+#: classes/applications/crm/crm_participant_search.aw:45
 msgid "Olulised"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:44
+#: classes/applications/crm/crm_participant_search.aw:46
 msgid "Esimesed kolmkümmend"
 msgstr ""
 
-#: classes/applications/crm/crm_participant_search.aw:50
+#: classes/applications/crm/crm_participant_search.aw:53
 msgid "N&auml;ita"
 msgstr ""
 

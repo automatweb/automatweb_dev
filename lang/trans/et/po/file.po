@@ -82,7 +82,7 @@ msgstr ""
 
 #: classes/file.aw:prop_ord_help
 msgid "Omaduse J&auml;rjekord (ord) help"
-msgstr ""
+msgstr "saab määrata objektide järjekorda administreerimisliideses. Veebil avaldab järjekorranumber mõju, kui faile kuvatakse läbi objektinimekirja."
 
 # classes/file.aw:prop_comment
 #: classes/file.aw:prop_comment
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/file.aw:prop_showal_help
 msgid "Omaduse N&auml;ita kohe (showal) help"
-msgstr ""
+msgstr "valiku märkimisel ei kuvata faili lingina vaid üritatakse seda kohe näidata."
 
 # classes/file.aw:prop_newwindow
 #: classes/file.aw:prop_newwindow
@@ -139,7 +139,7 @@ msgstr "faili uues aknas."
 # classes/file.aw:prop_newwindow_help
 #: classes/file.aw:prop_newwindow_help
 msgid "Omaduse Uues aknas (newwindow) help"
-msgstr "faili uues aknas."
+msgstr "avab faili uues aknas."
 
 #: classes/file.aw:prop_show_framed
 msgid "Omaduse N&auml;ita saidi raamis (show_framed) caption"
@@ -151,7 +151,7 @@ msgstr ""
 
 #: classes/file.aw:prop_show_framed_help
 msgid "Omaduse N&auml;ita saidi raamis (show_framed) help"
-msgstr ""
+msgstr "üritatakse faili kuvada veebilehe kujunduse sisse. Igat tüüpi faili niimoodi kuvada ei saa. Võimalik näiteks .txt ja .html laienditega failide puhul."
 
 #: classes/file.aw:prop_show_icon
 msgid "Omaduse N&auml;ita ikooni (show_icon) caption"
@@ -163,7 +163,7 @@ msgstr ""
 
 #: classes/file.aw:prop_show_icon_help
 msgid "Omaduse N&auml;ita ikooni (show_icon) help"
-msgstr ""
+msgstr "määrangust sõltub, kas veebilehel kuvatakse faili ette faili ikooni või mitte"
 
 #: classes/file.aw:prop_j_time
 msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) caption"
@@ -223,6 +223,18 @@ msgstr ""
 
 #: classes/file.aw:prop_transl_help
 msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr "v&otilde;imalus t&otilde;lkida objekt teise keelde. Vajalik juhul, kui kasutatakse erinevate keelte all sama objekti. Tõlkimiseks tuleb kirjutada vastavanimelistesse tekstiväljadesse sobilikud võõrkeelsed vasted. Kui see tehtud, siis teha märge välja Tõlge aktiivne."
+
+#: classes/file.aw:prop_acl
+msgid "Omaduse &Otilde;igused (acl) caption"
+msgstr ""
+
+#: classes/file.aw:prop_acl_comment
+msgid "Omaduse &Otilde;igused (acl) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_acl_help
+msgid "Omaduse &Otilde;igused (acl) help"
 msgstr ""
 
 # classes/file.aw:group_settings
@@ -253,15 +265,23 @@ msgstr ""
 msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/file.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
+msgstr ""
+
 #: classes/file.aw:rel_RELTYPE_KEYWORD
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:165
+#: classes/file.aw:171
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:1132
+#: classes/file.aw:1138
 msgid "Need either id or parent"
 msgstr ""
 

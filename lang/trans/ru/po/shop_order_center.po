@@ -193,6 +193,18 @@ msgstr ""
 msgid "Omaduse Veebis tooted on kataloogid (prods_are_folders) help"
 msgstr ""
 
+#: classes/applications/shop/shop_order_center.aw:prop_web_discount
+msgid "Omaduse Veebis allahindlus (%) (web_discount) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_web_discount_comment
+msgid "Omaduse Veebis allahindlus (%) (web_discount) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_web_discount_help
+msgid "Omaduse Veebis allahindlus (%) (web_discount) help"
+msgstr ""
+
 #: classes/applications/shop/shop_order_center.aw:prop_mail_to_client
 msgid "Omaduse Saada tellijale e-mail (mail_to_client) caption"
 msgstr ""
@@ -505,63 +517,63 @@ msgstr ""
 msgid "Seose tellimuse nime kontroller (RELTYPE_ORDER_NAME_CTR) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:182
+#: classes/applications/shop/shop_order_center.aw:185
 msgid "Sessionipõhine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:183
+#: classes/applications/shop/shop_order_center.aw:186
 msgid "Kasutajapõhine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:326
+#: classes/applications/shop/shop_order_center.aw:329
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:331
+#: classes/applications/shop/shop_order_center.aw:334
 msgid "Tabeli kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:337
+#: classes/applications/shop/shop_order_center.aw:340
 msgid "Paketi kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:343
+#: classes/applications/shop/shop_order_center.aw:346
 msgid "Paketi vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:349
+#: classes/applications/shop/shop_order_center.aw:352
 msgid "Paketi teise vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:369
-#: classes/applications/shop/shop_order_center.aw:1237
+#: classes/applications/shop/shop_order_center.aw:372
+#: classes/applications/shop/shop_order_center.aw:1239
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:445
+#: classes/applications/shop/shop_order_center.aw:448
 msgid "Sorditav v&auml;li"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:451
+#: classes/applications/shop/shop_order_center.aw:454
 msgid "Kasvav / kahanev"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:469
+#: classes/applications/shop/shop_order_center.aw:472
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1066
+#: classes/applications/shop/shop_order_center.aw:1068
 msgid "&nbsp"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1081
+#: classes/applications/shop/shop_order_center.aw:1083
 msgid "Vali t&uuml;hjaks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1184
+#: classes/applications/shop/shop_order_center.aw:1186
 msgid "Tellija andmete vorm valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1211
+#: classes/applications/shop/shop_order_center.aw:1213
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr ""

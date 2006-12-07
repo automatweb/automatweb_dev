@@ -134,6 +134,30 @@ msgstr ""
 msgid "Omaduse  (reqs_table) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reqs_cart_tb
+msgid "Omaduse  (reqs_cart_tb) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reqs_cart_tb_comment
+msgid "Omaduse  (reqs_cart_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reqs_cart_tb_help
+msgid "Omaduse  (reqs_cart_tb) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reqs_cart_table
+msgid "Omaduse  (reqs_cart_table) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reqs_cart_table_comment
+msgid "Omaduse  (reqs_cart_table) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:prop_reqs_cart_table_help
+msgid "Omaduse  (reqs_cart_table) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/development_order.aw:prop_problems_tb
 msgid "Omaduse  (problems_tb) caption"
 msgstr ""
@@ -159,11 +183,19 @@ msgid "Omaduse  (problems_table) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:group_reqs
-msgid "Grupi N&otilde;uded (reqs) pealkiri"
+msgid "Grupi K&otilde;ik n&otilde;uded (reqs) pealkiri"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:group_reqs_help
-msgid "Grupi N&otilde;uded (reqs) help"
+msgid "Grupi K&otilde;ik n&otilde;uded (reqs) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:group_reqs_cart
+msgid "Grupi Tellimuste korv (reqs_cart) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:group_reqs_cart_help
+msgid "Grupi Tellimuste korv (reqs_cart) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/development_order.aw:group_problems
@@ -210,7 +242,31 @@ msgstr ""
 msgid "Seose Probleem (RELTYPE_PROBLEM) tekst"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/development_order.aw:97 classes/applications/bug_o_matic_3000/development_order.aw:111
+#: classes/applications/bug_o_matic_3000/development_order.aw:103 classes/applications/bug_o_matic_3000/development_order.aw:117
 msgid "--vali--"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:185
+msgid "Ekspordi"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:192
+msgid "Lisa korvi"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:256
+msgid "Eemalda korvist"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:284
+msgid "T&ouml;&ouml;tunde"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:289
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/development_order.aw:294
+msgid "L&otilde;ppt&auml;htaeg"
 msgstr ""
 

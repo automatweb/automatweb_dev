@@ -274,12 +274,12 @@ msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
 #: classes/applications/calendar/event_search.aw:142
-#: classes/applications/calendar/event_search.aw:365
+#: classes/applications/calendar/event_search.aw:364
 msgid "Nimi"
 msgstr "Name"
 
 #: classes/applications/calendar/event_search.aw:147
-#: classes/applications/calendar/event_search.aw:369
+#: classes/applications/calendar/event_search.aw:368
 msgid "Pealkiri"
 msgstr "Title"
 
@@ -288,7 +288,7 @@ msgid "Sisu"
 msgstr "Content"
 
 #: classes/applications/calendar/event_search.aw:157
-#: classes/applications/calendar/event_search.aw:373
+#: classes/applications/calendar/event_search.aw:372
 msgid "Aktiivne"
 msgstr "Active"
 
@@ -357,55 +357,55 @@ msgstr "By day"
 msgid "Kuu alates t&auml;nasest"
 msgstr "Month from today"
 
-#: classes/applications/calendar/event_search.aw:378
+#: classes/applications/calendar/event_search.aw:377
 msgid "Klikitav"
 msgstr "Clickable"
 
-#: classes/applications/calendar/event_search.aw:383
+#: classes/applications/calendar/event_search.aw:382
 msgid "T&auml;isvaates"
 msgstr "Full view"
 
-#: classes/applications/calendar/event_search.aw:388
+#: classes/applications/calendar/event_search.aw:387
 msgid "Reavahetused"
 msgstr "Line breaks"
 
-#: classes/applications/calendar/event_search.aw:393
+#: classes/applications/calendar/event_search.aw:392
 msgid "Eraldaja enne"
 msgstr "Seprator before"
 
-#: classes/applications/calendar/event_search.aw:398
+#: classes/applications/calendar/event_search.aw:397
 msgid "Eraldaja p&auml;rast"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:403
+#: classes/applications/calendar/event_search.aw:402
 msgid "Jrk"
 msgstr "Ord"
 
-#: classes/applications/calendar/event_search.aw:408
+#: classes/applications/calendar/event_search.aw:407
 msgid "Seaded"
 msgstr "Settings"
 
-#: classes/applications/calendar/event_search.aw:413
+#: classes/applications/calendar/event_search.aw:412
 msgid "V&auml;ljade eraldaja"
 msgstr "Field separator"
 
-#: classes/applications/calendar/event_search.aw:418
+#: classes/applications/calendar/event_search.aw:417
 msgid "Lisav&auml;ljad"
 msgstr "Additional fields"
 
-#: classes/applications/calendar/event_search.aw:434
+#: classes/applications/calendar/event_search.aw:433
 msgid "V&auml;ljundvorm on valimata"
 msgstr "Output form not selected"
 
-#: classes/applications/calendar/event_search.aw:820
+#: classes/applications/calendar/event_search.aw:819
+#: classes/applications/calendar/event_search.aw:825
 #: classes/applications/calendar/event_search.aw:826
-#: classes/applications/calendar/event_search.aw:827
-#: classes/applications/calendar/event_search.aw:843
-#: classes/applications/calendar/event_search.aw:849
+#: classes/applications/calendar/event_search.aw:842
+#: classes/applications/calendar/event_search.aw:848
 msgid "k&otilde;ik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:856
+#: classes/applications/calendar/event_search.aw:855
 msgid "Otsi"
 msgstr "Search"
 

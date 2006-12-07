@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Kommentaar lingikogusse (comment) caption"] = "märkuste lahter, kuhu v&otilde;ib lisada selguse m&otilde;ttes informatsiooni või juhiseid antud objekti kohta. Kommentaari välja kirjutatut ei ole veebipoolel näha.";
 $GLOBALS["TRANS"]["Omaduse URL (url) kommentaar"] = "aadress, kuhu link viitab.";
 $GLOBALS["TRANS"]["Omaduse URL (url) help"] = "aadress, kuhu link viitab. Kirjutatakse kujul http://www.struktuur.ee või saidi sisese lingi puhul dokumendi või kausta ID.";
 $GLOBALS["TRANS"]["Omaduse Klikke (hits) kommentaar"] = "informeeriv väli. Näitab, mitu korda on antud lingil klikitud.";
@@ -9,6 +10,7 @@ $GLOBALS["TRANS"]["Omaduse Alt tekst (alt) kommentaar"] = "tekst, mis ilmub kurs
 $GLOBALS["TRANS"]["Omaduse Alt tekst (alt) help"] = "tekst, mis ilmub kursori kõrvale nähtavale kui lingil olles kursorit mõni hetk mitte liigutada.";
 $GLOBALS["TRANS"]["Omaduse Uues aknas (newwindow) kommentaar"] = "selle valiku abil pannakse lingi aadress avanema uues aknas.";
 $GLOBALS["TRANS"]["Omaduse Uues aknas (newwindow) help"] = "selle valiku abil pannakse lingi aadress avanema uues aknas.";
+$GLOBALS["TRANS"]["Omaduse J&auml;rjekord (ord) help"] = "saab määrata objektide järjekorda administreerimisliideses. Veebil avaldab järjekorranumber mõju, kui linke kuvatakse läbi objektinimekirja.";
 $GLOBALS["TRANS"]["Omaduse Kasuta javascripti (use_javascript) kommentaar"] = "võtab kasutusele kõik selles vaates olevad valikud. Selle valimisel avaneb lingi aadress automaatselt uues aknas.";
 $GLOBALS["TRANS"]["Omaduse Kasuta javascripti (use_javascript) help"] = "võtab kasutusele kõik selles vaates olevad valikud. Selle valimisel avaneb lingi aadress automaatselt uues aknas.";
 $GLOBALS["TRANS"]["Omaduse Uue akna laius (newwinwidth) kommentaar"] = "numbrina kirjutatav uue akna laius pikselites.";
@@ -29,4 +31,6 @@ $GLOBALS["TRANS"]["Omaduse Pilt aktiivne (link_image_check_active) kommentaar"] 
 $GLOBALS["TRANS"]["Omaduse Pilt aktiivne (link_image_check_active) help"] = "valiku tegemisel näidatakse lingi teksti asemel pilti.";
 $GLOBALS["TRANS"]["Omaduse Pilt aktiivne kuni (link_image_active_until) kommentaar"] = "pildi näitamise aeg. Sisestatud aja mõõdudes kuvatakse link jälle tekstina.";
 $GLOBALS["TRANS"]["Omaduse Pilt aktiivne kuni (link_image_active_until) help"] = "pildi näitamise aeg. Sisestatud aja mõõdudes kuvatakse link jälle tekstina.";
+$GLOBALS["TRANS"]["Omaduse T&otilde;lgi (transl) help"] = "v&otilde;imalus t&otilde;lkida objekt teise keelde. Vajalik juhul, kui kasutatakse erinevate keelte all sama lingiobjekti. Tõlkimiseks tuleb kirjutada vastavanimelistesse tekstiväljadesse sobilikud võõrkeelsed vasted. Kui see tehtud, siis teha märge välja Tõlge aktiivne.";
+$GLOBALS["TRANS"]["Omaduse V&otilde;tmes&otilde;nad (kws) help"] = "v&otilde;imalus m&auml;&auml;rta lingi objektile v&otilde;tmes&otilde;nu. Vajalik juhul, kui soovitakse, et saaks v&otilde;tmes&otilde;nade j&auml;rgi sama teemaga seotud linke leida.";
 ?>

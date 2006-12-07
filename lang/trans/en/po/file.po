@@ -37,7 +37,7 @@ msgstr ""
 
 #: classes/file.aw:prop_is_translated_help
 msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
+msgstr "Translation confirmed"
 
 # classes/file.aw:prop_filename
 #: classes/file.aw:prop_filename
@@ -52,7 +52,7 @@ msgstr ""
 # classes/file.aw:prop_filename_help
 #: classes/file.aw:prop_filename_help
 msgid "Omaduse Faili nimi (filename) help"
-msgstr ""
+msgstr "will be automatically displayed after adding the file."
 
 # classes/file.aw:prop_file
 #: classes/file.aw:prop_file
@@ -67,7 +67,7 @@ msgstr ""
 # classes/file.aw:prop_file_help
 #: classes/file.aw:prop_file_help
 msgid "Omaduse Vali fail (file) help"
-msgstr ""
+msgstr "option for searching the file from your computer."
 
 # classes/file.aw:prop_type
 #: classes/file.aw:prop_type
@@ -109,7 +109,7 @@ msgstr ""
 # classes/file.aw:prop_comment_help
 #: classes/file.aw:prop_comment_help
 msgid "Omaduse Faili allkiri (comment) help"
-msgstr ""
+msgstr "the link´s name which opens the file when clicked on it."
 
 # classes/file.aw:prop_file_url
 #: classes/file.aw:prop_file_url
@@ -124,7 +124,7 @@ msgstr ""
 # classes/file.aw:prop_file_url_help
 #: classes/file.aw:prop_file_url_help
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) help"
-msgstr ""
+msgstr "Internet address where the fail will be taken. If the “Select file” is already filled, then the URL reference will nor work."
 
 #: classes/file.aw:prop_showal
 msgid "Omaduse N&auml;ita kohe (showal) caption"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/file.aw:prop_showal_help
 msgid "Omaduse N&auml;ita kohe (showal) help"
-msgstr ""
+msgstr "it this box is ticked, then the file will not be displayed as link but it is shown right away."
 
 # classes/file.aw:prop_newwindow
 #: classes/file.aw:prop_newwindow
@@ -151,7 +151,7 @@ msgstr ""
 # classes/file.aw:prop_newwindow_help
 #: classes/file.aw:prop_newwindow_help
 msgid "Omaduse Uues aknas (newwindow) help"
-msgstr ""
+msgstr "opens the file in new window."
 
 #: classes/file.aw:prop_show_framed
 msgid "Omaduse N&auml;ita saidi raamis (show_framed) caption"
@@ -175,7 +175,7 @@ msgstr ""
 
 #: classes/file.aw:prop_show_icon_help
 msgid "Omaduse N&amp;auml;ita ikooni (show_icon) help"
-msgstr ""
+msgstr "displays files icon on webpage."
 
 #: classes/file.aw:prop_j_time
 msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) caption"

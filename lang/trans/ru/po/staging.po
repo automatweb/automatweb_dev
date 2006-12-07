@@ -73,6 +73,102 @@ msgstr ""
 msgid "Omaduse Kirjeldus (utextarea1) help"
 msgstr ""
 
+#: classes/applications/calendar/staging.aw:prop_utextbox1
+msgid "Omaduse Userdefined textbox 1 (utextbox1) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox1_comment
+msgid "Omaduse Userdefined textbox 1 (utextbox1) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox1_help
+msgid "Omaduse Userdefined textbox 1 (utextbox1) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox2
+msgid "Omaduse Userdefined textbox 2 (utextbox2) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox2_comment
+msgid "Omaduse Userdefined textbox 2 (utextbox2) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox2_help
+msgid "Omaduse Userdefined textbox 2 (utextbox2) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox3
+msgid "Omaduse Userdefined textbox 3 (utextbox3) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox3_comment
+msgid "Omaduse Userdefined textbox 3 (utextbox3) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox3_help
+msgid "Omaduse Userdefined textbox 3 (utextbox3) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox4
+msgid "Omaduse Userdefined textbox 4 (utextbox4) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox4_comment
+msgid "Omaduse Userdefined textbox 4 (utextbox4) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox4_help
+msgid "Omaduse Userdefined textbox 4 (utextbox4) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox5
+msgid "Omaduse Userdefined textbox 5 (utextbox5) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox5_comment
+msgid "Omaduse Userdefined textbox 5 (utextbox5) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox5_help
+msgid "Omaduse Userdefined textbox 5 (utextbox5) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox6
+msgid "Omaduse Userdefined textbox 6 (utextbox6) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox6_comment
+msgid "Omaduse Userdefined textbox 6 (utextbox6) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox6_help
+msgid "Omaduse Userdefined textbox 6 (utextbox6) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox7
+msgid "Omaduse Userdefined textbox 7 (utextbox7) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox7_comment
+msgid "Omaduse Userdefined textbox 7 (utextbox7) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox7_help
+msgid "Omaduse Userdefined textbox 7 (utextbox7) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox8
+msgid "Omaduse Userdefined textbox 8 (utextbox8) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox8_comment
+msgid "Omaduse Userdefined textbox 8 (utextbox8) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextbox8_help
+msgid "Omaduse Userdefined textbox 8 (utextbox8) help"
+msgstr ""
+
 #: classes/applications/calendar/staging.aw:prop_place
 msgid "Omaduse Vali toimumispaik (place) caption"
 msgstr ""

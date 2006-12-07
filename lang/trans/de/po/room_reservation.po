@@ -73,7 +73,6 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-#: classes/common/room_reservation.aw:528
-#: classes/common/room_reservation.aw:587
+#: classes/common/room_reservation.aw:641
 msgid "Salvesta"
 msgstr ""

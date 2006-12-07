@@ -802,6 +802,26 @@ msgstr ""
 msgid "Seose Muu kulu (RELTYPE_EXPENSE) tekst"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:layout_top_bit
+msgid "Kujundusosa Põhiandmed (top_bit) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:layout_center_bit_left_ct
+msgid "Kujundusosa Sisu (center_bit_left_ct) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:layout_center_bit_right_top
+msgid "Kujundusosa Osapooled (center_bit_right_top) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:layout_center_bit_right_bottom
+msgid "Kujundusosa Manused (center_bit_right_bottom) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:layout_predicates_left
+msgid "Kujundusosa Eeldustegevused (predicates_left) pealkiri"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:303
 msgid "Stopperid"
 msgstr ""

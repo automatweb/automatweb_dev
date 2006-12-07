@@ -365,18 +365,18 @@ msgstr "Parameters"
 msgid "CDATA"
 msgstr "CDATA"
 
-#: classes/export/xml_export.aw:908
+#: classes/export/xml_export.aw:909
 msgid "Omadus"
 msgstr "Property"
 
-#: classes/export/xml_export.aw:913
+#: classes/export/xml_export.aw:914
 msgid "V&auml;&auml;rtus"
 msgstr "Value"
 
-#: classes/export/xml_export.aw:918
+#: classes/export/xml_export.aw:919
 msgid "T&auml;pne"
 msgstr "Exact value"
 
-#: classes/export/xml_export.aw:936
+#: classes/export/xml_export.aw:937
 msgid "--vali--"
 msgstr "--select--"

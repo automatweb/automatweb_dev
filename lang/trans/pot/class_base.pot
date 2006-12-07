@@ -86,43 +86,43 @@ msgstr ""
 msgid "Abiinfo"
 msgstr ""
 
-#: classes/class_base.aw:635
+#: classes/class_base.aw:640
 msgid "tab panel"
 msgstr ""
 
-#: classes/class_base.aw:866
+#: classes/class_base.aw:871
 msgid "Lisainfo grupi kohta puudub"
 msgstr ""
 
-#: classes/class_base.aw:1390
+#: classes/class_base.aw:1395
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1398
+#: classes/class_base.aw:1403
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1425
+#: classes/class_base.aw:1440
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1614 classes/class_base.aw:4927 classes/class_base.aw:4938
+#: classes/class_base.aw:1633 classes/class_base.aw:4963 classes/class_base.aw:4974
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:3448
+#: classes/class_base.aw:3470
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/class_base.aw:3457
+#: classes/class_base.aw:3479
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4824
+#: classes/class_base.aw:4861
 msgid "%s is not a valid configuration form!"
 msgstr ""
 
-#: classes/class_base.aw:5209
+#: classes/class_base.aw:5262
 msgid "T&otilde;lge aktiivne"
 msgstr ""
 

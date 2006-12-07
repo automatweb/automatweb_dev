@@ -13,6 +13,18 @@ msgstr ""
 msgid "Klassi Ruum help"
 msgstr ""
 
+#: classes/common/room.aw:prop_short_name
+msgid "Omaduse Nime l&uuml;hend (short_name) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_short_name_comment
+msgid "Omaduse Nime l&uuml;hend (short_name) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_short_name_help
+msgid "Omaduse Nime l&uuml;hend (short_name) help"
+msgstr ""
+
 #: classes/common/room.aw:prop_location
 msgid "Omaduse Asukoht (location) caption"
 msgstr ""
@@ -37,16 +49,28 @@ msgstr ""
 msgid "Omaduse Omanik (owner) help"
 msgstr ""
 
-#: classes/common/room.aw:prop_inventory
-msgid "Omaduse Varustuse kataloog (inventory) caption"
+#: classes/common/room.aw:prop_warehouse
+msgid "Omaduse Ladu (warehouse) caption"
 msgstr ""
 
-#: classes/common/room.aw:prop_inventory_comment
-msgid "Omaduse Varustuse kataloog (inventory) kommentaar"
+#: classes/common/room.aw:prop_warehouse_comment
+msgid "Omaduse Ladu (warehouse) kommentaar"
 msgstr ""
 
-#: classes/common/room.aw:prop_inventory_help
-msgid "Omaduse Varustuse kataloog (inventory) help"
+#: classes/common/room.aw:prop_warehouse_help
+msgid "Omaduse Ladu (warehouse) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_fld
+msgid "Omaduse Ressursside kataloog (resources_fld) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_fld_comment
+msgid "Omaduse Ressursside kataloog (resources_fld) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_fld_help
+msgid "Omaduse Ressursside kataloog (resources_fld) help"
 msgstr ""
 
 #: classes/common/room.aw:prop_area
@@ -59,6 +83,30 @@ msgstr ""
 
 #: classes/common/room.aw:prop_area_help
 msgid "Omaduse Valdkond (area) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_professions
+msgid "Omaduse Ametinimetused (professions) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_professions_comment
+msgid "Omaduse Ametinimetused (professions) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_professions_help
+msgid "Omaduse Ametinimetused (professions) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_conditions
+msgid "Omaduse Kasutustingimused (conditions) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_conditions_comment
+msgid "Omaduse Kasutustingimused (conditions) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_conditions_help
+msgid "Omaduse Kasutustingimused (conditions) help"
 msgstr ""
 
 #: classes/common/room.aw:prop_square_meters
@@ -97,16 +145,76 @@ msgstr ""
 msgid "Omaduse Maksimaalne mahutavus (max_capacity) help"
 msgstr ""
 
-#: classes/common/room.aw:prop_conditions
-msgid "Omaduse Kasutustingimused (conditions) caption"
+#: classes/common/room.aw:prop_buffer_before
+msgid "Omaduse Puhveraeg enne (buffer_before) caption"
 msgstr ""
 
-#: classes/common/room.aw:prop_conditions_comment
-msgid "Omaduse Kasutustingimused (conditions) kommentaar"
+#: classes/common/room.aw:prop_buffer_before_comment
+msgid "Omaduse Puhveraeg enne (buffer_before) kommentaar"
 msgstr ""
 
-#: classes/common/room.aw:prop_conditions_help
-msgid "Omaduse Kasutustingimused (conditions) help"
+#: classes/common/room.aw:prop_buffer_before_help
+msgid "Omaduse Puhveraeg enne (buffer_before) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_before_unit
+msgid "Omaduse  (buffer_before_unit) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_before_unit_comment
+msgid "Omaduse  (buffer_before_unit) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_before_unit_help
+msgid "Omaduse  (buffer_before_unit) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_after
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_after) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_after_comment
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_after) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_after_help
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_after) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_after_unit
+msgid "Omaduse  (buffer_after_unit) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_after_unit_comment
+msgid "Omaduse  (buffer_after_unit) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_buffer_after_unit_help
+msgid "Omaduse  (buffer_after_unit) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_use_product_times
+msgid "Omaduse Kasuta toodetele m‰‰ratud aegu (use_product_times) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_use_product_times_comment
+msgid "Omaduse Kasuta toodetele m‰‰ratud aegu (use_product_times) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_use_product_times_help
+msgid "Omaduse Kasuta toodetele m‰‰ratud aegu (use_product_times) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_settings
+msgid "Omaduse Seaded (settings) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_settings_comment
+msgid "Omaduse Seaded (settings) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_settings_help
+msgid "Omaduse Seaded (settings) help"
 msgstr ""
 
 #: classes/common/room.aw:prop_calendar_tb
@@ -131,6 +239,54 @@ msgstr ""
 
 #: classes/common/room.aw:prop_calendar_help
 msgid "Omaduse  (calendar) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_calendar_select
+msgid "Omaduse  (calendar_select) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_calendar_select_comment
+msgid "Omaduse  (calendar_select) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_calendar_select_help
+msgid "Omaduse  (calendar_select) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_calendar_tbl
+msgid "Omaduse  (calendar_tbl) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_calendar_tbl_comment
+msgid "Omaduse  (calendar_tbl) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_calendar_tbl_help
+msgid "Omaduse  (calendar_tbl) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_tb
+msgid "Omaduse  (resources_tb) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_tb_comment
+msgid "Omaduse  (resources_tb) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_tb_help
+msgid "Omaduse  (resources_tb) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_tbl
+msgid "Omaduse  (resources_tbl) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_tbl_comment
+msgid "Omaduse  (resources_tbl) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_resources_tbl_help
+msgid "Omaduse  (resources_tbl) help"
 msgstr ""
 
 #: classes/common/room.aw:prop_images_tb
@@ -169,6 +325,66 @@ msgstr ""
 msgid "Omaduse  (images_search) help"
 msgstr ""
 
+#: classes/common/room.aw:prop_products_tb
+msgid "Omaduse  (products_tb) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_tb_comment
+msgid "Omaduse  (products_tb) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_tb_help
+msgid "Omaduse  (products_tb) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_tr
+msgid "Omaduse  (products_tr) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_tr_comment
+msgid "Omaduse  (products_tr) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_tr_help
+msgid "Omaduse  (products_tr) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_find_product_name
+msgid "Omaduse Toote nimetus (products_find_product_name) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_find_product_name_comment
+msgid "Omaduse Toote nimetus (products_find_product_name) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_find_product_name_help
+msgid "Omaduse Toote nimetus (products_find_product_name) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_do_find_products
+msgid "Omaduse Otsi (do_find_products) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_do_find_products_comment
+msgid "Omaduse Otsi (do_find_products) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_do_find_products_help
+msgid "Omaduse Otsi (do_find_products) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_tbl
+msgid "Omaduse  (products_tbl) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_tbl_comment
+msgid "Omaduse  (products_tbl) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_products_tbl_help
+msgid "Omaduse  (products_tbl) help"
+msgstr ""
+
 #: classes/common/room.aw:prop_currency
 msgid "Omaduse Valuuta (currency) caption"
 msgstr ""
@@ -191,6 +407,18 @@ msgstr ""
 
 #: classes/common/room.aw:prop_price_help
 msgid "Omaduse Hind (price) help"
+msgstr ""
+
+#: classes/common/room.aw:prop_price_per_face_if_too_many
+msgid "Omaduse Lisanduv hind &uuml;le normaalse mahutavuse oleva inimese kohta (price_per_face_if_too_many) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_price_per_face_if_too_many_comment
+msgid "Omaduse Lisanduv hind &uuml;le normaalse mahutavuse oleva inimese kohta (price_per_face_if_too_many) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_price_per_face_if_too_many_help
+msgid "Omaduse Lisanduv hind &uuml;le normaalse mahutavuse oleva inimese kohta (price_per_face_if_too_many) help"
 msgstr ""
 
 #: classes/common/room.aw:prop_time_unit
@@ -277,6 +505,18 @@ msgstr ""
 msgid "Omaduse  (prices_tbl) help"
 msgstr ""
 
+#: classes/common/room.aw:prop_openhours
+msgid "Omaduse Avamisajad (openhours) caption"
+msgstr ""
+
+#: classes/common/room.aw:prop_openhours_comment
+msgid "Omaduse Avamisajad (openhours) kommentaar"
+msgstr ""
+
+#: classes/common/room.aw:prop_openhours_help
+msgid "Omaduse Avamisajad (openhours) help"
+msgstr ""
+
 #: classes/common/room.aw:group_calendar
 msgid "Grupi Kalender (calendar) pealkiri"
 msgstr ""
@@ -285,12 +525,28 @@ msgstr ""
 msgid "Grupi Kalender (calendar) help"
 msgstr ""
 
+#: classes/common/room.aw:group_resources
+msgid "Grupi Ressursid (resources) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_resources_help
+msgid "Grupi Ressursid (resources) help"
+msgstr ""
+
 #: classes/common/room.aw:group_images
 msgid "Grupi Pildid (images) pealkiri"
 msgstr ""
 
 #: classes/common/room.aw:group_images_help
 msgid "Grupi Pildid (images) help"
+msgstr ""
+
+#: classes/common/room.aw:group_products
+msgid "Grupi Tooted (products) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_products_help
+msgid "Grupi Tooted (products) help"
 msgstr ""
 
 #: classes/common/room.aw:group_prices
@@ -325,6 +581,14 @@ msgstr ""
 msgid "Grupi Soodushinnad (prices_bargain_price) help"
 msgstr ""
 
+#: classes/common/room.aw:group_open_hrs
+msgid "Grupi Avamisajad (open_hrs) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:group_open_hrs_help
+msgid "Grupi Avamisajad (open_hrs) help"
+msgstr ""
+
 #: classes/common/room.aw:rel_RELTYPE_LOCATION
 msgid "Seose Asukoht (RELTYPE_LOCATION) tekst"
 msgstr ""
@@ -333,8 +597,8 @@ msgstr ""
 msgid "Seose Omanik (RELTYPE_OWNER) tekst"
 msgstr ""
 
-#: classes/common/room.aw:rel_RELTYPE_INVENTORY
-msgid "Seose Varustuse kataloog (RELTYPE_INVENTORY) tekst"
+#: classes/common/room.aw:rel_RELTYPE_INVENTORY_FOLDER
+msgid "Seose Ressursside kataloog (RELTYPE_INVENTORY_FOLDER) tekst"
 msgstr ""
 
 #: classes/common/room.aw:rel_RELTYPE_AREA
@@ -361,106 +625,306 @@ msgstr ""
 msgid "Seose Ruumi hind (RELTYPE_ROOM_PRICE) tekst"
 msgstr ""
 
-#: classes/common/room.aw:146
+#: classes/common/room.aw:rel_RELTYPE_SHOP_WAREHOUSE
+msgid "Seose Ladu (RELTYPE_SHOP_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_OPENHOURS
+msgid "Seose Avamisajad (RELTYPE_OPENHOURS) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_PROFESSION
+msgid "Seose Ametinimetus (RELTYPE_PROFESSION) tekst"
+msgstr ""
+
+#: classes/common/room.aw:rel_RELTYPE_SETTINGS
+msgid "Seose Seaded (RELTYPE_SETTINGS) tekst"
+msgstr ""
+
+#: classes/common/room.aw:layout_general_up
+msgid "Kujundusosa ‹ldinfo (general_up) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:layout_general_down
+msgid "Kujundusosa Mahutavus&#44; kasutustingimused (general_down) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:layout_products_tree
+msgid "Kujundusosa Toodete puu (products_tree) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:layout_products_find_params
+msgid "Kujundusosa Toodete otsing (products_find_params) pealkiri"
+msgstr ""
+
+#: classes/common/room.aw:240
 msgid "minutit"
 msgstr ""
 
-#: classes/common/room.aw:147
+#: classes/common/room.aw:241
 msgid "tundi"
 msgstr ""
 
-#: classes/common/room.aw:148
+#: classes/common/room.aw:242
 msgid "p&auml;eva"
 msgstr ""
 
-#: classes/common/room.aw:163
+#: classes/common/room.aw:252
+msgid "Sekundit"
+msgstr ""
+
+#: classes/common/room.aw:253
+msgid "Minutit"
+msgstr ""
+
+#: classes/common/room.aw:254
+msgid "Tundi"
+msgstr ""
+
+#: classes/common/room.aw:255
+msgid "P&auml;eva"
+msgstr ""
+
+#: classes/common/room.aw:273
 msgid "Inimese kohta"
 msgstr ""
 
-#: classes/common/room.aw:164
+#: classes/common/room.aw:274
 msgid "Kasutusaja kohta"
 msgstr ""
 
-#: classes/common/room.aw:174
+#: classes/common/room.aw:288
 msgid "minutitites"
 msgstr ""
 
-#: classes/common/room.aw:175
+#: classes/common/room.aw:289
 msgid "tundides"
 msgstr ""
 
-#: classes/common/room.aw:176
+#: classes/common/room.aw:290
 msgid "p&auml;evades"
 msgstr ""
 
-#: classes/common/room.aw:307
+#: classes/common/room.aw:335
+msgid "Pole valitud lao toodete kataloogi"
+msgstr ""
+
+#: classes/common/room.aw:347
+msgid "\n"
+msgstr ""
+
+#: classes/common/room.aw:349
+msgid "Template fail peab asuma kataloogis :"
+msgstr ""
+
+#: classes/common/room.aw:530
 msgid "Lisa pilt"
 msgstr ""
 
-#: classes/common/room.aw:326
+#: classes/common/room.aw:549
 msgid "Eemalda pildid"
 msgstr ""
 
-#: classes/common/room.aw:345
+#: classes/common/room.aw:568
 msgid "jrk"
 msgstr ""
 
-#: classes/common/room.aw:350
+#: classes/common/room.aw:573
 msgid "Pilt"
 msgstr ""
 
-#: classes/common/room.aw:352
+#: classes/common/room.aw:575
 msgid "Pildid"
 msgstr ""
 
-#: classes/common/room.aw:379
+#: classes/common/room.aw:602
 msgid "Uus hind"
 msgstr ""
 
-#: classes/common/room.aw:399
+#: classes/common/room.aw:622
 msgid "Eemalda hinnad"
 msgstr ""
 
-#: classes/common/room.aw:415
+#: classes/common/room.aw:638
 msgid "Kehtib"
 msgstr ""
 
-#: classes/common/room.aw:420
+#: classes/common/room.aw:643
 msgid "Kordub"
 msgstr ""
 
-#: classes/common/room.aw:431
+#: classes/common/room.aw:654
 msgid "Kuup&auml;evad"
 msgstr ""
 
-#: classes/common/room.aw:435
+#: classes/common/room.aw:658
 msgid "N&auml;dalap&auml;evad"
 msgstr ""
 
-#: classes/common/room.aw:439
+#: classes/common/room.aw:662
 msgid "Mitmes"
 msgstr ""
 
-#: classes/common/room.aw:443
+#: classes/common/room.aw:666
 msgid "Kellaaeg"
 msgstr ""
 
-#: classes/common/room.aw:449
+#: classes/common/room.aw:672 classes/common/room.aw:1615
 msgid "Aeg"
 msgstr ""
 
-#: classes/common/room.aw:468 classes/common/room.aw:513
+#: classes/common/room.aw:691 classes/common/room.aw:736
+#: classes/common/room.aw:2095 classes/common/room.aw:2175
+#: classes/common/room.aw:2258
 msgid "Muuda"
 msgstr ""
 
-#: classes/common/room.aw:507 classes/common/room.aw:508
+#: classes/common/room.aw:730 classes/common/room.aw:731
 msgid "Jah"
 msgstr ""
 
-#: classes/common/room.aw:507 classes/common/room.aw:508
+#: classes/common/room.aw:730 classes/common/room.aw:731
 msgid "Ei"
 msgstr ""
 
-#: classes/common/room.aw:587
+#: classes/common/room.aw:823
 msgid "Broneering"
+msgstr ""
+
+#: classes/common/room.aw:893
+msgid "Sellisele ajale pole broneerida v&otilde;imalik"
+msgstr ""
+
+#: classes/common/room.aw:1028
+msgid "Algusaeg"
+msgstr ""
+
+#: classes/common/room.aw:1035
+msgid "L&otilde;ppaeg"
+msgstr ""
+
+#: classes/common/room.aw:1043
+msgid "Eesnimi"
+msgstr ""
+
+#: classes/common/room.aw:1052
+msgid "Perenimi"
+msgstr ""
+
+#: classes/common/room.aw:1061
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/common/room.aw:1070
+msgid "Telefon"
+msgstr ""
+
+#: classes/common/room.aw:1079
+msgid "M‰rkused"
+msgstr ""
+
+#: classes/common/room.aw:1088
+msgid "Meie esindaja"
+msgstr ""
+
+#: classes/common/room.aw:1098
+msgid "Salvesta"
+msgstr ""
+
+#: classes/common/room.aw:1218
+msgid "Vali sobiv ajavahemik: "
+msgstr ""
+
+#: classes/common/room.aw:1241
+msgid "Vali broneeringu kestvus: "
+msgstr ""
+
+#: classes/common/room.aw:1345
+msgid "VABA"
+msgstr ""
+
+#: classes/common/room.aw:1351
+msgid "Broneeri"
+msgstr ""
+
+#: classes/common/room.aw:1360 classes/common/room.aw:1408
+msgid "BRON"
+msgstr ""
+
+#: classes/common/room.aw:1415
+msgid "Suletud"
+msgstr ""
+
+#: classes/common/room.aw:1682
+msgid "Broneerimine"
+msgstr ""
+
+#: classes/common/room.aw:1937
+msgid "Lisa ressurss"
+msgstr ""
+
+#: classes/common/room.aw:1953
+msgid "Ressursside kataloog m&auml;&auml;ramata"
+msgstr ""
+
+#: classes/common/room.aw:1959 classes/common/room.aw:2142
+#: classes/common/room.aw:2219
+msgid "Nimi"
+msgstr ""
+
+#: classes/common/room.aw:2038
+msgid "Kaust"
+msgstr ""
+
+#: classes/common/room.aw:2059 classes/common/room.aw:2169
+#: classes/common/room.aw:2246
+msgid "V&otilde;ta laost"
+msgstr ""
+
+#: classes/common/room.aw:2131
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/common/room.aw:2136 classes/common/room.aw:2213
+msgid "&nbsp;"
+msgstr ""
+
+#: classes/common/room.aw:2148 classes/common/room.aw:2225
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/common/room.aw:2155 classes/common/room.aw:2232
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/common/room.aw:2162 classes/common/room.aw:2239
+msgid "Kogus laos"
+msgstr ""
+
+#: classes/common/room.aw:2181 classes/common/room.aw:2264
+msgid "Vali"
+msgstr ""
+
+#: classes/common/room.aw:2252
+msgid "Vii lattu"
+msgstr ""
+
+#: classes/common/room.aw:2278
+msgid "Uus"
+msgstr ""
+
+#: classes/common/room.aw:2285
+msgid "Lisa kaust"
+msgstr ""
+
+#: classes/common/room.aw:2294
+msgid "Lisa tootekategooria"
+msgstr ""
+
+#: classes/common/room.aw:2304
+msgid "Aktiivseks"
+msgstr ""
+
+#: classes/common/room.aw:2311
+msgid "Kustuta valitud"
 msgstr ""

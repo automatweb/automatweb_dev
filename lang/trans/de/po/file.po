@@ -205,6 +205,18 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/file.aw:prop_acl
+msgid "Omaduse &Otilde;igused (acl) caption"
+msgstr ""
+
+#: classes/file.aw:prop_acl_comment
+msgid "Omaduse &Otilde;igused (acl) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_acl_help
+msgid "Omaduse &Otilde;igused (acl) help"
+msgstr ""
+
 #: classes/file.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr ""
@@ -229,14 +241,22 @@ msgstr ""
 msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/file.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
+msgstr ""
+
 #: classes/file.aw:rel_RELTYPE_KEYWORD
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:165
+#: classes/file.aw:171
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:1132
+#: classes/file.aw:1138
 msgid "Need either id or parent"
 msgstr ""

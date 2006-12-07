@@ -54,11 +54,19 @@ msgstr ""
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:529 classes/vcl/toolbar.aw:537
+#: classes/vcl/toolbar.aw:538 classes/vcl/toolbar.aw:546
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:560
+#: classes/vcl/toolbar.aw:569
 msgid "Kustuta valitud objektid"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:583
+msgid "Kustuta valitud seosed"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:596
+msgid "Salvesta"
 msgstr ""
 

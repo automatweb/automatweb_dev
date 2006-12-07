@@ -57,6 +57,10 @@ msgstr ""
 msgid "Grupi Objektid (o) help"
 msgstr ""
 
+#: classes/admin/admin_if.aw:layout_o_bot_left
+msgid "Kujundusosa Kataloogid (o_bot_left) pealkiri"
+msgstr ""
+
 #: classes/admin/admin_if.aw:86
 msgid "Lisa"
 msgstr ""
@@ -65,11 +69,11 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:102 classes/admin/admin_if.aw:858
+#: classes/admin/admin_if.aw:102 classes/admin/admin_if.aw:868
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_if.aw:109 classes/admin/admin_if.aw:864
+#: classes/admin/admin_if.aw:109 classes/admin/admin_if.aw:874
 msgid "Kopeeri"
 msgstr ""
 
@@ -77,11 +81,11 @@ msgstr ""
 msgid "Kleebi"
 msgstr ""
 
-#: classes/admin/admin_if.aw:126 classes/admin/admin_if.aw:874
+#: classes/admin/admin_if.aw:126 classes/admin/admin_if.aw:884
 msgid "Kustuta"
 msgstr ""
 
-#: classes/admin/admin_if.aw:127 classes/admin/admin_if.aw:870
+#: classes/admin/admin_if.aw:127 classes/admin/admin_if.aw:880
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
@@ -109,7 +113,7 @@ msgstr ""
 msgid "Jrk"
 msgstr ""
 
-#: classes/admin/admin_if.aw:510 classes/admin/admin_if.aw:772
+#: classes/admin/admin_if.aw:510 classes/admin/admin_if.aw:782
 msgid "Aktiivne"
 msgstr ""
 
@@ -133,38 +137,38 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/admin_if.aw:772
+#: classes/admin/admin_if.aw:782
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/admin/admin_if.aw:828
+#: classes/admin/admin_if.aw:838
 msgid "Ava"
 msgstr ""
 
-#: classes/admin/admin_if.aw:847
+#: classes/admin/admin_if.aw:857
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1146
+#: classes/admin/admin_if.aw:1156
 msgid "Administreerimisliides"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1166
+#: classes/admin/admin_if.aw:1176
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1167
+#: classes/admin/admin_if.aw:1177
 msgid "Asukoht:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1168
+#: classes/admin/admin_if.aw:1178
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
 msgstr ""
 
-#: classes/admin/admin_if.aw:1169
+#: classes/admin/admin_if.aw:1179
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1170
+#: classes/admin/admin_if.aw:1180
 msgid "Seaded"
 msgstr ""

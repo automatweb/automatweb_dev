@@ -360,7 +360,6 @@ $GLOBALS["TRANS"]["Klassi Kasutaja j&auml;rjehoidjad (1131) nimi"] = "User bookm
 $GLOBALS["TRANS"]["Klassi AW Objektide otsing (1132) nimi"] = "Search";
 $GLOBALS["TRANS"]["Klassi Kiirlisamine (1133) nimi"] = "Quick add";
 $GLOBALS["TRANS"]["Klassi Administreerimisliides (1134) nimi"] = "Administrative interface";
-$GLOBALS["TRANS"]["Klassi Ruum (1143) nimi"] = "Room";
 $GLOBALS["TRANS"]["Klassi Statistika (1145) nimi"] = "Statistics";
 $GLOBALS["TRANS"]["Klassi Statistika arhiivi staatus (1146) nimi"] = "Statistics archive";
 $GLOBALS["TRANS"]["Klassi T&otilde;lkimise t&ouml;&ouml;laud (1157) nimi"] = "Translation environment";

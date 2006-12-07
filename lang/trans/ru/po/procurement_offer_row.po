@@ -85,6 +85,18 @@ msgstr ""
 msgid "Omaduse Hind (price) help"
 msgstr ""
 
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_price_amount
+msgid "Omaduse Hind koguse puhul (price_amount) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_price_amount_comment
+msgid "Omaduse Hind koguse puhul (price_amount) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer_row.aw:prop_price_amount_help
+msgid "Omaduse Hind koguse puhul (price_amount) help"
+msgstr ""
+
 #: classes/applications/procurement_center/procurement_offer_row.aw:prop_currency
 msgid "Omaduse Valuuta (currency) caption"
 msgstr ""

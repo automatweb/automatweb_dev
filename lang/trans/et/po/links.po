@@ -18,7 +18,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_comment
 #: classes/contentmgmt/links.aw:prop_comment
 msgid "Omaduse Kommentaar lingikogusse (comment) caption"
-msgstr ""
+msgstr "m‰rkuste lahter, kuhu v&otilde;ib lisada selguse m&otilde;ttes informatsiooni vıi juhiseid antud objekti kohta. Kommentaari v‰lja kirjutatut ei ole veebipoolel n‰ha."
 
 # classes/contentmgmt/links.aw:prop_comment_comment
 #: classes/contentmgmt/links.aw:prop_comment_comment
@@ -130,7 +130,7 @@ msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_ord_help
 msgid "Omaduse J&auml;rjekord (ord) help"
-msgstr ""
+msgstr "saab m‰‰rata objektide j‰rjekorda administreerimisliideses. Veebil avaldab j‰rjekorranumber mıju, kui linke kuvatakse l‰bi objektinimekirja."
 
 # classes/contentmgmt/links.aw:prop_use_javascript
 #: classes/contentmgmt/links.aw:prop_use_javascript
@@ -317,7 +317,7 @@ msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_transl_help
 msgid "Omaduse T&otilde;lgi (transl) help"
-msgstr ""
+msgstr "v&otilde;imalus t&otilde;lkida objekt teise keelde. Vajalik juhul, kui kasutatakse erinevate keelte all sama lingiobjekti. Tılkimiseks tuleb kirjutada vastavanimelistesse tekstiv‰ljadesse sobilikud vıırkeelsed vasted. Kui see tehtud, siis teha m‰rge v‰lja Tılge aktiivne."
 
 #: classes/contentmgmt/links.aw:prop_kws
 msgid "Omaduse V&otilde;tmes&otilde;nad (kws) caption"
@@ -329,7 +329,7 @@ msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_kws_help
 msgid "Omaduse V&otilde;tmes&otilde;nad (kws) help"
-msgstr ""
+msgstr "v&otilde;imalus m&auml;&auml;rta lingi objektile v&otilde;tmes&otilde;nu. Vajalik juhul, kui soovitakse, et saaks v&otilde;tmes&otilde;nade j&auml;rgi sama teemaga seotud linke leida."
 
 # classes/contentmgmt/links.aw:group_Javascript
 #: classes/contentmgmt/links.aw:group_Javascript

@@ -49,6 +49,18 @@ msgstr ""
 msgid "Omaduse Pluginad (plugins) help"
 msgstr ""
 
+#: classes/doc.aw:prop_brother_warning
+msgid "Omaduse  (brother_warning) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_brother_warning_comment
+msgid "Omaduse  (brother_warning) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_brother_warning_help
+msgid "Omaduse  (brother_warning) help"
+msgstr ""
+
 #: classes/doc.aw:prop_title
 msgid "Omaduse Pealkiri (title) caption"
 msgstr ""
@@ -71,6 +83,18 @@ msgstr ""
 
 #: classes/doc.aw:prop_subtitle_help
 msgid "Omaduse Alapealkiri (subtitle) help"
+msgstr ""
+
+#: classes/doc.aw:prop_alias_ch
+msgid "Omaduse Genereeri alias automaatselt (alias_ch) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_alias_ch_comment
+msgid "Omaduse Genereeri alias automaatselt (alias_ch) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_alias_ch_help
+msgid "Omaduse Genereeri alias automaatselt (alias_ch) help"
 msgstr ""
 
 #: classes/doc.aw:prop_alias
@@ -1045,6 +1069,18 @@ msgstr ""
 msgid "Omaduse  (versions) help"
 msgstr ""
 
+#: classes/doc.aw:prop_trans_tb
+msgid "Omaduse  (trans_tb) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_trans_tb_comment
+msgid "Omaduse  (trans_tb) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_trans_tb_help
+msgid "Omaduse  (trans_tb) help"
+msgstr ""
+
 #: classes/doc.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -1055,6 +1091,18 @@ msgstr ""
 
 #: classes/doc.aw:prop_transl_help
 msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/doc.aw:prop_acl
+msgid "Omaduse &Otilde;igused (acl) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_acl_comment
+msgid "Omaduse &Otilde;igused (acl) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_acl_help
+msgid "Omaduse &Otilde;igused (acl) help"
 msgstr ""
 
 #: classes/doc.aw:group_calendar
@@ -1113,6 +1161,14 @@ msgstr ""
 msgid "Grupi Seostehaldur (relationmgr) help"
 msgstr ""
 
+#: classes/doc.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/doc.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
+msgstr ""
+
 #: classes/doc.aw:group_keywords
 msgid "Grupi keywords (keywords) pealkiri"
 msgstr ""
@@ -1157,62 +1213,78 @@ msgstr ""
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/doc.aw:440
+#: classes/doc.aw:366
+msgid "NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik!"
+msgstr ""
+
+#: classes/doc.aw:463
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:818
+#: classes/doc.aw:859
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:833
+#: classes/doc.aw:875 classes/doc.aw:1654
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:995
+#: classes/doc.aw:1037
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:1008
+#: classes/doc.aw:1050
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/doc.aw:1280 classes/doc.aw:1375 classes/doc.aw:1379
+#: classes/doc.aw:1333 classes/doc.aw:1428 classes/doc.aw:1432
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/doc.aw:1327
+#: classes/doc.aw:1380
 msgid "Versioon"
 msgstr ""
 
-#: classes/doc.aw:1333 classes/doc.aw:1393 classes/doc.aw:1421
+#: classes/doc.aw:1386 classes/doc.aw:1446 classes/doc.aw:1474
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc.aw:1339
+#: classes/doc.aw:1392
 msgid "Hinne"
 msgstr ""
 
-#: classes/doc.aw:1345
+#: classes/doc.aw:1398
 msgid "Hinda"
 msgstr ""
 
-#: classes/doc.aw:1351
+#: classes/doc.aw:1404
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/doc.aw:1357
+#: classes/doc.aw:1410
 msgid "Vali"
 msgstr ""
 
-#: classes/doc.aw:1388 classes/doc.aw:1416
+#: classes/doc.aw:1441 classes/doc.aw:1469
 msgid "--Vali--"
 msgstr ""
 
-#: classes/doc.aw:1513
+#: classes/doc.aw:1566
 msgid "Kustuta"
 msgstr ""
 
-#: classes/doc.aw:1550
+#: classes/doc.aw:1603
 msgid "M&auml;rks&otilde;na"
+msgstr ""
+
+#: classes/doc.aw:1629
+msgid "<b>Pealkiri:</b>"
+msgstr ""
+
+#: classes/doc.aw:1630
+msgid "<b>Lead:</b>"
+msgstr ""
+
+#: classes/doc.aw:1631
+msgid "<b>Sisu:</b>"
 msgstr ""

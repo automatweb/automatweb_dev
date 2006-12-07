@@ -182,6 +182,78 @@ msgstr ""
 msgid "Omaduse &Otilde;igused (acl) help"
 msgstr ""
 
+#: classes/applications/crm/crm_document.aw:prop_sp_tb
+msgid "Omaduse  (sp_tb) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_tb_comment
+msgid "Omaduse  (sp_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_tb_help
+msgid "Omaduse  (sp_tb) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_table
+msgid "Omaduse Valitud isikud (sp_table) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_table_comment
+msgid "Omaduse Valitud isikud (sp_table) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_table_help
+msgid "Omaduse Valitud isikud (sp_table) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_p_name
+msgid "Omaduse Isik (sp_p_name) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_p_name_comment
+msgid "Omaduse Isik (sp_p_name) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_p_name_help
+msgid "Omaduse Isik (sp_p_name) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_p_co
+msgid "Omaduse Organisatsioon (sp_p_co) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_p_co_comment
+msgid "Omaduse Organisatsioon (sp_p_co) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_p_co_help
+msgid "Omaduse Organisatsioon (sp_p_co) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_sbt
+msgid "Omaduse Otsi (sp_sbt) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_sbt_comment
+msgid "Omaduse Otsi (sp_sbt) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_sbt_help
+msgid "Omaduse Otsi (sp_sbt) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_s_res
+msgid "Omaduse Otsingu tulemused (sp_s_res) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_s_res_comment
+msgid "Omaduse Otsingu tulemused (sp_s_res) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_sp_s_res_help
+msgid "Omaduse Otsingu tulemused (sp_s_res) help"
+msgstr ""
+
 #: classes/applications/crm/crm_document.aw:group_acl
 msgid "Grupi &Otilde;igused (acl) pealkiri"
 msgstr ""
@@ -198,12 +270,28 @@ msgstr ""
 msgid "Grupi Failid (files) help"
 msgstr ""
 
+#: classes/applications/crm/crm_document.aw:group_parts_main
+msgid "Grupi Osalejad (parts_main) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:group_parts_main_help
+msgid "Grupi Osalejad (parts_main) help"
+msgstr ""
+
 #: classes/applications/crm/crm_document.aw:group_parts
 msgid "Grupi Osalejad (parts) pealkiri"
 msgstr ""
 
 #: classes/applications/crm/crm_document.aw:group_parts_help
 msgid "Grupi Osalejad (parts) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:group_notify
+msgid "Grupi Teavitamine (notify) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:group_notify_help
+msgid "Grupi Teavitamine (notify) help"
 msgstr ""
 
 #: classes/applications/crm/crm_document.aw:rel_RELTYPE_FILE
@@ -220,5 +308,41 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:rel_RELTYPE_ACTION
 msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:181
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:187
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:194
+msgid "Saada teavitusmeil"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:205
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:210
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:215
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:220
+msgid "E-mail"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:380
+msgid "Teavitus muutunud dokumendist"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:381
+msgid "Uuendati dokumenti \"%s\". Palun kliki siia:\n%s\net dokumenti näha!"
 msgstr ""
 

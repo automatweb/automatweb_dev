@@ -57,6 +57,10 @@ msgstr "Objects"
 msgid "Grupi Objektid (o) help"
 msgstr "This view is for editing content objects. To edit folders, You have to select Change from action-button on the object row. To edit other objects You can click on the name of the object.<br><br>To add a new object, use the green button on the left of the toolbar.<br><br>You can move in site structure by clicking on the tree or on folder names.<br><br>You can see preview of the current location on the web by clickin Preview button on the right of the toolbar"
 
+#: classes/admin/admin_if.aw:layout_o_bot_left
+msgid "Kujundusosa Kataloogid (o_bot_left) pealkiri"
+msgstr ""
+
 #: classes/admin/admin_if.aw:86
 msgid "Lisa"
 msgstr "Add"
@@ -65,11 +69,11 @@ msgstr "Add"
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/admin/admin_if.aw:102 classes/admin/admin_if.aw:858
+#: classes/admin/admin_if.aw:102 classes/admin/admin_if.aw:868
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/admin/admin_if.aw:109 classes/admin/admin_if.aw:864
+#: classes/admin/admin_if.aw:109 classes/admin/admin_if.aw:874
 msgid "Kopeeri"
 msgstr "Copy"
 
@@ -77,11 +81,11 @@ msgstr "Copy"
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/admin/admin_if.aw:126 classes/admin/admin_if.aw:874
+#: classes/admin/admin_if.aw:126 classes/admin/admin_if.aw:884
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/admin/admin_if.aw:127 classes/admin/admin_if.aw:870
+#: classes/admin/admin_if.aw:127 classes/admin/admin_if.aw:880
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects, are You sure?"
 
@@ -109,7 +113,7 @@ msgstr "Name"
 msgid "Jrk"
 msgstr "Order"
 
-#: classes/admin/admin_if.aw:510 classes/admin/admin_if.aw:772
+#: classes/admin/admin_if.aw:510 classes/admin/admin_if.aw:782
 msgid "Aktiivne"
 msgstr "Active"
 
@@ -133,38 +137,38 @@ msgstr "Action"
 msgid "Vali"
 msgstr "Select"
 
-#: classes/admin/admin_if.aw:772
+#: classes/admin/admin_if.aw:782
 msgid "Mitteaktiivne"
 msgstr "Non-active"
 
-#: classes/admin/admin_if.aw:828
+#: classes/admin/admin_if.aw:838
 msgid "Ava"
 msgstr "Open"
 
-#: classes/admin/admin_if.aw:847
+#: classes/admin/admin_if.aw:857
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/admin/admin_if.aw:1146
+#: classes/admin/admin_if.aw:1156
 msgid "Administreerimisliides"
 msgstr "Administrative interface"
 
-#: classes/admin/admin_if.aw:1166
+#: classes/admin/admin_if.aw:1176
 msgid "Logi v&auml;lja"
 msgstr "Log out"
 
-#: classes/admin/admin_if.aw:1167
+#: classes/admin/admin_if.aw:1177
 msgid "Asukoht:"
 msgstr "You are here:"
 
-#: classes/admin/admin_if.aw:1168
+#: classes/admin/admin_if.aw:1178
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
 msgstr "AutomatWeb&reg; is the registered trademark of Struktuur Meedia. All rights reserved, &copy; 1999-2006."
 
-#: classes/admin/admin_if.aw:1169
+#: classes/admin/admin_if.aw:1179
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr "Please visit our websites"
 
-#: classes/admin/admin_if.aw:1170
+#: classes/admin/admin_if.aw:1180
 msgid "Seaded"
 msgstr "Settings"

@@ -271,12 +271,12 @@ msgid "T&uuml;&uuml;p"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:142
-#: classes/applications/calendar/event_search.aw:365
+#: classes/applications/calendar/event_search.aw:364
 msgid "Nimi"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:147
-#: classes/applications/calendar/event_search.aw:369
+#: classes/applications/calendar/event_search.aw:368
 msgid "Pealkiri"
 msgstr ""
 
@@ -285,7 +285,7 @@ msgid "Sisu"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:157
-#: classes/applications/calendar/event_search.aw:373
+#: classes/applications/calendar/event_search.aw:372
 msgid "Aktiivne"
 msgstr ""
 
@@ -354,54 +354,54 @@ msgstr ""
 msgid "Kuu alates t&auml;nasest"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:378
+#: classes/applications/calendar/event_search.aw:377
 msgid "Klikitav"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:383
+#: classes/applications/calendar/event_search.aw:382
 msgid "T&auml;isvaates"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:388
+#: classes/applications/calendar/event_search.aw:387
 msgid "Reavahetused"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:393
+#: classes/applications/calendar/event_search.aw:392
 msgid "Eraldaja enne"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:398
+#: classes/applications/calendar/event_search.aw:397
 msgid "Eraldaja p&auml;rast"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:403
+#: classes/applications/calendar/event_search.aw:402
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:408
+#: classes/applications/calendar/event_search.aw:407
 msgid "Seaded"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:413
+#: classes/applications/calendar/event_search.aw:412
 msgid "V&auml;ljade eraldaja"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:418
+#: classes/applications/calendar/event_search.aw:417
 msgid "Lisav&auml;ljad"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:434
+#: classes/applications/calendar/event_search.aw:433
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:820
+#: classes/applications/calendar/event_search.aw:819
+#: classes/applications/calendar/event_search.aw:825
 #: classes/applications/calendar/event_search.aw:826
-#: classes/applications/calendar/event_search.aw:827
-#: classes/applications/calendar/event_search.aw:843
-#: classes/applications/calendar/event_search.aw:849
+#: classes/applications/calendar/event_search.aw:842
+#: classes/applications/calendar/event_search.aw:848
 msgid "k&otilde;ik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:856
+#: classes/applications/calendar/event_search.aw:855
 msgid "Otsi"
 msgstr ""

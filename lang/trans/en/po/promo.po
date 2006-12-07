@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_needs_translation_help
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
-msgstr ""
+msgstr "Needs translation"
 
 # classes/contentmgmt/promo.aw:prop_caption
 #: classes/contentmgmt/promo.aw:prop_caption
@@ -39,7 +39,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_caption_help
 #: classes/contentmgmt/promo.aw:prop_caption_help
 msgid "Omaduse Pealkiri (caption) help"
-msgstr ""
+msgstr "object name in the system"
 
 #: classes/contentmgmt/promo.aw:prop_type
 msgid "Omaduse Kasti t&uuml;&uuml;p (type) caption"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_type_help
 msgid "Omaduse Kasti t&uuml;&uuml;p (type) help"
-msgstr ""
+msgstr "Option for choosing the container´s appearance and location on web, depends also on Template´s content."
 
 # classes/contentmgmt/promo.aw:prop_link
 #: classes/contentmgmt/promo.aw:prop_link
@@ -81,7 +81,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_link_caption_help
 #: classes/contentmgmt/promo.aw:prop_link_caption_help
 msgid "Omaduse Lingi kirjeldus (link_caption) help"
-msgstr ""
+msgstr "web address where you can get when clicking on Link´s description. For example link could get you to the list of documents, that does not fit into the container (f. e. news archive)."
 
 #: classes/contentmgmt/promo.aw:prop_groups
 msgid "Omaduse Grupid, kellele kasti n&auml;idata (groups) caption"
@@ -93,7 +93,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_groups_help
 msgid "Omaduse Grupid, kellele kasti n&auml;idata (groups) help"
-msgstr ""
+msgstr "option for choosing the croups who an see the container."
 
 # classes/contentmgmt/promo.aw:prop_no_title
 #: classes/contentmgmt/promo.aw:prop_no_title
@@ -108,7 +108,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_no_title_help
 #: classes/contentmgmt/promo.aw:prop_no_title_help
 msgid "Omaduse Ilma pealkirjata (no_title) help"
-msgstr ""
+msgstr "if this box is ticked, then in the view General entered caption will not be displayed on web."
 
 #: classes/contentmgmt/promo.aw:prop_show_inact
 msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) caption"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_all_menus_help
 msgid "Omaduse N&auml;ita igal pool (all_menus) help"
-msgstr ""
+msgstr "the container is displayed on every page of the web, if the template is set in the home page´s design."
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search
 msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs_help
 msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) help"
-msgstr ""
+msgstr "if this option is chosen, then the container will be displayed in all web´s active languages in defined sections."
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs
 msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_help
 msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) help"
-msgstr ""
+msgstr "option for choosing the folders, in where the container would be displayed. It needs a previous connection in the Connection manager with the type Display next to folder"
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow
 msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) caption"
@@ -219,7 +219,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow_help
 msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) help"
-msgstr ""
+msgstr "makes it able to define exceptional folders, under where the containers are not displayed. Is useful when the container is needed to display everywhere, except in the section, where the same document list is located that could also be seen in the container."
 
 #: classes/contentmgmt/promo.aw:prop_sort_by
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) caption"
@@ -231,7 +231,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by_help
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) help"
-msgstr ""
+msgstr "Here are the document´s ordering conditions when displaying the container."
 
 # classes/contentmgmt/promo.aw:prop_sort_ord
 #: classes/contentmgmt/promo.aw:prop_sort_ord
@@ -309,7 +309,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_image_help
 #: classes/contentmgmt/promo.aw:prop_image_help
 msgid "Omaduse Pilt (image) help"
-msgstr ""
+msgstr "Descriptive image connected with the container, which is displayed in the container´s heading if necessary."
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead
 msgid "Omaduse Template n&auml;itamiseks (tpl_lead) caption"
@@ -321,7 +321,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead_help
 msgid "Omaduse Template n&auml;itamiseks (tpl_lead) help"
-msgstr ""
+msgstr "template for the document's that are into the container. Differs from the setting in General view by the container´s frame design. In General view is the the container´s frame design set."
 
 # classes/contentmgmt/promo.aw:prop_use_fld_tpl
 #: classes/contentmgmt/promo.aw:prop_use_fld_tpl
@@ -336,7 +336,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_use_fld_tpl_help
 #: classes/contentmgmt/promo.aw:prop_use_fld_tpl_help
 msgid "Omaduse Kasuta dokumendi asukoha templatet (use_fld_tpl) help"
-msgstr ""
+msgstr "if this box is ticked, then the documents in the container are displayed with the template that is defined for the folder where the document locates."
 
 # classes/contentmgmt/promo.aw:prop_promo_tpl
 #: classes/contentmgmt/promo.aw:prop_promo_tpl
@@ -351,7 +351,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_promo_tpl_help
 #: classes/contentmgmt/promo.aw:prop_promo_tpl_help
 msgid "Omaduse Template (dokumendi sees) (promo_tpl) help"
-msgstr ""
+msgstr "setting that makes it able to choose a special design for the container´s that are placed in a document."
 
 #: classes/contentmgmt/promo.aw:prop_last_menus
 msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) caption"
@@ -363,7 +363,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_last_menus_help
 msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) help"
-msgstr ""
+msgstr option for choosing folders, from where documents are taken to display in the Container. The column “Set as title” changes the folders name to the container´s headline. The column “incl. Sub-menus ” makes it able to choose if the documents are taken also from the folder´s sub-folders or not. It needs a previous connection in the Connection manager with the type Get documents form this folder."
 
 # classes/contentmgmt/promo.aw:prop_ndocs
 #: classes/contentmgmt/promo.aw:prop_ndocs
@@ -378,7 +378,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_ndocs_help
 #: classes/contentmgmt/promo.aw:prop_ndocs_help
 msgid "Omaduse Mitu viimast dokumenti (ndocs) help"
-msgstr ""
+msgstr "the number of last changed documents that would be taken from selected folders to display in the container."
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs
 msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) caption"
@@ -390,7 +390,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs_help
 msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) help"
-msgstr ""
+msgstr "the number of last changed documents that would be skipped while displaying this folders documents in the container. This setting is useful while there is need for displaying documents (that locate in one folder) in two different containers. Then the documents in the containers do not overlap."
 
 # classes/contentmgmt/promo.aw:prop_is_dyn
 #: classes/contentmgmt/promo.aw:prop_is_dyn
@@ -405,7 +405,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_is_dyn_help
 #: classes/contentmgmt/promo.aw:prop_is_dyn_help
 msgid "Omaduse Sisu ei cacheta (is_dyn) help"
-msgstr ""
+msgstr "Most of the AutomatWeb´s documents are cached (saved in the serves´s cache). There are situations where saving in cache may cause some functional restrictions, f. e. it may define that the container´s content changes after every viewing.  In that case has to be chosen “Content in not cached”, or the same content will be displayed until the next saving of some connected object."
 
 #: classes/contentmgmt/promo.aw:prop_kw_tb
 msgid "Omaduse  (kw_tb) caption"

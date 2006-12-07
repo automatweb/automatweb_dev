@@ -13,6 +13,18 @@ msgstr ""
 msgid "Klassi Lao toode help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_price_cur
+msgid "Omaduse Hinnad valuutades (price_cur) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_price_cur_comment
+msgid "Omaduse Hinnad valuutades (price_cur) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_price_cur_help
+msgid "Omaduse Hinnad valuutades (price_cur) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:prop_item_count
 msgid "Omaduse Mitu laos (item_count) caption"
 msgstr ""
@@ -59,6 +71,66 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_purchase_price_help
 msgid "Omaduse Ostu hind (purchase_price) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time
+msgid "Omaduse Broneeritav aeg (reservation_time) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_comment
+msgid "Omaduse Broneeritav aeg (reservation_time) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_help
+msgid "Omaduse Broneeritav aeg (reservation_time) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_unit
+msgid "Omaduse  (reservation_time_unit) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_unit_comment
+msgid "Omaduse  (reservation_time_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_unit_help
+msgid "Omaduse  (reservation_time_unit) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_before
+msgid "Omaduse Puhveraeg enne (buffer_time_before) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_before_comment
+msgid "Omaduse Puhveraeg enne (buffer_time_before) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_before_help
+msgid "Omaduse Puhveraeg enne (buffer_time_before) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_after
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_after_comment
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_after_help
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_unit
+msgid "Omaduse  (buffer_time_unit) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_unit_comment
+msgid "Omaduse  (buffer_time_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_unit_help
+msgid "Omaduse  (buffer_time_unit) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_must_order_num
@@ -901,6 +973,18 @@ msgstr ""
 msgid "Omaduse Lingid (lnk) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:group_data
 msgid "Grupi Toote info (data) pealkiri"
 msgstr ""
@@ -947,6 +1031,14 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_lnk_help
 msgid "Grupi Lingid (lnk) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_IMAGE
@@ -1021,6 +1113,22 @@ msgstr ""
 msgid "Seose Maksum&auml;&auml;r (RELTYPE_TAX_RATE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:534
+#: classes/applications/shop/shop_product.aw:414
+msgid "Minutit"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:415
+msgid "Tundi"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:455
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:460
+msgid "Valuuta"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:617
 msgid "shop_product::draw(): no layout set!"
 msgstr ""

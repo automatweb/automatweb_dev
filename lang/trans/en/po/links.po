@@ -27,7 +27,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_comment_help
 #: classes/contentmgmt/links.aw:prop_comment_help
 msgid "Omaduse Kommentaar lingikogusse (comment) help"
-msgstr ""
+msgstr "compartment for comments where could be added any information to clarify the instructions about the object.  The comments are not visible on web."
 
 # classes/contentmgmt/links.aw:prop_url
 #: classes/contentmgmt/links.aw:prop_url
@@ -42,7 +42,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_url_help
 #: classes/contentmgmt/links.aw:prop_url_help
 msgid "Omaduse URL (url) help"
-msgstr ""
+msgstr "the address where the link refers. It is written in following form: http://www.struktuur.ee or in case of inner site references the document's or folder큦 ID."
 
 # classes/contentmgmt/links.aw:prop_docid
 #: classes/contentmgmt/links.aw:prop_docid
@@ -72,7 +72,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_hits_help
 #: classes/contentmgmt/links.aw:prop_hits_help
 msgid "Omaduse Klikke (hits) help"
-msgstr ""
+msgstr "informational field. It shows how many times the link has been clicked."
 
 # classes/contentmgmt/links.aw:prop_url_int_text
 #: classes/contentmgmt/links.aw:prop_url_int_text
@@ -87,7 +87,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_url_int_text_help
 #: classes/contentmgmt/links.aw:prop_url_int_text_help
 msgid "Omaduse Saidi sisene link (url_int_text) help"
-msgstr ""
+msgstr "when opening that option, it is possible to search inner site documents to what make your link refer to. When you have found the right document fix it with selecting it. Link will be named automatically and the URL row will be filled."
 
 # classes/contentmgmt/links.aw:prop_alt
 #: classes/contentmgmt/links.aw:prop_alt
@@ -102,7 +102,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_alt_help
 #: classes/contentmgmt/links.aw:prop_alt_help
 msgid "Omaduse Alt tekst (alt) help"
-msgstr ""
+msgstr "the text that shows up next to the cursor if the cursor is held on the link for couple of seconds."
 
 # classes/contentmgmt/links.aw:prop_newwindow
 #: classes/contentmgmt/links.aw:prop_newwindow
@@ -117,7 +117,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_newwindow_help
 #: classes/contentmgmt/links.aw:prop_newwindow_help
 msgid "Omaduse Uues aknas (newwindow) help"
-msgstr ""
+msgstr "the link큦 address opens in a new window."
 
 #: classes/contentmgmt/links.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
@@ -144,7 +144,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_use_javascript_help
 #: classes/contentmgmt/links.aw:prop_use_javascript_help
 msgid "Omaduse Kasuta javascripti (use_javascript) help"
-msgstr ""
+msgstr "takes into usage all options in this view. When choosing this, the link큦 address opens automatically in new window."
 
 # classes/contentmgmt/links.aw:prop_newwinwidth
 #: classes/contentmgmt/links.aw:prop_newwinwidth
@@ -159,7 +159,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_newwinwidth_help
 #: classes/contentmgmt/links.aw:prop_newwinwidth_help
 msgid "Omaduse Uue akna laius (newwinwidth) help"
-msgstr ""
+msgstr "new window큦 width written in numbers and in pixels."
 
 #: classes/contentmgmt/links.aw:prop_newwinheight
 msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) caption"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_newwinheight_help
 msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) help"
-msgstr ""
+msgstr "new window큦 height written in numbers and in pixels."
 
 #: classes/contentmgmt/links.aw:prop_js_attributes
 msgid "Omaduse Atribuudid (js_attributes) caption"
@@ -198,7 +198,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_newwintoolbar_help
 #: classes/contentmgmt/links.aw:prop_newwintoolbar_help
 msgid "Omaduse Toolbar (newwintoolbar) help"
-msgstr ""
+msgstr "when ticking this, it allows to show the toolbar in new window."
 
 # classes/contentmgmt/links.aw:prop_newwinlocation
 #: classes/contentmgmt/links.aw:prop_newwinlocation
@@ -213,7 +213,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_newwinlocation_help
 #: classes/contentmgmt/links.aw:prop_newwinlocation_help
 msgid "Omaduse Address bar (newwinlocation) help"
-msgstr ""
+msgstr "when ticking this, it allows to show address bar in new window."
 
 #: classes/contentmgmt/links.aw:prop_newwinmenu
 msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) caption"
@@ -225,7 +225,7 @@ msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_newwinmenu_help
 msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) help"
-msgstr ""
+msgstr "when ticking this, it allows to show menu bar in new window."
 
 # classes/contentmgmt/links.aw:prop_newwinscroll
 #: classes/contentmgmt/links.aw:prop_newwinscroll
@@ -240,7 +240,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_newwinscroll_help
 #: classes/contentmgmt/links.aw:prop_newwinscroll_help
 msgid "Omaduse Skrollbarid (newwinscroll) help"
-msgstr ""
+msgstr "when ticking this, it allows to show scrollbars in new window."
 
 # classes/contentmgmt/links.aw:prop_link_image
 #: classes/contentmgmt/links.aw:prop_link_image
@@ -255,7 +255,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_link_image_help
 #: classes/contentmgmt/links.aw:prop_link_image_help
 msgid "Omaduse Pilt (link_image) help"
-msgstr ""
+msgstr "helps to find the image (displayed instead of the link큦 description) from your computer."
 
 # classes/contentmgmt/links.aw:prop_link_image_show
 #: classes/contentmgmt/links.aw:prop_link_image_show
@@ -285,7 +285,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_link_image_check_active_help
 #: classes/contentmgmt/links.aw:prop_link_image_check_active_help
 msgid "Omaduse Pilt aktiivne (link_image_check_active) help"
-msgstr ""
+msgstr "choosing this the link큦 text would be replaced with an image"
 
 # classes/contentmgmt/links.aw:prop_link_image_active_until
 #: classes/contentmgmt/links.aw:prop_link_image_active_until
@@ -300,7 +300,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_link_image_active_until_help
 #: classes/contentmgmt/links.aw:prop_link_image_active_until_help
 msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) help"
-msgstr ""
+msgstr "the time while the image is being displayed. When the entered period is over, the link will be as text again."
 
 #: classes/contentmgmt/links.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
