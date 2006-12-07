@@ -2160,11 +2160,14 @@ class _int_object
 		if (strpos($prop, ".") !== false)
 		{
 			$o = $this;
-			foreach(explode(".", $prop) as $part)
+			$bits = explode(".", $prop);
+			foreach($bits as $idx => $part)
 			{
 				$cur_v = $o->prop($part);
 				$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
-				if (in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager", "releditor")))
+				// the true here is because if the user says that this thingie is an oid, then we trust him
+				// we check of course, but still. we trust him.
+				if (true || in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager", "releditor")))
 				{
 					if (is_array($cur_v) && count($cur_v) == 1)
 					{
@@ -2172,6 +2175,10 @@ class _int_object
 					}
 					if (!$GLOBALS["object_loader"]->ds->can("view", $cur_v))
 					{
+						if ($idx == (count($bits)-1))
+						{
+							return $cur_v;
+						}
 						return null;
 					}
 					$o = obj($cur_v);
