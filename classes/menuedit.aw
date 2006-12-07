@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.378 2006/12/05 12:46:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.379 2006/12/07 12:01:28 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -319,6 +319,11 @@ class menuedit extends aw_template
 				}
 			}
 			list($lc, $section_a) = explode("/", $section, 2);
+			if (strlen($lc) > 2)
+			{
+				$section_a = $section;
+				$lc = aw_global_get("ct_lang_lc");
+			}
 			if ($section_a == "")
 			{
 				$lc = aw_global_get("ct_lang_lc");
