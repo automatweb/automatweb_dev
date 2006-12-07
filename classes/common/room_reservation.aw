@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.12 2006/12/07 20:02:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.13 2006/12/07 20:27:20 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -633,6 +633,7 @@ class room_reservation extends class_base
 					"prop" => array("vcl_inst" => &$t),
 					"room" => $room,
 					"web" => 1,
+					"submit_url" => $action,
 				));
 				$tables.= $t->draw();
 			}
