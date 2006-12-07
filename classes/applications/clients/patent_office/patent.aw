@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.8 2006/12/07 12:07:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.9 2006/12/07 12:08:43 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -378,7 +378,7 @@ class patent extends class_base
 	//	arr($_SESSION["patent"]);
 		$us = get_instance(CL_USER);
 		$this->users_person = new object($us->get_current_person());
-		if(is_object($this->users_person))
+/* 		if(is_object($this->users_person))
 		{
 			$_SESSION["patent"]["firstname"] = $this->users_person->prop("firstname");
 			$_SESSION["patent"]["lastname"] = $this->users_person->prop("lastname");
@@ -397,7 +397,7 @@ class patent extends class_base
 					$_SESSION["patent"]["country_code"] = $adr->get_country_code($address->prop("riik"));
 				}
 			}
-		}
+		}*/
 	}
 	
 
