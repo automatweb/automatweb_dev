@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.15 2006/12/07 20:53:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.16 2006/12/07 21:45:57 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -247,7 +247,14 @@ class room_reservation extends class_base
 		global $level;
 		enter_function("oom_reservation::parse_alias");
 		$targ = obj($arr["alias"]["target"]);
-		$room = $targ->get_first_obj_by_reltype(array("type" => "RELTYPE_ROOM"));
+		if( is_oid($_SESSION["room_reservation"]["room_id"]) && $this->can("view" , $_SESSION["room_reservation"]["room_id"]))
+		{
+			$room =  obj($_SESSION["room_reservation"]["room_id"]);
+		}
+		else
+		{
+			$room = $targ->get_first_obj_by_reltype(array("type" => "RELTYPE_ROOM"));
+		}
 		if(!is_object($room))
 		{
 			return "";
@@ -401,7 +408,7 @@ class room_reservation extends class_base
 					"room" => $room->id(),
 				)),
 			"no_link" => 1,
-			"width" => 600,
+			"width" => 770,
 			"height" => 600,
 			"scrollbars" => 1,
 		));
@@ -477,7 +484,14 @@ class room_reservation extends class_base
 	function submit_data($args = array())//tegeleb postitatud infoga
 	{
 		$bron_obj = obj($args["id"]);
-		$room = reset($bron_obj->prop("rooms"));
+		if( $_SESSION["room_reservation"]["room_id"])
+		{
+			$room =  $_SESSION["room_reservation"]["room_id"];
+		}
+		else
+		{
+			$room = reset($bron_obj->prop("rooms"));
+		}
 		foreach($_POST as $key=>$val)
 		{
 			$_SESSION["room_reservation"][$room][$key] = $val;
@@ -659,12 +673,18 @@ class room_reservation extends class_base
 	function submit_web_calendar_table($arr)
 	{
 		$room_inst = get_instance(CL_ROOM);
-		$times = $room_inst->_get_bron_time(array(
-			"bron" => $arr["bron"][$arr["room"]],
-			"id" => $arr["room"],
+		$room=$arr["room"];
+		foreach($arr["bron"] as $room => $bron)
+			$times = $room_inst->_get_bron_time(array(
+			"bron" => $bron,
+			"id" => $room,
 		));
-		$_SESSION["room_reservation"][$arr["room"]]["start"] = $times["start"];
-		$_SESSION["room_reservation"][$arr["room"]]["end"] = $times["end"];
+
+		//teised ruumid 'ra nullida oleks vaja
+		$_SESSION["room_reservation"][$room];
+		$_SESSION["room_reservation"]["room_id"] = $room;
+		$_SESSION["room_reservation"][$room]["start"] = $times["start"];
+		$_SESSION["room_reservation"][$room]["end"] = $times["end"];
 		$ret.= '<script language="javascript">
 			window.opener.location.reload();
 			window.close();
@@ -687,6 +707,10 @@ class room_reservation extends class_base
 	**/
 	function affirm_reservation($arr)
 	{
+		if( $_SESSION["room_reservation"]["room_id"])
+		{
+			$arr["room"] =  $_SESSION["room_reservation"]["room_id"];
+		}
 		extract($arr);
 		$room_inst = get_instance(CL_ROOM);
 		$bron_id;
@@ -716,6 +740,10 @@ class room_reservation extends class_base
 	**/
 	function pay_reservation($arr)
 	{
+		if( $_SESSION["room_reservation"]["room_id"])
+		{
+			$arr["room"] =  $_SESSION["room_reservation"]["room_id"];
+		}
 		extract($arr);
 		$room_inst = get_instance(CL_ROOM);
 		$room = obj($room);
@@ -762,6 +790,11 @@ class room_reservation extends class_base
 	**/
 	function revoke_reservation($arr)
 	{
+		if( $_SESSION["room_reservation"]["room_id"])
+		{
+			$arr["room"] =  $_SESSION["room_reservation"]["room_id"];
+		}
+		
 		extract($arr);
 		if(!$bron_id)
 		{
