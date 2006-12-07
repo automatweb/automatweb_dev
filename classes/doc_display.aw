@@ -75,6 +75,10 @@ class doc_display extends aw_template
 			$em = $this->_get_edit_menu($doc);
 		}
 
+		$user1 = $doc->prop("user1");
+		$al->parse_oo_aliases($doc->id(), &$user1);
+		$userta1 = $doc->prop("userta1");
+		$al->parse_oo_aliases($doc->id(), &$userta1);
 		$this->vars(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
@@ -91,12 +95,13 @@ class doc_display extends aw_template
 			"modifiedby_email" => $modf_eml,
 			"parent_id" => $doc->parent(),
 			"parent_name" => $doc_parent->name(),
-			"user1" => $doc->prop("user1"),
+			"user1" => $user1,
 			"user2" => $doc->prop("user2"),
 			"user3" => $doc->prop("user3"),
 			"user4" => $doc->prop("user4"),
 			"user5" => $doc->prop("user5"),
 			"user6" => $doc->prop("user6"),
+			"userta1" => $userta1,
 			"userta2" => $doc->prop("userta2"),
 			"userta3" => $doc->prop("userta3"),
 			"userta4" => $doc->prop("userta4"),
