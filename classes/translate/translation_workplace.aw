@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.5 2006/12/08 08:48:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.6 2006/12/08 09:42:07 kristo Exp $
 // translation_workplace.aw - T&otilde;lkimise t&ouml;&ouml;laud 
 /*
 
@@ -244,7 +244,7 @@ class translation_workplace extends class_base
 
 		$l = get_instance("languages");
 		$ll = $l->get_list(array("set_for_user" => true));
-
+		$data = array();
 		foreach($ol->arr() as $o)
 		{
 			$d = array(
@@ -263,6 +263,7 @@ class translation_workplace extends class_base
 				{
 					$d[$lang."_state"] = $o->status() == STAT_ACTIVE ? t("Jah") : t("Ei");
 					$d[$lang."_mod"] = $o->modified();
+					$this->_sortby_lang = $lang."_mod";
 				}
 				else
 				{
@@ -295,8 +296,50 @@ class translation_workplace extends class_base
 			{
 				continue;
 			}
+			$data[] = $d;
+		}
+
+		usort($data, array(&$this, "__t_sort"));
+		foreach($data as $d)
+		{
 			$t->define_data($d);
 		}
+		$t->set_sortable(false);
+	}
+
+	function __t_sort($a, $b)
+	{
+		// sort any red rows first
+		$a_has_red = $this->_has_reds($a);
+		$b_has_red = $this->_has_reds($b);
+
+		if ($a_has_red && $b_has_red)
+		{
+			// sort by date
+			return $b[$this->_sortby_lang] - $a[$this->_sortby_lang];
+		}
+		else
+		if ($a_has_red)
+		{
+			return -1;
+		}
+		else
+		if ($b_has_red)
+		{
+			return 1;
+		}
+	}
+
+	function _has_reds($a)
+	{
+		foreach($a as $v)
+		{
+			if (strpos($v, "color='red'") !== false)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	function _tr_tree($arr)
