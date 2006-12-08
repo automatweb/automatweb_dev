@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.3 2006/12/07 15:01:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.4 2006/12/08 08:18:40 kristo Exp $
 // translation_workplace.aw - T&otilde;lkimise t&ouml;&ouml;laud 
 /*
 
@@ -213,6 +213,10 @@ class translation_workplace extends class_base
 					$filt["modified"] = new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start());
 					$t->set_caption(t("Sel n&auml;dalal muudetud"));
 					break;
+
+				case "untr":
+					$t->set_caption(t("T&otilde;lkimata"));
+					break;
 			}
 		}
 		else
@@ -237,7 +241,7 @@ class translation_workplace extends class_base
 		$ol = new object_list($filt);
 
 		$l = get_instance("languages");
-		$ll = $l->get_list();
+		$ll = $l->get_list(array("set_for_user" => true));
 
 		foreach($ol->arr() as $o)
 		{
@@ -250,6 +254,7 @@ class translation_workplace extends class_base
 				"class_id" => $clss[$o->class_id()]["name"],
 				"trans_status" => $trs
 			);
+			$has_trans = false;
 			foreach($ll as $lid => $lang)
 			{
 				if ($lid == $o->lang_id())
@@ -268,9 +273,25 @@ class translation_workplace extends class_base
 							"caption" => "<font color='red'>".$t_state."</font>"
 						));
 					}
+					else
+					{
+						$t_state = html::href(array(
+							"url" => $this->mk_my_orb("change", array("id" => $o->id(), "group" => "tlgi"), "doc")."#".$lid,
+							"caption" => $t_state
+						));
+					}
 					$d[$lang."_state"] = $t_state;
 					$d[$lang."_mod"] = $t_mod;
+					if ($t_mod > 100)
+					{
+						$has_trans = true;
+					}
 				}
+			}
+
+			if ($tm == "untr" && $has_trans)
+			{
+				continue;
 			}
 			$t->define_data($d);
 		}
@@ -362,6 +383,15 @@ class translation_workplace extends class_base
 					"parent" => null,
 					"class_id" => null,
 					"tm" => "week"
+				), false, $arr["url"])
+			));
+			$t->add_item(0, array(
+				"id" => "modified_untr",
+				"name" => t("T&otilde;lkimata"),
+				"url" => aw_url_change_var(array(
+					"parent" => null,
+					"class_id" => null,
+					"tm" => "untr"
 				), false, $arr["url"])
 			));
 		}
