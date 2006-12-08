@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.71 2006/12/04 11:39:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.72 2006/12/08 07:16:03 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -33,7 +33,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property who type=crm_participant_search style=relpicker reltype=RELTYPE_MONITOR table=aw_bugs field=who parent=settings_col1 captionside=top
 		@caption Kellele
 
-		@property bug_mail type=textbox parent=settings_col1 captionside=top
+		@property bug_mail type=textbox parent=settings_col1 captionside=top size=15
 		@caption Bugmail CC
 
 	@layout settings_col2 type=vbox parent=settings

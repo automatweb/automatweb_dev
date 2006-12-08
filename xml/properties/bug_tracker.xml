@@ -381,6 +381,15 @@
             <caption>Kokkuv&amp;amp;otilde;te</caption>
       </property>
       <property>
+            <name>my_bugs_stat_p</name>
+            <table>objects</table>
+            <group>my_bugs_stat</group>
+            <type>text</type>
+            <store>no</store>
+            <field>my_bugs_stat_p</field>
+            <caption>Kelle buge n&amp;amp;auml;idata</caption>
+      </property>
+      <property>
             <name>my_bugs_stat_table</name>
             <table>objects</table>
             <group>my_bugs_stat</group>
@@ -743,7 +752,7 @@
             </reqs_main>
             <reqs>
                   <parent>reqs_main</parent>
-                  <caption>Sisestamine</caption>
+                  <caption>N&amp;amp;otilde;uete puu</caption>
                   <submit>no</submit>
             </reqs>
             <reqs_proj>

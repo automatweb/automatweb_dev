@@ -71,11 +71,32 @@ function check_generic_unloader()
 	}
 };
 //-->
+
+window.onscroll = function ()
+{
+	el=document.getElementById('floatlayer');
+	if (el)
+	{
+		el.style.position='absolute';
+		if (document.body.scrollLeft) // opera, ff etc
+		{
+			el.style.left=document.body.scrollLeft+800+"px";
+			el.style.top=document.body.scrollTop+200+"px";
+		}
+		else if (document.documentElement.scrollTop) //ie
+		{
+			el.style.left=document.documentElement.scrollLeft+800+"px";
+			el.style.top=document.documentElement.scrollTop+200+"px";
+		}
+	}
+}
+
+
 </script>
 
 </head>
 
-<body  onscroll="el=document.getElementById('floatlayer');if (el) {el.style.position='absolute';el.style.left=document.body.scrollLeft+800;el.style.top=document.body.scrollTop+200;}" onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
+<body  onBeforeUnload="check_generic_unloader();" onLoad="check_generic_loader();">
 <!-- päis -->
 		<!-- SUB: YAH -->
 <div id="pais">

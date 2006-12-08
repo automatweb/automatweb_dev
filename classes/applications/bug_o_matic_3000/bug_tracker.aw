@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.90 2006/12/04 13:35:07 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.90 2006/12/04 13:35:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.91 2006/12/08 07:16:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.91 2006/12/08 07:16:03 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -149,6 +149,9 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Kokkuv&otilde;te
 
 @default group=my_bugs_stat
+
+	@property my_bugs_stat_p type=text store=no 
+	@caption Kelle buge n&auml;idata
 
 	@property my_bugs_stat_table type=table no_caption=1
 	@caption Minuga seotud bugid
@@ -456,6 +459,7 @@ class bug_tracker extends class_base
 
 			case "gantt_p":
 			case "unset_p":
+			case "my_bugs_stat_p":
 				if ($this->can("view", $arr["request"]["filt_p"]))
 				{
 					$p = obj($arr["request"]["filt_p"]);
@@ -587,6 +591,15 @@ class bug_tracker extends class_base
 		));
 
 		$uid = aw_global_get('uid');
+		if ($arr["request"]["filt_p"])
+		{
+			$p = get_instance(CL_CRM_PERSON);
+			$u = $p->has_user(obj($arr["request"]["filt_p"]));
+			if ($u)
+			{
+				$uid = $u->prop("uid");
+			}
+		}
 		$bugs = array();
 		foreach ($bug_comments->arr() as $id => $bug_comment)
 		{

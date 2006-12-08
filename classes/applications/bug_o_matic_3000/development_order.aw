@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.4 2006/12/04 12:09:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/development_order.aw,v 1.5 2006/12/08 07:16:03 kristo Exp $
 // development_order.aw - Arendustellimus 
 /*
 
@@ -273,7 +273,7 @@ class development_order extends class_base
 		$cart = $arr["obj_inst"]->meta("cart");
 		foreach($all_ol->arr() as $o)
 		{
-			if ($cart[$o->id()])
+			if (isset($cart[$o->id()]))
 			{
 				$ol->add($o);
 			}
@@ -326,7 +326,7 @@ class development_order extends class_base
 		{
 			if (!isset($cart[$id]))
 			{
-				$cart[$id] = array();
+				$cart[$id] = array("price" => 0);
 			}
 		}
 		$o->set_meta("cart", $cart);

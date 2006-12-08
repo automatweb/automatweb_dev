@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.152 2006/12/06 18:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.153 2006/12/08 07:16:03 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2906,6 +2906,15 @@ class crm_person extends class_base
 		return $ret;
 	}
 
+	/** Returns the user object for the given person
+		@attrib api=1 params=pos
+
+		@param o required type=object
+			Person object to return user for
+
+		@returns
+			User object if the person has an user or false if not
+	**/
 	function has_user($o)
 	{
 		obj_set_opt("no_cache", 1);

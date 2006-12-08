@@ -58,6 +58,7 @@
             <type>textbox</type>
             <parent>settings_col1</parent>
             <captionside>top</captionside>
+            <size>15</size>
             <field>bug_mail</field>
             <caption>Bugmail CC</caption>
       </property>
