@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.181 2006/10/13 08:25:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.182 2006/12/08 10:10:11 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -944,6 +944,7 @@ class image extends class_base
 						<script language=\"javascript\">
 						function getDocID()
 						{
+							doc_id = 0;
 							q = window.parent.location.href;
 							ar = new Array();
 							ar = q.split('&');
@@ -1989,20 +1990,22 @@ class image extends class_base
 	/**
 		@attrib name=gen_image_alias_for_doc params=name
 		@param img_id required type=int
-		@param doc_id required type=int
+		@param doc_id optional 
 		@param close optional type=bool
 	**/
 	function gen_image_alias_for_doc($arr)
 	{
+		$close = "<script language=\"javascript\">javascript:window.parent.close();</script>";
+		if (!is_oid($arr["doc_id"]))
+		{
+			die($close);
+		}
 		$c = new connection();
 		$c->load(array(
 			"from" => $arr["doc_id"],
 			"to" => $arr["img_id"],
 		));
 		$c->save();
-		$close = "<script language=\"javascript\">
-		javascript:window.parent.close();
-		</script>";
 		$out = $arr["close"]?$close:$c->id();
 		die($out);
 	}

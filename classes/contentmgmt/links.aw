@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.31 2006/11/29 10:14:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.32 2006/12/08 10:10:10 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -345,6 +345,7 @@ class links extends class_base
 						<script language=\"javascript\">
 						function getDocID()
 						{
+							doc_id = 0;
 							q = window.parent.location.href;
 							ar = new Array();
 							ar = q.split('&');
