@@ -24,6 +24,12 @@
 
 	@classinfo no_status=1 syslog_type=ST_SRM_COUNTRY
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 */
 
 /*
@@ -50,6 +56,41 @@ class crm_country extends class_base
 		$this->init(array(
 			'clid' => CL_CRM_COUNTRY,
 		));
+		$this->trans_props = array(
+			"name","comment"
+		);
+	}
+
+	function set_property($arr = array())
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
+			case "price_cur":
+				$arr["obj_inst"]->set_meta("cur_prices", $arr["request"]["cur_prices"]);
+				break;
+
+		}
+		return $retval;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>
