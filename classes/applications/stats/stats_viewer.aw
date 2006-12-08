@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.3 2006/11/22 13:57:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.4 2006/12/08 07:07:18 kristo Exp $
 // stats_viewer.aw - Statistika 
 /*
 
@@ -502,7 +502,7 @@ class stats_viewer extends class_base
 				"oid" => $c->prop("to")
 			));
 		}
-		$t->set_caption("Kasutajad");
+		$t->set_caption(t("Kasutajad"));
 	}
 
 	function _init_s_user_group_t(&$t)
@@ -529,7 +529,7 @@ class stats_viewer extends class_base
 				"oid" => $c->prop("to")
 			));
 		}
-		$t->set_caption("Kasutajagrupp");
+		$t->set_caption(t("Kasutajagrupp"));
 	}
 
 	function _s_tb($arr)
