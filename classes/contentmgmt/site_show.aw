@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.211 2006/11/28 11:59:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.212 2006/12/08 13:38:14 kristo Exp $
 
 /*
 
@@ -1084,6 +1084,19 @@ class site_show extends class_base
 
 			if ($docid)
 			{
+				// if full_content_trans is set, and this document is not translated
+				// to the current ct lang and redirect is set, then do the redirect
+				if (aw_ini_get("user_interface.full_content_trans") && 
+					aw_ini_get("user_interface.ct_notact_redirect") != "")
+				{
+					$doc_o = obj($docid);
+					if (aw_global_get("ct_lang_id") != $doc_o->lang_id() &&
+						$doc_o->meta("trans_".aw_global_get("ct_lang_id")."_status") != 1)
+					{
+						header("Location: ".aw_ini_get("user_interface.ct_notact_redirect"));
+						die();
+					}
+				}
 				$this->active_doc = $docid;
 				$d->set_opt("cnt_documents",1);
 				aw_register_default_class_member("document", "cnt_documents", 1);
