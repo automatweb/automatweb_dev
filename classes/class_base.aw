@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.522 2006/12/04 17:58:53 kristo Exp $
+// $Id: class_base.aw,v 2.523 2006/12/08 07:05:04 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5177,7 +5177,7 @@ class class_base extends aw_template
 						$str = str_replace($r1, $r2, $str);
 					}
 				}
-			
+				$str = str_replace(chr(226).chr(128).chr(147), "-", $str);	
 				$nv = iconv("UTF-8", $lang["charset"], $str);
 				if ($nv != $all_vals[$lid][$p])
 				{
@@ -5237,7 +5237,7 @@ class class_base extends aw_template
 			$nm = "sep_$lid";
 			$ret[$nm] = array(
 				"name" => $nm,
-				"caption" => $lang["name"],
+				"caption" => $lang["name"]."<a name='#$lid'></a>",
 				"type" => "text",
 				"subtitle" => 1,
 			);
