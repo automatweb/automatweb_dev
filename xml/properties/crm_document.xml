@@ -135,6 +135,60 @@
             <field>acl</field>
             <caption>&amp;amp;Otilde;igused</caption>
       </property>
+      <property>
+            <name>sp_tb</name>
+            <table>objects</table>
+            <group>notify</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>sp_tb</field>
+      </property>
+      <property>
+            <name>sp_table</name>
+            <table>objects</table>
+            <group>notify</group>
+            <type>table</type>
+            <store>no</store>
+            <field>sp_table</field>
+            <caption>Valitud isikud</caption>
+      </property>
+      <property>
+            <name>sp_p_name</name>
+            <table>objects</table>
+            <group>notify</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>sp_p_name</field>
+            <caption>Isik</caption>
+      </property>
+      <property>
+            <name>sp_p_co</name>
+            <table>objects</table>
+            <group>notify</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>sp_p_co</field>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>sp_sbt</name>
+            <table>objects</table>
+            <group>notify</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>sp_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>sp_s_res</name>
+            <table>objects</table>
+            <group>notify</group>
+            <type>table</type>
+            <store>no</store>
+            <field>sp_s_res</field>
+            <caption>Otsingu tulemused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_DOCUMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -148,9 +202,17 @@
             <files>
                   <caption>Failid</caption>
             </files>
+            <parts_main>
+                  <caption>Osalejad</caption>
+            </parts_main>
             <parts>
                   <caption>Osalejad</caption>
+                  <parent>parts_main</parent>
             </parts>
+            <notify>
+                  <caption>Teavitamine</caption>
+                  <parent>parts_main</parent>
+            </notify>
       </groupinfo>
       <tableinfo>
             <aw_crm_document>

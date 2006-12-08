@@ -54,6 +54,14 @@
             <caption>Valuuta</caption>
       </property>
       <property>
+            <name>date</name>
+            <table>aw_procurement_offers</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_date</field>
+            <caption>Pakkumise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>accept_date</name>
             <table>aw_procurement_offers</table>
             <group>general</group>

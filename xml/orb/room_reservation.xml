@@ -38,7 +38,8 @@
 		<action name="get_web_calendar_table" nologin="1">
 			<function name="get_web_calendar_table">
 				<arguments>
-					<required name="room" type="int" />
+					<optional name="room" type="int" />
+					<optional name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
