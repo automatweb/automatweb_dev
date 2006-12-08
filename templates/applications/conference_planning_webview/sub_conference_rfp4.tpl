@@ -185,7 +185,7 @@
 	
 	<tr>
 		<td colspan="2" align="right">
-			<input type="button" onClick="javascript:submit_changeform('add_catering');" value="Add/Save catering"/>
+			<a href="#" onClick="javascript:submit_changeform('add_catering');">Add/Save catering</a>
 		</td>
 	</tr>
 </table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.9 2006/12/08 10:12:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.10 2006/12/08 15:32:28 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -43,13 +43,13 @@ class conference_planning extends class_base
 		));
 		
 		$this->wd = array(
-			0 => t("Mon"),
-			1 => t("Tue"),
-			2 => t("Wed"),
-			3 => t("Thu"),
-			4 => t("Fri"),
-			5 => t("Sat"),
-			6 => t("Sun"),
+			0 => t("Monday"),
+			1 => t("Tuesday"),
+			2 => t("Wednesday"),
+			3 => t("Thursday"),
+			4 => t("Friday"),
+			5 => t("Saturday"),
+			6 => t("Sunday"),
 		);
 
 		$this->table_forms = array(

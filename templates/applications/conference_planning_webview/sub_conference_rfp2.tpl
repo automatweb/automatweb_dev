@@ -4,7 +4,7 @@
 			{VAR:LC_ADD_NO}:
 		</td>
 		<td>
-			<input name="sub[2][no_dates_to_add]" type="text" /><input type="button" onClick="javascript:submit_changeform('add_dates');" value="{VAR:LC_ADD}"/>
+			<input name="sub[2][no_dates_to_add]" type="text" /><a href="#" onClick="javascript:submit_changeform('add_dates');">{VAR:LC_ADD}</a>
 		</td>
 	</tr>
 	<tr>
