@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.179 2006/12/06 07:02:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.180 2006/12/08 11:23:25 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -468,6 +468,12 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "alias_ch":
+				if(!aw_ini_get("menu.automatic_aliases"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
 			case "change_time":
 				$arr = array(
 					"always" => t("Alati muutuv"),
@@ -1345,12 +1351,12 @@ class menu extends class_base
 		$m = get_instance("menuedit");
 		$m->invalidate_menu_cache($this->updmenus);
 		$request = &$arr["request"];
-		if($request["group"] == "general_sub" && aw_ini_get("menu.automatic_aliases")  && $arr["obj_inst"]->prop("alias_ch") == 1)
+		if(($request["group"] == "general_sub" || $request["group"] == "general" || $request["group"] == "") && aw_ini_get("menu.automatic_aliases")  && $arr["obj_inst"]->prop("alias_ch") == 1)
 		{
 			if(!strlen($arr["obj_inst"]->alias()))
 			{
 				$new_alias = $this->_gen_nice_alias($request["name"]);
-				$arr["obj_inst"]->set_alias($this->_gen_nice_alias($request["name"]));
+				$arr["obj_inst"]->set_alias($this->_gen_nice_alias($request["name"], $arr["obj_inst"]->id()));
 				$arr["obj_inst"]->save();
 			}
 		}
@@ -1371,25 +1377,32 @@ class menu extends class_base
 		};
 	}
 
-	function _gen_nice_alias($name)
+	function _gen_nice_alias($name, $oid = false)
 	{
-		$to_replace = array("&auml;","&Auml;","&ouml;","&Ouml;","&uuml;","&Uuml;","&otilde;","&Otilde;","¾","®","¹","©"," ");
-		$replace_with = array("a","a","o","o","u","u","o","o","z","z","s","s","-");
-		$str = "!\"@#.¤$%&/()[]={}?\+-`'|,;:";
-		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);;
-		$name = str_replace($to_replace, $replace_with, $name);
-		return $this->_check_alias_name(substr($name,0, 50));
+		$name = strtolower($name);
+		$name = trim($name);
+		$to_replace = array("&auml;","&ouml;","&uuml;","&otilde;", " ");
+		$replace_with = array("a","o","u","o","-");
+		$str = "!\"@#.¤$%&/()[]={}?\+-`'|,;";
+		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);
+		$name = str_replace($to_replace, $replace_with, htmlentities($name));
+		return $this->_check_alias_name(strtolower(substr($name,0, 50)), $oid);
 	}
 
-	function _check_alias_name($name)
+	function _check_alias_name($name, $oid)
 	{
 		$nr = 0;
 		$orig_name = $name;
 		while(true)
 		{
-			$ol = new object_list(array(
-				"alias" => $name,
-			));
+			$filt = array();
+			$filt["alias"] = $name;
+			if(aw_ini_get("menuedit.recursive_aliases") && is_oid($oid))
+			{
+				$o = obj($oid);
+				$filt["parent"] = $o->parent(); 
+			}
+			$ol = new object_list($filt);
 			if($ol->count() > 0)
 			{
 				$name = $orig_name."_".$nr;
