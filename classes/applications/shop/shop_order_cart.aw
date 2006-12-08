@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.51 2006/11/30 10:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.52 2006/12/08 15:15:56 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -317,6 +317,7 @@ class shop_order_cart extends class_base
 	{
 		//arr($arr);
 		extract($arr);
+		$section = aw_global_get("section");
 		$oc = obj($oc);
 		//$this->clear_cart($oc);
 		//die();
@@ -653,22 +654,22 @@ class shop_order_cart extends class_base
 		{
 			return $arr["go_to_after"];
 		}
-
+		
 		if (!empty($arr["pre_confirm_order"]))
 		{
 			// go to separate page with order non modifiable and user data form below
-			return $this->mk_my_orb("pre_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"]));
+			return urldecode($this->mk_my_orb("pre_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"])));
 		}
 		else
 		if (!empty($arr["final_confirm_order"]))
 		{
 			// go to separate page with order non modifiable and user data form below
-			return $this->mk_my_orb("final_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"]));
+			return urldecode($this->mk_my_orb("final_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"])));
 		}
 		else
 		if (!empty($arr["update_final_finish"]))
 		{
-			return $this->mk_my_orb("final_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"]));
+			return urldecode($this->mk_my_orb("final_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"])));
 		}
 		else
 		if (!empty($arr["confirm_order"]))
@@ -700,11 +701,11 @@ class shop_order_cart extends class_base
 				"payment_type" => $cart["payment_method"]
 			));
 			$this->clear_cart($oc);
-			return $this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order");
+			return urldecode($this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order"));
 		}
 		else
 		{
-			return $this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"]));
+			return urldecode($this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"])));
 		}
 	}
 

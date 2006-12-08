@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.42 2006/11/30 10:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.43 2006/12/08 15:15:56 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -578,15 +578,20 @@ class shop_order_center extends class_base
 			return $o->prop("link");
 		}
 
+		$sect = $o->id();
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$sect = aw_global_get("ct_lang_lc")."/".$sect;
+		}
 		if ($ref === NULL)
 		{
-			$link =  $this->mk_my_orb("show_items", array("id" => $this->folder_obj->id(), "section" => $o->id()));
+			$link =  $this->mk_my_orb("show_items", array("id" => $this->folder_obj->id(), "section" => $sect));
 		}
 		else
 		{
-			$link =  $this->mk_my_orb("show_items", array("id" => $ref->id(), "section" => $o->id()));
+			$link =  $this->mk_my_orb("show_items", array("id" => $ref->id(), "section" => $sect));
 		}
-		return $link;
+		return urldecode($link);
 	}
 
 	/** shows shop items
@@ -645,7 +650,7 @@ class shop_order_center extends class_base
 		$ss->_init_path_vars($tmp);
 		$html = $ss->show_documents($tmp);
 		
-		$so = obj($section);
+		$so = obj(aw_global_get("section"));
 		if ($so->class_id() == CL_SHOP_PRODUCT)
 		{
 			$pl = array($so);
@@ -659,12 +664,13 @@ class shop_order_center extends class_base
 		{
 			$pl = $wh->get_packet_list(array(
 				"id" => $wh_id,
-				"parent" => $section,
+				"parent" => aw_global_get("section"),
 				"only_active" => $soc->prop("only_active_items")
 			));
 		}
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
-		
+	
+		$section = aw_global_get("section");
 		// get the template for products for this folder
 		$layout = $this->get_prod_layout_for_folder($soc, $section);
 

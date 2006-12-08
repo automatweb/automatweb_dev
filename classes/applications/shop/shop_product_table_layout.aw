@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.11 2006/11/28 11:26:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.12 2006/12/08 15:15:56 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -196,11 +196,16 @@ class shop_product_table_layout extends class_base
 		$cart_inst = get_instance(CL_SHOP_ORDER_CART);
 		$cart_val = $cart_inst->get_cart_value();
 		$this->ft_str .= $this->parse($this->r_template);
+		$sect = aw_global_get("section");
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$sect = aw_global_get("ct_lang_lc")."/".$sect;
+		}
 		$this->vars(array(
 			"ROW" => $this->ft_str,
 			"ROW1" => $this->ft_str,
 			"ROW2" => "",
-			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "oc" => $this->oc->id(), "return_url" => aw_global_get("REQUEST_URI")), "shop_order_cart"),
+			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => $sect, "oc" => $this->oc->id(), "return_url" => aw_global_get("REQUEST_URI")), "shop_order_cart"),
 			"HAS_ITEMS" => $hi,
 			"sel_menu_text" => $so->name(),
 			"web_discount" => $this->oc->prop("web_discount"),
