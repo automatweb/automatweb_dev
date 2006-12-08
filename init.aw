@@ -92,9 +92,11 @@ function parse_config($file)
 		if ($line != "")
 		{
 			// now, config opts are class.variable = value
+
 			$eqpos = strpos($line," = ");
 			if ($eqpos !== false)
 			{
+			
 				$var = trim(substr($line,0,$eqpos));
 				$varvalue = trim(substr($line,$eqpos+3));
 				
@@ -114,7 +116,6 @@ function parse_config($file)
 					$varclass = "__default";
 					$varname = $var;
 				}
-
 				// check if variable is an array 
 				if (($bpos = strpos($varname,"[")) !== false)
 				{
@@ -225,7 +226,7 @@ function init_config($arr)
 	}
 
 
-	if (!$read_from_cache)
+	if (!$read_from_cache || true)
 	{
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_s = $sec + $micro;
@@ -405,6 +406,14 @@ function lc_init()
 					$GLOBALS["cfg"]["__default"]["classfolders"][$clid]["name"] = $_tmp;
 				}
 			}
+			
+			foreach($GLOBALS["cfg"]["acl"]["names"] as $n => $cap)
+			{
+				if(($_tmp = t2("ACL tegevuse ".$cap." (".$n.") nimi")) != "")
+				{
+					$GLOBALS["cfg"]["acl"]["names"][$n] = $_tmp;
+				}
+			}
 
 			foreach($GLOBALS["cfg"]["syslog"]["types"] as $typid => $td)
 			{
@@ -423,6 +432,7 @@ function lc_init()
 			}
 		}
 	}
+
 }
 
 // this will not save the new value to the ini file
@@ -841,6 +851,7 @@ function aw_startup()
 function aw_shutdown()
 {
 	// whotta fook, this messenger thingie goes here then?:S
+	/*
 	if($_SESSION["current_user_has_messenger"] && is_oid($_SESSION["uid_oid"]))
 	{
 		$i = get_instance("file");
@@ -879,6 +890,7 @@ function aw_shutdown()
 		}
 		}
 	}
+	*/
 	// end of that messenger new mail notifiaction crap
 
 
@@ -922,7 +934,7 @@ function &__get_site_instance()
 	if (!is_object($__site_instance))
 	{
 		$fname = "site.".$GLOBALS["cfg"]["__default"]["ext"];
-		if (file_exists($fname))
+		if (file_exists($fname_tmp_fix_for_some_wierd_shit))
 		{
 			include($fname);
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.42 2006/12/08 07:03:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.43 2006/12/08 13:55:46 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -631,6 +631,15 @@ class pot_scanner extends core
 				);
 			}
 
+			$acl = aw_ini_get("acl.names");
+			foreach($acl as $name => $caption)
+			{
+				$strings[] = array(
+					"line" => "acl_".$name,
+					"str" => "ACL tegevuse ".$caption." (".$name.") nimi",
+				);
+			}
+
 			$sts = aw_ini_get("syslog.types");
 			foreach($sts as $stid => $sd)
 			{
@@ -650,6 +659,7 @@ class pot_scanner extends core
 			}
 			
 			$this->_cond_write_file($inipot, $strings, $inif);
+
 			$this->_do_update_po($inipot);
 			echo "wrote ini file translation\n";
 		}
