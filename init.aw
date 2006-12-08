@@ -405,6 +405,22 @@ function lc_init()
 					$GLOBALS["cfg"]["__default"]["classfolders"][$clid]["name"] = $_tmp;
 				}
 			}
+
+			foreach($GLOBALS["cfg"]["syslog"]["types"] as $typid => $td)
+			{
+				if (($_tmp = t2("syslog.type.".$td["def"])) != "")
+				{
+					$GLOBALS["cfg"]["syslog"]["types"][$typid]["name"] = $_tmp;
+				}
+			}
+
+			foreach($GLOBALS["cfg"]["syslog"]["actions"] as $actid => $ad)
+			{
+				if (($_tmp = t2("syslog.action.".$ad["def"])) != "")
+				{
+					$GLOBALS["cfg"]["syslog"]["actions"][$actid]["name"] = $_tmp;
+				}
+			}
 		}
 	}
 }
