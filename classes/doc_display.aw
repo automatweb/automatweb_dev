@@ -79,6 +79,8 @@ class doc_display extends aw_template
 		$al->parse_oo_aliases($doc->id(), &$user1);
 		$userta1 = $doc->prop("userta1");
 		$al->parse_oo_aliases($doc->id(), &$userta1);
+		$userta5 = $doc->prop("userta5");
+		$al->parse_oo_aliases($doc->id(), &$userta5);
 		$this->vars(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
@@ -105,7 +107,7 @@ class doc_display extends aw_template
 			"userta2" => $doc->prop("userta2"),
 			"userta3" => $doc->prop("userta3"),
 			"userta4" => $doc->prop("userta4"),
-			"userta5" => $doc->prop("userta5"),
+			"userta5" => $userta5,
 			"userta6" => $doc->prop("userta6"),
 			"link_text" => $doc->prop("link_text"),
 			"page_title" => strip_tags($doc->trans_get_val("title")),			
