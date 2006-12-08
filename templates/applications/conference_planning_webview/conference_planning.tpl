@@ -31,11 +31,19 @@
 				<!-- SUB: ACT_YAH_BTN -->
 					<b>{VAR:step_nr}. {VAR:caption}</b>
 				<!-- END SUB: ACT_YAH_BTN -->
+
+				<!-- SUB: ACT_YAH_BTN_AFTER -->
+				(?)
+				<!-- END SUB: ACT_YAH_BTN_AFTER -->
 				
 				<!-- SUB: ACT_YAH_BTN_HREF -->
 					<b><a href="{VAR:url}">{VAR:step_nr}.</a></b>
 				<!-- END SUB: ACT_YAH_BTN_HREF -->
 				
+				<!-- SUB: YAH_LAST_BTN_AFTER -->
+					({VAR:step_nr}.)
+				<!-- END SUB: YAH_LAST_BTN_AFTER -->
+
 				<!-- SUB: YAH_LAST_BTN -->
 					{VAR:step_nr}.]
 				<!-- END SUB: YAH_LAST_BTN -->

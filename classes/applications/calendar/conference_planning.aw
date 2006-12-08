@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.8 2006/12/07 21:05:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.9 2006/12/08 10:12:40 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -759,6 +759,14 @@ class conference_planning extends class_base
 				));
 				$yah[] = $this->parse($act."YAH_BTN".$href);
 			}
+			elseif($no == 6)
+			{
+				$this->vars(array(
+					"step_nr" => $i,
+					"caption" => strlen($act)?$yah_caption[$i]:"",
+				));
+				$yah[] = $this->parse("YAH_LAST_BTN_AFTER");
+			}
 			else
 			{
 				$this->vars(array(
@@ -766,6 +774,10 @@ class conference_planning extends class_base
 					"caption" => strlen($act)?$yah_caption[$i]:"",
 				));
 				$yah[] = $this->parse($act."YAH_LAST_BTN".$href);
+			}
+			if($act)
+			{
+				$yah[] = $this->parse("ACT_YAH_BTN_AFTER");
 			}
 		}
 		$this->vars(array(
