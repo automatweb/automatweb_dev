@@ -59,7 +59,7 @@ class languages extends aw_template
 			{
 				$uo = obj(aw_global_get("uid_oid"));
 				$tr_ls = $uo->prop("target_lang");
-				if (!$tr_ls[$ldat["id"]])
+				if (is_array($tr_ls) && count($tr_ls) && !$tr_ls[$ldat["id"]])
 				{
 					continue;
 				}
