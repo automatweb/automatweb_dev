@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.41 2006/11/25 12:20:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.42 2006/12/08 07:03:27 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -630,6 +630,25 @@ class pot_scanner extends core
 					"str" => "Klassi kataloogi ".$cld["name"]." ($clid) nimi",
 				);
 			}
+
+			$sts = aw_ini_get("syslog.types");
+			foreach($sts as $stid => $sd)
+			{
+				$strings[] = array(
+					"line" => "syslogtypes_".$stid,
+					"str" => "syslog.type.".$sd["def"],
+				);
+			}
+
+			$sas = aw_ini_get("syslog.actions");
+			foreach($sas as $said => $sd)
+			{
+				$strings[] = array(
+					"line" => "syslogactions_".$said,
+					"str" => "syslog.action.".$sd["def"],
+				);
+			}
+			
 			$this->_cond_write_file($inipot, $strings, $inif);
 			$this->_do_update_po($inipot);
 			echo "wrote ini file translation\n";

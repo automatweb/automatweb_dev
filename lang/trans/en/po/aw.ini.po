@@ -2832,6 +2832,2234 @@ msgstr "Sport management"
 msgid "Klassi kataloogi T&ouml;&ouml;aja planeerimine (64) nimi"
 msgstr "Rostering"
 
+#: aw.ini:syslogtypes_1
+msgid "syslog.type.ST_ML_VAR"
+msgstr ""
+
+#: aw.ini:syslogtypes_2
+msgid "syslog.type.ST_ML_STAMP"
+msgstr ""
+
+#: aw.ini:syslogtypes_3
+msgid "syslog.type.ST_ML_CAT"
+msgstr ""
+
+#: aw.ini:syslogtypes_4
+msgid "syslog.type.ST_CORE"
+msgstr ""
+
+#: aw.ini:syslogtypes_5
+msgid "syslog.type.ST_USERS"
+msgstr ""
+
+#: aw.ini:syslogtypes_6
+msgid "syslog.type.ST_GROUPS"
+msgstr ""
+
+#: aw.ini:syslogtypes_8
+msgid "syslog.type.ST_AWTABLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_9
+msgid "syslog.type.ST_REFERER"
+msgstr ""
+
+#: aw.ini:syslogtypes_10
+msgid "syslog.type.ST_STYLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_11
+msgid "syslog.type.ST_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_12
+msgid "syslog.type.ST_REPEATER"
+msgstr ""
+
+#: aw.ini:syslogtypes_14 aw.ini:syslogtypes_238
+msgid "syslog.type.ST_PERIOD"
+msgstr ""
+
+#: aw.ini:syslogtypes_15
+msgid "syslog.type.ST_ML_USER"
+msgstr ""
+
+#: aw.ini:syslogtypes_16
+msgid "syslog.type.ST_MENUEDIT"
+msgstr ""
+
+#: aw.ini:syslogtypes_17
+msgid "syslog.type.ST_MAILINGLIST_STAMP"
+msgstr ""
+
+#: aw.ini:syslogtypes_19
+msgid "syslog.type.ST_MAILINGLIST_MEMBER"
+msgstr ""
+
+#: aw.ini:syslogtypes_21
+msgid "syslog.type.ST_MAILINGLIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_22
+msgid "syslog.type.ST_ML_LIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_23
+msgid "syslog.type.ST_IFRAME"
+msgstr ""
+
+#: aw.ini:syslogtypes_24
+msgid "syslog.type.ST_FORM_OP"
+msgstr ""
+
+#: aw.ini:syslogtypes_25
+msgid "syslog.type.ST_FORM_ENRTY"
+msgstr ""
+
+#: aw.ini:syslogtypes_26
+msgid "syslog.type.ST_FORM"
+msgstr ""
+
+#: aw.ini:syslogtypes_27
+msgid "syslog.type.ST_FORM_ACTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_28
+msgid "syslog.type.ST_EXTLINK"
+msgstr ""
+
+#: aw.ini:syslogtypes_29
+msgid "syslog.type.ST_ML_MAIL"
+msgstr ""
+
+#: aw.ini:syslogtypes_30
+msgid "syslog.type.ST_ML_MAIL_LINK"
+msgstr ""
+
+#: aw.ini:syslogtypes_31
+msgid "syslog.type.ST_DOCUMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_32
+msgid "syslog.type.ST_CONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_33 aw.ini:syslogtypes_868
+msgid "syslog.type.ST_BUG"
+msgstr ""
+
+#: aw.ini:syslogtypes_34
+msgid "syslog.type.ST_DRONLINE"
+msgstr ""
+
+#: aw.ini:syslogtypes_35
+msgid "syslog.type.ST_GRAPH_NG"
+msgstr ""
+
+#: aw.ini:syslogtypes_36
+msgid "syslog.type.ST_IPADDRESS"
+msgstr ""
+
+#: aw.ini:syslogtypes_37
+msgid "syslog.type.ST_PROMO"
+msgstr ""
+
+#: aw.ini:syslogtypes_38
+msgid "syslog.type.ST_SITE"
+msgstr ""
+
+#: aw.ini:syslogtypes_40
+msgid "syslog.type.ST_SITE_LIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_41
+msgid "syslog.type.ST_MENU"
+msgstr ""
+
+#: aw.ini:syslogtypes_42
+msgid "syslog.type.ST_IMAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_43
+msgid "syslog.type.ST_ACTOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_44
+msgid "syslog.type.ST_ACTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_45
+msgid "syslog.type.ST_ENTITY"
+msgstr ""
+
+#: aw.ini:syslogtypes_46
+msgid "syslog.type.ST_PROCESS"
+msgstr ""
+
+#: aw.ini:syslogtypes_47
+msgid "syslog.type.ST_WORKFLOW"
+msgstr ""
+
+#: aw.ini:syslogtypes_48
+msgid "syslog.type.ST_LAYOUT"
+msgstr ""
+
+#: aw.ini:syslogtypes_49
+msgid "syslog.type.ST_WORKFLOW_CONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_50
+msgid "syslog.type.ST_RELATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_51
+msgid "syslog.type.ST_MENU_AREA"
+msgstr ""
+
+#: aw.ini:syslogtypes_52
+msgid "syslog.type.ST_YAH_LINE"
+msgstr ""
+
+#: aw.ini:syslogtypes_53
+msgid "syslog.type.ST_SITE_CONTENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_54
+msgid "syslog.type.ST_MENU_AREA_LEVEL"
+msgstr ""
+
+#: aw.ini:syslogtypes_55
+msgid "syslog.type.ST_AIP_CONF"
+msgstr ""
+
+#: aw.ini:syslogtypes_56
+msgid "syslog.type.ST_AIP"
+msgstr ""
+
+#: aw.ini:syslogtypes_57
+msgid "syslog.type.ST_AIP_CHANGE_SHOW"
+msgstr ""
+
+#: aw.ini:syslogtypes_58
+msgid "syslog.type.ST_GALLERY_CONF"
+msgstr ""
+
+#: aw.ini:syslogtypes_59
+msgid "syslog.type.ST_RATE_SCALE"
+msgstr ""
+
+#: aw.ini:syslogtypes_60
+msgid "syslog.type.ST_RATE"
+msgstr ""
+
+#: aw.ini:syslogtypes_61
+msgid "syslog.type.ST_GALLERY"
+msgstr ""
+
+#: aw.ini:syslogtypes_62 aw.ini:syslogtypes_64 aw.ini:syslogtypes_114
+msgid "syslog.type."
+msgstr ""
+
+#: aw.ini:syslogtypes_63
+msgid "syslog.type.ST_CAL_CONTENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_65
+msgid "syslog.type.ST_FLASH"
+msgstr ""
+
+#: aw.ini:syslogtypes_66
+msgid "syslog.type.ST_FTP_LOGIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_67
+msgid "syslog.type.ST_LIVELINK_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_69
+msgid "syslog.type.ST_SWOT"
+msgstr ""
+
+#: aw.ini:syslogtypes_70
+msgid "syslog.type.ST_SWOT_STRENGTH"
+msgstr ""
+
+#: aw.ini:syslogtypes_71
+msgid "syslog.type.ST_SWOT_WEAKNESS"
+msgstr ""
+
+#: aw.ini:syslogtypes_72
+msgid "syslog.type.ST_SWOT_THREAT"
+msgstr ""
+
+#: aw.ini:syslogtypes_73
+msgid "syslog.type.ST_SWOT_OPPORTUNITY"
+msgstr ""
+
+#: aw.ini:syslogtypes_74
+msgid "syslog.type.ST_CLASSIFICATOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_75
+msgid "syslog.type.ST_AW_SITE_GEN_LOG"
+msgstr ""
+
+#: aw.ini:syslogtypes_76
+msgid "syslog.type.ST_SITE_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_77
+msgid "syslog.type.ST_CSS"
+msgstr ""
+
+#: aw.ini:syslogtypes_78
+msgid "syslog.type.ST_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_79
+msgid "syslog.type.ST_COMMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_80
+msgid "syslog.type.ST_ACL"
+msgstr ""
+
+#: aw.ini:syslogtypes_81
+msgid "syslog.type.ST_ROLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_82
+msgid "syslog.type.ST_OBJECT_TREE"
+msgstr ""
+
+#: aw.ini:syslogtypes_83
+msgid "syslog.type.ST_DESKTOP"
+msgstr ""
+
+#: aw.ini:syslogtypes_84
+msgid "syslog.type.ST_FORUM"
+msgstr ""
+
+#: aw.ini:syslogtypes_85
+msgid "syslog.type.ST_EKOMAR"
+msgstr ""
+
+#: aw.ini:syslogtypes_86
+msgid "syslog.type.ST_MENU_SEPARATOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_87
+msgid "syslog.type.ST_SHORTCUT"
+msgstr ""
+
+#: aw.ini:syslogtypes_88
+msgid "syslog.type.ST_TRANSLATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_89
+msgid "syslog.type.ST_OBJECT_TRANSLATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_91
+msgid "syslog.type.ST_MAITENANCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_92
+msgid "syslog.type.ST_CRM_PHONE"
+msgstr ""
+
+#: aw.ini:syslogtypes_93
+msgid "syslog.type.ST_CRM_PROFESSION"
+msgstr ""
+
+#: aw.ini:syslogtypes_94
+msgid "syslog.type.ST_DOCUMENT_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_95
+msgid "syslog.type.ST_CRM_DEAL"
+msgstr ""
+
+#: aw.ini:syslogtypes_96
+msgid "syslog.type.ST_CRM_CALL"
+msgstr ""
+
+#: aw.ini:syslogtypes_97
+msgid "syslog.type.ST_CRM_MEETING"
+msgstr ""
+
+#: aw.ini:syslogtypes_98
+msgid "syslog.type.ST_CRM_OFFER"
+msgstr ""
+
+#: aw.ini:syslogtypes_99
+msgid "syslog.type.ST_MESSENGER_CONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_100
+msgid "syslog.type.ST_MESSENGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_101
+msgid "syslog.type.ST_PROTO_POP3"
+msgstr ""
+
+#: aw.ini:syslogtypes_102
+msgid "syslog.type.ST_PROTO_IMAP"
+msgstr ""
+
+#: aw.ini:syslogtypes_103
+msgid "syslog.type.ST_MAIL_RULE"
+msgstr ""
+
+#: aw.ini:syslogtypes_104
+msgid "syslog.type.ST_SITE_SEARCH_CONTENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_105
+msgid "syslog.type.ST_SITE_SEARCH_CONTENT_GRP"
+msgstr ""
+
+#: aw.ini:syslogtypes_106
+msgid "syslog.type.ST_INTRANET"
+msgstr ""
+
+#: aw.ini:syslogtypes_107
+msgid "syslog.type.ST_WORKBENCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_108
+msgid "syslog.type.ST_RTE"
+msgstr ""
+
+#: aw.ini:syslogtypes_112
+msgid "syslog.type.ST_PROJECT"
+msgstr ""
+
+#: aw.ini:syslogtypes_113
+msgid "syslog.type.ST_MESSENGER_IDENTITY"
+msgstr ""
+
+#: aw.ini:syslogtypes_117
+msgid "syslog.type.ST_TASK"
+msgstr ""
+
+#: aw.ini:syslogtypes_124
+msgid "syslog.type.ST_POLL"
+msgstr ""
+
+#: aw.ini:syslogtypes_125
+msgid "syslog.type.ST_CONFIG_LOGIN_MENUS"
+msgstr ""
+
+#: aw.ini:syslogtypes_126
+msgid "syslog.type.ST_CONFIG_AW_DOCUMENT_TEMPLATE"
+msgstr ""
+
+#: aw.ini:syslogtypes_127
+msgid "syslog.type.ST_WORKFLOW_TRANSITION"
+msgstr ""
+
+#: aw.ini:syslogtypes_128
+msgid "syslog.type.ST_WORKFLOW_ENTITY_INSTANCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_129
+msgid "syslog.type.ST_FOLDER_LIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_130
+msgid "syslog.type.ST_PROFILE"
+msgstr ""
+
+#: aw.ini:syslogtypes_131
+msgid "syslog.type.ST_SEXUAL_ORIENTATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_132
+msgid "syslog.type.ST_HAIR_COLOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_133
+msgid "syslog.type.ST_PROFILE_HAIR_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_134
+msgid "syslog.type.ST_PROFILE_EYES_COLOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_135
+msgid "syslog.type.ST_PROFILE_BODY_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_136
+msgid "syslog.type.ST_PROFILE_ALCOHOL"
+msgstr ""
+
+#: aw.ini:syslogtypes_137
+msgid "syslog.type.ST_PROFILE_TOBACCO"
+msgstr ""
+
+#: aw.ini:syslogtypes_138
+msgid "syslog.type.ST_PROFILE_HEIGHT"
+msgstr ""
+
+#: aw.ini:syslogtypes_139
+msgid "syslog.type.ST_PROFILE_WEIGHT"
+msgstr ""
+
+#: aw.ini:syslogtypes_140 aw.ini:syslogtypes_531
+msgid "syslog.type.ST_LANGUAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_141
+msgid "syslog.type.ST_CALENDAR_VIEW"
+msgstr ""
+
+#: aw.ini:syslogtypes_142
+msgid "syslog.type.ST_META"
+msgstr ""
+
+#: aw.ini:syslogtypes_143
+msgid "syslog.type.ST_SERVER_FOLDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_144
+msgid "syslog.type.ST_METAMGR"
+msgstr ""
+
+#: aw.ini:syslogtypes_145
+msgid "syslog.type.ST_AW_TEST"
+msgstr ""
+
+#: aw.ini:syslogtypes_146
+msgid "syslog.type.ST_CURRENCY"
+msgstr ""
+
+#: aw.ini:syslogtypes_147
+msgid "syslog.type.ST_RECURRENCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_148
+msgid "syslog.type.ST_JOIN_SITE"
+msgstr ""
+
+#: aw.ini:syslogtypes_149
+msgid "syslog.type.ST_JOIN_SITE_RULE"
+msgstr ""
+
+#: aw.ini:syslogtypes_150
+msgid "syslog.type.ST_SHOP_WAREHOUSE"
+msgstr ""
+
+#: aw.ini:syslogtypes_151
+msgid "syslog.type.ST_SHOP_PROD_CODES"
+msgstr ""
+
+#: aw.ini:syslogtypes_152
+msgid "syslog.type.ST_SHOP_PERIOD_SETTINGS"
+msgstr ""
+
+#: aw.ini:syslogtypes_153
+msgid "syslog.type.ST_SHOP_TAXES"
+msgstr ""
+
+#: aw.ini:syslogtypes_154
+msgid "syslog.type.ST_SHOP_ITEM_PRICE"
+msgstr ""
+
+#: aw.ini:syslogtypes_155
+msgid "syslog.type.ST_SHOP_PRICE_MODIFIER"
+msgstr ""
+
+#: aw.ini:syslogtypes_156
+msgid "syslog.type.ST_SHOP_PRODUCT"
+msgstr ""
+
+#: aw.ini:syslogtypes_157
+msgid "syslog.type.ST_SHOP_WAREHOUSE_CONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_158
+msgid "syslog.type.ST_SHOP_PACKET"
+msgstr ""
+
+#: aw.ini:syslogtypes_159
+msgid "syslog.type.ST_SHOP_WAREHOUSE_RECEPTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_160
+msgid "syslog.type.ST_SHOP_WAREHOUSE_EXPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_161
+msgid "syslog.type.ST_SHOP_PRODUCT_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_162
+msgid "syslog.type.ST_AUTHOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_163
+msgid "syslog.type.ST_SHOP_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_164
+msgid "syslog.type.ST_DOCUMENT_STATISTICS"
+msgstr ""
+
+#: aw.ini:syslogtypes_165
+msgid "syslog.type.ST_STAT_REPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_166
+msgid "syslog.type.ST_CONTENTS"
+msgstr ""
+
+#: aw.ini:syslogtypes_167
+msgid "syslog.type.ST_COMMUNE"
+msgstr ""
+
+#: aw.ini:syslogtypes_168
+msgid "syslog.type.ST_BANNER"
+msgstr ""
+
+#: aw.ini:syslogtypes_169
+msgid "syslog.type.ST_BANNER_LOCATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_170
+msgid "syslog.type.ST_AGRI_REGISTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_171
+msgid "syslog.type.ST_AGRI_DATA"
+msgstr ""
+
+#: aw.ini:syslogtypes_172
+msgid "syslog.type.ST_AGRI_PROD_CODES"
+msgstr ""
+
+#: aw.ini:syslogtypes_173
+msgid "syslog.type.ST_AGRI_PROD_CODE"
+msgstr ""
+
+#: aw.ini:syslogtypes_174
+msgid "syslog.type.ST_AGRI_PROD_DATA"
+msgstr ""
+
+#: aw.ini:syslogtypes_175
+msgid "syslog.type.ST_AGRI_STAT_REPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_176
+msgid "syslog.type.ST_DOCUMENT_ARCHIVE"
+msgstr ""
+
+#: aw.ini:syslogtypes_177
+msgid "syslog.type.ST_SHOP_ORDER_CENTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_178
+msgid "syslog.type.ST_SHOP_PRODUCT_LAYOUT"
+msgstr ""
+
+#: aw.ini:syslogtypes_179
+msgid "syslog.type.ST_SHOP_PRODUCT_TABLE_LAYOUT"
+msgstr ""
+
+#: aw.ini:syslogtypes_180
+msgid "syslog.type.ST_MINI_GALLERY"
+msgstr ""
+
+#: aw.ini:syslogtypes_181
+msgid "syslog.type.ST_SHOP_ORDER_CART"
+msgstr ""
+
+#: aw.ini:syslogtypes_182
+msgid "syslog.type.ST_CLASS_DESIGNER"
+msgstr ""
+
+#: aw.ini:syslogtypes_183
+msgid "syslog.type.ST_CRM_SECTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_184
+msgid "syslog.type.ST_MESSAGEBOARD"
+msgstr ""
+
+#: aw.ini:syslogtypes_185
+msgid "syslog.type.ST_AW_DOCGEN_VIEWER"
+msgstr ""
+
+#: aw.ini:syslogtypes_186
+msgid "syslog.type.ST_OBJECT_TREEVIEW_V2"
+msgstr ""
+
+#: aw.ini:syslogtypes_187
+msgid "syslog.type.ST_OTV_DS_OBJ"
+msgstr ""
+
+#: aw.ini:syslogtypes_188
+msgid "syslog.type.ST_OTV_DS_POSTIPOISS"
+msgstr ""
+
+#: aw.ini:syslogtypes_189
+msgid "syslog.type.ST_SHOP_PRODUCT_PACKAGING"
+msgstr ""
+
+#: aw.ini:syslogtypes_190
+msgid "syslog.type.ST_PERSONNEL_MANAGEMENT_CV_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_191
+msgid "syslog.type.ST_OBJECT_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_192
+msgid "syslog.type.ST_CLASS_LIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_193
+msgid "syslog.type.ST_PRINTAL_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_194
+msgid "syslog.type.ST_WORKFLOW_RESOURCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_195
+msgid "syslog.type.ST_PRISMA_CENTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_196
+msgid "syslog.type.ST_QUICKMESSAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_197
+msgid "syslog.type.ST_VASTUV6TT_KESKKOND"
+msgstr ""
+
+#: aw.ini:syslogtypes_198
+msgid "syslog.type.ST_VASTUV6TT_AVALDUS"
+msgstr ""
+
+#: aw.ini:syslogtypes_199
+msgid "syslog.type.ST_VASTUV6TT_SISSEASTUJA"
+msgstr ""
+
+#: aw.ini:syslogtypes_200
+msgid "syslog.type.ST_ABSTRACT_DATASOURCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_201
+msgid "syslog.type.ST_ABSTRACT_DATA_CLASS"
+msgstr ""
+
+#: aw.ini:syslogtypes_202
+msgid "syslog.type.ST_DB_SERVER_LOGIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_203
+msgid "syslog.type.ST_DB_LOGIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_204
+msgid "syslog.type.ST_DB_SERVER_EXPLORER_CONF"
+msgstr ""
+
+#: aw.ini:syslogtypes_205
+msgid "syslog.type.ST_DB_SERVER_EXPLORER"
+msgstr ""
+
+#: aw.ini:syslogtypes_206
+msgid "syslog.type.ST_OBJECT_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_207
+msgid "syslog.type.ST_ADD_TREE_CONF"
+msgstr ""
+
+#: aw.ini:syslogtypes_208
+msgid "syslog.type.ST_TREE_ROOT"
+msgstr ""
+
+#: aw.ini:syslogtypes_209
+msgid "syslog.type.ST_SCHEDULER_OBJ"
+msgstr ""
+
+#: aw.ini:syslogtypes_210
+msgid "syslog.type.ST_STAT_UPLOADER"
+msgstr ""
+
+#: aw.ini:syslogtypes_211
+msgid "syslog.type.ST_MAIL_MESSAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_212
+msgid "syslog.type.ST_APACHE_ALIAS"
+msgstr ""
+
+#: aw.ini:syslogtypes_213
+msgid "syslog.type.ST_PLANNER"
+msgstr ""
+
+#: aw.ini:syslogtypes_214
+msgid "syslog.type.ST_BACKUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_215
+msgid "syslog.type.ST_RECYCLE_BIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_216
+msgid "syslog.type.ST_DATASOURCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_217
+msgid "syslog.type.ST_UT_XML_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_218
+msgid "syslog.type.ST_CAL_EVENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_219
+msgid "syslog.type.ST_CFGFORM"
+msgstr ""
+
+#: aw.ini:syslogtypes_220
+msgid "syslog.type.ST_CFGMANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_221
+msgid "syslog.type.ST_FORUM_TOPIC"
+msgstr ""
+
+#: aw.ini:syslogtypes_222
+msgid "syslog.type.ST_HTML_POPUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_223
+msgid "syslog.type.ST_MENU_TREE"
+msgstr ""
+
+#: aw.ini:syslogtypes_224
+msgid "syslog.type.ST_LINKS"
+msgstr ""
+
+#: aw.ini:syslogtypes_225
+msgid "syslog.type.ST_DOCGEN_VIEWER"
+msgstr ""
+
+#: aw.ini:syslogtypes_226
+msgid "syslog.type.ST_CRM_ADDRESS"
+msgstr ""
+
+#: aw.ini:syslogtypes_227
+msgid "syslog.type.ST_CRM_CITY"
+msgstr ""
+
+#: aw.ini:syslogtypes_228
+msgid "syslog.type.ST_CRM_COMPANY"
+msgstr ""
+
+#: aw.ini:syslogtypes_229
+msgid "syslog.type.ST_CRM_CORPFORM"
+msgstr ""
+
+#: aw.ini:syslogtypes_230
+msgid "syslog.type.ST_CRM_COUNTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_231
+msgid "syslog.type.ST_CRM_DB"
+msgstr ""
+
+#: aw.ini:syslogtypes_232
+msgid "syslog.type.ST_CRM_PERSON"
+msgstr ""
+
+#: aw.ini:syslogtypes_233
+msgid "syslog.type.ST_CRM_PRODUCT"
+msgstr ""
+
+#: aw.ini:syslogtypes_234
+msgid "syslog.type.ST_CRM_SECTOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_235
+msgid "syslog.type.ST_CRM_SELECTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_236
+msgid "syslog.type.ST_FILE"
+msgstr ""
+
+#: aw.ini:syslogtypes_237
+msgid "syslog.type.ST_OBJ_TABLE_CONF"
+msgstr ""
+
+#: aw.ini:syslogtypes_239
+msgid "syslog.type.ST_POLL_NG"
+msgstr ""
+
+#: aw.ini:syslogtypes_240
+msgid "syslog.type.ST_PULLOUT"
+msgstr ""
+
+#: aw.ini:syslogtypes_241
+msgid "syslog.type.ST_SITE_THREEPANE"
+msgstr ""
+
+#: aw.ini:syslogtypes_242
+msgid "syslog.type.ST_PAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_243
+msgid "syslog.type.ST_TREEVIEW"
+msgstr ""
+
+#: aw.ini:syslogtypes_244
+msgid "syslog.type.ST_OBJECT_CHAIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_245
+msgid "syslog.type.ST_GRAPH"
+msgstr ""
+
+#: aw.ini:syslogtypes_341
+msgid "syslog.type.ST_REGISTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_342
+msgid "syslog.type.ST_REGISTER_DATA"
+msgstr ""
+
+#: aw.ini:syslogtypes_343
+msgid "syslog.type.ST_REGISTER_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_344
+msgid "syslog.type.ST_SHOP_SPECIAL_OFFER"
+msgstr ""
+
+#: aw.ini:syslogtypes_345
+msgid "syslog.type.ST_SHOP_ORDER_CART_VALUE"
+msgstr ""
+
+#: aw.ini:syslogtypes_346
+msgid "syslog.type.ST_PROJECT_INCOME"
+msgstr ""
+
+#: aw.ini:syslogtypes_347
+msgid "syslog.type.ST_PROJECT_COST"
+msgstr ""
+
+#: aw.ini:syslogtypes_348
+msgid "syslog.type.ST_PROJECT_COST_ARTICLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_349
+msgid "syslog.type.ST_SURVEY"
+msgstr ""
+
+#: aw.ini:syslogtypes_350
+msgid "syslog.type.ST_SURVEY_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_351
+msgid "syslog.type.ST_PERSONNEL_MANAGEMENT_JOB_WANTED"
+msgstr ""
+
+#: aw.ini:syslogtypes_428
+msgid "syslog.type.ST_CB_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_449
+msgid "syslog.type.ST_MESSAGE_TEMPLATE"
+msgstr ""
+
+#: aw.ini:syslogtypes_477
+msgid "syslog.type.ST_OBJECT_EXPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_478
+msgid "syslog.type.ST_OBJECT_IMPORT_EXCEPTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_479
+msgid "syslog.type.ST_AW_SYSCONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_480
+msgid "syslog.type.ST_AW_SCRIPT"
+msgstr ""
+
+#: aw.ini:syslogtypes_482
+msgid "syslog.type.ST_CALENDAR_REMINDER_RULE"
+msgstr ""
+
+#: aw.ini:syslogtypes_483
+msgid "syslog.type.ST_CRM_CATEGORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_484
+msgid "syslog.type.ST_CALENDAR_REMINDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_485
+msgid "syslog.type.ST_COMMUNITY"
+msgstr ""
+
+#: aw.ini:syslogtypes_486
+msgid "syslog.type.ST_REGISTER_SEARCH_RESULT"
+msgstr ""
+
+#: aw.ini:syslogtypes_488
+msgid "syslog.type.ST_OTTO_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_540
+msgid "syslog.type.ST_SKILL"
+msgstr ""
+
+#: aw.ini:syslogtypes_558
+msgid "syslog.type.ST_CRM_PANK"
+msgstr ""
+
+#: aw.ini:syslogtypes_560
+msgid "syslog.type.ST_CLASS"
+msgstr ""
+
+#: aw.ini:syslogtypes_566
+msgid "syslog.type.ST_AW_TABLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_571
+msgid "syslog.type.ST_AW_COLUMN"
+msgstr ""
+
+#: aw.ini:syslogtypes_581
+msgid "syslog.type.ST_AW_CLASS"
+msgstr ""
+
+#: aw.ini:syslogtypes_619
+msgid "syslog.type.ST_AW_TEXTBOX"
+msgstr ""
+
+#: aw.ini:syslogtypes_640
+msgid "syslog.type.ST_ACCOUNT"
+msgstr ""
+
+#: aw.ini:syslogtypes_650
+msgid "syslog.type.ST_TRANSACTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_657
+msgid "syslog.type.ST_AW_CHECKBOX"
+msgstr ""
+
+#: aw.ini:syslogtypes_658
+msgid "syslog.type.ST_AW_SELECT"
+msgstr ""
+
+#: aw.ini:syslogtypes_660
+msgid "syslog.type.ST_AW_CHOOSER"
+msgstr ""
+
+#: aw.ini:syslogtypes_662
+msgid "syslog.type.ST_AW_TEXTAREA"
+msgstr ""
+
+#: aw.ini:syslogtypes_689
+msgid "syslog.type.ST_AW_OPTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_777
+msgid "syslog.type.ST_AW_TAB"
+msgstr ""
+
+#: aw.ini:syslogtypes_798
+msgid "syslog.type.ST_OTTO_PROD_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_800
+msgid "syslog.type.ST_METHOD"
+msgstr ""
+
+#: aw.ini:syslogtypes_802
+msgid "syslog.type.ST_CALENDAR_VACANCY"
+msgstr ""
+
+#: aw.ini:syslogtypes_807
+msgid "syslog.type.ST_TAX"
+msgstr ""
+
+#: aw.ini:syslogtypes_808
+msgid "syslog.type.ST_TAX_CHAIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_809
+msgid "syslog.type.ST_IMAGE_RESIZER"
+msgstr ""
+
+#: aw.ini:syslogtypes_811
+msgid "syslog.type.ST_CONTACT_LIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_816
+msgid "syslog.type.ST_QUICKMESSAGEBOX"
+msgstr ""
+
+#: aw.ini:syslogtypes_818
+msgid "syslog.type.ST_CRM_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_819
+msgid "syslog.type.ST_CALENDAR_EVENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_820
+msgid "syslog.type.ST_OTV_DS_PP_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_825
+msgid "syslog.type.ST_MRP_RESOURCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_826
+msgid "syslog.type.ST_MRP_JOB"
+msgstr ""
+
+#: aw.ini:syslogtypes_827
+msgid "syslog.type.ST_MRP_SCHEDULE"
+msgstr ""
+
+#: aw.ini:syslogtypes_828
+msgid "syslog.type.ST_MRP_CASE"
+msgstr ""
+
+#: aw.ini:syslogtypes_830
+msgid "syslog.type.ST_CB_SEARCH_SYNONYMS"
+msgstr ""
+
+#: aw.ini:syslogtypes_831
+msgid "syslog.type.ST_STAGING"
+msgstr ""
+
+#: aw.ini:syslogtypes_832
+msgid "syslog.type.ST_CRM_SECTION_WEBSIDE"
+msgstr ""
+
+#: aw.ini:syslogtypes_833
+msgid "syslog.type.ST_VIDEO"
+msgstr ""
+
+#: aw.ini:syslogtypes_834
+msgid "syslog.type.ST_OBJ_INHERIT_PROPS_CONF"
+msgstr ""
+
+#: aw.ini:syslogtypes_651 aw.ini:syslogtypes_652 aw.ini:syslogtypes_655
+msgid "syslog.type.ST_OTV_DS_ROADINFO"
+msgstr ""
+
+#: aw.ini:syslogtypes_806
+msgid "syslog.type.ST_SEARCH_ROADINFO"
+msgstr ""
+
+#: aw.ini:syslogtypes_817
+msgid "syslog.type.ST_XML_EDITOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_835
+msgid "syslog.type.ST_MAJA_XML_EDITOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_836
+msgid "syslog.type.ST_CALENDAR_REGISTRATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_843
+msgid "syslog.type.ST_AUTH_CONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_844
+msgid "syslog.type.ST_AUTH_SERVER_LDAP"
+msgstr ""
+
+#: aw.ini:syslogtypes_845
+msgid "syslog.type.ST_AUTH_SERVER_LOCAL"
+msgstr ""
+
+#: aw.ini:syslogtypes_847
+msgid "syslog.type.ST_CSS_STYLE_GEN"
+msgstr ""
+
+#: aw.ini:syslogtypes_848
+msgid "syslog.type.ST_CALENDAR_REGISTRATION_FORM"
+msgstr ""
+
+#: aw.ini:syslogtypes_849
+msgid "syslog.type.ST_CALENDAR_REGISTRATION_FORM_CONF"
+msgstr ""
+
+#: aw.ini:syslogtypes_852
+msgid "syslog.type.ST_MRP_WORKSPACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_864
+msgid "syslog.type.ST_CRM_COMPANY_ROLE_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_866
+msgid "syslog.type.ST_WEBFORM"
+msgstr ""
+
+#: aw.ini:syslogtypes_867
+msgid "syslog.type.ST_BUG_TRACKER"
+msgstr ""
+
+#: aw.ini:syslogtypes_869
+msgid "syslog.type.ST_GANTT_CHART"
+msgstr ""
+
+#: aw.ini:syslogtypes_871
+msgid "syslog.type.ST_REMINDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_872
+msgid "syslog.type.ST_MRP_RESOURCE_OPERATOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_874
+msgid "syslog.type.ST_AUTH_SERVER_NDS"
+msgstr ""
+
+#: aw.ini:syslogtypes_875
+msgid "syslog.type.ST_PERSONA_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_876
+msgid "syslog.type.ST_CRM_VACATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_877
+msgid "syslog.type.ST_CRM_CONTRACT_STOP"
+msgstr ""
+
+#: aw.ini:syslogtypes_878
+msgid "syslog.type.ST_MRP_PRISMA_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_879
+msgid "syslog.type.ST_AUTH_REMOTE_SETTINGS"
+msgstr ""
+
+#: aw.ini:syslogtypes_880
+msgid "syslog.type.ST_PROPERTY_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_881
+msgid "syslog.type.ST_PROPERTY_TEXTBOX"
+msgstr ""
+
+#: aw.ini:syslogtypes_882
+msgid "syslog.type.ST_PROPERTY_GRID"
+msgstr ""
+
+#: aw.ini:syslogtypes_883
+msgid "syslog.type.ST_PROPERTY_CHOOSER"
+msgstr ""
+
+#: aw.ini:syslogtypes_884
+msgid "syslog.type.ST_PROPERTY_CHECKBOX"
+msgstr ""
+
+#: aw.ini:syslogtypes_885
+msgid "syslog.type.ST_NEWSFEED"
+msgstr ""
+
+#: aw.ini:syslogtypes_886
+msgid "syslog.type.ST_PROPERTY_TABLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_887
+msgid "syslog.type.ST_PROPERTY_TABLE_COLUMN"
+msgstr ""
+
+#: aw.ini:syslogtypes_888
+msgid "syslog.type.ST_PROPERTY_TEXTAREA"
+msgstr ""
+
+#: aw.ini:syslogtypes_889
+msgid "syslog.type.ST_PROPERTY_SELECT"
+msgstr ""
+
+#: aw.ini:syslogtypes_890
+msgid "syslog.type.ST_OTV_DS_KULTUURIAKEN"
+msgstr ""
+
+#: aw.ini:syslogtypes_891
+msgid "syslog.type.ST_CACHE_UPDATER"
+msgstr ""
+
+#: aw.ini:syslogtypes_892
+msgid "syslog.type.ST_PROPERTY_TREE"
+msgstr ""
+
+#: aw.ini:syslogtypes_893
+msgid "syslog.type.ST_CLASS_DESIGNER_RELATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_894
+msgid "syslog.type.ST_PROPERTY_TOOLBAR"
+msgstr ""
+
+#: aw.ini:syslogtypes_895
+msgid "syslog.type.ST_PROPERTY_TOOLBAR_BUTTON"
+msgstr ""
+
+#: aw.ini:syslogtypes_896
+msgid "syslog.type.ST_XML_EXPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_898
+msgid "syslog.type.ST_OTV_DATA_FILTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_900
+msgid "syslog.type.ST_PROPERTY_TREE_BRANCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_901
+msgid "syslog.type.ST_OBJECT_TREEVIEW_V2_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_902
+msgid "syslog.type.ST_USER_CHANGE_PASSWORD"
+msgstr ""
+
+#: aw.ini:syslogtypes_903
+msgid "syslog.type.ST_CRM_OFFER_MGR"
+msgstr ""
+
+#: aw.ini:syslogtypes_907
+msgid "syslog.type.ST_CRM_OFFER_CHAPTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_908
+msgid "syslog.type.ST_CRM_OFFER_GOAL"
+msgstr ""
+
+#: aw.ini:syslogtypes_909
+msgid "syslog.type.ST_CRM_OFFER_PAYMENT_TERMS"
+msgstr ""
+
+#: aw.ini:syslogtypes_910
+msgid "syslog.type.ST_CRM_OFFER_PRODUCTS_LIST"
+msgstr ""
+
+#: aw.ini:syslogtypes_911
+msgid "syslog.type.ST_SIMPLE_SHOP"
+msgstr ""
+
+#: aw.ini:syslogtypes_912
+msgid "syslog.type.ST_SIMPLE_SHOP_PRODUCT"
+msgstr ""
+
+#: aw.ini:syslogtypes_913
+msgid "syslog.type.ST_COMICS"
+msgstr ""
+
+#: aw.ini:syslogtypes_914
+msgid "syslog.type.ST_PARTY"
+msgstr ""
+
+#: aw.ini:syslogtypes_915
+msgid "syslog.type.ST_COMICS_SCRIPT"
+msgstr ""
+
+#: aw.ini:syslogtypes_920
+msgid "syslog.type.ST_SHOP_PRODUCT_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_922
+msgid "syslog.type.ST_FLYER"
+msgstr ""
+
+#: aw.ini:syslogtypes_924
+msgid "syslog.type.ST_CRM_OFFER_COMPARE_TABLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_925
+msgid "syslog.type.ST_CRM_OFFER_COMPARE_TABLE_COLUMN"
+msgstr ""
+
+#: aw.ini:syslogtypes_926
+msgid "syslog.type.ST_CRM_OFFER_COMPARE_TABLE_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_929
+msgid "syslog.type.ST_CLASS_DESIGNER_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_930
+msgid "syslog.type.ST_PROPERTY"
+msgstr ""
+
+#: aw.ini:syslogtypes_931
+msgid "syslog.type.ST_SIMPLE_SHOP_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_935
+msgid "syslog.type.ST_REALESTATE_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_936
+msgid "syslog.type.ST_REALESTATE_PROPERTY"
+msgstr ""
+
+#: aw.ini:syslogtypes_938
+msgid "syslog.type.ST_PROJECT_GOAL"
+msgstr ""
+
+#: aw.ini:syslogtypes_943
+msgid "syslog.type.ST_REALESTATE_APARTMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_944
+msgid "syslog.type.ST_REALESTATE_HOUSE"
+msgstr ""
+
+#: aw.ini:syslogtypes_945
+msgid "syslog.type.ST_REALESTATE_LAND"
+msgstr ""
+
+#: aw.ini:syslogtypes_946
+msgid "syslog.type.ST_REALESTATE_GARAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_947
+msgid "syslog.type.ST_REALESTATE_COMMERCIAL"
+msgstr ""
+
+#: aw.ini:syslogtypes_948
+msgid "syslog.type.ST_ADDRESS"
+msgstr ""
+
+#: aw.ini:syslogtypes_949
+msgid "syslog.type.ST_COUNTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_953
+msgid "syslog.type.ST_COUNTRY_ADMINISTRATIVE_UNIT"
+msgstr ""
+
+#: aw.ini:syslogtypes_955
+msgid "syslog.type.ST_AUTH_SERVER_OPENLDAP"
+msgstr ""
+
+#: aw.ini:syslogtypes_958
+msgid "syslog.type.ST_COUNTRY_CITY"
+msgstr ""
+
+#: aw.ini:syslogtypes_959
+msgid "syslog.type.ST_COUNTRY_CITYDISTRICT"
+msgstr ""
+
+#: aw.ini:syslogtypes_960
+msgid "syslog.type.ST_ADDRESS_STREET"
+msgstr ""
+
+#: aw.ini:syslogtypes_961
+msgid "syslog.type.ST_COUNTRY_ADMINISTRATIVE_STRUCTURE"
+msgstr ""
+
+#: aw.ini:syslogtypes_963
+msgid "syslog.type.ST_CB_FORM_CHAIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_965
+msgid "syslog.type.ST_CB_FORM_CHAIN_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_966
+msgid "syslog.type.ST_FOLDER_CONTEXT"
+msgstr ""
+
+#: aw.ini:syslogtypes_967
+msgid "syslog.type.ST_SHOP_PRICE_MODIFIER_WINDOW"
+msgstr ""
+
+#: aw.ini:syslogtypes_975
+msgid "syslog.type.ST_SITE_SEARCH_CONTENT_GRP_HTML"
+msgstr ""
+
+#: aw.ini:syslogtypes_976
+msgid "syslog.type.ST_SITE_SEARCH_CONTENT_GRP_FS"
+msgstr ""
+
+#: aw.ini:syslogtypes_978
+msgid "syslog.type.ST_REALESTATE_COTTAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_979
+msgid "syslog.type.ST_REALESTATE_HOUSEPART"
+msgstr ""
+
+#: aw.ini:syslogtypes_980
+msgid "syslog.type.ST_TABLE_FILTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_981
+msgid "syslog.type.ST_REALESTATE_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_982
+msgid "syslog.type.ST_REALESTATE_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_992
+msgid "syslog.type.ST_REALESTATE_ROWHOUSE"
+msgstr ""
+
+#: aw.ini:syslogtypes_993
+msgid "syslog.type.ST_WHERE_TO_GO"
+msgstr ""
+
+#: aw.ini:syslogtypes_994
+msgid "syslog.type.ST_CRM_SPECIAL_OFFER"
+msgstr ""
+
+#: aw.ini:syslogtypes_995
+msgid "syslog.type.ST_CRM_SPECIAL_OFFER_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_996
+msgid "syslog.type.ST_ECARD_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_997
+msgid "syslog.type.ST_ECARD"
+msgstr ""
+
+#: aw.ini:syslogtypes_998
+msgid "syslog.type.ST_SITE_STYLES"
+msgstr ""
+
+#: aw.ini:syslogtypes_999
+msgid "syslog.type.ST_GENRE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1000
+msgid "syslog.type.ST_PLACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1002
+msgid "syslog.type.ST_REALESTATE_EXPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1003
+msgid "syslog.type.ST_USER_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1006
+msgid "syslog.type.ST_CRM_DAY_REPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1007
+msgid "syslog.type.ST_CRM_DOCUMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1008
+msgid "syslog.type.ST_CRM_MEMO"
+msgstr ""
+
+#: aw.ini:syslogtypes_1009
+msgid "syslog.type.ST_CRM_BILL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1010
+msgid "syslog.type.ST_EXPP_JOURNAL_MANAGEMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1011
+msgid "syslog.type.ST_EXPP_PUBLICATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1013
+msgid "syslog.type.ST_CRM_COMPANY_WEBVIEW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1014
+msgid "syslog.type.ST_OPENHOURS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1019
+msgid "syslog.type.ST_AUDIO"
+msgstr ""
+
+#: aw.ini:syslogtypes_1023
+msgid "syslog.type.ST_CRM_BANK"
+msgstr ""
+
+#: aw.ini:syslogtypes_1024
+msgid "syslog.type.ST_CRM_BANK_ACCOUNT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1025
+msgid "syslog.type.ST_CRM_FIELD_ACCOMMODATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1026
+msgid "syslog.type.ST_REALESTATE_CLIENT_SELECTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1027
+msgid "syslog.type.ST_PROPTEST"
+msgstr ""
+
+#: aw.ini:syslogtypes_1028
+msgid "syslog.type.ST_CRM_COMPANY_CUSTOMER_DATA"
+msgstr ""
+
+#: aw.ini:syslogtypes_1029
+msgid "syslog.type.ST_CRM_FIELD_ENTERTAINMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1030
+msgid "syslog.type.ST_CRM_FIELD_FOOD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1031
+msgid "syslog.type.ST_CRM_FIELD_CONFERENCE_ROOM"
+msgstr ""
+
+#: aw.ini:syslogtypes_1033
+msgid "syslog.type.ST_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING"
+msgstr ""
+
+#: aw.ini:syslogtypes_1034
+msgid "syslog.type.ST_COUNTRY_ADMINISTRATIVE_DIVISION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1035
+msgid "syslog.type.ST_CRM_JOB_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1036
+msgid "syslog.type.ST_CRM_SETTINGS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1037
+msgid "syslog.type.ST_PURCHASE_SHEET"
+msgstr ""
+
+#: aw.ini:syslogtypes_1038
+msgid "syslog.type.ST_PURCHASE_BILL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1039
+msgid "syslog.type.ST_SHOP_WAREHOUSE_SELLING_SHEET"
+msgstr ""
+
+#: aw.ini:syslogtypes_1040
+msgid "syslog.type.ST_SHOP_WAREHOUSE_PURCHASE_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1041
+msgid "syslog.type.ST_SHOP_WAREHOUSE_SELLING_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1042
+msgid "syslog.type.ST_SHOP_WAREHOUSE_FAVOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_1043
+msgid "syslog.type.ST_CRM_PERSONAL_ID"
+msgstr ""
+
+#: aw.ini:syslogtypes_1044
+msgid "syslog.type.ST_SHOP_WAREHOUSE_INVENTORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1045
+msgid "syslog.type.ST_SHOP_WAREHOUSE_PRODUCT_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1046
+msgid "syslog.type.ST_CRM_TAX_RATE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1047
+msgid "syslog.type.ST_TAAVI_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1048
+msgid "syslog.type.ST_CRM_NUMBER_SERIES"
+msgstr ""
+
+#: aw.ini:syslogtypes_1049
+msgid "syslog.type.ST_CRM_DB_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_1050
+msgid "syslog.type.ST_TASK_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1051
+msgid "syslog.type.ST_CRM_DOCUMENT_ACTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1052
+msgid "syslog.type.ST_CRM_REPORT_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1053
+msgid "syslog.type.ST_INTERIM_PAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1054
+msgid "syslog.type.ST_CRM_BILL_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1057
+msgid "syslog.type.ST_CRM_EMAIL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1058
+msgid "syslog.type.ST_BUG_COMMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1060
+msgid "syslog.type.ST_CRM_PERSON_WORK_RELATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1061
+msgid "syslog.type.ST_IPT_FILE_CONVERT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1062
+msgid "syslog.type.ST_LINK_COLLECTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1063
+msgid "syslog.type.ST_TARGET_AUDIENCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1064
+msgid "syslog.type.ST_DOCUMENT_CONTENT_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1065
+msgid "syslog.type.ST_PROCUREMENT_CENTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1066
+msgid "syslog.type.ST_PROCUREMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1067
+msgid "syslog.type.ST_PROCUREMENT_REQUIREMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1068
+msgid "syslog.type.ST_PROCUREMENT_IMPLEMENTOR_CENTER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1069
+msgid "syslog.type.ST_PROCUREMENT_OFFER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1070
+msgid "syslog.type.ST_TASK_QUICK_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1071
+msgid "syslog.type.ST_PROCUREMENT_CENTER_ADMIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_1072
+msgid "syslog.type.ST_PROCUREMENT_REQUIREMENT_SOLUTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1073
+msgid "syslog.type.ST_EXTERNAL_SYSTEM"
+msgstr ""
+
+#: aw.ini:syslogtypes_1074
+msgid "syslog.type.ST_EXTERNAL_SYSTEM_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1075
+msgid "syslog.type.ST_PROCUREMENT_PRIORITY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1076
+msgid "syslog.type.ST_PROCUREMENT_CRITERIA"
+msgstr ""
+
+#: aw.ini:syslogtypes_1077
+msgid "syslog.type.ST_PROJECT_STRAT_GOAL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1078
+msgid "syslog.type.ST_PROJECT_STRAT_EVALUATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1079
+msgid "syslog.type.ST_PROJECT_RISK"
+msgstr ""
+
+#: aw.ini:syslogtypes_1080
+msgid "syslog.type.ST_PROJECT_RISK_EVALUATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1081
+msgid "syslog.type.ST_TRANSPORT_MANAGEMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1082
+msgid "syslog.type.ST_CARRIAGE_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1083
+msgid "syslog.type.ST_CARRIAGE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1084
+msgid "syslog.type.ST_ROUTE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1085
+msgid "syslog.type.ST_CRM_TRANSPORT_MANAGEMENT_TRUCK"
+msgstr ""
+
+#: aw.ini:syslogtypes_1086
+msgid "syslog.type.ST_CRM_TRANSPORT_MANAGEMENT_TRAILER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1087
+msgid "syslog.type.ST_CRM_TRANSPORT_MANAGEMENT_CAR_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1088
+msgid "syslog.type.ST_PROJECT_STRAT_GOAL_EVAL_WS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1089
+msgid "syslog.type.ST_PROJECT_RISK_EVAL_WS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1090
+msgid "syslog.type.ST_SCM_ADMIN"
+msgstr ""
+
+#: aw.ini:syslogtypes_1091
+msgid "syslog.type.ST_SCM_ORGANIZER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1092
+msgid "syslog.type.ST_SCM_CONTESTANT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1093
+msgid "syslog.type.ST_SCM_RESULT_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1094
+msgid "syslog.type.ST_SCM_EVENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1095
+msgid "syslog.type.ST_SCM_LOCATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1096
+msgid "syslog.type.ST_SCM_TOURNAMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1097
+msgid "syslog.type.ST_SCM_SCORE_CALC"
+msgstr ""
+
+#: aw.ini:syslogtypes_1098
+msgid "syslog.type.ST_SCM_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1099
+msgid "syslog.type.ST_SCM_COMPETITION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1100
+msgid "syslog.type.ST_SCM_RESULT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1101
+msgid "syslog.type.ST_PROJECT_TEAM"
+msgstr ""
+
+#: aw.ini:syslogtypes_1102
+msgid "syslog.type.ST_CRM_BUILDING_MANAGEMENT_SUPPLIER_RELATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1103
+msgid "syslog.type.ST_ESTIMATERS_WORKBENCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_1104
+msgid "syslog.type.ST_CRM_BUILDING_MANAGEMENT_PURCHASE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1105
+msgid "syslog.type.ST_CRM_BUILDING_MANAGEMENT_SUPPLIER_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1106
+msgid "syslog.type.ST_CRM_BUILDING_MANAGEMENT_OFFER_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1107
+msgid "syslog.type.ST_CRM_BUILDING_MANAGEMENT_AREA"
+msgstr ""
+
+#: aw.ini:syslogtypes_1108
+msgid "syslog.type.ST_CRM_BUILDING_MANAGEMENT_UNIT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1110
+msgid "syslog.type.ST_PROJECT_ANALYSIS_WS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1111
+msgid "syslog.type.ST_PROJECT_ANALYSIS_COL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1112
+msgid "syslog.type.ST_PROJECT_ANALYSIS_ROW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1113
+msgid "syslog.type.ST_PROJECT_ANALYSIS_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1114
+msgid "syslog.type.ST_CRM_FIELD_OTHER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1115
+msgid "syslog.type.ST_SCM_TEAM"
+msgstr ""
+
+#: aw.ini:syslogtypes_1116
+msgid "syslog.type.ST_LOCATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1117
+msgid "syslog.type.ST_WATERCRAFT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1118
+msgid "syslog.type.ST_WATERCRAFT_MANAGEMENT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1119
+msgid "syslog.type.ST_WATERCRAFT_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_1124
+msgid "syslog.type.ST_IMAGE_VERIFICATION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1129
+msgid "syslog.type.ST_CUSTOMER_FEEDBACK_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1130
+msgid "syslog.type.ST_CUSTOMER_FEEDBACK_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1131
+msgid "syslog.type.ST_USER_BOOKMARKS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1132
+msgid "syslog.type.ST_AW_OBJECT_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_1133
+msgid "syslog.type.ST_OBJ_QUICK_ADD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1134
+msgid "syslog.type.ST_ADMIN_IF"
+msgstr ""
+
+#: aw.ini:syslogtypes_1135
+msgid "syslog.type.ST_ROSTERING_WORKBENCH"
+msgstr ""
+
+#: aw.ini:syslogtypes_1136
+msgid "syslog.type.ST_PERSON_SKILL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1137
+msgid "syslog.type.ST_SCALA_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1138
+msgid "syslog.type.ST_PERSON_HAS_SKILL"
+msgstr ""
+
+#: aw.ini:syslogtypes_1139
+msgid "syslog.type.ST_PERSON_WORK_CYCLE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1140
+msgid "syslog.type.ST_ROSTERING_SCENARIO"
+msgstr ""
+
+#: aw.ini:syslogtypes_1141
+msgid "syslog.type.ST_ROSTERING_SHIFT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1142
+msgid "syslog.type.ST_ROSTERING_WORKPLACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1145
+msgid "syslog.type.ST_STATS_VIEWER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1146
+msgid "syslog.type.ST_STATS_ARCH_STATUS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1153
+msgid "syslog.type.ST_QUESTIONARY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1154
+msgid "syslog.type.ST_QUESTION_GROUP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1155
+msgid "syslog.type.ST_QUESTION"
+msgstr ""
+
+#: aw.ini:syslogtypes_1157
+msgid "syslog.type.ST_TRANSLATION_WORKPLACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1158
+msgid "syslog.type.ST_QUESTIONARY_RESULT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1159
+msgid "syslog.type.ST_ROSTERING_SCHEDULE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1160
+msgid "syslog.type.ST_ROSTERING_WORK_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1161
+msgid "syslog.type.ST_ROSTERING_PAYMENT_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1162
+msgid "syslog.type.ST_ROOM"
+msgstr ""
+
+#: aw.ini:syslogtypes_1164
+msgid "syslog.type.ST_ROOM_PRICE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1166
+msgid "syslog.type.ST_CONFERENCE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1167
+msgid "syslog.type.ST_CONFIG_OLD_REDIRECT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1168
+msgid "syslog.type.ST_WATERCRAFT_ADD"
+msgstr ""
+
+#: aw.ini:syslogtypes_1169
+msgid "syslog.type.ST_ANSWERER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1170
+msgid "syslog.type.ST_SITE_TEMPLATE_TRANS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1171
+msgid "syslog.type.ST_CONFERENCE_PLANNING"
+msgstr ""
+
+#: aw.ini:syslogtypes_1172
+msgid "syslog.type.ST_REQUIREMENT_CATEGORY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1173
+msgid "syslog.type.ST_PROCUREMENT_PROCESS"
+msgstr ""
+
+#: aw.ini:syslogtypes_1175
+msgid "syslog.type.ST_RFP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1176
+msgid "syslog.type.ST_MRP_PRISMA_BROWSER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1177
+msgid "syslog.type.ST_IP_LOCATOR"
+msgstr ""
+
+#: aw.ini:syslogtypes_1178
+msgid "syslog.type.ST_DIGIDOC"
+msgstr ""
+
+#: aw.ini:syslogtypes_1179
+msgid "syslog.type.ST_SPA_BOOKIGS_ENTRY"
+msgstr ""
+
+#: aw.ini:syslogtypes_1180
+msgid "syslog.type.ST_SPA_BOOKING"
+msgstr ""
+
+#: aw.ini:syslogtypes_1182
+msgid "syslog.type.ST_DDOC_PARSER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1183
+msgid "syslog.type.ST_DEVELOPMENT_ORDER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1184
+msgid "syslog.type.ST_DEVELOPMENT_ORDER_CAT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1185
+msgid "syslog.type.ST_CUSTOMER_PROBLEM_TICKET"
+msgstr ""
+
+#: aw.ini:syslogtypes_1186
+msgid "syslog.type.ST_DDOC"
+msgstr ""
+
+#: aw.ini:syslogtypes_1187
+msgid "syslog.type.ST_SPA_BOOKINGS_OVERVIEW"
+msgstr ""
+
+#: aw.ini:syslogactions_1
+msgid "syslog.action.SA_CHANGE"
+msgstr ""
+
+#: aw.ini:syslogactions_2
+msgid "syslog.action.SA_DELETE"
+msgstr ""
+
+#: aw.ini:syslogactions_3
+msgid "syslog.action.SA_ADD"
+msgstr ""
+
+#: aw.ini:syslogactions_4
+msgid "syslog.action.SA_ADD_ALIAS"
+msgstr ""
+
+#: aw.ini:syslogactions_5
+msgid "syslog.action.SA_CHANGE_ALIAS"
+msgstr ""
+
+#: aw.ini:syslogactions_6
+msgid "syslog.action.SA_RAISE_ERROR"
+msgstr ""
+
+#: aw.ini:syslogactions_7
+msgid "syslog.action.SA_LOGIN_FAILED"
+msgstr ""
+
+#: aw.ini:syslogactions_8
+msgid "syslog.action.SA_LOGIN"
+msgstr ""
+
+#: aw.ini:syslogactions_9
+msgid "syslog.action.SA_LOGOUT"
+msgstr ""
+
+#: aw.ini:syslogactions_10
+msgid "syslog.action.SA_CHANGE_GRP_USERS"
+msgstr ""
+
+#: aw.ini:syslogactions_11
+msgid "syslog.action.SA_GRP_ADD_SUBGRP"
+msgstr ""
+
+#: aw.ini:syslogactions_12
+msgid "syslog.action.SA_GRP_DEL_SUBGRP"
+msgstr ""
+
+#: aw.ini:syslogactions_13
+msgid "syslog.action.SA_CHANGE_PWD"
+msgstr ""
+
+#: aw.ini:syslogactions_14
+msgid "syslog.action.SA_BLOCK_USER"
+msgstr ""
+
+#: aw.ini:syslogactions_15
+msgid "syslog.action.SA_REMIND_PWD"
+msgstr ""
+
+#: aw.ini:syslogactions_16
+msgid "syslog.action.SA_DO_SEARCH"
+msgstr ""
+
+#: aw.ini:syslogactions_17
+msgid "syslog.action.SA_ACTIVATE_PERIOD"
+msgstr ""
+
+#: aw.ini:syslogactions_18
+msgid "syslog.action.SA_IMPORT"
+msgstr ""
+
+#: aw.ini:syslogactions_19
+msgid "syslog.action.SA_PAGEVIEW"
+msgstr ""
+
+#: aw.ini:syslogactions_20
+msgid "syslog.action.SA_ACL_ERROR"
+msgstr ""
+
+#: aw.ini:syslogactions_21
+msgid "syslog.action.SA_NOTEXIST"
+msgstr ""
+
+#: aw.ini:syslogactions_22
+msgid "syslog.action.SA_SEND"
+msgstr ""
+
+#: aw.ini:syslogactions_23
+msgid "syslog.action.SA_CLICK"
+msgstr ""
+
+#: aw.ini:syslogactions_24
+msgid "syslog.action.SA_PRINT"
+msgstr ""
+
+#: aw.ini:syslogactions_25
+msgid "syslog.action.SA_ASSIGN"
+msgstr ""
+
+#: aw.ini:syslogactions_26
+msgid "syslog.action.SA_FINAL_DELETE"
+msgstr ""
+
 #~ msgid "Klassi Ruum (1143) nimi"
 #~ msgstr "Room"
 
