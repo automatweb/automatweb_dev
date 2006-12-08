@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.4 2006/12/08 08:18:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.5 2006/12/08 08:48:39 kristo Exp $
 // translation_workplace.aw - T&otilde;lkimise t&ouml;&ouml;laud 
 /*
 
@@ -148,6 +148,8 @@ class translation_workplace extends class_base
 
 		$l = get_instance("languages");
 		$ll = $l->get_list(array("set_for_user" => true));
+		// meddle with things until the default language is the first in the table
+		uksort($ll, create_function('$a, $b','$ld=aw_ini_get("languages.default");if ($a == $ld) { return -1; }if ($b == $ld) { return 1;} return 0;'));
 		foreach($ll as $lid => $lang)
 		{
 			$t->define_field(array(
