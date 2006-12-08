@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.87 2006/12/01 15:32:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.88 2006/12/08 17:21:12 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -164,6 +164,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property list_status_table type=table store=no no_caption=1
 @caption Listi staatus
 
+@property send_button type=button store=no no_caption=1 
+@caption Saada kohe
 ------------------------------------------------------------------------
 
 @groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
@@ -724,7 +726,15 @@ class ml_list extends class_base
 					"confirm" => t("Kustutan valitud tegelased listist?"),
 					"img" => "delete.gif",
 				));
-				
+				break;
+			case "send_button":
+				$prop["value"] = t("Saada!");
+				$prop["onclick"] = "javascript:window.open(
+					'".$this->mk_my_orb("process_queue", array(), "ml_queue", false, true)."',
+					'',
+					'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600');";
+
+				break;
 			/*
 			case "msg_folder":
 				if(empty($prop["value"]) && !$arr["new"])

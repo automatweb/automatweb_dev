@@ -392,6 +392,17 @@
             <caption>Listi staatus</caption>
       </property>
       <property>
+            <name>send_button</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>list_status</group>
+            <type>button</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Saada</caption>
+      </property>
+      <property>
             <name>unsent_tb</name>
             <table>objects</table>
             <field>meta</field>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.30 2006/11/27 15:34:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.31 2006/12/08 17:21:12 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -206,7 +206,7 @@ class ml_queue extends aw_template
 		extract($arr);
 		$this->db_query("SELECT * FROM ml_queue WHERE qid='$id'");
 		$r=$this->db_next();
-	echo "SELECT * FROM ml_queue WHERE qid='$id'";arr($r);
+//	echo "SELECT * FROM ml_queue WHERE qid='$id'";arr($r);
 		$this->read_template("queue_change.tpl");
 		if ($r["status"]==2)
 		{
@@ -305,7 +305,7 @@ class ml_queue extends aw_template
 				$q.=($q?",":"")."'".(int)$v."'";
 			};
 			$this->db_query("DELETE FROM ml_queue WHERE qid IN ($q)");
-		};echo "DELETE FROM ml_queue WHERE qid IN ($q)";
+		};//echo "DELETE FROM ml_queue WHERE qid IN ($q)";
 		if ($from_mlm)
 		{
 			return $this->mk_my_orb("change", array("id" => $id), "ml_list_status");
@@ -341,8 +341,8 @@ class ml_queue extends aw_template
 			};
 			$delta=time()-2;
 			$w="UPDATE ml_queue SET start_at=$delta-delay WHERE qid IN ($q) AND status=0";
-			$this->db_query($w);echo $w;
-			$w="UPDATE ml_queue SET last_sent=$delta-delay WHERE qid IN ($q) AND status!=0";echo '<br>'.$w;
+			$this->db_query($w);//echo $w;
+			$w="UPDATE ml_queue SET last_sent=$delta-delay WHERE qid IN ($q) AND status!=0";//echo '<br>'.$w;
 			$this->db_query($w);
 		};
 		if ($from_mlm)
@@ -407,14 +407,14 @@ class ml_queue extends aw_template
 			"time" => time()+120,	// every 2 minutes
 		));
 		$this->awm = get_instance("protocols/mail/aw_mail");
-		echo "adding scheduler ! <br />\n";
+		echo t("adding scheduler ! <br />")."\n";
 		flush();
 		//decho("process_queue:<br />");//dbg
 		$tm = time();
 		$old = time() - 2 * 60;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)");
-		echo "select <br />\n";
+		//echo "select <br />\n";
 //		echo "SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)";
 		flush();
 
@@ -432,7 +432,7 @@ class ml_queue extends aw_template
 	//		flush();
 			$qid = (int)$r["qid"];
 			$lid = (int)$r["lid"];
-			echo("doing item $qid<br />");
+	//		echo("doing item $qid<br />");
 			flush();//dbg
 			// vaata kas see item on ikka lahti (ntx seda skripti võib kogemata 2 tk korraga joosta)
 			// so here I need to detect whether the last run was interrupted?
@@ -459,7 +459,7 @@ class ml_queue extends aw_template
 			//kontrollib, et 'kki vahepeal mõni teine queue on otsa jooksnud ja konkreetset maili juba saatma hakanud.... siis on admed muutunud ju... lukusatatud ju pole... ja alguses kõik ära lukustada pole ka hea mõte... 
 			$test_qid = $r["qid"];
 			$test_q = $this->db_fetch_row("SELECT * FROM ml_queue WHERE qid = '$test_qid'");
-			arr($test_q);
+			//arr($test_q);
 			
 			$tm = time();
 			$old = time() - 2 * 60;//kui nüüd 2 minutit möödas viimase maili saatmisest, siis võib suht kindel olla, et eelmine queue on pange pand
@@ -477,7 +477,21 @@ class ml_queue extends aw_template
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
 			{
-				echo("saadan  meili<br />");
+				//kontrollib üle, äkki miski statistikas kuskil valesti miskit
+				echo t("Sending ").$qid."<br />";
+				if(!($total = $this->check_queue_stats($r)))
+				{
+					echo t("Nothing to send...").$qid."<br />";
+					continue;	
+				}
+				echo t("Not sent: ").$total."<br />";
+				if($total < $patch_size)
+				{
+					$patch_size = $total;
+				}
+				echo t("Now sending next ").$patch_size."<br />";
+				
+
 				flush();//dbg
 				$this->save_handle();
 				//lukusta queue item
@@ -488,7 +502,7 @@ class ml_queue extends aw_template
 				$stat = 1/*ML_QUEUE_IN_PROGRESS*/;
 				$c = 0;
 				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND (mail_sent IS NULL OR mail_sent = 0) LIMIT $patch_size";
-				echo "qx = $qx <br>";
+		//		echo "qx = $qx <br>";
 				flush();
 				$this->db_query($qx);
 				$msg_data = true;
@@ -499,21 +513,21 @@ class ml_queue extends aw_template
 					{
 						$this->save_handle();
 						// 1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
-						echo "sending queue item..<br />\n";
+			//			echo "sending queue item..<br />\n";
 						flush();
 						$stat = $this->do_queue_item($msg_data);
 
 						// yo, increase the counter
 						$tm = time();
 						$q = "UPDATE ml_queue SET position=position+1, last_sent='$tm' WHERE qid='$qid'";
-						$this->db_query($q);echo $q;
+						$this->db_query($q);//echo $q;
 						$this->restore_handle();
 					};
 					$c++;
 				};
 
 				$q = "SELECT total-position AS remaining FROM ml_queue WHERE qid = '$qid'";
-				echo $q;
+			//	echo $q;
 				$this->db_query($q);
 				$row = $this->db_next();
 				if ($row["remaining"] <= 0)
@@ -542,9 +556,8 @@ class ml_queue extends aw_template
 				{
 					// unlock it
 					$this->db_query("UPDATE ml_queue SET status = $stat WHERE qid = '$qid'");
-					echo "UPDATE ml_queue SET status = $stat WHERE qid = '$qid'";//$pos="";
+				//	echo "UPDATE ml_queue SET status = $stat WHERE qid = '$qid'";//$pos="";
 				};
-
 				$this->restore_handle();
 			};
 		};
@@ -552,15 +565,39 @@ class ml_queue extends aw_template
 		return "";//hmhm
 	}
 
+	function check_queue_stats($q)
+	{
+		$qx = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = ".$q["qid"]." AND (mail_sent IS NULL OR mail_sent = 0)";
+		$this->db_query($qx);
+		$count = $this->db_next();
+		if($count["cnt"])
+		{
+			return $count["cnt"];
+		}
+		else 
+		{
+			$qx = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = ".$q["qid"];
+			$this->db_query($qx);
+			$count = $this->db_next();
+			//10 oleks nagu selline mõttetu arv.... et sellise hälbe nullib lihtsalt ära
+			if((($q["total"] - $q["position"]) > 0) && (($q["total"] - $q["position"]) < 10) && (($q["last_sent"] + 80000) < time()))
+			{
+				$qx = "UPDATE ml_queue SET status = 2, position=".$count["cnt"]." , total=".$count["cnt"]."  WHERE qid = ".$q["qid"];
+				$this->db_query($qx);
+			}
+		}
+		return 0;
+	}
+
 	////
 	//! Protsessib queue itemist 		echo $mailfrom;$r järgmise liikme
 	function do_queue_item($msg)
 	{
-	echo "queue item: ".dbg::dump($msg)." <br>";
+//	echo "queue item: ".dbg::dump($msg)." <br>";
 		$this->awm->clean();
 		if (!is_oid($msg["mail"]) || !$this->can("view", $msg["mail"]))
 		{
-			echo "couldn't send mail<br />\n";
+			echo t("couldn't send mail<br />\n");
 			return;
 		}
 		
@@ -593,9 +630,9 @@ class ml_queue extends aw_template
 			$message = str_replace("#content#", $message, $template);
 		}
 		// compatiblity with old messenger .. yikes
-		echo "from = {$msg["mailfrom"]}  <br />\n";
+		//echo "from = {$msg["mailfrom"]}  <br />\n";
 		flush();
-		echo dbg::dump($msg);
+	//	echo dbg::dump($msg);
 		$this->awm->create_message(array(
 
 			"froma" => $msg["mailfrom"],
@@ -630,13 +667,13 @@ class ml_queue extends aw_template
 				"name" => $to_o->name(),
 			));
 		};
-		echo "abuut to gen mail <br>\n";
+		echo t("sending mail to: ").$msg["target"]." ....";
 		flush();
 		$this->awm->gen_mail();
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
 		$this->db_query($q);
-		echo "<b>SENT!</b><br />\n";
+		echo "<b>.... SENT!</b><br />\n";
 		flush();	
 		return ML_QUEUE_IN_PROGRESS;
 	}
@@ -653,7 +690,7 @@ class ml_queue extends aw_template
 		$this->save_handle();
 		$this->db_query("UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'");
 		$this->restore_handle();
-		echo "UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'";
+//		echo "UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'";
 	}
 
 	function mark_queue_locked($qid)
@@ -661,7 +698,7 @@ class ml_queue extends aw_template
 		$this->save_handle();
 		$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
 		$this->restore_handle();
-		echo "UPDATE ml_queue SET status = 3 WHERE qid = '$qid'";
+//		echo "UPDATE ml_queue SET status = 3 WHERE qid = '$qid'";
 	}
 
 };
