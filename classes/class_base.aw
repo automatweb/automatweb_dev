@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.524 2006/12/08 08:34:23 kristo Exp $
+// $Id: class_base.aw,v 2.525 2006/12/08 08:36:38 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5264,6 +5264,12 @@ class class_base extends aw_template
 				"type" => "checkbox",
 				"ch_value" => 1,
 				"value" => $o->meta("trans_".$lid."_status") 
+			);
+			$nm = "sbt_".$lid;
+			$ret[$nm] = array(
+				"name" => $nm,
+				"caption" => t("Salvesta"),
+				"type" => "submit",
 			);
 		}
 
