@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.17 2006/11/30 10:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.18 2006/12/08 13:45:49 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -81,6 +81,12 @@
 @property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h group=img table_fields=name,ord table_edit_fields=ord
 @caption Pildid
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 @tableinfo aw_shop_packets index=aw_oid master_table=objects master_index=brother_of
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption paketi toode
@@ -98,6 +104,10 @@ class shop_packet extends class_base
 			"tpldir" => "applications/shop/shop_packet",
 			"clid" => CL_SHOP_PACKET
 		));
+
+		$this->trans_props = array(
+			"name","comment"
+		);
 	}
 
 	function get_property($arr)
@@ -133,6 +143,10 @@ class shop_packet extends class_base
 		{
 			case "packet":
 				$this->save_packet_table($arr);
+				break;
+
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
 				break;
 		}
 		return $retval;
@@ -570,6 +584,20 @@ class shop_packet extends class_base
 			$o->disconnect(array("from" => $item));
 		}
 		return $arr["post_ru"];
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

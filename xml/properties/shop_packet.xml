@@ -209,6 +209,16 @@
             <table_edit_fields>ord</table_edit_fields>
             <caption>Pildid</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PACKET</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -224,6 +234,9 @@
             <img>
                   <caption>Pildid</caption>
             </img>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <aw_shop_packets>
