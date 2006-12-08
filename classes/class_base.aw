@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.523 2006/12/08 07:05:04 kristo Exp $
+// $Id: class_base.aw,v 2.524 2006/12/08 08:34:23 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5136,6 +5136,7 @@ class class_base extends aw_template
 	function trans_save($arr, $props)
 	{
 		$o = $arr["obj_inst"];
+		$o->set_no_modify(true);
 		if ($o->is_brother())
 		{
 			$o = $o->get_original();
