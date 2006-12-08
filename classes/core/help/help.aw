@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.8 2006/12/07 14:55:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.9 2006/12/08 07:07:57 kristo Exp $
 
 // more ideas --- I might want to keep the help open when switching between tabs... for this I need to 
 // set a cookie
@@ -73,7 +73,7 @@ class help extends aw_template
 				break;
 			}
 		}
-		$link[] = "<a style=\"color:white;\" href=\"orb.aw?class=help&action=browser&clid=fld_0\">root</a>";
+		$link[] = "<a style=\"color:white;\" href=\"orb.aw?class=help&action=browser&clid=fld_0\">".t("root")."</a>";
 
 		foreach(array_reverse($link) as $el)
 		{
@@ -87,7 +87,7 @@ class help extends aw_template
 		$tree->start_tree (array (
 			"type" => TREE_DHTML,
 			"open_path" => "", // here should be a dynamically generated path which the tree should open automatically!!
-			"root_name" => "AW KLASSIDE ABI",
+			"root_name" => t("AW KLASSIDE ABI"),
 			"url_target" => "helpcontent",
 			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $arr["clid"], "parent" => " ")),
 			"has_root" => 1,
@@ -101,7 +101,7 @@ class help extends aw_template
 		{
 			$tree->add_item(0,array(
 				"name" => $classdat["name"],
-				"id" => "root",
+				"id" => t("root"),
 				"url" => $this->mk_my_orb("classhelp", array("clid" => $arr["clid"])),
 				"is_open" => 1,
 				"iconurl" => icons::get_icon_url($arr["clid"]),
@@ -115,7 +115,7 @@ class help extends aw_template
 
 			foreach($target_groups as $group_key => $group_data)
 			{
-				$parent = isset($group_data["parent"]) ? $group_data["parent"] : "root";
+				$parent = isset($group_data["parent"]) ? $group_data["parent"] : t("root");
 				$tree->add_item($parent ,array(
 					"name" => $group_data["caption"],
 					"id" => $group_key,
@@ -141,7 +141,7 @@ class help extends aw_template
 					//arr($item_collection);
 					foreach($item_collection as $el_id => $el_data)
 					{
-						$parnt = is_numeric($item_id) && $item_id == 0 ? "root" : $item_id;
+						$parnt = is_numeric($item_id) && $item_id == 0 ? t("root") : $item_id;
 						$tcnt++;
 
 						$tree->add_item(0,array(
@@ -271,7 +271,7 @@ class help extends aw_template
 			foreach($item_collection as $el_id => $el_data)
 			{
 
-				$parnt = is_numeric($item_id) && $item_id == 0 ? "root" : $item_id;
+				$parnt = is_numeric($item_id) && $item_id == 0 ? t("root") : $item_id;
 				$tcnt++;
 				$tree->add_item(0,array(
 					"name" => $el_data["name"],
@@ -462,9 +462,9 @@ class help extends aw_template
 			}
 		}
 		$this->vars(array(
-			"group_name" => strlen($contents["caption"])?$contents["caption"]:t("t&otilde;lgitud nimi puudub"),
-			"group_comment" => strlen($contents["comment"])?$contents["comment"]:t("kommentaar puudub"),
-			"group_help" => strlen($contents["help"])?$contents["help"]:t("abitekst puudub"),
+			"group_name" => strlen($contents["caption"])?$contents["caption"]:""/*t("t&otilde;lgitud nimi puudub")*/,
+			"group_comment" => strlen($contents["comment"])?$contents["comment"]:""/*t("kommentaar puudub")*/,
+			"group_help" => strlen($contents["help"])?$contents["help"]:""/*t("abitekst puudub")*/,
 		));
 		$this->parse("GROUP_HELP");
 
@@ -495,9 +495,9 @@ class help extends aw_template
 				}
 			}
 			$this->vars(array(
-				"property_name" => strlen($pval["caption"])?$pval["caption"]:t("tõlgitud nimi puudub"),
-				"property_comment" => strlen($pval["kommentaar"])?$pval["kommentaar"]:t("kommentaar puudub"),
-				"property_help" => strlen($pval["help"])?$pval["help"]:t("abitekst puudub"),
+				"property_name" => strlen($pval["caption"])?$pval["caption"]: "" /*t("tõlgitud nimi puudub")*/,
+				"property_comment" => strlen($pval["kommentaar"])?$pval["kommentaar"]: "" /*t("kommentaar puudub")*/,
+				"property_help" => strlen($pval["help"])?$pval["help"]:"" /*("abitekst puudub")*/,
 			));
 
 			if (!strlen($pval["kommentaar"]) && !strlen($pval["help"]))
