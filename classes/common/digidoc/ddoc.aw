@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.8 2006/12/06 19:00:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.9 2006/12/11 14:17:49 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -597,7 +597,8 @@ class ddoc extends class_base
 			));
 		}
 		$o = obj($oid);
-		$sign = count(aw_unserialize($o->prop("signatures")));
+		$p = $o->prop("signatures");
+		$sign = strlen($p)?count(aw_unserialize($p)):0;
 		return $sign > 0?true:false;
 	}
 
