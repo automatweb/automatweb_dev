@@ -116,6 +116,42 @@
 	<tr>
 		<td colspan="2"><b>{VAR:LC_CATERING}<b/></td>
 	</tr>
+	
+	<!-- SUB: ADDITIONAL_CATERING -->
+	<tr><td colspan="2">
+		<table>
+		<tr bgcolor="silver">
+			<td>
+				{VAR:LC_TYPE}
+			</td>
+			<td>
+				{VAR:LC_START_TIME}
+			</td>
+			<td>
+				{VAR:LC_END_TIME}
+			</td>
+			<td>
+			</td>
+		</tr>
+		<!-- SUB: CATERING_ROW -->
+		<tr>
+			<td>
+				{VAR:cat_type}
+			</td>
+			<td>
+				{VAR:cat_starttime}
+			</td>
+			<td>
+				{VAR:cat_endtime}
+			</td>
+			<td>
+				<a href="{VAR:cat_remove_url}">{VAR:LC_REMOVE}</a>&nbsp;<a href="{VAR:cat_edit_url}">{VAR:LC_EDIT}</a>
+			</td>
+		</tr>
+		<!-- END SUB: CATERING_ROW -->
+		</table>
+	</td></tr>
+	<!-- END SUB: ADDITIONAL_CATERING -->
 	<tr>
 		<td>
 			{VAR:LC_TYPE}:
@@ -152,6 +188,10 @@
 
 	<tr>
 		<td></td>
-		<td><input type="button" value="{VAR:LC_ADD}" onClick="javascript:submit_changeform('add_function');"/></td>
+		<td><a href="#" onClick="javascript:submit_changeform('add_fun_catering');">{VAR:LC_ADD_CATERING}</a></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><a href="#" onClick="javascript:submit_changeform('add_function');">{VAR:LC_ADD_FUNCTION}</a></td>
 	</tr>
 </table>

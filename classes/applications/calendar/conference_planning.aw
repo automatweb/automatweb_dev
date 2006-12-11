@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.10 2006/12/08 15:32:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.11 2006/12/11 11:10:16 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -136,7 +136,10 @@ class conference_planning extends class_base
 		$_GET = $GLOBALS["_GET"];
 		if($_GET["action"])
 		{
-			$this->do_actions($arr, $_GET["action"]);
+			if($ret = $this->do_actions($arr, $_GET["action"]))
+			{
+				header("Location:".$ret);
+			}
 		}
 		$c_obj = obj($arr["conference_planner"]);
 		$ob = new object($arr["id"]);
@@ -350,6 +353,7 @@ class conference_planning extends class_base
 				));
 				break;
 			case 5:
+				//arr($sd);
 				$sc->read_template("sub_conference_rfp5.tpl");				
 				$c_inst = get_instance(CL_CONFERENCE);
 				$c_types = $c_inst->conference_types();
@@ -357,6 +361,11 @@ class conference_planning extends class_base
 				if(strlen($_GET["act_evt_no"]))
 				{
 					$values = $sd["additional_functions"][$_GET["act_evt_no"]];
+					$cat_values = $values["catering"];
+					if(strlen($_GET["act_cat_no"]))
+					{
+						$act_cat = $cat_values[$_GET["act_cat_no"]];
+					}
 				}
 
 				foreach($c_types as $k => $capt)
@@ -391,13 +400,13 @@ class conference_planning extends class_base
 					$sc->vars(array(
 						"value" => $k,
 						"caption" => $capt,
-						"catering_type_select" => ($k == $values["catering_type_select"])?"SELECTED":"",
+						"catering_type_select" => ($k == $act_cat["catering_type_select"])?"SELECTED":"",
 					));
-					$catering .= $sc->parse("CATERING_TYPE");
+					$catering_form_select .= $sc->parse("CATERING_TYPE");
 				}
 				// table rows
-				$d = $this->get_form_data();
-				foreach($d["additional_functions"] as $id => $data)
+				//$d = $this->get_form_data();
+				foreach($sd["additional_functions"] as $id => $data)
 				{
 					$sc->vars(array(
 						"caption" => ($data["event_type_chooser"] == 1)?$c_types[$data["event_type_select"]]:$data["event_type_text"],
@@ -406,10 +415,28 @@ class conference_planning extends class_base
 					));
 					$rows .= $sc->parse("ROW");
 				}
+
+				// catering tab 
+				foreach($cat_values as $cat_no => $catering)
+				{
+					$sc->vars(array(
+						"cat_type" => ($catering["catering_type_chooser"] == 2)?$catering["catering_type_text"]:$this->catering_types[$catering["catering_type_select"]],
+						"cat_starttime" => $catering["catering_start_time"],
+						"cat_endtime" => $catering["catering_end_time"],
+						"cat_remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&evt=".$_REQUEST["act_evt_no"]."&cat=".$cat_no,
+						"cat_edit_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&act_evt_no=".$_REQUEST["act_evt_no"]."&act_cat_no=".$cat_no,
+					));
+					$cat_rows .= $sc->parse("CATERING_ROW");
+				}
+				$sc->vars(array(
+					"CATERING_ROW" => $cat_rows,
+				));
+				$additional_catering = $sc->parse("ADDITIONAL_CATERING");
 				$sc->vars(array(
 					"TECH_EQUIP" => $tech,
 					"TABLE_FORM" => $tform,
-					"CATERING_TYPE" => $catering,
+					"CATERING_TYPE" => $catering_form_select,
+					"ADDITIONAL_CATERING" => $additional_catering,
 					"EVT_TYPE" => $evt_type,
 					"ROW" => $rows,
 					"event_type_chooser_".$values["event_type_chooser"] => "CHECKED",
@@ -422,6 +449,10 @@ class conference_planning extends class_base
 					"function_end_date" => $values["function_end_date"],
 					"function_end_time" => $values["function_end_time"],
 					"24h" => $values["24h"]?"CHECKED":"",
+					"catering_type_chooser_".$act_cat["catering_type_chooser"] => "CHECKED",
+					"catering_type_text" => $act_cat["catering_type_text"],
+					"catering_start_time" => $act_cat["catering_start_time"],
+					"catering_end_time" => $act_cat["catering_end_time"],
 				));
 				break;
 			case 6:
@@ -791,6 +822,7 @@ class conference_planning extends class_base
 		$submit = $this->parse($first."_RFP_SUBMIT");
 
 		$act_evt_no = $_GET["act_evt_no"]?$_GET["act_evt_no"]:-1;
+		$act_cat_no = $_GET["act_cat_no"]?$_GET_["act_evt_no"]:-1;
 
 		$this->vars(array(
 			"YAH_BAR" => join("", $yah),
@@ -802,6 +834,7 @@ class conference_planning extends class_base
 				"id" => $ob->id(),
 				"current_sub" => $no,
 				"act_event_no" => $act_evt_no,
+				"act_cat_no" => $act_cat_no,
 				"conference_planner" => $c_obj->id(),
 			)),
 		));
@@ -941,6 +974,15 @@ class conference_planning extends class_base
 			{
 				$tmptech[] = $this->tech_equip[$k];
 			}
+			$cats = array();
+			foreach($tmp["catering"] as $cat)
+			{
+				$cats[] = array(
+					"catering_type" => ($cat["catering_type_chooser"] == 1)?$this->catering_types[$cat["catering_type_select"]]:$cat["catering_type_text"],
+					"catering_start" => $cat["catering_start_time"],
+					"catering_end" => $cat["catering_end_time"],
+				);
+			}
 			$tmpfunctions[] = array(
 				"type" => ($tmp["event_type_chooser"] == 1)?$evt_type[$tmp["event_type_select"]]:$tmp["event_type_text"],
 				"delegates_no" => $tmp["delegates_no"],
@@ -951,9 +993,7 @@ class conference_planning extends class_base
 				"start" => $tmp["function_start_date"]." ".$tmp["function_start_time"],
 				"end" => $tmp["function_end_date"]." ".$tmp["function_end_time"],
 				"24h" => ($tmp["24h"])?t("Yes"):t("No"),
-				"catering_type" => ($tmp["catering_type_chooser"] == 1)?$this->catering_types[$tmp["catering_type_select"]]:$tmp["catering_type_text"],
-				"catering_start" => $tmp["catering_start_time"],
-				"catering_end" => $tmp["catering_end_time"],
+				"catering" => $cats,
 			);
 		}
 		$obj->set_prop("additional_functions", aw_serialize($tmpfunctions, SERIALIZE_NATIVE));
@@ -1113,12 +1153,22 @@ class conference_planning extends class_base
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$arr["current_sub"];
 	}
 
+	/**
+		@attrib params=name name=add_fun_catering all_args=1
+	**/
+	function add_fun_catering($arr)
+	{
+		$this->save_form_data($arr);
+		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$arr["current_sub"]."&act_evt_no=".$arr["act_event_no"];
+	}
+
 	function do_actions($arr, $action = false)
 	{
 		$_GET = $GLOBALS["_GET"];
 		$no = $_GET["sub"]?$_GET["sub"]:$arr["current_sub"];
 		$data = aw_global_get("tmp_conference_data");
 		$act = $action?$action:$_GET["action"];
+		$ret = false;
 		switch($no)
 		{
 			case 2:
@@ -1150,19 +1200,27 @@ class conference_planning extends class_base
 			case 5:
 				if($act == "remove")
 				{
-					unset($data["additional_functions"][$_GET["id"]]);
+					if(strlen($_GET["evt"]) && strlen($_GET["cat"]))
+					{
+						unset($data["additional_functions"][$_GET["evt"]]["catering"][$_GET["cat"]]);
+						$ret = aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$no."&act_evt_no=".$_GET["evt"];
+					}
+					elseif(strlen($_GET["evt"]) && !strlen($_GET["cat"]))
+					{
+						unset($data["additional_functions"][$_GET["evt"]]);
+					}
 				}
 				break;
 		}
 		aw_session_set("tmp_conference_data", $data);
-		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$no;
+		return $ret;
 	}
 
 	function save_form_data($arr)
 	{
 		$form_data = $arr["sub"];
 		$_get = $GLOBALS["_GET"];
-		$data = aw_global_get("tmp_conference_data");
+		$data = $this->get_form_data();
 		foreach($form_data as $k => $val)
 		{
 			// new method
@@ -1242,6 +1300,8 @@ class conference_planning extends class_base
 					}
 					break;
 				case "5":
+					$no = $arr["act_event_no"];
+					$cat_no = $arr["act_cat_no"];
 					$additional_function["event_type_chooser"] = $val["event_type_chooser"];
 					$additional_function["event_type_select"] = $val["event_type_select"];
 					$additional_function["event_type_text"] = $val["event_type_text"];
@@ -1255,22 +1315,41 @@ class conference_planning extends class_base
 					$additional_function["function_end_date"] = $val["function_end_date"];
 					$additional_function["function_end_time"] = $val["function_end_time"];
 					$additional_function["24h"] = $val["24h"];
+					$additional_function["catering"] = ($no < 1)?array():$data["additional_functions"][$no]["catering"];
 
-					$additional_function["catering_type_chooser"] = $val["catering_type_chooser"];
-					$additional_function["catering_type_select"] = $val["catering_type_select"];
-					$additional_function["catering_type_text"] = $val["catering_type_text"];
-					$additional_function["catering_start_time"] = $val["catering_start_time"];
-					$additional_function["catering_end_time"] = $val["catering_end_time"];
-					$no = $arr["act_event_no"];
+
+					$additional_function_catering["catering_type_chooser"] = $val["catering_type_chooser"];
+					$additional_function_catering["catering_type_select"] = $val["catering_type_select"];
+					$additional_function_catering["catering_type_text"] = $val["catering_type_text"];
+					$additional_function_catering["catering_start_time"] = $val["catering_start_time"];
+					$additional_function_catering["catering_end_time"] = $val["catering_end_time"];
+
 					if($no < 0)
 					{
 						if($val["event_type_chooser"] || $val["delegates_no"] || is_array($val["tech"]) || $val["door_sign"] || $val["persons_no"] || $val["function_starting_date"] || $val["function_end_date"] || $val["catering_type_chooser"])
 						{
+							$t = $additional_function_catering;
+							if($t["catering_type_chooser"] || $t["catering_type_text"] || $t["catering_start_time"] || $t["catering_end_time"])
+							{
+								$additional_function["catering"][] = $additional_function_catering;
+							}
 							$data["additional_functions"][] = $additional_function;
 						}
 					}
 					else
 					{
+						if($cat_no < 0)
+						{
+							$t = $additional_function_catering;
+							if($t["catering_type_chooser"] || $t["catering_type_text"] || $t["catering_start_time"] || $t["catering_end_time"])
+							{
+								$additional_function["catering"][] = $additional_function_catering;
+							}
+						}
+						else
+						{
+							$additional_function["catering"][$cat_no] = $additional_function_catering;
+						}
 						$data["additional_functions"][$no] = $additional_function;
 					}
 					break;

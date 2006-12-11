@@ -71,6 +71,9 @@ $lc_conference_planning["LC_END_TIME"] = "Ending time";
 $lc_conference_planning["LC_ATTENDEE_NO"] = "Number of attendees";
 
 # sub_conference_rfp5.tpl
+$lc_conference_planning["LC_ADD_FUNCTION"] = "Add/Save function";
+$lc_conference_planning["LC_ADD_CATERING"] = "Add/Save catering";
+
 $lc_conference_planning["LC_EVENT"] = "Event";
 $lc_conference_planning["LC_EDIT"] = "Edit";
 // remove, type, etc..
