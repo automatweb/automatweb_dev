@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.138 2006/11/29 11:13:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.139 2006/12/11 16:30:31 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -32,6 +32,9 @@
 
 	@property filename type=text store=no field=name form=+emb
 	@caption Faili nimi
+
+	@property signed type=text store=no
+	@caption Allkirjastatud
 
 	@property file type=fileupload form=+emb
 	@caption Vali fail
@@ -124,6 +127,24 @@ class file extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "signed":
+				if(!aw_ini_get("file.ddoc_support"))
+				{
+					return PROP_IGNORE;
+				}
+				switch($this->is_signed($arr["obj_inst"]->id()))
+				{
+					case 1:
+						$data["value"] = t("Allkirjastatud fail");
+						break;
+					case 0:
+						$data["value"] = t("Allkirjasta DigiDoc konteiner");
+						break;
+					case -1:
+						$data["value"] = t("Allkirjasta fail");
+						break;
+				}
+				break;
 			case "show_icon":
 				if ($arr["obj_inst"]->prop("show_icon") == 8 || $arr["obj_inst"]->prop("show_icon") === NULL)
 				{
@@ -366,7 +387,7 @@ class file extends class_base
 					fwrite($fc, $data["value"]["content"]);
 					fclose($f);
 					$arr["obj_inst"]->set_name($data["value"]["name"]);
-					$arr["obj_inst"]->set_prop("type", "text/html");
+					$arr["obj_inst"]->set_prop("type", $data["value"]["type"]?$data["value"]["type"]:"text/html");
 					$data["value"] = $final_name;
 					$this->file_type = "text/html";
 				}
@@ -593,6 +614,43 @@ class file extends class_base
 		}
 	}
 
+	/**
+		@param oid required type=oid
+		@comment
+			finds out if given file object is signed or not.
+		@returns
+			1 if is signed
+			0 if file is set into digidoc container, which is not signed
+			-1 if file isn't in digidoc container
+	**/
+	function is_signed($oid)
+	{
+		if(!is_oid($oid))
+		{
+			error::raise(array(
+				"msg" => t("Vale objekti id!"),
+			));
+		}
+		$c = new connection();
+		$ret = $c->find(array(
+			"from.class_id" => CL_DDOC,
+			"type" => "RELTYPE_SIGNED_FILE",
+			"to" => $oid,
+		));
+		if(count($ret))
+		{
+			$ret = current($ret);
+			$ret = $ret["to"];
+			$inst = get_instance(CL_DDOC);
+			$ret = $inst->is_signed($ret);
+			$ret = $ret?1:0;
+		}
+		else
+		{
+			$ret = -1;
+		}
+		return $ret;
+	}
 
 	////
 	// !writes file to database - internal usage only, most of the parameters can be omitted
@@ -1120,6 +1178,8 @@ class file extends class_base
 		@param parent optional type=int
 		@param content
 		@param name required
+		@param type optional type=string
+			filetype
 
 	**/
 	function create_file_from_string($arr)
@@ -1142,6 +1202,7 @@ class file extends class_base
 		$data["file"] = array(
 			"content" => $arr["content"],
 			"name" => $arr["name"],
+			"type" => $arr["type"],
 		);
 		$t = get_instance(CL_FILE);
 		$rv = $t->submit($data);

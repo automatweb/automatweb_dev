@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.9 2006/12/11 14:17:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.10 2006/12/11 16:30:30 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -293,7 +293,7 @@ class ddoc extends class_base
 					return PROP_IGNORE;
 					//$retval = PROP_IGNORE;
 				};
-				$this->_do_reset_ddoc($arr["obj_inst"]->id());
+				$this->_do_reset_ddoc($arr["obj_inst"]->id(), $false);
 //arr($_SESSION["scode"]);
 				/*
 				$this->_start_ddoc_session($arr["obj_inst"]->id());
@@ -860,6 +860,23 @@ class ddoc extends class_base
 		}
 		return true;
 	}
+
+	/**
+		
+	**/
+	function _hash_exists($ddoc, $hash)
+	{
+		$o = obj($ddoc);
+		$m = aw_unserialize($o->prop("files"));
+		foreach($m as $data)
+		{
+			if($data["hash"] == $hash)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/**
 		@param ddoc_id required type=int
@@ -871,6 +888,7 @@ class ddoc extends class_base
 		@param size optional type=int
 		@param type optional type=string
 		@param name optional type=string
+		@param hash optional type=string
 		@comment
 			adds file to files metainfo in ddoc object.
 		@returns
@@ -884,12 +902,15 @@ class ddoc extends class_base
 		}
 		$o = obj($arr["oid"]);
 		$m = aw_unserialize($o->prop("files"));
+
 		$m[$arr["ddoc_id"]] = array(
-			"file" => $arr["file"],
-			"size" => $arr["size"],
-			"type" => $arr["type"],
-			"name" => $arr["name"],
+			"file" => strlen($arr["file"])?$arr["file"]:$m[$arr["ddoc_id"]]["file"],
+			"size" => strlen($arr["size"])?$arr["size"]:$m[$arr["ddoc_id"]]["size"],
+			"type" => strlen($arr["type"])?$arr["type"]:$m[$arr["ddoc_id"]]["type"],
+			"name" => strlen($arr["name"])?$arr["name"]:$m[$arr["ddoc_id"]]["name"],
+			"hash" => strlen($arr["hash"])?$arr["hash"]:$m[$arr["ddoc_id"]]["hash"],
 		);
+
 		$o->set_prop("files", aw_serialize($m, SERIALIZE_NATIVE));
 		$o->save();
 		return true;
@@ -899,19 +920,23 @@ class ddoc extends class_base
 		@attrib params=pos
 		@param oid required type=oid
 			the CL_DDOC object's oid which data is to be resetted.
-		@param save optional 
-			not used right now
+		@param save optional type=bool
+			if set to false, old file objects are ignored and new objects are recreated. this is nessecary if one uploads new ddoc container for example.
 		@comment
-			does the nessecary things if uploading new ddoc.
+			resets the ddoc metadata.
 	**/
-	function _do_reset_ddoc($oid, $save = false)
+	function _do_reset_ddoc($oid, $save = true)
 	{
 		if(!is_oid($oid))
 		{
 			return false;
 		}
 		
-		$this->_clear_old($oid);
+		$this->_clear_old_signatures($oid);
+		if(!$save)
+		{
+			$this->_clear_old_signed_files($oid);
+		}
 
 		$o = obj($oid);
 
@@ -919,26 +944,36 @@ class ddoc extends class_base
 		
 		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 		$ret2 =  $this->digidoc->WSDL->GetSignedDocInfo();
-		if(!is_array($ret2["SignedDocInfo"]->DataFileInfo))
+		if(!is_array($ret2["SignedDocInfo"]->DataFileInfo) && isset($ret2["SignedDocInfo"]->DataFileInfo))
 		{
 			$ret2["SignedDocInfo"]->DataFileInfo = array(0 => $ret2["SignedDocInfo"]->DataFileInfo);
 		}
-		if(!is_array($ret2["SignedDocInfo"]->SignatureInfo))
+		if(!is_array($ret2["SignedDocInfo"]->SignatureInfo) && isset($ret2["SignedDocInfo"]->SignatureInfo))
 		{
 			$ret2["SignedDocInfo"]->SignatureInfo = array(0 => $ret2["SignedDocInfo"]->SignatureInfo);
 		}
 		
 		// get files
+		$p = new ddoc2_parser();
+
 		foreach($ret2["SignedDocInfo"]->DataFileInfo as $std_obj)
 		{
 			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 			$file = $this->digidoc->WSDL->GetDataFile($std_obj->Id);
+			$hash = $p->getFileHash(array(
+				"name" => $file["DataFileData"]->Filename,
+				"MIME" => $file["DataFileData"]->MimeType,
+				"size" => $file["DataFileData"]->Size,
+				"content" => base64_decode($file["DataFileData"]->DfData),
+			), $file["DataFileData"]->Id);
+			$hash = $hash["DigestValue"];
 			
 			$files[$file["DataFileData"]->Id] = array(
 				"content" => base64_decode($file["DataFileData"]->DfData),
 				"name" => $file["DataFileData"]->Filename,
 				"type" => $file["DataFileData"]->MimeType,
 				"size" => $file["DataFileData"]->Size,
+				"hash" => $hash,
 			);
 		}
 		// set files
@@ -946,25 +981,29 @@ class ddoc extends class_base
 		// i don't use the parser results here because i don't get the file contents from there so easily
 		foreach($files as $ddoc_id => $data)
 		{
-			$id = $file_inst->create_file_from_string(array(
-				"parent" => $oid,
-				"content" => $data["content"],
-				"name" => $data["name"],
-				"type" => $data["type"],
-			));
+			if(!$save || !$this->_hash_exists($oid, $data["hash"]))
+			{
+				$id = $file_inst->create_file_from_string(array(
+					"parent" => $oid,
+					"content" => $data["content"],
+					"name" => $data["name"],
+					"type" => $data["type"],
+				));
 
-			$this->_write_file_metainfo(array(
-				"ddoc_id" => $ddoc_id,
-				"oid" => $oid,
-				"file" => $id,
-				"size" => $data["size"],
-				"type" => $data["type"],
-				"name" => $data["name"],
-			));
-			$o->connect(array(
-				"type" => "RELTYPE_SIGNED_FILE",
-				"to" => $id,
-			));
+				$this->_write_file_metainfo(array(
+					"ddoc_id" => $ddoc_id,
+					"oid" => $oid,
+					"file" => $id,
+					"size" => $data["size"],
+					"type" => $data["type"],
+					"name" => $data["name"],
+					"hash" => $data["hash"],
+				));
+				$o->connect(array(
+					"type" => "RELTYPE_SIGNED_FILE",
+					"to" => $id,
+				));
+			}
 		}
 		$o->save();
 		// set signatures
@@ -1334,11 +1373,7 @@ class ddoc extends class_base
 		return true;
 	}
 
-	/**
-		@comment
-			clears all cached data from object. Used internally, when new ddoc file is uploaded, or just the info needs to refreshed shomewhy..
-	**/
-	function _clear_old($oid)
+	function _clear_old_signed_files($oid)
 	{
 		if(!is_oid($oid))
 		{
@@ -1355,6 +1390,23 @@ class ddoc extends class_base
 			$to = obj($data["file"]);
 			$to->delete(true);
 		}
+		// clear metadata
+		$o->set_prop("files", aw_serialize(array(), SERIALIZE_NATIVE));
+		$o->save();
+		return true;
+	}
+
+	/**
+		@comment
+			clears all cached data from object. Used internally, when new ddoc file is uploaded, or just the info needs to refreshed shomewhy..
+	**/
+	function _clear_old_signatures($oid)
+	{
+		if(!is_oid($oid))
+		{
+			return false;
+		}
+		$o = obj($oid);
 		// removing connections to signers
 		foreach(aw_unserialize($o->prop("signatures")) as $data)
 		{
@@ -1363,7 +1415,6 @@ class ddoc extends class_base
 			));
 		}
 		// clear metadata
-		$o->set_prop("files", aw_serialize(array(), SERIALIZE_NATIVE));
 		$o->set_prop("signatures", aw_serialize(array(), SERIALIZE_NATIVE));
 		$o->save();
 		return true;

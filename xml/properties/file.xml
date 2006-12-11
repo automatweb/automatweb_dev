@@ -15,6 +15,15 @@
             <caption>Faili nimi</caption>
       </property>
       <property>
+            <name>signed</name>
+            <table>files</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>signed</field>
+            <caption>Allkirjastatud</caption>
+      </property>
+      <property>
             <name>file</name>
             <table>files</table>
             <group>general</group>
