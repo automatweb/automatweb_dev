@@ -36,7 +36,7 @@ class links_display
 		{
 			if ($this->img)
 			{
-				$alt = $this->trans_get_val($this->cur_link, "alt");
+				$alt = $this->cur_link->trans_get_val("alt");
 
 				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$alt,$alt,$this->img,$alt);
 			}
@@ -49,40 +49,12 @@ class links_display
 		return $replacement;
 	}
 
-	function trans_get_val($obj, $prop)
-	{
-		if ($prop == "name")
-		{
-			$val = $obj->name();
-		}
-		else
-		{
-			$val = $obj->prop($prop);
-		}
-		$val = htmlentities($val);
-
-		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $obj->lang_id())
-		{
-			$trs = $obj->meta("translations");
-			if (isset($trs[$cur_lid]))
-			{
-				if ($trs[$cur_lid][$prop] == "")
-				{
-					return $val;
-				}
-				$val = $trs[$cur_lid][$prop];
-			}
-		}
-
-		return $val;	
-	}	
-
 	function draw_link($target)
 	{
 		$link = obj($target);
 		$this->cur_link = $link;
 
-		$url_pv = $this->trans_get_val($link, "url");
+		$url_pv = $link->trans_get_val("url");
 
 		if (strpos($url_pv,"@") > 0)
 		{
@@ -144,8 +116,7 @@ class links_display
 			$target = $link->prop("newwindow") ? "target='_blank'" : "";
 		};
 
-
-		return array($url,$target,$this->trans_get_val($link, "name"));
+		return array($url,$target,$link->trans_get_val("name"));
 	}
 }
 ?>
