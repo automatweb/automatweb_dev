@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.139 2006/12/11 16:30:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.140 2006/12/11 16:46:02 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -640,7 +640,7 @@ class file extends class_base
 		if(count($ret))
 		{
 			$ret = current($ret);
-			$ret = $ret["to"];
+			$ret = $ret["from"];
 			$inst = get_instance(CL_DDOC);
 			$ret = $inst->is_signed($ret);
 			$ret = $ret?1:0;
