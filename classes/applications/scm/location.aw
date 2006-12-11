@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.2 2006/11/06 17:24:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.3 2006/12/11 12:47:02 tarvo Exp $
 // location.aw - Asukoht 
 /*
 
@@ -28,11 +28,28 @@
 @reltype PHOTO value=2 clid=CL_IMAGE
 @caption Foto
 
+@groupinfo images caption="Pildid"
+	@property images type=releditor mode=manager no_caption=1 group=images reltype=RELTYPE_IMAGE props=ord,file table_fields=ord,file table_edit_fields=ord
+	@caption Pildid
+
+@groupinfo accommondation caption="Majutus"
+	@property single_count type=textbox group=accommondation
+	@caption &Uuml;hekohaliste arv
+
+	@property double_count type=textbox group=accommondation
+	@caption Kahekohaliste arv
+
+	@property suite_count type=textbox group=accommondation
+	@caption Sviitide arv
+
 @reltype ADDRESS value=3 clid=CL_CRM_ADDRESS
 @caption Aadress
 
 @reltype BANK_PAYMENT value=4 clid=CL_BANK_PAYMENT
 @caption Pangalink
+
+@reltype IMAGE value=5 clid=CL_IMAGE
+@caption Pilt
 
 
 */
@@ -54,6 +71,24 @@ class location extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "img_tb":
+				$tb = $prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "add_img",
+					"tooltip" => t("tooltip"),
+					"url" => "",
+				));
+				break;
+			case "img_t":
+				$t = $prop["vcl_inst"];
+				$t->define_chooser(array(
+					"name" => "sel",
+					"field" => "img",
+				));
+				$t->define_field(array(
+					"name" => "jrk",
+				));
+				break;
 		};
 		return $retval;
 	}
@@ -110,5 +145,22 @@ class location extends class_base
 	}
 
 //-- methods --//
+
+	function get_images($oid)
+	{
+		if(!is_oid($oid))
+		{
+			return array();
+		}
+		$o = obj($oid);
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_IMAGE",
+		));
+		foreach($conns as $conn)
+		{
+			$ret[] = $conn->to();
+		}
+		return $ret;
+	}
 }
 ?>

@@ -87,7 +87,7 @@
 	<!-- SUB: SEARCH_RESULT -->
 	<tr>
 		<td colspan="2">
-			<input type="checkbox" name="sub[6][search_result][{VAR:value}]"/>{VAR:caption} ({VAR:address}) - {VAR:single_count}/{VAR:double_count}/{VAR:suite_count}
+			<input type="checkbox" name="sub[6][search_result][{VAR:value}]"/>{VAR:caption} {VAR:IMG_1} ({VAR:address}) - {VAR:single_count}/{VAR:double_count}/{VAR:suite_count}
 		</td>
 	</tr>
 	<!-- END SUB: SEARCH_RESULT -->

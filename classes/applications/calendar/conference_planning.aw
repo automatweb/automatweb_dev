@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.11 2006/12/11 11:10:16 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.12 2006/12/11 12:47:06 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -487,8 +487,19 @@ class conference_planning extends class_base
 					"attendees_count" => $sd["attendees_no"],
 					"dates" => $altern_dates,
 				));
+				$loc_inst = get_instance(CL_LOCATION);
+				$img_inst = get_instance(CL_IMAGE);
 				foreach($res as $loc_id => $data)
 				{
+					$imgs = $loc_inst->get_images($loc_id);
+					foreach($imgs as $img)
+					{
+						$sc->vars(array(
+							"IMG_".$img->ord() => html::img(array(
+								"url" => $img_inst->get_url_by_id($img->id()),
+							)),
+						));
+					}
 					$loc = obj($loc_id);
 					$sc->vars(array(
 						"caption" => $loc->name(),

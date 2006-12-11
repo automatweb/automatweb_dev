@@ -40,6 +40,54 @@
             <reltype>RELTYPE_BANK_PAYMENT</reltype>
             <caption>Pangamakse</caption>
       </property>
+      <property>
+            <name>images</name>
+            <table>objects</table>
+            <group>images</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <no_caption>1</no_caption>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <props>
+                  <num_0>ord</num_0>
+                  <num_1>file</num_1>
+            </props>
+            <table_fields>
+                  <num_0>ord</num_0>
+                  <num_1>file</num_1>
+            </table_fields>
+            <table_edit_fields>ord</table_edit_fields>
+            <caption>Pildid</caption>
+      </property>
+      <property>
+            <name>single_count</name>
+            <table>objects</table>
+            <group>accommondation</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>&amp;amp;Uuml;hekohaliste arv</caption>
+      </property>
+      <property>
+            <name>double_count</name>
+            <table>objects</table>
+            <group>accommondation</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kahekohaliste arv</caption>
+      </property>
+      <property>
+            <name>suite_count</name>
+            <table>objects</table>
+            <group>accommondation</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Sviitide arv</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_LOCATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -47,6 +95,14 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <images>
+                  <caption>Pildid</caption>
+            </images>
+            <accommondation>
+                  <caption>Majutus</caption>
+            </accommondation>
+      </groupinfo>
       <reltypes>
             <MAP>
                   <value>1</value>
@@ -68,6 +124,11 @@
                   <clid>CL_BANK_PAYMENT</clid>
                   <caption>Pangalink</caption>
             </BANK_PAYMENT>
+            <IMAGE>
+                  <value>5</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Pilt</caption>
+            </IMAGE>
       </reltypes>
 </properties>
 
