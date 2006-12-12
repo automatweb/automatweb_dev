@@ -193,7 +193,6 @@ function init_config($arr)
 			}
 		}
 	}
-
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_e = $sec + $micro;
 //	echo "timestamping took ",($ts_e - $ts_s), "seconds <br>";
@@ -226,7 +225,7 @@ function init_config($arr)
 	}
 
 
-	if (!$read_from_cache || true)
+	if (!$read_from_cache)
 	{
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_s = $sec + $micro;
