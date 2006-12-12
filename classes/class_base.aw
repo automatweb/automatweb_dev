@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.525 2006/12/08 08:36:38 kristo Exp $
+// $Id: class_base.aw,v 2.526 2006/12/12 10:26:52 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -707,7 +707,7 @@ class class_base extends aw_template
 			$cli->view_mode = 1;
 		};
 
-		foreach($resprops as $val)
+		foreach($resprops as $_k => $val)
 		{
 			if(!in_array($val["parent"], $this->leftout_layouts))
 			{
