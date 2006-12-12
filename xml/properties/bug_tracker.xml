@@ -717,6 +717,51 @@
             <parent>pr_h</parent>
             <field>pr_table</field>
       </property>
+      <property>
+            <name>stat_hrs_errs</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stat_hrs_errs</field>
+      </property>
+      <property>
+            <name>stat_hrs_overview</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stat_hrs_overview</field>
+      </property>
+      <property>
+            <name>stat_hrs_detail</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stat_hrs_detail</field>
+      </property>
+      <property>
+            <name>stat_proj_detail</name>
+            <table>objects</table>
+            <group>stat_proj_overview</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stat_proj_detail</field>
+      </property>
+      <property>
+            <name>stat_proj_detail_b</name>
+            <table>objects</table>
+            <group>stat_proj_overview</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stat_proj_detail_b</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -868,6 +913,14 @@
                   <caption>Minu Bugide stat</caption>
                   <parent>charts</parent>
             </my_bugs_stat>
+            <stat_hrs_overview>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;aja &amp;amp;uuml;levaade</caption>
+                  <parent>charts</parent>
+            </stat_hrs_overview>
+            <stat_proj_overview>
+                  <caption>Projektide &amp;amp;uuml;levaade</caption>
+                  <parent>charts</parent>
+            </stat_proj_overview>
       </groupinfo>
       <reltypes>
             <MONITOR>

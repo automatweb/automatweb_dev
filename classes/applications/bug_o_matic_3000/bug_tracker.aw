@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.91 2006/12/08 07:16:03 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.91 2006/12/08 07:16:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.92 2006/12/12 10:19:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.92 2006/12/12 10:19:57 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -290,6 +290,16 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property pr_table type=table store=no no_caption=1 parent=pr_h
 
+@default group=stat_hrs_overview
+
+	@property stat_hrs_errs type=table store=no no_caption=1
+	@property stat_hrs_overview type=table store=no no_caption=1
+	@property stat_hrs_detail type=table store=no no_caption=1
+
+@default group=stat_proj_overview
+
+	@property stat_proj_detail type=table store=no no_caption=1
+	@property stat_proj_detail_b type=table store=no no_caption=1
 
 @groupinfo general_sub caption="&Uuml;ldine" submit=no parent=general
 @groupinfo settings_people caption="Isikud" submit=no parent=general
@@ -332,6 +342,8 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo charts caption="Kaardid" submit=no
 	@groupinfo gantt_chart caption="Gantti diagramm" parent=charts submit=no
 	@groupinfo my_bugs_stat caption="Minu Bugide stat" parent=charts
+	@groupinfo stat_hrs_overview caption="T&ouml;&ouml;aja &uuml;levaade" parent=charts
+	@groupinfo stat_proj_overview caption="Projektide &uuml;levaade" parent=charts
 
 
 
@@ -398,6 +410,37 @@ class bug_tracker extends class_base
 		if ($prop["name"][0] == "s" && $prop["name"][1] == "_")
 		{
 			$prop["value"] = $arr["request"][$prop["name"]];
+		}
+
+		if (substr($prop["name"], 0, 4) == "reqs")
+		{
+			static $r_i;
+			if (!$r_i)
+			{
+				$r_i = get_instance("applications/bug_o_matic_3000/bt_req_impl");
+			}
+			$fn = "_get_".$prop["name"];
+			return $r_i->$fn($arr);
+		}
+		if (substr($prop["name"], 0, 4) == "devo" || substr($prop["name"], 0, 5) == "dev_o")
+		{
+			static $d_i;
+			if (!$d_i)
+			{
+				$d_i = get_instance("applications/bug_o_matic_3000/bt_devo_impl");
+			}
+			$fn = "_get_".$prop["name"];
+			return $d_i->$fn($arr);
+		}
+		if (substr($prop["group"], 0, 8) == "problems")
+		{
+			static $p_i;
+			if (!$p_i)
+			{
+				$p_i = get_instance("applications/bug_o_matic_3000/bt_problems_impl");
+			}
+			$fn = "_get_".$prop["name"];
+			return $p_i->$fn($arr);
 		}
 
 		switch($prop["name"])
@@ -492,16 +535,15 @@ class bug_tracker extends class_base
 				break;
 
 			case "sp_tb":
-				$this->_sp_tb($arr);
-				break;
-
 			case "sp_table":
-				$this->_sp_table($arr);
-				break;
-
 			case "sp_s_res":
-				$this->_sp_s_res($arr);
-				break;
+				static $sp_i;
+				if (!$sp_i)
+				{
+					$sp_i = get_instance("applications/bug_o_matic_3000/bt_settings_people_impl");
+				}	
+				$fn = "_get_".$arr["prop"]["name"];
+				return $sp_i->$fn($arr);
 		
 			case "sp_p_name":
 			case "sp_p_co":
@@ -509,6 +551,19 @@ class bug_tracker extends class_base
 				$prop["autocomplete_source"] = $this->mk_my_orb($prop["name"] == "sp_p_co" ? "co_autocomplete_source" : "p_autocomplete_source");
 				$prop["autocomplete_params"] = array($prop["name"]);
 				break;
+
+			case "stat_hrs_overview":
+			case "stat_hrs_detail":
+			case "stat_hrs_errs":
+			case "stat_proj_detail":
+			case "stat_proj_detail_b":
+				static $st_i;
+				if (!$st_i)
+				{
+					$st_i = get_instance("applications/bug_o_matic_3000/bt_stat_impl");
+				}
+				$fn = "_get_".$prop["name"];
+				return $st_i->$fn($arr);
 		};
 		return $retval;
 	}
@@ -644,13 +699,15 @@ class bug_tracker extends class_base
 				'working_hours' => $working_hours
 			));
 			$sum+=$working_hours;
+			$cnt +=  count($comments);
 		}
 
 		$t->sort_by();
 		$t->set_sortable(false);
 		$t->define_data(array(
 			"name" => t("Summa"),
-			"working_hours" => $sum
+			"working_hours" => $sum,
+			"comment_count" => $cnt
 		));
 		return PROP_OK;
 	}
@@ -2683,100 +2740,6 @@ class bug_tracker extends class_base
 		
 	}
 
-	function _sp_tb($arr)
-	{
-		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_button(array(
-			"name" => "save",
-			"tooltip" => t("Salvesta"),
-			"action" => "add_s_res_to_p_list",
-			"img" => "save.gif",
-		));
-		$tb->add_button(array(
-			"name" => "delete",
-			"tooltip" => t("Kustuta"),
-			"img" => "delete.gif",
-			"action" => "remove_p_from_l_list",
-		));
-	}
-
-	function _init_p_tbl(&$t)
-	{
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "co",
-			"caption" => t("Organisatsioon"),
-			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "phone",
-			"caption" => t("Telefon"),
-			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "email",
-			"caption" => t("E-mail"),
-			"align" => "center",
-		));
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "oid"
-		));
-	}
-
-	function _sp_table($arr)
-	{	
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_p_tbl($t);
-
-		foreach($this->get_people_list($arr["obj_inst"]) as $p_id => $p_nm)
-		{
-			$p = obj($p_id);
-			$t->define_data(array(
-				"name" => html::obj_change_url($p),
-				"co" => html::obj_change_url($p->prop("work_contact")),
-				"phone" => $p->prop("phone.name"),
-				"email" => $p->prop("email.name"),
-				"oid" => $p->id()
-			));
-		}
-	}
-
-	function _sp_s_res($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_p_tbl($t);
-
-		if ($arr["request"]["sp_p_name"] != "" || $arr["request"]["sp_p_co"] != "")
-		{
-			$param = array(
-				"class_id" => CL_CRM_PERSON,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"name" => "%".$arr["request"]["sp_p_name"]."%"
-			);
-			if ($arr["request"]["sp_p_co"] != "")
-			{
-				$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
-			}
-			$ol = new object_list($param);
-			foreach($ol->arr() as $p)
-			{
-				$t->define_data(array(
-					"name" => html::obj_change_url($p),
-					"co" => html::obj_change_url($p->prop("work_contact")),
-					"phone" => $p->prop("phone.name"),
-					"email" => html::href(array("url" => "mailto:".$p->prop("email.mail"),"caption" => $p->prop("email.mail"))),
-					"oid" => $p->id()
-				));
-			}
-		}
-	}
-
 	/**
 		@attrib name=add_s_res_to_p_list
 	**/
@@ -3402,830 +3365,6 @@ die();
 				"iconurl" => icons::get_icon_url(CL_CRM_COMPANY)
 			));
 		}
-	}
-
-	function _get_reqs_tb($arr)
-	{
-		$pt = $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
-		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_menu_button(array(
-			"name" => "add_req",
-			"tooltip" => t("Lisa"),
-			"img" => "new.gif",
-		));
-		$tb->add_menu_item(array(
-			"parent" => "add_req",
-			"text" => t("Kategooria"),
-			"link" => html::get_new_url(CL_REQUIREMENT_CATEGORY, $pt, array(
-				"return_url" => get_ru(),
-			))
-		));
-		$tb->add_menu_item(array(
-			"parent" => "add_req",
-			"text" => t("N&otilde;ue"),
-			"link" => html::get_new_url(CL_PROCUREMENT_REQUIREMENT, $pt, array(
-				"return_url" => get_ru(),
-			))
-		));
-		$tb->add_button(array(
-			"name" => "delete",
-			"tooltip" => t("Kustuta"),
-			"img" => "delete.gif",
-			"action" => "delete",
-			"confirm" => t("Oled kindel, et soovid n&otilde;udeid kustutada?"),
-		));
-		$tb->add_separator();
-		$tb->add_button(array(
-			"name" => "cut",
-			"tooltip" => t("L&otilde;ika"),
-			"img" => "cut.gif",
-			"action" => "cut_b",
-		));
-		if (is_array($_SESSION["bt"]["cut_bugs"]) && count($_SESSION["bt"]["cut_bugs"]))
-		{
-			$tb->add_button(array(
-				"name" => "paste",
-				"tooltip" => t("Kleebi"),
-				"img	" => "paste.gif",
-				"action" => "paste_b",
-			));
-		}
-		$tb->add_separator();
-		$tb->add_button(array(
-			"name" => "export",
-			"tooltip" => t("Ekspordi"),
-			"img" => "export.gif",
-			"action" => "export_req",
-		));
-	}
-	
-	function _get_reqs_tree($arr)
-	{
-		classload("core/icons");
-		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
-			"tree_opts" => array(
-				"type" => TREE_DHTML, 
-				"persist_state" => true,
-				"tree_id" => "bt_reqs",
-			),
-			"root_item" => $arr["obj_inst"],
-			"ot" => new object_tree(array(
-				"parent" => $arr["obj_inst"]->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"class_id" => CL_REQUIREMENT_CATEGORY
-			)),
-			"var" => "tf",
-			"icon" => icons::get_icon_url(CL_MENU)
-		));
-	}
-
-	function _init_reqs_table(&$t)
-	{
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "createdby",
-			"caption" => t("Looja"),
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "created",
-			"caption" => t("Loodud"),
-			"align" => "center",
-			"type" => "time",
-			"numeric" => 1,
-			"format" => "d.m.Y H:i",
-		));
-		
-		$t->define_chooser(array(
-			"field" => "id",
-			"name" => "sel",
-		));
-	}
-
-	function _get_reqs_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		//$this->_init_reqs_table($t);
-
-		$pt = $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
-		$pto = obj($pt);
-		$ol = new object_list(array(
-			"class_id" => CL_PROCUREMENT_REQUIREMENT,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"parent" => $pt
-		));
-		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
-		$t->set_caption(sprintf(t("N&otilde;uded kategoorias %s"), $pto->name()));
-	}
-
-	function _get_reqs_p_tree($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_PROCUREMENT_REQUIREMENT,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
-		// get all projects from those
-		$p2req = array();
-		$ps2req = array();
-		$pp2req = array();
-		foreach($ol->arr() as $r)
-		{
-			if ($this->can("view", $r->prop("project")))
-			{
-				$p2req[(int)$r->prop("project")] ++;
-				$ps2req[(int)$r->prop("project")][$r->prop("state")]++;
-				$pp2req[(int)$r->prop("project")][$r->prop("pri")]++;
-			}
-		}
-		$p2req[(int)null]++;
-		$p2req[(int)null]--;
-		$t =& $arr["prop"]["vcl_inst"];
-		$i = get_instance(CL_PROCUREMENT_REQUIREMENT);
-		foreach($p2req as $proj => $cnt)
-		{
-			/*if (!is_oid($proj))
-			{
-				continue;
-			}*/
-			$po = obj($proj);
-			$nm = (is_oid($proj) ? $po->name() : t("Muud t&ouml;&ouml;d"))." ($cnt)";
-			if ($arr["request"]["proj"] == $proj && !$arr["request"]["state"] && !$arr["request"]["pri"] )
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-			$t->add_item(0, array(
-				"id" => "p_".$proj,
-				"parent" => 0,
-				"name" => $nm,
-				"url" => aw_url_change_var(array(
-					"proj" => $proj,
-					"state" => null,
-					"pri" => null
-				))
-			));
-
-			$t->add_item("p_".$proj, array(
-				"id" => $proj."_states",
-				"parent" => $proj,
-				"name" => t("Staatused"),
-				"url" => aw_url_change_var(array(
-					"proj" => $proj,
-					"state" => null,
-					"pri" => null
-				))
-			));
-
-
-			foreach($i->get_status_list() as $s_id => $s_nm)
-			{
-				if ($arr["request"]["proj"] == $proj && $arr["request"]["state"] === "s_".$s_id)
-				{
-					$s_nm = "<b>".$s_nm."</b>";
-				}
-				$t->add_item($proj."_states", array(
-					"id" => $proj."_state_".$s_id,
-					"parent" => $proj."_states",
-					"name" => $s_nm." (".(int)$ps2req[$proj][$s_id].")",
-					"url" => aw_url_change_var(array(
-						"proj" => $proj,
-						"state" => "s_".$s_id,
-						"pri" => null
-					))
-				));
-			}
-
-
-			$t->add_item("p_".$proj, array(
-				"id" => $proj."_pris",
-				"parent" => "p_".$proj,
-				"name" => t("Prioriteedid"),
-				"url" => aw_url_change_var(array(
-					"proj" => $proj,
-					"state" => null,
-					"pri" => null
-				))
-			));
-
-
-			foreach($i->get_priority_list(obj()) as $s_id => $s_nm)
-			{
-				if ($arr["request"]["proj"] == $proj && $arr["request"]["pri"] == $s_id)
-				{
-					$s_nm = "<b>".$s_nm."</b>";
-				}
-				$t->add_item($proj."_pris", array(
-					"id" => $proj."_pri_".$s_id,
-					"parent" => $proj."_pris",
-					"name" => $s_nm." (".(int)$pp2req[$proj][$s_id].")",
-					"url" => aw_url_change_var(array(
-						"proj" => $proj,
-						"state" => null,
-						"pri" => $s_id
-					))
-				));
-			}
-		}
-	}
-
-	function _get_reqs_p_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		//$this->_init_reqs_table($t);
-
-		$f = array(
-			"class_id" => CL_PROCUREMENT_REQUIREMENT,
-			"lang_id" => array(),
-			"site_id" => array(),
-		);
-		$po = obj();
-		if (!$arr["request"]["proj"])
-		{
-			$f["project"] = new obj_predicate_compare(OBJ_COMP_LESS, 1);
-		}
-		else
-		{
-			$f["project"] = $arr["request"]["proj"];
-			$po = obj($f["project"]);
-		}
-
-		if ($arr["request"]["state"])
-		{
-			$f["state"] = str_replace("s_", "", $arr["request"]["state"]);
-		}
-
-		if ($arr["request"]["pri"])
-		{
-			$f["pri"] = $arr["request"]["pri"];
-		}
-
-		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
-		$t->set_caption(sprintf(t("N&otilde;uded projektis %s"), $po->name()));
-	}
-
-	function _get_bug_tree_req($arr)
-	{
-return;
-		classload("core/icons");
-		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
-			"tree_opts" => array(
-				"type" => TREE_DHTML, 
-				"persist_state" => true,
-				"tree_id" => "bt_reqs",
-			),
-			"root_item" => $arr["obj_inst"],
-			"ot" => new object_tree(array(
-				"parent" => $arr["obj_inst"]->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"class_id" => CL_REQUIREMENT_CATEGORY
-			)),
-			"var" => "tf",
-			"icon" => icons::get_icon_url(CL_MENU)
-		));
-	}
-
-	function _get_dev_orders_tree($arr)
-	{
-		classload("core/icons");
-		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
-			"tree_opts" => array(
-				"type" => TREE_DHTML, 
-				"persist_state" => true,
-				"tree_id" => "bt_devos",
-			),
-			"root_item" => $arr["obj_inst"],
-			"ot" => new object_tree(array(
-				"parent" => $arr["obj_inst"]->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"class_id" => CL_DEVELOPMENT_ORDER_CAT
-			)),
-			"var" => "tf",
-			"icon" => icons::get_icon_url(CL_MENU)
-		));
-	}
-
-	function _get_dev_orders_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$pt = $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
-		$pto = obj($pt);
-		$f = array(
-			"class_id" => CL_DEVELOPMENT_ORDER,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"parent" => $pt
-		);
-		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
-		$t->set_caption(sprintf(t("Arendustellimused kategoorias %s"), $pto->name()));
-	}
-
-	function _get_dev_orders_tb($arr)
-	{
-		$pt = $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
-		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_menu_button(array(
-			"name" => "add_req",
-			"tooltip" => t("Lisa"),
-			"img" => "new.gif",
-		));
-		$tb->add_menu_item(array(
-			"parent" => "add_req",
-			"text" => t("Kategooria"),
-			"link" => html::get_new_url(CL_DEVELOPMENT_ORDER_CAT, $pt, array(
-				"return_url" => get_ru(),
-			))
-		));
-		$tb->add_menu_item(array(
-			"parent" => "add_req",
-			"text" => t("Arendustellimus"),
-			"link" => html::get_new_url(CL_DEVELOPMENT_ORDER, $pt, array(
-				"return_url" => get_ru(),
-			))
-		));
-		$tb->add_button(array(
-			"name" => "delete",
-			"tooltip" => t("Kustuta"),
-			"img" => "delete.gif",
-			"action" => "delete",
-			"confirm" => t("Oled kindel, et soovid tellimusi kustutada?"),
-		));
-		$tb->add_separator();
-		$tb->add_button(array(
-			"name" => "cut",
-			"tooltip" => t("L&otilde;ika"),
-			"img" => "cut.gif",
-			"action" => "cut_b",
-		));
-		if (is_array($_SESSION["bt"]["cut_bugs"]) && count($_SESSION["bt"]["cut_bugs"]))
-		{
-			$tb->add_button(array(
-				"name" => "paste",
-				"tooltip" => t("Kleebi"),
-				"img" => "paste.gif",
-				"action" => "paste_b",
-			));
-		}
-	}
-
-	function _get_problems_tb($arr)
-	{
-		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_new_button(array(CL_CUSTOMER_PROBLEM_TICKET), $arr["obj_inst"]->id());
-		$tb->add_delete_button();
-	}
-
-	function _get_problems_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$ol = new object_list(array(
-			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
-		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
-		$t->set_caption(t("Nimekiri probleemidest"));
-	}
-
-	function _get_reqs_c_tree($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_PROCUREMENT_REQUIREMENT,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
-		// get all cos from those
-		$c2req = array();
-		$c2empl = array();
-		foreach($ol->arr() as $r)
-		{
-			$c2req[(int)$r->prop("req_co")] ++;
-			$c2empl[(int)$r->prop("req_co")][$r->prop("req_p")]++;
-		}
-		$t =& $arr["prop"]["vcl_inst"];
-		$i = get_instance(CL_PROCUREMENT_REQUIREMENT);
-		foreach($c2req as $co => $cnt)
-		{
-			if (!is_oid($co))
-			{
-				continue;
-			}
-			$po = obj($co);
-			$nm = $po->name()." ($cnt)";
-			if ($arr["request"]["co"] == $co && !$arr["request"]["empl"])
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-			$t->add_item(0, array(
-				"id" => "p_".$co,
-				"parent" => 0,
-				"name" => $nm,
-				"url" => aw_url_change_var(array(
-					"co" => $co,
-					"empl" => null,
-				))
-			));
-
-			foreach(safe_array($c2empl[$co]) as $p_id => $p_cnt)
-			{
-				$p_obj = obj($p_id);
-				$nm = $p_obj->name()." ($p_cnt)";
-				if ($arr["request"]["empl"] == $p_id)
-				{
-					$nm = "<b>".$nm."</b>";
-				}
-				$t->add_item("p_".$co, array(
-					"id" => "c_".$p_id,
-					"parent" => "p_".$co,
-					"name" => $nm,
-					"url" => aw_url_change_var(array(
-						"co" => $co,
-						"empl" => $p_id,
-					))
-				));
-			}
-		}
-	}
-
-	function _get_reqs_c_table($arr)
-	{
-		if (!$arr["request"]["empl"] && !$arr["request"]["co"])
-		{
-			return;
-		}
-		$t =& $arr["prop"]["vcl_inst"];
-		//$this->_init_reqs_table($t);
-
-		$f = array(
-			"class_id" => CL_PROCUREMENT_REQUIREMENT,
-			"lang_id" => array(),
-			"site_id" => array(),
-		);
-		if ($arr["request"]["empl"])
-		{
-			$f["req_p"] = $arr["request"]["empl"];
-		}
-
-		$coo = obj();
-		if ($arr["request"]["co"])
-		{
-			$f["req_co"] = $arr["request"]["co"];
-			$coo = obj($f["req_co"]);
-		}
-
-		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "created", "pri", "req_co", "req_p", "project", "process", "planned_time"), CL_PROCUREMENT_REQUIREMENT);
-		$t->set_caption(sprintf(t("N&otilde;uded organisatsioonile %s"), $coo->name()));
-	}
-
-	function _get_pu_tree($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		$cos = array();
-		$co2sect = array();
-		foreach($ol->arr() as $o)
-		{
-			$cos[$o->prop("orderer_co")]++;
-			$co2sect[$o->prop("orderer_co")][$o->prop("orderer_unit")]++;
-		}
-
-		$t =& $arr["prop"]["vcl_inst"];
-		$i = get_instance(CL_CUSTOMER_PROBLEM_TICKET);
-		foreach($cos as $co => $cnt)
-		{
-			if (!is_oid($co))
-			{
-				continue;
-			}
-			$po = obj($co);
-			$nm = $po->name()." ($cnt)";
-			if ($arr["request"]["co"] == $co && !$arr["request"]["asect"])
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-			$t->add_item(0, array(
-				"id" => "p_".$co,
-				"parent" => 0,
-				"name" => $nm,
-				"url" => aw_url_change_var(array(
-					"co" => $co,
-					"asect" => null,
-				))
-			));
-
-			// add al org sections under the tree
-			foreach($co2sect[$co] as $sect => $s_cnt)
-			{
-				$po = obj($sect);
-				$nm = $po->name()." ($cnt)";
-				if ($arr["request"]["co"] == $co && $arr["request"]["asect"] == $sect)
-				{
-					$nm = "<b>".$nm."</b>";
-				}
-				$t->add_item("p_".$co, array(
-					"id" => "s_".$sect,
-					"parent" => "p_".$co,
-					"name" => $nm,
-					"url" => aw_url_change_var(array(
-						"co" => $co,
-						"asect" => $sect,
-					))
-				));
-				
-			}
-		}
-	}
-
-	function _get_pu_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-
-		$f = array(
-			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
-			"lang_id" => array(),
-			"site_id" => array(),
-		);
-		$pto = obj();
-		if ($arr["request"]["co"])
-		{
-			$f["orderer_co"] = $arr["request"]["co"];
-			$pto = obj($f["orderer_co"]);
-		}
-		if ($arr["request"]["asect"])
-		{
-			$f["orderer_unit"] = $arr["request"]["asect"];
-		}
-
-		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "createdby", "created", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
-		$t->set_caption(sprintf(t("Probleemid organisatsioonil %s"), $pto->name()));
-	}
-
-	function _get_devo_p_tree($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_DEVELOPMENT_ORDER,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
-		// get all projects from those
-		$p2req = array();
-		foreach($ol->arr() as $r)
-		{
-			if ($this->can("view", $r->prop("project")))
-			{
-				$p2req[(int)$r->prop("project")] ++;
-			}
-		}
-		$p2req[(int)null]++;
-		$p2req[(int)null]--;
-		$t =& $arr["prop"]["vcl_inst"];
-		$i = get_instance(CL_DEVELOPMENT_ORDER);
-		foreach($p2req as $proj => $cnt)
-		{
-			/*if (!is_oid($proj))
-			{
-				continue;
-			}*/
-			$po = obj($proj);
-			$nm = (is_oid($proj) ? $po->name() : t("Muud t&ouml;&ouml;d"))." ($cnt)";
-			if ($arr["request"]["proj"] == $proj && !$arr["request"]["state"] && !$arr["request"]["pri"] )
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-			$t->add_item(0, array(
-				"id" => "p_".$proj,
-				"parent" => 0,
-				"name" => $nm,
-				"url" => aw_url_change_var(array(
-					"proj" => $proj,
-					"state" => null,
-					"pri" => null
-				))
-			));
-		}
-	}
-
-	function _get_devo_p_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$pto = obj();
-		if ($arr["request"]["proj"])
-		{
-			$p = $arr["request"]["proj"];
-			$pto = obj($p);
-		}
-		else
-		{
-			$p = new obj_predicate_compare(OBJ_COMP_NULL);
-		}
-		$f = array(
-			"class_id" => CL_DEVELOPMENT_ORDER,
-			"project" => $p,
-			"lang_id" => array(),
-			"site_id" => array(),
-		);
-		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
-		$t->set_caption(sprintf(t("Arendustellimused projektile %s"), $pto->name()));
-	}
-
-	function _get_devo_c_tree($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_DEVELOPMENT_ORDER,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
-		// get all projects from those
-		$p2req = array();
-		foreach($ol->arr() as $r)
-		{
-			if ($this->can("view", $r->prop("customer")))
-			{
-				$p2req[(int)$r->prop("customer")] ++;
-			}
-		}
-		$p2req[(int)null]++;
-		$p2req[(int)null]--;
-		$t =& $arr["prop"]["vcl_inst"];
-		$i = get_instance(CL_DEVELOPMENT_ORDER);
-		foreach($p2req as $proj => $cnt)
-		{
-			/*if (!is_oid($proj))
-			{
-				continue;
-			}*/
-			$po = obj($proj);
-			$nm = (is_oid($proj) ? $po->name() : t("Muud t&ouml;&ouml;d"))." ($cnt)";
-			if ($arr["request"]["cust"] == $proj )
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-			$t->add_item(0, array(
-				"id" => "p_".$proj,
-				"parent" => 0,
-				"name" => $nm,
-				"url" => aw_url_change_var(array(
-					"cust" => $proj,
-					"state" => null,
-					"pri" => null
-				))
-			));
-		}
-	}
-
-	function _get_devo_c_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$pto = obj();
-		if ($arr["request"]["cust"])
-		{
-			$p = $arr["request"]["cust"];
-			$pto = obj($p);
-		}
-		else
-		{
-			$p = new obj_predicate_compare(OBJ_COMP_NULL);
-		}
-		$f = array(
-			"class_id" => CL_DEVELOPMENT_ORDER,
-			"customer" => $p,
-			"lang_id" => array(),
-			"site_id" => array(),
-		);
-		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "created", "createdby", "orderer_co", "orderer_unit", "customer", "project"), CL_DEVELOPMENT_ORDER);
-		$t->set_caption(sprintf(t("Arendustellimused tellijale %s"), $pto->name()));
-	}
-
-	function _get_pp_tree($arr)
-	{
-		$ol = new object_list(array(
-			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
-			"lang_id" => array(),
-			"site_id" => array(),
-		));
-		// get all projects from those
-		$p2req = array();
-		foreach($ol->arr() as $r)
-		{
-			if ($this->can("view", $r->prop("project")))
-			{
-				$p2req[(int)$r->prop("project")] ++;
-			}
-		}
-		$p2req[(int)null]++;
-		$p2req[(int)null]--;
-		$t =& $arr["prop"]["vcl_inst"];
-		$i = get_instance(CL_CUSTOMER_PROBLEM_TICKET);
-		foreach($p2req as $proj => $cnt)
-		{
-			/*if (!is_oid($proj))
-			{
-				continue;
-			}*/
-			$po = obj($proj);
-			$nm = (is_oid($proj) ? $po->name() : t("Muud t&ouml;&ouml;d"))." ($cnt)";
-			if ($arr["request"]["proj"] == $proj && !$arr["request"]["state"] && !$arr["request"]["pri"] )
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-			$t->add_item(0, array(
-				"id" => "p_".$proj,
-				"parent" => 0,
-				"name" => $nm,
-				"url" => aw_url_change_var(array(
-					"proj" => $proj,
-					"state" => null,
-					"pri" => null
-				))
-			));
-		}
-	}
-
-	function _get_pp_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$pto = obj();
-		if ($arr["request"]["proj"])
-		{
-			$p = $arr["request"]["proj"];
-			$pto = obj($p);
-		}
-		else
-		{
-			$p = new obj_predicate_compare(OBJ_COMP_NULL);
-		}
-		$f = array(
-			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
-			"project" => $p,
-			"lang_id" => array(),
-			"site_id" => array(),
-		);
-		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
-		$t->set_caption(sprintf(t("Probleemid projektis %s"), $pto->name()));
-	}
-
-	function _get_pr_tree($arr)
-	{
-		classload("core/icons");
-		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
-			"tree_opts" => array(
-				"type" => TREE_DHTML, 
-				"persist_state" => true,
-				"tree_id" => "bt_pr_reqs",
-			),
-			"root_item" => $arr["obj_inst"],
-			"ot" => new object_tree(array(
-				"parent" => $arr["obj_inst"]->id(),
-				"lang_id" => array(),
-				"site_id" => array(),
-				"class_id" => array(CL_REQUIREMENT_CATEGORY,CL_PROCUREMENT_REQUIREMENT)
-			)),
-			"var" => "tf",
-			"icon" => icons::get_icon_url(CL_MENU)
-		));
-	}
-
-	function _get_pr_table($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		if (!$arr["request"]["tf"])
-		{
-			return;
-		}
-		/*$req_tree = new object_tree(array(
-			"parent" => $arr["request"]["tf"],
-			"lang_id" => array(),
-			"site_id" => array(),
-			"class_id" => array(CL_REQUIREMENT_CATEGORY,CL_PROCUREMENT_REQUIREMENT)
-		));*/
-
-		$pto = obj($arr["request"]["tf"]);
-		$f = array(
-			"class_id" => CL_CUSTOMER_PROBLEM_TICKET,
-			"requirement" => $arr["request"]["tf"], //$req_tree->ids(),
-			"lang_id" => array(),
-			"site_id" => array(),
-		);
-		$ol = new object_list($f);
-		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
-		$t->set_caption(sprintf(t("Probleemid n&otilde;udel %s"), $pto->name()));
 	}
 
 	/**

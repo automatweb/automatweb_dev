@@ -1,14 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.2 2006/06/26 10:26:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_comment.aw,v 1.3 2006/12/12 10:19:57 kristo Exp $
 // bug_comment.aw - Bugi kommentaar 
 /*
 
-@classinfo syslog_type=ST_BUG_COMMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_BUG_COMMENT relationmgr=yes no_status=1 prop_cb=1
 
 @tableinfo aw_bug_comments index=aw_oid master_index=brother_of master_table=objects
 
 @default table=objects
 @default group=general
+
+@property comment type=textarea rows=5 cols=50 table=objects field=comment
+@caption Kommentaar
 
 @property prev_state type=select table=aw_bug_comments field=aw_prev_state
 @caption Eelmine staatus
