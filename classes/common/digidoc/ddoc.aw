@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.10 2006/12/11 16:30:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.11 2006/12/12 14:42:03 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -493,7 +493,7 @@ class ddoc extends class_base
 		}
 		$p = new ddoc2_parser($ret["SignedDocData"]);
 		$content = $p->getDigiDoc();
-		if(!$this->set_ddoc($oid, $content))
+		if(!$this->set_ddoc($oid, $content, false))
 		{
 			$cl_file = get_instance(CL_FILE);
 			$final_loc = $cl_file->generate_file_path(array(
@@ -502,7 +502,7 @@ class ddoc extends class_base
 			$o = obj($oid);
 			$o->set_prop("ddoc_location", $final_loc);
 			$o->save();
-			if(!$this->set_ddoc($oid, $content))
+			if(!$this->set_ddoc($oid, $content, false))
 			{
 				error::raise(array(
 					"msg" => t("DigiDoc'i faili sisu seadmine eba&otilde;nnestus"),
@@ -513,7 +513,7 @@ class ddoc extends class_base
 		$o->set_name($name);
 		$o->save();
 		$this->_e();
-		return false;
+		return true;
 	}
 
 	/**
@@ -725,7 +725,7 @@ class ddoc extends class_base
 
 		@comment
 			Basically this adds file to ddoc container.
-			Either $file_oid or $file must be set. if $file is set, then corresponding CL_FILE object is takend and added to ddoc, otherwise file with given $name and $content is added, and the CL_FILE object is created automagically.
+			Either $file_oid or $file must be set. if $file_oid is set, then corresponding CL_FILE object is taken and added to ddoc, otherwise file with given $name and $content is added, and the CL_FILE object is created automagically.
 	**/
 	function add_file($arr)
 	{
@@ -760,7 +760,8 @@ class ddoc extends class_base
 
 			$p = new ddoc2_parser();
 			$o = obj($arr["oid"]);
-			$n = count(aw_unserialize($o->prop("files")));
+			$_tmp = aw_unserialize($o->prop("files"));
+			$n = (!is_array($_tmp) && !strlen($_tmp))?0:count($_tmp);
 			$hash = $p->getFileHash($file, "D".$n);
 
 			if(LOCAL_FILES)
@@ -805,6 +806,7 @@ class ddoc extends class_base
 				"size" => $file["size"],
 				"type" => $file["MIME"],
 				"name" => $file["name"],
+				"hash" => $hash["DigestValue"],
 			));
 			
 			$this->_e();
@@ -872,7 +874,7 @@ class ddoc extends class_base
 		{
 			if($data["hash"] == $hash)
 			{
-				return true;
+				return $data;
 			}
 		}
 		return false;
@@ -981,7 +983,9 @@ class ddoc extends class_base
 		// i don't use the parser results here because i don't get the file contents from there so easily
 		foreach($files as $ddoc_id => $data)
 		{
-			if(!$save || !$this->_hash_exists($oid, $data["hash"]))
+			// anyway.. this checks if there is need to recreate aw file objects($save var), 
+			// and if given hash exists already in ddoc metadata. if it doesen't aw file object is created
+			if(!$save || !($from_hash_exists = $this->_hash_exists($oid, $data["hash"])))
 			{
 				$id = $file_inst->create_file_from_string(array(
 					"parent" => $oid,
@@ -1004,6 +1008,16 @@ class ddoc extends class_base
 					"to" => $id,
 				));
 			}
+			else
+			{
+				// well.. this is for the moment's where connection to aw file object is lost somewhy
+				// actually i should do a object check also ..:S 
+				$o->connect(array(
+					"type" => "RELTYPE_SIGNED_FILE",
+					"to" => $from_hash_exists["file"],
+				));
+			}
+
 		}
 		$o->save();
 		// set signatures
@@ -1105,6 +1119,42 @@ class ddoc extends class_base
 
 		// TODO
 		// OKEI SIIN MA PEAKS SIIS PREPARE STAADIUMIS VAATAMA MIDA TAHEKTASE ALLKIRJASTADA(kas ddoc v6i midagi muud
+		/*
+			kui keegi m6tleb et miks seda kontrolli ja tyhja digidoc konteineri tegemist ei v6iks varem teha, ning siia j22ks ainult
+			allkirjastamise funktsionaalsus, siis lihtsalt siin on asi kindel et l2heb allkirjastamiseks. ehk siis muiduiiufsd
+		*/
+		if($arr["step"] == "PREPARE")
+		{
+			if(!isset($arr["ddoc_oid"]))
+			{
+				// tahetakse faili allkirjastada, ehk peab tegema uue tyhja ddoc konteineri ja faili sinna ennem panema
+				if(is_oid($arr["file_oid"]))
+				{
+					$file_obj = obj($arr["file_oid"]);
+					$new_ddoc = obj();
+					$new_ddoc->set_class_id(CL_DDOC);
+					$new_ddoc->set_parent($file_obj->parent());
+					$new_ddoc->save_new();
+
+					if(!$this->create_empty($new_ddoc->id(), $file_obj->name()))
+					{
+						error::raise(array(
+							"msg" => t("Uue t&uuml;hja digidoc konteineri loomine eba&otilde;nnestus"),
+						));
+					}
+					if(!$this->add_file(array(
+						"oid" => $new_ddoc->id(),
+						"file_oid" => $arr["file_oid"],
+					)))
+					{
+						error::raise(array(
+							"msg" => t("Faili lisamine digidoc konteinerisse eba&otilde;nnestus"),
+						));
+					}
+					$arr["ddoc_oid"] = $new_ddoc->id();
+				}
+			}
+		}
 		$ddoc_oid = $arr["ddoc_oid"];
 
 
@@ -1236,13 +1286,17 @@ class ddoc extends class_base
 					$ret = $this->digidoc->WSDL->GetSignedDoc();
 					if(PEAR::isError($ret))
 					{
-						die("Uue ddoc'i saamine eba6nnestus: ".$ret->getMessage());
+						error::raise(array(
+							"msg" => t("Allkirjastatud digidoc konteineri saamine eba&otilde;nnestus:".$ret->getMessage()),
+						));
 					}
 					$p = new ddoc2_parser($ret["SignedDocData"]);
 					$content = $p->getDigiDoc();
 					if(!$this->set_ddoc($ddoc_oid, $content))
 					{
-						die("uue ddoc'i sisu m22ramine eba6nnestus");
+						error::raise(array(
+							"msg" => t("DigiDoc konteineri sisu m&auml;&auml;ramine eba&otilde;nnestus"),
+						));
 					}
 
 					/*
@@ -1311,13 +1365,17 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->RemoveSignature($id);
 		if(PEAR::isError($ret))
 		{
-			die("rem.sig.re.sig.rotting:".$ret->getMessage());
+			error::raise(array(
+				"msg" => t("Ei suutnud eemaldada allkirja digidoc konteinerist:".$ret->getMessage()),
+			));
 		}
 		$this->digidoc->addHeader('SessionCode', $_SESSION["scode"]);
 		$ret = $this->digidoc->WSDL->GetSignedDoc();
 		if(PEAR::isError($ret))
 		{
-			die("rem.sig.get.new.doc.rotting:".$ret->getMessage());
+			error::raise(array(
+				"msg" => t("Ei suutnud saada uut digidoc konteinerit:".$ret->getMessage()),
+			));
 		}
 		else
 		{

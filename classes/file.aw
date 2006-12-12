@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.141 2006/12/12 12:13:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.142 2006/12/12 14:42:01 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -132,16 +132,34 @@ class file extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				switch($this->is_signed($arr["obj_inst"]->id()))
+				$ddoc_inst = get_instance(CL_DDOC);
+				$res = $this->is_signed($arr["obj_inst"]->id());
+				switch($res["status"])
 				{
 					case 1:
 						$data["value"] = t("Allkirjastatud fail");
 						break;
 					case 0:
-						$data["value"] = t("Allkirjasta DigiDoc konteiner");
+						$url = $ddoc_inst->sign_url(array(
+							"ddoc_oid" => $res["ddoc"],
+						));
+						$ddoc = obj($res["ddoc"]);
+						$data["value"] = html::href(array(
+							"url" => "#",
+							"caption" => t("Allkirjasta DigiDoc konteiner"),
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".sprintf(t("Faili: %s, allkirjastamine"), $ddoc->name())."\", 410, 250);",
+						));
+
 						break;
 					case -1:
-						$data["value"] = t("Allkirjasta fail");
+						$url = $ddoc_inst->sign_url(array(
+							"file_oid" => $arr["obj_inst"]->id(),
+						));
+						$data["value"] = html::href(array(
+							"url" => "#",
+							"caption" => t("Allkirjasta fail"),
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".sprintf(t("Faili: %s, allkirjastamine"), $arr["obj_inst"]->name())."\", 410, 250);",
+						));
 						break;
 				}
 				break;
@@ -619,9 +637,18 @@ class file extends class_base
 		@comment
 			finds out if given file object is signed or not.
 		@returns
+			array(
+				status => [1|0|-1]
+				ddoc => oid
+			)
+			Where "status" is:
+
 			1 if is signed
 			0 if file is set into digidoc container, which is not signed
 			-1 if file isn't in digidoc container
+
+			and "ddoc" is:
+			ddoc objects id in which this file lies in.
 	**/
 	function is_signed($oid)
 	{
@@ -637,19 +664,21 @@ class file extends class_base
 			"type" => "RELTYPE_SIGNED_FILE",
 			"to" => $oid,
 		));
+		$return = array();
 		if(count($ret))
 		{
 			$ret = current($ret);
 			$ret = $ret["from"];
 			$inst = get_instance(CL_DDOC);
-			$ret = $inst->is_signed($ret);
-			$ret = $ret?1:0;
+			$tmp = $inst->is_signed($ret);
+			$return["status"] = $tmp?1:0;
+			$return["ddoc"] = $ret;
 		}
 		else
 		{
-			$ret = -1;
+			$return["status"] = -1;
 		}
-		return $ret;
+		return $return;
 	}
 
 	////
