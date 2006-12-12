@@ -20,6 +20,7 @@
             <group>general</group>
             <type>text</type>
             <store>no</store>
+            <editonly>1</editonly>
             <field>signed</field>
             <caption>Allkirjastatud</caption>
       </property>

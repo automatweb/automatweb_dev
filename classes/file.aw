@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.140 2006/12/11 16:46:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.141 2006/12/12 12:13:28 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -33,7 +33,7 @@
 	@property filename type=text store=no field=name form=+emb
 	@caption Faili nimi
 
-	@property signed type=text store=no
+	@property signed type=text store=no editonly=1
 	@caption Allkirjastatud
 
 	@property file type=fileupload form=+emb
