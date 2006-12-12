@@ -2,7 +2,7 @@ var arrBronsTry = Array(); // make the array for checkBrons(), if all's ok, then
 var arrBronsActive = Array(); // currently red on the screen
 var bronTexts = Array();
 bronTexts["BRON"] = "Broneeri";
-bronTexts["FREE"] = "Vaba";
+bronTexts["FREE"] = "VABA";
 var bronErrors = Array();
 bronErrors["CANT_BRON"] = "Ei saa broneerida";
 
