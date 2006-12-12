@@ -11,15 +11,6 @@
             <caption>Taotleja</caption>
       </property>
       <property>
-            <name>country</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>P&amp;amp;auml;riltolumaa</caption>
-      </property>
-      <property>
             <name>procurator</name>
             <table>objects</table>
             <group>general</group>
@@ -262,16 +253,6 @@
             <type>date_select</type>
             <caption>Makse kuup&amp;amp;auml;ev</caption>
       </property>
-      <property>
-            <name>procurator_menu</name>
-            <table>objects</table>
-            <group>web</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PROCURATOR_MENU</reltype>
-            <caption>Volinike kaust</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_PATENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -292,9 +273,6 @@
             <fee>
                   <caption>Riigil&amp;amp;otilde;iv</caption>
             </fee>
-            <web>
-                  <caption>Saidilt lisamine</caption>
-            </web>
       </groupinfo>
       <reltypes>
             <APPLICANT>
@@ -310,11 +288,6 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Volinik</caption>
             </PROCURATOR>
-            <WARRANT>
-                  <value>3</value>
-                  <clid>CL_FILE</clid>
-                  <caption>Volikiri</caption>
-            </WARRANT>
             <REPRODUCTION>
                   <value>9</value>
                   <clid>CL_FILE</clid>
@@ -346,10 +319,15 @@
                   <caption>Volinike kaust</caption>
             </PROCURATOR_MENU>
             <AUTHORIZED_PERSON>
-                  <calue>10</calue>
+                  <value>10</value>
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Volitatud isik</caption>
             </AUTHORIZED_PERSON>
+            <BANK_PAYMENT>
+                  <value>11</value>
+                  <clid>CL_BANK_PAYMENT</clid>
+                  <caption>Pangalingi objekt</caption>
+            </BANK_PAYMENT>
       </reltypes>
 </properties>
 

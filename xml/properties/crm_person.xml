@@ -993,6 +993,16 @@
             <caption>Toimetused</caption>
       </property>
       <property>
+            <name>correspond_address</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CORRESPOND_ADDRESS</reltype>
+            <caption>Kirjavahetuse aadress</caption>
+      </property>
+      <property>
             <name>udef_ch1</name>
             <table>objects</table>
             <group>data</group>
@@ -1507,6 +1517,11 @@
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 3</caption>
             </VARUSER3>
+            <CORRESPOND_ADDRESS>
+                  <value>58</value>
+                  <clid>CL_CRM_ADDRESS</clid>
+                  <caption>Aadressid</caption>
+            </CORRESPOND_ADDRESS>
       </reltypes>
       <layout>
             <ct_super>

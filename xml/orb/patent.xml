@@ -8,7 +8,15 @@
 			</function>
 		</action>
 
-		<action name="find_products">
+		<action name="procurator_popup">
+			<function name="procurator_popup">
+				<arguments>
+					<required name="parent" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="find_products" nologin="1">
 			<function name="find_products">
 				<arguments>
 					<required name="ru" type="string" />
@@ -18,6 +26,14 @@
 
 		<action name="country_popup">
 			<function name="country_popup">
+				<arguments>
+					<required name="var" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="payer_popup">
+			<function name="payer_popup">
 				<arguments>
 				</arguments>
 			</function>

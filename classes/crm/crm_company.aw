@@ -187,6 +187,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property field_manager type=releditor mode=manager reltype=RELTYPE_FIELD props=name,class_name table_fields=name,class_name direct_links=1
 	@caption Valdkonnad
 
+	@property correspond_address type=relpicker reltype=RELTYPE_CORRESPOND_ADDRESS
+	@caption Kirjavahetuse aadress
+
 	property classif1 type=classificator store=connect reltype=RELTYPE_METAMGR
 	caption Asutuse omadused
 
@@ -1216,6 +1219,10 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype BUYER_REFERAL_TYPE value=64 clid=CL_META
 @caption sissetuleku meetod
+
+@reltype CORRESPOND_ADDRESS value=65 clid=CL_CRM_ADDRESS
+@caption Aadressid
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (

@@ -486,6 +486,15 @@
             <caption>Valdkonnad</caption>
       </property>
       <property>
+            <name>correspond_address</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CORRESPOND_ADDRESS</reltype>
+            <field>correspond_address</field>
+            <caption>Kirjavahetuse aadress</caption>
+      </property>
+      <property>
             <name>userta1</name>
             <table>objects</table>
             <group>add_info</group>
@@ -3549,6 +3558,11 @@
                   <clid>CL_META</clid>
                   <caption>sissetuleku meetod</caption>
             </BUYER_REFERAL_TYPE>
+            <CORRESPOND_ADDRESS>
+                  <value>65</value>
+                  <clid>CL_CRM_ADDRESS</clid>
+                  <caption>Aadressid</caption>
+            </CORRESPOND_ADDRESS>
       </reltypes>
       <layout>
             <co_top>

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.153 2006/12/08 07:16:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.154 2006/12/12 16:48:48 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -374,6 +374,10 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 @groupinfo data caption="Andmed"
 @default group=data
 
+@property correspond_address type=relpicker reltype=RELTYPE_CORRESPOND_ADDRESS
+@caption Kirjavahetuse aadress
+
+
 @property udef_ch1 type=chooser multiple=1
 @caption Kasutajadefineeritud CH1
 
@@ -612,6 +616,9 @@ caption Sõbragrupid
 
 @reltype VARUSER3 value=57 clid=CL_META
 @caption kasutajadefineeritud muutuja 3
+
+@reltype CORRESPOND_ADDRESS value=58 clid=CL_CRM_ADDRESS
+@caption Aadressid
 
 */
 
