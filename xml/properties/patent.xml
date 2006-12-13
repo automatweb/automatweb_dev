@@ -49,6 +49,24 @@
             <caption>Lisainfo</caption>
       </property>
       <property>
+            <name>verified</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>Kinnitatud</caption>
+      </property>
+      <property>
+            <name>exported</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>Eksporditud</caption>
+      </property>
+      <property>
             <name>type</name>
             <table>objects</table>
             <group>trademark</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.17 2006/12/12 16:48:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.18 2006/12/13 13:57:38 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -33,6 +33,13 @@
 	@property additional_info type=textarea 
 	@caption Lisainfo
 	
+	@property verified type=checkbox 
+	@caption Kinnitatud
+
+	@property exported type=checkbox 
+	@caption Eksporditud
+
+
 	property phone type=textbox
 	caption Telefon
 	
@@ -391,11 +398,11 @@ class patent extends class_base
 	function parse_alias($arr)
 	{
 		enter_function("patent::parse_alias");
-		if($_GET["patent_id"])
+		if($_GET["trademark_id"])
 		{
 			$_SESSION["patent"] = null;
-			$_SESSION["patent"]["id"] = $_GET["patent_id"];
-			$this->fill_session($_GET["patent_id"]);
+			$_SESSION["patent"]["id"] = $_GET["trademark_id"];
+			$this->fill_session($_GET["trademark_id"]);
 		}
 		
 		if(!$_SESSION["patent"]["data_type"])
@@ -1038,7 +1045,7 @@ class patent extends class_base
 		if($_POST["add_new_applicant"] || $_POST["applicant_id"] != "")
 		{
 			$_SESSION["patent"]["add_new_applicant"] = null;
-			return aw_url_change_var("patent_id" , null , $arr["return_url"]);
+			return aw_url_change_var("trademark_id" , null , $arr["return_url"]);
 			//return $arr["return_url"];
 		}
 		
@@ -1047,7 +1054,7 @@ class patent extends class_base
 //		{
 //			return aw_url_change_var("data_type" , null , $arr["return_url"]);
 //		}
-		return aw_url_change_var("patent_id" , null , aw_url_change_var("data_type" , ($arr["data_type"]+1) , $arr["return_url"]));
+		return aw_url_change_var("trademark_id" , null , aw_url_change_var("data_type" , ($arr["data_type"]+1) , $arr["return_url"]));
 	}
 	
 	function submit_applicant()
@@ -1386,7 +1393,10 @@ class patent extends class_base
 			$c = "";
 			foreach($obj_list->arr() as $key => $patent)
 			{
-				$url = $section."/?patent_id=".$patent->id();
+	//			$url = $section."?trademark_id=".$patent->id();
+				$url = aw_url_change_var("trademark_id", $patent->id());
+				$url = aw_url_change_var("data_type", null , $url);
+				
 				$this->vars(array(
 					"name" 	 	=> $patent->name(),
 					"id"	 	=> $patent->id(),
