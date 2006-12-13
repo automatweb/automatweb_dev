@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.1 2006/12/13 10:39:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.2 2006/12/13 15:48:38 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -9,36 +9,73 @@
 @default group=general
 @default field=meta
 @default method=serialize
+#GENERAL
+	@property not_verified_menu type=relpicker reltype=RELTYPE_NOT_VERIFIED_MENU
+	@caption Kinnitamata taotluste kaust
+	
+	@property verified_menu type=relpicker reltype=RELTYPE_VERIFIED_MENU
+	@caption Kinnitatud taotluste kaust
+
+	@property series type=relpicker reltype=RELTYPE_SERIES
+	@caption Numbriseeria
+
+	@property trademark_add type=relpicker reltype=RELTYPE_ADD
+	@caption Kaubam&auml;rgitaotluste lisamine
 
 
-#OBJECTS
-@groupinfo name=objects caption=Objektid
-@default group=objects
+#TAOTLUSED
+@groupinfo name=applications caption=Taotlused
+@default group=applications
 	
 	@property objects_tb type=toolbar no_caption=1 store=no
 	
 	@layout objects_lay type=hbox width=20%:80%
-	
+
 		@layout objects_l type=vbox parent=objects_lay
+			
+			@layout trademark_tr_l type=vbox parent=objects_l closeable=1 area_caption=Taotluste&nbsp;puu
+				@property trademark_tr type=treeview no_caption=1 store=no parent=trademark_tr_l
 			@layout objects_find_params type=vbox parent=objects_l closeable=1 area_caption=Objektide&nbsp;otsing
-				@property objects_find_name type=textbox store=no parent=objects_find_params captionside=top
-				@caption Nimi
-				@property objects_find_address type=textbox store=no parent=objects_find_params captionside=top
-				@caption Aadress
-				@property objects_find_groups type=select store=no parent=objects_find_params captionside=top
-				@caption Hankijagruppid
-				@property objects_find_done type=checkbox store=no parent=objects_find_params captionside=top no_caption=1
-				@caption Teostanud hankeid
-				@property objects_find_start type=date_select store=no parent=objects_find_params captionside=top
+				@property trademark_find_applicant_name type=textbox store=no parent=objects_find_params captionside=top size=30
+				@caption Esitaja nimi
+				
+				@property trademark_find_procurator_name type=textbox store=no size=30 parent=objects_find_params captionside=top
+				@caption Voliniku nimi
+				
+				@property trademark_find_start type=date_select store=no parent=objects_find_params captionside=top
 				@caption Alates
-				@property objects_find_end type=date_select store=no parent=objects_find_params captionside=top
+				
+				@property trademark_find_end type=date_select store=no parent=objects_find_params captionside=top
 				@caption Kuni
-				@property objects_find_product type=textbox store=no parent=objects_find_params captionside=top
-				@property do_find_objects type=submit store=no parent=objects_find_params captionside=top no_caption=1
+				
+				@property do_find_applications type=submit store=no parent=objects_find_params captionside=top no_caption=1
 				@caption Otsi
 		@property objects_tbl type=table no_caption=1 store=no parent=objects_lay
 
 
+#EKSPORT
+@groupinfo name=export caption=Eksport
+@default group=export
+	
+	@property exp_dest type=textbox
+	@caption Ekspordifaili asukoht serveris
+
+	@property exp_link type=text
+	@caption Ekspordi
+
+#RELTYPES
+
+	@reltype NOT_VERIFIED_MENU clid=CL_MENU value=1
+	@caption Kinnitamata taotluste kaust
+	
+	@reltype VERIFIED_MENU clid=CL_MENU value=2
+	@caption Kinnitatud taotluste kaust
+
+	@reltype SERIES clid=CL_CRM_NUMBER_SERIES value=3
+	@caption Numbriseeria
+
+	@reltype ADD clid=CL_DOCUMENT value=4
+	@caption Kaubam&auml;rgitaotluste lisamine
 
 */
 
@@ -47,7 +84,7 @@ class trademark_manager extends class_base
 	function trademark_manager()
 	{
 		$this->init(array(
-			"tpldir" => "applications/clients/patent_office/",
+			"tpldir" => "applications/patent",
 			"clid" => CL_TRADEMARK_MANAGER
 		));
 	}
@@ -64,6 +101,17 @@ class trademark_manager extends class_base
 			case "objects_tbl":
 				$this->_objects_tbl($arr);
 				break;
+				
+			case "trademark_find_applicant_name":
+			case "trademark_find_procurator_name":
+			case "trademark_find_start":
+			case "trademark_find_end":
+				$search_data = $arr["obj_inst"]->meta("search_data");
+				$prop["value"] = $search_data[$prop["name"]];
+				break;	
+			case "exp_link":
+				$prop["value"] = html::href(array("url" => "www.delfi.ru" , "caption" => t("EKSPORDI!")));
+				
 			//-- get_property --//
 		};
 		return $retval;
@@ -75,6 +123,9 @@ class trademark_manager extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "trademark_find_applicant_name":	
+				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
+			break;
 			//-- set_property --//
 		}
 		return $retval;
@@ -88,29 +139,113 @@ class trademark_manager extends class_base
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
+/*
+- vasakus puus: Kinnitamata taotlused, Kinnitatud taotlused
 
+*/
+		
+
+	function _get_trademark_tr($arr)
+	{
+		classload("core/icons");
+		//$arr["prop"]["vcl_inst"] = get_instance("vcl/treeview");
+		
+		$arr["prop"]["vcl_inst"]->start_tree (array (
+			"type" => TREE_DHTML,
+			"has_root" => 1,
+			"tree_id" => "offers_tree",
+			"persist_state" => 1,
+			"root_name" => t("Taotlused"),
+			"root_url" => "#",
+//			"get_branch_func" => $this->mk_my_orb("get_tree_stuff",array(
+//				"clid" => $arr["clid"], 
+//				"group" => $arr["request"]["group"],
+//				"oid" => $arr["obj_inst"]->id(),
+//				"set_retu" => get_ru(),
+//				"parent" => " ",
+//			)),
+		));
+
+		$arr["prop"]["vcl_inst"]->add_item(0, array(
+			"id" => 1,
+			"name" => t('Kinnitatud'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "verified",
+			)),
+		));
+		$arr["prop"]["vcl_inst"]->add_item(0, array(
+			"id" => 2,
+			"name" => t('Kinnitamata'),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["obj_inst"]->id(),
+				"group" => "applications",
+				"p_id" => "not_verified",
+			)),
+		));
+	}
+
+	function search_applications($this_obj)
+	{
+		$ol = new object_list();
+		$filter = array(
+			"class_id" => array(CL_PATENT),
+			"lang_id" => array(),
+			"site_id" => array(),
+		);
+		$data = $this_obj->meta("search_data");
+
+		if($data["trademark_find_applicant_name"])
+		{
+			$filter["CL_PATENT.RELTYPE_APPLICANT.name"] = "%".$data["trademark_find_applicant_name"]."%";
+		}
+		if($data["trademark_find_procurator_name"])
+		{
+			$filter["CL_PATENT.RELTYPE_PROCURATOR.name"] = "%".$data["trademark_find_procurator_name"]."%";
+		}
+	
+ 		if((date_edit::get_timestamp($data["trademark_find_start"]) > 1)|| (date_edit::get_timestamp($data["trademark_find_end"]) > 1))
+ 		{
+ 			if(date_edit::get_timestamp($data["trademark_find_start"]) > 1)
+ 			{
+ 				$from = date_edit::get_timestamp($data["trademark_find_start"]);
+ 			}
+ 			else
+ 			{
+ 				$from = 1;
+ 			}
+ 			if(date_edit::get_timestamp($data["trademark_find_end"]) > 1)
+ 			{
+ 				$to = date_edit::get_timestamp($data["trademark_find_end"]);
+ 			}
+ 			else
+ 			{
+ 				$to = time()*66;
+ 			}
+ 		 	$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
+ 		}
+		$ol = new object_list($filter);
+		return $ol;
+	}
 
 	function _objects_tbl($arr)
 	{
 		$filter = array(
-			"class_id" => array(CL_PROCUREMENT_OFFER),
+			"class_id" => array(CL_PATENT),
 //			"parent" => $parent,
 			"lang_id" => array(),
 			"site_id" => array()
 		);
 		
-		if(substr_count($arr["request"]["p_id"] , "valid"))
+		if($arr["request"]["p_id"] == "verified")
 		{
-			$filter["accept_date"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+			$filter["verified"] = 1;
 		}
-		if(substr_count($arr["request"]["p_id"], "archived" ))
-		{
-			$filter["accept_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, 10, time());
-		}
-		
-		//võtab igast jama eest ära... tabelis seda enam vaja pole
-		$arr["request"]["p_id"] = str_replace("valid_" , "" , $arr["request"]["p_id"]);
-		$arr["request"]["p_id"] = str_replace("archived_" , "" , $arr["request"]["p_id"]);
+//		if($arr["request"]["p_id"] == "not_verified")
+//		{
+//			$filter["verified"] = new obj_predicate_not(1);
+//		}
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_objects_tbl($t);
@@ -120,168 +255,137 @@ class trademark_manager extends class_base
 			$filter = null;
 		}
 		
-		if(is_oid($arr["request"]["p_id"]) && $this->can("view", $arr["request"]["p_id"]))
-		{
-			$p_obj = obj($arr["request"]["p_id"]);
-			if($p_obj->class_id() == CL_MENU)
-			{
-				$offerers = new object_list(array(
-					"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-					"lang_id" => array(),
-					"site_id" => array(),
-					"parent" => $arr["request"]["p_id"],
-				));
-				$filter["offerer"] = $offerers->ids();
-				if(!sizeof($filter["offerer"])) $filter["offerer"] = array(0);
-			}
-			if($p_obj->class_id() == CL_CRM_PERSON || $p_obj->class_id() == CL_CRM_COMPANY)
-			{
-				$filter["offerer"] = $arr["request"]["p_id"];
-			}
-			if($p_obj->class_id() == CL_PROCUREMENT)
-			{
-				$filter["procurement"] = $arr["request"]["p_id"];
-			}
-			
-			if($p_obj->class_id() == CL_CRM_CATEGORY)
-			{
-				foreach($p_obj->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
-				{
-					$filter["offerer"][$c->prop("to")] = $c->prop("to");
-				}
-			}
-			
-		}
-		
 		//otsingust
 		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
-			$ol = $this->search_offers($arr["obj_inst"]);
+			$ol = $this->search_applications($arr["obj_inst"]);
 			$arr["obj_inst"]->set_meta("search_data", null);
 			$arr["obj_inst"]->save();
 		}
 		else
 		{
 			$ol = new object_list($filter);
+			
 		}
 		
-		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
-		$statuses = $offer_inst->offer_states;
-		$result = $arr["request"]["result"];
+		$trademark_inst = get_instance(CL_PATENT);
+		$person_inst = get_instance(CL_CRM_PERSON);
+		$types = $trademark_inst->types;
 		foreach($ol->arr() as $o)
 		{
-//			$offerer_name = html::obj_change_url($o);
-			$offerer_area = "";
-			if(is_oid($o->prop("offerer")) && $this->can("view" , $o->prop("offerer")))
+			if($arr["request"]["p_id"] == "not_verified" && $o->prop("verified"))
 			{
-				$offerer = obj($o->prop("offerer"));
-				$offerer_name = html::obj_change_url($offerer);
-				if($offerer->class_id() == CL_CRM_COMPANY) $address_id = $offerer->prop("contact");
-				if($offerer->class_id() == CL_CRM_PERSON) $address_id = $offerer->prop("address");
-				if(is_oid($address_id) && $this->can("view" , $address_id))
-				{
-					$address = obj($address_id);
-					if(is_oid($address->prop("piirkond")) && $this->can("view" , $address->prop("piirkond")))
-					{
-						$area = obj($address->prop("piirkond"));
-						$offerer_area = $area->name();
-					}
-				}
+				continue;
 			}
-			
-			$files = "";
-			$file_ol = new object_list($o->connections_from(array()));
-			$file_inst = get_instance(CL_FILE);
-			$pm = get_instance("vcl/popup_menu");
-			foreach($file_ol->arr() as $file_o)
+			$procurator = $type = $nr = $applicant_name = $applicant_data = $applicant = "";
+			$procurator = $o->prop_str("procurator");
+			$type = $types[$o->prop("type")];
+			if($o->prop("type") == 0 && $o->prop("word_mark"))
 			{
-				if(!(($file_o->class_id() == CL_FILE) || ($file_o->class_id() == CL_CRM_DOCUMENT) || ($file_o->class_id() == CL_CRM_DEAL) || ($file_o->class_id() == CL_CRM_OFFER) || ($file_o->class_id() == CL_CRM_MEMO)))
+				$type.= " (".$o->prop("word_mark").")";
+			}
+			$nr_str = t("Number puudub");
+			if($o->prop("convention_nr"))
+			{
+				$nr_str = $o->prop("convention_nr");
+			}
+			$nr = html::href(array(
+				"caption" => $nr_str,
+				"url" => html::get_change_url($o->id(), array("return_url" => $arr["post_ru"])),
+			));
+			
+			if(!(is_oid($o->prop("applicant")) && ($this->can("view" ,$o->prop("applicant")))))
+			{
+				$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
+			}
+			else
+			{
+				$applicant = obj($o->prop("applicant"));
+			}
+			if(is_object($applicant))
+			{
+				$applicant_name = $applicant->name();
+				$applicant_data = "";
+				if($applicant->class_id() == CL_CRM_PERSON)
 				{
-					continue;
-				}
-
-				$pm->begin_menu("sf".$file_o->id());
-				if ($file_o->class_id() == CL_FILE)
-				{
-					$pm->add_item(array(
-						"text" => $file_o->name(),
-						"link" => file::get_url($file_o->id(), $file_o->name())
-					));
+					$applicant_data = $person_inst->get_short_description($applicant->id());
 				}
 				else
 				{
-					foreach($file_o->connections_from(array("type" => "RELTYPE_FILE")) as $c)
+					$stuff = array();
+					$stuff[] = html::obj_change_url($applicant);
+					if(is_object($a_phone = $applicant->get_first_obj_by_reltype("RELTYPE_PHONE")))
 					{
-						$pm->add_item(array(
-							"text" => $c->prop("to.name"),
-							"link" => file::get_url($c->prop("to"), $c->prop("to.name"))
-						));
+						$stuff[] = $a_phone->name();
 					}
+					
+					if(is_object($a_mail = $applicant->get_first_obj_by_reltype("RELTYPE_EMAIL")))
+					{
+						$stuff[] = $a_mail->name();
+					}
+					$applicant_data = join("," , $stuff);
 				}
-				$files.= $pm->get_menu(array(
-					"icon" => icons::get_icon_url($file_o)
-				));
 			}
 
 			$t->define_data(array(
-				"name" => html::obj_change_url($o),
-				"date" => date("d.m.Y",$o->created()),//$o->prop("accept_date")),
-				"offerer_name" => $offerer_name,
-				"area" => $offerer_area,
-				"status" => $statuses[$o->prop("state")],
-				"sum" => $o->prop("price"),
-				"files" => $files,
+				"procurator" => $procurator,
+				"nr" => $nr,
+				"type" => $type,
+				"applicant_name" => $applicant_name,
+				"applicant_data" => $applicant_data,
+				"date" => date("d.m.Y",$o->created()),
 				"oid" => $o->id(),
 			));
 		}
 	}
 
+/*
+- paremal tabelis: Märgi tüüp (sõnamärk, kujutismärk jne, kui sõnamärk, siis vastava tekstivälja sisu ka sulgudes), Taotluse number (sellel klikkides avaneb ka taotluse sisestusvorm, kui number puudub, siis on klikitav tekst Number puudub), Esitaja nimi, Esitaja kontaktandmed (kõik ühes väljas komaga eraldatult, aadressi pole vaja), voliniku nimi, Esitamise kuupäev, Vali tulp.		
+*/
 	function _init_objects_tbl(&$t)
 	{
 		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimetus"),
+			"name" => "type",
+			"caption" => t("M&auml;rgi t&uuml;&uuml;p"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
+		$t->define_field(array(
+			"name" => "nr",
+			"caption" => t("Taotluse number"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
+		$t->define_field(array(
+			"name" => "applicant_name",
+			"caption" => t("Esitaja nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
+		$t->define_field(array(
+			"name" => "applicant_data",
+			"caption" => t("Esitaja kontaktandmed"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "procurator",
+			"caption" => t("Voliniku nimi"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => t("Pakkumise kuup&auml;ev"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "offerer_name",
-			"caption" => t("Pakkuja"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "area",
-			"caption" => t("Piirkond"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "status",
-			"caption" => t("Pakkumise staatus"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "sum",
-			"caption" => t("Pakkumise summa"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "files",
-			"caption" => t("Pakkumisega seotud failid"),
+			"caption" => t("Esitamise kuup&aumlev"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		$t->define_chooser(array(
+			"caption" => t("Vali"),
 			"field" => "oid",
 			"name" => "sel"
 		));
@@ -290,66 +394,58 @@ class trademark_manager extends class_base
 	function _objects_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-
-		$tb->add_menu_button(array(
+		$add_inst = get_instance(CL_TRADEMARK_ADD);
+		$new_url = aw_ini_get("baseurl")."/".$arr["obj_inst"] ->prop("trademark_add");
+		
+		//$add_inst->mk_my_orb("parse_alias", array("alias" => array("target" => $arr["obj_inst"] ->prop("trademark_add")), CL_TRADEMARK_ADD));
+		
+		//$prop_obj->request_execute($realest_obj);
+		
+		//$add_inst->mk_my_orb("parse_alias" , array("alias" => array("target" => $arr["obj_inst"] -> prop("trademark_add"))));
+		
+		$tb->add_button(array(
 			'name'=>'add_item',
-			'tooltip'=> t('Uus')
+			"img" => 'new.gif',
+			'tooltip'=> t('Lisa taotlus'),
+	//		'action' => 'new',
+			'url' => $new_url,
+	//		'confirm' => t(""),
+			"target" => '_blank',
 		));
-
-		$arr["request"]["p_id"] = str_replace("valid_" , "" , $arr["request"]["p_id"]);
-		$arr["request"]["p_id"] = str_replace("archived_" , "" , $arr["request"]["p_id"]);
-
-		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->prop("offerers_folder");
-
-		$proc = $offerer = "";
-		if(is_oid($parent))
-		{
-			$parent_obj = obj($parent);
-			if($parent_obj->class_id() == CL_PROCUREMENT)
-			{
-				$proc = $parent;
-			}
-			if($parent_obj->class_id() == CL_CRM_COMPANY || $parent_obj->class_id() == CL_CRM_PERSON)
-			{
-				$offerer = $parent;
-			}
-		}
-		$_SESSION["procurement_offer"]["offerer"] = $offerer;
-		$_SESSION["procurement_offer"]["proc"] = $proc;
-		$_SESSION["procurement_offer"]["parent"] = $parent;
-
-		$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text'=> t('Pakkumine'),
-//			'link'=> $this->mk_my_orb("insert_offer" , array("return_url" => get_ru(), "parent" => $parent)),
-			'action' => "add_procurement_offer"
-//			'link'=> html::get_new_url(CL_PROCUREMENT_OFFER, $parent, array(
-//				"return_url" => get_ru(),
-//				"proc" => $proc,
-//				"offerer" => $offerer,
-//			))
+		
+		$tb->add_button(array(
+			'name' => 'save',
+			'img' => 'save.gif',
+			'tooltip' => t('Salvesta'),
+			'url' => "",
+	//		'action' => 'delete_procurements',
+	//		'confirm' => t(""),
 		));
-
-		$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text'=> t('Ost'),
-//			'link'=> html::get_new_url(CL_PURCHASE, $parent, array("return_url" => get_ru()))
-			'action'=> "insert_purchase",
-		));
-
 		$tb->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => t('Kustuta valitud hanked'),
-			'action' => 'delete_procurements',
-			'confirm' => t("Kas oled kindel et soovid valitud pakkumised kustudada?")
+			'tooltip' => t('Kustuta'),
+			'action' => 'delete_applications',
+			'confirm' => t("Kas oled kindel et soovid valitud taotlused kustudada?"),
 		));
+		$tb->add_button(array(
+			'name' => 'refresh',
+			'img' => 'refresh.gif',
+			'tooltip' => t('V&auml;rskenda'),
+			'url' => "",
+		//	'action' => 'delete_procurements',
+		//	'confirm' => t(""),
+		));	
 	}
 	
-
-
-
-
+	/**
+		@attrib name=delete_applications
+	**/
+	function delete_applications($arr)
+	{
+		object_list::iterate_list($arr["sel"], "delete");
+		return $arr["post_ru"];
+	}
 
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)

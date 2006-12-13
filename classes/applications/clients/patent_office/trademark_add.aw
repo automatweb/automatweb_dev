@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.1 2006/12/13 10:39:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.2 2006/12/13 15:48:38 markop Exp $
 // trademark_add.aw - Kaubam&auml;rgi veebist lisamine 
 /*
 
@@ -37,7 +37,7 @@ class trademark_add extends class_base
 	function trademark_add()
 	{
 		$this->init(array(
-			"tpldir" => "applications/clients/patent_office/",
+			"tpldir" => "applications/patent",
 			"clid" => CL_TRADEMARK_ADD
 		));
 	}
