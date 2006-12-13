@@ -33,7 +33,7 @@
 				<!-- END SUB: ACT_YAH_BTN -->
 
 				<!-- SUB: YAH_BTN_AFTER -->
-				(?)
+				{VAR:step_nr}.(after active)
 				<!-- END SUB: YAH_BTN_AFTER -->
 				
 				<!-- SUB: ACT_YAH_BTN_HREF -->
