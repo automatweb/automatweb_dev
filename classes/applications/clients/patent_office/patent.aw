@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.18 2006/12/13 13:57:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.19 2006/12/13 15:44:57 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -213,6 +213,14 @@ class patent extends class_base
 				$this->_get_products_and_services_tbl($arr);
 				break;
 			//-- get_property --//
+			case "convention_nr":
+				if ($prop["value"] == "" && $arr["obj_inst"]->prop("verified"))
+				{
+					$i = get_instance(CL_CRM_NUMBER_SERIES);
+					$prop["value"] = $i->find_series_and_get_next(CL_PATENT);
+				}
+				break;
+			
 		};
 		return $retval;
 	}
@@ -317,7 +325,7 @@ class patent extends class_base
 		foreach($patent->connections_from(array("type" => "RELTYPE_APPLICANT")) as $key => $c)
 		{
 			$o = $c->to();
-			$_SESSION["patent"]["applicant_id"] = $o->id();
+			$_SESSION["patent"]["applicant_id"] = $key;
 			$_SESSION["patent"]["applicants"][$key]["name"] = $o->name();
 			if($o->class_id() == CL_CRM_COMPANY)
 			{
@@ -343,7 +351,7 @@ class patent extends class_base
 				$_SESSION["patent"]["applicants"][$key]["warrant"] = $o->prop("picture");
 			}
 			
-			if(is_oid($address))
+			if(is_oid($address) && $this->can("view" , $address))
 			{
 				$address_obj = obj($address);
 				$_SESSION["patent"]["applicants"][$key]["street"] = $address_obj->prop("aadress");
@@ -999,6 +1007,7 @@ class patent extends class_base
 			{
 				$name = $applicant["firstname"]." ".$applicant["lastname"];
 			}
+			$delete_link = $this->mk_my_orb("remove_applicant", array("key" => $key));
 			
 			$t->define_data(array(
 				"name" => $name,
@@ -1013,12 +1022,33 @@ class patent extends class_base
 				//	"onClick"=>"self.disabled=true;submit_changeform(''); return false;",
 					"caption" => t("Muuda"),
 					//"title" => t("Muuda"),
+				))." ".html::href(array(
+					"url" =>  "#",
+			//		"url" => "javascript:document.getElementById(\"applicant_id\").value=".$key.";document.changeform.submit();",//aw_url_change_var("change_applicant" , $key , get_ru()),
+				//	"onClick"=>"self.disabled=true;submit_changeform(''); return false;",
+					"onClick" => 'javascript:window.open("'.$delete_link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=100, width=100")',
+					"caption" => t("Kustuta"),
+					//"title" => t("Muuda"),
 				)),
 			));
 		}
 		return $t->draw();
 	}
 	
+	/** 
+		@attrib name=remove_applicant is_public="1"  all_args=1
+		@param key optional type=int
+	**/
+	function remove_applicant($arr)
+	{
+		unset($_SESSION["patent"]["applicants"][$arr["key"]]);
+		die('<script type="text/javascript">
+			window.opener.location.reload();
+			window.close();
+			</script>'
+		);
+	}
+		
 	/** 
 		@attrib name=submit_data is_public="1" caption="Change" all_args=1
 	**/
@@ -1106,7 +1136,7 @@ class patent extends class_base
 			$patent->set_class_id(CL_PATENT);
 			$patent->set_parent($_SESSION["patent"]["parent"]);
 			$patent->save();
-			$patent->set_name("Patent nr. ".$patent->id());
+			$patent->set_name(" Kinnitamata taotlus nr [".$patent->id()."]");
 		}
 		$this->save_trademark($patent);
 		$this->save_priority($patent);
