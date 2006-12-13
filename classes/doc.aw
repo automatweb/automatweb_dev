@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.146 2006/12/07 19:15:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.147 2006/12/13 12:24:34 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -522,6 +522,7 @@ class doc extends class_base
 		{
 			case "transl":
 				$this->trans_save($args, $this->trans_props);
+				$this->funnel_ct_content($args);
 				break;
 
 			case "create_new_version":
@@ -1669,5 +1670,80 @@ class doc extends class_base
 			$arr["link"] = aw_url_change_var("edit_version", $_GET["edit_version"], $arr["link"]);
 		}
 	}
-};
+
+	function funnel_ct_content($arr)
+	{
+		// check table
+		$this->db_last_error = false;
+		$this->db_query("select oid FROM doc_ct_content LIMIT 1",false);
+		if ($this->db_last_error !== false)
+		{
+			$this->db_query("CREATE TABLE IF NOT EXISTS doc_ct_content(oid int, parent int, lang_id int, site_id int, title varchar(255), lead mediumtext, content mediumtext,tm int, modified int, user1 text, user4 text, author varchar(255), photos varchar(255), dcache text, no_search int)");
+			$this->db_query(" alter table doc_ct_content add index oid(oid)");
+			$this->db_query("alter table doc_ct_content add index lang_id(lang_id)");
+			$this->_conv_ct_docs();
+		}
+		// basically, create a table
+		// that holds doc contents in all languages
+		// so that site_search_content
+		// can search in other languages as well
+		$id = $arr["obj_inst"]->id();
+		foreach(safe_array($arr["obj_inst"]->meta("translations")) as $lid => $props)
+		{
+			$this->quote(&$props);
+			if ($this->db_fetch_field("select oid FROM doc_ct_content WHERE oid = '$id' AND lang_id ='$lid'", "oid"))
+			{
+				$this->db_query("UPDATE doc_ct_content SET
+					parent = '".$arr["obj_inst"]->parent()."',
+					title = '".$props["title"]."',
+					lead = '".$props["lead"]."',
+					content = '".$props["content"]."',
+					tm = '".$arr["obj_inst"]->prop("tm")."',
+					modified = '".$arr["obj_inst"]->prop("doc_modified")."',
+					user1 = '".$arr["obj_inst"]->prop("user1")."',
+					user4 = '".$arr["obj_inst"]->prop("user4")."',
+					author = '".$arr["obj_inst"]->prop("author")."',
+					photos = '".$arr["obj_inst"]->prop("photos")."',
+					dcache = '".$arr["obj_inst"]->prop("dcache")."',
+					no_search = '".$arr["obj_inst"]->prop("no_search")."'
+					WHERE oid = '$id' AND lang_id ='$lid'");
+			}
+			else
+			{
+				$this->db_query("INSERT INTO doc_ct_content(oid,parent,lang_id,site_id,title,lead,content,
+					tm,modified,user1,user4,author,photos,dcache,no_search) 
+					VALUES($id, 
+						'".$arr["obj_inst"]->parent()."',
+						$lid,
+						'".$arr["obj_inst"]->site_id()."',
+						'".$props["title"]."',
+						'".$props["lead"]."',
+						'".$props["content"]."',
+						'".$arr["obj_inst"]->prop("tm")."',
+						'".$arr["obj_inst"]->prop("doc_modified")."',
+						'".$arr["obj_inst"]->prop("user1")."',
+						'".$arr["obj_inst"]->prop("user4")."',
+						'".$arr["obj_inst"]->prop("author")."',
+						'".$arr["obj_inst"]->prop("photos")."',
+						'".$arr["obj_inst"]->prop("dcache")."',
+						'".$arr["obj_inst"]->prop("no_search")."'
+					)");
+			}
+		}
+	}
+
+	function _conv_ct_docs()
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_DOCUMENT
+		));
+		foreach($ol->arr() as $o)
+		{
+			echo "o = ".$o->name()." (".$o->id().") <br>\n";
+			flush();
+			$this->funnel_ct_content(array("obj_inst" => $o));
+		}
+		die("all done");
+	}
+}
 ?>

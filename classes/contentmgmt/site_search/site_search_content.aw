@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.78 2006/12/07 12:49:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.79 2006/12/13 12:24:35 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -632,9 +632,14 @@ class site_search_content extends class_base
 			"year" => 1,
 		));
 
+		$sect = aw_global_get("section");
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$sect = aw_global_get("ct_lang_lc")."/".$sect;
+		}
 		$this->vars(array(
 			"GROUP" => $s_gr,
-			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1, "section" => aw_global_get("section"))),
+			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1, "section" => $sect)),
 			"str" => htmlspecialchars((isset($str) ? $str : "")),
 			"str_opts" => $this->picker($opts["str"], $this->search_opts),
 			"date_from" => $de->gen_edit_form("s_date[from]", $date["from"], date("Y")-3, date("Y"), true),
@@ -861,6 +866,13 @@ class site_search_content extends class_base
 		}
 
 		$this->quote($str);
+		$joiner = "LEFT JOIN documents d ON o.brother_of = d.docid";
+		if (aw_ini_get("user_interface.full_content_trans") &&
+	                aw_ini_get("languages.default") != aw_global_get("ct_lang_id"))
+		{
+			$joiner = "LEFT JOIN doc_ct_content d ON d.oid = o.brother_of AND d.lang_id = ".aw_global_get("ct_lang_id");
+		}
+													       
 		$sql = "
 			SELECT 
 				o.oid as docid, 
@@ -875,7 +887,7 @@ class site_search_content extends class_base
 				d.user4 as user4 
 			 FROM 
 				objects o  
-				LEFT JOIN documents d ON o.brother_of = d.docid
+				$joiner
 			WHERE 
 				(
 					".$this->_get_sstring($str, $opts["str"], "d.content")." OR
