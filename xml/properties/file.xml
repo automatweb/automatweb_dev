@@ -25,6 +25,16 @@
             <caption>Allkirjastatud</caption>
       </property>
       <property>
+            <name>signatures</name>
+            <table>files</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <field>signatures</field>
+            <caption>Allkirjastajad</caption>
+      </property>
+      <property>
             <name>file</name>
             <table>files</table>
             <group>general</group>

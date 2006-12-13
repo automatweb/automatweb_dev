@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.11 2006/12/12 14:42:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.12 2006/12/13 14:17:41 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -862,9 +862,27 @@ class ddoc extends class_base
 		}
 		return true;
 	}
+	
+	/**
+		@attrib params=pos api=1
+		@param oid optional type=oid
+			ddoc object oid
+		@comment
+			Get signers, signing times etc..
+	**/
+	function get_signatures($oid)
+	{
+		if(!is_oid($oid))
+		{
+			return array();
+		}
+		$o = obj($oid);
+		return aw_unserialize($o->prop("signatures"));
+	}
 
 	/**
-		
+		@comment
+			used internally by _do_reset_ddoc
 	**/
 	function _hash_exists($ddoc, $hash)
 	{

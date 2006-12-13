@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.142 2006/12/12 14:42:01 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.143 2006/12/13 14:17:43 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -35,6 +35,9 @@
 
 	@property signed type=text store=no editonly=1
 	@caption Allkirjastatud
+
+	@property signatures type=text store=no editonly=1
+	@caption Allkirjastajad
 
 	@property file type=fileupload form=+emb
 	@caption Vali fail
@@ -127,6 +130,24 @@ class file extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "signatures":
+				if(!aw_ini_get("file.ddoc_support"))
+				{
+					return PROP_IGNORE;
+				}
+				$re = $this->is_signed($arr["obj_inst"]->id());
+				if($re["status"] != 1)
+				{
+					return PROP_IGNORE;
+				}
+				$ddoc_inst = get_instance(CL_DDOC);
+				$signs = $ddoc_inst->get_signatures($re["ddoc"]);
+				foreach($signs as $sig)
+				{
+					$sig_nice[] = sprintf(t("%s, %s (%s) - %s"), $sig["signer_ln"], $sig["signer_fn"], $sig["signer_pid"], date("H:i d/m/Y", $sig["signing_time"]));
+				}
+				$data["value"] = join("<br/>", $sig_nice);
+				break;
 			case "signed":
 				if(!aw_ini_get("file.ddoc_support"))
 				{
