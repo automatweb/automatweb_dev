@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.15 2006/12/13 13:13:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.16 2006/12/13 13:26:33 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -762,13 +762,9 @@ class conference_planning extends class_base
 		{
 			$first = "FIRST";
 		}
-		elseif($no > 1 && $no < 7)
+		elseif($no > 1 && $no <= 7)
 		{
 			$first = "OTHER";
-		}
-		elseif($no == 7)
-		{
-			$first = "LAST";
 		}
 		$yah_caption = array(
 			1 => "",
@@ -793,14 +789,19 @@ class conference_planning extends class_base
 				));
 				$yah[] = $this->parse($act."YAH_FIRST_BTN".$href);
 			}
-			elseif($i < 7 && $no != ($i-1))
+			elseif($i <= 7 && $no != ($i-1))
 			{
+				unset($last);
+				if($i == 7)
+				{
+					$last = "_LAST";
+				}
 				$this->vars(array(
 					"step_nr" => $i,
 					"caption" => $yah_caption[$i],
 					"url" => aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$i,
 				));
-				$yah[] = $this->parse($act."YAH_BTN".$href);
+				$yah[] = $this->parse($act."YAH".$last."_BTN".$href);
 			}
 			elseif($no == 6)
 			{
@@ -812,13 +813,14 @@ class conference_planning extends class_base
 			}
 			elseif($no != $i-1)
 			{
+				arr($i);
 				$this->vars(array(
 					"step_nr" => $i,
 					"caption" => strlen($act)?$yah_caption[$i]:"",
 				));
 				$yah[] = $this->parse($act."YAH_LAST_BTN".$href);
 			}
-			if(strlen($act) && $no != 6)
+			if(strlen($act) && $no != 6 && $i < 7)
 			{
 				$this->vars(array(
 					"step_nr" => ($i+1),

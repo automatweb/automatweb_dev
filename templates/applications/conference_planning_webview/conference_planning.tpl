@@ -52,7 +52,7 @@
 				<!-- END SUB: YAH_LAST_BTN_HREF -->
 
 				<!-- SUB: ACT_YAH_LAST_BTN -->
-					<b>{VAR:step_nr}.</b> ]
+					<b>{VAR:step_nr}. {VAR:caption}</b> ]
 				<!-- END SUB: ACT_YAH_LAST_BTN -->
 				<!-- SUB: ACT_YAH_LAST_BTN_HREF -->
 					<b><a href="{VAR:url}">{VAR:step_nr}.</a></b> ]
