@@ -32,9 +32,9 @@
 					<b>{VAR:step_nr}. {VAR:caption}</b>
 				<!-- END SUB: ACT_YAH_BTN -->
 
-				<!-- SUB: ACT_YAH_BTN_AFTER -->
+				<!-- SUB: YAH_BTN_AFTER -->
 				(?)
-				<!-- END SUB: ACT_YAH_BTN_AFTER -->
+				<!-- END SUB: YAH_BTN_AFTER -->
 				
 				<!-- SUB: ACT_YAH_BTN_HREF -->
 					<b><a href="{VAR:url}">{VAR:step_nr}.</a></b>
