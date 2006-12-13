@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.19 2006/12/13 15:44:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.20 2006/12/13 16:23:49 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -889,6 +889,9 @@ class patent extends class_base
 		
 		if($_POST["product"])
 		{
+			
+			$tpl = "products_res.tpl";
+			$is_tpl = $this->read_template($tpl,1);
 			classload("vcl/table");
 			$t = new vcl_table(array(
 				"layout" => "generic",
@@ -910,6 +913,27 @@ class patent extends class_base
 			
 			$products = new object_list(array("name" => "%".$_POST["product"]."%", "class_id" => CL_SHOP_PRODUCT , "lang_id" => array()));
 			
+			if($is_tpl)
+			{
+				$c = "";
+				foreach($products->arr() as $prod)
+				{
+				$parent = obj($prod->parent());
+					$this->vars(array(
+						"prod" => $prod->name(),
+						"class" => $parent->name(),
+						"code" => 132245,
+						"oid"	=> $prod->id(),
+					));
+					$c .= $this->parse("PRODUCT");
+				}
+				$this->vars(array(
+					"PRODUCT" => $c,
+					"ru" => $arr["ru"]
+				));
+				return $this->parse();
+			}
+			
 			//arr($_SESSION["patent"]["applicants"]);
 			foreach($products->arr() as $prod)
 			{
@@ -925,6 +949,13 @@ class patent extends class_base
 			<input type=hidden value=".$arr["ru"]." name=ru>
 			<input type=hidden value=1 name=do_post>
 			<input type=submit value='Lisa valitud terminid taotlusse'>";
+		}
+		
+		$tpl = "products.tpl";
+		$is_tpl = $this->read_template($tpl);
+		if($is_tpl)
+		{
+			return $this->parse();
 		}
 		//$products = nee object_list(array("class_id" => CL_SHOP_PRODUCT,"lang_id" => array()));
 //		$address_inst = get_instance(CL_CRM_ADDRESS);
