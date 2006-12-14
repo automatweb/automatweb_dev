@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.17 2006/12/14 13:14:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.18 2006/12/14 14:30:42 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -410,7 +410,7 @@ class conference_planning extends class_base
 				{
 					$sc->vars(array(
 						"caption" => ($data["event_type_chooser"] == 1)?$c_types[$data["event_type_select"]]:$data["event_type_text"],
-						"remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&id=".$id,
+						"remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&evt=".$id,
 						"edit_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&act_evt_no=".$id,
 					));
 					$rows .= $sc->parse("ROW");
@@ -423,6 +423,7 @@ class conference_planning extends class_base
 						"cat_type" => ($catering["catering_type_chooser"] == 2)?$catering["catering_type_text"]:$this->catering_types[$catering["catering_type_select"]],
 						"cat_starttime" => $catering["catering_start_time"],
 						"cat_endtime" => $catering["catering_end_time"],
+						"cat_attendee_no" =>$catering["catering_attendee_no"],
 						"cat_remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&evt=".$_REQUEST["act_evt_no"]."&cat=".$cat_no,
 						"cat_edit_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&act_evt_no=".$_REQUEST["act_evt_no"]."&act_cat_no=".$cat_no,
 					));
@@ -1342,6 +1343,7 @@ class conference_planning extends class_base
 					$additional_function_catering["catering_type_text"] = $val["catering_type_text"];
 					$additional_function_catering["catering_start_time"] = $val["catering_start_time"];
 					$additional_function_catering["catering_end_time"] = $val["catering_end_time"];
+					$additional_function_catering["catering_attendee_no"] = $val["catering_attendee_no"];
 
 					if($no < 0)
 					{
