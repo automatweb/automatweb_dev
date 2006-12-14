@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.46 2006/12/14 08:36:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.47 2006/12/14 10:11:59 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -958,7 +958,7 @@ class object_import extends class_base
 
 		$fetch = array("objects.oid as id");
 		$where = array("objects.status > 0", "objects.lang_id = '".aw_global_get("lang_id")."'", "objects.site_id = ".aw_ini_get("site_id"));
-		$tbls = array();
+		$tbls = array("objects" => "objects");
 
 		foreach($o->prop("unique_id") as $unique_id)
 		{
@@ -968,10 +968,6 @@ class object_import extends class_base
 				continue;
 			}
 			if ($prop["store"] == "no")
-			{
-				continue;
-			}
-			if ($prop["table"] == "objects")
 			{
 				continue;
 			}
