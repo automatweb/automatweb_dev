@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.32 2006/12/05 12:06:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.33 2006/12/14 12:34:20 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -128,6 +128,11 @@
 
 @property jm_texts type=callback callback=callback_get_jm_texts group=joinmail store=no
 
+@groupinfo trans caption="T&otilde;lgi"
+@default group=trans
+
+	@property trans_tb type=table no_caption=1 store=no
+
 @reltype JOIN_CLASS value=1 clid=CL_OBJECT_TYPE
 @caption liitumise vorm
 
@@ -221,6 +226,10 @@ class join_site extends class_base
 			case "joinmail_legend":
 				$data["value"] = t("E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#).");
 				break;
+
+			case "trans_tb":
+				$this->_trans_tb($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -257,6 +266,10 @@ class join_site extends class_base
 
 			case "jm_texts":
 				$arr["obj_inst"]->set_meta("jm_texts", $arr["request"]["lm_l_tx"]);
+				break;
+
+			case "trans_tb":
+				$arr["obj_inst"]->set_meta("lang_props", $arr["request"]["d"]);
 				break;
 		}
 		return $retval;
@@ -678,7 +691,10 @@ class join_site extends class_base
 		$propn = $ob->meta("propn");
 		$el_types = $ob->meta("types");
 		$cfgu = get_instance("cfg/cfgutils");
-		
+
+		$prop_langs = $ob->meta("lang_props");
+		$langid = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+
 		$ret = "";
 		$first = false;
 		$clss = array();
@@ -853,7 +869,14 @@ class join_site extends class_base
 				}
 				if ($propn[$clid][$oldn] != "")
 				{
-					$xprop["caption"] = $propn[$clid][$oldn];
+					if ($prop_langs[$clid][$oldn][$langid] != "")
+					{
+						$xprop["caption"] = $prop_langs[$clid][$oldn][$langid];
+					}
+					else
+					{
+						$xprop["caption"] = $propn[$clid][$oldn];
+					}
 				}
 
 				if ($oldn == "comment" && $clid == CL_USER)
@@ -1320,6 +1343,9 @@ class join_site extends class_base
 		$propn = $ob->meta("propn");
 		$je = aw_global_get("join_err");
 
+		$prop_langs = $ob->meta("lang_props");
+		$langid = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+
 		$cfgu = get_instance("cfg/cfgutils");
 
 		$user = isset($params["uid"]) ? $params["uid"] : aw_global_get("uid");
@@ -1560,7 +1586,14 @@ class join_site extends class_base
 					$prop["name"] = $pid;
 					if ($propn[$clid][$oldn] != "")
 					{
-						$prop["caption"] = $propn[$clid][$oldn];
+						if ($prop_langs[$clid][$oldn][$langid] != "")
+						{
+							$prop["caption"] = $prop_langs[$clid][$oldn][$langid];
+						}
+						else
+						{
+							$prop["caption"] = $propn[$clid][$oldn];
+						}
 					}
 					$prop["comment"] = "";
 					if ($oldn == "comment" && $clid == CL_USER)
@@ -2118,6 +2151,73 @@ class join_site extends class_base
 			$fo->save();
 		}
 		$o->set_prop($prop, $fo->id());
+	}
+
+	function _init_trans_tb(&$t, $o)
+	{
+		$t->define_field(array(
+			"name" => "orig",
+			"caption" => t("Omadus"),
+			"align" => "center"
+		));
+
+		$l = get_instance("languages");
+		$ll = $l->get_list();
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $o->lang_id())
+			{
+				continue;
+			}
+			$t->define_field(array(
+				"name" => "l".$lid,
+				"caption" => $lang,
+				"align" => "center"
+			));
+		}
+	}
+
+	function _trans_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_trans_tb($t, $arr["obj_inst"]);
+
+		$lang_props = $arr["obj_inst"]->meta("lang_props");
+
+		$visible = $arr["obj_inst"]->meta("visible");
+
+		$l = get_instance("languages");
+		$ll = $l->get_list(array("all_data" => true));
+
+		$propn = $arr["obj_inst"]->meta("propn");
+
+		$clid = aw_ini_get("classes");
+		foreach($visible as $clid => $props)
+		{
+			$cln = $clid[$clid]["name"];
+			foreach($props as $pn => $one)
+			{
+				$d = array(
+					"orig" => $propn[$clid][$pn],
+					"class" => $cln
+				);
+				foreach($ll as $lid => $lang)
+				{
+					if ($lid == $arr["obj_inst"]->lang_id())
+					{
+						continue;
+					}
+					$d["l".$lid] = html::textbox(array(
+						"name" => "d[$clid][$pn][$lid]",
+						"value" => $lang_props[$clid][$pn][$lid],
+						"size" => 20
+					));
+				}
+				$t->define_data($d);
+			}
+		}
+		$t->set_rgroupby(array("class" => "class"));
+		$t->set_caption(t("T&otilde;lgi omaduste tekste"));
 	}
 }
 ?>

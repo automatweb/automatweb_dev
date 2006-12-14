@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.154 2006/12/12 16:48:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.155 2006/12/14 12:34:18 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -381,6 +381,27 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 @property udef_ch1 type=chooser multiple=1
 @caption Kasutajadefineeritud CH1
 
+@property udef_ch2 type=chooser multiple=1
+@caption Kasutajadefineeritud CH2
+
+@property udef_ch3 type=chooser multiple=1
+@caption Kasutajadefineeritud CH3
+
+@property user1 type=textbox 
+@caption Kasutajadefineeritud tekstikast 1
+
+@property user2 type=textbox 
+@caption Kasutajadefineeritud tekstikast 2
+
+@property user3 type=textbox 
+@caption Kasutajadefineeritud tekstikast 3
+
+@property user4 type=textbox 
+@caption Kasutajadefineeritud tekstikast 4
+
+@property user5 type=textbox 
+@caption Kasutajadefineeritud tekstikast 5
+
 @property udef_ta1 type=textarea rows=5 cols=50
 @caption Kasutajadefineeritud TA1
 
@@ -404,6 +425,27 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 
 @property uservar3 type=classificator field=aw_varuser3 reltype=RELTYPE_VARUSER3 store=connect
 @caption User-defined var 3
+
+@property uservar4 type=classificator field=aw_varuser4 reltype=RELTYPE_VARUSER4 store=connect
+@caption User-defined var 4
+
+@property uservar5 type=classificator field=aw_varuser5 reltype=RELTYPE_VARUSER5 store=connect
+@caption User-defined var 5
+
+@property uservar6 type=classificator field=aw_varuser6 reltype=RELTYPE_VARUSER6 store=connect
+@caption User-defined var 6
+
+@property uservar7 type=classificator field=aw_varuser7 reltype=RELTYPE_VARUSER7 store=connect
+@caption User-defined var 7
+
+@property uservar8 type=classificator field=aw_varuser8 reltype=RELTYPE_VARUSER8 store=connect
+@caption User-defined var 8
+
+@property uservar9 type=classificator field=aw_varuser9 reltype=RELTYPE_VARUSER9 store=connect
+@caption User-defined var 9
+
+@property uservar10 type=classificator field=aw_varuser10 reltype=RELTYPE_VARUSER10 store=connect
+@caption User-defined var 10
 
 ------------------------------------------------------------------
 
@@ -619,6 +661,28 @@ caption Sõbragrupid
 
 @reltype CORRESPOND_ADDRESS value=58 clid=CL_CRM_ADDRESS
 @caption Aadressid
+
+@reltype VARUSER4 value=59 clid=CL_META
+@caption kasutajadefineeritud muutuja 4
+
+@reltype VARUSER5 value=60 clid=CL_META
+@caption kasutajadefineeritud muutuja 5
+
+@reltype VARUSER6 value=61 clid=CL_META
+@caption kasutajadefineeritud muutuja 6
+
+@reltype VARUSER7 value=62 clid=CL_META
+@caption kasutajadefineeritud muutuja 7
+
+@reltype VARUSER8 value=63 clid=CL_META
+@caption kasutajadefineeritud muutuja 8
+
+@reltype VARUSER9 value=64 clid=CL_META
+@caption kasutajadefineeritud muutuja 9
+
+@reltype VARUSER10 value=65 clid=CL_META
+@caption kasutajadefineeritud muutuja 10
+
 
 */
 

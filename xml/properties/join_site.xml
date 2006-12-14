@@ -303,6 +303,15 @@
             <store>no</store>
             <field>jm_texts</field>
       </property>
+      <property>
+            <name>trans_tb</name>
+            <table>objects</table>
+            <group>trans</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>trans_tb</field>
+      </property>
       <classinfo>
             <syslog_type>ST_JOIN_SITE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -362,6 +371,9 @@
                   <caption>Meil administraatorile</caption>
                   <parent>mails</parent>
             </notify_mail>
+            <trans>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </trans>
       </groupinfo>
       <reltypes>
             <JOIN_CLASS>

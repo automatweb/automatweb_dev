@@ -1013,6 +1013,71 @@
             <caption>Kasutajadefineeritud CH1</caption>
       </property>
       <property>
+            <name>udef_ch2</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>Kasutajadefineeritud CH2</caption>
+      </property>
+      <property>
+            <name>udef_ch3</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>Kasutajadefineeritud CH3</caption>
+      </property>
+      <property>
+            <name>user1</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kasutajadefineeritud tekstikast 1</caption>
+      </property>
+      <property>
+            <name>user2</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kasutajadefineeritud tekstikast 2</caption>
+      </property>
+      <property>
+            <name>user3</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kasutajadefineeritud tekstikast 3</caption>
+      </property>
+      <property>
+            <name>user4</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kasutajadefineeritud tekstikast 4</caption>
+      </property>
+      <property>
+            <name>user5</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kasutajadefineeritud tekstikast 5</caption>
+      </property>
+      <property>
             <name>udef_ta1</name>
             <table>objects</table>
             <group>data</group>
@@ -1099,6 +1164,83 @@
             <reltype>RELTYPE_VARUSER3</reltype>
             <store>connect</store>
             <caption>User-defined var 3</caption>
+      </property>
+      <property>
+            <name>uservar4</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser4</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER4</reltype>
+            <store>connect</store>
+            <caption>User-defined var 4</caption>
+      </property>
+      <property>
+            <name>uservar5</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser5</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER5</reltype>
+            <store>connect</store>
+            <caption>User-defined var 5</caption>
+      </property>
+      <property>
+            <name>uservar6</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser6</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER6</reltype>
+            <store>connect</store>
+            <caption>User-defined var 6</caption>
+      </property>
+      <property>
+            <name>uservar7</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser7</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER7</reltype>
+            <store>connect</store>
+            <caption>User-defined var 7</caption>
+      </property>
+      <property>
+            <name>uservar8</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser8</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER8</reltype>
+            <store>connect</store>
+            <caption>User-defined var 8</caption>
+      </property>
+      <property>
+            <name>uservar9</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser9</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER9</reltype>
+            <store>connect</store>
+            <caption>User-defined var 9</caption>
+      </property>
+      <property>
+            <name>uservar10</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>aw_varuser10</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER10</reltype>
+            <store>connect</store>
+            <caption>User-defined var 10</caption>
       </property>
       <property>
             <name>stats_s_from</name>
@@ -1522,6 +1664,41 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>Aadressid</caption>
             </CORRESPOND_ADDRESS>
+            <VARUSER4>
+                  <value>59</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 4</caption>
+            </VARUSER4>
+            <VARUSER5>
+                  <value>60</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 5</caption>
+            </VARUSER5>
+            <VARUSER6>
+                  <value>61</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 6</caption>
+            </VARUSER6>
+            <VARUSER7>
+                  <value>62</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 7</caption>
+            </VARUSER7>
+            <VARUSER8>
+                  <value>63</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 8</caption>
+            </VARUSER8>
+            <VARUSER9>
+                  <value>64</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 9</caption>
+            </VARUSER9>
+            <VARUSER10>
+                  <value>65</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 10</caption>
+            </VARUSER10>
       </reltypes>
       <layout>
             <ct_super>
