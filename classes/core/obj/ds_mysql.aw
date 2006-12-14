@@ -59,6 +59,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		else
 		{
 			$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = '$oid' AND status != 0");
+			if ($ret["oid"] != $ret["brother_of"])
+			{
+				$ret["metadata"] = $this->db_fetch_field("SELECT metadata FROM objects WHERE oid = '".$ret["brother_of"]."'", "metadata");
+			}
 			$ret = $this->_get_objdata_proc($ret, $param, $oid);
 		}
 		return $ret;
