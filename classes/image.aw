@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.182 2006/12/08 10:10:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.183 2006/12/14 10:06:28 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -66,6 +66,9 @@
 	@property file2_del type=checkbox ch_value=1 store=no
 	@caption Kustuta suur pilt
 
+	@property big_flash type=relpicker reltype=RELTYPE_FLASH table=objects field=meta method=serialize
+	@caption Flash 
+	
 @groupinfo resize caption="Muuda suurust"
 @default group=resize
 
@@ -109,6 +112,9 @@
 
 @reltype MOD_COMMENT value=1 clid=CL_COMMENT
 @caption Moderaatori kommentaar
+
+@reltype FLASH value=2 clid=CL_FLASH
+@caption Flash
 */
 
 define("FL_IMAGE_CAN_COMMENT", 1);
@@ -373,6 +379,10 @@ class image extends class_base
 				"comments" => $num_comments,
 			);
 
+			if ($this->can("view", $idata["big_flash"]))
+			{
+				$idata["big_url"] = " ";
+			}
 			$ha = ""; 
 			if ($idata["meta"]["author"] != "")
 			{
@@ -1419,18 +1429,33 @@ class image extends class_base
 		extract($arr);
 	
 		$im = $this->get_image_by_id($id);
-		$this->read_any_template("show_big.tpl");
-		if (empty($im['meta']['file2']) || !is_file($im['meta']['file2']))
+		$imo = obj($id);
+		
+		if ($this->can("view", $imo->prop("big_flash")))
 		{
-			$img_url = $im['url']; // Revert to small image
+			$fli = get_instance(CL_FLASH);
+			$this->vars(array(
+				"FLASH" => $fli->show(array("id" => $imo->prop("big_flash")))
+			));
 		}
 		else
 		{
-			$img_url = $this->get_url($im["meta"]["file2"]);
+			$this->read_any_template("show_big.tpl");
+			if (empty($im['meta']['file2']) || !is_file($im['meta']['file2']))
+			{
+				$img_url = $im['url']; // Revert to small image
+			}
+			else
+			{
+				$img_url = $this->get_url($im["meta"]["file2"]);
+			}
+			$this->vars(array(
+				"big_url" => $img_url,
+			));
+			$this->vars(array(
+				"IMAGE" => $this->parse("IMAGE")
+			));
 		}
-		$this->vars(array(
-			"big_url" => $img_url,
-		));
 		if ($comments)
 		{
 			$parse = "with_comments";
