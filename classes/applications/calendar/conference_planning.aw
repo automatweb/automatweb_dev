@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.18 2006/12/14 14:30:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.19 2006/12/14 14:36:05 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -841,8 +841,8 @@ class conference_planning extends class_base
 		));
 		$submit = $this->parse($first."_RFP_SUBMIT");
 
-		$act_evt_no = $_GET["act_evt_no"]?$_GET["act_evt_no"]:-1;
-		$act_cat_no = $_GET["act_cat_no"]?$_GET_["act_evt_no"]:-1;
+		$act_evt_no = strlen($_GET["act_evt_no"])?$_GET["act_evt_no"]:-1;
+		$act_cat_no = strlen($_GET["act_cat_no"])?$_GET_["act_evt_no"]:-1;
 
 		$this->vars(array(
 			"YAH_BAR" => join("", $yah),
