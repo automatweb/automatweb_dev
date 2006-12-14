@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_old_redirect.aw,v 1.1 2006/10/16 21:20:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_old_redirect.aw,v 1.2 2006/12/14 13:36:17 kristo Exp $
 // config_old_redirect.aw - Vanade aadresside suunamine 
 /*
 
@@ -10,10 +10,16 @@
 
 	@property url_table type=table store=no no_caption=1
 
+@groupinfo repl caption=Asendused
+
+	@property repl_t type=table store=no no_caption=1 group=repl
+
+
 @groupinfo activity caption=Aktiivsus
 
 @property activity type=table group=activity no_caption=1
 @caption Aktiivsus
+
 
 */
 
@@ -145,6 +151,60 @@ class config_old_redirect extends class_base
 				$o->save();
 			}
 		}
+	}
+
+	function _init_repl_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "with",
+			"caption" => t("Mis asendada"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "what",
+			"caption" => t("Milega asendada"),
+			"align" => "center"
+		));
+		$t->set_sortable(false);
+	}
+
+	function _get_repl_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_repl_table($t);
+
+		$d = $arr["obj_inst"]->meta("repl");
+		for($i = 0; $i < 10; $i++)
+		{
+			$d[] = array();
+		}
+
+		foreach($d as $idx => $row)
+		{
+			$t->define_data(array(
+				"with" => html::textbox(array(
+					"name" => "d[$idx][with]",
+					"value" => $row["with"]
+				)),
+				"what" => html::textbox(array(
+					"name" => "d[$idx][what]",
+					"value" => $row["what"]
+				)),
+			));
+		}
+	}
+
+	function _set_repl_t($arr)
+	{
+		$d = array();
+		foreach(safe_array($arr["request"]["d"]) as $row)
+		{
+			if ($row["with"] != "")
+			{
+				$d[] = $row;
+			}
+		}
+		$arr["obj_inst"]->set_meta("repl", $d);
 	}
 }
 ?>

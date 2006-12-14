@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.380 2006/12/13 12:26:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.381 2006/12/14 13:36:15 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -678,8 +678,18 @@ class menuedit extends aw_template
 			)
 		));	
 		$gr = aw_global_get("REQUEST_URI");
+		$repl_gr = $gr;
+		$repls = false;
 		foreach($pl->arr() as $item)
 		{
+			foreach(safe_array($item->meta("repl")) as $row)
+			{
+				if (strpos($repl_gr, $row["what"]) !== false)
+				{
+					$repls = true;
+					$repl_gr = str_replace($row["what"], $row["with"], $repl_gr);
+				}
+			}
 			foreach(safe_array($item->meta("d")) as $row)
 			{
 				if ("/".$row["old"] == $gr)
@@ -689,6 +699,13 @@ class menuedit extends aw_template
 					die();
 				}
 			}
+		}
+
+		if ($repls)
+		{
+			header("HTTP/1.0 301 Moved Permanently");
+			header("Location: ".aw_ini_get("baseurl")."/".$repl_gr);
+			die();
 		}
 
 		$si = __get_site_instance();
