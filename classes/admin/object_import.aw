@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.45 2006/11/28 14:45:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.46 2006/12/14 08:36:54 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -968,6 +968,10 @@ class object_import extends class_base
 				continue;
 			}
 			if ($prop["store"] == "no")
+			{
+				continue;
+			}
+			if ($prop["table"] == "objects")
 			{
 				continue;
 			}
