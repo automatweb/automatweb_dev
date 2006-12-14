@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.19 2006/12/14 14:36:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.20 2006/12/14 14:54:39 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -842,7 +842,7 @@ class conference_planning extends class_base
 		$submit = $this->parse($first."_RFP_SUBMIT");
 
 		$act_evt_no = strlen($_GET["act_evt_no"])?$_GET["act_evt_no"]:-1;
-		$act_cat_no = strlen($_GET["act_cat_no"])?$_GET_["act_evt_no"]:-1;
+		$act_cat_no = strlen($_GET["act_cat_no"])?$_GET["act_cat_no"]:-1;
 
 		$this->vars(array(
 			"YAH_BAR" => join("", $yah),
@@ -1335,7 +1335,7 @@ class conference_planning extends class_base
 					$additional_function["function_end_date"] = $val["function_end_date"];
 					$additional_function["function_end_time"] = $val["function_end_time"];
 					$additional_function["24h"] = $val["24h"];
-					$additional_function["catering"] = ($no < 1)?array():$data["additional_functions"][$no]["catering"];
+					$additional_function["catering"] = ($no < 0)?array():$data["additional_functions"][$no]["catering"];
 
 
 					$additional_function_catering["catering_type_chooser"] = $val["catering_type_chooser"];
@@ -1362,9 +1362,9 @@ class conference_planning extends class_base
 						if($cat_no < 0)
 						{
 							$t = $additional_function_catering;
-							if($t["catering_type_chooser"] || $t["catering_type_text"] || $t["catering_start_time"] || $t["catering_end_time"])
+							if($t["catering_type_chooser"] || $t["catering_type_text"] || $t["catering_start_time"] || $t["catering_end_time"] || $t["catering_attendee_no"])
 							{
-								$additional_function["catering"][] = $additional_function_catering;
+								array_push($additional_function["catering"], $t);
 							}
 						}
 						else
