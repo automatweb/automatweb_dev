@@ -271,6 +271,15 @@
             <type>date_select</type>
             <caption>Makse kuup&amp;amp;auml;ev</caption>
       </property>
+      <property>
+            <name>payment_order</name>
+            <table>objects</table>
+            <group>fee</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <caption>Maksekorraldus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PATENT</syslog_type>
             <relationmgr>yes</relationmgr>
