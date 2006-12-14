@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.212 2006/12/08 13:38:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.213 2006/12/14 13:02:04 kristo Exp $
 
 /*
 
@@ -881,7 +881,9 @@ class site_show extends class_base
 				));
 			}
 
-			if ($get_inact)
+			// if we are in full content trans, then we need to get all documents
+			// that are either active in original lang OR active in the current tr lang
+			if ($get_inact || aw_ini_get("user_interface.full_content_trans"))
 			{
 				$filter["status"] = array(STAT_ACTIVE,STAT_NOTACTIVE);
 			}
@@ -889,6 +891,7 @@ class site_show extends class_base
 			{
 				$filter["status"] = STAT_ACTIVE;
 			}
+
 			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
 			$filter["lang_id"] = $filt_lang_id;
 			$filter["sort_by"] = $ordby;
@@ -929,6 +932,20 @@ class site_show extends class_base
 			}
 
 			$documents = new object_list($filter);
+
+			if (!$get_inact && aw_ini_get("user_interface.full_content_trans"))
+			{
+				// filter the list for both-inactive docs
+				$doc_ol = new object_list();
+				foreach($documents->arr() as $__doc_o)
+				{
+					if ($__doc_o->status() == STAT_ACTIVE || $__doc_o->meta("trans_".aw_global_get("ct_lang_id")."_status"))
+					{
+						$doc_ol->add($__doc_o);
+					}
+				}
+				$documents = $doc_ol;
+			}
 
 			if ($has_rand)
 			{
