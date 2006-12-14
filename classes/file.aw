@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.144 2006/12/14 16:40:17 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.145 2006/12/14 22:01:55 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -165,7 +165,7 @@ class file extends class_base
 						$add_sig = html::href(array(
 							"url" => "#",
 							"caption" => t("Lisa allkiri"),
-							"onClick" => "aw_popup_scroll(\"".$url."\", \"".sprintf(t("Faili: %s, allkirjastamine"), $ddoc->name())."\", 410, 250);",
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Allkirjastamine")."\", 410, 250);",
 						));
 						$ddoc_link = html::href(array(
 							"url" => $this->mk_my_orb("change", array(
@@ -184,7 +184,7 @@ class file extends class_base
 						$add_sig = html::href(array(
 							"url" => "#",
 							"caption" => t("Allkirjasta"),
-							"onClick" => "aw_popup_scroll(\"".$url."\", \"".sprintf(t("Faili: %s, allkirjastamine"), $ddoc->name())."\", 410, 250);",
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Allkirjastamine")."\", 410, 250);",
 						));
 						$ddoc_link = html::href(array(
 							"url" => $this->mk_my_orb("change", array(
@@ -203,7 +203,8 @@ class file extends class_base
 						$data["value"] = html::href(array(
 							"url" => "#",
 							"caption" => t("Allkirjasta fail"),
-							"onClick" => "aw_popup_scroll(\"".$url."\", \"".sprintf(t("Faili: %s, allkirjastamine"), $arr["obj_inst"]->name())."\", 410, 250);",
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Faili: %s, allkirjastamine")."\", 410, 250);",
+
 						));
 						break;
 				}

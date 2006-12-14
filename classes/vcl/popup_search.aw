@@ -855,6 +855,8 @@ function aw_get_el(name,form)
 
 		@param clid optional type=array
 			The class id to search
+		@param confirm optional type=string
+			javascript confirmation popup caption
 		@comment
 			Returns the thml that displays search button for the user
 		@returns
@@ -862,9 +864,11 @@ function aw_get_el(name,form)
 	**/
 	function get_popup_search_link($arr)
 	{
+		$c = strlen($arr["confirm"])?" onClick=\"if(!confirm('$arr[confirm]')) {return false;}\"":"";
+		unset($arr["confirm"]);
 		$url = $this->mk_my_orb("do_search", $arr);
 		$s = t("Otsi");
-		return "<a class=\"aw04toolbarbutton\" title=\"$s\" alt=\"$s\" href='javascript:aw_popup_scroll(\"$url\",\"$s\",550,500)' onMouseOver=\"this.className='aw04toolbarbuttonhover'\" onMouseOut=\"this.className='aw04toolbarbutton'\" onMouseDown=\"this.className='aw04toolbarbuttondown'\" onMouseUp=\"this.className='aw04toolbarbuttonhover'\"><img alt=\"$s\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0></a>";
+		return "<a class=\"aw04toolbarbutton\" title=\"$s\" alt=\"$s\" href='javascript:aw_popup_scroll(\"$url\",\"$s\",550,500)'$c onMouseOver=\"this.className='aw04toolbarbuttonhover'\" onMouseOut=\"this.className='aw04toolbarbutton'\" onMouseDown=\"this.className='aw04toolbarbuttondown'\" onMouseUp=\"this.className='aw04toolbarbuttonhover'\"><img alt=\"$s\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0></a>";
 	}
 
 	/**

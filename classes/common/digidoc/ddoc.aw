@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.13 2006/12/14 16:40:17 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.14 2006/12/14 22:01:56 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -91,22 +91,26 @@ class ddoc extends class_base
 				$url = $this->mk_my_orb("upload_new_file", array(
 					"ddoc" => $arr["obj_inst"]->id(),
 				));
+				$s = $this->is_signed($arr["obj_inst"]->id());
 				$tb->add_button(array(
 					"name" => "add_file",
 					"tooltip" => t("Lisa fail"),
 					"onClick" => "aw_popup_scroll('".$url."', 'caption', 300, 100);",
 					"img" => "new.gif",
+					"confirm" => $s?t("Antud DigiDoc on ALLKIRJASTATUD, faili lisamisega eemaldatatakse automaatselt allkirjad! Kas te soovite j".html_entity_decode("&auml;")."tkata?"):NULL,
 				));
 				$tb->add_button(array(
 					"name" => "remove_file",
 					"tooltip" => t("Eemalda fail"),
 					"action" => "rem_file",
 					"img" => "delete.gif",
+					"confirm" => $s?t("Antud DigiDoc on ALLKIRJASTATUD, faili(de) eemaldamisega eemaldatakse ka allkirjad! Kas te soovite j".html_entity_decode("&auml;")."tkata?"):NULL,
 				));
 				$popup_search = get_instance("vcl/popup_search");
 				$search_butt = $popup_search->get_popup_search_link(array(
 					"pn" => "search_result_file",
 					"clid" => CL_FILE,
+					"confirm" => $s?t("Antud DigiDoc on ALLKIRJASTATUD, faili lisamisega eemaldatatakse automaatselt allkirjad! Kas te soovite j".html_entity_decode("&auml;")."tkata?"):NULL,
 				));
 				$tb->add_cdata($search_butt);
 				break;
@@ -380,6 +384,11 @@ class ddoc extends class_base
 	**/
 	function rem_file($arr)
 	{
+		// remove signatures if signed
+		if($this->is_signed($arr["id"]))
+		{
+			$this->remove_signatures($arr["id"]);
+		}
 		foreach($arr["sel"] as $file_id)
 		{
 			// do something
@@ -411,7 +420,6 @@ class ddoc extends class_base
 				{
 					$this->remove_signatures($arr["ddoc"]);
 				}
-				// TODO check for signatures, if any exist, delete them brutally!!
 				if(!$this->add_file(array(
 					"oid" => $arr["ddoc"],
 					"file" => array(
@@ -567,7 +575,7 @@ class ddoc extends class_base
 			));
 		}
 		$p = new ddoc2_parser($ret["SignedDocData"]);
-		if(!$this->set_ddoc($oid, $p->getDigiDoc()))
+		if(!$this->set_ddoc($oid, $p->getDigiDoc(), true))
 		{
 			error::raise(array(
 				"msg" => t("DigiDoc'i faili sisu seadmine eba&otilde;nnestus"),
@@ -901,6 +909,8 @@ class ddoc extends class_base
 	/**
 		@param ddoc_id required type=int
 			file id in the ddoc file container
+		@param remove optional type=bool
+			if this is set to true, file with $ddoc_id is removed from metainfo
 		@param oid required type=oid
 			aw CL_DDOC object oid
 		@param file required type=oid
@@ -916,21 +926,26 @@ class ddoc extends class_base
 	**/
 	function _write_file_metainfo($arr)
 	{
-		if(!is_oid($arr["oid"]) || !strlen($arr["ddoc_id"]) || !is_oid($arr["file"]))
+		if(!is_oid($arr["oid"]) || !strlen($arr["ddoc_id"]) || (!is_oid($arr["file"]) && !$arr["remove"]))
 		{
 			return false;
 		}
 		$o = obj($arr["oid"]);
 		$m = aw_unserialize($o->prop("files"));
-
-		$m[$arr["ddoc_id"]] = array(
-			"file" => strlen($arr["file"])?$arr["file"]:$m[$arr["ddoc_id"]]["file"],
-			"size" => strlen($arr["size"])?$arr["size"]:$m[$arr["ddoc_id"]]["size"],
-			"type" => strlen($arr["type"])?$arr["type"]:$m[$arr["ddoc_id"]]["type"],
-			"name" => strlen($arr["name"])?$arr["name"]:$m[$arr["ddoc_id"]]["name"],
-			"hash" => strlen($arr["hash"])?$arr["hash"]:$m[$arr["ddoc_id"]]["hash"],
-		);
-
+		if($arr["remove"])
+		{
+			unset($m[$arr["ddoc_id"]]);
+		}
+		else
+		{
+			$m[$arr["ddoc_id"]] = array(
+				"file" => strlen($arr["file"])?$arr["file"]:$m[$arr["ddoc_id"]]["file"],
+				"size" => strlen($arr["size"])?$arr["size"]:$m[$arr["ddoc_id"]]["size"],
+				"type" => strlen($arr["type"])?$arr["type"]:$m[$arr["ddoc_id"]]["type"],
+				"name" => strlen($arr["name"])?$arr["name"]:$m[$arr["ddoc_id"]]["name"],
+				"hash" => strlen($arr["hash"])?$arr["hash"]:$m[$arr["ddoc_id"]]["hash"],
+			);
+		}
 		$o->set_prop("files", aw_serialize($m, SERIALIZE_NATIVE));
 		$o->save();
 		return true;
@@ -1002,6 +1017,7 @@ class ddoc extends class_base
 		{
 			// anyway.. this checks if there is need to recreate aw file objects($save var), 
 			// and if given hash exists already in ddoc metadata. if it doesen't aw file object is created
+			$_inside_new_ddoc[$ddoc_id] = $data["hash"];
 			if(!$save || !($from_hash_exists = $this->_hash_exists($oid, $data["hash"])))
 			{
 				$id = $file_inst->create_file_from_string(array(
@@ -1036,7 +1052,22 @@ class ddoc extends class_base
 			}
 
 		}
+		// welll.. this is for case when file has been removed from ddoc, and needs to be removed from meta also
 		$o->save();
+		$_meta_files = aw_unserialize($o->prop("files"));
+		foreach($_meta_files as $ddoc_id => $data)
+		{
+			if($_inside_new_ddoc[$ddoc_id] != $data["hash"])
+			{
+				$this->_write_file_metainfo(array(
+					"oid" => $oid,
+					"ddoc_id" => $ddoc_id,
+					"remove" => true,
+				));
+			}
+		}
+		$o->save();
+		
 		// set signatures
 		foreach($ret2["SignedDocInfo"]->SignatureInfo as $sign)
 		{
@@ -1249,11 +1280,11 @@ class ddoc extends class_base
 				{
 					$use_prev = ((time() - $_SESSION["prev_sign_mark"]) < 3);
 				}
+				$_SESSION["prev_sign_mark"] = time();
 				if(!$use_prev)
 				{
 					$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 					$ret = $this->digidoc->WSDL->PrepareSignature($arr["signCertHex"], $arr["signCertId"], $arr["role"], $arr["city"], $arr["state"], $arr["postalcode"], $arr["country"]);
-					$_SESSION["prev_sign_value"] = aw_serialize($ret, SERIALIZE_NATIVE);
 				}
 				else
 				{
@@ -1263,10 +1294,13 @@ class ddoc extends class_base
 				// chekking preparation results
 				if(PEAR::isError($ret))
 				{
-					die("preparation step chrashed: ".$ret->getMessage());
+					error::raise(array(
+						"msg" => t("preparation step chrashed: ".$ret->getMessage()),
+					));
 				}
 				else
 				{
+					$_SESSION["prev_sign_value"] = aw_serialize($ret, SERIALIZE_NATIVE);
 					$_SESSION["signatureId"] = !isset($_SESSION["signatureId"])?$ret["SignatureId"]:$_SESSION["signatureId"];
 					$_SESSION['signedInfoDigest'] = !isset($_SESSION['signedInfoDigest'])?$ret['SignedInfoDigest']:$_SESSION['signedInfoDigest'];
 					$rep['{2}'] = $_SESSION['signedInfoDigest'];
