@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.21 2006/12/06 16:04:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.22 2006/12/14 12:22:23 markop Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -620,6 +620,11 @@ class crm_address extends class_base
 			$o->set_class_id(CL_CRM_COUNTRY);
 			$o->set_parent($parent);
 			$o->set_name($name);
+			$o->save();
+		}
+		else
+		{
+			$o = reset($o_l->arr());
 		}
 		return $o->id();
 	}

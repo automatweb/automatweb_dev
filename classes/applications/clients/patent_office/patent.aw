@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.20 2006/12/13 16:23:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.21 2006/12/14 12:22:22 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -131,6 +131,9 @@
 	@property payment_date type=date_select 
 	@caption Makse kuup&auml;ev
 	
+	@property payment_order type=fileupload
+	@caption Maksekorraldus
+	
 
 #saidilt lisamise propertyd
 groupinfo web caption="Saidilt lisamine"
@@ -188,9 +191,9 @@ class patent extends class_base
 		));
 	
 		$this->info_levels = array("applicant","trademark","products_and_services","priority","fee","check");
-		$this->text_vars = array("name" , "firstname" , "lastname" ,  "code" , "street", "city" ,"index", "country_code" , "phone" , "email" , "fax" ,  "undefended_parts" , "wordmark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "payer" , "doc_nr","authorized_person_firstname", "authorized_person_lastname","authorized_person_code", "correspond_street","correspond_city","correspond_index","correspond_country_code");
+		$this->text_vars = array("name" , "firstname" , "lastname" ,  "code" , "street", "city" ,"index", "country_code" , "phone" , "email" , "fax" ,  "undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "payer" , "doc_nr","authorized_person_firstname", "authorized_person_lastname","authorized_person_code", "correspond_street","correspond_city","correspond_index","correspond_country_code");
 		$this->text_area_vars = array("colors" , "trademark_character", "element_translation", "additional_info");
-		$this->file_upload_vars = array("warrant" , "reproduction");
+		$this->file_upload_vars = array("warrant" , "reproduction" , "payment_order");
 		$this->date_vars = array("payment_date" , "exhibition_date", "convention_date");
 		$this->types = array(t("Sõnamärk"),t("Kujutismärk"),t("Kombineeritud märk"),t("Ruumiline märk"));
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
@@ -304,7 +307,7 @@ class patent extends class_base
 		$patent = obj($id);
 		$property_vars = array("procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "reproduction" , "trademark_type" ,
 			 "priority" , "convention_nr" , "convention_country" , "exhibition_name", "exhibition_country", "exhibition" , "request_fee" , "classes_fee",
-			 "payer" , "doc_nr" , "warrant", "wordmark");
+			 "payer" , "doc_nr" , "warrant", "word_mark");
 	
 		foreach($property_vars as $var)
 		{
@@ -315,6 +318,15 @@ class patent extends class_base
 		{
 			$_SESSION["patent"][$var] = $patent->prop($var);
 			//$_SESSION["patent"][$var] = date("d",$patent->prop($var))."/".date("m",$patent->prop($var))."/".date("Y",$patent->prop($var));
+		}
+		
+		if($_SESSION["patent"]["trademark_type"][0])
+		{	
+			$_SESSION["patent"]["co_trademark"] = 1;
+		}
+		if($_SESSION["patent"]["trademark_type"][1])
+		{
+			$_SESSION["patent"]["guaranty_trademark"] = 1;
 		}
 		
 		$_SESSION["patent"]["products"] = $patent->meta("products");
@@ -361,18 +373,14 @@ class patent extends class_base
 					$city = obj($address_obj->prop("linn"));
 					$_SESSION["patent"]["applicants"][$key]["city"] = $city->name();
 				}
-				if(is_oid($address_obj->prop("riik")))
+				$_SESSION["patent"]["applicants"][$key]["country_code"] = $address_inst->get_country_code($address_obj->prop("riik"));
+				if($address_inst->get_country_code($address_obj->prop("riik") == "EE"))
 				{
-					$_SESSION["patent"]["applicants"][$key]["country"] = $address_inst->get_country_code($address_obj->prop("riik"));
-					if($address_inst->get_country_code($address_obj->prop("riik") == "EE"))
-					{
-						$_SESSION["patent"]["applicants"][$key]["country"] = 0;
-						
-					}
-					else
-					{
-						$_SESSION["patent"]["applicants"][$key]["country"] = 1;
-					}
+					$_SESSION["patent"]["applicants"][$key]["country"] = 0;
+				}
+				else
+				{
+					$_SESSION["patent"]["applicants"][$key]["country"] = 1;
 				}
 			}
 			if(is_oid($correspond_address))
@@ -385,10 +393,7 @@ class patent extends class_base
 					$city = obj($correspond_address_obj->prop("linn"));
 					$_SESSION["patent"]["applicants"][$key]["correspond_city"] = $city->name();
 				}
-				if(is_oid($address_obj->prop("riik")))
-				{
-					$_SESSION["patent"]["applicants"][$key]["correspond_country_code"] = $address_inst->get_country_code($correspond_address_obj->prop("riik"));
-				}
+				 $_SESSION["patent"]["applicants"][$key]["correspond_country_code"] = $address_inst->get_country_code($correspond_address_obj->prop("riik"));
 			}
 		}
 		if(is_oid($patent->prop("authorized_person")) && $this->can("view" , $patent->prop("authorized_person")))
@@ -505,7 +510,6 @@ class patent extends class_base
 		$data["data_type"] = $arr["data_type"];
 		$data["data_type_name"] = $this->info_levels[$arr["data_type"]];
 		$this->get_user_data($arr);
-		$this->get_vars($arr);
 		
 		foreach ($this->text_vars as $var)
 		{
@@ -543,7 +547,7 @@ class patent extends class_base
 		//siia siis miski tingimus, et on makstud jne... siis ei tohi muuta saada enam
 		if(true)
 		{
-			$p_vars = array("request_fee" , "classes_fee" , "payer" , "doc_nr");
+			$p_vars = array("request_fee" , "classes_fee" );
 			foreach($p_vars as $var)
 			{
 				$data[$var] = $_SESSION["patent"][$var];
@@ -556,43 +560,59 @@ class patent extends class_base
 	function get_vars($arr)
 	{
 		$data = array();
-		
+		if(!$_SESSION["patent"]["applicant_id"] && sizeof($_SESSION["patent"]["applicants"]))
+		{
+			$_SESSION["patent"]["applicant_id"] = reset(array_keys($_SESSION["patent"]["applicants"]));
+		}
 		if(isset($_SESSION["patent"]["applicant_id"]) && $_SESSION["patent"]["applicant_id"]!= "")
 		{
-			$this->_get_applicant_data();
+			if($_SESSION["patent"]["add_new_applicant"])
+			{
+				 $_SESSION["patent"]["add_new_applicant"] = null;
+			}
+			else
+			{
+				$this->_get_applicant_data();
+				$data["change_applicant"] = $_SESSION["patent"]["applicant_id"];
+			}
 			//$data["applicant_id"] = $_SESSION["patent"]["applicant_id"];
-			$data["change_applicant"] = $_SESSION["patent"]["applicant_id"];
 			$_SESSION["patent"]["change_applicant"] = null;
 			$_SESSION["patent"]["applicant_id"] = null;
+		}
+		else
+		{
+			$data["applicant_no"] = sizeof($_SESSION["patent"]["applicants"]) + 1;
 		}
 		//nendesse ka siis see tingumus, et muuta ei saa
 
 		if(true)
 		{
-			$classes = array();
+/*			$classes = array();
 			if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
 			{
 				foreach($_SESSION["patent"]["products"] as $key=> $val)
 				{
-					$prod = obj($key);
-					$classes[$prod->parent()] = $prod->parent();
+					if($this->can("view", $key))
+					{
+						$prod = obj($key);
+						$classes[$prod->parent()] = $prod->parent();
+					}
 				}
-			}
-			if(sizeof($classes))
+			}*/
+			if(sizeof($_SESSION["patent"]["products"]))
 			{
 				$_SESSION["patent"]["request_fee"]=2300;
 				if($_SESSION["patent"]["co_trademark"] || $_SESSION["patent"]["guaranty_trademark"])
 				{
 					$_SESSION["patent"]["request_fee"]=3000;
 				}
-				$_SESSION["patent"]["classes_fee"]= (sizeof($classes) - 1 )*700;
+				$_SESSION["patent"]["classes_fee"]= (sizeof($_SESSION["patent"]["products"]) - 1 )*700;
 			}
 			else
 			{
 				$_SESSION["patent"]["request_fee"] = 0;
 				$_SESSION["patent"]["classes_fee"] = 0;
 			}
-			
 			if(sizeof($_SESSION["patent"]["applicants"] == 1))
 			{
 				$_SESSION["patent"]["representer"] = reset(array_keys($_SESSION["patent"]["applicants"]));
@@ -606,7 +626,7 @@ class patent extends class_base
 				$data["payer"] =  $_SESSION["patent"]["payer"] = $_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["firstname"]." ".$_SESSION["patent"]["applicants"][$_SESSION["patent"]["representer"]]["lastname"];
 			}
 		}
-		
+
 		$data["country"] = t("Eesti :").html::radiobutton(array(
 			"value" => 0,
 			"checked" => (!$_SESSION["patent"]["country"] && isset($_SESSION["patent"]["country"])) ? 1 : 0,
@@ -670,7 +690,7 @@ class patent extends class_base
 				"name" => "guaranty_trademark",
 			)).t("Garantiim&auml;rk");
 		$dummy = obj($arr["alias"]["to"]);
-		$parent = $dummy->prop("procurator_menu");
+		$parent = $_SESSION["patent"]["parent"] = $data["parent"] = $dummy->prop("trademarks_menu");
 /*		$procurator_l = new object_list(array(
 			"lang_id" => array(),
 			"parent" => $parent, 
@@ -691,7 +711,7 @@ class patent extends class_base
 			))."<div id='procurator_name'> ".$procurator_name."</div> <div id='procurator_code'>".$procurator_code."</div>".html::href(array(
 			"caption" => t("Vali") ,
 			"url"=> "javascript:void(0);",
-			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("procurator_popup", array("print" => 1 , "parent" => $parent)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("procurator_popup", array("print" => 1 , "parent" => $dummy->prop("procurator_menu"))).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			
 		));
 		;
@@ -701,18 +721,17 @@ class patent extends class_base
 			"name" => "procurator",
 			"value" => $_SESSION["patent"]["procurator"]
 		));*/
-		
-		$_SESSION["patent"]["parent"] = $data["parent"] = $dummy->prop("patents_menu");
+
 		$data["add_new_applicant"] = html::radiobutton(array(
 				"value" => 1,
 				"checked" => 0,
 				"name" => "add_new_applicant",
 		));
-		$data["applicant_no"] = sizeof($_SESSION["patent"]["applicants"]) + 1;
-		if(is_array($_SESSION["patent"]["applicants"]))
+		
+		if(is_array($_SESSION["patent"]["applicants"]) && sizeof($_SESSION["patent"]["applicants"]))
 		{
 			$data["applicants_table"] = $this->_get_applicants_table();
-		}	
+		}
 		foreach($this->country_popup_link_vars as $var)
 		{
 			$data[$var."_popup_link"] = html::href(array(
@@ -738,9 +757,8 @@ class patent extends class_base
 			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("payer_popup", array("print" => 1)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			
 		));
-		
+		$data["sum"] = $this->get_payment_sum();
 		$_SESSION["patent"]["prod_ru"] = get_ru();
-		
 		$data["results_table"] = $this->get_results_table();
 		return $data;
 	}
@@ -751,13 +769,16 @@ class patent extends class_base
 		$sum = 0;
 		if(is_array($_SESSION["patent"]["products"]) && sizeof($_SESSION["patent"]["products"]))
 		{
-			
+/*			
 			foreach($_SESSION["patent"]["products"] as $key=> $val)
 			{
-				$prod = obj($key);
-				$classes[$prod->parent()] = $prod->parent();
+				if($this->can("view" ,$key))
+				{
+					$prod = obj($key);
+					$classes[$prod->parent()] = $prod->parent();
+				}
 			}
-			
+*/			
 			$_SESSION["patent"]["classes_fee"]= (sizeof($_SESSION["patent"]["products"]) - 1 )*700;
 			
 			if(sizeof($classes))
@@ -770,8 +791,7 @@ class patent extends class_base
 				{
 					$sum = 2300;
 				}
-				
-				$sum = $sum + (sizeof($classes) - 1 )*700;
+				$sum = $sum + (sizeof($_SESSION["patent"]["products"]) - 1 )*700;
 			}
 		}
 		return $sum;	
@@ -791,8 +811,28 @@ class patent extends class_base
 			"class_id" => CL_CRM_PERSON,
 		));
 	
+	
+	
+		$tpl = "procurator_popup.tpl";
+		$is_tpl = $this->read_template($tpl,1);
+		$c = " ";
+
 		foreach($procurator_l->arr() as $key => $val)
 		{
+			$this->vars(array(
+				"id"=> $val->id(),
+				"name" => $val->name(),
+				"code" => $val->prop("personal_id"),
+				"onclick" => 'javascript:
+					window.opener.document.getElementById("procurator").value= "'.$val->id().'";
+					window.opener.document.getElementById("procurator_name").innerHTML= "'.$val->name().'";
+					window.opener.document.getElementById("procurator_code").innerHTML= "'.$val->prop("personal_id").'";
+					window.opener.document.getElementById("warrant_row").style.display = "";
+					window.close()',
+				"code" => $key,
+			));
+			$c .= $this->parse("PROCURATOR");
+
 			$ret .= '<a href="javascript:void(0);" onClick=\'javascript:
 				window.opener.document.getElementById("procurator").value= "'.$val->id().'";
 				window.opener.document.getElementById("procurator_name").innerHTML= "'.$val->name().'";
@@ -800,6 +840,14 @@ class patent extends class_base
 				window.opener.document.getElementById("warrant_row").style.display = "";
 				window.close()\'>'.$val->name().' </a><br>';
 		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
+		}
+
+		if($is_tpl)
+		{
+			$this->vars(array(
+				"PROCURATOR" => $c,
+			));
+			return $this->parse();
 		}
 		return $ret;
 	}
@@ -822,49 +870,65 @@ class patent extends class_base
 			"name" => "class",
 			"caption" => t("Klass"),
 		));
-		$t->define_field(array(
-			"name" => "class_name",
-			"caption" => t("Klassi nimi"),
-		));
+//		$t->define_field(array(
+//			"name" => "class_name",
+//			"caption" => t("Klassi nimi"),
+//		));
 		$t->define_field(array(
 			"name" => "prod",
 			"caption" => t("Toode/teenus"),
 		));
 	
+		$classes = array();
 		//arr($_SESSION["patent"]["applicants"]);
 		if(is_array($_SESSION["patent"]["prod_selection"]))
 		{
 			foreach($_SESSION["patent"]["prod_selection"] as $prod)
 			{
-	
+				if(!$this->can("view" , $prod))
+				{
+					continue;
+				}
+				
 				$product = obj($prod);
 				$parent = obj($product->parent());
-				$t->define_data(array(
-					"prod" => html::textarea(array("name" => "products[".$prod."]" , "value" => $product->name() . "(" .$product->prop("code").  ")", )),
-					"class" => $parent->comment(),
-					"class_name" => $parent->name(),
+								
+				$classes[$product->parent()][$product->id()] = $product->name() . "(" .$product->prop("code").  ")";
+
+//				$t->define_data(array(
+//					"prod" => html::textarea(array("name" => "products[".$prod."]" , "value" => $product->name() . "(" .$product->prop("code").  ")", )),
+//					"class" => $parent->comment(),
+//					"class_name" => $parent->name(),
 	//				"oid"	=> $prod->id(),
-				));
+//				));
 			}
 			$_SESSION["patent"]["prod_selection"] = null;
-		}		
+		}
 		
+	
 		if(is_array($_SESSION["patent"]["products"]))
 		{
 			foreach($_SESSION["patent"]["products"] as $key=> $val)
 			{
-				$product = obj($key);
-				$parent = obj($product->parent());
-				$t->define_data(array(
-					"prod" => html::textarea(array("name" => "products[".$key."]" , "value" => $val, )),
-					"class" => $parent->comment(),
-					"class_name" => $parent->name(),
+				$classes[$key][] = $val;
+//				$t->define_data(array(
+//					"prod" => html::textarea(array("name" => "products[".$key."]" , "value" => $val, )),
+//					"class" => $parent->comment(),
+//					"class_name" => $parent->name(),
 	//				"oid"	=> $prod->id(),
-				));
+//				));
 			}
 //			$_SESSION["patent"]["prod_selection"] = null;
 		}		
-		
+		foreach($classes as $class => $prods)
+		{
+			$t->define_data(array(
+				"prod" => html::textarea(array("name" => "products[".$class."]" , "value" => join("\n" , $prods))),
+				"class" => $class,
+//				"class_name" => $parent->name(),
+	//			"oid"	=> $prod->id(),
+			));
+		}
 		return $t->draw();
 	}
 	
@@ -911,7 +975,12 @@ class patent extends class_base
 				"caption" => t("Vali"),
 			));
 			
-			$products = new object_list(array("name" => "%".$_POST["product"]."%", "class_id" => CL_SHOP_PRODUCT , "lang_id" => array()));
+			$products = new object_list(array(
+				"name" => "%".$_POST["product"]."%",
+				"class_id" => CL_SHOP_PRODUCT ,
+				"lang_id" => array(),
+				"limit" => 500,
+				));
 			
 			if($is_tpl)
 			{
@@ -980,11 +1049,29 @@ class patent extends class_base
 	{
 		$address_inst = get_instance(CL_CRM_ADDRESS);
 		$ret = "";
+		
+		
+		$tpl = "country_popup.tpl";
+		$is_tpl = $this->read_template($tpl,1);
+		$c = "";
 		foreach($address_inst->get_country_list() as $key=> $val)
 		{
-			
+			$this->vars(array(
+				"name" => $val,
+				"onclick" => 'javascript:window.opener.document.changeform.'.$arr["var"].'.value="'.$key.'";window.close()',
+				"code" => $key,
+			));
+			$c .= $this->parse("COUNTRY");
 			$ret .= "<a href='javascript:void(0);' onClick='javascript:window.opener.document.changeform.".$arr["var"].".value=\"".$key."\";window.close()'>".$val." </a><br>";
 		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
+		}
+		if($is_tpl)
+		{
+			$this->vars(array(
+				"COUNTRY" => $c,
+				"var" => $arr["var"]
+			));
+			return $this->parse();
 		}
 		return $ret;
 	}
@@ -1049,7 +1136,10 @@ class patent extends class_base
 					"name" => "representer",
 				)),
 				"change" => html::href(array(
+			//		"url" => "#",
 					"url" => "javascript:document.getElementById(\"applicant_id\").value=".$key.";document.changeform.submit();",//aw_url_change_var("change_applicant" , $key , get_ru()),
+			//		"onClick" => 'javascript:window.open("'.$delete_link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=100, width=100")',
+
 				//	"onClick"=>"self.disabled=true;submit_changeform(''); return false;",
 					"caption" => t("Muuda"),
 					//"title" => t("Muuda"),
@@ -1105,7 +1195,7 @@ class patent extends class_base
 		
 		if($_POST["add_new_applicant"] || $_POST["applicant_id"] != "")
 		{
-			$_SESSION["patent"]["add_new_applicant"] = null;
+			$_SESSION["patent"]["add_new_applicant"] = 1;
 			return aw_url_change_var("trademark_id" , null , $arr["return_url"]);
 			//return $arr["return_url"];
 		}
@@ -1131,7 +1221,13 @@ class patent extends class_base
 		}
 		else
 		{
-			$n = sizeof($_SESSION["patent"]["applicants"]);
+			//otsib esimese mitte kasutatava key
+			$n = 0;
+			while(array_key_exists($n , $_SESSION["patent"]["applicants"]))
+			{
+				$n++;
+			}
+//			$n = sizeof($_SESSION["patent"]["applicants"]);
 		}
 		foreach($applicant_vars as $var)
 		{
@@ -1183,6 +1279,14 @@ class patent extends class_base
 	{
 	//	$patent->set_prop("country" ,$_SESSION["patent"]["country"]);
 		$address_inst = get_instance(CL_CRM_ADDRESS);
+		$conns = $patent->connections_from(array(
+			"type" => "RELTYPE_APPLICANT",
+		));
+		foreach($conns as $conn)
+		{
+			$conn->delete();
+		}
+		
 		foreach($_SESSION["patent"]["applicants"] as $key => $val)
 		{
 			$applicant = new object();
@@ -1233,7 +1337,7 @@ class patent extends class_base
 				
 				$correspond_address->set_prop("aadress", $val["correspond_street"]);
 				$correspond_address->set_prop("postiindeks" , $val["correspond_index"]);
-				$correspond_address->set_prop("riik" , $address_inst->get_country_by_code($val["correspond_country_code"]));
+				$correspond_address->set_prop("riik" , $address_inst->get_country_by_code($val["correspond_country_code"], $applicant->id()));
 				if($val["correspond_city"])
 				{
 					$citys = new object_list(array("lang_id" => 1, "class_id" => CL_CRM_CITY, "name" => $val["correspond_city"]));
@@ -1242,8 +1346,8 @@ class patent extends class_base
 						$city = new object();
 						$city->set_parent($applicant->id());
 						$city->set_class_id(CL_CRM_CITY);
-						$city->save();
 						$city->set_name($val["correspond_city"]);
+						$city->save();
 					}
 					$correspond_address->set_prop("linn" ,$city->id());
 				}
@@ -1331,6 +1435,7 @@ class patent extends class_base
 				$patent->set_prop("applicant" , $applicant->id());
 			}
 			$patent->set_prop("applicant" , $applicant->id());
+			$applicant->save();
 		}
 		
 		//$patent->set_prop("country" , $_SESSION["patent"]["country_code"]);
@@ -1369,7 +1474,7 @@ class patent extends class_base
 	
 	function save_fee($patent)
 	{
-		$vars = array("request_fee" , "classes_fee" , "payer" , "doc_nr");
+		$vars = array("request_fee" , "classes_fee");
 		foreach($vars as $var)
 		{
 			if($_SESSION["patent"][$var])
@@ -1402,7 +1507,7 @@ class patent extends class_base
 	
 	function save_trademark($patent)
 	{
-		$patent->set_prop("word_mark" , $_SESSION["patent"]["wordmark"]);
+		$patent->set_prop("word_mark" , $_SESSION["patent"]["word_mark"]);
 		$patent->set_prop("colors" , $_SESSION["patent"]["colors"]);
 		$patent->set_prop("trademark_character" , $_SESSION["patent"]["trademark_character"]);
 		$patent->set_prop("element_translation" , $_SESSION["patent"]["element_translation"]);
@@ -1459,9 +1564,15 @@ class patent extends class_base
 				$url = aw_url_change_var("data_type", null , $url);
 				
 				$this->vars(array(
+					"date" 		=> date("j.m.Y" , $patent->created()),
+					"nr" 		=> ($patent->prop("convention_nr")) ? $patent->prop("convention_nr") : t("Number puudub"),
+					"applicant" 	=> $patent->prop_str("applicant"),
+					"type" 		=> $this->types[$patent->prop("type")],
+					"state" 	=> ($patent->prop("verified")) ? t("Kinnitatud") : t("Kinnitamata"),
 					"name" 	 	=> $patent->name(),
-					"id"	 	=> $patent->id(),
-					"url" 		=> $url,
+					"id" 	 	=> $patent->id(),
+					"url"  		=> $url,
+					"procurator"  	=> $patent->prop_str("procurator"),
 				));
 				$c .= $this->parse("LIST");
 			}
