@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.143 2006/12/13 14:17:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.144 2006/12/14 16:40:17 sander Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -158,18 +158,42 @@ class file extends class_base
 				switch($res["status"])
 				{
 					case 1:
-						$data["value"] = t("Allkirjastatud fail");
+						$url = $ddoc_inst->sign_url(array(
+							"ddoc_oid" => $res["ddoc"],
+						));
+						$ddoc = obj($res["ddoc"]);
+						$add_sig = html::href(array(
+							"url" => "#",
+							"caption" => t("Lisa allkiri"),
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".sprintf(t("Faili: %s, allkirjastamine"), $ddoc->name())."\", 410, 250);",
+						));
+						$ddoc_link = html::href(array(
+							"url" => $this->mk_my_orb("change", array(
+								"id" => $ddoc->id(),
+								"return_url" => get_ru(),
+							), CL_DDOC),
+							"caption" => t("DigiDoc konteinerisse"),
+						));
+						$data["value"] = $add_sig." (".$ddoc_link.")";
 						break;
 					case 0:
 						$url = $ddoc_inst->sign_url(array(
 							"ddoc_oid" => $res["ddoc"],
 						));
 						$ddoc = obj($res["ddoc"]);
-						$data["value"] = html::href(array(
+						$add_sig = html::href(array(
 							"url" => "#",
-							"caption" => t("Allkirjasta DigiDoc konteiner"),
+							"caption" => t("Allkirjasta"),
 							"onClick" => "aw_popup_scroll(\"".$url."\", \"".sprintf(t("Faili: %s, allkirjastamine"), $ddoc->name())."\", 410, 250);",
 						));
+						$ddoc_link = html::href(array(
+							"url" => $this->mk_my_orb("change", array(
+								"id" => $ddoc->id(),
+								"return_url" => get_ru(),
+							), CL_DDOC),
+							"caption" => t("DigiDoc konteiner"),
+						));
+						$data["value"] = $add_sig." (".$ddoc_link.")";
 
 						break;
 					case -1:

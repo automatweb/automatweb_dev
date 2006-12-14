@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.12 2006/12/13 14:17:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.13 2006/12/14 16:40:17 sander Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -972,7 +972,6 @@ class ddoc extends class_base
 		{
 			$ret2["SignedDocInfo"]->SignatureInfo = array(0 => $ret2["SignedDocInfo"]->SignatureInfo);
 		}
-		
 		// get files
 		$p = new ddoc2_parser();
 
