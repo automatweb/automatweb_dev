@@ -114,7 +114,8 @@ class doc_display extends aw_template
 			"date" => $_date,
 			"edit_doc" => $em,
 			"doc_link" => $doc_link,
-			"print_link" => aw_url_change_var("print", 1)
+			"print_link" => aw_url_change_var("print", 1),
+			"trans_lc" => aw_global_get("ct_lang_lc")
 		));
 
 		$ablock = "";
@@ -205,15 +206,26 @@ class doc_display extends aw_template
 
 	function _get_text($arr, $doc)
 	{
+		$lead = $doc->trans_get_val("lead");
+		$content = $doc->trans_get_val("content");
+		$sps = $doc->meta("setps");
+		if ($sps["lead"])
+		{
+			$lead = $sps["lead"];
+		}
+		if ($sps["content"])
+		{
+			$content = $sps["content"];
+		}
 		if ($arr["leadonly"] > -1)
 		{
-			$text = $doc->trans_get_val("lead");
+			$text = $lead; //$doc->trans_get_val("lead");
 		}
 		else
 		{
 			if ($doc->prop("showlead") || $arr["showlead"])
 			{
-				$lead = $doc->trans_get_val("lead");
+				//$lead = $doc->trans_get_val("lead");
 				if (trim(strtolower($lead)) == "<br>")
 				{
 					$lead = "";
@@ -224,16 +236,16 @@ class doc_display extends aw_template
 					{
 						$lead = "<b>".$lead."</b>";
 					}
-					$text = $lead.aw_ini_get("document.lead_splitter").$doc->trans_get_val("content");
+					$text = $lead.aw_ini_get("document.lead_splitter").$content; //$doc->trans_get_val("content");
 				}
 				else
 				{
-					$text = $doc->trans_get_val("content");
+					$text = $content; //$doc->trans_get_val("content");
 				}
 			}
 			else
 			{
-				$text = $doc->trans_get_val("content");
+				$text = $content; //$doc->trans_get_val("content");
 			}
 		}
 		// line break conversion between wysiwyg and not
@@ -245,6 +257,21 @@ class doc_display extends aw_template
 			$text = str_replace("<br /><ul><br />", "<ul>", $text);
 			$text = str_replace("</ul><br />", "</ul>", $text);
 		}
+
+		if (strpos($text, "#login#") !== false)
+                {
+                        if (aw_global_get("uid") == "")
+                        {
+                                $li = get_instance("aw_template");
+                                $li->init();
+                                $li->read_template("login.tpl");
+                                $text = str_replace("#login#", $li->parse(), $text);
+                        }
+                        else
+                        {
+                                $text = str_replace("#login#", "", $text);
+                        }
+                }
 
 		// if show in iframe is set, just return the iframe
 		if ($doc->prop("show_in_iframe") && !$_REQUEST["only_document_content"])
