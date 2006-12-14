@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.21 2006/12/14 15:22:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.22 2006/12/14 15:30:02 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -821,7 +821,6 @@ class conference_planning extends class_base
 			}
 			elseif($no != $i-1)
 			{
-				arr($i);
 				$this->vars(array(
 					"step_nr" => $i,
 					"caption" => strlen($act)?$yah_caption[$i]:"",
@@ -840,7 +839,8 @@ class conference_planning extends class_base
 		$this->vars(array(
 			"YAH_BAR" => join("", $yah),
 		));
-		$yah_bar = $this->parse($first."_RFP_YAH");
+		$first_for_yah = ($first == "LAST")?"OTHER":$first;
+		$yah_bar = $this->parse($first_for_yah."_RFP_YAH");
 
 		$this->vars(array(
 			"url" => "orb.aw",
@@ -854,7 +854,7 @@ class conference_planning extends class_base
 			"YAH_BAR" => join("", $yah),
 			"confirm_ch_id" => CONFIRM_ID,
 			"sub_contents" => $sc->parse(),
-			$first."_RFP_YAH" => $yah_bar,
+			$first_for_yah."_RFP_YAH" => $yah_bar,
 			$first."_RFP_SUBMIT" => $submit,
 			"action" => aw_ini_get("baseurl"),
 			"reforb" => $this->mk_reforb("submit_back", array(
