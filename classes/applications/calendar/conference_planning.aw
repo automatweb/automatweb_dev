@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.20 2006/12/14 14:54:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.21 2006/12/14 15:22:19 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -33,6 +33,7 @@
 @caption Riik
 */
 
+define(CONFIRM_ID, "confirm_submit_checkbox");
 class conference_planning extends class_base
 {
 	function conference_planning()
@@ -705,6 +706,7 @@ class conference_planning extends class_base
 				}
 				$sc->vars(array(
 					"SEARCH_RESULT" => $rows,
+					"confirm_ch_id" => CONFIRM_ID,
 				));
 				break;
 			case "qa":
@@ -764,9 +766,13 @@ class conference_planning extends class_base
 		{
 			$first = "FIRST";
 		}
-		elseif($no > 1 && $no <= 7)
+		elseif($no > 1 && $no < 7)
 		{
 			$first = "OTHER";
+		}
+		elseif($no == 7)
+		{
+			$first = "LAST";
 		}
 		$yah_caption = array(
 			1 => "",
@@ -846,6 +852,7 @@ class conference_planning extends class_base
 
 		$this->vars(array(
 			"YAH_BAR" => join("", $yah),
+			"confirm_ch_id" => CONFIRM_ID,
 			"sub_contents" => $sc->parse(),
 			$first."_RFP_YAH" => $yah_bar,
 			$first."_RFP_SUBMIT" => $submit,

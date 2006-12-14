@@ -90,4 +90,6 @@ $lc_conference_planning["LC_ZIP"] = "Zip";
 $lc_conference_planning["LC_CONTACT_INFORMATION"] = "Contact information";
 $lc_conference_planning["LC_NAME"] = "Name";
 // phone no, email
+
+$lc_conference_planning["LC_PLEASE_CONFIRM"] = "Please confirm your data";
 ?>

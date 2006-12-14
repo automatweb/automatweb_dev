@@ -83,7 +83,7 @@
 	<!-- SUB: LAST_RFP_SUBMIT -->
 	<tr>
 		<td align="center">
-			<input type="button" onClick="javascript:submit_changeform('submit_back');" value="Change data" />&nbsp;<input type="button" onClick="javascript:submit_changeform('submit_final');" value="Submit" />
+			<input type="button" onClick="javascript:submit_changeform('submit_back');" value="Change data" />&nbsp;<input type="button" onClick="javascript:checkConfirm();javascript:submit_changeform('submit_final');" value="Submit" />
 		</td>
 	</tr>
 	<!-- END SUB: LAST_RFP_SUBMIT -->
@@ -105,6 +105,15 @@
 			document.changeform.action.value = action;
 		};
 		document.changeform.submit();
+	}
+	function checkConfirm()
+	{
+		el = document.getElementById('{VAR:confirm_ch_id}');
+		if(!(el.checked))
+		{
+			alert('{VAR:LC_PLEASE_CONFIRM}');
+			exit();
+		}
 	}
 </script>
 </form>
