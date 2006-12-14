@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.16 2006/12/13 13:26:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.17 2006/12/14 13:14:32 kristo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -539,8 +539,9 @@ class conference_planning extends class_base
 			case "7":
 				$sc->read_template("sub_conference_rfp7.tpl");
 				// #0
+				$tmp = obj($sd["country"]);
 				$sc->vars(array(
-					"country" => call_user_func(array(obj($sd["country"]), "name")),
+					"country" => $tmp->trans_get_val("name")//call_user_func(array(obj($sd["country"]), "name")),
 				));
 				// #1
 				$sc->vars(array(
@@ -732,7 +733,7 @@ class conference_planning extends class_base
 					$o = obj($cnt);
 					$sc->vars(array(
 						"value" => $cnt,
-						"caption" => $o->name(), 
+						"caption" => $o->trans_get_val("name"), 
 						"country" => ($cnt == $sd["country"])?"SELECTED":"",
 					));
 					$countries .= $sc->parse("COUNTRY");
