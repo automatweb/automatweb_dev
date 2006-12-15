@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.16 2006/12/15 14:50:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.17 2006/12/15 15:20:32 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -79,13 +79,6 @@ class ddoc extends class_base
 		{
 			//-- get_property --//
 			case "name":
-				/*
-				$this->_s($arr["obj_inst"]->id());
-				$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-				$ret2 = $this->digidoc->WSDL->GetSignedDocInfo();
-				arr($ret2);
-				$this->_e();
-				*/
 				$prop["value"] = html::href(array(
 					"caption" => $prop["value"],
 					"url" => $this->mk_my_orb("get_file", array(
@@ -308,7 +301,7 @@ class ddoc extends class_base
 					return PROP_IGNORE;
 					//$retval = PROP_IGNORE;
 				};
-				$this->_do_reset_ddoc($arr["obj_inst"]->id(), $false);
+				$this->_do_reset_ddoc($arr["obj_inst"]->id(), false);
 //arr($_SESSION["scode"]);
 				/*
 				$this->_start_ddoc_session($arr["obj_inst"]->id());
@@ -639,18 +632,19 @@ class ddoc extends class_base
 		$this->_s($oid);
 		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 		$ret = $this->digidoc->WSDL->GetSignedDocInfo();
+		$ret2 = ddoc2_parser::Parse($this->digidoc->WSDL->xml, 'body');
 		if(PEAR::isError($ret))
 		{
 			die("error@_remove_sigantures:getsigneddocinfo:".$ret->getMessage());
 		}
 		$this->_e();
-		if(!is_array($ret["SignedDocInfo"]->SignatureInfo))
+		if(!is_array($ret2["SignedDocInfo"]["SignatureInfo"]))
 		{
-			$ret["SignedDocInfo"]->SignatureInfo = array(0 => $ret["SignedDocInfo"]->SignatureInfo);
+			$ret["SignedDocInfo"]["SignatureInfo"] = array(0 => $ret["SignedDocInfo"]["SignatureInfo"]);
 		}
-		foreach($ret["SignedDocInfo"]->SignatureInfo as $sign)
+		foreach($ret["SignedDocInfo"]["SignatureInfo"] as $sign)
 		{
-			$this->remove_signature($sign->Id, $oid);
+			$this->remove_signature($sign["Id"], $oid);
 		}
 		return true;
 	}
@@ -1058,22 +1052,25 @@ class ddoc extends class_base
 		$this->_s($oid);
 		
 		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-		$ret2 =  $this->digidoc->WSDL->GetSignedDocInfo();
-		if(!is_array($ret2["SignedDocInfo"]->DataFileInfo) && isset($ret2["SignedDocInfo"]->DataFileInfo))
+		$ret =  $this->digidoc->WSDL->GetSignedDocInfo();
+
+		$ret2 = ddoc2_parser::Parse($this->digidoc->WSDL->xml, 'body');
+
+		if(!is_array($ret2["SignedDocInfo"]["DataFileInfo"]) && isset($ret2["SignedDocInfo"]["DataFileInfo"]))
 		{
-			$ret2["SignedDocInfo"]->DataFileInfo = array(0 => $ret2["SignedDocInfo"]->DataFileInfo);
+			$ret2["SignedDocInfo"]["DataFileInfo"] = array(0 => $ret2["SignedDocInfo"]["DataFileInfo"]);
 		}
-		if(!is_array($ret2["SignedDocInfo"]->SignatureInfo) && isset($ret2["SignedDocInfo"]->SignatureInfo))
+		if(!is_array($ret2["SignedDocInfo"]["SignatureInfo"]) && isset($ret2["SignedDocInfo"]["SignatureInfo"]))
 		{
-			$ret2["SignedDocInfo"]->SignatureInfo = array(0 => $ret2["SignedDocInfo"]->SignatureInfo);
+			$ret2["SignedDocInfo"]["SignatureInfo"] = array(0 => $ret2["SignedDocInfo"]["SignatureInfo"]);
 		}
 		// get files
 		$p = new ddoc2_parser();
 
-		foreach($ret2["SignedDocInfo"]->DataFileInfo as $std_obj)
+		foreach($ret2["SignedDocInfo"]["DataFileInfo"] as $std_obj)
 		{
 			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-			$file = $this->digidoc->WSDL->GetDataFile($std_obj->Id);
+			$file = $this->digidoc->WSDL->GetDataFile($std_obj["Id"]);
 			$hash = $p->getFileHash(array(
 				"name" => $file["DataFileData"]->Filename,
 				"MIME" => $file["DataFileData"]->MimeType,
@@ -1150,18 +1147,18 @@ class ddoc extends class_base
 		$o->save();
 		
 		// set signatures
-		foreach($ret2["SignedDocInfo"]->SignatureInfo as $sign)
+		foreach($ret2["SignedDocInfo"]["SignatureInfo"] as $sign)
 		{
-			$name = $sign->Signer->CommonName;
+			$name = $sign["Signer"]["CommonName"];
 			$name = split(",", $name);
 			// why the hell do they put the T in the middle???.. 
-			$signing_time = strtotime(str_replace("T", " ",$sign->SigningTime));
+			$signing_time = strtotime(str_replace("T", " ",$sign["SigningTime"]));
 
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_PERSON,
 				"firstname" => ($fn = ucfirst(strtolower($name[1]))),
 				"lastname" => ($ln = ucfirst(strtolower($name[0]))),
-				"personal_id" => $sign->Signer->IDCode,
+				"personal_id" => $sign["Signer"]["IDCode"],
 			));
 			if($ol->count())
 			{
@@ -1175,22 +1172,22 @@ class ddoc extends class_base
 				$p_obj->set_name($fn." ".$ln);
 				$p_obj->set_prop("firstname", $fn);
 				$p_obj->set_prop("lastname", $ln);
-				$p_obj->set_prop("personal_id", $sign->Signer->IDCode);
+				$p_obj->set_prop("personal_id", $sign["Signer"]["IDCode"]);
 				$p_obj->save();
 			}
 			$this->_write_signature_metainfo(array(
-				"ddoc_id" => $sign->Id,
+				"ddoc_id" => $sign["Id"],
 				"oid" => $oid,
 				"signer" => $p_obj->id(),
 				"signer_fn" => $fn,
 				"signer_ln" => $ln,
-				"signer_pid" => $sign->Signer->IDCode,
+				"signer_pid" => $sign["Signer"]["IDCode"],
 				"signing_time" => $signing_time,
-				"signing_town" => $sign->SignatureProductionPlace->City,
-				"signing_state" => $sign->SignatureProductionPlace->StateOrProvince,
-				"signing_index" => $sign->SignatureProductionPlace->PostalCode,
-				"signing_country" => $sign->SignatureProductionPlace->CountryName,
-				"signing_role" => $sign->SignerRole->Role,
+				"signing_town" => $sign["SignatureProductionPlace"]["City"],
+				"signing_state" => $sign["SignatureProductionPlace"]["StateOrProvince"],
+				"signing_index" => $sign["SignatureProductionPlace"]["PostalCode"],
+				"signing_country" => $sign["SignatureProductionPlace"]["CountryName"],
+				"signing_role" => $sign["SignerRole"]["Role"],
 			));
 			$o->connect(array(
 				"type" => "RELTYPE_SIGNER",
