@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.6 2006/12/08 09:42:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.7 2006/12/15 11:39:15 kristo Exp $
 // translation_workplace.aw - T&otilde;lkimise t&ouml;&ouml;laud 
 /*
 
@@ -219,6 +219,11 @@ class translation_workplace extends class_base
 				case "untr":
 					$t->set_caption(t("T&otilde;lkimata"));
 					break;
+
+				case "old":
+					$t->set_caption(t("Vanemad"));
+					$filt["modified"] = new obj_predicate_compare(OBJ_COMP_LESS, get_week_start());
+					break;
 			}
 		}
 		else
@@ -292,7 +297,7 @@ class translation_workplace extends class_base
 				}
 			}
 
-			if ($tm == "untr" && $has_trans)
+			if (($tm == "untr" || $tm == "old") && $has_trans)
 			{
 				continue;
 			}
@@ -437,6 +442,15 @@ class translation_workplace extends class_base
 					"parent" => null,
 					"class_id" => null,
 					"tm" => "untr"
+				), false, $arr["url"])
+			));
+			$t->add_item(0, array(
+				"id" => "modified_old",
+				"name" => t("Vanemad"),
+				"url" => aw_url_change_var(array(
+					"parent" => null,
+					"class_id" => null,
+					"tm" => "old"
 				), false, $arr["url"])
 			));
 		}
