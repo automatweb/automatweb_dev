@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.53 2006/12/15 09:10:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.54 2006/12/15 10:29:47 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -782,7 +782,7 @@ class otv_ds_obj extends class_base
 								}
 								else
 								{
-									$ret[$t->id()][$ff_n] = $t->trans_get_val($ff_n); //$this->trans_get_val_str($t, $ff_n); //$t->prop_str($ff_n);
+									$ret[$t->id()][$ff_n] = $t->trans_get_val_str($ff_n); //$this->trans_get_val_str($t, $ff_n); //$t->prop_str($ff_n);
 								}
 							}
 						}
