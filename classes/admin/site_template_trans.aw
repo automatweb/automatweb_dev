@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.1 2006/10/23 11:41:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.2 2006/12/15 11:50:16 kristo Exp $
 // site_template_trans.aw - Saidi templatede t&otilde;lkimine 
 /*
 
@@ -106,7 +106,12 @@ class site_template_trans extends class_base
 		closedir($DH);
 
 		$fs = $this->get_directory(array("dir" => $ndir));
-
+		$lang_i = get_instance("languages");
+		$lv = "set_lang_id";
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$lv = "set_ct_lang_id";
+		}
 		foreach($fs as $file)
 		{
 			$bn = basename($file, ".aw");
@@ -119,11 +124,12 @@ class site_template_trans extends class_base
 
 			foreach($langs as $lang)
 			{
+				$lid = $lang_i->get_langid_for_code($lang);
 				$t->add_item($file, array(
 					"id" => $file."_".$lang,
 					"parent" => $file,
 					"name" => $arr["request"]["tfl"] == $file."_".$lang ? "<b>".$lang."</b>" : $lang,
-					"url" => aw_url_change_var(array("tfl" =>  $file."_".$lang, "tf" => null))
+					"url" => aw_url_change_var(array("tfl" =>  $file."_".$lang, "tf" => null, $lv => $lid))
 				));
 			}
 		}		
