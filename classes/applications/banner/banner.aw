@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.21 2006/05/04 08:10:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.22 2006/12/15 10:56:52 kristo Exp $
 
 /*
 
@@ -9,56 +9,61 @@
 @default table=objects
 @default group=general
 
-@property general_toolbar type=toolbar no_caption=1 store=no 
+	@property general_toolbar type=toolbar no_caption=1 store=no 
 
-@property name type=textbox
-@caption Nimi
+	@property name type=textbox
+	@caption Nimi
 
-@property comment type=textbox
-@caption Kommentaar 
+	@property comment type=textbox
+	@caption Kommentaar 
 
-@property status type=status
-@caption Aktiivne
+	@property status type=status
+	@caption Aktiivne
 
-@property url type=textbox table=banners 
-@caption URL, kuhu klikkimisel suunatakse
+	@property url type=textbox table=banners 
+	@caption URL, kuhu klikkimisel suunatakse
 
-@property banner_file type=relpicker reltype=RELTYPE_BANNER_FILE table=banners
-@caption Banneri sisu
+	@property banner_file type=relpicker reltype=RELTYPE_BANNER_FILE table=banners
+	@caption Banneri sisu
 
-@property banner_file_2 type=relpicker reltype=RELTYPE_BANNER_FILE table=banners
-@caption Banneri sisu lisaks
+	@property banner_file_2 type=relpicker reltype=RELTYPE_BANNER_FILE table=banners
+	@caption Banneri sisu lisaks
 
-@property banner_new_win type=checkbox ch_value=16 field=flags method=bitmask
-@caption Link avaneb uues aknas
+	@property banner_new_win type=checkbox ch_value=16 field=flags method=bitmask
+	@caption Link avaneb uues aknas
 
-@property html type=textarea rows=5 cols=30 table=banners
-@caption Banneri html
+	@property html type=textarea rows=5 cols=30 table=banners
+	@caption Banneri html
 
 @groupinfo display caption="N&auml;itamine"
 
-@property probability_tbl type=table group=display 
-@caption N&auml;itamise t&otilde;en&auml;osus
+	@property probability_tbl type=table group=display 
+	@caption N&auml;itamise t&otilde;en&auml;osus
 
-@property probability type=textbox display=none table=banners
+	@property probability type=textbox display=none table=banners
 
-@property max_views type=textbox size=3 table=banners  group=display
-@caption Mitu korda bannerit maksimaalselt n&auml;idata
+	@property max_views type=textbox size=3 table=banners  group=display
+	@caption Mitu korda bannerit maksimaalselt n&auml;idata
 
-@property max_clicks type=textbox size=3 table=banners  group=display
-@caption Mitu klikki maksimaalselt
+	@property max_clicks type=textbox size=3 table=banners  group=display
+	@caption Mitu klikki maksimaalselt
 
 @groupinfo stats caption="Statistika"
 
-@property clicks type=text group=stats
-@caption Klikke
+	@property clicks type=text group=stats
+	@caption Klikke
 
-@property views type=text group=stats
-@caption Vaatamisi
+	@property views type=text group=stats
+	@caption Vaatamisi
 
-@property click_through type=text group=stats
-@caption Click-through ratio
+	@property click_through type=text group=stats
+	@caption Click-through ratio
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
 
 @reltype LOCATION value=1 clid=CL_BANNER_CLIENT
 @caption banneri asukoht
@@ -76,6 +81,10 @@ class banner extends class_base
 			"tpldir" => "banner",
 			"clid" => CL_BANNER
 		));
+
+		$this->trans_props = array(
+			"url", "banner_file", "banner_file_2"
+		);
 	}
 
 	function get_property($arr)
@@ -115,6 +124,10 @@ class banner extends class_base
 
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "probability_tbl":
 				$this->do_save_prob_tbl($arr);
 				break;
@@ -516,12 +529,12 @@ class banner extends class_base
 
 	function display_banner($o)
 	{
-		if (!$o->prop("banner_file"))
+		if (!$o->trans_get_val("banner_file"))
 		{
 			$this->error_banner();
 		}
 
-		$f_o = obj($o->prop("banner_file"));
+		$f_o = obj($o->trans_get_val("banner_file"));
 		if ($f_o->class_id() == CL_IMAGE)
 		{
 			$i = get_instance(CL_IMAGE);
@@ -545,7 +558,7 @@ class banner extends class_base
 		$banner = $this->get_grp($loc, false);
 		if ($banner)
 		{
-			$content = $banner->prop("banner_file");
+			$content = $banner->trans_get_val("banner_file");
 			if (is_oid($content) && $this->can("view", $content))
 			{
 				$this->add_simple_view($banner->id(), $loc);
@@ -630,6 +643,20 @@ class banner extends class_base
 			$html = str_replace($repl, $this->get_banner_html($list[1][$idx]), $html);
 		}
 		return $html;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>
