@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.17 2006/12/15 15:20:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.18 2006/12/15 15:38:01 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -638,7 +638,7 @@ class ddoc extends class_base
 			die("error@_remove_sigantures:getsigneddocinfo:".$ret->getMessage());
 		}
 		$this->_e();
-		if(!is_array($ret2["SignedDocInfo"]["SignatureInfo"]))
+		if(!is_array($ret2["SignedDocInfo"]["SignatureInfo"][0]))
 		{
 			$ret["SignedDocInfo"]["SignatureInfo"] = array(0 => $ret["SignedDocInfo"]["SignatureInfo"]);
 		}
@@ -1056,14 +1056,15 @@ class ddoc extends class_base
 
 		$ret2 = ddoc2_parser::Parse($this->digidoc->WSDL->xml, 'body');
 
-		if(!is_array($ret2["SignedDocInfo"]["DataFileInfo"]) && isset($ret2["SignedDocInfo"]["DataFileInfo"]))
+		if(!is_array($ret2["SignedDocInfo"]["DataFileInfo"][0]) && isset($ret2["SignedDocInfo"]["DataFileInfo"]))
 		{
 			$ret2["SignedDocInfo"]["DataFileInfo"] = array(0 => $ret2["SignedDocInfo"]["DataFileInfo"]);
 		}
-		if(!is_array($ret2["SignedDocInfo"]["SignatureInfo"]) && isset($ret2["SignedDocInfo"]["SignatureInfo"]))
+		if(!is_array($ret2["SignedDocInfo"]["SignatureInfo"][0]) && isset($ret2["SignedDocInfo"]["SignatureInfo"]))
 		{
 			$ret2["SignedDocInfo"]["SignatureInfo"] = array(0 => $ret2["SignedDocInfo"]["SignatureInfo"]);
 		}
+		arr($ret2);
 		// get files
 		$p = new ddoc2_parser();
 
