@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.52 2006/11/15 12:58:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.53 2006/12/15 09:10:44 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -686,7 +686,7 @@ class otv_ds_obj extends class_base
 		foreach($ar as $t)
 		{
 			$url = $target = $fileSizeBytes = $fileSizeKBytes = $fileSizeMBytes = "";
-			$caption = $t->name();
+			$caption = $t->trans_get_val("name");
 			$clid = $t->class_id();
 			if ($clid == CL_EXTLINK)
 			{
@@ -697,7 +697,7 @@ class otv_ds_obj extends class_base
 			if ($clid == CL_FILE)
 			{
 				$fi = get_instance(CL_FILE);
-				$url = $fi->get_url($t->id(),$t->name());
+				$url = $fi->get_url($t->id(),$t->trans_get_val("name"));
 
 				if ($fd["newwindow"])
 				{
@@ -735,11 +735,11 @@ class otv_ds_obj extends class_base
 
 			if ($clid == CL_FILE && $ob->prop("file_show_comment"))
 			{
-				$_name = parse_obj_name($t->comment());
+				$_name = parse_obj_name($t->trans_get_val("comment"));
 			}
 			else
 			{
-				$_name = parse_obj_name($t->name());
+				$_name = parse_obj_name($t->trans_get_val("name"));
 			}
 			$ret[$t->id()] = array(
 				"id" => $t->id(),
@@ -747,13 +747,13 @@ class otv_ds_obj extends class_base
 				"name" => $_name,
 				"url" => $url,
 				"target" => $target,
-				"comment" => $t->comment(),
+				"comment" => $t->trans_get_val("comment"),
 				"type" => $classlist[$clid]["name"],
 				"add_date" => $t->created(),
 				"mod_date" => $t->modified(),
 				"adder" => $t->createdby(),
 				"modder" => $t->modifiedby(),
-				"icon" => image::make_img_tag(icons::get_icon_url($clid, $t->name())),
+				"icon" => image::make_img_tag(icons::get_icon_url($clid, $t->trans_get_val("name"))),
 				"fileSizeBytes" => $fileSizeBytes,
 				"fileSizeKBytes" => $fileSizeKBytes,
 				"fileSizeMBytes" => $fileSizeMBytes,
@@ -782,7 +782,7 @@ class otv_ds_obj extends class_base
 								}
 								else
 								{
-									$ret[$t->id()][$ff_n] = $this->trans_get_val_str($t, $ff_n); //$t->prop_str($ff_n);
+									$ret[$t->id()][$ff_n] = $t->trans_get_val($ff_n); //$this->trans_get_val_str($t, $ff_n); //$t->prop_str($ff_n);
 								}
 							}
 						}
@@ -795,7 +795,7 @@ class otv_ds_obj extends class_base
 							else
 							{
 	
-								$ret[$t->id()][$ff_n] = $this->trans_get_val_str($t, $ff_n);//$t->prop_str($ff_n);
+								$ret[$t->id()][$ff_n] = $t->trans_get_val_str($ff_n); //$this->trans_get_val_str($t, $ff_n);//$t->prop_str($ff_n);
 							}
 						}
 					}
@@ -814,11 +814,11 @@ class otv_ds_obj extends class_base
 
 			if ($t->class_id() == CL_FILE && $ob->prop("file_show_comment"))
 			{
-				$_name = parse_obj_name($t->comment());
+				$_name = parse_obj_name($t->trans_get_val("comment"));
 			}
 			else
 			{
-				$_name = parse_obj_name($t->name());
+				$_name = parse_obj_name($t->trans_get_val("name"));
 			}
 			$ret[$t->id()]["name"] = $_name;
 			$ret[$t->id()]["jrk"] = $t->ord();
@@ -852,7 +852,6 @@ foreach($images as $i)
 }
 
 */
-
 
 		return $ret;
 	}
