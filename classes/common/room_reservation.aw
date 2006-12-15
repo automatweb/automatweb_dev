@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.19 2006/12/15 16:49:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.20 2006/12/15 17:28:20 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -615,6 +615,7 @@ class room_reservation extends class_base
 		$arr["obj_inst"] = obj($arr["room"]);
 		$res_inst = get_instance(CL_ROOM);
 		$select = $res_inst->_get_calendar_select($arr);
+		$hidden = $res_inst->_get_hidden_fields($arr);
 		if($sf->is_template("CALENDAR"))
 		{
 			$c = "";
@@ -633,7 +634,8 @@ class room_reservation extends class_base
 			$sf->vars(array(
 				"CALENDAR" => $c,
 				"select" => $select,
-				"time_select" => $res_inst->_get_time_select($arr),
+				"hidden" => $hidden,
+				"time_select" => $res_inst->_get_time_select($arr).$hidden,
 				"length_select" => $res_inst->_get_length_select($arr),
 				"submit_url" => $action,
 			));
@@ -773,7 +775,7 @@ class room_reservation extends class_base
 		$loc = obj($room->prop("location"));
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $loc->prop("bank_payment");
-		$_SESSION["bank_payment"]["url"] = "lahe link kuhu vastuseid saada";
+		$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => $_SESSION["room_reservation"][$room->id()]["bron_id"]));;
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $_SESSION["room_reservation"][$room->id()]["bank"],
 			"amount" => $_SESSION["room_reservation"][$room->id()]["sum"],
@@ -786,6 +788,35 @@ class room_reservation extends class_base
 		return $ret;
 		//return $section."?level=".$level;
 	}
+
+	/**
+		@attrib name=bank_return nologin=1
+		@param id required type=int acl=view
+	**/
+	function bank_return($arr)
+	{
+		if(!$this->make_verified($arr["id"]))
+		{
+			print t("Broneeringut ei &otilde;nnestunud kinnitada"); 
+		}
+		return ;//$this->mk_my_orb("show", array("id" => $order_id), "shop_order");
+		//returni peaks miski ilusa saidi urli andma
+	}
+
+	function make_verified($id)
+	{
+		if(is_oid($id) && $this->can("view" , $id))
+		{
+			$bron = obj($id);
+			$bron->set_prop("verified" , 1);
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
 
 	//makes the reservation object ... then this stuff is ready for paying and stuff
 	/**

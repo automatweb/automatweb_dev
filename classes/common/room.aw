@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.65 2006/12/15 16:49:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.66 2006/12/15 17:28:20 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1212,10 +1212,9 @@ class room extends class_base
 	function _get_hidden_fields($arr)
 	{
 		$ret = html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
-		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
-		{
-	
-		}
+		$ret.=html::hidden(array("name" => "free_field_value", "id"=>"free_field_value" ,"value"=>"VABA"));
+		$ret.=html::hidden(array("name" => "res_field_value", "id"=>"res_field_value" ,"value"=>"BRON"));
+		$ret.=html::hidden(array("name" => "do_field_value", "id"=>"do_field_value" ,"value"=>"Broneeri"));
 		return $ret;
 	}
 
@@ -1273,7 +1272,7 @@ class room extends class_base
 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		}
-		$ret.= html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
+		$ret.= $this->_get_hidden_fields($arr);
 		$arr["prop"]["value"] = $ret;
 		return $ret;
 	}
@@ -1353,10 +1352,10 @@ class room extends class_base
 						else
 						{
 							$onclick[$x] = "doBron('".$arr["obj_inst"]->id()."_".$start_step."' , ".($step_length * $arr["obj_inst"]->prop("time_step")).")";
-							$string = t("VABA");
+							//$string = t("VABA");
 						}
 						$val = 0;
-						
+						$string = t("VABA");
 						$col[$x] = "#E1E1E1";
 						if($_SESSION["room_reservation"][$arr["obj_inst"]->id()]["start"]<=$start_step && $_SESSION["room_reservation"][$arr["obj_inst"]->id()]["end"]>=$end_step)
 						{
@@ -1596,8 +1595,8 @@ class room extends class_base
 		}
 
 		$ret.= $pm->get_menu(array(
-			//"icon" => icons::get_icon_url($package),
-			"icon" =>aw_ini_get("baseurl")."/automatweb/images/vaba.gif",
+			"icon" => icons::get_icon_url($package),
+			//"icon" =>aw_ini_get("baseurl")."/automatweb/images/vaba.gif",
 		));
 		return $ret;
 	}
