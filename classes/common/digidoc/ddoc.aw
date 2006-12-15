@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.14 2006/12/14 22:01:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.15 2006/12/15 13:01:44 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -35,7 +35,7 @@
 @property files type=hidden field=meta method=serialize
 @property signatures type=hidden field=meta method=serialize
 
-@reltype SIGNED_FILE value=1 clid=CL_FILE
+@reltype SIGNED_FILE value=1 clid=CL_FILE,CL_PATENT
 @caption Allkirjastatud fail
 
 @reltype SIGNER value=2 clid=CL_CRM_PERSON 
@@ -136,11 +136,15 @@ class ddoc extends class_base
 				$file_inst = get_instance(CL_FILE);
 				foreach($files as $id => $data)
 				{
+					$o = obj($data["file"]);
+					$cl_id = $o->class_id();
+					$cl = aw_ini_get("classes");
+					$url = ($cl_id == CL_FILE)?$file_inst->get_url($data["file"], $data["name"]):$this->mk_my_orb("change", array("id" => $data["file"], "return_url" => get_ru()), $cl_id);
 					$t->define_data(array(
 						"file_id" => $id,
 						"name" => html::href(array(
-							"caption" => $data["name"],
-							"url" => $file_inst->get_url($data["file"], $data["name"]),
+							"caption" => $data["name"]." (".$cl[$cl_id]["name"].")",
+							"url" => $url,
 						)),
 						"type" => $data["type"],
 						"size" => ($data["size"] > 1024)?round(($data["size"]/1024),2).t("kB"):$data["size"].t("B"),
@@ -741,7 +745,8 @@ class ddoc extends class_base
 		{
 			return false;
 		}
-		if(!is_oid($arr["file_oid"]) && (!$arr["file"]["name"] || !$arr["file"]["size"] || !$arr["file"]["MIME"] || !$arr["file"]["content"]))
+		// TODO other_oid
+		if(!is_oid($arr["file_oid"]) && !is_oid($arr["other_oid"]) && (!$arr["file"]["name"] || !$arr["file"]["size"] || !$arr["file"]["MIME"] || !$arr["file"]["content"]))
 		{
 			return false;
 		}
@@ -811,6 +816,74 @@ class ddoc extends class_base
 				"ddoc_id" => "D".$n,
 				"oid" => $arr["oid"],
 				"file" => $arr["file_oid"],
+				"size" => $file["size"],
+				"type" => $file["MIME"],
+				"name" => $file["name"],
+				"hash" => $hash["DigestValue"],
+			));
+			
+			$this->_e();
+		}
+		if($arr["other_oid"])
+		{
+			// aw patendi lisamine
+			$other_obj = obj($arr["other_oid"]);
+			$content = $other_obj->get_xml();
+			$file = array(
+				"name" => $other_obj->name(), //$f2["properties"]["name"],
+				"size" => strlen($content), //@filesize($f2["properties"]["file"]),
+				"MIME" => "text/xml", //$f2["properties"]["type"],
+				"content" => $content,
+			);
+
+			$this->_s($arr["oid"]);
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+
+			$p = new ddoc2_parser();
+			$o = obj($arr["oid"]);
+			$_tmp = aw_unserialize($o->prop("files"));
+			$n = (!is_array($_tmp) && !strlen($_tmp))?0:count($_tmp);
+			$hash = $p->getFileHash($file, "D".$n);
+
+			if(LOCAL_FILES)
+			{
+				$ret = $this->digidoc->WSDL->addDataFile($hash["Filename"], $hash["MimeType"], "HASHCODE", $hash["Size"], "sha1", $hash["DigestValue"], "");
+			}
+			else
+			{
+				$f = $file;
+				$ret = $this->digidoc->WSDL->addDataFile($f["name"], $f["MIME"], "EMBEDDED_BASE64", $f["size"], "", "", chunk_split(base64_encode($f["content"]), "64", "\n"));
+			}
+			if(PEAR::isError($ret))
+			{
+				error::raise(array(
+					"msg" => t("Ei saanud lisada faili konteinerisse:".$ret->getMessage()),
+				));
+			}
+			// datafile added now
+
+			// lets get the new and improved ddoc file
+			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+			$ret = $this->digidoc->WSDL->GetSignedDoc();
+			if(PEAR::isError($ret))
+			{
+				error::raise(array(
+					"msg" => t("Ei saanud DigiDoc konteinerit k&auml;tte:".$ret->getMessage()),
+				));
+			}
+			$p = new ddoc2_parser($ret["SignedDocData"]);
+			$content = $p->getDigiDoc();
+			if(!$this->set_ddoc($arr["oid"], $content, false))
+			{
+				error::raise(array(
+					"msg" => t("DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"),
+				));
+			}
+			// we do this manually, so the bastard wouldn't do a new file in reser_ddoc()
+			$this->_write_file_metainfo(array(
+				"ddoc_id" => "D".$n,
+				"oid" => $arr["oid"],
+				"file" => $arr["other_oid"],
 				"size" => $file["size"],
 				"type" => $file["MIME"],
 				"name" => $file["name"],
@@ -1137,7 +1210,7 @@ class ddoc extends class_base
 	**/
 	function sign_url($arr)
 	{
-		if(!is_oid($arr["ddoc_oid"]) && !is_oid($arr["file_oid"]) && !is_oid($arr["doc_oid"]))
+		if(!is_oid($arr["ddoc_oid"]) && !is_oid($arr["file_oid"]) && !is_oid($arr["other_oid"]))
 		{
 			return t("#");
 		}
@@ -1200,6 +1273,40 @@ class ddoc extends class_base
 						));
 					}
 					$arr["ddoc_oid"] = $new_ddoc->id();
+				}
+				elseif(is_oid($arr["other_oid"]))
+				{
+					$other_obj = obj($arr["other_oid"]);
+					if($other_obj->class_id() == CL_FILE )
+					{
+						return false;
+					}
+					$new_ddoc = obj();
+					$new_ddoc->set_class_id(CL_DDOC);
+					$new_ddoc->set_parent($other_obj->parent());
+					$new_ddoc->save_new();
+
+					if(!$this->create_empty($new_ddoc->id(), $other_obj->name()))
+					{
+						error::raise(array(
+							"msg" => t("Uue t&uuml;hja digidoc konteineri loomine eba&otilde;nnestus"),
+						));
+					}
+					if(!$this->add_file(array(
+						"oid" => $new_ddoc->id(),
+						"other_oid" => $arr["other_oid"],
+					)))
+					{
+						error::raise(array(
+							"msg" => t("Faili lisamine digidoc konteinerisse eba&otilde;nnestus"),
+						));
+					}
+					$arr["ddoc_oid"] = $new_ddoc->id();
+				
+				}
+				else
+				{
+					return false;
 				}
 			}
 		}

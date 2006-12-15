@@ -11,6 +11,28 @@
             <caption>Taotleja</caption>
       </property>
       <property>
+            <name>signed</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <caption>Allkirja staatus</caption>
+      </property>
+      <property>
+            <name>signatures</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <caption>Allkirjastajad</caption>
+      </property>
+      <property>
             <name>procurator</name>
             <table>objects</table>
             <group>general</group>

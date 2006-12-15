@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.21 2006/12/14 12:22:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.22 2006/12/15 13:01:43 tarvo Exp $
 // patent.aw - Patent 
 /*
 
@@ -17,6 +17,12 @@
 //idee siis selles, et kes on connectitud, on nagu õiged inimesed ja kes üks kes valitud, see on esindaja
 	@property applicant type=relpicker reltype=RELTYPE_APPLICANT
 	@caption Taotleja
+
+	@property signed type=text store=no editonly=1
+	@caption Allkirja staatus
+	
+	@property signatures type=text store=no editonly=1
+	@caption Allkirjastajad
 	
 	property country type=textbox
 	caption P&auml;riltolumaa
@@ -206,6 +212,79 @@ class patent extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "signed":
+				if(!aw_ini_get("file.ddoc_support"))
+				{
+					return PROP_IGNORE;
+				}
+				$ddoc_inst = get_instance(CL_DDOC);
+				$res = $this->is_signed($arr["obj_inst"]->id());
+				switch($res["status"])
+				{
+					case 1:
+						$url = $ddoc_inst->sign_url(array(
+							"ddoc_oid" => $res["ddoc"],
+						));
+						$ddoc = obj($res["ddoc"]);
+						$add_sig = html::href(array(
+							"url" => "#",
+							"caption" => t("Lisa allkiri"),
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Allkirjastamine")."\", 410, 250);",
+						));
+						$ddoc_link = html::href(array(
+							"url" => $this->mk_my_orb("change", array(
+								"id" => $ddoc->id(),
+								"return_url" => get_ru(),
+							), CL_DDOC),
+							"caption" => t("DigiDoc konteinerisse"),
+						));
+						$prop["value"] = $add_sig." (".$ddoc_link.")";
+						break;
+					case 0:
+						$url = $ddoc_inst->sign_url(array(
+							"ddoc_oid" => $res["ddoc"],
+						));
+						$ddoc = obj($res["ddoc"]);
+						$add_sig = html::href(array(
+							"url" => "#",
+							"caption" => t("Allkirjasta"),
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Allkirjastamine")."\", 410, 250);",
+						));
+						$ddoc_link = html::href(array(
+							"url" => $this->mk_my_orb("change", array(
+								"id" => $ddoc->id(),
+								"return_url" => get_ru(),
+							), CL_DDOC),
+							"caption" => t("DigiDoc konteiner"),
+						));
+						$prop["value"] = $add_sig." (".$ddoc_link.")";
+
+						break;
+					case -1:
+						$url = $ddoc_inst->sign_url(array(
+							"other_oid" => $arr["obj_inst"]->id(),
+						));
+						$prop["value"] = html::href(array(
+							"url" => "#",
+							"caption" => t("Allkirjasta fail"),
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Faili: %s, allkirjastamine")."\", 410, 250);",
+
+						));
+						break;
+				}
+
+				break;
+			case "signatures":
+				if(!aw_ini_get("file.ddoc_support"))
+				{
+					return PROP_IGNORE;
+				}
+				$re = $this->is_signed($arr["obj_inst"]->id());
+				if($re["status"] != 1)
+				{
+					return PROP_IGNORE;
+				}
+				break;
 			case "type":
 				$prop["options"] = $this->types;
 				break;
@@ -226,6 +305,40 @@ class patent extends class_base
 			
 		};
 		return $retval;
+	}
+	
+	/**
+		@comment 
+	**/
+	function is_signed($oid)
+	{
+		if(!is_oid($oid))
+		{
+			error::raise(array(
+				"msg" => t("Vale objekti id!"),
+			));
+		}
+		$c = new connection();
+		$ret = $c->find(array(
+			"from.class_id" => CL_DDOC,
+			"type" => "RELTYPE_SIGNED_FILE",
+			"to" => $oid,
+		));
+		$return = array();
+		if(count($ret))
+		{
+			$ret = current($ret);
+			$ret = $ret["from"];
+			$inst = get_instance(CL_DDOC);
+			$tmp = $inst->is_signed($ret);
+			$return["status"] = $tmp?1:0;
+			$return["ddoc"] = $ret;
+		}
+		else
+		{
+			$return["status"] = -1;
+		}
+		return $return;
 	}
 
 	function _get_products_and_services_tbl(&$arr)
@@ -1226,6 +1339,10 @@ class patent extends class_base
 			while(array_key_exists($n , $_SESSION["patent"]["applicants"]))
 			{
 				$n++;
+				if($n > 25)
+				{
+					break;
+				}
 			}
 //			$n = sizeof($_SESSION["patent"]["applicants"]);
 		}

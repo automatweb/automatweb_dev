@@ -106,7 +106,10 @@
       <reltypes>
             <SIGNED_FILE>
                   <value>1</value>
-                  <clid>CL_FILE</clid>
+                  <clid>
+                        <num_0>CL_FILE</num_0>
+                        <num_1>CL_PATENT</num_1>
+                  </clid>
                   <caption>Allkirjastatud fail</caption>
             </SIGNED_FILE>
             <SIGNER>
