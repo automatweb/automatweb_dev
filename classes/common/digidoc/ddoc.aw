@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.15 2006/12/15 13:01:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.16 2006/12/15 14:50:39 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -79,6 +79,13 @@ class ddoc extends class_base
 		{
 			//-- get_property --//
 			case "name":
+				/*
+				$this->_s($arr["obj_inst"]->id());
+				$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
+				$ret2 = $this->digidoc->WSDL->GetSignedDocInfo();
+				arr($ret2);
+				$this->_e();
+				*/
 				$prop["value"] = html::href(array(
 					"caption" => $prop["value"],
 					"url" => $this->mk_my_orb("get_file", array(
@@ -1094,7 +1101,7 @@ class ddoc extends class_base
 			if(!$save || !($from_hash_exists = $this->_hash_exists($oid, $data["hash"])))
 			{
 				$id = $file_inst->create_file_from_string(array(
-					"parent" => $oid,
+					"parent" => $o->parent(),
 					"content" => $data["content"],
 					"name" => $data["name"],
 					"type" => $data["type"],
@@ -1137,6 +1144,7 @@ class ddoc extends class_base
 					"ddoc_id" => $ddoc_id,
 					"remove" => true,
 				));
+				// TODO remove at least connection to file.(maybe object itself also.. i should think about it a bit)
 			}
 		}
 		$o->save();
@@ -1450,7 +1458,7 @@ class ddoc extends class_base
 					}
 					$p = new ddoc2_parser($ret["SignedDocData"]);
 					$content = $p->getDigiDoc();
-					if(!$this->set_ddoc($ddoc_oid, $content))
+					if(!$this->set_ddoc($ddoc_oid, $content, true))
 					{
 						error::raise(array(
 							"msg" => t("DigiDoc konteineri sisu m&auml;&auml;ramine eba&otilde;nnestus"),

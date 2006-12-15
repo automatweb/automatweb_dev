@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.22 2006/12/15 13:01:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.23 2006/12/15 14:50:37 tarvo Exp $
 // patent.aw - Patent 
 /*
 
@@ -284,6 +284,13 @@ class patent extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				$ddoc_inst = get_instance(CL_DDOC);
+				$signs = $ddoc_inst->get_signatures($re["ddoc"]);
+				foreach($signs as $sig)
+				{
+					$sig_nice[] = sprintf(t("%s, %s (%s) - %s"), $sig["signer_ln"], $sig["signer_fn"], $sig["signer_pid"], date("H:i d/m/Y", $sig["signing_time"]));
+				}
+				$prop["value"] = join("<br/>", $sig_nice);
 				break;
 			case "type":
 				$prop["options"] = $this->types;
