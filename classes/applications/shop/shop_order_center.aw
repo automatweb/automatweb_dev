@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.44 2006/12/15 11:20:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.45 2006/12/15 16:50:21 markop Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -60,6 +60,9 @@
 
 @property web_discount type=textbox size=5
 @caption Veebis allahindlus (%)
+
+@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
+@caption Pangamakse objekt
 
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
@@ -162,6 +165,9 @@
 
 @reltype ORDER_NAME_CTR value=7 clid=CL_FORM_CONTROLLER
 @caption tellimuse nime kontroller
+
+@reltype BANK_PAYMENT value=11 clid=CL_BANK_PAYMENT
+@caption Pangalingi objekt
 */
 
 class shop_order_center extends class_base
@@ -599,7 +605,7 @@ class shop_order_center extends class_base
 		@attrib name=show_items nologin="1"
 
 		@param id required type=int acl=view
-		@param section required type=int acl=view
+		@param section required 
 
 	**/
 	function show_items($arr)
@@ -731,11 +737,11 @@ class shop_order_center extends class_base
 //arr($_SESSION["soc_err"]);
 		$tl_inst = $t_layout->instance();
 		$tl_inst->start_table($t_layout, $soc);
-		lc_site_load("shop_order_center", &$tl_inst);
+
 		$xi = 0;
 		$l_inst = $layout->instance();
 		$l_inst->read_template($layout->prop("template"));
-		lc_site_load("shop_order_center", &$l_inst);
+
 		lc_site_load("shop_order_center", &$this);
 		foreach($pl as $o)
 		{

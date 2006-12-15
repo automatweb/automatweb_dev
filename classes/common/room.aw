@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.64 2006/12/07 23:54:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.65 2006/12/15 16:49:05 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -255,7 +255,10 @@ class room extends class_base
 			86400 => t("P&auml;eva"),
 		);
 		$this->weekdays = array(
-			"P&uuml;hap&auml;ev" , "Esmasp&auml;ev" , "Teisip&auml;ev", "Kolmap&auml;ev" , "Neljap&auml;ev" , "Reede", "Laup&auml;ev"
+			t("Sunday") , t("Monday") , t("Tuesday"), t("Wednesday") , t("Thursday") , t("Friday"), t("Saturday")
+		);
+		$this->weekdays_short = array(
+			t("Su") , t("Mo") , t("Tu"), t("We") , t("Th") , t("Fr"), t("Sa")
 		);
 	}
 
@@ -1206,6 +1209,16 @@ class room extends class_base
 
 	}
 
+	function _get_hidden_fields($arr)
+	{
+		$ret = html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
+		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
+		{
+	
+		}
+		return $ret;
+	}
+
 	function _get_calendar_select($arr)
 	{
 		$ret = "";
@@ -1331,7 +1344,7 @@ class room extends class_base
 					)))
 					{
 						$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
-						$arr["timestamp"] = $start_step;
+						$arr["timestamp"] = $start_step;$prod_menu="";
 						if($arr["obj_inst"]->prop("use_product_times"))
 						{
 							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
@@ -1340,9 +1353,10 @@ class room extends class_base
 						else
 						{
 							$onclick[$x] = "doBron('".$arr["obj_inst"]->id()."_".$start_step."' , ".($step_length * $arr["obj_inst"]->prop("time_step")).")";
+							$string = t("VABA");
 						}
 						$val = 0;
-						$string = t("VABA");
+						
 						$col[$x] = "#E1E1E1";
 						if($_SESSION["room_reservation"][$arr["obj_inst"]->id()]["start"]<=$start_step && $_SESSION["room_reservation"][$arr["obj_inst"]->id()]["end"]>=$end_step)
 						{
@@ -1378,9 +1392,8 @@ class room extends class_base
 										{
 											$product = obj($prod);
 											$codes[] = $product->prop("code");
-								
-$title .= " ".$product->name();
-		}
+											$title .= " ".$product->name();
+										}
 									}
 								}
 							}
@@ -1583,7 +1596,8 @@ $title .= " ".$product->name();
 		}
 
 		$ret.= $pm->get_menu(array(
-			"icon" => icons::get_icon_url($package),
+			//"icon" => icons::get_icon_url($package),
+			"icon" =>aw_ini_get("baseurl")."/automatweb/images/vaba.gif",
 		));
 		return $ret;
 	}
@@ -1640,7 +1654,7 @@ $title .= " ".$product->name();
 		));
 		if($this->is_open_day($time + 86400*2))$t->define_field(array(
 			"name" => "d2",
-			"caption" => substr(date("l" ,$time + 86400*2) , 0 , 2).date(" d/m/y" , $time + 86400*2),//date("l d/m/Y", $time + 86400*2),
+			"caption" =>substr(date("l" ,$time + 86400*2) , 0 , 2).date(" d/m/y" , $time + 86400*2),//date("l d/m/Y", $time + 86400*2),
 			"width" => "20px",
 			"chgbgcolor" => "col2",
 			"id" => "id2",

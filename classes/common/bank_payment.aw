@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.13 2006/12/01 13:37:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.14 2006/12/15 16:49:05 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -191,11 +191,11 @@ class bank_payment extends class_base
 		}
 		if(!$data["expl"])
 		{
-			$data["expl"] = $payment->prop("expl");
+			$data["expl"] = $payment->prop("expl").$data["expl"];
 		}
 		if(!$data["return_url"])
 		{
-			$data["return_url"] = $payment->prop("return_url");
+			//$data["return_url"] = $payment->prop("return_url");
 		}
 		if(!$data["cancel_url"])
 		{
@@ -206,6 +206,16 @@ class bank_payment extends class_base
 		{
 			$data["amount"] = $data["units"]*$payment->prop("default_unit_sum");
 		}
+		
+		$payment_data = $payment->meta("bank");
+		$data["sender_id"] = $payment_data[$data["bank_id"]]["sender_id"];
+		$data["stamp"] = $payment_data[$data["bank_id"]]["stamp"];
+
+		if($data["units"])
+		{
+			$data["amount"] = $data["units"]*$payment->prop("default_unit_sum");
+		}
+		
 		return $data;
 	}
 	
@@ -462,7 +472,9 @@ class bank_payment extends class_base
 	{
 		if(is_oid($arr["payment_id"]))
 		{
-			$payment = obj($arr["payment"]);
+			$payment = obj($arr["payment_id"]);
+			$arr = $this->_add_object_data($payment , $arr);
+/*			
 			$payment_data = $payment->meta("bank");
 			$arr["sender_id"] = $payment_data[$arr["bank_id"]]["sender_id"];
 			$arr["stamp"] = $payment_data[$arr["bank_id"]]["stamp"];
@@ -470,9 +482,8 @@ class bank_payment extends class_base
 			if($arr["units"])
 			{
 				$arr["amount"] = $arr["units"]*$payment->prop("default_unit_sum");
-			}
+			}*/
 		}
-		
 		if(!$arr["service"]) $arr["service"] = "1002";
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";

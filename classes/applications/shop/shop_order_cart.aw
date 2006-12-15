@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.52 2006/12/08 15:15:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.53 2006/12/15 16:50:21 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -109,7 +109,6 @@ class shop_order_cart extends class_base
 		extract($arr);
 		$this->read_template("show.tpl");
 		lc_site_load("shop_order_cart", &$this);
-
 		$soce = new aw_array(aw_global_get("soc_err"));
 		$soce_arr = $soce->get();
 		foreach($soce->get() as $prid => $errmsg)
@@ -136,6 +135,31 @@ class shop_order_cart extends class_base
 
 		$oc = obj($oc);
 
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		$bank_payment = $oc->prop("bank_payment");
+		if(is_oid($bank_payment))
+		{
+			$payment = obj($bank_payment);
+			foreach($payment->meta("bank") as $key => $val)
+			{
+				if(!$val["sender_id"])
+				{
+					continue;
+				}
+				$checked=0;
+				if($soce_arr["bank"] == $key)
+				{
+					$checked = 1;
+				}
+				$data["bank_".$key] = html::radiobutton(array(
+					"value" => $key,
+					"checked" => $checked,
+					"name" => "bank",
+				));
+			}
+		}
+		$this->vars($data);
+		
 		if ($oc->prop("no_show_cart_contents"))
 		{
 			return $this->pre_finish_order($arr);
@@ -1329,7 +1353,8 @@ class shop_order_cart extends class_base
 			"total" => number_format($total, 2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"], "from" => "confirm")),
 			"postal_price" => number_format($cart_o->prop("postal_price")),
-			"clear_cart_url" => $this->mk_my_orb("clear_cart", array("oc" => $arr["oc"]))
+			"clear_cart_url" => $this->mk_my_orb("clear_cart", array("oc" => $arr["oc"])),
+			"pay_cart_url" => $this->mk_my_orb("pay_cart", array("oc" => $arr["oc"])),
 		));
 
 		if ($cart_o->prop("postal_price") > 0)
@@ -1559,6 +1584,53 @@ class shop_order_cart extends class_base
 		$oc = obj($arr["oc"]);
 		$this->clear_cart($oc);
 		return aw_ini_get("baseurl");
+	}
+
+	/**
+		@attrib name=pay_cart nologin=1
+		@param oc required type=int acl=view
+	**/
+	function pay_cart($arr)
+	{
+		$oc = obj($arr["oc"]);
+		//$this->clear_cart($oc);
+		//return aw_ini_get("baseurl");
+		$cart_total = $this->get_cart_value();
+		$cart_discount = $cart_total * ($oc->prop("web_discount")/100);
+		$real_sum = $cart_total - $cart_discount;
+
+//iin siis $real_sum on see, mis maksta tuleb. mis pank on valitud, on:
+
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$cart = $soc->get_cart(obj($oc));
+		$user_data = $cart["user_data"];
+		$bank = $user_data["user9"];
+		
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		$bank_payment = $oc->prop("bank_payment");
+		
+		$bank_return = $this->mk_my_orb("bank_return", array("oc" => $oc->id()));
+		$_SESSION["bank_payment"]["url"] = $bank_return;
+		$ret = $bank_inst->do_payment(array(
+			"bank_id" => $bank,
+			"amount" => $real_sum,
+			"reference_nr" => $oc->id(),
+			"payment_id" => $bank_payment,
+			"expl" => $order_id,
+		));
+
+		return $ret;
+	}
+	
+	/**
+		@attrib name=bank_return nologin=1
+		@param oc required type=int acl=view
+	**/
+	function bank_return($arr)
+	{
+		$oc = obj($arr["oc"]);
+		$order_id = shop_order_cart::do_create_order_from_cart($oc);
+		return $this->mk_my_orb("show", array("id" => $order_id), "shop_order");
 	}
 
 	function update_user_data_from_order($oc, $wh, $params)

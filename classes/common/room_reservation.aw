@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.18 2006/12/07 23:54:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.19 2006/12/15 16:49:05 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -537,7 +537,7 @@ class room_reservation extends class_base
 		$sf->db_init();
 		$sf->tpl_init("automatweb");
 		$sf->read_template("index.tpl");
-			
+			lc_site_load("room_reservation", &$this);
 		$action = $this->mk_my_orb("submit_web_products_table", array("room" => $room->id()));
 		$sf->vars(array(
 			"content" => "<form name='products_form' action=".$action." method=POST>".$html."<br></form>",
@@ -610,6 +610,7 @@ class room_reservation extends class_base
 			$tpl = "index.tpl";
 		}
 		$sf->read_template($tpl);
+		lc_site_load("room_reservation", &$this);
 		$action = $this->mk_my_orb("submit_web_calendar_table", array("room" => $arr["room"]));
 		$arr["obj_inst"] = obj($arr["room"]);
 		$res_inst = get_instance(CL_ROOM);
@@ -636,8 +637,10 @@ class room_reservation extends class_base
 				"length_select" => $res_inst->_get_length_select($arr),
 				"submit_url" => $action,
 			));
-			$sf->vars(array("SELECT" => $sf->parse("SELECT")));
-		
+			if(!$arr["obj_inst"]->prop("use_product_times"))
+			{
+				$sf->vars(array("SELECT" => $sf->parse("SELECT")));
+			}
 		}
 		else
 		{
