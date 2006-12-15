@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.43 2006/12/08 15:15:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.44 2006/12/15 11:20:10 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -731,11 +731,11 @@ class shop_order_center extends class_base
 //arr($_SESSION["soc_err"]);
 		$tl_inst = $t_layout->instance();
 		$tl_inst->start_table($t_layout, $soc);
-
+		lc_site_load("shop_order_center", &$tl_inst);
 		$xi = 0;
 		$l_inst = $layout->instance();
 		$l_inst->read_template($layout->prop("template"));
-
+		lc_site_load("shop_order_center", &$l_inst);
 		lc_site_load("shop_order_center", &$this);
 		foreach($pl as $o)
 		{
@@ -800,6 +800,7 @@ class shop_order_center extends class_base
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 		$this->read_template("orders.tpl");
+		lc_site_load("shop_order_center", &$this);
 		if($ord = $p->get_first_obj_by_reltype("RELTYPE_ORDER"))
 		{
 			$center = $ord->get_first_obj_by_reltype("RELTYPE_ORDER_CENTER");

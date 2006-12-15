@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.12 2006/12/08 15:15:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.13 2006/12/15 11:20:10 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -78,7 +78,7 @@ class shop_product_table_layout extends class_base
 			$tpl = $t->prop("template");
 		}
 		$this->read_template($tpl);
-
+		lc_site_load("shop_order_center", &$this);
 		$soce = new aw_array(aw_global_get("soc_err"));
 		foreach($soce->get() as $prid => $errmsg)
 		{
