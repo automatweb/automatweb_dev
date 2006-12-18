@@ -1474,6 +1474,15 @@ class mrp_workspace extends class_base
 		}
 	}
 
+	// method only needed in self::create_resources_tree() method archived res removal backwards compatible version
+	function cb_remove_inactive_res(&$o, $parent)
+	{
+		if (CL_MRP_RESOURCE == $o->class_id() and MRP_STATUS_RESOURCE_INACTIVE == $o->prop("state"))
+		{
+			$this->mrp_remove_resources_from_tree[] = $o->id();
+		}
+	}
+
 	function create_resources_tree ($arr = array())
 	{
 		$this_object =& $arr["obj_inst"];
@@ -1487,8 +1496,21 @@ class mrp_workspace extends class_base
 			"parent" => $resources_folder,
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
-			"state" => new obj_predicate_not(array($applicable_states)),
+			// "CL_MRP_RESOURCE.state" => new obj_predicate_not(array($applicable_states)), // archived res removal std version
 		));
+
+		// archived res removal backwards compatible version
+		$this->mrp_remove_resources_from_tree = array();
+		$resource_tree->foreach_cb(array(
+			"func" => array(&$this, "cb_remove_inactive_res"),
+			"save" => false,
+		));
+
+		if (count($this->mrp_remove_resources_from_tree))
+		{
+			$resource_tree->remove($this->mrp_remove_resources_from_tree);
+		}
+		// END archived res removal backwards compatible version
 
 		classload("vcl/treeview");
 		$tree = treeview::tree_from_objects(array(
