@@ -1477,6 +1477,9 @@ class mrp_workspace extends class_base
 	function create_resources_tree ($arr = array())
 	{
 		$this_object =& $arr["obj_inst"];
+		$applicable_states = array(
+			MRP_STATUS_RESOURCE_INACTIVE,
+		);
 
 		### resource tree
 		$resources_folder = $this_object->prop ("resources_folder");
@@ -1484,6 +1487,7 @@ class mrp_workspace extends class_base
 			"parent" => $resources_folder,
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
+			"state" => obj_predicate_not(array($applicable_states)),
 		));
 
 		classload("vcl/treeview");
