@@ -13,6 +13,16 @@
             <caption>Ruumid</caption>
       </property>
       <property>
+            <name>prices</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>N&amp;amp;auml;ita hindu valuutades</caption>
+      </property>
+      <property>
             <name>reservation_template</name>
             <table>objects</table>
             <group>general</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.69 2006/12/18 15:28:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.70 2006/12/18 16:31:52 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2642,7 +2642,7 @@ class room extends class_base
 			return 0;
 		}
 		$room = obj($room);
-		$this->bargain_value = 0;
+		$this->bargain_value = array();
 		$this->step_length = $this->step_lengths[$room->prop("time_unit")];
 		$sum = array();
 		
@@ -2713,9 +2713,9 @@ class room extends class_base
 				"start" => $end-$time,
 			));
 			foreach($price->meta("prices") as $currency => $hr_price)
-			{
+			{//arr($hr_price); arr($hr_price - $bargain*$hr_price);arr("");
 				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
-				$this->bargain_value = $this->bargain_value + $bargain*$hr_price;
+				$this->bargain_value[$currency] = $this->bargain_value[$currency] + $bargain*$hr_price;
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
 		}

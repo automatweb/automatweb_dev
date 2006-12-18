@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.20 2006/12/15 17:28:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.21 2006/12/18 16:31:52 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -11,6 +11,9 @@
 
 @property rooms type=relpicker multiple=1 reltype=RELTYPE_ROOM store=connect field=meta method=serialize
 @caption Ruumid
+
+@property prices type=select multiple=1
+@caption N&auml;ita hindu valuutades
 
 @property reservation_template type=select 
 @caption Broneeringu template
@@ -61,7 +64,12 @@ class room_reservation extends class_base
 		//				$prop["type"] = "text";
 		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
 					}
-					break;
+				break;
+			case "prices":
+				$arr["obj_inst"]->prop("type");
+				$curr_list = new object_list(array("class_id" => CL_CURRENCY, "lang_id" => array()));
+				$prop["options"] = $curr_list->names();
+				break;
 						
 		};
 		return $retval;
@@ -425,7 +433,7 @@ class room_reservation extends class_base
 		));
 		$room_inst = get_instance(CL_ROOM);
 		
-		$data["sum"] = $room_inst->cal_room_price(array(
+		$sum = $room_inst->cal_room_price(array(
 			"room" => $room->id(),
 			"people" => $_SESSION["room_reservation"][$room->id()]["people"],
 			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
@@ -433,14 +441,34 @@ class room_reservation extends class_base
 			"products" => $_SESSION["room_reservation"][$room->id()]["products"],
 		));
 		//muidu annab massiivi kõikide valuutade hindadega... et eks selgub, kuda seda hiljem tahetakse
-		$data["sum"] = reset($data["sum"]);
+		$room_res = obj($arr["id"]);
+		
+		$show_curr = $room_res->prop("prices");
+		
+		$data["sum"] = $data["sum_wb"] = $data["bargain"] = array();
+		foreach ($show_curr as $curr)
+		{
+			$currency = obj($curr);
+			if($sum[$curr] || $sum[$curr] == 0)
+			{
+				$data["sum"][] = $sum[$curr]." ".$currency->name();
+				$data["bargain"][] = $room_inst->bargain_value[$curr]." ".$currency->name();
+				$data["sum_wb"][] = ((double)$sum[$curr] + (double)$room_inst->bargain_value[$curr])." ".$currency->name();
+			}
+		}
+		$data["sum"] = join("/" , $data["sum"]);
+		$data["bargain"] = join("/" , $data["bargain"]);
+		$data["sum_wb"] = join("/" , $data["sum_wb"]);
+/*		$data["sum"] = reset($data["sum"]);
+		
+		
+		
 		if(!$data["sum"])
 		{
 			$data["sum"] = 0;
 		}
 		
-		$data["bargain"] = $room_inst->bargain_value;
-		$data["sum_wb"] = (double)$data["sum"] + (double)$room_inst->bargain_value;
+		 = $room_inst->bargain_value;*/
 		
 		$data["time_from"] = "";
 		$data["time_to"] = "";
