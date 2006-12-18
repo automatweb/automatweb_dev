@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.24 2006/11/22 12:23:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.25 2006/12/18 10:46:35 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -206,6 +206,7 @@ class task_quick_entry extends class_base
 		{
 			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
 		}
+		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
 
@@ -244,7 +245,7 @@ class task_quick_entry extends class_base
                 {
                         $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
                 }
-
+		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
 
@@ -283,6 +284,7 @@ class task_quick_entry extends class_base
                 {
                         $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", $v->prop("lastname"));
                 }
+		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
 
@@ -329,6 +331,7 @@ class task_quick_entry extends class_base
                         	$autocomplete_options[$k] = parse_obj_name($v);
                 	}
 		}
+		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
 
@@ -338,19 +341,34 @@ class task_quick_entry extends class_base
 		// if needed add customer/project/task
 		$cur_co = get_current_company();
 		$cur_p = get_current_person();
+		$tcust = $arr["request"]["customer"];
 		if (mb_detect_encoding($arr["request"]["customer"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["customer"]);
+			if ($arr["request"]["customer"] == "")
+			{
+				$arr["request"]["customer"] = $tcust;
+			}
 		}
 
+		$tproj = $arr["request"]["project"];
 		if (mb_detect_encoding($arr["request"]["project"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["project"]);
+			if ($arr["request"]["project"] == "")
+			{
+				$arr["request"]["project"] = $tproj;
+			}
 		}
 
+		$ttask = $arr["request"]["task"];
 		if (mb_detect_encoding($arr["request"]["task"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["task"]);
+			if ($arr["request"]["task"] == "")
+			{
+				$arr["request"]["task"] = $ttask;
+			}
 		}
 		if ($arr["request"]["task"] == "")
 		{
@@ -587,11 +605,15 @@ class task_quick_entry extends class_base
 	**/
 	function check_existing($arr)
 	{
+		$ctmp = $arr["c"];
 		if (mb_detect_encoding($arr["c"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["c"] = iconv("UTF-8", aw_global_get("charset"), $arr["c"]);
+			if ($arr["c"] == "")
+			{
+				$arr["c"] = $ctmp;
+			}
 		}
-
 		$ret = "";
 		// if customer exists
 		$ol = new object_list(array(
@@ -605,9 +627,14 @@ class task_quick_entry extends class_base
 			$ret .= sprintf(t("Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["c"]);
 		}
 
+		$ptmp = $arr["p"];
 		if (mb_detect_encoding($arr["p"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["p"] = iconv("UTF-8", aw_global_get("charset"), $arr["p"]);
+			if ($arr["p"] == "")
+			{
+				$arr["p"] = $ptmp;
+			}
 		}
 		// if project exists
 		$ol = new object_list(array(
@@ -622,10 +649,14 @@ class task_quick_entry extends class_base
 			$ret .= sprintf(t("Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["p"]);
 		}
 
-
+		$ttmp = $arr["t"];
 		if (mb_detect_encoding($arr["t"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["t"] = iconv("UTF-8", aw_global_get("charset"), $arr["t"]);
+			if ($arr["t"] == "")
+			{
+				$arr["t"] = $ttmp;
+			}
 		}
 		// if task exists
 		$ol = new object_list(array(
@@ -640,6 +671,7 @@ class task_quick_entry extends class_base
 		{
 			$ret .= sprintf(t("Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["t"]);
 		}
+		header("Content-type: text/html; charset=utf-8");
 		die(iconv(aw_global_get("charset"), "UTF-8", $ret));
 	}
 	
