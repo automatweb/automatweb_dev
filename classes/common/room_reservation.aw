@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.21 2006/12/18 16:31:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.22 2006/12/18 17:43:04 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -459,6 +459,9 @@ class room_reservation extends class_base
 		$data["sum"] = join("/" , $data["sum"]);
 		$data["bargain"] = join("/" , $data["bargain"]);
 		$data["sum_wb"] = join("/" , $data["sum_wb"]);
+
+
+
 /*		$data["sum"] = reset($data["sum"]);
 		
 		
@@ -826,6 +829,10 @@ class room_reservation extends class_base
 		if(!$this->make_verified($arr["id"]))
 		{
 			print t("Broneeringut ei &otilde;nnestunud kinnitada"); 
+		}
+		else
+		{
+			return aw_ini_get("baseurl")/$arr["id"];
 		}
 		return ;//$this->mk_my_orb("show", array("id" => $order_id), "shop_order");
 		//returni peaks miski ilusa saidi urli andma

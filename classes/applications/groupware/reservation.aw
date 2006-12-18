@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.19 2006/11/29 16:18:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.20 2006/12/18 17:43:35 markop Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -302,11 +302,42 @@ class reservation extends class_base
 	{
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
+		
+
+		
 		$this->vars(array(
 			"name" => $ob->prop("name"),
+			"verified" => ($ob->prop("verified") ? t("Kinnitatud") : t("Kinnitamata")),
+			"time_str" => $this->get_time_str(array(
+				"start" => $ob->prop("start1"),
+				"end" => $ob->prop("end"),
+			)),
 		));
 		return $this->parse();
 	}
+	
+	function get_time_str($arr)
+	{
+		$room_inst = get_instance(CL_ROOM);
+		extract($arr);
+		$res = "";
+		$res.= $room_inst->weekdays[(int)date("w" , $arr["start"])];
+		$res.= ", ";
+		$res.= date("d.m.Y" , $arr["start"]);
+		$res.= ", ";
+		$res.= date("H:i" , $arr["start"]);
+		$res.= " - ";
+		$res.= date("H:i" , $arr["end"]);
+		return $res;
+	}
+	
+	function request_execute ($this_object)
+	{
+		return $this->show (array (
+			"this" => $this_object,
+		));
+	}
+	
 
 //-- methods --//
 
