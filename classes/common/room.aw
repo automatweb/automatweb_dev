@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.67 2006/12/18 09:56:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.68 2006/12/18 11:57:07 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1711,11 +1711,17 @@ class room extends class_base
 					"bron" => $val,
 					"id" => $room,
 				));
+				if ($times["start"])
+				{
+					$arr["id"] = $room;
+					break;
+				}
 				if(!$arr["id"])
 				{
 					$arr["id"] = $room;
 				}
 			}
+
 			extract($times);
 
 			$room = obj($arr["id"]);

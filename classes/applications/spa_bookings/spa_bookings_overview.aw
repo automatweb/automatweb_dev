@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.2 2006/12/04 13:44:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.3 2006/12/18 11:57:06 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -184,6 +184,11 @@ class spa_bookings_overview extends class_base
 				{
 					$bf["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
 				}
+				else
+				{
+					$bf["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1);
+				}
+
 				if ($to > 1)
 				{
 					$bf["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
@@ -367,6 +372,7 @@ class spa_bookings_overview extends class_base
 		}
 		$this->vars(array(
 			"CAL" => $cals,
+			"reforb" => $this->mk_reforb("do_add_reservation", array("id" => $arr["id"], "post_ru" => get_ru()), "room")
 		));
 		return $this->parse();
 	}
