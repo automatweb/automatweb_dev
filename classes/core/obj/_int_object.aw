@@ -1501,7 +1501,6 @@ class _int_object
 			$trans = true;
 			$cur_lid = $cl;
 		}
-
 		if ($trans)
 		{
 			$trs = $this->obj["meta"]["translations"];
@@ -1514,11 +1513,10 @@ class _int_object
 				$val = $trs[$cur_lid][$prop];
 			}
 		}
-		
 		return $val;	
 	}
 
-	function trans_get_val_str($prop)
+	function trans_get_val_str($param)
 	{
 		if ($this->obj["oid"] != $this->obj["brother_of"])
                 {
@@ -1538,7 +1536,7 @@ class _int_object
 			$type = "oid";
 		}
 
-		$val = $this->_int_get_prop($param);
+		$val = $this->trans_get_val($param);
 		switch($type)
 		{
 			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables 
