@@ -1487,7 +1487,7 @@ class mrp_workspace extends class_base
 			"parent" => $resources_folder,
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
-			"state" => obj_predicate_not(array($applicable_states)),
+			"state" => new obj_predicate_not(array($applicable_states)),
 		));
 
 		classload("vcl/treeview");
