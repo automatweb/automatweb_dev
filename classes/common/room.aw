@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.66 2006/12/15 17:28:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.67 2006/12/18 09:56:49 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -235,6 +235,7 @@ class room extends class_base
 			"tpldir" => "common/room",
 			"clid" => CL_ROOM
 		));
+		classload("core/icons");
 
 		$this->unit_step = array(
 			1 => t("minutit"),
@@ -1279,6 +1280,7 @@ class room extends class_base
 
 	function _get_calendar_tbl($arr)
 	{
+		enter_function("get_calendar_tbl");
 		//kkui asi tuleb veebist
 		if(is_oid($arr["room"]) && $this->can("view" , $arr["room"]))
 		{	
@@ -1299,8 +1301,10 @@ class room extends class_base
 		
 		$this->_init_calendar_t($t,$arr["request"]["start"]);
 
+		exit_function("get_calendar_tbl");
 		//see siis näitab miskeid valitud muid nädalaid
 		
+		enter_function("get_calendar_tbl::2");
 		$start_hour = 0;
 		$start_minute = 0;
 		if(is_object($this->openhours))
@@ -1322,6 +1326,9 @@ class room extends class_base
 
 		$step = 0;
 		$step_length = $this->step_lengths[$arr["obj_inst"]->prop("time_unit")];
+		exit_function("get_calendar_tbl::2");
+
+		enter_function("get_calendar_tbl::3");
 		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
@@ -1479,6 +1486,7 @@ class room extends class_base
 			}
 			$step = $step + 1;
 		}
+		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
 	}
 	
@@ -1546,51 +1554,34 @@ class room extends class_base
 
 	function get_prod_menu($arr)
 	{
-		classload("core/icons");
-//		$prod_list = $this->get_prod_list($arr["obj_inst"]->id());
-		static $item_list;
-
-		if ($item_list == null)
+		enter_function("get_calendar_tbl::get_prod_menu");
+		$m_oid = $arr["obj_inst"]->id();
+		static $prod_list;
+		static $times;
+		if ($prod_list == null)
 		{
+			$this->prod_data = $arr["obj_inst"]->meta("prod_data");
 			$item_list = $this->get_active_items($arr["obj_inst"]->id());
+			$prod_list = $item_list->names();
+			$times = array();
+			foreach($prod_list as $oid => $pname)
+			{
+				$times[$oid] = $this->cal_product_reserved_time(array("id" => $m_oid, "oid" => $oid));
+			}
 		}
 		$ret = "";
 		$pm = get_instance("vcl/popup_menu");
-		$room = $arr["obj_inst"];
-		$this->prod_data = $room->meta("prod_data");
-		
-		$image_inst = get_instance(CL_IMAGE);
 		$pm->begin_menu($arr["menu_id"]);
-//		foreach($prod_list->arr() as $prod)
-//		{
-/*			$pm->add_item(array(
-				"text" => $prod->name(),
-				"link" => "javascript: dontExecutedoBron=1;void(0)",
-				"onClick" => " dontExecutedoBron=1;onClick=doBronWithProduct(this, '".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))."' , '".$arr["timestamp"]."');",
-			),"CL_ROOM");
-		
-			$packages = new object_list(); //$this->get_package_list($prod->id());
-			
-			foreach($packages->arr() as $package)
-			{
-				$pm->add_item(array(
-					"text" => $package->name(),
-					"link" => "javascript: dontExecutedoBron=1;void(0)",
-					"onClick" => "onClick=doBronWithProduct(this, ".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $package->id()))." , ".$arr["timestamp"].");",
-				),"CL_ROOM");
-			}
-		*/
-//		}
-		foreach($item_list->arr() as $prod)
+		foreach($prod_list as $oid => $name)
 		{
 			$pm->add_item(array(
-				"text" => $prod->name(),
+				"text" => $name,
 				"link" => "javascript:dontExecutedoBron=1;void(0)",
 				"onClick" => "doBron(
-					'".$arr["obj_inst"]->id()."_".$arr["timestamp"]."' ,
+					'".$m_oid."_".$arr["timestamp"]."' ,
 					".$arr["step_length"]." ,
-					".$this->cal_product_reserved_time(array("id" => $room->id(), "oid" => $prod->id()))." ,
-					".$prod->id().");",
+					".$times[$oid]." ,
+					".$oid.");",
 			),"CL_ROOM");
 		}
 
@@ -1598,6 +1589,7 @@ class room extends class_base
 			"icon" => icons::get_icon_url($package),
 			//"icon" =>aw_ini_get("baseurl")."/automatweb/images/vaba.gif",
 		));
+		exit_function("get_calendar_tbl::get_prod_menu");
 		return $ret;
 	}
 
@@ -2989,6 +2981,7 @@ class room extends class_base
 			$buffer_end = $buff_before;
 			$buffer_start =$buff_after;
 		}
+
 		$buffer = $buff_before+$buff_after;
 		$filt = array(
 			"class_id" => array(CL_RESERVATION),
