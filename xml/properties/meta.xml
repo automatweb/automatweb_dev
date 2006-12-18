@@ -9,9 +9,24 @@
             <size>4</size>
             <caption>Jrk.</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_META</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
 </properties>
 

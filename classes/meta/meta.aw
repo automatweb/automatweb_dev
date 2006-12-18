@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/meta.aw,v 1.2 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/meta.aw,v 1.3 2006/12/18 10:26:31 kristo Exp $
 // meta.aw - Vidin 
 /*
 
@@ -10,6 +10,12 @@
 
 @property ord field=jrk type=textbox size=4
 @caption Jrk.
+
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 */
 
@@ -23,6 +29,10 @@ class meta extends class_base
 			"tpldir" => "meta",
 			"clid" => CL_META
 		));
+
+		$this->trans_props = array(
+			"name","comment"
+		);
 	}
 
 	//////
@@ -41,18 +51,21 @@ class meta extends class_base
 	}
 	*/
 
-	/*
+	
 	function set_property($arr = array())
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
                 {
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 
 		}
 		return $retval;
 	}	
-	*/
+	
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
@@ -77,6 +90,20 @@ class meta extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>
