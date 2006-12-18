@@ -28,7 +28,7 @@
 <!-- SUB: company_show -->
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <!-- SUB: line_name -->
-<h1>{VAR:value}</h1>
+<h1><a href="">{VAR:value}</a></h1>
 <!-- END SUB: line_name -->
 <table>
 	<tr>
@@ -105,7 +105,7 @@
 						<!-- SUB: croom_table_row_odd -->
 							<tr bgcolor="silver">
 								<!-- SUB: croom_name_col_odd -->
-									<td>{VAR:room_name_odd}{VAR:room_comment_odd}</td>
+									<td><a href="#" onClick="aw_popup_scroll('{VAR:room_popurl}','Ruum', 500, 500);">{VAR:room_name_odd}</a>{VAR:room_comment_odd}</td>
 								<!-- END SUB: room_name_col_odd -->
 								<!-- SUB: croom_area_col_odd -->
 									<td>{VAR:area_value_odd}</td>
@@ -118,7 +118,7 @@
 						<!-- SUB: croom_table_row_even -->
 							<tr bgcolor="lightblue">
 								<!-- SUB: croom_name_col_even -->
-									<td>{VAR:room_name_even}{VAR:room_comment_even}</td>
+									<td><a href="#" onClick="aw_popup_scroll('{VAR:room_popurl}','Ruum', 500, 500);">{VAR:room_name_even}</a>{VAR:room_comment_even}</td>
 								<!-- END SUB: room_name_col_even -->
 								<!-- SUB: croom_area_col_even -->
 									<td>{VAR:area_value_even}</td>

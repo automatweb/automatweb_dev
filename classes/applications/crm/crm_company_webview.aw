@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.16 2006/09/13 12:33:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.17 2006/12/18 14:23:21 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -210,9 +210,15 @@ class crm_company_webview extends class_base
 		{
 			$org = null;
 		}
+		$room = $_REQUEST["room"];
+		$room = $this->can('view', $room)?$room:false;
 
 	enter_function('crm_company_webview::show');
-		if (is_null($org))
+		if($room)
+		{
+			$ret = $this->_get_conference_room_html($room);
+		}
+		elseif (is_null($org))
 		{
 			// LIST COMPANIES
 			$ret = $this->_get_companies_list_html(array('id' => $arr['id']));
@@ -638,6 +644,7 @@ class crm_company_webview extends class_base
 													$this->vars(array(
 														"room_name".$odd_even_type => $room->name(),
 														"room_comment".$odd_even_type => $room->prop("description"),
+														"room_popurl" => $url = "/".aw_global_get('section')."?room=".$room->id(),
 													));
 													${"croom_name".$odd_even_type} = $this->parse("croom_name_col".$odd_even_type);
 													$this->vars(array(
@@ -649,7 +656,7 @@ class crm_company_webview extends class_base
 											foreach($odd_even as $odd_even_type)
 											{
 												$this->vars(array(
-													"col_value".$odd_even_type => $val,
+													"col_value".$odd_even_type => ($val < 1)?t("-"):$val,
 												));
 												${"cols".$odd_even_type} .= $this->parse("croom_table_col".$odd_even_type);
 											}
@@ -1323,6 +1330,34 @@ class crm_company_webview extends class_base
 		$this->parse('company_list');
 
 		return $this->parse();
+	}
+
+	function _get_conference_room_html($oid)
+	{
+		$this->read_template("company_popup_show.tpl");
+		$o = obj($oid);
+		$props = $o->get_property_list();
+		foreach($props as $pn => $pd)
+		{
+			if(substr($pn, 0 , 5) == "type_")
+			{
+				$this->vars(array(
+					"caption" => $pd["caption"],
+					"type_amount" => ($o->prop($pn) < 1)?t("-"):$o->prop($pn),
+				));
+				$types_html .= $this->parse("TYPES");
+			}
+		}
+		$this->vars(array(
+			"TYPES" => $types_html,
+			"name" => $o->name(),
+			"desc" => strlen($o->prop("description"))?$o->prop("description"):t("-"),
+			"total_area" => ($o->prop("area") < 1)?t("-"):$o->prop("area"),
+			"total_area_cap" => $props["area"]["caption"],
+			"name_cap" => $props["name"]["caption"],
+			"desc_cap" => $props["description"]["caption"],
+		));
+		die($this->parse());
 	}
 
 	function callback_mod_tab($arr)
