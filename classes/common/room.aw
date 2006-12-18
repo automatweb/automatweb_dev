@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.68 2006/12/18 11:57:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.69 2006/12/18 15:28:23 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2796,7 +2796,7 @@ class room extends class_base
 					}
 					if((mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end) && (mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) < $end))
 					{
-						return 0.01*$bargain->prop("bargain_percent")*($end - mktime($from["hour"], $from["minute"], 0, date("m",$from), date("d",$from), date("y",$from)))/($end-$start);
+						return 0.01*$bargain->prop("bargain_percent")*($end - mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)))/($end-$start);
 					}
 				}
 			}

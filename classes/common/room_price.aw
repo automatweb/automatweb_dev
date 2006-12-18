@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.4 2006/10/25 15:34:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.5 2006/12/18 15:28:23 markop Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -278,7 +278,7 @@ class room_price extends class_base
 		$caption = $this->get_time_caption($oid);
 		for($i = $data["from"]; $i <= $data["to"]; $i += $data["step"])
 		{
-			$ret[$i] = $i." ".$caption;
+			$ret["$i"] = $i." ".$caption;
 		}
 		return $ret;
 	}
