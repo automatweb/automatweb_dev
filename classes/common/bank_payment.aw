@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.14 2006/12/15 16:49:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.15 2006/12/18 14:19:19 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -200,6 +200,7 @@ class bank_payment extends class_base
 		if(!$data["cancel_url"])
 		{
 			$data["cancel_url"] = $payment->prop("cancel_url");
+			$_SESSION["bank_payment"]["cancel"] = $payment->prop("cancel_url");
 		}
 		
 		if(!$data["amount"] && $data["units"] && $payment->prop("default_unit_sum"))
@@ -520,7 +521,7 @@ class bank_payment extends class_base
 		{
 			$return.= '<input type="hidden" name='.$key.' value="'.(string)$val.'">
 			';
-		};
+		};//arr($return); die();
 		if($form) return $return;
 		print $return.'<p class="text">Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage <a href="#" onClick="document.postform.submit();">siia</a></p>
 		</form>
