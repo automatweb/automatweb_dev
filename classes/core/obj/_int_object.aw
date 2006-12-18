@@ -1525,24 +1525,85 @@ class _int_object
                         $tmp = $this->get_original();
                         return $tmp->trans_get_val_str($prop);
                 }
-												
-		$val = $this->prop_str($prop);
+
+		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
+		if (!$pd)
+		{
+			return $this->trans_get_val($param);
+		}
+
+		$type = $pd["type"];
+		if ($is_oid)
+		{
+			$type = "oid";
+		}
+
+		$val = $this->_int_get_prop($param);
+		switch($type)
+		{
+			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables 
+			case "relmanager":
+			case "relpicker": 
+			case "classificator":
+			case "popup_search":
+			case "crm_participant_search":
+			case "releditor":
+				if ($pd["store"] == "connect")
+				{
+					$rels = new object_list($this->connections_from(array(
+						"type" => $pd["reltype"]
+					)));
+					$_tmp = array();
+					foreach($rels->arr() as $rel_o)
+					{
+						$_tmp[] = $rel_o->trans_get_val("name");
+					}
+					if (count($_tmp))
+					{
+						$val = join(",", $_tmp);
+					}
+					else
+					{
+						$val = "";
+					}
+					break;
+				}
+
+			case "oid":
+				if (is_oid($val))
+				{
+					if ($GLOBALS["object_loader"]->ds->can("view", $val))
+					{
+						$tmp = new object($val);
+						$val = $tmp->trans_get_val("name");
+					}
+					else
+					{
+						$val = "";
+					}
+				}
+				else
+				if (is_array($val))
+				{
+					$vals = array();
+					foreach($val as $k)
+					{
+						if (is_oid($k))
+						{
+							if ($GLOBALS["object_loader"]->ds->can("view", $k))
+							{
+								$tmp = new object($k);
+								$vals[] = $tmp->trans_get_val("name");
+							}
+						}
+					}
+					$val = join(", ", $vals);
+				}
+				break;
+		}
 		if ($val === "0" || $val === 0)
 		{
 			$val = "";
-		}
-
-		if ($GLOBALS["cfg"]["user_interface"]["content_trans"] == 1 && ($cur_lid = aw_global_get("lang_id")) != $this->lang_id())
-		{
-			$trs = $this->obj["meta"]["translations"];
-			if (isset($trs[$cur_lid]))
-			{
-				if ($trs[$cur_lid][$prop] == "")
-				{
-					return $val;
-				}
-				$val = $trs[$cur_lid][$prop];
-			}
 		}
 		return $val;
 	}	
