@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.70 2006/12/18 16:31:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.71 2006/12/18 17:11:48 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -360,6 +360,20 @@ class room extends class_base
 				case "products_tb":
 					$this->_products_tb($arr);
 					break;		
+				case "openhours":
+					if(!sizeof($arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_OPENHOURS",
+					))))
+					{
+						$oh = new object();
+						$oh->set_parent($arr["obj_inst"]->id());
+						$oh->set_class_id(CL_OPENHOURS);
+						$oh->set_name($arr["obj_inst"]->name()." ".openhours);
+						$oh->save();
+						$arr["obj_inst"]->set_prop("openhours" , $oh->id());
+						$arr["obj_inst"]->connect(array("to" => $oh->id(), "reltype" => "RELTYPE_OPENHOURS"));
+					}
+					break;
 		};
 		return $retval;
 	}
