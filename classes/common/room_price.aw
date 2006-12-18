@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.5 2006/12/18 15:28:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.6 2006/12/18 16:37:19 markop Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -40,8 +40,6 @@
 	@property time type=select editonly=1
 	@caption Aeg
 
-	@property prices type=callback callback=gen_prices_props
-
 	@property bargain_percent type=textbox
 	@caption Soodustuse protsent
 
@@ -76,6 +74,10 @@ class room_price extends class_base
 			//-- get_property --//
 			case "weekdays":
 				$prop["options"] = $this->weekdays;
+				if(!$prop["value"])
+				{
+				    $prop["value"] = Array(1,1,1,1,1,1,1,1);
+				}
 				break;
 			case "nr":
 				if($arr["obj_inst"]->prop("type") == 2)
@@ -116,6 +118,7 @@ class room_price extends class_base
 					return PROP_IGNORE;
 				}
 				break;
+
 			// ignore's for bargain price
 		};
 		return $retval;
