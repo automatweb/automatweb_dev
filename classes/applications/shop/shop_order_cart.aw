@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.53 2006/12/15 16:50:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.54 2006/12/19 19:40:45 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -666,6 +666,7 @@ class shop_order_cart extends class_base
 				{
 					header("Location: ".$arr["return_url"]);
 				}
+				die();
 			}
 		}
 
