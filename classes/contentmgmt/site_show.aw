@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.213 2006/12/14 13:02:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.214 2006/12/19 10:54:34 kristo Exp $
 
 /*
 
@@ -1682,6 +1682,10 @@ class site_show extends class_base
 
 		foreach($lar as $row)
 		{
+			if (is_oid($row["oid"]) && !$this->can("view", $row["oid"]))
+			{
+				continue;
+			}
 			$num++;
 			$grp = $row["meta"]["lang_group"];
 			$grp_spec = $grp;

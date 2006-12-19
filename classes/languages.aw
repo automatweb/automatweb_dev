@@ -64,16 +64,18 @@ class languages extends aw_template
 					continue;
 				}
 			}
-			if (isset($all_data))
+			if (!(is_oid($ldat["oid"]) && !$this->can("view", $ldat["oid"])))
 			{
-				$ret[$ldat[$use_key]] = $ldat;
-			}
-			else
-			{
-				$ret[$ldat[$use_key]] = $ldat["name"];
+				if (isset($all_data))
+				{
+					$ret[$ldat[$use_key]] = $ldat;
+				}
+				else
+				{	
+					$ret[$ldat[$use_key]] = $ldat["name"];
+				}
 			}
 		}
-
 		return $ret;
 	}
 
@@ -166,7 +168,14 @@ class languages extends aw_template
 			// read the language from active lang
 			if ($GLOBALS["cfg"]["user_interface"]["use_site_lang"] == 1)
 			{
-				$_tmp = aw_global_get("LC");
+				if (aw_ini_get("user_interface.full_content_trans"))
+				{
+					$_tmp = aw_global_get("ct_lang_lc");
+				}
+				else
+				{
+					$_tmp = aw_global_get("LC");
+				}
 				$GLOBALS["cfg"]["user_interface"]["default_language"] = $_tmp;
 			}
 		}
@@ -319,7 +328,15 @@ class languages extends aw_template
 
 		if (!aw_global_get("ct_lang_id") && aw_ini_get("user_interface.full_content_trans") && ($ct_lc = aw_ini_get("user_interface.default_language")))
 		{
-			$ct_id = $this->get_langid_for_code($ct_lc);
+			if ($_COOKIE["ct_lang_id"])
+			{
+				$ct_id = $_COOKIE["ct_lang_id"];
+				$ct_lc = $_COOKIE["ct_lang_lc"];
+			}
+			else
+			{
+				$ct_id = $this->get_langid_for_code($ct_lc);
+			}
 			$_SESSION["ct_lang_lc"] = $ct_lc;
 			$_SESSION["ct_lang_id"] = $ct_id;
 			aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
@@ -382,7 +399,14 @@ class languages extends aw_template
 			// read the language from active lang
 			if ($GLOBALS["cfg"]["user_interface"]["use_site_lang"] == 1)
 			{
-				$_tmp = aw_global_get("LC");
+				if (aw_ini_get("user_interface.full_content_trans"))
+				{
+					$_tmp = aw_global_get("ct_lang_lc");
+				}
+				else
+				{
+					$_tmp = aw_global_get("LC");
+				}
 				$GLOBALS["cfg"]["user_interface"]["default_language"] = $_tmp;
 			}
 		}
