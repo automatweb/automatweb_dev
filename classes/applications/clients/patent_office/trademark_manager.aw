@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.2 2006/12/13 15:48:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.3 2006/12/20 10:47:42 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -217,7 +217,7 @@ class trademark_manager extends class_base
  			}
  			if(date_edit::get_timestamp($data["trademark_find_end"]) > 1)
  			{
- 				$to = date_edit::get_timestamp($data["trademark_find_end"]);
+ 				$to = date_edit::get_timestamp($data["trademark_find_end"])+(24*3600);
  			}
  			else
  			{
@@ -291,7 +291,8 @@ class trademark_manager extends class_base
 			}
 			$nr = html::href(array(
 				"caption" => $nr_str,
-				"url" => html::get_change_url($o->id(), array("return_url" => $arr["post_ru"])),
+				"url" => "#",//html::get_change_url($o->id(), array("return_url" => $arr["post_ru"])),
+				"onclick" => 'javascript:window.open("'.aw_ini_get("baseurl").'/'.$o->id().'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			));
 			
 			if(!(is_oid($o->prop("applicant")) && ($this->can("view" ,$o->prop("applicant")))))
@@ -335,6 +336,16 @@ class trademark_manager extends class_base
 				"applicant_data" => $applicant_data,
 				"date" => date("d.m.Y",$o->created()),
 				"oid" => $o->id(),
+				"verify" => ($o->prop("verified")) ? "" : html::href(array(
+					"caption" => t("Kinnita"),
+					"url" => "#",
+					"onclick" => 'javascript:window.open("'.
+						$this->mk_my_orb("verify",array(
+							"popup" => 1,
+							"sel" => array($o->id() => $o->id()),
+						))
+					.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+				)),
 			));
 		}
 	}
@@ -389,6 +400,14 @@ class trademark_manager extends class_base
 			"field" => "oid",
 			"name" => "sel"
 		));
+		
+		if(!($_GET["p_id"] == "verified"))
+		{
+			$t->define_field(array(
+				"name" => "verify",
+				"caption" => t("Kinnita"),
+			));
+		}
 	}
 
 	function _objects_tb($arr)
@@ -435,6 +454,14 @@ class trademark_manager extends class_base
 			'url' => "",
 		//	'action' => 'delete_procurements',
 		//	'confirm' => t(""),
+		));
+		$tb->add_button(array(
+			'name' => 'verify',
+			'img' => 'restore.gif',
+			'tooltip' => t('Kinnita'),
+			'url' => "",
+			'action' => 'verify',
+		//	'confirm' => t(""),
 		));	
 	}
 	
@@ -445,6 +472,31 @@ class trademark_manager extends class_base
 	{
 		object_list::iterate_list($arr["sel"], "delete");
 		return $arr["post_ru"];
+	}
+	
+	/**
+		@attrib name=verify all_args=1
+	**/
+	function verify($arr)
+	{
+		foreach($arr["sel"] as $id)
+		{
+			$o = obj($id);
+			$o->set_prop("verified",1);
+			$o->save();
+		}
+		if($arr["popup"])
+		{
+			die('<script type="text/javascript">
+				window.opener.location.reload();
+				window.close();
+				</script>'
+			);
+		}
+		else
+		{
+			return $arr["post_ru"];
+		}
 	}
 
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/

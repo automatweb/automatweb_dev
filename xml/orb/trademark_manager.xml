@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="verify" all_args="1">
+			<function name="verify">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
