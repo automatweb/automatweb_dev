@@ -140,6 +140,26 @@
             <caption>Lisa reproduktsioon</caption>
       </property>
       <property>
+            <name>g_statues</name>
+            <table>objects</table>
+            <group>trademark</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_G_STATUES</reltype>
+            <caption>Garantiim&amp;amp;auml;rgi p&amp;amp;otilde;hikiri</caption>
+      </property>
+      <property>
+            <name>c_statues</name>
+            <table>objects</table>
+            <group>trademark</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <reltype>RELTYPE_C_STATUES</reltype>
+            <caption>Kollektiivm&amp;amp;auml;rgi p&amp;amp;otilde;hikiri	</caption>
+      </property>
+      <property>
             <name>trademark_type</name>
             <table>objects</table>
             <group>trademark</group>
@@ -364,6 +384,16 @@
                   <clid>CL_BANK_PAYMENT</clid>
                   <caption>Pangalingi objekt</caption>
             </BANK_PAYMENT>
+            <C_STATUES>
+                  <value>12</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Kollektiivp&amp;amp;otilde;hikiri</caption>
+            </C_STATUES>
+            <G_STATUES>
+                  <value>13</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Garantiip&amp;amp;otilde;hikiri</caption>
+            </G_STATUES>
       </reltypes>
 </properties>
 
