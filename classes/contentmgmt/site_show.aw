@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.214 2006/12/19 10:54:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.215 2006/12/20 08:54:28 kristo Exp $
 
 /*
 
@@ -1321,6 +1321,8 @@ class site_show extends class_base
 			{
 				$sel_image_url = image::check_url($img_act_url);
 				$sel_image = "<img name='sel_menu_image' src='".$sel_image_url."' border='0'>";
+				$tmp = obj($o->meta("img_act"));
+				$sel_image_link = $tmp->prop("link");
 				$this->vars(array(
 					"url" => $sel_image_url
 				));
@@ -1350,6 +1352,8 @@ class site_show extends class_base
 				{
 					$sel_image = "<img name='sel_menu_image' src='".image::check_url($dat["url"])."' border='0'>";
 					$sel_image_url = $dat["url"];
+					$tmp = obj($dat["image_id"]);
+					$sel_image_link = $tmp->prop("link");
 				}
 				$this->vars(array(
 					"url" => image::check_url($dat["url"])
@@ -1393,6 +1397,7 @@ class site_show extends class_base
 			"sel_menu_name_no_doc" => $smn_nodoc,
 			"sel_menu_image" => $sel_image,
 			"sel_menu_image_url" => $sel_image_url,
+			"sel_menu_image_link" => $sel_image_link,
 			"sel_menu_comment" => $smc,
 			"sel_menu_o_img_url" => $sel_menu_o_img_url,
 			"sel_menu_timing" => $sel_menu_timing
