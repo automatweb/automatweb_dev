@@ -397,6 +397,7 @@ class user extends class_base
 							"uid" => $arr["obj_inst"]->prop("uid"),
 							"password" => $prop['value']
 						));
+						$arr["obj_inst"]->set_meta("password_change_time", time());
 					}
 				}
 				break;

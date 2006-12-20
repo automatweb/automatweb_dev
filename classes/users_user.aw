@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.131 2006/11/09 11:33:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.132 2006/12/20 11:14:22 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -199,6 +199,14 @@ class users_user extends aw_template
 		{
 			header("Location: ".aw_ini_get("baseurl")."/automatweb/orb.aw");
 			die();
+		}
+
+		// if force password change is set in the ini file, and the current user last changed password
+		// earlier than the limit, then redirect to password change form
+		if (($iv = aw_ini_get("users.change_password_interval")) > 0 && ($user_obj->meta("password_change_time") < (time() - $iv)))
+		{
+			$rv =$this->mk_my_orb("change", array("id" => $user_obj->id(), "group" => "chpwd"), "user", true);
+			return $rv;
 		}
 
 		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
