@@ -778,6 +778,15 @@
             <caption>META description</caption>
       </property>
       <property>
+            <name>page_title</name>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>keywords</group>
+            <caption>Lehe pealkiri</caption>
+      </property>
+      <property>
             <name>acl</name>
             <table>objects</table>
             <group>acl</group>

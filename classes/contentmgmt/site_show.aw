@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.216 2006/12/20 11:37:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.217 2006/12/20 11:39:11 kristo Exp $
 
 /*
 
@@ -2186,7 +2186,7 @@ class site_show extends class_base
 		}
 
 		$isfp = $section == $frontpage && !$_GET["class"];
-		$this->vars(array(
+		$this->vars_safe(array(
 			"IS_FRONTPAGE" => ($isfp ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($isfp ? $this->parse("IS_FRONTPAGE2") : ""),
 			"IS_NOT_FRONTPAGE" => (!$isfp ? $this->parse("IS_NOT_FRONTPAGE") : ""),

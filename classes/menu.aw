@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.181 2006/12/20 11:37:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.182 2006/12/20 11:39:11 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -310,6 +310,8 @@
 		@property description type=textbox field=meta method=serialize group=keywords
 		@caption META description
 
+		@property page_title type=textbox field=meta method=serialize group=keywords
+		@caption Lehe pealkiri
 
 
 @groupinfo acl caption=&Otilde;igused
@@ -418,7 +420,7 @@ class menu extends class_base
 		));
 
 		$this->trans_props = array(
-			"name","link","keywords","description"
+			"name","link","keywords","description","page_title"
 		);
 	}
 
@@ -1944,6 +1946,8 @@ class menu extends class_base
 	function get_sitemap()
 	{
 		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.google.com/schemas/sitemap/0.84\">\n";
+
+		$xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.google.com/schemas/sitemap/0.84" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84 http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 		$ot = new object_tree(array(
 			"class_id" => CL_MENU,
 			"parent" => aw_ini_get("site_rootmenu"),
