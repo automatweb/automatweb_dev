@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.215 2006/12/20 08:54:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.216 2006/12/20 11:37:57 kristo Exp $
 
 /*
 
@@ -754,7 +754,7 @@ class site_show extends class_base
 			{
 				$gm_subs = $obj->meta("section_include_submenus");
 				$gm_c = $obj->connections_from(array(
-					"type" => "RELTYPE_DOCS_FROM_MENU",
+					"type" => array("RELTYPE_DOCS_FROM_MENU","RELTYPE_NO_DOCS_FROM_MENU")
 				));
 
 				if ($_SESSION["doc_content_type"])
@@ -764,6 +764,10 @@ class site_show extends class_base
 
 				foreach($gm_c as $gm)
 				{
+					if ($gm->prop("reltype") == 24)
+					{
+						continue;
+					}
 					$gm_id = $gm->prop("to");
 					$sections[$gm_id] = $gm_id;
 					if ($gm_subs[$gm_id])
@@ -775,6 +779,30 @@ class site_show extends class_base
 							"sort_by" => "objects.parent"
 						));
 						$sections += $this->make_keys($ot->ids());
+					}
+				}
+
+				$gm_subs = $obj->meta("section_no_include_submenus");
+				foreach($gm_c as $gm)
+				{
+					if ($gm->prop("reltype") != 24)
+					{
+						continue;
+					}
+					$gm_id = $gm->prop("to");
+					unset($sections[$gm_id]);
+					if ($gm_subs[$gm_id])
+					{
+						$ot = new object_tree(array(
+							"class_id" => CL_MENU,
+							"parent" => $gm_id,
+							"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
+							"sort_by" => "objects.parent"
+						));
+						foreach($ot->ids() as $_id)
+						{
+							unset($sections[$_id]);
+						}
 					}
 				}
 			};

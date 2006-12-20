@@ -661,6 +661,15 @@
             <caption>Men&amp;amp;uuml;&amp;amp;uuml;d, mille alt viimased dokumendid v&amp;amp;otilde;etakse</caption>
       </property>
       <property>
+            <name>sss_exclude</name>
+            <table>objects</table>
+            <type>table</type>
+            <store>no</store>
+            <group>docs_from</group>
+            <field>sss_exclude</field>
+            <caption>&amp;amp;Auml;ra v&amp;amp;otilde;ta dokumente men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
+      </property>
+      <property>
             <name>seealso_docs_t</name>
             <table>menu</table>
             <type>table</type>
@@ -1016,6 +1025,11 @@
                   <clid>CL_KEYWORD</clid>
                   <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
             </KEYWORD>
+            <NO_DOCS_FROM_MENU>
+                  <value>24</value>
+                  <clid>CL_MENU</clid>
+                  <caption>&amp;amp;auml;ra v&amp;amp;otilde;ta dokumente men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
+            </NO_DOCS_FROM_MENU>
       </reltypes>
 </properties>
 

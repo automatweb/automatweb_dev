@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.180 2006/12/08 11:23:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.181 2006/12/20 11:37:56 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -266,6 +266,9 @@
 		@property sss type=table store=no group=docs_from
 		@caption Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse
 
+		@property sss_exclude type=table store=no group=docs_from
+		@caption &Auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt
+
 	@groupinfo seealso_docs caption="Vaata lisaks dokumendid" parent=menus
 
 		@property seealso_docs_t type=table group=seealso_docs no_caption=1 table=menu
@@ -397,6 +400,9 @@
 
 	@reltype KEYWORD value=23 clid=CL_KEYWORD
 	@caption V&otilde;tmes&otilde;na
+
+	@reltype NO_DOCS_FROM_MENU value=24 clid=CL_MENU
+	@caption &auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt
 */
 
 define("IP_ALLOWED", 1);
@@ -611,6 +617,10 @@ class menu extends class_base
 
 			case "sss":
 				$this->get_sss_table($arr);
+				break;
+
+			case "sss_exclude":
+				$this->get_sss_exclude_table($arr);
 				break;
 
 			case "grkeywords":
@@ -1149,6 +1159,10 @@ class menu extends class_base
 				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["request"]["include_submenus"]);
 				break;
 
+			case "sss_exclude":
+				$arr["obj_inst"]->set_meta("section_no_include_submenus",$arr["request"]["include_submenus"]);
+				break;
+
 			case "type":
 				$request = &$arr["request"];
 				if ($request["type"] != MN_ADMIN1)
@@ -1640,6 +1654,56 @@ class menu extends class_base
 
 		$conns = $obj->connections_from(array(
 			"type" => "RELTYPE_DOCS_FROM_MENU",
+		));
+
+		foreach($conns as $c)
+		{
+			$o = $c->to();
+
+			$t->define_data(array(
+				"id" => $o->id(),
+				"name" => $o->path_str(array(
+					"max_len" => 3
+				)),
+				"check" => html::checkbox(array(
+					"name" => "include_submenus[".$o->id()."]",
+					"value" => $o->id(),
+					"checked" => $section_include_submenus[$o->id()],
+				)),
+			));
+		}
+	}
+
+	function get_sss_exclude_table($arr)
+	{
+		$obj = $arr["obj_inst"];
+
+		$section_include_submenus = $obj->meta("section_no_include_submenus");
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"talign" => "center",
+		));
+		$t->define_field(array(
+			"name" => "check",
+			"caption" => t("k.a. alammen&uuml;&uuml;d"),
+			"talign" => "center",
+			"width" => 80,
+			"align" => "center",
+		));
+
+		$conns = $obj->connections_from(array(
+			"type" => "RELTYPE_NO_DOCS_FROM_MENU",
 		));
 
 		foreach($conns as $c)
