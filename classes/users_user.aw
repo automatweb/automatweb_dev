@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.132 2006/12/20 11:14:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.133 2006/12/21 10:57:13 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -22,6 +22,7 @@ define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of 
 /*
 
 EMIT_MESSAGE(MSG_USER_LOGIN);
+EMIT_MESSAGE(MSG_USER_LOGOUT);
 
 */
 
@@ -289,6 +290,8 @@ class users_user extends aw_template
 		aw_global_set("uid","");
 		aw_session_set("uid","");
 		$this->_log(ST_USERS, SA_LOGOUT ,$uid);
+
+		post_message("MSG_USER_LOGOUT", array("uid" => $uid));
 	}
 
 	////
