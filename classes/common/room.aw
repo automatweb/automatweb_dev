@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.72 2006/12/21 16:31:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.73 2006/12/21 16:44:19 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -922,6 +922,7 @@ class room extends class_base
 					$bron->set_class_id(CL_RESERVATION);
 					$bron->set_parent($parent);
 					$bron->set_prop("resource", $resource);
+					$bron->save();
 					if($product)
 					{
 						$bron->set_meta("amount" ,array($product => 1));
@@ -931,6 +932,8 @@ class room extends class_base
 				$bron->set_prop("end" ,$end);
 				$bron->set_prop("content" , $comment);
 				$bron->set_prop("verified" , 1);
+				$bron->set_prop("deadline" , time()+15*60);
+				
 				if(is_oid($people) && $this->can("view" , $people))
 				{
 					$bron->set_prop("people" , $people);
@@ -3047,6 +3050,7 @@ class room extends class_base
 		{
 			return $this->check_from_table($arr);
 		}
+		
 		extract($arr);
 		if(!(is_oid($room) && $this->can("view" , $room)))
 		{
