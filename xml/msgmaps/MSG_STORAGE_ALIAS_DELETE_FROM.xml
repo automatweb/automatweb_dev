@@ -16,18 +16,18 @@
       <param>CL_MENU</param>
 </num_2>
 <num_3>
-      <class>crm/crm_company</class>
-      <func>on_disconnect_person_from_org</func>
-      <param>CL_CRM_PERSON</param>
+      <class>core/users/group</class>
+      <func>on_remove_alias_from_group</func>
+      <param>CL_GROUP</param>
 </num_3>
 <num_4>
-      <class>crm/crm_section</class>
-      <func>on_disconnect_org_from_section</func>
-      <param>CL_CRM_COMPANY</param>
+      <class>core/users/user</class>
+      <func>on_delete_alias</func>
+      <param>CL_USER</param>
 </num_4>
 <num_5>
-      <class>crm/crm_section</class>
-      <func>on_disconnect_person_from_section</func>
+      <class>crm/crm_company</class>
+      <func>on_disconnect_person_from_org</func>
       <param>CL_CRM_PERSON</param>
 </num_5>
 <num_6>
@@ -41,13 +41,13 @@
       <param>CL_CRM_SECTION</param>
 </num_7>
 <num_8>
-      <class>core/users/user</class>
-      <func>on_delete_alias</func>
-      <param>CL_USER</param>
+      <class>crm/crm_section</class>
+      <func>on_disconnect_org_from_section</func>
+      <param>CL_CRM_COMPANY</param>
 </num_8>
 <num_9>
-      <class>core/users/group</class>
-      <func>on_remove_alias_from_group</func>
-      <param>CL_GROUP</param>
+      <class>crm/crm_section</class>
+      <func>on_disconnect_person_from_section</func>
+      <param>CL_CRM_PERSON</param>
 </num_9>
 </xml>
