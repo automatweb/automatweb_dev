@@ -204,6 +204,12 @@ class relationmgr extends aw_template
 			"caption" => t("Muutja"),
 			"value" => $arr["request"]["modifiedby"],
 		);
+		$rval["sparent"] = array(
+			"name" => "sparent",
+			"type" => "textbox",
+			"caption" => t("Asukoht"),
+			"value" => $arr["request"]["sparent"],
+		);
 		$rval["status"] = array(
 			"name" => "status",
 			"type" => "chooser",
@@ -464,6 +470,11 @@ class relationmgr extends aw_template
 			{
 				$parts[$numeric_field] = $arr[$numeric_field];
 			}
+		}
+
+		if (!empty($arr["sparent"]))
+		{
+			$parts["parent"] = $arr["sparent"];
 		}
 
 		if (!empty($arr["aselect"]))
