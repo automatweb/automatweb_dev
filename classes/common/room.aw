@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.73 2006/12/21 16:44:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.74 2006/12/21 17:15:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2110,11 +2110,11 @@ class room extends class_base
 			}
 			
 			$tb->define_data(array(
-				"active" =>  html::checkbox(array(
-					"name" => "sel_imp[".$o->id()."]",
-					"value" => $o->id(),
-					"checked" => $prod_data[$o->id()]["active"],
-				)),
+				"active" =>  $prod_data[$o->id()]["active"],//html::checkbox(array(
+	//				"name" => "sel_imp[".$o->id()."]",
+	//				"value" => $o->id(),
+	//				"checked" => $prod_data[$o->id()]["active"],
+	//			)),
 				"oid" => $o->id(),
 				"icon" => html::img(array("url" => icons::get_icon_url($o->class_id(), $o->name()))),
 				"name" => $name,
@@ -2159,9 +2159,10 @@ class room extends class_base
 
 	function _init_prod_list_list_tbl(&$t)
 	{
-		$t->define_field(array(
+		$t->define_chooser(array(
 			"name" => "active",
 			"caption" => t("Aktiivne"),
+			"field" => "oid",
 		));
 		
 		$t->define_field(array(
@@ -2353,11 +2354,12 @@ class room extends class_base
 	{
 		$this_obj = obj($arr["id"]);
 		$prod_data = $this_obj->meta("prod_data");
-		foreach($arr["set_ord"] as $id => $ord)
+		foreach($arr["set_ord"]  as $id => $ord)
 		{
+			$prod_data[$id]["active"] = $arr["active"][$id];
 			$prod_data[$id]["ord"] = $ord;
-			$prod_data[$id]["active"] = $arr["sel_imp"][$id];
 		}
+		
 		$this_obj->set_meta("prod_data" , $prod_data);
 		$this_obj->save();
 		return $arr["post_ru"];
