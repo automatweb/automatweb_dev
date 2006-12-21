@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.41 2006/12/06 12:07:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.42 2006/12/21 11:12:30 dragut Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1709,7 +1709,10 @@ class cb_form_chain extends class_base
 				{
 					$v["value"] = nl2br($v["value"]);
 				}
-
+				if ($v['type'] == 'date_select' && empty($v['value']))
+				{
+					$v['value'] = $v['defaultx'];
+				}
 				// if it is a text type property, insert a hidden element after the text so that the value gets submitted
 				if ($v["type"] == "text")
 				{
