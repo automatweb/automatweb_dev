@@ -15,6 +15,13 @@
 			</function>
 		</action>
 
+		<action name="error_popup" all_args="1">
+			<function name="error_popup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="procurator_popup">
 			<function name="procurator_popup">
 				<arguments>
