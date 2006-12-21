@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.5 2006/12/21 08:31:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.6 2006/12/21 09:12:34 kristo Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -529,7 +529,7 @@ class trademark_manager extends class_base
 
 		foreach($ol->arr() as $o)
 		{
-			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.$o->prop("convention_nr").'" OOCD="EE" ORIGLAN="3" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
+			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $o->prop("nr")).'" OOCD="EE" ORIGLAN="3" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
 ';
 				$xml .= '		<HOLGR>
 ';
@@ -577,7 +577,7 @@ class trademark_manager extends class_base
 				if ($this->can("view", $o->prop("procurator")))
 				{
 				$proc = obj($o->prop("procurator"));
-				$xml .= "\t\t<REPGR CLID=\"".$proc->id()."\">\n";
+				$xml .= "\t\t<REPGR CLID=\"".$proc->prop("code")."\">\n";
 					$xml .= "\t\t\t<NAME>\n";
 						$xml .= "\t\t\t\t<NAMEL>".$proc->name()."</NAMEL>\n";
 					$xml .= "\t\t\t</NAME>\n";
@@ -607,7 +607,7 @@ class trademark_manager extends class_base
 				$f = fopen($fn ,"w");
 				fwrite($f, file_get_contents($imd["file"]));
 				fclose($f);
-				$xml .= "\t\t<IMAGENAME=\"".sprintf("%08d", $o->prop("convention_nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
+				$xml .= "\t\t<IMAGENAME=\"".sprintf("%08d", $o->prop("nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
 				}
 
 				$xml .= "\t\t<MARTRGR>\n";
