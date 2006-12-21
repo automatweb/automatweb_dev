@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.71 2006/12/18 17:11:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.72 2006/12/21 16:31:38 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1310,9 +1310,10 @@ class room extends class_base
 		{
 			$this->openhours = obj($arr["obj_inst"]->prop("openhours"));
 			$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
- 			$open = $open_inst->get_times_for_date($this->openhours, $time);
+ 			$open = $this->open = $open_inst->get_times_for_date($this->openhours, $time);
 		}
-		
+		$this->start = $arr["request"]["start"];
+		$this->generate_res_table($arr["obj_inst"]);
 		$this->_init_calendar_t($t,$arr["request"]["start"]);
 
 		exit_function("get_calendar_tbl");
@@ -2966,6 +2967,70 @@ class room extends class_base
 		return $sum;
 	}
 
+	function check_from_table($arr)
+	{
+		foreach($this->res_table as $key => $val)
+		{
+			if($val["end"] > $arr["start"])
+			{
+				if($key < $arr["end"])
+				{
+					$this->last_bron_id = $val["id"];
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
+		return true;
+	}
+
+	function generate_res_table($room)
+	{
+		if(!$this->start)
+		{
+			$this->start =time();
+		}
+		$step_length = $this->step_lengths[$room->prop("time_unit")];
+		$filt = array(
+			"class_id" => array(CL_RESERVATION),
+			"lang_id" => array(),
+			"resource" => $room->id(),
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ($this->start + (7*24*3600))),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, ($this->start)),
+		);
+		$use_prod_times = $room->prop("use_product_times");
+		
+		$reservations = new object_list($filt);
+		$this->res_table = array();
+		foreach($reservations->arr() as $res)
+		{
+			if($res->prop("verified") || ($res->prop("deadline") > time()))
+			{
+				if($use_prod_times)
+				{
+					$start = $res->prop("start1")-$this->get_products_buffer(array("bron" => $res, "time" => "before"));
+					$this->res_table[$start]["end"] = $res->prop("end") + $this->get_products_buffer(array("bron" => $res, "time" => "after"));
+				}
+				else
+				{
+					$start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
+					$this->res_table[$start]["end"] = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+				}
+				if($res->prop("verified"))
+				{
+					$this->res_table[$start]["verified"] = 1;
+				}
+				$this->res_table[$start]["real_end"] = $res->prop("end");
+				$this->res_table[$start]["real_start"] = $res->prop("start1");
+				$this->res_table[$start]["id"] = $res->id();
+			}
+		}
+		ksort($this->res_table);
+	}
+
 	/**
 		@attrib params=name
 		@param room required type=oid
@@ -2978,6 +3043,10 @@ class room extends class_base
 	**/
 	function check_if_available($arr)
 	{
+		if(is_array($this->res_table))
+		{
+			return $this->check_from_table($arr);
+		}
 		extract($arr);
 		if(!(is_oid($room) && $this->can("view" , $room)))
 		{
