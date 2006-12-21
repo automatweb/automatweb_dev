@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.4 2006/12/21 08:07:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.5 2006/12/21 08:31:08 kristo Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -522,55 +522,65 @@ class trademark_manager extends class_base
 			"class_id" => CL_PATENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"limit" => 3
 		));
-
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
-		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">\n';
+		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
+';
 
 		foreach($ol->arr() as $o)
 		{
 			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.$o->prop("convention_nr").'" OOCD="EE" ORIGLAN="3" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
 ';
-				$xml .= '\t\t<HOLGR>\n';
-					$xml .= '\t\t\t<NAME>\n';
-						$xml .= '\t\t\t\t<NAMEL>'.$o->prop("applicant.name").'</NAMEL>\n';
-					$xml .= '\t\t\t</NAME>\n';
+				$xml .= '		<HOLGR>
+';
+					$xml .= "\t\t\t<NAME>\n";
+						$xml .= "\t\t\t\t<NAMEL>".$o->prop("applicant.name")."</NAMEL>\n";
+					$xml .= "\t\t\t</NAME>\n";
 
+					if ($this->can("view", $o->prop("applicant")))
+					{
 					$appl = obj($o->prop("applicant"));
-					$xml .= '\t\t\t<ADDRESS>\n';
+					$xml .= "\t\t\t<ADDRESS>\n";
 					$adr_i = get_instance(CL_CRM_ADDRESS);
 						if ($appl->class_id() == CL_CRM_PERSON)
 						{
-							$xml .= '\t\t\t\t<ADDRL>'.$appl->prop("address.aadress").'</ADDRL>\n';
-							$xml .= '\t\t\t\t<ADDRL>'.$appl->prop("address.linn.name").'</ADDRL>\n';
-							$xml .= '\t\t\t\t<ADDRL>'.$appl->prop("address.postiindeks").'</ADDRL>\n';
-							$xml .= '\t\t\t\t<COUNTRY>'.$adr_i->get_country_code(obj($appl->prop("address.riik"))).'</COUNTRY>\n';
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.aadress")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.linn.name")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
+							if ($this->can("view", $appl->prop("address.riik")))
+							{
+								$xml .= "\t\t\t\t<COUNTRY>".$adr_i->get_country_code(obj($appl->prop("address.riik")))."</COUNTRY>\n";
+							}
 						}
 						else
 						{
-							$xml .= '\t\t\t\t<ADDRL>'.$appl->prop("contact.aadress").'</ADDRL>\n';
-							$xml .= '\t\t\t\t<ADDRL>'.$appl->prop("contact.linn.name").'</ADDRL>\n';
-							$xml .= '\t\t\t\t<ADDRL>'.$appl->prop("contact.postiindeks").'</ADDRL>\n';
-							$xml .= '\t\t\t\t<COUNTRY>'.$adr_i->get_country_code(obj($appl->prop("contact.riik"))).'</COUNTRY>\n';
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.aadress")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.linn.name")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.postiindeks")."</ADDRL>\n";
+							if ($this->can("view", $appl->prop("contact.riik")))
+							{
+								$xml .= "\t\t\t\t<COUNTRY>".$adr_i->get_country_code(obj($appl->prop("contact.riik")))."</COUNTRY>\n";
+							}
 						}
-					$xml .= '\t\t\t</ADDRESS>\n';
+					$xml .= "\t\t\t</ADDRESS>\n";
 
-					$xml .= '\t\t\t<LEGNATU>\n';
-						$xml .= '\t\t\t\t<LEGNATT>'.$app->prop("ettevotlusvorm.name").'</LEGNATT>\n';
-					$xml .= '\t\t\t</LEGNATU>\n';
-
+					$xml .= "\t\t\t<LEGNATU>\n";
+						$xml .= "\t\t\t\t<LEGNATT>".$appl->prop("ettevotlusvorm.name")."</LEGNATT>\n";
+					$xml .= "\t\t\t</LEGNATU>\n";
+					}
 					/*if (!$this->can("view", $o->prop(""))
 					{
 						$xml .= "\t\t\t<CORRIND/>\n";
 					}*/
 
-				$xml .= '\t\t</HOLGR>\n';
+				$xml .= "\t\t</HOLGR>\n";
+				if ($this->can("view", $o->prop("procurator")))
+				{
 				$proc = obj($o->prop("procurator"));
-				$xml .= '\t\t<REPGR CLID="'.$proc->id().'">\n';
-					$xml .= '\t\t\t<NAME>\n';
-						$xml .= '\t\t\t\t<NAMEL>'.$proc->name().'</NAMEL>\n';
-					$xml .= '\t\t\t</NAME>\n';
+				$xml .= "\t\t<REPGR CLID=\"".$proc->id()."\">\n";
+					$xml .= "\t\t\t<NAME>\n";
+						$xml .= "\t\t\t\t<NAMEL>".$proc->name()."</NAMEL>\n";
+					$xml .= "\t\t\t</NAME>\n";
 
 
 					/*$xml .= '\t\t\t<ADDRESS>\n';
@@ -581,85 +591,89 @@ class trademark_manager extends class_base
 						$xml .= '\t\t\t\t<COUNTRY>'.$adr_i->get_country_code(obj($proc->prop("address.riik"))).'</COUNTRY>\n';
 					$xml .= '\t\t\t</ADDRESS>\n';*/
 
-				$xml .= '\t\t</REPGR>\n';
-
+				$xml .= "\t\t</REPGR>\n";
+				}
 				// save image to folder
+				if ($this->can("view", $o->prop("reproduction")))
+				{
 				$im = obj($o->prop("reproduction"));
-				$type = strtoupper(substr($im->name(), -strrpos($im->name(), ".")));
+				$type = strtoupper(substr($im->name(), strrpos($im->name(), ".")));
 
 				$fld = aw_ini_get("site_basedir")."/patent_files/";
 				$fn = $fld .sprintf("%08d", $o->prop("convention_nr")).".".$type;
-
+				echo "saving image $fn <br>";
 				$image_inst = get_instance(CL_IMAGE);
 				$imd = $image_inst->get_image_by_id($im->id());
 				$f = fopen($fn ,"w");
 				fwrite($f, file_get_contents($imd["file"]));
 				fclose($f);
-				$xml .= '\t\t<IMAGENAME="'.sprintf("%08d", $o->prop("convention_nr")).'" TEXT="'.$o->prop("word_mark").'" COLOUR="'.($o->prop("colors") != "" ? "Y" : "N").'" TYPE="'.$type.'"/>\n';
+				$xml .= "\t\t<IMAGENAME=\"".sprintf("%08d", $o->prop("convention_nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
+				}
 
+				$xml .= "\t\t<MARTRGR>\n";
+					$xml .= "\t\t\t<MARTREN>".$o->prop("element_translation")."</MARTREN>\n";
+				$xml .= "\t\t</MARTRGR>\n";
 
-				$xml .= '\t\t<MARTRGR>\n';
-					$xml .= '\t\t\t<MARTREN>'.$o->prop("element_translation").'</MARTREN>\n';
-				$xml .= '\t\t</MARTRGR>\n';
+				$xml .= "\t\t<TYPMARI>".($o->prop("trademark_type") == 0 ? "C" : "G")."</TYPMARI>\n";
 
-				$xml .= '\t\t<TYPMARI>'.($o->prop("trademark_type") == 0 ? "C" : "G").'</TYPMARI>\n';
+				$xml .= "\t\t<MARDESGR>\n";
+					$xml .= "\t\t\t<MARDESEN><![CDATA[".$o->prop("trademark_character")."]]></MARDESEN>\n";
+				$xml .= "\t\t</MARDESGR>\n";
 
-				$xml .= '\t\t<MARDESGR>\n';
-					$xml .= '\t\t\t<MARDESEN><![CDATA['.$o->prop("trademark_character").']]></MARDESEN>\n';
-				$xml .= '\t\t</MARDESGR>\n';
-
-				$xml .= '\t\t<DISCLAIMGR>\n';
-					$xml .= '\t\t\t<DISCLAIMEREN><![CDATA['.$o->prop("undefended_parts").']]></DISCLAIMEREN>\n';
-				$xml .= '\t\t</DISCLAIMGR>\n';
+				$xml .= "\t\t<DISCLAIMGR>\n";
+					$xml .= "\t\t\t<DISCLAIMEREN><![CDATA[".$o->prop("undefended_parts")."]]></DISCLAIMEREN>\n";
+				$xml .= "\t\t</DISCLAIMGR>\n";
 
 				if ($o->prop("colors") != "")
 				{
-					$xml .= '\t\t<MARCOLI/>\n';
+					$xml .= "\t\t<MARCOLI/>\n";
 				}
 
 				if ($o->prop("type") == 3)
 				{
-					$xml .= '\t\t<THRDMAR/>\n';
+					$xml .= "\t\t<THRDMAR/>\n";
 				}
 
-				$xml .= '\t\t<COLCLAGR>\n';
-					$xml .= '\t\t\t<COLCLAEN><![CDATA['.$o->prop("colors").']]></COLCLAEN>\n';
-				$xml .= '\t\t</COLCLAGR>\n';
+				$xml .= "\t\t<COLCLAGR>\n";
+					$xml .= "\t\t\t<COLCLAEN><![CDATA[".$o->prop("colors")."]]></COLCLAEN>\n";
+				$xml .= "\t\t</COLCLAGR>\n";
 
-				$xml .= '\t\t<BASICGS NICEVER="9">\n';
+				$xml .= "\t\t<BASICGS NICEVER=\"9\">\n";
 
 					foreach(safe_array($o->meta("products")) as $k => $v)
 					{
 						$prod = obj($k);
 						$parent = obj($prod->parent());
-						$xml .= '\t\t\t<GSGR NICCLAI="'.$parent->comment().'">\n';
-							$xml .= '\t\t\t\t<GSTERMEN><![CDATA['.$val.']]></GSTERMEN>\n';
-						$xml .= '\t\t\t</GSGR>\n';
+						$xml .= "\t\t\t<GSGR NICCLAI=\"".$parent->comment()."\">\n";
+							$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".$val."]]></GSTERMEN>\n";
+						$xml .= "\t\t\t</GSGR>\n";
 					}
-				$xml .= '\t\t</BASICGS>\n';
+				$xml .= "\t\t</BASICGS>\n";
 
-				$xml .= '\t\t<PRIGR>\n';
-					$xml .= '\t\t\t<PRICP>'.$o->prop("convention_country").'</PRICP>\n';
-					$xml .= '\t\t\t<PRIAPPD>'.date("Ymd",$o->prop("convention_date")).'</PRIAPPD>\n';
-					$xml .= '\t\t\t<PRIAPPN>'.$o->prop("convention_nr").'</PRIAPPN>\n';
+				$xml .= "\t\t<PRIGR>\n";
+					$xml .= "\t\t\t<PRICP>".$o->prop("convention_country")."</PRICP>\n";
+					$xml .= "\t\t\t<PRIAPPD>".date("Ymd",$o->prop("convention_date"))."</PRIAPPD>\n";
+					$xml .= "\t\t\t<PRIAPPN>".$o->prop("convention_nr")."</PRIAPPN>\n";
 				
-				$xml .= '\t\t</PRIGR>\n';
+				$xml .= "\t\t</PRIGR>\n";
 
-				$xml .= '\t\t<DESPG>\n';
-					$xml .= '\t\t\t<DCPCD>EE</DCPCD>\n';
-				$xml .= '\t\t</DESPG>\n';
+				$xml .= "\t\t<DESPG>\n";
+					$xml .= "\t\t\t<DCPCD>EE</DCPCD>\n";
+				$xml .= "\t\t</DESPG>\n";
 
-			$xml .= '\t</BIRTH>\n';
+			$xml .= "\t</BIRTH>\n";
 
 			$o->set_prop("exported", 1);
 			$o->set_prop("export_date", time());
 			$o->set_no_modify(true);
 			aw_disable_acl();
+			aw_disable_messages();
 			$o->save();
+			aw_restore_messages();
 			aw_restore_acl();
 		}
 
-		$xml .= '</ENOTIF>\n';
+		$xml .= "</ENOTIF>\n";
 
 		$fn = aw_ini_get("site_basedir")."/patent_xml/".date("Ymd").".xml";
 		$f = fopen($fn, "w");
