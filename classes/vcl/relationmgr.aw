@@ -449,7 +449,7 @@ class relationmgr extends aw_template
 		$ret =  $this->do_orb_method_call($_parms);
 		return $ret;
 	}
-	
+
 	function _init_search_fields($arr)
 	{
 		$this->do_search = false;
@@ -460,7 +460,9 @@ class relationmgr extends aw_template
 		{
 			if (!empty($arr[$string_field]))
 			{
-				$parts[$string_field] = "%" . $arr[$string_field] . "%";
+				$r = explode(",", $arr[$string_field]);
+				array_walk($r, create_function('&$a','$a = trim($a);'));
+				$parts[$string_field] = map('%%%s%%', $r);
 
 			}
 		}
@@ -468,13 +470,17 @@ class relationmgr extends aw_template
 		{
 			if (!empty($arr[$numeric_field]))
 			{
-				$parts[$numeric_field] = $arr[$numeric_field];
+				$r = explode(",", $arr[$numeric_field]);
+				array_walk($r, create_function('&$a','$a = trim($a);'));
+				$parts[$numeric_field] = $r;
 			}
 		}
 
 		if (!empty($arr["sparent"]))
 		{
-			$parts["parent"] = $arr["sparent"];
+			$r = explode(",", $arr["sparent"]);
+			$r = array_walk($r, create_function('&$a','$a = trim($a);'));
+			$parts["parent"] = $r;
 		}
 
 		if (!empty($arr["aselect"]))
