@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.23 2006/12/19 16:00:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.24 2006/12/22 12:26:58 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -265,16 +265,29 @@ class room_reservation extends class_base
 			return $this->parse();
 		}
 		
-		
 		$targ = obj($arr["alias"]["target"]);
-		if( is_oid($_SESSION["room_reservation"]["room_id"]) && $this->can("view" , $_SESSION["room_reservation"]["room_id"]))
+		
+		//ruumi valiku jama... toodete tellimise jne jne jaoks.... et ruume võib olla mitu, on see paras käkk
+		// kõigepealt vaatab, kui on 1 ruum, siis kui on mitu, võtab sessioonist ruumi id, kui see on olemas
+		// kui pole, siis esimese ruumidest
+		//seda jama dubleerib toodete vaates... sest vahepeal võib kalendris teine ruum valitud olla
+		if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms") == 1))
+		{
+			$room = obj(reset($targ->prop("rooms")));
+		}
+		elseif(is_oid($_SESSION["room_reservation"]["room_id"]) && $this->can("view" , $_SESSION["room_reservation"]["room_id"]))
 		{
 			$room =  obj($_SESSION["room_reservation"]["room_id"]);
+		}
+		elseif(is_array($targ->prop("rooms")))
+		{
+			$room = obj(reset($targ->prop("rooms")));
 		}
 		else
 		{
 			$room = $targ->get_first_obj_by_reltype(array("type" => "RELTYPE_ROOM"));
 		}
+		
 		if(!is_object($room))
 		{
 			return "";
@@ -719,7 +732,20 @@ class room_reservation extends class_base
 	function get_web_products_table($arr)
 	{
 		extract($arr);
-		if(is_oid($room) && $this->can("view", $room))
+		
+		if(is_oid($id) && $this->can("view", $id))
+		{
+			$targ = obj($targ);
+			if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms") == 1))
+			{
+				$room = obj(reset($targ->prop("rooms")));
+			}
+			elseif(is_oid($_SESSION["room_reservation"]["room_id"]) && $this->can("view" , $_SESSION["room_reservation"]["room_id"]))
+			{
+				$room =  obj($_SESSION["room_reservation"]["room_id"]);
+			}
+		}
+		if(!is_object($room) && is_oid($room) && $this->can("view", $room))
 		{
 			$room = obj($room);
 		}
