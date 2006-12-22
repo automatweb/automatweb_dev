@@ -1068,7 +1068,21 @@ class site_template_compiler extends aw_template
 		
 		// do menu images
 		$n_img = aw_ini_get("menuedit.num_menu_images");
+
+		$ret .= $this->_gi()."if (\$this->can(\"view\", ".$o_name."->prop(\"images_from_menu\")))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$tmp = obj(".$o_name."->prop(\"images_from_menu\"));\n";
+		$ret .= $this->_gi()."\$img = \$tmp->meta(\"menu_images\");\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$ret .= $this->_gi()."else\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
 		$ret .= $this->_gi()."\$img = ".$o_name."->meta(\"menu_images\");\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
 		$ret .= $this->_gi()."if (is_array(\$img) && count(\$img) > 0)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
