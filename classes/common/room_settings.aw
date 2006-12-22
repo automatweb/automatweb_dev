@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.3 2006/11/29 16:17:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.4 2006/12/22 08:21:42 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -35,6 +35,49 @@
 	@caption K&otilde;ik
 
 
+@groupinfo colours caption="V&auml;rvid"
+@default group=colours
+@default field=meta 
+@default method=serialize
+
+	@property col_buffer type=colorpicker 
+	@caption Puhveraja v&auml;rv kalendris
+
+	@property col_adm_bron type=colorpicker 
+	@caption Administraatori poolt broneeritud aja v&auml;rv
+
+	@property col_adm_web_bron type=colorpicker 
+	@caption Veebis tehtud tellimuse v&auml;rv
+
+	@property col_web_halfling type=colorpicker 
+	@caption Veebis poolelioleva tellimuse v&auml;rvi
+
+	@property col_closed type=colorpicker 
+	@caption Kinnise aja värvi
+
+@groupinfo settings caption="Muud seaded"
+@default group=settings
+
+	@property buffer_time_string type=textbox 
+	@caption Puhveraja string
+
+	@property closed_time_string type=textbox 
+	@caption Kinnise aja string
+
+	@property bron_popup_detailed type=checkbox ch_value=1
+	@caption Broneerimisaken on detailse sisuga
+
+	@property bron_popup_immediate type=checkbox ch_value=1
+	@caption Broneerimisaken avaneb kohe kui ajale klikkida
+
+	@property bron_no_popups type=checkbox ch_value=1
+	@caption Broneerimiseks ei avata popup aknaid
+	
+	@property cal_from_today type=checkbox ch_value=1
+	@caption Ruumide kalendrid algavad t&auml;nasest, mitte n&auml;dala algusest
+
+	@property bron_required_fields type=table store=no
+	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
 
 
 @reltype USER value=1 clid=CL_USER
@@ -206,7 +249,47 @@ class room_settings extends class_base
 		}
 	}
 
+	function _init_bron_req_t(&$t)
+	{
+		$t->define_field(array(
+			"caption" => t("Omadus"),
+			"align" => "center",
+			"name" => "prop"
+		));
 
-//-- methods --//
+		$t->define_field(array(
+			"caption" => t("N&otilde;utud"),
+			"align" => "center",
+			"name" => "req"
+		));
+	}
+
+	function _get_bron_required_fields($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_bron_req_t($t);
+
+		$tmp = obj();
+		$tmp->set_class_id(CL_RESERVATION);
+		$props = $tmp->get_property_list();
+	
+		$req = $arr["obj_inst"]->meta("bron_req_fields");
+		foreach($props as $pn => $pd)
+		{
+			$t->define_data(array(
+				"prop" => $pd["caption"]." ($pn)",
+				"req" => html::checkbox(array(
+					"name" => "d[$pn][req]",
+					"value" => 1,
+					"checked" => $req[$pn]["req"] == 1
+				))
+			));
+		}
+	}
+
+	function _set_bron_required_fields($arr)
+	{
+		$arr["obj_inst"]->set_meta("bron_req_fields", $arr["request"]["d"]);
+	}
 }
 ?>

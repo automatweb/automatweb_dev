@@ -97,15 +97,6 @@
             <caption>Aeg</caption>
       </property>
       <property>
-            <name>prices</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>callback</type>
-            <callback>gen_prices_props</callback>
-      </property>
-      <property>
             <name>bargain_percent</name>
             <table>objects</table>
             <group>general</group>

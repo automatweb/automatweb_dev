@@ -87,6 +87,119 @@
             <field>flags</field>
             <caption>K&amp;amp;otilde;ik</caption>
       </property>
+      <property>
+            <name>col_buffer</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Puhveraja v&amp;amp;auml;rv kalendris</caption>
+      </property>
+      <property>
+            <name>col_adm_bron</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Administraatori poolt broneeritud aja v&amp;amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>col_adm_web_bron</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Veebis tehtud tellimuse v&amp;amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>col_web_halfling</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Veebis poolelioleva tellimuse v&amp;amp;auml;rvi</caption>
+      </property>
+      <property>
+            <name>col_closed</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Kinnise aja v&amp;auml;rvi</caption>
+      </property>
+      <property>
+            <name>buffer_time_string</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Puhveraja string</caption>
+      </property>
+      <property>
+            <name>closed_time_string</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kinnise aja string</caption>
+      </property>
+      <property>
+            <name>bron_popup_detailed</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Broneerimisaken on detailse sisuga</caption>
+      </property>
+      <property>
+            <name>bron_popup_immediate</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Broneerimisaken avaneb kohe kui ajale klikkida</caption>
+      </property>
+      <property>
+            <name>bron_no_popups</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Broneerimiseks ei avata popup aknaid</caption>
+      </property>
+      <property>
+            <name>cal_from_today</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ruumide kalendrid algavad t&amp;amp;auml;nasest, mitte n&amp;amp;auml;dala algusest</caption>
+      </property>
+      <property>
+            <name>bron_required_fields</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Broneeringuobjekti kohustuslikud v&amp;amp;auml;ljad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ROOM_SETTINGS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -98,6 +211,12 @@
             <whom>
                   <caption>Kellele kehtib</caption>
             </whom>
+            <colours>
+                  <caption>V&amp;amp;auml;rvid</caption>
+            </colours>
+            <settings>
+                  <caption>Muud seaded</caption>
+            </settings>
       </groupinfo>
       <reltypes>
             <USER>
