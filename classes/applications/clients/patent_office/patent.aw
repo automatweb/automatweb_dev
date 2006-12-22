@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.27 2006/12/21 12:28:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.28 2006/12/22 16:25:08 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -228,7 +228,7 @@ class patent extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-						case "signed":
+			case "signed":
 				if(!aw_ini_get("file.ddoc_support"))
 				{
 					return PROP_IGNORE;
@@ -795,13 +795,6 @@ class patent extends class_base
 				document.getElementById("name_row").style.display = "none";';
 			}
 		}
-		
-		if($_SESSION["patent"]["errors"])
-		{
-			//$js.= 'alert("'.$_SESSION['patent']['errors'].'");';
-			$js.='javascript:window.open("'.$this->mk_my_orb("error_popup", array("print" => 1, "error" => $_SESSION['patent']['errors'])).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");';
-			$_SESSION["patent"]["errors"] = null;
-		}
 		return $js;
 	}
 
@@ -897,12 +890,26 @@ class patent extends class_base
 			}
 			$data["payment_date"] = date("j:m:Y" , $_SESSION["patent"]["payment_date"]);
 		}
+		if($_SESSION["patent"]["errors"])
+		{
+			//$js.= 'alert("'.$_SESSION['patent']['errors'].'");';
+			$data["error"] = $_SESSION['patent']['errors'];
+			$_SESSION["patent"]["errors"] = null;
+		}
+		
 		return $data;
 	}
 	
 	function get_vars($arr)
 	{
 		$data = array();
+		
+		if(isset($_SESSION["patent"]["delete_applicant"]))
+		{
+			unset($_SESSION["patent"]["applicants"][$_SESSION["patent"]["delete_applicant"]]);
+			unset($_SESSION["patent"]["delete_applicant"]);
+		}
+		
 		if(!$_SESSION["patent"]["applicant_id"] && sizeof($_SESSION["patent"]["applicants"]))
 		{
 			$_SESSION["patent"]["applicant_id"] = reset(array_keys($_SESSION["patent"]["applicants"]));
@@ -1117,9 +1124,23 @@ class patent extends class_base
 		$data["results_table"] = $this->get_results_table();
 		
 		$data["show_link"] = "javascript:window.open('".$this->mk_my_orb("show", array("print" => 1 , "id" => $_SESSION["patent"]["trademark_id"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=800')";
+		
+		
 		if(sizeof($_SESSION["patent"]["applicants"]))
 		{
 			$data["forward"] = '<input type="submit" value="Edasi">';
+		}
+		if(is_oid($_SESSION["patent"]["id"]))
+		{
+			$ddoc_inst = get_instance(CL_DDOC);
+			$url = $ddoc_inst->sign_url(array(
+				"other_oid" =>$_SESSION["patent"]["id"],
+			));
+			if($this->is_signed($_SESSION["patent"]["id"]))
+			{
+				$data["SIGNED"] = $this->parse("SIGNED");
+			}
+			$data["sign_button"] = '<input type="button" value="Allkirjasta fail" class="nupp" onClick="aw_popup_scroll(\''.$url.'\', \''.t("Faili: %s, allkirjastamine").'\', 410, 250);">';
 		}
 		return $data;
 	}
@@ -1512,10 +1533,11 @@ class patent extends class_base
 					"caption" => t("Muuda"),
 					//"title" => t("Muuda"),
 				))." ".html::href(array(
-					"url" =>  "#",
+//					"url" =>  "#",
+					"url" => "javascript:document.getElementById(\"delete_applicant\").value=".$key.";document.getElementById(\"stay\").value=1;document.changeform.submit();",//aw_url_change_var("change_applicant" , $key , get_ru()),
 			//		"url" => "javascript:document.getElementById(\"applicant_id\").value=".$key.";document.changeform.submit();",//aw_url_change_var("change_applicant" , $key , get_ru()),
 				//	"onClick"=>"self.disabled=true;submit_changeform(''); return false;",
-					"onClick" => 'javascript:window.open("'.$delete_link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=100, width=100")',
+//					"onClick" => 'javascript:window.open("'.$delete_link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=100, width=100")',
 					"caption" => t("Kustuta"),
 					//"title" => t("Muuda"),
 				)),
@@ -1554,7 +1576,7 @@ class patent extends class_base
 		if($_POST["code"] || $_POST["name"] || $_POST["firstname"] || $_POST["lastname"])
 		{
 			$n = $this->submit_applicant();
-			if($errs)
+			if($errs || $_POST["stay"])
 			{
 				$_SESSION["patent"]["change_applicant"] = $n;
 				$_SESSION["patent"]["applicant_id"] = $n;
@@ -1566,7 +1588,6 @@ class patent extends class_base
 		if($_POST["save"])
 		{
 			$this->save_data();
-			$_SESSION["patent"] = null;
 		}
 		if($_POST["add_new_applicant"] || $_POST["applicant_id"] != "")
 		{
@@ -1582,12 +1603,17 @@ class patent extends class_base
 //		{
 //			return aw_url_change_var("data_type" , null , $arr["return_url"]);
 //		}
-		if(!$errs)
+		if(!$errs && !$_POST["stay"])
 		{
+			if($_POST["save"])
+			{
+				$_SESSION["patent"] = null;
+			}
 			return aw_url_change_var("trademark_id" , null , aw_url_change_var("data_type" , ($arr["data_type"]+1) , $arr["return_url"]));
 		}
 		else
 		{
+			$_SESSION["patent"]["stay"] = null;
 			$_SESSION["patent"]["errors"] = $errs;
 			return aw_url_change_var("trademark_id" , null , $arr["return_url"]);
 		}
@@ -1750,7 +1776,7 @@ class patent extends class_base
 		$this->final_save($patent);
 		$patent->set_meta("products" , $_SESSION["patent"]["products"]);
 		$patent->save();
-		unset($_SESSION["patent"]);
+		$_SESSION["patent"]["id"] = $patent->id();
 	}
 	
 	function save_applicants($patent)
