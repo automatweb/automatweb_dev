@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.45 2006/12/15 16:50:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.46 2006/12/22 14:57:31 markop Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -131,6 +131,8 @@
 @property sortbl type=table store=no
 @caption Toodete sorteerimine
 
+@property grouping type=select
+@caption Toodete grupeerimine
 
 @groupinfo psfieldmap caption="Isukuandmete kaart"
 @default group=psfieldmap
@@ -221,6 +223,9 @@ class shop_order_center extends class_base
 			case "sortbl":
 				$this->do_sortbl($arr);
 				break;
+			case "grouping":
+				$prop["options"] = array("" => "" , "parent" => t("Kaust"));
+				break;
 
 			case "controller":
 				if (!$arr["obj_inst"]->prop("use_controller"))
@@ -289,7 +294,6 @@ class shop_order_center extends class_base
 			case "sortbl":
 				$this->do_save_sortbl($arr);
 				break;
-
 			case "psfieldmap":
 				$arr["obj_inst"]->set_meta("ps_pmap", $arr["request"]["pmap"]);
 				break;
@@ -605,7 +609,7 @@ class shop_order_center extends class_base
 		@attrib name=show_items nologin="1"
 
 		@param id required type=int acl=view
-		@param section required 
+		@param section required type=int acl=view
 
 	**/
 	function show_items($arr)
@@ -743,6 +747,7 @@ class shop_order_center extends class_base
 		$l_inst->read_template($layout->prop("template"));
 
 		lc_site_load("shop_order_center", &$this);
+		$last_menu = "";
 		foreach($pl as $o)
 		{
 			$i = $o->instance();
@@ -757,10 +762,12 @@ class shop_order_center extends class_base
 					"l_inst" => $l_inst,
 					"quantity" => $soce[$oid]["ordered_num_enter"],
 					"is_err" => $soce[$oid]["is_err"],
-					"prod_link_cb" => $arr["prod_link_cb"]
+					"prod_link_cb" => $arr["prod_link_cb"],
+					"last_product_menu" => $last_menu,
 				)));
 				$xi++;
 			}
+			$last_menu =  $o->parent();
 		}
 
 		return $tl_inst->finish_table();
@@ -932,13 +939,42 @@ class shop_order_center extends class_base
 		return $this->mk_my_orb("my_orders");
 	}
 
-	function do_sort_packet_list(&$pl, $itemsorts)
+	function do_sort_packet_list(&$pl, $itemsorts,$groups=null)
 	{
 		if (!is_array($itemsorts))
 		{
 			return;
 		}
 		$this->__is = $itemsorts;
+		if($groups=="parent")
+		{
+			$items = array();
+			$result = array();
+			$menu = null;
+			foreach($pl as $key => $item)
+			{
+				if($item->parent() != $menu)
+				{
+					if(sizeof($items))
+					{
+						usort($items, array(&$this, "__is_sorter"));
+						$result = array_merge($result ,$items);
+						$items = array($key => $item);
+						$menu = $item->parent();
+						continue;
+					}
+				}
+				$menu = $item->parent();
+				$items[$key] = $item;
+			}
+			if(sizeof($items))
+			{
+				usort($items, array(&$this, "__is_sorter"));
+				$result = array_merge($result,$items);
+			}
+			$pl = $result;
+			return ;
+		}
 		usort($pl, array(&$this, "__is_sorter"));
 	}
 

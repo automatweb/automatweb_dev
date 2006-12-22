@@ -154,6 +154,16 @@
             <caption>Veebis allahindlus (%)</caption>
       </property>
       <property>
+            <name>bank_payment</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BANK_PAYMENT</reltype>
+            <caption>Pangamakse objekt</caption>
+      </property>
+      <property>
             <name>mail_to_client</name>
             <group>mail_settings_orderer</group>
             <table>objects</table>
@@ -318,6 +328,15 @@
             <caption>Toodete sorteerimine</caption>
       </property>
       <property>
+            <name>grouping</name>
+            <group>appear</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Toodete grupeerimine</caption>
+      </property>
+      <property>
             <name>psfieldmap</name>
             <group>psfieldmap</group>
             <table>objects</table>
@@ -409,6 +428,11 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>tellimuse nime kontroller</caption>
             </ORDER_NAME_CTR>
+            <BANK_PAYMENT>
+                  <value>11</value>
+                  <clid>CL_BANK_PAYMENT</clid>
+                  <caption>Pangalingi objekt</caption>
+            </BANK_PAYMENT>
       </reltypes>
 </properties>
 
