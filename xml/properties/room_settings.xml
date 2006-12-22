@@ -97,24 +97,6 @@
             <caption>Puhveraja v&amp;amp;auml;rv kalendris</caption>
       </property>
       <property>
-            <name>col_adm_bron</name>
-            <table>objects</table>
-            <group>colours</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>colorpicker</type>
-            <caption>Administraatori poolt broneeritud aja v&amp;amp;auml;rv</caption>
-      </property>
-      <property>
-            <name>col_adm_web_bron</name>
-            <table>objects</table>
-            <group>colours</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>colorpicker</type>
-            <caption>Veebis tehtud tellimuse v&amp;amp;auml;rv</caption>
-      </property>
-      <property>
             <name>col_web_halfling</name>
             <table>objects</table>
             <group>colours</group>
@@ -131,6 +113,16 @@
             <method>serialize</method>
             <type>colorpicker</type>
             <caption>Kinnise aja v&amp;auml;rvi</caption>
+      </property>
+      <property>
+            <name>col_by_grp</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Broneeringu tegijate gruppide v&amp;amp;auml;rvid</caption>
       </property>
       <property>
             <name>buffer_time_string</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.4 2006/12/22 08:21:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.5 2006/12/22 09:57:29 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -43,17 +43,14 @@
 	@property col_buffer type=colorpicker 
 	@caption Puhveraja v&auml;rv kalendris
 
-	@property col_adm_bron type=colorpicker 
-	@caption Administraatori poolt broneeritud aja v&auml;rv
-
-	@property col_adm_web_bron type=colorpicker 
-	@caption Veebis tehtud tellimuse v&auml;rv
-
 	@property col_web_halfling type=colorpicker 
 	@caption Veebis poolelioleva tellimuse v&auml;rvi
 
 	@property col_closed type=colorpicker 
 	@caption Kinnise aja värvi
+
+	@property col_by_grp type=table store=no
+	@caption Broneeringu tegijate gruppide v&auml;rvid
 
 @groupinfo settings caption="Muud seaded"
 @default group=settings
@@ -290,6 +287,53 @@ class room_settings extends class_base
 	function _set_bron_required_fields($arr)
 	{
 		$arr["obj_inst"]->set_meta("bron_req_fields", $arr["request"]["d"]);
+	}
+
+	function _init_col_by_grp(&$t)
+	{
+		$t->define_field(array(
+			"name" => "grp",
+			"caption" => t("Grupp"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "col",
+			"caption" => t("V&auml;rv"),
+			"align" => "center"
+		));
+	}
+
+	function _get_col_by_grp($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_col_by_grp($t);
+
+		$ol = new object_list(array(
+			"class_id" => CL_GROUP,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"type" => "0"
+		));
+		$cols = $arr["obj_inst"]->meta("grp_cols");
+		foreach($ol->arr() as $o)
+		{
+			$tx = "<a href=\"javascript:colorpicker('c_".$o->id()."_')\">".t("Vali")."</a>";
+
+
+			$t->define_data(array(
+				"grp" => html::obj_change_url($o),
+				"col" => html::textbox(array(
+					"name" => "c[".$o->id()."]",
+					"size" => 7,
+					"value" => $cols[$o->id()],
+				))." ".$tx
+			));
+		}
+	}
+
+	function _set_col_by_grp($arr)
+	{
+		$arr["obj_inst"]->set_meta("grp_cols", $arr["request"]["c"]);
 	}
 }
 ?>
