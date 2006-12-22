@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.74 2006/12/21 17:15:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.75 2006/12/22 11:58:15 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1317,7 +1317,6 @@ class room extends class_base
 		}
 		$this->start = $arr["request"]["start"];
 		$this->generate_res_table($arr["obj_inst"]);
-		$this->_init_calendar_t($t,$arr["request"]["start"]);
 
 		exit_function("get_calendar_tbl");
 		//see siis näitab miskeid valitud muid nädalaid
@@ -1342,10 +1341,26 @@ class room extends class_base
 			$today_start = mktime($start_hour, $start_minute, 0, date("n", time()), date("j", time()), date("Y", time()));
 		}
 
+
 		$step = 0;
 		$step_length = $this->step_lengths[$arr["obj_inst"]->prop("time_unit")];
 		exit_function("get_calendar_tbl::2");
 
+		$settings = $this->get_settings_for_room($arr["obj_inst"]);
+
+		classload("core/date/date_calc");
+		if (is_oid($settings->id()) && !$arr["request"]["start"])
+		{
+			if ($settings->prop("cal_from_today"))
+			{
+				$this->start = $today_start = get_day_start();
+			}
+			else
+			{
+				$this->start = $today_start = get_week_start();
+			}
+		}
+		$this->_init_calendar_t($t,$this->start);
 		enter_function("get_calendar_tbl::3");
 		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
@@ -1373,6 +1388,11 @@ class room extends class_base
 						{
 							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
 							$prod_menu = $this->get_prod_menu($arr);
+						}
+						else
+						if ($settings->prop("bron_popup_immediate") && is_admin())
+						{
+							$onclick[$x] = "doBronExec('".$arr["obj_inst"]->id()."_".$start_step."', ".($step_length * $arr["obj_inst"]->prop("time_step")).")";
 						}
 						else
 						{
@@ -1426,13 +1446,25 @@ class room extends class_base
 								"caption" => "<span><font color=#26466D>".$cus . " " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
 							));
+							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
+							if ($settings->prop("col_buffer") != "")
+							{
+								$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
+								$d[$x] .= " ".$buf_tm;
+							}
+							if ($last_bron->prop("time_closed") == 1)
+							{
+								$col[$x] = "#".$settings->prop("col_closed");
+								$d[$x] .= " ".$last_bron->prop("closed_info");
+							}
+							else
 							if($last_bron->prop("verified"))
 							{
-								$col[$x] = "#EE6363";
+								$col[$x] = $this->get_colour_for_bron($last_bron, $settings);
 							}
 							else
 							{
-								$col[$x] = "#FFE4B5";
+								$col[$x] = $settings->prop("col_web_halfling") != "" ? $settings->prop("col_web_halfling") : "#FFE4B5";
 							}
 							if(($last_bron->prop("end") - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step")) > 1)
 							{
@@ -1440,6 +1472,29 @@ class room extends class_base
 								if((($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) % ($step_length * $arr["obj_inst"]->prop("time_step"))))
 								{
 									$rowspan[$x]++;
+								}
+							}
+
+							if ($settings->prop("col_buffer") != "")
+							{
+								$buf = $this->get_before_buffer(array(
+									"room" => $arr["obj_inst"],
+									"bron" => $last_bron,
+								));
+								if ($buf > 0)
+								{
+									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+									$d[$x] = "<div style='background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>".$d[$x];
+								}
+
+								$buf = $this->get_after_buffer(array(
+									"room" => $arr["obj_inst"],
+									"bron" => $last_bron,
+								));
+								if ($buf > 0)
+								{
+									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+									$d[$x] .= " <div style='background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 								}
 							}
 						}
@@ -1506,6 +1561,23 @@ class room extends class_base
 		}
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
+	}
+	
+	function get_colour_for_bron($bron, $settings)
+	{
+		$gc = $settings->meta("grp_cols");
+		if (!is_array($gc) || count($gc) == "")
+		{
+			return "#EE6363"; //#FFE4B5";
+		}
+
+		$u = get_instance(CL_USER);
+		$grp = $u->get_highest_pri_grp_for_user($bron->createdby(), true);
+		if ($grp && !empty($gc[$grp->id()]))
+		{
+			return "#".$gc[$grp->id()];
+		}
+		return "#EE6363";
 	}
 	
 	function get_after_buffer($arr)
@@ -1764,20 +1836,45 @@ class room extends class_base
 		{
 			$parent = $arr["id"];
 		}
-		
-		die("<script type='text/javascript'>
-			window.open('".$this->mk_my_orb("admin_add_bron_popup", array(
-				"parent" => $parent,
-				"calendar" => $cal,
+
+		$settings = $this->get_settings_for_room($room);
+                if ($settings->prop("bron_popup_detailed"))
+                {
+                        $url = html::get_new_url(CL_RESERVATION, $parent, array(
+				"return_url" => $arr["post_ru"],
 				"start1" => $start,
+				"calendar" => $cal,
 				"end" => $end,
 				"resource" => $arr["id"],
-				"return_url" => $arr["post_ru"],
-				"product" => $product,
-			))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=600');
+				"product" => $product
+			));
+                }
+                else
+		{
+			$url = $this->mk_my_orb("admin_add_bron_popup", array(
+                                "parent" => $parent,
+                                "calendar" => $cal,
+                                "start1" => $start,
+                                "end" => $end,
+                                "resource" => $arr["id"],
+                                "return_url" => $arr["post_ru"],
+                                "product" => $product,
+                        ));
+		}
+
+		if ($settings->prop("bron_no_popups"))
+		{
+			header("Location: ".$url);
+			die();
+		}
+		else
+		{
+			die("<script type='text/javascript'>
+			window.open('$url','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=600');
 			 
-			window.location.href='".$arr["post_ru"]."';
-		</script>");
+				window.location.href='".$arr["post_ru"]."';
+			</script>");
+		}
 		
 		return $this->mk_my_orb(
 			"new",
@@ -1792,6 +1889,24 @@ class room extends class_base
 			),
 			CL_RESERVATION
 		);
+	}
+
+	function get_settings_for_room($room)
+	{
+		$settings = obj();
+                if (is_array($room->prop("settings")))
+                {
+                        $set_id = reset($room->prop("settings"));
+                }
+                else
+                {
+                        $set_id = $room->prop("settings");
+                }
+                if ($this->can("view", $set_id))
+                {
+                        $settings = obj($set_id);
+                }
+		return $settings;
 	}
 	
 	/**
@@ -1896,6 +2011,9 @@ class room extends class_base
 			$customer = new object();
 			$customer->set_class_id(CL_CRM_PERSON);
 			$customer->set_name($data["name"]);
+			list($fn , $ln) = explode(" ", $data["name"]);
+			$customer->set_prop("firstname", $fn);
+			$customer->set_prop("lastname", $ln);
 			$customer->set_parent($parent);
 			$customer->save();
 			if($data["phone"])
@@ -1907,6 +2025,7 @@ class room extends class_base
 				$phone->set_parent($parent);
 				$phone->save();
 				$customer->connect(array("to"=> $phone->id(), "type" => "RELTYPE_PHONE"));
+				$customer->set_prop("phone", $phone->id());
 			}
 			if($data["email"])
 			{
@@ -1917,7 +2036,9 @@ class room extends class_base
 				$email->set_parent($parent);
 				$email->save();
 				$customer->connect(array("to"=> $email->id(), "type" => "RELTYPE_EMAIL"));
+				$customer->set_prop("email", $email->id());
 			}
+			$customer->save();
 			$reservation->set_prop("customer" , $customer->id());
 		}
 		$reservation->save();
@@ -2976,16 +3097,16 @@ class room extends class_base
 	{
 		foreach($this->res_table as $key => $val)
 		{
+			if($key > $arr["end"])
+			{
+				return true;
+			}
 			if($val["end"] > $arr["start"])
 			{
 				if($key < $arr["end"])
 				{
 					$this->last_bron_id = $val["id"];
 					return false;
-				}
-				else
-				{
-					return true;
 				}
 			}
 		}

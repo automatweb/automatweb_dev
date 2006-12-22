@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.20 2006/12/18 17:43:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.21 2006/12/22 11:58:28 kristo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -16,6 +16,8 @@
 @layout general_up type=vbox closeable=1 area_caption=&Uuml;ldinfo parent=general_split
 @default parent=general_up
 
+	@property b_tb type=toolbar store=no no_caption=1
+
 	@property name type=textbox field=name method=none size=20
 	@caption Nimi
 	
@@ -30,7 +32,19 @@
 	
 	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
 	@caption Klient
-				
+
+	@property cp_fn type=textbox store=no size=20
+	@caption Eesnimi
+
+	@property cp_ln type=textbox store=no size=20
+	@caption Perenimi
+	
+	@property cp_phone type=textbox store=no size=12
+	@caption Telefon
+	
+	@property cp_email type=textbox store=no size=20
+	@caption E-mail
+	
 	@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
 	@caption Projekt
 	
@@ -43,6 +57,12 @@
 	@property content type=textarea cols=40 rows=5 field=description table=planner
 	@caption Sisu	
 
+	@property time_closed type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Suletud
+
+	@property closed_info type=textbox table=objects field=meta method=serialize size=30
+	@caption Sulgemise p&otilde;hjus
+
 @layout general_down type=vbox closeable=1 area_caption=Aeg&#44;&nbsp;ja&nbsp;hind parent=general_split
 @default parent=general_down
 	
@@ -51,6 +71,9 @@
 		
 	@property start1 type=datetime_select field=start table=planner
 	@caption Algus
+
+	@property length type=select store=no 
+	@caption Pikkus
 
 	@property end type=datetime_select table=planner
 	@caption L&otilde;peb
@@ -216,16 +239,39 @@ class reservation extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		// get resource, then get settings from that and verify req fields
+		if ($this->can("view", $arr["request"]["resource"]))
+		{
+			$reso = obj($arr["request"]["resource"]);
+			$resi = $reso->instance();
+			$sett = $resi->get_settings_for_room($reso);
+			$reqf = $sett->meta("bron_req_fields");
+			if (is_array($reqf) && count($reqf))
+			{
+				if ($reqf[$prop["name"]]["req"] == 1 && $prop["value"] == "")
+				{
+					$prop["error"] = sprintf(t("V&auml;li %s peab olema t&auml;idetud!"), $prop["caption"]);
+					return PROP_FATAL_ERROR;
+				}
+			}
+		}
+	
 		switch($prop["name"])
 		{
 			case "products_tbl":
 				$arr["obj_inst"]->set_meta("amount", $arr["request"]["amount"]);
 				break;
-			//-- set_property --//
 		}
 		return $retval;
 	}	
 
+	function callback_pre_save($arr)
+	{
+		if ($arr["request"]["length"] > 0)
+		{
+			$arr["obj_inst"]->set_prop("end", $arr["obj_inst"]->prop("start1")+$arr["request"]["length"]*3600);
+		}
+	}
 /*	function set_sum($arr)
 	{
 		extract($arr);		
@@ -685,6 +731,174 @@ class reservation extends class_base
 		}
 		die($ret);
 	}
+
+	function _get_b_tb($arr)
+	{
+		if (!$this->can("delete", $arr["obj_inst"]->id()))
+		{
+			return PROP_IGNORE;
+		}
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "delete_bron",
+			"tooltip" => t("Kustuta broneering"),
+			"confirm" => t("Kas oled kindel et soovid beroneeringut kustutada?"),
+			"img" => "delete.gif",
+			"action" => "del_bron"
+		));
+	}
+
+	/**
+		@attrib name=del_bron
+	**/
+	function del_bron($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->delete();
+		return $arr["return_url"];
+	}
+
+	function _get_length($arr)
+	{
+		$arr["prop"]["options"] = $this->make_keys(range(0, 20));
+	}
+
+	function _get_cp_fn($arr)
+	{
+		if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+		{
+			return PROP_IGNORE;
+		}
+		$cust = obj($arr["obj_inst"]->prop("customer"));
+		if ($cust->class_id() == CL_CRM_PERSON)
+		{
+			$arr["prop"]["value"] = $cust->prop("firstname");
+		}
+		else
+		{
+			return PROP_IGNORE;
+		}
+	}
+
+	function _get_cp_ln($arr)
+        {
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                {
+                        return PROP_IGNORE;
+                }
+
+                $cust = obj($arr["obj_inst"]->prop("customer"));
+                if ($cust->class_id() == CL_CRM_PERSON)
+                {
+                        $arr["prop"]["value"] = $arr["obj_inst"]->prop("customer.lastname");
+                }
+                else
+                {
+                        return PROP_IGNORE;
+                }
+        }
+	
+	function _get_cp_phone($arr)
+        {
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                {
+                        return PROP_IGNORE;
+                }
+
+                $cust = obj($arr["obj_inst"]->prop("customer"));
+                if ($cust->class_id() == CL_CRM_PERSON)
+                {
+                        $arr["prop"]["value"] = $arr["obj_inst"]->prop("customer.phone.name");
+                }
+                else
+                {
+                        return PROP_IGNORE;
+                }
+        }
+
+        function _get_cp_email($arr)
+        {
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                {
+                        return PROP_IGNORE;
+                }
+
+                $cust = obj($arr["obj_inst"]->prop("customer"));
+                if ($cust->class_id() == CL_CRM_PERSON)
+                {
+                        $arr["prop"]["value"] = $arr["obj_inst"]->prop("customer.email.mail");
+                }
+                else
+                {
+                        return PROP_IGNORE;
+                }
+        }
+	
+	function _set_cp_fn($arr)
+	{
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                {
+                        return PROP_IGNORE;
+                }
+
+                $cust = obj($arr["obj_inst"]->prop("customer"));
+                if ($cust->class_id() == CL_CRM_PERSON)
+                {
+			$cust->set_prop("firstname", $arr["prop"]["value"]);
+			$cust->set_name($cust->prop("firstname")." ".$cust->prop("lastname"));
+			$cust->save();
+		}	
+		return PROP_IGNORE;
+	}
+
+        function _set_cp_ln($arr)
+        {
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                {
+                        return PROP_IGNORE;
+                }
+
+                $cust = obj($arr["obj_inst"]->prop("customer"));
+                if ($cust->class_id() == CL_CRM_PERSON)
+                {
+                        $cust->set_prop("lastname", $arr["prop"]["value"]);
+                        $cust->set_name($cust->prop("firstname")." ".$cust->prop("lastname"));
+                        $cust->save();
+                }
+                return PROP_IGNORE;
+        }
+
+        function _set_cp_phone($arr)
+        {
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                {
+                        return PROP_IGNORE;
+                }
+
+                $cust = obj($arr["obj_inst"]->prop("customer"));
+                if ($cust->class_id() == CL_CRM_PERSON)
+                {
+			if ($this->can("view", $cust->prop("phone")))
+			{
+				$ph = obj($cust->prop("phone"));
+			}
+			else
+			{
+				$ph = obj();
+				$ph->set_parent($cust->id());
+				$ph->set_class_id(CL_CRM_PHONE);
+			}
+			$ph->set_name($arr["prop"]["value"]);
+			$ph->save();
+			if (!$this->can("view", $cust->prop("phone")))
+			{
+				$cust->set_prop("phone", $ph->id());
+				$cust->save();
+			}
+                }
+                return PROP_IGNORE;
+        }
+
 
 }
 ?>

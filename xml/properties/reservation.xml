@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>b_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>b_tb</field>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
@@ -54,6 +64,50 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>cp_fn</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>textbox</type>
+            <store>no</store>
+            <size>20</size>
+            <field>cp_fn</field>
+            <caption>Eesnimi</caption>
+      </property>
+      <property>
+            <name>cp_ln</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>textbox</type>
+            <store>no</store>
+            <size>20</size>
+            <field>cp_ln</field>
+            <caption>Perenimi</caption>
+      </property>
+      <property>
+            <name>cp_phone</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>textbox</type>
+            <store>no</store>
+            <size>12</size>
+            <field>cp_phone</field>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>cp_email</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>textbox</type>
+            <store>no</store>
+            <size>20</size>
+            <field>cp_email</field>
+            <caption>E-mail</caption>
+      </property>
+      <property>
             <name>project</name>
             <table>planner</table>
             <group>general</group>
@@ -95,6 +149,28 @@
             <caption>Sisu	</caption>
       </property>
       <property>
+            <name>time_closed</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Suletud</caption>
+      </property>
+      <property>
+            <name>closed_info</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>30</size>
+            <caption>Sulgemise p&amp;amp;otilde;hjus</caption>
+      </property>
+      <property>
             <name>people_count</name>
             <table>objects</table>
             <group>general</group>
@@ -113,6 +189,16 @@
             <type>datetime_select</type>
             <field>start</field>
             <caption>Algus</caption>
+      </property>
+      <property>
+            <name>length</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>select</type>
+            <store>no</store>
+            <field>length</field>
+            <caption>Pikkus</caption>
       </property>
       <property>
             <name>end</name>
