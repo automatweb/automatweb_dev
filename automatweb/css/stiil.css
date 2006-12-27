@@ -11,7 +11,7 @@ a:hover {text-decoration: underline}
 /* päis */
 #pais {
 	background: #e2e2e2 url('/automatweb/images/aw06/pais_t.gif') repeat-x;
-	min-width: 1010px;
+	/*min-width: 550px;*/
 	height: 84px;
 	border-bottom: 1px solid #f1f8fc
 }
@@ -91,7 +91,7 @@ a:hover {text-decoration: underline}
 #pais .olekuriba {
 	background: url('/automatweb/images/aw06/olek_t.gif') no-repeat;
 	color: #545454;
-	min-width: 400px;
+	/*min-width: 400px;*/
 	font-size: 11px;
 	padding: 12px 0 0 8px;
 	top: 24px;
@@ -201,7 +201,7 @@ a:hover {text-decoration: underline}
 /* teise astme menüü */
 #k_menyy {
 	clear: both;
-	min-width: 962px;
+	/*min-width: 500px;*/
 	height: 25px;
 	padding: 0 10px 0 38px;
 }
