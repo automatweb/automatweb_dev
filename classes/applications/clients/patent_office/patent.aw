@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.28 2006/12/22 16:25:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.29 2006/12/27 11:32:00 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -42,7 +42,7 @@
 	@property verified type=checkbox 
 	@caption Kinnitatud
 
-	@property exported type=checkbox 
+	@property exported type=checkbox caption=no
 	@caption Eksporditud
 
 	@property export_date type=date_select
@@ -118,13 +118,13 @@
 	@caption Riigi kood
 
 @property childtitle111 type=text store=no subtitle=1
-@caption Näituseprioriteet
+@caption N&auml;ituseprioriteet
 
 	@property exhibition_name type=textbox
-	@caption Näituse nimi
+	@caption N&auml;ituse nimi
 	
 	@property exhibition_date type=date_select
-	@caption Kuupäev
+	@caption Kuup&auml;ev
 	
 	@property exhibition_country type=textbox
 	@caption Riigi kood
@@ -217,7 +217,7 @@ class patent extends class_base
 		$this->text_area_vars = array("colors" , "trademark_character", "element_translation", "additional_info");
 		$this->file_upload_vars = array("warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
 		$this->date_vars = array("payment_date" , "exhibition_date", "convention_date");
-		$this->types = array(t("Sõnamärk"),t("Kujutismärk"),t("Kombineeritud märk"),t("Ruumiline märk"));
+		$this->types = array(t("S&otilde;nam&auml;rk"),t("Kujutism&auml;rk"),t("Kombineeritud m&auml;rk"),t("Ruumiline m&auml;rk"));
 		$this->trademark_types = array(t("Kollektiivkaubam&auml;rk"),t("Garantiim&auml;rk"));
 		$this->country_popup_link_vars = array("convention_country", "exhibition_country", "country_code");
 	}
@@ -331,6 +331,17 @@ class patent extends class_base
 				{
 					$prop["type"] = "text";
 					$prop["value"] = date("j:m:Y h:i" , $prop["value"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case "exported":
+				if($arr["obj_inst"]->prop("exported"))
+				{
+					$prop["type"] = "text";
+					$prop["value"] = t("Eksporditud");
 				}
 				else
 				{
@@ -1012,22 +1023,22 @@ class patent extends class_base
 				"checked" => !$_SESSION["patent"]["type"],
 				"name" => "type",
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "none";',
-			)).t("Sõnamärk").html::radiobutton(array(
+			)).t("S&otilde;nam&auml;rk").html::radiobutton(array(
 				"value" => 1,
 		 		"checked" => ($_SESSION["patent"]["type"] == 1) ? 1 : 0,
 				"name" => "type",
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "none";document.getElementById("reproduction_row").style.display = "";',
-			)).t("Kujutismärk").html::radiobutton(array(
+			)).t("Kujutism&auml;rk").html::radiobutton(array(
 				"value" => 2,
 				"checked" => ($_SESSION["patent"]["type"] == 2) ? 1 : 0,
 				"name" => "type",
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";',
-			)).t("Kombineeritud märk").html::radiobutton(array(
+			)).t("Kombineeritud m&auml;rk").html::radiobutton(array(
 				"value" => 3,
 				"checked" => ($_SESSION["patent"]["type"] == 3) ? 1 : 0,
 				"name" => "type",
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "none";document.getElementById("reproduction_row").style.display = "";',
-			)).t("Ruumiline märk");
+			)).t("Ruumiline m&auml;rk");
 		
 		$data["trademark_type"] = html::checkbox(array(
 			"value" => 1,
@@ -1627,7 +1638,7 @@ class patent extends class_base
 		{
 			if(!array($_POST["products"]))
 			{
-				$err.= t("Kohustuslik vähemalt ühe toote/teenuse lisamine")."\n<br>";
+				$err.= t("Kohustuslik v&auml;hemalt &uuml;he toote/teenuse lisamine")."\n<br>";
 			}
 		}
 		
@@ -1635,11 +1646,11 @@ class patent extends class_base
 		{
 			if(!isset($_POST["country"]))
 			{
-				$err.= t("Kodumaine või välismaine peab olema valitud")."\n<br>";
+				$err.= t("Kodumaine v&otilde;i v&auml;lismaine peab olema valitud")."\n<br>";
 			}
 			if(!isset($_POST["applicant_type"]))
 			{
-				$err.= t("Füüsiline või juriidiline isik peab olema valitud")."\n<br>";
+				$err.= t("F&uuml;&uuml;siline v&otilde;i juriidiline isik peab olema valitud")."\n<br>";
 			}
 			if(!$_POST["code"])
 			{
@@ -1671,7 +1682,7 @@ class patent extends class_base
 			}
 			if(!$_POST["street"])
 			{
-				$err.= t("Tänav on kohustuslik")."\n<br>";
+				$err.= t("T&auml;nav on kohustuslik")."\n<br>";
 			}
 			if(!$_POST["country_code"])
 			{
@@ -1687,7 +1698,7 @@ class patent extends class_base
 		{
 			if(mktime(0,0,0,$_SESSION["patent"]["convention_date"]["month"],$_SESSION["patent"]["convention_date"]["day"],$_SESSION["patent"]["convention_date"]["year"]) < time() - 30*6*24*3600
 			 || mktime(0,0,0,$_SESSION["patent"]["exhibition_date"]["month"], $_SESSION["patent"]["exhibition_date"]["day"],$_SESSION["patent"]["exhibition_date"]["year"]) < time() - 30*6*24*3600 )
-			$err.= t("Prioriteedikuupäev ei või olla vanem kui 6 kuud")."\n<br>";
+			$err.= t("Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud")."\n<br>";
 		}
 		return $err;
 	}
@@ -2072,7 +2083,7 @@ class patent extends class_base
 					"nr" 		=> ($patent->prop("convention_nr")) ? $patent->prop("convention_nr") : t("Number puudub"),
 					"applicant" 	=> $patent->prop_str("applicant"),
 					"type" 		=> $this->types[$patent->prop("type")],
-					"state" 	=> ($patent->prop("verified")) ? t("Kinnitatud") : t("Kinnitamata"),
+					"state" 	=> ($patent->prop("verified")) ? t("Vastu v&otilde;etud") : t(""),
 					"name" 	 	=> $patent->name(),
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,

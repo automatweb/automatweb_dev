@@ -257,7 +257,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>N&amp;auml;ituseprioriteet</caption>
+            <caption>N&amp;amp;auml;ituseprioriteet</caption>
       </property>
       <property>
             <name>exhibition_name</name>
@@ -266,7 +266,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>N&amp;auml;ituse nimi</caption>
+            <caption>N&amp;amp;auml;ituse nimi</caption>
       </property>
       <property>
             <name>exhibition_date</name>
@@ -275,7 +275,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Kuup&amp;auml;ev</caption>
+            <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>exhibition_country</name>
