@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.381 2006/12/14 13:36:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.382 2006/12/27 11:04:14 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -400,6 +400,10 @@ class menuedit extends aw_template
 			$_SESSION["ct_lang_lc"] = $l->get_langid($set_ct_lang_id);
 			aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
 			aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
+			//$_COOKIE["ct_lang_id"] = $set_ct_lang_id;
+			//$_COOKIE["ct_lang_lc"] = $_SESSION["ct_lang_lc"];
+			setcookie("ct_lang_id", $set_ct_lang_id, time() + 3600, "/");
+			setcookie("ct_lang_lc", $_SESSION["ct_lang_lc"], time() + 3600, "/");
 		}
 
 		if ($set_lang_id)
@@ -684,10 +688,10 @@ class menuedit extends aw_template
 		{
 			foreach(safe_array($item->meta("repl")) as $row)
 			{
-				if (strpos($repl_gr, $row["what"]) !== false)
+				if (strpos($repl_gr, $row["with"]) !== false)
 				{
 					$repls = true;
-					$repl_gr = str_replace($row["what"], $row["with"], $repl_gr);
+					$repl_gr = str_replace($row["with"], $row["what"], $repl_gr);
 				}
 			}
 			foreach(safe_array($item->meta("d")) as $row)
@@ -695,7 +699,14 @@ class menuedit extends aw_template
 				if ("/".$row["old"] == $gr)
 				{
 					header("HTTP/1.0 301 Moved Permanently");
-					header("Location: ".aw_ini_get("baseurl")."/".$row["new"]);
+					if (substr($row["new"], 0, 4) == "http")
+					{
+						header("Location: ".$row["new"]);
+					}
+					else
+					{
+						header("Location: ".aw_ini_get("baseurl")."/".$row["new"]);
+					}
 					die();
 				}
 			}
@@ -704,6 +715,10 @@ class menuedit extends aw_template
 		if ($repls)
 		{
 			header("HTTP/1.0 301 Moved Permanently");
+			if (substr($repl_gr, -1) == "/")
+			{
+				$repl_gr = substr($repl_gr, 0, -1);
+			}
 			header("Location: ".aw_ini_get("baseurl")."/".$repl_gr);
 			die();
 		}
@@ -724,7 +739,18 @@ class menuedit extends aw_template
 		$r404 = $this->cfg["404redir"];
 		if (is_array($r404))
 		{
-			$r404 = $r404[aw_global_get("lang_id")];
+			if (aw_ini_get("user_interface.full_content_trans"))
+			{
+				$r404 = $r404[aw_global_get("ct_lang_lc")];
+				if ($r404 == "")
+				{
+					$r404 = $r404["en"];
+				}
+			}
+			else
+			{
+				$r404 = $r404[aw_global_get("lang_id")];
+			}
 		}
 		if ($r404 && "/".$GLOBALS["section"] != $r404)
 		{
