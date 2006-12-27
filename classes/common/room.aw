@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.76 2006/12/27 11:10:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.77 2006/12/27 12:34:12 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1344,7 +1344,8 @@ class room extends class_base
 		$start_minute = 0;
 		if(is_object($this->openhours))
 		{
-			extract($this->get_when_opens());
+			$gwo = $this->get_when_opens();
+			extract($gwo);
 		}
 		if($arr["request"]["start"])
 		{
@@ -1358,7 +1359,6 @@ class room extends class_base
 			}
 			$today_start = mktime($start_hour, $start_minute, 0, date("n", time()), date("j", time()), date("Y", time()));
 		}
-
 
 		$step = 0;
 		$step_length = $this->step_lengths[$arr["obj_inst"]->prop("time_unit")];
@@ -1377,7 +1377,20 @@ class room extends class_base
 			{
 				$this->start = $today_start = get_week_start();
 			}
+			
+			//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
+ 			if($gwo["start_hour"])
+ 			{
+ 				$this->start = $this->start+3600*$gwo["start_hour"];
+ 				$today_start = $today_start+3600*$gwo["start_hour"];
+ 			}
+ 			if($gwo["start_minute"])
+ 			{
+ 				$this->start = $this->start+60*$gwo["start_minute"];
+ 				$today_start = $today_start+60*$gwo["start_minute"];
+ 			}
 		}
+
 		$this->_init_calendar_t($t,$this->start);
 		enter_function("get_calendar_tbl::3");
 		$len = 7;
@@ -3163,7 +3176,7 @@ class room extends class_base
 	function generate_res_table($room)
 	{
 		if(!$this->start)
-		{	
+		{
 			classload("core/date/date_calc");
 			$this->start =get_week_start();
 		}
