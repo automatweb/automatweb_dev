@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.98 2006/11/29 09:34:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.99 2006/12/27 11:09:40 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -2106,6 +2106,8 @@ class cfgform extends class_base
 			}
 		}
 
+		$si = __get_site_instance();
+		$has_cb = method_exists($si, "callback_get_group_display");
 		foreach($ret as $gn => $gd)
 		{
 			if ($this->can("view", $gd["grp_d_ctl"]))
@@ -2114,6 +2116,14 @@ class cfgform extends class_base
 				$ctli = $ctl->instance();
 				$rv = $ctli->check_property($ret[$gn], $ctl->id(), $gd);
 				if ($rv == PROP_IGNORE)
+				{
+					unset($ret[$gn]);
+				}
+			}
+			else
+			if ($has_cb)
+			{
+				if ($si->callback_get_group_display($o, $gn) == PROP_IGNORE)
 				{
 					unset($ret[$gn]);
 				}
