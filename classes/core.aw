@@ -905,7 +905,7 @@ class core extends acl_base
 			}
 			$res .= $add;
 		};
-		return substr($res,0,-1);
+		return substr($res,0,-strlen($sep));
 	}
 
 	/** creates the necessary hidden elements to put in a form that tell the orb which function to call
