@@ -26,7 +26,6 @@ else
 		include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
 	}
 }
-
 enter_function("index_impl::after_init");
 // get an instance if the site class
 $si =&__get_site_instance();
@@ -53,12 +52,16 @@ if (!aw_global_get("no_menus"))
 }
 
 exit_function("index_impl::after_init");
-
 enter_function("index_impl::shutdown");
 // and finish gracefully
 if (file_exists(aw_ini_get("site_basedir")."/public/site_footer.aw"))
 {
 	include(aw_ini_get("site_basedir")."/public/site_footer.aw");
+}
+else
+if (file_exists(aw_ini_get("site_basedir")."/htdocs/site_footer.aw"))
+{
+	 include(aw_ini_get("site_basedir")."/htdocs/site_footer.aw");
 }
 else
 {
