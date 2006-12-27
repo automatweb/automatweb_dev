@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.54 2006/12/19 19:40:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.55 2006/12/27 11:09:15 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -666,6 +666,8 @@ class shop_order_cart extends class_base
 				{
 					header("Location: ".$arr["return_url"]);
 				}
+				// if this gets removed, then THINGS WILL GET FUCKED. the header() calls above will night sie workensh
+				// so don't touch this.
 				die();
 			}
 		}

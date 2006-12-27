@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.26 2006/11/28 15:14:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.27 2006/12/27 11:09:15 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -376,10 +376,10 @@ class shop_product_packaging extends class_base
 
 			$ivar = array(
 				"user".$i => $ui,
-				"userta".$i => nl2br($prod->prop("userta".$i)),
+				"userta".$i => nl2br($prod->trans_get_val("userta".$i)),
 				"uservar".$i => $tmp,
 				"packaging_user".$i => $pi->prop("user".$i),
-				"packaging_userta".$i => nl2br($pi->prop("userta".$i)),
+				"packaging_userta".$i => nl2br($pi->trans_get_val("userta".$i)),
 				"packaging_uservar".$i => $tmp2
 			);
 

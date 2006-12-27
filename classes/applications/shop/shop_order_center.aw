@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.46 2006/12/22 14:57:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.47 2006/12/27 11:09:15 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -609,7 +609,7 @@ class shop_order_center extends class_base
 		@attrib name=show_items nologin="1"
 
 		@param id required type=int acl=view
-		@param section required type=int acl=view
+		@param section required 
 
 	**/
 	function show_items($arr)
