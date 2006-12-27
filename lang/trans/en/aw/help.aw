@@ -7,4 +7,6 @@ $GLOBALS["TRANS"]["t&otilde;lgitud nimi puudub"] = "translated name is missing";
 $GLOBALS["TRANS"]["kommentaar puudub"] = "comment is missing";
 $GLOBALS["TRANS"]["abitekst puudub"] = "help is missing";
 $GLOBALS["TRANS"]["Omadused"] = "Properties";
+$GLOBALS["TRANS"]["AW KLASSIDE ABI"] = "AW Component help";
+$GLOBALS["TRANS"]["root"] = "Start";
 ?>

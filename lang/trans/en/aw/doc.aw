@@ -83,4 +83,6 @@ $GLOBALS["TRANS"]["Eelvaade"] = "Preview";
 $GLOBALS["TRANS"]["Dokument 2.0"] = "Document 2.0";
 $GLOBALS["TRANS"]["Dokument (vend)"] = "Document (brother)";
 $GLOBALS["TRANS"]["Aktiivne"] = "Active";
+$GLOBALS["TRANS"]["Omaduse  (brother_warning) caption"] = "<b>Be careful, this document is shown in several sections!</b>";
+$GLOBALS["TRANS"]["NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik!"] = "<b>Be careful, this document is shown in several sections!</b>";
 ?>

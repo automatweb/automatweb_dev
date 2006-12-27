@@ -78,4 +78,5 @@ $GLOBALS["TRANS"]["Tekstikast"] = "Texbox";
 $GLOBALS["TRANS"]["Listbox"] = "Listbox";
 $GLOBALS["TRANS"]["Raadionupp"] = "Radiobutton";
 $GLOBALS["TRANS"]["Checkbox"] = "Checkbox";
+$GLOBALS["TRANS"]["Sellise koodiga kasutajat pole olemas!"] = "A user with this code does not exist";
 ?>

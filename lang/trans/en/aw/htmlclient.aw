@@ -18,4 +18,5 @@ $GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["J&auml;rjehoidja"] = "Bookmarks";
 $GLOBALS["TRANS"]["Ajalugu"] = "History";
 $GLOBALS["TRANS"]["Lisa kiiresti"] = "Add quickly";
+$GLOBALS["TRANS"]["Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"] = "Data is not saved, do you want to save it before leaving this page?";
 ?>

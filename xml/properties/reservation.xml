@@ -43,6 +43,16 @@
             <caption>Kinnitatud</caption>
       </property>
       <property>
+            <name>unverify_reason</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>unverify_reason</field>
+      </property>
+      <property>
             <name>resource</name>
             <table>objects</table>
             <group>general</group>
@@ -248,6 +258,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Summa</caption>
+      </property>
+      <property>
+            <name>modder</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>modder</field>
       </property>
       <property>
             <name>resources_tbl</name>

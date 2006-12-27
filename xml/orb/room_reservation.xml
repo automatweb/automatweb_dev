@@ -75,6 +75,14 @@
 			</function>
 		</action>
 
+		<action name="bank_return" nologin="1">
+			<function name="bank_return">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="revoke_reservation" nologin="1">
 			<function name="revoke_reservation">
 				<arguments>

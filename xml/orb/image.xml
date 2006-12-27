@@ -170,7 +170,7 @@
 			<function name="gen_image_alias_for_doc">
 				<arguments>
 					<required name="img_id" type="int" />
-					<required name="doc_id" type="int" />
+					<optional name="doc_id" />
 					<optional name="close" type="bool" />
 				</arguments>
 			</function>

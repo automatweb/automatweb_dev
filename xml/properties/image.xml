@@ -149,6 +149,16 @@
             <caption>Kustuta suur pilt</caption>
       </property>
       <property>
+            <name>big_flash</name>
+            <group>img2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FLASH</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Flash </caption>
+      </property>
+      <property>
             <name>new_w</name>
             <group>resize</group>
             <type>textbox</type>
@@ -255,6 +265,11 @@
                   <clid>CL_COMMENT</clid>
                   <caption>Moderaatori kommentaar</caption>
             </MOD_COMMENT>
+            <FLASH>
+                  <value>2</value>
+                  <clid>CL_FLASH</clid>
+                  <caption>Flash</caption>
+            </FLASH>
       </reltypes>
 </properties>
 

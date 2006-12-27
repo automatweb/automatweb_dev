@@ -8,13 +8,6 @@
 			</function>
 		</action>
 
-		<action name="bank_forms" default="1" nologin="1" is_public="1" all_args="1">
-			<function name="bank_forms">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="pay_site" is_public="1" caption="Change">
 			<function name="pay_site">
 				<arguments>

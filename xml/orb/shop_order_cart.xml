@@ -47,5 +47,21 @@
 			</function>
 		</action>
 
+		<action name="pay_cart" nologin="1">
+			<function name="pay_cart">
+				<arguments>
+					<required name="oc" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="bank_return" nologin="1">
+			<function name="bank_return">
+				<arguments>
+					<required name="oc" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

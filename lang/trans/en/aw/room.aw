@@ -52,4 +52,11 @@ $GLOBALS["TRANS"]["Muuda"] = "Change";
 $GLOBALS["TRANS"]["Jah"] = "Yes";
 $GLOBALS["TRANS"]["Ei"] = "No";
 $GLOBALS["TRANS"]["Broneering"] = "Reservation";
+$GLOBALS["TRANS"]["Monday"] = "Monday";
+$GLOBALS["TRANS"]["Tuesday"] = "Tuesday";
+$GLOBALS["TRANS"]["Wednesday"] = "Wednesday";
+$GLOBALS["TRANS"]["Thursday"] = "Thursday";
+$GLOBALS["TRANS"]["Friday"] = "Friday";
+$GLOBALS["TRANS"]["Saturday"] = "Saturday";
+$GLOBALS["TRANS"]["Sunday"] = "Sunday";
 ?>

@@ -9,5 +9,19 @@
 			</function>
 		</action>
 
+		<action name="unverify">
+			<function name="unverify">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_bron">
+			<function name="del_bron">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
