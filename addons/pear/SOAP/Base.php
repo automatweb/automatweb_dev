@@ -432,7 +432,14 @@ class SOAP_Base extends SOAP_Base_Object
         $xmlout_type = $xmlns = $ptype = $array_type_ns = '';
 
         if (!$name || is_numeric($name)) {
-            $name = 'item';
+	    if (is_numeric($value))
+	    {
+	    	$name ='int';
+	    }
+	    else
+	    {
+	    	$name = 'item';
+		}
         }
 
         if ($this->_wsdl) {
@@ -513,7 +520,7 @@ class SOAP_Base extends SOAP_Base_Object
                     } else {
                         $array_type = $this->_getType($array_val);
                         $array_types[$array_type] = 1;
-                        $xmlout_value .= $this->_serializeValue($array_val, 'item', $array_type, $this->_section5 ? null : $elNamespace);
+                        $xmlout_value .= $this->_serializeValue($array_val, is_numeric($array_val) ? 'int' : 'item', $array_type, $this->_section5 ? null : $elNamespace);
                     }
                 }
 
