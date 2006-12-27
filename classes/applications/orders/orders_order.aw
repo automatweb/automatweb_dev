@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.19 2006/03/23 13:49:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.20 2006/12/27 17:00:29 dragut Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -902,6 +902,8 @@ class orders_order extends class_base
 		$_SESSION["show_order"] = 1;
 		$val = $form_i->change(array("show_order" => 1));
 		unset($_SESSION["show_order"]);
+		unset($_SESSION["order_form_id"]);
+		unset($_SESSION["order_cart_id"]);
 		//unset($_SESSION["order_form_id"]);
 		
 		return $val;
