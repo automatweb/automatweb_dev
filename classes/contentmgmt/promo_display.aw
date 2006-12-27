@@ -318,7 +318,7 @@ class promo_display
 					$image = $i->make_img_tag($image_url);
 				}
 
-				$inst->vars(array(
+				$inst->vars_safe(array(
 					"comment" => $o->trans_get_val("comment"),
 					"title" => $o->trans_get_val("name"), 
 					"caption" => $o->trans_get_val("caption"),
@@ -330,7 +330,7 @@ class promo_display
 					"image" => $image, 
 					"image_url" => $image_url,
 					"image_or_title" => ($image == "" ? $o->trans_get_val("caption") : $image),
-					
+					"promo_oid" => $o->id()	
 				));
 
 				// which promo to use? we need to know this to use
@@ -360,7 +360,7 @@ class promo_display
 					$use_tpl = "LEFT_PROMO";
 				};
 
-				$inst->vars(array(
+				$inst->vars_safe(array(
 					$use_tpl."_image" => $image,
 					$use_tpl."_image_url" => $image_url,
 					$use_tpl."_image_or_title" => ($image == "" ? $o->trans_get_val("caption") : $image),
@@ -371,19 +371,19 @@ class promo_display
 				{
 					$hlc = $inst->parse($use_tpl.".HAS_LINK_CAPTION");
 				}
-				$inst->vars(array(
+				$inst->vars_safe(array(
 					"HAS_LINK_CAPTION" => $hlc
 				));
 
 				if ($o->meta("no_title") != 1)
 				{
-					$inst->vars(array(
+					$inst->vars_safe(array(
 						"SHOW_TITLE" => $inst->parse($use_tpl . ".SHOW_TITLE")
 					));
 				}
 				else
 				{
-					$inst->vars(array(
+					$inst->vars_safe(array(
 						"SHOW_TITLE" => ""
 					));
 				}
@@ -401,23 +401,23 @@ class promo_display
 				if ($inst->is_template($use_tpl . $ap))
 				{
 					$promos[$use_tpl] .= $inst->parse($use_tpl . $ap);
-					$inst->vars(array($use_tpl . $ap => ""));
+					$inst->vars_safe(array($use_tpl . $ap => ""));
 				}
 				else
 				{
 					$promos[$use_tpl] .= $inst->parse($use_tpl);
-					$inst->vars(array($use_tpl => ""));
+					$inst->vars_safe(array($use_tpl => ""));
 				};
 				// nil the variables that were imported for promo boxes
 				// if we dont do that we can get unwanted copys of promo boxes
 				// in places we dont want them
-				$inst->vars(array("title" => 
+				$inst->vars_safe(array("title" => 
 					"", "content" => "","url" => ""));
 				exit_function("show_promo::".$o->name());
 			}
 		};
 
-		$inst->vars($promos);
+		$inst->vars_safe($promos);
 	}
 
 	function do_prev_next_links($docs, &$tpl)
