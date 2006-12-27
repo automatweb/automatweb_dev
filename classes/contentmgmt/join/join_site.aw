@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.34 2006/12/27 13:31:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.35 2006/12/27 14:23:14 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -52,6 +52,9 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 @caption Vahepealkirjad
 
 @default group=prop_settings
+
+	@property username_element type=select field=meta method=serialize
+	@caption Kasutajanime element
 
 	@property prop_settings type=table store=no no_caption=1
 
@@ -231,6 +234,10 @@ class join_site extends class_base
 
 			case "trans_tb":
 				$this->_trans_tb($arr);
+				break;
+
+			case "username_element":
+				$this->_username_element($arr);
 				break;
 		};
 		return $retval;
@@ -1026,6 +1033,13 @@ class join_site extends class_base
 		obj_set_opt("no_cache", 1);
 
 		$obj = obj($arr["id"]);
+
+		if (strpos($obj->prop("username_element"), "_") !== false)
+		{
+			list($clid, $el) = explode("_", $obj->prop("username_element"), 2);
+			$arr["typo_".CL_USER]["uid_entry"] = $arr["typo_".$clid][$el];
+		} 
+
 		// update session data in sess[site_join_status]
 		$this->_update_sess_data($arr);
 
@@ -1043,7 +1057,7 @@ class join_site extends class_base
 			$rpa = new aw_array($rp);
 			foreach($rpa->get() as $propn => $one)
 			{
-				if ($one == 1)
+				if ( $one == 1)
 				{
 					if ($sessd["typo_".$clid][$propn] == "")
 					{
@@ -1053,7 +1067,7 @@ class join_site extends class_base
 				}
 			}
 		}
-		
+
 		// if they are , then add the user and go to the after join page
 		if ($filled)
 		{
@@ -1194,7 +1208,6 @@ class join_site extends class_base
 			aw_session_set("join_err", array());
 			return $obj->prop("after_join_url");
 		}
-
 		aw_session_set("join_err", $nf);
 		if ($arr["err_return_url"])
 		{
@@ -2224,6 +2237,26 @@ class join_site extends class_base
 		}
 		$t->set_rgroupby(array("class" => "class"));
 		$t->set_caption(t("T&otilde;lgi omaduste tekste"));
+	}
+
+	function _username_element($arr)
+	{
+		$opts = array("" => t("--vali--"));
+		$clss = aw_ini_get("classes");
+		foreach($arr["obj_inst"]->meta("visible") as $clid => $items)
+		{
+			$tmp = obj();
+			$tmp->set_class_id($clid);
+			$property_list = $tmp->get_property_list();
+		
+			$opts[$clid] = $clss[$clid]["name"];
+
+			foreach($items as $pn => $one)
+			{
+				$opts[$clid."_".$pn] = str_repeat("&nbsp;", 10).$property_list[$pn]["caption"];
+			}
+		}
+		$arr["prop"]["options"] = $opts;
 	}
 }
 ?>

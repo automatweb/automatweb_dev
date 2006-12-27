@@ -105,6 +105,15 @@
             <caption>Vahepealkirjad</caption>
       </property>
       <property>
+            <name>username_element</name>
+            <table>objects</table>
+            <group>prop_settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajanime element</caption>
+      </property>
+      <property>
             <name>prop_settings</name>
             <table>objects</table>
             <group>prop_settings</group>
