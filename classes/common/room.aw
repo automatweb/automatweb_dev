@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.75 2006/12/22 11:58:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.76 2006/12/27 11:10:07 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -469,6 +469,11 @@ class room extends class_base
 		{
 			$this->_save_img_ord(&$arr);
 		}
+		if ($arr["request"]["set_view_dates"])
+		{
+			$arr["args"]["start"] = date_edit::get_timestamp($arr["request"]["set_d_from"]);
+			$arr["args"]["end"] = date_edit::get_timestamp($arr["request"]["set_d_to"]);
+		}
 	}
 
 	function callback_pre_edit($arr)
@@ -488,6 +493,7 @@ class room extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["set_view_dates"] = " ";
 	}
 
 	////////////////////////////////////
@@ -1291,6 +1297,18 @@ class room extends class_base
 		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		}
 		$ret.= $this->_get_hidden_fields($arr);
+
+		// add date select
+		$ret .= "<br>".t("Vali kuup&auml;ev:")." ".html::date_select(array(
+			"name" => "set_d_from",
+			"value" => $_GET["start"]
+		))." - ".html::date_select(array(
+			"name" => "set_d_to",
+			"value" => $_GET["end"]
+		))." ".html::button(array(
+                        "onclick" => "document.changeform.set_view_dates=1;submit_changeform();",
+                        "value" => t("N&auml;ita vahemikku")
+                ));
 		$arr["prop"]["value"] = $ret;
 		return $ret;
 	}
@@ -1362,6 +1380,11 @@ class room extends class_base
 		}
 		$this->_init_calendar_t($t,$this->start);
 		enter_function("get_calendar_tbl::3");
+		$len = 7;
+		if ($_GET["start"] && $_GET["end"])
+		{
+			$len = floor(($_GET["end"] - $_GET["start"]) / 86400);
+		}
 		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
@@ -1465,6 +1488,15 @@ class room extends class_base
 							else
 							{
 								$col[$x] = $settings->prop("col_web_halfling") != "" ? $settings->prop("col_web_halfling") : "#FFE4B5";
+							}
+
+							if ($last_bron->prop("content") != "" || $last_bron->comment() != "")
+							{
+								$d[$x] .= html::href(array(
+									"url" => "#",
+									"caption" => "*",
+									"title" => $last_bron->prop("content")." ".$last_bron->comment()
+								));
 							}
 							if(($last_bron->prop("end") - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step")) > 1)
 							{
@@ -2558,6 +2590,21 @@ class room extends class_base
 		}
 	}
 	
+	function get_folder_items($o,$menu)
+	{
+		if(!$this->active_items)
+		{
+			$ol = $this->get_active_items($o);
+			$this->active_items = $ol->ids();
+		}
+		return new object_list(array(
+			"lang_id" => array(),
+			"parent" => $menu,
+			"oid" => $this->active_items,
+		));
+	
+	}
+	
 	//returns active packages
 	function get_package_list($o)
 	{
@@ -3076,7 +3123,7 @@ class room extends class_base
 		$sum = 0;
 		foreach($products as $id => $amt)
 		{
-			if($amt && is_oid($id))
+			if($amt && $this->can("view", $id))
 			{
 				$product = obj($id);
 				if(is_oid($currency))
@@ -3116,8 +3163,9 @@ class room extends class_base
 	function generate_res_table($room)
 	{
 		if(!$this->start)
-		{
-			$this->start =time();
+		{	
+			classload("core/date/date_calc");
+			$this->start =get_week_start();
 		}
 		$step_length = $this->step_lengths[$room->prop("time_unit")];
 		$filt = array(

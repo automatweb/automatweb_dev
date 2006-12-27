@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.24 2006/12/22 12:26:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.25 2006/12/27 11:10:07 kristo Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects

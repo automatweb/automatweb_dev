@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.21 2006/12/22 11:58:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.22 2006/12/27 11:07:07 kristo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -26,7 +26,9 @@
 			
 	@property verified type=checkbox ch_value=1 field=meta method=serialize no_caption=1
 	@caption Kinnitatud
-			
+
+	@property unverify_reason type=text store=no no_caption=1
+
 	@property resource type=relpicker reltype=RELTYPE_RESOURCE field=meta method=serialize
 	@caption Ressurss
 	
@@ -93,6 +95,8 @@
 	@property sum type=text field=meta method=serialize
 	@caption Summa
 
+	@property modder type=text store=no no_caption=1
+	
 property summary type=textarea cols=80 rows=30 table=planner field=description no_caption=1
 caption Kokkuvõte
 
@@ -157,6 +161,14 @@ class reservation extends class_base
 			case "products_tbl":
 				$this->get_products_tbl;
 				break;
+
+			case "verified":
+				if ($prop["value"] == 1)
+				{
+					$prop["onclick"] = "document.changeform.reason.value=prompt(\"Sisestage t&uuml;histuse p&otilde;hjus\");submit_changeform(\"unverify\")";
+				}
+				break;
+				
 			case "sum":
 				$room_instance = get_instance(CL_ROOM);
 				$sum = $room_instance->cal_room_price(array(
@@ -195,7 +207,7 @@ class reservation extends class_base
 				$val = array();
 				foreach($amount as $product => $amt)
 				{
-					if($amt)
+					if($amt && $this->can("view", $product))
 					{
 						$prod=obj($product);
 						$val[] = $prod->name();
@@ -260,6 +272,7 @@ class reservation extends class_base
 		{
 			case "products_tbl":
 				$arr["obj_inst"]->set_meta("amount", $arr["request"]["amount"]);
+				$arr["obj_inst"]->set_meta("prod_discount", $arr["request"]["discount"]);
 				break;
 		}
 		return $retval;
@@ -312,6 +325,7 @@ class reservation extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["reason"] = " ";
 		if($_GET["calendar"]) 
 		{
 			$arr["calendar"] = $_GET["calendar"];
@@ -533,8 +547,7 @@ class reservation extends class_base
 // 						}
 // 					}
 // 					
-					
-					$shop_order_center->do_sort_packet_list($pl, $soc->meta("itemsorts"));
+					$shop_order_center->do_sort_packet_list($pl, $soc->meta("itemsorts"), $soc->prop("grouping"));
 				
 					// get the template for products for this folder
 					$layout = $shop_order_center->get_prod_layout_for_folder($soc, $room_obj->prop("resources_fld"));
@@ -571,8 +584,16 @@ class reservation extends class_base
 			"caption" => t("Nimi"),
 		));
 		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind")
+		));
+		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Kogus"),
+		));
+		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa")
 		));
 		//kui veebipoolne
 		if($arr["web"])
@@ -617,12 +638,17 @@ class reservation extends class_base
 			{			
 				$t->define_data(array(
 					"picture" => $image,
-					"name" => "<b>".$prod->name()."<b>",
+					"name" => "<b>".$prod->name()."<b> <i>".$prod->comment()."</i>",
 					"amount" =>  html::textbox(array(
 						"name"=>'amount['.$prod->id().']',
 						"value" => $amount[$prod->id()],
+						"size" => 5,
+						"onChange" => "el=document.getElementById('pr".$prod->id()."');el.innerHTML=this.value*".$prod->prop("price").";"
 					)),
+					"price" => number_format($prod->prop("price"), 2),
+					"sum" => "<span id='pr".$prod->id()."'>".number_format($prod->prop("price") * $amount[$prod->id()], 2)."</span>"
 				));
+				$sum += $prod->prop("price") * $amount[$prod->id()];
 			}
 			else
 			{
@@ -665,6 +691,27 @@ class reservation extends class_base
 			}
 		}
 		$t->set_sortable(false);
+		
+		$t->define_data(array(
+			"name" => t("Kogusumma"),
+			"sum" => number_format($sum, 2)
+		));
+
+		$disc = $sum * ($arr["obj_inst"]->meta("prod_discount") / 100.0);
+		$t->define_data(array(
+			"name" => t("Allahindlus (%)"),
+			"amount" => html::textbox(array(
+				"name" => "discount",
+				"value" => $arr["obj_inst"]->meta("prod_discount"),
+				"size" => 4
+			)),
+			"sum" => number_format($disc, 2)
+		));
+
+		$t->define_data(array(
+			"name" => t("<b>Summa</b>"),
+			"sum" => number_format($sum-$disc, 2)
+		));
 		return $t;
 	}
 
@@ -734,18 +781,44 @@ class reservation extends class_base
 
 	function _get_b_tb($arr)
 	{
-		if (!$this->can("delete", $arr["obj_inst"]->id()))
+		$tb =& $arr["prop"]["vcl_inst"];
+		if ($this->can("delete", $arr["obj_inst"]->id()))
+		{
+			$tb->add_button(array(
+				"name" => "delete_bron",
+				"tooltip" => t("Kustuta broneering"),
+				"confirm" => t("Kas oled kindel et soovid beroneeringut kustutada?"),
+				"img" => "delete.gif",
+				"action" => "del_bron"
+			));
+			$has = true;
+		}
+		if ($arr["obj_inst"]->prop("verified"))
+		{
+			$tb->add_button(array(
+				"name" => "unverify",
+				"tooltip" => t("T&uuml;hista kinnitus"),
+				"onClick" => "document.changeform.reason.value=prompt('Sisestage t&uuml;histuse p&otilde;hjus');submit_changeform('unverify')",
+				"action" => ""
+			));
+			$has = true;
+		}
+		if (!$has)
 		{
 			return PROP_IGNORE;
 		}
-		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_button(array(
-			"name" => "delete_bron",
-			"tooltip" => t("Kustuta broneering"),
-			"confirm" => t("Kas oled kindel et soovid beroneeringut kustutada?"),
-			"img" => "delete.gif",
-			"action" => "del_bron"
-		));
+	}
+
+	/**
+		@attrib name=unverify
+	**/
+	function unverify($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->set_prop("verified", 0);
+		$o->set_meta("unverify_reason", $arr["reason"]);
+		$o->save();
+		return $arr["post_ru"];
 	}
 
 	/**
@@ -767,7 +840,7 @@ class reservation extends class_base
 	{
 		if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 		{
-			return PROP_IGNORE;
+			return PROP_OK;
 		}
 		$cust = obj($arr["obj_inst"]->prop("customer"));
 		if ($cust->class_id() == CL_CRM_PERSON)
@@ -784,7 +857,7 @@ class reservation extends class_base
         {
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 {
-                        return PROP_IGNORE;
+                        return PROP_OK;
                 }
 
                 $cust = obj($arr["obj_inst"]->prop("customer"));
@@ -802,7 +875,7 @@ class reservation extends class_base
         {
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 {
-                        return PROP_IGNORE;
+                        return PROP_OK;
                 }
 
                 $cust = obj($arr["obj_inst"]->prop("customer"));
@@ -820,7 +893,7 @@ class reservation extends class_base
         {
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 {
-                        return PROP_IGNORE;
+                        return PROP_OK;
                 }
 
                 $cust = obj($arr["obj_inst"]->prop("customer"));
@@ -836,11 +909,19 @@ class reservation extends class_base
 	
 	function _set_cp_fn($arr)
 	{
-                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")) && $arr["prop"]["value"] != "")
                 {
-                        return PROP_IGNORE;
+			$cust = obj();
+			$cust->set_parent($arr["obj_inst"]->id() ? $arr["obj_inst"]->id() : $_POST["parent"]);
+			$cust->set_class_id(CL_CRM_PERSON);
+			$cust->save();
+			$arr["obj_inst"]->set_prop("customer", $cust->id());
                 }
 
+		if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+		{
+			return PROP_IGNORE;
+		}
                 $cust = obj($arr["obj_inst"]->prop("customer"));
                 if ($cust->class_id() == CL_CRM_PERSON)
                 {
@@ -892,6 +973,10 @@ class reservation extends class_base
 			$ph->save();
 			if (!$this->can("view", $cust->prop("phone")))
 			{
+				$cust->connect(array(
+					"to" => $ph->id(),
+					"type" => "RELTYPE_PHONE"
+				));
 				$cust->set_prop("phone", $ph->id());
 				$cust->save();
 			}
@@ -899,6 +984,63 @@ class reservation extends class_base
                 return PROP_IGNORE;
         }
 
+        function _set_cp_email($arr)
+        {
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                {
+                        return PROP_IGNORE;
+                }
 
+                $cust = obj($arr["obj_inst"]->prop("customer"));
+                if ($cust->class_id() == CL_CRM_PERSON)
+                {
+                        if ($this->can("view", $cust->prop("email")))
+                        {
+                                $ph = obj($cust->prop("email"));
+                        }
+                        else
+                        {
+                                $ph = obj();
+                                $ph->set_parent($cust->id());
+                                $ph->set_class_id(CL_ML_MEMBER);
+                        }
+                        $ph->set_name($arr["prop"]["value"]);
+			$ph->set_prop("mail", $arr["prop"]["value"]);
+                        $ph->save();
+                        if (!$this->can("view", $cust->prop("email")))
+                        {
+                                $cust->connect(array(
+                                        "to" => $ph->id(),
+                                        "type" => "RELTYPE_EMAIL"
+                                ));
+                                $cust->set_prop("email", $ph->id());
+                                $cust->save();
+                        }
+                }
+                return PROP_IGNORE;
+        }
+
+	function _get_modder($arr)
+	{
+		$u = get_instance(CL_USER);
+		$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
+		$mp = $u->get_person_for_uid($arr["obj_inst"]->modifiedby());
+		$arr["prop"]["value"] = sprintf(
+			t("Loomine: %s / %s.<br>Muutmine: %s / %s"),
+			html::obj_change_url($p),
+			date("d.m.Y H:i", $arr["obj_inst"]->created()),
+			html::obj_change_url($mp),
+			date("d.m.Y H:i", $arr["obj_inst"]->modified())
+		);
+	}
+
+	function _get_unverify_reason($arr)
+	{
+		if ($arr["obj_inst"]->meta("unverify_reason") == "")
+		{
+			return PROP_IGNORE;
+		}
+		$arr["prop"]["value"] = sprintf(t("Kinnituse eemaldamise p&otilde;hjus: %s"), $arr["obj_inst"]->meta("unverify_reason"));
+	}
 }
 ?>
