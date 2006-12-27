@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_userdefined.aw,v 1.1 2006/12/14 20:48:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_userdefined.aw,v 1.2 2006/12/27 11:15:17 kristo Exp $
 // auth_server_userdefined.aw - Autentimisserver kasutajadefineeritud 
 /*
 
@@ -8,7 +8,14 @@
 @default table=objects
 @default group=general
 
-@property code type=textarea rows=50 cols=50 field=meta method=serialize
+@property auto_create_user type=checkbox ch_value=1 field=meta method=serialize
+@caption Kas lastakse sisse logida kasutajatel, keda kohalikus s&uuml;steemis pole
+
+@property no_save_pwd type=checkbox ch_value=1 field=meta method=serialize
+@caption &Auml;ra salvesta AW'sse kasutaja parooli
+
+
+@property code type=textarea rows=50 cols=100 field=meta method=serialize
 @caption Kood
 */
 
@@ -47,11 +54,19 @@ class auth_server_userdefined extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function check_auth($server, $credentials)
+	function check_auth($server, $credentials, &$conf)
 	{
 		$code = $server->prop("code");
 		eval($code);
-		return $res;
+
+		if ($res[0] == true)
+		{
+			if ($conf->check_local_user($server->id(), $credentials))
+			{
+				return $res;
+			}
+		}
+		return array(false, "");
 	}
 }
 ?>
