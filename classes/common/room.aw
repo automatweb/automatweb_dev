@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.77 2006/12/27 12:34:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.78 2006/12/27 13:27:33 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1398,13 +1398,16 @@ class room extends class_base
 		{
 			$len = floor(($_GET["end"] - $_GET["start"]) / 86400);
 		}
-		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
+		
+		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
+		while($step < floor($steps))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
 			$x = 0;
 			$start_step = $today_start + $step * $step_length * $arr["obj_inst"]->prop("time_step");
 			$end_step = $start_step + $step_length * $arr["obj_inst"]->prop("time_step");
 			$visible = 0;
+			
 			while($x<7)
 			{
 				if(!is_object($this->openhours) || $this->is_open($start_step,$end_step))
