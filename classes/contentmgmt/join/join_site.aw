@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.33 2006/12/14 12:34:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.34 2006/12/27 13:31:58 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
+
+EMIT_MESSAGE(MSG_USER_JOINED)
 
 @classinfo syslog_type=ST_JOIN_SITE relationmgr=yes no_comment=1 no_status=1
 
@@ -802,7 +804,7 @@ class join_site extends class_base
 						}
 						else
 						{
-							$tp[$pid]["type"] = "textbox";
+						//	$tp[$pid]["type"] = "textbox";
 						}
 						unset($tp[$pid]["size"]);
 					}
@@ -1170,6 +1172,10 @@ class join_site extends class_base
 						);
 					}
 				}
+
+				post_message("MSG_USER_JOINED", array(
+					"user" => $u_oid
+				));
 
 				// we also gots to clear out all the join data
 				aw_session_set("site_join_status", array());
