@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.183 2006/12/14 10:06:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.184 2006/12/27 11:03:29 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -321,6 +321,11 @@ class image extends class_base
 			{
 				$size = @getimagesize($idata["meta"]["file2"]);
 			};
+			if ($this->can("view", $idata["meta"]["big_flash"]))
+			{
+				$flo = obj($idata["meta"]["big_flash"]);
+				$size = array($flo->prop("width"), $flo->prop("height"));
+			}
 			$bi_show_link = $this->mk_my_orb("show_big", $show_link_arr);
 			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0));
 			$popup_height = max(5, $size[1]);// + ($do_comments ? 200 : 0);
@@ -379,7 +384,7 @@ class image extends class_base
 				"comments" => $num_comments,
 			);
 
-			if ($this->can("view", $idata["big_flash"]))
+			if ($this->can("view", $idata["meta"]["big_flash"]))
 			{
 				$idata["big_url"] = " ";
 			}
@@ -389,7 +394,6 @@ class image extends class_base
 				$ha = localparse($tpls["HAS_AUTHOR"], $vars);
 			}
 			$vars["HAS_AUTHOR"] = $ha;
-			
 			if ($this->is_flash($idata["file"]))
 			{
 				$replacement = localparse($tpls["image_flash"],$vars);
@@ -422,16 +426,16 @@ class image extends class_base
 					}
 					if ($idata["comment"] != "" || $authortxt != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'/></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
 					}
 					else
 					if ($vars["align"] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'/></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
 					}
 					else
 					{
-						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a>", $idata["link"], $vars["target"], $idata["url"]);
+						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'/></a>", $idata["link"], $vars["target"], $idata["url"]);
 					}
 				};
 			}
@@ -455,7 +459,6 @@ class image extends class_base
 					}
 					$inplace = 0;
 				};
-
 				if (isset($tpls[$tpl]))
 				{
 					$replacement = localparse($tpls[$tpl],$vars);
@@ -471,7 +474,7 @@ class image extends class_base
 					{
 						$replacement .= "<a href=\"javascript:void(0)\" onClick=\"$bi_link\">";
 					};
-					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\" class=\"$use_style\">";
+					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\" class=\"$use_style\"/>";
 					if (!empty($idata["big_url"]) || $do_comments)
 					{
 						$replacement .= "</a>";
@@ -1430,17 +1433,17 @@ class image extends class_base
 	
 		$im = $this->get_image_by_id($id);
 		$imo = obj($id);
-		
+		$this->read_any_template("show_big.tpl");
+		lc_site_load("image", &$this);
 		if ($this->can("view", $imo->prop("big_flash")))
 		{
 			$fli = get_instance(CL_FLASH);
 			$this->vars(array(
-				"FLASH" => $fli->show(array("id" => $imo->prop("big_flash")))
+				"FLASH" => $fli->view(array("id" => $imo->prop("big_flash")))
 			));
 		}
 		else
 		{
-			$this->read_any_template("show_big.tpl");
 			if (empty($im['meta']['file2']) || !is_file($im['meta']['file2']))
 			{
 				$img_url = $im['url']; // Revert to small image
