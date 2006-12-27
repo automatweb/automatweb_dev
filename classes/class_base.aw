@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.526 2006/12/12 10:26:52 kristo Exp $
+// $Id: class_base.aw,v 2.527 2006/12/27 10:59:45 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4548,10 +4548,19 @@ class class_base extends aw_template
 		$this->grpmap = array();
 		$this->active_groups = array();
 
+		$si = __get_site_instance();
+		$has_cb = method_exists($si, "callback_get_group_display");
+		
 		// now, how do I make sure what level a group has?
 		foreach($this->groupinfo as $gkey => $ginfo)
 		{
-
+			if ($has_cb)
+			{
+				if ($si->callback_get_group_display($arr["clid"], $gkey, $ginfo) == PROP_IGNORE)
+				{
+					continue;
+				}
+			}
 			// I need some kind of additional array, thats what I need!
 			$parent = 0;
 			if ($ginfo["parent"])
@@ -4916,7 +4925,6 @@ class class_base extends aw_template
 			// if the class has a default config file, then load
 			// that as well
 		};
-
 		return $rv;
 	}
 
@@ -5142,7 +5150,7 @@ class class_base extends aw_template
 			$o = $o->get_original();
 		}
 		$l = get_instance("languages");
-		$ll = $l->get_list(array("all_data" => true));
+		$ll = $l->get_list(array("all_data" => true, "set_for_user" => true));
 		$all_vals = $o->meta("translations");
 		$repls = array(
 			chr(197).chr(161) => "&scaron;",
@@ -5158,9 +5166,16 @@ class class_base extends aw_template
 			chr(195).chr(150) => "&Ouml;",
 			chr(195).chr(132) => "&Auml;",
 		);
+		$uo = obj(aw_global_get("uid_oid"));
+		$uo = $uo->prop("target_lang");
+		
 		foreach($ll as $lid => $lang)
 		{
 			if ($lid == $o->lang_id())
+			{
+				continue;
+			}
+			if (is_array($uo) && count($uo) && !isset($uo[$lid]))
 			{
 				continue;
 			}
@@ -5248,7 +5263,7 @@ class class_base extends aw_template
 				$nm = "trans_".$lid."_".$p;
 				$ret[$nm] = array(
 					"name" => $nm,
-					"caption" => $pl[$p]["caption"],
+					"caption" => t($pl[$p]["caption"]),
 					"type" => $pl[$p]["type"],
 					"value" => iconv($lang["charset"], "UTF-8", $vals[$p])
 				);
