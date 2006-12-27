@@ -184,6 +184,7 @@ class html extends aw_template
 		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
 		$autocomplete = "";
 		$js_name = str_replace(array("[", "]", "-"), "_", $name);
+		$onchange = $onChange != "" ? "onChange=\"$onChange\"" : "";
 
 		### compose autocompletes source url
 		if (is_admin() && ($autocomplete_source or is_array($options) or $autocomplete_source_method))
@@ -272,7 +273,7 @@ class html extends aw_template
 				$value = $content;
 			}
 		}
-		return "<input type=\"text\" id=\"$id\" $ac_off name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti} />$post_append_text\n{$value_elem}{$autocomplete}";
+		return "<input type=\"text\" id=\"$id\" $ac_off name=\"$name\" $onchange size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti} />$post_append_text\n{$value_elem}{$autocomplete}";
 	}
 
 	/**
