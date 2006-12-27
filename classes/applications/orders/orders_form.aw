@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.17 2005/05/23 14:48:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.18 2006/12/27 16:49:56 dragut Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -239,7 +239,7 @@ class orders_form extends class_base
 				return aw_ini_get("baseurl");
 			}
 		}
-		
+
 		if(!is_oid($_SESSION["order_cart_id"]) || !$this->can("view", $_SESSION["order_cart_id"]) || !$_SESSION["order_form_id"])
 		{
 			$order = new object();
