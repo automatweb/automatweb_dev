@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.22 2006/12/15 10:56:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.23 2006/12/27 11:06:01 kristo Exp $
 
 /*
 
@@ -464,14 +464,14 @@ class banner extends class_base
 			{
 				$this->add_click($bid);
 				$ba = obj($bid);
-				header("Location: ".$ba->prop("url"));
+				header("Location: ".$ba->trans_get_val("url"));
 				die();
 			}
 
 			if ($gid)
 			{
 				$ret = $this->find_url($ss,$gid);
-				header("Location: ".$ret->prop("url"));
+				header("Location: ".$ret->trans_get_val("url"));
 				die();
 			}
 		}
@@ -572,11 +572,11 @@ class banner extends class_base
 						$img = $i->get_url_by_id($content_o->id());
 						if ($banner->prop("url") == "")
 						{
-							$html = "<img border='0' src='$img'>";
+							$html = "<img alt='' border='0' src='$img'/>";
 						}
 						else
 						{
-							$html = "<a $target href='$url'><img border='0' src='$img'></a>";
+							$html = "<a $target href='$url'><img alt='' border='0' src='$img'/></a>";
 						}
 						break;
 
@@ -585,7 +585,7 @@ class banner extends class_base
 						$f_url = $i->get_url($content_o->id(), $content_o->name());
 						if ($i->can_be_embedded($content_o))
 						{
-							$c_html = "<img border='0' src='$f_url'>";
+							$c_html = "<img border='0' src='$f_url' alt=''/>";
 						}
 						else
 						{
