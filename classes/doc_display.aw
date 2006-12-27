@@ -76,11 +76,11 @@ class doc_display extends aw_template
 		}
 
 		$user1 = $doc->prop("user1");
-		$al->parse_oo_aliases($doc->id(), &$user1);
+		$al->parse_oo_aliases($doc->id(), &$user1, array("templates" => $this->templates, "meta" => $mt));
 		$userta1 = $doc->prop("userta1");
-		$al->parse_oo_aliases($doc->id(), &$userta1);
+		$al->parse_oo_aliases($doc->id(), &$userta1, array("templates" => $this->templates, "meta" => $mt));
 		$userta5 = $doc->prop("userta5");
-		$al->parse_oo_aliases($doc->id(), &$userta5);
+		$al->parse_oo_aliases($doc->id(), &$userta5, array("templates" => $this->templates, "meta" => $mt));
 		$this->vars(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
