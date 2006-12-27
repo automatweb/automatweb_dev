@@ -1881,8 +1881,16 @@ class user extends class_base
 		@returns
 		User group object
 	**/
-	function get_highest_pri_grp_for_user($uid)
+	function get_highest_pri_grp_for_user($uid, $no_user_grp = false)
 	{
+		if ($uid == "")
+		{
+			// return non logged in users group
+			$nlu = $this->get_cval("non_logged_in_users_group");
+			$ui = get_instance("users");
+			$gd = $ui->fetchgroup($nlu);
+			return obj($gd["oid"]);
+		}
 		$groups = &$this->get_groups_for_user($uid);
 		if(!$groups)
 		{
@@ -1892,6 +1900,11 @@ class user extends class_base
 			"prop" => "priority",
 			"order" => "desc"
 		));
+		if (!no_user_grp)
+		{
+			$tmp = $groups->begin();
+			return $tmp->next();
+		}
 		return $groups->begin();
 	}
 
