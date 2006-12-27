@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Styles>
-	<Style name="Remove style" element="span">
-		<Attribute name="style" value="font-weight: normal; font-style:none;font-size:12px;color:black;text-decoration:none;" />
-	</Style>
 	<Style name="Image on left" element="img">
 		<Attribute name="style" value="padding: 5px; margin-right: 5px" />
 		<Attribute name="border" value="0" />
@@ -13,9 +10,6 @@
 		<Attribute name="border" value="0" />
 		<Attribute name="align" value="right" />
 	</Style>
-	<Style name="Heading 1" element="h1" />
-	<Style name="Heading 2" element="h2" />
-	<Style name="Heading 3" element="h3" />
 	<Style name="Regular bold" element="span">
 		<Attribute name="style" value="font-weight: bold;" />
 	</Style>
@@ -23,17 +17,7 @@
 	<Style name="Title" element="span">
 		<Attribute name="class" value="Title" />
 	</Style>
-	<Style name="Code" element="span">
-		<Attribute name="class" value="Code" />
-	</Style>
-	<Style name="Horisontal ruler" element="hr">
-		<Attribute name="size" value="1" />
-		<Attribute name="color" value="#ff0000" />
-	</Style>
-	<Style name="Vahepealkiri" element="span">
-		<Attribute name="class" value="vahepealkiri" />
-	</Style>
-	<Style name="Quotation" element="p">
+	<Style name="Quotation" element="div">
 		<Attribute name="class" value="quote" />
 	</Style>
 </Styles>

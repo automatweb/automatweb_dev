@@ -7,6 +7,15 @@ var bronErrors = Array();
 bronErrors["CANT_BRON"] = "Ei saa broneerida";
 
 /**
+	* does bron and goes to the next step as well
+**/
+function doBronExec(strId, intCalendarIntervall, intRoomReservationLength, intProduct)
+{
+	doBron(strId, intCalendarIntervall, intRoomReservationLength, intProduct);
+	submit_changeform('do_add_reservation');
+}
+
+/**
  * Does the bronning work
  *
  * @param strId 

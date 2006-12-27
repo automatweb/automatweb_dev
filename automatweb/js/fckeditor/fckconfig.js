@@ -87,8 +87,8 @@ FCKConfig.ToolbarSets["aw"] = [
        ['OrderedList','UnorderedList','-','Outdent','Indent'],
        ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
        ['awlup','Unlink','Anchor'],
-       ['awimageupload','awfup','Table'],
-       ['Style']
+       ['awimageupload','awfup','Table','Rule'],
+       ['Style','FontFormat']
 ] ;
 
 
