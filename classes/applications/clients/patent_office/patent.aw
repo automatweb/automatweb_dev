@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.29 2006/12/27 11:32:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.30 2006/12/27 16:05:41 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -30,7 +30,7 @@
 	@property procurator type=relpicker reltype=RELTYPE_PROCURATOR
 	@caption Volinik
 	
-	@property warrant type=fileupload
+	@property warrant type=fileupload reltype=RELTYPE_WARRANT
 	@caption Volikiri
 	
 	@property authorized_person type=relpicker reltype=RELTYPE_AUTHORIZED_PERSON
@@ -148,7 +148,7 @@
 	@property payment_date type=date_select 
 	@caption Makse kuup&auml;ev
 	
-	@property payment_order type=fileupload
+	@property payment_order type=fileupload reltype=RELTYPE_PAYMENT_ORDER
 	@caption Maksekorraldus
 	
 
@@ -169,8 +169,8 @@ default group=web
 @reltype PROCURATOR value=2 clid=CL_CRM_PERSON
 @caption Volinik
 
-reltype WARRANT value=3 clid=CL_FILE
-caption Volikiri
+@reltype WARRANT value=3 clid=CL_FILE
+@caption Volikiri
 
 @reltype REPRODUCTION value=9 clid=CL_FILE
 @caption Volikiri
@@ -201,6 +201,10 @@ caption Volikiri
 
 @reltype G_STATUES value=13 clid=CL_FILE
 @caption Garantiip&otilde;hikiri
+
+@reltype PAYMENT_ORDER value=14 clid=CL_FILE
+@caption Volikiri
+
 */
 
 class patent extends class_base
@@ -476,11 +480,24 @@ class patent extends class_base
 				"name" => $ob->prop("name"),
 			));
 			$this->vars($this->get_data_from_object($arr["id"]));
+			$prods = $ob->meta("products");
 		}
 		else
 		{
 			$this->vars($this->web_data($arr));
+			$prods = $_SESSION["patent"]["products"];
+	//		foreach($_SESSION["patent"]["applicants"] as $app)
+	//		{
+	//			foreach()
+	//		}
 		}
+		$p = "";
+		foreach($prods as $key => $product)
+		{
+			$this->vars(array("product" => $product, "class"=> $key));
+			$p.=$this->parse("PRODUCTS");
+		}
+		$this->vars(array("PRODUCTS" => $p));
 		return $this->parse();
 	}
 
@@ -494,7 +511,7 @@ class patent extends class_base
 		$correspond_address = "";
 		if($this->is_template("APPLICANT"))
 		{
-			foreach($patent->connections_from(array("type" => "RELTYPE_APPLICANT")) as $key => $c)
+			foreach($o->connections_from(array("type" => "RELTYPE_APPLICANT")) as $key => $c)
 			{
 				$applicant = $c->to();
 				$this->vars(array(
@@ -542,12 +559,20 @@ class patent extends class_base
 				$a.= $this->parse("APPLICANT");
 			}
 		}
+		
 		$props = $this->text_area_vars + $vars;
 		$data = array();
 		$data["APPLICANT"] = $a;
 		$tr = $o->prop("trademark_type");
 		$data["trademark_type_value"] = $tr[0]? $this->trademark_types[0]:""." ".$tr[1]? $this->trademark_types[1]:"";
 		$data["type_value"] = $this->types[$o->prop("type")];
+		if(is_oid($o->prop("authorized_person")))
+		{
+			$ap = obj($o->prop("authorized_person"));
+			$data["authorized_person_firstname_value"] = $ap->prop("firstname");
+			$data["authorized_person_lastname_value"] = $ap->prop("lastname");
+			$data["authorized_person_code_value"] = $ap->prop("personal_id");
+		}
 		foreach($props as $prop)
 		{
 			$data[$prop."_value"] = $o->prop($prop);
@@ -575,6 +600,7 @@ class patent extends class_base
 		{
 			$_SESSION["patent"][$var] = $patent->prop($var);
 			//$_SESSION["patent"][$var] = date("d",$patent->prop($var))."/".date("m",$patent->prop($var))."/".date("Y",$patent->prop($var));
+			
 		}
 		
 		if($_SESSION["patent"]["trademark_type"][0])
@@ -820,7 +846,8 @@ class patent extends class_base
 	function get_applicant_sub()
 	{
 		$applicant_vars = array("name", "firstname" , "lastname", "code", "street" , "city" , "index" , "country_code" , "phone" , "fax", "applicant_type" , "email", "correspond_country_code","correspond_street","correspond_index","correspond_city", "country");
-		foreach($_SESSION["patent"]["applicants"] as $key => $a)
+		$a = "";
+		foreach($_SESSION["patent"]["applicants"] as $key => $val)
 		{
 			foreach($applicant_vars as $var)
 			{
@@ -883,11 +910,16 @@ class patent extends class_base
 		}
 		foreach($this->date_vars as $var)
 		{
+			if(is_array($_SESSION["patent"][$var]))
+			{
+				$_SESSION["patent"][$var] = mktime(0,0,0,$_SESSION["patent"][$var]["month"],$_SESSION["patent"][$var]["day"],$_SESSION["patent"][$var]["year"]);
+			}
 			if(!($_SESSION["patent"][$var] >1) )
 			{
 				$_SESSION["patent"][$var] = -1;
 			}
 			$data[$var] = html::date_select(array("name" => $var, "value" => $_SESSION["patent"][$var] , "buttons" => 1));
+			$data[$prop."_value"] = date("j:m:Y" ,$_SESSION["patent"][$var]);
 		}
 
 		
@@ -1018,6 +1050,8 @@ class patent extends class_base
 			document.getElementById("reg_code").style.display="";',
 		));
 
+		$data["type_text"] = $this->types[$_SESSION["patent"]["type"]];
+		//$data["products_value"] = $this->_get_products_and_services_tbl();
 		$data["type"] = html::radiobutton(array(
 				"value" => 0,
 				"checked" => !$_SESSION["patent"]["type"],
@@ -1052,6 +1086,8 @@ class patent extends class_base
 				"name" => "guaranty_trademark",
 				"onclick" => 'document.getElementById("g_statues_row").style.display = "";'
 			)).t("Garantiim&auml;rk");
+		$data["trademark_type_text"] = ($_SESSION["patent"]["co_trademark"]) ? t("Kollektiivkaubam&auml;rk") : "" . ($_SESSION["patent"]["guaranty_trademark"]) ? t("Garantiim&auml;rk") : "";
+		
 		$dummy = obj($arr["alias"]["to"]);
 		$parent = $_SESSION["patent"]["parent"] = $data["parent"] = $dummy->prop("trademarks_menu");
 /*		$procurator_l = new object_list(array(
@@ -1067,6 +1103,7 @@ class patent extends class_base
 			$procurator = obj($_SESSION["patent"]["procurator"]);
 			$procurator_name = $procurator->name();
 			$procurator_code = $procurator->prop("code");
+			$data["procurator_text"] = $procurator_name;
 		}
 		
 		if (aw_global_get("uid") != "")
@@ -1900,7 +1937,7 @@ class patent extends class_base
 			
 			if(is_object($correspond_address))
 			{
-				$applicant->set_prop("address" , $correspond_address->id());
+				$applicant->set_prop("correspond_address" , $correspond_address->id());
 				$applicant->connect(array("to"=> $correspond_address->id(), "type" => "RELTYPE_CORRESPOND_ADDRESS"));
 			}
 			
@@ -1914,7 +1951,7 @@ class patent extends class_base
 				$phone->set_parent($applicant->id());
 				$phone->save();
 				$applicant->connect(array("to"=> $phone->id(), "type" => "RELTYPE_PHONE"));
-				$applicant->set_prop("phone" , $phone->id());
+				if(!$type) $applicant->set_prop("phone" , $phone->id());
 			}
 			if($val["email"])
 			{
@@ -1925,7 +1962,7 @@ class patent extends class_base
 				$email->set_parent($applicant->id());
 				$email->save();
 				$applicant->connect(array("to"=> $email->id(), "type" => "RELTYPE_EMAIL"));
-				$applicant->set_prop("email" , $phone->id());
+				if(!$type) $applicant->set_prop("email" , $email->id());
 			}
 			if($val["fax"])
 			{
@@ -2080,7 +2117,7 @@ class patent extends class_base
 				
 				$this->vars(array(
 					"date" 		=> date("j.m.Y" , $patent->created()),
-					"nr" 		=> ($patent->prop("convention_nr")) ? $patent->prop("convention_nr") : t("Number puudub"),
+					"nr" 		=> ($patent->prop("nr")) ? $patent->prop("nr") : t("Number puudub"),
 					"applicant" 	=> $patent->prop_str("applicant"),
 					"type" 		=> $this->types[$patent->prop("type")],
 					"state" 	=> ($patent->prop("verified")) ? t("Vastu v&otilde;etud") : t(""),

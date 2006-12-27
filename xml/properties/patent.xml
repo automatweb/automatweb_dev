@@ -49,6 +49,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>fileupload</type>
+            <reltype>RELTYPE_WARRANT</reltype>
             <caption>Volikiri</caption>
       </property>
       <property>
@@ -338,6 +339,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>fileupload</type>
+            <reltype>RELTYPE_PAYMENT_ORDER</reltype>
             <caption>Maksekorraldus</caption>
       </property>
       <classinfo>
@@ -375,6 +377,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Volinik</caption>
             </PROCURATOR>
+            <WARRANT>
+                  <value>3</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Volikiri</caption>
+            </WARRANT>
             <REPRODUCTION>
                   <value>9</value>
                   <clid>CL_FILE</clid>
@@ -425,6 +432,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Garantiip&amp;amp;otilde;hikiri</caption>
             </G_STATUES>
+            <PAYMENT_ORDER>
+                  <value>14</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Volikiri</caption>
+            </PAYMENT_ORDER>
       </reltypes>
 </properties>
 
