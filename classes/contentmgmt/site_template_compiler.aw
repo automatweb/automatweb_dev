@@ -1438,7 +1438,7 @@ class site_template_compiler extends aw_template
 
 		$this->brace_level--;
 		$ret  = $this->_gi()."}\n";
-		$ret .= $this->_gi()."\$this->vars(array(\"".$arr["tpl"]."\" => ".$content_name."));\n";
+		$ret .= $this->_gi()."\$this->vars_safe(array(\"".$arr["tpl"]."\" => ".$content_name."));\n";
 		return $ret;
 	}
 
@@ -1540,7 +1540,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."if (".$content_name." != \"\")\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$ret .= $this->_gi()."\$this->vars_safe(array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \$this->parse(\"".$arr["fq_tpl"]."\")\n";
 		$this->brace_level--;
@@ -1551,7 +1551,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."else\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$ret .= $this->_gi()."\$this->vars_safe(array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \"\"\n";
 		$this->brace_level--;
@@ -1580,7 +1580,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."if (".$content_name." == \"\")\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$ret .= $this->_gi()."\$this->vars_safe(array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \$this->parse(\"".$arr["fq_tpl"]."\")\n";
 		$this->brace_level--;
@@ -1591,7 +1591,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."else\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$ret .= $this->_gi()."\$this->vars_safe(array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \"\"\n";
 		$this->brace_level--;
@@ -2128,7 +2128,7 @@ class site_template_compiler extends aw_template
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 
-			$res .= $this->_gi()."\$this->vars(array(\n";
+			$res .= $this->_gi()."\$this->vars_safe(array(\n";
 			$this->brace_level++;
 
 				$res .= $this->_gi()."\"".$tpl."\" => $content_name\n";
@@ -2156,7 +2156,7 @@ class site_template_compiler extends aw_template
 
 			$this->brace_level--;
 			$res .= $this->_gi()."}\n";
-			$res .= $this->_gi()."\$this->vars(array(\"".$grp_tpl."\" => ".$grp_ct_name."));\n";
+			$res .= $this->_gi()."\$this->vars_safe(array(\"".$grp_tpl."\" => ".$grp_ct_name."));\n";
 		}
 		return $res;
 	}
