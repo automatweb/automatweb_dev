@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.32 2006/12/08 10:10:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.33 2006/12/27 11:10:46 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -490,11 +490,14 @@ class links extends class_base
 	function gen_link_alias_for_doc($arr)
 	{
 		$c = new connection();
-		$c->load(array(
-			"from" => $arr["doc_id"],
-			"to" => $arr["link_id"],
-		));
-		$c->save();
+		if (is_oid($doc_id))
+		{
+			$c->load(array(
+				"from" => $arr["doc_id"],
+				"to" => $arr["link_id"],
+			));
+			$c->save();
+		}
 		$close = "<script language=\"javascript\">
 		javascript:window.parent.close();
 		</script>";

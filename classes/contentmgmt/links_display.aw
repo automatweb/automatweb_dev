@@ -115,7 +115,6 @@ class links_display
 			$url = $linksrc;
 			$target = $link->prop("newwindow") ? "target='_blank'" : "";
 		};
-
 		return array($url,$target,$link->trans_get_val("name"));
 	}
 }
