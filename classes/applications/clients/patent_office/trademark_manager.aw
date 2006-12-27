@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.6 2006/12/21 09:12:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.7 2006/12/27 11:14:23 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -343,6 +343,7 @@ class trademark_manager extends class_base
 						$this->mk_my_orb("verify",array(
 							"popup" => 1,
 							"sel" => array($o->id() => $o->id()),
+							"id" => $arr["obj_inst"]->id(),
 						))
 					.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 				)),
@@ -479,10 +480,20 @@ class trademark_manager extends class_base
 	**/
 	function verify($arr)
 	{
+		$object = obj($arr["id"]);
+		if(is_oid($object->prop("verified_menu")))
+		{
+			$parent = $object->prop("verified_menu");
+		}
 		foreach($arr["sel"] as $id)
 		{
 			$o = obj($id);
 			$o->set_prop("verified",1);
+			
+			if($parent)
+			{
+				$o->set_parent($parent);
+			}
 			$o->save();
 		}
 		if($arr["popup"])
