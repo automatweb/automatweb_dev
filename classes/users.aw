@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.168 2006/10/04 13:34:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.169 2006/12/27 11:04:58 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1524,7 +1524,7 @@ class users extends users_user
 				// remove stale hash table entries
 				$this->db_query("DELETE FROM user_hashes WHERE hash_time < ".(time() - 60*24*3600));
 				//return (substr(aw_ini_get("baseurl"),0,5) == "https")?str_replace("http","https",aw_ini_get("baseurl")):aw_ini_get("baseurl");
-				return aw_ini_get("baseurl");
+				return $arr["return_url"]?$arr["return_url"]:aw_ini_get("baseurl");
 			}
 		}
 		return parent::login($arr);
