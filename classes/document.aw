@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.361 2006/11/29 11:49:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.362 2006/12/27 11:01:59 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -36,7 +36,8 @@ class document extends aw_template
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
 		$this->metafields = array("show_print","show_last_changed","show_real_pos","dcache");
 
-		lc_site_load("document",$this);
+
+		lc_site_load("document",&$this);
 
 		if (isset($GLOBALS["lc_document"]) && is_array($GLOBALS["lc_document"]))
 		{
