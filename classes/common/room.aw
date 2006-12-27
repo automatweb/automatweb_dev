@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.78 2006/12/27 13:27:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.79 2006/12/27 15:46:58 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -472,7 +472,25 @@ class room extends class_base
 		if ($arr["request"]["set_view_dates"])
 		{
 			$arr["args"]["start"] = date_edit::get_timestamp($arr["request"]["set_d_from"]);
-			$arr["args"]["end"] = date_edit::get_timestamp($arr["request"]["set_d_to"]);
+			if ($arr["request"]["set_view_dates"] == 1)
+			{
+				$arr["args"]["end"] = date_edit::get_timestamp($arr["request"]["set_d_to"]);
+			}
+			else
+			if ($arr["request"]["set_view_dates"] == 2)
+			{
+				 $arr["args"]["end"] = $arr["args"]["start"] + 24*3600;
+			}
+			else
+			if ($arr["request"]["set_view_dates"] == 3)
+			{
+				$arr["args"]["end"] = $arr["args"]["start"] + 24*3600*7;
+			}
+			else
+			if ($arr["request"]["set_view_dates"] == 4)
+			{
+				$arr["args"]["end"] = $arr["args"]["start"] + 24*3600*31;
+			}
 		}
 	}
 
@@ -1258,7 +1276,7 @@ class room extends class_base
 		$weekstart = mktime(0,0,0,1,1,date("Y" , time())) + (date("z" , time()) - date("w" , time()) + 1)*86400;
 		while($x<20)
 		{
-			$url = aw_url_change_var("start",$weekstart,get_ru());
+			$url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
 			$options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
 			if($arr["request"]["start"] == $weekstart) $selected = $url;
 			$weekstart = $weekstart + 604800;
@@ -1306,9 +1324,18 @@ class room extends class_base
 			"name" => "set_d_to",
 			"value" => $_GET["end"]
 		))." ".html::button(array(
-                        "onclick" => "document.changeform.set_view_dates=1;submit_changeform();",
+                        "onclick" => "document.changeform.set_view_dates.value=1;submit_changeform();",
                         "value" => t("N&auml;ita vahemikku")
-                ));
+                ))." ".html::button(array(
+			"onclick" => "document.changeform.set_view_dates.value=2;submit_changeform();",
+			"value" => t("P&auml;ev")
+		))." ".html::button(array(
+			"onclick" => "document.changeform.set_view_dates.value=3;submit_changeform();",
+			"value" => t("N&auml;dal")
+		))." ".html::button(array(
+			"onclick" => "document.changeform.set_view_dates.value=4;submit_changeform();",
+			"value" => t("Kuu")
+		));
 		$arr["prop"]["value"] = $ret;
 		return $ret;
 	}
@@ -1334,7 +1361,8 @@ class room extends class_base
  			$open = $this->open = $open_inst->get_times_for_date($this->openhours, $time);
 		}
 		$this->start = $arr["request"]["start"];
-		$this->generate_res_table($arr["obj_inst"]);
+		// do this later, so we can feed it the start/end date
+		//$this->generate_res_table($arr["obj_inst"]);
 
 		exit_function("get_calendar_tbl");
 		//see siis näitab miskeid valitud muid nädalaid
@@ -1391,24 +1419,26 @@ class room extends class_base
  			}
 		}
 
-		$this->_init_calendar_t($t,$this->start);
 		enter_function("get_calendar_tbl::3");
 		$len = 7;
 		if ($_GET["start"] && $_GET["end"])
 		{
 			$len = floor(($_GET["end"] - $_GET["start"]) / 86400);
 		}
+		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len);
+		$this->_init_calendar_t($t,$this->start, $len);
 		
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
-		while($step < floor($steps))
+		// this seems to fuck up in reval room calendar view and only display time to 15:00
+		//while($step < floor($steps))
+		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
 			$x = 0;
 			$start_step = $today_start + $step * $step_length * $arr["obj_inst"]->prop("time_step");
 			$end_step = $start_step + $step_length * $arr["obj_inst"]->prop("time_step");
 			$visible = 0;
-			
-			while($x<7)
+			while($x<$len)
 			{
 				if(!is_object($this->openhours) || $this->is_open($start_step,$end_step))
 				{
@@ -1421,6 +1451,7 @@ class room extends class_base
 						
 					)))
 					{
+//					echo "is availabale for ".date("d.m.Y H:i", $start_step)." - ".date("d.m.Y H:i", $end_step)." <br>";
 						$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
 						$arr["timestamp"] = $start_step;$prod_menu="";
 						if($arr["obj_inst"]->prop("use_product_times"))
@@ -1565,45 +1596,20 @@ class room extends class_base
 				$end_step += 86400;
 //				$today_start += 86400;
 			}
-			if($visible){
-				$t->define_data(array(
-					"time" => date("G:i" , $today_start+ $step*$step_length*$arr["obj_inst"]->prop("time_step")),//." - ".date("G:i" , $today_start+ ($step+1)*$step_length*$arr["obj_inst"]->prop("time_step")), //$step.":00-".($step + $arr["obj_inst"]->prop("time_step")).":00".html::hidden(array("name" => "step" , "value" => $step)),
-					"d0" => $d[0],
-					"d1" => $d[1],
-					"d2" => $d[2],
-					"d3" => $d[3],
-					"d4" => $d[4],
-					"d5" => $d[5],
-					"d6" => $d[6],
-					"id0" => $ids[0],
-					"id1" => $ids[1],
-					"id2" => $ids[2],
-					"id3" => $ids[3],
-					"id4" => $ids[4],
-					"id5" => $ids[5],
-					"id6" => $ids[6],
-					"onclick0" => $onclick[0],
-					"onclick1" => $onclick[1],
-					"onclick2" => $onclick[2],
-					"onclick3" => $onclick[3],
-					"onclick4" => $onclick[4],
-					"onclick5" => $onclick[5],
-					"onclick6" => $onclick[6],
-					"col0" => $col[0],
-					"col1" => $col[1],
-					"col2" => $col[2],
-					"col3" => $col[3],
-					"col4" => $col[4],
-					"col5" => $col[5],
-					"col6" => $col[6],
-					"rowspan0" => $rowspan[0],
-					"rowspan1" => $rowspan[1],
-					"rowspan2" => $rowspan[2],
-					"rowspan3" => $rowspan[3],
-					"rowspan4" => $rowspan[4],
-					"rowspan5" => $rowspan[5],
-					"rowspan6" => $rowspan[6],
-				));
+			if($visible)
+			{
+				$tmp_row_data = array(
+					"time" => date("G:i" , $today_start+ $step*$step_length*$arr["obj_inst"]->prop("time_step"))
+				);
+				for($i = 0; $i < $len; $i++)
+				{
+					$tmp_row_data["d".$i] = $d[$i];
+					$tmp_row_data["id".$i] = $ids[$i];
+					$tmp_row_data["onclick".$i] = $onclick[$i];
+					$tmp_row_data["col".$i] = $col[$i];
+					$tmp_row_data["rowspan".$i] = $rowspan[$i];
+				}
+				$t->define_data($tmp_row_data);
 			}
 			$step = $step + 1;
 		}
@@ -1750,7 +1756,7 @@ class room extends class_base
 		
 	}
 
-	function _init_calendar_t(&$t,$time=0)
+	function _init_calendar_t(&$t,$time=0, $len = 7)
 	{
 		if(!$time)
 		{
@@ -1762,70 +1768,24 @@ class room extends class_base
 			"caption" => t("Aeg"),
 			"width" => "20px",
 		));
-		if($this->is_open_day($time))
-		$t->define_field(array(
-			"name" => "d0",
-			"caption" => substr(date("l" , $time) , 0 , 2).date(" d/m/y" , $time),// d/m/Y", $time)//date("l d/m/Y", $time),
-			"width" => "20px",
-			"chgbgcolor" => "col0",
-			"id" => "id0",
-			"onclick" => "onclick0",
-			"rowspan" => "rowspan0",
-		));
-		if($this->is_open_day($time + 86400))$t->define_field(array(
-			"name" => "d1",
-			"caption" => substr(date("l" ,($time + 86400)) , 0 , 2).date(" d/m/y" , ($time + 86400)),//date("l d/m/Y", ($time + 86400),
-			"width" => "20px",
-			"chgbgcolor" => "col1",
-			"id" => "id1",
-			"onclick" => "onclick1",
-			"rowspan" => "rowspan1",
-		));
-		if($this->is_open_day($time + 86400*2))$t->define_field(array(
-			"name" => "d2",
-			"caption" =>substr(date("l" ,$time + 86400*2) , 0 , 2).date(" d/m/y" , $time + 86400*2),//date("l d/m/Y", $time + 86400*2),
-			"width" => "20px",
-			"chgbgcolor" => "col2",
-			"id" => "id2",
-			"onclick" => "onclick2",
-			"rowspan" => "rowspan2",
-		));
-		if($this->is_open_day($time + 86400*3))$t->define_field(array(
-			"name" => "d3",
-			"caption" => substr(date("l" , $time + 86400*3) , 0 , 2).date(" d/m/y" ,$time + 86400*3),//date("l d/m/Y", $time + 86400*3),
-			"chgbgcolor" => "col3",
-			"width" => "20px",
-			"id" => "id3",
-			"onclick" => "onclick3",
-			"rowspan" => "rowspan3",
-		));
-		if($this->is_open_day($time + 86400*4))$t->define_field(array(
-			"name" => "d4",
-			"caption" => substr(date("l" , $time + 86400*4) , 0 , 2).date(" d/m/y" , $time + 86400*4),//date("l d/m/Y", $time + 86400*4),
-			"width" => "20px",
-			"chgbgcolor" => "col4",
-			"id" => "id4",
-			"onclick" => "onclick4",
-			"rowspan" => "rowspan4",
-		));
-		if($this->is_open_day($time + 86400*5))$t->define_field(array(
-			"name" => "d5",
-			"caption" => substr(date("l" , $time + 86400*5) , 0 , 2).date(" d/m/y" , $time + 86400*5),//date("l d/m/Y", $time + 86400*5),
-			"width" => "20px",
-			"chgbgcolor" => "col5",
-			"id" => "id5",
-			"onclick" => "onclick5",
-			"rowspan" => "rowspan5",
-		));
-		if($this->is_open_day($time + 86400*6))$t->define_field(array(
-			"name" => "d6",
-			"caption" => substr(date("l" ,$time + 86400*6) , 0 , 2).date(" d/m/y" , $time + 86400*6),//date("l d/m/Y", $time + 86400*6),
-			"chgbgcolor" => "col6",
-			"width" => "20px",
-			"id" => "id6",
-			"onclick" => "onclick6",
-			"rowspan" => "rowspan6",
-		));
+
+		for($i = 0; $i < $len; $i++)
+		{
+			$tm = $time+$i*24*3600;
+			if($this->is_open_day($tm))
+			{
+				$t->define_field(array(
+					"name" => "d".$i,
+					"caption" => substr(date("l" , $tm) , 0 , 2).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
+					"width" => "20px",
+					"chgbgcolor" => "col".$i,
+					"id" => "id".$i,
+					"onclick" => "onclick".$i,
+					"rowspan" => "rowspan".$i,
+				));
+			}
+		}
+		
 		$t->table_caption = t("Broneerimine");
 		$t->set_sortable(false);
 	}
@@ -3176,20 +3136,29 @@ class room extends class_base
 		return true;
 	}
 
-	function generate_res_table($room)
+	function generate_res_table($room, $start = 0, $end = 0)
 	{
 		if(!$this->start)
 		{
 			classload("core/date/date_calc");
 			$this->start =get_week_start();
 		}
+
+		if ($start == 0)
+		{
+			$start = $this->start;
+		}
+		if ($end == 0)
+		{
+			$end = $this->start + (7*24*3600);
+		}
 		$step_length = $this->step_lengths[$room->prop("time_unit")];
 		$filt = array(
 			"class_id" => array(CL_RESERVATION),
 			"lang_id" => array(),
 			"resource" => $room->id(),
-			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ($this->start + (7*24*3600))),
-			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, ($this->start)),
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
+			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
 		);
 		$use_prod_times = $room->prop("use_product_times");
 		
