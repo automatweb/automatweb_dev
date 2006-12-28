@@ -50,6 +50,11 @@
             <method>serialize</method>
             <type>fileupload</type>
             <reltype>RELTYPE_WARRANT</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Volikiri</caption>
       </property>
       <property>
@@ -169,6 +174,11 @@
             <method>serialize</method>
             <type>fileupload</type>
             <reltype>RELTYPE_REPRODUCTION</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Lisa reproduktsioon</caption>
       </property>
       <property>
@@ -179,6 +189,11 @@
             <method>serialize</method>
             <type>fileupload</type>
             <reltype>RELTYPE_G_STATUES</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Garantiim&amp;amp;auml;rgi p&amp;amp;otilde;hikiri</caption>
       </property>
       <property>
@@ -189,6 +204,11 @@
             <method>serialize</method>
             <type>fileupload</type>
             <reltype>RELTYPE_C_STATUES</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Kollektiivm&amp;amp;auml;rgi p&amp;amp;otilde;hikiri	</caption>
       </property>
       <property>
@@ -340,6 +360,11 @@
             <method>serialize</method>
             <type>fileupload</type>
             <reltype>RELTYPE_PAYMENT_ORDER</reltype>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Maksekorraldus</caption>
       </property>
       <classinfo>
