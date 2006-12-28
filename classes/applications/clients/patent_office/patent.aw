@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.31 2006/12/28 13:13:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.32 2006/12/28 15:48:53 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -693,9 +693,9 @@ class patent extends class_base
 			{
 				$_SESSION["patent"]["applicants"][$key]["applicant_type"] = 1;
 				$address = $o->prop("contact");
-				$_SESSION["patent"]["applicants"][$key]["phone"] = $o->prop("phone_id");
-				$_SESSION["patent"]["applicants"][$key]["email"] = $o->prop("email_id");
-				$_SESSION["patent"]["applicants"][$key]["fax"] = $o->prop("telefax_id");
+				$_SESSION["patent"]["applicants"][$key]["phone"] = $o->prop("phone_id.name");
+				$_SESSION["patent"]["applicants"][$key]["email"] = $o->prop("email_id.mail");
+				$_SESSION["patent"]["applicants"][$key]["fax"] = $o->prop("telefax_id.name");
 				$_SESSION["patent"]["applicants"][$key]["code"] = $o->prop("reg_nr");
 			}
 			else
@@ -705,9 +705,9 @@ class patent extends class_base
 				$_SESSION["patent"]["applicants"][$key]["lastname"] = $o->prop("lastname");
 				$address = $o->prop("address");
 				$correspond_address = $o->prop("correspond_address");
-				$_SESSION["patent"]["applicants"][$key]["phone"] = $o->prop("phone");
-				$_SESSION["patent"]["applicants"][$key]["email"] = $o->prop("email");
-				$_SESSION["patent"]["applicants"][$key]["fax"] = $o->prop("fax");
+				$_SESSION["patent"]["applicants"][$key]["phone"] = $o->prop("phone.name");
+				$_SESSION["patent"]["applicants"][$key]["email"] = $o->prop("email.mail");
+				$_SESSION["patent"]["applicants"][$key]["fax"] = $o->prop("fax.name");
 				$_SESSION["patent"]["applicants"][$key]["code"] = $o->prop("personal_id");
 			}
 			if(is_oid($address) && $this->can("view" , $address))
@@ -887,7 +887,7 @@ class patent extends class_base
 			if($_SESSION["patent"]["applicant_type"])
 			{
 				$js.='document.getElementById("lastname_row").style.display = "none";
-				document.getElementById("name_row").style.display = "none";
+				document.getElementById("firstname_row").style.display = "none";
 				document.getElementById("personal_id").style.display = "none";';
 			}
 			else
@@ -1037,7 +1037,6 @@ class patent extends class_base
 			unset($_SESSION["patent"]["applicants"][$_SESSION["patent"]["delete_applicant"]]);
 			unset($_SESSION["patent"]["delete_applicant"]);
 		}
-		
 		if(!$_SESSION["patent"]["applicant_id"] && sizeof($_SESSION["patent"]["applicants"]))
 		{
 			$_SESSION["patent"]["applicant_id"] = reset(array_keys($_SESSION["patent"]["applicants"]));
@@ -1449,11 +1448,13 @@ class patent extends class_base
 			$_SESSION["patent"]["prod_selection"] =  $_POST["oid"];
 			die("
 				<script type='text/javascript'>
-				window.opener.location.href='".$_SESSION["patent"]["prod_ru"]."';
-				window.close();
+					window.opener.document.getElementById('stay').value=1;
+					window.opener.document.changeform.submit();
+					window.close();
 				</script>"
 			);
 		}
+//				window.opener.location.href='".$_SESSION["patent"]["prod_ru"]."';
 		
 		if($_POST["product"])
 		{
@@ -1688,7 +1689,7 @@ class patent extends class_base
 	function submit_data($arr)
 	{
 		$errs = "";
-		$errs.= $this->check_fields();
+		$_SESSION["patent"]["errors"] =  $errs.= $this->check_fields();
 		foreach($_POST as $data => $val)
 		{
 			$_SESSION["patent"][$data] = $val;
@@ -1736,7 +1737,7 @@ class patent extends class_base
 		else
 		{
 			$_SESSION["patent"]["stay"] = null;
-			$_SESSION["patent"]["errors"] = $errs;
+
 			return aw_url_change_var("trademark_id" , null , $arr["return_url"]);
 		}
 	}
