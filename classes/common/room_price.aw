@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.6 2006/12/18 16:37:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.7 2006/12/28 14:53:30 kristo Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -43,6 +43,8 @@
 	@property bargain_percent type=textbox
 	@caption Soodustuse protsent
 
+	@property prices_props type=callback callback=gen_prices_props
+	@caption Hinnad
 */
 
 class room_price extends class_base

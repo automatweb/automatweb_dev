@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.25 2006/12/27 11:10:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.26 2006/12/28 14:53:30 kristo Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -618,10 +618,15 @@ class room_reservation extends class_base
 				}
 			}
 		}
-		
+	
+		$min_prod_prices = $room->meta("web_min_prod_prices");
 		foreach ($show_curr as $curr)
 		{
 			$currency = obj($curr);
+			if ($min_prod_prices[$curr] > 0)
+			{
+				$data["menu_sum"][$curr] = $min_prod_prices[$curr];
+			}
 			$data["menu_sum"][$curr] = $data["menu_sum"][$curr]." ".$currency->name();
 		}
 				

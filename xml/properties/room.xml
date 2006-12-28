@@ -443,6 +443,17 @@
             <caption>, sammuga</caption>
       </property>
       <property>
+            <name>web_min_prod_price</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>buffer_after_l</parent>
+            <type>callback</type>
+            <callback>cb_gen_web_min_prices</callback>
+            <caption>Veebi miinumum toodete hind </caption>
+      </property>
+      <property>
             <name>prices_search</name>
             <table>objects</table>
             <field>meta</field>

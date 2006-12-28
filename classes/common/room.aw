@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.79 2006/12/27 15:46:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.80 2006/12/28 14:53:30 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -163,7 +163,10 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 			@property time_step type=textbox size=5 parent=time_step
 			@caption , sammuga
-	
+
+		@property web_min_prod_price type=callback callback=cb_gen_web_min_prices 
+		@caption Veebi miinumum toodete hind 
+
 	@groupinfo prices_price caption="Hinnad" parent=prices
 	@default group=prices_price,prices_bargain_price
 		@property prices_search type=hidden no_caption=1 store=no
@@ -449,6 +452,11 @@ class room extends class_base
 			case "openhours":
 				$prop["parent"] = $arr["obj_inst"]->id();
 				break;
+
+			case "web_min_prod_price":
+				$arr["obj_inst"]->set_meta("web_min_prod_prices", $arr["request"]["wpm_currency"]);
+				break;
+				
 				//$prop[""]
 			//-- set_property --//
 		}
@@ -1563,7 +1571,7 @@ class room extends class_base
 								if ($buf > 0)
 								{
 									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-									$d[$x] = "<div style='background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>".$d[$x];
+									$d[$x] = "<div style='margin-top: 0px; width: 100%; height: 5%; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
 								}
 
 								$buf = $this->get_after_buffer(array(
@@ -1573,9 +1581,11 @@ class room extends class_base
 								if ($buf > 0)
 								{
 									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-									$d[$x] .= " <div style='background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
+									$d[$x] .= " <div style='height: 5%; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 								}
 							}
+
+							$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
 						}
 						else
 						{
@@ -2461,6 +2471,35 @@ class room extends class_base
 			), CL_SHOP_PRODUCT_TYPE)
 		));
 
+		// list all shop product types and add them to the menu
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT_TYPE,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$tb->add_menu_separator(array("parent" => "crt_".$this->prod_type_fld));
+		foreach($ol->arr() as $prod_type)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "crt_".$this->prod_type_fld,
+				"text" => $prod_type->name(),
+				"link" => $this->mk_my_orb("new", array(
+                                                "item_type" => $prod_type->id(),
+                                                "parent" => $this->prod_tree_root,
+                                                //"alias_to" => $this->warehouse->id(),
+                                                "reltype" => 2, //RELTYPE_PRODUCT,
+                                                "return_url" => get_ru(),
+                                                "cfgform" => $prod_type->prop("sp_cfgform"),
+                                                "object_type" => $prod_type->prop("sp_object_type"),
+						"pseh" => aw_register_ps_event_handler(
+							CL_ROOM,
+							"handle_product_add",
+							array("id" => $data["obj_inst"]->id()),
+							CL_SHOP_PRODUCT
+						)
+                                        ), CL_SHOP_PRODUCT) 
+			));
+		}
 		$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
@@ -2475,7 +2514,16 @@ class room extends class_base
 			'action' => 'delete_cos',
 		));
 	}
-	
+
+	function handle_product_add($product, $arr)
+	{
+		$room = obj($arr["id"]);
+		$prod_data = $room->meta("prod_data");
+		$prod_data[$product->id()]["active"] = 1;
+		$room->set_meta("prod_data", $prod_data);
+		$room->save();
+	}
+
 	/**
 		@attrib name=save_products params=name all_args=1
 	**/
@@ -3393,5 +3441,39 @@ class room extends class_base
 			}
 		';
 	}
+
+	function cb_gen_web_min_prices($arr)
+	{
+		$cur = $arr["obj_inst"]->prop("currency");
+		$prices = $arr["obj_inst"]->meta("web_min_prod_prices");
+		foreach(safe_array($cur) as $cur)
+		{
+			if (!is_oid($cur))
+			{
+				continue;
+			}
+			$c = obj($cur);
+			$retval["wpm_currency[".$cur."]"] = array(
+                               "name" => "wpm_currency[".$cur."]",
+                               "type" => "textbox",
+                               "caption" => sprintf(t("Min hind toodetele veebis (%s)"), $c->prop("unit_name")),
+                               "value" => $prices[$cur],
+                               "editonly" => 1,
+			       "size" => 5
+                        );
+																						 
+		}
+		return $retval;
+	}
+
+        /**
+                @attrib name=delete_cos
+        **/
+        function delete_cos($arr)
+        {
+                object_list::iterate_list($arr["sel"], "delete");
+                return $arr["post_ru"];
+        }
+
 }
 ?>

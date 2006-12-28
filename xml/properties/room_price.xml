@@ -105,6 +105,16 @@
             <type>textbox</type>
             <caption>Soodustuse protsent</caption>
       </property>
+      <property>
+            <name>prices_props</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>gen_prices_props</callback>
+            <caption>Hinnad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ROOM_PRICE</syslog_type>
             <relationmgr>yes</relationmgr>

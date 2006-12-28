@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.22 2006/12/27 11:07:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.23 2006/12/28 14:53:30 kristo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -165,7 +165,7 @@ class reservation extends class_base
 			case "verified":
 				if ($prop["value"] == 1)
 				{
-					$prop["onclick"] = "document.changeform.reason.value=prompt(\"Sisestage t&uuml;histuse p&otilde;hjus\");submit_changeform(\"unverify\")";
+					$prop["onclick"] = "document.changeform.reason.value=prompt(\"Sisestage t&uuml;histuse p&otilde;hjus\");if (document.changeform.reason.value == \"\") {document.changeform.verified.checked=true; } else {submit_changeform(\"unverify\");}";
 				}
 				break;
 				
@@ -918,7 +918,7 @@ class reservation extends class_base
 			$arr["obj_inst"]->set_prop("customer", $cust->id());
                 }
 
-		if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+		if (!$this->can("view", $arr["obj_inst"]->prop("customer")) || $arr["prop"]["value"] == "")
 		{
 			return PROP_IGNORE;
 		}
@@ -934,7 +934,7 @@ class reservation extends class_base
 
         function _set_cp_ln($arr)
         {
-                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")) || $arr["prop"]["value"] == "")
                 {
                         return PROP_IGNORE;
                 }
@@ -951,7 +951,7 @@ class reservation extends class_base
 
         function _set_cp_phone($arr)
         {
-                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")) || $arr["prop"]["value"] == "")
                 {
                         return PROP_IGNORE;
                 }
@@ -986,7 +986,7 @@ class reservation extends class_base
 
         function _set_cp_email($arr)
         {
-                if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+                if (!$this->can("view", $arr["obj_inst"]->prop("customer")) || $arr["prop"]["value"] == "")
                 {
                         return PROP_IGNORE;
                 }
