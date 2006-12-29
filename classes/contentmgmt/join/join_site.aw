@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.35 2006/12/27 14:23:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.36 2006/12/29 10:18:57 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -136,7 +136,15 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 @groupinfo trans caption="T&otilde;lgi"
 @default group=trans
 
-	@property trans_tb type=table no_caption=1 store=no
+	@groupinfo trans_eld parent=trans caption="Elemendid"
+	@default group=trans_eld
+	
+		@property trans_tb type=table no_caption=1 store=no
+
+	@groupinfo trans_ttl parent=trans caption="Vahepealkirjad"
+	@default group=trans_ttl
+
+		@property trans_ttl_t type=table no_caption=1 store=no
 
 @reltype JOIN_CLASS value=1 clid=CL_OBJECT_TYPE
 @caption liitumise vorm
@@ -239,6 +247,10 @@ class join_site extends class_base
 			case "username_element":
 				$this->_username_element($arr);
 				break;
+
+			case "trans_ttl_t":
+				$this->_trans_ttl_t($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -279,6 +291,10 @@ class join_site extends class_base
 
 			case "trans_tb":
 				$arr["obj_inst"]->set_meta("lang_props", $arr["request"]["d"]);
+				break;
+
+			case "trans_ttl_t":
+				$arr["obj_inst"]->set_meta("lang_seps", $arr["request"]["d"]);
 				break;
 		}
 		return $retval;
@@ -1190,7 +1206,6 @@ class join_site extends class_base
 				post_message("MSG_USER_JOINED", array(
 					"user" => $u_oid
 				));
-
 				// we also gots to clear out all the join data
 				aw_session_set("site_join_status", array());
 			}
@@ -1206,14 +1221,23 @@ class join_site extends class_base
 		{
 			$this->join_done = true;
 			aw_session_set("join_err", array());
-			return $obj->prop("after_join_url");
+//			die("<html><head><meta http-equiv=\"refresh\" content=\"1;url=".$obj->prop("after_join_url")."\"></head><body>&nbsp;</body></html>");
+			$rv = $obj->prop("after_join_url");
+			if ($rv == "")
+			{
+				$rv = aw_ini_get("baseurl");
+			}
+			return $rv;
 		}
 		aw_session_set("join_err", $nf);
 		if ($arr["err_return_url"])
 		{
+//			die("<html><head><meta http-equiv=\"refresh\" content=\"1;url=".$arr["err_return_url"]."\"></head><body>&nbsp;</body></html>");
+			
 			return $arr["err_return_url"];
 		}
 
+//		die("<html><head><meta http-equiv=\"refresh\" content=\"1;url=".aw_ini_get("baseurl")."/".$arr["section"]."\"></head><body>&nbsp;</body></html>");
 		return aw_ini_get("baseurl")."/".$arr["section"];
 	}
 
@@ -1632,6 +1656,12 @@ class join_site extends class_base
 		}
 		// add seprator props
 		$seps = new aw_array($ob->meta("join_seps"));
+		$lang_seps = safe_array($ob->meta("lang_seps"));
+		$lang_id = aw_global_get("lang_id");
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$lang_id = aw_global_get("ct_lang_id");
+		}
 		foreach($seps->get() as $sepid => $sepn)
 		{
 			$pid = "typo_sep[jsep_".$sepid."]";
@@ -1640,7 +1670,7 @@ class join_site extends class_base
 				"name" => $pid,
 				//"no_caption" => 1,
 				"subtitle" => 1,
-				"value" => $sepn
+				"value" => !empty($lang_seps[$sepid][$lang_id]) ? $lang_seps[$sepid][$lang_id] : $sepn
 			);
 		}
 		
@@ -2257,6 +2287,63 @@ class join_site extends class_base
 			}
 		}
 		$arr["prop"]["options"] = $opts;
+	}
+
+        function _init_trans_ttl_t(&$t, $o)
+        {
+                $t->define_field(array(
+                        "name" => "orig",
+                        "caption" => t("Pealkiri"),
+                        "align" => "center"
+                ));
+
+                $l = get_instance("languages");
+                $ll = $l->get_list();
+                foreach($ll as $lid => $lang)
+                {
+                        if ($lid == $o->lang_id())
+                        {
+                                continue;
+                        }
+                        $t->define_field(array(
+                                "name" => "l".$lid,
+                                "caption" => $lang,
+                                "align" => "center"
+                        ));
+                }
+        }
+
+	function _trans_ttl_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_trans_ttl_t($t, $arr["obj_inst"]);
+
+                $lang_seps = $arr["obj_inst"]->meta("lang_seps");
+
+                $l = get_instance("languages");
+                $ll = $l->get_list(array("all_data" => true));
+
+		$seps = $arr["obj_inst"]->meta("join_seps");
+                foreach($seps as $sepid => $sep)
+                {
+	                $d = array(
+	                        "orig" => $sep,
+                        );
+                        foreach($ll as $lid => $lang)
+                        {
+                		if ($lid == $arr["obj_inst"]->lang_id())
+                                {
+                                	continue;
+                                }
+                                $d["l".$lid] = html::textbox(array(
+                                	"name" => "d[$sepid][$lid]",
+                                        "value" => $lang_seps[$sepid][$lid],
+                                        "size" => 20
+                                ));
+                        }
+                        $t->define_data($d);
+                }
+                $t->set_caption(t("T&otilde;lgi vahepealkiri"));
 	}
 }
 ?>

@@ -315,11 +315,20 @@
       <property>
             <name>trans_tb</name>
             <table>objects</table>
-            <group>trans</group>
+            <group>trans_eld</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>trans_tb</field>
+      </property>
+      <property>
+            <name>trans_ttl_t</name>
+            <table>objects</table>
+            <group>trans_ttl</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>trans_ttl_t</field>
       </property>
       <classinfo>
             <syslog_type>ST_JOIN_SITE</syslog_type>
@@ -383,6 +392,14 @@
             <trans>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </trans>
+            <trans_eld>
+                  <parent>trans</parent>
+                  <caption>Elemendid</caption>
+            </trans_eld>
+            <trans_ttl>
+                  <parent>trans</parent>
+                  <caption>Vahepealkirjad</caption>
+            </trans_ttl>
       </groupinfo>
       <reltypes>
             <JOIN_CLASS>
