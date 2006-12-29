@@ -326,6 +326,21 @@ class languages extends aw_template
 			}
 		}
 
+		if (aw_ini_get("menuedit.language_in_url"))
+		{
+			list($lang) = explode("/", aw_global_get("section"));
+			if (strlen($lang) == 2 && aw_global_get("ct_lang_lc") != $lang)
+			{
+				// set lang from url
+				$lang_id =  $this->get_langid_for_code($lang);
+				$_SESSION["ct_lang_id"] = $lang_id;
+        	                $_SESSION["ct_lang_lc"] = $lang;
+                	        aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
+                        	aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
+                	        setcookie("ct_lang_id", $lang_id, time() + 3600, "/");
+                        	setcookie("ct_lang_lc", $_SESSION["ct_lang_lc"], time() + 3600, "/");
+			}
+		}
 		if (!aw_global_get("ct_lang_id") && aw_ini_get("user_interface.full_content_trans") && ($ct_lc = aw_ini_get("user_interface.default_language")))
 		{
 			if ($_COOKIE["ct_lang_id"])
