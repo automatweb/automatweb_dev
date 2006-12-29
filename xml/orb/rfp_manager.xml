@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="rfp_manager" folder="applications/calendar" extends="class_base">
+		<action name="show_overview" all_args="1">
+			<function name="show_overview">
+				<arguments>
+					<required name="oid" type="oid" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
-		

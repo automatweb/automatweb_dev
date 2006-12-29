@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.22 2006/12/14 15:30:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.23 2006/12/29 14:22:05 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -153,8 +153,8 @@ class conference_planning extends class_base
 		));
 		$sc->lc_load("conference_planning", "lc_conference_planning");
 		$sd = $this->get_form_data();
-		$no = $_GET["sub"];
-		$sd = $this->get_form_data();
+		$no = $arr["sub"]?$arr["sub"]:$_GET["sub"];
+		$sd = (count($arr["data"]) && is_Array($arr["data"]))?$arr["data"]:$this->get_form_data();
 		switch($no)
 		{
 			case 1:
@@ -657,13 +657,16 @@ class conference_planning extends class_base
 				));
 				unset($rows);
 				// #5
+				//arr($sd["additional_functions"]);
+				$c_inst = get_instance(CL_CONFERENCE);
+				$conf_types = $c_inst->conference_types();
 				foreach($sd["additional_functions"] as $k => $data)
 				{
 					if(!count($data))
 					{
 						continue;
 					}
-					$cat_type = ($data["event_type_chooser"] == 1)?$this->catering_types[$data["event_type_select"]]:$data["event_type_text"];
+					$cat_type = ($data["event_type_chooser"] == 1)?$conf_types[$data["event_type_select"]]:$data["event_type_text"];
 					$sc->vars(array(
 						"type" => $cat_type,
 						"start_time" => $data["function_start_date"]." ".$data["function_start_time"],
@@ -705,8 +708,12 @@ class conference_planning extends class_base
 					$rows .= $sc->parse("SEARCH_RESULT");
 				}
 				$sc->vars(array(
-					"SEARCH_RESULT" => $rows,
 					"confirm_ch_id" => CONFIRM_ID,
+				));
+				$confirm = $sc->parse("CONFIRMATION");
+				$sc->vars(array(
+					"SEARCH_RESULT" => $rows,
+					"CONFIRMATION" => $arr["sub_contents_only"]?"":$confirm,
 				));
 				break;
 			case "qa":
@@ -759,6 +766,12 @@ class conference_planning extends class_base
 					"COUNTRY" => $countries,
 				));
 				break;
+		}
+
+		// this is for wierd cases, only once is this used. from rfp_manager ..
+		if($arr["sub_contents_only"])
+		{
+			return $sc->parse();
 		}
 
 		$first = "DUMMY";
@@ -905,7 +918,9 @@ class conference_planning extends class_base
 		$obj = new object();
 		$obj->set_class_id(CL_RFP);
 		$obj->set_parent($arr["conference_planner"]);
+		$obj->save();
 		$users = get_instance("users");
+		$obj->set_name($data["function_name"]);
 		$obj->set_prop("submitter", $users->get_oid_for_uid(aw_global_get("uid")));
 		$obj->set_prop("contact_preference", $data["user_contact_preference"]);
 		$obj->set_prop("country", call_user_func(array(obj($data["country"]), "name")));
@@ -922,6 +937,14 @@ class conference_planning extends class_base
 		$obj->set_prop("single_rooms", $data["single_count"]);
 		$obj->set_prop("double_rooms", $data["double_count"]);
 		$obj->set_prop("suites", $data["suite_count"]);
+		$obj->set_prop("date_comments", $data["date_comments"]);
+	/*
+	*/
+		$obj->set_prop("dates_are_flexible", $data["dates_are_flexible"]?1:0);
+		$obj->set_prop("meeting_pattern", $data["meeting_pattern"]);
+		$obj->set_prop("pattern_wday_from", $data["pattern_wday_from"]);
+		$obj->set_prop("pattern_wday_to", $data["pattern_wday_to"]);
+		$obj->set_prop("pattern_days", $data["pattern_days"]);
 
 		if($data["dates_are_flexible"])
 		{
@@ -955,8 +978,11 @@ class conference_planning extends class_base
 		$tmptech = array();
 		foreach($data["tech"] as $k => $pnt)
 		{
-			$tmptech[] = $this->tech_equip[$k];
+			$tmptech[$k] = $this->tech_equip[$k];
 		}
+		$obj->set_prop("tech_equip", aw_serialize($tmptech, SERIALIZE_NATIVE));
+		$obj->set_prop("main_catering", aw_serialize($data["main_catering"], SERIALIZE_NATIVE));
+
 		$tmpcatering = array();
 		foreach($data["main_catering"] as $k => $pnt)
 		{
@@ -968,19 +994,33 @@ class conference_planning extends class_base
 			);
 		}
 
-		$obj->set_prop("event_type", ($data["event_type_chooser"] == 1)?$evt_type[$data["event_type_select"]]:$data["event_type_select"]);
+		$obj->set_prop("event_type", ($data["event_type_chooser"] == 1)?$evt_type[$data["event_type_select"]]:$data["event_type_text"]);
+		// data separately also
+		$obj->set_prop("event_type_chooser", $data["event_type_chooser"]);
+		$obj->set_prop("event_type_select", $data["event_type_select"]);
+		$obj->set_prop("event_type_text", $data["event_type_text"]);
+		//
 		$obj->set_prop("delegates_no", $data["delegates_no"]);
 		$obj->set_prop("table_form", $this->table_forms[$data["table_form"]]);
 		$obj->set_prop("tech", join(", ", $tmptech));
 		$obj->set_prop("door_sign", $data["door_sign"]);
 		$obj->set_prop("person_no", $data["persons_no"]);
+		// duplicated raw_data again
+		$obj->set_prop("table_form_raw", $data["table_form"]);
+		$obj->set_prop("start_time_raw", $data["function_start_time"]);
+		$obj->set_prop("start_date_raw", $data["function_start_date"]);
+		$obj->set_prop("end_time_raw", $data["function_end_time"]);
+		$obj->set_prop("end_date_raw", $data["function_end_date"]);
+
 		$obj->set_prop("start_date", $this->_gen_to_timestamp($data["function_start_date"], $data["function_start_time"]));
 		$obj->set_prop("end_date", $this->_gen_to_timestamp($data["function_end_date"], $data["function_end_time"]));
 		$obj->set_prop("24h", $data["24h"]?1:0);
+
 		$obj->set_prop("catering_for_main", aw_serialize($tmpcatering, SERIALIZE_NATIVE));
 
 		// additional dates
 		unset($data["dates"][0]);
+		$obj->set_prop("additional_dates_raw", aw_serialize($data["dates"], SERIALIZE_NATIVE));
 		if(count($data["dates"]))
 		{
 			foreach($data["dates"] as $tmp)
@@ -994,6 +1034,7 @@ class conference_planning extends class_base
 			$obj->set_prop("additional_dates", aw_serialize($tmpdates, SERIALIZE_NATIVE));
 		}
 		// additional functions
+		$obj->set_prop("additional_functions_raw", aw_serialize($data["additional_functions"], SERIALIZE_NATIVE));
 		foreach($data["additional_functions"] as $tmp)
 		{
 			$tmptech = array();
@@ -1047,6 +1088,10 @@ class conference_planning extends class_base
 				"selected" => in_array($id ,$data["selected_search_result"])?1:0,
 			);
 		}
+		$obj->set_prop("all_search_results", aw_serialize($data["all_search_results"], SERIALIZE_NATIVE));
+		$obj->set_prop("selected_search_result", aw_serialize($data["selected_search_result"], SERIALIZE_NATIVE));
+
+
 		$obj->set_prop("search_result", aw_serialize($tmpsearch, SERIALIZE_NATIVE));
 		$obj->save();
 		$url = aw_ini_get("baseurl");

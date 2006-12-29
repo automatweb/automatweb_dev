@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.2 2006/11/10 14:01:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.3 2006/12/29 14:22:05 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -60,6 +60,31 @@
 
 	@property flexible_dates type=text
 	@caption Dates are flexible
+
+	@property date_comments type=text
+	@caption Date comments
+
+	// this approach sucks bigtime, but i don't have any time to do better..
+	@property dates_are_flexible type=hidden
+	@property meeting_pattern type=hidden
+	@property pattern_wday_from type=hidden
+	@property pattern_wday_to type=hidden
+	@property pattern_days type=hidden
+	@property tech_equip type=hidden
+	@property main_catering type=hidden
+	@property event_type_chooser type=hidden
+	@property event_type_select type=hidden
+	@property event_type_text type=hidden
+	@property table_form_raw type=hidden
+	@property start_time_raw type=hidden
+	@property start_date_raw type=hidden
+	@property end_time_raw type=hidden
+	@property end_date_raw type=hidden
+	@property additional_dates_raw type=hidden
+	@property additional_functions_raw type=hidden
+	@property all_search_results type=hidden
+	@property selected_search_result type=hidden
+
 
 // additional dates 
 

@@ -291,7 +291,9 @@
 	</tr>
 	<!-- END SUB: SEARCH_RESULT -->
 	</td>
+	<!-- SUB: CONFIRMATION -->
 	<tr>
 		<td colspan="2">kinnita: <input type="checkbox" name="confirm_rfp_submit" id="{VAR:confirm_ch_id}"/></td>
 	</tr>
+	<!-- END SUB: CONFIRMATION -->
 </table>
