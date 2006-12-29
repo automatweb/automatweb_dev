@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.7 2006/12/28 14:53:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.8 2006/12/29 16:02:20 markop Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -308,7 +308,14 @@ class room_price extends class_base
 		}
 		$ret["from"] = $room->prop("time_from");
 		$ret["to"] = $room->prop("time_to");
-		$ret["step"] = $room->prop("time_step");
+		if($room->prop("selectbox_time_step") > 0)
+		{
+			$ret["step"] = $room->prop("selectbox_time_step");
+		}
+		else
+		{
+			$ret["step"] = $room->prop("time_step");
+		}
 		return $ret;
 	}
 

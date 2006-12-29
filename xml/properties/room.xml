@@ -440,7 +440,18 @@
             <parent>time_step</parent>
             <type>textbox</type>
             <size>5</size>
-            <caption>, sammuga</caption>
+            <caption>,sammuga</caption>
+      </property>
+      <property>
+            <name>selectbox_time_step</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>time_step</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Valiku aja samm (kui on erinev)</caption>
       </property>
       <property>
             <name>web_min_prod_price</name>
@@ -700,7 +711,7 @@
             </products_find_params>
             <time_step>
                   <type>hbox</type>
-                  <width>5%:5%:80%</width>
+                  <width>5%:5%:20%:60%</width>
                   <group>prices_general</group>
                   <caption>Aja samm</caption>
             </time_step>

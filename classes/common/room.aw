@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.81 2006/12/29 13:14:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.82 2006/12/29 16:02:20 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -152,7 +152,7 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 		@property time_unit type=chooser
 		@caption Aja&uuml;hik
 
-		@layout time_step type=hbox width=5%:5%:80%
+		@layout time_step type=hbox width=5%:5%:20%:60%
 		@caption Aja samm
 
 			@property time_from type=textbox size=5 parent=time_step
@@ -162,8 +162,15 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 			@caption kuni
 
 			@property time_step type=textbox size=5 parent=time_step
-			@caption , sammuga
+			@caption ,sammuga
+			
+			@property selectbox_time_step type=textbox size=5 parent=time_step
+			@caption Valiku aja samm (kui on erinev, mõjub ka hinnale)
 
+			
+		property selectbox_length type=textbox size=4
+		caption Ajavaliku pikkus
+		
 		@property web_min_prod_price type=callback callback=cb_gen_web_min_prices 
 		@caption Veebi miinumum toodete hind 
 
@@ -1246,17 +1253,45 @@ class room extends class_base
 		{
 
 			$options = array();
-			$x = 1;
-			while($x<7)
+			if($arr["obj_inst"]->prop("selectbox_time_step"))
 			{
-				$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-				if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+				$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
+				while($x<7)
 				{
-					$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
+					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+					$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+					{
+						$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
+						if($small_units == 60)
+						{
+							$options["".$x] = $options["".$x] + 1;
+						}
+						else
+						{
+							if($small_units < 10)
+							{
+								$small_units = "0".$small_units;
+							}
+							$options["".$x] = $options["".$x] . ":" . $small_units;
+						}
+					}
+					$x = $x + $arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step");
 				}
-				$x++;
+			}
+			else
+			{
+				$x = 1;
+				while($x<7)
+				{
+					$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+					{
+						$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
+					}
+					$x++;
+				}
 			};
-		
 			$ret.= html::select(array(
 				"name" => "room_reservation_length",
 				"options" => $options,
@@ -1314,17 +1349,46 @@ class room extends class_base
 			$ret.= t("Vali broneeringu kestvus: ");
 			
 			$options = array();
-			$x = 1;
-			while($x<7)
+			if($arr["obj_inst"]->prop("selectbox_time_step"))
 			{
-				$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-				if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+				$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
+				while($x<7)
 				{
-					$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
+					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+					$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+					{
+						$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
+						if($small_units == 60)
+						{
+							$options["".$x] = $options["".$x] + 1;
+						}
+						else
+						{
+							if($small_units < 10)
+							{
+								$small_units = "0".$small_units;
+							}
+							$options["".$x] = $options["".$x] . ":" . $small_units;
+						}
+					}
+					$x = $x + $arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step");
 				}
-				$x++;
-			};
-		
+			}
+			else
+			{
+				$x = 1;
+				while($x<7)
+				{
+					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+					$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+					{
+						$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
+					}
+					$x++;
+				};
+			}
 			$ret.= html::select(array(
 				"name" => "room_reservation_length",
 				"options" => $options,
@@ -1829,6 +1893,7 @@ class room extends class_base
 				$times = $this->_get_bron_time(array(
 					"bron" => $val,
 					"id" => $room,
+					"room_reservation_length" => $room_reservation_length,
 				));
 				if ($times["start"])
 				{
@@ -1875,7 +1940,7 @@ class room extends class_base
 				"calendar" => $cal,
 				"end" => $end,
 				"resource" => $arr["id"],
-				"product" => $product
+				"product" => $product,
 			));
                 }
                 else
@@ -2080,6 +2145,8 @@ class room extends class_base
 			room id
 		@param bron optional array
 			keys are start timestamps
+		@param room_reservation_length optional double
+			length/step
 	**/
 	function _get_bron_time($arr)
 	{
@@ -2104,6 +2171,10 @@ class room extends class_base
 				{
 					$end = $bron + $length;
 				}
+			}
+			if($room_reservation_length > 0)
+			{
+				$end = $start + $length * $room_reservation_length;
 			}
 		}
 		return array("start" => $start, "end" => $end);
