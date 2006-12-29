@@ -454,6 +454,29 @@
             <caption>Veebi miinumum toodete hind </caption>
       </property>
       <property>
+            <name>childtitle110</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>buffer_after_l</parent>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Kogu ruumi broneeringu miinimumhind</caption>
+      </property>
+      <property>
+            <name>min_prices_props</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>buffer_after_l</parent>
+            <type>callback</type>
+            <callback>gen_min_prices_props</callback>
+            <caption>Miinimum hinnad</caption>
+      </property>
+      <property>
             <name>prices_search</name>
             <table>objects</table>
             <field>meta</field>

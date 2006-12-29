@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.26 2006/12/28 14:53:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.27 2006/12/29 13:14:32 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -371,6 +371,48 @@ class room_reservation extends class_base
 		return $this->parse();
 	}
 	
+	
+	/** get_total_bron_price
+		@param bron optional type=object
+		@param room optional type=oid
+		@param people optional type=int
+		@param start optional type=int
+		@param end optional type=int
+		@param products optional type=array
+		@comment et siis arvutab broneeringu hinna arvestades miinimumhinda, ja kui anda objekt ette, siis võtab ülejäänud info sealt
+	**/
+	function get_total_bron_price($arr)
+	{
+		extract($arr);
+		$room_inst = get_instance(CL_ROOM);
+		if(is_object($bron))
+		{
+			$room = $bron->prop("resource");
+			$people = $bron->prop("people_count");
+			$start = $bron->prop("start1");
+			$end = $bron->prop("end");
+			$products = $bron->meta("amount");
+		}
+		$room = obj($room);
+		$min_prices = $room->meta("web_room_min_price");
+		$sum = $room_inst->cal_room_price(array(
+			"room" => $room->id(),
+			"people" => $people,
+			"start" => $start,
+			"end" => $end,
+			"products" => $products,
+
+		));
+		foreach($sum as $cur => $val)
+		{
+			if($min_prices[$cur] > 0 && $min_prices[$cur] > $val)
+			{
+				$sum[$cur] = $min_prices[$cur];
+			}
+		}
+		return $sum;
+	}
+	
 	function get_object_data($id)
 	{
 		$ret = array();
@@ -427,13 +469,10 @@ class room_reservation extends class_base
 			$data["menu_sum"][$curr] = $data["menu_sum"][$curr]." ".$currency->name();
 		}
 		
-		$sum = $room_inst->cal_room_price(array(
-			"room" => $bron->prop("resource"),
-			"people" => $ret["people_value"],
-			"start" => $bron->prop("start1"),
-			"end" => $bron->prop("end"),
-			"products" => $bron->meta("amount"),
+		$sum = $this->get_total_bron_price(array(
+			"bron" => $bron,
 		));
+		
 		foreach($sum as $curr => $val)
 		{
 			$currency = obj($curr);
@@ -630,7 +669,7 @@ class room_reservation extends class_base
 			$data["menu_sum"][$curr] = $data["menu_sum"][$curr]." ".$currency->name();
 		}
 				
-		$sum = $room_inst->cal_room_price(array(
+		$sum = $this->get_total_bron_price(array(
 			"room" => $room->id(),
 			"people" => $_SESSION["room_reservation"][$room->id()]["people"],
 			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
@@ -1018,12 +1057,8 @@ class room_reservation extends class_base
 		
 		$bank = $_SESSION["room_reservation"][$room->id()]["bank"];
 		
-		$sum = $room_inst->cal_room_price(array(
-			"room" => $bron->prop("resource"),
-			"people" => $ret["people_value"],
-			"start" => $bron->prop("start1"),
-			"end" => $bron->prop("end"),
-			"products" => $bron->meta("amount"),
+		$sum = $this->get_total_bron_price(array(
+			"bron" => $bron,
 		));
 		
 		//2 lolli asja järjest

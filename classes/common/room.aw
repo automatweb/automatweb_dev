@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.80 2006/12/28 14:53:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.81 2006/12/29 13:14:32 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -166,6 +166,13 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 		@property web_min_prod_price type=callback callback=cb_gen_web_min_prices 
 		@caption Veebi miinumum toodete hind 
+
+		@property childtitle110 type=text store=no subtitle=1
+		@caption Kogu ruumi broneeringu miinimumhind
+		
+			@property min_prices_props type=callback callback=gen_min_prices_props
+			@caption Miinimum hinnad
+
 
 	@groupinfo prices_price caption="Hinnad" parent=prices
 	@default group=prices_price,prices_bargain_price
@@ -455,6 +462,10 @@ class room extends class_base
 
 			case "web_min_prod_price":
 				$arr["obj_inst"]->set_meta("web_min_prod_prices", $arr["request"]["wpm_currency"]);
+				break;
+				
+			case "min_prices_props":
+				$arr["obj_inst"]->set_meta("web_room_min_price", $arr["request"]["web_room_min_price"]);
 				break;
 				
 				//$prop[""]
@@ -1571,7 +1582,7 @@ class room extends class_base
 								if ($buf > 0)
 								{
 									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-									$d[$x] = "<div style='margin-top: 0px; width: 100%; height: 5%; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
+									$d[$x] = "<div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
 								}
 
 								$buf = $this->get_after_buffer(array(
@@ -1581,11 +1592,11 @@ class room extends class_base
 								if ($buf > 0)
 								{
 									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-									$d[$x] .= " <div style='height: 5%; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
+									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 								}
 							}
 
-							$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
+							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
 						}
 						else
 						{
@@ -3474,6 +3485,30 @@ class room extends class_base
                 object_list::iterate_list($arr["sel"], "delete");
                 return $arr["post_ru"];
         }
+
+	function gen_min_prices_props($arr)
+	{
+		$curs = $arr["obj_inst"]->prop("currency");
+		$prices = $arr["obj_inst"]->meta("web_room_min_price");
+		$retval = array();
+		foreach($curs as $cur)
+		{
+			if(!is_oid($cur))
+			{
+				continue;
+			}
+			$c = obj($cur);
+			$retval["web_room_min_price[".$cur."]"] = array(
+				"name" => "web_room_min_price[".$cur."]",
+				"type" => "textbox",
+				"size" => 4,
+				"caption" => $c->prop("unit_name"),
+				"value" => $prices[$cur],
+				"editonly" => 1,
+			);
+		}
+		return $retval;
+	}
 
 }
 ?>
