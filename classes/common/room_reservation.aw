@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.27 2006/12/29 13:14:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.28 2006/12/29 13:55:53 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -271,7 +271,7 @@ class room_reservation extends class_base
 		// kõigepealt vaatab, kui on 1 ruum, siis kui on mitu, võtab sessioonist ruumi id, kui see on olemas
 		// kui pole, siis esimese ruumidest
 		//seda jama dubleerib toodete vaates... sest vahepeal võib kalendris teine ruum valitud olla
-		if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms") == 1))
+		if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms")) == 1)
 		{
 			$room = obj(reset($targ->prop("rooms")));
 		}
@@ -311,6 +311,8 @@ class room_reservation extends class_base
 		$data = array("joga" => "jogajoga");
 		$data["revoke_url"] = $this->mk_my_orb("revoke_reservation", array("room" => $room->id()));
 
+		//seda vaja, et toodete tabelis vana crapi ka näha oleks,....et vahepeal võib ruum muutunud olla
+		$_SESSION["soc_err"] = $_SESSION["room_reservation"][$room->id()]["products"];
 
 		$this->vars($this->get_site_props(array(
 			"room" => $room,
@@ -776,11 +778,10 @@ class room_reservation extends class_base
 	function get_web_products_table($arr)
 	{
 		extract($arr);
-		
 		if(is_oid($id) && $this->can("view", $id))
 		{
 			$targ = obj($targ);
-			if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms") == 1))
+			if(is_array($targ->prop("rooms")) && sizeof($targ->prop("rooms")) == 1)
 			{
 				$room = obj(reset($targ->prop("rooms")));
 			}
@@ -838,7 +839,7 @@ class room_reservation extends class_base
 		if(is_array($arr["add_to_cart"]))
 		{
 			$_SESSION["room_reservation"][$arr["room"]]["products"] = $arr["add_to_cart"];
-			$_SESSION["soc_err"] = $arr["add_to_cart"];
+//			$_SESSION["soc_err"] = $arr["add_to_cart"];
 //			aw_global_set("soc_err", $arr["add_to_cart"]);
 //			"quantity" => $soce[$oid]["ordered_num_enter"],
 //			aw_global_set("quantity" => $soce[$oid]["ordered_num_enter"],
@@ -972,6 +973,7 @@ class room_reservation extends class_base
 		$_SESSION["room_reservation"]["room_id"] = $room;
 		$_SESSION["room_reservation"][$room]["start"] = $times["start"];
 		$_SESSION["room_reservation"][$room]["end"] = $times["end"];
+		
 		$ret.= '<script language="javascript">
 			window.opener.location.reload();
 			window.close();
@@ -1070,7 +1072,7 @@ class room_reservation extends class_base
 				$sum = $val;
 			}
 		}
-		$_SESSION["soc_err"] = null;//võimalus paralleelselt broneerida koos toodetega kaob siin
+		//$_SESSION["soc_err"] = null;
 		
 		
 		$_SESSION["room_reservation"][$room->id()] = null;;
