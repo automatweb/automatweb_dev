@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.82 2006/12/29 16:02:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.83 2006/12/29 16:58:43 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1253,19 +1253,27 @@ class room extends class_base
 		{
 
 			$options = array();
-			if($arr["obj_inst"]->prop("selectbox_time_step"))
+			$end = $arr["obj_inst"]->prop("time_to")/$arr["obj_inst"]->prop("time_step");
+			$x = $arr["obj_inst"]->prop("time_from")/$arr["obj_inst"]->prop("time_step");
+			if($arr["obj_inst"]->prop("selectbox_time_step") > 0)
 			{
-				$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
-				while($x<7)
+				$add = $arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step");
+			}
+			else
+			{
+				$add = 1;
+			}
+			//$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
+				while($x<=$end)
 				{
 					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
 					$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
 					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
 					{
 						$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
-						if($small_units == 60)
+						if($small_units%60 == 0)
 						{
-							$options["".$x] = $options["".$x] + 1;
+							$options["".$x] = $options["".$x] + $small_units/60;
 						}
 						else
 						{
@@ -1276,22 +1284,22 @@ class room extends class_base
 							$options["".$x] = $options["".$x] . ":" . $small_units;
 						}
 					}
-					$x = $x + $arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step");
+					$x = $x + $add;
 				}
-			}
-			else
+			//}
+/*			else
 			{
-				$x = 1;
-				while($x<7)
+				while($start <= $end)
 				{
+					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
 					$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
 					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
 					{
 						$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
 					}
 					$x++;
-				}
-			};
+				};
+			}*/
 			$ret.= html::select(array(
 				"name" => "room_reservation_length",
 				"options" => $options,
@@ -1347,54 +1355,57 @@ class room extends class_base
 		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
 		{
 			$ret.= t("Vali broneeringu kestvus: ");
-			
-			$options = array();
-			if($arr["obj_inst"]->prop("selectbox_time_step"))
-			{
-				$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
-				while($x<7)
-				{
-					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-					$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
-					{
-						$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
-						if($small_units == 60)
-						{
-							$options["".$x] = $options["".$x] + 1;
-						}
-						else
-						{
-							if($small_units < 10)
-							{
-								$small_units = "0".$small_units;
-							}
-							$options["".$x] = $options["".$x] . ":" . $small_units;
-						}
-					}
-					$x = $x + $arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step");
-				}
-			}
-			else
-			{
-				$x = 1;
-				while($x<7)
-				{
-					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-					$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
-					{
-						$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
-					}
-					$x++;
-				};
-			}
-			$ret.= html::select(array(
-				"name" => "room_reservation_length",
-				"options" => $options,
-				"onchange" => "changeRoomReservationLength(this);",
-			));
-			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
+			$ret.= $this->_get_length_select(array("obj_inst" => $arr["obj_inst"]));
+// 			$options = array();
+// 			$end = $arr["obj_inst"]->prop("time_to")/$arr["obj_inst"]->prop("time_step");
+// 			if($arr["obj_inst"]->prop("selectbox_time_step"))
+// 			{
+// 				$x = ($arr["obj_inst"]->prop("time_from")/$arr["obj_inst"]->prop("time_step"));
+// 
+// 				//$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
+// 				while($x<=$end)
+// 				{
+// 					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+// 					$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+// 					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+// 					{
+// 						$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
+// 						if($small_units%60 == 0)
+// 						{
+// 							$options["".$x] = $options["".$x] + $small_units/60;
+// 						}
+// 						else
+// 						{
+// 							if($small_units < 10)
+// 							{
+// 								$small_units = "0".$small_units;
+// 							}
+// 							$options["".$x] = $options["".$x] . ":" . $small_units;
+// 						}
+// 					}
+// 					$x = $x + $arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step");
+// 				}
+// 			}
+// 			else
+// 			{
+// 				$x = 1;
+// 				while($x <= $end)
+// 				{
+// 					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+// 					$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+// 					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+// 					{
+// 						$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
+// 					}
+// 					$x++;
+// 				};
+// 			}
+// 			$ret.= html::select(array(
+// 				"name" => "room_reservation_length",
+// 				"options" => $options,
+// 				"onchange" => "changeRoomReservationLength(this);",
+// 			));
+// 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		}
 		$ret.= $this->_get_hidden_fields($arr);
