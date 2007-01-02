@@ -451,7 +451,7 @@
             <parent>time_step</parent>
             <type>textbox</type>
             <size>5</size>
-            <caption>Valiku aja samm (kui on erinev)</caption>
+            <caption>Valiku aja samm (kui on erinev, m&amp;otilde;jub ka hinnale)</caption>
       </property>
       <property>
             <name>web_min_prod_price</name>

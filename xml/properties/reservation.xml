@@ -40,6 +40,7 @@
             <field>meta</field>
             <method>serialize</method>
             <no_caption>1</no_caption>
+            <default>1</default>
             <caption>Kinnitatud</caption>
       </property>
       <property>
@@ -297,6 +298,12 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <default>1</default>
+                  <icon>edit</icon>
+                  <focus>cp_fn</focus>
+            </general>
             <reserved_resources>
                   <caption>Ressursid</caption>
             </reserved_resources>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.83 2006/12/29 16:58:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.84 2007/01/02 13:56:03 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1975,7 +1975,7 @@ class room extends class_base
 		else
 		{
 			die("<script type='text/javascript'>
-			window.open('$url','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=600');
+			window.open('$url','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=1000');
 			 
 				window.location.href='".$arr["post_ru"]."';
 			</script>");
@@ -2146,6 +2146,13 @@ class room extends class_base
 			$customer->save();
 			$reservation->set_prop("customer" , $customer->id());
 		}
+		$reservation->set_name(sprintf(t("%s: %s / %s-%s %s"),
+			$reservation->prop("customer.name"),
+			date("d.m.Y", $reservation->prop("start1")),
+			date("H:i", $reservation->prop("start1")),
+                        date("H:i", $reservation->prop("end")),
+                        $reservation->prop("resource.name")
+		));
 		$reservation->save();
 		return $reservation->id();
 	}

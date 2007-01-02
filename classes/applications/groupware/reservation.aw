@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.23 2006/12/28 14:53:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.24 2007/01/02 13:56:09 kristo Exp $
 // reservation.aw - Broneering 
 /*
 
@@ -10,6 +10,8 @@
 @default table=objects
 @default group=general
 #TAB GENERAL
+
+@groupinfo general caption=&Uuml;ldine default=1 icon=edit focus=cp_fn
 
 @layout general_split type=hbox
 
@@ -24,7 +26,7 @@
 	@property deadline type=datetime_select table=planner field=deadline
 	@caption Maksmistähtaeg
 			
-	@property verified type=checkbox ch_value=1 field=meta method=serialize no_caption=1
+	@property verified type=checkbox ch_value=1 field=meta method=serialize no_caption=1 default=1
 	@caption Kinnitatud
 
 	@property unverify_reason type=text store=no no_caption=1
@@ -243,6 +245,21 @@ class reservation extends class_base
 				
 //			case "sum":
 //				break;
+
+			case "name":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = sprintf(t("%s: %s / %s-%s %s"), 
+					$arr["obj_inst"]->prop("customer.name"),
+					date("d.m.Y", $arr["obj_inst"]->prop("start1")),
+					date("H:i", $arr["obj_inst"]->prop("start1")),
+					date("H:i", $arr["obj_inst"]->prop("end")),
+					$arr["obj_inst"]->prop("resource.name")
+				);
+				$prop["type"] = "text";
+				break;
 		};
 		return $retval;
 	}
@@ -252,7 +269,7 @@ class reservation extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		// get resource, then get settings from that and verify req fields
-		if ($this->can("view", $arr["request"]["resource"]))
+		if ($this->can("view", $arr["request"]["resource"]) && !$arr["request"]["time_closed"])
 		{
 			$reso = obj($arr["request"]["resource"]);
 			$resi = $reso->instance();
@@ -274,12 +291,27 @@ class reservation extends class_base
 				$arr["obj_inst"]->set_meta("amount", $arr["request"]["amount"]);
 				$arr["obj_inst"]->set_meta("prod_discount", $arr["request"]["discount"]);
 				break;
+
+			case "time_closed":
+				if ($prop["value"]  && $arr["request"]["closed_info"] == "")
+				{
+					$prop["error"] = t("Sulgemise p&otilde;hjus peab olema t&auml;idetud!");
+					return PROP_FATAL_ERROR;
+				}
+				break;
 		}
 		return $retval;
 	}	
 
 	function callback_pre_save($arr)
 	{
+		$arr["obj_inst"]->set_name(sprintf(t("%s: %s / %s-%s %s"),
+	                $arr["obj_inst"]->prop("customer.name"),
+                        date("d.m.Y", $arr["obj_inst"]->prop("start1")),
+                        date("H:i", $arr["obj_inst"]->prop("start1")),
+                        date("H:i", $arr["obj_inst"]->prop("end")),
+                        $arr["obj_inst"]->prop("resource.name")
+		));
 		if ($arr["request"]["length"] > 0)
 		{
 			$arr["obj_inst"]->set_prop("end", $arr["obj_inst"]->prop("start1")+$arr["request"]["length"]*3600);
