@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.29 2007/01/02 13:34:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.30 2007/01/02 16:37:03 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -294,13 +294,20 @@ class room_reservation extends class_base
 		}
 		$levels = $targ->meta("levels");
 		$this->vars($this->get_level_urls($levels));
-		if(!isset($level))
+		if(!$_SESSION["room_reservation"][$room]["stay"])
 		{
-			$level=0;
+			if(!isset($level))
+			{
+				$level=0;
+			}
+			else 
+			{
+				$level++;
+			}
 		}
-		else 
+		else
 		{
-			$level++;
+			unset($_SESSION["room_reservation"][$room]["stay"]);
 		}
 		$tpl = $levels[$level]["template"];
 
@@ -872,6 +879,17 @@ class room_reservation extends class_base
 		{
 			$rooms = array($arr["room"]);
 		}
+		
+		$room_tmp = array();
+		foreach($rooms as $key => $val)
+		{
+			$room_obj = obj($val);
+			$room_tmp[$val] = $room_obj->ord();
+		}
+		asort($room_tmp,SORT_NUMERIC);
+		$rooms = $room_tmp;
+		
+		$rooms = array_keys($rooms);
 		$tables = "";
 		classload("vcl/table");
 
@@ -895,19 +913,26 @@ class room_reservation extends class_base
 		$res_inst = get_instance(CL_ROOM);
 		$select = $res_inst->_get_calendar_select($arr);
 		$hidden = $res_inst->_get_hidden_fields($arr);
+		if($_GET["start"])
+		{
+			$arr["request"]["start"] = $_GET["start"];
+		}
 		if($sf->is_template("CALENDAR"))
 		{
 			$c = "";
 			foreach($rooms as $room)
 			{
 				$t = new vcl_table();
-
+				$room_obj = obj($room);
 				$res_inst->_get_calendar_tbl(array(
 					"prop" => array("vcl_inst" => &$t),
 					"room" => $room,
 					"web" => 1,
 				));
-				$sf->vars(array("calendar" => $t->draw()));
+				$sf->vars(array(
+					"calendar" => $t->draw(),
+					"room_name" => $room_obj->name(),
+				));
 				$c.= $sf->parse("CALENDAR");
 			}
 			$sf->vars(array(
@@ -975,7 +1000,8 @@ class room_reservation extends class_base
 		$_SESSION["room_reservation"][$room]["end"] = $times["end"];
 		
 		$ret.= '<script language="javascript">
-			window.opener.location.reload();
+			window.opener.document.getElementById("stay").value=1;
+			window.opener.document.getElementById("changeform").submit();
 			window.close();
 		</script>';
 		//return $ret;
