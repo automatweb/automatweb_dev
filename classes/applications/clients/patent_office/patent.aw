@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.32 2006/12/28 15:48:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.33 2007/01/02 11:21:23 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -557,12 +557,12 @@ class patent extends class_base
 					$this->vars(array(
 						"code_value" => $applicant->prop("personal_id"),
 					));
-					$address = $o->prop("address");
+					$address = $applicant->prop("address");
 					//$correspond_address = $o->prop("correspond_address");
 					$this->vars(array(
-						"email_value" => $applicant->prop("email"),
-						"phone_value" => $applicant->prop("phone"),
-						"fax_value" => $applicant->prop_str("fax"),
+						"email_value" => $applicant->prop("email.mail"),
+						"phone_value" => $applicant->prop("phone.name"),
+						"fax_value" => $applicant->prop("fax.name"),
 						"name_caption" => t("Nimi"),
 						"reg-code_caption" => ("Isikokood"),
 						"name_value" => $applicant->prop("firstname"). " " . $applicant->prop("lastname"),
@@ -571,9 +571,9 @@ class patent extends class_base
 				else
 				{
 					$this->vars(array(
-						"email_value" => $applicant->prop_str("email_id"),
-						"phone_value" => $applicant->prop_str("phone_id"),
-						"fax_value" => $applicant->prop_str("telefax_id"),
+						"email_value" => $applicant->prop("email_id.mail"),
+						"phone_value" => $applicant->prop("phone_id.name"),
+						"fax_value" => $applicant->prop("telefax_id.name"),
 						"code_value" => $applicant->prop("reg_nr"),
 						"name_caption" => t("Nimetus"),
 						"reg-code_caption" => t("Reg.kood"),
