@@ -149,6 +149,17 @@
             <caption>Arve number</caption>
       </property>
       <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_up</parent>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>1</rows>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>planner</table>
             <group>general</group>
@@ -157,7 +168,7 @@
             <cols>40</cols>
             <rows>5</rows>
             <field>description</field>
-            <caption>Sisu	</caption>
+            <caption>Sisu</caption>
       </property>
       <property>
             <name>time_closed</name>
@@ -293,7 +304,6 @@
       <classinfo>
             <syslog_type>ST_RESERVATION</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>

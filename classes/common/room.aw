@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.84 2007/01/02 13:56:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.85 2007/01/02 14:59:30 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1592,6 +1592,10 @@ class room extends class_base
 								$cus = $customer->name();
 								$products = $last_bron->meta("amount");
 								$title = $last_bron->prop("content");
+								if($last_bron->prop("comment"))
+								{
+									$title.=", ".$last_bron->prop("comment");
+								}
 								foreach($products as $prod => $val)
 								{
 									if($val)

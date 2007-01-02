@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.24 2007/01/02 13:56:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.25 2007/01/02 14:59:31 markop Exp $
 // reservation.aw - Broneering 
 /*
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
-@classinfo syslog_type=ST_RESERVATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_RESERVATION relationmgr=yes no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
@@ -58,9 +58,12 @@
 	@property bill_no type=hidden table=planner 
 	@caption Arve number
 	
+	@property comment type=textarea cols=40 rows=1
+	@caption Kommentaar
+	
 	@property content type=textarea cols=40 rows=5 field=description table=planner
-	@caption Sisu	
-
+	@caption Sisu
+	
 	@property time_closed type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Suletud
 
