@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.33 2007/01/02 11:21:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.34 2007/01/02 11:54:36 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1275,7 +1275,7 @@ class patent extends class_base
 			{
 				$data["SIGNED"] = $this->parse("SIGNED");
 			}
-			$data["sign_button"] = '<input type="button" value="Allkirjasta fail" class="nupp" onClick="aw_popup_scroll(\''.$url.'\', \''.t("Faili: %s, allkirjastamine").'\', 410, 250);">';
+			$data["sign_button"] = '<input type="button" value="Allkirjasta fail" class="nupp" onClick="aw_popup_scroll(\''.$url.'\', \''.t("Allkirjastamine").'\', 410, 250);">';
 		}
 		return $data;
 	}
