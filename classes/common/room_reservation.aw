@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.28 2006/12/29 13:55:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.29 2007/01/02 13:34:55 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1102,10 +1102,46 @@ class room_reservation extends class_base
 		}
 		else
 		{
+			$this->send_affirmation_mail($arr["id"]);
 			return $this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]));
 		}
 		return ;//$this->mk_my_orb("show", array("id" => $order_id), "shop_order");
 		//returni peaks miski ilusa saidi urli andma
+	}
+
+	function send_affirmation_mail($id)
+	{
+		if(!is_oid($id))
+		{
+			return "";
+		}
+		
+		$bron = obj($id);
+		
+		$email_subj = sprintf(t("Broneering: %s"), $id);
+		$mail_from_addr = "automatweb@automatweb.com";
+		$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
+		
+		$awm = get_instance("protocols/mail/aw_mail");
+		$_send_to = $bron->prop("customer.email.mail");
+		$html = "";
+		$tpl = "preview.tpl";
+		$this->read_template($tpl);
+		lc_site_load("room_reservation", &$this);
+		$this->vars($this->get_object_data($_GET["id"]));
+		$html =  $this->parse();
+			
+		$awm->create_message(array(
+			"froma" => $mail_from_addr,
+			"fromn" => $mail_from_name,
+			"subject" => $email_subj,
+			"to" => $_send_to,
+			"body" => strip_tags(str_replace("<br>", "\n",$html)),
+		));
+		$awm->htmlbodyattach(array(
+			"data" => $html
+		));
+		$awm->gen_mail();
 	}
 
 	function make_verified($id)
@@ -1115,6 +1151,7 @@ class room_reservation extends class_base
 			$bron = obj($id);
 			$bron->set_prop("verified" , 1);
 			$bron->save();
+			
 			return 1;
 		}
 		else
