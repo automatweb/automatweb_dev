@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.5 2007/01/03 14:30:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.6 2007/01/03 14:56:25 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -228,6 +228,7 @@ class rfp_manager extends class_base
 		// set data .. this sucks
 		$obj = obj($arr["oid"]);
 		$data = array(
+			"country" => $obj->prop("country"),
 			"function_name" => $obj->prop("function_name"),
 			"organisation_company" => $obj->prop("organisation"),
 			"dates" => array(
