@@ -9,7 +9,7 @@ if (empty($_COOKIE["nocache"]) && aw_ini_get("config.use_squid"))
 ini_set("session.save_handler", "files");
 session_name("automatweb");
 session_start();
-
+session_regenerate_id();
 lc_init();
 classload("aw_template");
 classload("defs");
