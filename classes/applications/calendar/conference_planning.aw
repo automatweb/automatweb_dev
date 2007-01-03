@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.25 2007/01/03 14:33:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.26 2007/01/03 14:56:25 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -547,16 +547,16 @@ class conference_planning extends class_base
 					"billing_zip" => $sd["billing_zip"]?$sd["billing_zip"]:($addr?$addr->prop("postiindeks"):""),
 					"billing_name" => $sd["billing_name"]?$sd["billing_name"]:$per->name(),
 					"billing_phone_number" => $sd["billing_phone_number"]?$sd["billing_phone_number"]:($def_ph?$def_ph->name():""),
-					"billing_email" => $sd["billing_email"]?$sd["billing_phone_number"]:($def_em?$def_em->name():""),
+					"billing_email" => $sd["billing_email"]?$sd["billing_email"]:($def_em?$def_em->name():""),
 					"all_search_results" => $hid_rows,
 				));
 				break;
 			case "7":
 				$sc->read_template("sub_conference_rfp7.tpl");
 				// #0
-				$tmp = obj($sd["country"]);
+				$tmp = $this->can("view", $sd["country"])?obj($sd["country"]):false;
 				$sc->vars(array(
-					"country" => $tmp->trans_get_val("name")//call_user_func(array(obj($sd["country"]), "name")),
+					"country" => $tmp?$tmp->trans_get_val("name"):"",//call_user_func(array(obj($sd["country"]), "name")),
 				));
 				// #1
 				$sc->vars(array(
@@ -938,7 +938,7 @@ class conference_planning extends class_base
 		$obj->set_name($data["function_name"]);
 		$obj->set_prop("submitter", $users->get_oid_for_uid(aw_global_get("uid")));
 		$obj->set_prop("contact_preference", $data["user_contact_preference"]);
-		$obj->set_prop("country", call_user_func(array(obj($data["country"]), "name")));
+		$obj->set_prop("country", $data["country"]);
 		$obj->set_prop("organisation", $data["organisation_company"]);
 		$obj->set_prop("function_name", $data["function_name"]);
 		$obj->set_prop("attendees_no", $data["attendees_no"]);

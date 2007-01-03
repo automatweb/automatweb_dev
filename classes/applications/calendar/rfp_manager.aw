@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.6 2007/01/03 14:56:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.7 2007/01/03 14:58:20 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -156,7 +156,7 @@ class rfp_manager extends class_base
 						"date_period" => $obj->prop("arrival_date")." - ".$obj->prop("departure_date"),
 						"acc_need" => ($obj->prop("accommondation_requirements") == 1)?t("Jah"):t("Ei"),
 						"delegates" => $obj->prop("delegates_no"),
-						"contact_pers" => $obj->prop("billing_contact"),
+						"contact_pers" => $obj->prop("billing_name"),
 						"contacts" => join(", ", $contacts).(strlen($_t = $obj->prop("contact_preference"))?"(".$_t.")":""),
 						"popup" => $this->gen_popup($oid),
 						"urgent_col" => $urgent_col,
