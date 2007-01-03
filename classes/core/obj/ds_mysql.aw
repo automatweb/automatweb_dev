@@ -90,7 +90,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$ret["meta"] = aw_unserialize(stripslashes(stripslashes($ret["metadata"])));
 		}
-		unset($ret["metadata"]);
+		//unset($ret["metadata"]);
 
 		if ($ret["brother_of"] == 0)
 		{

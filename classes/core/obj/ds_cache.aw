@@ -35,7 +35,6 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$oid,
 			$c_fn
 		));
-
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->get_objdata($oid, $param);
