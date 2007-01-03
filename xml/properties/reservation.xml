@@ -232,6 +232,17 @@
             <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
+            <name>special_discount</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Spetsiaal allahindlus</caption>
+      </property>
+      <property>
             <name>client_arrived</name>
             <table>objects</table>
             <group>general</group>

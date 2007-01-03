@@ -183,6 +183,16 @@
             <caption>Ruumide kalendrid algavad t&amp;amp;auml;nasest, mitte n&amp;amp;auml;dala algusest</caption>
       </property>
       <property>
+            <name>no_cust_arrived_pop</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kliendi saabumise kinnitust pole vaja k&amp;amp;uuml;sida</caption>
+      </property>
+      <property>
             <name>bron_required_fields</name>
             <table>objects</table>
             <group>settings</group>
@@ -191,6 +201,72 @@
             <type>table</type>
             <store>no</store>
             <caption>Broneeringuobjekti kohustuslikud v&amp;amp;auml;ljad</caption>
+      </property>
+      <property>
+            <name>send_del_mail</name>
+            <table>objects</table>
+            <group>delete_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saada kustutamise kohta meil</caption>
+      </property>
+      <property>
+            <name>del_mail_to</name>
+            <table>objects</table>
+            <group>delete_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kellele kustutamise kohta meil saata</caption>
+      </property>
+      <property>
+            <name>del_mail_from</name>
+            <table>objects</table>
+            <group>delete_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili from aadress</caption>
+      </property>
+      <property>
+            <name>del_mail_from_name</name>
+            <table>objects</table>
+            <group>delete_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili from nimi</caption>
+      </property>
+      <property>
+            <name>del_mail_subj</name>
+            <table>objects</table>
+            <group>delete_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili subjekt</caption>
+      </property>
+      <property>
+            <name>del_mail_legend</name>
+            <table>objects</table>
+            <group>delete_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Meili sisu legend</caption>
+      </property>
+      <property>
+            <name>del_mail_ct</name>
+            <table>objects</table>
+            <group>delete_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>20</rows>
+            <cols>50</cols>
+            <caption>Meili sisu</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ROOM_SETTINGS</syslog_type>
@@ -209,6 +285,13 @@
             <settings>
                   <caption>Muud seaded</caption>
             </settings>
+            <email>
+                  <caption>Meiliseaded</caption>
+            </email>
+            <delete_email>
+                  <caption>Kustutamine</caption>
+                  <parent>email</parent>
+            </delete_email>
       </groupinfo>
       <reltypes>
             <USER>

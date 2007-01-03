@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.25 2007/01/02 14:59:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.26 2007/01/03 14:57:14 kristo Exp $
 // reservation.aw - Broneering 
 /*
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -84,7 +85,10 @@
 
 	@property end type=datetime_select table=planner
 	@caption L&otilde;peb
-	
+
+	@property special_discount type=textbox size=5 field=meta method=serialize
+	@caption Spetsiaal allahindlus
+
 	property code type=hidden size=5 table=planner field=code
 	caption Kood
 
@@ -182,6 +186,7 @@ class reservation extends class_base
 					"end" => $arr["obj_inst"]->prop("end"),
 					"people" => $arr["obj_inst"]->prop("people_count"),
 					"products" => $arr["obj_inst"]->meta("amount"),
+					"bron" => $arr["obj_inst"]
 				));
 				foreach($sum as $cur=>$price)
 				{
@@ -215,10 +220,14 @@ class reservation extends class_base
 					if($amt && $this->can("view", $product))
 					{
 						$prod=obj($product);
-						$val[] = $prod->name();
+						$val[] = sprintf(t("%s: %s tk / %s"),
+							$prod->name(),
+							$amt,
+							number_format($prod->prop("price")*$amt,2)
+						);
 					}
 				}
-				$prop["value"] = join($val , ",");
+				$prop["value"] = join($val , "<br>");
 				break;	
 			case "people":
 				if(is_oid($arr["obj_inst"]->meta("resource")))
@@ -669,6 +678,7 @@ class reservation extends class_base
 					$image = $image_inst->make_img_tag_wl($pic->id());
 				}
 			}
+			$po = obj($prod->parent());
 			if($sell_products)
 			{			
 				$t->define_data(array(
@@ -678,10 +688,11 @@ class reservation extends class_base
 						"name"=>'amount['.$prod->id().']',
 						"value" => $amount[$prod->id()],
 						"size" => 5,
-						"onChange" => "el=document.getElementById('pr".$prod->id()."');el.innerHTML=this.value*".$prod->prop("price").";"
+						"onChange" => "el=document.getElementById('pr".$prod->id()."');el.innerHTML=this.value*".$prod->prop("price").";els=document.getElementsByTagName('span');tots = 0;for(i=0; i < els.length; i++) { el=els[i]; if (el.id.indexOf('pr') == 0) { tots += parseInt(el.innerHTML);}} te=document.getElementById('total');te.innerHTML=tots;disc=parseInt(document.changeform.discount.value);disc_el=document.getElementById('disc_val');if(disc>0){disc_el.innerHTML=(tots*(disc/100));} sum_val = document.getElementById('sum_val');if (disc > 0) {sum_val.innerHTML=(tots-(tots*(disc/100)));} else { sum_val.innerHTML=tots; } "
 					)),
 					"price" => number_format($prod->prop("price"), 2),
-					"sum" => "<span id='pr".$prod->id()."'>".number_format($prod->prop("price") * $amount[$prod->id()], 2)."</span>"
+					"sum" => "<span id='pr".$prod->id()."'>".number_format($prod->prop("price") * $amount[$prod->id()], 2)."</span>",
+					"parent" => $po->name()
 				));
 				$sum += $prod->prop("price") * $amount[$prod->id()];
 			}
@@ -694,6 +705,7 @@ class reservation extends class_base
 	//					"name"=>'amount['.$prod->id().']',
 	//					"value" => $amount[$prod->id()],
 	//				)),
+					"parent" => $po->name()
 				));
 				$packages = $prod->connections_from(array(
 					"type" => "RELTYPE_PACKAGING",
@@ -725,11 +737,13 @@ class reservation extends class_base
 				}
 			}
 		}
+		$t->set_default_sortby("name");
+		$t->sort_by(array("rgroupby" => array("parent" => "parent")));
 		$t->set_sortable(false);
 		
 		$t->define_data(array(
 			"name" => t("Kogusumma"),
-			"sum" => number_format($sum, 2)
+			"sum" => "<span id=total>".number_format($sum, 2)."</span>"
 		));
 
 		$disc = $sum * ($arr["obj_inst"]->meta("prod_discount") / 100.0);
@@ -738,14 +752,15 @@ class reservation extends class_base
 			"amount" => html::textbox(array(
 				"name" => "discount",
 				"value" => $arr["obj_inst"]->meta("prod_discount"),
-				"size" => 4
+				"size" => 4,
+				"onChange" => "els=document.getElementsByTagName('span');tots = 0;for(i=0; i < els.length; i++) { el=els[i]; if (el.id.indexOf('pr') == 0) { tots += parseInt(el.innerHTML);}} te=document.getElementById('total');te.innerHTML=tots;disc=parseInt(document.changeform.discount.value);disc_el=document.getElementById('disc_val');if(disc>0){disc_el.innerHTML=(tots*(disc/100));} sum_val = document.getElementById('sum_val');if (disc > 0) {sum_val.innerHTML=(tots-(tots*(disc/100)));} else { sum_val.innerHTML=tots; }"
 			)),
-			"sum" => number_format($disc, 2)
+			"sum" => "<span id='disc_val'>".number_format($disc, 2)."</span>"
 		));
 
 		$t->define_data(array(
 			"name" => t("<b>Summa</b>"),
-			"sum" => number_format($sum-$disc, 2)
+			"sum" => "<span id='sum_val'>".number_format($sum-$disc, 2)."</span>"
 		));
 		return $t;
 	}
@@ -838,6 +853,13 @@ class reservation extends class_base
 			));
 			$has = true;
 		}
+
+		$has = true;
+		$tb->add_button(array(
+			"name" => "rclose",
+			"img" => "refresh.gif",
+			"onClick" => "window.opener.refresh();window.close();"
+		));
 		if (!$has)
 		{
 			return PROP_IGNORE;
@@ -1076,6 +1098,78 @@ class reservation extends class_base
 			return PROP_IGNORE;
 		}
 		$arr["prop"]["value"] = sprintf(t("Kinnituse eemaldamise p&otilde;hjus: %s"), $arr["obj_inst"]->meta("unverify_reason"));
+	}
+
+	function on_delete_reservation($arr)
+	{
+		$o = obj($arr["oid"]);
+		if ($this->can("view", $o->prop("resource")))
+		{
+			$res = obj($o->prop("resource"));
+			$sets = $res->prop("settings");
+			if (is_array($sets))
+			{
+				$sets = reset($sets);
+			}
+			if ($this->can("view", $sets))
+			{
+				$set = obj($sets);
+				if ($set->prop("send_del_mail"))
+				{
+					$this->do_send_on_delete_mail($o, $set);
+				}
+			}
+		}
+	}
+
+	function do_send_on_delete_mail($bron, $settings)
+	{
+		send_mail(
+			$settings->prop("del_mail_to"),
+			$settings->prop("del_mail_subj"),
+			str_replace("#ord#", $this->_get_mail_ord_ct($bron), $settings->prop("del_mail_ct")),
+			"From: ".$this->_get_del_mail_from($settings)
+		);
+	}
+
+	function _get_mail_ord_ct($bron)
+	{
+		$res = "";
+		//kliendi nimi, kontaktid, aeg, broneeritud ruum, toidud
+		$res .= sprintf(t("Klient: %s / %s / %s\n"), 
+			$bron->prop("customer.name"),
+			$bron->prop("customer.email.mail"),
+			$bron->prop("customer.phone.name")
+		);
+		$res .= sprintf(t("Aeg: %s: %s-%s\n"), 
+			date("d.m.Y", $bron->prop("start1")),
+			date("H:i", $bron->prop("start1")),
+			date("H:i", $bron->prop("end"))
+		);
+		$res .= sprintf(t("Koht: %s\n"), $bron->prop("resource.name"));
+
+                $amount = $bron->meta("amount");
+                $val = array();
+                foreach($amount as $product => $amt)
+ 	        {
+        	        if($amt && $this->can("view", $product))
+                	{
+		                $prod=obj($product);
+                		$val[] = $prod->name();
+	                }
+                }
+                $res .= sprintf(t("Toidud: %s\n"), join($val , ","));
+
+		return $res;
+	}
+
+	function _get_del_mail_from($s)
+	{
+		if ($s->prop("del_mail_from_name") != "")
+		{
+			return $s->prop("del_mail_from_name")." <".$s->prop("del_mail_from").">";
+		}
+		return $s->prop("del_mail_from");
 	}
 }
 ?>

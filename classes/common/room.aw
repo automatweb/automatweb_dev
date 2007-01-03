@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.85 2007/01/02 14:59:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.86 2007/01/03 14:57:12 kristo Exp $
 // room.aw - Ruum 
 /*
 
-@classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1
 
 @default table=objects
 @default field=meta
@@ -842,7 +842,7 @@ class room extends class_base
 		$o->set_class_id(CL_PLANNER);
 		$o->set_parent($room->id());
 		$o->set_name("Ruumi '".$room->name()."' kalender");
-		$o->save();
+		$o->save();arr($o); die();
 		$room->connect(array(
 			"to" => $o->id(),
 			"reltype" => "RELTYPE_CALENDAR",
@@ -1224,7 +1224,7 @@ class room extends class_base
 
 	function _get_time_select($arr)
 	{
-			$x=0;
+		$x=0;
 		$options = array();
 		$week = date("W" , time());
 		$weekstart = mktime(0,0,0,1,1,date("Y" , time())) + (date("z" , time()) - date("w" , time()) + 1)*86400;
@@ -1460,7 +1460,6 @@ class room extends class_base
 
 		exit_function("get_calendar_tbl");
 		//see siis näitab miskeid valitud muid nädalaid
-		
 		enter_function("get_calendar_tbl::2");
 		$start_hour = 0;
 		$start_minute = 0;
@@ -1479,7 +1478,7 @@ class room extends class_base
 			{
 				$start_hour = 0;
 			}
-			$today_start = mktime($start_hour, $start_minute, 0, date("n", time()), date("j", time()), date("Y", time()));
+			$this->start = $today_start = mktime($start_hour, $start_minute, 0, date("n", time()), date("j", time()), date("Y", time()));
 		}
 
 		$step = 0;
@@ -1512,7 +1511,7 @@ class room extends class_base
  				$today_start = $today_start+60*$gwo["start_minute"];
  			}
 		}
-
+			//arr(date(" d/m/y" , $this->start));arr(date(" d/m/y" , $today_start));
 		enter_function("get_calendar_tbl::3");
 		$len = 7;
 		if ($_GET["start"] && $_GET["end"])
@@ -3035,8 +3034,25 @@ class room extends class_base
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
 		}
+		
+		$warehouse = $room->prop("warehouse");
+		if(is_oid($warehouse) && $this->can("view" , $warehouse))
+		{
+			$w_obj = obj($warehouse);
+			$w_cnf = obj($w_obj->prop("conf"));
+			if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
+			{
+				$soc = obj($w_obj->prop("order_center"));
+				$prod_discount = $soc->prop("web_discount");
+			}
+		}
+		
 		foreach($room->prop("currency") as $currency)
 		{
+			if(!$sum[$currency])
+			{
+				$sum[$currency] = 0;
+			}
 			if($people > $room->prop("normal_capacity"))
 			{
 				$sum[$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
@@ -3046,7 +3062,7 @@ class room extends class_base
 				$sum[$currency] += $this->cal_products_price(array(
 					"products" => $products,
 					"currency" => $currency,
-					"warehouse" => $room->prop("warehouse"),
+					"prod_discount" => $prod_discount,
 				));
 			}
 		}
@@ -3242,12 +3258,24 @@ class room extends class_base
 			products and their amounts
 		@param currency optional type=oid
 			if you want result in not the same currency the company uses.
+		@param prod_discount optional type=int
+		@param warehouse optional type=oid
 		@return int
 			price of all products
 	**/
 	function cal_products_price($arr)
 	{
 		extract($arr);
+		if(is_oid($warehouse) && $this->can("view" , $warehouse))
+		{
+			$w_obj = obj($warehouse);
+			$w_cnf = obj($w_obj->prop("conf"));
+			if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
+			{
+				$soc = obj($w_obj->prop("order_center"));
+				$prod_discount = $soc->prop("web_discount");
+			}
+		}
 		$sum = 0;
 		foreach($products as $id => $amt)
 		{
@@ -3265,7 +3293,37 @@ class room extends class_base
 				}
 			}
 		}
+		if($prod_discount)
+		{
+			$sum = $sum-$sum*0.01*$prod_discount;
+		}
 		return $sum;
+	}
+
+	function get_prod_discount($arr)
+	{
+		extract($arr);
+		if(is_oid($room) && $this->can("view" , $room))
+		{
+			$o = obj($room);
+		}
+		if(!is_object($o))
+		{
+			return 0;
+		}
+		$warehouse = $o->prop("warehouse");
+		$prod_discount = 0;
+		if(is_oid($warehouse) && $this->can("view" , $warehouse))
+		{
+			$w_obj = obj($warehouse);
+			$w_cnf = obj($w_obj->prop("conf"));
+			if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
+			{
+				$soc = obj($w_obj->prop("order_center"));
+				$prod_discount = $soc->prop("web_discount");
+			}
+		}
+		return $prod_discount;
 	}
 
 	function check_from_table($arr)
