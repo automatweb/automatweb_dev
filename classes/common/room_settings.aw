@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.5 2006/12/22 09:57:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.6 2007/01/03 20:15:34 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -73,9 +73,37 @@
 	@property cal_from_today type=checkbox ch_value=1
 	@caption Ruumide kalendrid algavad t&auml;nasest, mitte n&auml;dala algusest
 
+	@property no_cust_arrived_pop type=checkbox ch_value=1
+	@caption Kliendi saabumise kinnitust pole vaja k&uuml;sida
+
 	@property bron_required_fields type=table store=no
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
 
+@groupinfo email caption="Meiliseaded"
+
+	@groupinfo delete_email caption="Kustutamine" parent=email
+	@default group=delete_email
+
+		@property send_del_mail type=checkbox ch_value=1
+		@caption Saada kustutamise kohta meil
+
+		@property del_mail_to type=textbox
+		@caption Kellele kustutamise kohta meil saata
+
+		@property del_mail_from type=textbox 
+		@caption Meili from aadress
+
+		@property del_mail_from_name type=textbox
+		@caption Meili from nimi
+
+		@property del_mail_subj type=textbox
+		@caption Meili subjekt
+
+		@property del_mail_legend type=text
+		@caption Meili sisu legend
+
+		@property del_mail_ct type=textarea rows=20 cols=50
+		@caption Meili sisu
 
 @reltype USER value=1 clid=CL_USER
 @caption Kasutaja
@@ -110,6 +138,10 @@ class room_settings extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "del_mail_legend":
+				$prop["value"] = t("#ord# - tellimuse sisu");
+				break;
+				
 			//-- get_property --//
 		};
 		return $retval;

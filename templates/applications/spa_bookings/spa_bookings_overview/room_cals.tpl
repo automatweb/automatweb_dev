@@ -1,10 +1,11 @@
+<div id="sisu">
 <form name="changeform" action="reforb.{VAR:ext}" method="POST">
 {VAR:toolbar}
 {VAR:picker}
-<table border="1">
+<table cellpadding="5" cellspacing="10" border="0">
 <tr>
 	<!-- SUB: CAL -->
-	<td valign="top" align="left">
+	<td valign="top" align="left" style="border: 1px black solid;">
 		{VAR:name}
 		{VAR:cal}
 	</td>
@@ -19,3 +20,4 @@ function submit_changeform()
 </script>
 {VAR:reforb}
 </form>
+</div>
