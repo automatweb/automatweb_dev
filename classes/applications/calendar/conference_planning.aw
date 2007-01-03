@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.24 2007/01/03 13:06:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.25 2007/01/03 14:33:48 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1085,7 +1085,7 @@ class conference_planning extends class_base
 		// billing
 
 		$obj->set_prop("billing_company", $data["billing_company"]);
-		$obj->set_prop("billing_contact", $data["billing_company"]);
+		$obj->set_prop("billing_contact", $data["billing_contact"]);
 		$obj->set_prop("billing_street", $data["billing_street"]);
 		$obj->set_prop("billing_city", $data["billing_city"]);
 		$obj->set_prop("billing_zip", $data["billing_zip"]);
