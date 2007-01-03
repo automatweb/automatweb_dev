@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.30 2007/01/02 16:37:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.31 2007/01/03 15:09:06 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -294,7 +294,7 @@ class room_reservation extends class_base
 		}
 		$levels = $targ->meta("levels");
 		$this->vars($this->get_level_urls($levels));
-		if(!$_SESSION["room_reservation"][$room]["stay"])
+		if(!$_SESSION["room_reservation"][$room->id()]["stay"])
 		{
 			if(!isset($level))
 			{
@@ -307,7 +307,7 @@ class room_reservation extends class_base
 		}
 		else
 		{
-			unset($_SESSION["room_reservation"][$room]["stay"]);
+			unset($_SESSION["room_reservation"][$room->id()]["stay"]);
 		}
 		$tpl = $levels[$level]["template"];
 
@@ -319,8 +319,8 @@ class room_reservation extends class_base
 		$data["revoke_url"] = $this->mk_my_orb("revoke_reservation", array("room" => $room->id()));
 
 		//seda vaja, et toodete tabelis vana crapi ka näha oleks,....et vahepeal võib ruum muutunud olla
-		$_SESSION["soc_err"] = $_SESSION["room_reservation"][$room->id()]["products"];
-
+		$this->set_cart_session($room);
+		
 		$this->vars($this->get_site_props(array(
 			"room" => $room,
 			"id" => $arr["alias"]["target"],
@@ -343,6 +343,10 @@ class room_reservation extends class_base
 		
 		$this->vars(array(
 			"PROD" 	=> $p,
+			"errors" => $_SESSION["room_reservation"][$room->id()]["errors"],
+			"CONTINUE" => ($_SESSION["room_reservation"][$room->id()]["start"]) ? $this->parse("CONTINUE") : "",
+			"continue_submit" => $_SESSION["room_reservation"][$room->id()]["start"] ? "changeform.submit();" : "alert('".t("Vali enne jätkamist sobiv aeg!")."');",
+			//"continue_alt" => !$_SESSION["room_reservation"][$room->id()]["start"] ? "alert();" : "",//t("Vali enne j&auml;tkamist sobiv aeg!") : "",
 			"reforb" => $this->mk_reforb("parse_alias",array(
 				"section"	=> aw_global_get("section"),
 				"level"		=> $level,
@@ -374,12 +378,40 @@ class room_reservation extends class_base
 				"room" => $room->id(),
 			)),
 		));
-		
+		$_SESSION["room_reservation"][$room->id()]["errors"] = null;
 		//property väärtuse saatmine kujul "property_nimi"_value
 		exit_function("oom_reservation::parse_alias");
 		return $this->parse();
 	}
 	
+	function set_cart_session($room)
+	{
+		unset($_SESSION["cart"]);
+		$_SESSION["soc_err"] = $_SESSION["room_reservation"][$room->id()]["products"];
+		foreach($_SESSION["room_reservation"][$room->id()]["products"] as $oid=> $val)
+		{
+			if($val)
+			{
+				$o = obj($oid);
+				if($o->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+				{
+					//$_SESSION["cart"]["items"][$oid]["items"] = $val;
+					$ol = new object_list(array("lang_id" => array(), "class_id" => CL_SHOP_PRODUCT, "CL_SHOP_PRODUCT.RELTYPE_PACKAGING" => $oid));
+					if(sizeof($ol->arr()))
+					{
+						$prod = reset($ol->arr());
+						$_SESSION["cart"]["items"][$prod->id()][$oid]["items"] = $val;
+					}
+					
+				}
+				else
+				{
+					$_SESSION["cart"]["items"][$oid]["items"] = $val;
+				}
+				$_SESSION["soc_err"][$oid]["ordered_num_enter"] = $val;
+			}
+		}
+	}
 	
 	/** get_total_bron_price
 		@param bron optional type=object
@@ -410,7 +442,6 @@ class room_reservation extends class_base
 			"start" => $start,
 			"end" => $end,
 			"products" => $products,
-
 		));
 		foreach($sum as $cur => $val)
 		{
@@ -446,11 +477,13 @@ class room_reservation extends class_base
 		//	"products" => $bron->meta("amount"),
 		));
 		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"] = array();
+		
+		$prod_discount = $room_inst->get_prod_discount(array("room" => $bron->prop("resource")));
 		foreach($sum as $curr => $val)
 		{
 			$currency = obj($curr);
 	//		$data["sum"][] =  $val." ".$currency->name();
-			$data["bargain"][] = $room_inst->bargain_value[$curr]." ".$currency->name();
+			$data["bargain"][] = (0+$room_inst->bargain_value[$curr])." ".$currency->name();
 			$data["sum_wb"][] = ((double) $val + (double)$room_inst->bargain_value[$curr])." ".$currency->name();
 		}
 		foreach ($bron->meta("amount") as $prod => $amount)
@@ -463,11 +496,11 @@ class room_reservation extends class_base
 				{
 					if($prices[$curr] || $prices[$curr] === 0)
 					{
-						$data["menu_sum"][$curr] = $data["menu_sum"][$curr] + $prices[$curr]*$amount;
+						$data["menu_sum"][$curr] = $data["menu_sum"][$curr] + $prices[$curr]*$amount*(100-$prod_discount);
 					}
 					else
 					{
-						$data["menu_sum"][$curr] = $data["menu_sum"][$curr]+$product->prop("price")*$amount;
+						$data["menu_sum"][$curr] = $data["menu_sum"][$curr]+$product->prop("price")*$amount(100-$prod_discount);
 					}
 				}
 			}
@@ -475,6 +508,10 @@ class room_reservation extends class_base
 		foreach ($sum as $curr=> $val)
 		{
 			$currency = obj($curr);
+			if(!$data["menu_sum"][$curr])
+			{
+				$data["menu_sum"][$curr] = 0;
+			}
 			$data["menu_sum"][$curr] = $data["menu_sum"][$curr]." ".$currency->name();
 		}
 		
@@ -513,8 +550,8 @@ class room_reservation extends class_base
 		if(is_oid($bron->prop("customer")))
 		{
 			$customer = obj($bron->prop("customer"));
-			$ret["phone_value"] = $customer->prop_str("phone");
-			$ret["email_value"] = $customer->prop_str("email");;
+			$ret["phone_value"] = $customer->prop("phone.name");
+			$ret["email_value"] = $customer->prop("email.mail");;
 		}
 		$ret["name_value"] = $bron->prop_str("customer");
 		$ret["PROD"] = $p;
@@ -635,17 +672,8 @@ class room_reservation extends class_base
 		$show_curr = $room_res->prop("prices");
 		
 		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"]= $data["sum_pay"]= array();
-		foreach ($show_curr as $curr)
-		{
-			$currency = obj($curr);
-			if($sum[$curr] || $sum[$curr] == 0)
-			{
-				$data["sum"][] = $sum[$curr]." ".$currency->name();
-				$data["bargain"][] = $room_inst->bargain_value[$curr]." ".$currency->name();
-				$data["sum_wb"][] = ((double)$sum[$curr] + (double)$room_inst->bargain_value[$curr])." ".$currency->name();
-			}
-		}
-		
+
+		$prod_discount = $room_inst->get_prod_discount(array("room" => $room->id()));
 		foreach ($_SESSION["room_reservation"][$room->id()]["products"] as $prod => $amount)
 		{
 			if($amount)
@@ -657,25 +685,42 @@ class room_reservation extends class_base
 					if($prices[$curr] || $prices[$curr] === 0)
 					{
 						$data["menu_sum"][$curr] = $data["menu_sum"][$curr] + $prices[$curr]*$amount;
+						$data["menu_disc"][$curr]+=$prices[$curr]*$amount*$prod_discount*0.01;
 					}
 					else
 					{
 						$data["menu_sum"][$curr] = $data["menu_sum"][$curr]+$product->prop("price")*$amount;
+						$data["menu_disc"][$curr]+=$product->prop("price")*$amount*$prod_discount*0.01;
 					}
-				
 				}
+			}
+		}
+		
+		foreach ($show_curr as $curr)
+		{
+			$currency = obj($curr);
+			if($sum[$curr] || $sum[$curr] == 0)
+			{
+				$data["sum"][$curr] = $sum[$curr]." ".$currency->name();
+				$data["bargain"][$curr] = ($data["menu_disc"][$curr]+$room_inst->bargain_value[$curr])." ".$currency->name();
+				$data["sum_wb"][$curr] = ((double)$sum[$curr] + (double)$room_inst->bargain_value[$curr])." ".$currency->name();
 			}
 		}
 	
 		$min_prod_prices = $room->meta("web_min_prod_prices");
 		foreach ($show_curr as $curr)
 		{
+			if(!$data["menu_sum"][$curr])
+			{
+				$data["menu_sum"][$curr] = 0;
+			}
 			$currency = obj($curr);
 			if ($min_prod_prices[$curr] > 0)
 			{
 				$data["menu_sum"][$curr] = $min_prod_prices[$curr];
 			}
 			$data["menu_sum"][$curr] = $data["menu_sum"][$curr]." ".$currency->name();
+			$data["menu_disc"][$curr] = $data["menu_disc"][$curr]." ".$currency->name();
 		}
 				
 		$sum = $this->get_total_bron_price(array(
@@ -684,7 +729,7 @@ class room_reservation extends class_base
 			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
 			"end" => $_SESSION["room_reservation"][$room->id()]["end"],
 			"products" => $_SESSION["room_reservation"][$room->id()]["products"],
-		));	
+		));
 		foreach ($show_curr as $curr)
 		{
 			$currency = obj($curr);
@@ -699,6 +744,7 @@ class room_reservation extends class_base
 		$data["bargain"] = join("/" , $data["bargain"]);
 		$data["sum_wb"] = join("/" , $data["sum_wb"]);
 		$data["menu_sum"] = join("/" , $data["menu_sum"]);
+		$data["menu_disc"] = join("/" , $data["menu_sum"]);
 
 
 
@@ -770,12 +816,35 @@ class room_reservation extends class_base
 		{
 			$_SESSION["room_reservation"][$room][$key] = $val;
 		}
+		if($err = $this->check_fields($_POST))
+		{
+			$_SESSION["room_reservation"][$room]["stay"] = 1;
+			$_SESSION["room_reservation"][$room]["errors"] = $err;
+		}
 		extract($args);
 		if(!$_GET["level"])
 		{
 			return aw_url_change_var("", "" , $args["return_to"])."?level=".$level;
 		}
 		return aw_url_change_var("level", $level , $args["return_to"]);//."?level=".$level;
+	}
+	
+	function check_fields($data)
+	{
+		$ret = "";
+		if(array_key_exists("name" , $data) && !(strlen($data["name"]) > 1))
+		{
+			$ret.= t("Nimi on kohustuslik")."\n<br>";
+		}
+		if(array_key_exists("phone" , $data) && !(strlen($data["phone"]) > 4))
+		{
+			$ret.= t("Telefon on kohustuslik")."\n<br>";
+		}
+		if(array_key_exists("email" , $data) && !(strlen($data["email"]) > 5))
+		{
+			$ret.= t("E-Mail on kohustuslik")."\n<br>";
+		}
+		return $ret;
 	}
 	
 	/**
@@ -856,7 +925,8 @@ class room_reservation extends class_base
 			$_SESSION["room_reservation"][$arr["room"]]["products"] = $arr["amount"];
 		}
 		$ret.= '<script language="javascript">
-			window.opener.location.reload();
+			window.opener.document.getElementById("stay").value=1;
+			window.opener.document.getElementById("changeform").submit();
 			window.close();
 		</script>';
 		//return $ret;
@@ -1100,7 +1170,10 @@ class room_reservation extends class_base
 		}
 		//$_SESSION["soc_err"] = null;
 		
-		
+		//if($_SESSION["room_reservation"][$room->id()]["email"] == "marko.puurmann@gmail.com")
+		//{
+		//	$sum = 1;
+		//}
 		$_SESSION["room_reservation"][$room->id()] = null;;
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
