@@ -1,10 +1,101 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>s_name</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>searchbox</parent>
+            <size>15</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>s_name</field>
+            <caption>&amp;amp;Uuml;rituse nimi</caption>
+      </property>
+      <property>
+            <name>s_org</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>searchbox</parent>
+            <size>15</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>s_org</field>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>s_contact</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>textbox</type>
+            <parent>searchbox</parent>
+            <size>15</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>s_contact</field>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>s_time_from</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>date_select</type>
+            <parent>searchbox</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>s_time_from</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>s_time_to</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>date_select</type>
+            <parent>searchbox</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>s_time_to</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>s_submit</name>
+            <table>objects</table>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
+            <type>submit</type>
+            <parent>searchbox</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>s_submit</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>rfps</name>
             <table>objects</table>
-            <group>rfps</group>
+            <group>
+                  <num_0>rfps_active</num_0>
+                  <num_1>rfps_archive</num_1>
+            </group>
             <type>table</type>
+            <parent>main</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>rfps</field>
@@ -19,8 +110,42 @@
       <groupinfo>
             <rfps>
                   <caption>Pakkumise saamis palved</caption>
-                  <submit>no</submit>
             </rfps>
+            <rfps_active>
+                  <caption>Aktiivsed</caption>
+                  <parent>rfps</parent>
+            </rfps_active>
+            <rfps_archive>
+                  <caption>Arhiiv</caption>
+                  <parent>rfps</parent>
+            </rfps_archive>
       </groupinfo>
+      <layout>
+            <hsplit>
+                  <type>hbox</type>
+                  <group>
+                        <num_0>rfps_active</num_0>
+                        <num_1>rfps_archive</num_1>
+                  </group>
+            </hsplit>
+            <searchbox>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <type>vbox</type>
+                  <parent>hsplit</parent>
+                  <group>
+                        <num_0>rfps_active</num_0>
+                        <num_1>rfps_archive</num_1>
+                  </group>
+            </searchbox>
+            <main>
+                  <type>vbox</type>
+                  <parent>hsplit</parent>
+                  <group>
+                        <num_0>rfps_active</num_0>
+                        <num_1>rfps_archive</num_1>
+                  </group>
+            </main>
+      </layout>
 </properties>
 

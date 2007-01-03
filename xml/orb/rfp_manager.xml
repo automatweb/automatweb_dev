@@ -9,5 +9,26 @@
 			</function>
 		</action>
 
+		<action name="unarchive" all_args="1">
+			<function name="unarchive">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="archive" all_args="1">
+			<function name="archive">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_rfp" all_args="1">
+			<function name="del_rfp">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

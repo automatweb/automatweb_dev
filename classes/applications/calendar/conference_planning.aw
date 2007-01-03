@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.23 2006/12/29 14:22:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.24 2007/01/03 13:06:10 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -159,6 +159,7 @@ class conference_planning extends class_base
 		{
 			case 1:
 				$sc->read_template("sub_conference_rfp1.tpl");				
+				$acc_req = ($sd["single_count"] > 0 || $sd["double_count"] > 0 || $sd["suite_count"] > 0 || $sd["accomondation_requirements"])?"CHECKED":"";
 				$sc->vars(array(
 					"function_name" => $sd["function_name"],
 					"organisation_company" => $sd["organisation_company"],
@@ -167,7 +168,7 @@ class conference_planning extends class_base
 					"arrival_date" => $sd["dates"][0]["arrival_date"],
 					"departure_date" => $sd["dates"][0]["departure_date"],
 					"open_for_alternative_dates" => ($sd["open_for_alternative_dates"])?"CHECKED":"",
-					"accommondation_requirements" => ($sd["accommondation_requirements"])?"CHECKED":"",
+					"accommondation_requirements" => $acc_req,
 				));
 
 				break;
@@ -238,7 +239,7 @@ class conference_planning extends class_base
 				$sc->read_template("sub_conference_rfp3.tpl");
 				foreach(array("single", "double", "suite") as $loop_item)
 				{
-					for($i = 1; $i <= $c_obj->prop($loop_item."_count"); $i++)
+					for($i = 0; $i <= $c_obj->prop($loop_item."_count"); $i++)
 					{
 						$sc->vars(array(
 							"value" => $i,
@@ -250,7 +251,7 @@ class conference_planning extends class_base
 				}
 				$sc->vars($room_options);
 				$sc->vars(array(
-					"needs_rooms" => $sd["needs_rooms"]?"CHECKED":"",
+					"needs_rooms" => $sd["accommondation_requirements"]?"CHECKED":"",
 					"main_arrival_date" => $sd["dates"][0]["arrival_date"],
 					"main_departure_date" => $sd["dates"][0]["departure_date"],
 				));
@@ -459,7 +460,8 @@ class conference_planning extends class_base
 				break;
 			case 6:
 				$sc->read_template("sub_conference_rfp6.tpl");				
-				foreach($this->countrys as $k => $v)
+				$addr = get_instance(CL_CRM_ADDRESS);
+				foreach($addr->get_country_list() as $k => $v)
 				{
 					$sc->vars(array(
 						"value" => $k,
@@ -510,6 +512,8 @@ class conference_planning extends class_base
 						"double_count" => $loc->prop("double_count"),
 						"suite_count" => $loc->prop("suite_count"),
 						"value" => $loc_id,
+						"selected" => in_array($loc_id, $sd["selected_search_result"])?"CHECKED":"",
+						"urgent" => $sd["urgent"]?"CHECKED":"",
 					));
 					$s_results .= $sc->parse("SEARCH_RESULT");
 					$hid_rows .= html::hidden(array(
@@ -524,17 +528,26 @@ class conference_planning extends class_base
 						$s_results .= $sc->parse("SEARCH_RESULT_ERROR");
 					}
 				}
+				$u = get_instance(CL_USER);
+				$org = $u->get_current_company();
+				$per = obj($u->get_current_person());
+				$addr = $per->prop("address");
+				$addr = $this->can("view", $addr)?obj($addr):false;
+				$def_ph = $per->prop("phone");
+				$def_ph = $this->can("view", $def_ph)?obj($def_ph):false;
+				$def_em = $per->prop("email");
+				$def_em = $this->can("view", $def_em)?obj($def_em):false;
 				$sc->vars(array(
 					"COUNTRY" => $ctr,
 					"SEARCH_RESULT" => $s_results,
-					"billing_company" => $sd["billing_company"],
-					"billing_contact" => $sd["billing_contact"],
-					"billing_street" => $sd["billing_street"],
-					"billing_city" => $sd["billing_city"],
-					"billing_zip" => $sd["billing_zip"],
-					"billing_name" => $sd["billing_name"],
-					"billing_phone_number" => $sd["billing_phone_number"],
-					"billing_email" => $sd["billing_email"],
+					"billing_company" => $sd["billing_company"]?$sd["billing_company"]:call_user_func(array(obj($org), "name")),
+					"billing_contact" => $sd["billing_contact"]?$sd["billing_contact"]:$per->name(),
+					"billing_street" => $sd["billing_street"]?$sd["billing_street"]:($addr?$addr->prop("aadress"):""),
+					"billing_city" => $sd["billing_city"]?$sd["billing_city"]:($addr?$addr->prop_str("linn"):""),
+					"billing_zip" => $sd["billing_zip"]?$sd["billing_zip"]:($addr?$addr->prop("postiindeks"):""),
+					"billing_name" => $sd["billing_name"]?$sd["billing_name"]:$per->name(),
+					"billing_phone_number" => $sd["billing_phone_number"]?$sd["billing_phone_number"]:($def_ph?$def_ph->name():""),
+					"billing_email" => $sd["billing_email"]?$sd["billing_phone_number"]:($def_em?$def_em->name():""),
 					"all_search_results" => $hid_rows,
 				));
 				break;
@@ -682,13 +695,15 @@ class conference_planning extends class_base
 				));
 
 				// #6
+				$addr = get_instance(CL_CRM_ADDRESS);
+				$countries = $addr->get_country_list();
 				$sc->vars(array(
 					"billing_company" => $sd["billing_company"],
 					"billing_contact" => $sd["billing_contact"],
 					"billing_street" => $sd["billing_street"],
 					"billing_city" => $sd["billing_city"],
 					"billing_zip" => $sd["billing_zip"],
-					"billing_country" => $sd["billing_country"],
+					"billing_country" => $countries[$sd["billing_country"]],
 					"billing_name" => $sd["billing_name"],
 					"billing_phone_number" => $sd["billing_phone_number"],
 					"billing_email" => $sd["billing_email"],
@@ -750,7 +765,7 @@ class conference_planning extends class_base
 				}
 				foreach(array("single", "double", "suite") as $loop_item)
 				{
-					for($i = 1; $i <= $c_obj->prop($loop_item."_count"); $i++)
+					for($i = 0; $i <= $c_obj->prop($loop_item."_count"); $i++)
 					{
 						$sc->vars(array(
 							"value" => $i,
@@ -1078,6 +1093,7 @@ class conference_planning extends class_base
 		$obj->set_prop("billing_name", $data["billing_name"]);
 		$obj->set_prop("billing_phone_number", $data["billing_phone_number"]);
 		$obj->set_prop("billing_email", $data["billing_email"]);
+		$obj->set_prop("urgent", $data["urgent"]?1:0);
 
 		// search_results
 		$tmpsearch = array();
@@ -1300,7 +1316,7 @@ class conference_planning extends class_base
 			{
 				case "0":
 					$data["country"] = $val["country"];
-					$data["attendees_no"] = $val["attendees_no"];
+					$data["delegates_no"] = $val["attendees_no"];
 					$data["single_count"] = $val["single_count"];
 					$data["double_count"] = $val["double_count"];
 					$data["suite_count"] = $val["suite_count"];
@@ -1368,6 +1384,10 @@ class conference_planning extends class_base
 					// catering shit 
 					foreach($val["main_catering"] as $k => $tmp)
 					{
+						if(!strlen($tmp["catering_start_time"]) && !strlen($tmp["catering_end_time"]) && !strlen($tmp["catering_attendees_no"]))
+						{
+							continue;
+						}
 						$data["main_catering"][$k] = $tmp;
 					}
 					break;
@@ -1438,6 +1458,7 @@ class conference_planning extends class_base
 					$data["billing_email"] = $val["billing_email"];
 					$data["selected_search_result"] = array_keys($val["search_result"]);
 					$data["all_search_results"] = array_keys($val["all_search"]);
+					$data["urgent"] = $val["urgent"];
 					break;
 				case "7":
 					break;

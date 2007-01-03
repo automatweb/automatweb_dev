@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.3 2006/12/29 14:22:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.4 2007/01/03 13:06:10 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -8,8 +8,32 @@
 @default table=objects
 @default group=general
 
-@groupinfo rfps caption="Pakkumise saamis palved" submit=no
-	@property rfps type=table group=rfps no_caption=1
+@groupinfo rfps caption="Pakkumise saamis palved"
+@groupinfo rfps_active caption="Aktiivsed" parent=rfps
+@groupinfo rfps_archive caption="Arhiiv" parent=rfps
+@default group=rfps_active,rfps_archive
+	@layout hsplit type=hbox
+		@layout searchbox closeable=1 area_caption=Otsing type=vbox parent=hsplit
+			@property s_name type=textbox parent=searchbox size=15 store=no captionside=top
+			@caption &Uuml;rituse nimi
+
+			@property s_org type=textbox parent=searchbox size=15 store=no captionside=top
+			@caption Organisatsioon
+
+			@property s_contact type=textbox parent=searchbox size=15 store=no captionside=top
+			@caption Kontaktisik
+
+			@property s_time_from type=date_select parent=searchbox store=no captionside=top
+			@caption Alates
+
+			@property s_time_to type=date_select parent=searchbox store=no captionside=top
+			@caption Kuni
+
+			@property s_submit type=submit parent=searchbox store=no no_caption=1
+			@caption Otsi
+
+		@layout main type=vbox parent=hsplit
+			@property rfps type=table parent=main no_caption=1
 
 */
 
@@ -30,48 +54,73 @@ class rfp_manager extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "s_name":
+			case "s_org":
+			case "s_contact":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+			case "s_time_to":
+			case "s_time_from":
+				$_t = &$arr["request"][$prop["name"]];
+				$time = mktime(0,0,0,$_t["month"], $_t["day"], $_t["year"]);
+				$prop["value"] = $time;
+				break;
 			case "rfps":
+				$act = ($arr["request"]["group"] == "rfps_active")?true:false;
 				$t = &$prop["vcl_inst"];
 				$t->define_field(array(
 					"name" => "function",
 					"caption" => t("&Uuml;ritus"),
+					"chgbgcolor" => "urgent_col",
 				));
 				$t->define_field(array(
 					"name" => "org",
 					"caption" => t("Organisatsioon"),
+					"chgbgcolor" => "urgent_col",
 				));
 				$t->define_field(array(
 					"name" => "response_date",
 					"caption" => t("Tagasiside aeg"),
+					"chgbgcolor" => "urgent_col",
 				));
 				$t->define_field(array(
-					"name" => "arrival_date",
-					"caption" => t("Saabumisaeg"),
-				));
-				$t->define_field(array(
-					"name" => "departure_date",
-					"caption" => t("Lahkumisaeg"),
+					"name" => "date_period",
+					"caption" => t("Ajavahemik"),
+					"chgbgcolor" => "urgent_col",
 				));
 				$t->define_field(array(
 					"name" => "acc_need",
-					"caption" => t("Maujutusvajadus"),
+					"caption" => t("Majutus"),
+					"chgbgcolor" => "urgent_col",
 				));
 				$t->define_field(array(
 					"name" => "delegates",
 					"caption" => t("Inimeste arv"),
+					"chgbgcolor" => "urgent_col",
 				));
 				$t->define_field(array(
 					"name" => "contact_pers",
 					"caption" => t("Kontaktisik"),
+					"chgbgcolor" => "urgent_col",
 				));
 				$t->define_field(array(
 					"name" => "contacts",
 					"caption" => t("Kontaktandmed"),
+					"chgbgcolor" => "urgent_col",
+				));
+				$t->define_field(array(
+					"name" => "popup",
+					"caption" => t("Tegevus"),
+					"align" => "center",
+					"chgbgcolor" => "urgent_col",
 				));
 
 
-				foreach($this->get_rfps() as $oid => $obj)
+				$rfps = $this->get_rfps($act);
+				$rfps = $this->do_filter_rfps($rfps, $arr["request"]);
+				foreach($rfps as $oid => $obj)
 				{
+					// end search filter
 					$sres = aw_unserialize($obj->prop("search_result"));
 					unset($places);
 					foreach($sres as $res)
@@ -87,6 +136,7 @@ class rfp_manager extends class_base
 							$contacts[] = $cnt;
 						}
 					}
+					$urgent_col = ($obj->prop("urgent") == 1)?"#CC3333":"";
 					$t->define_data(array(
 						"function" => html::href(array(
 							"caption" => ($_t = $obj->prop("function_name"))?$_t:t(" - Nimetu - "),
@@ -102,13 +152,14 @@ class rfp_manager extends class_base
 							*/
 						)),
 						"org" => $obj->prop("organisation"),
-						"responose_date" => $obj->prop("response_date"),
-						"arrival_date" => $obj->prop("arrival_date"),
-						"departure_date" => $obj->prop("departure_date"),
+						"response_date" => $obj->prop("response_date"),
+						"date_period" => $obj->prop("arrival_date")." - ".$obj->prop("departure_date"),
 						"acc_need" => ($obj->prop("accomondation_requirements") == 1)?t("Jah"):t("Ei"),
 						"delegates" => $obj->prop("delegates_no"),
-						"contact_pers" => "",
+						"contact_pers" => $obj->prop("billing_contact"),
 						"contacts" => join(", ", $contacts).(strlen($_t = $obj->prop("contact_preference"))?"(".$_t.")":""),
+						"popup" => $this->gen_popup($oid),
+						"urgent_col" => $urgent_col,
 					));
 				}
 				break;
@@ -132,6 +183,15 @@ class rfp_manager extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$todo = array("s_name", "s_org", "s_contact", "s_time_from", "s_time_to");
+		foreach($todo as $do)
+		{
+			$arr["args"][$do] = $arr["request"][$do];
+		}
+	}
+
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -149,10 +209,11 @@ class rfp_manager extends class_base
 
 //-- methods --//
 
-	function get_rfps()
+	function get_rfps($act)
 	{
 		$o = new object_list(array(
 			"class_id" => CL_RFP,
+			"archived" => !$act?1:0,
 		));
 		return $o->arr();
 	}
@@ -226,6 +287,111 @@ class rfp_manager extends class_base
 			"data" => $data,
 		));
 		die($ret);
+	}
+
+	function gen_popup($oid)
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu("aif_".$oid);
+		$obj = obj($oid);
+		$act = ($obj->prop("archived") == 1)?false:true;
+		$prefix = $act?"":"un";
+		$pm->add_item(array(
+			"text" => !$act?t("Aktiviseeri"):t("Arhiveeri"),
+			"link" => $this->mk_my_orb($prefix."archive", array(
+				"rfp" => $oid,
+				"return_url" => get_ru(),
+			)),
+		));
+		$pm->add_item(array(
+			"text" => t("Kustuta"),
+			"link" => $this->mk_my_orb("del_rfp", array(
+				"rfp" => $oid,
+				"return_url" => get_ru(),
+			)),
+		));
+		return $pm->get_menu();
+	}
+
+	/**
+		@attrib params=name name=unarchive all_args=1
+	**/
+	function unarchive($arr)
+	{
+		$o = obj($arr["rfp"]);
+		$o->set_prop("archived", 0);
+		$o->save();
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib params=name name=archive all_args=1
+	**/
+	function archive($arr)
+	{
+		$o = obj($arr["rfp"]);
+		$o->set_prop("archived", 1);
+		$o->save();
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib params=name name=del_rfp all_args=1
+	**/
+	function del_rfp($arr)
+	{
+		$o = obj($arr["rfp"]);
+		$o->delete();
+		return $arr["return_url"];
+	}
+
+	function do_filter_rfps($rfps, $request)
+	{
+		$_tmp_from = str_replace("---", 0, $request["s_time_from"]);
+		$_tmp_to = str_replace("---", 0, $request["s_time_to"]);
+		foreach($rfps as $oid => $obj)
+		{
+			// time
+			if(is_array($_tmp_from) && is_array($_tmp_to))
+			{
+				$comp = $obj->created();
+				$s_f = mktime(0,0,0, $_tmp_from["month"], $_tmp_from["day"], $_tmp_from["year"]);
+				$s_t = mktime(0,0,0, $_tmp_to["month"], $_tmp_to["day"], $_tmp_to["year"]);
+				if(($s_f == -1 && $s_t <= $comp) || ($s_t == -1 && $s_f >= $comp) || ($s_f == -1 && $s_t == -1))
+				{
+					unset($rfps[$oid]);
+				}
+			}
+
+			// func name
+			if(strlen($request["s_name"]) && !stristr($obj->name("organisation") , $request["s_name"]))
+			{
+				unset($rfps[$oid]);
+			}
+
+			// org name
+			if(strlen($request["s_org"]) && !stristr($obj->prop(), $request["s_org"]))
+			{
+				unset($rfps[$oid]);
+			}
+
+			// contact name
+			if(strlen($request["s_contact"]))
+			{
+				$is = false;
+				$name = $obj->prop("billing_contact");
+				foreach(split(" ", $request["s_contact"]) as $part)
+				{
+					$is = stristr($name, $part)?true:$is;
+				}
+				if(!$is)
+				{
+					unset($rfps[$oid]);
+				}
+			}
+		}
+
+		return $rfps;
 	}
 }
 ?>

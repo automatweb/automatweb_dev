@@ -96,7 +96,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Open for alternative dates</caption>
       </property>
       <property>
@@ -105,7 +106,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>I have accomonndation requirements</caption>
       </property>
       <property>
@@ -114,7 +116,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Needs rooms</caption>
       </property>
       <property>
@@ -150,7 +153,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Dates are flexible</caption>
       </property>
       <property>
@@ -161,6 +165,26 @@
             <method>serialize</method>
             <type>text</type>
             <caption>Date comments</caption>
+      </property>
+      <property>
+            <name>archived</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Archived</caption>
+      </property>
+      <property>
+            <name>urgent</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Urgent</caption>
       </property>
       <property>
             <name>dates_are_flexible</name>
@@ -203,22 +227,6 @@
             <type>hidden</type>
       </property>
       <property>
-            <name>tech_equip</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>main_catering</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
             <name>event_type_chooser</name>
             <table>objects</table>
             <group>general</group>
@@ -236,6 +244,22 @@
       </property>
       <property>
             <name>event_type_text</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
+            <name>tech_equip</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
+            <name>main_catering</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>

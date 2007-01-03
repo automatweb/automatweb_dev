@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.3 2006/12/29 14:22:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.4 2007/01/03 13:06:10 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -40,13 +40,13 @@
 	@property departure_date type=text
 	@caption Departure date
 
-	@property open_for_alternative_dates type=text
+	@property open_for_alternative_dates type=checkbox ch_value=1 default=0
 	@caption Open for alternative dates
 
-	@property accommondation_requirements type=text
+	@property accommondation_requirements type=checkbox ch_value=1 default=0
 	@caption I have accomonndation requirements
 
-	@property needs_rooms type=text
+	@property needs_rooms type=checkbox ch_value=1 default=0
 	@caption Needs rooms
 
 	@property single_rooms type=text
@@ -58,11 +58,17 @@
 	@property suites type=text
 	@caption Suites
 
-	@property flexible_dates type=text
+	@property flexible_dates type=checkbox ch_value=1 default=0
 	@caption Dates are flexible
 
 	@property date_comments type=text
 	@caption Date comments
+
+	@property archived type=checkbox ch_value=1 default=0
+	@caption Archived
+
+	@property urgent type=checkbox ch_value=1 default=0
+	@caption Urgent
 
 	// this approach sucks bigtime, but i don't have any time to do better..
 	@property dates_are_flexible type=hidden
@@ -70,18 +76,22 @@
 	@property pattern_wday_from type=hidden
 	@property pattern_wday_to type=hidden
 	@property pattern_days type=hidden
-	@property tech_equip type=hidden
-	@property main_catering type=hidden
+	
 	@property event_type_chooser type=hidden
 	@property event_type_select type=hidden
 	@property event_type_text type=hidden
+	@property tech_equip type=hidden
+	@property main_catering type=hidden
 	@property table_form_raw type=hidden
 	@property start_time_raw type=hidden
 	@property start_date_raw type=hidden
 	@property end_time_raw type=hidden
 	@property end_date_raw type=hidden
+
 	@property additional_dates_raw type=hidden
+	
 	@property additional_functions_raw type=hidden
+	
 	@property all_search_results type=hidden
 	@property selected_search_result type=hidden
 
