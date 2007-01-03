@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.87 2007/01/03 20:15:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.88 2007/01/03 23:48:03 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1403,11 +1403,18 @@ class room extends class_base
 			}
 		}
 		$t = &$arr["prop"]["vcl_inst"];
-		
+//		arr($arr["obj_inst"]->prop("openhours"));
+		$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
 		if(is_oid($arr["obj_inst"]->prop("openhours")) && $this->can("view" , $arr["obj_inst"]->prop("openhours")))
 		{
 			$this->openhours = obj($arr["obj_inst"]->prop("openhours"));
-			$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
+		}
+		if(!is_object($this->openhours))
+		{
+			$this->openhours = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OPENHOURS");
+		}
+		if(is_object($this->openhours))
+		{
  			$open = $this->open = $open_inst->get_times_for_date($this->openhours, $time);
 		}
 		if(!is_object($this->openhours))
@@ -1418,7 +1425,7 @@ class room extends class_base
 		$this->start = $arr["request"]["start"];
 		// do this later, so we can feed it the start/end date
 		//$this->generate_res_table($arr["obj_inst"]);
-
+		//arr(date("G:i",$this->start));
 		exit_function("get_calendar_tbl");
 		//see siis näitab miskeid valitud muid nädalaid
 		enter_function("get_calendar_tbl::2");
@@ -1447,7 +1454,6 @@ class room extends class_base
 		exit_function("get_calendar_tbl::2");
 
 		$settings = $this->get_settings_for_room($arr["obj_inst"]);
-
 		classload("core/date/date_calc");
 		if (is_oid($settings->id()) && !$arr["request"]["start"])
 		{
@@ -1461,18 +1467,20 @@ class room extends class_base
 			}
 			
 			//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
- 			if($gwo["start_hour"])
- 			{
- 				$this->start = $this->start+3600*$gwo["start_hour"];
- 				$today_start = $today_start+3600*$gwo["start_hour"];
- 			}
- 			if($gwo["start_minute"])
- 			{
- 				$this->start = $this->start+60*$gwo["start_minute"];
- 				$today_start = $today_start+60*$gwo["start_minute"];
- 			}
 		}
-			//arr(date(" d/m/y" , $this->start));arr(date(" d/m/y" , $today_start));
+
+ 		if($gwo["start_hour"])
+ 		{
+ 			$this->start = $this->start+3600*$gwo["start_hour"];
+ 			$today_start = $today_start+3600*$gwo["start_hour"];
+ 		}
+ 		if($gwo["start_minute"])
+ 		{
+ 			$this->start = $this->start+60*$gwo["start_minute"];
+ 			$today_start = $today_start+60*$gwo["start_minute"];
+ 		}
+
+
 		enter_function("get_calendar_tbl::3");
 		$len = 7;
 		if ($_GET["start"] && $_GET["end"])
@@ -1481,7 +1489,6 @@ class room extends class_base
 		}
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len);
 		$this->_init_calendar_t($t,$this->start, $len);
-		
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
 		// this seems to fuck up in reval room calendar view and only display time to 15:00
 		//while($step < floor($steps))
