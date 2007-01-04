@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.36 2006/12/29 10:18:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.37 2007/01/04 13:36:48 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -7,23 +7,34 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 @classinfo syslog_type=ST_JOIN_SITE relationmgr=yes no_comment=1 no_status=1
 
+@groupinfo general_sub parent=general caption="&Uuml;ldine"
+@groupinfo general_ctrl parent=general caption="Kontrollerid"
+
 @default table=objects
-@default group=general
+@default group=general_sub
 
-@property after_join_url type=textbox field=meta method=serialize 
-@caption P&auml;rast liitumist mine aadressile
+	@property name type=textbox table=objects field=name
+	@caption Nimi
 
-@property obj_folder type=relpicker reltype=RELTYPE_OBJ_FOLDER field=meta method=serialize 
-@caption Kataloog, kuhu salvestatakse objektid
+	@property after_join_url type=textbox field=meta method=serialize 
+	@caption P&auml;rast liitumist mine aadressile
 
-@property autologin type=checkbox ch_value=1 field=meta method=serialize 
-@caption Kas kasutaja logitakse automaatselt sisse liitumisel
+	@property obj_folder type=relpicker reltype=RELTYPE_OBJ_FOLDER field=meta method=serialize 
+	@caption Kataloog, kuhu salvestatakse objektid
 
-@property send_join_mail type=checkbox ch_value=1 field=meta method=serialize 
-@caption Kas liitumisel saadetakse meil
+	@property autologin type=checkbox ch_value=1 field=meta method=serialize 
+	@caption Kas kasutaja logitakse automaatselt sisse liitumisel
 
-@property users_blocked_by_default type=checkbox ch_value=1 field=meta method=serialize 
-@caption Kasutajad vaikimisi blokeeritud
+	@property send_join_mail type=checkbox ch_value=1 field=meta method=serialize 
+	@caption Kas liitumisel saadetakse meil
+
+	@property users_blocked_by_default type=checkbox ch_value=1 field=meta method=serialize 
+	@caption Kasutajad vaikimisi blokeeritud
+
+@default group=general_ctrl
+
+	@property check_sbt_controller type=relpicker reltype=RELTYPE_VALIDATE_CTR field=meta method=serialize
+	@caption Andmete valideerimise kontroller
 
 @groupinfo props caption="Vormid"
 
@@ -163,6 +174,9 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 @reltype MAILADDR value=6 clid=CL_ML_MEMBER
 @caption Kellele
+
+@reltype VALIDATE_CTR value=7 clid=CL_FORM_CONTROLLER
+@caption Valideerimise kontroller
 */
 
 class join_site extends class_base
@@ -729,9 +743,11 @@ class join_site extends class_base
 			$sessd = aw_global_get("site_join_status");
 		}
 		$je = aw_global_get("join_err");
-
 		$clss = aw_ini_get("classes");
-
+		$breaks = $ob->meta("el_breaks");
+		
+		list($ue_class, $ue_el) = explode("_", $ob->prop("username_element"), 2);
+		
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
 		$klomp = array();
@@ -757,7 +773,6 @@ class join_site extends class_base
 				"file" => $cln,
 				"clid" => $clid
 			));
-
 			$tp = array();
 			foreach($props as $pid => $prop)
 			{	
@@ -843,12 +858,11 @@ class join_site extends class_base
 			));
 
 			$cf_sd = $sessd[$wn];
-
 			foreach($xp as $xprop)
 			{
 				$oldn = str_replace($wn."[", "", str_replace("]", "", $xprop["name"]));
-
-				if ($clid == CL_USER && $oldn == "uid_entry")
+				
+				if ($clid == CL_USER && ($oldn == "uid_entry" || $oldn == $ue_el))
 				{
 					if ($je["gen"] != "")
 					{
@@ -883,9 +897,11 @@ class join_site extends class_base
 						"name" => "err_".$clid."_".$oldn,
 						"type" => "text",
 						"no_caption" => 1,
-						"value" => $ermsg
+						"value" => $ermsg,
+						"sort_by" => $oldn
 					);
-					$htmlc->add_property($errp);
+					//$htmlc->add_property($errp);
+					$klomp[$errp["name"]] = $errp;	
 				}
 
 				if (isset($cf_sd[$oldn]))
@@ -910,6 +926,14 @@ class join_site extends class_base
 					$xprop["comment"] = "";
 					$xprop["rows"] = 5;
 					$xprop["cols"] = 30;
+				}
+
+				if ($breaks[$clid][$oldn])
+				{
+					foreach(safe_array($xprop["options"]) as $_k => $_v)
+					{
+						$xprop["options"][$_k] = $_v."<br>";
+					}
 				}
 				$klomp[$oldn] = $xprop;
 			}
@@ -1078,6 +1102,24 @@ class join_site extends class_base
 					if ($sessd["typo_".$clid][$propn] == "")
 					{
 						$filled = false;
+						$nf["prop"][$clid][$propn] = 1;
+					}
+				}
+			}
+		}
+
+		if ($this->can("view", $obj->prop("check_sbt_controller")))
+		{
+			// if controller returns array, then all props in the array must be filled
+			$ctr_i = get_instance(CL_FORM_CONTROLLER);
+			$rv = $ctr_i->eval_controller($obj->prop("check_sbt_controller"), $arr, $obj, $obj);
+			if (is_array($rv))
+			{
+				$filled = false;
+				foreach($rv as $clid => $props)
+				{
+					foreach($props as $propn)
+					{
 						$nf["prop"][$clid][$propn] = 1;
 					}
 				}
@@ -1405,7 +1447,7 @@ class join_site extends class_base
 		$clss = aw_ini_get("classes");
 
 		$set_el_types = $ob->meta("types");
-
+		$breaks = $ob->meta("el_breaks");
 		$tp = array();
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
@@ -1650,6 +1692,16 @@ class join_site extends class_base
 					{
 						$prop["type"] = $set_el_types[$clid][$oldn];
 					}
+					unset($prop["size"]);
+
+        	                        if ($breaks[$clid][$oldn])
+	                                {
+                                	        foreach(safe_array($prop["options"]) as $_k => $_v)
+                        	                {
+                	                                $prop["options"][$_k] = $_v."<br>";
+        	                                }
+	                                }
+
 					$tp[$pid] = $prop;
 				}
 			}
@@ -1913,6 +1965,18 @@ class join_site extends class_base
 
 	function __prop_sorter($a, $b)
 	{
+		$a_diff = 0;
+		if ($a["sort_by"] != "")
+		{
+			$a = $this->__sort_tp[$a["sort_by"]];
+			$a_diff = -1;
+		}
+		$b_diff = 0;
+		if ($b["sort_by"] != "")
+		{
+			$b = $this->__sort_tp[$b["sort_by"]];
+			$b_diff = -1;
+		}
 		// get order from prop name
 		if (!preg_match("/typo_(.*)\[(.*)\]/U", $a["name"], $a_mt))
 		{
@@ -1931,6 +1995,25 @@ class join_site extends class_base
 
 		if (strpos($a_prop, "p_adr") !== false)
 		{
+			if ($a_prop == "p_adr_str")
+			{
+				$a_diff = -0.7+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "p_adr_zip")
+			{
+				$a_diff = -0.5+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "p_adr_city")
+			{
+				$a_diff = -0.3+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "p_adr_ctry")
+			{
+				$a_diff = -0.1+($a_diff / 100);
+			}
 			$a_prop = "address";
 		}
 
@@ -1938,9 +2021,28 @@ class join_site extends class_base
 		$b_prop = $b_mt[2];
 		if (strpos($b_prop, "p_adr") !== false)
 		{
+                        if ($b_prop == "p_adr_str")
+                        {
+                                $b_diff = -0.7+($b_diff / 100);
+                        }
+                        else
+                        if ($b_prop == "p_adr_zip")
+                        {
+                                $b_diff = -0.5+($b_diff / 100);
+                        }
+                        else
+                        if ($b_prop == "p_adr_city")
+                        {
+                                $b_diff = -0.3+($b_diff / 100);
+                        }
+                        else
+                        if ($b_prop == "p_adr_ctry")
+                        {
+                                $b_diff = -0.1+($b_diff / 100);
+                        }
 			$b_prop = "address";
 		}
-
+//echo "a _prop = $a_prop , a_diff = $a_diff , bprop = $p_prop , bdiff = $b_diff <br>";
 		if ($a_clid == "sep")
 		{
 			list(, $a_prop) = explode("_", $a_prop);
@@ -1961,6 +2063,8 @@ class join_site extends class_base
 			$b_ord = $this->__sort_ord[$b_clid][$b_prop];
 		}
 
+		$a_ord += $a_diff;
+		$b_ord += $b_diff;
 		if ($a_ord == $b_ord)
 		{
 			return 0;
@@ -1971,6 +2075,7 @@ class join_site extends class_base
 	function _do_final_sort_props(&$ob, &$tp)
 	{
 		$this->__sort_ord = $ob->meta("ord");
+		$this->__sort_tp = $tp;
 		uasort($tp, array(&$this, "__prop_sorter"));
 	}
 
@@ -2119,6 +2224,11 @@ class join_site extends class_base
 			"caption" => t("T&uuml;&uuml;p"),
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "break_in_el",
+			"caption" => t("Reavahetus sisu vahel"),
+			"align" => "center"
+		));
 	}
 
 	function _get_prop_settings($arr)
@@ -2127,6 +2237,7 @@ class join_site extends class_base
 		$this->_init_prop_settings($t);
 		$clss = aw_ini_get("classes");
 		$types = $arr["obj_inst"]->meta("types");
+		$breaks = $arr["obj_inst"]->meta("el_breaks");
 		$type_list = array(
 			"" => t("--vali--"),
 			"textbox" => t("Tekstikast"),
@@ -2152,7 +2263,12 @@ class join_site extends class_base
 						"value" => $types[$clid][$pn],
 						"options" => $type_list,
 						"name" => "types[$clid][$pn]"
-					))
+					)),
+					"break_in_el" => $property_list[$pn]["type"] == "classificator" ? html::checkbox(array(
+						"name" => "breaks[$clid][$pn]",
+						"value" => 1,
+						"checked" => $breaks[$clid][$pn] == 1
+					)) : "" 
 				));
 			}
 		}
@@ -2162,6 +2278,7 @@ class join_site extends class_base
 	function _set_prop_settings($arr)
 	{
 		$arr["obj_inst"]->set_meta("types", $arr["request"]["types"]);
+		$arr["obj_inst"]->set_meta("el_breaks", $arr["request"]["breaks"]);
 	}
 
 	function _update_address_from_req($o, $r)

@@ -1,9 +1,17 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>after_join_url</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
@@ -12,7 +20,7 @@
       <property>
             <name>obj_folder</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>relpicker</type>
             <reltype>RELTYPE_OBJ_FOLDER</reltype>
             <field>meta</field>
@@ -22,7 +30,7 @@
       <property>
             <name>autologin</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -32,7 +40,7 @@
       <property>
             <name>send_join_mail</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -42,12 +50,22 @@
       <property>
             <name>users_blocked_by_default</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
             <caption>Kasutajad vaikimisi blokeeritud</caption>
+      </property>
+      <property>
+            <name>check_sbt_controller</name>
+            <table>objects</table>
+            <group>general_ctrl</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_VALIDATE_CTR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmete valideerimise kontroller</caption>
       </property>
       <property>
             <name>join_properties</name>
@@ -337,6 +355,14 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <general_sub>
+                  <parent>general</parent>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+            </general_sub>
+            <general_ctrl>
+                  <parent>general</parent>
+                  <caption>Kontrollerid</caption>
+            </general_ctrl>
             <props>
                   <caption>Vormid</caption>
             </props>
@@ -436,6 +462,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>Kellele</caption>
             </MAILADDR>
+            <VALIDATE_CTR>
+                  <value>7</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>Valideerimise kontroller</caption>
+            </VALIDATE_CTR>
       </reltypes>
 </properties>
 
