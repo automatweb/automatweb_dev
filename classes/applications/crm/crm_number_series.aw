@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.5 2006/07/10 14:27:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.6 2007/01/04 16:46:22 markop Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -23,7 +23,8 @@ class crm_number_series extends class_base
 
 		$clss = aw_ini_get("classes");
 		$this->classes = array(
-			CL_CRM_BILL => $clss[CL_CRM_BILL]["name"]
+			CL_CRM_BILL => $clss[CL_CRM_BILL]["name"],
+			CL_PATENT => $clss[CL_PATENT]["name"]
 		);
 	}
 
@@ -213,12 +214,18 @@ class crm_number_series extends class_base
 	}
 
 	/** finds the current company and from that the series	and returns next number in series**/
-	function find_series_and_get_next($class)
+	function find_series_and_get_next($class,$n)
 	{
-		$u = get_instance(CL_USER);
-		$co = obj($u->get_current_company());
-		$ser = $co->get_first_obj_by_reltype("RELTYPE_NUMBER_SERIES");
-
+		if(is_oid($n) && $this->can("view" , $n))
+		{
+			$ser = obj($n);
+		}
+		else
+		{
+			$u = get_instance(CL_USER);
+			$co = obj($u->get_current_company());
+			$ser = $co->get_first_obj_by_reltype("RELTYPE_NUMBER_SERIES");
+		}
 		if (!$ser)
 		{
 			return NULL;
