@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.34 2007/01/02 11:54:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.35 2007/01/04 16:48:05 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -281,13 +281,13 @@ class patent extends class_base
 
 						break;
 					case -1:
-						$url = $ddoc_inst->sign_url(array(
+						$url = $ddoc_inst->sIgn_url(array(
 							"other_oid" => $arr["obj_inst"]->id(),
 						));
 						$prop["value"] = html::href(array(
 							"url" => "#",
 							"caption" => t("Allkirjasta fail"),
-							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Faili: %s, allkirjastamine")."\", 410, 250);",
+							"onClick" => "aw_popup_scroll(\"".$url."\", \"".t("Allkirjastamine")."\", 410, 250);",
 
 						));
 						break;
@@ -510,18 +510,17 @@ class patent extends class_base
 			$this->vars(array(
 				"name" => $ob->prop("name"),
 			));
-			$this->vars($this->get_data_from_object($arr["id"]));
+			$data = $this->get_data_from_object($arr["id"]);
 			$prods = $ob->meta("products");
 		}
 		else
 		{
-			$this->vars($this->web_data($arr));
+			$data = $this->web_data($arr);
 			$prods = $_SESSION["patent"]["products"];
-	//		foreach($_SESSION["patent"]["applicants"] as $app)
-	//		{
-	//			foreach()
-	//		}
 		}
+		
+		
+		$this->vars($data);
 		$p = "";
 		foreach($prods as $key => $product)
 		{
@@ -529,6 +528,14 @@ class patent extends class_base
 			$p.=$this->parse("PRODUCTS");
 		}
 		$this->vars(array("PRODUCTS" => $p));
+		if($data["convention_nr_value"])
+		{
+			$this->vars(array("CONVENTION" => $this->parse("CONVENTION")));
+		}
+		if($data["exhibition_name_value"])
+		{
+			$this->vars(array("EXHIBITION" => $this->parse("EXHIBITION")));
+		}
 		return $this->parse();
 	}
 
@@ -629,7 +636,7 @@ class patent extends class_base
 		{
 			if($o->prop($prop) > 0)
 			{
-				$data[$prop."_value"] = date("j:m:Y" ,$o->prop($prop));
+				$data[$prop."_value"] = date("j.m.Y" ,$o->prop($prop));
 			}
 		}
 		
@@ -995,7 +1002,7 @@ class patent extends class_base
 			$data[$var] = html::date_select(array("name" => $var, "value" => $_SESSION["patent"][$var] , "buttons" => 1));
 			if($_SESSION["patent"][$var] > 0)
 			{
-				$data[$prop."_value"] = date("j:m:Y" ,$_SESSION["patent"][$var]);
+				$data[$var."_value"] = date("j.m.Y" ,$_SESSION["patent"][$var]);
 			}
 		}
 
@@ -1003,20 +1010,21 @@ class patent extends class_base
 		//siia siis miski tingimus, et on makstud jne... siis ei tohi muuta saada enam
 		if(true)
 		{
-			$_SESSION["patent"]["payment_date"] = time();
+			if(!is_array($_SESSION["patent"]["payment_date"]) && !($_SESSION["patent"]["payment_date"]>1))
+				$_SESSION["patent"]["payment_date"] = time();
 			$p_vars = array("request_fee" , "classes_fee" );
 			foreach($p_vars as $var)
 			{
 				$data[$var] = $_SESSION["patent"][$var];
 			}
-			if($_SESSION["patent"]["payment_date"]>1)
-			{
-				$data["payment_date"] = date("j.m.Y" , $_SESSION["patent"]["payment_date"]);
-			}
-			else
-			{
-				$data["payment_date"] = "";
-			}
+//			if($_SESSION["patent"]["payment_date"]>1)
+//			{
+//				$data["payment_date"] = date("j.m.Y" , $_SESSION["patent"]["payment_date"]);
+//			}
+//			else
+//			{
+//				$data["payment_date"] = "";
+//			}
 		}
 		if($_SESSION["patent"]["errors"])
 		{
@@ -1271,7 +1279,8 @@ class patent extends class_base
 			$url = $ddoc_inst->sign_url(array(
 				"other_oid" =>$_SESSION["patent"]["id"],
 			));
-			if($this->is_signed($_SESSION["patent"]["id"]))
+			$status = $this->is_signed($_SESSION["patent"]["id"]);
+			if($status["status"] > 0)
 			{
 				$data["SIGNED"] = $this->parse("SIGNED");
 			}
@@ -2188,7 +2197,7 @@ class patent extends class_base
 				
 				$this->vars(array(
 					"date" 		=> date("j.m.Y" , $patent->created()),
-					"nr" 		=> ($patent->prop("nr")) ? $patent->prop("nr") : t("Number puudub"),
+					"nr" 		=> ($patent->prop("nr")) ? $patent->prop("nr") : "",
 					"applicant" 	=> $patent->prop_str("applicant"),
 					"type" 		=> $this->types[$patent->prop("type")],
 					"state" 	=> ($patent->prop("verified")) ? t("Vastu v&otilde;etud") : t(""),

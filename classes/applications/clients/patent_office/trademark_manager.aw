@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.7 2006/12/27 11:14:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.8 2007/01/04 16:48:05 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -285,9 +285,9 @@ class trademark_manager extends class_base
 				$type.= " (".$o->prop("word_mark").")";
 			}
 			$nr_str = t("Number puudub");
-			if($o->prop("convention_nr"))
+			if($o->prop("nr"))
 			{
-				$nr_str = $o->prop("convention_nr");
+				$nr_str = $o->prop("nr");
 			}
 			$nr = html::href(array(
 				"caption" => $nr_str,
@@ -484,12 +484,15 @@ class trademark_manager extends class_base
 		if(is_oid($object->prop("verified_menu")))
 		{
 			$parent = $object->prop("verified_menu");
+			$num_ser = $object->prop("series");
 		}
+		$ser = get_instance(CL_CRM_NUMBER_SERIES);
 		foreach($arr["sel"] as $id)
 		{
 			$o = obj($id);
 			$o->set_prop("verified",1);
-			
+			$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
+			$o->set_prop("nr" , $tno);
 			if($parent)
 			{
 				$o->set_parent($parent);
