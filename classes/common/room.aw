@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.88 2007/01/03 23:48:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.89 2007/01/04 16:09:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -842,7 +842,7 @@ class room extends class_base
 		$o->set_class_id(CL_PLANNER);
 		$o->set_parent($room->id());
 		$o->set_name("Ruumi '".$room->name()."' kalender");
-		$o->save();arr($o); die();
+		$o->save();
 		$room->connect(array(
 			"to" => $o->id(),
 			"reltype" => "RELTYPE_CALENDAR",
