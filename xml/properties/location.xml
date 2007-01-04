@@ -11,6 +11,56 @@
             <caption>Aadress</caption>
       </property>
       <property>
+            <name>owner</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OWNER</reltype>
+            <caption>Omanik</caption>
+      </property>
+      <property>
+            <name>phone</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PHONE</reltype>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>fax</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAX</reltype>
+            <caption>Faks</caption>
+      </property>
+      <property>
+            <name>web</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WEB</reltype>
+            <caption>Veebiaadress</caption>
+      </property>
+      <property>
+            <name>email</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EMAIL</reltype>
+            <caption>E-posti aadress</caption>
+      </property>
+      <property>
             <name>map</name>
             <table>objects</table>
             <group>general</group>
@@ -129,6 +179,34 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Pilt</caption>
             </IMAGE>
+            <OWNER>
+                  <value>6</value>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
+                  <caption>Omanik</caption>
+            </OWNER>
+            <PHONE>
+                  <value>7</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Telefon</caption>
+            </PHONE>
+            <FAX>
+                  <value>8</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Faks</caption>
+            </FAX>
+            <WEB>
+                  <value>9</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>Veebiaadress</caption>
+            </WEB>
+            <EMAIL>
+                  <value>10</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-post</caption>
+            </EMAIL>
       </reltypes>
 </properties>
 

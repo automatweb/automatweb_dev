@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.3 2006/12/11 12:47:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.4 2007/01/04 18:29:25 dragut Exp $
 // location.aw - Asukoht 
 /*
 
@@ -12,6 +12,21 @@
 
 @property address type=relpicker reltype=RELTYPE_ADDRESS
 @caption Aadress
+
+@property owner type=relpicker reltype=RELTYPE_OWNER
+@caption Omanik
+
+@property phone type=relpicker reltype=RELTYPE_PHONE
+@caption Telefon
+
+@property fax type=relpicker reltype=RELTYPE_FAX
+@caption Faks
+
+@property web type=relpicker reltype=RELTYPE_WEB
+@caption Veebiaadress
+
+@property email type=relpicker reltype=RELTYPE_EMAIL
+@caption E-posti aadress
 
 @property map type=relpicker reltype=RELTYPE_MAP
 @caption Asukohakaart
@@ -51,6 +66,20 @@
 @reltype IMAGE value=5 clid=CL_IMAGE
 @caption Pilt
 
+@reltype OWNER value=6 clid=CL_CRM_PERSON,CL_CRM_COMPANY
+@caption Omanik
+
+@reltype PHONE value=7 clid=CL_CRM_PHONE
+@caption Telefon
+
+@reltype FAX value=8 clid=CL_CRM_PHONE
+@caption Faks
+
+@reltype WEB value=9 clid=CL_EXTLINK
+@caption Veebiaadress
+
+@reltype EMAIL value=10 clid=CL_ML_MEMBER
+@caption E-post
 
 */
 
