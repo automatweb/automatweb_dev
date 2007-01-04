@@ -123,6 +123,7 @@ function awlib_addevent(o,e,f)
 
 var chk_status_nms = new Array();
 var chk_status_sets = new Array();
+var chk_status = 0;
 
 function aw_sel_chb(form,elname)
 {

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.99 2006/12/27 11:09:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.100 2007/01/04 08:35:38 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -318,7 +318,11 @@ class cfgform extends class_base
 		{
 			$t->define_field(array(
 				"name" => $group_obj->id(),
-				"caption" => $group_obj->name(),
+				"caption" => html::href(array(
+					"caption" => $group_obj->name(),
+					"url" => "#",
+					"onClick" => "aw_sel_chb(document.changeform,\"[".$group_obj->id()."]\");"
+				))
 			));
 		}
 		
