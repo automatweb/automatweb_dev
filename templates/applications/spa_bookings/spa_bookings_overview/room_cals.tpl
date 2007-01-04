@@ -1,5 +1,7 @@
 <div id="sisu">
 <form name="changeform" action="reforb.{VAR:ext}" method="POST">
+{VAR:reforb}
+
 {VAR:toolbar}
 {VAR:picker}
 <table cellpadding="5" cellspacing="10" border="0">
@@ -18,6 +20,5 @@ function submit_changeform()
 	document.changeform.submit();
 }
 </script>
-{VAR:reforb}
 </form>
 </div>
