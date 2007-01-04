@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.3 2006/12/18 11:57:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.4 2007/01/04 12:56:48 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -322,53 +322,74 @@ class spa_bookings_overview extends class_base
 		$this->read_template("room_cals.tpl");
 		$cals = "";
 		$first = true;
+		$roids = array();
 		foreach(explode(",", $arr["rooms"]) as $room_id)
 		{
 			if ($this->can("view", $room_id))
 			{
-
-				if ($first)
-				{
-					$ri = get_instance(CL_ROOM);
-					$toolbar = get_instance("vcl/toolbar");
-					$p = array(
-						"vcl_inst" => &$toolbar,
-					);
-					$ri->_calendar_tb(array(
-						"prop" => $p,
-						"obj_inst" => obj($room_id)
-					));
-
-					$this->vars(array(
-						"toolbar" => $toolbar->get_toolbar(),
-						"picker" => $ri->_get_calendar_select(array(
-							"prop" => array(),
-							"request" => array(
-								"start" => time()
-							)
-						)),
-						"reforb" => $this->mk_reforb("do_add_reservation", array("id" => $room_id), "room")
-					));
-				}
-
-				$first = false;
-				// show room cal
-				$ro = obj($room_id);
-				$ri = $ro->instance();
-				$t = new aw_table;
-				$prop = array(
-					"vcl_inst" => &$t
-				);
-			
-				$ri->_get_calendar_tbl(array(
-					"room" => $room_id,
-					"prop" => $prop
-				));
-				$this->vars(array(
-					"cal" => html::obj_change_url($ro)."<br>".$t->draw()
-				));
-				$cals .= $this->parse("CAL");
+				$roids[] = $room_id;
 			}
+		}
+
+		$r_ol = new object_list(array(
+			"oid" => $roids,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
+		));
+		foreach($r_ol->ids() as $room_id)
+		{
+			if ($first)
+			{
+				$ri = get_instance(CL_ROOM);
+				$toolbar = get_instance("vcl/toolbar");
+				$p = array(
+					"vcl_inst" => &$toolbar,
+				);
+				$ri->_calendar_tb(array(
+					"prop" => $p,
+					"obj_inst" => obj($room_id)
+				));
+
+				$this->vars(array(
+					"toolbar" => $toolbar->get_toolbar(),
+					"picker" => $ri->_get_calendar_select(array(
+						"prop" => array(),
+						"request" => array(
+							"start" => $_GET["start"] ? $_GET["start"] : time()
+						),
+						"obj_inst" => obj($room_id)
+					)),
+					"reforb" => $this->mk_reforb("do_add_reservation", array(
+						"id" => $room_id, 
+						"set_view_dates" => "0",
+						"post_ru" => get_ru()
+					))
+				));
+			}
+
+			$first = false;
+			// show room cal
+			$ro = obj($room_id);
+			$ri = $ro->instance();
+			$t = new aw_table;
+			$prop = array(
+				"vcl_inst" => &$t
+			);
+		
+			$ri->_get_calendar_tbl(array(
+				"room" => $room_id,
+				"prop" => $prop
+			));
+			$this->vars(array(
+				"cal" => html::get_change_url($ro->id(), array(
+					"return_url" => get_ru(), 
+					"group" => "calendar",
+					"start" => $_GET["start"],
+					"end" => $_GET["end"]
+				), parse_obj_name($ro->name()))."<br>".$t->draw()
+			));
+			$cals .= $this->parse("CAL");
 		}
 		$this->vars(array(
 			"CAL" => $cals,
@@ -382,7 +403,32 @@ class spa_bookings_overview extends class_base
 	**/
 	function do_add_reservation($arr)
 	{
-		die(dbg::dump($arr));
+		if ($arr["set_view_dates"])
+		{
+			$start = date_edit::get_timestamp($arr["set_d_from"]);
+                        if ($arr["set_view_dates"] == 1)
+                        {
+                                $end = date_edit::get_timestamp($arr["set_d_to"])+24*3600;
+                        }
+                        else
+                        if ($arr["set_view_dates"] == 2)
+                        {
+                                 $end = $start + 24*3600;
+                        }
+                        else
+                        if ($arr["set_view_dates"] == 3)
+                        {
+                                $end = $start + 24*3600*7;
+                        }
+                        else
+                        if ($arr["set_view_dates"] == 4)
+                        {
+                                $end = $start + 24*3600*31;
+                        }
+			return aw_url_change_var("start",$start,aw_url_change_var("end",$end,$arr["post_ru"]));
+		}
+		$ri = get_instance(CL_ROOM);
+		return $ri->do_add_reservation($arr);
 	}
 }
 ?>
