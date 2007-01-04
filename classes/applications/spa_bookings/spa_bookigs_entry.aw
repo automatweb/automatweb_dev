@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.8 2006/12/04 13:44:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.9 2007/01/04 10:12:28 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -428,7 +428,8 @@ class spa_bookigs_entry extends class_base
 				)),
 				"print" => html::href(array(
 					"caption" => t("Prindi"),
-					"url" => $this->mk_my_orb("print_booking", array("id" => $item->id()))
+					"url" => $this->mk_my_orb("print_booking", array("id" => $item->id())),
+					"target" => "_blank"
 				))
 			));
 		}
@@ -638,7 +639,8 @@ class spa_bookigs_entry extends class_base
 			);
 			$booking_str .= " ".html::href(array(
 				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id())),
-				"caption" => t("Prindi")
+				"caption" => t("Prindi"),
+				"target" => "_blank"
 			));
 			if ($arr["request"]["group"] == "cust")
 			{
@@ -738,7 +740,8 @@ class spa_bookigs_entry extends class_base
 					);
 					$booking_str .= " ".html::href(array(
 						"url" => $this->mk_my_orb("print_booking", array("id" => $o->id())),
-						"caption" => t("Prindi")
+						"caption" => t("Prindi"),
+						"target" => "_blank"
 					));
 					if ($arr["request"]["group"] == "cust")
 					{
@@ -1130,25 +1133,36 @@ class spa_bookigs_entry extends class_base
 		// now, list all bookings for rooms 
 		$dates = $this->get_booking_data_from_booking($b);
 		$books = "";
+		$items = array();
 		foreach($dates as $prod => $entries)
 		{
 			foreach($entries as $entry)
 			{
-				if ($entry["from"] < 1)
-				{
-					continue;
-				}
-				$ro = obj($entry["room"]);
-				$rvs = obj($entry["reservation_id"]);
-				$prod_obj = obj($rvs->meta("product_for_bron"));
-				$this->vars(array(
-					"r_from" => date("d.m.Y H:i", $entry["from"]),
-					"r_to" =>  date("d.m.Y H:i", $entry["to"]),
-					"r_room" => $ro->name(),
-					"r_prod" => $prod_obj->name()
-				));
-				$books .= $this->parse("BOOKING");
+				$items[] = $entry;
 			}
+		}
+
+		usort($items, create_function('$a,$b', 'return $a["from"] - $b["from"];'));
+		foreach($items as $entry)
+		{
+			if ($entry["from"] < 1)
+			{
+				continue;
+			}
+			$ro = obj($entry["room"]);
+			$rvs = obj($entry["reservation_id"]);
+			$prod_obj = obj($rvs->meta("product_for_bron"));
+			$this->vars(array(
+				"r_from" => date("d.m.Y H:i", $entry["from"]),
+				"r_to" =>  date("d.m.Y H:i", $entry["to"]),
+				"r_room" => $ro->name(),
+				"r_prod" => $prod_obj->name(),
+				"start_time" => $entry["from"],
+				"end_time" => $entry["to"],
+				"person_comment" => $rvs->prop("customer.comment"),
+				"person_name" => $rvs->prop("customer.name")
+			));
+			$books .= $this->parse("BOOKING");
 		}
 		$this->vars(array(
 			"BOOKING" => $books
