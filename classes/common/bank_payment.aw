@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.15 2006/12/18 14:19:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.16 2007/01/04 12:34:27 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -51,7 +51,9 @@ class bank_payment extends class_base
 		"krediidipank"	=> "Krediidipank",
 		"sampopank"	=> "Sampo Pank",
 		"hansapank_lv"	=> "L&Auml;ti Hansapank",
+		"credit_card"	=> "Kaardikeskus (krediitkaart)",
 	);
+	
 	//kõikidele pankadele ühine info
 	var $for_all_banks = array(
 		"amount"	=> "Summa",
@@ -71,6 +73,7 @@ class bank_payment extends class_base
 		"krediidipank"	=> "https://i-pank.krediidipank.ee/teller/maksa",
 		"nordeapank"	=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
 		"hansapank_lv"	=> "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp",
+		"credit_card"	=> "https://pos.estcard.ee/test-pos/servlet/iPAYServlet",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
@@ -466,6 +469,10 @@ class bank_payment extends class_base
 				$arr = $this->check_args($arr);
 				return $this->krediidi($arr);
 				break;
+			case "credit_card":
+				$arr = $this->check_cc_args($arr);
+				return $this->credit_card($arr);
+				break;
 		}
 	}
 	
@@ -475,15 +482,6 @@ class bank_payment extends class_base
 		{
 			$payment = obj($arr["payment_id"]);
 			$arr = $this->_add_object_data($payment , $arr);
-/*			
-			$payment_data = $payment->meta("bank");
-			$arr["sender_id"] = $payment_data[$arr["bank_id"]]["sender_id"];
-			$arr["stamp"] = $payment_data[$arr["bank_id"]]["stamp"];
-			$arr["expl"] = $arr["expl"].$payment->prop("expl");
-			if($arr["units"])
-			{
-				$arr["amount"] = $arr["units"]*$payment->prop("default_unit_sum");
-			}*/
 		}
 		if(!$arr["service"]) $arr["service"] = "1002";
 		if(!$arr["version"]) $arr["version"] = "008";
@@ -730,6 +728,64 @@ class bank_payment extends class_base
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}	
+
+	function check_cc_args($arr)
+	{
+		if(is_oid($arr["payment_id"]))
+		{
+			$payment = obj($arr["payment_id"]);
+			$arr = $this->_add_object_data($payment , $arr);
+		}
+		if(!$arr["curr"]) $arr["curr"] = "EEK";
+		if(!$arr["lang"]) $arr["lang"] = "et";
+		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["priv_key"])
+		{
+			$file = "privkey.pem";
+			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
+			$arr["priv_key"] = fread($fp, 8192);
+			fclose($fp);
+		}
+		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
+		$arr["amount"] = $arr["amount"]*100; //sentides
+		$arr["datetime"] = date("YmdHis", time());
+		if(!$arr["service"]) $arr["service"] = "gaf";
+		if(!$arr["version"]) $arr["version"] = "002";
+		return($arr);
+	}
+	
+	function credit_card($args)
+	{
+		extract($args);
+
+		$VK_message = sprintf("%03d",strlen($version)).$version;
+		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
+		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
+		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		$VK_message.= sprintf("%03d",strlen($curr)).$datetime;
+
+		$VK_signature = "";
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($VK_message, $VK_signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$VK_MAC = base64_encode( $VK_signature);
+
+		$link = $this->bank_link["credit_card"];
+		$params = array(
+			"action"	=> $service,		//"gaf"
+			"ver"		=> $version,		//Protokolli versioon, Fikseeritud väärtus: 002
+			"id"		=> $sender_id,		//Kaupmehe kasutajanimi süsteemis
+			"ecuno"		=> $reference_nr,	//Tehingu unikaalne number kaupmehe süsteemis,min. lubatud väärtus 100000
+			"eamount"	=> $amount,		//Kaupmehe süsteemi poolt antav tehingu summa sentides.;
+			"cur"		=> $curr,		//Tehingu valuuta nimi . Fikseeritud: EEK
+			"datetime"	=> $datetime,		//AAAAKKPPTTmmss 	Tehingu kuupäev,kellaaeg
+			"mac" 		=> $VK_MAC,		//Sõnumi signatuur (MAC)*
+			"lang" 		=> $lang,		//et,en . Süsteemis kasutatav keel. et - Eesti, en - Inglise
+		);
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
+	}
 
 	function check_nordea_args($arr)
 	{
