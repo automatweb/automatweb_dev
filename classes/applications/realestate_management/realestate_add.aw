@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.24 2006/08/29 07:18:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.25 2007/01/04 14:06:36 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -830,6 +830,10 @@ class realestate_add extends class_base
 		}
 		if($id)//see siis tähendab, et muudetakse juba olemasolevat.... st vaja sessioon infot täis toppida jne
 		{
+			if(!$this->can("edit", $id))
+			{
+				return;
+			}
 			$realest_obj = obj($id);
 			if(array_key_exists($realest_obj->class_id() , $this->opt))
 			{
