@@ -216,6 +216,11 @@
 
 	<!-- END SUB: MAIN_CATERING -->
 
+	<tr>
+		<td colspan="2">
+			<b>ADDITIONAL FUNCTIONS</b>
+		</td>
+	</tr>
 	<!-- SUB: ADDITIONAL_FUNCTIONS -->
 	<tr>
 		<td colspan="2">
@@ -233,6 +238,50 @@
 					<td>{VAR:end_time}</td>
 					<td>{VAR:attendee_no}</td>
 				</tr>
+				<!-- SUB: ADD_FUNCTION_CATERING -->
+				<tr>
+				<td colspan="4">
+					<table>
+					<tr>
+						<td colspan="4" style="font-size:11px;font-weight:bold;">
+							Catering:
+						</td>
+					</tr>
+					<tr>
+						<td style="font-size:10px;">
+							{VAR:LC_TYPE}
+						</td>
+						<td style="font-size:10px;">
+							{VAR:LC_START_TIME}
+						</td>
+						<td style="font-size:10px;">
+							{VAR:LC_END_TIME}
+						</td>
+						<td style="font-size:10px;">
+							{VAR:LC_ATTENDEE_NO}
+						</td>
+					</tr>
+					<!-- SUB: ADD_FUNCTION_CATERING_ROW -->
+					<tr>
+						<td style="font-size:10px;">
+							{VAR:type}
+						</td>
+						<td style="font-size:10px;">
+							{VAR:start_time}
+						</td>
+						<td style="font-size:10px;">
+							{VAR:end_time}
+						</td>
+						<td style="font-size:10px;">
+							{VAR:attendee_no}
+						</td>
+					</tr>
+					
+					<!-- END SUB: ADD_FUNCTION_CATERING_ROW -->
+					</table>
+				</td>
+				</tr>
+				<!-- END SUB: ADD_FUNCTION_CATERING -->
 				<!-- END SUB: ADD_FUNCTION_ROW -->
 			</table>
 		</td>

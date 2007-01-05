@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.26 2007/01/03 14:56:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.27 2007/01/05 11:52:26 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -680,11 +680,34 @@ class conference_planning extends class_base
 						continue;
 					}
 					$cat_type = ($data["event_type_chooser"] == 1)?$conf_types[$data["event_type_select"]]:$data["event_type_text"];
+					if(count($data["catering"]))
+					{
+						unset($caterings);
+						foreach($data["catering"] as $catering)
+						{
+							$sc->vars(array(
+								"type" => ($catering["catering_type_chooser"] == 1)?$this->catering_types[$catering["catering_type_select"]]:$data["catering_type_text"],
+								"start_time" => $catering["catering_start_time"],
+								"end_time" => $catering["catering_end_time"],
+								"attendee_no" => $catering["catering_attendee_no"],
+							));
+							$caterings .= $sc->parse("ADD_FUNCTION_CATERING_ROW");
+						}
+						$sc->vars(array(
+							"ADD_FUNCTION_CATERING_ROW" => $caterings,
+						));
+						$add_fun_cat = $sc->parse("ADD_FUNCTION_CATERING");
+					}
+					else
+					{
+						unset($add_fun_cat);
+					}
 					$sc->vars(array(
 						"type" => $cat_type,
 						"start_time" => $data["function_start_date"]." ".$data["function_start_time"],
 						"end_time" => $data["function_end_date"]." ".$data["function_end_time"],
 						"attendee_no" => $data["persons_no"],
+						"ADD_FUNCTION_CATERING" => $add_fun_cat,
 					));
 					$rows .= $sc->parse("ADD_FUNCTION_ROW");
 				}
