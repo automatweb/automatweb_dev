@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.7 2007/01/03 14:58:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.8 2007/01/05 12:48:11 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -137,6 +137,20 @@ class rfp_manager extends class_base
 						}
 					}
 					$urgent_col = ($obj->prop("urgent") == 1)?"#CC3333":"";
+					$rooms = array();
+					if($_t = $obj->prop("single_rooms"))
+					{
+						$rooms[] = $_t." ".t("Si");
+					}
+					if($_t = $obj->prop("double_rooms"))
+					{
+						$rooms[] = $_t." ".t("Do");
+					}
+					if($_t = $obj->prop("suites"))
+					{
+						$rooms[] = $_t." ".t("Su");
+					}
+					$acc_rooms = join(", ", $rooms);
 					$t->define_data(array(
 						"function" => html::href(array(
 							"caption" => ($_t = $obj->prop("function_name"))?$_t:t(" - Nimetu - "),
@@ -154,7 +168,7 @@ class rfp_manager extends class_base
 						"org" => $obj->prop("organisation"),
 						"response_date" => $obj->prop("response_date"),
 						"date_period" => $obj->prop("arrival_date")." - ".$obj->prop("departure_date"),
-						"acc_need" => ($obj->prop("accommondation_requirements") == 1)?t("Jah"):t("Ei"),
+						"acc_need" => ($obj->prop("accommondation_requirements") == 1)?$acc_rooms:t("Ei"),
 						"delegates" => $obj->prop("delegates_no"),
 						"contact_pers" => $obj->prop("billing_name"),
 						"contacts" => join(", ", $contacts).(strlen($_t = $obj->prop("contact_preference"))?"(".$_t.")":""),
