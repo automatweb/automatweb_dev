@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.19 2006/12/15 15:41:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.20 2007/01/05 10:27:15 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -40,8 +40,11 @@
 
 @reltype SIGNER value=2 clid=CL_CRM_PERSON 
 @caption Allkirjastaja
-*/
 
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PATENT, on_save_patent)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_FILE, on_save_file)
+
+*/
 
 define("USER_DEFAULT_DIR", 2);
 define("DEFAULT_DDOC_TYPE", "DIGIDOC-XML");
@@ -77,6 +80,13 @@ class ddoc extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "baba":
+				$prop["onclick"] = "alert(45);";
+				break;
+				break;
+			case "submit":
+				$prop["onclick"] = "alert(55);";
+				break;
 			//-- get_property --//
 			case "name":
 				$prop["value"] = html::href(array(
@@ -330,7 +340,21 @@ class ddoc extends class_base
 	{
 		if($arr["request"]["search_result_file"])
 		{
-			$files = split(",", $arr["request"]["search_result_file"]);
+			$files = stristr($arr["request"]["search_result_file"], ",")?split(",", $arr["request"]["search_result_file"]):array();
+			$file_inst = get_instance(CL_FILE);
+			// well this loop filters out these files which already have been signed.. this actually sucks a little but what-dha-hek
+			foreach($files as $k => $file)
+			{
+				$res = $file_inst->is_signed($file["file_oid"]);
+				if($res["status"] == 1 || $res["status"] == 0)
+				{
+					unset($files[$k]);
+				}
+			}
+			if($this->is_signed($arr["id"]) && count($files))
+			{
+				$this->remove_signatures($arr["id"]);
+			}
 			foreach($files as $file)
 			{
 				$this->add_file(array(
@@ -343,7 +367,7 @@ class ddoc extends class_base
 
 	function callback_post_save($arr)
 	{
-		// if we are dealing with a new ddoc instance and no ddoc file is set, we maka a new empty ddoc container!:)
+		// if we are dealing with a new ddoc instance and no ddoc file is set, we make a new empty ddoc container!:)
 		if($arr["new"] == 1 && !strlen($arr["obj_inst"]->prop("ddoc_location")))
 		{
 			$this->create_empty($arr["obj_inst"]->id());
@@ -363,6 +387,34 @@ class ddoc extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+//-- msg methods --//
+
+	// these functions remove dha signatures when saving a signed object
+	function on_save_patent($arr)
+	{
+		$inst = get_instance(CL_PATENT);
+		$res = $inst->is_signed($arr["oid"]);
+		if($res["status"] == 1)
+		{
+			if(!$this->remove_signatures($res["ddoc"]))
+			{
+				error::raise(array(
+					"msg" => t("Ei suutnud eemaldada allkirju"),
+				));
+			}
+		}
+	}
+
+	function on_save_file($arr)
+	{
+		$inst = get_instance(CL_FILE);
+		$res = $inst->is_signed($arr["oid"]);
+		if($res["status"] == 1)
+		{
+			$this->remove_signatures($res["ddoc"]);
+		}
 	}
 
 //-- orb methods --//
@@ -632,7 +684,7 @@ class ddoc extends class_base
 		$this->_s($oid);
 		$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
 		$ret = $this->digidoc->WSDL->GetSignedDocInfo();
-		$ret2 = ddoc2_parser::Parse($this->digidoc->WSDL->xml, 'body');
+		$ret = ddoc2_parser::Parse($this->digidoc->WSDL->xml, 'body');
 		if(PEAR::isError($ret))
 		{
 			die("error@_remove_sigantures:getsigneddocinfo:".$ret->getMessage());
@@ -649,6 +701,22 @@ class ddoc extends class_base
 		return true;
 	}
 
+	function raise($msg, $halt = true)
+	{
+		$this->read_template("error.tpl");
+		$this->vars(array(
+			"msg" => $msg,
+		));
+		if($halt)
+		{
+			die($this->parse("ERROR"));
+		}
+		else
+		{
+			return $this->parse("ERROR");
+		}
+	}
+
 	function _s($oid = false)
 	{
 		$cont = $oid?$this->get_ddoc($oid):"";
@@ -656,7 +724,16 @@ class ddoc extends class_base
 		$ret = $this->digidoc->WSDL->StartSession($oid?$p->GetDigiDoc(LOCAL_FILES):"", TRUE, '');
 		if(PEAR::isError($ret))
 		{
-			die("error@_s:".$ret->getMessage());
+			switch(trim($ret->message))
+			{
+				case "curl_exec error 7":
+					$msg = t("&Uuml;henduse probleemid. Hetkel ei ole kahjuks v&otilde;imalik allkirjastada!");
+					break;
+				default:
+					$msg = t("Viga sessiooni loomisel!");
+					break;
+			}
+			$this->raise($msg);
 		}
 		else
 		{
@@ -756,7 +833,6 @@ class ddoc extends class_base
 			return false;
 		}
 
-
 		if($arr["file_oid"])
 		{
 			// aw failiobjekti lisamine
@@ -825,7 +901,7 @@ class ddoc extends class_base
 			
 			$this->_e();
 		}
-		if($arr["other_oid"])
+		elseif($arr["other_oid"])
 		{
 			// aw patendi lisamine
 			$other_obj = obj($arr["other_oid"]);
