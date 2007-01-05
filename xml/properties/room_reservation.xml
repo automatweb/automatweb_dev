@@ -23,6 +23,15 @@
             <caption>N&amp;amp;auml;ita hindu valuutades</caption>
       </property>
       <property>
+            <name>multiple_reservations</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>Ruume saab samal ajal broneerida mitu</caption>
+      </property>
+      <property>
             <name>reservation_template</name>
             <table>objects</table>
             <group>general</group>

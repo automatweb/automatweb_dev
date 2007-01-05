@@ -49,6 +49,7 @@
 				<arguments>
 					<optional name="bron" type="array" />
 					<required name="room" type="oid" />
+					<optional name="room_res" type="oid" />
 				</arguments>
 			</function>
 		</action>
@@ -57,7 +58,7 @@
 			<function name="affirm_reservation">
 				<arguments>
 					<optional name="bron_id" type="array" />
-					<required name="room" type="oid" />
+					<required name="room" type="oid,array" />
 					<optional name="section" type="string" />
 					<optional name="level" type="int" />
 				</arguments>
