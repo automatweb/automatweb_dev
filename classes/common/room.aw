@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.90 2007/01/05 08:17:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.91 2007/01/05 09:50:15 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1331,107 +1331,63 @@ class room extends class_base
 			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=300')
 			</script>";
 		}
-		$ret.= t("Vali sobiv ajavahemik: ");
-		$x=0;
-		$options = array();
-		$week = date("W" , time());
-		$weekstart = mktime(0,0,0,1,1,date("Y" , time())) + (date("z" , time()) - date("w" , time()) + 1)*86400;
-		while($x<20)
-		{
-			$url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
-			$options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
-			if($arr["request"]["start"] == $weekstart) $selected = $url;
-			$weekstart = $weekstart + 604800;
-			$x++;
-		};
-		
-		$ret.= html::select(array(
-			"name" => "room_reservation_select",
-			"options" => $options,
-			"onchange" => " window.location = this.value;",
-			"selected" => $selected,
+                $x=0;
+                $options = array();
+                $week = date("W" , time());
+                $weekstart = mktime(0,0,0,1,1,date("Y" , time())) + (date("z" , time()) - date("w" , time()) + 1)*86400;
+                while($x<20)
+                {
+                        $url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
+                        $options[$url] = date("W" , $weekstart) . ". " .date("d.m.Y", $weekstart) . " - " . date("d.m.Y", ($weekstart+604800));
+                        if($arr["request"]["start"] == $weekstart) $selected = $url;
+                        $weekstart = $weekstart + 604800;
+                        $x++;
+                };
+		$ret.= $this->_get_hidden_fields($arr);
+
+                $ws = html::select(array(
+                        "name" => "room_reservation_select",
+                        "options" => $options,
+                        "onchange" => " window.location = this.value;",
+                        "selected" => $selected,
+                ));
+
+		$this->read_template("cal_header.tpl");
+		$this->vars(array(
+			"pop" => $ret,
+			"week_select" => $ws,
+			"date_from" => html::date_select(array(
+                  	      "name" => "set_d_from",
+                        	"value" => $_GET["start"]
+                	)),
+			"ts_buttons" => html::button(array(
+	                        "onclick" => "document.changeform.set_view_dates.value=2;submit_changeform();",
+        	                "value" => t("P&auml;ev")
+                	))." ".html::button(array(
+	                        "onclick" => "document.changeform.set_view_dates.value=3;submit_changeform();",
+        	                "value" => t("N&auml;dal")
+                	))." ".html::button(array(
+                        	"onclick" => "document.changeform.set_view_dates.value=4;submit_changeform();",
+	                        "value" => t("Kuu")
+        	        )),
+			"date_to" => html::date_select(array(
+	                        "name" => "set_d_to",
+        	                "value" => $_GET["end"]
+                	)),
+			"to_button" => html::button(array(
+	                        "onclick" => "document.changeform.set_view_dates.value=1;submit_changeform();",
+        	                "value" => t("N&auml;ita vahemikku")
+                	)),
 		));
 		
 		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
 		{
-			$ret.= t("Vali broneeringu kestvus: ");
-			$ret.= $this->_get_length_select(array("obj_inst" => $arr["obj_inst"]));
-// 			$options = array();
-// 			$end = $arr["obj_inst"]->prop("time_to")/$arr["obj_inst"]->prop("time_step");
-// 			if($arr["obj_inst"]->prop("selectbox_time_step"))
-// 			{
-// 				$x = ($arr["obj_inst"]->prop("time_from")/$arr["obj_inst"]->prop("time_step"));
-// 
-// 				//$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
-// 				while($x<=$end)
-// 				{
-// 					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-// 					$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-// 					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
-// 					{
-// 						$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
-// 						if($small_units%60 == 0)
-// 						{
-// 							$options["".$x] = $options["".$x] + $small_units/60;
-// 						}
-// 						else
-// 						{
-// 							if($small_units < 10)
-// 							{
-// 								$small_units = "0".$small_units;
-// 							}
-// 							$options["".$x] = $options["".$x] . ":" . $small_units;
-// 						}
-// 					}
-// 					$x = $x + $arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step");
-// 				}
-// 			}
-// 			else
-// 			{
-// 				$x = 1;
-// 				while($x <= $end)
-// 				{
-// 					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-// 					$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-// 					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
-// 					{
-// 						$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
-// 					}
-// 					$x++;
-// 				};
-// 			}
-// 			$ret.= html::select(array(
-// 				"name" => "room_reservation_length",
-// 				"options" => $options,
-// 				"onchange" => "changeRoomReservationLength(this);",
-// 			));
-// 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
-		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
+			$this->vars(array(
+				"length_sel" => t("Vali broneeringu pikkus: ").$this->_get_length_select(array("obj_inst" => $arr["obj_inst"]))
+			));
 		}
-		$ret.= $this->_get_hidden_fields($arr);
 
-		// add date select
-		$ret .= "<br>".t("Vali kuup&auml;ev:")." ".html::date_select(array(
-			"name" => "set_d_from",
-			"value" => $_GET["start"]
-		))." - ".html::date_select(array(
-			"name" => "set_d_to",
-			"value" => $_GET["end"]
-		))." ".html::button(array(
-                        "onclick" => "document.changeform.set_view_dates.value=1;submit_changeform();",
-                        "value" => t("N&auml;ita vahemikku")
-                ))." ".html::button(array(
-			"onclick" => "document.changeform.set_view_dates.value=2;submit_changeform();",
-			"value" => t("P&auml;ev")
-		))." ".html::button(array(
-			"onclick" => "document.changeform.set_view_dates.value=3;submit_changeform();",
-			"value" => t("N&auml;dal")
-		))." ".html::button(array(
-			"onclick" => "document.changeform.set_view_dates.value=4;submit_changeform();",
-			"value" => t("Kuu")
-		));
-		$arr["prop"]["value"] = $ret;
-		return $ret;
+		return $arr["prop"]["value"] = $this->parse();
 	}
 
 	function _get_calendar_tbl($arr)
@@ -1620,11 +1576,23 @@ class room extends class_base
 									}
 								}
 							}
-							$d[$x] = html::href(array(
+							$dx_p = array(
 								"url" => html::get_change_url($this->last_bron_id,array("return_url" => get_ru(),)),
 								"caption" => "<span><font color=#26466D>".$cus . " " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
-							));
+							);
+
+							if ($settings->prop("bron_no_popups"))
+							{
+								$d[$x] = html::href($dx_p);
+							}
+							else
+							{
+								$dx_p["width"] = 800;
+								$dx_p["height"] = 600;
+								$dx_p["scrollbars"] = 1;
+								$d[$x] = html::popup($dx_p);
+							}
 							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
 							if ($settings->prop("col_buffer") != "")
 							{
@@ -1958,9 +1926,9 @@ class room extends class_base
 		}
 
 		$settings = $this->get_settings_for_room($room);
-                if ($settings->prop("bron_popup_detailed"))
-                {
-                        $url = html::get_new_url(CL_RESERVATION, $parent, array(
+		if ($settings->prop("bron_popup_detailed"))
+		{
+			$url = html::get_new_url(CL_RESERVATION, $parent, array(
 				"return_url" => $arr["post_ru"],
 				"start1" => $start,
 				"calendar" => $cal,
@@ -1968,8 +1936,10 @@ class room extends class_base
 				"resource" => $arr["id"],
 				"product" => $product,
 			));
-                }
-                else
+			$w = 1000;
+			$h = 600;
+		}
+		else
 		{
 			$url = $this->mk_my_orb("admin_add_bron_popup", array(
                                 "parent" => $parent,
@@ -1980,6 +1950,8 @@ class room extends class_base
                                 "return_url" => $arr["post_ru"],
                                 "product" => $product,
                         ));
+			$w = 500;
+			$h = 400;
 		}
 
 		if ($settings->prop("bron_no_popups"))
@@ -1990,7 +1962,7 @@ class room extends class_base
 		else
 		{
 			die("<script type='text/javascript'>
-			window.open('$url','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=1000');
+			window.open('$url','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=$h, width=$w');
 			 
 				window.location.href='".$arr["post_ru"]."';
 			</script>");
