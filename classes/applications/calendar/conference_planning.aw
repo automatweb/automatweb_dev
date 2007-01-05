@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.27 2007/01/05 11:52:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.28 2007/01/05 12:11:31 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -686,10 +686,10 @@ class conference_planning extends class_base
 						foreach($data["catering"] as $catering)
 						{
 							$sc->vars(array(
-								"type" => ($catering["catering_type_chooser"] == 1)?$this->catering_types[$catering["catering_type_select"]]:$data["catering_type_text"],
-								"start_time" => $catering["catering_start_time"],
-								"end_time" => $catering["catering_end_time"],
-								"attendee_no" => $catering["catering_attendee_no"],
+								"type" => ($_t = ($catering["catering_type_chooser"] == 1)?$this->catering_types[$catering["catering_type_select"]]:$data["catering_type_text"])?$_t:t("-"),
+								"start_time" => ($_t = $catering["catering_start_time"])?$_t:t("-"),
+								"end_time" => ($_t = $catering["catering_end_time"])?$_t:t("-"),
+								"attendee_no" => ($_t = $catering["catering_attendee_no"])?$_t:t("-"),
 							));
 							$caterings .= $sc->parse("ADD_FUNCTION_CATERING_ROW");
 						}
@@ -703,10 +703,10 @@ class conference_planning extends class_base
 						unset($add_fun_cat);
 					}
 					$sc->vars(array(
-						"type" => $cat_type,
-						"start_time" => $data["function_start_date"]." ".$data["function_start_time"],
-						"end_time" => $data["function_end_date"]." ".$data["function_end_time"],
-						"attendee_no" => $data["persons_no"],
+						"type" => ($_t = $cat_type)?$_t:t("-"),
+						"start_time" => ($_t = trim($data["function_start_date"]." ".$data["function_start_time"]))?$_t:t("-"),
+						"end_time" => ($_t = trim($data["function_end_date"]." ".$data["function_end_time"]))?$_t:t("-"),
+						"attendee_no" => ($_t = $data["persons_no"])?$_t:t("-"),
 						"ADD_FUNCTION_CATERING" => $add_fun_cat,
 					));
 					$rows .= $sc->parse("ADD_FUNCTION_ROW");
