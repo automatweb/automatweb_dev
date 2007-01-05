@@ -38,19 +38,20 @@ else
 {
 	$str = $sf->parse();
 }
-// do a cache clean every hour for this session
-if ($_SESSION["last_cache_clear"] < (time() - 3600))
-{
-	$astr = "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&amp;action=cache_update' alt='' height='1' width='1'/>";
-	$astr .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=scheduler&amp;action=static_sched' alt='' height='1' width='1'/>";
 
-	$str = str_replace("</body>", $astr."</body>", $str);
-	$str = str_replace("</BODY>", $astr."</BODY>", $str);
-	$_SESSION["last_cache_clear"] = time();
-}
 ob_start();
 echo $str;
 ob_end_flush();
 
 aw_shutdown();
+
+// do a cache clean every hour 
+if (filectime(aw_ini_get("cache.page_cache")."/temp/lmod") < (time() - 3600))
+{
+	$m = get_instance("core/maitenance");
+	$m->cache_update(array());
+
+	$m = get_instance("scheduler");
+	$m->static_sched(array());
+}
 ?>

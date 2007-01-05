@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.41 2006/10/16 10:31:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.42 2007/01/05 12:58:08 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -779,12 +779,6 @@ class scheduler extends aw_template
 	**/
 	function static_sched($arr)
 	{
-		// let the user continue with their business
-		header("Content-Type: image/gif");
-		header("Content-Length: 43");
-		header("Connection: close");
-		echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
-		flush();
 		// basically, what this thing should do, is:
 		// read the static scheduler definition file and if the time for something is about to come, then 
 		// generate the correct url and add it to the real scheduler
@@ -815,7 +809,6 @@ class scheduler extends aw_template
 				}
 			}
 		}
-		die("all done");
 	}
 
 }

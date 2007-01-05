@@ -1317,6 +1317,7 @@ function check_pagecache_folders()
 	{
 		mkdir($pg."/temp", 0777);
 		chmod($pg."/temp", 0777);
+		touch($pg."/temp/lmod");
 	}
 }
 

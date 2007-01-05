@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.2 2006/01/31 15:25:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.3 2007/01/05 12:58:07 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -103,16 +103,10 @@ class maitenance extends class_base
 	**/
 	function cache_update($arr)
 	{
-		// let the user continue with their business
-		header("Content-Type: image/gif");
-		header("Content-Length: 43");
-		header("Connection: close");
-		echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
-		flush();
-
 		// go over temp folder and delete
 		$fld = aw_ini_get("cache.page_cache")."/temp";
 		$this->_req_cupd($fld);
+		@rmdir($fld);
 	}
 
 	function _req_cupd($dir)
