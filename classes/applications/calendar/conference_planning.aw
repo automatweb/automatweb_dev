@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.29 2007/01/05 12:48:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.30 2007/01/05 14:52:23 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -160,9 +160,12 @@ class conference_planning extends class_base
 			case 1:
 				$sc->read_template("sub_conference_rfp1.tpl");				
 				$acc_req = ($sd["single_count"] > 0 || $sd["double_count"] > 0 || $sd["suite_count"] > 0 || $sd["accomondation_requirements"])?"CHECKED":"";
+				$u = get_instance(CL_USER);
+				$org = $u->get_current_company();
+				$org = $this->can("view", $org)?obj($org):false;
 				$sc->vars(array(
 					"function_name" => $sd["function_name"],
-					"organisation_company" => $sd["organisation_company"],
+					"organisation_company" => strlen($_t = $sd["organisation_company"])?$_t:($org?$org->name():""),
 					"response_date" => $sd["dates"][0]["response_date"],
 					"decision_date" => $sd["dates"][0]["decision_date"],
 					"arrival_date" => $sd["dates"][0]["arrival_date"],
