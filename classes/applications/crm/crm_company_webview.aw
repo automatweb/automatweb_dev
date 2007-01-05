@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.17 2006/12/18 14:23:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.18 2007/01/05 12:33:03 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -974,7 +974,12 @@ class crm_company_webview extends class_base
 			$ob  = null;
 		}
 		$crm_db = obj($db);
-		$dir = is_oid($crm_db->prop('dir_firma')) ? $crm_db->prop('dir_firma') : $crm_db->prop('dir_default');
+		$df = $crm_db->prop('dir_firma');
+		if (is_array($df))
+		{
+			$df = reset($df);
+		}
+		$dir = is_oid($df) ? $df : $crm_db->prop('dir_default');
 		$objs = array();
 
 		// Get configuration

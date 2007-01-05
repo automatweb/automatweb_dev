@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.33 2006/05/10 14:15:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.34 2007/01/05 12:33:02 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -12,7 +12,7 @@
 @property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general
 @caption Vaikimisi valim
 
-@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT
+@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT multiple=1
 @caption Ettevõtete kaust
 
 @property folder_person type=relpicker reltype=RELTYPE_ISIK_CAT
@@ -305,7 +305,7 @@ class crm_db extends class_base
 			return;
 			$vars["CL_CRM_COMPANY.pohitegevus(CL_CRM_SECTOR).name"] = new obj_predicate_compare(OBJ_COMP_NULL); 
 		}
-		
+
 		$companys = new object_list($vars);
 		$t->d_row_cnt = $companys->count();
 		$ps = "";
@@ -366,11 +366,22 @@ class crm_db extends class_base
 			"tooltip" => t("Lisa"),
 			"img" => "new.gif",
 		));
-		$tb->add_menu_item(array(
-			"parent" => "create_event",
-			"text" => t("Lisa organisatsioon"),
-			"url" => $this->mk_my_orb("new", array("parent" => $arr["obj_inst"]->prop("dir_firma"),"return_url" => get_ru(), "sector" => $arr["request"]["teg_oid"]), CL_CRM_COMPANY),
-		));
+
+		$df = $arr["obj_inst"]->prop("dir_firma");
+		if ($this->can("view", $df))
+		{
+			$df = array($df);
+		}
+
+		foreach(safe_array($df) as $pt)
+		{
+			$pt = obj($pt);
+			$tb->add_menu_item(array(
+				"parent" => "create_event",
+				"text" => sprintf(t("Lisa organisatsioon (%s)"), $pt->name()),
+				"url" => $this->mk_my_orb("new", array("parent" => $pt->id(),"return_url" => get_ru(), "sector" => $arr["request"]["teg_oid"]), CL_CRM_COMPANY),
+			));
+		}
 		if($arr["request"]["group"] == "tegevusalad")
 		{
 			$pt = $arr["request"]["teg_oid"] ?  $arr["request"]["teg_oid"] : $arr["obj_inst"]->prop("dir_tegevusala");

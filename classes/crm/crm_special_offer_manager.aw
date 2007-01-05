@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer_manager.aw,v 1.2 2006/03/08 15:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer_manager.aw,v 1.3 2007/01/05 12:33:02 kristo Exp $
 // crm_special_offer_manager.aw - Organisatsiooni eripakkumiste haldus 
 // Valitud eripakkumiste veebi kuvamiseks
 /*
@@ -361,6 +361,10 @@ class crm_special_offer_manager extends class_base
 				}
 				$db = obj($id_db);
 				$id_dir = $db->prop("dir_firma");
+				if (is_array($id_dir))
+				{
+					$id_dir = reset($id_dir);
+				}
 				if (is_oid($id_dir) && ($dir=obj($id_dir)) && $dir->class_id() == CL_MENU)
 				{
 					$ol = new object_list(array(

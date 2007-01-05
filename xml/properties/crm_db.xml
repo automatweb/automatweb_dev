@@ -18,6 +18,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_FIRMA_CAT</reltype>
+            <multiple>1</multiple>
             <caption>Ettev&amp;otilde;tete kaust</caption>
       </property>
       <property>
