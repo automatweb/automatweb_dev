@@ -46,6 +46,10 @@ class digidoc {
 			} else {
 				$wsdl = new SOAP_WSDL( DD_WSDL, $connection );
 				$wcode = $wsdl->generateProxyCode();
+				if(PEAR::isError($wcode))
+				{
+					return false;
+				}
 				eval( $wcode );
 				ddFile::saveLocalFile( DD_WSDL_FILE, "<?php\n".$wcode."\n?".">");	
 			} 
@@ -59,6 +63,10 @@ class digidoc {
 		$connection = $this->getConnect();
 		$this->Client = new SOAP_Client ( DD_WSDL, TRUE, FALSE, $connection);
 		
+		if(!class_exists("WebService_DigiDocService_DigiDocService"))
+		{
+			return false;
+		}
 		$this->WSDL = new WebService_DigiDocService_DigiDocService();
 				
 		$this->browser = ddFile::getBrowser();
