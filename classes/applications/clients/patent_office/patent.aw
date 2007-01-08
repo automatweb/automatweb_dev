@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.37 2007/01/08 14:28:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.38 2007/01/08 14:59:07 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1777,7 +1777,7 @@ class patent extends class_base
 	function check_fields()
 	{
 		$err = "";
-		
+		arr($_SESSION["patent"]["reproduction"]);
 		if($_GET["data_type"] == 2)
 		{
 			if(!array($_POST["products"]))
@@ -1785,6 +1785,31 @@ class patent extends class_base
 				$err.= t("Kohustuslik v&auml;hemalt &uuml;he toote/teenuse lisamine")."\n<br>";
 			}
 		}
+		if($_GET["data_type"] == 1)
+		{
+			if($_POST["type"] == 0 && !isset($_POST["wordmark"]))
+			{
+				$err.= t("S&otilde;nam&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud")."\n<br>";
+			}
+			if($_POST["type"] == 1 && !$_FILES["reproduction_upload"]["name"] && !is_oid($_SESSION["patent"]["reproduction"]))
+			{
+				$err.= t("Peab olema lisatud ka pillt")."\n<br>";
+			}
+			if($_POST["type"] == 2 && !isset($_POST["wordmark"]))
+			{
+				$err.= t("Kombineeritud m&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud")."\n<br>";
+			}
+			if($_POST["type"] == 2 && !$_FILES["reproduction_upload"]["name"] && !is_oid($_SESSION["patent"]["reproduction"]))
+			{
+				$err.= t("Peab olema lisatud ka pillt")."\n<br>";
+			}
+			if($_POST["type"] == 3 && !$_FILES["reproduction_upload"]["name"] && !is_oid($_SESSION["patent"]["reproduction"]))
+			{
+				$err.= t("Peab olema lisatud ka pillt")."\n<br>";
+			}
+		
+		}
+		
 		
 		if($_POST["code"] || $_POST["name"] || $_POST["firstname"] || $_POST["lastname"])
 		{
