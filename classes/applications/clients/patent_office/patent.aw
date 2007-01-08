@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.36 2007/01/08 13:19:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.37 2007/01/08 14:28:48 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -519,6 +519,16 @@ class patent extends class_base
 			$prods = $_SESSION["patent"]["products"];
 		}
 		
+		if($_POST["print"])
+		{
+			$data["print"] = "<script language='javascript'>
+				window.print();
+			</script>;";
+		}
+		else
+		{
+			$data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onClick='javascript:document.changeform.submit();'>";
+		}		
 		
 		$this->vars($data);
 		$p = "";
