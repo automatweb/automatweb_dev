@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.37 2007/01/04 13:36:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.38 2007/01/08 11:35:45 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -806,6 +806,11 @@ class join_site extends class_base
 								"caption" => t("Linn"),
 								"type" => "textbox",
 							);
+							$tp["p_adr_county"] = array(
+								"name" => "p_adr_county",
+								"caption" => t("Maakond"),
+								"type" => "textbox"
+							);
 							$tp["p_adr_str"] = array(
 								"name" => "p_adr_str",
 								"caption" => t("T&auml;nava nimi"),
@@ -937,6 +942,26 @@ class join_site extends class_base
 				}
 				$klomp[$oldn] = $xprop;
 			}
+		}
+
+		// add seprator props
+		$seps = new aw_array($ob->meta("join_seps"));
+		$lang_seps = safe_array($ob->meta("lang_seps"));
+		$lang_id = aw_global_get("lang_id");
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$lang_id = aw_global_get("ct_lang_id");
+		}
+		foreach($seps->get() as $sepid => $sepn)
+		{
+			$pid = "typo_sep[jsep_".$sepid."]";
+			$klomp[$pid] = array(
+				"type" => "text",
+				"name" => $pid,
+				//"no_caption" => 1,
+				"subtitle" => 1,
+				"value" => !empty($lang_seps[$sepid][$lang_id]) ? $lang_seps[$sepid][$lang_id] : $sepn
+			);
 		}
 
 		$this->_do_final_sort_props($ob, $klomp);
@@ -1544,6 +1569,12 @@ class join_site extends class_base
 							"type" => "textbox",
 							"value" => $data_o->prop("address.linn.name")
 						);
+						$tp["p_adr_county"] = array(
+							"name" => "p_adr_county",
+							"caption" => t("Maakond"),
+							"type" => "textbox",
+							"value" => $data_o->prop("address.maakond.name")
+						);
 						$tp["p_adr_str"] = array(
 							"name" => "p_adr_str",
 							"caption" => t("T&auml;nava nimi"),
@@ -2002,17 +2033,22 @@ class join_site extends class_base
 			else
 			if ($a_prop == "p_adr_zip")
 			{
-				$a_diff = -0.5+($a_diff / 100);
+				$a_diff = -0.3+($a_diff / 100);
 			}
 			else
 			if ($a_prop == "p_adr_city")
 			{
-				$a_diff = -0.3+($a_diff / 100);
+				$a_diff = -0.5+($a_diff / 100);
 			}
 			else
 			if ($a_prop == "p_adr_ctry")
 			{
 				$a_diff = -0.1+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "p_adr_county")
+			{
+				$a_diff = -0.4+($a_diff / 100);
 			}
 			$a_prop = "address";
 		}
@@ -2028,20 +2064,28 @@ class join_site extends class_base
                         else
                         if ($b_prop == "p_adr_zip")
                         {
-                                $b_diff = -0.5+($b_diff / 100);
+                                $b_diff = -0.3+($b_diff / 100);
                         }
                         else
                         if ($b_prop == "p_adr_city")
                         {
-                                $b_diff = -0.3+($b_diff / 100);
+                                $b_diff = -0.5+($b_diff / 100);
                         }
                         else
                         if ($b_prop == "p_adr_ctry")
                         {
                                 $b_diff = -0.1+($b_diff / 100);
                         }
+                        else
+                        if ($b_prop == "p_adr_county")
+                        {
+                                $b_diff = -0.4+($b_diff / 100);
+                        }
+
 			$b_prop = "address";
 		}
+
+
 //echo "a _prop = $a_prop , a_diff = $a_diff , bprop = $p_prop , bdiff = $b_diff <br>";
 		if ($a_clid == "sep")
 		{
@@ -2286,6 +2330,7 @@ class join_site extends class_base
 		$o->set_prop("aadress", isset($r["typo_145"]["p_adr_str"]) ? $r["typo_145"]["p_adr_str"] : $r["p_adr_str"]);
 		$o->set_prop("postiindeks", isset($r["typo_145"]["p_adr_zip"]) ? $r["typo_145"]["p_adr_zip"] : $r["p_adr_zip"]);
 		$this->set_rel_by_val($o, "linn", isset($r["typo_145"]["p_adr_city"]) ? $r["typo_145"]["p_adr_city"] : $r["p_adr_city"]);
+		$this->set_rel_by_val($o, "maakond", isset($r["typo_145"]["p_adr_county"]) ? $r["typo_145"]["p_adr_county"] : $r["p_adr_county"]);
 		$adr_i = $o->instance();
 		$riiks = $adr_i->get_country_list();
 		$this->set_rel_by_val($o, "riik", $riiks[isset($r["typo_145"]["p_adr_ctry"]) ? $r["typo_145"]["p_adr_ctry"] : $r["p_adr_ctry"]]);
