@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.39 2007/01/08 15:25:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.40 2007/01/08 15:36:15 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -882,7 +882,7 @@ class patent extends class_base
 		
 		if($_GET["data_type"] == 1)
 		{
-			if(!$_SESSION["patent"]["applicant_type"])
+			if(!$_SESSION["patent"]["type"])
 			{
 				$js.='document.getElementById("reproduction_row").style.display = "none";';
 			}
@@ -1000,6 +1000,10 @@ class patent extends class_base
 				));
 			}
 		//	$data[$val."_value"] = $image_inst->make_img_tag_wl($_SESSION["patent"][$var]);
+		}
+		if($_SESSION["patent"]["reproduction"])
+		{
+			$data["image_set"] = 1;
 		}
 		foreach($this->date_vars as $var)
 		{
