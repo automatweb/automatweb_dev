@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.37 2006/07/13 15:22:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.38 2007/01/08 07:45:05 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -244,7 +244,7 @@ class poll extends class_base
 
 	function add_click($aid)
 	{
-		global $polls_clicked;
+		$polls_clicked = $_COOKIE["polls_clicked"];
 		$poa = unserialize($polls_clicked);
 
 		// block google
