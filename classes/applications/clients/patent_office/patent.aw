@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.38 2007/01/08 14:59:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.39 2007/01/08 15:25:28 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1777,7 +1777,6 @@ class patent extends class_base
 	function check_fields()
 	{
 		$err = "";
-		arr($_SESSION["patent"]["reproduction"]);
 		if($_GET["data_type"] == 2)
 		{
 			if(!array($_POST["products"]))
@@ -1787,7 +1786,7 @@ class patent extends class_base
 		}
 		if($_GET["data_type"] == 1)
 		{
-			if($_POST["type"] == 0 && !isset($_POST["wordmark"]))
+			if($_POST["type"] == 0 && !isset($_POST["word_mark"]))
 			{
 				$err.= t("S&otilde;nam&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud")."\n<br>";
 			}
@@ -1795,7 +1794,7 @@ class patent extends class_base
 			{
 				$err.= t("Peab olema lisatud ka pillt")."\n<br>";
 			}
-			if($_POST["type"] == 2 && !isset($_POST["wordmark"]))
+			if($_POST["type"] == 2 && !isset($_POST["word_mark"]))
 			{
 				$err.= t("Kombineeritud m&auml;rgi puhul peab olema s&otilde;naline osa t&auml;idetud")."\n<br>";
 			}
