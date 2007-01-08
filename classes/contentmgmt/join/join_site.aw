@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.38 2007/01/08 11:35:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.39 2007/01/08 13:17:52 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1016,6 +1016,7 @@ class join_site extends class_base
 		$this->vars(array(
 			"form" => $html,
 			"join_but_text" => t("Salvesta"),
+			"cancel_but_text" => t("T&uuml;hista"),
 			"reforb" => $this->mk_reforb(
 				"submit_update_form", 
 				array(
@@ -1052,6 +1053,7 @@ class join_site extends class_base
 				"id" => $arr["id"]
 			)),
 			"join_but_text" => $tx,
+			"cancel_but_text" => t("T&uuml;hista"),
 			"reforb" => $this->mk_reforb("submit_join_form", array("id" => $arr["id"], "add" => $add, "section" => aw_global_get("section")))
 		));
 
@@ -1288,7 +1290,6 @@ class join_site extends class_base
 		{
 			$this->join_done = true;
 			aw_session_set("join_err", array());
-//			die("<html><head><meta http-equiv=\"refresh\" content=\"1;url=".$obj->prop("after_join_url")."\"></head><body>&nbsp;</body></html>");
 			$rv = $obj->prop("after_join_url");
 			if ($rv == "")
 			{
@@ -1299,12 +1300,10 @@ class join_site extends class_base
 		aw_session_set("join_err", $nf);
 		if ($arr["err_return_url"])
 		{
-//			die("<html><head><meta http-equiv=\"refresh\" content=\"1;url=".$arr["err_return_url"]."\"></head><body>&nbsp;</body></html>");
 			
 			return $arr["err_return_url"];
 		}
 
-//		die("<html><head><meta http-equiv=\"refresh\" content=\"1;url=".aw_ini_get("baseurl")."/".$arr["section"]."\"></head><body>&nbsp;</body></html>");
 		return aw_ini_get("baseurl")."/".$arr["section"];
 	}
 
