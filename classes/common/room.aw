@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.92 2007/01/05 13:05:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.93 2007/01/08 14:22:08 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1324,8 +1324,10 @@ class room extends class_base
 
 	function _get_calendar_select($arr)
 	{
+		$settings = $this->get_settings_for_room($arr["obj_inst"]);
+		
 		$ret = "";
-		if($arr["user"] != 1 &&  $bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]))
+		if($arr["user"] != 1 &&  $bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]) && !$settings->prop("no_cust_arrived_pop"))
 		{
 			$reservaton_inst = get_instance(CL_RESERVATION);
 			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=300')

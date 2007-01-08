@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.5 2007/01/04 13:01:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.6 2007/01/08 14:22:07 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -213,7 +213,8 @@ class spa_bookings_overview extends class_base
 					$f["oid"] = -1;
 				}
 			}
-			
+		
+			$f["sort_by"] = "objects.jrk";
 			$ol = new object_list($f);
 		}
 		else
@@ -223,7 +224,8 @@ class spa_bookings_overview extends class_base
 				"class_id" => CL_ROOM,
 				"parent" => $arr["request"]["tf"],
 				"lang_id" => array(),
-				"site_id" => array()
+				"site_id" => array(),
+				"sort_by" => "objects.jrk"
 			));
 		}
 
@@ -241,6 +243,7 @@ class spa_bookings_overview extends class_base
 				"oid" => $o->id()
 			));
 		}
+		$t->set_sortable(false);
 	}
 
 	function _get_rs_name($arr)
