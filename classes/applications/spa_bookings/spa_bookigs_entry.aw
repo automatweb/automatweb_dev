@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.9 2007/01/04 10:12:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.10 2007/01/08 14:52:45 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -294,7 +294,7 @@ class spa_bookigs_entry extends class_base
 					));
 					$user->set_prop("email", $d["email"]);
 					$user->set_prop("after_login_redir", $this->mk_my_orb("change", array(
-							"id" => $arr["obj_inst"]->id(), "group" => "my_bookings"
+							"id" => $arr["obj_inst"]->id(), "group" => "my_bookings", "section" => "3169"
 						), CL_SPA_BOOKIGS_ENTRY));  
 					$user->save();
 
@@ -409,9 +409,14 @@ class spa_bookigs_entry extends class_base
 		return $this->_get_my_bookings($arr);
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_s_res($t);
+		$sr = $this->get_search_results($arr["request"], $arr["obj_inst"]);
 
-		foreach($this->get_search_results($arr["request"], $arr["obj_inst"]) as $item)
+		foreach($sr as $item)
 		{
+			if ($unset_p[$item->prop("package")])
+			{
+				continue;
+			}
 			$t->define_data(array(
 				"person" => html::obj_change_url($item->prop("person")),
 				"email" => html::obj_change_url($item->prop("person.email")),
@@ -602,7 +607,9 @@ class spa_bookigs_entry extends class_base
 		if ($arr["request"]["group"] == "cust" || $arr["request"]["group"] == "all_bookings")
 		{
 			$ol = new object_list();
-			$ol->add($this->get_search_results($arr["request"], $arr["obj_inst"]));
+			$sr = $this->get_search_results($arr["request"], $arr["obj_inst"]);
+			$ol->add($sr);
+
 		}
 		else
 		{
@@ -647,6 +654,8 @@ class spa_bookigs_entry extends class_base
 				$booking_str .= " ".html::get_change_url($o->id(), array("return_url" => get_ru()), t("Muuda"));
 			}
 
+			$fd = array();
+			$has_unc = false;
 			$prod_list = $pk->get_products_for_package($package);
 			foreach($pk->get_group_list($package) as $prod_group)
 			{
@@ -658,6 +667,8 @@ class spa_bookigs_entry extends class_base
 					$prod_str = array();
 					$date = "";
 					$date_booking_id = null;
+					$prod2room = array();
+					$prod2tm = array();
 					foreach($prods_in_group as $prod_id)
 					{
 						$prod = obj($prod_id);
@@ -667,6 +678,8 @@ class spa_bookigs_entry extends class_base
 							{
 								$sets = $nums[$i];
 								$room = obj($sets["room"]);
+								$prod2room[$_prod_id] = $room->id();
+								$prod2tm[$_prod_id] = $sets["from"];
 								$date .= sprintf("Ruum %s, ajal %s - %s", $room->name(), date("d.m.Y H:i", $sets["from"]), date("d.m.Y H:i", $sets["to"]));
 								$date_booking_id = $sets["reservation_id"];
 							}
@@ -680,10 +693,10 @@ class spa_bookigs_entry extends class_base
 						if ($date == "")
 						{
 							$prod_str[] = html::popup(array(
-								"url" => $this->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "pkt" => $package->id())),
+								"url" => $this->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "pkt" => $package->id())),
 								"caption" => $prod->name(),
-								"height" => 400,
-								"width" => 550,
+								"height" => 500,
+								"width" => 750,
 								"scrollbars" => 1,
 								"resizable" => 1
 							));
@@ -696,64 +709,37 @@ class spa_bookigs_entry extends class_base
 
 					if ($date != "")
 					{
-						$date .= " ".html::href(array(
-							"url" => $this->mk_my_orb("clear_booking", array("return_url" => get_ru(), "booking" => $date_booking_id)),
-							"caption" => t("T&uuml;hista")
-						));
+						$ri = get_instance(CL_ROOM);
+						$settings = $ri->get_settings_for_room(obj($prod2room[$prod_id]));
+						if ($ri->group_can_do_bron($settings, $prod2tm[$prod_id]))
+						{
+							$date .= " ".html::href(array(
+								"url" => $this->mk_my_orb("clear_booking", array("return_url" => get_ru(), "booking" => $date_booking_id)),
+								"caption" => t("T&uuml;hista")
+							));
+						}
 					}
-					$t->define_data(array(
+					else
+					{
+						$has_unc = true;
+					}
+
+					$fd[] = (array(
 						"booking" => $booking_str,
 						"name" => join("<br>", $prod_str),
 						"when" => $date
 					));
 				}
 			}
-/*
-			foreach($prod_list as $prod_id => $count)
-			{
-				$prod = obj($prod_id);
-				for ($i = 0; $i < $count; $i++)
-				{
-					$date = "";
-					if ($dates[$prod->id()][$i] && $dates[$prod->id()][$i]["from"] > 1)
-					{
-						$sets = $dates[$prod->id()][$i];
-						$room = obj($sets["room"]);
-						$date .= sprintf("Ruum %s, ajal %s - %s", $room->name(), date("d.m.Y H:i", $sets["from"]), date("d.m.Y H:i", $sets["to"]));
-					}
-					$date .= " ".html::popup(array(
-						"url" => $this->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod->id(), "prod_num" => "".$i, "pkt" => $package->id())),
-						"caption" => t("M&auml;&auml;ra aeg"),
-						"height" => 400,
-						"width" => 550,
-						"scrollbars" => 1,
-						"resizable" => 1
-					));
 
-					$booking_str = sprintf(t("Broneering %s, %s - %s, pakett %s"), html::href(array(
-							"url" => "mailto:".$o->prop("person.email.mail"),
-							"caption" => $o->prop("person.name")
-						)),
-						date("d.m.Y", $o->prop("start")),
-						date("d.m.Y", $o->prop("end")),
-						$o->prop("package.name")
-					);
-					$booking_str .= " ".html::href(array(
-						"url" => $this->mk_my_orb("print_booking", array("id" => $o->id())),
-						"caption" => t("Prindi"),
-						"target" => "_blank"
-					));
-					if ($arr["request"]["group"] == "cust")
-					{
-						$booking_str .= " ".html::get_change_url($o->id(), array("return_url" => get_ru()), t("Muuda"));
-					}
-					$t->define_data(array(
-						"booking" => $booking_str,
-						"name" => $prod->name(),
-						"when" => $date
-					));
-				}
-			}*/
+			if ($arr["request"]["s_date_not_set"] && !$has_unc)
+			{
+				continue;
+			}
+			foreach($fd as $row)
+			{
+				$t->define_data($row);
+			}
 		}
 
 		$t->set_rgroupby(array("booking" => "booking"));

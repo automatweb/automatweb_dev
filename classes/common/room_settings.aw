@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.6 2007/01/03 20:15:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.7 2007/01/08 14:52:43 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -53,7 +53,10 @@
 	@caption Broneeringu tegijate gruppide v&auml;rvid
 
 @groupinfo settings caption="Muud seaded"
-@default group=settings
+	@groupinfo settings_gen caption="Muud seaded" parent=settings
+	@groupinfo settings_grp caption="Broneerimisaegade seaded" parent=settings
+	
+@default group=settings_gen
 
 	@property buffer_time_string type=textbox 
 	@caption Puhveraja string
@@ -78,6 +81,10 @@
 
 	@property bron_required_fields type=table store=no
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
+
+@default group=settings_grp
+
+	@property grp_bron_time_table type=table store=no no_caption=1
 
 @groupinfo email caption="Meiliseaded"
 
@@ -366,6 +373,86 @@ class room_settings extends class_base
 	function _set_col_by_grp($arr)
 	{
 		$arr["obj_inst"]->set_meta("grp_cols", $arr["request"]["c"]);
+	}
+
+	function _init_grp_bron_time_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "grp",
+			"caption" => t("Grupp"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "from",
+			"caption" => t("Alates"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "from_ts",
+			"caption" => t("Aja&uuml;hik"),
+			"align" => "center"
+		));	
+		$t->define_field(array(
+			"name" => "to",
+			"caption" => t("Kuni"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "to_ts",
+			"caption" => t("Aja&uuml;hik"),
+			"align" => "center"
+		));
+	}
+
+	function _get_grp_bron_time_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_grp_bron_time_t($t);
+
+		$opts = array(
+			"min" => t("Minut"),
+			"hr" => t("Tund"),
+			"day" => t("P&auml;ev")
+		);
+
+		$d = $arr["obj_inst"]->meta("grp_bron_tm");
+		$ol = new object_list(array(
+			"class_id" => CL_GROUP,
+			"type" => "0",
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"grp" => html::obj_change_url($o),
+				"from" => html::textbox(array(
+					"name" => "d[".$o->id()."][from]",
+					"value" => $d[$o->id()]["from"],
+					"size" => 5
+				)),
+				"to" => html::textbox(array(
+					"name" => "d[".$o->id()."][to]",
+					"value" => $d[$o->id()]["to"],
+					"size" => 5
+				)),
+				"from_ts" => html::select(array(
+					"name" => "d[".$o->id()."][from_ts]",
+					"value" => $d[$o->id()]["from_ts"],
+					"options" => $opts
+				)),
+				"to_ts" => html::select(array(
+					"name" => "d[".$o->id()."][to_ts]",
+					"value" => $d[$o->id()]["to_ts"],
+					"options" => $opts
+				)),
+			));
+		}
+	}
+
+	function _set_grp_bron_time_table($arr)
+	{
+		$arr["obj_inst"]->set_meta("grp_bron_tm", $arr["request"]["d"]);
 	}
 }
 ?>

@@ -127,7 +127,7 @@
       <property>
             <name>buffer_time_string</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -136,7 +136,7 @@
       <property>
             <name>closed_time_string</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -145,7 +145,7 @@
       <property>
             <name>bron_popup_detailed</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -155,7 +155,7 @@
       <property>
             <name>bron_popup_immediate</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -165,7 +165,7 @@
       <property>
             <name>bron_no_popups</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -175,7 +175,7 @@
       <property>
             <name>cal_from_today</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -185,7 +185,7 @@
       <property>
             <name>no_cust_arrived_pop</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -195,12 +195,22 @@
       <property>
             <name>bron_required_fields</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>settings_gen</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <caption>Broneeringuobjekti kohustuslikud v&amp;amp;auml;ljad</caption>
+      </property>
+      <property>
+            <name>grp_bron_time_table</name>
+            <table>objects</table>
+            <group>settings_grp</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>send_del_mail</name>
@@ -285,6 +295,14 @@
             <settings>
                   <caption>Muud seaded</caption>
             </settings>
+            <settings_gen>
+                  <caption>Muud seaded</caption>
+                  <parent>settings</parent>
+            </settings_gen>
+            <settings_grp>
+                  <caption>Broneerimisaegade seaded</caption>
+                  <parent>settings</parent>
+            </settings_grp>
             <email>
                   <caption>Meiliseaded</caption>
             </email>

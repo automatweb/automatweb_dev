@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.6 2007/01/08 14:22:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.7 2007/01/08 14:52:45 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -213,16 +213,22 @@ class spa_bookings_overview extends class_base
 					$f["oid"] = -1;
 				}
 			}
+			$rf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_RF");
+			$flds = new object_tree(array("parent" => $rf->id(), "class_id" => CL_MENU, "lang_id" => array(), "site_id" => array()));
+			$f["parent"] = $this->make_keys($flds->ids());
+			$f["parent"][$rf->id()] = $rf->id();
+			
 		
 			$f["sort_by"] = "objects.jrk";
 			$ol = new object_list($f);
 		}
 		else
-		if ($arr["request"]["tf"])
 		{
+			$rf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_RF");
+			$pt = $arr["request"]["tf"] ? $arr["request"]["tf"] : $rf->id();
 			$ol = new object_list(array(
 				"class_id" => CL_ROOM,
-				"parent" => $arr["request"]["tf"],
+				"parent" => $pt,
 				"lang_id" => array(),
 				"site_id" => array(),
 				"sort_by" => "objects.jrk"

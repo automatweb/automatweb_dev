@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.93 2007/01/08 14:22:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.94 2007/01/08 14:52:43 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1530,6 +1530,12 @@ class room extends class_base
 						{
 							$onclick[$x] = "doBron('".$arr["obj_inst"]->id()."_".$start_step."' , ".($step_length * $arr["obj_inst"]->prop("time_step")).")";
 							//$string = t("VABA");
+						}
+
+						if (!$this->group_can_do_bron($settings, $start_step))
+						{
+							$onclick[$x] = "";
+							$prod_menu = "";
 						}
 						$val = 0;
 						$string = t("VABA");
@@ -3645,5 +3651,68 @@ class room extends class_base
 		return $retval;
 	}
 
+	/** checks if the group bron time settings allow the bron to be changed/created in that time
+		@attrib api=1
+	**/
+	function group_can_do_bron($s, $tm)
+	{
+		$gpt = $s->meta("grp_bron_tm");
+		$ui = get_instance(CL_USER);
+		$grp = $ui->get_highest_pri_grp_for_user(aw_global_get("uid"), true);
+		if (isset($gpt[$grp->id()]))
+		{
+			$t = $gpt[$grp->id()];
+			if ($t["from"] > 0)
+			{
+				$from_sec = 0;
+				switch($t["from_ts"])
+				{
+					case "min":
+						$from_sec = $t["from"] * 60;
+						break;
+
+					case "hr":
+						$from_sec = $t["from"] * 3600;
+						break;
+
+					default:
+					case "day":
+						$from_sec = $t["from"] * 3600 * 24;
+						break;
+				}
+				$can_bron_from = time() - $from_sec;
+				if ($tm < $can_bron_from)
+				{
+					return false;
+				}
+			}
+
+			if ($t["to"] > 0)
+			{
+				$to_sec = 0;
+				switch($t["to_ts"])
+				{
+					case "min":
+						$to_sec = $t["to"] * 60;
+						break;
+
+					case "hr":
+						$to_sec = $t["to"] * 3600;
+						break;
+
+					default:
+					case "day":
+						$to_sec = $t["to"] * 3600 * 24;
+						break;
+				}
+				$can_bron_to = time() - $to_sec;
+				if ($tm > $can_bron_to)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
 ?>
