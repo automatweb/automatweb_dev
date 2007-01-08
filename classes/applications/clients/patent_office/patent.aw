@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.35 2007/01/04 16:48:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.36 2007/01/08 13:19:01 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -798,6 +798,7 @@ class patent extends class_base
 		$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
 				"data_type"	=> $arr["data_type"],
 				"return_url" 	=> get_ru(),
+				"add_obj" 	=> $arr["alias"]["to"],
 			)),
 		));
 	
@@ -807,6 +808,7 @@ class patent extends class_base
 			$this->vars(array("reforb" => $this->mk_reforb("submit_data",array(
 					"save" => 1,
 					"return_url" 	=> get_ru(),
+					"add_obj" 	=> $arr["alias"]["to"],
 				)),
 			));
 		}
@@ -978,7 +980,7 @@ class patent extends class_base
 		foreach($this->file_upload_vars as $var)
 		{
 			$data[$var] = html::fileupload(array("name" => $var."_upload"));
-			if(is_oid($_SESSION["patent"][$var]))
+			if(is_oid($_SESSION["patent"][$var]) && $this->can("view" , $_SESSION["patent"][$var]))
 			{
 				$file = obj($_SESSION["patent"][$var]);
 				$data[$var."_value"] = html::href(array(
@@ -1719,7 +1721,7 @@ class patent extends class_base
 		
 		if($_POST["save"])
 		{
-			$this->save_data();
+			$object_id = $this->save_data();
 		}
 		if($_POST["add_new_applicant"] || $_POST["applicant_id"] != "")
 		{
@@ -1739,6 +1741,7 @@ class patent extends class_base
 		{
 			if($_POST["save"])
 			{
+				$this->set_sent($arr);//muudab staatuse... või noh, tegelt poogib numbrti külge
 				$_SESSION["patent"] = null;
 			}
 			return aw_url_change_var("trademark_id" , null , aw_url_change_var("data_type" , ($arr["data_type"]+1) , $arr["return_url"]));
@@ -1746,9 +1749,19 @@ class patent extends class_base
 		else
 		{
 			$_SESSION["patent"]["stay"] = null;
-
 			return aw_url_change_var("trademark_id" , null , $arr["return_url"]);
 		}
+	}
+	
+	function set_sent($arr)
+	{
+		$object = obj($arr["add_obj"]);
+		$num_ser = $object->prop("series");
+		$ser = get_instance(CL_CRM_NUMBER_SERIES);
+		$o = obj($_SESSION["patent"]["id"]);
+		$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
+		$o->set_prop("nr" , $tno);
+		$o->save();
 	}
 	
 	function check_fields()
@@ -1911,6 +1924,7 @@ class patent extends class_base
 		$patent->set_meta("products" , $_SESSION["patent"]["products"]);
 		$patent->save();
 		$_SESSION["patent"]["id"] = $patent->id();
+		return $patent->id();
 	}
 	
 	function save_applicants($patent)
@@ -2077,7 +2091,7 @@ class patent extends class_base
 	function fileupload_save($patent)
 	{
 		foreach($this->file_upload_vars as $var)
-		if(is_oid($_SESSION["patent"][$var]))
+		if(is_oid($_SESSION["patent"][$var]) && $this->can("view" ,$_SESSION["patent"][$var]))
 		{
 			$patent->set_prop($var, $_SESSION["patent"][$var]);
 			$patent->connect(array("to" => $_SESSION["patent"][$var], "type" => "RELTYPE_".strtoupper($var)));
@@ -2106,8 +2120,6 @@ class patent extends class_base
 		}
 		$patent->save();
 	}
-	
-	
 	
 	function save_fee($patent)
 	{
@@ -2194,13 +2206,12 @@ class patent extends class_base
 	//			$url = $section."?trademark_id=".$patent->id();
 				$url = aw_url_change_var("trademark_id", $patent->id());
 				$url = aw_url_change_var("data_type", null , $url);
-				
 				$this->vars(array(
 					"date" 		=> date("j.m.Y" , $patent->created()),
 					"nr" 		=> ($patent->prop("nr")) ? $patent->prop("nr") : "",
 					"applicant" 	=> $patent->prop_str("applicant"),
 					"type" 		=> $this->types[$patent->prop("type")],
-					"state" 	=> ($patent->prop("verified")) ? t("Vastu v&otilde;etud") : t(""),
+					"state" 	=> ($patent->prop("verified")) ? t("Vastu v&otilde;etud") : (($patent->prop("nr")) ? t("Esitatud") : ""),
 					"name" 	 	=> $patent->name(),
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,

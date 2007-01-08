@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.2 2006/12/13 15:48:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.3 2007/01/08 13:19:01 markop Exp $
 // trademark_add.aw - Kaubam&auml;rgi veebist lisamine 
 /*
 
@@ -19,6 +19,9 @@
 	@property trademarks_menu type=relpicker reltype=RELTYPE_TRADEMARK_MENU
 	@caption Kaubam&auml;rgitaotluste kaust
 	
+	@property series type=relpicker reltype=RELTYPE_SERIES
+	@caption Numbriseeria
+	
 @reltype BANK_PAYMENT value=11 clid=CL_BANK_PAYMENT
 @caption Pangalingi objekt
 
@@ -28,6 +31,8 @@
 @reltype TRADEMARK_MENU value=9 clid=CL_MENU
 @caption Kaubam&auml;rgitaotluste kaust
 
+@reltype SERIES clid=CL_CRM_NUMBER_SERIES value=3
+@caption Numbriseeria
 
 
 */

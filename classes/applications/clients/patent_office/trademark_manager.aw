@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.8 2007/01/04 16:48:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.9 2007/01/08 13:19:01 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -484,15 +484,15 @@ class trademark_manager extends class_base
 		if(is_oid($object->prop("verified_menu")))
 		{
 			$parent = $object->prop("verified_menu");
-			$num_ser = $object->prop("series");
+//			$num_ser = $object->prop("series");
 		}
-		$ser = get_instance(CL_CRM_NUMBER_SERIES);
+//		$ser = get_instance(CL_CRM_NUMBER_SERIES);
 		foreach($arr["sel"] as $id)
 		{
 			$o = obj($id);
 			$o->set_prop("verified",1);
-			$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
-			$o->set_prop("nr" , $tno);
+//			$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
+//			$o->set_prop("nr" , $tno);
 			if($parent)
 			{
 				$o->set_parent($parent);
