@@ -28,6 +28,7 @@
 			<function name="print_booking">
 				<arguments>
 					<required name="id" />
+					<required name="wb" />
 				</arguments>
 			</function>
 		</action>
@@ -37,6 +38,41 @@
 				<arguments>
 					<required name="return_url" />
 					<required name="booking" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_prod_to_bron">
+			<function name="add_prod_to_bron">
+				<arguments>
+					<required name="bron" type="int" acl="edit" />
+					<required name="wb" type="int" acl="edit" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="fin_add_prod_to_bron">
+			<function name="fin_add_prod_to_bron">
+				<arguments>
+					<required name="bron" type="int" acl="edit" />
+					<required name="wb" type="int" acl="edit" />
+					<required name="prod" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="enter_cust_data_pop">
+			<function name="enter_cust_data_pop">
+				<arguments>
+					<required name="bron" type="int" acl="edit" />
+					<optional name="props" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_cust_data_pop" all_args="1">
+			<function name="save_cust_data_pop">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

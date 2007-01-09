@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.10 2007/01/08 14:52:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.11 2007/01/09 13:48:00 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -19,6 +19,12 @@
 
 	@property persons_folder type=relpicker reltype=RELTYPE_PERSONS_FOLDER field=meta method=serialize
 	@caption Isikute asukoht
+
+	@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE field=meta method=serialize
+	@caption Ladu
+
+	@property print_view_ctr type=relpicker reltype=RELTYPE_PRINT_CTR field=meta method=serialize
+	@caption Printvaate andmdete valideerimise kontroller
 
 @default group=settings_mail
 
@@ -102,6 +108,12 @@
 
 @reltype PERSONS_FOLDER value=3 clid=CL_MENU
 @caption Isikute asukoht
+
+@reltype WAREHOUSE value=4 clid=CL_SHOP_WAREHOUSE
+@caption Ladu
+
+@reltype PRINT_CTR value=5 clid=CL_FORM_CONTROLLER
+@caption Kontroller
 
 */
 
@@ -354,90 +366,9 @@ class spa_bookigs_entry extends class_base
 		unset($_SESSION["spa_bookings_entry_fb"]);
 	}
 
-	function _init_s_res(&$t)
-	{
-		$t->define_field(array(
-			"name" => "person",
-			"caption" => t("Isik"),
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "email",
-			"caption" => t("E-post"),
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "start",
-			"caption" => t("Alates"),
-			"align" => "center",
-			"type" => "time",
-			"numeric" => 1,
-			"format" => "d.m.Y H:i"
-		));
-		$t->define_field(array(
-			"name" => "end",
-			"caption" => t("Kuni"),
-			"align" => "center",
-			"type" => "time",
-			"numeric" => 1,
-			"format" => "d.m.Y H:i"
-		));
-		$t->define_field(array(
-			"name" => "package",
-			"caption" => t("Pakett"),
-			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "change",
-			"caption" => t("Muuda"),
-			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "add_p",
-			"caption" => t("Lisa"),
-			"align" => "center",
-		));
-		$t->define_field(array(
-			"name" => "print",
-			"caption" => t("Prindi"),
-			"align" => "center",
-		));
-	}
-
 	function _get_s_res($arr)
 	{
 		return $this->_get_my_bookings($arr);
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_s_res($t);
-		$sr = $this->get_search_results($arr["request"], $arr["obj_inst"]);
-
-		foreach($sr as $item)
-		{
-			if ($unset_p[$item->prop("package")])
-			{
-				continue;
-			}
-			$t->define_data(array(
-				"person" => html::obj_change_url($item->prop("person")),
-				"email" => html::obj_change_url($item->prop("person.email")),
-				"start" => $item->prop("start"),
-				"end" => $item->prop("end"),
-				"package" => html::obj_change_url($item->prop("package")),
-				"change" => html::href(array(
-					"url" => html::get_change_url($item->id(), array("return_url" => get_ru())),
-					"caption" => t("Muuda")
-				)),
-				"add_p" => html::href(array(
-					"url" => html::get_new_url(CL_SPA_BOOKING, $arr["obj_inst"]->prop("persons_folder"), array("return_url" => get_ru(), "from_b" => $item->id())),
-					"caption" => t("Lisa samale isikule uus")
-				)),
-				"print" => html::href(array(
-					"caption" => t("Prindi"),
-					"url" => $this->mk_my_orb("print_booking", array("id" => $item->id())),
-					"target" => "_blank"
-				))
-			));
-		}
 	}
 
 	function _get_pk_list($o)
@@ -476,7 +407,6 @@ class spa_bookigs_entry extends class_base
 			$d["createdby"] = aw_global_get("uid");
 			$cnt = 4;
 		}
-//echo dbg::dump($r);
 
 		if ($r["s_tb"] && !isset($d["createdby"]))
 		{
@@ -644,8 +574,17 @@ class spa_bookigs_entry extends class_base
 				date("d.m.Y", $o->prop("end")),
 				$o->prop("package.name")
 			);
-			$booking_str .= " ".html::href(array(
-				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id())),
+			$booking_str .= " ".html::popup(array(
+				"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
+				"caption" => t("Lisa teenus"),
+				"width" => 600,
+				"height" => 400,
+				"scrollbars" => 1,
+				"resizable" => 1
+			));
+
+			$booking_str .= " / ".html::href(array(
+				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 				"caption" => t("Prindi"),
 				"target" => "_blank"
 			));
@@ -657,11 +596,22 @@ class spa_bookigs_entry extends class_base
 			$fd = array();
 			$has_unc = false;
 			$prod_list = $pk->get_products_for_package($package);
-			foreach($pk->get_group_list($package) as $prod_group)
+			$grp_list = $pk->get_group_list($package);
+			$grp_list[] = "__extra_items";
+			foreach($grp_list as $prod_group)
 			{
 				// repeat group by the count of the first product in the group
 				$prods_in_group = $pk->get_products_in_group($package, $prod_group);
-				$first_item_count = $prod_list[reset($prods_in_group)];
+				if ($prod_group == "__extra_items")
+				{
+					$prods_in_group = array();
+					$extra_items = safe_array($o->meta("extra_prods"));
+					foreach($extra_items as $extra_item_entry)
+					{
+						$prods_in_group[] = $extra_item_entry["prod"];
+					}
+				}
+				$first_item_count = max(1,$prod_list[reset($prods_in_group)]);
 				for ($i = 0; $i < $first_item_count; $i++)
 				{
 					$prod_str = array();
@@ -1101,10 +1051,12 @@ class spa_bookigs_entry extends class_base
 	/**
 		@attrib name=print_booking
 		@param id required
+		@param wb required
 	**/
 	function print_booking($arr)
 	{
 		$b = obj($arr["id"]);
+		$wb = obj($arr["wb"]);
 		$this->read_site_template("booking.tpl");
 		lc_site_load("spa_bookigs_entry", &$this);
 
@@ -1113,7 +1065,12 @@ class spa_bookigs_entry extends class_base
 			"person" => $b->prop_str("person"),
 			"package" => $b->prop_str("package"),
 			"from" => date("d.m.Y", $b->prop("start")),
-			"to" => date("d.m.Y", $b->prop("end"))
+			"to" => date("d.m.Y", $b->prop("end")),
+			"person_comment" => $b->prop("person.comment"),
+			"person_name" => $b->prop("person.name"),
+			"person_birthday" => $b->prop("person.birthday"),
+			"person_ext_id" => $b->prop("person.ext_id_alphanumeric"),
+			"person_gender" => $b->prop("person.gender") == 1 ? t("Mees") : t("Naine")
 		));
 
 		// now, list all bookings for rooms 
@@ -1145,14 +1102,18 @@ class spa_bookigs_entry extends class_base
 				"r_prod" => $prod_obj->name(),
 				"start_time" => $entry["from"],
 				"end_time" => $entry["to"],
-				"person_comment" => $rvs->prop("customer.comment"),
-				"person_name" => $rvs->prop("customer.name")
 			));
 			$books .= $this->parse("BOOKING");
 		}
 		$this->vars(array(
 			"BOOKING" => $books
 		));
+
+		if ($this->can("view", $wb->prop("print_view_ctr")))
+		{
+			$fc = get_instance(CL_FORM_CONTROLLER);
+			$fc->eval_controller($wb->prop("print_view_ctr"), $arr);
+		}
 		die($this->parse());
 	}
 
@@ -1268,6 +1229,275 @@ class spa_bookigs_entry extends class_base
 		$b->set_prop("end", -1);
 		$b->save();
 		return $arr["return_url"];
+	}
+
+	/**
+		@attrib name=add_prod_to_bron
+		@param bron required type=int acl=edit
+		@param wb required type=int acl=edit
+	**/
+	function add_prod_to_bron($arr)
+	{
+		$this->read_template("treetable.tpl");
+
+		$this->vars(array(
+			"tree" => $this->_get_prod_fld_tree($arr),
+			"list" => $this->_get_prod_list_tbl($arr)
+		));
+		return $this->parse();
+	}
+
+	function _get_prod_fld_tree($arr)
+	{
+		$o = obj($arr["wb"]);
+		$wh = obj($o->prop("warehouse"));
+		$wh_i = $wh->instance();
+		$p = array(
+			"obj_inst" => $wh
+		);
+		$wh_i->_init_view($p);
+		return $wh_i->_prod_list_tree($p);
+	}
+
+	function _get_prod_list_tbl($arr)
+	{
+		classload("vcl/table");
+		$t = new aw_table();
+
+		if (!$_GET["tree_filter"])
+		{
+			$ot = new object_list();
+		}
+		else
+		{
+			$ot = new object_list(array(
+				"parent" => $_GET["tree_filter"],
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
+			));
+		}
+
+		$t->define_field(array(
+			"name" => "prod",
+			"caption" => t("Vali toode"),
+			"align" => "center"
+		));
+		foreach($ot->arr() as $o)
+		{
+			$arr["prod"] = $o->id();
+			$t->define_data(array(
+				"prod" => html::href(array(
+					"caption" => parse_obj_name($o->name()),
+					"url" => $this->mk_my_orb("fin_add_prod_to_bron", $arr)
+				)),
+				"ord" => $o->ord()
+			));
+		}
+		$t->set_default_sortby("ord");
+		$t->sort_by();
+		return $t->draw();
+	}
+
+	/**
+		@attrib name=fin_add_prod_to_bron
+		@param bron required type=int acl=edit
+		@param wb required type=int acl=edit
+		@param prod required type=int acl=view
+	**/
+	function fin_add_prod_to_bron($arr)
+	{
+		$bron = obj($arr["bron"]);
+		
+		$bron->connect(array(
+			"to" => $arr["prod"],
+			"type" => "RELTYPE_EXTRA_PROD"
+		));
+
+		// akso make a new room reservation object for the extra thingie
+		$rooms = $this->get_rooms_for_product($arr["prod"]);
+		if (count($rooms))
+		{
+			$room_inst = get_instance(CL_ROOM);
+			$rv_id = $room_inst->make_reservation(array(
+				"id" => reset(array_keys($rooms)),
+				"data" => array(
+					"customer" => $bron->prop("person")
+				),
+				"meta" => array(
+					"product_for_bron" => $arr["prod"],
+					"product_count_for_bron" => 0
+				)
+			));
+			$bron->connect(array(
+				"to" => $rv_id,
+				"type" => "RELTYPE_ROOM_BRON"
+			));
+
+			$extra_prods = safe_array($bron->meta("extra_prods"));
+			$extra_prods[] = array(
+				"prod" => $arr["prod"],
+				"reservation" => $rv_id
+			);
+			$bron->set_meta("extra_prods", $extra_prods);
+			$bron->save();
+		}
+
+		return aw_ini_get("baseurl")."/automatweb/closewin.html";
+	}
+
+	/**
+		@attrib name=enter_cust_data_pop
+		@param bron required type=int acl=edit
+		@param props optional
+	**/
+	function enter_cust_data_pop($arr)
+	{
+		classload("cfg/htmlclient");
+		$htmlc = new htmlclient(array(
+			'template' => "default",
+		));
+		$htmlc->start_output();
+		$htmlc->add_property(array(
+			"caption" => t("Sisesta kasutaja puuduvad andmed"),
+		));
+
+		$tmp = obj();
+		$tmp->set_class_id(CL_CRM_PERSON);
+		$propl = $tmp->get_property_list();
+	
+		$bron = obj($arr["bron"]);
+		foreach(safe_array($arr["props"]) as $propertyn)
+		{
+			$capt = $propl[$propertyn]["caption"];
+			switch($propertyn)
+			{
+				case "phone":
+					$capt = t("Telefon");
+					break;
+			}
+			$val = $bron->prop("person.".$propertyn.".name");
+			if ($val == "")
+			{
+				$val = $bron->prop("person.".$propertyn);
+			}
+			$type = "textbox";
+			switch($propl[$propertyn]["type"])
+			{
+				case "date_select":
+					$type="date_select";
+					break;
+
+				case "chooser":
+					$type="chooser";
+					$i = get_instance(CL_CRM_PERSON);
+					$p = array(
+						"obj_inst" => obj($bron->prop("person")),
+						"prop" => &$propl[$propertyn]
+					);
+					$i->get_property($p);
+					$opts = $p["prop"]["options"];
+					break;
+			}
+
+			$htmlc->add_property(array(
+				"name" => "ud[$propertyn]",
+				"type" => $type,
+				"caption" => $capt,
+				"value" => $val,
+				"options" => $opts
+			));
+		}
+
+		$htmlc->add_property(array(
+			"name" => "s[submit]",
+			"type" => "submit",
+			"value" => "Salvesta",
+			"class" => "sbtbutton"
+		));
+
+		$htmlc->finish_output(array(
+			"action" => "save_cust_data_pop",
+			"method" => "POST",
+			"data" => array(
+				"id" => $arr["id"],
+				"orb_class" => "spa_bookigs_entry",
+				"reforb" => 0,
+				"props" => $arr["props"],
+				"bron" => $arr["bron"]
+			)
+		));
+
+		return $htmlc->get_result();
+	}
+
+	/**
+		@attrib name=save_cust_data_pop all_args=1
+	**/
+	function save_cust_data_pop($arr)
+	{
+		$arr = $_POST;
+		$bron = obj($arr["bron"]);
+		if (!$this->can("view", $bron->prop("person")))
+		{
+			$cust = obj();
+			$cust->set_class_id(CL_CRM_PERSON);
+			$cust->set_parent($bron->id());
+			$cust->save();
+			$bron->set_prop("person", $cust->id());
+			$bron->save();
+		}
+		else
+		{
+			$cust = obj($bron->prop("person"));
+		}
+
+		$tmp = obj();
+		$tmp->set_class_id(CL_CRM_PERSON);
+		$propl = $tmp->get_property_list();
+
+		foreach(safe_array($arr["props"]) as $pn)
+		{
+			if ($propl[$pn]["type"] == "date_select")
+			{
+				$arr["ud"][$pn] = date_edit::get_timestamp($arr["ud"][$pn]);
+			}
+			switch($pn)
+			{
+				case "name":
+					$cust->set_name($arr["ud"][$pn]);
+					break;
+
+				case "phone":
+					if ($this->can("view", $cust->prop("phone")))
+					{
+						$ph = obj($cust->prop("phone"));
+					}
+					else
+					{
+						$ph = obj();
+						$ph->set_parent($cust->id());
+						$ph->set_class_id(CL_CRM_PHONE);
+					}
+					$ph->set_name($arr["ud"][$pn]);
+					$ph->save();
+					if (!$this->can("view", $cust->prop("phone")))
+					{
+						$cust->connect(array(
+							"to" => $ph->id(),
+							"type" => "RELTYPE_PHONE"
+						));
+						$cust->set_prop("phone", $ph->id());
+					}
+					break;
+
+				default:
+					$cust->set_prop($pn, $arr["ud"][$pn]);
+					break;
+			}
+		}
+		$cust->save();
+
+		return aw_ini_get("baseurl")."/automatweb/closewin.html";
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.3 2006/11/30 10:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.4 2007/01/09 13:48:00 kristo Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -30,6 +30,9 @@
 
 @reltype ROOM_BRON value=3 clid=CL_RESERVATION
 @caption Ruumi broneering
+
+@reltype EXTRA_PROD value=4 clid=CL_SHOP_PRODUCT
+@caption Lisateenus
 */
 
 class spa_booking extends class_base

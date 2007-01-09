@@ -1,4 +1,4 @@
-<div id="sisu">
+<table id="sisu"><tr><td>
 <form name="changeform" action="reforb.{VAR:ext}" method="POST">
 {VAR:reforb}
 
@@ -22,3 +22,4 @@ function submit_changeform()
 </script>
 </form>
 </div>
+</td></tr></table>

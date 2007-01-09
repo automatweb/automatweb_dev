@@ -65,6 +65,11 @@
                   <clid>CL_RESERVATION</clid>
                   <caption>Ruumi broneering</caption>
             </ROOM_BRON>
+            <EXTRA_PROD>
+                  <value>4</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Lisateenus</caption>
+            </EXTRA_PROD>
       </reltypes>
 </properties>
 
