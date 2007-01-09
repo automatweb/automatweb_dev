@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.11 2007/01/09 13:48:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.12 2007/01/09 19:45:57 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -253,6 +253,7 @@ class spa_bookigs_entry extends class_base
 			{
 				$start = date_edit::get_timestamp($d["start"]);
 				$end = date_edit::get_timestamp($d["end"]);
+				$bd = date_edit::get_timestamp($d["birthday"]);
 				// create person, user, booking
 
 				// check if person exists
@@ -286,6 +287,8 @@ class spa_bookigs_entry extends class_base
 					$p->set_prop("firstname", $d["fn"]);
 					$p->set_prop("lastname", $d["ln"]);
 					$p->set_prop("email", $eml->id());
+					$p->set_prop("birthday", $bd);
+					$p->set_prop("gender", $d["gender"]);
 					$p->save();
 
 					$cu = get_instance("crm/crm_user_creator");
