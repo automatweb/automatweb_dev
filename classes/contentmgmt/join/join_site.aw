@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.39 2007/01/08 13:17:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.40 2007/01/09 12:37:49 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -737,12 +737,12 @@ class join_site extends class_base
 		$ret = "";
 		$first = false;
 		$clss = array();
-
 		if ($sessd == false)
 		{
 			$sessd = aw_global_get("site_join_status");
 		}
 		$je = aw_global_get("join_err");
+		aw_session_del("join_err");
 		$clss = aw_ini_get("classes");
 		$breaks = $ob->meta("el_breaks");
 		
@@ -867,27 +867,26 @@ class join_site extends class_base
 			{
 				$oldn = str_replace($wn."[", "", str_replace("]", "", $xprop["name"]));
 				
-				if ($clid == CL_USER && ($oldn == "uid_entry" || $oldn == $ue_el))
+				if ($clid == CL_USER && ($oldn == "uid_entry" || $oldn == $ue_el) && $je["gen"] != "")
 				{
-					if ($je["gen"] != "")
+					$ermsg = "<font color='#FF0000'>".$je["gen"]."</font>";
+					if ($this->is_template("ERROR_MESSAGE"))
 					{
-						$ermsg = "<font color='#FF0000'>".$je["gen"]."</font>";
-						if ($this->is_template("ERROR_MESSAGE"))
-						{
-							$this->vars(array(
-								"msg" => $je["gen"]
-							));
-							$ermsg = $this->parse("ERROR_MESSAGE");
-						}
-						$errp = array(
-							"name" => "err_".$clid."_".$oldn,
-							"type" => "text",
-							"no_caption" => 1,
-							"value" => $ermsg
-						);
-						$htmlc->add_property($errp);
+						$this->vars(array(
+							"msg" => $je["gen"]
+						));
+						$ermsg = $this->parse("ERROR_MESSAGE");
 					}
+					$errp = array(
+						"name" => "err_".$clid."_".$oldn,
+						"type" => "text",
+						"no_caption" => 1,
+						"value" => $ermsg
+					);
+					//$htmlc->add_property($errp);
+					$klomp[$errp["name"]] = $errp;
 				}
+				else
 				if ($je["prop"][$clid][$oldn])
 				{
 					$ermsg = t("<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>");
@@ -1302,6 +1301,11 @@ class join_site extends class_base
 		{
 			
 			return $arr["err_return_url"];
+		}
+
+		if (aw_ini_get("menuedit.language_in_url"))
+		{
+			$arr["section"] = aw_global_get("ct_lang_lc")."/".$arr["section"];
 		}
 
 		return aw_ini_get("baseurl")."/".$arr["section"];
@@ -2089,21 +2093,21 @@ class join_site extends class_base
 		if ($a_clid == "sep")
 		{
 			list(, $a_prop) = explode("_", $a_prop);
-			$a_ord = $this->__sort_ord[$a_clid][$a_prop];
+			$a_ord = $this->__sort_ord[$a_clid][$a_prop]*10;
 		}
 		else
 		{
-			$a_ord = $this->__sort_ord[$a_clid][$a_prop];
+			$a_ord = $this->__sort_ord[$a_clid][$a_prop]*10;
 		}
 
 		if ($b_clid == "sep")
 		{
 			list(, $b_prop) = explode("_", $b_prop);
-			$b_ord = $this->__sort_ord[$b_clid][$b_prop];
+			$b_ord = $this->__sort_ord[$b_clid][$b_prop]*10;
 		}
 		else
 		{
-			$b_ord = $this->__sort_ord[$b_clid][$b_prop];
+			$b_ord = $this->__sort_ord[$b_clid][$b_prop]*10;
 		}
 
 		$a_ord += $a_diff;
