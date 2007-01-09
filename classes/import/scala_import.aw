@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.15 2006/10/18 18:47:27 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.16 2007/01/09 10:53:40 kristo Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -810,11 +810,13 @@ class scala_import extends class_base
 				if ($o->name() != $product_data['name'])
 				{
 					$o->set_name($product_data['name']);
+					echo "\t#### changed name from ".$o->name()." to ".$product_data['name']."<br />\n";
 					$data_changed = true;
 				}
 				if ($o->status() != STAT_ACTIVE)
 				{
 					$o->set_status(STAT_ACTIVE);
+					echo "\t#### set status to active<br />\n";
 					$data_changed = true;
 				}
 				
@@ -824,6 +826,7 @@ class scala_import extends class_base
 					if ($o->prop($property) != $product_data[$property] || true)
 					{
 						$o->set_prop($property, $product_data[$property]." ");
+						echo "\t#### changed property ".$property." value from ".$o->prop($property)." to ".$product_data[$property]."<br />\n";
 						$data_changed = true;
 					}
 				}
@@ -831,6 +834,7 @@ class scala_import extends class_base
 				// save the object only when data is changed
 				if ($data_changed)
 				{
+					echo "\t#### data has been changed, so SAVE the object <br />\n";
 					$o->save();
 				}
 				unset($existing_products[$product]);
@@ -868,7 +872,7 @@ class scala_import extends class_base
 
 			if ($value['type'] == 'complete')
 			{
-				if ( array_key_exists($value['tag'], $config) )
+				if ( array_key_exists(trim($value['tag']), $config) )
 				{
 					$params[ $config[ $value['tag'] ] ] = $value['value'];
 				}
