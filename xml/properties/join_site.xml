@@ -348,6 +348,15 @@
             <store>no</store>
             <field>trans_ttl_t</field>
       </property>
+      <property>
+            <name>trans_errs</name>
+            <table>objects</table>
+            <group>trans_errs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>trans_errs</field>
+      </property>
       <classinfo>
             <syslog_type>ST_JOIN_SITE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -426,6 +435,10 @@
                   <parent>trans</parent>
                   <caption>Vahepealkirjad</caption>
             </trans_ttl>
+            <trans_errs>
+                  <parent>trans</parent>
+                  <caption>Veateaded</caption>
+            </trans_errs>
       </groupinfo>
       <reltypes>
             <JOIN_CLASS>

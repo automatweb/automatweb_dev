@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.134 2006/12/27 14:23:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.135 2007/01/09 17:43:45 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -45,6 +45,11 @@ class users_user extends aw_template
 		$msg = "";
 		
 		$do_auth = true;
+
+		if ($uid == "")
+		{
+			$do_auth = false;
+		}
 
 		$auth = get_instance(CL_AUTH_CONFIG);
 		if ($do_auth && ($auth_id = $auth->has_config()))

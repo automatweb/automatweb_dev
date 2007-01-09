@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.169 2006/12/27 11:04:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.170 2007/01/09 17:43:45 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -322,86 +322,79 @@ class users extends users_user
 		$q = "SELECT * FROM users WHERE uid = '$a_uid'";
 		$this->db_query($q);
 		$row = $this->db_next();
+
+		if ($arr["sj"])
+		{
+                	$lang_errs = $arr["sj"]->meta("lang_errs");
+                	$lang_id = aw_global_get("lang_id");
+                	if (aw_ini_get("user_interface.full_contente_trans"))
+                	{
+                        	$lang_id = aw_ini_get("ct_lang_id");
+                	}
+		}
+
 		if ($row)
 		{
-			if (defined("LC_USERADD_ERROR_EXISTS"))
-			{
-				$te = LC_USERADD_ERROR_EXISTS;
-			}
-			else
-			{
-				$te = "Sellise kasutajanimega kasutaja on juba olemas!";
-			}
+			$te = t("Sellise kasutajanimega kasutaja on juba olemas!");
+                        if (!empty($lang_errs["user_exists"][$lang_id]))
+                        {
+                                $te = $lang_errs["user_exists"][$lang_id];
+                        }
 			$add_state["error"] = $te;
 			return false;
 		}
 
 		if (!is_valid("uid",$a_uid))
 		{
-			if (defined("LC_USERADD_ERROR_SYMBOL"))
-			{
-				$te = LC_USERADD_ERROR_SYMBOL;
-			}
-			else
-			{
-				$te = "Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!";
-			}
+			$te = t("Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!");
+                        if (!empty($lang_errs["uid_short"][$lang_id]))
+                        {
+                                $te = $lang_errs["uid_short"][$lang_id];
+                        }
 			$add_state["error"] = $te;
 			return false;
 		}
 
 		if ($pass != $pass2)
 		{
-			if (defined("LC_USERADD_ERROR_PWD"))
-			{
-				$te = LC_USERADD_ERROR_PWD;
-			}
-			else
-			{
-				$te = "Sisestatud paroolid on erinevad!";
-			}
+			$te = t("Sisestatud paroolid on erinevad!");
+			if (!empty($lang_errs["pwd_typo"][$lang_id]))
+                        {
+                                $te = $lang_errs["pwd_typo"][$lang_id];
+                        }
 			$add_state["error"] = $te;
 			return false;
 		}
 
 		if (!is_valid("password", $pass))
 		{
-			if (defined("LC_USERADD_ERROR_PWD_SYMBOL"))
-			{
-				$te = LC_USERADD_ERROR_PWD_SYMBOL;
-			}
-			else
-			{
-				$te = "Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!";
-			}
+			$te = t("Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!");
+			if (!empty($lang_errs["pwd_err"][$lang_id]))
+                        {
+                                $te = $lang_errs["pwd_err"][$lang_id];
+                        }
 			$add_state["error"] = $te;
 			return false;
 		}
 
 		if (strlen($a_uid) < 3)
 		{
-			if (defined("LC_USERADD_ERROR_SHORT"))
-			{
-				$te = LC_USERADD_ERROR_SHORT;
-			}
-			else
-			{
-				$te = "Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!";
-			}
+			$te = t("Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!");
+			if (!empty($lang_errs["uid_short"][$lang_id]))
+                        {
+                                $te = $lang_errs["uid_short"][$lang_id];
+                        }
 			$add_state["error"] = $te;
 			return false;
 		}
 
 		if (strlen($pass) < 3)
 		{
-			if (defined("LC_USERADD_ERROR_PWD_SHORT"))
-			{
-				$te = LC_USERADD_ERROR_PWD_SHORT;
-			}
-			else
-			{
-				$te = "Paroolis peab olema v&auml;hemalt 3 t&auml;hte!";
-			}
+			$te = t("Paroolis peab olema v&auml;hemalt 3 t&auml;hte!");
+			if (!empty($lang_errs["pwd_short"][$lang_id]))
+                        {
+                                $te = $lang_errs["pwd_short"][$lang_id];
+                        }
 			$add_state["error"] = $te;
 			return false;
 		}

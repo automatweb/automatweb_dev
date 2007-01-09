@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.40 2007/01/09 12:37:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.41 2007/01/09 17:43:46 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -157,6 +157,11 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 		@property trans_ttl_t type=table no_caption=1 store=no
 
+	@groupinfo trans_errs parent=trans caption="Veateated"
+	@default group=trans_errs
+
+		@property trans_errs type=table store=no no_caption=1
+
 @reltype JOIN_CLASS value=1 clid=CL_OBJECT_TYPE
 @caption liitumise vorm
 
@@ -265,6 +270,10 @@ class join_site extends class_base
 			case "trans_ttl_t":
 				$this->_trans_ttl_t($arr);
 				break;
+
+			case "trans_errs":
+				$this->_trans_errs_t($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -309,6 +318,10 @@ class join_site extends class_base
 
 			case "trans_ttl_t":
 				$arr["obj_inst"]->set_meta("lang_seps", $arr["request"]["d"]);
+				break;
+
+			case "trans_errs":
+				$arr["obj_inst"]->set_meta("lang_errs", $arr["request"]["d"]);
 				break;
 		}
 		return $retval;
@@ -745,6 +758,17 @@ class join_site extends class_base
 		aw_session_del("join_err");
 		$clss = aw_ini_get("classes");
 		$breaks = $ob->meta("el_breaks");
+		$lang_errs = $ob->meta("lang_errs");
+		$fill_msg = "J&auml;rgnev v&auml;li peab olema t&auml;idetud!";
+		$lang_id = aw_global_get("lang_id");
+		if (aw_ini_get("user_interface.full_contente_trans"))
+		{
+			$lang_id = aw_ini_get("ct_lang_id");
+		}
+		if (!empty($lang_errs["next_filled"][$lang_id]))
+		{
+			$fill_msg = $lang_errs["next_filled"][$lang_id];
+		}
 		
 		list($ue_class, $ue_el) = explode("_", $ob->prop("username_element"), 2);
 		
@@ -889,11 +913,11 @@ class join_site extends class_base
 				else
 				if ($je["prop"][$clid][$oldn])
 				{
-					$ermsg = t("<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>");
+					$ermsg = "<font color='#FF0000'>".$fill_msg."</font>";
 					if ($this->is_template("ERROR_MESSAGE"))
 					{
 						$this->vars(array(
-							"msg" => t("<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>")
+							"msg" => "<font color='#FF0000'>".$fill_msg."</font>"
 						));
 						$ermsg = $this->parse("ERROR_MESSAGE");
 					}
@@ -1167,7 +1191,7 @@ class join_site extends class_base
 			$n_pass2 = $sessd["typo_".CL_USER]["passwd_again"];
 
 			$us = get_instance("users");
-			if ($us->can_add(array("a_uid" => $n_uid, "pass" => $n_pass, "pass2" => $n_pass2)))
+			if ($us->can_add(array("a_uid" => $n_uid, "pass" => $n_pass, "pass2" => $n_pass2, "sj" => $obj)))
 			{
 				$join_done = true;
 				// add the user
@@ -1462,6 +1486,18 @@ class join_site extends class_base
 		$cfgu = get_instance("cfg/cfgutils");
 
 		$user = isset($params["uid"]) ? $params["uid"] : aw_global_get("uid");
+                $lang_errs = $ob->meta("lang_errs");
+                $fill_msg = "J&auml;rgnev v&auml;li peab olema t&auml;idetud!";
+                $lang_id = aw_global_get("lang_id");
+                if (aw_ini_get("user_interface.full_contente_trans"))
+                {
+                        $lang_id = aw_ini_get("ct_lang_id");
+                }
+                if (!empty($lang_errs["next_filled"][$lang_id]))
+                {
+                        $fill_msg = $lang_errs["next_filled"][$lang_id];
+                }
+
 
 		if ($user != "")
 		{
@@ -1609,7 +1645,7 @@ class join_site extends class_base
 					}
 					if ($je["prop"][$clid][$pid])
 					{
-						$ermsg = "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>";
+						$ermsg = "<font color='#FF0000'>".$fill_msg."</font>";
 						if ($this->is_template("ERROR_MESSAGE"))
 						{
 							$this->vars(array(
@@ -2452,6 +2488,61 @@ class join_site extends class_base
 			}
 		}
 		$arr["prop"]["options"] = $opts;
+	}
+
+	function _init_trans_err_t(&$t, $o)
+	{
+		$t->define_field(array(
+                        "name" => "orig",
+                        "caption" => t("Veateade"),
+                        "align" => "center"
+                ));
+
+                $l = get_instance("languages");
+                $ll = $l->get_list();
+                foreach($ll as $lid => $lang)
+                {
+                        $t->define_field(array(
+                                "name" => "l".$lid,
+                                "caption" => $lang,
+                                "align" => "center"
+                        ));
+                }	
+	}
+
+	function _trans_errs_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_trans_err_t($t, $arr["obj_inst"]);
+
+		$l = get_instance("languages");
+		$ll = $l->get_list(array("all_data" => true));
+
+		$ermsgs = array(
+			"next_filled" => t("J&auml;rgnev v&auml;li peab olema t&auml;idetud!"),
+			"user_exists" => t("Sellise kasutajanimega kasutaja on juba olemas!"),
+			"pwd_typo" => t("Sisestatud paroolid on erinevad!"),
+			"pwd_err" => t("Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!"),
+			"uid_short" => t("Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!"),
+			"pwd_short" => t("Paroolis peab olema v&auml;hemalt 3 t&auml;hte!")
+		);
+		$lang_errs = $arr["obj_inst"]->meta("lang_errs");
+		foreach($ermsgs as $id => $msg)
+		{
+			$d = array(
+				"orig" => $msg
+			);
+			foreach($ll as $lid => $lang)
+                        {
+				$d["l".$lid] = html::textbox(array(
+					"name" => "d[$id][$lid]",
+					"value" => $lang_errs[$id][$lid],
+					"size" => 20
+                                ));
+                        }
+                        $t->define_data($d);
+		}
+		$t->set_caption(t("T&otilde;lgi veateateid"));
 	}
 
         function _init_trans_ttl_t(&$t, $o)
