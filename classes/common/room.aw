@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.94 2007/01/08 14:52:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.95 2007/01/09 14:46:24 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1493,6 +1493,7 @@ class room extends class_base
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
 		// this seems to fuck up in reval room calendar view and only display time to 15:00
 		//while($step < floor($steps))
+		//arr(86400/($step_length * $arr["obj_inst"]->prop("time_step")));
 		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
@@ -1774,8 +1775,21 @@ class room extends class_base
 		{
 			$this->open_inst = get_instance(CL_OPENHOURS);
 		}
+		$end_this = (date("H" , $end-1)*3600 + date("i" , $end-1)*60);
+		$start_this = (date("H" , $start)*3600 + date("i" , $start)*60);
+		
+		//kontrollib et tsükli lõpp äkki läheb järgmisesse päeva juba... siis oleks lõpp kuidagi varajane ja avatud oleku kontroll läheks puusse
+		if($start_this > $end_this)
+		{
+			$end_this+=24*3600;
+		}
 		$open = $this->open_inst->get_times_for_date($this->openhours, $start);
-		if(is_array($open) && ($open[0] || $open[1]) && ($open[1]-1 >= ((date("H" , $end-1)*3600 + date("i" , $end-1)*60))) && ($open[0] <= ((date("H" , $start)*3600 + date("i" , $start)*60))))
+		if(
+			is_array($open) && 
+			($open[0] || $open[1]) && 
+			($open[1]-1 >= $end_this) && 
+			($open[0] <= $start_this)
+		)
 		{
 			return true;
 		}
