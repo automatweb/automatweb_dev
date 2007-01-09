@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.20 2005/04/21 08:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.21 2007/01/09 08:40:50 dragut Exp $
 /*
 
 @default table=objects
@@ -351,7 +351,7 @@ class dronline_conf extends class_base
 
 	////
 	// !creates a clone of object $from under folder $parent with name $name
-	function clone($arr)
+	function clone_object($arr)
 	{
 		extract($arr);
 
@@ -368,5 +368,6 @@ class dronline_conf extends class_base
 
 		return $new->save();
 	}
+
 }
 ?>
