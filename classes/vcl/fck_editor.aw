@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.11 2006/10/25 10:37:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.12 2007/01/10 13:03:45 kristo Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor extends core
@@ -41,9 +41,45 @@ class fck_editor extends core
 	function draw_editor($arr)
 	{
 		$retval = '
-<script type="text/javascript" src="js/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="'.aw_ini_get("baseurl").'/automatweb/js/fckeditor/fckeditor.js"></script>
 <script type="text/javascript">
 <!--
+
+changed = 0;
+function set_changed()
+{
+changed = 1;
+}
+
+function generic_loader()
+{
+	// set onchange event handlers for all form elements
+	var els = document.changeform.elements;
+	var cnt = els.length;
+	for(var i = 0; i < cnt; i++)
+	{
+		if (els[i].attachEvent)
+		{
+			els[i].attachEvent("onChange",set_changed);
+		}
+		else
+		{
+			els[i].setAttribute("onChange",els[i].getAttribute("onChange")+ ";set_changed();");
+		}
+	}
+}
+
+function generic_unloader()
+{
+	if (changed)
+	{
+		if (confirm("'.t("Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?").'"))
+		{
+			document.changeform.submit();
+		}
+	}
+} 
+
 function FCKeditor_OnComplete( editorInstance )
 {
 	var browser = navigator.userAgent.toLowerCase();
@@ -93,7 +129,14 @@ window.onload = function()
 		fck'.$nm.'.Width = "'.$w.'px";
 		fck'.$nm.'.Height = "'.$h.'px";
 		fck'.$nm.'.Config["AutoDetectLanguage"] = false;
-		fck'.$nm.'.Config["DefaultLanguage"] = "'.(!empty($arr["lang"]) ? $arr["lang"] : ($_SESSION["user_adm_ui_lc"] != "" ? $_SESSION["user_adm_ui_lc"] : "et")).'";
+		// '.$arr["lang"] . $_SESSION["user_adm_ui_lc"] .'
+		';
+		
+		$strFcklang = !empty($arr["lang"]) ? $arr["lang"] : ($_SESSION["user_adm_ui_lc"] != "" ? $_SESSION["user_adm_ui_lc"] : "et");
+		if ($strFcklang == "en")
+			$strFcklang = "en-uk";
+		
+		$retval .= 'fck'.$nm.'.Config["DefaultLanguage"] = "'.$strFcklang.'";
 		fck'.$nm.'.ReplaceTextarea();';
 
 		$retval .= 'fck'.$nm.'.Config["CustomConfigurationsPath"] = "'.$this->mk_my_orb("get_fck_config").'" + ( new Date() * 1 ) ;'."\n";
