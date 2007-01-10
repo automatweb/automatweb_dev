@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.92 2006/11/24 14:27:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.93 2007/01/10 12:35:10 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -646,7 +646,7 @@ class releditor extends core
 				//$export_props = $target->properties();
 				if ($ed_fields && ($this->form_type != $target->id()))
 				{
-					foreach($ed_fields as $ed_field)
+					foreach(array_unique($ed_fields) as $ed_field)
 					{
 						// fucking hackery! :(
 						if ($this->all_props[$ed_field]["type"] == "textbox")
