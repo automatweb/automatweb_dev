@@ -267,11 +267,11 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_ip_except
 msgid "Omaduse IP Aadress v&auml;ljaarvatud (s_ip_except) caption"
-msgstr ""
+msgstr "Except IP address"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_ip_except_comment
 msgid "Omaduse IP Aadress v&auml;ljaarvatud (s_ip_except) kommentaar"
-msgstr "Except IP address"
+msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_ip_except_help
 msgid "Omaduse IP Aadress v&auml;ljaarvatud (s_ip_except) help"
@@ -279,7 +279,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_referer
 msgid "Omaduse Referer (s_referer) caption"
-msgstr ""
+msgstr "Referer"
 
 #: classes/applications/stats/stats_viewer.aw:prop_s_referer_comment
 msgid "Omaduse Referer (s_referer) kommentaar"
@@ -495,7 +495,7 @@ msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:group_stats_disp
 msgid "Grupi Tulemused (stats_disp) pealkiri"
-msgstr ""
+msgstr "Results"
 
 #: classes/applications/stats/stats_viewer.aw:group_stats_disp_help
 msgid "Grupi Tulemused (stats_disp) help"
@@ -532,6 +532,38 @@ msgstr "User group"
 #: classes/applications/stats/stats_viewer.aw:rel_RELTYPE_HTML
 msgid "Seose Aruanne (RELTYPE_HTML) tekst"
 msgstr "Statement"
+
+#: classes/applications/stats/stats_viewer.aw:layout_dates
+msgid "Kujundusosa Kuupäevad (dates) pealkiri"
+msgstr "Dates"
+
+#: classes/applications/stats/stats_viewer.aw:layout_us
+msgid "Kujundusosa Kasutajad (us) pealkiri"
+msgstr "Users"
+
+#: classes/applications/stats/stats_viewer.aw:layout_obj
+msgid "Kujundusosa Objektid (obj) pealkiri"
+msgstr "Objects"
+
+#: classes/applications/stats/stats_viewer.aw:layout_act_left
+msgid "Kujundusosa Tegevus (act_left) pealkiri"
+msgstr "Action"
+
+#: classes/applications/stats/stats_viewer.aw:layout_act_right
+msgid "Kujundusosa Maa (act_right) pealkiri"
+msgstr "Country"
+
+#: classes/applications/stats/stats_viewer.aw:layout_s_left
+msgid "Kujundusosa Sessioon & IP (s_left) pealkiri"
+msgstr "Session and IP"
+
+#: classes/applications/stats/stats_viewer.aw:layout_s_right
+msgid "Kujundusosa Tulemused (s_right) pealkiri"
+msgstr "Results"
+
+#: classes/applications/stats/stats_viewer.aw:layout_browser_tree
+msgid "Kujundusosa Kuupäevad (browser_tree) pealkiri"
+msgstr "Dates"
 
 #: classes/applications/stats/stats_viewer.aw:196
 msgid "Detailselt"
@@ -639,7 +671,7 @@ msgstr "Bring on-line"
 
 #: classes/applications/stats/stats_viewer.aw:420
 msgid "On-line"
-msgstr ""
+msgstr "On-line"
 
 #: classes/applications/stats/stats_viewer.aw:420
 msgid "Arhiveeritud"

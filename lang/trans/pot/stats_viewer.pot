@@ -534,6 +534,38 @@ msgstr ""
 msgid "Seose Aruanne (RELTYPE_HTML) tekst"
 msgstr ""
 
+#: classes/applications/stats/stats_viewer.aw:layout_dates
+msgid "Kujundusosa Kuupäevad (dates) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:layout_us
+msgid "Kujundusosa Kasutajad (us) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:layout_obj
+msgid "Kujundusosa Objektid (obj) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:layout_act_left
+msgid "Kujundusosa Tegevus (act_left) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:layout_act_right
+msgid "Kujundusosa Maa (act_right) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:layout_s_left
+msgid "Kujundusosa Sessioon & IP (s_left) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:layout_s_right
+msgid "Kujundusosa Tulemused (s_right) pealkiri"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:layout_browser_tree
+msgid "Kujundusosa Kuupäevad (browser_tree) pealkiri"
+msgstr ""
+
 #: classes/applications/stats/stats_viewer.aw:196
 msgid "Detailselt"
 msgstr ""

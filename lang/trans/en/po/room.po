@@ -769,13 +769,13 @@ msgstr "Count"
 msgid "Kellaaeg"
 msgstr "Time (clock)"
 
-#: classes/common/room.aw:672 classes/common/room.aw:1615
+#: classes/common/room.aw:672 classes/common/room.aw:1619
 msgid "Aeg"
 msgstr "Time"
 
 #: classes/common/room.aw:691 classes/common/room.aw:736
-#: classes/common/room.aw:2095 classes/common/room.aw:2175
-#: classes/common/room.aw:2258
+#: classes/common/room.aw:2099 classes/common/room.aw:2179
+#: classes/common/room.aw:2262
 msgid "Muuda"
 msgstr "Change"
 
@@ -843,89 +843,89 @@ msgstr ""
 msgid "VABA"
 msgstr ""
 
-#: classes/common/room.aw:1351
+#: classes/common/room.aw:1354
 msgid "Broneeri"
 msgstr ""
 
-#: classes/common/room.aw:1360 classes/common/room.aw:1408
+#: classes/common/room.aw:1364 classes/common/room.aw:1412
 msgid "BRON"
 msgstr ""
 
-#: classes/common/room.aw:1415
+#: classes/common/room.aw:1419
 msgid "Suletud"
 msgstr ""
 
-#: classes/common/room.aw:1682
+#: classes/common/room.aw:1686
 msgid "Broneerimine"
 msgstr ""
 
-#: classes/common/room.aw:1937
+#: classes/common/room.aw:1941
 msgid "Lisa ressurss"
 msgstr ""
 
-#: classes/common/room.aw:1953
+#: classes/common/room.aw:1957
 msgid "Ressursside kataloog m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/common/room.aw:1959 classes/common/room.aw:2142
-#: classes/common/room.aw:2219
+#: classes/common/room.aw:1963 classes/common/room.aw:2146
+#: classes/common/room.aw:2223
 msgid "Nimi"
 msgstr ""
 
-#: classes/common/room.aw:2038
+#: classes/common/room.aw:2042
 msgid "Kaust"
 msgstr ""
 
-#: classes/common/room.aw:2059 classes/common/room.aw:2169
-#: classes/common/room.aw:2246
+#: classes/common/room.aw:2063 classes/common/room.aw:2173
+#: classes/common/room.aw:2250
 msgid "V&otilde;ta laost"
 msgstr ""
 
-#: classes/common/room.aw:2131
+#: classes/common/room.aw:2135
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/common/room.aw:2136 classes/common/room.aw:2213
+#: classes/common/room.aw:2140 classes/common/room.aw:2217
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/common/room.aw:2148 classes/common/room.aw:2225
+#: classes/common/room.aw:2152 classes/common/room.aw:2229
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/common/room.aw:2155 classes/common/room.aw:2232
+#: classes/common/room.aw:2159 classes/common/room.aw:2236
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/common/room.aw:2162 classes/common/room.aw:2239
+#: classes/common/room.aw:2166 classes/common/room.aw:2243
 msgid "Kogus laos"
 msgstr ""
 
-#: classes/common/room.aw:2181 classes/common/room.aw:2264
+#: classes/common/room.aw:2185 classes/common/room.aw:2268
 msgid "Vali"
 msgstr ""
 
-#: classes/common/room.aw:2252
+#: classes/common/room.aw:2256
 msgid "Vii lattu"
 msgstr ""
 
-#: classes/common/room.aw:2278
+#: classes/common/room.aw:2282
 msgid "Uus"
 msgstr ""
 
-#: classes/common/room.aw:2285
+#: classes/common/room.aw:2289
 msgid "Lisa kaust"
 msgstr ""
 
-#: classes/common/room.aw:2294
+#: classes/common/room.aw:2298
 msgid "Lisa tootekategooria"
 msgstr ""
 
-#: classes/common/room.aw:2304
+#: classes/common/room.aw:2308
 msgid "Aktiivseks"
 msgstr ""
 
-#: classes/common/room.aw:2311
+#: classes/common/room.aw:2315
 msgid "Kustuta valitud"
 msgstr ""
 
