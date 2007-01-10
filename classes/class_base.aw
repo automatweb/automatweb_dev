@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.527 2006/12/27 10:59:45 kristo Exp $
+// $Id: class_base.aw,v 2.528 2007/01/10 11:45:21 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1547,6 +1547,10 @@ class class_base extends aw_template
 					"classinfo" => &$this->classinfo,
 				);
 
+				if ($val["set_link_target"])
+				{
+					$tabinfo["target"] = $val["set_link_target"];
+				}
 				$res = true;
 				if ($tab_callback)
 				{
@@ -1583,6 +1587,7 @@ class class_base extends aw_template
 						"caption" => $tabinfo["caption"],
 						"active" => $active,
 						"tabgroup" => $val["tabgroup"],
+						"target" => $tabinfo["target"]
 					));
 				};
 			};
@@ -3935,7 +3940,14 @@ class class_base extends aw_template
 					if ($property["save_format"] == "iso8601")
 					{
 						$dt = $rawdata[$name];
-						$property["value"] = sprintf("%04d-%02d-%02d",$dt["year"],$dt["month"],$dt["day"]);
+						if ($dt["year"] < 1 || $dt["month"] < 1 || $dt["day"] < 1)
+						{
+							$property["value"] = "";
+						}
+						else
+						{
+							$property["value"] = sprintf("%04d-%02d-%02d",$dt["year"],$dt["month"],$dt["day"]);
+						}
 					}
 					else
 					{

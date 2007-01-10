@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.18 2006/12/27 16:49:56 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.19 2007/01/10 11:45:30 kristo Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -382,7 +382,7 @@ class orders_form extends class_base
 			"udef_textbox6" => $order->prop("udef_textbox6"),
 			"udef_textbox7" => $order->prop("udef_textbox7"),
 			"person_contact" => $person->prop("comment"),
-			"birthday" => get_lc_date($person->prop("birthday"), 1),
+			"birthday" => $person->prop("birthday"),
 			"payment_type" => ($_SESSION["orders_form"]["payment"]["type"] == "cod" ? "Lunamaks" : "J&auml;relmaks"),
 		));
 		$add_props = array();

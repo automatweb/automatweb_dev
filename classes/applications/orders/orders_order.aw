@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.20 2006/12/27 17:00:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.21 2007/01/10 11:45:30 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -247,7 +247,7 @@ class orders_order extends class_base
 				$person->set_prop("personal_id", $props["personal_id"]);
 				$person->set_prop("comment", $props["person_contact"]);
 				
-				$person->set_prop("birthday", mktime(0, 0, 0, $props["person_birthday"]["month"], $props["person_birthday"]["day"], $props["person_birthday"]["year"]));
+				$person->set_prop("birthday", sprintf("%04d-%02d-%02d", $props["person_birthday"]["year"], $props["person_birthday"]["month"], $props["person_birthday"]["day"]));
 				
 				$person->save();
 				
@@ -295,7 +295,7 @@ class orders_order extends class_base
 				$person->set_prop("lastname", $props["lastname"]);
 				$person->set_prop("personal_id", $props["personal_id"]);
 				$person->set_prop("comment", $props["person_contact"]);
-				$person->set_prop("birthday", mktime(0, 0, 0, $props["person_birthday"]["month"], $props["person_birthday"]["day"], $props["person_birthday"]["year"]));
+				$person->set_prop("birthday", sprintf("%04d-%02d-%02d", $props["person_birthday"]["year"], $props["person_birthday"]["month"], $props["person_birthday"]["day"]));
 				$person->save();
 				
 				if($props["person_email"])

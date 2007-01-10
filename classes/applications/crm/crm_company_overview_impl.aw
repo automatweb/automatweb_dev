@@ -133,12 +133,12 @@ class crm_company_overview_impl extends class_base
 				WHERE	
 					objects.class_id = '145' AND 
 					objects.status > 0  AND
-					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null $p_id_filt
+					kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null $p_id_filt
 			";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
-				$m = date("m", $row["bd"]);
+				list($y, $m, $d) = explode("-", $row["bd"]);
 				if (($s_m > $e_m ? ($m >= $s_m || $m <= $e_m) : ($m >= $s_m && $m <= $e_m)))
 				{
 					$evts[$row["oid"]] = $row["oid"];
@@ -161,7 +161,8 @@ class crm_company_overview_impl extends class_base
 			{
 				$ds = $calo->prop("day_start");
 				$bd = $item->prop("birthday");
-				$date = mktime($ds["hour"], $ds["minute"], 0, date("m", $bd), date("d", $bd), date("Y"));
+				list($y, $m, $d) = explode("-", $bd);
+				$date = mktime($ds["hour"], $ds["minute"], 0, $m, $d, date("Y"));
 			}
 
 			// if this thing has recurrences attached, then stick those in there

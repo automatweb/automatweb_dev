@@ -93,11 +93,11 @@ class image_rate extends class_base
 		
 		if(!empty($browse["age_s"]))
 		{
-			$w .= " AND isik.birthday < '".mktime(0, 0, 0, 0, 0, (date("Y") - $browse["age_s"]))."'";
+			$w .= " AND isik.birthday < '".date("Y-m-d", (date("Y") - $browse["age_s"]))."'";
 		}
 		if(!empty($browse["age_e"]))
 		{
-			$w .= " AND isik.birthday > '".mktime(0, 0, 0, 0, 0, (date("Y") - $browse["age_s"]))."'";
+			$w .= " AND isik.birthday > '".date("Y-m-d", (date("Y") - $browse["age_s"]))."'";
 		}
 		if(!empty($GLOBALS["img_id"]))
 		{

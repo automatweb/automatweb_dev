@@ -56,8 +56,17 @@
             <year_from>1930</year_from>
             <year_to>2010</year_to>
             <default>-1</default>
+            <save_format>iso8601</save_format>
             <field>birthday</field>
             <caption>S&amp;uuml;nnip&amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>_bd_upg</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>hidden</type>
+            <field>aw_bd_up</field>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>gender</name>

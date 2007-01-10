@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.156 2007/01/08 13:17:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.157 2007/01/10 11:45:26 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -35,8 +35,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property personal_id type=textbox size=13 maxlength=11
 @caption Isikukood
 
-@property birthday type=date_select year_from=1930 year_to=2010 default=-1
+@property birthday type=date_select year_from=1930 year_to=2010 default=-1  save_format=iso8601
 @caption Sünnipäev
+
+@property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 
 @property gender type=chooser
 @caption Sugu
@@ -807,6 +809,9 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "_bd_upg":
+				return PROP_IGNORE;
+
 			case "atwork_table":
 				$this->_atwork_table($arr);
 				break;
@@ -1071,7 +1076,7 @@ class crm_person extends class_base
 				$data["options"] = array(
 					3 => t("Vallaline"),
 					1 => t("Abielus"),
-					2 => t("Lahutatud")
+					2 => t("Lahutatud"),
 				);
 				break;
 
@@ -3022,6 +3027,36 @@ class crm_person extends class_base
 	{
 		switch($field)
 		{
+			case "aw_bd_up":
+				// create the field, but first, convert all persons bds to iso fields
+				$this->db_query("SELECT birthday, oid FROM kliendibaas_isik");
+				while ($row = $this->db_next())
+				{
+					$this->save_handle();
+					if (is_numeric($row["birthday"]))
+					{
+						if ($row["birthday"] == -1)
+						{
+							$bd = "";
+						}
+						else
+						{
+							$bd = date("Y-m-d", $row["birthday"]);
+						}
+						$this->db_query("UPDATE kliendibaas_isik SET birthday = '$bd' WHERE oid = '$row[oid]'");
+					}
+					$this->restore_handle();
+				}
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int",
+				));
+				// clear cache
+				$c = get_instance("cache");
+				$c->file_clear_pt("storage_object_data");
+				return true;
+				break;
+
 			case "udef_ta1":
 			case "udef_ta2":
 			case "udef_ta3":

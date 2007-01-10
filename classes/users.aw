@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.170 2007/01/09 17:43:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.171 2007/01/10 11:45:21 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -781,7 +781,7 @@ class users extends users_user
 		};
 
 		$uo = obj($row["oid"]);
-		$pwhash = $uo->prop("password_hash");
+		$pwhash = $uo->meta("password_hash");
 
 		if ($pwhash != $key)
 		{	
@@ -792,7 +792,7 @@ class users extends users_user
 			return $this->parse();
 		};
 
-		$ts = $uo->prop("password_hash_timestamp");
+		$ts = $uo->meta("password_hash_timestamp");
 
 		// default expiration time is 1 hour (3600 seconds)
 		if (($ts + (3600*24*400)) < time())
@@ -1156,9 +1156,12 @@ class users extends users_user
 
 		aw_disable_acl();
 		$uo = obj($this->get_oid_for_uid($uid));
-		$uo->set_prop("password_hash",$hash);
-		$uo->set_prop("password_hash_timestamp",$ts);
-		$uo->save();
+		$uo->set_meta("password_hash",$hash);
+		$uo->set_meta("password_hash_timestamp",$ts);
+		if ($uo->parent())
+		{
+			$uo->save();
+		}
 		aw_restore_acl();
 
 		$host = aw_global_get("HTTP_HOST");

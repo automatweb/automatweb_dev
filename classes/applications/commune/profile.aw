@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.8 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.9 2007/01/10 11:45:27 kristo Exp $
 // profile.aw - Profiil 
 /*
 @classinfo syslog_type=ST_PROFILE relationmgr=yes
@@ -292,11 +292,13 @@ class profile extends class_base
 			$birthday = $person->prop("birthday"); // gives "-1" on unselcted date_edit ("---")
 			//if(!isset($birthday)) //doesn't work!
 			//why the hell isn't there a common way to check that prop("xxx") is not set??
-			if ($birthday == -1)
+			if ($birthday == "")
 			{
 				return $age;
 			}
-			$birthday_rec = getdate($birthday);
+			list($_y, $_m, $_d) = explode("-", $birthday);
+			$birthday_rec = array("year" => $_y, "month" => $_m, "day" => $_d);
+			
 			$now_rec = getdate();
 
 			$age = $now_rec["year"] - $birthday_rec["year"];

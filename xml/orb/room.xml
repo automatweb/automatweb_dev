@@ -46,6 +46,7 @@
 				<arguments>
 					<required name="id" />
 					<optional name="bron" />
+					<optional name="room_reservation_length" />
 				</arguments>
 			</function>
 		</action>

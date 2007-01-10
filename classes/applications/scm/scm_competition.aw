@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.18 2006/09/19 11:39:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.19 2007/01/10 11:45:36 kristo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -448,7 +448,8 @@ class scm_competition extends class_base
 					// date of birth
 					if(($s = $person->prop("birthday")))
 					{
-						$dob = $s;
+						list($y, $m, $d) = explode("-", $s);
+						$dob = mktime(0,0,0, $m, $d, $y);
 					}
 					elseif(($pid = $person->prop("personal_id")))
 					{

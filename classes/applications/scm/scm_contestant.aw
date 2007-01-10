@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.9 2006/09/19 11:40:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.10 2007/01/10 11:45:36 kristo Exp $
 // scm_contestant.aw - V&otilde;istleja 
 /*
 
@@ -487,7 +487,7 @@ class scm_contestant extends class_base
 			"CL_CRM_PERSON.firstname" => $arr["firstname"],
 			"CL_CRM_PERSON.lastname" => $arr["lastname"],
 			"CL_CRM_PERSON.gender" => $arr["gender"],
-			"CL_CRM_PERSON.birthday" => mktime(0,0,0, $arr["birthday"]["month"], $arr["birthday"]["day"], $arr["birthday"]["year"]),
+			"CL_CRM_PERSON.birthday" => sprintf("%04d-%02d-%02d", $arr["birthday"]["year"], $arr["birthday"]["month"], $arr["birthday"]["day"]),
 		));
 		
 		// leian kas olemasoleva crm_personi või tekitan uue
@@ -503,7 +503,7 @@ class scm_contestant extends class_base
 			$o_person->set_prop("firstname", $arr["firstname"]);
 			$o_person->set_prop("lastname", $arr["lastname"]);			
 			$o_person->set_parent($arr["parent"]);
-			$o_person->set_prop("birthday", mktime(0,0,0, $arr["birthday"]["month"], $arr["birthday"]["day"], $arr["birthday"]["year"]));
+			$o_person->set_prop("birthday", sprintf("%04d-%02d-%02d", $arr["birthday"]["year"], $arr["birthday"]["month"], $arr["birthday"]["day"]));
 			$o_person->set_prop("gender", $arr["gender"]);
 			$o_person->save();
 

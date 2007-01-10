@@ -674,7 +674,7 @@ class realestate_property extends class_base
 			{
 				list ($birthday, $gender) = $pid_data;
 				$client->set_prop ("gender", $gender);
-				$client->set_prop ("birthday", $birthday);
+				$client->set_prop ("birthday", date("Y-m-d", $birthday));
 				$modified = true;
 			}
 
@@ -719,7 +719,7 @@ class realestate_property extends class_base
 			{
 				list ($birthday, $gender) = $pid_data;
 				$client->set_prop ("gender", $gender);
-				$client->set_prop ("birthday", $birthday);
+				$client->set_prop ("birthday", date("Y-m-d", $birthday));
 				$client->set_parent ($this->re_manager->prop ("clients_folder"));
 				$client->save ();
 			}

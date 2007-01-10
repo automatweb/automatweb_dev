@@ -1,6 +1,7 @@
 var arrBronsTry = Array(); // make the array for checkBrons(), if all's ok, then copy to arrBronsActive and draw
 var arrBronsActive = Array(); // currently red on the screen
 var bronTexts = Array();
+var isClicked=false; // used in changeRoomReservationLength(). it is either false or contains rooms reservation length
 bronTexts["BRON"] = "Broneeri";
 bronTexts["FREE"] = "VABA";
 var bronErrors = Array();
@@ -27,6 +28,8 @@ function doBronExec(strId, intCalendarIntervall, intRoomReservationLength, intPr
  */
 function doBron (strId, intCalendarIntervall, intRoomReservationLength, intProduct)
 {
+	isClicked = intCalendarIntervall;
+	
 	if (!intRoomReservationLength)
 	{
 		sel = document.getElementById("room_reservation_length");
@@ -39,16 +42,17 @@ function doBron (strId, intCalendarIntervall, intRoomReservationLength, intProdu
 	setBrons (strId, intCalendarIntervall, intRoomReservationLength);
 }
 
-/**
- * @param obj that element td
- * @param integer intCalendarIntervall length of one unit in millisecond
- * @return bool
- */
-function doBronWithProduct (that, intRoomReservationLength, strId, intCalendarIntervall, intProduct, rid, ts, nice )
+function changeRoomReservationLength(that)
 {
-	//setBrons (strId, intCalendarIntervall, intRoomReservationLength);
+	if (isClicked)
+	{
+		intCalendarIntervall = isClicked;
+		intRoomReservationLength = that[that.selectedIndex].value*intCalendarIntervall;
+		strId = arrBronsActive[0];
+	
+		setBrons (strId, intCalendarIntervall, intRoomReservationLength);
+	}
 }
-
 
 function setBrons (strId, intCalendarIntervall, intRoomReservationLength)
 {

@@ -419,16 +419,17 @@ class planner_model extends core
 				WHERE	
 					objects.class_id = '145' AND 
 					objects.status > 0  AND
-					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
+					kliendibaas_isik.birthday != '' AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
 			";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
-				$m = date("m", $row["bd"]);
+				//$m = date("m", $row["bd"]);
+				list($y, $m, $d) = explode("-", $row["bd"]);
                                 if (($s_m > $e_m ? ($m >= $s_m || $m <= $e_m) : ($m >= $s_m && $m <= $e_m)))
                                 {
 					$ds = $obj->prop("day_start");
-					$bs = mktime($ds["hour"], $ds["minute"], 0, date("m", $row["bd"]), date("d", $row["bd"]), date("Y"));
+					$bs = mktime($ds["hour"], $ds["minute"], 0, $m, $d, date("Y"));
 					$rv[$row["oid"]] = array(
 						"id" => $row["oid"],
 						"start" => $bs,

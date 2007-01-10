@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.12 2007/01/09 19:45:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.13 2007/01/10 11:45:36 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -253,7 +253,7 @@ class spa_bookigs_entry extends class_base
 			{
 				$start = date_edit::get_timestamp($d["start"]);
 				$end = date_edit::get_timestamp($d["end"]);
-				$bd = date_edit::get_timestamp($d["birthday"]);
+				//$bd = date_edit::get_timestamp($d["birthday"]);
 				// create person, user, booking
 
 				// check if person exists
@@ -287,7 +287,7 @@ class spa_bookigs_entry extends class_base
 					$p->set_prop("firstname", $d["fn"]);
 					$p->set_prop("lastname", $d["ln"]);
 					$p->set_prop("email", $eml->id());
-					$p->set_prop("birthday", $bd);
+					$p->set_prop("birthday", sprintf("%04d-%02d-%02d", $d["birthday"]["year"], $d["birthday"]["month"], $d["birthday"]["day"]));
 					$p->set_prop("gender", $d["gender"]);
 					$p->save();
 
@@ -336,11 +336,11 @@ class spa_bookigs_entry extends class_base
 				$booking_inst->check_reservation_conns($booking);
 
 				$po = obj($d["packet"]);
-				$feedback .= sprintf("Lisasin kasutaja %s, isiku %s ja <a href='%s'>broneeringu</a> paketile %s algusega %s ja l&otilde;puga %s<br>", 
-					html::obj_change_url($user->id()),
-					html::obj_change_url($p->id()),
-					html::get_change_url($booking->id(), array("return_url" => $arr["request"]["post_ru"])),
-					html::obj_change_url($po->id()),
+				$feedback .= sprintf(t("Lisasin kasutaja %s, isiku %s ja <a href='%s'>broneeringu</a> paketile %s algusega %s ja l&otilde;puga %s<br>"), 
+					is_admin() ? html::obj_change_url($user->id()) : $user->name(),
+					is_admin() ? html::obj_change_url($p->id()) : $p->name(),
+					is_admin() ? html::get_change_url($booking->id(), array("return_url" => $arr["request"]["post_ru"])) : "#",
+					is_admin() ? html::obj_change_url($po->id()) : $po->name(),
 					date("d.m.Y H:i", $start), 
 					date("d.m.Y H:i", $end)
 				);
@@ -391,7 +391,10 @@ class spa_bookigs_entry extends class_base
 				"lang_id" => array(),
 				"site_id" => array()
 			));
-			$pk_list = $ol->names();
+			foreach($ol->arr() as $o)
+			{
+				$pk_list[$o->id()] = $o->trans_get_val("name");
+			}
 		}
 		return $pk_list;
 	}
@@ -1063,6 +1066,7 @@ class spa_bookigs_entry extends class_base
 		$this->read_site_template("booking.tpl");
 		lc_site_load("spa_bookigs_entry", &$this);
 
+		list($y, $m, $d) = explode("-", $b->prop("person.birthday"));
 		$this->vars(array(
 			"bureau" => $b->createdby(),
 			"person" => $b->prop_str("person"),
@@ -1071,7 +1075,7 @@ class spa_bookigs_entry extends class_base
 			"to" => date("d.m.Y", $b->prop("end")),
 			"person_comment" => $b->prop("person.comment"),
 			"person_name" => $b->prop("person.name"),
-			"person_birthday" => $b->prop("person.birthday"),
+			"person_birthday" => sprintf("%02d.%02d.%04d", $d, $m, $y),
 			"person_ext_id" => $b->prop("person.ext_id_alphanumeric"),
 			"person_gender" => $b->prop("person.gender") == 1 ? t("Mees") : t("Naine")
 		));
@@ -1407,7 +1411,9 @@ class spa_bookigs_entry extends class_base
 				"type" => $type,
 				"caption" => $capt,
 				"value" => $val,
-				"options" => $opts
+				"options" => $opts,
+				"year_from" => 1900,
+				"year_to" => date("Y")
 			));
 		}
 
@@ -1462,7 +1468,14 @@ class spa_bookigs_entry extends class_base
 		{
 			if ($propl[$pn]["type"] == "date_select")
 			{
-				$arr["ud"][$pn] = date_edit::get_timestamp($arr["ud"][$pn]);
+				if ($arr["ud"][$pn]["year"] < 100)
+				{
+					$arr["ud"][$pn] = "";
+				}
+				else
+				{
+					$arr["ud"][$pn] = sprintf("%04d-%02d-%02d", $arr["ud"][$pn]["year"], $arr["ud"][$pn]["month"], $arr["ud"][$pn]["day"]);
+				}
 			}
 			switch($pn)
 			{
