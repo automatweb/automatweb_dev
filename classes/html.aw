@@ -547,6 +547,8 @@ class html extends aw_template
 		button's name
 	@param value optional type=string
 		button's value
+	@param id optional type=string
+		field id
 	@param checked optional type=bool
 		If set, the radiobutton is checked
 	@param disabled optional type=bool
@@ -569,8 +571,12 @@ class html extends aw_template
 		{
 			$caption = '<span style="font-size: ' . $textsize . ';">' . $caption . '</span>';
 		}
+		if(!$id)
+		{
+			$id = $name."_".$value;
+		}
 
-		return "<input type='radio' name='$name' value='$value' $checked onClick='$onclick' $disabled />\n $caption";
+		return "<input type='radio' name='$name' id='$id' value='$value' $checked onClick='$onclick' $disabled />\n $caption";
 	}
 
 	/**Submit button
