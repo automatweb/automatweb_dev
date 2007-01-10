@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.13 2007/01/10 11:45:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.14 2007/01/10 14:16:29 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -787,6 +787,14 @@ class spa_bookigs_entry extends class_base
 			die(t("Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"));
 		}
 
+		get_instance(CL_ROOM);
+		$room2inst = array();
+		foreach($p_rooms as $room_id => $room_obj)
+		{
+			$room2inst[$room_id] = new room;
+			$room2inst[$room_id]->generate_res_table($room_obj, $range_from, $range_to);
+		}
+
 		$reserved_days = $this->get_reserved_days_for_pkt($arr["pkt"], $range_from, $range_to, $arr["booking"], $current_booking);
 
 		// get the current booking for this prod so we can ignore it in the taken checks
@@ -854,7 +862,7 @@ class spa_bookigs_entry extends class_base
 						
 					}
 					$room_inst = $room->instance();
-					if ($room_inst->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => $cur_step_end)))
+					if ($room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => $cur_step_end)))
 					{
 						$avail = true;
 					}
