@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.47 2006/12/27 11:09:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.48 2007/01/10 12:58:12 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -769,7 +769,6 @@ class shop_order_center extends class_base
 			}
 			$last_menu =  $o->parent();
 		}
-
 		return $tl_inst->finish_table();
 	}
 

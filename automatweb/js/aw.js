@@ -194,7 +194,7 @@ function aw_date_edit_show_cal(elname)
 	var y_obj = aw_get_el(elname+"[year]");
 	var m_obj = aw_get_el(elname+"[month]");
 	var d_obj = aw_get_el(elname+"[day]");
-
+	
 	if (y_obj.value > 0)
 	{
 		var y = y_obj.value;

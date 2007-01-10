@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.157 2007/01/10 11:45:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.158 2007/01/10 12:58:11 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -35,10 +35,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property personal_id type=textbox size=13 maxlength=11
 @caption Isikukood
 
-@property birthday type=date_select year_from=1930 year_to=2010 default=-1  save_format=iso8601
-@caption Sünnipäev
+@property birthday type=date_select year_from=1930 year_to=2010 default=-1 save_format=iso8601
 
-@property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
+property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 
 @property gender type=chooser
 @caption Sugu

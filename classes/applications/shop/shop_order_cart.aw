@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.55 2006/12/27 11:09:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.56 2007/01/10 12:58:12 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -339,7 +339,6 @@ class shop_order_cart extends class_base
 	**/
 	function submit_add_cart($arr)
 	{
-		//arr($arr);
 		extract($arr);
 		$section = aw_global_get("section");
 		$oc = obj($oc);
@@ -366,6 +365,7 @@ class shop_order_cart extends class_base
 			);
 		}
 		$awa = new aw_array($arr["add_to_cart"]);
+		//arr($arr);arr($cart);
 		foreach($awa->get() as $iid => $quantx)
 		{
 			if (!is_oid($iid) || !$this->can("view", $iid))
@@ -411,7 +411,7 @@ class shop_order_cart extends class_base
 				}
 			}
 		}
-
+//arr($soce);
 		if ($arr["from"] != "confirm" && $arr["from"] != "")
 		{
 			$cart["user_data"] = $GLOBALS["user_data"];

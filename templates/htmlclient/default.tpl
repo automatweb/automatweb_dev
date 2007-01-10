@@ -82,6 +82,10 @@ this.disabled=true;self.disabled=true;
 
 		<!-- SUB: GRIDITEM -->
 		<div class="aw04gridcell_caption">
+			<!-- SUB: GRID_ERR_MSG -->
+			<span style='color: red;'>{VAR:err_msg}</span>
+			<!-- END SUB: GRID_ERR_MSG -->
+			
 			<!-- SUB: CAPTION_TOP -->
 			{VAR:caption}:<br/>
 			{VAR:element}

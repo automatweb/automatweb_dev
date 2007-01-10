@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.528 2007/01/10 11:45:21 kristo Exp $
+// $Id: class_base.aw,v 2.529 2007/01/10 12:58:09 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -214,7 +214,6 @@ class class_base extends aw_template
 		$this->init_class_base();
 
 		$cb_values = aw_global_get("cb_values");
-
 		$has_errors = false;
 
 		if (!empty($cb_values))
@@ -2239,7 +2238,6 @@ class class_base extends aw_template
 				$property["error"] = $this->cb_values[$property["name"]]["error"];
 			};
 		};
-
 		$nm = $property["name"];
 
 		// if this is a new object and the property has a default value, use it
@@ -3034,7 +3032,6 @@ class class_base extends aw_template
 			}
 		}
 
-
 		return $resprops;
 	}
 
@@ -3807,7 +3804,6 @@ class class_base extends aw_template
 			{
 				$status = PROP_FATAL_ERROR;
 				$argblock["prop"]["error"] = $errors[$name]["msg"];
-
 			};
 
 			if ($status == PROP_OK && !empty($property["datatype"]) && "int" == $property["datatype"])
@@ -3856,7 +3852,6 @@ class class_base extends aw_template
 				};
 				$this->cb_values = $propvalues;
 				aw_session_set("cb_values",$propvalues);
-
 				$this->stop_processing = true;
 
 				//return false;

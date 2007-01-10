@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.161 2006/12/08 14:53:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.162 2007/01/10 12:58:10 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -626,7 +626,6 @@ class htmlclient extends aw_template
 					"property_comment" => isset($item["comment"]) ? $item["comment"] : "",
 					"property_help" => isset($item["help"]) ? $item["help"] : "",
 				));
-
 				$property_help .= $this->parse("PROPERTY_HELP");
 				$item["html"] = $this->create_element($item);
 				if (!empty($item["error"]))
@@ -1352,7 +1351,15 @@ class htmlclient extends aw_template
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
+			"err_msg" => $arr["error"],
+			"GRID_ERR_MSG" => ""
 		));
+		if (!empty($arr["error"]))
+		{
+			$this->vars(array(
+				"GRID_ERR_MSG" => $this->parse("GRID_ERR_MSG")
+			));
+		}
 		// name refers to a VAR inside the template
 		$caption_template = "CAPTION_${captionside}";
 		$this->vars(array(

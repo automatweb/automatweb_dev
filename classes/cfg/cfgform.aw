@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.100 2007/01/04 08:35:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.101 2007/01/10 12:58:09 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -763,15 +763,14 @@ class cfgform extends class_base
 						$fname = $tmp[$subclass]["file"];
 						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/class_base.xml"));
 						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-						$this->cfg_proplist = $proplist;
 						$this->cfg_groups = $grplist;
+						$this->cfg_proplist = $proplist;
 						$fname = basename($fname);
 						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/$fname.xml"));
 						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
 						// nono. It needs to fucking merge those things with classbase 
 						$this->cfg_proplist = $this->cfg_proplist + $proplist;
 						$this->cfg_groups = $this->cfg_groups + $grplist;
-
 					};
 				};
 				break;
