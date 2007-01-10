@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.145 2006/12/14 22:01:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.146 2007/01/10 13:19:51 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -90,10 +90,16 @@
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
+@default group=keywords
+
+	@property grkeywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
+	@caption AW M&auml;rks&otilde;nad
+
+
 @groupinfo settings caption=Seadistused
 @groupinfo dates caption=Ajad
 @groupinfo transl caption=T&otilde;lgi
-
+@groupinfo keywords caption="M&auml;rks&otilde;nad"
 @groupinfo acl caption=&Otilde;igused
 @default group=acl
 	

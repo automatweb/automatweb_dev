@@ -168,6 +168,16 @@
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <property>
+            <name>grkeywords2</name>
+            <table>objects</table>
+            <group>keywords</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>keyword_selector</type>
+            <reltype>RELTYPE_KEYWORD</reltype>
+            <caption>AW M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
             <name>acl</name>
             <table>objects</table>
             <group>acl</group>
@@ -192,6 +202,9 @@
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
+            <keywords>
+                  <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+            </keywords>
             <acl>
                   <caption>&amp;amp;Otilde;igused</caption>
             </acl>
