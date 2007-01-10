@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.40 2007/01/08 15:36:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.41 2007/01/10 10:05:08 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1027,7 +1027,10 @@ class patent extends class_base
 		if(true)
 		{
 			if(!is_array($_SESSION["patent"]["payment_date"]) && !($_SESSION["patent"]["payment_date"]>1))
-				$_SESSION["patent"]["payment_date"] = time();
+			{
+			//	$data["payment_date"] = html::date_select(array("name" => $var, "value" => time() , "buttons" => 1));
+				$data["payment_date_value"] = null;
+			}
 			$p_vars = array("request_fee" , "classes_fee" );
 			foreach($p_vars as $var)
 			{
