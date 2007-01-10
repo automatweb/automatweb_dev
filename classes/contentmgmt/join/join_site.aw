@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.41 2007/01/09 17:43:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.42 2007/01/10 13:51:10 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1726,7 +1726,19 @@ class join_site extends class_base
 						else
 						if ($oldn != "phone" && $oldn != "fax" && $oldn != "rank")
 						{
-							$prop["value"] = $data_o->prop($pid);
+							if ($prop["store"] == "connect")
+							{
+								$conns = $data_o->connections_from(array("type" => $prop["reltype"]));
+								$prop["value"] = array();
+								foreach($conns as $con)
+								{
+									$prop["value"][$con->prop("to")] = $con->prop("to");
+								}
+							}
+							else
+							{
+								$prop["value"] = $data_o->prop($pid);
+							}
 						}
 					}
 					else
