@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.16 2006/09/12 09:11:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.17 2007/01/10 13:24:14 kristo Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -645,7 +645,7 @@ class persons_webview extends class_base
 						$department .= $this->parse("LEVEL".$this->jrks[$section->id()]."DEPARTMENT");
 					else $department .= $this->parse("DEPARTMENT");
 				}
-				$this->vars(array("DEPARTMENT" => $department));
+				$this->vars_safe(array("DEPARTMENT" => $department));
 			}
 		}
 		else //juhul kui osakondade järgi pole grupeeritud, siis saab veidi lihtsamini template jne teha
@@ -658,10 +658,10 @@ class persons_webview extends class_base
 			if($this->is_template("DEPARTMENT"))//juhuks kui DEPARTMENT sub sisse on jäänud... mida tegelt pole vaja
 			{
 				$department .= $this->parse("DEPARTMENT");
-				$this->vars(array("DEPARTMENT" => $department));
+				$this->vars_safe(array("DEPARTMENT" => $department));
 			}
 		}
-		$this->vars(array(
+		$this->vars_safe(array(
 			"name" => $company->prop("name"),
 		));
 		return $this->parse();
@@ -702,7 +702,7 @@ class persons_webview extends class_base
 			$address_obj = obj($address_id);
 			$address = $address_obj->name();
 		}		
-		$this->vars(array(
+		$this->vars_safe(array(
 			"department_name" => $section->name(),
 			"phone"	=> $phone,
 			"email" => $email,
@@ -786,7 +786,7 @@ class persons_webview extends class_base
 				if($this->section && $section_conn->prop("from") == $this->section->id()) $profession_obj = $tmp_profession_obj;
 			}
 		}
-		
+				$file_inst = get_instance(CL_FILE);
 		if(is_object($profession_obj))
 		{
 			$profession = $profession_obj->name();
@@ -802,8 +802,13 @@ class persons_webview extends class_base
 			}
 		}
 		$profession_with_directive = $profession;
-		if(is_oid($directive)) $profession_with_directive = '<a href ="'.$directive.'"> '. $profession_with_directive.' </a>';
-		$this->vars(array(
+		if(is_oid($directive) && $this->can("view" , $directive ))
+		{
+			$directive_obj = obj($directive);
+			$directive_obj->prop("name");
+			$profession_with_directive = '<a href ="'.$file_inst->get_url($directive , $directive_obj->prop("name")).'"  target=_new> '. $profession_with_directive.' </a>';
+		}
+		$this->vars_safe(array(
 			"profession" => $profession,
 			"professions" => $professions,
 			"directive" => $directive,
@@ -840,7 +845,7 @@ class persons_webview extends class_base
 					$this->parse_worker($worker);
 					$c .= $this->parse("worker");
 				}
-				$this->vars(array(
+				$this->vars_safe(array(
 					"worker" => $c,
 				));
 				$column .= $this->parse("COL");
@@ -848,7 +853,7 @@ class persons_webview extends class_base
 				$parsed = 0;
 				if($col == $col_num)
 				{
-					$this->vars(array(
+					$this->vars_safe(array(
 						"COL" => $column,
 					));
 					$column = "";
@@ -863,7 +868,7 @@ class persons_webview extends class_base
 			}
 			if(!$parsed)//viimane rida võib olla tegemata
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"COL" => $column,
 				));
 				$column = "";
@@ -871,7 +876,7 @@ class persons_webview extends class_base
 				$col = 0;
 				$parsed = 1;
 			}
-			$this->vars(array(
+			$this->vars_safe(array(
 				"ROW" => $row,
 			));
 
@@ -897,7 +902,7 @@ class persons_webview extends class_base
 				$parsed = 0;
 				if($col == $col_num)
 				{
-					$this->vars(array(
+					$this->vars_safe(array(
 						"WORKER" => $c,
 					));
 					$c = "";
@@ -912,7 +917,7 @@ class persons_webview extends class_base
 			}
 			if(!$parsed)//viimane rida võib olla tegemata
 			{
-				$this->vars(array(
+				$this->vars_safe(array(
 					"WORKER" => $c,
 				));
 				$column = "";
@@ -920,7 +925,7 @@ class persons_webview extends class_base
 				$col = 0;
 				$parsed = 1;
 			}
-			$this->vars(array(
+			$this->vars_safe(array(
 				"LINE" => $row,
 			));
 		}
@@ -936,7 +941,7 @@ class persons_webview extends class_base
 					$c .= $this->parse("WORKER");
 				}
 			}
-			$this->vars(array(
+			$this->vars_safe(array(
 				"WORKER" => $c,
 			));
 		}
@@ -1014,11 +1019,11 @@ class persons_webview extends class_base
 		foreach($mail_list->arr() as $mail_obj)
 		{
 			if(strlen($emails) > 0 ) $emails .= ', ';
-			if(strlen($emails) > 0 ) $emails .= $mail_obj->prop("mail");
+			$emails .= $mail_obj->prop("mail");
 		}
 
 		//haridus
-		$speciality = "";
+		$speciality = $school = "";
 		$speciality_obj = $worker->get_first_obj_by_reltype("RELTYPE_EDUCATION");
 		if(is_object($speciality_obj))
 		{
@@ -1048,8 +1053,10 @@ class persons_webview extends class_base
 		$person_inst = get_instance(CL_CRM_PERSON);
 		$contact = $person_inst->get_short_description($worker->id());
 
-		$this->vars($phone_array);
-		$this->vars(array(
+
+
+		$this->vars_safe($phone_array);
+		$this->vars_safe(array(
 		//	"profession" => $profession,
 			"name" => $worker->name(),
 			"photo" => $photo,
@@ -1076,7 +1083,14 @@ class persons_webview extends class_base
 			"ta3" => $worker->prop("udef_ta3"),
 			"ta4" => $worker->prop("udef_ta4"),
 			"ta5" => $worker->prop("udef_ta5"),
+			"EDU_SUB" => $edu_sub,
 		));
+	
+		$asdasd.= $this->parse("EDU_SUB");
+		$this->vars_safe(array(
+			"EDU_SUB" => $asdasd,
+		));
+		
 	}
 
 	function get_cols_num($row)
