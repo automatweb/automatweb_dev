@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.72 2006/12/08 07:16:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.73 2007/01/10 13:31:43 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -1318,7 +1318,7 @@ class bug extends class_base
 			{
 				if ($pd["group"] == $gn)
 				{
-					$ret["prop_".$pn] = "&nbsp;&nbsp;&nbsp;".$pd["caption"];
+					$ret["prop_".$pn] = "&nbsp;&nbsp;&nbsp;".substr($pd["caption"], 0, 20);
 				}
 			}
 		}

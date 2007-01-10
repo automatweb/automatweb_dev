@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.92 2006/12/12 10:19:57 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.92 2006/12/12 10:19:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.93 2007/01/10 13:31:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.93 2007/01/10 13:31:43 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -2044,6 +2044,7 @@ class bug_tracker extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		$arr["tf"] = $_GET["tf"];
 		$arr["assign_to"] = 0;
 		$arr["b_id"] = $_GET["b_id"];
 		$arr["save_search_name"] = "";
@@ -2100,7 +2101,7 @@ class bug_tracker extends class_base
 	**/
 	function paste_b($arr)
 	{
-		object_list::iterate_list($_SESSION["bt"]["cut_bugs"], "set_parent", $arr["b_id"] ? $arr["b_id"] : $arr["id"]);
+		object_list::iterate_list($_SESSION["bt"]["cut_bugs"], "set_parent", $arr["b_id"] ? $arr["b_id"] : ($arr["tf"] ? $arr["tf"] : $arr["id"]));
 		$_SESSION["bt"]["cut_bugs"] = null;
 		return $arr["post_ru"];
 	}

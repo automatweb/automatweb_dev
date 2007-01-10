@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.13 2006/11/29 12:09:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.14 2007/01/10 13:31:41 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1158,7 +1158,7 @@ class admin_if extends class_base
 		}
 
 		$_SESSION["cur_admin_if"] = $o->id();
-		return html::get_change_url($o->id(), array("group" => "o", "parent" => $arr["parent"]));
+		return  html::get_change_url($o->id(), array("group" => "o", "parent" => $arr["parent"]));
 	}
 
 	function callback_mod_tab($arr)

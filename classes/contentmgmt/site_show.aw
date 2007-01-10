@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.217 2006/12/20 11:39:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.218 2007/01/10 13:31:41 kristo Exp $
 
 /*
 
@@ -312,7 +312,6 @@ class site_show extends class_base
 				$_ctx = obj($_ctx);
 				$use_ctx = $_ctx->name();
 			}
-
 			if ($use_ctx)
 			{
 				// check if we need to redirect, based on current context
@@ -321,7 +320,7 @@ class site_show extends class_base
 					"parent" => $this->sel_section,
 					"class_id" => CL_MENU,
 					"CL_MENU.RELTYPE_CTX.name" => $use_ctx,
-					"limit" => 1
+					"limit" => 1,
 				));
 				if (!$ol->count())
 				{
@@ -2264,7 +2263,7 @@ class site_show extends class_base
 			$lp = "";
 			$rp = "";
 
-			$this->vars(array(
+			$this->vars_safe(array(
 				"logged" => $this->parse("logged"), 
 				"logged1" => $this->parse("logged1"),
 				"logged2" => $this->parse("logged2"),
@@ -2290,7 +2289,7 @@ class site_show extends class_base
 			$rp = $this->parse("NO_RIGHT_PANE");
 		}
 		
-		$this->vars(array(
+		$this->vars_safe(array(
 			"LEFT_PANE" => $lp, 
 			"RIGHT_PANE" => $rp,
 			"NO_LEFT_PANE" => "",
@@ -2300,14 +2299,14 @@ class site_show extends class_base
 		// check if logged is outside LEFT_PANE and if it is, then parse logged again if we are logged in
 		if ($this->is_parent_tpl("LEFT_PANE", "logged") && aw_global_get("uid") != "")
 		{
-			$this->vars(array(
+			$this->vars_safe(array(
 				"logged" => $this->parse("logged")
 			));
 		}
 
 		if ($this->is_parent_tpl("RIGHT_PANE", "logged") && aw_global_get("uid") != "")
 		{
-			$this->vars(array(
+			$this->vars_safe(array(
 				"logged" => $this->parse("logged")
 			));
 		}

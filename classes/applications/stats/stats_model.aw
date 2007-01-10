@@ -451,11 +451,16 @@ echo "cmd2 = $cmd <br>";
 
 		echo "resolving ips  <br>\n";
 		flush();
+		$ip_cache = array();
 		// resolve ip adresses
 		$this->db_query("SELECT id,ip FROM syslog_archive WHERE ip_resolved is null");
 		while ($row = $this->db_next())
 		{
-			$adr = gethostbyaddr($row["ip"]);
+			if (!isset($ip_cache[$row["ip"]]))
+			{
+				$ip_cache[$row["ip"]] = gethostbyaddr($row["ip"]);
+			}
+			$adr = $ip_cache[$row["ip"]];
 			$this->quote(&$adr);
 			$this->save_handle();
 			$this->db_query("UPDATE syslog_archive SET ip_resolved = '$adr' WHERE id = '$row[id]'");

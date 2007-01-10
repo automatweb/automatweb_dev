@@ -177,6 +177,7 @@ class relationmgr extends aw_template
 			"type" => "textbox",
 			"caption" => t("Nimi"),
 			"value" => $arr["request"]["name"],
+			"post_append_text" => "<script language=javascript>el=document.getElementById('name');el.focus();</script>"
 		); 
 		$rval["comment"] = array(
 			"name" => "comment",

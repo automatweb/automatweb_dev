@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.112 2006/11/27 15:08:02 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.113 2007/01/10 13:31:41 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2256,6 +2256,7 @@ class webform extends class_base
 		$obj_inst = obj($arr["id"]);
 		$redirect = $obj_inst->trans_get_val("redirect");
 		$rval = (strpos(strtolower($redirect), "http://") !== false ? $redirect : (substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect));
+
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$cfgform = $obj_inst->get_first_obj_by_reltype("RELTYPE_CFGFORM");
 		$register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER");
@@ -2459,7 +2460,8 @@ class webform extends class_base
 			{
 				return $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => $rval), CL_WEBFORM, false, false, "&", false);
 			}
-			return !empty($subaction) ? $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => $rval), CL_WEBFORM) : $rval;
+			$rv = !empty($subaction) ? $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => $rval), CL_WEBFORM) : $rval;
+			return $rv;
 		}
 	}
 

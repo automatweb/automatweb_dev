@@ -409,3 +409,14 @@ span.kast {
 .clear {
 	clear: both
 }
+.awActbOptionList {
+	border: solid 1px #05a6e9;
+	background-color: #e1e1e1;
+	font-size: 11px;
+	padding: 4px;
+	line-height: 15px;
+}
+.awActbActiveOption {
+	color: #05a6e9;
+	text-decoration: underline
+}
