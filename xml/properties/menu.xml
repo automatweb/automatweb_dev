@@ -652,6 +652,15 @@
             <caption>Vennad</caption>
       </property>
       <property>
+            <name>sss_tb</name>
+            <table>objects</table>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>docs_from</group>
+            <field>sss_tb</field>
+      </property>
+      <property>
             <name>sss</name>
             <table>objects</table>
             <type>table</type>

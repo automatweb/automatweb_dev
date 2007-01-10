@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.94 2006/10/23 10:41:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.95 2007/01/10 12:25:31 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -69,6 +69,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 
 	@groupinfo container_locations caption="Konteineri n&auml;itamise asukohad" parent=show
 
+		@property sss_tb type=toolbar store=no no_caption=1 group=container_locations
+
 		@property all_menus type=checkbox ch_value=1 group=container_locations method=serialize table=objects field=meta
 		@caption N&auml;ita igal pool
 
@@ -129,6 +131,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 @groupinfo menus caption="Sisu seaded"
 
 	@groupinfo menus_sub parent=menus caption="Dokumendid"
+
+		@property lm_tb type=toolbar store=no no_caption=1 group=menus_sub
 
 		@property last_menus type=table group=menus_sub method=serialize store=no
 		@caption Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse
@@ -210,6 +214,14 @@ class promo extends class_base
 		$retval = PROP_OK; 
 		switch($prop["name"])
 		{
+			case "sss_tb":
+				$this->_get_sss_tb($arr);
+				break;
+
+			case "lm_tb":
+				$this->_get_lm_tb($arr);
+				break;
+
 			case "kw_tb":
 				$this->kw_tb($arr);
 				break;
@@ -1100,6 +1112,33 @@ class promo extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function _get_sss_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$ps = get_instance("vcl/popup_search");
+		$tb->add_cdata($ps->get_popup_search_link(array("pn" => "_set_sss", "clid" => CL_MENU)));
+	}
+
+	function _get_lm_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$ps = get_instance("vcl/popup_search");
+		$tb->add_cdata($ps->get_popup_search_link(array("pn" => "_set_lm_sss", "clid" => CL_MENU)));
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["_set_sss"] = "0";
+		$arr["_set_lm_sss"] = "0";
+	}
+
+	function callback_post_save($arr)
+	{
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_sss"], 1 /* RELTYPE_ASSIGNED_MENU */);
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_lm_sss"], 2 /* RELTYPE_DOC_SOURCE */);
 	}
 }
 ?>

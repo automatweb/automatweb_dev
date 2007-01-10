@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.182 2006/12/20 11:39:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.183 2007/01/10 12:25:33 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -263,6 +263,8 @@
 
 	@groupinfo docs_from caption="Sisu asukoht" parent=menus
 
+		@property sss_tb type=toolbar store=no no_caption=1 group=docs_from
+
 		@property sss type=table store=no group=docs_from
 		@caption Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse
 
@@ -476,6 +478,10 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "sss_tb":
+				$this->_get_sss_tb($arr);
+				break;
+
 			case "alias_ch":
 				if(!aw_ini_get("menu.automatic_aliases"))
 				{
@@ -1376,6 +1382,9 @@ class menu extends class_base
 				$arr["obj_inst"]->save();
 			}
 		}
+
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_sss"], 9 /* RELTYPE_DOCS_FROM_MENU */);
 	}
 
 	function callback_pre_save($arr)
@@ -1985,6 +1994,18 @@ class menu extends class_base
 		unlink($tmpf);
 		unlink($tmpf.".gz");
 		die();
+	}
+
+	function _get_sss_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$ps = get_instance("vcl/popup_search");
+		$tb->add_cdata($ps->get_popup_search_link(array("pn" => "_set_sss", "clid" => CL_MENU)));
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["_set_sss"] = "0";
 	}
 };
 ?>

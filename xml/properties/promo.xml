@@ -110,6 +110,14 @@
             <caption>Perioodilise, automaatselt vahetuva sisuga</caption>
       </property>
       <property>
+            <name>sss_tb</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>container_locations</group>
+            <field>sss_tb</field>
+      </property>
+      <property>
             <name>all_menus</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -264,6 +272,14 @@
             <method>serialize</method>
             <group>templates</group>
             <caption>Template (dokumendi sees)</caption>
+      </property>
+      <property>
+            <name>lm_tb</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>menus_sub</group>
+            <field>lm_tb</field>
       </property>
       <property>
             <name>last_menus</name>
