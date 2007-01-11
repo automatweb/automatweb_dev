@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.95 2007/01/09 14:46:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.96 2007/01/11 07:41:48 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1520,7 +1520,7 @@ class room extends class_base
 						if($arr["obj_inst"]->prop("use_product_times"))
 						{
 							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
-							$prod_menu = $this->get_prod_menu($arr);
+							$prod_menu = $this->get_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
 						}
 						else
 						if ($settings->prop("bron_popup_immediate") && is_admin())
@@ -1796,7 +1796,7 @@ class room extends class_base
 		else return false;
 	}
 
-	function get_prod_menu($arr)
+	function get_prod_menu($arr, $immediate = false)
 	{
 		enter_function("get_calendar_tbl::get_prod_menu");
 		$m_oid = $arr["obj_inst"]->id();
@@ -1821,7 +1821,7 @@ class room extends class_base
 			$pm->add_item(array(
 				"text" => $name,
 				"link" => "javascript:dontExecutedoBron=1;void(0)",
-				"onClick" => "doBron(
+				"onClick" => ($immediate? "doBronExec" : "doBron")."(
 					'".$m_oid."_".$arr["timestamp"]."' ,
 					".$arr["step_length"]." ,
 					".$times[$oid]." ,
@@ -3676,9 +3676,10 @@ class room extends class_base
 		if (isset($gpt[$grp->id()]))
 		{
 			$t = $gpt[$grp->id()];
-			if ($t["from"] > 0)
+			if ($t["from"] > 0 || true)
 			{
 				$from_sec = 0;
+				$cur_tm = time();
 				switch($t["from_ts"])
 				{
 					case "min":
@@ -3691,19 +3692,21 @@ class room extends class_base
 
 					default:
 					case "day":
+						$cur_tm = get_day_start();
 						$from_sec = $t["from"] * 3600 * 24;
 						break;
 				}
-				$can_bron_from = time() - $from_sec;
-				if ($tm < $can_bron_from)
+				$can_bron_to = $cur_tm + $from_sec;
+				if ($tm > $can_bron_to)
 				{
 					return false;
 				}
 			}
 
-			if ($t["to"] > 0)
+			if ($t["to"] > 0 || true)
 			{
 				$to_sec = 0;
+				$cur_tm = time();
 				switch($t["to_ts"])
 				{
 					case "min":
@@ -3716,11 +3719,12 @@ class room extends class_base
 
 					default:
 					case "day":
+						$cur_tm = get_day_start();
 						$to_sec = $t["to"] * 3600 * 24;
 						break;
 				}
-				$can_bron_to = time() - $to_sec;
-				if ($tm > $can_bron_to)
+				$can_bron_from = $cur_tm + $to_sec;
+				if ($tm < $can_bron_from)
 				{
 					return false;
 				}
