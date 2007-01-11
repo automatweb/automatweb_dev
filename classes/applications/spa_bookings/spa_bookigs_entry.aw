@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.14 2007/01/10 14:16:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.15 2007/01/11 11:54:12 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -330,6 +330,8 @@ class spa_bookigs_entry extends class_base
 				$booking->set_prop("end", $end);
 				$booking->set_prop("package", $d["package"]);
 				$booking->save();
+
+				$this->created_booking = $booking->id();
 
 				// for this booking, create empty reservations for all products so we can search by them
 				$booking_inst = $booking->instance();
@@ -722,47 +724,6 @@ class spa_bookigs_entry extends class_base
 		$range_to = $to;
 		// split into weeks, and if more than 1, let the user select range
 		$rs = get_week_start($from) + 24*7*3600;
- 		/*if (($to - get_week_start($from)) > (7*24*3600))
-		{
-			$ranges = array();
-			$re = $to;
-			$ranges[] = array("from" => $from, "to" => $rs);
-			while ($rs < $re)
-			{
-				$ranges[] = array("from" => $rs, "to" => min($rs + 24*3600*7, $to));
-				$rs += 24*3600*7;
-			}
-			$opts = array();
-			foreach($ranges as $range)
-			{
-				$url = aw_url_change_var("range_from", $range["from"], aw_url_change_var("range_to", $range["to"]));
-				$opts[$url] = date("d.m.Y", $range["from"])." - ".date("d.m.Y", $range["to"]);
-			}
-			$html .= html::select(array(
-				"name" => "range_select",
-				"options" => $opts,
-				"onchange" => "window.location=this.options[this.selectedIndex].value"
-			));
-			if (!$_fGET["range_from"])
-			{
-				$range_from = get_week_start($ranges[0]["from"]);
-				$range_to = $ranges[0]["to"];
-			}
-		}
-		else
-		{
-			if (!$_GET["range_from"])
-			{
-				$range_from = get_week_start($from);
-				$range_to = $range_from+(24*3600*7);
-			}
-		}
-
-		if ($_GET["range_from"])
-		{
-			$range_from = $_GET["range_from"];
-			$range_to = $_GET["range_to"];
-		}*/
 		// now, draw table for the active range
 		classload("vcl/table");
 		$t = new aw_table();
@@ -1172,7 +1133,8 @@ class spa_bookigs_entry extends class_base
 		$rooms = new object_list(array(
 			"class_id" => CL_ROOM,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
 		));
 		foreach($rooms->arr() as $room)
 		{
