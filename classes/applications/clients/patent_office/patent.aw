@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.41 2007/01/10 10:05:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.42 2007/01/11 10:01:48 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -414,7 +414,6 @@ class patent extends class_base
 			"caption" => t("Toode/teenus"),
 		));
 	
-		//arr($_SESSION["patent"]["applicants"]);
 		if(is_array($arr["obj_inst"]->meta("products")))
 		{
 			foreach($arr["obj_inst"]->meta("products") as $key=> $val)
@@ -428,7 +427,6 @@ class patent extends class_base
 	//				"oid"	=> $prod->id(),
 				));
 			}
-//			$_SESSION["patent"]["prod_selection"] = null;
 		}
 		return $t->draw();
 	}
@@ -799,7 +797,6 @@ class patent extends class_base
 		{
 			return $this->my_patent_list();//$this->mk_my_orb("my_patent_list", array());
 		}
-		
 		$tpl = $this->info_levels[$arr["data_type"]].".tpl";
 		$this->read_template($tpl);
 		lc_site_load("patent", &$this);
@@ -843,7 +840,6 @@ class patent extends class_base
 			return;
 		}
 		$adr = get_instance(CL_CRM_ADDRESS);
-	//	arr($_SESSION["patent"]);
 		$us = get_instance(CL_USER);
 		$this->users_person = new object($us->get_current_person());
 /* 		if(is_object($this->users_person))
@@ -1303,7 +1299,7 @@ class patent extends class_base
 			{
 				$data["SIGNED"] = $this->parse("SIGNED");
 			}
-			$data["sign_button"] = '<input type="button" value="Allkirjasta fail" class="nupp" onClick="aw_popup_scroll(\''.$url.'\', \''.t("Allkirjastamine").'\', 410, 250);">';
+			$data["sign_button"] = '<input type="button" value="Allkirjasta taotlus" class="nupp" onClick="aw_popup_scroll(\''.$url.'\', \''.t("Allkirjastamine").'\', 410, 250);">';
 		}
 		return $data;
 	}
@@ -1411,7 +1407,6 @@ class patent extends class_base
 		));
 	
 		$classes = array();
-		//arr($_SESSION["patent"]["applicants"]);
 		if(is_array($_SESSION["patent"]["prod_selection"]))
 		{
 			foreach($_SESSION["patent"]["prod_selection"] as $prod)
@@ -1469,8 +1464,6 @@ class patent extends class_base
 	**/
 	function find_products($arr)
 	{
-	//	arr($_GET["ru"]);
-		
 		if($_POST["do_post"])
 		{
 			$_SESSION["patent"]["prod_selection"] =  $_POST["oid"];
@@ -1544,7 +1537,6 @@ class patent extends class_base
 				return $this->parse();
 			}
 			
-			//arr($_SESSION["patent"]["applicants"]);
 			foreach($products->arr() as $prod)
 			{
 				$parent = obj($prod->parent());
@@ -1736,7 +1728,7 @@ class patent extends class_base
 		
 		$this->save_uploads($_FILES);
 		
-		if($_POST["save"])
+		if($_POST["save"] && $_POST["stay"])
 		{
 			$object_id = $this->save_data();
 		}
@@ -1758,6 +1750,25 @@ class patent extends class_base
 		{
 			if($_POST["save"])
 			{
+				if($_SESSION["patent"]["id"] && $_SESSION["patent"]["authoirized_person_code"] && $_GET["data_type"]==5)
+				{
+					$status = $this->is_signed($key);
+					if($status["status"] > 0)
+					{
+						$ddoc = obj($status["ddoc"]);
+						$codes = array();
+						foreach($ddoc->connections_from(array("type" => "RELTYPE_SIGNER")) as $key => $c)
+						{
+							$person = obj($c->to());
+							$codes[] = $person->prop("personal_id");
+						}
+						if(!in_array($_SESSION["patent"]["authoirized_person_code"] , $codes))//erineb 
+						{
+							$_SESSION["patent"]["errors"] = "Allkirjastama peab seaduslik esindaja";
+							return aw_url_change_var("trademark_id" , null , $arr["return_url"]);
+						}
+					}
+				}
 				$this->set_sent($arr);//muudab staatuse... või noh, tegelt poogib numbrti külge
 				$_SESSION["patent"] = null;
 			}
@@ -2244,7 +2255,6 @@ class patent extends class_base
 			$c = "";
 			foreach($obj_list->arr() as $key => $patent)
 			{
-	//			$url = $section."?trademark_id=".$patent->id();
 				$url = aw_url_change_var("trademark_id", $patent->id());
 				$url = aw_url_change_var("data_type", null , $url);
 				$this->vars(array(
