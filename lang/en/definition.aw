@@ -248,11 +248,6 @@ define("LC_FORM_CHANGE_FORM","Change form");
 define("LC_FORM_ALL_ELEMENTS","All elements");
 define("LC_FORM_CHANGE_SETTINGS","Change settings");
 define("LC_FORM_ALIASMGR","Alias manager");
-/*define("LC_FORM_INSERT_INO_FORM","insert into form_entries values($entry_id, $this->id, ");
-define("LC_FORM_FILLD_FORM","T&auml;itis formi $this->name");
-define("LC_FORM_CHANGED_FORM_ENTRY","Muutis formi $this->name sisestust $entry_id");
-define("LC_FORM_ERASED_FORM_ENTRY","Kustutas formi $this->name sisestuse $entry_id");
-define("LC_FORM_LOC","Location: $orb");*/
 define("LC_FORM_CHOOSE_LOOK_FORM","Choose searching forms");
 //define("LC_FORM_NO_FORMS_SELECTED","form->search($entry_id): no forms selected as search targets!");
 define("LC_FORM_NO_DABLE_SELECTED","No table selected for showing data!");
@@ -262,14 +257,11 @@ define("LC_FORM_ADDED_FORM","Added form $name");
 //define("LC_FORM_FORM_ENTRIES","form_%d_entries");
 define("LC_FORM_CHANGE_FORM_CHOOSE_EL_LOC","'>Change form</a> / Choose elements position");
 define("LC_FORM_METAINFO","Metainfo");
-/*define("LC_FORM_CAHNGED_FORM_METAINFO","Muutis formi $this->name metainfot");
-define("LC_FORM_ENTRIES_PRIMARY","_entries (id int primary key,chain_id int)");
-define("LC_FORM_DREATE_TABLE","CREATE TABLE form_");*/
 
 //form_actions.aw
 define("LC_FORM_ACTIONS_FORM_ACTIONS","Form actions");
 define("LC_FORM_ACTIONS_ADD_ACTIONS","'>Form actions</a> / Add action");
-define("LC_FORM_ACTIONS_CHANGED_ACTION","Changed forms $this->name action $name");
+define("LC_FORM_ACTIONS_CHANGED_ACTION","Changed forms %s action %s");
 define("LC_FORM_ACTIONS_ADDED_FORM_ACTIONS","Added to form $id action $name");
 define("LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION","'>Form actions</a> / Change action");
 
