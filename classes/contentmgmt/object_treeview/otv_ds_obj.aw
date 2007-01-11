@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.55 2007/01/10 12:58:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.56 2007/01/11 11:43:00 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -628,8 +628,22 @@ class otv_ds_obj extends class_base
 						}
 						else
 						{
-							$cur_filt[$filter['field']] = $filter_value;
-
+							// handle multiple filters on same field
+							if ($cur_filt[$filter['field']] != "" || is_array($cur_filt[$filter['field']]))
+							{
+								if (!is_array($cur_filt[$filter['field']]))
+								{
+									$cur_filt[$filter['field']] = array($cur_filt[$filter['field']]);
+								}
+								else
+								{
+									$cur_filt[$filter['field']][] = $filter_value;
+								}
+							}
+							else
+							{
+								$cur_filt[$filter['field']] = $filter_value;
+							}
 						}
 					}
 				}
