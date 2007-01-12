@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.21 2007/01/12 10:23:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.22 2007/01/12 10:49:56 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -58,27 +58,22 @@ class ddoc extends class_base
 			"tpldir" => "common/digidoc",
 			"clid" => CL_DDOC
 		));
-
-		// a temporary fix here.. i dont know how or where i'm gonna put the fucking conf file
-		//$loc = aw_ini_get("basedir")."/../public/vv_files/digidoctest/conf.php";
+		$this->digidoc = false;
+		/*
 		$loc = aw_ini_get("basedir")."/classes/common/digidoc/conf.php";
 		include_once($loc);
 
-		// total mess.. sick fuck, etc..
-		//classload("protocols/file/digidoc");
-		//classload("common/digidoc/ddoc_parser");
-		//include_once("/var/www/juurutus.epa.ee/public/vv_files/teine/digidoc2.aw");
 		include_once(aw_ini_get("basedir")."/classes/common/digidoc/ddoc_parser.aw");
 		include_once(aw_ini_get("basedir")."/classes/protocols/file/digidoc.aw");
 		digidoc::load_WSDL();
 		$this->digidoc = new digidoc(); //get_instance("protocols/file/digidoc");
+		*/
 	}
 
 	function do_init()
 	{
 		$loc = aw_ini_get("basedir")."/classes/common/digidoc/conf.php";
 		include_once($loc);
-
 		include_once(aw_ini_get("basedir")."/classes/common/digidoc/ddoc_parser.aw");
 		include_once(aw_ini_get("basedir")."/classes/protocols/file/digidoc.aw");
 		digidoc::load_WSDL();
@@ -99,6 +94,7 @@ class ddoc extends class_base
 						"oid" => $arr["obj_inst"]->id(),
 					)),
 				));
+				arr($_SESSION);
 				break;
 			case "files_tb":
 				$tb = &$prop["vcl_inst"];
@@ -317,16 +313,6 @@ class ddoc extends class_base
 					//$retval = PROP_IGNORE;
 				};
 				$this->_do_reset_ddoc($arr["obj_inst"]->id(), false);
-//arr($_SESSION["scode"]);
-				/*
-				$this->_start_ddoc_session($arr["obj_inst"]->id());
-				$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-				$ret = $this->digidoc->WSDL->GetSignedDocInfo();
-				arr("enne teist closet ja enne arri");
-				arr($ret);
-				arr($this->_close_ddoc_session());
-				*/
-				//$this->do_a_fucking_test($arr["obj_inst"]->id());
 				break;
 			case "ddoc_location":
 				$retval = PROP_IGNORE;
@@ -729,6 +715,10 @@ class ddoc extends class_base
 
 	function _s($oid = false)
 	{
+		if(!$this->digidoc)
+		{
+			$this->do_init();
+		}
 		$cont = $oid?$this->get_ddoc($oid):"";
 		$p = new ddoc2_parser($cont);
 		$ret = $this->digidoc->WSDL->StartSession($oid?$p->GetDigiDoc(LOCAL_FILES):"", TRUE, '');
@@ -1742,60 +1732,5 @@ class ddoc extends class_base
 		return true;
 	}
 
-
-
-	function do_a_fucking_test($id)
-	{
-		//digidoc::load_WSDL();
-		$dd = new digidoc();
-
-		$p = new ddoc2_parser($this->get_ddoc($id));
-		
-		$ret = $this->digidoc->WSDL->StartSession($p->GetDigiDoc(LOCAL_FILES), TRUE, ''); 
-		//$ret = $dd->WSDL->StartSession($p->GetDigiDoc(LOCAL_FILES), TRUE, ''); 
-		if(!PEAR::isError($ret))
-		{
-			$xml = $p->Parse($this->digidoc->WSDL->xml, 'body');
-			//$xml = $p->Parse($dd->WSDL->xml, 'body');
-			$_SESSION["scode"] = $xml["sesscode"];
-			$_SESSION["ddoc_name"] = $xml[$id];
-			// do dha test
-
-			$this->digidoc->addHeader("SessionCode", $_SESSION["scode"]);
-			$ret2 =  $this->digidoc->WSDL->GetSignedDocInfo();
-			//$dd->addHeader("SessionCode", $_SESSION["scode"]);
-			//$ret2 =  $dd->WSDL->GetSignedDocInfo();
-			if(!PEAR::isError($ret2))
-			{
-				arr($ret2);
-			}
-			else
-			{
-				arr($ret2->getMessage());
-			}
-		}
-		else
-		{
-			arr("error");
-		}
-	}
-	
-	/**
-		@attrib nologin=1 params=name name=get_ssl all_args=1
-	**/
-	function get_ssl($arr)
-	{
-		arr($arr);
-		//arr($_SERVER);
-		die();
-	}
-
-	/**
-		@attrib params=name name=fafa
-	**/
-	function fafa($arr)
-	{
-		die("ehh");
-	}
 }
 ?>
