@@ -448,11 +448,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 				}
 				else
+				if ($prop['type'] == 'range') // range support by dragut
+				{
+					$fields[] = $table.".`".$prop["field"]."_from` AS `".$prop["name"]."_from`";
+					$fields[] = $table.".`".$prop["field"]."_to` AS `".$prop["name"]."_to`";
+				}
+				else
 				{
 					$fields[] = $table.".`".$prop["field"]."` AS `".$prop["name"]."`";
 				}
 			}
-
 			if ($q != "")
 			{
 				return array();
@@ -2305,7 +2310,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// make list of uniq class_id's
 		$clids = array();
-		$cl2obj = array();	
+		$cl2obj = array();
 		foreach($to_fetch as $oid => $clid)
 		{
 			$clids[$clid] = $clid;
@@ -2350,6 +2355,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->db_query($sql["q"]);
 				while ($row = $this->db_next())
 				{
+					foreach ($this->properties as $property_name => $property_data)
+					{
+						if ($property_data['type'] == 'range')
+						{
+							$row[$property_name] = array(
+								"from" => $row[$property_name."_from"],
+								"to" => $row[$property_name."_to"],
+							);
+							unset($row[$property_name."_from"], $row[$property_name."_to"]);
+						}
+					}
 					$this->read_properties_data_cache[$row["oid"]] = $row;
 					$ret[] = $row;
 				}
@@ -2364,7 +2380,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}			
 		}
-
 		return $ret;
 	}
 
