@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.7 2006/11/21 14:12:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.8 2007/01/12 00:41:20 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -18,7 +18,7 @@
 	@property no_search_form type=checkbox ch_value=1 table=watercraft_search
 	@caption &Auml;ra kuva otsinguvormi
 
-	@property saved_searches type=text store=no
+	@property saved_search type=checkbox ch_value=1 table=watercraft_search
 	@caption Salvestatud otsing
 
 @groupinfo parameters caption="Parameetrid"
@@ -27,58 +27,69 @@
 	@property search_form_conf type=chooser orient=vertical multiple=1 field=meta method=serialize
 	@caption Otsinguvormis kuvatavad v&auml;ljad
 
-	property parameters_subtitle type=text store=no subtitle=1
-	caption Otsinguvormis kuvatavad v&auml;ljad
+@groupinfo search caption="Otsing"
+@default group=search
 
-	property watercraft_type type=checkbox ch_value=1 table=watercraft_search
-	caption Aluse t&uuml;&uuml;p
+	@property watercraft_type type=select table=watercraft_search
+	@caption Aluse t&uuml;&uuml;p
 
-	property condition type=checkbox ch_value=1 table=watercraft_search
-	caption Seisukord
+	@property condition type=select table=watercraft_search
+	@caption Seisukord
 
-	property body_material type=checkbox ch_value=1 table=watercraft_search
-	caption Kerematerjal
+	@property body_material type=select table=watercraft_search
+	@caption Kerematerjal
 
-	property location type=checkbox ch_value=1 table=watercraft_search
-	caption Asukoht
+	@property location type=select table=watercraft_search
+	@caption Asukoht
 
-	property length type=checkbox ch_value=1 table=watercraft_search
-	caption Pikkus
+	@property length type=range table=watercraft_search
+	@caption Pikkus
 
-	property width type=checkbox ch_value=1 table=watercraft_search
-	caption Laius
+	@property width type=range table=watercraft_search
+	@caption Laius
 
-	property height type=checkbox ch_value=1 table=watercraft_search
-	caption K&otilde;rgus
+	@property height type=range table=watercraft_search
+	@caption K&otilde;rgus
 
-	property weight type=checkbox ch_value=1 table=watercraft_search
-	caption Raskus
+	@property weight type=range table=watercraft_search
+	@caption Raskus
 
-	property draught type=checkbox ch_value=1 table=watercraft_search
-	caption S&uuml;vis
+	@property draught type=range table=watercraft_search
+	@caption S&uuml;vis
 
-	property creation_year type=checkbox ch_value=1 table=watercraft_search
-	caption Valmistamisaasta
+	@property creation_year type=range table=watercraft_search
+	@caption Valmistamisaasta
 
-	property passanger_count type=checkbox ch_value=1 table=watercraft_search
-	caption Reisijaid
+	@property passanger_count type=range table=watercraft_search 
+	@caption Reisijaid
 
-	property additional_equipment type=checkbox ch_value=1 table=watercraft_search
-	caption Lisavarustus
+	@property additional_equipment type=textbox size=20 table=watercraft_search
+	@caption Lisavarustus
 
-	property seller type=checkbox ch_value=1 table=watercraft_search
-	caption M&uuml;&uuml;ja
+	@property seller type=select table=watercraft_search
+	@caption M&uuml;&uuml;ja
 	
-	property price type=checkbox ch_value=1 table=watercraft_search
-	caption Hind
+	@property price type=range table=watercraft_search
+	@caption Hind
+
+	@property watercraft_search_submit type=submit no_caption=1
+	@caption Otsi
+
+	@property search_result_table type=table store=no
+	@caption Tulemused
 
 */
+
+define('SELLER_TYPE_PERSON', 145);
+define('SELLER_TYPE_COMPANY', 129);
 
 class watercraft_search extends class_base
 {
 
 	var $search_form_elements;
 	var $additional_equipment_elements;
+	var $watercraft_inst;
+	var $seller_type;
 
 	function watercraft_search()
 	{
@@ -130,6 +141,13 @@ class watercraft_search extends class_base
 			'water_tank' => t('Veepaak'),
 			'life_boat' => t('P&auml;&auml;stepaat'),
 		);
+
+		$this->seller_type = array(
+			SELLER_TYPE_PERSON => t('Eraisik'),
+			SELLER_TYPE_COMPANY => t('Firma')
+		);
+
+		$this->watercraft_inst = get_instance(CL_WATERCRAFT);
 	}
 
 	function get_property($arr)
@@ -153,7 +171,69 @@ class watercraft_search extends class_base
 			case 'search_form_conf':
 				$prop['options'] = $this->search_form_elements;
 				break;
+
+			case 'watercraft_type':
+				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->watercraft_type; 
+				$prop['selected'] = $arr['request']['watercraft_type'];
+				break;
+			case 'condition':
+				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->condition;
+				$prop['selected'] = $arr['request']['condition'];
+				break;
+			case 'body_material':
+				$prop['options'] = array(t('K&otilde;ik')) + $this->watercraft_inst->body_material;
+				$prop['selected'] = $arr['request']['body_material'];
+				break;
+			case 'location':
+				$prop['options'][0] = t('K&otilde;ik');
+
+				$watercraft_managements = $arr['obj_inst']->connections_to(array(
+					'from.class_id' => CL_WATERCRAFT_MANAGEMENT
+				));
+
+				$watercraft_management = reset($watercraft_managements);
+
+				$locations = new object_list(array(
+					'class_id' => CL_CRM_ADDRESS,
+					'parent' => $watercraft_management->prop('locations')
+				));
+				foreach ( $locations->arr() as $id => $location )
+				{
+					$prop['options'][$id] = $location->name();
+				}
+				$prop['selected'] = $arr['request']['location'];
+
+				break;
+			case 'length': 
+			case 'width':
+			case 'height':
+			case 'weight':
+			case 'draught':
+			case 'creation_year':
+			case 'passanger_count':
+			case 'price':
+				$range = &$prop['vcl_inst'];
+				$range->set_range($arr['request'][$prop['name']]);
+				
+				break;
+			case 'additional_equipment':
+				$prop['value'] = $arr['request']['additional_equipment'];
+				break;
+			case 'seller':
+				$prop['options'] = array(t('K&otilde;ik')) + $this->seller_type;
+				$prop['selected'] = $arr['request']['seller_type'];
+				break;
 		};
+
+		if ( array_key_exists( $prop['name'], $this->search_form_elements ) )
+		{
+			$search_form_conf = $arr['obj_inst']->prop('search_form_conf');
+			if ( !in_array( $prop['name'],  $search_form_conf) )
+			{
+				$retval = PROP_IGNORE;
+			}
+		}
+
 		return $retval;
 	}
 
@@ -168,6 +248,138 @@ class watercraft_search extends class_base
 		return $retval;
 	}	
 
+	function _get_search_result_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->set_caption(t('Otsingu tulemused'));
+
+		$t->define_chooser(array(
+			'name' => 'selected_ids',
+			'field' => 'select'
+		));
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi'),
+		));
+		$t->define_field(array(
+			'name' => 'type',
+			'caption' => t('T&uuml;&uuml;p')
+		));
+		$t->define_field(array(
+			'name' => 'manufacturer',
+			'caption' => t('Tootja')
+		));
+		$t->define_field(array(
+			'name' => 'brand',
+			'caption' => t('Mark')
+		));
+		$t->define_field(array(
+			'name' => 'location',
+			'caption' => t('Asukoht')
+		));
+		$t->define_field(array(
+			'name' => 'seller',
+			'caption' => t('M&uuml;&uuml;ja')
+		));
+		$t->define_field(array(
+			'name' => 'price',
+			'caption' => t('Hind')
+		));
+		$t->define_field(array(
+			'name' => 'visible',
+			'caption' => t('N&auml;htav'),
+			'align' => 'center',
+			'width' => '5%'
+		));
+		$t->define_field(array(
+			'name' => 'archive',
+			'caption' => t('Arhiivis'),
+			'align' => 'center',
+			'width' => '5%'
+		));
+
+		$property_data = $arr['obj_inst']->get_property_list();
+		$properties = $arr['obj_inst']->properties();
+
+		$search_params = array();
+		foreach ($property_data as $property)
+		{
+			if ($property['group'] == 'search' && !empty($properties[$property['name']]))
+			{
+				$search_params[$property['name']] = $properties[$property['name']];
+			}
+		}
+
+		$items  = $this->search(array(
+			'obj_inst' => $arr['obj_inst'],
+			'request' => $search_params
+		));
+
+		foreach ($items->arr() as $id => $item)
+		{
+			$name_str = html::href(array(
+				'url' => $this->mk_my_orb('change', array(
+					'id' => $id,
+					'return_url' => get_ru()
+				), CL_WATERCRAFT),
+				'caption' => $item->name()
+			));
+
+			$manufacturer_str = '';
+			$manufacturer_oid = $item->prop('manufacturer');
+			if ($this->can('view', $manufacturer_oid))
+			{
+				$manufacturer = new object($manufacturer_oid);
+				$manufacturer_str = html::href(array(
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $manufacturer_oid,
+						'return_url' => get_ru()
+					), CL_CRM_COMPANY),
+					'caption' => $manufacturer->name()
+				));
+			}
+			$location_str = '';
+			$location = $item->prop('location');
+			if ($this->can('view', $location))
+			{
+				$location = new object($location);
+				$location_str = $location->name();
+			}
+			else
+			{
+				$location_str = $item->prop('location_other');
+			}
+
+			$seller_str = "";
+			$seller = $item->prop('seller');
+			if ($this->can('view', $seller))
+			{
+				$seller = new object($seller);
+				$seller_str = html::href(array(
+					'caption' => $seller->name(),
+					'url' => $this->mk_my_orb('change', array('id' => $seller->id()), $seller->class_id())
+				));
+			}
+			$t->define_data(array(
+				'select' => $id,
+				'name' => $name_str,
+				'type' => $this->item_inst->item_type[$item->prop('item_type')],
+				'manufacturer' => $manufacturer_str,
+				'brand' => $item->prop('brand'),
+				'location' => $location_str,
+				'seller' => $seller_str,
+				'price' => $item->prop('price'),
+				'visible' => ($item->prop('visible') == 1) ? t('Jah') : t('Ei'),
+				'archive' => ($item->prop('archived') == 1) ? t('Jah') : t('Ei'),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
@@ -177,24 +389,219 @@ class watercraft_search extends class_base
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
 
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
+	/**
+		@attrib name=show nologin="1" all_args="1"
+	**/
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
+		$obj = new object($arr["id"]);
+
+		$active_page = (int)$_GET['page'];
+		$results_on_page = $obj->prop('results_on_page');
+		$max_results = $obj->prop('max_results');
+
 		$this->read_template("show.tpl");
+
+		$do_search = false;
+		if ($_GET['do_search'] == 1)
+		{
+			$do_search = true;
+		}
+
+		if ($obj->prop('no_search_form') == 1)
+		{
+			$search_form_str = '';
+		}
+		else
+		{
+			$this->vars(array(
+				 'search_form' => $this->draw_search_form(array(
+					'ob' => $obj
+				)),
+			));
+			$search_form_str = $this->parse('SEARCH_FORM_BOX');
+		}
+
+		$search_params = array();
+		if ($obj->prop('saved_search') == 1)
+		{
+			$property_data = $obj->get_property_list();
+			$properties = $obj->properties();
+			foreach ($property_data as $property)
+			{
+				if ($property['group'] == 'search')
+				{
+					$search_params[$property['name']] = $properties[$property['name']];
+				}
+			}
+			$do_search = true;
+		}
+		else
+		{
+			$search_params = $_GET;
+		}
+
+		if ($do_search === true)
+		{
+			$items_ol = $this->search(array(
+				'obj_inst' => $obj,
+				'request' => $search_params,
+				'limit' => $max_results
+			));
+			
+			$items = $items_ol->arr();
+
+			$items = array_slice($items, ($active_page * $results_on_page), $results_on_page);
+
+			$items_str = '';
+			foreach ($items as $item)
+			{
+				$properties = array();
+				foreach ($item->properties() as $name => $value)
+				{
+					$properties['watercraft_'.$name] = $value;
+				}
+				$this->vars($properties);
+				$items_str .= $this->parse('SEARCH_RESULT_ITEM');
+			}
+
+			$this->vars(array(
+				'SEARCH_RESULT_ITEM' => $items_str
+			));
+
+			$search_results = $this->parse('SEARCH_RESULTS');
+
+			$pages_str = $this->draw_page_selector(array(
+				'obj_inst' => $obj,
+				'items_count' => $items_ol->count(),
+				'active_page' => $active_page,
+				'results_on_page' => $results_on_page
+			));
+		}
+
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+			'SEARCH_FORM_BOX' => $search_form_str,
+			'SEARCH_RESULTS' => $search_results,
+			'PAGES' => $pages_str,
+			'name' => $obj->prop('name'),
 		));
 		return $this->parse();
 	}
 
-	// searches the watercrafts
+	function draw_page_selector($arr)
+	{
+		$page_count = ((int)$arr['items_count'] / (int)$arr['results_on_page']);
+		for ($i = 0; $i < $page_count; $i++)
+		{
+			$this->vars(array(
+				'page_url' => aw_url_change_var('page', $i),
+				'page_num' => ($i + 1)
+			));
+			if ($arr['active_page'] == $i)
+			{
+				$pages_str .= $this->parse('SEL_PAGE');
+			}
+			else
+			{
+				$pages_str .= $this->parse('PAGE');
+			}
+		}
+
+		$this->vars(array(
+			'PAGE' => $pages_str
+		));
+		return $this->parse('PAGES');
+	}
+
+	function draw_search_form($arr)
+	{
+		$ob = $arr['ob'];
+		classload('cfg/htmlclient');
+		$htmlclient = new htmlclient(array(
+			'tpldir' => 'applications/watercraft_management/watercraft_search',
+			'template' => 'search_form.tpl'
+		));
+		$htmlclient->start_output();
+		$watercraft_search_inst = $ob->instance();
+		$range_vcl_inst = get_instance('vcl/range');
+
+		foreach ($ob->get_property_list() as $property)
+		{
+
+			if ($property['group'] == 'search' && $property['type'] != 'table')
+			{
+
+				if ($property['type'] == 'range')
+				{
+			
+			
+					$property = $range_vcl_inst->init_vcl_property(array(
+						'property' => $property,
+						'obj_inst' => $ob
+					));
+					$property = reset($property);
+
+					if ($ob->prop('saved_search') != 1)
+					{
+						// as the init_vcl_property sets the property value too for range,
+						// then i need to reset it when the search is not saved search to 
+						// prevent the saved search values appear in the form -dragut
+						$property['vcl_inst']->set_range(array(
+							'from' => '', 
+							'to' => ''
+						));
+					}
+				//	$property['vcl_inst'] = $range_vcl_inst;
+				}
+
+				$retval = $watercraft_search_inst->get_property(array(
+					'prop' => &$property,
+					'obj_inst' => &$ob,
+					'request' => ($ob->prop('saved_search') == 1) ? $ob->properties() : $_GET
+				));
+
+				if ($retval === PROP_OK)
+				{
+					$htmlclient->add_property($property);
+				}
+			}
+		}
+
+		$htmlclient->finish_output(array(
+			"data" => array(
+				"class" => "",
+				"section" => aw_global_get("section"),
+				"action" => "show",
+				"id" => $ob->id(),
+				"alias" => "event_search",
+				"do_search" => 1
+			),
+			"method" => "get",
+			"form_handler" => aw_ini_get("baseurl")."/".aw_global_get("section"),
+			"submit" => "no"
+		));
+
+		return $htmlclient->get_result();
+	}
+
 	function search($arr)
 	{
+		if (empty($arr['obj_inst']))
+		{
+			$arr['obj_inst'] = new object($arr['id']);
+		}
+
+
 		$filter = array(
 			'class_id' => CL_WATERCRAFT,
-			'parent' => $arr['obj_inst']->prop('data')
+			'parent' => $arr['obj_inst']->prop('data'),
 		);
+
+		if (!empty($arr['limit']))
+		{
+			$filter['limit'] = (int)$arr['limit'];
+		}
+
 		foreach ($this->search_form_elements as $name => $caption)
 		{
 			// if it is range:
@@ -288,7 +695,38 @@ class watercraft_search extends class_base
 	{
 		if (empty($field))
 		{
-			$this->db_query('CREATE TABLE '.$table.' (oid INT PRIMARY KEY NOT NULL)');
+			$this->db_query('CREATE TABLE '.$table.' (
+				oid INT PRIMARY KEY NOT NULL,
+
+				results_on_page int,
+				max_results int,
+				no_search_form int,
+				save_search int,
+				watercraft_type int,
+				condition int,
+				body_material int,
+				location int,
+				length_from int,
+				length_to int,
+				width_from int,
+				width_to int,
+				height_from int,
+				height_to int,
+				weight_from int,
+				weight_to int,
+				draught_from int,
+				draught_to int,
+				creation_year_from int,
+				creation_year_to int,
+				passanger_count_from int,
+				passanger_count_to int,
+				seller int,
+				price_from int,
+				price_to int
+
+				additional_equipment varchar(255),
+
+			)');
 			return true;
 		}
 
@@ -297,9 +735,45 @@ class watercraft_search extends class_base
 			case 'results_on_page':
 			case 'max_results':
 			case 'no_search_form':
+			case 'saved_search':
+			case 'watercraft_type':
+			case 'condition':
+			case 'body_material':
+			case 'location':
+			case 'length':
+			case 'length_from':
+			case 'length_to':
+			case 'width':
+			case 'width_from':
+			case 'width_to':
+			case 'height':
+			case 'height_from':
+			case 'height_to':
+			case 'weight':
+			case 'weight_from':
+			case 'weight_to':
+			case 'draught':
+			case 'draught_from':
+			case 'draught_to':
+			case 'creation_year':
+			case 'creation_year_from':
+			case 'creation_year_to':
+			case 'passanger_count':
+			case 'passanger_count_from':
+			case 'passanger_count_to':
+			case 'seller':
+			case 'price':
+			case 'price_from':
+			case 'price_to':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
+				));
+                                return true;
+			case 'additional_equipment':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'varchar(255)'
 				));
                                 return true;
                 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.4 2006/12/04 16:16:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.5 2007/01/12 00:41:20 dragut Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -255,6 +255,8 @@ class watercraft_add extends class_base
 		$page = (int)$_GET['page'];
 		$vars = array();
 
+
+		// if the watercraft id is set in the url, then we should load that watercraft obj. 
 		if ($this->can('view', $_SESSION['watercraft_input_data']['watercraft_id']))
 		{
 			$watercraft_obj = new object($_SESSION['watercraft_input_data']['watercraft_id']);

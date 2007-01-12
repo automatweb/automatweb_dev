@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.8 2006/11/21 14:12:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.9 2007/01/12 00:41:20 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -147,7 +147,7 @@
 	@property sail_table type=table
 	@caption Purjed
 
-	@property sail_info type=textarea rows=10 cols=80 table=watercraft
+	@property sail_info type=textarea rows=10 cols=60 table=watercraft
 	@caption Lisainfo
 
 @groupinfo additional_equipment caption="Lisavarustus"
@@ -563,6 +563,7 @@ class watercraft extends class_base
 			MAST_MATERIAL_OTHER => t('Muu materjal'),
 		);
 	}
+
 
 	function get_property($arr)
 	{
