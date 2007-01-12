@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.20 2007/01/05 10:27:15 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.21 2007/01/12 10:23:21 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -74,19 +74,23 @@ class ddoc extends class_base
 		$this->digidoc = new digidoc(); //get_instance("protocols/file/digidoc");
 	}
 
+	function do_init()
+	{
+		$loc = aw_ini_get("basedir")."/classes/common/digidoc/conf.php";
+		include_once($loc);
+
+		include_once(aw_ini_get("basedir")."/classes/common/digidoc/ddoc_parser.aw");
+		include_once(aw_ini_get("basedir")."/classes/protocols/file/digidoc.aw");
+		digidoc::load_WSDL();
+		$this->digidoc = new digidoc();
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "baba":
-				$prop["onclick"] = "alert(45);";
-				break;
-				break;
-			case "submit":
-				$prop["onclick"] = "alert(55);";
-				break;
 			//-- get_property --//
 			case "name":
 				$prop["value"] = html::href(array(
@@ -183,6 +187,7 @@ class ddoc extends class_base
 				
 				break;
 			case "signatures_tbl":
+				dbg::p1("!");
 				$t = &$prop["vcl_inst"];
 				$t->define_chooser(array(
 					"name" => "sel",
@@ -704,12 +709,17 @@ class ddoc extends class_base
 	function raise($msg, $halt = true)
 	{
 		$this->read_template("error.tpl");
-		$this->vars(array(
-			"msg" => $msg,
-		));
+		$msgs = is_array($msg)?$msg:array($msg);
+		foreach($msgs as $msg)
+		{
+			$this->vars(array(
+				"msg" => $msg,
+			));
+			$output .= $this->parse("ERROR");
+		}
 		if($halt)
 		{
-			die($this->parse("ERROR"));
+			die($output);
 		}
 		else
 		{
@@ -1306,6 +1316,11 @@ class ddoc extends class_base
 		@param ddoc_oid
 		@param file_oid
 		@param doc_oid
+		@param check optional type=array
+			array(
+				personal_id,
+			)
+			if these are'nt correct signing will not be allowed
 	**/
 	function sign($arr)
 	{
@@ -1482,9 +1497,11 @@ class ddoc extends class_base
 				// chekking preparation results
 				if(PEAR::isError($ret))
 				{
-					error::raise(array(
-						"msg" => t("preparation step chrashed: ".$ret->getMessage()),
-					));
+					$err = array(
+						t("Allkirjastamise ettevalmistusetapp eba&otilde;nnestus! Palun proovige uuesti!"),
+						sprintf(t("T&auml;psem veateade: %s"), $ret->getMessage()),
+					);
+					$this->raise($err);
 				}
 				else
 				{
@@ -1517,7 +1534,11 @@ class ddoc extends class_base
 				$ret = $this->digidoc->WSDL->FinalizeSignature($arr["signatureId"], $arr["signValueHex"]);
 				if(PEAR::isError($ret))
 				{
-					die("finalize step made a mess!: ".$ret->getMessage());
+					$err = array(
+						t("Allkirjastamise l&otilde;puetapp eba&otilde;nnestus! Palun proovige uuesti."),
+						sprintf(t("T&auml;psem veateade: %s"), $ret->getMessage()),
+					);
+					$this->raise($err);
 				}
 				else
 				{
@@ -1525,17 +1546,21 @@ class ddoc extends class_base
 					$ret = $this->digidoc->WSDL->GetSignedDoc();
 					if(PEAR::isError($ret))
 					{
-						error::raise(array(
-							"msg" => t("Allkirjastatud digidoc konteineri saamine eba&otilde;nnestus:".$ret->getMessage()),
-						));
+						$err = array(
+							t("Allkirjastatud digidoc konteineri saamine eba&otilde;nnestus."),
+							sprintf(t("T&auml;psem veateade: %s"), $ret->getMessage()),
+						);
+						$this->raise($err);
 					}
 					$p = new ddoc2_parser($ret["SignedDocData"]);
 					$content = $p->getDigiDoc();
 					if(!$this->set_ddoc($ddoc_oid, $content, true))
 					{
-						error::raise(array(
-							"msg" => t("DigiDoc konteineri sisu m&auml;&auml;ramine eba&otilde;nnestus"),
-						));
+						$err = array(
+							t("DigiDoc konteineri sisu m&auml;&auml;ramine eba&otilde;nnestus"),
+							sprintf(t("T&auml;psem veateade: %s"), $ret->getMessage()),
+						);
+						$this->raise($err);
 					}
 
 					/*
@@ -1753,6 +1778,24 @@ class ddoc extends class_base
 		{
 			arr("error");
 		}
+	}
+	
+	/**
+		@attrib nologin=1 params=name name=get_ssl all_args=1
+	**/
+	function get_ssl($arr)
+	{
+		arr($arr);
+		//arr($_SERVER);
+		die();
+	}
+
+	/**
+		@attrib params=name name=fafa
+	**/
+	function fafa($arr)
+	{
+		die("ehh");
 	}
 }
 ?>
