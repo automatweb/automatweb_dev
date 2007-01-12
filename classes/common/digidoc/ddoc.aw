@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.22 2007/01/12 10:49:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.23 2007/01/12 11:01:22 tarvo Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -68,6 +68,7 @@ class ddoc extends class_base
 		digidoc::load_WSDL();
 		$this->digidoc = new digidoc(); //get_instance("protocols/file/digidoc");
 		*/
+
 	}
 
 	function do_init()
@@ -94,7 +95,6 @@ class ddoc extends class_base
 						"oid" => $arr["obj_inst"]->id(),
 					)),
 				));
-				arr($_SESSION);
 				break;
 			case "files_tb":
 				$tb = &$prop["vcl_inst"];
@@ -1314,6 +1314,9 @@ class ddoc extends class_base
 	**/
 	function sign($arr)
 	{
+		// this do_init() is here because usually does this $this->_s() but in signing _s() is called only in prepare stadium
+		$this->do_init();
+
 		/*
 			siin peaks siis olema k6igepealt paramite kontroll.
 			Siis peaks PREPARE staadiumis (kui on tegemist aw faili v6i aw docuga) tegema ddoc faili.
