@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.8 2007/01/12 00:41:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.9 2007/01/12 11:53:02 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -397,8 +397,8 @@ class watercraft_search extends class_base
 		$obj = new object($arr["id"]);
 
 		$active_page = (int)$_GET['page'];
-		$results_on_page = $obj->prop('results_on_page');
-		$max_results = $obj->prop('max_results');
+		$results_on_page = (int)$obj->prop('results_on_page');
+		$max_results = (int)$obj->prop('max_results');
 
 		$this->read_template("show.tpl");
 
@@ -448,7 +448,12 @@ class watercraft_search extends class_base
 				'request' => $search_params,
 				'limit' => $max_results
 			));
-			
+			$items_count = $items_ol->count();
+			$items = $this->search(array(
+				'obj_inst' => $obj,
+				'request' => $search_params,
+				'limit' => ($active_page * $results_on_page), $results_on_page
+			));
 			$items = $items_ol->arr();
 
 			$items = array_slice($items, ($active_page * $results_on_page), $results_on_page);
@@ -507,8 +512,28 @@ class watercraft_search extends class_base
 			}
 		}
 
+		$prev_page_link = '';
+		if (!empty($arr['active_page']))
+		{
+			$this->vars(array(
+				'prev_page_url' => aw_url_change_var( 'page', ($arr['active_page'] - 1) ),
+			));
+			$prev_page_link = $this->parse('PREV_PAGE');
+		}
+
+		$next_page_link = '';
+		if (($arr['active_page'] + 1) < $page_count )
+		{
+			$this->vars(array(
+				'next_page_url' => aw_url_change_var( 'page', ($arr['active_page'] + 1) ),
+			));
+			$next_page_link = $this->parse('NEXT_PAGE');
+		}
+
 		$this->vars(array(
-			'PAGE' => $pages_str
+			'PAGE' => $pages_str,
+			'PREV_PAGE' => $prev_page_link,
+			'NEXT_PAGE' => $next_page_link
 		));
 		return $this->parse('PAGES');
 	}
@@ -599,7 +624,7 @@ class watercraft_search extends class_base
 
 		if (!empty($arr['limit']))
 		{
-			$filter['limit'] = (int)$arr['limit'];
+			$filter['limit'] = $arr['limit'];
 		}
 
 		foreach ($this->search_form_elements as $name => $caption)
