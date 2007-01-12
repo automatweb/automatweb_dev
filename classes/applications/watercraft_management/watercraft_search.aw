@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.9 2007/01/12 11:53:02 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.10 2007/01/12 12:01:16 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -449,17 +449,15 @@ class watercraft_search extends class_base
 				'limit' => $max_results
 			));
 			$items_count = $items_ol->count();
+
 			$items = $this->search(array(
 				'obj_inst' => $obj,
 				'request' => $search_params,
-				'limit' => ($active_page * $results_on_page), $results_on_page
+				'limit' => ($active_page * $results_on_page).', '.$results_on_page
 			));
-			$items = $items_ol->arr();
-
-			$items = array_slice($items, ($active_page * $results_on_page), $results_on_page);
 
 			$items_str = '';
-			foreach ($items as $item)
+			foreach ($items->arr() as $item)
 			{
 				$properties = array();
 				foreach ($item->properties() as $name => $value)
@@ -478,7 +476,7 @@ class watercraft_search extends class_base
 
 			$pages_str = $this->draw_page_selector(array(
 				'obj_inst' => $obj,
-				'items_count' => $items_ol->count(),
+				'items_count' => $items_count,
 				'active_page' => $active_page,
 				'results_on_page' => $results_on_page
 			));
