@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.7 2007/01/08 14:52:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.8 2007/01/12 13:39:48 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property owner type=relpicker reltype=RELTYPE_OWNER field=meta method=serialize
 	@caption Omanik
+
+	@property groups type=relpicker reltype=RELTYPE_GROUP field=meta method=serialize multiple=1
+	@caption Kasutajagrupid
 
 @default group=rooms
 
@@ -53,6 +56,9 @@
 
 @reltype OWNER value=2 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Omanik
+
+@reltype GROUP value=3 clid=CL_GROUP
+@caption Kasutajagrupp
 
 */
 
@@ -317,6 +323,32 @@ class spa_bookings_overview extends class_base
 			"img" => "icon_cal_today.gif",
 			"onClick" => "vals='';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};aw_popup_scroll('$url'+vals,'mulcal',700,500);return false;",
 		));
+
+		$tb->add_menu_button(array(
+			"name" => "print",
+			"img" => "print.gif",
+		));
+				
+		$tb->add_sub_menu(array(
+			"parent" => "print",
+			"name" => "p_all_g",
+			"text" => t("K&otilde;ik"),
+		));
+
+		// add yesterday/today/tomorrow subs
+		$this->_add_day_subs($tb, "p_all_g", null);
+
+		foreach(safe_array($arr["obj_inst"]->prop("groups")) as $grp_id)
+		{
+			$go = obj($grp_id);
+			$tb->add_sub_menu(array(
+				"parent" => "print",
+				"text" => $go->name(),
+				"name" => "g_".$grp_id
+			));
+			$this->_add_day_subs($tb, "g_".$grp_id , $grp_id);
+		}
+
 	}
 
 	/**
@@ -359,6 +391,37 @@ class spa_bookings_overview extends class_base
 					"prop" => $p,
 					"obj_inst" => obj($room_id)
 				));
+
+				$toolbar->add_menu_button(array(
+					"name" => "print",
+					"img" => "print.gif",
+				));
+				
+				$toolbar->add_menu_item(array(
+					"parent" => "print",
+					"text" => t("K&otilde;ik"),
+					"link" => $this->mk_my_orb("room_booking_printer", array(
+						"rooms" => $r_ol->ids(),
+						"from" => $_GET["start"],
+						"to" => $_GET["end"]
+					))
+				));
+				$oo = obj($arr["id"]);
+				foreach(safe_array($oo->prop("groups")) as $grp_id)
+				{
+					$go = obj($grp_id);
+					$toolbar->add_menu_item(array(
+						"parent" => "print",
+						"text" => $go->name(),
+						"link" => $this->mk_my_orb("room_booking_printer", array(
+							"rooms" => $r_ol->ids(),
+							"from" => $_GET["start"],
+							"to" => $_GET["end"],
+							"group" => $grp_id
+						))
+					));
+				}
+				
 
 				$this->vars(array(
 					"toolbar" => $toolbar->get_toolbar(),
@@ -438,6 +501,133 @@ class spa_bookings_overview extends class_base
 		}
 		$ri = get_instance(CL_ROOM);
 		return $ri->do_add_reservation($arr);
+	}
+
+	/**
+		@attrib name=room_booking_printer
+		@param rooms required
+		@param from optional
+		@param to optional
+		@param group optional
+	**/
+	function room_booking_printer($arr)
+	{
+		$this->read_any_template("booking_printer.tpl");
+
+		// get all the bookings for the given rooms in the given timespan and group if set
+
+		$days = ($arr["to"] - $arr["from"]) / (24 * 3600);
+
+		if (!is_array($arr["rooms"]))
+		{
+			$arr["rooms"] = explode(",", $arr["rooms"]);
+		}
+
+		$r_inst = get_instance(CL_RESERVATION);
+		$rs = "";
+		foreach(safe_array($arr["rooms"]) as $room_id)
+		{
+			if (!$this->can("view", $room_id))
+			{
+				continue;
+			}
+			$ro = obj($room_id);
+			$day_str = "";
+			for($day = 0; $day < $days; $day++)
+			{
+				$from = $arr["from"] + ($day * 24*3600);
+				$to = $from+(24*3600);
+				$ft = array(
+					"class_id" => CL_RESERVATION,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"resource" => $room_id,
+					new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to))
+				);			
+				if ($arr["group"])
+				{
+					// get group members
+					$g = get_instance(CL_GROUP);
+					$users = $g->get_group_members(obj($arr["group"]));
+					$ft["createdby"] = array();
+					foreach($users as $user)
+					{
+						$ft["createdby"][] = $user->prop("uid");
+					}
+				}
+				$books = "";
+				$reservation_ol = new object_list($ft);
+				foreach($reservation_ol->arr() as $r)
+				{
+					$this->vars(array(
+						"time_from" => date("H:i", $r->prop("start1")),
+						"time_to" => date("H:i", $r->prop("end")),
+						"customer" => $r->prop("customer.name"),
+						"products" => $r_inst->get_products_text($r, " ")
+					));
+					$books .= $this->parse("BOOKING");
+				}
+				
+				if ($books != "")
+				{
+					$this->vars(array(
+						"BOOKING" => $books,
+						"date" => date("d.m.Y", $from)
+					));
+					$day_str .= $this->parse("DAY");
+				}
+			}
+
+			$this->vars(array(
+				"DAY" => $day_str,
+				"room_name" => $ro->trans_get_val("name"),
+				"date_from" => date("d.m.Y", $arr["from"]),
+				"date_to" => date("d.m.Y", $arr["to"]),
+			));
+			$rs .= $this->parse("ROOM");
+		}
+
+		$this->vars(array(
+			"ROOM" => $rs
+		));
+
+		return $this->parse();
+	}
+
+	function _add_day_subs(&$tb, $pt, $grp)
+	{
+		$link = $this->mk_my_orb("room_booking_printer", array(
+			"from" => get_day_start()-24*3600,
+			"to" => get_day_start(),
+			"group" => $grp
+		));
+		$tb->add_menu_item(array(
+			"parent" => $pt,
+			"text" => t("Eile"),
+			"onClick" => "vals='&rooms=';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};aw_popup_scroll('$link'+vals,'mulcal',700,500);return false;",
+		));
+
+		$link = $this->mk_my_orb("room_booking_printer", array(
+			"from" => get_day_start(),
+			"to" => get_day_start()+24*3600,
+			"group" => $grp
+		));
+		$tb->add_menu_item(array(
+			"parent" => $pt,
+			"text" => t("T&auml;na"),
+			"onClick" => "vals='&rooms=';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};aw_popup_scroll('$link'+vals,'mulcal',700,500);return false;",
+		));
+
+		$link = $this->mk_my_orb("room_booking_printer", array(
+			"from" => get_day_start()+24*3600,
+			"to" => get_day_start()+24*3600+24*3600,
+			"group" => $grp
+		));
+		$tb->add_menu_item(array(
+			"parent" => $pt,
+			"text" => t("Homme"),
+			"onClick" => "vals='&rooms=';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};aw_popup_scroll('$link'+vals,'mulcal',700,500);return false;",
+		));
 	}
 }
 ?>
