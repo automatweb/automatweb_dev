@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.9 2007/01/08 13:19:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.10 2007/01/12 10:12:14 kristo Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -110,7 +110,10 @@ class trademark_manager extends class_base
 				$prop["value"] = $search_data[$prop["name"]];
 				break;	
 			case "exp_link":
-				$prop["value"] = html::href(array("url" => "www.delfi.ru" , "caption" => t("EKSPORDI!")));
+				$prop["value"] = html::href(array(
+					"url" =>  $this->mk_my_orb("nightly_export"), 
+					"caption" => t("EKSPORDI!")
+				));
 				
 			//-- get_property --//
 		};
@@ -392,7 +395,7 @@ class trademark_manager extends class_base
 		
 		$t->define_field(array(
 			"name" => "date",
-			"caption" => t("Esitamise kuup&aumlev"),
+			"caption" => t("Esitamise kuup&auml;ev"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -536,6 +539,7 @@ class trademark_manager extends class_base
 			"class_id" => CL_PATENT,
 			"lang_id" => array(),
 			"site_id" => array(),
+			"verified" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
 		));
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
 		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
@@ -614,12 +618,12 @@ class trademark_manager extends class_base
 				$type = strtoupper(substr($im->name(), strrpos($im->name(), ".")));
 
 				$fld = aw_ini_get("site_basedir")."/patent_files/";
-				$fn = $fld .sprintf("%08d", $o->prop("convention_nr")).".".$type;
-				echo "saving image $fn <br>";
-				$image_inst = get_instance(CL_IMAGE);
-				$imd = $image_inst->get_image_by_id($im->id());
+				$fn = $fld .sprintf("%08d", $o->prop("nr")).$type;
+				echo "saving file $fn <br>";
+				$image_inst = get_instance(CL_FILE);
+				$imd = $image_inst->get_file_by_id($im->id(), true);
 				$f = fopen($fn ,"w");
-				fwrite($f, file_get_contents($imd["file"]));
+				fwrite($f, $imd["content"]);
 				fclose($f);
 				$xml .= "\t\t<IMAGENAME=\"".sprintf("%08d", $o->prop("nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
 				}
@@ -631,11 +635,25 @@ class trademark_manager extends class_base
 				$xml .= "\t\t<TYPMARI>".($o->prop("trademark_type") == 0 ? "C" : "G")."</TYPMARI>\n";
 
 				$xml .= "\t\t<MARDESGR>\n";
-					$xml .= "\t\t\t<MARDESEN><![CDATA[".$o->prop("trademark_character")."]]></MARDESEN>\n";
+					if ($o->prop("trademark_character") == "")
+					{
+						$xml .= "\t\t\t<MARDESEN></MARDESEN>\n";
+					}
+					else
+					{
+						$xml .= "\t\t\t<MARDESEN><![CDATA[".$o->prop("trademark_character")."]]></MARDESEN>\n";
+					}
 				$xml .= "\t\t</MARDESGR>\n";
 
 				$xml .= "\t\t<DISCLAIMGR>\n";
-					$xml .= "\t\t\t<DISCLAIMEREN><![CDATA[".$o->prop("undefended_parts")."]]></DISCLAIMEREN>\n";
+					if ($o->prop("undefended_parts") == "")
+					{
+						$xml .= "\t\t\t<DISCLAIMEREN></DISCLAIMEREN>\n";
+					}
+					else
+					{
+						$xml .= "\t\t\t<DISCLAIMEREN><![CDATA[".$o->prop("undefended_parts")."]]></DISCLAIMEREN>\n";
+					}
 				$xml .= "\t\t</DISCLAIMGR>\n";
 
 				if ($o->prop("colors") != "")
@@ -649,18 +667,38 @@ class trademark_manager extends class_base
 				}
 
 				$xml .= "\t\t<COLCLAGR>\n";
-					$xml .= "\t\t\t<COLCLAEN><![CDATA[".$o->prop("colors")."]]></COLCLAEN>\n";
+					if ($o->prop("colors") == "")
+					{
+						$xml .= "\t\t\t<COLCLAEN></COLCLAEN>\n";
+					}
+					else
+					{
+						$xml .= "\t\t\t<COLCLAEN><![CDATA[".$o->prop("colors")."]]></COLCLAEN>\n";
+					}
 				$xml .= "\t\t</COLCLAGR>\n";
 
 				$xml .= "\t\t<BASICGS NICEVER=\"9\">\n";
 
 					foreach(safe_array($o->meta("products")) as $k => $v)
 					{
-						$prod = obj($k);
-						$parent = obj($prod->parent());
-						$xml .= "\t\t\t<GSGR NICCLAI=\"".$parent->comment()."\">\n";
-							$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".$val."]]></GSTERMEN>\n";
-						$xml .= "\t\t\t</GSGR>\n";
+						if ($this->can("view", $k))
+						{
+							$prod = obj($k);
+							if ($this->can("view", $prod->parent()))
+							{
+								$parent = obj($prod->parent());
+								$xml .= "\t\t\t<GSGR NICCLAI=\"".$parent->comment()."\">\n";
+									if ($val == "")
+									{
+										$xml .= "\t\t\t\t<GSTERMEN></GSTERMEN>\n";
+									}
+									else
+									{
+										$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".$val."]]></GSTERMEN>\n";
+									}
+								$xml .= "\t\t\t</GSGR>\n";
+							}
+						}
 					}
 				$xml .= "\t\t</BASICGS>\n";
 
