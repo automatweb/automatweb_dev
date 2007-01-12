@@ -23,7 +23,7 @@
 </table>
 <!-- END SUB: SEARCH_RESULTS -->
 <!-- SUB: PAGES -->
-<div style="border:2px solid red;">
+<p>
 	<!-- SUB: PREV_PAGE -->
 		<a href="{VAR:prev_page_url}">Eelmine leht</a>
 	<!-- END SUB: PREV_PAGE -->
@@ -39,5 +39,5 @@
 	<!-- SUB: NEXT_PAGE -->
 		<a href="{VAR:next_page_url}">J&auml;rgmine leht</a>
 	<!-- END SUB: NEXT_PAGE -->
-</div>
+</p>
 <!-- END SUB: PAGES -->
