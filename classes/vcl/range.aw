@@ -24,8 +24,7 @@ class range extends class_base
 
 	function init_vcl_property($arr)
 	{
-
-		$saved_value = $arr['obj_inst']->prop($arr['prop']['name']);
+		$saved_value = $arr['obj_inst']->prop($arr['property']['name']);
 
 		if (is_array($saved_value))
 		{
@@ -130,14 +129,14 @@ class range extends class_base
 	function set_range($arr)
 	{
 
-		if (!empty($arr['from']))
+		if (is_numeric($arr['from']) || empty($arr['from']))
 		{
-			$this->from = (int)$arr['from'];
+			$this->from = $arr['from'];
 		}
 
-		if (!empty($arr['to']))
+		if (is_numeric($arr['to']) || empty($arr['to']))
 		{
-			$this->to = (int)$arr['to'];
+			$this->to = $arr['to'];
 		}
 	}
 
