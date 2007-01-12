@@ -340,7 +340,7 @@
             <group>sail</group>
             <type>textarea</type>
             <rows>10</rows>
-            <cols>80</cols>
+            <cols>60</cols>
             <field>sail_info</field>
             <caption>Lisainfo</caption>
       </property>
