@@ -578,11 +578,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$arr["objdata"]["meta"][$data["name"]] = $data["default"];
 			}
 		}
-
 		extract($arr);
 		
 		$metadata = aw_serialize($objdata["meta"]);
-		$this->quote($metadata);
+
+		$this->quote(&$metadata);
 		$this->quote(&$objdata);
 		// insert default new acl to object table here
 		$acld_fld = $acld_val = "";
@@ -620,12 +620,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// create all access for the creator
 		$this->create_obj_access($oid);
-		$this->can("admin", $oid);
 		// set brother to self if not specified.
 		if (!$objdata["brother_of"])
 		{
 			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
 		}
+		$this->can("admin", $oid);
 
 		// hits
 		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
