@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.26 2007/01/03 14:57:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.27 2007/01/15 11:41:14 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -17,7 +17,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 @layout general_split type=hbox
 
 @layout general_up type=vbox closeable=1 area_caption=&Uuml;ldinfo parent=general_split
-@default parent=general_up
+
+	@layout general_up_up parent=general_up type=vbox
+	
+@default parent=general_up_up
 
 	@property b_tb type=toolbar store=no no_caption=1
 
@@ -71,6 +74,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property closed_info type=textbox table=objects field=meta method=serialize size=30
 	@caption Sulgemise p&otilde;hjus
 
+	@layout sbt_layout type=hbox parent=general_up
+	
+	@property sbt type=submit no_caption=1 parent=sbt_layout
+	@caption Salvesta
+
+	@property sbt_close type=submit no_caption=1 parent=sbt_layout
+	@caption Salvesta ja sulge
+	
 @layout general_down type=vbox closeable=1 area_caption=Aeg&#44;&nbsp;ja&nbsp;hind parent=general_split
 @default parent=general_down
 	
@@ -276,6 +287,11 @@ class reservation extends class_base
 		return $retval;
 	}
 
+	function callback_generate_scripts($arr)
+	{
+		return "if (window.opener) { window.opener.refresh(); }";
+	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -394,6 +410,11 @@ class reservation extends class_base
 		{
 			$arr["obj_inst"]->set_prop("resource" ,$arr["request"]["resource"]);
 			$arr["obj_inst"]->save();
+		}
+
+		if ($arr["request"]["sbt_close"] != "")
+		{
+			die("<script language='javascript'>if (window.opener) window.opener.refresh(); window.close();</script>");
 		}
 	}
 
@@ -837,7 +858,7 @@ class reservation extends class_base
 			$tb->add_button(array(
 				"name" => "delete_bron",
 				"tooltip" => t("Kustuta broneering"),
-				"confirm" => t("Kas oled kindel et soovid beroneeringut kustutada?"),
+				"confirm" => t("Kas oled kindel et soovid broneeringut kustutada?"),
 				"img" => "delete.gif",
 				"action" => "del_bron"
 			));
@@ -884,8 +905,22 @@ class reservation extends class_base
 	function del_bron($arr)
 	{
 		$o = obj($arr["id"]);
+		$room = obj($o->prop("resource"));
 		$o->delete();
-		return $arr["return_url"];
+		$room_i = get_instance(CL_ROOM);
+		$settings = $room_i->get_settings_for_room($room);
+		if ($settings->prop("bron_no_popups"))
+		{
+			return $arr["return_url"];
+		}
+		// close if in popup
+		die("<script language='javascript'>
+			if (window.opener)
+			{
+				window.opener.refresh();
+			}
+			window.close();
+		</script>");
 	}
 
 	function _get_length($arr)
