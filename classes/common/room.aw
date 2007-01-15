@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.96 2007/01/11 07:41:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.97 2007/01/15 12:06:46 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -197,6 +197,12 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 	@caption Avamisajad
 
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 
 # RELTYPES
 
@@ -277,6 +283,11 @@ class room extends class_base
 		);
 		$this->weekdays_short = array(
 			t("Su") , t("Mo") , t("Tu"), t("We") , t("Th") , t("Fr"), t("Sa")
+		);
+		classload("core/date/date_calc");
+
+		$this->trans_props = array(
+			"name"
 		);
 	}
 
@@ -476,6 +487,10 @@ class room extends class_base
 				break;
 				
 				//$prop[""]
+
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 			//-- set_property --//
 		}
 		return $retval;
@@ -1327,7 +1342,7 @@ class room extends class_base
 		$settings = $this->get_settings_for_room($arr["obj_inst"]);
 		
 		$ret = "";
-		if($arr["user"] != 1 &&  $bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]) && !$settings->prop("no_cust_arrived_pop"))
+		if($arr["user"] != 1 &&  $this->can("view",$bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"])) && !$settings->prop("no_cust_arrived_pop"))
 		{
 			$reservaton_inst = get_instance(CL_RESERVATION);
 			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=300')
@@ -1438,9 +1453,21 @@ class room extends class_base
 			$gwo = $this->get_when_opens();
 			extract($gwo);
 		}
+
 		if($arr["request"]["start"])
 		{
 			$today_start = $arr["request"]["start"];
+			//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
+ 			if($gwo["start_hour"])
+ 			{
+	 			$this->start = $this->start+3600*$gwo["start_hour"];
+ 				$today_start = $today_start+3600*$gwo["start_hour"];
+ 			}
+ 			if($gwo["start_minute"])
+	 		{	
+ 				$this->start = $this->start+60*$gwo["start_minute"];
+ 				$today_start = $today_start+60*$gwo["start_minute"];
+	 		}
 		}
 		else
 		{
@@ -1468,18 +1495,20 @@ class room extends class_base
 			{
 				$this->start = $today_start = get_week_start();
 			}
+
+			//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
+ 			if($gwo["start_hour"])
+ 			{
+	 			$this->start = $this->start+3600*$gwo["start_hour"];
+ 				$today_start = $today_start+3600*$gwo["start_hour"];
+ 			}
+ 			if($gwo["start_minute"])
+	 		{	
+ 				$this->start = $this->start+60*$gwo["start_minute"];
+ 				$today_start = $today_start+60*$gwo["start_minute"];
+	 		}
 		}
-		//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
- 		if($gwo["start_hour"])
- 		{
- 			$this->start = $this->start+3600*$gwo["start_hour"];
- 			$today_start = $today_start+3600*$gwo["start_hour"];
- 		}
- 		if($gwo["start_minute"])
- 		{
- 			$this->start = $this->start+60*$gwo["start_minute"];
- 			$today_start = $today_start+60*$gwo["start_minute"];
- 		}
+
 			
 		enter_function("get_calendar_tbl::3");
 		$len = 7;
@@ -3731,6 +3760,20 @@ class room extends class_base
 			}
 		}
 		return true;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

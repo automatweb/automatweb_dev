@@ -543,6 +543,18 @@
             <store>no</store>
             <caption>Avamisajad</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>transl</group>
+            <parent>buffer_after_l</parent>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ROOM</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -584,6 +596,9 @@
             <open_hrs>
                   <caption>Avamisajad</caption>
             </open_hrs>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <LOCATION>
