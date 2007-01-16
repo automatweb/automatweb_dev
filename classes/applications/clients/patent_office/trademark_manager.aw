@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.10 2007/01/12 10:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.11 2007/01/16 08:32:43 kristo Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -539,7 +539,7 @@ class trademark_manager extends class_base
 			"class_id" => CL_PATENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"verified" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
+			"verified" => 1 
 		));
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
 		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
