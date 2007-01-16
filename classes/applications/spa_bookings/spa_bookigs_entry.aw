@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.15 2007/01/11 11:54:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.16 2007/01/16 16:38:29 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1015,6 +1015,7 @@ class spa_bookigs_entry extends class_base
 					"to" => $rv_id,
 					"type" => "RELTYPE_ROOM_BRON"
 				));
+				$bron->save();
 
 				return aw_ini_get("baseurl")."/automatweb/closewin.html";
 
@@ -1038,8 +1039,8 @@ class spa_bookigs_entry extends class_base
 		list($y, $m, $d) = explode("-", $b->prop("person.birthday"));
 		$this->vars(array(
 			"bureau" => $b->createdby(),
-			"person" => $b->prop_str("person"),
-			"package" => $b->prop_str("package"),
+			"person" => $b->trans_get_val_str("person"),
+			"package" => $b->trans_get_val_str("package"),
 			"from" => date("d.m.Y", $b->prop("start")),
 			"to" => date("d.m.Y", $b->prop("end")),
 			"person_comment" => $b->prop("person.comment"),
@@ -1074,8 +1075,8 @@ class spa_bookigs_entry extends class_base
 			$this->vars(array(
 				"r_from" => date("d.m.Y H:i", $entry["from"]),
 				"r_to" =>  date("d.m.Y H:i", $entry["to"]),
-				"r_room" => $ro->name(),
-				"r_prod" => $prod_obj->name(),
+				"r_room" => $ro->trans_get_val("name"),
+				"r_prod" => $prod_obj->trans_get_val("name"),
 				"start_time" => $entry["from"],
 				"end_time" => $entry["to"],
 			));
@@ -1341,6 +1342,14 @@ class spa_bookigs_entry extends class_base
 		$tmp = obj();
 		$tmp->set_class_id(CL_CRM_PERSON);
 		$propl = $tmp->get_property_list();
+
+		// get system default cfgform for person
+		$si = get_instance(CL_CFGFORM);
+		$sysd = $si->get_sysdefault(array("clid" => CL_CRM_PERSON));
+		if ($sysd)
+		{
+			$propl = $si->get_props_from_cfgform(array("id" => $sysd));
+		}
 	
 		$bron = obj($arr["bron"]);
 		foreach(safe_array($arr["props"]) as $propertyn)
@@ -1358,6 +1367,7 @@ class spa_bookigs_entry extends class_base
 				$val = $bron->prop("person.".$propertyn);
 			}
 			$type = "textbox";
+			$opts = null;
 			switch($propl[$propertyn]["type"])
 			{
 				case "date_select":
