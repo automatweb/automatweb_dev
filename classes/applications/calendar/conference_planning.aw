@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.30 2007/01/05 14:52:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.32 2007/01/16 19:55:25 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -20,6 +20,9 @@
 @property meeting_pattern_max_days type=textbox field=meta method=serialize
 @caption Koosoleku aja mustri p&auml;evade arv
 
+@property search_from type=relpicker reltype=RELTYPE_LOCATION field=meta method=serialize multiple=1
+@caption Otsitavad asukohad
+
 @property countries type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_COUNTRIES
 @caption Riigid
 
@@ -31,6 +34,9 @@
 
 @reltype COUNTRIES value=1 clid=CL_CRM_COUNTRY
 @caption Riik
+
+@reltype LOCATION value=3 clid=CL_LOCATION
+@caption Otsitav asukoht
 */
 
 define(CONFIRM_ID, "confirm_submit_checkbox");
@@ -180,6 +186,7 @@ class conference_planning extends class_base
 				// tablerows
 				foreach($sd["dates"] as $row_no => $date)
 				{
+					arr($date);
 					$sc->vars(array(
 						"date_no" => $row_no,
 						"date_type_".(($date["type"] == 0)?"normal":"alternative") => "SELECTED",
@@ -459,6 +466,7 @@ class conference_planning extends class_base
 					"catering_type_text" => $act_cat["catering_type_text"],
 					"catering_start_time" => $act_cat["catering_start_time"],
 					"catering_end_time" => $act_cat["catering_end_time"],
+					"catering_attendee_no" => $act_cat["catering_attendee_no"],
 				));
 				break;
 			case 6:
@@ -493,6 +501,7 @@ class conference_planning extends class_base
 					"suites" => ($sd["needs_rooms"])?$sd["suite_count"]:false,
 					"attendees_count" => $sd["attendees_no"],
 					"dates" => $altern_dates,
+					"oid" => $c_obj->id(),
 				));
 				$loc_inst = get_instance(CL_LOCATION);
 				$img_inst = get_instance(CL_IMAGE);
@@ -508,6 +517,7 @@ class conference_planning extends class_base
 						));
 					}
 					$loc = obj($loc_id);
+					$inf = $loc_inst->get_add_info($loc_id);
 					$sc->vars(array(
 						"caption" => $loc->name(),
 						"address" => $loc->prop_str("address"),
@@ -517,6 +527,7 @@ class conference_planning extends class_base
 						"value" => $loc_id,
 						"selected" => in_array($loc_id, $sd["selected_search_result"])?"CHECKED":"",
 						"urgent" => $sd["urgent"]?"CHECKED":"",
+						"info" => $inf."&lt;--",
 					));
 					$s_results .= $sc->parse("SEARCH_RESULT");
 					$hid_rows .= html::hidden(array(
@@ -1170,9 +1181,20 @@ class conference_planning extends class_base
 		{
 			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=qa";
 		}
+
 		$us = get_instance(CL_USER);
 		classload("users");
 		$password = substr(gen_uniq_id(),0,8);
+		$taken = false;
+		$taken = $us->username_is_taken($data["email"]);
+		if($taken)
+		{
+			aw_session_set("text_for_login", t("Kasutanimi on juba olemas, palun logige sisse."));
+			aw_session_set("uid_for_login", $data["email"]);
+			$url = aw_ini_get("baseurl")."/".$arr["id"]."?sub=1";
+			$this->set_cval("after_login", $url);
+			return aw_ini_get("baseurl")."/login.aw";
+		}
 
 		$user = $us->add_user(array(
 			"uid" => $data["email"],
@@ -1180,7 +1202,7 @@ class conference_planning extends class_base
 			"password" => $password,
 			"real_name" => $data["firstname"]." ".$data["lastname"],
 		));
-
+		
 		$person_obj = new object();
 		$person_obj->set_class_id(145);
 		$person_obj->set_parent(2);
@@ -1190,7 +1212,14 @@ class conference_planning extends class_base
 		$person_obj->set_prop("title", ($data["salutation"]-1));
 		$person_obj->save_new();
 
-		if($data["company_assoction"])
+
+		$user->connect(array(
+			"to" => $person_obj->id(),
+			"reltype" => 2
+		));
+		$user->save();
+
+		if($data["company_assocation"])
 		{
 			$org = new object();
 			$org->set_class_id(CL_CRM_COMPANY);
@@ -1204,39 +1233,57 @@ class conference_planning extends class_base
 			$person_obj->set_prop("work_contact", $org->id());
 		}
 		
-		$phone = new object();
-		$phone->set_class_id(219);
-		$phone->set_parent($person_obj->id());
-		$phone->set_name($data["phone_number"]);
-		$phone->set_prop("type", "work");
-		$phone->save();
+		if($data["phone_number"])
+		{
+			$phone = new object();
+			$phone->set_class_id(219);
+			$phone->set_parent($person_obj->id());
+			$phone->set_name($data["phone_number"]);
+			$phone->set_prop("type", "work");
+			$phone->save();
 
-		$fax = new object();
-		$fax->set_class_id(219);
-		$fax->set_parent($person_obj->id());
-		$fax->set_name($data["fax_number"]);
-		$fax->set_prop("type", "fax");
-		$fax->save();
+			$person_obj->connect(array(
+				"to" => $phone->id(),
+				"type" => "RELTYPE_PHONE",
+			));
+			$person_obj->set_prop("phone", $phone->id());
+		}
 
-		$email = new object();
-		$email->set_class_id(73);
-		$email->set_parent($person_obj->id());
-		$email->set_name($data["email"]);
-		$email->set_prop("mail", $data["email"]);
-		$email->save();
+		if($data["fax_number"])
+		{
+			$fax = new object();
+			$fax->set_class_id(219);
+			$fax->set_parent($person_obj->id());
+			$fax->set_name($data["fax_number"]);
+			$fax->set_prop("type", "fax");
+			$fax->save();
 
-		$person_obj->connect(array(
-			"to" => $phone->id(),
-			"type" => "RELTYPE_PHONE",
-		));
-		$person_obj->connect(array(
-			"to" => $fax->id(),
-			"type" => "RELTYPE_PHONE",
-		));
-		$person_obj->connect(array(
-			"to" => $email->id(),
-			"type" => "RELTYPE_EMAIL",
-		));
+			$person_obj->connect(array(
+				"to" => $fax->id(),
+				"type" => "RELTYPE_FAX",
+			));
+			$person_obj->set_prop("fax", $fax->id());
+		}
+
+		if($data["email"])
+		{
+			$email = new object();
+			$email->set_class_id(73);
+			$email->set_parent($person_obj->id());
+			$email->set_name($data["email"]);
+			$email->set_prop("mail", $data["email"]);
+			$email->save();
+
+			$person_obj->connect(array(
+				"to" => $email->id(),
+				"type" => "RELTYPE_EMAIL",
+			));
+			$person_obj->set_prop("email", $email->id());
+		}
+		$person_obj->save();
+
+
+
 		// i have to create company also :S
 		// we are logging in
 		$hash = gen_uniq_id();
@@ -1310,7 +1357,7 @@ class conference_planning extends class_base
 						for($i=0;$i<$val["no_dates_to_add"];$i++)	
 						{
 							$data["dates"][] = array(
-								"type" => "0"
+								"type" => "1"
 							);
 						}
 					}
@@ -1549,16 +1596,33 @@ class conference_planning extends class_base
 
 		// tsiish, basically i can't filter out any locations... but i have to put warings to them(there are not enough suites, or these rooms aren't available in these periods etc.. 
 		$room_inst = get_instance(CL_ROOM);
+		if($this->can("view", $arr["oid"]))
+		{
+			$obj = obj($arr["oid"]);
+		}
+		else
+		{
+			return array();
+		}
+
+		$from = array_unique($obj->prop("search_from"));
+		foreach($from as $fr_loc)
+		{
+			$list[$fr_loc] = obj($fr_loc);
+		}
+		/*
 		$ol = new object_list(array(
 			"class_id" => CL_LOCATION,
 		));
+		*/
 		$biggest_event = $arr["attendees_count"];
 		// loop over locations
 		foreach($arr["dates"] as $data)
 		{
 			$biggest_event = ($biggest_event < $data["persons"])?$data["persons"]:$biggest_event;
 		}
-		foreach($ol->arr() as $location_oid => $location)
+		//foreach($ol->arr() as $location_oid => $location)
+		foreach($list as $location_oid => $location)
 		{
 			$locations[$location_oid] = array();
 			$element = &$locations[$location_oid];
