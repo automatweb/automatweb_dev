@@ -25,12 +25,27 @@ $m = get_instance("contentmgmt/site_cache");
 
 $si =&__get_site_instance();
 
+
+if($_SESSION["text_for_login"])
+{
+	$te->vars(array(
+		"logintext" => $_SESSION["text_for_login"],
+	));
+	$tfl = $te->parse("TEXT_FOR_LOGIN");
+}
+$te->vars(array(
+	"uid" => $_SESSION["uid_for_login"],
+	"TEXT_FOR_LOGIN" => $tfl,
+));
+
 $content = $m->show(array(
 	"vars" => $si->on_page(),
 	"text" => $te->parse(),
 	"no_right_pane" => ($content) ? true : false,
 	"sub_callbacks" => $si->get_sub_callbacks()
 ));
+aw_session_set("text_for_login", "");
+aw_session_set("uid_for_login", "");
 
 if (file_exists(aw_ini_get("site_basedir")."/public/site_footer.aw"))
 {

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.32 2007/01/16 19:55:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.31 2007/01/16 21:23:06 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1202,7 +1202,7 @@ class conference_planning extends class_base
 			"password" => $password,
 			"real_name" => $data["firstname"]." ".$data["lastname"],
 		));
-		
+
 		$person_obj = new object();
 		$person_obj->set_class_id(145);
 		$person_obj->set_parent(2);
@@ -1211,13 +1211,6 @@ class conference_planning extends class_base
 		$person_obj->set_prop("lastname",$data["lastname"]);
 		$person_obj->set_prop("title", ($data["salutation"]-1));
 		$person_obj->save_new();
-
-
-		$user->connect(array(
-			"to" => $person_obj->id(),
-			"reltype" => 2
-		));
-		$user->save();
 
 		if($data["company_assocation"])
 		{

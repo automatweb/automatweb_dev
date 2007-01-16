@@ -37,6 +37,17 @@
             <caption>Koosoleku aja mustri p&amp;amp;auml;evade arv</caption>
       </property>
       <property>
+            <name>search_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LOCATION</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <caption>Otsitavad asukohad</caption>
+      </property>
+      <property>
             <name>countries</name>
             <table>objects</table>
             <group>general</group>
@@ -75,6 +86,11 @@
                   <clid>CL_CRM_COUNTRY</clid>
                   <caption>Riik</caption>
             </COUNTRIES>
+            <LOCATION>
+                  <value>3</value>
+                  <clid>CL_LOCATION</clid>
+                  <caption>Otsitav asukoht</caption>
+            </LOCATION>
       </reltypes>
 </properties>
 

@@ -1,8 +1,15 @@
 <form action="reforb.{VAR:ext}" method="POST">
 	<table>
+		<!-- SUB: TEXT_FOR_LOGIN -->
+		<tr>
+			<td colspan="2">
+				{VAR:logintext}
+			</td>
+		</tr>
+		<!-- END SUB: TEXT_FOR_LOGIN -->
 		<tr>
 			<td>Kasutajanimi:</td>
-			<td><input type="text" name="uid" /></td>
+			<td><input type="text" name="uid" value="{VAR:uid}"/></td>
 		</tr>
 		<tr>
 			<td>Parool:</td>

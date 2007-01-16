@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.4 2007/01/04 18:29:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.5 2007/01/16 21:23:09 tarvo Exp $
 // location.aw - Asukoht 
 /*
 
@@ -36,6 +36,9 @@
 
 @property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
 @caption Pangamakse
+
+@property add_text type=textarea
+@caption Lisaandmed
 
 @reltype MAP value=1 clid=CL_IMAGE
 @caption Kaart
@@ -190,6 +193,19 @@ class location extends class_base
 			$ret[] = $conn->to();
 		}
 		return $ret;
+	}
+
+	function get_add_info($oid)
+	{
+		if(!$this->can("view", $oid))
+		{
+			return "";
+		}
+		$o = obj($oid);
+		$i = $o->prop("add_text");
+		$ap = get_instance("alias_parser");
+		$ap->parse_oo_aliases($oid, &$i);
+		return $i;
 	}
 }
 ?>
