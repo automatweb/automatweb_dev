@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.218 2007/01/10 13:31:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.219 2007/01/16 15:27:49 kristo Exp $
 
 /*
 
@@ -1106,6 +1106,7 @@ class site_show extends class_base
 			{
 				// resets the template
 				$d->_init_vars();
+				aw_global_set("shown_document", $did);
 
 				$ct .= $d->gen_preview(array(
 					"docid" => $did,
@@ -1146,6 +1147,7 @@ class site_show extends class_base
 				aw_register_default_class_member("document", "cnt_documents", 1);
 				$d->set_opt("shown_document",$docid);
 				aw_register_default_class_member("document", "shown_document", $docid);
+				aw_global_set("shown_document", $docid);
 
 				$awt->start("gen-preview");
 				$ct = $d->gen_preview(array(

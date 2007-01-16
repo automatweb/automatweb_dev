@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.113 2007/01/10 13:31:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.114 2007/01/16 15:27:49 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1692,7 +1692,7 @@ class webform extends class_base
 		$id = $arr["alias"]["target"];
 		if(is_oid($id) && $this->can("view", $id))
 		{
-			return $this->show(array("id" => $id, "doc_id" => $arr["oid"]));
+			return $this->show(array("id" => $id, "doc_id" => aw_global_get("shown_document") ? aw_global_get("shown_document") : $arr["oid"]));
 		}
 	}
 
@@ -1777,7 +1777,7 @@ class webform extends class_base
 					"class" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "webform" : "calendar_registration_form_conf",
 					"return_url" => $section.($_GET["show"] == 1 ? "?show=1" : ""),
 					"id" => $ftype != CL_CALENDAR_REGISTRATION_FORM  ? $arr["id"] : $ef_id,
-					"doc_id" => $arr["doc_id"],
+					"doc_id" => is_object($arr["doc_id"]) ? $arr["doc_id"]->id() : $arr["doc_id"],
 					"subaction" => "",
 				),
 				"errors" => $errors,
@@ -1877,7 +1877,11 @@ class webform extends class_base
 					$pd["rows"] = $all_props[$pn]["height"];
 				}
 			}
-			$pd["value"] = $values[$pn];
+			
+			if ($pd["type"] != "text")
+			{
+				$pd["value"] = $values[$pn];
+			}
 			if($pd["type"] == "submit")
 			{
 				$sbz[$pn] = $pd;
@@ -2013,7 +2017,7 @@ class webform extends class_base
 			$aliasmgr->parse_oo_aliases($id, &$els[$key]["caption"]);
 			if($val["type"] == "text")
 			{
-				if(!empty($all_props[$key]["value"]))
+				if(!empty($all_props[$key]["value"]) && empty($els[$key]["value"]))
 				{
 					$els[$key]["value"] = nl2br($all_props[$key]["value"]);
 				}
@@ -2517,7 +2521,7 @@ class webform extends class_base
 		}
 		$vars['reforb'] = $this->mk_reforb('save_form_data', array(
 			'id' => $arr['id'],
-			'return_url' => aw_ini_get('baseurl').'/'.$arr['doc_id'],
+			'return_url' => aw_ini_get('baseurl').'/'.(is_object($arr['doc_id']) ? $arr["doc_id"]->id() : $arr["doc_id"]),
 		), 'webform');
 
 		$vars['confirmed_button'] = html::submit(array(
