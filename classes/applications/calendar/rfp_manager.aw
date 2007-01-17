@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.8 2007/01/05 12:48:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.9 2007/01/17 08:57:44 kristo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -66,7 +66,7 @@ class rfp_manager extends class_base
 				$prop["value"] = $time;
 				break;
 			case "rfps":
-				$act = ($arr["request"]["group"] == "rfps_active")?true:false;
+				$act = ($arr["request"]["group"] == "rfps_active" || $arr["request"]["group"] == "rfps")?true:false;
 				$t = &$prop["vcl_inst"];
 				$t->define_field(array(
 					"name" => "function",
@@ -157,7 +157,7 @@ class rfp_manager extends class_base
 							"url" => "#",
 							"onClick" => "aw_popup_scroll(\"".$this->mk_my_orb("show_overview", array(
 								"oid" => $oid
-							))."\",\"hey\",400,600);",
+							))."\",\"hey\",600,600);",
 							/*
 							"url" => $this->mk_my_orb("change", array(
 								"id" => $oid,
