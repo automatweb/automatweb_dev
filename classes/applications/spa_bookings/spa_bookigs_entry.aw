@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.18 2007/01/17 11:55:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.19 2007/01/17 12:01:25 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -393,6 +393,7 @@ class spa_bookigs_entry extends class_base
 				"lang_id" => array(),
 				"site_id" => array()
 			));
+			$pk_list = array();
 			foreach($ol->arr() as $o)
 			{
 				$pk_list[$o->id()] = $o->trans_get_val("name");
