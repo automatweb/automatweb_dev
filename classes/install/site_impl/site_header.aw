@@ -18,6 +18,7 @@ classload("core/util/timer");
 classload("menuedit");
 classload("document");
 classload("file");
+
 $awt = new aw_timer();
 enter_function("site_header::aw_startup");
 aw_startup();

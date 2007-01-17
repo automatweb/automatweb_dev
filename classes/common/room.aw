@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.98 2007/01/17 13:33:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.99 2007/01/17 14:45:23 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -289,6 +289,7 @@ class room extends class_base
 		$this->trans_props = array(
 			"name"
 		);
+		$this->ui = get_instance(CL_USER);
 	}
 
 	function get_property($arr)
@@ -1550,7 +1551,6 @@ class room extends class_base
 						if($arr["obj_inst"]->prop("use_product_times"))
 						{
 							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
-							//$prod_menu = $this->get_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
 							$img_id = 'm_'.$arr["obj_inst"]->id().'_'.$start_step;
 							$prod_menu = '<a class="menuButton" href="javascript:void(0)" onclick="bron_disp_popup(\'bron_menu_'.$arr["obj_inst"]->id().'\', '.$start_step.',\''.$img_id.'\');" alt="" title="" id=""><img alt="" title="" border="0" src="'.aw_ini_get("icons.server").'/class_.gif" id="'.$img_id.'" ></a>';
 						}
@@ -2819,10 +2819,10 @@ class room extends class_base
 			));
 			foreach($packages as $conn)
 			{
-				$package = $conn->to();
-				if($this->prod_data[$package->id()]["active"])
+				$package = $conn->prop("to");
+				if($this->prod_data[$package]["active"])
 				{
-					$ol->add($package->id());
+					$ol->add($package);
 				}
 			}
 		}
@@ -2835,11 +2835,11 @@ class room extends class_base
 				"lang_id" => array(),
 				"parent" => $parents,
 			));
-			foreach($ol->arr() as $package)
+			foreach($ol->ids() as $package)
 			{
-				if(!$this->prod_data[$package->id()]["active"])
+				if(!$this->prod_data[$package]["active"])
 				{
-					$ol->remove($package->id());
+					$ol->remove($package);
 				}
 			}
 		
@@ -2909,11 +2909,11 @@ class room extends class_base
 			"lang_id" => array(),
 			"parent" => $parents,
 		));
-		foreach($ol->arr() as $prod)
+		foreach($ol->ids() as $prod)
 		{
-			if(!$this->prod_data[$prod->id()]["active"])
+			if(!$this->prod_data[$prod]["active"])
 			{
-				$ol->remove($prod->id());
+				$ol->remove($prod);
 			}
 		}
 		return $ol;
@@ -3733,8 +3733,7 @@ class room extends class_base
 	function group_can_do_bron($s, $tm)
 	{
 		$gpt = $s->meta("grp_bron_tm");
-		$ui = get_instance(CL_USER);
-		$grp = $ui->get_highest_pri_grp_for_user(aw_global_get("uid"), true);
+		$grp = $this->ui->get_highest_pri_grp_for_user(aw_global_get("uid"), true);
 		if (isset($gpt[$grp->id()]))
 		{
 			$t = $gpt[$grp->id()];

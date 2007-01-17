@@ -35,10 +35,6 @@ class _int_object
 
 	function load($param)
 	{
-		if (!empty($GLOBALS["TRACE_OBJ"]))
-		{
-			echo "load object $param from <br>".dbg::short_backtrace()." <br>";
-		}
 		if (is_array($param))
 		{
 			$this->obj = $param;

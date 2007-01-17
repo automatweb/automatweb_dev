@@ -11,7 +11,6 @@ if (!is_array($_POST))
 {
 	$_POST = $HTTP_POST_VARS;
 }
-
 //$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
 if (!isset($AW_GET_VARS) || !is_array($AW_GET_VARS))
 {

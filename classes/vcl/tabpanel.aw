@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.19 2006/12/08 07:09:06 kristo Exp $
+// $Id: tabpanel.aw,v 1.20 2007/01/17 14:45:26 kristo Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -105,6 +105,7 @@ class tabpanel extends aw_template
 		$this->vars(array(
 			"caption" => $args["caption"],
 			"link" => $args["link"],
+			"target" => $args["target"]
 		));
 		
 		$use_subtpl = $tab_prefix . $subtpl . "_L" . $level;

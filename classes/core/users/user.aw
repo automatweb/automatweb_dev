@@ -398,6 +398,7 @@ class user extends class_base
 							"password" => $prop['value']
 						));
 						$arr["obj_inst"]->set_meta("password_change_time", time());
+						$this->_set_pwd = $prop["value"];
 					}
 				}
 				break;
@@ -1213,7 +1214,7 @@ class user extends class_base
 		{
 			$this->users->add(array(
 				"uid" => $arr["obj_inst"]->prop("uid"),
-				"password" => generate_password(),
+				"password" => $this->_set_pwd ? $this->_set_pwd : generate_password(),
 				"email" => $arr["request"]["email"],
 				"join_grp" => "",
 				"join_form_entry" => "",
@@ -1313,6 +1314,14 @@ class user extends class_base
 						}
 					}
 				}
+			}
+			if ($this->_set_pwd != "")
+			{
+				$this->users->save(array(
+					"uid" => $arr["obj_inst"]->prop("uid"),
+					"password" => $this->_set_pwd
+				));
+				$arr["obj_inst"]->set_meta("password_change_time", time());
 			}
 		}
 
@@ -1883,17 +1892,25 @@ class user extends class_base
 	**/
 	function get_highest_pri_grp_for_user($uid, $no_user_grp = false)
 	{
+		static $cache;
+		if (isset($cache[$uid][$no_user_grp]))
+		{
+			return $cache[$uid][$no_user_grp];
+		}
 		if ($uid == "")
 		{
 			// return non logged in users group
 			$nlu = $this->get_cval("non_logged_in_users_group");
 			$ui = get_instance("users");
 			$gd = $ui->fetchgroup($nlu);
-			return obj($gd["oid"]);
+			$rv = obj($gd["oid"]);
+			$cache[$uid][$no_user_grp] = $rv;
+			return $rv;
 		}
 		$groups = &$this->get_groups_for_user($uid);
 		if(!$groups)
 		{
+			$cache[$uid][$no_user_grp] = false;
 			return false;
 		}
 		$groups->sort_by(array(
@@ -1903,9 +1920,13 @@ class user extends class_base
 		if (!no_user_grp)
 		{
 			$tmp = $groups->begin();
-			return $tmp->next();
+			$rv = $tmp->next();
+			$cache[$uid][$no_user_grp] = $rv;
+			return $rv;
 		}
-		return $groups->begin();
+		$rv = $groups->begin();
+		$cache[$uid][$no_user_grp] = $rv;
+		return $rv;
 	}
 
 	/**

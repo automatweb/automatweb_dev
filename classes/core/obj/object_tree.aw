@@ -133,11 +133,11 @@ class object_tree extends _int_obj_container_base
 		{
 			if($root)
 			{
-				$ol->add($pt);
+				$ol->list[$pt] = $pt;
 			}
 			foreach($objs as $oid => $o)
 			{
-				$ol->add($oid);
+				$ol->list[$oid] = $oid;
 			}
 		}
 		return $ol;

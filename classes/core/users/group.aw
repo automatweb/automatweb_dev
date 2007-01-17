@@ -1031,6 +1031,21 @@ class group extends class_base
 		$c = get_instance("cache");
 		$c->file_clear_pt("acl");
 	}
+
+	/** Returns an array of user objects in the given group
+		@attrib api=1
+		@param group required type=object
+	**/
+	function get_group_members($g)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_USER,
+			"parent" => $g->id(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		return $ol->arr();
+	}
 }
 
 ?>

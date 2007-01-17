@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/timer.aw,v 1.1 2006/09/20 10:28:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/timer.aw,v 1.2 2007/01/17 14:45:25 kristo Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -114,7 +114,7 @@ class aw_timer
 	//  $arr[taimerinimi] = kulutatud_aeg
 	function summaries() 
 	{
-		krsort($this->timers);
+		krsort($this->timers, SORT_NUMERIC);
 		while(list($timer,) = each($this->timers)) 
 		{
 			$this->stop($timer);

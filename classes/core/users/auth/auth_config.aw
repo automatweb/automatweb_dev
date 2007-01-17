@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.22 2006/05/23 10:38:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.23 2007/01/17 14:45:25 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -19,7 +19,7 @@
 @property activity type=table group=activity no_caption=1
 @caption Aktiivsus
 
-@reltype AUTH_SERVER value=1 clid=CL_AUTH_SERVER_LDAP,CL_AUTH_SERVER_LOCAL,CL_AUTH_SERVER_NDS,CL_AUTH_SERVER_OPENLDAP
+@reltype AUTH_SERVER value=1 clid=CL_AUTH_SERVER_LDAP,CL_AUTH_SERVER_LOCAL,CL_AUTH_SERVER_NDS,CL_AUTH_SERVER_OPENLDAP,CL_AUTH_SERVER_USERDEFINED
 @caption autentimisserver
 
 */
