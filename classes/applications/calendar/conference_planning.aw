@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.31 2007/01/16 21:23:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.33 2007/01/17 08:55:00 kristo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -186,7 +186,6 @@ class conference_planning extends class_base
 				// tablerows
 				foreach($sd["dates"] as $row_no => $date)
 				{
-					arr($date);
 					$sc->vars(array(
 						"date_no" => $row_no,
 						"date_type_".(($date["type"] == 0)?"normal":"alternative") => "SELECTED",
@@ -507,6 +506,14 @@ class conference_planning extends class_base
 				$img_inst = get_instance(CL_IMAGE);
 				foreach($res as $loc_id => $data)
 				{
+					$loc = obj($loc_id);
+					if($email = $loc->prop_str("email"))
+					{
+						$sc->vars(array(
+							"email"  => $email,
+						));
+						$email = $sc->parse("RES_EMAIL");
+					}
 					$imgs = $loc_inst->get_images($loc_id);
 					foreach($imgs as $img)
 					{
@@ -516,18 +523,26 @@ class conference_planning extends class_base
 							)),
 						));
 					}
-					$loc = obj($loc_id);
 					$inf = $loc_inst->get_add_info($loc_id);
+					$photo = $loc->prop("photo");
+					$map = $loc->prop("map");
+					$img_inst = get_instance(CL_IMAGE);
+
 					$sc->vars(array(
 						"caption" => $loc->name(),
 						"address" => $loc->prop_str("address"),
 						"single_count" => $loc->prop("single_count"),
 						"double_count" => $loc->prop("double_count"),
 						"suite_count" => $loc->prop("suite_count"),
+						"phone" => ($ph = $loc->prop_str("phone"))?$ph:t("-"),
+						"fax" => ($f = $loc->prop_str("fax"))?$f:t("-"),
+						"RES_EMAIL" => $email, 
+						"photo_uri" => $img_inst->get_url_by_id($photo),
+						"map_uri" => $img_inst->get_url_by_id($map),
 						"value" => $loc_id,
 						"selected" => in_array($loc_id, $sd["selected_search_result"])?"CHECKED":"",
 						"urgent" => $sd["urgent"]?"CHECKED":"",
-						"info" => $inf."&lt;--",
+						"info" => $inf,
 					));
 					$s_results .= $sc->parse("SEARCH_RESULT");
 					$hid_rows .= html::hidden(array(
@@ -972,7 +987,7 @@ class conference_planning extends class_base
 
 	
 	/**
-		@attrib params=name name=submit_final all_args=1
+		@attrib params=name name=submit_final all_args=1 nologin=1
 	**/
 	function submit_final($arr)
 	{
@@ -982,7 +997,11 @@ class conference_planning extends class_base
 		$obj = new object();
 		$obj->set_class_id(CL_RFP);
 		$obj->set_parent($arr["conference_planner"]);
-		$obj->save();
+		// do not save object here, because then you save it twice. and that means, that on the second save
+		// you need the "edit" acl for the object, on the first you only need the "add" acl to the parent
+		// and things like these are usually configured with only "add" and "view" access, so that 
+		// random people can not modify them later
+		//$obj->save();
 		$users = get_instance("users");
 		$obj->set_name($data["function_name"]);
 		$obj->set_prop("submitter", $users->get_oid_for_uid(aw_global_get("uid")));
@@ -1202,7 +1221,7 @@ class conference_planning extends class_base
 			"password" => $password,
 			"real_name" => $data["firstname"]." ".$data["lastname"],
 		));
-
+		
 		$person_obj = new object();
 		$person_obj->set_class_id(145);
 		$person_obj->set_parent(2);
@@ -1211,6 +1230,13 @@ class conference_planning extends class_base
 		$person_obj->set_prop("lastname",$data["lastname"]);
 		$person_obj->set_prop("title", ($data["salutation"]-1));
 		$person_obj->save_new();
+
+
+		$user->connect(array(
+			"to" => $person_obj->id(),
+			"reltype" => 2
+		));
+		$user->save();
 
 		if($data["company_assocation"])
 		{

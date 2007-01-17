@@ -15,7 +15,7 @@
 			</function>
 		</action>
 
-		<action name="submit_final" all_args="1">
+		<action name="submit_final" all_args="1" nologin="1">
 			<function name="submit_final">
 				<arguments>
 				</arguments>
