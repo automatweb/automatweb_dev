@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.17 2007/01/17 11:53:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.18 2007/01/17 11:55:29 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1083,6 +1083,10 @@ class spa_bookigs_entry extends class_base
 			}
 		}
 
+		$all_items = "";
+		$packet_services = "";
+		$additional_services = "";
+
 		usort($items, create_function('$a,$b', 'return $a["from"] - $b["from"];'));
 		foreach($items as $entry)
 		{
@@ -1100,11 +1104,31 @@ class spa_bookigs_entry extends class_base
 				"r_prod" => $prod_obj->trans_get_val("name"),
 				"start_time" => $entry["from"],
 				"end_time" => $entry["to"],
+				"price" => $prod_obj->prop("price")
 			));
 			$books .= $this->parse("BOOKING");
+
+			$all_items .= $this->parse("ALL_ITEMS");
+			if ($entry["is_extra"] == 1)
+			{
+				$additional_services .= $this->parse("ADDITIONAL_SERVICES");
+			}
+			else
+			{
+				$packet_services .= $this->parse("PACKET_SERVICES");
+			}
 		}
+
+
 		$this->vars(array(
-			"BOOKING" => $books
+			"BOOKING" => $books,
+			"ADDITIONAL_SERVICES" => $additional_services,
+			"PACKET_SERVICES" => $packet_services,
+			"ALL_ITEMS" => $all_items
+		));
+		$this->vars(array(
+			"HAS_PACKET_SERVICES" => $packet_services != "" ? $this->parse("HAS_PACKET_SERVICES") : "",
+			"HAS_ADDITIONAL_SERVICES" => $packet_services != "" ? $this->parse("HAS_ADDITIONAL_SERVICES") : "",
 		));
 
 		if ($this->can("view", $wb->prop("print_view_ctr")))
@@ -1143,6 +1167,27 @@ class spa_bookigs_entry extends class_base
 					"to" => $room_bron->prop("end"),
 					"reservation_id" => $room_bron->id()
 				);
+			}
+		}
+
+		$extra_prods = safe_array($o->meta("extra_prods"));
+		foreach($dates as $prod => $items)
+		{
+			$is_extra = false;
+			foreach($extra_prods as $exp)
+			{
+				if ($exp["prod"] == $prod)
+				{
+					$is_extra = true;
+				}
+			}
+
+			if ($is_extra)
+			{
+				foreach($items as $count => $data)
+				{
+					$dates[$prod][$count]["is_extra"] = true;
+				}
 			}
 		}
 		return $dates;
@@ -1271,7 +1316,7 @@ class spa_bookigs_entry extends class_base
 		{
 			$ot = new object_list(array(
 				"parent" => $_GET["tree_filter"],
-				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT,CL_SHOP_PRODUCT_PACKAGING),
 				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 			));
 		}
@@ -1387,6 +1432,7 @@ class spa_bookigs_entry extends class_base
 			{
 				$val = $bron->prop("person.".$propertyn);
 			}
+
 			$type = "textbox";
 			$opts = null;
 			switch($propl[$propertyn]["type"])
