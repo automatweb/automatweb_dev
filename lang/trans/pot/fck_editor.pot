@@ -18,3 +18,7 @@ msgstr ""
 msgid "HTML"
 msgstr ""
 
+#: classes/vcl/fck_editor.aw:76
+msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
+msgstr ""
+

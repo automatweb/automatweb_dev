@@ -217,6 +217,18 @@ msgstr ""
 msgid "Omaduse Kustuta suur pilt (file2_del) help"
 msgstr ""
 
+#: classes/image.aw:prop_big_flash
+msgid "Omaduse Flash  (big_flash) caption"
+msgstr ""
+
+#: classes/image.aw:prop_big_flash_comment
+msgid "Omaduse Flash  (big_flash) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_big_flash_help
+msgid "Omaduse Flash  (big_flash) help"
+msgstr ""
+
 #: classes/image.aw:prop_new_w
 msgid "Omaduse Uus laius (new_w) caption"
 msgstr ""
@@ -357,26 +369,30 @@ msgstr ""
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr ""
 
-#: classes/image.aw:309
+#: classes/image.aw:rel_RELTYPE_FLASH
+msgid "Seose Flash (RELTYPE_FLASH) tekst"
+msgstr ""
+
+#: classes/image.aw:315
 msgid "kommentaar"
 msgstr ""
 
-#: classes/image.aw:309
+#: classes/image.aw:315
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:894
+#: classes/image.aw:907
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/image.aw:895
+#: classes/image.aw:908
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/image.aw:908
+#: classes/image.aw:921
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
 
-#: classes/image.aw:1461
+#: classes/image.aw:1490
 msgid "Lisa"
 msgstr ""

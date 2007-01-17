@@ -14,6 +14,16 @@ msgstr ""
 msgid "Selle klassil puudub abiinfo"
 msgstr "No help available for this class"
 
+#: classes/core/help/help.aw:76 classes/core/help/help.aw:104
+#: classes/core/help/help.aw:118 classes/core/help/help.aw:144
+#: classes/core/help/help.aw:274
+msgid "root"
+msgstr ""
+
+#: classes/core/help/help.aw:90
+msgid "AW KLASSIDE ABI"
+msgstr ""
+
 #: classes/core/help/help.aw:180 classes/core/help/help.aw:345
 msgid "Klassi '%s' abiinfo"
 msgstr "'%s' help"
@@ -26,7 +36,7 @@ msgstr "AW Help Center"
 msgid "Sellist gruppi pole"
 msgstr "No such group"
 
-#: classes/core/help/help.aw:465 classes/core/help/help.aw:498
+#: classes/core/help/help.aw:465
 msgid "t&otilde;lgitud nimi puudub"
 msgstr "translated name is missing"
 
@@ -34,10 +44,14 @@ msgstr "translated name is missing"
 msgid "kommentaar puudub"
 msgstr "comment is missing"
 
-#: classes/core/help/help.aw:467 classes/core/help/help.aw:500
+#: classes/core/help/help.aw:467
 msgid "abitekst puudub"
 msgstr "help is missing"
 
-#: classes/core/help/help.aw:509
+#: classes/core/help/help.aw:498
+msgid "tõlgitud nimi puudub"
+msgstr ""
+
+#: classes/core/help/help.aw:513
 msgid "Omadused"
 msgstr "Properties"

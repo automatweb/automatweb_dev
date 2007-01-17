@@ -25,6 +25,66 @@ msgstr ""
 msgid "Omaduse Aadress (address) help"
 msgstr ""
 
+#: classes/applications/scm/location.aw:prop_owner
+msgid "Omaduse Omanik (owner) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_owner_comment
+msgid "Omaduse Omanik (owner) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_owner_help
+msgid "Omaduse Omanik (owner) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_phone
+msgid "Omaduse Telefon (phone) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_phone_comment
+msgid "Omaduse Telefon (phone) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_phone_help
+msgid "Omaduse Telefon (phone) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_fax
+msgid "Omaduse Faks (fax) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_fax_comment
+msgid "Omaduse Faks (fax) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_fax_help
+msgid "Omaduse Faks (fax) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_web
+msgid "Omaduse Veebiaadress (web) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_web_comment
+msgid "Omaduse Veebiaadress (web) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_web_help
+msgid "Omaduse Veebiaadress (web) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_email
+msgid "Omaduse E-posti aadress (email) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_email_comment
+msgid "Omaduse E-posti aadress (email) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_email_help
+msgid "Omaduse E-posti aadress (email) help"
+msgstr ""
+
 #: classes/applications/scm/location.aw:prop_map
 msgid "Omaduse Asukohakaart (map) caption"
 msgstr ""
@@ -61,6 +121,70 @@ msgstr ""
 msgid "Omaduse Pangamakse (bank_payment) help"
 msgstr ""
 
+#: classes/applications/scm/location.aw:prop_images
+msgid "Omaduse Pildid (images) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_images_comment
+msgid "Omaduse Pildid (images) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_images_help
+msgid "Omaduse Pildid (images) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_single_count
+msgid "Omaduse &Uuml;hekohaliste arv (single_count) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_single_count_comment
+msgid "Omaduse &Uuml;hekohaliste arv (single_count) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_single_count_help
+msgid "Omaduse &Uuml;hekohaliste arv (single_count) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_double_count
+msgid "Omaduse Kahekohaliste arv (double_count) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_double_count_comment
+msgid "Omaduse Kahekohaliste arv (double_count) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_double_count_help
+msgid "Omaduse Kahekohaliste arv (double_count) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_suite_count
+msgid "Omaduse Sviitide arv (suite_count) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_suite_count_comment
+msgid "Omaduse Sviitide arv (suite_count) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_suite_count_help
+msgid "Omaduse Sviitide arv (suite_count) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:group_images
+msgid "Grupi Pildid (images) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/location.aw:group_images_help
+msgid "Grupi Pildid (images) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:group_accommondation
+msgid "Grupi Majutus (accommondation) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/location.aw:group_accommondation_help
+msgid "Grupi Majutus (accommondation) help"
+msgstr ""
+
 #: classes/applications/scm/location.aw:rel_RELTYPE_MAP
 msgid "Seose Kaart (RELTYPE_MAP) tekst"
 msgstr ""
@@ -75,4 +199,32 @@ msgstr ""
 
 #: classes/applications/scm/location.aw:rel_RELTYPE_BANK_PAYMENT
 msgid "Seose Pangalink (RELTYPE_BANK_PAYMENT) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_IMAGE
+msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_OWNER
+msgid "Seose Omanik (RELTYPE_OWNER) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_PHONE
+msgid "Seose Telefon (RELTYPE_PHONE) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_FAX
+msgid "Seose Faks (RELTYPE_FAX) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_WEB
+msgid "Seose Veebiaadress (RELTYPE_WEB) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_EMAIL
+msgid "Seose E-post (RELTYPE_EMAIL) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:107
+msgid "tooltip"
 msgstr ""

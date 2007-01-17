@@ -3,13 +3,6 @@ $GLOBALS["TRANS"]["Omaduse &Uuml;hekohaliste tubade arv (single_count) caption"]
 $GLOBALS["TRANS"]["Omaduse Kahekohaliste tubade arv (double_count) caption"] = "Double rooms";
 $GLOBALS["TRANS"]["Omaduse Sviitide arv (suite_count) caption"] = "Suites";
 $GLOBALS["TRANS"]["Omaduse Koosoleku aja mustri p&auml;evade arv (meeting_pattern_max_days) caption"] = "Meeting pattern days";
-$GLOBALS["TRANS"]["Mon"] = "Mon";
-$GLOBALS["TRANS"]["Tue"] = "Tue";
-$GLOBALS["TRANS"]["Wed"] = "Wed";
-$GLOBALS["TRANS"]["Thu"] = "Thu";
-$GLOBALS["TRANS"]["Fri"] = "Fri";
-$GLOBALS["TRANS"]["Sat"] = "Sat";
-$GLOBALS["TRANS"]["Sun"] = "Sun";
 $GLOBALS["TRANS"]["Theatre"] = "Theatre";
 $GLOBALS["TRANS"]["Diplomat"] = "Diplomat";
 $GLOBALS["TRANS"]["Banquet"] = "Banquet";

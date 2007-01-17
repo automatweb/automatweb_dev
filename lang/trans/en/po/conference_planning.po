@@ -93,181 +93,236 @@ msgstr ""
 msgid "Seose Riik (RELTYPE_COUNTRIES) tekst"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:46
-msgid "Mon"
-msgstr "Mon"
-
 #: classes/applications/calendar/conference_planning.aw:47
-msgid "Tue"
-msgstr "Tue"
+msgid "Monday"
+msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:48
-msgid "Wed"
-msgstr "Wed"
+msgid "Tuesday"
+msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:49
-msgid "Thu"
-msgstr "Thu"
+msgid "Wednesday"
+msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:50
-msgid "Fri"
-msgstr "Fri"
+msgid "Thursday"
+msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:51
-msgid "Sat"
-msgstr "Sat"
+msgid "Friday"
+msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:52
-msgid "Sun"
-msgstr "Sun"
+msgid "Saturday"
+msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:56
+#: classes/applications/calendar/conference_planning.aw:53
+msgid "Sunday"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:57
 msgid "Theatre"
 msgstr "Theatre"
 
-#: classes/applications/calendar/conference_planning.aw:57
+#: classes/applications/calendar/conference_planning.aw:58
 msgid "Diplomat"
 msgstr "Diplomat"
 
-#: classes/applications/calendar/conference_planning.aw:58
+#: classes/applications/calendar/conference_planning.aw:59
 msgid "Banquet"
 msgstr "Banquet"
 
-#: classes/applications/calendar/conference_planning.aw:59
+#: classes/applications/calendar/conference_planning.aw:60
 msgid "School"
 msgstr "School"
 
-#: classes/applications/calendar/conference_planning.aw:60
+#: classes/applications/calendar/conference_planning.aw:61
 msgid "Fishbone"
 msgstr "Fishbone"
 
-#: classes/applications/calendar/conference_planning.aw:61
+#: classes/applications/calendar/conference_planning.aw:62
 msgid "U-Shape"
 msgstr "U-Shape"
 
-#: classes/applications/calendar/conference_planning.aw:62
+#: classes/applications/calendar/conference_planning.aw:63
 msgid "Cabaret"
 msgstr "Cabaret"
 
-#: classes/applications/calendar/conference_planning.aw:63
+#: classes/applications/calendar/conference_planning.aw:64
 msgid "Dinner"
 msgstr "Dinner"
 
-#: classes/applications/calendar/conference_planning.aw:64
+#: classes/applications/calendar/conference_planning.aw:65
 msgid "Coctail"
 msgstr "Coctail"
 
-#: classes/applications/calendar/conference_planning.aw:68
+#: classes/applications/calendar/conference_planning.aw:69
 msgid "Data projector"
 msgstr "Data projector"
 
-#: classes/applications/calendar/conference_planning.aw:69
+#: classes/applications/calendar/conference_planning.aw:70
 msgid "TV/DVD"
 msgstr "TV/DVD"
 
-#: classes/applications/calendar/conference_planning.aw:70
+#: classes/applications/calendar/conference_planning.aw:71
 msgid "Slide projector"
 msgstr "Slide projector"
 
-#: classes/applications/calendar/conference_planning.aw:71
+#: classes/applications/calendar/conference_planning.aw:72
 msgid "Mircophones"
 msgstr "Mircophones"
 
-#: classes/applications/calendar/conference_planning.aw:72
+#: classes/applications/calendar/conference_planning.aw:73
 msgid "OHP"
 msgstr "OHP"
 
-#: classes/applications/calendar/conference_planning.aw:76
+#: classes/applications/calendar/conference_planning.aw:77
 msgid "Morning coffe break"
 msgstr "Morning coffe break"
 
-#: classes/applications/calendar/conference_planning.aw:77
+#: classes/applications/calendar/conference_planning.aw:78
 msgid "Lunch"
 msgstr "Lunch"
 
-#: classes/applications/calendar/conference_planning.aw:78
+#: classes/applications/calendar/conference_planning.aw:79
 msgid "Afternoon coffe break"
 msgstr "Afternoon coffe break"
 
-#: classes/applications/calendar/conference_planning.aw:79
+#: classes/applications/calendar/conference_planning.aw:80
 msgid "Fruit assortment in the room"
 msgstr "Fruit assortment in the room"
 
-#: classes/applications/calendar/conference_planning.aw:80
+#: classes/applications/calendar/conference_planning.aw:81
 msgid "Sodas"
 msgstr "Sodas"
 
-#: classes/applications/calendar/conference_planning.aw:81
+#: classes/applications/calendar/conference_planning.aw:82
 msgid "Non-stop coffee"
 msgstr "Non-stop coffee"
 
-#: classes/applications/calendar/conference_planning.aw:85
+#: classes/applications/calendar/conference_planning.aw:86
 msgid "Estionia"
 msgstr "Estonia"
 
-#: classes/applications/calendar/conference_planning.aw:86
+#: classes/applications/calendar/conference_planning.aw:87
 msgid "Latvia"
 msgstr "Latvia"
 
-#: classes/applications/calendar/conference_planning.aw:87
+#: classes/applications/calendar/conference_planning.aw:88
 msgid "Lietuva"
 msgstr "Lietuva"
 
-#: classes/applications/calendar/conference_planning.aw:187
-#: classes/applications/calendar/conference_planning.aw:202
+#: classes/applications/calendar/conference_planning.aw:195
+#: classes/applications/calendar/conference_planning.aw:210
+#: classes/applications/calendar/conference_planning.aw:692
+#: classes/applications/calendar/conference_planning.aw:693
+#: classes/applications/calendar/conference_planning.aw:694
+#: classes/applications/calendar/conference_planning.aw:695
+#: classes/applications/calendar/conference_planning.aw:715
+#: classes/applications/calendar/conference_planning.aw:716
+#: classes/applications/calendar/conference_planning.aw:717
+#: classes/applications/calendar/conference_planning.aw:718
 msgid "-"
 msgstr "-"
 
-#: classes/applications/calendar/conference_planning.aw:511
-#: classes/applications/calendar/conference_planning.aw:512
-#: classes/applications/calendar/conference_planning.aw:610
-#: classes/applications/calendar/conference_planning.aw:928
+#: classes/applications/calendar/conference_planning.aw:572
+#: classes/applications/calendar/conference_planning.aw:573
+#: classes/applications/calendar/conference_planning.aw:671
+#: classes/applications/calendar/conference_planning.aw:724
+#: classes/applications/calendar/conference_planning.aw:1116
 msgid "Yes"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:511
-#: classes/applications/calendar/conference_planning.aw:512
-#: classes/applications/calendar/conference_planning.aw:610
-#: classes/applications/calendar/conference_planning.aw:857
-#: classes/applications/calendar/conference_planning.aw:862
-#: classes/applications/calendar/conference_planning.aw:928
+#: classes/applications/calendar/conference_planning.aw:572
+#: classes/applications/calendar/conference_planning.aw:573
+#: classes/applications/calendar/conference_planning.aw:671
+#: classes/applications/calendar/conference_planning.aw:724
+#: classes/applications/calendar/conference_planning.aw:1018
+#: classes/applications/calendar/conference_planning.aw:1023
+#: classes/applications/calendar/conference_planning.aw:1116
 msgid "No"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:519
-#: classes/applications/calendar/conference_planning.aw:904
+#: classes/applications/calendar/conference_planning.aw:580
+#: classes/applications/calendar/conference_planning.aw:1082
 msgid "Normal"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:519
-#: classes/applications/calendar/conference_planning.aw:904
+#: classes/applications/calendar/conference_planning.aw:580
+#: classes/applications/calendar/conference_planning.aw:1082
 msgid "Alternative"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:845
-msgid "Not Applicable"
+msgid "Alternative dates"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:846
+msgid "Accomondation"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:847
+msgid "Main Event"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:848
+msgid "Additional Events"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:849
+msgid "Booking Details"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:850
+msgid "Confirmation"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:1006
+msgid "Not Applicable"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:1010
 msgid "From %s to %s"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:853
+#: classes/applications/calendar/conference_planning.aw:1014
 msgid "%s days"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1331
+#: classes/applications/calendar/conference_planning.aw:1567
 msgid "There aren't enough single rooms"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1335
+#: classes/applications/calendar/conference_planning.aw:1571
 msgid "There aren't enough double rooms"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1339
+#: classes/applications/calendar/conference_planning.aw:1575
 msgid "There aren't enough suites"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1361
+#: classes/applications/calendar/conference_planning.aw:1597
 msgid "There aren't as big rooms as needed"
 msgstr ""
+
+#~ msgid "Mon"
+#~ msgstr "Mon"
+
+#~ msgid "Tue"
+#~ msgstr "Tue"
+
+#~ msgid "Wed"
+#~ msgstr "Wed"
+
+#~ msgid "Thu"
+#~ msgstr "Thu"
+
+#~ msgid "Fri"
+#~ msgstr "Fri"
+
+#~ msgid "Sat"
+#~ msgstr "Sat"
+
+#~ msgid "Sun"
+#~ msgstr "Sun"

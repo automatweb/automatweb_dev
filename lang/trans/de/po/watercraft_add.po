@@ -105,6 +105,6 @@ msgstr ""
 msgid "Templeit"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:588
+#: classes/applications/watercraft_management/watercraft_add.aw:590
 msgid "(Nimetu)"
 msgstr ""

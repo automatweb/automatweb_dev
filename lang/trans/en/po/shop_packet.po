@@ -350,6 +350,18 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
+#: classes/applications/shop/shop_packet.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
 # classes/applications/shop/shop_packet.aw:group_packet
 #: classes/applications/shop/shop_packet.aw:group_packet
 msgid "Grupi Paketi sisu (packet) pealkiri"
@@ -380,6 +392,14 @@ msgstr "Images"
 msgid "Grupi Pildid (img) help"
 msgstr ""
 
+#: classes/applications/shop/shop_packet.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 # classes/applications/shop/shop_packet.aw:rel_RELTYPE_PRODUCT
 #: classes/applications/shop/shop_packet.aw:rel_RELTYPE_PRODUCT
 msgid "Seose paketi toode (RELTYPE_PRODUCT) tekst"
@@ -390,30 +410,30 @@ msgstr "product"
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr "image"
 
-#: classes/applications/shop/shop_packet.aw:111
+#: classes/applications/shop/shop_packet.aw:121
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:112
+#: classes/applications/shop/shop_packet.aw:122
 msgid "N&auml;dal"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:113
+#: classes/applications/shop/shop_packet.aw:123
 msgid "Kuu"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:145
+#: classes/applications/shop/shop_packet.aw:159
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/shop/shop_packet.aw:150
+#: classes/applications/shop/shop_packet.aw:164
 msgid "Mitu paketis"
 msgstr "Amount"
 
-#: classes/applications/shop/shop_packet.aw:156
+#: classes/applications/shop/shop_packet.aw:170
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:545
+#: classes/applications/shop/shop_packet.aw:559
 msgid "Kustuta tooted paketist"
 msgstr ""

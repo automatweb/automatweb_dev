@@ -25,6 +25,30 @@ msgstr ""
 msgid "Omaduse Ruumid (rooms) help"
 msgstr ""
 
+#: classes/common/room_reservation.aw:prop_prices
+msgid "Omaduse N&auml;ita hindu valuutades (prices) caption"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_prices_comment
+msgid "Omaduse N&auml;ita hindu valuutades (prices) kommentaar"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_prices_help
+msgid "Omaduse N&auml;ita hindu valuutades (prices) help"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_multiple_reservations
+msgid "Omaduse Ruume saab samal ajal broneerida mitu (multiple_reservations) caption"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_multiple_reservations_comment
+msgid "Omaduse Ruume saab samal ajal broneerida mitu (multiple_reservations) kommentaar"
+msgstr ""
+
+#: classes/common/room_reservation.aw:prop_multiple_reservations_help
+msgid "Omaduse Ruume saab samal ajal broneerida mitu (multiple_reservations) help"
+msgstr ""
+
 #: classes/common/room_reservation.aw:prop_reservation_template
 msgid "Omaduse Broneeringu template (reservation_template) caption"
 msgstr ""
@@ -53,26 +77,62 @@ msgstr ""
 msgid "Seose Ruum mida broneerida (RELTYPE_ROOM) tekst"
 msgstr ""
 
-#: classes/common/room_reservation.aw:60
+#: classes/common/room_reservation.aw:66
 msgid "\n"
 msgstr ""
 
-#: classes/common/room_reservation.aw:62
+#: classes/common/room_reservation.aw:68
 msgid "Template fail peab asuma kataloogis :"
 msgstr ""
 
-#: classes/common/room_reservation.aw:115
+#: classes/common/room_reservation.aw:126
 msgid "Tase"
 msgstr ""
 
-#: classes/common/room_reservation.aw:120
+#: classes/common/room_reservation.aw:131
 msgid "Etapi nimi"
 msgstr ""
 
-#: classes/common/room_reservation.aw:140
+#: classes/common/room_reservation.aw:151
 msgid "Template"
 msgstr ""
 
-#: classes/common/room_reservation.aw:657
+#: classes/common/room_reservation.aw:355
+msgid "Vali enne jätkamist sobiv aeg!"
+msgstr ""
+
+#: classes/common/room_reservation.aw:356
+msgid "Vali enne j&auml;tkamist sobiv aeg!"
+msgstr ""
+
+#: classes/common/room_reservation.aw:541
+msgid "Kinnitatud"
+msgstr ""
+
+#: classes/common/room_reservation.aw:541
+msgid "Kinnitamata"
+msgstr ""
+
+#: classes/common/room_reservation.aw:844
+msgid "Nimi on kohustuslik"
+msgstr ""
+
+#: classes/common/room_reservation.aw:848
+msgid "Telefon on kohustuslik"
+msgstr ""
+
+#: classes/common/room_reservation.aw:852
+msgid "E-Mail on kohustuslik"
+msgstr ""
+
+#: classes/common/room_reservation.aw:1047
 msgid "Salvesta"
+msgstr ""
+
+#: classes/common/room_reservation.aw:1237
+msgid "Broneeringut ei &otilde;nnestunud kinnitada"
+msgstr ""
+
+#: classes/common/room_reservation.aw:1257
+msgid "Broneering: %s"
 msgstr ""

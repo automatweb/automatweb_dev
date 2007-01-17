@@ -11,7 +11,7 @@ msgstr ""
 
 
 #: classes/contentmgmt/poll.aw:class_33_help
-msgid "Klassi Kiirk&amp;uuml;sitlus help"
+msgid "Klassi Kiirk&uuml;sitlus help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation
@@ -24,18 +24,6 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation_help
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
-msgstr ""
-
-#: classes/contentmgmt/poll.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr ""
-
-#: classes/contentmgmt/poll.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/poll.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_clicks
@@ -75,15 +63,15 @@ msgid "Omaduse Arhiivis (in_archive) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_question
-msgid "Omaduse K&amp;uuml;simus (question) caption"
+msgid "Omaduse K&uuml;simus (question) caption"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_question_comment
-msgid "Omaduse K&amp;uuml;simus (question) kommentaar"
+msgid "Omaduse K&uuml;simus (question) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_question_help
-msgid "Omaduse K&amp;uuml;simus (question) help"
+msgid "Omaduse K&uuml;simus (question) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_answers
@@ -111,15 +99,15 @@ msgid "Omaduse Aktiivsus (activity) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_translate
-msgid "Omaduse T&amp;otilde;lgi (translate) caption"
+msgid "Omaduse T&otilde;lgi (translate) caption"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_translate_comment
-msgid "Omaduse T&amp;otilde;lgi (translate) kommentaar"
+msgid "Omaduse T&otilde;lgi (translate) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_translate_help
-msgid "Omaduse T&amp;otilde;lgi (translate) help"
+msgid "Omaduse T&otilde;lgi (translate) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_clicks
@@ -147,11 +135,11 @@ msgid "Grupi Vastajad (clicks_detail) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_translate
-msgid "Grupi T&amp;otilde;lgi (translate) pealkiri"
+msgid "Grupi T&otilde;lgi (translate) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_translate_help
-msgid "Grupi T&amp;otilde;lgi (translate) help"
+msgid "Grupi T&otilde;lgi (translate) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_activity
@@ -171,7 +159,7 @@ msgid "IP"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:509
-msgid "Kuup&amp;auml;ev"
+msgid "Kuup&auml;ev"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:519 classes/contentmgmt/poll.aw:549
@@ -195,7 +183,7 @@ msgid "Vastus nr %s"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:836
-msgid "K&amp;uuml;simus"
+msgid "K&uuml;simus"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:846

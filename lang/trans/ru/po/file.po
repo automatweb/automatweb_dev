@@ -37,6 +37,30 @@ msgstr ""
 msgid "Omaduse Faili nimi (filename) help"
 msgstr ""
 
+#: classes/file.aw:prop_signed
+msgid "Omaduse Allkirjastatud (signed) caption"
+msgstr ""
+
+#: classes/file.aw:prop_signed_comment
+msgid "Omaduse Allkirjastatud (signed) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_signed_help
+msgid "Omaduse Allkirjastatud (signed) help"
+msgstr ""
+
+#: classes/file.aw:prop_signatures
+msgid "Omaduse Allkirjastajad (signatures) caption"
+msgstr ""
+
+#: classes/file.aw:prop_signatures_comment
+msgid "Omaduse Allkirjastajad (signatures) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_signatures_help
+msgid "Omaduse Allkirjastajad (signatures) help"
+msgstr ""
+
 #: classes/file.aw:prop_file
 msgid "Omaduse Vali fail (file) caption"
 msgstr ""
@@ -205,6 +229,18 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/file.aw:prop_grkeywords2
+msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) caption"
+msgstr ""
+
+#: classes/file.aw:prop_grkeywords2_comment
+msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_grkeywords2_help
+msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) help"
+msgstr ""
+
 #: classes/file.aw:prop_acl
 msgid "Omaduse &Otilde;igused (acl) caption"
 msgstr ""
@@ -241,6 +277,14 @@ msgstr ""
 msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/file.aw:group_keywords
+msgid "Grupi M&auml;rks&otilde;nad (keywords) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_keywords_help
+msgid "Grupi M&auml;rks&otilde;nad (keywords) help"
+msgstr ""
+
 #: classes/file.aw:group_acl
 msgid "Grupi &Otilde;igused (acl) pealkiri"
 msgstr ""
@@ -253,10 +297,46 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:171
+#: classes/file.aw:153
+msgid "%s, %s (%s) - %s"
+msgstr ""
+
+#: classes/file.aw:173
+msgid "Lisa allkiri"
+msgstr ""
+
+#: classes/file.aw:174 classes/file.aw:193
+msgid "Allkirjastamine"
+msgstr ""
+
+#: classes/file.aw:181
+msgid "DigiDoc konteinerisse"
+msgstr ""
+
+#: classes/file.aw:192
+msgid "Allkirjasta"
+msgstr ""
+
+#: classes/file.aw:200
+msgid "DigiDoc konteiner"
+msgstr ""
+
+#: classes/file.aw:211
+msgid "Allkirjasta fail"
+msgstr ""
+
+#: classes/file.aw:212
+msgid "Faili: %s, allkirjastamine"
+msgstr ""
+
+#: classes/file.aw:262
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:1138
+#: classes/file.aw:710
+msgid "Vale objekti id!"
+msgstr ""
+
+#: classes/file.aw:1279
 msgid "Need either id or parent"
 msgstr ""

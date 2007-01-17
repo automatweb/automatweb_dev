@@ -117,8 +117,7 @@ msgstr "Display probability"
 
 # classes/applications/banner/banner.aw:prop_probability_tbl_comment
 #: classes/applications/banner/banner.aw:prop_probability_tbl_comment
-msgid ""
-"Omaduse N&auml;itamise t&otilde;en&auml;osus (probability_tbl) kommentaar"
+msgid "Omaduse N&auml;itamise t&otilde;en&auml;osus (probability_tbl) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_probability_tbl_help
@@ -143,14 +142,12 @@ msgstr ""
 
 # classes/applications/banner/banner.aw:prop_max_views
 #: classes/applications/banner/banner.aw:prop_max_views
-msgid ""
-"Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) caption"
+msgid "Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) caption"
 msgstr "Maximum number of banner views"
 
 # classes/applications/banner/banner.aw:prop_max_views_comment
 #: classes/applications/banner/banner.aw:prop_max_views_comment
-msgid ""
-"Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) kommentaar"
+msgid "Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_max_views_help
@@ -218,6 +215,18 @@ msgstr ""
 msgid "Omaduse Click-through ratio (click_through) help"
 msgstr ""
 
+#: classes/applications/banner/banner.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
 # classes/applications/banner/banner.aw:group_display
 #: classes/applications/banner/banner.aw:group_display
 msgid "Grupi N&auml;itamine (display) pealkiri"
@@ -237,6 +246,14 @@ msgstr "Statistics"
 msgid "Grupi Statistika (stats) help"
 msgstr ""
 
+#: classes/applications/banner/banner.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 # classes/applications/banner/banner.aw:rel_RELTYPE_LOCATION
 #: classes/applications/banner/banner.aw:rel_RELTYPE_LOCATION
 msgid "Seose banneri asukoht (RELTYPE_LOCATION) tekst"
@@ -247,19 +264,19 @@ msgstr "banner location"
 msgid "Seose banneri sisu (RELTYPE_BANNER_FILE) tekst"
 msgstr "banner content"
 
-#: classes/applications/banner/banner.aw:149
+#: classes/applications/banner/banner.aw:162
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:196
+#: classes/applications/banner/banner.aw:209
 msgid "Banner"
 msgstr "Banner"
 
-#: classes/applications/banner/banner.aw:202
+#: classes/applications/banner/banner.aw:215
 msgid "N&auml;itamise t&otilde;en&auml;osus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:442
+#: classes/applications/banner/banner.aw:455
 msgid "No banner location id given"
 msgstr "No banner location id given"
 

@@ -74,3 +74,7 @@ msgstr ""
 msgid "Seose Ruumi broneering (RELTYPE_ROOM_BRON) tekst"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_booking.aw:rel_RELTYPE_EXTRA_PROD
+msgid "Seose Lisateenus (RELTYPE_EXTRA_PROD) tekst"
+msgstr ""
+

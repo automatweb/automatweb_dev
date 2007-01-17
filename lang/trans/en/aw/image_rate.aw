@@ -1,5 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Grupi  () pealkiri"] = " ";
 $GLOBALS["TRANS"]["Saada sõnum"] = "Send message";
 $GLOBALS["TRANS"]["lisa sõprade hulka"] = "add to friends";
 $GLOBALS["TRANS"]["Ignoreeri"] = "Ignore";

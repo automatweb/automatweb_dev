@@ -26,27 +26,27 @@ msgstr ""
 msgid "Omaduse  (series) help"
 msgstr ""
 
-#: classes/applications/crm/crm_number_series.aw:65
+#: classes/applications/crm/crm_number_series.aw:66
 msgid "Klass"
 msgstr ""
 
-#: classes/applications/crm/crm_number_series.aw:71
+#: classes/applications/crm/crm_number_series.aw:72
 msgid "Alates"
 msgstr ""
 
-#: classes/applications/crm/crm_number_series.aw:77
+#: classes/applications/crm/crm_number_series.aw:78
 msgid "Kuni"
 msgstr ""
 
-#: classes/applications/crm/crm_number_series.aw:83
+#: classes/applications/crm/crm_number_series.aw:84
 msgid "Seeria esimene number"
 msgstr ""
 
-#: classes/applications/crm/crm_number_series.aw:89
+#: classes/applications/crm/crm_number_series.aw:90
 msgid "Seeria viimane number"
 msgstr ""
 
-#: classes/applications/crm/crm_number_series.aw:104 classes/applications/crm/crm_number_series.aw:106
+#: classes/applications/crm/crm_number_series.aw:105 classes/applications/crm/crm_number_series.aw:107
 msgid "vali"
 msgstr ""
 

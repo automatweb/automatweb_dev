@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Broneering help"
 msgstr ""
 
+#: classes/applications/groupware/reservation.aw:prop_b_tb
+msgid "Omaduse  (b_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_b_tb_comment
+msgid "Omaduse  (b_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_b_tb_help
+msgid "Omaduse  (b_tb) help"
+msgstr ""
+
 #: classes/applications/groupware/reservation.aw:prop_deadline
 msgid "Omaduse Maksmistähtaeg (deadline) caption"
 msgstr ""
@@ -38,6 +50,18 @@ msgstr ""
 msgid "Omaduse Kinnitatud (verified) help"
 msgstr ""
 
+#: classes/applications/groupware/reservation.aw:prop_unverify_reason
+msgid "Omaduse  (unverify_reason) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_unverify_reason_comment
+msgid "Omaduse  (unverify_reason) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_unverify_reason_help
+msgid "Omaduse  (unverify_reason) help"
+msgstr ""
+
 #: classes/applications/groupware/reservation.aw:prop_resource
 msgid "Omaduse Ressurss (resource) caption"
 msgstr ""
@@ -60,6 +84,54 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_customer_help
 msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_fn
+msgid "Omaduse Eesnimi (cp_fn) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_fn_comment
+msgid "Omaduse Eesnimi (cp_fn) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_fn_help
+msgid "Omaduse Eesnimi (cp_fn) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_ln
+msgid "Omaduse Perenimi (cp_ln) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_ln_comment
+msgid "Omaduse Perenimi (cp_ln) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_ln_help
+msgid "Omaduse Perenimi (cp_ln) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_phone
+msgid "Omaduse Telefon (cp_phone) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_phone_comment
+msgid "Omaduse Telefon (cp_phone) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_phone_help
+msgid "Omaduse Telefon (cp_phone) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_email
+msgid "Omaduse E-mail (cp_email) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_email_comment
+msgid "Omaduse E-mail (cp_email) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_cp_email_help
+msgid "Omaduse E-mail (cp_email) help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_project
@@ -99,15 +171,39 @@ msgid "Omaduse Arve number (bill_no) help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_content
-msgid "Omaduse Sisu	 (content) caption"
+msgid "Omaduse Sisu (content) caption"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_content_comment
-msgid "Omaduse Sisu	 (content) kommentaar"
+msgid "Omaduse Sisu (content) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_content_help
-msgid "Omaduse Sisu	 (content) help"
+msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_time_closed
+msgid "Omaduse Suletud (time_closed) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_time_closed_comment
+msgid "Omaduse Suletud (time_closed) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_time_closed_help
+msgid "Omaduse Suletud (time_closed) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_closed_info
+msgid "Omaduse Sulgemise p&otilde;hjus (closed_info) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_closed_info_comment
+msgid "Omaduse Sulgemise p&otilde;hjus (closed_info) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_closed_info_help
+msgid "Omaduse Sulgemise p&otilde;hjus (closed_info) help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_people_count
@@ -134,6 +230,18 @@ msgstr ""
 msgid "Omaduse Algus (start1) help"
 msgstr ""
 
+#: classes/applications/groupware/reservation.aw:prop_length
+msgid "Omaduse Pikkus (length) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_length_comment
+msgid "Omaduse Pikkus (length) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_length_help
+msgid "Omaduse Pikkus (length) help"
+msgstr ""
+
 #: classes/applications/groupware/reservation.aw:prop_end
 msgid "Omaduse L&otilde;peb (end) caption"
 msgstr ""
@@ -144,6 +252,18 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_end_help
 msgid "Omaduse L&otilde;peb (end) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_special_discount
+msgid "Omaduse Spetsiaal allahindlus (special_discount) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_special_discount_comment
+msgid "Omaduse Spetsiaal allahindlus (special_discount) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_special_discount_help
+msgid "Omaduse Spetsiaal allahindlus (special_discount) help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_client_arrived
@@ -192,6 +312,18 @@ msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_sum_help
 msgid "Omaduse Summa (sum) help"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_modder
+msgid "Omaduse  (modder) caption"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_modder_comment
+msgid "Omaduse  (modder) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:prop_modder_help
+msgid "Omaduse  (modder) help"
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:prop_resources_tbl
@@ -254,31 +386,111 @@ msgstr ""
 msgid "Kujundusosa Aeg&#44; ja hind (general_down) pealkiri"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:384 classes/applications/groupware/reservation.aw:494
+#: classes/applications/groupware/reservation.aw:264 classes/applications/groupware/reservation.aw:323
+msgid "%s: %s / %s-%s %s"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:297
+msgid "V&auml;li %s peab olema t&auml;idetud!"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:313
+msgid "Sulgemise p&otilde;hjus peab olema t&auml;idetud!"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:422
+msgid "Kinnitatud"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:422
+msgid "Kinnitamata"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:527 classes/applications/groupware/reservation.aw:636
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:388 classes/applications/groupware/reservation.aw:498
+#: classes/applications/groupware/reservation.aw:531 classes/applications/groupware/reservation.aw:644
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:490
+#: classes/applications/groupware/reservation.aw:632
 msgid ""
 msgstr ""
 
 #: classes/applications/groupware/reservation.aw:640
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:648
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:753
+msgid "Kogusumma"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:759
+msgid "Allahindlus (%)"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:770
+msgid "<b>Summa</b>"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:822
 msgid "Broneering : "
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:650
+#: classes/applications/groupware/reservation.aw:832
 msgid "Klient ei ilmunud kohale"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:651
+#: classes/applications/groupware/reservation.aw:833
 msgid "Klient ilmus kohale"
 msgstr ""
 
-#: classes/applications/groupware/reservation.aw:652
+#: classes/applications/groupware/reservation.aw:834
 msgid "M&auml;rgi"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:848
+msgid "Kustuta broneering"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:849
+msgid "Kas oled kindel et soovid broneeringut kustutada?"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:859
+msgid "T&uuml;hista kinnitus"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:1109
+msgid "Loomine: %s / %s.<br>Muutmine: %s / %s"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:1123
+msgid "Kinnituse eemaldamise p&otilde;hjus: %s"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:1162
+msgid "Klient: %s / %s / %s\n"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:1167
+msgid "Aeg: %s: %s-%s\n"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:1172
+msgid "Koht: %s\n"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:1184
+msgid "Toidud: %s\n"
+msgstr ""
+
+#: classes/applications/groupware/reservation.aw:1207
+msgid "%s: %s tk / %s"
 msgstr ""
 

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/translate/translation_workplace.aw:class_1157_help
 msgid "Klassi T&otilde;lkimise t&ouml;&ouml;laud help"
 msgstr ""
@@ -122,6 +121,14 @@ msgstr ""
 msgid "Seose Objektit&uuml;&uuml;p (RELTYPE_OBJT) tekst"
 msgstr ""
 
+#: classes/translate/translation_workplace.aw:layout_tr_left_top
+msgid "Kujundusosa Filtreeri (tr_left_top) pealkiri"
+msgstr ""
+
+#: classes/translate/translation_workplace.aw:layout_tr_left_bottom
+msgid "Kujundusosa Otsing (tr_left_bottom) pealkiri"
+msgstr ""
+
 #: classes/translate/translation_workplace.aw:101
 msgid "Nimi"
 msgstr ""
@@ -138,7 +145,9 @@ msgstr ""
 msgid "Muutja"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:128 classes/translate/translation_workplace.aw:169 classes/translate/translation_workplace.aw:287
+#: classes/translate/translation_workplace.aw:128
+#: classes/translate/translation_workplace.aw:171
+#: classes/translate/translation_workplace.aw:367
 msgid "Muudetud"
 msgstr ""
 
@@ -150,55 +159,66 @@ msgstr ""
 msgid "T&otilde;lke staatus"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:162
+#: classes/translate/translation_workplace.aw:164
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:204
+#: classes/translate/translation_workplace.aw:206
 msgid "T&auml;na muudetud"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:209
+#: classes/translate/translation_workplace.aw:211
 msgid "Eile muudetud"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:214
+#: classes/translate/translation_workplace.aw:216
 msgid "Sel n&auml;dalal muudetud"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:223
+#: classes/translate/translation_workplace.aw:220
+#: classes/translate/translation_workplace.aw:440
+msgid "T&otilde;lkimata"
+msgstr ""
+
+#: classes/translate/translation_workplace.aw:224
+#: classes/translate/translation_workplace.aw:449
+msgid "Vanemad"
+msgstr ""
+
+#: classes/translate/translation_workplace.aw:234
 msgid "Objektit&uuml;&uuml;p: %s"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:257 classes/translate/translation_workplace.aw:262
+#: classes/translate/translation_workplace.aw:269
+#: classes/translate/translation_workplace.aw:275
 msgid "Jah"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:257 classes/translate/translation_workplace.aw:262
+#: classes/translate/translation_workplace.aw:269
+#: classes/translate/translation_workplace.aw:275
 msgid "Ei"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:285
+#: classes/translate/translation_workplace.aw:365
 msgid "Kataloogid"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:286
+#: classes/translate/translation_workplace.aw:366
 msgid "Objektit&uuml;&uuml;bid"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:333
+#: classes/translate/translation_workplace.aw:413
 msgid "T&auml;na"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:342
+#: classes/translate/translation_workplace.aw:422
 msgid "Eile"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:351
+#: classes/translate/translation_workplace.aw:431
 msgid "See n&auml;dal"
 msgstr ""
 
-#: classes/translate/translation_workplace.aw:486
+#: classes/translate/translation_workplace.aw:584
 msgid "--vali--"
 msgstr ""
-

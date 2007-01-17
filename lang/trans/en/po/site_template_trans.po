@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/admin/site_template_trans.aw:class_1170_help
 msgid "Klassi Saidi templatede t&otilde;lkimine help"
 msgstr ""
@@ -58,19 +57,22 @@ msgstr "Translation"
 msgid "Grupi T&otilde;lkimine (t) help"
 msgstr ""
 
+#: classes/admin/site_template_trans.aw:layout_bm_tree
+msgid "Kujundusosa Puu (bm_tree) pealkiri"
+msgstr ""
+
 #: classes/admin/site_template_trans.aw:79
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/admin/site_template_trans.aw:136
+#: classes/admin/site_template_trans.aw:142
 msgid "Selgitus"
 msgstr "Explanation"
 
-#: classes/admin/site_template_trans.aw:141
+#: classes/admin/site_template_trans.aw:147
 msgid "Konstant"
 msgstr "Constant"
 
-#: classes/admin/site_template_trans.aw:146
+#: classes/admin/site_template_trans.aw:152
 msgid "T&otilde;lge"
 msgstr "Translation"
-

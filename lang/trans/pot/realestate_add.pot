@@ -158,35 +158,35 @@ msgstr ""
 msgid ""
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:103 classes/applications/realestate_management/realestate_add.aw:1771
+#: classes/applications/realestate_management/realestate_add.aw:103 classes/applications/realestate_management/realestate_add.aw:1775
 msgid "Maja"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:104 classes/applications/realestate_management/realestate_add.aw:1772
+#: classes/applications/realestate_management/realestate_add.aw:104 classes/applications/realestate_management/realestate_add.aw:1776
 msgid "Ridaelamu"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:105 classes/applications/realestate_management/realestate_add.aw:1773
+#: classes/applications/realestate_management/realestate_add.aw:105 classes/applications/realestate_management/realestate_add.aw:1777
 msgid "Suvila"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:106 classes/applications/realestate_management/realestate_add.aw:1774
+#: classes/applications/realestate_management/realestate_add.aw:106 classes/applications/realestate_management/realestate_add.aw:1778
 msgid "Majaosa"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:107 classes/applications/realestate_management/realestate_add.aw:1775
+#: classes/applications/realestate_management/realestate_add.aw:107 classes/applications/realestate_management/realestate_add.aw:1779
 msgid "Korter"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:108 classes/applications/realestate_management/realestate_add.aw:1776
+#: classes/applications/realestate_management/realestate_add.aw:108 classes/applications/realestate_management/realestate_add.aw:1780
 msgid "Äripind"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:109 classes/applications/realestate_management/realestate_add.aw:1777
+#: classes/applications/realestate_management/realestate_add.aw:109 classes/applications/realestate_management/realestate_add.aw:1781
 msgid "Garaaz"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:110 classes/applications/realestate_management/realestate_add.aw:1778
+#: classes/applications/realestate_management/realestate_add.aw:110 classes/applications/realestate_management/realestate_add.aw:1782
 msgid "Maa"
 msgstr ""
 
@@ -206,59 +206,59 @@ msgstr ""
 msgid "väli '"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1002
+#: classes/applications/realestate_management/realestate_add.aw:1006
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1049 classes/applications/realestate_management/realestate_add.aw:1057
+#: classes/applications/realestate_management/realestate_add.aw:1053 classes/applications/realestate_management/realestate_add.aw:1061
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1245
+#: classes/applications/realestate_management/realestate_add.aw:1249
 msgid "Müük"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1246
+#: classes/applications/realestate_management/realestate_add.aw:1250
 msgid "Ost"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1247
+#: classes/applications/realestate_management/realestate_add.aw:1251
 msgid "Üürile anda"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1268
+#: classes/applications/realestate_management/realestate_add.aw:1272
 msgid "Aegunud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1271 classes/applications/realestate_management/realestate_add.aw:1272
+#: classes/applications/realestate_management/realestate_add.aw:1275 classes/applications/realestate_management/realestate_add.aw:1276
 msgid "Nähtav"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1271
+#: classes/applications/realestate_management/realestate_add.aw:1275
 msgid "päeva"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1274 classes/applications/realestate_management/realestate_add.aw:1275 classes/applications/realestate_management/realestate_add.aw:1282
+#: classes/applications/realestate_management/realestate_add.aw:1278 classes/applications/realestate_management/realestate_add.aw:1279 classes/applications/realestate_management/realestate_add.aw:1286
 msgid "Maksmata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1282
+#: classes/applications/realestate_management/realestate_add.aw:1286
 msgid "Nähtamatu"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1697 classes/applications/realestate_management/realestate_add.aw:1731
+#: classes/applications/realestate_management/realestate_add.aw:1701 classes/applications/realestate_management/realestate_add.aw:1735
 msgid "Mitu nädalat"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1699 classes/applications/realestate_management/realestate_add.aw:1733
+#: classes/applications/realestate_management/realestate_add.aw:1703 classes/applications/realestate_management/realestate_add.aw:1737
 msgid "pikendan"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1713
+#: classes/applications/realestate_management/realestate_add.aw:1717
 msgid "Tagasi"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_add.aw:1756
+#: classes/applications/realestate_management/realestate_add.aw:1760
 msgid "Maksma"
 msgstr ""
 

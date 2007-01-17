@@ -145,118 +145,178 @@ msgstr ""
 msgid "Seose Allkirjastaja (RELTYPE_SIGNER) tekst"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:96
+#: classes/common/digidoc/ddoc.aw:107
 msgid "Lisa fail"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:102
+#: classes/common/digidoc/ddoc.aw:110 classes/common/digidoc/ddoc.aw:123
+msgid "Antud DigiDoc on ALLKIRJASTATUD, faili lisamisega eemaldatatakse automaatselt allkirjad! Kas te soovite j"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:114
 msgid "Eemalda fail"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:121
+#: classes/common/digidoc/ddoc.aw:117
+msgid "Antud DigiDoc on ALLKIRJASTATUD, faili(de) eemaldamisega eemaldatakse ka allkirjad! Kas te soovite j"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:135
 msgid "Fail"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:125
+#: classes/common/digidoc/ddoc.aw:139
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:129
+#: classes/common/digidoc/ddoc.aw:143
 msgid "Suurus"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:142
+#: classes/common/digidoc/ddoc.aw:160
 msgid "kB"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:142
+#: classes/common/digidoc/ddoc.aw:160
 msgid "B"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:154
+#: classes/common/digidoc/ddoc.aw:172
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:161
+#: classes/common/digidoc/ddoc.aw:179
 msgid "Eemalda allkiri"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:175
+#: classes/common/digidoc/ddoc.aw:194
 msgid "Eesnimi"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:179
+#: classes/common/digidoc/ddoc.aw:198
 msgid "Perekonnanimi"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:183
+#: classes/common/digidoc/ddoc.aw:202
 msgid "Isikukood"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:187
+#: classes/common/digidoc/ddoc.aw:206
 msgid "Aeg"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:191
+#: classes/common/digidoc/ddoc.aw:210
 msgid "Roll"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:195
+#: classes/common/digidoc/ddoc.aw:214
 msgid "Asukoht"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:213
+#: classes/common/digidoc/ddoc.aw:232
 msgid "M&aauml;&aauml;ramata"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:427
+#: classes/common/digidoc/ddoc.aw:395
+msgid "Ei suutnud eemaldada allkirju"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:482
 msgid "Faili lisamine eba&otilde;nnestus!"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:483
+#: classes/common/digidoc/ddoc.aw:538
 msgid "Uue DigiDoc konteineri loomine eba&otilde;nnestus: "
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:491
+#: classes/common/digidoc/ddoc.aw:546
 msgid "Ei saanud k&auml;tte DigiDoc konteinerit:"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:508 classes/common/digidoc/ddoc.aw:573
+#: classes/common/digidoc/ddoc.aw:563 classes/common/digidoc/ddoc.aw:628
 msgid "DigiDoc'i faili sisu seadmine eba&otilde;nnestus"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:538
+#: classes/common/digidoc/ddoc.aw:593
 msgid "Eemaldatava faili id ei ole korrektne"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:544
+#: classes/common/digidoc/ddoc.aw:599
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:550
+#: classes/common/digidoc/ddoc.aw:605
 msgid "Ei saa eemaldada faile allkirjastatud DigiDoc'ilt"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:566
+#: classes/common/digidoc/ddoc.aw:621
 msgid "Ei saanud DigiDoc'i sisu k&auml;tte:"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:596
+#: classes/common/digidoc/ddoc.aw:651
 msgid "Vale objetki id!"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:777 classes/common/digidoc/ddoc.aw:832
+#: classes/common/digidoc/ddoc.aw:730
+msgid "&Uuml;henduse probleemid. Hetkel ei ole kahjuks v&otilde;imalik allkirjastada!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:733
+msgid "Viga sessiooni loomisel!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:869 classes/common/digidoc/ddoc.aw:937
+#: classes/common/digidoc/ddoc.aw:993
 msgid "Ei saanud lisada faili konteinerisse:"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:788 classes/common/digidoc/ddoc.aw:842
+#: classes/common/digidoc/ddoc.aw:880 classes/common/digidoc/ddoc.aw:948
+#: classes/common/digidoc/ddoc.aw:1003
 msgid "Ei saanud DigiDoc konteinerit k&auml;tte:"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:796 classes/common/digidoc/ddoc.aw:850
+#: classes/common/digidoc/ddoc.aw:888 classes/common/digidoc/ddoc.aw:956
+#: classes/common/digidoc/ddoc.aw:1011
 msgid "DigiDoc faili sisu m&auml;&auml;ramine eba&otilde;nnestus!"
 msgstr ""
 
-#: classes/common/digidoc/ddoc.aw:1040
+#: classes/common/digidoc/ddoc.aw:1296
 msgid "#"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1352 classes/common/digidoc/ddoc.aw:1381
+msgid "Uue t&uuml;hja digidoc konteineri loomine eba&otilde;nnestus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1361 classes/common/digidoc/ddoc.aw:1390
+msgid "Faili lisamine digidoc konteinerisse eba&otilde;nnestus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1494
+msgid "Allkirjastamise ettevalmistusetapp eba&otilde;nnestus! Palun proovige uuesti!"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1495 classes/common/digidoc/ddoc.aw:1532
+#: classes/common/digidoc/ddoc.aw:1544 classes/common/digidoc/ddoc.aw:1554
+msgid "T&auml;psem veateade: %s"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1531
+msgid "Allkirjastamise l&otilde;puetapp eba&otilde;nnestus! Palun proovige uuesti."
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1543
+msgid "Allkirjastatud digidoc konteineri saamine eba&otilde;nnestus."
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1553
+msgid "DigiDoc konteineri sisu m&auml;&auml;ramine eba&otilde;nnestus"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1626
+msgid "Ei suutnud eemaldada allkirja digidoc konteinerist:"
+msgstr ""
+
+#: classes/common/digidoc/ddoc.aw:1634
+msgid "Ei suutnud saada uut digidoc konteinerit:"
 msgstr ""

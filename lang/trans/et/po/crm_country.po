@@ -71,10 +71,22 @@ msgstr ""
 msgid "Omaduse Nimetus kohalikus keeles (name_native) help"
 msgstr ""
 
-#: classes/crm/crm_country.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/crm/crm_country.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/crm/crm_country.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/crm/crm_country.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_country.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/crm/crm_country.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_country.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""

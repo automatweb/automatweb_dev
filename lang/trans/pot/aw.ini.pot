@@ -2159,7 +2159,7 @@ msgid "Klassi Turismipakett (1180) nimi"
 msgstr ""
 
 #: aw.ini:class_1181
-msgid "Klassi Patent (1181) nimi"
+msgid "Klassi Trademark (1181) nimi"
 msgstr ""
 
 #: aw.ini:class_1182
@@ -2188,6 +2188,22 @@ msgstr ""
 
 #: aw.ini:class_1188
 msgid "Klassi Ruumi seaded (1188) nimi"
+msgstr ""
+
+#: aw.ini:class_1189
+msgid "Klassi Kaubam&auml;rgi veebist lisamine (1189) nimi"
+msgstr ""
+
+#: aw.ini:class_1190
+msgid "Klassi Kaubam&auml;rgitaotluse keskkond (1190) nimi"
+msgstr ""
+
+#: aw.ini:class_1191
+msgid "Klassi Autentimisserver kasutajadefineeritud (1191) nimi"
+msgstr ""
+
+#: aw.ini:class_1192
+msgid "Klassi RFP Haldus (1192) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29
@@ -2436,6 +2452,30 @@ msgstr ""
 
 #: aw.ini:classfolder_64
 msgid "Klassi kataloogi T&ouml;&ouml;aja planeerimine (64) nimi"
+msgstr ""
+
+#: aw.ini:acl_can_edit
+msgid "ACL tegevuse Muutmine (can_edit) nimi"
+msgstr ""
+
+#: aw.ini:acl_can_add
+msgid "ACL tegevuse Lisamine (can_add) nimi"
+msgstr ""
+
+#: aw.ini:acl_can_admin
+msgid "ACL tegevuse ACL Muutmine (can_admin) nimi"
+msgstr ""
+
+#: aw.ini:acl_can_delete
+msgid "ACL tegevuse Kustutamine (can_delete) nimi"
+msgstr ""
+
+#: aw.ini:acl_can_view
+msgid "ACL tegevuse Vaatamine (can_view) nimi"
+msgstr ""
+
+#: aw.ini:acl_can_subs
+msgid "ACL tegevuse Kehtib alamobjektidele (can_subs) nimi"
 msgstr ""
 
 #: aw.ini:syslogtypes_1
@@ -4560,6 +4600,14 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1187
 msgid "syslog.type.ST_SPA_BOOKINGS_OVERVIEW"
+msgstr ""
+
+#: aw.ini:syslogtypes_1191
+msgid "syslog.type.ST_AUTH_SERVER_USERDEFINED"
+msgstr ""
+
+#: aw.ini:syslogtypes_1192
+msgid "syslog.type.ST_RFP_MANAGER"
 msgstr ""
 
 #: aw.ini:syslogactions_1

@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse  (url_table) help"
 msgstr ""
 
+#: classes/admin/config/config_old_redirect.aw:prop_repl_t
+msgid "Omaduse  (repl_t) caption"
+msgstr ""
+
+#: classes/admin/config/config_old_redirect.aw:prop_repl_t_comment
+msgid "Omaduse  (repl_t) kommentaar"
+msgstr ""
+
+#: classes/admin/config/config_old_redirect.aw:prop_repl_t_help
+msgid "Omaduse  (repl_t) help"
+msgstr ""
+
 #: classes/admin/config/config_old_redirect.aw:prop_activity
 msgid "Omaduse Aktiivsus (activity) caption"
 msgstr ""
@@ -38,6 +50,14 @@ msgstr ""
 msgid "Omaduse Aktiivsus (activity) help"
 msgstr ""
 
+#: classes/admin/config/config_old_redirect.aw:group_repl
+msgid "Grupi Asendused (repl) pealkiri"
+msgstr ""
+
+#: classes/admin/config/config_old_redirect.aw:group_repl_help
+msgid "Grupi Asendused (repl) help"
+msgstr ""
+
 #: classes/admin/config/config_old_redirect.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
 msgstr ""
@@ -46,11 +66,19 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:59
+#: classes/admin/config/config_old_redirect.aw:65
 msgid "Vana aadress"
 msgstr ""
 
-#: classes/admin/config/config_old_redirect.aw:64
+#: classes/admin/config/config_old_redirect.aw:70
 msgid "Uus aadress"
+msgstr ""
+
+#: classes/admin/config/config_old_redirect.aw:160
+msgid "Mis asendada"
+msgstr ""
+
+#: classes/admin/config/config_old_redirect.aw:165
+msgid "Milega asendada"
 msgstr ""
 

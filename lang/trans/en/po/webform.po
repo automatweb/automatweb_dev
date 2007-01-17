@@ -992,15 +992,15 @@ msgstr "Register"
 msgid "Saada"
 msgstr "Send"
 
-#: classes/contentmgmt/webform.aw:2523
+#: classes/contentmgmt/webform.aw:2525
 msgid "Kinnita"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2528
+#: classes/contentmgmt/webform.aw:2530
 msgid "Tagasi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2650
+#: classes/contentmgmt/webform.aw:2652
 msgid "Liigu edasi &raquo;"
 msgstr "Go on &raquo;"
 

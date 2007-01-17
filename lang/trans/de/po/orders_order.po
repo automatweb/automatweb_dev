@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/orders/orders_order.aw:class_839_help
 msgid "Klassi Tellimus 2 help"
 msgstr ""
@@ -426,39 +425,38 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:202
+#: classes/applications/orders/orders_order.aw:205
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:206
+#: classes/applications/orders/orders_order.aw:209
 msgid "Toote kood"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:210
+#: classes/applications/orders/orders_order.aw:213
 msgid "Värv"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:214
+#: classes/applications/orders/orders_order.aw:217
 msgid "Suurus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:218
+#: classes/applications/orders/orders_order.aw:221
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:222
+#: classes/applications/orders/orders_order.aw:225
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:465
+#: classes/applications/orders/orders_order.aw:468
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:467
+#: classes/applications/orders/orders_order.aw:470
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:573
+#: classes/applications/orders/orders_order.aw:576
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr ""
-

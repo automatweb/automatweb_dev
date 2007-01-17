@@ -39,10 +39,38 @@ msgstr " "
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:551
+#: classes/applications/mailinglist/ml_queue.aw:410
+msgid "adding scheduler ! <br />"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_queue.aw:481
+msgid "Sending "
+msgstr ""
+
+#: classes/applications/mailinglist/ml_queue.aw:484
+msgid "Nothing to send..."
+msgstr ""
+
+#: classes/applications/mailinglist/ml_queue.aw:487
+msgid "Not sent: "
+msgstr ""
+
+#: classes/applications/mailinglist/ml_queue.aw:492
+msgid "Now sending next "
+msgstr ""
+
+#: classes/applications/mailinglist/ml_queue.aw:564
 msgid ""
 "done\n"
 "<br>"
 msgstr ""
 "done\n"
 "<br>"
+
+#: classes/applications/mailinglist/ml_queue.aw:600
+msgid "couldn't send mail<br />\n"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_queue.aw:670
+msgid "sending mail to: "
+msgstr ""

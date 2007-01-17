@@ -134,18 +134,6 @@ msgstr ""
 msgid "Omaduse Aeg (time) help"
 msgstr ""
 
-#: classes/common/room_price.aw:prop_prices
-msgid "Omaduse  (prices) caption"
-msgstr ""
-
-#: classes/common/room_price.aw:prop_prices_comment
-msgid "Omaduse  (prices) kommentaar"
-msgstr ""
-
-#: classes/common/room_price.aw:prop_prices_help
-msgid "Omaduse  (prices) help"
-msgstr ""
-
 #: classes/common/room_price.aw:prop_bargain_percent
 msgid "Omaduse Soodustuse protsent (bargain_percent) caption"
 msgstr ""
@@ -156,6 +144,18 @@ msgstr ""
 
 #: classes/common/room_price.aw:prop_bargain_percent_help
 msgid "Omaduse Soodustuse protsent (bargain_percent) help"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_prices_props
+msgid "Omaduse Hinnad (prices_props) caption"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_prices_props_comment
+msgid "Omaduse Hinnad (prices_props) kommentaar"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_prices_props_help
+msgid "Omaduse Hinnad (prices_props) help"
 msgstr ""
 
 #: classes/common/room_price.aw:60
@@ -186,19 +186,19 @@ msgstr ""
 msgid "P"
 msgstr ""
 
-#: classes/common/room_price.aw:101
+#: classes/common/room_price.aw:105
 msgid "Hind"
 msgstr ""
 
-#: classes/common/room_price.aw:102
+#: classes/common/room_price.aw:106
 msgid "Soodushind"
 msgstr ""
 
-#: classes/common/room_price.aw:220
+#: classes/common/room_price.aw:225
 msgid "Valuutad"
 msgstr ""
 
-#: classes/common/room_price.aw:221
+#: classes/common/room_price.aw:226
 msgid "Hind ei ole seotud &uuml;hegi ruumiga v&otilde;i on valuutad m&auml;&auml;ramata"
 msgstr ""
 

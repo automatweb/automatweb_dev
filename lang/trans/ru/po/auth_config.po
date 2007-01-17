@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/users/auth/auth_config.aw:class_843_help
 msgid "Klassi Autentimise Seaded help"
 msgstr ""
@@ -36,14 +35,6 @@ msgstr ""
 
 #: classes/core/users/auth/auth_config.aw:prop_activity_help
 msgid "Omaduse Aktiivsus (activity) help"
-msgstr ""
-
-#: classes/core/users/auth/auth_config.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/core/users/auth/auth_config.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/core/users/auth/auth_config.aw:group_servers
@@ -85,4 +76,3 @@ msgstr ""
 #: classes/core/users/auth/auth_config.aw:137
 msgid "Nimetus"
 msgstr ""
-

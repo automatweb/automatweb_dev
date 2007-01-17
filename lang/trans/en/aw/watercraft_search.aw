@@ -2,7 +2,6 @@
 $GLOBALS["TRANS"]["Omaduse Tulemuste arv lehel (results_on_page) caption"] = "Results on page";
 $GLOBALS["TRANS"]["Omaduse Maksimaalne tulemuste arv (max_results) caption"] = "Max results";
 $GLOBALS["TRANS"]["Omaduse &Auml;ra kuva otsinguvormi (no_search_form) caption"] = "Do not show search form";
-$GLOBALS["TRANS"]["Omaduse Salvestatud otsing (saved_searches) caption"] = "Saved search";
 $GLOBALS["TRANS"]["Omaduse Otsinguvormis kuvatavad v&auml;ljad (search_form_conf) caption"] = "Properties to show in search form";
 $GLOBALS["TRANS"]["Grupi Parameetrid (parameters) pealkiri"] = "Parameters";
 $GLOBALS["TRANS"]["Aluse t&uuml;&uuml;p"] = "Watercraft type";

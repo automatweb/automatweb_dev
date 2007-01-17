@@ -122,21 +122,15 @@ msgid "Omaduse Toodete kaust (dir_toode) help"
 msgstr ""
 
 #: classes/crm/crm_db.aw:prop_dir_default
-msgid ""
-"Omaduse Kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda "
-"(dir_default) caption"
+msgid "Omaduse Kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda (dir_default) caption"
 msgstr ""
 
 #: classes/crm/crm_db.aw:prop_dir_default_comment
-msgid ""
-"Omaduse Kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda "
-"(dir_default) kommentaar"
+msgid "Omaduse Kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda (dir_default) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_db.aw:prop_dir_default_help
-msgid ""
-"Omaduse Kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda "
-"(dir_default) help"
+msgid "Omaduse Kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda (dir_default) help"
 msgstr ""
 
 #: classes/crm/crm_db.aw:prop_flimit
@@ -252,7 +246,7 @@ msgid "Seose Organisatsioonide kaust (RELTYPE_FIRMA_CAT) tekst"
 msgstr ""
 
 #: classes/crm/crm_db.aw:rel_RELTYPE_ISIK_CAT
-msgid "Seose T&ouml;&ouml;tajate kaust (RELTYPE_ISIK_CAT) tekst"
+msgid "Seose Tˆˆtajate kaust (RELTYPE_ISIK_CAT) tekst"
 msgstr ""
 
 #: classes/crm/crm_db.aw:rel_RELTYPE_ADDRESS_CAT
@@ -280,7 +274,7 @@ msgid "Seose Toodete kataloogide kaust (RELTYPE_TOODE_CAT) tekst"
 msgstr ""
 
 #: classes/crm/crm_db.aw:rel_RELTYPE_GENERAL_CAT
-msgid "Seose &Uuml;ldkaust (RELTYPE_GENERAL_CAT) tekst"
+msgid "Seose ‹ldkaust (RELTYPE_GENERAL_CAT) tekst"
 msgstr ""
 
 #: classes/crm/crm_db.aw:rel_RELTYPE_CALENDAR
@@ -288,7 +282,7 @@ msgid "Seose Kalender (RELTYPE_CALENDAR) tekst"
 msgstr ""
 
 #: classes/crm/crm_db.aw:rel_RELTYPE_ETTEVOTLUSVORM_CAT
-msgid "Seose &Otilde;iguslike vormide kaust (RELTYPE_ETTEVOTLUSVORM_CAT) tekst"
+msgid "Seose ’iguslike vormide kaust (RELTYPE_ETTEVOTLUSVORM_CAT) tekst"
 msgstr ""
 
 #: classes/crm/crm_db.aw:rel_RELTYPE_FORMS
@@ -303,7 +297,7 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_db.aw:185 classes/crm/crm_db.aw:405
+#: classes/crm/crm_db.aw:185 classes/crm/crm_db.aw:416
 msgid "Kustuta"
 msgstr ""
 
@@ -351,34 +345,34 @@ msgstr ""
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_db.aw:371
-msgid "Lisa organisatsioon"
+#: classes/crm/crm_db.aw:381
+msgid "Lisa organisatsioon (%s)"
 msgstr ""
 
-#: classes/crm/crm_db.aw:379
+#: classes/crm/crm_db.aw:390
 msgid "Lisa tegevusala"
 msgstr ""
 
-#: classes/crm/crm_db.aw:391
+#: classes/crm/crm_db.aw:402
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_db.aw:399
+#: classes/crm/crm_db.aw:410
 msgid "Ava valim"
 msgstr ""
 
-#: classes/crm/crm_db.aw:407
+#: classes/crm/crm_db.aw:418
 msgid "Kustutada valitud organisatsioonid?"
 msgstr ""
 
-#: classes/crm/crm_db.aw:417
+#: classes/crm/crm_db.aw:428
 msgid "-- vali valim --"
 msgstr ""
 
-#: classes/crm/crm_db.aw:442
+#: classes/crm/crm_db.aw:453
 msgid "Lisa valitud valimisse"
 msgstr ""
 
-#: classes/crm/crm_db.aw:444
+#: classes/crm/crm_db.aw:455
 msgid "Paiguta valitud organisatsioonid sellesse valimisse?"
 msgstr ""

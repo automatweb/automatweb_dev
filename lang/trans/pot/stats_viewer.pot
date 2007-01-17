@@ -690,16 +690,20 @@ msgstr ""
 msgid "Juurobjekt"
 msgstr ""
 
+#: classes/applications/stats/stats_viewer.aw:505
+msgid "Kasutajad"
+msgstr ""
+
+#: classes/applications/stats/stats_viewer.aw:532 classes/applications/stats/stats_viewer.aw:561 classes/applications/stats/stats_viewer.aw:686
+msgid "Kasutajagrupp"
+msgstr ""
+
 #: classes/applications/stats/stats_viewer.aw:540 classes/applications/stats/stats_viewer.aw:549 classes/applications/stats/stats_viewer.aw:556 classes/applications/stats/stats_viewer.aw:562
 msgid "Otsi"
 msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:555 classes/applications/stats/stats_viewer.aw:681 classes/applications/stats/stats_viewer.aw:1465
 msgid "Kasutaja"
-msgstr ""
-
-#: classes/applications/stats/stats_viewer.aw:561 classes/applications/stats/stats_viewer.aw:686
-msgid "Kasutajagrupp"
 msgstr ""
 
 #: classes/applications/stats/stats_viewer.aw:567 classes/applications/stats/stats_viewer.aw:2325

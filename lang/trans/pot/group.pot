@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/users/group.aw:class_38_help
-msgid "Klassi Kasutaja1 help"
+#: classes/core/users/group.aw:class_37_help
+msgid "Klassi Kasutajagrupp help"
 msgstr ""
 
 #: classes/core/users/group.aw:prop_gid
@@ -331,7 +331,7 @@ msgid "Seose Acl (RELTYPE_ACL) tekst"
 msgstr ""
 
 #: classes/core/users/group.aw:rel_RELTYPE_ADMIN_ROOT
-msgid "Seose Rootmen&amp;uuml;&amp;uuml; (RELTYPE_ADMIN_ROOT) tekst"
+msgid "Seose Rootmen&uuml;&uuml; (RELTYPE_ADMIN_ROOT) tekst"
 msgstr ""
 
 #: classes/core/users/group.aw:rel_RELTYPE_ADD_TREE

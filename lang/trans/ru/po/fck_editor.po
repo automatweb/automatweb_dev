@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/fck_editor.aw:15
 msgid "RTE"
 msgstr ""
@@ -18,3 +17,6 @@ msgstr ""
 msgid "HTML"
 msgstr ""
 
+#: classes/vcl/fck_editor.aw:76
+msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
+msgstr ""

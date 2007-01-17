@@ -14,23 +14,47 @@ msgstr ""
 msgid "Parool on edukalt vahetatud"
 msgstr ""
 
-#: classes/users.aw:773
+#: classes/users.aw:338
+msgid "Sellise kasutajanimega kasutaja on juba olemas!"
+msgstr ""
+
+#: classes/users.aw:349
+msgid "Kasutajanimes tohivad sisalduda ainult t&auml;hed, numbrid ja alakriips!"
+msgstr ""
+
+#: classes/users.aw:360
+msgid "Sisestatud paroolid on erinevad!"
+msgstr ""
+
+#: classes/users.aw:371
+msgid "Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!"
+msgstr ""
+
+#: classes/users.aw:382
+msgid "Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!"
+msgstr ""
+
+#: classes/users.aw:393
+msgid "Paroolis peab olema v&auml;hemalt 3 t&auml;hte!"
+msgstr ""
+
+#: classes/users.aw:766
 msgid "Vigane kasutajanimi"
 msgstr ""
 
-#: classes/users.aw:785
+#: classes/users.aw:778
 msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
-#: classes/users.aw:797
+#: classes/users.aw:790
 msgid "Sellist võtit pole väljastatud"
 msgstr ""
 
-#: classes/users.aw:809
+#: classes/users.aw:802
 msgid "See võti on juba aegunud"
 msgstr ""
 
-#: classes/users.aw:809
+#: classes/users.aw:802
 msgid "Telli uusi v&otilde;ti"
 msgstr ""
 

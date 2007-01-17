@@ -49,6 +49,6 @@ msgstr ""
 msgid "Omaduse Lisandunud t&ouml;&ouml;tunnid (add_wh) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_comment.aw:43
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:46
 msgid "--vali--"
 msgstr ""

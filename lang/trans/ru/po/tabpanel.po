@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/vcl/tabpanel.aw:56 classes/vcl/tabpanel.aw:231
+#: classes/vcl/tabpanel.aw:56 classes/vcl/tabpanel.aw:235
 msgid "first"
 msgstr ""
 
 #: classes/vcl/tabpanel.aw:61
 msgid "second"
 msgstr ""
-
