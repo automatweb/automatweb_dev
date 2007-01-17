@@ -71,6 +71,16 @@
             <caption>Kestvus</caption>
       </property>
       <property>
+            <name>parts</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <field>parts</field>
+            <caption>Osalejad</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>objects</table>
             <group>general</group>

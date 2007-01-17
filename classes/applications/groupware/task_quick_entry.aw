@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.25 2006/12/18 10:46:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.26 2007/01/17 10:22:50 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -33,6 +33,9 @@
 
 @property duration type=textbox store=no size=5
 @caption Kestvus
+
+@property parts type=chooser multiple=1 orient=vertical
+@caption Osalejad
 
 @property content type=textarea store=no rows=10 cols=50
 @caption Sisu
@@ -130,6 +133,11 @@ class task_quick_entry extends class_base
 			case "cust_n":
 				$prop["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
 				$prop["autocomplete_params"] = array("cust_n");
+				break;
+
+			case "parts":
+				$co = get_instance(CL_CRM_COMPANY);
+				$prop["options"] = $co->get_employee_picker(null, false, true);
 				break;
 		};
 		return $retval;
@@ -485,6 +493,12 @@ class task_quick_entry extends class_base
 
 			$t_i = $t->instance();
 			$t_i->add_participant($t, $cur_p);
+
+			foreach(safe_array($arr["request"]["parts"]) as $part)
+			{
+				$t_i->add_participant($t, obj($part));
+			}
+
 
 			$t_i->get_property(array(
 				"prop" => array(
