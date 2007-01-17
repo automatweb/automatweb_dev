@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.97 2007/01/15 12:06:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.98 2007/01/17 13:33:28 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1518,6 +1518,8 @@ class room extends class_base
 		}
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len);
 		$this->_init_calendar_t($t,$this->start, $len);
+
+		$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
 		
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
 		// this seems to fuck up in reval room calendar view and only display time to 15:00
@@ -1543,13 +1545,14 @@ class room extends class_base
 						
 					)))
 					{
-//					echo "is availabale for ".date("d.m.Y H:i", $start_step)." - ".date("d.m.Y H:i", $end_step)." <br>";
-						$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
-						$arr["timestamp"] = $start_step;$prod_menu="";
+						$arr["timestamp"] = $start_step;
+						$prod_menu="";
 						if($arr["obj_inst"]->prop("use_product_times"))
 						{
 							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
-							$prod_menu = $this->get_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
+							//$prod_menu = $this->get_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
+							$img_id = 'm_'.$arr["obj_inst"]->id().'_'.$start_step;
+							$prod_menu = '<a class="menuButton" href="javascript:void(0)" onclick="bron_disp_popup(\'bron_menu_'.$arr["obj_inst"]->id().'\', '.$start_step.',\''.$img_id.'\');" alt="" title="" id=""><img alt="" title="" border="0" src="'.aw_ini_get("icons.server").'/class_.gif" id="'.$img_id.'" ></a>';
 						}
 						else
 						if ($settings->prop("bron_popup_immediate") && is_admin())
@@ -1731,6 +1734,36 @@ class room extends class_base
 		}
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
+
+		$popup_menu = $this->get_room_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
+		$t->set_caption(t("Broneerimine").$popup_menu);
+	}
+
+	function get_room_prod_menu($arr, $immediate = false)
+	{
+		$res = '<div class="menu" id="bron_menu_'.$arr["obj_inst"]->id().'" style="display: none;">';
+
+		$m_oid = $arr["obj_inst"]->id();
+		$this->prod_data = $arr["obj_inst"]->meta("prod_data");
+		$item_list = $this->get_active_items($arr["obj_inst"]->id());
+		$prod_list = $item_list->names();
+		$times = array();
+		foreach($prod_list as $oid => $pname)
+		{
+			$times[$oid] = $this->cal_product_reserved_time(array("id" => $m_oid, "oid" => $oid));
+		}
+		foreach($prod_list as $oid => $name)
+		{
+			$res .='<a class="menuItem" href="javascript:dontExecutedoBron=1;void(0)"  onClick="'.($immediate? "doBronExec" : "doBron").'(
+					\''.$m_oid.'_\'+current_timestamp ,
+					'.$arr["step_length"].' ,
+					'.$times[$oid].' ,
+					'.$oid.');">'.$name.'</a>';
+		}
+
+
+		$res .= '</div>';
+		return $res;
 	}
 	
 	function get_colour_for_bron($bron, $settings)

@@ -17,5 +17,16 @@
 			</function>
 		</action>
 
+		<action name="room_booking_printer">
+			<function name="room_booking_printer">
+				<arguments>
+					<required name="rooms" />
+					<optional name="from" />
+					<optional name="to" />
+					<optional name="group" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

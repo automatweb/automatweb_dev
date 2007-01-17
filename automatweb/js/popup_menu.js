@@ -40,6 +40,7 @@ var pp_browser = new XBrowser();
 //----------------------------------------------------------------------------
 
 var activeButton = null;
+var reset_func = resetButton;
 
 // Capture mouse clicks on the page so any active button can be
 // deactivated.
@@ -50,14 +51,12 @@ else
   document.addEventListener("mousedown", pageMousedown, true);
 
 function pageMousedown(event) {
-
   var el;
 
   // If there is no active button, exit.
 
   if (activeButton == null)
     return;
-
   // Find the element that was clicked on.
 
   if (pp_browser.isIE)
@@ -74,7 +73,7 @@ function pageMousedown(event) {
   // button.
 
   if (getContainerWith(el, "DIV", "menu") == null) {
-    resetButton(activeButton);
+    reset_func(activeButton);
     activeButton = null;
   }
 }

@@ -21,6 +21,17 @@
             <caption>Omanik</caption>
       </property>
       <property>
+            <name>groups</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_GROUP</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <caption>Kasutajagrupid</caption>
+      </property>
+      <property>
             <name>r_tb</name>
             <table>objects</table>
             <group>rooms</group>
@@ -141,6 +152,11 @@
                   </clid>
                   <caption>Omanik</caption>
             </OWNER>
+            <GROUP>
+                  <value>3</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Kasutajagrupp</caption>
+            </GROUP>
       </reltypes>
       <layout>
             <r_split>

@@ -207,3 +207,40 @@ function getRIDFromPrefixAndTimestamp (str)
 	t = splitPrefixAndTimestamp (str);
 	return t["prefix"];
 }
+
+var current_popup;
+function bron_disp_popup(elname, timestamp, position_el)
+{
+	var pop_el, el, x, y;
+	pop_el=document.getElementById(elname);
+	current_popup = pop_el;
+
+	el = document.getElementById(position_el);
+	activeButton=el;
+
+	x = getPageOffsetLeft(el);
+	if (pp_browser.isIE)
+	{
+		y = getPageOffsetTop(el) + el.offsetHeight + 10 ;
+	}
+	else
+	{
+		y = getPageOffsetTop(el) + el.offsetHeight;
+	}
+	if (pp_browser.isIE) 
+	{
+		x += el.offsetParent.clientLeft;
+		y += el.offsetParent.clientTop;
+	}
+	pop_el.style.left = x + "px";
+	pop_el.style.top  = y + "px";
+	pop_el.style.visibility = "visible";
+	current_timestamp = timestamp;
+	reset_func = cancel_bron_popup_dialog;
+	pop_el.style.display='block';
+}
+
+function cancel_bron_popup_dialog(el)
+{
+	current_popup.style.display = 'none';
+}

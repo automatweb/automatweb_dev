@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.8 2007/01/12 13:39:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.9 2007/01/17 13:33:29 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -444,7 +444,7 @@ class spa_bookings_overview extends class_base
 			// show room cal
 			$ro = obj($room_id);
 			$ri = $ro->instance();
-			$t = new aw_table;
+			$t = new vcl_table;
 			$prop = array(
 				"vcl_inst" => &$t
 			);
@@ -459,7 +459,7 @@ class spa_bookings_overview extends class_base
 					"group" => "calendar",
 					"start" => $_GET["start"],
 					"end" => $_GET["end"]
-				), parse_obj_name($ro->name()))."<br>".$t->draw()
+				), parse_obj_name($ro->name()))."<br>".$t->get_html()
 			));
 			$cals .= $this->parse("CAL");
 		}

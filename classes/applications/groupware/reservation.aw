@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.27 2007/01/15 11:41:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.28 2007/01/17 13:33:29 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -224,22 +224,9 @@ class reservation extends class_base
 				break;
 				
 			case "products_text":
-				$amount = $arr["obj_inst"]->meta("amount");
-				$val = array();
-				foreach($amount as $product => $amt)
-				{
-					if($amt && $this->can("view", $product))
-					{
-						$prod=obj($product);
-						$val[] = sprintf(t("%s: %s tk / %s"),
-							$prod->name(),
-							$amt,
-							number_format($prod->prop("price")*$amt,2)
-						);
-					}
-				}
-				$prop["value"] = join($val , "<br>");
+				$prop["value"] = $this->get_products_text($arr["obj_inst"]);
 				break;	
+
 			case "people":
 				if(is_oid($arr["obj_inst"]->meta("resource")))
 				{
@@ -847,6 +834,7 @@ class reservation extends class_base
 			$ret.= "\n<br>".html::submit(array("name" => "submit", "value" => t("M&auml;rgi")));
 			$ret.="</form>";
 		}
+		$ret.="<!-- $arr[bron] -->";
 		die($ret);
 	}
 
@@ -1205,6 +1193,25 @@ class reservation extends class_base
 			return $s->prop("del_mail_from_name")." <".$s->prop("del_mail_from").">";
 		}
 		return $s->prop("del_mail_from");
+	}
+
+	function get_products_text($o, $sep = "<BR>")
+	{
+		$amount = $o->meta("amount");
+		$val = array();
+		foreach($amount as $product => $amt)
+		{
+			if($amt && $this->can("view", $product))
+			{
+				$prod=obj($product);
+				$val[] = sprintf(t("%s: %s tk / %s"),
+					$prod->name(),
+					$amt,
+					number_format($prod->prop("price")*$amt,2)
+				);
+			}
+		}
+		return join($val , $sep);
 	}
 }
 ?>

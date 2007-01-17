@@ -4,7 +4,7 @@
             <name>b_tb</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -14,7 +14,7 @@
             <name>name</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>textbox</type>
             <field>name</field>
             <method>none</method>
@@ -25,7 +25,7 @@
             <name>deadline</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>datetime_select</type>
             <field>deadline</field>
             <caption>Maksmist&amp;auml;htaeg</caption>
@@ -34,7 +34,7 @@
             <name>verified</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -47,7 +47,7 @@
             <name>unverify_reason</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -57,7 +57,7 @@
             <name>resource</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>relpicker</type>
             <reltype>RELTYPE_RESOURCE</reltype>
             <field>meta</field>
@@ -68,7 +68,7 @@
             <name>customer</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>relpicker</type>
             <field>customer</field>
             <reltype>RELTYPE_CUSTOMER</reltype>
@@ -78,7 +78,7 @@
             <name>cp_fn</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>20</size>
@@ -89,7 +89,7 @@
             <name>cp_ln</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>20</size>
@@ -100,7 +100,7 @@
             <name>cp_phone</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>12</size>
@@ -111,7 +111,7 @@
             <name>cp_email</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>textbox</type>
             <store>no</store>
             <size>20</size>
@@ -122,7 +122,7 @@
             <name>project</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>relpicker</type>
             <field>project</field>
             <reltype>RELTYPE_PROJECT</reltype>
@@ -132,7 +132,7 @@
             <name>send_bill</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>send_bill</field>
@@ -143,7 +143,7 @@
             <name>bill_no</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>hidden</type>
             <field>bill_no</field>
             <caption>Arve number</caption>
@@ -152,7 +152,7 @@
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>textarea</type>
             <cols>40</cols>
             <rows>1</rows>
@@ -163,7 +163,7 @@
             <name>content</name>
             <table>planner</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>textarea</type>
             <cols>40</cols>
             <rows>5</rows>
@@ -174,7 +174,7 @@
             <name>time_closed</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -185,12 +185,34 @@
             <name>closed_info</name>
             <table>objects</table>
             <group>general</group>
-            <parent>general_up</parent>
+            <parent>general_up_up</parent>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <size>30</size>
             <caption>Sulgemise p&amp;amp;otilde;hjus</caption>
+      </property>
+      <property>
+            <name>sbt</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>sbt_layout</parent>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>sbt</field>
+            <caption>Salvesta</caption>
+      </property>
+      <property>
+            <name>sbt_close</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>sbt_layout</parent>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>sbt_close</field>
+            <caption>Salvesta ja sulge</caption>
       </property>
       <property>
             <name>people_count</name>
@@ -371,6 +393,16 @@
                   <parent>general_split</parent>
                   <group>general</group>
             </general_up>
+            <general_up_up>
+                  <parent>general_up</parent>
+                  <type>vbox</type>
+                  <group>general</group>
+            </general_up_up>
+            <sbt_layout>
+                  <type>hbox</type>
+                  <parent>general_up</parent>
+                  <group>general</group>
+            </sbt_layout>
             <general_down>
                   <type>vbox</type>
                   <closeable>1</closeable>
