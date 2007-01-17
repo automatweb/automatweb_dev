@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.16 2007/01/16 16:38:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.17 2007/01/17 11:53:07 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -638,7 +638,7 @@ class spa_bookigs_entry extends class_base
 								$room = obj($sets["room"]);
 								$prod2room[$_prod_id] = $room->id();
 								$prod2tm[$_prod_id] = $sets["from"];
-								$date .= sprintf("Ruum %s, ajal %s - %s", $room->name(), date("d.m.Y H:i", $sets["from"]), date("d.m.Y H:i", $sets["to"]));
+								$date .= sprintf(t("Ruum %s, ajal %s - %s"), $room->name(), date("d.m.Y H:i", $sets["from"]), date("d.m.Y H:i", $sets["to"]));
 								$date_booking_id = $sets["reservation_id"];
 							}
 						}
@@ -748,7 +748,7 @@ class spa_bookigs_entry extends class_base
 			die(t("Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"));
 		}
 
-		get_instance(CL_ROOM);
+		$room_inst = get_instance(CL_ROOM);
 		$room2inst = array();
 		foreach($p_rooms as $room_id => $room_obj)
 		{
@@ -779,6 +779,18 @@ class spa_bookigs_entry extends class_base
 		$p = get_current_person();
 		$settings_inst = get_instance(CL_ROOM_SETTINGS);
 		$data = array();
+		$oh_i = get_instance(CL_OPENHOURS);
+
+		$room2oh = array();
+		foreach($p_rooms as $room)
+		{
+			$oh = $room->prop("openhours");
+			if ($this->can("view", $oh))
+			{
+				$oh = obj($oh);
+				$room2oh[$room->id()] = $oh;
+			}
+		}
 
 		for ($h = 0; $h < $num_steps; $h++)
 		{
@@ -801,28 +813,12 @@ class spa_bookigs_entry extends class_base
 				$avail = false;
 				foreach($p_rooms as $room)
 				{
-					$oh = $room->prop("openhours");
-					
-					if ($this->can("view", $oh))
+					if ($room2oh[$room->id()])
 					{
-						$oh = obj($oh);
-						$oh_i = $oh->instance();
-						list($d_start, $d_end) = $oh_i->get_times_for_date($oh, $range_from+($i*24*3600)+$h*3600);
+						list($d_start, $d_end) = $oh_i->get_times_for_date($room2oh[$room->id()], $range_from+($i*24*3600)+$h*3600);
 						$d_from = min($d_from, $d_start);
 						$d_to = max($d_to, $d_end);
-						//arr(date("G:i" , $room_midday));
-					
-						if(!$room_midday)
-						{
-							$room_midday = $oh_i->get_midday($oh,$range_from+($i*24*3600)+$h*3600);
-						}
-						if(!$settings)
-						{
-							$settings = $settings_inst->get_current_settings($room->id());
-						}
-						
 					}
-					$room_inst = $room->instance();
 					if ($room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => $cur_step_end)))
 					{
 						$avail = true;
@@ -876,6 +872,31 @@ class spa_bookigs_entry extends class_base
 				//$t->define_data($d);
 			}
 		}
+
+		foreach($p_rooms as $room)
+		{
+			$oh = $room->prop("openhours");
+			
+			if ($this->can("view", $oh))
+			{
+				$oh = obj($oh);
+				list($d_start, $d_end) = $oh_i->get_times_for_date($oh, $range_from+($i*24*3600)+$h*3600);
+				$d_from = min($d_from, $d_start);
+				$d_to = max($d_to, $d_end);
+				//arr(date("G:i" , $room_midday));
+			
+				if(!$room_midday)
+				{
+					$room_midday = $oh_i->get_midday($oh,$range_from+($i*24*3600)+$h*3600);
+				}
+				if(!$settings)
+				{
+					$settings = $settings_inst->get_current_settings($room->id());
+				}
+				
+			}
+		}
+
 
 		if(is_object($settings))
 		{
