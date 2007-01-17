@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.28 2007/01/17 13:33:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.29 2007/01/17 15:11:32 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -176,6 +176,21 @@ class reservation extends class_base
 				if($arr["new"] && $arr["request"][$prop["name"]])
 				{
 					$prop["value"] = $arr["request"][$prop["name"]];
+				}
+				if ($this->can("view", $prop["value"]))
+				{
+					$ri = get_instance(CL_ROOM);
+					$sets = $ri->get_settings_for_room(obj($prop["value"]));
+					if ($this->can("view", $sets->prop("related_room_folder")))
+					{
+						$rrs = new object_list(array(
+							"class_id" => CL_ROOM,
+							"parent" => $sets->prop("related_room_folder"),
+							"lang_id" => array(),
+							"site_id" => array()
+						));
+						$prop["options"] += $rrs->names();
+					}
 				}
 				break;
 			case "products_tbl":
