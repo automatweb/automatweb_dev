@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.99 2007/01/17 14:45:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.100 2007/01/17 14:49:08 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -961,13 +961,14 @@ class room extends class_base
 			$room_inst = get_instance(CL_ROOM);
 			$start1 = mktime($start1["hour"], $start1["minute"], 0, $start1["month"], $start1["day"], $start1["year"]);
 			$end = mktime($end["hour"], $end["minute"], 0, $end["month"], $end["day"], $end["year"]);
-			
+
 			if(is_oid($product))
 			{
+
 				$product_obj = obj($product);
 				$end = $start1 + $product_obj->prop("reservation_time")*$product_obj->prop("reservation_time_unit");
+
 			}
-			
 			if(!$room_inst->check_if_available(array(
 				"room" => $resource,
 				"start" => $start1,
@@ -975,6 +976,7 @@ class room extends class_base
 			)) && $room_inst->last_bron_id !=$id)
 			{
 				$err = t("Sellisele ajale pole broneerida v&otilde;imalik");
+				die($err);
 			}
 			else
 			{
@@ -1025,7 +1027,6 @@ class room extends class_base
 						$phone_obj = reset($phones->arr());
 					}
 				}
-				
 				if(strlen($firstname) || strlen($lastname))
 				{
 					$persons = new object_list(array(
@@ -1085,6 +1086,7 @@ class room extends class_base
 				$bron->save();
 				$id = $bron->id();
 				die("<script type='text/javascript'>
+					if (window.opener)
 					window.opener.location.href='".$arr['return_url']."';
 					window.close();
 					</script>
@@ -3645,8 +3647,9 @@ class room extends class_base
 		//	"start1" => new obj_predicate_compare(OBJ_COMP_LESS, ()),//24h hiljem pole ka vaja enam
 			"verified" => 1,
 		));
-		foreach($reservations->arr() as $res)
+		foreach($reservations->ids() as $id)
 		{
+			$res = obj($id);
 			if($res->prop("start1") < $min && $res->prop("start1")>100)
 			{
 				$ret = $res; $min = $res->prop("start1");

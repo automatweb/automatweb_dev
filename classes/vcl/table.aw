@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.100 2006/12/05 12:20:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.101 2007/01/17 14:49:09 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -571,7 +571,7 @@ class aw_table extends aw_template
 		{
 			foreach($this->rgroupby as $_rgcol => $rgel)
 			{
-				if ($this->rgroupsortdat[$_rgcol]["sort_el"])
+				if (is_array($this->rgroupsortdat[$_rgcol]) && $this->rgroupsortdat[$_rgcol]["sort_el"])
 				{
 					$v1 = $a[$this->rgroupsortdat[$_rgcol]["sort_el"]];
 					$v2 = $b[$this->rgroupsortdat[$_rgcol]["sort_el"]];

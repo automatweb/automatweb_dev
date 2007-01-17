@@ -628,7 +628,7 @@ function get_instance($class,$args = array(), $errors = true)
 	};
 
 	$id = "instance::" . $class;
-	$instance = aw_global_get($id);
+//	$instance = aw_global_get($id);
 
 	$lib = basename($class);
 

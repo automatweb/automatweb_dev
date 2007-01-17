@@ -7,11 +7,17 @@ $te->read_template("login.tpl");
 lc_site_load("login", $te);
 // if there is an auth config then get the list of servers to add 
 $ac = get_instance(CL_AUTH_CONFIG);
+
+$te->vars(array(
+	"uid" => $_GET["uid"]
+));
 if (is_oid($ac_id = auth_config::has_config()))
 {
 	$sl = $ac->get_server_ext_list($ac_id);
+
+
 	$te->vars(array(
-		"servers" => $te->picker(-1, $sl)
+		"servers" => $te->picker(-1, $sl),
 	));
 	if (count($sl))
 	{

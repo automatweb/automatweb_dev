@@ -324,6 +324,10 @@ class date_edit
 		{
 			return -1;
 		}
+		if (!is_array($var))
+		{
+			return -1;
+		}
 		$tmp =  mktime($var["hour"], $var["minute"], $var["second"], $var["month"], $var["day"], $var["year"]);
 		return $tmp;
 	}

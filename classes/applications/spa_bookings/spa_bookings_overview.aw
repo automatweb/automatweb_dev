@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.9 2007/01/17 13:33:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.10 2007/01/17 14:49:07 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -159,7 +159,7 @@ class spa_bookings_overview extends class_base
 		$from = date_edit::get_timestamp($arr["request"]["rs_booking_from"]);
 		$to = date_edit::get_timestamp($arr["request"]["rs_booking_to"]);
 
-		$srch = !empty($arr["request"]["rs_name"]) || !empty($arr["request"]["rs_booker_name"]) || $from > 1 || $to > 1 ;
+		$srch = !empty($arr["request"]["rs_name"]) || !empty($arr["request"]["rs_booker_name"]) || $from > 1 || $to > 1 ;	
 		$room2booking = array();
 		if ($srch)
 		{
@@ -224,7 +224,6 @@ class spa_bookings_overview extends class_base
 			$f["parent"] = $this->make_keys($flds->ids());
 			$f["parent"][$rf->id()] = $rf->id();
 			
-		
 			$f["sort_by"] = "objects.jrk";
 			$ol = new object_list($f);
 		}

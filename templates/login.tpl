@@ -9,7 +9,7 @@
 		<!-- END SUB: TEXT_FOR_LOGIN -->
 		<tr>
 			<td>Kasutajanimi:</td>
-			<td><input type="text" name="uid" value="{VAR:uid}"/></td>
+			<td><input type="text" name="uid" value="{VAR:uid}" /></td>
 		</tr>
 		<tr>
 			<td>Parool:</td>
