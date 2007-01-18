@@ -75,5 +75,12 @@
 			</function>
 		</action>
 
+		<action name="my_unsigned_patent_list" is_public="1" caption="Minu patenditaotlused">
+			<function name="my_unsigned_patent_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.11 2007/01/16 08:32:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.12 2007/01/18 15:40:08 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -282,6 +282,15 @@ class trademark_manager extends class_base
 			}
 			$procurator = $type = $nr = $applicant_name = $applicant_data = $applicant = "";
 			$procurator = $o->prop_str("procurator");
+			if($this->can("view" , $o->prop("warrant")))
+			{
+				$file_inst = get_instance(CL_FILE);
+				$procurator = html::href(array(
+					"caption" => $procurator,
+					"url" => "#",//html::get_change_url($o->id(), array("return_url" => $arr["post_ru"])),
+					"onclick" => 'javascript:window.open("'.$file_inst->get_url($o->prop("warrant")).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+				));
+			}
 			$type = $types[$o->prop("type")];
 			if($o->prop("type") == 0 && $o->prop("word_mark"))
 			{
@@ -494,6 +503,8 @@ class trademark_manager extends class_base
 		{
 			$o = obj($id);
 			$o->set_prop("verified",1);
+			$o->set_name(t("Taotlus nr: ".$o->prop("nr")));
+			
 //			$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
 //			$o->set_prop("nr" , $tno);
 			if($parent)
@@ -534,12 +545,14 @@ class trademark_manager extends class_base
 	**/
 	function nightly_export($arr)
 	{
+		classload("core/date/date_calc");
 		// list all patents created today
 		$ol = new object_list(array(
 			"class_id" => CL_PATENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"verified" => 1 
+			"verified" => 1,
+			"modified" => new obj_predicate_compare(OBJ_COMP_GREATER, get_day_start()) 
 		));
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
 		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
@@ -565,9 +578,12 @@ class trademark_manager extends class_base
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.aadress")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.linn.name")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
+//echo "aadres ".$appl->prop("address")." <br>";
+//echo "riik = ".$appl->prop("address.riik")." <br>";
 							if ($this->can("view", $appl->prop("address.riik")))
 							{
 								$xml .= "\t\t\t\t<COUNTRY>".$adr_i->get_country_code(obj($appl->prop("address.riik")))."</COUNTRY>\n";
+//echo "country code from ".$appl->prop("address.riik.name")." => ".$adr_i->get_country_code(obj($appl->prop("address.riik")))." <br>";
 							}
 						}
 						else
@@ -611,6 +627,7 @@ class trademark_manager extends class_base
 
 				$xml .= "\t\t</REPGR>\n";
 				}
+				$type = ""; 
 				// save image to folder
 				if ($this->can("view", $o->prop("reproduction")))
 				{
@@ -625,14 +642,16 @@ class trademark_manager extends class_base
 				$f = fopen($fn ,"w");
 				fwrite($f, $imd["content"]);
 				fclose($f);
-				$xml .= "\t\t<IMAGENAME=\"".sprintf("%08d", $o->prop("nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
-				}
+				}//tõstsin seda ettepoole, et ilma reproduktsioonita tahetakse ka tegelikult sõnalist osa näha
+				$xml .= "\t\t<IMAGE NAME=\"".sprintf("%08d", $o->prop("nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
+				
 
 				$xml .= "\t\t<MARTRGR>\n";
 					$xml .= "\t\t\t<MARTREN>".$o->prop("element_translation")."</MARTREN>\n";
 				$xml .= "\t\t</MARTRGR>\n";
-
-				$xml .= "\t\t<TYPMARI>".($o->prop("trademark_type") == 0 ? "C" : "G")."</TYPMARI>\n";
+				$typm = $o->prop("trademark_type");
+//echo "typm = ".dbg::dump($typm)."  = <TYPMARI>".($typm["1"] == "1" ? "G" : "").($typm["0"] === "0" ? "C" : "")." <br>";
+				$xml .= "\t\t<TYPMARI>".($typm["1"] == "1" ? "G" : "").($typm["0"] === "0" ? "C" : "")."</TYPMARI>\n";
 
 				$xml .= "\t\t<MARDESGR>\n";
 					if ($o->prop("trademark_character") == "")
@@ -678,10 +697,13 @@ class trademark_manager extends class_base
 				$xml .= "\t\t</COLCLAGR>\n";
 
 				$xml .= "\t\t<BASICGS NICEVER=\"9\">\n";
-
+//echo dbg::dump($o->meta("products"));
 					foreach(safe_array($o->meta("products")) as $k => $v)
 					{
-						if ($this->can("view", $k))
+						$xml .= "\t\t\t<GSGR NICCLAI=\"".$k."\">\n";
+							$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".$v."]]></GSTERMEN>\n";
+						$xml .= "\t\t\t</GSGR>\n";
+						/*if ($this->can("view", $k))
 						{
 							$prod = obj($k);
 							if ($this->can("view", $prod->parent()))
@@ -689,22 +711,22 @@ class trademark_manager extends class_base
 								$parent = obj($prod->parent());
 								$xml .= "\t\t\t<GSGR NICCLAI=\"".$parent->comment()."\">\n";
 									if ($val == "")
-									{
-										$xml .= "\t\t\t\t<GSTERMEN></GSTERMEN>\n";
-									}
-									else
-									{
+									{	
 										$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".$val."]]></GSTERMEN>\n";
 									}
 								$xml .= "\t\t\t</GSGR>\n";
 							}
-						}
+						}*/
 					}
 				$xml .= "\t\t</BASICGS>\n";
 
 				$xml .= "\t\t<PRIGR>\n";
 					$xml .= "\t\t\t<PRICP>".$o->prop("convention_country")."</PRICP>\n";
-					$xml .= "\t\t\t<PRIAPPD>".date("Ymd",$o->prop("convention_date"))."</PRIAPPD>\n";
+//echo dbg::dump($o->prop("convention_date"));
+					if ($o->prop("convention_date") > 1)
+					{
+						$xml .= "\t\t\t<PRIAPPD>".date("Ymd",$o->prop("convention_date"))."</PRIAPPD>\n";
+					}
 					$xml .= "\t\t\t<PRIAPPN>".$o->prop("convention_nr")."</PRIAPPN>\n";
 				
 				$xml .= "\t\t</PRIGR>\n";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.42 2007/01/11 10:01:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.43 2007/01/18 15:40:07 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -526,7 +526,16 @@ class patent extends class_base
 		else
 		{
 			$data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onClick='javascript:document.changeform.submit();'>";
-		}		
+		}
+		
+		if($arr["sign"])
+		{
+			$ddoc_inst = get_instance(CL_DDOC);
+			$url = $ddoc_inst->sign_url(array(
+				"other_oid" =>$arr["id"],
+			));
+			$data["sign"] = "<input type='button' value='".t("Allkirjasta")."' class='nupp' onClick='javascript:window.open(\"".$url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>";
+		}
 		
 		$this->vars($data);
 		$p = "";
@@ -767,19 +776,29 @@ class patent extends class_base
 		}
 	}
 	
+	function check_and_give_rights($oid)
+	{
+		$o = obj($oid);
+		$uid = aw_global_get("uid");
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		$code = $p->prop("personal_id");
+		if($code && $code == $o->prop("authorized_person.personal_id"))
+		{
+			$u = get_instance("users_user");
+			$gid = $u->get_gid_by_uid($uid);
+			$grp = obj($u->get_oid_for_gid($gid));
+			$o->acl_set($grp, array("can_view" => 1, "can_edit" => 1, "can_delete" => 0));
+		}
+	}
+	
 	/** 
 		@attrib name=parse_alias is_public="1" caption="Change"
 	**/
 	function parse_alias($arr)
 	{
 		enter_function("patent::parse_alias");
-		if($_GET["trademark_id"])
-		{
-			$_SESSION["patent"] = null;
-			$_SESSION["patent"]["id"] = $_GET["trademark_id"];
-			$this->fill_session($_GET["trademark_id"]);
-		}
-		
+
 		if(!$_SESSION["patent"]["data_type"])
 		{
 			$_SESSION["patent"]["data_type"] = 0;
@@ -797,6 +816,34 @@ class patent extends class_base
 		{
 			return $this->my_patent_list();//$this->mk_my_orb("my_patent_list", array());
 		}
+		if($arr["data_type"] == 7)
+		{
+			return $this->my_unsigned_patent_list();//$this->mk_my_orb("my_patent_list", array());
+		}
+
+		
+		
+		if(isset($_GET["trademark_id"]))
+		{
+			$_SESSION["patent"] = null;
+			if(is_oid($_GET["trademark_id"]) && $this->can("view" , $_GET["trademark_id"]))
+			{
+				$_SESSION["patent"]["id"] = $_GET["trademark_id"];
+				$this->fill_session($_GET["trademark_id"]);
+				$this->check_and_give_rights($_GET["trademark_id"]);
+			}
+		}
+		
+		if(is_oid($_SESSION["patent"]["id"]) )
+		{
+			$o = obj($_SESSION["patent"]["id"]);
+			$status = $this->is_signed($o->id());
+			if($o->prop("nr") || $o->prop("verified") || ($status["status"] > 0))
+			{
+				return $this->show(array("id" => $o->id()));
+			}
+		}
+		
 		$tpl = $this->info_levels[$arr["data_type"]].".tpl";
 		$this->read_template($tpl);
 		lc_site_load("patent", &$this);
@@ -2247,7 +2294,6 @@ class patent extends class_base
 		$this->read_template($tpl);
 		lc_site_load("patent", $this);
 
-
 //		$has = $this->is_admin();
 		
 		if ($this->is_template("LIST"))
@@ -2257,6 +2303,10 @@ class patent extends class_base
 			{
 				$url = aw_url_change_var("trademark_id", $patent->id());
 				$url = aw_url_change_var("data_type", null , $url);
+				$view_url = $this->mk_my_orb("show", array(
+					"id" => $patent->id(),
+				), CL_PATENT);
+				
 				$this->vars(array(
 					"date" 		=> date("j.m.Y" , $patent->created()),
 					"nr" 		=> ($patent->prop("nr")) ? $patent->prop("nr") : "",
@@ -2267,6 +2317,8 @@ class patent extends class_base
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,
 					"procurator"  	=> $patent->prop_str("procurator"),
+					"change"	=> $url,
+					"view"		=> $view_url,
 				));
 				$c .= $this->parse("LIST");
 			}
@@ -2276,5 +2328,102 @@ class patent extends class_base
 		}
 		return $this->parse();
 	}
+	
+	/** Show patents added by user 
+		
+		@attrib name=my_unsigned_patent_list is_public="1" caption="Minu patenditaotlused"
+	
+	**/
+	function my_unsigned_patent_list($args)
+	{
+		$uid = aw_global_get("uid");
+		$section = aw_global_get("section");
+		
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		$code = $p->prop("personal_id");
+		
+		$obj_list = new object_list(array(
+			"class_id" => CL_PATENT,
+			"createdby" => $uid,
+			"lang_id" => array(),
+		));
+		
+		foreach($obj_list->arr() as $o)
+		{
+			if($o->prop("authorized_person.personal_id"))
+			{
+				$obj_list->remove($o);
+			}
+		}
+		
+		if($code)
+		{
+			$persons_list = new object_list(array("class_id" => CL_CRM_PERSON, "lang_id" => array(), "personal_id" => $code));
+			
+			foreach($persons_list->ids() as $id)
+			{
+				$other_list = new object_list(array(
+					"class_id" => CL_PATENT,
+					"lang_id" => array(),
+					"authorized_person" => $id,
+				));
+				$obj_list->add($other_list);
+			}
+		}
+		
+		foreach($obj_list->arr() as $o)
+		{
+			$re = $this->is_signed($o->id());
+			if($re["status"] == 1)
+			{
+				$obj_list->remove($o);
+			}
+		}
+		
+		$tpl = "unsigned_list.tpl";
+		$this->read_template($tpl);
+		lc_site_load("patent", $this);
+	
+		if ($this->is_template("LIST"))
+		{
+			$c = "";
+			foreach($obj_list->arr() as $key => $patent)
+			{
+				$url = aw_url_change_var("trademark_id", $patent->id());
+				$url = aw_url_change_var("data_type", null , $url);
+				$view_url = $this->mk_my_orb("show", array(
+					"id" => $patent->id(),
+					"sign" => 1,
+				), CL_PATENT);
+				
+				$ddoc_inst = get_instance(CL_DDOC);
+				$sign_url = $ddoc_inst->sign_url(array(
+					"other_oid" =>$patent->id(),
+				));
+				
+				$this->vars(array(
+					"date" 		=> date("j.m.Y" , $patent->created()),
+					"nr" 		=> ($patent->prop("nr")) ? $patent->prop("nr") : "",
+					"applicant" 	=> $patent->prop_str("applicant"),
+					"type" 		=> $this->types[$patent->prop("type")],
+					"state" 	=> ($patent->prop("verified")) ? t("Vastu v&otilde;etud") : (($patent->prop("nr")) ? t("Esitatud") : ""),
+					"name" 	 	=> $patent->name(),
+					"id" 	 	=> $patent->id(),
+					"url"  		=> $url,
+					"procurator"  	=> $patent->prop_str("procurator"),
+					"change"	=> $url,
+					"view"		=> $view_url,
+					"sign"		=> $sign_url,
+				));
+				$c .= $this->parse("LIST");
+			}
+			$this->vars(array(
+				"LIST" => $c,
+			));
+		}
+		return $this->parse();
+	}
+	
 }
 ?>
