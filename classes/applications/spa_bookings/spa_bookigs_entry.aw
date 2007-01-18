@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.21 2007/01/18 08:42:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.22 2007/01/18 08:56:43 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -605,19 +605,18 @@ class spa_bookigs_entry extends class_base
 			$has_unc = false;
 			$prod_list = $pk->get_products_for_package($package);
 			$grp_list = $pk->get_group_list($package);
-			$grp_list[] = "__extra_items";
+			foreach(safe_array($o->meta("extra_prods")) as $extra_item_entry)
+			{
+				$grp_list[] = "__ei|".$extra_item_entry["prod"];
+			}
 			foreach($grp_list as $prod_group)
 			{
 				// repeat group by the count of the first product in the group
 				$prods_in_group = $pk->get_products_in_group($package, $prod_group);
-				if ($prod_group == "__extra_items")
+				if (substr($prod_group, 0, 4) == "__ei")
 				{
-					$prods_in_group = array();
-					$extra_items = safe_array($o->meta("extra_prods"));
-					foreach($extra_items as $extra_item_entry)
-					{
-						$prods_in_group[] = $extra_item_entry["prod"];
-					}
+					list(, $prod_id) = explode("|", $prod_group);
+					$prods_in_group = array($prod_id);
 				}
 				$first_item_count = max(1,$prod_list[reset($prods_in_group)]);
 				for ($i = 0; $i < $first_item_count; $i++)
