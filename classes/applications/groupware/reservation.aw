@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.30 2007/01/18 11:03:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.31 2007/01/18 12:43:44 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -344,7 +344,17 @@ class reservation extends class_base
 		));
 		if ($arr["request"]["length"] > 0)
 		{
-			$arr["obj_inst"]->set_prop("end", $arr["obj_inst"]->prop("start1")+$arr["request"]["length"]*3600);
+			$mul = 3600;
+			if ($this->can("view", $arr["obj_inst"]->prop("resource")))
+			{
+				$room = obj($arr["obj_inst"]->prop("resource"));
+				if ($room->prop("time_unit") == 1)
+				{
+					$mul = 60;
+				}
+			}
+
+			$arr["obj_inst"]->set_prop("end", $arr["obj_inst"]->prop("start1")+$arr["request"]["length"]*$mul);
 		}
 	}
 /*	function set_sum($arr)
@@ -933,7 +943,18 @@ class reservation extends class_base
 
 	function _get_length($arr)
 	{
+		if ($this->can("view", $arr["obj_inst"]->prop("resource")))
+		{
+			$room = obj($arr["obj_inst"]->prop("resource"));
+			if ($room->prop("time_unit") == 1)
+			{
+				$arr["prop"]["options"] = $this->make_keys(range(0, 60));
+				$arr["prop"]["post_append_text"] = t("Minutit");
+				return;
+			}
+		}
 		$arr["prop"]["options"] = $this->make_keys(range(0, 20));
+		$arr["prop"]["post_append_text"] = t("Tundi");
 	}
 
 	function _get_cp_fn($arr)
