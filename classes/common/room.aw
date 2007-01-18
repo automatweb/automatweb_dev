@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.100 2007/01/17 14:49:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.101 2007/01/18 10:06:21 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -2070,6 +2070,14 @@ class room extends class_base
 
 	function get_settings_for_room($room)
 	{
+		$si = get_instance(CL_ROOM_SETTINGS);
+		$rv = $si->get_current_settings($room);
+		if (!is_object($rv))
+		{
+			return obj();
+		}
+		return $rv;
+
 		$settings = obj();
                 if (is_array($room->prop("settings")))
                 {

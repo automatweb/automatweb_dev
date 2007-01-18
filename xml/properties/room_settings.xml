@@ -41,6 +41,18 @@
             <caption>Kasutajad</caption>
       </property>
       <property>
+            <name>groups</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_GROUP</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Grupid</caption>
+      </property>
+      <property>
             <name>persons</name>
             <table>objects</table>
             <group>whom</group>
@@ -352,6 +364,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Seotud ruumide kaust</caption>
             </RELATED_ROOM_FOLDER>
+            <GROUP>
+                  <value>8</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Grupp</caption>
+            </GROUP>
       </reltypes>
 </properties>
 

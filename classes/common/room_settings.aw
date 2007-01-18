@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.8 2007/01/17 15:11:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.9 2007/01/18 10:04:26 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -21,6 +21,9 @@
 @default group=whom
 	@property users type=relpicker multiple=1 store=connect reltype=RELTYPE_USER field=meta method=serialize
 	@caption Kasutajad
+
+	@property groups type=relpicker multiple=1 store=connect reltype=RELTYPE_GROUP field=meta method=serialize
+	@caption Grupid
 
 	@property persons type=relpicker multiple=1 store=connect reltype=RELTYPE_PERSON field=meta method=serialize
 	@caption Isikud
@@ -133,6 +136,9 @@
 @reltype RELATED_ROOM_FOLDER value=7 clid=CL_MENU
 @caption Seotud ruumide kaust
 
+@reltype GROUP value=8 clid=CL_GROUP
+@caption Grupp
+
 */
 
 class room_settings extends class_base
@@ -208,6 +214,7 @@ class room_settings extends class_base
 		$cd = get_instance("applications/crm/crm_data");
 		$cursec = $cd->get_current_section();
 		$curprof = $cd->get_current_profession();
+		$cur_grps = aw_global_get("gidlist_oid");
 
 		$ol = new object_list(array(
 			"class_id" => CL_ROOM_SETTINGS,
@@ -216,12 +223,13 @@ class room_settings extends class_base
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					"CL_CRM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid"),
-					"CL_CRM_SETTINGS.RELTYPE_PERSON" => $curp,
-					"CL_CRM_SETTINGS.RELTYPE_COMPANY" => $curco,
-					"CL_CRM_SETTINGS.RELTYPE_SECTION" => $cursec,
-					"CL_CRM_SETTINGS.RELTYPE_PROFESSION" => $curprof,
-					"CL_CRM_SETTINGS.everyone" => 1
+					"CL_ROOM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid"),
+					"CL_ROOM_SETTINGS.RELTYPE_PERSON" => $curp,
+					"CL_ROOM_SETTINGS.RELTYPE_COMPANY" => $curco,
+					"CL_ROOM_SETTINGS.RELTYPE_SECTION" => $cursec,
+					"CL_ROOM_SETTINGS.RELTYPE_PROFESSION" => $curprof,
+					"CL_ROOM_SETTINGS.RELTYPE_GROUP" => $cur_grps,
+					"CL_ROOM_SETTINGS.everyone" => 1
 				)
 			))
 		));
@@ -249,6 +257,7 @@ class room_settings extends class_base
 				{
 					$has_p = $o;
 				}
+
 				if ($o->is_connected_to(array("to" => aw_global_get("uid_oid"))))
 				{
 					$has_u = $o;
@@ -257,11 +266,20 @@ class room_settings extends class_base
 				{
 					$has_all = $o;
 				}
+
+				if (count(array_intersect($o->prop("groups"), $cur_grps)))
+				{
+					$has_grp = $o;
+				}
 			}
 
 			if ($has_u)
 			{
 				return $has_u;
+			}
+			if ($has_grp)
+			{
+				return $has_grp;
 			}
 			if ($has_p)
 			{
