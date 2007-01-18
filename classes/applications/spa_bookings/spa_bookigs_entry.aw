@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.22 2007/01/18 08:56:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.23 2007/01/18 11:42:24 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -747,6 +747,7 @@ class spa_bookigs_entry extends class_base
 			die(t("Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"));
 		}
 
+
 		$room_inst = get_instance(CL_ROOM);
 		$room2inst = array();
 		foreach($p_rooms as $room_id => $room_obj)
@@ -768,7 +769,31 @@ class spa_bookigs_entry extends class_base
 		// get reservation length from product
 		$prod_obj = obj($arr["prod"]);
 		$prod_inst = $prod_obj->instance();
-		$time_step = $prod_inst->get_reservation_length($prod_obj);
+		$time_step = $reservation_length = $prod_inst->get_reservation_length($prod_obj);
+		
+		// check if buffers are shorter than the min rvs len
+		// then time steps are buffer length, but rvs len is rvs len still
+		$tmp = $prod_inst->get_pre_buffer($prod_obj);
+		$tmp2 = $prod_inst->get_post_buffer($prod_obj);		
+		if ($tmp > 0 && $tmp2 > 0 )
+		{
+			$tmp = min($tmp, $tmp2);
+			if ($tmp < $time_step)
+			{
+				$time_step = $tmp;
+			}
+		}
+		else
+		if ($tmp > 0)
+		{
+			$time_step = min($tmp, $time_step);
+		}
+		else
+		if ($tmp2 > 0)
+		{
+			$time_step = min($tmp2, $time_step);
+		}
+
 		if ($time_step == 0)
 		{
 			die(sprintf(t("Tootele %s pole m&auml;&auml;ratud broneeringu pikkust!"), html::obj_change_url($prod_obj)));
@@ -806,9 +831,9 @@ class spa_bookigs_entry extends class_base
 				$d_to = 0;
 
 				$tmd = $h*$time_step;
-				$tmd2 = min(3600*24, ($h+1)*$time_step);
+				$tmd2 = min(3600*24, $tmd + $reservation_length);
 				$cur_step_start = $range_from+($i*24*3600)+$h*$time_step;
-				$cur_step_end = $range_from+($i*24*3600)+($h+1)*$time_step;
+				$cur_step_end = $cur_step_start + $reservation_length;
 				$avail = false;
 				foreach($p_rooms as $room)
 				{
