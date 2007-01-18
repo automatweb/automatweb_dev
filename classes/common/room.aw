@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.102 2007/01/18 11:02:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.103 2007/01/18 13:51:30 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -307,7 +307,9 @@ class room extends class_base
 					2 => t("Kasutusaja kohta"),
 				);
 				break;
-			
+			case "prices_tb":
+				$this->_get_prices_tb($arr);
+				break;
 			case "buffer_before_unit":
 			case "buffer_after_unit":
 				$prop["options"] = $this->time_units;
