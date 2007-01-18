@@ -40,7 +40,7 @@ if($_SESSION["text_for_login"])
 	$tfl = $te->parse("TEXT_FOR_LOGIN");
 }
 $te->vars(array(
-	"uid" => $_SESSION["uid_for_login"],
+	"uid" => $_SESSION["uid_for_login"] ? $_SESSION["uid_for_login"] : $_GET["uid"],
 	"TEXT_FOR_LOGIN" => $tfl,
 ));
 
