@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.101 2007/01/18 10:06:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.102 2007/01/18 11:02:59 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1633,6 +1633,7 @@ class room extends class_base
 								$dx_p["width"] = 800;
 								$dx_p["height"] = 600;
 								$dx_p["scrollbars"] = 1;
+								$dx_p["href"] = "#";
 								$d[$x] = html::popup($dx_p);
 							}
 							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
