@@ -281,7 +281,7 @@ class crm_user_creator extends core
 		}
 	}
 
-	function get_uid_for_person($person, $validate_only = false)
+	function get_uid_for_person($person, $validate_only = false, $replace_faulty_chars = false)
 	{
 		$allowed_chars = array_merge(range("A","Z"), range("a","z"), range(0,9), array("_", "."));
 		$errors = array();
@@ -302,6 +302,18 @@ class crm_user_creator extends core
 			$uid = preg_replace("/\&([A-z])[A-z]{1,7}\;/U", "$1", $uid);
 		}
 
+		if ($replace_faulty_chars)
+		{
+			$len = strlen($uid);
+			for ($i = 0; $i < $len; $i++)
+			{
+				if (!in_array($uid[$i], $allowed_chars, true))
+				{
+					$uid[$i] = "_";
+				}
+			}
+		}
+
 		$uid_chars = preg_split('//', $uid, -1, PREG_SPLIT_NO_EMPTY);
 		$invalid_chars = array_diff($uid_chars, $allowed_chars);
 
@@ -311,9 +323,21 @@ class crm_user_creator extends core
 			$errors[] = sprintf(t("Nimes sisaldunud tähemärgid [%s] pole kasutajanimedes lubatud."), $invalid_chars);
 		}
 
-		if ($this->cl_user->username_is_taken($uid))
+		if ($replace_faulty_chars)
 		{
-			$errors[] = sprintf(t("Valitud kasutajanimi [%s] on juba kasutusel."), $uid);
+			$o_uid = $uid;
+			$cnt = 0;
+			while ($this->cl_user->username_is_taken($uid))
+			{
+				$uid = $o_oid.".".sprintf("%03d", $cnt++);
+			}
+		}
+		else
+		{
+			if ($this->cl_user->username_is_taken($uid))
+			{
+				$errors[] = sprintf(t("Valitud kasutajanimi [%s] on juba kasutusel."), $uid);
+			}
 		}
 
 		if (count($errors))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.19 2007/01/17 12:01:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.20 2007/01/18 08:29:23 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -292,8 +292,7 @@ class spa_bookigs_entry extends class_base
 					$p->save();
 
 					$cu = get_instance("crm/crm_user_creator");
-					$uid = $cu->get_uid_for_person($p);
-
+					$uid = $cu->get_uid_for_person($p, false, true);
 					$u = get_instance(CL_USER);
 					$user = $u->add_user(array(
 						"uid" => $uid,
