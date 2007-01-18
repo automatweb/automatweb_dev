@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.18 2006/12/08 13:45:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.19 2007/01/18 14:51:07 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -166,6 +166,11 @@ class shop_packet extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "packaging",
+			"caption" => t("Pakend"),
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "group",
 			"caption" => t("Grupp"),
 			"align" => "center"
@@ -181,6 +186,7 @@ class shop_packet extends class_base
 	{
 		$pd = $arr["obj_inst"]->meta("packet_content");
 		$pg = $arr["obj_inst"]->meta("packet_groups");
+		$pk = $arr["obj_inst"]->meta("packet_def_pkgs");
 
 		$this->_init_packet_table($arr["prop"]["vcl_inst"]);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
@@ -205,15 +211,31 @@ class shop_packet extends class_base
 					"value" => $pg[$c->prop("to")],
 					"size" => 5
 				)),
-				"oid" => $c->prop("to")
+				"oid" => $c->prop("to"),
+				"packaging" => html::select(array(
+					"name" => "pk[".$c->prop("to")."]",
+					"value" => $pk[$c->prop("to")],
+					"options" => $this->get_package_picker_for_prod($c->to())
+				))
 			));
 		}
+	}
+
+	function get_package_picker_for_prod($prod)
+	{
+		$ret = array("" => t("--vali--"));
+		foreach($prod->connections_from(array("type" => "RELTYPE_PACKAGING")) as $c)
+		{
+			$ret[$c->prop("to")] = $c->prop("to.name");
+		}
+		return $ret;
 	}
 
 	function save_packet_table(&$arr)
 	{
 		$arr["obj_inst"]->set_meta("packet_content", $arr["request"]["pd"]);
 		$arr["obj_inst"]->set_meta("packet_groups", $arr["request"]["pg"]);
+		$arr["obj_inst"]->set_meta("packet_def_pkgs", $arr["request"]["pk"]);
 	}
 
 	function get_price($o)
@@ -599,5 +621,11 @@ class shop_packet extends class_base
 	{
 		return $this->trans_callback($arr, $this->trans_props);
 	}
+
+	function get_default_packagings_in_packet($package)
+	{
+		return safe_array($package->meta("packet_def_pkgs"));
+	}
+
 }
 ?>

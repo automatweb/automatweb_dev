@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.4 2007/01/09 13:48:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.5 2007/01/18 14:51:09 kristo Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -128,6 +128,7 @@ class spa_booking extends class_base
 		$pk = $package->instance();
 		$entry_inst = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		$dates = $entry_inst->get_booking_data_from_booking($booking);
+		$pkings = $pk->get_default_packagings_in_packet($package);
 		foreach($pk->get_products_for_package($package) as $prod_id => $count)
 		{
 			$prod = obj($prod_id);
@@ -142,11 +143,12 @@ class spa_booking extends class_base
 						$rv_id = $room_inst->make_reservation(array(
 							"id" => reset(array_keys($rooms)),
 							"data" => array(
-								"customer" => $booking->prop("person")
+								"customer" => $booking->prop("person"),
+								"products" => array($pkings[$prod->id()] => 1)
 							),
 							"meta" => array(
 								"product_for_bron" => $prod->id(),
-								"product_count_for_bron" => $i
+								"product_count_for_bron" => $i,
 							)
 						));
 						$booking->connect(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.23 2007/01/18 11:42:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.24 2007/01/18 14:51:09 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -334,7 +334,8 @@ class spa_bookigs_entry extends class_base
 
 				// for this booking, create empty reservations for all products so we can search by them
 				$booking_inst = $booking->instance();
-				$booking_inst->check_reservation_conns($booking);
+	echo "check rvs conns <br>";			
+	$booking_inst->check_reservation_conns($booking);
 
 				$po = obj($d["packet"]);
 				$feedback .= sprintf(t("Lisasin kasutaja %s, isiku %s ja <a href='%s'>broneeringu</a> paketile %s algusega %s ja l&otilde;puga %s<br>"), 
@@ -1034,6 +1035,9 @@ class spa_bookigs_entry extends class_base
 			$current_booking = $cur_bookings[$arr["prod"]][$arr["prod_num"]]["reservation_id"];
 		}
 
+		$package = obj($bron->prop("package"));
+		$p_i = $package->instance();
+		$def_pkgs = $p_i->get_default_packagings_in_packet($package);
 		// go over all rooms and the first one that is available, we book
 		foreach($p_rooms as $room)
 		{
@@ -1048,7 +1052,7 @@ class spa_bookigs_entry extends class_base
 						"end" => $arr["end"],
 						"customer" => $bron->prop("person"),
 						"verified" => 1,
-						"products" => array($arr["prod"] => 1)
+						"products" => array($def_pkgs[$arr["prod"]] => 1)
 					),
 					"meta" => array(
 						"product_for_bron" => $arr["prod"],

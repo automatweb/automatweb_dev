@@ -283,7 +283,7 @@ class crm_user_creator extends core
 
 	function get_uid_for_person($person, $validate_only = false, $replace_faulty_chars = false)
 	{
-		$allowed_chars = array_merge(range("A","Z"), range("a","z"), range(0,9), array("_", "."));
+		$allowed_chars = array_merge(range("A","Z"), range("a","z"), range("0","9"), array("_", "."));
 		$errors = array();
 
 		if (!is_object($this->cl_user))
@@ -304,10 +304,11 @@ class crm_user_creator extends core
 
 		if ($replace_faulty_chars)
 		{
+			$alc = $this->make_keys($allowed_chars);
 			$len = strlen($uid);
 			for ($i = 0; $i < $len; $i++)
 			{
-				if (!in_array($uid[$i], $allowed_chars, true))
+				if (!isset($alc[$uid[$i]]))
 				{
 					$uid[$i] = "_";
 				}
@@ -329,7 +330,7 @@ class crm_user_creator extends core
 			$cnt = 0;
 			while ($this->cl_user->username_is_taken($uid))
 			{
-				$uid = $o_oid.".".sprintf("%03d", $cnt++);
+				$uid = $o_uid.".".sprintf("%03d", $cnt++);
 			}
 		}
 		else
