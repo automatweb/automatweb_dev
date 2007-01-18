@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.20 2007/01/18 08:29:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.21 2007/01/18 08:42:16 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1066,9 +1066,9 @@ class spa_bookigs_entry extends class_base
 			"to" => date("d.m.Y", $b->prop("end")),
 			"person_comment" => $b->prop("person.comment"),
 			"person_name" => $b->prop("person.name"),
-			"person_birthday" => sprintf("%02d.%02d.%04d", $d, $m, $y),
+			"person_birthday" => $y > 0 ? sprintf("%02d.%02d.%04d", $d, $m, $y) : "",
 			"person_ext_id" => $b->prop("person.ext_id_alphanumeric"),
-			"person_gender" => $b->prop("person.gender") == 1 ? t("Mees") : t("Naine")
+			"person_gender" => $b->prop("person.gender") == 1 ? t("Mees") : ($b->prop("person.gender") === "2" ? t("Naine") : "")
 		));
 
 		// now, list all bookings for rooms 
