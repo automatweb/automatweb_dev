@@ -324,6 +324,10 @@ class date_edit
 		{
 			return -1;
 		}
+		if ($var['month'] == 0 || $var['day'] == 0 || $var['year'] == 0)
+		{
+			return -1;
+		}
 		if (!is_array($var))
 		{
 			return -1;
