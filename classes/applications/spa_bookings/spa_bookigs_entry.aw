@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.24 2007/01/18 14:51:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.25 2007/01/19 11:57:55 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -261,8 +261,7 @@ class spa_bookigs_entry extends class_base
 					"class_id" => CL_CRM_PERSON,
 					"lang_id" => array(),
 					"site_id" => array(),
-					"firstname" => $d["fn"],
-					"lastname" => $d["ln"]
+					"CL_CRM_PERSON.RELTYPE_EMAIL.mail" => $d["email"]
 				));
 				if ($ol->count())
 				{
@@ -290,6 +289,10 @@ class spa_bookigs_entry extends class_base
 					$p->set_prop("birthday", sprintf("%04d-%02d-%02d", $d["birthday"]["year"], $d["birthday"]["month"], $d["birthday"]["day"]));
 					$p->set_prop("gender", $d["gender"]);
 					$p->save();
+					$p->connect(array(
+						"to" => $eml->id(),
+						"type" => "RELTYPE_EMAIL"
+					));
 
 					$cu = get_instance("crm/crm_user_creator");
 					$uid = $cu->get_uid_for_person($p, false, true);
