@@ -284,7 +284,7 @@ class languages extends aw_template
 			{
 				// we must re-read from the db and write the cache
 				aw_cache_flush("languages");
-				$this->db_query("SELECT * FROM languages WHERE status != 0");
+				$this->db_query("SELECT languages.* FROM languages LEFT JOIN objects o ON languages.oid = o.oid WHERE languages.status != 0 ORDER BY o.jrk");
 				while ($row = $this->db_next())
 				{
 					$row["meta"] = aw_unserialize($row["meta"]);
