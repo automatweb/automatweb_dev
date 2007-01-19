@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.34 2007/01/05 12:33:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.35 2007/01/19 13:54:52 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -178,14 +178,14 @@ class crm_db extends class_base
 			$url = $this->mk_my_orb("change", array("id" => $id, "return_url" => get_ru(), "is_sa" => 1), CL_CRM_SECTOR, true);
 			$pm->add_item(array(
 				"text" => t("Muuda"),
-				"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
-				"link" => "javascript:void(0)"
+				//"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
+				"link" => html::get_change_url($id, array("return_url" => get_ru()))//"javascript:void(0)"
 			));
 			$pm->add_item(array(
 				"text" => t("Kustuta"),
 				"link" => $this->mk_my_orb("delete_organizations", array("id" => $arr["obj_inst"]->id(), "sel[$id]" => $id, "post_ru" => get_ru())),
 			));
-			$name = $name;//." ".$pm->get_menu();
+			$name = $name." ".$pm->get_menu();
 			$t->add_item($parent, array(
 				"id" => $id,
 				"name" => $name,//strlen($name) > 20 ? substr($name, 0, 20).".." : $name,
