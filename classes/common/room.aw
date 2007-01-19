@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.103 2007/01/18 13:51:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.104 2007/01/19 13:02:41 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1625,6 +1625,11 @@ class room extends class_base
 								"caption" => "<span><font color=#26466D>".$cus . " " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
 							);
+
+							if ($settings->prop("cal_show_prods"))
+							{
+								$dx_p["caption"] .= " ".$title;
+							}
 
 							if ($settings->prop("bron_no_popups"))
 							{

@@ -29,6 +29,16 @@
             <caption>Seotud ruumide kaust</caption>
       </property>
       <property>
+            <name>cal_show_prods</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva valitud tooteid kalendrivaates</caption>
+      </property>
+      <property>
             <name>users</name>
             <table>objects</table>
             <group>whom</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.9 2007/01/18 10:04:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.10 2007/01/19 13:02:41 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -8,14 +8,17 @@
 @default table=objects
 @default group=general
 
-@property max_times_per_day type=textbox field=meta method=serialize
-@caption Maksimaalne aegade arv samal p&auml;eval
+	@property max_times_per_day type=textbox field=meta method=serialize
+	@caption Maksimaalne aegade arv samal p&auml;eval
 
-@property hold_not_verifyed type=textbox field=meta method=serialize
-@caption Kinnitamata broneeringut tuleb hoida kinni x minutit
+	@property hold_not_verifyed type=textbox field=meta method=serialize
+	@caption Kinnitamata broneeringut tuleb hoida kinni x minutit
 
-@property related_room_folder type=relpicker field=meta method=serialize reltype=RELTYPE_RELATED_ROOM_FOLDER
-@caption Seotud ruumide kaust
+	@property related_room_folder type=relpicker field=meta method=serialize reltype=RELTYPE_RELATED_ROOM_FOLDER
+	@caption Seotud ruumide kaust
+
+	@property cal_show_prods type=checkbox ch_value=1 field=meta method=serialize 
+	@caption Kuva valitud tooteid kalendrivaates
 
 @groupinfo whom caption="Kellele kehtib"
 @default group=whom
