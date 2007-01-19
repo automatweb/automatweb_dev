@@ -8,6 +8,10 @@
 	@property tegevusala type=textbox size=55 table=kliendibaas_tegevusala
 	@caption Tegevusala nimetus
 
+	@property ord type=textbox size=5 table=objects field=jrk
+	@caption J&auml;rjekord
+
+
 	@property tegevusala_en type=textbox size=55 table=kliendibaas_tegevusala
 	@caption Inglise keelne nimetus
 		

@@ -10,6 +10,15 @@
             <caption>Tegevusala nimetus</caption>
       </property>
       <property>
+            <name>ord</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>jrk</field>
+            <caption>J&amp;amp;auml;rjekord</caption>
+      </property>
+      <property>
             <name>tegevusala_en</name>
             <table>kliendibaas_tegevusala</table>
             <group>general</group>
