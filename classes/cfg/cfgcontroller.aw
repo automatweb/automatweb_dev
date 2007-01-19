@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.9 2006/03/10 14:49:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.10 2007/01/19 11:32:33 kristo Exp $
 // cfgcontroller.aw - Kontroller(Classbase) 
 /*
 
@@ -25,6 +25,13 @@ caption Ainult hoiatus
 
 property error_in_popup type=checkbox ch_value=1
 caption Veateade popupis 
+
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 */
 
 class cfgcontroller extends class_base
@@ -35,6 +42,10 @@ class cfgcontroller extends class_base
 			"tpldir" => "cfg/cfgcontroller",
 			"clid" => CL_CFGCONTROLLER
 		));
+
+		$this->trans_props = array(
+			"formula", "errmsg"
+		);
 	}
 
 	function get_property($arr)
@@ -49,6 +60,32 @@ class cfgcontroller extends class_base
 		return $retval;
 	}
 	
+	function set_property($arr = array())
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+		}
+		return $retval;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
 	
 	/** runs the controller given
 		@attrib api=1
@@ -96,7 +133,7 @@ class cfgcontroller extends class_base
 			return;
 		}
 		$controller_inst = &obj($controller_oid);
-		eval($controller_inst->prop("formula"));
+		eval($controller_inst->trans_get_val("formula"));
 		return $retval;
 	}
 }

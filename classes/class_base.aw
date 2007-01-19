@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.529 2007/01/10 12:58:09 kristo Exp $
+// $Id: class_base.aw,v 2.530 2007/01/19 11:32:36 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3516,7 +3516,7 @@ class class_base extends aw_template
 							print "validation failed!<br>";
 						};
 						$ctrl_obj = new object($controller_id);
-						$errmsg = $ctrl_obj->prop("errmsg");
+						$errmsg = $ctrl_obj->trans_get_val("errmsg");
 						if (empty($errmsg))
 						{
 							$errmsg = "Entry was blocked by a controller, but no error message is available";
