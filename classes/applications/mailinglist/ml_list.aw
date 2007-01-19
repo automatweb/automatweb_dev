@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.88 2006/12/08 17:21:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.89 2007/01/19 13:48:35 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -234,7 +234,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 ------------------------------------------------------------------------
 
-@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE
+@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION
 @caption Listi liikmete allikas
 
 @reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
@@ -2017,6 +2017,31 @@ class ml_list extends class_base
 					"no_return" => $no_return));
 				$cnt = $this->member_count;
 				$already_found = $this->already_found;
+			}
+			else
+			if ($source_obj->class_id() == CL_CRM_SELECTION)
+			{
+				$si = get_instance(CL_CRM_SELECTION);
+				$ret = array();
+				foreach($si->get_selection($source_obj->id()) as $selection_item)
+				{
+					if (!$this->can("view", $selection_item["object"]))
+					{
+						continue;
+					}
+					$co = obj($selection_item["object"]);
+					if ($this->can("view", $co->prop("email_id")))
+					{
+						$eml = obj($co->prop("email_id"));
+						$ret[] = array(
+							"oid" => $eml->id(),
+							"parent" => $source_obj->id(),
+							"name" => $eml->prop("name"),
+							"mail" => $eml->prop("mail")
+						);
+					}
+				}
+				$cnt += count($ret);
 			}
 		}
 		if(!$all)$cnt = sizeof($already_found);

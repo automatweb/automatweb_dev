@@ -400,7 +400,7 @@
             <type>button</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Saada</caption>
+            <caption>Saada kohe</caption>
       </property>
       <property>
             <name>unsent_tb</name>
@@ -644,6 +644,7 @@
                         <num_1>CL_GROUP</num_1>
                         <num_2>CL_USER</num_2>
                         <num_3>CL_FILE</num_3>
+                        <num_4>CL_CRM_SELECTION</num_4>
                   </clid>
                   <caption>Listi liikmete allikas</caption>
             </MEMBER_PARENT>
