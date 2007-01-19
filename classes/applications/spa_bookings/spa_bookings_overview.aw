@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.11 2007/01/19 10:52:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.12 2007/01/19 11:49:59 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -411,6 +411,7 @@ class spa_bookings_overview extends class_base
 			$_from = min($_from, $rvs->prop("start1"));
 			$_to = max($_to, $rvs->prop("end"));
 		}
+		uasort($arr["rvs"], create_function('$a,$b', '$ao = obj($a); $bo = obj($b); return $ao->prop("start1") - $bo->prop("start1");'));
 		$b = obj(reset($arr["rvs"]));
 		$p = obj($arr["person"]);
 		list($y, $m, $d) = explode("-", $p->prop("birthday"));
