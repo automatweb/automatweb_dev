@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.10 2007/01/17 14:49:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.11 2007/01/19 10:52:23 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -122,7 +122,7 @@ class spa_bookings_overview extends class_base
 		));
 	}
 
-	function _init_r_list(&$t)
+	function _init_r_list(&$t, $selectah = true)
 	{
 		$t->define_field(array(
 			"name" => "cal",
@@ -143,16 +143,18 @@ class spa_bookings_overview extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "oid"
-		));
+		if ($selectah)
+		{
+			$t->define_chooser(array(
+				"name" => "sel",
+				"field" => "oid"
+			));
+		}
 	}
 
 	function _get_r_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_r_list($t);
 
 		$ol = new object_list();
 
@@ -240,19 +242,58 @@ class spa_bookings_overview extends class_base
 			));
 		}
 
-		foreach($ol->arr() as $o)
+		if (count($room2booking))
 		{
-			$brons = array();
-			foreach($room2booking[$o->id()] as $booking)
+			$this->_init_r_list($t, false);
+			// group table by ppl and do several rows for one room if necessary
+			$ppl = array();
+			foreach($room2booking as $room_id => $books)
 			{
-				$brons[] = html::get_change_url($booking->id(), array("return_url" => get_ru()), $booking->prop_str("customer")." ".date("d.m.Y H:i", $booking->prop("start1"))." - ".date("d.m.Y H:i", $booking->prop("end")));
+				foreach($books as $booking)
+				{
+					$ppl[$booking->prop("customer")][] = $booking;
+				}
 			}
-			$t->define_data(array(
-				"cal" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "calendar"), icons::get_icon($o)),
-				"room" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "calendar"), $o->name()),
-				"bron" => join("<br>", $brons),
-				"oid" => $o->id()
+
+			foreach($ppl as $cust_id => $bookings)
+			{
+				$rvs_ids = array();
+				foreach($bookings as $booking)
+				{
+					$rvs_ids[] = $booking->id();
+				}
+				$p_obj = obj($cust_id);
+				$p_str = html::obj_change_url($p_obj)." / ".html::href(array(
+					"url" => $this->mk_my_orb("print_person_chart", array("person" => $cust_id, "rvs" => $rvs_ids)),
+					"caption" => t("Prindi")
+				));
+
+				foreach($bookings as $booking)
+				{
+					$t->define_data(array(
+						"cal" => html::get_change_url($booking->prop("resource"), array("return_url" => get_ru(), "group" => "calendar"), icons::get_icon(obj($booking->prop("resource")))),
+						"room" => html::get_change_url($booking->prop("resource"), array("return_url" => get_ru(), "group" => "calendar"), $booking->prop("resource.name")),
+						"bron" => html::get_change_url($booking->id(), array("return_url" => get_ru()), date("d.m.Y", $booking->prop("start1"))." / ".date("H:i", $booking->prop("start1"))." - ".date("H:i", $booking->prop("end"))),
+						"oid" => $booking->prop("resource"),
+						"person" => $p_str
+					));
+				}
+			}
+			$t->sort_by(array(
+				"rgroupby" => array("person" => "person")
 			));
+		}
+		else
+		{	
+			$this->_init_r_list($t, true);
+			foreach($ol->arr() as $o)
+			{
+				$t->define_data(array(
+					"cal" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "calendar"), icons::get_icon($o)),
+					"room" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "calendar"), $o->name()),
+					"oid" => $o->id()
+				));
+			}
 		}
 		$t->set_sortable(false);
 	}
@@ -347,7 +388,89 @@ class spa_bookings_overview extends class_base
 			));
 			$this->_add_day_subs($tb, "g_".$grp_id , $grp_id);
 		}
+	}
 
+	/**
+		@attrib name=print_person_chart
+		@param person optional
+		@param rvs optional 
+	**/
+	function print_person_chart($arr)
+	{
+		$this->tpl_init("applications/spa_bookings/spa_bookings_entry");
+		$this->read_site_template("booking.tpl");
+		lc_site_load("spa_bookigs_entry", &$this);
+
+		$_from = time() + 24*3600*1000;
+		$_to = 0;
+		$rv2r = array();
+		foreach($arr["rvs"] as $b_oid)
+                {
+                        $rvs = obj($b_oid);
+			$rv2r[$b_oid] = $rvs->prop("resource");
+			$_from = min($_from, $rvs->prop("start1"));
+			$_to = max($_to, $rvs->prop("end"));
+		}
+		$b = obj(reset($arr["rvs"]));
+		$p = obj($arr["person"]);
+		list($y, $m, $d) = explode("-", $p->prop("birthday"));
+		$this->vars(array(
+			"bureau" => $b->createdby(),
+			"person" => $b->trans_get_val_str("customer"),
+			"package" => $b->trans_get_val_str("package"),
+			"from" => date("d.m.Y", $_from),
+			"to" => date("d.m.Y", $_to),
+			"person_comment" => $b->prop("customer.comment"),
+			"person_name" => $b->prop("customer.name"),
+			"person_birthday" => $y > 0 ? sprintf("%02d.%02d.%04d", $d, $m, $y) : "",
+			"person_ext_id" => $b->prop("customer.ext_id_alphanumeric"),
+			"person_gender" => $b->prop("customer.gender") == 1 ? t("Mees") : ($b->prop("customer.gender") === "2" ? t("Naine") : "")
+		));
+
+		$all_items = "";
+		$packet_services = "";
+		$additional_services = "";
+
+		foreach($arr["rvs"] as $b_oid)
+		{
+			$rvs = obj($b_oid);
+			$ro = obj($rv2r[$b_oid]);
+			$prod_obj = obj($rvs->meta("product_for_bron"));
+			$this->vars(array(
+				"r_from" => date("d.m.Y H:i", $rvs->prop("start1")),
+				"r_to" =>  date("d.m.Y H:i", $rvs->prop("end")),
+				"r_room" => $ro->trans_get_val("name"),
+				"r_prod" => $prod_obj->trans_get_val("name"),
+				"start_time" => $rvs->prop("start1"),
+				"end_time" => $rvs->prop("end"),
+				"price" => $prod_obj->prop("price")
+			));
+			$books .= $this->parse("BOOKING");
+
+			$all_items .= $this->parse("ALL_ITEMS");
+			if ($entry["is_extra"] == 1)
+			{
+				$additional_services .= $this->parse("ADDITIONAL_SERVICES");
+			}
+			else
+			{
+				$packet_services .= $this->parse("PACKET_SERVICES");
+			}
+		}
+
+
+		$this->vars(array(
+			"BOOKING" => $books,
+			"ADDITIONAL_SERVICES" => $additional_services,
+			"PACKET_SERVICES" => $packet_services,
+			"ALL_ITEMS" => $all_items
+		));
+		$this->vars(array(
+			"HAS_PACKET_SERVICES" => $packet_services != "" ? $this->parse("HAS_PACKET_SERVICES") : "",
+			"HAS_ADDITIONAL_SERVICES" => $packet_services != "" ? $this->parse("HAS_ADDITIONAL_SERVICES") : "",
+		));
+
+		die($this->parse());
 	}
 
 	/**
