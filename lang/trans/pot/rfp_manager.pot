@@ -1,0 +1,196 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/calendar/rfp_manager.aw:class_1192_help
+msgid "Klassi RFP Haldus help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_name
+msgid "Omaduse &Uuml;rituse nimi (s_name) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_name_comment
+msgid "Omaduse &Uuml;rituse nimi (s_name) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_name_help
+msgid "Omaduse &Uuml;rituse nimi (s_name) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_org
+msgid "Omaduse Organisatsioon (s_org) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_org_comment
+msgid "Omaduse Organisatsioon (s_org) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_org_help
+msgid "Omaduse Organisatsioon (s_org) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_contact
+msgid "Omaduse Kontaktisik (s_contact) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_contact_comment
+msgid "Omaduse Kontaktisik (s_contact) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_contact_help
+msgid "Omaduse Kontaktisik (s_contact) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_time_from
+msgid "Omaduse Alates (s_time_from) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_time_from_comment
+msgid "Omaduse Alates (s_time_from) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_time_from_help
+msgid "Omaduse Alates (s_time_from) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_time_to
+msgid "Omaduse Kuni (s_time_to) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_time_to_comment
+msgid "Omaduse Kuni (s_time_to) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_time_to_help
+msgid "Omaduse Kuni (s_time_to) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_submit
+msgid "Omaduse Otsi (s_submit) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_submit_comment
+msgid "Omaduse Otsi (s_submit) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_s_submit_help
+msgid "Omaduse Otsi (s_submit) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_rfps
+msgid "Omaduse  (rfps) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_rfps_comment
+msgid "Omaduse  (rfps) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:prop_rfps_help
+msgid "Omaduse  (rfps) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:group_rfps
+msgid "Grupi Pakkumise saamis palved (rfps) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:group_rfps_help
+msgid "Grupi Pakkumise saamis palved (rfps) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:group_rfps_active
+msgid "Grupi Aktiivsed (rfps_active) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:group_rfps_active_help
+msgid "Grupi Aktiivsed (rfps_active) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:group_rfps_archive
+msgid "Grupi Arhiiv (rfps_archive) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:group_rfps_archive_help
+msgid "Grupi Arhiiv (rfps_archive) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:layout_searchbox
+msgid "Kujundusosa Otsing (searchbox) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:73
+msgid "&Uuml;ritus"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:78
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:83
+msgid "Tagasiside aeg"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:88
+msgid "Ajavahemik"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:93
+msgid "Majutus"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:98
+msgid "Inimeste arv"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:103
+msgid "Kontaktisik"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:108
+msgid "Kontaktandmed"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:113
+msgid "Tegevus"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:143
+msgid "Si"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:147
+msgid "Do"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:151
+msgid "Su"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:156
+msgid " - Nimetu - "
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:171
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:315
+msgid "Aktiviseeri"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:315
+msgid "Arhiveeri"
+msgstr ""
+
+#: classes/applications/calendar/rfp_manager.aw:322
+msgid "Kustuta"
+msgstr ""
+
