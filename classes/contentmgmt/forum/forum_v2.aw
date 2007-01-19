@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.116 2006/11/14 15:08:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.117 2007/01/19 15:26:33 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1442,7 +1442,7 @@ class forum_v2 extends class_base
 	
 				$this->vars(array(
 					"author" => $uid,
-					"author_email" => $user_obj->prop("email"),
+					"author_email" => $user_obj->prop("email.mail"),
 				));
 			
 			}
