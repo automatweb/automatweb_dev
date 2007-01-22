@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.105 2007/01/22 12:23:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.106 2007/01/22 13:11:29 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3115,6 +3115,10 @@ class room extends class_base
 				"time" => $price->prop("time") * $this->step_length,
 				"start" => $end-$time,
 			));
+			if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
+			{
+				$bargain =  $arr["bron"]->prop("special_discount") * 0.01;
+			}
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
 			{//arr($hr_price); arr($hr_price - $bargain*$hr_price);arr("");
@@ -3139,6 +3143,10 @@ class room extends class_base
 			}
 		}
 		
+		if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
+		{
+			$prod_discount = $arr["bron"]->prop("special_discount");
+		}
 		$rv["prod_discount"] = $prod_discount;
 		foreach($room->prop("currency") as $currency)
 		{
