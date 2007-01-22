@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.5 2007/01/22 12:33:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.6 2007/01/22 13:41:10 tarvo Exp $
 // id_config.aw - ID-Kaardi konfiguratsioon 
 /*
 
@@ -355,7 +355,7 @@ class id_config extends class_base
 		$is = false;
 		foreach($gr as $group)
 		{
-			if($this->can("view", $group))
+			if(is_oid($group) && $group != 0)
 			{
 				$is = true;
 			}
