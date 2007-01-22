@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.172 2007/01/22 09:56:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.173 2007/01/22 12:24:55 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -82,7 +82,7 @@ class users extends users_user
 		extract($arr);
 		if(!$username || !$old_pass || !$new_pass || !$new_pass_repeat)
 		{
-			$error = "Kõik väljad peavad olema täidetud";
+			$error = "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud";
 		}
 		elseif($new_pass != $new_pass_repeat)
 		{
@@ -124,7 +124,7 @@ class users extends users_user
 		}
 		elseif ($success)
 		{
-			//sellepärast ,et me teda uuesti parooli muutmisele ei saadaks paneme talle ühe logini kirja
+			//sellep&auml;rast ,et me teda uuesti parooli muutmisele ei saadaks paneme talle &uuml;he logini kirja
 			//$q = "UPDATE users SET logins = logins+1 WHERE uid = '$username'";
 			
 			aw_disable_acl();
@@ -174,7 +174,7 @@ class users extends users_user
 
 		if (!is_valid("password",$pwd))
 		{
-			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => "Uus parool sisaldab lubamatuid märke<br />"));
+			return $this->mk_my_orb("change_pwd", array("id" => $id, "error" => "Uus parool sisaldab lubamatuid m&auml;rke<br />"));
 		}
 
 		if ($arr["pwd"] != "")
@@ -720,7 +720,7 @@ class users extends users_user
 			};
 			if (not(is_email($row["email"])))
 			{
-				$status_msg .= "Kasutajal $uid puudub korrektne e-posti aadress. Palun pöörduge veebisaidi haldaja poole";
+				$status_msg .= "Kasutajal $uid puudub korrektne e-posti aadress. Palun p&ouml;&ouml;rduge veebisaidi haldaja poole";
 				aw_session_set("status_msg", $status_msg);
 				return $this->mk_my_orb("send_hash",array());
 			};
@@ -736,7 +736,7 @@ class users extends users_user
 			$msg = $this->parse();
 			$from = sprintf("%s <%s>", $this->cfg["webmaster_name"], $this->cfg["webmaster_mail"]);
 			send_mail($row["email"], "Paroolivahetus saidil ".aw_global_get("HTTP_HOST"), $msg, "From: $from");
-			aw_session_set("status_msg", "Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br />Täname!<br />");
+			aw_session_set("status_msg", "Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br />T&auml;name!<br />");
 		};
 		return $this->mk_my_orb("send_hash",array("section" => $args["section"]));
 	}
@@ -787,7 +787,7 @@ class users extends users_user
 		{	
 			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
-				"msg" => t("Sellist võtit pole väljastatud"),
+				"msg" => t("Sellist v&otilde;tit pole v&auml;ljastatud"),
 			));
 			return $this->parse();
 		};
@@ -799,7 +799,7 @@ class users extends users_user
 		{
 			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
-				"msg" => t("See võti on juba aegunud")." <a href='".$this->mk_my_orb('send_hash')."'>".t("Telli uusi v&otilde;ti")."</a>"
+				"msg" => t("See v&otilde;ti on juba aegunud")." <a href='".$this->mk_my_orb('send_hash')."'>".t("Telli uusi v&otilde;ti")."</a>"
 			));
 			return $this->parse();
 		}
@@ -837,7 +837,7 @@ class users extends users_user
 		$row = $this->db_next();
 		if (!$row)
 		{
-			return "<span style='color: red'>Sellist võtit pole väljastatud!</span><br />";
+			return "<span style='color: red'>Sellist v&otilde;tit pole v&auml;ljastatud!</span><br />";
 		};
 
 		if ($args["change"])
@@ -891,23 +891,23 @@ class users extends users_user
 
 		if ($pwhash1 != $pwhash)
 		{
-			aw_session_set("status_msg","Sellist võtit pole väljastatud");
+			aw_session_set("status_msg","Sellist v&otilde;tit pole v&auml;ljastatud");
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 		
 		if (not(is_valid("password",$pass1)))
 		{
-			aw_session_set("status_msg","Parool sisaldab keelatud märke");
+			aw_session_set("status_msg","Parool sisaldab keelatud m&auml;rke");
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
 		if ($pass1 != $pass2)
 		{
-			aw_session_set("status_msg","Paroolid peavad olema ühesugused");
+			aw_session_set("status_msg","Paroolid peavad olema &uuml;hesugused");
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
-		// tundub, et kõik on allright. muudame parooli ära
+		// tundub, et k&otilde;ik on allright. muudame parooli &auml;ra
 		$newpass = md5($pass1);
 		$q = "UPDATE users SET password = '$newpass' WHERE uid = '$uid'";
 		$this->db_query($q);
@@ -1390,6 +1390,18 @@ class users extends users_user
 			return aw_ini_get("baseurl");
 		}
 		// here should be user's certification OSCP check
+		classload("classes/core/users/id_config");
+		$act = id_config::get_active();
+		// safe-list allows only pre-set personal id's to login(if it's enabled)
+		if($act->use_safelist())
+		{
+			$sl = $act->get_safelist();
+			if(!in_array($arr["ik"], array_keys($sl)))
+			{
+				return aw_ini_get("baseurl");
+			}
+		}
+
 		//$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_G"];
 		//$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_S"];
 		//$arr["ik"] = split(",", $_SERVER["SSL_CLIENT_S_DN_CN"]);
@@ -1429,18 +1441,26 @@ class users extends users_user
 		}
 		if($ol->count() < 1)
 		{
+			$gr_inst = get_instance(CL_GROUP);
+			$grs = $act->get_ugroups();
 			$user = get_instance("core/users/user");
 			$u_obj = $user->add_user(array(
 				"uid" => $arr["uid"],
 				"password" => $password,
 				"real_name" => $arr["firstname"]." ".$arr["lastname"],
 			));
+			// set new users user groups depending on the active id_config settings 
+			foreach($grs as $gr)
+			{
+				$gr_obj = obj($gr);
+				$gr_inst->add_user_to_group($u_obj, $gr_obj);
+			}
 
 			//aw_switch_user(array("uid" => $u_obj->id()));
 
 			$person_obj = new object();
 			$person_obj->set_class_id(145);
-			$person_obj->set_parent(2);
+			$person_obj->set_parent(aw_ini_get("users.root_folder"));
 			$person_obj->set_name($arr["uid"]);
 			$person_obj->set_prop("personal_id",$arr["ik"]);
 			$person_obj->set_prop("firstname",$arr["firstname"]);
@@ -1470,6 +1490,9 @@ class users extends users_user
 				"from.class_id" => CL_USER,
 				"to" => $ol->ids()
 			));
+			$us = get_instance("users_user");
+
+
 			if(count($conns) < 1)
 			{
 				$person_id = current($ol->ids());
@@ -1479,6 +1502,7 @@ class users extends users_user
 					"password" => $password,
 					"real_name" => $arr["firstname"]." ".$arr["lastname"],
 				));
+
 
 				$o = new object($u_obj->id());
 				$o->connect(array(

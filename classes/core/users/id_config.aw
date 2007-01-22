@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.3 2007/01/22 09:26:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.4 2007/01/22 12:24:56 tarvo Exp $
 // id_config.aw - ID-Kaardi konfiguratsioon 
 /*
 
@@ -315,7 +315,6 @@ class id_config extends class_base
 	{
 		$pl = new object_list(array(
 			"class_id" => CL_ID_CONFIG,
-			"status" => 2,
 		));
 		for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
 		{
@@ -324,13 +323,27 @@ class id_config extends class_base
 				break;
 			}
 		};
-		if($o->count())
+		if(!$pl->count())
 		{
+			$gr = get_instance(CL_GROUP);
 			$o = new object();
 			$o->set_class_id(CL_ID_CONFIG);
 			$o->set_name(t("ID-kaardi Konfiguratsioon"));
 			$o->set_parent(DEFAULT_ID_CONFIG_PARENT);
 			$o->save_new();
+			$new_group = new object();
+			$new_group->set_class_id(CL_GROUP);
+			$new_group->set_name("ID-Kaardi kasutajad");
+			$new_group->set_parent(aw_ini_get("users.root_folder"));
+			$new_group->save_new();
+			$o->connect(array(
+				"to" => $new_group->id(),
+				"type" => "RELTYPE_ID_USER_GROUP",
+			));
+			$o->set_prop("id_ugroup", array(
+				0 => $new_group->id(),
+			));
+			$o->save();
 		}
 		if(!$o->flag(OBJ_FLAG_IS_SELECTED))
 		{
@@ -357,6 +370,14 @@ class id_config extends class_base
 			return true;
 		}
 		return false;
+	}
+
+	function get_ugroups()
+	{
+		$a = $this->get_active();
+		$ugr = $a->prop("id_ugroup");
+		return $ugr;
+
 	}
 }
 ?>
