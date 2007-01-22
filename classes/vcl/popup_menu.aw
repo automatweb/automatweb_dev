@@ -84,18 +84,18 @@ class popup_menu extends aw_template
 			$id = "id='$arr[href_id]'";
 		}
 
-		if (!empty($target))
+		if (!empty($arr["target"]))
 		{
 			$target = " target=\"_blank\" ";
 		}
 
 		if (empty($arr["disabled"]))
 		{
-			$rv ='<a '.$id.' class="menuItem" $target href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
+			$rv ='<a '.$id.' class="menuItem" '.$target.' href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
 		}
 		else
 		{
-			$rv = '<a '.$id.' class="menuItem" $target href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
+			$rv = '<a '.$id.' class="menuItem" '.$target.' href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
 		}
 		$this->menus[$arr["parent"]] .= $rv;
 	}

@@ -323,7 +323,8 @@ class crm_company_docs_impl extends class_base
 			{
 				$pm->add_item(array(
 					"text" => $o->name(),
-					"link" => file::get_url($o->id(), $o->name())
+					"link" => file::get_url($o->id(), $o->name()),
+					"target" => 1
 				));
 			}
 			else
