@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.6 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.7 2007/01/22 13:37:08 kristo Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property jrk type=textbox size=5 table=objects field=jrk
+@caption J&auml;rjekord
 
 @property img_upload type=releditor reltype=RELTYPE_IMAGE props=file,file_show
 @caption Pilt
