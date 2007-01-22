@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.173 2007/01/22 12:24:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.174 2007/01/22 13:58:38 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1390,17 +1390,24 @@ class users extends users_user
 			return aw_ini_get("baseurl");
 		}
 		// here should be user's certification OSCP check
-		classload("classes/core/users/id_config");
+		
+
+		classload("core/users/id_config");
+		$act_inst = get_instance(CL_ID_CONFIG);
 		$act = id_config::get_active();
+		
+
 		// safe-list allows only pre-set personal id's to login(if it's enabled)
-		if($act->use_safelist())
+		
+		if($act_inst->use_safelist())
 		{
-			$sl = $act->get_safelist();
+			$sl = $act_inst->get_safelist();
 			if(!in_array($arr["ik"], array_keys($sl)))
 			{
 				return aw_ini_get("baseurl");
 			}
 		}
+
 
 		//$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_G"];
 		//$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_S"];
@@ -1432,7 +1439,8 @@ class users extends users_user
 			"class_id" => 145, 
 			"personal_id" => $arr["ik"],
 			"site_id" => array(),
-			"lang_id" => array()
+			"lang_id" => array(),
+			"status" => STAT_ACTIVE,
 		));
 		if($ol->count() < 1 && aw_ini_get("users.id_only_existing") == "1")
 		{
@@ -1442,7 +1450,7 @@ class users extends users_user
 		if($ol->count() < 1)
 		{
 			$gr_inst = get_instance(CL_GROUP);
-			$grs = $act->get_ugroups();
+			$grs = $act_inst->get_ugroups();
 			$user = get_instance("core/users/user");
 			$u_obj = $user->add_user(array(
 				"uid" => $arr["uid"],

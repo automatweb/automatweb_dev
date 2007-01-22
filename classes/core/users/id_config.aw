@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.6 2007/01/22 13:41:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.7 2007/01/22 13:58:39 tarvo Exp $
 // id_config.aw - ID-Kaardi konfiguratsioon 
 /*
 
@@ -35,6 +35,7 @@
 */
 
 define("DEFAULT_ID_CONFIG_PARENT", 2);
+define("DEFAULT_ID_LOGIN_PRIORITY", 10);
 
 class id_config extends class_base
 {
@@ -336,6 +337,8 @@ class id_config extends class_base
 			$new_group->set_name("ID-Kaardi kasutajad");
 			$new_group->set_parent(aw_ini_get("users.root_folder"));
 			$new_group->save_new();
+			$new_group->set_prop("priority", DEFAULT_ID_LOGIN_PRIORITY);
+			$new_group->save();
 			$o->connect(array(
 				"to" => $new_group->id(),
 				"type" => "RELTYPE_ID_USER_GROUP",
@@ -367,6 +370,8 @@ class id_config extends class_base
 			$new_group->set_name("ID-Kaardi kasutajad");
 			$new_group->set_parent(aw_ini_get("users.root_folder"));
 			$new_group->save_new();
+			$new_group->set_prop("priority", DEFAULT_ID_LOGIN_PRIORITY);
+			$new_group->save();
 			$o->connect(array(
 				"to" => $new_group->id(),
 				"type" => "RELTYPE_ID_USER_GROUP",
