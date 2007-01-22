@@ -22,16 +22,6 @@
             <caption>Kasuta kontrollnimekirja</caption>
       </property>
       <property>
-            <name>safelist_tb</name>
-            <table>objects</table>
-            <group>safelist</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>safelist_tb</field>
-            <caption>Kontrollnimekirja haldus</caption>
-      </property>
-      <property>
             <name>safelist_tbl</name>
             <table>objects</table>
             <group>safelist</group>

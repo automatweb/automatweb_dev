@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.2 2007/01/19 12:58:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.3 2007/01/22 09:26:42 tarvo Exp $
 // id_config.aw - ID-Kaardi konfiguratsioon 
 /*
 
@@ -16,8 +16,8 @@
 
 @groupinfo safelist caption=Kontrollnimekiri
 
-	@property safelist_tb type=toolbar group=safelist no_caption=1
-	@caption Kontrollnimekirja haldus
+/	@property safelist_tb type=toolbar group=safelist no_caption=1
+/	@caption Kontrollnimekirja haldus
 
 	@property safelist_tbl type=table group=safelist no_caption=1
 	@caption Kontrollnimekiri
@@ -161,6 +161,7 @@ class id_config extends class_base
 				)),
 			));
 		}
+		classload("core/icons");
 		foreach($list as $k => $el)
 		{
 			$name = t("-");
@@ -169,9 +170,31 @@ class id_config extends class_base
 				"pid" => $el["pid"],
 				"name" => $name,
 				"comment" => $el["comment"],
+				"rem" => html::href(array(
+					"url" => $this->mk_my_orb("rem_pid", array(
+						"pid" => $el["pid"],
+						"oid" => $arr["obj_inst"]->id(),
+						"return_url" => get_ru(),
+					)),
+					"caption" => html::img(array(
+						"border" => 0,
+						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif",
+					)),
+				)),
 			));
 		}
 
+	}
+	
+	/**
+		@attrib params=name all_args=1 name=rem_pid
+	**/
+	function rem_pid($arr)
+	{
+		$sl = $this->get_safelist($arr["oid"]);
+		unset($sl[$arr["pid"]]);
+		$this->set_safelist($arr["oid"], $sl);
+		return $arr["return_url"];
 	}
 
 	function _init_safelist_tbl($t)
@@ -186,13 +209,19 @@ class id_config extends class_base
 			"name" => "pid",
 			"caption" => t("Isikukood"),
 		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-		));
+		//$t->define_field(array(
+		//	"name" => "name",
+		//	"caption" => t("Nimi"),
+		//));
 		$t->define_field(array(
 			"name" => "comment",
 			"caption" => t("Selgitus"),
+		));
+		$t->define_field(array(
+			"name" => "rem",
+			"caption" => t("Eemalda"),
+			"align" => "center",
+			"width" => "20",
 		));
 		$t->set_default_sortby("id");
 		$t->set_default_sorder("asc");
@@ -274,6 +303,14 @@ class id_config extends class_base
 		return true;
 	}
 	
+	/**
+		@attrib api=1
+		@comment
+			Finds out the active id-config object. If not present, creates one.
+		@returns 
+			ID-config object.
+
+	**/
 	function get_active()
 	{
 		$pl = new object_list(array(
@@ -287,15 +324,20 @@ class id_config extends class_base
 				break;
 			}
 		};
-		if(!$o || !$o->flag(OBJ_FLAG_IS_SELECTED))
+		if($o->count())
 		{
-			arr("wtf?");
 			$o = new object();
 			$o->set_class_id(CL_ID_CONFIG);
 			$o->set_name(t("ID-kaardi Konfiguratsioon"));
 			$o->set_parent(DEFAULT_ID_CONFIG_PARENT);
 			$o->save_new();
 		}
+		if(!$o->flag(OBJ_FLAG_IS_SELECTED))
+		{
+			$o->set_flag(OBJ_FLAG_IS_SELECTED, true);
+			$o->save();
+		}
+
 		return $o;
 	}
 
