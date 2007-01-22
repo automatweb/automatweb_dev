@@ -165,6 +165,10 @@ class crm_data extends class_base
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 
+		if (!is_oid($p->id()))
+		{
+			return null;
+		}
 		$cs = $p->connections_to(array("from.class_id" => CL_CRM_SECTION));
 		$c = reset($cs);
 		if (!$c)
@@ -179,7 +183,11 @@ class crm_data extends class_base
 	{
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
-		
+	
+		if (!is_oid($p->id()))
+		{
+			return null;
+		}
 		$cs = $p->connections_from(array("to.class_id" => CL_CRM_PROFESSION));
 		$c = reset($cs);
 		if (!$c)
