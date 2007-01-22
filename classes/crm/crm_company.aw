@@ -23,7 +23,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 		@layout co_top_left type=vbox parent=co_top
 
-			@property name type=textbox size=3f0 maxlength=255 table=objects parent=co_top_left 
+			@property name type=textbox size=30 maxlength=255 table=objects parent=co_top_left 
 			@caption Organisatsiooni nimi
 
 			@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name parent=co_top_left 
