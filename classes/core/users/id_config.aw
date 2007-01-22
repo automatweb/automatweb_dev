@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.4 2007/01/22 12:24:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/id_config.aw,v 1.5 2007/01/22 12:33:26 tarvo Exp $
 // id_config.aw - ID-Kaardi konfiguratsioon 
 /*
 
@@ -348,6 +348,32 @@ class id_config extends class_base
 		if(!$o->flag(OBJ_FLAG_IS_SELECTED))
 		{
 			$o->set_flag(OBJ_FLAG_IS_SELECTED, true);
+			$o->save();
+		}
+
+		$gr = $o->prop("id_ugroup");
+		$is = false;
+		foreach($gr as $group)
+		{
+			if($this->can("view", $group))
+			{
+				$is = true;
+			}
+		}
+		if(!$is)
+		{
+			$new_group = new object();
+			$new_group->set_class_id(CL_GROUP);
+			$new_group->set_name("ID-Kaardi kasutajad");
+			$new_group->set_parent(aw_ini_get("users.root_folder"));
+			$new_group->save_new();
+			$o->connect(array(
+				"to" => $new_group->id(),
+				"type" => "RELTYPE_ID_USER_GROUP",
+			));
+			$o->set_prop("id_ugroup", array(
+				0 => $new_group->id(),
+			));
 			$o->save();
 		}
 
