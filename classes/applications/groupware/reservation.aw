@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.32 2007/01/19 15:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.33 2007/01/22 12:23:17 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -112,7 +112,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property products_text type=text submit=no
 	@caption Toode
 
-	@property sum type=text field=meta method=serialize
+	@property sum type=text field=meta method=serialize no_caption=1
 	@caption Summa
 
 	@property modder type=text store=no no_caption=1
@@ -205,21 +205,9 @@ class reservation extends class_base
 				break;
 				
 			case "sum":
-				$room_instance = get_instance(CL_ROOM);
-				$sum = $room_instance->cal_room_price(array(
-					"room" => $arr["obj_inst"]->prop("resource"),
-					"start" => $arr["obj_inst"]->prop("start1"),
-					"end" => $arr["obj_inst"]->prop("end"),
-					"people" => $arr["obj_inst"]->prop("people_count"),
-					"products" => $arr["obj_inst"]->meta("amount"),
-					"bron" => $arr["obj_inst"]
-				));
-				foreach($sum as $cur=>$price)
-				{
-					$cur = obj($cur);
-					$prop["value"].= $price." ".$cur->name()."<br>";
-				}
+				$prop["value"] = $this->_format_sum($arr["obj_inst"]);
 				break;
+
 			case "deadline":
 				if($arr["obj_inst"]->prop("verified"))
 				{
@@ -1253,6 +1241,102 @@ class reservation extends class_base
 			}
 		}
 		return join($val , $sep);
+	}
+
+	function _format_sum($o)
+	{
+		classload("vcl/table");
+		$t = new vcl_table;
+
+		$t->define_field(array(
+			"name" => "desc",
+			"caption" => "",
+			"align" => "right",
+		));
+
+		$room_instance = get_instance(CL_ROOM);
+		$sum = $room_instance->cal_room_price(array(
+			"room" => $o->prop("resource"),
+			"start" => $o->prop("start1"),
+			"end" => $o->prop("end"),
+			"people" => $o->prop("people_count"),
+			"products" => $o->meta("amount"),
+			"bron" => $o,
+			"detailed_info" => true
+		));
+
+		foreach($sum["room_price"] as $cur => $price)
+		{
+			$co = obj($cur);
+			$t->define_field(array(
+				"name" => "price".$cur,
+				"caption" => $co->name(),
+				"align" => "right",
+			));
+		}
+
+		$d = array(
+			"desc" => t("Tooted")
+		);
+		foreach($sum["prod_price"] as $cur => $price)
+		{
+			$d["price".$cur] = number_format($price, 2);
+		}
+		$t->define_data($d);
+
+		$d = array(
+			"desc" => t("Ruum")
+		);
+		foreach($sum["room_price"] as $cur => $price)
+		{
+			$d["price".$cur] = number_format($price, 2);
+		}
+		$t->define_data($d);
+
+		$d = array(
+			"desc" => sprintf(t("Soodustus ruumilt (-%d %%)"), $sum["room_bargain"]*100)
+		);
+		foreach($sum["room_bargain_value"] as $cur => $price)
+		{
+			$d["price".$cur] = number_format($price, 2);
+		}
+		$t->define_data($d);
+
+		$d = array(
+			"desc" => sprintf(t("Soodustus toodetelt (-%d %%)"), $sum["prod_discount"])
+		);
+		foreach($sum["prod_discount_value"] as $cur => $price)
+		{
+			$d["price".$cur] = number_format($price, 2);
+		}
+		$t->define_data($d);
+
+
+		$d = array(
+			"desc" => t("Summa")
+		);
+		foreach($sum["room_price"] as $cur => $price)
+		{
+			$d["price".$cur] = number_format($price + $sum["prod_price"][$cur], 2);
+		}
+		$t->define_data($d);
+
+
+		return $t->draw();
+
+
+		$pv = "";
+		foreach($sum as $cur=>$price)
+		{
+			$cur = obj($cur);
+			$pv .= $price." ".$cur->name()."<br>";
+			$t->define_data(array(
+				"desc" => $cur->name(),
+				"price" => $price
+			));
+		}
+		return $t->draw();
+		return $pv;
 	}
 }
 ?>

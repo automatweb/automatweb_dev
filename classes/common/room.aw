@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.104 2007/01/19 13:02:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.105 2007/01/22 12:23:16 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3033,6 +3033,8 @@ class room extends class_base
 			when the event, you need room for, ends
 		@param products optional type=array
 			products you want to order with room
+		@param detailed_info type=bool default=false
+			if set to true, data is returned in detail, separate entries for products and everything
 	**/
 	function cal_room_price($arr)
 	{
@@ -3045,7 +3047,8 @@ class room extends class_base
 		$this->bargain_value = array();
 		$this->step_length = $this->step_lengths[$room->prop("time_unit")];
 		$sum = array();
-		
+		$rv = array();		
+
 		$price_inst = get_instance(CL_ROOM_PRICE);
 		$this_price = "";
 		$this_prices = array();
@@ -3112,6 +3115,7 @@ class room extends class_base
 				"time" => $price->prop("time") * $this->step_length,
 				"start" => $end-$time,
 			));
+			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
 			{//arr($hr_price); arr($hr_price - $bargain*$hr_price);arr("");
 				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
@@ -3119,7 +3123,10 @@ class room extends class_base
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
 		}
-		
+
+		$rv["room_price"] = $sum;		
+		$rv["room_bargain_value"] = $this->bargain_value;
+
 		$warehouse = $room->prop("warehouse");
 		if(is_oid($warehouse) && $this->can("view" , $warehouse))
 		{
@@ -3132,6 +3139,7 @@ class room extends class_base
 			}
 		}
 		
+		$rv["prod_discount"] = $prod_discount;
 		foreach($room->prop("currency") as $currency)
 		{
 			if(!$sum[$currency])
@@ -3141,17 +3149,32 @@ class room extends class_base
 			if($people > $room->prop("normal_capacity"))
 			{
 				$sum[$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
+				$rv["room_price"][$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
 			}
 			if(is_array($products) && sizeof($products))
 			{
-				$sum[$currency] += $this->cal_products_price(array(
+				$tmp = $this->cal_products_price(array(
 					"products" => $products,
 					"currency" => $currency,
 					"prod_discount" => $prod_discount,
 				));
+				$sum[$currency] += $tmp;
+				$rv["prod_price"][$currency] += $tmp;
+
+				// calculate the amount of money saved by the discount back from the discounted price
+				$adv = 100 - $prod_discount;
+				$rv["prod_discount_value"][$currency] = ((100.0 * $tmp) / $adv) - $tmp;
 			}
 		}
-		return $sum;
+
+		if ($arr["detailed_info"])
+		{
+			return $rv;
+		}
+		else
+		{
+			return $sum;
+		}
 	}
 	
 	//annab soodustuse juhul kui see täpselt kattub hinna ajaga või kui üks soodustus lõppeb kas enne aja lõppu , või algab alles poole pealt
