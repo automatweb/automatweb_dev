@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.171 2007/01/10 11:45:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.172 2007/01/22 09:56:48 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1325,6 +1325,22 @@ class users extends users_user
 			send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		}
 	}
+
+	/**
+		@comment
+			fixes umlauts etc in name.
+	**/
+	function fix_name($name, $space = "_")
+	{
+		$name = strtolower($name);
+		$name = trim($name);
+		$to_replace = array("&auml;","&ouml;","&uuml;","&otilde;", " ");
+		$replace_with = array("a","o","u","o", $space);
+		$str = "!\"@#.$%&/()[]={}?\+-`'|,;";
+		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);
+		$name = str_replace($to_replace, $replace_with, htmlentities($name));
+		return $name;
+	}
 	
 	/**
 		@attrib params=pos
@@ -1336,8 +1352,9 @@ class users extends users_user
 	**/
 	function _find_username($first, $last)
 	{
-		$first = strtolower($first);
-		$last = strtolower($last);
+
+		$first = $this->fix_name($first);
+		$last = $this->fix_name($last);
 		$suffix = "";
 		$count = 0;
 		$user = get_instance("core/users/user");
@@ -1364,16 +1381,37 @@ class users extends users_user
 	**/
 	function id_pre_login($arr)
 	{
+		//dbg::p1($_SERVER);
+		//arr($_SERVER);
+		//die();
+
 		if($_SERVER["HTTPS"] != "on")
 		{
 			return aw_ini_get("baseurl");
 		}
 		// here should be user's certification OSCP check
-		$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_G"];
-		$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_S"];
-		$arr["ik"] = split("[,]", $_SERVER["SSL_CLIENT_S_DN_CN"]);
-		$arr["ik"] = $arr["ik"][2];
-		$arr["gender"] = ($_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 1 || $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 3 || $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 5)?1:2;
+		//$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_G"];
+		//$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_S"];
+		//$arr["ik"] = split(",", $_SERVER["SSL_CLIENT_S_DN_CN"]);
+		//$arr["ik"] = $arr["ik"][2];
+
+		// this little modafocka is here beacause estonian language has freaking umlauts etc..
+		$certstruct = openssl_x509_parse($_SERVER["SSL_CLIENT_CERT"]);
+		$arr["firstname"] = $certstruct["subject"]["GN"];
+		$arr["lastname"] = $certstruct["subject"]["SN"];
+		$arr["ik"] = $certstruct["subject"]["serialNumber"];
+
+		$arr["gender"] = ($arr["ik"][0] == 1 || $arr["ik"][0] == 3 || $arr["ik"][0] == 5)?1:2;
+		if(!$arr["firstname"] || !$arr["lastname"] || !$arr["ik"])
+		{
+			$url = aw_ini_get("baseurl")."/orb.aw?class=ddoc&action=no_ddoc";
+			$tpl = new aw_template();
+			$tpl->init(array(
+				"tpldir" => "common/digidoc/idErr"
+			));
+			$tpl->read_template("error.tpl");
+			die($tpl->parse());
+		}
 //tst
 		$arr["uid"] = $this->_find_username($arr["firstname"],$arr["lastname"]);
 		$password = substr(gen_uniq_id(),0,8);
@@ -1386,10 +1424,20 @@ class users extends users_user
 		));
 		if($ol->count() < 1 && aw_ini_get("users.id_only_existing") == "1")
 		{
+			aw_restore_acl();
 			return aw_ini_get("baseurl");
 		}
 		if($ol->count() < 1)
 		{
+			$user = get_instance("core/users/user");
+			$u_obj = $user->add_user(array(
+				"uid" => $arr["uid"],
+				"password" => $password,
+				"real_name" => $arr["firstname"]." ".$arr["lastname"],
+			));
+
+			//aw_switch_user(array("uid" => $u_obj->id()));
+
 			$person_obj = new object();
 			$person_obj->set_class_id(145);
 			$person_obj->set_parent(2);
@@ -1400,13 +1448,7 @@ class users extends users_user
 			$person_obj->set_prop("gender",$arr["gender"]);
 			$person_id = $person_obj->save_new();
 			
-			$user = get_instance("core/users/user");
-			
-			$u_obj = $user->add_user(array(
-				"uid" => $arr["uid"],
-				"password" => $password,
-				"real_name" => $arr["firstname"]." ".$arr["lastname"],
-			));
+
 
 			$o = new object($u_obj->id());
 			$o->connect(array(
