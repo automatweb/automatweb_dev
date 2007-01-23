@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.106 2007/01/22 13:11:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.107 2007/01/23 13:20:42 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -196,7 +196,6 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 	@property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
 	@caption Avamisajad
 
-
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
 	
@@ -284,6 +283,7 @@ class room extends class_base
 		$this->weekdays_short = array(
 			t("Su") , t("Mo") , t("Tu"), t("We") , t("Th") , t("Fr"), t("Sa")
 		);
+		
 		classload("core/date/date_calc");
 
 		$this->trans_props = array(
@@ -490,11 +490,10 @@ class room extends class_base
 				break;
 				
 				//$prop[""]
-
+			//-- set_property --//
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
-			//-- set_property --//
 		}
 		return $retval;
 	}
@@ -963,14 +962,13 @@ class room extends class_base
 			$room_inst = get_instance(CL_ROOM);
 			$start1 = mktime($start1["hour"], $start1["minute"], 0, $start1["month"], $start1["day"], $start1["year"]);
 			$end = mktime($end["hour"], $end["minute"], 0, $end["month"], $end["day"], $end["year"]);
-
+			
 			if(is_oid($product))
 			{
-
 				$product_obj = obj($product);
 				$end = $start1 + $product_obj->prop("reservation_time")*$product_obj->prop("reservation_time_unit");
-
 			}
+			
 			if(!$room_inst->check_if_available(array(
 				"room" => $resource,
 				"start" => $start1,
@@ -1029,6 +1027,7 @@ class room extends class_base
 						$phone_obj = reset($phones->arr());
 					}
 				}
+				
 				if(strlen($firstname) || strlen($lastname))
 				{
 					$persons = new object_list(array(
@@ -1458,7 +1457,7 @@ class room extends class_base
 			$gwo = $this->get_when_opens();
 			extract($gwo);
 		}
-
+		
 		if($arr["request"]["start"])
 		{
 			$today_start = $arr["request"]["start"];
@@ -1500,20 +1499,18 @@ class room extends class_base
 			{
 				$this->start = $today_start = get_week_start();
 			}
-
-			//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
- 			if($gwo["start_hour"])
- 			{
-	 			$this->start = $this->start+3600*$gwo["start_hour"];
- 				$today_start = $today_start+3600*$gwo["start_hour"];
- 			}
- 			if($gwo["start_minute"])
-	 		{	
- 				$this->start = $this->start+60*$gwo["start_minute"];
- 				$today_start = $today_start+60*$gwo["start_minute"];
-	 		}
 		}
-
+		//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
+ 		if($gwo["start_hour"])
+ 		{
+ 			$this->start = $this->start+3600*$gwo["start_hour"];
+ 			$today_start = $today_start+3600*$gwo["start_hour"];
+ 		}
+ 		if($gwo["start_minute"])
+ 		{
+ 			$this->start = $this->start+60*$gwo["start_minute"];
+ 			$today_start = $today_start+60*$gwo["start_minute"];
+ 		}
 			
 		enter_function("get_calendar_tbl::3");
 		$len = 7;
@@ -1625,12 +1622,12 @@ class room extends class_base
 								"caption" => "<span><font color=#26466D>".$cus . " " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
 							);
-
+							
 							if ($settings->prop("cal_show_prods"))
 							{
 								$dx_p["caption"] .= " ".$title;
 							}
-
+							
 							if ($settings->prop("bron_no_popups"))
 							{
 								$d[$x] = html::href($dx_p);
@@ -1744,11 +1741,10 @@ class room extends class_base
 		}
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
-
 		$popup_menu = $this->get_room_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
 		$t->set_caption(t("Broneerimine").$popup_menu);
 	}
-
+	
 	function get_room_prod_menu($arr, $immediate = false)
 	{
 		$res = '<div class="menu" id="bron_menu_'.$arr["obj_inst"]->id().'" style="display: none;">';
@@ -3031,8 +3027,8 @@ class room extends class_base
 			whenever that stuff , you need room for, starts
 		@param end required type=int
 			when the event, you need room for, ends
-		@param products optional type=array
-			products you want to order with room
+		@param products optional type=array, -1
+			products you want to order with room , -1 if room price without products
 		@param detailed_info type=bool default=false
 			if set to true, data is returned in detail, separate entries for products and everything
 	**/
@@ -3047,8 +3043,8 @@ class room extends class_base
 		$this->bargain_value = array();
 		$this->step_length = $this->step_lengths[$room->prop("time_unit")];
 		$sum = array();
-		$rv = array();		
-
+		$rv = array();	
+		
 		$price_inst = get_instance(CL_ROOM_PRICE);
 		$this_price = "";
 		$this_prices = array();
@@ -3115,10 +3111,6 @@ class room extends class_base
 				"time" => $price->prop("time") * $this->step_length,
 				"start" => $end-$time,
 			));
-			if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
-			{
-				$bargain =  $arr["bron"]->prop("special_discount") * 0.01;
-			}
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
 			{//arr($hr_price); arr($hr_price - $bargain*$hr_price);arr("");
@@ -3127,10 +3119,10 @@ class room extends class_base
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
 		}
-
-		$rv["room_price"] = $sum;		
+		
+		$rv["room_price"] = $sum;
 		$rv["room_bargain_value"] = $this->bargain_value;
-
+		
 		$warehouse = $room->prop("warehouse");
 		if(is_oid($warehouse) && $this->can("view" , $warehouse))
 		{
@@ -3143,10 +3135,6 @@ class room extends class_base
 			}
 		}
 		
-		if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
-		{
-			$prod_discount = $arr["bron"]->prop("special_discount");
-		}
 		$rv["prod_discount"] = $prod_discount;
 		foreach($room->prop("currency") as $currency)
 		{
@@ -3159,12 +3147,14 @@ class room extends class_base
 				$sum[$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
 				$rv["room_price"][$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
 			}
-			if(is_array($products) && sizeof($products))
+//			if(is_array($products) && sizeof($products))
+			if(!($products == -1))
 			{
 				$tmp = $this->cal_products_price(array(
 					"products" => $products,
 					"currency" => $currency,
 					"prod_discount" => $prod_discount,
+					"room" => $room,
 				));
 				$sum[$currency] += $tmp;
 				$rv["prod_price"][$currency] += $tmp;
@@ -3174,7 +3164,6 @@ class room extends class_base
 				$rv["prod_discount_value"][$currency] = ((100.0 * $tmp) / $adv) - $tmp;
 			}
 		}
-
 		if ($arr["detailed_info"])
 		{
 			return $rv;
@@ -3376,42 +3365,60 @@ class room extends class_base
 			if you want result in not the same currency the company uses.
 		@param prod_discount optional type=int
 		@param warehouse optional type=oid
+		@param room optional type=object
+			room object
 		@return int
 			price of all products
 	**/
 	function cal_products_price($arr)
 	{
 		extract($arr);
-		if(is_oid($warehouse) && $this->can("view" , $warehouse))
+			
+		if(is_array($products) && sizeof($products))//kui tooteid pole, võiks selle osa vahele jätta... võibolla võidab paar millisekundit
 		{
-			$w_obj = obj($warehouse);
-			$w_cnf = obj($w_obj->prop("conf"));
-			if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
+			if(is_oid($warehouse) && $this->can("view" , $warehouse))
 			{
-				$soc = obj($w_obj->prop("order_center"));
-				$prod_discount = $soc->prop("web_discount");
-			}
-		}
-		$sum = 0;
-		foreach($products as $id => $amt)
-		{
-			if($amt && $this->can("view", $id))
-			{
-				$product = obj($id);
-				if(is_oid($currency))
+				$w_obj = obj($warehouse);
+				$w_cnf = obj($w_obj->prop("conf"));
+				if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
 				{
-					$cur_pr = $product->meta("cur_prices");
-					if($cur_pr[$currency])
-					{
-						$sum += $cur_pr[$currency] *  $amt;
-					}
-					else $sum += $product->prop("price") * $amt;
+					$soc = obj($w_obj->prop("order_center"));
+					$prod_discount = $soc->prop("web_discount");
 				}
 			}
+			$sum = 0;
+			foreach($products as $id => $amt)
+			{
+				if($amt && $this->can("view", $id))
+				{
+					$product = obj($id);
+					if(is_oid($currency))
+					{
+						$cur_pr = $product->meta("cur_prices");
+						if($cur_pr[$currency])
+						{
+							$sum += $cur_pr[$currency] *  $amt;
+						}
+						else $sum += $product->prop("price") * $amt;
+					}
+				}
+			}
+				//võtab toote hinnalt toodete allahindluse maha
+			if($prod_discount)
+			{
+				$this->last_discount = $sum*0.01*$prod_discount;
+				$sum = $sum-$this->last_discount;
+			}
 		}
-		if($prod_discount)
+		
+		//ja juhul kui jääb alla miinimumi, siis jääb miinimum
+		if(is_object($room) && is_oid($currency))
 		{
-			$sum = $sum-$sum*0.01*$prod_discount;
+			$min = $room->meta("web_min_prod_prices");
+			if($sum < $min[$currency])
+			{
+				$sum = $min[$currency];
+			}
 		}
 		return $sum;
 	}
@@ -3843,7 +3850,7 @@ class room extends class_base
 		}
 		return true;
 	}
-
+	
 	function callback_mod_tab($arr)
 	{
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
