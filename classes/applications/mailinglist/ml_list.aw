@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.89 2007/01/19 13:48:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.90 2007/01/23 10:34:26 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -329,46 +329,70 @@ class ml_list extends class_base
 				"id" => $targets,
 			));
 		}
+
 		$this->mk_path(0, "<a href='".aw_global_get("route_back")."'>".t("Tagasi")."</a>&nbsp;/&nbsp;".t("Saada teade"));
+		classload("cfg/htmlclient");
+		$htmlc = new htmlclient(array(
+			'template' => "default",
+		));
+		$htmlc->start_output();
 
-		$this->read_template("post_message.tpl");
+		$htmlc->add_property(array(
+			"name" => "start_at",
+			"type" => "datetime_select",
+			"caption" => t("Millal saata"),
+			"value" => time() - 13
+		));
+		$htmlc->add_property(array(
+			"name" => "patch_size",
+			"type" => "textbox",
+			"value" => 100,
+			"caption" => t("Mitu teadet korraga"),
+		));
+		$htmlc->add_property(array(
+			"name" => "delay",
+			"type" => "textbox",
+			"value" => 0,
+			"caption" => t("Saatmiste vahel oota (min)"),
+		));
 
-		load_vcl("date_edit");
-		$date_edit = new date_edit(time());
-		$date_edit->configure(array(
-			"day" => "",
-			"month" => "",
-			"year" => "",
-			"hour" => "",
-			"minute" => "",
-			"classid" => "small_button",
+		$htmlc->add_property(array(
+			"name" => "submitb",
+			"type" => "submit",
+			"value" => "Saada",
+			"class" => "sbtbutton"
 		));
 
 		$id = (int)$id;//teate id
 		$listinfo = new object($targets);
-		$listrida = "";
-
-		$this->vars(array(
-			"title" => $target,
-			"date_edit" => $date_edit->gen_edit_form("start_at", time() - 13),
-		));
-		$listrida .= $this->parse("listrida");
 		if(is_oid($id))
 		{
-		$msg = obj($id);
-		$mfrom = $msg->prop("mfrom");
+			$msg = obj($id);
+			$mfrom = $msg->prop("mfrom");
 		}
-		$this->vars(array(
 
-			"listrida" => $listrida,
-			"reforb" => $this->mk_reforb("submit_post_message", array(
+		$htmlc->finish_output(array(
+			"action" => "submit_post_message",
+			"method" => "POST",
+			"data" => array(
 				"id" => $id,
 				"list_id" => $listinfo->id(),
 				"mfrom" => $mfrom,
-			)),
+				"orb_class" => "ml_list",
+				"reforb" => 1
+			)
 		));
+		$html = $htmlc->get_result();
 
-		return $this->parse();
+		$tp = get_instance("vcl/tabpanel");
+		$tp->add_tab(array(
+			"active" => true,
+			"caption" => t("Kirja saatmine"),
+			"link" => aw_global_get("REQUEST_URI")
+		));
+		return $tp->get_tabpanel(array(
+			"content" => $html
+		));
 	}
 
 	/** See händleb juba õiget postitust, siis kui on valitud saatmise ajavahemikud
