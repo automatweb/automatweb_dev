@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.107 2007/01/23 13:20:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.108 2007/01/23 14:12:08 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -151,6 +151,12 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 		@property time_unit type=chooser
 		@caption Aja&uuml;hik
+
+		@property prod_discount_loc type=chooser
+		@caption Toodete soodushind võetakse: 
+
+		@property prod_web_discount type=textbox size=2
+		@caption Toodete soodushind
 
 		@layout time_step type=hbox width=5%:5%:20%:60%
 		@caption Aja samm
@@ -313,6 +319,15 @@ class room extends class_base
 			case "buffer_before_unit":
 			case "buffer_after_unit":
 				$prop["options"] = $this->time_units;
+				break;
+			case "prod_discount_loc":
+				$prop["options"] = array(t("Tellimiskeskkonnast") , t("Ruumi juurest"));
+				break;
+			case "prod_web_discount":
+				if(!$arr["obj_inst"]->prop("prod_discount_loc"))
+				{
+					return PROP_IGNORE;
+				}
 				break;
 			case "calendar_tb":
 				$this->_calendar_tb($arr);
@@ -3131,7 +3146,14 @@ class room extends class_base
 			if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
 			{
 				$soc = obj($w_obj->prop("order_center"));
-				$prod_discount = $soc->prop("web_discount");
+				if($room->prop("prod_discount_loc"))
+				{
+					$prod_discount = $room->prop("prod_web_discount");
+				}
+				else
+				{
+					$prod_discount = $soc->prop("web_discount");
+				}
 			}
 		}
 		
@@ -3364,7 +3386,6 @@ class room extends class_base
 		@param currency optional type=oid
 			if you want result in not the same currency the company uses.
 		@param prod_discount optional type=int
-		@param warehouse optional type=oid
 		@param room optional type=object
 			room object
 		@return int
@@ -3376,15 +3397,9 @@ class room extends class_base
 			
 		if(is_array($products) && sizeof($products))//kui tooteid pole, võiks selle osa vahele jätta... võibolla võidab paar millisekundit
 		{
-			if(is_oid($warehouse) && $this->can("view" , $warehouse))
+			if(is_object($room))
 			{
-				$w_obj = obj($warehouse);
-				$w_cnf = obj($w_obj->prop("conf"));
-				if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
-				{
-					$soc = obj($w_obj->prop("order_center"));
-					$prod_discount = $soc->prop("web_discount");
-				}
+				$prod_discount = $this->get_prod_discount(array("room" => $room->id()));
 			}
 			$sum = 0;
 			foreach($products as $id => $amt)
@@ -3434,16 +3449,23 @@ class room extends class_base
 		{
 			return 0;
 		}
-		$warehouse = $o->prop("warehouse");
 		$prod_discount = 0;
-		if(is_oid($warehouse) && $this->can("view" , $warehouse))
+		$warehouse = $o->prop("warehouse");
+		if($o->prop("prod_discount_loc"))
 		{
-			$w_obj = obj($warehouse);
-			$w_cnf = obj($w_obj->prop("conf"));
-			if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
+			$prod_discount = $o->prop("prod_web_discount");
+		}
+		else
+		{
+			if(is_oid($warehouse) && $this->can("view" , $warehouse))
 			{
-				$soc = obj($w_obj->prop("order_center"));
-				$prod_discount = $soc->prop("web_discount");
+				$w_obj = obj($warehouse);
+				$w_cnf = obj($w_obj->prop("conf"));
+				if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
+				{
+					$soc = obj($w_obj->prop("order_center"));
+					$prod_discount = $soc->prop("web_discount");
+				}
 			}
 		}
 		return $prod_discount;

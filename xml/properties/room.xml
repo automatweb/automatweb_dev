@@ -410,6 +410,27 @@
             <caption>Aja&amp;amp;uuml;hik</caption>
       </property>
       <property>
+            <name>prod_discount_loc</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>buffer_after_l</parent>
+            <type>chooser</type>
+            <caption>Toodete soodushind v&amp;otilde;etakse: </caption>
+      </property>
+      <property>
+            <name>prod_web_discount</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>buffer_after_l</parent>
+            <type>textbox</type>
+            <size>2</size>
+            <caption>Toodete soodushind</caption>
+      </property>
+      <property>
             <name>time_from</name>
             <table>objects</table>
             <field>meta</field>
