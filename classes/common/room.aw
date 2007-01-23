@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.108 2007/01/23 14:12:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.109 2007/01/23 15:18:29 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1514,19 +1514,19 @@ class room extends class_base
 			{
 				$this->start = $today_start = get_week_start();
 			}
+
+			//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
+			if($gwo["start_hour"])
+			{
+				$this->start = $this->start+3600*$gwo["start_hour"];
+				$today_start = $today_start+3600*$gwo["start_hour"];
+			}
+			if($gwo["start_minute"])
+			{
+				$this->start = $this->start+60*$gwo["start_minute"];
+				$today_start = $today_start+60*$gwo["start_minute"];
+			}
 		}
-		//seda avamise alguse aega peab ka ikka arvestama, muidu võtab esimese tsükli miskist x kohast
- 		if($gwo["start_hour"])
- 		{
- 			$this->start = $this->start+3600*$gwo["start_hour"];
- 			$today_start = $today_start+3600*$gwo["start_hour"];
- 		}
- 		if($gwo["start_minute"])
- 		{
- 			$this->start = $this->start+60*$gwo["start_minute"];
- 			$today_start = $today_start+60*$gwo["start_minute"];
- 		}
-			
 		enter_function("get_calendar_tbl::3");
 		$len = 7;
 		if ($_GET["start"] && $_GET["end"])
@@ -1535,7 +1535,7 @@ class room extends class_base
 		}
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len);
 		$this->_init_calendar_t($t,$this->start, $len);
-
+//arr($this->res_table);
 		$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
 		
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
@@ -1684,9 +1684,13 @@ class room extends class_base
 									"title" => $last_bron->prop("content")." ".$last_bron->comment()
 								));
 							}
-							if(($last_bron->prop("end") - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step")) > 1)
+							if(($last_bron->prop("end") - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step")) >= 1)
 							{
-								$rowspan[$x] = (int)(($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step"))) ;
+								$rowspan[$x] = (int)((
+									$last_bron->prop("end")
+									+ $this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron))
+									 - $start_step)
+									 / ($step_length * $arr["obj_inst"]->prop("time_step"))) ;
 								if((($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) % ($step_length * $arr["obj_inst"]->prop("time_step"))))
 								{
 									$rowspan[$x]++;
@@ -1715,7 +1719,6 @@ class room extends class_base
 									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 								}
 							}
-
 							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
 						}
 						else
@@ -3470,7 +3473,7 @@ class room extends class_base
 		}
 		return $prod_discount;
 	}
-
+	
 	function check_from_table($arr)
 	{
 		foreach($this->res_table as $key => $val)
@@ -3480,7 +3483,7 @@ class room extends class_base
 				return true;
 			}
 			if($val["end"] > $arr["start"])
-			{
+			{//if($key == 1169301600){arr(date("h:i" , arr($key))); arr(date("h:i", $arr["end"]));}
 				if($key < $arr["end"])
 				{
 					$this->last_bron_id = $val["id"];
