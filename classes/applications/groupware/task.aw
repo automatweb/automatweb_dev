@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.155 2006/11/10 14:28:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.156 2007/01/23 11:02:17 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3302,7 +3302,7 @@ class task extends class_base
 		}
 
 		$url = $this->mk_my_orb("do_search", array("pn" => "files_h", "clid" => array(
-			CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER
+			CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_MENU
 		), "multiple" => 1), "popup_search");
 		$tb->add_button(array(
 			"name" => "search",
@@ -3393,13 +3393,34 @@ class task extends class_base
 		}
 		$clss = aw_ini_get("classes");
 		$u = get_instance(CL_USER);
+		$objs = array();
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FILE")) as $c)
 		{
-			$c = $c->to();
+			if ($c->prop("to.class_id") == CL_MENU)
+			{
+				$ol = new object_list(array(
+					"class_id" => array(CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER),
+					"parent" => $c->prop("to"),
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				foreach($ol->arr() as $o)
+				{
+					$objs[] = $o;
+				}
+			}
+			else
+			{
+				$objs[] = $c->to();
+			}
+		}
+
+		foreach($objs as $c)
+		{
 			$m = $c->modifiedby();
 			$m = $u->get_person_for_uid($m);
 			$t->define_data(array(
-				"oid" => $c->id(),
+				"oid" => "o_".$c->id(),
 				"name" => html::obj_change_url($c),
 				"type" => $clss[$c->class_id()]["name"],
 				"modifiedby" => html::obj_change_url($m)
@@ -3475,9 +3496,18 @@ class task extends class_base
 		{
 			foreach(safe_array($arr["sel"]) as $item)
 			{
-				$o->disconnect(array(
-					"from" => $item,
-				));
+				if (substr($item, 0, 2) == "o_")
+				{
+					list(,$oid) = explode("_", $item);
+					$o = obj($oid);
+					$o->delete();
+				}
+				else
+				{
+					$o->disconnect(array(
+						"from" => $item,
+					));
+				}
 			}
 		}
 		return $arr["post_ru"];
