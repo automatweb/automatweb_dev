@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.73 2007/01/10 13:31:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.74 2007/01/23 10:46:58 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -1056,18 +1056,18 @@ class bug extends class_base
 
 	function _split_long_words($comt)
 	{
-		// split words and check for > 100 chars
+		// split words and check for > 70 chars
 		$words = preg_split("/\s+/", strip_tags(trim($comt)));
 		foreach($words as $word)
 		{
-			if (strlen($word) > 100)
+			if (strlen($word) > 70)
 			{
 				$o_w = $word;
 				$n_w = "";
 				$l = strlen($word);
 				for ($i = 0; $i < $l; $i++)
 				{
-					if (($i % 100 == 0) && $i > 1)
+					if (($i % 70 == 0) && $i > 1)
 					{
 						$n_w .= "<br>";
 					}

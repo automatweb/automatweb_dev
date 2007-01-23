@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.184 2006/12/27 11:03:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.185 2007/01/23 10:46:57 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -382,6 +382,7 @@ class image extends class_base
 				"author" => $idata["meta"]["author"],
 				"docid" => $args["oid"],
 				"comments" => $num_comments,
+
 			);
 
 			if ($this->can("view", $idata["meta"]["big_flash"]))
@@ -393,6 +394,7 @@ class image extends class_base
 			{
 				$ha = localparse($tpls["HAS_AUTHOR"], $vars);
 			}
+
 			$vars["HAS_AUTHOR"] = $ha;
 			if ($this->is_flash($idata["file"]))
 			{

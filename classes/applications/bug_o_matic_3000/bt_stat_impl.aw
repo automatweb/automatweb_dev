@@ -282,6 +282,7 @@ class bt_stat_impl extends core
 			$sum_by_proj[$bug->prop("project")] += max(0,$com->prop("add_wh"));
 		}
 
+		$tot_sum = 0;
 		foreach($stat_hrs as $uid => $coms)
 		{
 			$u = get_instance(CL_USER);
@@ -318,14 +319,19 @@ class bt_stat_impl extends core
 				if ($wh>0)
 				{
 					$mons["sum"] = number_format($row_sum, 2, ".", " ");
+					$tot_sum += $row_sum;
 					$t->define_data($mons);
 				}
 			}
 		}
+
 		$t->set_rgroupby(array("year" => "year"));
 		$t->set_caption(t("T&ouml;&ouml;tundide statistika projektide ja kuude kaupa"));
 		$t->set_default_sortby("sum");
 		$t->set_default_sorder("desc");
+		$t->sort_by();
+		$t->set_sortable(false);
+		$t->define_data(array("p" => t("<b>Summa</b>"),"sum" => number_format($tot_sum, 2, ".", " ")));
 	}
 
 	function _get_stat_proj_detail_b($arr)

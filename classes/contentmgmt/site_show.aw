@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.219 2007/01/16 15:27:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.220 2007/01/23 10:46:57 kristo Exp $
 
 /*
 
@@ -1730,7 +1730,6 @@ class site_show extends class_base
 
 			$sel_img_url = "";
 			$img_url = "";
-			
 			// if the language has an image
 			if ($row["meta"]["lang_img"])
 			{
@@ -1806,7 +1805,6 @@ class site_show extends class_base
 				}
 			}
 		}
-
 		if (!$sel_lang)
 		{
 			$ll = get_instance("languages");

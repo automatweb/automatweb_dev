@@ -65,7 +65,7 @@ class popup_menu extends aw_template
 		};
 		if (!empty($arr["oncl"]))
 		{
-			$arr["oncl"] = " onClick=\"". $arr["oncl"] . "\"";
+			$arr["onClick"] = $arr["oncl"];
 		};
 
 		if (!empty($arr["link"]))
@@ -97,6 +97,7 @@ class popup_menu extends aw_template
 		{
 			$rv = '<a '.$id.' class="menuItem" '.$target.' href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
 		}
+
 		$this->menus[$arr["parent"]] .= $rv;
 	}
 
