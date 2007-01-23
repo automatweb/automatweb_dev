@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.109 2007/01/23 15:18:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.110 2007/01/23 15:50:34 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -315,6 +315,9 @@ class room extends class_base
 				break;
 			case "prices_tb":
 				$this->_get_prices_tb($arr);
+				break;
+			case "prices_tbl":
+				$this->_get_prices_tbl($arr);
 				break;
 			case "buffer_before_unit":
 			case "buffer_after_unit":
@@ -3085,7 +3088,7 @@ class room extends class_base
 		}
 		$step = 1;
 		$time = $end-$start;//+60 seepärast et oleks nagu täisminutid ja täistunnid jne
-		while($time > 60)//alla minuti ei ole oluline aeg eriti... et toimiks nii 00, kui ka minut enne.. siis peaks igaks juhuks 60sek otsas olema
+		while($time >= 60)//alla minuti ei ole oluline aeg eriti..
 		{//arr($end);
 			$price = "";
 			if(is_array($this_prices[$step]))
