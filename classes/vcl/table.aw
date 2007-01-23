@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.101 2007/01/17 14:49:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.102 2007/01/23 11:07:13 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -982,6 +982,19 @@ class aw_table extends aw_template
 				$rowid = $this->prefix . $this->id . $counter;
 				$tbl .= "<tr id='$rowid' class='$row_style'>";
 
+
+				$tmp = "";
+				// grpupeerimine
+				if (isset($rgroupby) && is_array($rgroupby))
+				{
+					$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v, $rowid, $row_style);
+				};
+				if ($tmp != "")
+				{
+					$counter = 1;
+				}
+
+				$tbl .= $tmp;
 					if ($this->use_chooser)
 					{
 						$chooser_value = $v[$this->chooser_config["field"]];
@@ -1009,18 +1022,6 @@ class aw_table extends aw_template
 							$tbl .= "<td align='center'>&nbsp;</td>";
 						}
 					};
-
-				$tmp = "";
-				// grpupeerimine
-				if (isset($rgroupby) && is_array($rgroupby))
-				{
-					$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v, $rowid, $row_style);
-				};
-				if ($tmp != "")
-				{
-					$counter = 1;
-				}
-				$tbl .= $tmp;
 
 				// ts&uuml;kkel &uuml;le rowdefsi, et andmed oleksid oiges j&auml;rjekorras
 				foreach($this->rowdefs as $k1 => $v1)
@@ -1991,7 +1992,7 @@ class aw_table extends aw_template
 				{
 					$tbl.=$this->opentag(array(
 						"name" => "td",
-						"colspan" => count($this->rowdefs),
+						"colspan" => count($this->rowdefs) + ($this->use_chooser ? 1 : 0),
 					));
 
 					if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
@@ -2017,7 +2018,7 @@ class aw_table extends aw_template
 				{
 					$tbl.=$this->opentag(array(
 						"name" => "td",
-						"colspan" => count($this->rowdefs),
+						"colspan" => count($this->rowdefs) + ($this->use_chooser ? 1 : 0),
 						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
 					));
 					if (isset($rgroupby_sep[$rgel]["real_sep_before"]))

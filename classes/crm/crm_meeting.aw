@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.80 2006/09/20 13:45:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.81 2007/01/23 11:02:19 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -1237,9 +1237,18 @@ class crm_meeting extends class_base
 		{
 			foreach(safe_array($arr["sel"]) as $item)
 			{
-				$o->disconnect(array(
-					"from" => $item,
-				));
+				if (substr($item, 0, 2) == "o_")
+				{
+					list(,$oid) = explode("_", $item);
+					$o = obj($oid);
+					$o->delete();
+				}
+				else
+				{
+					$o->disconnect(array(
+						"from" => $item,
+					));
+				}
 			}
 		}
 		return $arr["post_ru"];

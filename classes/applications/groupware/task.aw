@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.156 2007/01/23 11:02:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.157 2007/01/23 11:07:12 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3419,13 +3419,16 @@ class task extends class_base
 		{
 			$m = $c->modifiedby();
 			$m = $u->get_person_for_uid($m);
+			$po = obj($c->parent());
 			$t->define_data(array(
 				"oid" => "o_".$c->id(),
 				"name" => html::obj_change_url($c),
 				"type" => $clss[$c->class_id()]["name"],
-				"modifiedby" => html::obj_change_url($m)
+				"modifiedby" => html::obj_change_url($m),
+				"parent_name" => $po->name()
 			));
 		}
+		$t->set_rgroupby(array("parent_name" => "parent_name"));
 	}
 
 	/**
