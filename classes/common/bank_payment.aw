@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.16 2007/01/04 12:34:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.17 2007/01/24 10:19:51 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -22,14 +22,15 @@
 	@property private_key type=relpicker reltype=RELTYPE_KEY
 	@caption Privaatv&otilde;ti
 	
+	@property private_c_key type=relpicker reltype=RELTYPE_P_KEY
+	@caption krediitkaardi privaatv&otilde;ti
+	
 	@property return_url type=textbox
 	@caption Url, kuhu tagasi tulla eduka makse puhul
 	
 	@property cancel_url type=textbox
 	@caption Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul
-	
-	
-	
+
 @groupinfo bank caption="Pankade info"
 
 @default group=bank
@@ -38,6 +39,9 @@
 #RELTYPES
 
 @reltype KEY value=2 clid=CL_FILE
+@caption Privaatv&otilde;ti
+
+@reltype P_KEY value=3 clid=CL_FILE
 @caption Privaatv&otilde;ti
 
 */
@@ -105,13 +109,28 @@ class bank_payment extends class_base
  	**/
 	function form_test_case($arr)
 	{
-		die('
+		
+		
+		die('<form name="postform" id="postform" method="post" action=https://pos.estcard.ee/test-pos/servlet/iPAYServlet>
+			<input type="hidden" name=action value="gaf">
+			<input type="hidden" name=ver value="002">
+			<input type="hidden" name=id value="Reval">
+			<input type="hidden" name=ecuno value="112309">
+			<input type="hidden" name=eamount value="100000">
+			<input type="hidden" name=cur value="EEK">
+			<input type="hidden" name=datetime value="20070104165623">
+			<input type="hidden" name=mac value="RG8JJGd0QRIBFQW845eRjG2EyfNTQSleommHuldYQdtooZxIzHDhHJaLm+wYhVHI2E2LqV76faI0bro7iObPBR8C1wcTXqSRKNuTBobxb0SPfZ3/nnbdQ51svMXNdDBNQTqn9gawwxxcOz1PuoRunYA+v1n7cyxekqkS4ZIxkWQ=">
+			<input type="hidden" name=lang value="et">
+			<input type=submit value="maksa ilgelt pappi">
+			</form>
+		');
+		/*die('
 			<form name="makse" id="makse" method="post" action="http://marko.dev.struktuur.ee/orb.aw?class=bank_payment&id=10580">
 			<br>
 			<input type="textbox" name="amount" value=3000000>
 			<input type=submit value="maksa ilgelt pappi">
 			</form>'
-		);
+		);*/
 	}
 	
 	/** 
@@ -190,6 +209,12 @@ class bank_payment extends class_base
 		{
 			$file_inst = get_instance(CL_FILE);
 			$file = $file_inst->get_file_by_id($payment->prop("private_key"));
+			$data["priv_key"] = $file["content"];
+		}
+		if($payment->prop("private_c_key") && $data["bank_id"] == "credit_card")
+		{
+			$file_inst = get_instance(CL_FILE);
+			$file = $file_inst->get_file_by_id($payment->prop("private_c_key"));
 			$data["priv_key"] = $file["content"];
 		}
 		if(!$data["expl"])
@@ -519,7 +544,7 @@ class bank_payment extends class_base
 		{
 			$return.= '<input type="hidden" name='.$key.' value="'.(string)$val.'">
 			';
-		};//arr($return); die();
+		};
 		if($form) return $return;
 		print $return.'<p class="text">Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage <a href="#" onClick="document.postform.submit();">siia</a></p>
 		</form>
@@ -758,19 +783,19 @@ class bank_payment extends class_base
 	function credit_card($args)
 	{
 		extract($args);
+		
+		$VK_message = $version;
+		$VK_message.= sprintf("%-10s", $sender_id);
+		$VK_message.= sprintf("%012s",$reference_nr);
+		$VK_message.= sprintf("%012s",$amount);
+		$VK_message.= $curr;
+		$VK_message.= $datetime;
 
-		$VK_message = sprintf("%03d",strlen($version)).$version;
-		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
-		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
-		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
-		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
-		$VK_message.= sprintf("%03d",strlen($curr)).$datetime;
-
-		$VK_signature = "";
+		$signature=sha1($VK_message);
 		$pkeyid = openssl_get_privatekey($priv_key);
-		openssl_sign($VK_message, $VK_signature, $pkeyid);
+		openssl_sign($data, $VK_signature, $pkeyid);
 		openssl_free_key($pkeyid);
-		$VK_MAC = base64_encode( $VK_signature);
+		$VK_MAC = bin2hex($VK_signature);//base64_encode( $VK_signature);
 
 		$link = $this->bank_link["credit_card"];
 		$params = array(

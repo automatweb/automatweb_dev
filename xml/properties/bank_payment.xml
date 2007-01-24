@@ -38,6 +38,16 @@
             <caption>Privaatv&amp;amp;otilde;ti</caption>
       </property>
       <property>
+            <name>private_c_key</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_P_KEY</reltype>
+            <caption>krediitkaardi privaatv&amp;amp;otilde;ti</caption>
+      </property>
+      <property>
             <name>return_url</name>
             <table>objects</table>
             <field>meta</field>
@@ -84,6 +94,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Privaatv&amp;amp;otilde;ti</caption>
             </KEY>
+            <P_KEY>
+                  <value>3</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Privaatv&amp;amp;otilde;ti</caption>
+            </P_KEY>
       </reltypes>
 </properties>
 
