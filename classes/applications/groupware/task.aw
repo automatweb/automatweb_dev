@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.157 2007/01/23 11:07:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.158 2007/01/24 13:30:21 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3303,7 +3303,7 @@ class task extends class_base
 
 		$url = $this->mk_my_orb("do_search", array("pn" => "files_h", "clid" => array(
 			CL_FILE,CL_CRM_MEMO,CL_CRM_DOCUMENT,CL_CRM_DEAL,CL_CRM_OFFER,CL_MENU
-		), "multiple" => 1), "popup_search");
+		), "multiple" => 1), "task_file_search");
 		$tb->add_button(array(
 			"name" => "search",
 			"img" => "search.gif",
