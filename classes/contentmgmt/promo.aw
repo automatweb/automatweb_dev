@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.95 2007/01/10 12:25:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.96 2007/01/24 15:19:01 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -311,6 +311,10 @@ class promo extends class_base
 
 			case "content_all_langs":
 				return PROP_IGNORE;
+				break;
+
+			case "link":
+				$this->_get_linker($prop, $arr["obj_inst"]);
 				break;
 		}
 		return $retval;
@@ -737,7 +741,7 @@ class promo extends class_base
 			"title" => $ob->trans_get_val("caption"),
 			"content" => $content,
 			"align" => $align[$args["matches"][4]],
-			"link" => $ob->trans_get_val("link"),
+			"link" => $this->get_promo_link($ob),
 			"link_caption" => $ob->trans_get_val("link_caption"),
 			"image" => $image,
 			"image_url" => $image_url,
@@ -1132,6 +1136,7 @@ class promo extends class_base
 	{
 		$arr["_set_sss"] = "0";
 		$arr["_set_lm_sss"] = "0";
+		$arr["link_pops"] = "0";
 	}
 
 	function callback_post_save($arr)
@@ -1139,6 +1144,46 @@ class promo extends class_base
 		$ps = get_instance("vcl/popup_search");
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_sss"], 1 /* RELTYPE_ASSIGNED_MENU */);
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_lm_sss"], 2 /* RELTYPE_DOC_SOURCE */);
+	}
+
+	function _get_linker(&$p, $o)
+	{
+		$ps = get_instance("vcl/popup_search");
+		if ($this->can("view", $o->meta("linked_obj")))
+		{
+			$p["post_append_text"] = sprintf(t("Valitud objekt: %s /"), html::obj_change_url($o->meta("linked_obj")));
+		}
+		$p["post_append_text"] .= t(" Otsi uus objekt: ").$ps->get_popup_search_link(array(
+			"pn" => "link_pops",
+			"clid" => array(CL_DOCUMENT,CL_LINK)
+		));
+	}
+
+	function callback_pre_save($arr)
+	{
+		if ($this->can("view", $arr["request"]["link_pops"]))
+		{
+			$arr["obj_inst"]->set_meta("linked_obj", $arr["request"]["link_pops"]);
+		}
+	}
+
+	function get_promo_link($o)
+	{
+		$link_str = $o->trans_get_val("link");
+		if ($this->can("view", $o->meta("linked_obj")))
+		{
+			$linked_obj = obj($o->meta("linked_obj"));
+			if ($linked_obj->class_id() == CL_MENU)
+			{
+				$link_str = $this->make_menu_link($linked_obj);
+			}
+			else
+			{
+				$dd = get_instance("doc_display");
+				$link_str = $dd->get_doc_link($linked_obj);
+			}
+		}
+		return $link_str;
 	}
 }
 ?>

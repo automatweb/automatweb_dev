@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.183 2007/01/10 12:25:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.184 2007/01/24 15:19:03 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -883,6 +883,10 @@ class menu extends class_base
 				}
 				$data["options"] = $opts;
 				break;
+
+			case "link":
+				$this->_get_linker($data, $arr["obj_inst"]);
+				break;
 		};
 		return $retval;
 	}
@@ -1400,6 +1404,11 @@ class menu extends class_base
 				"ex_icons" => $request["ex_icons"],
 			));
 		};
+
+		if ($this->can("view", $arr["request"]["link_pops"]))
+		{
+			$arr["obj_inst"]->set_meta("linked_obj", $arr["request"]["link_pops"]);
+		}
 	}
 
 	function _gen_nice_alias($name, $oid = false)
@@ -2006,6 +2015,20 @@ class menu extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["_set_sss"] = "0";
+		$arr["link_pops"] = "0";
+	}
+
+	function _get_linker(&$p, $o)
+	{
+		$ps = get_instance("vcl/popup_search");
+		if ($this->can("view", $o->meta("linked_obj")))
+		{
+			$p["post_append_text"] = sprintf(t("Valitud objekt: %s /"), html::obj_change_url($o->meta("linked_obj")));
+		}
+		$p["post_append_text"] .= t(" Otsi uus objekt: ").$ps->get_popup_search_link(array(
+			"pn" => "link_pops",
+			"clid" => array(CL_DOCUMENT,CL_LINK)
+		));
 	}
 };
 ?>

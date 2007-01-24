@@ -80,7 +80,7 @@ class promo_display
 				));
 			}
 			
-			$promo_link = $o->trans_get_val("link");
+			$promo_link = $this->get_promo_link($o);
 
 			$found = false;
 
@@ -467,6 +467,25 @@ class promo_display
 			"PREV_LINK" => $s_prev,
 			"NEXT_LINK" => $s_next
 		));
+	}
+
+	function get_promo_link($o)
+	{
+		$link_str = $o->trans_get_val("link");
+		if ($this->can("view", $o->meta("linked_obj")))
+		{
+			$linked_obj = obj($o->meta("linked_obj"));
+			if ($linked_obj->class_id() == CL_MENU)
+			{
+				$link_str = $this->make_menu_link($linked_obj);
+			}
+			else
+			{
+				$dd = get_instance("doc_display");
+				$link_str = $dd->get_doc_link($linked_obj);
+			}
+		}
+		return $link_str;
 	}
 }
 ?>

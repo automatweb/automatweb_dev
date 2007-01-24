@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.220 2007/01/23 10:46:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.221 2007/01/24 15:19:01 kristo Exp $
 
 /*
 
@@ -2384,6 +2384,19 @@ class site_show extends class_base
 	{
 		$this->skip = false;
 		$link_str = $o->trans_get_val("link");
+		if ($this->can("view", $o->meta("linked_obj")))
+		{
+			$linked_obj = obj($o->meta("linked_obj"));
+			if ($linked_obj->class_id() == CL_MENU)
+			{
+				$link_str = $this->make_menu_link($linked_obj);
+			}
+			else
+			{
+				$dd = get_instance("doc_display");
+				$link_str = $dd->get_doc_link($linked_obj);
+			}
+		}
 		if ($o->prop("type") == MN_PMETHOD)
 		{
 			// I should retrieve orb definitions for the requested class
