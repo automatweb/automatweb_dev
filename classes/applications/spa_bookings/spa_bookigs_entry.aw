@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.25 2007/01/19 11:57:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.26 2007/01/24 14:27:40 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1458,10 +1458,21 @@ class spa_bookigs_entry extends class_base
 					$capt = t("Telefon");
 					break;
 			}
-			$val = $bron->prop("person.".$propertyn.".name");
-			if ($val == "")
+			if ($bron->class_id() == CL_CRM_PERSON)
 			{
-				$val = $bron->prop("person.".$propertyn);
+				$val = $bron->prop($propertyn.".name");
+				if ($val == "")
+				{
+					$val = $bron->prop($propertyn);
+				}
+			}
+			else
+			{
+				$val = $bron->prop("person.".$propertyn.".name");
+				if ($val == "")
+				{
+					$val = $bron->prop("person.".$propertyn);
+				}
 			}
 
 			$type = "textbox";
@@ -1524,6 +1535,11 @@ class spa_bookigs_entry extends class_base
 	{
 		$arr = $_POST;
 		$bron = obj($arr["bron"]);
+		if ($bron->class_id() == CL_CRM_PERSON)
+		{
+			$cust = $bron;
+		}
+		else
 		if (!$this->can("view", $bron->prop("person")))
 		{
 			$cust = obj();

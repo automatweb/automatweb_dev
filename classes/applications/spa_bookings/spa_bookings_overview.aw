@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.12 2007/01/19 11:49:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.13 2007/01/24 14:27:40 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -265,7 +265,8 @@ class spa_bookings_overview extends class_base
 				$p_obj = obj($cust_id);
 				$p_str = html::obj_change_url($p_obj)." / ".html::href(array(
 					"url" => $this->mk_my_orb("print_person_chart", array("person" => $cust_id, "rvs" => $rvs_ids)),
-					"caption" => t("Prindi")
+					"caption" => t("Prindi"),
+					"target" => "_blank"
 				));
 
 				foreach($bookings as $booking)
@@ -413,7 +414,7 @@ class spa_bookings_overview extends class_base
 		}
 		uasort($arr["rvs"], create_function('$a,$b', '$ao = obj($a); $bo = obj($b); return $ao->prop("start1") - $bo->prop("start1");'));
 		$b = obj(reset($arr["rvs"]));
-		$p = obj($arr["person"]);
+		$p = obj($_GET["person"]);
 		list($y, $m, $d) = explode("-", $p->prop("birthday"));
 		$this->vars(array(
 			"bureau" => $b->createdby(),
@@ -436,7 +437,9 @@ class spa_bookings_overview extends class_base
 		{
 			$rvs = obj($b_oid);
 			$ro = obj($rv2r[$b_oid]);
-			$prod_obj = obj($rvs->meta("product_for_bron"));
+			//$prod_obj = obj($rvs->meta("product_for_bron"));
+			$prods = safe_array($rvs->meta("amount"));
+			$prod_obj = obj(reset(array_keys($prods)));
 			$this->vars(array(
 				"r_from" => date("d.m.Y H:i", $rvs->prop("start1")),
 				"r_to" =>  date("d.m.Y H:i", $rvs->prop("end")),
@@ -471,6 +474,19 @@ class spa_bookings_overview extends class_base
 			"HAS_ADDITIONAL_SERVICES" => $packet_services != "" ? $this->parse("HAS_ADDITIONAL_SERVICES") : "",
 		));
 
+		$ol = new object_list(array(
+			"class_id" => CL_SPA_BOOKIGS_ENTRY,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $wb)
+		{
+			if ($this->can("view", $wb->prop("print_view_ctr")))
+			{
+				$fc = get_instance(CL_FORM_CONTROLLER);
+				$fc->eval_controller($wb->prop("print_view_ctr"), $arr);
+			}
+		}
 		die($this->parse());
 	}
 
