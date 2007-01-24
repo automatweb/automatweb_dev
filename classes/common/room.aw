@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.110 2007/01/23 15:50:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.111 2007/01/24 13:42:26 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1659,7 +1659,7 @@ class room extends class_base
 								$d[$x] = html::popup($dx_p);
 							}
 							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
-							if ($settings->prop("col_buffer") != "")
+							if ($settings->prop("col_buffer") != "" && !$settings->prop("disp_bron_len"))
 							{
 								$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
 								$d[$x] .= " ".$buf_tm;

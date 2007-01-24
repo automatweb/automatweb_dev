@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.33 2007/01/23 12:17:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.34 2007/01/24 13:42:26 kristo Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -867,7 +867,7 @@ class room_reservation extends class_base
 		{
 			$ret.= t("Nimi on kohustuslik")."\n<br>";
 		}
-		if(array_key_exists("phone" , $data) && !(strlen($data["phone"]) > 4))
+		if(array_key_exists("phone" , $data) && !(strlen($data["phone"]) > 1))
 		{
 			$ret.= t("Telefon on kohustuslik")."\n<br>";
 		}
