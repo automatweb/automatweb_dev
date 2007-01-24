@@ -1357,7 +1357,10 @@ class crm_company_bills_impl extends class_base
 				{
 					$dd = trim($row["comment"]);
 				} 
-				$ri[] = $this->nice_trim($dd);	// testartikkel (toimetuse rea sisu) 
+
+				$dd_bits = $this->split_by_word($dd);
+				$ri[] = $dd_bits[0];    // testartikkel (toimetuse rea sisu)
+
 				$ri[] = str_replace(".", ",", $row["price"]);	// 555,00 (ühiku hind) 
 //				$sum = round(str_replace(",", ".", $row["sum"])*2.0+0.049,1)/2.0;
 				$sum = str_replace(",", ".", $row["sum"]);
@@ -1382,8 +1385,36 @@ class crm_company_bills_impl extends class_base
 				$ri[] = "";
 				$ri[] = $row["unit"];	//TK (ühik)     
 
-
 				$ct[] = join("\t", $ri);
+				for($i = 1; $i < count($dd_bits); $i++)
+				{
+					$ri = array();
+					$ri[] = "1";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = $dd_bits[$i];
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ri[] = "";
+					$ct[] = join("\t", $ri);
+				}
 			}
 			}
 			else
@@ -1486,13 +1517,24 @@ class crm_company_bills_impl extends class_base
 		//mb_strtoupper(join(", ", $list->names()), aw_global_get("charset"));
 	}
 
-	function nice_trim($s)
+	function nice_trim($s, $len = 250)
 	{
-		if (strlen($s) > 250)
+		if (strlen($s) > $len)
 		{
-			return substr($s, 0, strrpos(substr($s, 0, 250), " "));
+			return substr($s, 0, strrpos(substr($s, 0, $len), " "));
 		}
-		return $s;	
+		return $s;
+	}
+
+	function split_by_word($str, $len = 50)
+	{
+		$ret = array();
+		do {
+			$tmp = $this->nice_trim($str, 50);
+			$ret[] = $tmp;
+			$str = trim(substr($str, strlen($tmp)));
+		} while ($str != "");
+		return $ret;
 	}
 }
 ?>
