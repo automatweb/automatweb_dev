@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.16 2007/01/09 10:53:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.17 2007/01/25 04:02:23 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -58,11 +58,11 @@
 @default group=import_config
 
 	// This is not going to be at the moment, so commenting out
-	groupinfo prices caption="Hinnad" parent=import_config
-	default group=prices
+	@groupinfo prices caption="Hinnad" parent=import_config
+	@default group=prices
 
-		property prices_config_table type=table 
-		caption Hindade seadete tabel
+		@property prices_config_table type=table 
+		@caption Hindade seadete tabel
 
 	@groupinfo users caption="Kasutajad" parent=import_config
 	@default group=users
@@ -98,7 +98,7 @@
 
 class scala_import extends class_base
 {
-	var $db_table_name = 'scala_prices_to_customers';
+//	var $db_table_name = 'scala_prices_to_customers';
 	var $import_sections;
 	var $log_str = '';
 	var $log_file_name = '';
@@ -111,10 +111,10 @@ class scala_import extends class_base
 		));
 
 		$this->import_sections = array(
-		//	'pricing' => t('Hinnad'),
 			'users' => t('Kasutajad'),
 			'categories' => t('Kategooriad'),
 			'availability' => t('Lao seis'),
+			'pricing' => t('Hinnad'),
 		);
 	}
 
@@ -162,52 +162,61 @@ class scala_import extends class_base
 		}
 		return $retval;
 	}	
-/*
+
 	function _get_prices_config_table($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
 
 		$t->define_field(array(
-			'name' => 'db_field',
-			'caption' => t('Andmebaasi tabeli v&auml;ljad'),
+			'name' => 'property',
+			'caption' => t('Property'),
 			'width' => '30%'
 		));
 		$t->define_field(array(
 			'name' => 'xml_tag',
 			'caption' => t('XML tagide nimed')
 		));
+/*
+		$o = new object();
+		$o->set_class_id(CL_SHOP_PRODUCT);
+
+		$config_form = $arr['obj_inst']->prop('config_form');
+		if (!empty($config_form))
+		{
+			$cfgform_inst = get_instance('cfg/cfgform');
+			$all_properties = $cfgform_inst->get_props_from_cfgform(array(
+				'id' => $arr['obj_inst']->prop('config_form'),
+			));
+			
+		}
+		else
+		{
+			$all_properties = $o->get_property_list();
+		}
+*/
+		$all_properties = array(
+			'price' => array(
+				'caption' => t('Hind'),
+				'name' => 'price'
+			),
+			'code' => array(
+				'caption' => t('Tootekood'),
+				'name' => 'code'
+			)
+		);
 
 		$xml_file = $arr['obj_inst']->prop('ftp_file_location_pricing');
 
-		// if the database table doesn't exist, then we are going to create it:
-		if ( $this->db_table_exists($this->db_table_name) === false )
-		{
-			$this->db_query('create table '.$this->db_table_name.' (
-				id int primary key auto_increment not null,
-				client_code varchar(255),
-				product_code varchar(255),
-				price varchar(255)
-			)');
-		}
-
-		$db_table_desc = $this->db_get_table($this->db_table_name);
-	
-		$format = t('Andmebaasi tabel (%s) >> XML fail (%s)');
-		$t->set_caption(sprintf($format, $this->db_table_name, basename($xml_file)));
+		$format = t('Toote objektidele hinnad XML fail (%s) p&otilde;hjal');
+		$t->set_caption(sprintf($format, basename($xml_file)));
 	
 		$saved_config = $arr['obj_inst']->meta('prices_config');
 
-		foreach ( $db_table_desc['fields'] as $data )
+		foreach ( $all_properties as $name => $data )
 		{
-			// don't show the id field, this will be filled automatically in database
-			if ( $data['name'] == 'id' )
-			{
-				continue;
-			}
-
 			$t->define_data(array(
-				'db_field' => $data['name'],
+				'property' => $data['caption'],
 				'xml_tag' => html::textbox(array(
 					'name' => 'prices_config['.$data['name'].']',
 					'value' => $saved_config[$data['name']]
@@ -223,7 +232,7 @@ class scala_import extends class_base
 		$arr['obj_inst']->set_meta('prices_config', $arr['request']['prices_config']);
 		return PROP_OK;
 	}
-*/
+
 	function _get_users_config_table($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -404,7 +413,7 @@ class scala_import extends class_base
 
 		@param id required type=int acl=view
 			Scala import object id
-		param pricing optional type=int 
+		@param pricing optional type=int 
 			Import pricing data
 		@param users optional type=int 
 			Import users
@@ -438,30 +447,8 @@ class scala_import extends class_base
 			'user' => $o->prop('ftp_user'),
 			'pass' => $o->prop('ftp_password')
 		));
-/*		
-		// import pricing
-		if ( $arr['pricing'] )
-		{
-			$this->log_str .= "[ info ] Import pricing\n";
-			$pricing_xml = $o->prop('ftp_file_location_pricing');
-		//	$raw_xml = file_get_contents($pricing_xml);
-			$raw_xml = $ftp->get_file($pricing_xml);
 
-			if ( !empty($raw_xml) )
-			{
-				$this->log_str .= "[ info ] Got the XML file (".$pricing_xml.")\n";
-				$this->_import_prices(array(
-					'raw_xml' => $raw_xml,
-					'obj_inst' => $o
-				));
-			}
-			else
-			{
-				$this->log_str .= "[ error ] Couldn\"t get the ".$pricing_xml." file, so will not import pricing data\n";
-			}
-			
-		}
-*/
+
 		aw_disable_acl();
 		// import users
 		if ( $arr['users'] )
@@ -555,6 +542,30 @@ class scala_import extends class_base
 			// lets restore the acl checking after import
 		}
 		
+		// import pricing
+		if ( $arr['pricing'] )
+		{
+			$this->log_str .= "[ info ] Import pricing\n";
+			$pricing_xml = $o->prop('ftp_file_location_pricing');
+		//	$raw_xml = file_get_contents($pricing_xml);
+			$raw_xml = $ftp->get_file($pricing_xml);
+
+			if ( !empty($raw_xml) )
+			{
+				$this->log_str .= "[ info ] Got the XML file (".$pricing_xml.")\n";
+				$this->_import_prices(array(
+					'raw_xml' => $raw_xml,
+					'obj_inst' => $o
+				));
+			}
+			else
+			{
+				$this->log_str .= "[ error ] Couldn\"t get the ".$pricing_xml." file, so will not import pricing data\n";
+			}
+			
+		}
+
+
 		// save the import ending time into meta, so we can show it in interface and provide
 		// an easy way to check if the cron has executed the import and has it completed or not
 		$o->set_meta('import_end_time', time());
@@ -563,20 +574,22 @@ class scala_import extends class_base
 		$this->write_log();
 
 	}
-/*
+
 	function _import_prices($arr)
 	{
 		list($parsed_xml['values'], $parsed_xml['tags']) = parse_xml_def(array('xml' => $arr['raw_xml']));
 
 		$config = array_flip($arr['obj_inst']->meta('prices_config'));
+		unset($config['']);
 
-		$this->db_query('delete from '.$this->db_table_name);
-		$this->db_query('alter table '.$this->db_table_name.' auto_increment=1');
+		// lets collect the product codes:
+		$products_price_data = array();
 		foreach ($parsed_xml['values'] as $data)
 		{
 			if ($data['tag'] == 'Line' && $data['type'] == 'open')
 			{
-				$fields = array();
+				$product_code = '';
+				$product_price = '';
 			}
 
 			if ($data['type'] == 'complete')
@@ -584,20 +597,46 @@ class scala_import extends class_base
 
 				if ( array_key_exists($data['tag'], $config) )
 				{
-					$fields[] = ' '.$config[$data['tag']].' = \''.$data['value'].'\' ';
+					switch ($config[$data['tag']])
+					{
+						case 'price':
+							$product_price = $data['value'];
+							break;
+						case 'code':
+							$product_code = $data['value'];
+							break;
+					}
 				}
 			}
 
 			if ($data['tag'] == 'Line' && $data['type'] == 'close')
 			{
-				$sql = 'insert into '.$this->db_table_name.' set '.implode(',', $fields);
-				$this->db_query($sql);
+				if (!empty($product_code))
+				{
+					$products_price_data[$product_code] = $product_price;
+				}
 			}
+		}
+
+		$product_codes = array_keys($product_price_data);
+		$products = new object_list(array(
+			'class_id' => CL_SHOP_PRODUCT,
+			'code' => array_keys($products_price_data),
+			'status' => STAT_ACTIVE
+		));
+		foreach ($products->arr() as $product)
+		{
+			$product->set_prop('price', $products_price_data[$product->prop('code')]);
+			echo "[hind] toote (".$product->id().") \"".$product->name()."\" hind on \"".$product->prop("price")."\"";
+			flush();
+			$product->save();
+			echo " [saved]<br>\n";
+			flush();
 		}
 		$this->log_str .= "[ ok ] Pricing info import is complete\n";
 		return true;
 	}
-*/
+
 	function _import_users($arr)
 	{
 		// mh, xml parser don't like plain '&' characters, so i'll replace them with entities:

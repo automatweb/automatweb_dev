@@ -5,6 +5,7 @@
 			<function name="do_import">
 				<arguments>
 					<required name="id" type="int" acl="view" />
+					<optional name="pricing" type="int" />
 					<optional name="users" type="int" />
 					<optional name="categories" type="int" />
 					<optional name="availability" type="int" />

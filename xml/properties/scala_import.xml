@@ -113,6 +113,15 @@
             <caption>Availability.xml </caption>
       </property>
       <property>
+            <name>prices_config_table</name>
+            <table>objects</table>
+            <group>prices</group>
+            <type>table</type>
+            <store>no</store>
+            <field>prices_config_table</field>
+            <caption>Hindade seadete tabel</caption>
+      </property>
+      <property>
             <name>users_config_table</name>
             <table>objects</table>
             <group>users</group>
@@ -153,6 +162,10 @@
             <import_config>
                   <caption>Impordi seaded</caption>
             </import_config>
+            <prices>
+                  <caption>Hinnad</caption>
+                  <parent>import_config</parent>
+            </prices>
             <users>
                   <caption>Kasutajad</caption>
                   <parent>import_config</parent>
