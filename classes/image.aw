@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.185 2007/01/23 10:46:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.186 2007/01/25 15:34:56 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1524,8 +1524,13 @@ class image extends class_base
 			{
 				if ($set_next)
 				{
+					$im = obj($im_id);
+					$fn = $this->_mk_fn($im->prop("file"));
+					$sz = @getimagesize($fn);
 					$this->vars(array(
-						"next_url" => aw_url_change_var("id", $im_id)
+						"next_url" => aw_url_change_var("id", $im_id),
+						"width" => $sz[0],
+						"height" => $sz[1]
 					));
 					$this->vars(array(
 						"NEXT_LINK" => $this->parse("NEXT_LINK")
@@ -1536,8 +1541,13 @@ class image extends class_base
 				{
 					if ($prev)
 					{
+						$im = obj($im_id);
+						$fn = $this->_mk_fn($im->prop("file"));
+						$sz = @getimagesize($fn);
 						$this->vars(array(
-							"prev_url" => aw_url_change_var("id", $prev)
+							"prev_url" => aw_url_change_var("id", $prev),
+							"width" => $sz[0],
+							"height" => $sz[1]
 						));
 						$this->vars(array(
 							"PREV_LINK" => $this->parse("PREV_LINK")
