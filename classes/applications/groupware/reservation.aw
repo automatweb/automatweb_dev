@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.35 2007/01/25 11:15:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.36 2007/01/25 15:09:48 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -332,7 +332,7 @@ class reservation extends class_base
 					"room" => $arr["request"]["resource"],
 					"start" => mktime($s["hour"],$s["minute"],0,$s["month"],$s["day"],$s["year"]),
 					"end" => (mktime($e["hour"],$e["minute"],0,$e["month"],$e["day"],$e["year"]) + $room_obj->prop("buffer_after")*$room_obj->prop("buffer_after_unit")),
-					"ignore_booking" => 1,
+					"ignore_booking" => $arr["obj_inst"]->id(),
 				)))
 				{
 					$prop["error"] = t("Sellisele ajale ei saa antud ruumi broneerida");

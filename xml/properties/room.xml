@@ -389,15 +389,27 @@
             <caption>Hind</caption>
       </property>
       <property>
-            <name>price_per_face_if_too_many</name>
+            <name>childtitle17</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>prices_general</group>
             <parent>buffer_after_l</parent>
-            <type>textbox</type>
-            <size>5</size>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
             <caption>Lisanduv hind &amp;amp;uuml;le normaalse mahutavuse oleva inimese kohta</caption>
+      </property>
+      <property>
+            <name>add_price_per_face</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>prices_general</group>
+            <parent>buffer_after_l</parent>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <caption>Lisanduv hind inimestele &amp;uuml;le normaalmahutavuse</caption>
       </property>
       <property>
             <name>time_unit</name>

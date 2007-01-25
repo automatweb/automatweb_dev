@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.114 2007/01/25 09:06:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.115 2007/01/25 15:09:38 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -145,9 +145,11 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 		@property price type=chooser multiple=1 ch_value=1
 		@caption Hind
 
-		@property price_per_face_if_too_many type=textbox size=5
+		@property childtitle17 type=text store=no subtitle=1
 		@caption Lisanduv hind &uuml;le normaalse mahutavuse oleva inimese kohta
 		
+		@property add_price_per_face type=text no_caption=1
+		@caption Lisanduv hind inimestele üle normaalmahutavuse
 
 		@property time_unit type=chooser
 		@caption Aja&uuml;hik
@@ -335,6 +337,9 @@ class room extends class_base
 			case "calendar_tb":
 				$this->_calendar_tb($arr);
 				break;
+			case "add_price_per_face":
+				$prop["value"] = $this->gen_people_prices($arr);
+				break;
 			
 			case "time_unit":
 				$prop["options"] = array(
@@ -501,6 +506,21 @@ class room extends class_base
 
 			case "web_min_prod_price":
 				$arr["obj_inst"]->set_meta("web_min_prod_prices", $arr["request"]["wpm_currency"]);
+				break;
+				
+			case "add_price_per_face":
+				$res = array();
+				$n = 1;
+				foreach($arr["request"]["people_prices"] as $price)
+				{
+					$tmp = reset($price);
+					if($tmp || $tmp == "0")
+					{
+						$res[$n] =  $price;
+						$n++;
+					}
+				}
+				$arr["obj_inst"]->set_meta("people_prices", $res);
 				break;
 				
 			case "min_prices_props":
@@ -1301,28 +1321,28 @@ class room extends class_base
 				$add = 1;
 			}
 			//$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
-				while($x<=$end)
+			while($x<=$end)
+			{
+				//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+				$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
+				if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
 				{
-					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-					$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+					$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
+					if($small_units%60 == 0)
 					{
-						$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
-						if($small_units%60 == 0)
-						{
-							$options["".$x] = $options["".$x] + $small_units/60;
-						}
-						else
-						{
-							if($small_units < 10)
-							{
-								$small_units = "0".$small_units;
-							}
-							$options["".$x] = $options["".$x] . ":" . $small_units;
-						}
+						$options["".$x] = $options["".$x] + $small_units/60;
 					}
-					$x = $x + $add;
+					else
+					{
+						if($small_units < 10)
+						{
+							$small_units = "0".$small_units;
+						}
+						$options["".$x] = $options["".$x] . ":" . $small_units;
+					}
 				}
+				$x = $x + $add;
+			}
 			//}
 /*			else
 			{
@@ -1345,7 +1365,12 @@ class room extends class_base
 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		}
+		
+		//seda hakkaks js siis vajama, et natuke aega juurde liita ajale mida selectitakse
+		$after_buffer = "".($arr["obj_inst"]->prop("buffer_after")*$arr["obj_inst"]->prop("buffer_after_unit")/($arr["obj_inst"]->prop("time_step")*$this->step_lengths[$arr["obj_inst"]->prop("time_unit")]));
+		$ret.= html::hidden(array("name" => "buffer_after", "id"=>"buffer_after" ,"value"=>$after_buffer));
 		$ret.= html::hidden(array("name" => "product", "id"=>"product_id" ,"value"=>""));
+
 		return $ret;
 
 	}
@@ -1356,6 +1381,7 @@ class room extends class_base
 		$ret.=html::hidden(array("name" => "free_field_value", "id"=>"free_field_value" ,"value"=>"VABA"));
 		$ret.=html::hidden(array("name" => "res_field_value", "id"=>"res_field_value" ,"value"=>"BRON"));
 		$ret.=html::hidden(array("name" => "do_field_value", "id"=>"do_field_value" ,"value"=>"Broneeri"));
+		
 		return $ret;
 	}
 
@@ -1618,7 +1644,7 @@ class room extends class_base
 								$cus = $customer->name();
 								$products = $last_bron->meta("amount");
 								$title = $last_bron->prop("content");
-								if(trim($last_bron->prop("comment")) != "")
+								if($last_bron->prop("comment"))
 								{
 									$title.=", ".$last_bron->prop("comment");
 								}
@@ -1629,10 +1655,7 @@ class room extends class_base
 										if($this->can("view" , $prod))
 										{
 											$product = obj($prod);
-											if ($product->prop("code") != "")
-											{
-												$codes[] = $product->prop("code");
-											}
+											$codes[] = $product->prop("code");
 											$title .= " ".$product->name();
 										}
 									}
@@ -1662,7 +1685,7 @@ class room extends class_base
 								$d[$x] = html::popup($dx_p);
 							}
 							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
-							if ($settings->prop("col_buffer") != "" && !$settings->prop("disp_bron_len"))
+							if ($settings->prop("col_buffer") != "")
 							{
 								$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
 								$d[$x] .= " ".$buf_tm;
@@ -1711,11 +1734,7 @@ class room extends class_base
 								));
 								if ($buf > 0)
 								{
-									$buf_tm = "";
-									if (!$settings->prop("disp_bron_len"))
-									{
-										$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-									}
+									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
 									$d[$x] = "<div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
 								}
 
@@ -1725,11 +1744,7 @@ class room extends class_base
 								));
 								if ($buf > 0)
 								{
-									$buf_tm = "";
-									if (!$settings->prop("disp_bron_len"))
-									{
-										$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-									}
+									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
 									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 								}
 							}
@@ -1792,7 +1807,7 @@ class room extends class_base
 		}
 		foreach($prod_list as $oid => $name)
 		{
-			$res .='<a class="menuItem" href="#"  onClick="'.($immediate? "doBronExec" : "doBron").'(
+			$res .='<a class="menuItem" href="javascript:dontExecutedoBron=1;void(0)"  onClick="'.($immediate? "doBronExec" : "doBron").'(
 					\''.$m_oid.'_\'+current_timestamp ,
 					'.$arr["step_length"].' ,
 					'.$times[$oid].' ,
@@ -3183,8 +3198,8 @@ class room extends class_base
 			}
 			if($people > $room->prop("normal_capacity"))
 			{
-				$sum[$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
-				$rv["room_price"][$currency] += ($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
+				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
+				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
 			}
 //			if(is_array($products) && sizeof($products))
 			if(!($products == -1))
@@ -3211,6 +3226,40 @@ class room extends class_base
 		{
 			return $sum;
 		}
+	}
+	
+	function cal_people_price($arr)
+	{
+		extract($arr);
+		if(is_oid($room) && $this->can("view" ,$room))
+		{
+			$room = obj($room);
+		}
+		if(!is_object($room))
+		{
+			return 0;
+		}
+		$sum = 0;
+		$prices = $room->meta("people_prices");
+		$price_nt = 1;
+		$t_people = $people-$room->prop("normal_capacity");
+		$n = 1;
+		while($n <= $t_people)
+		{
+			if($prices[$price_nt] || $prices[$price_nt] == "0")
+			{
+				$sum+=$prices[$price_nt][$cur];
+				$price_nt++;
+			}
+			else
+			{
+				$sum+=$prices[$price_nt-1][$cur];
+			}
+			$n++;
+		}
+
+		return $sum;
+	//array("room" => $room, "people" => $people, "cur" => $currency));	
 	}
 	
 	//annab soodustuse juhul kui see täpselt kattub hinna ajaga või kui üks soodustus lõppeb kas enne aja lõppu , või algab alles poole pealt
@@ -3788,6 +3837,55 @@ class room extends class_base
                         );
 		}
 		return $retval;
+	}
+
+	function gen_people_prices($arr)
+	{
+		$cur = $arr["obj_inst"]->prop("currency");
+		$prices = $arr["obj_inst"]->meta("people_prices");
+		$prices[] = "";
+		$n = 1;
+		$rows = array();
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));		
+		$t->define_field(array(
+			"name" => "curr",
+			"caption" => t("valuuta"),
+		));
+		foreach($prices as $price)
+		{
+			foreach($cur as $currency)
+			{
+				if (!is_oid($currency))
+				{
+					continue;
+				}
+				
+				$rows[$currency][$n] = html::textbox(array(
+					"name" => "people_prices[".$n."][".$currency."]",
+					"value" => $prices[$n][$currency],
+					"size" => 3,
+				));
+			}
+			$t->define_field(array(
+				"name" => $n,
+				"caption" => $n.t(". lisainimesele"),
+			));
+			$n++;
+		}
+		foreach($rows as $curr => $row)
+		{
+			$c = obj($curr);
+			$data = array("curr" => $c->name());
+			foreach($row as $num => $value)
+			{
+				$data[$num] = $value;
+			}
+			$t->define_data($data);
+		}
+		return $t->draw();
 	}
 
         /**
