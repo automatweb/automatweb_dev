@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.34 2007/01/24 13:42:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.35 2007/01/25 12:42:06 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -429,7 +429,7 @@ class room_reservation extends class_base
 				{
 					$_SESSION["cart"]["items"][$oid]["items"] = $val;
 				}
-				$_SESSION["soc_err"][$oid]["ordered_num_enter"] = $val;
+				$_SESSION["soc_err"][$oid] = array("ordered_num_enter" => $val);
 			}
 		}
 	}
