@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.34 2007/01/25 10:50:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.35 2007/01/25 11:15:43 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -170,6 +170,13 @@ class reservation extends class_base
 					return PROP_IGNORE;
 				}
 				break;
+			case "people_count":
+				if(!($prop["value"] > 0))
+				{
+					$prop["value"] = 1;
+				}
+				break;
+				
 			case "start1":
 			case "end":
 			case "resource":
