@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.112 2007/01/24 13:47:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.113 2007/01/25 08:40:29 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1784,7 +1784,7 @@ class room extends class_base
 		}
 		foreach($prod_list as $oid => $name)
 		{
-			$res .='<a class="menuItem" href="javascript:dontExecutedoBron=1;void(0)"  onClick="'.($immediate? "doBronExec" : "doBron").'(
+			$res .='<a class="menuItem" href="#"  onClick="'.($immediate? "doBronExec" : "doBron").'(
 					\''.$m_oid.'_\'+current_timestamp ,
 					'.$arr["step_length"].' ,
 					'.$times[$oid].' ,
