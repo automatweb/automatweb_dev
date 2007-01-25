@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.227 2006/12/08 13:47:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.228 2007/01/25 15:06:09 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -731,7 +731,7 @@ if (!defined("DEFS"))
 	// Courtesy of martin@linuxator.com ;)**/
 	function is_email ($address = "") 
 	{
-		return preg_match('/([a-z0-9-]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',$address);
+		return preg_match('/([a-z0-9-]*((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',$address);
 	}
 
 	function is_admin()
