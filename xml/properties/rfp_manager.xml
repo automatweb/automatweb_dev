@@ -8,7 +8,7 @@
             <reltype>RELTYPE_REDIR_DOC</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Konverentsiplaneerija</caption>
+            <caption>Edasisuunamisdokument</caption>
       </property>
       <property>
             <name>s_name</name>

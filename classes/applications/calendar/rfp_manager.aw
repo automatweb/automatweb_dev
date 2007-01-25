@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.10 2007/01/25 10:21:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.11 2007/01/25 10:29:05 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -9,7 +9,7 @@
 @default group=general
 
 @property copy_redirect type=relpicker reltype=RELTYPE_REDIR_DOC field=meta method=serialize
-@caption Konverentsiplaneerija
+@caption Edasisuunamisdokument
 
 @groupinfo rfps caption="Pakkumise saamis palved"
 @groupinfo rfps_active caption="Aktiivsed" parent=rfps
