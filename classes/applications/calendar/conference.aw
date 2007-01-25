@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.7 2006/11/10 14:01:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference.aw,v 1.8 2007/01/25 15:07:38 tarvo Exp $
 // conference.aw - Konverents 
 /*
 
@@ -138,6 +138,14 @@ class conference extends class_base
 			10 => t("Party"),
 			11 => t("Wedding"),
 			12 => t("Other"),
+		);
+
+		$this->additional_conference_types = array(
+			1 => t("Break out rooms"),
+			2 => t("Show room"),
+			3 => t("Office"),
+			4 => t("Dinner"),
+			5 => t("Other"),
 		);
 	}
 
@@ -759,6 +767,11 @@ class conference extends class_base
 	function conference_types()
 	{
 		return $this->conference_types;
+	}
+
+	function additional_conference_types()
+	{
+		return $this->additional_conference_types;
 	}
 }
 ?>

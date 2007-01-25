@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.35 2007/01/25 11:45:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.36 2007/01/25 15:07:38 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -367,7 +367,7 @@ class conference_planning extends class_base
 				//arr($sd);
 				$sc->read_template("sub_conference_rfp5.tpl");				
 				$c_inst = get_instance(CL_CONFERENCE);
-				$c_types = $c_inst->conference_types();
+				$c_types = $c_inst->additional_conference_types();
 				$values = array();
 				if(strlen($_GET["act_evt_no"]))
 				{
@@ -700,7 +700,7 @@ class conference_planning extends class_base
 				// #5
 				//arr($sd["additional_functions"]);
 				$c_inst = get_instance(CL_CONFERENCE);
-				$conf_types = $c_inst->conference_types();
+				$conf_types = $c_inst->additional_conference_types();
 				foreach($sd["additional_functions"] as $k => $data)
 				{
 					if(!count($data))
@@ -780,17 +780,42 @@ class conference_planning extends class_base
 				// search res
 				unset($rows);
 				$loc_inst = get_instance(CL_LOCATION);
+				$img_inst = get_instance(CL_IMAGE);
 				foreach($sd["selected_search_result"] as $location)
 				{
 					$o = obj($location);
-					$inf = $loc_inst->get_add_info($loc_id);
+					if($email = $o->prop_str("email"))
+					{
+						$sc->vars(array(
+							"email"  => $email,
+						));
+						$email = $sc->parse("RES_EMAIL");
+					}
+					$imgs = $loc_inst->get_images($location);
+					foreach($imgs as $img)
+					{
+						$sc->vars(array(
+							"IMG_".$img->ord() => html::img(array(
+								"url" => $img_inst->get_url_by_id($img->id()),
+							)),
+						));
+					}
+					$photo = $o->prop("photo");
+					$map = $o->prop("map");
+					//$inf = $loc_inst->get_add_info($loc_id);
 					$sc->vars(array(
 						"caption" => $o->name(),
 						"address" => $o->prop_str("address"),
 						"single_count" => $o->prop("single_count"),
 						"double_count" => $o->prop("double_count"),
 						"suite_count" => $o->prop("suite_count"),
-						"info" => $inf,
+						"info" => $loc_inst->get_add_info($location),
+						"phone" => ($ph = $o->prop_str("phone"))?$ph:t("-"),
+						"fax" => ($f = $o->prop_str("fax"))?$f:t("-"),
+						"RES_EMAIL" => $email,
+						"photo_uri" => $img_inst->get_url_by_id($photo),
+						"map_uri" => $img_inst->get_url_by_id($map),
+						//"info" => $inf,
 					));
 					$rows .= $sc->parse("SEARCH_RESULT");
 				}
@@ -881,7 +906,7 @@ class conference_planning extends class_base
 			4 => t("Main Event"),
 			5 => t("Additional Events"),
 			6 => t("Booking Details"),
-			7 => t("Confirmation"),
+			7 => t("RFP check"),
 		);
 		// yah bar
 		for($i = 1; $i <= 7; $i++)
@@ -1066,6 +1091,7 @@ class conference_planning extends class_base
 
 		$conf_inst = get_instance(CL_CONFERENCE);
 		$evt_type = $conf_inst->conference_types();
+		$add_evt_type = $conf_inst->additional_conference_types();
 		$tmptech = array();
 		foreach($data["tech"] as $k => $pnt)
 		{
@@ -1144,7 +1170,7 @@ class conference_planning extends class_base
 				);
 			}
 			$tmpfunctions[] = array(
-				"type" => ($tmp["event_type_chooser"] == 1)?$evt_type[$tmp["event_type_select"]]:$tmp["event_type_text"],
+				"type" => ($tmp["event_type_chooser"] == 1)?$add_evt_type[$tmp["event_type_select"]]:$tmp["event_type_text"],
 				"delegates_no" => $tmp["delegates_no"],
 				"table_form" => $this->table_forms[$tmp["table_form"]],
 				"tech" => join(", ", $tmptech),
@@ -1327,7 +1353,7 @@ class conference_planning extends class_base
 	}
 
 	/**
-		@attrib params=name name=add_catering all_args=1
+		@attrib params=name name=add_catering all_args=1 nologin=1
 	**/
 	function add_catering($arr)
 	{
@@ -1336,7 +1362,7 @@ class conference_planning extends class_base
 	}
 
 	/**
-		@attrib params=name name=add_dates all_args=1
+		@attrib params=name name=add_dates all_args=1 nologin=1
 	**/
 	function add_dates($arr)
 	{
@@ -1346,7 +1372,7 @@ class conference_planning extends class_base
 	}
 
 	/**
-		@attrib params=name name=add_function all_args=1
+		@attrib params=name name=add_function all_args=1 nologin=1
 	**/
 	function add_function($arr)
 	{
@@ -1355,7 +1381,7 @@ class conference_planning extends class_base
 	}
 
 	/**
-		@attrib params=name name=add_fun_catering all_args=1
+		@attrib params=name name=add_fun_catering all_args=1 nologin=1
 	**/
 	function add_fun_catering($arr)
 	{
