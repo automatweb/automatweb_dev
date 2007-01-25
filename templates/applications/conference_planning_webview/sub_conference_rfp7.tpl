@@ -237,6 +237,11 @@
 					<td>{VAR:start_time}</td>
 					<td>{VAR:end_time}</td>
 					<td>{VAR:attendee_no}</td>
+					<td>
+						<!-- SUB: ADD_FUN_TECH -->
+							{VAR:tech}<br/>
+						<!-- END SUB: ADD_FUN_TECH -->
+					</td>
 				</tr>
 				<!-- SUB: ADD_FUNCTION_CATERING -->
 				<tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.34 2007/01/25 10:21:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.35 2007/01/25 11:45:18 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -732,10 +732,16 @@ class conference_planning extends class_base
 					}
 					// tech
 					$tech = array();
+					unset($tech_html);
 					foreach(array_keys($data["tech"]) as $te)
 					{
-						$tech[] = $this->tech_equip[$te];
+						//$tech[] = $this->tech_equip[$te];
+						$sc->vars(array(
+							"tech" => $this->tech_equip[$te],
+						));
+						$tech_html .= $sc->parse("ADD_FUN_TECH");
 					}
+					
 					$sc->vars(array(
 						"type" => ($_t = $cat_type)?$_t:t("-"),
 						"start_time" => ($_t = trim($data["function_start_date"]." ".$data["function_start_time"]))?$_t:t("-"),
@@ -743,7 +749,7 @@ class conference_planning extends class_base
 						"attendee_no" => ($_t = $data["persons_no"])?$_t:t("-"),
 						"delegates_no" => $data["delegates_no"],
 						"table_form" => $this->table_forms[$data["table_form"]],
-						"tech" => join(", ", $tech),
+						"ADD_FUN_TECH" => $tech_html,
 						"door_sign" => $data["door_sign"],
 						"persons_no" => $data["persons_no"],
 						"24h" => $data["24h"]?t("Yes"):t("No"),
