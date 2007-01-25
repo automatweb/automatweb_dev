@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.113 2007/01/25 08:40:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.114 2007/01/25 09:06:17 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1711,7 +1711,11 @@ class room extends class_base
 								));
 								if ($buf > 0)
 								{
-									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+									$buf_tm = "";
+									if (!$settings->prop("disp_bron_len"))
+									{
+										$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+									}
 									$d[$x] = "<div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
 								}
 
@@ -1721,7 +1725,11 @@ class room extends class_base
 								));
 								if ($buf > 0)
 								{
-									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+									$buf_tm = "";
+									if (!$settings->prop("disp_bron_len"))
+									{
+										$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+									}
 									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 								}
 							}
