@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.42 2007/01/10 13:51:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.43 2007/01/25 10:12:05 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -963,6 +963,10 @@ class join_site extends class_base
 						$xprop["options"][$_k] = $_v."<br>";
 					}
 				}
+				if (is_array($xprop["options"]) && $arr["add_empty_vals"])
+				{
+					$xprop["options"] = array("" => "") + $xprop["options"];
+				}
 				$klomp[$oldn] = $xprop;
 			}
 		}
@@ -1820,7 +1824,7 @@ class join_site extends class_base
 				"value" => $params["err_return_url"]
 			);
 		}
-
+		
 		aw_session_set("join_err", false);
 		return $tp;
 	}

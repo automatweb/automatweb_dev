@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.6 2006/03/23 11:55:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.7 2007/01/25 10:12:05 kristo Exp $
 // join_site_rule.aw - Liitumise Reegel 
 /*
 
@@ -58,7 +58,8 @@ class join_site_rule extends class_base
 		$js->read_template("add_rule.tpl");
 		$js->vars(array(
 			"form" => $js->get_form_from_obj(array(
-				"id" => $arr["obj_inst"]->prop("join_conf")
+				"id" => $arr["obj_inst"]->prop("join_conf"),
+				"add_empty_vals" => true
 			), $arr["obj_inst"]->meta("rule_data"))
 		));
 		return $js->parse();
