@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.33 2007/01/17 08:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.34 2007/01/25 10:21:14 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -527,7 +527,6 @@ class conference_planning extends class_base
 					$photo = $loc->prop("photo");
 					$map = $loc->prop("map");
 					$img_inst = get_instance(CL_IMAGE);
-
 					$sc->vars(array(
 						"caption" => $loc->name(),
 						"address" => $loc->prop_str("address"),
@@ -774,15 +773,18 @@ class conference_planning extends class_base
 				));
 				// search res
 				unset($rows);
+				$loc_inst = get_instance(CL_LOCATION);
 				foreach($sd["selected_search_result"] as $location)
 				{
 					$o = obj($location);
+					$inf = $loc_inst->get_add_info($loc_id);
 					$sc->vars(array(
 						"caption" => $o->name(),
 						"address" => $o->prop_str("address"),
 						"single_count" => $o->prop("single_count"),
 						"double_count" => $o->prop("double_count"),
 						"suite_count" => $o->prop("suite_count"),
+						"info" => $inf,
 					));
 					$rows .= $sc->parse("SEARCH_RESULT");
 				}
@@ -1064,6 +1066,7 @@ class conference_planning extends class_base
 			$tmptech[$k] = $this->tech_equip[$k];
 		}
 		$obj->set_prop("tech_equip", aw_serialize($tmptech, SERIALIZE_NATIVE));
+		$obj->set_prop("tech_equip_raw", aw_serialize($data["tech"], SERIALIZE_NATIVE));
 		$obj->set_prop("main_catering", aw_serialize($data["main_catering"], SERIALIZE_NATIVE));
 
 		$tmpcatering = array();

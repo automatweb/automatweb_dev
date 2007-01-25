@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>copy_redirect</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REDIR_DOC</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Konverentsiplaneerija</caption>
+      </property>
+      <property>
             <name>s_name</name>
             <table>objects</table>
             <group>
@@ -120,6 +130,13 @@
                   <parent>rfps</parent>
             </rfps_archive>
       </groupinfo>
+      <reltypes>
+            <REDIR_DOC>
+                  <value>1</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Konverentsiplaneerija</caption>
+            </REDIR_DOC>
+      </reltypes>
       <layout>
             <hsplit>
                   <type>hbox</type>

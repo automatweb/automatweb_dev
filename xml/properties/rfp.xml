@@ -259,6 +259,14 @@
             <type>hidden</type>
       </property>
       <property>
+            <name>tech_equip_raw</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
             <name>main_catering</name>
             <table>objects</table>
             <group>general</group>

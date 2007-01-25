@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.9 2007/01/17 08:57:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.10 2007/01/25 10:21:14 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property copy_redirect type=relpicker reltype=RELTYPE_REDIR_DOC field=meta method=serialize
+@caption Konverentsiplaneerija
 
 @groupinfo rfps caption="Pakkumise saamis palved"
 @groupinfo rfps_active caption="Aktiivsed" parent=rfps
@@ -35,6 +38,10 @@
 		@layout main type=vbox parent=hsplit
 			@property rfps type=table parent=main no_caption=1
 
+
+
+@reltype REDIR_DOC value=1 clid=CL_DOCUMENT
+@caption Konverentsiplaneerija
 */
 
 class rfp_manager extends class_base
@@ -42,7 +49,7 @@ class rfp_manager extends class_base
 	function rfp_manager()
 	{
 		$this->init(array(
-			"tpldir" => "applications/calendar/rfp_manager",
+			"tpldir" => "applications/conference_planning_webview",
 			"clid" => CL_RFP_MANAGER
 		));
 	}
@@ -118,6 +125,7 @@ class rfp_manager extends class_base
 
 				$rfps = $this->get_rfps($act);
 				$rfps = $this->do_filter_rfps($rfps, $arr["request"]);
+				$uss = get_instance(CL_USER);
 				foreach($rfps as $oid => $obj)
 				{
 					// end search filter
@@ -214,21 +222,60 @@ class rfp_manager extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
+		$this->read_template("rfp_history.tpl");
+		$rfps = $this->get_rfps(true, true);
+		foreach($rfps as $oid => $obj)
+		{
+			$sr = aw_unserialize($obj->prop("search_result"));
+			unset($hotels);
+			foreach($sr as $loc_data)
+			{
+				if($loc_data["selected"] == 1)
+				{
+					$this->vars(array(
+						"hotel" => $loc_data["location"],
+					));
+					$hotels[] = $this->parse("HOTEL");
+				}
+			}
+			$hotel = join($this->parse("HOTEL_SEP") , $hotels);
+			$this->vars(array(
+				"name" => $obj->name(),
+				"time" => $obj->prop("arrival_date")." - ".$obj->prop("departure_date"),
+				"attendees" => $obj->prop("delegates_no"),
+				"HOTEL" => $hotel,
+				"copy_url" => $this->mk_my_orb("reload_rfp", array(
+					"rfp" => $obj->id(),
+					"oid" => $arr["id"],
+					"return_url" => aw_ini_get("baseurl"),
+				)),
+				"remove_url" => $this->mk_my_orb("archive", array(
+					"rfp" => $obj->id(),
+					"return_url" => get_ru(),
+				)),
+			));
+			$html .= $this->parse("RFP");
+		}
+
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+			"RFP" => $html,	
 		));
 		return $this->parse();
 	}
 
 //-- methods --//
 
-	function get_rfps($act)
+	function get_rfps($act, $cur_user = false)
 	{
-		$o = new object_list(array(
+		$arr = array(
 			"class_id" => CL_RFP,
 			"archived" => !$act?1:0,
-		));
+		);
+		if($cur_user)
+		{
+			$arr["createdby"] = aw_global_get("uid");
+		}
+		$o = new object_list($arr);
 		return $o->arr();
 	}
 
@@ -407,6 +454,83 @@ class rfp_manager extends class_base
 		}
 
 		return $rfps;
+	}
+
+	/**
+		@attrib params=name name=reload_rfp all_args=1
+	**/
+	function reload_rfp($arr)
+	{
+		// data = session["tmp_conference_data"]
+		$obj = obj($arr["rfp"]);
+		$data = array();
+		
+		$data["function_name"] = $obj->name();
+		$data["user_contact_preference"] = $obj->prop("contact_preference");
+		$data["country"] = $obj->prop("country");
+
+		$data["organisation_company"] = $obj->prop("organisation");
+		$data["attendees_no"]  = $obj->prop("attendees_no");
+		// dates = data["dates"]
+		$first_date["response_date"] = $obj->prop("response_date");
+		$first_date["decision_date"] = $obj->prop("decision_date");
+		$first_date["arrival_date"] = $obj->prop("arrival_date");
+		$first_date["departure_date"] = $obj->prop("departure_date");
+		
+		$data["open_for_alternative_dates"] = $obj->prop("open_for_alternative_dates");
+		$data["accommondation_requirements"] = $obj->prop("accommondation_requirements");
+		$data["needs_rooms"] = $obj->prop("needs_rooms");
+		$data["single_count"] = $obj->prop("single_rooms");
+		$data["double_count"] = $obj->prop("double_rooms");
+		$data["suite_count"] = $obj->prop("suites");
+		$data["date_comments"] = $obj->prop("date_comments");
+		$data["dates_are_flexible"] = $obj->prop("dates_are_flexible");
+		$data["meeting_pattern"] = $obj->prop("meeting_pattern");
+		$data["pattern_wday_from"] = $obj->prop("pattern_wday_from");
+		$data["pattern_wday_to"] = $obj->prop("pattern_wday_to");
+		$data["pattern_days"] = $obj->prop("pattern_days");
+		$data["tech"] = aw_unserialize($obj->prop("tech_equip_raw"));
+		$data["main_catering"] = aw_unserialize($obj->prop("main_catering"));
+
+		$data["event_type_chooser"] = $obj->prop("event_type_chooser");
+		$data["event_type_select"] = $obj->prop("event_type_select");
+		$data["event_type_text"] = $obj->prop("event_type_text");
+		//
+		$data["delegates_no"] = $obj->prop("delegates_no");
+		$data["door_sign"] = $obj->prop("door_sign");
+		$data["persons_no"] = $obj->prop("person_no");
+		$data["table_form"] = $obj->prop("table_form_raw");
+		$data["function_start_time"] = $obj->prop("start_time_raw");
+		$data["function_start_date"] = $obj->prop("start_date_raw");
+		$data["function_end_time"] = $obj->prop("end_time_raw");
+		$data["function_end_date"] = $obj->prop("end_date_raw");
+		$data["24h"] = $obj->prop("24h");
+		$dates = aw_unserialize($obj->prop("additional_dates_raw"));
+		$dates[0] = $first_date;
+		$data["dates"] = $dates;
+
+		$data["additional_functions"] = aw_unserialize($obj->prop("additional_functions_raw"));
+
+		// billing stuff
+		$data["billing_company"] = $obj->prop("billing_company");
+		$data["billing_contact"] = $obj->prop("billing_contact");
+		$data["billing_street"] = $obj->prop("billing_street");
+		$data["billing_city"] = $obj->prop("billing_city");
+		$data["billing_zip"] = $obj->prop("billing_zip");
+		$data["billing_country"] = $obj->prop("billing_country");
+		$data["billing_name"] = $obj->prop("billing_name");
+		$data["billing_phone_number"] = $obj->prop("billing_phone_number");
+		$data["billing_email"] = $obj->prop("billing_email");
+		$data["urgent"] = $obj->prop("urgent");
+
+		$data["all_search_results"] = aw_unserialize($obj->prop("all_search_results"));
+		$data["selected_search_result"] = aw_unserialize($obj->prop("selected_search_result"));
+		aw_session_set("tmp_conference_data", $data);
+
+		$self = obj($arr["oid"]);
+		$c = $self->prop("copy_redirect");
+
+		return aw_ini_get("baseurl")."/".$c."?sub=1";
 	}
 }
 ?>

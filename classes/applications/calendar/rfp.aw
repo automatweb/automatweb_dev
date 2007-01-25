@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.4 2007/01/03 13:06:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.5 2007/01/25 10:21:14 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -81,6 +81,9 @@
 	@property event_type_select type=hidden
 	@property event_type_text type=hidden
 	@property tech_equip type=hidden
+
+	@property tech_equip_raw type=hidden
+
 	@property main_catering type=hidden
 	@property table_form_raw type=hidden
 	@property start_time_raw type=hidden
