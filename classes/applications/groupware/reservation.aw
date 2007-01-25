@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.33 2007/01/22 12:23:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.34 2007/01/25 10:50:16 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -284,6 +284,7 @@ class reservation extends class_base
 
 	function set_property($arr = array())
 	{
+		$room_inst = get_instance(CL_ROOM);
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		// get resource, then get settings from that and verify req fields
@@ -302,7 +303,6 @@ class reservation extends class_base
 				}
 			}
 		}
-	
 		switch($prop["name"])
 		{
 			case "products_tbl":
@@ -314,6 +314,21 @@ class reservation extends class_base
 				if ($prop["value"]  && $arr["request"]["closed_info"] == "")
 				{
 					$prop["error"] = t("Sulgemise p&otilde;hjus peab olema t&auml;idetud!");
+					return PROP_FATAL_ERROR;
+				}
+				break;
+			case "end":
+				$s = $arr["request"]["start1"];
+				$e = $arr["request"]["end"];
+				$room_obj = obj($arr["request"]["resource"]);
+				if(!$room_inst->check_if_available(array(
+					"room" => $arr["request"]["resource"],
+					"start" => mktime($s["hour"],$s["minute"],0,$s["month"],$s["day"],$s["year"]),
+					"end" => (mktime($e["hour"],$e["minute"],0,$e["month"],$e["day"],$e["year"]) + $room_obj->prop("buffer_after")*$room_obj->prop("buffer_after_unit")),
+					"ignore_booking" => 1,
+				)))
+				{
+					$prop["error"] = t("Sellisele ajale ei saa antud ruumi broneerida");
 					return PROP_FATAL_ERROR;
 				}
 				break;
