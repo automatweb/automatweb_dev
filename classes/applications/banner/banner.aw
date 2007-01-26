@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.23 2006/12/27 11:06:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.24 2007/01/26 11:19:07 kristo Exp $
 
 /*
 
@@ -563,7 +563,7 @@ class banner extends class_base
 			{
 				$this->add_simple_view($banner->id(), $loc);
 				$content_o = obj($content);
-				$url = $this->mk_my_orb("proc_banner", array("click" => 1, "bid" => $banner->id()));
+				$url = $this->mk_my_orb("proc_banner", array("click" => 1, "bid" => $banner->id()), "banner", false, false, "&amp;");
 				$target = $banner->prop("banner_new_win") ? "target=\"_blank\"" : "";
 				switch($content_o->class_id())
 				{
