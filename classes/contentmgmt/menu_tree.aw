@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.13 2006/08/31 12:58:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.14 2007/01/26 12:57:50 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -168,7 +168,8 @@ class menu_tree extends class_base
 				$this->level = 0;
 			};
 		};
-		$fl = join("",$folder_list);
+		$fl = str_replace("&", "&amp;", join("",$folder_list));
+		$fl = str_replace(chr(150), "-", $fl);	
 		return $fl;
 		
 	}
@@ -204,7 +205,6 @@ class menu_tree extends class_base
 			$this->_recurse_object_list(array(
 				"parent" => (is_object($_root) ? $_root->parent() : ""),
 			));
-
 			if ($this->layout_mode == 1)
 			{
 				// return the stuff outside the "content" sub as well
@@ -437,6 +437,12 @@ class menu_tree extends class_base
 				$url = $ss->make_menu_link($v);
 			}
 
+			$item = false;
+			if (strpos($url, "&amp;") === false || true)
+			{
+				$url = str_replace("&", "&amp;", $url);
+			}
+
 			if ($this->children_only && $v->id() == $this->start_from)
 			{
 				// do nothing
@@ -455,6 +461,7 @@ class menu_tree extends class_base
 
 					$this->res .= $this->parse($tpl);
 					$this->shown[$v->id()] = $id;
+					$item = true;
 				}
 			};
 
@@ -489,8 +496,12 @@ class menu_tree extends class_base
 						array_pop($this->alias_stack);
 				};
 			};
-		};
 
+			if ($item && $this->is_template("ITEM_END"))
+			{
+				$this->res .= $this->parse("ITEM_END");
+			}
+		};
 		$this->rec_level--;
 	}
 }
