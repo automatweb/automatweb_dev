@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.36 2007/01/25 15:09:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.37 2007/01/29 16:22:40 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -180,6 +180,7 @@ class reservation extends class_base
 			case "start1":
 			case "end":
 			case "resource":
+				$prop["options"] = array();
 				if($arr["new"] && $arr["request"][$prop["name"]])
 				{
 					$prop["value"] = $arr["request"][$prop["name"]];
@@ -195,7 +196,7 @@ class reservation extends class_base
 							"parent" => $sets->prop("related_room_folder"),
 							"lang_id" => array(),
 							"site_id" => array()
-						));
+						));//arr($prop["options"]);
 						$prop["options"] += $rrs->names();
 					}
 				}
@@ -699,7 +700,7 @@ class reservation extends class_base
 			$amount = $arr["obj_inst"]->meta("amount");
 		}
 		$room = obj($arr["obj_inst"]->prop("resource"));
-		
+		//arr($prod_list);
 		$warehouse = obj($room->prop("warehouse"));
 		if(is_oid($warehouse->prop("conf")))
 		{
