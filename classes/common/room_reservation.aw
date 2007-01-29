@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.35 2007/01/25 12:42:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.36 2007/01/29 16:59:40 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -498,7 +498,7 @@ class room_reservation extends class_base
 			"products" => -1,
 		//	"products" => $bron->meta("amount"),
 		));
-		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"] = array();
+		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"] = $data["menu_sum_left"] = array();
 		
 		$prod_discount = $room_inst->get_prod_discount(array("room" => $bron->prop("resource")));
 		foreach($sum as $curr => $val)
@@ -545,13 +545,20 @@ class room_reservation extends class_base
 		{
 			$currency = obj($curr);
 			$data["sum"][] =  $val." ".$currency->name();
-		}		
-				
+			$min_prices = $room->meta("web_room_min_price");
+			$min_sum = $min_prices[$curr] - $val;
+			if($min_sum < 0)
+			{
+				$min_sum = 0;
+			}
+			$data["min_sum_left"][] = $min_sum." ".$currency->name();
+		}
 		$ret["sum"] = join("/" , $data["sum"]);
 		$ret["bargain"] = join("/" , $data["bargain"]);
 		$ret["sum_wb"] = join("/" , $data["sum_wb"]);
 		$ret["menu_sum"] = join("/" , $data["menu_sum"]);
 		$ret["comment_value"] = $bron->prop("content");
+		$ret["min_sum_left"] = join("/" , $data["min_sum_left"]);
 		
 		$ret["status"] = ($bron->prop("verified") ? t("Kinnitatud") : t("Kinnitamata"));
 		
@@ -739,6 +746,7 @@ class room_reservation extends class_base
 		}
 	
 		$min_prod_prices = $room->meta("web_min_prod_prices");
+		$min_prices = $room->meta("web_room_min_price");
 		foreach ($show_curr as $curr)
 		{
 			if(!$data["menu_sum"][$curr])
@@ -750,8 +758,18 @@ class room_reservation extends class_base
 //			{
 //				$data["menu_sum"][$curr] = $min_prod_prices[$curr];
 //			}
+
+			$min_sum = $min_prices[$curr] - $data["menu_sum"][$curr] + $data["menu_disc"][$curr];
+			//arr($min_prices[$curr]); arr($sum[$curr]);
+			if($min_sum < 0)
+			{
+				$min_sum = 0;
+			}
+			$data["min_sum_left"][] = $min_sum." ".$currency->name();
+
 			$data["menu_sum"][$curr] = $data["menu_sum"][$curr]." ".$currency->name();
 			$data["menu_disc"][$curr] = $data["menu_disc"][$curr]." ".$currency->name();
+
 		}
 
 		$sum = $this->get_total_bron_price(array(
@@ -769,13 +787,14 @@ class room_reservation extends class_base
 				$data["sum_pay"][] = $sum[$curr]." ".$currency->name();
 			}
 		}
-				
+			
 		$data["sum"] = join("/" , $data["sum"]);
 		$data["sum_pay"] = join("/" , $data["sum_pay"]);
 		$data["bargain"] = join("/" , $data["bargain"]);
 		$data["sum_wb"] = join("/" , $data["sum_wb"]);
 		$data["menu_sum"] = join("/" , $data["menu_sum"]);
 		$data["menu_disc"] = join("/" , $data["menu_sum"]);
+		$data["min_sum_left"] = join("/" , $data["min_sum_left"]);
 
 		$data["time_from"] = "";
 		$data["time_to"] = "";
