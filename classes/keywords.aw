@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.69 2006/09/27 15:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.70 2007/01/29 13:22:06 kristo Exp $
 // keywords.aw - dokumentide v&otilde;tmes&otilde;nad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -10,6 +10,12 @@
 
 @property keyword type=textbox
 @caption M&auml;rks&otilde;na
+
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 @reltype KEYWORD value=1 clid=CL_DOCUMENT
 @caption Dokument
@@ -30,6 +36,10 @@ class keywords extends class_base
 		$this->init(array(
 			"clid" => CL_KEYWORD,
 		));
+
+		$this->trans_props = array(
+			"keyword"
+		);
 	}
 
 	
@@ -1149,6 +1159,10 @@ class keywords extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "keyword":
 				// list other kws with the same name
 				$ol = new object_list(array(
@@ -1169,6 +1183,15 @@ class keywords extends class_base
 		return $retval;
 	}
 	
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();

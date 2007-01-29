@@ -1283,7 +1283,7 @@ class crm_company extends class_base
 		));
 
 		$this->trans_props = array(
-			"tegevuse_kirjeldus", "userta1", "userta2", "userta3", "userta4", "userta5"
+			"tegevuse_kirjeldus", "userta1", "userta2", "userta3", "userta4", "userta5", "comment"
 		);
 		
 	}

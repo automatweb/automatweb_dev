@@ -8,12 +8,27 @@
             <field>keyword</field>
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;na</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>keywords</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_KEYWORDS</syslog_type>
             <relationmgr>yes</relationmgr>
             <status>no</status>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <tableinfo>
             <keywords>
                   <index>id</index>
