@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.18 2007/01/29 18:45:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.19 2007/01/29 19:43:15 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -1022,7 +1022,7 @@ class bank_payment extends class_base
 	{
 		extract($_SESSION["bank_return"]["data"]);
 		
-		if($action == "afb")
+		if($action == "afb")//selliselt tulevad krediitkaardimakse tagasipöördumised
 		{
 			return $this->check_cc_response();
 		}
@@ -1083,11 +1083,10 @@ class bank_payment extends class_base
 		$mac = $this->hex2str($mac);
 		$signature = sha1($data);
 		$fp = fopen($this->cfg["site_basedir"]."/pank/80_ecom.crt", "r");
-		var_dump($fp);
 		$cert = fread($fp, 8192);
 		fclose($fp);
 		$pubkeyid = openssl_get_publickey($cert);
-		$ok = openssl_verify($data, $mac, $pubkeyid);arr($ok);
+		$ok = openssl_verify($data, $mac, $pubkeyid);
 		openssl_free_key($pubkeyid);
 		return $ok;
 	}
