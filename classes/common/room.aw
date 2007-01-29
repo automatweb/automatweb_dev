@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.115 2007/01/25 15:09:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.116 2007/01/29 18:45:44 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2163,7 +2163,7 @@ class room extends class_base
 			phone - contact persons phone
 			customer - If the person object already exists, then connect the booking to this person, if given 
 			verified - if true, reservation is marked as verified
-
+		@param not_verified
 		@param meta optional type=array
 			Any key=>value paris given here, will be written to the objects metadata
 	**/
@@ -2285,6 +2285,11 @@ class room extends class_base
                         $reservation->prop("resource.name")
 		));
 		$reservation->save();
+		if($arr["not_verified"])
+		{
+			$reservation->set_prop("verified", 0);
+			$reservation->save();
+		}
 		return $reservation->id();
 	}
 

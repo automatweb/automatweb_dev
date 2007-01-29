@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.36 2007/01/29 16:59:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.37 2007/01/29 18:45:44 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -482,6 +482,7 @@ class room_reservation extends class_base
 			return $ret;
 		}
 		$bron = obj($id);
+		$room = obj($bron->prop("resource"));
 		$ret["time_str"] = $this->get_time_str(array(
 			"start" => $bron->prop("start1"),
 			"end" => $bron->prop("end"),
@@ -1179,6 +1180,7 @@ class room_reservation extends class_base
 				$bron_id = $_SESSION["room_reservation"][$room]["bron_id"];
 			}
 			$_SESSION["room_reservation"][$room]["bron_id"] = $room_inst->make_reservation(array(
+				"not_verified" => 1,
 				"id" => $room,
 				"res_id" => $bron_id,
 				"data" => $_SESSION["room_reservation"][$room],
@@ -1225,6 +1227,7 @@ class room_reservation extends class_base
 			$_SESSION["room_reservation"][$r->id()]["bron_id"] = $room_inst->make_reservation(array(
 				"id" => $r->id(),
 				"res_id" => $bron_id,
+				"not_verified" => 1,
 				"data" => $_SESSION["room_reservation"][$r->id()],
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
@@ -1275,6 +1278,11 @@ class room_reservation extends class_base
 	**/
 	function bank_return($arr)
 	{
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		if($_SESSION["bank_return"]["data"]["action"] == "afb" && !$bank_inst->check_response())
+		{
+			return;
+		}
 		if(!$this->make_verified($arr["id"]))
 		{
 			print t("Broneeringut ei &otilde;nnestunud kinnitada"); 

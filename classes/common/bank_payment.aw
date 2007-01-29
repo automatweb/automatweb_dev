@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.17 2007/01/24 10:19:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.18 2007/01/29 18:45:44 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -783,7 +783,29 @@ class bank_payment extends class_base
 	function credit_card($args)
 	{
 		extract($args);
-		
+		//test:
+		$action="$service";
+		$ver="$version";
+		$id="$sender_id";
+		$idnp = $id;
+		$ecuno='123456';
+		$eamount='1000';
+		$cur='EEK';
+		$datetime=date("YmdHis");
+		$lang='et';
+		$id=sprintf("%-10s", "$id");
+		$ecuno=sprintf("%012s", "$reference_nr");
+		$eamount=sprintf("%012s", "$amount");
+		$data = $ver . $id . $ecuno . $eamount . $cur . $datetime;
+		$signature=sha1($data);
+	//	echo "signatuur: <pre>$data</pre><br>";
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($data, $signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$mac=bin2hex($signature);
+		echo "https://pos.estcard.ee/test-pos/servlet/iPAYServlet?action=$action&amp;ver=$ver&amp;id=$idnp&amp;ecuno=$ecuno&amp;eamount=$eamount&amp;cur=$cur&amp;datetime=$datetime&amp;mac=$mac&amp;lang=en";
+		//testi lõpp
+
 		$VK_message = $version;
 		$VK_message.= sprintf("%-10s", $sender_id);
 		$VK_message.= sprintf("%012s",$reference_nr);
@@ -999,6 +1021,12 @@ class bank_payment extends class_base
 	function check_response()
 	{
 		extract($_SESSION["bank_return"]["data"]);
+		
+		if($action == "afb")
+		{
+			return $this->check_cc_response();
+		}
+		
 		$data = substr("000".strlen($VK_SERVICE),-3).$VK_SERVICE
 		.substr("000".strlen($VK_VERSION),-3).$VK_VERSION
 		.substr("000".strlen($VK_SND_ID),-3).$VK_SND_ID
@@ -1037,6 +1065,31 @@ class bank_payment extends class_base
 		else {
 			echo "ugly, error checking signature";
 		}	
+	}
+	
+	function hex2str($hex) {
+		for($i=0;$i<strlen($hex);$i+=2) $str.=chr(hexdec(substr($hex,$i,2)));
+		return $str;
+	}
+	
+	function check_cc_response()
+	{
+		extract($_SESSION["bank_return"]["data"]);
+		$data = sprintf("%03s", $ver) . sprintf("%-10s", "$id") .
+		sprintf("%012s", $ecuno) . sprintf("%06s", $receipt_no) . sprintf("%012s",
+		$eamount) . sprintf("%3s", $cur) . $respcode . $datetime . sprintf("%-40s",
+		$msgdata) . sprintf("%-40s", $actiontext);
+
+		$mac = $this->hex2str($mac);
+		$signature = sha1($data);
+		$fp = fopen($this->cfg["site_basedir"]."/pank/80_ecom.crt", "r");
+		var_dump($fp);
+		$cert = fread($fp, 8192);
+		fclose($fp);
+		$pubkeyid = openssl_get_publickey($cert);
+		$ok = openssl_verify($data, $mac, $pubkeyid);arr($ok);
+		openssl_free_key($pubkeyid);
+		return $ok;
 	}
 }
 ?>
