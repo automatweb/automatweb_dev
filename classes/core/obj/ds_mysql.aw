@@ -25,6 +25,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$site_id = " AND site_id = '".$site_id."'";
 		}
 
+		$this->quote(&$alias);
 		$q = sprintf("
 			SELECT 
 				%s 
