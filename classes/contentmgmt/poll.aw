@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.38 2007/01/08 07:45:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.39 2007/01/30 08:39:33 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -257,7 +257,8 @@ class poll extends class_base
 			return;
 		}
 		
-		$poll_id = $this->db_fetch_field("SELECT poll_id FROM poll_answers WHERE id = $aid", "poll_id");
+		$this->quote(&$aid);
+		$poll_id = $this->db_fetch_field("SELECT poll_id FROM poll_answers WHERE id = '$aid'", "poll_id");
 
 		if ($poa[$poll_id] != 1)
 		{
@@ -267,7 +268,7 @@ class poll extends class_base
 			{
 				$ip = $REMOTE_ADDR;
 			}
-			$this->db_query("UPDATE poll_answers SET clicks=clicks+1 WHERE id = $aid");
+			$this->db_query("UPDATE poll_answers SET clicks=clicks+1 WHERE id = '$aid'");
 			$this->db_query("INSERT INTO poll_clicks(uid, ip, date, poll_id, answer_id) VALUES('".aw_global_get("uid")."','$ip',".time().",'$poll_id','$aid')");
 		}
 
