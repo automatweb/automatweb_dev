@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.119 2007/01/30 15:14:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.120 2007/01/30 16:15:26 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1671,6 +1671,7 @@ class room extends class_base
 							{
 								$customer = obj($last_bron->prop("customer"));
 								$cus = $customer->name();
+						
 								$products = $last_bron->meta("amount");
 								$title = $last_bron->prop("content");
 								if($last_bron->prop("comment"))
@@ -1777,6 +1778,12 @@ class room extends class_base
 									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 								}
 							}
+								
+								if($last_bron->prop("start1") < $start_step)
+								{
+									$d[$x] = "--//--";
+								}
+							
 							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
 						}
 						else
@@ -1809,7 +1816,7 @@ class room extends class_base
 					$tmp_row_data["id".$i] = $ids[$i];
 					$tmp_row_data["onclick".$i] = $onclick[$i];
 					$tmp_row_data["col".$i] = $col[$i];
-					$tmp_row_data["rowspan".$i] = $rowspan[$i];
+			//		$tmp_row_data["rowspan".$i] = $rowspan[$i];
 				}
 				$t->define_data($tmp_row_data);
 			}
@@ -3179,6 +3186,7 @@ class room extends class_base
 		{
 			$bron_made = $arr["bron"]->created();
 		}
+
 		foreach($prices as $conn)
 		{
 			$price = $conn->to();
@@ -3247,8 +3255,7 @@ class room extends class_base
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
 			{//arr($hr_price); arr($hr_price - $bargain*$hr_price);arr("");
-				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
-				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));
+				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
 				$this->bargain_value[$currency] = $this->bargain_value[$currency] + $bargain*$hr_price;
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
@@ -3285,14 +3292,8 @@ class room extends class_base
 			}
 			if($people > $room->prop("normal_capacity"))
 			{
-				$ppl_price = $this->cal_people_price(array("room" => $room, "people" => $people, "cur" =>  $currency));
-				if ($rv["room_bargain"] > 0)
-				{
-					$rv["room_bargain_value"][$currency] +=  ($ppl_price * $rv["room_bargain"]);
-					$ppl_price -= ($ppl_price * $rv["room_bargain"]);
-				}
-				$sum[$currency] +=  $ppl_price;
-				$rv["room_price"][$currency] += $ppl_price;
+				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
+				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
 			}
 //			if(is_array($products) && sizeof($products))
 			if(!($products == -1))
