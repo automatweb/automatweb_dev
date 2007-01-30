@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.120 2007/01/30 16:15:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.121 2007/01/30 16:32:26 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1756,6 +1756,11 @@ class room extends class_base
 								}
 							}
 
+							if($last_bron->prop("start1") < $start_step)
+							{
+								$d[$x] = "--//--";
+							}
+
 							if ($settings->prop("col_buffer") != "")
 							{
 								$buf = $this->get_before_buffer(array(
@@ -1772,18 +1777,12 @@ class room extends class_base
 									"room" => $arr["obj_inst"],
 									"bron" => $last_bron,
 								));
-								if ($buf > 0)
+								if ($buf > 0 && ($last_bron->prop("end") < $end_step))
 								{
 									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
 									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 								}
 							}
-								
-								if($last_bron->prop("start1") < $start_step)
-								{
-									$d[$x] = "--//--";
-								}
-							
 							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
 						}
 						else
