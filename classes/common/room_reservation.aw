@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.38 2007/01/30 10:06:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.39 2007/01/30 10:23:36 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -808,12 +808,51 @@ class room_reservation extends class_base
 			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
 			"end" => $_SESSION["room_reservation"][$room->id()]["end"]
 		));
+		$data["date"] = $this->get_date_str(array(
+			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
+			"end" => $_SESSION["room_reservation"][$room->id()]["end"]
+		));
+		$data["time"] = $this->get_time_(array(
+			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
+			"end" => $_SESSION["room_reservation"][$room->id()]["end"]
+		));
 		foreach($_SESSION["room_reservation"][$room->id()] as $key => $val)
 		{
 			$data[$key."_value"] = $val;
 		}
 		$data["bank_value"] = $this->banks[$_SESSION["room_reservation"][$room->id()]["bank"]];
 		return $data;
+	}
+
+	function get_time_($arr)
+	{
+		$res.= date("H:i" , $arr["start"]);
+		$res.= " - ";
+		$res.= date("H:i" , $arr["end"]);
+		return $res;
+	}
+
+	function get_date_str($arr)
+	{
+		$room_inst = get_instance(CL_ROOM);
+		extract($arr);
+		$res = "";
+		$res1 = $room_inst->weekdays[(int)date("w" , $arr["start"])];
+		$res1.= ", ";
+		$res1.= date("d.m.Y" , $arr["start"]);
+
+		$res2 = $room_inst->weekdays[(int)date("w" , $arr["end"])];
+		$res2.= ", ";
+		$res2.= date("d.m.Y" , $arr["end"]);
+		if($res2 == $res1)
+		{
+			$res = $res1;
+		}
+		else
+		{
+			$res1." - ".$res2;
+		}
+		return $res;
 	}
 
 	function get_time_str($arr)
