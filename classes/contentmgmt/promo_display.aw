@@ -472,7 +472,8 @@ class promo_display
 	function get_promo_link($o)
 	{
 		$link_str = $o->trans_get_val("link");
-		if ($this->can("view", $o->meta("linked_obj")))
+		$i = get_instance(CL_FILE);
+		if ($i->can("view", $o->meta("linked_obj")))
 		{
 			$linked_obj = obj($o->meta("linked_obj"));
 			if ($linked_obj->class_id() == CL_MENU)

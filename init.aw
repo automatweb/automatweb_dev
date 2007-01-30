@@ -1171,35 +1171,9 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 
 function log_pv($mt)
 {
-	return;
-	//list($usec, $sec) = explode(" ", $mt);
-	$start = $mt ;//((float)$usec + (float)$sec);
-
-	list($usec, $sec) = explode(" ", microtime());
-	$end = ((float)$usec + (float)$sec);
-
-	$time = $end - $start;
-
-	if ($time > 1000)
+	if (file_exists("/www/automatweb_new/logger.aw"))
 	{
-		$time = "0";
-	}
-
-	$promo_time = $GLOBALS["awt"]->timers["mainc-contentmgmt/promo"]["elapsed"];
-
-	// log pv to file
-	$fn = "/www/automatweb_new/files/logs/";
-	if (!is_dir($fn))
-	{
-		@mkdir($fn);
-	}
-	$fn .= date("Y-m-d").".log";
-
-	$f = @fopen($fn, "a");
-	if ($f)
-	{
-		fwrite($f, date("d.m.Y H:i:s")." ".aw_ini_get("site_id")." ".aw_ini_get("baseurl")." ".aw_global_get("REQUEST_URI")." $time $promo_time\n");
-		fclose($f);
+		@include_once("/www/automatweb_new/logger.aw");
 	}
 }
 
