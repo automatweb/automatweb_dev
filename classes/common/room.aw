@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.118 2007/01/30 13:24:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.119 2007/01/30 15:14:35 markop Exp $
 // room.aw - Ruum 
 /*
 
-@classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_ROOM relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
 @default field=meta
@@ -427,6 +427,9 @@ class room extends class_base
 						$arr["obj_inst"]->set_prop("openhours" , $oh->id());
 						$arr["obj_inst"]->connect(array("to" => $oh->id(), "reltype" => "RELTYPE_OPENHOURS"));
 					}
+					break;
+
+				case "resources_tb":
 					break;
 		};
 		return $retval;
@@ -2996,18 +2999,58 @@ class room extends class_base
 			$parents = $this->get_prod_tree_ids($o);
 		}
 		
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRODUCT,
-			"lang_id" => array(),
-			"parent" => $parents,
-		));
-		foreach($ol->ids() as $prod)
+		$parents_temp = array();
+		foreach($parents as $parent)
 		{
-			if(!$this->prod_data[$prod]["active"])
+			if($this->can("view" , $parent))
 			{
-				$ol->remove($prod);
+				$po = obj($parent);
+				if($this->prod_data) 
+				{
+					$parents_temp[$parent] = $this->prod_data[$parent]["ord"];
+				}
+				else
+				{
+					$parents_temp[$parent] = $po->prop("jrk");
+				}
 			}
 		}
+		asort($parents_temp, SORT_NUMERIC);
+		$parents = $parents_temp;
+		
+		
+		foreach($parents as $key => $jrk)
+		{
+			$tmp_list = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT,
+				"lang_id" => array(),
+				"parent" => $key,
+				"sort_by" => "jrk ASC",
+			));
+			if(!$this->prod_data)
+			{
+				foreach($tmp_list->ids() as $prod)
+				{
+					if($this->prod_data[$prod]["active"])
+					{
+						$ol->add($prod);
+					}
+				}
+			}
+			else
+			{
+				$prods = array();
+				foreach($tmp_list->ids() as $prod)
+				{
+					if($this->prod_data[$prod]["active"])
+					{
+						$prods[$prod] = $this->prod_data[$prod]["ord"];
+					}
+				}//arr($prods);
+				asort($prods, SORT_NUMERIC);
+				$ol->add(array_keys($prods));
+			}
+		}//arr($ol);
 		return $ol;
 	}
 	
@@ -3136,7 +3179,6 @@ class room extends class_base
 		{
 			$bron_made = $arr["bron"]->created();
 		}
-
 		foreach($prices as $conn)
 		{
 			$price = $conn->to();
@@ -3205,7 +3247,8 @@ class room extends class_base
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
 			{//arr($hr_price); arr($hr_price - $bargain*$hr_price);arr("");
-				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
+				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
+				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));
 				$this->bargain_value[$currency] = $this->bargain_value[$currency] + $bargain*$hr_price;
 			}
 			$time = $time - ($price->prop("time") * $this->step_length);
@@ -3242,8 +3285,14 @@ class room extends class_base
 			}
 			if($people > $room->prop("normal_capacity"))
 			{
-				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
-				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
+				$ppl_price = $this->cal_people_price(array("room" => $room, "people" => $people, "cur" =>  $currency));
+				if ($rv["room_bargain"] > 0)
+				{
+					$rv["room_bargain_value"][$currency] +=  ($ppl_price * $rv["room_bargain"]);
+					$ppl_price -= ($ppl_price * $rv["room_bargain"]);
+				}
+				$sum[$currency] +=  $ppl_price;
+				$rv["room_price"][$currency] += $ppl_price;
 			}
 //			if(is_array($products) && sizeof($products))
 			if(!($products == -1))
