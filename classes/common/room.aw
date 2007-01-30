@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.116 2007/01/29 18:45:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.117 2007/01/30 13:00:28 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -809,6 +809,29 @@ class room extends class_base
 				));
 			}
 		}
+
+		$t->define_field(array(
+			"name" => "bron_made",
+			"caption" => t("Broneering tehtud"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "bron_made_from",
+			"caption" => t("Alates"),
+			"align" => "center",
+			"parent" => "bron_made",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "bron_made_to",
+			"caption" => t("Kuni"),
+			"align" => "center",
+			"parent" => "bron_made",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),
@@ -852,6 +875,8 @@ class room extends class_base
 				"time_step" => $obj->prop("time")." ".$caption,
 				"active" => $obj->prop("active")?t("Jah"):t("Ei"),
 				"recur" => $obj->prop("recur")?t("Jah"):t("Ei"),
+				"bron_made_from" => $obj->prop("bron_made_from"),
+				"bron_made_to" => $obj->prop("bron_made_to"),
 				"change" => html::href(array(
 					"caption" => html::img(array(
 						"url" => aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif",
@@ -3104,6 +3129,13 @@ class room extends class_base
 			"class_id" => CL_ROOM_PRICE,
 			"type" => "RELTYPE_ROOM_PRICE",
 		));
+
+		$bron_made = time();
+		if (is_object($arr["bron"]))
+		{
+			$bron_made = $arr["bron"]->created();
+		}
+
 		foreach($prices as $conn)
 		{
 			$price = $conn->to();
@@ -3111,9 +3143,14 @@ class room extends class_base
 			{
 				if(in_array((date("w", $start) + 1) , $price->prop("weekdays")))
 				{
-					$this_price = $price;
-					$this_prices[$price->prop("nr")][] = $price;
-//					break;
+					if (($price->prop("bron_made_from") < 1 || $bron_made > $price->prop("bron_made_from")) ||
+					    ($price->prop("bron_made_to") < 1 || $bron_made < $price->prop("bron_made_to"))
+					)
+					{
+						$this_price = $price;
+						$this_prices[$price->prop("nr")][] = $price;
+//						break;
+					}
 				}
 			}
 		}
@@ -3162,6 +3199,7 @@ class room extends class_base
 				"room" => $room,
 				"time" => $price->prop("time") * $this->step_length,
 				"start" => $end-$time,
+				"bron_made" => $bron_made
 			));
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
@@ -3312,21 +3350,26 @@ class room extends class_base
 					)
 				)
 				{
-					$from = $bargain->prop("time_from");
-					$to = $bargain->prop("time_to");//arr(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start))); arr(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))); arr($start);arr($end);
-					//juhul kui aeg mahub täpselt soodushinna sisse
-					if(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start && mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end)
+					if (($bargain->prop("bron_made_from") < 1 || $bron_made > $bargain->prop("bron_made_from")) ||
+					    ($bargain->prop("bron_made_to") < 1 || $bron_made < $bargain->prop("bron_made_to"))
+					)
 					{
-						return 0.01*$bargain->prop("bargain_percent");
-					}
-					//juhul kui mõni kattub poolikult... esimene siis , et kui allahindlus algul on,... teine, et allahindlus tuleb poolepealt
-					if((mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start) && (mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) > $start))
-					{
-						return 0.01*$bargain->prop("bargain_percent")*(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) - $start)/($end-$start);
-					}
-					if((mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end) && (mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) < $end))
-					{
-						return 0.01*$bargain->prop("bargain_percent")*($end - mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)))/($end-$start);
+						$from = $bargain->prop("time_from");
+						$to = $bargain->prop("time_to");//arr(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start))); arr(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end))); arr($start);arr($end);
+						//juhul kui aeg mahub täpselt soodushinna sisse
+						if(mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start && mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end)
+						{
+							return 0.01*$bargain->prop("bargain_percent");
+						}
+						//juhul kui mõni kattub poolikult... esimene siis , et kui allahindlus algul on,... teine, et allahindlus tuleb poolepealt
+						if((mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) <=  $start) && (mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) > $start))
+						{
+							return 0.01*$bargain->prop("bargain_percent")*(mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) - $start)/($end-$start);
+						}
+						if((mktime($to["hour"], $to["minute"], 0, date("m",$end), date("d",$end), date("y",$end)) >=  $end) && (mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)) < $end))
+						{
+							return 0.01*$bargain->prop("bargain_percent")*($end - mktime($from["hour"], $from["minute"], 0, date("m",$start), date("d",$start), date("y",$start)))/($end-$start);
+						}
 					}
 				}
 			}

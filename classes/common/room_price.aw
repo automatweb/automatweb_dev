@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.8 2006/12/29 16:02:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.9 2007/01/30 13:00:28 kristo Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -39,6 +39,12 @@
 
 	@property time type=select editonly=1
 	@caption Aeg
+
+	@property bron_made_from type=datetime_select default=-1
+	@caption Broneering tehtud alates
+
+	@property bron_made_to type=datetime_select default=-1
+	@caption Broneering tehtud kuni
 
 	@property bargain_percent type=textbox
 	@caption Soodustuse protsent

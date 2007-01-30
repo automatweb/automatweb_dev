@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.39 2007/01/30 10:23:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.40 2007/01/30 13:00:28 kristo Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -464,6 +464,7 @@ class room_reservation extends class_base
 			"start" => $start,
 			"end" => $end,
 			"products" => $products,
+			"bron" => $bron
 		));
 		foreach($sum as $cur => $val)
 		{
@@ -499,6 +500,7 @@ class room_reservation extends class_base
 			"end" => $bron->prop("end"),
 			"products" => -1,
 		//	"products" => $bron->meta("amount"),
+			"bron" => $bron
 		));
 		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"] = $data["menu_sum_left"] = array();
 		

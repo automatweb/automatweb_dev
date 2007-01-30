@@ -97,6 +97,26 @@
             <caption>Aeg</caption>
       </property>
       <property>
+            <name>bron_made_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>datetime_select</type>
+            <default>-1</default>
+            <caption>Broneering tehtud alates</caption>
+      </property>
+      <property>
+            <name>bron_made_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>datetime_select</type>
+            <default>-1</default>
+            <caption>Broneering tehtud kuni</caption>
+      </property>
+      <property>
             <name>bargain_percent</name>
             <table>objects</table>
             <group>general</group>
