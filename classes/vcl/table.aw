@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.102 2007/01/23 11:07:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.103 2007/01/30 13:24:04 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1267,6 +1267,11 @@ class aw_table extends aw_template
 		};
 		// sisu joonistamine lopeb
 
+		if ($this->titlebar_repeat_bottom)
+		{
+			$tbl .= $this->_req_draw_header("");
+		}
+
 		// tabel kinni
 		if (is_array($this->tableattribs))
 		{
@@ -2231,12 +2236,13 @@ class aw_table extends aw_template
 
 		$tbl2 = $this->_req_draw_header($subs);
 
-		if ($this->use_chooser)
+		if ($this->use_chooser && $this->_sh_req_level == 1)
 		{
 			$opentag = array(
 				"name" => "td",
 				"align" => "center",
 				"classid" => $this->header_normal,
+				"rowspan" => $this->max_sh_count
 			);
 			if(($tmp = $this->chooser_config["width"]))
 			{
@@ -2522,6 +2528,15 @@ class aw_table extends aw_template
 			$filter[$k] = substr($v, 0, 20);
 		}
 		return $filter;
+	}
+
+	/** Sets whether to display the titlebar at the bottom of the table as well
+		@attrib api=1
+		@param display_titlebar_below required type=bool
+	**/
+	function set_lower_titlebar_display($display_titlebar_below)
+	{
+		$this->titlebar_repeat_bottom = $display_titlebar_below;
 	}
 }
 

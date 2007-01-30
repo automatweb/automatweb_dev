@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.117 2007/01/30 13:00:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.118 2007/01/30 13:24:02 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1493,6 +1493,7 @@ class room extends class_base
 			}
 		}
 		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_lower_titlebar_display(true);
 //		arr($arr["obj_inst"]->prop("openhours"));
 		$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
 		if(is_oid($arr["obj_inst"]->prop("openhours")) && $this->can("view" , $arr["obj_inst"]->prop("openhours")))
