@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.40 2007/01/30 13:00:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.41 2007/01/30 14:49:09 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -464,7 +464,6 @@ class room_reservation extends class_base
 			"start" => $start,
 			"end" => $end,
 			"products" => $products,
-			"bron" => $bron
 		));
 		foreach($sum as $cur => $val)
 		{
@@ -500,7 +499,6 @@ class room_reservation extends class_base
 			"end" => $bron->prop("end"),
 			"products" => -1,
 		//	"products" => $bron->meta("amount"),
-			"bron" => $bron
 		));
 		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"] = $data["menu_sum_left"] = array();
 		
@@ -810,6 +808,7 @@ class room_reservation extends class_base
 			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
 			"end" => $_SESSION["room_reservation"][$room->id()]["end"]
 		));
+		$data["date_start"] =  date("d.m.Y" , $_SESSION["room_reservation"][$room->id()]["start"]);
 		$data["date"] = $this->get_date_str(array(
 			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
 			"end" => $_SESSION["room_reservation"][$room->id()]["end"]
@@ -835,16 +834,16 @@ class room_reservation extends class_base
 	}
 
 	function get_date_str($arr)
-	{
+	{//arr($arr);
 		$room_inst = get_instance(CL_ROOM);
 		extract($arr);
-		$res = "";
-		$res1 = $room_inst->weekdays[(int)date("w" , $arr["start"])];
-		$res1.= ", ";
+		$res = $res1 = $res2 = "";
+	//	$res1 = $room_inst->weekdays[(int)date("w" , $arr["start"])];
+	//	$res1.= ", ";
 		$res1.= date("d.m.Y" , $arr["start"]);
 
-		$res2 = $room_inst->weekdays[(int)date("w" , $arr["end"])];
-		$res2.= ", ";
+	//	$res2 = $room_inst->weekdays[(int)date("w" , $arr["end"])];
+	//	$res2.= ", ";
 		$res2.= date("d.m.Y" , $arr["end"]);
 		if($res2 == $res1)
 		{
@@ -852,7 +851,7 @@ class room_reservation extends class_base
 		}
 		else
 		{
-			$res1." - ".$res2;
+			$res = $res1." - ".$res2;
 		}
 		return $res;
 	}
