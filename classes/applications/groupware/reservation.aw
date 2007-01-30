@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.37 2007/01/29 16:22:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.38 2007/01/30 14:13:56 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -200,6 +200,11 @@ class reservation extends class_base
 						$prop["options"] += $rrs->names();
 					}
 				}
+                                if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+                                {
+                                        $tmp = obj($prop["value"]);
+                                        $prop["options"][$prop["value"]] = $tmp->name();
+                                }
 				break;
 			case "products_tbl":
 				$this->get_products_tbl;
@@ -336,8 +341,8 @@ class reservation extends class_base
 					"ignore_booking" => $arr["obj_inst"]->id(),
 				)))
 				{
-					$prop["error"] = t("Sellisele ajale ei saa antud ruumi broneerida");
-					return PROP_FATAL_ERROR;
+				//	$prop["error"] = t("Sellisele ajale ei saa antud ruumi broneerida");
+				//	return PROP_FATAL_ERROR;
 				}
 				break;
 		}
@@ -571,17 +576,31 @@ class reservation extends class_base
 			"name" => "amount",
 			"caption" => t("Kogus"),
 		));
-		$res = $this->resource_info($arr["obj_inst"]->id());
-		foreach($res as $res => $count)
+		$room = obj($arr["obj_inst"]->prop("resource"));
+		$room_inst = $room->instance();
+		$rss = $room_inst->get_room_resources($room->id());
+		$resinfo = $this->resource_info($arr["obj_inst"]->id());
+		foreach($rss as $res_obj)
 		{
+			$res = $res_obj->id();
+			$count = $resinfo[$res];
 			$o = obj($res);
 			$t->define_data(array(
 				"name" => $o->name(),
-				"amount" => $count,
+				"amount" => html::textbox(array(
+					"name" => "cnt[$res]",
+					"value" => (int)$count,
+					"size" => 5
+				))
 			));
 		}
 	}
-	
+
+	function _set_resources_tbl($arr)
+	{
+		$this->set_resource_info($arr["obj_inst"]->id(), $arr["request"]["cnt"]);
+	}
+
 	function get_room_products($room)
 	{
 		$ol = new object_list();
@@ -786,8 +805,8 @@ class reservation extends class_base
 				}
 			}
 		}
-		$t->set_default_sortby("name");
-		$t->sort_by(array("rgroupby" => array("parent" => "parent")));
+	//	$t->set_default_sortby("name");
+	//	$t->sort_by(array("rgroupby" => array("parent" => "parent")));
 		$t->set_sortable(false);
 		
 		$t->define_data(array(
