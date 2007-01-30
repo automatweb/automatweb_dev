@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.5 2007/01/16 21:23:09 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.6 2007/01/30 11:54:16 dragut Exp $
 // location.aw - Asukoht 
 /*
 
@@ -15,6 +15,12 @@
 
 @property owner type=relpicker reltype=RELTYPE_OWNER
 @caption Omanik
+
+@property chairman type=relpicker reltype=RELTYPE_CHAIRMAN
+@caption Juhataja
+
+@property contact_person type=relpicker reltype=RELTYPE_CONTACT_PERSON
+@caption Kontaktisik
 
 @property phone type=relpicker reltype=RELTYPE_PHONE
 @caption Telefon
@@ -34,17 +40,23 @@
 @property photo type=relpicker reltype=RELTYPE_PHOTO
 @caption Foto kohast
 
+@property open_times type=textarea
+@caption Lahtioleku ajad
+
+@property prices type=textarea
+@caption Hinnad
+
 @property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
 @caption Pangamakse
 
+@property short_description type=textbox
+@caption L&uuml;hikirjeldus
+
+@property description type=textarea
+@caption Kirjeldus
+
 @property add_text type=textarea
 @caption Lisaandmed
-
-@reltype MAP value=1 clid=CL_IMAGE
-@caption Kaart
-
-@reltype PHOTO value=2 clid=CL_IMAGE
-@caption Foto
 
 @groupinfo images caption="Pildid"
 	@property images type=releditor mode=manager no_caption=1 group=images reltype=RELTYPE_IMAGE props=ord,file table_fields=ord,file table_edit_fields=ord
@@ -59,6 +71,15 @@
 
 	@property suite_count type=textbox group=accommondation
 	@caption Sviitide arv
+
+	@property rooms_description type=textarea group=accommondation
+	@caption Ruumide kirjeldus
+
+@reltype MAP value=1 clid=CL_IMAGE
+@caption Kaart
+
+@reltype PHOTO value=2 clid=CL_IMAGE
+@caption Foto
 
 @reltype ADDRESS value=3 clid=CL_CRM_ADDRESS
 @caption Aadress
@@ -84,6 +105,11 @@
 @reltype EMAIL value=10 clid=CL_ML_MEMBER
 @caption E-post
 
+@reltype CONTACT_PERSON value=11 clid=CL_CRM_PERSON
+@caption Kontaktisik
+
+@reltype CHAIRMAN value=12 clid=CL_CRM_PERSON
+@caption Juhataja
 */
 
 class location extends class_base

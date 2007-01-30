@@ -21,6 +21,26 @@
             <caption>Omanik</caption>
       </property>
       <property>
+            <name>chairman</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CHAIRMAN</reltype>
+            <caption>Juhataja</caption>
+      </property>
+      <property>
+            <name>contact_person</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
             <name>phone</name>
             <table>objects</table>
             <group>general</group>
@@ -81,6 +101,24 @@
             <caption>Foto kohast</caption>
       </property>
       <property>
+            <name>open_times</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Lahtioleku ajad</caption>
+      </property>
+      <property>
+            <name>prices</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Hinnad</caption>
+      </property>
+      <property>
             <name>bank_payment</name>
             <table>objects</table>
             <group>general</group>
@@ -89,6 +127,24 @@
             <type>relpicker</type>
             <reltype>RELTYPE_BANK_PAYMENT</reltype>
             <caption>Pangamakse</caption>
+      </property>
+      <property>
+            <name>short_description</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>L&amp;amp;uuml;hikirjeldus</caption>
+      </property>
+      <property>
+            <name>description</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Kirjeldus</caption>
       </property>
       <property>
             <name>add_text</name>
@@ -146,6 +202,15 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Sviitide arv</caption>
+      </property>
+      <property>
+            <name>rooms_description</name>
+            <table>objects</table>
+            <group>accommondation</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Ruumide kirjeldus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_LOCATION</syslog_type>
@@ -216,6 +281,16 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>E-post</caption>
             </EMAIL>
+            <CONTACT_PERSON>
+                  <value>11</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kontaktisik</caption>
+            </CONTACT_PERSON>
+            <CHAIRMAN>
+                  <value>12</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Juhataja</caption>
+            </CHAIRMAN>
       </reltypes>
 </properties>
 

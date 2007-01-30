@@ -7358,6 +7358,129 @@ class crm_company extends class_base
 		}
 		return 0;
 	}
+
+//////////////////////////////////////
+//
+//  Try to make some kind of API for organisation class
+//
+//////////////////////////////////////
+
+	/** Adds phone number under the organisations general contact information tab
+
+		@attrib name=add_phone params=name api=1
+
+		@param organisation_object required type=object
+			The organisation object where to add the phone number
+		@param phone_object optional type=object
+			If this is set, then no new phone number object is created, but this one is added to the organisation instead
+		@param phone_number optional type=string
+			The phone number
+		@param active optional type=bool
+			If the phone number is selected ("Select one" column value)
+		@param type optional type=string default=phone
+			Possible values: [ phone | fax ]. Sets the type of the phone number, as in AW they both are phone numbers and the difference is only in relation type
+
+		@returns Created phone object id.
+
+		@example
+			$org_inst = get_instance(CL_CRM_COMPANY);
+			$org_obj = new object();
+			$org_obj->set_class_id(CL_CRM_COMPANY);
+			$org_obj->set_name('Some Organisation Name');
+			$org_obj->set_parent(666);
+			$org_obj->save();
+
+			$crm_phone_object_oid = $org_inst->add_phone(array(
+				'organisation_object' => $org_obj,
+				'phone_number' => '+37 2503 7767'
+				
+			));
+	**/
+	function add_phone($arr)
+	{
+		$org_obj = $arr['organisation_object'];
+		
+		if (!empty($arr['phone_object']))
+		{
+			$phone_obj_id = $arr['phone_object']->id();
+		}
+		else
+		{
+			$o = new object();
+			$o->set_class_id(CL_CRM_PHONE);
+			$o->set_parent($org_obj->id());
+			$o->set_name($arr['phone_number']);
+			$o->save();
+			$phone_obj_id = $o->id();
+		}
+		
+		$type = 17; // phone
+		if ($arr['type'] == 'fax')
+		{
+			$type = 18; // fax
+		}
+
+		$org_obj->connect(array(
+			'to' => $phone_obj_id,
+			'type' => $type
+		));
+		if ($arr['active'] === true)
+		{
+			$org_obj->set_prop('phone_id', $phone_obj_id);
+			$org_obj->save();
+		}
+		
+		return $phone_obj_id;
+	}
+
+	/** Adds web address under the organisations general contact information tab
+
+		@attrib name=add_web_address params=name api=1
+
+		@param organisation_object required type=object
+			The organisation object where to add the web address
+		@param web_address_object optional type=object
+			If this is set, then no new web address object is created, but this one is added to the organisation instead
+		@param web_address optional type=string
+			The web address
+		@param active optional type=bool
+			If the web address is selected ("Select one" column value)
+
+		@returns Created web address object id
+	**/
+	function add_web_address($arr)
+	{
+		$org_obj = $arr['organisation_object'];
+		
+		if (!empty($arr['web_address_object']))
+		{
+			$web_address_obj_id = $arr['web_address_object']->id();
+		}
+		else
+		{
+			$o = new object();
+			$o->set_class_id(CL_EXTLINK);
+			$o->set_parent($org_obj->id());
+			$o->set_name($org_obj->name());
+			$o->set_prop('url', $arr['web_address']);
+			$o->save();
+			$web_address_obj_id = $o->id();
+		}
+
+		$org_obj->connect(array(
+			'to' => $web_address_obj_id,
+			'type' => 16
+		));
+
+		if ($arr['active'] === true)
+		{
+			$org_obj->set_prop('url_id', $web_address_obj_id);
+			$org_obj->save();
+		}
+
+		return $web_address_obj_id;
+	}
+
 }
 
 ?>
