@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.37 2007/01/29 18:45:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.38 2007/01/30 10:06:47 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -42,6 +42,7 @@ class room_reservation extends class_base
 			"hansapank" => "Hansapank",
 			"seb" => "Ühispank",
 			"sampopank" => "Sampopank",
+			"credit_card" => "Krediitkaart",
 		);
 	}
 
@@ -811,7 +812,7 @@ class room_reservation extends class_base
 		{
 			$data[$key."_value"] = $val;
 		}
-			$data["bank_value"] = $this->banks[$_SESSION["room_reservation"][$room->id()]["bank"]];
+		$data["bank_value"] = $this->banks[$_SESSION["room_reservation"][$room->id()]["bank"]];
 		return $data;
 	}
 
@@ -856,12 +857,21 @@ class room_reservation extends class_base
 		{
 			$this->submit_one_room($r);
 		}
-		extract($args);
-		if(!$_GET["level"])
+		extract($args);//arr($_GET["level"]);
+		$url = parse_url($args["return_to"]);
+		if(!$level && !($level==0))
 		{
-			return aw_url_change_var("", "" , $args["return_to"])."?level=".$level;
+			return $args["return_to"];
 		}
-		return aw_url_change_var("level", $level , $args["return_to"]);//."?level=".$level;
+		else
+		{
+			return $url["scheme"]."://".$url["host"].$url["path"]."?level=".$level;
+		}
+//		if(!$_GET["level"] &&  !($_GET["level"]==0))
+//		{
+//			return aw_url_change_var("", "" , $args["return_to"])."?level=".$level;
+//		}
+//		return aw_url_change_var("level", $level , $args["return_to"]);//."?level=".$level;
 	}
 	
 	/** 

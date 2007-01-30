@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.19 2007/01/29 19:43:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.20 2007/01/30 10:06:47 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -25,7 +25,7 @@
 	@property private_c_key type=relpicker reltype=RELTYPE_P_KEY
 	@caption krediitkaardi privaatv&otilde;ti
 	
-	@property return_url type=textbox
+	@property bank_return_url type=textbox
 	@caption Url, kuhu tagasi tulla eduka makse puhul
 	
 	@property cancel_url type=textbox

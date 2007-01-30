@@ -48,7 +48,7 @@
             <caption>krediitkaardi privaatv&amp;amp;otilde;ti</caption>
       </property>
       <property>
-            <name>return_url</name>
+            <name>bank_return_url</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
