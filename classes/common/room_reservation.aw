@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.43 2007/01/31 14:25:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.44 2007/01/31 18:19:15 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -256,7 +256,6 @@ class room_reservation extends class_base
 	**/
 	function parse_alias($arr)
 	{
-		aw_session_set("no_cache", 1);
 		global $level;
 		enter_function("oom_reservation::parse_alias");
 		
@@ -1380,12 +1379,16 @@ class room_reservation extends class_base
 		$awm = get_instance("protocols/mail/aw_mail");
 		$_send_to = $bron->prop("customer.email.mail");
 		$html = "";
+		
+		if(!is_oid($id)) 
+		{
+			$id = $_GET["id"];
+		}
 		$tpl = "preview.tpl";
-		$this->read_template($tpl);
+		$this->read_site_template($tpl);
 		lc_site_load("room_reservation", &$this);
-		$this->vars($this->get_object_data($_GET["id"]));
+		$this->vars($this->get_object_data($id));
 		$html =  $this->parse();
-			
 		$awm->create_message(array(
 			"froma" => $mail_from_addr,
 			"fromn" => $mail_from_name,
@@ -1406,7 +1409,6 @@ class room_reservation extends class_base
 			$bron = obj($id);
 			$bron->set_prop("verified" , 1);
 			$bron->save();
-			
 			return 1;
 		}
 		else
