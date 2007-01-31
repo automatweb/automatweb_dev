@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.43 2006/12/06 08:49:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.44 2007/01/31 15:28:18 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -1082,7 +1082,7 @@ class register_search extends class_base
 			if (!($res = $c->file_get_ts($cfn, $c->get_objlastmod())))
 			{
 				$q = "SELECT distinct($p[field]) as val FROM $p[table] 
-					LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).")";
+					LEFT JOIN objects ON objects.oid = ".$p["table"].".aw_id WHERE objects.parent IN(".join(",",$flds).") AND objects.status > 0";
 
 				if (aw_global_get("uid") == "meff")
 				{
