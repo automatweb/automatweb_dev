@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.39 2007/01/31 08:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.40 2007/01/31 14:36:04 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -983,18 +983,34 @@ class reservation extends class_base
 
 	function _get_length($arr)
 	{
+		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
+		if ($len > 3600)
+		{
+			$arr["prop"]["post_append_text"] = sprintf(t(" / Hetkel pikkus: %d tundi"), 
+				floor($len / 3600),
+				floor(($len - floor($len / 3600)*3600) / 60)
+			);
+		}
+		else
+		{
+			$arr["prop"]["post_append_text"] = sprintf(t(" / Hetkel pikkus: %02d minutit"),
+				floor($len / 60)
+			);
+		}
 		if ($this->can("view", $arr["obj_inst"]->prop("resource")))
 		{
 			$room = obj($arr["obj_inst"]->prop("resource"));
 			if ($room->prop("time_unit") == 1)
 			{
 				$arr["prop"]["options"] = $this->make_keys(range(0, 60));
-				$arr["prop"]["post_append_text"] = t("Minutit");
+				$arr["prop"]["post_append_text"] = t("Minutit").$arr["prop"]["post_append_text"];
+				$arr["prop"]["options"][0] = t("--vali--");
 				return;
 			}
 		}
 		$arr["prop"]["options"] = $this->make_keys(range(0, 20));
-		$arr["prop"]["post_append_text"] = t("Tundi");
+		$arr["prop"]["post_append_text"] = t("Tundi").$arr["prop"]["post_append_text"];
+		$arr["prop"]["options"][0] = t("--vali--");
 	}
 
 	function _get_cp_fn($arr)
