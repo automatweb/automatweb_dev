@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.127 2007/01/31 14:43:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.128 2007/01/31 15:22:30 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3936,11 +3936,11 @@ class room extends class_base
 			var sURL = unescape(window.location.href);
 			function doLoad()
 			{
-			setTimeout( "refresh()", 600000 );
+			setTimeout( "refresh()", 60000 );
 			}
 			function refresh()
 			{
-				window.location.href = sURL;
+				window.location.reload();
 			}
 		';
 	}
