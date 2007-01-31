@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.124 2007/01/31 11:59:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.125 2007/01/31 12:54:43 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3178,14 +3178,17 @@ class room extends class_base
 		));
 
 		$bron_made = time();
-		if (is_object($arr["bron"]))
-		{
-			$bron_made = $arr["bron"]->created();
-		}
-
 		$gl = aw_global_get("gidlist_oid");
 		$grp = reset($gl);
 		$grp = next($gl);
+		if (is_object($arr["bron"]))
+		{
+			$bron_made = $arr["bron"]->created();
+			$gi = get_instance(CL_USER);
+			$gro = $gi->get_highest_pri_grp_for_user($arr["bron"]->createdby(), true);
+			$grp = $gro->id();
+		}
+
 
 		foreach($prices as $conn)
 		{
@@ -3254,7 +3257,8 @@ class room extends class_base
 				"room" => $room,
 				"time" => $price->prop("time") * $this->step_length,
 				"start" => $end-$time,
-				"bron_made" => $bron_made
+				"bron_made" => $bron_made,
+				"bron" => $arr["bron"]
 			));
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
@@ -3365,9 +3369,14 @@ class room extends class_base
 	function get_bargain($arr)
 	{
 		extract($arr);
-		$gl = aw_global_get("gidlist_oid");
-		$grp = reset($gl);
-		$grp = next($gl);
+                $gl = aw_global_get("gidlist_oid");
+                $grp = reset($gl);
+                $grp = next($gl);
+		if (is_object($arr["bron"]))
+		{
+	                $gro = $gi->get_highest_pri_grp_for_user($arr["bron"]->createdby(), true);
+        	        $grp = $gro->id();
+		}
 		if(is_object($price) && is_object($room))
 		{
 			$bargains = array();
