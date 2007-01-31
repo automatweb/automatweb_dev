@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.125 2007/01/31 12:54:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.126 2007/01/31 13:42:09 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3374,6 +3374,7 @@ class room extends class_base
                 $grp = next($gl);
 		if (is_object($arr["bron"]))
 		{
+			$gi = get_instance(CL_USER);
 	                $gro = $gi->get_highest_pri_grp_for_user($arr["bron"]->createdby(), true);
         	        $grp = $gro->id();
 		}
