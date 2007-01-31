@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.186 2007/01/25 15:34:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.187 2007/01/31 08:45:21 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -399,6 +399,11 @@ class image extends class_base
 			if ($this->is_flash($idata["file"]))
 			{
 				$replacement = localparse($tpls["image_flash"],$vars);
+			}
+			else
+			if ($this->can("view", $idata["meta"]["big_flash"]) && isset($tpls["image_big_flash"]))
+			{
+				$replacement = localparse($tpls["image_big_flash"],$vars);
 			}
 			else
 			if ($idata["link"] != "")
