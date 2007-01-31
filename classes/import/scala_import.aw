@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.18 2007/01/31 19:43:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.19 2007/01/31 20:27:43 dragut Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -566,7 +566,7 @@ class scala_import extends class_base
 			
 		}
 
-
+		echo "Import complete";
 		// save the import ending time into meta, so we can show it in interface and provide
 		// an easy way to check if the cron has executed the import and has it completed or not
 		$o->set_meta('import_end_time', time());
@@ -628,7 +628,7 @@ class scala_import extends class_base
 		foreach ($products->arr() as $product)
 		{
 			$product->set_prop('price', $products_price_data[$product->prop('code')]);
-			echo "[hind] toote (".$product->id().") \"".$product->name()."\" hind on \"".$product->prop("price")."\"";
+			echo "[hind] toote (".$product->id().") \"".$product->name()."\" hind on \"".$product->prop("price")."\" -- hind XML-ist: ".$products_price_data[$product->prop('code')];
 			flush();
 			$product->save();
 			echo " [saved]<br>\n";
@@ -863,7 +863,7 @@ class scala_import extends class_base
 				// the properties:
 				foreach ($properties as $property)
 				{
-					if ($o->prop($property) != $product_data[$property] || true)
+					if ($o->prop($property) != $product_data[$property])
 					{
 						$o->set_prop($property, $product_data[$property]." ");
 						echo "\t#### changed property ".$property." value from ".$o->prop($property)." to ".$product_data[$property]."<br />\n";
