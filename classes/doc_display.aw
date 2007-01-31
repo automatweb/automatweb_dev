@@ -77,10 +77,30 @@ class doc_display extends aw_template
 
 		$user1 = $doc->prop("user1");
 		$al->parse_oo_aliases($doc->id(), &$user1, array("templates" => $this->templates, "meta" => $mt));
+		$user2 = $doc->prop("user2");
+		$al->parse_oo_aliases($doc->id(), &$user2, array("templates" => $this->templates, "meta" => $mt));
+		$user3 = $doc->prop("user3");
+		$al->parse_oo_aliases($doc->id(), &$user3, array("templates" => $this->templates, "meta" => $mt));
+		$user4 = $doc->prop("user4");
+		$al->parse_oo_aliases($doc->id(), &$user4, array("templates" => $this->templates, "meta" => $mt));
+		$user5 = $doc->prop("user5");
+		$al->parse_oo_aliases($doc->id(), &$user5, array("templates" => $this->templates, "meta" => $mt));
+		$user6 = $doc->prop("user6");
+		$al->parse_oo_aliases($doc->id(), &$user6, array("templates" => $this->templates, "meta" => $mt));
+		
 		$userta1 = $doc->prop("userta1");
 		$al->parse_oo_aliases($doc->id(), &$userta1, array("templates" => $this->templates, "meta" => $mt));
+		$userta2 = $doc->prop("userta2");
+		$al->parse_oo_aliases($doc->id(), &$userta2, array("templates" => $this->templates, "meta" => $mt));
+		$userta3 = $doc->prop("userta3");
+		$al->parse_oo_aliases($doc->id(), &$userta3, array("templates" => $this->templates, "meta" => $mt));
+		$userta4 = $doc->prop("userta4");
+		$al->parse_oo_aliases($doc->id(), &$userta4, array("templates" => $this->templates, "meta" => $mt));
 		$userta5 = $doc->prop("userta5");
 		$al->parse_oo_aliases($doc->id(), &$userta5, array("templates" => $this->templates, "meta" => $mt));
+		$userta6 = $doc->prop("userta6");
+		$al->parse_oo_aliases($doc->id(), &$userta6, array("templates" => $this->templates, "meta" => $mt));
+		
 		$this->vars_safe(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
 			"text" => $text,
@@ -98,17 +118,17 @@ class doc_display extends aw_template
 			"parent_id" => $doc->parent(),
 			"parent_name" => $doc_parent->name(),
 			"user1" => $user1,
-			"user2" => $doc->prop("user2"),
-			"user3" => $doc->prop("user3"),
-			"user4" => $doc->prop("user4"),
-			"user5" => $doc->prop("user5"),
-			"user6" => $doc->prop("user6"),
+			"user2" => $user2,
+			"user3" => $user3,
+			"user4" => $user4,
+			"user5" => $user5,
+			"user6" => $user6,
 			"userta1" => $userta1,
-			"userta2" => $doc->prop("userta2"),
-			"userta3" => $doc->prop("userta3"),
-			"userta4" => $doc->prop("userta4"),
+			"userta2" => $userta2,
+			"userta3" => $userta3,
+			"userta4" => $userta4,
 			"userta5" => $userta5,
-			"userta6" => $doc->prop("userta6"),
+			"userta6" => $userta6,
 			"link_text" => $doc->prop("link_text"),
 			"page_title" => strip_tags($doc->trans_get_val("title")),			
 			"date" => $_date,
