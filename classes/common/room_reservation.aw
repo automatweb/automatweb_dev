@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.42 2007/01/31 14:11:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.43 2007/01/31 14:25:30 kristo Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -256,6 +256,7 @@ class room_reservation extends class_base
 	**/
 	function parse_alias($arr)
 	{
+		aw_session_set("no_cache", 1);
 		global $level;
 		enter_function("oom_reservation::parse_alias");
 		
