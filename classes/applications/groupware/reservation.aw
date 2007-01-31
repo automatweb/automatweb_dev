@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.38 2007/01/30 14:13:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.39 2007/01/31 08:49:47 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -735,6 +735,7 @@ class reservation extends class_base
 			$prod_data = $room->meta("prod_data");
 		}
 		$image_inst = get_instance(CL_IMAGE);
+		$parent = 0;
 		foreach($prod_list->arr() as $prod)
 		{
 			$image = "";
@@ -747,6 +748,15 @@ class reservation extends class_base
 				}
 			}
 			$po = obj($prod->parent());
+			if($po->id() != $parent)
+			{
+				$parent = $po->id();
+				$t->define_data(array(
+					"picture" => "<h4><b>".$po->name()."<b></h4>",
+					"name" => "",
+					"amount" => "",
+				));
+			}
 			if($sell_products)
 			{			
 				$t->define_data(array(

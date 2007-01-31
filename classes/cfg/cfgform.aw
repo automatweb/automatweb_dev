@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.101 2007/01/10 12:58:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.102 2007/01/31 08:49:47 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -437,7 +437,7 @@ class cfgform extends class_base
 		{
 			$t->define_data(array(
 				"property" => $pn,
-				"orig_str" => $pd["caption"],
+				"orig_str" => $pd["type"] == "text" ? $pd["value"] : $pd["caption"],
 				"trans_str" => html::textbox(array(
 					"name" => "dat[".$lid."][$pn]",
 					"value" => $trans[$lid][$pn]
@@ -1709,7 +1709,14 @@ class cfgform extends class_base
 				{
 					if ($tc[$pn] != "")
 					{
-						$els[$pn]["caption"] = $tc[$pn];
+						if ($pd["type"] == "text")
+						{
+							$els[$pn]["value"] = $tc[$pn];
+						}
+						else
+						{
+							$els[$pn]["caption"] = $tc[$pn];
+						}
 					}
 				}
 			}
@@ -1976,7 +1983,14 @@ class cfgform extends class_base
 			{
 				if ($tc[$pn] != "")
 				{
-					$ret[$pn]["caption"] = $tc[$pn];
+					if ($pd["type"] == "text")
+					{
+						$ret[$pn]["value"] = $tc[$pn];
+					}
+					else
+					{
+						$ret[$pn]["caption"] = $tc[$pn];
+					}
 					$read_from_trans = false;
 				}
 			}

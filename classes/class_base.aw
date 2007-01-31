@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.531 2007/01/23 12:06:18 kristo Exp $
+// $Id: class_base.aw,v 2.532 2007/01/31 08:49:46 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5172,7 +5172,8 @@ class class_base extends aw_template
 			chr(195).chr(149) => "&Otilde;",
 			chr(195).chr(150) => "&Ouml;",
 			chr(195).chr(132) => "&Auml;",
-			chr(196).chr(171) => "&iuml;"
+			chr(196).chr(171) => "&#299;",
+			chr(196).chr(129) => "&#257;"
 		);
 		$uo = obj(aw_global_get("uid_oid"));
 		$uo = $uo->prop("target_lang");
@@ -5191,10 +5192,10 @@ class class_base extends aw_template
 			foreach($props as $p)
 			{
 				$nm = "trans_".$lid."_".$p;
-				/*if ($_SERVER["REMOTE_ADDR"] == "62.65.36.190")
+				if ($_SERVER["REMOTE_ADDR"] == "62.65.36.190")
 				{
 					dbg::str_dbg($arr["request"][$nm]);
-				}*/
+				}
 				// replace estonian chars in other languages woth entities
 				$str = $arr["request"][$nm];
 				if ($lang["acceptlang"] != "et")

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.10 2006/05/22 11:27:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.11 2007/01/31 08:49:47 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -117,7 +117,7 @@ class flash extends class_base
 	{
 		if ($url)
 		{
-			$url = $this->mk_my_orb("show", array("file" => basename($url)),"flash",false,true/*,"/"*/);
+			$url = $this->mk_my_orb("show", array("file" => basename($url)),"flash",false,true,"&amp;");
 			$url = str_replace("automatweb/","",$url);
 		}
 		else
@@ -211,7 +211,6 @@ class flash extends class_base
 		$ob = new object($id);
 
 		$this->read_template('show.tpl');
-
 		if ($ob->prop("file_url") != "")
 		{
 			$url = $ob->prop("file_url");

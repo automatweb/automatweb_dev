@@ -2228,14 +2228,19 @@ class _int_object
 					{
 						$cur_v = reset($cur_v);
 					}
+					$acl_tmp = $GLOBALS["cfg"]["acl"]["no_check"];
+					$GLOBALS["cfg"]["acl"]["no_check"] = 0;
 					if (!$GLOBALS["object_loader"]->ds->can("view", $cur_v))
 					{
+						$GLOBALS["cfg"]["acl"]["no_check"] = $acl_tmp;
 						if ($idx == (count($bits)-1))
 						{
 							return $cur_v;
 						}
 						return null;
 					}
+					$GLOBALS["cfg"]["acl"]["no_check"] = $acl_tmp;
+
 					$o = obj($cur_v);
 				}
 				else

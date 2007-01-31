@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.147 2006/12/13 12:24:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.148 2007/01/31 08:49:46 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1615,12 +1615,12 @@ class doc extends class_base
 
 	function callback_get_transl($arr)
 	{
-		$val = '<div id="floatlayer" style="left: 800px; top: 200px; width: 200px; border:solid black 1px;padding:5px; background: #dddddd;overflow: -moz-scrollbars-vertical;">'.
+		$val = '<div id="floatlayerk" style="left: 800px; top: 200px; width: 200px; border:solid black 1px;padding:5px; background: #dddddd;overflow: -moz-scrollbars-vertical;">'.
 			t("<b>Pealkiri:</b>")." ".$arr["obj_inst"]->prop("title")."<br><br>".
 			t("<b>Lead:</b>")." ".$arr["obj_inst"]->prop("lead")."<br><br>".
 			t("<b>Sisu:</b>")." ".$arr["obj_inst"]->prop("content").
 			'</div>';
-		$val .= '<script language="javascript">el=document.getElementById(\'floatlayer\');if (el) {el.style.position=\'absolute\';el.style.left=800;el.style.top=200;}</script>';
+		$val .= '<script language="javascript">el=document.getElementById(\'floatlayerk\');if (el) {el.style.position=\'absolute\';el.style.left=800;el.style.top=200;}</script>';
 
 
 		

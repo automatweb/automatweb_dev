@@ -162,7 +162,6 @@ class languages extends aw_template
 			setcookie("lang_id",$id,time()+aw_ini_get("languages.cookie_lifetime"),"/");
 		};
 		aw_global_set("lang_id", $id);
-
 		if (!is_admin())
 		{
 			// read the language from active lang
@@ -307,6 +306,13 @@ class languages extends aw_template
 	// !this will get called once in the beginning of the page, so that the class can initialize itself nicely
 	function request_startup()
 	{
+		static $init_done;
+		if ($init_done > 1)
+		{
+			return;
+		}
+		$init_done++;
+		
 		classload("vcl/date_edit");
 		$lang_id = aw_global_get("lang_id");
 

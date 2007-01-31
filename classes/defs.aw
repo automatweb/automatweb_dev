@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.228 2007/01/25 15:06:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.229 2007/01/31 08:49:46 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1020,16 +1020,14 @@ if (!defined("DEFS"))
 			aw_global_set($var,isset($_SERVER[$var]) ? $_SERVER[$var] : null);
 		}
 		
-		if (isset($_COOKIE["lang_id"]))
+		if (isset($_COOKIE["lang_id"]) && !isset($_SESSION["lang_id"]))
 		{
 			aw_global_set("lang_id", $_COOKIE["lang_id"]);
 		}
-
 		if (isset($_REQUEST))
 		{
 			aw_global_set("request",$_REQUEST);
 		};
-
 		$GLOBALS["__aw_globals_inited"] = true;
 	}
 
@@ -1051,11 +1049,19 @@ if (!defined("DEFS"))
 	// and causing potential security problems
 	function aw_global_get($var)
 	{
+		/*if ($var == "lang_id")
+		{
+			echo "$var is ".(isset($GLOBALS["__aw_globals"][$var]) ? $GLOBALS["__aw_globals"][$var] : false)."<br>";
+		}*/
 		return isset($GLOBALS["__aw_globals"][$var]) ? $GLOBALS["__aw_globals"][$var] : false;
 	}
 
 	function aw_global_set($var,$val)
 	{
+		/*if ($var == "lang_id")
+		{
+			echo "setto $val from ".dbg::process_backtrace(debug_backtrace());
+		}*/
 		$GLOBALS["__aw_globals"][$var] = $val;
 	}
 
