@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.11 2006/10/05 13:29:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.12 2007/01/31 15:19:11 markop Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -330,12 +330,16 @@ class crm_section_webside extends class_base
 		$orderdata = $ob->meta("order");
 		foreach ($workers as $worker)
 		{
-			$workers2[$orderdata[$worker->id()]] = $worker;		
-			ksort($workers2);
+			$workers2[$orderdata[$worker->id()]][$worker->prop("lastname").$worker->name()] = $worker;
 		}
-		$workers = array_values($workers2);	
-		
-			
+		ksort($workers2);
+		$workers = array();
+		foreach ($workers2 as $workers_array)
+		{
+			ksort($workers_array);
+			$workers += $workers_array;
+		}
+		$workers = array_values($workers);
 		if($ob->prop("cols") == 1)
 		{
 			$this->read_template("frame_one_col.tpl");
