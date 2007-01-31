@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.36 2007/01/25 15:07:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.37 2007/01/31 10:01:31 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -92,6 +92,11 @@ class conference_planning extends class_base
 			1 => t("Estionia"),
 			2 => t("Latvia"),
 			3 => t("Lietuva"),
+		);
+
+		$this->err = array(
+			"missing_email" => t("E-mail on puudu"),
+			"missing_phone" => t("Telefoninumber on puudu"),
 		);
 
 		$this->lc_load("conference_planning", "lc_conference_planning");
@@ -471,6 +476,25 @@ class conference_planning extends class_base
 			case 6:
 				$sc->read_template("sub_conference_rfp6.tpl");				
 				$addr = get_instance(CL_CRM_ADDRESS);
+				
+				// error managment
+				$err = $_SESSION["tmp_conference_err"];
+				if(is_array($err) && count($err))
+				{
+					foreach($err as $text)
+					{
+						$sc->vars(array(
+							"caption" => $this->err[$text],
+						));
+						$err_rows .= $sc->parse("ERROR");
+					}
+					$sc->vars(array(
+						"ERROR" => $err_rows,
+					));
+					$m_err = $sc->parse("MISSING_ERROR");
+				}
+
+
 				foreach($addr->get_country_list() as $k => $v)
 				{
 					$sc->vars(array(
@@ -565,7 +589,9 @@ class conference_planning extends class_base
 				$def_ph = $this->can("view", $def_ph)?obj($def_ph):false;
 				$def_em = $per->prop("email");
 				$def_em = $this->can("view", $def_em)?obj($def_em):false;
+
 				$sc->vars(array(
+					"MISSING_ERROR" => $m_err,
 					"COUNTRY" => $ctr,
 					"SEARCH_RESULT" => $s_results,
 					"billing_company" => $sd["billing_company"]?$sd["billing_company"]:call_user_func(array(obj($org), "name")),
@@ -1000,6 +1026,24 @@ class conference_planning extends class_base
 	function submit_back($arr)
 	{
 		$this->save_form_data($arr);
+		if($arr["current_sub"] == 6 && (!strlen($arr["sub"]["6"]["billing_phone_number"]) || !strlen($arr["sub"]["6"]["billing_email"])))
+		{
+			$s = $arr["sub"]["6"];
+			$err_arr = array();
+			if(!strlen($arr["billing_phone_number"]))
+			{
+				$err_arr[] = "missing_phone";
+			}
+			if(!strlen($arr["billing_email"]))
+			{
+				$err_arr[] = "missing_email";
+			}
+			aw_session_set("tmp_conference_err", $err_arr);
+		}
+		else
+		{
+			aw_session_set("tmp_conference_err", "");
+		}
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".($arr["current_sub"]-1);
 	}
 	
@@ -1008,12 +1052,31 @@ class conference_planning extends class_base
 	**/
 	function submit_forward($arr)
 	{
-		//arr($arr);
 		$this->save_form_data($arr);
 		if($arr["current_sub"] == 0 && strlen(trim(aw_global_get("uid"))) == 0)
 		{
 			// in case the user hasn't logged in yet.. 
 			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=qa";
+		}
+
+		if($arr["current_sub"] == 6 && (!strlen($arr["sub"]["6"]["billing_phone_number"]) || !strlen($arr["sub"]["6"]["billing_email"])))
+		{
+			$s = $arr["sub"]["6"];
+			$err_arr = array();
+			if(!strlen($arr["sub"]["6"]["billing_phone_number"]))
+			{
+				$err_arr[] = "missing_phone";
+			}
+			if(!strlen($arr["sub"]["6"]["billing_email"]))
+			{
+				$err_arr[] = "missing_email";
+			}
+			aw_session_set("tmp_conference_err", $err_arr);
+			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$arr["current_sub"];
+		}
+		else
+		{
+			aw_session_set("tmp_conference_err", "");
 		}
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".($arr["current_sub"]+1);
 	}
