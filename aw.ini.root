@@ -88,3 +88,4 @@ include ${ini_dir}/template_compiler.ini
 include ${ini_dir}/timing.ini
 include ${ini_dir}/debug.ini
 include ${ini_dir}/stats.ini
+include ${ini_dir}/room_reservation.ini
