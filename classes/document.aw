@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.363 2007/01/04 14:03:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.364 2007/01/31 07:22:55 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2197,8 +2197,8 @@ class document extends aw_template
 		$this->vars(array(
 			"MATCH" => $r,
 			"s_parent" => $parent,
-			"sstring" => urldecode($str),
-			"sstringn" => $str, 
+			"sstring" => htmlspecialchars(urldecode($str)),
+			"sstringn" => htmlspecialchars($str), 
 			"section" => $section,
 			"matches" => $cnt,
 			"sortby" => $sortby
