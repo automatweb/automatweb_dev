@@ -157,16 +157,6 @@
             <caption>Kinnise aja v&amp;auml;rvi</caption>
       </property>
       <property>
-            <name>col_by_grp</name>
-            <table>objects</table>
-            <group>colours</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <caption>Broneeringu tegijate gruppide v&amp;amp;auml;rvid</caption>
-      </property>
-      <property>
             <name>buffer_time_string</name>
             <table>objects</table>
             <group>settings_gen</group>
@@ -245,16 +235,6 @@
             <caption>Broneeringuobjekti kohustuslikud v&amp;amp;auml;ljad</caption>
       </property>
       <property>
-            <name>grp_bron_time_table</name>
-            <table>objects</table>
-            <group>settings_grp</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
             <name>send_del_mail</name>
             <table>objects</table>
             <group>delete_email</group>
@@ -320,6 +300,16 @@
             <cols>50</cols>
             <caption>Meili sisu</caption>
       </property>
+      <property>
+            <name>grp_settings</name>
+            <table>objects</table>
+            <group>grp_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ROOM_SETTINGS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -341,10 +331,6 @@
                   <caption>Muud seaded</caption>
                   <parent>settings</parent>
             </settings_gen>
-            <settings_grp>
-                  <caption>Broneerimisaegade seaded</caption>
-                  <parent>settings</parent>
-            </settings_grp>
             <email>
                   <caption>Meiliseaded</caption>
             </email>
@@ -352,6 +338,9 @@
                   <caption>Kustutamine</caption>
                   <parent>email</parent>
             </delete_email>
+            <grp_settings>
+                  <caption>Gruppide seaded</caption>
+            </grp_settings>
       </groupinfo>
       <reltypes>
             <USER>

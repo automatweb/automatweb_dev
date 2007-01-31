@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.122 2007/01/31 09:00:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.123 2007/01/31 11:40:43 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1062,10 +1062,11 @@ class room extends class_base
 						$bron->set_meta("amount" ,array($product => 1));
 					}
 				}
+				$si = get_instance(CL_ROOM_SETTINGS);
 				$bron->set_prop("start1", $start1);
 				$bron->set_prop("end" ,$end);
 				$bron->set_prop("content" , $comment);
-				$bron->set_prop("verified" , 1);
+				$bron->set_prop("verified" , $si->get_verified_default_for_group($this->get_settings_for_room(obj($resource))));
 				$bron->set_prop("deadline" , time()+15*60);
 				
 				if(is_oid($people) && $this->can("view" , $people))
@@ -1418,12 +1419,8 @@ class room extends class_base
 		$settings = $this->get_settings_for_room($arr["obj_inst"]);
 		
 		$ret = "";
-		if($arr["user"] != 1 &&  $this->can("view",$bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"])) && !$settings->prop("no_cust_arrived_pop"))
-		{
-			$reservaton_inst = get_instance(CL_RESERVATION);
-			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=300')
-			</script>";
-		}
+		$ret .= $this->_get_mark_arrived_pop($arr, $settings);
+
                 $x=0;
                 $options = array();
                 $week = date("W" , time());
@@ -4098,6 +4095,26 @@ class room extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function _get_mark_arrived_pop($arr, $settings)
+	{
+		$bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]);
+		if($arr["user"] != 1 &&  $this->can("view",$bron_id) && !$settings->prop("no_cust_arrived_pop"))
+		{
+			$grp_settings = $settings->meta("grp_settings");
+			$gl = aw_global_get("gidlist_oid");
+			$grp = reset($gl);
+			$grp = next($gl);
+			if (!$grp_settings[$grp]["ask_cust_arrived"])
+			{
+				return "";
+			}
+			$reservaton_inst = get_instance(CL_RESERVATION);
+			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=300')
+			</script>";
+		}
+		return $ret;
 	}
 }
 ?>

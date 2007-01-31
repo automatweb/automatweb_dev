@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.11 2007/01/24 13:42:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.12 2007/01/31 11:40:43 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -61,12 +61,8 @@
 	@property col_closed type=colorpicker 
 	@caption Kinnise aja värvi
 
-	@property col_by_grp type=table store=no
-	@caption Broneeringu tegijate gruppide v&auml;rvid
-
 @groupinfo settings caption="Muud seaded"
 	@groupinfo settings_gen caption="Muud seaded" parent=settings
-	@groupinfo settings_grp caption="Broneerimisaegade seaded" parent=settings
 	
 @default group=settings_gen
 
@@ -94,9 +90,6 @@
 	@property bron_required_fields type=table store=no
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
 
-@default group=settings_grp
-
-	@property grp_bron_time_table type=table store=no no_caption=1
 
 @groupinfo email caption="Meiliseaded"
 
@@ -123,6 +116,11 @@
 
 		@property del_mail_ct type=textarea rows=20 cols=50
 		@caption Meili sisu
+
+@groupinfo grp_settings caption="Gruppide seaded"
+@default group=grp_settings
+
+	@property grp_settings type=table store=no no_caption=1
 
 @reltype USER value=1 clid=CL_USER
 @caption Kasutaja
@@ -186,6 +184,21 @@ class room_settings extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function callback_generate_scripts()
+	{
+		$cplink = $this->mk_my_orb("colorpicker",array(),"css");
+		return	"var element = 0;\n".
+			"function set_color(clr) {\n".
+			"document.getElementById(element).value=clr;\n".
+			"}\n".
+			"function colorpicker(el) {\n".
+			"element = el;\n".
+			"aken=window.open('$cplink','colorpickerw','height=220,width=310');\n".
+			"aken.focus();\n".
+			"};\n";
+
 	}
 
 	////////////////////////////////////
@@ -358,7 +371,7 @@ class room_settings extends class_base
 		$arr["obj_inst"]->set_meta("bron_req_fields", $arr["request"]["d"]);
 	}
 
-	function _init_col_by_grp(&$t)
+	function _init_grp_settings_t(&$t)
 	{
 		$t->define_field(array(
 			"name" => "grp",
@@ -366,84 +379,67 @@ class room_settings extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
-			"name" => "col",
-			"caption" => t("V&auml;rv"),
+			"name" => "bron_tm",
+			"caption" => t("Broneerimisaegade seaded"),
 			"align" => "center"
 		));
-	}
 
-	function _get_col_by_grp($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_col_by_grp($t);
-
-		$ol = new object_list(array(
-			"class_id" => CL_GROUP,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"type" => "0"
-		));
-		$cols = $arr["obj_inst"]->meta("grp_cols");
-		foreach($ol->arr() as $o)
-		{
-			$tx = "<a href=\"javascript:colorpicker('c_".$o->id()."_')\">".t("Vali")."</a>";
-
-
-			$t->define_data(array(
-				"grp" => html::obj_change_url($o),
-				"col" => html::textbox(array(
-					"name" => "c[".$o->id()."]",
-					"size" => 7,
-					"value" => $cols[$o->id()],
-				))." ".$tx
-			));
-		}
-	}
-
-	function _set_col_by_grp($arr)
-	{
-		$arr["obj_inst"]->set_meta("grp_cols", $arr["request"]["c"]);
-	}
-
-	function _init_grp_bron_time_t(&$t)
-	{
-		$t->define_field(array(
-			"name" => "grp",
-			"caption" => t("Grupp"),
-			"align" => "center"
-		));
 		$t->define_field(array(
 			"name" => "from",
 			"caption" => t("Alates"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "bron_tm"
 		));
 		$t->define_field(array(
 			"name" => "from_ts",
 			"caption" => t("Aja&uuml;hik"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "bron_tm"
 		));	
 		$t->define_field(array(
 			"name" => "to",
 			"caption" => t("Kuni"),
-			"align" => "center"
+			"align" => "center",
+			"parent" => "bron_tm"
 		));
 		$t->define_field(array(
 			"name" => "to_ts",
 			"caption" => t("Aja&uuml;hik"),
+			"align" => "center",
+			"parent" => "bron_tm"
+		));
+
+		$t->define_field(array(
+			"name" => "col",
+			"caption" => t("Broneeringu tegijate gruppide v&auml;rvid"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "ask_cust_arrived",
+			"caption" => t("K&uuml;sida kliendi saabumise kinnitust"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "confirmed_default",
+			"caption" => t("Broneeringud vaikimisi kinnitatud"),
 			"align" => "center"
 		));
 	}
 
-	function _get_grp_bron_time_table($arr)
+	function _get_grp_settings($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_grp_bron_time_t($t);
+		$this->_init_grp_settings_t($t);
 
 		$opts = array(
 			"min" => t("Minut"),
 			"hr" => t("Tund"),
 			"day" => t("P&auml;ev")
 		);
+		$cols = $arr["obj_inst"]->meta("grp_cols");
+		$settings = $arr["obj_inst"]->meta("grp_settings");
 
 		$d = $arr["obj_inst"]->meta("grp_bron_tm");
 		$ol = new object_list(array(
@@ -476,13 +472,39 @@ class room_settings extends class_base
 					"value" => $d[$o->id()]["to_ts"],
 					"options" => $opts
 				)),
+				"col" => html::textbox(array(
+					"name" => "c[".$o->id()."]",
+					"size" => 7,
+					"value" => $cols[$o->id()],
+				))." "."<a href=\"javascript:colorpicker('c_".$o->id()."_')\">".t("Vali")."</a>",
+				"ask_cust_arrived" => html::checkbox(array(
+					"name" => "e[".$o->id()."][ask_cust_arrived]",
+					"value" => 1,
+					"checked" => $settings[$o->id()]["ask_cust_arrived"]
+				)),
+				"confirmed_default" => html::checkbox(array(
+					"name" => "e[".$o->id()."][confirmed_default]",
+					"value" => 1,
+					"checked" => $settings[$o->id()]["confirmed_default"]
+				)),
 			));
 		}
 	}
 
-	function _set_grp_bron_time_table($arr)
+	function _set_grp_settings($arr)
 	{
 		$arr["obj_inst"]->set_meta("grp_bron_tm", $arr["request"]["d"]);
+		$arr["obj_inst"]->set_meta("grp_cols", $arr["request"]["c"]);
+		$arr["obj_inst"]->set_meta("grp_settings", $arr["request"]["e"]);
+	}
+
+	function get_verified_default_for_group($settings)
+	{
+		$grp_settings = $settings->meta("grp_settings");
+		$gl = aw_global_get("gidlist_oid");
+		$grp = reset($gl);
+		$grp = next($gl);
+		return $grp_settings[$grp]["confirmed_default"];
 	}
 }
 ?>
