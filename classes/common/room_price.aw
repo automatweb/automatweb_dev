@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.9 2007/01/30 13:00:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_price.aw,v 1.10 2007/01/31 11:59:09 kristo Exp $
 // room_price.aw - Ruumi hind 
 /*
 
@@ -28,6 +28,9 @@
 	@property weekdays type=chooser multiple=1 captionside=top
 	@caption N&auml;dalap&auml;evad
 
+	@property apply_groups type=relpicker reltype=RELTYPE_GROUP multiple=1
+	@caption Kehtib gruppidele
+
 	@property nr type=select
 	@caption Mitmes
 
@@ -51,6 +54,9 @@
 
 	@property prices_props type=callback callback=gen_prices_props
 	@caption Hinnad
+
+@reltype GROUP value=1 clid=CL_GROUP
+@caption Kehtib grupile
 */
 
 class room_price extends class_base

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.123 2007/01/31 11:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.124 2007/01/31 11:59:09 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3183,6 +3183,10 @@ class room extends class_base
 			$bron_made = $arr["bron"]->created();
 		}
 
+		$gl = aw_global_get("gidlist_oid");
+		$grp = reset($gl);
+		$grp = next($gl);
+
 		foreach($prices as $conn)
 		{
 			$price = $conn->to();
@@ -3194,9 +3198,13 @@ class room extends class_base
 					    ($price->prop("bron_made_to") < 1 || $bron_made < $price->prop("bron_made_to"))
 					)
 					{
-						$this_price = $price;
-						$this_prices[$price->prop("nr")][] = $price;
-//						break;
+						$groups = $price->prop("apply_groups");
+						if (!is_array($groups) || !count($groups) || $groups[$grp])
+						{
+							$this_price = $price;
+							$this_prices[$price->prop("nr")][] = $price;
+	//						break;
+						}
 					}
 				}
 			}
@@ -3357,6 +3365,9 @@ class room extends class_base
 	function get_bargain($arr)
 	{
 		extract($arr);
+		$gl = aw_global_get("gidlist_oid");
+		$grp = reset($gl);
+		$grp = next($gl);
 		if(is_object($price) && is_object($room))
 		{
 			$bargains = array();
@@ -3397,8 +3408,15 @@ class room extends class_base
 					)
 				)
 				{
-					if (($bargain->prop("bron_made_from") < 1 || $bron_made > $bargain->prop("bron_made_from")) ||
-					    ($bargain->prop("bron_made_to") < 1 || $bron_made < $bargain->prop("bron_made_to"))
+					$groups = $bargain->prop("apply_groups");
+					if (
+						(
+							($bargain->prop("bron_made_from") < 1 || $bron_made > $bargain->prop("bron_made_from")) ||
+						    	($bargain->prop("bron_made_to") < 1 || $bron_made < $bargain->prop("bron_made_to"))
+					    	) && 
+						(
+							!is_array($groups) || !count($groups) || $groups[$grp]
+						)
 					)
 					{
 						$from = $bargain->prop("time_from");

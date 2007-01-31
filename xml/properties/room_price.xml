@@ -60,6 +60,17 @@
             <caption>N&amp;amp;auml;dalap&amp;amp;auml;evad</caption>
       </property>
       <property>
+            <name>apply_groups</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_GROUP</reltype>
+            <multiple>1</multiple>
+            <caption>Kehtib gruppidele</caption>
+      </property>
+      <property>
             <name>nr</name>
             <table>objects</table>
             <group>general</group>
@@ -142,5 +153,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <GROUP>
+                  <value>1</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Kehtib grupile</caption>
+            </GROUP>
+      </reltypes>
 </properties>
 
