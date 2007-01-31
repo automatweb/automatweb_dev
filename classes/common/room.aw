@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.126 2007/01/31 13:42:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.127 2007/01/31 14:43:04 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1493,7 +1493,6 @@ class room extends class_base
 			}
 		}
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->set_lower_titlebar_display(true);
 //		arr($arr["obj_inst"]->prop("openhours"));
 		$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
 		if(is_oid($arr["obj_inst"]->prop("openhours")) && $this->can("view" , $arr["obj_inst"]->prop("openhours")))
@@ -1592,7 +1591,9 @@ class room extends class_base
 		$this->_init_calendar_t($t,$this->start, $len);
 //arr($this->res_table);
 		$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
-		
+	
+		$num_rows = 0;
+	
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
 		// this seems to fuck up in reval room calendar view and only display time to 15:00
 		//while($step < floor($steps))
@@ -1815,8 +1816,13 @@ class room extends class_base
 			//		$tmp_row_data["rowspan".$i] = $rowspan[$i];
 				}
 				$t->define_data($tmp_row_data);
+				$num_rows++;
 			}
 			$step = $step + 1;
+		}
+		if ($num_rows > 5)
+		{
+			$t->set_lower_titlebar_display(true);
 		}
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
