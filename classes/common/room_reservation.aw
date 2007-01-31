@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.41 2007/01/30 14:49:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.42 2007/01/31 14:11:38 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1329,20 +1329,37 @@ class room_reservation extends class_base
 	function bank_return($arr)
 	{
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		
+		if(!(is_oid($arr["id"]) && $this->can("view" , $arr["id"])))
+		{
+			$bad_url = aw_ini_get("room_reservation.unsuccessful_bank_payment_url");
+			return;	
+		}
+		$bron = obj($arr["id"]);
+		$room = obj($bron->prop("resource"));
+		$location = obj($room->prop("location"));
+		$bank_payment = obj($location->prop("bank_payment"));
+		if($bank_payment->prop("cancel_url"))
+		{
+			$bad_url = $bank_payment->prop("cancel_url");
+		}
+		$bad = 0;
 		if($_SESSION["bank_return"]["data"]["action"] == "afb" && !$bank_inst->check_response())
 		{
-			return;
+			$bad = 1;
 		}
-		if(!$this->make_verified($arr["id"]))
+		if(!$bad && !$this->make_verified($arr["id"]))
 		{
-			print t("Broneeringut ei &otilde;nnestunud kinnitada"); 
+			$bad = 1;
+			//print t("Broneeringut ei &otilde;nnestunud kinnitada"); 
 		}
-		else
+		if(!$bad)
 		{
 			$this->send_affirmation_mail($arr["id"]);
 			return $this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]));
 		}
-		return ;//$this->mk_my_orb("show", array("id" => $order_id), "shop_order");
+		return $bad_url;
+		//$this->mk_my_orb("show", array("id" => $order_id), "shop_order");
 		//returni peaks miski ilusa saidi urli andma
 	}
 
