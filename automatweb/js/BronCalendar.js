@@ -13,7 +13,10 @@ bronErrors["CANT_BRON"] = "Ei saa broneerida";
 function doBronExec(strId, intCalendarIntervall, intRoomReservationLength, intProduct)
 {
 	doBron(strId, intCalendarIntervall, intRoomReservationLength, intProduct);
-	submit_changeform('do_add_reservation');
+	document.changeform.action.value = 'do_add_reservation';
+	document.changeform.submit();
+	return true;
+	//submit_changeform('do_add_reservation');
 }
 
 /**

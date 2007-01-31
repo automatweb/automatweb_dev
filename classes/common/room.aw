@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.121 2007/01/30 16:32:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.122 2007/01/31 09:00:27 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1041,7 +1041,7 @@ class room extends class_base
 				"end" => $end,
 			)) && $room_inst->last_bron_id !=$id)
 			{
-				$err = t("Sellisele ajale pole broneerida v&otilde;imalik");
+				$err = t("Sellisele ajale pole broneerida v&otilde;imalik ".date("d.m.Y H:i:s", $start1)." - ".date("d.m.Y H:i:s", $end));
 				die($err);
 			}
 			else
@@ -1842,7 +1842,7 @@ class room extends class_base
 		}
 		foreach($prod_list as $oid => $name)
 		{
-			$res .='<a class="menuItem" href="javascript:dontExecutedoBron=1;void(0)"  onClick="'.($immediate? "doBronExec" : "doBron").'(
+			$res .='<a class="menuItem" href="#"  onClick="'.($immediate? "doBronExec" : "doBron").'(
 					\''.$m_oid.'_\'+current_timestamp ,
 					'.$arr["step_length"].' ,
 					'.$times[$oid].' ,
@@ -3772,7 +3772,7 @@ class room extends class_base
 			if($res->prop("verified"))
 			{
 				$verified_reservations->add($res->id());
-				//$reservations->remove($res->id());
+				$reservations->remove($res->id());
 			}
 			elseif(!($res->prop("deadline") > time()))
 			{
