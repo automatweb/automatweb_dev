@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.129 2007/01/31 15:30:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.130 2007/02/01 10:39:34 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1753,8 +1753,19 @@ class room extends class_base
 									$rowspan[$x]++;
 								}
 							}
-
-							if($last_bron->prop("start1") < $start_step)
+							if($this->is_after_buffer)
+							{
+								$d[$x] = ""; 
+								if($settings->prop("col_buffer"))
+								{
+									$col[$x] = "#".$settings->prop("col_buffer");
+								}
+								else
+								{
+									"#EE6363";
+								}
+							}
+							elseif($last_bron->prop("start1") < $start_step)
 							{
 								$d[$x] = "--//--";
 							}
@@ -1782,6 +1793,19 @@ class room extends class_base
 								}
 							}
 							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
+						}
+						elseif($this->is_buffer)
+						{//arr($settings->prop("col_buffer"));
+							if($settings->prop("col_buffer"))
+							{
+								$col[$x] = "#".$settings->prop("col_buffer");
+							}
+							else
+							{
+								"#EE6363";
+							}
+							//$d[$x] = "<div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
+							
 						}
 						else
 						{
@@ -3679,6 +3703,15 @@ class room extends class_base
 				if($key < $arr["end"])
 				{
 					$this->last_bron_id = $val["id"];
+					$this->is_buffer = $val["going_to_be_after_buffer"];	
+					if($val["real_end"] <= $arr["start"])
+					{
+						$this->is_after_buffer = 1;
+					}
+					else
+					{
+						$this->is_after_buffer = 0;
+					}
 					return false;
 				}
 			}
@@ -3727,6 +3760,12 @@ class room extends class_base
 				{
 					$start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
 					$this->res_table[$start]["end"] = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+					//tekitab eelnevale või eelnevatele cellidele nö. broneeringu, mis on lihtsalt broneeritud buffriks
+					if($room->prop("buffer_after"))
+					{
+						$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["going_to_be_after_buffer"] = 1;
+						$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["end"] = $start;
+					}
 				}
 				if($res->prop("verified"))
 				{
