@@ -77,39 +77,49 @@ $sf->tpl_init("automatweb");
 
 
 //siit hakkab siis alles pangast tuleva infoga tegelemine
+
+$_SESSION["bank_return"]["data"] = null;
 foreach ($_POST as $key => $val)
 {
 	$_SESSION["bank_return"]["data"][$key] = $val;
 }
-$id = substr($_POST["VK_REF"], 0, -1);
 
-$id = substr($_GET["ecuno"], 0, -1);
+if($_POST["VK_REF"])
+{
+	$id = substr($_POST["VK_REF"], 0, -1);
+}
+if($_GET["ecuno"])
+{
+	$id = substr($_GET["ecuno"], 0, -1);
+}
 foreach ($_GET as $key => $val)
 {
 	$_SESSION["bank_return"]["data"][$key] = $val;
 }
-if($id)
-{
-	$id = substr($_GET["ecuno"], 0, -1);
-}
-
 
 //esimene on hansapanga, EYP, sampo ja krediidipanga positiivne vastus, teine krediitkaardikeskuse
 if($_POST["VK_SERVICE"] == 1101 || ($_GET["action"] == "afb" && $_GET["respcode"] == "000"))
 {
 	$url = $_SESSION["bank_payment"]["url"];
+	if(!$url)
+	{
+		$obj = obj($id);
+		$inst = $obj->instance();
+		$inst->bank_return(array("id" => $obj->id()));
+	}
 }
 else
 {
 	$url = $_SESSION["bank_payment"]["cancel"];
 }
-
+/*
 if(!$url)
 {
 	$obj = obj($id);
 	$inst = $obj->instance();
 	$inst->bank_return(array("id" => $obj->id()));
 }
+*/
 
 header("Location:".$url);
 die();
