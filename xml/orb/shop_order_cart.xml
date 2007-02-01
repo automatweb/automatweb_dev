@@ -58,7 +58,7 @@
 		<action name="bank_return" nologin="1">
 			<function name="bank_return">
 				<arguments>
-					<required name="oc" type="int" acl="view" />
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.56 2007/01/10 12:58:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.57 2007/02/01 12:16:10 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1612,7 +1612,7 @@ class shop_order_cart extends class_base
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
 		
-		$bank_return = $this->mk_my_orb("bank_return", array("oc" => $oc->id()));
+		$bank_return = $this->mk_my_orb("bank_return", array("id" => $oc->id()));
 		$_SESSION["bank_payment"]["url"] = $bank_return;
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
@@ -1627,11 +1627,11 @@ class shop_order_cart extends class_base
 	
 	/**
 		@attrib name=bank_return nologin=1
-		@param oc required type=int acl=view
+		@param id required type=int acl=view
 	**/
 	function bank_return($arr)
 	{
-		$oc = obj($arr["oc"]);
+		$oc = obj($arr["id"]);
 		$order_id = shop_order_cart::do_create_order_from_cart($oc);
 		return $this->mk_my_orb("show", array("id" => $order_id), "shop_order");
 	}
