@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.20 2007/01/30 10:06:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.21 2007/02/01 13:01:39 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -49,13 +49,14 @@
 class bank_payment extends class_base
 {	//olemasolevad panga
 	var $banks = array (
-		"hansapank"	=> "Hansapank",
-		"seb"		=> "SEB Eesti &Uuml;hispank",
-		"nordeapank"	=> "Nordea Pank",
-		"krediidipank"	=> "Krediidipank",
-		"sampopank"	=> "Sampo Pank",
-		"hansapank_lv"	=> "L&Auml;ti Hansapank",
-		"credit_card"	=> "Kaardikeskus (krediitkaart)",
+		"hansapank"		=> "Hansapank",
+		"seb"			=> "SEB Eesti &Uuml;hispank",
+		"nordeapank"		=> "Nordea Pank",
+		"krediidipank"		=> "Krediidipank",
+		"sampopank"		=> "Sampo Pank",
+		"hansapank_lv"		=> "L&Auml;ti Hansapank",
+		"hansapank_lt"		=> "Leedu Hansapank",
+		"credit_card"		=> "Kaardikeskus (krediitkaart)",
 	);
 	
 	//kõikidele pankadele ühine info
@@ -71,13 +72,19 @@ class bank_payment extends class_base
 
 	//erinevate pankade lingid
 	var $bank_link = array(
-		"hansapank"	=> "https://www.hanza.net/cgi-bin/hanza/pangalink.jsp",
-		"seb"		=> "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r",
-		"sampopank"	=> "https://www.sampo.ee/cgi-bin/pizza",
-		"krediidipank"	=> "https://i-pank.krediidipank.ee/teller/maksa",
-		"nordeapank"	=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
-		"hansapank_lv"	=> "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp",
-		"credit_card"	=> "https://pos.estcard.ee/test-pos/servlet/iPAYServlet",
+		"hansapank"		=> "https://www.hanza.net/cgi-bin/hanza/pangalink.jsp",
+		"seb"			=> "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r",
+		"sampopank"		=> "https://www.sampo.ee/cgi-bin/pizza",
+		"krediidipank"		=> "https://i-pank.krediidipank.ee/teller/maksa",
+		"nordeapank"		=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
+		"hansapank_lv"		=> "https://www.hanzanet.lv/banklink/",
+		"hansapank_lt"		=> "https://www.hanzanet.lv/banklink/",
+		"credit_card"		=> "https://pos.estcard.ee/test-pos/servlet/iPAYServlet",
+	);
+
+	var $merchant_id = array(
+		"EYP" => "seb",
+		"HP" => "Hansapank",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
@@ -382,7 +389,7 @@ class bank_payment extends class_base
 		};
 	}
 	
-		//tekitab võimalike pankade ja propertyte nimekirja
+	//tekitab võimalike pankade ja propertyte nimekirja
 	function callback_bank($arr)
 	{
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
@@ -474,9 +481,13 @@ class bank_payment extends class_base
 				$arr = $this->check_args($arr);
 				return $this->seb($arr);
 				break;
-			case "hansapank_vl":
+			case "hansapank_lv":
 				$arr = $this->check_args($arr);
 				return $this->hansa_lv($arr);
+				break;
+			case "hansapank_lt":
+				$arr = $this->check_args($arr);
+				return $this->hansa_lt($arr);
 				break;
 			case "hansapank":
 				$arr = $this->check_args($arr);
@@ -620,8 +631,47 @@ class bank_payment extends class_base
 		$VK_MAC = base64_encode( $VK_signature);
 
 		$http = get_instance("protocols/file/http");
+		$link = $this->bank_link["hansapank_lv"];
 		$link = "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp";
-		$handler = "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp";
+		$handler = $link;
+		$params = array(
+			"VK_SERVICE"	=> $service,	//"1002"
+			"VK_VERSION"	=> $version,	//"008"
+			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST"
+			"VK_STAMP"	=> $stamp,	//row["arvenr"]
+			"VK_AMOUNT"	=> $amount,	//$row["summa"];
+			"VK_CURR"	=> $curr,	//"EEK"
+			"VK_REF"	=> $reference_nr,
+			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
+			"VK_MAC" 	=> $VK_MAC,
+			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_LANG" 	=> $lang,	//"EST"
+		);
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
+	//	return $http->post_request($link, $handler, $params, $port = 80);
+	}
+
+	function hansa_lt($args) 
+	{
+		extract($args);
+		$VK_message = sprintf("%03d",strlen($service)).$service;
+		$VK_message.= sprintf("%03d",strlen($version)).$version;
+		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
+		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
+		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
+		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
+		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
+		$VK_signature = "";
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($VK_message, $VK_signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$VK_MAC = base64_encode( $VK_signature);
+
+		$http = get_instance("protocols/file/http");
+		$link = $this->bank_link["hansapank_lt"];;
+		$handler = $link;
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
