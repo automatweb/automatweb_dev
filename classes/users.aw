@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.174 2007/01/22 13:58:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.175 2007/02/01 08:59:44 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1338,7 +1338,7 @@ class users extends users_user
 		$replace_with = array("a","o","u","o", $space);
 		$str = "!\"@#.$%&/()[]={}?\+-`'|,;";
 		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);
-		$name = str_replace($to_replace, $replace_with, htmlentities($name));
+		$name = str_replace($to_replace, $replace_with, strtolower(htmlentities($name)));
 		return $name;
 	}
 	
@@ -1375,6 +1375,60 @@ class users extends users_user
 	}
 
 	/**
+		@comment
+			converts certificates subject value to ISO-8859-1
+	**/
+	function certstr2utf8($str) {
+		$result="";
+		$encoding=mb_detect_encoding($str,"ASCII, UTF-8");
+		if ($encoding=="ASCII")
+		{
+			$result=mb_convert_encoding($str, "ISO-8859-1", "ASCII");
+		}
+		else
+		{
+			if (substr_count($str,chr(0))>0)
+			{
+				$result=mb_convert_encoding($str, "ISO-8859-1", "UCS2");
+			}
+			else
+			{
+				$result=$str;
+			}
+		}
+		return $result;
+	}
+
+	/**
+		@comment
+			Returns certificate info as an array in ISO-8859-1 charset
+		@returns
+			array(
+				f_name => firstname,
+				l_name => lastname,
+				pid => personal id,
+	**/
+	function returncertdata($cert)
+	{
+		$data = array();
+		$certstructure=openssl_x509_parse($cert);
+
+		if (strpos($_SERVER["SSL_VERSION_LIBRARY"],"0.9.6")===false)
+		{
+			$data['f_name'] = $this->certstr2utf8($certstructure["subject"]["GN"]);
+			$data['l_name'] = $this->certstr2utf8($certstructure["subject"]["SN"]);
+			$data['pid'] = $certstructure["subject"]["serialNumber"];
+		}
+		else
+		{
+			$data['f_name'] = $certstructure["subject"]["SN"];
+			$data['l_name'] = $this->certstr2utf8($certstructure["subject"]["G"]);
+			$data['pid'] = $this->certstr2utf8($certstructure["subject"]["S"]);
+		}
+		return $data;
+	}
+
+	/**
 		@attrib name=id_pre_login params=name nologin=1
 		@comment
 		Logs user in with id-card over ssl.
@@ -1384,12 +1438,13 @@ class users extends users_user
 		//dbg::p1($_SERVER);
 		//arr($_SERVER);
 		//die();
-
 		if($_SERVER["HTTPS"] != "on")
 		{
 			return aw_ini_get("baseurl");
 		}
 		// here should be user's certification OSCP check
+
+
 		
 
 		classload("core/users/id_config");
@@ -1397,7 +1452,20 @@ class users extends users_user
 		$act = id_config::get_active();
 		
 
-		// safe-list allows only pre-set personal id's to login(if it's enabled)
+		// this little modafocka is here beacause estonian language has freaking umlauts etc..
+		$data = $this->returncertdata($_SERVER["SSL_CLIENT_CERT"]);
+		$arr["firstname"] = $data["f_name"];
+		$arr["lastname"] = $data["l_name"];
+		$arr["ik"] = $data["pid"];
+	
+		/* for debug
+		if($_SERVER["REMOTE_ADDR"] == "62.65.36.186")
+		{
+		}
+		*/
+
+		$arr["gender"] = ($arr["ik"][0] == 1 || $arr["ik"][0] == 3 || $arr["ik"][0] == 5)?1:2;
+
 		
 		if($act_inst->use_safelist())
 		{
@@ -1408,19 +1476,6 @@ class users extends users_user
 			}
 		}
 
-
-		//$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_G"];
-		//$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_S"];
-		//$arr["ik"] = split(",", $_SERVER["SSL_CLIENT_S_DN_CN"]);
-		//$arr["ik"] = $arr["ik"][2];
-
-		// this little modafocka is here beacause estonian language has freaking umlauts etc..
-		$certstruct = openssl_x509_parse($_SERVER["SSL_CLIENT_CERT"]);
-		$arr["firstname"] = $certstruct["subject"]["GN"];
-		$arr["lastname"] = $certstruct["subject"]["SN"];
-		$arr["ik"] = $certstruct["subject"]["serialNumber"];
-
-		$arr["gender"] = ($arr["ik"][0] == 1 || $arr["ik"][0] == 3 || $arr["ik"][0] == 5)?1:2;
 		if(!$arr["firstname"] || !$arr["lastname"] || !$arr["ik"])
 		{
 			$url = aw_ini_get("baseurl")."/orb.aw?class=ddoc&action=no_ddoc";
@@ -1431,16 +1486,16 @@ class users extends users_user
 			$tpl->read_template("error.tpl");
 			die($tpl->parse());
 		}
-//tst
 		$arr["uid"] = $this->_find_username($arr["firstname"],$arr["lastname"]);
 		$password = substr(gen_uniq_id(),0,8);
 		aw_disable_acl();
 		$ol = new object_list(array(
-			"class_id" => 145, 
+			"class_id" => CL_CRM_PERSON, 
 			"personal_id" => $arr["ik"],
 			"site_id" => array(),
 			"lang_id" => array(),
-			"status" => STAT_ACTIVE,
+			"status" => new obj_predicate_not(STAT_DELETED),
+			//"status" => STAT_ACTIVE,
 		));
 		if($ol->count() < 1 && aw_ini_get("users.id_only_existing") == "1")
 		{
