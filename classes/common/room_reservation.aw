@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.45 2007/02/01 07:19:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.46 2007/02/01 11:37:38 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -250,8 +250,7 @@ class room_reservation extends class_base
 //-- methods --//
 
 	/** Change the realestate object info.
-		
-		@attrib name=parse_alias is_public="1" caption="Change"
+		@attrib name=parse_alias is_public="1" caption="Change" nologin=1
 	
 	**/
 	function parse_alias($arr)
@@ -1259,6 +1258,9 @@ class room_reservation extends class_base
 			$arr["room"] =  $_SESSION["room_reservation"]["room_id"];
 		}
 		extract($arr);
+		
+ 		$lang = aw_global_get("lang_id");
+	
 		$bron_ids = array();
 		$bron_names = array();
 		$total_sum = 0;
@@ -1282,6 +1284,7 @@ class room_reservation extends class_base
 				"data" => $_SESSION["room_reservation"][$r->id()],
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
+			$bron->set_meta("lang" , $lang);
 			$bron_ids[] = $bron->id();
 			$bron_names[] = $bron->name();
 			$sum = $this->get_total_bron_price(array(
@@ -1309,6 +1312,7 @@ class room_reservation extends class_base
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $loc->prop("bank_payment");
 		$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => join(" ," , $bron_ids)));
+		
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $total_sum,
@@ -1334,9 +1338,11 @@ class room_reservation extends class_base
 		if(!(is_oid($arr["id"]) && $this->can("view" , $arr["id"])))
 		{
 			$bad_url = aw_ini_get("room_reservation.unsuccessful_bank_payment_url");
-			return;	
+			return $bad_url;
 		}
 		$bron = obj($arr["id"]);
+		if($bron->meta("lang"));
+		aw_global_set("lang_id" , $bron->meta("lang"));
 		$room = obj($bron->prop("resource"));
 		$location = obj($room->prop("location"));
 		$bank_payment = obj($location->prop("bank_payment"));
@@ -1357,8 +1363,13 @@ class room_reservation extends class_base
 		if(!$bad)
 		{
 			$this->send_affirmation_mail($arr["id"]);
+			$GLOBALS["cfg"]["__default"]["in_admin"] = 0;
+			header("Location:".$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"])));
+			die();
 			return $this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]));
 		}
+		header("Location:".$bad_url);
+		die();
 		return $bad_url;
 		//$this->mk_my_orb("show", array("id" => $order_id), "shop_order");
 		//returni peaks miski ilusa saidi urli andma
