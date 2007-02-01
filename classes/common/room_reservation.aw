@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.46 2007/02/01 11:37:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.47 2007/02/01 11:44:33 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1311,7 +1311,8 @@ class room_reservation extends class_base
 		$loc = obj($r->prop("location"));
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $loc->prop("bank_payment");
-		$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => join(" ," , $bron_ids)));
+		//$_SESSION["bank_payment"]["url"] = null;
+		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => join(" ," , $bron_ids)));
 		
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
