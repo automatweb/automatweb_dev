@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.130 2007/02/01 10:39:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.131 2007/02/01 11:21:55 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1794,7 +1794,7 @@ class room extends class_base
 							}
 							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
 						}
-						elseif($this->is_buffer)
+						elseif($this->is_buffer && !$arr["web"])
 						{//arr($settings->prop("col_buffer"));
 							if($settings->prop("col_buffer"))
 							{
@@ -1804,6 +1804,8 @@ class room extends class_base
 							{
 								"#EE6363";
 							}
+							$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+							$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
 							//$d[$x] = "<div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
 							
 						}
