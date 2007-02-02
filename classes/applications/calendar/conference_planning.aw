@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.38 2007/02/02 13:57:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.39 2007/02/02 14:12:12 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1765,7 +1765,7 @@ class conference_planning extends class_base
 		$template = array(
 			"class_id" => CL_LOCATION,
 			"oid" => $from,
-			"status" => STAT_ACTIVE,	
+			//"status" => STAT_ACTIVE,	
 		);
 		$tmp = array(
 			"single_rooms" => "single_count",
