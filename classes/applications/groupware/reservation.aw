@@ -1,10 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.41 2007/02/01 10:10:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.42 2007/02/02 08:33:57 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
+@tableinfo aw_room_reservations index=aw_oid master_table=objects master_index=brother_of
+
 
 @classinfo syslog_type=ST_RESERVATION relationmgr=yes no_status=1 prop_cb=1
 
@@ -30,12 +32,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property deadline type=datetime_select table=planner field=deadline
 	@caption Maksmistähtaeg
 			
-	@property verified type=checkbox ch_value=1 field=meta method=serialize no_caption=1 default=1
+	@property verified type=checkbox ch_value=1 table=aw_room_reservations field=aw_verified no_caption=1 default=1
 	@caption Kinnitatud
 
 	@property unverify_reason type=text store=no no_caption=1
 
-	@property resource type=relpicker reltype=RELTYPE_RESOURCE field=meta method=serialize
+	@property resource type=relpicker reltype=RELTYPE_RESOURCE table=aw_room_reservations field=aw_resource
 	@caption Ressurss
 	
 	@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
@@ -68,10 +70,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property content type=textarea cols=40 rows=5 field=description table=planner
 	@caption Sisu
 	
-	@property time_closed type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@property time_closed type=checkbox ch_value=1 table=aw_room_reservations field=aw_time_closed
 	@caption Suletud
 
-	@property closed_info type=textbox table=objects field=meta method=serialize size=30
+	@property closed_info type=textbox table=aw_room_reservations field=aw_closed_info  size=30
 	@caption Sulgemise p&otilde;hjus
 
 	@layout sbt_layout type=hbox parent=general_up
@@ -85,7 +87,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 @layout general_down type=vbox closeable=1 area_caption=Aeg&#44;&nbsp;ja&nbsp;hind parent=general_split
 @default parent=general_down
 	
-	@property people_count type=textbox size=3 field=meta method=serialize
+	@property people_count type=textbox size=3 table=aw_room_reservations field=aw_people_count
 	@caption Inimesi
 		
 	@property start1 type=datetime_select field=start table=planner
@@ -97,22 +99,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property end type=datetime_select table=planner
 	@caption L&otilde;peb
 
-	@property special_discount type=textbox size=5 field=meta method=serialize
+	@property special_discount type=textbox size=5 table=aw_room_reservations field=aw_special_discount
 	@caption Spetsiaal allahindlus
 
 	property code type=hidden size=5 table=planner field=code
 	caption Kood
 
-	@property client_arrived type=chooser field=meta method=serialize
+	@property client_arrived type=chooser table=aw_room_reservations field=aw_client_arrived
 	@caption Klient saabus
 
-	@property people type=select field=meta method=serialize
+	@property people type=select table=aw_room_reservations field=aw_people
 	@caption Org. esindajad
 
 	@property products_text type=text submit=no
 	@caption Toode
 
-	@property sum type=text field=meta method=serialize no_caption=1
+	@property sum type=text table=aw_room_reservations field=aw_sum  no_caption=1
 	@caption Summa
 
 	@property modder type=text store=no no_caption=1
@@ -1405,6 +1407,59 @@ class reservation extends class_base
 		}
 		return $t->draw();
 		return $pv;
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "" && $t == "aw_room_reservations")
+		{
+			$this->db_query("CREATE TABLE aw_room_reservations(aw_oid int primary key,
+				aw_verified int,
+				aw_resource int,
+				aw_time_closed int,
+				aw_closed_info varchar(255),
+				aw_people_count int,
+				aw_special_discount double,
+				aw_client_arrived int,
+				aw_people int,
+				aw_sum text
+			)");
+			echo "table <br>\n";
+		flush();
+			$ol = new object_list(array(
+				"class_id" => CL_RESERVATION,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+echo "list <br>\n";
+flush();
+			$ids = $ol->ids();
+			foreach($ids as $id)
+			{
+				$this->db_query("INSERT INTO aw_room_reservations(aw_oid) values($id)");
+			}
+echo "inserts <br>\n";
+flush();
+			foreach($ol->arr() as $o)
+			{
+				$o->set_prop("verified", $o->meta("verified"));
+				$o->set_prop("resource", $o->meta("resource"));
+				$o->set_prop("time_closed", $o->meta("time_closed"));
+				$o->set_prop("closed_info", $o->meta("closed_info"));
+				$o->set_prop("people_count", $o->meta("people_count"));
+				$o->set_prop("special_discount", $o->meta("special_discount"));
+				$o->set_prop("client_arrived", $o->meta("client_arrived"));
+				$o->set_prop("people", $o->meta("people"));
+				aw_disable_acl();
+				$o->save();
+				aw_restore_acl();
+				echo $o->id()." <br>\n";
+				flush();
+			}
+echo "all done <br>\n";
+flush();
+			return true;
+		}
 	}
 	
 	function bank_return($arr)

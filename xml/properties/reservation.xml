@@ -32,13 +32,12 @@
       </property>
       <property>
             <name>verified</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_verified</field>
             <no_caption>1</no_caption>
             <default>1</default>
             <caption>Kinnitatud</caption>
@@ -55,13 +54,12 @@
       </property>
       <property>
             <name>resource</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_up_up</parent>
             <type>relpicker</type>
             <reltype>RELTYPE_RESOURCE</reltype>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_resource</field>
             <caption>Ressurss</caption>
       </property>
       <property>
@@ -172,23 +170,21 @@
       </property>
       <property>
             <name>time_closed</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_up_up</parent>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_time_closed</field>
             <caption>Suletud</caption>
       </property>
       <property>
             <name>closed_info</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_up_up</parent>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_closed_info</field>
             <size>30</size>
             <caption>Sulgemise p&amp;amp;otilde;hjus</caption>
       </property>
@@ -216,13 +212,12 @@
       </property>
       <property>
             <name>people_count</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_down</parent>
             <type>textbox</type>
             <size>3</size>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_people_count</field>
             <caption>Inimesi</caption>
       </property>
       <property>
@@ -255,33 +250,30 @@
       </property>
       <property>
             <name>special_discount</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_down</parent>
             <type>textbox</type>
             <size>5</size>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_special_discount</field>
             <caption>Spetsiaal allahindlus</caption>
       </property>
       <property>
             <name>client_arrived</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_down</parent>
             <type>chooser</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_client_arrived</field>
             <caption>Klient saabus</caption>
       </property>
       <property>
             <name>people</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_down</parent>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_people</field>
             <caption>Org. esindajad</caption>
       </property>
       <property>
@@ -296,12 +288,11 @@
       </property>
       <property>
             <name>sum</name>
-            <table>objects</table>
+            <table>aw_room_reservations</table>
             <group>general</group>
             <parent>general_down</parent>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_sum</field>
             <no_caption>1</no_caption>
             <caption>Summa</caption>
       </property>
@@ -361,6 +352,11 @@
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </planner>
+            <aw_room_reservations>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_room_reservations>
       </tableinfo>
       <reltypes>
             <CUSTOMER>
