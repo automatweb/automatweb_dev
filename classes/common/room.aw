@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.131 2007/02/01 11:21:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.132 2007/02/02 07:45:20 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1858,8 +1858,13 @@ class room extends class_base
 	
 	function get_room_prod_menu($arr, $immediate = false)
 	{
+		$last_parent = 0;
+		$parents = array();
+		
 		$res = '<div class="menu" id="bron_menu_'.$arr["obj_inst"]->id().'" style="display: none;">';
+		
 
+		
 		$m_oid = $arr["obj_inst"]->id();
 		$this->prod_data = $arr["obj_inst"]->meta("prod_data");
 		$item_list = $this->get_active_items($arr["obj_inst"]->id());
@@ -1871,16 +1876,57 @@ class room extends class_base
 		}
 		foreach($prod_list as $oid => $name)
 		{
-			$res .='<a class="menuItem" href="#"  onClick="'.($immediate? "doBronExec" : "doBron").'(
+		
+			$product = obj($oid);
+			$parent = $product->parent();
+			$parents[$parent][] = $oid;
+
+			$res .='<div id="'.$oid.'"><a class="menuItem" href="#"  onClick="'.($immediate? "doBronExec" : "doBron").'(
 					\''.$m_oid.'_\'+current_timestamp ,
 					'.$arr["step_length"].' ,
 					'.$times[$oid].' ,
-					'.$oid.');">'.$name.'</a>';
+					'.$oid.');">'.$name.'</a></div>';
 		}
-
-
+//arr($parents);
+		//arr($this->make_conf_prod_list($parents));
+		
 		$res .= '</div>';
 		return $res;
+		
+	}
+	
+	function make_conf_prod_list($parents)
+	{
+		$ret = '<a class="menuItem" href="" onclick="return false;"';
+		foreach($parents as $key => $prods)
+		{
+			;
+		}
+		
+		//selle järgi hakkab ehitama
+		/*<div id="add_item" class="menu" onmouseover="menuMouseover(event)">
+<a class="menuItem" href="" onclick="return false;"
+			        onmouseover="menuItemMouseover(event, 'add_cust_co');">
+				<span class="menuItemText">Organisatsioon</span>
+
+				<span class="menuItemArrow"><img style="border:0px" src="http://hanked.struktuur.ee/automatweb/images/arr.gif" alt=""></span></a><a class="menuItem" href="" onclick="return false;"
+			        onmouseover="menuItemMouseover(event, 'add_cust_p');">
+				<span class="menuItemText">Eraisik</span>
+				<span class="menuItemArrow"><img style="border:0px" src="http://hanked.struktuur.ee/automatweb/images/arr.gif" alt=""></span></a><a  class="menuItem" href="http://hanked.struktuur.ee/automatweb/orb.aw?class=crm_category&action=new&parent=&alias_to=235&reltype=30&return_url=http%3A%2F%2Fhanked.struktuur.ee%2Fautomatweb%2Forb.aw%3Fclass%3Dprocurement_center%26action%3Dchange%26id%3D237%26group%3Dofferers" >Hankija kategooria</a>
+</div>
+<div id="add_cust_co" class="menu" onmouseover="menuMouseover(event)">
+<a  class="menuItem" href="http://hanked.struktuur.ee/automatweb/orb.aw?class=crm_company&action=new&parent=235&alias_to=969&reltype=3&return_url=http%3A%2F%2Fhanked.struktuur.ee%2Fautomatweb%2Forb.aw%3Fclass%3Dprocurement_center%26action%3Dchange%26id%3D237%26group%3Dofferers" >toidu hankijad</a>
+<a  class="menuItem" href="http://hanked.struktuur.ee/automatweb/orb.aw?class=crm_company&action=new&parent=235&alias_to=970&reltype=3&return_url=http%3A%2F%2Fhanked.struktuur.ee%2Fautomatweb%2Forb.aw%3Fclass%3Dprocurement_center%26action%3Dchange%26id%3D237%26group%3Dofferers" >ehitusmaterjalide hankijad</a>
+<a  class="menuItem" href="http://hanked.struktuur.ee/automatweb/orb.aw?class=crm_company&action=new&parent=235&alias_to=999&reltype=3&return_url=http%3A%2F%2Fhanked.struktuur.ee%2Fautomatweb%2Forb.aw%3Fclass%3Dprocurement_center%26action%3Dchange%26id%3D237%26group%3Dofferers" >Traffic lights</a>
+</div>
+
+<div id="add_cust_p" class="menu" onmouseover="menuMouseover(event)">
+<a  class="menuItem" href="http://hanked.struktuur.ee/automatweb/orb.aw?class=crm_person&action=new&parent=235&alias_to=969&reltype=3&return_url=http%3A%2F%2Fhanked.struktuur.ee%2Fautomatweb%2Forb.aw%3Fclass%3Dprocurement_center%26action%3Dchange%26id%3D237%26group%3Dofferers" >toidu hankijad</a>
+<a  class="menuItem" href="http://hanked.struktuur.ee/automatweb/orb.aw?class=crm_person&action=new&parent=235&alias_to=970&reltype=3&return_url=http%3A%2F%2Fhanked.struktuur.ee%2Fautomatweb%2Forb.aw%3Fclass%3Dprocurement_center%26action%3Dchange%26id%3D237%26group%3Dofferers" >ehitusmaterjalide hankijad</a>
+<a  class="menuItem" href="http://hanked.struktuur.ee/automatweb/orb.aw?class=crm_person&action=new&parent=235&alias_to=999&reltype=3&return_url=http%3A%2F%2Fhanked.struktuur.ee%2Fautomatweb%2Forb.aw%3Fclass%3Dprocurement_center%26action%3Dchange%26id%3D237%26group%3Dofferers" >Traffic lights</a>
+</div>
+		
+		*/
 	}
 	
 	function get_colour_for_bron($bron, $settings)
@@ -4101,7 +4147,7 @@ class room extends class_base
 		if (isset($gpt[$grp->id()]))
 		{
 			$t = $gpt[$grp->id()];
-			if ($t["from"] > 0 || true)
+			if (!($t["from"] === null || $t["from"] === ""))
 			{
 				$from_sec = 0;
 				$cur_tm = time();
@@ -4128,7 +4174,7 @@ class room extends class_base
 				}
 			}
 
-			if ($t["to"] > 0 || true)
+			if (!($t["to"] === null || $t["to"] === ""))
 			{
 				$to_sec = 0;
 				$cur_tm = time();
