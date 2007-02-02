@@ -1,7 +1,7 @@
 <table>
 	<tr>
 		<td>
-			{VAR:LC_FUNCTION_NAME}:
+			{VAR:LC_FUNCTION_NAME} *:
 		</td>
 		<td>
 			<input name="sub[1][function_name]" value="{VAR:function_name}" type="text"/>

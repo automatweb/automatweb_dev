@@ -61,6 +61,13 @@
 		</td>
 	</tr>
 	<!-- END SUB: OTHER_RFP_YAH -->
+	<!-- SUB: MISSING_ERROR -->
+		<tr>
+			<td>
+				{VAR:caption}
+			</td>
+		</tr>
+	<!-- END SUB: MISSING_ERROR -->
 	<tr>
 		<td>
 			{VAR:sub_contents}

@@ -45,7 +45,7 @@
 	</tr>
 	<tr>
 		<td>
-			{VAR:LC_MAIN_ARR_DATE}:
+			{VAR:LC_MAIN_ARR_DATE}{VAR:required}
 		</td>
 		<td>
 			<input name="sub[3][main_arrival_date]" value="{VAR:main_arrival_date}" type="text"/>
@@ -53,7 +53,7 @@
 	</tr>
 	<tr>
 		<td>
-			{VAR:LC_MAIN_DEP_DATE}:
+			{VAR:LC_MAIN_DEP_DATE}{VAR:required}
 		</td>
 		<td>
 			<input name="sub[3][main_departure_date]" value="{VAR:main_departure_date}" type="text"/>

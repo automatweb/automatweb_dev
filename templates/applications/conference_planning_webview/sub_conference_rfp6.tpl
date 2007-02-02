@@ -1,3 +1,15 @@
+<!-- SUB: MISSING_ERROR -->
+<table>
+	<!-- SUB: ERROR -->
+	<tr>
+		<td>
+			{VAR:caption}
+		<td>
+	</tr>
+	<!-- END SUB: ERROR -->
+</table>
+<!-- END SUB: MISSING_ERROR -->
+
 <table>
 	<tr>
 		<td colspan="2">{VAR:LC_BILLING_DETAILS}</td>
@@ -87,7 +99,8 @@
 	<!-- SUB: SEARCH_RESULT -->
 	<tr>
 		<td colspan="2">
-			<input type="checkbox" name="sub[6][search_result][{VAR:value}]" {VAR:selected}/>{VAR:caption} {VAR:IMG_1} ({VAR:address}) - {VAR:single_count}/{VAR:double_count}/{VAR:suite_count}
+			<input type="checkbox" name="sub[6][search_result][{VAR:value}]" {VAR:selected}/>{VAR:caption} {VAR:IMG_1} ({VAR:address}) - {VAR:single_count}/{VAR:double_count}/{VAR:suite_count}<br/>
+			{VAR:info}
 		</td>
 	</tr>
 	<!-- END SUB: SEARCH_RESULT -->

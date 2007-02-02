@@ -34,7 +34,7 @@
 			<br/>
 			<input type="radio" name="sub[5][event_type_chooser]" value="2" {VAR:event_type_chooser_2}/>
 			{VAR:LC_OTHER}:
-			<input type="text" name="sub[5][event_type_text]" value="{VAR:event_type_select}"/>
+			<input type="text" name="sub[5][event_type_text]" value="{VAR:event_type_text}"/>
 		</td>
 	</tr>
 	<tr>
@@ -131,6 +131,9 @@
 				{VAR:LC_END_TIME}
 			</td>
 			<td>
+				{VAR:LC_ATTENDEE_NO}
+			</td>
+			<td>
 			</td>
 		</tr>
 		<!-- SUB: CATERING_ROW -->
@@ -143,6 +146,9 @@
 			</td>
 			<td>
 				{VAR:cat_endtime}
+			</td>
+			<td>
+				{VAR:cat_attendee_no}
 			</td>
 			<td>
 				<a href="{VAR:cat_remove_url}">{VAR:LC_REMOVE}</a>&nbsp;<a href="{VAR:cat_edit_url}">{VAR:LC_EDIT}</a>
@@ -183,6 +189,14 @@
 		</td>
 		<td>
 			<input type="text" name="sub[5][catering_end_time]" value="{VAR:catering_end_time}"/>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			{VAR:LC_ATTENDEE_NO}:
+		</td>
+		<td>
+			<input type="text" name="sub[5][catering_attendee_no]" value="{VAR:catering_attendee_no}"/>
 		</td>
 	</tr>
 

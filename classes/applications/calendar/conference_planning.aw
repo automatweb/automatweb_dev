@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.37 2007/01/31 10:01:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.38 2007/02/02 13:57:17 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -19,6 +19,9 @@
 
 @property meeting_pattern_max_days type=textbox field=meta method=serialize
 @caption Koosoleku aja mustri p&auml;evade arv
+
+@property search_result_max type=textbox field=meta method=serialize default=3
+@caption Maksimaalne tulemuste arv
 
 @property search_from type=relpicker reltype=RELTYPE_LOCATION field=meta method=serialize multiple=1
 @caption Otsitavad asukohad
@@ -94,13 +97,56 @@ class conference_planning extends class_base
 			3 => t("Lietuva"),
 		);
 
-		$this->err = array(
-			"missing_email" => t("E-mail on puudu"),
-			"missing_phone" => t("Telefoninumber on puudu"),
+		$this->required_fields_error = array(
+			1 => array(
+				"function_name" => t("&Uuml;rituse nimi on puudu"),
+			),
+			3 => array(
+				"main_arrival_date" => t("Saabumisaeg on puudu"),
+				"main_departure_date" => t("Lahkumisaeg on puudu"),
+			),
+			6 => array(
+				"billing_phone_number" => t("Telefoninumber on puudu"),
+				"billing_email" => t("E-mail on puudu"),
+			),
 		);
+
+		$this->required_fields = array(
+			"1" => array(
+				"function_name",
+			),
+			"3" => array(
+				"main_arrival_date",
+				"main_departure_date",
+			),
+			"6" => array(
+				"billing_phone_number",
+				"billing_email",
+			),
+		);
+
 
 		$this->lc_load("conference_planning", "lc_conference_planning");
 		lc_site_load("conference_planning", &$this);
+	}
+
+	/**
+		@comment
+			checks whater to use given sub's required fields or leave them unrequired
+	**/
+	function required_fields_conditions($sub, $data)
+	{
+		$retval = true;
+		switch($sub)
+		{
+			case 3:
+				if(!$data[$sub]["needs_rooms"])
+				{
+					$retval = false;
+				}
+				break;
+		}
+		return $retval;
 	}
 
 	function get_property($arr)
@@ -268,6 +314,7 @@ class conference_planning extends class_base
 					"needs_rooms" => $sd["accommondation_requirements"]?"CHECKED":"",
 					"main_arrival_date" => $sd["dates"][0]["arrival_date"],
 					"main_departure_date" => $sd["dates"][0]["departure_date"],
+					"required" => $sd["accommondation_requirements"]?t("*"):NULL,
 				));
 				break;
 			case 4:
@@ -476,23 +523,7 @@ class conference_planning extends class_base
 			case 6:
 				$sc->read_template("sub_conference_rfp6.tpl");				
 				$addr = get_instance(CL_CRM_ADDRESS);
-				
-				// error managment
-				$err = $_SESSION["tmp_conference_err"];
-				if(is_array($err) && count($err))
-				{
-					foreach($err as $text)
-					{
-						$sc->vars(array(
-							"caption" => $this->err[$text],
-						));
-						$err_rows .= $sc->parse("ERROR");
-					}
-					$sc->vars(array(
-						"ERROR" => $err_rows,
-					));
-					$m_err = $sc->parse("MISSING_ERROR");
-				}
+
 
 
 				foreach($addr->get_country_list() as $k => $v)
@@ -519,9 +550,9 @@ class conference_planning extends class_base
 					);
 				}
 				$res = $this->all_mighty_search_engine(array(
-					"single_rooms" => ($sd["needs_rooms"])?$sd["single_count"]:false,
-					"double_rooms" => ($sd["needs_rooms"])?$sd["double_count"]:false,
-					"suites" => ($sd["needs_rooms"])?$sd["suite_count"]:false,
+					"single_rooms" => ($sd["accommondation_requirements"])?$sd["single_count"]:false,
+					"double_rooms" => ($sd["accommondation_requirements"])?$sd["double_count"]:false,
+					"suites" => ($sd["accommondation_requirements"])?$sd["suite_count"]:false,
 					"attendees_count" => $sd["attendees_no"],
 					"dates" => $altern_dates,
 					"oid" => $c_obj->id(),
@@ -1000,8 +1031,23 @@ class conference_planning extends class_base
 
 		$act_evt_no = strlen($_GET["act_evt_no"])?$_GET["act_evt_no"]:-1;
 		$act_cat_no = strlen($_GET["act_cat_no"])?$_GET["act_cat_no"]:-1;
+		
+		// error managment
+		$error_data = aw_global_get("conference_required_errors");
+		if(is_array($error_data[$no]) && count($error_data[$no]))
+		{
+			foreach($error_data[$no] as $err)
+			{
+				$this->vars(array(
+					"caption" => $this->required_fields_error[$no][$err],
+				));
+				$err_rows .= $this->parse("MISSING_ERROR");
+			}
+		}
+
 
 		$this->vars(array(
+			"MISSING_ERROR" => $err_rows,
 			"YAH_BAR" => join("", $yah),
 			"confirm_ch_id" => CONFIRM_ID,
 			"sub_contents" => $sc->parse(),
@@ -1026,27 +1072,40 @@ class conference_planning extends class_base
 	function submit_back($arr)
 	{
 		$this->save_form_data($arr);
-		if($arr["current_sub"] == 6 && (!strlen($arr["sub"]["6"]["billing_phone_number"]) || !strlen($arr["sub"]["6"]["billing_email"])))
-		{
-			$s = $arr["sub"]["6"];
-			$err_arr = array();
-			if(!strlen($arr["billing_phone_number"]))
-			{
-				$err_arr[] = "missing_phone";
-			}
-			if(!strlen($arr["billing_email"]))
-			{
-				$err_arr[] = "missing_email";
-			}
-			aw_session_set("tmp_conference_err", $err_arr);
-		}
-		else
-		{
-			aw_session_set("tmp_conference_err", "");
-		}
+		$this->handle_required_fields($arr);
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".($arr["current_sub"]-1);
 	}
 	
+	function handle_required_fields($arr)
+	{
+		$error_data = aw_global_get("conference_required_errors");
+		if($this->required_fields_conditions($arr["current_sub"],$arr["sub"]))
+		{
+			foreach($this->required_fields[$arr["current_sub"]] as $req_el)
+			{
+				if(!strlen($arr["sub"][$arr["current_sub"]][$req_el]))
+				{
+					$error_data[$arr["current_sub"]][$req_el] = $req_el;
+				}
+				else
+				{
+					unset($error_data[$arr["current_sub"]][$req_el]);
+				}
+			}
+		}
+		else
+		{
+			unset($error_data[$arr["current_sub"]]);
+		}
+		aw_session_set("conference_required_errors", $error_data);
+		$retval = true;
+		if(is_array($error_data[$arr["current_sub"]]) && count($error_data[$arr["current_sub"]]))
+		{
+			$retval = false;
+		}
+		return $retval;
+	}
+
 	/**
 		@attrib params=name name=submit_forward all_args=1 nologin=1
 	**/
@@ -1058,25 +1117,11 @@ class conference_planning extends class_base
 			// in case the user hasn't logged in yet.. 
 			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=qa";
 		}
-
-		if($arr["current_sub"] == 6 && (!strlen($arr["sub"]["6"]["billing_phone_number"]) || !strlen($arr["sub"]["6"]["billing_email"])))
+		
+		// requirements
+		if(!$this->handle_required_fields($arr))
 		{
-			$s = $arr["sub"]["6"];
-			$err_arr = array();
-			if(!strlen($arr["sub"]["6"]["billing_phone_number"]))
-			{
-				$err_arr[] = "missing_phone";
-			}
-			if(!strlen($arr["sub"]["6"]["billing_email"]))
-			{
-				$err_arr[] = "missing_email";
-			}
-			aw_session_set("tmp_conference_err", $err_arr);
 			return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$arr["current_sub"];
-		}
-		else
-		{
-			aw_session_set("tmp_conference_err", "");
 		}
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".($arr["current_sub"]+1);
 	}
@@ -1536,7 +1581,9 @@ class conference_planning extends class_base
 					break;
 				case "1":
 					$data["function_name"] = $val["function_name"];
+					$data["door_sign"] = strlen($data["door_sign"])?$data["door_sign"]:$val["function_name"]; // for 4th sub
 					$data["organisation_company"] = $val["organisation_company"];
+					$data["billing_company"] = strlen($data["billing_company"])?$data["billing_company"]:$val["organisation_company"];
 					$data["dates"][0]["response_date"] = $val["response_date"];
 					$data["dates"][0]["decision_date"] = $val["decision_date"];
 					$data["dates"][0]["arrival_date"] = $val["arrival_date"];
@@ -1562,7 +1609,7 @@ class conference_planning extends class_base
 
 					break;
 				case "3":
-					$data["needs_rooms"] = $val["needs_rooms"];
+					$data["accommondation_requirements"] = $val["needs_rooms"];
 					$data["single_count"] = $val["single_count"];
 					$data["double_count"] = $val["double_count"];
 					$data["suite_count"] = $val["suite_count"];
@@ -1704,14 +1751,6 @@ class conference_planning extends class_base
 	**/
 	function all_mighty_search_engine($arr)
 	{
-		//arr($arr);
-		// okay, i need to get all locations, then check the locations single, double and suite counts
-		// from these, which match, .. i need to get all ther rooms ... and check availability..
-		// if there are any available rooms.. i need to check if the rooms can accommodate needed peoples
-		// locations, which rooms can do this.. are the search results ???
-
-
-		// tsiish, basically i can't filter out any locations... but i have to put warings to them(there are not enough suites, or these rooms aren't available in these periods etc.. 
 		$room_inst = get_instance(CL_ROOM);
 		if($this->can("view", $arr["oid"]))
 		{
@@ -1723,23 +1762,59 @@ class conference_planning extends class_base
 		}
 
 		$from = array_unique($obj->prop("search_from"));
-		foreach($from as $fr_loc)
-		{
-			$list[$fr_loc] = obj($fr_loc);
-		}
-		/*
-		$ol = new object_list(array(
+		$template = array(
 			"class_id" => CL_LOCATION,
-		));
-		*/
+			"oid" => $from,
+			"status" => STAT_ACTIVE,	
+		);
+		$tmp = array(
+			"single_rooms" => "single_count",
+			"double_rooms" => "double_count",
+			"suites" => "suite_count",
+		);
+		$search_crit = false;
+		$search = $template;
+		foreach($tmp as $type => $type_prop)
+		{
+			if($arr[$type])
+			{
+				$search_crit = true;
+				$search[$type_prop] = $arr[$type];
+			}
+		}
+		$ol = new object_list($search);
+
+		// well, at first we search locations by the rooms, but if there aren't enough places (and room restrictions were set.. 
+		// then we search some additional places which don't have as much rooms, sort them by room total counts and add as many as needed
+		$res = $ol->arr();
+		if($ol->count() < $obj->prop("search_result_max") && $search_crit)
+		{
+			if($ol->count != 0)
+			{
+				$template["oid"] = new obj_predicate_not($ol->ids());
+			}
+			$new_ol = new object_list($template);
+			$new_ol->sort_by_cb(array(&$this, "__search_sort"));
+			$new_res = $new_ol->arr();
+			$need = $obj->prop("search_result_max") - count($res);
+			foreach($new_res as $k => $o)
+			{
+				$res[$k] = $o;
+				if(!(--$need))
+				{
+					break;
+				}
+				
+			}
+		}
+
 		$biggest_event = $arr["attendees_count"];
-		// loop over locations
 		foreach($arr["dates"] as $data)
 		{
 			$biggest_event = ($biggest_event < $data["persons"])?$data["persons"]:$biggest_event;
 		}
-		//foreach($ol->arr() as $location_oid => $location)
-		foreach($list as $location_oid => $location)
+		// loop over locations
+		foreach($res as $location_oid => $location)
 		{
 			$locations[$location_oid] = array();
 			$element = &$locations[$location_oid];
@@ -1788,6 +1863,13 @@ class conference_planning extends class_base
 		$spl = $date?split("[.]", $date):array(1,1,1970);
 		$splt = $time?split(":", $time):array(0,0);
 		return mktime($splt[0], $splt[1], 0, $spl[1], $spl[0], $spl[2]);
+	}
+
+	function __search_sort($a, $b)
+	{
+		$a_sum = $a->prop("single_count") + $a->prop("double_count") + $a->prop("suite_count");
+		$b_sum = $b->prop("single_count") + $b->prop("double_count") + $b->prop("suite_count");
+		return $b_sum - $a_sum;
 	}
 }
 ?>
