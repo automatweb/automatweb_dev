@@ -37,6 +37,7 @@
 					< name="ddoc_oid" />
 					< name="file_oid" />
 					< name="doc_oid" />
+					<optional name="check" type="array" />
 				</arguments>
 			</function>
 		</action>

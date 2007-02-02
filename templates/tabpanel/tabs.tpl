@@ -28,6 +28,7 @@
 
 <!-- SUB: HAS_TABS -->
 	<br class="clear" />
+	<!-- SUB: NOT_POPUP -->
 	<div class="toiming">
 		{VAR:qa_pop}
 		{VAR:bm_pop}
@@ -35,6 +36,7 @@
 <!--		<a href="#" class="nupp"><img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />Ajalugu <img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a> -->
 		<a href="{VAR:srch_link}" class="nupp"><img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_luup.gif" alt="" width="13" height="13" border="0" class="ikoon" />{VAR:search_text} <img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>
 	</div>
+	<!-- END SUB: NOT_POPUP -->
 
 </div>
 <!-- //päis -->

@@ -24,18 +24,6 @@ $apd = get_instance("layout/active_page_data");
 $styles = $apd->on_shutdown_get_styles();
 $styles_done = false;
 
-/*$pm = get_instance("vcl/popup_menu");
-$pm->begin_menu("ui_lang");
-
-$i = get_instance("core/trans/pot_scanner");
-foreach($i->get_langs() as $_uil)
-{
-	$pm->add_item(array(
-		"text" => $_uil,
-		"link" => aw_url_change_var("set_ui_lang", $_uil)
-	));
-}*/
-
 // check the url for classes and if any of those are in a prod family, then set that
 $pf = "";
 $clss = aw_ini_get("classes");
@@ -121,7 +109,16 @@ $sf->vars(array(
 		"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 	)),
 ));
-$shwy = (empty($site_title) || aw_global_get("hide_yah")) && $_GET["class"] != "admin_if";
+$shwy =  (empty($site_title) || aw_global_get("hide_yah")) && $_GET["class"] != "admin_if";
+
+if ($_GET["in_popup"])
+{
+	$sf->vars(array(
+		"NO_HEADER" => $sf->parse("NO_HEADER")
+	));
+	$site_title = "";
+	$shwy = true;
+}
 $sf->vars(array(
 	"YAH" => $shwy ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH"),
 	"YAH2" => $shwy ? ($site_title != "" ? "&nbsp;" : "") : $sf->parse("YAH2"),

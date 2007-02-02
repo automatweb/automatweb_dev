@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.133 2007/02/02 08:27:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.134 2007/02/02 12:46:24 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1359,7 +1359,7 @@ class room extends class_base
 			$time_to = $arr["obj_inst"]->prop("time_to");
 
 
-			if($arr["obj_inst"]->prop("selectbox_time_step") > 0)
+			if($arr["obj_inst"]->prop("selectbox_time_step") > 0 && false)
 			{
 				$time_step = $arr["obj_inst"]->prop("selectbox_time_step");
 				$time_from = $arr["obj_inst"]->prop("selectbox_time_from");

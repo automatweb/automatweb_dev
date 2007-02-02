@@ -116,6 +116,8 @@ window.onscroll = function ()
 		{VAR:site_title}
 	</div>
 		<!-- END SUB: YAH -->
+		<!-- SUB: NO_HEADER -->
+		<!-- END SUB: NO_HEADER -->
 
 	{VAR:content}
 <!-- //sisu -->

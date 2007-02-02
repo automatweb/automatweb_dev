@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.532 2007/01/31 08:49:46 kristo Exp $
+// $Id: class_base.aw,v 2.533 2007/02/02 12:46:24 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5501,6 +5501,11 @@ class class_base extends aw_template
 			));
 		}
 		return  $arr["post_ru"];
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 };
 ?>

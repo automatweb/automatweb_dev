@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="spa_bookings_overview" folder="applications/spa_bookings" extends="class_base">
+		<action name="print_person_chart">
+			<function name="print_person_chart">
+				<arguments>
+					<optional name="person" />
+					<optional name="rvs" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="show_cals_pop">
 			<function name="show_cals_pop">
 				<arguments>

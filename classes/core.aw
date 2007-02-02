@@ -780,13 +780,10 @@ class core extends acl_base
 				{
 					$uid_arr = explode(",", $seu);
 				}
-				if ($u != "" && !headers_sent() && aw_ini_get("site_id") != 138 && !in_array(aw_global_get("uid"), $uid_arr) )
+				if ($u != "" && !headers_sent() && !in_array(aw_global_get("uid"), $uid_arr) )
 				{
-					if (aw_global_get("uid") != "ahti")
-					{	
-						header("Location: $u");
-						die();
-					}
+					header("Location: $u");
+					die();
 				}
 				flush();
 				die("<br /><b>".

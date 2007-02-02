@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.162 2007/01/10 12:58:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.163 2007/02/02 12:46:24 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -823,6 +823,12 @@ class htmlclient extends aw_template
 				"settings_pop" => $bmb->get_menu(array("load_on_demand_url" => $this->mk_my_orb("settings_lod", array("url" => get_ru()), "user"))),
 				"srch_link" => $this->mk_my_orb("redir_search", array("url" => get_ru()), "aw_object_search")
 			));
+			if (!$_GET["in_popup"])
+			{
+				$tp->vars(array(
+					"NOT_POPUP" => $tp->parse("NOT_POPUP")
+				));
+			}
 			if (aw_ini_get("site_id") == 155)
 			{
 				$tp->vars(array(

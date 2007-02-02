@@ -15,6 +15,12 @@ a:hover {text-decoration: underline}
 	height: 84px;
 	border-bottom: 1px solid #f1f8fc
 }
+#pais_noheader {
+	background: #e2e2e2;
+	/*min-width: 550px;*/
+	height: 14px;
+	border-bottom: 1px solid #f1f8fc
+}
 #pais .logo { 
 	background: url('/automatweb/images/aw06/logo_t.gif') no-repeat;
 	width: 239px;
@@ -420,3 +426,4 @@ span.kast {
 	color: #05a6e9;
 	text-decoration: underline
 }
+
