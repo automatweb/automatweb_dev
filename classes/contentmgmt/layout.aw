@@ -247,7 +247,6 @@ class layout extends class_base
 	function set_property(&$arr)
 	{
 		$prop = &$arr['prop'];
-		echo "setp = $prop[name] <br>";
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
