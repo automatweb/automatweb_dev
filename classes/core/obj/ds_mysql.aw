@@ -412,10 +412,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		$conn_prop_fetch = array();
 
+		$fields = array();
 		// do a query for each table
 		foreach($tables as $table)
 		{
-			$fields = array();
 			$_got_fields = array();
 			foreach($tbl2prop[$table] as $prop)
 			{
@@ -437,15 +437,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
 					{
-					// resolve reltype and do find_connections
-					//$values = array();
-					$_co_reltype = $prop["reltype"];
-					$_co_reltype = $GLOBALS["relinfo"][$class_id][$_co_reltype]["value"];
+						// resolve reltype and do find_connections
+						$_co_reltype = $prop["reltype"];
+						$_co_reltype = $GLOBALS["relinfo"][$class_id][$_co_reltype]["value"];
 
-					$conn_prop_fetch[$prop["name"]] = $_co_reltype;
-
-					//$conn_prop_vals[$prop["name"]] = $values;
-					//echo "resolved reltype to ".dbg::dump($_co_reltype)." <br>";
+						$conn_prop_fetch[$prop["name"]] = $_co_reltype;
 					}
 				}
 				else
@@ -459,69 +455,82 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$fields[] = $table.".`".$prop["field"]."` AS `".$prop["name"]."`";
 				}
 			}
-			if ($q != "")
+/*			if ($q != "")
 			{
 				return array();
-			}
+			}*/
+		}
 
-			if ($full)
+
+		if ($full)
+		{
+			$q = "SELECT 
+				objects.oid as oid,
+				objects.parent as parent,
+				objects.name as name,
+				objects.createdby as createdby,
+				objects.class_id as class_id,
+				objects.created as created,
+				objects.modified as modified,
+				objects.status as status,
+				objects.hits as hits,
+				objects.lang_id as lang_id,
+				objects.comment as comment,
+				objects.last as last,
+				objects.modifiedby as modifiedby,
+				objects.jrk as jrk,
+				objects.visible as visible,
+				objects.period as period,
+				objects.alias as alias,
+				objects.periodic as periodic,
+				objects.site_id as site_id,
+				objects.brother_of as brother_of,
+				objects.cachedirty as cachedirty,
+				objects.metadata as metadata,
+				objects.subclass as subclass,
+				objects.cachedata as cachedata,
+				objects.flags as flags";
+			if (aw_ini_get("acl.use_new_acl") == 1)
 			{
-				$q = "SELECT 
-					objects.oid as oid,
-					objects.parent as parent,
-					objects.name as name,
-					objects.createdby as createdby,
-					objects.class_id as class_id,
-					objects.created as created,
-					objects.modified as modified,
-					objects.status as status,
-					objects.hits as hits,
-					objects.lang_id as lang_id,
-					objects.comment as comment,
-					objects.last as last,
-					objects.modifiedby as modifiedby,
-					objects.jrk as jrk,
-					objects.visible as visible,
-					objects.period as period,
-					objects.alias as alias,
-					objects.periodic as periodic,
-					objects.site_id as site_id,
-					objects.brother_of as brother_of,
-					objects.cachedirty as cachedirty,
-					objects.metadata as metadata,
-					objects.subclass as subclass,
-					objects.cachedata as cachedata,
-					objects.flags as flags";
-				if (aw_ini_get("acl.use_new_acl") == 1)
-				{
-					$q .= ",objects.acldata as acldata";
-				}
-				if (count($fields) > 0)
-				{
-					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.brother_of = ".$table.".`".$tableinfo[$table]["index"]."` WHERE ";
-					$q .= " objects.oid ";
-				}
-				else
-				{
-					$q .= " FROM objects WHERE oid";
-				}
+				$q .= ",objects.acldata as acldata";
 			}
-			else
 			if (count($fields) > 0)
 			{
-				$q = "SELECT ".join(",", $fields)." FROM $table WHERE `".$tableinfo[$table]["index"]."`";
+				$joins = "";
+				foreach($tables as $table)
+				{
+					$joins .= " LEFT JOIN $table ON objects.brother_of = ".$table.".`".$tableinfo[$table]["index"]."` ";
+				}
+				$q .= ",".join(",", $fields)." FROM objects $joins  WHERE ";
+				$q .= " objects.oid ";
 			}
-
-			if (!$full)
+			else
 			{
-				if (is_array($object_id))
-				{
-					$q .= " IN (".join(",", $object_id).")";
-				}
-				else
-				{
-					$q .= " = '".$object_id."'";
-				}
+				$q .= " FROM objects WHERE oid";
+			}
+		}
+		else
+		if (count($fields) > 0)
+		{
+			$table = reset($tables);
+			$from = " FROM $table ";
+			$o_t = $table;
+			while($table = each($tables))
+			{
+				$from .= " LEFT JOIN $table ON ".$o_t.".`".$tableinfo[$o_t]["index"]."` = ".$table.".`".$tableinfo[$table]["index"]."` ";
+			}
+			$q = "SELECT ".join(",", $fields)." $from WHERE `".$tableinfo[$table]["index"]."`";
+		}
+
+		if (!$full)
+		{
+			if (is_array($object_id))
+			{
+				$q .= " IN (".join(",", $object_id).")";
+			}
+			else
+			{
+				$q .= " = '".$object_id."'";
 			}
 		}
 
