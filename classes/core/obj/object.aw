@@ -131,6 +131,10 @@ class object
 			unset($GLOBALS["objects"][$oid]);
 		}
 
+		if (!empty($GLOBALS["TRACE_OBJ_UNIQ"]) && !isset($GLOBALS["objects"][$oid]))
+		{
+			echo "load object $param from <br>".dbg::short_backtrace()." <br>";
+		}
 		enter_function("object::load");
 		$this->oid = $GLOBALS["object_loader"]->load($oid);
 		exit_function("object::load");

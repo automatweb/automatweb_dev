@@ -2548,7 +2548,6 @@ class grid_editor extends class_base
 		$f = fopen($file,"r");
 		$filestr = fread($f,filesize($file));
 		fclose($f);
-
 		$len = strlen($filestr);
 		$linearr = array();
 		$in_cell = false;

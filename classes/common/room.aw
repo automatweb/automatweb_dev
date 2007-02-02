@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.134 2007/02/02 12:46:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.135 2007/02/02 12:49:47 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1595,13 +1595,14 @@ class room extends class_base
 		{
 			$len = floor(($_GET["end"] - $_GET["start"]) / 86400);
 		}
+		enter_function("get_calendar_tbl::3::genres");
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len);
 		$this->_init_calendar_t($t,$this->start, $len);
+		exit_function("get_calendar_tbl::3::genres");
 //arr($this->res_table);
 		$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
 	
 		$num_rows = 0;
-	
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
 		// this seems to fuck up in reval room calendar view and only display time to 15:00
 		//while($step < floor($steps))
@@ -1881,6 +1882,7 @@ class room extends class_base
 		$m_oid = $arr["obj_inst"]->id();
 		$this->prod_data = $arr["obj_inst"]->meta("prod_data");
 		$item_list = $this->get_active_items($arr["obj_inst"]->id());
+		$item_list->arr();	//optimization to fetc all at once
 		$prod_list = $item_list->names();
 		$times = array();
 		foreach($prod_list as $oid => $pname)
@@ -1966,15 +1968,23 @@ class room extends class_base
 		{
 			return 0;
 		}
-		
+
+		static $cache;
+		if (isset($cache[$room->id()][$bron->id()]))
+		{
+			return $cache[$room->id()][$bron->id()];
+		}		
+
 		if(is_object($room) && $room->prop("use_product_times") && is_object($bron))
 		{
-			return $this->get_products_buffer(array("bron" => $bron, "time" => "after"));
+			$rv = $this->get_products_buffer(array("bron" => $bron, "time" => "after"));
 		}
 		elseif(is_object($room))
 		{
-			return $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+			$rv = $room->prop("buffer_after")*$room->prop("buffer_after_unit");
 		}
+		$cache[$room->id()][$bron->id()] = $rv;
+		return $rv;
 	}
 	
 	function get_before_buffer($arr)
@@ -1985,14 +1995,22 @@ class room extends class_base
 			return 0;
 		}
 		
+		static $cache;
+		if (isset($cache[$room->id()][$bron->id()]))
+		{
+			return $cache[$room->id()][$bron->id()];
+		}
+
 		if(is_object($room) && $room->prop("use_product_times") && is_object($bron))
 		{
-			return $this->get_products_buffer(array("bron" => $bron, "time" => "before"));
+			$rv = $this->get_products_buffer(array("bron" => $bron, "time" => "before"));
 		}
 		elseif(is_object($room))
 		{
-			return $room->prop("buffer_before")*$room->prop("buffer_before_unit");
+			$rv = $room->prop("buffer_before")*$room->prop("buffer_before_unit");
 		}
+		$cache[$room->id()][$bron->id()] = $rv;
+		return $rv;
 	}
 		
 	function get_when_opens()
@@ -3061,10 +3079,26 @@ class room extends class_base
 		else
 		{
 			$prods = $this->get_prod_list($o);
-			foreach($prods->arr() as $product)
+			$c = new connection();
+			$conns = $c->find(array(
+				"from" => $prods->ids(),
+				"from.class_id" => CL_SHOP_PRODUCT,
+				"reltype" => "RELTYPE_PACKAGING"
+			));
+			$pk_ids = array();
+			foreach($conns as $c)
+			{
+				$pk_ids[] = $c["to"];
+			}
+			$ol = new object_list(array(
+				"oid" => $pk_ids,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			/*foreach($prods->arr() as $product)
 			{
 				$ol->add($this->get_package_list($product));
-			}
+			}*/
 		}
 		return $ol;
 	}
@@ -3085,15 +3119,14 @@ class room extends class_base
 		
 		if($o->class_id() == CL_MENU)
 		{
+			return $ol;
 			$parents = $o->id();
+			
 		}
-		else
-		{
-			$this->prod_data = $o->meta("prod_data");
-			$parents = $this->get_prod_tree_ids($o);
-		}
+		$this->prod_data = $o->meta("prod_data");
+		$parents = $this->get_prod_tree_ids($o);
 		
-		$parents_temp = array();
+		/*$parents_temp = array();
 		foreach($parents as $parent)
 		{
 			if($this->can("view" , $parent))
@@ -3111,8 +3144,27 @@ class room extends class_base
 		}
 		asort($parents_temp, SORT_NUMERIC);
 		$parents = $parents_temp;
-		
-		
+		*/
+
+		$prods = array();
+		foreach($this->prod_data as $prod => $data)
+		{
+			if ($data["active"])
+			{
+				$prods[] = $prod;
+			}
+		}
+
+		$p_ol = new object_list(array(
+                        "class_id" => CL_SHOP_PRODUCT,
+                        "lang_id" => array(),
+	                "parent" => $prods,
+        	     //   "sort_by" => "jrk ASC",
+                ));
+		$p_ol->arr();
+		$p_ol->sort_by_cb(array(&$this, "__prod_sorter"));
+		return $p_ol;
+
 		foreach($parents as $key => $jrk)
 		{
 			$tmp_list = new object_list(array(
@@ -3121,17 +3173,7 @@ class room extends class_base
 				"parent" => $key,
 				"sort_by" => "jrk ASC",
 			));
-			if(!$this->prod_data)
-			{
-				foreach($tmp_list->ids() as $prod)
-				{
-					if($this->prod_data[$prod]["active"])
-					{
-						$ol->add($prod);
-					}
-				}
-			}
-			else
+			if($this->prod_data)
 			{
 				$prods = array();
 				foreach($tmp_list->ids() as $prod)
@@ -3148,6 +3190,10 @@ class room extends class_base
 		return $ol;
 	}
 	
+	function __prod_sorter($a, $b)
+	{
+		return $this->prod_data[$b->id()]["ord"] - $this->prod_data[$a->id()]["ord"];
+	}
 	/**
 		@attrib params=pos
 		@param prod_list required type=Array
@@ -3808,6 +3854,7 @@ class room extends class_base
 		
 		$reservations = new object_list($filt);
 		$this->res_table = array();
+		$customers = array();
 		foreach($reservations->arr() as $res)
 		{
 			if($res->prop("verified") || ($res->prop("deadline") > time()))
@@ -3835,9 +3882,20 @@ class room extends class_base
 				$this->res_table[$start]["real_end"] = $res->prop("end");
 				$this->res_table[$start]["real_start"] = $res->prop("start1");
 				$this->res_table[$start]["id"] = $res->id();
+				$customers[] = $res->prop("customer");
 			}
 		}
 		ksort($this->res_table);
+
+		if (count($customers))
+		{
+			$cust_ol = new object_list(array(
+				"oid" => $customers,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$custs = $cust_ol->arr();
+		}
 	}
 
 	/**

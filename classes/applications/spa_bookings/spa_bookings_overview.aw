@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.13 2007/01/24 14:27:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.14 2007/02/02 12:49:47 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -587,7 +587,6 @@ class spa_bookings_overview extends class_base
 			$prop = array(
 				"vcl_inst" => &$t
 			);
-		
 			$ri->_get_calendar_tbl(array(
 				"room" => $room_id,
 				"prop" => $prop
@@ -602,6 +601,7 @@ class spa_bookings_overview extends class_base
 			));
 			$cals .= $this->parse("CAL");
 		}
+
 		$this->vars(array(
 			"CAL" => $cals,
 			//"reforb" => $this->mk_reforb("do_add_reservation", array("id" => $arr["id"], "post_ru" => get_ru()), "room")
