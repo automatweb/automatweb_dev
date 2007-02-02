@@ -247,6 +247,7 @@ class layout extends class_base
 	function set_property(&$arr)
 	{
 		$prop = &$arr['prop'];
+		echo "setp = $prop[name] <br>";
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
@@ -281,7 +282,7 @@ class layout extends class_base
 				break;
 
 			case "import_file":
-				global $import_file;
+				$import_file = $_FILES["import_file"]["tmp_name"];
 				if (is_uploaded_file($import_file))
 				{
 					$ge = get_instance("vcl/grid_editor");
