@@ -186,6 +186,17 @@
             <caption>Kasuta toodetele m&amp;auml;&amp;auml;ratud aegu</caption>
       </property>
       <property>
+            <name>group_product_menu</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>checkbox</type>
+            <no_caption>1</no_caption>
+            <caption>Grupeeri tooted kaustadesse</caption>
+      </property>
+      <property>
             <name>settings</name>
             <table>objects</table>
             <field>meta</field>
