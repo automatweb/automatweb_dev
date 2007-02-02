@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.132 2007/02/02 07:45:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.133 2007/02/02 08:27:45 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -17,65 +17,61 @@
 	@layout general_split type=hbox width=50%:50%
 
 	@layout general_up type=vbox closeable=1 area_caption=&Uuml;ldinfo parent=general_split
-	@default parent=general_up
 
-		@property name type=textbox field=name method=none
+		@property name type=textbox field=name method=none parent=general_up
 		@caption Nimi
 
-		@property short_name type=textbox
+		@property short_name type=textbox parent=general_up
 		@caption Nime l&uuml;hend
 
-		@property location type=relpicker reltype=RELTYPE_LOCATION
+		@property location type=relpicker reltype=RELTYPE_LOCATION parent=general_up
 		@caption Asukoht
 
-		@property owner type=relpicker reltype=RELTYPE_OWNER
+		@property owner type=relpicker reltype=RELTYPE_OWNER parent=general_up
 		@caption Omanik
 
-		@property warehouse type=relpicker reltype=RELTYPE_SHOP_WAREHOUSE
+		@property warehouse type=relpicker reltype=RELTYPE_SHOP_WAREHOUSE parent=general_up
 		@caption Ladu
 		
-		@property resources_fld type=hidden reltype=RELTYPE_INVENTORY_FOLDER no_caption=1
+		@property resources_fld type=hidden reltype=RELTYPE_INVENTORY_FOLDER no_caption=1 parent=general_up
 		@caption Ressursside kataloog
 
-		@property area type=relpicker reltype=RELTYPE_AREA
+		@property area type=relpicker reltype=RELTYPE_AREA parent=general_up
 		@caption Valdkond
 
-		@property professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1
+		@property professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up
 		@caption Ametinimetused
 	
-		property reservation_template type=select
+		property reservation_template type=select parent=general_up
 		caption Broneeringu template
 
 	@layout general_down type=vbox closeable=1 area_caption=Mahutavus&#44;&nbsp;kasutustingimused parent=general_split
-	@default parent=general_down
 		
-		@property conditions type=relpicker reltype=RELTYPE_CONDITIONS
+		@property conditions type=relpicker reltype=RELTYPE_CONDITIONS parent=general_down
 		@caption Kasutustingimused
 		
-		@property square_meters type=textbox size=5
+		@property square_meters type=textbox size=5 parent=general_down
 		@caption Suurus(ruutmeetrites)
 
-		@property normal_capacity type=textbox size=5
+		@property normal_capacity type=textbox size=5 parent=general_down
 		@caption Normaalne mahutavus
 
-		@property max_capacity type=textbox size=5
+		@property max_capacity type=textbox size=5 parent=general_down
 		@caption Maksimaalne mahutavus
 
 		@layout buffer_before_l type=hbox width=30%:70% parent=general_down
-		@default parent=buffer_before_l
 
-		@property buffer_before type=textbox size=5
+		@property buffer_before type=textbox size=5 parent=buffer_before_l
 		@caption Puhveraeg enne
 		
-		@property buffer_before_unit type=select no_caption=1
+		@property buffer_before_unit type=select no_caption=1 parent=general_down
 		
 		@layout buffer_after_l type=hbox  width=30%:70% parent=general_down
-		@default parent=buffer_after_l
 		
-		@property buffer_after type=textbox size=5
+		@property buffer_after type=textbox size=5 parent=buffer_after_l
 		@caption Puhveraeg p&auml;rast
 		
-		@property buffer_after_unit type=select no_caption=1
+		@property buffer_after_unit type=select no_caption=1 parent=general_down
 		
 		@property use_product_times type=checkbox parent=general_down no_caption=1
 		@caption Kasuta toodetele määratud aegu
@@ -107,7 +103,7 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 # TAB IMAGES
 
 @groupinfo images caption="Pildid"
-@default group=images,parent=
+@default group=images
 	@property images_tb type=toolbar no_caption=1
 	@property images_tbl type=table no_caption=1
 	@property images_search type=hidden no_caption=1 store=no
@@ -134,59 +130,79 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 # TAB PRICES
 
 @groupinfo prices caption="Hinnad"
-@default group=prices,parent=
+@default group=prices
 	
 	@groupinfo prices_general caption="&Uuml;ldine" parent=prices
 	@default group=prices_general
 
-		@property currency type=relpicker multiple=1 reltype=RELTYPE_CURRENCY
-		@caption Valuuta
 
-		@property price type=chooser multiple=1 ch_value=1
-		@caption Hind
 
-		@property childtitle17 type=text store=no subtitle=1
-		@caption Lisanduv hind &uuml;le normaalse mahutavuse oleva inimese kohta
-		
-		@property add_price_per_face type=text no_caption=1
-		@caption Lisanduv hind inimestele üle normaalmahutavuse
+		@layout top_split type=hbox width=50%:50%
 
-		@property time_unit type=chooser
-		@caption Aja&uuml;hik
+			@layout currency_l type=vbox area_caption=Seaded closeable=1 parent=top_split
 
-		@property prod_discount_loc type=chooser
-		@caption Toodete soodushind võetakse: 
+				@property currency type=relpicker multiple=1 reltype=RELTYPE_CURRENCY parent=currency_l
+				@caption Valuuta
 
-		@property prod_web_discount type=textbox size=2
-		@caption Toodete soodushind
+				@property price type=chooser multiple=1 ch_value=1 parent=currency_l
+				@caption Hind
 
-		@layout time_step type=hbox width=5%:5%:20%:60%
-		@caption Aja samm
+				@property prod_discount_loc type=chooser parent=currency_l
+				@caption Toodete soodushind võetakse: 
 
-			@property time_from type=textbox size=5 parent=time_step
-			@caption Alates
 
-			@property time_to type=textbox size=5 parent=time_step
-			@caption kuni
+				@property prod_web_discount type=textbox size=2 parent=currency_l
+				@caption Toodete soodushind
 
-			@property time_step type=textbox size=5 parent=time_step
-			@caption ,sammuga
+
+			@layout add_face type=vbox area_caption=Lisanduv&nbsp;hind&nbsp;inimestele&nbsp;&uuml;le&nbsp;normaalmahutavuse closeable=1 parent=top_split
+
+				@property add_price_per_face type=text no_caption=1  parent=add_face
+				@caption Lisanduv hind inimestele üle normaalmahutavuse
+
+
+		@layout middle_split type=hbox width=50%:50%
+
+			@layout middle type=vbox area_caption=Ajaseaded closeable=1 parent=middle_split
+
+				@property time_unit type=chooser parent=middle
+				@caption Aja&uuml;hik
+
+				@layout time_step type=hbox width=5%:5%:20%:60% parent=middle
+				@caption Aja samm
+
+					@property time_from type=textbox size=5 parent=time_step
+					@caption Aja samm: alates
+
+					@property time_to type=textbox size=5 parent=time_step
+					@caption kuni
+
+					@property time_step type=textbox size=5 parent=time_step
+					@caption ,sammuga
 			
-			@property selectbox_time_step type=textbox size=5 parent=time_step
-			@caption Valiku aja samm (kui on erinev, mõjub ka hinnale)
+
+				@layout selectbox_time_step type=hbox width=5%:5%:20%:60% parent=middle
+				@caption Valiku aja samm
+
+					@property selectbox_time_from type=textbox size=5 parent=selectbox_time_step
+					@caption Valiku aja samm: alates
+
+					@property selectbox_time_to type=textbox size=5 parent=selectbox_time_step
+					@caption kuni
+
+					@property selectbox_time_step type=textbox size=5 parent=selectbox_time_step
+					@caption , sammuga
+
+
+			@layout min_prices type=vbox closeable=1 area_caption=Kogu&nbsp;ruumi&nbsp;broneeringu&nbsp;miinimumhind parent=middle_split
+		
+				@property min_prices_props type=callback callback=gen_min_prices_props parent=min_prices
 
 			
-		property selectbox_length type=textbox size=4
-		caption Ajavaliku pikkus
-		
-		@property web_min_prod_price type=callback callback=cb_gen_web_min_prices 
-		@caption Veebi miinumum toodete hind 
+	
+				@property web_min_prod_price type=callback callback=cb_gen_web_min_prices 
 
-		@property childtitle110 type=text store=no subtitle=1
-		@caption Kogu ruumi broneeringu miinimumhind
-		
-			@property min_prices_props type=callback callback=gen_min_prices_props
-			@caption Miinimum hinnad
+	
 
 
 	@groupinfo prices_price caption="Hinnad" parent=prices
@@ -1337,26 +1353,33 @@ class room extends class_base
 		$ret = "";
 		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
 		{
-
 			$options = array();
-			$end = $arr["obj_inst"]->prop("time_to")/$arr["obj_inst"]->prop("time_step");
-			$x = $arr["obj_inst"]->prop("time_from")/$arr["obj_inst"]->prop("time_step");
+			$time_step = $arr["obj_inst"]->prop("time_step");
+			$time_from = $arr["obj_inst"]->prop("time_from");
+			$time_to = $arr["obj_inst"]->prop("time_to");
+
+
 			if($arr["obj_inst"]->prop("selectbox_time_step") > 0)
 			{
-				$add = $arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step");
+				$time_step = $arr["obj_inst"]->prop("selectbox_time_step");
+				$time_from = $arr["obj_inst"]->prop("selectbox_time_from");
+				$time_to = $arr["obj_inst"]->prop("selectbox_time_to");
+				$add = $arr["obj_inst"]->prop("selectbox_time_step")/$time_step;
 			}
 			else
 			{
 				$add = 1;
 			}
-			//$x = ($arr["obj_inst"]->prop("selectbox_time_step")/$arr["obj_inst"]->prop("time_step"));
+
+			$end = $time_to/$time_step;
+			$x = $time_from/$time_step;
+
 			while($x<=$end)
 			{
-				//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-				$options["".$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-				if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
+				$options["".$x] = ($x * $time_step)%10;
+				if(($x * $time_step - ($x * $time_step)%10))
 				{
-					$small_units = round(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60);
+					$small_units = round(($x * $time_step - ($x * $time_step)%10)*60);
 					if($small_units%60 == 0)
 					{
 						$options["".$x] = $options["".$x] + $small_units/60;
@@ -1372,27 +1395,12 @@ class room extends class_base
 				}
 				$x = $x + $add;
 			}
-			//}
-/*			else
-			{
-				while($start <= $end)
-				{
-					//$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-					$options[$x] = ($x * $arr["obj_inst"]->prop("time_step"))%10;
-					if(($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10))
-					{
-						$options[$x] = $options[$x] . ":" . ($x * $arr["obj_inst"]->prop("time_step") - ($x * $arr["obj_inst"]->prop("time_step"))%10)*60; 
-					}
-					$x++;
-				};
-			}*/
 			$ret.= html::select(array(
 				"name" => "room_reservation_length",
 				"options" => $options,
 				"onchange" => "changeRoomReservationLength(this);",
 			));
 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
-		//	$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		}
 		
 		//seda hakkaks js siis vajama, et natuke aega juurde liita ajale mida selectitakse
@@ -1620,6 +1628,11 @@ class room extends class_base
 					{
 						$arr["timestamp"] = $start_step;
 						$prod_menu="";
+						$time_step = $arr["obj_inst"]->prop("time_step");
+						if ($arr["obj_inst"]->prop("selectbox_time_step") > 0)
+						{
+							$time_step = $arr["obj_inst"]->prop("selectbox_time_step");
+						}
 						if($arr["obj_inst"]->prop("use_product_times"))
 						{
 							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
@@ -1629,11 +1642,11 @@ class room extends class_base
 						else
 						if ($settings->prop("bron_popup_immediate") && is_admin())
 						{
-							$onclick[$x] = "doBronExec('".$arr["obj_inst"]->id()."_".$start_step."', ".($step_length * $arr["obj_inst"]->prop("time_step")).")";
+							$onclick[$x] = "doBronExec('".$arr["obj_inst"]->id()."_".$start_step."', ".($step_length * $time_step).")";
 						}
 						else
 						{
-							$onclick[$x] = "doBron('".$arr["obj_inst"]->id()."_".$start_step."' , ".($step_length * $arr["obj_inst"]->prop("time_step")).")";
+							$onclick[$x] = "doBron('".$arr["obj_inst"]->id()."_".$start_step."' , ".($step_length * $time_step).")";
 							//$string = t("VABA");
 						}
 
@@ -4049,7 +4062,8 @@ class room extends class_base
                                "caption" => sprintf(t("Min hind toodetele veebis (%s)"), $c->prop("unit_name")),
                                "value" => $prices[$cur],
                                "editonly" => 1,
-			       "size" => 5
+			       "size" => 5,
+//				"parent" => "min_price_prod"
                         );
 		}
 		return $retval;
@@ -4132,6 +4146,7 @@ class room extends class_base
 				"caption" => $c->prop("unit_name"),
 				"value" => $prices[$cur],
 				"editonly" => 1,
+				"parent" => "min_prices"
 			);
 		}
 		return $retval;
