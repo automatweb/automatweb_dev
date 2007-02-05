@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.26 2007/01/24 14:27:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.27 2007/02/05 08:57:14 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -751,7 +751,6 @@ class spa_bookigs_entry extends class_base
 			die(t("Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"));
 		}
 
-
 		$room_inst = get_instance(CL_ROOM);
 		$room2inst = array();
 		foreach($p_rooms as $room_id => $room_obj)
@@ -774,7 +773,6 @@ class spa_bookigs_entry extends class_base
 		$prod_obj = obj($arr["prod"]);
 		$prod_inst = $prod_obj->instance();
 		$time_step = $reservation_length = $prod_inst->get_reservation_length($prod_obj);
-		
 		// check if buffers are shorter than the min rvs len
 		// then time steps are buffer length, but rvs len is rvs len still
 		$tmp = $prod_inst->get_pre_buffer($prod_obj);
@@ -798,6 +796,16 @@ class spa_bookigs_entry extends class_base
 			$time_step = min($tmp2, $time_step);
 		}
 
+		// what we actually need to do, is to get the time steps from all the rooms and get the smallest one
+		$time_step = 24*3600;
+		foreach($p_rooms as $room_id => $room_obj)
+                {
+			$tmp = $room_obj->prop("time_step") * ($room_obj->prop("time_unit") == 1 ? 60 : ($room_obj->prop("time_unit") == 2 ? 3600 : 3600*24));
+			$time_step = min($time_step, $tmp);
+                }
+
+
+		//$time_step = 15*60;
 		if ($time_step == 0)
 		{
 			die(sprintf(t("Tootele %s pole m&auml;&auml;ratud broneeringu pikkust!"), html::obj_change_url($prod_obj)));
