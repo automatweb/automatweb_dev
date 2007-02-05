@@ -150,6 +150,15 @@
             <caption>Lahenduse valmimist&amp;amp;auml;htaeg n&amp;amp;otilde;utud</caption>
       </property>
       <property>
+            <name>shipment_date_req</name>
+            <table>aw_procurements</table>
+            <group>s_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_shipment_date_req</field>
+            <caption>Tarne t&amp;amp;auml;htaeg n&amp;amp;otilde;utud</caption>
+      </property>
+      <property>
             <name>pri_t</name>
             <table>objects</table>
             <group>s_pris</group>

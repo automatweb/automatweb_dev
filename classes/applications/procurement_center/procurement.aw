@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.12 2007/02/05 14:57:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.13 2007/02/05 15:14:07 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -64,6 +64,10 @@
 
 	@property compl_date_req type=checkbox ch_value=1 field=aw_compl_date_req table=aw_procurements
 	@caption Lahenduse valmimist&auml;htaeg n&otilde;utud
+
+	@property shipment_date_req type=checkbox ch_value=1 field=aw_shipment_date_req table=aw_procurements
+	@caption Tarne t&auml;htaeg n&otilde;utud
+
 
 @default group=s_pris
 
@@ -686,6 +690,7 @@ class procurement extends class_base
 			case "aw_offers_date":
 			case "aw_completion_date":
 			case "aw_compl_date_req":
+			case "aw_shipment_date_req":
 			case "aw_proj":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;

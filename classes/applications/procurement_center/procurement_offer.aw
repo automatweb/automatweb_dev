@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.21 2006/12/06 11:14:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.22 2007/02/05 15:14:07 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -473,6 +473,7 @@ class procurement_offer extends class_base
 		if(is_oid($this_object->prop("procurement")) && $this->can("view" , $this_object->prop("procurement")))
 		{
 			$procurement = obj($this_object->prop("procurement"));
+			arr($procurement->prop("orderer"));
 			$co = obj($procurement->prop("orderer"));
 			$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
 		}
@@ -996,6 +997,7 @@ class procurement_offer extends class_base
 		if(is_oid($this_obj->prop("procurement")))
 		{
 			$procurement_obj = obj($this_obj->prop("procurement"));
+			$show_shipment_date = $procurement_obj->prop("shipment_date_req");
 			$company_id = $procurement_obj->prop("orderer");
 			if(is_oid($company_id) && $this->can("view", $company_id)) $co = obj($company_id);
 		}
@@ -1040,10 +1042,14 @@ class procurement_offer extends class_base
 			'name' => 'total',
 			'caption' => t('Kogusumma'),
 		));
-		$t->define_field(array(
-			'name' => 'shipment',
-			'caption' => t('Tarneaeg'),
-		));
+		
+		if($show_shipment_date)
+		{
+			$t->define_field(array(
+				'name' => 'shipment',
+				'caption' => t('Tarneaeg'),
+			));
+		}
 /*		$t->define_field(array(
 			'name' => 'accept',
 			'caption' => t('Aktsepteeritud'),
@@ -1118,6 +1124,15 @@ class procurement_offer extends class_base
 					"checked" => $row->prop("accept"),
 				));
 			}
+			if(!$row->prop("price_amount"))
+			{
+				$min_amount = $row->prop("amount");
+			}
+			else
+			{
+				$min_amount = $row->prop("price_amount");
+			}
+			
 			$prod_rows_data[] = array(
 				"date" => date("d.m.Y", $row->prop("shipment")),
 				"accept" => $accept,	
@@ -1131,7 +1146,7 @@ class procurement_offer extends class_base
 				"price" => $row->prop("price"),
 				"currency" => $row->prop("currency"),
 				"shipment" => $row->prop("shipment"),
-				"price_amount" => $row->prop("price_amount"),
+				"price_amount" => $min_amount,
 			);
 		}
 		foreach($prod_rows_data as $prod_row_data)	
@@ -1143,7 +1158,7 @@ class procurement_offer extends class_base
 				"available" 	=> $available,
 				"product"	=> html::textbox(array(
 							"name" => "products[".$x."][product]",
-							"size" => "25",
+							"size" => "40",
 							"value" => $product,
 							"autocomplete_source" => $procurement_inst->mk_my_orb ("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
 							"autocomplete_params" => "products[".$x."][product]",
@@ -1220,7 +1235,7 @@ class procurement_offer extends class_base
 			//	"jrk"		=> $x+2,
 				"product"	=> html::textbox(array(
 							"name" => "products[".$x."][product]",
-							"size" => "25",
+							"size" => "40",
 							"autocomplete_source" => $procurement_inst->mk_my_orb ("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
 							"autocomplete_params" => "products[".$x."][product]",
 							)),
