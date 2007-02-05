@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.29 2007/02/05 15:38:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.30 2007/02/05 16:32:03 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -1490,7 +1490,8 @@ class procurement_center extends class_base
 					{
 						$pm->add_item(array(
 							"text" => $c->prop("to.name"),
-							"link" => file::get_url($c->prop("to"), $c->prop("to.name"))
+							"link" => file::get_url($c->prop("to"), $c->prop("to.name")),
+							"target" => 1,
 						));
 					}
 				}
@@ -1498,14 +1499,13 @@ class procurement_center extends class_base
 					"icon" => icons::get_icon_url($file_o)
 				));
 			}
-
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
-				"date" => date("d.m.Y",$o->created()),//$o->prop("accept_date")),
+				"date" => date("d.m.Y",$o->prop("date")),//$o->prop("accept_date")),
 				"offerer_name" => $offerer_name,
 				"area" => $offerer_area,
 				"status" => $statuses[$o->prop("state")],
-				"sum" => $o->prop("price"),
+				"sum" => number_format($offer_inst->calculate_price($o), 2),
 				"files" => $files,
 				"oid" => $o->id(),
 			));
@@ -1540,6 +1540,12 @@ class procurement_center extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "files",
+			"caption" => t("Pakkumisega seotud failid"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "status",
 			"caption" => t("Pakkumise staatus"),
 			"align" => "center",
@@ -1548,12 +1554,6 @@ class procurement_center extends class_base
 		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("Pakkumise summa"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "files",
-			"caption" => t("Pakkumisega seotud failid"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -1867,6 +1867,12 @@ class procurement_center extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "offers",
+			"caption" => t("Ostuga seotud pakkumised"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "status",
 			"caption" => t("Ostu staatus"),
 			"align" => "center",
@@ -1875,12 +1881,6 @@ class procurement_center extends class_base
 		$t->define_field(array(
 			"name" => "sum",
 			"caption" => t("Ostu summa"),
-			"align" => "center",
-			"sortable" => 1
-		));
-		$t->define_field(array(
-			"name" => "offers",
-			"caption" => t("Ostuga seotud pakkumised"),
 			"align" => "center",
 			"sortable" => 1
 		));
