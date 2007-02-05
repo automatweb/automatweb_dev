@@ -138,6 +138,7 @@ class object_tree extends _int_obj_container_base
 			foreach($objs as $oid => $o)
 			{
 				$ol->list[$oid] = $oid;
+				$ol->list_objdata[$oid] = $this->tree_objdata[$pt][$oid];
 			}
 		}
 		return $ol;
@@ -600,6 +601,7 @@ class object_tree extends _int_obj_container_base
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
 			{
+				$this->tree_objdata[$parentdata[$oid]][$oid] = $objdata[$oid];
 				if (count($meta_filter) > 0)
 				{
 					$o = new object($oid);
