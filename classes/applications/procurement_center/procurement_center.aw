@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.28 2006/12/01 14:23:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.29 2007/02/05 15:38:42 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -30,6 +30,9 @@
 	@caption default kuup&auml;ev otsungus tagasi
 		
 	@property search_date_subtract_unit type=select no_caption=1 parent=settings_l field=meta method=serialize
+
+	@property no_warehouse type=checkbox no_caption=1 field=meta method=serialize
+	@caption Laoseisu ei arvestata
 
 @default group=p
 
@@ -2555,14 +2558,13 @@ class procurement_center extends class_base
 		{
 			$filter["name"] = "%".$data["products_find_product_name"]."%";
 		}
-		
 		if(
 			    $data["products_find_name"]
 			 || $data["products_find_address"]
 			 || $data["products_find_groups"]
 			 || $data["products_find_apply"]
 			 || $data["products_find_start"]
-			 || $data["products_find_start"]
+			 || $data["products_find_end"]
 		)
 		{
 			$offerer_filter = array("class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON), "lang_id" => array());
@@ -2594,7 +2596,7 @@ class procurement_center extends class_base
 			}
 //			if($data["products_find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
 			$offerer_list = new object_list($offerer_filter);
-			$filter["name"] = array();
+			$filter["name"] = array($filter["name"]);
 			foreach($offerer_list->arr() as $offerer)
 			{
 				$row_filter = array(
@@ -2639,7 +2641,8 @@ class procurement_center extends class_base
 	function _products_tbl(&$arr)
 	{
 		classload("core/icons");
-		$tb =& $arr["prop"]["vcl_inst"];		
+		$tb =& $arr["prop"]["vcl_inst"];
+		$this->no_warehouse = $arr["obj_inst"]->prop("no_warehouse");
 		$this->_init_prod_list_list_tbl($tb);
 
 		// get items 
@@ -2794,26 +2797,28 @@ class procurement_center extends class_base
 			"align" => "center"
 		));
 
-		$t->define_field(array(
-			"sortable" => 1,
-			"name" => "cnt",
-			"caption" => t("Kogus laos"),
-			"align" => "center",
-			"type" => "int"
-		));
-
-		$t->define_field(array(
-			"name" => "get",
-			"caption" => t("V&otilde;ta laost"),
-			"align" => "center"
-		));
-
-		$t->define_field(array(
-			"name" => "put",
-			"caption" => t("Vii lattu"),
-			"align" => "center"
-		));
-
+		if(!$this->no_warehouse)
+		{
+			$t->define_field(array(
+				"sortable" => 1,
+				"name" => "cnt",
+				"caption" => t("Kogus laos"),
+				"align" => "center",
+				"type" => "int"
+			));
+	
+			$t->define_field(array(
+				"name" => "get",
+				"caption" => t("V&otilde;ta laost"),
+				"align" => "center"
+			));
+	
+			$t->define_field(array(
+				"name" => "put",
+				"caption" => t("Vii lattu"),
+				"align" => "center"
+			));
+		}
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),

@@ -48,6 +48,16 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>no_warehouse</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <no_caption>1</no_caption>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Laoseisu ei arvestata</caption>
+      </property>
+      <property>
             <name>p_tb</name>
             <table>objects</table>
             <group>p</group>

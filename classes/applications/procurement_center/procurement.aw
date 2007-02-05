@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.13 2007/02/05 15:14:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.14 2007/02/05 15:38:42 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -303,7 +303,7 @@ class procurement extends class_base
 	//			"jrk"		=> $x+1,
 				"product"	=> html::textbox(array(
 							"name" => "products[".$x."][product]",
-							"size" => "15",
+							"size" => "100",
 							"autocomplete_source" => $this->mk_my_orb ("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
 							"autocomplete_params" => "products[".$x."][product]",
 							)),
