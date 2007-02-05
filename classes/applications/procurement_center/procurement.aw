@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.11 2006/12/01 13:59:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.12 2007/02/05 14:57:27 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -757,13 +757,16 @@ class procurement extends class_base
 			"sortable" => 1,
 			"numeric" => 1,
 		));
-		$t->define_field(array(
-			"name" => "score",
-			"caption" => t("Punktid"),
-			"align" => "center",
-			"sortable" => 1,
-			"numeric" => 1,
-		));
+		if(!$this->do_not_show_scores)
+		{
+			$t->define_field(array(
+				"name" => "score",
+				"caption" => t("Punktid"),
+				"align" => "center",
+				"sortable" => 1,
+				"numeric" => 1,
+			));
+		}
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"
@@ -773,7 +776,6 @@ class procurement extends class_base
 	function _o_tbl($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_o_tbl($t);
 
 		if ($arr["request"]["co_id"] == "")
 		{
@@ -782,12 +784,27 @@ class procurement extends class_base
 
 		$offers = $this->model->get_all_offers_for_procurement($arr["obj_inst"]);
 		$scores = $this->get_scores_for_proc($arr["request"]["co_id"], $offers, $arr["obj_inst"]);
+		if(!(is_array($scores) && sizeof($scores)))
+		{
+			$this->do_not_show_scores = 1;
+		}
+		$this->_init_o_tbl($t);
+		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
+
 		foreach($offers->arr() as $offer)
 		{
+			if($offer->prop("price"))
+			{
+				$price = number_format($offer->prop("price"), 2);
+			}
+			else
+			{
+				$price =  number_format($offer_inst->calculate_price($offer), 2);
+			}
 			$t->define_data(array(
 				"name" => html::obj_change_url($offer),
 				"offerer" => html::obj_change_url($offer->prop("offerer")),
-				"price" => number_format($offer->prop("price"), 2),
+				"price" => $price,
 				"oid" => $offer->id(),
 				"score" => number_format($scores[$offer->id()], 2)
 			));
