@@ -1,5 +1,6 @@
+	
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.30 2007/02/05 16:32:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.31 2007/02/06 11:14:32 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -1740,14 +1741,16 @@ class procurement_center extends class_base
 
 //		if($data["buyings_find_groups"]) $filter["CL_PURCHASE.offerer.parent"] = $data["buyings_find_groups"];
 		
- 		if((date_edit::get_timestamp($data["buyings_find_start"]) > 1)|| (date_edit::get_timestamp($data["buyings_find_end"]) > 1))
- 		{
- 			if(date_edit::get_timestamp($data["buyings_find_start"]) > 1) $from = date_edit::get_timestamp($data["buyings_find_start"]); else $from = 0;
- 			if(date_edit::get_timestamp($data["buyings_find_end"]) > 1) $to = date_edit::get_timestamp($data["buyings_find_end"]); else $to = time()*666;
- 		 	$filter["date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
- 		}
- 		
-		if(!$data["offers_find_archived"]) $filter["CL_PURCHASE.RELTYPE_OFFER.accept_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, time(),  time()*66);
+		if(date_edit::get_timestamp($data["buyings_find_start"]) != date_edit::get_timestamp($data["buyings_find_end"]))
+		{
+			if((date_edit::get_timestamp($data["buyings_find_start"]) > 1)|| (date_edit::get_timestamp($data["buyings_find_end"]) > 1))
+			{
+				if(date_edit::get_timestamp($data["buyings_find_start"]) > 1) $from = date_edit::get_timestamp($data["buyings_find_start"]); else $from = 0;
+				if(date_edit::get_timestamp($data["buyings_find_end"]) > 1) $to = date_edit::get_timestamp($data["buyings_find_end"]); else $to = time()*666;
+				$filter["date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
+			}
+		}
+		if(!$data["buyings_find_archived"]) $filter["CL_PURCHASE.RELTYPE_OFFER.accept_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, time(),  time()*66);
 
 		if($data["buyings_find_groups"])
 		{
