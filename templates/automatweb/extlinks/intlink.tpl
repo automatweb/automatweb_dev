@@ -5,4 +5,4 @@ function setLink(li,title)
 	document.changeform.name.value=title; // nime element
 }
 </script>
-<a href="javascript:remote('no',500,400,'{VAR:search_doc}')">{VAR:int_link_caption}</a>
+<a href="javascript:aw_popup('{VAR:search_doc}', 'intlik', 500,400)">{VAR:int_link_caption}</a>
