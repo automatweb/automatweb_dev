@@ -2483,10 +2483,10 @@ class crm_company extends class_base
 				$data["value"] = $i->_get_my_view($arr);
 				break;
 			case "sell_offers":
-				if(!$arr["request"]["buyer"])
-				{
-					return PROP_IGNORE;
-				}
+// 				if(!$arr["request"]["buyer"])
+// 				{
+// 					return PROP_IGNORE;
+// 				}
 				$this->_sell_offers_table($arr);
 				break;
 		};
@@ -6685,26 +6685,47 @@ class crm_company extends class_base
 		 ),CL_MESSAGE);
 	}
 
-	
-
 	function _sell_offers_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_offers_tbl($t);
-		$products = new object_list();
-		$products->add($arr["request"]["products"]);
-		$prod_names = $products->names();
-		
+		if(is_array($arr["request"]["products"]))
+		{
+			$products = new object_list();
+			$products->add($arr["request"]["products"]);
+			$prod_names = $products->names();
+		}
 		$purchase_inst = get_instance(CL_PURCHASE);
 		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
+		
+		$offerer = $arr["obj_inst"]->id();
+		if(!$arr["request"]["buyer"])
+		{
+			$offerer = null;
+		}
+		
 		$filter = array(
-			"class_id" => array(CL_PURCHASE, CL_PROCUREMENT_OFFER),
+			"class_id" => array(CL_PURCHASE),
 			"lang_id" => array(),
 			"site_id" => array(),
-		//	"buyer" => $arr["request"]["buyer"],
-			"offerer" => $arr["obj_inst"]->id(),
+			"buyer" => $arr["request"]["buyer"],
+			"offerer" => $offerer,
 		);
 		$ol = new object_list($filter);
+		$filter2 = array(
+			"class_id" => array(CL_PROCUREMENT_OFFER),
+			"lang_id" => array(),
+			"site_id" => array(),
+//			"buyer" => $arr["request"]["buyer"],
+			"offerer" => $offerer,
+		);
+		$ol2 = new object_list($filter2);
+		$ol->add($ol2);
+		
+		//arr($filter);   
+// 		obj_set_opt("no_cache", 1);
+// 				$GLOBALS["DUKE"] =1;
+// 		arr($ol);
 		foreach($ol->arr() as $o)
 		{
 			$deal_no = $o->prop("deal_no");
@@ -6713,6 +6734,12 @@ class crm_company extends class_base
 				'type' => "RELTYPE_OFFER",
 			));
 
+			$prod_table = new vcl_table();
+			$prod_table->define_field(array("name" => "name", "caption" => t("Nimetus")));
+			$prod_table->define_field(array("name" => "price", "caption" => t("Hind")));
+			$prod_table->define_field(array("name" => "amount", "caption" => t("Kogus")));
+			$alt = t("Hange:");
+			
 			if($o->class_id() == CL_PURCHASE)
 			{
 				$type = t("Ost");
@@ -6727,15 +6754,16 @@ class crm_company extends class_base
 				foreach($offers as $offer_conn)
 				{
 					$offer_obj = obj($offer_conn->prop("to"));
-					$procurement = obj($offer_obj->prop("procurement"));
-					if(is_object($procurement))
+					if($this->can("view" , $offer_obj->prop("procurement")))
 					{
+						$procurement = obj($offer_obj->prop("procurement"));
 						$alt.= $procurement->name();
 					}
 					$conns = $offer_obj->connections_to(array(
 						'reltype' => 1,
 						'class' => CL_PROCUREMENT_OFFER_ROW,
 					));
+					if(!sizeof($conns)) continue;
 					foreach($conns as $conn)
 					{
 						if(is_oid($conn->prop("from")))
@@ -6747,10 +6775,15 @@ class crm_company extends class_base
 						{
 							continue;
 						}
-						if(in_array($row->prop("product") , $prod_names))
+						if(!is_array($prod_names) || in_array($row->prop("product") , $prod_names))
 						{
 							$curr = obj($row->prop("currency"));
 							$prod_inf.= $row->prop("product")." (".$row->prop("b_price").$curr->name().")\n";
+							$prod_table->define_data(array(
+								"name" => $row->prop("product"),
+								"price" => $row->prop("b_price").$curr->name(),
+								"amount" => $row->prop("b_amount"),
+							));
 						}
 					}
 				}
@@ -6760,15 +6793,16 @@ class crm_company extends class_base
 				$type = t("Pakkumine");
 				$deal = "";
 				$date = $o->prop("accept_date");
-				$procurement = obj($o->prop("procurement"));
-				if(is_object($procurement))
+				if($this->can("view" , $o->prop("procurement")))
 				{
+					$procurement = obj($o->prop("procurement"));
 					$alt = t("Hange:")." ".$procurement->name();
 				}
 				$conns = $o->connections_to(array(
 					'reltype' => 1,
 					'class' => CL_PROCUREMENT_OFFER_ROW,
 				));
+				if(!sizeof($conns)) continue;
 				foreach($conns as $conn)
 				{
 					if(is_oid($conn->prop("from")))
@@ -6776,19 +6810,22 @@ class crm_company extends class_base
 						$row = obj($conn->prop("from"));
 					}	
 					else continue;
-					
-					
-					
-					if(in_array($row->prop("product") , $prod_names))
+					if(!is_array($prod_names) || in_array($row->prop("product") , $prod_names))
 					{
+						if(!$this->can("view" , $row->prop("currency"))) continue;
 						$curr = obj($row->prop("currency"));
 						$prod_inf.= $row->prop("product")." (".$row->prop("price").$curr->name().")\n";
+						$prod_table->define_data(array(
+							"name" => $row->prop("product"),
+							"price" => $row->prop("b_price").$curr->name(),
+							"amount" => $row->prop("b_amount"),
+						));
 					}
 				}
 			}
 			$t->define_data(array(
 				"deal" => $deal_no,
-				"products"	=> $prod_inf,
+				"products"	=> $prod_table->draw(),//$prod_inf,
 //				"amount"	=> $row->prop("b_amount"),
 //				'price'		=> $row->prop("b_price"),
 				'date'		=> date("d.m.Y", $date),
