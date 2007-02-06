@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.115 2007/02/06 12:14:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.116 2007/02/06 13:55:56 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1461,7 +1461,8 @@ class webform extends class_base
 							"name" => "prp_opts[".$prpdata["name"]."][format][day_format]",
 							"options" => array(
 								"day" => t("Valik"),
-								"day_textbox" => t("Tekstikast")
+								"day_textbox" => t("Tekstikast"),
+								"day_disable" => t("Ei n&auml;idata")
 							),
 							"selected" => $property["format"]["day_format"]
 						)),
@@ -1469,7 +1470,8 @@ class webform extends class_base
 							"name" => "prp_opts[".$prpdata["name"]."][format][month_format]",
 							"options" => array(
 								"month" => t("Valik"),
-								"month_textbox" => t("Tekstikast")
+								"month_textbox" => t("Tekstikast"),
+								"month_disable" => t("Ei n&auml;idata")
 							),
 							"selected" => $property["format"]["month_format"]
 						)),
@@ -1477,7 +1479,8 @@ class webform extends class_base
 							"name" => "prp_opts[".$prpdata["name"]."][format][year_format]",
 							"options" => array(
 								"year" => t("Valik"),
-								"year_textbox" => t("Tekstikast")
+								"year_textbox" => t("Tekstikast"),
+								"year_disable" => t("Ei n&auml;idata")
 							),
 							"selected" => $property["format"]["year_format"]
 						)),
