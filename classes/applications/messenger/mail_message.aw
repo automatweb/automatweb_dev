@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.38 2006/12/06 09:14:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.39 2007/02/06 10:57:37 markop Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -303,7 +303,7 @@ class mail_message extends class_base
 			Header("Location: $url");
 			die();
 		};
-		if ($msgobj->prop("html_mail") == 1)
+		if ($msgobj->prop("html_mail"))
 		{
 			$this->awm->create_message(array(
 				"froma" => $address,
@@ -314,9 +314,18 @@ class mail_message extends class_base
 				"bcc" => $msgobj->prop("bcc"),
 				"body" => t("Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"),
 			));
-			$this->awm->htmlbodyattach(array(
-				"data" => $msgobj->prop("message"),
-			));
+			if($this->message)
+			{
+				$this->awm->htmlbodyattach(array(
+					"data" => $this->message,
+				));
+			}
+			else
+			{
+				$this->awm->htmlbodyattach(array(
+					"data" => $msgobj->prop("message"),
+				));
+			}
 		}
 		else
 		{
