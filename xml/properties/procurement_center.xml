@@ -77,6 +77,18 @@
             <field>p_tr</field>
       </property>
       <property>
+            <name>procurements_find_name</name>
+            <table>objects</table>
+            <group>p</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>p_search</parent>
+            <size>20</size>
+            <captionside>top</captionside>
+            <field>procurements_find_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>procurements_find_status</name>
             <table>objects</table>
             <group>p</group>

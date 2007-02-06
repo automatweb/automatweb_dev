@@ -1,6 +1,6 @@
 	
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.31 2007/02/06 11:14:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.32 2007/02/06 12:49:38 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -47,6 +47,8 @@
 			@property p_tr type=treeview no_caption=1 store=no parent=p_tree
 		
 		@layout p_search type=vbox parent=p_left closeable=1 area_caption=Hangete&nbsp;otsing
+			@property procurements_find_name type=textbox store=no parent=p_search size=20 captionside=top
+			@caption Nimi
 			@property procurements_find_status type=select store=no parent=p_search captionside=top
 			@caption Staatus
 			@property procurements_find_offerer type=textbox store=no parent=p_search size=20 captionside=top
@@ -332,6 +334,7 @@ class procurement_center extends class_base
 			case "products_find_address":
 			case "procurements_find_offerer":
 			case "procurements_find_product":
+			case "procurements_find_name":
 			case "products_find_apply":
 			case "products_find_end":
 				
@@ -2343,6 +2346,10 @@ class procurement_center extends class_base
 		$ol = new object_list();
 		$filter = array("class_id" => array(CL_PROCUREMENT), "lang_id" => array());
 		$data = $this_obj->meta("search_data");
+		if($data["procurements_find_name"] != "")
+		{
+			$filter["name"] = "%".$data["procurements_find_name"]."%";
+		}
 		if($data["procurements_find_status"] != "")
 		{
 			$filter["state"] = $data["procurements_find_status"];
