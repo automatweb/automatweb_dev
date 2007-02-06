@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.39 2007/02/02 14:12:12 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.40 2007/02/06 08:35:57 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -524,14 +524,19 @@ class conference_planning extends class_base
 				$sc->read_template("sub_conference_rfp6.tpl");				
 				$addr = get_instance(CL_CRM_ADDRESS);
 
-
-
+				$ui = get_instance(CL_USER);
+				$logged_in_user = $ui->get_current_person();
+				if($this->can("view", $logged_in_user))
+				{
+					$uo = obj($logged_in_user);
+					$c_name = $uo->prop("address.riik.name");
+				}
 				foreach($addr->get_country_list() as $k => $v)
 				{
 					$sc->vars(array(
 						"value" => $k,
 						"caption" => $v,
-						"billing_country" => ($k == $sd["billing_country"])?"SELECTED":"",
+						"billing_country" => ($k == $sd["billing_country"] || (!strlen($sd["billing_country"]) && stristr($v, $c_name)))?"SELECTED":"",
 					));
 					$ctr .= $sc->parse("COUNTRY");
 				}
@@ -1643,6 +1648,8 @@ class conference_planning extends class_base
 				case "5":
 					$no = $arr["act_event_no"];
 					$cat_no = $arr["act_cat_no"];
+
+					
 					$additional_function["event_type_chooser"] = $val["event_type_chooser"];
 					$additional_function["event_type_select"] = $val["event_type_select"];
 					$additional_function["event_type_text"] = $val["event_type_text"];
@@ -1668,10 +1675,10 @@ class conference_planning extends class_base
 
 					if($no < 0)
 					{
-						if($val["event_type_chooser"] || $val["delegates_no"] || is_array($val["tech"]) || $val["door_sign"] || $val["persons_no"] || $val["function_starting_date"] || $val["function_end_date"] || $val["catering_type_chooser"])
+						if($val["door_sign"] || $val["persons_no"] || ($val["function_start_date"] && $val["function_start_time"]) ||  ($val["function_end_date"] && $val["function_end_time"]))
 						{
 							$t = $additional_function_catering;
-							if($t["catering_type_chooser"] || $t["catering_type_text"] || $t["catering_start_time"] || $t["catering_end_time"])
+							if($t["catering_start_time"] || $t["catering_end_time"] || $t["catering_attendee_no"])
 							{
 								$additional_function["catering"][] = $additional_function_catering;
 							}
@@ -1683,7 +1690,7 @@ class conference_planning extends class_base
 						if($cat_no < 0)
 						{
 							$t = $additional_function_catering;
-							if($t["catering_type_chooser"] || $t["catering_type_text"] || $t["catering_start_time"] || $t["catering_end_time"] || $t["catering_attendee_no"])
+							if($t["catering_start_time"] || $t["catering_end_time"] || $t["catering_attendee_no"])
 							{
 								array_push($additional_function["catering"], $t);
 							}
