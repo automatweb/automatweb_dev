@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.43 2007/02/06 09:01:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.44 2007/02/06 14:37:30 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1822,10 +1822,11 @@ class conference_planning extends class_base
 		{
 			$biggest_event = ($biggest_event < $data["persons"])?$data["persons"]:$biggest_event;
 		}
-		$res = array_slice($res, 0, $obj->prop("search_result_max"), true);
+		$res = array_slice($res, 0, $obj->prop("search_result_max"));
 		// loop over locations
-		foreach($res as $location_oid => $location)
+		foreach($res as $location)
 		{
+			$location_oid = $location->id();
 			$locations[$location_oid] = array();
 			$element = &$locations[$location_oid];
 			if($arr["single_rooms"] && $location->prop("single_count") < $arr["single_rooms"])
