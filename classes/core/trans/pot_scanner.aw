@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.43 2006/12/08 13:55:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.44 2007/02/06 15:54:49 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -620,6 +620,13 @@ class pot_scanner extends core
 					"line" => "class_".$clid,
 					"str" => "Klassi ".$cld["name"]." ($clid) nimi",
 				);
+				if(strlen($cld["prod_family"]))
+				{
+					$strings[] = array(
+						"line" => "class_prodfamily_".$clid,
+						"str" => "Klassi tooteperekonna ".$cld["prod_family"]." nimi",
+					);
+				}
 			}
 
 			$clss = aw_ini_get("classfolders");

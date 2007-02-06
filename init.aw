@@ -400,6 +400,10 @@ function lc_init()
 				{
 					$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = $_tmp;
 				}
+				if(($_tmp = t2("Klassi tooteperekonna ".$cld["prod_family"]." nimi")) != "")
+				{
+					$GLOBALS["cfg"]["__default"]["classes"][$clid]["prod_family"] = $_tmp;
+				}
 			}
 
 			foreach($GLOBALS["cfg"]["__default"]["classfolders"] as $clid => $cld)
@@ -409,6 +413,7 @@ function lc_init()
 					$GLOBALS["cfg"]["__default"]["classfolders"][$clid]["name"] = $_tmp;
 				}
 			}
+
 			
 			foreach($GLOBALS["cfg"]["acl"]["names"] as $n => $cap)
 			{
