@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.114 2007/01/16 15:27:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.115 2007/02/06 12:14:45 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -196,7 +196,7 @@
 @caption Salvestamise kontroller
 
 @reltype VIEWCONTROLLER value=4 clid=CL_CFG_VIEW_CONTROLLER
-@caption N&auml;tamise kontroller
+@caption N&auml;itamise kontroller
 
 @reltype EMAIL value=5 clid=CL_ML_MEMBER
 @caption Meiliaadress
