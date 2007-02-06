@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.12 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.13 2007/02/06 14:31:55 kristo Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -364,6 +364,68 @@ class timing extends class_base
 //			$obj->save();
 		}
 		return "done";
+	}
+
+	function init_vcl_property($arr)
+	{
+		$tmp = obj();
+		$tmp->set_class_id($this->clid);
+		$props = $tmp->get_property_list();
+		unset($props["name"]);
+		unset($props["comment"]);
+
+		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_TIMING");
+		if ($o)
+		{
+			foreach($props as $pn => $pd)
+			{
+				$props[$pn]["value"] = $o->prop($pn);
+			}
+		}
+
+		$a = array(
+			"obj_inst" => $o ? $o : $arr["obj_inst"],
+			"request" => $arr["request"],
+			"prop" => &$props["archive_folder"]
+		);
+		$this->get_property($a);
+
+		return $props;
+	}
+
+	function process_vcl_property($arr)
+	{
+		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_TIMING");
+		if (!$o)
+		{
+			$o = obj();
+			$o->set_parent($arr["obj_inst"]->id());
+			$o->set_class_id(CL_TIMING);
+			$o->set_name(sprintf(t("%s ajaline aktiivsus"), $arr["obj_inst"]->name()));
+			$crea = true;
+		}
+
+		foreach($o->get_property_list() as $pn => $pd)
+		{
+			if ($pd["type"] == "datetime_select")
+			{
+				$o->set_prop($pn, date_edit::get_timestamp($arr["request"][$pn]));
+			}
+			else
+			{
+				$o->set_prop($pn, $arr["request"][$pn]);
+			}
+		}
+		$o->set_name(sprintf(t("%s ajaline aktiivsus"), $arr["obj_inst"]->name()));
+		$o->save();
+
+		if ($crea)
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $o->id(),
+				"type" => "RELTYPE_TIMING"
+			));
+		}
 	}
 }
 ?>

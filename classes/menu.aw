@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.184 2007/01/24 15:19:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.185 2007/02/06 14:31:54 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -322,6 +322,11 @@
 	@property acl type=acl_manager store=no
 	@caption &Otilde;igused
 
+@groupinfo timing caption="Ajaline aktiivsus"
+@default group=timing
+
+	@property timing type=timing store=no
+	@caption Ajaline aktiivsus
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl

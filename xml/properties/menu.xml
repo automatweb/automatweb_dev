@@ -805,6 +805,15 @@
             <caption>&amp;amp;Otilde;igused</caption>
       </property>
       <property>
+            <name>timing</name>
+            <table>objects</table>
+            <group>timing</group>
+            <type>timing</type>
+            <store>no</store>
+            <field>timing</field>
+            <caption>Ajaline aktiivsus</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -911,6 +920,9 @@
             <acl>
                   <caption>&amp;amp;Otilde;igused</caption>
             </acl>
+            <timing>
+                  <caption>Ajaline aktiivsus</caption>
+            </timing>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

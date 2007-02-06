@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.24 2007/01/26 11:19:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.25 2007/02/06 14:31:54 kristo Exp $
 
 /*
 
@@ -59,6 +59,12 @@
 	@property click_through type=text group=stats
 	@caption Click-through ratio
 
+@groupinfo timing caption="Ajaline aktiivsus"
+@default group=timing
+
+	@property timing type=timing store=no
+	@caption Ajaline aktiivsus
+
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
 	
@@ -70,6 +76,9 @@
 
 @reltype BANNER_FILE value=2 clid=CL_IMAGE,CL_FILE,CL_FLASH,CL_EXTLINK,CL_DOCUMENT
 @caption banneri sisu
+
+@reltype TIMING value=20 clid=CL_TIMING
+@caption Aeg
 
 */
 

@@ -139,6 +139,15 @@
             <caption>Click-through ratio</caption>
       </property>
       <property>
+            <name>timing</name>
+            <table>objects</table>
+            <group>timing</group>
+            <type>timing</type>
+            <store>no</store>
+            <field>timing</field>
+            <caption>Ajaline aktiivsus</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -158,6 +167,9 @@
             <stats>
                   <caption>Statistika</caption>
             </stats>
+            <timing>
+                  <caption>Ajaline aktiivsus</caption>
+            </timing>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -186,6 +198,11 @@
                   </clid>
                   <caption>banneri sisu</caption>
             </BANNER_FILE>
+            <TIMING>
+                  <value>20</value>
+                  <clid>CL_TIMING</clid>
+                  <caption>Aeg</caption>
+            </TIMING>
       </reltypes>
 </properties>
 

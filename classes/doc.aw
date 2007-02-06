@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.148 2007/01/31 08:49:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.149 2007/02/06 14:31:54 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -275,6 +275,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 	@property versions_tb type=toolbar store=no no_caption=1
 	@property versions type=table store=no no_caption=1
+
+@groupinfo timing caption="Ajaline aktiivsus"
+@default group=timing
+
+	@property timing type=timing store=no
+	@caption Ajaline aktiivsus
 
 @default group=transl
 
