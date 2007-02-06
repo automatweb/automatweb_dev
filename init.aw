@@ -400,7 +400,7 @@ function lc_init()
 				{
 					$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = $_tmp;
 				}
-				if(($_tmp = t2("Klassi tooteperekonna ".$cld["prod_family"]." nimi")) != "")
+				if(($_tmp = t2("Klassi tooteperekonna ".$cld["prod_family"]." ($clid) nimi")) != "")
 				{
 					$GLOBALS["cfg"]["__default"]["classes"][$clid]["prod_family"] = $_tmp;
 				}

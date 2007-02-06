@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.44 2007/02/06 15:54:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.45 2007/02/06 15:58:49 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -624,7 +624,7 @@ class pot_scanner extends core
 				{
 					$strings[] = array(
 						"line" => "class_prodfamily_".$clid,
-						"str" => "Klassi tooteperekonna ".$cld["prod_family"]." nimi",
+						"str" => "Klassi tooteperekonna ".$cld["prod_family"]." ($clid) nimi",
 					);
 				}
 			}
