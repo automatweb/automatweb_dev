@@ -1,6 +1,6 @@
 	
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.32 2007/02/06 12:49:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.33 2007/02/06 13:27:17 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -31,6 +31,12 @@
 	@caption default kuup&auml;ev otsungus tagasi
 		
 	@property search_date_subtract_unit type=select no_caption=1 parent=settings_l field=meta method=serialize
+
+	@property search_date_add type=textbox size=3 parent=settings_l field=meta method=serialize
+	@caption default kuup&auml;ev otsungus edasi
+		
+	@property search_date_add_unit type=select no_caption=1 parent=settings_l field=meta method=serialize
+
 
 	@property no_warehouse type=checkbox no_caption=1 field=meta method=serialize
 	@caption Laoseisu ei arvestata
@@ -243,6 +249,15 @@ class procurement_center extends class_base
 					31536000=> t("Aastat"),
 				);
 				break;
+			case "search_date_add_unit":
+				$prop["options"] = array(
+					86400	=> t("P&auml;eva"),
+					604800	=> t("N&auml;dalat"),
+					2648000	=> t("Kuud"),
+					31536000=> t("Aastat"),
+				);
+				break;			
+			
 			case "p_tb":
 				$this->_p_tb($arr);
 				break;
@@ -315,18 +330,18 @@ class procurement_center extends class_base
 			case "offerers_find_name":
 			case "offerers_find_address":
 			case "offerers_find_done":
-			case "offerers_find_end":
+
 			case "offerers_find_product":
 			case "offerers_find_only_buy":
 			case "offers_find_name":
 			case "offers_find_address":
-			case "offers_find_end":
+
 			case "offers_find_product":
 			case "offers_find_only_buy":
 			case "offers_find_archived":
 			case "buyings_find_name":
 			case "buyings_find_address":
-			case "buyings_find_end":
+
 			case "buyings_find_product":
 			case "buyings_find_archived":
 			case "products_find_product_name":
@@ -336,7 +351,7 @@ class procurement_center extends class_base
 			case "procurements_find_product":
 			case "procurements_find_name":
 			case "products_find_apply":
-			case "products_find_end":
+
 				
 				$search_data = $arr["obj_inst"]->meta("search_data");
 				$prop["value"] = $search_data[$prop["name"]];
@@ -349,7 +364,32 @@ class procurement_center extends class_base
 				$prop["value"] = $search_data[$prop["name"]];
 				if(!$prop["value"])
 				{
-					$prop["value"] = time() - $arr["obj_inst"]->prop("search_date_subtract")* $arr["obj_inst"]->prop("search_date_subtract_unit");
+					if($arr["obj_inst"]->prop("search_date_subtract"))
+					{
+						$prop["value"] = time() - $arr["obj_inst"]->prop("search_date_subtract")* $arr["obj_inst"]->prop("search_date_subtract_unit");
+					}
+					else
+					{
+						$prop["value"] = time() - 365*24*3600;
+					}
+				}
+				break;
+			case "offerers_find_end":
+			case "offers_find_end":
+			case "buyings_find_end":
+			case "products_find_end":
+				$search_data = $arr["obj_inst"]->meta("search_data");
+				$prop["value"] = $search_data[$prop["name"]];
+				if(!$prop["value"])
+				{
+					if($arr["obj_inst"]->prop("search_date_add"))
+					{
+						$prop["value"] = time() + $arr["obj_inst"]->prop("search_date_add")* $arr["obj_inst"]->prop("search_date_add_unit");
+					}
+					else
+					{
+						$prop["value"] = time() + 24*3600;
+					}
 				}
 				break;
 			
@@ -2500,6 +2540,13 @@ class procurement_center extends class_base
 			'action' => 'delete_cos',
 			'confirm' => t("Kas oled kindel et soovid valitud pakkujad kustudada?")
 		));
+		
+		$tb->add_button(array(
+			'name'=>'send_email',
+			'tooltip'=> t('Saada kiri'),
+			"img" => "mail_send.gif",
+			'action' => 'send_mails',
+		));
 	}
 	
 	function _do_cust_cat_tb_submenus(&$tb, $link, $p, $p_str, $oncl = null)
@@ -3538,6 +3585,52 @@ class procurement_center extends class_base
 			}
 		}
 		return html::get_change_url($o->id(), array("return_url" => $arr["post_ru"]));
+	}
+	
+	/**
+		@attrib name=send_mails
+	**/
+	function send_mails($arr)
+	{
+		$send_to = "";
+		$mails = array();
+		foreach($arr["sel"] as $cust)
+		{
+			$email = "";
+			if($this->can("view" , $cust))
+			{
+				$customer = obj($cust);
+				$email = $customer->get_first_obj_by_reltype("RELTYPE_EMAIL");
+				if(is_oid($customer->prop("email")))
+				{
+					$email = obj($customer->prop("email"));
+				}
+				if(!is_object($email))
+				{
+					$email = $customer->get_first_obj_by_reltype("RELTYPE_EMAIL");
+				}
+				if(is_object($email))
+				{
+					$mails[] = $email->prop("mail");
+				}
+			}
+		}
+		$send_to = join($mails , ", ");
+//		$user = aw_global_get("uid");
+
+		$mfrom = aw_global_get("uid_oid");
+		$user_obj = obj($mfrom);
+		$person = $user_obj->get_first_obj_by_reltype("RELTYPE_PERSON");
+		if(is_object($person))
+		{
+			$mfrom = $person->id();
+		}
+		return $this->mk_my_orb('new',array(
+			'parent' => $arr['id'],
+			"return_url" => $arr["post_ru"],
+		 	"mto" => $send_to,
+		 	"mfrom" => $mfrom,
+		 ),CL_MESSAGE);
 	}
 	
 	/**
