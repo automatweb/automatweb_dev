@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.44 2007/01/31 15:28:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.45 2007/02/06 12:36:53 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -838,6 +838,11 @@ class register_search extends class_base
 					{
 						$filter[$pn] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from, $to);
 					}
+				}
+				else
+				if ($fdata[$pn]["is_chooser"])
+				{
+					$filter[$pn] = $request["rsf"][$pn];
 				}
 				else
 				{
