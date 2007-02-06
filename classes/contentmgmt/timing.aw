@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.13 2007/02/06 14:31:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.14 2007/02/06 14:50:38 kristo Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -342,26 +342,41 @@ class timing extends class_base
 		foreach($objs as $obz)
 		{
 			$obj = $obz->to();
-			switch ($arr["subaction"])
+			$oar = array($obj->id() => $obj);
+			$ol = new object_list(array(
+				"brother_of" => $obj->id(),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			foreach($ol->arr() as $o)
 			{
-				case "delete":
-					$obj->delete();	
-					break;
-				case "activate":
-					$obj->set_status(STAT_ACTIVE);
-					$obj->save();
-					break;
-				case "deactivate":
-					$obj->set_status(STAT_NOTACTIVE);
-					$obj->save();
-					break;
-				case "archive":
-					$obj->set_parent($obj_inst->prop("archive_folder"));
-					$obj->save();
-					break;
-//				$obj->set_status(($arr["subaction"] == "activate" ? STAT_ACTIVE : STAT_NOTACTIVE));
+				$oar[$o->id()] = $o;
 			}
-//			$obj->save();
+			
+
+			foreach($oar as $obj)
+			{
+				switch ($arr["subaction"])
+				{
+					case "delete":
+						$obj->delete();	
+						break;
+					case "activate":
+						$obj->set_status(STAT_ACTIVE);
+						$obj->save();
+						break;
+					case "deactivate":
+						$obj->set_status(STAT_NOTACTIVE);
+						$obj->save();
+						break;
+					case "archive":
+						$obj->set_parent($obj_inst->prop("archive_folder"));
+						$obj->save();
+						break;
+//					$obj->set_status(($arr["subaction"] == "activate" ? STAT_ACTIVE : STAT_NOTACTIVE));
+				}
+//				$obj->save();
+			}
 		}
 		return "done";
 	}
