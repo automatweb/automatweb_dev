@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.41 2007/02/06 08:50:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.42 2007/02/06 08:52:46 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1039,7 +1039,6 @@ class conference_planning extends class_base
 		
 		// error managment
 		$error_data = aw_global_get("conference_required_errors");
-		arr($error_data);
 		if(is_array($error_data[$no]) && count($error_data[$no]))
 		{
 			foreach($error_data[$no] as $err)
