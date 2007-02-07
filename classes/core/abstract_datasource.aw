@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.9 2007/02/07 13:39:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.10 2007/02/07 13:41:19 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
@@ -39,7 +39,7 @@
 @reltype DS value=1 clid=CL_FILE,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_OBJ,CL_DB_TABLE_CONTENTS
 @caption andmed objektist
 
-@reltype CTR value=1 clid=CL_FORM_CONTROLLER
+@reltype CTR value=2 clid=CL_FORM_CONTROLLER
 @caption Kontroller
 */
 
