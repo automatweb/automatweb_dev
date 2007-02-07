@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.45 2007/01/29 16:18:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.46 2007/02/07 12:15:53 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -203,6 +203,9 @@ default group=web
 @caption Garantiip&otilde;hikiri
 
 @reltype PAYMENT_ORDER value=14 clid=CL_FILE
+@caption Volikiri
+
+@reltype TRADEMARK_STATUS value=15 clid=CL_TRADEMARK_STATUS
 @caption Volikiri
 
 */
@@ -1248,13 +1251,13 @@ class patent extends class_base
 			}
 		}
 
-		$data["country"] = t("Eesti :").html::radiobutton(array(
+		$data["country"] = t(" &#8211 Eesti ").html::radiobutton(array(
 			"value" => 0,
 			"checked" => (!$_SESSION["patent"]["country"] && isset($_SESSION["patent"]["country"])) ? 1 : 0,
 			"name" => "country",
 			"onclick" => 'document.getElementById("contact_popup_link").style.display="none";
 					document.getElementById("country_code").value = "EE";',
-		)).t(" V&auml;lismaa :").html::radiobutton(array(
+		)).t("&nbsp;&nbsp;&nbsp;&nbsp; &#8211 V&auml;lismaa ").html::radiobutton(array(
 			"value" => 1,
 			"checked" => $_SESSION["patent"]["country"],
 			"name" => "country",
@@ -1262,14 +1265,14 @@ class patent extends class_base
 					document.getElementById("country_code").value = "";',
 		));
 
-		$data["applicant_type"] = t("F&uuml;&uuml;siline isik :").html::radiobutton(array(
+		$data["applicant_type"] = t(" &#8211 F&uuml;&uuml;siline isik ").html::radiobutton(array(
 			"value" => 0,
 			"checked" => (!$_SESSION["patent"]["applicant_type"]) ? 1 : 0,
 			"name" => "applicant_type",
 			"onclick" => 'document.getElementById("firstname_row").style.display = ""; document.getElementById("lastname_row").style.display = ""; document.getElementById("name_row").style.display = "none";
 			document.getElementById("personal_id").style.display="";
 			document.getElementById("reg_code").style.display="none";',
-		)).t("Juriidiline isik :").html::radiobutton(array(
+		)).t("&nbsp;&nbsp;&nbsp;&nbsp; &#8211 Juriidiline isik ").html::radiobutton(array(
 			"value" => 1,
 			"checked" => $_SESSION["patent"]["applicant_type"],
 			"name" => "applicant_type",
@@ -1280,40 +1283,41 @@ class patent extends class_base
 
 		$data["type_text"] = $this->types[$_SESSION["patent"]["type"]];
 		//$data["products_value"] = $this->_get_products_and_services_tbl();
-		$data["type"] = html::radiobutton(array(
+		$data["type"] = t("&#8211 S&otilde;nam&auml;rk ").html::radiobutton(array(
 				"value" => 0,
 				"checked" => !$_SESSION["patent"]["type"],
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "none";',
-			)).t("S&otilde;nam&auml;rk").html::radiobutton(array(
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "none";document.getElementById("wordmark_caption").innerHTML = "Kaubam&auml;rk"; ',
+			)).t("&nbsp;&nbsp;&#8211 Kujutism&auml;rk ").html::radiobutton(array(
 				"value" => 1,
 		 		"checked" => ($_SESSION["patent"]["type"] == 1) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "none";document.getElementById("reproduction_row").style.display = "";',
-			)).t("Kujutism&auml;rk").html::radiobutton(array(
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "none";  document.getElementById("foreignlangelements_row").style.display = "none";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa"; ',
+			)).t("&nbsp;&nbsp;&#8211 Kombineeritud m&auml;rk ").html::radiobutton(array(
 				"value" => 2,
 				"checked" => ($_SESSION["patent"]["type"] == 2) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";',
-			)).t("Kombineeritud m&auml;rk").html::radiobutton(array(
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";',
+			)).t("&nbsp;&nbsp;&#8211 Ruumiline m&auml;rk ").html::radiobutton(array(
 				"value" => 3,
 				"checked" => ($_SESSION["patent"]["type"] == 3) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "none";document.getElementById("reproduction_row").style.display = "";',
-			)).t("Ruumiline m&auml;rk");
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";',
+			));
 		
-		$data["trademark_type"] = html::checkbox(array(
+		$data["trademark_type"] = t("&#8211 Kollektiivkaubam&auml;rk ").html::checkbox(array(
 			"value" => 1,
 			"checked" => $_SESSION["patent"]["co_trademark"],
 			"name" => "co_trademark",
 			"onclick" => 'document.getElementById("c_statues_row").style.display = "";'
-			)).t("Kollektiivkaubam&auml;rk").
-			html::checkbox(array(
+			)).'<a href="javascript:;" onClick="MM_openBrWindow(\'16340\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" /></a>'.
+			
+			t("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8211 Garantiim&auml;rk ").html::checkbox(array(
 				"value" => 1,
 				"checked" => $_SESSION["patent"]["guaranty_trademark"],
 				"name" => "guaranty_trademark",
 				"onclick" => 'document.getElementById("g_statues_row").style.display = "";'
-			)).t("Garantiim&auml;rk");
+			));
 		$data["trademark_type_text"] = ($_SESSION["patent"]["co_trademark"]) ? t("Kollektiivkaubam&auml;rk") : "";
 		$data["trademark_type_text"].= " ";
 		$data["trademark_type_text"].= ($_SESSION["patent"]["guaranty_trademark"]) ? t("Garantiim&auml;rk") : "";
@@ -1386,7 +1390,7 @@ class patent extends class_base
 			$data["banks"] = $bank_inst->bank_forms(array("id" => $dummy->prop("bank_payment") , "amount" => $this->get_payment_sum()));
 		}
 		$data["find_products"] = html::href(array(
-			"caption" => t("Otsi klassifikaatorit") ,
+			"caption" => t("Sisene klassifikaatorisse") ,
 			"url"=> "javascript:void(0);",
 			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("find_products", array("ru" => get_ru(), "print" => 1)).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 		));
@@ -1791,7 +1795,7 @@ class patent extends class_base
 		));
 		$t->define_field(array(
 			"name" => "representer",
-			"caption" => t("Esindaja"),
+			"caption" => t("&Uuml;hine esindaja").'<a href="javascript:;" onClick="MM_openBrWindow(\'16338\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" /></a>',
 		));
 		$t->define_field(array(
 			"name" => "change",
@@ -1946,8 +1950,10 @@ class patent extends class_base
 		$ser = get_instance(CL_CRM_NUMBER_SERIES);
 		$o = obj($_SESSION["patent"]["id"]);
 		$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
-		$o->set_prop("nr" , $tno);
-		$o->save();
+		$status = $this->get_status($o);
+		$status->set_prop("nr" , $tno);
+		$status->save();
+//		$o->save();
 	}
 	
 	function check_fields()
@@ -2133,8 +2139,24 @@ class patent extends class_base
 		$this->final_save($patent);
 		$patent->set_meta("products" , $_SESSION["patent"]["products"]);
 		$patent->save();
+
 		$_SESSION["patent"]["id"] = $patent->id();
+		$status = $this->get_status($patent);
 		return $patent->id();
+	}
+	
+	function get_status($patent)
+	{
+		$status = $patent->get_first_obj_by_reltype("RELTYPE_TRADEMARK_STATUS");
+		if(!is_object($status))
+		{
+			$status = new object();
+			$status->set_class_id(CL_TRADEMARK_STATUS);
+			$status->set_parent($patent->id());
+			$status->set_name("Taotluse ".$patent->id()." staatus");
+			$status->save();
+		}
+		return $status;
 	}
 	
 	function save_applicants($patent)
@@ -2295,6 +2317,7 @@ class patent extends class_base
 		
 		//$patent->set_prop("country" , $_SESSION["patent"]["country_code"]);
 		$patent->set_prop("procurator", $_SESSION["patent"]["procurator"]);
+		$patent->save();
 	}
 	
 	
@@ -2496,6 +2519,7 @@ class patent extends class_base
 					$sign = "";
 				}
 				$view_url = $this->mk_my_orb("show", array(
+					"print" => 1,
 					"id" => $patent->id(),
 					"add_obj" => $arr["alias"]["to"],
 					"sign" => $do_sign,

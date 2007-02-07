@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.12 2007/01/18 15:40:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.13 2007/02/07 12:15:53 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -502,16 +502,18 @@ class trademark_manager extends class_base
 		foreach($arr["sel"] as $id)
 		{
 			$o = obj($id);
-			$o->set_prop("verified",1);
-			$o->set_name(t("Taotlus nr: ".$o->prop("nr")));
+			$status = $this->get_status($o);
+			$status->set_prop("verified",1);
+			$status->set_name(t("Taotlus nr: ".$o->prop("nr")));
 			
 //			$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
 //			$o->set_prop("nr" , $tno);
 			if($parent)
 			{
-				$o->set_parent($parent);
+				$status->set_parent($parent);
 			}
-			$o->save();
+//			$o->save();
+			$status->save();
 		}
 		if($arr["popup"])
 		{
@@ -560,7 +562,7 @@ class trademark_manager extends class_base
 
 		foreach($ol->arr() as $o)
 		{
-			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $o->prop("nr")).'" OOCD="EE" ORIGLAN="3" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
+			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $o->prop("nr")).'" OOCD="EE" ORIGLAN="3" EXPDATE="'.date("Ymd", $o->prop("exhibition_date")).'" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
 ';
 				$xml .= '		<HOLGR>
 ';
@@ -720,6 +722,13 @@ class trademark_manager extends class_base
 					}
 				$xml .= "\t\t</BASICGS>\n";
 
+				$xml .= "\t\t<BASGR>\n";
+					$xml .= "\t\t\t<BASAPPGR>\n";
+						$xml .= "\t\t\t\t<BASAPPD>".date("Ymd", $o->prop("exhibition_date"))."</BASAPPD>\n";
+						$xml .= "\t\t\t\t<BASAPPN>".sprintf("%08d", $o->prop("nr"))."</BASAPPN>\n";
+					$xml .= "\t\t\t</BASAPPGR>\n";
+				$xml .= "\t\t</BASGR>\n";
+
 				$xml .= "\t\t<PRIGR>\n";
 					$xml .= "\t\t\t<PRICP>".$o->prop("convention_country")."</PRICP>\n";
 //echo dbg::dump($o->prop("convention_date"));
@@ -737,12 +746,13 @@ class trademark_manager extends class_base
 
 			$xml .= "\t</BIRTH>\n";
 
-			$o->set_prop("exported", 1);
-			$o->set_prop("export_date", time());
+			$status = $this->get_status($o);
+			$status->set_prop("exported", 1);
+			$status->set_prop("export_date", time());
 			$o->set_no_modify(true);
 			aw_disable_acl();
 			aw_disable_messages();
-			$o->save();
+			$status->save();
 			aw_restore_messages();
 			aw_restore_acl();
 		}
