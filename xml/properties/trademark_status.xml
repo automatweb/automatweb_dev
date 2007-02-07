@@ -1,5 +1,37 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>verified</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <field>verified</field>
+            <caption>Kinnitatud</caption>
+      </property>
+      <property>
+            <name>exported</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <caption>Eksporditud</caption>
+            <field>exported</field>
+      </property>
+      <property>
+            <name>export_date</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>export_date</field>
+            <caption>Ekspordi kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>nr</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>nr</field>
+            <caption>Taotluse number</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TRADEMARK_STATUS</syslog_type>
             <relationmgr>yes</relationmgr>
