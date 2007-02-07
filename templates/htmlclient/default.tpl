@@ -1,10 +1,10 @@
+<!-- SUB: SHOW_CHANGEFORM -->
+<form action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
+<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
+
+<!-- END SUB: SHOW_CHANGEFORM -->
 <table id="" width="100%" border="0" cellspacing="0" cellpadding="0"> <!-- aw06contenttable -->
 	
-	<!-- SUB: SHOW_CHANGEFORM -->
-	<form action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
-	    <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
-	<!-- END SUB: SHOW_CHANGEFORM -->
-
 	{VAR:content}
 
 	<!-- SUB: ERROR -->
