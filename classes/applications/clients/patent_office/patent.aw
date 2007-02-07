@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.46 2007/02/07 12:15:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.47 2007/02/07 12:48:46 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -334,7 +334,8 @@ class patent extends class_base
 				}
 				break;
 			case "export_date":
-				if($arr["obj_inst"]->prop("exported"))
+				$status = $this->get_status($arr["obj_inst"]);
+				if($status->prop("exported"))
 				{
 					$prop["type"] = "text";
 					$prop["value"] = date("j:m:Y h:i" , $prop["value"]);
@@ -345,7 +346,8 @@ class patent extends class_base
 				}
 				break;
 			case "exported":
-				if($arr["obj_inst"]->prop("exported"))
+				$status = $this->get_status($arr["obj_inst"]);
+				if($status->prop("exported"))
 				{
 					$prop["type"] = "text";
 					$prop["value"] = t("Eksporditud");
@@ -508,8 +510,9 @@ class patent extends class_base
 		if(is_oid($arr["id"]) && $this->can("view" , $arr["id"]))
 		{
 			$ob = new object($arr["id"]);
+			$stat_obj = $this->get_status($ob);
 			$this->vars(array(
-				"name" => $ob->prop("name"),
+				"name" => $stat_obj->prop("name"),
 			));
 			$data = $this->get_data_from_object($arr["id"]);
 			$prods = $ob->meta("products");
@@ -521,6 +524,8 @@ class patent extends class_base
 			$prods = $_SESSION["patent"]["products"];
 			$ob = obj($_SESSION["patent"]["id"]);
 		}
+		
+		$stat_obj = $this->get_status($ob);
 		
 		if($_POST["send"])
 		{
@@ -551,7 +556,7 @@ class patent extends class_base
 		{
 			$status = $this->is_signed($ob->id());
 		}	
-		if($status["status"] > 0 && !$ob->prop("nr") && !$_POST["print"])
+		if($status["status"] > 0 && !$stat_obj->prop("nr") && !$_POST["print"])
 		{
 			$data["send"] = '<input type="submit" value="'.t("Saadan taotluse").'" class="nupp" onClick="javascript:
 				document.getElementById("send").value=1;
@@ -717,6 +722,7 @@ class patent extends class_base
 	function fill_session($id)
 	{
 		$patent = obj($id);
+		$status = $this->get_status($patent);
 		$property_vars = array("procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "trademark_type" ,
 			 "priority" , "convention_nr" , "convention_country" , "exhibition_name", "exhibition_country", "exhibition" , "request_fee" , "classes_fee",
 			 "payer" , "doc_nr" , "word_mark","warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
@@ -752,7 +758,7 @@ class patent extends class_base
 			$key = $o->id();
 			$_SESSION["patent"]["applicant_id"] = $key;
 		//	$_SESSION["patent"]["change_applicant"] = $key;
-			$_SESSION["patent"]["applicants"][$key]["name"] = $o->name();
+			$_SESSION["patent"]["applicants"][$key]["name"] = $status->name();
 			if($o->class_id() == CL_CRM_COMPANY)
 			{
 				$_SESSION["patent"]["applicants"][$key]["applicant_type"] = 1;
@@ -877,7 +883,7 @@ class patent extends class_base
 		{
 			$o = obj($_SESSION["patent"]["id"]);
 			$status = $this->is_signed($o->id());
-			if($o->prop("nr") || $o->prop("verified"))
+			if($status->prop("nr") || $status->prop("verified"))
 			{
 				return $this->show(array(
 					"id" => $o->id(),
@@ -1310,14 +1316,14 @@ class patent extends class_base
 			"checked" => $_SESSION["patent"]["co_trademark"],
 			"name" => "co_trademark",
 			"onclick" => 'document.getElementById("c_statues_row").style.display = "";'
-			)).'<a href="javascript:;" onClick="MM_openBrWindow(\'16340\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" /></a>'.
+			)).'<a href="javascript:;" onClick="MM_openBrWindow(\'16340\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" /></a><br>'.
 			
-			t("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8211 Garantiim&auml;rk ").html::checkbox(array(
+			t("&#8211 Garantiim&auml;rk ").html::checkbox(array(
 				"value" => 1,
 				"checked" => $_SESSION["patent"]["guaranty_trademark"],
 				"name" => "guaranty_trademark",
 				"onclick" => 'document.getElementById("g_statues_row").style.display = "";'
-			));
+			)).'<a href="javascript:;" onClick="MM_openBrWindow(\'16341\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" />';
 		$data["trademark_type_text"] = ($_SESSION["patent"]["co_trademark"]) ? t("Kollektiivkaubam&auml;rk") : "";
 		$data["trademark_type_text"].= " ";
 		$data["trademark_type_text"].= ($_SESSION["patent"]["guaranty_trademark"]) ? t("Garantiim&auml;rk") : "";
@@ -2153,7 +2159,7 @@ class patent extends class_base
 			$status = new object();
 			$status->set_class_id(CL_TRADEMARK_STATUS);
 			$status->set_parent($patent->id());
-			$status->set_name("Taotluse ".$patent->id()." staatus");
+			$status->set_name(" Kinnitamata taotlus nr [".$patent->id()."]");
 			$status->save();
 		}
 		return $status;
@@ -2468,8 +2474,9 @@ class patent extends class_base
 			$c = "";
 			foreach($obj_list->arr() as $key => $patent)
 			{
+				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
-				if($send_patent == $patent->id() && $re["status"] == 1 && !$patent->prop("nr"))
+				if($send_patent == $patent->id() && $re["status"] == 1 && !$status->prop("nr"))
 				{
 					$_SESSION["patent"]["id"] = $patent->id();
 					$this->set_sent(array("add_obj" => $arr["alias"]["to"]));
@@ -2477,11 +2484,11 @@ class patent extends class_base
 
 				if($arr["unsigned"])
 				{
-					if($patent->prop("nr")) continue;
+					if($status->prop("nr")) continue;
 				}
 				else
 				{
-					if(!$patent->prop("nr")) continue;
+					if(!$status->prop("nr")) continue;
 				}
 				
 				$url = aw_url_change_var("trademark_id", $patent->id());
@@ -2490,8 +2497,8 @@ class patent extends class_base
 				
 				if(
 					!($re["status"] == 1) && 
-					!$patent->prop("verified") && 
-					!$patent->prop("nr") && 
+					!$status->prop("verified") && 
+					!$status->prop("nr") && 
 					(
 						(
 							$code &&
@@ -2526,7 +2533,7 @@ class patent extends class_base
 				), CL_PATENT);
 				
 				$change = '';
-				if(!($patent->prop("nr") || $patent->prop("verified") || ($re["status"] == 1)))
+				if(!($status->prop("nr") || $status->prop("verified") || ($re["status"] == 1)))
 				{
 					$change = '<a href="'.$url.'">Muuda</a>';
 				}
@@ -2537,11 +2544,11 @@ class patent extends class_base
 				}
 				$this->vars(array(
 					"date" 		=> date("j.m.Y" , $patent->created()),
-					"nr" 		=> ($patent->prop("nr")) ? $patent->prop("nr") : "",
+					"nr" 		=> ($status->prop("nr")) ? $status->prop("nr") : "",
 					"applicant" 	=> $patent->prop_str("applicant"),
 					"type" 		=> $this->types[$patent->prop("type")],
-					"state" 	=> ($patent->prop("verified")) ? t("Vastu v&otilde;etud") : (($patent->prop("nr")) ? t("Saadetud") : ""),
-					"name" 	 	=> $patent->name(),
+					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Saadetud") : ""),
+					"name" 	 	=> $status->name(),
 					"id" 	 	=> $patent->id(),
 					"url"  		=> $url,
 					"procurator"  	=> $patent->prop_str("procurator"),

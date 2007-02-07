@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.1 2007/02/07 11:36:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.2 2007/02/07 12:48:46 markop Exp $
 // trademark_status.aw - Trademark status 
 /*
 
@@ -7,6 +7,19 @@
 
 @default table=objects
 @default group=general
+
+	@property verified type=checkbox 
+	@caption Kinnitatud
+
+	@property exported type=checkbox caption=no
+	@caption Eksporditud
+
+	@property export_date type=date_select
+	@caption Ekspordi kuup&auml;ev
+
+	@property nr type=textbox
+	@caption Taotluse number
+
 
 */
 

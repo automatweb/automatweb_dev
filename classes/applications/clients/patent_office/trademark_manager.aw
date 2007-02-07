@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.13 2007/02/07 12:15:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.14 2007/02/07 12:48:46 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -243,7 +243,7 @@ class trademark_manager extends class_base
 		
 		if($arr["request"]["p_id"] == "verified")
 		{
-			$filter["verified"] = 1;
+			$filter["RELTYPE_TRADEMARK_STATUS.verified"] = 1;
 		}
 //		if($arr["request"]["p_id"] == "not_verified")
 //		{
@@ -276,7 +276,8 @@ class trademark_manager extends class_base
 		$types = $trademark_inst->types;
 		foreach($ol->arr() as $o)
 		{
-			if($arr["request"]["p_id"] == "not_verified" && $o->prop("verified"))
+			$status = $trademark_inst->get_status($o);
+			if($arr["request"]["p_id"] == "not_verified" && $status->prop("verified"))
 			{
 				continue;
 			}
@@ -297,9 +298,9 @@ class trademark_manager extends class_base
 				$type.= " (".$o->prop("word_mark").")";
 			}
 			$nr_str = t("Number puudub");
-			if($o->prop("nr"))
+			if($status->prop("nr"))
 			{
-				$nr_str = $o->prop("nr");
+				$nr_str = $status->prop("nr");
 			}
 			$nr = html::href(array(
 				"caption" => $nr_str,
@@ -348,7 +349,7 @@ class trademark_manager extends class_base
 				"applicant_data" => $applicant_data,
 				"date" => date("d.m.Y",$o->created()),
 				"oid" => $o->id(),
-				"verify" => ($o->prop("verified")) ? "" : html::href(array(
+				"verify" => ($status->prop("verified")) ? "" : html::href(array(
 					"caption" => t("Kinnita"),
 					"url" => "#",
 					"onclick" => 'javascript:window.open("'.
@@ -504,7 +505,7 @@ class trademark_manager extends class_base
 			$o = obj($id);
 			$status = $this->get_status($o);
 			$status->set_prop("verified",1);
-			$status->set_name(t("Taotlus nr: ".$o->prop("nr")));
+			$status->set_name(t("Taotlus nr: ".$status->prop("nr")));
 			
 //			$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
 //			$o->set_prop("nr" , $tno);
@@ -553,16 +554,18 @@ class trademark_manager extends class_base
 			"class_id" => CL_PATENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"verified" => 1,
+			"RELTYPE_TRADEMARK_STATUS.verified" => 1,
 			"modified" => new obj_predicate_compare(OBJ_COMP_GREATER, get_day_start()) 
 		));
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
 		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
 ';
+		$tm = get_instance(CL_PATENT);
 
 		foreach($ol->arr() as $o)
 		{
-			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $o->prop("nr")).'" OOCD="EE" ORIGLAN="3" EXPDATE="'.date("Ymd", $o->prop("exhibition_date")).'" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
+			$status = $tm->get_status($o);
+			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $status->prop("nr")).'" OOCD="EE" ORIGLAN="3" EXPDATE="'.date("Ymd", $o->prop("exhibition_date")).'" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
 ';
 				$xml .= '		<HOLGR>
 ';
@@ -637,7 +640,7 @@ class trademark_manager extends class_base
 				$type = strtoupper(substr($im->name(), strrpos($im->name(), ".")));
 
 				$fld = aw_ini_get("site_basedir")."/patent_files/";
-				$fn = $fld .sprintf("%08d", $o->prop("nr")).$type;
+				$fn = $fld .sprintf("%08d", $status->prop("nr")).$type;
 				echo "saving file $fn <br>";
 				$image_inst = get_instance(CL_FILE);
 				$imd = $image_inst->get_file_by_id($im->id(), true);
@@ -645,7 +648,7 @@ class trademark_manager extends class_base
 				fwrite($f, $imd["content"]);
 				fclose($f);
 				}//tõstsin seda ettepoole, et ilma reproduktsioonita tahetakse ka tegelikult sõnalist osa näha
-				$xml .= "\t\t<IMAGE NAME=\"".sprintf("%08d", $o->prop("nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
+				$xml .= "\t\t<IMAGE NAME=\"".sprintf("%08d", $status->prop("nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
 				
 
 				$xml .= "\t\t<MARTRGR>\n";
@@ -725,7 +728,7 @@ class trademark_manager extends class_base
 				$xml .= "\t\t<BASGR>\n";
 					$xml .= "\t\t\t<BASAPPGR>\n";
 						$xml .= "\t\t\t\t<BASAPPD>".date("Ymd", $o->prop("exhibition_date"))."</BASAPPD>\n";
-						$xml .= "\t\t\t\t<BASAPPN>".sprintf("%08d", $o->prop("nr"))."</BASAPPN>\n";
+						$xml .= "\t\t\t\t<BASAPPN>".sprintf("%08d", $status->prop("nr"))."</BASAPPN>\n";
 					$xml .= "\t\t\t</BASAPPGR>\n";
 				$xml .= "\t\t</BASGR>\n";
 
@@ -745,8 +748,6 @@ class trademark_manager extends class_base
 				$xml .= "\t\t</DESPG>\n";
 
 			$xml .= "\t</BIRTH>\n";
-
-			$status = $this->get_status($o);
 			$status->set_prop("exported", 1);
 			$status->set_prop("export_date", time());
 			$o->set_no_modify(true);
