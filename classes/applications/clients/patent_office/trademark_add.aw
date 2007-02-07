@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.5 2007/02/07 13:04:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.6 2007/02/07 13:30:20 markop Exp $
 // trademark_add.aw - Kaubam&auml;rgi veebist lisamine 
 /*
 
@@ -167,7 +167,6 @@ class trademark_add extends class_base
 				else break;
 			}
 		}
-		
 		if(!(is_array($links) && sizeof($links) == 6))
 		{
 			$ol = new object_list();
@@ -214,6 +213,7 @@ class trademark_add extends class_base
 			$ol->add($o6);
 			
 			$o->set_meta("meaningless_sh__" , $ol->ids());
+			$o->save();
 		}
 		return $ol;
 	}
