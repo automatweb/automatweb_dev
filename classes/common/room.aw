@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.136 2007/02/02 16:18:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.137 2007/02/07 15:00:47 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1608,14 +1608,13 @@ class room extends class_base
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len);
 		$this->_init_calendar_t($t,$this->start, $len);
 		exit_function("get_calendar_tbl::3::genres");
-//arr($this->res_table);
+
 		$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
 	
 		$num_rows = 0;
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
 		// this seems to fuck up in reval room calendar view and only display time to 15:00
 		//while($step < floor($steps))
-		//arr(86400/($step_length * $arr["obj_inst"]->prop("time_step")));
 		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
@@ -1817,8 +1816,10 @@ class room extends class_base
 							}
 							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
 						}
-						elseif($this->is_buffer && !$arr["web"])
-						{//arr($settings->prop("col_buffer"));
+						else
+						if($this->is_buffer && !$arr["web"])
+						{;
+						//arr($settings->prop("col_buffer"));
 							if($settings->prop("col_buffer"))
 							{
 								$col[$x] = "#".$settings->prop("col_buffer");
@@ -2123,12 +2124,24 @@ class room extends class_base
 		{
 			$time = time();
 		}
-		
+	
+		$op_len = 0;
+		for($i = 0; $i < $len; $i++)
+		{
+			$tm = $time+$i*24*3600;
+			if($this->is_open_day($tm))
+			{
+				$op_len++;
+			}
+		}
+		$pct = floor(100 / ($op_len+1));
 		$t->define_field(array(
 			"name" => "time",
 			"caption" => t("Aeg"),
-			"width" => "20px",
+			"width" => $pct."%",
 		));
+
+		
 
 		for($i = 0; $i < $len; $i++)
 		{
@@ -2138,7 +2151,7 @@ class room extends class_base
 				$t->define_field(array(
 					"name" => "d".$i,
 					"caption" => substr(date("l" , $tm) , 0 , 2).date(" d/m/y" , $tm),// d/m/Y", $tm)//date("l d/m/Y", $tm),
-					"width" => "20px",
+					"width" => $pct."%",
 					"chgbgcolor" => "col".$i,
 					"id" => "id".$i,
 					"onclick" => "onclick".$i,
@@ -2200,8 +2213,7 @@ class room extends class_base
 			}
 		}
 		$product = $arr["product"];
-		//arr($arr); arr($start); arr($end);
-		//die();
+		
 		if (!$parent)
 		{
 			$parent = $arr["id"];
@@ -3191,7 +3203,7 @@ class room extends class_base
 				asort($prods, SORT_NUMERIC);
 				$ol->add(array_keys($prods));
 			}
-		}//arr($ol);
+		}
 		return $ol;
 	}
 	
@@ -3357,7 +3369,7 @@ class room extends class_base
 		$step = 1;
 		$time = $end-$start;//+60 seepärast et oleks nagu täisminutid ja täistunnid jne
 		while($time >= 60)//alla minuti ei ole oluline aeg eriti..
-		{//arr($end);
+		{
 			$price = "";
 			if(is_array($this_prices[$step]))
 			{
@@ -3404,7 +3416,7 @@ class room extends class_base
 			));
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
-			{//arr($hr_price); arr($hr_price - $bargain*$hr_price);arr("");
+			{
 				$sum[$currency] += ($hr_price - $bargain*$hr_price);//+1 seepärast, et lõppemise täistunniks võetakse esialgu ümardatud allapoole tunnid... et siis ajale tuleb üks juurde liita, sest poolik tund läheb täis tunnina arvesse
 				$this->bargain_value[$currency] = $this->bargain_value[$currency] + $bargain*$hr_price;
 			}
@@ -3804,11 +3816,12 @@ class room extends class_base
 	
 	function check_from_table($arr)
 	{
+		$ret = true;
 		foreach($this->res_table as $key => $val)
 		{
 			if($key > $arr["end"])
 			{
-				return true;
+				return $ret;
 			}
 			if($val["end"] > $arr["start"])
 			{//if($key == 1169301600){arr(date("h:i" , arr($key))); arr(date("h:i", $arr["end"]));}
@@ -3824,11 +3837,18 @@ class room extends class_base
 					{
 						$this->is_after_buffer = 0;
 					}
-					return false;
+					if($val["verified"])
+					{
+						return false;
+					}
+					else
+					{
+						$ret = false;
+					}
 				}
 			}
 		}
-		return true;
+		return $ret;
 	}
 
 	function generate_res_table($room, $start = 0, $end = 0)
@@ -3875,8 +3895,14 @@ class room extends class_base
 					$this->res_table[$start]["end"] = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
 					//tekitab eelnevale või eelnevatele cellidele nö. broneeringu, mis on lihtsalt broneeritud buffriks
 					if($room->prop("buffer_after"))
-					{
-						$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["going_to_be_after_buffer"] = 1;
+					{//arr($start-$room->prop("buffer_after")*$room->prop("buffer_after_unit"));
+					
+/*					if (aw_global_get("uid") == "struktuur") {
+					arr(date("h:i  " , $start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")));
+					arr(date("h:i  " , $start));
+					arr("sdfsdfdsfsd");
+					}
+*/						$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["going_to_be_after_buffer"] = 1;
 						$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["end"] = $start;
 					}
 				}
@@ -3891,7 +3917,7 @@ class room extends class_base
 			}
 		}
 		ksort($this->res_table);
-
+		//if (aw_global_get("uid") == "struktuur") {arr($this->res_table);}
 		if (count($customers))
 		{
 			$cust_ol = new object_list(array(
