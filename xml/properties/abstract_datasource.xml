@@ -68,6 +68,16 @@
             <size>5</size>
             <caption>Mitu rida maksimaalselt importida</caption>
       </property>
+      <property>
+            <name>controller</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CTR</reltype>
+            <caption>Kontroller</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ABSTRACT_DATASOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -83,6 +93,11 @@
                   </clid>
                   <caption>andmed objektist</caption>
             </DS>
+            <CTR>
+                  <value>1</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CTR>
       </reltypes>
 </properties>
 

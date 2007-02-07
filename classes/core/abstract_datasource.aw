@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.8 2005/06/27 12:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.9 2007/02/07 13:39:22 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
@@ -32,10 +32,15 @@
 @property max_lines type=textbox size=5
 @caption Mitu rida maksimaalselt importida
 
+@property controller type=relpicker reltype=RELTYPE_CTR
+@caption Kontroller
+
 
 @reltype DS value=1 clid=CL_FILE,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_OBJ,CL_DB_TABLE_CONTENTS
 @caption andmed objektist
 
+@reltype CTR value=1 clid=CL_FORM_CONTROLLER
+@caption Kontroller
 */
 
 class abstract_datasource extends class_base
@@ -203,6 +208,21 @@ class abstract_datasource extends class_base
 				if (++$cnt > $o->prop("max_lines"))
 				{
 					break;
+				}
+			}
+			$ret = $tmp;
+		}
+
+		if ($this->can("view", $o->prop("controller")))
+		{
+			$tmp = array();
+			$ci = get_instance(CL_FORM_CONTROLLER);
+			$c_id = $o->prop("controller");
+			foreach($ret as $k => $v)
+			{
+				if ($ci->eval_controller($c_id, $v, $o))
+				{
+					$tmp[$k] = $v;
 				}
 			}
 			$ret = $tmp;
