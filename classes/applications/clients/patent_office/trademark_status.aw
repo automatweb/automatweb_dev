@@ -1,23 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.2 2007/02/07 12:48:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.3 2007/02/08 16:16:38 markop Exp $
 // trademark_status.aw - Trademark status 
 /*
 
 @classinfo syslog_type=ST_TRADEMARK_STATUS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@tableinfo aw_trademark_status index=aw_oid master_table=objects master_index=brother_of
 
-@default table=objects
 @default group=general
 
-	@property verified type=checkbox 
+	@property verified type=checkbox table=aw_trademark_status field=aw_verified ch_value=1 
 	@caption Kinnitatud
 
-	@property exported type=checkbox caption=no
+	@property exported type=checkbox caption=no table=aw_trademark_status field=aw_exported ch_value=1 
 	@caption Eksporditud
 
-	@property export_date type=date_select
+	@property export_date type=date_select table=aw_trademark_status field=aw_exported_date
 	@caption Ekspordi kuup&auml;ev
 
-	@property nr type=textbox
+	@property nr type=textbox table=aw_trademark_status field=aw_nr
 	@caption Taotluse number
 
 
@@ -46,6 +46,7 @@ class trademark_status extends class_base
 
 	function set_property($arr = array())
 	{
+
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -74,6 +75,21 @@ class trademark_status extends class_base
 		));
 		return $this->parse();
 	}
+	
+	function do_db_upgrade($t, $f, $q, $err)
+	{
+		if ($f == "" && $t == "aw_trademark_status")
+		{
+			$this->db_query("CREATE TABLE aw_trademark_status(
+				aw_oid int primary key,
+				aw_verified int,
+				aw_exported int,
+				aw_exported_date int,
+				aw_nr int
+			)");
+		}
+	}
+	
 
 //-- methods --//
 }

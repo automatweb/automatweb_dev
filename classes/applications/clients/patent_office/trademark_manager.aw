@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.14 2007/02/07 12:48:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.15 2007/02/08 16:16:38 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -243,8 +243,9 @@ class trademark_manager extends class_base
 		
 		if($arr["request"]["p_id"] == "verified")
 		{
-			$filter["RELTYPE_TRADEMARK_STATUS.verified"] = 1;
+			$filter["CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified"] = 1;
 		}
+		
 //		if($arr["request"]["p_id"] == "not_verified")
 //		{
 //			$filter["verified"] = new obj_predicate_not(1);
@@ -268,9 +269,13 @@ class trademark_manager extends class_base
 		else
 		{
 			$ol = new object_list($filter);
-			
 		}
-		
+		$ol->sort_by(array(
+			"prop" => "created",
+			"order" => "desc"
+		));
+
+
 		$trademark_inst = get_instance(CL_PATENT);
 		$person_inst = get_instance(CL_CRM_PERSON);
 		$types = $trademark_inst->types;
@@ -493,6 +498,7 @@ class trademark_manager extends class_base
 	**/
 	function verify($arr)
 	{
+		$patent_inst = get_instance(CL_PATENT);
 		$object = obj($arr["id"]);
 		if(is_oid($object->prop("verified_menu")))
 		{
@@ -503,18 +509,18 @@ class trademark_manager extends class_base
 		foreach($arr["sel"] as $id)
 		{
 			$o = obj($id);
-			$status = $this->get_status($o);
+			$status = $patent_inst->get_status($o);
 			$status->set_prop("verified",1);
 			$status->set_name(t("Taotlus nr: ".$status->prop("nr")));
 			
 //			$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
 //			$o->set_prop("nr" , $tno);
-			if($parent)
-			{
-				$status->set_parent($parent);
-			}
+//			if($parent)
+//			{
+//				$status->set_parent($parent);
+//			}
 //			$o->save();
-			$status->save();
+			$status->save();arr($status);
 		}
 		if($arr["popup"])
 		{

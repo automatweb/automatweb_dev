@@ -2,34 +2,36 @@
 <properties>
       <property>
             <name>verified</name>
-            <table>objects</table>
             <group>general</group>
             <type>checkbox</type>
-            <field>verified</field>
+            <table>aw_trademark_status</table>
+            <field>aw_verified</field>
+            <ch_value>1</ch_value>
             <caption>Kinnitatud</caption>
       </property>
       <property>
             <name>exported</name>
-            <table>objects</table>
             <group>general</group>
             <type>checkbox</type>
             <caption>Eksporditud</caption>
-            <field>exported</field>
+            <table>aw_trademark_status</table>
+            <field>aw_exported</field>
+            <ch_value>1</ch_value>
       </property>
       <property>
             <name>export_date</name>
-            <table>objects</table>
             <group>general</group>
             <type>date_select</type>
-            <field>export_date</field>
+            <table>aw_trademark_status</table>
+            <field>aw_exported_date</field>
             <caption>Ekspordi kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>nr</name>
-            <table>objects</table>
             <group>general</group>
             <type>textbox</type>
-            <field>nr</field>
+            <table>aw_trademark_status</table>
+            <field>aw_nr</field>
             <caption>Taotluse number</caption>
       </property>
       <classinfo>
@@ -39,5 +41,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <tableinfo>
+            <aw_trademark_status>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_trademark_status>
+      </tableinfo>
 </properties>
 
