@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.35 2007/01/19 13:54:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.36 2007/02/08 16:57:45 markop Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -243,6 +243,11 @@ class crm_db extends class_base
 			"caption" => t("Kliendihaldur"),
 			"sortable" => 1,
 		));
+		$t->define_field(array(
+			"name" => "changed",
+			"caption" => t("Muudetud"),
+			"sortable" => 1,
+		));
 		$t->define_chooser(array(
 			"field" => "id",
 			"name" => "sel",
@@ -250,7 +255,7 @@ class crm_db extends class_base
 	}
 
 	function company_table($arr)
-	{
+	{//arr("kräpp");
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_company_table(&$t);
 
@@ -353,6 +358,7 @@ class crm_db extends class_base
 				"phone" => $com->prop("phone_id.name"),
 				"org_leader" => $org_leader,
 				"cr_manager" => $cr_manager,
+				"changed" => date("j.m.Y H:i" , $com->modified()),
 			));
 		}
 		$t->sort_by();
