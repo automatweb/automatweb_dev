@@ -1265,7 +1265,14 @@ class site_template_compiler extends aw_template
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"parent\" => \$parent_obj->".$this->id_func."(),\n";
 		$ret .= $this->_gi()."\"class_id\" => array(CL_MENU,CL_BROTHER),\n";
-		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
+		if (aw_ini_get("user_interface.full_content_trans"))
+		{
+			$ret .= $this->_gi()."\"status\" => array(STAT_ACTIVE, STAT_NOTACTIVE),\n";
+		}
+		else
+		{
+			$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
+		}
 
 		$ret .= $this->_gi()."new object_list_filter(array(\n";
 
@@ -1344,6 +1351,16 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0,\$prev_obj = NULL; !".$list_name."->end(); \$prev_obj = ".$o_name.",".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
+
+			if (aw_ini_get("user_interface.full_content_trans"))
+			{
+				$ret .= $this->_gi()."if (!(".$o_name."->status() == STAT_ACTIVE || ".$o_name."->meta(\"trans_\".aw_global_get(\"ct_lang_id\").\"_status\")))\n";
+				$ret .= $this->_gi()."{\n";
+				$this->brace_level++;
+					$ret .= $this->_gi()."continue;\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."}\n";
+			}
 
 			$ret .= $this->_gi()."if (".$this_is_from_obj_name."[".$o_name."->parent()])\n";
 			$ret .= $this->_gi()."{\n";
