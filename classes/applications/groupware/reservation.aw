@@ -1,5 +1,5 @@
-<?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.42 2007/02/02 08:33:57 kristo Exp $
+<?PHp
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.43 2007/02/08 14:08:43 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -320,6 +320,13 @@ class reservation extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "cp_ln":
+			case "cp_fn":
+			case "cp_phone":
+			case "cp_email":
+				$fn = "_get_".$data["name"];
+				return $this->$fn($arr);
+				break;
 			case "products_tbl":
 				$arr["obj_inst"]->set_meta("amount", $arr["request"]["amount"]);
 				$arr["obj_inst"]->set_meta("prod_discount", $arr["request"]["discount"]);
@@ -977,7 +984,7 @@ class reservation extends class_base
 		die("<script language='javascript'>
 			if (window.opener)
 			{
-				window.opener.refresh();
+				window.opener.location.reload();
 			}
 			window.close();
 		</script>");
@@ -1017,7 +1024,7 @@ class reservation extends class_base
 
 	function _get_cp_fn($arr)
 	{
-		if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
+if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 		{
 			return PROP_OK;
 		}
@@ -1088,6 +1095,7 @@ class reservation extends class_base
 	
 	function _set_cp_fn($arr)
 	{
+	
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")) && $arr["prop"]["value"] != "")
                 {
 			$cust = obj();
@@ -1107,12 +1115,13 @@ class reservation extends class_base
 			$cust->set_prop("firstname", $arr["prop"]["value"]);
 			$cust->set_name($cust->prop("firstname")." ".$cust->prop("lastname"));
 			$cust->save();
-		}	
+		}
 		return PROP_IGNORE;
 	}
 
         function _set_cp_ln($arr)
-        {
+         {
+	 
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")) || $arr["prop"]["value"] == "")
                 {
                         return PROP_IGNORE;
