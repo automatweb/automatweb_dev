@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.15 2006/06/08 13:49:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.16 2007/02/08 12:50:17 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -332,9 +332,45 @@ class object_export extends class_base
 		{
 			$filt["limit"] = 10;
 		}
+		ini_set("memory_limit","1800M");
+		set_time_limit(1200);
 		$ol = new object_list($filt);
-		foreach($ol->arr() as $o)
+//		echo "filtrd <br>\n";
+//		flush();
+		$d = $ol->arr() ;
+//		echo "arrd() <br>\n";
+//		flush();
+
+		// go over all props and for all classificators
+		// read all the conns at once so we don't have to 
+		// do a query for each object.
+		/*$conn_vals = array();
+		foreach($props as $pn => $pd)
 		{
+			if ($pd["type"] == "classificator")
+			{
+				$c = new connection();
+				$conns = $c->find(array(
+					"from" => $ol->ids(),
+					"from.class_id" => $clid,
+					"type" => $pd["reltype"]
+				));
+				foreach($conns as $con)
+				{
+					$conn_vals[$pn][$con["from"]][] = $con;
+				}
+			}
+		}*/
+		//ini_set("display_errors", "On");
+		//error_reporting(E_ALL^E_NOTICE);
+		foreach($d as $o)
+		{
+		//	if (++$cnt > 100)
+		//	{
+		//echo $o->id()." mem: ".memory_get_usage()."<br>\n";
+		//flush();
+		//		$cnt = 0;
+		//	}
 			$dat = array();
 			foreach($props as $pn => $pd)
 			{
@@ -380,7 +416,8 @@ class object_export extends class_base
 			}
 			$t->define_data($dat);
 		}
-
+//echo "defind <br>\n";
+//flush();
 		if ($arr["request"]["do_exp"] == 1)
 		{
 			header("Content-type: application/csv");
