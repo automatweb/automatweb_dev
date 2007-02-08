@@ -549,7 +549,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				SELECT 
 					source,
 					target,
-					reltype
+					reltype,
+					objects.name as target_name
 				FROM 
 					aliases 
 				LEFT JOIN objects ON objects.oid = aliases.target
@@ -2377,6 +2378,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						}
 					}
 					$this->read_properties_data_cache[$row["oid"]] = $row;
+					$GLOBALS["read_properties_data_cache_conn"][$row["oid"]] = array();
 					$ret[] = $row;
 				}
 			}
@@ -2385,8 +2387,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->db_query($sql["q2"]);
 				while ($row = $this->db_next())
 				{
-					$this->read_properties_data_cache_conn[$row["source"]][] = $row;
+					$GLOBALS["read_properties_data_cache_conn"][$row["source"]][$row["reltype"]][] = $row;
 					$ret2[] = $row;
+					//$GLOBALS["obj_conn_fetch_vals"][$this->oid][$param]
 				}
 			}			
 		}

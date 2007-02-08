@@ -1122,10 +1122,24 @@ class _int_object
 			case "releditor":
 				if ($pd["store"] == "connect")
 				{
-					$rels = new object_list($this->connections_from(array(
-						"type" => $pd["reltype"]
-					)));
-					$_tmp = $rels->names();
+					// we need to list the connections and fetch their names. 
+					// UNLESS we already got them from wherever. like fetch_full_list conn prop fetch
+					if (is_array($GLOBALS["read_properties_data_cache_conn"][$this->obj["oid"]]))
+					{
+						$rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$pd["reltype"]]["value"];
+						$_tmp = array();
+						foreach(safe_array($GLOBALS["read_properties_data_cache_conn"][$this->obj["oid"]][$rt]) as $con)
+						{
+							$_tmp[] = $con["target_name"];
+						}
+					}
+					else
+					{
+						$rels = new object_list($this->connections_from(array(
+							"type" => $pd["reltype"]
+						)));
+						$_tmp = $rels->names();
+					}
 					if (count($_tmp))
 					{
 						$val = join(",", $_tmp);
