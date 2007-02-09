@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.21 2006/08/28 12:21:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.22 2007/02/09 11:54:50 kristo Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -234,7 +234,7 @@ class object_type extends class_base
 				$rv["d".$key] = array(
 					"name" => "clf_default[" . $key . "]",
 					"caption" => t("Vaikimisi välimus"),
-					"options" => $options ? $options->names() : array(),
+					"options" => $options ? array("" => t("--vali--")) + $options->names() : array(),
 					"value" => $clf_defaults[$key],
 					"selected" => $clf_defaults[$key],
 					"parent" => "c".$key,
