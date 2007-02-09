@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.3 2007/02/08 16:16:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.4 2007/02/09 13:57:55 markop Exp $
 // trademark_status.aw - Trademark status 
 /*
 
@@ -20,6 +20,8 @@
 	@property nr type=textbox table=aw_trademark_status field=aw_nr
 	@caption Taotluse number
 
+	@property sent_date type=date_select table=aw_trademark_status field=aw_sent_date
+	@caption Saatmise kuup&auml;ev
 
 */
 
@@ -85,8 +87,18 @@ class trademark_status extends class_base
 				aw_verified int,
 				aw_exported int,
 				aw_exported_date int,
-				aw_nr int
+				aw_nr int,
+				aw_sent_date int,
 			)");
+		}
+		switch($f)
+		{
+			case "aw_sent_date":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
 		}
 	}
 	

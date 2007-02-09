@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.48 2007/02/08 16:16:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.49 2007/02/09 13:57:54 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -987,7 +987,10 @@ class patent extends class_base
 			{
 				$js.='document.getElementById("c_statues_row").style.display = "none";';
 			}
-			
+			if($_SESSION["patent"]["type"])
+			{
+				$js.='document.getElementById("foreignlangelements_row").style.display = "none"';
+			}
 		}
 		
 		if(!$_GET["data_type"])
@@ -1329,7 +1332,9 @@ class patent extends class_base
 				"name" => "type",
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
 				document.getElementById("reproduction_row").style.display = "none";
-				document.getElementById("wordmark_caption").innerHTML = "Kaubam&auml;rk"; ',
+				document.getElementById("wordmark_caption").innerHTML = "Kaubam&auml;rk";
+				document.getElementById("foreignlangelements_row").style.display = "";
+				 ',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Kujutism&auml;rk ").html::radiobutton(array(
 				"value" => 1,
 		 		"checked" => ($_SESSION["patent"]["type"] == 1) ? 1 : 0,
@@ -1339,12 +1344,12 @@ class patent extends class_base
 				"value" => 2,
 				"checked" => ($_SESSION["patent"]["type"] == 2) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";',
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";document.getElementById("foreignlangelements_row").style.display = "";',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Ruumiline m&auml;rk ").html::radiobutton(array(
 				"value" => 3,
 				"checked" => ($_SESSION["patent"]["type"] == 3) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";',
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";document.getElementById("foreignlangelements_row").style.display = "";',
 			));
 		
 		$data["trademark_type"] = t("(kui taotlete kollektiivkaubam&auml;rki)").html::checkbox(array(
@@ -1994,7 +1999,10 @@ class patent extends class_base
 		$tno = $ser->find_series_and_get_next(CL_PATENT,$num_ser);
 		$status = $this->get_status($o);
 		$status->set_prop("nr" , $tno);
+		$status->set_prop("sent_date" , time());
 		$status->save();
+		header("Location:"."19205");
+		die();
 //		$o->save();
 	}
 	
@@ -2459,6 +2467,13 @@ class patent extends class_base
 		extract($_GET);
 		$uid = aw_global_get("uid");
 		$section = aw_global_get("section");
+		
+		if(is_oid($_GET["delete_patent"]) && $this->can("delete" , $_GET["delete_patent"]))
+		{
+			$d = obj($_GET["delete_patent"]);
+			$d->delete();
+		}
+		
 		$obj_list = new object_list(array(
 			"class_id" => CL_PATENT,
 			"createdby" => $uid,
@@ -2474,12 +2489,6 @@ class patent extends class_base
 		if($arr["unsigned"])
 		{
 			$tpl = "unsigned_list.tpl";
-		}
-		
-		if(is_oid($_GET["delete_patent"]) && $this->can("delete" , $_GET["delete_patent"]))
-		{
-			$d = obj($_GET["delete_patent"]);
-			$d->delete();
 		}
 		
 		$this->read_template($tpl);
@@ -2530,10 +2539,19 @@ class patent extends class_base
 				if($arr["unsigned"])
 				{
 					if($status->prop("nr")) continue;
+					$date = date("j.m.Y" , $patent->created());
 				}
 				else
 				{
 					if(!$status->prop("nr")) continue;
+					if($status->prop("sent_date"))
+					{
+						$date = date("j.m.Y" , $status->prop("sent_date"));
+					}
+					else
+					{
+						$date = date("j.m.Y" , $patent->created());
+					}
 				}
 				
 				$url = aw_url_change_var("trademark_id", $patent->id());
@@ -2581,7 +2599,7 @@ class patent extends class_base
 				if(!($status->prop("nr") || $status->prop("verified") || ($re["status"] == 1)))
 				{
 					$change = '<a href="'.$url.'">Muuda</a>';
-					$del_url = aw_url_change_var("delete_patent", $patent->id());
+					$del_url = aw_ini_get("baseurl").aw_url_change_var("delete_patent", $patent->id());
 				}
 				elseif(($re["status"] == 1))
 				{
@@ -2592,7 +2610,7 @@ class patent extends class_base
 				
 				
 				$this->vars(array(
-					"date" 		=> date("j.m.Y" , $patent->created()),
+					"date" 		=> $date,
 					"nr" 		=> ($status->prop("nr")) ? $status->prop("nr") : "",
 					"applicant" 	=> $patent->prop_str("applicant"),
 					"type" 		=> $this->types[$patent->prop("type")],

@@ -34,6 +34,14 @@
             <field>aw_nr</field>
             <caption>Taotluse number</caption>
       </property>
+      <property>
+            <name>sent_date</name>
+            <group>general</group>
+            <type>date_select</type>
+            <table>aw_trademark_status</table>
+            <field>aw_sent_date</field>
+            <caption>Saatmise kuup&amp;amp;auml;ev</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TRADEMARK_STATUS</syslog_type>
             <relationmgr>yes</relationmgr>

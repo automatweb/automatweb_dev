@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.15 2007/02/08 16:16:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.16 2007/02/09 13:57:55 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -346,13 +346,22 @@ class trademark_manager extends class_base
 				}
 			}
 
+			if($status->prop("sent_date"))
+			{
+				$date = date("j.m.Y" , $status->prop("sent_date"));
+			}
+			else
+			{
+				$date = date("j.m.Y" , $o->created());
+			}
+
 			$t->define_data(array(
 				"procurator" => $procurator,
 				"nr" => $nr,
 				"type" => $type,
 				"applicant_name" => $applicant_name,
 				"applicant_data" => $applicant_data,
-				"date" => date("d.m.Y",$o->created()),
+				"date" => $date,
 				"oid" => $o->id(),
 				"verify" => ($status->prop("verified")) ? "" : html::href(array(
 					"caption" => t("Kinnita"),
@@ -520,7 +529,7 @@ class trademark_manager extends class_base
 //				$status->set_parent($parent);
 //			}
 //			$o->save();
-			$status->save();arr($status);
+			$status->save();
 		}
 		if($arr["popup"])
 		{
@@ -560,7 +569,7 @@ class trademark_manager extends class_base
 			"class_id" => CL_PATENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"RELTYPE_TRADEMARK_STATUS.verified" => 1,
+			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => 1,
 			"modified" => new obj_predicate_compare(OBJ_COMP_GREATER, get_day_start()) 
 		));
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";

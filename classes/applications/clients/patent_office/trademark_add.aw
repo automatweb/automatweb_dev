@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.7 2007/02/08 16:16:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.8 2007/02/09 13:57:55 markop Exp $
 // trademark_add.aw - Kaubam&auml;rgi veebist lisamine 
 /*
 
@@ -153,67 +153,70 @@ class trademark_add extends class_base
 	function get_folders_as_object_list($o, $level, $parent)
 	{
 		$ol = new object_list();
-		$links = $o->meta("meaningless_sh__");
-		//arr($links);
-		$_SESSION["patent"]["jrk"] = 0;
-		if(is_array($links) && sizeof($links) == 6)
+		if((isset($_GET["data_type"]) && $_GET["data_type"] < 6 )|| isset($_GET["trademark_id"]))
 		{
-			foreach($links as $link)
+			$links = $o->meta("meaningless_sh__");
+			//arr($links);
+			$_SESSION["patent"]["jrk"] = 0;
+			if(is_array($links) && sizeof($links) == 6)
 			{
-				if($this->can("view" , $link))
+				foreach($links as $link)
 				{
-					$ol->add($link);
+					if($this->can("view" , $link))
+					{
+						$ol->add($link);
+					}
+					else break;
 				}
-				else break;
 			}
-		}
-		if(!(is_array($links) && sizeof($links) == 6))
-		{
-			$ol = new object_list();
-			$o1 = new object();
-			$o1->set_name("Taotleja andmed");
-			$o1->set_class_id(CL_TRADEMARK_ADD);
-			$o1->set_parent($o->id());
-			$o1->save();
-			$ol->add($o1);
-			
-			$o2 = new object();
-			$o2->set_name("Kaubamärk");
-			$o2->set_class_id(CL_TRADEMARK_ADD);
-			$o2->set_parent($o->id());
-			$o2->save();
-			$ol->add($o2);
-						
-			$o3 = new object();
-			$o3->set_name("Kaupade ja teenuste loetelu");
-			$o3->set_class_id(CL_TRADEMARK_ADD);
-			$o3->set_parent($o->id());
-			$o3->save();
-			$ol->add($o3);
-			
-			$o4 = new object();
-			$o4->set_name("Prioriteet");
-			$o4->set_class_id(CL_TRADEMARK_ADD);
-			$o4->set_parent($o->id());
-			$o4->save();
-			$ol->add($o4);
-			
-			$o5 = new object();
-			$o5->set_name("Riigilõiv");
-			$o5->set_class_id(CL_TRADEMARK_ADD);
-			$o5->set_parent($o->id());
-			$o5->save();
-			$ol->add($o5);
-			
-			$o6 = new object();
-			$o6->set_name("Andmete kontroll/edastamine");
-			$o6->set_class_id(CL_TRADEMARK_ADD);
-			$o6->set_parent($o->id());
-			$o6->save();
-			$ol->add($o6);
-			
-			$o->set_meta("meaningless_sh__" , $ol->ids());
-			$o->save();
+			if(!(is_array($links) && sizeof($links) == 6))
+			{
+				$ol = new object_list();
+				$o1 = new object();
+				$o1->set_name("Taotleja andmed");
+				$o1->set_class_id(CL_TRADEMARK_ADD);
+				$o1->set_parent($o->id());
+				$o1->save();
+				$ol->add($o1);
+				
+				$o2 = new object();
+				$o2->set_name("Kaubamärk");
+				$o2->set_class_id(CL_TRADEMARK_ADD);
+				$o2->set_parent($o->id());
+				$o2->save();
+				$ol->add($o2);
+							
+				$o3 = new object();
+				$o3->set_name("Kaupade ja teenuste loetelu");
+				$o3->set_class_id(CL_TRADEMARK_ADD);
+				$o3->set_parent($o->id());
+				$o3->save();
+				$ol->add($o3);
+				
+				$o4 = new object();
+				$o4->set_name("Prioriteet");
+				$o4->set_class_id(CL_TRADEMARK_ADD);
+				$o4->set_parent($o->id());
+				$o4->save();
+				$ol->add($o4);
+				
+				$o5 = new object();
+				$o5->set_name("Riigilõiv");
+				$o5->set_class_id(CL_TRADEMARK_ADD);
+				$o5->set_parent($o->id());
+				$o5->save();
+				$ol->add($o5);
+				
+				$o6 = new object();
+				$o6->set_name("Andmete kontroll/edastamine");
+				$o6->set_class_id(CL_TRADEMARK_ADD);
+				$o6->set_parent($o->id());
+				$o6->save();
+				$ol->add($o6);
+				
+				$o->set_meta("meaningless_sh__" , $ol->ids());
+				$o->save();
+			}
 		}
 		return $ol;
 	}
@@ -228,7 +231,7 @@ class trademark_add extends class_base
 		//arr($_GET["section"]);
 		//arr();
 		}
-		elseif(!($_GET["data_type"] <  ($_SESSION["patent"]["jrk"])) || is_oid($_SESSION["patent"]["id"]))
+		elseif(!($_GET["data_type"] <  ($_SESSION["patent"]["jrk"])))
 		{
 			$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
 		}
