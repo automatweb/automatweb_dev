@@ -75,6 +75,8 @@ class doc_display extends aw_template
 			$em = $this->_get_edit_menu($doc);
 		}
 
+		$orig = $doc->get_original();
+
 		$user1 = $doc->prop("user1");
 		$al->parse_oo_aliases($doc->id(), &$user1, array("templates" => $this->templates, "meta" => $mt));
 		$user2 = $doc->prop("user2");
@@ -88,17 +90,17 @@ class doc_display extends aw_template
 		$user6 = $doc->prop("user6");
 		$al->parse_oo_aliases($doc->id(), &$user6, array("templates" => $this->templates, "meta" => $mt));
 		
-		$userta1 = $doc->prop("userta1");
+		$userta1 = $orig->prop("userta1");
 		$al->parse_oo_aliases($doc->id(), &$userta1, array("templates" => $this->templates, "meta" => $mt));
-		$userta2 = $doc->prop("userta2");
+		$userta2 = $orig->prop("userta2");
 		$al->parse_oo_aliases($doc->id(), &$userta2, array("templates" => $this->templates, "meta" => $mt));
-		$userta3 = $doc->prop("userta3");
+		$userta3 = $orig->prop("userta3");
 		$al->parse_oo_aliases($doc->id(), &$userta3, array("templates" => $this->templates, "meta" => $mt));
-		$userta4 = $doc->prop("userta4");
+		$userta4 = $orig->prop("userta4");
 		$al->parse_oo_aliases($doc->id(), &$userta4, array("templates" => $this->templates, "meta" => $mt));
-		$userta5 = $doc->prop("userta5");
+		$userta5 = $orig->prop("userta5");
 		$al->parse_oo_aliases($doc->id(), &$userta5, array("templates" => $this->templates, "meta" => $mt));
-		$userta6 = $doc->prop("userta6");
+		$userta6 = $orig->prop("userta6");
 		$al->parse_oo_aliases($doc->id(), &$userta6, array("templates" => $this->templates, "meta" => $mt));
 		
 		$this->vars_safe(array(
@@ -301,7 +303,6 @@ class doc_display extends aw_template
 			));
 			return $this->parse("IFRAME");
 		}
-
 		return $text;
 	}
 
