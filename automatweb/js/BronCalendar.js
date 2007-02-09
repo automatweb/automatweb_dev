@@ -10,12 +10,32 @@ bronErrors["CANT_BRON"] = "Ei saa broneerida";
 /**
 	* does bron and goes to the next step as well
 **/
-function doBronExec(strId, intCalendarIntervall, intRoomReservationLength, intProduct)
+function doBronExec(
+		    strId, 
+		    intCalendarIntervall, 
+		    intRoomReservationLength, 
+		    intProduct,
+		    strUrl,
+		    intWidth,
+		    intHeight,
+		    intNoPopup
+)
 {
 	doBron(strId, intCalendarIntervall, intRoomReservationLength, intProduct);
-	document.changeform.action.value = 'do_add_reservation';
-	document.changeform.submit();
-	return true;
+	cancel_bron_popup_dialog();
+	strUrl += '&start1='+current_timestamp+'&end='+(current_timestamp+intRoomReservationLength);
+	if (intNoPopup)
+	{
+		window.location.href=strUrl;
+	}
+	else
+	{
+		aw_popup_scroll(strUrl, 'bronpop', intWidth, intHeight);
+	}
+
+	//document.changeform.action.value = 'do_add_reservation';
+	//document.changeform.submit();
+	//return true;
 	//submit_changeform('do_add_reservation');
 }
 
