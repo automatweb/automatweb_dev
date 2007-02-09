@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.14 2007/02/02 12:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.15 2007/02/09 08:26:58 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -517,6 +517,14 @@ class spa_bookings_overview extends class_base
 			"site_id" => array(),
 			"sort_by" => "objects.jrk"
 		));
+		$start = $_GET["start"];
+		$end = $_GET["end"];
+		if (!$start)
+		{
+			classload("core/date/date_calc");
+			$start = get_week_start();
+			$end = $start+7*24*3600;
+		}
 		foreach($r_ol->ids() as $room_id)
 		{
 			if ($first)
@@ -541,8 +549,8 @@ class spa_bookings_overview extends class_base
 					"text" => t("K&otilde;ik"),
 					"link" => $this->mk_my_orb("room_booking_printer", array(
 						"rooms" => $r_ol->ids(),
-						"from" => $_GET["start"],
-						"to" => $_GET["end"]
+						"from" => $start,
+						"to" => $end
 					))
 				));
 				$oo = obj($arr["id"]);
@@ -702,7 +710,8 @@ class spa_bookings_overview extends class_base
 						"time_from" => date("H:i", $r->prop("start1")),
 						"time_to" => date("H:i", $r->prop("end")),
 						"customer" => $r->prop("customer.name"),
-						"products" => $r_inst->get_products_text($r, " ")
+						"products" => $r_inst->get_products_text($r, " "),
+						"cust_arrived" => $r->prop("client_arrived") ? t("Klient saabus") : ""
 					));
 					$books .= $this->parse("BOOKING");
 				}

@@ -1,5 +1,5 @@
 <?PHp
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.43 2007/02/08 14:08:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.44 2007/02/09 08:26:58 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -887,21 +887,29 @@ class reservation extends class_base
 	**/
 	function mark_arrived_popup($arr)
 	{
+		if ($this->can("view", $arr["bron"]))
+		{
+			$arr["bron"] = array($arr["bron"]);
+		}
 		extract($arr);
-		if(is_oid($bron) && $this->can("view" , $bron))
+		$ret = "<form method=POST action=".get_ru().">";
+		foreach(safe_array($arr["bron"]) as $bron)
 		{
 			$bron_obj = obj($bron);
 			if(isset($_POST[$bron]))
 			{
 				$bron_obj->set_prop("client_arrived" , $_POST[$bron]);
 				$bron_obj->save();
-				die("<script type='text/javascript'>window.close();</script>");
 			}
-			$ret = "<form method=POST action=".get_ru().">";
 			$ret.= t("Broneering : ");
 			$ret.= date("G:i" , $bron_obj->prop("start1"));
 			$ret.= "-";
 			$ret.= date("G:i" , $bron_obj->prop("end"));
+			if(is_oid($bron_obj->prop("resource")))
+			{
+				$res = obj($bron_obj->prop("resource"));
+				$ret.= "\n<br>".$res->name();
+			}
 			
 			if(is_oid($bron_obj->prop("customer")))
 			{
@@ -910,8 +918,14 @@ class reservation extends class_base
 			}
 			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 0 , "caption" => t("Klient ei ilmunud kohale")));
 			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 1 , "caption" => t("Klient ilmus kohale")));
-			$ret.= "\n<br>".html::submit(array("name" => "submit", "value" => t("M&auml;rgi")));
-			$ret.="</form>";
+			$ret .= "<hr>";
+		}
+
+		$ret.= "\n<br>".html::submit(array("name" => "submit", "value" => t("M&auml;rgi")));
+		$ret.="</form>";
+		if ($_SERVER["REQUEST_METHOD"] == "POST")
+		{
+			die("<script type='text/javascript'>window.close();</script>");
 		}
 		$ret.="<!-- $arr[bron] -->";
 		die($ret);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.137 2007/02/07 15:00:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.138 2007/02/09 08:26:57 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -484,7 +484,7 @@ class room extends class_base
 		usort($result);
 		if(sizeof($result))
 		{
-			return end($result);
+			return $result;
 		}
 		else
 		{
@@ -1719,7 +1719,7 @@ class room extends class_base
 							
 							if ($settings->prop("cal_show_prods"))
 							{
-								$dx_p["caption"] .= " ".$title;
+								$dx_p["caption"] .= " <b>".$title."</b>";
 							}
 							
 							if ($settings->prop("bron_no_popups"))
@@ -1876,6 +1876,7 @@ class room extends class_base
 		}
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
+		$arr["settings"] = $settings;
 		$popup_menu = $this->get_room_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
 		$t->set_caption(t("Broneerimine").$popup_menu);
 	}
@@ -1883,6 +1884,19 @@ class room extends class_base
 	function get_room_prod_menu($arr, $immediate = false)
 	{
 		$menus = $arr["obj_inst"]->meta("group_product_menu");
+		$settings = $arr["settings"];
+
+		if(is_object($cal_obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
+		{
+			$cal = $cal_obj->id();
+			$parent = $cal_obj->prop("event_folder");
+			if (!$parent)
+			{
+				$parent = $cal_obj->id();
+			}
+		}
+
+
 		$last_parent = 0;
 		$parents = array();
 		$div = "";
@@ -1918,29 +1932,46 @@ class room extends class_base
 
 				$res.= '<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, '.$parent.');">
 					<span class="menuItemText">'.$p->name().'</span>
-					<span class="menuItemArrow"><img style="border:0px" src="http://hanked.struktuur.ee/automatweb/images/arr.gif" alt=""></span>
+					<span class="menuItemArrow"><img style="border:0px" src="'.aw_ini_get("baseurl").'/automatweb/images/arr.gif" alt=""></span>
 					</a>';
 				$div.= '<div id="'.$parent.'" class="menu" onmouseover="menuMouseover(event)">';
 			}
 
-			if(!$menus)
+
+			if ($settings->prop("bron_popup_detailed"))
 			{
-				$res .= '<div id="'.$oid.'"><a class="menuItem" href="#"  onClick="'.($immediate? "doBronExec" : "doBron").'(
-					\''.$m_oid.'_\'+current_timestamp ,
-					'.$arr["step_length"].' ,
-					'.$times[$oid].' ,
-					'.$oid.');">'.$name.'</a>
-					</div>';
+				$url = html::get_new_url(CL_RESERVATION, $parent, array(
+					"return_url" => get_ru(),
+					"calendar" => $cal,
+					"resource" => $arr["obj_inst"]->id(),
+					"product" => $product->id(),
+				));
+				$w = 1000;
+				$h = 600;
 			}
 			else
 			{
-				$div.='<div id="'.$oid.'"><a class="menuItem" href="#"  onClick="'.($immediate? "doBronExec" : "doBron").'(
-					\''.$m_oid.'_\'+current_timestamp ,
-					'.$arr["step_length"].' ,
-					'.$times[$oid].' ,
-					'.$oid.');">'.$name.'</a>
-				</div>';
+				$url = $this->mk_my_orb("admin_add_bron_popup", array(
+	                                "parent" => $parent,
+                                	"calendar" => $cal,
+        	                        "resource" => $arr["obj_inst"]->id(),
+	                                "return_url" => get_ru(),
+                                	"product" => $product->id(),
+                        	));
+				$w = 500;
+				$h = 400;
 			}
+
+
+
+			$func = ($immediate? "doBronExec" : "doBron");
+			$oncl = $func.'(
+				\''.$m_oid.'_\'+current_timestamp ,
+				'.$arr["step_length"].' ,
+				'.$times[$oid].' ,
+				'.$oid.
+				',\''.$url.'\', '.$w.', '.$h.', '.((int)$settings->prop("bron_no_popups")).');';
+			$res .= '<div id="'.$oid.'"><a class="menuItem" href="#"  onClick="'.$oncl.'">'.$name.'</a></div>';
 		}
 		
 		$div.='</div>';
@@ -1958,13 +1989,24 @@ class room extends class_base
 			return "#EE6363"; //#FFE4B5";
 		}
 
+		static $cache;
+		if (isset($cache[$bron->createdby()]))
+		{
+			return $cache[$bron->createdby()];
+		}
+
 		$u = get_instance(CL_USER);
 		$grp = $u->get_highest_pri_grp_for_user($bron->createdby(), true);
 		if ($grp && !empty($gc[$grp->id()]))
 		{
-			return "#".$gc[$grp->id()];
+			$rv = "#".$gc[$grp->id()];
 		}
-		return "#EE6363";
+		else
+		{
+			$rv = "#EE6363";
+		}
+		$cache[$bron->createdby()] = $rv;
+		return $rv;
 	}
 	
 	function get_after_buffer($arr)
@@ -3332,9 +3374,10 @@ class room extends class_base
 		));
 
 		$bron_made = time();
-		$gl = aw_global_get("gidlist_oid");
-		$grp = reset($gl);
-		$grp = next($gl);
+		$gl = aw_global_get("gidlist_pri_oid");
+		asort($gl);
+		$gl = array_keys($gl);
+		$grp = $gl[1];
 		if (is_object($arr["bron"]))
 		{
 			$bron_made = $arr["bron"]->created();
@@ -3523,9 +3566,10 @@ class room extends class_base
 	function get_bargain($arr)
 	{
 		extract($arr);
-                $gl = aw_global_get("gidlist_oid");
-                $grp = reset($gl);
-                $grp = next($gl);
+		$gl = aw_global_get("gidlist_pri_oid");
+		asort($gl);
+		$gl = array_keys($gl);
+		$grp = $gl[1];
 		if (is_object($arr["bron"]))
 		{
 			$gi = get_instance(CL_USER);
@@ -4325,18 +4369,19 @@ class room extends class_base
 	function _get_mark_arrived_pop($arr, $settings)
 	{
 		$bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]);
-		if($arr["user"] != 1 &&  $this->can("view",$bron_id) && !$settings->prop("no_cust_arrived_pop"))
+		if($arr["user"] != 1 &&  is_array($bron_id) && count($bron_id) && !$settings->prop("no_cust_arrived_pop"))
 		{
 			$grp_settings = $settings->meta("grp_settings");
-			$gl = aw_global_get("gidlist_oid");
-			$grp = reset($gl);
-			$grp = next($gl);
+			$gl = aw_global_get("gidlist_pri_oid");
+			asort($gl);
+			$gl = array_keys($gl);
+			$grp = $gl[1];
 			if (!$grp_settings[$grp]["ask_cust_arrived"])
 			{
 				return "";
 			}
 			$reservaton_inst = get_instance(CL_RESERVATION);
-			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=150, width=300')
+			$ret.="<script name= javascript>window.open('".$reservaton_inst->mk_my_orb("mark_arrived_popup", array("bron" => $bron_id,))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=".(160*count($bron_id)).", width=300')
 			</script>";
 		}
 		return $ret;

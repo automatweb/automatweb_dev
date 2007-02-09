@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.12 2007/01/31 11:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.13 2007/02/09 08:26:58 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -501,9 +501,10 @@ class room_settings extends class_base
 	function get_verified_default_for_group($settings)
 	{
 		$grp_settings = $settings->meta("grp_settings");
-		$gl = aw_global_get("gidlist_oid");
-		$grp = reset($gl);
-		$grp = next($gl);
+		$gl = aw_global_get("gidlist_pri_oid");
+		asort($gl);
+		$gl = array_keys($gl);
+		$grp = $gl[1];
 		return $grp_settings[$grp]["confirmed_default"];
 	}
 }
