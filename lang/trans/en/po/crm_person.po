@@ -2104,7 +2104,7 @@ msgstr "Married"
 
 #: classes/crm/crm_person.aw:1078
 msgid "Lahutatud"
-msgstr ""
+msgstr "Divorced"
 
 #: classes/crm/crm_person.aw:1084
 msgid "Pilt, kontakt, artiklid"
