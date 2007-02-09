@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.187 2007/01/31 08:45:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.188 2007/02/09 11:41:56 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -179,6 +179,12 @@ class image extends class_base
 			{
 				array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
 				$row["url"] = $this->get_url($row["file"]);
+				// if the image is from another site, then make the url point to that
+				if ($row["site_id"] != aw_ini_get("site_id"))
+				{
+					$sl = get_instance("install/site_list");
+					$row["url"] = str_replace(aw_ini_get("baseurl"), $sl->get_url_for_site($row["site_id"]), $row["url"]);
+				}
 				$row["meta"] = aw_unserialize($row["metadata"]);
 				$row["can_comment"] = $row["flags"] & FL_IMAGE_CAN_COMMENT;
 				if ($row["meta"]["file2"] != "")
