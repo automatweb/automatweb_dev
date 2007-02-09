@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.49 2007/02/09 13:57:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.50 2007/02/09 14:10:02 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -2522,12 +2522,29 @@ class patent extends class_base
 			}
 		}
 		
+		$objects_array = array();
+		foreach($obj_list->arr() as $key => $patent)
+		{
+			$status = $this->get_status($patent);
+			if($status->prop("nr"))
+			{
+				$objects_array[$status->prop("nr")] = $patent;
+			}
+			else
+			{
+				$objects_array[] = $patent;
+			}
+		}
+		if(!$arr["unsigned"])
+		{
+			krsort($objects_array);
+		}
 //		$has = $this->is_admin();
 		
 		if ($this->is_template("LIST"))
 		{
 			$c = "";
-			foreach($obj_list->arr() as $key => $patent)
+			foreach($objects_array as $key => $patent)
 			{
 				$status = $this->get_status($patent);
 				$re = $this->is_signed($patent->id());
