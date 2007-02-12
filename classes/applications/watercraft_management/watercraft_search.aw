@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.10 2007/01/12 12:01:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.11 2007/02/12 13:01:53 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -399,6 +399,15 @@ class watercraft_search extends class_base
 		$active_page = (int)$_GET['page'];
 		$results_on_page = (int)$obj->prop('results_on_page');
 		$max_results = (int)$obj->prop('max_results');
+		$watercraft_id = (int)$_GET['watercraft_id'];
+		if ($this->can('view', $watercraft_id))
+		{
+			$watercraft_inst = get_instance(CL_WATERCRAFT);
+			return $watercraft_inst->show(array(
+				'id' => $watercraft_id,
+			));
+		}
+
 
 		$this->read_template("show.tpl");
 
@@ -457,14 +466,18 @@ class watercraft_search extends class_base
 			));
 
 			$items_str = '';
-			foreach ($items->arr() as $item)
+			foreach ($items->arr() as $item_id => $item)
 			{
 				$properties = array();
 				foreach ($item->properties() as $name => $value)
 				{
 					$properties['watercraft_'.$name] = $value;
 				}
-				$this->vars($properties);
+				$this->vars(array(
+					'watercraft_view_url' => aw_ini_get('site_baseurl').'/'.aw_global_get('section').'?watercraft_id='.$item_id.'&return_url='.get_ru()
+					) + $properties
+				);
+				
 				$items_str .= $this->parse('SEARCH_RESULT_ITEM');
 			}
 
@@ -597,7 +610,8 @@ class watercraft_search extends class_base
 				"action" => "show",
 				"id" => $ob->id(),
 				"alias" => "event_search",
-				"do_search" => 1
+				"return_url" => get_ru(),
+				"do_search" => 1,
 			),
 			"method" => "get",
 			"form_handler" => aw_ini_get("baseurl")."/".aw_global_get("section"),

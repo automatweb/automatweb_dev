@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.9 2007/01/12 00:41:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.10 2007/02/12 13:01:53 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -995,11 +995,90 @@ class watercraft extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
+
+		$templates = array(
+			WATERCRAFT_TYPE_MOTOR_BOAT => 'motor_boat.tpl',
+			WATERCRAFT_TYPE_SAILING_SHIP => 'sailing_ship.tpl',
+			WATERCRAFT_TYPE_DINGHY => 'dinghy.tpl',
+			WATERCRAFT_TYPE_ROWING_BOAT => 'rowing_boat.tpl',
+			WATERCRAFT_TYPE_SCOOTER => 'scooter.tpl',
+			WATERCRAFT_TYPE_SAILBOARD => 'sailboard.tpl',
+			WATERCRAFT_TYPE_CANOE => 'canoe.tpl',
+			WATERCRAFT_TYPE_FISHING_BOAT => 'fishing_boat.tpl',
+			WATERCRAFT_TYPE_OTHER => 'other.tpl',
+			WATERCRAFT_TYPE_ACCESSORIES => 'accessories.tpl',
+		);
+
+		// read template:
+
+		$watercraft_type = $ob->prop('watercraft_type');
+		if ($watercraft_type)
+		{
+			$this->read_template($templates[$watercraft_type]);
+		}
+		else
+		{
+			$this->read_template("show.tpl");
+		}
+		
+		$vars = array();
+
+		// properties
+		$props = $ob->properties();
+		foreach ($props as $prop_name => $prop_value)
+		{
+			if (is_array($this->$prop_name))
+			{
+				$prop_data = $this->$prop_name;
+				$vars['watercraft_'.$prop_name] = $prop_data[$prop_value];
+			}
+			else
+			{
+				$vars['watercraft_'.$prop_name] = $prop_value;	
+			}
+		}
+		
+		// images
+		$image_inst = get_instance(CL_IMAGE);
+		$images = new object_list(array(
+			'class_id' => CL_IMAGE,
+			'parent' => $ob->id()
 		));
+		$images_str = '';
+		$images_count = 0;
+		foreach ($images->arr() as $image_id => $image)
+		{
+			$image_data = $image_inst->get_image_by_id($image_id);
+			$image_url = $image_inst->get_url_by_id($image_id);
+			$this->vars(array(
+				'watercraft_image_url' => $image_inst->get_url_by_id($image_id),
+				'watercraft_image_name' => $image_data['name'],
+				'watercraft_image_tag' => $image_inst->make_img_tag_wl($image_id), 
+			));
+			$images_str .= $this->parse('WATERCRAFT_IMAGE');
+			$images_count++;
+		}
+
+		if (empty($images_str))
+		{
+			$images_str = $this->parse('WATERCRAFT_NO_IMAGE');
+		}
+
+		$vars['WATERCRAFT_IMAGE'] = $images_str;
+		$vars['images_count'] = $images_count;
+		$vars['name'] = $ob->prop('name');
+	//	$vars['return_url'] = $_GET['return_url'];
+		$vars['return_url'] = aw_url_change_var('watercraft_id', NULL, get_ru());
+
+		$this->vars($vars);
 		return $this->parse();
+	}
+
+	function request_execute($o)
+	{
+		return $this->show(array(
+			'id' => $o->id(),
+		));
 	}
 
 	function custom_range($start, $end)
