@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.47 2007/02/01 11:44:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.48 2007/02/12 09:03:55 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -808,7 +808,7 @@ class room_reservation extends class_base
 			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
 			"end" => $_SESSION["room_reservation"][$room->id()]["end"]
 		));
-		$data["date_start"] =  date("d.m.Y" , $_SESSION["room_reservation"][$room->id()]["start"]);
+		if($_SESSION["room_reservation"][$room->id()]["start"])$data["date_start"] =  date("d.m.Y" , $_SESSION["room_reservation"][$room->id()]["start"]);
 		$data["date"] = $this->get_date_str(array(
 			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
 			"end" => $_SESSION["room_reservation"][$room->id()]["end"]
@@ -826,7 +826,8 @@ class room_reservation extends class_base
 	}
 
 	function get_time_($arr)
-	{
+	{	
+		if(!$arr["start"]) return "";
 		$res.= date("H:i" , $arr["start"]);
 		$res.= " - ";
 		$res.= date("H:i" , $arr["end"]);
@@ -835,9 +836,11 @@ class room_reservation extends class_base
 
 	function get_date_str($arr)
 	{//arr($arr);
+		if(!$arr["start"]) return "";
 		$room_inst = get_instance(CL_ROOM);
 		extract($arr);
 		$res = $res1 = $res2 = "";
+		
 	//	$res1 = $room_inst->weekdays[(int)date("w" , $arr["start"])];
 	//	$res1.= ", ";
 		$res1.= date("d.m.Y" , $arr["start"]);
@@ -1230,7 +1233,7 @@ class room_reservation extends class_base
 				$bron_id = $_SESSION["room_reservation"][$room]["bron_id"];
 			}
 			$_SESSION["room_reservation"][$room]["bron_id"] = $room_inst->make_reservation(array(
-				"not_verified" => 1,
+				"not_verified" => 1,//veebi poolelt et ei kinnitaks ära
 				"id" => $room,
 				"res_id" => $bron_id,
 				"data" => $_SESSION["room_reservation"][$room],
@@ -1280,7 +1283,7 @@ class room_reservation extends class_base
 			$_SESSION["room_reservation"][$r->id()]["bron_id"] = $room_inst->make_reservation(array(
 				"id" => $r->id(),
 				"res_id" => $bron_id,
-				"not_verified" => 1,
+				"not_verified" => 1,//veebi poolelt et ei kinnitaks ära
 				"data" => $_SESSION["room_reservation"][$r->id()],
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
@@ -1421,7 +1424,9 @@ class room_reservation extends class_base
 		{
 			$bron = obj($id);
 			$bron->set_prop("verified" , 1);
+			aw_disable_acl();
 			$bron->save();
+			aw_restore_acl();
 			return 1;
 		}
 		else
