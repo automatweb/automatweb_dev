@@ -127,6 +127,94 @@
             <parent>r_split</parent>
             <field>r_list</field>
       </property>
+      <property>
+            <name>stats_rs_name</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>stats_r_srch</parent>
+            <size>22</size>
+            <field>stats_rs_name</field>
+            <caption>Kliendi nimi</caption>
+      </property>
+      <property>
+            <name>stats_rs_booker_name</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>stats_r_srch</parent>
+            <size>22</size>
+            <field>stats_rs_booker_name</field>
+            <caption>Reisib&amp;amp;uuml;roo nimi</caption>
+      </property>
+      <property>
+            <name>stats_rs_booking_from</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>date_select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>stats_r_srch</parent>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>stats_rs_booking_from</field>
+            <caption>Broneering alates</caption>
+      </property>
+      <property>
+            <name>stats_rs_booking_to</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>date_select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>stats_r_srch</parent>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>stats_rs_booking_to</field>
+            <caption>Broneering kuni</caption>
+      </property>
+      <property>
+            <name>stats_rs_package</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>stats_r_srch</parent>
+            <field>stats_rs_package</field>
+            <caption>Pakett</caption>
+      </property>
+      <property>
+            <name>stats_rs_btn</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>stats_r_srch</parent>
+            <no_caption>1</no_caption>
+            <field>stats_rs_btn</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>stats_r_list</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>stats_r_split</parent>
+            <field>stats_r_list</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SPA_BOOKINGS_OVERVIEW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -137,6 +225,9 @@
             <rooms>
                   <caption>Ruumid</caption>
             </rooms>
+            <stats>
+                  <caption>Statistika</caption>
+            </stats>
       </groupinfo>
       <reltypes>
             <RF>
@@ -183,6 +274,23 @@
                   <parent>r_left</parent>
                   <group>rooms</group>
             </r_srch>
+            <stats_r_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>stats</group>
+            </stats_r_split>
+            <stats_r_left>
+                  <type>vbox</type>
+                  <parent>stats_r_split</parent>
+                  <group>stats</group>
+            </stats_r_left>
+            <stats_r_srch>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <parent>stats_r_left</parent>
+                  <group>stats</group>
+            </stats_r_srch>
       </layout>
 </properties>
 

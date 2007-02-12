@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.16 2007/02/12 08:12:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.17 2007/02/12 09:12:37 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -48,7 +48,39 @@
 
 		@property r_list type=table store=no no_caption=1 parent=r_split
 
+
+@default group=stats
+
+	@layout stats_r_split type=hbox width=20%:80%
+
+		@layout stats_r_left type=vbox parent=stats_r_split
+
+			@layout stats_r_srch type=vbox closeable=1 area_caption=Otsing parent=stats_r_left
+			
+				@property stats_rs_name type=textbox store=no captionside=top parent=stats_r_srch size=22
+				@caption Kliendi nimi
+
+				@property stats_rs_booker_name type=textbox store=no captionside=top parent=stats_r_srch size=22
+				@caption Reisib&uuml;roo nimi
+
+				@property stats_rs_booking_from type=date_select store=no captionside=top parent=stats_r_srch format=day_textbox,month_textbox,year_textbox
+				@caption Broneering alates
+			
+				@property stats_rs_booking_to type=date_select store=no captionside=top parent=stats_r_srch format=day_textbox,month_textbox,year_textbox
+				@caption Broneering kuni
+
+				@property stats_rs_package type=select store=no captionside=top parent=stats_r_srch 
+				@caption Pakett
+
+				@property stats_rs_btn type=submit store=no parent=stats_r_srch no_caption=1
+				@caption Otsi
+
+		@property stats_r_list type=table store=no no_caption=1 parent=stats_r_split
+
+
+
 @groupinfo rooms caption=Ruumid
+@groupinfo stats caption=Statistika
 
 
 @reltype RF value=1 clid=CL_MENU
@@ -70,6 +102,8 @@ class spa_bookings_overview extends class_base
 			"tpldir" => "applications/spa_bookings/spa_bookings_overview",
 			"clid" => CL_SPA_BOOKINGS_OVERVIEW
 		));
+		classload("core/date/date_calc");
+		classload("core/icons");
 	}
 
 	function get_property($arr)
@@ -103,6 +137,12 @@ class spa_bookings_overview extends class_base
 		$arr["args"]["rs_booker_name"] = $arr["request"]["rs_booker_name"];
 		$arr["args"]["rs_booking_from"] = $arr["request"]["rs_booking_from"];
 		$arr["args"]["rs_booking_to"] = $arr["request"]["rs_booking_to"];
+
+		$arr["args"]["stats_rs_name"] = $arr["request"]["stats_rs_name"];
+		$arr["args"]["stats_rs_booker_name"] = $arr["request"]["stats_rs_booker_name"];
+		$arr["args"]["stats_rs_booking_from"] = $arr["request"]["stats_rs_booking_from"];
+		$arr["args"]["stats_rs_booking_to"] = $arr["request"]["stats_rs_booking_to"];
+		$arr["args"]["stats_rs_package"] = $arr["request"]["stats_rs_package"];
 	}	
 
 	function _get_rooms_tree($arr)
@@ -776,6 +816,214 @@ class spa_bookings_overview extends class_base
 			"text" => t("Homme"),
 			"onClick" => "vals='&rooms=';f=document.changeform.elements;l=f.length;num=0;for(i=0;i<l;i++){ if(f[i].name.indexOf('sel') != -1 && f[i].checked) {vals += ','+f[i].value;}};aw_popup_scroll('$link'+vals,'mulcal',700,500);return false;",
 		));
+	}
+
+	// stats
+	function _get_stats_rs_name($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_stats_rs_package($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PACKET,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$pk_list = array();
+		foreach($ol->arr() as $o)
+		{
+			$pk_list[$o->id()] = $o->trans_get_val("name");
+		}
+
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		$arr["prop"]["options"] = array("" => t("--vali--")) +  $pk_list;
+	}
+
+	function _get_stats_rs_booker_name($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_stats_rs_booking_from($arr)
+	{
+		$v = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
+		if ($v < 1)
+		{
+			$v = mktime(0,0,0, date("m"), date("d")-1, date("Y"));
+		}
+		$arr["prop"]["value"] = $v;
+	}
+
+	function _get_stats_rs_booking_to($arr)
+	{
+		$v = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
+		if ($v < 1)
+		{
+			$v = mktime(0,0,0, date("m"), date("d")+7, date("Y"));
+		}
+		$arr["prop"]["value"] = $v;
+	}
+
+
+	function _get_stats_r_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$ol = new object_list();
+
+		$from = date_edit::get_timestamp($arr["request"]["stats_rs_booking_from"]);
+		$to = date_edit::get_timestamp($arr["request"]["stats_rs_booking_to"]);
+		$srch = !empty($arr["request"]["stats_rs_name"]) || !empty($arr["request"]["stats_rs_booker_name"]) || $from > 1 || $to > 1 || !empty($arr["request"]["stats_rs_package"]);	
+		if (!$srch)
+		{
+			return;
+		}
+
+		$f = array(
+			"class_id" => CL_SPA_BOOKING,
+			"lang_id" => array(),
+			"site_id" => array()
+		);
+
+		if (!empty($arr["request"]["stats_rs_name"]))
+		{
+			$f["CL_SPA_BOOKING.person.name"] = "%".$arr["request"]["stats_rs_name"]."%";
+		}
+
+		if (!empty($arr["request"]["stats_rs_booker_name"]))
+		{
+			// list all cos with names like that and get all users from the employees of those
+			$ppl = array();
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => "%".$arr["request"]["stats_rs_booker_name"]."%"
+			));
+			$co = get_instance(CL_CRM_COMPANY);
+			foreach($ol->arr() as $o)
+			{
+				foreach($co->get_employee_picker($o) as $pid => $pnm)
+				{
+					$ppl[$pid] = $pid;
+				}
+			}
+			// now get users for persons
+			$users = new object_list(array(
+				"class_id" => CL_USER,
+				"lang_id" => array(),	
+				"site_id" => array(),
+				"CL_USER.RELTYPE_PERSON" => $ppl
+			));
+			$uds = array();
+			foreach($users->arr() as $usr)
+			{
+				$uds[] = $usr->prop("uid");
+			}
+			$f["createdby"] = map("%%%s%%", $uds);
+		}
+
+
+		if ($from > 1)
+		{
+			$f["start"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
+		}
+		else
+		{
+			$f["start"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1);
+		}
+
+		if ($to > 1)
+		{
+			$f["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
+		}
+
+		if (!empty($arr["request"]["stats_rs_package"]))
+		{
+			$f["package"] = $arr["request"]["stats_rs_package"];
+		}
+
+		$ol = new object_list($f);
+
+		$pks = array();
+		$d = array();
+		foreach($ol->arr() as $o)
+		{
+			if (!$this->can("view", $o->prop("package")) || $o->createdby() == "")
+			{
+				continue;
+			}
+			$pks[$o->prop("package")] = 1;
+			$d[$o->createdby()][$o->prop("package")]["count"] ++;
+
+			// add all prices from attached brons
+			foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+			{
+				$b = $c->to();
+				$room_instance = get_instance(CL_ROOM);
+				$sum = $room_instance->cal_room_price(array(
+					"room" => $b->prop("resource"),
+					"start" => $b->prop("start1"),
+					"end" => $b->prop("end"),
+					"people" => $b->prop("people_count"),
+					"products" => $b->meta("amount"),
+					"bron" => $b,
+				));
+				foreach($sum as $cur => $amt)
+				{
+					$d[$o->createdby()][$o->prop("package")]["sum"][$cur] += $amt;
+				}
+			}
+		}
+
+		$t->define_field(array(
+			"name" => "tb",
+			"align" => "center",
+			"caption" => t("Reisib&uuml;roo")
+		));
+		foreach($pks as $pkid => $one)
+		{
+			$pko = obj($pkid);
+			$t->define_field(array(
+				"name" => "p".$pkid,
+				"align" => "center",
+				"caption" => $pko->name()
+			));
+		}
+
+		$pi = get_instance(CL_USER);
+		foreach($d as $uid => $d1)
+		{
+			// get person for user and from person get co 
+			$p = $pi->get_person_for_uid($uid);
+			$c = new connection();
+			$conns = $c->find(array(
+				"from.class_id" => CL_CRM_COMPANY,
+				"type" => "RELTYPE_WORKERS",
+				"to" => $p->id()
+			));
+			$c = reset($conns);
+			$co = obj($c["from"]);
+
+			$r = array(
+				"tb" => $co->name()
+			);
+			foreach($d1 as $pk => $d2)
+			{
+				$sum = array();
+				foreach($d2["sum"] as $cur => $amt)
+				{
+					$curo = obj($cur);
+					$sum[] = number_format($amt, 2)." ".$curo->name();
+				}
+				$sum[] = sprintf(t("%s tk"), $d2["count"]);
+				$r["p".$pk] = join(" / ", $sum);
+			}
+			$t->define_data($r);
+		}
+		$t->set_sortable(false);
 	}
 }
 ?>
