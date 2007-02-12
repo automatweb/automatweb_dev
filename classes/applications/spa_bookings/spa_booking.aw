@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.5 2007/01/18 14:51:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.6 2007/02/12 10:16:52 kristo Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -21,6 +21,9 @@
 	@property package type=relpicker reltype=RELTYPE_PACKAGE field=aw_package automatic=1
 	@caption Pakett
 
+	@property seller type=relpicker reltype=RELTYPE_SELLER field=aw_seller 
+	@caption M&uuml;&uuml;ja
+
 
 @reltype PERSON value=1 clid=CL_CRM_PERSON
 @caption Isik
@@ -33,6 +36,9 @@
 
 @reltype EXTRA_PROD value=4 clid=CL_SHOP_PRODUCT
 @caption Lisateenus
+
+@reltype SELLER value=5 clid=CL_CRM_PERSON
+@caption M&uuml;&uuml;ja
 */
 
 class spa_booking extends class_base
@@ -66,6 +72,14 @@ class spa_booking extends class_base
 				{
 					$tmp = obj($prop["value"]);
 					$prop["options"][$prop["value"]] = $tmp->name();
+				}
+				break;
+
+			case "seller":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					$p = get_current_person();
+					$prop["options"][$p->id()] = $p->name();
 				}
 				break;
 		};
@@ -104,6 +118,16 @@ class spa_booking extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_spa_bookings (aw_oid int primary key, aw_person int, aw_start int, aw_end int, aw_package int)");
 			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_seller":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
 		}
 	}
 
