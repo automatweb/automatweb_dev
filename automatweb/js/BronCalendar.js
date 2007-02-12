@@ -21,7 +21,10 @@ function doBronExec(
 		    intNoPopup
 )
 {
-	doBron(strId, intCalendarIntervall, intRoomReservationLength, intProduct);
+	if (!doBron(strId, intCalendarIntervall, intRoomReservationLength, intProduct))
+	{
+		return false;
+	}
 	cancel_bron_popup_dialog();
 	strUrl += '&start1='+current_timestamp+'&end='+(current_timestamp+intRoomReservationLength);
 	if (intNoPopup)
@@ -32,11 +35,6 @@ function doBronExec(
 	{
 		aw_popup_scroll(strUrl, 'bronpop', intWidth, intHeight);
 	}
-
-	//document.changeform.action.value = 'do_add_reservation';
-	//document.changeform.submit();
-	//return true;
-	//submit_changeform('do_add_reservation');
 }
 
 /**
@@ -62,7 +60,7 @@ function doBron (strId, intCalendarIntervall, intRoomReservationLength, intProdu
 	if (intProduct)
 		document.getElementById("product").value = intProduct;
 	
-	setBrons (strId, intCalendarIntervall, intRoomReservationLength);
+	return setBrons (strId, intCalendarIntervall, intRoomReservationLength);
 }
 
 function changeRoomReservationLength(that)
@@ -84,8 +82,12 @@ function setBrons (strId, intCalendarIntervall, intRoomReservationLength)
 	if (canBron())
 	{
 		drawBrons();
+		return true;
 	}
-		
+	else
+	{
+		return false;
+	}
 }
 
 /**
