@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.50 2007/02/09 14:10:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.51 2007/02/12 09:32:52 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1606,7 +1606,6 @@ class patent extends class_base
 				
 				$product = obj($prod);
 				$parent = obj($product->parent());
-								
 				$classes[$parent->comment()][$product->id()] = $product->name();
 
 //				$t->define_data(array(
@@ -1719,9 +1718,17 @@ class patent extends class_base
 				$c = "";
 				foreach($products->arr() as $prod)
 				{
-				$parent = obj($prod->parent());
+					$parent = obj($prod->parent());
+					if($prod->prop("userch10"))
+					{
+						$p = "<b>".$prod->name()."</b>";
+					}
+					else
+					{
+						$p = $prod->name();
+					}
 					$this->vars(array(
-						"prod" => $prod->name(),
+						"prod" => $p,
 						"class" => $parent->name(),
 						"code" => 132245,
 						"oid"	=> $prod->id(),
