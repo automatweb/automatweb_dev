@@ -608,6 +608,10 @@ function classload($args)
 
 function get_instance($class,$args = array(), $errors = true)
 {
+if ($GLOBALS["TRACE_INSTANCE"])
+{
+	echo "get_instance $class from ".dbg::short_backtrace()." <br>";
+}
 	enter_function("__global::get_instance",array());
 
 	$site = $designed = false;
