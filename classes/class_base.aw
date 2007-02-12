@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.533 2007/02/02 12:46:24 kristo Exp $
+// $Id: class_base.aw,v 2.534 2007/02/12 13:54:25 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3401,7 +3401,7 @@ class class_base extends aw_template
 
 	function get_all_view_controllers($config_id)
 	{
-		if (!is_oid($config_id) || !$this->can("view", $config_id))
+		if (!$this->can("view", $config_id))
 		{
 			return false;
 		}

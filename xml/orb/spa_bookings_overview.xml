@@ -37,12 +37,5 @@
 			</function>
 		</action>
 
-		<action name="print_person_chart">
-			<function name="print_person_chart">
-				<arguments>
-					<optional name="rvs"/>
-				</arguments>
-			</function>
-		</action>
 	</class>
 </orb>

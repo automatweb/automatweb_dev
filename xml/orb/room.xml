@@ -36,6 +36,7 @@
 					<required name="id" />
 					<optional name="res_id" />
 					<required name="data" />
+					< name="not_verified" />
 					<optional name="meta" type="array" />
 				</arguments>
 			</function>

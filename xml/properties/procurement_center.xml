@@ -48,6 +48,27 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>search_date_add</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <size>3</size>
+            <parent>settings_l</parent>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>default kuup&amp;amp;auml;ev otsungus edasi</caption>
+      </property>
+      <property>
+            <name>search_date_add_unit</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>select</type>
+            <no_caption>1</no_caption>
+            <parent>settings_l</parent>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>no_warehouse</name>
             <table>objects</table>
             <group>settings</group>
