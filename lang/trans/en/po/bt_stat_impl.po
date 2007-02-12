@@ -9,12 +9,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:14 classes/applications/bug_o_matic_3000/bt_stat_impl.aw:227
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:14
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:227
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:29 classes/applications/bug_o_matic_3000/bt_stat_impl.aw:242
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:29
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:242
 msgid "Summa"
 msgstr ""
 
@@ -46,11 +47,14 @@ msgstr ""
 msgid "T&ouml;&ouml;tunde"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:326
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:329
 msgid "T&ouml;&ouml;tundide statistika projektide ja kuude kaupa"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:379
-msgid "%s t&ouml;&ouml;tunnid projektis %s ajavahemikul %s - %s"
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:334
+msgid "<b>Summa</b>"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bt_stat_impl.aw:385
+msgid "%s t&ouml;&ouml;tunnid projektis %s ajavahemikul %s - %s"
+msgstr ""

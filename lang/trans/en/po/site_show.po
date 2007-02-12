@@ -21,46 +21,46 @@ msgstr "site_show::exec_subtemplate_handlers(): could not find subtemplate handl
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr "site_show::make_final_vars(): need JOIN_FORM sub back!"
 
-#: classes/contentmgmt/site_show.aw:2691
+#: classes/contentmgmt/site_show.aw:2704
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: "
 msgstr "Sorry, sccess is denied to this page from your IP address. <br>Address: "
 
-#: classes/contentmgmt/site_show.aw:2727
+#: classes/contentmgmt/site_show.aw:2740
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 
-#: classes/contentmgmt/site_show.aw:2732
+#: classes/contentmgmt/site_show.aw:2745
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr "No ACL error messages defined! no can_view access for object %s"
 
-#: classes/contentmgmt/site_show.aw:2910
+#: classes/contentmgmt/site_show.aw:2923
 msgid "Lisa uus k&otilde;rvale"
 msgstr "Add new on same level"
 
-#: classes/contentmgmt/site_show.aw:2920
+#: classes/contentmgmt/site_show.aw:2933
 msgid "Lisa uus alamkaust"
 msgstr "Add new subfolder"
 
-#: classes/contentmgmt/site_show.aw:2930
+#: classes/contentmgmt/site_show.aw:2943
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/contentmgmt/site_show.aw:2940
+#: classes/contentmgmt/site_show.aw:2953
 msgid "Muuda &otilde;igusi"
 msgstr "Change rights"
 
-#: classes/contentmgmt/site_show.aw:2949
+#: classes/contentmgmt/site_show.aw:2962
 msgid "Peida"
 msgstr "Hide"
 
-#: classes/contentmgmt/site_show.aw:2953
+#: classes/contentmgmt/site_show.aw:2966
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/contentmgmt/site_show.aw:2961 classes/contentmgmt/site_show.aw:2993
+#: classes/contentmgmt/site_show.aw:2974 classes/contentmgmt/site_show.aw:3006
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/contentmgmt/site_show.aw:2981
+#: classes/contentmgmt/site_show.aw:2994
 msgid "Lisa uus"
 msgstr "Add new"

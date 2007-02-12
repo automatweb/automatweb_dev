@@ -394,6 +394,7 @@ msgid "Luncheon"
 msgstr ""
 
 #: classes/applications/calendar/conference.aw:137
+#: classes/applications/calendar/conference.aw:147
 msgid "Dinner"
 msgstr ""
 
@@ -406,87 +407,100 @@ msgid "Wedding"
 msgstr ""
 
 #: classes/applications/calendar/conference.aw:140
+#: classes/applications/calendar/conference.aw:148
 msgid "Other"
 msgstr ""
 
-#: classes/applications/calendar/conference.aw:265
+#: classes/applications/calendar/conference.aw:144
+msgid "Break out rooms"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:145
+msgid "Show room"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:146
+msgid "Office"
+msgstr ""
+
+#: classes/applications/calendar/conference.aw:273
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/calendar/conference.aw:270
+#: classes/applications/calendar/conference.aw:278
 msgid "reserveeri"
 msgstr "reserve"
 
-#: classes/applications/calendar/conference.aw:276
+#: classes/applications/calendar/conference.aw:284
 msgid "vabu ressursse"
 msgstr "free resources"
 
-#: classes/applications/calendar/conference.aw:282
-#: classes/applications/calendar/conference.aw:339
-#: classes/applications/calendar/conference.aw:562
+#: classes/applications/calendar/conference.aw:290
+#: classes/applications/calendar/conference.aw:347
+#: classes/applications/calendar/conference.aw:570
 msgid "Ruum"
 msgstr "Room"
 
-#: classes/applications/calendar/conference.aw:335
+#: classes/applications/calendar/conference.aw:343
 msgid "P&auml;ev"
 msgstr "Day"
 
-#: classes/applications/calendar/conference.aw:343
+#: classes/applications/calendar/conference.aw:351
 msgid "Toode"
 msgstr "Product"
 
-#: classes/applications/calendar/conference.aw:347
+#: classes/applications/calendar/conference.aw:355
 msgid "Kogus"
 msgstr "Amount"
 
-#: classes/applications/calendar/conference.aw:351
+#: classes/applications/calendar/conference.aw:359
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/calendar/conference.aw:376
+#: classes/applications/calendar/conference.aw:384
 msgid "-- Vali toode --"
 msgstr "--Select product--"
 
-#: classes/applications/calendar/conference.aw:383
+#: classes/applications/calendar/conference.aw:391
 msgid "-- Vali p&auml;ev ja ruum -- "
 msgstr "--Select day and room--"
 
-#: classes/applications/calendar/conference.aw:389
+#: classes/applications/calendar/conference.aw:397
 msgid "-- Vali ruum --"
 msgstr "--Select room--"
 
-#: classes/applications/calendar/conference.aw:533
+#: classes/applications/calendar/conference.aw:541
 msgid "Lisa ruum"
 msgstr "Add room"
 
-#: classes/applications/calendar/conference.aw:547
+#: classes/applications/calendar/conference.aw:555
 msgid "Eemalda ruum"
 msgstr "Remove room"
 
-#: classes/applications/calendar/conference.aw:566
+#: classes/applications/calendar/conference.aw:574
 msgid "Algusaeg"
 msgstr "Start time"
 
-#: classes/applications/calendar/conference.aw:570
+#: classes/applications/calendar/conference.aw:578
 msgid "L&otilde;puaeg"
 msgstr "End time"
 
-#: classes/applications/calendar/conference.aw:653
+#: classes/applications/calendar/conference.aw:661
 msgid "nimetu"
 msgstr "nameless"
 
-#: classes/applications/calendar/conference.aw:678
+#: classes/applications/calendar/conference.aw:686
 msgid "Esineja"
 msgstr "Performer"
 
-#: classes/applications/calendar/conference.aw:682
+#: classes/applications/calendar/conference.aw:690
 msgid "Teema"
 msgstr "Subject"
 
-#: classes/applications/calendar/conference.aw:742
+#: classes/applications/calendar/conference.aw:750
 msgid "Lisa esineja"
 msgstr "Add performer"
 
-#: classes/applications/calendar/conference.aw:753
+#: classes/applications/calendar/conference.aw:761
 msgid "Eemalda esineja"
 msgstr "Remove performer"

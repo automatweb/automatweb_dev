@@ -37,6 +37,42 @@ msgstr ""
 msgid "Omaduse Kinnitamata broneeringut tuleb hoida kinni x minutit (hold_not_verifyed) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_related_room_folder
+msgid "Omaduse Seotud ruumide kaust (related_room_folder) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_related_room_folder_comment
+msgid "Omaduse Seotud ruumide kaust (related_room_folder) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_related_room_folder_help
+msgid "Omaduse Seotud ruumide kaust (related_room_folder) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prods
+msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prods_comment
+msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prods_help
+msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_disp_bron_len
+msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_disp_bron_len_comment
+msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_disp_bron_len_help
+msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:prop_users
 msgid "Omaduse Kasutajad (users) caption"
 msgstr ""
@@ -47,6 +83,18 @@ msgstr ""
 
 #: classes/common/room_settings.aw:prop_users_help
 msgid "Omaduse Kasutajad (users) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_groups
+msgid "Omaduse Grupid (groups) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_groups_comment
+msgid "Omaduse Grupid (groups) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_groups_help
+msgid "Omaduse Grupid (groups) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_persons
@@ -145,18 +193,6 @@ msgstr ""
 msgid "Omaduse Kinnise aja värvi (col_closed) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_col_by_grp
-msgid "Omaduse Broneeringu tegijate gruppide v&auml;rvid (col_by_grp) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_by_grp_comment
-msgid "Omaduse Broneeringu tegijate gruppide v&auml;rvid (col_by_grp) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_col_by_grp_help
-msgid "Omaduse Broneeringu tegijate gruppide v&auml;rvid (col_by_grp) help"
-msgstr ""
-
 #: classes/common/room_settings.aw:prop_buffer_time_string
 msgid "Omaduse Puhveraja string (buffer_time_string) caption"
 msgstr ""
@@ -253,18 +289,6 @@ msgstr ""
 msgid "Omaduse Broneeringuobjekti kohustuslikud v&auml;ljad (bron_required_fields) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:prop_grp_bron_time_table
-msgid "Omaduse  (grp_bron_time_table) caption"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_grp_bron_time_table_comment
-msgid "Omaduse  (grp_bron_time_table) kommentaar"
-msgstr ""
-
-#: classes/common/room_settings.aw:prop_grp_bron_time_table_help
-msgid "Omaduse  (grp_bron_time_table) help"
-msgstr ""
-
 #: classes/common/room_settings.aw:prop_send_del_mail
 msgid "Omaduse Saada kustutamise kohta meil (send_del_mail) caption"
 msgstr ""
@@ -349,6 +373,18 @@ msgstr ""
 msgid "Omaduse Meili sisu (del_mail_ct) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_grp_settings
+msgid "Omaduse  (grp_settings) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_grp_settings_comment
+msgid "Omaduse  (grp_settings) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_grp_settings_help
+msgid "Omaduse  (grp_settings) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:group_whom
 msgid "Grupi Kellele kehtib (whom) pealkiri"
 msgstr ""
@@ -381,14 +417,6 @@ msgstr ""
 msgid "Grupi Muud seaded (settings_gen) help"
 msgstr ""
 
-#: classes/common/room_settings.aw:group_settings_grp
-msgid "Grupi Broneerimisaegade seaded (settings_grp) pealkiri"
-msgstr ""
-
-#: classes/common/room_settings.aw:group_settings_grp_help
-msgid "Grupi Broneerimisaegade seaded (settings_grp) help"
-msgstr ""
-
 #: classes/common/room_settings.aw:group_email
 msgid "Grupi Meiliseaded (email) pealkiri"
 msgstr ""
@@ -403,6 +431,14 @@ msgstr ""
 
 #: classes/common/room_settings.aw:group_delete_email_help
 msgid "Grupi Kustutamine (delete_email) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_grp_settings
+msgid "Grupi Gruppide seaded (grp_settings) pealkiri"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_grp_settings_help
+msgid "Grupi Gruppide seaded (grp_settings) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:rel_RELTYPE_USER
@@ -425,50 +461,70 @@ msgstr ""
 msgid "Seose Ametinimetus (RELTYPE_PROFESSION) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:149
+#: classes/common/room_settings.aw:rel_RELTYPE_RELATED_ROOM_FOLDER
+msgid "Seose Seotud ruumide kaust (RELTYPE_RELATED_ROOM_FOLDER) tekst"
+msgstr ""
+
+#: classes/common/room_settings.aw:rel_RELTYPE_GROUP
+msgid "Seose Grupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/common/room_settings.aw:165
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:291
+#: classes/common/room_settings.aw:334
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:297
+#: classes/common/room_settings.aw:340
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:335 classes/common/room_settings.aw:382
+#: classes/common/room_settings.aw:378
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:340
-msgid "V&auml;rv"
+#: classes/common/room_settings.aw:383
+msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:359
-msgid "Vali"
-msgstr ""
-
-#: classes/common/room_settings.aw:387
+#: classes/common/room_settings.aw:389
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:392 classes/common/room_settings.aw:402
+#: classes/common/room_settings.aw:395 classes/common/room_settings.aw:407
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:397
+#: classes/common/room_settings.aw:401
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:413
+#: classes/common/room_settings.aw:414
+msgid "Broneeringu tegijate gruppide v&auml;rvid"
+msgstr ""
+
+#: classes/common/room_settings.aw:420
+msgid "K&uuml;sida kliendi saabumise kinnitust"
+msgstr ""
+
+#: classes/common/room_settings.aw:426
+msgid "Broneeringud vaikimisi kinnitatud"
+msgstr ""
+
+#: classes/common/room_settings.aw:437
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:414
+#: classes/common/room_settings.aw:438
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:415
+#: classes/common/room_settings.aw:439
 msgid "P&auml;ev"
+msgstr ""
+
+#: classes/common/room_settings.aw:479
+msgid "Vali"
 msgstr ""

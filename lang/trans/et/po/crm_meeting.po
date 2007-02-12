@@ -894,6 +894,26 @@ msgstr ""
 msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:layout_top_bit
+msgid "Kujundusosa Põhiandmed (top_bit) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_center_bit_left_ct
+msgid "Kujundusosa Sisu (center_bit_left_ct) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_center_bit_right_top
+msgid "Kujundusosa Osapooled (center_bit_right_top) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_center_bit_right_bottom
+msgid "Kujundusosa Manused (center_bit_right_bottom) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:layout_center_bit_bottom
+msgid "Kujundusosa Kokkuvõte (center_bit_bottom) pealkiri"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:320
 msgid "Aktiivne"
 msgstr ""

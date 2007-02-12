@@ -431,9 +431,17 @@ msgid "Mitu paketis"
 msgstr ""
 
 #: classes/applications/shop/shop_packet.aw:170
+msgid "Pakend"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:175
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/shop/shop_packet.aw:559
+#: classes/applications/shop/shop_packet.aw:226
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:581
 msgid "Kustuta tooted paketist"
 msgstr ""

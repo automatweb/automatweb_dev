@@ -37,6 +37,30 @@ msgstr ""
 msgid "Omaduse Omanik (owner) help"
 msgstr ""
 
+#: classes/applications/scm/location.aw:prop_chairman
+msgid "Omaduse Juhataja (chairman) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_chairman_comment
+msgid "Omaduse Juhataja (chairman) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_chairman_help
+msgid "Omaduse Juhataja (chairman) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_contact_person
+msgid "Omaduse Kontaktisik (contact_person) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_contact_person_comment
+msgid "Omaduse Kontaktisik (contact_person) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_contact_person_help
+msgid "Omaduse Kontaktisik (contact_person) help"
+msgstr ""
+
 #: classes/applications/scm/location.aw:prop_phone
 msgid "Omaduse Telefon (phone) caption"
 msgstr ""
@@ -109,6 +133,30 @@ msgstr ""
 msgid "Omaduse Foto kohast (photo) help"
 msgstr ""
 
+#: classes/applications/scm/location.aw:prop_open_times
+msgid "Omaduse Lahtioleku ajad (open_times) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_open_times_comment
+msgid "Omaduse Lahtioleku ajad (open_times) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_open_times_help
+msgid "Omaduse Lahtioleku ajad (open_times) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_prices
+msgid "Omaduse Hinnad (prices) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_prices_comment
+msgid "Omaduse Hinnad (prices) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_prices_help
+msgid "Omaduse Hinnad (prices) help"
+msgstr ""
+
 #: classes/applications/scm/location.aw:prop_bank_payment
 msgid "Omaduse Pangamakse (bank_payment) caption"
 msgstr ""
@@ -119,6 +167,42 @@ msgstr ""
 
 #: classes/applications/scm/location.aw:prop_bank_payment_help
 msgid "Omaduse Pangamakse (bank_payment) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_short_description
+msgid "Omaduse L&uuml;hikirjeldus (short_description) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_short_description_comment
+msgid "Omaduse L&uuml;hikirjeldus (short_description) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_short_description_help
+msgid "Omaduse L&uuml;hikirjeldus (short_description) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_description
+msgid "Omaduse Kirjeldus (description) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_description_comment
+msgid "Omaduse Kirjeldus (description) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_description_help
+msgid "Omaduse Kirjeldus (description) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_add_text
+msgid "Omaduse Lisaandmed (add_text) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_add_text_comment
+msgid "Omaduse Lisaandmed (add_text) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_add_text_help
+msgid "Omaduse Lisaandmed (add_text) help"
 msgstr ""
 
 #: classes/applications/scm/location.aw:prop_images
@@ -167,6 +251,18 @@ msgstr ""
 
 #: classes/applications/scm/location.aw:prop_suite_count_help
 msgid "Omaduse Sviitide arv (suite_count) help"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_rooms_description
+msgid "Omaduse Ruumide kirjeldus (rooms_description) caption"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_rooms_description_comment
+msgid "Omaduse Ruumide kirjeldus (rooms_description) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/location.aw:prop_rooms_description_help
+msgid "Omaduse Ruumide kirjeldus (rooms_description) help"
 msgstr ""
 
 #: classes/applications/scm/location.aw:group_images
@@ -225,6 +321,14 @@ msgstr ""
 msgid "Seose E-post (RELTYPE_EMAIL) tekst"
 msgstr ""
 
-#: classes/applications/scm/location.aw:107
+#: classes/applications/scm/location.aw:rel_RELTYPE_CONTACT_PERSON
+msgid "Seose Kontaktisik (RELTYPE_CONTACT_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:rel_RELTYPE_CHAIRMAN
+msgid "Seose Juhataja (RELTYPE_CHAIRMAN) tekst"
+msgstr ""
+
+#: classes/applications/scm/location.aw:136
 msgid "tooltip"
 msgstr ""

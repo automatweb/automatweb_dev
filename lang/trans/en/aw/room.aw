@@ -9,7 +9,6 @@ $GLOBALS["TRANS"]["Omaduse Maksimaalne mahutavus (max_capacity) caption"] = "Max
 $GLOBALS["TRANS"]["Omaduse Valuuta (currency) caption"] = "Currency";
 $GLOBALS["TRANS"]["Omaduse Hind (price) caption"] = "Price";
 $GLOBALS["TRANS"]["Omaduse Aja&uuml;hik (time_unit) caption"] = "Time unit";
-$GLOBALS["TRANS"]["Omaduse Alates (time_from) caption"] = "From";
 $GLOBALS["TRANS"]["Omaduse kuni (time_to) caption"] = "Till";
 $GLOBALS["TRANS"]["Grupi Kalender (calendar) pealkiri"] = "Calendar";
 $GLOBALS["TRANS"]["Grupi Pildid (images) pealkiri"] = "Images";

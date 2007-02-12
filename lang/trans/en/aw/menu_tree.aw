@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Vajab t&otilde;lget (needs_translation) caption"] = "Needs translation";
-$GLOBALS["TRANS"]["Omaduse T&otilde;lge kinnitatud (is_translated) caption"] = "Translation confirmed";
 $GLOBALS["TRANS"]["Omaduse Men&uuml;&uuml;d (menus) caption"] = "Folders";
 $GLOBALS["TRANS"]["Omaduse Ainult alammen&uuml;&uuml;d (children_only) caption"] = "Only subfolders";
 $GLOBALS["TRANS"]["Omaduse Template (template) caption"] = "Template";

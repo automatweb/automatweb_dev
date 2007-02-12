@@ -26,5 +26,11 @@ $GLOBALS["TRANS"]["Non-stop coffee"] = "Non-stop coffee";
 $GLOBALS["TRANS"]["Estionia"] = "Estonia";
 $GLOBALS["TRANS"]["Latvia"] = "Latvia";
 $GLOBALS["TRANS"]["Lietuva"] = "Lietuva";
+$GLOBALS["TRANS"]["&Uuml;rituse nimi on puudu"] = "Function name is mandatory";
+$GLOBALS["TRANS"]["Saabumisaeg on puudu"] = "Arrival date is mandatory";
+$GLOBALS["TRANS"]["Lahkumisaeg on puudu"] = "Departure date is mandatory";
+$GLOBALS["TRANS"]["Telefoninumber on puudu"] = "Phone is mandatory";
+$GLOBALS["TRANS"]["E-mail on puudu"] = "E-mail is mandatory";
 $GLOBALS["TRANS"]["-"] = "-";
+$GLOBALS["TRANS"]["Kasutanimi on juba olemas, palun logige sisse."] = "Username already exists, please log in";
 ?>

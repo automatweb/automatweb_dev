@@ -141,8 +141,7 @@ msgstr "Remove selected objects"
 
 #: classes/contentmgmt/timing.aw:270
 msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
-msgstr ""
-"Are you sure you want to delete the relected objects from this reminder?"
+msgstr "Are you sure you want to delete the relected objects from this reminder?"
 
 #: classes/contentmgmt/timing.aw:280
 msgid "ID"
@@ -155,3 +154,7 @@ msgstr "Name"
 #: classes/contentmgmt/timing.aw:282
 msgid "Tüüp"
 msgstr "Type"
+
+#: classes/contentmgmt/timing.aw:419 classes/contentmgmt/timing.aw:434
+msgid "%s ajaline aktiivsus"
+msgstr ""

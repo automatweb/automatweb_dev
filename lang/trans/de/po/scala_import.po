@@ -157,6 +157,18 @@ msgstr ""
 msgid "Omaduse Availability.xml  (ftp_file_location_availability) help"
 msgstr ""
 
+#: classes/import/scala_import.aw:prop_prices_config_table
+msgid "Omaduse Hindade seadete tabel (prices_config_table) caption"
+msgstr ""
+
+#: classes/import/scala_import.aw:prop_prices_config_table_comment
+msgid "Omaduse Hindade seadete tabel (prices_config_table) kommentaar"
+msgstr ""
+
+#: classes/import/scala_import.aw:prop_prices_config_table_help
+msgid "Omaduse Hindade seadete tabel (prices_config_table) help"
+msgstr ""
+
 #: classes/import/scala_import.aw:prop_users_config_table
 msgid "Omaduse Kasutajate seadete tabel (users_config_table) caption"
 msgstr ""
@@ -209,6 +221,14 @@ msgstr ""
 msgid "Grupi Impordi seaded (import_config) help"
 msgstr ""
 
+#: classes/import/scala_import.aw:group_prices
+msgid "Grupi Hinnad (prices) pealkiri"
+msgstr ""
+
+#: classes/import/scala_import.aw:group_prices_help
+msgid "Grupi Hinnad (prices) help"
+msgstr ""
+
 #: classes/import/scala_import.aw:group_users
 msgid "Grupi Kasutajad (users) pealkiri"
 msgstr ""
@@ -250,19 +270,19 @@ msgid "Seose Kordused (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
 #: classes/import/scala_import.aw:114
-msgid "Hinnad"
-msgstr ""
-
-#: classes/import/scala_import.aw:115
 msgid "Kasutajad"
 msgstr ""
 
-#: classes/import/scala_import.aw:116
+#: classes/import/scala_import.aw:115
 msgid "Kategooriad"
 msgstr ""
 
-#: classes/import/scala_import.aw:117
+#: classes/import/scala_import.aw:116
 msgid "Lao seis"
+msgstr ""
+
+#: classes/import/scala_import.aw:117
+msgid "Hinnad"
 msgstr ""
 
 #: classes/import/scala_import.aw:144
@@ -270,27 +290,35 @@ msgid "Impordi %s"
 msgstr ""
 
 #: classes/import/scala_import.aw:173
-msgid "Andmebaasi tabeli v&auml;ljad"
+msgid "Property"
 msgstr ""
 
-#: classes/import/scala_import.aw:178 classes/import/scala_import.aw:238
-#: classes/import/scala_import.aw:288 classes/import/scala_import.aw:333
+#: classes/import/scala_import.aw:178 classes/import/scala_import.aw:247
+#: classes/import/scala_import.aw:297 classes/import/scala_import.aw:342
 msgid "XML tagide nimed"
 msgstr ""
 
-#: classes/import/scala_import.aw:196
-msgid "Andmebaasi tabel (%s) >> XML fail (%s)"
+#: classes/import/scala_import.aw:200
+msgid "Hind"
 msgstr ""
 
-#: classes/import/scala_import.aw:234 classes/import/scala_import.aw:284
-#: classes/import/scala_import.aw:329
+#: classes/import/scala_import.aw:204
+msgid "Tootekood"
+msgstr ""
+
+#: classes/import/scala_import.aw:211
+msgid "Toote objektidele hinnad XML fail (%s) p&otilde;hjal"
+msgstr ""
+
+#: classes/import/scala_import.aw:243 classes/import/scala_import.aw:293
+#: classes/import/scala_import.aw:338
 msgid "AW objekti v&auml;ljad"
 msgstr ""
 
-#: classes/import/scala_import.aw:243
+#: classes/import/scala_import.aw:252
 msgid "Kasutaja objektid XML faili %s p&otilde;hjal"
 msgstr ""
 
-#: classes/import/scala_import.aw:356
+#: classes/import/scala_import.aw:365
 msgid "Lao toote objektid XML faili %s p&otilde;hjal"
 msgstr ""

@@ -185,35 +185,51 @@ msgstr "Tila"
 msgid "Broneering"
 msgstr "Varaus"
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:299
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:268
+msgid "Prindi"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:340
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:305
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:346
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:313
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:354
 msgid "Kleebi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:322
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:363
 msgid "Kalender"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:335
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:402
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:376
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:549
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:606
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:429
+msgid "Mees"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:429
+msgid "Naine"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:714
+msgid "Klient saabus"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:754
 msgid "Eile"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:617
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:765
 msgid "T&auml;na"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:628
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:776
 msgid "Homme"
 msgstr ""

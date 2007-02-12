@@ -61,16 +61,28 @@ msgstr ""
 msgid "Omaduse Privaatv&otilde;ti (private_key) help"
 msgstr ""
 
-#: classes/common/bank_payment.aw:prop_return_url
-msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (return_url) caption"
+#: classes/common/bank_payment.aw:prop_private_c_key
+msgid "Omaduse krediitkaardi privaatv&otilde;ti (private_c_key) caption"
 msgstr ""
 
-#: classes/common/bank_payment.aw:prop_return_url_comment
-msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (return_url) kommentaar"
+#: classes/common/bank_payment.aw:prop_private_c_key_comment
+msgid "Omaduse krediitkaardi privaatv&otilde;ti (private_c_key) kommentaar"
 msgstr ""
 
-#: classes/common/bank_payment.aw:prop_return_url_help
-msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (return_url) help"
+#: classes/common/bank_payment.aw:prop_private_c_key_help
+msgid "Omaduse krediitkaardi privaatv&otilde;ti (private_c_key) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank_return_url
+msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (bank_return_url) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank_return_url_comment
+msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (bank_return_url) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank_return_url_help
+msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (bank_return_url) help"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_cancel_url
@@ -109,6 +121,10 @@ msgstr ""
 msgid "Seose Privaatv&otilde;ti (RELTYPE_KEY) tekst"
 msgstr ""
 
-#: classes/common/bank_payment.aw:323
+#: classes/common/bank_payment.aw:rel_RELTYPE_P_KEY
+msgid "Seose Privaatv&otilde;ti (RELTYPE_P_KEY) tekst"
+msgstr ""
+
+#: classes/common/bank_payment.aw:355
 msgid "\n"
 msgstr ""

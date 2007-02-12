@@ -109,6 +109,18 @@ msgstr ""
 msgid "Omaduse Kestvus (duration) help"
 msgstr ""
 
+#: classes/applications/groupware/task_quick_entry.aw:prop_parts
+msgid "Omaduse Osalejad (parts) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_parts_comment
+msgid "Omaduse Osalejad (parts) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_parts_help
+msgid "Omaduse Osalejad (parts) help"
+msgstr ""
+
 #: classes/applications/groupware/task_quick_entry.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
 msgstr ""
@@ -145,34 +157,34 @@ msgstr ""
 msgid "Omaduse &nbsp; (submit_and_add) help"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:67
+#: classes/applications/groupware/task_quick_entry.aw:70
 msgid "Salvesta ja lisa uus"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:97
+#: classes/applications/groupware/task_quick_entry.aw:100
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:97
+#: classes/applications/groupware/task_quick_entry.aw:100
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:127
+#: classes/applications/groupware/task_quick_entry.aw:130
 msgid "--Vali--"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:155
+#: classes/applications/groupware/task_quick_entry.aw:163
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:627
+#: classes/applications/groupware/task_quick_entry.aw:641
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:649
+#: classes/applications/groupware/task_quick_entry.aw:663
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:672
+#: classes/applications/groupware/task_quick_entry.aw:686
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""

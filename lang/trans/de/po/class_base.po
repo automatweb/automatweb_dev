@@ -122,10 +122,10 @@ msgstr ""
 msgid "%s is not a valid configuration form!"
 msgstr ""
 
-#: classes/class_base.aw:5285
+#: classes/class_base.aw:5290
 msgid "T&otilde;lge aktiivne"
 msgstr ""
 
-#: classes/class_base.aw:5293
+#: classes/class_base.aw:5298
 msgid "Salvesta"
 msgstr ""

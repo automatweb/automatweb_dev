@@ -26,18 +26,6 @@ msgstr ""
 msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_is_translated
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
-msgstr "Translation confirmed"
-
-#: classes/contentmgmt/menu_tree.aw:prop_is_translated_comment
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/menu_tree.aw:prop_is_translated_help
-msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
-msgstr ""
-
 #: classes/contentmgmt/menu_tree.aw:prop_menus
 msgid "Omaduse Men&uuml;&uuml;d (menus) caption"
 msgstr "Folders"
@@ -110,6 +98,9 @@ msgstr ""
 #: classes/contentmgmt/menu_tree.aw:47
 msgid "K&otilde;ik"
 msgstr "All"
+
+#~ msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
+#~ msgstr "Translation confirmed"
 
 # classes/contentmgmt/menu_tree.aw:prop_needs_translation
 #~ msgid "Omaduse Vajab t�get (needs_translation) caption"

@@ -85,6 +85,18 @@ msgstr ""
 msgid "Omaduse N&auml;dalap&auml;evad (weekdays) help"
 msgstr ""
 
+#: classes/common/room_price.aw:prop_apply_groups
+msgid "Omaduse Kehtib gruppidele (apply_groups) caption"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_apply_groups_comment
+msgid "Omaduse Kehtib gruppidele (apply_groups) kommentaar"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_apply_groups_help
+msgid "Omaduse Kehtib gruppidele (apply_groups) help"
+msgstr ""
+
 #: classes/common/room_price.aw:prop_nr
 msgid "Omaduse Mitmes (nr) caption"
 msgstr "Count"
@@ -133,6 +145,30 @@ msgstr ""
 msgid "Omaduse Aeg (time) help"
 msgstr ""
 
+#: classes/common/room_price.aw:prop_bron_made_from
+msgid "Omaduse Broneering tehtud alates (bron_made_from) caption"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_bron_made_from_comment
+msgid "Omaduse Broneering tehtud alates (bron_made_from) kommentaar"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_bron_made_from_help
+msgid "Omaduse Broneering tehtud alates (bron_made_from) help"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_bron_made_to
+msgid "Omaduse Broneering tehtud kuni (bron_made_to) caption"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_bron_made_to_comment
+msgid "Omaduse Broneering tehtud kuni (bron_made_to) kommentaar"
+msgstr ""
+
+#: classes/common/room_price.aw:prop_bron_made_to_help
+msgid "Omaduse Broneering tehtud kuni (bron_made_to) help"
+msgstr ""
+
 #: classes/common/room_price.aw:prop_bargain_percent
 msgid "Omaduse Soodustuse protsent (bargain_percent) caption"
 msgstr "Discount %"
@@ -157,46 +193,50 @@ msgstr ""
 msgid "Omaduse Hinnad (prices_props) help"
 msgstr ""
 
-#: classes/common/room_price.aw:60
+#: classes/common/room_price.aw:rel_RELTYPE_GROUP
+msgid "Seose Kehtib grupile (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/common/room_price.aw:72
 msgid "E"
 msgstr "Mo"
 
-#: classes/common/room_price.aw:61
+#: classes/common/room_price.aw:73
 msgid "T"
 msgstr "Tu"
 
-#: classes/common/room_price.aw:62
+#: classes/common/room_price.aw:74
 msgid "K"
 msgstr "We"
 
-#: classes/common/room_price.aw:63
+#: classes/common/room_price.aw:75
 msgid "N"
 msgstr "Th"
 
-#: classes/common/room_price.aw:64
+#: classes/common/room_price.aw:76
 msgid "R"
 msgstr "Fr"
 
-#: classes/common/room_price.aw:65
+#: classes/common/room_price.aw:77
 msgid "L"
 msgstr "Sa"
 
-#: classes/common/room_price.aw:66
+#: classes/common/room_price.aw:78
 msgid "P"
 msgstr "Su"
 
-#: classes/common/room_price.aw:105
+#: classes/common/room_price.aw:117
 msgid "Hind"
 msgstr "Price"
 
-#: classes/common/room_price.aw:106
+#: classes/common/room_price.aw:118
 msgid "Soodushind"
 msgstr "Discount"
 
-#: classes/common/room_price.aw:225
+#: classes/common/room_price.aw:237
 msgid "Valuutad"
 msgstr "Currencies"
 
-#: classes/common/room_price.aw:226
+#: classes/common/room_price.aw:238
 msgid "Hind ei ole seotud &uuml;hegi ruumiga v&otilde;i on valuutad m&auml;&auml;ramata"
 msgstr "Price is not connected to any room or currencies are not selected"

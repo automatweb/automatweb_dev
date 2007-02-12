@@ -215,6 +215,18 @@ msgstr ""
 msgid "Omaduse Click-through ratio (click_through) help"
 msgstr ""
 
+#: classes/applications/banner/banner.aw:prop_timing
+msgid "Omaduse Ajaline aktiivsus (timing) caption"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_timing_comment
+msgid "Omaduse Ajaline aktiivsus (timing) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_timing_help
+msgid "Omaduse Ajaline aktiivsus (timing) help"
+msgstr ""
+
 #: classes/applications/banner/banner.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -245,6 +257,14 @@ msgstr ""
 msgid "Grupi Statistika (stats) help"
 msgstr ""
 
+#: classes/applications/banner/banner.aw:group_timing
+msgid "Grupi Ajaline aktiivsus (timing) pealkiri"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:group_timing_help
+msgid "Grupi Ajaline aktiivsus (timing) help"
+msgstr ""
+
 #: classes/applications/banner/banner.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
 msgstr ""
@@ -263,18 +283,22 @@ msgstr ""
 msgid "Seose banneri sisu (RELTYPE_BANNER_FILE) tekst"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:162
+#: classes/applications/banner/banner.aw:rel_RELTYPE_TIMING
+msgid "Seose Aeg (RELTYPE_TIMING) tekst"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:171
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:209
+#: classes/applications/banner/banner.aw:218
 msgid "Banner"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:215
+#: classes/applications/banner/banner.aw:224
 msgid "N&auml;itamise t&otilde;en&auml;osus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:455
+#: classes/applications/banner/banner.aw:464
 msgid "No banner location id given"
 msgstr ""

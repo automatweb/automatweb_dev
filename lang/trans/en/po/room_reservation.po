@@ -77,62 +77,62 @@ msgstr ""
 msgid "Seose Ruum mida broneerida (RELTYPE_ROOM) tekst"
 msgstr ""
 
-#: classes/common/room_reservation.aw:66
+#: classes/common/room_reservation.aw:67
 msgid "\n"
 msgstr ""
 
-#: classes/common/room_reservation.aw:68
+#: classes/common/room_reservation.aw:69
 msgid "Template fail peab asuma kataloogis :"
 msgstr "Template file should be in folder:"
 
-#: classes/common/room_reservation.aw:126
+#: classes/common/room_reservation.aw:127
 msgid "Tase"
 msgstr "Level"
 
-#: classes/common/room_reservation.aw:131
+#: classes/common/room_reservation.aw:132
 msgid "Etapi nimi"
 msgstr "Stage name"
 
-#: classes/common/room_reservation.aw:151
+#: classes/common/room_reservation.aw:152
 msgid "Template"
 msgstr "Template"
 
-#: classes/common/room_reservation.aw:355
+#: classes/common/room_reservation.aw:367
 msgid "Vali enne jätkamist sobiv aeg!"
 msgstr ""
 
-#: classes/common/room_reservation.aw:356
+#: classes/common/room_reservation.aw:368
 msgid "Vali enne j&auml;tkamist sobiv aeg!"
 msgstr ""
 
-#: classes/common/room_reservation.aw:541
+#: classes/common/room_reservation.aw:565
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/common/room_reservation.aw:541
+#: classes/common/room_reservation.aw:565
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/common/room_reservation.aw:844
+#: classes/common/room_reservation.aw:938
 msgid "Nimi on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:848
+#: classes/common/room_reservation.aw:942
 msgid "Telefon on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:852
+#: classes/common/room_reservation.aw:946
 msgid "E-Mail on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1047
+#: classes/common/room_reservation.aw:1141
 msgid "Salvesta"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1237
+#: classes/common/room_reservation.aw:1362
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1257
+#: classes/common/room_reservation.aw:1388
 msgid "Broneering: %s"
 msgstr ""

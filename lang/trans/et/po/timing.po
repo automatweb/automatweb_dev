@@ -153,3 +153,7 @@ msgstr ""
 #: classes/contentmgmt/timing.aw:282
 msgid "Tüüp"
 msgstr ""
+
+#: classes/contentmgmt/timing.aw:419 classes/contentmgmt/timing.aw:434
+msgid "%s ajaline aktiivsus"
+msgstr ""

@@ -883,18 +883,18 @@ msgstr ""
 msgid "Registreeru"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1958
+#: classes/contentmgmt/webform.aw:1962
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2525
+#: classes/contentmgmt/webform.aw:2529
 msgid "Kinnita"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2530
+#: classes/contentmgmt/webform.aw:2534
 msgid "Tagasi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2652
+#: classes/contentmgmt/webform.aw:2656
 msgid "Liigu edasi &raquo;"
 msgstr ""

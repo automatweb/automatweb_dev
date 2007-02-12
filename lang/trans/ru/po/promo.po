@@ -645,25 +645,33 @@ msgstr ""
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:354 classes/contentmgmt/promo.aw:403
-#: classes/contentmgmt/promo.aw:450
+#: classes/contentmgmt/promo.aw:358 classes/contentmgmt/promo.aw:407
+#: classes/contentmgmt/promo.aw:454
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:362 classes/contentmgmt/promo.aw:411
-#: classes/contentmgmt/promo.aw:459
+#: classes/contentmgmt/promo.aw:366 classes/contentmgmt/promo.aw:415
+#: classes/contentmgmt/promo.aw:463
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:367 classes/contentmgmt/promo.aw:416
-#: classes/contentmgmt/promo.aw:473
+#: classes/contentmgmt/promo.aw:371 classes/contentmgmt/promo.aw:420
+#: classes/contentmgmt/promo.aw:477
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:466
+#: classes/contentmgmt/promo.aw:470
 msgid "Pane pealkirjaks"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1096
+#: classes/contentmgmt/promo.aw:1100
 msgid "M&auml;rks&otilde;na"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:1154
+msgid "Valitud objekt: %s /"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:1156
+msgid " Otsi uus objekt: "
 msgstr ""

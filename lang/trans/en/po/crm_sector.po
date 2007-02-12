@@ -30,6 +30,18 @@ msgstr ""
 msgid "Omaduse Tegevusala nimetus (tegevusala) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_ord
+msgid "Omaduse J&auml;rjekord (ord) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ord_comment
+msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_ord_help
+msgid "Omaduse J&auml;rjekord (ord) help"
+msgstr ""
+
 # classes/crm/crm_sector.aw:prop_tegevusala_en
 #: classes/crm/crm_sector.aw:prop_tegevusala_en
 msgid "Omaduse Inglise keelne nimetus (tegevusala_en) caption"

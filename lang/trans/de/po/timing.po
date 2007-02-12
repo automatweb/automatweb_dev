@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/timing.aw:class_858_help
 msgid "Klassi Ajaline aktiivsus help"
 msgstr ""
@@ -130,3 +129,6 @@ msgstr ""
 msgid "Tüüp"
 msgstr ""
 
+#: classes/contentmgmt/timing.aw:419 classes/contentmgmt/timing.aw:434
+msgid "%s ajaline aktiivsus"
+msgstr ""

@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/cfg/htmlclient.aw:256
+msgid "Viga sisendandmetes"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:279
+msgid "Jah"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:280
+msgid "Ei"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:306
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:307
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:308
+msgid "Deaktiivne"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:342
+msgid "Vali"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:429 classes/cfg/htmlclient.aw:570
+msgid "Salvesta"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:584
+msgid "&lt;&lt;&lt; Tagasi"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:585
+msgid "submit_and_back"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:595
+msgid "Edasi &gt;&gt;&gt;"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:596
+msgid "submit_and_forward"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:753
+msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:806
+msgid "Tagasiside"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:808
+msgid "Kasutajatugi"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:809
+msgid "Abi"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:810
+msgid "Otsi"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:813
+msgid "J&auml;rjehoidja"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:817
+msgid "Ajalugu"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:821
+msgid "Lisa kiiresti"
+msgstr ""
+

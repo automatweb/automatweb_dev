@@ -132,11 +132,11 @@ msgstr "That is not a valid e-mail adddress"
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 
-#: classes/class_base.aw:5285
+#: classes/class_base.aw:5290
 msgid "T&otilde;lge aktiivne"
 msgstr "Translation is active"
 
-#: classes/class_base.aw:5293
+#: classes/class_base.aw:5298
 msgid "Salvesta"
 msgstr ""
 

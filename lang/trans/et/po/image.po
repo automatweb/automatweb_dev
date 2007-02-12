@@ -434,19 +434,19 @@ msgstr ""
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:907
+#: classes/image.aw:914
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/image.aw:908
+#: classes/image.aw:915
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/image.aw:921
+#: classes/image.aw:928
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
 
-#: classes/image.aw:1490
+#: classes/image.aw:1497
 msgid "Lisa"
 msgstr ""
 

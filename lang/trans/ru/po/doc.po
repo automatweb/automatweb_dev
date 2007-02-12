@@ -1069,6 +1069,18 @@ msgstr ""
 msgid "Omaduse  (versions) help"
 msgstr ""
 
+#: classes/doc.aw:prop_timing
+msgid "Omaduse Ajaline aktiivsus (timing) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_timing_comment
+msgid "Omaduse Ajaline aktiivsus (timing) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_timing_help
+msgid "Omaduse Ajaline aktiivsus (timing) help"
+msgstr ""
+
 #: classes/doc.aw:prop_trans_tb
 msgid "Omaduse  (trans_tb) caption"
 msgstr ""
@@ -1103,6 +1115,14 @@ msgstr ""
 
 #: classes/doc.aw:prop_acl_help
 msgid "Omaduse &Otilde;igused (acl) help"
+msgstr ""
+
+#: classes/doc.aw:group_timing
+msgid "Grupi Ajaline aktiivsus (timing) pealkiri"
+msgstr ""
+
+#: classes/doc.aw:group_timing_help
+msgid "Grupi Ajaline aktiivsus (timing) help"
 msgstr ""
 
 #: classes/doc.aw:group_calendar
@@ -1213,78 +1233,78 @@ msgstr ""
 msgid "Seose V&otilde;tmes&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/doc.aw:366
+#: classes/doc.aw:372
 msgid "NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik!"
 msgstr ""
 
-#: classes/doc.aw:463
+#: classes/doc.aw:469
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:849
+#: classes/doc.aw:855
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:865 classes/doc.aw:1644
+#: classes/doc.aw:871 classes/doc.aw:1650
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:1027
+#: classes/doc.aw:1033
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:1040
+#: classes/doc.aw:1046
 msgid "Dokument (vend)"
 msgstr ""
 
-#: classes/doc.aw:1323 classes/doc.aw:1418 classes/doc.aw:1422
+#: classes/doc.aw:1329 classes/doc.aw:1424 classes/doc.aw:1428
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/doc.aw:1370
+#: classes/doc.aw:1376
 msgid "Versioon"
 msgstr ""
 
-#: classes/doc.aw:1376 classes/doc.aw:1436 classes/doc.aw:1464
+#: classes/doc.aw:1382 classes/doc.aw:1442 classes/doc.aw:1470
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc.aw:1382
+#: classes/doc.aw:1388
 msgid "Hinne"
 msgstr ""
 
-#: classes/doc.aw:1388
+#: classes/doc.aw:1394
 msgid "Hinda"
 msgstr ""
 
-#: classes/doc.aw:1394
+#: classes/doc.aw:1400
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/doc.aw:1400
+#: classes/doc.aw:1406
 msgid "Vali"
 msgstr ""
 
-#: classes/doc.aw:1431 classes/doc.aw:1459
+#: classes/doc.aw:1437 classes/doc.aw:1465
 msgid "--Vali--"
 msgstr ""
 
-#: classes/doc.aw:1556
+#: classes/doc.aw:1562
 msgid "Kustuta"
 msgstr ""
 
-#: classes/doc.aw:1593
+#: classes/doc.aw:1599
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/doc.aw:1619
+#: classes/doc.aw:1625
 msgid "<b>Pealkiri:</b>"
 msgstr ""
 
-#: classes/doc.aw:1620
+#: classes/doc.aw:1626
 msgid "<b>Lead:</b>"
 msgstr ""
 
-#: classes/doc.aw:1621
+#: classes/doc.aw:1627
 msgid "<b>Sisu:</b>"
 msgstr ""

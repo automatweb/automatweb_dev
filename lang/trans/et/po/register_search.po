@@ -301,18 +301,18 @@ msgstr ""
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:989
+#: classes/applications/register/register_search.aw:994
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1003
+#: classes/applications/register/register_search.aw:1008
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1014
+#: classes/applications/register/register_search.aw:1019
 msgid "Kustutada objekt?"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:1015
+#: classes/applications/register/register_search.aw:1020
 msgid "Kustuta"
 msgstr ""

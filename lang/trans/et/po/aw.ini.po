@@ -2487,6 +2487,14 @@ msgstr ""
 msgid "Klassi RFP Haldus (1192) nimi"
 msgstr ""
 
+#: aw.ini:class_1193
+msgid "Klassi ID-Kaardi konfiguratsioon (1193) nimi"
+msgstr ""
+
+#: aw.ini:class_1194
+msgid "Klassi RFP Ajalugu veebis (1194) nimi"
+msgstr ""
+
 # aw.ini:classfolder_29
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
@@ -4936,6 +4944,14 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1192
 msgid "syslog.type.ST_RFP_MANAGER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1193
+msgid "syslog.type.ST_ID_CONFIG"
+msgstr ""
+
+#: aw.ini:syslogtypes_1194
+msgid "syslog.type.ST_RFP_HISTORY"
 msgstr ""
 
 #: aw.ini:syslogactions_1

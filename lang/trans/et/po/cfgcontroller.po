@@ -43,3 +43,23 @@ msgstr ""
 #: classes/cfg/cfgcontroller.aw:prop_errmsg_help
 msgid "Omaduse Veateade (errmsg) help"
 msgstr ""
+
+#: classes/cfg/cfgcontroller.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/cfg/cfgcontroller.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/cfg/cfgcontroller.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/cfg/cfgcontroller.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgcontroller.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
