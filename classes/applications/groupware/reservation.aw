@@ -1,5 +1,5 @@
 <?PHp
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.44 2007/02/09 08:26:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.45 2007/02/12 13:43:04 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -234,7 +234,7 @@ class reservation extends class_base
 				}
 				break;
 			case "client_arrived":
-				$prop["options"] = array("Ei" , "Jah");
+				$prop["options"] = array(0 => t("M&auml;rkimata"), 2 => t("Ei") , 1 => t("Jah"));
 //				if(!$prop["value"])
 //				{
 //					$prop["value"] = 0;
@@ -916,7 +916,7 @@ class reservation extends class_base
 				$customer = obj($bron_obj->prop("customer"));
 				$ret.= "\n<br>".$customer->name();
 			}
-			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 0 , "caption" => t("Klient ei ilmunud kohale")));
+			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 2 , "caption" => t("Klient ei ilmunud kohale")));
 			$ret.= "\n<br>".html::radiobutton(array("name" => $bron , "value" => 1 , "caption" => t("Klient ilmus kohale")));
 			$ret .= "<hr>";
 		}

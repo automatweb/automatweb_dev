@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.7 2006/12/15 11:39:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/translation_workplace.aw,v 1.8 2007/02/12 13:43:06 kristo Exp $
 // translation_workplace.aw - T&otilde;lkimise t&ouml;&ouml;laud 
 /*
 
@@ -193,7 +193,7 @@ class translation_workplace extends class_base
 
 		$filt = array(
 			"class_id" => array_keys($this->_get_clids($arr["obj_inst"])),
-			"flags" => array("mask" => 2, "flags" => 2),
+			//"flags" => array("mask" => 2, "flags" => 2),
 		);
 		$has = false;
 		if ($tm)

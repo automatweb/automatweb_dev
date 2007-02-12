@@ -131,13 +131,16 @@ class object
 			unset($GLOBALS["objects"][$oid]);
 		}
 
-		if (!empty($GLOBALS["TRACE_OBJ_UNIQ"]) && !isset($GLOBALS["objects"][$oid]))
+		if (!isset($GLOBALS["objects"][$oid]))
 		{
-			echo "load object $param from <br>".dbg::short_backtrace()." <br>";
+			$cnt = true;
+			enter_function("object::load");
 		}
-		enter_function("object::load");
 		$this->oid = $GLOBALS["object_loader"]->load($oid);
-		exit_function("object::load");
+		if ($cnt)
+		{
+			exit_function("object::load");
+		}
 		if (!empty($GLOBALS["TRACE_OBJ"]))
 		{
 			echo "load object $param from <br>".dbg::short_backtrace()." <br>";
@@ -1961,6 +1964,11 @@ class object
 	function trans_get_val_str($prop)
 	{
 		return $GLOBALS["objects"][$this->oid]->trans_get_val_str($prop);
+	}
+
+	function prop_is_translated($prop)
+	{
+		return $GLOBALS["objects"][$this->oid]->prop_is_translated($prop);
 	}
 }
 

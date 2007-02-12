@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.27 2007/02/05 08:57:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.28 2007/02/12 13:43:05 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -672,7 +672,7 @@ class spa_bookigs_entry extends class_base
 					{
 						$ri = get_instance(CL_ROOM);
 						$settings = $ri->get_settings_for_room(obj($prod2room[$prod_id]));
-						if ($ri->group_can_do_bron($settings, $prod2tm[$prod_id]))
+						if (true || $ri->group_can_do_bron($settings, $prod2tm[$prod_id]))
 						{
 							$date .= " ".html::href(array(
 								"url" => $this->mk_my_orb("clear_booking", array("return_url" => get_ru(), "booking" => $date_booking_id)),
@@ -855,7 +855,7 @@ class spa_bookigs_entry extends class_base
 						$d_from = min($d_from, $d_start);
 						$d_to = max($d_to, $d_end);
 					}
-					if ($room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => $cur_step_end)))
+					if ($room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => $cur_step_end)) && !$room2inst[$room->id()]->is_buffer)
 					{
 						$avail = true;
 					}
@@ -1503,6 +1503,62 @@ class spa_bookigs_entry extends class_base
 					break;
 			}
 
+			switch($propertyn)
+			{
+				case "pk_name":
+					$type = "select";
+					$capt = t("Paketi nimi");
+					$val = "";
+					$ol = new object_list(array(
+						"class_id" => CL_SHOP_PACKET,
+						"lang_id" => array(),
+						"site_id" => array()
+					));
+					$pk_list = array("" => t("--vali--"));
+					foreach($ol->arr() as $o)
+					{
+						$pk_list[$o->id()] = $o->trans_get_val("name");
+					}
+					$opts = $pk_list;
+					break;
+
+				case "pk_arrival":
+					$capt = t("Saabumine");
+
+				case "pk_leave":
+					$type="date_select";
+					$capt = $capt != "" ? $capt : t("Lahkumine");
+					$val = -1;
+					break;
+
+				case "pk_tb_name":
+					$type = "select";
+					$capt = t("Reisib&uuml;roo nimi");
+					$opts = array("" => t("--vali--"));
+					$o = obj($_GET["center"]);
+					foreach(safe_array($o->prop("groups")) as $g_oid)
+					{
+						$gi = get_instance(CL_GROUP);
+						foreach($gi->get_group_members(obj($g_oid)) as $user)
+						{
+							foreach($user->connections_from(array("type" => "RELTYPE_PERSON")) as $c)
+							{
+								$ci = new connection();
+								$conns = $ci->find(array(
+									"from.class_id" => CL_CRM_COMPANY,
+									"type" => "RELTYPE_WORKERS",
+									"to" => $c->prop("to")
+								));
+								foreach($conns as $con)
+								{
+									$opts[$con["from"]] = $con["from.name"];
+								}
+							}
+						}
+					}
+					break;
+			}
+
 			$htmlc->add_property(array(
 				"name" => "ud[$propertyn]",
 				"type" => $type,
@@ -1529,7 +1585,9 @@ class spa_bookigs_entry extends class_base
 				"orb_class" => "spa_bookigs_entry",
 				"reforb" => 0,
 				"props" => $arr["props"],
-				"bron" => $arr["bron"]
+				"bron" => $arr["bron"],
+				"center" => $_GET["center"],
+				"out_arr" => $_GET["out_arr"]
 			)
 		));
 
@@ -1608,13 +1666,35 @@ class spa_bookigs_entry extends class_base
 					}
 					break;
 
-				default:
-					$cust->set_prop($pn, $arr["ud"][$pn]);
+				default:	
+					if ($cust->is_property($pn))
+					{
+						$cust->set_prop($pn, $arr["ud"][$pn]);
+					}
 					break;
 			}
 		}
 		$cust->save();
 
+		// if package is set in the submit, then do create spa booking
+		if ($arr["ud"]["pk_name"] && count($arr["out_arr"]))
+		{
+			$b = obj();
+			$b->set_class_id(CL_SPA_BOOKING);
+			$b->set_parent($arr["center"]);
+			$b->set_prop("person", $cust->id());
+			$b->set_prop("start", date_edit::get_timestamp($arr["ud"]["pk_arrival"]));
+			$b->set_prop("end", date_edit::get_timestamp($arr["ud"]["pk_leave"]));
+			$b->set_prop("package", $arr["ud"]["pk_name"]);
+			$b->save();
+			foreach($arr["out_arr"] as $r_id)
+			{
+				$b->connect(array(
+					"to" => $r_id,
+					"type" => "RELTYPE_ROOM_BRON"
+				));
+			}
+		}
 		return aw_ini_get("baseurl")."/automatweb/closewin.html";
 	}
 }

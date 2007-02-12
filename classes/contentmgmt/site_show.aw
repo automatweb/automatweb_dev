@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.221 2007/01/24 15:19:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.222 2007/02/12 13:43:05 kristo Exp $
 
 /*
 
@@ -957,9 +957,7 @@ class site_show extends class_base
 			{
 				obj_set_opt("no_cache", 1);
 			}
-
 			$documents = new object_list($filter);
-
 			if (!$get_inact && aw_ini_get("user_interface.full_content_trans"))
 			{
 				// filter the list for both-inactive docs
@@ -985,6 +983,11 @@ class site_show extends class_base
 			foreach($documents->arr() as $o)
 			{
 				if ($o->site_id() != $rsid && !$o->is_brother())
+				{
+					continue;
+				}
+			
+				if (aw_ini_get("user_interface.hide_untranslated") && !$o->prop_is_translated("title"))
 				{
 					continue;
 				}

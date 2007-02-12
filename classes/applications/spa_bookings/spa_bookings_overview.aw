@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.17 2007/02/12 09:12:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.18 2007/02/12 13:43:05 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -304,7 +304,7 @@ class spa_bookings_overview extends class_base
 				}
 				$p_obj = obj($cust_id);
 				$p_str = html::obj_change_url($p_obj)." / ".html::href(array(
-					"url" => $this->mk_my_orb("print_person_chart", array("person" => $cust_id, "rvs" => $rvs_ids)),
+					"url" => $this->mk_my_orb("print_person_chart", array("person" => $cust_id, "rvs" => $rvs_ids, "center" => $arr["obj_inst"]->id())),
 					"caption" => t("Prindi"),
 					"target" => "_blank"
 				));
@@ -729,7 +729,7 @@ class spa_bookings_overview extends class_base
 					"lang_id" => array(),
 					"site_id" => array(),
 					"resource" => $room_id,
-					new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to))
+					new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to)),
 				);			
 				if ($arr["group"])
 				{
@@ -744,6 +744,7 @@ class spa_bookings_overview extends class_base
 				}
 				$books = "";
 				$reservation_ol = new object_list($ft);
+				$reservation_ol->sort_by(array("prop" => "start1"));
 				foreach($reservation_ol->arr() as $r)
 				{
 					$this->vars(array(
@@ -751,7 +752,7 @@ class spa_bookings_overview extends class_base
 						"time_to" => date("H:i", $r->prop("end")),
 						"customer" => $r->prop("customer.name"),
 						"products" => $r_inst->get_products_text($r, " "),
-						"cust_arrived" => $r->prop("client_arrived") ? t("Klient saabus") : ""
+						"cust_arrived" => ($r->prop("client_arrived") == 0 ? "" : ($r->prop("client_arrived") == 1 ? t("Klient saabus") : t("Klient ei saabunud")))
 					));
 					$books .= $this->parse("BOOKING");
 				}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.93 2007/01/10 12:35:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.94 2007/02/12 13:43:06 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -213,7 +213,7 @@ class releditor extends core
 		{
 			$cfg = get_instance(CL_CFGFORM);
 			$this->cfg_act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
-			$act_props = $act_props + $this->cfg_act_props;
+			//$act_props = $act_props + $this->cfg_act_props;
 		}
 
 		if (!empty($prop["choose_default"]))

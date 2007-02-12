@@ -1526,6 +1526,33 @@ class _int_object
 		return $val;	
 	}
 
+	function prop_is_translated($prop)
+	{
+		$trans = false;
+		$cur_lid = false;
+		if ($GLOBALS["cfg"]["user_interface"]["content_trans"] == 1 && ($cur_lid = aw_global_get("lang_id")) != $this->lang_id())
+		{
+			$trans = true;
+		}
+
+		if ($GLOBALS["cfg"]["user_interface"]["full_content_trans"] == 1 && ($cl = aw_global_get("ct_lang_id")) != $this->lang_id())
+		{
+			$trans = true;
+			$cur_lid = $cl;
+		}
+
+		if ($trans)
+		{
+			$trs = $this->obj["meta"]["translations"];
+			if (!empty($trs[$cur_lid]) && $this->obj["meta"]["trans_".$cur_lid."_status"] == 1)
+			{
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+
 	function trans_get_val_str($param)
 	{
 		if ($this->obj["oid"] != $this->obj["brother_of"])

@@ -175,6 +175,10 @@ class promo_display
 				$show_promo = false;
 			}
 
+			if (aw_ini_get("user_interface.hide_untranslated") && !$o->prop_is_translated("name"))
+			{
+				$show_promo = false;
+			}
 			$so = obj(aw_global_get("section"));
 			if ($o->meta("not_in_doc_view") == 1 && ($so->class_id() == CL_DOCUMENT || $_GET["docid"]))
 			{
@@ -274,6 +278,11 @@ class promo_display
 
 				foreach($docid as $d)
 				{
+					$do = obj($d);
+					if (aw_ini_get("user_interface.hide_untranslated") && !$do->prop_is_translated("content"))
+					{
+						continue;
+					}
 					if (($d_cnt % 2)  == 1)
 					{
 						if (file_exists($tpldir."/automatweb/documents/".$tpl_filename."2"))

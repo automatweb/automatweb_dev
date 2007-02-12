@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.139 2007/02/12 11:35:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.140 2007/02/12 13:43:05 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -482,7 +482,7 @@ class room extends class_base
  		$result = array();
   		foreach($reservations->arr() as $res)
   		{
-			if(($res->prop("client_arrived") == null)  && ($res->prop("verified") || $res->prop("deadline") > time()))
+			if(($res->prop("client_arrived") == 0)  && ($res->prop("verified") || $res->prop("deadline") > time()))
 			{
 				$result[$res->prop("end")] = $res->id();
 			}
@@ -1740,7 +1740,7 @@ class room extends class_base
 							}
 							$dx_p = array(
 								"url" => html::get_change_url($this->last_bron_id,array("return_url" => get_ru(),)),
-								"caption" => "<span><font color=#26466D>".$cus . " " . join($codes , ",")."</FONT></span>",
+								"caption" => "<span><font color=#26466D><u>".$cus . "</u> " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
 							);
 							

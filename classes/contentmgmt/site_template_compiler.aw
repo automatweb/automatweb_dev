@@ -1352,6 +1352,16 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 
+		if (aw_ini_get("user_interface.hide_untranslated"))
+		{
+			$ret .= $this->_gi()."if (!".$o_name."->prop_is_translated(\"name\"))\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."continue;\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
+
 			if (aw_ini_get("user_interface.full_content_trans"))
 			{
 				$ret .= $this->_gi()."if (!(".$o_name."->status() == STAT_ACTIVE || ".$o_name."->meta(\"trans_\".aw_global_get(\"ct_lang_id\").\"_status\")))\n";
