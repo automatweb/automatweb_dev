@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.140 2007/02/12 13:43:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.141 2007/02/12 15:07:56 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1816,8 +1816,19 @@ class room extends class_base
 							}
 							elseif($last_bron->prop("start1") < $start_step)
 							{
-								$d[$x] = "--//--";
-							}
+								if ($settings->prop("bron_no_popups"))
+								{
+									$d[$x] = html::href(array(
+										"url" => $dx_p["url"],
+										"caption" => "--//--"
+									));
+								}
+								else
+								{
+									$dx_p["caption"] = "--//--";
+									$d[$x] = html::popup($dx_p);
+								}
+							}				
 
 							if ($settings->prop("col_buffer") != "")
 							{
