@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.138 2007/02/09 08:26:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.139 2007/02/12 11:35:34 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -223,6 +223,9 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 	@property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
 	@caption Avamisajad
 
+	@property pauses type=releditor reltype=RELTYPE_PAUSES rel_id=first use_form=emb store=no
+	@caption Pausid
+
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
 	
@@ -273,6 +276,9 @@ caption Templeit
 
 @reltype SETTINGS value=13 clid=CL_ROOM_SETTINGS
 @caption Seaded
+
+@reltype PAUSES value=45 clid=CL_OPENHOURS
+@caption Pausid
 
 */
 
@@ -1520,13 +1526,20 @@ class room extends class_base
 		{
 			$this->openhours = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OPENHOURS");
 		}
+
+		if(is_oid($arr["obj_inst"]->prop("pauses")) && $this->can("view" , $arr["obj_inst"]->prop("pauses")))
+		{
+			$this->pauses = obj($arr["obj_inst"]->prop("pauses"));
+		}
+		if(!is_object($this->pauses))
+		{
+			$this->pauses = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PAUSES");
+		}
+
+
 		if(is_object($this->openhours))
 		{
  			$open = $this->open = $open_inst->get_times_for_date($this->openhours, $time);
-		}
-		if(!is_object($this->openhours))
-		{
-			$this->openhours = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OPENHOURS");
 		}
 		
 		$this->start = $arr["request"]["start"];
@@ -1628,6 +1641,20 @@ class room extends class_base
 				{
 					$visible=1;
 					$rowspan[$x] = 1;
+					if ($this->is_paused($start_step,$end_step))
+					{
+						if($settings->prop("col_buffer"))
+						{
+							$col[$x] = "#".$settings->prop("col_buffer");
+						}
+						else
+						{
+							"#EE6363";
+						}
+						$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
+						$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
+					}
+					else
 					if($this->check_if_available(array(
 						"room" => $arr["obj_inst"]->id(),
 						"start" => $start_step,
@@ -2071,6 +2098,36 @@ class room extends class_base
 		$start_minute = 0;
 		$opens = $this->open_inst->get_opening_time($this->openhours);
 		return array("start_hour" => $opens["hour"], "start_minute" => $opens["minute"]);
+	}
+
+	function is_paused($start, $end)
+	{
+		if(!$this->open_inst)
+		{
+			$this->open_inst = get_instance(CL_OPENHOURS);
+		}
+		$end_this = (date("H" , $end-1)*3600 + date("i" , $end-1)*60);
+		$start_this = (date("H" , $start)*3600 + date("i" , $start)*60);
+		
+		//kontrollib et tsükli lõpp äkki läheb järgmisesse päeva juba... siis oleks lõpp kuidagi varajane ja avatud oleku kontroll läheks puusse
+		if($start_this > $end_this)
+		{
+			$end_this+=24*3600;
+		}
+		if ($this->pauses)
+		{
+			$pauses = $this->open_inst->get_times_for_date($this->pauses, $start);
+			if(
+				is_array($pauses) && 
+				($pauses[0] || $pauses[1]) && 
+				($pauses[1]-1 >= $end_this) && 
+				($pauses[0] <= $start_this)
+			)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	function is_open($start,$end)
