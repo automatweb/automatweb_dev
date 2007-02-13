@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.49 2007/02/13 17:31:04 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.50 2007/02/13 17:32:55 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1646,7 +1646,7 @@ class conference_planning extends class_base
 					// catering shit 
 					foreach($val["main_catering"] as $k => $tmp)
 					{
-						if(!strlen($tmp["catering_start_time"]) && !strlen($tmp["catering_end_time"]) && !strlen($tmp["catering_attendees_no"]))
+						if(!strlen($tmp["catering_start_time"]) && !strlen($tmp["catering_end_time"]))
 						{
 							continue;
 						}
