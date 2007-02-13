@@ -354,7 +354,7 @@ class layout extends class_base
 
 			if (substr($r_k, 0, 8) == "sel_row=")
 			{
-				if (preg_match("/sel_row=(\d+);col=(\d+)/imsU", $r_k, $mt))
+				if (preg_match("/sel_row=(\d+);col=(\d+)/ims", $r_k, $mt))
 				{
 					$ge->set_cell_style($mt[1], $mt[2], $request["sel_style"]);
 				}
