@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.18 2007/02/12 13:43:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.19 2007/02/13 12:46:13 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -226,7 +226,7 @@ class spa_bookings_overview extends class_base
 				);
 				if (!empty($arr["request"]["rs_booker_name"]))
 				{
-					$bf["CL_RESERVATION.customer.name"] = "%".$arr["request"]["rs_booker_name"]."%";
+					$bf["CL_RESERVATION.RELTYPE_CUSTOMER.name"] = "%".$arr["request"]["rs_booker_name"]."%";
 				}
 				if ($from > 1)
 				{
@@ -291,7 +291,10 @@ class spa_bookings_overview extends class_base
 			{
 				foreach($books as $booking)
 				{
-					$ppl[$booking->prop("customer")][] = $booking;
+					foreach($booking->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+					{
+						$ppl[$c->prop("to")][] = $booking;
+					}
 				}
 			}
 
@@ -454,19 +457,26 @@ class spa_bookings_overview extends class_base
 		}
 		uasort($arr["rvs"], create_function('$a,$b', '$ao = obj($a); $bo = obj($b); return $ao->prop("start1") - $bo->prop("start1");'));
 		$b = obj(reset($arr["rvs"]));
-		$p = obj($_GET["person"]);
+		if (!$_GET["person"])
+		{
+			$p = obj($b->prop("customer"));
+		}
+		else
+		{
+			$p = obj($_GET["person"]);
+		}
 		list($y, $m, $d) = explode("-", $p->prop("birthday"));
 		$this->vars(array(
 			"bureau" => $b->createdby(),
-			"person" => $b->trans_get_val_str("customer"),
+			"person" => $p->trans_get_val("name"),
 			"package" => $b->trans_get_val_str("package"),
 			"from" => date("d.m.Y", $_from),
 			"to" => date("d.m.Y", $_to),
-			"person_comment" => $b->prop("customer.comment"),
-			"person_name" => $b->prop("customer.name"),
+			"person_comment" => $p->prop("comment"),
+			"person_name" => $p->prop("name"),
 			"person_birthday" => $y > 0 ? sprintf("%02d.%02d.%04d", $d, $m, $y) : "",
-			"person_ext_id" => $b->prop("customer.ext_id_alphanumeric"),
-			"person_gender" => $b->prop("customer.gender") == 1 ? t("Mees") : ($b->prop("customer.gender") === "2" ? t("Naine") : "")
+			"person_ext_id" => $p->prop("ext_id_alphanumeric"),
+			"person_gender" => $p->prop("gender") == 1 ? t("Mees") : ($p->prop("gender") === "2" ? t("Naine") : "")
 		));
 
 		$all_items = "";

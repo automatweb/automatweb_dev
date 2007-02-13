@@ -326,6 +326,26 @@
             <store>no</store>
             <field>products_tbl</field>
       </property>
+      <property>
+            <name>ppl_tb</name>
+            <table>objects</table>
+            <group>ppl</group>
+            <parent>general_down</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>ppl_tb</field>
+      </property>
+      <property>
+            <name>ppl</name>
+            <table>objects</table>
+            <group>ppl</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>ppl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_RESERVATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -345,6 +365,9 @@
             <products>
                   <caption>Tooted</caption>
             </products>
+            <ppl>
+                  <caption>Kliendid</caption>
+            </ppl>
       </groupinfo>
       <tableinfo>
             <planner>

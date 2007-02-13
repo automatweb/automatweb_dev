@@ -1,5 +1,5 @@
 <?PHp
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.45 2007/02/12 13:43:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.46 2007/02/13 12:46:12 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -133,6 +133,12 @@ caption Kokkuvõte
 @default group=products
 	
 	@property products_tbl type=table no_caption=1
+
+@groupinfo ppl caption="Kliendid"
+@default group=ppl
+	
+	@property ppl_tb type=toolbar no_caption=1 store=no
+	@property ppl type=table no_caption=1 store=no
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -287,6 +293,15 @@ class reservation extends class_base
 					$arr["obj_inst"]->prop("resource.name")
 				);
 				$prop["type"] = "text";
+				break;
+
+			case "customer":
+				if ($arr["request"]["set_cust"])
+				{
+					$prop["value"] = $arr["request"]["set_cust"];
+					$arr["obj_inst"]->set_prop("customer", $arr["request"]["set_cust"]);
+				}
+				$prop["onchange"] = "window.location.href='".aw_url_change_var("set_cust", null)."&set_cust='+this.options[this.selectedIndex].value";
 				break;
 		};
 		return $retval;
@@ -1492,5 +1507,51 @@ flush();
 		return $url;
 	}
 
+	function _get_ppl_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_CRM_PERSON),$arr["obj_inst"]->id(), 1 /* RELTYPE_CUSTOMER */);
+		$tb->add_delete_rels_button();
+	}
+
+	function _init_ppl_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => t("Meiliaadress"),
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_ppl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_ppl_t($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		{
+			$o = $c->to();
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"phone" => html::obj_change_url($o->prop("phone")),
+				"email" => html::obj_change_url($o->prop("email")),
+				"oid" => $o->id()
+			));
+		}
+	}
 }
 ?>

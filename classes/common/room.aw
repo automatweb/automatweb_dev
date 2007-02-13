@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.141 2007/02/12 15:07:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.142 2007/02/13 12:46:13 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1010,10 +1010,6 @@ class room extends class_base
 					"parent" => $parent,
 					"return_url" => get_ru(),
 					"calendar" => $cal,
-		//			"alias_to" => $arr["obj_inst"]->id(),
-	//				"reltype" => 9,
-//					"alias_to_org" => $arr["obj_inst"]->prop("customer"),
-//					"set_proj" => $arr["obj_inst"]->prop("project")
 				),
 				CL_RESERVATION
 			)
