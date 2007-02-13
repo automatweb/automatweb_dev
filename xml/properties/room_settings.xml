@@ -23,6 +23,7 @@
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
+            <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_RELATED_ROOM_FOLDER</reltype>
