@@ -120,7 +120,31 @@ FCKConfig.FontNames		= 'Arial;Comic Sans MS;Courier New;Tahoma;Times New Roman;V
 FCKConfig.FontSizes		= '1/xx-small;2/x-small;3/small;4/medium;5/large;6/x-large;7/xx-large' ;
 FCKConfig.FontFormats	= 'p;div;pre;address;h1;h2;h3;h4;h5;h6' ;
 
-FCKConfig.StylesXmlPath		= '/automatweb/js/fckeditor/fckstyles.xml' ;
+
+function aw_fck_get_url_contents(url)
+{
+	var req;
+	if (window.XMLHttpRequest) 
+	{
+		req = new XMLHttpRequest();
+		req.open('GET', url, false);
+		req.send(null);
+	} 
+	else 
+	if (window.ActiveXObject) 
+	{
+		req = new ActiveXObject('Microsoft.XMLHTTP');
+		if (req) 
+		{
+			req.open('GET', url, false);
+			req.send();
+		}
+	}
+	return req.responseText;
+}
+
+
+FCKConfig.StylesXmlPath		= aw_fck_get_url_contents('/orb.aw?class=doc&action=get_fckstyles_path');//'/automatweb/js/fckeditor/fckstyles.xml' ;
 FCKConfig.TemplatesXmlPath	= FCKConfig.EditorPath + 'fcktemplates.xml' ;
 
 FCKConfig.SpellChecker			= 'ieSpell' ;	// 'ieSpell' | 'SpellerPages'

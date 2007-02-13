@@ -49,5 +49,12 @@
 			</function>
 		</action>
 
+		<action name="get_fckstyles_path">
+			<function name="get_fckstyles_path">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

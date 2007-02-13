@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.149 2007/02/06 14:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.150 2007/02/13 11:18:01 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1750,6 +1750,21 @@ class doc extends class_base
 			$this->funnel_ct_content(array("obj_inst" => $o));
 		}
 		die("all done");
+	}
+
+	/**
+		@attrib name=get_fckstyles_path
+	**/
+	function get_fckstyles_path()
+	{
+		if (aw_ini_get("document.site_fck_styles"))
+		{
+			die('/css/fckstyles.xml');
+		}
+		else
+		{
+			die('/automatweb/js/fckeditor/fckstyles.xml');
+		}
 	}
 }
 ?>
