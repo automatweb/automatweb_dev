@@ -66,6 +66,15 @@
             <caption>Url, kuhu tagasi tulla eba&amp;amp;otilde;nnestunud makse puhul</caption>
       </property>
       <property>
+            <name>test</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <caption>testre&amp;amp;#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)</caption>
+      </property>
+      <property>
             <name>bank</name>
             <table>objects</table>
             <field>meta</field>

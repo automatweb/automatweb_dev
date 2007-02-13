@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.21 2007/02/01 13:01:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.22 2007/02/13 13:29:43 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -30,6 +30,9 @@
 	
 	@property cancel_url type=textbox
 	@caption Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul
+
+	@property test type=checkbox
+	@caption testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)
 
 @groupinfo bank caption="Pankade info"
 
@@ -94,12 +97,11 @@ class bank_payment extends class_base
 
 	//test keskkonnas läheb üldjuhul miskeid testandmeid vaja
 	var $test_priv_keys = array(
-		"seb"	=> "vesta.key.key",
+		"seb"	=> "seb_test_priv.pem",
 	);
 
 	/** 
 		@attrib api=1
-
  	**/
 	function bank_payment()
 	{
@@ -115,9 +117,7 @@ class bank_payment extends class_base
 
  	**/
 	function form_test_case($arr)
-	{
-		
-		
+	{/*
 		die('<form name="postform" id="postform" method="post" action=https://pos.estcard.ee/test-pos/servlet/iPAYServlet>
 			<input type="hidden" name=action value="gaf">
 			<input type="hidden" name=ver value="002">
@@ -138,6 +138,20 @@ class bank_payment extends class_base
 			<input type=submit value="maksa ilgelt pappi">
 			</form>'
 		);*/
+		//veel üks teist imiteerimaks panka
+		die('<form name="postform2" id="postform2" method="post" action=http://www.revalhotels.com/automatweb/bank_return.aw>
+			<input type="hidden" name=VK_SERVICE value="1101">
+			<input type="hidden" name=VK_VERSION value="008">
+			<input type="hidden" name=VK_SND_ID value="EYP">
+			<input type="hidden" name=VK_REC_ID value="testvpos">
+			<input type="hidden" name=VK_STAMP value="10002050618003">
+			<input type="hidden" name=VK_T_NO value="23888">
+			<input type="hidden" name=VK_REF value="285906">
+			<input type="hidden" name=VK_MAC value="b0Msf4RJn97KeESEPMK4S+t7DTszxdPxfOBTGSWhn2b+o71hv6rzMQq97+uBt5HILxHNxBpHv1aoywXjRA4/4q9XRAjP28vZ9mPUo0W/pBaI/tC6eteb6Cp6w443+mMadf6emb2rAtSDaod6pdwSxnIEzkMD6OzSccFI1TiuzjU=">
+			<input type="hidden" name=lang value="et">
+			<input type=submit value="maksa ilgelt pappi">
+			</form>
+		');
 	}
 	
 	/** 
@@ -212,6 +226,10 @@ class bank_payment extends class_base
 
 	function _add_object_data($payment,$data)
 	{
+		if($payment->prop("test"))
+		{
+			$data["test"] = 1;
+		}
 		if(!$data["priv_key"] && $payment->prop("private_key"))
 		{
 			$file_inst = get_instance(CL_FILE);
@@ -223,6 +241,16 @@ class bank_payment extends class_base
 			$file_inst = get_instance(CL_FILE);
 			$file = $file_inst->get_file_by_id($payment->prop("private_c_key"));
 			$data["priv_key"] = $file["content"];
+		}
+		if($data["test"] &&  $this->test_link[$data["bank_id"]])
+		{
+			$fp = fopen($this->cfg["site_basedir"]."/pank/".$data["bank_id"]."_test_priv.pem", "r");
+			$data = fread($fp, 8192);
+			fclose($fp);
+			if($data)
+			{
+				$arr["priv_key"] = $data;
+			}
 		}
 		if(!$data["expl"])
 		{
