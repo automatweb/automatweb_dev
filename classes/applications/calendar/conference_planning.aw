@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.50 2007/02/13 17:32:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.51 2007/02/13 17:43:58 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -403,7 +403,7 @@ class conference_planning extends class_base
 					"CATERING_TYPE" => $catering_types,
 					"MAIN_CATERING_ROW" => $cat_rows,
 					"event_type_text" => $sd["event_type_text"],
-					"event_type_chooser_".$sd["event_type_chooser"] => "CHECKED",
+					"event_type_chooser_".(($sd["event_type_chooser"])?$sd["event_type_chooser"]:1) => "CHECKED",
 					"delegates_no" => $sd["delegates_no"],
 					"door_sign" => $sd["door_sign"],
 					"persons_no" => $sd["persons_no"],
