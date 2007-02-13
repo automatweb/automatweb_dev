@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.13 2007/02/09 08:26:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.14 2007/02/13 14:00:28 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -60,6 +60,9 @@
 
 	@property col_closed type=colorpicker 
 	@caption Kinnise aja värvi
+
+	@property col_recent type=colorpicker 
+	@caption Hiljuti muudetud reserveeringud
 
 @groupinfo settings caption="Muud seaded"
 	@groupinfo settings_gen caption="Muud seaded" parent=settings

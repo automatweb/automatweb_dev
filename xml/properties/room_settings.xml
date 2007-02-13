@@ -157,6 +157,15 @@
             <caption>Kinnise aja v&amp;auml;rvi</caption>
       </property>
       <property>
+            <name>col_recent</name>
+            <table>objects</table>
+            <group>colours</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Hiljuti muudetud reserveeringud</caption>
+      </property>
+      <property>
             <name>buffer_time_string</name>
             <table>objects</table>
             <group>settings_gen</group>

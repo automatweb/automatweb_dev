@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.143 2007/02/13 13:33:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.144 2007/02/13 14:00:28 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1778,7 +1778,7 @@ class room extends class_base
 									"caption" => "+",
 									"url" => "#",
 									"title" => t("Klient saabus"),
-									"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 2))."\");alert(\"done\");"
+									"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 2))."\");"
 								));
 							}
 							else
@@ -1787,7 +1787,7 @@ class room extends class_base
 									"caption" => "-",
 									"url" => "#",
 									"title" => t("Klient ei saabunud"),
-									"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 1))."\");;alert(\"done\");"
+									"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 1))."\");"
 								));
 							}
 							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
@@ -1796,6 +1796,12 @@ class room extends class_base
 								$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
 								$d[$x] .= " ".$buf_tm;
 							}
+
+							if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
+							{
+								$col[$x] = "#".$settings->prop("col_recent");
+							}
+							else
 							if ($last_bron->prop("time_closed") == 1)
 							{
 								$col[$x] = "#".$settings->prop("col_closed");
