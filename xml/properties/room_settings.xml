@@ -39,6 +39,26 @@
             <caption>Kuva valitud tooteid kalendrivaates</caption>
       </property>
       <property>
+            <name>cal_show_prod_img</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva tootepilte kalendrivaates</caption>
+      </property>
+      <property>
+            <name>cal_show_prod_img_ord</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tootepildi j&amp;amp;auml;rjekorranumber, mida kuvada</caption>
+      </property>
+      <property>
             <name>disp_bron_len</name>
             <table>objects</table>
             <group>general</group>

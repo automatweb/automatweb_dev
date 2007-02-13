@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.144 2007/02/13 14:00:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.145 2007/02/13 14:40:07 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1743,6 +1743,16 @@ class room extends class_base
 											$product = obj($prod);
 											$codes[] = $product->prop("code");
 											$title .= " ".$product->name();
+											if ($settings->prop("cal_show_prod_img"))
+											{
+												$cons = $product->connections_from(array(
+													"type" => "RELTYPE_IMAGE",
+													"to.jrk" => $settings->prop("cal_show_prod_img_ord")
+												));
+												$con = reset($cons);
+												$ii = get_instance(CL_IMAGE);
+												$title .= $ii->make_img_tag_wl($con->prop("to"));
+											}
 										}
 									}
 								}

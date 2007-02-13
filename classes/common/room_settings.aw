@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.14 2007/02/13 14:00:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.15 2007/02/13 14:40:08 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -19,6 +19,12 @@
 
 	@property cal_show_prods type=checkbox ch_value=1 field=meta method=serialize 
 	@caption Kuva valitud tooteid kalendrivaates
+
+	@property cal_show_prod_img type=checkbox ch_value=1 field=meta method=serialize 
+	@caption Kuva tootepilte kalendrivaates
+
+	@property cal_show_prod_img_ord type=textbox size=5 field=meta method=serialize 
+	@caption Tootepildi j&auml;rjekorranumber, mida kuvada
 
 @property disp_bron_len type=checkbox ch_value=1 field=meta method=serialize
 @caption &Auml;ra kuva aja pikkust kalendris
