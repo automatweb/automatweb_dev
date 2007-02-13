@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.8 2007/02/09 13:57:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.9 2007/02/13 14:59:55 markop Exp $
 // trademark_add.aw - Kaubam&auml;rgi veebist lisamine 
 /*
 
@@ -223,6 +223,7 @@ class trademark_add extends class_base
 
 	function make_menu_link($o, $ref = NULL)
 	{
+		//arr($_SESSION["patent"]["checked"]);
 		//r($_SESSION);
 		if($_SESSION["patent"]["jrk"] == 0)
 		{
@@ -231,7 +232,7 @@ class trademark_add extends class_base
 		//arr($_GET["section"]);
 		//arr();
 		}
-		elseif(!($_GET["data_type"] <  ($_SESSION["patent"]["jrk"])))
+		elseif((!($_GET["data_type"] <  ($_SESSION["patent"]["jrk"])))|| (($_SESSION["patent"]["checked"]+1) >= $_SESSION["patent"]["jrk"]) )
 		{
 			$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
 		}

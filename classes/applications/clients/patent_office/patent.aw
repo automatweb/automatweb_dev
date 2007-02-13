@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.51 2007/02/12 09:32:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.52 2007/02/13 14:59:55 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -978,6 +978,11 @@ class patent extends class_base
 			if(!$_SESSION["patent"]["type"])
 			{
 				$js.='document.getElementById("reproduction_row").style.display = "none";';
+				$js.='document.getElementById("color_row").style.display = "none";';
+			}
+			if($_SESSION["patent"]["type"] == 1)
+			{
+				$js.='document.getElementById("wordmark_row").style.display = "none";';
 			}
 			if(!$_SESSION["patent"]["guaranty_trademark"])
 			{
@@ -998,6 +1003,7 @@ class patent extends class_base
 			if(!is_oid($_SESSION["patent"]["procurator"]))
 			{
 				$js.= 'document.getElementById("warrant_row").style.display = "none";';
+				$js.= 'window.opener.document.getElementById("remove_procurator").style.display = "none";';
 			}
 			if($_SESSION["patent"]["applicant_type"])
 			{
@@ -1332,6 +1338,7 @@ class patent extends class_base
 				"name" => "type",
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
 				document.getElementById("reproduction_row").style.display = "none";
+				document.getElementById("color_row").style.display = "none";
 				document.getElementById("wordmark_caption").innerHTML = "Kaubam&auml;rk";
 				document.getElementById("foreignlangelements_row").style.display = "";
 				 ',
@@ -1339,17 +1346,29 @@ class patent extends class_base
 				"value" => 1,
 		 		"checked" => ($_SESSION["patent"]["type"] == 1) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";  document.getElementById("foreignlangelements_row").style.display = "none";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa"; ',
+				"onclick" => 'document.getElementById("wordmark_row").style.display = ""; 
+				document.getElementById("wordmark_row").style.display = "none";
+				document.getElementById("foreignlangelements_row").style.display = "none";
+				document.getElementById("reproduction_row").style.display = "";
+				document.getElementById("color_row").style.display = "";
+				document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa"; ',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Kombineeritud m&auml;rk ").html::radiobutton(array(
 				"value" => 2,
 				"checked" => ($_SESSION["patent"]["type"] == 2) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";document.getElementById("foreignlangelements_row").style.display = "";',
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
+				document.getElementById("color_row").style.display = "";
+				document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";
+				document.getElementById("foreignlangelements_row").style.display = "";',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Ruumiline m&auml;rk ").html::radiobutton(array(
 				"value" => 3,
 				"checked" => ($_SESSION["patent"]["type"] == 3) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";document.getElementById("foreignlangelements_row").style.display = "";',
+				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
+				document.getElementById("color_row").style.display = "";
+				document.getElementById("reproduction_row").style.display = "";
+				document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";
+				document.getElementById("foreignlangelements_row").style.display = "";',
 			));
 		
 		$data["trademark_type"] = t("(kui taotlete kollektiivkaubam&auml;rki)").html::checkbox(array(
@@ -1399,13 +1418,25 @@ class patent extends class_base
 		$data["procurator"] = html::hidden(array(
 				"name" => "procurator",
 				"value" => $_SESSION["patent"]["procurator"],
-			))."<span id='procurator_name'> ".$procurator_name."</span> <span id='procurator_code'>".$procurator_code."</span>".html::href(array(
+			))."<span id='procurator_name'> ".$procurator_name."</span> <span id='procurator_code'>".$procurator_code."</span> ".html::href(array(
 			"caption" => $pop_str ,
 			"url"=> "javascript:void(0);",
 			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("procurator_popup", array("print" => 1 , "parent" => $dummy->prop("procurator_menu"))).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			
 		));
 		;
+		
+		$data["remove_procurator"] = html::href(array(
+			"caption" => t("Eemalda") ,
+			"url"=> "javascript:void(0);",
+			"onclick" => 'javascript:
+				window.document.getElementById("procurator").value= "";
+				window.document.getElementById("procurator_name").innerHTML= "";
+				window.document.getElementById("procurator_code").innerHTML= "";
+				window.document.getElementById("warrant_row").style.display = "none";
+				window.document.getElementById("remove_procurator").style.display = "none";'
+		));
+		
 /*		
 		html::select(array(
 			"options" => $options,
@@ -1516,9 +1547,7 @@ class patent extends class_base
 			"parent" => $arr["parent"], 
 			"class_id" => CL_CRM_PERSON,
 		));
-	
-	
-	
+
 		$tpl = "procurator_popup.tpl";
 		$is_tpl = $this->read_template($tpl,1);
 		$c = " ";
@@ -1533,6 +1562,7 @@ class patent extends class_base
 					window.opener.document.getElementById("procurator").value= "'.$val->id().'";
 					window.opener.document.getElementById("procurator_name").innerHTML= "'.$val->name().'";
 					window.opener.document.getElementById("procurator_code").innerHTML= "'.$val->prop("code").'";
+					window.opener.document.getElementById("remove_procurator").style.display = "";
 					window.opener.document.getElementById("warrant_row").style.display = "";
 					window.close()',
 			));
@@ -1543,6 +1573,7 @@ class patent extends class_base
 				window.opener.document.getElementById("procurator_name").innerHTML= "'.$val->name().'";
 				window.opener.document.getElementById("procurator_code").innerHTML= "'.$val->prop("code").'";
 				window.opener.document.getElementById("warrant_row").style.display = "";
+				window.opener.document.getElementById("remove_procurator").style.display = "";
 				window.close()\'>'.$val->name().' </a><br>';
 		//	$ret .= "<a href='javascript:void(0)' onClick='javascript:window.opener.changeform.exhibition_country.value=".$key."'>".$val."</a><br>";
 		}
@@ -1698,20 +1729,46 @@ class patent extends class_base
 				"caption" => t("Vali"),
 			));
 			
+			$products = new object_list();
+			if(strlen($_POST["class"]) == 1)
+			{
+				$_POST["class"] = "0".$_POST["class"];
+			}
 			$parents = new object_list(array(
 				"comment" => "%".$_POST["class"]."%",
 				"class_id" => CL_MENU ,
 				"lang_id" => array(),
 				"limit" => $limit,
 			));
-
-			$products = new object_list(array(
-				"name" => "%".$_POST["product"]."%",
-				"parent" => $parents->ids(),
-				"class_id" => CL_SHOP_PRODUCT ,
-				"lang_id" => array(),
-				"limit" => $limit,
+			$parents->sort_by(array(
+				"prop" => "name",
+				"order" => "asc"
 			));
+
+			foreach ($parents->ids() as $id)
+			{
+				$prod_list = new object_list(array(
+					"name" => "%".$_POST["product"]."%",
+					"parent" => $id,
+					"class_id" => CL_SHOP_PRODUCT ,
+					"lang_id" => array(),
+					"limit" => $limit,
+				));
+				$prod_list->sort_by(array(
+					"prop" => "name",
+					"order" => "asc"
+				));
+				
+				$products->add($prod_list);
+			}
+
+// 			$products = new object_list(array(
+// 				"name" => "%".$_POST["product"]."%",
+// 				"parent" => $parents->ids(),
+// 				"class_id" => CL_SHOP_PRODUCT ,
+// 				"lang_id" => array(),
+// 				"limit" => $limit,
+// 			));
 			//arr(sizeof($products->ids()));
 			if($is_tpl)
 			{
@@ -1847,10 +1904,14 @@ class patent extends class_base
 			"name" => "code",
 			"caption" => t("Isikukood/reg.kood"),
 		));
-		$t->define_field(array(
-			"name" => "representer",
-			"caption" => t("&Uuml;hine esindaja").'<a href="javascript:;" onClick="MM_openBrWindow(\'16338\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" /></a>',
-		));
+		
+		if(sizeof($_SESSION["patent"]["applicants"]) > 1)
+		{
+			$t->define_field(array(
+				"name" => "representer",
+				"caption" => t("&Uuml;hine esindaja").'<a href="javascript:;" onClick="MM_openBrWindow(\'16338\',\'\',\'width=720,height=540\')"><img src="/img/lk/ikoon_kysi.gif" border="0" /></a>',
+			));
+		}
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => t(""),
@@ -2111,6 +2172,14 @@ class patent extends class_base
 				$err.= t("Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud")."\n<br>";
 			}
 		}
+		if(!$err)
+		{
+			$_SESSION["patent"]["checked"] = $_GET["data_type"];
+		}
+		else
+		{
+			$_SESSION["patent"]["checked"] = $_GET["data_type"]-1;
+		}
 		return $err;
 	}
 	
@@ -2231,6 +2300,10 @@ class patent extends class_base
 		}
 		foreach($_SESSION["patent"]["applicants"] as $key => $val)
 		{
+			if(!$_SESSION["patent"]["representer"])
+			{
+				$_SESSION["patent"]["representer"] = $key;
+			}
 			$applicant = new object();
 			$applicant->set_parent($patent->id());
 			if($val["applicant_type"])
