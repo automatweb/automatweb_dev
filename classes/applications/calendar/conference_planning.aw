@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.45 2007/02/13 09:36:11 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.46 2007/02/13 15:37:26 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -359,7 +359,6 @@ class conference_planning extends class_base
 					$catering_no = $_GET["id"];
 					$edit = true;
 				}
-
 				foreach($sd["main_catering"] as $cat_no => $cat_data)
 				{					
 					$sc->vars(array(
@@ -392,11 +391,11 @@ class conference_planning extends class_base
 						"catering_type_text" => $sd["main_catering"][$_GET["id"]]["catering_type_text"],
 						"catering_start_time" => $sd["main_catering"][$_GET["id"]]["catering_start_time"],
 						"catering_end_time" => $sd["main_catering"][$_GET["id"]]["catering_end_time"],
-						"catering_attendees_no" => $sd["main_catering"][$_GET["id"]]["catering_attendees_no"],
 					));
 				}
 
 				$sc->vars(array(
+					"catering_attendees_no" => ($_t = $sd["main_catering"][$_GET["id"]]["catering_attendees_no"])?$_t:$sd["delegates_no"],
 					"EVT_TYPE" => $evt_type,
 					"TABLE_FORM" => $tab_forms,
 					"TECH_EQUIP" => $tech,
@@ -1599,7 +1598,9 @@ class conference_planning extends class_base
 					$data["dates"][0]["response_date"] = $val["response_date"];
 					$data["dates"][0]["decision_date"] = $val["decision_date"];
 					$data["dates"][0]["arrival_date"] = $val["arrival_date"];
+					$data["function_start_date"] = $val["arrival_date"]; // for 4th view
 					$data["dates"][0]["departure_date"] = $val["departure_date"];
+					$data["function_end_date"] = $val["arrival_date"]; // for 4th view
 					$data["dates"][0]["type"] = 0;
 					$data["open_for_alternative_dates"] = $val["open_for_alternative_dates"];
 					$data["accommondation_requirements"] = $val["accommondation_requirements"];
