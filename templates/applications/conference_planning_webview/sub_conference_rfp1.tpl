@@ -61,7 +61,7 @@
 			{VAR:LC_HAVE_ACC_REQ}:
 		</td>
 		<td>
-			<input name="sub[1][accommondation_requirements]" value="1" {VAR:accommondation_requirements} type="checkbox"/>
+			<input name="sub[1][needs_rooms]" value="1" {VAR:needs_rooms} type="checkbox"/>
 		</td>
 	</tr>
 </table>

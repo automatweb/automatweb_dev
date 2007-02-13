@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.47 2007/02/13 15:47:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.48 2007/02/13 17:15:01 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -216,7 +216,7 @@ class conference_planning extends class_base
 		{
 			case 1:
 				$sc->read_template("sub_conference_rfp1.tpl");				
-				$acc_req = ($sd["single_count"] > 0 || $sd["double_count"] > 0 || $sd["suite_count"] > 0 || $sd["accomondation_requirements"])?"CHECKED":"";
+				$acc_req = ($sd["single_count"] > 0 || $sd["double_count"] > 0 || $sd["suite_count"] > 0 || $sd["needs_rooms"])?"CHECKED":"";
 				$u = get_instance(CL_USER);
 				$org = $u->get_current_company();
 				$org = $this->can("view", $org)?obj($org):false;
@@ -228,7 +228,7 @@ class conference_planning extends class_base
 					"arrival_date" => $sd["dates"][0]["arrival_date"],
 					"departure_date" => $sd["dates"][0]["departure_date"],
 					"open_for_alternative_dates" => ($sd["open_for_alternative_dates"])?"CHECKED":"",
-					"accommondation_requirements" => $acc_req,
+					"needs_rooms" => $acc_req,
 				));
 
 				break;
@@ -311,10 +311,10 @@ class conference_planning extends class_base
 				}
 				$sc->vars($room_options);
 				$sc->vars(array(
-					"needs_rooms" => $sd["accommondation_requirements"]?"CHECKED":"",
+					"needs_rooms" => $sd["needs_rooms"]?"CHECKED":"",
 					"main_arrival_date" => $sd["dates"][0]["arrival_date"],
 					"main_departure_date" => $sd["dates"][0]["departure_date"],
-					"required" => $sd["accommondation_requirements"]?t("*"):NULL,
+					"required" => $sd["needs_rooms"]?t("*"):NULL,
 				));
 				break;
 			case 4:
@@ -417,6 +417,7 @@ class conference_planning extends class_base
 				break;
 			case 5:
 				//arr($sd);
+				arr($_SERVER);
 				$sc->read_template("sub_conference_rfp5.tpl");				
 				$c_inst = get_instance(CL_CONFERENCE);
 				$c_types = $c_inst->additional_conference_types();
@@ -555,9 +556,9 @@ class conference_planning extends class_base
 					);
 				}
 				$res = $this->all_mighty_search_engine(array(
-					"single_rooms" => ($sd["accommondation_requirements"])?$sd["single_count"]:false,
-					"double_rooms" => ($sd["accommondation_requirements"])?$sd["double_count"]:false,
-					"suites" => ($sd["accommondation_requirements"])?$sd["suite_count"]:false,
+					"single_rooms" => ($sd["needs_rooms"])?$sd["single_count"]:false,
+					"double_rooms" => ($sd["neeeds_rooms"])?$sd["double_count"]:false,
+					"suites" => ($sd["needs_rooms"])?$sd["suite_count"]:false,
 					"attendees_count" => $sd["attendees_no"],
 					"dates" => $altern_dates,
 					"oid" => $c_obj->id(),
@@ -662,7 +663,7 @@ class conference_planning extends class_base
 					"arrival_date" => $sd["dates"][0]["arrival_date"],
 					"departure_date" => $sd["dates"][0]["departure_date"],
 					"open_for_alternative_dates" => ($sd["open_for_alternative_dates"])?t("Yes"):t("No"),
-					"accommondation_requirements" => ($sd["accommondation_requirements"])?t("Yes"):t("No"),
+					"needs_rooms" => ($sd["needs_rooms"])?t("Yes"):t("No"),
 				));
 				// #2
 				// tablerows
@@ -1168,7 +1169,7 @@ class conference_planning extends class_base
 		$obj->set_prop("arrival_date", $data["dates"][0]["arrival_date"]);
 		$obj->set_prop("departure_date", $data["dates"][0]["departure_date"]);
 		$obj->set_prop("open_for_alternative_dates", $data["open_for_alternative_dates"]?1:0);
-		$obj->set_prop("accommondation_requirements", $data["accommondation_requirements"]?1:0);
+		//$obj->set_prop("accommondation_requirements", $data["accommondation_requirements"]?1:0); // deprecated
 		$obj->set_prop("needs_rooms", $data["needs_rooms"]?1:0);
 		$obj->set_prop("single_rooms", $data["single_count"]);
 		$obj->set_prop("double_rooms", $data["double_count"]);
@@ -1604,7 +1605,7 @@ class conference_planning extends class_base
 					$data["function_end_date"] = $val["arrival_date"]; // for 4th view
 					$data["dates"][0]["type"] = 0;
 					$data["open_for_alternative_dates"] = $val["open_for_alternative_dates"];
-					$data["accommondation_requirements"] = $val["accommondation_requirements"];
+					$data["needs_rooms"] = $val["needs_rooms"];
 					break;
 				case "2":
 
@@ -1623,7 +1624,7 @@ class conference_planning extends class_base
 
 					break;
 				case "3":
-					$data["accommondation_requirements"] = $val["needs_rooms"];
+					$data["needs_rooms"] = $val["needs_rooms"];
 					$data["single_count"] = $val["single_count"];
 					$data["double_count"] = $val["double_count"];
 					$data["suite_count"] = $val["suite_count"];

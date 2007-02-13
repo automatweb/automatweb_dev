@@ -35,7 +35,7 @@
 	</tr>
 	<tr>
 		<td>{VAR:LC_HAVE_ACC_REQ}:</td>
-		<td>{VAR:accommondation_requirements}</td>
+		<td>{VAR:needs_rooms}</td>
 	</tr>
 	<!-- SELECTED  DATES -->
 
