@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.44 2007/02/06 14:37:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.45 2007/02/13 09:36:11 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -564,6 +564,7 @@ class conference_planning extends class_base
 				));
 				$loc_inst = get_instance(CL_LOCATION);
 				$img_inst = get_instance(CL_IMAGE);
+				$overvr = array();
 				foreach($res as $loc_id => $data)
 				{
 					$loc = obj($loc_id);
@@ -575,6 +576,7 @@ class conference_planning extends class_base
 						$email = $sc->parse("RES_EMAIL");
 					}
 					$imgs = $loc_inst->get_images($loc_id);
+					$sc->vars($overvr);
 					foreach($imgs as $img)
 					{
 						$sc->vars(array(
@@ -582,6 +584,9 @@ class conference_planning extends class_base
 								"url" => $img_inst->get_url_by_id($img->id()),
 							)),
 						));
+						$overvr = array(
+							"IMG_".$img->ord() => "",
+						);
 					}
 					$inf = $loc_inst->get_add_info($loc_id);
 					$photo = $loc->prop("photo");
