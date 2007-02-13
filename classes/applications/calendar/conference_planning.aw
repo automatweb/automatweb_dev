@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.48 2007/02/13 17:15:01 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.49 2007/02/13 17:31:04 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -391,12 +391,12 @@ class conference_planning extends class_base
 						"catering_type_text" => $sd["main_catering"][$_GET["id"]]["catering_type_text"],
 						"catering_start_time" => $sd["main_catering"][$_GET["id"]]["catering_start_time"],
 						"catering_end_time" => $sd["main_catering"][$_GET["id"]]["catering_end_time"],
-						"catering_attendees_no" => $sd["main_catering"][$_GET["id"]]["catering_attendees_no"]
+						"catering_attendees_no" => $sd["main_catering"][$_GET["id"]]["catering_attendees_no"],
 					));
 				}
 
 				$sc->vars(array(
-					"catering_attendees_no" => ($_t = $sd["main_catering"][$_GET["id"]]["catering_attendees_no"])?$_t:$sd["delegates_no"],
+					"catering_attendees_no" => ($_t = $sd["main_catering"][$_GET["id"]]["catering_attendees_no"])?$_t:$sd["persons_no"],
 					"EVT_TYPE" => $evt_type,
 					"TABLE_FORM" => $tab_forms,
 					"TECH_EQUIP" => $tech,
@@ -416,8 +416,6 @@ class conference_planning extends class_base
 				));
 				break;
 			case 5:
-				//arr($sd);
-				arr($_SERVER);
 				$sc->read_template("sub_conference_rfp5.tpl");				
 				$c_inst = get_instance(CL_CONFERENCE);
 				$c_types = $c_inst->additional_conference_types();
