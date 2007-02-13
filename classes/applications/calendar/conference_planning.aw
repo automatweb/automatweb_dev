@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.46 2007/02/13 15:37:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.47 2007/02/13 15:47:40 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -391,6 +391,7 @@ class conference_planning extends class_base
 						"catering_type_text" => $sd["main_catering"][$_GET["id"]]["catering_type_text"],
 						"catering_start_time" => $sd["main_catering"][$_GET["id"]]["catering_start_time"],
 						"catering_end_time" => $sd["main_catering"][$_GET["id"]]["catering_end_time"],
+						"catering_attendees_no" => $sd["main_catering"][$_GET["id"]]["catering_attendees_no"]
 					));
 				}
 
