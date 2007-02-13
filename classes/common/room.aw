@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.142 2007/02/13 12:46:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.143 2007/02/13 13:33:24 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -323,6 +323,19 @@ class room extends class_base
 			"name"
 		);
 		$this->ui = get_instance(CL_USER);
+	}
+
+	/**
+		@attrib name=set_bron_cust_arrived_status
+		@param bron required 
+		@param status required
+	**/
+	function set_bron_cust_arrived_status($arr)
+	{
+		$o = obj($arr["bron"]);
+		$o->set_prop("client_arrived", $arr["status"]);
+		$o->save();
+		die("done");
 	}
 
 	function get_property($arr)
@@ -1756,6 +1769,26 @@ class room extends class_base
 								$dx_p["scrollbars"] = 1;
 								$dx_p["href"] = "#";
 								$d[$x] = html::popup($dx_p);
+							}
+
+							$d[$x] .= " ";
+							if ($last_bron->prop("client_arrived") == 1)
+							{
+								$d[$x] .= html::href(array(
+									"caption" => "+",
+									"url" => "#",
+									"title" => t("Klient saabus"),
+									"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 2))."\");alert(\"done\");"
+								));
+							}
+							else
+							{
+								$d[$x] .= html::href(array(
+									"caption" => "-",
+									"url" => "#",
+									"title" => t("Klient ei saabunud"),
+									"onClick" => "aw_get_url_contents(\"".$this->mk_my_orb("set_bron_cust_arrived_status", array("bron" => $last_bron->id(), "status" => 1))."\");;alert(\"done\");"
+								));
 							}
 							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
 							if ($settings->prop("col_buffer") != "")
@@ -4450,5 +4483,6 @@ class room extends class_base
 		}
 		return $ret;
 	}
+
 }
 ?>
