@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.52 2007/02/13 14:59:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.53 2007/02/13 15:20:09 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1402,7 +1402,6 @@ class patent extends class_base
 		{
 			$procurator = obj($_SESSION["patent"]["procurator"]);
 			$procurator_name = $procurator->name();
-			$procurator_code = $procurator->prop("code");
 			$data["procurator_text"] = $procurator_name;
 		}
 		
@@ -1418,7 +1417,7 @@ class patent extends class_base
 		$data["procurator"] = html::hidden(array(
 				"name" => "procurator",
 				"value" => $_SESSION["patent"]["procurator"],
-			))."<span id='procurator_name'> ".$procurator_name."</span> <span id='procurator_code'>".$procurator_code."</span> ".html::href(array(
+			))."<span id='procurator_name'> ".$procurator_name." </span>&nbsp;".html::href(array(
 			"caption" => $pop_str ,
 			"url"=> "javascript:void(0);",
 			"onclick" => 'javascript:window.open("'.$this->mk_my_orb("procurator_popup", array("print" => 1 , "parent" => $dummy->prop("procurator_menu"))).'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
@@ -1432,7 +1431,6 @@ class patent extends class_base
 			"onclick" => 'javascript:
 				window.document.getElementById("procurator").value= "";
 				window.document.getElementById("procurator_name").innerHTML= "";
-				window.document.getElementById("procurator_code").innerHTML= "";
 				window.document.getElementById("warrant_row").style.display = "none";
 				window.document.getElementById("remove_procurator").style.display = "none";'
 		));
@@ -1561,7 +1559,6 @@ class patent extends class_base
 				"onclick" => 'javascript:
 					window.opener.document.getElementById("procurator").value= "'.$val->id().'";
 					window.opener.document.getElementById("procurator_name").innerHTML= "'.$val->name().'";
-					window.opener.document.getElementById("procurator_code").innerHTML= "'.$val->prop("code").'";
 					window.opener.document.getElementById("remove_procurator").style.display = "";
 					window.opener.document.getElementById("warrant_row").style.display = "";
 					window.close()',
@@ -1571,7 +1568,6 @@ class patent extends class_base
 			$ret .= '<a href="javascript:void(0);" onClick=\'javascript:
 				window.opener.document.getElementById("procurator").value= "'.$val->id().'";
 				window.opener.document.getElementById("procurator_name").innerHTML= "'.$val->name().'";
-				window.opener.document.getElementById("procurator_code").innerHTML= "'.$val->prop("code").'";
 				window.opener.document.getElementById("warrant_row").style.display = "";
 				window.opener.document.getElementById("remove_procurator").style.display = "";
 				window.close()\'>'.$val->name().' </a><br>';
