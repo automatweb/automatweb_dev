@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.158 2007/01/10 12:58:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.159 2007/02/14 14:17:33 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3747,7 +3747,7 @@ class crm_person extends class_base
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => t("<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Vali</a>"),
+			"caption" => t("<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Arvele</a>"),
 			"align" => "center",
 		));
 	}
@@ -3877,7 +3877,11 @@ class crm_person extends class_base
 				"task" => html::obj_change_url($task),
 				"content" => $bi->_split_long_words($o->prop("content")),
 				"length" => number_format($o->prop("time_real"), 2, ',', ''),
-				"length_cust" => number_format($o->prop("time_to_cust"), 2, ',', ''),
+				"length_cust" => html::textbox(array(
+					"name" => "time_to_cust[".$o->id()."]",
+					"value" => number_format($o->prop("time_to_cust"), 2, ',', ''),
+					"size" => 4,
+				)),
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
 				"check" => $check,

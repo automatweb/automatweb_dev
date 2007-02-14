@@ -2454,6 +2454,12 @@ class crm_company extends class_base
 			case "my_stats_tb":
 				$_SESSION["create_bill_ru"] = get_ru();
 				$arr["prop"]["vcl_inst"]->add_button(array(
+					"name" => "save",
+					"img" => "save.gif",
+					"tooltip" => t("Salvesta"),
+					"action" => "save_time"
+				));
+				$arr["prop"]["vcl_inst"]->add_button(array(
 					"name" => "creab",
 					"img" => "save.gif",
 					"tooltip" => t("Loo arve"),
@@ -4520,6 +4526,36 @@ class crm_company extends class_base
 			."';</script>";
 			die($popup);
 		}
+	}
+
+	/**
+		@attrib name=save_time all_args=1
+	**/
+	function save_time($arr)
+	{
+		$sel = array();
+		foreach($arr as $k => $v)
+		{
+			if (substr($k, 0, 3) == "sel")
+			{
+				foreach($v as $v_id)
+				{
+					$sel[] = $v_id;
+				}
+			}
+		}
+		sort($sel);
+		if (count($sel))
+		{
+			$arr["sel"] = $sel;
+		}
+		foreach($arr["time_to_cust"] as $oid => $val)
+		{
+			$row = obj($oid);
+			$row->set_prop("time_to_cust" , str_replace(",", ".", $val));
+			$row->save();
+		}
+		return $_SESSION["create_bill_ru"];
 	}
 
 	/**

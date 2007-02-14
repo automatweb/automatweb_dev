@@ -153,6 +153,13 @@
 			</function>
 		</action>
 
+		<action name="save_time" all_args="1">
+			<function name="save_time">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="create_bill" all_args="1">
 			<function name="create_bill">
 				<arguments>
@@ -459,6 +466,7 @@
 				</arguments>
 			</function>
 		</action>
+
 
 	</class>
 </orb>
