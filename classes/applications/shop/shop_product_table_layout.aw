@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.13 2006/12/15 11:20:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.14 2007/02/14 15:48:00 markop Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -201,6 +201,14 @@ class shop_product_table_layout extends class_base
 		{
 			$sect = aw_global_get("ct_lang_lc")."/".$sect;
 		}
+		if($this->oc->prop("web_discount"))
+		{
+			$wd = $this->oc->prop("web_discount");
+		}
+		else
+		{
+			$wd = 0;
+		}
 		$this->vars(array(
 			"ROW" => $this->ft_str,
 			"ROW1" => $this->ft_str,
@@ -208,7 +216,7 @@ class shop_product_table_layout extends class_base
 			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => $sect, "oc" => $this->oc->id(), "return_url" => aw_global_get("REQUEST_URI")), "shop_order_cart"),
 			"HAS_ITEMS" => $hi,
 			"sel_menu_text" => $so->name(),
-			"web_discount" => $this->oc->prop("web_discount"),
+			"web_discount" => $wd,
 			"cart_total" => $cart_val,
 			"cart_discount_sum" => $cart_val*($this->oc->prop("web_discount")/100),
 			"cart_value_w_disc" => $cart_val - ($cart_val*($this->oc->prop("web_discount")/100))
