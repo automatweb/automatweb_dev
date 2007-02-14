@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.222 2007/02/12 13:43:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.223 2007/02/14 12:08:06 kristo Exp $
 
 /*
 
@@ -2148,7 +2148,7 @@ class site_show extends class_base
 			"date" => $this->time2date(time(), 2),
 			"date2" => $this->time2date(time(), 8),
 			"date_timestamp" => time(),
-			"date3" => date("d").". ".get_lc_month(date("n")).". ".date("Y"),
+			"date3" => date("d").". ".get_lc_month(date("n"))." ".date("Y"),
 			"date4" => get_lc_weekday(date("w")).", ".get_lc_date(time(),LC_DATE_FORMAT_LONG_FULLYEAR),
 			"date4_uc" => ucwords(get_lc_weekday(date("w"))).", ".get_lc_date(time(),LC_DATE_FORMAT_LONG_FULLYEAR),
 			"site_title" => strip_tags($this->site_title),
