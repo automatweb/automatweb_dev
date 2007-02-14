@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.11 2007/02/12 13:01:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.12 2007/02/14 15:13:52 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -193,13 +193,16 @@ class watercraft_search extends class_base
 
 				$watercraft_management = reset($watercraft_managements);
 
-				$locations = new object_list(array(
-					'class_id' => CL_CRM_ADDRESS,
-					'parent' => $watercraft_management->prop('locations')
-				));
-				foreach ( $locations->arr() as $id => $location )
+				if (!empty($watercraft_management))
 				{
-					$prop['options'][$id] = $location->name();
+					$locations = new object_list(array(
+						'class_id' => CL_CRM_ADDRESS,
+						'parent' => $watercraft_management->prop('locations')
+					));
+					foreach ( $locations->arr() as $id => $location )
+					{
+						$prop['options'][$id] = $location->name();
+					}
 				}
 				$prop['selected'] = $arr['request']['location'];
 
@@ -324,7 +327,7 @@ class watercraft_search extends class_base
 					'id' => $id,
 					'return_url' => get_ru()
 				), CL_WATERCRAFT),
-				'caption' => $item->name()
+				'caption' => htmlentities($item->name())
 			));
 
 			$manufacturer_str = '';
@@ -337,7 +340,7 @@ class watercraft_search extends class_base
 						'id' => $manufacturer_oid,
 						'return_url' => get_ru()
 					), CL_CRM_COMPANY),
-					'caption' => $manufacturer->name()
+					'caption' => htmlentities($manufacturer->name())
 				));
 			}
 			$location_str = '';
@@ -358,7 +361,7 @@ class watercraft_search extends class_base
 			{
 				$seller = new object($seller);
 				$seller_str = html::href(array(
-					'caption' => $seller->name(),
+					'caption' => htmlentities($seller->name()),
 					'url' => $this->mk_my_orb('change', array('id' => $seller->id()), $seller->class_id())
 				));
 			}
@@ -367,10 +370,10 @@ class watercraft_search extends class_base
 				'name' => $name_str,
 				'type' => $this->item_inst->item_type[$item->prop('item_type')],
 				'manufacturer' => $manufacturer_str,
-				'brand' => $item->prop('brand'),
-				'location' => $location_str,
+				'brand' => htmlentities($item->prop('brand')),
+				'location' => htmlentities($location_str),
 				'seller' => $seller_str,
-				'price' => $item->prop('price'),
+				'price' => htmlentities($item->prop('price')),
 				'visible' => ($item->prop('visible') == 1) ? t('Jah') : t('Ei'),
 				'archive' => ($item->prop('archived') == 1) ? t('Jah') : t('Ei'),
 			));
@@ -471,10 +474,15 @@ class watercraft_search extends class_base
 				$properties = array();
 				foreach ($item->properties() as $name => $value)
 				{
-					$properties['watercraft_'.$name] = $value;
+					$properties['watercraft_'.$name] = htmlentities($value);
 				}
 				$this->vars(array(
-					'watercraft_view_url' => aw_ini_get('site_baseurl').'/'.aw_global_get('section').'?watercraft_id='.$item_id.'&return_url='.get_ru()
+				//	'watercraft_view_url' => aw_ini_get('site_baseurl').'/'.aw_global_get('section').'?watercraft_id='.$item_id.'&return_url='.get_ru()
+					'watercraft_view_url' => aw_url_change_var(array(
+						'section' => aw_global_get('section'),
+						'watercraft_id' => $item_id,
+						'return_url' => (!empty($_GET['return_url'])) ? $_GET['return_url'] : get_ru()
+					))
 					) + $properties
 				);
 				

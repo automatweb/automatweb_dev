@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.10 2007/02/12 13:01:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.11 2007/02/14 15:13:51 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -1034,7 +1034,7 @@ class watercraft extends class_base
 			}
 			else
 			{
-				$vars['watercraft_'.$prop_name] = $prop_value;	
+				$vars['watercraft_'.$prop_name] = htmlentities($prop_value);
 			}
 		}
 		
@@ -1045,7 +1045,9 @@ class watercraft extends class_base
 			'parent' => $ob->id()
 		));
 		$images_str = '';
+		$first_image_str = '';
 		$images_count = 0;
+		$first_image = true;
 		foreach ($images->arr() as $image_id => $image)
 		{
 			$image_data = $image_inst->get_image_by_id($image_id);
@@ -1055,20 +1057,29 @@ class watercraft extends class_base
 				'watercraft_image_name' => $image_data['name'],
 				'watercraft_image_tag' => $image_inst->make_img_tag_wl($image_id), 
 			));
-			$images_str .= $this->parse('WATERCRAFT_IMAGE');
+			if ($first_image)
+			{
+				$first_image_str = $this->parse('WATERCRAFT_FIRST_IMAGE');
+				$first_image = false;
+			}
+			else
+			{
+				$images_str .= $this->parse('WATERCRAFT_IMAGE');
+			}
 			$images_count++;
 		}
 
 		if (empty($images_str))
 		{
 			$images_str = $this->parse('WATERCRAFT_NO_IMAGE');
+			$first_image_str = $this->parse('WATERCRAFT_NO_FIRST_IMAGE');
 		}
 
 		$vars['WATERCRAFT_IMAGE'] = $images_str;
+		$vars['WATERCRAFT_FIRST_IMAGE'] = $first_image_str;
 		$vars['images_count'] = $images_count;
 		$vars['name'] = $ob->prop('name');
-	//	$vars['return_url'] = $_GET['return_url'];
-		$vars['return_url'] = aw_url_change_var('watercraft_id', NULL, get_ru());
+		$vars['return_url'] = aw_url_change_var(array('watercraft_id' => NULL, 'return_url' => NULL), false, get_ru());
 
 		$this->vars($vars);
 		return $this->parse();
