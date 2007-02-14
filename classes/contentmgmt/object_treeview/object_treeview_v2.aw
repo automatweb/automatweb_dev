@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.107 2006/11/15 12:58:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.108 2007/02/14 14:40:39 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -2108,10 +2108,16 @@ class object_treeview_v2 extends class_base
 			if (1 == $isd["is_date"])
 			{
 				list($d, $m,$y) = explode(".", $comp_a);
-				$comp_a = mktime(0,0,0, $m,$d, $y);
+				if ($y > 0)
+				{
+					$comp_a = mktime(0,0,0, $m,$d, $y);
+				}
 
 				list($d, $m,$y) = explode(".", $comp_b);
-				$comp_b = mktime(0,0,0, $m,$d, $y);
+				if ($y > 0)
+				{
+					$comp_b = mktime(0,0,0, $m,$d, $y);
+				}
 			}
 			$ord = $isd["ord"];
 			if ($comp_a != $comp_b)
