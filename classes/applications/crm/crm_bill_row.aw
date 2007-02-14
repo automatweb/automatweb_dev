@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.6 2006/09/12 16:02:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.7 2007/02/14 17:16:03 markop Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
@@ -59,7 +59,7 @@
 @caption Isik
 
 @reltype EXPENSE value=5 clid=CL_CRM_EXPENSE
-@caption Toimetuse rida
+@caption Muu kulu
 
 */
 

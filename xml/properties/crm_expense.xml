@@ -42,6 +42,15 @@
             <type>date_select</type>
             <caption>Arvele m&amp;amp;auml;&amp;amp;auml;ramise kuup&amp;amp;auml;ev</caption>
       </property>
+      <property>
+            <name>who</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PEOPLE</reltype>
+            <caption>Kes tegi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_EXPENSE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -55,6 +64,11 @@
                   <clid>CL_CRM_BILL</clid>
                   <caption>Arve</caption>
             </BILL>
+            <PEOPLE>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Arve</caption>
+            </PEOPLE>
       </reltypes>
 </properties>
 

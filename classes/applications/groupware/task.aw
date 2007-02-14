@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.158 2007/01/24 13:30:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.159 2007/02/14 17:16:04 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1043,6 +1043,7 @@ class task extends class_base
 								$obj->set_name($entry["name"]);
 								$obj->set_prop("date" , $entry["date"]);
 								$obj->set_prop("cost" , $entry["cost"]);
+								$obj->set_prop("who" , $entry["who"]);
 								$obj->save();
 							}
 							continue;
@@ -1057,6 +1058,7 @@ class task extends class_base
 						$row->set_name($entry["name"]);
 						$row->set_prop("date", $entry["date"]);
 						$row->set_prop("cost", $entry["cost"]);
+						$row->set_prop("who" , $entry["who"]);	
 						$row->save();
 						$arr["obj_inst"]->connect(array(
 							"to" => $row->id(),
@@ -1064,7 +1066,6 @@ class task extends class_base
 						));
 					}
 				}
-				break;
 				
 			case "hrs_table":
 				$different_customers = 0;
@@ -1245,7 +1246,7 @@ class task extends class_base
 		$elib = get_instance('calendar/event_property_lib');
 		return $elib->participant_selector($arr);
 	}
-
+	
 	function _init_other_exp_t(&$t)
 	{
 		$t->define_field(array(
@@ -1264,6 +1265,12 @@ class task extends class_base
 //			"name" => "on_bill",
 //			"caption" => t("Arvele")
 //		));
+
+		$t->define_field(array(
+			"name" => "who",
+			"caption" => t("")
+		));
+
 		$t->define_field(array(
 			"name" => "bill",
 			"caption" => t("Arve nr.")
@@ -1281,6 +1288,10 @@ class task extends class_base
 		$dat[] = array();
 		$dat[] = array();
 		$nr = 1;
+		
+		$participians = $arr["obj_inst"]->prop("participants");
+		$pa_list = new object_list();
+		$pa_list->add($participians);
 		
 		$cs = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_EXPENSE",
@@ -1315,6 +1326,11 @@ class task extends class_base
 						"name" => "exp[".$ob->id()."][date]",
 						"value" => $ob->prop("date"),
 					)),
+					"who" => html::select(array(
+						"name" => "exp[".$ob->id()."][who]",
+						"value" => $ob->prop("who"),
+						"options" => $pa_list->names(),
+					)),
 					"on_bill" => html::checkbox(array(
 						"name" => "exp[".$ob->id()."][on_bill]",
 						"value" => 1,
@@ -1341,14 +1357,15 @@ class task extends class_base
 				"date" => html::date_select(array(
 					"name" => "exp[$nr][date]",
 				)),
+				"who" => html::select(array(
+					"name" => "exp[".$nr."][who]",
+					"options" => $pa_list->names(),
+				)),
 			));
 			$nr++;
 		}
 		$t->set_sortable(false);
 	}
-
-	
-
 	/**
 		@attrib name=error_popup
 		@param text optional
@@ -1902,6 +1919,22 @@ class task extends class_base
 		return " ";
 	}
 
+	function get_task_expenses($o)
+	{
+		$cs = $o->connections_from(array(
+			"type" => "RELTYPE_EXPENSE",
+		));
+		$expenses = new object_list();
+		foreach ($cs as $key => $ro)
+		{
+			$ob = $ro->to();
+			if($ob->class_id() == CL_CRM_EXPENSE)
+			{
+				$expenses->add($ob);
+			}
+		}
+		return $expenses;
+	}
 
 	function get_task_bill_rows($task, $only_on_bill = true, $bill_id = null)
 	{

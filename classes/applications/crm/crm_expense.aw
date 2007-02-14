@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.2 2006/09/12 16:02:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.3 2007/02/14 17:16:03 markop Exp $
 // crm_expense.aw - Kulu 
 /*
 
@@ -24,7 +24,13 @@
 	@property to_bill_date type=date_select
 	@caption Arvele m&auml;&auml;ramise kuup&auml;ev
 
+	@property who type=relpicker reltype=RELTYPE_PEOPLE
+	@caption Kes tegi
+
 	@reltype BILL value=1 clid=CL_CRM_BILL
+	@caption Arve
+
+	@reltype PEOPLE value=2 clid=CL_CRM_PERSON
 	@caption Arve
 
 */
