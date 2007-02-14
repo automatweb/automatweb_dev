@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.48 2007/02/12 09:03:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.49 2007/02/14 13:05:35 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -524,7 +524,7 @@ class room_reservation extends class_base
 					}
 					else
 					{
-						$data["menu_sum"][$curr] = $data["menu_sum"][$curr]+$product->prop("price")*$amount(100-$prod_discount);
+						$data["menu_sum"][$curr] = $data["menu_sum"][$curr]+$product->prop("price")*$amount*(100-$prod_discount);
 					}
 				}
 			}
@@ -1316,7 +1316,6 @@ class room_reservation extends class_base
 		$bank_payment = $loc->prop("bank_payment");
 		//$_SESSION["bank_payment"]["url"] = null;
 		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => join(" ," , $bron_ids)));
-		
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $total_sum,
@@ -1359,10 +1358,14 @@ class room_reservation extends class_base
 		{
 			$bad = 1;
 		}
-		if(!$bad && !$this->make_verified($arr["id"]))
+		if(!$bad)
 		{
-			$bad = 1;
-			//print t("Broneeringut ei &otilde;nnestunud kinnitada"); 
+			if(!$this->make_verified($arr["id"]))
+			{
+				//print t("Broneeringut ei &otilde;nnestunud kinnitada");//miski suurem kala 
+				$bad = 1;
+			}
+			
 		}
 		if(!$bad)
 		{
@@ -1379,32 +1382,57 @@ class room_reservation extends class_base
 		//returni peaks miski ilusa saidi urli andma
 	}
 
+	function get_other_addresses($o)
+	{
+		if ($this->can("view", $o->prop("resource")))
+		{
+			$res = obj($o->prop("resource"));
+			$sets = $res->prop("settings");
+			if (is_array($sets))
+			{
+				$sets = reset($sets);
+			}
+			if ($this->can("view", $sets))
+			{
+				$set = obj($sets);
+				$groups = $set->prop("order_mail_groups");
+				//arr($groups);
+				$gl = aw_global_get("gidlist_oid");//arr($gl);
+				//$grp = reset($gl);//arr($grp);
+				if(sizeof(array_intersect($gl,$groups)))
+				{
+					return $set->prop("order_mail_to");
+				}
+				else
+				{
+					return "";
+				}
+			}
+		}
+	}
+
 	function send_affirmation_mail($id)
 	{
 		if(!is_oid($id))
 		{
 			return "";
 		}
-		
 		$bron = obj($id);
-		
+
 		$email_subj = sprintf(t("Broneering: %s"), $id);
 		$mail_from_addr = "automatweb@automatweb.com";
 		$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
-		
-		$awm = get_instance("protocols/mail/aw_mail");
 		$_send_to = $bron->prop("customer.email.mail");
-		$html = "";
-		
-		if(!is_oid($id)) 
+		if($others = $this->get_other_addresses($bron))
 		{
-			$id = $_GET["id"];
+			$_send_to.=",".$others;
 		}
 		$tpl = "preview.tpl";
 		$this->read_site_template($tpl);
 		lc_site_load("room_reservation", &$this);
 		$this->vars($this->get_object_data($id));
 		$html =  $this->parse();
+		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->create_message(array(
 			"froma" => $mail_from_addr,
 			"fromn" => $mail_from_name,

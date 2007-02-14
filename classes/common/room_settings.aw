@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.16 2007/02/13 14:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.17 2007/02/14 13:05:35 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -126,6 +126,20 @@
 		@property del_mail_ct type=textarea rows=20 cols=50
 		@caption Meili sisu
 
+	@groupinfo order_email caption="Tellimusmeil" parent=email
+	@default group=order_email
+
+		@property order_mail_legend type=text
+		@caption Meili sisu legend
+
+		@property order_mail_to type=textbox
+		@caption Kellele tellimuse kohta meil saata
+
+		@property order_mail_groups type=select multiple=1
+		@caption Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse
+
+Meili sisu peab saama tõlkida, ilmselt seadetele Tõlgi vaade teha lisaks.
+
 @groupinfo grp_settings caption="Gruppide seaded"
 @default group=grp_settings
 
@@ -173,7 +187,18 @@ class room_settings extends class_base
 			case "del_mail_legend":
 				$prop["value"] = t("#ord# - tellimuse sisu");
 				break;
-				
+			case "order_mail_groups":
+				$ol = new object_list(array(
+					"class_id" => CL_GROUP,
+					"type" => "0",
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$prop["options"] = $ol->names();
+				break;
+			case "order_mail_legend":
+				$prop["value"] = t("sisu tuleb common/room/preview.tpl failist");
+				break;
 			//-- get_property --//
 		};
 		return $retval;

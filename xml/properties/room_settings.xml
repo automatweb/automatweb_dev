@@ -331,6 +331,34 @@
             <caption>Meili sisu</caption>
       </property>
       <property>
+            <name>order_mail_legend</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Meili sisu legend</caption>
+      </property>
+      <property>
+            <name>order_mail_to</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kellele tellimuse kohta meil saata</caption>
+      </property>
+      <property>
+            <name>order_mail_groups</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse</caption>
+      </property>
+      <property>
             <name>grp_settings</name>
             <table>objects</table>
             <group>grp_settings</group>
@@ -368,6 +396,10 @@
                   <caption>Kustutamine</caption>
                   <parent>email</parent>
             </delete_email>
+            <order_email>
+                  <caption>Tellimusmeil</caption>
+                  <parent>email</parent>
+            </order_email>
             <grp_settings>
                   <caption>Gruppide seaded</caption>
             </grp_settings>

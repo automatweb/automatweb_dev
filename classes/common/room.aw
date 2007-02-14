@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.145 2007/02/13 14:40:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.146 2007/02/14 13:05:35 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2517,7 +2517,7 @@ class room extends class_base
 			$reservation->set_parent($parent);
 			$reservation->set_prop("deadline", (time() + 15*60));
 			$reservation->set_prop("resource" , $room->id());
-			$reservation->save();
+//			$reservation->save();
 		}
 
 		if (is_array($arr["meta"]))
@@ -2564,7 +2564,7 @@ class room extends class_base
 			$customer->set_prop("firstname", $fn);
 			$customer->set_prop("lastname", $ln);
 			$customer->set_parent($parent);
-			$customer->save();
+		//	$customer->save();
 			if($data["phone"])
 			{
 				$phone = new object();
@@ -2597,12 +2597,12 @@ class room extends class_base
                         date("H:i", $reservation->prop("end")),
                         $reservation->prop("resource.name")
 		));
-		$reservation->save();
 		if($arr["not_verified"])
 		{
 			$reservation->set_prop("verified", 0);
-			$reservation->save();
+		//	$reservation->save();
 		}
+		$reservation->save();
 		return $reservation->id();
 	}
 
@@ -3298,7 +3298,7 @@ class room extends class_base
 		$this->prod_data = $o->meta("prod_data");
 		$parents = $this->get_prod_tree_ids($o);
 		
-		/*$parents_temp = array();
+		$parents_temp = array();
 		foreach($parents as $parent)
 		{
 			if($this->can("view" , $parent))
@@ -3316,7 +3316,7 @@ class room extends class_base
 		}
 		asort($parents_temp, SORT_NUMERIC);
 		$parents = $parents_temp;
-		*/
+		
 
 		$prods = array();
 		foreach($this->prod_data as $prod => $data)
@@ -3335,7 +3335,7 @@ class room extends class_base
                 ));
 		$p_ol->arr();
 		$p_ol->sort_by_cb(array(&$this, "__prod_sorter"));
-		return $p_ol;
+//		return $p_ol;
 
 		foreach($parents as $key => $jrk)
 		{

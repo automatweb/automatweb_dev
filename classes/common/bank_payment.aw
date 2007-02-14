@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.22 2007/02/13 13:29:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.23 2007/02/14 13:05:35 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -245,11 +245,11 @@ class bank_payment extends class_base
 		if($data["test"] &&  $this->test_link[$data["bank_id"]])
 		{
 			$fp = fopen($this->cfg["site_basedir"]."/pank/".$data["bank_id"]."_test_priv.pem", "r");
-			$data = fread($fp, 8192);
+			$file_data = fread($fp, 8192);
 			fclose($fp);
-			if($data)
+			if($file_data)
 			{
-				$arr["priv_key"] = $data;
+				$data["priv_key"] = $file_data;
 			}
 		}
 		if(!$data["expl"])
@@ -279,7 +279,6 @@ class bank_payment extends class_base
 		{
 			$data["amount"] = $data["units"]*$payment->prop("default_unit_sum");
 		}
-		
 		return $data;
 	}
 	
