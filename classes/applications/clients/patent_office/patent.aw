@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.53 2007/02/13 15:20:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.54 2007/02/14 10:21:52 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1003,7 +1003,7 @@ class patent extends class_base
 			if(!is_oid($_SESSION["patent"]["procurator"]))
 			{
 				$js.= 'document.getElementById("warrant_row").style.display = "none";';
-				$js.= 'window.opener.document.getElementById("remove_procurator").style.display = "none";';
+				$js.= 'document.getElementById("remove_procurator").style.display = "none";';
 			}
 			if($_SESSION["patent"]["applicant_type"])
 			{
