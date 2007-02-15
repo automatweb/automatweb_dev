@@ -46,8 +46,7 @@ class date
 
 	function get_lc_weekday($num, $short = false, $ucfirst = false)
 	{
-		$names = array("maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai", "sunnuntai");
-		$num--;
+		$names = array("sunnuntai", "maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai", "sunnuntai");
 		$name = ($ucfirst) ? ucfirst($names[$num]) : $names[$num];
 		return $short ? substr($name, 0, 2) : $name;
 	}
