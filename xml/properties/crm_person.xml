@@ -269,18 +269,6 @@
             <caption>Aadress</caption>
       </property>
       <property>
-            <name>comment</name>
-            <table>objects</table>
-            <group>contact</group>
-            <type>textarea</type>
-            <cols>40</cols>
-            <rows>3</rows>
-            <field>comment</field>
-            <parent>contact_l</parent>
-            <captionside>top</captionside>
-            <caption>Kontakt</caption>
-      </property>
-      <property>
             <name>work_contact</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
@@ -316,6 +304,18 @@
             <captionside>top</captionside>
             <field>rank</field>
             <caption>Ametinimetus</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>3</rows>
+            <field>comment</field>
+            <parent>work</parent>
+            <captionside>top</captionside>
+            <caption>Kontakt</caption>
       </property>
       <property>
             <name>cedit_phone_tbl</name>
@@ -356,6 +356,16 @@
             <no_caption>1</no_caption>
             <parent>cedit_url</parent>
             <field>cedit_url_tbl</field>
+      </property>
+      <property>
+            <name>cedit_adr_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ceditadr</parent>
+            <field>cedit_adr_tbl</field>
       </property>
       <property>
             <name>email</name>
@@ -1763,6 +1773,12 @@
                   <area_caption>URL</area_caption>
                   <group>contact</group>
             </cedit_url>
+            <ceditadr>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Aadressid</area_caption>
+                  <group>contact</group>
+            </ceditadr>
             <docs_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.159 2007/02/14 14:17:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.160 2007/02/15 12:45:27 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -117,9 +117,6 @@ caption Msn/yahoo/aol/icq
 			@property address type=relpicker reltype=RELTYPE_ADDRESS parent=contact_l captionside=top
 			@caption Aadress
 
-			@property comment type=textarea cols=40 rows=3 table=objects field=comment parent=contact_l captionside=top
-			@caption Kontakt
-
 
 	@layout work_super type=vbox  closeable=1 area_caption=T&ouml;&ouml;koht
 
@@ -134,6 +131,8 @@ caption Msn/yahoo/aol/icq
 			@property rank type=relpicker reltype=RELTYPE_RANK automatic=1 parent=work captionside=top
 			@caption Ametinimetus
 
+			@property comment type=textarea cols=40 rows=3 table=objects field=comment parent=work captionside=top
+			@caption Kontakt
 
 
 		@layout ceditphf type=hbox width=50%:50%
@@ -158,6 +157,10 @@ caption Msn/yahoo/aol/icq
 			@layout cedit_url type=vbox parent=ceditemlurl closeable=1 area_caption=URL
 
 				@property cedit_url_tbl type=table store=no no_caption=1 parent=cedit_url store=no
+
+		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
+
+			@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
 
 
 @property email type=hidden table=objects field=meta method=serialize
@@ -722,6 +725,7 @@ class crm_person extends class_base
 			case "cedit_telefax_tbl":
 			case "cedit_url_tbl":
 			case "cedit_email_tbl":
+			case "cedit_adr_tbl":
 				static $i;
 				if (!$i)
 				{
@@ -797,6 +801,9 @@ class crm_person extends class_base
 				}
 				break;
 
+
+			case "address":
+				return PROP_IGNORE;
 		};
 		return $retval;
 	}
@@ -808,6 +815,9 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "address":
+				return PROP_IGNORE;
+
 			case "_bd_upg":
 				return PROP_IGNORE;
 
@@ -1338,6 +1348,22 @@ class crm_person extends class_base
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_email_tbl($t, $arr);
+				break;
+
+			case "cedit_adr_tbl":
+				$i = get_instance("applications/crm/crm_company_cedit_impl");
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"aadress" => t("T&auml;nav"),
+					"postiindeks" => t("Postiindeks"),
+					"linn" => t("Linn"),
+					"maakond" => t("Maakond"),
+					"piirkond" => t("Piirkond"),
+					"riik" => t("Riik")
+				);
+				$i->init_cedit_tables(&$t, $fields);
+				$i->_get_adr_tbl($t, $arr);
+				$t->table_caption = t("Aadressid");
 				break;
 		}
 		return $retval;

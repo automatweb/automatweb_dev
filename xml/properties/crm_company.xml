@@ -913,6 +913,16 @@
             <field>cedit_bank_account_tbl</field>
       </property>
       <property>
+            <name>cedit_adr_tbl</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ceditadr</parent>
+            <field>cedit_adr_tbl</field>
+      </property>
+      <property>
             <name>contact</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
@@ -935,6 +945,17 @@
             <caption>Telefoni v&amp;amp;otilde;tab vastu</caption>
       </property>
       <property>
+            <name>bill_due_days</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_bill_due_days</field>
+            <parent>ce_other_top</parent>
+            <captionside>top</captionside>
+            <caption>Makset&amp;amp;auml;htaeg p&amp;amp;auml;evades</caption>
+      </property>
+      <property>
             <name>currency</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
@@ -955,17 +976,6 @@
             <parent>ce_other_bot</parent>
             <captionside>top</captionside>
             <caption>&amp;amp;Uuml;marda</caption>
-      </property>
-      <property>
-            <name>bill_due_days</name>
-            <table>kliendibaas_firma</table>
-            <group>cedit</group>
-            <type>textbox</type>
-            <size>5</size>
-            <field>aw_bill_due_days</field>
-            <parent>ce_other_bot</parent>
-            <captionside>top</captionside>
-            <caption>Makset&amp;amp;auml;htaeg p&amp;amp;auml;evades</caption>
       </property>
       <property>
             <name>phone_id</name>
@@ -3697,6 +3707,12 @@
                   <area_caption>Pangaarved</area_caption>
                   <group>cedit</group>
             </ceditbank>
+            <ceditadr>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Aadressid</area_caption>
+                  <group>cedit</group>
+            </ceditadr>
             <cedit_layout_other>
                   <type>vbox</type>
                   <area_caption>Andmed</area_caption>

@@ -722,4 +722,233 @@ class crm_company_cedit_impl extends core
 			"align" => "center",
 		));
 	}
+
+	function _get_adr_tbl(&$t, $arr)
+	{
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_ADDRESS",
+		));
+
+		$pp = "contact";
+		if (!$arr["obj_inst"]->is_property("contact"))
+		{
+			$pp = "address";
+		}
+
+		foreach($conns as $conn)
+		{
+			$obj = $conn->to();
+			$chooser = html::radiobutton(array(
+				"name" => "cedit[".$arr["prop"]["name"]."]",
+				"value" => $obj->id(),
+				"checked" => $arr["obj_inst"]->prop($pp) == $obj->id()?1:0,
+			));
+			$ch_url = aw_url_change_var("cedit_tbl_edit_a", $obj->id());
+
+			if ($arr["request"]["cedit_tbl_edit_a"] == $obj->id())
+			{
+				$t->define_data(array(
+					"sel" => $obj->id(),
+					"choose" => $chooser,
+					"aadress" => html::textbox(array(
+						"name" => "cedit_adr[".$obj->id()."][aadress]",
+						"value" => $obj->prop("aadress"),
+						"size" => 15
+					)),
+					"postiindeks" => html::textbox(array(
+						"name" => "cedit_adr[".$obj->id()."][postiindeks]",
+						"value" => $obj->prop("postiindeks"),
+						"size" => 15
+					)),
+					"linn" => html::textbox(array(
+						"name" => "cedit_adr[".$obj->id()."][linn]",
+						"value" => $obj->prop("linn.name"),
+						"size" => 15
+					)),
+					"maakond" => html::textbox(array(
+						"name" => "cedit_adr[".$obj->id()."][maakond]",
+						"value" => $obj->prop("maakond.name"),
+						"size" => 15
+					)),
+					"piirkond" => html::textbox(array(
+						"name" => "cedit_adr[".$obj->id()."][piirkond]",
+						"value" => $obj->prop("piirkond.name"),
+						"size" => 15
+					)),
+					"riik" => html::textbox(array(
+						"name" => "cedit_adr[".$obj->id()."][riik]",
+						"value" => $obj->prop("riik.name"),
+						"size" => 15
+					)),
+					"change" => html::href(array(
+						"caption" => t("Muuda"),
+						"url" => $ch_url,
+					)),
+				));
+			}
+			else
+			{
+				$t->define_data(array(
+					"sel" => $obj->id(),
+					"choose" => $chooser,
+					"aadress" => $obj->prop("aadress"),
+					"postiindeks" => $obj->prop_str("postiindeks"),
+					"linn" => $obj->prop("linn.name"),
+					"maakond" => $obj->prop("maakond.name"),
+					"piirkond" => $obj->prop("piirkond.name"),
+					"riik" => $obj->prop("riik.name"),
+					"change" => html::href(array(
+						"caption" => t("Muuda"),
+						"url" => $ch_url,
+					)),
+				));
+			}
+		}
+		if (!$arr["request"]["cedit_tbl_edit_a"])
+		{
+			$chooser = html::radiobutton(array(
+				"name" => "cedit[".$arr["prop"]["name"]."]",
+				"value" => -1,
+				"checked" => $this->can("view", $arr["obj_inst"]->prop($pp)) ? 0 : 1,
+			));
+			$t->define_data(array(
+				"choose" => $chooser,
+				"aadress" => html::textbox(array(
+					"name" => "cedit_adr[-1][aadress]",
+					"value" => "",
+					"size" => 15
+				)),
+				"postiindeks" => html::textbox(array(
+					"name" => "cedit_adr[-1][postiindeks]",
+					"value" => "",
+					"size" => 15
+				)),
+				"linn" => html::textbox(array(
+					"name" => "cedit_adr[-1][linn]",
+					"value" => "",
+					"size" => 15
+				)),
+				"maakond" => html::textbox(array(
+					"name" => "cedit_adr[-1][maakond]",
+					"value" => "",
+					"size" => 15
+				)),
+				"piirkond" => html::textbox(array(
+					"name" => "cedit_adr[-1][piirkond]",
+					"value" => "",
+					"size" => 15
+				)),
+				"riik" => html::textbox(array(
+					"name" => "cedit_adr[-1][riik]",
+					"value" => "",
+					"size" => 15
+				)),
+				"change" => ""
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	function _set_cedit_adr_tbl($arr)
+	{
+		foreach(safe_array($arr["request"]["cedit_adr"]) as $id => $data)
+		{
+			if ($this->can("view", $id))
+			{
+				$o = obj($id);
+				$o->set_prop("aadress", $data["aadress"]);
+				$o->set_prop("postiindeks", $data["postiindeks"]);
+				$this->set_rel_by_val($o, "linn", $data["linn"]);
+				$this->set_rel_by_val($o, "maakond", $data["maakond"]);
+				$this->set_rel_by_val($o, "piirkond", $data["piirkond"]);
+				$this->set_rel_by_val($o, "riik", $data["riik"]);
+				$i = get_instance(CL_CRM_ADDRESS);
+				$o->set_name($i->get_name_from_adr($o));
+				$o->save();
+			}
+			else
+			if ($id == -1)
+			{
+				$o = obj();
+				$o->set_parent($arr["obj_inst"]->id());
+				$o->set_class_id(CL_CRM_ADDRESS);
+				$has = false;
+				foreach($data as $k => $v)
+				{
+					if ($v != "")
+					{
+						$has = true;
+					}
+				}
+				$o->set_prop("aadress", $data["aadress"]);
+				$o->set_prop("postiindeks", $data["postiindeks"]);
+				$this->set_rel_by_val($o, "linn", $data["linn"]);
+				$this->set_rel_by_val($o, "maakond", $data["maakond"]);
+				$this->set_rel_by_val($o, "piirkond", $data["piirkond"]);
+				$this->set_rel_by_val($o, "riik", $data["riik"]);
+
+				if ($has)
+				{
+					$i = get_instance(CL_CRM_ADDRESS);
+					$o->set_name($i->get_name_from_adr($o));
+					$o->save();
+					$arr["obj_inst"]->connect(array(
+						"to" => $o->id(),
+						"type" => "RELTYPE_ADDRESS"
+					));
+					if ($arr["request"]["cedit"]["cedit_adr_tbl"] == -1)
+					{
+						if ($arr["obj_inst"]->is_property("contact"))
+						{
+							$arr["obj_inst"]->set_prop("contact", $o->id());
+						}
+						else
+						{
+							$arr["obj_inst"]->set_prop("address", $o->id());
+						}
+					}
+				}
+			}
+		}
+
+		if ($this->can("view", $arr["request"]["cedit"]["cedit_adr_tbl"]))
+		{
+			if ($arr["obj_inst"]->is_property("contact"))
+			{
+				$arr["obj_inst"]->set_prop("contact", $arr["request"]["cedit"]["cedit_adr_tbl"]);
+			}
+			else
+			{
+				$arr["obj_inst"]->set_prop("address", $arr["request"]["cedit"]["cedit_adr_tbl"]);
+			}
+		}
+	}
+
+	function set_rel_by_val($o, $prop, $val)
+	{
+		$pl = $o->get_property_list();
+		$reli = $o->get_relinfo();
+		$p = $pl[$prop];
+		$clid = $reli[$p["reltype"]]["clid"][0];
+		$ol = new object_list(array(
+			"class_id" => $clid,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $val
+		)); 
+		if ($ol->count())
+		{
+			$fo = $ol->begin();
+		}
+		else
+		{
+			$fo = obj();
+			$fo->set_class_id($clid);
+			$fo->set_parent($o->id() ? $o->id() : $_POST["id"]);
+			$fo->set_name($val);
+			$fo->save();
+		}
+		$o->set_prop($prop, $fo->id());
+	}
+
 }

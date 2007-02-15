@@ -346,6 +346,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 			@property cedit_bank_account_tbl type=table store=no no_caption=1 parent=ceditbank
 
+		@layout ceditadr type=vbox closeable=1 area_caption=Aadressid
+
+			@property cedit_adr_tbl type=table store=no no_caption=1 parent=ceditadr
+
 	@layout cedit_layout_other type=vbox area_caption=Andmed closeable=1 
 
 		@layout ce_oth_split type=hbox parent=cedit_layout_other
@@ -358,6 +362,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 				@property receptionist_name type=textbox field=meta method=serialize parent=ce_other_top captionside=top
 				@caption Telefoni v&otilde;tab vastu
 
+				@property bill_due_days type=textbox size=5 table=kliendibaas_firma field=aw_bill_due_days parent=ce_other_top captionside=top
+				@caption Makset&auml;htaeg p&auml;evades
+
 			@layout ce_other_bot type=vbox parent=ce_oth_split
 
 				@property currency type=relpicker reltype=RELTYPE_CURRENCY table=kliendibaas_firma field=aw_currency parent=ce_other_bot captionside=top
@@ -366,8 +373,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 				@property round type=textbox method=serialize field=meta parent=ce_other_bot captionside=top
 				@caption &Uuml;marda
 
-				@property bill_due_days type=textbox size=5 table=kliendibaas_firma field=aw_bill_due_days parent=ce_other_bot captionside=top
-				@caption Makset&auml;htaeg p&auml;evades
 
 	@property phone_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
 	@property telefax_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
@@ -1556,6 +1561,22 @@ class crm_company extends class_base
 				$t->table_caption = t("Pangaarved");
 				break;
 
+			case "cedit_adr_tbl":
+				$i = get_instance("applications/crm/crm_company_cedit_impl");
+				$t = &$data["vcl_inst"];
+				$fields = array(
+					"aadress" => t("T&auml;nav"),
+					"postiindeks" => t("Postiindeks"),
+					"linn" => t("Linn"),
+					"maakond" => t("Maakond"),
+					"piirkond" => t("Piirkond"),
+					"riik" => t("Riik")
+				);
+				$i->init_cedit_tables(&$t, $fields);
+				$i->_get_adr_tbl($t, $arr);
+				$t->table_caption = t("Aadressid");
+				break;
+
 			// END CEDIT tab
 
 			case "client_category":
@@ -1809,26 +1830,7 @@ class crm_company extends class_base
 				break;
 
 			case 'contact':
-				// kuna relpickeril on nyydseks change nupp siis change link captionist eemaldatud [voldemar 2006/3/22]
-				//hägish, panen nime kõrval html lingi ka
-				// if(sizeof($data['options']) > 1)
-				// {
-					// $url = $this->mk_my_orb('change',array(
-						// 'id' => max(array_keys($data['options'])),
-						// "return_url" => get_ru(),
-					// ),CL_CRM_ADDRESS);
-					// $data['caption'] .= '<br><a href="'.$url.'">'.t("Muuda").'</a>';
-				// }
-				// else
-				// {
-					// $url = $this->mk_my_orb('new',array(
-						// 'alias_to' => $arr['obj_inst']->id(),
-						// 'parent' => $arr['obj_inst']->id(),
-						// 'reltype' => 3, //crm_company.reltype_address
-						// "return_url" => get_ru(),
-					// ),CL_CRM_ADDRESS);
-					// $data['caption'] .= '<br><a href="'.$url.'">'.t("Lisa").'</a>';
-				// }
+				return PROP_IGNORE;
 				break;
 
 			case "firmajuht":
@@ -2516,6 +2518,7 @@ class crm_company extends class_base
 			case "cedit_url_tbl":
 			case "cedit_email_tbl":
 			case "cedit_bank_account_tbl":
+			case "cedit_adr_tbl":
 				static $i;
 				if (!$i)
 				{
@@ -2649,6 +2652,9 @@ class crm_company extends class_base
 					$rel->save();
 				}
 				break;
+
+			case "contact":
+				return PROP_IGNORE;
 		}
 		return PROP_OK;
 	}
