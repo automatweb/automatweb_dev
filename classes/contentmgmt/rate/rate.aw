@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.28 2006/09/27 15:03:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.29 2007/02/15 19:04:25 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -195,7 +195,6 @@ class rate extends class_base
 		{
 			$rates = $rate;
 		}
-
 		if (!is_oid($oid) || !$this->can('view', $oid) || !count($rates))
 		{
 			header("Location: $return_url");
@@ -203,10 +202,15 @@ class rate extends class_base
 		}
 		$o = obj($oid);
 		$rs = $o->meta("__ratings");
-		
 		//if (!isset($ro[$oid]))
 		foreach ($rates as $rate_id => $rate)
 		{
+			if ($rate_id == 0)
+			{
+				$rs = get_instance(CL_RATE_SCALE);
+				$rate_id_ar = $rs->get_scale_objs_for_obj($oid, true);
+				$rate_id = reset($rate_id_ar);
+			}
 			if (!is_numeric($rate) || !is_numeric($rate_id))
 			{
 				continue;
