@@ -465,7 +465,7 @@
             <TRADEMARK_STATUS>
                   <value>15</value>
                   <clid>CL_TRADEMARK_STATUS</clid>
-                  <caption>Volikiri</caption>
+                  <caption>Staatus</caption>
             </TRADEMARK_STATUS>
       </reltypes>
 </properties>

@@ -147,7 +147,7 @@
             <EXPENSE>
                   <value>5</value>
                   <clid>CL_CRM_EXPENSE</clid>
-                  <caption>Toimetuse rida</caption>
+                  <caption>Muu kulu</caption>
             </EXPENSE>
       </reltypes>
 </properties>
