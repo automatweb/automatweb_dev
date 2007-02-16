@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.30 2007/02/16 12:33:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.31 2007/02/16 15:15:31 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -208,51 +208,69 @@ class rate extends class_base
 		}
 		$o = obj($oid);
 		$rs = $o->meta("__ratings");
-		
-		//if (!isset($ro[$oid]))
-		foreach ($rates as $rate_id => $rate)
+
+		// CHECK THE KUUKI!!
+		$rated_objs = unserialize($_COOKIE["rated_objs"]);
+		if (!isset($rated_objs[$oid]))
 		{
-			if (!is_numeric($rate) || !is_numeric($rate_id))
-			{
-				continue;
-			}
-			// Update ratings
-			$this->db_query("
-				INSERT INTO ratings(oid, rating,".($rate_id?' rate_id,':'')." tm, uid, ip) 
-				VALUES ($oid,$rate,".($rate_id?"$rate_id,":'').time().",'".aw_global_get("uid")."','".aw_global_get("REMOTE_ADDR")."')
-			");
+			$rated_objs[$oid] = 1;
+			setcookie ("rated_objs", serialize($rated_objs) , time() + 24*3600*1000, "/");
 
-			// Fetch and cache statistics
-			$q = "SELECT COUNT(oid) AS total FROM rating_sum WHERE oid = $oid". ($rate_id?" and rate_id = $rate_id":'');
-			if($this->db_fetch_field($q, "total") > 0)
-			{
-				$this->db_query("UPDATE rating_sum SET divider=(divider+1), sum=(sum+".(int)$rate."), avg=(sum/divider) WHERE oid=$oid".($rate_id?" AND rate_id = $rate_id":''));
-			}
-			else
-			{
-				$this->db_query("INSERT INTO rating_sum (oid,".($rate_id?" rate_id,":'')." divider, sum, avg) VALUES($oid,".($rate_id?"$rate_id,":'')." 1, $rate, $rate)");
-			}
-			$ro[$oid] = $rate;
 
-			$stat_query = "SELECT MIN(rating) AS min,MAX(rating) AS max,AVG(rating) AS avg FROM ratings WHERE oid = $oid" . ($rate_id?" AND rate_id = $rate_id":'');
-			$this->db_query($stat_query);
-			$row = $this->db_next();
-
-			$hits =  $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits");
-			if (empty($rate_id))
+			//if (!isset($ro[$oid]))
+			foreach ($rates as $rate_id => $rate)
 			{
-				$rate_id = 0;
+				if (!is_numeric($rate) || !is_numeric($rate_id))
+				{
+					continue;
+				}
+
+				if (!$rate_id)
+				{
+					$sc = get_instance(CL_RATE_SCALE);
+					$ros =$sc->get_scale_objs_for_obj($oid);
+					$rate_id = $ros[0];
+				}
+
+
+				// Update ratings
+				$this->db_query("
+					INSERT INTO ratings(oid, rating,".($rate_id?' rate_id,':'')." tm, uid, ip) 
+					VALUES ($oid,$rate,".($rate_id?"$rate_id,":'').time().",'".aw_global_get("uid")."','".aw_global_get("REMOTE_ADDR")."')
+				");
+
+				// Fetch and cache statistics
+				$q = "SELECT COUNT(oid) AS total FROM rating_sum WHERE oid = $oid". ($rate_id?" and rate_id = $rate_id":'');
+				if($this->db_fetch_field($q, "total") > 0)
+				{
+					$this->db_query("UPDATE rating_sum SET divider=(divider+1), sum=(sum+".(int)$rate."), avg=(sum/divider) WHERE oid=$oid".($rate_id?" AND rate_id = $rate_id":''));
+				}
+				else
+				{
+					$this->db_query("INSERT INTO rating_sum (oid,".($rate_id?" rate_id,":'')." divider, sum, avg) VALUES($oid,".($rate_id?"$rate_id,":'')." 1, $rate, $rate)");
+				}
+				$ro[$oid] = $rate;
+
+				$stat_query = "SELECT MIN(rating) AS min,MAX(rating) AS max,AVG(rating) AS avg FROM ratings WHERE oid = $oid" . ($rate_id?" AND rate_id = $rate_id":'');
+				$this->db_query($stat_query);
+				$row = $this->db_next();
+
+				$hits =  $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits");
+				if (empty($rate_id))
+				{
+					$rate_id = 0;
+				}
+				$rs[$rate_id] = array(
+					RATING_AVERAGE => $row["avg"],
+					RATING_HIGHEST => $row["max"],
+					RATING_VIEWS => $hits,
+					RATING_LOWEST_VIEWS => $hits,
+					RATING_LOWEST_RATE => $row["min"],
+				);
 			}
-			$rs[$rate_id] = array(
-				RATING_AVERAGE => $row["avg"],
-				RATING_HIGHEST => $row["max"],
-				RATING_VIEWS => $hits,
-				RATING_LOWEST_VIEWS => $hits,
-				RATING_LOWEST_RATE => $row["min"],
-			);
+			$o->set_meta("__ratings",$rs);
+			$o->save();
 		}
-		$o->set_meta("__ratings",$rs);
-		$o->save();
 
 		if ($arr["no_redir"])
 		{
