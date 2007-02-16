@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.1 2007/02/15 15:35:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.2 2007/02/16 12:33:50 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -8,6 +8,11 @@
 @default table=objects
 @default group=general
 
+@property prod_folders type=relpicker reltype=RELTYPE_FOLDER multiple=1 field=meta method=serialize
+@caption Toodete ktaloogid
+
+@reltype FOLDER value=1 clid=CL_MENU
+@caption Toodete kataloog
 */
 
 class spa_customer_interface extends class_base
@@ -80,17 +85,42 @@ class spa_customer_interface extends class_base
 			);
 
 			$gl = aw_global_get("gidlist_oid");
-			$booking_str .= " ".html::href(array(
-				"url" => $this->mk_my_orb("add_prod_to_bron", array(
-					"bron" => $o->id(), 
-					"id" => $id,
-					"r" => get_ru()
-				)),
-				"caption" => t("Lisa teenus"),
-			));
+
+			$confirmed = true;
+			$has_times = true;
+			foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+			{
+				$bron = $c->to();
+				$confirmed &= $bron->prop("verified");
+				if ($bron->prop("start1") < 100)
+				{
+					$has_times = false;
+				}
+			}
+
+
+			if (!$confirmed)
+			{
+				$booking_str .= " ".html::href(array(
+					"url" => $this->mk_my_orb("add_prod_to_bron", array(
+						"bron" => $o->id(), 
+						"id" => $id,
+						"r" => get_ru()
+					)),
+					"caption" => t("Lisa teenus"),
+				));
+			}
+
+			if (!$confirmed && $has_times)
+			{
+				$booking_str .= " / ".html::href(array(
+					"url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
+					"caption" => t("Kinnita"),
+				));
+			}
 
 			$booking_str .= " / ".html::href(array(
-				"url" => $ei->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
+				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
 				"caption" => t("Prindi"),
 				"target" => "_blank"
 			));
@@ -125,6 +155,7 @@ class spa_customer_interface extends class_base
 					$prod2room = array();
 					$prod2tm = array();
 					$selected_prod = false;
+					$rvs_obj = false;
 					foreach($prods_in_group as $prod_id)
 					{
 						$prod = obj($prod_id);
@@ -133,6 +164,7 @@ class spa_customer_interface extends class_base
 							if ($_prod_id == $prod_id && isset($nums[$i]) && $nums[$i]["from"] > 1)
 							{
 								$sets = $nums[$i];
+								$rvs_obj = obj($sets["reservation_id"]);
 								$room = obj($sets["room"]);
 								$prod2room[$_prod_id] = $room->id();
 								$prod2tm[$_prod_id] = $sets["from"];
@@ -150,7 +182,7 @@ class spa_customer_interface extends class_base
 						if ($date == "")
 						{
 							$prod_str[] = html::popup(array(
-								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169")),
+								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "not_verified" => 1)),
 								"caption" => $prod->name(),
 								"height" => 500,
 								"width" => 750,
@@ -168,7 +200,7 @@ class spa_customer_interface extends class_base
 					{
 						$ri = get_instance(CL_ROOM);
 						$settings = $ri->get_settings_for_room(obj($prod2room[$prod_id]));
-						if ($ri->group_can_do_bron($settings, $prod2tm[$prod_id]))
+						if ($ri->group_can_do_bron($settings, $prod2tm[$prod_id]) && (!$rvs_obj || !$rvs_obj->prop("verified")))
 						{
 							$date .= " ".html::href(array(
 								"url" => $ei->mk_my_orb("clear_booking", array("return_url" => get_ru(), "booking" => $date_booking_id)),
@@ -209,6 +241,40 @@ class spa_customer_interface extends class_base
 		return $this->parse();
 	}
 
+	function _get_prod_parents($oid)
+	{
+		$o = obj($oid);
+		if (is_oid($o->prop("prod_folders")))
+		{
+			$ot = new object_tree(array(
+				"parent" => $o->prop("prod_folders"),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$rv = array($o->prop("prod_folders"));
+			foreach($ot->ids() as $id)
+			{
+				$rv[] = $id;
+			}
+			return $rv;
+		}
+		$rv = array();
+		foreach(safe_array($o->prop("prod_folders")) as $pf)
+		{
+			$rv[] = $pf;
+			$ot = new object_tree(array(
+				"parent" => $pf,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			foreach($ot->ids() as $id)
+			{
+				$rv[] = $id;
+			}
+		}
+		return $rv;
+	}
+
 	/**
 		@attrib name=add_pkt
 		@param id required type=int acl=view
@@ -218,9 +284,10 @@ class spa_customer_interface extends class_base
 	{
 		// list prods and let the user select one
 		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRODUCT,
+			"class_id" => CL_SHOP_PRODUCT_PACKAGING,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"parent" => $this->_get_prod_parents($arr["id"])
 		));
 		$p = array();
 		foreach($ol->arr() as $o)
@@ -277,7 +344,8 @@ class spa_customer_interface extends class_base
 		$i->fin_add_prod_to_bron(array(
 			"bron" => $b->id(),
 			"wb" => $arr["id"],
-			"prod" => $arr["prod"]
+			"prod" => $arr["prod"],
+			"not_verified" => 1
 		));
 
 		return $arr["r"];
@@ -293,9 +361,10 @@ class spa_customer_interface extends class_base
 	{
 		// list prods and let the user select one
 		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRODUCT,
+			"class_id" => CL_SHOP_PRODUCT_PACKAGING,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"parent" => $this->_get_prod_parents($arr["id"])
 		));
 		$p = array();
 		foreach($ol->arr() as $o)
@@ -332,7 +401,7 @@ class spa_customer_interface extends class_base
 			"PARENT" => $pts
 		));
 
-		return $this->parse();
+		return "<!---->".$this->parse();
 	}
 
 	/**
@@ -345,8 +414,136 @@ class spa_customer_interface extends class_base
 	function fin_add_prod_to_bron($arr)
 	{
 		$i = get_instance(CL_SPA_BOOKIGS_ENTRY);
+		$arr["not_verified"] = 1;
 		$i->fin_add_prod_to_bron($arr);
 		return $arr["r"];
+	}
+
+	/**
+		@attrib name=confirm_booking
+		@param id required type=int acl=view
+		@param r optional
+	**/
+	function confirm_booking($arr)
+	{
+		$o = obj($arr["id"]);
+		foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+		{
+			$b = $c->to();
+			$b->set_prop("verified", 1);
+			$b->save();
+		}
+		return $arr["r"];
+	}
+
+	/**
+		@attrib name=print_booking
+		@param id required
+		@param wb required
+	**/
+	function print_booking($arr)
+	{
+		$b = obj($arr["id"]);
+		$wb = obj($arr["wb"]);
+		$this->read_site_template("booking.tpl");
+		lc_site_load("spa_bookigs_entry", &$this);
+
+		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
+
+		// now, list all bookings for rooms 
+		$dates = $ei->get_booking_data_from_booking($b);
+		$books = "";
+		$items = array();
+		foreach($dates as $prod => $entries)
+		{
+			foreach($entries as $entry)
+			{
+				$items[] = $entry;
+			}
+		}
+
+		$all_items = "";
+		$packet_services = "";
+		$additional_services = "";
+
+		usort($items, create_function('$a,$b', 'return $a["from"] - $b["from"];'));
+
+
+		$from = time() + 24*3600*1000;
+		$to = 0;
+		foreach($items as $entry)
+		{
+			if ($entry["from"] < 1)
+			{
+				continue;
+			}
+			$from = min($from, $entry["from"]);
+			$to = max($to, $entry["to"]);
+		}
+
+		list($y, $m, $d) = explode("-", $b->prop("person.birthday"));
+		$this->vars(array(
+			"bureau" => $b->createdby(),
+			"person" => $b->trans_get_val_str("person"),
+			"package" => $b->trans_get_val_str("package"),
+			"from" => date("d.m.Y", $from),
+			"to" => date("d.m.Y", $to),
+			"person_comment" => $b->prop("person.comment"),
+			"person_name" => $b->prop("person.name"),
+			"person_birthday" => $y > 0 ? sprintf("%02d.%02d.%04d", $d, $m, $y) : "",
+			"person_ext_id" => $b->prop("person.ext_id_alphanumeric"),
+			"person_gender" => $b->prop("person.gender") == 1 ? t("Mees") : ($b->prop("person.gender") === "2" ? t("Naine") : "")
+		));
+
+		foreach($items as $entry)
+		{
+			if ($entry["from"] < 1)
+			{
+				continue;
+			}
+			$ro = obj($entry["room"]);
+			$rvs = obj($entry["reservation_id"]);
+			$prod_obj = obj($rvs->meta("product_for_bron"));
+			$this->vars(array(
+				"r_from" => date("d.m.Y H:i", $entry["from"]),
+				"r_to" =>  date("d.m.Y H:i", $entry["to"]),
+				"r_room" => $ro->trans_get_val("name"),
+				"r_prod" => $prod_obj->trans_get_val("name"),
+				"start_time" => $entry["from"],
+				"end_time" => $entry["to"],
+				"price" => $prod_obj->prop("price")
+			));
+			$books .= $this->parse("BOOKING");
+
+			$all_items .= $this->parse("ALL_ITEMS");
+			if ($entry["is_extra"] == 1)
+			{
+				$additional_services .= $this->parse("ADDITIONAL_SERVICES");
+			}
+			else
+			{
+				$packet_services .= $this->parse("PACKET_SERVICES");
+			}
+		}
+
+
+		$this->vars(array(
+			"BOOKING" => $books,
+			"ADDITIONAL_SERVICES" => $additional_services,
+			"PACKET_SERVICES" => $packet_services,
+			"ALL_ITEMS" => $all_items
+		));
+		$this->vars(array(
+			"HAS_PACKET_SERVICES" => $packet_services != "" ? $this->parse("HAS_PACKET_SERVICES") : "",
+			"HAS_ADDITIONAL_SERVICES" => $packet_services != "" ? $this->parse("HAS_ADDITIONAL_SERVICES") : "",
+		));
+
+		if ($this->can("view", $wb->prop("print_view_ctr")))
+		{
+			$fc = get_instance(CL_FORM_CONTROLLER);
+			$fc->eval_controller($wb->prop("print_view_ctr"), $arr);
+		}
+		die($this->parse());
 	}
 }
 ?>

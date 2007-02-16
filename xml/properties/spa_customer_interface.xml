@@ -1,5 +1,16 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>prod_folders</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toodete ktaloogid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SPA_CUSTOMER_INTERFACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +18,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Toodete kataloog</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 

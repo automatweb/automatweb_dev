@@ -8,6 +8,7 @@
 					<required name="prod" type="int" />
 					<required name="prod_num" type="int" />
 					<optional name="pkt" type="int" />
+					<optional name="not_verified" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -20,6 +21,7 @@
 					<required name="prod" type="int" />
 					<required name="prod_num" type="int" />
 					<required name="booking" type="int" />
+					<optional name="not_verified" type="int" />
 				</arguments>
 			</function>
 		</action>

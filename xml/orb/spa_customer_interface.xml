@@ -41,5 +41,23 @@
 			</function>
 		</action>
 
+		<action name="confirm_booking">
+			<function name="confirm_booking">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="r" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="print_booking">
+			<function name="print_booking">
+				<arguments>
+					<required name="id" />
+					<required name="wb" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

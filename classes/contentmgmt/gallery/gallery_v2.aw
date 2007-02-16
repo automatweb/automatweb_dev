@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.62 2006/05/30 12:40:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.63 2007/02/16 12:33:51 kristo Exp $
 
 /*
 
@@ -126,6 +126,19 @@ class gallery_v2 extends class_base
 		));
 	}
 		
+	/**	
+		@attrib name=submit_rates nologin="1" no_login=1
+	**/
+	function submit_rates($arr)
+	{
+		foreach(safe_array($arr["rate"]) as $oid => $rval)
+		{
+			$ri = get_instance(CL_RATE);
+			$ri->add_rate(array("no_redir" => 1, "oid" => $oid, "rate" => $rval));
+		}
+		return $arr["r"];
+	}
+
 	function get_property(&$arr)
 	{
 		$prop =& $arr['prop'];
@@ -872,7 +885,8 @@ class gallery_v2 extends class_base
 				"cell_content_callback" => array(&$this, "_get_show_cell_content", array("obj" => $ob, "page" => $page)),
 				"ignore_empty" => true
 			)),
-			"name" => $ob->name()
+			"name" => $ob->name(),
+			"reforb" => $this->mk_reforb("submit_rates", array("r" => get_ru()))
 		));
 
 		$ret = $this->parse();
@@ -1058,7 +1072,6 @@ class gallery_v2 extends class_base
 			));
 		}
 		$this->has_images = true;
-
 		$rating = $this->rating->get_rating_for_object($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']);
 
 		$tp = new aw_template;
@@ -1072,9 +1085,32 @@ class gallery_v2 extends class_base
 			"rating" => $rating,
 			"hits" => $this->hits[$pd['img']['id']],
 			"date" => $pd["date"],
-			"caption" => $pd["caption"]
+			"caption" => $pd["caption"],
+			"img_id" => $pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']
 		));
 
+		$rsi = "";
+		if (count($this->_get_rate_objs($obj)) > 0)
+		{
+			$sc = get_instance(CL_RATE_SCALE);
+			$scale = $sc->get_scale_for_obj(($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']));
+			foreach($scale as $sci_val => $sci_name)
+			{
+				$tp->vars(array(
+					"rate_link" => $this->mk_my_orb("rate", array(
+						"oid" => ($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']),
+						"return_url" => $post_rate_url,
+						"rate" => $sci_val
+					), "rate"),
+					"scale_value" => $sci_name
+				));
+				$rsi.=$tp->parse("RATING_SCALE_ITEM");
+			}
+		}
+
+		$tp->vars(array(
+			"RATING_SCALE_ITEM" => $rsi,
+		));
 		if ($rating != "")
 		{
 			$tp->vars(array(

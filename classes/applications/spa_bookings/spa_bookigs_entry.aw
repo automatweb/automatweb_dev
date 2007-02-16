@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.29 2007/02/15 15:35:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.30 2007/02/16 12:33:50 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -713,6 +713,7 @@ class spa_bookigs_entry extends class_base
 		@param prod required type=int
 		@param prod_num required type=int
 		@param pkt optional type=int
+		@param not_verified optional type=int
 	**/
 	function select_room_booking($arr)
 	{
@@ -776,7 +777,7 @@ class spa_bookigs_entry extends class_base
 
 		// get reservation length from product
 		$prod_obj = obj($arr["prod"]);
-		$prod_inst = $prod_obj->instance();
+		$prod_inst = get_instance(CL_SHOP_PRODUCT);
 		$time_step = $reservation_length = $prod_inst->get_reservation_length($prod_obj);
 		// check if buffers are shorter than the min rvs len
 		// then time steps are buffer length, but rvs len is rvs len still
@@ -892,6 +893,7 @@ class spa_bookigs_entry extends class_base
 					"prod" => $arr["prod"],
 					"prod_num" => $arr["prod_num"],
 					"booking" => $arr["booking"],
+					"not_verified" => $arr["not_verified"]
 				));
 				if (!$avail)
 				{
@@ -1031,6 +1033,7 @@ class spa_bookigs_entry extends class_base
 		@param prod required type=int
 		@param prod_num required type=int
 		@param booking required type=int
+		@param not_verified optional type=int
 	**/
 	function make_reservation($arr)
 	{
@@ -1081,7 +1084,8 @@ class spa_bookigs_entry extends class_base
 					"meta" => array(
 						"product_for_bron" => $arr["prod"],
 						"product_count_for_bron" => $arr["prod_num"]
-					)
+					),
+					"not_verified" => $arr["not_verified"]
 				));
 				$rvo = obj($rv_id);
 				$bron->connect(array(
@@ -1414,7 +1418,7 @@ class spa_bookigs_entry extends class_base
 		if (count($rooms))
 		{
 			$room_inst = get_instance(CL_ROOM);
-			$rv_id = $room_inst->make_reservation(array(
+			$p = array(
 				"id" => reset(array_keys($rooms)),
 				"data" => array(
 					"customer" => $bron->prop("person")
@@ -1423,7 +1427,12 @@ class spa_bookigs_entry extends class_base
 					"product_for_bron" => $arr["prod"],
 					"product_count_for_bron" => 0
 				)
-			));
+			);
+			if ($arr["not_verified"])
+			{
+				$p["not_verified"] = 1;
+			}
+			$rv_id = $room_inst->make_reservation($p);
 			$bron->connect(array(
 				"to" => $rv_id,
 				"type" => "RELTYPE_ROOM_BRON"
