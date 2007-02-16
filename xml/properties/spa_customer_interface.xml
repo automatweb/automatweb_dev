@@ -9,7 +9,18 @@
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Toodete ktaloogid</caption>
+            <caption>Toodete kataloogid</caption>
+      </property>
+      <property>
+            <name>rooms</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOM</reltype>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ruumid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SPA_CUSTOMER_INTERFACE</syslog_type>
@@ -24,6 +35,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Toodete kataloog</caption>
             </FOLDER>
+            <ROOM>
+                  <value>2</value>
+                  <clid>CL_ROOM</clid>
+                  <caption>Ruum</caption>
+            </ROOM>
       </reltypes>
 </properties>
 

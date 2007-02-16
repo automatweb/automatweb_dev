@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.30 2007/02/16 12:33:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.31 2007/02/16 13:05:14 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -714,6 +714,7 @@ class spa_bookigs_entry extends class_base
 		@param prod_num required type=int
 		@param pkt optional type=int
 		@param not_verified optional type=int
+		@param rooms optional 
 	**/
 	function select_room_booking($arr)
 	{
@@ -752,6 +753,19 @@ class spa_bookigs_entry extends class_base
 		}
 
 		$p_rooms = $this->get_rooms_for_product($arr["prod"]);
+
+		if (is_array($arr["rooms"]) && count($arr["rooms"]))
+		{
+			$arr["rooms"] = $this->make_keys($arr["rooms"]);
+			foreach($p_rooms as $_id => $d)
+			{
+				if (!isset($arr["rooms"][$_id]))
+				{
+					unset($p_rooms[$_id]);
+				}
+			}
+		}
+
 		if (count($p_rooms) == 0)
 		{
 			die(t("Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"));

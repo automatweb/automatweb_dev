@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.2 2007/02/16 12:33:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.3 2007/02/16 13:05:14 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -9,10 +9,16 @@
 @default group=general
 
 @property prod_folders type=relpicker reltype=RELTYPE_FOLDER multiple=1 field=meta method=serialize
-@caption Toodete ktaloogid
+@caption Toodete kataloogid
+
+@property rooms type=relpicker reltype=RELTYPE_ROOM multiple=1 field=meta method=serialize
+@caption Ruumid
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Toodete kataloog
+
+@reltype ROOM value=2 clid=CL_ROOM
+@caption Ruum
 */
 
 class spa_customer_interface extends class_base
@@ -69,6 +75,9 @@ class spa_customer_interface extends class_base
 		));
 
 		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
+
+		$ct = obj($id);
+		$rooms = $ct->prop("rooms");
 
 		foreach($ol->arr() as $o)
 		{
@@ -182,7 +191,7 @@ class spa_customer_interface extends class_base
 						if ($date == "")
 						{
 							$prod_str[] = html::popup(array(
-								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "not_verified" => 1)),
+								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "not_verified" => 1, "rooms" => $rooms)),
 								"caption" => $prod->name(),
 								"height" => 500,
 								"width" => 750,

@@ -9,6 +9,7 @@
 					<required name="prod_num" type="int" />
 					<optional name="pkt" type="int" />
 					<optional name="not_verified" type="int" />
+					<optional name="rooms" />
 				</arguments>
 			</function>
 		</action>
