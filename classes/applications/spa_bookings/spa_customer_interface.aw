@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.3 2007/02/16 13:05:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.4 2007/02/16 13:59:26 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -87,7 +87,6 @@ class spa_customer_interface extends class_base
 			// so, list all the products in the package and for each product let the user select from all the rooms that have that package
 			$dates = $ei->get_booking_data_from_booking($o);
 
-			
 			$booking_str = sprintf(t("Broneering %s / %s"), 
 				$o->prop("person.name"),
 				date("d.m.Y", $o->created())
@@ -136,8 +135,43 @@ class spa_customer_interface extends class_base
 
 			$this->vars(array(
 				"booking" => $booking_str,
-				"booking_id" => $o->id()
+				"booking_id" => $o->id(),
+				"person_name" => $o->prop("person.name"),
+				"bron_date" => date("d.m.Y", $o->created()),
+				"add_service_url" => $this->mk_my_orb("add_prod_to_bron", array(
+						"bron" => $o->id(), 
+						"id" => $id,
+						"r" => get_ru()
+					)),
+				"confirm_url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
+				"print_url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
 			));
+
+			if (!$confirmed)
+			{
+				$this->vars(array(
+					"ADD_SERVICE" => $this->parse("ADD_SERVICE")
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"ADD_SERVICE" => ""
+				));
+			}
+
+			if (!$confirmed && $has_times)
+			{
+				$this->vars(array(
+					"CONFIRM" => $this->parse("CONFIRM")
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"CONFIRM" => ""
+				));
+			}
 
 			$fd = array();
 			$has_unc = false;
@@ -165,6 +199,10 @@ class spa_customer_interface extends class_base
 					$prod2tm = array();
 					$selected_prod = false;
 					$rvs_obj = false;
+					$this->vars(array(
+						"HAS_BOOKING" => "",
+						"CLEAR" => ""
+					));
 					foreach($prods_in_group as $prod_id)
 					{
 						$prod = obj($prod_id);
@@ -178,6 +216,14 @@ class spa_customer_interface extends class_base
 								$prod2room[$_prod_id] = $room->id();
 								$prod2tm[$_prod_id] = $sets["from"];
 								$date .= sprintf("Ruum %s, ajal %s - %s", $room->name(), date("d.m.Y H:i", $sets["from"]), date("H:i", $sets["to"]));
+								$this->vars(array(
+									"b_room" => $room->name(),
+									"b_from" => date("d.m.Y H:i", $sets["from"]),
+									"b_to" => date("H:i", $sets["to"])
+								));
+								$this->vars(array(
+									"HAS_BOOKING" => $this->parse("HAS_BOOKING")
+								));
 								$date_booking_id = $sets["reservation_id"];
 								$selected_prod = $prod_id;
 							}
@@ -214,6 +260,12 @@ class spa_customer_interface extends class_base
 							$date .= " ".html::href(array(
 								"url" => $ei->mk_my_orb("clear_booking", array("return_url" => get_ru(), "booking" => $date_booking_id)),
 								"caption" => t("T&uuml;hista")
+							));
+							$this->vars(array(
+								"clear_url" => $ei->mk_my_orb("clear_booking", array("return_url" => get_ru(), "booking" => $date_booking_id)),
+							));
+							$this->vars(array(
+								"CLEAR" => $this->parse("CLEAR")
 							));
 						}
 					}
