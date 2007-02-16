@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.146 2007/02/14 13:05:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.147 2007/02/16 12:20:58 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2476,7 +2476,7 @@ class room extends class_base
 			phone - contact persons phone
 			customer - If the person object already exists, then connect the booking to this person, if given 
 			verified - if true, reservation is marked as verified
-		@param not_verified
+		@param not_verified optional type=int
 		@param meta optional type=array
 			Any key=>value paris given here, will be written to the objects metadata
 	**/
@@ -3491,6 +3491,10 @@ class room extends class_base
 		asort($gl);
 		$gl = array_keys($gl);
 		$grp = $gl[1];
+		if (count($gl) == 1)
+		{
+			$grp = $gl[0];
+		}
 		if (is_object($arr["bron"]))
 		{
 			$bron_made = $arr["bron"]->created();
@@ -3512,7 +3516,7 @@ class room extends class_base
 					)
 					{
 						$groups = $price->prop("apply_groups");
-						if (!is_array($groups) || !count($groups) || $groups[$grp])
+						if (!is_array($groups) || !count($groups) || in_array($grp, $groups))
 						{
 							$this_price = $price;
 							$this_prices[$price->prop("nr")][] = $price;
@@ -3683,6 +3687,10 @@ class room extends class_base
 		asort($gl);
 		$gl = array_keys($gl);
 		$grp = $gl[1];
+		if (count($gl) == 1)
+		{
+			$grp = $gl[0];
+		}
 		if (is_object($arr["bron"]))
 		{
 			$gi = get_instance(CL_USER);
@@ -3736,7 +3744,7 @@ class room extends class_base
 						    	($bargain->prop("bron_made_to") < 1 || $bron_made < $bargain->prop("bron_made_to"))
 					    	) && 
 						(
-							!is_array($groups) || !count($groups) || $groups[$grp]
+							!is_array($groups) || !count($groups) || in_array($grp, $groups)
 						)
 					)
 					{
@@ -4489,6 +4497,10 @@ class room extends class_base
 			asort($gl);
 			$gl = array_keys($gl);
 			$grp = $gl[1];
+			if (count($gl) == 1)
+			{
+				$grp = $gl[0];
+			}
 			if (!$grp_settings[$grp]["ask_cust_arrived"])
 			{
 				return "";
