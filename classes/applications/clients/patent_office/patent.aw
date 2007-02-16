@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.54 2007/02/14 10:21:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.55 2007/02/16 12:15:44 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -879,6 +879,8 @@ class patent extends class_base
 				$this->fill_session($_GET["trademark_id"]);
 				$this->check_and_give_rights($_GET["trademark_id"]);
 			}
+			header("Location:".$_SERVER["SCRIPT_URI"]."?section=".$_GET["section"]."&data_type=0");
+			die();
 		}
 		
 		if(is_oid($_SESSION["patent"]["id"]) )
@@ -1633,7 +1635,7 @@ class patent extends class_base
 				
 				$product = obj($prod);
 				$parent = obj($product->parent());
-				$classes[$parent->comment()][$product->id()] = $product->name();
+				$classes[$parent->comment()][$product->id()] = $product->prop("userta1");
 
 //				$t->define_data(array(
 //					"prod" => html::textarea(array("name" => "products[".$prod."]" , "value" => $product->name() . "(" .$product->prop("code").  ")", )),
@@ -1660,13 +1662,16 @@ class patent extends class_base
 			}
 //			$_SESSION["patent"]["prod_selection"] = null;
 		}		
+		ksort($classes);
 		foreach($classes as $class => $prods)
 		{
 			$t->define_data(array(
 				"prod" => html::textarea(array("name" => "products[".$class."]" , "value" => join("\n" , $prods))),
 				"class" => $class,
 				"delete" => html::href(array(
-					"url" => "javascript:alert(\"Kustutab klassi nimekirjast\");document.getElementById(\"delete\").value=\"".$class."\";document.getElementById(\"stay\").value=1;document.changeform.submit();",
+					"url" => "#",
+					"onclick" => 'fRet = confirm("'.t("Oled kindel, et soovid valitud klassi kustutada?").'"); if(fRet) {document.getElementById("delete").value="'.$class.'";document.getElementById("stay").value=1;
+					document.changeform.submit();} else;',
 					"caption" => t("Kustuta"),
 				)),
 
@@ -1744,12 +1749,22 @@ class patent extends class_base
 			foreach ($parents->ids() as $id)
 			{
 				$prod_list = new object_list(array(
-					"name" => "%".$_POST["product"]."%",
+					"userta1" => "%".$_POST["product"]."%",
 					"parent" => $id,
 					"class_id" => CL_SHOP_PRODUCT ,
 					"lang_id" => array(),
 					"limit" => $limit,
 				));
+
+				foreach($prod_list->arr() as $p)
+				{
+					if($p->prop("userch10"))
+					{
+						$prod_list->remove($p->id());
+						$products->add($p->id());
+					}
+				}
+
 				$prod_list->sort_by(array(
 					"prop" => "name",
 					"order" => "asc"
@@ -1774,11 +1789,11 @@ class patent extends class_base
 					$parent = obj($prod->parent());
 					if($prod->prop("userch10"))
 					{
-						$p = "<b>".$prod->name()."</b>";
+						$p = "<b>".$prod->prop("userta1")."</b>";
 					}
 					else
 					{
-						$p = $prod->name();
+						$p = $prod->prop("userta1");
 					}
 					$this->vars(array(
 						"prod" => $p,
@@ -1890,7 +1905,9 @@ class patent extends class_base
 		classload("vcl/table");
 		$t = new vcl_table(array(
 			"layout" => "generic",
+			"id" => "patent_requesters_registered",
 		));
+		$t->table_tag_id = "applicant_requesters";
 		
 		$t->define_field(array(
 			"name" => "name",
@@ -1901,7 +1918,7 @@ class patent extends class_base
 			"caption" => t("Isikukood/reg.kood"),
 		));
 		
-		if(sizeof($_SESSION["patent"]["applicants"]) > 1)
+		if(sizeof($_SESSION["patent"]["applicants"]) > 1 && !is_oid($_SESSION["patent"]["procurator"]))
 		{
 			$t->define_field(array(
 				"name" => "representer",
@@ -2161,11 +2178,20 @@ class patent extends class_base
 		if($_POST["convention_date"]["day"] || $_POST["exhibition_date"]["day"])
 		{
 			if(
-				($_POST["convention_nr"] && mktime(0,0,0,$_POST["convention_date"]["month"],$_POST["convention_date"]["day"],$_POST["convention_date"]["year"]) < time() - (30*6+5)*24*3600)
-			 || ($_POST["exhibition_name"] && mktime(0,0,0,$_POST["exhibition_date"]["month"], $_POST["exhibition_date"]["day"],$_POST["exhibition_date"]["year"]) < time() - (30*6 + 5)*24*3600 )
+				(
+						$_POST["convention_nr"] && mktime(0,0,0,$_POST["convention_date"]["month"],$_POST["convention_date"]["day"],$_POST["convention_date"]["year"]) <
+						mktime(0,0,0,date("m" , time())-6, date("j" , time())-5,date("Y" , time()))
+				)
+				//time() - (30*6+5)*24*3600)
+				|| 
+				
+					(
+						$_POST["exhibition_name"] && mktime(0,0,0,$_POST["exhibition_date"]["month"], $_POST["exhibition_date"]["day"],$_POST["exhibition_date"]["year"]) <   mktime(0,0,0,date("m" , time())-6, date("j" , time())-5,date("Y" , time()))
+					)
+				//time() - (30*6 + 5)*24*3600 )
 			 )
 			{
-				$err.= t("Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud")."\n<br>";
+				$err.= t("Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud ja 5 p&auml;eva ")."\n<br>";
 			}
 		}
 		if(!$err)
