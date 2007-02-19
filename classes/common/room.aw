@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.148 2007/02/19 12:46:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.149 2007/02/19 12:50:19 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2482,6 +2482,8 @@ class room extends class_base
 		@param not_verified optional type=int
 		@param meta optional type=array
 			Any key=>value paris given here, will be written to the objects metadata
+		@param tpl optional type=string
+			verification mail template
 	**/
 	function make_reservation($arr)
 	{
@@ -2604,6 +2606,11 @@ class room extends class_base
 		{
 			$reservation->set_prop("verified", 0);
 		//	$reservation->save();
+		}
+		
+		if($arr["tpl"])
+		{
+			$reservation->set_meta("tpl", $arr["tpl"]);
 		}
 		$reservation->save();
 		return $reservation->id();

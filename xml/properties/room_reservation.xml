@@ -41,6 +41,15 @@
             <caption>Broneeringu template</caption>
       </property>
       <property>
+            <name>ver_mail_template</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kinnitusmaili template</caption>
+      </property>
+      <property>
             <name>levels</name>
             <table>objects</table>
             <group>general</group>

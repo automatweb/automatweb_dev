@@ -61,6 +61,7 @@
 					<required name="room" type="oid,array" />
 					<optional name="section" type="string" />
 					<optional name="level" type="int" />
+					<optional name="res" type="oid" />
 				</arguments>
 			</function>
 		</action>
@@ -72,6 +73,7 @@
 					<required name="room" type="oid" />
 					<optional name="section" type="string" />
 					<optional name="level" type="int" />
+					<optional name="res" type="oid" />
 				</arguments>
 			</function>
 		</action>

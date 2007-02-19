@@ -45,8 +45,9 @@
 					<required name="id" />
 					<optional name="res_id" />
 					<required name="data" />
-					< name="not_verified" />
+					<optional name="not_verified" type="int" />
 					<optional name="meta" type="array" />
+					<optional name="tpl" type="string" />
 				</arguments>
 			</function>
 		</action>

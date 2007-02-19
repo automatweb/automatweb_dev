@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.49 2007/02/14 13:05:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.50 2007/02/19 12:50:19 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -20,6 +20,9 @@
 
 @property reservation_template type=select 
 @caption Broneeringu template
+
+@property ver_mail_template type=select 
+@caption Kinnitusmaili template
 
 @property levels type=table no_caption=1 store=no
 @caption Tasemed
@@ -69,6 +72,18 @@ class room_reservation extends class_base
 		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
 					}
 				break;
+				case "ver_mail_template":
+					$tm = get_instance("templatemgr");
+					$prop["options"] = $tm->template_picker(array(
+						"folder" => "common/room"
+					));
+					if(!sizeof($prop["options"]))
+					{
+						$prop["caption"] .= t("\n".$this->site_template_dir."");
+		//				$prop["type"] = "text";
+		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
+					}
+				break;	
 			case "prices":
 				$arr["obj_inst"]->prop("type");
 				$curr_list = new object_list(array("class_id" => CL_CURRENCY, "lang_id" => array()));
@@ -392,12 +407,14 @@ class room_reservation extends class_base
 				"level" => $level,
 				"id" => $id,
 				"room" => $room->id(),
+				"res" => $targ->id(),
 			)),
 			"pay_url" => $this->mk_my_orb("pay_reservation", array(
 //				"section" => aw_global_get("section"),
 //				"level" => $level,
 				"bron_id" => $_SESSION["room_reservation"][$room->id()]["bron_id"],
 				"room" => $room->id(),
+				"res" => $targ->id(),
 			)),
 		));
 		$_SESSION["room_reservation"][$room->id()]["errors"] = null;
@@ -1000,7 +1017,7 @@ class room_reservation extends class_base
 		$sf->db_init();
 		$sf->tpl_init("automatweb");
 		$sf->read_template("index.tpl");
-			lc_site_load("room_reservation", &$this);
+			lc_site_load("room_reservation", &$sf);
 		$action = $this->mk_my_orb("submit_web_products_table", array("room" => $room->id()));
 		$sf->vars(array(
 			"content" => "<form name='products_form' action=".$action." method=POST>".$html."<br></form>",
@@ -1085,7 +1102,7 @@ class room_reservation extends class_base
 			$tpl = "index.tpl";
 		}
 		$sf->read_template($tpl);
-		lc_site_load("room_reservation", &$this);
+		lc_site_load("room_reservation", &$sf);
 		$action = $this->mk_my_orb("submit_web_calendar_table", array("room" => $arr["room"], "room_res" => $arr["id"]));
 		$arr["obj_inst"] = obj($arr["room"]);
 		$res_inst = get_instance(CL_ROOM);
@@ -1211,8 +1228,10 @@ class room_reservation extends class_base
 			room id
 		@param section optional type=string
 			aw section
-		@param level optional type=int	
-			web reservarion level	
+		@param level optional type=int
+			web reservarion level
+		@param res optional type=oid
+			web room reservation object
 	**/
 	function affirm_reservation($arr)
 	{
@@ -1226,6 +1245,11 @@ class room_reservation extends class_base
 		{
 			$room = array($room);
 		}
+		if(is_oid($res_obj) && $this->can("view" , $res_obj))
+		{
+			$res_obj = obj($res_obj);
+			$tpl = $res_obj->prop("ver_mail_template");
+		}
 		foreach($room as $r)
 		{
 			if(!$bron_id)
@@ -1237,6 +1261,7 @@ class room_reservation extends class_base
 				"id" => $room,
 				"res_id" => $bron_id,
 				"data" => $_SESSION["room_reservation"][$room],
+				"tpl" => $tpl,
 			));
 		}
 		//return $section."?level=".$level;
@@ -1253,6 +1278,8 @@ class room_reservation extends class_base
 			aw section
 		@param level optional type=int	
 			web reservarion level	
+		@param res optional type=oid
+			web room reservation object
 	**/
 	function pay_reservation($arr)
 	{
@@ -1272,6 +1299,11 @@ class room_reservation extends class_base
 		{
 			$room = array($room);
 		}
+		if(is_oid($res) && $this->can("view" , $res))
+		{
+			$res_obj = obj($res);
+			$tpl = $res_obj->prop("ver_mail_template");
+		}
 		foreach($room as $r)
 		{
 			$r = obj($r);
@@ -1285,6 +1317,7 @@ class room_reservation extends class_base
 				"res_id" => $bron_id,
 				"not_verified" => 1,//veebi poolelt et ei kinnitaks ära
 				"data" => $_SESSION["room_reservation"][$r->id()],
+				"tpl" => $tpl,
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
 			$bron->set_meta("lang" , $lang);
@@ -1369,7 +1402,14 @@ class room_reservation extends class_base
 		}
 		if(!$bad)
 		{
-			$this->send_affirmation_mail($arr["id"]);
+			if($bron->meta("tpl"))
+			{
+				$tpl = $bron->meta("tpl");
+			}
+			if(!$this->mail_sent_already)
+			{
+				$this->send_affirmation_mail($arr["id"],$tpl);
+			}
 			$GLOBALS["cfg"]["__default"]["in_admin"] = 0;
 			header("Location:".$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"])));
 			die();
@@ -1411,7 +1451,7 @@ class room_reservation extends class_base
 		}
 	}
 
-	function send_affirmation_mail($id)
+	function send_affirmation_mail($id,$tpl = null)
 	{
 		if(!is_oid($id))
 		{
@@ -1427,7 +1467,10 @@ class room_reservation extends class_base
 		{
 			$_send_to.=",".$others;
 		}
-		$tpl = "preview.tpl";
+		if(!$tpl)
+		{
+			$tpl = "preview.tpl";
+		}
 		$this->read_site_template($tpl);
 		lc_site_load("room_reservation", &$this);
 		$this->vars($this->get_object_data($id));
@@ -1453,6 +1496,14 @@ class room_reservation extends class_base
 			$bron = obj($id);
 			$bron->set_prop("verified" , 1);
 			aw_disable_acl();
+			if(!$bron->meta("mail_sent"))//topelt mailide vältimiseks
+			{
+				$bron->set_meta("mail_sent",1);
+			}
+			else
+			{
+				$this->mail_sent_already = 1;
+			}
 			$bron->save();
 			aw_restore_acl();
 			return 1;
