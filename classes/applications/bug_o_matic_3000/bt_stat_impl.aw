@@ -59,7 +59,7 @@ class bt_stat_impl extends core
 			$dmz = array();
 			foreach($coms as $com)
 			{
-				$dmz[date("Y", $com->created())]["m".date("m", $com->created())] += max(0,$com->prop("add_wh"));
+				$dmz[date("Y", $com->created())]["m".date("m", $com->created())] += $com->prop("add_wh");
 			}
 
 			foreach($dmz as $year => $mons)
@@ -132,7 +132,7 @@ class bt_stat_impl extends core
 		$bugs = array();
 		foreach($ol->arr() as $com)
 		{
-			$bugs[$com->parent()] += max(0,$com->prop("add_wh"));
+			$bugs[$com->parent()] += $com->prop("add_wh");
 		}
 
 		foreach($bugs as $bug => $wh)
@@ -279,7 +279,7 @@ class bt_stat_impl extends core
 		foreach($ol->arr() as $com)
 		{
 			$bug = obj($com->parent());
-			$sum_by_proj[$bug->prop("project")] += max(0,$com->prop("add_wh"));
+			$sum_by_proj[$bug->prop("project")] += $com->prop("add_wh");
 		}
 
 		$tot_sum = 0;
@@ -292,7 +292,7 @@ class bt_stat_impl extends core
 			foreach($coms as $com)
 			{
 				$bug = obj($com->parent());
-				$dmz[$bug->prop("project")]["m".date("m", $com->created())] += max(0,$com->prop("add_wh"));
+				$dmz[$bug->prop("project")]["m".date("m", $com->created())] += $com->prop("add_wh");
 			}
 
 			foreach($dmz as $proj => $mons)
@@ -363,7 +363,7 @@ class bt_stat_impl extends core
 			$bug = obj($com->parent());
 			if ($bug->prop("project") == $arr["request"]["det_proj"])
 			{
-				$bugs[$com->parent()] += max(0,$com->prop("add_wh"));
+				$bugs[$com->parent()] += $com->prop("add_wh");
 			}
 		}
 

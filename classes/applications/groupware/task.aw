@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.159 2007/02/14 17:16:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.160 2007/02/19 15:47:53 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -3019,7 +3019,12 @@ class task extends class_base
 			"name" => "cust",
 			"text" => t("Tellija"),
 		));
-		
+	
+		if (!is_object($arr["obj_inst"]))
+		{
+			return;
+		}
+	
 		$tb->add_menu_item(array(
 			"parent" => "cust",
 			"text" => t("Organisatsioon"),
@@ -3159,7 +3164,7 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_co_table($t);
 
-		if (!is_oid($arr["obj_inst"]->id()))
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
 		{
 			return;
 		}
@@ -3209,7 +3214,7 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_proj_table($t);
 
-		if (!is_oid($arr["obj_inst"]->id()))
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
 		{
 			return;
 		}
@@ -3257,7 +3262,7 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_parts_table($t);
 
-		if (!is_oid($arr["obj_inst"]->id()))
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
 		{
 			return;
 		}
@@ -3420,7 +3425,7 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_files_table($t);
 
-		if (!is_oid($arr["obj_inst"]->id()))
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
 		{
 			return;
 		}

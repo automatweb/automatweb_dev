@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.14 2007/01/10 13:31:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.15 2007/02/19 15:47:52 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1154,7 +1154,9 @@ class admin_if extends class_base
 			$o->set_parent(aw_ini_get("amenustart"));
 			$o->set_class_id(CL_ADMIN_IF);
 			$o->set_name(t("Administreerimisliides"));
+			aw_disable_acl();
 			$o->save();
+			aw_restore_acl();
 		}
 
 		$_SESSION["cur_admin_if"] = $o->id();

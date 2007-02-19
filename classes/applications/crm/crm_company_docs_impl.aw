@@ -301,7 +301,10 @@ class crm_company_docs_impl extends class_base
 			$parent_ol = $parent_tree->to_list();
 			$parents = $parent_ol->ids();
 			$parents[] = $fld->id();
-			$ol = new object_list($this->_get_doc_search_f($arr["request"], $parents));
+			$f = $this->_get_doc_search_f($arr["request"], $parents);
+			$f["site_id"] = array();
+			$f["lang_id"] = array();
+			$ol = new object_list($f);
 		}
 		else
 		{

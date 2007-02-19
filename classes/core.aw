@@ -92,6 +92,7 @@ class core extends acl_base
 	**/
 	function _log($type,$action,$text,$oid = 0,$honor_ini = true)
 	{
+return; // TEMP
 		if(aw_ini_get('logging_disabled') && $honor_ini)
 		{
 			return;

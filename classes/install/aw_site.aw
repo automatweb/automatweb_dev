@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.45 2005/11/16 13:23:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.46 2007/02/19 15:47:54 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -1201,7 +1201,7 @@ class aw_site extends class_base
 			"class" => "site_list",
 			"action" => "get_site_list", 
 			"params" => array(
-				"server_id" => $server_id
+				//"server_id" => $server_id
 			),
 			"method" => "xmlrpc",
 			"server" => "register.automatweb.com",

@@ -17,6 +17,16 @@
 	<Style name="Title" element="span">
 		<Attribute name="class" value="Title" />
 	</Style>
+	<Style name="Code" element="span">
+		<Attribute name="class" value="Code" />
+	</Style>
+	<Style name="Horisontal ruler" element="hr">
+		<Attribute name="size" value="1" />
+		<Attribute name="color" value="#ff0000" />
+	</Style>
+	<Style name="Vahepealkiri" element="span">
+		<Attribute name="class" value="vahepealkiri" />
+	</Style>
 	<Style name="Quotation" element="div">
 		<Attribute name="class" value="quote" />
 	</Style>

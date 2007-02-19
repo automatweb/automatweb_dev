@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.81 2007/01/23 11:02:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.82 2007/02/19 15:47:53 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -316,6 +316,10 @@ class crm_meeting extends class_base
 				break;
 
 			case "add_clauses":
+				if (!is_object($arr["obj_inst"]))
+				{
+					return PROIP_IGNORE;
+				}
 				$data["options"] = array(
 					"status" => t("Aktiivne"),
 					"is_done" => t("Tehtud"),
@@ -1111,7 +1115,7 @@ class crm_meeting extends class_base
 		));
 
 		// small conversion - if set, create a relation instead and clear, so that we can have multiple
-		if ($this->can("view", $arr["obj_inst"]->prop("bill_no") ))
+		if (is_object($arr["obj_inst"]) && $this->can("view", $arr["obj_inst"]->prop("bill_no") ))
 		{
 			$arr["obj_inst"]->connect(array(
 				"to" => $arr["obj_inst"]->prop("bill_no"),
@@ -1147,22 +1151,22 @@ class crm_meeting extends class_base
 		$t->define_data(array(
 			"time_guess" => html::textbox(array(
 				"name" => "time_guess",
-				"value" => $arr["obj_inst"]->prop("time_guess"),
+				"value" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->prop("time_guess") : 0,
 				"size" => 5
 			)),
 			"time_real" => html::textbox(array(
 				"name" => "time_real",
-				"value" => $arr["obj_inst"]->prop("time_real"),
+				"value" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->prop("time_real") : 0,
 				"size" => 5
 			)),
 			"time_to_cust" => html::textbox(array(
 				"name" => "time_to_cust",
-				"value" => $arr["obj_inst"]->prop("time_to_cust"),
+				"value" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->prop("time_to_cust") : 0,
 				"size" => 5
 			)),
 			"hr_price" => html::textbox(array(
 				"name" => "hr_price",
-				"value" => $arr["obj_inst"]->prop("hr_price"),
+				"value" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->prop("hr_price") : 0,
 				"size" => 5
 			)),
 			"bill_no" => $bno,

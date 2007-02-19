@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.74 2007/01/23 10:46:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.75 2007/02/19 15:47:52 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -760,7 +760,7 @@ class bug extends class_base
 					return PROP_FATAL_ERROR;
 				}
 
-				if ($estend > ($ev+24*3600))
+				if ($ev > 100 && $estend > ($ev+24*3600))
 				{
 					$prop["error"] = sprintf(t("Bugi ei ole v&otilde;imalik valmis saada enne %s!"), date("d.m.Y H:i", $estend));
 					return PROP_FATAL_ERROR;
