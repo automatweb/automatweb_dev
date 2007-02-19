@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.14 2007/02/14 15:48:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.15 2007/02/19 14:21:50 markop Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -201,7 +201,11 @@ class shop_product_table_layout extends class_base
 		{
 			$sect = aw_global_get("ct_lang_lc")."/".$sect;
 		}
-		if($this->oc->prop("web_discount"))
+		if($this->web_discount)
+		{
+			$wd = $this->web_discount;
+		}
+		elseif($this->oc->prop("web_discount"))
 		{
 			$wd = $this->oc->prop("web_discount");
 		}

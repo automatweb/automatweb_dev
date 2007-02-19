@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.48 2007/01/10 12:58:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.49 2007/02/19 14:21:50 markop Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -741,7 +741,10 @@ class shop_order_center extends class_base
 //arr($_SESSION["soc_err"]);
 		$tl_inst = $t_layout->instance();
 		$tl_inst->start_table($t_layout, $soc);
-
+		if($this->web_discount)
+		{
+			$tl_inst->web_discount = $this->web_discount;
+		}
 		$xi = 0;
 		$l_inst = $layout->instance();
 		$l_inst->read_template($layout->prop("template"));
@@ -754,6 +757,7 @@ class shop_order_center extends class_base
 			if ($tl_inst->is_on_cur_page())
 			{
 				$oid = $o->id();
+				//if(aw_global_get("uid") == "struktuur")arr($soce[$oid]);
 				$tl_inst->add_product($i->do_draw_product(array(
 					"bgcolor" => $xi % 2 ? "cartbgcolor1" : "cartbgcolor2",
 					"prod" => $o,
