@@ -219,7 +219,10 @@ class keyword_selector extends class_base
 				"url" => aw_url_change_var("kw_sel_filt", "_all")	
 			));
 		}
-		return join(" ", $list);
+	
+		$rv = join(" ", $list);
+		$rv .= " / ".html::get_new_url(CL_KEYWORD, $_GET["id"], array("return_url" => get_ru()), t("Lisa uus"));
+		return $rv;
 	}
 
 	function _draw_existing_kws($arr)
