@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.150 2007/02/19 13:39:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.151 2007/02/19 14:18:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2003,6 +2003,7 @@ class room extends class_base
 		}
 		foreach($prod_list as $oid => $name)
 		{
+			$product = obj($oid);
 			$parent = $product->parent();
 	//		$parents[$parent][] = $oid;
 
