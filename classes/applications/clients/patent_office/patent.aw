@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.55 2007/02/16 12:15:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.56 2007/02/19 11:43:36 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -579,6 +579,16 @@ class patent extends class_base
 			$p.=$this->parse("PRODUCTS");
 		}
 		$this->vars(array("PRODUCTS" => $p));
+		//arr($data);
+		foreach($data as $prop => $val)
+		{
+			if($val)
+			{
+				$str = strtoupper(str_replace("_value","",str_replace("_text","",$prop)));
+				$this->vars(array($str => $this->parse($str)));
+			}
+		}
+		
 		if($data["convention_nr_value"])
 		{
 			$this->vars(array("CONVENTION" => $this->parse("CONVENTION")));
@@ -596,6 +606,13 @@ class patent extends class_base
 		$props = array();
 		$vars = array("undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "doc_nr", "payer");
 		
+		//siia panev miskid muutujad mille iga ringi peal ära kustutab... et uuele taotlejale vana info ei jääks
+		$del_vars = array("name_value" , "email_value" , "phone_value" ,
+				"fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","correspond_street_value",
+				"correspond_index_value" ,
+				"correspond_country_code_value" ,
+				"correspond_city_value");
+		
 		$a = "";
 		$correspond_address = "";
 		$address_inst = get_instance(CL_CRM_ADDRESS);
@@ -603,13 +620,17 @@ class patent extends class_base
 		{
 			foreach($o->connections_from(array("type" => "RELTYPE_APPLICANT")) as $key => $c)
 			{
+				foreach($del_vars as $del_var)
+				{
+					unset($this->vars[$del_var]);
+				}
 				$applicant = $c->to();
 				$this->vars(array(
 					"name_value" => $applicant->name(),
 					"email_value" => $applicant->prop("email"),
 					"phone_value" => $applicant->prop("phone"),
 					"fax_value" => $applicant->prop_str("fax"),
-				));	
+				));
 				if($applicant->class_id() == CL_CRM_PERSON)
 				{
 					$this->vars(array(
@@ -661,6 +682,15 @@ class patent extends class_base
 						"correspond_country_code_value" => $address_inst->get_country_code($correspond_address_obj->prop("riik")),
 						"correspond_city_value" => $correspond_address_obj->prop_str("linn"),
 					));
+				}
+				
+				foreach($del_vars as $var)
+				{
+					if($this->vars[$var])
+					{
+						$str = strtoupper(str_replace("_value","",str_replace("_text","",$var)));
+						$this->vars(array($str => $this->parse($str)));
+					}
 				}
 				$a.= $this->parse("APPLICANT");
 			}
@@ -1061,6 +1091,11 @@ class patent extends class_base
 						"CO_ADDRESS" => "",
 					));
 				}
+				if($_SESSION["patent"]["applicants"][$key][$var])
+				{
+					$str = strtoupper($key);
+					$this->vars(array($str => $this->parse($str)));
+					}
 			}
 			$a.= $this->parse("APPLICANT");
 		}
