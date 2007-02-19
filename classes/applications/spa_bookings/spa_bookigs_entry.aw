@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.32 2007/02/19 10:08:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.33 2007/02/19 10:52:24 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -714,6 +714,7 @@ class spa_bookigs_entry extends class_base
 		@param pkt optional type=int
 		@param not_verified optional type=int
 		@param rooms optional 
+		@param retf optional 
 	**/
 	function select_room_booking($arr)
 	{
@@ -906,7 +907,8 @@ class spa_bookigs_entry extends class_base
 					"prod" => $arr["prod"],
 					"prod_num" => $arr["prod_num"],
 					"booking" => $arr["booking"],
-					"not_verified" => $arr["not_verified"]
+					"not_verified" => $arr["not_verified"],
+					"retf" => $arr["retf"]
 				));
 				if (!$avail)
 				{
@@ -1047,6 +1049,7 @@ class spa_bookigs_entry extends class_base
 		@param prod_num required type=int
 		@param booking required type=int
 		@param not_verified optional type=int
+		@param retf optional 
 	**/
 	function make_reservation($arr)
 	{
@@ -1107,6 +1110,13 @@ class spa_bookigs_entry extends class_base
 				));
 				$bron->save();
 
+				if ($arr["retf"] != "")
+				{
+					die("<script language=javascript>
+						window.opener.location.href='".$arr["retf"]."';
+						window.close();
+					</script>");
+				}
 				return aw_ini_get("baseurl")."/automatweb/closewin.html";
 
 			}
@@ -1341,6 +1351,36 @@ class spa_bookigs_entry extends class_base
 		$b->set_prop("start1", -1);
 		$b->set_prop("end", -1);
 		$b->save();
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib name=delete_booking
+		@param return_url required
+		@param booking required type=int 
+		@param spa_bron required type=int 
+	**/
+	function delete_booking($arr)
+	{
+		$b = obj($arr["booking"]);
+		$b->delete();
+		$sb = obj($arr["spa_bron"]);
+		$ep = $sb->meta("extra_prods");
+		foreach($ep as $ei_key => $ei_entry)
+		{
+			if ($ei_entry["reservation"] == $arr["booking"])
+			{
+				unset($ep[$ei_key]);
+			}
+		}
+		$sb->set_meta("extra_prods", $ep);
+		$sb->save();
+		if ($sb->is_connected_to(array("to" => $arr["booking"])))
+		{
+			$sb->disconnect(array(
+				"from" => $arr["booking"]
+			));
+		}
 		return $arr["return_url"];
 	}
 

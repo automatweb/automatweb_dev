@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.6 2007/02/19 10:08:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.7 2007/02/19 10:52:24 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -96,8 +96,10 @@ class spa_customer_interface extends class_base
 
 			$confirmed = true;
 			$has_times = true;
+			$has_prods = false;
 			foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
 			{
+				$has_prods = true;
 				$bron = $c->to();
 				$confirmed &= $bron->prop("verified");
 				if ($bron->prop("start1") < 100)
@@ -107,7 +109,7 @@ class spa_customer_interface extends class_base
 			}
 
 
-			if (!$confirmed)
+			if (!$confirmed || !$has_prods)
 			{
 				$booking_str .= " ".html::href(array(
 					"url" => $this->mk_my_orb("add_prod_to_bron", array(
@@ -119,7 +121,7 @@ class spa_customer_interface extends class_base
 				));
 			}
 
-			if (!$confirmed && $has_times)
+			if (!$confirmed && $has_times && $has_prods)
 			{
 				$booking_str .= " / ".html::href(array(
 					"url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
@@ -147,7 +149,7 @@ class spa_customer_interface extends class_base
 				"print_url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
 			));
 
-			if (!$confirmed)
+			if (!$confirmed || !$has_prods)
 			{
 				$this->vars(array(
 					"ADD_SERVICE" => $this->parse("ADD_SERVICE")
@@ -160,7 +162,7 @@ class spa_customer_interface extends class_base
 				));
 			}
 
-			if (!$confirmed && $has_times)
+			if (!$confirmed && $has_times && $has_prods)
 			{
 				$this->vars(array(
 					"CONFIRM" => $this->parse("CONFIRM")
@@ -262,7 +264,15 @@ class spa_customer_interface extends class_base
 								"caption" => t("T&uuml;hista")
 							));
 							$this->vars(array(
-								"clear_url" => $ei->mk_my_orb("clear_booking", array("return_url" => get_ru(), "booking" => $date_booking_id)),
+								"clear_url" => $ei->mk_my_orb("clear_booking", array(
+									"return_url" => get_ru(), 
+									"booking" => $date_booking_id
+								)),
+								"delete_url" => $ei->mk_my_orb("delete_booking", array(
+									"return_url" => get_ru(), 
+									"booking" => $date_booking_id,
+									"spa_bron" => $o->id()
+								)),
 							));
 							$this->vars(array(
 								"CLEAR" => $this->parse("CLEAR")
@@ -290,12 +300,20 @@ class spa_customer_interface extends class_base
 					"disp_main" => $o->modified() > (time() - 300) ? "block" : "none",
 					"disp_short" => $o->modified() > (time() - 300) ? "none" : "block"
 				));
-				$bookings .= $this->parse("BOOKING");
+				if ($bookings == "" && $f_booking == "" && $this->is_template("FIRST_BOOKING"))
+				{
+					$f_booking = $this->parse("FIRST_BOOKING");
+				}
+				else
+				{
+					$bookings .= $this->parse("BOOKING");
+				}
 			}
 			$book_line = "";
 
 		}
 		$this->vars(array(
+			"FIRST_BOOKING" => $f_booking,
 			"BOOKING" => $bookings,
 			"add_pk_url" => $this->mk_my_orb("add_pkt", array("id" => $id, "r" => get_ru()))
 		));
@@ -378,7 +396,8 @@ class spa_customer_interface extends class_base
 				));
 				$pop_url = $this->mk_my_orb("prepare_select_new_pkt_time", array(
 					"prod" => $pr->id(),
-					"id" => $arr["id"]
+					"id" => $arr["id"],
+					"r" => $arr["r"]
 				));
 				$this->vars(array(
 					"prod_name" => $pr->trans_get_val("name"),
@@ -477,9 +496,29 @@ class spa_customer_interface extends class_base
 					)),
 					"caption" => $pr->name()
 				));
+				$prod_url = $this->mk_my_orb("fin_add_prod_to_bron", array(
+					"prod" => $pr->id(), 
+					"id" => $arr["id"], 
+					"r" => $arr["r"],
+					"bron" => $arr["bron"]
+				));
+				$this->vars(array(
+					"prod_name" => $pr->trans_get_val("name"),
+					"prod_url" => $prod_url,
+					"select_time_pop" => "aw_popup_scroll('$prod_url','bronner',640,480)"
+				));
+				$pp = $pr->meta("cur_prices");
+				foreach($curs as $_id => $_nm)
+				{
+					$this->vars(array(
+						"price_".$_id => $pp[$_id]
+					));
+				}
+				$p_str .= $this->parse("PRODUCT");
 			}
 			$this->vars(array(
 				"prods" => join(", ", $p_list),
+				"PRODUCT" => $p_str,
 				"parent" => $po->name()
 			));
 			$pts .= $this->parse("PARENT");
@@ -504,7 +543,18 @@ class spa_customer_interface extends class_base
 		$i = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		$arr["not_verified"] = 1;
 		$i->fin_add_prod_to_bron($arr);
-		return $arr["r"];
+		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
+		$ct = obj($arr["id"]);
+		$rooms = $ct->prop("rooms");
+		return $ei->mk_my_orb("select_room_booking", array(
+			"booking" => $arr["bron"], 
+			"prod" => $arr["prod"], 
+			"prod_num" => 0, 
+			"section" => "3169", 
+			"not_verified" => 1, 
+			"rooms" => $rooms,
+			"retf" => $arr["r"]
+		));
 	}
 
 	/**
@@ -638,6 +688,7 @@ class spa_customer_interface extends class_base
 		@attrib name=prepare_select_new_pkt_time
 		@param prod required type=int acl=view
 		@param id required type=int acl=view
+		@param r optional
 	**/
 	function prepare_select_new_pkt_time($arr)
 	{
@@ -651,7 +702,8 @@ class spa_customer_interface extends class_base
 			"prod_num" => 0, 
 			"section" => "3169", 
 			"not_verified" => 1, 
-			"rooms" => $rooms
+			"rooms" => $rooms,
+			"retf" => $arr["r"]
 		));
 	}
 }

@@ -10,6 +10,7 @@
 					<optional name="pkt" type="int" />
 					<optional name="not_verified" type="int" />
 					<optional name="rooms" />
+					<optional name="retf" />
 				</arguments>
 			</function>
 		</action>
@@ -23,6 +24,7 @@
 					<required name="prod_num" type="int" />
 					<required name="booking" type="int" />
 					<optional name="not_verified" type="int" />
+					<optional name="retf" />
 				</arguments>
 			</function>
 		</action>
@@ -41,6 +43,16 @@
 				<arguments>
 					<required name="return_url" />
 					<required name="booking" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_booking">
+			<function name="delete_booking">
+				<arguments>
+					<required name="return_url" />
+					<required name="booking" type="int" />
+					<required name="spa_bron" type="int" />
 				</arguments>
 			</function>
 		</action>

@@ -64,6 +64,7 @@
 				<arguments>
 					<required name="prod" type="int" acl="view" />
 					<required name="id" type="int" acl="view" />
+					<optional name="r" />
 				</arguments>
 			</function>
 		</action>
