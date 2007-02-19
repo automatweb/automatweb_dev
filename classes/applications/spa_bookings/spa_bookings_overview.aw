@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.19 2007/02/13 12:46:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.20 2007/02/19 10:08:04 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -457,6 +457,20 @@ class spa_bookings_overview extends class_base
 		}
 		uasort($arr["rvs"], create_function('$a,$b', '$ao = obj($a); $bo = obj($b); return $ao->prop("start1") - $bo->prop("start1");'));
 		$b = obj(reset($arr["rvs"]));
+		// try to find the spa_booking that is connected to the room reservartion
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_SPA_BOOKING,
+			"to" => $b->id()
+		));
+		if (count($conns))
+		{
+			$con = reset($conns);
+			$b = obj($con["from"]);
+			$_from = $b->prop("start");
+			$_to = $b->prop("end");
+		}
+
 		if (!$_GET["person"])
 		{
 			$p = obj($b->prop("customer"));

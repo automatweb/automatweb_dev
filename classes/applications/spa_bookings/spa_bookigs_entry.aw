@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.31 2007/02/16 13:05:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.32 2007/02/19 10:08:04 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -337,7 +337,6 @@ class spa_bookigs_entry extends class_base
 
 				// for this booking, create empty reservations for all products so we can search by them
 				$booking_inst = $booking->instance();
-	echo "check rvs conns <br>";			
 	$booking_inst->check_reservation_conns($booking);
 
 				$po = obj($d["packet"]);
@@ -1519,6 +1518,8 @@ class spa_bookigs_entry extends class_base
 				}
 			}
 
+			$year_from = 1900;
+			$year_to = date("Y");
 			$type = "textbox";
 			$opts = null;
 			switch($propl[$propertyn]["type"])
@@ -1565,6 +1566,8 @@ class spa_bookigs_entry extends class_base
 					$type="date_select";
 					$capt = $capt != "" ? $capt : t("Lahkumine");
 					$val = -1;
+					$year_from = date("Y");
+					$year_to = date("Y")+3;
 					break;
 
 				case "pk_tb_name":
@@ -1601,7 +1604,7 @@ class spa_bookigs_entry extends class_base
 				"caption" => $capt,
 				"value" => $val,
 				"options" => $opts,
-				"year_from" => 1900,
+				"year_from" => $year_from,
 				"year_to" => date("Y")
 			));
 		}

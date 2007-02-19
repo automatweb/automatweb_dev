@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.5 2007/02/19 10:02:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.6 2007/02/19 10:08:04 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -356,22 +356,48 @@ class spa_customer_interface extends class_base
 			$p[$o->parent()][] = $o;
 		}
 
+		$ol = new object_list(array(
+			"class_id" => CL_CURRENCY,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$curs = $ol->arr();
+
 		$pts = "";
 		$this->read_template("add_pkt.tpl");
 		foreach($p as $parent => $prods)
 		{
 			$po = obj($parent);
 			$p_list = array();
+			$p_str = "";
 			foreach($prods as $pr)
 			{
 				$p_list[] = html::href(array(
 					"url" => $this->mk_my_orb("add_prod_to_new_pkt", array("prod" => $pr->id(), "id" => $arr["id"], "r" => $arr["r"])),
 					"caption" => $pr->name()
 				));
+				$pop_url = $this->mk_my_orb("prepare_select_new_pkt_time", array(
+					"prod" => $pr->id(),
+					"id" => $arr["id"]
+				));
+				$this->vars(array(
+					"prod_name" => $pr->trans_get_val("name"),
+					"prod_url" => $this->mk_my_orb("add_prod_to_new_pkt", array("prod" => $pr->id(), "id" => $arr["id"], "r" => $arr["r"])),
+					"select_time_pop" => "aw_popup_scroll('$pop_url','bronner',640,480)"
+				));
+				$pp = $pr->meta("cur_prices");
+				foreach($curs as $_id => $_nm)
+				{
+					$this->vars(array(
+						"price_".$_id => $pp[$_id]
+					));
+				}
+				$p_str .= $this->parse("PRODUCT");
 			}
 			$this->vars(array(
 				"prods" => join(", ", $p_list),
-				"parent" => $po->name()
+				"parent" => $po->name(),
+				"PRODUCT" => $p_str
 			));
 			$pts .= $this->parse("PARENT");
 		}
