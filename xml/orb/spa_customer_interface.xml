@@ -59,5 +59,14 @@
 			</function>
 		</action>
 
+		<action name="prepare_select_new_pkt_time">
+			<function name="prepare_select_new_pkt_time">
+				<arguments>
+					<required name="prod" type="int" acl="view" />
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

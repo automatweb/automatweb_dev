@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.4 2007/02/16 13:59:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.5 2007/02/19 10:02:57 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -400,6 +400,7 @@ class spa_customer_interface extends class_base
 		$b->set_prop("person", $p->id());	
 
 		$b->save();
+		$this->last_bron = $b->id();
 
 		$i = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		$i->fin_add_prod_to_bron(array(
@@ -605,6 +606,27 @@ class spa_customer_interface extends class_base
 			$fc->eval_controller($wb->prop("print_view_ctr"), $arr);
 		}
 		die($this->parse());
+	}
+
+	/**
+		@attrib name=prepare_select_new_pkt_time
+		@param prod required type=int acl=view
+		@param id required type=int acl=view
+	**/
+	function prepare_select_new_pkt_time($arr)
+	{
+		$this->add_prod_to_new_pkt($arr);
+		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
+		$ct = obj($arr["id"]);
+		$rooms = $ct->prop("rooms");
+		return $ei->mk_my_orb("select_room_booking", array(
+			"booking" => $this->last_bron, 
+			"prod" => $arr["prod"], 
+			"prod_num" => 0, 
+			"section" => "3169", 
+			"not_verified" => 1, 
+			"rooms" => $rooms
+		));
 	}
 }
 ?>
