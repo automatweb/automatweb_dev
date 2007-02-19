@@ -81,7 +81,16 @@ class acl_manager extends class_base
 
 		$arr["post_ru"] = post_ru();
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_mgr", $arr)
+			"reforb" => $this->mk_reforb("submit_mgr", $arr),
+			"table_legend" => sprintf(t("Tabeli legend:<Br>M - %s<br>L - %s<Br>ACL - %s<br>K - %s<br>V - %s<br>Alam - %s<br>J - %s"), 
+					t("Muutmine"),
+					t("Lisamine"),
+					t("ACL Muutmine"),
+					t("Kustutamine"),
+					t("Vaatamine"),
+					t("Kehtib alamobjektidele"),
+					t("Juurkaust")
+			)
 		));	
 		return $this->parse();
 	}
@@ -122,17 +131,33 @@ class acl_manager extends class_base
 			"caption" => t("Nimi"),
 			"align" => "center"
 		));
+		$shorts = array(
+			"can_edit" => t("M"),
+			"can_add" => t("L"),
+			"can_admin" => t("ACL"),
+			"can_delete" => t("K"),
+			"can_view" => t("V"),
+			"can_subs" => t("ALAM")
+		);
 		foreach(aw_ini_get("acl.names") as $id => $name)
 		{
 			$t->define_field(array(
 				"name" => $id,
-				"caption" => $name,
+				"caption" => html::href(array(
+					"url" => "#",
+					"caption" => $shorts[$id],
+					"title" => $name,
+				)),
 				"align" => "center"
 			));
 		}
 		$t->define_field(array(
 			"name" => "rootf",
-			"caption" => t("Juurkaust"),
+			"caption" => html::href(array(
+				"url" => "#",
+				"caption" => t("J"),
+				"title" => t("Juurkaust"),
+			)),
 			"align" => "center"
 		));
 		$t->define_field(array(
