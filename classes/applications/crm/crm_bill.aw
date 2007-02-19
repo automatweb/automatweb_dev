@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.109 2006/11/20 17:06:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.110 2007/02/19 14:40:36 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -357,16 +357,23 @@ class crm_bill extends class_base
 			case "customer":
 				// check if the 
 
-				if(!is_oid($prop["value"]))
-				{
-					$ol = new object_list(array(
-						"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
-						"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-						"lang_id" => array(),
-					));
-					$cust_obj = $ol->begin();
-					$prop["value"] = $cust_obj->id();
-				}
+ 				if(!is_oid($prop["value"]))
+ 				{
+ 					if(is_oid($arr["request"]["customer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["customer_awAutoCompleteTextbox"]))
+ 					{
+ 						$prop["value"] = $arr["request"]["customer_awAutoCompleteTextbox"];
+ 					}
+ 					else
+ 					{
+ 						$ol = new object_list(array(
+ 							"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
+ 							"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+ 							"lang_id" => array(),
+ 						));
+ 						$cust_obj = $ol->begin();
+ 						$prop["value"] = $cust_obj->id();
+ 					}
+ 				}
 				if ($this->can("view", $prop["value"]) && (($arr["obj_inst"]->prop("bill_due_date_days") == 0) || ($arr["obj_inst"]->prop("bill_due_date_days") == null)))
 				{
 					$cc = get_instance(CL_CRM_COMPANY);
