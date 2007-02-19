@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.149 2007/02/19 12:50:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.150 2007/02/19 13:39:57 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1426,7 +1426,7 @@ class room extends class_base
 			));
 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		}
-		
+		//if(aw_global_get("uid") == "struktuur")arr($options);
 		//seda hakkaks js siis vajama, et natuke aega juurde liita ajale mida selectitakse
 		$after_buffer = "".($arr["obj_inst"]->prop("buffer_after")*$arr["obj_inst"]->prop("buffer_after_unit")/($arr["obj_inst"]->prop("time_step")*$this->step_lengths[$arr["obj_inst"]->prop("time_unit")]));
 		$ret.= html::hidden(array("name" => "buffer_after", "id"=>"buffer_after" ,"value"=>$after_buffer));
@@ -2003,7 +2003,6 @@ class room extends class_base
 		}
 		foreach($prod_list as $oid => $name)
 		{
-			$product = obj($oid);
 			$parent = $product->parent();
 	//		$parents[$parent][] = $oid;
 
@@ -2017,7 +2016,7 @@ class room extends class_base
 				$p = obj($parent);
 
 				$res.= '<a class="menuItem" href="" onclick="return false;" onmouseover="menuItemMouseover(event, '.$parent.');">
-					<span class="menuItemText">'.$p->name().'</span>
+					<span class="menuItemText">'.$p->trans_get_val().'</span>
 					<span class="menuItemArrow"><img style="border:0px" src="'.aw_ini_get("baseurl").'/automatweb/images/arr.gif" alt=""></span>
 					</a>';
 				$div.= '<div id="'.$parent.'" class="menu" onmouseover="menuMouseover(event)">';
