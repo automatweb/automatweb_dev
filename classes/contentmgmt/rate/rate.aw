@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.31 2007/02/16 15:15:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.32 2007/02/20 09:03:42 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -444,7 +444,8 @@ class rate extends class_base
 			$this->vars(array(
 				"LINE" => $l,
 				"name" => $ob->name(),
-				"count" => $ob->meta('top')
+				"count" => $ob->meta('top'),
+				"total" => $this->db_fetch_field("select count(*) as cnt from ratings", "cnt")
 			));
 			return $this->parse();
 		}
