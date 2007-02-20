@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.189 2007/02/20 11:25:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.190 2007/02/20 14:47:19 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1113,7 +1113,20 @@ class image extends class_base
 					// get rid of the old file
 					if (file_exists($oldfile))
 					{
-						@unlink($oldfile);
+						// also, we should check if any OTHER file objects point to this file.
+						// if they do, then don't delete the old one. this is sort-of like reference counting:P
+						// because copy/paste on images creates a new object that points to the same file. 
+						$ol = new object_list(array(
+							"class_id" => CL_IMAGE,
+							"lang_id" => array(),
+							"site_id" => array(),
+							"file" => "%".basename($oldfile)."%",
+							"oid" => new obj_predicate_not($arr["obj_inst"]->id())
+						));
+						if (!$ol->count())
+						{
+							@unlink($oldfile);
+						}
 					}
 					if ($arr["obj_inst"]->name() == "")
 					{
