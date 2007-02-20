@@ -22,6 +22,13 @@
 			</function>
 		</action>
 
+		<action name="pdf" all_args="1">
+			<function name="pdf">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="procurator_popup">
 			<function name="procurator_popup">
 				<arguments>

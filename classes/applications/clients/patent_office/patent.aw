@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.57 2007/02/20 11:35:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.58 2007/02/20 13:04:32 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1520,7 +1520,8 @@ class patent extends class_base
 		
 		$data["show_link"] = "javascript:window.open('".$this->mk_my_orb("show", array("print" => 1 , "id" => $_SESSION["patent"]["trademark_id"], "add_obj" => $arr["alias"]["to"]))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=600, width=800')";
 		
-		
+		$data["convert_link"] = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["trademark_id"], "add_obj" => $arr["alias"]["to"]) , CL_PATENT);
+	
 		if(sizeof($_SESSION["patent"]["applicants"]))
 		{
 			$data["forward"] = '<input type="submit" value="Edasi"  class="nupp">';
@@ -1547,6 +1548,21 @@ class patent extends class_base
 		return $data;
 	}
 	
+	/** 
+		@attrib name=pdf all_args=1
+	**/
+	function pdf($arr)
+	{
+//		header("Content-type: application/pdf");
+		$conv = get_instance("core/converters/html2pdf");
+		die($conv->gen_pdf(array(
+			"source" => $this->show (array (
+				"id" => $id,
+			)),
+			"filename" => "Kaubamärgitaotlus",
+		)));
+	}
+		
 	function get_payment_sum($arr)
 	{
 		$classes = array();
@@ -2693,7 +2709,7 @@ class patent extends class_base
 				if($send_patent == $patent->id() && $re["status"] == 1 && !$status->prop("nr"))
 				{
 					$_SESSION["patent"]["id"] = $patent->id();
-					$this->set_sent(array("add_obj" => $arr["alias"]["to"]));
+					$asd = $this->set_sent(array("add_obj" => $arr["alias"]["to"]));
 				}
 				if($arr["unsigned"])
 				{
