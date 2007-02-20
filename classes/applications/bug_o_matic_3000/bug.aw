@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.75 2007/02/19 15:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.76 2007/02/20 13:47:04 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -783,7 +783,7 @@ class bug extends class_base
 				break;
 
 			case "bug_content_comm":
-				if (trim($prop["value"]) != "")
+				if (trim($prop["value"]) != "" && !$arr["new"])
 				{
 					// save comment
 					//$this->_add_comment($arr["obj_inst"], $prop["value"]);
@@ -803,7 +803,7 @@ class bug extends class_base
 					}
 				}
 
-				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"] && !$arr["new"])
 				{
 					$com = sprintf(t("Staatus muudeti %s => %s"), $this->bug_statuses[$old], $this->bug_statuses[$prop["value"]]);
 					//$this->_add_comment($arr["obj_inst"], $com);
@@ -812,7 +812,7 @@ class bug extends class_base
 				break;
 
 			case "bug_priority":
-				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"] && !$arr["new"])
 				{
 					$com = sprintf(t("Prioriteet muudeti %s => %s"), $old, $prop["value"]);
 					//$this->_add_comment($arr["obj_inst"], $com);
@@ -845,7 +845,7 @@ class bug extends class_base
 					$nv = $nvo->name();
 				}
 
-				if (($old = $arr["obj_inst"]->prop_str($prop["name"])) != $nv)
+				if (($old = $arr["obj_inst"]->prop_str($prop["name"])) != $nv && !$arr["new"])
 				{
 					$com = sprintf(t("Kellele muudeti %s => %s"), $old, $nv);
 					//$this->_add_comment($arr["obj_inst"], $com);
@@ -857,7 +857,7 @@ class bug extends class_base
 				$clss = aw_ini_get("classes");
 				$old = $clss[(int)$arr["obj_inst"]->prop($prop["name"])]["name"];
 				$nv = $clss[(int)$prop["value"]]["name"];
-				if ($old != $nv)
+				if ($old != $nv && !$arr["new"])
 				{
 					$com = sprintf(t("Klass muudeti %s => %s"), $old, $nv);
 					//$this->_add_comment($arr["obj_inst"], $com);
@@ -1130,14 +1130,15 @@ class bug extends class_base
 
 	function callback_pre_save($arr)
 	{
-		if (is_array($this->add_comments) && count($this->add_comments))
-		{
-			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh);
-		}
 	}
 	
 	function callback_post_save($arr)
 	{
+		if (is_array($this->add_comments) && count($this->add_comments))
+		{
+			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh);
+		}
+
 		if ($arr["new"])
 		{
 			$this->notify_monitors($arr["obj_inst"], $arr["obj_inst"]->prop("bug_content"));
