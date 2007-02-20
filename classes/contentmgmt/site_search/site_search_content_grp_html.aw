@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.5 2005/09/29 06:31:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.6 2007/02/20 13:06:56 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -129,6 +129,32 @@ echo "baseurl = ".$this->baseurl." <br>";
 		$this->queue->set_all($o->meta("stored_queue"));
 		$this->pages = $this->make_keys($o->meta("stored_visited_pages"));
 		echo "restored queue, items = ".$this->queue->count()." pages = ".count($this->pages)."<br>";
+	}
+
+
+	function add_single_url_to_index($url)
+	{
+		classload("contentmgmt/site_search/parsers/parser_finder");
+		$i = parser_finder::instance($url);
+		if ($i === NULL)
+		{
+			return false;
+		}
+		
+		// try to get oid of the first available object of this class
+		$ol = new object_list(array(
+			"class_id" => CL_SITE_SEARCH_CONTENT_GRP_HTML,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$o = $ol->begin();
+		if (!$o)
+		{
+			$o = obj();
+		}
+		ob_start();
+		$this->_store_content($i, $o->id());
+		ob_end_clean();
 	}
 
 	function bg_run_step($o)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.79 2006/12/13 12:24:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.80 2007/02/20 13:06:56 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -2396,6 +2396,27 @@ class site_search_content extends class_base
 		return $tp->get_tabpanel(array(
 			"content" => $html
 		));
+	}
+
+	/** Adds a single aw object to the static search index
+		@attrib api=1 params=name
+		@param oid required type=oid 
+			the object to add to the index - currently only CL_FILE type objects are supported
+	**/
+	function add_single_object_to_index($arr)
+	{
+		if (!$this->can("view", $arr["oid"]))
+		{
+			return false;
+		}
+		$o = obj($arr["oid"]);
+		if ($o->class_id() != CL_FILE)
+		{
+			return false;
+		}
+		$i = get_instance(CL_SITE_SEARCH_CONTENT_GRP_HTML);
+		$f = get_instance(CL_FILE);
+		$i->add_single_url_to_index(file::get_url($o->id(), $o->name()));
 	}
 }
 ?>

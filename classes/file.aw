@@ -1,28 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.146 2007/01/10 13:19:51 kristo Exp $
-// file.aw - Failide haldus
-
-// if files.file != "" then the file is stored in the filesystem
-// otherwise it is stored in the db
-//
-// original file name is stored in objects.name - kind of silly, yeah, but whatever
-//
-// <terryf> failide tabelis on v2li
-// <terryf> showal
-// <terryf> mis n2itab et kas faili n2datakse kohe v6i ei
-// <terryf> ja siis kui showal=1
-// <terryf> siis ocitaxe selle faili seest kui ta on m6ne dokumendi juurde aliasex pandud
-//
-// all file saving operatios are done in save_file - they should stay there so we can configure whether 
-// we use db storage of filesystem storage for files
-//
-
-
-// UUS KOMMENTAAR
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.147 2007/02/20 13:06:55 kristo Exp $
 /*
-
-
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
 @tableinfo files index=id master_table=objects master_index=oid	
@@ -480,12 +458,11 @@ class file extends class_base
 
 	function callback_post_save($arr)
 	{
-		// overwrite the name if new file is uploaded
-		/*if (isset($this->file_name))
+		if ($arr["request"]["save_and_index"])
 		{
-			$arr["obj_inst"]->set_name($this->file_name);
-			$arr["obj_inst"]->save();
-		};*/
+			$i = get_instance(CL_SITE_SEARCH_CONTENT);
+			$i->add_single_object_to_index(array("oid" => $arr["obj_inst"]->id()));
+		}
 	}
 
 	////
@@ -1371,6 +1348,23 @@ class file extends class_base
 		</script>";
 		$out = $arr["close"]?$close:$c->id();
 		die($out);
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		// see if there is a site_search content class set to search from static content
+		$ol = new object_list(array(
+			"class_id" => CL_SITE_SEARCH_CONTENT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"search_static" => 1
+		));
+		if ($ol->count())
+		{
+			return "
+				nsbt = document.createElement('input');nsbt.name='save_and_index';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja indekseeri otsingusse")."'; el = document.getElementById('buttons');el.appendChild(nsbt);";
+		}
+		return "";
 	}
 };
 ?>
