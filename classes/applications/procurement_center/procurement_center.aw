@@ -1,6 +1,5 @@
-	
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.33 2007/02/06 13:27:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.34 2007/02/20 15:42:42 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -1543,9 +1542,15 @@ class procurement_center extends class_base
 					"icon" => icons::get_icon_url($file_o)
 				));
 			}
+			$date = "";
+			if($o->prop("accept_date"))
+			{
+				$date = date("d.m.Y",$o->prop("accept_date"));
+			}
+			
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
-				"date" => date("d.m.Y",$o->prop("date")),//$o->prop("accept_date")),
+				"date" => $date,//$o->prop("accept_date")),
 				"offerer_name" => $offerer_name,
 				"area" => $offerer_area,
 				"status" => $statuses[$o->prop("state")],
@@ -2609,7 +2614,10 @@ class procurement_center extends class_base
 	function search_products($this_obj)
 	{
 		$ol = new object_list();
-		$filter = array("class_id" => array(CL_SHOP_PRODUCT), "lang_id" => array());
+		$filter = array(
+			"class_id" => array(CL_SHOP_PRODUCT),
+			"lang_id" => array()
+		);
 		$data = $this_obj->meta("search_data");
 		if($data["products_find_product_name"])
 		{
@@ -2620,19 +2628,28 @@ class procurement_center extends class_base
 			 || $data["products_find_address"]
 			 || $data["products_find_groups"]
 			 || $data["products_find_apply"]
-			 || $data["products_find_start"]
-			 || $data["products_find_end"]
+			 || date_edit::get_timestamp($data["products_find_start"]) > 0
+			 || date_edit::get_timestamp($data["products_find_end"]) > 0
 		)
 		{
-			$offerer_filter = array("class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON), "lang_id" => array());
-			if($data["products_find_name"]) $offerer_filter["name"] = "%".$data["products_find_name"]."%";
-			if($data["products_find_address"]) $offerer_filter[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-				"CL_CRM_COMPANY.contact.name" => "%".$data["products_find_address"]."%",
-				"CL_CRM_PERSON.address.name" => "%".$data["products_find_address"]."%",
-				)
-			));
+			$offerer_filter = array(
+				"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+				"lang_id" => array()
+			);
+			if($data["products_find_name"])
+			{
+				$offerer_filter["name"] = "%".$data["products_find_name"]."%";
+			}
+			if($data["products_find_address"])
+			{
+				$offerer_filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_COMPANY.contact.name" => "%".$data["products_find_address"]."%",
+						"CL_CRM_PERSON.address.name" => "%".$data["products_find_address"]."%",
+					)
+				));
+			}
 			if($data["products_find_groups"])
 			{
 				if(is_oid($data["products_find_groups"]))
@@ -2653,43 +2670,54 @@ class procurement_center extends class_base
 			}
 //			if($data["products_find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
 			$offerer_list = new object_list($offerer_filter);
-			$filter["name"] = array($filter["name"]);
-			foreach($offerer_list->arr() as $offerer)
+			if(($data["products_find_groups"] || $data["products_find_address"] || $data["products_find_name"]) && !sizeof($offerer_list->arr()))
 			{
-				$row_filter = array(
-					"class_id" => array(CL_PROCUREMENT_OFFER_ROW),
-					"lang_id" => array(),
-					"CL_PROCUREMENT_OFFER_ROW.RELTYPE_OFFER.offerer" => $offerer->id(),
-				);
-				if($data["products_find_apply"]) $row_filter["accept"] = 1;
-				
-				//otsimine pakkumise aja järgi
-				if((date_edit::get_timestamp($data["products_find_start"]) > 1)|| (date_edit::get_timestamp($data["products_find_end"]) > 1))
-				{
-					if(date_edit::get_timestamp($data["products_find_start"]) > 1)
-					{
-						$from = date_edit::get_timestamp($data["products_find_start"]);
-					}
-					else $from = 1;
-					if(date_edit::get_timestamp($data["products_find_end"]) > 1)
-					{
-						$to = date_edit::get_timestamp($data["products_find_end"]);
-					}
-					else $to = time()*66;
-					$row_filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
-				}
-				
-				$offer_rows = new object_list($row_filter);
-				foreach($offer_rows->arr() as $row)
-				{
-					if($data["products_find_product_name"] && !(substr_count(strtolower($row->prop("product")) , strtolower($data["products_find_product_name"]))))
-					{
-						continue;
-					}
-					$filter["name"][] = $row->prop("product");
-				}
+				return $ol;
 			}
-			if(!(sizeof($filter["name"]))) return $ol;
+			$filter["name"] = array();
+			
+			//otsib pakkumiste ridu mis vastaks tingimustele
+			$row_filter = array(
+				"class_id" => array(CL_PROCUREMENT_OFFER_ROW),
+				"lang_id" => array(),
+				"CL_PROCUREMENT_OFFER_ROW.RELTYPE_OFFER.offerer" => $offerer_list->ids(),
+			);
+			if($data["products_find_apply"])
+			{
+				$row_filter["accept"] = 1;
+			}
+			if((date_edit::get_timestamp($data["products_find_start"]) > 1)|| (date_edit::get_timestamp($data["products_find_end"]) > 1))
+			{
+				if(date_edit::get_timestamp($data["products_find_start"]) > 1)
+				{
+					$from = date_edit::get_timestamp($data["products_find_start"]);
+				}
+				else $from = 1;
+				if(date_edit::get_timestamp($data["products_find_end"]) > 1)
+				{
+					$to = date_edit::get_timestamp($data["products_find_end"]);
+				}
+				else $to = time()*66;
+				$row_filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, ($from - 1), ($to + 1));
+			}
+
+			$offer_rows = new object_list($row_filter);
+			if(!sizeof($offer_rows->arr()))
+			{
+				return $ol;
+			}
+			foreach($offer_rows->arr() as $row)
+			{
+				if($data["products_find_product_name"] && !(substr_count(strtolower($row->prop("product")) , strtolower($data["products_find_product_name"]))))
+				{
+					continue;
+				}
+				$filter["name"][] = $row->prop("product");
+			}
+			if(!(sizeof($filter["name"])))
+			{
+				return $ol;
+			}
 		}
 		$ol = new object_list($filter);
 		return $ol;

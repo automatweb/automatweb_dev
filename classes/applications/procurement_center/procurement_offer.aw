@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.22 2007/02/05 15:14:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.23 2007/02/20 15:42:42 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -473,7 +473,6 @@ class procurement_offer extends class_base
 		if(is_oid($this_object->prop("procurement")) && $this->can("view" , $this_object->prop("procurement")))
 		{
 			$procurement = obj($this_object->prop("procurement"));
-			arr($procurement->prop("orderer"));
 			$co = obj($procurement->prop("orderer"));
 			$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
 		}
@@ -880,7 +879,10 @@ class procurement_offer extends class_base
 
 	function calculate_price($o)
 	{
-		if(is_oid($o->prop("procurement")) && $this->can("view", $o->prop("procurement")))$reqs = $this->model->get_requirements_from_procurement(obj($o->prop("procurement")));
+		if(is_oid($o->prop("procurement")) && $this->can("view", $o->prop("procurement")))
+		{
+			$reqs = $this->model->get_requirements_from_procurement(obj($o->prop("procurement")));
+		}
 		else return;
 		$hrs = 0;
 		$pr = 0;
@@ -909,12 +911,12 @@ class procurement_offer extends class_base
 		{
 			$procurement = obj($this_obj->prop("procurement"));
 			foreach($procurement->meta("products") as $product)
-			{
+			{//arr($product);
 				if(!$product["product"])
 				{
 					continue;
 				}
-				$total_sum += $product["amount"] * $row->prop("price");
+				//$total_sum += $product["amount"] * $row->prop("price");
 			}
 		}
 		foreach($conns as $conn)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.14 2007/02/05 15:38:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.15 2007/02/20 15:42:42 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -508,8 +508,10 @@ class procurement extends class_base
 					$p->save();
 				}
 			}
-			
-			$this_object->set_meta("products",$_SESSION["procurement"]["val"]);
+			if(is_array($_SESSION["procurement"]["val"]))
+			{
+				$this_object->set_meta("products",$_SESSION["procurement"]["val"]);
+			}
 			$this_object->save();
 			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
@@ -542,7 +544,10 @@ class procurement extends class_base
 		
 		if(!$new_products)
 		{
-			$this_object->set_meta("products",$_SESSION["procurement"]["val"]);
+			if(is_array($_SESSION["procurement"]["val"]))
+			{
+				$this_object->set_meta("products",$_SESSION["procurement"]["val"]);
+			}
 			$this_object->save();
 			$_SESSION["procurement"] = null;
 			die("<script type='text/javascript'>
