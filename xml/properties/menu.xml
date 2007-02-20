@@ -798,11 +798,29 @@
       <property>
             <name>acl</name>
             <table>objects</table>
-            <group>acl</group>
+            <group>acl_main</group>
             <type>acl_manager</type>
             <store>no</store>
             <field>acl</field>
             <caption>&amp;amp;Otilde;igused</caption>
+      </property>
+      <property>
+            <name>acl_views</name>
+            <table>objects</table>
+            <group>acl_views</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>acl_views</field>
+      </property>
+      <property>
+            <name>acl_edits</name>
+            <table>objects</table>
+            <group>acl_edits</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>acl_edits</field>
       </property>
       <property>
             <name>timing</name>
@@ -920,6 +938,18 @@
             <acl>
                   <caption>&amp;amp;Otilde;igused</caption>
             </acl>
+            <acl_main>
+                  <caption>&amp;amp;Otilde;igused</caption>
+                  <parent>acl</parent>
+            </acl_main>
+            <acl_views>
+                  <caption>Vaatamised</caption>
+                  <parent>acl</parent>
+            </acl_views>
+            <acl_edits>
+                  <caption>Muutmised</caption>
+                  <parent>acl</parent>
+            </acl_edits>
             <timing>
                   <caption>Ajaline aktiivsus</caption>
             </timing>

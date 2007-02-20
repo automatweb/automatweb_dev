@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.185 2007/02/06 14:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.186 2007/02/20 09:26:37 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -319,8 +319,21 @@
 @groupinfo acl caption=&Otilde;igused
 @default group=acl
 	
-	@property acl type=acl_manager store=no
-	@caption &Otilde;igused
+	@groupinfo acl_main caption=&Otilde;igused parent=acl
+	@default group=acl_main
+	
+		@property acl type=acl_manager store=no
+		@caption &Otilde;igused
+
+	@groupinfo acl_views caption=Vaatamised parent=acl
+	@default group=acl_views
+	
+		@property acl_views type=table store=no no_caption=1
+
+	@groupinfo acl_edits caption=Muutmised parent=acl
+	@default group=acl_edits
+	
+		@property acl_edits type=table store=no no_caption=1
 
 @groupinfo timing caption="Ajaline aktiivsus"
 @default group=timing
@@ -891,6 +904,14 @@ class menu extends class_base
 
 			case "link":
 				$this->_get_linker($data, $arr["obj_inst"]);
+				break;
+
+			case "acl_views":
+				$this->_get_acl_views($arr);
+				break;
+
+			case "acl_edits":
+				$this->_get_acl_edits($arr);
 				break;
 		};
 		return $retval;
@@ -2034,6 +2055,79 @@ class menu extends class_base
 			"pn" => "link_pops",
 			"clid" => array(CL_DOCUMENT,CL_LINK)
 		));
+	}
+
+	function _init_stats_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "tm",
+			"align" => "center",
+			"caption" => t("Aeg"),
+			"type" => "time",
+			"format" => "d.m.Y H:i:s",
+			"numeric" => 1,
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "person",
+			"align" => "center",
+			"caption" => t("Isik"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "uid",
+			"align" => "center",
+			"caption" => t("Kasutaja"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "ugroup",
+			"align" => "center",
+			"caption" => t("Kasutajagrupp"),
+			"sortable" => 1
+		));
+	}
+
+	function _get_acl_views($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_stats_table($t);
+
+		$u = get_instance(CL_USER);
+
+		$this->db_query("SELECT tm,uid FROM syslog WHERE oid = ".$arr["obj_inst"]->id()." AND act_id = ".SA_PAGEVIEW." ORDER BY id DESC LIMIT 50 ");
+		while ($row = $this->db_next())
+		{
+			$p = $u->get_person_for_uid($row["uid"]);
+			$g = $u->get_highest_pri_grp_for_user($row["uid"], true);
+			$t->define_data(array(
+				"tm" => $row["tm"],
+				"person" => $p ? $p->name() : "",
+				"uid" => $row["uid"],
+				"ugroup" => $g ? $g->name() : ""
+			));
+		}
+	}
+
+	function _get_acl_edits($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_stats_table($t);
+
+		$u = get_instance(CL_USER);
+
+		$this->db_query("SELECT tm,uid FROM syslog WHERE oid = ".$arr["obj_inst"]->id()." AND act_id = ".SA_CHANGE." ORDER BY id DESC LIMIT 50 ");
+		while ($row = $this->db_next())
+		{
+			$p = $u->get_person_for_uid($row["uid"]);
+			$g = $u->get_highest_pri_grp_for_user($row["uid"], true);
+			$t->define_data(array(
+				"tm" => $row["tm"],
+				"person" => $p ? $p->name() : "",
+				"uid" => $row["uid"],
+				"ugroup" => $g ? $g->name() : ""
+			));
+		}
 	}
 };
 ?>
