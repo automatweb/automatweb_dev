@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.56 2007/02/19 11:43:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.57 2007/02/20 11:35:49 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -326,13 +326,13 @@ class patent extends class_base
 				$this->_get_products_and_services_tbl($arr);
 				break;
 			//-- get_property --//
-			case "convention_nr":
-				if ($prop["value"] == "" && $arr["obj_inst"]->prop("verified"))
-				{
-					$i = get_instance(CL_CRM_NUMBER_SERIES);
-					$prop["value"] = $i->find_series_and_get_next(CL_PATENT);
-				}
-				break;
+//			case "convention_nr":
+//				if ($prop["value"] == "" && $arr["obj_inst"]->prop("verified"))
+//				{
+//					$i = get_instance(CL_CRM_NUMBER_SERIES);
+//					$prop["value"] = $i->find_series_and_get_next(CL_PATENT);
+//				}
+//				break;
 			case "export_date":
 				$status = $this->get_status($arr["obj_inst"]);
 				if($status->prop("exported"))
@@ -2108,6 +2108,11 @@ class patent extends class_base
 	
 	function set_sent($arr)
 	{
+		$re = $this->is_signed($_SESSION["patent"]["id"]);
+		if(!($re["status"] == 1))//et allkirjastamata taotlused saatmisele ei läheks
+		{
+			return null; 
+		}
 		$object = obj($arr["add_obj"]);
 		$num_ser = $object->prop("series");
 		$ser = get_instance(CL_CRM_NUMBER_SERIES);
