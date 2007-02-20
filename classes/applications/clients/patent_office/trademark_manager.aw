@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.17 2007/02/20 12:11:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.18 2007/02/20 12:15:26 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -283,7 +283,7 @@ class trademark_manager extends class_base
 		{
 			$re = $trademark_inst->is_signed($o->id());
 			$status = $trademark_inst->get_status($o);
-			if($arr["request"]["p_id"] == "not_verified" && $status->prop("verified"))
+			if($arr["request"]["p_id"] == "not_verified" && ($status->prop("verified") || (!($re["status"] == 1))))
 			{
 				continue;
 			}
