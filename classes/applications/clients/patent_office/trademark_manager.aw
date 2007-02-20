@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.16 2007/02/09 13:57:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.17 2007/02/20 12:11:50 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -281,6 +281,7 @@ class trademark_manager extends class_base
 		$types = $trademark_inst->types;
 		foreach($ol->arr() as $o)
 		{
+			$re = $trademark_inst->is_signed($o->id());
 			$status = $trademark_inst->get_status($o);
 			if($arr["request"]["p_id"] == "not_verified" && $status->prop("verified"))
 			{
@@ -354,6 +355,20 @@ class trademark_manager extends class_base
 			{
 				$date = date("j.m.Y" , $o->created());
 			}
+			
+			$retval = "";
+			if($re["status"] == 1)
+			{
+				$signatures_url = $this->mk_my_orb("change", array("group" => "signatures", "id" => $re["ddoc"]), CL_DDOC);
+				$retval = html::href(array(
+					"url" => $signatures_url,
+					"target" => "new window",
+					//"url" => "#",
+					"caption" => t("Allkirjad"),
+					"title" => $title,
+					//"onclick" => 'javascript:window.open("'.$signatures_url.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
+				));
+			}
 
 			$t->define_data(array(
 				"procurator" => $procurator,
@@ -363,6 +378,7 @@ class trademark_manager extends class_base
 				"applicant_data" => $applicant_data,
 				"date" => $date,
 				"oid" => $o->id(),
+				"signatures" => $retval,
 				"verify" => ($status->prop("verified")) ? "" : html::href(array(
 					"caption" => t("Kinnita"),
 					"url" => "#",
@@ -423,6 +439,14 @@ class trademark_manager extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
+		
+		$t->define_field(array(
+			"name" => "signatures",
+			"caption" => t("Allkirjad"),
+			"align" => "center",
+//			"sortable" => 1
+		));
+		
 		$t->define_chooser(array(
 			"caption" => t("Vali"),
 			"field" => "oid",
