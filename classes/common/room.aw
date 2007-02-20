@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.151 2007/02/19 14:18:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.152 2007/02/20 16:23:28 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -75,6 +75,9 @@
 		
 		@property use_product_times type=checkbox parent=general_down no_caption=1
 		@caption Kasuta toodetele määratud aegu
+		
+		@property allow_multiple type=checkbox parent=general_down no_caption=1
+		@caption Luba mitu broneeringut ühele ajale
 		
 		@property group_product_menu type=checkbox parent=general_down no_caption=1
 		@caption Grupeeri tooted kaustadesse
@@ -4159,7 +4162,6 @@ class room extends class_base
 			$filt["oid"] = new obj_predicate_not($arr["ignore_booking"]);
 		}
 		$reservations = new object_list($filt);
-		
 		//ueh... filter ei tööta, niiet .... oehjah
 		$verified_reservations = new object_list();
 		foreach($reservations->arr() as $res)
@@ -4167,7 +4169,7 @@ class room extends class_base
 			if($res->prop("verified"))
 			{
 				$verified_reservations->add($res->id());
-				$reservations->remove($res->id());
+//				$reservations->remove($res->id());
 			}
 			elseif(!($res->prop("deadline") > time()))
 			{
@@ -4175,7 +4177,7 @@ class room extends class_base
 			}
 	//		$booked[] = array("start" => $res->prop("start1"), "end" => $res->prop("end"));
 		}
-		
+
 		if(!sizeof($reservations->arr()))
 		{
 			return true;

@@ -186,6 +186,17 @@
             <caption>Kasuta toodetele m&amp;auml;&amp;auml;ratud aegu</caption>
       </property>
       <property>
+            <name>allow_multiple</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <parent>general_down</parent>
+            <no_caption>1</no_caption>
+            <caption>Luba mitu broneeringut &amp;uuml;hele ajale</caption>
+      </property>
+      <property>
             <name>group_product_menu</name>
             <table>objects</table>
             <field>meta</field>
