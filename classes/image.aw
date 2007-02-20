@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.188 2007/02/09 11:41:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.189 2007/02/20 11:25:09 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -995,12 +995,6 @@ class image extends class_base
 							}
 							return doc_id;
 						}
-						if (window.parent.name == \"InsertAWImageCommand\")
-						{
-							aw_url = '".$alias_url."';
-							url = aw_url + '&doc_id=' + getDocID();
-							document.write(\"<a href='\"+url+\"' onClick='submit_changeform();FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.GetSelectedElement() ;if (\\\"\\\"+eSelected == \\\"HTMLImageElement\\\") { eSelected.src=\\\"$image_url\\\"; } else { ct=aw_get_url_contents(\\\"$url\\\"); FCK.InsertHtml(ct); } '>Insert into document</a>\");
-						}
 					</script>
 					";
 				}
@@ -1386,6 +1380,30 @@ class image extends class_base
 		}
 
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
+
+		if ($arr["request"]["save_and_doc"] != "")
+		{
+			$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
+			$image_url = $this->get_url_by_id($arr["obj_inst"]->id());
+			die("
+				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
+				<script language='javascript'>
+				FCK=window.parent.opener.FCK;
+				var eSelected = FCK.Selection.GetSelectedElement() ;
+				if (\"\"+eSelected == \"HTMLImageElement\") 
+				{
+					 eSelected.src=\"$image_url\"; 
+				} 
+				else 
+				{ 
+					ct=aw_get_url_contents(\"$url\"); 
+					FCK.InsertHtml(ct); 
+				} 
+				window.parent.close();
+			</script>
+			");
+		}
+
 	}
 
 
@@ -2014,6 +2032,14 @@ class image extends class_base
 			return false;
 		}
 		return true;
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		return "
+		if (window.parent.name == \"InsertAWImageCommand\")
+		{
+		nsbt = document.createElement('input');nsbt.name='save_and_doc';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja paiguta dokumenti")."'; el = document.getElementById('buttons');el.appendChild(nsbt);}";
 	}
 
 	function callback_get_transl($arr)
