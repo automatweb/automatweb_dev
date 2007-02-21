@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.49 2007/02/20 16:23:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.50 2007/02/21 16:29:07 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -654,7 +654,7 @@ class reservation extends class_base
 	}
 	
 	function _get_products_order_view($arr)
-	{
+	{//arr($arr);
 		extract($arr);
 		$shop_order_center = get_instance(CL_SHOP_ORDER_CENTER);
 		$wh = get_instance(CL_SHOP_WAREHOUSE);
@@ -695,10 +695,7 @@ class reservation extends class_base
 		
 					// get the table layout for this folder
 					$t_layout = $shop_order_center->get_prod_table_layout_for_folder($soc, $room_obj->prop("resources_fld"));
-					if($room_obj->prop("prod_discount_loc"))
-					{
-						$shop_order_center->web_discount = $room_obj->prop("prod_web_discount");
-					}
+					$shop_order_center->web_discount = $room_instance->get_prod_discount(array("room" =>  $room_obj->id()));
 					$html .= $shop_order_center->do_draw_prods_with_layout(array(
 						"t_layout" => $t_layout, 
 						"layout" => $layout, 
