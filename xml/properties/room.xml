@@ -410,7 +410,7 @@
             <type>textbox</type>
             <size>2</size>
             <parent>currency_l</parent>
-            <caption>Toodete soodushind</caption>
+            <caption>Toodete fikseeritud allahindlus</caption>
       </property>
       <property>
             <name>add_price_per_face</name>

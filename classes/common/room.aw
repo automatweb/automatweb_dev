@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.156 2007/02/21 15:55:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.157 2007/02/21 16:07:23 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -158,7 +158,7 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 
 				@property prod_web_discount type=textbox size=2 parent=currency_l
-				@caption Toodete soodushind
+				@caption Toodete fikseeritud allahindlus
 
 
 			@layout add_face type=vbox area_caption=Lisanduv&nbsp;hind&nbsp;inimestele&nbsp;&uuml;le&nbsp;normaalmahutavuse closeable=1 parent=top_split
@@ -3615,13 +3615,21 @@ class room extends class_base
 		$rv["room_bargain_value"] = $this->bargain_value;
 		
 		$warehouse = $room->prop("warehouse");
-		if(is_oid($warehouse) && $this->can("view" , $warehouse))
+		$prod_discount = $this->get_prod_discount(array(
+			"start" => $start,
+			"end" => $end,
+			"room" => $room->id()
+		));
+
+/*		if(is_oid($warehouse) && $this->can("view" , $warehouse))
 		{
 			$w_obj = obj($warehouse);
 			$w_cnf = obj($w_obj->prop("conf"));
 			if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
 			{
 				$soc = obj($w_obj->prop("order_center"));
+				$prod_discount = $this->get_prod_discount(array(array("start" => $start, "end" => $end, "room" => $room->id())));
+/*				$pro "start" => $start, "end" => $end, "room" => $o
 				if($room->prop("prod_discount_loc"))
 				{
 					$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $room));
@@ -3633,7 +3641,7 @@ class room extends class_base
 				}
 			}
 		}
-	
+	*/
 		if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
 		{
 			$prod_discount = $arr["bron"]->prop("special_discount");
@@ -4096,7 +4104,10 @@ class room extends class_base
 		$warehouse = $o->prop("warehouse");
 		if($o->prop("prod_discount_loc"))
 		{
-		//	$prod_discount = $o->prop("prod_web_discount");
+			if($o->prop("prod_web_discount"))
+			{
+				$prod_discount = $o->prop("prod_web_discount");
+			}
 			$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $o));
 		}
 		else
