@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.154 2007/02/21 13:13:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.155 2007/02/21 14:02:34 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3652,8 +3652,8 @@ class room extends class_base
 			}
 			if($people > $room->prop("normal_capacity"))
 			{
-				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
-				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
+				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency , "start" => $start, "end" => $end));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
+				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency, "start" => $start, "end" => $end));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
 			}
 //			if(is_array($products) && sizeof($products))
 			if(!($products == -1))
@@ -3681,9 +3681,92 @@ class room extends class_base
 			return $sum;
 		}
 	}
+
+	function get_room_discount_objects($room)
+	{
+		$ol = new object_list();
+		$bargain_conns = $room->connections_from(array(
+			"class_id" => CL_ROOM_PRICE,
+			"type" => "RELTYPE_ROOM_PRICE",
+		));
+		foreach($bargain_conns as $conn)
+		{
+			$ol->add($conn->to());
+		}
+		return $ol;
+	}
+	
+	/**
+	@param room required type=oid
+	@param start required type=int
+	@param end required type=int
+	**/
+	function get_rnd_discount_in_time($arr)
+	{
+		$ret = 0;
+		extract($arr);
+		
+		if(is_oid($room) && $this->can("view" , $room))
+		{
+			$room = obj($room);
+		}
+		if(is_object($room))
+		{
+			$b_list = $this->get_room_discount_objects($room);
+			foreach($b_list->arr() as $bargain)
+			{
+				if(
+					($bargain->prop("active") == 1) &&
+					($bargain->prop("type") == 2) &&
+					(in_array((date("w", $start) + 1) , $bargain->prop("weekdays"))) && 
+					(
+						(
+							$bargain->prop("date_from") <= ($start) &&
+							($bargain->prop("date_to") + 60) >= ($end)
+						)||
+						(
+							$bargain->prop("recur")	&&
+							(
+								(
+									(100*date("n",$bargain->prop("date_from")) + date("j",$bargain->prop("date_from"))) <= (100*date("n",$start) + date("j",$start)) && 
+									(100*date("n",$bargain->prop("date_to")) + date("j",$bargain->prop("date_to"))) >= (100*date("n",($start+$time)) + date("j",($start+$time)))
+								) || 
+								(
+									(100*date("n",$bargain->prop("date_from")) + date("j",$bargain->prop("date_from")) >= 100*date("n",$bargain->prop("date_to")) + date("j",$bargain->prop("date_to"))) &&
+										(
+											((100*date("n",$bargain->prop("date_from")) + date("j",$bargain->prop("date_from"))) <= (100*date("n",$start) + date("j",$start)))||
+											((100*date("n",$bargain->prop("date_to")) + date("j",$bargain->prop("date_to"))) >= (100*date("n",($start+$time)) + date("j",($start+$time)))
+										)
+									)
+								)
+							)
+						)
+					)
+				)
+				{
+					$groups = $bargain->prop("apply_groups");
+					if (
+						(
+							($bargain->prop("bron_made_from") < 1 || $bron_made > $bargain->prop("bron_made_from")) ||
+						    	($bargain->prop("bron_made_to") < 1 || $bron_made < $bargain->prop("bron_made_to"))
+					    	) && 
+						(
+							!is_array($groups) || !count($groups) || !reset($groups) || in_array($grp, $groups)
+						)
+					)
+					{
+						$ret = 0.01*$bargain->prop("bargain_percent");
+					}
+				}
+			}
+		}
+		return $ret;
+	}
 	
 	function cal_people_price($arr)
 	{
+		//if(aw_global_get("uid"))arr($arr);
+		$discount = $this->get_rnd_discount_in_time($arr);
 		extract($arr);
 		if(is_oid($room) && $this->can("view" ,$room))
 		{
@@ -3712,9 +3795,10 @@ class room extends class_base
 			$n++;
 		}
 
-		return $sum;
+		return $sum - ($discount*$sum);
 	//array("room" => $room, "people" => $people, "cur" => $currency));	
 	}
+	
 	
 	//annab soodustuse juhul kui see täpselt kattub hinna ajaga või kui üks soodustus lõppeb kas enne aja lõppu , või algab alles poole pealt
 	//inimliku lolluse vastu kahjuks see funktsioon ei aita, kui kellelgi on tahtmist mitmeid poolikult kattuvaid soodustusi ühele ajale paigutada... palun väga, kuid resultaati ei oska ette ennustada
