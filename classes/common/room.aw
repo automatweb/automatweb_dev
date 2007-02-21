@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.155 2007/02/21 14:02:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.156 2007/02/21 15:55:10 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3624,7 +3624,8 @@ class room extends class_base
 				$soc = obj($w_obj->prop("order_center"));
 				if($room->prop("prod_discount_loc"))
 				{
-					$prod_discount = $room->prop("prod_web_discount");
+					$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $room));
+					//$prod_discount = $room->prop("prod_web_discount");
 				}
 				else
 				{
@@ -3663,6 +3664,8 @@ class room extends class_base
 					"currency" => $currency,
 					"prod_discount" => $prod_discount,
 					"room" => $room,
+					"start" => $start,
+					"end" => $end,
 				));
 				$sum[$currency] += $tmp;
 				$rv["prod_price"][$currency] += $tmp;
@@ -3697,12 +3700,16 @@ class room extends class_base
 	}
 	
 	/**
-	@param room required type=oid
+	@param room required type=oid,object
 	@param start required type=int
 	@param end required type=int
 	**/
 	function get_rnd_discount_in_time($arr)
 	{
+		if(isset($this->rnd_discount))
+		{
+			return $this->rnd_discount;
+		}
 		$ret = 0;
 		extract($arr);
 		
@@ -3755,11 +3762,13 @@ class room extends class_base
 						)
 					)
 					{
-						$ret = 0.01*$bargain->prop("bargain_percent");
+						$ret = $bargain->prop("bargain_percent");
 					}
 				}
 			}
-		}
+		}//				if(aw_global_get("uid") == "struktuur"){arr($bargain);}
+		$this->rnd_discount = $ret;
+		
 		return $ret;
 	}
 	
@@ -3795,7 +3804,7 @@ class room extends class_base
 			$n++;
 		}
 
-		return $sum - ($discount*$sum);
+		return $sum - (($discount * 0.01)*$sum);
 	//array("room" => $room, "people" => $people, "cur" => $currency));	
 	}
 	
@@ -4018,6 +4027,10 @@ class room extends class_base
 		@param prod_discount optional type=int
 		@param room optional type=object
 			room object
+		@param start optional type=int
+			reservation starts
+		@param end optional type=int
+			reservation ends
 		@return int
 			price of all products
 	**/
@@ -4029,7 +4042,7 @@ class room extends class_base
 		{
 			if(is_object($room) && !$prod_discount)
 			{
-				$prod_discount = $this->get_prod_discount(array("room" => $room->id()));
+				$prod_discount = $this->get_prod_discount(array("room" => $room->id(), "start" => $start, "end" => $end));
 			}
 			$sum = 0;
 			foreach($products as $id => $amt)
@@ -4083,7 +4096,8 @@ class room extends class_base
 		$warehouse = $o->prop("warehouse");
 		if($o->prop("prod_discount_loc"))
 		{
-			$prod_discount = $o->prop("prod_web_discount");
+		//	$prod_discount = $o->prop("prod_web_discount");
+			$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $o));
 		}
 		else
 		{

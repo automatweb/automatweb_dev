@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.51 2007/02/21 14:34:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.52 2007/02/21 15:55:10 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -224,7 +224,6 @@ class room_reservation extends class_base
 				"value" => "",
 			));
 		}
-
 
 		$new_data["template"] = html::select(array(
 			"name" => "meta[".$count."][template]",
@@ -519,7 +518,11 @@ class room_reservation extends class_base
 		));
 		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"] = $data["menu_sum_left"] = array();
 		
-		$prod_discount = $room_inst->get_prod_discount(array("room" => $bron->prop("resource")));
+		$prod_discount = $room_inst->get_prod_discount(array(
+			"room" => $bron->prop("resource"),
+			"start" => $bron->prop("start1"),
+			"end" => $bron->prop("end"))
+		);
 		foreach($sum as $curr => $val)
 		{
 			$currency = obj($curr);
@@ -721,7 +724,11 @@ class room_reservation extends class_base
 		
 		$data["sum"] = $data["sum_wb"] = $data["bargain"] = $data["menu_sum"]= $data["sum_pay"]= array();
 
-		$prod_discount = $room_inst->get_prod_discount(array("room" => $room->id()));
+		$prod_discount = $room_inst->get_prod_discount(array(
+			"room" => $room->id(),
+			"start" => $_SESSION["room_reservation"][$room->id()]["start"],
+			"end" => $_SESSION["room_reservation"][$room->id()]["end"],
+		));
 // 		foreach ($_SESSION["room_reservation"][$room->id()]["products"] as $prod => $amount)
 // 		{
 // 			if($amount)
