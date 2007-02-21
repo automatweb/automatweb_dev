@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.59 2007/02/21 13:03:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.60 2007/02/21 14:10:04 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -496,7 +496,6 @@ class patent extends class_base
 	}
 
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	
 	/** Show trademark applications
 		
 		@attrib name=show is_public="1" all_args=1
@@ -539,6 +538,8 @@ class patent extends class_base
 		else
 		{
 			$data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onClick='javascript:document.changeform.submit();'>";
+			$data["pdf"] = "<a href=".$this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["trademark_id"], "add_obj" => $arr["alias"]["to"]) , CL_PATENT)."><input type='button' value='Salvesta pdf' class='nupp' href=''></a><br>";
+
 		}
 		
 		if($arr["sign"] && !$_POST["print"])
