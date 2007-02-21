@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.37 2006/11/15 12:58:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.38 2007/02/21 10:16:10 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -203,9 +203,26 @@ class site_cache extends aw_template
 		if (strpos($res, "<?php") !== false)
 		{
 			ob_start();
+			$tres = $res;
 			$res = str_replace("<?xml", "&lt;?xml", $res);
 			eval("?>".$res);
 			$res = ob_get_contents();
+			if (strpos($res, "syntax err") !== false)
+			{
+				preg_match("/on line \<b\>(\d+)\<\/b\>/ims", $res, $mt);
+				$lines = explode("\n", str_replace("<?xml", "&lt;?xml", $tres));
+				echo "<pre>";
+				$mt[1]--;
+				echo htmlentities($lines[$mt[1]-2])."<br>";
+				echo htmlentities($lines[$mt[1]-1])."<br>";
+				echo "<b>".htmlentities($lines[$mt[1]-0])."</b><br>";
+				echo htmlentities($lines[$mt[1]+1])."<br>";
+				echo htmlentities($lines[$mt[1]+2])."<br>";
+				echo htmlentities($lines[$mt[1]+3])."<br>";
+				echo htmlentities($lines[$mt[1]+4])."<br>";
+				
+				die("syntax error in template");
+			}
 			ob_end_clean();
 		}
 
