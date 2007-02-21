@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.54 2007/02/21 15:17:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.55 2007/02/21 15:20:21 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -769,7 +769,7 @@ class conference_planning extends class_base
 				$c_inst = get_instance(CL_CONFERENCE);
 				$conf_types = $c_inst->conference_types();
 
-				$days = $sd["main_function"];
+				$days = ($sd["multi_day"] == 2)?$sd["main_function"]:array(0 => $sd["main_function"][0]);
 				foreach($days as $day_id => $day)
 				{
 					$evt_type = ($day["event_type_chooser"] == 1)?$conf_types[$day["event_type_select"]]:$day["event_type_text"];
