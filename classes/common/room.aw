@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.152 2007/02/20 16:23:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.153 2007/02/21 10:47:35 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3587,6 +3587,10 @@ class room extends class_base
 				"bron_made" => $bron_made,
 				"bron" => $arr["bron"]
 			));
+			if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
+			{
+				$bargain =  $arr["bron"]->prop("special_discount") * 0.01;
+			}
 			$rv["room_bargain"] = $bargain;
 			foreach($price->meta("prices") as $currency => $hr_price)
 			{
@@ -3617,7 +3621,17 @@ class room extends class_base
 				}
 			}
 		}
-		
+	
+		if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
+		{
+			$prod_discount = $arr["bron"]->prop("special_discount");
+		}
+		// and if the user has set a discount for prods separately, then that overrides everything
+		if (is_object($arr["bron"]) && $arr["bron"]->meta("prod_discount"))
+		{
+			 $prod_discount = $arr["bron"]->meta("prod_discount");
+		}
+	
 		$rv["prod_discount"] = $prod_discount;
 		foreach($room->prop("currency") as $currency)
 		{
@@ -3918,7 +3932,7 @@ class room extends class_base
 			
 		if(is_array($products) && sizeof($products))//kui tooteid pole, võiks selle osa vahele jätta... võibolla võidab paar millisekundit
 		{
-			if(is_object($room))
+			if(is_object($room) && !$prod_discount)
 			{
 				$prod_discount = $this->get_prod_discount(array("room" => $room->id()));
 			}
