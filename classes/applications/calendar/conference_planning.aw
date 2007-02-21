@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.53 2007/02/21 14:47:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.54 2007/02/21 15:17:13 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -703,7 +703,7 @@ class conference_planning extends class_base
 					"arrival_date" => $sd["dates"][0]["arrival_date"],
 					"departure_date" => $sd["dates"][0]["departure_date"],
 					"open_for_alternative_dates" => ($sd["open_for_alternative_dates"])?t("Yes"):t("No"),
-					"multi_day" => $sd["multi_day"]?t("Yes"):t("No"),
+					"multi_day" => ($sd["multi_day"] == 2)?t("Yes"):t("No"),
 					"needs_rooms" => ($sd["needs_rooms"])?t("Yes"):t("No"),
 				));
 				// #2
