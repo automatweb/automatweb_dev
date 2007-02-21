@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.17 2007/02/14 13:05:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.18 2007/02/21 10:15:44 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -302,16 +302,16 @@ class room_settings extends class_base
 					$has_prof = $o;
 				}
 
-				if ($o->is_connected_to(array("to" => $curco)))
+				if ($curco && $o->is_connected_to(array("to" => $curco)))
 				{
 					$has_co = $o;
 				}
-				if ($o->is_connected_to(array("to" => $curp)))
+				if ($curp && $o->is_connected_to(array("to" => $curp)))
 				{
 					$has_p = $o;
 				}
 
-				if ($o->is_connected_to(array("to" => aw_global_get("uid_oid"))))
+				if (aw_global_get("uid_oid") && $o->is_connected_to(array("to" => aw_global_get("uid_oid"))))
 				{
 					$has_u = $o;
 				}
@@ -539,6 +539,10 @@ class room_settings extends class_base
 		asort($gl);
 		$gl = array_keys($gl);
 		$grp = $gl[1];
+		if (count($gl) == 1)
+		{
+			$grp = $gl[0];
+		}
 		return $grp_settings[$grp]["confirmed_default"];
 	}
 }
