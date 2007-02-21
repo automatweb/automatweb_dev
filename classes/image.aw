@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.190 2007/02/20 14:47:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.191 2007/02/21 10:12:40 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -285,7 +285,6 @@ class image extends class_base
 		{
 			$idata = $this->get_image_by_id($f["target"]);
 		}
-		
 		// show commentlist and popup to if set in property or forced
 		$do_comments = (!empty($idata["can_comment"]) || $force_comments);
 
@@ -400,7 +399,6 @@ class image extends class_base
 			{
 				$ha = localparse($tpls["HAS_AUTHOR"], $vars);
 			}
-
 			$vars["HAS_AUTHOR"] = $ha;
 			if ($this->is_flash($idata["file"]))
 			{
@@ -2074,7 +2072,7 @@ class image extends class_base
 	function fetch_image_tag_for_doc($arr)
 	{
 		$s = $this->parse_alias(array("alias" => array("target" => $arr["id"])));
-		die($s["replacement"]);
+		die(str_replace("automatweb/", "", $s["replacement"]));
 	}
 	
 	/**
