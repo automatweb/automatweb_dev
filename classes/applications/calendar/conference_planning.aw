@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.52 2007/02/21 12:13:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.53 2007/02/21 14:47:30 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -322,6 +322,7 @@ class conference_planning extends class_base
 				$sc->read_template("sub_conference_rfp4.tpl");				
 				$c_inst = get_instance(CL_CONFERENCE);
 				$conference_types = $c_inst->conference_types();
+				$_GET["act_evt_no"] = ($sd["multi_day"] == "2")?$_GET["act_evt_no"]:"0";
 				// setting active main event and catering id
 				if(strlen($_GET["act_evt_no"]))
 				{
@@ -332,7 +333,7 @@ class conference_planning extends class_base
 					}
 				}
 				// conference day's table .. when it is needed
-				if($sd["multi_day"] && is_array($sd["main_function"]) && count($sd["main_function"]))
+				if(($sd["multi_day"] == 2) && is_array($sd["main_function"]) && count($sd["main_function"]))
 				{
 					unset($days);
 					foreach($sd["main_function"] as $id => $data)
@@ -453,6 +454,7 @@ class conference_planning extends class_base
 					"24h" => $mf["24h"]?checked(true):"",
 					"catering_no" => $catering_no,
 					"DAYS" => $days_table,
+					"ADD_DAY" => ($sd["multi_day"] == 2)?$sc->parse("ADD_DAY"):"",
 				));
 				break;
 			case 5:
@@ -1308,7 +1310,7 @@ class conference_planning extends class_base
 		$obj->set_prop("catering_for_main", aw_serialize($tmpcatering, SERIALIZE_NATIVE));
 		*/
 		$obj->set_prop("main_function", aw_serialize($data["main_function"], SERIALIZE_NATIVE));
-		$obj->set_prop("multi_day", $data["multi_day"]?1:0);
+		$obj->set_prop("multi_day", ($data["multi_day"] == 2)?1:0);
 
 		// additional dates
 		unset($data["dates"][0]);

@@ -211,9 +211,11 @@
 			<a href="#" onClick="javascript:submit_changeform('add_catering');">Add/Save catering</a>
 		</td>
 	</tr>
+	<!-- SUB: ADD_DAY -->
 	<tr>
 		<td colspan="2" align="right">
 			<a href="#" onClick="javascript:submit_changeform('add_catering');">Add/Save day</a>
 		</td>
 	</tr>
+	<!-- END SUB: ADD_DAY -->
 </table>
