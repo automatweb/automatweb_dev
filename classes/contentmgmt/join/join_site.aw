@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.43 2007/01/25 10:12:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.44 2007/02/21 10:16:24 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -970,7 +970,6 @@ class join_site extends class_base
 				$klomp[$oldn] = $xprop;
 			}
 		}
-
 		// add seprator props
 		$seps = new aw_array($ob->meta("join_seps"));
 		$lang_seps = safe_array($ob->meta("lang_seps"));
