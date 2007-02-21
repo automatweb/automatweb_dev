@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.157 2007/02/21 16:07:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.158 2007/02/21 16:27:31 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3727,6 +3727,14 @@ class room extends class_base
 		}
 		if(is_object($room))
 		{
+			if(!$start && $_SESSION["room_reservation"][$room->id()]["start"])
+			{
+				$start = $_SESSION["room_reservation"][$room->id()]["start"];
+			}
+			if(!$end && $_SESSION["room_reservation"][$room->id()]["end"])
+			{
+				$end = $_SESSION["room_reservation"][$room->id()]["end"];
+			}
 			$b_list = $this->get_room_discount_objects($room);
 			foreach($b_list->arr() as $bargain)
 			{
@@ -3774,7 +3782,7 @@ class room extends class_base
 					}
 				}
 			}
-		}//				if(aw_global_get("uid") == "struktuur"){arr($bargain);}
+		}
 		$this->rnd_discount = $ret;
 		
 		return $ret;
@@ -4108,7 +4116,10 @@ class room extends class_base
 			{
 				$prod_discount = $o->prop("prod_web_discount");
 			}
-			$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $o));
+			else
+			{
+				$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $o));
+			}
 		}
 		else
 		{
