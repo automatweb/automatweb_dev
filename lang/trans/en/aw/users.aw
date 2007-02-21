@@ -3,4 +3,5 @@ $GLOBALS["TRANS"]["Parool on edukalt vahetatud"] = "Password successfully change
 $GLOBALS["TRANS"]["Vigane kasutajanimi"] = "Erroneous username";
 $GLOBALS["TRANS"]["Sellist kasutajat pole registreeritud"] = "No such user";
 $GLOBALS["TRANS"]["Telli uusi v&otilde;ti"] = "Order new key";
+$GLOBALS["TRANS"]["Sellise kasutajanimega kasutaja on juba olemas!"] = "An user with entered username already exists!";
 ?>

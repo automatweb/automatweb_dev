@@ -70,7 +70,7 @@ $lc_conference_planning["LC_START_TIME"] = "Starting time";
 $lc_conference_planning["LC_END_TIME"] = "Ending time";
 $lc_conference_planning["LC_ATTENDEE_NO"] = "Number of attendees";
 
-# sub_conference_rfp5.tpl
+#sub_conference_rfp5.tpl
 $lc_conference_planning["LC_ADD_FUNCTION"] = "Add/Save function";
 $lc_conference_planning["LC_ADD_CATERING"] = "Add/Save catering";
 
@@ -89,19 +89,8 @@ $lc_conference_planning["LC_CITY"] = "City";
 $lc_conference_planning["LC_ZIP"] = "Zip";
 $lc_conference_planning["LC_CONTACT_INFORMATION"] = "Contact information";
 $lc_conference_planning["LC_NAME"] = "Name";
-$lc_conference_planning["LC_CHOOSE_HOTELS"] = "Choose hotels";
 // phone no, email
 
-# sub_conference_rfp7.tpl
-$lc_conference_planning["LC_GENERAL_INFORMATION"] = "General information";
-$lc_conference_planning["LC_ALTERNATIVE_DATES"] = "Alternative dates";
-$lc_conference_planning["LC_ACCOMMODATION"] = "Accommodation";
-$lc_conference_planning["LC_MAIN_ARR_DATE"] = "Main arrival date:";
-$lc_conference_planning["LC_MAIN_DEP_DATE"] = "Main departure date:";
-$lc_conference_planning["LC_MAIN_EVENT"] = "Main event";
-$lc_conference_planning["LC_ADD_EVENTS"] = "Additional events";
-$lc_conference_planning["LC_HOTELS"] = "Hotels:";
-$lc_conference_planning["LC_INF_ABOVE_CORRECT"] = "Information above is correct";
-
+$lc_conference_planning["LC_INF_ABOVE_CORRECT"] = "Confirm data";
 $lc_conference_planning["LC_PLEASE_CONFIRM"] = "Please confirm your data";
 ?>
