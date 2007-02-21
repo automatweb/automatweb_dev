@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.150 2007/02/13 11:18:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.151 2007/02/21 10:11:58 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -369,7 +369,8 @@ class doc extends class_base
 			case "brother_warning":
 				if ($arr["obj_inst"]->is_brother())
 				{
-					$data["value"] = t("NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik!");
+					$data["value"] = sprintf(t("NB! Seda dokumenti n&auml;idatakse mitmes kohas, olge palun ettevaatlik! (%s)"), html::get_change_url($arr["obj_inst"]->brother_of(), array("return_url" => get_ru()), 
+					t("Originaal")));
 				}
 				else
 				{
