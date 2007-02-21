@@ -99,6 +99,15 @@
             <caption>Tegevused vaikimisi vaade</caption>
       </property>
       <property>
+            <name>group_task_view</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <caption>Grupeeri tegevused vaade</caption>
+      </property>
+      <property>
             <name>view_task_rows_open</name>
             <table>objects</table>
             <group>general</group>

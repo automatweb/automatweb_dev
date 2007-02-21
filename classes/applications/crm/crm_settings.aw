@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.16 2006/11/20 17:06:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.17 2007/02/21 17:56:14 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -41,6 +41,9 @@
 
 	@property default_tasks_view type=select table=objects field=meta
 	@caption Tegevused vaikimisi vaade
+
+  	@property group_task_view type=checkbox ch_value=1 table=objects field=meta
+  	@caption Grupeeri tegevused vaade
 
 	@property view_task_rows_open type=checkbox ch_value=1 table=objects field=meta
 	@caption Vaikimisi avatakse toimetuse nimel klikkides kohe read

@@ -286,7 +286,7 @@ class crm_company_overview_impl extends class_base
 		$prop["value"] = $rv;
 	}
 
-	function _init_my_tasks_t(&$t, $data = false, $r = array())
+	function _init_my_tasks_t(&$t, $data = false, $r = array() , $group = 0)
 	{
 		if (is_array($data) && $r["act_s_print_view"] != 1)
 		{
@@ -340,25 +340,26 @@ class crm_company_overview_impl extends class_base
 	//			"chgbgcolor" => "col",
 			));
 		}
-
-		$t->define_field(array(
-			"caption" => t("Klient"),
-			"name" => "customer",
-			"align" => "center",
-//			"chgbgcolor" => "col",
-			"sortable" => 1,
-			"filter" => array_unique($filt["customer"])
-		));
-
-		$t->define_field(array(
-			"caption" => t("Projekt"),
-			"name" => "proj_name",
-			"align" => "center",
-//			"chgbgcolor" => "col",
-			"sortable" => 1,
-			"filter" => array_unique($filt["proj_name"])
-		));
-
+		if(!$group)
+		{
+			$t->define_field(array(
+				"caption" => t("Klient"),
+				"name" => "customer",
+				"align" => "center",
+	//			"chgbgcolor" => "col",
+				"sortable" => 1,
+				"filter" => array_unique($filt["customer"])
+			));
+	
+			$t->define_field(array(
+				"caption" => t("Projekt"),
+				"name" => "proj_name",
+				"align" => "center",
+	//			"chgbgcolor" => "col",
+				"sortable" => 1,
+				"filter" => array_unique($filt["proj_name"])
+			));
+		}
 		if ($r["group"] != "meetings")
 		{
 			$t->define_field(array(
@@ -378,7 +379,7 @@ class crm_company_overview_impl extends class_base
 		if ($r["group"] != "ovrv_offers")
 		{
 			$t->define_field(array(
-				"caption" => t("Pri"),
+				"caption" => t("Prioriteet"),
 				"name" => "priority",
 	//			"chgbgcolor" => "col",
 				"align" => "center",
@@ -407,8 +408,47 @@ class crm_company_overview_impl extends class_base
 		}
 	}
 
+	function __task_sorter($a, $b)
+	{
+		$b_proj = $b->prop("project");
+		$a_proj = $a->prop("project");
+		$b_cust = $b->prop("customer");
+		$a_cust = $a->prop("customer");
+		if(($a_cust - $b_cust) == 0)
+		{
+			if(($a_proj - $b_proj) == 0)
+			{
+				if($a->prop("deadline") == $b->prop("deadline"))
+				{
+					return strcmp($a->name(), $b->name());
+				}
+				else
+				{
+					return ($a->prop("deadline") - $b->prop("deadline"));
+				}
+			}
+			else
+			{
+				return strcmp($a->prop("project.name"), $b->prop("project.name"));
+			}
+		}
+		else
+		{
+			return strcmp($a->prop("customer.name"), $b->prop("customer.name"));
+		}
+		return $a->prop("date") - $b->prop("date");
+	}
+
+
 	function _get_my_tasks($arr)
 	{
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		if(is_object($sts) && $sts->prop("group_task_view"))
+		{
+			$group = 1;	
+		}
+		
 		if (aw_global_get("crm_task_view") != CRM_TASK_VIEW_TABLE)
 		{
 			return PROP_IGNORE;
@@ -416,6 +456,9 @@ class crm_company_overview_impl extends class_base
 		classload("core/icons");
 
 		$ol = $this->_get_task_list($arr);
+
+		$ol->sort_by_cb(array(&$this, "__task_sorter"));
+
 		if ($arr["request"]["group"] == "ovrv_offers")
 		{
 			return $this->_get_ovrv_offers($arr, $ol);
@@ -423,16 +466,45 @@ class crm_company_overview_impl extends class_base
 		$pm = get_instance("vcl/popup_menu");
 		// make task2person list
 		$task2person = $this->_get_participant_list_for_tasks($ol->ids());
-
+		
 		$task2recur = $this->_get_recur_list_for_tasks($ol->ids());
 
 		$task_nr = 0;
 		$table_data = array();
+		
+		$last_cust = $last_proj = 0;
+
 		foreach($ol->ids() as $task_id)
 		{
 			$task_nr++;
 			$task = obj($task_id);
 
+			if($group)
+			{
+				if($last_cust != $task->prop("customer"))
+				{
+					if($this->can("view" , $task->prop("customer")))
+					{
+						$cust = obj($task->prop("customer"));
+						$table_data[] = array(
+								"name" => "<h3>".$cust->name()."</h3>",
+						);
+					}
+					$last_cust = $task->prop("customer");
+				}
+				
+				if($last_proj != $task->prop("project"))
+				{
+					if($this->can("view" , $task->prop("project")))
+					{
+						$proj = obj($task->prop("project"));
+						$table_data[] = array(
+								"name" => "<h4>".$task->name()."</h4>",
+						);
+					}
+					$last_proj = $task->prop("project");
+				}
+			}
 			$cust = $task->prop("customer");
 			$cust_str = "";
 			if (is_oid($cust) && $this->can("view", $cust))
@@ -657,46 +729,7 @@ class crm_company_overview_impl extends class_base
 		}
 
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_my_tasks_t($t, $table_data, $arr["request"]);
-
-
-		switch ($arr['request']['group'])
-		{
-			case 'my_tasks':
-				$format = t('%s toimetused');
-				break;
-			case 'meetings':
-				$format = t('%s kohtumised');
-				break;
-			case 'calls':
-				$format = t('%s k&otilde;ned');
-				break;
-			case 'ovrv_mails':
-				$format = t('%s mailid');
-				break;
-			case 'documents_all_manage':
-				$format = t('%s dokumendid: haldus');
-				break;
-			default:
-				$format = t('%s k&otilde;ik tegemised');
-		}
-		if ( isset($arr['request']['act_s_part']) && ($arr['request']['group'] != 'ovrv_mails') )
-		{
-			$participants_name = $arr['request']['act_s_part'];
-			if (!empty($participants_name))
-			{
-				$format .= t(', milles on %s osaline');
-			}
-		}
-		else
-		{
-			$user_inst = get_instance(CL_USER);
-			$user_obj = obj($user_inst->get_current_person());
-			$participants_name = $user_obj->name();
-			$format .= t(', milles on %s osaline');
-		}
-
-		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $participants_name));
+		$this->_init_my_tasks_t($t, $table_data, $arr["request"], $group);
 
 		foreach($table_data as $row)
 		{
