@@ -185,11 +185,11 @@
 	</tr>
 	<tr>
 		<td>{VAR:LC_START_DATETIME}:</td>
-		<td>{VAR:main_start}</td>
+		<td>{VAR:main_start_date}</td>
 	</tr>
 	<tr>
-		<td>{VAR:LC_END_DATETIME}:</td>
-		<td>{VAR:main_end}</td>
+		<td>{VAR:LC_TIME}:</td>
+		<td>{VAR:main_start_time} - {VAR:main_end_time}</td>
 	</tr>
 	<tr>
 		<td>{VAR:LC_24H}:</td>

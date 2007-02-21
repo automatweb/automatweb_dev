@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.55 2007/02/21 15:20:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.56 2007/02/21 15:25:27 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -804,8 +804,10 @@ class conference_planning extends class_base
 						"MAIN_CATERING" => $cats,
 						"main_door_sign" => $day["door_sign"],
 						"main_person_no" => $day["persons_no"],
-						"main_start" => $day["function_start_date"]." ".$day["function_start_time"],
-						"main_end" => $day["function_end_date"]." ".$day["function_end_time"],
+						"main_start" => $day["function_start_date"],
+						"main_start_time" => $day["function_start_time"],
+						"main_end_time" => $day["funcion_end_time"],
+						//"main_end" => $day["function_end_date"]." ".$day["function_end_time"],
 						"main_24h" => $day["24h"]?t("Yes"):t("No"),
 						"MAIN_CATERING" => $main_catering,
 					));
