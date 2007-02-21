@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.153 2007/02/21 10:47:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.154 2007/02/21 13:13:08 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1787,6 +1787,17 @@ class room extends class_base
 								$d[$x] = html::popup($dx_p);
 							}
 
+							if ($last_bron->prop("send_bill"))
+							{
+								$d[$x] = html::href(array(
+									"url" => "javascript:;",
+									"caption" => html::img(array(
+										"url" => aw_ini_get("baseurl")."/automatweb/images/icons/create_bill.jpg",
+										"border" => 0
+									)),
+									"title" => t("Saata arve")
+								))." ".$d[$x];
+							}
 							$d[$x] .= " ";
 							if ($last_bron->prop("client_arrived") == 1)
 							{
