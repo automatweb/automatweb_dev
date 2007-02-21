@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.60 2007/02/21 14:10:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.61 2007/02/21 14:34:28 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -2804,7 +2804,7 @@ class patent extends class_base
 				), CL_PATENT);
 				
 				$change = $del_url = $send_url= '';
-				if(!($status->prop("nr") || $status->prop("verified") || ($re["status"] == 1)))
+				if(!($status->prop("nr") || $status->prop("verified")))
 				{
 					$change = '<a href="'.$url.'">Muuda</a>';
 					$del_url = aw_ini_get("baseurl").aw_url_change_var("delete_patent", $patent->id());

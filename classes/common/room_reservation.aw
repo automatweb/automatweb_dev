@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.50 2007/02/19 12:50:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.51 2007/02/21 14:34:09 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -537,11 +537,11 @@ class room_reservation extends class_base
 				{
 					if($prices[$curr] || $prices[$curr] === 0)
 					{
-						$data["menu_sum"][$curr] = $data["menu_sum"][$curr] + $prices[$curr]*$amount*(100-$prod_discount);
+						$data["menu_sum"][$curr] = $data["menu_sum"][$curr] + $prices[$curr]*$amount*(100-$prod_discount)*0.01;
 					}
 					else
 					{
-						$data["menu_sum"][$curr] = $data["menu_sum"][$curr]+$product->prop("price")*$amount*(100-$prod_discount);
+						$data["menu_sum"][$curr] = $data["menu_sum"][$curr]+$product->prop("price")*$amount*(100-$prod_discount)*0.01;
 					}
 				}
 			}
