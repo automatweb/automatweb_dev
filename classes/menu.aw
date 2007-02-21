@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.186 2007/02/20 09:26:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.187 2007/02/21 10:13:15 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1876,10 +1876,15 @@ class menu extends class_base
 					$d_tpl = $this->cfg["seealso_doc_tpl_names"][$tpl];
 				}
 				$d = get_instance(CL_DOCUMENT);
-				$tmp[$tpl] .= $d->gen_preview(array(
+				$iv = aw_ini_get("document.lead_splitter");
+				aw_ini_set("document", "lead_splitter", "");
+				$ttt = $d->gen_preview(array(
 					"docid" => $did,
-					"tpl" => $d_tpl
+					"tpl" => $d_tpl,
+					"no_doc_lead_break" => 1
 				));
+				aw_ini_set("document", "lead_splitter", $iv);
+				$tmp[$tpl] .= $ttt;
 			}
 		}
 		foreach($tmp as $tpl => $docs)
