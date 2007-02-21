@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.3 2007/02/01 20:05:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.4 2007/02/21 10:13:40 kristo Exp $
 // site_template_trans.aw - Saidi templatede t&otilde;lkimine 
 /*
 
@@ -240,8 +240,8 @@ class site_template_trans extends class_base
 			return;
 		}
 
-		list($file, $lang) = explode("_", $arr["request"]["tfl"]);
-		$fp = aw_ini_get("site_basedir")."/lang/".$lang."/".str_replace("..", "", str_replace("/", "", $file));
+		list($file, $lang) = explode("aw_", $arr["request"]["tfl"]);
+		$fp = aw_ini_get("site_basedir")."/lang/".$lang."/".str_replace("..", "", str_replace("/", "", $file))."aw";
 		$this->write_trans_file($fp, $arr["request"]["tr"]);
 	}
 
@@ -270,7 +270,6 @@ class site_template_trans extends class_base
 			$c .= $array_name."[\"".$const."\"] = \"".$this->code_quote($value)."\"; ".($comm != "" ? " // ".$comm : "")."\n";
 		}
 		$c .= "?>";
-
 		$this->put_file(array(
 			"file" => $fn,
 			"content" => $c
