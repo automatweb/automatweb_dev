@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.83 2006/09/06 16:01:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.84 2007/02/21 10:16:44 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -875,7 +875,7 @@ class vcalendar extends aw_template
 				)),
 			));
 		};
-		$this->vars(array(
+		$this->vars_safe(array(
 			"RANDOM" => $this->random,
 			"YEARS" => $this->years,
 			"PAGE" => $ts,
@@ -1064,14 +1064,14 @@ class vcalendar extends aw_template
 			$w .= $this->parse("WEEK");
 		};
 		$this->last_event = $event;
-
 		$this->vars(array(
 			"HEADER" => $header,
 			"WEEK" => $w,
 			"month_name" => locale::get_lc_month($this->range["m"]),	
 			"year" => $this->range["y"],
 		));
-		return $this->parse();
+		$rv =  $this->parse();
+		return $rv;
 	}
 	
 	function draw_year()
@@ -1524,7 +1524,7 @@ class vcalendar extends aw_template
 						if ($this->can('view', $event_oid))
 						{
 							$event_obj = new object($event_oid);
-							$this->vars(array(
+							$this->vars_safe(array(
 								'event_id' => $event_oid,
 								'event_title' => $event_obj->name(),
 								'event_content' => $event_obj->prop('content'),
@@ -1534,8 +1534,7 @@ class vcalendar extends aw_template
 						}
 					}
 				}
-
-				$this->vars(array(
+				$this->vars_safe(array(
 					"style" => $style,
 					"link" => $link,
 					"link2" => $day_url,
@@ -1547,7 +1546,7 @@ class vcalendar extends aw_template
 				));
 				if($this->is_template("CLICKABLE") && $mode == 0)
 				{
-					$this->vars(array(
+					$this->vars_safe(array(
 						"link" => $this->parse("CLICKABLE"),
 					));
 				}
@@ -1555,15 +1554,14 @@ class vcalendar extends aw_template
 				$i = $i + 86400;
 			};
 			$rv = "";
-			$this->vars(array(
+			$this->vars_safe(array(
 				"DAY" => $day,
 			));
 			$week .= $this->parse("WEEK");
 			$j = $j + (7*86400);
 		};
-
 		// now, how to make those configurable?
-		$this->vars(array(
+		$this->vars_safe(array(
 			"WEEK" => $week,
 			"style_title" => $style_title,
 			"style_background" => $style_background,
