@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.58 2007/02/20 13:04:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.59 2007/02/21 13:03:05 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -504,7 +504,6 @@ class patent extends class_base
 	**/
 	function show($arr)
 	{
-		
 		$this->read_template("show.tpl");
 		
 		if(is_oid($arr["id"]) && $this->can("view" , $arr["id"]))
@@ -580,14 +579,7 @@ class patent extends class_base
 		}
 		$this->vars(array("PRODUCTS" => $p));
 		//arr($data);
-		foreach($data as $prop => $val)
-		{
-			if($val)
-			{
-				$str = strtoupper(str_replace("_value","",str_replace("_text","",$prop)));
-				$this->vars(array($str => $this->parse($str)));
-			}
-		}
+		
 		
 		if($data["convention_nr_value"])
 		{
@@ -596,6 +588,22 @@ class patent extends class_base
 		if($data["exhibition_name_value"])
 		{
 			$this->vars(array("EXHIBITION" => $this->parse("EXHIBITION")));
+		}
+		foreach($data as $prop => $val)
+		{
+			if($val && (substr_count($prop, 'value') || substr_count($prop, 'text')) && $val!= " ")
+			{
+				$str = strtoupper(str_replace("_value","",str_replace("_text","",$prop)));
+				$this->vars(array($str => $this->parse($str)));
+			}
+		}
+		if($data["procurator_text"])
+		{
+			$this->vars(array("PROCURATOR_TEXT" => $this->parse("PROCURATOR_TEXT")));
+		}
+		if($data["authorized_person_firstname_value"] || $data["authorized_person_lastname_value"] || $data["authorized_person_code_value"])
+		{
+			$this->vars(array("AUTHORIZED_PERSON" => $this->parse("AUTHORIZED_PERSON")));
 		}
 		return $this->parse();
 	}
@@ -691,6 +699,18 @@ class patent extends class_base
 						$str = strtoupper(str_replace("_value","",str_replace("_text","",$var)));
 						$this->vars(array($str => $this->parse($str)));
 					}
+				}
+				if($this->vars["street_value"] || $this->vars["city_value"] || $this->vars["index_value"] || $this->vars["country_code_value"])
+				{
+					$this->vars(array("ADDRESS" => $this->parse("ADDRESS")));
+				}
+				if($this->vars["correspond_street_value"] || $this->vars["correspond_city_value"] || $this->vars["correspond_index_value"] || $this->vars["correspond_country_code_value"])
+				{
+					$this->vars(array("CORRESPOND_ADDRESS" => $this->parse("CORRESPOND_ADDRESS")));
+				}
+				if($this->vars["phone_value"] || $this->vars["email_value"] || $this->vars["fax_value"])
+				{
+					$this->vars(array("CONTACT" => $this->parse("CONTACT")));
 				}
 				$a.= $this->parse("APPLICANT");
 			}
@@ -1093,10 +1113,22 @@ class patent extends class_base
 				}
 				if($_SESSION["patent"]["applicants"][$key][$var])
 				{
-					$str = strtoupper($key);
+					$str = strtoupper($var);
 					$this->vars(array($str => $this->parse($str)));
-					}
+				}
 			}
+ 			if($this->vars["street_value"] || $this->vars["city_value"] || $this->vars["index_value"] || $this->vars["country_code_value"])
+ 			{
+ 				$this->vars(array("ADDRESS" => $this->parse("ADDRESS")));
+ 			}
+ 			if($this->vars["correspond_street_value"] || $this->vars["correspond_city_value"] || $this->vars["correspond_index_value"] || $this->vars["correspond_country_code_value"])
+ 			{
+ 				$this->vars(array("CORRESPOND_ADDRESS" => $this->parse("CORRESPOND_ADDRESS")));
+ 			}
+ 			if($this->vars["phone_value"] || $this->vars["email_value"] || $this->vars["fax_value"])
+ 			{
+ 				$this->vars(array("CONTACT" => $this->parse("CONTACT")));
+ 			}
 			$a.= $this->parse("APPLICANT");
 		}
 		return $a;
