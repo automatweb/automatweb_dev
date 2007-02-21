@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.43 2006/09/04 17:01:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.44 2007/02/21 10:14:11 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -433,7 +433,7 @@ class calendar_view extends class_base
 		$multi_e = $arr["obj_inst"]->prop("show_event_days");
 		// alright .. this function needs to accept an object id from which to ask events
 		$range = $arr["range"];
-		$arr["cal_inst"]->vars($this->vars);
+		$arr["cal_inst"]->vars_safe($this->vars);
 		if (is_oid($arr["oid"]))
 		{
 			$obj = new object($arr["oid"]);
@@ -847,7 +847,7 @@ class calendar_view extends class_base
 				foreach($ids as $id)
 				{
 					$obj = obj($id);
-					$this->vars(array(
+					$this->vars_safe(array(
 						"link" => aw_url_change_var(array("date" => date("d-m-Y", $obj->prop("start1")))),
 					));
 					$random .= $this->parse("RANDOM");
@@ -898,7 +898,7 @@ class calendar_view extends class_base
 					$obj = $objs->begin();
 					if ($obj)
 					{
-						$this->vars(array(
+						$this->vars_safe(array(
 							"link" => aw_url_change_var(array("date" => date("d-m-Y", $obj->prop("start1")))),
 							"name" => $year,
 						));
@@ -1051,7 +1051,6 @@ class calendar_view extends class_base
 			};
 
 		};
-
 		return $rv;
 	}
 
