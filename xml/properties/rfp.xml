@@ -111,6 +111,16 @@
             <caption>I have accomonndation requirements</caption>
       </property>
       <property>
+            <name>multi_day</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Multi-day main function</caption>
+      </property>
+      <property>
             <name>needs_rooms</name>
             <table>objects</table>
             <group>general</group>
@@ -355,6 +365,16 @@
             <type>text</type>
             <no_caption>1</no_caption>
             <caption>Additional_dates</caption>
+      </property>
+      <property>
+            <name>main_function</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <caption>Main function</caption>
       </property>
       <property>
             <name>event_type</name>

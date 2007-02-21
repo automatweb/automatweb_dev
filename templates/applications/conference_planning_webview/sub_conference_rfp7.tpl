@@ -37,6 +37,11 @@
 		<td>{VAR:LC_HAVE_ACC_REQ}:</td>
 		<td>{VAR:needs_rooms}</td>
 	</tr>
+	<tr>
+		<td>Multi-day main function?</td>
+		<td>{VAR:multi_day}</td>
+	</tr>
+
 	<!-- SELECTED  DATES -->
 
 
@@ -145,6 +150,8 @@
 
 	<!-- main function -->
 
+	<!-- SUB: MAIN_FUNCTION_DAY -->
+
 	<tr>
 		<td colspan="2"><b>{VAR:LC_MAIN_FUNCTION_ROOM}<b/></td>
 	</tr>
@@ -215,6 +222,8 @@
 	</tr>
 
 	<!-- END SUB: MAIN_CATERING -->
+
+	<!-- END SUB: MAIN_FUNCTION_DAY -->
 
 	<tr>
 		<td colspan="2">

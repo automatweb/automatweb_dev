@@ -9,6 +9,15 @@
 	</tr>
 	<tr>
 		<td>
+			{VAR:LC_MULTI_DAY_CAPTION}:
+		</td>
+		<td>
+			<input type="radio" name="sub[1][multi_day]" {VAR:multi_day_1} value="1"/>{VAR:LC_ONE_DAY}<br/>
+			<input type="radio" name="sub[1][multi_day]" {VAR:multi_day_2} value="2"/>{VAR:LC_MULTI_DAY}
+		</td>
+	</tr>
+	<tr>
+		<td>
 			{VAR:LC_ORGANISATION_COMPANY}:
 		</td>
 		<td>

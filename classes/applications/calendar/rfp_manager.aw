@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.11 2007/01/25 10:29:05 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.12 2007/02/21 12:13:46 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -339,6 +339,8 @@ class rfp_manager extends class_base
 			"billing_email" => $obj->prop("billing_email"),
 			"selected_search_result" => aw_unserialize($obj->prop("selected_search_result")),
 			"all_search_results" => aw_unserialize($obj->prop("all_search_results")),
+			"main_function" => aw_unserialize($obj->prop("main_function")),
+			"multi_day" => aw_unserialize($obj->prop("multi_day")),
 		);
 		
 		$data["dates"] = array_merge($data["dates"], aw_unserialize($obj->prop("additional_dates_raw")));

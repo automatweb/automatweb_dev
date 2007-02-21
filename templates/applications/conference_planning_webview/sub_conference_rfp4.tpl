@@ -1,4 +1,35 @@
 <table>
+	<!-- SUB: DAYS -->
+	<tr>
+		<td colspan="2">
+			<table border="1">
+				<tr>
+					<td>
+						{VAR:LC_DATE}
+					</td>
+					<td>
+						{VAR:LC_EVENT_TYPE}
+					</td>
+					<td>
+						{VAR:LC_TIME}
+					</td>
+					<td>
+					</td>
+				</tr>
+				<!-- SUB: DAY -->
+				<tr>
+					<td>{VAR:function_start_date}</td>
+					<td>{VAR:event_type}</td>
+					<td>{VAR:function_start_time} - {VAR:function_end_time}</td>
+					<td>
+						<a href="{VAR:edit_url}">{VAR:LC_EDIT}</a>&nbsp;&nbsp;<a href="{VAR:remove_url}">{VAR:LC_REMOVE}</a>
+					</td>
+				</tr>
+				<!-- END SUB: DAY -->
+			</table>
+		</td>
+	</tr>
+	<!-- END SUB: DAYS -->
 	<tr>
 		<td>
 			{VAR:LC_EVENT_TYPE}:
@@ -71,15 +102,7 @@
 			{VAR:LC_START_DATETIME}:
 		</td>
 		<td>
-			<input type="text" size="10" name="sub[4][function_start_date]" value="{VAR:function_start_date}"/><input size="2" type="text" name="sub[4][function_start_time]" value="{VAR:function_start_time}"/> {VAR:LC_TIME_FORMAT}
-		</td>
-	</tr>
-	<tr>
-		<td>
-			{VAR:LC_END_DATETIME}:
-		</td>
-		<td>
-			<input type="text" size="10" name="sub[4][function_end_date]" value="{VAR:function_end_date}"/><input size="2" type="text" name="sub[4][function_end_time]" value="{VAR:function_end_time}"/> {VAR:LC_TIME_FORMAT}
+			<input type="text" size="10" name="sub[4][function_start_date]" value="{VAR:function_start_date}"/><input size="2" type="text" name="sub[4][function_start_time]" value="{VAR:function_start_time}"/> - <input size="2" type="text" name="sub[4][function_end_time]" value="{VAR:function_end_time}"/> {VAR:LC_TIME_FORMAT}
 		</td>
 	</tr>
 	<tr>
@@ -144,16 +167,16 @@
 			{VAR:LC_TYPE}:
 		</td>
 		<td>
-			<input type="radio" name="sub[4][main_catering][{VAR:catering_no}][catering_type_chooser]" value="1" {VAR:catering_type_chooser_1}/>
-			<select name="sub[4][main_catering][{VAR:catering_no}][catering_type_select]">
+			<input type="radio" name="sub[4][catering_type_chooser]" value="1" {VAR:catering_type_chooser_1}/>
+			<select name="sub[4][catering_type_select]">
 				<!-- SUB: CATERING_TYPE -->
 				<option value="{VAR:value}" {VAR:catering_type_select}>{VAR:caption}</option>
 				<!-- END SUB: CATERING_TYPE -->
 			</select>
 			<br/>
-			<input type="radio" name="sub[4][main_catering][{VAR:catering_no}][catering_type_chooser]" value="2" {VAR:catering_type_chooser_2}/>
+			<input type="radio" name="sub[4][catering_type_chooser]" value="2" {VAR:catering_type_chooser_2}/>
 			{VAR:LC_OTHER}:
-			<input type="text" name="sub[4][main_catering][{VAR:catering_no}][catering_type_text]" value="{VAR:catering_type_text}"/>
+			<input type="text" name="sub[4][catering_type_text]" value="{VAR:catering_type_text}"/>
 		</td>
 	</tr>
 	<tr>
@@ -161,7 +184,7 @@
 			{VAR:LC_START_TIME}:
 		</td>
 		<td>
-			<input type="text" name="sub[4][main_catering][{VAR:catering_no}][catering_start_time]" value="{VAR:catering_start_time}"/>
+			<input type="text" name="sub[4][catering_start_time]" value="{VAR:catering_start_time}"/>
 		</td>
 	</tr>
 	<tr>
@@ -169,7 +192,7 @@
 			{VAR:LC_END_TIME}:
 		</td>
 		<td>
-			<input type="text" name="sub[4][main_catering][{VAR:catering_no}][catering_end_time]" value="{VAR:catering_end_time}"/>
+			<input type="text" name="sub[4][catering_end_time]" value="{VAR:catering_end_time}"/>
 		</td>
 	</tr>
 	<tr>
@@ -177,7 +200,7 @@
 			{VAR:LC_ATTENDEE_NO}:
 		</td>
 		<td>
-			<input type="text" name="sub[4][main_catering][{VAR:catering_no}][catering_attendees_no]" value="{VAR:catering_attendees_no}"/>
+			<input type="text" name="sub[4][catering_attendees_no]" value="{VAR:catering_attendees_no}"/>
 		</td>
 	</tr>
 
@@ -186,6 +209,11 @@
 	<tr>
 		<td colspan="2" align="right">
 			<a href="#" onClick="javascript:submit_changeform('add_catering');">Add/Save catering</a>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="right">
+			<a href="#" onClick="javascript:submit_changeform('add_catering');">Add/Save day</a>
 		</td>
 	</tr>
 </table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.5 2007/01/25 10:21:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.6 2007/02/21 12:13:46 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -45,6 +45,9 @@
 
 	@property accommondation_requirements type=checkbox ch_value=1 default=0
 	@caption I have accomonndation requirements
+
+	@property multi_day type=checkbox ch_value=1 default=0
+	@caption Multi-day main function
 
 	@property needs_rooms type=checkbox ch_value=1 default=0
 	@caption Needs rooms
@@ -111,6 +114,10 @@
 
 @groupinfo main_fun caption="Main function"
 @default group=main_fun
+
+	@property main_function type=text no_caption=1
+	@caption Main function
+
 	@property event_type type=text
 	@caption Event type
 
