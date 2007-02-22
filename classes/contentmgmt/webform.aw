@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.116 2007/02/06 13:55:56 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.117 2007/02/22 12:10:53 tarvo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -104,7 +104,7 @@
 @caption Stiilide kaust
 
 //@property form_output_style type=select
-//@caption Väljundi tekstide stiil
+//@caption V&auml;ljundi tekstide stiil
 
 @property def_caption_style type=select
 @caption Vaikimisi pealkirja stiil
@@ -891,6 +891,14 @@ class webform extends class_base
 				"name" => t("Sisesta dokumendi pealkiri"),
 				"formula" => '$value = $arr["obj_inst"]->prop($prop["name"]);if(!empty($value)){$prop["type"] = "text";$prop["value"] = nl2br($value);}',
 			),
+			array(
+				"name" => t("Sisselogitud isiku eesnimi"),
+				"formula" => '$u = get_instance("core/users/user"); $p = obj($u->get_current_person()); $prop["value"] = $p->prop("firstname");',
+			),
+			array(
+				"name" => t("Sisselogitud isiku perekonnanimi"),
+				"formula" => '$u = get_instance("core/users/user"); $p = obj($u->get_current_person()); $prop["value"] = $p->prop("lastname");',
+			),
 		);
 		$i = 0;
 		foreach($set_controllers as $key => $val)
@@ -1263,8 +1271,8 @@ class webform extends class_base
 		);
 		$sort_opts = array(
 			"" => t("--vali--"),
-			"objects.jrk ASC" => t("Järjekord (kasvav)"),
-			"objects.jrk DESC" => t("Järjekord (kahanev)"),
+			"objects.jrk ASC" => t("J&auml;rjekord (kasvav)"),
+			"objects.jrk DESC" => t("J&auml;rjekord (kahanev)"),
 			"objects.name ASC" => t("Nimi (kasvav)"),
 			"objects.name DESC" => t("Nimi (kahanev)"),
 			"objects.created ASC" => t("Loomisaeg (kasvav)"),
@@ -1272,7 +1280,7 @@ class webform extends class_base
 		);
 		$prp_orient = array(0 => t("horisontaalne"), "vertical" => t("vertikaalne"));
 		$year_sels = $this->make_keys(range(1902, 2037));
-		$mon_fors = array(0 => "Sõnaline", 1 => "Numbriline");
+		$mon_fors = array(0 => "S&otilde;naline", 1 => "Numbriline");
 		
 		$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$metamgr = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_METAMGR");
@@ -1839,11 +1847,11 @@ class webform extends class_base
 			"format" => "format"
 		);
 		
-		$user_group_list = aw_global_get("gidlist_oid");//kõik grupid kus kasutaja on
-		$hidden_stuff = $cfgform->meta("show_to_groups");//juhul kui omadusi on teatud gruppidele maha keeratud, näitab 
+		$user_group_list = aw_global_get("gidlist_oid");//k&otilde;ik grupid kus kasutaja on
+		$hidden_stuff = $cfgform->meta("show_to_groups");//juhul kui omadusi on teatud gruppidele maha keeratud, n&auml;itab 
 		foreach($els as $pn => $pd)
 		{
-			if($hidden_stuff[$pn])//see värk siis kontrollib, kas miskile kasutajale on mingi omadus äkki maha keeratud
+			if($hidden_stuff[$pn])//see v&auml;rk siis kontrollib, kas miskile kasutajale on mingi omadus &auml;kki maha keeratud
 			{
 				$allowed_to_see = 0;
 				foreach($user_group_list as $user_group)
