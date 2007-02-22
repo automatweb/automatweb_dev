@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.159 2007/02/22 12:09:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.160 2007/02/22 12:39:42 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -223,11 +223,21 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 @groupinfo open_hrs caption="Avamisajad"
 @default group=open_hrs
 
-	@property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
-	@caption Avamisajad
+	@property oh_tb type=toolbar no_caption=1 store=no
 
-	@property pauses type=releditor reltype=RELTYPE_PAUSES rel_id=first use_form=emb store=no
-	@caption Pausid
+	@layout oh type=vbox closeable=1 area_caption=Avamisajad
+
+		@property oh_t type=table store=no no_caption=1 parent=oh
+
+	@layout ch type=vbox closeable=1 area_caption=Pausid
+
+		@property ch_t type=table store=no no_caption=1 parent=ch
+
+	property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
+	caption Avamisajad
+
+	property pauses type=releditor reltype=RELTYPE_PAUSES rel_id=first use_form=emb store=no
+	caption Pausid
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
@@ -1635,6 +1645,17 @@ class room extends class_base
 		exit_function("get_calendar_tbl::3::genres");
 
 		$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
+
+		if(is_object($cal_obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
+		{
+			$cal = $cal_obj->id();
+			$b_parent = $cal_obj->prop("event_folder");
+			if (!$b_parent)
+			{
+				$b_parent = $cal_obj->id();
+			}
+		}
+
 	
 		$num_rows = 0;
 		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
@@ -1690,7 +1711,29 @@ class room extends class_base
 						else
 						if ($settings->prop("bron_popup_immediate") && is_admin())
 						{
-							$onclick[$x] = "doBronExec('".$arr["obj_inst"]->id()."_".$start_step."', ".($step_length * $time_step).")";
+							if ($settings->prop("bron_popup_detailed"))
+							{
+								$url = html::get_new_url(CL_RESERVATION, $b_parent, array(
+									"return_url" => get_ru(),
+									"calendar" => $cal,
+									"resource" => $arr["obj_inst"]->id(),
+								));
+								$w = 1000;
+								$h = 600;
+							}
+							else
+							{
+								$url = $this->mk_my_orb("admin_add_bron_popup", array(
+					                                "parent" => $b_parent,
+				                                	"calendar" => $cal,
+				        	                        "resource" => $arr["obj_inst"]->id(),
+					                                "return_url" => get_ru(),
+			                	        	));
+								$w = 500;
+								$h = 400;
+							}
+
+							$onclick[$x] = "doBronExec('".$arr["obj_inst"]->id()."_".$start_step."', ".($step_length * $time_step).",null,null,'$url', '$w', '$h', 0)";
 						}
 						else
 						{
@@ -1989,10 +2032,10 @@ class room extends class_base
 		if(is_object($cal_obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
 		{
 			$cal = $cal_obj->id();
-			$parent = $cal_obj->prop("event_folder");
-			if (!$parent)
+			$b_parent = $cal_obj->prop("event_folder");
+			if (!$b_parent)
 			{
-				$parent = $cal_obj->id();
+				$b_parent = $cal_obj->id();
 			}
 		}
 
@@ -2040,7 +2083,7 @@ class room extends class_base
 
 			if ($settings->prop("bron_popup_detailed"))
 			{
-				$url = html::get_new_url(CL_RESERVATION, $parent, array(
+				$url = html::get_new_url(CL_RESERVATION, $b_parent, array(
 					"return_url" => get_ru(),
 					"calendar" => $cal,
 					"resource" => $arr["obj_inst"]->id(),
@@ -2052,7 +2095,7 @@ class room extends class_base
 			else
 			{
 				$url = $this->mk_my_orb("admin_add_bron_popup", array(
-	                                "parent" => $parent,
+	                                "parent" => $b_parent,
                                 	"calendar" => $cal,
         	                        "resource" => $arr["obj_inst"]->id(),
 	                                "return_url" => get_ru(),
@@ -4681,6 +4724,108 @@ class room extends class_base
 			</script>";
 		}
 		return $ret;
+	}
+
+	function _init_oh_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "apply_group",
+			"caption" => t("Kehtib gruppidele"),
+			"align" => "center",
+			"width" => "50%"
+		));
+		$t->define_field(array(
+			"name" => "oh",
+			"caption" => t("Avamisajad"),
+			"align" => "center",
+			"width" => "50%"
+		));
+		$t->define_field(array(
+			"name" => "edit",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"width" => "100"
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+			"width" => "20"
+		));
+	}
+
+	function _get_oh_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_oh_t($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_OPENHOURS")) as $c)
+		{
+			$oh = $c->to();
+			$i = $oh->instance();
+			$t->define_data(array(
+				"apply_group" => $oh->prop_str("apply_group"),
+				"oh" => $i->show(array("id" => $oh->id())),
+				"edit" => html::get_change_url($oh->id(), array("return_url" => get_ru()), t("Muuda")),
+				"oid" => $oh->id()
+			));
+		}
+	}
+
+
+	function _get_ch_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_oh_t($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PAUSES")) as $c)
+		{
+			$oh = $c->to();
+			$i = $oh->instance();
+			$t->define_data(array(
+				"apply_group" => $oh->prop_str("apply_group"),
+				"oh" => $i->show(array("id" => $oh->id())),
+				"edit" => html::get_change_url($oh->id(), array("return_url" => get_ru()), t("Muuda")),
+				"oid" => $oh->id()
+			));
+		}
+	}
+
+	function _get_oh_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif"
+		));
+		$t->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Avamisaeg"),
+			"link" => html::get_new_url(CL_OPENHOURS, $arr["obj_inst"]->id(), array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 44, "return_url" => get_ru())),
+		));
+		$t->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Paus"),
+			"link" => html::get_new_url(CL_OPENHOURS, $arr["obj_inst"]->id(), array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 45, "return_url" => get_ru())),
+		));
+		$t->add_delete_button();
+	}
+
+	/** Returns the openhours object for the current user, or null if none applies
+		@attrib api=1
+		@param room required type=object
+	**/
+	function get_current_openhtours_for_room($room)
+	{
+		$gl = aw_global_get("gidlist_oid");
+		foreach($room->connections_from(array("type" => "RELTYPE_OPENHOURS")) as $c)
+		{
+			$oh = $c->to();
+			if (count(array_intersect($gl, safe_array($oh->prop("apply_groups")))))
+			{
+				return $oh;
+			}
+		}
+		return null;
 	}
 
 }
