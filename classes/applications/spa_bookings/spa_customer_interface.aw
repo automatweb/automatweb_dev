@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.7 2007/02/19 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.8 2007/02/22 11:59:36 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -92,6 +92,8 @@ class spa_customer_interface extends class_base
 				date("d.m.Y", $o->created())
 			);
 
+			$o_begin = 2147483647;
+			$o_end = 0;
 			$gl = aw_global_get("gidlist_oid");
 
 			$confirmed = true;
@@ -106,6 +108,8 @@ class spa_customer_interface extends class_base
 				{
 					$has_times = false;
 				}
+				$o_end = max($o_end, $bron->prop("end"));
+				$o_begin = min($o_begin, $bron->prop("start1"));
 			}
 
 
@@ -300,7 +304,7 @@ class spa_customer_interface extends class_base
 					"disp_main" => $o->modified() > (time() - 300) ? "block" : "none",
 					"disp_short" => $o->modified() > (time() - 300) ? "none" : "block"
 				));
-				if ($bookings == "" && $f_booking == "" && $this->is_template("FIRST_BOOKING"))
+				if ($bookings == "" && $f_booking == "" && $this->is_template("FIRST_BOOKING") && time() < $o_end)
 				{
 					$f_booking = $this->parse("FIRST_BOOKING");
 				}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.33 2007/02/19 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.34 2007/02/22 11:59:36 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -854,7 +854,7 @@ class spa_bookigs_entry extends class_base
 			for ($i = 0; $i < $num_days; $i++)
 			{
 				$s = $range_from + ($i * 24 * 3600);
-				if ($s < $from || $s > $to)
+				if ($s < $from || $s >= $to)
 				{
 					continue;
 				}
@@ -897,7 +897,8 @@ class spa_bookigs_entry extends class_base
 				{
 					$avail = false;
 				}
-				if ($h*$time_step < $d_from || $h*$time_step > $d_to)
+				$tmp_to = $cur_step_end - get_day_start($cur_step_end);
+				if ($h*$time_step < $d_from || $h*$time_step >= $d_to || $tmp_to > $d_to)
 				{
 					continue;
 				}
