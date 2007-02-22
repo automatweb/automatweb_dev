@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.23 2007/02/20 15:42:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.24 2007/02/22 10:39:23 kristo Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -198,6 +198,11 @@ class procurement_offer extends class_base
 				if (!is_oid($arr["obj_inst"]->id()) && $arr["request"]["proc"])
 				{
 					$prop["value"] = $arr["request"]["proc"];
+				}
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
 				}
 				break;
 
