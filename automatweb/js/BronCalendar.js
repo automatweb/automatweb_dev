@@ -25,15 +25,24 @@ function doBronExec(
 	{
 		return false;
 	}
-	cancel_bron_popup_dialog();
-	strUrl += '&start1='+current_timestamp+'&end='+(current_timestamp+intRoomReservationLength);
-	if (intNoPopup)
+	if (strUrl)
 	{
-		window.location.href=strUrl;
+		cancel_bron_popup_dialog();
+		strUrl += '&start1='+current_timestamp+'&end='+(current_timestamp+intRoomReservationLength);
+		if (intNoPopup)
+		{
+			window.location.href=strUrl;
+		}
+		else
+		{
+			aw_popup_scroll(strUrl, 'bronpop', intWidth, intHeight);
+		}
 	}
 	else
 	{
-		aw_popup_scroll(strUrl, 'bronpop', intWidth, intHeight);
+		document.changeform.action.value = 'do_add_reservation';
+		document.changeform.submit();
+		return true;
 	}
 }
 

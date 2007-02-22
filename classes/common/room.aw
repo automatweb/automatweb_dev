@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.158 2007/02/21 16:27:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.159 2007/02/22 12:09:28 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3729,11 +3729,25 @@ class room extends class_base
 		{
 			if(!$start && $_SESSION["room_reservation"][$room->id()]["start"])
 			{
-				$start = $_SESSION["room_reservation"][$room->id()]["start"];
+				if($_SESSION["room_reservation"][$room->id()]["start"])
+				{
+					$start = $_SESSION["room_reservation"][$room->id()]["start"];
+				}
+				else
+				{
+					$start = time();
+				}
 			}
-			if(!$end && $_SESSION["room_reservation"][$room->id()]["end"])
+			if(!$end)
 			{
-				$end = $_SESSION["room_reservation"][$room->id()]["end"];
+				if($_SESSION["room_reservation"][$room->id()]["end"])
+				{
+					$end = $_SESSION["room_reservation"][$room->id()]["end"];
+				}
+				else
+				{
+					$end = time();
+				}
 			}
 			$b_list = $this->get_room_discount_objects($room);
 			foreach($b_list->arr() as $bargain)
