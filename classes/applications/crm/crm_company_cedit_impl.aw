@@ -763,22 +763,30 @@ class crm_company_cedit_impl extends core
 					"linn" => html::textbox(array(
 						"name" => "cedit_adr[".$obj->id()."][linn]",
 						"value" => $obj->prop("linn.name"),
-						"size" => 15
+						"size" => 15,
+						"autocomplete_source" => $this->mk_my_orb("adr_city_ac"),
+						"autocomplete_params" => array("cedit_adr[".$obj->id()."][linn]")
 					)),
 					"maakond" => html::textbox(array(
 						"name" => "cedit_adr[".$obj->id()."][maakond]",
 						"value" => $obj->prop("maakond.name"),
-						"size" => 15
+						"size" => 15,
+						"autocomplete_source" => $this->mk_my_orb("adr_city_ac"),
+						"autocomplete_params" => array("cedit_adr[".$obj->id()."][maakond]")
 					)),
 					"piirkond" => html::textbox(array(
 						"name" => "cedit_adr[".$obj->id()."][piirkond]",
 						"value" => $obj->prop("piirkond.name"),
-						"size" => 15
+						"size" => 15,
+						"autocomplete_source" => $this->mk_my_orb("adr_city_ac"),
+						"autocomplete_params" => array("cedit_adr[".$obj->id()."][piirkond]")
 					)),
 					"riik" => html::textbox(array(
 						"name" => "cedit_adr[".$obj->id()."][riik]",
 						"value" => $obj->prop("riik.name"),
-						"size" => 15
+						"size" => 15,
+						"autocomplete_source" => $this->mk_my_orb("adr_city_ac"),
+						"autocomplete_params" => array("cedit_adr[".$obj->id()."][riik]")
 					)),
 					"change" => html::href(array(
 						"caption" => t("Muuda"),
@@ -826,22 +834,30 @@ class crm_company_cedit_impl extends core
 				"linn" => html::textbox(array(
 					"name" => "cedit_adr[-1][linn]",
 					"value" => "",
-					"size" => 15
+					"size" => 15,
+					"autocomplete_source" => $this->mk_my_orb("adr_city_ac"),
+					"autocomplete_params" => array("cedit_adr[-1][linn]")
 				)),
 				"maakond" => html::textbox(array(
 					"name" => "cedit_adr[-1][maakond]",
 					"value" => "",
-					"size" => 15
+					"size" => 15,
+					"autocomplete_source" => $this->mk_my_orb("adr_city_ac"),
+					"autocomplete_params" => array("cedit_adr[-1][maakond]")
 				)),
 				"piirkond" => html::textbox(array(
 					"name" => "cedit_adr[-1][piirkond]",
 					"value" => "",
-					"size" => 15
+					"size" => 15,
+					"autocomplete_source" => $this->mk_my_orb("adr_city_ac"),
+					"autocomplete_params" => array("cedit_adr[-1][piirkond]")
 				)),
 				"riik" => html::textbox(array(
 					"name" => "cedit_adr[-1][riik]",
 					"value" => "",
-					"size" => 15
+					"size" => 15,
+					"autocomplete_source" => $this->mk_my_orb("adr_city_ac"),
+					"autocomplete_params" => array("cedit_adr[-1][riik]")
 				)),
 				"change" => ""
 			));
@@ -949,6 +965,59 @@ class crm_company_cedit_impl extends core
 			$fo->save();
 		}
 		$o->set_prop($prop, $fo->id());
+	}
+
+	/**
+		@attrib name=adr_city_ac all_args=1
+	**/
+	function adr_city_ac($arr)
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
+		$bit = "";
+		$c_lut = array(
+			"linn" => CL_CRM_CITY,
+			"maakond" => CL_CRM_COUNTY,
+			"piirkond" => CL_CRM_AREA,
+			"riik" => CL_CRM_COUNTRY
+		);
+		if (is_array($arr["cedit_adr"]))
+		{
+			foreach($arr["cedit_adr"] as $lar)
+			{
+				foreach($lar as $k => $v)
+				{
+					$bit = $v;
+					$clid = $c_lut[$k];
+				}
+			}
+		}
+		$ol = new object_list(array(
+			"class_id" => $clid,
+			"name" => iconv("UTF-8", aw_global_get("charset"), $bit)."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 500,
+		));
+		$autocomplete_options = $ol->names();
+		foreach($autocomplete_options as $k => $v)
+		{
+			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
+		}
+		header("Content-type: text/html; charset=utf-8");
+		exit ($cl_json->encode($option_data));
 	}
 
 }
