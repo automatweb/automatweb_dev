@@ -1016,6 +1016,7 @@ class crm_company_cedit_impl extends core
 		{
 			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
 		}
+		$autocomplete_options = array_unique($autocomplete_options);
 		header("Content-type: text/html; charset=utf-8");
 		exit ($cl_json->encode($option_data));
 	}
