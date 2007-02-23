@@ -16,5 +16,15 @@
 			</function>
 		</action>
 
+		<action name="remove_from_cust_grp">
+			<function name="remove_from_cust_grp">
+				<arguments>
+					<required name="id" />
+					<required name="cgrp" />
+					<required name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1786,6 +1786,17 @@ class crm_company_cust_impl extends class_base
 					"text" => t("Muuda"),
 					"link" => html::get_change_url($o->id(), array("return_url" => get_ru()))
 				));
+				if ($arr["request"]["category"])
+				{
+					$pm->add_item(array(
+						"text" => t("Eemalda kliendigrupist"),
+						"link" => $this->mk_my_orb("remove_from_cust_grp", array(
+							"id" => $o->id(),
+							"cgrp" => $arr["request"]["category"],
+							"post_ru" => get_ru()
+						))
+					));
+				}
 				$pm = $pm->get_menu();
 			}
 
@@ -2119,6 +2130,19 @@ class crm_company_cust_impl extends class_base
 
 		$t->sort_by();
 		die(iconv(aw_global_get("charset"), "utf-8", $t->draw()));
+	}
+
+	/**
+		@attrib name=remove_from_cust_grp
+		@param id required
+		@param cgrp required
+		@param post_ru required
+	**/
+	function remove_from_cust_grp($arr)
+	{
+		$cg = obj($arr["cgrp"]);
+		$cg->disconnect(array("from" => $arr["id"]));
+		return $arr["post_ru"];
 	}
 }
 ?>
