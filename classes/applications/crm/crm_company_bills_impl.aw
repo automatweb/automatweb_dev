@@ -638,7 +638,6 @@ class crm_company_bills_impl extends class_base
 	**/
 	function search_bill($arr)
 	{
-	
 		if($_GET["sel"])
 		{
 			echo "Valitud tööd on teostatud erinevatele klientidele!";
@@ -665,7 +664,9 @@ class crm_company_bills_impl extends class_base
 			$filter["lang_id"] = array();
 			$filter["site_id"] = array();
 			$filter["class_id"] = CL_CRM_BILL;
+			$filter["state"] = 0;
 		
+
 			$ol = new object_list($filter);
 			
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
@@ -740,9 +741,8 @@ class crm_company_bills_impl extends class_base
 		$filter["lang_id"] = array();
 		$filter["site_id"] = array();
 		$filter["class_id"] = CL_CRM_BILL;
-	
+		$filter["state"] = 0;
 		$ol = new object_list($filter);
-		
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$dat = array(
