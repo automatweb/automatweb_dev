@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_db.aw:class_130_help
 msgid "Klassi Kliendibaas help"
 msgstr ""
@@ -298,7 +297,7 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_db.aw:185 classes/crm/crm_db.aw:416
+#: classes/crm/crm_db.aw:185 classes/crm/crm_db.aw:422
 msgid "Kustuta"
 msgstr ""
 
@@ -338,43 +337,46 @@ msgstr ""
 msgid "Kliendihaldur"
 msgstr ""
 
-#: classes/crm/crm_db.aw:347
+#: classes/crm/crm_db.aw:248
+msgid "Muudetud"
+msgstr ""
+
+#: classes/crm/crm_db.aw:352
 msgid "(nimetu)"
 msgstr ""
 
-#: classes/crm/crm_db.aw:366
+#: classes/crm/crm_db.aw:372
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_db.aw:381
+#: classes/crm/crm_db.aw:387
 msgid "Lisa organisatsioon (%s)"
 msgstr ""
 
-#: classes/crm/crm_db.aw:390
+#: classes/crm/crm_db.aw:396
 msgid "Lisa tegevusala"
 msgstr ""
 
-#: classes/crm/crm_db.aw:402
+#: classes/crm/crm_db.aw:408
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_db.aw:410
+#: classes/crm/crm_db.aw:416
 msgid "Ava valim"
 msgstr ""
 
-#: classes/crm/crm_db.aw:418
+#: classes/crm/crm_db.aw:424
 msgid "Kustutada valitud organisatsioonid?"
 msgstr ""
 
-#: classes/crm/crm_db.aw:428
+#: classes/crm/crm_db.aw:434
 msgid "-- vali valim --"
 msgstr ""
 
-#: classes/crm/crm_db.aw:453
+#: classes/crm/crm_db.aw:459
 msgid "Lisa valitud valimisse"
 msgstr ""
 
-#: classes/crm/crm_db.aw:455
+#: classes/crm/crm_db.aw:461
 msgid "Paiguta valitud organisatsioonid sellesse valimisse?"
 msgstr ""
-

@@ -261,108 +261,118 @@ msgstr "Phone is mandatory"
 msgid "E-mail on puudu"
 msgstr "E-mail is mandatory"
 
-#: classes/applications/calendar/conference_planning.aw:252
-#: classes/applications/calendar/conference_planning.aw:267
-#: classes/applications/calendar/conference_planning.aw:591
-#: classes/applications/calendar/conference_planning.aw:592
-#: classes/applications/calendar/conference_planning.aw:774
-#: classes/applications/calendar/conference_planning.aw:775
-#: classes/applications/calendar/conference_planning.aw:776
-#: classes/applications/calendar/conference_planning.aw:777
-#: classes/applications/calendar/conference_planning.aw:803
-#: classes/applications/calendar/conference_planning.aw:804
-#: classes/applications/calendar/conference_planning.aw:805
-#: classes/applications/calendar/conference_planning.aw:806
+#: classes/applications/calendar/conference_planning.aw:253
+#: classes/applications/calendar/conference_planning.aw:268
+#: classes/applications/calendar/conference_planning.aw:642
+#: classes/applications/calendar/conference_planning.aw:643
+#: classes/applications/calendar/conference_planning.aw:838
+#: classes/applications/calendar/conference_planning.aw:839
+#: classes/applications/calendar/conference_planning.aw:840
+#: classes/applications/calendar/conference_planning.aw:841
+#: classes/applications/calendar/conference_planning.aw:867
+#: classes/applications/calendar/conference_planning.aw:868
+#: classes/applications/calendar/conference_planning.aw:869
 #: classes/applications/calendar/conference_planning.aw:870
-#: classes/applications/calendar/conference_planning.aw:871
+#: classes/applications/calendar/conference_planning.aw:934
+#: classes/applications/calendar/conference_planning.aw:935
 msgid "-"
 msgstr "-"
 
-#: classes/applications/calendar/conference_planning.aw:317
+#: classes/applications/calendar/conference_planning.aw:318
 msgid "*"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:654
-#: classes/applications/calendar/conference_planning.aw:655
-#: classes/applications/calendar/conference_planning.aw:753
-#: classes/applications/calendar/conference_planning.aw:812
-#: classes/applications/calendar/conference_planning.aw:1289
+#: classes/applications/calendar/conference_planning.aw:349
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:349
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:705
+#: classes/applications/calendar/conference_planning.aw:706
+#: classes/applications/calendar/conference_planning.aw:707
+#: classes/applications/calendar/conference_planning.aw:811
+#: classes/applications/calendar/conference_planning.aw:876
+#: classes/applications/calendar/conference_planning.aw:1359
 msgid "Yes"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:654
-#: classes/applications/calendar/conference_planning.aw:655
-#: classes/applications/calendar/conference_planning.aw:753
-#: classes/applications/calendar/conference_planning.aw:812
-#: classes/applications/calendar/conference_planning.aw:1189
-#: classes/applications/calendar/conference_planning.aw:1194
-#: classes/applications/calendar/conference_planning.aw:1289
+#: classes/applications/calendar/conference_planning.aw:705
+#: classes/applications/calendar/conference_planning.aw:706
+#: classes/applications/calendar/conference_planning.aw:707
+#: classes/applications/calendar/conference_planning.aw:811
+#: classes/applications/calendar/conference_planning.aw:876
+#: classes/applications/calendar/conference_planning.aw:1255
+#: classes/applications/calendar/conference_planning.aw:1260
+#: classes/applications/calendar/conference_planning.aw:1359
 msgid "No"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:662
-#: classes/applications/calendar/conference_planning.aw:1255
+#: classes/applications/calendar/conference_planning.aw:714
+#: classes/applications/calendar/conference_planning.aw:1325
 msgid "Normal"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:662
-#: classes/applications/calendar/conference_planning.aw:1255
+#: classes/applications/calendar/conference_planning.aw:714
+#: classes/applications/calendar/conference_planning.aw:1325
 msgid "Alternative"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:961
+#: classes/applications/calendar/conference_planning.aw:1025
 msgid "Alternative dates"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:962
+#: classes/applications/calendar/conference_planning.aw:1026
 msgid "Accomondation"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:963
+#: classes/applications/calendar/conference_planning.aw:1027
 msgid "Main Event"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:964
+#: classes/applications/calendar/conference_planning.aw:1028
 msgid "Additional Events"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:965
+#: classes/applications/calendar/conference_planning.aw:1029
 msgid "Booking Details"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:966
+#: classes/applications/calendar/conference_planning.aw:1030
 msgid "RFP check"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1177
+#: classes/applications/calendar/conference_planning.aw:1243
 msgid "Not Applicable"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1181
+#: classes/applications/calendar/conference_planning.aw:1247
 msgid "From %s to %s"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1185
+#: classes/applications/calendar/conference_planning.aw:1251
 msgid "%s days"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1354
+#: classes/applications/calendar/conference_planning.aw:1424
 msgid "Kasutanimi on juba olemas, palun logige sisse."
 msgstr "Username already exists, please log in"
 
-#: classes/applications/calendar/conference_planning.aw:1823
+#: classes/applications/calendar/conference_planning.aw:1958
 msgid "There aren't enough single rooms"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1827
+#: classes/applications/calendar/conference_planning.aw:1962
 msgid "There aren't enough double rooms"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1831
+#: classes/applications/calendar/conference_planning.aw:1966
 msgid "There aren't enough suites"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1853
+#: classes/applications/calendar/conference_planning.aw:1988
 msgid "There aren't as big rooms as needed"
 msgstr ""
 

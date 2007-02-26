@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/repeater_obj.aw:23
-msgid "Salvesta"
+#: classes/protocols/data/dot.aw:class_1197_help
+msgid "Klassi DOT help"
 msgstr ""
 

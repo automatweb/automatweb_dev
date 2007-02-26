@@ -25,58 +25,78 @@ msgstr ""
 msgid "Omaduse Avamisajad (openhours) help"
 msgstr ""
 
-#: classes/common/openhours.aw:54
+#: classes/common/openhours.aw:prop_apply_group
+msgid "Omaduse Kehtib gruppidele (apply_group) caption"
+msgstr ""
+
+#: classes/common/openhours.aw:prop_apply_group_comment
+msgid "Omaduse Kehtib gruppidele (apply_group) kommentaar"
+msgstr ""
+
+#: classes/common/openhours.aw:prop_apply_group_help
+msgid "Omaduse Kehtib gruppidele (apply_group) help"
+msgstr ""
+
+#: classes/common/openhours.aw:rel_RELTYPE_GROUP
+msgid "Seose Kehtib kasutajagrupile (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/common/openhours.aw:47
+msgid "--vali--"
+msgstr ""
+
+#: classes/common/openhours.aw:69
 msgid "Lisa"
 msgstr ""
 
-#: classes/common/openhours.aw:84
+#: classes/common/openhours.aw:99
 msgid "Rida"
 msgstr ""
 
-#: classes/common/openhours.aw:134
+#: classes/common/openhours.aw:149
 msgid "E"
 msgstr ""
 
-#: classes/common/openhours.aw:135
+#: classes/common/openhours.aw:150
 msgid "T"
 msgstr ""
 
-#: classes/common/openhours.aw:136
+#: classes/common/openhours.aw:151
 msgid "K"
 msgstr ""
 
-#: classes/common/openhours.aw:137
+#: classes/common/openhours.aw:152
 msgid "N"
 msgstr ""
 
-#: classes/common/openhours.aw:138
+#: classes/common/openhours.aw:153
 msgid "R"
 msgstr ""
 
-#: classes/common/openhours.aw:139
+#: classes/common/openhours.aw:154
 msgid "L"
 msgstr ""
 
-#: classes/common/openhours.aw:140
+#: classes/common/openhours.aw:155
 msgid "P"
 msgstr ""
 
-#: classes/common/openhours.aw:219
+#: classes/common/openhours.aw:234
 msgid "-- Valimata --"
 msgstr ""
 
-#: classes/common/openhours.aw:282
+#: classes/common/openhours.aw:297
 msgid "Vigane perioodi alguse p&auml;ev"
 msgstr ""
 
-#: classes/common/openhours.aw:286
+#: classes/common/openhours.aw:301
 msgid "Vigane perioodi l&otilde;pu p&auml;ev"
 msgstr ""
 
-#: classes/common/openhours.aw:290
+#: classes/common/openhours.aw:305
 msgid "Vigane perioodi alguse aeg"
 msgstr ""
 
-#: classes/common/openhours.aw:294
+#: classes/common/openhours.aw:309
 msgid "Vigane perioodi l&otilde;pu aeg"
 msgstr ""

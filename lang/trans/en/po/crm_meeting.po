@@ -917,67 +917,67 @@ msgstr ""
 msgid "Kujundusosa Kokkuvõte (center_bit_bottom) pealkiri"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:320
+#: classes/crm/crm_meeting.aw:324
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:321
+#: classes/crm/crm_meeting.aw:325
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:322
+#: classes/crm/crm_meeting.aw:326
 msgid "Terve p&auml;ev"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:323
+#: classes/crm/crm_meeting.aw:327
 msgid "Isiklik"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:324
+#: classes/crm/crm_meeting.aw:328
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:546
+#: classes/crm/crm_meeting.aw:550
 msgid "--Vali--"
 msgstr "--Select--"
 
-#: classes/crm/crm_meeting.aw:557
+#: classes/crm/crm_meeting.aw:561
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/crm/crm_meeting.aw:559
+#: classes/crm/crm_meeting.aw:563
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr "Are you sure you want to remove the selected participants?"
 
-#: classes/crm/crm_meeting.aw:567
+#: classes/crm/crm_meeting.aw:571
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/crm/crm_meeting.aw:576
+#: classes/crm/crm_meeting.aw:580
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_meeting.aw:1089
+#: classes/crm/crm_meeting.aw:1093
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1094
+#: classes/crm/crm_meeting.aw:1098
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1099
+#: classes/crm/crm_meeting.aw:1103
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1104
+#: classes/crm/crm_meeting.aw:1108
 msgid "Tunnihind"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1109
+#: classes/crm/crm_meeting.aw:1113
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1143
+#: classes/crm/crm_meeting.aw:1147
 msgid "Loo uus arve"
 msgstr ""
 

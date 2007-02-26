@@ -30,15 +30,15 @@ msgid "Omaduse Sait, mida indekseerida (url) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_short_name
-msgid "Omaduse L&amp;uuml;hend (short_name) caption"
+msgid "Omaduse L&uuml;hend (short_name) caption"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_short_name_comment
-msgid "Omaduse L&amp;uuml;hend (short_name) kommentaar"
+msgid "Omaduse L&uuml;hend (short_name) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_short_name_help
-msgid "Omaduse L&amp;uuml;hend (short_name) help"
+msgid "Omaduse L&uuml;hend (short_name) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_meta_ctr
@@ -126,27 +126,27 @@ msgid "Omaduse Mitu sekundit oodata lehtede vahel (indexer_sleep) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_bg_run_always
-msgid "Omaduse Indekseerija k&amp;auml;ib pidevalt (bg_run_always) caption"
+msgid "Omaduse Indekseerija k&auml;ib pidevalt (bg_run_always) caption"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_bg_run_always_comment
-msgid "Omaduse Indekseerija k&amp;auml;ib pidevalt (bg_run_always) kommentaar"
+msgid "Omaduse Indekseerija k&auml;ib pidevalt (bg_run_always) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_bg_run_always_help
-msgid "Omaduse Indekseerija k&amp;auml;ib pidevalt (bg_run_always) help"
+msgid "Omaduse Indekseerija k&auml;ib pidevalt (bg_run_always) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_rc_txt
-msgid "Omaduse Kordus indekseerija k&amp;auml;ivitamiseks (rc_txt) caption"
+msgid "Omaduse Kordus indekseerija k&auml;ivitamiseks (rc_txt) caption"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_rc_txt_comment
-msgid "Omaduse Kordus indekseerija k&amp;auml;ivitamiseks (rc_txt) kommentaar"
+msgid "Omaduse Kordus indekseerija k&auml;ivitamiseks (rc_txt) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_rc_txt_help
-msgid "Omaduse Kordus indekseerija k&amp;auml;ivitamiseks (rc_txt) help"
+msgid "Omaduse Kordus indekseerija k&auml;ivitamiseks (rc_txt) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_html.aw:prop_recur_edit
@@ -193,28 +193,28 @@ msgstr ""
 msgid "Seose metaandmete kontroller (RELTYPE_META_CTR) tekst"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:198
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:224
 msgid ""
-"Indekseerija k&amp;auml;ivitati %s, l&amp;otilde;petas edukalt %s.\n"
+"Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\n"
 "Indekseeriti %s lehte, mis sialdasid %s baiti teksti."
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:210
-msgid "Indekseerija nimega %s alustas t&amp;ouml;&amp;ouml;d %s.\n"
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:236
+msgid "Indekseerija nimega %s alustas t&ouml;&ouml;d %s.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:211
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:237
 msgid "Hetkel on indekseeritud %s lehte.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:212
-msgid "J&amp;auml;rjekorras on %s lehte.\n"
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:238
+msgid "J&auml;rjekorras on %s lehte.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:213
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:239
 msgid "Viimati uuendati staatust %s.\n"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:222
-msgid "Indekseerija k&amp;auml;ivitati %s, peatati %s."
+#: classes/contentmgmt/site_search/site_search_content_grp_html.aw:248
+msgid "Indekseerija k&auml;ivitati %s, peatati %s."
 msgstr ""

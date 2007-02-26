@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/gallery/gallery_v2.aw:class_190_help
 msgid "Klassi Galerii help"
 msgstr ""
@@ -48,6 +47,18 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_num_pages_help
 msgid "Omaduse Mitu lehte: (num_pages) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:prop_rate_redir
+msgid "Omaduse Suuna p&auml;rast h&auml;&auml;letamist (rate_redir) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:prop_rate_redir_comment
+msgid "Omaduse Suuna p&auml;rast h&auml;&auml;letamist (rate_redir) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:prop_rate_redir_help
+msgid "Omaduse Suuna p&auml;rast h&auml;&auml;letamist (rate_redir) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_pg_1_content
@@ -382,11 +393,10 @@ msgstr ""
 msgid "Seose ftp login (RELTYPE_FTP_LOGIN) tekst"
 msgstr ""
 
-#: classes/contentmgmt/gallery/gallery_v2.aw:148
+#: classes/contentmgmt/gallery/gallery_v2.aw:175
 msgid "Sellele kataloogile pole konfiguratsiooni valitud!"
 msgstr ""
 
-#: classes/contentmgmt/gallery/gallery_v2.aw:391
+#: classes/contentmgmt/gallery/gallery_v2.aw:418
 msgid "Sellist kataloogi pole serveris! (%s)"
 msgstr ""
-

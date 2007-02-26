@@ -197,14 +197,14 @@ msgstr ""
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:362
+#: classes/applications/calendar/rfp_manager.aw:364
 msgid "Aktiviseeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:362
+#: classes/applications/calendar/rfp_manager.aw:364
 msgid "Arhiveeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:369
+#: classes/applications/calendar/rfp_manager.aw:371
 msgid "Kustuta"
 msgstr ""

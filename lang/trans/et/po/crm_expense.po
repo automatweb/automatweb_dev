@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_expense.aw:class_1144_help
 msgid "Klassi Kulu help"
 msgstr ""
@@ -74,7 +73,22 @@ msgstr ""
 msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) help"
 msgstr ""
 
+#: classes/applications/crm/crm_expense.aw:prop_who
+msgid "Omaduse Kes tegi (who) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_who_comment
+msgid "Omaduse Kes tegi (who) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_expense.aw:prop_who_help
+msgid "Omaduse Kes tegi (who) help"
+msgstr ""
+
 #: classes/applications/crm/crm_expense.aw:rel_RELTYPE_BILL
 msgid "Seose Arve (RELTYPE_BILL) tekst"
 msgstr ""
 
+#: classes/applications/crm/crm_expense.aw:rel_RELTYPE_PEOPLE
+msgid "Seose Arve (RELTYPE_PEOPLE) tekst"
+msgstr ""

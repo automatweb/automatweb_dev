@@ -66,8 +66,7 @@ msgstr "Use existing database"
 
 # classes/install/aw_site.aw:prop_use_existing_database_comment
 #: classes/install/aw_site.aw:prop_use_existing_database_comment
-msgid ""
-"Omaduse Kasuta olemasolevat andmebaasi (use_existing_database) kommentaar"
+msgid "Omaduse Kasuta olemasolevat andmebaasi (use_existing_database) kommentaar"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_use_existing_database_help
@@ -92,24 +91,17 @@ msgstr ""
 
 # classes/install/aw_site.aw:prop_select_parent_folder
 #: classes/install/aw_site.aw:prop_select_parent_folder
-msgid ""
-"Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse "
-"(select_parent_folder) caption"
-msgstr ""
-"Select folder in the existing database, where the new site will be created"
+msgid "Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse (select_parent_folder) caption"
+msgstr "Select folder in the existing database, where the new site will be created"
 
 # classes/install/aw_site.aw:prop_select_parent_folder_comment
 #: classes/install/aw_site.aw:prop_select_parent_folder_comment
-msgid ""
-"Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse "
-"(select_parent_folder) kommentaar"
+msgid "Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse (select_parent_folder) kommentaar"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_select_parent_folder_help
 #: classes/install/aw_site.aw:prop_select_parent_folder_help
-msgid ""
-"Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse "
-"(select_parent_folder) help"
+msgid "Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse (select_parent_folder) help"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_use_existing_templates
@@ -129,63 +121,47 @@ msgstr ""
 
 # classes/install/aw_site.aw:prop_select_tpl_sites
 #: classes/install/aw_site.aw:prop_select_tpl_sites
-msgid ""
-"Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) caption"
+msgid "Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) caption"
 msgstr "Select sites whose templates can be selected"
 
 # classes/install/aw_site.aw:prop_select_tpl_sites_comment
 #: classes/install/aw_site.aw:prop_select_tpl_sites_comment
-msgid ""
-"Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) "
-"kommentaar"
+msgid "Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) kommentaar"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_select_tpl_sites_help
 #: classes/install/aw_site.aw:prop_select_tpl_sites_help
-msgid ""
-"Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) help"
+msgid "Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) help"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_select_tpl_folders
 #: classes/install/aw_site.aw:prop_select_tpl_folders
-msgid ""
-"Omaduse Vali templatede kataloogid, mis uude saiti kopeerida "
-"(select_tpl_folders) caption"
+msgid "Omaduse Vali templatede kataloogid, mis uude saiti kopeerida (select_tpl_folders) caption"
 msgstr "Select template folders to copy to the new site"
 
 # classes/install/aw_site.aw:prop_select_tpl_folders_comment
 #: classes/install/aw_site.aw:prop_select_tpl_folders_comment
-msgid ""
-"Omaduse Vali templatede kataloogid, mis uude saiti kopeerida "
-"(select_tpl_folders) kommentaar"
+msgid "Omaduse Vali templatede kataloogid, mis uude saiti kopeerida (select_tpl_folders) kommentaar"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_select_tpl_folders_help
 #: classes/install/aw_site.aw:prop_select_tpl_folders_help
-msgid ""
-"Omaduse Vali templatede kataloogid, mis uude saiti kopeerida "
-"(select_tpl_folders) help"
+msgid "Omaduse Vali templatede kataloogid, mis uude saiti kopeerida (select_tpl_folders) help"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_select_imgcss_sites
 #: classes/install/aw_site.aw:prop_select_imgcss_sites
-msgid ""
-"Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) "
-"caption"
+msgid "Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) caption"
 msgstr "Select the source site for css and images"
 
 # classes/install/aw_site.aw:prop_select_imgcss_sites_comment
 #: classes/install/aw_site.aw:prop_select_imgcss_sites_comment
-msgid ""
-"Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) "
-"kommentaar"
+msgid "Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) kommentaar"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_select_imgcss_sites_help
 #: classes/install/aw_site.aw:prop_select_imgcss_sites_help
-msgid ""
-"Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) "
-"help"
+msgid "Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) help"
 msgstr ""
 
 # classes/install/aw_site.aw:prop_gen_site
@@ -263,14 +239,6 @@ msgstr ""
 msgid "Omaduse Hoiatused: (site_warnmsg) help"
 msgstr ""
 
-#: classes/install/aw_site.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/install/aw_site.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/install/aw_site.aw:group_templates
 #: classes/install/aw_site.aw:group_templates
 msgid "Grupi Templated (templates) pealkiri"
@@ -317,12 +285,8 @@ msgid "Ei saanud lugeda serveri saitide nimekirja! (vali piltide ja css sait)"
 msgstr "Could not read server site list! (select image and css site)"
 
 #: classes/install/aw_site.aw:317
-msgid ""
-"Saidi urlis v&otilde;ivad sisalduda ainult numbrid, t&auml;hed, punkt ja "
-"sidekriips. URL'i ette pole vaja panna http://'d!"
-msgstr ""
-"Site url can only contain numbers, letters, dots and dashes. URL dooes not "
-"need to be prefixed with http://"
+msgid "Saidi urlis v&otilde;ivad sisalduda ainult numbrid, t&auml;hed, punkt ja sidekriips. URL'i ette pole vaja panna http://'d!"
+msgstr "Site url can only contain numbers, letters, dots and dashes. URL dooes not need to be prefixed with http://"
 
 #: classes/install/aw_site.aw:349
 msgid "error in site config: %s"
@@ -341,8 +305,7 @@ msgid "Saidi %s loomise log"
 msgstr "Site %s creation log"
 
 #: classes/install/aw_site.aw:401
-msgid ""
-"<br><br><b>Valmis! sait on kasutatav 30 sekundi p&auml;rast!</b><br />\n"
+msgid "<br><br><b>Valmis! sait on kasutatav 30 sekundi p&auml;rast!</b><br />\n"
 msgstr "<br><br><b>Done! Site will be usable in 30 seconds!</b><br />\n"
 
 #: classes/install/aw_site.aw:413 classes/install/aw_site.aw:454
@@ -441,8 +404,7 @@ msgstr "Database to use is not selected"
 
 #: classes/install/aw_site.aw:932
 msgid "Uue saidi root kataloog olemasolevas andmebaasis on valimata!"
-msgstr ""
-"The root folder for the new site in the existing database is not selected!"
+msgstr "The root folder for the new site in the existing database is not selected!"
 
 #: classes/install/aw_site.aw:947
 msgid "Sait on liiga vana koodiversiooniga et selle p&otilde;hjal uut luua!"
@@ -453,29 +415,16 @@ msgid "Saidi andmebaas on juba olemas! (%s) "
 msgstr "Site database already exists! (%s)"
 
 #: classes/install/aw_site.aw:989
-msgid ""
-"Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni "
-"pole registreeritud! (%s) "
-msgstr ""
-"Site domain's nameserver is not configurable by automatweb and the domain "
-"does not exist! (%s)"
+msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! (%s) "
+msgstr "Site domain's nameserver is not configurable by automatweb and the domain does not exist! (%s)"
 
 #: classes/install/aw_site.aw:993
-msgid ""
-"Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen "
-"viitab valele IP aadressile! (vajalik = %s domeeni ip = %s)"
-msgstr ""
-"Site domain's nameserver is not configurable by automatweb and the domain is "
-"pointing to an incorrect IP address! (required = %s, current = %s)"
+msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen viitab valele IP aadressile! (vajalik = %s domeeni ip = %s)"
+msgstr "Site domain's nameserver is not configurable by automatweb and the domain is pointing to an incorrect IP address! (required = %s, current = %s)"
 
 #: classes/install/aw_site.aw:1000
-msgid ""
-"Saidi domeen on juba registreeritud! (domeen = %s ip = %s) Kui selle domeeni "
-"pealt k&auml;ib m&otilde;ni teine sait, siis seda ei saa p&auml;rast uue "
-"saidi loomist kasutada!"
-msgstr ""
-"Site's domain is already registered! (domain = %s, ip = %s) If another site "
-"is running on that domain, it will be unusable after creating the new site!"
+msgid "Saidi domeen on juba registreeritud! (domeen = %s ip = %s) Kui selle domeeni pealt k&auml;ib m&otilde;ni teine sait, siis seda ei saa p&auml;rast uue saidi loomist kasutada!"
+msgstr "Site's domain is already registered! (domain = %s, ip = %s) If another site is running on that domain, it will be unusable after creating the new site!"
 
 #: classes/install/aw_site.aw:1016
 msgid "Saitide registris on juba sait, mille url on %s !"
@@ -538,12 +487,8 @@ msgid "Saidi url muutus %s => %s"
 msgstr "Site's url changed from %s to %s"
 
 #: classes/install/aw_site.aw:1551
-msgid ""
-"HOIATUS! Templatede valiku muutmisel kirjutatakse olemasolevad templated "
-"&uuml;le!"
-msgstr ""
-"WARNING! Existing templates will be OVERWRITTEN if new templates are "
-"selected!"
+msgid "HOIATUS! Templatede valiku muutmisel kirjutatakse olemasolevad templated &uuml;le!"
+msgstr "WARNING! Existing templates will be OVERWRITTEN if new templates are selected!"
 
 #: classes/install/aw_site.aw:1552
 msgid "Templated muutusid default templatedest teise saidi omadeks!"
@@ -566,8 +511,7 @@ msgid "aw_site::_do_change_url(%s): pagecache folder is empty or bad ( %s )!"
 msgstr "aw_site::_do_change_url(%s): pagecache folder is empty or bad ( %s )!"
 
 #: classes/install/aw_site.aw:1723
-msgid ""
-"Valmis! Sait on uue aadressi pealt kasutatav paari minuti p&auml;rast! <Br>\n"
+msgid "Valmis! Sait on uue aadressi pealt kasutatav paari minuti p&auml;rast! <Br>\n"
 msgstr "Done! Site is usable on new address in a few minutes! <Br>\n"
 
 #: classes/install/aw_site.aw:1756
@@ -579,10 +523,8 @@ msgid "aw_site::_do_change_imgcss(): basedir is empty or bad (%s)!"
 msgstr "aw_site::_do_change_imgcss(): basedir is empty or bad (%s)!"
 
 #: classes/install/aw_site.aw:1815
-msgid ""
-"aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (%s)!"
-msgstr ""
-"aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (%s)!"
+msgid "aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (%s)!"
+msgstr "aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (%s)!"
 
 #: classes/install/aw_site.aw:1838
 msgid "Meist"

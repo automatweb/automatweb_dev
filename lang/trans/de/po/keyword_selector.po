@@ -23,6 +23,10 @@ msgstr ""
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:228
+#: classes/vcl/keyword_selector.aw:224
+msgid "Lisa uus"
+msgstr ""
+
+#: classes/vcl/keyword_selector.aw:231
 msgid "Valitud:"
 msgstr ""

@@ -70,7 +70,7 @@ msgid "Klassi Konteiner (22) nimi"
 msgstr "Container"
 
 #: aw.ini:class_23
-msgid "Klassi Konteineri näitamine (23) nimi"
+msgid "Klassi Konteineri n&auml;itamine (23) nimi"
 msgstr ""
 
 #: aw.ini:class_28
@@ -345,6 +345,10 @@ msgstr "Calendar"
 msgid "Klassi Organisatsioon (129) nimi"
 msgstr "Organisation"
 
+#: aw.ini:class_prodfamily_129
+msgid "Klassi tooteperekonna Kliendihaldus (129) nimi"
+msgstr ""
+
 # aw.ini:class_130
 #: aw.ini:class_130
 msgid "Klassi Kliendibaas (130) nimi"
@@ -365,10 +369,9 @@ msgstr "Mailing list settings"
 msgid "Klassi Riik (134) nimi"
 msgstr "Country"
 
-# aw.ini:class_135
 #: aw.ini:class_135
-msgid "Klassi Õiguslik vorm (135) nimi"
-msgstr "Corporate type"
+msgid "Klassi &Otilde;iguslik vorm (135) nimi"
+msgstr ""
 
 # aw.ini:class_137
 #: aw.ini:class_137
@@ -948,10 +951,9 @@ msgstr "Shopping cart"
 msgid "Klassi Klassidisainer (320) nimi"
 msgstr "Class designer"
 
-# aw.ini:class_321
 #: aw.ini:class_321
-msgid "Klassi Üksus (321) nimi"
-msgstr "Unit"
+msgid "Klassi &Uuml;ksus (321) nimi"
+msgstr ""
 
 # aw.ini:class_322
 #: aw.ini:class_322
@@ -1166,15 +1168,13 @@ msgstr "Bank"
 msgid "Klassi Konto (640) nimi"
 msgstr "Account"
 
-# aw.ini:class_645
 #: aw.ini:class_645
-msgid "Klassi Täienduskoolitus (645) nimi"
-msgstr "Extra training"
+msgid "Klassi T&auml;ienduskoolitus (645) nimi"
+msgstr ""
 
-# aw.ini:class_650
 #: aw.ini:class_650
-msgid "Klassi Ülekanne (650) nimi"
-msgstr "Transfer"
+msgid "Klassi &Uuml;lekanne (650) nimi"
+msgstr ""
 
 # aw.ini:class_655
 #: aw.ini:class_655
@@ -1206,10 +1206,9 @@ msgstr "Tax"
 msgid "Klassi Maanteeinfo otsing (806) nimi"
 msgstr "Roadinfo search"
 
-# aw.ini:class_808
 #: aw.ini:class_808
-msgid "Klassi Maksu pärg (808) nimi"
-msgstr "Tax chain"
+msgid "Klassi Maksu p&auml;rg (808) nimi"
+msgstr ""
 
 # aw.ini:class_809
 #: aw.ini:class_809
@@ -1251,10 +1250,9 @@ msgstr "XML Editor"
 msgid "Klassi Klientide manageerija (818) nimi"
 msgstr "Client manager"
 
-# aw.ini:class_819
 #: aw.ini:class_819
-msgid "Klassi Kalendri sündmus (819) nimi"
-msgstr "Calendar event"
+msgid "Klassi Kalendri s&uuml;ndmus (819) nimi"
+msgstr ""
 
 # aw.ini:class_820
 #: aw.ini:class_820
@@ -1291,10 +1289,9 @@ msgstr "Classbase search synonyms"
 msgid "Klassi Lavastus (831) nimi"
 msgstr "Show"
 
-# aw.ini:class_832
 #: aw.ini:class_832
-msgid "Klassi Üksus veebis (832) nimi"
-msgstr "Unit in website"
+msgid "Klassi &Uuml;ksus veebis (832) nimi"
+msgstr ""
 
 # aw.ini:class_833
 #: aw.ini:class_833
@@ -1311,10 +1308,9 @@ msgstr "Property inheritance rule"
 msgid "Klassi Maja XML-i editor (835) nimi"
 msgstr "House XML Editor"
 
-# aw.ini:class_836
 #: aw.ini:class_836
-msgid "Klassi Kalendri sündmusele registreerumine (836) nimi"
-msgstr "Calendar event registration"
+msgid "Klassi Kalendri s&uuml;ndmusele registreerumine (836) nimi"
+msgstr ""
 
 # aw.ini:class_839
 #: aw.ini:class_839
@@ -1371,10 +1367,9 @@ msgstr "Event registration"
 msgid "Klassi Pr&uuml;gikast (856) nimi"
 msgstr "Recycle bin"
 
-# aw.ini:class_850
 #: aw.ini:class_850
-msgid "Klassi Sündmuste otsing (850) nimi"
-msgstr "Event search"
+msgid "Klassi S&uuml;ndmuste otsing (850) nimi"
+msgstr ""
 
 # aw.ini:class_852
 #: aw.ini:class_852
@@ -1410,6 +1405,10 @@ msgstr "Webform"
 #: aw.ini:class_867
 msgid "Klassi BugTrack (867) nimi"
 msgstr "BugTrack"
+
+#: aw.ini:class_prodfamily_867
+msgid "Klassi tooteperekonna Arendus&uuml;lesanded (867) nimi"
+msgstr ""
 
 # aw.ini:class_868
 #: aw.ini:class_868
@@ -1466,10 +1465,9 @@ msgstr "Automatic login"
 msgid "Klassi Vormi grupp (880) nimi"
 msgstr "Form group"
 
-# aw.ini:class_881
 #: aw.ini:class_881
-msgid "Klassi Tekstiväli (881) nimi"
-msgstr "Text field"
+msgid "Klassi Tekstiv&auml;li (881) nimi"
+msgstr ""
 
 # aw.ini:class_882
 #: aw.ini:class_882
@@ -1709,7 +1707,7 @@ msgid "Klassi Linnaosa v2 (959) nimi"
 msgstr ""
 
 #: aw.ini:class_960
-msgid "Klassi Tänav v2 (960) nimi"
+msgid "Klassi T&auml;nav v2 (960) nimi"
 msgstr ""
 
 # aw.ini:class_961
@@ -1791,7 +1789,7 @@ msgid "Klassi Expp tyybi list (988) nimi"
 msgstr ""
 
 #: aw.ini:class_989
-msgid "Klassi Expp väljaanne (989) nimi"
+msgid "Klassi Expp v&auml;ljaanne (989) nimi"
 msgstr ""
 
 #: aw.ini:class_990
@@ -1879,7 +1877,7 @@ msgid "Klassi V&auml;ljaanne (1011) nimi"
 msgstr ""
 
 #: aw.ini:class_1012
-msgid "Klassi Tüübilist (1012) nimi"
+msgid "Klassi T&uuml;&uuml;bilist (1012) nimi"
 msgstr ""
 
 #: aw.ini:class_1013
@@ -1963,7 +1961,7 @@ msgid "Klassi Haldusjaotuse kodeering (1033) nimi"
 msgstr ""
 
 #: aw.ini:class_1034
-msgid "Klassi Haldusüksus v2 (1034) nimi"
+msgid "Klassi Haldus&uuml;ksus v2 (1034) nimi"
 msgstr ""
 
 #: aw.ini:class_1035
@@ -1983,7 +1981,7 @@ msgid "Klassi Ostu arve (1038) nimi"
 msgstr ""
 
 #: aw.ini:class_1039
-msgid "Klassi Müügi-saateleht (1039) nimi"
+msgid "Klassi M&uuml;&uuml;gi-saateleht (1039) nimi"
 msgstr ""
 
 #: aw.ini:class_1040
@@ -1991,7 +1989,7 @@ msgid "Klassi Ostutellimus (1040) nimi"
 msgstr ""
 
 #: aw.ini:class_1041
-msgid "Klassi Müügitellimus (1041) nimi"
+msgid "Klassi M&uuml;&uuml;gitellimus (1041) nimi"
 msgstr ""
 
 #: aw.ini:class_1042
@@ -2085,6 +2083,10 @@ msgstr "Content type"
 #: aw.ini:class_1065
 msgid "Klassi Hankekeskkond (1065) nimi"
 msgstr "Procurement centre"
+
+#: aw.ini:class_prodfamily_1065
+msgid "Klassi tooteperekonna HANKEKESKKOND (1065) nimi"
+msgstr ""
 
 #: aw.ini:class_1066
 msgid "Klassi Hange (1066) nimi"
@@ -2259,7 +2261,7 @@ msgid "Klassi Piirkond (1107) nimi"
 msgstr ""
 
 #: aw.ini:class_1108
-msgid "Klassi Ühik (1108) nimi"
+msgid "Klassi &Uuml;hik (1108) nimi"
 msgstr ""
 
 #: aw.ini:class_1110
@@ -2291,15 +2293,15 @@ msgid "Klassi Asukoht (1116) nimi"
 msgstr "Location"
 
 #: aw.ini:class_1117
-msgid "Klassi Veesõiduk (1117) nimi"
-msgstr "Watercraft"
+msgid "Klassi Vees&otilde;iduk (1117) nimi"
+msgstr ""
 
 #: aw.ini:class_1118
-msgid "Klassi Veesõidukite haldus (1118) nimi"
+msgid "Klassi Vees&otilde;idukite haldus (1118) nimi"
 msgstr ""
 
 #: aw.ini:class_1119
-msgid "Klassi Veesõidukite otsing (1119) nimi"
+msgid "Klassi Vees&otilde;idukite otsing (1119) nimi"
 msgstr ""
 
 #: aw.ini:class_1124
@@ -2342,8 +2344,16 @@ msgstr "Quick add"
 msgid "Klassi Administreerimisliides (1134) nimi"
 msgstr "Administrative interface"
 
+#: aw.ini:class_prodfamily_1134
+msgid "Klassi tooteperekonna Culture in database (1134) nimi"
+msgstr ""
+
 #: aw.ini:class_1135
 msgid "Klassi T&ouml;&ouml;aja planeerimine (1135) nimi"
+msgstr ""
+
+#: aw.ini:class_prodfamily_1135
+msgid "Klassi tooteperekonna T&ouml;&ouml;aja planeerimine (1135) nimi"
 msgstr ""
 
 #: aw.ini:class_1136
@@ -2548,6 +2558,18 @@ msgstr ""
 
 #: aw.ini:class_1194
 msgid "Klassi RFP Ajalugu veebis (1194) nimi"
+msgstr ""
+
+#: aw.ini:class_1195
+msgid "Klassi Trademark status (1195) nimi"
+msgstr ""
+
+#: aw.ini:class_1197
+msgid "Klassi DOT (1197) nimi"
+msgstr ""
+
+#: aw.ini:class_1198
+msgid "Klassi SPA Kliendi liides (1198) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29
@@ -5020,6 +5042,14 @@ msgstr ""
 msgid "syslog.type.ST_RFP_HISTORY"
 msgstr ""
 
+#: aw.ini:syslogtypes_1197
+msgid "syslog.type.ST_DOT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1198
+msgid "syslog.type.ST_SPA_CUSTOMER_INTERFACE"
+msgstr ""
+
 #: aw.ini:syslogactions_1
 msgid "syslog.action.SA_CHANGE"
 msgstr ""
@@ -5123,6 +5153,49 @@ msgstr ""
 #: aw.ini:syslogactions_26
 msgid "syslog.action.SA_FINAL_DELETE"
 msgstr ""
+
+# aw.ini:class_135
+#~ msgid "Klassi Õiguslik vorm (135) nimi"
+#~ msgstr "Corporate type"
+
+# aw.ini:class_321
+#~ msgid "Klassi Üksus (321) nimi"
+#~ msgstr "Unit"
+
+# aw.ini:class_645
+#~ msgid "Klassi Täienduskoolitus (645) nimi"
+#~ msgstr "Extra training"
+
+# aw.ini:class_650
+#~ msgid "Klassi Ülekanne (650) nimi"
+#~ msgstr "Transfer"
+
+# aw.ini:class_808
+#~ msgid "Klassi Maksu pärg (808) nimi"
+#~ msgstr "Tax chain"
+
+# aw.ini:class_819
+#~ msgid "Klassi Kalendri sündmus (819) nimi"
+#~ msgstr "Calendar event"
+
+# aw.ini:class_832
+#~ msgid "Klassi Üksus veebis (832) nimi"
+#~ msgstr "Unit in website"
+
+# aw.ini:class_836
+#~ msgid "Klassi Kalendri sündmusele registreerumine (836) nimi"
+#~ msgstr "Calendar event registration"
+
+# aw.ini:class_850
+#~ msgid "Klassi Sündmuste otsing (850) nimi"
+#~ msgstr "Event search"
+
+# aw.ini:class_881
+#~ msgid "Klassi Tekstiväli (881) nimi"
+#~ msgstr "Text field"
+
+#~ msgid "Klassi Veesõiduk (1117) nimi"
+#~ msgstr "Watercraft"
 
 #~ msgid "Klassi Ruum (1143) nimi"
 #~ msgstr "Room"

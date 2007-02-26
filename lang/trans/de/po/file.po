@@ -297,46 +297,54 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:153
+#: classes/file.aw:131
 msgid "%s, %s (%s) - %s"
 msgstr ""
 
-#: classes/file.aw:173
+#: classes/file.aw:151
 msgid "Lisa allkiri"
 msgstr ""
 
-#: classes/file.aw:174 classes/file.aw:193
+#: classes/file.aw:152 classes/file.aw:171
 msgid "Allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:181
+#: classes/file.aw:159
 msgid "DigiDoc konteinerisse"
 msgstr ""
 
-#: classes/file.aw:192
+#: classes/file.aw:170
 msgid "Allkirjasta"
 msgstr ""
 
-#: classes/file.aw:200
+#: classes/file.aw:178
 msgid "DigiDoc konteiner"
 msgstr ""
 
-#: classes/file.aw:211
+#: classes/file.aw:189
 msgid "Allkirjasta fail"
 msgstr ""
 
-#: classes/file.aw:212
+#: classes/file.aw:190
 msgid "Faili: %s, allkirjastamine"
 msgstr ""
 
-#: classes/file.aw:262
+#: classes/file.aw:240
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:710
+#: classes/file.aw:336
+msgid "Paiguta dokumenti"
+msgstr ""
+
+#: classes/file.aw:687
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/file.aw:1279
+#: classes/file.aw:1256
 msgid "Need either id or parent"
+msgstr ""
+
+#: classes/file.aw:1365
+msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""

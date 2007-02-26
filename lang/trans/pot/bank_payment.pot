@@ -98,6 +98,18 @@ msgstr ""
 msgid "Omaduse Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul (cancel_url) help"
 msgstr ""
 
+#: classes/common/bank_payment.aw:prop_test
+msgid "Omaduse testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond) (test) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_test_comment
+msgid "Omaduse testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond) (test) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_test_help
+msgid "Omaduse testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond) (test) help"
+msgstr ""
+
 #: classes/common/bank_payment.aw:prop_bank
 msgid "Omaduse  (bank) caption"
 msgstr ""
@@ -126,7 +138,7 @@ msgstr ""
 msgid "Seose Privaatv&otilde;ti (RELTYPE_P_KEY) tekst"
 msgstr ""
 
-#: classes/common/bank_payment.aw:355
+#: classes/common/bank_payment.aw:382
 msgid "\n"
 msgstr ""
 

@@ -153,22 +153,22 @@ msgstr ""
 msgid "Administreerimisliides"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1176
+#: classes/admin/admin_if.aw:1178
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1177
+#: classes/admin/admin_if.aw:1179
 msgid "Asukoht:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1178
+#: classes/admin/admin_if.aw:1180
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
 msgstr ""
 
-#: classes/admin/admin_if.aw:1179
+#: classes/admin/admin_if.aw:1181
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr ""
 
-#: classes/admin/admin_if.aw:1180
+#: classes/admin/admin_if.aw:1182
 msgid "Seaded"
 msgstr ""

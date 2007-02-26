@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/bug_o_matic_3000/bug.aw:class_868_help
 msgid "Klassi Bugi help"
 msgstr ""
@@ -411,15 +410,15 @@ msgid "Omaduse Vea sagedus (density) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_responsible
-msgid "Omaduse Kliendipoolne vastutaja	 (cust_responsible) caption"
+msgid "Omaduse Kliendipoolne vastutaja\t (cust_responsible) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_responsible_comment
-msgid "Omaduse Kliendipoolne vastutaja	 (cust_responsible) kommentaar"
+msgid "Omaduse Kliendipoolne vastutaja\t (cust_responsible) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_responsible_help
-msgid "Omaduse Kliendipoolne vastutaja	 (cust_responsible) help"
+msgid "Omaduse Kliendipoolne vastutaja\t (cust_responsible) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_status
@@ -694,7 +693,17 @@ msgstr ""
 msgid "Puudutab k&otilde;iki"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:347 classes/applications/bug_o_matic_3000/bug.aw:399 classes/applications/bug_o_matic_3000/bug.aw:424 classes/applications/bug_o_matic_3000/bug.aw:532 classes/applications/bug_o_matic_3000/bug.aw:576 classes/applications/bug_o_matic_3000/bug.aw:609 classes/applications/bug_o_matic_3000/bug.aw:628 classes/applications/bug_o_matic_3000/bug.aw:1478 classes/applications/bug_o_matic_3000/bug.aw:1506 classes/applications/bug_o_matic_3000/bug.aw:1529 classes/applications/bug_o_matic_3000/bug.aw:1572
+#: classes/applications/bug_o_matic_3000/bug.aw:347
+#: classes/applications/bug_o_matic_3000/bug.aw:399
+#: classes/applications/bug_o_matic_3000/bug.aw:424
+#: classes/applications/bug_o_matic_3000/bug.aw:532
+#: classes/applications/bug_o_matic_3000/bug.aw:576
+#: classes/applications/bug_o_matic_3000/bug.aw:609
+#: classes/applications/bug_o_matic_3000/bug.aw:628
+#: classes/applications/bug_o_matic_3000/bug.aw:1479
+#: classes/applications/bug_o_matic_3000/bug.aw:1507
+#: classes/applications/bug_o_matic_3000/bug.aw:1530
+#: classes/applications/bug_o_matic_3000/bug.aw:1573
 msgid "--vali--"
 msgstr ""
 
@@ -710,7 +719,8 @@ msgstr ""
 msgid "Vaade avatud: %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:668 classes/applications/bug_o_matic_3000/bug.aw:948
+#: classes/applications/bug_o_matic_3000/bug.aw:668
+#: classes/applications/bug_o_matic_3000/bug.aw:948
 msgid "Bug"
 msgstr ""
 
@@ -774,31 +784,33 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:999 classes/applications/bug_o_matic_3000/bug.aw:1221
-msgid "\nTegelik tundide arv muudeti %s => %s"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug.aw:1174
-msgid "Failid: "
+#: classes/applications/bug_o_matic_3000/bug.aw:999
+#: classes/applications/bug_o_matic_3000/bug.aw:1222
+msgid ""
+"\n"
+"Tegelik tundide arv muudeti %s => %s"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:1175
+msgid "Failid: "
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:1176
 msgid "Aeg:"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1254
+#: classes/applications/bug_o_matic_3000/bug.aw:1255
 msgid "Added comment to bug %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1344
+#: classes/applications/bug_o_matic_3000/bug.aw:1345
 msgid "Uus arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1349
+#: classes/applications/bug_o_matic_3000/bug.aw:1350
 msgid "Samale tasemele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1355
+#: classes/applications/bug_o_matic_3000/bug.aw:1356
 msgid "Sisse"
 msgstr ""
-

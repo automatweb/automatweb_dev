@@ -139,9 +139,10 @@ msgstr "Export"
 msgid "Grupi Ekspordi (export) help"
 msgstr ""
 
+# classes/admin/object_export.aw:rel_RELTYPE_OBJECT_TYPE
 #: classes/admin/object_export.aw:rel_RELTYPE_OBJECT_TYPE
-msgid "Seose objektit&amp;uuml;&amp;uuml;p (RELTYPE_OBJECT_TYPE) tekst"
-msgstr ""
+msgid "Seose objektit&uuml;&uuml;p (RELTYPE_OBJECT_TYPE) tekst"
+msgstr "object type"
 
 # classes/admin/object_export.aw:rel_RELTYPE_FOLDER
 #: classes/admin/object_export.aw:rel_RELTYPE_FOLDER
@@ -191,7 +192,3 @@ msgstr ""
 #: classes/admin/object_export.aw:271
 msgid "Muudetud"
 msgstr ""
-
-# classes/admin/object_export.aw:rel_RELTYPE_OBJECT_TYPE
-#~ msgid "Seose objektit&uuml;&uuml;p (RELTYPE_OBJECT_TYPE) tekst"
-#~ msgstr "object type"

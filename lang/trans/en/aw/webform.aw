@@ -39,7 +39,6 @@ $GLOBALS["TRANS"]["Grupi N&auml;itamine (get_controllers) pealkiri"] = "Display"
 $GLOBALS["TRANS"]["Seose Muutujate haldur (RELTYPE_METAMGR) tekst"] = "Variable manager";
 $GLOBALS["TRANS"]["Seose Seadete vorm (RELTYPE_CFGFORM) tekst"] = "Configuration form";
 $GLOBALS["TRANS"]["Seose Salvestamise kontroller (RELTYPE_CONTROLLER) tekst"] = "Save controller";
-$GLOBALS["TRANS"]["Seose N&auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"] = "Display controller";
 $GLOBALS["TRANS"]["Seose Meiliaadress (RELTYPE_EMAIL) tekst"] = "E-mail address";
 $GLOBALS["TRANS"]["Seose Objekti t&uuml;&uuml;p (RELTYPE_OBJECT_TYPE) tekst"] = "Object type";
 $GLOBALS["TRANS"]["Seose Register (RELTYPE_REGISTER) tekst"] = "Register";

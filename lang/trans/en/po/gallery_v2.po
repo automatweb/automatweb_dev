@@ -31,21 +31,17 @@ msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_reinit_layout
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_reinit_layout
-msgid ""
-"Omaduse Uuenda layout (kustutab k&otilde;ik pildid!) (reinit_layout) caption"
+msgid "Omaduse Uuenda layout (kustutab k&otilde;ik pildid!) (reinit_layout) caption"
 msgstr "Reinitialize layout"
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_reinit_layout_comment
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_reinit_layout_comment
-msgid ""
-"Omaduse Uuenda layout (kustutab k&otilde;ik pildid!) (reinit_layout) "
-"kommentaar"
+msgid "Omaduse Uuenda layout (kustutab k&otilde;ik pildid!) (reinit_layout) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_reinit_layout_help
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_reinit_layout_help
-msgid ""
-"Omaduse Uuenda layout (kustutab k&otilde;ik pildid!) (reinit_layout) help"
+msgid "Omaduse Uuenda layout (kustutab k&otilde;ik pildid!) (reinit_layout) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_num_pages
@@ -61,6 +57,18 @@ msgstr ""
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_num_pages_help
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_num_pages_help
 msgid "Omaduse Mitu lehte: (num_pages) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:prop_rate_redir
+msgid "Omaduse Suuna p&auml;rast h&auml;&auml;letamist (rate_redir) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:prop_rate_redir_comment
+msgid "Omaduse Suuna p&auml;rast h&auml;&auml;letamist (rate_redir) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:prop_rate_redir_help
+msgid "Omaduse Suuna p&auml;rast h&auml;&auml;letamist (rate_redir) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_pg_1_content
@@ -320,42 +328,32 @@ msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_import_overwrite
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_import_overwrite
-msgid ""
-"Omaduse Importimisel kirjuta olemasolevad pildid &uuml;le (import_overwrite) "
-"caption"
+msgid "Omaduse Importimisel kirjuta olemasolevad pildid &uuml;le (import_overwrite) caption"
 msgstr "When importing, overwrite existing images"
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_import_overwrite_comment
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_import_overwrite_comment
-msgid ""
-"Omaduse Importimisel kirjuta olemasolevad pildid &uuml;le (import_overwrite) "
-"kommentaar"
+msgid "Omaduse Importimisel kirjuta olemasolevad pildid &uuml;le (import_overwrite) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_import_overwrite_help
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_import_overwrite_help
-msgid ""
-"Omaduse Importimisel kirjuta olemasolevad pildid &uuml;le (import_overwrite) "
-"help"
+msgid "Omaduse Importimisel kirjuta olemasolevad pildid &uuml;le (import_overwrite) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_import_add_pages
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_import_add_pages
-msgid ""
-"Omaduse Importimisel lisa vajadusel lehek&uuml;lgi (import_add_pages) caption"
+msgid "Omaduse Importimisel lisa vajadusel lehek&uuml;lgi (import_add_pages) caption"
 msgstr "When importing, add pages as needed"
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_import_add_pages_comment
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_import_add_pages_comment
-msgid ""
-"Omaduse Importimisel lisa vajadusel lehek&uuml;lgi (import_add_pages) "
-"kommentaar"
+msgid "Omaduse Importimisel lisa vajadusel lehek&uuml;lgi (import_add_pages) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_import_add_pages_help
 #: classes/contentmgmt/gallery/gallery_v2.aw:prop_import_add_pages_help
-msgid ""
-"Omaduse Importimisel lisa vajadusel lehek&uuml;lgi (import_add_pages) help"
+msgid "Omaduse Importimisel lisa vajadusel lehek&uuml;lgi (import_add_pages) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_do_import
@@ -488,10 +486,10 @@ msgstr ""
 msgid "Seose ftp login (RELTYPE_FTP_LOGIN) tekst"
 msgstr "ftp login"
 
-#: classes/contentmgmt/gallery/gallery_v2.aw:148
+#: classes/contentmgmt/gallery/gallery_v2.aw:175
 msgid "Sellele kataloogile pole konfiguratsiooni valitud!"
 msgstr "This folder has no configration set!"
 
-#: classes/contentmgmt/gallery/gallery_v2.aw:391
+#: classes/contentmgmt/gallery/gallery_v2.aw:418
 msgid "Sellist kataloogi pole serveris! (%s)"
 msgstr "No such folder in server (%s)"

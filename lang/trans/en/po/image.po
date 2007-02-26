@@ -420,26 +420,30 @@ msgstr "Moderator comment"
 msgid "Seose Flash (RELTYPE_FLASH) tekst"
 msgstr ""
 
-#: classes/image.aw:315
+#: classes/image.aw:320
 msgid "kommentaar"
 msgstr "comment"
 
-#: classes/image.aw:315
+#: classes/image.aw:320
 msgid "kommentaari"
 msgstr "comments"
 
-#: classes/image.aw:914
+#: classes/image.aw:918
 msgid "Uues aknas"
 msgstr "In a new window"
 
-#: classes/image.aw:915
+#: classes/image.aw:919
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr "Don't show in print view"
 
-#: classes/image.aw:928
+#: classes/image.aw:932
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr "Image automatic resizing is controlled by object "
 
-#: classes/image.aw:1497
+#: classes/image.aw:1532
 msgid "Lisa"
 msgstr "Add"
+
+#: classes/image.aw:2053
+msgid "Salvesta ja paiguta dokumenti"
+msgstr ""

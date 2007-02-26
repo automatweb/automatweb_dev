@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Pakett (package) help"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_booking.aw:prop_seller
+msgid "Omaduse M&uuml;&uuml;ja (seller) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_booking.aw:prop_seller_comment
+msgid "Omaduse M&uuml;&uuml;ja (seller) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_booking.aw:prop_seller_help
+msgid "Omaduse M&uuml;&uuml;ja (seller) help"
+msgstr ""
+
 #: classes/applications/spa_bookings/spa_booking.aw:rel_RELTYPE_PERSON
 msgid "Seose Isik (RELTYPE_PERSON) tekst"
 msgstr ""
@@ -76,5 +88,9 @@ msgstr ""
 
 #: classes/applications/spa_bookings/spa_booking.aw:rel_RELTYPE_EXTRA_PROD
 msgid "Seose Lisateenus (RELTYPE_EXTRA_PROD) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_booking.aw:rel_RELTYPE_SELLER
+msgid "Seose M&uuml;&uuml;ja (RELTYPE_SELLER) tekst"
 msgstr ""
 

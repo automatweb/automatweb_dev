@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/room_settings.aw:class_1188_help
 msgid "Klassi Ruumi seaded help"
 msgstr ""
@@ -60,6 +59,30 @@ msgstr ""
 
 #: classes/common/room_settings.aw:prop_cal_show_prods_help
 msgid "Omaduse Kuva valitud tooteid kalendrivaates (cal_show_prods) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img
+msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_comment
+msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_help
+msgid "Omaduse Kuva tootepilte kalendrivaates (cal_show_prod_img) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord
+msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord_comment
+msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_show_prod_img_ord_help
+msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_disp_bron_len
@@ -192,6 +215,18 @@ msgstr ""
 
 #: classes/common/room_settings.aw:prop_col_closed_help
 msgid "Omaduse Kinnise aja värvi (col_closed) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_recent
+msgid "Omaduse Hiljuti muudetud reserveeringud (col_recent) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_recent_comment
+msgid "Omaduse Hiljuti muudetud reserveeringud (col_recent) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_col_recent_help
+msgid "Omaduse Hiljuti muudetud reserveeringud (col_recent) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_buffer_time_string
@@ -374,6 +409,42 @@ msgstr ""
 msgid "Omaduse Meili sisu (del_mail_ct) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_order_mail_legend
+msgid "Omaduse Meili sisu legend (order_mail_legend) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_legend_comment
+msgid "Omaduse Meili sisu legend (order_mail_legend) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_legend_help
+msgid "Omaduse Meili sisu legend (order_mail_legend) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_to
+msgid "Omaduse Kellele tellimuse kohta meil saata (order_mail_to) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_to_comment
+msgid "Omaduse Kellele tellimuse kohta meil saata (order_mail_to) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_to_help
+msgid "Omaduse Kellele tellimuse kohta meil saata (order_mail_to) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_groups
+msgid "Omaduse Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse (order_mail_groups) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_groups_comment
+msgid "Omaduse Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse (order_mail_groups) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_groups_help
+msgid "Omaduse Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse (order_mail_groups) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:prop_grp_settings
 msgid "Omaduse  (grp_settings) caption"
 msgstr ""
@@ -434,6 +505,14 @@ msgstr ""
 msgid "Grupi Kustutamine (delete_email) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:group_order_email
+msgid "Grupi Tellimusmeil (order_email) pealkiri"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_order_email_help
+msgid "Grupi Tellimusmeil (order_email) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:group_grp_settings
 msgid "Grupi Gruppide seaded (grp_settings) pealkiri"
 msgstr ""
@@ -470,63 +549,66 @@ msgstr ""
 msgid "Seose Grupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:165
+#: classes/common/room_settings.aw:188
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:334
+#: classes/common/room_settings.aw:200
+msgid "sisu tuleb common/room/preview.tpl failist"
+msgstr ""
+
+#: classes/common/room_settings.aw:368
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:340
+#: classes/common/room_settings.aw:374
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:378
+#: classes/common/room_settings.aw:412
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:383
+#: classes/common/room_settings.aw:417
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:389
+#: classes/common/room_settings.aw:423
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:395 classes/common/room_settings.aw:407
+#: classes/common/room_settings.aw:429 classes/common/room_settings.aw:441
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:401
+#: classes/common/room_settings.aw:435
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:414
+#: classes/common/room_settings.aw:448
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:420
+#: classes/common/room_settings.aw:454
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:426
+#: classes/common/room_settings.aw:460
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:437
+#: classes/common/room_settings.aw:471
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:438
+#: classes/common/room_settings.aw:472
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:439
+#: classes/common/room_settings.aw:473
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:479
+#: classes/common/room_settings.aw:513
 msgid "Vali"
 msgstr ""
-

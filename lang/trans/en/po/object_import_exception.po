@@ -10,26 +10,32 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/admin/object_import_exception.aw:class_478_help
+#: classes/admin/object_import_exception.aw:class_478_help
 msgid "Klassi Objektide impordi erand help"
 msgstr ""
 
 # classes/admin/object_import_exception.aw:prop_exc
+#: classes/admin/object_import_exception.aw:prop_exc
 msgid "Omaduse  (exc) caption"
 msgstr ""
 
 # classes/admin/object_import_exception.aw:prop_exc_comment
+#: classes/admin/object_import_exception.aw:prop_exc_comment
 msgid "Omaduse  (exc) kommentaar"
 msgstr ""
 
 # classes/admin/object_import_exception.aw:prop_exc_help
+#: classes/admin/object_import_exception.aw:prop_exc_help
 msgid "Omaduse  (exc) help"
 msgstr ""
 
 # classes/admin/object_import_exception.aw:group_exc
+#: classes/admin/object_import_exception.aw:group_exc
 msgid "Grupi Erandid (exc) pealkiri"
 msgstr "Exceptions"
 
 # classes/admin/object_import_exception.aw:group_exc_help
+#: classes/admin/object_import_exception.aw:group_exc_help
 msgid "Grupi Erandid (exc) help"
 msgstr ""
 

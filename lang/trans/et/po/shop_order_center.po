@@ -682,7 +682,7 @@ msgid "Paketi teise vaate kujundus"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:382
-#: classes/applications/shop/shop_order_center.aw:1287
+#: classes/applications/shop/shop_order_center.aw:1291
 msgid "--vali--"
 msgstr ""
 
@@ -698,18 +698,18 @@ msgstr ""
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1116
+#: classes/applications/shop/shop_order_center.aw:1120
 msgid "&nbsp"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1131
+#: classes/applications/shop/shop_order_center.aw:1135
 msgid "Vali t&uuml;hjaks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1234
+#: classes/applications/shop/shop_order_center.aw:1238
 msgid "Tellija andmete vorm valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1261
+#: classes/applications/shop/shop_order_center.aw:1265
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr ""

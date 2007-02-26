@@ -162,5 +162,5 @@ msgid "Seose Isik (RELTYPE_PEOPLE) tekst"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:rel_RELTYPE_EXPENSE
-msgid "Seose Toimetuse rida (RELTYPE_EXPENSE) tekst"
+msgid "Seose Muu kulu (RELTYPE_EXPENSE) tekst"
 msgstr ""
