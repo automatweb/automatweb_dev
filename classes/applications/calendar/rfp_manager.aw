@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.12 2007/02/21 12:13:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.13 2007/02/26 13:45:42 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -350,7 +350,11 @@ class rfp_manager extends class_base
 			"sub_contents_only" => true,
 			"data" => $data,
 		));
-		die($ret);
+		$this->read_template("overview.tpl");
+		$this->vars(array(
+			"contents" => $ret,
+		));
+		die($this->parse());
 	}
 
 	function gen_popup($oid)

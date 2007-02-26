@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.56 2007/02/21 15:25:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.57 2007/02/26 13:45:42 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -234,6 +234,10 @@ class conference_planning extends class_base
 
 				break;
 			case 2:
+					if($_SERVER["SERVER_ADDR"] == "62.65.36.186")
+					{
+						arr($sd);
+					}
 				$sc->read_template("sub_conference_rfp2.tpl");
 				// tablerows
 				foreach($sd["dates"] as $row_no => $date)
@@ -448,7 +452,7 @@ class conference_planning extends class_base
 					"delegates_no" => $mf["delegates_no"],
 					"door_sign" => $mf["door_sign"],
 					"persons_no" => $mf["persons_no"],
-					"function_start_date" => $mf["function_start_date"],
+					"function_start_date" => $mf["function_start_date"]?$mf["function_start_date"]:$sd["dates"][0]["arrival_date"],
 					"function_start_time" => $mf["function_start_time"],
 					"function_end_time" => $mf["function_end_time"],
 					"24h" => $mf["24h"]?checked(true):"",
@@ -559,6 +563,7 @@ class conference_planning extends class_base
 					"catering_start_time" => $act_cat["catering_start_time"],
 					"catering_end_time" => $act_cat["catering_end_time"],
 					"catering_attendee_no" => $act_cat["catering_attendee_no"],
+					"ADD_CATERING" => strlen($_GET["act_evt_no"])?$sc->parse("ADD_CATERING"):"",
 				));
 				break;
 			case 6:
@@ -694,6 +699,9 @@ class conference_planning extends class_base
 				$sc->vars(array(
 					"country" => $tmp?$tmp->trans_get_val("name"):"",//call_user_func(array(obj($sd["country"]), "name")),
 				));
+				$sc->vars(array(
+					"COUNTRY" => $tmp?$this->parse("COUNTRY"):"",
+				));
 				// #1
 				$sc->vars(array(
 					"function_name" => $sd["function_name"],
@@ -773,7 +781,7 @@ class conference_planning extends class_base
 				foreach($days as $day_id => $day)
 				{
 					$evt_type = ($day["event_type_chooser"] == 1)?$conf_types[$day["event_type_select"]]:$day["event_type_text"];
-					
+					unset($tech_equip);	
 					foreach($day["tech"] as $k => $capt)
 					{
 						$sc->vars(array("value" => $this->tech_equip[$k]));
@@ -804,9 +812,9 @@ class conference_planning extends class_base
 						"MAIN_CATERING" => $cats,
 						"main_door_sign" => $day["door_sign"],
 						"main_person_no" => $day["persons_no"],
-						"main_start" => $day["function_start_date"],
+						"main_start_date" => $day["function_start_date"],
 						"main_start_time" => $day["function_start_time"],
-						"main_end_time" => $day["funcion_end_time"],
+						"main_end_time" => $day["function_end_time"],
 						//"main_end" => $day["function_end_date"]." ".$day["function_end_time"],
 						"main_24h" => $day["24h"]?t("Yes"):t("No"),
 						"MAIN_CATERING" => $main_catering,
@@ -858,7 +866,7 @@ class conference_planning extends class_base
 					{
 						//$tech[] = $this->tech_equip[$te];
 						$sc->vars(array(
-							"tech" => $this->tech_equip[$te],
+							"value" => $this->tech_equip[$te],
 						));
 						$tech_html .= $sc->parse("ADD_FUN_TECH");
 					}
@@ -1536,6 +1544,15 @@ class conference_planning extends class_base
 	**/
 	function add_catering($arr)
 	{
+		$retval = $this->save_form_data($arr);
+		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$arr["current_sub"]."&act_evt_no=".($retval?0:$arr["act_event_no"]);
+	}
+
+	/**
+		@attrib params=name name=add_fun all_args=1 nologin=1
+	**/
+	function add_fun($arr)
+	{
 		$this->save_form_data($arr);
 		return aw_ini_get("baseurl")."/".$arr["id"]."?sub=".$arr["current_sub"];
 	}
@@ -1631,6 +1648,7 @@ class conference_planning extends class_base
 		$form_data = $arr["sub"];
 		$_get = $GLOBALS["_GET"];
 		$data = $this->get_form_data();
+		$retval = false;
 		foreach($form_data as $k => $val)
 		{
 			// new method
@@ -1639,6 +1657,7 @@ class conference_planning extends class_base
 				case "0":
 					$data["country"] = $val["country"];
 					$data["delegates_no"] = $val["attendees_no"];
+					$data["persons_no"] = $val["attendees_no"];
 					$data["single_count"] = $val["single_count"];
 					$data["double_count"] = $val["double_count"];
 					$data["suite_count"] = $val["suite_count"];
@@ -1684,7 +1703,12 @@ class conference_planning extends class_base
 						$data["dates"][$row_no]["arrival_date"] = $row_data["arrival_date"];
 						$data["dates"][$row_no]["departure_date"] = $row_data["departure_date"];
 					}
-
+					/*
+					if($_SERVER["SERVER_ADDR"] == "62.65.36.186")
+					{
+						arr($data);
+					}
+					*/
 					break;
 				case "3":
 					$data["needs_rooms"] = $val["needs_rooms"];
@@ -1751,6 +1775,7 @@ class conference_planning extends class_base
 								$main_fun["main_catering"][] = $main_cat;
 							}
 							$data["main_function"][] = $main_fun;
+							$retval = true;
 						}
 					}
 					else
@@ -1847,6 +1872,7 @@ class conference_planning extends class_base
 			}
 		}
 		aw_session_set("tmp_conference_data", $data);
+		return $retval;
 	}
 
 	function get_form_data()
