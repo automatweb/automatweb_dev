@@ -4,7 +4,12 @@
 
 <!-- END SUB: SHOW_CHANGEFORM -->
 <table id="" width="100%" border="0" cellspacing="0" cellpadding="0"> <!-- aw06contenttable -->
-	
+
+<!-- SUB: SAVE_MESSAGE -->
+<tr>
+	<td colspan="2" class="DataSavedMessage">{VAR:message}</td>
+</tr>	
+<!-- END SUB: SAVE_MESSAGE -->
 	{VAR:content}
 
 	<!-- SUB: ERROR -->
