@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.47 2006/11/30 10:55:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.48 2007/02/26 14:23:21 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -662,6 +662,16 @@ class shop_order extends class_base
 		}
 		if($this->order_center)
 		{
+			//kui pank ise teeb päringu tagasi, siis võtab miski muu keeele milles maili saata, et järgnev siis selle vastu
+			if($params["lang_id"])
+			{
+				$l = get_instance("languages");
+				$_SESSION["ct_lang_id"] = $params["lang_id"];
+				$_SESSION["ct_lang_lc"] = $params["lang_lc"];
+				aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
+				aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
+			}
+			
 			$awm = get_instance("protocols/mail/aw_mail");
 
 			$ud = $oi->meta("user_data");

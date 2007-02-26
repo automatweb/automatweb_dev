@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.57 2007/02/01 12:16:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.58 2007/02/26 14:23:21 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -767,6 +767,8 @@ class shop_order_cart extends class_base
 		$so->start_order(obj($warehouse), $oc);
 		
 		$params["cart"] = $cart;
+		$params[""] = $cart;
+		
 		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quant)
 		{
@@ -776,6 +778,14 @@ class shop_order_cart extends class_base
 				$so->add_item(array("iid" => $iid, "item_data" => $cart["items"][$iid][$key], "it" => $key));
 			}
 		}
+		
+		//kui pank ise teeb päringu tagasi, siis võtab miski muu keeele milles maili saata, et järgnev siis selle vastu
+		if($oc->meta("lang_id"))
+		{
+			$params["lang_id"] = $oc->meta("lang_id");
+			$params["lang_lc"] = $oc->meta("lang_lc");
+		}
+		
 		$rval = $so->finish_order($params);
 		$this->clear_cart($oc);
 		return $rval;
@@ -1611,6 +1621,17 @@ class shop_order_cart extends class_base
 		
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
+		
+		$lang = aw_global_get("lang_id");
+		$oc->set_meta("lang" , $lang);
+		$l = get_instance("languages");
+		$_SESSION["ct_lang_lc"] = $l->get_langid($_SESSION["ct_lang_id"]);
+		$oc->set_meta("lang" , $lang);
+		$oc->set_meta("lang_id" , $_SESSION["ct_lang_id"]);
+		$oc->set_meta("lang_lc" , $_SESSION["ct_lang_lc"]);
+		$oc->save();
+		
+		
 		
 		$bank_return = $this->mk_my_orb("bank_return", array("id" => $oc->id()));
 		$_SESSION["bank_payment"]["url"] = $bank_return;
