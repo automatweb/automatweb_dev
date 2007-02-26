@@ -326,7 +326,7 @@ class crm_company_overview_impl extends class_base
 		$t->define_field(array(
 			"caption" => t("Pealkiri"),
 			"name" => "name",
-			"align" => "center",
+			"align" => "left",
 //			"chgbgcolor" => "col",
 			"sortable" => 1
 		));
@@ -478,39 +478,38 @@ class crm_company_overview_impl extends class_base
 		{
 			$task_nr++;
 			$task = obj($task_id);
-
+			$cust = $task->prop("customer");
+			$cust_name = "";
+			
+			$cust_str = "";
+			if (is_oid($cust) && $this->can("view", $cust))
+			{
+				$cust_o = obj($cust);
+				$cust_str = html::get_change_url($cust, array("return_url" => get_ru()), parse_obj_name($cust_o->name()));
+				$cust_name = $cust_o->name();
+			}
+			
 			if($group)
 			{
-				if($last_cust != $task->prop("customer"))
+/*				if($last_cust != $task->prop("customer"))
 				{
-					if($this->can("view" , $task->prop("customer")))
-					{
-						$cust = obj($task->prop("customer"));
-						$table_data[] = array(
-								"name" => "<h3>".$cust->name()."</h3>",
-						);
-					}
+					$table_data[] = array(
+						"name" => "<h3>".$cust->name()."</h3>",
+					);
 					$last_cust = $task->prop("customer");
 				}
-				
+*/				
 				if($last_proj != $task->prop("project"))
 				{
 					if($this->can("view" , $task->prop("project")))
 					{
 						$proj = obj($task->prop("project"));
 						$table_data[] = array(
-								"name" => "<h4>".$task->name()."</h4>",
+								"name" => "<h4>".$cust_name." - ". $proj->name()."</h4>",
 						);
 					}
 					$last_proj = $task->prop("project");
 				}
-			}
-			$cust = $task->prop("customer");
-			$cust_str = "";
-			if (is_oid($cust) && $this->can("view", $cust))
-			{
-				$cust_o = obj($cust);
-				$cust_str = html::get_change_url($cust, array("return_url" => get_ru()), parse_obj_name($cust_o->name()));
 			}
 
 			$proj = $task->prop("project");
