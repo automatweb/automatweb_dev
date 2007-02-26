@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.18 2007/02/21 10:15:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.19 2007/02/26 14:25:16 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -128,6 +128,15 @@
 
 	@groupinfo order_email caption="Tellimusmeil" parent=email
 	@default group=order_email
+
+		@property order_mail_from type=textbox 
+		@caption Meili from aadress
+
+		@property order_mail_from_name type=textbox
+		@caption Meili from nimi
+
+		@property order_mail_subj type=textbox
+		@caption Meili subjekt
 
 		@property order_mail_legend type=text
 		@caption Meili sisu legend

@@ -331,6 +331,33 @@
             <caption>Meili sisu</caption>
       </property>
       <property>
+            <name>order_mail_from</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili from aadress</caption>
+      </property>
+      <property>
+            <name>order_mail_from_name</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili from nimi</caption>
+      </property>
+      <property>
+            <name>order_mail_subj</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili subjekt</caption>
+      </property>
+      <property>
             <name>order_mail_legend</name>
             <table>objects</table>
             <group>order_email</group>

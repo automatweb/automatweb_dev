@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.23 2007/02/14 13:05:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.24 2007/02/26 14:25:16 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -82,7 +82,7 @@ class bank_payment extends class_base
 		"nordeapank"		=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
 		"hansapank_lv"		=> "https://www.hanzanet.lv/banklink/",
 		"hansapank_lt"		=> "https://www.hanzanet.lv/banklink/",
-		"credit_card"		=> "https://pos.estcard.ee/test-pos/servlet/iPAYServlet",
+		"credit_card"		=> "https://pos.estcard.ee/webpos/servlet/iPAYServlet",
 	);
 
 	var $merchant_id = array(
@@ -93,6 +93,7 @@ class bank_payment extends class_base
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
 	var $test_link = array(
 		"seb"	=> "https://www.seb.ee/cgi-bin/dv.sh/un3min.r",
+		"credit_card"	=> "https://pos.estcard.ee/test-pos/servlet/iPAYServlet",
 	);
 
 	//test keskkonnas läheb üldjuhul miskeid testandmeid vaja
@@ -236,7 +237,7 @@ class bank_payment extends class_base
 			$file = $file_inst->get_file_by_id($payment->prop("private_key"));
 			$data["priv_key"] = $file["content"];
 		}
-		if($payment->prop("private_c_key") && $data["bank_id"] == "credit_card")
+		if($payment->prop("private_c_key") && $data["bank_id"] == "credit_card" && $data["test"])
 		{
 			$file_inst = get_instance(CL_FILE);
 			$file = $file_inst->get_file_by_id($payment->prop("private_c_key"));
@@ -880,7 +881,7 @@ class bank_payment extends class_base
 		openssl_sign($data, $signature, $pkeyid);
 		openssl_free_key($pkeyid);
 		$mac=bin2hex($signature);
-		echo "https://pos.estcard.ee/test-pos/servlet/iPAYServlet?action=$action&amp;ver=$ver&amp;id=$idnp&amp;ecuno=$ecuno&amp;eamount=$eamount&amp;cur=$cur&amp;datetime=$datetime&amp;mac=$mac&amp;lang=en";
+		echo "https://pos.estcard.ee/webpos/servlet/iPAYServlet?action=$action&amp;ver=$ver&amp;id=$idnp&amp;ecuno=$ecuno&amp;eamount=$eamount&amp;cur=$cur&amp;datetime=$datetime&amp;mac=$mac&amp;lang=en";
 		//testi lõpp
 
 		$VK_message = $version;

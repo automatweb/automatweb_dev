@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.160 2007/02/22 12:39:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.161 2007/02/26 14:25:16 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2669,6 +2669,13 @@ class room extends class_base
 		{
 			$reservation->set_meta("tpl", $arr["tpl"]);
 		}
+		$lang = aw_global_get("lang_id");
+		
+		$l = get_instance("languages");
+		$_SESSION["ct_lang_lc"] = $l->get_langid($_SESSION["ct_lang_id"]);
+		$reservation->set_meta("lang" , $lang);
+		$reservation->set_meta("lang_id" , $_SESSION["ct_lang_id"]);
+		$reservation->set_meta("lang_lc" , $_SESSION["ct_lang_lc"]);
 		$reservation->save();
 		return $reservation->id();
 	}

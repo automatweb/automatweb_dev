@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.52 2007/02/21 15:55:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.53 2007/02/26 14:25:16 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -276,7 +276,14 @@ class room_reservation extends class_base
 		//antud juhul peaks objektist võtma info hoopis... peaks olema just tagasi pangamakselt tulnud
 		if($_GET["preview"])
 		{
-			$tpl = "preview.tpl";
+			if($_GET["tpl"])
+			{
+				$tpl = $_GET["tpl"];
+			}
+			else
+			{
+				$tpl = "preview.tpl";
+			}
 			$this->read_template($tpl);
 			lc_site_load("room_reservation", &$this);
 			$this->vars($this->get_object_data($_GET["id"]));
@@ -498,7 +505,7 @@ class room_reservation extends class_base
 		{
 			return $ret;
 		}
-		$bron = obj($id);
+		$bron = obj($id);//arr($bron->meta("lang"));
 		$room = obj($bron->prop("resource"));
 		$ret["time_str"] = $this->get_time_str(array(
 			"start" => $bron->prop("start1"),
@@ -1296,7 +1303,7 @@ class room_reservation extends class_base
 		}
 		extract($arr);
 		
- 		$lang = aw_global_get("lang_id");
+// 		$lang = aw_global_get("lang_id");
 	
 		$bron_ids = array();
 		$bron_names = array();
@@ -1327,7 +1334,7 @@ class room_reservation extends class_base
 				"tpl" => $tpl,
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
-			$bron->set_meta("lang" , $lang);
+//			$bron->set_meta("lang" , $lang);
 			$bron_ids[] = $bron->id();
 			$bron_names[] = $bron->name();
 			$sum = $this->get_total_bron_price(array(
@@ -1354,8 +1361,8 @@ class room_reservation extends class_base
 		$loc = obj($r->prop("location"));
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $loc->prop("bank_payment");
-		//$_SESSION["bank_payment"]["url"] = null;
-		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => join(" ," , $bron_ids)));
+		$_SESSION["bank_payment"]["url"] = null;
+		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => reset($bron_ids)));
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $total_sum,
@@ -1384,8 +1391,15 @@ class room_reservation extends class_base
 			return $bad_url;
 		}
 		$bron = obj($arr["id"]);
-		if($bron->meta("lang"));
-		aw_global_set("lang_id" , $bron->meta("lang"));
+	//	if(aw_global_get("uid") == "strutkuur")arr($bron->meta("lang"));
+		if($bron->meta("lang_id"))
+		{
+			$_SESSION["ct_lang_id"] = $bron->meta("lang_id");
+			$_SESSION["ct_lang_lc"] = $bron->meta("lang_lc");
+			$l = get_instance("languages");
+			aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
+			aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
+		}
 		$room = obj($bron->prop("resource"));
 		$location = obj($room->prop("location"));
 		$bank_payment = obj($location->prop("bank_payment"));
@@ -1418,9 +1432,9 @@ class room_reservation extends class_base
 				$this->send_affirmation_mail($arr["id"],$tpl);
 			}
 			$GLOBALS["cfg"]["__default"]["in_admin"] = 0;
-			header("Location:".$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"])));
+			header("Location:".$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"] , "tpl" => $tpl,)));
 			die();
-			return $this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]));
+			return $this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"] , "tpl" => $tpl,));
 		}
 		header("Location:".$bad_url);
 		die();
@@ -1431,6 +1445,55 @@ class room_reservation extends class_base
 
 	function get_other_addresses($o)
 	{
+		$set = $this->get_bron_room_settings($o);
+		if(is_object($set) && $set->prop("order_mail_from"))
+		{
+			$groups = $set->prop("order_mail_groups");
+			$gl = aw_global_get("gidlist_oid");
+			if(sizeof(array_intersect($gl,$groups)))
+			{
+				return $set->prop("order_mail_to");
+			}
+		}
+		return "";
+	}
+
+	function _get_order_mail_sender_addr($o)
+	{
+		$set = $this->get_bron_room_settings($o);
+		if(is_object($set) && $set->prop("order_mail_from"))
+		{
+			return $set->prop("order_mail_from");
+		}
+		return "automatweb@automatweb.com";
+	}
+
+	function _get_order_mail_sender_name($o)
+	{
+		$set = $this->get_bron_room_settings($o);
+		if(is_object($set) && $set->prop("order_mail_from_name"))
+		{
+			return $set->prop("order_mail_from_name");
+		}
+		return str_replace("http://", "", aw_ini_get("baseurl"));
+	}
+
+	function _get_order_mail_subject($o)
+	{
+		$set = $this->get_bron_room_settings($o);
+		if(is_object($set) && $set->prop("order_mail_subj"))
+		{
+			return $set->prop("order_mail_subj");
+		}
+		return sprintf(t("Broneering: %s"), $o->id());
+	}
+	
+	function get_bron_room_settings($o)
+	{
+		if(is_object($this->set))
+		{
+			return $this->set;
+		}
 		if ($this->can("view", $o->prop("resource")))
 		{
 			$res = obj($o->prop("resource"));
@@ -1441,23 +1504,12 @@ class room_reservation extends class_base
 			}
 			if ($this->can("view", $sets))
 			{
-				$set = obj($sets);
-				$groups = $set->prop("order_mail_groups");
-				//arr($groups);
-				$gl = aw_global_get("gidlist_oid");//arr($gl);
-				//$grp = reset($gl);//arr($grp);
-				if(sizeof(array_intersect($gl,$groups)))
-				{
-					return $set->prop("order_mail_to");
-				}
-				else
-				{
-					return "";
-				}
+				$this->set = obj($sets);
 			}
 		}
+		return $this->set;
 	}
-
+	
 	function send_affirmation_mail($id,$tpl = null)
 	{
 		if(!is_oid($id))
@@ -1465,15 +1517,15 @@ class room_reservation extends class_base
 			return "";
 		}
 		$bron = obj($id);
-
-		$email_subj = sprintf(t("Broneering: %s"), $id);
-		$mail_from_addr = "automatweb@automatweb.com";
-		$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
+		
 		$_send_to = $bron->prop("customer.email.mail");
 		if($others = $this->get_other_addresses($bron))
 		{
 			$_send_to.=",".$others;
 		}
+		$email_subj = $this->_get_order_mail_subject();//sprintf(t("Broneering: %s"), $id);
+		$mail_from_addr = $this->_get_order_mail_sender_addr();//"automatweb@automatweb.com";
+		$mail_from_name = $this->_get_order_mail_sender_name();//str_replace("http://", "", aw_ini_get("baseurl"));
 		if(!$tpl)
 		{
 			$tpl = "preview.tpl";
