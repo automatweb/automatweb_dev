@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.160 2007/02/15 12:45:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.161 2007/02/26 16:56:19 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3767,13 +3767,18 @@ class crm_person extends class_base
 			"numeric" => 1
 		));
 		$t->define_field(array(
+			"name" => "bill_nr",
+			"caption" => t("Arve nr."),
+			"align" => "center",
+		));		
+		$t->define_field(array(
 			"name" => "bill_state",
 			"caption" => t("Arve staatus"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => t("<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Arvele</a>"),
+			"caption" => t("<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Vali</a>"),
 			"align" => "center",
 		));
 	}
@@ -3848,6 +3853,7 @@ class crm_person extends class_base
 		$stat_inst = get_instance("applications/crm/crm_company_stats_impl");
 		$task_inst = get_instance("applications/groupware/task");
 		$row_inst = get_instance("applications/groupware/task_row");
+		$bill_inst = get_instance(CL_CRM_BILL);
 		$company_curr = $stat_inst->get_company_currency();
 		$bi = get_instance(CL_BUG);
 		
@@ -3855,23 +3861,28 @@ class crm_person extends class_base
 		
 		foreach($ol->arr() as $o)
 		{
-			$check = "";
-			$bs = "";
+			$impl = $check = $bs = $bn = "";
 			$agreement = array();
 			if ($this->can("view", $o->prop("bill_id")))
 			{
 				$b = obj($o->prop("bill_id"));
-				$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
+				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
+				$bn = $b->prop("bill_no");
+				$bs = $bill_inst->states[$b->prop("state")];
 				$agreement = $b->meta("agreement_price");
+			//	$bs = html::obj_change_url($o->prop("bill_id"));
 			}
-			else
-			if ($o->prop("on_bill"))
+			elseif ($o->prop("on_bill"))
 			{
 				$bs = t("Arvele");
 				$check = html::checkbox(array(
 					"name" => "sel[]",
 					"value" => $o->id()
 				));
+			}
+			else
+			{
+				$bs = t("Arve puudub");
 			}
 			
 			$task = obj($row2task[$o->id()]);
@@ -3911,7 +3922,8 @@ class crm_person extends class_base
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
 				"check" => $check,
-				"sum" => number_format($sum, 2, ',', '')
+				"sum" => number_format($sum, 2, ',', ''),
+				"bill_nr" => $bn,
 			));
 			$l_sum += $o->prop("time_real");
 			$s_sum += $sum;
