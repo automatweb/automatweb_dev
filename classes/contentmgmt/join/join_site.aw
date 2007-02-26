@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.44 2007/02/21 10:16:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.45 2007/02/26 10:20:06 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -52,6 +52,9 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 @property join_but_text type=textbox field=meta method=serialize group=sel_props
 @caption Liitumise nupu tekst
+
+@property save_but_text type=textbox field=meta method=serialize group=sel_props
+@caption Salvestamise nupu tekst
 
 @property join_properties_pages type=table store=no group=mk_pages
 @caption Liitumisel k&uuml;sitavad v&auml;ljad
@@ -1039,9 +1042,23 @@ class join_site extends class_base
 			"raw_output" => 1
 		));
 
+		$tx = t("Salvesta");
+		if ($o->prop("save_but_text"))
+		{
+			$tx = $o->prop("save_but_text");
+		}
+
+		$lang_props = $o->meta("lang_props");
+		$langid = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+
+		if (!empty($lang_props["bt"]["__save_but"][$langid]))
+		{
+			$tx = $lang_props["bt"]["__save_but"][$langid];
+		}
+
 		$this->vars(array(
 			"form" => $html,
-			"join_but_text" => t("Salvesta"),
+			"join_but_text" => $tx,
 			"cancel_but_text" => t("T&uuml;hista"),
 			"reforb" => $this->mk_reforb(
 				"submit_update_form", 
@@ -1074,6 +1091,15 @@ class join_site extends class_base
 		{
 			$tx = $o->prop("join_but_text");
 		}
+
+		$lang_props = $o->meta("lang_props");
+		$langid = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+
+		if (!empty($lang_props["bt"]["__join_but"][$langid]))
+		{
+			$tx = $lang_props["bt"]["__join_but"][$langid];
+		}
+
 		$this->vars(array(
 			"form" => $this->get_form_from_obj(array(
 				"id" => $arr["id"]
@@ -2456,15 +2482,15 @@ class join_site extends class_base
 
 		$propn = $arr["obj_inst"]->meta("propn");
 
-		$clid = aw_ini_get("classes");
+		$clss = aw_ini_get("classes");
 		foreach($visible as $clid => $props)
 		{
-			$cln = $clid[$clid]["name"];
+			$cln = $clss[$clid]["name"];
 			foreach($props as $pn => $one)
 			{
 				$d = array(
 					"orig" => $propn[$clid][$pn],
-					"class" => $cln
+					"class" => "<b>".$cln."</b>"
 				);
 				foreach($ll as $lid => $lang)
 				{
@@ -2481,6 +2507,46 @@ class join_site extends class_base
 				$t->define_data($d);
 			}
 		}
+
+		$d = array(
+			"orig" => t("Liitu nupu tekst"),
+			"class" => t("<b>Nuppude tekstid</b>")
+		);
+		$clid = "bt";
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $arr["obj_inst"]->lang_id())
+			{
+				continue;
+			}
+			$d["l".$lid] = html::textbox(array(
+				"name" => "d[$clid][__join_but][$lid]",
+				"value" => $lang_props[$clid]["__join_but"][$lid],
+				"size" => 20
+			));
+		}
+		$t->define_data($d);
+
+		$d = array(
+			"orig" => t("Salvesta nupu tekst"),
+			"class" => t("<b>Nuppude tekstid</b>")
+		);
+		$clid = "bt";
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $arr["obj_inst"]->lang_id())
+			{
+				continue;
+			}
+			$d["l".$lid] = html::textbox(array(
+				"name" => "d[$clid][__save_but][$lid]",
+				"value" => $lang_props[$clid]["__save_but"][$lid],
+				"size" => 20
+			));
+		}
+		$t->define_data($d);
+
+
 		$t->set_rgroupby(array("class" => "class"));
 		$t->set_caption(t("T&otilde;lgi omaduste tekste"));
 	}
