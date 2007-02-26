@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.131 2006/10/13 16:17:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.132 2007/02/26 20:56:01 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1103,116 +1103,6 @@ class planner extends class_base
 	function view($args = array())
 	{
 		return $this->change(array("id" => $args["id"]));
-	}
-
-
-	////
-	// !tagastab eventid mingis ajavahemikus
-	// argumendid:
-	// start(timestamp), end(timestamp)
-	// parent(int) - kalendri ID
-	//  voi
-	// uid(char) - kasutaja id, kui tegemist on kasutaja kalendriga
-	// index_time - if set, the returned array is indexed by the event start time
-	
-	function get_events($args = array())
-	{
-		extract($args);
-		$repeater = get_instance("repeater");
-		if ($uid)
-		{
-			$selector = " AND planner.uid = '$uid'";
-		}
-		elseif ($parent)
-		{
-			$selector = " AND objects.parent = '$parent'";
-		}
-		elseif ($folder)
-		{
-			$select = " AND planner.folder = '$folder'";
-		}
-		
-		if (!$end)
-		{
-			// note, the repeater parser is horribly ineffective with repeaters
-			// that span over a long time period.
-			$end = mktime(23,59,59,12,31,2002);
-		};
-
-		$eselect = (isset($event)) ? "AND planner.id = '$event'" : "";
-		$limit = ($limit) ? $limit : 999999;
-		$retval = array();
-		$reps = array();
-		if (isset($event))
-		{
-			$q = "SELECT * FROM planner
-				LEFT JOIN objects ON (planner.id = objects.oid)
-				WHERE objects.status = 2 AND planner.id = $event";
-		}
-		else
-		{
-			$q = "SELECT * FROM planner
-			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE objects.status = 2 $select $eselect $tp
-				AND ( (start >= '$start') OR (start <= '$end') OR (rep_until >= '$start'))
-				ORDER BY start";
-		};	
-		$this->db_query($q);
-		$results = array();
-		$timebase = mktime(0,0,0,1,1,2001);
-		$start_gdn = sprintf("%d",($start - $timebase) / 86400);
-		$end_gdn = sprintf("%d",(($end - $timebase) / 86400) + 1);
-		$gdn = $start_gdn;
-		$range = range($start_gdn,$end_gdn);	
-		while($row = $this->db_next())
-		{
-			$reps = aw_unserialize($row["repeaters"]);
-			$meta = aw_unserialize($row["metadata"]);
-			$ccounter = (int)$meta["cycle_counter"];
-			for ($i = 1; $i <= $ccounter; $i++)
-			{
-				if ($meta["repeaters".$i]["own_time"])
-				{
-					$hour = $meta["repeaters".$i]["reptime"]["hour"];
-					$minute = $meta["repeaters".$i]["reptime"]["minute"];
-					list($d,$m,$y) = explode("-",date("d-m-Y",$start));
-					# start from the next day?
-					$_start = mktime($hour,$minute,0,$m,$d,$y);
-					if ($_start < time())
-					{	
-						$_start = mktime($hour,$minute,0,$m,$d+1,$y);
-					};
-					$row["start"] = $_start;
-				}
-				else
-				{
-					$hour = $minute = 0;
-				};
-				if (is_array($reps))
-				{
-					$intersect = array_intersect($reps,$range);
-				};
-				// always show the event at the day it was added
-				$idx = ($index_time) ? $row["start"] : date("dmy",$row["start"]);
-				$retval[$idx][] = $row;
-				if (is_array($intersect))
-				{
-					foreach($intersect as $xgdn)
-					{
-						$ts = mktime($hour,$minute,0,1,$xgdn,2001);
-						if ($ts >= $row["rep_from"])
-						{
-							$gx = ($index_time) ? $ts : date("dmY",$ts);
-							$retval[$gx][] = $row;
-						};
-					};
-				};
-				$intersect = "";
-			};
-				
-			$gdn++;
-		};
-		return (sizeof($retval) > 0) ? $retval : false;
 	}
 
 	////
