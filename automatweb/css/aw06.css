@@ -452,3 +452,15 @@ div.menu .menuItemTextSep {
 	margin-bottom: 2px;
 	padding: 2px;
 }
+
+.DataSavedMessage { 
+	font-family: Tahoma, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #00CC00;
+	font-weight: bold;
+	text-align: center;
+	padding: 7px;
+	border: solid 3px #00CC00;
+	text-transform: uppercase;
+	background-color: #FFFFFF;
+}
