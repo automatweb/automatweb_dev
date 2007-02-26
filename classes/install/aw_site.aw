@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.46 2007/02/19 15:47:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.47 2007/02/26 15:15:55 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -686,6 +686,13 @@ class aw_site extends class_base
 				"can_delete" => 1,
 				"can_view" => 1
 			);
+			$no_acc = array(
+				"can_edit" => 0,
+				"can_add" => 0,
+				"can_admin" => 0,
+				"can_delete" => 0,
+				"can_view" => 0
+			);
 			$dbi->db_query("select gid,oid FROM groups WHERE type = 0 AND gid != ".$ini_opts["groups.all_users_grp"]);
 			while ($row = $dbi->db_next())
 			{
@@ -695,7 +702,7 @@ class aw_site extends class_base
 				$dbi->save_handle();
 				// access to root menu
 				$dbi->add_acl_group_to_obj($row["gid"], $ini_opts["admin_rootmenu2"]);
-				$dbi->save_acl($ini_opts["admin_rootmenu2"], $row["gid"], $acls);
+				$dbi->save_acl($ini_opts["admin_rootmenu2"], $row["gid"], $osi_vars["groups.admins"] == $row["oid"] ? $acls : $no_acc);
 
 				// also, acl rel
 				aw_disable_messages();
