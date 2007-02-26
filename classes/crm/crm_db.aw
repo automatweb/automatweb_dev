@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.36 2007/02/08 16:57:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.37 2007/02/26 11:08:58 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -164,7 +164,7 @@ class crm_db extends class_base
 		$menu_tree = new object_tree(array(
 			"parent" => $arr["obj_inst"]->prop("dir_tegevusala"),
 			"class_id" => CL_CRM_SECTOR,
-			"sort_by" => "objects.name",
+			"sort_by" => "objects.jrk,objects.name",
 		));
 		$sectors_list = $menu_tree->to_list();
 		$ids = $this->make_keys($sectors_list->ids());
