@@ -251,11 +251,6 @@
                   <clid>CL_USER</clid>
                   <caption>Liige</caption>
             </MEMBER>
-            <ACL>
-                  <value>3</value>
-                  <clid>CL_ACL</clid>
-                  <caption>Acl</caption>
-            </ACL>
             <ADMIN_ROOT>
                   <value>4</value>
                   <clid>CL_MENU</clid>

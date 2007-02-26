@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.68 2006/09/27 15:03:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.69 2007/02/26 22:06:23 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -705,82 +705,6 @@ class converters extends aw_template
 			$this->_rec_groups_convert($row["gid"], $row["oid"]);
 			$this->restore_handle();
 		}
-	}
-
-	///////////////////////////////
-	/**  
-		
-		@attrib name=convert_acl_to_classbase params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function convert_acl_to_classbase()
-	{
-		// go over all acl objects and make aliases for the selected roles/chains/groups
-		$ol = new object_list(array(
-			"class_id" => CL_ACL,
-			"site_id" => array(),
-			"lang_id" => array()
-		));
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			$obj = $o->fetch();
-			echo "converting object $obj[name] ($obj[oid]) <br />\n";
-			$obj["meta"] = aw_unserialize($obj["metadata"]);
-			flush();
-			// ah, fuck it. 1st, delete all aliases
-			$this->db_query("DELETE FROM aliases WHERE source = $obj[oid]");
-
-			// now, add them back
-			if ($obj["meta"]["role"])
-			{
-//				echo "role = ".$obj["meta"]["role"]." <br />";
-				$o = obj($obj["oid"]);
-				$o->connect(array(
-					"to" => $obj["meta"]["role"],
-					"reltype" => 2
-				));
-			}
-			if ($obj["meta"]["chain"])
-			{
-//				echo "chain = ".$obj["meta"]["chain"]." <br />";
-				$o = obj($obj["oid"]);
-				$o->connect(array(
-					"to" => $obj["meta"]["chain"],
-					"reltype" => 1
-				));
-			}
-			$_ar = new aw_array($obj["meta"]["groups"]);
-
-			foreach($_ar->get() as $gid)
-			{
-//				echo "gid = $gid <br />";
-				$u = get_instance("users");
-				$o = obj($obj["oid"]);
-				$o->connect(array(
-					"to" => $u->get_oid_for_gid($gid),
-					"reltype" => 3
-				));
-				// also, add alias to acl object from group
-				// but only if it does not exist
-				$row = $this->db_fetch_row("SELECT * FROM aliases WHERE source = ".$u->get_oid_for_gid($gid)." AND target = ".$obj['oid']);
-				if (!is_array($row))
-				{
-					$o = obj($u->get_oid_for_gid($gid));
-					$o->connect(array(
-						"to" => $obj['oid'],
-						"reltype" => 3
-					));
-					echo "add alias to group ".$u->get_oid_for_gid($gid)." <br />";
-				}
-			}
-		}
-		die("Valmis!");
 	}
 
 	/**  

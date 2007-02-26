@@ -112,9 +112,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @reltype MEMBER value=2 clid=CL_USER
 @caption Liige
 
-@reltype ACL value=3 clid=CL_ACL
-@caption Acl
-
 @reltype ADMIN_ROOT value=4 clid=CL_MENU
 @caption Rootmen&uuml;&uuml;
 
@@ -522,38 +519,6 @@ class group extends class_base
 			}
 		}
 		return $acls;
-	}
-
-	/** removes role $role_id from group $gid 
-		
-		@attrib name=remove_role_from_group params=name default="0"
-		
-		@param role_id required
-		@param gid required
-		
-		@returns
-		
-		
-		@comment
-		- does this, by finding all acl objects that contain this group and that role, then removing the group from those acls
-
-	**/
-	function remove_role_from_group($arr)
-	{
-		extract($arr);
-		
-		$acl = get_instance(CL_ACL);
-		$acls = $acl->get_acls_for_group($gid);
-		foreach($acls as $acl_oid)
-		{
-			$role = $acl->get_roles_for_acl($acl_oid);
-			if ($role == $role_id)
-			{
-				$acl->remove_group_from_acl($acl_oid, $gid);
-			}
-		}
-		$u = get_instance("users");
-		return $this->mk_my_orb("change", array("id" => $u->get_oid_for_gid($gid), "group" => "roles"));
 	}
 
 	function callback_pre_save($arr)

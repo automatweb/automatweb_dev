@@ -52,8 +52,8 @@ class mk_orb_test extends UnitTestCase
 	{
 		// orb does not allow slashes in class names for security reasons and mk_my_orb
 		// always creates "flat" links (without the directory described in classes.ini)
-		$url = $this->c->mk_my_orb("change",array("id" => 3),CL_ACL);
-		$this->assertPattern("/class=acl_class/",$url);
+		$url = $this->c->mk_my_orb("change",array("id" => 3),CL_FILE);
+		$this->assertPattern("/class=file/",$url);
 	}
 	
 	function test_numeric_clid()
