@@ -25,11 +25,6 @@
       <func>on_connect_to_profession</func>
       <param>CL_CRM_PROFESSION</param>
 </num_4>
-<num_5>
-      <class>calendar/cal_event</class>
-      <func>on_add_alias</func>
-      <param>CL_CAL_EVENT</param>
-</num_5>
 <num_6>
       <class>contentmgmt/reminder</class>
       <func>on_rconnect_to</func>

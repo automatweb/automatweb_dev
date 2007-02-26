@@ -97,16 +97,6 @@
             <caption>Cache p&amp;amp;auml;ringud taustal</caption>
       </property>
       <property>
-            <name>rerun_queries_at</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>objpicker</type>
-            <clid>CL_REPEATER_OBJ</clid>
-            <caption>Cache uueneb automaatselt vastavalt kordusele</caption>
-      </property>
-      <property>
             <name>rerun_queries</name>
             <table>objects</table>
             <field>meta</field>

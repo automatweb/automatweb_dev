@@ -855,6 +855,16 @@ default group=org_objects
 	@property stats_s_res_type type=select store=no
 	@caption Tulemused
 
+	@property stats_s_group_by_client type=checkbox ch_value=1 store=no
+	@caption Grupeeri kliendi alusel
+
+	@property stats_s_group_by_project type=checkbox ch_value=1 store=no
+	@caption Grupeeri projekti alusel
+	
+	@property stats_s_group_by_task type=checkbox ch_value=1 store=no
+	@caption Grupeeri tegevuse alusel
+
+
 	@property stats_s_sbt type=submit store=no
 	@caption Otsi
 
@@ -6741,7 +6751,10 @@ class crm_company extends class_base
 		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
 		
 		$offerer = $arr["obj_inst"]->id();
-		if(!$arr["request"]["buyer"])
+
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		if($co == $offerer)
 		{
 			$offerer = null;
 		}

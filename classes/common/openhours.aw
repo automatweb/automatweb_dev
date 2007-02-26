@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.10 2006/12/15 16:49:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.11 2007/02/26 21:35:39 kristo Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -12,6 +12,11 @@
 @caption Avamisajad
 @comment Rea kustutamiseks vali molemale paevale "Valimata"
 
+@property apply_group type=relpicker field=meta method=serialize reltype=RELTYPE_GROUP multiple=1 store=connect 
+@caption Kehtib gruppidele
+
+@reltype GROUP value=1 clid=CL_GROUP
+@caption Kehtib kasutajagrupile
 */
 
 class openhours extends class_base
@@ -32,6 +37,16 @@ class openhours extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "apply_group":
+				$ol = new object_list(array(
+					"class_id" => CL_GROUP,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"type" => GRP_REGULAR
+				));
+				$data["options"] = array("" => t("--vali--")) + $ol->names();
+				break;
+
 			//-- get_property --//
 			case 'openhours':
 				$prefix = $data['name'];

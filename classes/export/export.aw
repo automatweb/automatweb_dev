@@ -93,7 +93,6 @@ class export extends aw_template
 			"zip_file" => $this->get_cval("export::zip_file"),
 			"aw_zip_folder" => $this->picker($this->get_cval("export::aw_zip_folder"),$this->get_menu_list()),
 			"aw_zip_fname" => $this->get_cval("export::aw_zip_fname"),
-			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $event_id),"cal_event",false,true),
 			"automatic" => checked($this->get_cval("export::automatic") == 1),
 			"static_site" => checked($this->get_cval("export::static_site") == 1),
 			"fn_type_1" => checked($fn_type == FN_TYPE_SECID),
@@ -1024,7 +1023,6 @@ class export extends aw_template
 			"menus" => $this->multiple_option_list($this->loaded_rule["meta"]["menus"],$ls),
 			"stop_rule" => $this->mk_my_orb("stop_rule", array("id" => $id)),
 			"reforb" => $this->mk_reforb("submit_rule", array("id" => $id)),
-			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $this->loaded_rule["meta"]["event_id"]),"cal_event",false,true),
 			"do_rule" => $this->mk_my_orb("do_export", array("rule_id" => $id))
 		));
 		$this->vars(array(

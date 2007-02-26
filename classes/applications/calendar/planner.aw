@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.132 2007/02/26 20:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.133 2007/02/26 21:35:34 kristo Exp $
 // planner.aw - kalender
-// CL_CAL_EVENT on kalendri event
 /*
 
 EMIT_MESSAGE(MSG_EVENT_ADD);
@@ -1171,33 +1170,6 @@ class planner extends class_base
 		// miski modification voiks ka olla
 		$retval = mktime(0,0,0,$m,$d,$y);
 		return $retval;
-	}
-
-	////
-	// !Embed the repeater editor form inside the planner interface
-	function event_repeaters($args = array())
-	{
-		extract($args);
-		$obj = new object($id);
-		$par_obj = new object($obj->parent());
-		$ce = get_instance(CL_CAL_EVENT);
-		$html = $ce->repeaters(array(
-			"id" => $id,
-			"cycle" => $cycle,
-		));
-		$this->mk_path($par_obj->parent(),t("Kalender / Muuda sündmust"));
-		return $menubar . $html;
-	}
-
-	////
-	// !Deletes a repeater.
-	function delete_repeater($args = array())
-	{
-		extract($args);
-		$o = obj($id);
-		$o->set_meta("repeaters" . $cycle, NULL);
-		$o->save();
-		return $this->mk_my_orb("event_repeaters",array("id" => $id));
 	}
 
 	function gen_navtoolbar(&$arr)

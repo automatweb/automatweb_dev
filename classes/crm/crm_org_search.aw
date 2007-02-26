@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.14 2006/03/10 13:11:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.15 2007/02/26 21:35:41 kristo Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -315,7 +315,7 @@ class crm_org_search extends class_base
 				$juht_id = $juht_obj->id();
 			};
 
-			if (is_oid($o->prop("phone_id")))
+			if ($this->can("view", $o->prop("phone_id")))
 			{
 				$ph_obj = new object($o->prop("phone_id"));
 				$phone = $ph_obj->name();

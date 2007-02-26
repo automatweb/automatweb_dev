@@ -558,30 +558,36 @@
             <store>no</store>
       </property>
       <property>
-            <name>openhours</name>
+            <name>oh_tb</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>open_hrs</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_OPENHOURS</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Avamisajad</caption>
       </property>
       <property>
-            <name>pauses</name>
+            <name>oh_t</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>open_hrs</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_PAUSES</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
+            <type>table</type>
             <store>no</store>
-            <caption>Pausid</caption>
+            <no_caption>1</no_caption>
+            <parent>oh</parent>
+      </property>
+      <property>
+            <name>ch_t</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>open_hrs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ch</parent>
       </property>
       <property>
             <name>transl</name>
@@ -820,6 +826,18 @@
                   <parent>middle_split</parent>
                   <group>prices_general</group>
             </min_prices>
+            <oh>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Avamisajad</area_caption>
+                  <group>open_hrs</group>
+            </oh>
+            <ch>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Pausid</area_caption>
+                  <group>open_hrs</group>
+            </ch>
       </layout>
 </properties>
 

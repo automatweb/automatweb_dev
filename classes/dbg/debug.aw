@@ -31,7 +31,7 @@ class debug extends class_base
 		{
 			while (($file = readdir($dir)) !== false) 
 			{
-				if (!($file == "." || $file == ".." || $file == "CVS" || $file == "fastcall_base.aw" || $file == "repeater_obj.aw" || $file == "contact.aw" || $file == "pop3.aw" || $file == "translation.aw"))
+				if (!($file == "." || $file == ".." || $file == "CVS" || $file == "fastcall_base.aw" || $file == "contact.aw" || $file == "pop3.aw" || $file == "translation.aw"))
 				{
 					if (!preg_match("/\.\#/",$file))
 					{

@@ -2653,6 +2653,36 @@
             <caption>Tulemused</caption>
       </property>
       <property>
+            <name>stats_s_group_by_client</name>
+            <table>objects</table>
+            <group>stats_s</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>stats_s_group_by_client</field>
+            <caption>Grupeeri kliendi alusel</caption>
+      </property>
+      <property>
+            <name>stats_s_group_by_project</name>
+            <table>objects</table>
+            <group>stats_s</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>stats_s_group_by_project</field>
+            <caption>Grupeeri projekti alusel</caption>
+      </property>
+      <property>
+            <name>stats_s_group_by_task</name>
+            <table>objects</table>
+            <group>stats_s</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>stats_s_group_by_task</field>
+            <caption>Grupeeri tegevuse alusel</caption>
+      </property>
+      <property>
             <name>stats_s_sbt</name>
             <table>objects</table>
             <group>stats_s</group>

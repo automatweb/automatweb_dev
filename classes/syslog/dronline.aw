@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.39 2005/12/06 18:20:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.40 2007/02/26 21:35:43 kristo Exp $
 
 /*
 
@@ -41,9 +41,6 @@
 
 @property bg_queries type=checkbox ch_value=1
 @caption Cache p&auml;ringud taustal
-
-@property rerun_queries_at type=objpicker clid=CL_REPEATER_OBJ
-@caption Cache uueneb automaatselt vastavalt kordusele
 
 @property rerun_queries type=checkbox ch_value=1
 @caption Uuenda p&auml;ringute&nbsp;cache kohe

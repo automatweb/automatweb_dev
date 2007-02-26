@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.63 2007/02/16 12:33:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.64 2007/02/26 21:35:39 kristo Exp $
 
 /*
 
@@ -32,6 +32,9 @@
 
 @property num_pages type=textbox size=3 
 @caption Mitu lehte:
+
+@property rate_redir type=textbox 
+@caption Suuna p&auml;rast h&auml;&auml;letamist
 
 @property pg_1_content type=text group=page_1 no_caption=1
 @property pg_2_content type=text group=page_2 no_caption=1
@@ -131,12 +134,23 @@ class gallery_v2 extends class_base
 	**/
 	function submit_rates($arr)
 	{
+		$has = false;
 		foreach(safe_array($arr["rate"]) as $oid => $rval)
 		{
 			$ri = get_instance(CL_RATE);
 			$ri->add_rate(array("no_redir" => 1, "oid" => $oid, "rate" => $rval));
+			if ($rval)
+			{
+				$has = true;
+			}
+		}
+		$go = obj($arr["gid"]);
+		if ($has && $go->prop("rate_redir") != "")
+		{
+			return $go->prop("rate_redir");
 		}
 		return $arr["r"];
+	
 	}
 
 	function get_property(&$arr)
@@ -886,7 +900,10 @@ class gallery_v2 extends class_base
 				"ignore_empty" => true
 			)),
 			"name" => $ob->name(),
-			"reforb" => $this->mk_reforb("submit_rates", array("r" => get_ru()))
+			"reforb" => $this->mk_reforb("submit_rates", array(
+				"r" => get_ru(),
+				"gid" => $ob->id()
+			))
 		));
 
 		$ret = $this->parse();

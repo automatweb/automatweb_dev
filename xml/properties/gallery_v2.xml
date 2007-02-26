@@ -31,6 +31,15 @@
             <caption>Mitu lehte:</caption>
       </property>
       <property>
+            <name>rate_redir</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Suuna p&amp;amp;auml;rast h&amp;amp;auml;&amp;amp;auml;letamist</caption>
+      </property>
+      <property>
             <name>pg_1_content</name>
             <table>objects</table>
             <group>page_1</group>
