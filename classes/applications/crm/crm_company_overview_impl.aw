@@ -328,7 +328,8 @@ class crm_company_overview_impl extends class_base
 			"name" => "name",
 			"align" => "left",
 //			"chgbgcolor" => "col",
-			"sortable" => 1
+			"sortable" => 1,
+			"colspan" => "colspan",
 		));
 
 		if ($r["group"] == "meetings")
@@ -505,7 +506,8 @@ class crm_company_overview_impl extends class_base
 					{
 						$proj = obj($task->prop("project"));
 						$table_data[] = array(
-								"name" => "<h4>".$cust_name." - ". $proj->name()."</h4>",
+							"name" => "<h3>".$cust_name." - ". $proj->name()."</h3>",
+							"colspan" => 4,
 						);
 					}
 					$last_proj = $task->prop("project");

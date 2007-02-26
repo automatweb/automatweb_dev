@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.104 2007/02/05 12:04:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.105 2007/02/26 16:26:20 markop Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1120,6 +1120,7 @@ class aw_table extends aw_template
 						"classid" => $style,
 						"width" => isset($v1["width"]) ? $v1["width"] : "",
 						"rowspan" => ($rowspan > 1) ? $rowspan : 0,
+						"colspan" => $v[$v1["colspan"]] ? $v[$v1["colspan"]] : 1,						
 						"style" => ((!empty($v1["chgbgcolor"]) && !empty($v[$v1["chgbgcolor"]])) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
 						"align" => isset($v1["align"]) ? $v1["align"] : "",
 						"valign" => isset($v1["valign"]) ? $v1["valign"] : "",
