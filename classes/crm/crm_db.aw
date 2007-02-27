@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.38 2007/02/27 11:45:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.39 2007/02/27 11:52:17 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -362,7 +362,7 @@ class crm_db extends class_base
 
 			if (!$arr["obj_inst"]->prop("all_ct_data") && $this->can("view", $com->prop("phone_id")))
 			{
-				$phs = $com->prop("phone_id.mail");
+				$phs = $com->prop("phone_id.name");
 			}
 			else
 			{
@@ -377,7 +377,7 @@ class crm_db extends class_base
 			
 			if (!$arr["obj_inst"]->prop("all_ct_data") && $this->can("view", $com->prop("url_id")))
 			{
-				$url = $com->prop("url_id.mail");
+				$url = $com->prop("url_id.name");
 				$url = substr($url, strpos($url, "http://"), strlen($url)+1);
 				if(strlen($url) > 0)
 				{
