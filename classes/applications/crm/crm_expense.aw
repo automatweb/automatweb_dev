@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.4 2007/02/27 13:07:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.5 2007/02/27 15:41:43 markop Exp $
 // crm_expense.aw - Kulu 
 /*
 
@@ -29,6 +29,9 @@
 
 	@property has_tax type=checkbox ch_value=1
 	@caption Lisandub k&auml;ibemaks?
+
+	@property currency type=select
+	@caption Valuuta
 
 	@reltype BILL value=1 clid=CL_CRM_BILL
 	@caption Arve

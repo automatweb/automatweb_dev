@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.160 2007/02/19 15:47:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.161 2007/02/27 15:41:45 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1043,7 +1043,8 @@ class task extends class_base
 								$obj->set_name($entry["name"]);
 								$obj->set_prop("date" , $entry["date"]);
 								$obj->set_prop("cost" , $entry["cost"]);
-								$obj->set_prop("who" , $entry["who"]);
+								$obj->set_prop("who" , $entry["who"]);	
+								$obj->set_prop("currency" , $entry["currency"]);
 								$obj->save();
 							}
 							continue;
@@ -1059,6 +1060,7 @@ class task extends class_base
 						$row->set_prop("date", $entry["date"]);
 						$row->set_prop("cost", $entry["cost"]);
 						$row->set_prop("who" , $entry["who"]);	
+						$row->set_prop("currency" , $entry["currency"]);	
 						$row->save();
 						$arr["obj_inst"]->connect(array(
 							"to" => $row->id(),
@@ -1066,6 +1068,8 @@ class task extends class_base
 						));
 					}
 				}
+				$arr["obj_inst"]->set_meta("other_expenses", null);
+				break;
 				
 			case "hrs_table":
 				$different_customers = 0;
@@ -1289,9 +1293,12 @@ class task extends class_base
 		$dat[] = array();
 		$nr = 1;
 		
-		$participians = $arr["obj_inst"]->prop("participants");
+		$participians = $this->get_partipicants($arr);
 		$pa_list = new object_list();
-		$pa_list->add($participians);
+		if (is_oid($participians) || (is_array($participians) && count($participians)))
+		{
+			$pa_list->add($participians);
+		}
 		
 		$cs = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_EXPENSE",
@@ -1321,6 +1328,11 @@ class task extends class_base
 						"name" => "exp[".$ob->id()."][cost]",
 						"size" => 5,
 						"value" => $ob->prop("cost"),
+					)),
+					"currency"=> html::select(array(
+						"options" => $this->_get_currencys(),
+						"name" => "exp[".$ob->id()."][currency]",
+						"value" => $ob->prop("currency"),
 					)),
 					"date" => html::date_select(array(
 						"name" => "exp[".$ob->id()."][date]",
@@ -1354,6 +1366,11 @@ class task extends class_base
 					"size" => 5,
 					"value" => $exp["cost"]
 				)),
+				"currency"=> html::select(array(
+					"options" => $this->_get_currencys(),
+					"name" => "exp[$nr][currency]",
+					"value" => $exp["currency"],
+				)),
 				"date" => html::date_select(array(
 					"name" => "exp[$nr][date]",
 				)),
@@ -1366,6 +1383,20 @@ class task extends class_base
 		}
 		$t->set_sortable(false);
 	}
+	
+	function _get_currencys()
+	{
+		$data = array();
+		$curr_object_list = new object_list(array(
+                      "class_id" => CL_CURRENCY,
+                ));
+                foreach($curr_object_list->arr() as $curr)
+                {
+                	 $data[$curr->id()] = $curr->name();
+                }
+		return $data;
+	}
+	
 	/**
 		@attrib name=error_popup
 		@param text optional
@@ -2354,7 +2385,14 @@ class task extends class_base
 
 	function _set_resources($arr)
 	{
-		$sel_res = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RESOURCE")));
+		if($arr["obj_inst"]->id() > 0)
+		{
+			$sel_res = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RESOURCE")));
+		}
+		else
+		{
+			$sel_res = new object_list();
+		}
 		$sel_ids = array_flip($sel_res->ids());
 
 		$sbt = safe_array($arr["request"]["sel"]);

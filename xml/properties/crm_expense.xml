@@ -60,6 +60,14 @@
             <ch_value>1</ch_value>
             <caption>Lisandub k&amp;amp;auml;ibemaks?</caption>
       </property>
+      <property>
+            <name>currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>select</type>
+            <caption>Valuuta</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_EXPENSE</syslog_type>
             <relationmgr>yes</relationmgr>
