@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.161 2007/02/27 15:41:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.162 2007/02/27 16:32:27 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1972,6 +1972,7 @@ class task extends class_base
 		// check if task has rows defined that go on bill
 		// if, then ret those
 		// if not, return data for bill
+		$stats_inst = get_instance("applications/crm/crm_company_stats_impl");
 
 		$rows = array();
 		//$dat = safe_array($task->meta("rows"));
@@ -1979,6 +1980,8 @@ class task extends class_base
 		{
 			$task = obj($task->brother_of());
 		}
+		
+		$curr = $task->prop("hr_price_currency");
 		foreach($task->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
 			$row = $c->to();
@@ -2066,11 +2069,20 @@ class task extends class_base
 				$rows[$id] = array(
 					"name" => $ob->name(),
 					"unit" => "",
-					"price" => $ob->prop("cost"),
+					
+					"price" => $stats_inst->convert_to_company_currency(array(
+						"sum" => $ob->prop("cost"),
+						"o" => $ob->prop("cost"),
+						"company_curr" =>  $curr,
+					)),
 					"amt" => 1,
 					"amt_real" => 1,
 					"amt_guess" => 1,
-					"sum" => $ob->prop("cost"),
+					"sum" => $stats_inst->convert_to_company_currency(array(
+						"sum" => $ob->prop("cost"),
+						"o" => $ob->prop("cost"),
+						"company_curr" =>  $curr,
+					)),
 					"has_tax" => 1,
 					"is_oe" => true,
 					"on_bill" => 1

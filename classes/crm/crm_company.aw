@@ -4574,6 +4574,12 @@ class crm_company extends class_base
 		return $_SESSION["create_bill_ru"];
 	}
 
+	function convert_to_company_currency($arr)
+	{
+		$inst = get_instance("applications/crm/crm_company_stats_impl");
+		return $inst->convert_to_company_currency($arr);
+	}
+
 	/**
 		@attrib name=create_bill all_args=1
 	**/
@@ -4706,6 +4712,7 @@ class crm_company extends class_base
 				$cust_rel = $cust_rel_list->begin();
 				$bill->set_prop("bill_due_date_days", $cust_rel->prop("bill_due_date_days"));
 			}
+			
 			if(!$bill->prop("bill_due_date_days"))
 			{
 				$bill->set_prop("bill_due_date_days", $bill->prop("customer.bill_due_days"));
@@ -4716,6 +4723,7 @@ class crm_company extends class_base
 				mktime(3,3,3, date("m", $bt), date("d", $bt) + $bill->prop("bill_due_date_days"), date("Y", $bt))
 			);
 		}
+		
 
 		$bill->save();
 
@@ -4799,7 +4807,10 @@ class crm_company extends class_base
 				$br->set_parent($bill->id());
 				$br->set_prop("comment", $expense->name());
 				$br->set_prop("amt", 1);
-				$br->set_prop("price", str_replace(",", ".", $expense->prop("cost")));
+				$br->set_prop("price", str_replace(",", ".", $sum = $this->convert_to_company_currency(array(
+					"sum" => $expense->prop("cost"),
+					"o" => $expense,
+				))));
 				$br->set_prop("is_oe", 1);
 				$date = $expense->prop("date");
 				$br->set_prop("date", date("d.m.Y", mktime(0,0,0, $date["month"], $date["day"], $date["year"])));
@@ -4920,7 +4931,7 @@ class crm_company extends class_base
 		}
 		return html::get_change_url($bill->id(),array("return_url" => $create_bill_ru,));
 	}
-
+	
 	/**
 		@attrib name=add_proj_to_co_as_ord
 	**/
