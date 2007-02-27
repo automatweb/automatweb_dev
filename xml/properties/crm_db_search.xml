@@ -20,6 +20,16 @@
             <type>textbox</type>
             <caption>Url, millele lisatakse org. objekti id</caption>
       </property>
+      <property>
+            <name>only_active</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ainult aktiivsed</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_DB_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.1 2005/12/29 17:23:56 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.2 2007/02/27 15:43:11 kristo Exp $
 // crm_db_search.aw - Kliendibaasi otsingu grupp 
 /*
 
@@ -15,6 +15,9 @@
 
 @property url type=textbox
 @caption Url, millele lisatakse org. objekti id
+
+@property only_active type=checkbox ch_value=1 field=meta method=serialize
+@caption Ainult aktiivsed
 
 @reltype CRM_DB value=1 clid=CL_CRM_DB
 @caption Organisatsioonide andmebaas
@@ -105,6 +108,7 @@ class crm_db_search extends class_base
 		$list = $wvinst->_list_companies(array(
 			'crm_db' => $o->prop('crm_db'),
 			'limit_plaintext' => $arr['str'],
+			"only_active" => $o->prop("only_active")
 		));
 		return $list;
 	}

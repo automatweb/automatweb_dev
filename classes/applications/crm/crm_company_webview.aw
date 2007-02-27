@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.18 2007/01/05 12:33:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.19 2007/02/27 15:43:11 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -41,6 +41,9 @@
 
 @property field type=select field=meta method=serialize
 @caption Tegevusala
+
+@property only_active type=checkbox ch_value=1 field=meta method=serialize
+@caption Ainult aktiivsed
 
 @default group=transl
 	
@@ -1058,6 +1061,12 @@ class crm_company_webview extends class_base
 			$filt["CL_CRM_COMPANY.contact.maakond"] = new obj_predicate_not($limit_county);
 		}
 
+
+		if (($ob && $ob->prop("only_active")) || $arr["only_active"] == 1)
+		{
+			$filt["status"] = STAT_ACTIVE;
+		}
+	
 		if (!empty($arr['limit_plaintext']))
 		{
 			$value = '%'.$arr['limit_plaintext'].'%';

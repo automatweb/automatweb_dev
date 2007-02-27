@@ -112,6 +112,16 @@
             <caption>Tegevusala</caption>
       </property>
       <property>
+            <name>only_active</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ainult aktiivsed</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
