@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.162 2007/02/27 15:15:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.163 2007/02/27 15:46:36 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2394,7 +2394,7 @@ class room extends class_base
 			keys are start timestamps
 	**/
 	function do_add_reservation($arr)
-	{arr($arr);
+	{
 		extract($arr);
 		if(is_oid($arr["id"]))
 		{
