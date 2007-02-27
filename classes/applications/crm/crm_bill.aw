@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.110 2007/02/19 14:40:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.111 2007/02/27 13:07:50 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -514,9 +514,19 @@ class crm_bill extends class_base
 			);
 		}
 		$pps = get_instance("applications/crm/crm_participant_search");
-		$default_row_jrk = 0;
+		$default_row_jrk = $first_oe = 0;
+		
 		foreach($rows as $row)
 		{
+			//eraldab muid kulusid
+			if(!$first_oe && $row["is_oe"])
+			{
+				$t->define_data(array(
+					"name" => t("Kulud:"),
+				));
+				$first_oe = 1;
+			}
+			
 			$t_inf = $row;
 			$id = $row["id"];
 			$r_prods = $prods;
@@ -1470,6 +1480,10 @@ class crm_bill extends class_base
 		list($b_d, $b_m, $b_y) = explode(".", $b_date);
 		$a_tm = mktime(0,0,0, $a_m, $a_d, $a_y);
 		$b_tm = mktime(0,0,0, $b_m, $b_d, $b_y);
+		if(!(($a["is_oe"] - $b["is_oe"]) == 0))
+		{
+			return $a["is_oe"]- $b["is_oe"];
+		}
 		//echo $a["jrk"] < $b["jrk"] ? -1 :($a["jrk"] > $b["jrk"] ? 1 : ($a_tm >  $b_tm ? 1 : ($a_tm == $b_tm ? 0 : -1)));
 		return  $a["jrk"] < $b["jrk"] ? -1 :
 			($a["jrk"] > $b["jrk"] ? 1:

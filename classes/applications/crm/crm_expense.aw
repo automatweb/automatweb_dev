@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.3 2007/02/14 17:16:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_expense.aw,v 1.4 2007/02/27 13:07:50 markop Exp $
 // crm_expense.aw - Kulu 
 /*
 
@@ -26,6 +26,9 @@
 
 	@property who type=relpicker reltype=RELTYPE_PEOPLE
 	@caption Kes tegi
+
+	@property has_tax type=checkbox ch_value=1
+	@caption Lisandub k&auml;ibemaks?
 
 	@reltype BILL value=1 clid=CL_CRM_BILL
 	@caption Arve

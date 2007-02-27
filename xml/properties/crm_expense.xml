@@ -51,6 +51,15 @@
             <reltype>RELTYPE_PEOPLE</reltype>
             <caption>Kes tegi</caption>
       </property>
+      <property>
+            <name>has_tax</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lisandub k&amp;amp;auml;ibemaks?</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_EXPENSE</syslog_type>
             <relationmgr>yes</relationmgr>
