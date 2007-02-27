@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.148 2007/02/22 10:55:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.149 2007/02/27 12:06:12 kristo Exp $
 /*
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
@@ -462,6 +462,44 @@ class file extends class_base
 		{
 			$i = get_instance(CL_SITE_SEARCH_CONTENT);
 			$i->add_single_object_to_index(array("oid" => $arr["obj_inst"]->id()));
+		}
+		if ($arr["request"]["save_and_doc"] != "")
+		{
+			$link_url = $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name());
+			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+			die("
+				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
+				<script language='javascript'>
+
+
+				function SetAttribute( element, attName, attValue ) 
+				{ 
+					if ( attValue == null || attValue.length == 0 ) 
+					{
+						element.removeAttribute( attName, 0 ) ;
+					}
+					else 
+					{
+						element.setAttribute( attName, attValue, 0 ) ;
+					}
+				}
+	
+				FCK=window.parent.opener.FCK;
+				var eSelected = FCK.Selection.MoveToAncestorNode(\"A\");
+				if (eSelected) 
+				{ 
+					eSelected.href=\"".$link_url."\";
+					eSelected.innerHTML=\"".$arr["obj_inst"]->prop("name")."\"; 
+					SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ; 
+				} 
+				else 
+				{ 
+					FCK.InsertHtml(aw_get_url_contents(\"$url\")); 
+				}
+
+				window.parent.close();
+			</script>
+			");
 		}
 	}
 
@@ -1359,12 +1397,21 @@ class file extends class_base
 			"site_id" => array(),
 			"search_static" => 1
 		));
+		$rv = "";
 		if ($ol->count())
 		{
-			return "
+			$rv .= "
 				nsbt = document.createElement('input');nsbt.name='save_and_index';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja indekseeri otsingusse")."'; el = document.getElementById('buttons');el.appendChild(nsbt);";
 		}
-		return "";
+
+
+
+		$rv .= "
+		if (window.parent.name == \"InsertAWFupCommand\")
+		{
+		nsbt = document.createElement('input');nsbt.name='save_and_doc';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja paiguta dokumenti")."'; el = document.getElementById('buttons');el.appendChild(nsbt);}";
+
+		return $rv;
 	}
 };
 ?>
