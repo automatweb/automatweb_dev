@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.37 2007/02/26 11:08:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.38 2007/02/27 11:45:26 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -41,6 +41,9 @@
 
 @property flimit type=select
 @caption Kirjeid ühel lehel
+
+@property all_ct_data type=checkbox ch_value=1 
+@caption Kuva k&otilde;iki kontaktandmeid
 
 -----------------------------------------------------------------------------
 @groupinfo org caption=Organisatsioonid
@@ -327,12 +330,6 @@ class crm_db extends class_base
 		$coms = $companys->arr();
 		foreach($coms as $com)
 		{
-			$url = $com->prop("url_id.name");
-			$url = substr($url, strpos($url, "http://"), strlen($url)+1);
-			if(strlen($url) > 0)
-			{
-				$url = html::href(array("url" => $url, "caption" => $url, "target" => "_blank"));
-			}
 			$ol = $com->prop("firmajuht");
 			$org_leader = "";
 			if($this->can("view", $ol))
@@ -347,15 +344,87 @@ class crm_db extends class_base
 				$cr_manager = html::get_change_url($com->prop("client_manager"), array("return_url" => get_ru()), $com->prop("client_manager.name"));
 			}
 
+			if (!$arr["obj_inst"]->prop("all_ct_data") && $this->can("view", $com->prop("email_id")))
+			{
+				$eml = $com->prop("email_id.mail");
+			}
+			else
+			{
+				$phc = $com->connections_from(array("type" => "RELTYPE_EMAIL"));
+				$pha = array();
+				foreach($phc as $ph_con)
+				{
+					$ph_o = $ph_con->to();
+					$pha[] = $ph_o->prop("mail");
+				}
+				$eml = join(", ", $pha);
+			}
+
+			if (!$arr["obj_inst"]->prop("all_ct_data") && $this->can("view", $com->prop("phone_id")))
+			{
+				$phs = $com->prop("phone_id.mail");
+			}
+			else
+			{
+				$phc = $com->connections_from(array("type" => "RELTYPE_PHONE"));
+				$pha = array();
+				foreach($phc as $ph_con)
+				{
+					$pha[] = $ph_con->prop("to.name");
+				}
+				$phs = join(", ", $pha);
+			}
+			
+			if (!$arr["obj_inst"]->prop("all_ct_data") && $this->can("view", $com->prop("url_id")))
+			{
+				$url = $com->prop("url_id.mail");
+				$url = substr($url, strpos($url, "http://"), strlen($url)+1);
+				if(strlen($url) > 0)
+				{
+					$url = html::href(array("url" => $url, "caption" => $url, "target" => "_blank"));
+				}
+			}
+			else
+			{
+				$phc = $com->connections_from(array("type" => "RELTYPE_URL"));
+				$pha = array();
+				foreach($phc as $ph_con)
+				{
+					$tu = $ph_con->prop("to.name");
+					$tu = substr($tu, strpos($tu, "http://"), strlen($tu)+1);
+					if(strlen($tu) > 0)
+					{
+						$tu = html::href(array("url" => $tu, "caption" => $tu, "target" => "_blank"));
+					}
+					$pha[] = $tu;
+				}
+				$url = join(", ", $pha);
+			}
+
+			if (!$arr["obj_inst"]->prop("all_ct_data") && $this->can("view", $com->prop("contact")))
+			{
+				$cts = $com->prop("contact.name");
+			}
+			else
+			{
+				$phc = $com->connections_from(array("type" => "RELTYPE_ADDRESS"));
+				$pha = array();
+				foreach($phc as $ph_con)
+				{
+					$pha[] = $ph_con->prop("to.name");
+				}
+				$cts = join(", ", $pha);
+			}
+			
 			$t->define_data(array(
 				"id" => $com->id(),
 				"org" => html::get_change_url($com->id(), array("return_url" => get_ru()), strlen($com->name()) ? $com->name() : t("(nimetu)")),
-				"field" => $com->prop("pohitegevus.name"),
-				"ettevotlusvorm" => $com->prop("ettevotlusvorm.name"),
-				"address" => $com->prop("contact.name"),
-				"e_mail" => $com->prop("email_id.mail"),
+				"field" => $com->prop_str("pohitegevus"),
+				"ettevotlusvorm" => $com->prop_str("ettevotlusvorm"),
+				"address" => $cts,
+				"e_mail" => $eml,
 				"url" => $url,
-				"phone" => $com->prop("phone_id.name"),
+				"phone" => $phs,
 				"org_leader" => $org_leader,
 				"cr_manager" => $cr_manager,
 				"changed" => date("j.m.Y H:i" , $com->modified()),

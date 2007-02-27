@@ -1142,7 +1142,7 @@ class _int_object
 					}
 					if (count($_tmp))
 					{
-						$val = join(",", $_tmp);
+						$val = join(", ", $_tmp);
 					}
 					else
 					{
@@ -1595,7 +1595,7 @@ class _int_object
 					}
 					if (count($_tmp))
 					{
-						$val = join(",", $_tmp);
+						$val = join(", ", $_tmp);
 					}
 					else
 					{
@@ -2105,7 +2105,7 @@ class _int_object
 				{
 					error::raise(array(
 						"id" => ERR_ACL,
-						"msg" => sprintf(t("object::save(): no access to add object under folder %s (gidlist = %s)!"), $this->obj["parent"], join(",", aw_global_get("gidlist")))
+						"msg" => sprintf(t("object::save(): no access to add object under folder %s (gidlist = %s)!"), $this->obj["parent"], join(", ", aw_global_get("gidlist")))
 					));
 					return;
 				}

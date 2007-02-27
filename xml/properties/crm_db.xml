@@ -111,6 +111,16 @@
             <caption>Kirjeid &amp;uuml;hel lehel</caption>
       </property>
       <property>
+            <name>all_ct_data</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuva k&amp;amp;otilde;iki kontaktandmeid</caption>
+      </property>
+      <property>
             <name>orgtoolbar</name>
             <table>objects</table>
             <group>
