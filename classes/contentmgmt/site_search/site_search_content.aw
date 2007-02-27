@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.80 2007/02/20 13:06:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.81 2007/02/27 12:41:01 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -872,7 +872,23 @@ class site_search_content extends class_base
 		{
 			$joiner = "LEFT JOIN doc_ct_content d ON d.oid = o.brother_of AND d.lang_id = ".aw_global_get("ct_lang_id");
 		}
-													       
+
+		if ($this->can("view", $arr["obj"]->prop("search_only_kws")) || (is_array($arr["obj"]->prop("search_only_kws")) && count($arr["obj"]->prop("search_only_kws"))))
+		{
+			$c = new connection();
+			$cs = $c->find(array(
+				"from.class_id" => CL_DOCUMENT,
+				"type" => "RELTYPE_KEYWORD",
+				"to" => $arr["obj"]->prop("search_only_kws")
+			));
+			$lm_dids = new aw_array();
+			foreach($cs as $con_entry)
+			{
+				$lm_dids->set($con_entry["from"]);
+			}
+			$kw_limiter  = " AND o.oid IN (".$lm_dids->to_sql().") ";
+		}
+									       
 		$sql = "
 			SELECT 
 				o.oid as docid, 
@@ -902,6 +918,7 @@ class site_search_content extends class_base
 				o.lang_id = '".aw_global_get("lang_id")."' AND
 				d.no_search != 1 AND
 				o.class_id IN (".CL_DOCUMENT.",".CL_BROTHER_DOCUMENT.",".CL_PERIODIC_SECTION.") 
+				$kw_limiter
 				$mod 
 				$mod2
 				$lim
@@ -935,7 +952,8 @@ class site_search_content extends class_base
 			{
 				$ret = $ret + $keyresults;
 			}
-			elseif($keyresults)
+			else
+			if($keyresults)
 			{
 				$ret = $keyresults;
 			}
@@ -1003,9 +1021,11 @@ class site_search_content extends class_base
 			return;
 		}
 			
+		$obj2kw = array();
 		foreach($keyword_to_file_conns as $conn)
 		{
 			$ids_list[] = $conn["to"];
+			$obj2kw[$conn["to"]][$conn["from"]] = $conn["from"];
 		}
 		
 		//List of files oids
@@ -1020,6 +1040,7 @@ class site_search_content extends class_base
 		foreach ($aliased_docs_conns as $conn)
 		{
 			$doc_ids[] = $conn["from"];	
+			$obj2kw[$conn["from"]][$conn["to"]] = $conn["to"];
 		}
 		
 		if(!$doc_ids)
@@ -1053,7 +1074,8 @@ class site_search_content extends class_base
 				"content" => $obj->prop("content"),
 				"lead" => $obj->prop("lead"),
 				"tm" => $obj->prop("tm"),
-				"doc_modified" => $obj->prop("doc_modified")
+				"doc_modified" => $obj->prop("doc_modified"),
+				"keywords" => $obj2kw[$obj->id()]
 			);
 		}
 		exit_function("site_search_content::search_keywords");
@@ -1464,7 +1486,8 @@ class site_search_content extends class_base
 
 		$this->sort_results(array(
 			"results" => &$results, 
-			"sort_by" => $sort_by
+			"sort_by" => $sort_by,
+			"grp_by_kw" => $group_by_kw
 		));
 
 		// .. and sort order links as well
@@ -1706,7 +1729,7 @@ class site_search_content extends class_base
 								"group" => reset($group), 
 								"section" => aw_global_get("section"),
 								"sdate" => $arr["s_date"],
-								"opts" => $arr["opts"]
+								"opts" => $arr["opts"],
 							),
 							"page" => is_array($page) ? $page[$conn->prop("to")] : $page,
 							"multigroups" => $has_res
@@ -1759,7 +1782,7 @@ class site_search_content extends class_base
 						"group" => $group, 
 						"section" => aw_global_get("section"),
 						"s_date" => $arr["s_date"],
-						"opts" => $arr["opts"]
+						"opts" => $arr["opts"],
 					),
 					"page" => $page
 				));

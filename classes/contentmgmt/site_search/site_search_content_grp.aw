@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.24 2005/10/16 14:25:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.25 2007/02/27 12:41:01 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -32,8 +32,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_menu)
 @property seach_notactive type=checkbox ch_value=1 field=meta method=serialize
 @caption Otsi ka mitteaktiivsetest dokumentidest
 
+@property search_only_kws type=relpicker multiple=1 reltype=RELTYPE_KW field=meta method=serialize
+@caption Otsi ainult m&auml;rks&otilde;nadest
+
 @reltype SEARCH_LOCATION value=1 clid=CL_MENU
 @caption Otsingu lähtekoht
+
+@reltype KW value=2 clid=CL_KEYWORD
+@caption M&auml;rks&otilde;na
 
 */
 
