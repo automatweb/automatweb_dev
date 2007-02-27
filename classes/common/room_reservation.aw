@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.53 2007/02/26 14:25:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.54 2007/02/27 15:15:45 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1188,6 +1188,7 @@ class room_reservation extends class_base
 		@param bron optional type=array
 		@param room required type=oid
 		@param room_res optional type=oid
+		@param room_reservation_length optional type=int
 	**/
 	function submit_web_calendar_table($arr)
 	{
@@ -1209,6 +1210,7 @@ class room_reservation extends class_base
 				$times = $room_inst->_get_bron_time(array(
 					"bron" => $bron,
 					"id" => $id,
+					"room_reservation_length" => $arr["room_reservation_length"],
 				));
 				$_SESSION["room_reservation"][$id]["start"] = $times["start"];
 				$_SESSION["room_reservation"][$id]["end"] = $times["end"];

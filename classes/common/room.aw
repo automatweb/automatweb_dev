@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.161 2007/02/26 14:25:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.162 2007/02/27 15:15:45 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1391,17 +1391,17 @@ class room extends class_base
 		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
 		{
 			$options = array();
-			$time_step = $arr["obj_inst"]->prop("time_step");
+			$time_step = $sb_time_step = $arr["obj_inst"]->prop("time_step");
 			$time_from = $arr["obj_inst"]->prop("time_from");
 			$time_to = $arr["obj_inst"]->prop("time_to");
+			$unit = $this->step_lengths[$arr["obj_inst"]->prop("time_unit")];
 
-
-			if($arr["obj_inst"]->prop("selectbox_time_step") > 0 && false)
+			if($arr["obj_inst"]->prop("selectbox_time_step") > 0 || $arr["obj_inst"]->prop("selectbox_time_to") > 0)
 			{
-				$time_step = $arr["obj_inst"]->prop("selectbox_time_step");
+				$add = $arr["obj_inst"]->prop("selectbox_time_step")/$time_step;
+				$sb_time_step = $arr["obj_inst"]->prop("selectbox_time_step");
 				$time_from = $arr["obj_inst"]->prop("selectbox_time_from");
 				$time_to = $arr["obj_inst"]->prop("selectbox_time_to");
-				$add = $arr["obj_inst"]->prop("selectbox_time_step")/$time_step;
 			}
 			else
 			{
@@ -1411,23 +1411,29 @@ class room extends class_base
 			$end = $time_to/$time_step;
 			$x = $time_from/$time_step;
 
-			while($x<=$end)
+			while($x<=$end || ($x-$end < 0.000001))
 			{
-				$options["".$x] = ($x * $time_step)%10;
-				if(($x * $time_step - ($x * $time_step)%10))
+				$options["".$x] = ($x * $time_step);
+				if($unit > 60)
 				{
-					$small_units = round(($x * $time_step - ($x * $time_step)%10)*60);
-					if($small_units%60 == 0)
+					$options["".$x] = $options["".$x] %60;
+
+					if(($x * $sb_time_step - ($x * $sb_time_step)%10))
 					{
-						$options["".$x] = $options["".$x] + $small_units/60;
-					}
-					else
-					{
-						if($small_units < 10)
+						$small_units = round(($x * $sb_time_step - ($x * $sb_time_step)%10)*60);
+						//if(aw_global_get("uid") == "struktuur");
+						if($small_units%60 == 0)
 						{
-							$small_units = "0".$small_units;
+							$options["".$x] = $options["".$x] + $small_units/60;
 						}
-						$options["".$x] = $options["".$x] . ":" . $small_units;
+						else
+						{
+							if($small_units < 10)
+							{
+								$small_units = "0".$small_units;
+							}
+							$options["".$x] = $options["".$x] . ":" . $small_units;
+						}
 					}
 				}
 				$x = $x + $add;
@@ -1439,7 +1445,7 @@ class room extends class_base
 			));
 			$ret.= $this->unit_step[$arr["obj_inst"]->prop("time_unit")];
 		}
-		//if(aw_global_get("uid") == "struktuur")arr($options);
+
 		//seda hakkaks js siis vajama, et natuke aega juurde liita ajale mida selectitakse
 		$after_buffer = "".($arr["obj_inst"]->prop("buffer_after")*$arr["obj_inst"]->prop("buffer_after_unit")/($arr["obj_inst"]->prop("time_step")*$this->step_lengths[$arr["obj_inst"]->prop("time_unit")]));
 		$ret.= html::hidden(array("name" => "buffer_after", "id"=>"buffer_after" ,"value"=>$after_buffer));
@@ -1698,10 +1704,10 @@ class room extends class_base
 						$arr["timestamp"] = $start_step;
 						$prod_menu="";
 						$time_step = $arr["obj_inst"]->prop("time_step");
-						if ($arr["obj_inst"]->prop("selectbox_time_step") > 0)
-						{
-							$time_step = $arr["obj_inst"]->prop("selectbox_time_step");
-						}
+//						if ($arr["obj_inst"]->prop("selectbox_time_step") > 0)
+//						{
+//							$time_step = $arr["obj_inst"]->prop("selectbox_time_step");
+//						}
 						if($arr["obj_inst"]->prop("use_product_times"))
 						{
 							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
@@ -2388,7 +2394,7 @@ class room extends class_base
 			keys are start timestamps
 	**/
 	function do_add_reservation($arr)
-	{
+	{arr($arr);
 		extract($arr);
 		if(is_oid($arr["id"]))
 		{

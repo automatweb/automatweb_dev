@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.24 2007/02/26 14:25:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.25 2007/02/27 15:15:45 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -902,8 +902,8 @@ class bank_payment extends class_base
 			"action"	=> $service,		//"gaf"
 			"ver"		=> $version,		//Protokolli versioon, Fikseeritud väärtus: 002
 			"id"		=> $sender_id,		//Kaupmehe kasutajanimi süsteemis
-			"ecuno"		=> $reference_nr,	//Tehingu unikaalne number kaupmehe süsteemis,min. lubatud väärtus 100000
-			"eamount"	=> $amount,		//Kaupmehe süsteemi poolt antav tehingu summa sentides.;
+			"ecuno"		=> $ecuno,	//Tehingu unikaalne number kaupmehe süsteemis,min. lubatud väärtus 100000
+			"eamount"	=> $eamount,		//Kaupmehe süsteemi poolt antav tehingu summa sentides.;
 			"cur"		=> $curr,		//Tehingu valuuta nimi . Fikseeritud: EEK
 			"datetime"	=> $datetime,		//AAAAKKPPTTmmss 	Tehingu kuupäev,kellaaeg
 			"mac" 		=> $VK_MAC,		//Sõnumi signatuur (MAC)*

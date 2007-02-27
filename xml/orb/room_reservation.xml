@@ -50,6 +50,7 @@
 					<optional name="bron" type="array" />
 					<required name="room" type="oid" />
 					<optional name="room_res" type="oid" />
+					<optional name="room_reservation_length" type="int" />
 				</arguments>
 			</function>
 		</action>
