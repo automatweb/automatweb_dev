@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.8 2006/10/20 10:57:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/user_bookmarks.aw,v 1.9 2007/02/27 13:33:39 kristo Exp $
 // user_bookmarks.aw - Kasutaja j&auml;rjehoidjad 
 /*
 
@@ -89,7 +89,9 @@ class user_bookmarks extends class_base
 			$o->set_parent(aw_ini_get("amenustart"));
 			$p = get_current_person();
 			$o->set_name(sprintf(t("%s j&auml;rjehoidja"), $p->name()));
+			aw_disable_acl();
 			$o->save();
+			aw_restore_acl();
 			return $o;
 		}
 		else
