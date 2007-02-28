@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.34 2007/02/22 11:59:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.35 2007/02/28 10:06:10 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -840,10 +840,9 @@ class spa_bookigs_entry extends class_base
 		$room2oh = array();
 		foreach($p_rooms as $room)
 		{
-			$oh = $room->prop("openhours");
-			if ($this->can("view", $oh))
+			$oh = $room_inst->get_current_openhours_for_room($room);
+			if (is_object($oh))
 			{
-				$oh = obj($oh);
 				$room2oh[$room->id()] = $oh;
 			}
 		}
@@ -934,11 +933,9 @@ class spa_bookigs_entry extends class_base
 
 		foreach($p_rooms as $room)
 		{
-			$oh = $room->prop("openhours");
-			
-			if ($this->can("view", $oh))
+			$oh = $room_inst->get_current_openhours_for_room($room);
+			if (is_object($oh))
 			{
-				$oh = obj($oh);
 				list($d_start, $d_end) = $oh_i->get_times_for_date($oh, $range_from+($i*24*3600)+$h*3600);
 				$d_from = min($d_from, $d_start);
 				$d_to = max($d_to, $d_end);

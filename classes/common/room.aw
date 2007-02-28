@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.163 2007/02/27 15:46:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.164 2007/02/28 10:06:08 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -462,26 +462,11 @@ class room extends class_base
 				case "products_tbl":
 					$this->_products_tbl($arr);
 					break;
+
 				case "products_tb":
 					$this->_products_tb($arr);
 					break;		
-				case "openhours":
-					if(!sizeof($arr["obj_inst"]->connections_from(array(
-						"type" => "RELTYPE_OPENHOURS",
-					))))
-					{
-						$oh = new object();
-						$oh->set_parent($arr["obj_inst"]->id());
-						$oh->set_class_id(CL_OPENHOURS);
-						$oh->set_name($arr["obj_inst"]->name()." ".openhours);
-						$oh->save();
-						$arr["obj_inst"]->set_prop("openhours" , $oh->id());
-						$arr["obj_inst"]->connect(array("to" => $oh->id(), "reltype" => "RELTYPE_OPENHOURS"));
-					}
-					break;
 
-				case "resources_tb":
-					break;
 				case "group_product_menu":
 					if(!$arr["obj_inst"]->prop("use_product_times"))
 					{
@@ -559,9 +544,6 @@ class room extends class_base
 				break;
 			case "deadline":
 				$prop["value"] = time() + 15*60;
-				break;
-			case "openhours":
-				$prop["parent"] = $arr["obj_inst"]->id();
 				break;
 
 			case "web_min_prod_price":
@@ -1544,26 +1526,10 @@ class room extends class_base
 			}
 		}
 		$t = &$arr["prop"]["vcl_inst"];
-//		arr($arr["obj_inst"]->prop("openhours"));
+
 		$open_inst = $this->open_inst = get_instance(CL_OPENHOURS);
-		if(is_oid($arr["obj_inst"]->prop("openhours")) && $this->can("view" , $arr["obj_inst"]->prop("openhours")))
-		{
-			$this->openhours = obj($arr["obj_inst"]->prop("openhours"));
-		}
-		if(!is_object($this->openhours))
-		{
-			$this->openhours = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OPENHOURS");
-		}
-
-		if(is_oid($arr["obj_inst"]->prop("pauses")) && $this->can("view" , $arr["obj_inst"]->prop("pauses")))
-		{
-			$this->pauses = obj($arr["obj_inst"]->prop("pauses"));
-		}
-		if(!is_object($this->pauses))
-		{
-			$this->pauses = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PAUSES");
-		}
-
+		$this->openhours = $this->get_current_openhours_for_room($arr["obj_inst"]);
+		$this->pauses = $this->get_current_pauses_for_room($arr["obj_inst"]);
 
 		if(is_object($this->openhours))
 		{
@@ -4742,6 +4708,22 @@ class room extends class_base
 	function _init_oh_t(&$t)
 	{
 		$t->define_field(array(
+			"name" => "date_from",
+			"caption" => t("Kehtib alates"),
+			"align" => "center",
+			"width" => "10%",
+			"type" => "time",
+			"format" => "d.m.Y"
+		));
+		$t->define_field(array(
+			"name" => "date_to",
+			"caption" => t("Kehtib kuni"),
+			"align" => "center",
+			"width" => "10%",
+			"type" => "time",
+			"format" => "d.m.Y"
+		));
+		$t->define_field(array(
 			"name" => "apply_group",
 			"caption" => t("Kehtib gruppidele"),
 			"align" => "center",
@@ -4779,7 +4761,9 @@ class room extends class_base
 				"apply_group" => $oh->prop_str("apply_group"),
 				"oh" => $i->show(array("id" => $oh->id())),
 				"edit" => html::get_change_url($oh->id(), array("return_url" => get_ru()), t("Muuda")),
-				"oid" => $oh->id()
+				"oid" => $oh->id(),
+				"date_from" => $oh->prop("date_from"),
+				"date_to" => $oh->prop("date_to"),
 			));
 		}
 	}
@@ -4798,7 +4782,9 @@ class room extends class_base
 				"apply_group" => $oh->prop_str("apply_group"),
 				"oh" => $i->show(array("id" => $oh->id())),
 				"edit" => html::get_change_url($oh->id(), array("return_url" => get_ru()), t("Muuda")),
-				"oid" => $oh->id()
+				"oid" => $oh->id(),
+				"date_from" => $oh->prop("date_from"),
+				"date_to" => $oh->prop("date_to"),
 			));
 		}
 	}
@@ -4827,13 +4813,47 @@ class room extends class_base
 		@attrib api=1
 		@param room required type=object
 	**/
-	function get_current_openhtours_for_room($room)
+	function get_current_openhours_for_room($room)
 	{
 		$gl = aw_global_get("gidlist_oid");
 		foreach($room->connections_from(array("type" => "RELTYPE_OPENHOURS")) as $c)
 		{
 			$oh = $c->to();
-			if (count(array_intersect($gl, safe_array($oh->prop("apply_groups")))))
+			if ($oh->prop("date_from") > 100 && time() < $oh->prop("date_from"))
+			{
+				continue;
+			}
+			if ($oh->prop("date_to") > 100 && time() > $oh->prop("date_to"))
+			{
+				continue;
+			}
+			if (!is_array($oh->prop("apply_group")) || !count($oh->prop("apply_group")) || count(array_intersect($gl, safe_array($oh->prop("apply_group")))))
+			{
+				return $oh;
+			}
+		}
+		return null;
+	}
+
+	/** Returns the openhours object for the current user, or null if none applies, for pauses in the room's schedule
+		@attrib api=1
+		@param room required type=object
+	**/
+	function get_current_pauses_for_room($room)
+	{
+		$gl = aw_global_get("gidlist_oid");
+		foreach($room->connections_from(array("type" => "RELTYPE_PAUSES")) as $c)
+		{
+			$oh = $c->to();
+			if ($oh->prop("date_from") > 100 && time() < $oh->prop("date_from"))
+			{
+				continue;
+			}
+			if ($oh->prop("date_to") > 100 && time() > $oh->prop("date_to"))
+			{
+				continue;
+			}
+			if (!is_array($oh->prop("apply_group")) || !count($oh->prop("apply_group")) || count(array_intersect($gl, safe_array($oh->prop("apply_group")))))
 			{
 				return $oh;
 			}
