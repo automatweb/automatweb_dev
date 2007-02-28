@@ -33,6 +33,17 @@
             <caption>Allkirjastajad</caption>
       </property>
       <property>
+            <name>job</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <caption>Allkirjastaja amet</caption>
+      </property>
+      <property>
             <name>procurator</name>
             <table>objects</table>
             <group>general</group>

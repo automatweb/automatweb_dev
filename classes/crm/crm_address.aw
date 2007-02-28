@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.23 2007/01/10 12:58:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.24 2007/02/28 12:50:55 markop Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -636,7 +636,7 @@ class crm_address extends class_base
 	**/
 	function get_country_code($o)
 	{
-		if(!is_oid($o) || $this->can("view" ,$o ))
+		if(is_oid($o) && $this->can("view" ,$o))
 		{
 			$o = obj($o);
 		}
