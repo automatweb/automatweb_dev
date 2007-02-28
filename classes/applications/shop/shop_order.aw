@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.48 2007/02/26 14:23:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.49 2007/02/28 16:28:51 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -711,7 +711,10 @@ class shop_order extends class_base
 						$awm->htmlbodyattach(array(
 							"data" => $html,
 						));
-						$awm->gen_mail();
+						if(!$params["no_mail"])
+						{
+							$awm->gen_mail();
+						}
 						//echo "sent to $_to , from $mail_from_addr <br>";
 					}
 				}
@@ -790,7 +793,10 @@ class shop_order extends class_base
 							));
 						}
 						//strip_tags(str_replace("<br>", "\n",$html))
-						$awm->gen_mail();
+						if(!$params["no_mail"])
+						{
+							$awm->gen_mail();
+						}
 						//echo "sent to $eml , from $mail_from_addr <br>";
 					}
 				}
@@ -836,7 +842,10 @@ class shop_order extends class_base
 							));
 						}
 						//strip_tags(str_replace("<br>", "\n",$html))
-						$awm->gen_mail();
+						if(!$params["no_mail"])
+						{
+							$awm->gen_mail();
+						}
 						//echo "sent to ".$eml->prop("mail")." from $mail_from_addr <br>";
 					}
 				}
@@ -885,11 +894,91 @@ class shop_order extends class_base
 				$awm->htmlbodyattach(array(
 					"data" => $html
 				));
-				$awm->gen_mail();
+				if(!$params["no_mail"])
+				{
+					$awm->gen_mail();
+				}
 			}
 
 		} // if(this->order_center) end
 		return $oi->id();
+	}
+
+	/**
+		@attrib name=bank_return nologin=1
+		@param id required type=int acl=view
+	**/
+	function bank_return($arr)
+	{
+		$o = obj($arr["id"]);
+		$l = get_instance("languages");
+		
+		if($o->prop("lang_id"))
+		{
+			$_SESSION["ct_lang_id"] = $o->prop("lang_id");
+			$_SESSION["ct_lang_lc"] = $o->prop("lang_lc");
+			aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
+			aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
+		}
+
+	//	$order_id = shop_order_cart::do_create_order_from_cart($oc, NULL,array("no_mail" => 1));
+		$order_center = obj($o->prop("oc"));
+		aw_disable_acl();
+		$o->set_prop("confirmed" , 1);
+		$o->save();
+		aw_restore_acl();
+		$email_subj = t("Tellimus laost ");
+		$mail_from_addr = "automatweb@automatweb.com";
+		$mail_from_name = str_replace("http://", "", aw_ini_get("baseurl"));
+		
+		
+		if (is_oid($order_center->prop("cart")) && $this->can("view", $order_center->prop("cart")))
+		{
+			$cart_o = obj($order_center->prop("cart"));
+			if ($cart_o->prop("email_subj") != "")
+			{
+				$email_subj = $cart_o->prop("email_subj");
+			}
+		}
+		if ($order_center->prop("mail_from_addr"))
+		{
+			$mail_from_addr = $order_center->prop("mail_from_addr");
+		}
+		if ($order_center->prop("mail_from_name"))
+		{
+			$mail_from_name = $order_center->prop("mail_from_name");
+		}
+		
+		if($o->meta("user_data"))
+		{
+			$uta = $o->meta("user_data");
+			$_send_to = $uta["user6"];
+		}
+		elseif($o->prop("orderer_person"))
+		{
+			$po = obj($o->prop("orderer_person"));
+			if(is_oid($po->prop("email")))
+			{
+				$mo = obj($po->prop("email"));
+				$_send_to = $mo->prop("mail");
+			}
+		}
+
+		$awm = get_instance("protocols/mail/aw_mail");
+		$html = $this->show(array("id" => $o->id()));
+		//if(aw_global_get("uid") == "struktuur"){arr($_send_to);arr($html);arr($o->meta("user_data"));die(); }
+		$awm->create_message(array(
+			"froma" => $mail_from_addr,
+			"fromn" => $mail_from_name,
+			"subject" => $email_subj,
+			"to" => $_send_to,
+			"body" => strip_tags(str_replace("<br>", "\n",$html)),
+		));
+		$awm->htmlbodyattach(array(
+			"data" => $html
+		));
+		$awm->gen_mail();
+		return $this->mk_my_orb("show", array("id" => $o->id()), "shop_order");
 	}
 
 	/** shows thes order

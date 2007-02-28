@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.58 2007/02/26 14:23:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.59 2007/02/28 16:28:51 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1621,28 +1621,30 @@ class shop_order_cart extends class_base
 		
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
+	
+		$order_id = shop_order_cart::do_create_order_from_cart($oc, NULL,array("no_mail" => 1));
+		$bank_return = $this->mk_my_orb("bank_return", array("id" =>$order_id), "shop_order");
+		$_SESSION["bank_payment"]["url"] = $bank_return;
+		$order_obj = obj($order_id);
 		
 		$lang = aw_global_get("lang_id");
-		$oc->set_meta("lang" , $lang);
+		$order_obj->set_meta("lang" , $lang);
 		$l = get_instance("languages");
 		$_SESSION["ct_lang_lc"] = $l->get_langid($_SESSION["ct_lang_id"]);
-		$oc->set_meta("lang" , $lang);
-		$oc->set_meta("lang_id" , $_SESSION["ct_lang_id"]);
-		$oc->set_meta("lang_lc" , $_SESSION["ct_lang_lc"]);
-		$oc->save();
+		$order_obj->set_meta("lang_id" , $_SESSION["ct_lang_id"]);
+		$order_obj->set_meta("lang_lc" , $_SESSION["ct_lang_lc"]);
+		aw_disable_acl();
+		$order_obj->save();
+		aw_restore_acl();
 		
-		
-		
-		$bank_return = $this->mk_my_orb("bank_return", array("id" => $oc->id()));
-		$_SESSION["bank_payment"]["url"] = $bank_return;
+		if(aw_global_get("uid") == "struktuur"){arr($_SESSION["bank_payment"]["url"]); die();}
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $real_sum,
-			"reference_nr" => $oc->id(),
+			"reference_nr" => $order_id,
 			"payment_id" => $bank_payment,
 			"expl" => $order_id,
 		));
-
 		return $ret;
 	}
 	
@@ -1652,8 +1654,8 @@ class shop_order_cart extends class_base
 	**/
 	function bank_return($arr)
 	{
-		$oc = obj($arr["id"]);
-		$order_id = shop_order_cart::do_create_order_from_cart($oc);
+		$order = obj($arr["id"]);
+		$order_id = shop_order_cart::do_create_order_from_cart($oc, NULL,array("no_mail" => 1));
 		return $this->mk_my_orb("show", array("id" => $order_id), "shop_order");
 	}
 

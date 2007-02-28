@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.25 2007/02/27 15:15:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.26 2007/02/28 16:29:51 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -736,7 +736,11 @@ class bank_payment extends class_base
 		$VK_MAC = base64_encode($VK_signature);
 		$http = get_instance("protocols/file/http");
 		$link = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
-		if($test) $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
+		if($test)
+		{
+			 $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
+			$sender_id = "testvpos";
+		}
 		$handler = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
@@ -881,9 +885,8 @@ class bank_payment extends class_base
 		openssl_sign($data, $signature, $pkeyid);
 		openssl_free_key($pkeyid);
 		$mac=bin2hex($signature);
-		echo "https://pos.estcard.ee/webpos/servlet/iPAYServlet?action=$action&amp;ver=$ver&amp;id=$idnp&amp;ecuno=$ecuno&amp;eamount=$eamount&amp;cur=$cur&amp;datetime=$datetime&amp;mac=$mac&amp;lang=en";
+		//echo "https://pos.estcard.ee/webpos/servlet/iPAYServlet?action=$action&amp;ver=$ver&amp;id=$idnp&amp;ecuno=$ecuno&amp;eamount=$eamount&amp;cur=$cur&amp;datetime=$datetime&amp;mac=$mac&amp;lang=en";
 		//testi lõpp
-
 		$VK_message = $version;
 		$VK_message.= sprintf("%-10s", $sender_id);
 		$VK_message.= sprintf("%012s",$reference_nr);
