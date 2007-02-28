@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.27 2006/12/27 11:09:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.28 2007/02/28 09:03:43 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -139,6 +139,13 @@
 
 @property userch5 type=checkbox ch_value=1  field=userch5 group=data datatype=int
 @caption User-defined checkbox 5
+
+@groupinfo acl caption=&Otilde;igused
+@default group=acl
+	
+	@property acl type=acl_manager store=no
+	@caption &Otilde;igused
+
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl

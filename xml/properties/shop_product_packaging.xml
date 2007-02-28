@@ -378,6 +378,15 @@
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
+            <name>acl</name>
+            <table>aw_shop_packaging</table>
+            <group>acl</group>
+            <type>acl_manager</type>
+            <store>no</store>
+            <field>acl</field>
+            <caption>&amp;amp;Otilde;igused</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>aw_shop_packaging</table>
             <group>transl</group>
@@ -398,6 +407,9 @@
             <file>
                   <caption>Failid</caption>
             </file>
+            <acl>
+                  <caption>&amp;amp;Otilde;igused</caption>
+            </acl>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

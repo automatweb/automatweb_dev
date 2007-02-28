@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.19 2007/01/18 14:51:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.20 2007/02/28 09:03:43 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -80,6 +80,12 @@
 
 @property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h group=img table_fields=name,ord table_edit_fields=ord
 @caption Pildid
+
+@groupinfo acl caption=&Otilde;igused
+@default group=acl
+	
+	@property acl type=acl_manager store=no
+	@caption &Otilde;igused
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
