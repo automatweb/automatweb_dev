@@ -27,6 +27,26 @@
             <store>connect</store>
             <caption>Kehtib gruppidele</caption>
       </property>
+      <property>
+            <name>date_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <default>-1</default>
+            <caption>Kehtib alates</caption>
+      </property>
+      <property>
+            <name>date_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <default>-1</default>
+            <caption>Kehtib kuni</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OPENHOURS</syslog_type>
             <relationmgr>yes</relationmgr>

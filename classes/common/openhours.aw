@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.11 2007/02/26 21:35:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.12 2007/02/28 10:18:10 kristo Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -14,6 +14,12 @@
 
 @property apply_group type=relpicker field=meta method=serialize reltype=RELTYPE_GROUP multiple=1 store=connect 
 @caption Kehtib gruppidele
+
+@property date_from type=date_select field=meta method=serialize default=-1
+@caption Kehtib alates
+
+@property date_to type=date_select field=meta method=serialize default=-1
+@caption Kehtib kuni
 
 @reltype GROUP value=1 clid=CL_GROUP
 @caption Kehtib kasutajagrupile
