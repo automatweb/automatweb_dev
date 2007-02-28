@@ -8,7 +8,6 @@
 <tr>
 	<!-- SUB: CAL -->
 	<td valign="top" align="left" style="border: 1px black solid;">
-		{VAR:name}
 		{VAR:cal}
 	</td>
 	<!-- END SUB: CAL -->

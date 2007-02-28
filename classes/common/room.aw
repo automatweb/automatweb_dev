@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.165 2007/02/28 10:08:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.166 2007/02/28 12:48:23 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1537,8 +1537,6 @@ class room extends class_base
 		}
 		
 		$this->start = $arr["request"]["start"];
-		// do this later, so we can feed it the start/end date
-		//$this->generate_res_table($arr["obj_inst"]);
 
 		exit_function("get_calendar_tbl");
 		//see siis näitab miskeid valitud muid nädalaid
@@ -1617,6 +1615,7 @@ class room extends class_base
 		exit_function("get_calendar_tbl::3::genres");
 
 		$arr["step_length"] = $step_length * $arr["obj_inst"]->prop("time_step");
+		$this->step_length = $arr["step_length"];
 
 		if(is_object($cal_obj = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CALENDAR")))
 		{
@@ -2013,7 +2012,9 @@ class room extends class_base
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
 		$arr["settings"] = $settings;
+
 		$popup_menu = $this->get_room_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
+		$this->popup_menu_str = $popup_menu;
 		$t->set_caption(t("Broneerimine").$popup_menu);
 	}
 	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.20 2007/02/19 10:08:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.21 2007/02/28 12:48:22 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -589,6 +589,7 @@ class spa_bookings_overview extends class_base
 			$start = get_week_start();
 			$end = $start+7*24*3600;
 		}
+		$room2tbl = array();
 		foreach($r_ol->ids() as $room_id)
 		{
 			if ($first)
@@ -663,15 +664,92 @@ class spa_bookings_overview extends class_base
 				"room" => $room_id,
 				"prop" => $prop
 			));
+			$room2tbl[] = array(
+				"t" => $t,
+				"room" => $room_id,
+				"timespan" => $ri->step_length,
+				"popup_menu" => $ri->popup_menu_str
+			);
+		}
+
+		foreach($room2tbl as $idx => $dat)
+		{
+			$t =& $room2tbl[$idx]["t"];
+			$ts = $dat["timespan"];
+			$room_id = $room2tbl[$idx]["room"];
+
+			// try to join the table together with the old one
+			// if the timespans are the same
+			$ro = obj($room_id);
+
+			if ($ts == $prev_ts)
+			{
+				// add the contents of this table to the previous one
+				$prev_td = $prev_t->get_data();
+				$cur_td = $t->get_data();
+				foreach($prev_td as $prev_idx => $prev_dr)
+				{
+					$cur_dr = $cur_td[$prev_idx];
+					foreach($cur_dr as $cur_k => $cur_v)
+					{
+						$cur_k = "k".$idx.$cur_k;
+						$prev_dr[$cur_k] = $cur_v;
+					}
+					$prev_t->set_data($prev_idx, $prev_dr);
+				}
+
+				$new_fields = $t->get_defined_fields();
+				$prev_t->define_field(array(
+					"name" => "room".$room_id,
+					"caption" => $ro->name()
+				));
+				foreach($new_fields as $field_data)
+				{
+					$field_data["name"] = "k".$idx.$field_data["name"];
+					$field_data["chgbgcolor"] = "k".$idx.$field_data["chgbgcolor"];
+					$field_data["parent"] = "room".$room_id;
+					$field_data["id"] = "k".$idx.$field_data["id"];
+					$field_data["onclick"] = "k".$idx.$field_data["onclick"];
+					$field_data["rowspan"] = "k".$idx.$field_data["rowspan"];
+					$prev_t->define_field($field_data);
+				}
+				$room2tbl[$prev_main_idx]["popup_menu"] .= $dat["popup_menu"];
+				unset($room2tbl[$idx]);
+			}
+			else
+			{
+				$new_fields = $t->get_defined_fields();
+				$t->define_field(array(
+					"name" => "room".$room_id,
+					"caption" => $ro->name()
+				));
+				foreach($new_fields as $field_data)
+				{
+					$field_data["parent"] = "room".$room_id;
+					$t->remove_field($field_data["name"]);
+					$t->define_field($field_data);
+				}
+				$prev_t =& $t;
+				$prev_ts = $ts;
+				$prev_main_idx = $idx;
+			}
+		}
+
+
+
+		foreach($room2tbl as $idx => $dat)
+		{
+			$t =& $dat["t"];
+			$ts = $dat["timespan"];
+			$room_id = $dat["room"];
+			$ro = obj($room_id);
+			$t->set_caption(null);
 			$this->vars(array(
-				"cal" => html::get_change_url($ro->id(), array(
-					"return_url" => get_ru(), 
-					"group" => "calendar",
-					"start" => $_GET["start"],
-					"end" => $_GET["end"]
-				), parse_obj_name($ro->name()))."<br>".$t->get_html()
+				"cal" => $t->get_html().$dat["popup_menu"]
 			));
 			$cals .= $this->parse("CAL");
+			$prev_t =& $t;
+			$prev_ts = $ts;
 		}
 
 		$this->vars(array(

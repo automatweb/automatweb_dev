@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.105 2007/02/26 16:26:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.106 2007/02/28 12:48:24 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1758,6 +1758,12 @@ class aw_table extends aw_template
 			}
 		}
 		return count($this->rowdefs)-1;
+	}
+
+
+	function get_defined_fields()
+	{
+		return $this->rowdefs;
 	}
 
 	/**
