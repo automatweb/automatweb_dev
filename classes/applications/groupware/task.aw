@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.162 2007/02/27 16:32:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.163 2007/02/28 10:46:35 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2072,7 +2072,7 @@ class task extends class_base
 					
 					"price" => $stats_inst->convert_to_company_currency(array(
 						"sum" => $ob->prop("cost"),
-						"o" => $ob->prop("cost"),
+						"o" => $ob,
 						"company_curr" =>  $curr,
 					)),
 					"amt" => 1,
@@ -2080,7 +2080,7 @@ class task extends class_base
 					"amt_guess" => 1,
 					"sum" => $stats_inst->convert_to_company_currency(array(
 						"sum" => $ob->prop("cost"),
-						"o" => $ob->prop("cost"),
+						"o" => $ob,
 						"company_curr" =>  $curr,
 					)),
 					"has_tax" => 1,
