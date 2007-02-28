@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.33 2006/12/27 11:10:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.34 2007/02/28 07:42:20 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -319,66 +319,6 @@ class links extends class_base
 				{
 					$prop["value"] = "/".$arr["obj_inst"]->prop("docid");
 				}
-
-				if (is_oid($arr["obj_inst"]->id()))
-				{
-					if (aw_ini_get("extlinks.directlink") == 1)
-					{
-						$link_url = $arr["obj_inst"]->prop("url");
-						if (substr($link_url, 0, 3) == "www")
-						{
-							$link_url = "http://".$link_url;
-						}
-					}
-					else
-					{
-						$link_url = obj_link($arr["obj_inst"]->id());
-					}
-
-					$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
-					$alias_url = $this->mk_my_orb("gen_link_alias_for_doc", array(
-						"link_id" => $arr["obj_inst"]->id(),
-						"close" => true,
-					), CL_EXTLINK);
-
-					$prop["post_append_text"] .= "&nbsp;&nbsp;
-						<script language=\"javascript\">
-						function getDocID()
-						{
-							doc_id = 0;
-							q = window.parent.location.href;
-							ar = new Array();
-							ar = q.split('&');
-							for(i=0;i<ar.length;i++)
-							{
-								pair = ar[i].split('=');
-								if(pair[0]=='doc')
-								{
-									doc_url = pair[1];
-									break;
-								}
-							}
-							ar = doc_url.split('%26');
-							for(i=0;i<ar.length;i++)
-							{
-								pair=ar[i].split('%3D');
-								if(pair[0]=='id')
-								{
-									doc_id = pair[1];
-									break;
-								}
-							}
-							return doc_id;
-						}
-						FCK=window.parent.opener.FCK;
-						if (window.parent.name == \"InsertAWFupCommand\")
-						{
-							url = '".$alias_url."' + '&doc_id=' + getDocID();
-							document.write(\"<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</sc\"+\"ript><a href='\"+url+\"' onClick='submit_changeform();FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; SetAttribute( eSelected, \\\"_fcksavedurl\\\", \\\"$link_url\\\" ) ; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Insert into document</a>\");
-						}
-					</script>
-					";
-				}
 				break;
 
 			case "link_image_active_until":
@@ -465,6 +405,69 @@ class links extends class_base
 	function request_execute($obj)
 	{
 		$this->show(array("id" => $obj->id()));
+	}
+
+	function callback_post_save($arr)
+	{
+		if ($arr["request"]["save_and_doc"] != "")
+		{
+			if (aw_ini_get("extlinks.directlink") == 1)
+			{
+				$link_url = $arr["obj_inst"]->prop("url");
+				if (substr($link_url, 0, 3) == "www")
+				{
+					$link_url = "http://".$link_url;
+				}
+			}
+			else
+			{
+				$link_url = obj_link($arr["obj_inst"]->id());
+			}
+
+			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+			die("
+				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
+				<script language='javascript'>
+
+				function SetAttribute( element, attName, attValue ) 
+				{ 
+					if ( attValue == null || attValue.length == 0 ) 
+					{
+						element.removeAttribute( attName, 0 ) ;
+					} 
+					else 
+					{
+						element.setAttribute( attName, attValue, 0 ) ;
+					}
+				}
+
+				FCK=window.parent.opener.FCK;
+				var eSelected = FCK.Selection.MoveToAncestorNode(\"A\");
+				if (eSelected) 
+				{ 
+					eSelected.href=\"".$link_url."\";
+					eSelected.innerHTML=\"".$arr["obj_inst"]->prop("name")."\"; 
+					SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ; 
+				} 
+				else 
+				{ 
+					FCK.InsertHtml(aw_get_url_contents(\"$url\")); 
+				}
+ 
+				window.parent.close();
+			</script>
+			");
+		}
+
+
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		return "
+		if (window.parent.name == \"InsertAWFupCommand\")
+		{
+		nsbt = document.createElement('input');nsbt.name='save_and_doc';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja paiguta dokumenti")."'; el = document.getElementById('buttons');el.appendChild(nsbt);}";
 	}
 
 	function callback_mod_tab($arr)

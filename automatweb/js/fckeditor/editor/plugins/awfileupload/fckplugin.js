@@ -4,8 +4,8 @@ FCKCommands.RegisterCommand(
         'boo',
         FCKLang.AWFileUpload,
         'http://terryf.dev.struktuur.ee/automatweb/orb.aw?class=file&action=new&parent=1316', 
-        600, 
-        530
+        800, 
+        600
    )
 );
 
