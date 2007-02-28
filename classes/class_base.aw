@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.535 2007/02/26 12:46:15 kristo Exp $
+// $Id: class_base.aw,v 2.536 2007/02/28 15:16:46 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1018,6 +1018,7 @@ class class_base extends aw_template
 			"return" => isset($args["return"]) ? $args["return"] : null,
 			"period" => aw_global_get("period"),
 			"alias_to" => $request["alias_to"],
+			"just_saved" => $this->just_saved,
 			"alias_to_prop" => $request["alias_to_prop"],
 			"return_url" => $request["return_url"],
 		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
@@ -1646,9 +1647,8 @@ class class_base extends aw_template
 				"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
 				"content" => $args["content"],
 				"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]),
-				"save_message" => $_SESSION["just_saved"] ? t("Andmed salvestatud!") : null
+				"save_message" => $_GET["just_saved"] ? t("Andmed salvestatud!") : null
 			));
-			unset($_SESSION["just_saved"]);
 		//}
 		//else
 		//{
@@ -4074,7 +4074,7 @@ class class_base extends aw_template
 			$this->obj_inst->set_status(STAT_ACTIVE);
 		};
 
-		$_SESSION["just_saved"] = 1;
+		$this->just_saved = 1;
 		$this->obj_inst->save();
 
 		$this->id = $this->obj_inst->id();
