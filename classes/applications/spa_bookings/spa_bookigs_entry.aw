@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.35 2007/02/28 10:06:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.36 2007/02/28 10:08:04 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -853,7 +853,7 @@ class spa_bookigs_entry extends class_base
 			for ($i = 0; $i < $num_days; $i++)
 			{
 				$s = $range_from + ($i * 24 * 3600);
-				if ($s < $from || $s >= $to)
+				if ($s < $from || $s > $to)
 				{
 					continue;
 				}
@@ -909,7 +909,7 @@ class spa_bookigs_entry extends class_base
 					"booking" => $arr["booking"],
 					"not_verified" => $arr["not_verified"],
 					"retf" => $arr["retf"]
-				));
+				), get_class($this), false, false, "&amp;");
 				if (!$avail)
 				{
 					$d["aa".$i] = t("Broneeritud");
@@ -1072,13 +1072,24 @@ class spa_bookigs_entry extends class_base
 		{
 			$package = obj();
 			$package->set_class_id(CL_SHOP_PACKET);
+			$def_pkgs = array($arr["prod"] => $arr["prod"]);
 		}
 		else
 		{
 			$package = obj($bron->prop("package"));
+			$p_i = $package->instance();
+			$def_pkgs = $p_i->get_default_packagings_in_packet($package);
+		}
+		
+		if ($arr["prod"])
+		{
+			$_prod = obj($arr["prod"]);
+			if ($_prod->class_id() != CL_SHOP_PRODUCT)
+			{
+				$def_pkgs = array($arr["prod"] => $arr["prod"]);
+			}
 		}
 		$p_i = $package->instance();
-		$def_pkgs = $p_i->get_default_packagings_in_packet($package);
 		// go over all rooms and the first one that is available, we book
 		foreach($p_rooms as $room)
 		{
@@ -1472,7 +1483,8 @@ class spa_bookigs_entry extends class_base
 			$p = array(
 				"id" => reset(array_keys($rooms)),
 				"data" => array(
-					"customer" => $bron->prop("person")
+					"customer" => $bron->prop("person"),
+					"products" => array($arr["prod"] => 1)
 				),
 				"meta" => array(
 					"product_for_bron" => $arr["prod"],
@@ -1497,7 +1509,6 @@ class spa_bookigs_entry extends class_base
 			$bron->set_meta("extra_prods", $extra_prods);
 			$bron->save();
 		}
-
 		return aw_ini_get("baseurl")."/automatweb/closewin.html";
 	}
 

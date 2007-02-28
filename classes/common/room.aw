@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.164 2007/02/28 10:06:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.165 2007/02/28 10:08:04 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1752,6 +1752,7 @@ class room extends class_base
 								{
 									$title.=", ".$last_bron->prop("comment");
 								}
+								$imgstr = "";
 								foreach($products as $prod => $val)
 								{
 									if($val)
@@ -1763,6 +1764,16 @@ class room extends class_base
 											$title .= " ".$product->name();
 											if ($settings->prop("cal_show_prod_img"))
 											{
+												// if this is a packaging, then get the product for it
+												if ($product->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+												{
+													$_conns = $product->connections_to(array("from.class_id" => CL_SHOP_PRODUCT));
+													if (count($_conns))
+													{
+														$_con = reset($_conns);
+														$product = $_con->from();
+													}
+												}
 												$cons = $product->connections_from(array(
 													"type" => "RELTYPE_IMAGE",
 													"to.jrk" => $settings->prop("cal_show_prod_img_ord")
@@ -1770,8 +1781,11 @@ class room extends class_base
 												if (count($cons))
 												{
 													$con = reset($cons);
-													$ii = get_instance(CL_IMAGE);
-													$title .= $ii->make_img_tag_wl($con->prop("to"));
+													if ($con)
+													{
+														$ii = get_instance(CL_IMAGE);
+														$imgstr .= $ii->make_img_tag_wl($con->prop("to"));
+													}
 												}
 											}
 										}
@@ -1867,6 +1881,11 @@ class room extends class_base
 									"title" => $last_bron->prop("content")." ".$last_bron->comment()
 								));
 							}
+
+							if ($imgstr != "")
+							{
+								$d[$x] .= "<br>".$imgstr;
+							}
 							if(($last_bron->prop("end") - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step")) >= 1)
 							{
 								$rowspan[$x] = (int)((
@@ -1930,6 +1949,8 @@ class room extends class_base
 								}
 							}
 							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
+
+
 						}
 						else
 						if($this->is_buffer && !$arr["web"])
