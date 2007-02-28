@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.166 2007/02/28 12:48:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.167 2007/02/28 13:54:40 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -41,6 +41,9 @@
 
 		@property professions type=relpicker reltype=RELTYPE_PROFESSION multiple=1 parent=general_up
 		@caption Ametinimetused
+	
+		@property inherit_prods_from type=relpicker reltype=RELTYPE_ROOM parent=general_up
+		@caption P&auml;ri tooted ruumist
 	
 		property reservation_template type=select parent=general_up
 		caption Broneeringu template
@@ -292,6 +295,9 @@ caption Templeit
 
 @reltype PAUSES value=45 clid=CL_OPENHOURS
 @caption Pausid
+
+@reltype ROOM value=46 clid=CL_ROOM
+@caption Ruum
 
 */
 
@@ -2043,7 +2049,7 @@ class room extends class_base
 			$res = '<div id="bron_menu_'.$arr["obj_inst"]->id().'" class="menu" onmouseover="menuMouseover(event)">';
 		}
 		$m_oid = $arr["obj_inst"]->id();
-		$this->prod_data = $arr["obj_inst"]->meta("prod_data");
+		$this->prod_data = $this->get_prod_data_for_room($arr["obj_inst"]);
 		$item_list = $this->get_active_items($arr["obj_inst"]->id());
 		$item_list->arr();	//optimization to fetc all at once
 		$prod_list = $item_list->names();
@@ -2275,7 +2281,7 @@ class room extends class_base
 		static $times;
 		if ($prod_list == null)
 		{
-			$this->prod_data = $arr["obj_inst"]->meta("prod_data");
+			$this->prod_data = $this->get_prod_data_for_room($arr["obj_inst"]);
 			$item_list = $this->get_active_items($arr["obj_inst"]->id());
 			$prod_list = $item_list->names();
 			$times = array();
@@ -2818,7 +2824,7 @@ class room extends class_base
 			$ol = $ol->arr(); 
 		}
 		
-		$prod_data = $arr["obj_inst"]->meta("prod_data");
+		$prod_data = $this->get_prod_data_for_room($arr["obj_inst"]);
 		foreach($ol as $o)
 		{
 
@@ -3135,7 +3141,7 @@ class room extends class_base
 	function handle_product_add($product, $arr)
 	{
 		$room = obj($arr["id"]);
-		$prod_data = $room->meta("prod_data");
+		$prod_data = $this->get_prod_data_for_room($room);
 		$prod_data[$product->id()]["active"] = 1;
 		$room->set_meta("prod_data", $prod_data);
 		$room->save();
@@ -3275,7 +3281,7 @@ class room extends class_base
 		}
 		if($o->class_id() == CL_ROOM)
 		{
-			$this->prod_data = $o->meta("prod_data");
+			$this->prod_data = $this->get_prod_data_for_room($o);
 			$parents = $this->get_prod_tree_ids($o);
 			$ol = new object_list(array(
 				"class_id" => CL_SHOP_PRODUCT_PACKAGING,
@@ -3363,7 +3369,7 @@ class room extends class_base
 			$parents = $o->id();
 			
 		}
-		$this->prod_data = $o->meta("prod_data");
+		$this->prod_data = $this->get_prod_data_for_room($o);
 		$parents = $this->get_prod_tree_ids($o);
 		
 		$parents_temp = array();
@@ -4883,5 +4889,17 @@ class room extends class_base
 		return null;
 	}
 
+	/** returns data about products for room
+		@attrib api=1
+		@param room required type=object
+	**/
+	function get_prod_data_for_room($room)
+	{
+		if ($this->can("view", $room->prop("inherit_prods_from")))
+		{
+			$room = obj($room->prop("inherit_prods_from"));
+		}
+		return $room->meta("prod_data");
+	}		
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.50 2007/02/21 16:29:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.51 2007/02/28 13:54:36 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -641,14 +641,6 @@ class reservation extends class_base
 		{
 			$room_instance = get_instance(CL_ROOM);
 			$ol = $room_instance->get_prod_list($room);
-//			$prod_data = $room->meta("prod_data");
-//			foreach($ol->arr() as $id => $o)
-//			{
-//				if(!$prod_data[$id]["active"])
-//				{
-//					$ol->remove($id);
-//				}
-//			}
 		}
 		return $ol;
 	}
@@ -672,22 +664,8 @@ class reservation extends class_base
 					$soc = obj($w_obj->prop("order_center"));
 					$pl_ol =  $room_instance->get_active_items($room);
 					$pl = $pl_ol->arr();
-//					$pl = $wh->get_packet_list(array(
-//						"id" => $wh_id,
-//						"parent" => $room_obj->prop("resources_fld"),
-//						"only_active" => $soc->prop("only_active_items")
-//					));
 					
 					//peksab need välja mis ruumi juures aktiivseks pole läinud
-// 					$prod_data = $room_obj->meta("prod_data");
-// 					foreach($pl as $key=> $val)
-// 					{
-// 						if(!$prod_data[$val->id()]["active"])
-// 						{
-// 							unset($pl[$key]);
-// 						}
-// 					}
-// 					
 					$shop_order_center->do_sort_packet_list($pl, $soc->meta("itemsorts"), $soc->prop("grouping"));
 				
 					// get the template for products for this folder
@@ -762,7 +740,8 @@ class reservation extends class_base
 		
 		if(is_object($room))
 		{
-			$prod_data = $room->meta("prod_data");
+			$ri = $room->instance();
+			$prod_data = $ri->get_prod_data_for_room($room);
 		}
 		$image_inst = get_instance(CL_IMAGE);
 		$parent = 0;

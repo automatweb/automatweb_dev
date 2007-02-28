@@ -89,6 +89,17 @@
             <caption>Ametinimetused</caption>
       </property>
       <property>
+            <name>inherit_prods_from</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOM</reltype>
+            <parent>general_up</parent>
+            <caption>P&amp;amp;auml;ri tooted ruumist</caption>
+      </property>
+      <property>
             <name>conditions</name>
             <table>objects</table>
             <field>meta</field>
@@ -717,6 +728,11 @@
                   <clid>CL_OPENHOURS</clid>
                   <caption>Pausid</caption>
             </PAUSES>
+            <ROOM>
+                  <value>46</value>
+                  <clid>CL_ROOM</clid>
+                  <caption>Ruum</caption>
+            </ROOM>
       </reltypes>
       <layout>
             <general_split>

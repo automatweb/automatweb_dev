@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.36 2007/02/28 10:08:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.37 2007/02/28 13:54:39 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1291,9 +1291,10 @@ class spa_bookigs_entry extends class_base
 			"site_id" => array(),
 			"sort_by" => "objects.jrk"
 		));
+		$ri = get_instance(CL_ROOM);
 		foreach($rooms->arr() as $room)
 		{
-			$pd = $room->meta("prod_data");
+			$pd = $ri->get_prod_data_for_room($room);
 			if ($pd[$prod]["active"])
 			{
 				$p_rooms[$room->id()] = $room;
