@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.57 2007/02/26 13:45:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.58 2007/02/28 08:51:54 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -342,6 +342,7 @@ class conference_planning extends class_base
 					unset($days);
 					foreach($sd["main_function"] as $id => $data)
 					{
+						$active_day = !strcmp($id, $_GET["act_evt_no"])?"_ACTIVE":"";
 						$sc->vars(array(
 							"event_type" => ($data["event_type_chooser"] == 1)?$conference_types[$data["event_type_select"]]:$data["event_type_text"],
 							"persons_no" => $data["persons_no"],
@@ -355,7 +356,7 @@ class conference_planning extends class_base
 							"remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&evt=".$id,
 							"edit_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&act_evt_no=".$id,
 						));
-						$days .= $sc->parse("DAY");
+						$days .= $sc->parse("DAY".$active_day);
 					}
 					$sc->vars(array(
 						"DAY" => $days,
@@ -406,7 +407,8 @@ class conference_planning extends class_base
 					$edit = true;
 				}
 				foreach($mf["main_catering"] as $cat_no => $cat_data)
-				{					
+				{
+					$active_cat = !strcmp($cat_no, $_GET["act_cat_no"])?"_ACTIVE":"";
 					$sc->vars(array(
 						"catering_row_type" => ($cat_data["catering_type_chooser"] == 1)?$this->catering_types[$cat_data["catering_type_select"]]:$cat_data["catering_type_text"],
 						"catering_row_start_time" => $cat_data["catering_start_time"],
@@ -415,7 +417,7 @@ class conference_planning extends class_base
 						"edit_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&act_evt_no=".$_GET["act_evt_no"]."&act_cat_no=".$cat_no,
 						"catering_row_attendees_no" => $cat_data["catering_attendees_no"],
 					));
-					$cat_rows .= $sc->parse("MAIN_CATERING_ROW");
+					$cat_rows .= $sc->parse("MAIN_CATERING_ROW".$active_cat);
 				}
 
 				// catering types for dropdown
@@ -440,6 +442,17 @@ class conference_planning extends class_base
 					));
 				}
 
+				if(count($sd["main_function"]))
+				{
+					$e = end($sd["main_function"]);
+					$spl = split("[.]", $e["function_start_date"]);
+					$date = date("d.m.Y", mktime(0,0,0,$spl[1], ($spl[0]+1), $spl[2]));
+				}
+				else
+				{
+					$date = $sd["dates"][0]["arrival_date"];
+				}
+
 				$sc->vars(array(
 					"catering_attendees_no" => ($_t = $mf["main_catering"][$_GET["id"]]["catering_attendees_no"])?$_t:$mf["persons_no"],
 					"EVT_TYPE" => $evt_type,
@@ -452,7 +465,7 @@ class conference_planning extends class_base
 					"delegates_no" => $mf["delegates_no"],
 					"door_sign" => $mf["door_sign"],
 					"persons_no" => $mf["persons_no"],
-					"function_start_date" => $mf["function_start_date"]?$mf["function_start_date"]:$sd["dates"][0]["arrival_date"],
+					"function_start_date" => $mf["function_start_date"]?$mf["function_start_date"]:$date,
 					"function_start_time" => $mf["function_start_time"],
 					"function_end_time" => $mf["function_end_time"],
 					"24h" => $mf["24h"]?checked(true):"",
