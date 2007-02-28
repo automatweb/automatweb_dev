@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.93 2007/01/10 13:31:43 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.93 2007/01/10 13:31:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.94 2007/02/28 10:36:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.94 2007/02/28 10:36:20 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1935,12 +1935,19 @@ class bug_tracker extends class_base
 			$person_ol->arr();
 		}
 
-		$comment_ol = new object_list(array(
-			"parent" => $ol->ids(),
-			"class_id" => CL_BUG_COMMENT,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
+		if (!$ol->count())
+		{
+			$comment_ol = new object_list();
+		}
+		else
+		{
+			$comment_ol = new object_list(array(
+				"parent" => $ol->ids(),
+				"class_id" => CL_BUG_COMMENT,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+		}
 		$comments_by_bug = array();
 		foreach($comment_ol->arr() as $comm)
 		{
