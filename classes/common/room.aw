@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.168 2007/03/01 08:40:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.169 2007/03/01 17:59:50 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -495,14 +495,22 @@ class room extends class_base
 			"lang_id" => array(),
 			"resource" => $room->id(),
 			"end" => new obj_predicate_compare(OBJ_COMP_BETWEEN, time() - 84600, time()),
+			"client_arrived" => new obj_predicate_not(1),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"verified" => 1,
+					"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time())
+				)
+			))
 		));
  		$result = array();
   		foreach($reservations->arr() as $res)
   		{
-			if(($res->prop("client_arrived") == 0)  && ($res->prop("verified") || $res->prop("deadline") > time()))
-			{
+			//if(($res->prop("client_arrived") == 0)  && ($res->prop("verified") || $res->prop("deadline") > time()))
+			//{
 				$result[$res->prop("end")] = $res->id();
-			}
+			//}
   		}
 		usort($result);
 		if(sizeof($result))
@@ -1635,15 +1643,20 @@ class room extends class_base
 
 	
 		$num_rows = 0;
-		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $arr["obj_inst"]->prop("time_step"));
+		$time_step = $arr["obj_inst"]->prop("time_step");
+		$steps = (int)(86400 - (3600*$gwo["start_hour"] + 60*$gwo["start_minute"]))/($step_length * $time_step);
 		// this seems to fuck up in reval room calendar view and only display time to 15:00
 		//while($step < floor($steps))
-		while($step < 86400/($step_length * $arr["obj_inst"]->prop("time_step")))
+		$room_id = $arr["obj_inst"]->id();
+		$col_buffer = $settings->prop("col_buffer");
+		$buffer_time_string = $settings->prop("buffer_time_string");
+		$use_product_times = $arr["obj_inst"]->prop("use_product_times");
+		while($step < 86400/($step_length * $time_step))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
 			$x = 0;
-			$start_step = $today_start + $step * $step_length * $arr["obj_inst"]->prop("time_step");
-			$end_step = $start_step + $step_length * $arr["obj_inst"]->prop("time_step");
+			$start_step = $today_start + $step * $step_length * $time_step;
+			$end_step = $start_step + $step_length * $time_step;
 			$visible = 0;
 			while($x<$len)
 			{
@@ -1653,20 +1666,20 @@ class room extends class_base
 					$rowspan[$x] = 1;
 					if ($this->is_paused($start_step,$end_step))
 					{
-						if($settings->prop("col_buffer"))
+						if($col_buffer)
 						{
-							$col[$x] = "#".$settings->prop("col_buffer");
+							$col[$x] = "#".$col_buffer;
 						}
 						else
 						{
 							"#EE6363";
 						}
 						$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-						$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
+						$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
 					}
 					else
 					if($this->check_if_available(array(
-						"room" => $arr["obj_inst"]->id(),
+						"room" => $room_id,
 						"start" => $start_step,
 						"end" => $end_step,
 						
@@ -1674,16 +1687,11 @@ class room extends class_base
 					{
 						$arr["timestamp"] = $start_step;
 						$prod_menu="";
-						$time_step = $arr["obj_inst"]->prop("time_step");
-//						if ($arr["obj_inst"]->prop("selectbox_time_step") > 0)
-//						{
-//							$time_step = $arr["obj_inst"]->prop("selectbox_time_step");
-//						}
-						if($arr["obj_inst"]->prop("use_product_times"))
+						if($use_product_times)
 						{
-							$arr["menu_id"] = "menu_".$start_step."_".$arr["obj_inst"]->id();
-							$img_id = 'm_'.$arr["obj_inst"]->id().'_'.$start_step;
-							$prod_menu = '<a class="menuButton" href="javascript:void(0)" onclick="bron_disp_popup(\'bron_menu_'.$arr["obj_inst"]->id().'\', '.$start_step.',\''.$img_id.'\');" alt="" title="" id=""><img alt="" title="" border="0" src="'.aw_ini_get("icons.server").'/class_.gif" id="'.$img_id.'" ></a>';
+							$arr["menu_id"] = "menu_".$start_step."_".$room_id;
+							$img_id = 'm_'.$room_id.'_'.$start_step;
+							$prod_menu = '<a class="menuButton" href="javascript:void(0)" onclick="bron_disp_popup(\'bron_menu_'.$room_id.'\', '.$start_step.',\''.$img_id.'\');" alt="" title="" id=""><img alt="" title="" border="0" src="'.aw_ini_get("icons.server").'/class_.gif" id="'.$img_id.'" ></a>';
 						}
 						else
 						if ($settings->prop("bron_popup_immediate") && is_admin())
@@ -1693,7 +1701,7 @@ class room extends class_base
 								$url = html::get_new_url(CL_RESERVATION, $b_parent, array(
 									"return_url" => get_ru(),
 									"calendar" => $cal,
-									"resource" => $arr["obj_inst"]->id(),
+									"resource" => $room_id,
 								));
 								$w = 1000;
 								$h = 600;
@@ -1703,18 +1711,18 @@ class room extends class_base
 								$url = $this->mk_my_orb("admin_add_bron_popup", array(
 					                                "parent" => $b_parent,
 				                                	"calendar" => $cal,
-				        	                        "resource" => $arr["obj_inst"]->id(),
+				        	                        "resource" => $room_id,
 					                                "return_url" => get_ru(),
 			                	        	));
 								$w = 500;
 								$h = 400;
 							}
 
-							$onclick[$x] = "doBronExec('".$arr["obj_inst"]->id()."_".$start_step."', ".($step_length * $time_step).",null,null,'$url', '$w', '$h', 0)";
+							$onclick[$x] = "doBronExec('".$room_id."_".$start_step."', ".($step_length * $time_step).",null,null,'$url', '$w', '$h', 0)";
 						}
 						else
 						{
-							$onclick[$x] = "doBron('".$arr["obj_inst"]->id()."_".$start_step."' , ".($step_length * $time_step).")";
+							$onclick[$x] = "doBron('".$room_id."_".$start_step."' , ".($step_length * $time_step).")";
 							//$string = t("VABA");
 						}
 
@@ -1726,17 +1734,17 @@ class room extends class_base
 						$val = 0;
 						$string = t("VABA");
 						$col[$x] = "#E1E1E1";
-						if($_SESSION["room_reservation"][$arr["obj_inst"]->id()]["start"]<=$start_step && $_SESSION["room_reservation"][$arr["obj_inst"]->id()]["end"]>=$end_step)
+						if($_SESSION["room_reservation"][$room_id]["start"]<=$start_step && $_SESSION["room_reservation"][$room_id]["end"]>=$end_step)
 						{
 							//teeb selle kontrolli ka , et äkki tüübid ültse teist ruumi tahavad juba... et siis läheks sassi
-							if(!$_SESSION["room_reservation"]["room_id"] || $_SESSION["room_reservation"]["room_id"] == $arr["obj_inst"]->id() || in_array($arr["obj_inst"]->id(), $_SESSION["room_reservation"]["room_id"]))
+							if(!$_SESSION["room_reservation"]["room_id"] || $_SESSION["room_reservation"]["room_id"] == $room_id || in_array($room_id, $_SESSION["room_reservation"]["room_id"]))
 							{
 								$val = 1;
 								$col[$x] = "red";
 								$string = t("Broneeri");
 							}
 						}
-						$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$arr["obj_inst"]->id().']['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
+						$d[$x] = "<span>".$string."</span>".html::hidden(array("name"=>'bron['.$room_id.']['.$start_step.']' , "value" =>$val)). " " . $prod_menu;
 					}
 					else
 					{
@@ -1746,9 +1754,10 @@ class room extends class_base
 							$cus = t("BRON");
 							$title = "";
 							$codes = array();
-							if(is_oid($last_bron->prop("customer")) && $this->can("view", $last_bron->prop("customer")))
+							$last_cust = $last_bron->prop("customer");
+							if($this->can("view", $last_cust))
 							{
-								$customer = obj($last_bron->prop("customer"));
+								$customer = obj($last_cust);
 								$cus = $customer->name();
 						
 								$products = $last_bron->meta("amount");
@@ -1798,7 +1807,6 @@ class room extends class_base
 								}
 							}
 							$dx_p = array(
-								"url" => html::get_change_url($this->last_bron_id,array("return_url" => get_ru(),)),
 								"caption" => "<span><font color=#26466D><u>".$cus . "</u> " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
 							);
@@ -1810,6 +1818,8 @@ class room extends class_base
 							
 							if ($settings->prop("bron_no_popups"))
 							{
+								$dx_p["url"] = html::get_change_url($this->last_bron_id,array("return_url" => get_ru(),));
+
 								$d[$x] = html::href($dx_p);
 							}
 							else
@@ -1818,6 +1828,7 @@ class room extends class_base
 								$dx_p["height"] = 600;
 								$dx_p["scrollbars"] = 1;
 								$dx_p["href"] = "#";
+								$dx_p["url"] = $this->mk_my_orb("change", array("id" => $this->last_bron_id, "return_url" => get_ru()), "reservation");
 								$d[$x] = html::popup($dx_p);
 							}
 
@@ -1852,7 +1863,7 @@ class room extends class_base
 								));
 							}
 							$b_len = $last_bron->prop("end") - $last_bron->prop("start1");
-							if ($settings->prop("col_buffer") != "")
+							if ($col_buffer != "")
 							{
 								$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
 								$d[$x] .= " ".$buf_tm;
@@ -1891,14 +1902,14 @@ class room extends class_base
 							{
 								$d[$x] .= "<br>".$imgstr;
 							}
-							if(($last_bron->prop("end") - $start_step) / ($step_length * $arr["obj_inst"]->prop("time_step")) >= 1)
+							if(($last_bron->prop("end") - $start_step) / ($step_length * $time_step) >= 1)
 							{
 								$rowspan[$x] = (int)((
 									$last_bron->prop("end")
 									+ $this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron))
 									 - $start_step)
-									 / ($step_length * $arr["obj_inst"]->prop("time_step"))) ;
-								if((($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) % ($step_length * $arr["obj_inst"]->prop("time_step"))))
+									 / ($step_length * $time_step)) ;
+								if((($last_bron->prop("end")+$this->get_after_buffer(array("room" => $arr["obj_inst"], "bron" => $last_bron)) - $start_step) % ($step_length * $time_step)))
 								{
 									$rowspan[$x]++;
 								}
@@ -1906,9 +1917,9 @@ class room extends class_base
 							if($this->is_after_buffer)
 							{
 								$d[$x] = ""; 
-								if($settings->prop("col_buffer"))
+								if($col_buffer)
 								{
-									$col[$x] = "#".$settings->prop("col_buffer");
+									$col[$x] = "#".$col_buffer;
 								}
 								else
 								{
@@ -1931,7 +1942,7 @@ class room extends class_base
 								}
 							}				
 
-							if ($settings->prop("col_buffer") != "")
+							if ($col_buffer != "")
 							{
 								$buf = $this->get_before_buffer(array(
 									"room" => $arr["obj_inst"],
@@ -1940,7 +1951,7 @@ class room extends class_base
 								if ($buf > 0)
 								{
 									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-									$d[$x] = "<div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
+									$d[$x] = "<div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
 								}
 
 								$buf = $this->get_after_buffer(array(
@@ -1950,7 +1961,7 @@ class room extends class_base
 								if ($buf > 0 && ($last_bron->prop("end") < $end_step))
 								{
 									$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
+									$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
 								}
 							}
 							//$d[$x] = "<table border='1' style='width: 100%; height: 100%'><tr><td>".$d[$x]."</td></tr></table>";
@@ -1959,19 +1970,17 @@ class room extends class_base
 						}
 						else
 						if($this->is_buffer && !$arr["web"])
-						{;
-						//arr($settings->prop("col_buffer"));
-							if($settings->prop("col_buffer"))
+						{
+							if($col_buffer)
 							{
-								$col[$x] = "#".$settings->prop("col_buffer");
+								$col[$x] = "#".$col_buffer;
 							}
 							else
 							{
 								"#EE6363";
 							}
 							$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-							$d[$x] .= " <div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>".$settings->prop("buffer_time_string")." ".$buf_tm."</div>";
-							//$d[$x] = "<div style='position: relative; left: -7px; background: #".$settings->prop("col_buffer")."'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div style='padding-left: 5px; height: 90%'>".$d[$x]."</div>";
+							$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
 							
 						}
 						else
@@ -1987,7 +1996,7 @@ class room extends class_base
 					$d[$x] = "<span>".t("Suletud")."</span>";
 				}
 				//$ids[$x] = $arr["room"]."_".$start_step;
-				$ids[$x] = $arr["obj_inst"]->id()."_".$start_step;
+				$ids[$x] = $room_id."_".$start_step;
 				$x++;
 				$start_step += 86400;
 				$end_step += 86400;
@@ -1996,7 +2005,7 @@ class room extends class_base
 			if($visible)
 			{
 				$tmp_row_data = array(
-					"time" => date("G:i" , $today_start+ $step*$step_length*$arr["obj_inst"]->prop("time_step"))
+					"time" => date("G:i" , $today_start+ $step*$step_length*$time_step)
 				);
 				for($i = 0; $i < $len; $i++)
 				{
@@ -2494,28 +2503,21 @@ class room extends class_base
 
 	function get_settings_for_room($room)
 	{
+		static $cache;
+		if (isset($cache[$room->id()]))
+		{
+			return $cache[$room->id()];
+		}
+		enter_function("room::get_settings_for_room");
 		$si = get_instance(CL_ROOM_SETTINGS);
 		$rv = $si->get_current_settings($room);
 		if (!is_object($rv))
 		{
-			return obj();
+			$rv = obj();
 		}
+		$cache[$room->id()] = $rv;
+		exit_function("room::get_settings_for_room");
 		return $rv;
-
-		$settings = obj();
-                if (is_array($room->prop("settings")))
-                {
-                        $set_id = reset($room->prop("settings"));
-                }
-                else
-                {
-                        $set_id = $room->prop("settings");
-                }
-                if ($this->can("view", $set_id))
-                {
-                        $settings = obj($set_id);
-                }
-		return $settings;
 	}
 	
 	/**
@@ -4265,6 +4267,13 @@ class room extends class_base
 			"resource" => $room->id(),
 			"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $end),
 			"end" => new obj_predicate_compare(OBJ_COMP_GREATER, $start),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"verified" => 1,
+					"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time())
+				)
+			))
 		);
 		$use_prod_times = $room->prop("use_product_times");
 		
@@ -4273,39 +4282,30 @@ class room extends class_base
 		$customers = array();
 		foreach($reservations->arr() as $res)
 		{
-			if($res->prop("verified") || ($res->prop("deadline") > time()))
+			if($use_prod_times)
 			{
-				if($use_prod_times)
-				{
-					$start = $res->prop("start1")-$this->get_products_buffer(array("bron" => $res, "time" => "before"));
-					$this->res_table[$start]["end"] = $res->prop("end") + $this->get_products_buffer(array("bron" => $res, "time" => "after"));
-				}
-				else
-				{
-					$start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
-					$this->res_table[$start]["end"] = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
-					//tekitab eelnevale või eelnevatele cellidele nö. broneeringu, mis on lihtsalt broneeritud buffriks
-					if($room->prop("buffer_after"))
-					{//arr($start-$room->prop("buffer_after")*$room->prop("buffer_after_unit"));
-					
-/*					if (aw_global_get("uid") == "struktuur") {
-					arr(date("h:i  " , $start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")));
-					arr(date("h:i  " , $start));
-					arr("sdfsdfdsfsd");
-					}
-*/						$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["going_to_be_after_buffer"] = 1;
-						$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["end"] = $start;
-					}
-				}
-				if($res->prop("verified"))
-				{
-					$this->res_table[$start]["verified"] = 1;
-				}
-				$this->res_table[$start]["real_end"] = $res->prop("end");
-				$this->res_table[$start]["real_start"] = $res->prop("start1");
-				$this->res_table[$start]["id"] = $res->id();
-				$customers[] = $res->prop("customer");
+				list($before_buf, $after_buf) = $this->get_products_buffer(array("bron" => $res, "time" => "both"));
+				$start = $res->prop("start1")-$before_buf;
+				$this->res_table[$start]["end"] = $res->prop("end") + $after_buf;
 			}
+			else
+			{
+				$start = $res->prop("start1")-$room->prop("buffer_before")*$room->prop("buffer_before_unit");
+				$this->res_table[$start]["end"] = $res->prop("end") + $room->prop("buffer_after")*$room->prop("buffer_after_unit");
+				//tekitab eelnevale või eelnevatele cellidele nö. broneeringu, mis on lihtsalt broneeritud buffriks
+				if($room->prop("buffer_after"))
+				{
+					$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["end"] = $start;
+				}
+			}
+			if($res->prop("verified"))
+			{
+				$this->res_table[$start]["verified"] = 1;
+			}
+			$this->res_table[$start]["real_end"] = $res->prop("end");
+			$this->res_table[$start]["real_start"] = $res->prop("start1");
+			$this->res_table[$start]["id"] = $res->id();
+			$customers[] = $res->prop("customer");
 		}
 		ksort($this->res_table);
 		//if (aw_global_get("uid") == "struktuur") {arr($this->res_table);}
@@ -4415,7 +4415,7 @@ class room extends class_base
 		@param $bron required type=object
 			The reservation object
 		@param $time optional type=string
-			if "before" , calculates before buffer times, if "after", calculates after buffer times, if not set, calculates both
+			if "before" , calculates before buffer times, if "after", calculates after buffer times, if not set, calculates both, if set to "both" , returns array (before,after)
 	**/
 	function get_products_buffer($arr)
 	{
@@ -4424,8 +4424,15 @@ class room extends class_base
 		{
 			return 0;
 		}
+		static $cache;
+		if (isset($cache[$bron->id()][$time]))
+		{
+			return $cache[$bron->id()][$time];
+		}
 		$products = $bron->meta("amount");
 		$ret = 0;
+		$r_b = 0;
+		$r_a = 0;
 		if(is_array($products))
 		{
 			foreach($products as $product=> $amount)
@@ -4438,12 +4445,23 @@ class room extends class_base
 						$ret = $ret + $prod->prop("buffer_time_before") + $prod->prop("buffer_time_after")*$prod->prop("buffer_time_unit");
 					}
 					else
+					if ($time == "both")
+					{
+						$r_b = $r_b + $prod->prop("buffer_time_before")*$prod->prop("buffer_time_unit");
+						$r_a = $r_a + $prod->prop("buffer_time_after")*$prod->prop("buffer_time_unit");
+					}
+					else
 					{
 						$ret = $ret + $prod->prop("buffer_time_".$time)*$prod->prop("buffer_time_unit");
 					}
 				}
 			}
 		}
+		if ($time == "both")
+		{
+			$ret = array($r_b, $r_a);
+		}
+		$cache[$bron->id()][$time] = $ret;
 		return $ret;
 	}
 	
@@ -4714,6 +4732,10 @@ class room extends class_base
 
 	function _get_mark_arrived_pop($arr, $settings)
 	{
+		if (!($arr["user"] != 1 && !$settings->prop("no_cust_arrived_pop")))
+		{
+			return "";
+		}
 		$bron_id = $this->last_reservation_arrived_not_set($arr["obj_inst"]);
 		if($arr["user"] != 1 &&  is_array($bron_id) && count($bron_id) && !$settings->prop("no_cust_arrived_pop"))
 		{

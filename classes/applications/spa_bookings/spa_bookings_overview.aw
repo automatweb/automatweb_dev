@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.21 2007/02/28 12:48:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.22 2007/03/01 17:59:49 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -672,6 +672,7 @@ class spa_bookings_overview extends class_base
 			);
 		}
 
+		enter_function("spa_bookings_owverview::join_cals");
 		foreach($room2tbl as $idx => $dat)
 		{
 			$t =& $room2tbl[$idx]["t"];
@@ -735,7 +736,8 @@ class spa_bookings_overview extends class_base
 			}
 		}
 
-
+		exit_function("spa_bookings_owverview::join_cals");
+		enter_function("spa_bookings_owverview::draw_cals");
 
 		foreach($room2tbl as $idx => $dat)
 		{
@@ -751,6 +753,7 @@ class spa_bookings_overview extends class_base
 			$prev_t =& $t;
 			$prev_ts = $ts;
 		}
+		exit_function("spa_bookings_owverview::draw_cals");
 
 		$this->vars(array(
 			"CAL" => $cals,

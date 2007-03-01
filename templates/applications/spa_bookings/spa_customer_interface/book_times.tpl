@@ -1,11 +1,12 @@
-<a href='{VAR:add_pk_url}'>Lisa k&uuml;lastus</a><br><br><br>
+
+<a href='{VAR:add_pk_url}&section=11149'>Alustan broneerimist</a><br><br>
 <!-- SUB: BOOKING -->
 <div style='display: {VAR:disp_main};' id='bk{VAR:booking_id}'>
 <table border="0" width="100%">
 <tr><td>&nbsp;</td>
 </tr>
 <tr>
-	<td width="100%" height="26" align="center" style="background-image:url(http://kalevspa.struktuur.ee/img/taust_pealkiri.gif)" class="bronpealingid"><a href='javascript:void(0)' onClick='
+	<td width="100%" height="26" align="center" style="background-image:url(http://www.kalevspa.ee/img/taust_pealkiri.gif)" class="bronpealingid"><a href='javascript:void(0)' onClick='
 el=document.getElementById("bk{VAR:booking_id}");
 el.style.display == "none" ? el.style.display = "block" : el.style.display = "none";
 

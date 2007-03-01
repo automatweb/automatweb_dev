@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.51 2007/02/28 13:54:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.52 2007/03/01 17:59:49 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1128,7 +1128,9 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 {
 			$cust->set_prop("firstname", $arr["prop"]["value"]);
 			$cust->set_name($cust->prop("firstname")." ".$cust->prop("lastname"));
+			aw_disable_acl();
 			$cust->save();
+			aw_restore_acl();
 		}
 		return PROP_IGNORE;
 	}
@@ -1146,7 +1148,9 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 {
                         $cust->set_prop("lastname", $arr["prop"]["value"]);
                         $cust->set_name($cust->prop("firstname")." ".$cust->prop("lastname"));
+			aw_disable_acl();
                         $cust->save();
+			aw_restore_acl();
                 }
                 return PROP_IGNORE;
         }
@@ -1180,7 +1184,9 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 					"type" => "RELTYPE_PHONE"
 				));
 				$cust->set_prop("phone", $ph->id());
+				aw_disable_acl();
 				$cust->save();
+				aw_restore_acl();
 			}
                 }
                 return PROP_IGNORE;
@@ -1216,7 +1222,9 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                                         "type" => "RELTYPE_EMAIL"
                                 ));
                                 $cust->set_prop("email", $ph->id());
+				aw_disable_acl();
                                 $cust->save();
+				aw_restore_acl();
                         }
                 }
                 return PROP_IGNORE;

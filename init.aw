@@ -917,6 +917,12 @@ function aw_shutdown()
 			print "$k = $v\n";
 		};
 		echo " querys = ".aw_global_get("qcount")." \n";
+		if (function_exists("get_time"))
+		{
+			echo "total  = ".(get_time()-$GLOBALS["__START"])."\n";
+			echo "proc  = ".($GLOBALS["__END_DISP"]-$GLOBALS["__START"])."\n";
+			echo "print  = ".(get_time()-$GLOBALS["__END_DISP"])."\n";
+		}
 		echo "-->\n";
 	}
 

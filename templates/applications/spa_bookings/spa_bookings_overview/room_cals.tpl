@@ -2,8 +2,8 @@
 <form name="changeform" action="reforb.{VAR:ext}" method="POST">
 {VAR:reforb}
 
-{VAR:toolbar}
 {VAR:picker}
+{VAR:toolbar}
 <table cellpadding="5" cellspacing="10" border="0">
 <tr>
 	<!-- SUB: CAL -->

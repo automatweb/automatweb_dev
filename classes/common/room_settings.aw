@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.19 2007/02/26 14:25:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.20 2007/03/01 17:59:50 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -268,8 +268,93 @@ class room_settings extends class_base
 		if(is_oid($room) && $this->can("view" , $room))
 		{
 			$room = obj($room);
-			$oids = $room->prop("settings");
 		}
+		$oids = safe_array($room->prop("settings"));
+		$objs = array();
+		foreach($oids as $set_oid)
+		{
+			$objs[] = obj($set_oid);
+		}
+
+		foreach($objs as $settings)
+		{
+			if (in_array(aw_global_get("uid_oid"), $settings->prop("users")))
+			{
+				return $settings;
+			}
+		}
+
+		foreach($objs as $settings)
+		{
+			if (count(array_intersect($settings->prop("groups"), aw_global_get("gidlist_oid"))))
+			{
+				return $settings;
+			}
+		}
+
+		$pers = $settings->prop("persons");
+		if (is_array($pers) && count($pers))
+		{
+			$cur_p = get_current_person();
+			foreach($objs as $settings)
+			{
+				if (in_array($cur_p->id(), $pers))
+				{
+					return $settings;
+				}
+			}
+		}
+
+		$cos = $settings->prop("cos");
+		if (is_array($cos) && count($cos))
+		{
+			$cur_co = get_current_company();
+			foreach($objs as $settings)
+			{
+				if (in_array($cur_co->id(), $cos))
+				{
+					return $settings;
+				}
+			}
+		}
+
+		$sects = $settings->prop("sects");
+		if (is_array($sects) && count($sects))
+		{
+			$cd = get_instance("applications/crm/crm_data");
+			$cursec = $cd->get_current_section();
+			foreach($objs as $settings)
+			{
+				if (in_array($cursec->id(), $sects))
+				{
+					return $settings;
+				}
+			}
+		}
+
+		$profs = $settings->prop("profs");
+		if (is_array($profs) && count($profs))
+		{
+			$cd = get_instance("applications/crm/crm_data");
+			$curprof = $cd->get_current_profession();
+			foreach($objs as $settings)
+			{
+				if (in_array($curprof->id(), $profs))
+				{
+					return $settings;
+				}
+			}
+		}
+
+		foreach($objs as $settings)
+		{
+			if ($settings->prop("everyone"))
+			{
+				return $settings;
+			}
+		}
+		return null;
+
 		$u = get_instance(CL_USER);
 		$curp = $u->get_current_person();
 		$curco = $u->get_current_company();

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2005 Frederico Caldeira Knabben
  * 
@@ -125,7 +125,7 @@ SelectionFieldProp	: "Selection Field Properties",	//MISSING
 TextareaProp		: "Textarea Properties",	//MISSING
 FormProp			: "Form Properties",	//MISSING
 
-FontFormats			: "Tavaline;Vormindatud;Aadress;Pealkiri 1;Pealkiri 2;Pealkiri 3;Pealkiri 4;Pealkiri 5;Pealkiri 6",
+FontFormats			: "Tavaline;Lõik;Vormindatud;Aadress;Pealkiri 1;Pealkiri 2;Pealkiri 3;Pealkiri 4;Pealkiri 5;Pealkiri 6",
 
 // Alerts and Messages
 ProcessingXHTML		: "Töötlen XHTML. Palun oota...",

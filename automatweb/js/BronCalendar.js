@@ -5,6 +5,7 @@ var isClicked=false; // used in changeRoomReservationLength(). it is either fals
 bronTexts["BRON"] = "Broneeri";
 bronTexts["FREE"] = "VABA";
 var bronErrors = Array();
+var current_timestamp = 0;
 bronErrors["CANT_BRON"] = "Ei saa broneerida";
 
 /**
@@ -72,10 +73,9 @@ function doBron (strId, intCalendarIntervall, intRoomReservationLength, intProdu
 		sel = document.getElementById("room_reservation_length");
 		intRoomReservationLength = sel.options[sel.selectedIndex].value*intCalendarIntervall;
 	}
-	
 	if (intProduct)
 		document.getElementById("product").value = intProduct;
-	
+
 	return setBrons (strId, intCalendarIntervall, intRoomReservationLength);
 }
 
@@ -94,7 +94,7 @@ function changeRoomReservationLength(that)
 function setBrons (strId, intCalendarIntervall, intRoomReservationLength)
 {
 	setArrBronsTry (strId, intCalendarIntervall, intRoomReservationLength);
-	
+
 	if (canBron())
 	{
 		drawBrons();
@@ -115,7 +115,7 @@ function drawBrons()
 	var strId;
 	clearBrons ();
 	arrBronsActive = arrBronsTry;
-	
+
 	for (i=0;i<arrBronsActive.length;i++)
 	{
 		strId = arrBronsActive[i];
@@ -123,6 +123,10 @@ function drawBrons()
 		document.getElementById(strId).parentNode.firstChild.style.background = "red";
 		if (navigator.userAgent.indexOf("MSIE") > 0)
 		{
+			if (""+document.getElementById(strId).childNodes[0] != "[Object]")
+			{
+				continue;
+			}
 			document.getElementById(strId).childNodes[0].innerHTML = bronTexts["BRON"];
 			document.getElementById(strId).childNodes[1].value = 1;
 		}

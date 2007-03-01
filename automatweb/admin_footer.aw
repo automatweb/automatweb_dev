@@ -199,6 +199,10 @@ if (!$styles_done)
 	$str .= $styles;
 };
 
+if (function_exists("get_time"))
+{
+	$GLOBALS["__END_DISP"] = get_time();
+}
 if ($GLOBALS["__aw_op_handler"])
 {
 	$f = $GLOBALS["__aw_op_handler"][1];
@@ -208,9 +212,9 @@ else
 {
 	echo $str;
 }
+flush();
 aw_shutdown();
 
-flush();
 
 if ($_SESSION["user_history_count"] > 0)
 {

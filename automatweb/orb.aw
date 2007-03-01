@@ -1,5 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.24 2006/08/28 11:02:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.25 2007/03/01 17:59:47 kristo Exp $
+	function get_time() 
+	{
+		list($micro,$sec) = explode(" ",microtime());
+		return ((float)$sec + (float)$micro);
+	}
+$GLOBALS["__START"] = get_time();
 if (!ini_get("safe_mode"))
 {
 	set_time_limit(0);
@@ -80,12 +86,14 @@ if (!$t->prog_acl_auth("view", PRG_MENUEDIT))
 // but there seems to be no sure way to do that unfortunately. 
 
 $orb = new orb();
+enter_function("orb::process_request");
 $orb->process_request(array(
 	"class" => $class,
 	"action" => $action,
 	"vars" => $vars,
 	"silent" => false,
 ));
+exit_function("orb::process_request");
 
 $content = $orb->get_data();
 

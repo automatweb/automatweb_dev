@@ -24,9 +24,11 @@
 
 body
 {
-font-family: Arial, Helvetica, sans-serif; 
-font-size: 11px;
+font-family: Verdana, Arial, Helvetica, sans-serif; 
+font-size: 12px;
 background-color: #ffffff;
+line-height: 18px;
+color: #666666;
 }
 
 /* 
@@ -63,22 +65,18 @@ P, UL, LI
 	background-color: #ff9933;
 }
 
-H1 { padding: 0; margin: 0 0 5px 0; line-height: normal; font-family: Tahoma, Arial, Helvetica, sans-serif; font-weight: normal; color: #333; font-size: 18px; }
-H2, H3, H4, H5, H6 { padding: 0; margin: 0 0 5px 0; line-height: normal; color: #333; font-family: Tahoma, Arial, Helvetica, sans-serif; }
+h1 {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:18px;
+	color:#99cc00;
+	line-height:26px;
+}
+H2, H3, H4, H5, H6 { padding: 0; margin: 0 0 5px 0; line-height: normal; color: #99cc00; font-family: Verdana,Arial; }
 
-H2 { font-size: 18px; font-family: Tahoma, Arial, Helvetica, sans-serif; border-bottom: 1px solid #dcdcdc; margin-bottom: 13px; font-weight: normal; }
-H3 { font-size: 17px; font-family: Tahoma, Arial, Helvetica, sans-serif; border-bottom: 1px solid #dcdcdc; margin-bottom: 13px; font-weight: normal; }
-H4 { font-size: 14px; font-weight: bold; font-family: Tahoma, Arial, Helvetica, sans-serif; position: relative;margin-top: 10px;}
-H5 { font-size: 11px; font-weight: bold; border-bottom: 1px solid #dcdcdc; }
+H2 { font-size: 18px; font-weight: normal; }
+H3 { font-size: 17px; font-weight: normal; }
+H4 { font-size: 14px;}
+H5 { font-size: 11px;}
 H6 { font-size: 11px; font-weight: bold; font-style: italic;  }
-
-	/* Quotation */
-	div.quote { background: white url(http://new.revalhotels.com/img/gfx/bg15c.gif) 0 100% no-repeat; padding: 10px 10px 5px 10px; margin: 15px 0 15px 0; }
-	div.quote p { background: url(http://new.revalhotels.com/img/gfx/bg20.gif) 0 0 no-repeat; padding: 5px 0 0 50px; margin: 0; clear: both; min-height: 30px; vertical-align: bottom; font-weight: bold; }
-	div.quote h4 { background: url(http://new.revalhotels.com/img/gfx/bg20.gif) 0 0 no-repeat; padding: 5px 0 0 50px; margin: 0; clear: both; min-height: 30px; vertical-align: bottom; font-weight: bold; }
-	* HTML DIV.quote P { min-height: 20px; }
-	h4 div.quote { background: white url(http://new.revalhotels.com/img/gfx/bg15c.gif) 0 100% no-repeat; padding: 10px 10px 5px 10px; margin: 15px 0 15px 0; }
-	h4 div.quote { background: url(http://new.revalhotels.com/img/gfx/bg20.gif) 0 0 no-repeat; padding: 5px 0 0 50px; margin: 0; clear: both; min-height: 30px; vertical-align: bottom; font-weight: bold; }
-	h4 div.quote { background: url(http://new.revalhotels.com/img/gfx/bg20.gif) 0 0 no-repeat; padding: 5px 0 0 50px; margin: 0; clear: both; min-height: 30px; vertical-align: bottom; font-weight: bold; }
 
 .Title {color: #af151f; font-size: 14px; font-weight:bold}
