@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.167 2007/02/28 13:54:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.168 2007/03/01 08:40:39 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3708,6 +3708,10 @@ class room extends class_base
 			if(!$sum[$currency])
 			{
 				$sum[$currency] = 0;
+			}
+			if (!$rv["room_price"][$currency])
+			{
+				$rv["room_price"][$currency] = 0;
 			}
 			if($people > $room->prop("normal_capacity"))
 			{
