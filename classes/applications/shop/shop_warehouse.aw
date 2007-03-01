@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.46 2006/11/30 15:57:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.47 2007/03/01 11:10:49 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1207,8 +1207,10 @@ class shop_warehouse extends class_base
 	{
 		$this->_init_storage_list_tbl($arr["prop"]["vcl_inst"]);
 
+		$tr = $this->get_packet_folder_list(array("id" => $arr["obj_inst"]->id()));
 		$items = $this->get_packet_list(array(
-			"id" => $arr["obj_inst"]->id()
+			"id" => $arr["obj_inst"]->id(),
+			"parent" => $tr[1]->ids()
 		));
 		foreach($items as $i)
 		{

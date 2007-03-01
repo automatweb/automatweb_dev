@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_reception.aw,v 1.4 2005/03/30 12:17:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_reception.aw,v 1.5 2007/03/01 11:10:49 kristo Exp $
 // shop_warehouse_reception.aw - Lao sissetulek 
 /*
 
@@ -12,6 +12,8 @@
 @caption Kinnita
 
 @groupinfo income caption="Sissetuleku sisu"
+
+@property income_tb type=toolbar no_caption=1 store=no group=income
 
 @property income group=income field=meta method=serialize type=table no_caption=1
 
@@ -36,6 +38,10 @@ class shop_warehouse_reception extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "income_tb":
+				$this->_income_tb($arr);
+				break;
+
 			case "income":
 				$this->do_inc_table($arr);
 				break;
@@ -49,6 +55,18 @@ class shop_warehouse_reception extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function _income_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$ps = get_instance("vcl/popup_search");
+		$tb->add_cdata(
+			$ps->get_popup_search_link(array(
+				"pn" => "sitm",
+				"clid" => array(CL_SHOP_PRODUCT)
+			))
+		);
 	}
 
 	function set_property($arr = array())
@@ -135,6 +153,17 @@ class shop_warehouse_reception extends class_base
 		}
 		$o->set_prop("confirm", 1);
 		$o->save();
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["sitm"] = "0";
+	}
+
+	function callback_post_save($arr)
+	{
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["sitm"], 1 /* RELTYPE_PRODUCT */);
 	}
 }
 ?>

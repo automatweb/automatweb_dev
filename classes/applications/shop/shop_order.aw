@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.49 2007/02/28 16:28:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.50 2007/03/01 11:10:49 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -613,6 +613,7 @@ class shop_order extends class_base
 				continue;
 			}
 			$i_o = obj($iid);
+			$orig_count = $i_o->prop("item_count");
 			$i_inst = $i_o->instance();
 			$price = $i_inst->get_price($i_o);
 			$oi->connect(array(
@@ -628,6 +629,13 @@ class shop_order extends class_base
 				}
 				$mp[$iid] = $quant["items"];
 				$sum += ($quant["items"] * $price);
+				$i_o->set_prop("item_count", $i_o->prop("item_count")-$quant["items"]);
+			}
+			if ($i_o->prop("item_count") != $orig_count)
+			{
+				aw_disable_acl();
+				$i_o->save();
+				aw_restore_acl();
 			}
 		}
 		$oi->set_meta('ord_item_data', $this->order_items);
