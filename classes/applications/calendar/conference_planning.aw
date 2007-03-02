@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.59 2007/03/02 12:47:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.60 2007/03/02 13:10:25 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -32,6 +32,8 @@
 @property redir_doc type=relpicker field=meta method=serialize reltype=RELTYPE_REDIR_DOC
 @caption Edasisuunamise dokument
 
+@property send_email type=checkbox field=meta method=serialize ch_value=1 default=0
+@caption Saada email
 @property email type=relpicker field=meta method=serialize reltype=RELTYPE_EMAIL
 @caption Saatja E-mail
 
@@ -1423,11 +1425,14 @@ class conference_planning extends class_base
 		$c_obj = obj($arr["conference_planner"]);
 		$url .= ($c_obj->prop("redir_doc"))?"/".$c_obj->prop("redir_doc"):"";
 		aw_session_set("tmp_conference_data", array());
-		$this->do_send_emails(array(
-			"oid" => $obj->id(),
-			"emails" => $this->gather_email_addresses($data["selected_search_result"]),
-			"c_planner" => $c_obj->id(),
-		));
+		if($c_obj->prop("send_email") == 1)
+		{
+			$this->do_send_emails(array(
+				"oid" => $obj->id(),
+				"emails" => $this->gather_email_addresses($data["selected_search_result"]),
+				"c_planner" => $c_obj->id(),
+			));
+		}
 		return $url;
 	}
 	

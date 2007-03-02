@@ -79,6 +79,16 @@
             <caption>Edasisuunamise dokument</caption>
       </property>
       <property>
+            <name>send_email</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <ch_value>1</ch_value>
+            <caption>Saada email</caption>
+      </property>
+      <property>
             <name>email</name>
             <table>objects</table>
             <group>general</group>
