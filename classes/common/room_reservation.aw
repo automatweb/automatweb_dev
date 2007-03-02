@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.54 2007/02/27 15:15:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.55 2007/03/02 13:40:14 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1226,6 +1226,17 @@ class room_reservation extends class_base
 		}
 		//tegelt teised ruumid 'ra nullida oleks vaja ... vist.... jätame selle tuleviku tarkadele otsustada
 		$_SESSION["room_reservation"]["room_id"] = $room;
+		
+		//teeb kohe algul broneeringu ära... igal kalenri submittimisel salvestab
+		$bron_id = $_SESSION["room_reservation"][$room]["bron_id"];
+		$_SESSION["room_reservation"][$room]["bron_id"] = $room_inst->make_reservation(array(
+			"not_verified" => 1,//veebi poolelt et ei kinnitaks ära
+			"id" => $room,
+			"res_id" => $bron_id,
+			"data" => $_SESSION["room_reservation"][$room],
+			"tpl" => $tpl,
+		));
+		
 		$ret.= '<script language="javascript">
 			window.opener.document.getElementById("stay").value=1;
 			window.opener.document.getElementById("changeform").submit();
@@ -1363,7 +1374,9 @@ class room_reservation extends class_base
 		$loc = obj($r->prop("location"));
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $loc->prop("bank_payment");
+		//if(aw_global_get("uid") == "struktuur"){arr($this->mk_my_orb("bank_return", array("id" => reset($bron_ids)))); die();}
 		$_SESSION["bank_payment"]["url"] = null;
+		
 		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => reset($bron_ids)));
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
