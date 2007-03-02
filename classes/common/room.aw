@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.169 2007/03/01 17:59:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.170 2007/03/02 09:14:28 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1545,9 +1545,9 @@ class room extends class_base
 		$this->openhours = $this->get_current_openhours_for_room($arr["obj_inst"]);
 		$this->pauses = $this->get_current_pauses_for_room($arr["obj_inst"]);
 
-		if(is_object($this->openhours))
+		if(is_array($this->openhours))
 		{
- 			$open = $this->open = $open_inst->get_times_for_date($this->openhours, $time);
+ 			$open = $this->open = $open_inst->get_times_for_date(reset($this->openhours), $time);
 		}
 		
 		$this->start = $arr["request"]["start"];
@@ -1557,7 +1557,7 @@ class room extends class_base
 		enter_function("get_calendar_tbl::2");
 		$start_hour = 0;
 		$start_minute = 0;
-		if(is_object($this->openhours))
+		if(is_array($this->openhours))
 		{
 			$gwo = $this->get_when_opens();
 			extract($gwo);
@@ -1660,7 +1660,7 @@ class room extends class_base
 			$visible = 0;
 			while($x<$len)
 			{
-				if(!is_object($this->openhours) || $this->is_open($start_step,$end_step))
+				if(!is_array($this->openhours) || $this->is_open($start_step,$end_step))
 				{
 					$visible=1;
 					$rowspan[$x] = 1;
@@ -2221,7 +2221,7 @@ class room extends class_base
 		}
 		$start_hour = 0;
 		$start_minute = 0;
-		$opens = $this->open_inst->get_opening_time($this->openhours);
+		$opens = $this->open_inst->get_opening_time(reset($this->openhours));
 		return array("start_hour" => $opens["hour"], "start_minute" => $opens["minute"]);
 	}
 
@@ -2241,15 +2241,27 @@ class room extends class_base
 		}
 		if ($this->pauses)
 		{
-			$pauses = $this->open_inst->get_times_for_date($this->pauses, $start);
-			if(
-				is_array($pauses) && 
-				($pauses[0] || $pauses[1]) && 
-				($pauses[1]-1 >= $end_this) && 
-				($pauses[0] <= $start_this)
-			)
+			foreach($this->pauses as $pause)
 			{
-				return true;
+				if ($pause->prop("date_from") > 100 && $start < $pause->prop("date_from"))
+				{
+					continue;
+				}
+				if ($pause->prop("date_to") > 100 && $start > $pause->prop("date_to"))
+				{
+					continue;
+				}
+
+				$pauses = $this->open_inst->get_times_for_date($pause, $start);
+				if(
+					is_array($pauses) && 
+					($pauses[0] || $pauses[1]) && 
+					($pauses[1]-1 >= $end_this) && 
+					($pauses[0] <= $start_this)
+				)
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -2269,17 +2281,32 @@ class room extends class_base
 		{
 			$end_this+=24*3600;
 		}
-		$open = $this->open_inst->get_times_for_date($this->openhours, $start);
-		if(
-			is_array($open) && 
-			($open[0] || $open[1]) && 
-			($open[1]-1 >= $end_this) && 
-			($open[0] <= $start_this)
-		)
+
+		foreach($this->openhours as $oh)
 		{
-			return true;
+			if ($oh->prop("date_from") > 100 && $start < $oh->prop("date_from"))
+			{
+				continue;
+			}
+			if ($oh->prop("date_to") > 100 && $start > $oh->prop("date_to"))
+			{
+				continue;
+			}
+			$open = $this->open_inst->get_times_for_date($oh, $start);
+			if(
+				is_array($open) && 
+				($open[0] || $open[1]) && 
+				($open[1]-1 >= $end_this) && 
+				($open[0] <= $start_this)
+			)
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
 		}
-		else return false;
 	}
 
 	function get_prod_menu($arr, $immediate = false)
@@ -2325,7 +2352,7 @@ class room extends class_base
 
 	function is_open_day($time)
 	{
-		if(!is_object($this->openhours))
+		if(!is_array($this->openhours))
 		{
 			return true;
 		}
@@ -2333,13 +2360,27 @@ class room extends class_base
 		{
 			$this->open_inst = get_instance(CL_OPENHOURS);
 		}
-		$open = $this->open_inst->get_times_for_date($this->openhours, $time);
-		if($open[0] || $open[1])
+
+		foreach($this->openhours as $oh)
 		{
-			return true;
+			if ($oh->prop("date_from") > 100 && $start < $oh->prop("date_from"))
+			{
+				continue;
+			}
+			if ($oh->prop("date_to") > 100 && $start > $oh->prop("date_to"))
+			{
+				continue;
+			}
+			$open = $this->open_inst->get_times_for_date($oh, $time);
+			if($open[0] || $open[1])
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
 		}
-		else return false;
-		
 	}
 
 	function _init_calendar_t(&$t,$time=0, $len = 7)
@@ -4869,24 +4910,25 @@ class room extends class_base
 	**/
 	function get_current_openhours_for_room($room)
 	{
+		$rv = array();
 		$gl = aw_global_get("gidlist_oid");
 		foreach($room->connections_from(array("type" => "RELTYPE_OPENHOURS")) as $c)
 		{
 			$oh = $c->to();
-			if ($oh->prop("date_from") > 100 && time() < $oh->prop("date_from"))
+			/*if ($oh->prop("date_from") > 100 && time() < $oh->prop("date_from"))
 			{
 				continue;
 			}
 			if ($oh->prop("date_to") > 100 && time() > $oh->prop("date_to"))
 			{
 				continue;
-			}
+			}*/
 			if (!is_array($oh->prop("apply_group")) || !count($oh->prop("apply_group")) || count(array_intersect($gl, safe_array($oh->prop("apply_group")))))
 			{
-				return $oh;
+				$rv[] = $oh;
 			}
 		}
-		return null;
+		return count($rv) ? $rv : null;
 	}
 
 	/** Returns the openhours object for the current user, or null if none applies, for pauses in the room's schedule
@@ -4895,24 +4937,25 @@ class room extends class_base
 	**/
 	function get_current_pauses_for_room($room)
 	{
+		$rv = array();
 		$gl = aw_global_get("gidlist_oid");
 		foreach($room->connections_from(array("type" => "RELTYPE_PAUSES")) as $c)
 		{
 			$oh = $c->to();
-			if ($oh->prop("date_from") > 100 && time() < $oh->prop("date_from"))
+			/*if ($oh->prop("date_from") > 100 && time() < $oh->prop("date_from"))
 			{
-				continue;
+				//continue;
 			}
 			if ($oh->prop("date_to") > 100 && time() > $oh->prop("date_to"))
 			{
-				continue;
-			}
+				//continue;
+			}*/
 			if (!is_array($oh->prop("apply_group")) || !count($oh->prop("apply_group")) || count(array_intersect($gl, safe_array($oh->prop("apply_group")))))
 			{
-				return $oh;
+				$rv[] = $oh;
 			}
 		}
-		return null;
+		return count($rv) ? $rv : null;
 	}
 
 	/** returns data about products for room
