@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.4 2007/03/02 15:43:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.5 2007/03/02 15:52:37 dragut Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -56,7 +56,7 @@ class ip_locator extends class_base
 				$csv_file = $arr['obj_inst']->prop('csv_file_location');
 				if (is_readable($csv_file))
 				{
-					$prop['value'] = t('Faili viimate muudetud: ').date('d.m.Y', filemtime($csv_file));
+					$prop['value'] = t('Faili viimati muudetud: ').date('d.m.Y', filemtime($csv_file));
 				}
 				break;
 			case 'update_db':
