@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.3 2006/11/14 15:58:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.4 2007/03/02 15:43:13 dragut Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -232,6 +232,11 @@ class ip_locator extends class_base
 		$lines = file($file);
 		foreach ($lines as $line)
 		{
+			$line = trim($line);
+			if ($line{0} == '#' || empty($line))
+			{
+				continue;
+			}
 			$line = str_replace('"', '', $line);
 			$fields = explode(',', $line);
 
@@ -244,9 +249,9 @@ class ip_locator extends class_base
 				) values (
 					".(double)$fields[0].", 
 					".(double)$fields[1].", 
-					'".addslashes($fields[2])."', 
-					'".addslashes($fields[3])."', 
-					'".addslashes($fields[4])."'
+					'".addslashes($fields[4])."', 
+					'".addslashes($fields[5])."', 
+					'".addslashes($fields[6])."'
 			)";
 
 			$this->db_query($sql);
