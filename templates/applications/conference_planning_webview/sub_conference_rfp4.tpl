@@ -26,6 +26,16 @@
 					</td>
 				</tr>
 				<!-- END SUB: DAY -->
+				<!-- SUB: DAY_ACTIVE -->
+				<tr bgcolor="silver">
+					<td>{VAR:function_start_date}</td>
+					<td>{VAR:event_type}</td>
+					<td>{VAR:function_start_time} - {VAR:function_end_time}</td>
+					<td>
+						<a href="{VAR:edit_url}">{VAR:LC_EDIT}</a>&nbsp;&nbsp;<a href="{VAR:remove_url}">{VAR:LC_REMOVE}</a>
+					</td>
+				</tr>
+				<!-- END SUB: DAY_ACTIVE -->
 			</table>
 		</td>
 	</tr>
@@ -155,6 +165,25 @@
 			</td>
 		</tr>
 		<!-- END SUB: MAIN_CATERING_ROW -->
+		<!-- SUB: MAIN_CATERING_ROW_ACTIVE -->
+		<tr bgcolor="silver">
+			<td>
+				{VAR:catering_row_type}
+			</td>
+			<td>
+				{VAR:catering_row_start_time}
+			</td>
+			<td>
+				{VAR:catering_row_end_time}
+			</td>
+			<td>
+				{VAR:catering_row_attendees_no}
+			</td>
+			<td>
+				<a href="{VAR:remove_url}">{VAR:LC_REMOVE}</a>&nbsp;&nbsp;&nbsp;<a href="{VAR:edit_url}">{VAR:LC_EDIT}</a>
+			</td>
+		</tr>
+		<!-- END SUB: MAIN_CATERING_ROW_ACTIVE -->
 		</table>
 		</td>
 	</tr>
@@ -214,7 +243,7 @@
 	<!-- SUB: ADD_DAY -->
 	<tr>
 		<td colspan="2" align="right">
-			<a href="#" onClick="javascript:submit_changeform('add_catering');">Add/Save day</a>
+			<a href="#" onClick="javascript:submit_changeform('add_fun');">Add/Save day</a>
 		</td>
 	</tr>
 	<!-- END SUB: ADD_DAY -->

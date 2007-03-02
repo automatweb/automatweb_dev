@@ -17,6 +17,16 @@
 					</td>
 				</tr>
 				<!-- END SUB: ROW -->
+				<!-- SUB: ROW_ACTIVE -->
+				<tr bgcolor="silver">
+					<td>
+						{VAR:caption}
+					</td>
+					<td>
+						<a href="{VAR:edit_url}">{VAR:LC_EDIT}</a> <a href="{VAR:remove_url}">{VAR:LC_REMOVE}</a>
+					</td>
+				</tr>
+				<!-- END SUB: ROW_ACTIVE -->
 			</table>
 		</td>
 	</tr>
@@ -93,15 +103,7 @@
 			{VAR:LC_START_DATETIME}:
 		</td>
 		<td>
-			<input type="text" size="10" name="sub[5][function_start_date]" value="{VAR:function_start_date}"/><input size="2" type="text" name="sub[5][function_start_time]" value="{VAR:function_start_time}"/> {VAR:LC_TIME_FORMAT}
-		</td>
-	</tr>
-	<tr>
-		<td>
-			{VAR:LC_END_DATETIME}:
-		</td>
-		<td>
-			<input type="text" size="10" name="sub[5][function_end_date]" value="{VAR:function_end_date}"/><input size="2" type="text" name="sub[5][function_end_time]" value="{VAR:function_end_time}"/> {VAR:LC_TIME_FORMAT}
+			<input type="text" size="10" name="sub[5][function_start_date]" value="{VAR:function_start_date}"/><input size="2" type="text" name="sub[5][function_start_time]" value="{VAR:function_start_time}"/> - <input size="2" type="text" name="sub[5][function_end_time]" value="{VAR:function_end_time}"/> {VAR:LC_TIME_FORMAT}
 		</td>
 	</tr>
 	<tr>
@@ -155,6 +157,25 @@
 			</td>
 		</tr>
 		<!-- END SUB: CATERING_ROW -->
+		<!-- SUB: CATERING_ROW_ACTIVE -->
+		<tr>
+			<td>
+				{VAR:cat_type}
+			</td>
+			<td>
+				{VAR:cat_starttime}
+			</td>
+			<td>
+				{VAR:cat_endtime}
+			</td>
+			<td>
+				{VAR:cat_attendee_no}
+			</td>
+			<td>
+				<a href="{VAR:cat_remove_url}">{VAR:LC_REMOVE}</a>&nbsp;<a href="{VAR:cat_edit_url}">{VAR:LC_EDIT}</a>
+			</td>
+		</tr>
+		<!-- END SUB: CATERING_ROW_ACTIVE -->
 		</table>
 	</td></tr>
 	<!-- END SUB: ADDITIONAL_CATERING -->

@@ -78,6 +78,25 @@
             <reltype>RELTYPE_REDIR_DOC</reltype>
             <caption>Edasisuunamise dokument</caption>
       </property>
+      <property>
+            <name>email</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_EMAIL</reltype>
+            <caption>Saatja E-mail</caption>
+      </property>
+      <property>
+            <name>subject</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>E-maili teema</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CONFERENCE_PLANNING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -101,6 +120,11 @@
                   <clid>CL_LOCATION</clid>
                   <caption>Otsitav asukoht</caption>
             </LOCATION>
+            <EMAIL>
+                  <value>4</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-Mail</caption>
+            </EMAIL>
       </reltypes>
 </properties>
 

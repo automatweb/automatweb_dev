@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.13 2007/02/26 13:45:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.14 2007/03/02 12:47:36 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -283,7 +283,7 @@ class rfp_manager extends class_base
 		@attrib params=name name=show_overview all_args=1
 		@param oid required type=oid
 	**/
-	function show_overview($arr)
+	function show_overview($arr, $return_content = false)
 	{
 		$c_plan= get_instance(CL_CONFERENCE_PLANNING);
 		// set data .. this sucks
@@ -354,7 +354,15 @@ class rfp_manager extends class_base
 		$this->vars(array(
 			"contents" => $ret,
 		));
-		die($this->parse());
+		$content = $this->parse();
+		if($return_content)
+		{
+			return $content;
+		}
+		else
+		{
+			die($content);
+		}
 	}
 
 	function gen_popup($oid)

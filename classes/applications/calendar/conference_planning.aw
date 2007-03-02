@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.58 2007/02/28 08:51:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.59 2007/03/02 12:47:36 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -32,6 +32,12 @@
 @property redir_doc type=relpicker field=meta method=serialize reltype=RELTYPE_REDIR_DOC
 @caption Edasisuunamise dokument
 
+@property email type=relpicker field=meta method=serialize reltype=RELTYPE_EMAIL
+@caption Saatja E-mail
+
+@property subject type=textbox field=meta method=serialize
+@caption E-maili teema
+
 @reltype REDIR_DOC value=2 clid=CL_DOCUMENT
 @caption Edasisuunamise dokument
 
@@ -40,6 +46,9 @@
 
 @reltype LOCATION value=3 clid=CL_LOCATION
 @caption Otsitav asukoht
+
+@reltype EMAIL value=4 clid=CL_ML_MEMBER
+@caption E-Mail
 */
 
 define(CONFIRM_ID, "confirm_submit_checkbox");
@@ -234,10 +243,6 @@ class conference_planning extends class_base
 
 				break;
 			case 2:
-					if($_SERVER["SERVER_ADDR"] == "62.65.36.186")
-					{
-						arr($sd);
-					}
 				$sc->read_template("sub_conference_rfp2.tpl");
 				// tablerows
 				foreach($sd["dates"] as $row_no => $date)
@@ -529,17 +534,19 @@ class conference_planning extends class_base
 				//$d = $this->get_form_data();
 				foreach($sd["additional_functions"] as $id => $data)
 				{
+					$row_active = ($id == $_GET["act_evt_no"])?"_ACTIVE":"";
 					$sc->vars(array(
 						"caption" => ($data["event_type_chooser"] == 1)?$c_types[$data["event_type_select"]]:$data["event_type_text"],
 						"remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&evt=".$id,
 						"edit_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&act_evt_no=".$id,
 					));
-					$rows .= $sc->parse("ROW");
+					$rows .= $sc->parse("ROW".$row_active);
 				}
 
 				// catering tab 
 				foreach($cat_values as $cat_no => $catering)
 				{
+					$cat_active = ($cat_no == $_GET["act_cat_no"])?"_ACTIVE":"";
 					$sc->vars(array(
 						"cat_type" => ($catering["catering_type_chooser"] == 2)?$catering["catering_type_text"]:$this->catering_types[$catering["catering_type_select"]],
 						"cat_starttime" => $catering["catering_start_time"],
@@ -548,7 +555,7 @@ class conference_planning extends class_base
 						"cat_remove_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&action=remove&evt=".$_REQUEST["act_evt_no"]."&cat=".$cat_no,
 						"cat_edit_url" => aw_ini_get("baseurl")."/".$ob->id()."?sub=".$no."&act_evt_no=".$_REQUEST["act_evt_no"]."&act_cat_no=".$cat_no,
 					));
-					$cat_rows .= $sc->parse("CATERING_ROW");
+					$cat_rows .= $sc->parse("CATERING_ROW".$cat_active);
 				}
 				$sc->vars(array(
 					"CATERING_ROW" => $cat_rows,
@@ -568,7 +575,6 @@ class conference_planning extends class_base
 					"door_sign" => $values["door_sign"],
 					"function_start_date" => $values["function_start_date"],
 					"function_start_time" => $values["function_start_time"],
-					"function_end_date" => $values["function_end_date"],
 					"function_end_time" => $values["function_end_time"],
 					"24h" => $values["24h"]?"CHECKED":"",
 					"catering_type_chooser_".$act_cat["catering_type_chooser"] => "CHECKED",
@@ -886,8 +892,9 @@ class conference_planning extends class_base
 					
 					$sc->vars(array(
 						"type" => ($_t = $cat_type)?$_t:t("-"),
-						"start_time" => ($_t = trim($data["function_start_date"]." ".$data["function_start_time"]))?$_t:t("-"),
-						"end_time" => ($_t = trim($data["function_end_date"]." ".$data["function_end_time"]))?$_t:t("-"),
+						"start_date" => $data["function_start_date"],
+						"start_time" => $data["function_start_time"],
+						"end_time" => $data["function_end_time"],
 						"attendee_no" => ($_t = $data["persons_no"])?$_t:t("-"),
 						"delegates_no" => $data["delegates_no"],
 						"table_form" => $this->table_forms[$data["table_form"]],
@@ -1416,7 +1423,51 @@ class conference_planning extends class_base
 		$c_obj = obj($arr["conference_planner"]);
 		$url .= ($c_obj->prop("redir_doc"))?"/".$c_obj->prop("redir_doc"):"";
 		aw_session_set("tmp_conference_data", array());
+		$this->do_send_emails(array(
+			"oid" => $obj->id(),
+			"emails" => $this->gather_email_addresses($data["selected_search_result"]),
+			"c_planner" => $c_obj->id(),
+		));
 		return $url;
+	}
+	
+	function gather_email_addresses($arr)
+	{
+		foreach($arr as $loc)
+		{
+			$loc = obj($loc);
+			if(is_email($email = $loc->prop("email.mail")))
+			{
+				$ret[] = $email;
+			}
+		}
+		return $ret;
+	}
+
+	function do_send_emails($arr)
+	{
+		$manager = get_instance(CL_RFP_MANAGER);
+		$mail_content = $manager->show_overview(array(
+			"oid" => $arr["oid"]
+		), true);
+		$conf_planner = obj($arr["c_planner"]);
+		foreach($arr["emails"] as $email)
+		{
+			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->create_message(array(
+				"froma" => $conf_planner->prop("email.name"),
+				"fromn" => $conf_planner->prop("email.mail"),
+				"subject" => $conf_planner->prop("subject"),
+				"to" => $email,
+				"body" => t("Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"),
+			));
+			$awm->htmlbodyattach(array(
+				"data" => $mail_content,
+			));
+			$awm->gen_mail();
+			//send_mail($email, "www.revalhotels.com RFP", $mail_content);
+		}
+
 	}
 
 	/**
@@ -1824,7 +1875,7 @@ class conference_planning extends class_base
 					$additional_function["persons_no"] = $val["persons_no"];
 					$additional_function["function_start_date"] = $val["function_start_date"];
 					$additional_function["function_start_time"] = $val["function_start_time"];
-					$additional_function["function_end_date"] = $val["function_end_date"];
+					//$additional_function["function_end_date"] = $val["function_end_date"]; // not needed anymore
 					$additional_function["function_end_time"] = $val["function_end_time"];
 					$additional_function["24h"] = $val["24h"];
 					$additional_function["catering"] = ($no < 0)?array():$data["additional_functions"][$no]["catering"];
