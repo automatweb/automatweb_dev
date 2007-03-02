@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.17 2006/01/16 08:39:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.18 2007/03/02 13:53:04 dragut Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -54,7 +54,7 @@
 @property utextbox10 type=textbox
 @caption 
 
-@property utextarea1 type=textarea
+@property utextarea1 type=textarea cols=80 rows=40
 @caption 
 
 @property utextarea2 type=textarea

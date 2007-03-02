@@ -129,6 +129,8 @@
             <group>general</group>
             <table>planner</table>
             <type>textarea</type>
+            <cols>80</cols>
+            <rows>40</rows>
             <field>utextarea1</field>
             <caption></caption>
       </property>
