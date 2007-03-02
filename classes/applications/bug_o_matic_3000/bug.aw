@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.76 2007/02/20 13:47:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.77 2007/03/02 10:41:38 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -283,38 +283,36 @@ class bug extends class_base
 	function callback_on_load($arr)
 	{
 		$this->cx = get_instance("cfg/cfgutils");
-		if($this->can("add", $arr["request"]["parent"]) && $arr["request"]["action"] == "new")
+		$pt = $arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"];
+
+		$parent = new object($pt);
+		$props = $parent->properties();
+		$cx_props = $this->cx->load_properties(array(
+			"clid" => $parent->class_id(),
+			"filter" => array(
+				"group" => "general",
+			),
+		));
+		$this->parent_options = array();
+		$els = array("who", "monitors", "project", "customer");
+		foreach($els as $el)
 		{
-			$parent = new object($arr["request"]["parent"]);
-			$props = $parent->properties();
-			$cx_props = $this->cx->load_properties(array(
-				"clid" => $parent->class_id(),
-				"filter" => array(
-					"group" => "general",
-				),
+			$this->parent_options[$el] = array();
+			$objs = $parent->connections_from(array(
+				"type" => $cx_props[$el]["reltype"],
 			));
-			$this->parent_options = array();
-			$els = array("who", "monitors", "project", "customer");
-			foreach($els as $el)
+			foreach($objs as $obj)
 			{
-				$this->parent_options[$el] = array();
-				$objs = $parent->connections_from(array(
-					"type" => $cx_props[$el]["reltype"],
-				));
-				foreach($objs as $obj)
-				{
-					$this->parent_options[$el][$obj->prop("to")] = $obj->prop("to.name");
-				}
+				$this->parent_options[$el][$obj->prop("to")] = $obj->prop("to.name");
 			}
-			$this->parent_data = array(
-				"who" => $props["who"],
-				"bug_class" => $props["bug_class"],
-				"monitors" => $props["monitors"],
-				"project" => $props["project"],
-				"customer" => $props["customer"],
-//				"deadline" => $props["deadline"],
-			);
 		}
+		$this->parent_data = array(
+			"who" => $props["who"],
+			"bug_class" => $props["bug_class"],
+			"monitors" => $props["monitors"],
+			"project" => $props["project"],
+			"customer" => $props["customer"],
+		);
 	}
 
 	function get_property($arr)
@@ -494,7 +492,7 @@ class bug extends class_base
 				
 			case "who":
 			case "monitors":
-				if ($arr["new"])
+				if ($arr["new"] || true)
 				{
 					foreach($this->parent_options[$prop["name"]] as $key => $val)
 					{
@@ -516,7 +514,7 @@ class bug extends class_base
 					}
 
 					// find tracker for the bug and get people list from that
-					$po = obj($arr["request"]["parent"]);
+					$po = obj($arr["request"]["parent"] ? $arr["request"]["parent"] : $arr["request"]["id"]);
 					$pt = $po->path();
 					foreach($pt as $pi)
 					{
