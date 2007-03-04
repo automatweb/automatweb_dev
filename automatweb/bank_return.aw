@@ -90,15 +90,33 @@ if($_POST["VK_REF"])
 }
 if($_GET["ecuno"])
 {
-	$id = substr($_GET["ecuno"], 0, -1);
-}
-foreach ($_GET as $key => $val)
+	$id = substr($_GET["ecuno"], 0, -1);}
+	foreach ($_GET as $key => $val)
+	{
+		$_SESSION["bank_return"]["data"][$key] = $val;
+	}
+	//see siis automaatse tagasituleku puhul pangast, miskip'rast teeb hansa get meetodika selle
+if($_SESSION["bank_return"]["data"]["VK_REF"])
 {
-	$_SESSION["bank_return"]["data"][$key] = $val;
+	$id = substr($_SESSION["bank_return"]["data"]["VK_REF"] ,0 , -1 );
 }
 
+
+//logimine
+$log = date("d/m/Y H:i : ",time());
+foreach($_SESSION["bank_return"]["data"] as $key => $val)
+{
+	$log.= $key." = ".$val.", ";
+}
+$log.="\n";
+$myFile = $site_dir."/bank_log.txt";
+$fh = fopen($myFile, 'a');
+fwrite($fh, $log);
+fclose($fh);
+
+
 //esimene on hansapanga, EYP, sampo ja krediidipanga positiivne vastus, teine krediitkaardikeskuse
-if($_POST["VK_SERVICE"] == 1101 || ($_GET["action"] == "afb" && $_GET["respcode"] == "000"))
+	if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1101  || $_POST["VK_SERVICE"] == 1101 || ($_GET["action"] == "afb" && $_GET["respcode"] == "000"))
 {
 	$url = $_SESSION["bank_payment"]["url"];
 	if(!$url)
