@@ -1,12 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.62 2007/02/28 12:50:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.63 2007/03/05 01:32:20 markop Exp $
 // patent.aw - Patent 
 /*
 
 @classinfo syslog_type=ST_PATENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
-
-
-
 
 @default table=objects
 @default group=general
@@ -565,6 +562,21 @@ class patent extends class_base
 			">';
 		}
 		
+$data["ref"] = $stat_obj->prop("nr");
+$data["send_date"] = $stat_obj->prop("sent_date");
+		if(!$data["ref"])
+		{
+			$data["ref"] = "";
+		}
+		if($data["send_date"])
+		{
+			$data["send_date"] = date("d.m.Y" , $data["send_date"]);
+		}
+		else
+		{
+			$data["send_date"] = "";
+		}
+
 		if($arr["sign"] && !$_POST["print"] && !($status["status"] > 0))
 		{
 			$ddoc_inst = get_instance(CL_DDOC);
@@ -1248,9 +1260,32 @@ class patent extends class_base
 			$data["error"] = $_SESSION['patent']['errors'];
 			$_SESSION["patent"]["errors"] = null;
 		}
+		$data["signatures"] = $this->get_signatures($_SESSION["patent"]["id"]);
 		return $data;
 	}
 	
+	function get_signatures($id)
+	{
+		if(!aw_ini_get("file.ddoc_support"))
+		{
+			return "";
+		}
+		$re = $this->is_signed($id);
+		if($re["status"] != 1)
+		{
+			return "";
+		}
+		$ddoc_inst = get_instance(CL_DDOC);
+		$signs = $ddoc_inst->get_signatures($re["ddoc"]);
+		foreach($signs as $sig)
+		{
+			$sig_nice[] = sprintf(t("%s, %s (%s) - %s"), $sig["signer_ln"], $sig["signer_fn"], $sig["signer_pid"], date("H:i d/m/Y", $sig["signing_time"]));
+		}
+		$prop["value"] = join("<br/>", $sig_nice);
+		return $prop["value"];
+		break;
+	}
+
 	function get_right_size_image($oid)
 	{
 		$image_inst = get_instance(CL_IMAGE);
@@ -1575,7 +1610,8 @@ class patent extends class_base
 		{
 			$ddoc_inst = get_instance(CL_DDOC);
 			$url = $ddoc_inst->sign_url(array(
-				"other_oid" =>$_SESSION["patent"]["id"],
+				"other_oid" => $_SESSION["patent"]["id"],
+				"no_refresh" => 1,
 			));
 			$status = $this->is_signed($_SESSION["patent"]["id"]);
 			if($status["status"] > 0)
@@ -1965,9 +2001,13 @@ class patent extends class_base
 		
 		
 		$tpl = "country_popup.tpl";
+		include($GLOBALS["aw_dir"]."/lang/trans/".$GLOBALS["LC"]."/aw/crm_address.aw");
 		$is_tpl = $this->read_template($tpl,1);
 		$c = "";
-		foreach($address_inst->get_country_list() as $key=> $val)
+
+		$c_l = $address_inst->get_country_list();
+		asort($c_l);
+		foreach($c_l as $key=> $val)
 		{
 			$this->vars(array(
 				"name" => $val,
@@ -2688,7 +2728,7 @@ class patent extends class_base
 		
 		$obj_list = new object_list(array(
 			"class_id" => CL_PATENT,
-			"createdby" => $uid,
+		//	"createdby" => $uid,
 			"lang_id" => array(),
 		));
 		
@@ -2788,7 +2828,7 @@ class patent extends class_base
 				//arr($re["status"]); arr($patent->prop("verified")); arr($patent->prop("nr")); arr($code); arr($patent->prop("authorized_person.personal_id")); arr($patent->prop("applicant.personal_id"));
 				
 				if(
-					!($re["status"] == 1) && 
+					//!($re["status"] == 1) && 
 					!$status->prop("verified") && 
 					!$status->prop("nr")// && 
 //					(
@@ -2830,11 +2870,12 @@ class patent extends class_base
 					$change = '<a href="'.$url.'">Muuda</a>';
 					$del_url = aw_ini_get("baseurl").aw_url_change_var("delete_patent", $patent->id());
 				}
-				elseif(($re["status"] == 1))
+	
+				if(($re["status"] == 1))
 				{
 					$change = "";
 					$url = aw_url_change_var("send_patent", $patent->id());
-					$send_url = '<a href="'.$url.'">Saada</a>';
+					$send_url = '<a href="'.$url.'"> Saada</a>';
 				}
 				
 				$this->vars(array(
