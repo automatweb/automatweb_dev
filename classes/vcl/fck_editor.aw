@@ -1,11 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.12 2007/01/10 13:03:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.13 2007/03/05 09:46:01 kristo Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor extends core
 {
 	function get_rte_toolbar($arr)
 	{
+		if (!is_object($arr["toolbar"]))
+		{
+			return;
+		}
 		$toolbar = &$arr["toolbar"];
 		$toolbar->add_separator();
 		if($arr["no_rte"] == 1)
