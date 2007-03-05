@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.26 2007/02/28 16:29:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.27 2007/03/05 13:01:46 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -36,8 +36,14 @@
 
 @groupinfo bank caption="Pankade info"
 
-@default group=bank
+@default group=bank submit=no
 	@property bank type=callback callback=callback_bank store=no no_caption=1
+
+@groupinfo log caption="Logi"
+
+@default group=log
+	@property log type=text store=no no_caption=1
+
 
 #RELTYPES
 
@@ -373,6 +379,65 @@ class bank_payment extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "log":
+				$myFile = $GLOBALS["site_dir"]."/bank_log.txt";
+				$fh = fopen($myFile, 'r');
+				$theData = fread($fh, filesize($myFile));
+				fclose($fh);
+				$log_array = explode("\n" , $theData);
+				//arr($log_array);
+				$log_data = array();
+				foreach($log_array as $log)
+				{
+					if(is_array(unserialize($log)))
+					{
+						$val = unserialize($log);
+						if($val["timestamp"])
+						{
+							$log_data[$val["timestamp"]]["payer"] = $val["VK_SND_NAME"];
+							$log_data[$val["timestamp"]]["ref"] = $val["VK_REF"];
+							$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
+							$log_data[$val["timestamp"]]["sum"] = $val["VK_AMOUNT"];
+							if($val["eamount"])$log_data[$val["timestamp"]]["sum"] = $val["eamount"]/100;
+							if($val["ecuno"])$log_data[$val["timestamp"]]["ref"] = $val["ecuno"];
+							if($val["msgdata"])$log_data[$val["timestamp"]]["msg"] = $val["msgdata"];
+							if($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000")
+							{
+								$log_data[$val["timestamp"]]["ok"] = 1;
+							}
+							else
+							{
+								$log_data[$val["timestamp"]]["ok"] = 0;
+							}
+							$log_data[$val["timestamp"]]["good"] = $val["good"];
+						}
+						else
+						{
+							$log_data[] = array("payer" => $val["VK_SND_NAME"] , "ref" => $val["VK_REF"],"msg" => $val["VK_MSG"], "sum" => $val["VK_AMOUNT"]);
+						}
+					}
+					else
+					{
+						//$log_data[] = array("msg" => $log);
+					}
+				}
+				classload("vcl/table");
+				$t = new vcl_table;
+				$this->init_log($t);
+				krsort($log_data);
+				foreach($log_data as $key => $val)
+				{
+						$t->define_data(array(
+						"time" => date("d.m.Y H:i" ,$key),
+						"ref" => $val["ref"],
+						"expl" => $val["msg"],
+						"payer" => $val["payer"],
+						"ok" =>  $val["ok"] ? t("&otilde;nnestus") : t("eba&otilde;nnestus"),
+						"good" => $val["good"] ? t("ok") : t(""),
+					));
+				}
+				$prop["value"] = $t->draw();
+				break;
 			case "template":
 				$tm = get_instance("templatemgr");
 				$prop["options"] = $tm->template_picker(array(
@@ -386,6 +451,44 @@ class bank_payment extends class_base
 			//-- get_property --//
 		};
 		return $retval;
+	}
+
+	function init_log(&$t)
+	{
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "payer",
+			"caption" => t("Maksja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "ref",
+			"caption" => t("Viitenumber"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "expl",
+			"caption" => t("Seletus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "ok",
+			"caption" => t("&Otilde;nnestus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "good",
+			"caption" => t("SK"),
+			"align" => "center"
+		));
 	}
 
 	function set_property($arr = array())

@@ -80,8 +80,20 @@
             <field>meta</field>
             <method>serialize</method>
             <group>bank</group>
+            <submit>no</submit>
             <type>callback</type>
             <callback>callback_bank</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>log</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>log</group>
+            <submit>no</submit>
+            <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
@@ -96,6 +108,9 @@
             <bank>
                   <caption>Pankade info</caption>
             </bank>
+            <log>
+                  <caption>Logi</caption>
+            </log>
       </groupinfo>
       <reltypes>
             <KEY>

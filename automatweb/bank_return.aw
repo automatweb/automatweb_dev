@@ -104,14 +104,18 @@ if($_SESSION["bank_return"]["data"]["VK_REF"])
 
 //logimine
 $log = date("d/m/Y H:i : ",time());
-foreach($_SESSION["bank_return"]["data"] as $key => $val)
-{
-	$log.= $key." = ".$val.", ";
-}
+$bi = get_instance(CL_BANK_PAYMENT);
+$_SESSION["bank_return"]["data"]["timestamp"] = time();
+$_SESSION["bank_return"]["data"]["good"] = $bi->check_response();
+
+//foreach($_SESSION["bank_return"]["data"] as $key => $val)
+//{
+//	$log.= $key." = ".$val.", ";
+//}
 $log.="\n";
 $myFile = $site_dir."/bank_log.txt";
 $fh = fopen($myFile, 'a');
-fwrite($fh, $log);
+fwrite($fh, serialize($_SESSION["bank_return"]["data"])."\n");
 fclose($fh);
 
 
