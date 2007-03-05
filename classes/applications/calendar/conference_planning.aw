@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.61 2007/03/05 08:01:24 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.62 2007/03/05 18:27:03 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1515,8 +1515,8 @@ class conference_planning extends class_base
 		{
 			$awm = get_instance("protocols/mail/aw_mail");
 			$awm->create_message(array(
-				"froma" => $conf_planner->prop("email.name"),
-				"fromn" => $conf_planner->prop("email.mail"),
+				"froma" => !is_email($conf_planner->prop("email.mail"))?"example@example.com":$conf_planner->prop("email.mail"),
+				"fromn" => $conf_planner->prop("email.name"),
 				"subject" => $conf_planner->prop("subject"),
 				"to" => $email,
 				"body" => t("Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"),
@@ -1525,7 +1525,6 @@ class conference_planning extends class_base
 				"data" => $mail_content,
 			));
 			$awm->gen_mail();
-			//send_mail($email, "www.revalhotels.com RFP", $mail_content);
 		}
 
 	}
