@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.63 2007/03/05 01:32:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.64 2007/03/05 15:57:39 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -35,6 +35,9 @@
 	
 	@property authorized_person type=relpicker reltype=RELTYPE_AUTHORIZED_PERSON
 	@caption Volitatud isik
+	
+	@property authorized_codes type=textbox
+	@caption Volitatud isikute isikukoodid
 	
 	@property additional_info type=textarea 
 	@caption Lisainfo
@@ -220,7 +223,7 @@ class patent extends class_base
 		));
 	
 		$this->info_levels = array("applicant","trademark","products_and_services","priority","fee","check");
-		$this->text_vars = array("name" , "firstname" , "lastname" ,  "code" , "street", "city" ,"index", "country_code" , "phone" , "email" , "fax" ,  "undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "payer" , "doc_nr","authorized_person_firstname", "authorized_person_lastname","authorized_person_code", "correspond_street","correspond_city","correspond_index","correspond_country_code", "job");
+		$this->text_vars = array("name" , "firstname" , "lastname" ,  "code" , "street", "city" ,"index", "country_code" , "phone" , "email" , "fax" ,  "undefended_parts" , "word_mark", "authorized_codes","convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "payer" , "doc_nr","authorized_person_firstname", "authorized_person_lastname","authorized_person_code", "correspond_street","correspond_city","correspond_index","correspond_country_code", "job");
 		$this->text_area_vars = array("colors" , "trademark_character", "element_translation", "additional_info");
 		$this->file_upload_vars = array("warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
 		$this->date_vars = array("payment_date" , "exhibition_date", "convention_date");
@@ -628,7 +631,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 	{
 		$o = obj($id);
 		$props = array();
-		$vars = array("job" , "undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "doc_nr", "payer");
+		$vars = array("authorized_codes" ,"job" , "undefended_parts" , "word_mark", "convention_nr"  , "convention_country", "exhibition_name" , "exhibition_country" , "request_fee" , "classes_fee" , "doc_nr", "payer");
 		
 		//siia panev miskid muutujad mille iga ringi peal ära kustutab... et uuele taotlejale vana info ei jääks
 		$del_vars = array("name_value" , "email_value" , "phone_value" ,
@@ -784,6 +787,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			}
 		}
 		$data["procurator_text"] = $o->prop_str("procurator");
+		$data["signatures"] = $this->get_signatures($id);
 		return $data;
 	}
 
@@ -791,7 +795,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 	{
 		$patent = obj($id);
 		$status = $this->get_status($patent);
-		$property_vars = array("job" , "procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "trademark_type" ,
+		$property_vars = array("authorized_codes" , "job" , "procurator" , "additional_info", "type","undefended_parts", "word_mark" , "colors" , "trademark_character", "element_translation", "trademark_type" ,
 			 "priority" , "convention_nr" , "convention_country" , "exhibition_name", "exhibition_country", "exhibition" , "request_fee" , "classes_fee",
 			 "payer" , "doc_nr" , "warrant" , "reproduction" , "payment_order", "g_statues","c_statues");
 	
@@ -1049,11 +1053,34 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			{
 				$js.='document.getElementById("reproduction_row").style.display = "none";';
 				$js.='document.getElementById("color_row").style.display = "none";';
+        $js.='document.getElementById("wordmark_row").style.display = "";';
+				$js.='document.getElementById("wordmark_caption").innerHTML = "* Kaubam&auml;rk";';
+				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
 			}
 			if($_SESSION["patent"]["type"] == 1)
 			{
 				$js.='document.getElementById("wordmark_row").style.display = "none";';
+				$js.='document.getElementById("foreignlangelements_row").style.display = "none";';
+				$js.='document.getElementById("reproduction_row").style.display = "";';
+				$js.='document.getElementById("color_row").style.display = "";';
+				$js.='document.getElementById("wordmark_caption").innerHTML = "* S&otilde;naline osa";';
 			}
+      if($_SESSION["patent"]["type"] == 2)
+			{
+        $js.='document.getElementById("wordmark_row").style.display = "";';
+				$js.='document.getElementById("color_row").style.display = "";';
+				$js.='document.getElementById("reproduction_row").style.display = "";';
+        $js.='document.getElementById("wordmark_caption").innerHTML = "* S&otilde;naline osa";';
+				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
+      }
+      if($_SESSION["patent"]["type"] == 3)
+      {
+        $js.='document.getElementById("wordmark_row").style.display = "";';
+				$js.='document.getElementById("color_row").style.display = "";';
+				$js.='document.getElementById("reproduction_row").style.display = "";';
+				$js.='document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";';
+				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
+      }
 			if(!$_SESSION["patent"]["guaranty_trademark"])
 			{
 				$js.='document.getElementById("g_statues_row").style.display = "none";';
@@ -1061,10 +1088,6 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			if(!$_SESSION["patent"]["co_trademark"])
 			{
 				$js.='document.getElementById("c_statues_row").style.display = "none";';
-			}
-			if($_SESSION["patent"]["type"])
-			{
-				$js.='document.getElementById("foreignlangelements_row").style.display = "none"';
 			}
 		}
 		
@@ -1270,7 +1293,10 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		{
 			return "";
 		}
-		$re = $this->is_signed($id);
+		if(is_oid($id))
+		{
+			$re = $this->is_signed($id);
+		}
 		if($re["status"] != 1)
 		{
 			return "";
@@ -1454,7 +1480,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
 				document.getElementById("reproduction_row").style.display = "none";
 				document.getElementById("color_row").style.display = "none";
-				document.getElementById("wordmark_caption").innerHTML = "Kaubam&auml;rk";
+				document.getElementById("wordmark_caption").innerHTML = "* Kaubam&auml;rk";
 				document.getElementById("foreignlangelements_row").style.display = "";
 				 ',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Kujutism&auml;rk ").html::radiobutton(array(
@@ -1466,14 +1492,15 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				document.getElementById("foreignlangelements_row").style.display = "none";
 				document.getElementById("reproduction_row").style.display = "";
 				document.getElementById("color_row").style.display = "";
-				document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa"; ',
+				document.getElementById("wordmark_caption").innerHTML = "* S&otilde;naline osa"; ',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Kombineeritud m&auml;rk ").html::radiobutton(array(
 				"value" => 2,
 				"checked" => ($_SESSION["patent"]["type"] == 2) ? 1 : 0,
 				"name" => "type",
 				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
 				document.getElementById("color_row").style.display = "";
-				document.getElementById("reproduction_row").style.display = "";document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";
+				document.getElementById("reproduction_row").style.display = "";
+        document.getElementById("wordmark_caption").innerHTML = "* S&otilde;naline osa";
 				document.getElementById("foreignlangelements_row").style.display = "";',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Ruumiline m&auml;rk ").html::radiobutton(array(
 				"value" => 3,
@@ -1611,7 +1638,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			$ddoc_inst = get_instance(CL_DDOC);
 			$url = $ddoc_inst->sign_url(array(
 				"other_oid" => $_SESSION["patent"]["id"],
-				"no_refresh" => 1,
+				//"no_refresh" => 1,
 			));
 			$status = $this->is_signed($_SESSION["patent"]["id"]);
 			if($status["status"] > 0)
@@ -1755,7 +1782,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 //		));
 		$t->define_field(array(
 			"name" => "prod",
-			"caption" => t("Toode/teenus"),
+			"caption" => t("Kaup/teenus"),
 		));
 		$t->define_field(array(
 			"name" => "delete",
@@ -1862,7 +1889,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			));
 			$t->define_field(array(
 				"name" => "prod",
-				"caption" => t("Toode/teenus"),
+				"caption" => t("Kaup/teenus"),
 			));
 			$t->define_chooser(array(
 				"name" => "oid",
@@ -2637,6 +2664,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 	{
 		$patent->set_prop("additional_info" , $_SESSION["patent"]["additional_info"]);
 		$patent->set_prop("job" , $_SESSION["patent"]["job"]);
+		$patent->set_prop("authorized_codes" , $_SESSION["patent"]["authorized_codes"]);
 		if(	$_SESSION["patent"]["authorized_person_firstname"] || 
 			$_SESSION["patent"]["authoirized_person_person_lastname"] || 
 			$_SESSION["patent"]["authoirized_person_code"])
@@ -2748,7 +2776,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 		$code = $p->prop("personal_id");
-		$ddoc_inst = get_instance(CL_DDOC);
+		$ddoc_inst = get_instance(CL_DDOC);arr($code);
 		if($code)
 		{
 			$persons_list = new object_list(array(
@@ -2756,6 +2784,13 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"lang_id" => array(),
 				"personal_id" => $code
 			));
+			$other_list = new object_list(array(
+				"class_id" => CL_PATENT,
+				"lang_id" => array(),
+				"authorized_person_code" => "%".$code."%",
+			));
+			$obj_list->add($other_list);
+			
 			foreach($persons_list->ids() as $id)
 			{
 				$other_list = new object_list(array(
@@ -2830,7 +2865,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				if(
 					//!($re["status"] == 1) && 
 					!$status->prop("verified") && 
-					!$status->prop("nr")// && 
+					!$status->prop("nr") //&& 
 //					(
 //						(
 //							$code &&

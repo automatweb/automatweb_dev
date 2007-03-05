@@ -79,6 +79,15 @@
             <caption>Volitatud isik</caption>
       </property>
       <property>
+            <name>authorized_codes</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Volitatud isikute isikukoodid</caption>
+      </property>
+      <property>
             <name>additional_info</name>
             <table>objects</table>
             <group>general</group>
