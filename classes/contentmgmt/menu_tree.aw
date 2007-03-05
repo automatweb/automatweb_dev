@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.14 2007/01/26 12:57:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.15 2007/03/05 10:31:57 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -268,7 +268,7 @@ class menu_tree extends class_base
 		$_parents = array();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$name = $o->name();
+			$name = $o->trans_get_val("name");
 			if ($this->strip_tags)
 			{
 				$name = strip_tags($name);
@@ -349,7 +349,7 @@ class menu_tree extends class_base
 			$slicecounter++;
 			$id = $v->id();
 			$spacer = str_repeat($this->spacer,$this->level * $this->sq);
-			$name = $spacer . $v->name();
+			$name = $spacer . $v->trans_get_val("name");
 				
 			if ($this->single_tpl)
 			{
@@ -455,7 +455,7 @@ class menu_tree extends class_base
 					$this->vars(array(
 						"url" => $url,
 						"oid" => $id,
-						"name" => parse_obj_name($v->name()),
+						"name" => parse_obj_name($v->trans_get_val("name")),
 						"spacer" => $spacer,
 					));
 
