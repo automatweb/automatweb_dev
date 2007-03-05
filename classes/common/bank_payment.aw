@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.27 2007/03/05 13:01:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.28 2007/03/05 14:55:59 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -237,6 +237,10 @@ class bank_payment extends class_base
 		{
 			$data["test"] = 1;
 		}
+		if($payment->prop("expl") && (strlen($payment->prop("expl")) + strlen($data["expl"])  < 70))
+		{
+			$data["expl"] = $payment->prop("expl")." ".$data["expl"];
+		}
 		if(!$data["priv_key"] && $payment->prop("private_key"))
 		{
 			$file_inst = get_instance(CL_FILE);
@@ -258,10 +262,6 @@ class bank_payment extends class_base
 			{
 				$data["priv_key"] = $file_data;
 			}
-		}
-		if(!$data["expl"])
-		{
-			$data["expl"] = $payment->prop("expl").$data["expl"];
 		}
 		if(!$data["return_url"])
 		{

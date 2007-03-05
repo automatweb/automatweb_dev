@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.170 2007/03/02 09:14:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.171 2007/03/05 14:55:59 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3708,33 +3708,19 @@ class room extends class_base
 		$rv["room_bargain_value"] = $this->bargain_value;
 		
 		$warehouse = $room->prop("warehouse");
+		$u = get_instance(CL_USER);
+		if(is_object($arr["bron"]))
+		{
+			$grp = $u->get_highest_pri_grp_for_user($arr["bron"]->createdby(), true);
+			$grp = array($grp->id());
+		}
 		$prod_discount = $this->get_prod_discount(array(
 			"start" => $start,
 			"end" => $end,
-			"room" => $room->id()
+			"room" => $room->id(),
+			"group" => $grp,
 		));
 
-/*		if(is_oid($warehouse) && $this->can("view" , $warehouse))
-		{
-			$w_obj = obj($warehouse);
-			$w_cnf = obj($w_obj->prop("conf"));
-			if(is_oid($w_obj->prop("order_center")) && $this->can("view" , $w_obj->prop("order_center")))
-			{
-				$soc = obj($w_obj->prop("order_center"));
-				$prod_discount = $this->get_prod_discount(array(array("start" => $start, "end" => $end, "room" => $room->id())));
-/*				$pro "start" => $start, "end" => $end, "room" => $o
-				if($room->prop("prod_discount_loc"))
-				{
-					$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $room));
-					//$prod_discount = $room->prop("prod_web_discount");
-				}
-				else
-				{
-					$prod_discount = $soc->prop("web_discount");
-				}
-			}
-		}
-	*/
 		if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
 		{
 			$prod_discount = $arr["bron"]->prop("special_discount");
@@ -3744,7 +3730,7 @@ class room extends class_base
 		{
 			 $prod_discount = $arr["bron"]->meta("prod_discount");
 		}
-	
+	//if(aw_global_get("uid") == "struktuur") arr($arr["bron"]->prop("special_discount"));
 		$rv["prod_discount"] = $prod_discount;
 		foreach($room->prop("currency") as $currency)
 		{
@@ -3808,12 +3794,24 @@ class room extends class_base
 	@param room required type=oid,object
 	@param start required type=int
 	@param end required type=int
+	@param group optional type=int
 	**/
 	function get_rnd_discount_in_time($arr)
 	{
 		if(isset($this->rnd_discount))
 		{
 			return $this->rnd_discount;
+		}
+		if(is_array($arr["group"]))
+		{
+			$grp = $arr["group"];
+		}
+		else
+		{
+			$gl = aw_global_get("gidlist_pri_oid");
+			asort($gl);
+			$gl = array_keys($gl);
+			$grp = $gl;
 		}
 		$ret = 0;
 		extract($arr);
@@ -3846,7 +3844,7 @@ class room extends class_base
 					$end = time();
 				}
 			}
-			$b_list = $this->get_room_discount_objects($room);
+			$b_list = $this->get_room_discount_objects($room);//arr($room);
 			foreach($b_list->arr() as $bargain)
 			{
 				if(
@@ -3878,17 +3876,18 @@ class room extends class_base
 					)
 				)
 				{
-					$groups = $bargain->prop("apply_groups");
+					
+					$groups = $bargain->prop("apply_groups");//arr($grp);
 					if (
 						(
 							($bargain->prop("bron_made_from") < 1 || $bron_made > $bargain->prop("bron_made_from")) ||
 						    	($bargain->prop("bron_made_to") < 1 || $bron_made < $bargain->prop("bron_made_to"))
 					    	) && 
 						(
-							!is_array($groups) || !count($groups) || !reset($groups) || in_array($grp, $groups)
+							!is_array($groups) || !count($groups) || !reset($groups) || sizeof(array_intersect($grp, $groups))
 						)
 					)
-					{
+					{//arr(array_intersect($grp, $groups));arr($grp); arr($groups);arr($bargain);
 						$ret = $bargain->prop("bargain_percent");
 					}
 				}
@@ -4229,7 +4228,7 @@ class room extends class_base
 			}
 			else
 			{
-				$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $o));
+				$prod_discount = $this->get_rnd_discount_in_time(array("start" => $start, "end" => $end, "room" => $o, "group" => $group));
 			}
 		}
 		else
