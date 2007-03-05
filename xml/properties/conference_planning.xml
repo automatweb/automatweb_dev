@@ -107,6 +107,15 @@
             <method>serialize</method>
             <caption>E-maili teema</caption>
       </property>
+      <property>
+            <name>mails</name>
+            <table>objects</table>
+            <group>mails</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mails</field>
+      </property>
       <classinfo>
             <syslog_type>ST_CONFERENCE_PLANNING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -114,6 +123,11 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <mails>
+                  <caption>E-mailid</caption>
+            </mails>
+      </groupinfo>
       <reltypes>
             <REDIR_DOC>
                   <value>2</value>

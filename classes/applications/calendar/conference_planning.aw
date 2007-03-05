@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.60 2007/03/02 13:10:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.61 2007/03/05 08:01:24 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -39,6 +39,11 @@
 
 @property subject type=textbox field=meta method=serialize
 @caption E-maili teema
+
+@groupinfo mails caption="E-mailid"
+@default group=mails
+
+	@property mails type=text no_caption=1 store=no
 
 @reltype REDIR_DOC value=2 clid=CL_DOCUMENT
 @caption Edasisuunamise dokument
@@ -167,6 +172,34 @@ class conference_planning extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "mails":
+				classload("vcl/table");
+				$vcl = new vcl_table();
+				$vcl->define_field(array(
+					"name" => "hotel",
+					"caption" => t("Hotell"),
+				));
+				$vcl->define_field(array(
+					"name" => "mail",
+					"caption" => t("E-Mail"),
+				));
+				foreach($arr["obj_inst"]->prop("search_from") as $loc)
+				{
+					if(!$this->can("view", $loc))
+					{
+						continue;
+					}
+					$loc = obj($loc);
+					$vcl->define_data(array(
+						"hotel" => $loc->name(),
+						"mail" => html::textbox(array(
+							"value" => $loc->prop("email.mail"),
+							"name" => "loc[".$loc->id()."]",
+						)),
+					));
+				}
+				$prop["value"] = $vcl->get_html();
+				break;
 		};
 		return $retval;
 	}
@@ -182,6 +215,28 @@ class conference_planning extends class_base
 		}
 		return $retval;
 	}	
+
+	function callback_pre_save($arr)
+	{
+		if(is_array($arr["request"]["loc"]) && count($arr["request"]["loc"]))
+		{
+			foreach($arr["request"]["loc"] as $loc =>$email)
+			{
+				if(!$this->can("view", $loc))
+				{
+					continue;
+				}
+				$loc = obj($loc);
+				if(!$this->can("view", $loc->prop("email")))
+				{
+					continue;
+				}
+				$em = obj($loc->prop("email"));
+				$em->set_prop("mail", $email);
+				$em->save();
+			}
+		}
+	}
 
 	function callback_mod_reforb($arr)
 	{
