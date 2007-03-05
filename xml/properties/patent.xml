@@ -80,10 +80,10 @@
       </property>
       <property>
             <name>authorized_codes</name>
-            <table>objects</table>
+            <table>aw_trademark</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_authorized_codes</field>
+            <method>null</method>
             <type>textbox</type>
             <caption>Volitatud isikute isikukoodid</caption>
       </property>
@@ -408,6 +408,13 @@
                   <caption>Riigil&amp;amp;otilde;iv</caption>
             </fee>
       </groupinfo>
+      <tableinfo>
+            <aw_trademark>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_trademark>
+      </tableinfo>
       <reltypes>
             <APPLICANT>
                   <value>1</value>

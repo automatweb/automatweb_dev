@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.64 2007/03/05 15:57:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.65 2007/03/05 16:44:49 markop Exp $
 // patent.aw - Patent 
 /*
 
 @classinfo syslog_type=ST_PATENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+
+@tableinfo aw_trademark index=aw_oid master_table=objects master_index=brother_of
+
 
 @default table=objects
 @default group=general
@@ -36,7 +39,7 @@
 	@property authorized_person type=relpicker reltype=RELTYPE_AUTHORIZED_PERSON
 	@caption Volitatud isik
 	
-	@property authorized_codes type=textbox
+	@property authorized_codes type=textbox table=aw_trademark field=aw_authorized_codes method=null
 	@caption Volitatud isikute isikukoodid
 	
 	@property additional_info type=textarea 
@@ -2756,7 +2759,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		
 		$obj_list = new object_list(array(
 			"class_id" => CL_PATENT,
-		//	"createdby" => $uid,
+			"createdby" => $uid,
 			"lang_id" => array(),
 		));
 		
@@ -2776,7 +2779,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 		$code = $p->prop("personal_id");
-		$ddoc_inst = get_instance(CL_DDOC);arr($code);
+		$ddoc_inst = get_instance(CL_DDOC);
 		if($code)
 		{
 			$persons_list = new object_list(array(
@@ -2785,10 +2788,10 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"personal_id" => $code
 			));
 			$other_list = new object_list(array(
-				"class_id" => CL_PATENT,
-				"lang_id" => array(),
-				"authorized_person_code" => "%".$code."%",
-			));
+ 				"class_id" => CL_PATENT,
+ 				"lang_id" => array(),
+ 				"authorized_codes" => "%".$code."%",
+ 			));
 			$obj_list->add($other_list);
 			
 			foreach($persons_list->ids() as $id)
@@ -2938,6 +2941,18 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		return $this->parse();
 	}
 	
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "" && $t == "aw_trademark")
+		{
+			$this->db_query("CREATE TABLE aw_trademark(
+				aw_oid int primary key,
+				aw_authorized_codes text
+			)");
+		}
+		return true;
+	}
+
 	/** Show patents added by user 
 		
 		@attrib name=my_unsigned_patent_list is_public="1" caption="Minu patenditaotlused"
