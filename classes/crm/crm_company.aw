@@ -4875,6 +4875,10 @@ class crm_company extends class_base
 
 			// now, get all rows from task and convert to bill rows
 			$task_i = get_instance(CL_TASK);
+			if(sizeof($arr["sel"]) > 1)
+			{
+				continue;
+			}
 			foreach($task_i->get_task_bill_rows($task_o, true, $bill->id()) as $row)
 			{
 				if ($filt_by_row !== null && $row["row_oid"] != $filt_by_row)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.164 2007/03/06 13:29:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.165 2007/03/06 13:59:05 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -2065,7 +2065,8 @@ class task extends class_base
 			$ob = $ro->to();
 			if($ob->class_id() == CL_CRM_EXPENSE)
 			{
-				if (($bill_id === null || $ob->prop("bill_id") == $bill_id || !is_oid($ob->prop("bill_id"))))
+				if (($bill_id === null || $ob->prop("bill_id") == $bill_id || !(is_oid($ob->prop("bill_id")) && $this->can("view" , $ob->prop("bill_id")))))
+
 				{
 					$id = $task->id()."_oe_".$ob->id();
 					$rows[$id] = array(
