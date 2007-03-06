@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.64 2007/03/06 15:25:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.65 2007/03/06 15:39:42 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -33,13 +33,13 @@
 @caption Edasisuunamise dokument
 
 @property send_email type=checkbox field=meta method=serialize ch_value=1 default=0
-@caption Saada email
+@caption Saada email hotellidele
 
 @property email type=relpicker field=meta method=serialize reltype=RELTYPE_EMAIL
 @caption Saatja E-mail
 
 @property subject type=textbox field=meta method=serialize
-@caption E-maili teema
+@caption Hotelliteavituse e-maili teema
 
 @groupinfo mails caption="E-mailid"
 @default group=mails
@@ -53,10 +53,10 @@
 	@caption Saada kasutajale teavitus
 
 	@property usr_subject type=textbox field=meta method=serialize
-	@caption Maili teema
+	@caption Kasutajateavituse e-maili teema
 
 	@property usr_contents type=textarea field=meta method=serialize
-	@caption Maili sisu
+	@caption Kasutajateavituse e-maili sisu
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
@@ -166,7 +166,7 @@ class conference_planning extends class_base
 
 
 		$this->trans_props = array(
-			"usr_subject", "usr_contents"
+			"subject", "usr_subject", "usr_contents"
 		);
 	}
 

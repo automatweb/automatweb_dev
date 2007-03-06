@@ -86,7 +86,7 @@
             <field>meta</field>
             <method>serialize</method>
             <ch_value>1</ch_value>
-            <caption>Saada email</caption>
+            <caption>Saada email hotellidele</caption>
       </property>
       <property>
             <name>email</name>
@@ -105,7 +105,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>E-maili teema</caption>
+            <caption>Hotelliteavituse e-maili teema</caption>
       </property>
       <property>
             <name>mails</name>
@@ -133,7 +133,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Maili teema</caption>
+            <caption>Kasutajateavituse e-maili teema</caption>
       </property>
       <property>
             <name>usr_contents</name>
@@ -142,7 +142,7 @@
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Maili sisu</caption>
+            <caption>Kasutajateavituse e-maili sisu</caption>
       </property>
       <property>
             <name>transl</name>
