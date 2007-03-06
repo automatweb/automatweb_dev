@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.77 2007/03/02 10:41:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.78 2007/03/06 09:50:40 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -27,14 +27,14 @@ define("BUG_STATUS_CLOSED", 5);
 		@property bug_status type=select parent=settings_col1 captionside=top
 		@caption Staatus
 
+		@property bug_feedback_p type=relpicker reltype=RELTYPE_FEEDBACK_P parent=settings_col1 captionside=top field=aw_bug_feedback_p
+		@caption Tagasiside kellelt
+
 		@property bug_priority type=select parent=settings_col1 captionside=top
 		@caption Prioriteet
 
 		@property who type=crm_participant_search style=relpicker reltype=RELTYPE_MONITOR table=aw_bugs field=who parent=settings_col1 captionside=top
 		@caption Kellele
-
-		@property bug_mail type=textbox parent=settings_col1 captionside=top size=15
-		@caption Bugmail CC
 
 	@layout settings_col2 type=vbox parent=settings
 
@@ -132,8 +132,9 @@ define("BUG_STATUS_CLOSED", 5);
 			@property bug_predicates type=textbox parent=data_r_bot captionside=top field=aw_bug_predicates
 			@caption Eeldusbugid
 
-			@property bug_feedback_p type=relpicker reltype=RELTYPE_FEEDBACK_P parent=data_r_bot captionside=top field=aw_bug_feedback_p
-			@caption Tagasiside kellelt
+			@property bug_mail type=textbox parent=data_r_bot captionside=top size=15
+			@caption Bugmail CC
+
 
 
 @default group=cust
@@ -383,13 +384,6 @@ class bug extends class_base
 				}
 				break;
 
-			case "bug_feedback_p":
-				if ($arr["obj_inst"]->prop("bug_status") != BUG_FEEDBACK)
-				{
-					return PROP_IGNORE;
-				}
-				break;
-
 			case "team":
 				if ($this->can("view", $arr["obj_inst"]->prop("project")))
 				{
@@ -490,6 +484,13 @@ class bug extends class_base
 				}
 				break;
 				
+
+			case "bug_feedback_p":
+				if ($arr["obj_inst"]->prop("bug_status") != BUG_FEEDBACK)
+				{
+					return PROP_IGNORE;
+				}
+
 			case "who":
 			case "monitors":
 				if ($arr["new"] || true)
@@ -507,7 +508,7 @@ class bug extends class_base
 					$p = obj($u->get_current_person());
 					$tmp[$p->id()] = $p->name();
 
-					if ($prop["multiple"] == 1)
+					if ($prop["multiple"] == 1 && $arr["new"])
 					{
 					//	$prop["value"] = $this->make_keys(array_keys($tmp));
 						$prop["value"] = array($p->id(), $p->id());
@@ -533,6 +534,18 @@ class bug extends class_base
 				{
 					$tmp = obj($prop["value"]);
 					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+
+				if (is_array($prop["value"]))
+				{
+					foreach($prop["value"] as $val)
+					{
+						if ($this->can("view", $val))
+						{
+							$tmp = obj($val);
+							$prop["options"][$tmp->id()] = $tmp->name();
+						}
+					}
 				}
 
 				if ($arr["request"]["from_req"])
@@ -792,19 +805,19 @@ class bug extends class_base
 			case "bug_status":
 				$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
 				$this->_ac_new_state = $prop["value"];
-				if($prop["value"] == BUG_STATUS_CLOSED && !$arr["new"] && $arr["obj_inst"]->prop("bug_status") != BUG_STATUS_CLOSED)
+				if (!$arr["new"])
 				{
-					if(aw_global_get("uid") != $arr["obj_inst"]->createdby())
-					{
-						$retval = PROP_FATAL_ERROR;
-						$prop["error"] = t("Puuduvad õigused bugi sulgeda!");
-					}
+					$retval = $this->_handle_status_change(
+						$this->_ac_old_state,
+						$this->_ac_new_state,
+						$arr["obj_inst"],
+						$prop
+					);
 				}
 
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"] && !$arr["new"])
 				{
 					$com = sprintf(t("Staatus muudeti %s => %s"), $this->bug_statuses[$old], $this->bug_statuses[$prop["value"]]);
-					//$this->_add_comment($arr["obj_inst"], $com);
 					$this->add_comments[] = $com;
 				}
 				break;
@@ -862,6 +875,31 @@ class bug extends class_base
 					$this->add_comments[] = $com;
 				}
 				break;
+
+			case "bug_feedback_p":
+				if ($arr["obj_inst"]->prop("bug_status") != BUG_FEEDBACK)
+				{
+					return PROP_IGNORE;
+				}
+
+				if ($this->_set_feedback)
+				{
+					$prop["value"] = $this->_set_feedback;
+				}
+
+				$nv = "";
+				if ($this->can("view", $prop["value"]))
+				{
+					$nvo = obj($prop["value"]);
+					$nv = $nvo->name();
+				}
+
+				if (($old = $arr["obj_inst"]->prop_str($prop["name"])) != $nv && !$arr["new"])
+				{
+					$com = sprintf(t("Tagaiside kellelt muudeti %s => %s"), $old, $nv);
+					$this->add_comments[] = $com;
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -881,7 +919,7 @@ class bug extends class_base
 		);
 		$u = get_instance(CL_USER);
 		$us = get_instance("users");
-		if (in_array($bug->prop("bug_status"), $states))
+		if (true || in_array($bug->prop("bug_status"), $states))
 		{
 			$crea = $bug->createdby();
 			$monitors[] = $u->get_person_for_user(obj($us->get_oid_for_uid($crea)));
@@ -1583,6 +1621,30 @@ class bug extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FROM_PROBLEM")));
 		$t->table_from_ol($ol, array("name", "createdby", "created", "orderer_co", "orderer_unit", "customer", "project", "requirement", "from_dev_order", "from_bug"), CL_CUSTOMER_PROBLEM_TICKET);
+	}
+
+	function _handle_status_change($old, $new, $bug, &$prop)
+	{
+		$retval = PROP_OK;
+		if($new == BUG_STATUS_CLOSED && $old != BUG_STATUS_CLOSED)
+		{
+			if(aw_global_get("uid") != $bug->createdby())
+			{
+				$retval = PROP_FATAL_ERROR;
+				$prop["error"] = t("Puuduvad õigused bugi sulgeda!");
+			}
+		}
+
+		if ($new == BUG_FEEDBACK && $old != BUG_FEEDBACK)
+		{
+			// set the creator as the feedback from person
+			$u = get_instance(CL_USER);
+			$p = $u->get_person_for_uid($bug->createdby());
+			$bug->set_prop("bug_feedback_p", $p->id());
+			$this->_set_feedback = $p->id();
+		}
+
+		return $retval;
 	}
 }
 ?>
