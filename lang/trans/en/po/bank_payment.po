@@ -137,6 +137,6 @@ msgstr ""
 msgid "Seose Privaatv&otilde;ti (RELTYPE_P_KEY) tekst"
 msgstr ""
 
-#: classes/common/bank_payment.aw:382
+#: classes/common/bank_payment.aw:383
 msgid "\n"
 msgstr ""

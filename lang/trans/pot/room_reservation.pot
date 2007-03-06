@@ -110,43 +110,43 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-#: classes/common/room_reservation.aw:381
+#: classes/common/room_reservation.aw:388
 msgid "Vali enne jätkamist sobiv aeg!"
 msgstr ""
 
-#: classes/common/room_reservation.aw:382
+#: classes/common/room_reservation.aw:389
 msgid "Vali enne j&auml;tkamist sobiv aeg!"
 msgstr ""
 
-#: classes/common/room_reservation.aw:585
+#: classes/common/room_reservation.aw:592
 msgid "Kinnitatud"
 msgstr ""
 
-#: classes/common/room_reservation.aw:585
+#: classes/common/room_reservation.aw:592
 msgid "Kinnitamata"
 msgstr ""
 
-#: classes/common/room_reservation.aw:965
+#: classes/common/room_reservation.aw:972
 msgid "Nimi on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:969
+#: classes/common/room_reservation.aw:976
 msgid "Telefon on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:973
+#: classes/common/room_reservation.aw:980
 msgid "E-Mail on kohustuslik"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1168
+#: classes/common/room_reservation.aw:1175
 msgid "Salvesta"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1405
+#: classes/common/room_reservation.aw:1421
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1469
+#: classes/common/room_reservation.aw:1490 classes/common/room_reservation.aw:1528
 msgid "Broneering: %s"
 msgstr ""
 

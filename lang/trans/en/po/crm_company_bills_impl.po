@@ -22,7 +22,7 @@ msgid "Projekt"
 msgstr "Project"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:29
-#: classes/applications/crm/crm_company_bills_impl.aw:657
+#: classes/applications/crm/crm_company_bills_impl.aw:656
 #: classes/applications/crm/crm_company_bills_impl.aw:801
 msgid "Klient"
 msgstr "Customer"
@@ -70,37 +70,37 @@ msgstr "Create invoice"
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:651
+#: classes/applications/crm/crm_company_bills_impl.aw:650
 msgid "Arve"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:661
-#: classes/applications/crm/crm_company_bills_impl.aw:736
+#: classes/applications/crm/crm_company_bills_impl.aw:660
+#: classes/applications/crm/crm_company_bills_impl.aw:737
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:684
+#: classes/applications/crm/crm_company_bills_impl.aw:685
 #: classes/applications/crm/crm_company_bills_impl.aw:756
 msgid "Vali see"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:709
+#: classes/applications/crm/crm_company_bills_impl.aw:710
 msgid "OID"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:715
+#: classes/applications/crm/crm_company_bills_impl.aw:716
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:720
+#: classes/applications/crm/crm_company_bills_impl.aw:721
 msgid "Asukoht"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:725
+#: classes/applications/crm/crm_company_bills_impl.aw:726
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:729
+#: classes/applications/crm/crm_company_bills_impl.aw:730
 msgid "Muudetud"
 msgstr ""
 

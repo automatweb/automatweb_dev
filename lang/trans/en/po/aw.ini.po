@@ -132,11 +132,6 @@ msgstr "XML Output"
 msgid "Klassi Message (52) nimi"
 msgstr "Message"
 
-# aw.ini:class_53
-#: aw.ini:class_53
-msgid "Klassi Kalendri event (53) nimi"
-msgstr "Calendar event"
-
 # aw.ini:class_54
 #: aw.ini:class_54
 msgid "Klassi Banner (54) nimi"
@@ -216,16 +211,6 @@ msgstr "Pullout"
 #: aw.ini:class_86
 msgid "Klassi Objektigrupp (86) nimi"
 msgstr "Object group"
-
-# aw.ini:class_87
-#: aw.ini:class_87
-msgid "Klassi Roll (87) nimi"
-msgstr "Role"
-
-# aw.ini:class_88
-#: aw.ini:class_88
-msgid "Klassi Privileeg (88) nimi"
-msgstr "Privilege"
 
 # aw.ini:class_89
 #: aw.ini:class_89
@@ -432,11 +417,6 @@ msgstr "Database table content"
 #: aw.ini:class_154
 msgid "Klassi SQL P&auml;ring (154) nimi"
 msgstr "SQL Query"
-
-# aw.ini:class_157
-#: aw.ini:class_157
-msgid "Klassi Kordus (157) nimi"
-msgstr "Repeater"
 
 # aw.ini:class_161
 #: aw.ini:class_161
@@ -2942,10 +2922,6 @@ msgstr ""
 msgid "syslog.type.ST_SEARCH"
 msgstr ""
 
-#: aw.ini:syslogtypes_12
-msgid "syslog.type.ST_REPEATER"
-msgstr ""
-
 #: aw.ini:syslogtypes_14 aw.ini:syslogtypes_238
 msgid "syslog.type.ST_PERIOD"
 msgstr ""
@@ -3188,14 +3164,6 @@ msgstr ""
 
 #: aw.ini:syslogtypes_79
 msgid "syslog.type.ST_COMMENT"
-msgstr ""
-
-#: aw.ini:syslogtypes_80
-msgid "syslog.type.ST_ACL"
-msgstr ""
-
-#: aw.ini:syslogtypes_81
-msgid "syslog.type.ST_ROLE"
 msgstr ""
 
 #: aw.ini:syslogtypes_82
@@ -3688,10 +3656,6 @@ msgstr ""
 
 #: aw.ini:syslogtypes_217
 msgid "syslog.type.ST_UT_XML_IMPORT"
-msgstr ""
-
-#: aw.ini:syslogtypes_218
-msgid "syslog.type.ST_CAL_EVENT"
 msgstr ""
 
 #: aw.ini:syslogtypes_219
@@ -5153,6 +5117,22 @@ msgstr ""
 #: aw.ini:syslogactions_26
 msgid "syslog.action.SA_FINAL_DELETE"
 msgstr ""
+
+# aw.ini:class_53
+#~ msgid "Klassi Kalendri event (53) nimi"
+#~ msgstr "Calendar event"
+
+# aw.ini:class_87
+#~ msgid "Klassi Roll (87) nimi"
+#~ msgstr "Role"
+
+# aw.ini:class_88
+#~ msgid "Klassi Privileeg (88) nimi"
+#~ msgstr "Privilege"
+
+# aw.ini:class_157
+#~ msgid "Klassi Kordus (157) nimi"
+#~ msgstr "Repeater"
 
 # aw.ini:class_135
 #~ msgid "Klassi Õiguslik vorm (135) nimi"

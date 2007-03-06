@@ -596,6 +596,18 @@ msgstr ""
 msgid "Omaduse User-defined checkbox 5 (userch5) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_packaging.aw:prop_acl
+msgid "Omaduse &Otilde;igused (acl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_acl_comment
+msgid "Omaduse &Otilde;igused (acl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_acl_help
+msgid "Omaduse &Otilde;igused (acl) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -626,6 +638,14 @@ msgstr "Files"
 # classes/applications/shop/shop_product_packaging.aw:group_file_help
 #: classes/applications/shop/shop_product_packaging.aw:group_file_help
 msgid "Grupi Failid (file) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:group_transl
@@ -681,18 +701,18 @@ msgstr "variable4"
 msgid "Seose muutuja5 (RELTYPE_USERVAR5) tekst"
 msgstr "variable5"
 
-#: classes/applications/shop/shop_product_packaging.aw:197
+#: classes/applications/shop/shop_product_packaging.aw:204
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:198
+#: classes/applications/shop/shop_product_packaging.aw:205
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product_packaging.aw:496
+#: classes/applications/shop/shop_product_packaging.aw:503
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/shop/shop_product_packaging.aw:501
+#: classes/applications/shop/shop_product_packaging.aw:508
 msgid "Valuuta"
 msgstr "Currency"

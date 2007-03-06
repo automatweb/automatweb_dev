@@ -406,3 +406,7 @@ msgstr ""
 #: classes/contentmgmt/links.aw:312
 msgid "Saidi sisene link"
 msgstr ""
+
+#: classes/contentmgmt/links.aw:470
+msgid "Salvesta ja paiguta dokumenti"
+msgstr ""

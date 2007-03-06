@@ -37,66 +37,90 @@ msgstr ""
 msgid "Omaduse Kehtib gruppidele (apply_group) help"
 msgstr ""
 
+#: classes/common/openhours.aw:prop_date_from
+msgid "Omaduse Kehtib alates (date_from) caption"
+msgstr ""
+
+#: classes/common/openhours.aw:prop_date_from_comment
+msgid "Omaduse Kehtib alates (date_from) kommentaar"
+msgstr ""
+
+#: classes/common/openhours.aw:prop_date_from_help
+msgid "Omaduse Kehtib alates (date_from) help"
+msgstr ""
+
+#: classes/common/openhours.aw:prop_date_to
+msgid "Omaduse Kehtib kuni (date_to) caption"
+msgstr ""
+
+#: classes/common/openhours.aw:prop_date_to_comment
+msgid "Omaduse Kehtib kuni (date_to) kommentaar"
+msgstr ""
+
+#: classes/common/openhours.aw:prop_date_to_help
+msgid "Omaduse Kehtib kuni (date_to) help"
+msgstr ""
+
 #: classes/common/openhours.aw:rel_RELTYPE_GROUP
 msgid "Seose Kehtib kasutajagrupile (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/common/openhours.aw:47
+#: classes/common/openhours.aw:53
 msgid "--vali--"
 msgstr ""
 
-#: classes/common/openhours.aw:69
+#: classes/common/openhours.aw:75
 msgid "Lisa"
 msgstr ""
 
-#: classes/common/openhours.aw:99
+#: classes/common/openhours.aw:105
 msgid "Rida"
 msgstr ""
 
-#: classes/common/openhours.aw:149
+#: classes/common/openhours.aw:155
 msgid "E"
 msgstr ""
 
-#: classes/common/openhours.aw:150
+#: classes/common/openhours.aw:156
 msgid "T"
 msgstr ""
 
-#: classes/common/openhours.aw:151
+#: classes/common/openhours.aw:157
 msgid "K"
 msgstr ""
 
-#: classes/common/openhours.aw:152
+#: classes/common/openhours.aw:158
 msgid "N"
 msgstr ""
 
-#: classes/common/openhours.aw:153
+#: classes/common/openhours.aw:159
 msgid "R"
 msgstr ""
 
-#: classes/common/openhours.aw:154
+#: classes/common/openhours.aw:160
 msgid "L"
 msgstr ""
 
-#: classes/common/openhours.aw:155
+#: classes/common/openhours.aw:161
 msgid "P"
 msgstr ""
 
-#: classes/common/openhours.aw:234
+#: classes/common/openhours.aw:240
 msgid "-- Valimata --"
 msgstr ""
 
-#: classes/common/openhours.aw:297
+#: classes/common/openhours.aw:303
 msgid "Vigane perioodi alguse p&auml;ev"
 msgstr ""
 
-#: classes/common/openhours.aw:301
+#: classes/common/openhours.aw:307
 msgid "Vigane perioodi l&otilde;pu p&auml;ev"
 msgstr ""
 
-#: classes/common/openhours.aw:305
+#: classes/common/openhours.aw:311
 msgid "Vigane perioodi alguse aeg"
 msgstr ""
 
-#: classes/common/openhours.aw:309
+#: classes/common/openhours.aw:315
 msgid "Vigane perioodi l&otilde;pu aeg"
 msgstr ""

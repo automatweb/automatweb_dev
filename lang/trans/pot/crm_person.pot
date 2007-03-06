@@ -2259,46 +2259,54 @@ msgid "Summa"
 msgstr ""
 
 #: classes/crm/crm_person.aw:3771
-msgid "Arve staatus"
+msgid "Arve nr."
 msgstr ""
 
 #: classes/crm/crm_person.aw:3776
-msgid "<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Arvele</a>"
+msgid "Arve staatus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3864
+#: classes/crm/crm_person.aw:3781
+msgid "<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Vali</a>"
+msgstr ""
+
+#: classes/crm/crm_person.aw:3869
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3870
+#: classes/crm/crm_person.aw:3877
 msgid "Arvele"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3911
+#: classes/crm/crm_person.aw:3885
+msgid "Arve puudub"
+msgstr ""
+
+#: classes/crm/crm_person.aw:3922
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3911
+#: classes/crm/crm_person.aw:3922
 msgid "Tegemata"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3925
+#: classes/crm/crm_person.aw:3937
 msgid "<b>Summa</b>"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3966
+#: classes/crm/crm_person.aw:3978
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3972
+#: classes/crm/crm_person.aw:3984
 msgid "Kustuta p&auml;devused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3980
+#: classes/crm/crm_person.aw:3992
 msgid "P&auml;devus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:3986
+#: classes/crm/crm_person.aw:3998
 msgid "Omandatud"
 msgstr ""
 

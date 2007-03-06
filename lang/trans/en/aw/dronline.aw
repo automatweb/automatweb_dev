@@ -9,7 +9,6 @@ $GLOBALS["TRANS"]["Omaduse Log objekti nimi (save_as_obj_name) caption"] = "Log 
 $GLOBALS["TRANS"]["Omaduse Lukusta objektide salvestamine (lock_q) caption"] = "Lock object saving";
 $GLOBALS["TRANS"]["Omaduse Lukusta p&auml;ringu tegemine (lock_filter) caption"] = "Lock query creation";
 $GLOBALS["TRANS"]["Omaduse Cache p&auml;ringud taustal (bg_queries) caption"] = "Cache queries in background";
-$GLOBALS["TRANS"]["Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) caption"] = "Rerun queries according to recurrence";
 $GLOBALS["TRANS"]["Omaduse Uuenda p&auml;ringute&nbsp;cache kohe (rerun_queries) caption"] = "Renew query cache";
 $GLOBALS["TRANS"]["Omaduse Tausta p&auml;ringute staatus (bg_query_status) caption"] = "Background query status";
 $GLOBALS["TRANS"]["Omaduse Cache viimati muudetud (bg_query_created) caption"] = "Cache last modified";

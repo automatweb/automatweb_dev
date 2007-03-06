@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_db_search.aw:class_1049_help
 msgid "Klassi Kliendibaasi otsingu grupp help"
 msgstr ""
@@ -38,19 +37,30 @@ msgstr ""
 msgid "Omaduse Url, millele lisatakse org. objekti id (url) help"
 msgstr ""
 
+#: classes/applications/crm/crm_db_search.aw:prop_only_active
+msgid "Omaduse Ainult aktiivsed (only_active) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_only_active_comment
+msgid "Omaduse Ainult aktiivsed (only_active) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_only_active_help
+msgid "Omaduse Ainult aktiivsed (only_active) help"
+msgstr ""
+
 #: classes/applications/crm/crm_db_search.aw:rel_RELTYPE_CRM_DB
 msgid "Seose Organisatsioonide andmebaas (RELTYPE_CRM_DB) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:121
+#: classes/applications/crm/crm_db_search.aw:125
 msgid "Otsisid '<b>%s</b>', "
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:123
+#: classes/applications/crm/crm_db_search.aw:127
 msgid "Leiti %s asutus."
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:123
+#: classes/applications/crm/crm_db_search.aw:127
 msgid "Leiti %s asutust."
 msgstr ""
-

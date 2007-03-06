@@ -62,31 +62,31 @@ msgstr ""
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:806
+#: classes/cfg/htmlclient.aw:817
 msgid "Tagasiside"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:808
+#: classes/cfg/htmlclient.aw:819
 msgid "Kasutajatugi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:809
+#: classes/cfg/htmlclient.aw:820
 msgid "Abi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:810
+#: classes/cfg/htmlclient.aw:821
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:813
+#: classes/cfg/htmlclient.aw:824
 msgid "J&auml;rjehoidja"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:817
+#: classes/cfg/htmlclient.aw:828
 msgid "Ajalugu"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:821
+#: classes/cfg/htmlclient.aw:832
 msgid "Lisa kiiresti"
 msgstr ""
 

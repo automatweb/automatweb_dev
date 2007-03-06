@@ -110,10 +110,6 @@ msgstr ""
 msgid "Klassi Message (52) nimi"
 msgstr ""
 
-#: aw.ini:class_53
-msgid "Klassi Kalendri event (53) nimi"
-msgstr ""
-
 #: aw.ini:class_54
 msgid "Klassi Banner (54) nimi"
 msgstr ""
@@ -176,14 +172,6 @@ msgstr ""
 
 #: aw.ini:class_86
 msgid "Klassi Objektigrupp (86) nimi"
-msgstr ""
-
-#: aw.ini:class_87
-msgid "Klassi Roll (87) nimi"
-msgstr ""
-
-#: aw.ini:class_88
-msgid "Klassi Privileeg (88) nimi"
 msgstr ""
 
 #: aw.ini:class_89
@@ -352,10 +340,6 @@ msgstr ""
 
 #: aw.ini:class_154
 msgid "Klassi SQL P&auml;ring (154) nimi"
-msgstr ""
-
-#: aw.ini:class_157
-msgid "Klassi Kordus (157) nimi"
 msgstr ""
 
 #: aw.ini:class_161
@@ -2558,10 +2542,6 @@ msgstr ""
 msgid "syslog.type.ST_SEARCH"
 msgstr ""
 
-#: aw.ini:syslogtypes_12
-msgid "syslog.type.ST_REPEATER"
-msgstr ""
-
 #: aw.ini:syslogtypes_14 aw.ini:syslogtypes_238
 msgid "syslog.type.ST_PERIOD"
 msgstr ""
@@ -2804,14 +2784,6 @@ msgstr ""
 
 #: aw.ini:syslogtypes_79
 msgid "syslog.type.ST_COMMENT"
-msgstr ""
-
-#: aw.ini:syslogtypes_80
-msgid "syslog.type.ST_ACL"
-msgstr ""
-
-#: aw.ini:syslogtypes_81
-msgid "syslog.type.ST_ROLE"
 msgstr ""
 
 #: aw.ini:syslogtypes_82
@@ -3304,10 +3276,6 @@ msgstr ""
 
 #: aw.ini:syslogtypes_217
 msgid "syslog.type.ST_UT_XML_IMPORT"
-msgstr ""
-
-#: aw.ini:syslogtypes_218
-msgid "syslog.type.ST_CAL_EVENT"
 msgstr ""
 
 #: aw.ini:syslogtypes_219

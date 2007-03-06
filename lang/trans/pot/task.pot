@@ -870,15 +870,15 @@ msgstr ""
 msgid "Isiklik"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:496 classes/applications/groupware/task.aw:1266
+#: classes/applications/groupware/task.aw:496 classes/applications/groupware/task.aw:1270
 msgid "Arvele"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:599 classes/applications/groupware/task.aw:610 classes/applications/groupware/task.aw:1759 classes/applications/groupware/task.aw:1769
+#: classes/applications/groupware/task.aw:599 classes/applications/groupware/task.aw:610 classes/applications/groupware/task.aw:1790 classes/applications/groupware/task.aw:1800
 msgid "Stopper"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:607 classes/applications/groupware/task.aw:1756 classes/applications/groupware/task.aw:1766 classes/applications/groupware/task.aw:3602
+#: classes/applications/groupware/task.aw:607 classes/applications/groupware/task.aw:1787 classes/applications/groupware/task.aw:1797 classes/applications/groupware/task.aw:3652
 msgid "Toimetus"
 msgstr ""
 
@@ -886,7 +886,7 @@ msgstr ""
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:725 classes/applications/groupware/task.aw:3093 classes/applications/groupware/task.aw:3104 classes/applications/groupware/task.aw:3110 classes/applications/groupware/task.aw:3126 classes/applications/groupware/task.aw:3348 classes/applications/groupware/task.aw:3629 classes/applications/groupware/task.aw:3631
+#: classes/applications/groupware/task.aw:725 classes/applications/groupware/task.aw:3143 classes/applications/groupware/task.aw:3154 classes/applications/groupware/task.aw:3160 classes/applications/groupware/task.aw:3176 classes/applications/groupware/task.aw:3398 classes/applications/groupware/task.aw:3679 classes/applications/groupware/task.aw:3681
 msgid "Otsi"
 msgstr ""
 
@@ -894,279 +894,279 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1085
+#: classes/applications/groupware/task.aw:1089
 msgid "<br><br><br>Valitud Projekti ja Toimetuse kliendid erinevad"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1094
+#: classes/applications/groupware/task.aw:1098
 msgid "Tunnihind sisestamata!"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1254 classes/applications/groupware/task.aw:2258
+#: classes/applications/groupware/task.aw:1258 classes/applications/groupware/task.aw:2301
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1258 classes/applications/groupware/task.aw:2985
+#: classes/applications/groupware/task.aw:1262 classes/applications/groupware/task.aw:3035
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1262 classes/applications/groupware/task.aw:1425
+#: classes/applications/groupware/task.aw:1266 classes/applications/groupware/task.aw:1456
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1271 classes/applications/groupware/task.aw:3377
+#: classes/applications/groupware/task.aw:1275 classes/applications/groupware/task.aw:3427
 msgid ""
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1276
+#: classes/applications/groupware/task.aw:1280
 msgid "Arve nr."
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1313 classes/applications/groupware/task.aw:1776 classes/applications/groupware/task.aw:1782
+#: classes/applications/groupware/task.aw:1320 classes/applications/groupware/task.aw:1807 classes/applications/groupware/task.aw:1813
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1402 classes/applications/groupware/task.aw:1411
+#: classes/applications/groupware/task.aw:1433 classes/applications/groupware/task.aw:1442
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1419
+#: classes/applications/groupware/task.aw:1450
 msgid "Tegevus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1435
+#: classes/applications/groupware/task.aw:1466
 msgid "Teostaja"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1443
+#: classes/applications/groupware/task.aw:1474
 msgid "Tunde"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1452
+#: classes/applications/groupware/task.aw:1483
 msgid "Kulunud tunde"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1458
+#: classes/applications/groupware/task.aw:1489
 msgid "Tunde kliendile"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1464
+#: classes/applications/groupware/task.aw:1495
 msgid "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"done\")'>Tehtud</a>"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1467 classes/applications/groupware/task.aw:1481 classes/applications/groupware/task.aw:1494 classes/applications/groupware/task.aw:1512 classes/applications/groupware/task.aw:1529 classes/applications/groupware/task.aw:1560
+#: classes/applications/groupware/task.aw:1498 classes/applications/groupware/task.aw:1512 classes/applications/groupware/task.aw:1525 classes/applications/groupware/task.aw:1543 classes/applications/groupware/task.aw:1560 classes/applications/groupware/task.aw:1591
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1468 classes/applications/groupware/task.aw:1482 classes/applications/groupware/task.aw:1495 classes/applications/groupware/task.aw:1516 classes/applications/groupware/task.aw:1533 classes/applications/groupware/task.aw:1564
+#: classes/applications/groupware/task.aw:1499 classes/applications/groupware/task.aw:1513 classes/applications/groupware/task.aw:1526 classes/applications/groupware/task.aw:1547 classes/applications/groupware/task.aw:1564 classes/applications/groupware/task.aw:1595
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1477
+#: classes/applications/groupware/task.aw:1508
 msgid "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>Arvele</a>"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1483 classes/applications/groupware/task.aw:1556
+#: classes/applications/groupware/task.aw:1514 classes/applications/groupware/task.aw:1587
 msgid "Arvel"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1484 classes/applications/groupware/task.aw:1546 classes/applications/groupware/task.aw:1551
+#: classes/applications/groupware/task.aw:1515 classes/applications/groupware/task.aw:1577 classes/applications/groupware/task.aw:1582
 msgid "Arveta"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1675
+#: classes/applications/groupware/task.aw:1706
 msgid "vali"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1687
+#: classes/applications/groupware/task.aw:1718
 msgid "%s (%s)"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1900
+#: classes/applications/groupware/task.aw:1931
 msgid "h"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1901
+#: classes/applications/groupware/task.aw:1932
 msgid "Kokku:"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1960 classes/applications/groupware/task.aw:1997
+#: classes/applications/groupware/task.aw:1994 classes/applications/groupware/task.aw:2031
 msgid "tund"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2088
+#: classes/applications/groupware/task.aw:2131
 msgid "Kohtumine"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2106
+#: classes/applications/groupware/task.aw:2149
 msgid "Loo arve"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2122
+#: classes/applications/groupware/task.aw:2165
 msgid "Kustuta read"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2165
+#: classes/applications/groupware/task.aw:2208
 msgid "%s toimetus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2222 classes/applications/groupware/task.aw:2805
+#: classes/applications/groupware/task.aw:2265 classes/applications/groupware/task.aw:2855
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2244
+#: classes/applications/groupware/task.aw:2287
 msgid "Kalender"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2251 classes/applications/groupware/task.aw:3197
+#: classes/applications/groupware/task.aw:2294 classes/applications/groupware/task.aw:3247
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2265
+#: classes/applications/groupware/task.aw:2308
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2295
+#: classes/applications/groupware/task.aw:2338
 msgid "Ressurss on valitud aegadel kasutuses:<br>"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2314 classes/applications/groupware/task.aw:2333
+#: classes/applications/groupware/task.aw:2357 classes/applications/groupware/task.aw:2376
 msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2344
+#: classes/applications/groupware/task.aw:2387
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2350
+#: classes/applications/groupware/task.aw:2393
 msgid "Ressurss on vaba"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2862
+#: classes/applications/groupware/task.aw:2912
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2867
+#: classes/applications/groupware/task.aw:2917
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2872
+#: classes/applications/groupware/task.aw:2922
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2877
+#: classes/applications/groupware/task.aw:2927
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2882
+#: classes/applications/groupware/task.aw:2932
 msgid "Tunnihind"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2887
+#: classes/applications/groupware/task.aw:2937
 msgid "Kokkuleppehind"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2892
+#: classes/applications/groupware/task.aw:2942
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2897
+#: classes/applications/groupware/task.aw:2947
 msgid "Arve number"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2902
+#: classes/applications/groupware/task.aw:2952
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2954
+#: classes/applications/groupware/task.aw:3004
 msgid "Loo uus arve"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2985
+#: classes/applications/groupware/task.aw:3035
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:2985
+#: classes/applications/groupware/task.aw:3035
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3014 classes/applications/groupware/task.aw:3304 classes/applications/groupware/task.aw:3597
+#: classes/applications/groupware/task.aw:3064 classes/applications/groupware/task.aw:3354 classes/applications/groupware/task.aw:3647
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3020 classes/applications/groupware/task.aw:3103 classes/applications/groupware/task.aw:3144
+#: classes/applications/groupware/task.aw:3070 classes/applications/groupware/task.aw:3153 classes/applications/groupware/task.aw:3194
 msgid "Tellija"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3030
+#: classes/applications/groupware/task.aw:3080
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3039
+#: classes/applications/groupware/task.aw:3089
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3049 classes/applications/groupware/task.aw:3109 classes/applications/groupware/task.aw:3191
+#: classes/applications/groupware/task.aw:3099 classes/applications/groupware/task.aw:3159 classes/applications/groupware/task.aw:3241
 msgid "Projekt"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3060 classes/applications/groupware/task.aw:3125 classes/applications/groupware/task.aw:3242
+#: classes/applications/groupware/task.aw:3110 classes/applications/groupware/task.aw:3175 classes/applications/groupware/task.aw:3292
 msgid "Osaleja"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3070 classes/applications/groupware/task.aw:3082
+#: classes/applications/groupware/task.aw:3120 classes/applications/groupware/task.aw:3132
 msgid "Lisa isik organisatsiooni %s"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3150 classes/applications/groupware/task.aw:3254
+#: classes/applications/groupware/task.aw:3200 classes/applications/groupware/task.aw:3304
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3156
+#: classes/applications/groupware/task.aw:3206
 msgid "Kontaktisik"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3203
+#: classes/applications/groupware/task.aw:3253
 msgid "L&otilde;ppt&auml;htaeg"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3248
+#: classes/applications/groupware/task.aw:3298
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3378
+#: classes/applications/groupware/task.aw:3428
 msgid "Memo"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3379
+#: classes/applications/groupware/task.aw:3429
 msgid "CRM Dokument"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3380
+#: classes/applications/groupware/task.aw:3430
 msgid "Leping"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3381
+#: classes/applications/groupware/task.aw:3431
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3405
+#: classes/applications/groupware/task.aw:3455
 msgid "Manuse nimi"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3411
+#: classes/applications/groupware/task.aw:3461
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3417
+#: classes/applications/groupware/task.aw:3467
 msgid "Viimane muutja"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3565
+#: classes/applications/groupware/task.aw:3615
 msgid "Eeldustegevus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:3611
+#: classes/applications/groupware/task.aw:3661
 msgid "K&otilde;ne"
 msgstr ""
 

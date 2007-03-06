@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/link_collection.aw:class_1062_help
 msgid "Klassi Lingikogu help"
 msgstr ""
@@ -78,11 +77,10 @@ msgstr ""
 msgid "T&auml;hestik"
 msgstr ""
 
-#: classes/contentmgmt/link_collection.aw:256
+#: classes/contentmgmt/link_collection.aw:255
 msgid "Kaust"
 msgstr ""
 
-#: classes/contentmgmt/link_collection.aw:263
-msgid "K.A. alamkataloogid"
+#: classes/contentmgmt/link_collection.aw:262
+msgid "K.A. alamobjektid"
 msgstr ""
-

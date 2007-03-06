@@ -20,8 +20,8 @@ msgstr ""
 #: classes/applications/crm/crm_company_cedit_impl.aw:582
 #: classes/applications/crm/crm_company_cedit_impl.aw:597
 #: classes/applications/crm/crm_company_cedit_impl.aw:714
-#: classes/applications/crm/crm_company_cedit_impl.aw:784
-#: classes/applications/crm/crm_company_cedit_impl.aw:801
+#: classes/applications/crm/crm_company_cedit_impl.aw:792
+#: classes/applications/crm/crm_company_cedit_impl.aw:809
 msgid "Muuda"
 msgstr ""
 

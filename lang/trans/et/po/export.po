@@ -9,22 +9,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/export/export.aw:237
+#: classes/export/export.aw:236
 msgid "Folder %s does not exist on server!"
 msgstr ""
 
-#: classes/export/export.aw:250
+#: classes/export/export.aw:249
 msgid "eksport juba k&auml;ib!"
 msgstr ""
 
-#: classes/export/export.aw:471
+#: classes/export/export.aw:470
 msgid "Found stop flag as %s, shutting down."
 msgstr ""
 
-#: classes/export/export.aw:494
+#: classes/export/export.aw:493
 msgid "VIGA, tyhi url!"
 msgstr ""
 
-#: classes/export/export.aw:778
+#: classes/export/export.aw:777
 msgid "VIGA! EI LEIDNUD ext for type %s"
 msgstr ""

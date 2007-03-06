@@ -409,6 +409,42 @@ msgstr ""
 msgid "Omaduse Meili sisu (del_mail_ct) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_order_mail_from
+msgid "Omaduse Meili from aadress (order_mail_from) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_from_comment
+msgid "Omaduse Meili from aadress (order_mail_from) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_from_help
+msgid "Omaduse Meili from aadress (order_mail_from) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_from_name
+msgid "Omaduse Meili from nimi (order_mail_from_name) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_from_name_comment
+msgid "Omaduse Meili from nimi (order_mail_from_name) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_from_name_help
+msgid "Omaduse Meili from nimi (order_mail_from_name) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_subj
+msgid "Omaduse Meili subjekt (order_mail_subj) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_subj_comment
+msgid "Omaduse Meili subjekt (order_mail_subj) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_order_mail_subj_help
+msgid "Omaduse Meili subjekt (order_mail_subj) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:prop_order_mail_legend
 msgid "Omaduse Meili sisu legend (order_mail_legend) caption"
 msgstr ""
@@ -549,66 +585,66 @@ msgstr ""
 msgid "Seose Grupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:188
+#: classes/common/room_settings.aw:197
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:200
+#: classes/common/room_settings.aw:209
 msgid "sisu tuleb common/room/preview.tpl failist"
 msgstr ""
 
-#: classes/common/room_settings.aw:368
+#: classes/common/room_settings.aw:377
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:374
+#: classes/common/room_settings.aw:383
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:412
+#: classes/common/room_settings.aw:421
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:417
+#: classes/common/room_settings.aw:426
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:423
+#: classes/common/room_settings.aw:432
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:429 classes/common/room_settings.aw:441
+#: classes/common/room_settings.aw:438 classes/common/room_settings.aw:450
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:435
+#: classes/common/room_settings.aw:444
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:448
+#: classes/common/room_settings.aw:457
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:454
+#: classes/common/room_settings.aw:463
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:460
+#: classes/common/room_settings.aw:469
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:471
+#: classes/common/room_settings.aw:480
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:472
+#: classes/common/room_settings.aw:481
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:473
+#: classes/common/room_settings.aw:482
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:513
+#: classes/common/room_settings.aw:522
 msgid "Vali"
 msgstr ""
