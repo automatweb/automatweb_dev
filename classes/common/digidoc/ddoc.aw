@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.23 2007/01/12 11:01:22 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/digidoc/ddoc.aw,v 1.24 2007/03/06 16:46:25 markop Exp $
 // ddoc.aw - DigiDoc 
 /*
 
@@ -183,7 +183,6 @@ class ddoc extends class_base
 				
 				break;
 			case "signatures_tbl":
-				dbg::p1("!");
 				$t = &$prop["vcl_inst"];
 				$t->define_chooser(array(
 					"name" => "sel",
@@ -509,7 +508,9 @@ class ddoc extends class_base
 	{
 		$content = $this->get_ddoc($arr["oid"]);
 		$o = obj($arr["oid"]);
-		ddFile::saveAs($o->name(), $content);
+		$this->do_init();
+		$name = (substr($o->name(), -4, 4) == ".ddoc")?$o->name():$o->name().".ddoc";
+		ddFile::saveAs($name, $content);
 	}
 
 	/*
@@ -1206,7 +1207,9 @@ class ddoc extends class_base
 
 		}
 		// welll.. this is for case when file has been removed from ddoc, and needs to be removed from meta also
+		aw_disable_acl();
 		$o->save();
+		aw_restore_acl();
 		$_meta_files = aw_unserialize($o->prop("files"));
 		foreach($_meta_files as $ddoc_id => $data)
 		{
@@ -1219,9 +1222,9 @@ class ddoc extends class_base
 				));
 				// TODO remove at least connection to file.(maybe object itself also.. i should think about it a bit)
 			}
-		}
+		}aw_disable_acl();
 		$o->save();
-		
+		aw_restore_acl();
 		// set signatures
 		foreach($ret2["SignedDocInfo"]["SignatureInfo"] as $sign)
 		{
@@ -1272,8 +1275,9 @@ class ddoc extends class_base
 			
 			// close the session
 			$this->_e();
-		}
-		$o->save();
+		}aw_disable_acl();
+	
+		$o->save();aw_restore_acl();
 	}
 
 /// SIGNING PROCESS
@@ -1284,7 +1288,7 @@ class ddoc extends class_base
 			aw CL_DDOC object oid
 		@param file_oid optional type=oid
 		@param doc_oid optional type=oid
-		
+		@param no_refresh optional type=int
 		@comment
 			Well, this method gives a link that pop's up the singing window!!
 			This is the function to use when you want to sign something!!
@@ -1313,7 +1317,7 @@ class ddoc extends class_base
 			if these are'nt correct signing will not be allowed
 	**/
 	function sign($arr)
-	{
+	{enter_function("ddoc::sign");
 		// this do_init() is here because usually does this $this->_s() but in signing _s() is called only in prepare stadium
 		$this->do_init();
 
@@ -1572,7 +1576,8 @@ class ddoc extends class_base
 
 
 			break;
-		}
+		}//arr($GLOBALS["awt"]);
+		exit_function("ddoc::sign");
 		die($html);
 	}
 
@@ -1684,7 +1689,8 @@ class ddoc extends class_base
 		$m = aw_unserialize($o->prop("signatures"));
 		$m[$arr["ddoc_id"]] = $arr;
 		$o->set_prop("signatures", aw_serialize($m, SERIALIZE_NATIVE));
-		$o->save();
+		aw_disable_acl();
+		$o->save();aw_restore_acl();
 		return true;
 	}
 
@@ -1731,7 +1737,8 @@ class ddoc extends class_base
 		}
 		// clear metadata
 		$o->set_prop("signatures", aw_serialize(array(), SERIALIZE_NATIVE));
-		$o->save();
+		aw_disable_acl();
+		$o->save();aw_restore_acl();
 		return true;
 	}
 

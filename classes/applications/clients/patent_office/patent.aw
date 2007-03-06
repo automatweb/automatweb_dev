@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.65 2007/03/05 16:44:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.66 2007/03/06 16:46:24 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -547,20 +547,31 @@ class patent extends class_base
 			$data["pdf"] = "<a href=".$this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"], "add_obj" => $arr["alias"]["to"]) , CL_PATENT)."><input type='button' value='Salvesta pdf' class='nupp' href=''></a><br>";
 
 		}
+		if($this->can("view" , $arr["id"]))
+		{
+			$status = $this->is_signed($arr["id"]);
+		}
 		
 		if($arr["sign"] && !$_POST["print"])
 		{
 			$ddoc_inst = get_instance(CL_DDOC);
-			$url = $ddoc_inst->sign_url(array(
-				"other_oid" =>$arr["id"],
-			));
+			if($status["status"] > 0)
+			{
+				$url = $ddoc_inst->sign_url(array(
+					"ddoc_oid" =>$status["ddoc"],
+				));
+			}
+			else
+			{
+				$url = $ddoc_inst->sign_url(array(
+					"other_oid" =>$arr["id"],
+				));
+			}
 			$data["sign"] = "<input type='button' value='".t("Allkirjasta")."' class='nupp' onClick='javascript:window.open(\"".$url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>";
 		}
 		
-		if($this->can("view" , $ob->id()))
-		{
-			$status = $this->is_signed($ob->id());
-		}	
+
+		
 		if($status["status"] > 0 && !$stat_obj->prop("nr") && !$_POST["print"])
 		{
 			$data["send"] = '<input type="submit" value="'.t("Saadan taotluse").'" class="nupp" onClick="javascript:document.getElementById(\'send\').value=\'1\';
@@ -583,7 +594,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			$data["send_date"] = "";
 		}
 
-		if($arr["sign"] && !$_POST["print"] && !($status["status"] > 0))
+		if($arr["sign"] && !$_POST["print"])
 		{
 			$ddoc_inst = get_instance(CL_DDOC);
 			$url = $ddoc_inst->sign_url(array(
@@ -1639,11 +1650,20 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		if(is_oid($_SESSION["patent"]["id"]))
 		{
 			$ddoc_inst = get_instance(CL_DDOC);
-			$url = $ddoc_inst->sign_url(array(
-				"other_oid" => $_SESSION["patent"]["id"],
-				//"no_refresh" => 1,
-			));
 			$status = $this->is_signed($_SESSION["patent"]["id"]);
+			
+			if($status["status"] > 0)
+			{
+				$url = $ddoc_inst->sign_url(array(
+					"ddoc_oid" =>$status["ddoc"],
+				));
+			}
+			else
+			{
+				$url = $ddoc_inst->sign_url(array(
+					"other_oid" =>$_SESSION["patent"]["id"],
+				));
+			}
 			if($status["status"] > 0)
 			{
 				$data["SIGNED"] = $this->parse("SIGNED");
@@ -2885,9 +2905,18 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				)
 				{
 					$do_sign = 1;
-			        	$sign_url = $ddoc_inst->sign_url(array(
-						"other_oid" =>$patent->id(),
-					));
+			        	if($re["status"] == 1)
+			        	{
+			        		$sign_url = $ddoc_inst->sign_url(array(
+							"ddoc_oid" => $re["ddoc"],
+						));
+			        	}
+			        	else
+			        	{
+				        	$sign_url = $ddoc_inst->sign_url(array(
+							"other_oid" =>$patent->id(),
+						));
+			                }
 			                $sign = "<a href='javascript:void(0);' onClick='javascript:window.open(\"".$sign_url."\",\"\", \"toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600\");'>Allkirjasta</a>";
 				}
 				else
@@ -2908,7 +2937,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 					$change = '<a href="'.$url.'">Muuda</a>';
 					$del_url = aw_ini_get("baseurl").aw_url_change_var("delete_patent", $patent->id());
 				}
-	
+
 				if(($re["status"] == 1))
 				{
 					$change = "";
