@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.62 2007/03/05 18:27:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.63 2007/03/06 14:36:27 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1480,6 +1480,7 @@ class conference_planning extends class_base
 		$c_obj = obj($arr["conference_planner"]);
 		$url .= ($c_obj->prop("redir_doc"))?"/".$c_obj->prop("redir_doc"):"";
 		aw_session_set("tmp_conference_data", array());
+		$_SESSION["tmp_conference_data"] = array();
 		if($c_obj->prop("send_email") == 1)
 		{
 			$this->do_send_emails(array(
