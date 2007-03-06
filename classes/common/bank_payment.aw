@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.28 2007/03/05 14:55:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.29 2007/03/06 22:42:30 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -202,6 +202,10 @@ class bank_payment extends class_base
 	function bank_forms($arr = array())
 	{
 		$data = $_GET+$_POST+$arr;
+		if($arr["id"])
+		{
+			$data["id"] = $arr["id"];
+		}
 		$payment = $this->_get_payment_object($data);
 		if(!is_object($payment))
 		{
