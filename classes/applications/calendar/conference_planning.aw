@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.63 2007/03/06 14:36:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.64 2007/03/06 15:25:19 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -34,6 +34,7 @@
 
 @property send_email type=checkbox field=meta method=serialize ch_value=1 default=0
 @caption Saada email
+
 @property email type=relpicker field=meta method=serialize reltype=RELTYPE_EMAIL
 @caption Saatja E-mail
 
@@ -44,6 +45,24 @@
 @default group=mails
 
 	@property mails type=text no_caption=1 store=no
+
+@groupinfo users_notification caption="Kasutaja teavitus"
+@default group=users_notification
+	
+	@property usr_send_mail type=checkbox ch_value=1 default=0 field=meta method=serialize
+	@caption Saada kasutajale teavitus
+
+	@property usr_subject type=textbox field=meta method=serialize
+	@caption Maili teema
+
+	@property usr_contents type=textarea field=meta method=serialize
+	@caption Maili sisu
+
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 @reltype REDIR_DOC value=2 clid=CL_DOCUMENT
 @caption Edasisuunamise dokument
@@ -144,6 +163,11 @@ class conference_planning extends class_base
 
 		$this->lc_load("conference_planning", "lc_conference_planning");
 		lc_site_load("conference_planning", &$this);
+
+
+		$this->trans_props = array(
+			"usr_subject", "usr_contents"
+		);
 	}
 
 	/**
@@ -211,6 +235,9 @@ class conference_planning extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 
 		}
 		return $retval;
@@ -241,6 +268,11 @@ class conference_planning extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 
 	function parse_alias($arr)
@@ -1488,6 +1520,21 @@ class conference_planning extends class_base
 				"emails" => $this->gather_email_addresses($data["selected_search_result"]),
 				"c_planner" => $c_obj->id(),
 			));
+		}
+		if($c_obj->prop("usr_send_mail") == 1)
+		{
+			if(is_email($data["billing_email"]) && is_email($c_obj->prop("email.mail")) && strlen($c_obj->prop_str("usr_contents")) && strlen($c_obj->prop_str("usr_subject")))
+			{
+				$awm = get_instance("protocols/mail/aw_mail");
+				$awm->create_message(array(
+					"froma" => !is_email($c_obj->prop("email.mail"))?"example@example.com":$c_obj->prop("email.mail"),
+					"fromn" => $c_obj->prop("email.name"),
+					"subject" => $c_obj->prop_str("usr_subject"),
+					"to" => $data["billing_email"],
+					"body" => $c_obj->prop_str("usr_contents"),
+				));
+				$awm->gen_mail();
+			}
 		}
 		return $url;
 	}

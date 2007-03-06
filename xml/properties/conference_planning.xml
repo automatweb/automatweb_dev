@@ -116,6 +116,44 @@
             <store>no</store>
             <field>mails</field>
       </property>
+      <property>
+            <name>usr_send_mail</name>
+            <table>objects</table>
+            <group>users_notification</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Saada kasutajale teavitus</caption>
+      </property>
+      <property>
+            <name>usr_subject</name>
+            <table>objects</table>
+            <group>users_notification</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Maili teema</caption>
+      </property>
+      <property>
+            <name>usr_contents</name>
+            <table>objects</table>
+            <group>users_notification</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Maili sisu</caption>
+      </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CONFERENCE_PLANNING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -127,6 +165,12 @@
             <mails>
                   <caption>E-mailid</caption>
             </mails>
+            <users_notification>
+                  <caption>Kasutaja teavitus</caption>
+            </users_notification>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <REDIR_DOC>
