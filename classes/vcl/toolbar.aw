@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.21 2006/12/04 13:44:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.22 2007/03/06 13:32:28 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -595,6 +595,26 @@ class toolbar extends aw_template
 			"action" => "",
 			"tooltip" => t("Salvesta")
 		));
+	}
+
+	/** Adds search button to the toolbar
+		@attrib api=1
+
+		@param pn required type=string
+			The html element name to stick the search results to
+
+		@param multiple optional type=bool
+			If the element is a multiple select
+
+		@param clid optional type=array
+			The class id to search
+		@param confirm optional type=string
+			javascript confirmation popup caption
+	**/
+	function add_search_button($arr)
+	{
+		$i = get_instance("vcl/popup_search");
+		$this->add_cdata($i->get_popup_search_link($arr));
 	}
 };
 ?>

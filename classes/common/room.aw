@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.171 2007/03/05 14:55:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.172 2007/03/06 13:32:27 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1754,11 +1754,18 @@ class room extends class_base
 							$cus = t("BRON");
 							$title = "";
 							$codes = array();
+
 							$last_cust = $last_bron->prop("customer");
 							if($this->can("view", $last_cust))
 							{
 								$customer = obj($last_cust);
-								$cus = $customer->name();
+								$cus = array();
+								foreach($last_bron->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+								{
+									$cus[] = $c->prop("to.name")." ";
+								}
+								$cus = join(", ", $cus);
+								//$cus = $customer->name();
 						
 								$products = $last_bron->meta("amount");
 								$title = $last_bron->prop("content");

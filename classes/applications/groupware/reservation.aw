@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.52 2007/03/01 17:59:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.53 2007/03/06 13:32:24 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -448,6 +448,7 @@ class reservation extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["reason"] = " ";
+		$arr["add_p"] = "0";
 		if($_GET["calendar"]) 
 		{
 			$arr["calendar"] = $_GET["calendar"];
@@ -473,6 +474,9 @@ class reservation extends class_base
 			$arr["obj_inst"]->set_prop("resource" ,$arr["request"]["resource"]);
 			$arr["obj_inst"]->save();
 		}
+
+		$ps = get_instance("vcl/popup_search");
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["add_p"], 1 /* RELTYPE_CUSTOMER */);
 
 		if ($arr["request"]["sbt_close"] != "")
 		{
@@ -1503,7 +1507,26 @@ flush();
 	function _get_ppl_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_new_button(array(CL_CRM_PERSON),$arr["obj_inst"]->id(), 1 /* RELTYPE_CUSTOMER */);
+		
+		$disp = true;
+		if ($this->can("view", $arr["obj_inst"]->prop("resource")))
+		{
+			$ro = obj($arr["obj_inst"]->prop("resource"));
+			if ($ro->prop("max_capacity") > 0 && count($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER"))) >= $ro->prop("max_capacity"))
+			{
+				$disp = false;
+			}
+		}
+
+		$this->disp = $disp;
+		if ($disp)
+		{
+			$tb->add_new_button(array(CL_CRM_PERSON),$arr["obj_inst"]->id(), 1 /* RELTYPE_CUSTOMER */);
+			$tb->add_search_button(array(
+				"pn" => "add_p",
+				"clid" => CL_CRM_PERSON,
+			));
+		}
 		$tb->add_delete_rels_button();
 	}
 
@@ -1534,7 +1557,7 @@ flush();
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_ppl_t($t);
-
+		$t->set_sortable(false);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 		{
 			$o = $c->to();
@@ -1543,6 +1566,74 @@ flush();
 				"phone" => html::obj_change_url($o->prop("phone")),
 				"email" => html::obj_change_url($o->prop("email")),
 				"oid" => $o->id()
+			));
+		}
+
+		if ($this->disp)
+		{
+			$t->define_data(array(
+				"name" => html::textbox(array(
+					"name" => "new[name]",
+					"size" => 15
+				)),
+				"phone" => html::textbox(array(
+					"name" => "new[phone]",
+					"size" => 15
+				)),
+				"email" => html::textbox(array(
+					"name" => "new[email]",
+					"size" => 15
+				)),
+			));
+		}
+	}
+
+	function _set_ppl($arr)
+	{
+		if ($arr["request"]["new"]["name"] != "")
+		{
+			$cust = obj();
+			$cust->set_parent($arr["obj_inst"]->id() ? $arr["obj_inst"]->id() : $_POST["parent"]);
+			$cust->set_class_id(CL_CRM_PERSON);
+			list($fn, $ln) = explode(" ", $arr["request"]["new"]["name"]);
+			$cust->set_prop("firstname", trim($fn));
+			$cust->set_prop("lastname", trim($ln));
+			$cust->set_name(trim($fn)." ".trim($ln));
+			$cust->save();
+
+			if ($arr["request"]["new"]["phone"] != "")
+			{
+				$ph = obj();
+				$ph->set_parent($cust->id());
+				$ph->set_class_id(CL_CRM_PHONE);
+				$ph->set_name($arr["request"]["new"]["phone"]);
+				$ph->save();
+				$cust->connect(array(
+					"to" => $ph->id(),
+					"type" => "RELTYPE_PHONE"
+				));
+				$cust->set_prop("phone", $ph->id());
+			}
+
+			if ($arr["request"]["new"]["email"] != "")
+			{
+                                $ph = obj();
+                                $ph->set_parent($cust->id());
+                                $ph->set_class_id(CL_ML_MEMBER);
+	                        $ph->set_name($arr["request"]["new"]["email"]);
+				$ph->set_prop("mail", $arr["request"]["new"]["email"]);
+                	        $ph->save();
+                                $cust->connect(array(
+                                        "to" => $ph->id(),
+                                        "type" => "RELTYPE_EMAIL"
+                                ));
+                                $cust->set_prop("email", $ph->id());
+			}
+			$cust->save();
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $cust->id(),
+				"type" => "RELTYPE_CUSTOMER"
 			));
 		}
 	}

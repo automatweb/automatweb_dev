@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.22 2007/03/01 17:59:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.23 2007/03/06 13:32:26 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -287,10 +287,11 @@ class spa_bookings_overview extends class_base
 			$this->_init_r_list($t, false);
 			// group table by ppl and do several rows for one room if necessary
 			$ppl = array();
+			$ppl_all = array();
 			foreach($room2booking as $room_id => $books)
 			{
 				foreach($books as $booking)
-				{
+				{	
 					foreach($booking->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 					{
 						$ppl[$c->prop("to")][] = $booking;
@@ -306,6 +307,11 @@ class spa_bookings_overview extends class_base
 					$rvs_ids[] = $booking->id();
 				}
 				$p_obj = obj($cust_id);
+				if ($arr["request"]["rs_booker_name"] != "" && strpos($p_obj->name(), $arr["request"]["rs_booker_name"]) === false)
+				{
+					continue;
+				}
+				$ppl_links = array();
 				$p_str = html::obj_change_url($p_obj)." / ".html::href(array(
 					"url" => $this->mk_my_orb("print_person_chart", array("person" => $cust_id, "rvs" => $rvs_ids, "center" => $arr["obj_inst"]->id())),
 					"caption" => t("Prindi"),
