@@ -22,6 +22,16 @@
             <method>serialize</method>
             <caption>Ruumid</caption>
       </property>
+      <property>
+            <name>bank_payment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BANK_PAYMENT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pangamakse objekt</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SPA_CUSTOMER_INTERFACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -40,6 +50,11 @@
                   <clid>CL_ROOM</clid>
                   <caption>Ruum</caption>
             </ROOM>
+            <BANK_PAYMENT>
+                  <value>3</value>
+                  <clid>CL_BANK_PAYMENT</clid>
+                  <caption>Pangamakse</caption>
+            </BANK_PAYMENT>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.8 2007/02/22 11:59:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.9 2007/03/06 17:26:40 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -14,11 +14,18 @@
 @property rooms type=relpicker reltype=RELTYPE_ROOM multiple=1 field=meta method=serialize
 @caption Ruumid
 
+@property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT field=meta method=serialize
+@caption Pangamakse objekt
+
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Toodete kataloog
 
 @reltype ROOM value=2 clid=CL_ROOM
 @caption Ruum
+
+@reltype BANK_PAYMENT value=3 clid=CL_BANK_PAYMENT
+@caption Pangamakse
+
 */
 
 class spa_customer_interface extends class_base
