@@ -18,6 +18,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
+	
+	@property jrk field=jrk type=textbox display=none group=general_sub
+	@caption Jrk
 
 	@layout co_top type=hbox closeable=1 area_caption=&Uuml;ldandmed width=50%:50%
 

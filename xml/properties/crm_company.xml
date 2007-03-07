@@ -11,6 +11,15 @@
             <field>navtoolbar</field>
       </property>
       <property>
+            <name>jrk</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <field>jrk</field>
+            <type>textbox</type>
+            <display>none</display>
+            <caption>Jrk</caption>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general_sub</group>
