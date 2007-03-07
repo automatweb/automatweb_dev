@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.66 2007/03/06 16:46:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.67 2007/03/07 12:37:40 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -652,7 +652,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"fax_value" , "code_value" ,"email_value" , "street_value" ,"index_value" ,"country_code_value","city_value","correspond_street_value",
 				"correspond_index_value" ,
 				"correspond_country_code_value" ,
-				"correspond_city_value");
+				"correspond_city_value", "name");
 		
 		$a = "";
 		$correspond_address = "";
@@ -1149,6 +1149,10 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		{
 			foreach($applicant_vars as $var)
 			{
+				if($var == "name" && !$_SESSION["patent"]["applicants"][$key][$var])
+				{
+					$_SESSION["patent"]["applicants"][$key][$var] = $_SESSION["patent"]["applicants"][$key]["firstname"]." ".$_SESSION["patent"]["applicants"][$key]["lastname"];
+				}
 				$this->vars(array($var."_value" => $_SESSION["patent"]["applicants"][$key][$var]));
 				if($_SESSION["patent"]["applicants"][$key]["type"])
 				{
@@ -1166,6 +1170,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 						"CO_ADDRESS" => "",
 					));
 				}
+				
 				if($_SESSION["patent"]["applicants"][$key][$var])
 				{
 					$str = strtoupper($var);
@@ -1184,7 +1189,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
  			{
  				$this->vars(array("CONTACT" => $this->parse("CONTACT")));
  			}
-			$a.= $this->parse("APPLICANT");
+ 			$a.= $this->parse("APPLICANT");
 		}
 		return $a;
 	}
@@ -2390,7 +2395,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				//time() - (30*6 + 5)*24*3600 )
 			 )
 			{
-				$err.= t("Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud ja 5 p&auml;eva ")."\n<br>";
+				$err.= t("Prioriteedikuup&auml;ev ei v&otilde;i olla vanem kui 6 kuud")."\n<br>";
 			}
 		}
 		if(!$err)
