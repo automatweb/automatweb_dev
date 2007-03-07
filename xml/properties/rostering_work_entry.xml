@@ -11,22 +11,6 @@
             <caption>Graafik</caption>
       </property>
       <property>
-            <name>unit</name>
-            <table>aw_rostering_work_entry</table>
-            <group>general</group>
-            <type>select</type>
-            <field>aw_unit</field>
-            <caption>&amp;amp;Uuml;ksus</caption>
-      </property>
-      <property>
-            <name>day</name>
-            <table>aw_rostering_work_entry</table>
-            <group>general</group>
-            <type>select</type>
-            <field>aw_day</field>
-            <caption>P&amp;amp;auml;ev</caption>
-      </property>
-      <property>
             <name>g_wp</name>
             <table>aw_rostering_work_entry</table>
             <group>general</group>
@@ -35,6 +19,15 @@
             <reltype>RELTYPE_WORKBENCH</reltype>
             <field>aw_g_wp</field>
             <caption>T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
+      </property>
+      <property>
+            <name>entry_header</name>
+            <table>aw_rostering_work_entry</table>
+            <group>entry</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>entry_header</field>
       </property>
       <property>
             <name>entry_t</name>

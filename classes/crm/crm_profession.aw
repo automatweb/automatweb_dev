@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.14 2006/11/08 16:01:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.15 2007/03/07 13:00:25 kristo Exp $
 // crm_profession.aw - Ametinimetus
 /*
 @classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes
@@ -26,6 +26,9 @@
 @caption Nimi mitmuses
 @comment Ametinimetus mitmuses
 
+@property skills type=relpicker reltype=RELTYPE_SKILL store=connect multiple=1 automatic=1
+@caption P&auml;devused
+
 @property trans type=translator store=no group=trans props=name,name_in_plural
 @caption Tõlkimine
 
@@ -39,6 +42,9 @@
 
 @reltype DESC_FILE value=3 clid=CL_FILE
 @caption Ametijuhend
+
+@reltype SKILL value=4 clid=CL_PERSON_SKILL
+@caption Oskus
 
 */
 

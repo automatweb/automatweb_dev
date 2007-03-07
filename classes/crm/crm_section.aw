@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.26 2006/06/20 11:22:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.27 2007/03/07 13:00:25 kristo Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -46,6 +46,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 	@property email_id type=relpicker reltype=RELTYPE_EMAIL field=meta method=serialize
 	@caption E-posti aadress
 
+@groupinfo wpls caption="T&ouml;&ouml;kohad"
+@default group=wpls
+
+	@property wpls type=relpicker reltype=RELTYPE_WORKPLACE multiple=1 store=connect automatic=1
+	@caption T&ouml;&ouml;kohad
+
 @reltype SECTION value=1 clid=CL_CRM_SECTION
 @caption Alamüksus
 
@@ -75,6 +81,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @reltype LINK_DOCUMENT value=10 clid=CL_DOCUMENT
 @caption Dokument
+
+@reltype WORKPLACE value=11 clid=CL_ROSTERING_WORKPLACE
+@caption T&ouml;&ouml;koht
 
 */
 

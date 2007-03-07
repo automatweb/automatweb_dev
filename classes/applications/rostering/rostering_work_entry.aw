@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.3 2006/10/16 10:37:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.4 2007/03/07 13:00:24 kristo Exp $
 // rostering_work_entry.aw - T&ouml;&ouml;aegade sisestus 
 /*
 
@@ -13,17 +13,12 @@
 	@property graph type=relpicker automatic=1 reltype=RELTYPE_GRAPH field=aw_graph
 	@caption Graafik
 
-	@property unit type=select field=aw_unit
-	@caption &Uuml;ksus
-
-	@property day type=select field=aw_day
-	@caption P&auml;ev
-
 	@property g_wp type=relpicker automatic=1 reltype=RELTYPE_WORKBENCH field=aw_g_wp
 	@caption T&ouml;&ouml;laud
 
 @default group=entry
 
+	@property entry_header type=text store=no no_caption=1
 	@property entry_t type=table store=no no_caption=1
 
 @groupinfo entry caption="Sisestamine"
@@ -60,40 +55,6 @@ class rostering_work_entry extends class_base
 				{
 					$prop["value"] = $arr["request"]["wp"];
 				}
-				break;
-
-			case "unit":
-				if ($arr["new"])
-				{
-					return PROP_IGNORE;
-				}
-				$wp = obj($arr["obj_inst"]->prop("g_wp"));
-				$co = obj($wp->prop("owner"));
-				$co_i = $co->instance();
-				$se = $co_i->get_all_org_sections($co);
-				$opts = array("" => t("--vali--"));	
-				foreach($se as $se_id)
-				{
-					$s = obj($se_id);
-					$opts[$se_id] = $s->name();
-				}
-				$prop["options"] = $opts;
-				break;
-
-			case "day":
-				if (!$arr["obj_inst"]->prop("graph"))
-				{
-					return PROP_IGNORE;
-				}
-				$gr = obj($arr["obj_inst"]->prop("graph"));
-				$start = $gr->prop("g_start");
-				$end = $gr->prop("g_end");
-				$opts = array("" => t("--vali--"));
-				for($i = $start; $i < $end; $i+=24*3600)
-				{
-					$opts[$i] = date("d.m.Y", $i);
-				}
-				$prop["options"] = $opts;
 				break;
 		};
 		return $retval;
@@ -158,6 +119,12 @@ class rostering_work_entry extends class_base
 			"parent" => "def"
 		));
 		$t->define_field(array(
+			"name" => "skill",
+			"caption" => t("P&auml;devus"),
+			"align" => "center",
+			"parent" => "def"
+		));
+		$t->define_field(array(
 			"name" => "hrs",
 			"caption" => t("Aeg"),
 			"align" => "center",
@@ -211,14 +178,19 @@ class rostering_work_entry extends class_base
 		$wp = obj($arr["obj_inst"]->prop("g_wp"));
 		$co = obj($wp->prop("owner"));
 		$co_i = $co->instance();
-		
+
+		$gr = obj($arr["obj_inst"]->prop("graph"));
+
 		$ppl = array();
-		if ($arr["obj_inst"]->prop("unit"))
+		if (is_array($gr->prop("g_unit")) && count($gr->prop("unit")))
 		{
-			$u = obj($arr["obj_inst"]->prop("unit"));
-			foreach($u->connections_from(array("type" => "RELTYPE_WORKERS")) as $c)
+			foreach($gr->prop("g_unit") as $unit)
 			{
-				$ppl[$c->prop("to")] = $c->prop("to.name");
+				$u = obj($unit);
+				foreach($u->connections_from(array("type" => "RELTYPE_WORKERS")) as $c)
+				{
+					$ppl[$c->prop("to")] = $c->prop("to.name");
+				}
 			}
 		}
 		else
@@ -226,17 +198,10 @@ class rostering_work_entry extends class_base
 			$ppl = $co_i->get_employee_picker($co);
 		}
 
-		if ($arr["obj_inst"]->prop("day"))
-		{
-			$start = $arr["obj_inst"]->prop("day");
-			$end += 24*3600;
-		}
-		else
-		{
-			$gr = obj($arr["obj_inst"]->prop("graph"));
-			$start = $gr->prop("g_start");
-			$end = $gr->prop("g_end");
-		}
+		// get date range from selected graph
+		$gr = obj($arr["obj_inst"]->prop("graph"));
+		$start = $arr["request"]["date"] ? $arr["request"]["date"] : $gr->prop("g_start");
+		$end = $start + 24 * 3600;
 
 		$pt = array();
 		foreach($wp->connections_from(array("type" => "RELTYPE_PAYMENT_TYPE")) as $c)
@@ -254,6 +219,7 @@ class rostering_work_entry extends class_base
 				$t->define_data(array(
 					"wpl" => html::obj_change_url($wt_item["workplace"]),
 					"person" => html::obj_change_url($p_id),
+					"skill" => html::obj_change_url($wt_item["skill"]),
 					"hrs" => date("d.m.Y H:i", $wt_item["start"])." - ".date("d.m.Y H:i", $wt_item["end"]),
 					"correct" => html::checkbox(array(
 						"name" => "d[$wt_id][correct]",
@@ -284,6 +250,32 @@ class rostering_work_entry extends class_base
 			}
 		}
 		$t->set_sortable(false);
+	}
+
+	function _get_entry_header($arr)
+	{
+		// get date range from selected graph
+		$gr = obj($arr["obj_inst"]->prop("graph"));
+		$start = $gr->prop("g_start");
+		$end = $gr->prop("g_end");
+		$date = $arr["request"]["date"] ? $arr["request"]["date"] : $start;
+
+		$dstr = array();
+		for($tm = $start; $tm < $end; $tm += (24*3600))
+		{
+			if ($tm == $date)
+			{
+				$dstr[] = date("d.m.Y", $tm);
+			}
+			else
+			{
+				$dstr[] = html::href(array(
+					"url" => aw_url_change_var("date", $tm),
+					"caption" => date("d.m.Y", $tm)
+				));
+			}
+		}
+		$arr["prop"]["value"] = join(" /  ", $dstr);
 	}
 }
 ?>

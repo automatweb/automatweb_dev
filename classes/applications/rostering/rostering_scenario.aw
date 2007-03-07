@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_scenario.aw,v 1.1 2006/09/14 09:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_scenario.aw,v 1.2 2007/03/07 13:00:24 kristo Exp $
 // rostering_scenario.aw - Planeerimise stsenaarium 
 /*
 
@@ -43,7 +43,7 @@
 	@groupinfo settings_sect caption="Spetsiifiised" submit=no parent=settings
 
 	
-@reltype CYCLE value=1 clic=CL_PERSON_WORK_CYCLE
+@reltype CYCLE value=1 clid=CL_PERSON_WORK_CYCLE
 @caption Ts&uuml;kkel
 */
 

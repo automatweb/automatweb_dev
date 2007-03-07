@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.7 2006/10/20 11:19:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.8 2007/03/07 13:00:24 kristo Exp $
 // rostering_workbench.aw - T&ouml;&ouml;aja planeerimine 
 /*
 
@@ -474,6 +474,36 @@ class rostering_workbench extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
+		$t->define_field(array(
+			"name" => "cycles",
+			"caption" => t("Ts&uuml;klid"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "work_hrs_per_week",
+			"caption" => t("T&ouml;&ouml;tunde n&auml;dalas"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "no_plan_night",
+			"caption" => t("&Auml;ra planeeri &ouml;&ouml;seks"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "max_overtime",
+			"caption" => t("Maksimaalne &uuml;letundide arv"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "free_days_after_night_shift",
+			"caption" => t("Vabu p&auml;evi peale &ouml;&ouml;t&ouml;&ouml;d"),
+			"align" => "center",
+			"sortable" => 1
+		));
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"
@@ -490,7 +520,12 @@ class rostering_workbench extends class_base
 			$o = $c->to();
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
-				"oid" => $o->id()
+				"oid" => $o->id(),
+				"cycles" => $o->prop_str("cycles"),
+				"work_hrs_per_week" => $o->prop("work_hrs_per_week"),
+				"no_plan_night" => $o->prop("no_plan_night") ? t("X") : "",
+				"max_overtime" => $o->prop("max_overtime"),
+				"free_days_after_night_shift" => $o->prop("free_days_after_night_shift")
 			));
 		}
 	}
@@ -925,6 +960,40 @@ class rostering_workbench extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
+		$t->define_field(array(
+			"name" => "createdby_person",
+			"caption" => t("Koostaja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "g_unit",
+			"caption" => t("&Uuml;ksus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "g_start",
+			"caption" => t("Algus"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y"
+		));
+		$t->define_field(array(
+			"name" => "g_end",
+			"caption" => t("L&otilde;pp"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y"
+		));
+		$t->define_field(array(
+			"name" => "final",
+			"caption" => t("Kinnitatud"),
+			"align" => "center",
+			"sortable" => 1
+		));
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"
@@ -1015,6 +1084,12 @@ class rostering_workbench extends class_base
 			"numeric" => 1,
 			"format" => "d.m.Y H:i"
 		));
+		$t->define_field(array(
+			"name" => "graph",
+			"caption" => t("Graafik"),
+			"align" => "center",
+			"sortable" => 1
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -1035,7 +1110,7 @@ class rostering_workbench extends class_base
 	function _work_hrs_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_button(array(
+		$tb->add_menu_button(array(
 			"name" => "new",
 			"img" => "new.gif",
 			"url" => html::get_new_url(CL_ROSTERING_WORK_ENTRY, $arr["obj_inst"]->id(), array(
@@ -1044,6 +1119,50 @@ class rostering_workbench extends class_base
 			)),
 			"tooltip" => t("Lisa")
 		));
+		// now add graphs submenu
+		$pt = $this->_get_graph_pt($arr["obj_inst"]);
+		$gfolders = new object_tree(array(
+			"class_id" => CL_MENU,
+			"parent" => $pt,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		// list all graphs for the parents
+		$ol = new object_list(array(
+			"class_id" => CL_ROSTERING_SCHEDULE,
+			"parent" => $gfolders->ids(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$fld2graph = array();
+		foreach($ol->arr() as $o)
+		{
+			$fld2graph[$o->parent()][] = $o;
+		}
+		foreach($gfolders->ids() as $gf_id)
+		{
+			if (true )
+			{
+				$fo = obj($gf_id);
+				$tb->add_sub_menu(array(
+					"parent" => $fo->parent() == $pt ? "new" : "p".$fo->parent(),
+					"name" => "p".$gf_id,
+					"text" => $fo->name()
+				));
+				if (is_array($fld2graph[$gf_id]))
+				{
+					foreach($fld2graph[$gf_id] as $gr)
+					{
+						$tb->add_menu_item(array(
+							"parent" => "p".$gf_id,
+							"text" => $gr->name(),
+							"title" => $gr->name(),
+							"link" => $this->mk_my_orb("create_we_from_graph", array("wb" => $arr["obj_inst"]->id(), "gr" => $gr->id(), "ru" => get_ru()))
+						));
+					}
+				}
+			}
+		}
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -1071,6 +1190,26 @@ class rostering_workbench extends class_base
 		$tb =& $arr["prop"]["vcl_inst"];
 		$tb->add_new_button(array(CL_ROSTERING_PAYMENT_TYPE), $arr["obj_inst"]->id(), 8);
 		$tb->add_delete_button();
+	}
+
+	/**
+		@attrib name=create_we_from_graph
+		@param wb required 
+		@param gr required
+		@param ru required
+	**/
+	function create_we_from_graph($arr)
+	{
+		$gr = obj($arr["gr"]);
+
+		$we = obj();
+		$we->set_class_id(CL_ROSTERING_WORK_ENTRY);
+		$we->set_parent($arr["wb"]);
+		$we->set_name(sprintf(t("Graafiku %s t&ouml;&ouml;aruanne"), $gr->name()));
+		$we->set_prop("graph", $gr->id());
+		$we->set_prop("g_wp", $arr["wb"]);
+		$we->save();
+		return $this->mk_my_orb("change", array("id" => $we->id(), "return_url" => $arr["ru"]), $we->class_id());
 	}
 }
 ?>

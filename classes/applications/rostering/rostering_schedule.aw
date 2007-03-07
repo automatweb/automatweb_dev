@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.3 2006/10/20 11:19:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.4 2007/03/07 13:00:24 kristo Exp $
 // rostering_schedule.aw - Rostering graafik 
 /*
 
@@ -20,8 +20,11 @@
 	@property g_end type=date_select field=aw_g_end default=-1
 	@caption L&otilde;pp
 
-	@property g_scenario type=relpicker automatic=1 field=aw_g_scenario reltype=RELTYPE_SCENARIO
+	@property g_scenario type=relpicker display=radio automatic=1 field=aw_g_scenario reltype=RELTYPE_SCENARIO
 	@caption Stsenaarium
+
+	@property g_unit type=relpicker automatic=1 field=aw_g_unit reltype=RELTYPE_UNIT multiple=1 store=connect
+	@caption &Uuml;ksus
 
 	@property g_wp type=relpicker automatic=1 reltype=RELTYPE_WORKBENCH field=aw_g_wp
 	@caption T&ouml;&ouml;laud
@@ -84,6 +87,9 @@
 
 @reltype WORKBENCH value=2 clid=CL_ROSTERING_WORKBENCH
 @caption T&ouml;&ouml;laud
+
+@reltype UNIT value=3 clid=CL_CRM_SECTION
+@caption &Uuml;ksus
 
 */
 
@@ -619,14 +625,31 @@ class rostering_schedule extends class_base
 		return PROP_OK;
 	}
 
-	function _init_skg_tbl(&$t, &$wpl2skill)
+	function _init_skg_tbl(&$t, &$wpl2skill, $o)
 	{
-		// list all wp's and for those, needed skills
-		$ol = new object_list(array(
-			"class_id" => CL_ROSTERING_WORKPLACE,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
+		// get all units from the graph and for each unit, check if it has workplaces set.
+		// if it does, then only add those. 
+		// if not, then add all of them
+		$ol = new object_list();
+		foreach(safe_array($o->prop("g_unit")) as $unit)
+		{
+			$uo = obj($unit);
+			if (count(safe_array($uo->prop("wpls"))))
+			{
+				foreach(safe_array($uo->prop("wpls")) as $wpl)
+				{
+					$ol->add($wpl);
+				}
+			}
+			else
+			{
+				$ol->add(new object_list(array(
+					"class_id" => CL_ROSTERING_WORKPLACE,
+					"lang_id" => array(),
+					"site_id" => array()
+				)));
+			}
+		}
 		$t->define_field(array(
 			"name" => "empl",
 			"caption" => t("T&ouml;&ouml;taja"),
@@ -657,7 +680,7 @@ class rostering_schedule extends class_base
 	function _skg_tbl($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_skg_tbl($t, $wpl2skill);
+		$this->_init_skg_tbl($t, $wpl2skill, $arr["obj_inst"]);
 
 		$o = obj($arr["obj_inst"]->prop("g_wp"));
 		$co = obj($o->prop("owner"));
@@ -899,6 +922,16 @@ class rostering_schedule extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_rostering_schedule (aw_oid int primary key, aw_final int, aw_g_start int, aw_g_end int, aw_g_wp int, aw_g_scenario int)");
 			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_g_unit":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
 		}
 	}
 

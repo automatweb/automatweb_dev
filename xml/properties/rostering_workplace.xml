@@ -13,6 +13,17 @@
             <caption>P&amp;amp;auml;devused</caption>
       </property>
       <property>
+            <name>professions</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <store>connect</store>
+            <reltype>RELTYPE_PROFESSION</reltype>
+            <automatic>1</automatic>
+            <field>professions</field>
+            <caption>Ametinimetused</caption>
+      </property>
+      <property>
             <name>address</name>
             <table>aw_rostering_workplace</table>
             <group>general</group>
@@ -69,6 +80,11 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>Aadress</caption>
             </ADDRESS>
+            <PROFESSION>
+                  <value>3</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Ametinimetus</caption>
+            </PROFESSION>
       </reltypes>
 </properties>
 

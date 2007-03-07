@@ -50,5 +50,15 @@
 			</function>
 		</action>
 
+		<action name="create_we_from_graph">
+			<function name="create_we_from_graph">
+				<arguments>
+					<required name="wb" />
+					<required name="gr" />
+					<required name="ru" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

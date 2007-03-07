@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workplace.aw,v 1.2 2006/10/11 13:06:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workplace.aw,v 1.3 2007/03/07 13:00:24 kristo Exp $
 // rostering_workplace.aw - T&ouml;&ouml;koht 
 /*
 
@@ -12,6 +12,9 @@
 
 	@property skills type=relpicker multiple=1 store=connect reltype=RELTYPE_SKILL automatic=1
 	@caption P&auml;devused
+
+	@property professions type=relpicker store=connect reltype=RELTYPE_PROFESSION automatic=1
+	@caption Ametinimetused
 
 	@property address type=relpicker reltype=RELTYPE_ADDRESS table=aw_rostering_workplace field=aw_address
 	@caption Aadress
@@ -30,6 +33,9 @@
 
 @reltype ADDRESS value=2 clid=CL_CRM_ADDRESS
 @caption Aadress
+
+@reltype PROFESSION value=3 clid=CL_CRM_PROFESSION
+@caption Ametinimetus
 */
 
 class rostering_workplace extends class_base

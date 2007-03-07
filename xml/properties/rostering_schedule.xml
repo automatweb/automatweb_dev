@@ -33,10 +33,23 @@
             <table>aw_rostering_schedule</table>
             <group>general</group>
             <type>relpicker</type>
+            <display>radio</display>
             <automatic>1</automatic>
             <field>aw_g_scenario</field>
             <reltype>RELTYPE_SCENARIO</reltype>
             <caption>Stsenaarium</caption>
+      </property>
+      <property>
+            <name>g_unit</name>
+            <table>aw_rostering_schedule</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <field>aw_g_unit</field>
+            <reltype>RELTYPE_UNIT</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <caption>&amp;amp;Uuml;ksus</caption>
       </property>
       <property>
             <name>g_wp</name>
@@ -208,6 +221,11 @@
                   <clid>CL_ROSTERING_WORKBENCH</clid>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;laud</caption>
             </WORKBENCH>
+            <UNIT>
+                  <value>3</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>&amp;amp;Uuml;ksus</caption>
+            </UNIT>
       </reltypes>
       <layout>
             <opa>

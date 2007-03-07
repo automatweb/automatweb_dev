@@ -108,10 +108,27 @@
             <method>serialize</method>
             <caption>E-posti aadress</caption>
       </property>
+      <property>
+            <name>wpls</name>
+            <table>objects</table>
+            <group>wpls</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WORKPLACE</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <automatic>1</automatic>
+            <field>wpls</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SECTION</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <wpls>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;kohad</caption>
+            </wpls>
+      </groupinfo>
       <reltypes>
             <SECTION>
                   <value>1</value>
@@ -163,6 +180,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument</caption>
             </LINK_DOCUMENT>
+            <WORKPLACE>
+                  <value>11</value>
+                  <clid>CL_ROSTERING_WORKPLACE</clid>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;koht</caption>
+            </WORKPLACE>
       </reltypes>
 </properties>
 

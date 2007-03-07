@@ -109,7 +109,7 @@
       <reltypes>
             <CYCLE>
                   <value>1</value>
-                  <clic>CL_PERSON_WORK_CYCLE</clic>
+                  <clid>CL_PERSON_WORK_CYCLE</clid>
                   <caption>Ts&amp;amp;uuml;kkel</caption>
             </CYCLE>
       </reltypes>
