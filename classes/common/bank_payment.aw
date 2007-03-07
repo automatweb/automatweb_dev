@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.29 2007/03/06 22:42:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.30 2007/03/07 15:44:39 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
