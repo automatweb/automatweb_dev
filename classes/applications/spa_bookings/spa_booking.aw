@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.6 2007/02/12 10:16:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.7 2007/03/07 14:57:30 markop Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -50,7 +50,6 @@ class spa_booking extends class_base
 			"clid" => CL_SPA_BOOKING
 		));
 	}
-
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -84,6 +83,16 @@ class spa_booking extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	/**
+		@attrib name=bank_return  is_public=1 all_args=1
+		@param id required type=int
+	**/
+	function bank_return($arr)
+	{
+		$inst = get_instance(CL_SPA_CUSTOMER_INTERFACE);
+		return $inst->bank_return($arr);
 	}
 
 	function set_property($arr = array())

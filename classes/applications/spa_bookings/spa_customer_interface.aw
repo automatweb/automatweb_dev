@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.9 2007/03/06 17:26:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.10 2007/03/07 14:55:14 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -84,6 +84,9 @@ class spa_customer_interface extends class_base
 		$ei = get_instance(CL_SPA_BOOKIGS_ENTRY);
 
 		$ct = obj($id);
+		
+		$bank_payment = $ct->prop("bank_payment");
+		
 		$rooms = $ct->prop("rooms");
 
 		foreach($ol->arr() as $o)
@@ -134,9 +137,13 @@ class spa_customer_interface extends class_base
 
 			if (!$confirmed && $has_times && $has_prods)
 			{
+				$pay_url = $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment));
+
 				$booking_str .= " / ".html::href(array(
-					"url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
-					"caption" => t("Kinnita"),
+					"url" => $pay_url,
+				//"url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
+				//	"caption" => t("Kinnita"),
+					"caption" => t("Maksa"),
 				));
 			}
 
@@ -157,6 +164,7 @@ class spa_customer_interface extends class_base
 						"r" => get_ru()
 					)),
 				"confirm_url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
+				"pay_url" => $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment)),
 				"print_url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
 			));
 
@@ -568,6 +576,59 @@ class spa_customer_interface extends class_base
 		));
 	}
 
+	function get_reservations_sum($o)
+	{
+		$total_sum = 0;
+		if(!is_oid($o) || !$this->can("view" , $o))
+		{
+			return $total_sum;
+		}
+		$o = obj($o);
+		$room_res_inst = get_instance(CL_ROOM_RESERVATION);
+		foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+		{
+			$b = $c->to();
+			$sum = $room_res_inst->get_total_bron_price(array(
+				"bron" => $b,
+			));
+			foreach($sum as $curr => $val)
+			{
+				$c = obj($curr);
+				if($c->name() == "EEK")
+				{
+					$sum = $val;
+				}
+			}
+			$total_sum+= $sum;
+		}
+		return $total_sum;
+	}
+
+	/**
+		@attrib name=pay
+		@param oid required type=int acl=view
+		@param r optional
+		@param bank_payment required typoe=oid
+	**/
+	function pay($arr)
+	{
+		extract($arr);
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		if(is_oid($bank_payment))
+		{
+			$payment = obj($bank_payment);
+			$asd = $bank_inst->bank_forms(array(
+				"id" => $bank_payment,
+				"amount" =>  $this->get_reservations_sum($arr["id"]),
+				"reference_nr" => $arr["id"],
+			));
+		}
+		$o = obj($arr["id"]);
+		$o->set_meta("ru" , $r);
+		$o->save();
+		return $asd;
+	}
+
 	/**
 		@attrib name=confirm_booking
 		@param id required type=int acl=view
@@ -581,6 +642,28 @@ class spa_customer_interface extends class_base
 			$b = $c->to();
 			$b->set_prop("verified", 1);
 			$b->save();
+		}
+		return $arr["r"];
+	}
+
+	/**
+		@attrib name=bank_return is_public=1 all_args=1
+		@param id required type=int acl=view
+	**/
+	function bank_return($arr)
+	{
+		$o = obj($arr["id"]);
+		foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+		{
+			$b = $c->to();
+			$b->set_prop("verified", 1);
+			$b->save();
+		}
+		if($o->meta("ru"))
+		{
+			header("Location:".$o->meta("ru"));
+			die();
+			return $o->meta("ru");
 		}
 		return $arr["r"];
 	}

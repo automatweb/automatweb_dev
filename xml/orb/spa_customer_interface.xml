@@ -41,11 +41,29 @@
 			</function>
 		</action>
 
+		<action name="pay">
+			<function name="pay">
+				<arguments>
+					<required name="oid" type="int" acl="view" />
+					<optional name="r" />
+					<required name="bank_payment" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="confirm_booking">
 			<function name="confirm_booking">
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<optional name="r" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="bank_return" is_public="1" all_args="1">
+			<function name="bank_return">
+				<arguments>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
