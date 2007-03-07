@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.50 2007/03/01 11:10:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.51 2007/03/07 14:44:52 markop Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -45,6 +45,8 @@
 @property sum type=textbox table=aw_shop_orders field=aw_sum group=items
 @caption Summa
 
+@property pickup type=text store=no 
+@caption Klient tuleb j&auml;rele
 
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT,CL_SHOP_PACKET
 @caption tellimuse toode
@@ -87,6 +89,11 @@ class shop_order extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "pickup":
+				$ud = $arr["obj_inst"]->meta("user_data");
+				$data["value"] = $ud["user7"]."  ".$ud["user8"].":00";
+				break;
+
 			case "items":
 				$this->do_ord_table($arr);
 				break;
@@ -920,11 +927,11 @@ class shop_order extends class_base
 	{
 		$o = obj($arr["id"]);
 		$l = get_instance("languages");
-		
-		if($o->prop("lang_id"))
+		//arr($o->prop("lang_id")); arr($o->prop("lang_lc"));
+		if($o->meta("lang_id"))
 		{
-			$_SESSION["ct_lang_id"] = $o->prop("lang_id");
-			$_SESSION["ct_lang_lc"] = $o->prop("lang_lc");
+			$_SESSION["ct_lang_id"] = $o->meta("lang_id");
+			$_SESSION["ct_lang_lc"] = $o->meta("lang_lc");
 			aw_global_set("ct_lang_lc", $_SESSION["ct_lang_lc"]);
 			aw_global_set("ct_lang_id", $_SESSION["ct_lang_id"]);
 		}
@@ -973,6 +980,7 @@ class shop_order extends class_base
 		}
 
 		$awm = get_instance("protocols/mail/aw_mail");
+//		$awm->dbg = 1;
 		$html = $this->show(array("id" => $o->id()));
 		//if(aw_global_get("uid") == "struktuur"){arr($_send_to);arr($html);arr($o->meta("user_data"));die(); }
 		$awm->create_message(array(
@@ -986,6 +994,143 @@ class shop_order extends class_base
 			"data" => $html
 		));
 		$awm->gen_mail();
+
+
+		// also, if the warehouse has emails set, then send those
+		$warehouse = $order_center->prop("warehouse");
+		$wo = obj($warehouse);
+		$emails = $wo->connections_from(array("type" => "RELTYPE_EMAIL"));
+//if (aw_global_get("uid") == "struktuur") { echo "emails = ".dbg::dump($emails)." <br>"; }
+                        if (count($emails) > 0)
+                        {
+                                // if send mails by grp el is set, do this crap different
+                                if ($order_center->prop("mails_sep_by_el"))
+                                {
+                                        // go over prods, gather mail => prods relations and get html and do the whole mailing things
+                                        $eml2prod = array();
+                                        $__fld = $order_center->prop("mail_group_by");
+                                        foreach($o->meta('ord_item_data') as $iid => $quantx)
+                                        {
+                                                $_po = obj($iid);
+                                                $eml2prod[$_po->prop($__fld)][] = $iid;
+                                        }
+
+                                        $to_send = array();
+                                        foreach($eml2prod as $eml => $_prods)
+                                        {
+                                                if ($eml == "")
+                                                {
+                                                        // make content for empty prods
+                                                        $i = get_instance(CL_SHOP_ORDER);
+							$_html = $i->show(array(
+                                                                "id" => $oi->id(),
+                                                                "show_only_prods_with_val" => $eml
+                                                        ));
+                                                        foreach($emails as $c)
+                                                        {
+                                                                $eml = $c->to();
+                                                                $to_send[$eml->prop("mail")] = array($_html, "");
+                                                        }
+                                                }
+                                                else
+                                                {
+							$i = get_instance(CL_SHOP_ORDER);
+                                                        $_html = $i->show(array(
+                                                                "id" => $oi->id(),
+                                                                "show_only_prods_with_val" => $eml
+                                                        ));
+                                                        $eml_o = obj($eml);
+                                                        $to_send[$eml_o->comment()] = array($_html, $eml);
+                                                }
+                                        }
+
+                                        foreach($to_send as $eml => $html)
+ 					{
+                                                $awm->clean();
+                                                $awm->create_message(array(
+                                                        "froma" => $mail_from_addr,
+                                                        "fromn" => $mail_from_name,
+                                                        "subject" => $email_subj,
+                                                        "to" => $eml,
+                                                        "body" => "see on html kiri",
+                                                ));
+                                                $awm->htmlbodyattach(array(
+                                                        "data" => $html[0],
+                                                ));
+                                                if($at == 1)
+                                                {
+                                                        $vars = array(
+                                                                "id" => $oi->id(),
+                                                                "show_only_prods_with_val" => $html[1]
+                                                        );
+							$i = get_instance(CL_SHOP_ORDER);
+                                                        if(file_exists($i->site_template_dir."/show_attach.tpl"))
+                                                        {
+                                                                $vars["template"] = "show_attach.tpl";
+                                                        }
+                                                        $org = obj($c_com_id);
+                                                        $htmla = $i->show($vars);
+                                                        $awm->fattach(array(
+                                                                "contenttype" => "application/vnd.ms-excel",
+                                                                "name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+                                                                "content" => $htmla,
+                                                        ));
+                                                }
+//                                                if (aw_global_get("uid") == "struktuur") echo strip_tags(str_replace("<br>", "\n",$html))." <br>";
+                                                $awm->gen_mail();
+//if (aw_global_get("uid") == "struktuur") echo "sent to $eml , from $mail_from_addr <br>";
+                                        }
+                                }
+                                else
+                                {
+                                        if ($html == "")
+                                        {
+                                                $html = $i->show(array(
+                                                        "id" => $oi->id()
+                                                ));
+                                        }
+
+
+                                        foreach($emails as $c)
+                                        {
+                                                $eml = $c->to();
+                                                $awm->clean();
+                                                $awm->create_message(array(
+                                                        "froma" => $mail_from_addr,
+                                                        "fromn" => $mail_from_name,
+                                                        "subject" => $email_subj,
+                                                        "to" => $eml->prop("mail"),
+                                                        "body" => "see on html kiri",
+                                                ));
+                                                $awm->htmlbodyattach(array(
+                                                        "data" => $html,
+                                                ));
+                                                if($at == 1)
+                                                {
+                                                        $vars = array(
+                                                                "id" => $oi->id(),
+                                                        );
+							$i = get_instance(CL_SHOP_ORDER);
+                                                        if(file_exists($i->site_template_dir."/show_attach.tpl"))
+                                                        {
+                                                                $vars["template"] = "show_attach.tpl";
+                                                        }
+                                                        $org = obj($c_com_id);
+                                                        $htmla = $i->show($vars);
+                                                        $awm->fattach(array(
+                                                                "contenttype" => "application/vnd.ms-excel",
+                                                                "name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+                                                                "content" => $htmla,
+                                                        ));
+                                                }
+//                                                if (aw_global_get("uid") == "struktuur") echo strip_tags(str_replace("<br>", "\n",$html))."<br>";
+                                                $awm->gen_mail();
+//                                                if (aw_global_get("uid") == "struktuur") echo "sent to ".$eml->prop("mail")." from $mail_from_addr <br>";
+                                        }
+                                }
+                        }
+
+	
 		return $this->mk_my_orb("show", array("id" => $o->id()), "shop_order");
 	}
 
@@ -1110,7 +1255,7 @@ class shop_order extends class_base
 				$cur_tot = $val["items"] * $calc_price;
 				$prod_total += $cur_tot;
 				$this->vars(array(
-					"prod_name" => $product_info->name(),
+					"prod_name" => $product_info->trans_get_val("name"),
 					"prod_price" => $product_info_i->get_price($product_info),
 					"prod_tot_price" => number_format($cur_tot, 2)
 				));
@@ -1126,8 +1271,8 @@ class shop_order extends class_base
 					}
 				}
 				$this->vars(array(
-					"name" => $prod->name(),
-					"p_name" => ($product_info ? $product_info->name() : $prod->name()),
+					"name" => $prod->trans_get_val("name"),
+					"p_name" => ($product_info ? $product_info->trans_get_val("name") : $prod->trans_get_val("name")),
 					"quant" => $val["items"],
 					"price" => number_format($pr,2),
 					"obj_price" => number_format($pr, 2),
