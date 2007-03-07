@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.20 2007/03/01 17:59:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.21 2007/03/07 15:14:46 kristo Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -25,6 +25,9 @@
 
 	@property cal_show_prod_img_ord type=textbox size=5 field=meta method=serialize 
 	@caption Tootepildi j&auml;rjekorranumber, mida kuvada
+
+	@property cal_refresh_time type=textbox size=5 field=meta method=serialize 
+	@caption Mitme minuti tagant kalendrit refreshida
 
 @property disp_bron_len type=checkbox ch_value=1 field=meta method=serialize
 @caption &Auml;ra kuva aja pikkust kalendris
@@ -292,12 +295,12 @@ class room_settings extends class_base
 			}
 		}
 
-		$pers = $settings->prop("persons");
-		if (is_array($pers) && count($pers))
+		foreach($objs as $settings)
 		{
-			$cur_p = get_current_person();
-			foreach($objs as $settings)
+			$pers = $settings->prop("persons");
+			if (is_array($pers) && count($pers))
 			{
+				$cur_p = get_current_person();
 				if (in_array($cur_p->id(), $pers))
 				{
 					return $settings;
@@ -305,12 +308,12 @@ class room_settings extends class_base
 			}
 		}
 
-		$cos = $settings->prop("cos");
-		if (is_array($cos) && count($cos))
+		foreach($objs as $settings)
 		{
-			$cur_co = get_current_company();
-			foreach($objs as $settings)
+			$cos = $settings->prop("cos");
+			if (is_array($cos) && count($cos))
 			{
+				$cur_co = get_current_company();
 				if (in_array($cur_co->id(), $cos))
 				{
 					return $settings;
@@ -318,13 +321,13 @@ class room_settings extends class_base
 			}
 		}
 
-		$sects = $settings->prop("sects");
-		if (is_array($sects) && count($sects))
+		foreach($objs as $settings)
 		{
-			$cd = get_instance("applications/crm/crm_data");
-			$cursec = $cd->get_current_section();
-			foreach($objs as $settings)
+			$sects = $settings->prop("sects");
+			if (is_array($sects) && count($sects))
 			{
+				$cd = get_instance("applications/crm/crm_data");
+				$cursec = $cd->get_current_section();
 				if (in_array($cursec->id(), $sects))
 				{
 					return $settings;
@@ -332,13 +335,13 @@ class room_settings extends class_base
 			}
 		}
 
-		$profs = $settings->prop("profs");
-		if (is_array($profs) && count($profs))
+		foreach($objs as $settings)
 		{
-			$cd = get_instance("applications/crm/crm_data");
-			$curprof = $cd->get_current_profession();
-			foreach($objs as $settings)
+			$profs = $settings->prop("profs");
+			if (is_array($profs) && count($profs))
 			{
+				$cd = get_instance("applications/crm/crm_data");
+				$curprof = $cd->get_current_profession();
 				if (in_array($curprof->id(), $profs))
 				{
 					return $settings;

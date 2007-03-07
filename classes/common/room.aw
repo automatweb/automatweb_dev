@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.172 2007/03/06 13:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.173 2007/03/07 15:14:46 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -4576,11 +4576,21 @@ class room extends class_base
 	
 	function callback_generate_scripts($arr)
 	{
-		return 'doLoad(600000);
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+		$set = $this->get_settings_for_room($arr["obj_inst"]);
+		$tm = 600000;
+		if ($set->prop("cal_refresh_time") > 0)
+		{
+			$tm = $set->prop("cal_refresh_time") * 60000;
+		}
+		return 'doLoad('.$tm.');
 			var sURL = unescape(window.location.href);
 			function doLoad()
 			{
-			setTimeout( "refresh()", 600000 );
+			setTimeout( "refresh()", '.$tm.' );
 			}
 			function refresh()
 			{
