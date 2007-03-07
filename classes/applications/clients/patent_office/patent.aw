@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.67 2007/03/07 12:37:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.68 2007/03/07 15:51:21 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -2285,7 +2285,9 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		$status = $this->get_status($o);
 		$status->set_prop("nr" , $tno);
 		$status->set_prop("sent_date" , time());
+		aw_disable_acl();
 		$status->save();
+		aw_restore_acl();
 		header("Location:"."19205");
 		die();
 //		$o->save();
