@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.45 2007/02/26 10:20:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.46 2007/03/08 10:55:47 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -2028,7 +2028,9 @@ class join_site extends class_base
 							$this->_update_address_from_req($p_obj, $_POST);
 						}
 						$p_obj->set_name($cf_sd[$oldn]);
+						aw_disable_acl();
 						$p_obj->save();
+						aw_restore_acl();
 					}
 					else
 					{
@@ -2036,7 +2038,9 @@ class join_site extends class_base
 						$p_obj->set_parent($data_o->id());
 						$p_obj->set_class_id($reli[$prop["reltype"]]["clid"][0]);
 						$p_obj->set_name($cf_sd[$oldn]);
+						aw_disable_acl();
 						$p_obj->save();
+						aw_restore_acl();
 						if ($prop["name"] == "address")
 						{
 							$this->_update_address_from_req($p_obj, $_POST);
