@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.46 2007/03/08 10:55:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.47 2007/03/08 11:22:02 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1599,9 +1599,14 @@ class join_site extends class_base
 				}
 			}
 
+			$adr = $ttp["address"];
 			$class_inst = get_instance($clid);
 			$class_inst->init_class_base();
 			$ttp = $class_inst->parse_properties(array("properties" => $ttp, "obj_inst" => $data_o));
+			if ($adr)
+			{
+				$ttp["address"] = $adr;
+			}
 			foreach($ttp as $pid => $prop)
 			{
 				$cpn = $prop["name"];
@@ -1612,7 +1617,6 @@ class join_site extends class_base
 				if ($visible[$clid][$cpn])
 				{
 					$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
-
 					if ($clid == CL_CRM_PERSON && $pid == "address")
 					{
 						// address has: * Street address: * City: * Zip code: * Country:	
