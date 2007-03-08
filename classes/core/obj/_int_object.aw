@@ -907,13 +907,12 @@ class _int_object
 
 	function get_original()
 	{
-		if ($this->is_brother() && 
-			$GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"])
-		)
+		$ib = $this->is_brother();
+		$cv = $GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]);
+		if ($ib && $cv)
 		{
 			return new object($this->obj["brother_of"]);
 		}
-
 		return $this;
 	}
 
@@ -1478,9 +1477,11 @@ class _int_object
 		if ($this->obj["oid"] != $this->obj["brother_of"])
 		{
 			$tmp = $this->get_original();
-			return $tmp->trans_get_val($prop);
+			if ($tmp->id() != $this->obj["oid"]) // if no view access for original, bro can return the same object
+			{
+				return $tmp->trans_get_val($prop);
+			}
 		}
-		
 		switch($prop)
 		{
 			case "name":
@@ -1498,7 +1499,6 @@ class _int_object
 			default:
 				$val = $this->prop($prop);
 		}
-		
 		$trans = false;
 		$cur_lid = false;
 		if ($GLOBALS["cfg"]["user_interface"]["content_trans"] == 1 && ($cur_lid = aw_global_get("lang_id")) != $this->lang_id())
