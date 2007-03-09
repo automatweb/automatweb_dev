@@ -25,6 +25,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @groupinfo objects caption="Objektid ja &Otilde;igused"
 @groupinfo admin_rm caption="Admin rootmen&uuml;&uuml;"
 @groupinfo img caption="Pilt"
+@groupinfo if_acl caption="Liidese &otilde;igused"
 
 @tableinfo groups index=oid master_table=objects master_index=oid
 
@@ -62,9 +63,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 
 	@property grp_frontpage type=callback callback=get_grp_frontpage field=meta method=serialize table=objects
 	@caption Esileht
-
-	@property can_admin_interface type=checkbox ch_value=1 field=meta table=objects method=serialize
-	@caption Kas saab administreerimiskeskkonda
 
 	@property require_change_pass type=checkbox ch_value=1 field=meta table=objects method=serialize
 	@caption N&otilde;ua parooli vahetust esimesel logimisel
@@ -105,6 +103,52 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 
 	@property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first props=file field=meta method=serialize table=objects
 	@caption Pilt/foto
+
+@default group=if_acl
+
+	@property can_admin_interface type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kas saab administreerimiskeskkonda
+
+	@property if_acls_set type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Liidese &otilde;igused on piiratud
+
+	@property can_quick_add type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kas saab kasutada kiirlisamist
+
+	@property can_bm type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kas saab kasutada j&auml;rjehoidjat
+
+	@property can_history type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kas saab kasutada ajalugu
+
+	@property can_search type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kas saab kasutada otsingut
+
+	@property can_search type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kas saab kasutada otsingut
+
+	@property default_yah_ct type=textbox field=meta table=objects method=serialize
+	@caption Vaikimisi asukohariba
+
+	@property disp_person type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kuva isikut
+
+	@property disp_co_edit type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kuva organisatsiooni muutmisvaadet
+
+	@property disp_co_view type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kuva organisatsiooni vaatamisvaadet
+
+	@property disp_object_type type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kuva objektit&uuml;&uuml;pi
+
+	@property disp_object_link type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kuva objekti muutmislinki
+
+	@property editable_settings type=select ch_value=1 field=meta table=objects method=serialize multiple=1
+	@caption Vali muudetavad seaded
+
+
 
 @reltype SEARCHFORM value=1 clid=CL_FORM
 @caption Otsinguvorm
@@ -215,6 +259,15 @@ class group extends class_base
 					<br />
 					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
 				");
+				break;
+
+			case "editable_settings":
+				$o = obj(aw_global_get("uid_oid"));
+				$prop["options"] = array();
+				foreach($o->get_group_list() as $gid => $gd)
+				{
+					$prop["options"][$gid] = $gd["caption"];
+				}
 				break;
 		}
 		return PROP_OK;

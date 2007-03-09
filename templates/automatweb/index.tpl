@@ -104,7 +104,23 @@ window.onscroll = function ()
 		<span>{VAR:prod_family}</span>
 		<a href="{VAR:prod_family_href}" title="AutomatWeb"><img src="{VAR:baseurl}/automatweb/images/aw06/aw_logo.gif" alt="AutomatWeb.com" width="183" height="34" border="0" /></a>
 	</div>
-	<div class="top-left-menyy"><a href="{VAR:cur_p_url}">{VAR:cur_p_name}</a> | <a href="{VAR:cur_co_url}">{VAR:cur_co_name}</a> | {VAR:cur_class} | <a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a></div>
+	<div class="top-left-menyy">
+		<!-- SUB: SHOW_CUR_P -->
+		<a href="{VAR:cur_p_url}">{VAR:cur_p_name}</a> | 
+		<!-- END SUB: SHOW_CUR_P -->
+		<!-- SUB: SHOW_CUR_CO -->
+		<a href="{VAR:cur_co_url}">{VAR:cur_co_name}</a> | 
+		<!-- END SUB: SHOW_CUR_CO -->
+		<!-- SUB: SHOW_CUR_CO_VIEW -->
+		<a href="{VAR:cur_co_url_view}">{VAR:cur_co_name}</a> | 
+		<!-- END SUB: SHOW_CUR_CO_VIEW -->
+		<!-- SUB: SHOW_CUR_CLASS -->
+		{VAR:cur_class} | 
+		<!-- END SUB: SHOW_CUR_CLASS -->
+		<!-- SUB: SHOW_CUR_OBJ -->
+		<a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a>
+		<!-- END SUB: SHOW_CUR_OBJ -->
+	</div>
 <!--	<div class="top-left-menyy">{VAR:cur_p_url} | {VAR:cur_co_url} | {VAR:cur_class} | <a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a></div>-->
 	<div class="top-right-menyy">
 		{VAR:lang_pop}

@@ -89,16 +89,6 @@
             <caption>Esileht</caption>
       </property>
       <property>
-            <name>can_admin_interface</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kas saab administreerimiskeskkonda</caption>
-      </property>
-      <property>
             <name>require_change_pass</name>
             <table>objects</table>
             <group>general</group>
@@ -209,6 +199,136 @@
             <method>serialize</method>
             <caption>Pilt/foto</caption>
       </property>
+      <property>
+            <name>can_admin_interface</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas saab administreerimiskeskkonda</caption>
+      </property>
+      <property>
+            <name>if_acls_set</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Liidese &amp;amp;otilde;igused on piiratud</caption>
+      </property>
+      <property>
+            <name>can_quick_add</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas saab kasutada kiirlisamist</caption>
+      </property>
+      <property>
+            <name>can_bm</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas saab kasutada j&amp;amp;auml;rjehoidjat</caption>
+      </property>
+      <property>
+            <name>can_history</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas saab kasutada ajalugu</caption>
+      </property>
+      <property>
+            <name>can_search</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas saab kasutada otsingut</caption>
+      </property>
+      <property>
+            <name>default_yah_ct</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi asukohariba</caption>
+      </property>
+      <property>
+            <name>disp_person</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva isikut</caption>
+      </property>
+      <property>
+            <name>disp_co_edit</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva organisatsiooni muutmisvaadet</caption>
+      </property>
+      <property>
+            <name>disp_co_view</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva organisatsiooni vaatamisvaadet</caption>
+      </property>
+      <property>
+            <name>disp_object_type</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva objektit&amp;amp;uuml;&amp;amp;uuml;pi</caption>
+      </property>
+      <property>
+            <name>disp_object_link</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva objekti muutmislinki</caption>
+      </property>
+      <property>
+            <name>editable_settings</name>
+            <table>objects</table>
+            <group>if_acl</group>
+            <type>select</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <caption>Vali muudetavad seaded</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_GROUP</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -232,6 +352,9 @@
             <img>
                   <caption>Pilt</caption>
             </img>
+            <if_acl>
+                  <caption>Liidese &amp;amp;otilde;igused</caption>
+            </if_acl>
       </groupinfo>
       <tableinfo>
             <groups>

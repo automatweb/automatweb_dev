@@ -89,17 +89,13 @@ $sf->vars(array(
 	"prod_family" => $pf,
 	"prod_family_href" => $pf_url,
 	"cur_p_name" => $p->name(),
-//	"cur_p_url" => html::obj_change_url($p),
 	"cur_p_url" => html::get_change_url($p->id(), array('return_url' => get_ru())),
-//	"cur_co_url" => html::obj_change_url($co),
 	"cur_co_url" => html::get_change_url($co->id(), array('return_url' => get_ru())),
+	"cur_co_url_view" => $sf->mk_my_orb("view", array("id" => $co->id(), 'return_url' => get_ru()), CL_CRM_COMPANY),
 	"cur_co_name" => $co->name(),
 	"cur_class" => $clss[clid_for_name($_GET["class"])]["name"],
 	"cur_obj_name" => $cur_obj->name(),
 	"site_title" => $site_title,
-/*	"ui_lang" => $pm->get_menu(array(
-		"text" => t("[Liidese keel]")
-	)),*/
 	"settings_pop" => $bmb->get_menu(array(
 		"load_on_demand_url" => $sf->mk_my_orb("settings_lod", array("url" => get_ru()), "user"),
 		"text" => '<img src="/automatweb/images/aw06/ikoon_seaded.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />'.t("Seaded").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
@@ -109,6 +105,37 @@ $sf->vars(array(
 		"text" => $ld["name"].' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'
 	)),
 ));
+
+if ($sf->prog_acl("view", "disp_person"))
+{
+	$sf->vars(array(
+		"SHOW_CUR_P" => $sf->parse("SHOW_CUR_P")
+	));
+}
+if ($sf->prog_acl("view", "disp_co_edit"))
+{
+	$sf->vars(array(
+		"SHOW_CUR_CO" => $sf->parse("SHOW_CUR_CO")
+	));
+}
+if ($sf->prog_acl("view", "disp_co_view"))
+{
+	$sf->vars(array(
+		"SHOW_CUR_CO_VIEW" => $sf->parse("SHOW_CUR_CO_VIEW")
+	));
+}
+if ($sf->prog_acl("view", "disp_object_type"))
+{
+	$sf->vars(array(
+		"SHOW_CUR_CLASS" => $sf->parse("SHOW_CUR_CLASS")
+	));
+}
+if ($sf->prog_acl("view", "disp_object_link"))
+{
+	$sf->vars(array(
+		"SHOW_CUR_OBJ" => $sf->parse("SHOW_CUR_OBJ")
+	));
+}
 $shwy =  (empty($site_title) || aw_global_get("hide_yah")) && $_GET["class"] != "admin_if";
 
 if ($_GET["in_popup"])

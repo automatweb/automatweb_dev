@@ -580,7 +580,7 @@ class acl_base extends db_connector
 		else
 		{
 			// the only program you can ask for is PRG_MENUEDIT 
-			error::raise_if($progid != PRG_MENUEDIT, array(
+			/*error::raise_if($progid != PRG_MENUEDIT, array(
 				"id" => ERR_PROG_ACL,
 				"msg" => sprintf(t("acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"), $right, $progid)
 			));
@@ -589,8 +589,11 @@ class acl_base extends db_connector
 			if ($can_adm > 0)
 			{
 				return $can_adm - 1;
+			}*/
+			if (is_numeric($progid))
+			{
+				$progid = "can_admin_interface";
 			}
-
 			$can_adm = false;
 			$can_adm_max = 0;
 			$can_adm_oid = 0;
@@ -609,7 +612,8 @@ class acl_base extends db_connector
 				}
 				if ($o->prop("priority") > $can_adm_max)
 				{
-					$can_adm = $o->prop("can_admin_interface");
+					// all settings except can use admin depend on if_acls_set being true
+					$can_adm = $o->prop($progid) || ($progid == "can_admin_interface" ? false : !$o->prop("if_acls_set"));
 					$can_adm_max = $o->prop("priority");
 				}
 			}

@@ -2133,6 +2133,23 @@ class user extends class_base
 		$pm = get_instance("vcl/popup_menu");
 		$pm->begin_menu("settings_pop");
 
+		$gl = aw_global_get("gidlist_oid");
+		foreach($gl as $g_oid)
+		{	
+			$o = obj($g_oid);
+			
+			if ($o->prop("type") == 1 || $o->prop("type") == 3)
+			{
+				continue;
+			}
+			if ($o->prop("priority") > $can_adm_max && $o->prop("if_acls_set"))
+			{
+				// all settings except can use admin depend on if_acls_set being true
+				$dyc = $o->prop("editable_settings");
+				$can_adm_max = $o->prop("priority");
+			}
+		}
+
 		$u = obj(aw_global_get("uid_oid"));
 		$u->set_class_id(CL_USER);
 		$gl = $u->get_group_list();
@@ -2140,6 +2157,10 @@ class user extends class_base
 		foreach($gl as $gn => $d)
 		{
 			if ($gn == "userdef")
+			{
+				continue;
+			}
+			if ($dyc && !$dyc[$gn])
 			{
 				continue;
 			}

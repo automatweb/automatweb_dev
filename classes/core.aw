@@ -1013,7 +1013,41 @@ return; // TEMP
 	// !creates a list of menus above $parent and appends $text and assigns it to the correct variable
 	function mk_path($oid,$text = "",$period = 0)
 	{
-		if ($this->can("view", $oid))
+		$nt = true;
+		// check if there is a default text
+		$gl = aw_global_get("gidlist_oid");
+		foreach($gl as $g_oid)
+		{	
+			$o = obj($g_oid);
+			
+			if ($o->prop("type") == 1 || $o->prop("type") == 3)
+			{
+				continue;
+			}
+			if ($o->prop("priority") > $can_adm_max)
+			{
+				// all settings except can use admin depend on if_acls_set being true
+				$dyc = $o->prop("default_yah_ct");
+				$can_adm_max = $o->prop("priority");
+			}
+		}
+		if ($dyc != "")
+		{
+			if ($_GET["return_url"] != "")
+			{
+				$text = html::href(array(
+					"url" => $_GET["return_url"],
+					"caption" => t("Tagasi"),
+				));
+			}
+			else
+			{
+				$text = $dyc;
+			}
+			$nt = false;
+		}
+
+		if ($this->can("view", $oid) && $nt)
 		{
 			$path = "";
 			$current = new object($oid);

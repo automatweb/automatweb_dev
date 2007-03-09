@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.164 2007/02/26 12:46:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.165 2007/03/09 13:18:40 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -819,21 +819,28 @@ class htmlclient extends aw_template
 				"feedback_m_text" => t("Kasutajatugi"),
 				"help_text" => t("Abi"),
 				"search_text" => t("Otsi"),
-				"bm_pop" => $bm->get_menu(array(
+				"bm_pop" => $this->prog_acl("view", "can_bm") ? $bm->get_menu(array(
 					"load_on_demand_url" => $this->mk_my_orb("pm_lod", array("url" => get_ru()), "user_bookmarks"),
 					"text" => '<img src="/automatweb/images/aw06/ikoon_jarjehoidja.gif" alt="" width="16" height="14" border="0" class="ikoon" />'.t("J&auml;rjehoidja").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
-				)),
-				"history_pop" => $bm_h->get_menu(array(
+				)) : "",
+				"history_pop" => $this->prog_acl("view", "can_history") ? $bm_h->get_menu(array(
 					"load_on_demand_url" => $this->mk_my_orb("hist_lod", array("url" => get_ru()), "user"),
 					"text" => '<img src="/automatweb/images/aw06/ikoon_ajalugu.gif" alt="" width="13" height="13" border="0" class="ikoon" />'.t("Ajalugu").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" />'
-				)),
-				"qa_pop" => $bmq->get_menu(array(
+				)) : "",
+				"qa_pop" => $this->prog_acl("view", "can_quick_add") ? $bmq->get_menu(array(
 					"load_on_demand_url" => $this->mk_my_orb("qa_lod", array("url" => get_ru()), "obj_quick_add"),
 					"text" => '<img alt="" title="" border="0" src="'.aw_ini_get("baseurl").'/automatweb/images/aw06/ikoon_lisa.gif" id="mb_user_qa" border="0" class="ikoon" />'.t("Lisa kiiresti").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" style="margin: 0 -3px 1px 0px" /></a>'
-				)),
+				)) : "",
 				"settings_pop" => $bmb->get_menu(array("load_on_demand_url" => $this->mk_my_orb("settings_lod", array("url" => get_ru()), "user"))),
 				"srch_link" => $this->mk_my_orb("redir_search", array("url" => get_ru()), "aw_object_search")
 			));
+
+			if ($this->prog_acl("view", "can_search"))
+			{
+				$tp->vars(array(
+					"HAS_SEARCH" => $tp->parse("HAS_SEARCH")
+				));
+			}
 			if (!$_GET["in_popup"])
 			{
 				$tp->vars(array(
