@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.30 2007/03/07 15:44:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.31 2007/03/09 14:45:34 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -93,7 +93,8 @@ class bank_payment extends class_base
 
 	var $merchant_id = array(
 		"EYP" => "seb",
-		"HP" => "Hansapank",
+		"HP" => "hansapank",
+		"afb" => "credit_card",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
@@ -402,9 +403,11 @@ class bank_payment extends class_base
 							$log_data[$val["timestamp"]]["ref"] = $val["VK_REF"];
 							$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
 							$log_data[$val["timestamp"]]["sum"] = $val["VK_AMOUNT"];
+							$log_data[$val["timestamp"]]["bank"] = $this->merchant_id[$val["VK_SND_ID"]];
 							if($val["eamount"])$log_data[$val["timestamp"]]["sum"] = $val["eamount"]/100;
 							if($val["ecuno"])$log_data[$val["timestamp"]]["ref"] = $val["ecuno"];
 							if($val["msgdata"])$log_data[$val["timestamp"]]["msg"] = $val["msgdata"];
+							if($val["action"] == "afb") $log_data[$val["timestamp"]]["bank"] = $this->merchant_id[$val["action"]];
 							if($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000")
 							{
 								$log_data[$val["timestamp"]]["ok"] = 1;
@@ -432,13 +435,15 @@ class bank_payment extends class_base
 				foreach($log_data as $key => $val)
 				{
 						$t->define_data(array(
-						"time" => date("d.m.Y H:i" ,$key),
-						"ref" => $val["ref"],
-						"expl" => $val["msg"],
-						"payer" => $val["payer"],
-						"ok" =>  $val["ok"] ? t("&otilde;nnestus") : t("eba&otilde;nnestus"),
-						"good" => $val["good"] ? t("ok") : t(""),
-					));
+							"sum" => $val["sum"],
+							"bank" => $this->banks[$val["bank"]],
+							"time" => date("d.m.Y H:i" ,$key),
+							"ref" => $val["ref"],
+							"expl" => $val["msg"],
+							"payer" => $val["payer"],
+							"ok" =>  $val["ok"] ? t("&otilde;nnestus") : t("eba&otilde;nnestus"),
+							"good" => $val["good"] ? t("ok") : t(""),
+						));
 				}
 				$prop["value"] = $t->draw();
 				break;
@@ -478,8 +483,20 @@ class bank_payment extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "expl",
 			"caption" => t("Seletus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "bank",
+			"caption" => t("Pank"),
 			"align" => "center",
 			"sortable" => 1
 		));
