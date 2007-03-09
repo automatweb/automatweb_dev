@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.18 2007/02/20 12:15:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.19 2007/03/09 09:56:31 kristo Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -583,7 +583,7 @@ class trademark_manager extends class_base
 //-- methods --//
 
 	/** 
-		@attrib name=nightly_export
+		@attrib name=nightly_export nologin="1"
 	**/
 	function nightly_export($arr)
 	{

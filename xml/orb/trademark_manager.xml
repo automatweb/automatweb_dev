@@ -15,7 +15,7 @@
 			</function>
 		</action>
 
-		<action name="nightly_export">
+		<action name="nightly_export" nologin="1">
 			<function name="nightly_export">
 				<arguments>
 				</arguments>
