@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.24 2007/02/22 10:39:23 kristo Exp $
-// procurement_offer.aw - Pakkumine hankele 
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.25 2007/03/09 14:20:47 markop Exp $
+// procurement_offer.aw - Pakkumine hankele
 /*
 
 @classinfo syslog_type=ST_PROCUREMENT_OFFER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -33,10 +33,10 @@
 
 	@property accept_date type=date_select table=aw_procurement_offers field=aw_accept_date
 	@caption Aktsepteerimist&auml;htaeg
-	
+
 	@property shipment_date type=date_select table=aw_procurement_offers field=aw_shipment_date
 	@caption Tarne t&auml;htaeg
-	
+
 	@property completion_date type=date_select table=aw_procurement_offers field=aw_completion_date
 	@caption Valmimist&auml;htaeg
 
@@ -47,20 +47,20 @@
 @default group=products
 	@property products type=table no_caption=1
 
-@groupinfo files caption="Failid" 
+@groupinfo files caption="Failid"
 @default group=files
 
 	@property files_tb type=toolbar no_caption=1 store=no
-	
+
 	@property files_table type=table no_caption=1
-	
+
 	@property files type=text  no_caption=1
 	@caption Manused
 
 @default group=r_list
 	@property p_tb type=toolbar no_caption=1 store=no
 	@layout p_l type=hbox width=30%:70%
-		
+
 		@property p_tr type=treeview no_caption=1 store=no parent=p_l
 
 		@property p_tbl type=table no_caption=1 store=no parent=p_l
@@ -151,11 +151,11 @@ class procurement_offer extends class_base
 			case "files":
 				$this->_get_files($arr);
 				break;
-				
+
 			case "files_table":
 				$this->_get_files_table($arr);
-				break;	
-				
+				break;
+
 			case "files_tb":
 				$tb =&$arr["prop"]["vcl_inst"];
 				$tb->add_button(array(
@@ -192,7 +192,7 @@ class procurement_offer extends class_base
 				break;
 
 			case "procurement":
-				// list all procs for the current 
+				// list all procs for the current
 				$ol = $this->model->get_my_procurements();
 				$prop["options"] = $ol->names();
 				if (!is_oid($arr["obj_inst"]->id()) && $arr["request"]["proc"])
@@ -226,12 +226,12 @@ class procurement_offer extends class_base
 			case "p_tbl":
 				$this->_p_tbl($arr);
 				break;
-				
+
 			case "products":
 				$t = &$arr["prop"]["vcl_inst"];
 				return $this->products_table($t , $arr["obj_inst"]);
 				break;
-			
+
 // 			case "procurement":
 // 				if($arr["new"])
 // 				{
@@ -253,7 +253,7 @@ class procurement_offer extends class_base
 // 					{
 // 						$arr["obj_inst"]->set_prop("offerer" , $arr["request"]["offerer"]);
 // 					}
-// 
+//
 // 					$arr["obj_inst"]->save();
 // 					$_GET["action"] = "change";
 // 				}
@@ -276,7 +276,7 @@ class procurement_offer extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-		
+
 			case "products":
 				$_SESSION["procurement"]["accept"] = $arr["request"]["accept"];
 				$_SESSION["procurement"]["val"] = $arr["request"]["products"];
@@ -289,7 +289,7 @@ class procurement_offer extends class_base
 	}
 
 	function _init_files_tbl(&$t)
-	{	
+	{
 		$t->define_field(array(
 			"caption" => t(""),
 			"name" => "icon",
@@ -358,7 +358,7 @@ class procurement_offer extends class_base
 
 
 		$ol = new object_list($arr["obj_inst"]->connections_from(array()));
-		
+
 		classload("core/icons");
 		$clss = aw_ini_get("classes");
 		get_instance(CL_FILE);
@@ -386,7 +386,7 @@ class procurement_offer extends class_base
 					));
 				}
 			}
-			
+
 			$t->define_data(array(
 				"icon" => $pm->get_menu(array(
 					"icon" => icons::get_icon_url($o)
@@ -404,7 +404,7 @@ class procurement_offer extends class_base
 		$t->set_default_sortby("created");
 		$t->set_default_sorder("desc");
 	}
-	
+
 	function _get_files_pt($arr)
 	{
 		if ($arr["request"]["tf"] && $arr["request"]["tf"] != "unsorted")
@@ -426,7 +426,7 @@ class procurement_offer extends class_base
 		}
 		return $ff->id();
 	}
-	
+
 	function _get_sub_folder_objects($obj)
 	{
 		$parents = array();
@@ -467,14 +467,14 @@ class procurement_offer extends class_base
 			"sortable" => 1,
 			"caption" => t("T&uuml;&uuml;p")
 		));
-		
+
 		$t->define_field(array(
 			"name" => "menu",
 			"sortable" => 1,
 			"caption" => t("Kataloog")
 		));
 		$t->set_default_sortby("name");
-			
+
 		if(is_oid($this_object->prop("procurement")) && $this->can("view" , $this_object->prop("procurement")))
 		{
 			$procurement = obj($this_object->prop("procurement"));
@@ -485,9 +485,9 @@ class procurement_offer extends class_base
 		{
 			$warehouse->config = obj($warehouse->prop("conf"));
 			$parent = $warehouse->config->prop("prod_fld");
-		}	
+		}
 		else $parent = $_GET["id"];
-		
+
 		$types = new object_list(array(
 				"class_id" => array(CL_SHOP_PRODUCT_TYPE),
 				"lang_id" => array(),
@@ -497,7 +497,7 @@ class procurement_offer extends class_base
 		$menu_opt = $this->_get_sub_folder_objects(obj($parent));
 		foreach($menu_opt as $opt)
 		{
-			$menu_options[$opt->id()] = $opt->name(); 
+			$menu_options[$opt->id()] = $opt->name();
 		}
 
 		asort($menu_options);
@@ -539,7 +539,7 @@ class procurement_offer extends class_base
 					$p->set_prop("item_type" ,$_POST["types"][$product["product"]]);
 					$p->save();
 				}
-			
+
 				if(is_oid($product["row_id"]))
 				{
 					$o = obj($product["row_id"]);
@@ -583,7 +583,7 @@ class procurement_offer extends class_base
 							break;
 
 						case "price":
-							$o->set_prop($key, str_replace(",", ".", $val));
+							$o->set_prop($key, str_replace(",", ".", str_replace(" ", "",$val)));
 							break;
 
 						default:
@@ -619,11 +619,11 @@ class procurement_offer extends class_base
 				if(strlen($product["product"]) > 0) $t->define_data($dat);
 			}
 		}
-		
+
 		if(!$new_products)
 		{
 			foreach($_SESSION["procurement"]["val"] as $key=>$product)
-			{		
+			{
 				if(is_oid($product["row_id"]))
 				{
 					$o = obj($product["row_id"]);
@@ -678,9 +678,9 @@ class procurement_offer extends class_base
 							break;
 
 						case "price":
-							$o->set_prop($key, str_replace(",", ".", $val));
+							$o->set_prop($key, str_replace(",", ".",  str_replace(" ", "",$val)));
 							break;
-						
+
 						default:
 							if($o->is_property($key)) $o->set_prop($key, $val);
 					}
@@ -696,12 +696,12 @@ class procurement_offer extends class_base
 		$t->define_data(array("type" => html::submit(array("name" => "submit", "class" => "submit" , "value" => "submit" , "onclick"=>"self.disabled=true;submit_changeform(''); return false;") )));
 		$t->set_sortable(false);
 		return "<form action='".$this->mk_my_orb("set_type", array(
-			"val" => $_GET["val"], 
-			"id" => $_GET["id"] , 
-			"accept" => $_GET["accept"], 
+			"val" => $_GET["val"],
+			"id" => $_GET["id"] ,
+			"accept" => $_GET["accept"],
 			"return_url" => $_GET["return_url"]))."' method='POST' name='changeform' enctype='multipart/form-data' >".$t->draw()."</form>";
 	}
-	
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
@@ -752,8 +752,8 @@ class procurement_offer extends class_base
 				'img' => 'new.gif',
 				'tooltip' => t('Lisa'),
 				"url" => html::get_new_url(
-					CL_PROCUREMENT_REQUIREMENT_SOLUTION, 
-					$parent, 
+					CL_PROCUREMENT_REQUIREMENT_SOLUTION,
+					$parent,
 					array(
 						"return_url" => get_ru(),
 						"set_requirement" => $parent,
@@ -783,7 +783,7 @@ class procurement_offer extends class_base
 		classload("core/icons");
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
-				"type" => TREE_DHTML, 
+				"type" => TREE_DHTML,
 				"persist_state" => true,
 				"tree_id" => "procurement_offer",
 			),
@@ -930,7 +930,7 @@ class procurement_offer extends class_base
 			{
 				$row = obj($conn->prop("from"));
 			}
-			else 
+			else
 			{
 				continue;
 			}
@@ -1008,14 +1008,14 @@ class procurement_offer extends class_base
 			$company_id = $procurement_obj->prop("orderer");
 			if(is_oid($company_id) && $this->can("view", $company_id)) $co = obj($company_id);
 		}
-		
+
 	//	$t->set_id("products_table");
 	//	$t->define_field(array(
 	//		"name" => "jrk",
 	//		"caption" => t("Id"),
 	//		"numeric" => 1,
 	//	));
-		
+
 		$t->define_field(array(
 			"name" => "product",
 			"caption" => t("Toode"),
@@ -1030,17 +1030,17 @@ class procurement_offer extends class_base
 			'name' => 'unit',
 			'caption' => t('&Uuml;hik'),
 		));
-		
+
 		$t->define_field(array(
         		'name' => 'price_amount',
 			'caption' => t('Min. kogus'),
 		));
-		
+
 		$t->define_field(array(
         		'name' => 'price',
 			'caption' => t('Hind'),
 		));
-		
+
 		$t->define_field(array(
 			'name' => 'currency',
 			'caption' => t('Valuuta'),
@@ -1049,7 +1049,7 @@ class procurement_offer extends class_base
 			'name' => 'total',
 			'caption' => t('Kogusumma'),
 		));
-		
+
 		if($show_shipment_date)
 		{
 			$t->define_field(array(
@@ -1061,7 +1061,7 @@ class procurement_offer extends class_base
 			'name' => 'accept',
 			'caption' => t('Aktsepteeritud'),
 		));*/
-		
+
 		$t->define_chooser(array(
 			"name" => "accept",
 			"field" => "oid",
@@ -1080,12 +1080,12 @@ class procurement_offer extends class_base
 		{
 			$unit_opts[$unit->id()] = $unit->prop("unit_code");
 		}
-		
+
 		$curr_list = new object_list(array(
 			"class_id" => CL_CURRENCY
 		));
 		$curr_opts = $curr_list->names();
-		
+
 		$conns = $this_obj->connections_to(array(
 			'reltype' => 1,
 			'class' => CL_PROCUREMENT_OFFER_ROW,
@@ -1139,10 +1139,10 @@ class procurement_offer extends class_base
 			{
 				$min_amount = $row->prop("price_amount");
 			}
-			
+
 			$prod_rows_data[] = array(
 				"date" => date("d.m.Y", $row->prop("shipment")),
-				"accept" => $accept,	
+				"accept" => $accept,
 				"x" => $x,
 				"max_x" => $max_x,
 				"row" => $row,
@@ -1156,7 +1156,7 @@ class procurement_offer extends class_base
 				"price_amount" => $min_amount,
 			);
 		}
-		foreach($prod_rows_data as $prod_row_data)	
+		foreach($prod_rows_data as $prod_row_data)
 		{
 			extract($prod_row_data);
 			$t->define_data(array(
@@ -1174,7 +1174,7 @@ class procurement_offer extends class_base
 						.html::hidden(array(
 								"name" => "products[".$x."][row_id]",
 								"value" => $id)),
-							
+
 				"amount"	=> html::textbox(array(
 							"name" => "products[".$x."][amount]",
 							"size" => "6",
@@ -1222,8 +1222,8 @@ class procurement_offer extends class_base
 					"name" => "products[".$x."][available]",
 					"value" => 1,
 					"checked" => 1,
-				)),			
-			
+				)),
+
 			));
 			$total_sum += $amount * $price;
 		}
@@ -1262,7 +1262,7 @@ class procurement_offer extends class_base
 							"name" => "products[".$x."][price_amount]",
 							"size" => "6",
 							)),
-							
+
 				'currency'	=> html::select(array(
 							"name" => "products[".$x."][currency]",
 							"options" => $curr_opts,
@@ -1285,8 +1285,8 @@ class procurement_offer extends class_base
 			));
 			$x++;
 		}
-		
-	/*	
+
+	/*
 Ühik (lb, süsteemi Ühikute koodidega), Valuuta (lb, süsteemi valuutadega, vaikimisi Minu Organisatsiooni vaikimisi valitud valuuta), Tarneaeg (kp tekstiväljana, kus lõpus on ?vali? link), Aktsept (cb). Tooteväli on Autocomplete põhimõttel ehitatud, loetakse tooteid seotud laost. Kui sisestatakse tootenimetus, mida varem laos ei ole, siis salvestatakse see uue tootena, kuid enne küsitakse popup aknas tootekategooria (kui mitu uut toodet, siis on küsimise tabelis mitu rida). Tootekategooria kuvatakse listboxina, erinevad tasemed on trepitud (tähestiku järjekord). Peale 10 rea salvestamist tekib võimalus uue 10 rea sisestamiseks. Juhul, kui Tarneaeg jäetakse toote taga tühjaks, kuvatakse peale salvestamist sinna sama kuupäev, kui Pakkumises määratud tarne tähtaeg. */
 		$t->set_sortable(false);
 
@@ -1303,11 +1303,11 @@ class procurement_offer extends class_base
 		if($arr["new"]==1 && is_oid($arr["request"]["offerer"]) && $this->can("view" , $arr["request"]["offerer"]))
 		{
 			$arr["obj_inst"]->set_prop("offerer" , $arr["request"]["offerer"]);
-// 		arr($arr); 
+// 		arr($arr);
 // 		arr($arr["obj_inst"]->prop("procurement"));
 		}
 	}
-	
+
 	function get_avg_score($offer)
 	{
 		// get all prefered solutions in offer and their scores
@@ -1464,7 +1464,7 @@ class procurement_offer extends class_base
 		$t = new vcl_table(array(
 			"layout" => "generic",
 		));
-		
+
 		$t->define_field(array(
 			"caption" => t("Nimi"),
 			"name" => "name",
@@ -1545,10 +1545,10 @@ class procurement_offer extends class_base
 					$o->set_class_id($entry["type"]);
 					$o->set_name($entry["tx_name"] != "" ? $entry["tx_name"] : $_FILES["fups_$num"]["name"]);
 
-			
+
 					$o->set_parent($fldo->id());
 					$procurement = obj($t->prop("procurement"));
-					
+
 					if ($entry["type"] != CL_FILE)
 					{
 						$o->set_prop("project", $t->id());
@@ -1610,17 +1610,17 @@ class procurement_offer extends class_base
 		{
 			$x = $conn->prop("from");
 			$xs[] = $x;
-			if($max_x < $x) $max_x = $x; 
+			if($max_x < $x) $max_x = $x;
 		}
-		
+
 		$ret = "
-		
+
 		function changeContent(id,sb_val)
 		{
 		var x=document.getElementById(id).rows[0].cells
 		x[0].innerHTML=sb_val
 		}
-		
+
 		function aw_submit_handler() {".
 		""."var url = '".$procurement_inst->mk_my_orb("check_existing")."';";
 		// fetch list of companies with that name and ask user if count > 0
@@ -1639,7 +1639,7 @@ class procurement_offer extends class_base
 				";
 			$x++;
 		}
-		
+
 		$ret.= "num= aw_get_url_contents(url);".
 		"if (num != \"\")
 		{
