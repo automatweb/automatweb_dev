@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.68 2007/03/07 15:51:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.69 2007/03/12 09:04:00 kristo Exp $
 // patent.aw - Patent 
 /*
 
@@ -1741,6 +1741,8 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			"lang_id" => array(),
 			"parent" => $arr["parent"], 
 			"class_id" => CL_CRM_PERSON,
+			"firstname" => "%",
+			"sort_by" => "kliendibaas_isik.`lastname`"
 		));
 
 		$tpl = "procurator_popup.tpl";
