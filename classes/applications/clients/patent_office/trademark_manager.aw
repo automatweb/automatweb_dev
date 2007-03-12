@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.19 2007/03/09 09:56:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.20 2007/03/12 13:19:02 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -324,7 +324,7 @@ class trademark_manager extends class_base
 			}
 			if(is_object($applicant))
 			{
-				$applicant_name = $applicant->name();
+				$applicant_name = $trademark_inst->get_applicants_str($o);//$applicant->name();
 				$applicant_data = "";
 				if($applicant->class_id() == CL_CRM_PERSON)
 				{
@@ -606,7 +606,8 @@ class trademark_manager extends class_base
 			$status = $tm->get_status($o);
 			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $status->prop("nr")).'" OOCD="EE" ORIGLAN="3" EXPDATE="'.date("Ymd", $o->prop("exhibition_date")).'" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
 ';
-				$xml .= '		<HOLGR>
+
+/*				$xml .= '		<HOLGR>
 ';
 					$xml .= "\t\t\t<NAME>\n";
 						$xml .= "\t\t\t\t<NAMEL>".$o->prop("applicant.name")."</NAMEL>\n";
@@ -651,7 +652,66 @@ class trademark_manager extends class_base
 						$xml .= "\t\t\t<CORRIND/>\n";
 					}*/
 
+/*				$xml .= "\t\t</HOLGR>\n";*/
+
+
+//taotlejad veidi ümber et mitu tükki ka neid saaks
+
+
+
+			foreach($o->connections_from(array("type" => "RELTYPE_APPLICANT")) as $key => $c)
+			{
+				$applicant = $c->to();
+				$xml .= '		<HOLGR>
+';
+					$xml .= "\t\t\t<NAME>\n";
+						$xml .= "\t\t\t\t<NAMEL>".$applicant->name()."</NAMEL>\n";
+					$xml .= "\t\t\t</NAME>\n";
+
+					if ($this->can("view", $applicant->id()))
+					{
+					$appl = $applicant;
+					$xml .= "\t\t\t<ADDRESS>\n";
+					$adr_i = get_instance(CL_CRM_ADDRESS);
+						if ($appl->class_id() == CL_CRM_PERSON)
+						{
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.aadress")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.linn.name")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
+//echo "aadres ".$appl->prop("address")." <br>";
+//echo "riik = ".$appl->prop("address.riik")." <br>";
+							if ($this->can("view", $appl->prop("address.riik")))
+							{
+								$xml .= "\t\t\t\t<COUNTRY>".$adr_i->get_country_code(obj($appl->prop("address.riik")))."</COUNTRY>\n";
+//echo "country code from ".$appl->prop("address.riik.name")." => ".$adr_i->get_country_code(obj($appl->prop("address.riik")))." <br>";
+							}
+						}
+						else
+						{
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.aadress")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.linn.name")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.postiindeks")."</ADDRL>\n";
+							if ($this->can("view", $appl->prop("contact.riik")))
+							{
+								$xml .= "\t\t\t\t<COUNTRY>".$adr_i->get_country_code(obj($appl->prop("contact.riik")))."</COUNTRY>\n";
+							}
+						}
+					$xml .= "\t\t\t</ADDRESS>\n";
+
+					$xml .= "\t\t\t<LEGNATU>\n";
+						$xml .= "\t\t\t\t<LEGNATT>".$appl->prop("ettevotlusvorm.name")."</LEGNATT>\n";
+					$xml .= "\t\t\t</LEGNATU>\n";
+					}
+					/*if (!$this->can("view", $o->prop(""))
+					{
+						$xml .= "\t\t\t<CORRIND/>\n";
+					}*/
+
 				$xml .= "\t\t</HOLGR>\n";
+			}	
+				
+
+
 				if ($this->can("view", $o->prop("procurator")))
 				{
 				$proc = obj($o->prop("procurator"));

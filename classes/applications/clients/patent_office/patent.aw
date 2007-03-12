@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.69 2007/03/12 09:04:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.70 2007/03/12 13:19:02 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -537,14 +537,18 @@ class patent extends class_base
 		}
 		if($_POST["print"] && !$_POST["send"])
 		{
+			$ref_url = get_ru();
 			$data["print"] = "<script language='javascript'>
 				window.print();
+				setTimeout('window.location.href=\"".$ref_url."\"',5000);
 			</script>;";
 		}
 		else
 		{
+			$pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"], "add_obj" => $arr["alias"]["to"]) , CL_PATENT);
+			$pdfurl = str_replace("https" , "http" , $pdfurl);
 			$data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onClick='javascript:document.changeform.submit();'>";
-			$data["pdf"] = "<a href=".$this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"], "add_obj" => $arr["alias"]["to"]) , CL_PATENT)."><input type='button' value='Salvesta pdf' class='nupp' href=''></a><br>";
+			$data["pdf"] = "<input type='button' value='Salvesta pdf' class='nupp'  onclick='javascript:window.location.href=\"".$pdfurl."\";'><br>";
 
 		}
 		if($this->can("view" , $arr["id"]))
@@ -2954,10 +2958,14 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 					$send_url = '<a href="'.$url.'"> Saada</a>';
 				}
 				
+				//taotlejad komaga eraldatuld
+				$applicant_str = $this->get_applicants_str($patent);
+
+				
 				$this->vars(array(
 					"date" 		=> $date,
 					"nr" 		=> ($status->prop("nr")) ? $status->prop("nr") : "",
-					"applicant" 	=> $patent->prop_str("applicant"),
+					"applicant" 	=> $applicant_str,//$patent->prop_str("applicant"),
 					"type" 		=> $this->types[$patent->prop("type")],
 					"state" 	=> ($status->prop("verified")) ? t("Vastu v&otilde;etud") : (($status->prop("nr")) ? t("Saadetud") : ""),
 					"name" 	 	=> $status->name(),
@@ -2977,6 +2985,18 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			));
 		}
 		return $this->parse();
+	}
+	
+	function get_applicants_str($o)
+	{
+		$aa = array();
+		
+		foreach($o->connections_from(array("type" => "RELTYPE_APPLICANT")) as $key => $c)
+		{
+			$applicant = $c->to();
+			$aa[] =$applicant->name();
+		}
+		return join(", " , $aa);
 	}
 	
 	function do_db_upgrade($t, $f)
