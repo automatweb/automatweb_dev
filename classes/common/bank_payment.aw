@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.31 2007/03/09 14:45:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.32 2007/03/12 13:33:54 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -405,8 +405,12 @@ class bank_payment extends class_base
 							$log_data[$val["timestamp"]]["sum"] = $val["VK_AMOUNT"];
 							$log_data[$val["timestamp"]]["bank"] = $this->merchant_id[$val["VK_SND_ID"]];
 							if($val["eamount"])$log_data[$val["timestamp"]]["sum"] = $val["eamount"]/100;
-							if($val["ecuno"])$log_data[$val["timestamp"]]["ref"] = $val["ecuno"];
-							if($val["msgdata"])$log_data[$val["timestamp"]]["msg"] = $val["msgdata"];
+							if($val["ecuno"])
+							{
+								$log_data[$val["timestamp"]]["ref"] = $val["ecuno"];
+								$log_data[$val["timestamp"]]["msg"] = substr($val["ecuno"], 0, -1);
+							}
+							if($val["msgdata"])$log_data[$val["timestamp"]]["payer"] = $val["msgdata"];
 							if($val["action"] == "afb") $log_data[$val["timestamp"]]["bank"] = $this->merchant_id[$val["action"]];
 							if($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000")
 							{
