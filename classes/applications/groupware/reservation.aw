@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.54 2007/03/07 16:11:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.55 2007/03/12 14:19:58 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1121,10 +1121,26 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 	
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")) && $arr["prop"]["value"] != "")
                 {
-			$cust = obj();
-			$cust->set_parent($arr["obj_inst"]->id() ? $arr["obj_inst"]->id() : $_POST["parent"]);
-			$cust->set_class_id(CL_CRM_PERSON);
-			$cust->save();
+			list($fn, $ln) = explode(" ", $arr["request"]["new"]["name"]);
+
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"firstname" => trim($arr["request"]["cp_fn"]),
+				"lastname" => trim($arr["request"]["cp_ln"])
+			));
+			if ($ol->count())
+			{
+				$cust = $ol->begin();
+			}
+			else
+			{
+				$cust = obj();
+				$cust->set_parent($arr["obj_inst"]->id() ? $arr["obj_inst"]->id() : $_POST["parent"]);
+				$cust->set_class_id(CL_CRM_PERSON);
+				$cust->save();
+			}
 			$arr["obj_inst"]->set_prop("customer", $cust->id());
                 }
 
@@ -1597,44 +1613,59 @@ flush();
 	{
 		if ($arr["request"]["new"]["name"] != "")
 		{
-			$cust = obj();
-			$cust->set_parent($arr["obj_inst"]->id() ? $arr["obj_inst"]->id() : $_POST["parent"]);
-			$cust->set_class_id(CL_CRM_PERSON);
 			list($fn, $ln) = explode(" ", $arr["request"]["new"]["name"]);
-			$cust->set_prop("firstname", trim($fn));
-			$cust->set_prop("lastname", trim($ln));
-			$cust->set_name(trim($fn)." ".trim($ln));
-			$cust->save();
 
-			if ($arr["request"]["new"]["phone"] != "")
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"firstname" => trim($fn),
+				"lastname" => trim($ln)
+			));
+			if ($ol->count())
 			{
-				$ph = obj();
-				$ph->set_parent($cust->id());
-				$ph->set_class_id(CL_CRM_PHONE);
-				$ph->set_name($arr["request"]["new"]["phone"]);
-				$ph->save();
-				$cust->connect(array(
-					"to" => $ph->id(),
-					"type" => "RELTYPE_PHONE"
-				));
-				$cust->set_prop("phone", $ph->id());
+				$cust = $ol->begin();
 			}
+			else
+			{
+				$cust = obj();
+				$cust->set_parent($arr["obj_inst"]->id() ? $arr["obj_inst"]->id() : $_POST["parent"]);
+				$cust->set_class_id(CL_CRM_PERSON);
+				$cust->set_prop("firstname", trim($fn));
+				$cust->set_prop("lastname", trim($ln));
+				$cust->set_name(trim($fn)." ".trim($ln));
+				$cust->save();
 
-			if ($arr["request"]["new"]["email"] != "")
-			{
-                                $ph = obj();
-                                $ph->set_parent($cust->id());
-                                $ph->set_class_id(CL_ML_MEMBER);
-	                        $ph->set_name($arr["request"]["new"]["email"]);
-				$ph->set_prop("mail", $arr["request"]["new"]["email"]);
-                	        $ph->save();
-                                $cust->connect(array(
-                                        "to" => $ph->id(),
-                                        "type" => "RELTYPE_EMAIL"
-                                ));
-                                $cust->set_prop("email", $ph->id());
+				if ($arr["request"]["new"]["phone"] != "")
+				{
+					$ph = obj();
+					$ph->set_parent($cust->id());
+					$ph->set_class_id(CL_CRM_PHONE);
+					$ph->set_name($arr["request"]["new"]["phone"]);
+					$ph->save();
+					$cust->connect(array(
+						"to" => $ph->id(),
+						"type" => "RELTYPE_PHONE"
+					));
+					$cust->set_prop("phone", $ph->id());
+				}
+
+				if ($arr["request"]["new"]["email"] != "")
+				{
+                	                $ph = obj();
+                        	        $ph->set_parent($cust->id());
+                                	$ph->set_class_id(CL_ML_MEMBER);
+		                        $ph->set_name($arr["request"]["new"]["email"]);
+					$ph->set_prop("mail", $arr["request"]["new"]["email"]);
+                		        $ph->save();
+                        	        $cust->connect(array(
+                                	        "to" => $ph->id(),
+                                        	"type" => "RELTYPE_EMAIL"
+	                                ));
+        	                        $cust->set_prop("email", $ph->id());
+				}
+				$cust->save();
 			}
-			$cust->save();
 
 			$arr["obj_inst"]->connect(array(
 				"to" => $cust->id(),
