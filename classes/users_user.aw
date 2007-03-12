@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.135 2007/01/09 17:43:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.136 2007/03/12 09:33:11 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -106,6 +106,12 @@ class users_user extends aw_template
 			if ($redir_url == "")
 			{
 				$redir_url = $this->cfg["baseurl"]."/login.".$this->cfg["ext"];
+			}
+
+			$si = __get_site_instance();
+			if (method_exists($si, "handle_failed_login"))
+			{
+				$si->handle_failed_login($params, $msg, $redir_url);
 			}
 			header("Refresh: 1;url=".$redir_url);
 			print $msg;
