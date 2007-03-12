@@ -96,6 +96,17 @@
             <caption>Listi liikmete seadetevorm</caption>
       </property>
       <property>
+            <name>register_data</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REGISTER_DATA</reltype>
+            <rel>1</rel>
+            <caption>Registri andmed</caption>
+      </property>
+      <property>
             <name>search_tb</name>
             <table>objects</table>
             <field>meta</field>
@@ -683,6 +694,10 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>Saatja</caption>
             </SENDER>
+            <RELTYPE_REGISTER_DATA>
+                  <value>9</value>
+                  <clid>CL_REGISTER_DATA</clid>
+            </RELTYPE_REGISTER_DATA>
       </reltypes>
 </properties>
 

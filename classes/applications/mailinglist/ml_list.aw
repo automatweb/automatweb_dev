@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.90 2007/01/23 10:34:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.91 2007/03/12 14:24:13 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -39,6 +39,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
 @caption Listi liikmete seadetevorm
+
+@property register_data type=relpicker reltype=RELTYPE_REGISTER_DATA rel=1
+@caption Registri andmed
+
 
 
 @groupinfo membership caption=Liikmed 
@@ -257,6 +261,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @reltype SENDER value=8 clid=CL_ML_MEMBER
 @caption Saatja
+
+@reltype RELTYPE_REGISTER_DATA value=9 clid=CL_REGISTER_DATA
+@caqption Registri andmed
 
 */
 
@@ -2454,7 +2461,6 @@ class ml_list extends class_base
 		$templates = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_TEMPLATE",
 		));
-
 		$filtered_props = array();
 		// insert a template selector, if there are any templates available
 		if (sizeof($templates) > 0 )
@@ -2622,7 +2628,20 @@ class ml_list extends class_base
 		if((!strlen($msg_data["message"]) > 0 ) && (is_oid($msg_data["copy_template"])))
 		{
 			$template_obj = obj($msg_data["copy_template"]);
-			$msg_data["message"] = $template_obj->prop("content");
+			$this->use_template($template_obj->prop("content"));
+
+			if(is_oid($arr["obj_inst"]->prop("register_data")))
+			{
+				$ro = obj($arr["obj_inst"]->prop("register_data"));
+				foreach($ro->get_property_list() as $key => $val)
+				{
+					$this->vars(array($key => $ro->prop($key)));
+				}
+			}
+//			$this->read_template($template_obj->id());
+//			$this->vars(array("asd" => "aaaaaaaaaaaaaaaaaaaa"));
+			$msg_data["message"] = $this->parse();
+	//		$msg_data["message"] = $template_obj->prop("content");
 		}
 		$msg_data["return"] = "id";
 		//uhh......minuarust on selle kõigega ikka miski jama
