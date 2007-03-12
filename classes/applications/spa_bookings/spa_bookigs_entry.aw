@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.37 2007/02/28 13:54:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.38 2007/03/12 13:59:48 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -282,9 +282,9 @@ class spa_bookigs_entry extends class_base
 					$p = obj();
 					$p->set_class_id(CL_CRM_PERSON);
 					$p->set_parent($arr["obj_inst"]->prop("persons_folder"));
-					$p->set_name($d["fn"]." ".$d["ln"]);
-					$p->set_prop("firstname", $d["fn"]);
-					$p->set_prop("lastname", $d["ln"]);
+					$p->set_name(trim($d["fn"])." ".trim($d["ln"]));
+					$p->set_prop("firstname", trim($d["fn"]));
+					$p->set_prop("lastname", trim($d["ln"]));
 					$p->set_prop("email", $eml->id());
 					$p->set_prop("birthday", sprintf("%04d-%02d-%02d", $d["birthday"]["year"], $d["birthday"]["month"], $d["birthday"]["day"]));
 					$p->set_prop("gender", $d["gender"]);
@@ -841,12 +841,12 @@ class spa_bookigs_entry extends class_base
 		foreach($p_rooms as $room)
 		{
 			$oh = $room_inst->get_current_openhours_for_room($room);
+			$oh = reset($oh);
 			if (is_object($oh))
 			{
 				$room2oh[$room->id()] = $oh;
 			}
 		}
-
 		for ($h = 0; $h < $num_steps; $h++)
 		{
 			$d = array();

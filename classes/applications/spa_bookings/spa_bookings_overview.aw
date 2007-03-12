@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.23 2007/03/06 13:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.24 2007/03/12 13:59:48 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -294,7 +294,8 @@ class spa_bookings_overview extends class_base
 				{	
 					foreach($booking->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 					{
-						$ppl[$c->prop("to")][] = $booking;
+						$_po = $c->to();
+						$ppl[$_po->brother_of()][] = $booking;
 					}
 				}
 			}
@@ -307,7 +308,7 @@ class spa_bookings_overview extends class_base
 					$rvs_ids[] = $booking->id();
 				}
 				$p_obj = obj($cust_id);
-				if ($arr["request"]["rs_booker_name"] != "" && strpos($p_obj->name(), $arr["request"]["rs_booker_name"]) === false)
+				if ($arr["request"]["rs_booker_name"] != "" && strpos(strtolower($p_obj->name()), strtolower($arr["request"]["rs_booker_name"])) === false)
 				{
 					continue;
 				}
@@ -708,7 +709,14 @@ class spa_bookings_overview extends class_base
 				$new_fields = $t->get_defined_fields();
 				$prev_t->define_field(array(
 					"name" => "room".$room_id,
-					"caption" => $ro->name()
+					"caption" => html::href(array(
+                                                "url" => $this->mk_my_orb("change", array(
+                                                        "id" => $ro->id(),
+                                                        "group" => "calendar",
+                                                        "return_url" => get_ru()
+                                                ), "room"),
+                                                "caption" => $ro->name()
+                                        ))
 				));
 				foreach($new_fields as $field_data)
 				{
@@ -728,7 +736,14 @@ class spa_bookings_overview extends class_base
 				$new_fields = $t->get_defined_fields();
 				$t->define_field(array(
 					"name" => "room".$room_id,
-					"caption" => $ro->name()
+					"caption" => html::href(array(
+						"url" => $this->mk_my_orb("change", array(
+							"id" => $ro->id(),
+							"group" => "calendar",
+							"return_url" => get_ru()
+						), "room"),
+						"caption" => $ro->name()
+					))
 				));
 				foreach($new_fields as $field_data)
 				{
@@ -795,7 +810,7 @@ class spa_bookings_overview extends class_base
                         {
                                 $end = $start + 24*3600*31;
                         }
-			return aw_url_change_var("start",$start,aw_url_change_var("end",$end,$arr["post_ru"]));
+			return aw_url_change_var("start",$start,aw_url_change_var("end",$end,aw_url_change_var("no_det_info", $arr["no_det_info"], $arr["post_ru"])));
 		}
 		$ri = get_instance(CL_ROOM);
 		return $ri->do_add_reservation($arr);

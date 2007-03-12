@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.173 2007/03/07 15:14:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.174 2007/03/12 13:59:47 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1157,9 +1157,9 @@ class room extends class_base
 						$person = new object();
 						$person->set_class_id(CL_CRM_PERSON);
 						$person->set_parent($parent);
-						$person->set_name($firstname." ".$lastname);
-						$person->set_prop("firstname" , $firstname);
-						$person->set_prop("lastname" , $lastname);
+						$person->set_name(trim($firstname)." ".trim($lastname));
+						$person->set_prop("firstname" , trim($firstname));
+						$person->set_prop("lastname" , trim($lastname));
 						$person->save();
 					}
 					else
@@ -1515,6 +1515,7 @@ class room extends class_base
 	                        "onclick" => "document.changeform.set_view_dates.value=1;submit_changeform();",
         	                "value" => t("N&auml;ita vahemikku")
                 	)),
+			"no_det_info" => $_GET["no_det_info"] ? "checked" : ""
 		));
 		
 		if(is_object($arr["obj_inst"]) && !$arr["obj_inst"]->prop("use_product_times"))
@@ -1657,9 +1658,23 @@ class room extends class_base
 			$x = 0;
 			$start_step = $today_start + $step * $step_length * $time_step;
 			$end_step = $start_step + $step_length * $time_step;
+			$prev_dst = date("I", $start_step);
 			$visible = 0;
 			while($x<$len)
 			{
+				if (date("I", $start_step) > $prev_dst)
+				{
+					$start_step -= 3600;
+					$end_step -= 3600;
+					$prev_dst = date("I", $start_step);
+				}
+				else
+				if (date("I", $start_step) < $prev_dst)
+				{
+					$start_step += 3600;
+					$end_step += 3600;
+					$prev_dst = date("I", $start_step);
+				}
 				if(!is_array($this->openhours) || $this->is_open($start_step,$end_step))
 				{
 					$visible=1;
@@ -1753,59 +1768,61 @@ class room extends class_base
 							$last_bron = obj($this->last_bron_id);
 							$cus = t("BRON");
 							$title = "";
+							$imgstr = "";
 							$codes = array();
-
-							$last_cust = $last_bron->prop("customer");
-							if($this->can("view", $last_cust))
+							if (!$_GET["no_det_info"])
 							{
-								$customer = obj($last_cust);
-								$cus = array();
-								foreach($last_bron->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+								$last_cust = $last_bron->prop("customer");
+								if ($this->can("view", $last_cust))
 								{
-									$cus[] = $c->prop("to.name")." ";
-								}
-								$cus = join(", ", $cus);
-								//$cus = $customer->name();
-						
-								$products = $last_bron->meta("amount");
-								$title = $last_bron->prop("content");
-								if($last_bron->prop("comment"))
-								{
-									$title.=", ".$last_bron->prop("comment");
-								}
-								$imgstr = "";
-								foreach($products as $prod => $val)
-								{
-									if($val)
+									$customer = obj($last_cust);
+									$cus = array();
+									foreach($last_bron->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 									{
-										if($this->can("view" , $prod))
+										$cus[] = $c->prop("to.name")." ";
+									}
+									$cus = join(", ", $cus);
+									//$cus = $customer->name();
+						
+									$products = $last_bron->meta("amount");
+									$title = $last_bron->prop("content");
+									if($last_bron->prop("comment"))
+									{
+										$title.=", ".$last_bron->prop("comment");
+									}
+									foreach($products as $prod => $val)
+									{
+										if($val)
 										{
-											$product = obj($prod);
-											$codes[] = $product->prop("code");
-											$title .= " ".$product->name();
-											if ($settings->prop("cal_show_prod_img"))
+											if($this->can("view" , $prod))
 											{
-												// if this is a packaging, then get the product for it
-												if ($product->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+												$product = obj($prod);
+												$codes[] = $product->prop("code");
+												$title .= " ".$product->name();
+												if ($settings->prop("cal_show_prod_img"))
 												{
-													$_conns = $product->connections_to(array("from.class_id" => CL_SHOP_PRODUCT));
-													if (count($_conns))
+													// if this is a packaging, then get the product for it
+													if ($product->class_id() == CL_SHOP_PRODUCT_PACKAGING)
 													{
-														$_con = reset($_conns);
-														$product = $_con->from();
+														$_conns = $product->connections_to(array("from.class_id" => CL_SHOP_PRODUCT));
+														if (count($_conns))
+														{
+															$_con = reset($_conns);
+															$product = $_con->from();
+														}
 													}
-												}
-												$cons = $product->connections_from(array(
-													"type" => "RELTYPE_IMAGE",
-													"to.jrk" => $settings->prop("cal_show_prod_img_ord")
-												));
-												if (count($cons))
-												{
-													$con = reset($cons);
-													if ($con)
+													$cons = $product->connections_from(array(
+														"type" => "RELTYPE_IMAGE",
+														"to.jrk" => $settings->prop("cal_show_prod_img_ord")
+													));
+													if (count($cons))
 													{
-														$ii = get_instance(CL_IMAGE);
-														$imgstr .= $ii->make_img_tag_wl($con->prop("to"));
+														$con = reset($cons);
+														if ($con)
+														{
+															$ii = get_instance(CL_IMAGE);
+															$imgstr .= $ii->make_img_tag_wl($con->prop("to"));
+														}
 													}
 												}
 											}
@@ -2238,8 +2255,12 @@ class room extends class_base
 		{
 			$this->open_inst = get_instance(CL_OPENHOURS);
 		}
+
 		$end_this = (date("H" , $end-1)*3600 + date("i" , $end-1)*60);
+//		$end_this -= date("I", $end-1)*3600;
+//echo "end = $end , I = ".date("d.m.Y H:i:s / I", $end-1)." et = ".date("d.m.Y H:i:s", $end_this)."<br>";
 		$start_this = (date("H" , $start)*3600 + date("i" , $start)*60);
+//		$start_this -= date("I", $start)*3600;
 		
 		//kontrollib et tsükli lõpp äkki läheb järgmisesse päeva juba... siis oleks lõpp kuidagi varajane ja avatud oleku kontroll läheks puusse
 		if($start_this > $end_this)
@@ -2671,10 +2692,10 @@ class room extends class_base
 		{
 			$customer = new object();
 			$customer->set_class_id(CL_CRM_PERSON);
-			$customer->set_name($data["name"]);
+			$customer->set_name(trim($data["name"]));
 			list($fn , $ln) = explode(" ", $data["name"]);
-			$customer->set_prop("firstname", $fn);
-			$customer->set_prop("lastname", $ln);
+			$customer->set_prop("firstname", trim($fn));
+			$customer->set_prop("lastname", trim($ln));
 			$customer->set_parent($parent);
 		//	$customer->save();
 			if($data["phone"])
