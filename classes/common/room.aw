@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.174 2007/03/12 13:59:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.175 2007/03/12 16:08:05 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1834,7 +1834,6 @@ class room extends class_base
 								"caption" => "<span><font color=#26466D><u>".$cus . "</u> " . join($codes , ",")."</FONT></span>",
 								"title" => $title,
 							);
-							
 							if ($settings->prop("cal_show_prods"))
 							{
 								$dx_p["caption"] .= " <b>".$title."</b>";
@@ -1892,10 +1891,10 @@ class room extends class_base
 								$buf_tm = sprintf("%02d:%02d", floor($b_len / 3600), ($b_len % 3600) / 60);
 								$d[$x] .= " ".$buf_tm;
 							}
-
+					
 							if ($settings->prop("col_recent") != "" && time() < ($last_bron->modified()+30*60))
 							{
-								$col[$x] = "#".$settings->prop("col_recent");
+								$col[$x] = "#".$settings->prop("col_recent"); 
 							}
 							else
 							if ($last_bron->prop("time_closed") == 1)
@@ -2004,8 +2003,7 @@ class room extends class_base
 								"#EE6363";
 							}
 							$buf_tm = sprintf("%02d:%02d", floor($buf / 3600), ($buf % 3600) / 60);
-							$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";
-							
+							$d[$x] .= " <div style='position: relative; left: -7px; background: #".$col_buffer."'>".$buffer_time_string." ".$buf_tm."</div>";	//	if (aw_global_get("uid") == "struktuur") {arr($buffer_time_string);}
 						}
 						else
 						{
@@ -3749,10 +3747,11 @@ class room extends class_base
 			"group" => $grp,
 		));
 
-		if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
+		// special discount does nota pply to products
+		/*if (is_object($arr["bron"]) && $arr["bron"]->prop("special_discount") > 0)
 		{
 			$prod_discount = $arr["bron"]->prop("special_discount");
-		}
+		}*/
 		// and if the user has set a discount for prods separately, then that overrides everything
 		if (is_object($arr["bron"]) && $arr["bron"]->meta("prod_discount"))
 		{
@@ -4364,6 +4363,7 @@ class room extends class_base
 				if($room->prop("buffer_after"))
 				{
 					$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["end"] = $start;
+					$this->res_table[$start-$room->prop("buffer_after")*$room->prop("buffer_after_unit")]["going_to_be_after_buffer"] = 1;
 				}
 			}
 			if($res->prop("verified"))
@@ -4376,7 +4376,7 @@ class room extends class_base
 			$customers[] = $res->prop("customer");
 		}
 		ksort($this->res_table);
-		//if (aw_global_get("uid") == "struktuur") {arr($this->res_table);}
+
 		if (count($customers))
 		{
 			$cust_ol = new object_list(array(
