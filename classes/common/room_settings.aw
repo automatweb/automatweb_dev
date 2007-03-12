@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.21 2007/03/07 15:14:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.22 2007/03/12 15:33:55 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -111,6 +111,7 @@
 		@property send_del_mail type=checkbox ch_value=1
 		@caption Saada kustutamise kohta meil
 
+
 		@property del_mail_to type=textbox
 		@caption Kellele kustutamise kohta meil saata
 
@@ -123,11 +124,38 @@
 		@property del_mail_subj type=textbox
 		@caption Meili subjekt
 
+
 		@property del_mail_legend type=text
 		@caption Meili sisu legend
-
+		
 		@property del_mail_ct type=textarea rows=20 cols=50
 		@caption Meili sisu
+
+	@groupinfo uv_email caption="Kinnituse eemaldamine" parent=email
+	@default group=uv_email
+
+		@property send_uv_mail type=checkbox ch_value=1
+		@caption Saada kinnituse kustutamise kohta meil
+
+		@property uv_mail_to type=textbox
+		@caption Kellele kustutamise kohta meil saata
+
+		@property uv_mail_from type=textbox 
+		@caption Meili from aadress
+
+		@property uv_mail_from_name type=textbox
+		@caption Meili from nimi
+
+
+		@property uv_mail_subj type=textbox
+		@caption Meili subjekt
+		
+		@property uv_mail_legend type=text
+		@caption Meili sisu legend
+		
+		@property uv_mail_ct type=textarea rows=20 cols=50
+		@caption Meili sisu
+
 
 	@groupinfo order_email caption="Tellimusmeil" parent=email
 	@default group=order_email
@@ -199,6 +227,9 @@ class room_settings extends class_base
 			case "del_mail_legend":
 				$prop["value"] = t("#ord# - tellimuse sisu");
 				break;
+			case "uv_mail_legend":
+				$prop["value"] = t("#ord# - tellimuse sisu<br>#reason# - kinnituse eemaldamise p&ouml;hjus");
+				break;			
 			case "order_mail_groups":
 				$ol = new object_list(array(
 					"class_id" => CL_GROUP,

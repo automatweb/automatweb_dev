@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.55 2007/03/12 14:19:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.56 2007/03/12 15:33:57 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -986,6 +986,28 @@ class reservation extends class_base
 		$o->set_prop("verified", 0);
 		$o->set_meta("unverify_reason", $arr["reason"]);
 		$o->save();
+		if ($this->can("view", $o->prop("resource")))
+		{
+			$res = obj($o->prop("resource"));
+			$sets = $res->prop("settings");
+			if (is_array($sets))
+			{
+				$sets = reset($sets);
+			}
+			if ($this->can("view", $sets))
+			{
+				$set = obj($sets);
+				if ($set->prop("send_uv_mail"))
+				{
+					send_mail(
+						$set->prop("uv_mail_to"),
+						$set->prop("uv_mail_subj"),
+						str_replace("#ord#", $this->_get_mail_ord_ct($o), str_replace("#reason#", $arr["reason"] , $set->prop("uv_mail_ct"))),
+						"From: ".$this->_get_del_mail_from($set)
+					);
+				}
+			}
+		}
 		return $arr["post_ru"];
 	}
 
