@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.91 2007/03/12 14:24:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.92 2007/03/12 16:50:36 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -192,14 +192,23 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Grupid kellele kiri saata
 
+
 @property no_fck type=checkbox ch_value=1
 @caption Maili kirjutamine plaintext vaates
+
+
 
 @property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
 @caption Maili kirjutamine
 
+@property register_data type=relpicker reltype=RELTYPE_REGISTER_DATA
+@caption Registri andmed
+
 @property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
 @caption Aliastehaldur
+
+
+
 ------------------------------------------------------------------------
 
 @groupinfo mail_report caption="Kirja raport" parent=raports submit=no
@@ -236,9 +245,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property show_mail_message type=text store=no no_caption=1
 @caption Sisu
 
+
 ------------------------------------------------------------------------
 
-@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION
+@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE,CL_CRM_SELECTION,CL_CRM_SECTOR
 @caption Listi liikmete allikas
 
 @reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
@@ -1843,6 +1853,49 @@ class ml_list extends class_base
 		return $url;
 	}
 
+	function get_members_from_sector($args)
+	{
+		extract($args);
+		$ala = obj($id);
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD.id"  => $id,
+			"site_id" => array(),
+			"lang_id" => array(),
+		));
+		foreach($ol->arr() as $o)
+		{
+			$mail = $o->prop("email_id.mail");;
+			if(!$no_return)
+			{
+				if(!(array_key_exists($mail , $already_found)))
+				{
+					if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
+					{
+						$name = $o->name();
+						if($comb)
+						{
+							$name = "".$name." &lt;".$mail."&gt;";
+						}
+						$ret[]  = array(
+							"parent" => $ala->id(),
+							"name" => $name,
+							"mail" => $mail,
+							"parent_name" => $ala->name(),
+							"oid" => $o->id(),
+						);
+					}
+					$cnt++;
+				}
+			}
+			if(!$all) $already_found[$mail] = $mail;
+		}
+		$this->already_found = $already_found;
+		if(!$all)$this->member_count = sizeof($already_found);
+		else $this->member_count= $cnt;
+		return $ret;
+	}
+
 	function get_members_from_file($args)
 	{
 		extract($args);
@@ -2073,6 +2126,20 @@ class ml_list extends class_base
 					}
 				}
 				$cnt += count($ret);
+			}
+			elseif ($source_obj->class_id() == CL_CRM_SECTOR)
+			{
+				$ret = $this->get_members_from_sector(array(
+					"id" => $source_obj->id(),
+					"ret" => $ret ,
+					"cnt" => $cnt ,
+					"all" => $all ,
+					"already_found" => $already_found ,
+					"from" => $from ,
+					"to" => $to,
+					"no_return" => $no_return));
+				$cnt = $this->member_count;
+				$already_found = $this->already_found;
 			}
 		}
 		if(!$all)$cnt = sizeof($already_found);

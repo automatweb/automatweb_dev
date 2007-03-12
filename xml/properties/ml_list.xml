@@ -100,10 +100,9 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
+            <group>write_mail</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REGISTER_DATA</reltype>
-            <rel>1</rel>
             <caption>Registri andmed</caption>
       </property>
       <property>
@@ -656,6 +655,7 @@
                         <num_2>CL_USER</num_2>
                         <num_3>CL_FILE</num_3>
                         <num_4>CL_CRM_SELECTION</num_4>
+                        <num_5>CL_CRM_SECTOR</num_5>
                   </clid>
                   <caption>Listi liikmete allikas</caption>
             </MEMBER_PARENT>
