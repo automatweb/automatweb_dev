@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.15 2007/03/05 10:31:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.16 2007/03/13 15:16:06 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -168,8 +168,8 @@ class menu_tree extends class_base
 				$this->level = 0;
 			};
 		};
-		$fl = str_replace("&", "&amp;", join("",$folder_list));
-		$fl = str_replace(chr(150), "-", $fl);	
+		//$fl = str_replace("&", "&amp;", join("",$folder_list));
+		$fl = str_replace(chr(150), "-", join("",$folder_list));	
 		return $fl;
 		
 	}
