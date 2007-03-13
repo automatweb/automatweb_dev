@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.92 2007/03/12 16:50:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.93 2007/03/13 15:13:20 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -40,8 +40,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
 @caption Listi liikmete seadetevorm
 
-@property register_data type=relpicker reltype=RELTYPE_REGISTER_DATA rel=1
-@caption Registri andmed
+@property default_bounce type=textbox
+@caption Default bounce
 
 
 
@@ -196,7 +196,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property no_fck type=checkbox ch_value=1
 @caption Maili kirjutamine plaintext vaates
 
-
+@property bounce type=textbox
+@caption Bounce aadress
 
 @property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
 @caption Maili kirjutamine
@@ -850,6 +851,12 @@ class ml_list extends class_base
 				$prop["value"] = $this->gen_mail_subject($arr);
 				break;
 			
+			case "bounce":
+				if(!$prop["value"])
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("default_bounce");
+				}
+				break;
 			
 			case "mail_toolbar":
 				$tb = &$prop["vcl_inst"];

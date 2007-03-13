@@ -96,14 +96,13 @@
             <caption>Listi liikmete seadetevorm</caption>
       </property>
       <property>
-            <name>register_data</name>
+            <name>default_bounce</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>write_mail</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_REGISTER_DATA</reltype>
-            <caption>Registri andmed</caption>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>Default bounce</caption>
       </property>
       <property>
             <name>search_tb</name>
@@ -468,6 +467,15 @@
             <caption>Maili kirjutamine plaintext vaates</caption>
       </property>
       <property>
+            <name>bounce</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>textbox</type>
+            <caption>Bounce aadress</caption>
+      </property>
+      <property>
             <name>write_mail</name>
             <table>objects</table>
             <field>meta</field>
@@ -478,6 +486,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Maili kirjutamine</caption>
+      </property>
+      <property>
+            <name>register_data</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REGISTER_DATA</reltype>
+            <caption>Registri andmed</caption>
       </property>
       <property>
             <name>aliasmgr</name>

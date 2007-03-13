@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.31 2006/12/08 17:21:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.32 2007/03/13 15:13:20 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -473,7 +473,14 @@ class ml_queue extends aw_template
 				)
 			)
 			continue;
-
+			$list = obj($lid);
+			$bounce = $list->prop("bounce");
+			if(!$bounce)
+			{
+				$bounce = $list->prop("default_bounce");
+			}
+			
+			
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
 			{
@@ -511,6 +518,7 @@ class ml_queue extends aw_template
 					$msg_data = $this->db_next();
 					if ($msg_data)
 					{
+						$msg_data["bounce"] = $bounce;
 						$this->save_handle();
 						// 1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
 			//			echo "sending queue item..<br />\n";
@@ -669,6 +677,7 @@ class ml_queue extends aw_template
 		};
 		echo t("sending mail to: ").$msg["target"]." ....";
 		flush();
+		$this->awm->headers["Bcc"] = $msg["bounce"];
 		$this->awm->gen_mail();
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
