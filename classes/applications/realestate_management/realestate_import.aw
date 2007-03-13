@@ -974,11 +974,14 @@ class realestate_import extends class_base
 				#### transaction_price2
 				$value = round ($this->property_data["TEHING_MYYGIHIND"], 2);
 				$property->set_prop ("transaction_price2", $value);
-
+				
 				### price per m2
-				$value = round ($this->property_data["PRICE_PER_M2"], 2);
-				$property->set_prop ("price_per_m2", $value);
-
+				if($property->is_property("total_floor_area"))
+				{
+					$value = round ($this->property_data["PRICE_PER_M2"], 2);
+					$property->set_prop ("price_per_m2", $value);
+				}
+				
 				#### transaction_rent
 				$value = round ($this->property_data["TEHING_KUUYYR"], 2);
 				$property->set_prop ("transaction_rent", $value);
