@@ -11,48 +11,48 @@ msgstr ""
 
 #: classes/vcl/date_edit.aw:184
 msgid "Jaanuar"
-msgstr ""
+msgstr "Январь"
 
 #: classes/vcl/date_edit.aw:185
 msgid "Veebruar"
-msgstr ""
+msgstr "Февраль"
 
 #: classes/vcl/date_edit.aw:186
 msgid "M&auml;rts"
-msgstr ""
+msgstr "Март"
 
 #: classes/vcl/date_edit.aw:187
 msgid "Aprill"
-msgstr ""
+msgstr "Апрель"
 
 #: classes/vcl/date_edit.aw:188
 msgid "Mai"
-msgstr ""
+msgstr "Май"
 
 #: classes/vcl/date_edit.aw:189
 msgid "Juuni"
-msgstr ""
+msgstr "Июнь"
 
 #: classes/vcl/date_edit.aw:190
 msgid "Juuli"
-msgstr ""
+msgstr "Июль"
 
 #: classes/vcl/date_edit.aw:191
 msgid "August"
-msgstr ""
+msgstr "Август"
 
 #: classes/vcl/date_edit.aw:192
 msgid "September"
-msgstr ""
+msgstr "Сентябрь"
 
 #: classes/vcl/date_edit.aw:193
 msgid "Oktoober"
-msgstr ""
+msgstr "Октябрь"
 
 #: classes/vcl/date_edit.aw:194
 msgid "November"
-msgstr ""
+msgstr "Ноябрь"
 
 #: classes/vcl/date_edit.aw:195
 msgid "Detsember"
-msgstr ""
+msgstr "Декабрь"

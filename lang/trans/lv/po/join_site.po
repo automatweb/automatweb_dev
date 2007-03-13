@@ -716,23 +716,23 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:822 classes/contentmgmt/join/join_site.aw:1627
 msgid "Maa"
-msgstr ""
+msgstr "ðalis"
 
 #: classes/contentmgmt/join/join_site.aw:828 classes/contentmgmt/join/join_site.aw:1634
 msgid "Postiindeks"
-msgstr ""
+msgstr "Paðto indeksas"
 
 #: classes/contentmgmt/join/join_site.aw:833 classes/contentmgmt/join/join_site.aw:1640
 msgid "Linn"
-msgstr ""
+msgstr "Miestas"
 
 #: classes/contentmgmt/join/join_site.aw:838 classes/contentmgmt/join/join_site.aw:1646
 msgid "Maakond"
-msgstr ""
+msgstr "Valstybë (regionas)"
 
 #: classes/contentmgmt/join/join_site.aw:843 classes/contentmgmt/join/join_site.aw:1652
 msgid "T&auml;nava nimi"
-msgstr ""
+msgstr "Gatvës pavadinimas"
 
 #: classes/contentmgmt/join/join_site.aw:1045
 msgid "Salvesta"
@@ -740,11 +740,11 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:1062 classes/contentmgmt/join/join_site.aw:1108
 msgid "T&uuml;hista"
-msgstr ""
+msgstr "Atðaukti"
 
 #: classes/contentmgmt/join/join_site.aw:1089
 msgid "Liitun"
-msgstr ""
+msgstr "Prisijungti"
 
 #: classes/contentmgmt/join/join_site.aw:2232
 msgid "Liitumise meili from aadress (%s)"

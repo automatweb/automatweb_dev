@@ -1980,15 +1980,15 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:1086
 msgid "Vallaline"
-msgstr ""
+msgstr "naimaton"
 
 #: classes/crm/crm_person.aw:1087
 msgid "Abielus"
-msgstr ""
+msgstr "naimisissa"
 
 #: classes/crm/crm_person.aw:1088
 msgid "Lahutatud"
-msgstr ""
+msgstr "eronnut"
 
 #: classes/crm/crm_person.aw:1094
 msgid "Pilt, kontakt, artiklid"
@@ -2000,11 +2000,11 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:1109
 msgid "mees"
-msgstr ""
+msgstr "mies"
 
 #: classes/crm/crm_person.aw:1110
 msgid "naine"
-msgstr ""
+msgstr "nainen"
 
 #: classes/crm/crm_person.aw:1304
 msgid "Muuda"

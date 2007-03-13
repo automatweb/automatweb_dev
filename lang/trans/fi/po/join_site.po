@@ -720,27 +720,27 @@ msgstr ""
 #: classes/contentmgmt/join/join_site.aw:822
 #: classes/contentmgmt/join/join_site.aw:1623
 msgid "Maa"
-msgstr ""
+msgstr "Maa"
 
 #: classes/contentmgmt/join/join_site.aw:828
 #: classes/contentmgmt/join/join_site.aw:1630
 msgid "Postiindeks"
-msgstr ""
+msgstr "Postinro"
 
 #: classes/contentmgmt/join/join_site.aw:833
 #: classes/contentmgmt/join/join_site.aw:1636
 msgid "Linn"
-msgstr ""
+msgstr "Kaupunki/taajama"
 
 #: classes/contentmgmt/join/join_site.aw:838
 #: classes/contentmgmt/join/join_site.aw:1642
 msgid "Maakond"
-msgstr ""
+msgstr "L‰‰ni/piiri"
 
 #: classes/contentmgmt/join/join_site.aw:843
 #: classes/contentmgmt/join/join_site.aw:1648
 msgid "T&auml;nava nimi"
-msgstr ""
+msgstr "Katuosoite"
 
 #: classes/contentmgmt/join/join_site.aw:1045
 msgid "Salvesta"
@@ -749,11 +749,11 @@ msgstr ""
 #: classes/contentmgmt/join/join_site.aw:1062
 #: classes/contentmgmt/join/join_site.aw:1108
 msgid "T&uuml;hista"
-msgstr ""
+msgstr "Tyhjenn‰ kent‰t"
 
 #: classes/contentmgmt/join/join_site.aw:1089
 msgid "Liitun"
-msgstr ""
+msgstr "Liity"
 
 #: classes/contentmgmt/join/join_site.aw:2224
 msgid "Liitumise meili from aadress (%s)"
