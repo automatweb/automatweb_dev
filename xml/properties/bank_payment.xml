@@ -87,6 +87,73 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>find_date_start</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>log</group>
+            <submit>no</submit>
+            <type>date_select</type>
+            <store>no</store>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>find_date_end</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>log</group>
+            <submit>no</submit>
+            <type>date_select</type>
+            <store>no</store>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>find_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>log</group>
+            <submit>no</submit>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Maksja nimi</caption>
+      </property>
+      <property>
+            <name>find_ref</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>log</group>
+            <submit>no</submit>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>viide</caption>
+      </property>
+      <property>
+            <name>find_one</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>log</group>
+            <submit>no</submit>
+            <type>checkbox</type>
+            <store>no</store>
+            <caption>Ei n&amp;amp;auml;ita korduvaid</caption>
+      </property>
+      <property>
+            <name>do_find</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>log</group>
+            <submit>no</submit>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>log</name>
             <table>objects</table>
             <field>meta</field>

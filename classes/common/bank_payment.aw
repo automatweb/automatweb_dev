@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.33 2007/03/13 12:35:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.34 2007/03/13 14:00:22 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -42,6 +42,24 @@
 @groupinfo log caption="Logi"
 
 @default group=log
+	@property find_date_start type=date_select store=no
+	@caption Alates
+	
+	@property find_date_end type=date_select store=no
+	@caption Kuni
+
+	@property find_name type=textbox store=no
+	@caption Maksja nimi
+	
+	@property find_ref type=textbox store=no
+	@caption viide
+
+	@property find_one type=checkbox store=no
+	@caption Ei n&auml;ita korduvaid
+
+	@property do_find type=submit store=no no_caption=1
+	@caption Otsi
+	
 	@property log type=text store=no no_caption=1
 
 
@@ -107,6 +125,21 @@ class bank_payment extends class_base
 	//test keskkonnas läheb üldjuhul miskeid testandmeid vaja
 	var $test_priv_keys = array(
 		"seb"	=> "seb_test_priv.pem",
+	);
+
+//edasi logi jaoks infi... et ei peaks liialt if lauseid tegema
+	var $payer_name = array(
+		"seb" => "VK_SND_NAME",
+		"hansapank" => "VK_SND_NAME",
+		"sampopank" => "VK_SND_NAME",
+		"credit_card" => "msgdata",
+	);
+
+	var $ref = array(
+		"seb" => "VK_REF",
+		"hansapank" => "VK_REF",
+		"sampopank" => "VK_REF",
+		"credit_card" => "ecuno",
 	);
 
 	/** 
@@ -379,78 +412,131 @@ class bank_payment extends class_base
 		return $payment_object;
 	}
 
+	function get_log_data($o)
+	{
+		$filter = $o->meta("search_data");
+		$o->set_meta("search_data" , null);
+		$myFile = $GLOBALS["site_dir"]."/bank_log.txt";
+		$fh = fopen($myFile, 'r');
+		$theData = fread($fh, filesize($myFile));
+		fclose($fh);
+		$log_array = explode("\n" , $theData);
+		//arr($log_array);
+		$log_data = array();
+		$done = array();
+		
+		foreach($log_array as $log)
+		{
+			if(is_array(unserialize($log)))
+			{
+				$val = unserialize($log);
+				if($val["VK_SND_ID"])
+				{
+					$bank_id = $this->merchant_id[$val["VK_SND_ID"]];
+				}
+				else
+				{
+					$bank_id = $this->merchant_id[$val["action"]];
+				}
+				if(date_edit::get_timestamp($filter["find_date_start"]) > 1 && !(date_edit::get_timestamp($filter["find_date_start"]) == date_edit::get_timestamp($filter["find_date_end"])) && date_edit::get_timestamp($filter["find_date_start"]) > $val["timestamp"])
+				{
+					continue;
+				}
+				if(date_edit::get_timestamp($filter["find_date_end"]) > 1 && !(date_edit::get_timestamp($filter["find_date_start"]) == date_edit::get_timestamp($filter["find_date_end"])) && date_edit::get_timestamp($filter["find_date_end"]) < $val["timestamp"])
+				{
+					continue;
+				}
+				if($filter["find_name"] && !(substr_count(strtoupper($val[$this->payer_name[$bank_id]]) ,strtoupper($filter["find_name"]))))
+				{
+					continue;
+				}
+				if($filter["find_ref"] && !(substr_count($val[$this->ref[$bank_id]] , $filter["find_ref"])))
+				{
+					continue;
+				}
+	
+				if($filter["find_one"]  && ($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000"))
+				{
+					if(array_key_exists($val[$this->ref[$bank_id]] ,  $done)) continue;
+					$done[$val[$this->ref[$bank_id]]] = $val[$this->ref[$bank_id]];
+				}
+				if($val["timestamp"])
+				{
+					$log_data[$val["timestamp"]]["payer"] = $val["VK_SND_NAME"];
+					$log_data[$val["timestamp"]]["ref"] = $val["VK_REF"];
+					$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
+					$log_data[$val["timestamp"]]["sum"] = $val["VK_AMOUNT"];
+					$log_data[$val["timestamp"]]["bank"] = $bank_id;
+					if($val["eamount"])
+					{
+						$log_data[$val["timestamp"]]["sum"] = $val["eamount"]/100;
+					}
+					if($val["ecuno"])
+					{
+						$log_data[$val["timestamp"]]["ref"] = $val["ecuno"];
+						$log_data[$val["timestamp"]]["msg"] = substr($val["ecuno"], 0, -1);
+					}
+					if($val["msgdata"])
+					{
+						$log_data[$val["timestamp"]]["payer"] = $val["msgdata"];
+					}
+					if($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000")
+					{
+						$log_data[$val["timestamp"]]["ok"] = 1;
+					}
+					else
+					{
+						$log_data[$val["timestamp"]]["ok"] = 0;
+					}
+					$log_data[$val["timestamp"]]["good"] = $val["good"];
+				}
+				else
+				{
+					$log_data[] = array("payer" => $val["VK_SND_NAME"] , "ref" => $val["VK_REF"],"msg" => $val["VK_MSG"], "sum" => $val["VK_AMOUNT"]);
+				}
+			}
+			else
+			{
+				//$log_data[] = array("msg" => $log);
+			}
+		}
+		krsort($log_data);
+		return $log_data;
+	}
+
+	function get_log(&$arr)
+	{
+		$log_data = $this->get_log_data($arr["obj_inst"]);
+		classload("vcl/table");
+		$t = new vcl_table;
+		$this->init_log($t);
+
+		foreach($log_data as $key => $val)
+		{
+			//filtreerib välja lihtsalt ülearuse
+			$t->define_data(array(
+				"sum" => $val["sum"],
+				"bank" => $this->banks[$val["bank"]],
+				"time" => date("d.m.Y H:i" ,$key),
+				"ref" => $val["ref"],
+				"expl" => $val["msg"],
+				"payer" => $val["payer"],
+				"ok" =>  $val["ok"] ? t("&otilde;nnestus") : t("eba&otilde;nnestus"),
+				"good" => $val["good"] ? t("ok") : t(""),
+			));
+		}
+		return $t->draw();
+	}
+
 	function get_property($arr)
 	{
+		$search_data = $arr["obj_inst"]->meta("search_data");
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
 			case "log":
-				$myFile = $GLOBALS["site_dir"]."/bank_log.txt";
-				$fh = fopen($myFile, 'r');
-				$theData = fread($fh, filesize($myFile));
-				fclose($fh);
-				$log_array = explode("\n" , $theData);
-				//arr($log_array);
-				$log_data = array();
-				foreach($log_array as $log)
-				{
-					if(is_array(unserialize($log)))
-					{
-						$val = unserialize($log);
-						if($val["timestamp"])
-						{
-							$log_data[$val["timestamp"]]["payer"] = $val["VK_SND_NAME"];
-							$log_data[$val["timestamp"]]["ref"] = $val["VK_REF"];
-							$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
-							$log_data[$val["timestamp"]]["sum"] = $val["VK_AMOUNT"];
-							$log_data[$val["timestamp"]]["bank"] = $this->merchant_id[$val["VK_SND_ID"]];
-							if($val["eamount"])$log_data[$val["timestamp"]]["sum"] = $val["eamount"]/100;
-							if($val["ecuno"])
-							{
-								$log_data[$val["timestamp"]]["ref"] = $val["ecuno"];
-								$log_data[$val["timestamp"]]["msg"] = substr($val["ecuno"], 0, -1);
-							}
-							if($val["msgdata"])$log_data[$val["timestamp"]]["payer"] = $val["msgdata"];
-							if($val["action"] == "afb") $log_data[$val["timestamp"]]["bank"] = $this->merchant_id[$val["action"]];
-							if($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000")
-							{
-								$log_data[$val["timestamp"]]["ok"] = 1;
-							}
-							else
-							{
-								$log_data[$val["timestamp"]]["ok"] = 0;
-							}
-							$log_data[$val["timestamp"]]["good"] = $val["good"];
-						}
-						else
-						{
-							$log_data[] = array("payer" => $val["VK_SND_NAME"] , "ref" => $val["VK_REF"],"msg" => $val["VK_MSG"], "sum" => $val["VK_AMOUNT"]);
-						}
-					}
-					else
-					{
-						//$log_data[] = array("msg" => $log);
-					}
-				}
-				classload("vcl/table");
-				$t = new vcl_table;
-				$this->init_log($t);
-				krsort($log_data);
-				foreach($log_data as $key => $val)
-				{
-						$t->define_data(array(
-							"sum" => $val["sum"],
-							"bank" => $this->banks[$val["bank"]],
-							"time" => date("d.m.Y H:i" ,$key),
-							"ref" => $val["ref"],
-							"expl" => $val["msg"],
-							"payer" => $val["payer"],
-							"ok" =>  $val["ok"] ? t("&otilde;nnestus") : t("eba&otilde;nnestus"),
-							"good" => $val["good"] ? t("ok") : t(""),
-						));
-				}
-				$prop["value"] = $t->draw();
+				$prop["value"] = $this->get_log($arr);
 				break;
 			case "template":
 				$tm = get_instance("templatemgr");
@@ -462,6 +548,17 @@ class bank_payment extends class_base
 					$prop["caption"] .= t("\n".$this->site_template_dir."");
 				}
 				break;
+			case "find_name":
+			case "find_date_start":
+			case "find_date_end":
+			case "find_ref":
+			case "find_one":
+				if($search_data[$prop["name"]])
+				{
+					$prop["value"] = $search_data[$prop["name"]];
+				}
+				break;
+				
 			//-- get_property --//
 		};
 		return $retval;
@@ -526,6 +623,14 @@ class bank_payment extends class_base
 			//-- set_property --//
 					case "bank":
 				$this->submit_meta($arr);
+				break;
+				
+			case "find_name":
+			case "find_date_start":
+			case "find_date_end":
+			case "find_ref":
+			case "find_one":
+				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				break;
 		}
 		return $retval;
