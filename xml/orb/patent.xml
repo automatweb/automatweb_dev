@@ -4,6 +4,7 @@
 		<action name="show" is_public="1" all_args="1">
 			<function name="show">
 				<arguments>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.70 2007/03/12 13:19:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.71 2007/03/13 10:19:59 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -505,7 +505,9 @@ class patent extends class_base
 	/** Show trademark applications
 		
 		@attrib name=show is_public="1" all_args=1
-	
+		@param id required oid
+			trademark id
+		
 	**/
 	function show($arr)
 	{
@@ -545,7 +547,11 @@ class patent extends class_base
 		}
 		else
 		{
-			$pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"], "add_obj" => $arr["alias"]["to"]) , CL_PATENT);
+			if($arr["alias"]["to"])	$pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"], "add_obj" => $arr["alias"]["to"]) , CL_PATENT);
+			else
+			{
+				$pdfurl = $this->mk_my_orb("pdf", array("print" => 1 , "id" => $_SESSION["patent"]["id"]) , CL_PATENT);
+			}
 			$pdfurl = str_replace("https" , "http" , $pdfurl);
 			$data["print"] = "<input type='button' value='".t("Prindi")."' class='nupp' onClick='javascript:document.changeform.submit();'>";
 			$data["pdf"] = "<input type='button' value='Salvesta pdf' class='nupp'  onclick='javascript:window.location.href=\"".$pdfurl."\";'><br>";
@@ -611,7 +617,10 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		$p = "";
 		foreach($prods as $key => $product)
 		{
+			$product = strtolower(str_replace("\n",", ",$product));
+
 			$this->vars(array("product" => $product, "class"=> $key));
+					
 			$p.=$this->parse("PRODUCTS");
 		}
 		$this->vars(array("PRODUCTS" => $p));
@@ -1703,6 +1712,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 	{
 //		header("Content-type: application/pdf");
 		$conv = get_instance("core/converters/html2pdf");
+		extract($arr);
 		die($conv->gen_pdf(array(
 			"source" => $this->show (array (
 				"id" => $id,
