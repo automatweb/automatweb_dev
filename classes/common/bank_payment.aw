@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.32 2007/03/12 13:33:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.33 2007/03/13 12:35:14 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -95,6 +95,7 @@ class bank_payment extends class_base
 		"EYP" => "seb",
 		"HP" => "hansapank",
 		"afb" => "credit_card",
+		"SAMPOPANK" => "sampopank",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
