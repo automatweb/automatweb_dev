@@ -25,13 +25,6 @@
 			</function>
 		</action>
 
-		<action name="edit_something">
-			<function name="edit_something">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="edit_my_person_obj" is_public="1" caption="Muuda isikuobjekti andmeid">
 			<function name="edit_my_person_obj">
 				<arguments>

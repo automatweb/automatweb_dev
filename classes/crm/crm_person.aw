@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.161 2007/02/26 16:56:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.162 2007/03/13 15:57:09 tarvo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -15,7 +15,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @default table=objects
 ------------------------------------------------------------------
 
-@groupinfo general2 caption="Üldine" parent=general
+@groupinfo general2 caption="&Uuml;ldine" parent=general
 @default group=general2
 
 @property name type=text
@@ -30,7 +30,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @caption Perekonnanimi
 
 @property nickname type=textbox size=10 maxlength=20
-@caption Hüüdnimi
+@caption H&uuml;&uuml;dnimi
 
 @property personal_id type=textbox size=13 maxlength=11
 @caption Isikukood
@@ -64,10 +64,10 @@ property _bd_upg type=hidden table=kliendibaas_isik field=aw_bd_up no_caption=1
 @caption Pilt suuremana
 
 @property ext_id type=textbox table=objects field=subclass maxlength=11
-@caption Numbriline sidussüsteemi ID
+@caption Numbriline siduss&uuml;steemi ID
 
 @property ext_id_alphanumeric type=textbox maxlength=25
-@caption Sidussüsteemi ID
+@caption Siduss&uuml;steemi ID
 
 @property code type=textbox
 @caption Kood
@@ -76,7 +76,7 @@ property messenger type=textbox size=30 maxlength=200
 caption Msn/yahoo/aol/icq
 
 @property username type=text store=no
-@comment Kasutajanimes on lubatud ladina tähestiku suur- ja väiketähed, numbrid 0-9 ning märgid alakriips ja punkt
+@comment Kasutajanimes on lubatud ladina t&auml;hestiku suur- ja v&auml;iket&auml;hed, numbrid 0-9 ning m&auml;rgid alakriips ja punkt
 @caption Kasutaja
 
 @property password type=password table=objects field=meta method=serialize
@@ -224,7 +224,7 @@ caption Msn/yahoo/aol/icq
 @default group=settings
 
 @property templates type=select table=objects field=meta method=serialize
-@caption Väljund
+@caption V&auml;ljund
 
 @property server_folder type=server_folder_selector table=objects field=meta method=serialize
 @caption Kataloog serveris, kus asuvad failid
@@ -246,7 +246,7 @@ caption Msn/yahoo/aol/icq
 ------------------------------------------------------------------
 @groupinfo cv caption="Elulugu"
 
-@groupinfo education caption="Hariduskäik" parent=cv submit=no
+@groupinfo education caption="Haridusk&auml;ik" parent=cv submit=no
 @default group=education
 
 @property edulevel type=select table=objects field=meta method=serialize
@@ -256,7 +256,7 @@ caption Msn/yahoo/aol/icq
 
 ------------------------------------------------------------------
 
-@groupinfo add_edu caption="Täienduskoolitus" parent=cv submit=no
+@groupinfo add_edu caption="T&auml;ienduskoolitus" parent=cv submit=no
 
 @property add_edu_edit type=releditor store=no mode=manager reltype=RELTYPE_ADD_EDUCATION props=org,field,time,length table_fields=org,field,time,length group=add_edu
 ------------------------------------------------------------------
@@ -291,7 +291,7 @@ caption Msn/yahoo/aol/icq
 @caption Arvutioskus
 
 @property compskills_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to
-Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
+Arvutioskus: Programm	Valik v&otilde;i tekstikast / Tase	Valik
 
 @property drivers_license type=text subtitle=1
 @caption Autojuhiload
@@ -303,25 +303,24 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 @caption Alates
 
 @property dl_can_use type=checkbox ch_value=1
-@caption Kas võimalik kasutada tööeesmärkidel
+@caption Kas v&otilde;imalik kasutada t&ouml;&ouml;eesm&auml;rkidel
 
 @property addinfo type=textarea
 @caption Muud oskused
 
 ------------------------------------------------------------------
 
-@groupinfo work caption="Töö"
+@groupinfo work caption="T&ouml;&ouml;"
 
-@groupinfo experiences caption="Töökogemus" parent=work submit=no
+@groupinfo experiences caption="T&ouml;&ouml;kogemus" parent=work submit=no
 @default group=experiences
 
-@property tookogemused_edit type=releditor reltype=RELTYPE_EDUCATION props=organisation,profession,date_from,date_to,duties store=no
 @property previous_jobs_tb type=toolbar no_caption=1 store=no
 @property previous_jobs_table type=table store=no no_caption=1
 
 ------------------------------------------------------------------
 
-@groupinfo work_wanted caption="Soovitud töö" parent=work submit=no
+@groupinfo work_wanted caption="Soovitud t&ouml;&ouml;" parent=work submit=no
 @default group=work_wanted
 
 @property jobs_wanted_tb type=toolbar no_caption=1 store=no
@@ -356,8 +355,8 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 ------------------------------------------------------------------
 
 @groupinfo overview caption="Tegevused"
-@groupinfo all_actions caption="Kõik" parent=overview submit=no
-@groupinfo calls caption="Kõned" parent=overview submit=no
+@groupinfo all_actions caption="K&otilde;ik" parent=overview submit=no
+@groupinfo calls caption="K&otilde;ned" parent=overview submit=no
 @groupinfo meetings caption="Kohtumised" parent=overview submit=no
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
 
@@ -365,7 +364,7 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 @caption org_actions
 
 @property org_calls type=calendar no_caption=1 group=calls viewtype=relative
-@caption Kõned
+@caption K&otilde;ned
 
 @property org_meetings type=calendar no_caption=1 group=meetings viewtype=relative
 @caption Kohtumised
@@ -549,7 +548,7 @@ reltype CHILDREN value=5 clid=CL_CRM_PERSON
 caption Lapsed
 
 @reltype WORK value=6 clid=CL_CRM_COMPANY
-@caption Töökoht
+@caption T&ouml;&ouml;koht
 
 @reltype RANK value=7 clid=CL_CRM_PROFESSION
 @caption Ametinimetus
@@ -558,7 +557,7 @@ caption Lapsed
 @caption Kohtumine
 
 @reltype PERSON_CALL value=9 clid=CL_CRM_CALL
-@caption Kõne
+@caption K&otilde;ne
 
 @reltype PERSON_TASK value=10 clid=CL_TASK
 @caption Toimetus
@@ -588,7 +587,7 @@ caption Andmed
 @caption Tellimus
 
 @reltype SECTION value=21 clid=CL_CRM_SECTION
-@caption Üksus
+@caption &Uuml;ksus
 
 //parem nimi teretulnud, person on cl_crm_company jaox
 //kliendihaldur
@@ -598,7 +597,7 @@ caption Andmed
 @caption Haridus
 
 @reltype ADD_EDUCATION value=24 clid=CL_CRM_PERSON_ADD_EDUCATION
-@caption Täiendkoolitus
+@caption T&auml;iendkoolitus
 
 @reltype LANGUAGE_SKILL value=27 clid=CL_CRM_PERSON_LANGUAGE
 @caption Keeleoskus
@@ -607,13 +606,13 @@ caption Andmed
 @caption Kirjelduse dokument
 
 reltype FRIEND value=35 clid=CL_CRM_PERSON
-caption Sõber
+caption S&otilde;ber
 
 reltype FAVOURITE value=36 clid=CL_CRM_PERSON
 caption Lemmik
 
 reltype MATCH value=37 clid=CL_CRM_PERSON
-caption Väljavalitu
+caption V&auml;ljavalitu
 
 reltype BLOCKED value=38 clid=CL_CRM_PERSON
 caption blokeeritud
@@ -622,13 +621,13 @@ reltype IGNORED value=39 clid=CL_CRM_PERSON
 caption ignoreeritud
 
 reltype FRIEND_GROUPS value=40 clid=CL_META
-caption Sõbragrupid
+caption S&otilde;bragrupid
 
 @reltype VACATION value=41 clid=CL_CRM_VACATION
 @caption Puhkus
 
 @reltype CONTRACT_STOP value=42 clid=CL_CRM_CONTRACT_STOP
-@caption Töölepingu peatamine
+@caption T&ouml;&ouml;lepingu peatamine
 
 @reltype IMPORTANT_PERSON value=43 clid=CL_CRM_PERSON
 @caption Kontaktisik
@@ -686,6 +685,10 @@ caption Sõbragrupid
 
 @reltype VARUSER10 value=65 clid=CL_META
 @caption kasutajadefineeritud muutuja 10
+
+
+@reltype PREVIOUS_JOB value=66 clid=CL_CRM_PERSON_WORK_RELATION
+@caption Eelnev t&ouml;&ouml;kogemus
 
 
 */
@@ -848,10 +851,10 @@ class crm_person extends class_base
 			case "edulevel":
 				$data["options"] = array(
 					0 => t("-- vali --"),
-					1 => t("põhi"),
+					1 => t("p&otilde;hi"),
 					2 => t("kesk"),
 					3 => t("kesk-eri"),
-					4 => t("kõrgem"),
+					4 => t("k&otilde;rgem"),
 				);
 				break;
 
@@ -1075,7 +1078,7 @@ class crm_person extends class_base
 				break;
 			case "title":
 				$data["options"] = array(
-					t("Härra"),
+					t("H&auml;rra"),
 					t("Proua"),
 					t("Preili")
 				);
@@ -1163,19 +1166,6 @@ class crm_person extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				break;
-
-			case "tookogemused_edit":
-
-				if($arr["request"]["eoid"])
-				{
-					$data["rel_id"] = $arr["request"]["eoid"];
-				}
-				elseif (!$arr["request"]["new_prevjob"])
-				{
-					return PROP_IGNORE;
-				}
-
 				break;
 
 			case "language_levels":
@@ -1410,7 +1400,7 @@ class crm_person extends class_base
 				{
 					$toolbar->add_menu_item(array(
 						"parent" => "add_relation",
-						"title" => t("Kalender määramata"),
+						"title" => t("Kalender m&auml;&auml;ramata"),
 						'text' => sprintf(t('Lisa %s'),$val['caption']),
 						'disabled' => true,
 					));
@@ -1467,7 +1457,7 @@ class crm_person extends class_base
 				{
 					$toolbar->add_menu_item(array(
 						"parent" => "add_event",
-						'title' => t('Kalender määramata'),
+						'title' => t('Kalender m&auml;&auml;ramata'),
 						'text' => sprintf(t('Lisa %s'),$clss[$val["clid"]]["name"]),
 						'disabled' => true,
 					));
@@ -1798,7 +1788,7 @@ class crm_person extends class_base
 
 	function fetch_all_data($id)
 	{
-//vot siuke päring, ära küsi
+//vot siuke p&auml;ring, &auml;ra k&uuml;si
 		return  $this->db_fetch_row("select
 			t1.oid as oid,
 			t2.name as name,
@@ -1961,9 +1951,9 @@ class crm_person extends class_base
 			// how the bloody hell do I get the limiting to work
 
 			// prev 10 / next 10 .. how do I pass the thing?
-			// äkki teha kuudega? ah? hm?
+			// &auml;kki teha kuudega? ah? hm?
 
-			// alguses näitame viimast 10-t
+			// alguses n&auml;itame viimast 10-t
 			// ... then how do I limit those?
 
 			// hot damn, this thing sucks
@@ -2221,7 +2211,7 @@ class crm_person extends class_base
 		$toolbar->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => t('Kustuta valitud tööpakkumised'),
+			'tooltip' => t('Kustuta valitud t&ouml;&ouml;pakkumised'),
 		));
 
 		$toolbar->add_button(array(
@@ -2304,36 +2294,23 @@ class crm_person extends class_base
 		$tb->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
-			"tooltip" => t("Lisa uus töökogemus"),
-			"url" => $this->mk_my_orb("change", array(
-				"group" => $arr["request"]["group"],
-				"id" => $arr["obj_inst"]->id(),
-				"new_prevjob" => true,
-			), CL_CRM_PERSON),
+			"tooltip" => t("Lisa uus t&ouml;&ouml;kogemus"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr["obj_inst"]->id(),
+				"reltype" => 66,
+				"return_url" => get_ru(),
+				"parent" => $arr["obj_inst"]->parent(),
+			), CL_CRM_PERSON_WORK_RELATION),
 		));
 
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => t("Kustuta töökogemused"),
+			"tooltip" => t("Kustuta t&ouml;&ouml;kogemused"),
 			"action" => "delete_objects",
 			"confirm" => t("Oled kindel, et kustutada?"),
 		));
 
-		$tb->add_button(array(
-			"name" => "edit",
-			"img" => "edit.gif",
-			"tooltip" => t("Muuda tkogemust"),
-			"action" => "edit_something",
-		));
-
-
-		$tb->add_button(array(
-			"name" => "save",
-			"img" => "save.gif",
-			"tooltip" => t("Salvesta"),
-			"action" => "submit",
-		));
 	}
 
 	function do_jobs_table($arr)
@@ -2364,6 +2341,16 @@ class crm_person extends class_base
 			"sortable" => 1
 		));
 
+		$table->define_field(array(
+			"name" => "tasks",
+			"caption" => t("T&ouml;&ouml;&uuml;lessanded"),
+		));
+
+		$table->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+		));
+
 		$table->define_chooser(array(
 			"name" => "sel",
 			"field" => "from",
@@ -2372,18 +2359,29 @@ class crm_person extends class_base
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn)
 		{
 			$prevjob = $conn->to();
+			if($prevjob->prop("org"))
+			{
+					$url = html::href(array(
+						"caption" => $prevjob->prop_str("org"),
+						"url" => $this->mk_my_orb("change", array(
+							"id" => $prevjob->prop("org"),
+							"return_url" => get_ru(),
+						), CL_CRM_COMPANY),
+					));
+			}
 			$table->define_data(array(
-				"asutus" => html::href(array(
-					"caption" => $prevjob->prop("organisation"),
+				"asutus" => $prevjob->prop_str("org")?$url:t("-"), 
+				"alates" => get_lc_date($prevjob->prop("start")),
+				"ametikoht" => $prevjob->prop("profession")?$prevjob->prop_str("profession"):t("-"),
+				"kuni" => get_lc_date($prevjob->prop("end")),
+				"tasks" => $prevjob->prop("tasks"),
+				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
-						"id" => $arr["request"]["id"],
-						"group" => $arr["request"]["group"],
-						"eoid" => $conn->id(),
-					), CL_CRM_PERSON),
+						"id" => $prevjob->id(),
+						"return_url" => get_ru(),
+					), CL_CRM_PERSON_WORK_RELATION),
+					"caption" => t("Muuda"),
 				)),
-				"alates" => get_lc_date($prevjob->prop("date_from")),
-				"ametikoht" => $prevjob->prop("profession"),
-				"kuni" => get_lc_date($prevjob->prop("date_to")),
 				"from" => $conn->id(),
 			));
 		}
@@ -2595,7 +2593,7 @@ class crm_person extends class_base
 
 		$tb->add_menu_item(array(
 				'parent'=>'new',
-				'text'=>t('Põhiharidus'),
+				'text'=>t('P&otilde;hiharidus'),
 				'link'=> $this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
@@ -2616,7 +2614,7 @@ class crm_person extends class_base
 
 		$tb->add_menu_item(array(
 				'parent'=>'new',
-				'text'=>t('Kõrgharidus'),
+				'text'=>t('K&otilde;rgharidus'),
 				'link'=>$this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
@@ -2699,7 +2697,7 @@ class crm_person extends class_base
 					)),
 				"date_to" => $b_edu->prop("date_to"),
 				"date_from" => $b_edu->prop("date_from"),
-				"etype" => "Põhiharidus",
+				"etype" => "P&otilde;hiharidus",
 				"sel" => $b_edu_conn->id(),
 			));
 		}
@@ -2740,7 +2738,7 @@ class crm_person extends class_base
 				"date_to" => $h_edu->prop("date_to"),
 				"date_from" => $h_edu->prop("date_from"),
 				"profession" => $h_edu->prop("profession"),
-				"etype" => t("Kõrgharidus"),
+				"etype" => t("K&otilde;rgharidus"),
 				"sel" => $h_edu_conn->id(),
 			));
 		}
@@ -2791,7 +2789,7 @@ class crm_person extends class_base
 
 		$table->define_field(array(
 			"name" => "speaking",
-			"caption" => t("Rääkimine"),
+			"caption" => t("R&auml;&auml;kimine"),
 			"align" => "center",
 		));
 
@@ -2857,21 +2855,6 @@ class crm_person extends class_base
 					"value" => $writing_val,
 				)),
 			));
-		}
-	}
-	/**
-	@attrib name=edit_something
-	**/
-	function edit_something($arr)
-	{
-		if($arr["sel"])
-		{
-			$eoid = current($arr["sel"]);
-
-			return $this->mk_my_orb("change", array(
-			"id" => $arr["id"],
-			"group" => $arr["group"],
-			"eoid" => $eoid), $arr["class"]);
 		}
 	}
 

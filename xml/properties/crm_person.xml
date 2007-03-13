@@ -36,7 +36,7 @@
             <size>10</size>
             <maxlength>20</maxlength>
             <field>nickname</field>
-            <caption>H&amp;uuml;&amp;uuml;dnimi</caption>
+            <caption>H&amp;amp;uuml;&amp;amp;uuml;dnimi</caption>
       </property>
       <property>
             <name>personal_id</name>
@@ -141,7 +141,7 @@
             <type>textbox</type>
             <field>subclass</field>
             <maxlength>11</maxlength>
-            <caption>Numbriline siduss&amp;uuml;steemi ID</caption>
+            <caption>Numbriline siduss&amp;amp;uuml;steemi ID</caption>
       </property>
       <property>
             <name>ext_id_alphanumeric</name>
@@ -150,7 +150,7 @@
             <type>textbox</type>
             <maxlength>25</maxlength>
             <field>ext_id_alphanumeric</field>
-            <caption>Siduss&amp;uuml;steemi ID</caption>
+            <caption>Siduss&amp;amp;uuml;steemi ID</caption>
       </property>
       <property>
             <name>code</name>
@@ -167,7 +167,7 @@
             <type>text</type>
             <store>no</store>
             <field>username</field>
-            <comment>Kasutajanimes on lubatud ladina t&amp;auml;hestiku suur- ja v&amp;auml;iket&amp;auml;hed, numbrid 0-9 ning m&amp;auml;rgid alakriips ja punkt</comment>
+            <comment>Kasutajanimes on lubatud ladina t&amp;amp;auml;hestiku suur- ja v&amp;amp;auml;iket&amp;amp;auml;hed, numbrid 0-9 ning m&amp;amp;auml;rgid alakriips ja punkt</comment>
             <caption>Kasutaja</caption>
       </property>
       <property>
@@ -536,7 +536,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>V&amp;auml;ljund</caption>
+            <caption>V&amp;amp;auml;ljund</caption>
       </property>
       <property>
             <name>server_folder</name>
@@ -796,7 +796,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas v&amp;otilde;imalik kasutada t&amp;ouml;&amp;ouml;eesm&amp;auml;rkidel</caption>
+            <caption>Kas v&amp;amp;otilde;imalik kasutada t&amp;amp;ouml;&amp;amp;ouml;eesm&amp;amp;auml;rkidel</caption>
       </property>
       <property>
             <name>addinfo</name>
@@ -806,23 +806,6 @@
             <method>serialize</method>
             <type>textarea</type>
             <caption>Muud oskused</caption>
-      </property>
-      <property>
-            <name>tookogemused_edit</name>
-            <table>objects</table>
-            <group>experiences</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>releditor</type>
-            <reltype>RELTYPE_EDUCATION</reltype>
-            <props>
-                  <num_0>organisation</num_0>
-                  <num_1>profession</num_1>
-                  <num_2>date_from</num_2>
-                  <num_3>date_to</num_3>
-                  <num_4>duties</num_4>
-            </props>
-            <store>no</store>
       </property>
       <property>
             <name>previous_jobs_tb</name>
@@ -976,7 +959,7 @@
             <no_caption>1</no_caption>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <caption>K&amp;otilde;ned</caption>
+            <caption>K&amp;amp;otilde;ned</caption>
       </property>
       <property>
             <name>org_meetings</name>
@@ -1372,7 +1355,7 @@
       </classinfo>
       <groupinfo>
             <general2>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general2>
             <contact>
@@ -1400,12 +1383,12 @@
                   <caption>Elulugu</caption>
             </cv>
             <education>
-                  <caption>Haridusk&amp;auml;ik</caption>
+                  <caption>Haridusk&amp;amp;auml;ik</caption>
                   <parent>cv</parent>
                   <submit>no</submit>
             </education>
             <add_edu>
-                  <caption>T&amp;auml;ienduskoolitus</caption>
+                  <caption>T&amp;amp;auml;ienduskoolitus</caption>
                   <parent>cv</parent>
                   <submit>no</submit>
             </add_edu>
@@ -1424,15 +1407,15 @@
                   <parent>cv</parent>
             </addinfo>
             <work>
-                  <caption>T&amp;ouml;&amp;ouml;</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;</caption>
             </work>
             <experiences>
-                  <caption>T&amp;ouml;&amp;ouml;kogemus</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;kogemus</caption>
                   <parent>work</parent>
                   <submit>no</submit>
             </experiences>
             <work_wanted>
-                  <caption>Soovitud t&amp;ouml;&amp;ouml;</caption>
+                  <caption>Soovitud t&amp;amp;ouml;&amp;amp;ouml;</caption>
                   <parent>work</parent>
                   <submit>no</submit>
             </work_wanted>
@@ -1455,12 +1438,12 @@
                   <caption>Tegevused</caption>
             </overview>
             <all_actions>
-                  <caption>K&amp;otilde;ik</caption>
+                  <caption>K&amp;amp;otilde;ik</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
             </all_actions>
             <calls>
-                  <caption>K&amp;otilde;ned</caption>
+                  <caption>K&amp;amp;otilde;ned</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
             </calls>
@@ -1520,7 +1503,7 @@
             <WORK>
                   <value>6</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>T&amp;ouml;&amp;ouml;koht</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;koht</caption>
             </WORK>
             <RANK>
                   <value>7</value>
@@ -1535,7 +1518,7 @@
             <PERSON_CALL>
                   <value>9</value>
                   <clid>CL_CRM_CALL</clid>
-                  <caption>K&amp;otilde;ne</caption>
+                  <caption>K&amp;amp;otilde;ne</caption>
             </PERSON_CALL>
             <PERSON_TASK>
                   <value>10</value>
@@ -1575,7 +1558,7 @@
             <SECTION>
                   <value>21</value>
                   <clid>CL_CRM_SECTION</clid>
-                  <caption>&amp;Uuml;ksus</caption>
+                  <caption>&amp;amp;Uuml;ksus</caption>
             </SECTION>
             <HANDLER>
                   <value>22</value>
@@ -1589,7 +1572,7 @@
             <ADD_EDUCATION>
                   <value>24</value>
                   <clid>CL_CRM_PERSON_ADD_EDUCATION</clid>
-                  <caption>T&amp;auml;iendkoolitus</caption>
+                  <caption>T&amp;amp;auml;iendkoolitus</caption>
             </ADD_EDUCATION>
             <LANGUAGE_SKILL>
                   <value>27</value>
@@ -1612,7 +1595,7 @@
             <CONTRACT_STOP>
                   <value>42</value>
                   <clid>CL_CRM_CONTRACT_STOP</clid>
-                  <caption>T&amp;ouml;&amp;ouml;lepingu peatamine</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;lepingu peatamine</caption>
             </CONTRACT_STOP>
             <IMPORTANT_PERSON>
                   <value>43</value>
@@ -1709,6 +1692,11 @@
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 10</caption>
             </VARUSER10>
+            <PREVIOUS_JOB>
+                  <value>66</value>
+                  <clid>CL_CRM_PERSON_WORK_RELATION</clid>
+                  <caption>Eelnev t&amp;amp;ouml;&amp;amp;ouml;kogemus</caption>
+            </PREVIOUS_JOB>
       </reltypes>
       <layout>
             <ct_super>
