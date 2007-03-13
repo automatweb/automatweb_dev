@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.16 2007/03/13 15:16:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.17 2007/03/13 15:23:41 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -241,10 +241,11 @@ class menu_tree extends class_base
 			}
 		}
 
+		$hu = aw_ini_get("user_interface.hide_untranslated");
 		$filt = array(
 			"class_id" => CL_MENU,
 			"parent" => $parents,
-			"status" => STAT_ACTIVE,
+			"status" => $hu ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -268,6 +269,10 @@ class menu_tree extends class_base
 		$_parents = array();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
+			if ($hu && !$o->prop_is_translated("name"))
+			{
+				continue;
+			}
 			$name = $o->trans_get_val("name");
 			if ($this->strip_tags)
 			{
