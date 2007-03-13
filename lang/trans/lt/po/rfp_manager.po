@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/rfp_manager.aw:class_1192_help
 msgid "Klassi RFP Haldus help"
 msgstr ""
@@ -198,15 +197,14 @@ msgstr ""
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:368
+#: classes/applications/calendar/rfp_manager.aw:376
 msgid "Aktiviseeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:368
+#: classes/applications/calendar/rfp_manager.aw:376
 msgid "Arhiveeri"
 msgstr ""
 
-#: classes/applications/calendar/rfp_manager.aw:375
+#: classes/applications/calendar/rfp_manager.aw:383
 msgid "Kustuta"
 msgstr ""
-

@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/trans/pot_scanner.aw:795
+#: classes/core/trans/pot_scanner.aw:799
 msgid "\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"
 msgstr ""
 

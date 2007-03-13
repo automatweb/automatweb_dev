@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_search_date_subtract
 msgid "Omaduse default kuup&auml;ev otsungus tagasi (search_date_subtract) caption"
-msgstr ""
+msgstr "default date back in search"
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_search_date_subtract_comment
 msgid "Omaduse default kuup&auml;ev otsungus tagasi (search_date_subtract) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_search_date_add
 msgid "Omaduse default kuup&auml;ev otsungus edasi (search_date_add) caption"
-msgstr ""
+msgstr "default date forward in search"
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_search_date_add_comment
 msgid "Omaduse default kuup&auml;ev otsungus edasi (search_date_add) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_no_warehouse
 msgid "Omaduse Laoseisu ei arvestata (no_warehouse) caption"
-msgstr ""
+msgstr "Don't include warehause state"
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_no_warehouse_comment
 msgid "Omaduse Laoseisu ei arvestata (no_warehouse) kommentaar"
@@ -783,7 +783,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:group_general2
 msgid "Grupi &Uuml;ldinfo (general2) pealkiri"
-msgstr ""
+msgstr "General info"
 
 #: classes/applications/procurement_center/procurement_center.aw:group_general2_help
 msgid "Grupi &Uuml;ldinfo (general2) help"
@@ -900,22 +900,22 @@ msgstr ""
 #: classes/applications/procurement_center/procurement_center.aw:245
 #: classes/applications/procurement_center/procurement_center.aw:253
 msgid "P&auml;eva"
-msgstr ""
+msgstr "Days"
 
 #: classes/applications/procurement_center/procurement_center.aw:246
 #: classes/applications/procurement_center/procurement_center.aw:254
 msgid "N&auml;dalat"
-msgstr ""
+msgstr "Weeks"
 
 #: classes/applications/procurement_center/procurement_center.aw:247
 #: classes/applications/procurement_center/procurement_center.aw:255
 msgid "Kuud"
-msgstr ""
+msgstr "Months"
 
 #: classes/applications/procurement_center/procurement_center.aw:248
 #: classes/applications/procurement_center/procurement_center.aw:256
 msgid "Aastat"
-msgstr ""
+msgstr "Years"
 
 #: classes/applications/procurement_center/procurement_center.aw:415
 #: classes/applications/procurement_center/procurement_center.aw:462
