@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.536 2007/02/28 15:16:46 kristo Exp $
+// $Id: class_base.aw,v 2.537 2007/03/13 15:02:44 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5197,7 +5197,7 @@ class class_base extends aw_template
 				$nm = "trans_".$lid."_".$p;
 				if ($_SERVER["REMOTE_ADDR"] == "62.65.36.190")
 				{
-					dbg::str_dbg($arr["request"][$nm]);
+	//				dbg::str_dbg($arr["request"][$nm]);
 				}
 				// replace estonian chars in other languages woth entities
 				$str = $arr["request"][$nm];

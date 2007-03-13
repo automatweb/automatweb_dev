@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.187 2007/02/21 10:13:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.188 2007/03/13 15:02:44 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -440,7 +440,7 @@ class menu extends class_base
 		));
 
 		$this->trans_props = array(
-			"name","link","keywords","description","page_title"
+			"name","alias", "link","keywords","description","page_title"
 		);
 	}
 
@@ -1122,6 +1122,7 @@ class menu extends class_base
 		switch($data["name"])
 		{
 			case "transl":
+				$this->write_trans_aliases($arr);
 				$this->trans_save($arr, $this->trans_props);
 				break;
 
@@ -2132,6 +2133,29 @@ class menu extends class_base
 				"uid" => $row["uid"],
 				"ugroup" => $g ? $g->name() : ""
 			));
+		}
+	}
+
+	function write_trans_aliases($arr)
+	{
+		$o = $arr["obj_inst"];
+		$l = get_instance("languages");
+		$ll = $l->get_list(array("all_data" => true, "set_for_user" => true));
+		$this->db_query("DELETE FROM aw_alias_trans WHERE menu_id = ".$o->id());
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $o->lang_id())
+			{
+				continue;
+			}
+			if ($arr["request"]["act_".$lid])
+			{
+				$str = $arr["request"]["trans_".$lid."_alias"];
+				$nv = iconv("UTF-8", $lang["charset"], $str);
+				$this->quote(&$nv);
+				$this->db_query("INSERT INTO aw_alias_trans(menu_id,lang_id,alias) 
+					VALUES(".$o->id().", $lid, '$nv')");
+			}
 		}
 	}
 };

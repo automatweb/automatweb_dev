@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.383 2007/02/12 14:44:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.384 2007/03/13 15:02:44 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -531,6 +531,49 @@ class menuedit extends aw_template
 					};
 				};
 
+				if (aw_ini_get("user_interface.full_content_trans") && !count($candidates))
+				{
+					// do the same check for the translated aliases
+					$this->quote(&$last);
+					$lang_id = aw_global_get("ct_lang_id");
+					$this->db_query("SELECT menu_id FROM aw_alias_trans WHERE alias = '$last' AND lang_id = $lang_id");
+					while ($row = $this->db_next())
+					{
+						if (!$this->can("view", $row["menu_id"]))
+						{
+							continue;
+						}
+						$check_obj = obj($row["menu_id"]);
+						// put it in correct order and remove the first element (object itself)
+						$path = array_reverse($check_obj->path());
+						$curr_id = $check_obj->id();
+						$candidates[$curr_id] = "";
+	
+						$stop = false;
+
+						foreach($path as $path_obj)
+						{
+							if (!$stop)
+							{
+								$alias = $this->db_fetch_field("SELECT alias FROM aw_alias_trans WHERE lang_id = $lang_id AND menu_id =".$path_obj->id(), "alias");
+								if ($alias == null)
+								{
+									$alias = $path_obj->alias();
+								}
+								if (strlen($alias) > 0)
+								{
+									$candidates[$curr_id] = $alias . "/" . $candidates[$curr_id];
+								}
+								else
+								{
+									$stop = true;
+								};
+							};
+						};
+					};
+				}
+
+
 				foreach($candidates as $cand_id => $cand_path)
 				{
 					$path_for_obj = substr($cand_path,0,-1);
@@ -557,7 +600,18 @@ class menuedit extends aw_template
 				));
 				if ($ol->count() < 1)
 				{
-					$obj = false;
+					$lang_id = aw_ini_get("user_interface.full_content_trans") ? aw_global_get("ct_lang_id") : aw_global_get("lang_id");
+					// check translations
+					$this->quote(&$section);
+					$menu_id = $this->db_fetch_field("SELECT menu_id FROM aw_alias_trans WHERE lang_id = $lang_id AND alias = '$section'", "menu_id");
+					if ($this->can("view", $menu_id))
+					{
+						$obj = obj($menu_id);
+					}
+					else
+					{
+						$obj = false;
+					}
 				}
 				else
 				{

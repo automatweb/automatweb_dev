@@ -1495,6 +1495,10 @@ class _int_object
 					$val = $this->$prop();
 				}
 				break;
+
+			case "alias":
+				$val = $this->$prop();
+				break;
 	
 			default:
 				$val = $this->prop($prop);
@@ -2173,6 +2177,9 @@ class _int_object
 			));
 			$todelete = array_keys($tmp);
 		}
+
+		// now we need to fetch all objects from the db that are below the objects on $todelete and set them as deleted as well
+//		$todelete = $this->
 
 		foreach($todelete as $oid)
 		{			

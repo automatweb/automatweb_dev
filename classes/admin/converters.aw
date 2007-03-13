@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.69 2007/02/26 22:06:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.70 2007/03/13 15:02:43 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1898,6 +1898,15 @@ echo "mod ".$con["to.name"]."<br>";
 				{
 					case "":
 						$this->db_query("create table syslog_archive_sessions (id int primary key auto_increment, session_id char(32), entry_page varchar(255), exit_page varchar(255),tm_s int, tm_e int)");
+						return true;
+				}
+				break;
+
+			case "aw_alias_trans":
+				switch($f)
+				{
+					case "":
+						$this->db_query("create table aw_alias_trans(menu_id int,lang_id int,alias varchar(255))");
 						return true;
 				}
 				break;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.223 2007/02/14 12:08:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.224 2007/03/13 15:02:42 kristo Exp $
 
 /*
 
@@ -1751,7 +1751,7 @@ class site_show extends class_base
 			}
 			if (aw_ini_get("user_interface.full_content_trans"))
 			{
-				$url = get_ru();
+				/*$url = get_ru();
 				if (strpos($url, "/".aw_global_get("ct_lang_lc")."/") === false)
 				{
 					$url = aw_ini_get("baseurl")."/".$row["acceptlang"];
@@ -1759,7 +1759,8 @@ class site_show extends class_base
 				else
 				{
 					$url = str_replace("/".aw_global_get("ct_lang_lc")."/", "/".$row["acceptlang"]."/", $url);
-				}
+				}*/
+				$url = $this->make_menu_link($this->section_obj, $row["acceptlang"]);
 			}
 			$this->vars(array(
 				"name" => $row["name"],
@@ -2496,6 +2497,11 @@ class site_show extends class_base
 			if ($lc === null)
 			{
 				$lc = aw_global_get("ct_lang_lc");
+				$use_trans = true;
+			}
+			else
+			{
+				$use_trans = false;
 			}
 			$link = $this->cfg["baseurl"] ."/";
 			if (aw_ini_get("menuedit.language_in_url"))
@@ -2504,9 +2510,9 @@ class site_show extends class_base
 			}
 			if (aw_ini_get("menuedit.long_section_url"))
 			{
-				if ($o->alias() != "")
+				if (($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
 				{
-					$link .= $o->alias();
+					$link .= ($use_trans ? $o->trans_get_val("alias") : $o->alias());
 				}
 				else
 				{
@@ -2522,7 +2528,7 @@ class site_show extends class_base
 			}
 			else
 			{
-				if ($o->alias() != "")
+				if (($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
 				{
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{
@@ -2540,9 +2546,9 @@ class site_show extends class_base
 						$alp = array();
 						foreach($_p as $p_o)
 						{
-							if ($p_o->alias() != "")
+							if (($use_trans ? $p_o->trans_get_val("alias") : $p_o->alias()) != "")
 							{
-								$alp[] = urlencode($p_o->alias());
+								$alp[] = urlencode(($use_trans ? $p_o->trans_get_val("alias") : $p_o->alias()));
 							}
 						}
 						
@@ -2556,13 +2562,13 @@ class site_show extends class_base
 					{
 						//the alias seems to consist only of a space or two
 						//i'm gonna show the id, if the strlen(trim(alias)) is 0
-						if(!strlen(trim($o->alias())))
+						if(!strlen(trim(($use_trans ? $o->trans_get_val("alias") : $o->alias()))))
 						{
 							$link .= $o->id();
 						}
 						else
 						{
-							$link .= urlencode($o->alias());
+							$link .= urlencode(($use_trans ? $o->trans_get_val("alias") : $o->alias()));
 						}
 					}
 				}
