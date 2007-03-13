@@ -14,34 +14,50 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @groupinfo grp_photos caption="Pildid"
 @groupinfo grp_map caption="Kaart"
 
-
-@property header type=text store=no no_caption=1 group=grp_main,grp_detailed,grp_additional_info,grp_photos,grp_map
-
 @default table=objects
+
+@default group=grp_detailed
 @default group=grp_main
-	@property property_toolbar type=toolbar store=no no_caption=1
 
-	@property oid type=text
-	@caption Objekti id AutomatWeb-is
+	@groupinfo grp_sub_main parent=grp_main caption="Üldine" 
+	@default group=grp_sub_main
+		
+		@property header type=text store=no no_caption=1 
 
-	@property realestate_manager type=hidden field=meta method=serialize
+		@property property_toolbar type=toolbar store=no no_caption=1
 
-	@property city24_object_id type=text table=realestate_property
-	@caption Objekti id City24 andmebaasis
+		@property oid type=hidden
+		@caption Objekti id AutomatWeb-is
 
-	@property is_visible type=checkbox ch_value=1 table=realestate_property
-	@caption N&auml;htav
+		@property realestate_manager type=hidden field=meta method=serialize
+//tegi hiddeniks
+		@property city24_object_id type=hidden table=realestate_property
+		@caption Objekti id City24 andmebaasis
 
-	@property is_archived type=checkbox ch_value=1 table=realestate_property
-	@caption Arhiveeritud
+		@layout box123 type=hbox
+		@caption Staatus
+			@property is_visible type=checkbox ch_value=1 table=realestate_property parent=box123 no_caption=1
+			@caption N&auml;htav
 
-	@property title1 type=text store=no subtitle=1
-	@caption Objekti aadress
-		@property address_connection type=releditor reltype=RELTYPE_REALESTATE_ADDRESS rel_id=first editonly=1 props=location_country,location,postal_code,street_address,po_box,apartment
-		@caption Aadress
+			@property is_archived type=checkbox ch_value=1 table=realestate_property parent=box123 no_caption=1
+			@caption Arhiveeritud
 
-	@property title2 type=text store=no subtitle=1
-	@caption Tehingu andmed
+		@property expire type=text field=meta method=serialize
+		@caption aegub
+
+//seda järjekorda peab veel mõtlema
+		@property title1 type=text store=no subtitle=1
+		@caption Objekti aadress
+			@property address_connection type=releditor reltype=RELTYPE_REALESTATE_ADDRESS rel_id=first editonly=1 props=location_country,location,postal_code,street_address,po_box,apartment
+			@caption Aadress
+
+	@groupinfo transaction_data parent=grp_main caption="Tehingu andmed"
+	@default group=transaction_data
+
+//tehing
+
+		@property deal
+
 		@property transaction_type type=classificator table=realestate_property
 		@caption Tehingu t&uuml;&uuml;p
 
@@ -54,9 +70,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property transaction_rent type=textbox field=meta method=serialize
 		@caption Kuu&uuml;&uuml;r
 
-		@property transaction_constraints type=classificator table=realestate_property
-		@caption Piirangud
-
 		@property transaction_down_payment type=textbox field=meta method=serialize
 		@caption Ettemaks
 
@@ -66,40 +79,37 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property transaction_closed type=checkbox table=realestate_property ch_value=1
 		@caption Tehing s&otilde;lmitud
 
+		@property title100 type=text store=no subtitle=1
+		@caption M&uuml;&uuml;ja andmed
 
-	@property title3 type=text store=no subtitle=1
-	@caption M&uuml;&uuml;ja andmed
 		@property seller_search type=text store=no
-		@caption M&uuml;&uuml;ja
+		caption Ostja
 
-		@property seller type=releditor reltype=RELTYPE_REALESTATE_SELLER rel_id=first editonly=1 props=firstname,lastname,personal_id,gender,birthday,phone,email,comment,notes
-
-		@property seller_heard_from type=classificator field=meta method=serialize
-		@caption Infoallikas
-
-	@property title31 type=text store=no subtitle=1
-	@caption Ostja andmed
+		@property seller type=text reltype=RELTYPE_REALESTATE_SELLER  field=meta method=serialize
+		
+		@property title101 type=text store=no subtitle=1
+		@caption Ostja andmed
+		
 		@property buyer_search type=text store=no
-		@caption Ostja
+		caption Ostja
 
-		@property buyer type=releditor reltype=RELTYPE_REALESTATE_BUYER rel_id=first editonly=1 props=firstname,lastname,personal_id,gender,birthday,phone,email,comment,notes
-
-		@property buyer_heard_from type=classificator field=meta method=serialize
-		@caption Infoallikas
-
-
-	@property title5 type=text store=no subtitle=1
-	@caption T&auml;nukiri
-		@property appreciation_note_date type=date_select field=meta method=serialize default=-1
-		@caption T&auml;nukirja saatmise kuup&auml;ev
-
-		@property appreciation_note_type type=classificator field=meta method=serialize
-		@caption T&auml;nukirja t&uuml;&uuml;p
+		@property buyer type=text reltype=RELTYPE_REALESTATE_BUYER  field=meta method=serialize
+		
+		type=releditor reltype=RELTYPE_REALESTATE_BUYER rel_id=first editonly=1
+		props=firstname,lastname,personal_id,gender,birthday,phone,email,comment,notes
 
 
+		@property title5 type=text store=no subtitle=1
+		@caption T&auml;nukiri
+			@property appreciation_note_date type=date_select field=meta method=serialize default=-1
+			@caption T&auml;nukirja saatmise kuup&auml;ev
 
-	@property title4 type=text store=no subtitle=1
-	@caption Lisaandmed
+			@property appreciation_note_type type=classificator field=meta method=serialize
+			@caption T&auml;nukirja t&uuml;&uuml;p
+
+	@groupinfo advertisement_data parent=grp_main caption="Kuulutuse andmed"
+	@default group=advertisement_data
+
 		@property realestate_agent1 type=relpicker reltype=RELTYPE_REALESTATE_AGENT clid=CL_CRM_PERSON table=realestate_property
 		@caption Maakler 1
 
@@ -130,10 +140,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property project type=relpicker reltype=RELTYPE_REALESTATE_PROJECT clid=CL_PROJECT automatic=1 field=meta method=serialize
 		@caption Projekt
 
-		@property expire type=text field=meta method=serialize
-		@caption aegub
 
-@default group=grp_detailed
+//see nagu peaks järjekorra lõpus olema tegelt
+		@property transaction_constraints type=classificator table=realestate_property
+		@caption Piirangud
+
+		@property buyer_heard_from type=classificator field=meta method=serialize
+		@caption Infoallikas
+
+
+	@groupinfo temp caption="põhimõtteliselt prügikast"
+	@default group=grp_sub_main
+
+		property seller type=releditor reltype=RELTYPE_REALESTATE_SELLER rel_id=first editonly=1 props=firstname,lastname,personal_id,gender,birthday,phone,email,comment,notes
 
 
 @default group=grp_additional_info
@@ -158,7 +177,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@caption Pildid
 
 	@property picture_icon_city24 type=hidden field=meta method=serialize
-	@property picture_icon type=hidden field=meta method=serialize
+	@property picture_icon type=text field=meta method=serialize
 	@property picture_icon_image reltype=RELTYPE_REALESTATE_PICTUREICON clid=CL_IMAGE field=meta method=serialize
 	@caption V&auml;ike pilt
 
@@ -184,10 +203,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @reltype REALESTATE_ADDRESS value=1 clid=CL_ADDRESS
 @caption Aadress
 
-@reltype REALESTATE_SELLER value=2 clid=CL_CRM_PERSON
+@reltype REALESTATE_SELLER value=2 clid=CL_CRM_PERSON,CL_CRM_COMPANY
 @caption Klient (M&uuml;&uuml;ja)
 
-@reltype REALESTATE_BUYER value=7 clid=CL_CRM_PERSON
+@reltype REALESTATE_BUYER value=7 clid=CL_CRM_PERSON,CL_CRM_COMPANY
 @caption Klient (Ostja)
 
 @reltype REALESTATE_AGENT value=3 clid=CL_CRM_PERSON
@@ -395,13 +414,23 @@ class realestate_property extends class_base
 				break;
 
 			case "header":
+				$type_obj = obj($this_object->prop("transaction_type"));
+				if(is_object($type_obj)) $trans_type = $type_obj->name();
 				$classes = aw_ini_get("classes");
-				$prop["value"] = '<div style="padding: .8em;"><b>' . $classes[$this_object->class_id ()]["name"] . '</b> - ' . $this_object->name () . '</div>';
+				$prop["value"] = '<div style="padding: .8em;">'.$trans_type.', <b>' . $classes[$this_object->class_id ()]["name"] . '</b> - ' . $this_object->name () . '<br>AW ID '.$this_object->prop("oid").', City24 ID '.$this_object->prop("city24_object_id").'</div>';
 				break;
 
 			### seller data
+			case "seller":
+				$seller_obj_list = new object_list($this_object->connections_from(array(
+						"type" => "RELTYPE_REALESTATE_SELLER",
+				)));
+				if(!(sizeof($seller_obj_list->arr()) > 0)) return PROP_IGNORE;
+				$prop["value"] = $this->get_costumers_data(array("costumers" => $seller_obj_list, "obj_inst" => $arr["obj_inst"], "type" => "RELTYPE_REALESTATE_SELLER"));
+				break;
+			
 			case "seller_search":
-				$customer_search_url = $this->mk_my_orb ("customer_search", array (
+/*				$customer_search_url = $this->mk_my_orb ("customer_search", array (
 					"id" => $this_object->id(),
 					"manager" => $this->re_manager->id(),
 					"return_url" => get_ru (),
@@ -409,18 +438,95 @@ class realestate_property extends class_base
 				));
 				$str = "<a href='javascript:void(0)' onClick='aw_popup_scroll(\"{$customer_search_url}\",\"_spop\",640,480)'>Otsi klient</a>";
 				$prop["value"] = $str;
+*/
+				$org_search_url = html::get_new_url(
+					CL_CRM_COMPANY,
+					$arr["obj_inst"]->parent(),
+					array(
+						"alias_to" => $arr["obj_inst"]->id(),
+						"alias_to_prop" => "seller",
+						"reltype" => 2,
+						"return_url" => get_ru(),
+					)
+				);
+				$str .= ' <a href="'.$org_search_url.'">Lisa Organisatsioon</a>';
+
+				$person_search_url = html::get_new_url(
+					CL_CRM_PERSON,
+					$arr["obj_inst"]->parent(),
+					array(
+						"alias_to" => $arr["obj_inst"]->id(),
+						"alias_to_prop" => "seller",
+						"reltype" => 2,
+						"return_url" => get_ru(),
+					)
+				);
+				$str .= ' <a href="'.$person_search_url.'">Lisa Isik</a>';
+							
+				$search_url = $this->mk_my_orb("do_search", array(
+						"id" => $arr["obj_inst"]->id(),
+						"pn" => "seller",
+						"clid" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
+						"multiple" => "",
+					), "popup_search");
+				$str .= " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"{$search_url}\",\"_spop\",300,400)'>Otsi</a>";
+		
+				$prop["value"]=$str;
+
 				break;
 
 			### buyer data
+			case "buyer":
+				$seller_obj_list = new object_list($this_object->connections_from(array(
+						"type" => "RELTYPE_REALESTATE_BUYER",
+				)));
+				if(!(sizeof($seller_obj_list->arr()) > 0)) return PROP_IGNORE;
+				$prop["value"] = $this->get_costumers_data(array("costumers" => $seller_obj_list, "obj_inst" => $arr["obj_inst"] , "type" => "RELTYPE_REALESTATE_BUYER"));
+				break;
+			
 			case "buyer_search":
-				$customer_search_url = $this->mk_my_orb ("customer_search", array (
-					"id" => $this_object->id(),
-					"manager" => $this->re_manager->id(),
-					"return_url" => get_ru (),
-					"client_type" => "BUYER",
-				));
-				$str = "<a href='javascript:void(0)' onClick='aw_popup_scroll(\"{$customer_search_url}\",\"_spop\",300,400)'>Otsi klient</a>";
-				$prop["value"] = $str;
+//				$customer_search_url = $this->mk_my_orb ("customer_search", array (
+//					"id" => $this_object->id(),
+//					"manager" => $this->re_manager->id(),
+//					"return_url" => get_ru (),
+//					"client_type" => "BUYER",
+//				));
+//				$str = "<a href='javascript:void(0)' onClick='aw_popup_scroll(\"{$customer_search_url}\",\"_spop\",300,400)'>Otsi klient</a>";
+//				$prop["value"] = $str;
+
+				$org_search_url = html::get_new_url(
+					CL_CRM_COMPANY,
+					$arr["obj_inst"]->parent(),
+					array(
+						"alias_to" => $arr["obj_inst"]->id(),
+						"alias_to_prop" => "buyer",
+						"reltype" => 7,
+						"return_url" => get_ru(),
+					)
+				);
+				$str .= ' <a href="'.$org_search_url.'">Lisa Organisatsioon</a>';
+
+				$person_search_url = html::get_new_url(
+					CL_CRM_PERSON,
+					$arr["obj_inst"]->parent(),
+					array(
+						"alias_to" => $arr["obj_inst"]->id(),
+						"alias_to_prop" => "buyer",
+						"reltype" => 7,
+						"return_url" => get_ru(),
+					)
+				);
+				$str .= ' <a href="'.$person_search_url.'">Lisa Isik</a>';
+							
+				$search_url = $this->mk_my_orb("do_search", array(
+						"id" => $arr["obj_inst"]->id(),
+						"pn" => "buyer",
+						"clid" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
+						"multiple" => "",
+					), "popup_search");
+				$str .= " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"{$search_url}\",\"_spop\",300,400)'>Otsi</a>";
+		
+				$prop["value"]=$str;
 				break;
 
 			### ...
@@ -565,15 +671,97 @@ class realestate_property extends class_base
 				$prop["value"] = "";
 				break;
 
-			// case "picture_icon":
-				// $prop["value"] = html::img (array (
-					// "url" => $prop["value"],
-				// ));
-				// break;
+			 case "picture_icon":
+			 	$options = array(0 => t("Vaheta ikooni"));
+			 	$connections = $this_object->connections_from (array (
+					"type" => "RELTYPE_REALESTATE_PICTURE",
+				));
+				foreach($connections as $con)
+				{
+					$options[$con->prop("to")] = $con->prop("to.name");
+				}
+			 
+				$prop["value"] = html::img (array (
+					 "url" => $prop["value"],
+				)).html::select(array("name" => "icon",
+					"options" => $options,
+					))."<input type='file' id='picture6upload' name='icon_upload' />";
+				break;
 		}
 
 		return $retval;
 	}
+
+	function get_costumers_data($arr)
+	{
+		$prop["value"] = "";
+		foreach($arr["costumers"]->arr() as $costumer)
+		{
+			$prop["value"].= $costumer->name();
+			if($costumer->class_id() == CL_CRM_COMPANY)
+			{
+
+				if(strlen($costumer->prop("reg_nr")) > 1)$prop["value"].= ', '.$costumer->prop("reg_nr");
+				if(strlen($costumer->prop("email_id")) > 1)$prop["value"].= ', '.$costumer->prop("email_id");
+				if(strlen($costumer->prop("phone_id")) > 1)$prop["value"].= ', '.$costumer->prop("phone_id");
+				if(strlen($costumer->prop("contact")) > 1)$costumer["value"].= ', '.$costumer->prop("contact");
+			}
+			else
+			{
+				if(strlen($costumer->prop("personal_id")) > 1)$prop["value"].= ', '.$costumer->prop("personal_id");
+				if(strlen($costumer->prop("birthday")) > 1)$prop["value"].= ', '.$costumer->prop("birthday");
+				if(strlen($costumer->prop("email")) > 1)$prop["value"].= ', '.$costumer->prop("email");
+				if(strlen($costumer->prop("phone")) > 1)$prop["value"].= ', '.$costumer->prop("phone");
+				if(strlen($costumer->prop("address")) > 1)$prop["value"].= ', '.$costumer->prop("address");
+			}
+			$prop["value"].= ', '.
+			html::href(array(
+				"url" => html::get_change_url($costumer->id(), array("return_url" => get_ru())),
+				"caption" => "Muuda",
+				"title" => t("Muuda"),
+			)).', '.
+			html::href(array(
+				"url" => $this->mk_my_orb ("remove_costumer", array (
+					"id" => $arr["obj_inst"]->id(),
+					"costumer" => $costumer->id(),
+					"return_url" => get_ru (),
+					"type" => $arr["type"],
+					)),
+				"caption" => "Eemalda",
+				"title" => t("Eemalda"),
+					
+//					"url" => $this->mk_my_orb(
+//						"remove_costumer",
+//						array(
+//							"id" => $arr["obj_inst"]->id(),
+//							"
+//						),
+//					),
+//					
+			)).
+			'<br>';
+		}
+		return $prop["value"];
+	}
+
+	/**
+		@attrib name=remove_costumer
+	**/
+	function remove_costumer($arr)
+	{
+		$property = obj($_GET["id"]);
+		
+		$connections = $property->connections_from (array (
+			"type" => $_GET["type"],
+		));
+		foreach ($connections as $connection)
+		{
+			if($connection->prop("to") == $_GET["costumer"]) $connection->delete();
+		}	
+		return $_GET["return_url"];
+	}
+
+
 
 	function set_property($arr = array())
 	{
@@ -583,13 +771,13 @@ class realestate_property extends class_base
 
 		switch($prop["name"])
 		{
-			case "seller":
-			case "buyer":
-				if (empty ($prop["value"]["firstname"]) and empty ($prop["value"]["lastname"]) and empty ($prop["value"]["personal_id"]))
-				{
-					$retval = PROP_IGNORE;
-				}
-				break;
+// 			case "seller":
+// 			case "buyer":
+// 				if (empty ($prop["value"]["firstname"]) and empty ($prop["value"]["lastname"]) and empty ($prop["value"]["personal_id"]))
+// 				{
+// 					$retval = PROP_IGNORE;
+// 				}
+// 				break;
 
 			case "transaction_price":
 			case "total_floor_area":
@@ -628,18 +816,71 @@ class realestate_property extends class_base
 
 			### "cache" picture icon url to avoid calling get_url_by_id on mass loading
 			case "picture_icon":
+				if (!is_object ($this->cl_image))
+				{
+					$this->cl_image = get_instance(CL_IMAGE);
+				}	
+				if (is_oid ($arr["request"]["icon"]) && $this->can ("view" , $arr["request"]["icon"]))
+				{
+					$this_object->connect(array(
+						"to" => $arr["request"]["icon"],
+						"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
+					));
+					$this_object->set_prop("picture_icon", $this->cl_image->get_url_by_id($arr["request"]["icon"]));
+					$this_object->save();
+				}
+
+				if(array_key_exists("icon_upload" , $_FILES))
+				{
+					$image_inst = get_instance(CL_IMAGE);
+					$upload_image = $image_inst->add_upload_image("icon_upload", $this_object->id());
+					// if there is image uploaded:
+					if ($upload_image !== false)
+					{
+						$this->make_icon(array(
+							"upload_image" => "icon_upload", 
+							"realestate_obj" => &$this_object,
+						));
+					}
+				}
 				if (is_oid ($arr["request"]["picture_icon_image"]))
 				{
-					if (!is_object ($this->cl_image))
-					{
-						$this->cl_image = get_instance(CL_IMAGE);
-					}
-
 					$prop["value"] = $this->cl_image->get_url_by_id ($arr["request"]["picture_icon_image"]);
 				}
 				break;
 		}
 		return $retval;
+	}
+
+	function make_icon($args)
+	{
+		extract($args);
+		$image_inst = get_instance(CL_IMAGE);
+		$upload_image = $image_inst->add_upload_image("icon_upload", $realestate_obj->id());
+		$o = obj($upload_image["id"]);
+		$o->img = get_instance("core/converters/image_convert");
+		$o->img->load_from_file($o->prop("file"));
+		$o->img->resize_simple(100,(int)($upload_image["sz"][1]/($upload_image["sz"][0]/100)));
+		$image_cl = get_instance(CL_IMAGE);
+		$image_cl->put_file(array(
+			'file' => $o->prop("file"),
+			"content" => $o->img->get(IMAGE_JPEG)
+		));
+		$conns_from = $realestate_obj->connections_from(array (
+			"type" => "RELTYPE_REALESTATE_PICTUREICON",
+		));
+		$ids = array();
+		foreach($conns_from as $conn)
+		{	
+			$ids[] = $conn->prop("to");
+		}
+		$realestate_obj->disconnect(array("from" => $ids));
+		$realestate_obj->connect(array(
+			"to" => $upload_image['id'],
+			"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
+		));
+		$realestate_obj->set_prop("picture_icon", $image_inst->get_url_by_id($upload_image['id']));
+		$realestate_obj->save();
 	}
 
 	function callback_mod_reforb($arr)
@@ -1357,7 +1598,7 @@ class realestate_property extends class_base
 		$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
 		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
 		$data["additional_info"] = $this_object->prop ("additional_info_" . aw_global_get("LC"));
-
+	
 		//et ei näitataks hinda, kui see on 0
 		if(!$data["transaction_price_value"] > 0)
 		{
@@ -2678,6 +2919,18 @@ class realestate_property extends class_base
 						"save" => true,
 					));
 					return true;
+				case "heating_type":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "varchar(255)"
+					));
+					return true;
+				case "rooms_condition":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "varchar(255)"
+					));
+				return true;
 			}
 		}
 	}

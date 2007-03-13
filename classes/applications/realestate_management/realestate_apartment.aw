@@ -10,14 +10,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @tableinfo realestate_property index=oid master_table=objects master_index=oid
 
 @default table=objects
-@default group=grp_main
-	@property location_description type=classificator table=realestate_property
-	@caption Paiknemine
+
+@default group=advertisement_data
+	@property show_apartment_no type=checkbox ch_value=1 field=meta method=serialize
+	@caption Näita korteri numbrit
 
 	@layout box1 type=vbox
 	@caption Vahendustasu
-	@property transaction_broker_fee type=textbox field=meta method=serialize no_caption=1 parent=box1
-	@property transaction_broker_fee_type type=select field=meta method=serialize no_caption=1 parent=box1
+
+		@property transaction_broker_fee type=textbox field=meta method=serialize no_caption=1 parent=box1
+
+		@property transaction_broker_fee_type type=select field=meta method=serialize no_caption=1 parent=box1
+
+	@property fee_payer type=classificator table=realestate_property
+	@caption Maakleritasu tasub
 
 	@property transaction_selling_price type=text field=meta method=serialize
 	@caption M&uuml;&uuml;gihind
@@ -34,51 +40,87 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@property estate_price_total type=text field=meta method=serialize
 	@caption Krundi hind kokku
 
-	@property fee_payer type=classificator table=realestate_property
-	@caption Maakleritasu tasub
-
 	@property available_from type=date_select field=meta method=serialize default=-1
 	@caption Objekti vabastamine
 
-	@property show_apartment_number type=checkbox ch_value=1 field=meta method=serialize
-	@caption N&auml;ita korteri numbrit
+@default group=grp_main
+	@groupinfo temp caption="põhimõtteliselt prügikast"
+	@default group=temp
+
+	@groupinfo apartment_info parent=grp_detailed caption="Korteri üldinfo"
+	@default group=apartment_info
+
+		@property floor type=textbox datatype=int field=meta method=serialize
+		@caption Korrus		
+		
+		@property number_of_rooms type=textbox datatype=int table=realestate_property
+		@caption Tubade arv
+
+		@property total_floor_area type=textbox table=realestate_property
+		@caption &Uuml;ldpind
 
 
-@default group=grp_detailed
-	@property childtitle6 type=text store=no subtitle=1
-	@caption Krunt ja maja
-		@property property_area type=textbox field=meta method=serialize
-		@caption Krundi suurus
+		@property heatable_area type=textbox field=meta method=serialize
+		@caption K&ouml;etav pind
 
-		@property privatization type=classificator table=realestate_property
-		@caption Maa erastamine
+		@property ownership_type type=classificator table=realestate_property
+		@caption Varaomand		
+
+		@property condition type=classificator table=realestate_property
+		@caption Valmidus
+
+		@property montlhy_expenses type=textbox field=meta method=serialize
+		@caption Kommunaalmaksete suurus
+
+	@groupinfo house_and_property parent=grp_detailed caption="Krunt ja maja"
+	@default group=house_and_property
+
+		@property number_of_storeys type=textbox datatype=int field=meta method=serialize group=apartment_info
+		@caption Korruseid
 
 		@property year_built type=select field=meta method=serialize
 		@caption Ehitusaasta
 
-		@property legal_status type=classificator table=realestate_property
-		@caption Omandivorm
-
 		@property architect type=textbox field=meta method=serialize
 		@caption Arhitekt
+
+		@property location_description type=classificator table=realestate_property
+		@caption Paiknemine
 
 		@property building_type type=classificator table=realestate_property
 		@caption Hoone t&uuml;&uuml;p
 
-		@property number_of_storeys type=textbox datatype=int field=meta method=serialize
-		@caption Korruseid
+		@property has_lift type=checkbox ch_value=1 field=meta method=serialize
+		@caption Lift
 
-		@property floor type=textbox datatype=int field=meta method=serialize
-		@caption Korrus
+		@property has_cellar type=checkbox ch_value=1 field=meta method=serialize
+		@caption Kelder
 
-		@property is_middle_floor type=hidden table=realestate_property
-		@caption Pole esimene ega viimane korrus
+		@property has_parking_spot type=checkbox ch_value=1 field=meta method=serialize
+		@caption Parkimiskoht
+
+		@layout box8 type=vbox
+		@caption Garaazh
+
+		@property has_garage type=checkbox ch_value=1 field=meta method=serialize parent=box8
+
+		@property number_of_garages type=textbox datatype=int field=meta method=serialize parent=box8
+		@caption Arv
+
+		@property heating_type type=textbox field=heating_type table=realestate_property
+		@caption K&uuml;tte t&uuml;&uuml;p
 
 		@property building_society_state type=classificator table=realestate_property
 		@caption &uuml;histu
 
 		@property facade_condition type=classificator table=realestate_property
 		@caption Fassaad
+
+		@property has_hallway_locked type=checkbox ch_value=1 field=meta method=serialize
+		@caption Trepikoda lukus
+
+		@property hallway_condition type=classificator table=realestate_property
+		@caption Trepikoja seisukord
 
 		@property roof_condition type=classificator table=realestate_property
 		@caption Katuse seisund
@@ -89,80 +131,62 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property has_new_radiators type=checkbox ch_value=1 field=meta method=serialize
 		@caption Uued radiaatorid
 
-		@property has_parking_spot type=checkbox ch_value=1 field=meta method=serialize
-		@caption Parkimiskoht
 
-		@property has_lift type=checkbox ch_value=1 field=meta method=serialize
-		@caption Lift
+		@property property_area type=textbox field=meta method=serialize
+		@caption Krundi suurus
 
-		@property has_hallway_locked type=checkbox ch_value=1 field=meta method=serialize
-		@caption Trepikoda lukus
-
-		@property hallway_condition type=classificator table=realestate_property
-		@caption Trepikoja seisukord
+		@property privatization type=classificator table=realestate_property
+		@caption Maa erastamine
 
 		@property building_additional_info type=textarea rows=5 cols=74 field=meta method=serialize
 		@caption Lisainfo maja kohta
 
-	@property childtitle7 type=text store=no subtitle=1
-	@caption Korter
-		@property montlhy_expenses type=textbox field=meta method=serialize
-		@caption Kommunaalmaksete suurus
+	@groupinfo kitchen parent=grp_detailed caption="K&ouml;&ouml;k"
+	@default group=kitchen
 
-		@property ownership_type type=classificator table=realestate_property
-		@caption Varaomand
-
-		@property total_floor_area type=textbox table=realestate_property
-		@caption &Uuml;ldpind
-
-		@property heatable_area type=textbox field=meta method=serialize
-		@caption K&ouml;etav pind
-
-	@property childtitle8 type=text store=no subtitle=1
-	@caption K&ouml;&ouml;k
 		@property kitchen_area type=textbox field=meta method=serialize
 		@caption K&ouml;&ouml;gi pindala
-
-		@property kitchenware_condition type=classificator table=realestate_property
-		@caption K&ouml;&ouml;gitehnika
-
-		@property kitchen_furniture type=classificator table=realestate_property
-		@caption Sissej&auml;&auml;v k&ouml;&ouml;gim&ouml;&ouml;bel/tehnika
 
 		@property kitchen_type type=classificator table=realestate_property
 		@caption K&ouml;&ouml;k
 
+		@property kitchen_furniture_option type=classificator table=realestate_property
+		@caption M&uuml;&uuml;gis
+
+		@property kitchen_furniture_condition type=classificator table=realestate_property
+		@caption M&ouml;&ouml;bel
+
+		@property kitchenware_condition type=classificator table=realestate_property
+		@caption K&ouml;&ouml;gitehnika
+
+		@property stove_type type=classificator table=realestate_property
+		@caption Pliit
+
 		@layout box4 type=vbox
-		@caption K&ouml;&ouml;giseinad
+		@caption Köögiseinad
 		@property kitchen_walls type=classificator table=realestate_property no_caption=1 parent=box4
 		@property kitchen_walls_description type=textbox field=meta method=serialize no_caption=1 parent=box4
 
 		@property kitchen_floor type=classificator table=realestate_property
 		@caption K&ouml;&ouml;gip&otilde;rand
 
-		@property stove_type type=classificator table=realestate_property
-		@caption Pliit
+		@property kitchen_furniture type=classificator table=realestate_property
+		@caption Sissej&auml;&auml;v k&ouml;&ouml;gim&ouml;&ouml;bel/tehnika
 
-		@property kitchen_furniture_option type=classificator table=realestate_property
-		@caption M&uuml;&uuml;gis
-
-		@property kitchen_furniture_condition type=classificator table=realestate_property
-		@caption K&ouml;&ouml;gim&ouml;&ouml;bel
-
-
-	@property childtitle1 type=text store=no subtitle=1
-	@caption Toad
+	@groupinfo rooms parent=grp_detailed caption="Toad"
+	@default group=rooms
+//kordab
 		@property number_of_rooms type=textbox datatype=int table=realestate_property
 		@caption Tubade arv
 
+		@property apartment_situation type=classificator table=realestate_property
+		@caption Paigutus
+
+		@property room_sizes type=textarea field=meta method=serialize
+		@caption Tubade suurused
+
 		@property number_of_bedrooms type=textbox datatype=int field=meta method=serialize
 		@caption Magamistubasid
-
-		@property number_of_bathrooms type=textbox datatype=int field=meta method=serialize
-		@caption Vannitubasid
-
-		@property has_separate_wc type=checkbox ch_value=1 field=meta method=serialize
-		@caption WC ja vannituba eraldi
 
 		@property has_wardrobe type=checkbox ch_value=1 field=meta method=serialize
 		@caption Garderoob
@@ -177,36 +201,65 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property has_terrace type=checkbox ch_value=1 field=meta method=serialize
 		@caption Terrass
 
-		@layout box5 type=vbox
-		@caption Toaseinad
-		@property room_walls type=classificator table=realestate_property no_caption=1 parent=box5
-		@property room_walls_description type=textbox field=meta method=serialize no_caption=1 parent=box5
-
-		@property room_floors type=classificator table=realestate_property
-		@caption Toap&otilde;rand
-
-		@property ceilings type=textbox field=meta method=serialize
-		@caption Laed
-
-		@property apartment_situation type=classificator table=realestate_property
-		@caption Paigutus
-
-		@property room_sizes type=textbox field=meta method=serialize
-		@caption Tubade suurused
-
 		@property view type=textbox field=meta method=serialize
 		@caption Vaade
 
-		@property windows_type type=classificator table=realestate_property
-		@caption Aknad
+		@property rooms_additional type=textarea rows=5 cols=74 field=meta method=serialize
+		@caption Lisainfo tubade kohta
 
-		@layout box3 type=vbox
-		@caption Siseuksed
-		@property doors_condition type=classificator table=realestate_property no_caption=1 parent=box3
-		@property doors_condition_description type=textbox field=meta method=serialize no_caption=1 parent=box3
 
-		@property has_security_door type=checkbox ch_value=1 field=meta method=serialize
-		@caption Turvauks
+		@property childtitle60 type=text store=no subtitle=1 
+		@caption Viimistlus
+
+			@property rooms_condition type=textbox table=realestate_property field=rooms_condition
+			@caption Seisukord
+
+			@property windows_type type=classificator table=realestate_property
+			@caption Aknad
+
+			@layout box3 type=vbox
+			@caption Siseuksed
+			@property doors_condition type=classificator table=realestate_property no_caption=1 parent=box3
+			@property doors_condition_description type=textbox field=meta method=serialize no_caption=1 parent=box3
+
+			@layout box5 type=vbox
+			@caption Toaseinad
+			@property room_walls type=classificator table=realestate_property no_caption=1 parent=box5
+			@property room_walls_description type=textbox field=meta method=serialize no_caption=1 parent=box5
+
+			@property room_floors type=classificator table=realestate_property
+			@caption Toap&otilde;rand
+
+			@layout box9 type=vbox
+			@caption Parkett
+			@property has_parquet type=checkbox ch_value=1 field=meta method=serialize parent=box9
+			@caption Parkett
+			@property parquet_type type=classificator table=realestate_property no_caption=1 parent=box9
+			@property parquet_type_other type=textbox field=meta method=serialize parent=box9
+			@caption Muu
+
+			@property ceilings type=textbox field=meta method=serialize
+			@caption Laed
+
+			@property quality_class type=classificator field=meta method=serialize
+			@caption Kvaliteediklass
+
+			@property has_security_door type=checkbox ch_value=1 field=meta method=serialize
+			@caption Turvauks
+
+	@property childtitle3 type=text store=no subtitle=1
+	@caption Kommunikatsioonid
+		@property has_alarm_installed type=checkbox ch_value=1 field=meta method=serialize
+		@caption Signalisatsioon
+
+		@property has_cable_tv type=checkbox ch_value=1 field=meta method=serialize
+		@caption Kaabel TV
+
+		@property has_phone type=checkbox ch_value=1 field=meta method=serialize
+		@caption Telefon
+
+		@property has_internet type=checkbox ch_value=1 field=meta method=serialize
+		@caption Internet
 
 	@property childtitle2 type=text store=no subtitle=1
 	@caption K&uuml;te
@@ -234,20 +287,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property has_oil_heating type=checkbox ch_value=1 field=meta method=serialize
 		@caption &otilde;lik&uuml;te
 
-	@property childtitle3 type=text store=no subtitle=1
-	@caption Kommunikatsioonid
-		@property has_alarm_installed type=checkbox ch_value=1 field=meta method=serialize
-		@caption Signalisatsioon
-
-		@property has_cable_tv type=checkbox ch_value=1 field=meta method=serialize
-		@caption Kaabel TV
-
-		@property has_phone type=checkbox ch_value=1 field=meta method=serialize
-		@caption Telefon
-
-		@property has_internet type=checkbox ch_value=1 field=meta method=serialize
-		@caption Internet
-
 	@property childtitle4 type=text store=no subtitle=1
 	@caption Sisustus
 		@property has_fireplace type=checkbox ch_value=1 field=meta method=serialize
@@ -256,23 +295,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property has_tv type=checkbox ch_value=1 field=meta method=serialize
 		@caption Televiisor
 
-		@property has_shower type=checkbox ch_value=1 field=meta method=serialize
-		@caption Dush
-
-		@layout box6 type=vbox
-		@caption Vann
-		@property has_bath type=checkbox ch_value=1 field=meta method=serialize parent=box6
-		@caption Vann
-		@property bath_additional type=textbox field=meta method=serialize no_caption=1 parent=box6
-
-		@property has_boiler type=checkbox ch_value=1 field=meta method=serialize
-		@caption Boiler
-
 		@property has_refrigerator type=checkbox ch_value=1 field=meta method=serialize
 		@caption K&uuml;lmik
-
-		@property has_washing_machine type=checkbox ch_value=1 field=meta method=serialize
-		@caption Pesumasin
 
 		@property has_dishwasher type=checkbox ch_value=1 field=meta method=serialize
 		@caption N&otilde;udepesumasin
@@ -300,50 +324,62 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property electricity_meter_param type=textbox field=meta method=serialize no_caption=1 parent=box7
 		@caption kW/A
 
-		@property rooms_additional type=textarea rows=5 cols=74 field=meta method=serialize
-		@caption Lisainfo tubade kohta
 
-	@property childtitle10 type=text store=no subtitle=1
-	@caption Sanruumid
-		@property lavatories_condition type=classificator table=realestate_property
-		@caption Sanruumid
+	@groupinfo san_rooms parent=grp_detailed caption="Sanitaarruumid"
+	@default group=san_rooms
 
-		@property lavatory_equipment_condition type=classificator table=realestate_property
-		@caption Santehnika
+		@property number_of_bathrooms type=textbox datatype=int field=meta method=serialize
+		@caption Vannitubasid
 
-		@property has_water_meters type=checkbox ch_value=1 field=meta method=serialize
-		@caption Veem&otilde;&otilde;tjad
+		@property has_separate_wc type=checkbox ch_value=1 field=meta method=serialize
+		@caption WC ja vannituba eraldi
 
-	@property childtitle11 type=text store=no subtitle=1
-	@caption Abiruumid
-		@property has_cellar type=checkbox ch_value=1 field=meta method=serialize
-		@caption Kelder
+		@property bathroom_has_window type=checkbox ch_value=1 field=meta method=serialize
+		@caption Aken
 
-		@layout box8 type=vbox
-		@caption Garaazhid
-		@property has_garage type=checkbox ch_value=1 field=meta method=serialize parent=box8
-		@caption Garaazh
-		@property number_of_garages type=textbox datatype=int field=meta method=serialize parent=box8
-		@caption Arv
+		@property bathroom_has_floor_heating type=checkbox ch_value=1 field=meta method=serialize
+		@caption Põrandaküte
 
 		@property has_sauna type=checkbox ch_value=1 field=meta method=serialize
 		@caption Saun
 
-	@property childtitle5 type=text store=no subtitle=1
-	@caption Viimistlus ja ehitus
-		@layout box9 type=vbox
-		@caption Parkett
-		@property has_parquet type=checkbox ch_value=1 field=meta method=serialize parent=box9
-		@caption Parkett
-		@property parquet_type type=classificator table=realestate_property no_caption=1 parent=box9
-		@property parquet_type_other type=textbox field=meta method=serialize parent=box9
-		@caption Muu
+		@property lavatories_condition type=classificator table=realestate_property
+		@caption Sanruumid
 
-		@property condition type=classificator table=realestate_property
-		@caption Valmidus
+		@property is_plated type=checkbox ch_value=1 field=meta method=serialize
+		@caption Plaaditud
 
-		@property quality_class type=classificator field=meta method=serialize
-		@caption Kvaliteediklass
+		@property lavatory_equipment_condition type=classificator table=realestate_property
+		@caption Santehnika
+
+		@property has_shower type=checkbox ch_value=1 field=meta method=serialize
+		@caption Dush
+
+		@layout box6 type=vbox
+		@caption Vann
+		@property has_bath type=checkbox ch_value=1 field=meta method=serialize parent=box6
+		@caption Vann
+		@property bath_additional type=textbox field=meta method=serialize no_caption=1 parent=box6
+
+		@property has_boiler type=checkbox ch_value=1 field=meta method=serialize
+		@caption Boiler
+
+		@property has_water_meters type=checkbox ch_value=1 field=meta method=serialize
+		@caption Veem&otilde;&otilde;tjad
+
+		@property has_washing_machine type=checkbox ch_value=1 field=meta method=serialize
+		@caption Pesumasin
+
+	@groupinfo temp caption="Muu"
+	@default group=temp
+
+//see on nagu miski teine omandi asi ka olemas... ei tea miks
+		@property legal_status type=classificator table=realestate_property
+		@caption Omandivorm
+
+
+		@property is_middle_floor type=hidden table=realestate_property
+		@caption Pole esimene ega viimane korrus
 
 */
 

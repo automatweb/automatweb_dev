@@ -2,22 +2,17 @@
 <properties>
       <property>
             <name>header</name>
+            <table>objects</table>
+            <group>grp_sub_main</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <group>
-                  <num_0>grp_main</num_0>
-                  <num_1>grp_detailed</num_1>
-                  <num_2>grp_additional_info</num_2>
-                  <num_3>grp_photos</num_3>
-                  <num_4>grp_map</num_4>
-            </group>
             <field>header</field>
       </property>
       <property>
             <name>property_toolbar</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>grp_sub_main</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -26,15 +21,15 @@
       <property>
             <name>oid</name>
             <table>objects</table>
-            <group>grp_main</group>
-            <type>text</type>
+            <group>grp_sub_main</group>
+            <type>hidden</type>
             <field>oid</field>
             <caption>Objekti id AutomatWeb-is</caption>
       </property>
       <property>
             <name>realestate_manager</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>grp_sub_main</group>
             <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
@@ -42,33 +37,46 @@
       <property>
             <name>city24_object_id</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
-            <type>text</type>
+            <group>grp_sub_main</group>
+            <type>hidden</type>
             <field>city24_object_id</field>
             <caption>Objekti id City24 andmebaasis</caption>
       </property>
       <property>
             <name>is_visible</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>grp_sub_main</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <parent>box123</parent>
+            <no_caption>1</no_caption>
             <field>is_visible</field>
             <caption>N&amp;amp;auml;htav</caption>
       </property>
       <property>
             <name>is_archived</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>grp_sub_main</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <parent>box123</parent>
+            <no_caption>1</no_caption>
             <field>is_archived</field>
             <caption>Arhiveeritud</caption>
       </property>
       <property>
+            <name>expire</name>
+            <table>objects</table>
+            <group>grp_sub_main</group>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>aegub</caption>
+      </property>
+      <property>
             <name>title1</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>grp_sub_main</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -78,7 +86,7 @@
       <property>
             <name>address_connection</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>grp_sub_main</group>
             <type>releditor</type>
             <reltype>RELTYPE_REALESTATE_ADDRESS</reltype>
             <rel_id>first</rel_id>
@@ -95,19 +103,15 @@
             <caption>Aadress</caption>
       </property>
       <property>
-            <name>title2</name>
+            <name></name>
             <table>objects</table>
-            <group>grp_main</group>
-            <type>text</type>
-            <store>no</store>
-            <subtitle>1</subtitle>
-            <field>title2</field>
-            <caption>Tehingu andmed</caption>
+            <group>transaction_data</group>
+            <field></field>
       </property>
       <property>
             <name>transaction_type</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>classificator</type>
             <field>transaction_type</field>
             <caption>Tehingu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
@@ -115,7 +119,7 @@
       <property>
             <name>transaction_price</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>textbox</type>
             <field>transaction_price</field>
             <caption>Hind</caption>
@@ -123,7 +127,7 @@
       <property>
             <name>transaction_price2</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
@@ -132,24 +136,16 @@
       <property>
             <name>transaction_rent</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Kuu&amp;amp;uuml;&amp;amp;uuml;r</caption>
       </property>
       <property>
-            <name>transaction_constraints</name>
-            <table>realestate_property</table>
-            <group>grp_main</group>
-            <type>classificator</type>
-            <field>transaction_constraints</field>
-            <caption>Piirangud</caption>
-      </property>
-      <property>
             <name>transaction_down_payment</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
@@ -158,7 +154,7 @@
       <property>
             <name>transaction_date</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>date_select</type>
             <default>-1</default>
             <field>transaction_date</field>
@@ -167,114 +163,70 @@
       <property>
             <name>transaction_closed</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>transaction_closed</field>
             <caption>Tehing s&amp;amp;otilde;lmitud</caption>
       </property>
       <property>
-            <name>title3</name>
+            <name>title100</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <field>title3</field>
+            <field>title100</field>
             <caption>M&amp;amp;uuml;&amp;amp;uuml;ja andmed</caption>
       </property>
       <property>
             <name>seller_search</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>text</type>
             <store>no</store>
             <field>seller_search</field>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
       </property>
       <property>
             <name>seller</name>
             <table>objects</table>
-            <group>grp_main</group>
-            <type>releditor</type>
+            <group>transaction_data</group>
+            <type>text</type>
             <reltype>RELTYPE_REALESTATE_SELLER</reltype>
-            <rel_id>first</rel_id>
-            <editonly>1</editonly>
-            <props>
-                  <num_0>firstname</num_0>
-                  <num_1>lastname</num_1>
-                  <num_2>personal_id</num_2>
-                  <num_3>gender</num_3>
-                  <num_4>birthday</num_4>
-                  <num_5>phone</num_5>
-                  <num_6>email</num_6>
-                  <num_7>comment</num_7>
-                  <num_8>notes</num_8>
-            </props>
-            <field>seller</field>
-      </property>
-      <property>
-            <name>seller_heard_from</name>
-            <table>objects</table>
-            <group>grp_main</group>
-            <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Infoallikas</caption>
       </property>
       <property>
-            <name>title31</name>
+            <name>title101</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <field>title31</field>
+            <field>title101</field>
             <caption>Ostja andmed</caption>
       </property>
       <property>
             <name>buyer_search</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>text</type>
             <store>no</store>
             <field>buyer_search</field>
-            <caption>Ostja</caption>
       </property>
       <property>
             <name>buyer</name>
             <table>objects</table>
-            <group>grp_main</group>
-            <type>releditor</type>
+            <group>transaction_data</group>
+            <type>text</type>
             <reltype>RELTYPE_REALESTATE_BUYER</reltype>
-            <rel_id>first</rel_id>
-            <editonly>1</editonly>
-            <props>
-                  <num_0>firstname</num_0>
-                  <num_1>lastname</num_1>
-                  <num_2>personal_id</num_2>
-                  <num_3>gender</num_3>
-                  <num_4>birthday</num_4>
-                  <num_5>phone</num_5>
-                  <num_6>email</num_6>
-                  <num_7>comment</num_7>
-                  <num_8>notes</num_8>
-            </props>
-            <field>buyer</field>
-      </property>
-      <property>
-            <name>buyer_heard_from</name>
-            <table>objects</table>
-            <group>grp_main</group>
-            <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Infoallikas</caption>
       </property>
       <property>
             <name>title5</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -284,7 +236,7 @@
       <property>
             <name>appreciation_note_date</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>date_select</type>
             <field>meta</field>
             <method>serialize</method>
@@ -294,26 +246,16 @@
       <property>
             <name>appreciation_note_type</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>transaction_data</group>
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>T&amp;amp;auml;nukirja t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>title4</name>
-            <table>objects</table>
-            <group>grp_main</group>
-            <type>text</type>
-            <store>no</store>
-            <subtitle>1</subtitle>
-            <field>title4</field>
-            <caption>Lisaandmed</caption>
-      </property>
-      <property>
             <name>realestate_agent1</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATE_AGENT</reltype>
             <clid>CL_CRM_PERSON</clid>
@@ -323,7 +265,7 @@
       <property>
             <name>realestate_agent2</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATE_AGENT2</reltype>
             <clid>CL_CRM_PERSON</clid>
@@ -333,7 +275,7 @@
       <property>
             <name>weeks_valid_for</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>chooser</type>
             <default>12</default>
             <field>meta</field>
@@ -343,7 +285,7 @@
       <property>
             <name>visible_to</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>classificator</type>
             <field>visible_to</field>
             <caption>N&amp;amp;auml;htav</caption>
@@ -351,7 +293,7 @@
       <property>
             <name>priority</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>classificator</type>
             <field>priority</field>
             <caption>Prioriteet</caption>
@@ -359,7 +301,7 @@
       <property>
             <name>show_on_webpage</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -370,7 +312,7 @@
       <property>
             <name>show_house_number_on_web</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -380,7 +322,7 @@
       <property>
             <name>special_homepage</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
@@ -389,7 +331,7 @@
       <property>
             <name>special_status</name>
             <table>realestate_property</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>classificator</type>
             <field>special_status</field>
             <caption>Eristaatus (eripakkumiste kuvamiseks veebis)</caption>
@@ -397,7 +339,7 @@
       <property>
             <name>project</name>
             <table>objects</table>
-            <group>grp_main</group>
+            <group>advertisement_data</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATE_PROJECT</reltype>
             <clid>CL_PROJECT</clid>
@@ -407,13 +349,21 @@
             <caption>Projekt</caption>
       </property>
       <property>
-            <name>expire</name>
+            <name>transaction_constraints</name>
+            <table>realestate_property</table>
+            <group>advertisement_data</group>
+            <type>classificator</type>
+            <field>transaction_constraints</field>
+            <caption>Piirangud</caption>
+      </property>
+      <property>
+            <name>buyer_heard_from</name>
             <table>objects</table>
-            <group>grp_main</group>
-            <type>text</type>
+            <group>advertisement_data</group>
+            <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>aegub</caption>
+            <caption>Infoallikas</caption>
       </property>
       <property>
             <name>additional_info_et</name>
@@ -502,7 +452,7 @@
             <name>picture_icon</name>
             <table>objects</table>
             <group>grp_photos</group>
-            <type>hidden</type>
+            <type>text</type>
             <field>meta</field>
             <method>serialize</method>
       </property>
@@ -592,6 +542,21 @@
             <grp_map>
                   <caption>Kaart</caption>
             </grp_map>
+            <grp_sub_main>
+                  <parent>grp_main</parent>
+                  <caption>&amp;Uuml;ldine</caption>
+            </grp_sub_main>
+            <transaction_data>
+                  <parent>grp_main</parent>
+                  <caption>Tehingu andmed</caption>
+            </transaction_data>
+            <advertisement_data>
+                  <parent>grp_main</parent>
+                  <caption>Kuulutuse andmed</caption>
+            </advertisement_data>
+            <temp>
+                  <caption>p&amp;otilde;him&amp;otilde;tteliselt pr&amp;uuml;gikast</caption>
+            </temp>
       </groupinfo>
       <tableinfo>
             <realestate_property>
@@ -608,12 +573,18 @@
             </REALESTATE_ADDRESS>
             <REALESTATE_SELLER>
                   <value>2</value>
-                  <clid>CL_CRM_PERSON</clid>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
                   <caption>Klient (M&amp;amp;uuml;&amp;amp;uuml;ja)</caption>
             </REALESTATE_SELLER>
             <REALESTATE_BUYER>
                   <value>7</value>
-                  <clid>CL_CRM_PERSON</clid>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
                   <caption>Klient (Ostja)</caption>
             </REALESTATE_BUYER>
             <REALESTATE_AGENT>
@@ -642,5 +613,12 @@
                   <caption>V&amp;amp;auml;ike pilt</caption>
             </REALESTATE_PICTUREICON>
       </reltypes>
+      <layout>
+            <box123>
+                  <type>hbox</type>
+                  <group>grp_sub_main</group>
+                  <caption>Staatus</caption>
+            </box123>
+      </layout>
 </properties>
 
