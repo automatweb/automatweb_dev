@@ -67,6 +67,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property transaction_price2 type=textbox field=meta method=serialize
 		@caption M&uuml;&uuml;gihind
 
+		@property price_per_m2 type=text table=realestate_property field=price_per_m2
+		@caption Ruutmeetri hind
+
 		@property transaction_rent type=textbox field=meta method=serialize
 		@caption Kuu&uuml;&uuml;r
 
@@ -386,6 +389,16 @@ class realestate_property extends class_base
 		}
 	}
 
+	function get_price_per_m2($o)
+	{
+		if($o->is_property("total_floor_area") && $o->prop("total_floor_area") > 0)
+		{
+			
+			return $o->prop("transaction_price") / $o->prop("total_floor_area");
+		}
+		else return 0;
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -394,6 +407,10 @@ class realestate_property extends class_base
 
 		switch($prop["name"])
 		{
+			case "price_per_m2":
+				$prop["value"] = $this->get_price_per_m2($this_object);
+				break;
+			
 			case "weeks_valid_for":
 				$prop["options"] = array (2,4,6,8,10,12);
 				break;
@@ -778,6 +795,9 @@ class realestate_property extends class_base
 // 					$retval = PROP_IGNORE;
 // 				}
 // 				break;
+			case "price_per_m2":
+				$prop["value"] = $this->get_price_per_m2($this_object);
+				break;
 
 			case "transaction_price":
 			case "total_floor_area":
@@ -2931,6 +2951,12 @@ class realestate_property extends class_base
 						"type" => "varchar(255)"
 					));
 				return true;
+				case "price_per_m2":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(12)"
+					));
+					return true;
 			}
 		}
 	}
