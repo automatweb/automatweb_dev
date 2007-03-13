@@ -1,0 +1,72 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/vcl/toolbar.aw:51 classes/vcl/toolbar.aw:96 classes/vcl/toolbar.aw:153 classes/vcl/toolbar.aw:178 classes/vcl/toolbar.aw:344
+msgid "Kustuta"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:101
+msgid "fail"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:102
+msgid "kustuta fail"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:183
+msgid "text"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:184
+msgid "tiitel"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:189
+msgid "suubmenuuu"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:193
+msgid "teine tekst"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:194
+msgid "teine tiitel"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:251
+msgid "neti.ee"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:252
+msgid "Oled sa kindel et tahad ikka sinna saidile minna?"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:493
+msgid "Otsi"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:538 classes/vcl/toolbar.aw:546
+msgid "Lisa"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:569
+msgid "Kustuta valitud objektid"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:583
+msgid "Kustuta valitud seosed"
+msgstr ""
+
+#: classes/vcl/toolbar.aw:596
+msgid "Salvesta"
+msgstr ""
+

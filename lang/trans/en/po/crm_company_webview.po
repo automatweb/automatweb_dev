@@ -224,29 +224,29 @@ msgid "K&otilde;ik"
 msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:291
-#: classes/applications/crm/crm_company_webview.aw:1143
+#: classes/applications/crm/crm_company_webview.aw:1144
 msgid "Aadress"
 msgstr "Address"
 
 #: classes/applications/crm/crm_company_webview.aw:292
 #: classes/applications/crm/crm_company_webview.aw:346
-#: classes/applications/crm/crm_company_webview.aw:1144
+#: classes/applications/crm/crm_company_webview.aw:1145
 msgid "Tel"
 msgstr "Phone"
 
 #: classes/applications/crm/crm_company_webview.aw:293
-#: classes/applications/crm/crm_company_webview.aw:1145
+#: classes/applications/crm/crm_company_webview.aw:1146
 msgid "Faks"
 msgstr "Fax"
 
 #: classes/applications/crm/crm_company_webview.aw:294
-#: classes/applications/crm/crm_company_webview.aw:1146
+#: classes/applications/crm/crm_company_webview.aw:1147
 msgid "Avatud"
 msgstr "Open hours"
 
 #: classes/applications/crm/crm_company_webview.aw:295
 #: classes/applications/crm/crm_company_webview.aw:348
-#: classes/applications/crm/crm_company_webview.aw:1147
+#: classes/applications/crm/crm_company_webview.aw:1148
 msgid "E-post"
 msgstr "E-mail"
 
@@ -376,9 +376,9 @@ msgid "Veel lisainfot"
 msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:662
-#: classes/applications/crm/crm_company_webview.aw:1360
-#: classes/applications/crm/crm_company_webview.aw:1368
+#: classes/applications/crm/crm_company_webview.aw:1361
 #: classes/applications/crm/crm_company_webview.aw:1369
+#: classes/applications/crm/crm_company_webview.aw:1370
 msgid "-"
 msgstr ""
 
@@ -407,11 +407,11 @@ msgstr ""
 msgid "Hinda"
 msgstr ""
 
-#: classes/applications/crm/crm_company_webview.aw:1148
+#: classes/applications/crm/crm_company_webview.aw:1149
 msgid "Koduleht"
 msgstr "Homepage"
 
-#: classes/applications/crm/crm_company_webview.aw:1193
+#: classes/applications/crm/crm_company_webview.aw:1194
 msgid "Muuda"
 msgstr "Change"
 

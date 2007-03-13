@@ -109,6 +109,126 @@ msgstr ""
 msgid "Omaduse Edasisuunamise dokument (redir_doc) help"
 msgstr ""
 
+#: classes/applications/calendar/conference_planning.aw:prop_send_email
+msgid "Omaduse Saada email hotellidele (send_email) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_send_email_comment
+msgid "Omaduse Saada email hotellidele (send_email) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_send_email_help
+msgid "Omaduse Saada email hotellidele (send_email) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_email
+msgid "Omaduse Saatja E-mail (email) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_email_comment
+msgid "Omaduse Saatja E-mail (email) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_email_help
+msgid "Omaduse Saatja E-mail (email) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_subject
+msgid "Omaduse Hotelliteavituse e-maili teema (subject) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_subject_comment
+msgid "Omaduse Hotelliteavituse e-maili teema (subject) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_subject_help
+msgid "Omaduse Hotelliteavituse e-maili teema (subject) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_mails
+msgid "Omaduse  (mails) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_mails_comment
+msgid "Omaduse  (mails) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_mails_help
+msgid "Omaduse  (mails) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_send_mail
+msgid "Omaduse Saada kasutajale teavitus (usr_send_mail) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_send_mail_comment
+msgid "Omaduse Saada kasutajale teavitus (usr_send_mail) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_send_mail_help
+msgid "Omaduse Saada kasutajale teavitus (usr_send_mail) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_subject
+msgid "Omaduse Kasutajateavituse e-maili teema (usr_subject) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_subject_comment
+msgid "Omaduse Kasutajateavituse e-maili teema (usr_subject) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_subject_help
+msgid "Omaduse Kasutajateavituse e-maili teema (usr_subject) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_contents
+msgid "Omaduse Kasutajateavituse e-maili sisu (usr_contents) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_contents_comment
+msgid "Omaduse Kasutajateavituse e-maili sisu (usr_contents) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_usr_contents_help
+msgid "Omaduse Kasutajateavituse e-maili sisu (usr_contents) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:group_mails
+msgid "Grupi E-mailid (mails) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:group_mails_help
+msgid "Grupi E-mailid (mails) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:group_users_notification
+msgid "Grupi Kasutaja teavitus (users_notification) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:group_users_notification_help
+msgid "Grupi Kasutaja teavitus (users_notification) help"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/applications/calendar/conference_planning.aw:rel_RELTYPE_REDIR_DOC
 msgid "Seose Edasisuunamise dokument (RELTYPE_REDIR_DOC) tekst"
 msgstr ""
@@ -121,257 +241,271 @@ msgstr ""
 msgid "Seose Otsitav asukoht (RELTYPE_LOCATION) tekst"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:56
-msgid "Monday"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:57
-msgid "Tuesday"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:58
-msgid "Wednesday"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:59
-msgid "Thursday"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:60
-msgid "Friday"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:61
-msgid "Saturday"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:62
-msgid "Sunday"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:66
-msgid "Theatre"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:67
-msgid "Diplomat"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:68
-msgid "Banquet"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:69
-msgid "School"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:70
-msgid "Fishbone"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:71
-msgid "U-Shape"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:72
-msgid "Cabaret"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:73
-msgid "Dinner"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:74
-msgid "Coctail"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:78
-msgid "Data projector"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:79
-msgid "TV/DVD"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:80
-msgid "Slide projector"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:81
-msgid "Mircophones"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:82
-msgid "OHP"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:86
-msgid "Morning coffe break"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:87
-msgid "Lunch"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:88
-msgid "Afternoon coffe break"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:89
-msgid "Fruit assortment in the room"
-msgstr ""
-
-#: classes/applications/calendar/conference_planning.aw:90
-msgid "Sodas"
+#: classes/applications/calendar/conference_planning.aw:rel_RELTYPE_EMAIL
+msgid "Seose E-Mail (RELTYPE_EMAIL) tekst"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:91
-msgid "Non-stop coffee"
+msgid "Monday"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:92
+msgid "Tuesday"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:93
+msgid "Wednesday"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:94
+msgid "Thursday"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:95
-msgid "Estionia"
+msgid "Friday"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:96
-msgid "Latvia"
+msgid "Saturday"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:97
-msgid "Lietuva"
+msgid "Sunday"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:101
+msgid "Theatre"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:102
-msgid "&Uuml;rituse nimi on puudu"
+msgid "Diplomat"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:103
+msgid "Banquet"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:104
+msgid "School"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:105
-msgid "Saabumisaeg on puudu"
+msgid "Fishbone"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:106
-msgid "Lahkumisaeg on puudu"
+msgid "U-Shape"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:107
+msgid "Cabaret"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:108
+msgid "Dinner"
 msgstr ""
 
 #: classes/applications/calendar/conference_planning.aw:109
+msgid "Coctail"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:113
+msgid "Data projector"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:114
+msgid "TV/DVD"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:115
+msgid "Slide projector"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:116
+msgid "Mircophones"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:117
+msgid "OHP"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:121
+msgid "Morning coffe break"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:122
+msgid "Lunch"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:123
+msgid "Afternoon coffe break"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:124
+msgid "Fruit assortment in the room"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:125
+msgid "Sodas"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:126
+msgid "Non-stop coffee"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:130
+msgid "Estionia"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:131
+msgid "Latvia"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:132
+msgid "Lietuva"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:137
+msgid "&Uuml;rituse nimi on puudu"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:140
+msgid "Saabumisaeg on puudu"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:141
+msgid "Lahkumisaeg on puudu"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:144
 msgid "Telefoninumber on puudu"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:110
+#: classes/applications/calendar/conference_planning.aw:145
 msgid "E-mail on puudu"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:257
-#: classes/applications/calendar/conference_planning.aw:272
-#: classes/applications/calendar/conference_planning.aw:660
-#: classes/applications/calendar/conference_planning.aw:661
-#: classes/applications/calendar/conference_planning.aw:859
-#: classes/applications/calendar/conference_planning.aw:860
-#: classes/applications/calendar/conference_planning.aw:861
-#: classes/applications/calendar/conference_planning.aw:862
-#: classes/applications/calendar/conference_planning.aw:888
-#: classes/applications/calendar/conference_planning.aw:889
-#: classes/applications/calendar/conference_planning.aw:890
-#: classes/applications/calendar/conference_planning.aw:891
+#: classes/applications/calendar/conference_planning.aw:204
+msgid "Hotell"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:208
+msgid "E-Mail"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:351
+#: classes/applications/calendar/conference_planning.aw:366
+#: classes/applications/calendar/conference_planning.aw:755
+#: classes/applications/calendar/conference_planning.aw:756
+#: classes/applications/calendar/conference_planning.aw:954
 #: classes/applications/calendar/conference_planning.aw:955
 #: classes/applications/calendar/conference_planning.aw:956
+#: classes/applications/calendar/conference_planning.aw:957
+#: classes/applications/calendar/conference_planning.aw:983
+#: classes/applications/calendar/conference_planning.aw:987
+#: classes/applications/calendar/conference_planning.aw:1051
+#: classes/applications/calendar/conference_planning.aw:1052
 msgid "-"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:322
+#: classes/applications/calendar/conference_planning.aw:416
 msgid "*"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:354
+#: classes/applications/calendar/conference_planning.aw:448
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:354
+#: classes/applications/calendar/conference_planning.aw:448
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:726
-#: classes/applications/calendar/conference_planning.aw:727
-#: classes/applications/calendar/conference_planning.aw:728
-#: classes/applications/calendar/conference_planning.aw:832
-#: classes/applications/calendar/conference_planning.aw:897
-#: classes/applications/calendar/conference_planning.aw:1380
+#: classes/applications/calendar/conference_planning.aw:821
+#: classes/applications/calendar/conference_planning.aw:822
+#: classes/applications/calendar/conference_planning.aw:823
+#: classes/applications/calendar/conference_planning.aw:927
+#: classes/applications/calendar/conference_planning.aw:993
+#: classes/applications/calendar/conference_planning.aw:1476
 msgid "Yes"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:726
-#: classes/applications/calendar/conference_planning.aw:727
-#: classes/applications/calendar/conference_planning.aw:728
-#: classes/applications/calendar/conference_planning.aw:832
-#: classes/applications/calendar/conference_planning.aw:897
-#: classes/applications/calendar/conference_planning.aw:1276
-#: classes/applications/calendar/conference_planning.aw:1281
-#: classes/applications/calendar/conference_planning.aw:1380
+#: classes/applications/calendar/conference_planning.aw:821
+#: classes/applications/calendar/conference_planning.aw:822
+#: classes/applications/calendar/conference_planning.aw:823
+#: classes/applications/calendar/conference_planning.aw:927
+#: classes/applications/calendar/conference_planning.aw:993
+#: classes/applications/calendar/conference_planning.aw:1372
+#: classes/applications/calendar/conference_planning.aw:1377
+#: classes/applications/calendar/conference_planning.aw:1476
 msgid "No"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:735
-#: classes/applications/calendar/conference_planning.aw:1346
+#: classes/applications/calendar/conference_planning.aw:830
+#: classes/applications/calendar/conference_planning.aw:1442
 msgid "Normal"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:735
-#: classes/applications/calendar/conference_planning.aw:1346
+#: classes/applications/calendar/conference_planning.aw:830
+#: classes/applications/calendar/conference_planning.aw:1442
 msgid "Alternative"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1046
+#: classes/applications/calendar/conference_planning.aw:1142
 msgid "Alternative dates"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1047
+#: classes/applications/calendar/conference_planning.aw:1143
 msgid "Accomondation"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1048
+#: classes/applications/calendar/conference_planning.aw:1144
 msgid "Main Event"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1049
+#: classes/applications/calendar/conference_planning.aw:1145
 msgid "Additional Events"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1050
+#: classes/applications/calendar/conference_planning.aw:1146
 msgid "Booking Details"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1051
+#: classes/applications/calendar/conference_planning.aw:1147
 msgid "RFP check"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1264
+#: classes/applications/calendar/conference_planning.aw:1360
 msgid "Not Applicable"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1268
+#: classes/applications/calendar/conference_planning.aw:1364
 msgid "From %s to %s"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1272
+#: classes/applications/calendar/conference_planning.aw:1368
 msgid "%s days"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1445
+#: classes/applications/calendar/conference_planning.aw:1570
+msgid "Kahjuks sinu meililugeja ei oska n&auml;idata HTML formaadis kirju"
+msgstr ""
+
+#: classes/applications/calendar/conference_planning.aw:1603
 msgid "Kasutanimi on juba olemas, palun logige sisse."
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:1997
+#: classes/applications/calendar/conference_planning.aw:2155
 msgid "There aren't enough single rooms"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:2001
+#: classes/applications/calendar/conference_planning.aw:2159
 msgid "There aren't enough double rooms"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:2005
+#: classes/applications/calendar/conference_planning.aw:2163
 msgid "There aren't enough suites"
 msgstr ""
 
-#: classes/applications/calendar/conference_planning.aw:2027
+#: classes/applications/calendar/conference_planning.aw:2185
 msgid "There aren't as big rooms as needed"
 msgstr ""

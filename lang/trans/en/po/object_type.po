@@ -14,19 +14,16 @@ msgstr ""
 msgid "Klassi Objekti t&uuml;&uuml;p help"
 msgstr ""
 
-# classes/admin/object_type.aw:prop_type
 #: classes/admin/object_type.aw:prop_type
-msgid "Omaduse Objektitüüp (type) caption"
-msgstr "Object type"
-
-# classes/admin/object_type.aw:prop_type_comment
-#: classes/admin/object_type.aw:prop_type_comment
-msgid "Omaduse Objektitüüp (type) kommentaar"
+msgid "Omaduse Objektit&uuml;&uuml;p (type) caption"
 msgstr ""
 
-# classes/admin/object_type.aw:prop_type_help
+#: classes/admin/object_type.aw:prop_type_comment
+msgid "Omaduse Objektit&uuml;&uuml;p (type) kommentaar"
+msgstr ""
+
 #: classes/admin/object_type.aw:prop_type_help
-msgid "Omaduse Objektitüüp (type) help"
+msgid "Omaduse Objektit&uuml;&uuml;p (type) help"
 msgstr ""
 
 # classes/admin/object_type.aw:prop_use_cfgform
@@ -129,17 +126,20 @@ msgid "Oks"
 msgstr "Branch"
 
 #: classes/admin/object_type.aw:220
-msgid "Tüüp"
-msgstr "Type"
-
-#: classes/admin/object_type.aw:236
-msgid "Vaikimisi välimus"
+msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/admin/object_type.aw:237
-msgid "--vali--"
+#: classes/admin/object_type.aw:236
+msgid "Vaikimisi v&auml;limus"
 msgstr ""
 
 #: classes/admin/object_type.aw:286
 msgid "K&otilde;ik"
 msgstr "All"
+
+# classes/admin/object_type.aw:prop_type
+#~ msgid "Omaduse Objektitüüp (type) caption"
+#~ msgstr "Object type"
+
+#~ msgid "Tüüp"
+#~ msgstr "Type"

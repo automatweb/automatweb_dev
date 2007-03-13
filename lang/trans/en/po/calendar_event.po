@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/applications/calendar/calendar_event.aw:class_819_help
 #: classes/applications/calendar/calendar_event.aw:class_819_help
-msgid "Klassi Kalendri sündmus help"
+msgid "Klassi Kalendri s&uuml;ndmus help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_jrk

@@ -829,10 +829,10 @@ msgstr ""
 msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr ""
 
-#: classes/core/users/user.aw:2153
+#: classes/core/users/user.aw:2174
 msgid "Seaded"
 msgstr ""
 
-#: classes/core/users/user.aw:2200
+#: classes/core/users/user.aw:2221
 msgid "Ajalugu"
 msgstr ""

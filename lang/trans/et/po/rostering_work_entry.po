@@ -25,30 +25,6 @@ msgstr ""
 msgid "Omaduse Graafik (graph) help"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:prop_unit
-msgid "Omaduse &Uuml;ksus (unit) caption"
-msgstr ""
-
-#: classes/applications/rostering/rostering_work_entry.aw:prop_unit_comment
-msgid "Omaduse &Uuml;ksus (unit) kommentaar"
-msgstr ""
-
-#: classes/applications/rostering/rostering_work_entry.aw:prop_unit_help
-msgid "Omaduse &Uuml;ksus (unit) help"
-msgstr ""
-
-#: classes/applications/rostering/rostering_work_entry.aw:prop_day
-msgid "Omaduse P&auml;ev (day) caption"
-msgstr ""
-
-#: classes/applications/rostering/rostering_work_entry.aw:prop_day_comment
-msgid "Omaduse P&auml;ev (day) kommentaar"
-msgstr ""
-
-#: classes/applications/rostering/rostering_work_entry.aw:prop_day_help
-msgid "Omaduse P&auml;ev (day) help"
-msgstr ""
-
 #: classes/applications/rostering/rostering_work_entry.aw:prop_g_wp
 msgid "Omaduse T&ouml;&ouml;laud (g_wp) caption"
 msgstr ""
@@ -59,6 +35,18 @@ msgstr ""
 
 #: classes/applications/rostering/rostering_work_entry.aw:prop_g_wp_help
 msgid "Omaduse T&ouml;&ouml;laud (g_wp) help"
+msgstr ""
+
+#: classes/applications/rostering/rostering_work_entry.aw:prop_entry_header
+msgid "Omaduse  (entry_header) caption"
+msgstr ""
+
+#: classes/applications/rostering/rostering_work_entry.aw:prop_entry_header_comment
+msgid "Omaduse  (entry_header) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/rostering_work_entry.aw:prop_entry_header_help
+msgid "Omaduse  (entry_header) help"
 msgstr ""
 
 #: classes/applications/rostering/rostering_work_entry.aw:prop_entry_t
@@ -89,49 +77,51 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;laud (RELTYPE_WORKBENCH) tekst"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:74
-#: classes/applications/rostering/rostering_work_entry.aw:91
-#: classes/applications/rostering/rostering_work_entry.aw:265
-#: classes/applications/rostering/rostering_work_entry.aw:280
-msgid "--vali--"
-msgstr ""
-
-#: classes/applications/rostering/rostering_work_entry.aw:144
+#: classes/applications/rostering/rostering_work_entry.aw:105
 msgid "Planeeritud"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:150
+#: classes/applications/rostering/rostering_work_entry.aw:111
 msgid "T&ouml;&ouml;post"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:156
+#: classes/applications/rostering/rostering_work_entry.aw:117
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:162
+#: classes/applications/rostering/rostering_work_entry.aw:123
+msgid "P&auml;devus"
+msgstr ""
+
+#: classes/applications/rostering/rostering_work_entry.aw:129
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:169
+#: classes/applications/rostering/rostering_work_entry.aw:136
 msgid "Tegelik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:175
+#: classes/applications/rostering/rostering_work_entry.aw:142
 msgid "Graafik korrektne"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:181
+#: classes/applications/rostering/rostering_work_entry.aw:148
 msgid "T&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:187
+#: classes/applications/rostering/rostering_work_entry.aw:154
 msgid "Alates"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:193
+#: classes/applications/rostering/rostering_work_entry.aw:160
 msgid "Kuni"
 msgstr ""
 
-#: classes/applications/rostering/rostering_work_entry.aw:199
+#: classes/applications/rostering/rostering_work_entry.aw:166
 msgid "Tasu liik"
+msgstr ""
+
+#: classes/applications/rostering/rostering_work_entry.aw:231
+#: classes/applications/rostering/rostering_work_entry.aw:246
+msgid "--vali--"
 msgstr ""

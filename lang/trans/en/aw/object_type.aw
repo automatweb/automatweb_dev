@@ -1,5 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Objektitüüp (type) caption"] = "Object type";
 $GLOBALS["TRANS"]["Omaduse Kasuta seadete vormi (use_cfgform) caption"] = "Use configuration form";
 $GLOBALS["TRANS"]["Omaduse Klassi konfiguratsioon (configuration) caption"] = "Class configuration";
 $GLOBALS["TRANS"]["Omaduse Vaikimisi objekt (default_object) caption"] = "Default object";
@@ -13,6 +12,5 @@ $GLOBALS["TRANS"]["select"] = "select";
 $GLOBALS["TRANS"]["checkboxid"] = "checkboxes";
 $GLOBALS["TRANS"]["radiobuttons"] = "radiobuttons";
 $GLOBALS["TRANS"]["Oks"] = "Branch";
-$GLOBALS["TRANS"]["Tüüp"] = "Type";
 $GLOBALS["TRANS"]["K&otilde;ik"] = "All";
 ?>

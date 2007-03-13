@@ -13,26 +13,26 @@ msgstr ""
 msgid "0"
 msgstr "0"
 
-#: classes/users_user.aw:125
+#: classes/users_user.aw:131
 msgid "uid is empty!"
 msgstr "uid is empty!"
 
-#: classes/users_user.aw:133
+#: classes/users_user.aw:139
 msgid "oid for uid is empty uid = '%s'!"
 msgstr "oid for uid is empty uid = '%s'!"
 
-#: classes/users_user.aw:141
+#: classes/users_user.aw:147
 msgid "user object is not user object!!!! %s clid = %s"
 msgstr "user object is not user object!!!! %s clid = %s"
 
-#: classes/users_user.aw:149
+#: classes/users_user.aw:155
 msgid "user object is of wrong type! %s props = %s"
 msgstr "user object is of wrong type! %s props = %s"
 
-#: classes/users_user.aw:184
+#: classes/users_user.aw:190
 msgid "1"
 msgstr "1"
 
-#: classes/users_user.aw:993
+#: classes/users_user.aw:999
 msgid "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"
 msgstr "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"

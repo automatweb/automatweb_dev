@@ -61,6 +61,18 @@ msgstr ""
 msgid "Omaduse Stsenaarium (g_scenario) help"
 msgstr ""
 
+#: classes/applications/rostering/rostering_schedule.aw:prop_g_unit
+msgid "Omaduse &Uuml;ksus (g_unit) caption"
+msgstr ""
+
+#: classes/applications/rostering/rostering_schedule.aw:prop_g_unit_comment
+msgid "Omaduse &Uuml;ksus (g_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/rostering_schedule.aw:prop_g_unit_help
+msgid "Omaduse &Uuml;ksus (g_unit) help"
+msgstr ""
+
 #: classes/applications/rostering/rostering_schedule.aw:prop_g_wp
 msgid "Omaduse T&ouml;&ouml;laud (g_wp) caption"
 msgstr ""
@@ -281,99 +293,103 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;laud (RELTYPE_WORKBENCH) tekst"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:298
+#: classes/applications/rostering/rostering_schedule.aw:rel_RELTYPE_UNIT
+msgid "Seose &Uuml;ksus (RELTYPE_UNIT) tekst"
+msgstr ""
+
+#: classes/applications/rostering/rostering_schedule.aw:304
 msgid "T&ouml;&ouml;post"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:387
+#: classes/applications/rostering/rostering_schedule.aw:393
 msgid "Planeerimata : %s - %s"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:532
+#: classes/applications/rostering/rostering_schedule.aw:538
 msgid "<<"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:533
+#: classes/applications/rostering/rostering_schedule.aw:539
 msgid "5 tagasi"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:537
+#: classes/applications/rostering/rostering_schedule.aw:543
 msgid "Eelmine"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:541
+#: classes/applications/rostering/rostering_schedule.aw:547
 msgid "Täna"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:545
+#: classes/applications/rostering/rostering_schedule.aw:551
 msgid "Järgmine"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:549
+#: classes/applications/rostering/rostering_schedule.aw:555
 msgid ">>"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:550
+#: classes/applications/rostering/rostering_schedule.aw:556
 msgid "5 edasi"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:554
+#: classes/applications/rostering/rostering_schedule.aw:560
 msgid "&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:560
+#: classes/applications/rostering/rostering_schedule.aw:566
 msgid "Kaota valik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:564
+#: classes/applications/rostering/rostering_schedule.aw:570
 msgid " &nbsp;&nbsp;Valitud projekt: "
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:569
+#: classes/applications/rostering/rostering_schedule.aw:575
 msgid "Kuuvaade"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:590
+#: classes/applications/rostering/rostering_schedule.aw:596
 msgid "Vali t&ouml;&ouml;taja: <br>"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:603
+#: classes/applications/rostering/rostering_schedule.aw:609
 msgid "Vali uus t&ouml;&ouml;aeg: <br>"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:604
+#: classes/applications/rostering/rostering_schedule.aw:610
 msgid "Alates:<br> "
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:608
+#: classes/applications/rostering/rostering_schedule.aw:614
 msgid "Kuni:<br> "
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:612
+#: classes/applications/rostering/rostering_schedule.aw:618
 msgid "K&auml;sitsi m&auml;&auml;ratud:<br> "
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:632
+#: classes/applications/rostering/rostering_schedule.aw:655
 msgid "T&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:675
+#: classes/applications/rostering/rostering_schedule.aw:698
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:753
+#: classes/applications/rostering/rostering_schedule.aw:776
 msgid "Vahetus"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:821
-#: classes/applications/rostering/rostering_schedule.aw:880
+#: classes/applications/rostering/rostering_schedule.aw:844
+#: classes/applications/rostering/rostering_schedule.aw:903
 msgid "Puudu inimene"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:950
+#: classes/applications/rostering/rostering_schedule.aw:983
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_schedule.aw:956
+#: classes/applications/rostering/rostering_schedule.aw:989
 msgid "P&auml;devused"
 msgstr ""

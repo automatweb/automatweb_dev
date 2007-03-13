@@ -469,13 +469,29 @@ msgstr ""
 msgid "Seose Tasu liik (RELTYPE_PAYMENT_TYPE) tekst"
 msgstr ""
 
+#: classes/applications/rostering/rostering_workbench.aw:layout_contacts_edit_tree
+msgid "Kujundusosa Struktuur (contacts_edit_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:layout_sk_tree
+msgid "Kujundusosa Pädevuste puu (sk_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:layout_skl_tree
+msgid "Kujundusosa Organisatsiooni struktuur (skl_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:layout_graph_tree
+msgid "Kujundusosa Graafikud (graph_tree) pealkiri"
+msgstr ""
+
 #: classes/applications/rostering/rostering_workbench.aw:402
 #: classes/applications/rostering/rostering_workbench.aw:459
-#: classes/applications/rostering/rostering_workbench.aw:509
-#: classes/applications/rostering/rostering_workbench.aw:580
-#: classes/applications/rostering/rostering_workbench.aw:662
-#: classes/applications/rostering/rostering_workbench.aw:968
-#: classes/applications/rostering/rostering_workbench.aw:1038
+#: classes/applications/rostering/rostering_workbench.aw:544
+#: classes/applications/rostering/rostering_workbench.aw:615
+#: classes/applications/rostering/rostering_workbench.aw:704
+#: classes/applications/rostering/rostering_workbench.aw:1044
+#: classes/applications/rostering/rostering_workbench.aw:1120
 msgid "Lisa"
 msgstr ""
 
@@ -499,105 +515,149 @@ msgstr ""
 msgid "Stsenaarium"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:515
+#: classes/applications/rostering/rostering_workbench.aw:479
+msgid "Ts&uuml;klid"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:485
+msgid "T&ouml;&ouml;tunde n&auml;dalas"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:491
+msgid "&Auml;ra planeeri &ouml;&ouml;seks"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:497
+msgid "Maksimaalne &uuml;letundide arv"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:503
+msgid "Vabu p&auml;evi peale &ouml;&ouml;t&ouml;&ouml;d"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:526
+msgid "X"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:550
 msgid "Kustuta t&ouml;&ouml;kohad"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:523
+#: classes/applications/rostering/rostering_workbench.aw:558
 msgid "T&ouml;&ouml;koht"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:529
-#: classes/applications/rostering/rostering_workbench.aw:841
-#: classes/applications/rostering/rostering_workbench.aw:873
+#: classes/applications/rostering/rostering_workbench.aw:564
+#: classes/applications/rostering/rostering_workbench.aw:883
+#: classes/applications/rostering/rostering_workbench.aw:915
 msgid "P&auml;devused"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:535
+#: classes/applications/rostering/rostering_workbench.aw:570
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:541
+#: classes/applications/rostering/rostering_workbench.aw:576
 msgid "Mitu t&ouml;&ouml;tajat"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:586
+#: classes/applications/rostering/rostering_workbench.aw:621
 msgid "Kustuta vahetused"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:594
+#: classes/applications/rostering/rostering_workbench.aw:629
 msgid "Vahetus"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:600
+#: classes/applications/rostering/rostering_workbench.aw:635
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:641
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:606
+#: classes/applications/rostering/rostering_workbench.aw:647
+#: classes/applications/rostering/rostering_workbench.aw:977
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:612
+#: classes/applications/rostering/rostering_workbench.aw:653
+#: classes/applications/rostering/rostering_workbench.aw:985
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:668
+#: classes/applications/rostering/rostering_workbench.aw:710
 msgid "Kustuta p&auml;devused"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:676
+#: classes/applications/rostering/rostering_workbench.aw:718
 msgid "P&auml;devus"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:710
+#: classes/applications/rostering/rostering_workbench.aw:752
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:760
+#: classes/applications/rostering/rostering_workbench.aw:802
+#: classes/applications/rostering/rostering_workbench.aw:971
 msgid "&Uuml;ksus"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:766
+#: classes/applications/rostering/rostering_workbench.aw:808
 msgid "&Uuml;letunde"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:817
+#: classes/applications/rostering/rostering_workbench.aw:859
 msgid "<font color=red>Kriitiline</font>"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:835
-#: classes/applications/rostering/rostering_workbench.aw:992
+#: classes/applications/rostering/rostering_workbench.aw:877
+#: classes/applications/rostering/rostering_workbench.aw:1068
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:917
+#: classes/applications/rostering/rostering_workbench.aw:959
 msgid "Graafiku nimi"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:949
+#: classes/applications/rostering/rostering_workbench.aw:965
+msgid "Koostaja"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:993
+msgid "Kinnitatud"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:1025
 msgid "%s graafikud"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:972
+#: classes/applications/rostering/rostering_workbench.aw:1048
 msgid "Kaust"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:977
+#: classes/applications/rostering/rostering_workbench.aw:1053
+#: classes/applications/rostering/rostering_workbench.aw:1089
 msgid "Graafik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:984
+#: classes/applications/rostering/rostering_workbench.aw:1060
 msgid "Kustuta graafikud"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:998
+#: classes/applications/rostering/rostering_workbench.aw:1074
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:1004
+#: classes/applications/rostering/rostering_workbench.aw:1080
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workbench.aw:1044
+#: classes/applications/rostering/rostering_workbench.aw:1170
 msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workbench.aw:1208
+msgid "Graafiku %s t&ouml;&ouml;aruanne"
 msgstr ""

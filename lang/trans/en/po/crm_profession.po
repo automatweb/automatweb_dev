@@ -79,6 +79,18 @@ msgstr ""
 msgid "Omaduse Nimi mitmuses (name_in_plural) help"
 msgstr ""
 
+#: classes/crm/crm_profession.aw:prop_skills
+msgid "Omaduse P&auml;devused (skills) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_skills_comment
+msgid "Omaduse P&auml;devused (skills) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_skills_help
+msgid "Omaduse P&auml;devused (skills) help"
+msgstr ""
+
 # classes/crm/crm_profession.aw:prop_trans
 #: classes/crm/crm_profession.aw:prop_trans
 msgid "Omaduse Tõlkimine (trans) caption"
@@ -115,6 +127,10 @@ msgstr "Group"
 #: classes/crm/crm_profession.aw:rel_RELTYPE_DESC_FILE
 msgid "Seose Ametijuhend (RELTYPE_DESC_FILE) tekst"
 msgstr "Job description"
+
+#: classes/crm/crm_profession.aw:rel_RELTYPE_SKILL
+msgid "Seose Oskus (RELTYPE_SKILL) tekst"
+msgstr ""
 
 #~ msgid "Grupi Üldine (general) pealkiri"
 #~ msgstr "General"

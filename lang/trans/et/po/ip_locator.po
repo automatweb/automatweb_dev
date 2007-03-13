@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/util/ip_locator/ip_locator.aw:class_1177_help
 msgid "Klassi IP lokaator help"
 msgstr ""
@@ -95,7 +94,7 @@ msgid "Grupi Otsing (search) help"
 msgstr ""
 
 #: classes/core/util/ip_locator/ip_locator.aw:59
-msgid "Faili viimate muudetud: "
+msgid "Faili viimati muudetud: "
 msgstr ""
 
 #: classes/core/util/ip_locator/ip_locator.aw:64
@@ -121,4 +120,3 @@ msgstr ""
 #: classes/core/util/ip_locator/ip_locator.aw:108
 msgid "Vastavalt ISO 3166 standardile"
 msgstr ""
-

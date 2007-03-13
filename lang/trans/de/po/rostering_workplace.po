@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/rostering/rostering_workplace.aw:class_1142_help
 msgid "Klassi T&ouml;&ouml;koht help"
 msgstr ""
@@ -24,6 +23,18 @@ msgstr ""
 
 #: classes/applications/rostering/rostering_workplace.aw:prop_skills_help
 msgid "Omaduse P&auml;devused (skills) help"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workplace.aw:prop_professions
+msgid "Omaduse Ametinimetused (professions) caption"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workplace.aw:prop_professions_comment
+msgid "Omaduse Ametinimetused (professions) kommentaar"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workplace.aw:prop_professions_help
+msgid "Omaduse Ametinimetused (professions) help"
 msgstr ""
 
 #: classes/applications/rostering/rostering_workplace.aw:prop_address
@@ -78,11 +89,14 @@ msgstr ""
 msgid "Seose Aadress (RELTYPE_ADDRESS) tekst"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workplace.aw:97
+#: classes/applications/rostering/rostering_workplace.aw:rel_RELTYPE_PROFESSION
+msgid "Seose Ametinimetus (RELTYPE_PROFESSION) tekst"
+msgstr ""
+
+#: classes/applications/rostering/rostering_workplace.aw:103
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/rostering/rostering_workplace.aw:102
+#: classes/applications/rostering/rostering_workplace.aw:108
 msgid "T&ouml;&ouml;ajad"
 msgstr ""
-

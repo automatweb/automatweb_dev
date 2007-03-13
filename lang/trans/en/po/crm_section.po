@@ -13,28 +13,30 @@ msgstr ""
 msgid "Klassi &Uuml;ksus help"
 msgstr ""
 
+# classes/crm/crm_section.aw:prop_jrk
 #: classes/crm/crm_section.aw:prop_jrk
-msgid "Omaduse J&auml;rk (jrk) caption"
-msgstr ""
+msgid "Omaduse Järk (jrk) caption"
+msgstr "Rank"
 
 #: classes/crm/crm_section.aw:prop_jrk_comment
-msgid "Omaduse J&auml;rk (jrk) kommentaar"
+msgid "Omaduse Järk (jrk) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_section.aw:prop_jrk_help
-msgid "Omaduse J&auml;rk (jrk) help"
+msgid "Omaduse Järk (jrk) help"
 msgstr ""
 
+# classes/crm/crm_section.aw:prop_ext_id
 #: classes/crm/crm_section.aw:prop_ext_id
-msgid "Omaduse Siduss&uuml;steemi ID (ext_id) caption"
-msgstr ""
+msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
+msgstr "External ID"
 
 #: classes/crm/crm_section.aw:prop_ext_id_comment
-msgid "Omaduse Siduss&uuml;steemi ID (ext_id) kommentaar"
+msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_section.aw:prop_ext_id_help
-msgid "Omaduse Siduss&uuml;steemi ID (ext_id) help"
+msgid "Omaduse Sidussüsteemi ID (ext_id) help"
 msgstr ""
 
 # classes/crm/crm_section.aw:prop_grp_crea
@@ -69,42 +71,32 @@ msgstr ""
 
 # classes/crm/crm_section.aw:prop_has_group_subs
 #: classes/crm/crm_section.aw:prop_has_group_subs
-msgid ""
-"Omaduse Kas tehakse kasutajagrupp alamsektsioonidele (has_group_subs) caption"
+msgid "Omaduse Kas tehakse kasutajagrupp alamsektsioonidele (has_group_subs) caption"
 msgstr "Create groups for subsections"
 
 # classes/crm/crm_section.aw:prop_has_group_subs_comment
 #: classes/crm/crm_section.aw:prop_has_group_subs_comment
-msgid ""
-"Omaduse Kas tehakse kasutajagrupp alamsektsioonidele (has_group_subs) "
-"kommentaar"
+msgid "Omaduse Kas tehakse kasutajagrupp alamsektsioonidele (has_group_subs) kommentaar"
 msgstr ""
 
 # classes/crm/crm_section.aw:prop_has_group_subs_help
 #: classes/crm/crm_section.aw:prop_has_group_subs_help
-msgid ""
-"Omaduse Kas tehakse kasutajagrupp alamsektsioonidele (has_group_subs) help"
+msgid "Omaduse Kas tehakse kasutajagrupp alamsektsioonidele (has_group_subs) help"
 msgstr ""
 
 # classes/crm/crm_section.aw:prop_has_group_subs_prof
 #: classes/crm/crm_section.aw:prop_has_group_subs_prof
-msgid ""
-"Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_prof) "
-"caption"
+msgid "Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_prof) caption"
 msgstr "Create groups for subprofessions"
 
 # classes/crm/crm_section.aw:prop_has_group_subs_prof_comment
 #: classes/crm/crm_section.aw:prop_has_group_subs_prof_comment
-msgid ""
-"Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_prof) "
-"kommentaar"
+msgid "Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_prof) kommentaar"
 msgstr ""
 
 # classes/crm/crm_section.aw:prop_has_group_subs_prof_help
 #: classes/crm/crm_section.aw:prop_has_group_subs_prof_help
-msgid ""
-"Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_prof) "
-"help"
+msgid "Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_prof) help"
 msgstr ""
 
 #: classes/crm/crm_section.aw:prop_link_document
@@ -167,6 +159,26 @@ msgstr ""
 msgid "Omaduse E-posti aadress (email_id) help"
 msgstr ""
 
+#: classes/crm/crm_section.aw:prop_wpls
+msgid "Omaduse T&ouml;&ouml;kohad (wpls) caption"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_wpls_comment
+msgid "Omaduse T&ouml;&ouml;kohad (wpls) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_section.aw:prop_wpls_help
+msgid "Omaduse T&ouml;&ouml;kohad (wpls) help"
+msgstr ""
+
+#: classes/crm/crm_section.aw:group_wpls
+msgid "Grupi T&ouml;&ouml;kohad (wpls) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_section.aw:group_wpls_help
+msgid "Grupi T&ouml;&ouml;kohad (wpls) help"
+msgstr ""
+
 #: classes/crm/crm_section.aw:group_Kontaktid
 msgid "Grupi Kontaktid (Kontaktid) pealkiri"
 msgstr ""
@@ -175,9 +187,10 @@ msgstr ""
 msgid "Grupi Kontaktid (Kontaktid) help"
 msgstr ""
 
+# classes/crm/crm_section.aw:rel_RELTYPE_SECTION
 #: classes/crm/crm_section.aw:rel_RELTYPE_SECTION
-msgid "Seose Alam&amp;uuml;ksus (RELTYPE_SECTION) tekst"
-msgstr ""
+msgid "Seose Alamüksus (RELTYPE_SECTION) tekst"
+msgstr "Subsection"
 
 # classes/crm/crm_section.aw:rel_RELTYPE_WORKERS
 #: classes/crm/crm_section.aw:rel_RELTYPE_WORKERS
@@ -189,9 +202,10 @@ msgstr "Employee"
 msgid "Seose Roll (RELTYPE_PROFESSIONS) tekst"
 msgstr "Role"
 
+# classes/crm/crm_section.aw:rel_RELTYPE_JOB_OFFER
 #: classes/crm/crm_section.aw:rel_RELTYPE_JOB_OFFER
-msgid "Seose T&amp;ouml;&amp;ouml;pakkumine (RELTYPE_JOB_OFFER) tekst"
-msgstr ""
+msgid "Seose Tööpakkumine (RELTYPE_JOB_OFFER) tekst"
+msgstr "Job offer"
 
 # classes/crm/crm_section.aw:rel_RELTYPE_GROUP
 #: classes/crm/crm_section.aw:rel_RELTYPE_GROUP
@@ -218,24 +232,12 @@ msgstr ""
 msgid "Seose Dokument (RELTYPE_LINK_DOCUMENT) tekst"
 msgstr ""
 
-# classes/crm/crm_section.aw:prop_jrk
-#~ msgid "Omaduse Järk (jrk) caption"
-#~ msgstr "Rank"
-
-# classes/crm/crm_section.aw:prop_ext_id
-#~ msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
-#~ msgstr "External ID"
+#: classes/crm/crm_section.aw:rel_RELTYPE_WORKPLACE
+msgid "Seose T&ouml;&ouml;koht (RELTYPE_WORKPLACE) tekst"
+msgstr ""
 
 #~ msgid "Seose Alam&uuml;ksus (RELTYPE_SECTION) tekst"
 #~ msgstr "Subsection"
 
 #~ msgid "Seose T&ouml;&ouml;pakkumine (RELTYPE_JOB_OFFER) tekst"
-#~ msgstr "Job offer"
-
-# classes/crm/crm_section.aw:rel_RELTYPE_SECTION
-#~ msgid "Seose Alamüksus (RELTYPE_SECTION) tekst"
-#~ msgstr "Subsection"
-
-# classes/crm/crm_section.aw:rel_RELTYPE_JOB_OFFER
-#~ msgid "Seose Tööpakkumine (RELTYPE_JOB_OFFER) tekst"
 #~ msgstr "Job offer"

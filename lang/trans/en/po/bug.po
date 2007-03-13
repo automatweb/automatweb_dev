@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Staatus (bug_status) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_feedback_p
+msgid "Omaduse Tagasiside kellelt (bug_feedback_p) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_feedback_p_comment
+msgid "Omaduse Tagasiside kellelt (bug_feedback_p) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_feedback_p_help
+msgid "Omaduse Tagasiside kellelt (bug_feedback_p) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_priority
 msgid "Omaduse Prioriteet (bug_priority) caption"
 msgstr ""
@@ -72,18 +84,6 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_who_help
 msgid "Omaduse Kellele (who) help"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail
-msgid "Omaduse Bugmail CC (bug_mail) caption"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail_comment
-msgid "Omaduse Bugmail CC (bug_mail) kommentaar"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail_help
-msgid "Omaduse Bugmail CC (bug_mail) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_type
@@ -365,16 +365,16 @@ msgstr ""
 msgid "Omaduse Eeldusbugid (bug_predicates) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_feedback_p
-msgid "Omaduse Tagasiside kellelt (bug_feedback_p) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail
+msgid "Omaduse Bugmail CC (bug_mail) caption"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_feedback_p_comment
-msgid "Omaduse Tagasiside kellelt (bug_feedback_p) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail_comment
+msgid "Omaduse Bugmail CC (bug_mail) kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_feedback_p_help
-msgid "Omaduse Tagasiside kellelt (bug_feedback_p) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail_help
+msgid "Omaduse Bugmail CC (bug_mail) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_team
@@ -633,190 +633,194 @@ msgstr ""
 msgid "Kujundusosa Andmed (data_r_bot) pealkiri"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:253
+#: classes/applications/bug_o_matic_3000/bug.aw:254
 msgid "Lahtine"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:254
+#: classes/applications/bug_o_matic_3000/bug.aw:255
 msgid "Tegemisel"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:255
+#: classes/applications/bug_o_matic_3000/bug.aw:256
 msgid "Valmis"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:256
+#: classes/applications/bug_o_matic_3000/bug.aw:257
 msgid "Testitud"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:257
+#: classes/applications/bug_o_matic_3000/bug.aw:258
 msgid "Suletud"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:258
+#: classes/applications/bug_o_matic_3000/bug.aw:259
 msgid "Vale teade"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:259
+#: classes/applications/bug_o_matic_3000/bug.aw:260
 msgid "Kordamatu"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:260
+#: classes/applications/bug_o_matic_3000/bug.aw:261
 msgid "Parandamatu"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:261
+#: classes/applications/bug_o_matic_3000/bug.aw:262
 msgid "Ei paranda"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:262
+#: classes/applications/bug_o_matic_3000/bug.aw:263
 msgid "Vajab tagasisidet"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:263
+#: classes/applications/bug_o_matic_3000/bug.aw:264
 msgid "Fatal error"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:267
+#: classes/applications/bug_o_matic_3000/bug.aw:268
 msgid "Esmakordne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:268
+#: classes/applications/bug_o_matic_3000/bug.aw:269
 msgid "Korduv"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:272
+#: classes/applications/bug_o_matic_3000/bug.aw:273
 msgid "&Uuml;ksikjuht"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:273
+#: classes/applications/bug_o_matic_3000/bug.aw:274
 msgid "Puudutab suurt osa"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:274
+#: classes/applications/bug_o_matic_3000/bug.aw:275
 msgid "Puudutab k&otilde;iki"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:347
-#: classes/applications/bug_o_matic_3000/bug.aw:399
-#: classes/applications/bug_o_matic_3000/bug.aw:424
-#: classes/applications/bug_o_matic_3000/bug.aw:532
-#: classes/applications/bug_o_matic_3000/bug.aw:576
-#: classes/applications/bug_o_matic_3000/bug.aw:609
-#: classes/applications/bug_o_matic_3000/bug.aw:628
-#: classes/applications/bug_o_matic_3000/bug.aw:1479
-#: classes/applications/bug_o_matic_3000/bug.aw:1507
-#: classes/applications/bug_o_matic_3000/bug.aw:1530
-#: classes/applications/bug_o_matic_3000/bug.aw:1573
+#: classes/applications/bug_o_matic_3000/bug.aw:346
+#: classes/applications/bug_o_matic_3000/bug.aw:391
+#: classes/applications/bug_o_matic_3000/bug.aw:416
+#: classes/applications/bug_o_matic_3000/bug.aw:531
+#: classes/applications/bug_o_matic_3000/bug.aw:587
+#: classes/applications/bug_o_matic_3000/bug.aw:620
+#: classes/applications/bug_o_matic_3000/bug.aw:639
+#: classes/applications/bug_o_matic_3000/bug.aw:1515
+#: classes/applications/bug_o_matic_3000/bug.aw:1543
+#: classes/applications/bug_o_matic_3000/bug.aw:1566
+#: classes/applications/bug_o_matic_3000/bug.aw:1609
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:441
+#: classes/applications/bug_o_matic_3000/bug.aw:433
 msgid "Looja: %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:457
+#: classes/applications/bug_o_matic_3000/bug.aw:449
 msgid "Link"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:460
+#: classes/applications/bug_o_matic_3000/bug.aw:452
 msgid "Vaade avatud: %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:668
-#: classes/applications/bug_o_matic_3000/bug.aw:948
+#: classes/applications/bug_o_matic_3000/bug.aw:679
+#: classes/applications/bug_o_matic_3000/bug.aw:984
 msgid "Bug"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:671
+#: classes/applications/bug_o_matic_3000/bug.aw:682
 msgid "Stopper"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:704
+#: classes/applications/bug_o_matic_3000/bug.aw:715
 msgid "Kellele ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:721
+#: classes/applications/bug_o_matic_3000/bug.aw:732
 msgid "T&auml;htaeg ei tohi olla minevikus!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:759
+#: classes/applications/bug_o_matic_3000/bug.aw:770
 msgid "Selliste parameetritega ei saa salvestada, kuna see l&uuml;kkaks j&auml;rgnevad bugid &uuml;le t&auml;htaja: %s!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:765
+#: classes/applications/bug_o_matic_3000/bug.aw:776
 msgid "Bugi ei ole v&otilde;imalik valmis saada enne %s!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:780
+#: classes/applications/bug_o_matic_3000/bug.aw:791
 msgid "Eeldusbugid muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:802
-msgid "Puuduvad õigused bugi sulgeda!"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug.aw:808
+#: classes/applications/bug_o_matic_3000/bug.aw:820
 msgid "Staatus muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:817
+#: classes/applications/bug_o_matic_3000/bug.aw:828
 msgid "Prioriteet muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:826
+#: classes/applications/bug_o_matic_3000/bug.aw:837
 msgid "Tegelik tundide arv muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:835
+#: classes/applications/bug_o_matic_3000/bug.aw:846
 msgid "Prognoositud tundide arv muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:850
+#: classes/applications/bug_o_matic_3000/bug.aw:861
 msgid "Kellele muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:862
+#: classes/applications/bug_o_matic_3000/bug.aw:873
 msgid "Klass muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:949
+#: classes/applications/bug_o_matic_3000/bug.aw:899
+msgid "Tagaiside kellelt muudeti %s => %s"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:985
 msgid "Summary"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:950
+#: classes/applications/bug_o_matic_3000/bug.aw:986
 msgid "URL"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:999
-#: classes/applications/bug_o_matic_3000/bug.aw:1222
+#: classes/applications/bug_o_matic_3000/bug.aw:1035
+#: classes/applications/bug_o_matic_3000/bug.aw:1258
 msgid ""
 "\n"
 "Tegelik tundide arv muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1175
+#: classes/applications/bug_o_matic_3000/bug.aw:1211
 msgid "Failid: "
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1176
+#: classes/applications/bug_o_matic_3000/bug.aw:1212
 msgid "Aeg:"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1255
+#: classes/applications/bug_o_matic_3000/bug.aw:1291
 msgid "Added comment to bug %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1345
+#: classes/applications/bug_o_matic_3000/bug.aw:1381
 msgid "Uus arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1350
+#: classes/applications/bug_o_matic_3000/bug.aw:1386
 msgid "Samale tasemele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1356
+#: classes/applications/bug_o_matic_3000/bug.aw:1392
 msgid "Sisse"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:1634
+msgid "Puuduvad õigused bugi sulgeda!"
 msgstr ""
 
 #~ msgid "Omaduse Lühikirjeldus (name) caption"
