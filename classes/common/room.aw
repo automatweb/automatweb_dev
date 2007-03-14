@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.180 2007/03/14 17:54:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.181 2007/03/14 18:25:58 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -226,6 +226,9 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 @groupinfo open_hrs caption="Avamisajad"
 @default group=open_hrs
 
+@groupinfo open_hrs_sub caption="Avamisajad" parent=open_hrs
+@default group=open_hrs_sub
+
 	@property oh_tb type=toolbar no_caption=1 store=no
 
 	@layout oh type=vbox closeable=1 area_caption=Avamisajad
@@ -241,6 +244,12 @@ valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seond
 
 	property pauses type=releditor reltype=RELTYPE_PAUSES rel_id=first use_form=emb store=no
 	caption Pausid
+
+@groupinfo people caption="Inimeste t&ouml;&ouml;ajad" parent=open_hrs
+@default group=people
+
+@property people type=text submit=no no_caption=1
+
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
@@ -366,6 +375,17 @@ class room extends class_base
 			//-- get_property --//
 			
 			# TAB PRICE
+			case 'people':
+				$month = $_GET["month"];
+				if(!$month)
+				{
+					$month = 0;	
+				}
+				$prop["value"]= $this->up_link($month);
+				$arr["month"] = $month;
+				$prop["value"].= $this->get_people_table($arr);
+				break;
+			
 			case "price":
 				$prop["options"] = array(
 					1 => t("Inimese kohta"),
@@ -537,6 +557,28 @@ class room extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case 'people':
+				$wd = $arr['obj_inst']->meta("working_days");
+				foreach($arr["request"]["hidden_days"] as $p => $times)
+				{
+					foreach($times as $time => $val)
+					{
+						if($arr["request"]["working_days"][$p][$time])
+						{
+							$wd[$p][$time] = 1;
+						}
+						else
+						{
+							if($wd[$p][$time])
+							{
+								unset($wd[$p][$time]);
+							}
+						}
+					}
+				}
+				
+				$arr['obj_inst']->set_meta('working_days',$wd);
+				break;
 			case "products_find_product_name":
 				
 				if($arr["request"]["sel_imp"]);
@@ -2060,10 +2102,12 @@ class room extends class_base
 		{
 			$t->set_lower_titlebar_display(true);
 		}
+		
 		if(!$arr["web"])
 		{
-			$t->define_data($this->get_day_workers_row());
+			$t->define_data($this->get_day_workers_row($arr["obj_inst"]));
 		}
+
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
 		$arr["settings"] = $settings;
@@ -2073,17 +2117,16 @@ class room extends class_base
 		$t->set_caption(t("Broneerimine").$popup_menu);
 	}
 	
-	function get_day_workers_row()
+	function get_day_workers_row($o)
 	{
 		$open_inst = get_instance(CL_OPENHOURS);
 		$res = array();
 		$x = 0;
-		$o = reset($this->openhours);
 		$time = $this->start;
 		$res["time"] = t("t&ouml;&ouml;tajad:");
 		while($x < $this->len)
 		{
-			$workers = $open_inst->get_day_workers($o , $time);
+			$workers = $this->get_day_workers($o , $time);
 			foreach($workers->arr() as $worker)
 			{
 				$res["d".$x].= $worker->name()."<br>\n";
@@ -5054,6 +5097,107 @@ class room extends class_base
 			$room = obj($room->prop("inherit_prods_from"));
 		}
 		return $room->meta("prod_data");
-	}		
+	}
+	
+	function get_people_for_oh($o)
+	{
+		if(!sizeof($o->prop("professions")))
+		{
+			return new object_list();
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"lang_id" => array(),
+			"CL_CRM_PERSON.RELTYPE_RANK" => $o->prop("professions"),
+		));
+		return $ol;
+	}
+	
+		
+	function get_people_table($arr)
+	{
+		$working_days = $arr["obj_inst"]->meta("working_days");
+		classload("vcl/table");
+		if($arr["month"])
+		{
+			$time = mktime(0,0,0,(date("m" , time()) +$arr["month"]) ,date("j" , time()), date("Y" , time()));
+		}
+		else
+		{
+			$time = time();
+		}
+		$t = new vcl_table;
+		$x = 1;
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$days = date("t" , $time);
+		while($x <= $days)
+		{
+			$t->define_field(array(
+				"name" => "d".$x,
+				"caption" => $x,
+			));
+			$x++;
+		}
+		$pl = $this->get_people_for_oh($arr["obj_inst"]);
+		foreach($pl->arr() as $po)
+		{
+			$data = array();
+			$data["name"] = $po->name();
+			$x = 1;
+			while($x <= $days)
+			{
+				$data["d".$x] = html::checkbox(array(
+					"name" => "working_days[".$po->id()."][".date("Y" , $time).date("m" , $time).$x."]",
+					"checked" =>  $working_days[$po->id()][date("Y" , $time).date("m" , $time).$x],
+				));
+				$data["d".$x].=html::hidden(array(
+					"name" => "hidden_days[".$po->id()."][".date("Y" , $time).date("m" , $time).$x."]",
+					"value" => 1,
+				));
+				$x++;
+			}
+			$t->define_data($data);
+		}
+		return $t->draw(); 
+	}
+
+	function up_link($month)
+	{
+	
+		$month_name = t(date("F" , mktime(0,0,0,(date("m" , time()) +$month) ,date("j" , time()), date("Y" , time()))));
+
+		$ret = html::href(array(
+			"caption" => "<< " . t("Eelmine"),
+			"url" => aw_url_change_var("month" , $month - 1)))." ".
+		$month_name." ".
+			html::href(array("caption" => t("J&auml;rgmine") . " >> " ,
+			"url" => aw_url_change_var("month" , $month + 1)));
+		return $ret;
+	}
+	
+	/**
+		@param o required type=object
+			oh object
+		@param time required type=int
+			day timestamp
+	**/
+	function get_day_workers($o , $time)
+	{
+		$working_days = $o->meta("working_days");
+		$res = new object_list();
+		foreach($working_days as $p => $val)
+		{
+			if(array_key_exists(date("Y" , $time).date("m" , $time).date("j" , $time) , $val))
+			{
+				$res->add($p);
+			}
+		}
+		return $res;
+	}
+
+	
 }
 ?>

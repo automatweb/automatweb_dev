@@ -573,7 +573,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>open_hrs</group>
+            <group>open_hrs_sub</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -583,7 +583,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>open_hrs</group>
+            <group>open_hrs_sub</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -594,11 +594,21 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>open_hrs</group>
+            <group>open_hrs_sub</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>ch</parent>
+      </property>
+      <property>
+            <name>people</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>people</group>
+            <type>text</type>
+            <submit>no</submit>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>transl</name>
@@ -653,6 +663,14 @@
             <open_hrs>
                   <caption>Avamisajad</caption>
             </open_hrs>
+            <open_hrs_sub>
+                  <caption>Avamisajad</caption>
+                  <parent>open_hrs</parent>
+            </open_hrs_sub>
+            <people>
+                  <caption>Inimeste t&amp;amp;ouml;&amp;amp;ouml;ajad</caption>
+                  <parent>open_hrs</parent>
+            </people>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -846,13 +864,13 @@
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Avamisajad</area_caption>
-                  <group>open_hrs</group>
+                  <group>open_hrs_sub</group>
             </oh>
             <ch>
                   <type>vbox</type>
                   <closeable>1</closeable>
                   <area_caption>Pausid</area_caption>
-                  <group>open_hrs</group>
+                  <group>open_hrs_sub</group>
             </ch>
       </layout>
 </properties>
