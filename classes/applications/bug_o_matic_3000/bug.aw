@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.78 2007/03/06 09:50:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.79 2007/03/14 10:13:48 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -832,6 +832,7 @@ class bug extends class_base
 				break;
 
 			case "num_hrs_real":
+				$prop["value"] = str_replace(",", ".", $prop["value"]);
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
 					$com = sprintf(t("Tegelik tundide arv muudeti %s => %s"), $old, $prop["value"]);
@@ -841,9 +842,19 @@ class bug extends class_base
 				break;
 
 			case "num_hrs_guess":
+				$prop["value"] = str_replace(",", ".", $prop["value"]);
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
 					$com = sprintf(t("Prognoositud tundide arv muudeti %s => %s"), $old, $prop["value"]);
+					$this->add_comments[] = $com;
+				}
+				break;
+
+			case "num_hrs_to_cust":
+				$prop["value"] = str_replace(",", ".", $prop["value"]);
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
+				{
+					$com = sprintf(t("Tundide kliendile arv muudeti %s => %s"), $old, $prop["value"]);
 					$this->add_comments[] = $com;
 				}
 				break;
