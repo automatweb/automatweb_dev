@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.82 2007/02/19 15:47:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.83 2007/03/14 15:19:56 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -670,6 +670,15 @@ class crm_meeting extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "end":
+				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($prop["value"]))
+				{
+					
+					$prop["value"] = $arr["request"]["start1"];
+					$arr["request"]["end"] = $arr["request"]["start1"];
+				}
+				break;
+		
 			case "add_clauses":
 				$arr["obj_inst"]->set_status($data["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
 				$arr["obj_inst"]->set_prop("is_done", $data["value"]["is_done"] ? 8 : 0);

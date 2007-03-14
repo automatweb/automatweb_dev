@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.165 2007/03/06 13:59:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.166 2007/03/14 15:20:42 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -551,6 +551,7 @@ class task extends class_base
 				break;
 				
 			case "end":
+				
 	//			$dayend = mktime($prop["value"]["hour"],$prop["value"]["minute"],0,$prop["value"]["month"],$prop["value"]["day"],$prop["value"]["year"]);
 				$daystart = mktime($arr["request"]["start1"]["hour"],$arr["request"]["start1"]["minute"],0,$arr["request"]["start1"]["month"],$arr["request"]["start1"]["day"],$arr["request"]["start1"]["year"]);
 				if($daystart > $data["value"]) $data["value"] = $daystart;
@@ -569,6 +570,7 @@ class task extends class_base
 				{
 					$data["value"] = time() + 900;
 				}
+				break;
 
 			case "start1":
 			case "deadline":
@@ -897,9 +899,15 @@ class task extends class_base
 			case "predicates":
 				return PROP_IGNORE;
 			case "end":
-				$dayend = mktime($prop["value"]["hour"],$prop["value"]["minute"],0,$prop["value"]["month"],$prop["value"]["day"],$prop["value"]["year"]);
-				$daystart = mktime($arr["request"]["start1"]["hour"],$arr["request"]["start1"]["minute"],0,$arr["request"]["start1"]["month"],$arr["request"]["start1"]["day"],$arr["request"]["start1"]["year"]);
-				if($daystart > $dayend) $prop["value"] = $daystart;
+//				$dayend = mktime($prop["value"]["hour"],$prop["value"]["minute"],0,$prop["value"]["month"],$prop["value"]["day"],$prop["value"]["year"]);
+//				$daystart = mktime($arr["request"]["start1"]["hour"],$arr["request"]["start1"]["minute"],0,$arr["request"]["start1"]["month"],$arr["request"]["start1"]["day"],$arr["request"]["start1"]["year"]);
+//				if($daystart > $dayend) $prop["value"] = $daystart;
+				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($prop["value"]))
+				{
+					
+					$prop["value"] = $arr["request"]["start1"];
+					$arr["request"]["end"] = $arr["request"]["start1"];
+				}
 				break;
 			case "add_clauses":
 				$arr["obj_inst"]->set_status($prop["value"]["status"] ? STAT_ACTIVE : STAT_NOTACTIVE);
@@ -1229,7 +1237,6 @@ class task extends class_base
 		{
 			$this->add_participant($arr["obj_inst"], get_current_person());
 		}
-
 		$pl = get_instance(CL_PLANNER);
 		$pl->post_submit_event($arr["obj_inst"]);
 	}

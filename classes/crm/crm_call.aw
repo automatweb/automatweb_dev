@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.59 2006/09/20 13:45:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.60 2007/03/14 15:19:56 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -553,6 +553,15 @@ class crm_call extends class_base
 			case "customer":
 			case "project":
 				return PROP_IGNORE;
+				
+			case "end":
+				if(date_edit::get_timestamp($arr["request"]["start1"]) > date_edit::get_timestamp($prop["value"]))
+				{
+					
+					$prop["value"] = $arr["request"]["start1"];
+					$arr["request"]["end"] = $arr["request"]["start1"];
+				}
+				break;
 		};
 		return $retval;
 	}
