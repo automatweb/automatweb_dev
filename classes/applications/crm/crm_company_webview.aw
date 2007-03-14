@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.19 2007/02/27 15:43:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.20 2007/03/14 14:02:51 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -415,7 +415,21 @@ class crm_company_webview extends class_base
 						$thing = $conn->to();
 						if ($this->can('view', $thing->id()))
 						{
-							$value[] = $thing->name();
+							if ($_GET["action"] == "show_co")
+							{
+								$value[] = html::href(array(
+									"caption" => $thing->name(),
+									"class" => "ccwSectLink",
+									"url" => $this->mk_my_orb("show_sect", array(
+										"section" => $thing->id(),
+										"wv" => $_GET["wv"]
+									), "crm_company_webview")
+								));
+							}
+							else
+							{
+								$value[] = $thing->name();
+							}
 						}
 					}
 				break;
@@ -1102,6 +1116,7 @@ class crm_company_webview extends class_base
 		{
 			$filt["sort_by"] = join(", ", $order);
 		}
+
 		$ol = new object_list($filt);
 		exit_function('crm_company_webview::list');
 		return $ol->arr();
@@ -1211,7 +1226,7 @@ class crm_company_webview extends class_base
 				{
 					$oid = $o->prop($mapped);
 				}
-				if (empty($mapped) || (is_oid($oid) && $o_item = obj($oid)) && (is_object($o_item) && is_numeric($o_item->id())))
+				if (empty($mapped) || ($this->can("view", $oid) && $o_item = obj($oid)) && (is_object($o_item) && is_oid($o_item->id())))
 				{
 					if ($item == 'email')
 					{
@@ -1445,7 +1460,6 @@ class crm_company_webview extends class_base
 		{
 			$tmpl = "default.tpl";
 		}
-		
 		$this->read_template($tmpl);
 
 		$ret = $this->_get_companies_list_html(array(
