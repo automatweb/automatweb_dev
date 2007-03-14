@@ -42,6 +42,13 @@
             <field>aw_sent_date</field>
             <caption>Saatmise kuup&amp;amp;auml;ev</caption>
       </property>
+      <property>
+            <name>modified</name>
+            <group>general</group>
+            <type>hidden</type>
+            <table>objects</table>
+            <field>modified</field>
+      </property>
       <classinfo>
             <syslog_type>ST_TRADEMARK_STATUS</syslog_type>
             <relationmgr>yes</relationmgr>

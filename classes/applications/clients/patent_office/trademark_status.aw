@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.4 2007/02/09 13:57:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_status.aw,v 1.5 2007/03/14 12:33:46 markop Exp $
 // trademark_status.aw - Trademark status 
 /*
 
@@ -22,6 +22,8 @@
 
 	@property sent_date type=date_select table=aw_trademark_status field=aw_sent_date
 	@caption Saatmise kuup&auml;ev
+
+	@property modified type=hidden table=objects field=modified
 
 */
 
