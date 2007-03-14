@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.178 2007/03/14 08:24:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.179 2007/03/14 12:16:42 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1663,6 +1663,8 @@ class room extends class_base
 		$col_buffer = $settings->prop("col_buffer");
 		$buffer_time_string = $settings->prop("buffer_time_string");
 		$use_product_times = $arr["obj_inst"]->prop("use_product_times");
+		$real_day_start = get_day_start($today_start);
+		$base_add = $today_start - $real_day_start;
 		while($step < $day_end/($step_length * $time_step))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
@@ -1686,7 +1688,7 @@ class room extends class_base
 					$end_step += 3600;
 					$prev_dst = date("I", $start_step);
 				}
-				if(!is_array($this->openhours) || $this->is_open($start_step,$end_step))
+				if(!is_array($this->openhours) || $this->is_open($start_step,$end_step,($base_add + $step * $step_length * $time_step) > (24*3600)))
 				{
 					$visible=1;
 					$rowspan[$x] = 1;
@@ -2266,10 +2268,7 @@ class room extends class_base
 		}
 
 		$end_this = (date("H" , $end-1)*3600 + date("i" , $end-1)*60);
-//		$end_this -= date("I", $end-1)*3600;
-//echo "end = $end , I = ".date("d.m.Y H:i:s / I", $end-1)." et = ".date("d.m.Y H:i:s", $end_this)."<br>";
 		$start_this = (date("H" , $start)*3600 + date("i" , $start)*60);
-//		$start_this -= date("I", $start)*3600;
 		
 		//kontrollib et tsükli lõpp äkki läheb järgmisesse päeva juba... siis oleks lõpp kuidagi varajane ja avatud oleku kontroll läheks puusse
 		if($start_this > $end_this)
@@ -2304,7 +2303,7 @@ class room extends class_base
 		return false;
 	}
 	
-	function is_open($start,$end)
+	function is_open($start,$end, $next_day = false)
 	{
 		if(!$this->open_inst)
 		{
@@ -2330,10 +2329,22 @@ class room extends class_base
 				continue;
 			}
 			$open = $this->open_inst->get_times_for_date($oh, $start);
+
+			// this monster here makes sure that open times that cross the midnight (21:00 - 03:00 for example) work 
+			if ($next_day &&
+				is_array($open) && 
+				($open[0] || $open[1]) && 
+				($open[1]-1 >= $end_this) &&
+				($open[0] > $open[1])
+			)
+			{
+				return true;
+			}
+			else
 			if(
 				is_array($open) && 
 				($open[0] || $open[1]) && 
-				($open[1]-1 >= $end_this) && 
+				($open[1] > $open[0] ? $open[1]-1 >= $end_this : $open[1]-1 <= $end_this) && 
 				($open[0] <= $start_this)
 			)
 			{
