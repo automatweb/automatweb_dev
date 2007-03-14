@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.177 2007/03/14 08:08:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.178 2007/03/14 08:24:37 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1573,13 +1573,13 @@ class room extends class_base
  			{
 	 			$this->start = $this->start+3600*$gwo["start_hour"];
  				$today_start = $today_start+3600*$gwo["start_hour"];
-				$day_end -= (3600*$gwo["start_hour"]);
+				//$day_end -= (3600*$gwo["start_hour"]);
  			}
  			if($gwo["start_minute"])
 	 		{	
  				$this->start = $this->start+60*$gwo["start_minute"];
  				$today_start = $today_start+60*$gwo["start_minute"];
-				$day_end -= (60*$gwo["start_minute"]);
+				//$day_end -= (60*$gwo["start_minute"]);
 	 		}
 		}
 		else
@@ -1589,7 +1589,7 @@ class room extends class_base
 				$start_hour = 0;
 			}
 			$this->start = $today_start = mktime($start_hour, $start_minute, 0, date("n", time()), date("j", time()), date("Y", time()));
-			$day_end -= (3600*$start_hour + 60*$start_minute);
+			//$day_end -= (3600*$start_hour + 60*$start_minute);
 		}
 
 		$step = 0;
@@ -1614,13 +1614,13 @@ class room extends class_base
 			{
 				$this->start = $this->start+3600*$gwo["start_hour"];
 				$today_start = $today_start+3600*$gwo["start_hour"];
-				$day_end -= (3600*$gwo["start_hour"]);
+			//	$day_end -= (3600*$gwo["start_hour"]);
 			}
 			if($gwo["start_minute"])
 			{
 				$this->start = $this->start+60*$gwo["start_minute"];
 				$today_start = $today_start+60*$gwo["start_minute"];
-				$day_end -= (60*$gwo["start_minute"]);
+			//	$day_end -= (60*$gwo["start_minute"]);
 			}
 		}
 		if (date("I", $today_start) == 1)
