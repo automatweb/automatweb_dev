@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.179 2007/03/14 12:16:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.180 2007/03/14 17:54:15 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1635,6 +1635,7 @@ class room extends class_base
 		{
 			$len = floor(($_GET["end"] - $_GET["start"]) / 86400);
 		}
+		$this->len = $len;
 		enter_function("get_calendar_tbl::3::genres");
 		$this->generate_res_table($arr["obj_inst"], $this->start, $this->start + 24*3600*$len);
 		$this->_init_calendar_t($t,$this->start, $len);
@@ -2059,6 +2060,10 @@ class room extends class_base
 		{
 			$t->set_lower_titlebar_display(true);
 		}
+		if(!$arr["web"])
+		{
+			$t->define_data($this->get_day_workers_row());
+		}
 		exit_function("get_calendar_tbl::3");
 		//$t->set_rgroupby(array("group" => "d2"));
 		$arr["settings"] = $settings;
@@ -2066,6 +2071,27 @@ class room extends class_base
 		$popup_menu = $this->get_room_prod_menu($arr, ($settings->prop("bron_popup_immediate") && is_admin()));
 		$this->popup_menu_str = $popup_menu;
 		$t->set_caption(t("Broneerimine").$popup_menu);
+	}
+	
+	function get_day_workers_row()
+	{
+		$open_inst = get_instance(CL_OPENHOURS);
+		$res = array();
+		$x = 0;
+		$o = reset($this->openhours);
+		$time = $this->start;
+		$res["time"] = t("t&ouml;&ouml;tajad:");
+		while($x < $this->len)
+		{
+			$workers = $open_inst->get_day_workers($o , $time);
+			foreach($workers->arr() as $worker)
+			{
+				$res["d".$x].= $worker->name()."<br>\n";
+			}
+			$time = $time + 24*60*60;
+			$x++;
+		}
+		return $res;
 	}
 	
 	function get_room_prod_menu($arr, $immediate = false)
