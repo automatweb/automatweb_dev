@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.32 2007/03/13 15:13:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.33 2007/03/14 13:39:44 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -411,7 +411,7 @@ class ml_queue extends aw_template
 		flush();
 		//decho("process_queue:<br />");//dbg
 		$tm = time();
-		$old = time() - 2 * 60;
+		$old = time() - 10 * 60;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)");
 		//echo "select <br />\n";
@@ -462,7 +462,7 @@ class ml_queue extends aw_template
 			//arr($test_q);
 			
 			$tm = time();
-			$old = time() - 2 * 60;//kui nüüd 2 minutit möödas viimase maili saatmisest, siis võib suht kindel olla, et eelmine queue on pange pand
+			$old = time() - 10 * 60;//kui nüüd 2 minutit möödas viimase maili saatmisest, siis võib suht kindel olla, et eelmine queue on pange pand
 			
 			if(
 			   !($test_q["status"] == 1)
@@ -479,7 +479,8 @@ class ml_queue extends aw_template
 			{
 				$bounce = $list->prop("default_bounce");
 			}
-			
+			$mo = obj((int)$r["mid"]);
+			$charset = $mo->meta("charset");
 			
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
@@ -519,6 +520,7 @@ class ml_queue extends aw_template
 					if ($msg_data)
 					{
 						$msg_data["bounce"] = $bounce;
+						$msg_data["charset"] = $charset;
 						$this->save_handle();
 						// 1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
 			//			echo "sending queue item..<br />\n";
@@ -678,6 +680,7 @@ class ml_queue extends aw_template
 		echo t("sending mail to: ").$msg["target"]." ....";
 		flush();
 		$this->awm->headers["Bcc"] = $msg["bounce"];
+		$this->awm->set_header("Content-Type","text/plain; charset=\"".$msg["charset"]."\"");
 		$this->awm->gen_mail();
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];

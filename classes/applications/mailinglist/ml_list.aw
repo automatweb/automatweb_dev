@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.93 2007/03/13 15:13:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.94 2007/03/14 13:39:44 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -429,6 +429,11 @@ class ml_list extends class_base
 		$count = 0;
 		$this->list_id = $list_id;
 		$this->get_members(array("id" => $id, "no_return" => 1));
+		
+		$mail_obj = obj($id);
+		$ll = get_instance("languages");
+		$mail_obj->set_meta("charset" , $ll->get_charset());
+		
 		$count = $this->member_count;
 		// mark the queue as "processing" - 5
 		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
