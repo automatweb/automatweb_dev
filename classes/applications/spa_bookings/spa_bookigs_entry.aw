@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.39 2007/03/14 11:01:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.40 2007/03/14 11:33:36 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1666,10 +1666,17 @@ class spa_bookigs_entry extends class_base
 				continue;
 			}
 			$rvo = obj($rv_id);
+			$amt = $rvo->meta("amount");
+			$prod = reset(array_keys($amt));
+			$po = obj($prod);
 			$htmlc->add_property(array(
                                 "name" => "ud[rv_$rv_id]",
                                 "type" => "textbox",
-                                "caption" => sprintf(t("Kommentaar reserveeringule %s"), $rvo->name()),
+                                "caption" => sprintf(t("%s %s-%s"), 
+					$po->name(), 
+					date("d.m.Y H:i", $rvo->prop("start1")),
+					date("H:i", $rvo->prop("end"))
+				),
                                 "value" => $rvo->comment()
                         ));
 		}
