@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.175 2007/03/12 16:08:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.176 2007/03/14 07:58:10 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1558,6 +1558,7 @@ class room extends class_base
 		enter_function("get_calendar_tbl::2");
 		$start_hour = 0;
 		$start_minute = 0;
+		$day_end = 86400;
 		if(is_array($this->openhours))
 		{
 			$gwo = $this->get_when_opens();
@@ -1572,11 +1573,13 @@ class room extends class_base
  			{
 	 			$this->start = $this->start+3600*$gwo["start_hour"];
  				$today_start = $today_start+3600*$gwo["start_hour"];
+				$day_end -= (3600*$gwo["start_hour"]);
  			}
  			if($gwo["start_minute"])
 	 		{	
  				$this->start = $this->start+60*$gwo["start_minute"];
  				$today_start = $today_start+60*$gwo["start_minute"];
+				$day_end -= (60*$gwo["start_minute"]);
 	 		}
 		}
 		else
@@ -1586,6 +1589,7 @@ class room extends class_base
 				$start_hour = 0;
 			}
 			$this->start = $today_start = mktime($start_hour, $start_minute, 0, date("n", time()), date("j", time()), date("Y", time()));
+			$day_end -= (3600*$start_hour + 60*$start_minute);
 		}
 
 		$step = 0;
@@ -1593,7 +1597,6 @@ class room extends class_base
 		exit_function("get_calendar_tbl::2");
 
 		$settings = $this->get_settings_for_room($arr["obj_inst"]);
-
 		classload("core/date/date_calc");
 		if (is_oid($settings->id()) && !$arr["request"]["start"])
 		{
@@ -1611,11 +1614,13 @@ class room extends class_base
 			{
 				$this->start = $this->start+3600*$gwo["start_hour"];
 				$today_start = $today_start+3600*$gwo["start_hour"];
+				$day_end -= (3600*$gwo["start_hour"]);
 			}
 			if($gwo["start_minute"])
 			{
 				$this->start = $this->start+60*$gwo["start_minute"];
 				$today_start = $today_start+60*$gwo["start_minute"];
+				$day_end -= (60*$gwo["start_minute"]);
 			}
 		}
 		enter_function("get_calendar_tbl::3");
@@ -1652,7 +1657,7 @@ class room extends class_base
 		$col_buffer = $settings->prop("col_buffer");
 		$buffer_time_string = $settings->prop("buffer_time_string");
 		$use_product_times = $arr["obj_inst"]->prop("use_product_times");
-		while($step < 86400/($step_length * $time_step))
+		while($step < $day_end/($step_length * $time_step))
 		{
 			$d = $col = $ids = $rowspan = $onclick = array();
 			$x = 0;
