@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.24 2007/03/12 13:59:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.25 2007/03/14 11:01:09 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -518,7 +518,8 @@ class spa_bookings_overview extends class_base
 				"r_prod" => $prod_obj->trans_get_val("name"),
 				"start_time" => $rvs->prop("start1"),
 				"end_time" => $rvs->prop("end"),
-				"price" => $prod_obj->prop("price")
+				"price" => $prod_obj->prop("price"),
+				"r_comment" => $rvs->comment()
 			));
 			$books .= $this->parse("BOOKING");
 

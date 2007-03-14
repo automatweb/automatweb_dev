@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.38 2007/03/12 13:59:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.39 2007/03/14 11:01:09 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1659,6 +1659,21 @@ class spa_bookigs_entry extends class_base
 			));
 		}
 
+		foreach(safe_array($_GET["rvs"]) as $rv_id)
+		{
+			if (!$this->can("view", $rv_id))
+			{
+				continue;
+			}
+			$rvo = obj($rv_id);
+			$htmlc->add_property(array(
+                                "name" => "ud[rv_$rv_id]",
+                                "type" => "textbox",
+                                "caption" => sprintf(t("Kommentaar reserveeringule %s"), $rvo->name()),
+                                "value" => $rvo->comment()
+                        ));
+		}
+
 		$htmlc->add_property(array(
 			"name" => "s[submit]",
 			"type" => "submit",
@@ -1676,7 +1691,8 @@ class spa_bookigs_entry extends class_base
 				"props" => $arr["props"],
 				"bron" => $arr["bron"],
 				"center" => $_GET["center"],
-				"out_arr" => $_GET["out_arr"]
+				"out_arr" => $_GET["out_arr"],
+				"rvs" => $_GET["rvs"]
 			)
 		));
 
@@ -1764,6 +1780,16 @@ class spa_bookigs_entry extends class_base
 			}
 		}
 		$cust->save();
+
+		foreach(safe_array($arr["rvs"]) as $rvs_id)
+		{
+			if ($this->can("view", $rvs_id))
+			{
+				$rvo = obj($rvs_id);
+				$rvo->set_comment($arr["ud"]["rv_".$rvs_id]);
+				$rvo->save();
+			}
+		}
 
 		// if package is set in the submit, then do create spa booking
 		if ($arr["ud"]["pk_name"] && count($arr["out_arr"]))
