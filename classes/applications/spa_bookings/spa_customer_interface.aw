@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.10 2007/03/07 14:55:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.11 2007/03/14 11:57:32 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -606,7 +606,7 @@ class spa_customer_interface extends class_base
 
 	/**
 		@attrib name=pay
-		@param oid required type=int acl=view
+		@param id required type=int acl=view
 		@param r optional
 		@param bank_payment required typoe=oid
 	**/
