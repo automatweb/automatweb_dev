@@ -47,15 +47,6 @@
             <default>-1</default>
             <caption>Kehtib kuni</caption>
       </property>
-      <property>
-            <name>people</name>
-            <table>objects</table>
-            <group>people</group>
-            <type>text</type>
-            <submit>no</submit>
-            <no_caption>1</no_caption>
-            <field>people</field>
-      </property>
       <classinfo>
             <syslog_type>ST_OPENHOURS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -63,11 +54,6 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
-      <groupinfo>
-            <people>
-                  <caption>Inimeste t&amp;amp;ouml;&amp;amp;ouml;ajad</caption>
-            </people>
-      </groupinfo>
       <reltypes>
             <GROUP>
                   <value>1</value>

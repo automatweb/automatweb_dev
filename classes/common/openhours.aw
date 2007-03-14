@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.13 2007/03/14 17:57:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.14 2007/03/14 18:19:28 markop Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -20,11 +20,6 @@
 
 @property date_to type=date_select field=meta method=serialize default=-1
 @caption Kehtib kuni
-
-@groupinfo people caption="Inimeste t&ouml;&ouml;ajad"
-@default group=people
-
-@property people type=text submit=no no_caption=1
 
 @reltype GROUP value=1 clid=CL_GROUP
 @caption Kehtib kasutajagrupile
@@ -59,17 +54,6 @@ class openhours extends class_base
 				$data["options"] = array("" => t("--vali--")) + $ol->names();
 				break;
 
-			//-- get_property --//
-			case 'people':
-				$month = $_GET["month"];
-				if(!$month)
-				{
-					$month = 0;	
-				}
-				$data["value"]= $this->up_link($month);
-				$arr["month"] = $month;
-				$data["value"].= $this->get_people_table($arr);
-				break;
 			case 'openhours':
 				$prefix = $data['name'];
 				if (isset($arr['name_prefix']))
@@ -102,29 +86,7 @@ class openhours extends class_base
 		switch($data["name"])
 		{
 			//-- set_property --//
-			case 'people':
-				$wd = $arr['obj_inst']->meta("working_days");
-				foreach($arr["request"]["hidden_days"] as $p => $times)
-				{
-					foreach($times as $time => $val)
-					{
-						if($arr["request"]["working_days"][$p][$time])
-						{
-							$wd[$p][$time] = 1;
-						}
-						else
-						{
-							if($wd[$p][$time])
-							{
-								unset($wd[$p][$time]);
-							}
-						}
-					}
-				}
-				
-				$arr['obj_inst']->set_meta('working_days',$wd);
-				break;
-		
+
 			case 'openhours':
 				$lastvalue = $arr['obj_inst']->meta('openhours');
 				$store = array ();
@@ -478,117 +440,6 @@ class openhours extends class_base
 		return count($rv) ? $rv : null;
 	}
 	
-	function get_jobs_for_oh($o)
-	{
-		$rv = array();
-		foreach($this->get_rooms_for_oh($o) as $room)
-		{
-			if(is_array($room->prop("professions")))
-			{
-				$rv = $rv + $room->prop("professions");
-			}
-		}
-		return $rv;
-	}
-	
-	function get_people_for_oh($o)
-	{
-		if(!sizeof($p = $this->get_jobs_for_oh($o)))
-		{
-			return new object_list();
-		}
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_PERSON,
-			"lang_id" => array(),
-			"CL_CRM_PERSON.RELTYPE_RANK" => $p,
-		));
-		return $ol;
-	}
-	
-		
-	function get_people_table($arr)
-	{
-		$working_days = $arr["obj_inst"]->meta("working_days");
-		classload("vcl/table");
-		if($arr["month"])
-		{
-			$time = mktime(0,0,0,(date("m" , time()) +$arr["month"]) ,date("j" , time()), date("Y" , time()));
-		}
-		else
-		{
-			$time = time();
-		}
-		$t = new vcl_table;
-		$x = 1;
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-		));
-		$days = date("t" , $time);
-		while($x <= $days)
-		{
-			$t->define_field(array(
-				"name" => "d".$x,
-				"caption" => $x,
-			));
-			$x++;
-		}
-		$pl = $this->get_people_for_oh($arr["obj_inst"]);
-		foreach($pl->arr() as $po)
-		{
-			$data = array();
-			$data["name"] = $po->name();
-			$x = 1;
-			while($x <= $days)
-			{
-				$data["d".$x] = html::checkbox(array(
-					"name" => "working_days[".$po->id()."][".date("Y" , $time).date("m" , $time).$x."]",
-					"checked" =>  $working_days[$po->id()][date("Y" , $time).date("m" , $time).$x],
-				));
-				$data["d".$x].=html::hidden(array(
-					"name" => "hidden_days[".$po->id()."][".date("Y" , $time).date("m" , $time).$x."]",
-					"value" => 1,
-				));
-				$x++;
-			}
-			$t->define_data($data);
-		}
-		return $t->draw(); 
-	}
-
-	function up_link($month)
-	{
-	
-		$month_name = t(date("F" , mktime(0,0,0,(date("m" , time()) +$month) ,date("j" , time()), date("Y" , time()))));
-
-		$ret = html::href(array(
-			"caption" => "<< " . t("Eelmine"),
-			"url" => aw_url_change_var("month" , $month - 1)))." ".
-		$month_name." ".
-			html::href(array("caption" => t("J&auml;rgmine") . " >> " ,
-			"url" => aw_url_change_var("month" , $month + 1)));
-		return $ret;
-	}
-	
-	/**
-		@param o required type=object
-			oh object
-		@param time required type=int
-			day timestamp
-	**/
-	function get_day_workers($o , $time)
-	{
-		$working_days = $o->meta("working_days");
-		$res = new object_list();
-		foreach($working_days as $p => $val)
-		{
-			if(array_key_exists(date("Y" , $time).date("m" , $time).date("j" , $time) , $val))
-			{
-				$res->add($p);
-			}
-		}
-		return $res;
-	}
-	
 }
+	
 ?>
