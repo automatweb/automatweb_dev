@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.20 2007/03/12 13:19:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.21 2007/03/14 12:12:19 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -314,14 +314,14 @@ class trademark_manager extends class_base
 				"onclick" => 'javascript:window.open("'.aw_ini_get("baseurl").'/'.$o->id().'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600");',
 			));
 			
-			if(!(is_oid($o->prop("applicant")) && ($this->can("view" ,$o->prop("applicant")))))
-			{
+//			if(!(is_oid($o->prop("applicant")) && ($this->can("view" ,$o->prop("applicant")))))
+//			{
 				$applicant = $o->get_first_obj_by_reltype("RELTYPE_APPLICANT");
-			}
-			else
-			{
-				$applicant = obj($o->prop("applicant"));
-			}
+//			}
+//			else
+//			{
+//				$applicant = obj($o->prop("applicant"));
+//			}
 			if(is_object($applicant))
 			{
 				$applicant_name = $trademark_inst->get_applicants_str($o);//$applicant->name();
