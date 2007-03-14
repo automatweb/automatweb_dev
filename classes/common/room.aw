@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.176 2007/03/14 07:58:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.177 2007/03/14 08:08:56 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1623,6 +1623,12 @@ class room extends class_base
 				$day_end -= (60*$gwo["start_minute"]);
 			}
 		}
+		if (date("I", $today_start) == 1)
+		{
+			$this->start -= 3600;
+			$today_start -= 3600;
+		}
+
 		enter_function("get_calendar_tbl::3");
 		$len = 7;
 		if ($_GET["start"] && $_GET["end"])
