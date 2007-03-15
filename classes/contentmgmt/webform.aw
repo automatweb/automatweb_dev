@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.117 2007/02/22 12:10:53 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.118 2007/03/15 09:20:42 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -848,7 +848,7 @@ class webform extends class_base
 		$set_controllers = array(
 			array(
 				"name" => t("M&auml;&auml;ra saaja aadressiks"),
-				"formula" => '$value = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);$vals = array();foreach($value as $val){if(is_oid($val) && $this->can("view", $val)){$obj = obj($val);$vals[$val] = $obj->comment();}}if(!empty($vals)){aw_global_set("recievers_name", $vals);}',
+				"formula" => 'if (is_email($prop["value"])) {$vals = aw_global_get("recievers_name");$vals[$prop["value"]] = $prop["value"]; aw_global_set("recievers_name", $vals);} else { $value = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);$vals = aw_global_get("recievers_name");foreach($value as $val){if(is_oid($val) && $this->can("view", $val)){$obj = obj($val);$vals[$val] = $obj->comment();}}if(!empty($vals)){aw_global_set("recievers_name", $vals);}}',
 			),
 			array(
 				"name" => t("M&auml;&auml;ra saatja aadressiks"),
