@@ -54,6 +54,7 @@
 			<function name="gen_job_pdf">
 				<arguments>
 					<required name="id" type="int" />
+					<optional name="cv_tpl" type="int" />
 				</arguments>
 			</function>
 		</action>

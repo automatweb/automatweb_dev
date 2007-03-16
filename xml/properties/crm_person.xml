@@ -318,6 +318,20 @@
             <caption>Kontakt</caption>
       </property>
       <property>
+            <name>work_contact_start</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <parent>work_down</parent>
+            <captionside>top</captionside>
+            <type>releditor</type>
+            <reltype>RELTYPE_CURRENT_JOB</reltype>
+            <rel_id>first</rel_id>
+            <props>start</props>
+            <store>no</store>
+            <field>work_contact_start</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;le asumise aeg</caption>
+      </property>
+      <property>
             <name>cedit_phone_tbl</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
@@ -837,6 +851,26 @@
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>work_projects</name>
+            <table>objects</table>
+            <group>work_projects</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Projektid</caption>
+      </property>
+      <property>
+            <name>work_projects_tasks</name>
+            <table>objects</table>
+            <group>work_projects</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
             <no_caption>1</no_caption>
       </property>
       <property>
@@ -1426,6 +1460,10 @@
                   <parent>work</parent>
                   <submit>no</submit>
             </experiences>
+            <work_projects>
+                  <caption>Projektid</caption>
+                  <parent>work</parent>
+            </work_projects>
             <work_wanted>
                   <caption>Soovitud t&amp;amp;ouml;&amp;amp;ouml;</caption>
                   <parent>work</parent>
@@ -1709,6 +1747,11 @@
                   <clid>CL_CRM_PERSON_WORK_RELATION</clid>
                   <caption>Eelnev t&amp;amp;ouml;&amp;amp;ouml;kogemus</caption>
             </PREVIOUS_JOB>
+            <CURRENT_JOB>
+                  <value>67</value>
+                  <clid>CL_CRM_PERSON_WORK_RELATION</clid>
+                  <caption>Praegune t&amp;amp;ouml;&amp;amp;ouml;koht</caption>
+            </CURRENT_JOB>
       </reltypes>
       <layout>
             <ct_super>
@@ -1735,6 +1778,12 @@
                   <width>30%:30%:30%</width>
                   <group>contact</group>
             </work>
+            <work_down>
+                  <type>hbox</type>
+                  <parent>work_super</parent>
+                  <width>20%:80%</width>
+                  <group>contact</group>
+            </work_down>
             <ceditphf>
                   <type>hbox</type>
                   <width>50%:50%</width>

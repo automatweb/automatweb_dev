@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.163 2007/03/16 12:34:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.164 2007/03/16 14:43:18 tarvo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -133,6 +133,11 @@ caption Msn/yahoo/aol/icq
 
 			@property comment type=textarea cols=40 rows=3 table=objects field=comment parent=work captionside=top
 			@caption Kontakt
+		
+		@layout work_down type=hbox parent=work_super width=20%:80%
+
+			@property work_contact_start parent=work_down captionside=top type=releditor reltype=RELTYPE_CURRENT_JOB rel_id=first props=start store=no
+			@caption T&ouml;&ouml;le asumise aeg
 
 
 		@layout ceditphf type=hbox width=50%:50%
@@ -321,6 +326,15 @@ Arvutioskus: Programm	Valik v&otilde;i tekstikast / Tase	Valik
 
 @property previous_jobs_tb type=toolbar no_caption=1 store=no
 @property previous_jobs_table type=table store=no no_caption=1
+
+------------------------------------------------------------------
+
+@groupinfo work_projects caption="Projektid" parent=work
+	
+	@property work_projects group=work_projects type=table store=no no_caption=1
+	@caption Projektid
+
+	@property work_projects_tasks group=work_projects type=hidden no_caption=1 field=meta method=serialize
 
 ------------------------------------------------------------------
 
@@ -694,6 +708,9 @@ caption S&otilde;bragrupid
 @reltype PREVIOUS_JOB value=66 clid=CL_CRM_PERSON_WORK_RELATION
 @caption Eelnev t&ouml;&ouml;kogemus
 
+@reltype CURRENT_JOB value=67 clid=CL_CRM_PERSON_WORK_RELATION
+@caption Praegune t&ouml;&ouml;koht
+
 
 */
 
@@ -822,6 +839,83 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "work_projects":
+				$t = &$data["vcl_inst"];
+				$t->define_field(array(
+					"name" => "select",
+					"caption" => t("CV"),
+					"width" => "10"
+				));
+				$t->define_field(array(
+					"name" => "project",
+					"caption" => t("Projekt"),
+					"width" => "300"
+				));
+				$t->define_field(array(
+					"name" => "value",
+					"caption" => t("Hind"),
+				));
+				$t->define_field(array(
+					"name" => "role",
+					"caption" => t("Roll"),
+				));
+				$t->define_field(array(
+					"name" => "description",
+					"caption" => t("&Uuml;lessanded"),
+				));
+
+
+				$tasks = $this->get_work_project_tasks($arr["obj_inst"]->id());
+				$i = get_instance(CL_USER);
+				foreach($this->get_person_and_org_related_projects($arr["obj_inst"]->id()) as $oid => $obj)
+				{
+					$project = html::href(array(
+						"caption" => $obj->name(),
+						"url" => $this->mk_my_orb("change", array(
+							"id" => $oid,
+							"return_url" => get_ru(),
+						), CL_PROJECT),
+					));
+					$roles = $this->get_project_roles(array(
+						"person" => $arr["obj_inst"]->id(),
+						"project" => $oid,
+					));
+					$roles_url = $this->mk_my_orb("change", array(
+						"from_org" => $i->get_current_company(),
+						"to_org" => current($obj->prop("orderer")),
+						"to_project" => $oid,
+						"class" => "crm_role_manager",
+					));
+					$roles_url = html::href(array(
+						"caption" => t("Rollid"),
+						"url" => "#",
+						"onClick" => "javascript:aw_popup_scroll(\"".$roles_url."\", \"Rollid\", 500, 500);",
+					));
+
+					$t->define_data(array(
+						"project" => $project,
+						"description" => html::textarea(array(
+							"name" => "project_tasks[".$oid."]",
+							"value" => $tasks[$oid]["task"],
+							"rows" => 10,
+							"cols" => 100,
+						)),
+						"value" => ($_t = $obj->prop("proj_price"))?$_t:t("-"),
+						"role" => ($_t = join(",", $roles))?$_t." (".$roles_url.")":$roles_url,
+						"select" => html::checkbox(array(
+							"name" => "project_sel[".$oid."]",
+							"checked" => checked($tasks[$oid]["selected"]),
+						)),
+					));
+				}
+
+				break;
+			case "work_contact_start":
+				if(!$arr["obj_inst"]->prop("work_contact"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
 			case "address":
 				return PROP_IGNORE;
 
@@ -867,7 +961,30 @@ class crm_person extends class_base
 					"name" => "delete",
 					"img" => "pdf_upload.gif",
 					"tooltip" => t("Genereeri pdf"),
-					"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id()))
+					"url" => $this->mk_my_orb("gen_job_pdf", array(
+						"id" => $arr["obj_inst"]->id(),
+						"cv_tpl" => ($_t = $arr["request"]["cv_tpl"])?$_t:0,
+					))
+				));
+				//arr($arr);
+				$arr["prop"]["toolbar"]->add_cdata(html::select(array(
+					"name" => "cv_tpl",
+					"options" => array_values($this->get_cv_tpl()),
+					"selected" => $arr["request"]["cv_tpl"],
+				)));
+				$arr["prop"]["toolbar"]->add_button(array(
+					"name" => "show",
+					"img" => "save.gif",
+					"tooltip" => t("N&auml;ita"),
+					"action" => "",//"javascript:submit_changeform('');",
+				));
+				break;
+			case "cv_view":
+				$v = array_keys($this->get_cv_tpl());
+				$tpl = $arr["request"]["cv_tpl"]?("cv/".basename($v[$arr["request"]["cv_tpl"]])):false;
+				$arr["prop"]["value"] .= $this->show_cv(array(
+					"id" => $arr["obj_inst"]->id(),
+					"cv" => $tpl,
 				));
 				break;
 			case "dl_since":
@@ -2418,8 +2535,49 @@ class crm_person extends class_base
 		return  $arr["post_ru"];
 	}
 
+	function has_current_job_relation($oid)
+	{
+		$c = new connection();
+		$ret = $c->find(array(
+			"from" => $oid,
+			"type" => 67,
+		));
+		$c = current($ret);
+		return count($ret)?obj($c["to"]):false;
+	}
+
 	function callback_post_save($arr)
 	{
+		if($arr["obj_inst"]->prop("work_contact"))
+		{
+			if(!$o = $this->has_current_job_relation($arr["obj_inst"]->id()))
+			{
+				$o = new object();
+				$o->set_parent($arr["obj_inst"]->parent());
+				$o->set_class_id(CL_CRM_PERSON_WORK_RELATION);
+				$o->set_name($arr["obj_inst"]->prop_str("work_contact"));
+				$o->save();
+				$arr["obj_inst"]->connect(array(
+					"to" => $o->id(),
+					"type" => "RELTYPE_CURRENT_JOB",
+				));
+				$arr["obj_inst"]->save();
+			}
+			$o->set_prop("org", $arr["obj_inst"]->prop("work_contact"));
+			$o->connect(array(
+				"to" => $arr["obj_inst"]->prop("work_contact"),
+				"type" => "RELTYPE_ORG",
+			));
+			$o->save();
+		}
+		else
+		{
+			if($o = $this->has_current_job_relation($arr["obj_inst"]->id()))
+			{
+				$o->delete();
+			}
+		}
+
 		if (aw_global_get("uid") != "")
 		{
 			$u = get_instance(CL_USER);
@@ -2573,6 +2731,24 @@ class crm_person extends class_base
 					"reltype" => "RELTYPE_LANGUAGE_SKILL",
 				));
 			}
+		}
+		if(is_array($arr["request"]["project_tasks"]) && count($arr["request"]["project_tasks"]))
+		{
+			$tasks = $this->get_work_project_tasks($arr["obj_inst"]->id());
+			foreach($arr["request"]["project_tasks"] as $project => $task)
+			{
+				$tasks[$project]["task"] = $task;
+			}
+			$this->set_work_project_tasks($arr["obj_inst"]->id(), $tasks);
+		}
+		if($arr["request"]["group"] == "work_projects")
+		{
+			$tasks = $this->get_work_project_tasks($arr["obj_inst"]->id());
+			foreach($tasks as $project => $data)
+			{
+				$tasks[$project]["selected"] = $arr["request"]["project_sel"][$project]?1:0;
+			}
+			$this->set_work_project_tasks($arr["obj_inst"]->id(), $tasks);
 		}
 		$arr["obj_inst"]->set_meta("no_create_user_yet", NULL);
 	}
@@ -3102,6 +3278,11 @@ class crm_person extends class_base
 		return false;
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["cv_tpl"] = $arr["request"]["cv_tpl"];
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["add_to_task"] = $_GET["add_to_task"];
@@ -3332,22 +3513,39 @@ class crm_person extends class_base
 	/**
 		@attrib name=gen_job_pdf nologin="1"
 		@param id required type=int
+		@param cv_tpl optional type=int
 	**/
 	function gen_job_pdf($arr)
 	{
 		$job = &obj($arr["id"]);
 		$pdf_gen = get_instance("core/converters/html2pdf");
-		session_cache_limiter("public");
+		//session_cache_limiter("public");
+		$tpl = $arr["request"]["cv_tpl"]?("cv/".basename($v[$arr["request"]["cv_tpl"]])):false;
 		die($pdf_gen->gen_pdf(array(
 			"filename" => $arr["id"],
 			"source" => $this->show_cv(array(
-				"id" => $arr["id"]
+				"id" => $arr["id"],
+				"cv" => $tpl,
 			))
 		)));
 	}
-
+	
+	function get_cv_tpl()
+	{
+		$dir = aw_ini_get("basedir")."/crm/person/cv/";
+		$ret = array(
+			$dir."cv_clonmel.tpl" => "clonmel",
+			$dir."show_cv.tpl" => "default",
+		);
+		return $ret;
+	}
+	
 	function show_cv($arr)
 	{
+		if(!$arr["cv"])
+		{
+			$arr["cv"] = "cv/".basename(key($this->get_cv_tpl()));
+		}
 		$ob = new object($arr["id"]);
 		$person_obj = current($ob->connections_to(/*array("from.class_id" => CL_CRM_PERSON)*/));
 		if(!is_object($person_obj))
@@ -3359,8 +3557,7 @@ class crm_person extends class_base
 		$email_obj = &obj($person_obj->prop("email"));
 		$phone_obj = &obj($person_obj->prop("phone"));
 
-
-		$this->read_template("show.tpl");
+		$this->read_template($arr["cv"]);
 
 		if($person_obj->prop("gender") == 1)
 		{
@@ -3371,17 +3568,31 @@ class crm_person extends class_base
 			$gender ="Naine";
 		}
 
-		foreach ($ob->connections_from(array("type" => "RELTYPE_KOGEMUS")) as $kogemus)
+		foreach ($ob->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $kogemus)
 		{
 			$kogemus = $kogemus->to();
 
 			$this->vars(array(
-				"company" => $kogemus->prop("asutus"),
-				"period" => get_lc_date($kogemus->prop("algus"))." - ".get_lc_date($kogemus->prop("kuni")),
-				"profession" => $kogemus->prop("ametikoht"),
+				"company" => $kogemus->prop_str("org"),
+				"start" => get_lc_date($kogemus->prop("start")),
+				"end" => get_lc_date($kogemus->prop("end")),
+				"profession" => $kogemus->prop("proffession"),
 				"duties" => $kogemus->prop("tasks"),
 			));
-			$kogemused_temp .= $this->parse("work_experiences");
+			$kogemused_temp .= $this->parse("WORK_EXPERIENCES");
+		}
+
+		// additional training
+		foreach($ob->connections_from(array("type" => "RELTYPE_ADD_EDUCATION")) as $conn)
+		{
+			$educ = $conn->to();
+			$this->vars(array(
+				"education_company" => $educ->prop("org"),
+				"education_theme" => $educ->prop("field"),
+				"education_time" => get_lc_date($educ->prop("time")),
+				"education_length" => $educ->prop("length"),
+			));
+			$add_training .= $this->parse("ADDITIONAL_TRAINING");
 		}
 
 		//Valdkondade nimekiri
@@ -3392,7 +3603,6 @@ class crm_person extends class_base
 			));
 			$tmp_sectors.=$this->parse("sectors");
 		}
-
 
 		//Hariduste nimekiri
 		foreach ($ob->connections_from(array("type" => "RELTYPE_EDUCATION")) as $haridus)
@@ -3506,20 +3716,50 @@ class crm_person extends class_base
 			));
 			$ed .= $this->parse("ED");
 		}
+		$cur_comp = get_current_company();
+		
+		$logo = $cur_comp->prop("logo");
+		foreach($this->get_work_project_tasks($ob->id()) as $project => $data)
+		{
+			if(!$data["selected"])
+			{
+				continue;
+			}
+			$p = obj($project);
+			$this->vars(array(
+				"project_start" =>   get_lc_date($p->prop("start")),
+				"project_end" => get_lc_date($p->prop("end")),
+				"project_contract" => ($_t = $p->name())?$_t:t("-"),
+				"project_tasks" => ($_t = $data["task"])?$_t:t("-"),
+				"project_value" => ($_t = $p->prop("proj_price"))?$_t:t("-"),
+				"project_roles" => ($_t = join(", ", $this->get_project_roles(array(
+					"person" => $ob->id(),
+					"project" => $project,
+				))))?$_t:t("-"),
+			));
+			$projects .= $this->parse("PROJECT");
+		}
 
 		$gidlist = aw_global_get("gidlist_oid");
 
 		$personname = $person_obj->name();
-
+		$cur_job = $this->has_current_job_relation($ob->id());
+		$img_inst = get_instance(CL_IMAGE);
+		$bd = split("-", $ob->prop("birthday"));
+		$bd = mktime(0,0,0,$bd[1],$bd[2], $bd[0]);
 		$this->vars(array(
 			"COMP_SKILL" => $ck,
 			"LANG_SKILL" => $lsk,
 			"DRIVE_SKILL" => join(",", $dsk),
+			"WORK_EXPERIENCES" => $kogemused_temp,
 			"ED" => $ed,
+			"PROJECT" => $projects,
+			"ADDITIONAL_TRAINING" => $add_training,
 			"recommenders" => nl2br($ob->prop("soovitajad")),
-			"name" => $personname,
+			"first_name" => ucfirst(strtolower($ob->prop("firstname"))),
+			"last_name" => ucfirst(strtolower($ob->prop("lastname"))),
 			"modified" => get_lc_date($ob->modified()),
-			"birthday" => date("d.m.Y", $person_obj->prop("birthday")),
+			"birthday" => date("d.m.Y", $bd),
 			"social_status" => $person_obj->prop("social_status"),
 			"mail" => html::href(array(
 				"url" => "mailto:" . $email_obj->prop("mail"),
@@ -3531,9 +3771,30 @@ class crm_person extends class_base
 			"driving_licenses" => $driving_licenses,
 			"addional_info" => $ob->prop("job_addinfo"),
 			"gender" => $gender,
+			"cur_org_start" => $cur_job?get_lc_date($cur_job->prop("start")):"",
+			"cur_org_position" => $ob->prop_str("rank"),
+			"cur_org_time" => ($cur_job && $cur_job->prop("start"))?get_lc_date(time() - $cur_job->prop("start")):"",
+			"picture_url" => $img_inst->get_url_by_id($ob->prop("picture")),
+			"company_logo" => $this->can("view",$logo)?$img_inst->get_url_by_id($logo):"",
 		));
-
 		return $this->parse();
+	}
+
+	function get_project_roles($arr)
+	{
+		$role_list = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
+			"person" => $arr["person"],
+			"project" => $arr["project"],
+		));
+		foreach($role_list->arr() as $re)
+		{
+			if(trim($_t = $re->prop_str("role")))
+			{
+				$roles[] = $_t;
+			}
+		}
+		return $roles;
 	}
 
 	function _init_ext_sys_t(&$t)
@@ -4078,5 +4339,33 @@ class crm_person extends class_base
 		
 		$arr["prop"]["value"] = $chart->draw_chart();
 	}
+
+	function get_work_project_tasks($oid)
+	{
+		$o = obj($oid);
+		return aw_unserialize($o->prop("work_projects_tasks"));
+	}
+
+	function set_work_project_tasks($oid, $tasks)
+	{
+		$o = obj($oid);
+		$o->set_prop("work_projects_tasks", aw_serialize($tasks, SERIALIZE_NATIVE));
+		$o->save();
+		return true;
+	}
+
+	function get_person_and_org_related_projects($person_oid)
+	{
+		$i = get_instance(CL_USER);
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"CL_PROJECT.RELTYPE_PARTICIPANT" => array(
+				$person_oid,
+				$i->get_company_for_person($person_oid),
+			),
+		));
+		return $ol->arr();
+	}
+
 }
 ?>
