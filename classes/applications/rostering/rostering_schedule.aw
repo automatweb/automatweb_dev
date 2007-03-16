@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.4 2007/03/07 13:00:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_schedule.aw,v 1.5 2007/03/16 12:34:33 kristo Exp $
 // rostering_schedule.aw - Rostering graafik 
 /*
 
@@ -75,8 +75,8 @@
 
 @groupinfo skills_g caption="P&auml;devused" 
 @groupinfo shifts_g caption="Vahetused" submit=no
-	@groupinfo shifts_g_1 caption="T&ouml;&ouml;postide kaupa" parent=shifts_g submit=no
-	@groupinfo shifts_g_2 caption="Vahetuste kaupa" parent=shifts_g submit=no
+	@groupinfo shifts_g_1 caption="T&ouml;&ouml;postid ja vahetused" parent=shifts_g submit=no
+	@groupinfo shifts_g_2 caption="Vahetused ja t&ouml;&ouml;postid" parent=shifts_g submit=no
 
 @groupinfo day_g caption="P&auml;eva vaade" submit=no
 @groupinfo mn_g caption="Kuu vaade" submit=no
@@ -150,6 +150,10 @@ class rostering_schedule extends class_base
 
 			case "mn_g_tbl":
 				$this->_mn_g_tbl($arr);
+				break;
+
+			case "g_scenario":
+				unset($prop["options"][0]);
 				break;
 		};
 		return $retval;
@@ -687,17 +691,33 @@ class rostering_schedule extends class_base
 		$co_i = $co->instance();
 		$empl = $co_i->get_employee_picker($co);
 
-		$sects = $this->get_all_org_sections($co, $t, $empl);
+		$sel_units = new aw_array($arr["obj_inst"]->prop("g_unit"));
+		$sects = $this->get_all_org_sections($co, $t, $empl, $sel_units);
 		$t->set_sortable(false);
 	}
 
-	function _init_day_g_tbl(&$t)
+	function _init_day_g_tbl(&$t, $o)
 	{
 		$t->define_field(array(
 			"name" => "hr",
 			"caption" => t("Aeg"),
 			"align" => "left"
 		));
+
+		$unit_list = new aw_array($o->prop("g_unit"));
+		$wpls = array();
+		foreach($unit_list->get() as $unit_id)
+		{
+			if ($this->can("view", $unit_id))
+			{
+				$uo = obj($unit_id);
+				foreach(safe_array($uo->prop("wpls")) as $wpl_id)
+				{
+					$wpls[$wpl_id] = $wpl_id;
+				}
+			}
+
+		}
 		
 		$wpl_list = new object_list(array(
 			"class_id" => CL_ROSTERING_WORKPLACE,
@@ -706,10 +726,15 @@ class rostering_schedule extends class_base
 		));
 		foreach($wpl_list->arr() as $wpl)
 		{
+			if (count($wpls) && !$wpls[$wpl->id()])
+			{
+				continue;
+			}
 			$t->define_field(array(
 				"name" => $wpl->id(),
 				"caption" => $wpl->name(),
-				"align" => "center"
+				"align" => "center",
+				"rowspan" => "rowspan".$wpl->id()
 			));
 		}
 	}
@@ -717,7 +742,7 @@ class rostering_schedule extends class_base
 	function _day_g_tbl($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_day_g_tbl($t);
+		$this->_init_day_g_tbl($t, $arr["obj_inst"]);
 
 		$m = get_instance("applications/rostering/rostering_model");
 		$o = obj($arr["obj_inst"]->prop("g_wp"));
@@ -758,9 +783,28 @@ class rostering_schedule extends class_base
 				$d = array(
 					"hr" => sprintf("&nbsp;&nbsp;&nbsp;&nbsp;%02d:00 - %02d:00", $i, $i+1)
 				);
-				foreach($wt[date("H", get_day_start() + $i * 3600)] as $item)
+				$tmp = $wt[date("H", get_day_start() + $i * 3600)];
+				foreach($tmp as $idx => $item)
 				{
 					$d[$item["workplace"]] = html::obj_change_url($item["person_id"]);
+					$rs = 0;
+					for($a = $i; $a < $endt; $a++)
+					{
+						$tmp2 = $wt[date("H", get_day_start() + $a * 3600)];
+						foreach($tmp2 as $idx => $tmp_item)
+						{
+							if ($tmp_item["workplace"] == $item["workplace"] && $tmp_item["person_id"] == $item["person_id"])
+							{
+								$rs++;
+							}
+							else
+							if ($tmp_item["workplace"] == $item["workplace"] && $tmp_item["person_id"] != $item["person_id"])
+							{
+								break;
+							}
+						}
+					}
+					$d["rowspan".$item["workplace"]] = $rs;
 				}
 				$t->define_data($d);
 				
@@ -814,9 +858,24 @@ class rostering_schedule extends class_base
 		));
 		$wpl2shift = array();
 		$start = get_week_start();
+		$unit_list = new aw_array($arr["obj_inst"]->prop("g_unit"));
+		$wpls = array();
+		foreach($unit_list->get() as $unit_id)
+		{
+			if ($this->can("view", $unit_id))
+			{
+				$uo = obj($unit_id);
+				foreach(safe_array($uo->prop("wpls")) as $wpl_id)
+				{
+					$wpls[$wpl_id] = $wpl_id;
+				}
+			}
+
+		}
+
 		foreach($shift_list->arr() as $shift)
 		{
-			foreach($shift->connections_from(array("type" => "RELTYPE_WORKPLACE")) as $c)
+			foreach($shift->connections_from(array("type" => "RELTYPE_WORKPLACE")) as $c)	
 			{
 				$wpl = $c->to();
 				$wpl2shift[$wpl->id()][] = $shift;
@@ -825,6 +884,10 @@ class rostering_schedule extends class_base
 
 		foreach($wpl2shift as $wpl_id => $shifts)
 		{
+			if (count($wpls) && !$wpls[$wpl_id])
+			{
+				continue;
+			}
 			$t->define_data(array(
 				"shift" => html::obj_change_url($wpl_id)
 			));
@@ -881,6 +944,22 @@ class rostering_schedule extends class_base
 		));
 		$wpl2shift = array();
 		$start = get_week_start();
+
+		$unit_list = new aw_array($arr["obj_inst"]->prop("g_unit"));
+		$wpls = array();
+		foreach($unit_list->get() as $unit_id)
+		{
+			if ($this->can("view", $unit_id))
+			{
+				$uo = obj($unit_id);
+				foreach(safe_array($uo->prop("wpls")) as $wpl_id)
+				{
+					$wpls[$wpl_id] = $wpl_id;
+				}
+			}
+
+		}
+
 		foreach($shift_list->arr() as $shift)
 		{
 			$t->define_data(array(
@@ -889,6 +968,10 @@ class rostering_schedule extends class_base
 			foreach($shift->connections_from(array("type" => "RELTYPE_WORKPLACE")) as $c)
 			{
 				$wpl = $c->to();
+				if (count($wpls) && !$wpls[$wpl->id()])
+				{
+					continue;
+				}
 				$d = array(
 					"shift" => "&nbsp;&nbsp;&nbsp;&nbsp;".html::obj_change_url($wpl)
 				);
@@ -935,14 +1018,27 @@ class rostering_schedule extends class_base
 		}
 	}
 
-	function get_all_org_sections($obj, &$t, $empl)
+	function get_all_org_sections($obj, &$t, $empl, $units = null)
 	{
 		static $retval, $level;
 		$level++;
-		foreach ($obj->connections_from(array("type" => "RELTYPE_SECTION")) as $section)
+		if ($units === null)
 		{
-			$retval[$obj->id()][] = $section->prop("to");
-			$section_obj = $section->to();
+			$tmp = $obj->connections_from(array("type" => "RELTYPE_SECTION"));
+			$units = array();
+			foreach($tmp as $c)
+			{
+				$units[] = $c->prop("to");
+			}
+		}
+		else
+		{
+			$units = $units->get();
+		}
+		foreach ($units as $unit_id)
+		{
+			$section_obj = obj($unit_id);
+			$retval[$obj->id()][] = $section_obj->id();
 			$t->define_data(array(
 				"empl" => str_repeat("&nbsp;", $level*3).$section_obj->name()
 			));
@@ -990,10 +1086,35 @@ class rostering_schedule extends class_base
 			"align" => "center"
 		));
 
+		$unit_list = new aw_array($g->prop("g_unit"));
+		$skill_list = array();
+		$wpls = array();
+		foreach($unit_list->get() as $unit_id)
+		{
+			if ($this->can("view", $unit_id))
+			{
+				$uo = obj($unit_id);
+				foreach(safe_array($uo->prop("wpls")) as $wpl_id)
+				{
+					//$wpls[$wpl_id] = $wpl_id;
+					if ($this->can("view", $wpl_id))
+					{
+						$wplo = obj($wpl_id);
+						foreach(safe_array($wplo->prop("skills")) as $skill_id)
+						{
+							$skill_list[$skill_id] = $skill_id;
+						}
+					}
+				}
+			}
+
+		}
+
 		$ol = new object_list(array(
 			"class_id" => CL_PERSON_SKILL,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"oid" => $skill_list
 		));
 		foreach($ol->arr() as $o)
 		{
@@ -1039,7 +1160,22 @@ class rostering_schedule extends class_base
 		$o = obj($arr["obj_inst"]->prop("g_wp"));
 
 		$co = get_instance(CL_CRM_COMPANY);
-		$ppl = $co->get_employee_picker(obj($o->prop("owner")));
+		$unit_list = new aw_array($arr["obj_inst"]->prop("g_unit"));
+		if (count($unit_list->get()))
+		{
+			$ppl = array();
+			foreach($unit_list->get() as $unit_id)
+			{
+				if ($this->can("view", $unit_id))
+				{
+					$ppl += $co->get_employee_picker(obj($unit_id));
+				}
+			}
+		}
+		else
+		{
+			$ppl = $co->get_employee_picker(obj($o->prop("owner")));
+		}
 		foreach($ppl as $p_id => $p_nm)
 		{
 			$d = array(
@@ -1072,6 +1208,23 @@ class rostering_schedule extends class_base
 			$t->define_data($d);
 		}
 		$t->set_sortable(false);
+	}
+
+	function _get_work_hrs($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_ROSTERING_WORK_ENTRY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"graph" => $arr["obj_inst"]->id()
+		));
+		$arr["prop"]["vcl_inst"]->table_from_ol(
+			$ol, 
+			array(
+				"name"
+			), 
+			CL_ROSTERING_WORK_ENTRY
+		);
 	}
 }
 ?>

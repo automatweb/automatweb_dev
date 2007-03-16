@@ -582,6 +582,18 @@
             <comment>Formaat: E: 9-17\nT: 14-19</comment>
       </property>
       <property>
+            <name>vacation_hrs</name>
+            <table>objects</table>
+            <group>work_hrs</group>
+            <type>textarea</type>
+            <rows>7</rows>
+            <cols>20</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Puhkused</caption>
+            <comment>Formaat: 15.03.2007 - 18.03.2007</comment>
+      </property>
+      <property>
             <name>edulevel</name>
             <table>objects</table>
             <group>education</group>

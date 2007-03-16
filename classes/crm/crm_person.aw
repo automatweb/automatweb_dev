@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.162 2007/03/13 15:57:09 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.163 2007/03/16 12:34:34 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -242,6 +242,10 @@ caption Msn/yahoo/aol/icq
 	@property work_hrs type=textarea rows=7 cols=20 table=objects field=meta method=serialize
 	@caption T&ouml;&ouml;ajad
 	@comment Formaat: E: 9-17\nT: 14-19
+
+	@property vacation_hrs type=textarea rows=7 cols=20 table=objects field=meta method=serialize
+	@caption Puhkused
+	@comment Formaat: 15.03.2007 - 18.03.2007
 
 ------------------------------------------------------------------
 @groupinfo cv caption="Elulugu"

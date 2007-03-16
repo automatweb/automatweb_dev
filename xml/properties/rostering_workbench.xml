@@ -242,6 +242,17 @@
             <no_caption>1</no_caption>
             <field>payment_types</field>
       </property>
+      <property>
+            <name>holidays</name>
+            <table>objects</table>
+            <group>other</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Riigip&amp;amp;uuml;had</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ROSTERING_WORKBENCH</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -292,6 +303,10 @@
                   <parent>settings</parent>
                   <submit>no</submit>
             </payment_types>
+            <other>
+                  <caption>Muud seaded</caption>
+                  <parent>settings</parent>
+            </other>
             <stats>
                   <caption>Statistika</caption>
             </stats>

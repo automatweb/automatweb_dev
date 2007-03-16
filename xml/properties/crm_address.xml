@@ -16,7 +16,7 @@
             <size>50</size>
             <maxlength>100</maxlength>
             <field>aadress</field>
-            <caption>T&amp;auml;nav/K&amp;uuml;la</caption>
+            <caption>T&amp;amp;auml;nav/K&amp;amp;uuml;la</caption>
       </property>
       <property>
             <name>postiindeks</name>

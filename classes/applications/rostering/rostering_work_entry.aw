@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.4 2007/03/07 13:00:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_work_entry.aw,v 1.5 2007/03/16 12:34:33 kristo Exp $
 // rostering_work_entry.aw - T&ouml;&ouml;aegade sisestus 
 /*
 
@@ -16,6 +16,13 @@
 	@property g_wp type=relpicker automatic=1 reltype=RELTYPE_WORKBENCH field=aw_g_wp
 	@caption T&ouml;&ouml;laud
 
+	@property g_unit type=relpicker automatic=1 field=aw_unit reltype=RELTYPE_UNIT multiple=1 store=connect
+	@caption &Uuml;ksus
+	
+	@property g_day type=select field=aw_day 
+	@caption P&auml;ev
+	
+
 @default group=entry
 
 	@property entry_header type=text store=no no_caption=1
@@ -28,6 +35,9 @@
 
 @reltype WORKBENCH value=2 clid=CL_ROSTERING_WORKBENCH
 @caption T&ouml;&ouml;laud
+
+@reltype UNIT value=3 clid=CL_CRM_SECTION
+@caption &Uuml;ksus
 */
 
 class rostering_work_entry extends class_base
@@ -182,9 +192,15 @@ class rostering_work_entry extends class_base
 		$gr = obj($arr["obj_inst"]->prop("graph"));
 
 		$ppl = array();
-		if (is_array($gr->prop("g_unit")) && count($gr->prop("unit")))
+		$units = $gr->prop("g_unit");
+		if (is_array($arr["obj_inst"]->prop("g_unit")) && count($arr["obj_inst"]->prop("g_unit")))
 		{
-			foreach($gr->prop("g_unit") as $unit)
+			$units = $arr["obj_inst"]->prop("g_unit");
+		}
+
+		if (is_array($units) && count($units))
+		{
+			foreach($units as $unit)
 			{
 				$u = obj($unit);
 				foreach($u->connections_from(array("type" => "RELTYPE_WORKERS")) as $c)
@@ -200,7 +216,7 @@ class rostering_work_entry extends class_base
 
 		// get date range from selected graph
 		$gr = obj($arr["obj_inst"]->prop("graph"));
-		$start = $arr["request"]["date"] ? $arr["request"]["date"] : $gr->prop("g_start");
+		$start = $arr["obj_inst"]->prop("g_day") ? $arr["obj_inst"]->prop("g_day") : $gr->prop("g_start");
 		$end = $start + 24 * 3600;
 
 		$pt = array();
@@ -254,6 +270,7 @@ class rostering_work_entry extends class_base
 
 	function _get_entry_header($arr)
 	{
+		return PROP_IGNORE;
 		// get date range from selected graph
 		$gr = obj($arr["obj_inst"]->prop("graph"));
 		$start = $gr->prop("g_start");
@@ -276,6 +293,38 @@ class rostering_work_entry extends class_base
 			}
 		}
 		$arr["prop"]["value"] = join(" /  ", $dstr);
+	}
+
+	function _get_g_unit($arr)
+	{
+		if ($this->can("view", $arr["obj_inst"]->prop("graph")))
+		{
+			$go = obj($arr["obj_inst"]->prop("graph"));
+			if (is_array($go->prop("g_unit")) && count($go->prop("g_unit")))
+			{
+				$arr["prop"]["options"] = array("" => t("--vali--"));
+				foreach(safe_array($go->prop("g_unit")) as $unit_id)
+				{
+					if ($this->can("view", $unit_id))
+					{
+						$uo = obj($unit_id);
+						$arr["prop"]["options"][$unit_id] = $uo->name();
+					}
+				}
+			}
+		}
+	}
+
+	function _get_g_day($arr)
+	{
+		if ($this->can("view", $arr["obj_inst"]->prop("graph")))
+		{
+			$go = obj($arr["obj_inst"]->prop("graph"));
+			for($tm = $go->prop("g_start"); $tm < $go->prop("g_end"); $tm += 24*3600)
+			{
+				$arr["prop"]["options"][$tm] = date("d.m.Y", $tm);
+			}
+		}
 	}
 }
 ?>

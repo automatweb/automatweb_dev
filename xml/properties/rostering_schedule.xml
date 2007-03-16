@@ -182,12 +182,12 @@
                   <submit>no</submit>
             </shifts_g>
             <shifts_g_1>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;postide kaupa</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;postid ja vahetused</caption>
                   <parent>shifts_g</parent>
                   <submit>no</submit>
             </shifts_g_1>
             <shifts_g_2>
-                  <caption>Vahetuste kaupa</caption>
+                  <caption>Vahetused ja t&amp;amp;ouml;&amp;amp;ouml;postid</caption>
                   <parent>shifts_g</parent>
                   <submit>no</submit>
             </shifts_g_2>

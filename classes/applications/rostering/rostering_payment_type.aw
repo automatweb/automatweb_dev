@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_payment_type.aw,v 1.1 2006/10/11 13:06:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_payment_type.aw,v 1.2 2007/03/16 12:34:33 kristo Exp $
 // rostering_payment_type.aw - Tasu liik 
 /*
 
@@ -10,6 +10,18 @@
 
 	@property hr_price type=textbox size=10 field=aw_hr_price
 	@caption Tunnihind
+
+	@property apply_from_hr type=select field=aw_apply_from_hr 
+	@caption Kehtib alates
+
+	@property apply_to_hr type=select field=aw_apply_to_hr 
+	@caption Kehtib kuni
+
+	@property apply_day_types type=chooser multiple=1 table=objects field=meta method=serialize
+	@caption Mis p&auml;evadel kehtib
+
+	@property apply_overtime type=checkbox ch_value=1 field=aw_apply_overtime
+	@caption Kehtib &uuml;letunnit&ouml;&ouml; jaoks
 */
 
 class rostering_payment_type extends class_base
@@ -54,6 +66,46 @@ class rostering_payment_type extends class_base
 			$this->db_query("CREATE TABLE aw_rostering_payment_type (aw_oid int primary key, aw_hr_price double)");
 			return true;
 		}
+
+		switch($f)
+		{
+			case "aw_apply_from_hr":
+			case "aw_apply_to_hr":
+			case "aw_apply_overtime":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+				break;
+		}
+	}
+
+	function _get_apply_from_hr($arr)
+	{
+		$arr["prop"]["options"] = array("" => t("--vali--"));
+		for ($i = 0; $i < 24; $i++)
+		{
+			$arr["prop"]["options"][$i] = sprintf("%02d:00", $i);
+		}
+	}
+
+	function _get_apply_to_hr($arr)
+	{
+		$arr["prop"]["options"] = array("" => t("--vali--"));
+		for ($i = 0; $i < 24; $i++)
+		{
+			$arr["prop"]["options"][$i] = sprintf("%02d:00", $i);
+		}
+	}
+
+	function _get_apply_day_types($arr)
+	{
+		$arr["prop"]["options"] = array(
+			"work" => t("T&ouml;&ouml;p&auml;evadel"),
+			"weekend" => t("N&auml;dalavahetustel"),
+			"holiday" => t("P&uuml;hadel")
+		);
 	}
 }
 ?>

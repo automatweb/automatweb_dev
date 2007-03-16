@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.8 2007/03/07 13:00:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/rostering/rostering_workbench.aw,v 1.9 2007/03/16 12:34:33 kristo Exp $
 // rostering_workbench.aw - T&ouml;&ouml;aja planeerimine 
 /*
 
@@ -100,6 +100,11 @@
 	@property payment_types_tb type=toolbar no_caption=1 store=no
 	@property payment_types type=table store=no no_caption=1
 
+@default group=other
+	
+	@property holidays type=textarea rows=10 cols=50 table=objects field=meta method=serialize
+	@caption Riigip&uuml;had
+
 @groupinfo ppl caption="Isikud" submit=no
 
 @groupinfo settings caption="Seaded"
@@ -110,6 +115,7 @@
 	@groupinfo skills caption="P&auml;devused" parent=settings submit=no 
 	@groupinfo skills_losing caption="P&auml;devuste kadumine" parent=settings submit=no 
 	@groupinfo payment_types caption="Tasu liigid" parent=settings submit=no 
+	@groupinfo other caption="Muud seaded" parent=settings 
 
 @groupinfo stats caption="Statistika"
 	@groupinfo stats_wp caption="T&ouml;&ouml;postid" parent=stats submit=no
@@ -1087,6 +1093,38 @@ class rostering_workbench extends class_base
 		$t->define_field(array(
 			"name" => "graph",
 			"caption" => t("Graafik"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "graph.g_start",
+			"caption" => t("Algus"),
+			"type" => "time",
+			"format" => "d.m.Y",
+			"numeric" => 1,
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "graph.g_end",
+			"caption" => t("L&otilde;pp"),
+			"type" => "time",
+			"format" => "d.m.Y",
+			"numeric" => 1,
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "graph.g_unit",
+			"caption" => t("&Uuml;ksus"),
+			"numeric" => 1,
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "graph.g_scenario",
+			"caption" => t("Stsenaarium"),
+			"numeric" => 1,
 			"align" => "center",
 			"sortable" => 1
 		));
