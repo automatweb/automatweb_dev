@@ -105,6 +105,16 @@
             <caption>Salvestamise nupu tekst</caption>
       </property>
       <property>
+            <name>cancel_but_text</name>
+            <table>objects</table>
+            <group>sel_props</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>T&amp;uuml;hista nupu tekst</caption>
+      </property>
+
+      <property>
             <name>join_properties_pages</name>
             <table>objects</table>
             <group>mk_pages</group>

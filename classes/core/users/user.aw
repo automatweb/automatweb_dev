@@ -1331,6 +1331,43 @@ class user extends class_base
 			header("Location: ".$this->mk_my_orb("change", array("id" => $go_to), "user"));
 			die();
 		}
+
+		// save email to person
+		if ($arr["obj_inst"]->prop("email") != "")
+		{
+			$p = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PERSON");
+			if ($p)
+			{
+				if ($p->prop("email.mail") != $arr["obj_inst"]->prop("email"))
+				{
+					if ($this->can("view", $p->prop("email.mail")))
+					{
+						$ml = obj($p->prop("email.mail"));
+						$ml->set_prop("mail", $arr["obj_inst"]->prop("email"));
+						$ml->set_name($arr["obj_inst"]->prop("email"));
+						aw_disable_acl();
+						$ml->save();
+						aw_restore_acl();
+					}
+					else
+					{
+						$ml = obj();
+						$ml->set_class_id(CL_ML_MEMBER);
+						$ml->set_parent($p->id());
+						$ml->set_prop("mail", $arr["obj_inst"]->prop("email"));
+						$ml->set_name($arr["obj_inst"]->prop("email"));
+						aw_disable_acl();
+						$ml->save();
+						aw_restore_acl();
+						$p->set_prop("email", $ml->id());
+						$p->connect(array(
+							"to" => $ml->id(),
+							"type" => "RELTYPE_EMAIL"
+						));
+					}
+				}
+			}
+		}
 	}
 
 	function on_save_user($arr)

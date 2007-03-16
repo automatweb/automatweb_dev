@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.164 2007/03/16 14:43:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.165 2007/03/16 15:23:27 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2657,7 +2657,7 @@ class crm_person extends class_base
 			}
 			if ($u->prop("email") != $arr["obj_inst"]->prop_str("email"))
 			{
-				$u->set_prop("email", $arr["obj_inst"]->prop_str("email"));
+				$u->set_prop("email", $arr["obj_inst"]->prop("email.mail"));
 				$mod = true;
 			}
 

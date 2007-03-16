@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.47 2007/03/08 11:22:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.48 2007/03/16 15:23:28 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -55,6 +55,9 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 @property save_but_text type=textbox field=meta method=serialize group=sel_props
 @caption Salvestamise nupu tekst
+
+@property cancel_but_text type=textbox field=meta method=serialize group=sel_props
+@caption T&uuml;hista nupu tekst
 
 @property join_properties_pages type=table store=no group=mk_pages
 @caption Liitumisel k&uuml;sitavad v&auml;ljad
@@ -1056,10 +1059,19 @@ class join_site extends class_base
 			$tx = $lang_props["bt"]["__save_but"][$langid];
 		}
 
+		$cb = t("T&uuml;hista");
+                if ($o->prop("cancel_but_text") != "")
+                {
+                        $cb = $o->prop("cancel_but_text");
+                }
+		if (!empty($lang_props["bt"]["__cancel_but"][$langid]))
+		{
+			$cb = $lang_props["bt"]["__cancel_but"][$langid];
+		}
 		$this->vars(array(
 			"form" => $html,
 			"join_but_text" => $tx,
-			"cancel_but_text" => t("T&uuml;hista"),
+			"cancel_but_text" => $cb,
 			"reforb" => $this->mk_reforb(
 				"submit_update_form", 
 				array(
@@ -1099,13 +1111,23 @@ class join_site extends class_base
 		{
 			$tx = $lang_props["bt"]["__join_but"][$langid];
 		}
+		
+		$cb = t("T&uuml;hista");
+		if ($o->prop("cancel_but_text") != "")
+		{
+			$cb = $o->prop("cancel_but_text");
+		}
+                if (!empty($lang_props["bt"]["__cancel_but"][$langid]))
+                {
+                        $cb = $lang_props["bt"]["__cancel_but"][$langid];
+                }
 
 		$this->vars(array(
 			"form" => $this->get_form_from_obj(array(
 				"id" => $arr["id"]
 			)),
 			"join_but_text" => $tx,
-			"cancel_but_text" => t("T&uuml;hista"),
+			"cancel_but_text" => $cb,
 			"reforb" => $this->mk_reforb("submit_join_form", array("id" => $arr["id"], "add" => $add, "section" => aw_global_get("section")))
 		));
 
@@ -1748,6 +1770,16 @@ class join_site extends class_base
 							$prop["value"] = $tdata_o->prop("fax.name");
 						}
 					}
+					else
+					if ($oldn == "email")
+					{
+						$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
+						if ($c)
+						{
+							$tdata_o = $c->to();
+							$prop["value"] = $tdata_o->prop("email.mail");
+						}
+					}
 
 					// set value in property
 					if ($data_o)
@@ -1757,7 +1789,7 @@ class join_site extends class_base
 							$prop["value"] = $data_o->name();
 						}
 						else
-						if ($oldn != "phone" && $oldn != "fax" && $oldn != "rank")
+						if ($oldn != "email" && $oldn != "phone" && $oldn != "fax" && $oldn != "rank")
 						{
 							if ($prop["store"] == "connect")
 							{
@@ -1765,7 +1797,15 @@ class join_site extends class_base
 								$prop["value"] = array();
 								foreach($conns as $con)
 								{
-									$prop["value"][$con->prop("to")] = $con->prop("to");
+									if ($prop["multiple"] == 1)
+									{
+										$prop["value"][$con->prop("to")] = $con->prop("to");
+									}
+									else
+									{
+										$prop["value"] = $con->prop("to");
+										break;
+									}
 								}
 							}
 							else
@@ -2013,7 +2053,6 @@ class join_site extends class_base
 				{
 					$data_o->set_prop($pid, $cf_sd[$oldn]);
 				}
-
 				if ($prop["type"] == "relmanager" || $prop["type"] == "releditor" || $prop["type"] == "relpicker")
 				{
 					//$submit_data["cb_emb"] = $data["cb_emb"][$wn];
@@ -2023,7 +2062,7 @@ class join_site extends class_base
 					// if not, create new 
 					// set the object's id as the submit value
 					$p_oid = $data_o->prop($prop["name"]);
-					if (is_oid($p_oid) && $this->can("view", $p_oid) && ($prop["name"] == "address" || $data_o->prop($prop["name"].".name") == $cf_sd[$oldn]))
+					if ($this->can("view", $p_oid) && ($prop["name"] == "address" || $data_o->prop($prop["name"].".name") == $cf_sd[$oldn]))
 					{
 						$p_obj = obj($p_oid);
 						// if this is the address thingamajig, then create the address from the separate props
@@ -2040,8 +2079,12 @@ class join_site extends class_base
 					{
 						$p_obj = obj();
 						$p_obj->set_parent($data_o->id());
-						$p_obj->set_class_id($reli[$prop["reltype"]]["clid"][0]);
+						$p_obj->set_class_id($oldn == "email" ? CL_ML_MEMBER :$reli[$prop["reltype"]]["clid"][0]);
 						$p_obj->set_name($cf_sd[$oldn]);
+						if ($oldn == "email")
+						{
+							$p_obj->set_prop("mail", $cf_sd[$oldn]);
+						}
 						aw_disable_acl();
 						$p_obj->save();
 						aw_restore_acl();
@@ -2074,6 +2117,8 @@ class join_site extends class_base
 		if ($clid == CL_USER)
 		{
 			$data_o->save();
+			$data_o_inst = $data_o->instance();
+			$data_o_inst->callback_post_save(array("obj_inst" => $data_o));
 		}
 		else
 		{
@@ -2551,8 +2596,29 @@ class join_site extends class_base
 				"value" => $lang_props[$clid]["__save_but"][$lid],
 				"size" => 20
 			));
+			
 		}
 		$t->define_data($d);
+
+		$d = array(
+                        "orig" => t("T&uuml;hista nupu tekst"),
+                        "class" => t("<b>Nuppude tekstid</b>")
+                );
+                $clid = "bt";
+                foreach($ll as $lid => $lang)
+                {
+                        if ($lid == $arr["obj_inst"]->lang_id())
+                        {
+                                continue;
+                        }
+                        $d["l".$lid] = html::textbox(array(
+                                "name" => "d[$clid][__cancel_but][$lid]",
+                                "value" => $lang_props[$clid]["__cancel_but"][$lid],
+                                "size" => 20
+                        ));
+
+                }
+                $t->define_data($d);
 
 
 		$t->set_rgroupby(array("class" => "class"));
