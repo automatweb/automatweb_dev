@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.191 2007/02/21 10:12:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.192 2007/03/16 13:46:50 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -389,6 +389,9 @@ class image extends class_base
 				"comments" => $num_comments,
 
 			);
+			$tmp = new aw_template;
+			lc_site_load("document", &$tmp);
+			$vars += $tmp->vars;
 
 			if ($this->can("view", $idata["meta"]["big_flash"]))
 			{
