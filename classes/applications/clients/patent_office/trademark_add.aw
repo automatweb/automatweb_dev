@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.9 2007/02/13 14:59:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_add.aw,v 1.10 2007/03/19 12:10:03 markop Exp $
 // trademark_add.aw - Kaubam&auml;rgi veebist lisamine 
 /*
 
@@ -225,6 +225,21 @@ class trademark_add extends class_base
 	{
 		//arr($_SESSION["patent"]["checked"]);
 		//r($_SESSION);
+//arr($_SESSION["patent"]["id"]);
+		if(is_oid($_SESSION["patent"]["id"]) && $this->can("view" , $_SESSION["patent"]["id"]))
+		{
+			$tr_inst = get_instance(CL_PATENT);
+			$res = $tr_inst->is_signed($_SESSION["patent"]["id"]);
+			if($res["status"] == 1)
+			{
+				return aw_url_change_var()."#";
+			}
+
+/*		
+			switch($res["status"])
+			$tm = obj($_SESSION["patent"]["id"]);
+*/
+		}
 		if($_SESSION["patent"]["jrk"] == 0)
 		{
 			$url = $_SERVER["SCRIPT_URI"]."?section=".$_GET["section"]."&data_type=0";
@@ -232,7 +247,9 @@ class trademark_add extends class_base
 		//arr($_GET["section"]);
 		//arr();
 		}
-		elseif((!($_GET["data_type"] <  ($_SESSION["patent"]["jrk"])))|| (($_SESSION["patent"]["checked"]+1) >= $_SESSION["patent"]["jrk"]) )
+		elseif(
+			($_SESSION["patent"]["checked"] > -1) && (
+			(!($_GET["data_type"] <  ($_SESSION["patent"]["jrk"])))|| (($_SESSION["patent"]["checked"]+1) >= $_SESSION["patent"]["jrk"])))
 		{
 			$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
 		}
@@ -240,8 +257,7 @@ class trademark_add extends class_base
 		$url = aw_url_change_var()."#";//aw_url_change_var("", "#");	
 		// $url =$_SERVER["SCRIPT_URI"]."?section=".aw_ini_get("section")."&data_type=".$_SESSION["patent"]["jrk"];
 		
-		
-//		$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
+	//		$url = aw_url_change_var("data_type", $_SESSION["patent"]["jrk"]);
 		$_SESSION["patent"]["jrk"]++;
 	//	arr($_SESSION["patent"]["data_type"]);
 	//arr($_SESSION["patent"]["data_type"]); arr(($_SESSION["patent"]["jrk"]-2));

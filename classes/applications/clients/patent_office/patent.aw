@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.71 2007/03/13 10:19:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.72 2007/03/19 12:10:03 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -810,7 +810,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 						"caption" => $file->name(),
 						"target" => "New window",
 					));
-				}
+				}			//		if(aw_global_get("uid") == "struktuur")arr($data[$var."_value"]);
 			}
 		}
 		$data["procurator_text"] = $o->prop_str("procurator");
@@ -1685,6 +1685,10 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			if($status["status"] > 0)
 			{
 				$data["SIGNED"] = $this->parse("SIGNED");
+			}
+			else
+			{
+				$data["UNSIGNED"] = $this->parse("UNSIGNED");
 			}
 //			$u = get_instance(CL_USER);
 //			$p = obj($u->get_current_person());
