@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.23 2007/03/15 08:59:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.24 2007/03/19 14:21:06 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -678,6 +678,7 @@ class trademark_manager extends class_base
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.aadress")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.linn.name")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL></ADDRL>\n";
 //echo "aadres ".$appl->prop("address")." <br>";
 //echo "riik = ".$appl->prop("address.riik")." <br>";
 							if ($this->can("view", $appl->prop("address.riik")))
@@ -691,6 +692,7 @@ class trademark_manager extends class_base
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.aadress")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.linn.name")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.postiindeks")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL></ADDRL>\n";
 							if ($this->can("view", $appl->prop("contact.riik")))
 							{
 								$xml .= "\t\t\t\t<COUNTRY>".$adr_i->get_country_code(obj($appl->prop("contact.riik")))."</COUNTRY>\n";
@@ -805,7 +807,7 @@ class trademark_manager extends class_base
 					foreach(safe_array($o->meta("products")) as $k => $v)
 					{
 						$xml .= "\t\t\t<GSGR NICCLAI=\"".$k."\">\n";
-							$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".$v."]]></GSTERMEN>\n";
+							$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".strtolower(str_replace(", ", ",", $v))."]]></GSTERMEN>\n";
 						$xml .= "\t\t\t</GSGR>\n";
 						/*if ($this->can("view", $k))
 						{
@@ -832,13 +834,13 @@ class trademark_manager extends class_base
 				$xml .= "\t\t</BASGR>\n";
 
 				$xml .= "\t\t<PRIGR>\n";
-					$xml .= "\t\t\t<PRICP>".$o->prop("convention_country")."</PRICP>\n";
+					$xml .= "\t\t\t<PRICP>".($o->prop("convention_country"))?$o->prop("convention_country"):$o->prop("exhibition_country")."</PRICP>\n";
 //echo dbg::dump($o->prop("convention_date"));
-					if ($o->prop("convention_date") > 1)
+					if ($o->prop("convention_date") > 1|| $o->prop("exhibition_date") > 1)
 					{
-						$xml .= "\t\t\t<PRIAPPD>".date("Ymd",$o->prop("convention_date"))."</PRIAPPD>\n";
+						$xml .= "\t\t\t<PRIAPPD>".($o->prop("convention_date") > 1)?date("Ymd",$o->prop("convention_date")):date("Ymd",$o->prop("exhibition_date"))."</PRIAPPD>\n";
 					}
-					$xml .= "\t\t\t<PRIAPPN>".$o->prop("convention_nr")."</PRIAPPN>\n";
+					$xml .= "\t\t\t<PRIAPPN>".($o->prop("convention_nr"))?$o->prop("convention_nr"):$o->prop("exhibition_ame")."</PRIAPPN>\n";
 				
 				$xml .= "\t\t</PRIGR>\n";
 
