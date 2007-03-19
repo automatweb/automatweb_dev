@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.55 2007/03/02 13:40:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.56 2007/03/19 16:28:39 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -382,6 +382,7 @@ class room_reservation extends class_base
 			$this_url = $_SERVER["PATH_INFO"]."?level=".($back_level+1);
 		}
 		$this->vars(array(
+			"room_name" => $room->name(),
 			"PROD" 	=> $p,
 			"errors" => $_SESSION["room_reservation"][$room->id()]["errors"],
 			"CONTINUE" => ($_SESSION["room_reservation"][$room->id()]["start"]) ? $this->parse("CONTINUE") : "",
