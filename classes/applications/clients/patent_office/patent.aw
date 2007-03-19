@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.72 2007/03/19 12:10:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.73 2007/03/19 13:42:19 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -792,7 +792,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				$data[$prop."_value"] = date("j.m.Y" ,$o->prop($prop));
 			}
 		}
-		
+		classload("common/digidoc/ddoc_parser");
 		$file_inst = get_instance(CL_FILE);
 		foreach($this->file_upload_vars as $var)
 		{
@@ -802,6 +802,22 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				if($var == "reproduction")
 				{
 					$data[$var."_value"] = $this->get_right_size_image($file->id());
+				}elseif($var == "warrant")
+				{
+			/*		$content = $this->get_ddoc($arr["oid"]);
+					$o = obj($arr["oid"]);
+					$this->do_init();
+					$name = (substr($o->name(), -4, 4) == ".ddoc")?$o->name():$o->name().".ddoc";
+					ddFile::saveAs($name, $content);
+*/
+				
+					$data[$var."_value"] = html::href(array(
+ 							"caption" =>  $file->name(),
+							"target" => "New window",
+							"url" => $this->mk_my_orb("get_file", array(
+ 							"oid" => $file->id(),
+						), CL_PATENT),
+					));
 				}
 				else
 				{
@@ -810,12 +826,30 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 						"caption" => $file->name(),
 						"target" => "New window",
 					));
-				}			//		if(aw_global_get("uid") == "struktuur")arr($data[$var."_value"]);
+				}
 			}
 		}
 		$data["procurator_text"] = $o->prop_str("procurator");
 		$data["signatures"] = $this->get_signatures($id);
 		return $data;
+	}
+
+	/**
+		@attrib name=get_file params=name all_args=1 api=1
+		@comment
+			saves the ddoc file (browser save popup)
+	**/
+	function get_file($arr)
+	{
+		$file_inst = get_instance(CL_FILE);
+		$ddinst = get_instance(CL_DDOC);
+		classload("common/digidoc/ddoc_parser");
+		$fc = $file_inst->get_file_by_id($arr["oid"]);
+		$content = $fc["content"];
+		$o = obj($arr["oid"]);
+		$ddinst->do_init();
+		$name = $o->name();
+		ddFile::saveAs($name, $content,'jpg');
 	}
 
 	function fill_session($id)
@@ -1253,6 +1287,22 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				if($var == "reproduction")
 				{
 					$data[$var."_value"] = $this->get_right_size_image($_SESSION["patent"][$var]);
+				}elseif($var == "warrant")
+				{
+			/*		$content = $this->get_ddoc($arr["oid"]);
+					$o = obj($arr["oid"]);
+					$this->do_init();
+					$name = (substr($o->name(), -4, 4) == ".ddoc")?$o->name():$o->name().".ddoc";
+					ddFile::saveAs($name, $content);
+*/
+				
+					$data[$var."_value"] = html::href(array(
+ 							"caption" =>  $file->name(),
+							"target" => "New window",
+							"url" => $this->mk_my_orb("get_file", array(
+ 							"oid" => $file->id(),
+						), CL_PATENT),
+					));
 				}
 				else
 				{
