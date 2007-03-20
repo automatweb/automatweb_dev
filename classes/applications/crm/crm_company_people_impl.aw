@@ -157,7 +157,7 @@ class crm_company_people_impl extends class_base
 	{
 		$t->define_field(array(
 			"name" => "cal",
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"width" => 1
 		));
 
