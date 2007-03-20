@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.25 2007/03/09 14:20:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.26 2007/03/20 14:27:36 tarvo Exp $
 // procurement_offer.aw - Pakkumine hankele
 /*
 
@@ -291,7 +291,7 @@ class procurement_offer extends class_base
 	function _init_files_tbl(&$t)
 	{
 		$t->define_field(array(
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"name" => "icon",
 			"align" => "center",
 			"sortable" => 0,
@@ -333,7 +333,7 @@ class procurement_offer extends class_base
 		));
 
 		$t->define_field(array(
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"name" => "pop",
 			"align" => "center"
 		));
@@ -1345,7 +1345,7 @@ class procurement_offer extends class_base
 		$objs[] = obj();
 
 		$types = array(
-			CL_FILE => t(""),
+			CL_FILE => t("&nbsp;"),
 			CL_CRM_MEMO => t("Memo"),
 			CL_CRM_DOCUMENT => t("CRM Dokument"),
 			CL_CRM_DEAL => t("Leping"),
@@ -1486,7 +1486,7 @@ class procurement_offer extends class_base
 		));
 
 		$t->define_field(array(
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"name" => "del",
 		));
 
