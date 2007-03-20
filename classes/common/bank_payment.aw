@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.35 2007/03/20 11:46:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.36 2007/03/20 11:47:33 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -491,7 +491,7 @@ class bank_payment extends class_base
 					$log_data[$val["timestamp"]]["good"] = $val["good"];
 					if($val["actiontext"])
 					{
-						$log_data[$val["timestamp"]]["msg"].= "(".$val["actiontext"].")";
+						$log_data[$val["timestamp"]]["msg"].= " (".$val["actiontext"].")";
 					}
 				}
 				else
