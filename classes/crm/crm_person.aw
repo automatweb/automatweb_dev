@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.165 2007/03/16 15:23:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.166 2007/03/20 11:23:31 tarvo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -957,6 +957,7 @@ class crm_person extends class_base
 				break;
 
 			case "cv_view_tb":
+				/*
 				$arr["prop"]["toolbar"]->add_button(array(
 					"name" => "delete",
 					"img" => "pdf_upload.gif",
@@ -965,6 +966,26 @@ class crm_person extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"cv_tpl" => ($_t = $arr["request"]["cv_tpl"])?$_t:0,
 					))
+				));
+				*/
+				$tpl = $arr["request"]["cv_tpl"]?("cv/".basename($v[$arr["request"]["cv_tpl"]])):false;
+				$url = $this->mk_my_orb("show_cv", array(
+					"cv" => $tpl,
+					"id" => $arr["obj_inst"]->id(),
+					"die" => "1",
+				));
+				$arr["prop"]["toolbar"]->add_button(array(
+					"name" => "delete",
+					"img" => "preview.gif",
+					"tooltip" => t("Popup vaade"),
+					"url" => "#",
+					/*
+					"url" => $this->mk_my_orb("gen_job_pdf", array(
+						"id" => $arr["obj_inst"]->id(),
+						"cv_tpl" => ($_t = $arr["request"]["cv_tpl"])?$_t:0,
+					)),
+					*/
+					"onClick" => "aw_popup_scroll('".$url."','Eelvaade', 900, 900);"
 				));
 				//arr($arr);
 				$arr["prop"]["toolbar"]->add_cdata(html::select(array(
@@ -3539,7 +3560,10 @@ class crm_person extends class_base
 		);
 		return $ret;
 	}
-	
+
+	/**
+		@attrib name=show_cv all_args=1 params=name
+	**/
 	function show_cv($arr)
 	{
 		if(!$arr["cv"])
@@ -3741,12 +3765,15 @@ class crm_person extends class_base
 		}
 
 		$gidlist = aw_global_get("gidlist_oid");
-
 		$personname = $person_obj->name();
 		$cur_job = $this->has_current_job_relation($ob->id());
 		$img_inst = get_instance(CL_IMAGE);
 		$bd = split("-", $ob->prop("birthday"));
 		$bd = mktime(0,0,0,$bd[1],$bd[2], $bd[0]);
+		$tio = time() - $cur_job->prop("start");
+		$m = round(((($tio/60)/60)/24)/30, 0);
+		$y = floor((((($tio/60)/60)/24)/30)/12);
+		$time = $y?sprintf(t("%s %s, %s %s"), $y, $m,(($y==1)?t("year"):t("years")), (($m == 1)?t("month"):t("months"))):sprintf("%s %s", $m ,(($m == 1)?t("month"):t("months")));
 		$this->vars(array(
 			"COMP_SKILL" => $ck,
 			"LANG_SKILL" => $lsk,
@@ -3773,11 +3800,11 @@ class crm_person extends class_base
 			"gender" => $gender,
 			"cur_org_start" => $cur_job?get_lc_date($cur_job->prop("start")):"",
 			"cur_org_position" => $ob->prop_str("rank"),
-			"cur_org_time" => ($cur_job && $cur_job->prop("start"))?get_lc_date(time() - $cur_job->prop("start")):"",
+			"cur_org_time" => $time,
 			"picture_url" => $img_inst->get_url_by_id($ob->prop("picture")),
 			"company_logo" => $this->can("view",$logo)?$img_inst->get_url_by_id($logo):"",
 		));
-		return $this->parse();
+		return $arr["die"]?die($this->parse()):$this->parse();
 	}
 
 	function get_project_roles($arr)
