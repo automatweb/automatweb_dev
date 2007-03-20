@@ -19,10 +19,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @default group=grp_detailed
 @default group=grp_main
 
-	@groupinfo grp_sub_main parent=grp_main caption="Üldine" 
+	@groupinfo grp_sub_main parent=grp_main caption="Üldine"
 	@default group=grp_sub_main
-		
-		@property header type=text store=no no_caption=1 
+
+		@property header type=text store=no no_caption=1
 
 		@property property_toolbar type=toolbar store=no no_caption=1
 
@@ -89,15 +89,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		caption Ostja
 
 		@property seller type=text reltype=RELTYPE_REALESTATE_SELLER  field=meta method=serialize
-		
+
 		@property title101 type=text store=no subtitle=1
 		@caption Ostja andmed
-		
+
 		@property buyer_search type=text store=no
 		caption Ostja
 
 		@property buyer type=text reltype=RELTYPE_REALESTATE_BUYER  field=meta method=serialize
-		
+
 		type=releditor reltype=RELTYPE_REALESTATE_BUYER rel_id=first editonly=1
 		props=firstname,lastname,personal_id,gender,birthday,phone,email,comment,notes
 
@@ -393,7 +393,7 @@ class realestate_property extends class_base
 	{
 		if($o->is_property("total_floor_area") && $o->prop("total_floor_area") > 0)
 		{
-			
+
 			return $o->prop("transaction_price") / $o->prop("total_floor_area");
 		}
 		else return 0;
@@ -410,7 +410,7 @@ class realestate_property extends class_base
 			case "price_per_m2":
 				$prop["value"] = $this->get_price_per_m2($this_object);
 				break;
-			
+
 			case "weeks_valid_for":
 				$prop["options"] = array (2,4,6,8,10,12);
 				break;
@@ -445,7 +445,7 @@ class realestate_property extends class_base
 				if(!(sizeof($seller_obj_list->arr()) > 0)) return PROP_IGNORE;
 				$prop["value"] = $this->get_costumers_data(array("costumers" => $seller_obj_list, "obj_inst" => $arr["obj_inst"], "type" => "RELTYPE_REALESTATE_SELLER"));
 				break;
-			
+
 			case "seller_search":
 /*				$customer_search_url = $this->mk_my_orb ("customer_search", array (
 					"id" => $this_object->id(),
@@ -479,7 +479,7 @@ class realestate_property extends class_base
 					)
 				);
 				$str .= ' <a href="'.$person_search_url.'">Lisa Isik</a>';
-							
+
 				$search_url = $this->mk_my_orb("do_search", array(
 						"id" => $arr["obj_inst"]->id(),
 						"pn" => "seller",
@@ -487,7 +487,7 @@ class realestate_property extends class_base
 						"multiple" => "",
 					), "popup_search");
 				$str .= " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"{$search_url}\",\"_spop\",300,400)'>Otsi</a>";
-		
+
 				$prop["value"]=$str;
 
 				break;
@@ -500,7 +500,7 @@ class realestate_property extends class_base
 				if(!(sizeof($seller_obj_list->arr()) > 0)) return PROP_IGNORE;
 				$prop["value"] = $this->get_costumers_data(array("costumers" => $seller_obj_list, "obj_inst" => $arr["obj_inst"] , "type" => "RELTYPE_REALESTATE_BUYER"));
 				break;
-			
+
 			case "buyer_search":
 //				$customer_search_url = $this->mk_my_orb ("customer_search", array (
 //					"id" => $this_object->id(),
@@ -534,7 +534,7 @@ class realestate_property extends class_base
 					)
 				);
 				$str .= ' <a href="'.$person_search_url.'">Lisa Isik</a>';
-							
+
 				$search_url = $this->mk_my_orb("do_search", array(
 						"id" => $arr["obj_inst"]->id(),
 						"pn" => "buyer",
@@ -542,7 +542,7 @@ class realestate_property extends class_base
 						"multiple" => "",
 					), "popup_search");
 				$str .= " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"{$search_url}\",\"_spop\",300,400)'>Otsi</a>";
-		
+
 				$prop["value"]=$str;
 				break;
 
@@ -697,7 +697,7 @@ class realestate_property extends class_base
 				{
 					$options[$con->prop("to")] = $con->prop("to.name");
 				}
-			 
+
 				$prop["value"] = html::img (array (
 					 "url" => $prop["value"],
 				)).html::select(array("name" => "icon",
@@ -746,7 +746,7 @@ class realestate_property extends class_base
 					)),
 				"caption" => "Eemalda",
 				"title" => t("Eemalda"),
-					
+
 //					"url" => $this->mk_my_orb(
 //						"remove_costumer",
 //						array(
@@ -754,7 +754,7 @@ class realestate_property extends class_base
 //							"
 //						),
 //					),
-//					
+//
 			)).
 			'<br>';
 		}
@@ -767,14 +767,14 @@ class realestate_property extends class_base
 	function remove_costumer($arr)
 	{
 		$property = obj($_GET["id"]);
-		
+
 		$connections = $property->connections_from (array (
 			"type" => $_GET["type"],
 		));
 		foreach ($connections as $connection)
 		{
 			if($connection->prop("to") == $_GET["costumer"]) $connection->delete();
-		}	
+		}
 		return $_GET["return_url"];
 	}
 
@@ -839,7 +839,7 @@ class realestate_property extends class_base
 				if (!is_object ($this->cl_image))
 				{
 					$this->cl_image = get_instance(CL_IMAGE);
-				}	
+				}
 				if (is_oid ($arr["request"]["icon"]) && $this->can ("view" , $arr["request"]["icon"]))
 				{
 					$this_object->connect(array(
@@ -858,7 +858,7 @@ class realestate_property extends class_base
 					if ($upload_image !== false)
 					{
 						$this->make_icon(array(
-							"upload_image" => "icon_upload", 
+							"upload_image" => "icon_upload",
 							"realestate_obj" => &$this_object,
 						));
 					}
@@ -891,7 +891,7 @@ class realestate_property extends class_base
 		));
 		$ids = array();
 		foreach($conns_from as $conn)
-		{	
+		{
 			$ids[] = $conn->prop("to");
 		}
 		$realestate_obj->disconnect(array("from" => $ids));
@@ -1551,7 +1551,7 @@ class realestate_property extends class_base
 					$properties["picture_icon"]["value"] = $default_icon;
 					$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
 				}
-				
+
 				//piltide sorteerimine metas elutseva j&auml;rjekorra järgi
 
 				$i = 1;
@@ -1617,8 +1617,8 @@ class realestate_property extends class_base
 		// "/" oli kuskile vahelt kadunud....
 		$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
 		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
-		$data["additional_info"] = $this_object->prop ("additional_info_" . aw_global_get("LC"));
-	
+		$data["additional_info"] = nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")));
+
 		//et ei näitataks hinda, kui see on 0
 		if(!$data["transaction_price_value"] > 0)
 		{
@@ -2830,7 +2830,7 @@ class realestate_property extends class_base
 		{
 			$this->realestate_agents_data[$agent_oid]["name"] = $person->name();
 		}
-		else 
+		else
 		{
 			$this->realestate_agents_data[$agent_oid]["name"] = $agent->name();
 		}
