@@ -495,6 +495,7 @@
             <group>write_mail</group>
             <type>relpicker</type>
             <reltype>RELTYPE_REGISTER_DATA</reltype>
+            <rel>1</rel>
             <caption>Registri andmed</caption>
       </property>
       <property>
@@ -715,6 +716,7 @@
             <RELTYPE_REGISTER_DATA>
                   <value>9</value>
                   <clid>CL_REGISTER_DATA</clid>
+                  <caption>Registri andmed</caption>
             </RELTYPE_REGISTER_DATA>
       </reltypes>
 </properties>

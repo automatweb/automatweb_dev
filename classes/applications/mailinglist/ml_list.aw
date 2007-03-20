@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.94 2007/03/14 13:39:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.95 2007/03/20 13:48:17 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -202,7 +202,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
 @caption Maili kirjutamine
 
-@property register_data type=relpicker reltype=RELTYPE_REGISTER_DATA
+@property register_data type=relpicker reltype=RELTYPE_REGISTER_DATA rel=1
 @caption Registri andmed
 
 @property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
@@ -274,7 +274,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Saatja
 
 @reltype RELTYPE_REGISTER_DATA value=9 clid=CL_REGISTER_DATA
-@caqption Registri andmed
+@caption Registri andmed
 
 */
 
@@ -2673,6 +2673,7 @@ class ml_list extends class_base
 
 	function submit_write_mail($arr)
 	{
+		$img_inst = get_instance(CL_IMAGE);
 		$msg_data = $arr["request"]["emb"];
 		//ei ole aimugi moment kust kurat see asi vahepeal muutunud on..... kehv lahendus, aga asja peaks ruttu tööle saama ju
 		if(!$msg_data["message"]) $msg_data["message"] = $arr["request"]["message"];
@@ -2715,6 +2716,12 @@ class ml_list extends class_base
 				foreach($ro->get_property_list() as $key => $val)
 				{
 					$this->vars(array($key => $ro->prop($key)));
+				}
+				$asd = 1;
+				while($asd < 30)
+				{
+					$this->vars(array("userim".$asd => $img_inst->make_img_tag_wl($ro->prop("userim".$asd))));
+					$asd++;
 				}
 			}
 //			$this->read_template($template_obj->id());
