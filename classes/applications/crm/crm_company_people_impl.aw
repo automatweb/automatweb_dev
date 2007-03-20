@@ -163,7 +163,7 @@ class crm_company_people_impl extends class_base
 
 		$t->define_field(array(
 			'name' => 'image',
-			'caption' => t(''),
+			'caption' => t('&nbsp;'),
 			"chgbgcolor" => "cutcopied",
 			"align" => "center",
 			"width" => 1
