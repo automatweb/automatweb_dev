@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.56 2007/03/19 16:28:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.57 2007/03/20 12:07:21 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1424,10 +1424,10 @@ class room_reservation extends class_base
 			$bad_url = $bank_payment->prop("cancel_url");
 		}
 		$bad = 0;
-		if($_SESSION["bank_return"]["data"]["action"] == "afb" && !$bank_inst->check_response())
-		{
-			$bad = 1;
-		}
+// 		if($_SESSION["bank_return"]["data"]["action"] == "afb" && !$bank_inst->check_response())
+// 		{
+// 			$bad = 1;
+// 		}
 		if(!$bad)
 		{
 			if(!$this->make_verified($arr["id"]))
