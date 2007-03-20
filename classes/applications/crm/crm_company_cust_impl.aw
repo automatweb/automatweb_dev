@@ -309,7 +309,7 @@ class crm_company_cust_impl extends class_base
 
 		$tf->define_field(array(
 			"name" => "pop",
-			"caption" => t("")
+			"caption" => t("&nbsp;")
 		));
 
 		$tf->define_chooser(array(
