@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.45 2007/02/06 15:58:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.46 2007/03/20 14:13:16 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -133,7 +133,7 @@ class pot_scanner extends core
 
 					$strings[] = array(
 						"line" => $line,
-						"str" => $param
+						"str" => trim($param),
 					);
 				}
 			}

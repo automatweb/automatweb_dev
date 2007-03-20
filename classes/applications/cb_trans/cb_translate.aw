@@ -95,7 +95,7 @@ class cb_translate extends aw_template
 			"type" => TREE_DHTML,
 			"open_path" => array("fld_10","fld_37","fld_59"),
 			//"open_path" => array("fld_10","fld_37","fld_59","867"),
-			"root_name" => iconv("iso-8859-1", "utf-8", "AW KLASSIDE TÕLKIMINE"),
+			"root_name" => iconv("iso-8859-1", "utf-8", "AW KLASSIDE T&Otilde;LKIMINE"),
 			"url_target" => "editorcontent",
 			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $arr["clid"], "parent" => " ")),
 			"has_root" => 1,
@@ -261,7 +261,7 @@ class cb_translate extends aw_template
 	**/
 	function get_node($arr)
 	{
-		aw_global_set("output_charset", "utf-8");
+		aw_global_set("output_charset", "UTF-8");
 		$this->read_template("editor.tpl");
 
 		$cfgu = get_instance("cfg/cfgutils");
@@ -456,7 +456,7 @@ class cb_translate extends aw_template
 	function lineeditor($arr)
 	{
 		$charset_from_local = "iso-8859-1";
-		aw_global_set("output_charset", "utf-8");
+		aw_global_set("output_charset", "UTF-8");
 		$this->read_template("linetrans.tpl");
 		//$this->sub_merge = 1;
 		$pot_scanner = get_instance("core/trans/pot_scanner");
@@ -544,7 +544,8 @@ class cb_translate extends aw_template
 					"1",
 			)),
 		));
-		return ($this->parse());
+		//return die($this->parse());
+		return $this->parse();
 	}
 	/** manages single class or classfolder editing
 		@attrib name=releditor
@@ -554,7 +555,7 @@ class cb_translate extends aw_template
 	function releditor($arr)
 	{
 		$charset_from_local = "iso-8859-1";
-		aw_global_set("output_charset", "utf-8");
+		aw_global_set("output_charset", "UTF-8");
 		$this->read_template("reltrans.tpl");
 		$cu = get_instance("cfg/cfgutils");
 		$cu->load_properties(array(
@@ -610,7 +611,7 @@ class cb_translate extends aw_template
 		}
 
 		$title = t("Klassi")." '".$cls[$arr["clid"]]["name"]."' ".t("seos")." '".$rels[$arr["reltype"]]["caption"]."'";
-		$title .= " ('".$arr["reltype"]."' ".t("tüüpi").")";
+		$title .= " ('".$arr["reltype"]."' ".t("t&uuml;&uuml;pi").")";
 		$this->vars(array(
 			"title" => iconv($charset_from_local, "utf-8", $title),
 			"caption" => $rels[$arr["reltype"]]["caption"],
@@ -619,7 +620,8 @@ class cb_translate extends aw_template
 				"reltype" => $arr["reltype"],
 			)),
 		));
-		return($this->parse());
+		//return die($this->parse());
+		return $this->parse();
 	}
 
 	/** manages single class or classfolder editing
@@ -629,7 +631,7 @@ class cb_translate extends aw_template
 	function classeditor($arr)
 	{
 		$charset_from_local = "iso-8859-1";
-		aw_global_set("output_charset", "utf-8");
+		aw_global_set("output_charset", "UTF-8");
 		$obj_is_folder = false;
 		if(substr($arr["clid"],0,4) == "fld_")
 		{
@@ -729,6 +731,7 @@ class cb_translate extends aw_template
 		));
 
 		return ($this->parse());
+		//return die($this->parse());
 	}
 
 	/**
@@ -741,7 +744,7 @@ class cb_translate extends aw_template
 		$charset_from_local = "iso-8859-1";
 		$pot_scanner = get_instance("core/trans/pot_scanner");
 		$languages = $pot_scanner->get_langs();
-		aw_global_set("output_charset", "utf-8");
+		aw_global_set("output_charset", "UTF-8");
 
 		$this->read_template("proptrans.tpl");
 		$this->sub_merge = 1;
@@ -817,6 +820,7 @@ class cb_translate extends aw_template
 			)),
 		));
 		return ($this->parse());
+		//return die($this->parse());
 	}
 
 
@@ -829,7 +833,7 @@ class cb_translate extends aw_template
 	function proptrans($arr) 
 	{
 		$charset_from_local = "iso-8859-1";
-		aw_global_set("output_charset", "utf-8");
+		aw_global_set("output_charset", "UTF-8");
 		$pot_scanner = get_instance("core/trans/pot_scanner");
 		$languages = $pot_scanner->get_langs();
 
@@ -902,7 +906,7 @@ class cb_translate extends aw_template
 		$title = t("Klass")." '".$cls[$arr["clid"]]["name"]."'";
 		$title .= ", ".t("Grupp")." '".$groups[$arr["grpid"]]["caption"]."'";
 		$title .= ", ".t("Omadus")." '".$props[$arr["propid"]]["caption"]."'";
-		$title .= " ('".$props[$arr["propid"]]["type"]."' ".t("tüüpi").")";
+		$title .= " ('".$props[$arr["propid"]]["type"]."' ".t("t&uuml;&uuml;pi").")";
 
 		$this->vars(array(
 			"caption" => iconv($charset_from_local, "utf-8", $props[$arr["propid"]]["caption"]),
@@ -914,8 +918,7 @@ class cb_translate extends aw_template
 			)),
 		));
 		return ($this->parse());
-
-
+		//return die($this->parse());
 	}
 
 	/**
@@ -973,8 +976,7 @@ class cb_translate extends aw_template
 			));
 			$this->parse("NO_CHANGE");
 		}
-		return $this->parse();
-
+		return die($this->parse());
 	}
 
 
@@ -1041,7 +1043,7 @@ class cb_translate extends aw_template
 			"reforb" => $this->mk_reforb("actual_commit"),
 		));
 
-		return $this->parse();
+		return die($this->parse());
 	}
 
 	/**
@@ -1082,6 +1084,7 @@ class cb_translate extends aw_template
 	**/
 	function submit_editor($arr)
 	{
+		//arr($arr);
 		$arr["caption"] = htmlentities($arr["caption"], ENT_COMPAT, "UTF-8");
 		//die(arr($arr));
 		$langs_info = aw_ini_get("languages.list");
@@ -1319,6 +1322,7 @@ class cb_translate extends aw_template
 					foreach($vars as $msgid => $msgstr)
 					{
 						$var_exists = 0;
+						$msgid = htmlentities($msgid, ENT_COMPAT, "UTF-8");
 						// goes trough po file contents
 						foreach($po_contents as $entry_no => $entry)
 						{
@@ -1367,6 +1371,7 @@ class cb_translate extends aw_template
 				{
 					foreach($vars  as $msgid => $msgstr)
 					{
+						$msgid = htmlentities($msgid, ENT_COMPAT, "UTF-8");
 						if(strlen(trim($msgstr)) > 0)
 						{
 							$headers = $this->_get_line_headers($tmp[CLS]["id"]);

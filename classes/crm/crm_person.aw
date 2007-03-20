@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.166 2007/03/20 11:23:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.167 2007/03/20 14:12:45 tarvo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2399,7 +2399,7 @@ class crm_person extends class_base
 
 		if($arr["request"]["skill"] == "languages")
 		{
-			$lang_capt = t("<b>Keeled</b>");
+			$lang_capt = "<b>".t("Keeled")."</b>";
 		}
 		else
 		{
@@ -4053,7 +4053,7 @@ class crm_person extends class_base
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => t("<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Vali</a>"),
+			"caption" => "<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>".t("Vali")."</a>",
 			"align" => "center",
 		));
 	}
