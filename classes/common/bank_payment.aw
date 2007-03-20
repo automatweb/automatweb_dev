@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.34 2007/03/13 14:00:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.35 2007/03/20 11:46:32 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -480,7 +480,7 @@ class bank_payment extends class_base
 					{
 						$log_data[$val["timestamp"]]["payer"] = $val["msgdata"];
 					}
-					if($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000")
+					if($val["VK_SERVICE"] == 1101 || $val["respcode"] == "000")
 					{
 						$log_data[$val["timestamp"]]["ok"] = 1;
 					}
@@ -489,6 +489,10 @@ class bank_payment extends class_base
 						$log_data[$val["timestamp"]]["ok"] = 0;
 					}
 					$log_data[$val["timestamp"]]["good"] = $val["good"];
+					if($val["actiontext"])
+					{
+						$log_data[$val["timestamp"]]["msg"].= "(".$val["actiontext"].")";
+					}
 				}
 				else
 				{
