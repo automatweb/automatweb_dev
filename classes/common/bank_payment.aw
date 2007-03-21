@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.36 2007/03/20 11:47:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.37 2007/03/21 16:53:27 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -462,6 +462,10 @@ class bank_payment extends class_base
 				}
 				if($val["timestamp"])
 				{
+ /*					if(aw_global_get("uid") == "struktuur"){arr($val);
+ 					$_SESSION["bank_return"]["data"] = $val;
+ 					arr($val["good"] = $this->check_response($val));
+ 					}*/
 					$log_data[$val["timestamp"]]["payer"] = $val["VK_SND_NAME"];
 					$log_data[$val["timestamp"]]["ref"] = $val["VK_REF"];
 					$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
@@ -1398,10 +1402,9 @@ class bank_payment extends class_base
 		sprintf("%012s", $ecuno) . sprintf("%06s", $receipt_no) . sprintf("%012s",
 		$eamount) . sprintf("%3s", $cur) . $respcode . $datetime . sprintf("%-40s",
 		$msgdata) . sprintf("%-40s", $actiontext);
-
 		$mac = $this->hex2str($mac);
 		$signature = sha1($data);
-		$fp = fopen($this->cfg["site_basedir"]."/pank/80_ecom.crt", "r");
+		$fp = fopen($this->cfg["site_basedir"]."/pank/credit_card.crt", "r");
 		$cert = fread($fp, 8192);
 		fclose($fp);
 		$pubkeyid = openssl_get_publickey($cert);
@@ -1410,4 +1413,5 @@ class bank_payment extends class_base
 		return $ok;
 	}
 }
+
 ?>
