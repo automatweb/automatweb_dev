@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.24 2007/03/19 14:21:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.25 2007/03/21 13:49:13 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -588,14 +588,15 @@ class trademark_manager extends class_base
 	function nightly_export($arr)
 	{
 		classload("core/date/date_calc");
-		// list all patents created today
+		// list all patents created yesterday
 		$ol = new object_list(array(
 			"class_id" => CL_PATENT,
 			"lang_id" => array(),
 			"site_id" => array(),
 			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => 1,
-			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.modified" => new obj_predicate_compare(OBJ_COMP_GREATER, get_day_start()-24*3600) 
+			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.modified" => new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start()),
 		));
+		
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
 		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
 ';
@@ -604,7 +605,23 @@ class trademark_manager extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$status = $tm->get_status($o);
-			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $status->prop("nr")).'" OOCD="EE" ORIGLAN="3" EXPDATE="'.date("Ymd", $o->prop("exhibition_date")).'" REGEDAT="'.date("Ymd", $o->prop("convention_date")).'" INTREGD="'.date("Ymd", $o->prop("exhibition_date")).'" DESUNDER="P">
+			$pri_co = $pri_date = $pri_name = "";
+			if($o->prop("convention_date") > 1) $pri_date = date("Ymd",$o->prop("convention_date"));
+			if($o->prop("exhibition_date") > 1)
+			{
+				$pri_date = date("Ymd",$o->prop("exhibition_date"));
+			}
+			if($o->prop("convention_nr"))
+			{
+				$pri_name = $o->prop("convention_nr");
+			}
+			if($o->prop("exhibition_name"))
+			{
+				$pri_name = $o->prop("exhibition_name");
+			}
+			$pri_co = ($o->prop("convention_country"))?$o->prop("convention_country"):$o->prop("exhibition_country");
+	
+			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $status->prop("nr")).'" OOCD="EE" ORIGLAN="3" EXPDATE="'.date("Ymd", $status->prop("modified")).'" REGEDAT="'.date("Ymd", $status->prop("sent_date")).'" INTREGD="'.date("Ymd", $status->prop("modified")).'" DESUNDER="P">
 ';
 
 /*				$xml .= '		<HOLGR>
@@ -828,19 +845,19 @@ class trademark_manager extends class_base
 
 				$xml .= "\t\t<BASGR>\n";
 					$xml .= "\t\t\t<BASAPPGR>\n";
-						$xml .= "\t\t\t\t<BASAPPD>".date("Ymd", $o->prop("exhibition_date"))."</BASAPPD>\n";
+						$xml .= "\t\t\t\t<BASAPPD>".date("Ymd", $status->prop("modified"))."</BASAPPD>\n";
 						$xml .= "\t\t\t\t<BASAPPN>".sprintf("%08d", $status->prop("nr"))."</BASAPPN>\n";
 					$xml .= "\t\t\t</BASAPPGR>\n";
 				$xml .= "\t\t</BASGR>\n";
 
 				$xml .= "\t\t<PRIGR>\n";
-					$xml .= "\t\t\t<PRICP>".($o->prop("convention_country"))?$o->prop("convention_country"):$o->prop("exhibition_country")."</PRICP>\n";
+					$xml .= "\t\t\t<PRICP>".$pri_co."</PRICP>\n";
 //echo dbg::dump($o->prop("convention_date"));
 					if ($o->prop("convention_date") > 1|| $o->prop("exhibition_date") > 1)
 					{
-						$xml .= "\t\t\t<PRIAPPD>".($o->prop("convention_date") > 1)?date("Ymd",$o->prop("convention_date")):date("Ymd",$o->prop("exhibition_date"))."</PRIAPPD>\n";
+						$xml .= "\t\t\t<PRIAPPD>".$pri_date."</PRIAPPD>\n";
 					}
-					$xml .= "\t\t\t<PRIAPPN>".($o->prop("convention_nr"))?$o->prop("convention_nr"):$o->prop("exhibition_ame")."</PRIAPPN>\n";
+					$xml .= "\t\t\t<PRIAPPN>".$pri_name."</PRIAPPN>\n";
 				
 				$xml .= "\t\t</PRIGR>\n";
 
@@ -849,6 +866,7 @@ class trademark_manager extends class_base
 				$xml .= "\t\t</DESPG>\n";
 
 			$xml .= "\t</BIRTH>\n";
+			$status->set_no_modify(true);
 			$status->set_prop("exported", 1);
 			$status->set_prop("export_date", time());
 			$o->set_no_modify(true);
