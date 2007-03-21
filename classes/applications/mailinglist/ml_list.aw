@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.95 2007/03/20 13:48:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.96 2007/03/21 16:19:12 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -39,6 +39,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
 @caption Listi liikmete seadetevorm
+
+@property register_data_cgfform_id type=relpicker reltype=RELTYPE_RD_CONFIG
+@caption Registri andmete seadetevorm
 
 @property default_bounce type=textbox
 @caption Default bounce
@@ -199,11 +202,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property bounce type=textbox
 @caption Bounce aadress
 
+@property register_data type=text
+@caption Registri andmed
+
 @property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
 @caption Maili kirjutamine
-
-@property register_data type=relpicker reltype=RELTYPE_REGISTER_DATA rel=1
-@caption Registri andmed
 
 @property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
 @caption Aliastehaldur
@@ -275,6 +278,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @reltype RELTYPE_REGISTER_DATA value=9 clid=CL_REGISTER_DATA
 @caption Registri andmed
+
+@reltype RELTYPE_RD_CONFIG value=10 clid=CL_CFGFORM
+@caption Registri andmete seadete vorm
 
 */
 
@@ -764,6 +770,29 @@ class ml_list extends class_base
 
 		switch($prop["name"])
 		{
+			case "register_data":
+				if(is_object($rd = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER_DATA")))
+				{
+					$prop["value"] = $rd->name();
+				}
+				else
+				{
+					$prop["value"] = t("Registri andmed");
+				}
+/*				if(is_oid($arr["request"]["msg_id"]) && $this->can("view" , $arr["request"]["msg_id"]))
+				{
+					$mail_obj = obj($arr["request"]["msg_id"]);
+					foreach($mail_obj->connections_from(array("type" => "RELTYPE_REGISTER_DATA")) as $c)
+					{
+						$rd = $c->to();
+						$prop["options"] = $prop["options"]+array($rd->id() => $rd->name);
+					}
+				}*/
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("register_data" , array("ml" => $arr["obj_inst"]->id(), "ru" => get_ru())),
+					"caption" => $prop["value"],
+				));
+				break;
 			case "search_tb":
 				$toolbar = &$prop["vcl_inst"];
 				$toolbar->add_button(array(
@@ -2541,6 +2570,27 @@ class ml_list extends class_base
 			"type" => "RELTYPE_TEMPLATE",
 		));
 		$filtered_props = array();
+		
+		if (!strlen($msg_obj->prop("message")) > 0)
+		{
+			$options = array(0 => t(" - vali - "));
+			$tm = get_instance("templatemgr");
+			$options = $tm->template_picker(array(
+				"folder" => "automatweb/mlist"
+			));
+			foreach($templates as $template)
+			{
+				$options[$template->prop("to")] = $template->prop("to.name");
+			}
+			$filtered_props["copy_template"] = array(
+				"type" => "select",
+				"name" => "copy_template",
+				"options" => $options,
+				"caption" => t("Vali template mille sisusse kopeerida"),
+				"value" => $msg_obj->meta("copy_template"),
+			);
+		}
+		
 		// insert a template selector, if there are any templates available
 		if (sizeof($templates) > 0 )
 		{
@@ -2610,21 +2660,6 @@ class ml_list extends class_base
 				}
 				$filtered_props[$id] = $prop;
 			}
-		}
-		if ((sizeof($templates) > 0) && (!strlen($msg_obj->prop("message")) > 0))
-		{
-			$options = array(0 => t(" - vali - "));
-			foreach($templates as $template)
-			{
-				$options[$template->prop("to")] = $template->prop("to.name");
-			}
-			$filtered_props["copy_template"] = array(
-				"type" => "select",
-				"name" => "copy_template",
-				"options" => $options,
-				"caption" => t("Vali template mille sisusse kopeerida"),
-				"value" => $msg_obj->meta("copy_template"),
-			);
 		}
 		$filtered_props["id"] = array(
 			"name" => "id",
@@ -2705,23 +2740,39 @@ class ml_list extends class_base
 		}
 		$tpl = $msg_data["template_selector"];
 		$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
-		if((!strlen($msg_data["message"]) > 0 ) && (is_oid($msg_data["copy_template"])))
+		if((!strlen($msg_data["message"]) > 0 ) && $msg_data["copy_template"])
 		{
-			$template_obj = obj($msg_data["copy_template"]);
-			$this->use_template($template_obj->prop("content"));
-
-			if(is_oid($arr["obj_inst"]->prop("register_data")))
+			if(is_oid($msg_data["copy_template"]))
 			{
-				$ro = obj($arr["obj_inst"]->prop("register_data"));
+				$template_obj = obj($msg_data["copy_template"]);
+				$this->use_template($template_obj->prop("content"));
+			}
+			else
+			{
+				$this->read_site_template($msg_data["copy_template"]);
+			}
+			if(is_object($ro = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER_DATA")))
+			{
+				$c = obj($ro->meta("cfgform_id"));
+				foreach($c->get_property_list() as $key => $val)
+				{
+					$this->vars(array($key => $c->prop($key)));
+					//arr($c->meta($key));arr($key);
+				}
 				foreach($ro->get_property_list() as $key => $val)
 				{
 					$this->vars(array($key => $ro->prop($key)));
+//					arr($ro->meta($key));arr($key);
 				}
 				$asd = 1;
-				while($asd < 30)
+				while($asd < 6)
 				{
-					$this->vars(array("userim".$asd => $img_inst->make_img_tag_wl($ro->prop("userim".$asd))));
+					if(is_object($x = $ro->get_first_obj_by_reltype("RELTYPE_IMAGE".$asd)))
+					{
+					$this->vars(array("userim".$asd => $img_inst->make_img_tag_wl($x->id())));
+					}
 					$asd++;
+					
 				}
 			}
 //			$this->read_template($template_obj->id());
@@ -2967,6 +3018,37 @@ class ml_list extends class_base
 	function search_tb($arr)
 	{
 	
+	}
+	
+	/**
+	@attrib api=1 params=name name=register_data
+	@param ml required type=oid
+		ml_list oid
+	@param ru optional type=string
+		return url
+	**/
+	function register_data($arr)
+	{
+		$arr["obj_inst"] = obj($arr["ml"]);
+		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER_DATA");
+		if(!is_object($o))
+		{
+			$o = new object();
+			$o->set_parent($arr["obj_inst"]->id());
+			$o->set_class_id(CL_REGISTER_DATA);
+			$o->set_name($arr["obj_inst"]->name()." ".t("kirjade registri andmed"));
+			$o->save();
+			if($arr["obj_inst"]->prop("register_data_cgfform_id"))
+			{
+				$o->set_meta("cfgform_id", $arr["obj_inst"]->prop("register_data_cgfform_id"));
+			}
+			$o->save();
+			$arr["obj_inst"]->connect(array(
+				"to" => $o->id(),
+				"reltype" => "RELTYPE_REGISTER_DATA",
+			));
+		}
+		return html::get_change_url($o->id(), array("return_url" => $arr["ru"]));
 	}
 	
 	function member_search($arr)

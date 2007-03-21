@@ -89,5 +89,14 @@
 			</function>
 		</action>
 
+		<action name="register_data">
+			<function name="register_data">
+				<arguments>
+					<required name="ml" type="oid" />
+					<optional name="ru" type="string" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

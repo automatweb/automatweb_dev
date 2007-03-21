@@ -96,6 +96,16 @@
             <caption>Listi liikmete seadetevorm</caption>
       </property>
       <property>
+            <name>register_data_cgfform_id</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RD_CONFIG</reltype>
+            <caption>Registri andmete seadetevorm</caption>
+      </property>
+      <property>
             <name>default_bounce</name>
             <table>objects</table>
             <field>meta</field>
@@ -476,6 +486,15 @@
             <caption>Bounce aadress</caption>
       </property>
       <property>
+            <name>register_data</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>text</type>
+            <caption>Registri andmed</caption>
+      </property>
+      <property>
             <name>write_mail</name>
             <table>objects</table>
             <field>meta</field>
@@ -486,17 +505,6 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Maili kirjutamine</caption>
-      </property>
-      <property>
-            <name>register_data</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>write_mail</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_REGISTER_DATA</reltype>
-            <rel>1</rel>
-            <caption>Registri andmed</caption>
       </property>
       <property>
             <name>aliasmgr</name>
@@ -718,6 +726,11 @@
                   <clid>CL_REGISTER_DATA</clid>
                   <caption>Registri andmed</caption>
             </RELTYPE_REGISTER_DATA>
+            <RELTYPE_RD_CONFIG>
+                  <value>10</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Registri andmete seadete vorm</caption>
+            </RELTYPE_RD_CONFIG>
       </reltypes>
 </properties>
 
