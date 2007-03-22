@@ -530,7 +530,8 @@ class realestate_import extends class_base
 						$imported_properties[] = $property->id ();
 					// }
 
-					unset ($property);
+					// unset ($property);
+					$property = NULL; // v2idetavalt on m2lukasutus unsetiga v6rreldes nii efektiivsem
 				}
 				else
 				{
@@ -551,7 +552,7 @@ class realestate_import extends class_base
 			if (("ROW" === $data["tag"]) and ("open" === $data["type"]))
 			{
 				### start property import
-				unset ($this->property_data);
+				// unset ($this->property_data);
 				$this->property_data = array ();
 				$this->property_data["PILT"] = array ();
 			}
@@ -974,14 +975,14 @@ class realestate_import extends class_base
 				#### transaction_price2
 				$value = round ($this->property_data["TEHING_MYYGIHIND"], 2);
 				$property->set_prop ("transaction_price2", $value);
-				
+
 				### price per m2
 				if($property->is_property("total_floor_area"))
 				{
 					$value = round ($this->property_data["PRICE_PER_M2"], 2);
 					$property->set_prop ("price_per_m2", $value);
 				}
-				
+
 				#### transaction_rent
 				$value = round ($this->property_data["TEHING_KUUYYR"], 2);
 				$property->set_prop ("transaction_rent", $value);
@@ -1202,8 +1203,10 @@ class realestate_import extends class_base
 						"to" => $image,
 						"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
 					));
-					unset ($imagedata);
-					unset ($image);
+					// unset ($imagedata);
+					// unset ($image);
+					$imagedata = NULL;
+					$image = NULL;
 				}
 
 				#### pictures
@@ -1255,8 +1258,10 @@ class realestate_import extends class_base
 							"reltype" => "RELTYPE_REALESTATE_PICTURE",
 						));
 
-						unset ($imagedata);
-						unset ($image);
+						// unset ($imagedata);
+						// unset ($image);
+						$imagedata = NULL;
+						$image = NULL;
 					}
 					elseif ($key != $existing_pictures[$picture_id]->ord())
 					{ # change order
@@ -1265,7 +1270,8 @@ class realestate_import extends class_base
 					}
 				}
 
-				unset($existing_pictures);
+				// unset($existing_pictures);
+				$existing_pictures = NULL;
 
 
 				### set type specific property values
