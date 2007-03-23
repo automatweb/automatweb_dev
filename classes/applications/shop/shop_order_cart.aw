@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.59 2007/02/28 16:28:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.60 2007/03/23 11:47:28 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -107,7 +107,16 @@ class shop_order_cart extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$this->read_template("show.tpl");
+		
+		$oc = obj($oc);
+		if($oc->prop("chart_show_template"))
+		{
+			$this->read_template($oc->prop("chart_show_template"));
+		}
+		else
+		{
+			$this->read_template("show.tpl");
+		}
 		lc_site_load("shop_order_cart", &$this);
 		$soce = new aw_array(aw_global_get("soc_err"));
 		$soce_arr = $soce->get();
@@ -133,7 +142,6 @@ class shop_order_cart extends class_base
 
 		aw_session_del("soc_err");
 
-		$oc = obj($oc);
 
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
@@ -1211,10 +1219,20 @@ class shop_order_cart extends class_base
 	function final_finish_order($arr)
 	{
 		extract($arr);
-		$this->read_template("final_finish_order.tpl");
+		
+		$oc = obj($oc);
+		if($oc->prop("chart_final_template"))
+		{
+			$this->read_template($oc->prop("chart_final_template"));
+		}
+		else
+		{
+			$this->read_template("final_finish_order.tpl");
+		}
+
 		lc_site_load("shop_order_cart", &$this);
 
-		$oc = obj($oc);
+
 
 		// get cart to user from oc
 		if ($arr["id"])
@@ -1637,7 +1655,7 @@ class shop_order_cart extends class_base
 		$order_obj->save();
 		aw_restore_acl();
 		
-		if(aw_global_get("uid") == "struktuur"){arr($_SESSION["bank_payment"]["url"]); die();}
+		//if(aw_global_get("uid") == "struktuur"){arr($_SESSION["bank_payment"]["url"]); die();}
 		$ret = $bank_inst->do_payment(array(
 			"bank_id" => $bank,
 			"amount" => $real_sum,

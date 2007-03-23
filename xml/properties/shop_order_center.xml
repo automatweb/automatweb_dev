@@ -154,6 +154,24 @@
             <caption>Veebis allahindlus (%)</caption>
       </property>
       <property>
+            <name>chart_show_template</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Ostukorvi vaade template</caption>
+      </property>
+      <property>
+            <name>chart_final_template</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Ostukorvi l&amp;amp;ouml;ppvaate template</caption>
+      </property>
+      <property>
             <name>bank_payment</name>
             <group>general</group>
             <table>objects</table>

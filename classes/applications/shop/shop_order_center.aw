@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.49 2007/02/19 14:21:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.50 2007/03/23 11:47:28 markop Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -60,6 +60,12 @@
 
 @property web_discount type=textbox size=5
 @caption Veebis allahindlus (%)
+
+@property chart_show_template type=select
+@caption Ostukorvi vaade template
+
+@property chart_final_template type=select
+@caption Ostukorvi l&ouml;ppvaate template
 
 @property bank_payment type=relpicker reltype=RELTYPE_BANK_PAYMENT
 @caption Pangamakse objekt
@@ -194,6 +200,15 @@ class shop_order_center extends class_base
 					1 => t("Kasutajapõhine"),
 				);
 				break;
+				
+			case "chart_show_template":
+			case "chart_final_template":
+				
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "applications/shop/shop_order_cart/"
+				));
+				break;	
 				
 			case "rent_prop":
 				$df = $arr["obj_inst"]->prop("data_form");
