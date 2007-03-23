@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.166 2007/03/14 15:20:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.167 2007/03/23 13:17:17 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -195,6 +195,9 @@ caption Osalejad
 
 	@property rows_tb type=toolbar store=no no_caption=1 method=serialize
 	@property rows type=table store=no no_caption=1 method=serialize
+	@property rows_bottom type=text no_caption=1
+	@property rows_oe type=text no_caption=1
+	
 @default group=resources
 
 	@property sel_resources type=table no_caption=1 method=serialize
@@ -446,6 +449,76 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{	
+			case "rows_oe":
+				$data["value"]= t("Muud kulud")."\n";
+				$cs = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_EXPENSE",
+				));
+				$stats_inst = get_instance("applications/crm/crm_company_stats_impl");
+				$cu_name = "";
+				$sum = 0;
+				if(is_oid($arr["obj_inst"]->prop("hr_price_currency")))
+				{
+					$co_cu = obj($arr["obj_inst"]->prop("hr_price_currency"));
+				}
+				foreach ($cs as $key => $ro)
+				{
+					$ob = $ro->to();
+					if($ob->class_id() == CL_CRM_EXPENSE)
+					{
+						$bno = "";
+						if ($this->can("view", $ob->prop("bill_id")))
+						{
+							$bo = obj($ob->prop("bill_id"));
+							$bno = $bo->prop("bill_no");
+						}
+						$onbill = "";
+						if ($ob->prop("bill_id"))
+						{
+							$onbill = sprintf(t("arve nr %s"), $bno);
+						}
+						$c = $d = $w = $a = "";
+						if(is_oid($ob->prop("currency")))
+						{
+							$curr = obj($ob->prop("currency"));
+							$c = $curr->name();
+							$sum = $sum + $stats_inst->convert_to_company_currency(array(
+								"sum" => $ob->prop("cost"),
+								"o" => $ob,
+								"company_curr" =>  $co_cu->id(),
+							));
+						}
+						else
+						{
+							$sum = $sum + $ob->prop("cost");
+						}
+						if(date_edit::get_timestamp($ob->prop("date")) > 0)
+						{
+							$d = date("j.m.Y", date_edit::get_timestamp($ob->prop("date")));
+						}
+						elseif($ob->prop("date") > 0)
+						{
+							$d = date("j.m.Y", $ob->prop("date"));
+						}
+						if(is_oid ($ob->prop("who")))
+						{
+							$who = obj($ob->prop("who"));
+							$w = $who->name();
+						}
+						if(false)
+						{
+							$a = t("arve nr"). " ";
+						}
+	
+						$data["value"].= $ob->name().", ". $ob->prop("cost") . " " .$c. ", " . $d. ", " .$w . ", " . $onbill."\n<br>";
+					}
+	//			$nr++;
+				}
+				if(is_object($co_cu)) $cu_name = $co_cu->name();
+				$data["value"].=t("Kokku:")." ".$sum." ".$cu_name;
+				break;
+		
+		
 			case "predicates":
 				return PROP_IGNORE;
 				break;
