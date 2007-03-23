@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.34 2007/02/20 15:42:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.35 2007/03/23 10:48:46 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -38,7 +38,7 @@
 
 
 	@property no_warehouse type=checkbox no_caption=1 field=meta method=serialize
-	@caption Laoseisu ei arvestata
+	@caption Arvestab laoseisu
 
 @default group=p
 
@@ -2670,11 +2670,8 @@ class procurement_center extends class_base
 			}
 //			if($data["products_find_groups"]) $offerer_filter["parent"] = $data["products_find_groups"];
 			$offerer_list = new object_list($offerer_filter);
-			if(($data["products_find_groups"] || $data["products_find_address"] || $data["products_find_name"]) && !sizeof($offerer_list->arr()))
-			{
-				return $ol;
-			}
-			$filter["name"] = array();
+			$filter["name"] = array($filter["name"]);
+			
 			
 			//otsib pakkumiste ridu mis vastaks tingimustele
 			$row_filter = array(
@@ -2882,7 +2879,7 @@ class procurement_center extends class_base
 			"align" => "center"
 		));
 
-		if(!$this->no_warehouse)
+		if($this->no_warehouse)
 		{
 			$t->define_field(array(
 				"sortable" => 1,
@@ -3462,7 +3459,7 @@ class procurement_center extends class_base
 						if($doc->class_id() == CL_FILE)
 						{
 						//	$file = $file_inst->get_file_by_id($doc->id());
-							$last_offer_file = $file_inst->get_url($doc->id());
+							$last_offer_file = $file_inst->get_url($doc->id()).'/'.$doc->name();
 						}
 						else
 						{
@@ -3476,6 +3473,7 @@ class procurement_center extends class_base
 					
 					foreach($row_list->arr() as $row)
 					{
+						$date = "";
 //						arr($row->prop("product") . " - " . $o->name());
 						$amount = $row->prop("amount");
 						$price = $row->prop("price");
@@ -3483,12 +3481,20 @@ class procurement_center extends class_base
 						$unit_obj = obj($row->prop("unit"));
 						$unit = $unit_obj->prop("unit_code");
 						$time = $offer->prop("date");
-						if(!$time)
+						if(!($time > 0))
+						{
+							$time = $offer->prop("accept_date");
+						}
+
+						if(!($time > 0))
 						{
 							$time = $row->prop("shipment");
 						}
-						$date = date("d.m.Y",$time);
-					
+						if($time > 0)
+						{
+							$date = date("d.m.Y",$time);
+						}
+
 						$buyings_list = new object_list(array(
 							"class_id" => CL_PURCHASE,
 							"lang_id" => array(),
@@ -3496,11 +3502,14 @@ class procurement_center extends class_base
 						));
 						if($row->prop("accept") && sizeof($buyings_list->arr()))
 						{
+							foreach($buyings_list->arr() as $buying)
+							{
+							}
+							if($buying->prop("date") > 0) $date = date("d.m.Y",$buying->prop("date"));
 							$amount = $row->prop("b_amount");
 							$price = $row->prop("b_price");
 							$cutcopied = "yellow";
 						}
-						
 						if($last_offer_file)
 						{
 							$price = html::href(array(

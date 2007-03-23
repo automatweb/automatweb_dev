@@ -6890,8 +6890,8 @@ class crm_company extends class_base
 						$prod_inf.= $row->prop("product")." (".$row->prop("price").$curr->name().")\n";
 						$prod_table->define_data(array(
 							"name" => $row->prop("product"),
-							"price" => $row->prop("b_price").$curr->name(),
-							"amount" => $row->prop("b_amount"),
+							"price" => ($row->prop("b_price")) ? $row->prop("b_price"):$row->prop("price").$curr->name(),
+							"amount" => ($row->prop("b_amount")) ? $row->prop("b_amount"):$row->prop("amount"),
 						));
 					}
 				}
