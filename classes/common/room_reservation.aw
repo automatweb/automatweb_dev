@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.57 2007/03/20 12:07:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.58 2007/03/26 12:37:04 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -271,7 +271,7 @@ class room_reservation extends class_base
 	{
 		aw_session_set("no_cache", 1);
 		global $level;
-		enter_function("oom_reservation::parse_alias");
+		enter_function("room_reservation::parse_alias");
 		
 		//antud juhul peaks objektist võtma info hoopis... peaks olema just tagasi pangamakselt tulnud
 		if($_GET["preview"])
@@ -426,7 +426,7 @@ class room_reservation extends class_base
 		));
 		$_SESSION["room_reservation"][$room->id()]["errors"] = null;
 		//property väärtuse saatmine kujul "property_nimi"_value
-		exit_function("oom_reservation::parse_alias");
+		exit_function("room_reservation::parse_alias");
 		return $this->parse();
 	}
 	
@@ -508,6 +508,7 @@ class room_reservation extends class_base
 		}
 		$bron = obj($id);//arr($bron->meta("lang"));
 		$room = obj($bron->prop("resource"));
+		$ret["room_name"] = $room->name();
 		$ret["time_str"] = $this->get_time_str(array(
 			"start" => $bron->prop("start1"),
 			"end" => $bron->prop("end"),
@@ -591,7 +592,7 @@ class room_reservation extends class_base
 		$ret["min_sum_left"] = join("/" , $data["min_sum_left"]);
 		
 		$ret["status"] = ($bron->prop("verified") ? t("Kinnitatud") : t("Kinnitamata"));
-		
+		$ret["bank_value"] = $bron->meta("bank_name");
 		foreach ($bron->meta("amount") as $prod => $amount)
 		{
 			if($amount)
@@ -604,7 +605,6 @@ class room_reservation extends class_base
 				$p.= $this->parse("PROD");
 			}
 		}
-		
 		
 		if(is_oid($bron->prop("customer")))
 		{
@@ -1348,6 +1348,8 @@ class room_reservation extends class_base
 				"tpl" => $tpl,
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
+			$bron->set_meta("bank_name",$this->banks[$_SESSION["room_reservation"][$r->id()]["bank"]]);
+			$bron->save();
 //			$bron->set_meta("lang" , $lang);
 			$bron_ids[] = $bron->id();
 			$bron_names[] = $bron->name();
@@ -1386,8 +1388,10 @@ class room_reservation extends class_base
 			"payment_id" => $bank_payment,
 			"expl" => join(" ," , $bron_names),
 		));
-		
+	/*	if(aw_global_get("uid") == "struktuur"){arr($this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]))); die();}
+	*/	
 		$this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]));
+		
 		//kuna siiani asi ei jõua, siis makse kontrollis peaks vist sessiooni ära nullima... või ma ei tea
 		return $ret;
 		//return $section."?level=".$level;
