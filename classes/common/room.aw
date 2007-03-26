@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.181 2007/03/14 18:25:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.182 2007/03/26 14:32:18 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2169,7 +2169,7 @@ class room extends class_base
 		$times = array();
 		foreach($prod_list as $oid => $pname)
 		{
-			$times[$oid] = $this->cal_product_reserved_time(array("id" => $m_oid, "oid" => $oid));
+			$times[$oid] = $this->cal_product_reserved_time(array("id" => $m_oid, "oid" => $oid , "room" => $arr["obj_inst"]->id()));
 		}
 		foreach($prod_list as $oid => $name)
 		{
@@ -2440,7 +2440,7 @@ class room extends class_base
 			$times = array();
 			foreach($prod_list as $oid => $pname)
 			{
-				$times[$oid] = $this->cal_product_reserved_time(array("id" => $m_oid, "oid" => $oid));
+				$times[$oid] = $this->cal_product_reserved_time(array("id" => $m_oid, "oid" => $oid, "room" => $arr["obj_inst"]->id()));
 			}
 		}
 		$ret = "";
@@ -2954,7 +2954,7 @@ class room extends class_base
 	{
 		classload("core/icons");
 		$tb =& $arr["prop"]["vcl_inst"];		
-		$this->_init_prod_list_list_tbl($tb);
+		$this->_init_prod_list_list_tbl($tb,$arr["obj_inst"]);
 
 		// get items 
 		if (!$_GET["tree_filter"])
@@ -2981,7 +2981,7 @@ class room extends class_base
 			$ol = $this->search_products($arr["obj_inst"]);
 			$arr["obj_inst"]->set_meta("search_data", null);
 			$arr["obj_inst"]->save();
-			$ol = $ol->arr(); 
+			$ol = $ol->arr();
 		}
 		
 		$prod_data = $this->get_prod_data_for_room($arr["obj_inst"]);
@@ -3030,6 +3030,23 @@ class room extends class_base
 			{
 				$ord = $prod_data[$o->id()]["ord"];
 			}
+			if($o->class_id() == CL_MENU)
+			{
+				$ba = $bb = "";
+			}
+			else
+			{
+				$bb = html::textbox(array(
+						"name" => "bb[".$o->id()."]",
+						"value" => $prod_data[$o->id()]["bb"],
+						"size" => 5
+				));
+				$ba = html::textbox(array(
+					"name" => "ba[".$o->id()."]",
+					"value" => $prod_data[$o->id()]["ba"],
+					"size" => 5
+				));
+			}
 			
 			$tb->define_data(array(
 				"active" =>  $prod_data[$o->id()]["active"],//html::checkbox(array(
@@ -3064,6 +3081,8 @@ class room extends class_base
 					"name" => "old_ord[".$o->id()."]",
 					"value" => $o->ord()
 				)),
+				"bb" => $bb,
+				"ba" => $ba,
 				"hidden_ord" => $ord
 			));
 		}
@@ -3079,7 +3098,7 @@ class room extends class_base
 		));
 	}
 
-	function _init_prod_list_list_tbl(&$t)
+	function _init_prod_list_list_tbl(&$t,$room)
 	{
 		$t->define_chooser(array(
 			"name" => "active",
@@ -3131,7 +3150,20 @@ class room extends class_base
 			"caption" => t("Muuda"),
 			"align" => "center"
 		));
-
+		if($room->prop("use_product_times"))
+		{
+			$t->define_field(array(
+				"name" => "bb",
+				"caption" => t("Eelpuhver"),
+				"align" => "center"
+			));
+	
+			$t->define_field(array(
+				"name" => "ba",
+				"caption" => t("J&auml;relpuhver"),
+				"align" => "center"
+			));
+		}
 		$t->define_field(array(
 			"name" => "del",
 			"caption" => t("Vali"),
@@ -3318,6 +3350,8 @@ class room extends class_base
 		{
 			$prod_data[$id]["active"] = $arr["active"][$id];
 			$prod_data[$id]["ord"] = $ord;
+			$prod_data[$id]["bb"] = $arr["bb"][$id];
+			$prod_data[$id]["ba"] = $arr["ba"][$id];
 		}
 		
 		$this_obj->set_meta("prod_data" , $prod_data);
@@ -4246,6 +4280,8 @@ class room extends class_base
 	
 	/**
 		@attrib name=cal_product_reserved_time params=name all_args=1 nologin=1
+		@param room required type=oid
+			products and their amounts
 		@param oid required type=oid
 			products and their amounts
 		@return int
@@ -4257,7 +4293,8 @@ class room extends class_base
 		if(is_oid($arr["oid"]) && $this->can("view", $arr["oid"]))
 		{
 			$product=obj($arr["oid"]);
-			return ($product->prop("reservation_time")*$product->prop("reservation_time_unit")+$product->prop("buffer_time_after")*$product->prop("buffer_time_unit"));
+			$ba = $this->_get_room_prod_after_buffer(array("id" => $arr["oid"] , "room" => $arr["room"]));
+			return ($product->prop("reservation_time")*$product->prop("reservation_time_unit")+$ba);
 		}
 		return 0;
 	}
@@ -4601,17 +4638,21 @@ class room extends class_base
 					$prod = obj($product);
 					if(!$time)
 					{
-						$ret = $ret + $prod->prop("buffer_time_before") + $prod->prop("buffer_time_after")*$prod->prop("buffer_time_unit");
+						$ret = $ret + $this->_get_room_prod_before_buffer(array("id" => $prod->id() , "room" => $bron->prop("resource"))) + $this->_get_room_prod_after_buffer(array("id" => $prod->id() , "room" => $bron->prop("resource")));
 					}
 					else
 					if ($time == "both")
 					{
-						$r_b = $r_b + $prod->prop("buffer_time_before")*$prod->prop("buffer_time_unit");
-						$r_a = $r_a + $prod->prop("buffer_time_after")*$prod->prop("buffer_time_unit");
+						$r_b = $r_b + $this->_get_room_prod_before_buffer(array("id" => $prod->id() , "room" => $bron->prop("resource")));
+						$r_a = $r_a + $this->_get_room_prod_after_buffer(array("id" => $prod->id() , "room" => $bron->prop("resource")));// $prod->prop("buffer_time_after")*$prod->prop("buffer_time_unit");
+					}
+					elseif($time == "before")
+					{
+						$ret = $ret + $this->_get_room_prod_before_buffer(array("id"=> $prod->id(), "room" => $bron->prop("resource")));//->prop("buffer_time_".$time)*$prod->prop("buffer_time_unit");
 					}
 					else
 					{
-						$ret = $ret + $prod->prop("buffer_time_".$time)*$prod->prop("buffer_time_unit");
+						$ret = $ret + $this->_get_room_prod_after_buffer(array("id"=> $prod->id(), "room" => $bron->prop("resource")));//$prod->prop("buffer_time_".$time)*$prod->prop("buffer_time_unit");
 					}
 				}
 			}
@@ -4624,6 +4665,46 @@ class room extends class_base
 		return $ret;
 	}
 	
+	//id , room
+	function _get_room_prod_after_buffer($arr)
+	{
+		extract($arr);
+		$product=obj($id);
+		if(is_oid($room))
+		{
+			$prod_data = $this->get_prod_data_for_room($room);
+			if(isset($prod_data[$id]["ba"]))
+			{
+				$ba = $prod_data[$id]["ba"];
+			}
+		}
+		if(!isset($ba))
+		{
+			$ba = $product->prop("buffer_time_after");
+		}
+		return $product->prop("buffer_time_unit")*$ba;
+	}
+	
+	//id , room
+	function _get_room_prod_before_buffer($arr)
+	{
+		extract($arr);
+		$product=obj($id);
+		if(is_oid($room))
+		{
+			$prod_data = $this->get_prod_data_for_room($room);
+			if(isset($prod_data[$id]["bb"]))
+			{
+				$bb = $prod_data[$id]["bb"];
+			}
+		}
+		if(!isset($bb))
+		{
+			$bb = $product->prop("buffer_time_before");
+		}
+		return $product->prop("buffer_time_unit")*$bb;
+	}
+	
 	/** returns object (last bron object before start time)
 		@attrib api=1 params=name
 		@param $room required type=object
@@ -4633,7 +4714,6 @@ class room extends class_base
 	**/
 	function get_last_bron($arr)
 	{
-	
 		extract($arr);
 		$ret = ""; $max = $start - 24*3600;
 		$reservations = new object_list(array(
@@ -5092,10 +5172,15 @@ class room extends class_base
 	**/
 	function get_prod_data_for_room($room)
 	{
+		if($this->prod_data_for_room)
+		{
+			return $this->prod_data_for_room;
+		}
 		if ($this->can("view", $room->prop("inherit_prods_from")))
 		{
 			$room = obj($room->prop("inherit_prods_from"));
 		}
+		$this->prod_data_for_room = $room->meta("prod_data");
 		return $room->meta("prod_data");
 	}
 	
