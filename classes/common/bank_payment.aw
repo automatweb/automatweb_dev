@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.37 2007/03/21 16:53:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.38 2007/03/26 12:47:44 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -496,6 +496,13 @@ class bank_payment extends class_base
 					if($val["actiontext"])
 					{
 						$log_data[$val["timestamp"]]["msg"].= " (".$val["actiontext"].")";
+					}
+					
+					//objektile klikitav viitenumber
+					$id = substr($log_data[$val["timestamp"]]["ref"], 0, -1);
+					if(is_oid($id) && $this->can("view" , $id))
+					{
+						$log_data[$val["timestamp"]]["ref"] = html::obj_change_url($id , $log_data[$val["timestamp"]]["ref"]);
 					}
 				}
 				else
