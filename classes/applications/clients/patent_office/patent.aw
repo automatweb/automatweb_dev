@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.73 2007/03/19 13:42:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.74 2007/03/26 11:47:10 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1387,7 +1387,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		$signs = $ddoc_inst->get_signatures($re["ddoc"]);
 		foreach($signs as $sig)
 		{
-			$sig_nice[] = sprintf(t("%s, %s (%s) - %s"), $sig["signer_ln"], $sig["signer_fn"], $sig["signer_pid"], date("H:i d/m/Y", $sig["signing_time"]));
+			$sig_nice[] = sprintf(t("%s, %s  - %s"), $sig["signer_ln"], $sig["signer_fn"], date("H:i d/m/Y", $sig["signing_time"]));
 		}
 		$prop["value"] = join("<br/>", $sig_nice);
 		return $prop["value"];
@@ -1732,6 +1732,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 					"other_oid" =>$_SESSION["patent"]["id"],
 				));
 			}
+
 			if($status["status"] > 0)
 			{
 				$data["SIGNED"] = $this->parse("SIGNED");
@@ -1755,6 +1756,10 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				}
 				$data["sign_button"] = '<input type="button" value="3. Allkirjasta taotlus" class="nupp" onClick="aw_popup_scroll(\''.$url.'\', \''.t("Allkirjastamine").'\', 410, 250);">'.$job.'<br>';
 //			}
+		}
+		else
+		{
+			$data["UNSIGNED"] = $this->parse("UNSIGNED");
 		}
 		return $data;
 	}

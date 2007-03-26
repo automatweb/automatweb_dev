@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.25 2007/03/21 13:49:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.26 2007/03/26 11:47:11 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -695,7 +695,10 @@ class trademark_manager extends class_base
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.aadress")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.linn.name")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL></ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("phone.name").",".$appl->prop("fax.name")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("email.mail")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL> </ADDRL>\n";
 //echo "aadres ".$appl->prop("address")." <br>";
 //echo "riik = ".$appl->prop("address.riik")." <br>";
 							if ($this->can("view", $appl->prop("address.riik")))
@@ -709,6 +712,8 @@ class trademark_manager extends class_base
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.aadress")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.linn.name")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.postiindeks")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("phone_id.name").",".$appl->prop("telefax_id.name")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("email_id.mail")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL></ADDRL>\n";
 							if ($this->can("view", $appl->prop("contact.riik")))
 							{
