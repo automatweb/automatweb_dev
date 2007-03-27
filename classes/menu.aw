@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.188 2007/03/13 15:02:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.189 2007/03/27 08:34:56 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1831,6 +1831,7 @@ class menu extends class_base
 			$sect = obj($sect->parent());
 		}
 		$sad_opts = $sect->meta("sad_opts");
+		$connd = array();
 		foreach($sect->connections_from(array("type" => "RELTYPE_SEEALSO_DOC")) as $c)
 		{
 			$tpl = isset($sad_opts[$c->prop("to")]["tpl"]) ? $sad_opts[$c->prop("to")]["tpl"] : "SEEALSO_DOCUMENT";
@@ -1838,6 +1839,7 @@ class menu extends class_base
 			{
 				$str[$tpl][$c->prop("to")] = $c->prop("to.jrk");
 			}
+			$connd[$c->prop("to")] = 1;
 		}
 		
 		// also parents
@@ -1852,6 +1854,10 @@ class menu extends class_base
 			$sad_opts = $o->meta("sad_opts");
 			foreach(safe_array($sad_opts) as $docid => $dat)
 			{
+				if (!isset($connd[$docid]))
+				{
+					continue;
+				}
 				if ($this->can("view", $docid) && $dat["submenus"] == $docid)
 				{
 					$tpl = isset($dat["tpl"]) ? $dat["tpl"] : "SEEALSO_DOCUMENT";
