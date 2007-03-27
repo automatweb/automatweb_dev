@@ -60,6 +60,61 @@
             <store>no</store>
             <caption>Tasemed</caption>
       </property>
+      <property>
+            <name>order_mail_from</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili from aadress</caption>
+      </property>
+      <property>
+            <name>order_mail_from_name</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili from nimi</caption>
+      </property>
+      <property>
+            <name>order_mail_subj</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Meili subjekt</caption>
+      </property>
+      <property>
+            <name>order_mail_legend</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Meili sisu legend</caption>
+      </property>
+      <property>
+            <name>order_mail_to</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kellele tellimuse kohta meil saata</caption>
+      </property>
+      <property>
+            <name>order_mail_groups</name>
+            <table>objects</table>
+            <group>order_email</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ROOM_RESERVATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -67,6 +122,11 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <order_email>
+                  <caption>Tellimusmeil</caption>
+            </order_email>
+      </groupinfo>
       <reltypes>
             <ROOM>
                   <value>1</value>

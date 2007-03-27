@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.58 2007/03/26 12:37:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.59 2007/03/27 14:53:20 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -26,6 +26,29 @@
 
 @property levels type=table no_caption=1 store=no
 @caption Tasemed
+
+
+@groupinfo order_email caption="Tellimusmeil"
+@default group=order_email
+
+	@property order_mail_from type=textbox 
+	@caption Meili from aadress
+	
+	@property order_mail_from_name type=textbox
+	@caption Meili from nimi
+	
+	@property order_mail_subj type=textbox
+	@caption Meili subjekt
+	
+	@property order_mail_legend type=text
+	@caption Meili sisu legend
+	
+	@property order_mail_to type=textbox
+	@caption Kellele tellimuse kohta meil saata
+	
+	@property order_mail_groups type=select multiple=1
+	@caption Kasutajagrupid, kelle poolt tehtud broneeringute kohta meil saadetakse
+
 
 @reltype ROOM value=1 clid=CL_ROOM
 @caption Ruum mida broneerida
@@ -60,6 +83,9 @@ class room_reservation extends class_base
 				case "levels":
 					$this->do_table($arr);
 				break;	
+				case "order_mail_legend":
+					$prop["value"] = t("sisu tuleb common/room/preview.tpl failist");
+				break;
 				case "reservation_template":
 					$tm = get_instance("templatemgr");
 					$prop["options"] = $tm->template_picker(array(
@@ -83,7 +109,17 @@ class room_reservation extends class_base
 		//				$prop["type"] = "text";
 		//				$prop["value"] = t("Template fail peab asuma kataloogis :".$this->site_template_dir."");
 					}
-				break;	
+				break;
+			case "order_mail_groups":
+				$ol = new object_list(array(
+					"class_id" => CL_GROUP,
+					"type" => "0",
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$prop["options"] = $ol->names();
+				break;
+				
 			case "prices":
 				$arr["obj_inst"]->prop("type");
 				$curr_list = new object_list(array("class_id" => CL_CURRENCY, "lang_id" => array()));
@@ -1349,6 +1385,7 @@ class room_reservation extends class_base
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
 			$bron->set_meta("bank_name",$this->banks[$_SESSION["room_reservation"][$r->id()]["bank"]]);
+			$bron->set_meta("room_reservation_id",$arr["res"]);
 			$bron->save();
 //			$bron->set_meta("lang" , $lang);
 			$bron_ids[] = $bron->id();
@@ -1514,6 +1551,18 @@ class room_reservation extends class_base
 		{
 			return $this->set;
 		}
+		
+		//järgnevalt maili saatmise võimalus juhul kui on ruumi broneerimise objektist väljad täidetud... et siis annaks nagu settingute objektiks hoopis broneerimise objekti, kuna propertyd on samad... kuid ei tea kui hea mõte see on... juhul kui mujal ka kasutama hakata neid settinguid kui maili saatmisel, siis tuleb teha 2 erinevat muutujat
+		if(is_oid($o->meta("room_reservation_id")) && $this->can("view" , $o->meta("room_reservation_id")))
+		{
+			$res = obj($o->meta("room_reservation_id"));
+			if($res->prop("order_mail_to"))
+			{
+				$this->set = $res;
+				return $this->set;
+			}
+		}
+		
 		if ($this->can("view", $o->prop("resource")))
 		{
 			$res = obj($o->prop("resource"));
@@ -1537,7 +1586,6 @@ class room_reservation extends class_base
 			return "";
 		}
 		$bron = obj($id);
-		
 		$_send_to = $bron->prop("customer.email.mail");
 		if($others = $this->get_other_addresses($bron))
 		{
