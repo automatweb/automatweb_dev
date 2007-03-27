@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.96 2007/03/21 16:19:12 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.97 2007/03/27 12:46:28 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -45,8 +45,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property default_bounce type=textbox
 @caption Default bounce
-
-
 
 @groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
@@ -126,6 +124,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Listi liikmete allikas
 
+@property req_members type=text
+@caption Otsi ka alamobjektide alt
+
 @property member_list type=table store=no no_caption=1
 @caption Liikmed
 
@@ -195,6 +196,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Grupid kellele kiri saata
 
+@property req_members_m type=text
+@caption Otsi ka alamobjektide alt
 
 @property no_fck type=checkbox ch_value=1
 @caption Maili kirjutamine plaintext vaates
@@ -803,6 +806,46 @@ class ml_list extends class_base
 					"img" => "delete.gif",
 				));
 				break;
+			case "req_members_m":
+				if(!sizeof($arr["obj_inst"]->prop("write_user_folder")))
+				{
+					return PROP_IGNORE;
+				}
+				$ret = "";
+				foreach($arr["obj_inst"]->prop("write_user_folder") as $menu)
+				{
+					if(is_oid($menu) && $this->can("view" , $menu))
+					{
+						$menu_o = obj($menu);
+						if($menu_o->class_id() == CL_MENU)
+						{
+							$ret.=html::checkbox(array("name" => "req_members_m[".$menu."]" , "value" => 1, "checked" => $prop["value"][$menu]));
+							$ret.=" ".$menu_o->name()."\n";
+						}
+					}
+				}
+				$prop["value"] = $ret;
+				break;
+			case "req_members":
+				if(!sizeof($arr["obj_inst"]->prop("def_user_folder")))
+				{
+					return PROP_IGNORE;
+				}
+				$ret = "";
+				foreach($arr["obj_inst"]->prop("def_user_folder") as $menu)
+				{
+					if(is_oid($menu) && $this->can("view" , $menu))
+					{
+						$menu_o = obj($menu);
+						if($menu_o->class_id() == CL_MENU)
+						{
+							$ret.=html::checkbox(array("name" => "req_members[".$menu."]" , "value" => 1, "checked" => $prop["value"][$menu]));
+							$ret.=" ".$menu_o->name()."\n";
+						}
+					}
+				}
+				$prop["value"] = $ret;
+				break;
 			case "send_button":
 				$prop["value"] = t("Saada!");
 				$prop["onclick"] = "javascript:window.open(
@@ -1071,7 +1114,56 @@ class ml_list extends class_base
 					return PROP_FATAL_ERROR;
 				}
 				break;
-	
+			case "req_members_m":
+				$arr["obj_inst"]->set_meta("req_members" , $prop["value"]);
+				$arr["obj_inst"]->set_meta("req_members_m" , $prop["value"]);
+				foreach($prop["value"] as $key=> $val)
+				{
+					if(is_oid($key))
+					{
+						$menu = obj($key);
+						$menu->set_meta("req_members",$prop["value"][$key]);
+						$menu->save();
+					}
+				}
+				if(is_array($arr["request"]["def_user_folder"]))
+				{
+					foreach($arr["request"]["def_user_folder"] as $fld)
+					{
+						if(is_oid($fld))
+						{
+							$menu = obj($fld);
+							$menu->set_meta("req_members",$prop["value"][$fld]);
+							$menu->save();
+						}
+					}
+				}
+				break;
+			
+			case "req_members":
+				$arr["obj_inst"]->set_meta("req_members" , $prop["value"]);
+				foreach($prop["value"] as $key=> $val)
+				{
+					if(is_oid($key))
+					{
+						$menu = obj($key);
+						$menu->set_meta("req_members",$prop["value"][$key]);
+						$menu->save();
+					}
+				}
+				if(is_array($arr["request"]["def_user_folder"]))
+				{
+					foreach($arr["request"]["def_user_folder"] as $fld)
+					{
+						if(is_oid($fld))
+						{
+							$menu = obj($fld);
+							$menu->set_meta("req_members",$prop["value"][$fld]);
+							$menu->save();
+						}
+					}
+				}
+				break;
 			case "delete_textfile":
 				$imp = $_FILES["delete_textfile"]["tmp_name"];
 				if (!is_uploaded_file($imp))
@@ -1984,6 +2076,41 @@ class ml_list extends class_base
 		return $ret;
 	}
 
+	function get_req_menus($src)
+	{
+		$sub = array();
+		foreach($src as $menu)
+		{
+			if(!is_oid($menu) || !$this->can("view" , $menu))
+			{
+				continue;
+			}
+			$o = obj($menu);
+			if(!($o->class_id() == CL_MENU))
+			{
+				continue;
+			}
+			if($o->meta("req_members"))
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_MENU,
+					"lang_id" => array(),
+					"parent" => $menu,
+				));
+
+				foreach($this->get_req_menus($ol->ids()) as $submenu)
+				{
+					$sub[] = $submenu;
+				}
+			}
+		}
+		foreach($sub as $submenu)
+		{
+			$src[] = $submenu;
+		}
+		return $src;
+	}
+
 	function un_format_name($arr)
 	{
 		$data = explode('&lt;' , $arr["name"]);
@@ -2038,6 +2165,7 @@ class ml_list extends class_base
 			$src = $obj->prop("def_user_folder");
 			if(!$this->list_id) $this->list_id = $id;
 		}
+		$src = $this->get_req_menus($src);
 		$fld = new aw_array($src);
 		foreach($fld->get() as $folder_id)
 		{

@@ -317,6 +317,15 @@
             <caption>Listi liikmete allikas</caption>
       </property>
       <property>
+            <name>req_members</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>member_list</group>
+            <type>text</type>
+            <caption>Otsi ka alamobjektide alt</caption>
+      </property>
+      <property>
             <name>member_list</name>
             <table>objects</table>
             <field>meta</field>
@@ -465,6 +474,15 @@
             <editonly>1</editonly>
             <multiple>1</multiple>
             <caption>Grupid kellele kiri saata</caption>
+      </property>
+      <property>
+            <name>req_members_m</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>text</type>
+            <caption>Otsi ka alamobjektide alt</caption>
       </property>
       <property>
             <name>no_fck</name>
