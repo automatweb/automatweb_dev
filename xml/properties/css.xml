@@ -161,6 +161,16 @@
             <caption>K&amp;amp;otilde;rgus</caption>
       </property>
       <property>
+            <name>nowrap</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Nowrap</caption>
+      </property>
+      <property>
             <name>padding</name>
             <group>general</group>
             <table>objects</table>

@@ -1352,7 +1352,6 @@ class grid_editor extends class_base
 
 		$stc = get_instance(CL_STYLE);
 		$this->_init_show_styles();
-
 		if ($this->arr["table_style"])
 		{
 			$table.= "<table border=\"0\" ".$stc->get_table_string($this->arr["table_style"]).">";
@@ -1383,14 +1382,19 @@ class grid_editor extends class_base
 					// ok, this is going to really slow :(
 					// but i don't see any better solution right now, cause
 					// every cell can have its own style (which is object).
+					$adds = "";
 					if (is_oid($st) && $this->can("view", $st))
 					{
 						$style_object = new object($st);
 						$style_from_site_css = $style_object->prop("site_css");
+						if ($style_object->prop("nowrap"))
+						{
+							$adds = " nowrap=1 ";
+						}
 					}
 					if (empty($style_from_site_css))
 					{
-						$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\">";
+						$cs .= "<td $adds colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\">";
 						active_page_data::add_site_css_style($st);
 					}
 					else

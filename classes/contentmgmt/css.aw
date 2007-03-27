@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.14 2005/09/09 12:37:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.15 2007/03/27 11:39:12 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -59,6 +59,9 @@
 
 @property height type=textbox size=5
 @caption K&otilde;rgus
+
+@property nowrap type=checkbox ch_value=1 
+@caption Nowrap
 
 @property padding type=textbox size=5 
 @caption Elementide vahe (cellspacing) (px)
