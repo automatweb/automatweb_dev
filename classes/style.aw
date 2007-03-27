@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.45 2005/06/01 11:06:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.46 2007/03/27 11:19:26 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -340,7 +340,12 @@ class style extends aw_template
 		{
 			classload("layout/active_page_data");
 			active_page_data::add_site_css_style($st["oid"]);
-			return "class=\"".$this->get_style_name($st["oid"])."\"";
+			$o = obj($id);
+			if ($o->prop("margin") != "")
+			{
+				$rv = " cellpadding=\"".$o->prop("margin")."\" ";
+			}
+			return $rv."class=\"".$this->get_style_name($st["oid"])."\"";
 		}
 
 		if ($st["bgcolor"] != "")
