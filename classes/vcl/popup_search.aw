@@ -330,7 +330,7 @@ class popup_search extends aw_template
 				$htmlc->add_property(array(
 					"name" => "s[submit]",
 					"type" => "submit",
-					"value" => "Vali",
+					"value" => t("Vali"),
 					"class" => "sbtbutton"
 				));
 
