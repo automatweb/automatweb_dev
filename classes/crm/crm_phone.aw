@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.10 2007/03/28 13:13:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.11 2007/03/28 13:19:02 markop Exp $
 // phone.aw - Telefon
 /*
 
@@ -65,7 +65,6 @@ class crm_phone extends class_base
 				break;
 		};
 		return $retval;
-
 	}
 
 	// Returns nicer view (formatted, with or without country code)
