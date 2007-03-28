@@ -539,7 +539,7 @@ class popup_search extends aw_template
 
 		$t->define_field(array(
 			"name" => "icon",
-			"caption" => t("")
+			"caption" => t("&nbsp;")
 		));
 
 		if (is_array($arr["tbl_props"]))
@@ -600,7 +600,7 @@ class popup_search extends aw_template
 		));
 		$t->define_field(array(
 			"name" => "sel",
-			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\"sel\")'>Vali</a>")
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\"sel\")'>".t("Vali")."</a>"
 		));
 		$t->set_default_sortby("name");
 
