@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.4 2006/12/08 07:07:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stats/stats_viewer.aw,v 1.5 2007/03/28 13:26:21 kristo Exp $
 // stats_viewer.aw - Statistika 
 /*
 
@@ -838,8 +838,18 @@ class stats_viewer extends class_base
 			$objs[$c->prop("to")] = $c->prop("to");
 			if ($subs[$c->prop("to")])
 			{
+				$clid = array(CL_MENU,CL_PROMO,CL_DOCUMENT,CL_EXTLINK);
+				if (is_array($o->prop("s_clid")) && count($o->prop("s_clid")))
+				{
+					$clid = array(CL_MENU,CL_PROMO,CL_DOCUMENT,CL_EXTLINK);
+					foreach($o->prop("s_clid") as $_cl)
+					{
+						$clid[] = $_cl;
+					}
+				}
 				$ot = new object_tree(array(
-					"parent" => $c->prop("to")
+					"parent" => $c->prop("to"),
+					"class_id" => $clid
 				));
 				foreach($ot->ids() as $id)
 				{
@@ -848,7 +858,6 @@ class stats_viewer extends class_base
 			}
 		}
 		$r["s_objs"] = $objs;
-
 		$uids = array();
 		foreach($o->connections_from(array("type" => "RELTYPE_USER")) as $c)
 		{
@@ -1100,6 +1109,7 @@ class stats_viewer extends class_base
 				".$this->_get_limit($r, $arr["obj_inst"])."
 		";
 		//echo "q = $q <br>";
+		//die("<pre>".$q);
 		$acts = aw_ini_get("syslog.actions");
 		$this->db_query($q);
 		$rows = array();

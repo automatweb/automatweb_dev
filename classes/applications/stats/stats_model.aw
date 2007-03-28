@@ -449,21 +449,22 @@ echo "cmd2 = $cmd <br>";
 		echo $q." <br>";
 		$this->db_query($q);
 
-		echo "resolving ips  <br>\n";
+		echo "resolving ips and countries <br>\n";
 		flush();
-		$ip_cache = array();
 		// resolve ip adresses
-		$this->db_query("SELECT id,ip FROM syslog_archive WHERE ip_resolved is null");
+		$this->db_query("SELECT distinct(ip) as ip FROM syslog_archive WHERE ip_resolved is null or ip_resolved = '' and ip != ''");
 		while ($row = $this->db_next())
 		{
-			if (!isset($ip_cache[$row["ip"]]))
-			{
-				$ip_cache[$row["ip"]] = gethostbyaddr($row["ip"]);
-			}
-			$adr = $ip_cache[$row["ip"]];
+			$adr = gethostbyaddr($row["ip"]);
 			$this->quote(&$adr);
 			$this->save_handle();
-			$this->db_query("UPDATE syslog_archive SET ip_resolved = '$adr' WHERE id = '$row[id]'");
+			// get country from resolved ip adr
+			$bits = array_reverse(explode(".", $adr));
+                        $tld = strtoupper(reset($bits));
+                        $country = $this->countries[$tld];
+
+			$this->quote(&$country);
+			$this->db_query("UPDATE syslog_archive SET ip_resolved = '$adr', country = '$country' WHERE ip = '$row[ip]'");
 			echo $row["ip"]." => ".$adr." <br>\n";
 			flush();
 			$this->restore_handle();
@@ -488,22 +489,6 @@ echo "cmd2 = $cmd <br>";
 				created_wd IS NULL
 		");
 
-		// resolve countries
-		echo "resolving countries <br>\n";
-		flush();
-		$this->db_query("SELECT id,ip_resolved FROM syslog_archive WHERE country IS NULL");
-		while($row = $this->db_next())
-		{
-			$this->save_handle();
-			$bits = array_reverse(explode(".", $row["ip_resolved"]));
-			$tld = strtoupper(reset($bits));
-			$country = $this->countries[$tld];
-			echo "$row[ip_resolved] => $country <br>\n";
-			flush();
-			$this->db_query("UPDATE syslog_archive SET country = '$country' WHERE id = '$row[id]'");
-			$this->restore_handle();
-		}
-
 		// write group membership
 		echo "writing group memberships <br>\n";
 		flush();
@@ -516,21 +501,21 @@ echo "cmd2 = $cmd <br>";
 				$gm[$row["uid"]] = $row;
 			}
 		}
-		$this->db_query("SELECT uid,id FROM syslog_archive WHERE g_oid IS NULL");
+		$this->db_query("SELECT distinct(uid) as uid FROM syslog_archive WHERE g_oid IS NULL");
 		while($row = $this->db_next())
 		{
 			$this->save_handle();
 			$gp = $gm[$row["uid"]]["oid"];
 			echo "$row[uid] => $gp <br>\n";
 			flush();
-			$this->db_query("UPDATE syslog_archive SET g_oid = '$gp' WHERE id = '$row[id]'");
+			$this->db_query("UPDATE syslog_archive SET g_oid = '$gp' WHERE uid = '$row[uid]'");
 			$this->restore_handle();
 		}
 
 		echo "creating entry & exit pages summaries <br>\n";
 		flush();
 		$pgs = array();
-		$this->db_query("SELECT a.* FROM syslog_archive a LEFT JOIN syslog_archive_sessions s ON a.session_id = s.session_id WHERE s.session_id is null order by a.tm");
+		$this->db_query("SELECT a.* FROM syslog_archive a LEFT JOIN syslog_archive_sessions s ON a.session_id = s.session_id WHERE s.session_id is null limit 300000");
 		while ($row = $this->db_next())
 		{
 			if (!isset($pgs[$row["session_id"]]))
@@ -545,13 +530,25 @@ echo "cmd2 = $cmd <br>";
 			else
 			{
 				$pgs[$row["session_id"]]["exit_page"] = $row["oid"];
-				$pgs[$row["session_id"]]["tm_e"] = $row["tm"];
+				if ($row["tm"] > $pgs[$row["session_id"]]["tm_e"])
+				{
+					$pgs[$row["session_id"]]["tm_e"] = $row["tm"];
+				}
+				if ($row["tm"] < $pgs[$row["session_id"]]["tm_s"])
+				{
+					$pgs[$row["session_id"]]["tm_s"] = $row["tm"];
+				}
 			}
 		}
-
+		echo "session count = ".count($pgs)." <br>";
+		$cnt = 0;
 		foreach($pgs as $session => $inf)
 		{
-			echo "session $session <br>";
+			if ((++$cnt % 100) == 2)
+			{
+				echo "count = $cnt <br>\n";
+				flush();
+			}
 			$this->db_query("INSERT INTO syslog_archive_sessions(session_id, entry_page, exit_page, tm_s, tm_e) values('$session','$inf[entry_page]', '$inf[exit_page]',$inf[tm_s], $inf[tm_e])");
 		}
 		die("all done");
