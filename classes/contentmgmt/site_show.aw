@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.224 2007/03/13 15:02:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.225 2007/03/28 10:15:03 kristo Exp $
 
 /*
 
@@ -644,7 +644,7 @@ class site_show extends class_base
 			}
 		}
 
-		set_time_limit(0);
+		set_time_limit(14400);
 
 		$skipfirst = 0;
 
@@ -834,7 +834,11 @@ class site_show extends class_base
 			if ($obj->prop("ndocs") > 0)
 			{
 				$filter["limit"] = $obj->prop("ndocs"); 
-			};
+			}
+			if ($obj->prop("ndocs") == -1)
+			{
+				$filter["oid"] = -1;
+			}
 
 			$docid = array();
 			$cnt = 0;
@@ -1716,7 +1720,10 @@ class site_show extends class_base
 			));
 			return "";
 		}		
-
+if ($_GET["YO"] == 1)
+{
+echo dbg::dump($lar);
+}
 		foreach($lar as $row)
 		{
 			if (is_oid($row["oid"]) && !$this->can("view", $row["oid"]))

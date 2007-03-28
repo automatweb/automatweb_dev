@@ -603,7 +603,7 @@ BACKGROUND: #EEEEEE; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 .alamLingid {  font-family: Verdana, Arial, Helvetica, sans-serif; color: #0000f0; text-decoration: none}
 .muh { position: relative; visibility: visible; }
 .mainmenu {
-        position: absolute;
+/*        position: absolute; */
         left: 10px;
         top: 15px;
         visibility: visible;

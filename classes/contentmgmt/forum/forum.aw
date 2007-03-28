@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.9 2006/10/12 14:09:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.10 2007/03/28 10:15:04 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -772,7 +772,7 @@ topic");
 		$this->content = "";
 		$tabs = "";
 		extract($args);
-
+		error::view_check($board);
 		$board_obj = new object($board);
 		$board_meta = $board_obj->meta();
 

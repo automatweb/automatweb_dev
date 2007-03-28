@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.29 2006/08/21 15:21:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.30 2007/03/28 10:15:04 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 

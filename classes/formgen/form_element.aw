@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.85 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.86 2007/03/28 10:15:04 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2019,7 +2019,6 @@ class form_element extends aw_template
 				$show = false;
 			}
 		}
-
 		if (!$show)
 		{
 			return "";
@@ -2093,7 +2092,6 @@ class form_element extends aw_template
 			}
 			$css .= "tabindex=\"".($this->arr["el_tabindex"]+$this->form->base_tabindex)."\"";
 		}
-
 		switch($this->arr["type"])
 		{
 			case "textarea":
@@ -2637,6 +2635,14 @@ class form_element extends aw_template
 				if ($this->entry_id)
 				{
 					$html.=$this->get_value();
+				}
+				if (isset($this->arr["file_delete_link_text"][aw_global_get("lang_id")]))
+				{
+					$dlk = html::href(array(
+						"url" => aw_url_change_var("del_image", $this->id),
+						"caption" => $this->arr["file_delete_link_text"][aw_global_get("lang_id")]
+					));
+					$html .= $dlk."<br>";
 				}
 				$csscl = ($this->arr["button_css_class"] != "" ? "class=\"".$this->arr["button_css_class"]."\"" : "");
 				$html .= "<input type='file' $disabled $stat_check NAME='".$element_name."' value='' $csscl/>\n";

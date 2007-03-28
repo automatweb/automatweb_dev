@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.229 2007/01/31 08:49:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.230 2007/03/28 10:15:02 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -666,8 +666,8 @@ if (!defined("DEFS"))
 				'min' => 3,
 				'max' => 255),
 			'uid'	=> array(
+				'min' => 2,
 				'content'	=> '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM.@',
-				'min' => 3,
 				'max' => 30)
 			);
 		// defineerimata character set, bail out

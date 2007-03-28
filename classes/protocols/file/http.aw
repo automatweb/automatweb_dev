@@ -154,7 +154,6 @@ class http
 			$this->cookie = $args["sessid"];
 			return;
 		}
-
 		// what if remote host uses a different "ext"?
 		$op = "HEAD /orb.".$this->cfg["ext"]."?class=remote_login&action=getcookie HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n\r\n";
@@ -288,6 +287,14 @@ class http
 	function login_hash($args = array())
 	{
 		extract($args);
+		if (substr($host,0,7) == "http://")
+		{
+			$host = substr($host,7);
+		}
+/*		if ($this->cookie == "")
+		{
+			$this->handshake(array("host" => $host));
+		}*/
 		$cookie = $this->cookie;
 		$socket = get_instance("protocols/socket");
 		if (substr($host,0,7) == "http://")
@@ -300,7 +307,6 @@ class http
 		));
 		
 		$request = "uid=$uid&hash=$hash&class=users&action=login";
-
 		$op = "GET /orb.".$this->cfg["ext"]."?$request HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n";
@@ -310,13 +316,13 @@ class http
 			print "<pre>";
 			echo "Logging in $host op = ",htmlentities($op),"\n";
 		}
-
 		$socket->write($op);
 		$ipd = "";
 		while($data = $socket->read())
 		{
 			$ipd .= $data;
 		};
+
 		$this->socket = $socket;
 
 		if (!$silent)

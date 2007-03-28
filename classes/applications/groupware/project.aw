@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.116 2006/12/04 11:31:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.117 2007/03/28 10:15:03 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -1442,9 +1442,9 @@ class project extends class_base
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
 			WHERE ((planner.start >= '${_start}' AND planner.start <= '${_end}')
 			OR
-			(planner.end >= '${_start}' AND planner.end <= '${_end}')) AND
-			$stat_str AND objects.parent IN (${parent})  order by planner.start"; // $limit
-		
+			(planner.end >= '${_start}' AND planner.start <= '${_end}')) AND
+			$stat_str AND objects.parent IN (${parent}) order by planner.start"; // $limit
+
 		if($arr["range"]["viewtype"] == "relative")
 		{
 			if($_GET["date"])
@@ -1565,6 +1565,7 @@ class project extends class_base
 			$ids[$e_obj->brother_of()] = $e_obj->brother_of();
 
 			$by_parent[$event_parent][] = $event_brother;
+			
 
 			/*if (++$limit_counter >= $limit_num && $limit_num)
 			{
@@ -1913,7 +1914,7 @@ class project extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_PROJECT,
 		));
-		set_time_limit(0);
+		set_time_limit(14400);
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			/*
@@ -2919,10 +2920,22 @@ class project extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$id = $o->id();
+			$dstart = (int)($o->prop("start1") / 86400);
+			$dend = (int)($o->prop("end") / 86400);
 			$rv[] = array(
 				"url" => "/" . $o->id(),
 				"start" => $o->prop("start1"),
 			);
+			if ($dend > $dstart)
+			{
+				for ($i = $dstart + 1; $i <= $dend; $i = $i + 1)
+				{
+					$rv[] = array(
+						"url" => "/" . $o->id(),
+						"start" => $i * 86400,
+					);
+				};
+			};
 		};
 		return $rv;
 	}

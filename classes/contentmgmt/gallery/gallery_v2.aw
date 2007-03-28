@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.64 2007/02/26 21:35:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.65 2007/03/28 10:15:04 kristo Exp $
 
 /*
 
@@ -361,7 +361,7 @@ class gallery_v2 extends class_base
 
 		if ($meta['do_import'] != "" && $arr["request"]["group"] == "import")
 		{
-			set_time_limit(0);
+			set_time_limit(14400);
 			if ($meta['import_overwrite'] == 1)
 			{
 				$this->_clear_images(&$meta);

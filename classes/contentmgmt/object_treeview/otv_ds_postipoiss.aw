@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.28 2006/03/23 12:38:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.29 2007/03/28 10:15:04 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -623,7 +623,7 @@ class otv_ds_postipoiss extends class_base
 
 	function do_update_ds($o)
 	{
-		set_time_limit(0);
+		set_time_limit(14400);
 		classload("core/icons", "image");
 		$xml_fld = $o->prop("xml_fld");
 

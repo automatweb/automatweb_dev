@@ -447,7 +447,6 @@ class layout extends class_base
 			$pt = obj($o->parent());
 			$ret[$o->id()] = $sl->get_url_for_site($o->site_id()).": ".$pt->name()." / ".$o->name();
 		}
-
 		$ol = new object_list(array(
 			"parent" => $folders,
 			"class_id" => CL_CSS,

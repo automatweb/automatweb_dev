@@ -2,6 +2,7 @@
 $uid = "";	// for the extra paranoid 
 ini_set("session.save_handler", "files");
 session_name("automatweb");
+
 session_start();
 unset($_SESSION["nliug"]);
 

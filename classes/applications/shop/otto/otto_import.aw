@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.45 2006/09/26 09:36:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.46 2007/03/28 10:15:07 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -820,6 +820,8 @@ class otto_import extends class_base
 	**/
 	function pictimp($arr,$fix_missing = false)
 	{
+		set_time_limit(14400);
+
 		$this->added_images = array();
 		set_time_limit(0);
 		echo "-----------[ start of picture import function ]------------------<br>";
@@ -1414,6 +1416,7 @@ class otto_import extends class_base
 
 	function update_csv_db($o)
 	{
+		set_time_limit(14400);
 		set_time_limit(0);
 		$otto_import_lang_id = $o->lang_id();
 		echo "- START UPDATE CSV DB -<br>";

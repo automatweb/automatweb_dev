@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.192 2007/03/16 13:46:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.193 2007/03/28 10:15:02 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -624,7 +624,7 @@ class image extends class_base
 		$_fi = get_instance(CL_FILE);
 		if ($_FILES[$name]['tmp_name'] != "" && $_FILES[$name]['tmp_name'] != "none")
 		{
-			if (!$img_id)
+			if (!$this->can("view", $img_id))
 			{
 				$img_obj = new object();
 				$img_obj->set_parent($parent);

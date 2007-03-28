@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.118 2007/03/15 09:20:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.119 2007/03/28 10:15:03 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1717,6 +1717,18 @@ class webform extends class_base
 			"obj_inst" => $obj_inst,
 			"prop" => "style",
 		));
+		if ($_SERVER["HTTPS"] != "")
+		{
+			$this->vars(array(
+				"url_spec" => str_replace("http:", "https:", aw_ini_get("baseurl"))."/"
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"url_spec" => aw_ini_get("baseurl")."/"
+			));
+		}
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$errors = aw_global_get("wf_errors");
 		$values = aw_global_get("wf_data");
@@ -1729,6 +1741,10 @@ class webform extends class_base
 		else
 		{
 			$section = aw_ini_get("baseurl").$_SERVER["REQUEST_URI"];
+		}
+		if ($_SERVER["HTTPS"] != "")
+		{
+			$section = str_replace("http:", "https:", $section);
 		}
 		$vrs = array();
 		if($ftype == CL_CALENDAR_REGISTRATION_FORM)
@@ -2270,7 +2286,7 @@ class webform extends class_base
 		$subaction = $arr["subaction"];
 		$obj_inst = obj($arr["id"]);
 		$redirect = $obj_inst->trans_get_val("redirect");
-		$rval = (strpos(strtolower($redirect), "http://") !== false ? $redirect : (substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect));
+		$rval = (strpos(strtolower($redirect), "http://") !== false || strpos(strtolower($redirect), "https://") !== false ? $redirect : (substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect));
 
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$cfgform = $obj_inst->get_first_obj_by_reltype("RELTYPE_CFGFORM");

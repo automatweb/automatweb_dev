@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.74 2006/07/05 10:12:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.75 2007/03/28 10:15:02 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -808,7 +808,7 @@ class sys extends aw_template
 	**/
 	function test_sites($arr)
 	{
-		set_time_limit(0);
+		set_time_limit(14400);
 		echo "testing sites ... <br>\n";
 		flush();
 

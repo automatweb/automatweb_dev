@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.84 2007/02/21 10:16:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.85 2007/03/28 10:15:05 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1544,6 +1544,7 @@ class vcalendar extends aw_template
 					"event_comment" => "",
 					"EVENT" => $events_str
 				));
+
 				if($this->is_template("CLICKABLE") && $mode == 0)
 				{
 					$this->vars_safe(array(
@@ -1724,6 +1725,7 @@ class vcalendar extends aw_template
 			{
 				$time = date("H:i",$evt["timestamp"]);
 			};
+
 		}
 		else
 		{
@@ -1818,7 +1820,5 @@ class vcalendar extends aw_template
 			return (int)($el1['start'] - $el2['start']);
 		}
 	}
-
-
 };
 ?>

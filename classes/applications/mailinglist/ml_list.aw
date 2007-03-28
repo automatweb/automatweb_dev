@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.97 2007/03/27 12:46:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.98 2007/03/28 10:15:07 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1272,7 +1272,6 @@ class ml_list extends class_base
 				echo "Liituda saab ainult kaustadesse... ".$fld_obj->name()." ei ole kaust<br />";
 				continue;
 			}
-
 			$members = $this->get_all_members($fold);
 			$name = $fld_obj->name();
 			echo "Impordin kasutajaid kataloogi $fold / $name... <br />";

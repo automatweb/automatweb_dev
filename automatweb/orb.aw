@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.25 2007/03/01 17:59:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.26 2007/03/28 10:15:01 kristo Exp $
 	function get_time() 
 	{
 		list($micro,$sec) = explode(" ",microtime());
@@ -8,7 +8,7 @@
 $GLOBALS["__START"] = get_time();
 if (!ini_get("safe_mode"))
 {
-	set_time_limit(0);
+	set_time_limit(14400);
 }
 include("const.aw");
 

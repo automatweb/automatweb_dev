@@ -17,7 +17,7 @@
 
 <tr>
 <td colspan="2">
-<input type="submit" value="Unsubscribe">
+<input type="submit" value="Lahkun listist">
 </td>
 </tr>
 <input type="hidden" name="op" value="2">

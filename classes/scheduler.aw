@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.42 2007/01/05 12:58:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.43 2007/03/28 10:15:02 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -332,7 +332,6 @@ class scheduler extends aw_template
 		extract($arr);
 		set_time_limit(14400);
 
-
 		// read in all events
 		$this->open_session();
 		$this->close_session(true);
@@ -344,6 +343,7 @@ class scheduler extends aw_template
 
 		foreach($cp as $evnt)
 		{
+//w:		echo "now = $now , time  = $evnt[time] , event = $evnt[url] \n";
 			if (isset($evnt["time"]) && ($now > $evnt["time"]))
 			{
 				echo "exec event $evnt[event] <br />";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.136 2007/03/12 09:33:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.137 2007/03/28 10:15:02 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -275,7 +275,11 @@ class users_user extends aw_template
 	// !Logib kasutaja valja
 	function logout($uid) 
 	{
-		$t = time();
+$ma = -1;
+        session_cache_limiter("must-revalidate, max-age=".$ma);
+	        header("Cache-Control: must-revalidate, max-age=".$ma);
+		        header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
+$t = time();
 		$q = "UPDATE users
 			SET 	online = 0,
 				lastaction = $t
@@ -283,6 +287,8 @@ class users_user extends aw_template
 		$this->db_query($q);
 		aw_global_set("uid","");
 		aw_session_set("uid","");
+		$_SESSION["uid"] = null;
+///		echo dbg::dump($_SESSION);
 		$this->_log(ST_USERS, SA_LOGOUT ,$uid);
 
 		post_message("MSG_USER_LOGOUT", array("uid" => $uid));

@@ -1,12 +1,11 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.39 2007/01/30 08:39:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.40 2007/03/28 10:15:03 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
 //
 // latest version - all answer data is in metadata "answers"[lang_id][answer_id] array, poll_answers is just to count clicks. 
-
 
 /*
 
@@ -142,7 +141,7 @@ class poll extends class_base
 			$this->read_any_template("poll.tpl");
 		}
 
-		if ($GLOBALS["answer_id"] && !$GLOBALS["class"] && $GLOBALS["poll_id"] == $id)
+		if ($_GET["c_set_answer_id"] || $GLOBALS["answer_id"] && !$GLOBALS["class"] && $GLOBALS["poll_id"] == $id)
 		{
 			return $this->show($GLOBALS["poll_id"]);
 		}
@@ -193,14 +192,14 @@ class poll extends class_base
 		reset($ans);
 		while (list($k,$v) = each($ans))
 		{
-			$o_l = $this->mk_my_orb("show", array("poll_id" => $poll_id, "answer_id" => $k, "section" => $section));
+			$o_l = $this->mk_my_orb("show", array("poll_id" => $poll_id, "c_set_answer_id" => $k, "section" => $section));
 			if ($def)	 
 			{	 
-				$au = "javascript:window.location.href='" . $this->mk_my_orb("show", array("poll_id" => $poll_id, "answer_id" => $k, "section" => $section)) . "'";
+				$au = "javascript:window.location.href='" . $this->mk_my_orb("show", array("poll_id" => $poll_id, "c_set_answer_id" => $k, "section" => $section)) . "'";
 			}	 
 			else	 
 			{	 
-				$au = "javascript:window.location.href='/?section=".$section."&poll_id=".$poll_id."&answer_id=".$k."&section=".$section . "'";	 
+				$au = "javascript:window.location.href='/?section=".$section."&poll_id=".$poll_id."&c_set_answer_id=".$k."&section=".$section . "'";	 
 			}
 			if (is_admin())
 			{
@@ -256,7 +255,7 @@ class poll extends class_base
 		{
 			return;
 		}
-		
+	
 		$this->quote(&$aid);
 		$poll_id = $this->db_fetch_field("SELECT poll_id FROM poll_answers WHERE id = '$aid'", "poll_id");
 
@@ -291,6 +290,16 @@ class poll extends class_base
 	**/
 	function show($id)
 	{
+                if ($_GET["c_set_answer_id"])
+                {
+                        // try to set the answer id via a cookie
+                        $_COOKIE["poll_set_answer_id"] = $_GET["c_set_answer_id"];
+                        setcookie("poll_set_answer_id", $_GET["c_set_answer_id"],time()+24*3600*1000,"/");
+                        ///$url = aw_url_change_var("c_set_answer_id", null);
+			$url = $this->mk_my_orb("show", array("poll_id" => $_GET["poll_id"], "section" => aw_global_get("section")));
+                        die("<script language=javascript>window.location.href='$url';</script>");
+                }
+
 		if (is_array($id))
 		{
 			// orb call
@@ -308,6 +317,12 @@ class poll extends class_base
 		{
 			$answer_id = $aid;
 		}
+
+                if ($_COOKIE["poll_set_answer_id"])
+                {
+                        $answer_id = $_COOKIE["poll_set_answer_id"];
+                }
+
 		if ($answer_id && $GLOBALS["poll_id"] == $id)
 		{
 			$this->add_click($answer_id);

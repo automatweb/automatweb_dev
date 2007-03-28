@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.175 2007/02/01 08:59:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.176 2007/03/28 10:15:02 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -238,7 +238,7 @@ class users extends users_user
 	function submit_user_site($arr)
 	{
 		extract($arr);
-		set_time_limit(0);
+		set_time_limit(14400);
 
 		global $add_state;
 		$add_state["pass"] = $pass;
@@ -1628,7 +1628,11 @@ class users extends users_user
 					hash_time > ".time()." AND
 					uid = '$arr[uid]'
 			";
+			//echo "q =- $q <br>\n\n";
+		//	flush();
 			$row = $this->db_fetch_row($q);
+		//	echo "row = ".dbg::dump($row)."\n\n\n";
+		//	flush();
 			if ($row["hash"] == $arr["hash"])
 			{
 				// do quick login
@@ -1648,8 +1652,11 @@ class users extends users_user
 
 				// remove stale hash table entries
 				$this->db_query("DELETE FROM user_hashes WHERE hash_time < ".(time() - 60*24*3600));
-				//return (substr(aw_ini_get("baseurl"),0,5) == "https")?str_replace("http","https",aw_ini_get("baseurl")):aw_ini_get("baseurl");
-				return $arr["return_url"]?$arr["return_url"]:aw_ini_get("baseurl");
+				//echo "logged in user  \n\n\n";
+				//flush();
+
+				$url = ($t = urldecode(aw_global_get("request_uri_before_auth")))?$t:aw_ini_get("baseurl");
+				return $url;
 			}
 		}
 		return parent::login($arr);

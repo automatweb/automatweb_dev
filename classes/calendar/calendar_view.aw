@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.44 2007/02/21 10:14:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.45 2007/03/28 10:15:03 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -479,7 +479,6 @@ class calendar_view extends class_base
 			{
 				$to_o = $conn->to();
 				//$to_o->properties();
-
 				$events = $this->get_events_from_object(array(
 					"obj_inst" => $to_o,
 					"range" => $range,
@@ -732,8 +731,6 @@ class calendar_view extends class_base
 			$args["fix_links"] = 1;
 		}
 		$vcal->obj_status = $status;
-
-
 		$vcal->configure($args);
 
 
@@ -999,7 +996,6 @@ class calendar_view extends class_base
 		};
 
 		$rv = $vcal->get_html($args);
-		
 		if ("grouped" == $use_template)
 		{
 			$conns = $this->obj_inst->connections_from(array(

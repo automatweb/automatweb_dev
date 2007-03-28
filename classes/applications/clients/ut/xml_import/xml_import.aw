@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.7 2005/08/23 07:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.8 2007/03/28 10:15:07 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -32,6 +32,7 @@ class xml_import extends class_base
 			"import_oppekava" => "import_oppekava",
 			"import_oppeasted" => "import_oppeasted",
 			"import_oppevormid" => "import_oppevormid",
+			"import_oppeained" => "import_oppeained"
 		);
 		set_time_limit(90);
 	}
@@ -87,6 +88,8 @@ class xml_import extends class_base
 		$method = $obj->prop("import_function");
 		$ds = get_instance("applications/clients/ut/xml_import/datasource");
 		$src_data = $ds->retrieve(array("id" => $obj->prop("datasource")));
+echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</pre><br>";
+
 		print "Got " . strlen($src_data) . " bytes of data<br />";
 		flush();
 		if (strlen($src_data) < 100)
@@ -133,6 +136,7 @@ class xml_import extends class_base
 		xml_parser_free($parser);
 		//$q = "DELETE FROM ut_tudengid";
 		//$this->db_query($q);
+		$count = 0;
 		$table = $this->create_temp_table("ut_tudengid");
 		foreach($values as $key => $val)
 		{
@@ -160,11 +164,20 @@ class xml_import extends class_base
 				print $q;
 				print "<br />";
 				$this->db_query($q);
+				$count++;
 			};
 
 
 		}
-		$this->sync_with_temp("ut_tudengid","temp_ut_tudengid");
+
+		if ($count)
+		{
+			$this->sync_with_temp("ut_tudengid","temp_ut_tudengid");
+		}
+		else
+		{
+			$this->db_query("DROP TABLE $table");
+		}
 	}
 	
 	/**  
@@ -317,7 +330,14 @@ class xml_import extends class_base
 			} 
 		}
 		print "<h1>$counter</h1>";
-		$this->sync_with_temp("ut_struktuurid","temp_ut_struktuurid");
+		if ($counter > 0)
+		{
+			$this->sync_with_temp("ut_struktuurid","temp_ut_struktuurid");
+		}
+		else
+		{
+			$this->db_query("DROP TABLE $table");
+		}
 	}
 	
 	/**  
@@ -670,7 +690,7 @@ class xml_import extends class_base
 		$oppekava_url = $oppeaasta_url = "";
 		$aasta_urls = array();
 		$st_id = array();
-
+		$cnt = 0;
 		foreach($values as $key => $val)
 		{
 			if ( ($val["tag"] == "struktuur") && ($val["type"] == "complete") )
@@ -732,13 +752,21 @@ class xml_import extends class_base
 				print "<br />";
 				$nimetus = $nimetus_en = $oppeaste = $id = $kood = "";
 				$this->db_query($q);
-
+				$cnt++;
 			};
 
 
 
 		}
-		$this->sync_with_temp("ut_oppekavad","temp_ut_oppekavad");
+
+		if ($cnt > 0)
+		{
+			$this->sync_with_temp("ut_oppekavad","temp_ut_oppekavad");
+		}
+		else
+		{
+			$this->db_query("DROP TABLE $table");
+		}
 	}
 	
 	function import_oppeasted($args = array())
@@ -759,6 +787,7 @@ class xml_import extends class_base
 		$q = "DELETE FROM ut_oppeasted";
 		$this->db_query($q);
 		*/
+		$cnt = 0;
 		foreach($values as $key => $val)
 		{
 			if ( ($val["tag"] == "oppeaste")  && ($val["type"] == "complete") )
@@ -773,12 +802,64 @@ class xml_import extends class_base
 				print $q;
 				print "<br />";
 				$this->db_query($q);
+				$cnt++;
 			};
 
 
 
 		}
-		$this->sync_with_temp("ut_oppeasted","temp_ut_oppeasted");
+
+		if ($cnt > 0)
+		{
+			$this->sync_with_temp("ut_oppeasted","temp_ut_oppeasted");
+		}
+		else
+		{
+			$this->db_query("DROP TABLE $table");
+		}
+	}
+
+	function import_oppekavad($args  = array())
+	{
+                       $fn = "https://www.is.ut.ee/pls/xml/oppeained.xml";
+                        $this->db_query("DROP TABLE IF EXISTS imporditud_oppekavad");
+                        $this->db_query("CREATE TABLE imporditud_oppekavad(id int primary key auto_increment, ainekood varch
+ar(255), maht varchar(10), nimetus varchar(255), annotatsioon text, eesmark text)");
+
+                        $parser = xml_parser_create();
+                        xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+                        xml_parse_into_struct($parser,file_get_contents($fn),&$keys,&$values);
+                        xml_parser_free($parser);
+
+                        echo "parsed <Br>\n";
+                        flush();
+
+                        //echo dbg::dump($keys);
+                        foreach($keys as $entry)
+                        {
+                                if ($entry["tag"] == "aine" && $entry["type"] == "complete")
+                                {
+                                        $ainekood = $entry["attributes"]["ainekood"];
+                                        $this->quote(&$ainekood);
+
+                                        $maht = $entry["attributes"]["maht"];
+                                        $this->quote(&$maht);
+
+                                        $nimetus = $entry["attributes"]["nimetus"];
+                                        $this->quote(&$nimetus);
+
+                                        $anno = $entry["attributes"]["annotatsioon"];
+                                        $this->quote(&$anno);
+
+                                        $eesm = $entry["attributes"]["eesmark"];
+                                        $this->quote(&$eesm);
+
+                                        $this->db_query("INSERT INTO imporditud_oppekavad(ainekood, maht, nimetus, annotatsi
+oon, eesmark) values('$ainekood', '$maht', '$nimetus', '$anno', '$eesm')");
+                                        echo $nimetus." <Br>";
+                                }
+                        }
+	
 	}
 	
 	function import_oppevormid($args = array())
@@ -799,9 +880,10 @@ class xml_import extends class_base
 		$q = "DELETE FROM ut_oppevormid";
 		$this->db_query($q);
 		*/
+		$cnt = 0;
 		foreach($values as $key => $val)
 		{
-			if ( ($val["tag"] == "oppevormid")  && ($val["type"] == "complete") )
+			if ( ($val["tag"] == "oppevorm")  && ($val["type"] == "complete") )
 			{
 				$attr = $val["attributes"];		
 				$nimetus = $this->convert_charset($attr["nimetus"]);
@@ -813,12 +895,20 @@ class xml_import extends class_base
 				print $q;
 				print "<br />";
 				$this->db_query($q);
+				$cnt++;
 			};
 
 
 
 		}
-		$this->sync_with_temp("ut_oppevormid","temp_ut_oppevormid");
+		if ($cnt > 0)
+		{
+			$this->sync_with_temp("ut_oppevormid","temp_ut_oppevormid");
+		}
+		else
+		{
+			$this->db_query("DROP TABLE $table");
+		}
 	}
 
 	function bitch_and_die(&$parser,&$contents)

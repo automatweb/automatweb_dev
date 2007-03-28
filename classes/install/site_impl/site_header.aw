@@ -1,15 +1,22 @@
 <?php
+
 if (empty($_COOKIE["nocache"]) && aw_ini_get("config.use_squid"))
 {
-	$ma = aw_ini_get("config.http_cache_max_age");
+/*	$ma = aw_ini_get("config.http_cache_max_age");
         session_cache_limiter("must-revalidate, max-age=".$ma);
 	header("Cache-Control: must-revalidate, max-age=".$ma);
-	header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
+	header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");*/
 };
+
+
+
 ini_set("session.save_handler", "files");
 session_name("automatweb");
-session_start();
-session_regenerate_id();
+if (empty($_COOKIE["automatweb"]))
+{
+	session_regenerate_id();
+};
+@session_start();
 lc_init();
 classload("aw_template");
 classload("defs");
