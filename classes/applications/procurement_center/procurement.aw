@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.15 2007/02/20 15:42:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.16 2007/03/28 12:32:26 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -1104,6 +1104,10 @@ class procurement extends class_base
 		"var url = '".$this->mk_my_orb("check_existing")."';";
 		
 		$x = 0;
+		if($size>25)
+		{
+			$x = $size-25;
+		}
 		while($x < $size)
 		{
 			$ret.= "url = url + '&p[".$x."]=' + escape(document.changeform.products_".$x."__product_.value);
