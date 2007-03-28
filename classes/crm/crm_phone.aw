@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.9 2006/12/06 18:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.10 2007/03/28 13:13:36 markop Exp $
 // phone.aw - Telefon
 /*
 
@@ -15,7 +15,7 @@
 @caption Kommentaar
 
 @property type type=chooser field=meta method=serialize
-@caption Numbri tüüp
+@caption Numbri t&uuml;&uuml;p
 
 @property country type=relpicker reltype=RELTYPE_COUNTRY field=meta method=serialize automatic=1
 @caption Riik
@@ -39,9 +39,9 @@ class crm_phone extends class_base
 			"clid" => CL_CRM_PHONE
 		));
 		$this->phone_types = array(
-			"work" => t("tööl"),
+			"work" => t("t&ouml;&ouml;l"),
 			"home" => t("kodus"),
-			"short" => t("lühinumber"),
+			"short" => t("l&uuml;hinumber"),
 			"mobile" => t("mobiil"),
 			// "fax" => t("faks"),
 			"skype" => t("skype"),
