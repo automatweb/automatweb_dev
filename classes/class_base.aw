@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.537 2007/03/13 15:02:44 kristo Exp $
+// $Id: class_base.aw,v 2.538 2007/03/28 14:09:13 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1161,7 +1161,7 @@ class class_base extends aw_template
 		// or, if configuration form should be loaded from somewhere
 		// else, this is the place to do it
 
-		$action = $args["action"];
+		$action = $args["args"]["action"];
 
 		$retval = "";
 		$cgid = false;
