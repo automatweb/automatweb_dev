@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.40 2007/03/28 15:40:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.41 2007/03/28 16:14:21 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -757,6 +757,17 @@ class bank_payment extends class_base
 	**/	
 	function do_payment($arr)
 	{
+		//selle nõmeduse pidi siia ette panema, sest hiljem bank_id'd muutes peaks muidu siia funktsiooni tagasi pöörama
+		if(is_oid($arr["payment_id"]))
+		{
+			$payment = obj($arr["payment_id"]);
+			$bank_data = $payment->meta("bank");
+			if($bank_data[$arr["bank_id"]."_".$_SESSION["ct_lang_lc"]]["sender_id"])
+			{
+				$arr["bank_id"] = $arr["bank_id"]."_".$_SESSION["ct_lang_lc"];
+			}
+		}
+				
 		switch($arr["bank_id"]) {
 			case "seb":
 				$arr = $this->check_args($arr);
