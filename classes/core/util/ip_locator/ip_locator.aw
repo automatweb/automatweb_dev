@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.5 2007/03/02 15:52:37 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/ip_locator/ip_locator.aw,v 1.6 2007/03/28 07:37:26 kristo Exp $
 // ip_locator.aw - IP lokaator 
 /*
 
@@ -172,6 +172,25 @@ class ip_locator extends class_base
 	**/
 	function search($ip)
 	{
+		// check tix list
+		$fc = file("http://tix.estpak.ee/networks.txt");
+		foreach($fc as $line)
+		{
+			list(, $ip_range) = explode(" ", $line);
+			list($range_adr, $range_len) = explode("/", $ip_range);
+			$int_range_adr = ip2long($range_adr);
+			$int_ip = ip2long($ip);
+
+			// chop off the given number of bits and compare
+			$mask = pow(2, ($range_len+1))-1;
+			if (($int_range_adr | $mask) == ($int_ip | $mask))
+			{
+				return array(
+					"country_code3" => "EST"
+				);
+			}
+		}
+		return false;
 		$ip_number = ip2long($ip);
 		if ($ip_number != -1)
 		{
