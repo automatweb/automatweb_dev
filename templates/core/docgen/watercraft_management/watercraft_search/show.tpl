@@ -15,7 +15,7 @@
 	</tr>
 	<!-- SUB: SEARCH_RESULT_ITEM -->
 	<tr>
-		<td>{VAR:watercraft_name}</td>
+		<td><a href="{VAR:watercraft_view_url}">{VAR:watercraft_name}</a></td>
 		<td>{VAR:watercraft_price}</td>
 		<td>{VAR:watercraft_lenght}</td>
 	</tr>
