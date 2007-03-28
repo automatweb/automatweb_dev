@@ -872,6 +872,16 @@
             <field>cedit_toolbar</field>
       </property>
       <property>
+            <name>contact_desc_text</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>contact_desc_text</field>
+            <caption>Kontaktandmed</caption>
+      </property>
+      <property>
             <name>cedit_phone_tbl</name>
             <table>objects</table>
             <group>cedit</group>

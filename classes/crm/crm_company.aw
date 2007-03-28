@@ -321,7 +321,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 @default group=cedit
 	@property cedit_toolbar type=toolbar store=no no_caption=1 
-
+	@property contact_desc_text type=text store=no no_caption=1
+	@caption Kontaktandmed
 		@layout ceditphf type=hbox width=50%:50%
 
 			@layout cedit_phone type=vbox parent=ceditphf closeable=1 area_caption=Telefonid
@@ -1549,7 +1550,11 @@ class crm_company extends class_base
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_url_tbl($t, $arr);
 				break;
-
+				
+			case "contact_desc_text":
+				$data["value"] = $this->get_short_description($arr["obj_inst"]->id());
+				break;
+				
 			case "cedit_email_tbl":
 				$i = get_instance("applications/crm/crm_company_cedit_impl");
 				$t = &$data["vcl_inst"];
@@ -7589,6 +7594,154 @@ class crm_company extends class_base
 		}
 
 		return $web_address_obj_id;
+	}
+
+
+/*Aadress:
+(kui mitu siis Aadress 1, Aadress 2 jne üksteise all)
+Telefon: xxxxxxx, yyyyyyy
+Faks: tttttttt,iiiiiiii
+E-mail: aaa@bbb.ee (klikitav)
+WWW: http://www.domain.ee (klikitav)
+Bank accounts: üksteise all
+*/
+
+	function init_short_description_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "caption",
+		));
+		$t->define_field(array(
+			"name" => "data",
+		));
+	}
+
+	/** returns a line of info about the company - name, phone, fax , e-mail , web-page , bank accounts
+		@attrib api=1 params=pos
+
+		@param c required type=oid
+			The company to return the info for
+	**/
+	function get_short_description($c)
+	{
+		$p = obj($c);
+		$t = new vcl_table();
+		$this->init_short_description_table(&$t);
+/*		$t->define_data(array("caption" => t("Aadress:")));
+*/		
+		$conns = $p->connections_from(array(
+			"type" => "RELTYPE_ADDRESS",
+		));
+		if(sizeof($conns) > 1)
+		{
+			$multi_addr = 1;
+		}
+		$count = 0;
+		foreach($conns as $c)
+		{
+			$count++;
+			$aa = array();
+			$a = $c->to();
+			if($a->prop("aadress")) 	$aa[] = $a->prop("aadress");
+			if($a->prop("postiindeks")) 	$aa[] = $a->prop("postiindeks");
+			if($a->prop("linn.name")) 	$aa[] = $a->prop("linn.name");
+			if($a->prop("maakond.name")) 	$aa[] = $a->prop("maakond.name");
+			if($a->prop("piirkond.name")) 	$aa[] = $a->prop("piirkond.name");
+			if($a->prop("riik.name")) 	$aa[] = $a->prop("riik.name");
+			$caption = t("Aadress")." ".($multi_addr ? $count:"").":";
+			if(sizeof($aa))
+			{
+				$t->define_data(array(
+					"caption" => $caption,
+					"data" => join($aa, ", "),
+				));
+			}
+		}
+		$conns = $p->connections_from(array(
+			"type" => "RELTYPE_PHONE",
+		));
+		if(sizeof($conns))
+		{
+			$aa = array();
+			foreach($conns as $c)
+			{
+				$a = $c->to();
+				$aa[] = $a->name();
+			}
+			$t->define_data(array(
+				"caption" => t("Telefon".":"),
+				"data" => join($aa, ", "),
+			));
+		}
+		$conns = $p->connections_from(array(
+			"type" => "RELTYPE_TELEFAX",
+		));
+		if(sizeof($conns))
+		{
+			$aa = array();
+			foreach($conns as $c)
+			{
+				$a = $c->to();
+				$aa[] = $a->name();
+			}
+			$t->define_data(array(
+				"caption" => t("Faks").":",
+				"data" => join($aa, ", "),
+			));
+		}
+		$conns = $p->connections_from(array(
+			"type" => "RELTYPE_EMAIL",
+		));
+		if(sizeof($conns))
+		{
+			$aa = array();
+			foreach($conns as $c)
+			{
+				$a = $c->to();
+				$aa[] = $a->prop("mail");
+			}
+			$t->define_data(array(
+				"caption" => t("E-mail").":",
+				"data" => join($aa, ", "),
+			));
+		}
+		
+		$conns = $p->connections_from(array(
+			"type" => "RELTYPE_URL",
+		));
+		
+		if(sizeof($conns))
+		{
+			$aa = array();
+			foreach($conns as $c)
+			{
+				$a = $c->to();
+				$aa[] = $a->name();
+			}
+			$t->define_data(array(
+				"caption" => t("WWW").":",
+				"data" => join($aa, "\n<br>"),
+			));
+		}
+		
+		$conns = $p->connections_from(array(
+			"type" => "RELTYPE_BANK_ACCOUNT",
+		));
+		
+		if(sizeof($conns))
+		{
+			$aa = array();
+			foreach($conns as $c)
+			{
+				$a = $c->to();
+				$aa[] = $a->prop("acct_no");
+			}
+			$t->define_data(array(
+				"caption" => t("Bank accounts").":",
+				"data" => join($aa, "\n<br>"),
+			));
+		}
+		return $t->draw();
 	}
 
 }
