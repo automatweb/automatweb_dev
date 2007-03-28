@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.39 2007/03/28 11:14:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.40 2007/03/28 15:40:17 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -424,7 +424,6 @@ class bank_payment extends class_base
 		//arr($log_array);
 		$log_data = array();
 		$done = array();
-		
 		foreach($log_array as $log)
 		{
 			if(is_array(unserialize($log)))
@@ -525,10 +524,10 @@ class bank_payment extends class_base
 		classload("vcl/table");
 		$t = new vcl_table;
 		$this->init_log($t);
-
+		$sum = 0;
 		foreach($log_data as $key => $val)
 		{
-			//filtreerib välja lihtsalt ülearuse
+			$sum = $sum + $val["sum"];
 			$t->define_data(array(
 				"sum" => $val["sum"],
 				"bank" => $this->banks[$val["bank"]],
@@ -540,6 +539,11 @@ class bank_payment extends class_base
 				"good" => $val["good"] ? t("ok") : t(""),
 			));
 		}
+		//see summa toimib hetkel vaid eeldusel , et valuuta on igal pool sama
+		$t->define_data(array(
+			"sum" => $sum,
+			"payer" => t("Kokku:"),
+		));
 		return $t->draw();
 	}
 
