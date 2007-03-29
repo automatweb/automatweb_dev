@@ -95,7 +95,7 @@
       </property>
       <property>
             <name>show_conditions</name>
-            <group>show</group>
+            <group>show_def</group>
             <type>chooser</type>
             <multiple>1</multiple>
             <store>no</store>
@@ -104,7 +104,7 @@
       </property>
       <property>
             <name>newwindow</name>
-            <group>show</group>
+            <group>show_def</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <table>images</table>
@@ -113,7 +113,7 @@
       </property>
       <property>
             <name>no_print</name>
-            <group>show</group>
+            <group>show_def</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <table>objects</table>
@@ -123,7 +123,7 @@
       </property>
       <property>
             <name>ord</name>
-            <group>show</group>
+            <group>show_def</group>
             <type>textbox</type>
             <size>3</size>
             <table>objects</table>
@@ -224,6 +224,15 @@
             <caption>Info</caption>
       </property>
       <property>
+            <name>grkeywords2</name>
+            <group>keywords</group>
+            <type>keyword_selector</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_KEYWORD</reltype>
+            <caption>AW M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
             <name>transl</name>
             <group>transl</group>
             <type>callback</type>
@@ -239,6 +248,10 @@
             <show>
                   <caption>N&amp;amp;auml;itamine</caption>
             </show>
+            <show_def>
+                  <caption>N&amp;amp;auml;itamine</caption>
+                  <parent>show</parent>
+            </show_def>
             <img2>
                   <caption>Suur pilt</caption>
             </img2>
@@ -248,6 +261,10 @@
             <resize_big>
                   <caption>Muuda suure pildi suurust</caption>
             </resize_big>
+            <keywords>
+                  <caption>M&amp;amp;auml;rk&amp;amp;otilde;nad</caption>
+                  <parent>show</parent>
+            </keywords>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -270,6 +287,11 @@
                   <clid>CL_FLASH</clid>
                   <caption>Flash</caption>
             </FLASH>
+            <KEYWORD>
+                  <value>3</value>
+                  <clid>CL_KEYWORD</clid>
+                  <caption>M&amp;amp;auml;rks&amp;amp;otilde;na</caption>
+            </KEYWORD>
       </reltypes>
 </properties>
 

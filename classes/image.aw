@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.193 2007/03/28 10:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.194 2007/03/29 14:17:21 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -43,7 +43,8 @@
 	/@caption Eelvaade 
 
 @groupinfo show caption="N&auml;itamine"
-@default group=show
+@groupinfo show_def caption="N&auml;itamine" parent=show
+@default group=show_def
 
 	@property show_conditions type=chooser multiple=1 store=no
 	@caption Tingimused
@@ -104,6 +105,12 @@
 	@caption Info
 
 
+@groupinfo keywords caption="M&auml;rk&otilde;nad" parent=show
+@default group=keywords
+
+	@property grkeywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
+	@caption AW M&auml;rks&otilde;nad
+
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
 	
@@ -115,6 +122,9 @@
 
 @reltype FLASH value=2 clid=CL_FLASH
 @caption Flash
+
+@reltype KEYWORD value=3 clid=CL_KEYWORD
+@caption M&auml;rks&otilde;na
 */
 
 define("FL_IMAGE_CAN_COMMENT", 1);
