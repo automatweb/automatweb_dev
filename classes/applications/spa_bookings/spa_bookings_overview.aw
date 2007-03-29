@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.26 2007/03/14 11:33:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.27 2007/03/29 11:00:24 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -221,6 +221,7 @@ class spa_bookings_overview extends class_base
 				// get all bookings for that person
 				$bf = array(
 					"class_id" => CL_RESERVATION,
+					"verified" => 1,			
 					"lang_id" => array(),
 					"site_id" => array(),
 				);
@@ -300,8 +301,30 @@ class spa_bookings_overview extends class_base
 				}
 			}
 
+			$tmp = array();
 			foreach($ppl as $cust_id => $bookings)
 			{
+				$cust_o = obj($cust_id);
+				if (isset($tmp[$cust_o->name()]))
+				{
+					foreach($bookings as $booking)
+					{
+						$tmp[$cust_o->name()]["bookings"][] = $booking;
+					}
+				}
+				else
+				{
+					$tmp[$cust_o->name()] = array(
+						"id" => $cust_id,
+						"bookings" => $bookings
+					);
+				}
+			}
+
+			foreach($tmp as $data) //$cust_id => $bookings)
+			{
+				$cust_id = $data["id"];
+				$bookings = $data["bookings"];
 				$rvs_ids = array();
 				foreach($bookings as $booking)
 				{
@@ -857,6 +880,7 @@ class spa_bookings_overview extends class_base
 					"lang_id" => array(),
 					"site_id" => array(),
 					"resource" => $room_id,
+					"verified" => 1,
 					new obj_predicate_compare(OBJ_COMP_IN_TIMESPAN, array("start1", "end"), array($from, $to)),
 				);			
 				if ($arr["group"])
