@@ -75,16 +75,16 @@ class keyword_selector extends class_base
 	function _init_kw_t(&$t)
 	{
 		$t->define_field(array(
-			"name" => "name",
+			"name" => "name_1",
 			"caption" => t("Nimi"),
 			"align" => "right"
 		));
 
-		$t->define_field(array(
-			"name" => "sel",
+/*		$t->define_field(array(
+			"name" => "sel_1",
 			"caption" => t("Vali"),
 			"align" => "center"
-		));
+		));*/
 
 		$t->define_field(array(
 			"name" => "name_2",
@@ -92,11 +92,11 @@ class keyword_selector extends class_base
 			"align" => "right"
 		));
 
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "sel_2",
 			"caption" => t("Vali"),
 			"align" => "center"
-		));
+		));*/
 
 		$t->define_field(array(
 			"name" => "name_3",
@@ -104,11 +104,11 @@ class keyword_selector extends class_base
 			"align" => "right"
 		));
 
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "sel_3",
 			"caption" => t("Vali"),
 			"align" => "center"
-		));
+		));*/
 	}
 
 	function _draw_alphabet($arr)
@@ -131,57 +131,55 @@ class keyword_selector extends class_base
 		$filt["sort_by"] = "objects.name";
 		$ol = new object_list($filt);
 		$used_kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD")));
+		$used_kws->sort_by(array("prop" => "parent"));
 		$used_kws = $this->make_keys($used_kws->ids());
 		$data = array_values($ol->arr());
-		$rows = count($data) / 3;
 
-		$cnt = 0;
-		for($i = 0; $i < $rows; $i++)
+		$num = 0;
+		foreach($ol->arr() as $kw)
 		{
-			$kw1 = $data[$cnt++];
-			$rowd[$i] = array(
-				"name" => html::obj_change_url($kw1),
-				"sel" => html::checkbox(array(
-					"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw1->id()."]",
-					"value" => 1,
-					"checked" => isset($used_kws[$kw1->id()])
-				))
-			);
-		}
-		for($i = 0; $i < $rows; $i++)
-		{
-			$kw1 = $data[$cnt++];
-			if (!$kw1)
+			if (!isset($prev_parent))
 			{
-				continue;
+				$prev_parent = $kw->parent();	
+				$po = obj($kw->parent());
+				$cur_row = array(
+					"parent" => "<b>".parse_obj_name($po->name())."</b>"
+				);
 			}
-			$rowd[$i]["name_2"] = html::obj_change_url($kw1);
-			$rowd[$i]["sel_2"] = html::checkbox(array(
-				"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw1->id()."]",
-				"value" => 1,
-				"checked" => isset($used_kws[$kw1->id()])
-			));
-		}
-		for($i = 0; $i < $rows; $i++)
-		{
-			$kw1 = $data[$cnt++];
-			if (!$kw1)
-			{
-				continue;
-			}
-			$rowd[$i]["name_3"] = html::obj_change_url($kw1);
-			$rowd[$i]["sel_3"] = html::checkbox(array(
-				"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw1->id()."]",
-				"value" => 1,
-				"checked" => isset($used_kws[$kw1->id()])
-			));
-		}
 
-		foreach($rowd as $row)
-		{
-			$t->define_data($row);
+			if ($prev_parent != $kw->parent())
+			{
+				$num = 15;
+			}
+		
+			$num++;
+			if ($num > 3)
+			{
+				$po = obj($kw->parent());
+				$t->define_data($cur_row);
+				$cur_row = array(
+					"parent" => "<b>".parse_obj_name($po->name())."</b>"
+				);
+				$num = 1;
+			}
+
+			$cur_row["name_".$num] = html::obj_change_url($kw)." ".html::checkbox(array(
+				"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw->id()."]",
+				"value" => 1,
+				"checked" => isset($used_kws[$kw->id()])
+			));
+			$prev_parent = $kw->parent();
 		}
+		$po = obj($prev_parent);
+		$t->define_data($cur_row);
+		$cur_row = array(
+			"parent" => "<b>".parse_obj_name($po->name())."</b>"
+		);
+
 		$t->set_header($this->_get_alpha_list($arr["request"]));
+		$t->sort_by(array(
+			"rgroupby" => array("parent" => "parent")
+		));
 		return $t->draw();
 	}
 

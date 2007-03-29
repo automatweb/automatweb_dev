@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.151 2007/02/21 10:11:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.152 2007/03/29 13:22:46 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1589,18 +1589,50 @@ class doc extends class_base
 	function kw_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		
-		$pt = $arr["obj_inst"]->id();
-		if (aw_ini_get("config.keyword_folder"))
-		{
-			$pt = aw_ini_get("config.keyword_folder");
-		}
-		$tb->add_button(array(
-			"name" => "new_kw",
-			"tooltip" => t("M&auml;rks&otilde;na"),
-			"url" => html::get_new_url(CL_KEYWORD, $pt, array("return_url" => get_ru())),
-			"img" => "new.gif",
+
+		$ol = new object_list(array(
+			"class_id" => CL_KEYWORD
 		));
+		$parents = array();
+		foreach($ol->arr() as $kw)
+		{
+			$parents[$kw->parent()] = $kw->parent();
+		}
+
+		if (count($parents) > 1)
+		{
+			$tb->add_menu_button(array(
+				"name" => "new",
+				"img" => "new.gif"
+			));
+			foreach($parents as $pt_id)
+			{
+				$po = obj($pt_id);
+				$tb->add_menu_item(array(
+					"parent" => "new",
+					"text" => $po->name(),
+					"link" => html::get_new_url(CL_KEYWORD, $pt_id, array("return_url" => get_ru()))
+				));
+			}
+		}
+		else
+		{
+			$pt = $arr["obj_inst"]->id();
+			if (aw_ini_get("config.keyword_folder"))
+			{
+				$pt = aw_ini_get("config.keyword_folder");
+			}
+			if (count($parents) == 1)
+			{
+				$pt = reset($parents);
+			}
+			$tb->add_button(array(
+				"name" => "new_kw",
+				"tooltip" => t("M&auml;rks&otilde;na"),
+				"url" => html::get_new_url(CL_KEYWORD, $pt, array("return_url" => get_ru())),
+				"img" => "new.gif",
+			));
+		}
 		$tb->closed = 1;
 	}
 
