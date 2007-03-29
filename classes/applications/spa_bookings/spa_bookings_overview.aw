@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.27 2007/03/29 11:00:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.28 2007/03/29 12:28:16 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -700,7 +700,8 @@ class spa_bookings_overview extends class_base
 				"t" => $t,
 				"room" => $room_id,
 				"timespan" => $ri->step_length,
-				"popup_menu" => $ri->popup_menu_str
+				"popup_menu" => $ri->popup_menu_str,
+				"start" => $ri->start
 			);
 		}
 
@@ -709,13 +710,14 @@ class spa_bookings_overview extends class_base
 		{
 			$t =& $room2tbl[$idx]["t"];
 			$ts = $dat["timespan"];
+			$ts_start = $dat["start"];
 			$room_id = $room2tbl[$idx]["room"];
 
 			// try to join the table together with the old one
 			// if the timespans are the same
 			$ro = obj($room_id);
 
-			if ($ts == $prev_ts)
+			if ($ts == $prev_ts && $ts_start == $prev_ts_start)
 			{
 				// add the contents of this table to the previous one
 				$prev_td = $prev_t->get_data();
@@ -778,6 +780,7 @@ class spa_bookings_overview extends class_base
 				}
 				$prev_t =& $t;
 				$prev_ts = $ts;
+				$prev_ts_start = $ts_start;
 				$prev_main_idx = $idx;
 			}
 		}
