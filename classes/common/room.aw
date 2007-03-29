@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.182 2007/03/26 14:32:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.183 2007/03/29 12:05:09 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -2083,7 +2083,8 @@ class room extends class_base
 			if($visible)
 			{
 				$tmp_row_data = array(
-					"time" => date("G:i" , $today_start+ $step*$step_length*$time_step)
+					"time" => date("G:i" , $today_start+ $step*$step_length*$time_step),
+					"time_col" => "#BADBAD"
 				);
 				for($i = 0; $i < $len; $i++)
 				{
@@ -2521,6 +2522,7 @@ class room extends class_base
 			"name" => "time",
 			"caption" => t("Aeg"),
 			"width" => $pct."%",
+			"chgbgcolor" => "time_col"
 		));
 
 		
