@@ -1947,7 +1947,7 @@ class realestate_property extends class_base
 
 		$data["docid"] = $this_object->id ();
 		$data["extras"] = $extras;
-		$data["additional_info"] = $this_object->prop ("additional_info_" . aw_global_get("LC"));
+		$data["additional_info"] = nl2br($this_object->prop ("additional_info_" . aw_global_get("LC")));
 		$data["city24_object_id"] = $this_object->prop ("city24_object_id");
 
 		### ...
