@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.81 2007/02/27 12:41:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.82 2007/03/29 07:19:25 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -994,7 +994,6 @@ class site_search_content extends class_base
 			"name" => "%$str%",
 			"site_id" => array()
 		));
-		;		
 		//If keyword not found, no point to process it futher
 		if($keyword_list->count() == 0)
 		{
@@ -1018,7 +1017,7 @@ class site_search_content extends class_base
 		if(!$keyword_to_file_conns)
 		{
 			exit_function("site_search_content::search_keywords");
-			return;
+			//return;
 		}
 			
 		$obj2kw = array();
@@ -1031,30 +1030,41 @@ class site_search_content extends class_base
 		//List of files oids
 		//$ids_list[]
 		
-		$aliased_docs_conns = new connection();
-		$aliased_docs_conns = $aliased_docs_conns->find(array(
-			"to" => $ids_list,
-			"from.class_id" => CL_DOCUMENT,
-		));
-		;	
-		foreach ($aliased_docs_conns as $conn)
+		if (count($ids_list))
 		{
-			$doc_ids[] = $conn["from"];	
-			$obj2kw[$conn["from"]][$conn["to"]] = $conn["to"];
+			$aliased_docs_conns = new connection();
+			$aliased_docs_conns = $aliased_docs_conns->find(array(
+				"to" => $ids_list,
+				"from.class_id" => CL_DOCUMENT,
+			));
+			
+			foreach ($aliased_docs_conns as $conn)
+			{
+				$doc_ids[] = $conn["from"];	
+			}
 		}
-		
-		if(!$doc_ids)
+		// also, find all docs that are connected to keyword directly
+		$c = new connection();
+		$kw_to_doc_conns = $c->find(array(
+			"from.class_id" => CL_DOCUMENT,
+			"type" => "RELTYPE_KEYWORD",
+			"to" => $keyword_list->ids()
+		));
+		foreach($kw_to_doc_conns as $con)
+		{
+			$doc_ids[] = $con["from"];
+		}
+	
+		if(!$doc_ids || !count($doc_ids))
 		{
 			exit_function("site_search_content::search_keywords");
 			return;
 		}
-		
 		$filtr = array(
 			"oid" => $doc_ids,
 			"parent" => $menus,
 		);
 		$ol = new object_list($filtr);
-	
 		
 		$ret = array();	
 		foreach ($ol->arr() as $obj)
