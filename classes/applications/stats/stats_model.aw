@@ -598,5 +598,26 @@ echo "fn = $fn <br>";
 	{
 		return $this->countries;
 	}
+
+	function get_simple_count_for_obj($oid, $from = null, $to = null)
+	{
+		$whb = array();
+		if ($from !== null)
+		{
+			$whb[] = " tm >= $from ";
+		}
+		if ($to !== null)
+		{
+			$whb[] = " tm <= $to ";
+		}
+		$where = "";
+		if (count($whb))
+		{
+			$where = " AND ".join(" AND ", $whb);
+		}
+		$rv = $this->db_fetch_field("SELECT count(*) as cnt FROM syslog WHERE oid = $oid $where", "cnt");
+		$rv += $this->db_fetch_field("SELECT count(*) as cnt FROM syslog_archive WHERE oid = $oid $where", "cnt");
+		return $rv;
+	}
 }
 ?>

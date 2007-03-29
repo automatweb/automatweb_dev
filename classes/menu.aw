@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.190 2007/03/27 09:55:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.191 2007/03/29 09:59:06 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -71,6 +71,18 @@
 
 		@property users_only type=checkbox field=meta method=serialize group=users ch_value=1
 		@caption Ainult sisselogitud kasutajatele
+
+	@groupinfo stats caption="Statistika" parent=general
+
+		@property stats_from type=date_select field=meta method=serialize group=stats default=-1
+		@caption Alates
+
+		@property stats_to type=date_select field=meta method=serialize group=stats default=-1
+		@caption Kuni
+
+		@property stats_disp type=text field=meta method=serialize group=stats
+		@caption Vaatamisi ja muutmisi
+
 
 @groupinfo show caption=N&auml;itamine
 
@@ -496,6 +508,11 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "stats_disp":
+				$m = get_instance("applications/stats/stats_model");
+				$data["value"] = $m->get_simple_count_for_obj($arr["obj_inst"]->id(), $arr["obj_inst"]->prop("stats_from"), $arr["obj_inst"]->prop("stats_to"));
+				break;
+
 			case "sss_tb":
 				$this->_get_sss_tb($arr);
 				break;

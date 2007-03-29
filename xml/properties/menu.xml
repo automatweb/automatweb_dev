@@ -164,6 +164,35 @@
             <caption>Ainult sisselogitud kasutajatele</caption>
       </property>
       <property>
+            <name>stats_from</name>
+            <table>objects</table>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>stats</group>
+            <default>-1</default>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>stats_to</name>
+            <table>objects</table>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>stats</group>
+            <default>-1</default>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>stats_disp</name>
+            <table>objects</table>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>stats</group>
+            <caption>Vaatamisi ja muutmisi</caption>
+      </property>
+      <property>
             <name>link_behaviour</name>
             <table>objects</table>
             <type>chooser</type>
@@ -866,6 +895,10 @@
                   <caption>Kasutajad</caption>
                   <parent>general</parent>
             </users>
+            <stats>
+                  <caption>Statistika</caption>
+                  <parent>general</parent>
+            </stats>
             <show>
                   <caption>N&amp;amp;auml;itamine</caption>
             </show>
