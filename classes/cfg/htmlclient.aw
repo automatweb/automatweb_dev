@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.165 2007/03/09 13:18:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.166 2007/03/30 09:15:24 voldemar Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
 // for editing objects, then we can just add other clients
 // (xmlrpc, rdf, tty, etc) which take care of converting the data
-// from the cfgmanager to the required form. 
+// from the cfgmanager to the required form.
 
 class htmlclient extends aw_template
 {
@@ -60,12 +60,12 @@ class htmlclient extends aw_template
 	{
 		$this->layoutinfo = $arr;
 	}
-	
-	/** this can be used to set the different aspects of the behaviour of the client. 
+
+	/** this can be used to set the different aspects of the behaviour of the client.
 	**/
 	function configure($arr)
 	{
-		// help_url - set to the thing that should give you more information about the place you are in 
+		// help_url - set to the thing that should give you more information about the place you are in
 		// .. i need a few strings too, like "help", "close", "more" .. and also inline help about the group
 		// but that should probably be somewhere in the finish_output
 		$this->config = $arr;
@@ -85,7 +85,7 @@ class htmlclient extends aw_template
 			{
 				$this->sub_tpl->vars(array(
 					"form_target" => "target='" . $this->form_target . "' ",
-				));	
+				));
 			}
 			else
 			{
@@ -121,12 +121,12 @@ class htmlclient extends aw_template
 	// the current panel?
 
 	////
-	// !Starts the output 
+	// !Starts the output
 	function start_output($args = array())
 	{
 		$this->set_parse_method("eval");
 
-	
+
 		$tpl = "default.tpl";
 		if (!empty($this->use_template))
 		{
@@ -215,7 +215,7 @@ class htmlclient extends aw_template
 		}
 		// now I have to check whether this property is placed in a grid
 		// if so, place this thing int he grid
-		elseif (!empty($args["layout"]) && 
+		elseif (!empty($args["layout"]) &&
 			!empty($this->layoutinfo[$args["layout"]]) &&
 			$this->layoutinfo[$args["layout"]]["type"] == "grid")
 		{
@@ -340,7 +340,7 @@ class htmlclient extends aw_template
 			};
 
 			$tx = "<a href=\"javascript:colorpicker('$args[name]')\">".t("Vali")."</a>";
-	
+
 			$val .= html::text(array("value" => $script . $tx));
 			$args["value"] = $val;
 		};
@@ -467,7 +467,7 @@ class htmlclient extends aw_template
 		$rv = $this->parse($name);
 		return $rv;
 	}
-	
+
 	function put_header_subtitle($args)
 	{
 		$name = "SUB_TITLE";
@@ -480,7 +480,7 @@ class htmlclient extends aw_template
 		$rv = $this->parse($name);
 		return $rv;
 	}
-	
+
 	function put_content($args)
 	{
 		$tpl_vars = array(
@@ -493,7 +493,7 @@ class htmlclient extends aw_template
 		$rv = $this->parse("CONTENT");
 		return $rv;
 	}
-	
+
 	////
 	// !Finished the output
 	function finish_output($arr = array())
@@ -509,6 +509,7 @@ class htmlclient extends aw_template
 				}
 			}
 		}
+
 		extract($arr);
 		$sbt = "";
 
@@ -519,7 +520,7 @@ class htmlclient extends aw_template
 
 		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
 		unset($data["orb_class"]);
-	
+
 		$data = $data + $this->orb_vars;
 
 		$res = "";
@@ -555,22 +556,23 @@ class htmlclient extends aw_template
 				if ($item["type"] == "submit")
 				{
 					$this->submit_done = true;
-				};
-			};
-		};
+				}
+			}
+		}
+
 		if ($this->submit_done || $this->view_mode == 1)
 		{
-		
-		}
-		else
-		if (empty($submit) || $submit !== "no")		{
 
+		}
+		elseif (empty($submit) || $submit !== "no")
+		{
 			$var_name = "SUBMIT";
 			$tpl_vars = array(
 				"sbt_caption" => $sbt_caption != "" ? $sbt_caption : t("Salvesta"),
 			);
 			// I need to figure out whether I have a relation manager
 			$this->vars($tpl_vars);
+
 			if (aw_global_get("changeform_target") != "_blank")
 			{
 				$this->vars(array(
@@ -600,8 +602,7 @@ class htmlclient extends aw_template
 				));
 			}
 			$sbt = $this->parse($var_name);
-			
-		};
+		}
 
 		$this->layoutinfo["_main"] = array(
 			"type" => "vbox",
@@ -693,7 +694,7 @@ class htmlclient extends aw_template
 
 		$fn = basename($_SERVER["SCRIPT_FILENAME"],".aw");
 		$data["ret_to_orb"] = $fn == "orb" ? 1 : 0;
-	
+
 		// let's hope that nobody uses that vbox and hbox spagetti with grouptemplates -- ahz
 		// groupboxes where implemented for rateme .. the code is not exactly elegant .. can I kill it?
 		// please-please-please?
@@ -717,7 +718,7 @@ class htmlclient extends aw_template
 			"PROPERTY_HELP" => $property_help,
 			//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
 		));
-		
+
 		if ($no_insert_reforb)
 		{
 			$ds = array();
@@ -739,7 +740,8 @@ class htmlclient extends aw_template
 			// to get the classbase layoyt with iframe working correctly
 			$apd = get_instance("layout/active_page_data");
 			$apd->add_serialized_css_style($this->parse("iframe_body_style"));
-		};
+		}
+
 		if(empty($this->no_form))
 		{
 			$this->vars(array(
@@ -747,6 +749,7 @@ class htmlclient extends aw_template
 				"SHOW_CHANGEFORM2" => $this->parse("SHOW_CHANGEFORM2"),
 			));
 		}
+
 		if ($arr["confirm_save_data"] == 1 && !($_GET["action"] == "check_leave_page" || $_GET["group"] == "relationmgr"))
 		{
 			$this->vars(array(
@@ -768,6 +771,16 @@ class htmlclient extends aw_template
 			));
 		}
 
+		// elem. id for all aw interface container tables
+		if (is_oid($arr["awcb_cfgform_id"]))
+		{
+			$this->vars["contenttbl_id"] = "awcbContentTbl" . $arr["awcb_cfgform_id"];
+		}
+		else
+		{
+			$this->vars["contenttbl_id"] = "awcbContentTblDefault";
+		}
+
 		if (!empty($arr["raw_output"]))
 		{
 			$rv = $this->vars["content"];
@@ -778,7 +791,6 @@ class htmlclient extends aw_template
 		}
 		else
 		{
-		
 			if (empty($arr["content"]))
 			{
 				$rv = $this->parse();
@@ -786,12 +798,15 @@ class htmlclient extends aw_template
 			else
 			{
 				$rv = $arr["content"];
-			};
+			}
+
 			$tp = $this->tp;
+
 			if (is_object($this->tabpanel))
 			{
 				$tp = $this->tabpanel;
-			};
+			}
+
 			$bm = get_instance("vcl/popup_menu");
 			$bm->begin_menu("user_bookmarks");
 			$bmq = get_instance("vcl/popup_menu");
@@ -908,13 +923,14 @@ class htmlclient extends aw_template
 				else
 				{
 					$rv = $tabs;
-				};
+				}
+
 				//$this->additional_content["top"] .= $tabs;
 				//$tabs = $tp->get_tabpanel(array());
 				//$this->additional_content["top"] .= $tabs;
-			};
-		};
-		
+			}
+		}
+
 		if ($this->form_layout == "boxed")
 		{
 			$this->read_template("boxed.tpl");
@@ -926,7 +942,7 @@ class htmlclient extends aw_template
 				"content" => $rv,
 			));
 			return $this->parse();
-		};
+		}
 
 		return $rv;
 	}
@@ -935,7 +951,7 @@ class htmlclient extends aw_template
 	{
 		$tmp = new aw_array($args);
 		$arr = $tmp->get();
-		
+
 		if ($args["type"] == "submit")
 		{
 			$this->submit_done = true;
@@ -986,7 +1002,7 @@ class htmlclient extends aw_template
 						$retval .= "<br />";
 
 					};
-						
+
 				};
 				break;
 
@@ -1048,8 +1064,8 @@ class htmlclient extends aw_template
 				));
 				break;
 
-				// will probably be deprecated, after all what good is a 
-				// single 
+				// will probably be deprecated, after all what good is a
+				// single
 			case "radiobutton":
 				$retval = html::radiobutton(array(
 					"name" => $arr["name"],
@@ -1073,7 +1089,7 @@ class htmlclient extends aw_template
 				$arr["class"] = "sbtbutton";
 				$retval = html::submit($arr);
 				break;
-				
+
 			case "reset":
 				$arr["class"] = "sbtbutton";
 			case "button":
@@ -1087,11 +1103,11 @@ class htmlclient extends aw_template
 			case "date_select":
 				$retval = html::date_select($arr);
 				break;
-			
+
 			case "datetime_select":
 				$retval = html::datetime_select($arr);
 				break;
-			
+
 			case "img":
 				$retval = html::img($arr);
 				break;
@@ -1099,7 +1115,7 @@ class htmlclient extends aw_template
 			case "href":
 				$retval = html::href($arr);
 				break;
-			case "hidden":	
+			case "hidden":
 				// hidden elements end up in the orb_vars
 				$this->orb_vars[$item["name"]] = $item["value"];
 				break;
@@ -1122,7 +1138,7 @@ class htmlclient extends aw_template
 			return $this->tp->add_tab($arr);
 		};
 	}
-	
+
 	function create_element($item)
 	{
 		$type = isset($item["type"]) ? $item["type"] : "";
@@ -1169,7 +1185,7 @@ class htmlclient extends aw_template
 		};
 		return $item["html"];
 	}
-	
+
 	function parse_layouts($layout_name)
 	{
 		$layout_items = array();
@@ -1208,8 +1224,8 @@ class htmlclient extends aw_template
 						$this->proplist[$pkey]["type"] = "text";
 						$this->proplist[$pkey]["caption"] = $this->layoutinfo[$gx]["caption"];
 						// XXX: right now this is rewriting the first property in a box to contain
-						// the rest of the parsed properties in that box, probably shouldn't 
-						// do that though. 
+						// the rest of the parsed properties in that box, probably shouldn't
+						// do that though.
 
 						// set no_caption, if layout has no caption, otherwise the output
 						// will contain a property with an empty caption, which will look
@@ -1349,7 +1365,7 @@ class htmlclient extends aw_template
 				"VGRID_HAS_CLOSER" => $ghc,
 				"VGRID_CLOSER_END" => $gce
 			));
-			
+
 			$html .= $this->parse("GRID_VBOX");
 		};
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.538 2007/03/28 14:09:13 kristo Exp $
+// $Id: class_base.aw,v 2.539 2007/03/30 09:15:24 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -220,77 +220,75 @@ class class_base extends aw_template
 		{
 			$this->cb_values = $cb_values;
 			$has_errors = true;
-		};
+		}
 
 		$cfgform_id = "";
 		$this->subgroup = $this->reltype = "";
 		$this->is_rel = false;
-
 		$this->orb_action = $args["action"];
-
 		$this->is_translated = 0;
-
 
 		if (!isset($args["action"]))
 		{
 			$args["action"] = "view";
-		};
+		}
 
 		if($args["no_buttons"])
 		{
 			$this->no_buttons = true;
 		}
 
-		if (empty($use_form))
+		if ($args["action"] == "new")
 		{
-			if ($args["action"] == "new")
-			{
-				$this->init_storage_object($args);
-			}
-			elseif (($args["action"] == "change") || ($args["action"] == "view"))
-			{
-				$this->load_storage_object($args);
-				if ($this->obj_inst->class_id() == CL_RELATION)
-				{
-					// this is a relation!
-					$this->is_rel = true;
-					$def = $this->_ct[$this->clid]["def"];
-					$meta = $this->obj_inst->meta("values");
-					$this->values = $meta[$def];
-					$this->values["name"] = $this->obj_inst->name();
-				};
+			$this->init_storage_object($args);
+		}
+		elseif (($args["action"] == "change") || ($args["action"] == "view"))
+		{
+			$this->load_storage_object($args);
 
-			};
+			if ($this->obj_inst->class_id() == CL_RELATION)
+			{
+				// this is a relation!
+				$this->is_rel = true;
+				$def = $this->_ct[$this->clid]["def"];
+				$meta = $this->obj_inst->meta("values");
+				$this->values = $meta[$def];
+				$this->values["name"] = $this->obj_inst->name();
+			}
+		}
+
+		// added in connection with class interface display through cfgform alias
+		if (!empty($args["awcb_display_mode"]))
+		{
+			$this->awcb_display_mode = $args["awcb_display_mode"];
 		}
 		else
 		{
-			// because if I don't have a object id, I'm going to have a hard time drawing a yah line
-			$this->set_classinfo(array("name" => "no_yah", "value" => 1));
-		};
+			$this->awcb_display_mode = "default";
+		}
 
-
-		// now i need to do something with that translation thingie
-
-		// yees, this means that other forms besides add and edit cannot use custom config forms
-		// at least not yet.
-		if (empty($use_form))
+		if (is_oid($args["awcb_cfgform"]))
 		{
+			$cfgform_id = $args["awcb_cfgform"];
+		}
+		else
+		{
+			// yees, this means that other forms besides add and edit cannot use custom config forms
+			// at least not yet.
 			// a class should be able to override it
 			$cfgform_id = $this->get_cfgform_for_object(array(
 				"obj_inst" => $this->obj_inst,
 				"args" => $args,
 			));
+		}
 
-
-		};
-
-		//$cfgform_id = $args["cfgform"];
 		if (empty($cfgform_id) && is_object($this->obj_inst))
 		{
 			$cfgform_id = $this->obj_inst->meta("cfgform_id");
-		};
+		}
 
 		$this->cfgform_id = $cfgform_id;
+
 		// well, i NEED to get the right property group BEFORE i get the right view..
 		// i hope this doesn't qualify as a hack, because nobody changes the args
 		// anyway -- ahz
@@ -306,12 +304,12 @@ class class_base extends aw_template
 		if (!empty($args["form"]))
 		{
 			$filter["form"] = $args["form"];
-		};
+		}
 
 		if ($this->is_rel)
 		{
 			$filter["rel"] = 1;
-		};
+		}
 
 		// XXX: temporary -- duke
 		if ($args["fxt"])
@@ -324,6 +322,7 @@ class class_base extends aw_template
 		/////////////////////
 
 		$defview = 0;
+
 		if(is_oid($this->cfgform_id) && $this->can("view", $this->cfgform_id) && $args["action"] != "view")
 		{
 			$f = obj($this->cfgform_id);
@@ -333,9 +332,10 @@ class class_base extends aw_template
 				$defview = 1;
 			}
 		}
+
 		if($defview == 1)
 		{
-			// if by cfgform, the default is view, then take retour here to get the view 
+			// if by cfgform, the default is view, then take retour here to get the view
 			$args["action"] = "view";
 			$args["view"] = 1;
 			$this->no_mod_view = 1;
@@ -346,7 +346,7 @@ class class_base extends aw_template
 		if (1 == $args["view"])
 		{
 			$this->view = true;
-		};
+		}
 
 		$use_form = $args["form"];
 
@@ -359,13 +359,14 @@ class class_base extends aw_template
 				"request" => $args,
 			));
 		}
-		
+
 		if ($args["no_active_tab"])
 		{
 			$this->no_active_tab = 1;
-		};
+		}
 
 		unset($properties["is_translated"]);
+
 		if (!aw_ini_get("user_interface.content_trans"))
 		{
 			unset($properties["needs_translation"]);
@@ -389,7 +390,8 @@ class class_base extends aw_template
 			{
 				$this->inst->$onload_method($args);
 			}
-		};
+		}
+
 		$this->request = $args;
 		$gdata = !empty($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->use_group];
 
@@ -407,7 +409,6 @@ class class_base extends aw_template
 					"classinfo" => &$this->classinfo,
 				));
 
-
 				if (is_array($fstat) && !empty($fstat["error"]))
 				{
 					// callback_pre_edit can block saving if it wants to
@@ -418,10 +419,9 @@ class class_base extends aw_template
 						"error" => $fstat["errmsg"],
 					);
 					$gdata["submit"] = "no";
-				};
-
-			};
-		};
+				}
+			}
+		}
 
 		// the whole freaking fixed toolbar trickery was implemented
 		// only because IE does not support positon: fixed like other
@@ -434,12 +434,12 @@ class class_base extends aw_template
 		if (!empty($lm))
 		{
 			$gdata["submit"] = "no";
-		};
+		}
 
 		if ($args["no_rte"] == 1)
 		{
 			$this->no_rte = 1;
-		};
+		}
 
 		// and, if we are in fixed toolbar layout mode, then we should
 		// probably remap all
@@ -466,7 +466,6 @@ class class_base extends aw_template
 			// elements and "<form>" tag that I really do not need
 			// this really could use some generic solution!
 			$this->raw_output = 1;
-
 		}
 		else
 		{
@@ -485,7 +484,8 @@ class class_base extends aw_template
 			if (!empty($template))
 			{
 				$o_arr["template"] = $template;
-			};
+			}
+
 			if ($this->embedded)
 			{
 				$o_arr["embedded"] = true;
@@ -516,6 +516,7 @@ class class_base extends aw_template
 			{
 					$cli->set_form_target($this->changeform_target);
 			}
+
 			if ($o_arr["no_form"])
 			{
 				$cli->set_opt("no_form",1);
@@ -647,7 +648,7 @@ class class_base extends aw_template
 
 		// it may seem strange, but sometimes you have to change the layout from callback,
 		// and if you don't parse it again, it won't show -- ahz
-		
+
 		// why the hell for is this next thing here???... the exact same code is ~50lines upwards also?
 		// .. serves it any meaning or what??.. i kind'a dont think this is a code back-up :P --- taiu
 		// anyway.. i commented it out for now.. i don't see any purpose to it.. --- taiu
@@ -679,14 +680,14 @@ class class_base extends aw_template
 			$cli->set_layout($tmp);
 		};
 		*/
-		
+
 
 		$awt->start("add-property");
 		// what exactly is going on with that subgroup stuff?
 		if (isset($resprops["subgroup"]))
 		{
 			$this->subgroup = $resprops["subgroup"]["value"];
-		};
+		}
 
 		if ($has_errors)
 		{
@@ -704,7 +705,7 @@ class class_base extends aw_template
 		if ($this->view)
 		{
 			$cli->view_mode = 1;
-		};
+		}
 
 		foreach($resprops as $_k => $val)
 		{
@@ -782,7 +783,6 @@ class class_base extends aw_template
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
 			$this->inst->callback_mod_reforb(&$argblock,$this->request);
-
 		};
 
 		if (is_array($this->_do_call_vcl_mod_reforbs))
@@ -848,7 +848,7 @@ class class_base extends aw_template
 			));
 		}
 		$awt->start("final-bit");
-		
+
 		// find help data for current tab
 		$cls = aw_ini_get("classes");
 		foreach($cls as $clid => $cl)
@@ -916,12 +916,13 @@ class class_base extends aw_template
 		else
 		{
 			$orb_action = $args["action"];
-		};
+		}
 
 		if (isset($this->view) && $this->view == 1 && !$this->no_mod_view)
 		{
 			$orb_action = "view";
-		};
+		}
+
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
@@ -1489,11 +1490,19 @@ class class_base extends aw_template
 		$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
 
 		$hide_tabs = isset($this->classinfo["hide_tabs"]);
+
+		if ("cfg_embed" == $this->awcb_display_mode)
+		{
+			$hide_tabs = true;
+		}
+
 		$orb_class = get_class($this->orb_class);
+
 		if (is_oid(aw_global_get("class")))
 		{
 			$orb_class = aw_global_get("class");
-		};
+		}
+
 		if (!$hide_tabs)
 		{
 			$groupinfo = $this->get_visible_groups();
@@ -1597,13 +1606,13 @@ class class_base extends aw_template
 		if (!empty($this->classinfo["disable_relationmgr"]))
 		{
 			$this->classinfo["relationmgr"] = false;
-		};
+		}
 
 		// temporary workaround to hide relationmgr
 		if (isset($this->hide_relationmgr))
 		{
 			$this->classinfo["relationmgr"] = false;
-		};
+		}
 
 
 		// XX: I need a better way to handle relationmgr, it should probably be a special
@@ -1639,11 +1648,13 @@ class class_base extends aw_template
 					"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
 					"disabled" => empty($this->id),
 				));
-			};
-		};
+			}
+		}
+
 		//if (empty($args["content"]))
 		//{
 			$content = $this->cli->get_result(array(
+				"awcb_cfgform_id" => $this->cfgform_id,
 				"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
 				"content" => $args["content"],
 				"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]),
@@ -2881,7 +2892,7 @@ class class_base extends aw_template
 							};
 
 							$has_props = false;
-							// if group is empty, then don't show it. 
+							// if group is empty, then don't show it.
 							foreach($this->_cfg_props as $pn => $pd)
 							{
 								if ($pd["group"] == $grp_id)
@@ -2898,7 +2909,7 @@ class class_base extends aw_template
 
 							$target = "contentarea";
 							$cb_part = 1;
-							if ($no_rte) 
+							if ($no_rte)
 							{
 								$target = "_self";
 								$cb_part = null;
@@ -3441,7 +3452,7 @@ class class_base extends aw_template
 		{
 			$arr["cfgform_id"] = aw_ini_get("document.default_cfgform");
 		}
-		
+
 
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]) )
 		{
@@ -3555,7 +3566,7 @@ class class_base extends aw_template
 		$callback = method_exists($this->inst,"set_property");
 
 		$class_methods = get_class_methods($this->inst);
-		
+
 		$new = false;
 		$this->id = isset($id) ? $id : "";
 
@@ -3779,7 +3790,7 @@ class class_base extends aw_template
 
 
 
-			
+
 			// give the class a possiblity to execute some action
 			// while we are saving it.
 
@@ -4007,7 +4018,7 @@ class class_base extends aw_template
 					{
 						$this->obj_inst->set_prop($name,$val);
 					}
-				} 
+				}
 				else
 				if ($type != "releditor")	// cause it submits CRAP
 				{
@@ -4560,7 +4571,7 @@ class class_base extends aw_template
 
 		$si = __get_site_instance();
 		$has_cb = method_exists($si, "callback_get_group_display");
-		
+
 		// now, how do I make sure what level a group has?
 		foreach($this->groupinfo as $gkey => $ginfo)
 		{
@@ -4629,7 +4640,7 @@ class class_base extends aw_template
 					"request" => $args,
 				));
 			}
-			else 
+			else
 			{
 				$use_group = $default_group;
 			}
@@ -4726,7 +4737,7 @@ class class_base extends aw_template
 
 			$property_groups[$key] = $propgroups;
 		};
-		
+
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
@@ -5180,7 +5191,7 @@ class class_base extends aw_template
 		);
 		$uo = obj(aw_global_get("uid_oid"));
 		$uo = $uo->prop("target_lang");
-		
+
 		foreach($ll as $lid => $lang)
 		{
 			if ($lid == $o->lang_id())
@@ -5208,7 +5219,7 @@ class class_base extends aw_template
 						$str = str_replace($r1, $r2, $str);
 					}
 				}
-				$str = str_replace(chr(226).chr(128).chr(147), "-", $str);	
+				$str = str_replace(chr(226).chr(128).chr(147), "-", $str);
 				$nv = iconv("UTF-8", $lang["charset"], $str);
 				if ($nv != $all_vals[$lid][$p])
 				{
@@ -5293,7 +5304,7 @@ class class_base extends aw_template
 				"caption" => t("T&otilde;lge aktiivne"),
 				"type" => "checkbox",
 				"ch_value" => 1,
-				"value" => $o->meta("trans_".$lid."_status") 
+				"value" => $o->meta("trans_".$lid."_status")
 			);
 			$nm = "sbt_".$lid;
 			$ret[$nm] = array(
@@ -5326,9 +5337,9 @@ class class_base extends aw_template
 		$val = $obj->prop($prop);
 		switch($type)
 		{
-			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables 
+			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables
 			case "relmanager":
-			case "relpicker": 
+			case "relpicker":
 			case "classificator":
 			case "popup_search":
 			case "releditor":
@@ -5407,7 +5418,7 @@ class class_base extends aw_template
 			}
 		}
 		return $val;
-	}	
+	}
 
 	/**
 		@attrib name=rel_cut

@@ -106,7 +106,7 @@
             <method>serialize</method>
             <type>callback</type>
             <callback>callback_edit_groups</callback>
-            <caption>Muuda gruppe</caption>
+            <caption>Muuda tabe</caption>
       </property>
       <property>
             <name>group_movement</name>
@@ -117,7 +117,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Gruppide vaheline liikumine</caption>
+            <caption>Tabide vaheline liikumine</caption>
       </property>
       <property>
             <name>navtoolbar</name>
@@ -182,7 +182,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
-            <caption>Grupid</caption>
+            <caption>Tabid</caption>
       </property>
       <property>
             <name>subaction</name>
@@ -306,7 +306,7 @@
             <method>serialize</method>
             <type>text</type>
             <subtitle>1</subtitle>
-            <caption>Grupid</caption>
+            <caption>Tabid</caption>
       </property>
       <property>
             <name>trans_tbl_grps</name>
@@ -363,16 +363,34 @@
             <callback>callback_get_transl</callback>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
+      <property>
+            <name>cfgview_action</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>N&amp;amp;auml;itamise meetod</caption>
+      </property>
+      <property>
+            <name>cfgview_grp</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>N&amp;amp;auml;idatav tab</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>
       </classinfo>
       <groupinfo>
             <groupdata>
-                  <caption>Grupid</caption>
+                  <caption>Tabid</caption>
             </groupdata>
             <groupdata_a>
-                  <caption>Grupid</caption>
+                  <caption>Tabid</caption>
                   <parent>groupdata</parent>
             </groupdata_a>
             <groupdata_b>
@@ -409,6 +427,10 @@
                   <caption>Vormi seaded</caption>
                   <parent>settings</parent>
             </system>
+            <cfgview_settings>
+                  <caption>Klass aliasena</caption>
+                  <parent>settings</parent>
+            </cfgview_settings>
             <translate>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </translate>

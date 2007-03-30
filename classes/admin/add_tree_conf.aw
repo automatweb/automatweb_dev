@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.38 2006/11/16 15:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.39 2007/03/30 09:15:23 voldemar Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -92,7 +92,7 @@ class add_tree_conf extends class_base
 			$visible = array();
 			$usable = array();
 			$alias_add = array();
-			
+
 			$clsf = aw_ini_get("classfolders");
 			foreach($clsf as $id => $d)
 			{
@@ -167,7 +167,7 @@ class add_tree_conf extends class_base
 						"value" => 1,
 						"checked" => $visible["fld"][$id] == 1
 					)),
-					
+
 				));
 
 				$tmp = aw_ini_get("classes");
@@ -331,9 +331,9 @@ class add_tree_conf extends class_base
 	}
 
 	/** returns true if the given class can be used in the given conf
-	
+
 		@comment
-			
+
 			$atc - add_tree_conf object instance
 			$class - the name of the class to check access to
 
@@ -346,9 +346,9 @@ class add_tree_conf extends class_base
 			$grps = aw_ini_get("classfolders");
 		}
 		$us = $atc->meta("usable");
-		
+
 		$class_id = false;
-		
+
 		$clss = $atc->meta("class_structure");
 		if (!is_array($clss))
 		{
@@ -420,8 +420,8 @@ class add_tree_conf extends class_base
 		}
 		return $ret;
 	}
-	
-	
+
+
 	function can_access_classes($atc, $classes)
 	{
 		$grps = $atc->meta("folder_structure");
@@ -490,15 +490,15 @@ class add_tree_conf extends class_base
 		$this->adc_set_all($o);
 
 		$clss = aw_ini_get("classes");
-	
+
 		//  Dokumendi seostehalduris kuvatakse vaikimisi järgmisi objekte:
-		$alias_addable = array(CL_EXTLINK, CL_FILE, CL_IMAGE, CL_LAYOUT, CL_WEBFORM, CL_MINI_GALLERY, CL_DOCUMENT, CL_MENU_TREE, CL_ML_LIST, CL_PROMO);
+		$alias_addable = array(CL_EXTLINK, CL_FILE, CL_IMAGE, CL_LAYOUT, CL_WEBFORM, CL_MINI_GALLERY, CL_DOCUMENT, CL_MENU_TREE, CL_ML_LIST, CL_PROMO, CL_CFGFORM);
 
 		foreach($clss as $clid => $cld)
 		{
 			$this->adc_set_class($o, $clid, true, true, in_array($clid, $alias_addable));
 		}
-		
+
 		// Kohe tuleb välja jätta järgmiste programmide kasutamise võimalus:
 
 		// Otsingud > Saidi otsing (vist mingi vana objekt)
@@ -509,7 +509,7 @@ class add_tree_conf extends class_base
 		$this->adc_set_class($o, CL_FORUM, false, false, false);
 		$this->adc_set_class($o, CL_ML_STAMP, false, false, false);
 		$this->adc_set_class($o, CL_ML_LIST_CONF, false, false, false);
-		
+
 		// Süsteemi haldus > Töösolevad klassid
 		$this->adc_set_fld($o, 19, false);
 
@@ -542,7 +542,7 @@ class add_tree_conf extends class_base
 		$visible = array();
 		$usable = array();
 		$alias_add = array();
-			
+
 		$clsf = aw_ini_get("classfolders");
 		foreach($clsf as $id => $d)
 		{
@@ -644,7 +644,7 @@ class add_tree_conf extends class_base
 		};
 
 		$by_parent = array();
-		
+
 		foreach($clss as $clid => $cldata)
 		{
 			if (!isset($cldata["parents"]))
@@ -734,6 +734,6 @@ class add_tree_conf extends class_base
 		return $by_parent;
 	}
 
-	
+
 };
 ?>

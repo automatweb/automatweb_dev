@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.191 2007/03/29 09:59:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.192 2007/03/30 09:15:24 voldemar Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -171,10 +171,10 @@
 		@property color2 type=colorpicker field=meta method=serialize group=look_sub
 		@caption Men&uuml;&uuml; v&auml;rv 2
 
-		@property icon type=icon field=meta method=serialize group=look_sub 
+		@property icon type=icon field=meta method=serialize group=look_sub
 		@caption Ikoon
 
-		@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=look_sub  
+		@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=look_sub
 		@caption Vali ikoon
 
 	@groupinfo templates caption=Kujundusp&otilde;hjad parent=look
@@ -330,21 +330,21 @@
 
 @groupinfo acl caption=&Otilde;igused
 @default group=acl
-	
+
 	@groupinfo acl_main caption=&Otilde;igused parent=acl
 	@default group=acl_main
-	
+
 		@property acl type=acl_manager store=no
 		@caption &Otilde;igused
 
 	@groupinfo acl_views caption=Vaatamised parent=acl
 	@default group=acl_views
-	
+
 		@property acl_views type=table store=no no_caption=1
 
 	@groupinfo acl_edits caption=Muutmised parent=acl
 	@default group=acl_edits
-	
+
 		@property acl_edits type=table store=no no_caption=1
 
 @groupinfo timing caption="Ajaline aktiivsus"
@@ -355,7 +355,7 @@
 
 @groupinfo transl caption=T&otilde;lgi
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -396,7 +396,7 @@
 	@reltype DOCS_FROM_MENU value=9 clid=CL_MENU
 	@caption v&otilde;ta dokumente men&uuml;&uuml; alt
 
-	@reltype PERIOD value=10 clid=CL_PERIOD 
+	@reltype PERIOD value=10 clid=CL_PERIOD
 	@caption v&otilde;ta dokumente perioodi alt
 
 	@reltype OBJ_TABLE_CONF value=11 clid=CL_OBJ_TABLE_CONF
@@ -411,17 +411,17 @@
 	@reltype IMAGE value=14 clid=CL_IMAGE
 	@caption pilt
 
-	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE,CL_CRM_COMPANY_WEBVIEW,CL_PERSONS_WEBVIEW
+	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE,CL_CRM_COMPANY_WEBVIEW,CL_PERSONS_WEBVIEW,CL_CFGFORM
 	@caption alammen&uuml;&uuml;d objektist
 
 	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
-    	@caption Sisu objektist
+	@caption Sisu objektist
 
 	@reltype SEEALSO_DOC value=18 clid=CL_DOCUMENT
-    	@caption vaata lisaks dokument
+	@caption vaata lisaks dokument
 
 	@reltype ICON value=19 clid=CL_IMAGE
-    	@caption ikoon
+	@caption ikoon
 
 	@reltype TIMING value=20 clid=CL_TIMING
 	@caption Aeg
@@ -456,20 +456,20 @@ class menu extends class_base
 		);
 	}
 
-	/** Generate a form for adding or changing an object 
-		
+	/** Generate a form for adding or changing an object
+
 		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa"
-		
+
 		@param parent optional type=int acl="add"
 		@param period optional
 		@param alias_to optional
 		@param return_url optional
 		@param reltype optional type=int
 
-		
+
 		@returns
-		
-		
+
+
 		@comment
 		id _always_ refers to the objects table. Always. If you want to load
 		any other data, then you'll need to use other field name
@@ -480,19 +480,19 @@ class menu extends class_base
 		return $this->change($args);
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=change params=name all_args="1" is_public="1" caption="Muuda"
-		
+
 		@param id optional type=int acl="edit"
 		@param group optional
 		@param period optional
 		@param alias_to optional
 		@param return_url optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -643,7 +643,7 @@ class menu extends class_base
 				$tplmgr = get_instance("templatemgr");
 				$data["options"] = $tplmgr->get_template_list(array("type" => 1, "menu" => $ob->id()));
 				break;
-			
+
 			case "tpl_view":
 				$tplmgr = get_instance("templatemgr");
 				$data["options"] = $tplmgr->get_template_list(array("type" => 2, "menu" => $ob->id()));
@@ -653,7 +653,7 @@ class menu extends class_base
 				$template_sets = aw_ini_get("menuedit.template_sets");
 				$data["options"] = array_merge(array("" => t("kasuta parenti valikut")),$template_sets);
 				break;
-			
+
 			case "sections":
 				$this->get_brother_table($arr);
 				break;
@@ -700,13 +700,13 @@ class menu extends class_base
 				// only show the program selector, if the menu has the correct type
 				if ($ob->prop("type") == MN_ADMIN1)
 				{
-					$data["options"] = $this->get_feature_sel();				
+					$data["options"] = $this->get_feature_sel();
 				}
 				else
 				{
 					$retval = PROP_IGNORE;
 				};
-				break;	
+				break;
 
 			case "sorter":
 				// okey, how do I do this?
@@ -852,7 +852,7 @@ class menu extends class_base
 					"sortable" => 0,
 					"align" => "center"
 				));
-				
+
 				$allow = $ob->meta("ip_allow");
 				$deny = $ob->meta("ip_deny");
 
@@ -862,7 +862,7 @@ class menu extends class_base
 				foreach($conn as $c)
 				{
 					$c_o = $c->to();
-			
+
 					$t->define_data(array(
 						"ip_name" => $c_o->name(),
 						"ip" => $c_o->prop("addr"),
@@ -938,7 +938,7 @@ class menu extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_get_images_table_cols($t);
-		
+
 		$cnt = aw_ini_get("menu.num_menu_images");
 		$imdata = $arr["obj_inst"]->meta("menu_images");
 
@@ -1119,7 +1119,7 @@ class menu extends class_base
 			"caption" => t("Meetod viitab adminni"),
 			"ch_value" => $arr["obj_inst"]->meta("pm_url_admin"),
 		);
-		
+
 		$nodes[] = array(
 			"type" => "checkbox",
 			"name" => "pm_url_menus",
@@ -1127,12 +1127,12 @@ class menu extends class_base
 			"caption" => t("Meetodi v&auml;ljundi kuvamisel n&auml;idatakse men&uuml;&uuml;sid"),
 			"ch_value" => $arr["obj_inst"]->meta("pm_url_menus"),
 		);
-				
+
 		return $nodes;
 	}
-			
+
 	function set_property($arr = array())
-	{	
+	{
 		$data = &$arr["prop"];
 		$ob = $arr["obj_inst"];
 		$retval = PROP_OK;
@@ -1156,7 +1156,7 @@ class menu extends class_base
 			case "icon":
 				$retval = PROP_IGNORE;
 				break;
-			
+
 			case "left_pane":
 			case "right_pane":
 				$retval = PROP_IGNORE;
@@ -1299,7 +1299,7 @@ class menu extends class_base
 				}
 				$arr["obj_inst"]->set_meta("ip_allow",$allow);
 				$arr["obj_inst"]->set_meta("ip_deny",$deny);
-				break;				
+				break;
 
 			case "alias":
 				if ($data["value"] != "")
@@ -1347,7 +1347,7 @@ class menu extends class_base
 		}
 		return $rval;
 	}
-	
+
 	function get_pobjects($class_id)
 	{
 		$objects = new object_list(array(
@@ -1356,7 +1356,7 @@ class menu extends class_base
 		));
 		return array(0 => t("-- vali --")) + $objects->names();
 	}
-	
+
 	function update_menu_images($args = array())
 	{
 		extract($args);
@@ -1478,7 +1478,7 @@ class menu extends class_base
 			if(aw_ini_get("menuedit.recursive_aliases") && is_oid($oid))
 			{
 				$o = obj($oid);
-				$filt["parent"] = $o->parent(); 
+				$filt["parent"] = $o->parent();
 			}
 			$ol = new object_list($filt);
 			if($ol->count() > 0)
@@ -1580,7 +1580,7 @@ class menu extends class_base
 			}
 		}
 		$this->db_query("DELETE FROM keyword2menu WHERE menu_id = $id");
-	
+
 		if (is_array($keywords))
 		{
 			$has_kwd_rels = 1;
@@ -1787,7 +1787,7 @@ class menu extends class_base
 			));
 		}
 	}
-	
+
 	////
 	// !Aliaste parsimine
 	function parse_alias($args = array())
@@ -1810,7 +1810,7 @@ class menu extends class_base
 		if ($o->prop("link") != "")
 		{
 			$link = $o->prop("link");
-		}	
+		}
 		else
 		{
 			$link = $this->cfg["baseurl"]."/".$target["to"];
@@ -1856,7 +1856,7 @@ class menu extends class_base
 				$str[$tpl][$c->prop("to")] = $c->prop("to.jrk");
 			}
 		}
-		
+
 		// also parents
 		$pt = $sect->path();
 		foreach($pt as $o)
@@ -1865,7 +1865,7 @@ class menu extends class_base
 			{
 				continue;
 			}
-			
+
 			$sad_opts = $o->meta("sad_opts");
 			foreach(safe_array($sad_opts) as $docid => $dat)
 			{
@@ -1982,7 +1982,7 @@ class menu extends class_base
 	function kw_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		
+
 		$tb->add_button(array(
 			"name" => "new_kw",
 			"tooltip" => t("M&auml;rks&otilde;na"),
@@ -2173,7 +2173,7 @@ class menu extends class_base
 				$str = $arr["request"]["trans_".$lid."_alias"];
 				$nv = iconv("UTF-8", $lang["charset"], $str);
 				$this->quote(&$nv);
-				$this->db_query("INSERT INTO aw_alias_trans(menu_id,lang_id,alias) 
+				$this->db_query("INSERT INTO aw_alias_trans(menu_id,lang_id,alias)
 					VALUES(".$o->id().", $lid, '$nv')");
 			}
 		}
