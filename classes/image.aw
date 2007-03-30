@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.195 2007/03/30 07:11:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.196 2007/03/30 07:25:47 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1411,6 +1411,11 @@ class image extends class_base
 		{
 			$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
 			$image_url = $this->get_url_by_id($arr["obj_inst"]->id());
+			$this->gen_image_alias_for_doc(array(
+				"img_id" => $arr["obj_inst"]->id(),
+				"doc_id" => $arr["request"]["docid"],
+				"no_die" => 1
+			));
 			die("
 				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
 				<script language='javascript'>
@@ -2022,6 +2027,11 @@ class image extends class_base
 
 	}
 
+	function callback_mod_reforb($arr)
+	{
+		$arr["docid"] = $_GET["docid"];
+	}
+
 	function callback_mod_tab($arr)
 	{
 		if ($arr["id"] == "resize" || $arr["id"] == "resize_big")
@@ -2110,7 +2120,10 @@ class image extends class_base
 		));
 		$c->save();
 		$out = $arr["close"]?$close:$c->id();
-		die($out);
+		if (!$arr["no_die"])
+		{
+			die($out);
+		}
 	}
 
 	function do_db_upgrade($t, $f)

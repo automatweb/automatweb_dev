@@ -48,7 +48,7 @@ class image_manager extends aw_template
 			{
 				$parent = $doc->parent();
 			}
-			$image_url = html::get_new_url(CL_IMAGE, $parent);
+			$image_url = html::get_new_url(CL_IMAGE, $parent, array("docid" => $doc->id()));
 		}
 		
 		$this->read_template("manage.tpl");
