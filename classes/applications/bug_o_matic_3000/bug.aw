@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.79 2007/03/14 10:13:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.80 2007/03/30 14:02:19 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -1014,7 +1014,8 @@ class bug extends class_base
 			BUG_INCORRECT => 40,
 			BUG_NOTREPEATABLE => 40,
 			BUG_NOTFIXABLE => 40,
-			BUG_FATALERROR => 200
+			BUG_FATALERROR => 200,
+			BUG_FEEDBACK => 130
 		);
 		$rv = $sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
 		// also, if the bug has a deadline, then we need to up the priority as the deadline comes closer
