@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.60 2007/03/23 11:47:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.61 2007/03/30 09:54:29 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -247,6 +247,8 @@ class shop_order_cart extends class_base
 		$els = $swh->callback_get_order_current_form(array(
 			"obj_inst" => $wh_o
 		));
+		$els = $this->do_insert_user_data_errors($els);
+	
 
 		$htmlc = get_instance("cfg/htmlclient");
 		$htmlc->start_output();
@@ -1121,7 +1123,7 @@ class shop_order_cart extends class_base
 
 		// if there are errors
 		$els = $this->do_insert_user_data_errors($els);
-
+		
 		$rd = get_instance(CL_REGISTER_DATA);
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
