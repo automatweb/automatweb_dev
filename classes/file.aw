@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.149 2007/02/27 12:06:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.150 2007/03/30 10:36:25 kristo Exp $
 /*
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
@@ -1010,6 +1010,18 @@ class file extends class_base
 		// allow only integer id-s
 		$id = (int)$id;
 		error::view_check($id);
+
+		// if the user has access and imgbaseurl is set, then we can redirect the user to that
+		// and let apache do the serving the file, that can take quite some time, if the file is large
+		$fo = obj($id);
+		if (aw_ini_get("image.imgbaseurl") != "" && $fo->prop("file_url") == "" && !$fo->meta("force_path"))
+		{
+			$fn = basename($fo->prop("file"));
+			$file_path = "/".$fn[0]."/".$fn;
+			header("Location: ".aw_ini_get("baseurl").aw_ini_get("image.imgbaseurl").$file_path);
+			die();
+		}
+
 		$fc = $this->get_file_by_id($id);
 		$pi = pathinfo($fc["name"]);
 		$mimeregistry = get_instance("core/aw_mime_types");
