@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.56 2007/03/12 15:33:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.57 2007/03/30 11:53:38 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -140,6 +140,20 @@ caption Kokkuvõte
 	@property ppl_tb type=toolbar no_caption=1 store=no
 	@property ppl type=table no_caption=1 store=no
 
+@groupinfo recur caption="Kordumine"
+
+@groupinfo recur_entry caption="Sisesta kordused" parent=recur
+@default group=recur_entry
+
+	@property recur_tb type=toolbar no_caption=1 store=no
+	@property recur_t type=table no_caption=1 store=no
+
+@groupinfo recur_manage caption="Halda korratud reserveeringuid" parent=recur submit=no
+@default group=recur_manage
+
+	@property recur_manage_tb type=toolbar no_caption=1 store=no
+	@property recur_manage_t type=table no_caption=1 store=no
+
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
 #RELTYPES
@@ -152,6 +166,15 @@ caption Kokkuvõte
 
 @reltype RESOURCE value=3 clid=CL_ROOM
 @caption Ressurss
+
+@reltype RECURRENCE value=4 clid=CL_RECURRENCE
+@caption Kordus
+
+@reltype REPEATED_BRON value=5 clid=CL_RESERVATION
+@caption Korratud reserveering
+
+@reltype ORIGINAL_BRON value=6 clid=CL_RESERVATION
+@caption Korduse originaal
 
 */
 
@@ -188,31 +211,16 @@ class reservation extends class_base
 			case "start1":
 			case "end":
 			case "resource":
-				$prop["options"] = array();
+				$prop["options"] = $this->get_resource_options($arr["obj_inst"]);
 				if($arr["new"] && $arr["request"][$prop["name"]])
 				{
 					$prop["value"] = $arr["request"][$prop["name"]];
 				}
-				if ($this->can("view", $prop["value"]))
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
-					$ri = get_instance(CL_ROOM);
-					$sets = $ri->get_settings_for_room(obj($prop["value"]));
-					if ($sets->prop("related_room_folder"))
-					{
-						$rrs = new object_list(array(
-							"class_id" => CL_ROOM,
-							"parent" => $sets->prop("related_room_folder"),
-							"lang_id" => array(),
-							"site_id" => array()
-						));//arr($prop["options"]);
-						$prop["options"] += $rrs->names();
-					}
+					$tmp = obj($prop["value"]);
+					$prop["options"][$prop["value"]] = $tmp->name();
 				}
-                                if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
-                                {
-                                        $tmp = obj($prop["value"]);
-                                        $prop["options"][$prop["value"]] = $tmp->name();
-                                }
 				break;
 			case "products_tbl":
 				$this->get_products_tbl;
@@ -383,15 +391,20 @@ class reservation extends class_base
 		return $retval;
 	}	
 
+	function calc_obj_name($o)
+	{
+		$o->set_name(sprintf(t("%s: %s / %s-%s %s"),
+	                $o->prop("customer.name"),
+                        date("d.m.Y", $o->prop("start1")),
+                        date("H:i", $o->prop("start1")),
+                        date("H:i", $o->prop("end")),
+                        $o->prop("resource.name")
+		));
+	}
+
 	function callback_pre_save($arr)
 	{
-		$arr["obj_inst"]->set_name(sprintf(t("%s: %s / %s-%s %s"),
-	                $arr["obj_inst"]->prop("customer.name"),
-                        date("d.m.Y", $arr["obj_inst"]->prop("start1")),
-                        date("H:i", $arr["obj_inst"]->prop("start1")),
-                        date("H:i", $arr["obj_inst"]->prop("end")),
-                        $arr["obj_inst"]->prop("resource.name")
-		));
+		$this->calc_obj_name($arr["obj_inst"]);
 		if ($arr["request"]["length"] > 0)
 		{
 			$mul = 3600;
@@ -1693,6 +1706,262 @@ flush();
 				"to" => $cust->id(),
 				"type" => "RELTYPE_CUSTOMER"
 			));
+		}
+	}
+
+	function _get_recur_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_RECURRENCE), $arr["obj_inst"]->id(), 4 /* RELTYPE_RECURRENCE */);
+		$tb->add_delete_button();
+	}
+
+	function _init_recur_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "confirmed",
+			"caption" => t("Kinnita"),
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _get_recur_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_recur_t($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RECURRENCE")) as $c)
+		{
+			$r = $c->to();
+			if ($r->meta("confirmed"))
+			{
+				$t->define_data(array(
+					"name" => html::obj_view_url($r),
+					"confirmed" => t("Kinnituatud, kordused loodud"),
+				));
+			}
+			else
+			{
+				$t->define_data(array(
+					"name" => html::obj_change_url($r),
+					"confirmed" => html::checkbox(array(
+						"name" => "confirm[".$r->id()."]",
+						"value" => 1
+					)),
+					"oid" => $r->id()
+				));
+			}
+		}
+	}
+
+	function _set_recur_t($arr)
+	{
+		foreach(safe_array($arr["request"]["confirm"]) as $id => $val)
+		{
+			if ($val == 1)
+			{
+				$this->do_create_recurring_events($arr["obj_inst"], obj($id));
+			}
+		}
+	}
+
+	function do_create_recurring_events($reservation, $recur)
+	{
+		$ri = $recur->instance();
+		$day_secs = $reservation->prop("start1") - get_day_start($reservation->prop("start1"));
+		$day_end_secs = $reservation->prop("end") - get_day_start($reservation->prop("start1"));
+		foreach($ri->get_event_range(array("id" => $recur->id(), "start" => $recur->prop("start"), "end" => $recur->prop("end"))) as $event)
+		{
+			$day = get_day_start($event["recur_start"]);
+
+			$from = $day + $day_secs;
+			$to = $day + $day_end_secs;
+
+			$new = $this->_copy_object($reservation, $reservation->parent());
+			$new->set_prop("start1", $from);
+			$new->set_prop("end", $to);
+			$this->calc_obj_name($new);
+			$new->save();
+
+			$reservation->connect(array(
+				"to" => $new->id(),
+				"type" => "RELTYPE_REPEATED_BRON"
+			));
+
+			$new->connect(array(
+				"to" => $reservation->id(),
+				"type" => "RELTYPE_ORIGINAL_BRON"
+			));
+		}
+		$recur->set_meta("confirmed", 1);
+		$recur->save();
+	}
+
+	function _copy_object($old, $parent)
+	{
+		$o = obj();
+		$o->set_class_id($old->class_id());
+		$o->set_parent($parent);
+		$o->set_comment($old->comment());
+
+		// meta
+		foreach($old->meta() as $k => $v)
+		{
+			$o->set_meta($k, $v);
+		}
+
+		// props
+		foreach($old->properties() as $k => $v)
+		{
+			if ($o->is_property($k))
+			{
+				$o->set_prop($k, $v);
+			}
+		}
+		$o->save();
+
+		// conns
+		foreach($old->connections_from() as $c)
+		{
+			if (!$o->is_connected_to(array("to" => $c->prop("to"), "type" => $c->prop("reltype"))))
+			{
+				if ($c->prop("reltype") != 5)
+				{
+					$o->connect(array(
+						"to" => $c->prop("to"),
+						"reltype" => $c->prop("reltype")
+					));
+				}
+			}
+		}
+
+		return $o;
+	}
+
+	function _init_recur_manage_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "from",
+			"caption" => t("Alates"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "to",
+			"caption" => t("Kuni"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "room",
+			"caption" => t("Ruum"),
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_recur_manage_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_recur_manage_t($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_REPEATED_BRON")) as $c)
+		{
+			$bron = $c->to();
+			$t->define_data(array(
+				"from" => html::datetime_select(array(
+					"value" => $bron->prop("start1"),
+					"name" => "bron[".$bron->id()."][from]"
+				)),
+				"to" => html::datetime_select(array(
+					"value" => $bron->prop("end"),
+					"name" => "bron[".$bron->id()."][to]"
+				)),
+				"room" => html::select(array(
+					"name" => "bron[".$bron->id()."][room]",
+					"options" => $this->get_resource_options($bron),
+					"value" => $bron->prop("resource")
+				)),
+				"oid" => $bron->id(),
+				"start" => $bron->prop("start1")
+			));
+		}
+		$t->set_default_sortby("start");
+		$t->set_caption(t("Korratud reserveeringud"));
+		$t->sort_by();
+	}
+
+	function get_resource_options($o)
+	{
+		$rv = array();
+		if ($this->can("view", $o->prop("resource")))
+		{
+			$ri = get_instance(CL_ROOM);
+			$sets = $ri->get_settings_for_room(obj($o->prop("resource")));
+			if ($sets->prop("related_room_folder"))
+			{
+				$rrs = new object_list(array(
+					"class_id" => CL_ROOM,
+					"parent" => $sets->prop("related_room_folder"),
+					"lang_id" => array(),
+					"site_id" => array()
+				));//arr($prop["options"]);
+				$rv += $rrs->names();
+			}
+		}
+		if (!isset($rv[$o->prop("resource")]) && $this->can("view", $o->prop("resource")))
+		{
+			$tmp = obj($o->prop("resource"));
+			$rv[$o->prop("resource")] = $tmp->name();
+		}
+		return $rv;
+	}
+
+	function _get_recur_manage_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_save_button();
+		$tb->add_delete_button();
+	}
+
+	function _set_recur_manage_t($arr)
+	{
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_REPEATED_BRON")) as $c)
+		{
+			$mod = false;
+			$bron = $c->to();
+			$ts = date_edit::get_timestamp($arr["request"]["bron"][$bron->id()]["from"]);
+			if ($bron->prop("start1") != $ts)
+			{
+				$mod = true;
+				$bron->set_prop("start1", $ts);
+			}
+			$ts = date_edit::get_timestamp($arr["request"]["bron"][$bron->id()]["to"]);
+			if ($bron->prop("end") != $ts)
+			{
+				$mod = true;
+				$bron->set_prop("end", $ts);
+			}
+			if ($bron->prop("resource") != ($ts = $arr["request"]["bron"][$bron->id()]["room"]))
+			{
+				$mod = true;
+				$bron->set_prop("resource", $ts);
+			}
+
+			if ($mod)
+			{
+				$bron->save();
+			}
 		}
 	}
 }

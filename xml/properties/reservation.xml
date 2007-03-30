@@ -346,6 +346,46 @@
             <store>no</store>
             <field>ppl</field>
       </property>
+      <property>
+            <name>recur_tb</name>
+            <table>objects</table>
+            <group>recur_entry</group>
+            <parent>general_down</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>recur_tb</field>
+      </property>
+      <property>
+            <name>recur_t</name>
+            <table>objects</table>
+            <group>recur_entry</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>recur_t</field>
+      </property>
+      <property>
+            <name>recur_manage_tb</name>
+            <table>objects</table>
+            <group>recur_manage</group>
+            <parent>general_down</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>recur_manage_tb</field>
+      </property>
+      <property>
+            <name>recur_manage_t</name>
+            <table>objects</table>
+            <group>recur_manage</group>
+            <parent>general_down</parent>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>recur_manage_t</field>
+      </property>
       <classinfo>
             <syslog_type>ST_RESERVATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -368,6 +408,18 @@
             <ppl>
                   <caption>Kliendid</caption>
             </ppl>
+            <recur>
+                  <caption>Kordumine</caption>
+            </recur>
+            <recur_entry>
+                  <caption>Sisesta kordused</caption>
+                  <parent>recur</parent>
+            </recur_entry>
+            <recur_manage>
+                  <caption>Halda korratud reserveeringuid</caption>
+                  <parent>recur</parent>
+                  <submit>no</submit>
+            </recur_manage>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -400,6 +452,21 @@
                   <clid>CL_ROOM</clid>
                   <caption>Ressurss</caption>
             </RESOURCE>
+            <RECURRENCE>
+                  <value>4</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Kordus</caption>
+            </RECURRENCE>
+            <REPEATED_BRON>
+                  <value>5</value>
+                  <clid>CL_RESERVATION</clid>
+                  <caption>Korratud reserveering</caption>
+            </REPEATED_BRON>
+            <ORIGINAL_BRON>
+                  <value>6</value>
+                  <clid>CL_RESERVATION</clid>
+                  <caption>Korduse originaal</caption>
+            </ORIGINAL_BRON>
       </reltypes>
       <layout>
             <general_split>
