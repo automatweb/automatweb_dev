@@ -15,17 +15,16 @@ msgstr ""
 msgid "Klassi Aadress help"
 msgstr ""
 
-# classes/crm/crm_address.aw:prop_aadress
 #: classes/crm/crm_address.aw:prop_aadress
-msgid "Omaduse Tänav/Küla (aadress) caption"
-msgstr "Street/Village"
+msgid "Omaduse T&auml;nav/K&uuml;la (aadress) caption"
+msgstr "Street/village"
 
 #: classes/crm/crm_address.aw:prop_aadress_comment
-msgid "Omaduse Tänav/Küla (aadress) kommentaar"
+msgid "Omaduse T&auml;nav/K&uuml;la (aadress) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_address.aw:prop_aadress_help
-msgid "Omaduse Tänav/Küla (aadress) help"
+msgid "Omaduse T&auml;nav/K&uuml;la (aadress) help"
 msgstr ""
 
 #: classes/crm/crm_address.aw:prop_postiindeks
@@ -1111,8 +1110,9 @@ msgstr ""
 msgid "Zimbabwe"
 msgstr ""
 
-#~ msgid "Omaduse T&auml;nav/K&uuml;la (aadress) caption"
-#~ msgstr "Street/village"
+# classes/crm/crm_address.aw:prop_aadress
+#~ msgid "Omaduse Tänav/Küla (aadress) caption"
+#~ msgstr "Street/Village"
 
 #~ msgid "Grupi Üldine (general) pealkiri"
 #~ msgstr "General"

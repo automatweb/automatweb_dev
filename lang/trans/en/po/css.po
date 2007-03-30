@@ -269,6 +269,18 @@ msgstr ""
 msgid "Omaduse K&otilde;rgus (height) help"
 msgstr ""
 
+#: classes/contentmgmt/css.aw:prop_nowrap
+msgid "Omaduse Nowrap (nowrap) caption"
+msgstr ""
+
+#: classes/contentmgmt/css.aw:prop_nowrap_comment
+msgid "Omaduse Nowrap (nowrap) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/css.aw:prop_nowrap_help
+msgid "Omaduse Nowrap (nowrap) help"
+msgstr ""
+
 # classes/contentmgmt/css.aw:prop_padding
 #: classes/contentmgmt/css.aw:prop_padding
 msgid "Omaduse Elementide vahe (cellspacing) (px) (padding) caption"
@@ -582,14 +594,6 @@ msgstr ""
 # classes/contentmgmt/css.aw:prop_pre_help
 #: classes/contentmgmt/css.aw:prop_pre_help
 msgid "Omaduse Eelvaade (pre) help"
-msgstr ""
-
-#: classes/contentmgmt/css.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/css.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 # classes/contentmgmt/css.aw:group_table

@@ -9,7 +9,6 @@ $GLOBALS["TRANS"]["AW abiinfo"] = "AW help";
 $GLOBALS["TRANS"]["Klassi"] = "Class";
 $GLOBALS["TRANS"]["tekstid."] = "texts";
 $GLOBALS["TRANS"]["seos"] = "relation";
-$GLOBALS["TRANS"]["tüüpi"] = "type";
 $GLOBALS["TRANS"]["Kaust"] = "Folder";
 $GLOBALS["TRANS"]["Klass"] = "Class";
 $GLOBALS["TRANS"]["Grupp"] = "Group";

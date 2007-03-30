@@ -14,7 +14,7 @@ msgid "Salvesta"
 msgstr "Save"
 
 #: classes/applications/cb_trans/cb_translate.aw:236
-#: classes/applications/cb_trans/cb_translate.aw:1034
+#: classes/applications/cb_trans/cb_translate.aw:1036
 msgid "CVS commit"
 msgstr "CVS commit"
 
@@ -39,7 +39,7 @@ msgid "AW abiinfo"
 msgstr "AW help"
 
 #: classes/applications/cb_trans/cb_translate.aw:537
-#: classes/applications/cb_trans/cb_translate.aw:612
+#: classes/applications/cb_trans/cb_translate.aw:613
 msgid "Klassi"
 msgstr "Class"
 
@@ -47,62 +47,65 @@ msgstr "Class"
 msgid "tekstid."
 msgstr "texts"
 
-#: classes/applications/cb_trans/cb_translate.aw:612
+#: classes/applications/cb_trans/cb_translate.aw:613
 msgid "seos"
 msgstr "relation"
 
-#: classes/applications/cb_trans/cb_translate.aw:613
-#: classes/applications/cb_trans/cb_translate.aw:905
-msgid "tüüpi"
-msgstr "type"
+#: classes/applications/cb_trans/cb_translate.aw:614
+#: classes/applications/cb_trans/cb_translate.aw:909
+msgid "t&uuml;&uuml;pi"
+msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:722
+#: classes/applications/cb_trans/cb_translate.aw:724
 msgid "Kaust"
 msgstr "Folder"
 
-#: classes/applications/cb_trans/cb_translate.aw:722
-#: classes/applications/cb_trans/cb_translate.aw:809
-#: classes/applications/cb_trans/cb_translate.aw:902
+#: classes/applications/cb_trans/cb_translate.aw:724
+#: classes/applications/cb_trans/cb_translate.aw:812
+#: classes/applications/cb_trans/cb_translate.aw:906
 msgid "Klass"
 msgstr "Class"
 
-#: classes/applications/cb_trans/cb_translate.aw:810
-#: classes/applications/cb_trans/cb_translate.aw:903
+#: classes/applications/cb_trans/cb_translate.aw:813
+#: classes/applications/cb_trans/cb_translate.aw:907
 msgid "Grupp"
 msgstr "Group"
 
-#: classes/applications/cb_trans/cb_translate.aw:904
+#: classes/applications/cb_trans/cb_translate.aw:908
 msgid "Omadus"
 msgstr "Property"
 
-#: classes/applications/cb_trans/cb_translate.aw:948
+#: classes/applications/cb_trans/cb_translate.aw:951
 msgid "tekst puudus"
 msgstr "text missing"
 
-#: classes/applications/cb_trans/cb_translate.aw:949
+#: classes/applications/cb_trans/cb_translate.aw:952
 msgid "tekst eemaldati"
 msgstr "text removed"
 
-#: classes/applications/cb_trans/cb_translate.aw:956
+#: classes/applications/cb_trans/cb_translate.aw:959
 msgid "Sooritatud muudatused"
 msgstr "Changes"
 
-#: classes/applications/cb_trans/cb_translate.aw:965
+#: classes/applications/cb_trans/cb_translate.aw:968
 msgid "Kinnita muudatused"
 msgstr "Confirm changes"
 
-#: classes/applications/cb_trans/cb_translate.aw:972
+#: classes/applications/cb_trans/cb_translate.aw:975
 msgid "muudatusi pole"
 msgstr "no changes"
 
-#: classes/applications/cb_trans/cb_translate.aw:1027
+#: classes/applications/cb_trans/cb_translate.aw:1029
 msgid "Muudetud faile ei ole!"
 msgstr "No files modified"
 
-#: classes/applications/cb_trans/cb_translate.aw:1038
+#: classes/applications/cb_trans/cb_translate.aw:1040
 msgid "Seletus"
 msgstr "Explanation"
 
-#: classes/applications/cb_trans/cb_translate.aw:1039
+#: classes/applications/cb_trans/cb_translate.aw:1041
 msgid "Commitimisele minevad failid"
 msgstr "Files to commit"
+
+#~ msgid "tüüpi"
+#~ msgstr "type"

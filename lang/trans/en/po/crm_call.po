@@ -591,6 +591,22 @@ msgstr ""
 msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
+#: classes/crm/crm_call.aw:layout_top_bit
+msgid "Kujundusosa Põhiandmed (top_bit) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:layout_center_bit_left_ct
+msgid "Kujundusosa Sisu (center_bit_left_ct) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:layout_center_bit_right_top
+msgid "Kujundusosa Osapooled (center_bit_right_top) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:layout_center_bit_right_bottom
+msgid "Kujundusosa Manused (center_bit_right_bottom) pealkiri"
+msgstr ""
+
 #: classes/crm/crm_call.aw:270
 msgid "Aktiivne"
 msgstr ""
@@ -623,35 +639,35 @@ msgstr "Save"
 msgid "Uee k&otilde;ne aeg ei tohi olla minevikus!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:722
+#: classes/crm/crm_call.aw:731
 msgid "Millal"
 msgstr ""
 
-#: classes/crm/crm_call.aw:729
+#: classes/crm/crm_call.aw:738
 msgid "Sisu"
 msgstr ""
 
-#: classes/crm/crm_call.aw:734
+#: classes/crm/crm_call.aw:743
 msgid "Vaata"
 msgstr ""
 
-#: classes/crm/crm_call.aw:813
+#: classes/crm/crm_call.aw:822
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:818
+#: classes/crm/crm_call.aw:827
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_call.aw:823
+#: classes/crm/crm_call.aw:832
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_call.aw:828
+#: classes/crm/crm_call.aw:837
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_call.aw:862
+#: classes/crm/crm_call.aw:871
 msgid "Loo uus arve"
 msgstr ""
 

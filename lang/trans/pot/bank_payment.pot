@@ -122,6 +122,78 @@ msgstr ""
 msgid "Omaduse  (bank) help"
 msgstr ""
 
+#: classes/common/bank_payment.aw:prop_find_date_start
+msgid "Omaduse Alates (find_date_start) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_date_start_comment
+msgid "Omaduse Alates (find_date_start) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_date_start_help
+msgid "Omaduse Alates (find_date_start) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_date_end
+msgid "Omaduse Kuni (find_date_end) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_date_end_comment
+msgid "Omaduse Kuni (find_date_end) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_date_end_help
+msgid "Omaduse Kuni (find_date_end) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_name
+msgid "Omaduse Maksja nimi (find_name) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_name_comment
+msgid "Omaduse Maksja nimi (find_name) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_name_help
+msgid "Omaduse Maksja nimi (find_name) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_ref
+msgid "Omaduse viide (find_ref) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_ref_comment
+msgid "Omaduse viide (find_ref) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_ref_help
+msgid "Omaduse viide (find_ref) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_one
+msgid "Omaduse Ei n&auml;ita korduvaid (find_one) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_one_comment
+msgid "Omaduse Ei n&auml;ita korduvaid (find_one) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_find_one_help
+msgid "Omaduse Ei n&auml;ita korduvaid (find_one) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_do_find
+msgid "Omaduse Otsi (do_find) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_do_find_comment
+msgid "Omaduse Otsi (do_find) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_do_find_help
+msgid "Omaduse Otsi (do_find) help"
+msgstr ""
+
 #: classes/common/bank_payment.aw:prop_log
 msgid "Omaduse  (log) caption"
 msgstr ""
@@ -158,55 +230,63 @@ msgstr ""
 msgid "Seose Privaatv&otilde;ti (RELTYPE_P_KEY) tekst"
 msgstr ""
 
-#: classes/common/bank_payment.aw:448
+#: classes/common/bank_payment.aw:539
 msgid "&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:448
+#: classes/common/bank_payment.aw:539
 msgid "eba&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:449
+#: classes/common/bank_payment.aw:540
 msgid "ok"
 msgstr ""
 
-#: classes/common/bank_payment.aw:449
+#: classes/common/bank_payment.aw:540
 msgid ""
 msgstr ""
 
-#: classes/common/bank_payment.aw:461
+#: classes/common/bank_payment.aw:563
 msgid "\n"
 msgstr ""
 
-#: classes/common/bank_payment.aw:473
+#: classes/common/bank_payment.aw:586
 msgid "Aeg"
 msgstr ""
 
-#: classes/common/bank_payment.aw:479
+#: classes/common/bank_payment.aw:592
 msgid "Maksja"
 msgstr ""
 
-#: classes/common/bank_payment.aw:485
+#: classes/common/bank_payment.aw:598
 msgid "Viitenumber"
 msgstr ""
 
-#: classes/common/bank_payment.aw:491
+#: classes/common/bank_payment.aw:604
 msgid "Summa"
 msgstr ""
 
-#: classes/common/bank_payment.aw:497
+#: classes/common/bank_payment.aw:610
 msgid "Seletus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:503
+#: classes/common/bank_payment.aw:616
 msgid "Pank"
 msgstr ""
 
-#: classes/common/bank_payment.aw:509
+#: classes/common/bank_payment.aw:622
 msgid "&Otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:514
+#: classes/common/bank_payment.aw:627
 msgid "SK"
+msgstr ""
+
+#: classes/common/bank_payment.aw:837
+msgid "Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage"
+msgstr ""
+
+#: classes/common/bank_payment.aw:837
+msgid "siia"
 msgstr ""
 

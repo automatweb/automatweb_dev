@@ -306,7 +306,7 @@ msgid "Valige palun v&auml;hemalt &uuml;ks ruum!"
 msgstr ""
 
 #: classes/applications/spa_bookings/spa_bookings_overview.aw:426
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:621
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:623
 msgid "K&otilde;ik"
 msgstr ""
 
@@ -318,34 +318,34 @@ msgstr ""
 msgid "Naine"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:881
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:883
 msgid "Klient saabus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:881
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:883
 msgid "Klient ei saabunud"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:921
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:923
 msgid "Eile"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:932
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:934
 msgid "T&auml;na"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:943
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:945
 msgid "Homme"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:968
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:970
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1111
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1113
 msgid "Reisib&uuml;roo"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookings_overview.aw:1148
+#: classes/applications/spa_bookings/spa_bookings_overview.aw:1150
 msgid "%s tk"
 msgstr ""

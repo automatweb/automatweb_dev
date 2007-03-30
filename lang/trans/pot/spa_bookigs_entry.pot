@@ -494,3 +494,7 @@ msgstr ""
 msgid "Reisib&uuml;roo nimi"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1675
+msgid "%s %s-%s"
+msgstr ""
+

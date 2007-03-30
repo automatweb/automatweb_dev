@@ -500,6 +500,6 @@ msgstr "Delete criterias"
 msgid "Oled kindel et soovid valitud kriteeriumid kustutada?"
 msgstr "Are You sure You want to delete selected criterias"
 
-#: classes/applications/procurement_center/procurement.aw:1151
+#: classes/applications/procurement_center/procurement.aw:1155
 msgid "Toodet nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr "There is no product named %s, it will be added if You click OK"

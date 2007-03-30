@@ -216,12 +216,12 @@ msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr "No add access to the selected image folder"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:431
-msgid "Galerii "
-msgstr "Gallery"
+msgid "Galerii"
+msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:431
-msgid " pildid"
-msgstr " images"
+msgid "pildid"
+msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:445
 msgid "Lisa uus pilt"
@@ -246,6 +246,12 @@ msgstr "Modified by"
 #: classes/contentmgmt/gallery/mini_gallery.aw:485
 msgid "Muudetud"
 msgstr "Modified"
+
+#~ msgid "Galerii "
+#~ msgstr "Gallery"
+
+#~ msgid " pildid"
+#~ msgstr " images"
 
 #~ msgid "Omaduse Piltide j&amp;auml;rjestamine (sorter) caption"
 #~ msgstr "Ordering images by"

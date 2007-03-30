@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:08:59 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,32 +9,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/vcl/popup_search.aw:48 classes/vcl/popup_search.aw:109
+#: classes/vcl/popup_search.aw:149 classes/vcl/popup_search.aw:466
+#: classes/vcl/popup_search.aw:870
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/vcl/popup_search.aw:88 classes/vcl/popup_search.aw:146
-msgid "Nimi"
-msgstr "Name"
+#: classes/vcl/popup_search.aw:158
+msgid "Muuda"
+msgstr "Change"
 
-#: classes/vcl/popup_search.aw:95
-msgid "Kommentaar"
-msgstr "Comment"
+#: classes/vcl/popup_search.aw:198
+msgid "Lisa"
+msgstr "Add"
 
-#: classes/vcl/popup_search.aw:102 classes/vcl/popup_search.aw:140
-msgid "OID"
-msgstr "OID"
+#: classes/vcl/popup_search.aw:216
+msgid "Lisa uus %s"
+msgstr "Add new %s"
 
-#: classes/vcl/popup_search.aw:151
-msgid "Muutja"
-msgstr "Modifiedby"
+#: classes/vcl/popup_search.aw:232
+msgid "Eemalda"
+msgstr "Remove"
 
-#: classes/vcl/popup_search.aw:155
-msgid "Muudetud"
-msgstr "Modified"
+#: classes/vcl/popup_search.aw:317
+msgid "Vali eemaldatavad objektid"
+msgstr "Select objects to remove"
 
-#: classes/vcl/popup_search.aw:162
+#: classes/vcl/popup_search.aw:333 classes/vcl/popup_search.aw:599
+#: classes/vcl/popup_search.aw:603
 msgid "Vali"
 msgstr "Select"
 
+#: classes/vcl/popup_search.aw:414
+msgid "Organisatsioon"
+msgstr "Organisation"
+
+#: classes/vcl/popup_search.aw:444 classes/vcl/popup_search.aw:575
+msgid "Nimi"
+msgstr "Name"
+
+#: classes/vcl/popup_search.aw:451
+msgid "Objekti id"
+msgstr "Object ID"
+
+#: classes/vcl/popup_search.aw:542
+msgid "&nbsp;"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:568
+msgid "OID"
+msgstr "OID"
+
+#: classes/vcl/popup_search.aw:581
+msgid "Asukoht"
+msgstr "Location in system"
+
+#: classes/vcl/popup_search.aw:587
+msgid "Muutja"
+msgstr "Modifiedby"
+
+#: classes/vcl/popup_search.aw:591
+msgid "Muudetud"
+msgstr "Modified"
+
+#: classes/vcl/popup_search.aw:665
+msgid "Vali see"
+msgstr "Select this"
+
+#~ msgid "Kommentaar"
+#~ msgstr "Comment"

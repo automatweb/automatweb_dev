@@ -323,7 +323,7 @@ msgid "Kustuta"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:294 classes/applications/procurement_center/procurement_offer.aw:336 classes/applications/procurement_center/procurement_offer.aw:1348 classes/applications/procurement_center/procurement_offer.aw:1489
-msgid ""
+msgid "&nbsp;"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:302 classes/applications/procurement_center/procurement_offer.aw:463 classes/applications/procurement_center/procurement_offer.aw:805 classes/applications/procurement_center/procurement_offer.aw:977 classes/applications/procurement_center/procurement_offer.aw:1469

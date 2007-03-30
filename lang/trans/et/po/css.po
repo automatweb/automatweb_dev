@@ -248,16 +248,12 @@ msgstr ""
 # classes/contentmgmt/css.aw:prop_width_comment
 #: classes/contentmgmt/css.aw:prop_width_comment
 msgid "Omaduse Laius (width) kommentaar"
-msgstr ""
-"elemendi või tabeli laius pixlites või protsentides ümbrtisevast vabast "
-"ruumist"
+msgstr "elemendi või tabeli laius pixlites või protsentides ümbrtisevast vabast ruumist"
 
 # classes/contentmgmt/css.aw:prop_width_help
 #: classes/contentmgmt/css.aw:prop_width_help
 msgid "Omaduse Laius (width) help"
-msgstr ""
-"elemendi või tabeli laius pixlites või protsentides ümbrtisevast vabast "
-"ruumist"
+msgstr "elemendi või tabeli laius pixlites või protsentides ümbrtisevast vabast ruumist"
 
 # classes/contentmgmt/css.aw:prop_height
 #: classes/contentmgmt/css.aw:prop_height
@@ -273,6 +269,18 @@ msgstr "elemendi või tabeli maksimaalne kõrgus."
 #: classes/contentmgmt/css.aw:prop_height_help
 msgid "Omaduse K&otilde;rgus (height) help"
 msgstr "elemendi või tabeli maksimaalne kõrgus."
+
+#: classes/contentmgmt/css.aw:prop_nowrap
+msgid "Omaduse Nowrap (nowrap) caption"
+msgstr ""
+
+#: classes/contentmgmt/css.aw:prop_nowrap_comment
+msgid "Omaduse Nowrap (nowrap) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/css.aw:prop_nowrap_help
+msgid "Omaduse Nowrap (nowrap) help"
+msgstr ""
 
 # classes/contentmgmt/css.aw:prop_padding
 #: classes/contentmgmt/css.aw:prop_padding
@@ -312,16 +320,12 @@ msgstr ""
 # classes/contentmgmt/css.aw:prop_a_style_comment
 #: classes/contentmgmt/css.aw:prop_a_style_comment
 msgid "Omaduse Lingi stiil (a_style) kommentaar"
-msgstr ""
-"kui sisuks on link, siis võimalik määrata, et linki näidataks erineva "
-"stiiliga teistest tekstidest "
+msgstr "kui sisuks on link, siis võimalik määrata, et linki näidataks erineva stiiliga teistest tekstidest "
 
 # classes/contentmgmt/css.aw:prop_a_style_help
 #: classes/contentmgmt/css.aw:prop_a_style_help
 msgid "Omaduse Lingi stiil (a_style) help"
-msgstr ""
-"kui sisuks on link, siis võimalik määrata, et linki näidataks erineva "
-"stiiliga teistest tekstidest "
+msgstr "kui sisuks on link, siis võimalik määrata, et linki näidataks erineva stiiliga teistest tekstidest "
 
 # classes/contentmgmt/css.aw:prop_a_hover_style
 #: classes/contentmgmt/css.aw:prop_a_hover_style
@@ -591,14 +595,6 @@ msgstr ""
 # classes/contentmgmt/css.aw:prop_pre_help
 #: classes/contentmgmt/css.aw:prop_pre_help
 msgid "Omaduse Eelvaade (pre) help"
-msgstr ""
-
-#: classes/contentmgmt/css.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/css.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 # classes/contentmgmt/css.aw:group_table

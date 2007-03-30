@@ -34,9 +34,9 @@ msgid "Grupi  () help"
 msgstr ""
 
 #: classes/vcl/grid_editor.aw:28 classes/vcl/grid_editor.aw:1346
-#: classes/vcl/grid_editor.aw:1461 classes/vcl/grid_editor.aw:1539
-#: classes/vcl/grid_editor.aw:1569 classes/vcl/grid_editor.aw:1599
-#: classes/vcl/grid_editor.aw:1755 classes/vcl/grid_editor.aw:1794
+#: classes/vcl/grid_editor.aw:1465 classes/vcl/grid_editor.aw:1543
+#: classes/vcl/grid_editor.aw:1573 classes/vcl/grid_editor.aw:1603
+#: classes/vcl/grid_editor.aw:1759 classes/vcl/grid_editor.aw:1798
 msgid "allah"
 msgstr ""
 
@@ -92,42 +92,42 @@ msgstr ""
 msgid "Mitu lahtrit kustutada"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1756 classes/vcl/grid_editor.aw:1795
+#: classes/vcl/grid_editor.aw:1760 classes/vcl/grid_editor.aw:1799
 msgid "allah2"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1934
+#: classes/vcl/grid_editor.aw:1938
 msgid "Merge alla"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1940
+#: classes/vcl/grid_editor.aw:1944
 msgid "Merge &uuml;les"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1946
+#: classes/vcl/grid_editor.aw:1950
 msgid "Merge vasakule"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1952
+#: classes/vcl/grid_editor.aw:1956
 msgid "Merge paremale"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1959
+#: classes/vcl/grid_editor.aw:1963
 msgid "Split alla"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1965
+#: classes/vcl/grid_editor.aw:1969
 msgid "Split &uuml;les"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1971
+#: classes/vcl/grid_editor.aw:1975
 msgid "Split vasakule"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1977
+#: classes/vcl/grid_editor.aw:1981
 msgid "Split paremale"
 msgstr ""
 
-#: classes/vcl/grid_editor.aw:1983
+#: classes/vcl/grid_editor.aw:1987
 msgid "Kustuta read/tulbad"
 msgstr ""

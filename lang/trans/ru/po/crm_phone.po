@@ -58,7 +58,7 @@ msgid "Seose Riik (RELTYPE_COUNTRY) tekst"
 msgstr ""
 
 #: classes/crm/crm_phone.aw:42
-msgid "tööl"
+msgid "t&ouml;&ouml;l"
 msgstr ""
 
 #: classes/crm/crm_phone.aw:43
@@ -66,7 +66,7 @@ msgid "kodus"
 msgstr ""
 
 #: classes/crm/crm_phone.aw:44
-msgid "lühinumber"
+msgid "l&uuml;hinumber"
 msgstr ""
 
 #: classes/crm/crm_phone.aw:45

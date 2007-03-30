@@ -329,26 +329,26 @@ msgstr ""
 msgid "Viimati muudetud"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:277
+#: classes/contentmgmt/links.aw:287
 msgid "T&ouml;&ouml;riistariba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:278
+#: classes/contentmgmt/links.aw:288
 msgid "Aadressi riba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:279
+#: classes/contentmgmt/links.aw:289
 msgid "Men&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:280
+#: classes/contentmgmt/links.aw:290
 msgid "Kerimisriba"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:312
+#: classes/contentmgmt/links.aw:322
 msgid "Saidi sisene link"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:470
+#: classes/contentmgmt/links.aw:480
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""

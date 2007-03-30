@@ -196,11 +196,11 @@ msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:431
-msgid "Galerii "
+msgid "Galerii"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:431
-msgid " pildid"
+msgid "pildid"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:445

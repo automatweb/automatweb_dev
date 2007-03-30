@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/calendar/calendar_view.aw:class_59_help
 msgid "Klassi Kalendrivaade help"
 msgstr ""
@@ -394,11 +393,10 @@ msgstr ""
 msgid "Väljundvorm on valimata"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1013
+#: classes/calendar/calendar_view.aw:1009
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1020
+#: classes/calendar/calendar_view.aw:1016
 msgid "&gt;&gt;"
 msgstr ""
-

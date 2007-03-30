@@ -303,6 +303,6 @@ msgid "V&auml;rskenda"
 msgstr ""
 
 #: classes/applications/clients/patent_office/trademark_manager.aw:547
-msgid "Taotlus nr: "
+msgid "Taotlus nr:"
 msgstr ""
 

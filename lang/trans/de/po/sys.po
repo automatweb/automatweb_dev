@@ -18,11 +18,11 @@ msgid "Write error"
 msgstr ""
 
 #: classes/sys.aw:516
-msgid "L&amp;otilde;i saidi andmebaasi tabelid"
+msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr ""
 
 #: classes/sys.aw:572
-msgid "all done! "
+msgid "all done!"
 msgstr ""
 
 #: classes/sys.aw:618

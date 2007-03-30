@@ -957,27 +957,27 @@ msgstr "Search"
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_meeting.aw:1093
+#: classes/crm/crm_meeting.aw:1102
 msgid "Prognoositav tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1098
+#: classes/crm/crm_meeting.aw:1107
 msgid "Tegelik tundide arv"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1103
+#: classes/crm/crm_meeting.aw:1112
 msgid "Tundide arv kliendile"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1108
+#: classes/crm/crm_meeting.aw:1117
 msgid "Tunnihind"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1113
+#: classes/crm/crm_meeting.aw:1122
 msgid "Arve number"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:1147
+#: classes/crm/crm_meeting.aw:1156
 msgid "Loo uus arve"
 msgstr ""
 

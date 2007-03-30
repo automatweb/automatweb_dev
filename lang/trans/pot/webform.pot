@@ -679,7 +679,7 @@ msgid "Andmed"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:722
-msgid "Objekti t&uuml;&uuml;p "
+msgid "Objekti t&uuml;&uuml;p"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:839 classes/contentmgmt/webform.aw:860
@@ -890,23 +890,23 @@ msgstr ""
 msgid "-- Vali --"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1778
+#: classes/contentmgmt/webform.aw:1794
 msgid "Registreeru"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1973
+#: classes/contentmgmt/webform.aw:1989
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2540
+#: classes/contentmgmt/webform.aw:2556
 msgid "Kinnita"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2545
+#: classes/contentmgmt/webform.aw:2561
 msgid "Tagasi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2667
+#: classes/contentmgmt/webform.aw:2683
 msgid "Liigu edasi &raquo;"
 msgstr ""
 

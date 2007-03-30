@@ -379,24 +379,24 @@ msgid "L&otilde;i saidi andmebaasi"
 msgstr "Created site database"
 
 #: classes/install/aw_site.aw:893
-msgid "Saidi baaskataloog on juba olemas! (%s) "
-msgstr "Site base folder already exists! (%s)"
+msgid "Saidi baaskataloog on juba olemas! (%s)"
+msgstr ""
 
 #: classes/install/aw_site.aw:900
-msgid "Saidi logide kataloog on juba olemas! (%s) "
-msgstr "Site log folder already exists! (%s)"
+msgid "Saidi logide kataloog on juba olemas! (%s)"
+msgstr ""
 
 #: classes/install/aw_site.aw:907
-msgid "Saidi apache konfiguratsioon on juba olemas! (%s) "
-msgstr "Site apache config already exists! (%s)"
+msgid "Saidi apache konfiguratsioon on juba olemas! (%s)"
+msgstr ""
 
 #: classes/install/aw_site.aw:916
-msgid "Saidid, kust templatesid kopeerida on valimata! "
-msgstr "Sites where to copy templates from, are not selected!"
+msgid "Saidid, kust templatesid kopeerida on valimata!"
+msgstr ""
 
 #: classes/install/aw_site.aw:922
-msgid "Kataloogid, kust templatesid kopeerida on valimata! "
-msgstr "Folders where to copy templates from, are not selected!"
+msgid "Kataloogid, kust templatesid kopeerida on valimata!"
+msgstr ""
 
 #: classes/install/aw_site.aw:933
 msgid "Kasutatav andmebaas on valimata!"
@@ -411,12 +411,12 @@ msgid "Sait on liiga vana koodiversiooniga et selle p&otilde;hjal uut luua!"
 msgstr "Site has too old an automatweb version to add a new site to it!"
 
 #: classes/install/aw_site.aw:983
-msgid "Saidi andmebaas on juba olemas! (%s) "
-msgstr "Site database already exists! (%s)"
+msgid "Saidi andmebaas on juba olemas! (%s)"
+msgstr ""
 
 #: classes/install/aw_site.aw:996
-msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! (%s) "
-msgstr "Site domain's nameserver is not configurable by automatweb and the domain does not exist! (%s)"
+msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! (%s)"
+msgstr ""
 
 #: classes/install/aw_site.aw:1000
 msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen viitab valele IP aadressile! (vajalik = %s domeeni ip = %s)"
@@ -609,3 +609,24 @@ msgstr ""
 #: classes/install/aw_site.aw:1946
 msgid "Saadan"
 msgstr ""
+
+#~ msgid "Saidi baaskataloog on juba olemas! (%s) "
+#~ msgstr "Site base folder already exists! (%s)"
+
+#~ msgid "Saidi logide kataloog on juba olemas! (%s) "
+#~ msgstr "Site log folder already exists! (%s)"
+
+#~ msgid "Saidi apache konfiguratsioon on juba olemas! (%s) "
+#~ msgstr "Site apache config already exists! (%s)"
+
+#~ msgid "Saidid, kust templatesid kopeerida on valimata! "
+#~ msgstr "Sites where to copy templates from, are not selected!"
+
+#~ msgid "Kataloogid, kust templatesid kopeerida on valimata! "
+#~ msgstr "Folders where to copy templates from, are not selected!"
+
+#~ msgid "Saidi andmebaas on juba olemas! (%s) "
+#~ msgstr "Site database already exists! (%s)"
+
+#~ msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! (%s) "
+#~ msgstr "Site domain's nameserver is not configurable by automatweb and the domain does not exist! (%s)"

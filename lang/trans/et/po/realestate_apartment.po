@@ -109,6 +109,18 @@ msgstr ""
 msgid "Omaduse Arhiveeritud (is_archived) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_expire
+msgid "Omaduse aegub (expire) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_expire_comment
+msgid "Omaduse aegub (expire) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_expire_help
+msgid "Omaduse aegub (expire) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_title1
 msgid "Omaduse Objekti aadress (title1) caption"
 msgstr ""
@@ -133,16 +145,16 @@ msgstr ""
 msgid "Omaduse Aadress (address_connection) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title2
-msgid "Omaduse Tehingu andmed (title2) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_
+msgid "Omaduse  () caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title2_comment
-msgid "Omaduse Tehingu andmed (title2) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop__comment
+msgid "Omaduse  () kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title2_help
-msgid "Omaduse Tehingu andmed (title2) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop__help
+msgid "Omaduse  () help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_type
@@ -193,18 +205,6 @@ msgstr ""
 msgid "Omaduse Kuu&uuml;&uuml;r (transaction_rent) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_constraints
-msgid "Omaduse Piirangud (transaction_constraints) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_constraints_comment
-msgid "Omaduse Piirangud (transaction_constraints) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_constraints_help
-msgid "Omaduse Piirangud (transaction_constraints) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_down_payment
 msgid "Omaduse Ettemaks (transaction_down_payment) caption"
 msgstr ""
@@ -241,28 +241,28 @@ msgstr ""
 msgid "Omaduse Tehing s&otilde;lmitud (transaction_closed) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title3
-msgid "Omaduse M&uuml;&uuml;ja andmed (title3) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_title100
+msgid "Omaduse M&uuml;&uuml;ja andmed (title100) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title3_comment
-msgid "Omaduse M&uuml;&uuml;ja andmed (title3) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_title100_comment
+msgid "Omaduse M&uuml;&uuml;ja andmed (title100) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title3_help
-msgid "Omaduse M&uuml;&uuml;ja andmed (title3) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_title100_help
+msgid "Omaduse M&uuml;&uuml;ja andmed (title100) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_seller_search
-msgid "Omaduse M&uuml;&uuml;ja (seller_search) caption"
+msgid "Omaduse  (seller_search) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_seller_search_comment
-msgid "Omaduse M&uuml;&uuml;ja (seller_search) kommentaar"
+msgid "Omaduse  (seller_search) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_seller_search_help
-msgid "Omaduse M&uuml;&uuml;ja (seller_search) help"
+msgid "Omaduse  (seller_search) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_seller
@@ -277,40 +277,28 @@ msgstr ""
 msgid "Omaduse  (seller) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_seller_heard_from
-msgid "Omaduse Infoallikas (seller_heard_from) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_title101
+msgid "Omaduse Ostja andmed (title101) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_seller_heard_from_comment
-msgid "Omaduse Infoallikas (seller_heard_from) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_title101_comment
+msgid "Omaduse Ostja andmed (title101) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_seller_heard_from_help
-msgid "Omaduse Infoallikas (seller_heard_from) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title31
-msgid "Omaduse Ostja andmed (title31) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title31_comment
-msgid "Omaduse Ostja andmed (title31) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title31_help
-msgid "Omaduse Ostja andmed (title31) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_title101_help
+msgid "Omaduse Ostja andmed (title101) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_search
-msgid "Omaduse Ostja (buyer_search) caption"
+msgid "Omaduse  (buyer_search) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_search_comment
-msgid "Omaduse Ostja (buyer_search) kommentaar"
+msgid "Omaduse  (buyer_search) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_search_help
-msgid "Omaduse Ostja (buyer_search) help"
+msgid "Omaduse  (buyer_search) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer
@@ -323,18 +311,6 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_help
 msgid "Omaduse  (buyer) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_heard_from
-msgid "Omaduse Infoallikas (buyer_heard_from) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_heard_from_comment
-msgid "Omaduse Infoallikas (buyer_heard_from) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_heard_from_help
-msgid "Omaduse Infoallikas (buyer_heard_from) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_title5
@@ -371,18 +347,6 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_appreciation_note_type_help
 msgid "Omaduse T&auml;nukirja t&uuml;&uuml;p (appreciation_note_type) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title4
-msgid "Omaduse Lisaandmed (title4) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title4_comment
-msgid "Omaduse Lisaandmed (title4) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_title4_help
-msgid "Omaduse Lisaandmed (title4) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_realestate_agent1
@@ -505,16 +469,28 @@ msgstr ""
 msgid "Omaduse Projekt (project) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_expire
-msgid "Omaduse aegub (expire) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_constraints
+msgid "Omaduse Piirangud (transaction_constraints) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_expire_comment
-msgid "Omaduse aegub (expire) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_constraints_comment
+msgid "Omaduse Piirangud (transaction_constraints) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_expire_help
-msgid "Omaduse aegub (expire) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_constraints_help
+msgid "Omaduse Piirangud (transaction_constraints) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_heard_from
+msgid "Omaduse Infoallikas (buyer_heard_from) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_heard_from_comment
+msgid "Omaduse Infoallikas (buyer_heard_from) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_buyer_heard_from_help
+msgid "Omaduse Infoallikas (buyer_heard_from) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_additional_info_et
@@ -697,16 +673,16 @@ msgstr ""
 msgid "Omaduse  (map_id) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_location_description
-msgid "Omaduse Paiknemine (location_description) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_no
+msgid "Omaduse Näita korteri numbrit (show_apartment_no) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_location_description_comment
-msgid "Omaduse Paiknemine (location_description) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_no_comment
+msgid "Omaduse Näita korteri numbrit (show_apartment_no) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_location_description_help
-msgid "Omaduse Paiknemine (location_description) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_no_help
+msgid "Omaduse Näita korteri numbrit (show_apartment_no) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_broker_fee
@@ -731,6 +707,18 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_broker_fee_type_help
 msgid "Omaduse  (transaction_broker_fee_type) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_fee_payer
+msgid "Omaduse Maakleritasu tasub (fee_payer) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_fee_payer_comment
+msgid "Omaduse Maakleritasu tasub (fee_payer) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_fee_payer_help
+msgid "Omaduse Maakleritasu tasub (fee_payer) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_transaction_selling_price
@@ -793,18 +781,6 @@ msgstr ""
 msgid "Omaduse Krundi hind kokku (estate_price_total) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_fee_payer
-msgid "Omaduse Maakleritasu tasub (fee_payer) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_fee_payer_comment
-msgid "Omaduse Maakleritasu tasub (fee_payer) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_fee_payer_help
-msgid "Omaduse Maakleritasu tasub (fee_payer) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_available_from
 msgid "Omaduse Objekti vabastamine (available_from) caption"
 msgstr ""
@@ -817,100 +793,88 @@ msgstr ""
 msgid "Omaduse Objekti vabastamine (available_from) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_number
-msgid "Omaduse N&auml;ita korteri numbrit (show_apartment_number) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_floor
+msgid "Omaduse Korrus\t\t (floor) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_number_comment
-msgid "Omaduse N&auml;ita korteri numbrit (show_apartment_number) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_floor_comment
+msgid "Omaduse Korrus\t\t (floor) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_show_apartment_number_help
-msgid "Omaduse N&auml;ita korteri numbrit (show_apartment_number) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_floor_help
+msgid "Omaduse Korrus\t\t (floor) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle6
-msgid "Omaduse Krunt ja maja (childtitle6) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_rooms
+msgid "Omaduse Tubade arv (number_of_rooms) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle6_comment
-msgid "Omaduse Krunt ja maja (childtitle6) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_rooms_comment
+msgid "Omaduse Tubade arv (number_of_rooms) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle6_help
-msgid "Omaduse Krunt ja maja (childtitle6) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_rooms_help
+msgid "Omaduse Tubade arv (number_of_rooms) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_property_area
-msgid "Omaduse Krundi suurus (property_area) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_total_floor_area
+msgid "Omaduse &Uuml;ldpind (total_floor_area) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_property_area_comment
-msgid "Omaduse Krundi suurus (property_area) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_total_floor_area_comment
+msgid "Omaduse &Uuml;ldpind (total_floor_area) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_property_area_help
-msgid "Omaduse Krundi suurus (property_area) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_total_floor_area_help
+msgid "Omaduse &Uuml;ldpind (total_floor_area) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_privatization
-msgid "Omaduse Maa erastamine (privatization) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_heatable_area
+msgid "Omaduse K&ouml;etav pind (heatable_area) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_privatization_comment
-msgid "Omaduse Maa erastamine (privatization) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_heatable_area_comment
+msgid "Omaduse K&ouml;etav pind (heatable_area) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_privatization_help
-msgid "Omaduse Maa erastamine (privatization) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_heatable_area_help
+msgid "Omaduse K&ouml;etav pind (heatable_area) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_year_built
-msgid "Omaduse Ehitusaasta (year_built) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type
+msgid "Omaduse Varaomand\t\t (ownership_type) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_year_built_comment
-msgid "Omaduse Ehitusaasta (year_built) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type_comment
+msgid "Omaduse Varaomand\t\t (ownership_type) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_year_built_help
-msgid "Omaduse Ehitusaasta (year_built) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type_help
+msgid "Omaduse Varaomand\t\t (ownership_type) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_legal_status
-msgid "Omaduse Omandivorm (legal_status) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_condition
+msgid "Omaduse Valmidus (condition) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_legal_status_comment
-msgid "Omaduse Omandivorm (legal_status) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_condition_comment
+msgid "Omaduse Valmidus (condition) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_legal_status_help
-msgid "Omaduse Omandivorm (legal_status) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_condition_help
+msgid "Omaduse Valmidus (condition) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_architect
-msgid "Omaduse Arhitekt (architect) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_montlhy_expenses
+msgid "Omaduse Kommunaalmaksete suurus (montlhy_expenses) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_architect_comment
-msgid "Omaduse Arhitekt (architect) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_montlhy_expenses_comment
+msgid "Omaduse Kommunaalmaksete suurus (montlhy_expenses) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_architect_help
-msgid "Omaduse Arhitekt (architect) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_building_type
-msgid "Omaduse Hoone t&uuml;&uuml;p (building_type) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_building_type_comment
-msgid "Omaduse Hoone t&uuml;&uuml;p (building_type) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_building_type_help
-msgid "Omaduse Hoone t&uuml;&uuml;p (building_type) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_montlhy_expenses_help
+msgid "Omaduse Kommunaalmaksete suurus (montlhy_expenses) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_storeys
@@ -925,28 +889,124 @@ msgstr ""
 msgid "Omaduse Korruseid (number_of_storeys) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_floor
-msgid "Omaduse Korrus (floor) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_year_built
+msgid "Omaduse Ehitusaasta (year_built) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_floor_comment
-msgid "Omaduse Korrus (floor) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_year_built_comment
+msgid "Omaduse Ehitusaasta (year_built) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_floor_help
-msgid "Omaduse Korrus (floor) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_year_built_help
+msgid "Omaduse Ehitusaasta (year_built) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_middle_floor
-msgid "Omaduse Pole esimene ega viimane korrus (is_middle_floor) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_architect
+msgid "Omaduse Arhitekt (architect) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_middle_floor_comment
-msgid "Omaduse Pole esimene ega viimane korrus (is_middle_floor) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_architect_comment
+msgid "Omaduse Arhitekt (architect) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_middle_floor_help
-msgid "Omaduse Pole esimene ega viimane korrus (is_middle_floor) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_architect_help
+msgid "Omaduse Arhitekt (architect) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_location_description
+msgid "Omaduse Paiknemine (location_description) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_location_description_comment
+msgid "Omaduse Paiknemine (location_description) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_location_description_help
+msgid "Omaduse Paiknemine (location_description) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_building_type
+msgid "Omaduse Hoone t&uuml;&uuml;p (building_type) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_building_type_comment
+msgid "Omaduse Hoone t&uuml;&uuml;p (building_type) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_building_type_help
+msgid "Omaduse Hoone t&uuml;&uuml;p (building_type) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_lift
+msgid "Omaduse Lift (has_lift) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_lift_comment
+msgid "Omaduse Lift (has_lift) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_lift_help
+msgid "Omaduse Lift (has_lift) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cellar
+msgid "Omaduse Kelder (has_cellar) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cellar_comment
+msgid "Omaduse Kelder (has_cellar) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cellar_help
+msgid "Omaduse Kelder (has_cellar) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parking_spot
+msgid "Omaduse Parkimiskoht (has_parking_spot) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parking_spot_comment
+msgid "Omaduse Parkimiskoht (has_parking_spot) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parking_spot_help
+msgid "Omaduse Parkimiskoht (has_parking_spot) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_garage
+msgid "Omaduse  (has_garage) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_garage_comment
+msgid "Omaduse  (has_garage) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_garage_help
+msgid "Omaduse  (has_garage) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_garages
+msgid "Omaduse Arv (number_of_garages) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_garages_comment
+msgid "Omaduse Arv (number_of_garages) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_garages_help
+msgid "Omaduse Arv (number_of_garages) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_heating_type
+msgid "Omaduse K&uuml;tte t&uuml;&uuml;p (heating_type) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_heating_type_comment
+msgid "Omaduse K&uuml;tte t&uuml;&uuml;p (heating_type) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_heating_type_help
+msgid "Omaduse K&uuml;tte t&uuml;&uuml;p (heating_type) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_building_society_state
@@ -971,6 +1031,30 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_facade_condition_help
 msgid "Omaduse Fassaad (facade_condition) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_hallway_locked
+msgid "Omaduse Trepikoda lukus (has_hallway_locked) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_hallway_locked_comment
+msgid "Omaduse Trepikoda lukus (has_hallway_locked) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_hallway_locked_help
+msgid "Omaduse Trepikoda lukus (has_hallway_locked) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_hallway_condition
+msgid "Omaduse Trepikoja seisukord (hallway_condition) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_hallway_condition_comment
+msgid "Omaduse Trepikoja seisukord (hallway_condition) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_hallway_condition_help
+msgid "Omaduse Trepikoja seisukord (hallway_condition) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_roof_condition
@@ -1009,52 +1093,28 @@ msgstr ""
 msgid "Omaduse Uued radiaatorid (has_new_radiators) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parking_spot
-msgid "Omaduse Parkimiskoht (has_parking_spot) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_property_area
+msgid "Omaduse Krundi suurus (property_area) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parking_spot_comment
-msgid "Omaduse Parkimiskoht (has_parking_spot) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_property_area_comment
+msgid "Omaduse Krundi suurus (property_area) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parking_spot_help
-msgid "Omaduse Parkimiskoht (has_parking_spot) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_property_area_help
+msgid "Omaduse Krundi suurus (property_area) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_lift
-msgid "Omaduse Lift (has_lift) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_privatization
+msgid "Omaduse Maa erastamine (privatization) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_lift_comment
-msgid "Omaduse Lift (has_lift) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_privatization_comment
+msgid "Omaduse Maa erastamine (privatization) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_lift_help
-msgid "Omaduse Lift (has_lift) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_hallway_locked
-msgid "Omaduse Trepikoda lukus (has_hallway_locked) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_hallway_locked_comment
-msgid "Omaduse Trepikoda lukus (has_hallway_locked) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_hallway_locked_help
-msgid "Omaduse Trepikoda lukus (has_hallway_locked) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_hallway_condition
-msgid "Omaduse Trepikoja seisukord (hallway_condition) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_hallway_condition_comment
-msgid "Omaduse Trepikoja seisukord (hallway_condition) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_hallway_condition_help
-msgid "Omaduse Trepikoja seisukord (hallway_condition) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_privatization_help
+msgid "Omaduse Maa erastamine (privatization) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_building_additional_info
@@ -1069,78 +1129,6 @@ msgstr ""
 msgid "Omaduse Lisainfo maja kohta (building_additional_info) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle7
-msgid "Omaduse Korter (childtitle7) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle7_comment
-msgid "Omaduse Korter (childtitle7) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle7_help
-msgid "Omaduse Korter (childtitle7) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_montlhy_expenses
-msgid "Omaduse Kommunaalmaksete suurus (montlhy_expenses) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_montlhy_expenses_comment
-msgid "Omaduse Kommunaalmaksete suurus (montlhy_expenses) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_montlhy_expenses_help
-msgid "Omaduse Kommunaalmaksete suurus (montlhy_expenses) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type
-msgid "Omaduse Varaomand (ownership_type) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type_comment
-msgid "Omaduse Varaomand (ownership_type) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_ownership_type_help
-msgid "Omaduse Varaomand (ownership_type) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_total_floor_area
-msgid "Omaduse &Uuml;ldpind (total_floor_area) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_total_floor_area_comment
-msgid "Omaduse &Uuml;ldpind (total_floor_area) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_total_floor_area_help
-msgid "Omaduse &Uuml;ldpind (total_floor_area) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_heatable_area
-msgid "Omaduse K&ouml;etav pind (heatable_area) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_heatable_area_comment
-msgid "Omaduse K&ouml;etav pind (heatable_area) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_heatable_area_help
-msgid "Omaduse K&ouml;etav pind (heatable_area) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle8
-msgid "Omaduse K&ouml;&ouml;k (childtitle8) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle8_comment
-msgid "Omaduse K&ouml;&ouml;k (childtitle8) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle8_help
-msgid "Omaduse K&ouml;&ouml;k (childtitle8) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_area
 msgid "Omaduse K&ouml;&ouml;gi pindala (kitchen_area) caption"
 msgstr ""
@@ -1151,6 +1139,42 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_area_help
 msgid "Omaduse K&ouml;&ouml;gi pindala (kitchen_area) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_type
+msgid "Omaduse K&ouml;&ouml;k (kitchen_type) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_type_comment
+msgid "Omaduse K&ouml;&ouml;k (kitchen_type) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_type_help
+msgid "Omaduse K&ouml;&ouml;k (kitchen_type) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_option
+msgid "Omaduse M&uuml;&uuml;gis (kitchen_furniture_option) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_option_comment
+msgid "Omaduse M&uuml;&uuml;gis (kitchen_furniture_option) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_option_help
+msgid "Omaduse M&uuml;&uuml;gis (kitchen_furniture_option) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_condition
+msgid "Omaduse M&ouml;&ouml;bel (kitchen_furniture_condition) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_condition_comment
+msgid "Omaduse M&ouml;&ouml;bel (kitchen_furniture_condition) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_condition_help
+msgid "Omaduse M&ouml;&ouml;bel (kitchen_furniture_condition) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchenware_condition
@@ -1165,28 +1189,16 @@ msgstr ""
 msgid "Omaduse K&ouml;&ouml;gitehnika (kitchenware_condition) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture
-msgid "Omaduse Sissej&auml;&auml;v k&ouml;&ouml;gim&ouml;&ouml;bel/tehnika (kitchen_furniture) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_stove_type
+msgid "Omaduse Pliit (stove_type) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_comment
-msgid "Omaduse Sissej&auml;&auml;v k&ouml;&ouml;gim&ouml;&ouml;bel/tehnika (kitchen_furniture) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_stove_type_comment
+msgid "Omaduse Pliit (stove_type) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_help
-msgid "Omaduse Sissej&auml;&auml;v k&ouml;&ouml;gim&ouml;&ouml;bel/tehnika (kitchen_furniture) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_type
-msgid "Omaduse K&ouml;&ouml;k (kitchen_type) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_type_comment
-msgid "Omaduse K&ouml;&ouml;k (kitchen_type) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_type_help
-msgid "Omaduse K&ouml;&ouml;k (kitchen_type) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_stove_type_help
+msgid "Omaduse Pliit (stove_type) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_walls
@@ -1225,64 +1237,40 @@ msgstr ""
 msgid "Omaduse K&ouml;&ouml;gip&otilde;rand (kitchen_floor) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_stove_type
-msgid "Omaduse Pliit (stove_type) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture
+msgid "Omaduse Sissej&auml;&auml;v k&ouml;&ouml;gim&ouml;&ouml;bel/tehnika (kitchen_furniture) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_stove_type_comment
-msgid "Omaduse Pliit (stove_type) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_comment
+msgid "Omaduse Sissej&auml;&auml;v k&ouml;&ouml;gim&ouml;&ouml;bel/tehnika (kitchen_furniture) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_stove_type_help
-msgid "Omaduse Pliit (stove_type) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_help
+msgid "Omaduse Sissej&auml;&auml;v k&ouml;&ouml;gim&ouml;&ouml;bel/tehnika (kitchen_furniture) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_option
-msgid "Omaduse M&uuml;&uuml;gis (kitchen_furniture_option) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_apartment_situation
+msgid "Omaduse Paigutus (apartment_situation) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_option_comment
-msgid "Omaduse M&uuml;&uuml;gis (kitchen_furniture_option) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_apartment_situation_comment
+msgid "Omaduse Paigutus (apartment_situation) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_option_help
-msgid "Omaduse M&uuml;&uuml;gis (kitchen_furniture_option) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_apartment_situation_help
+msgid "Omaduse Paigutus (apartment_situation) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_condition
-msgid "Omaduse K&ouml;&ouml;gim&ouml;&ouml;bel (kitchen_furniture_condition) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_sizes
+msgid "Omaduse Tubade suurused (room_sizes) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_condition_comment
-msgid "Omaduse K&ouml;&ouml;gim&ouml;&ouml;bel (kitchen_furniture_condition) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_sizes_comment
+msgid "Omaduse Tubade suurused (room_sizes) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_kitchen_furniture_condition_help
-msgid "Omaduse K&ouml;&ouml;gim&ouml;&ouml;bel (kitchen_furniture_condition) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle1
-msgid "Omaduse Toad (childtitle1) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle1_comment
-msgid "Omaduse Toad (childtitle1) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle1_help
-msgid "Omaduse Toad (childtitle1) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_rooms
-msgid "Omaduse Tubade arv (number_of_rooms) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_rooms_comment
-msgid "Omaduse Tubade arv (number_of_rooms) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_rooms_help
-msgid "Omaduse Tubade arv (number_of_rooms) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_sizes_help
+msgid "Omaduse Tubade suurused (room_sizes) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_bedrooms
@@ -1295,30 +1283,6 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_bedrooms_help
 msgid "Omaduse Magamistubasid (number_of_bedrooms) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_bathrooms
-msgid "Omaduse Vannitubasid (number_of_bathrooms) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_bathrooms_comment
-msgid "Omaduse Vannitubasid (number_of_bathrooms) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_bathrooms_help
-msgid "Omaduse Vannitubasid (number_of_bathrooms) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_separate_wc
-msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_separate_wc_comment
-msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_separate_wc_help
-msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_wardrobe
@@ -1369,78 +1333,6 @@ msgstr ""
 msgid "Omaduse Terrass (has_terrace) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls
-msgid "Omaduse  (room_walls) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_comment
-msgid "Omaduse  (room_walls) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_help
-msgid "Omaduse  (room_walls) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_description
-msgid "Omaduse  (room_walls_description) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_description_comment
-msgid "Omaduse  (room_walls_description) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_description_help
-msgid "Omaduse  (room_walls_description) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_floors
-msgid "Omaduse Toap&otilde;rand (room_floors) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_floors_comment
-msgid "Omaduse Toap&otilde;rand (room_floors) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_floors_help
-msgid "Omaduse Toap&otilde;rand (room_floors) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_ceilings
-msgid "Omaduse Laed (ceilings) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_ceilings_comment
-msgid "Omaduse Laed (ceilings) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_ceilings_help
-msgid "Omaduse Laed (ceilings) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_apartment_situation
-msgid "Omaduse Paigutus (apartment_situation) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_apartment_situation_comment
-msgid "Omaduse Paigutus (apartment_situation) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_apartment_situation_help
-msgid "Omaduse Paigutus (apartment_situation) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_sizes
-msgid "Omaduse Tubade suurused (room_sizes) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_sizes_comment
-msgid "Omaduse Tubade suurused (room_sizes) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_sizes_help
-msgid "Omaduse Tubade suurused (room_sizes) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_view
 msgid "Omaduse Vaade (view) caption"
 msgstr ""
@@ -1451,6 +1343,42 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_view_help
 msgid "Omaduse Vaade (view) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_additional
+msgid "Omaduse Lisainfo tubade kohta (rooms_additional) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_additional_comment
+msgid "Omaduse Lisainfo tubade kohta (rooms_additional) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_additional_help
+msgid "Omaduse Lisainfo tubade kohta (rooms_additional) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle60
+msgid "Omaduse Viimistlus (childtitle60) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle60_comment
+msgid "Omaduse Viimistlus (childtitle60) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle60_help
+msgid "Omaduse Viimistlus (childtitle60) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_condition
+msgid "Omaduse Seisukord (rooms_condition) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_condition_comment
+msgid "Omaduse Seisukord (rooms_condition) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_condition_help
+msgid "Omaduse Seisukord (rooms_condition) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_windows_type
@@ -1489,6 +1417,102 @@ msgstr ""
 msgid "Omaduse  (doors_condition_description) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls
+msgid "Omaduse  (room_walls) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_comment
+msgid "Omaduse  (room_walls) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_help
+msgid "Omaduse  (room_walls) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_description
+msgid "Omaduse  (room_walls_description) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_description_comment
+msgid "Omaduse  (room_walls_description) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_walls_description_help
+msgid "Omaduse  (room_walls_description) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_floors
+msgid "Omaduse Toap&otilde;rand (room_floors) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_floors_comment
+msgid "Omaduse Toap&otilde;rand (room_floors) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_room_floors_help
+msgid "Omaduse Toap&otilde;rand (room_floors) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parquet
+msgid "Omaduse Parkett (has_parquet) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parquet_comment
+msgid "Omaduse Parkett (has_parquet) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parquet_help
+msgid "Omaduse Parkett (has_parquet) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type
+msgid "Omaduse  (parquet_type) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_comment
+msgid "Omaduse  (parquet_type) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_help
+msgid "Omaduse  (parquet_type) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_other
+msgid "Omaduse Muu (parquet_type_other) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_other_comment
+msgid "Omaduse Muu (parquet_type_other) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_other_help
+msgid "Omaduse Muu (parquet_type_other) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_ceilings
+msgid "Omaduse Laed (ceilings) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_ceilings_comment
+msgid "Omaduse Laed (ceilings) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_ceilings_help
+msgid "Omaduse Laed (ceilings) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_quality_class
+msgid "Omaduse Kvaliteediklass (quality_class) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_quality_class_comment
+msgid "Omaduse Kvaliteediklass (quality_class) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_quality_class_help
+msgid "Omaduse Kvaliteediklass (quality_class) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_security_door
 msgid "Omaduse Turvauks (has_security_door) caption"
 msgstr ""
@@ -1499,6 +1523,66 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_security_door_help
 msgid "Omaduse Turvauks (has_security_door) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle3
+msgid "Omaduse Kommunikatsioonid (childtitle3) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle3_comment
+msgid "Omaduse Kommunikatsioonid (childtitle3) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle3_help
+msgid "Omaduse Kommunikatsioonid (childtitle3) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_alarm_installed
+msgid "Omaduse Signalisatsioon (has_alarm_installed) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_alarm_installed_comment
+msgid "Omaduse Signalisatsioon (has_alarm_installed) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_alarm_installed_help
+msgid "Omaduse Signalisatsioon (has_alarm_installed) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cable_tv
+msgid "Omaduse Kaabel TV (has_cable_tv) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cable_tv_comment
+msgid "Omaduse Kaabel TV (has_cable_tv) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cable_tv_help
+msgid "Omaduse Kaabel TV (has_cable_tv) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_phone
+msgid "Omaduse Telefon (has_phone) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_phone_comment
+msgid "Omaduse Telefon (has_phone) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_phone_help
+msgid "Omaduse Telefon (has_phone) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_internet
+msgid "Omaduse Internet (has_internet) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_internet_comment
+msgid "Omaduse Internet (has_internet) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_internet_help
+msgid "Omaduse Internet (has_internet) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle2
@@ -1609,66 +1693,6 @@ msgstr ""
 msgid "Omaduse &otilde;lik&uuml;te (has_oil_heating) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle3
-msgid "Omaduse Kommunikatsioonid (childtitle3) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle3_comment
-msgid "Omaduse Kommunikatsioonid (childtitle3) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle3_help
-msgid "Omaduse Kommunikatsioonid (childtitle3) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_alarm_installed
-msgid "Omaduse Signalisatsioon (has_alarm_installed) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_alarm_installed_comment
-msgid "Omaduse Signalisatsioon (has_alarm_installed) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_alarm_installed_help
-msgid "Omaduse Signalisatsioon (has_alarm_installed) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cable_tv
-msgid "Omaduse Kaabel TV (has_cable_tv) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cable_tv_comment
-msgid "Omaduse Kaabel TV (has_cable_tv) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cable_tv_help
-msgid "Omaduse Kaabel TV (has_cable_tv) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_phone
-msgid "Omaduse Telefon (has_phone) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_phone_comment
-msgid "Omaduse Telefon (has_phone) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_phone_help
-msgid "Omaduse Telefon (has_phone) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_internet
-msgid "Omaduse Internet (has_internet) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_internet_comment
-msgid "Omaduse Internet (has_internet) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_internet_help
-msgid "Omaduse Internet (has_internet) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle4
 msgid "Omaduse Sisustus (childtitle4) caption"
 msgstr ""
@@ -1705,54 +1729,6 @@ msgstr ""
 msgid "Omaduse Televiisor (has_tv) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_shower
-msgid "Omaduse Dush (has_shower) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_shower_comment
-msgid "Omaduse Dush (has_shower) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_shower_help
-msgid "Omaduse Dush (has_shower) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_bath
-msgid "Omaduse Vann (has_bath) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_bath_comment
-msgid "Omaduse Vann (has_bath) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_bath_help
-msgid "Omaduse Vann (has_bath) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_bath_additional
-msgid "Omaduse  (bath_additional) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_bath_additional_comment
-msgid "Omaduse  (bath_additional) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_bath_additional_help
-msgid "Omaduse  (bath_additional) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_boiler
-msgid "Omaduse Boiler (has_boiler) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_boiler_comment
-msgid "Omaduse Boiler (has_boiler) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_boiler_help
-msgid "Omaduse Boiler (has_boiler) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_refrigerator
 msgid "Omaduse K&uuml;lmik (has_refrigerator) caption"
 msgstr ""
@@ -1763,18 +1739,6 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_refrigerator_help
 msgid "Omaduse K&uuml;lmik (has_refrigerator) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_washing_machine
-msgid "Omaduse Pesumasin (has_washing_machine) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_washing_machine_comment
-msgid "Omaduse Pesumasin (has_washing_machine) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_washing_machine_help
-msgid "Omaduse Pesumasin (has_washing_machine) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_dishwasher
@@ -1885,112 +1849,52 @@ msgstr ""
 msgid "Omaduse kW/A (electricity_meter_param) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_additional
-msgid "Omaduse Lisainfo tubade kohta (rooms_additional) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_bathrooms
+msgid "Omaduse Vannitubasid (number_of_bathrooms) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_additional_comment
-msgid "Omaduse Lisainfo tubade kohta (rooms_additional) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_bathrooms_comment
+msgid "Omaduse Vannitubasid (number_of_bathrooms) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_rooms_additional_help
-msgid "Omaduse Lisainfo tubade kohta (rooms_additional) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_bathrooms_help
+msgid "Omaduse Vannitubasid (number_of_bathrooms) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle10
-msgid "Omaduse Sanruumid (childtitle10) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_separate_wc
+msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle10_comment
-msgid "Omaduse Sanruumid (childtitle10) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_separate_wc_comment
+msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle10_help
-msgid "Omaduse Sanruumid (childtitle10) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_separate_wc_help
+msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatories_condition
-msgid "Omaduse Sanruumid (lavatories_condition) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bathroom_has_window
+msgid "Omaduse Aken (bathroom_has_window) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatories_condition_comment
-msgid "Omaduse Sanruumid (lavatories_condition) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bathroom_has_window_comment
+msgid "Omaduse Aken (bathroom_has_window) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatories_condition_help
-msgid "Omaduse Sanruumid (lavatories_condition) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bathroom_has_window_help
+msgid "Omaduse Aken (bathroom_has_window) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatory_equipment_condition
-msgid "Omaduse Santehnika (lavatory_equipment_condition) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bathroom_has_floor_heating
+msgid "Omaduse Põrandaküte (bathroom_has_floor_heating) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatory_equipment_condition_comment
-msgid "Omaduse Santehnika (lavatory_equipment_condition) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bathroom_has_floor_heating_comment
+msgid "Omaduse Põrandaküte (bathroom_has_floor_heating) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatory_equipment_condition_help
-msgid "Omaduse Santehnika (lavatory_equipment_condition) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_water_meters
-msgid "Omaduse Veem&otilde;&otilde;tjad (has_water_meters) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_water_meters_comment
-msgid "Omaduse Veem&otilde;&otilde;tjad (has_water_meters) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_water_meters_help
-msgid "Omaduse Veem&otilde;&otilde;tjad (has_water_meters) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle11
-msgid "Omaduse Abiruumid (childtitle11) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle11_comment
-msgid "Omaduse Abiruumid (childtitle11) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle11_help
-msgid "Omaduse Abiruumid (childtitle11) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cellar
-msgid "Omaduse Kelder (has_cellar) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cellar_comment
-msgid "Omaduse Kelder (has_cellar) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_cellar_help
-msgid "Omaduse Kelder (has_cellar) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_garage
-msgid "Omaduse Garaazh (has_garage) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_garage_comment
-msgid "Omaduse Garaazh (has_garage) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_garage_help
-msgid "Omaduse Garaazh (has_garage) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_garages
-msgid "Omaduse Arv (number_of_garages) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_garages_comment
-msgid "Omaduse Arv (number_of_garages) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_number_of_garages_help
-msgid "Omaduse Arv (number_of_garages) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bathroom_has_floor_heating_help
+msgid "Omaduse Põrandaküte (bathroom_has_floor_heating) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_has_sauna
@@ -2005,76 +1909,136 @@ msgstr ""
 msgid "Omaduse Saun (has_sauna) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle5
-msgid "Omaduse Viimistlus ja ehitus (childtitle5) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatories_condition
+msgid "Omaduse Sanruumid (lavatories_condition) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle5_comment
-msgid "Omaduse Viimistlus ja ehitus (childtitle5) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatories_condition_comment
+msgid "Omaduse Sanruumid (lavatories_condition) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_childtitle5_help
-msgid "Omaduse Viimistlus ja ehitus (childtitle5) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatories_condition_help
+msgid "Omaduse Sanruumid (lavatories_condition) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parquet
-msgid "Omaduse Parkett (has_parquet) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_plated
+msgid "Omaduse Plaaditud (is_plated) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parquet_comment
-msgid "Omaduse Parkett (has_parquet) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_plated_comment
+msgid "Omaduse Plaaditud (is_plated) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_parquet_help
-msgid "Omaduse Parkett (has_parquet) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_plated_help
+msgid "Omaduse Plaaditud (is_plated) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type
-msgid "Omaduse  (parquet_type) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatory_equipment_condition
+msgid "Omaduse Santehnika (lavatory_equipment_condition) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_comment
-msgid "Omaduse  (parquet_type) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatory_equipment_condition_comment
+msgid "Omaduse Santehnika (lavatory_equipment_condition) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_help
-msgid "Omaduse  (parquet_type) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_lavatory_equipment_condition_help
+msgid "Omaduse Santehnika (lavatory_equipment_condition) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_other
-msgid "Omaduse Muu (parquet_type_other) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_shower
+msgid "Omaduse Dush (has_shower) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_other_comment
-msgid "Omaduse Muu (parquet_type_other) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_shower_comment
+msgid "Omaduse Dush (has_shower) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_parquet_type_other_help
-msgid "Omaduse Muu (parquet_type_other) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_shower_help
+msgid "Omaduse Dush (has_shower) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_condition
-msgid "Omaduse Valmidus (condition) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_bath
+msgid "Omaduse Vann (has_bath) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_condition_comment
-msgid "Omaduse Valmidus (condition) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_bath_comment
+msgid "Omaduse Vann (has_bath) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_condition_help
-msgid "Omaduse Valmidus (condition) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_bath_help
+msgid "Omaduse Vann (has_bath) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_quality_class
-msgid "Omaduse Kvaliteediklass (quality_class) caption"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bath_additional
+msgid "Omaduse  (bath_additional) caption"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_quality_class_comment
-msgid "Omaduse Kvaliteediklass (quality_class) kommentaar"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bath_additional_comment
+msgid "Omaduse  (bath_additional) kommentaar"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:prop_quality_class_help
-msgid "Omaduse Kvaliteediklass (quality_class) help"
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_bath_additional_help
+msgid "Omaduse  (bath_additional) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_boiler
+msgid "Omaduse Boiler (has_boiler) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_boiler_comment
+msgid "Omaduse Boiler (has_boiler) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_boiler_help
+msgid "Omaduse Boiler (has_boiler) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_water_meters
+msgid "Omaduse Veem&otilde;&otilde;tjad (has_water_meters) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_water_meters_comment
+msgid "Omaduse Veem&otilde;&otilde;tjad (has_water_meters) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_water_meters_help
+msgid "Omaduse Veem&otilde;&otilde;tjad (has_water_meters) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_washing_machine
+msgid "Omaduse Pesumasin (has_washing_machine) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_washing_machine_comment
+msgid "Omaduse Pesumasin (has_washing_machine) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_has_washing_machine_help
+msgid "Omaduse Pesumasin (has_washing_machine) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_legal_status
+msgid "Omaduse Omandivorm (legal_status) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_legal_status_comment
+msgid "Omaduse Omandivorm (legal_status) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_legal_status_help
+msgid "Omaduse Omandivorm (legal_status) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_middle_floor
+msgid "Omaduse Pole esimene ega viimane korrus (is_middle_floor) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_middle_floor_comment
+msgid "Omaduse Pole esimene ega viimane korrus (is_middle_floor) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:prop_is_middle_floor_help
+msgid "Omaduse Pole esimene ega viimane korrus (is_middle_floor) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:group_grp_main
@@ -2117,6 +2081,78 @@ msgstr ""
 msgid "Grupi Kaart (grp_map) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_apartment.aw:group_grp_sub_main
+msgid "Grupi Üldine (grp_sub_main) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_grp_sub_main_help
+msgid "Grupi Üldine (grp_sub_main) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_transaction_data
+msgid "Grupi Tehingu andmed (transaction_data) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_transaction_data_help
+msgid "Grupi Tehingu andmed (transaction_data) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_advertisement_data
+msgid "Grupi Kuulutuse andmed (advertisement_data) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_advertisement_data_help
+msgid "Grupi Kuulutuse andmed (advertisement_data) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_temp
+msgid "Grupi Muu (temp) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_temp_help
+msgid "Grupi Muu (temp) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_apartment_info
+msgid "Grupi Korteri üldinfo (apartment_info) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_apartment_info_help
+msgid "Grupi Korteri üldinfo (apartment_info) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_house_and_property
+msgid "Grupi Krunt ja maja (house_and_property) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_house_and_property_help
+msgid "Grupi Krunt ja maja (house_and_property) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_kitchen
+msgid "Grupi K&ouml;&ouml;k (kitchen) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_kitchen_help
+msgid "Grupi K&ouml;&ouml;k (kitchen) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_rooms
+msgid "Grupi Toad (rooms) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_rooms_help
+msgid "Grupi Toad (rooms) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_san_rooms
+msgid "Grupi Sanitaarruumid (san_rooms) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_apartment.aw:group_san_rooms_help
+msgid "Grupi Sanitaarruumid (san_rooms) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_apartment.aw:rel_RELTYPE_REALESTATE_ADDRESS
 msgid "Seose Aadress (RELTYPE_REALESTATE_ADDRESS) tekst"
 msgstr ""
@@ -2149,23 +2185,23 @@ msgstr ""
 msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:395
+#: classes/applications/realestate_management/realestate_apartment.aw:431
 msgid "Lisandub objekti hinnale"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:396
+#: classes/applications/realestate_management/realestate_apartment.aw:432
 msgid "Sisaldub objekti hinnas"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:414
+#: classes/applications/realestate_management/realestate_apartment.aw:450
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:490
-#: classes/applications/realestate_management/realestate_apartment.aw:498
+#: classes/applications/realestate_management/realestate_apartment.aw:526
+#: classes/applications/realestate_management/realestate_apartment.aw:534
 msgid "Kohustuslik v&auml;li"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:524
+#: classes/applications/realestate_management/realestate_apartment.aw:560
 msgid "Viga andmetes: korruste arv korrusest v&auml;iksem. "
 msgstr ""

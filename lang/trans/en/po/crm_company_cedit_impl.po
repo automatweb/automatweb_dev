@@ -23,12 +23,12 @@ msgstr ""
 #: classes/applications/crm/crm_company_cedit_impl.aw:792
 #: classes/applications/crm/crm_company_cedit_impl.aw:809
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/applications/crm/crm_company_cedit_impl.aw:545
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
 #: classes/applications/crm/crm_company_cedit_impl.aw:720
 msgid "Vali &uuml;ks"
-msgstr ""
+msgstr "Pick one"

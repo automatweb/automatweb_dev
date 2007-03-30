@@ -33,6 +33,6 @@ msgstr "user object is of wrong type! %s props = %s"
 msgid "1"
 msgstr "1"
 
-#: classes/users_user.aw:999
+#: classes/users_user.aw:1005
 msgid "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"
 msgstr "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"

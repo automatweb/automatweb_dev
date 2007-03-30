@@ -79,7 +79,6 @@ $GLOBALS["TRANS"]["Kustuta valitud omadused"] = "Delete selected properties";
 $GLOBALS["TRANS"]["Oled kindel, et tahad antud omadused kustutada?"] = "Are you sure you want to delete selected properties?";
 $GLOBALS["TRANS"]["--vali--"] = "--select--";
 $GLOBALS["TRANS"]["Andmed"] = "Data";
-$GLOBALS["TRANS"]["Objekti t&uuml;&uuml;p "] = "Objects type";
 $GLOBALS["TRANS"]["%caption peab olema t&auml;idetud"] = "%caption has to be filled out";
 $GLOBALS["TRANS"]["%caption peab olema valitud"] = "%caption has to be selected";
 $GLOBALS["TRANS"]["%caption sisestatud e-mailiaadress pole korrektne"] = "%caption inserted e-mail address is not correct";

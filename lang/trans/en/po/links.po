@@ -382,26 +382,26 @@ msgstr "Createdby"
 msgid "Viimati muudetud"
 msgstr "Last modified"
 
-#: classes/contentmgmt/links.aw:277
+#: classes/contentmgmt/links.aw:287
 msgid "T&ouml;&ouml;riistariba"
 msgstr "Toolbar"
 
-#: classes/contentmgmt/links.aw:278
+#: classes/contentmgmt/links.aw:288
 msgid "Aadressi riba"
 msgstr "Address bar"
 
-#: classes/contentmgmt/links.aw:279
+#: classes/contentmgmt/links.aw:289
 msgid "Men&uuml;&uuml;d"
 msgstr "Menus"
 
-#: classes/contentmgmt/links.aw:280
+#: classes/contentmgmt/links.aw:290
 msgid "Kerimisriba"
 msgstr "Scrollbars"
 
-#: classes/contentmgmt/links.aw:312
+#: classes/contentmgmt/links.aw:322
 msgid "Saidi sisene link"
 msgstr "Inner-site link"
 
-#: classes/contentmgmt/links.aw:470
+#: classes/contentmgmt/links.aw:480
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""

@@ -135,7 +135,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_procurements_find_name
 msgid "Omaduse Nimi (procurements_find_name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_procurements_find_name_comment
 msgid "Omaduse Nimi (procurements_find_name) kommentaar"
@@ -327,7 +327,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_offerers_find_product
 msgid "Omaduse pakutud Toode (offerers_find_product) caption"
-msgstr "offered product"
+msgstr "Offered product"
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_offerers_find_product_comment
 msgid "Omaduse pakutud Toode (offerers_find_product) kommentaar"
@@ -735,7 +735,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_products_find_start
 msgid "Omaduse Pakutud alates (products_find_start) caption"
-msgstr ""
+msgstr "Offered from"
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_products_find_start_comment
 msgid "Omaduse Pakutud alates (products_find_start) kommentaar"
@@ -747,7 +747,7 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_products_find_end
 msgid "Omaduse Pakutud kuni (products_find_end) caption"
-msgstr ""
+msgstr "Offered till"
 
 #: classes/applications/procurement_center/procurement_center.aw:prop_products_find_end_comment
 msgid "Omaduse Pakutud kuni (products_find_end) kommentaar"
@@ -859,43 +859,43 @@ msgstr "Procurement center folder"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_p_tree
 msgid "Kujundusosa Hangete puu (p_tree) pealkiri"
-msgstr ""
+msgstr "Procurements tree"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_p_search
 msgid "Kujundusosa Hangete otsing (p_search) pealkiri"
-msgstr ""
+msgstr "Procurements search"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_offerers_tree_l
 msgid "Kujundusosa Pakkujate puu (offerers_tree_l) pealkiri"
-msgstr ""
+msgstr "Offerers tree"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_offerers_find_params
 msgid "Kujundusosa Pakkujate otsing (offerers_find_params) pealkiri"
-msgstr ""
+msgstr "Offerers search"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_offers_tree
 msgid "Kujundusosa Pakkumiste puu (offers_tree) pealkiri"
-msgstr ""
+msgstr "Offers tree"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_offers_find_params
 msgid "Kujundusosa Pakkumiste otsing (offers_find_params) pealkiri"
-msgstr ""
+msgstr "Offers search"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_buyings_tree
 msgid "Kujundusosa Ostude puu (buyings_tree) pealkiri"
-msgstr ""
+msgstr "Buyings tree"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_buyings_find_params
 msgid "Kujundusosa Ostude otsing (buyings_find_params) pealkiri"
-msgstr ""
+msgstr "Buyings search"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_products_tree
 msgid "Kujundusosa Toodete puu (products_tree) pealkiri"
-msgstr ""
+msgstr "Products tree"
 
 #: classes/applications/procurement_center/procurement_center.aw:layout_products_find_params
 msgid "Kujundusosa Toodete otsing (products_find_params) pealkiri"
-msgstr ""
+msgstr "Products search"
 
 #: classes/applications/procurement_center/procurement_center.aw:245
 #: classes/applications/procurement_center/procurement_center.aw:253
@@ -922,7 +922,7 @@ msgstr "Years"
 #: classes/applications/procurement_center/procurement_center.aw:1621
 #: classes/applications/procurement_center/procurement_center.aw:1873
 #: classes/applications/procurement_center/procurement_center.aw:2437
-#: classes/applications/procurement_center/procurement_center.aw:3128
+#: classes/applications/procurement_center/procurement_center.aw:3125
 msgid "Uus"
 msgstr "New"
 
@@ -1010,7 +1010,7 @@ msgstr "Offerer"
 
 #: classes/applications/procurement_center/procurement_center.aw:1587
 #: classes/applications/procurement_center/procurement_center.aw:1916
-#: classes/applications/procurement_center/procurement_center.aw:3358
+#: classes/applications/procurement_center/procurement_center.aw:3355
 msgid "Piirkond"
 msgstr "Area"
 
@@ -1077,8 +1077,8 @@ msgid "Kontaktandmed"
 msgstr "Contacts"
 
 #: classes/applications/procurement_center/procurement_center.aw:2323
-#: classes/applications/procurement_center/procurement_center.aw:2868
-#: classes/applications/procurement_center/procurement_center.aw:3065
+#: classes/applications/procurement_center/procurement_center.aw:2865
+#: classes/applications/procurement_center/procurement_center.aw:3062
 msgid "Nimi"
 msgstr "Name"
 
@@ -1134,117 +1134,120 @@ msgstr "Are you sure you want to delete selected offerers?"
 msgid "Saada kiri"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:2766
-#: classes/applications/procurement_center/procurement_center.aw:2959
+#: classes/applications/procurement_center/procurement_center.aw:2763
+#: classes/applications/procurement_center/procurement_center.aw:2956
 msgid "Kaust"
 msgstr "Folder"
 
-#: classes/applications/procurement_center/procurement_center.aw:2787
-#: classes/applications/procurement_center/procurement_center.aw:2897
-#: classes/applications/procurement_center/procurement_center.aw:2980
-#: classes/applications/procurement_center/procurement_center.aw:3092
+#: classes/applications/procurement_center/procurement_center.aw:2784
+#: classes/applications/procurement_center/procurement_center.aw:2894
+#: classes/applications/procurement_center/procurement_center.aw:2977
+#: classes/applications/procurement_center/procurement_center.aw:3089
 msgid "V&otilde;ta laost"
 msgstr "Take from warehouse"
 
-#: classes/applications/procurement_center/procurement_center.aw:2799
-#: classes/applications/procurement_center/procurement_center.aw:2903
-#: classes/applications/procurement_center/procurement_center.aw:2992
-#: classes/applications/procurement_center/procurement_center.aw:3098
+#: classes/applications/procurement_center/procurement_center.aw:2796
+#: classes/applications/procurement_center/procurement_center.aw:2900
+#: classes/applications/procurement_center/procurement_center.aw:2989
+#: classes/applications/procurement_center/procurement_center.aw:3095
 msgid "Vii lattu"
 msgstr "Put into warehouse"
 
-#: classes/applications/procurement_center/procurement_center.aw:2826
-#: classes/applications/procurement_center/procurement_center.aw:2909
-#: classes/applications/procurement_center/procurement_center.aw:3006
-#: classes/applications/procurement_center/procurement_center.aw:3104
+#: classes/applications/procurement_center/procurement_center.aw:2823
+#: classes/applications/procurement_center/procurement_center.aw:2906
+#: classes/applications/procurement_center/procurement_center.aw:3003
+#: classes/applications/procurement_center/procurement_center.aw:3101
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/applications/procurement_center/procurement_center.aw:2862
-#: classes/applications/procurement_center/procurement_center.aw:3059
+#: classes/applications/procurement_center/procurement_center.aw:2859
+#: classes/applications/procurement_center/procurement_center.aw:3056
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:2874
-#: classes/applications/procurement_center/procurement_center.aw:3071
+#: classes/applications/procurement_center/procurement_center.aw:2871
+#: classes/applications/procurement_center/procurement_center.aw:3068
 msgid "J&auml;rjekord"
 msgstr "Queue"
 
-#: classes/applications/procurement_center/procurement_center.aw:2881
-#: classes/applications/procurement_center/procurement_center.aw:3078
+#: classes/applications/procurement_center/procurement_center.aw:2878
+#: classes/applications/procurement_center/procurement_center.aw:3075
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/applications/procurement_center/procurement_center.aw:2890
-#: classes/applications/procurement_center/procurement_center.aw:3085
+#: classes/applications/procurement_center/procurement_center.aw:2887
+#: classes/applications/procurement_center/procurement_center.aw:3082
 msgid "Kogus laos"
 msgstr "Amount in warehouse"
 
-#: classes/applications/procurement_center/procurement_center.aw:2915
-#: classes/applications/procurement_center/procurement_center.aw:3110
+#: classes/applications/procurement_center/procurement_center.aw:2912
+#: classes/applications/procurement_center/procurement_center.aw:3107
 msgid "Vali"
 msgstr "Choose"
 
-#: classes/applications/procurement_center/procurement_center.aw:3135
+#: classes/applications/procurement_center/procurement_center.aw:3132
 msgid "Lisa kaust"
 msgstr "Add folder"
 
-#: classes/applications/procurement_center/procurement_center.aw:3144
+#: classes/applications/procurement_center/procurement_center.aw:3141
 msgid "Lisa tootekategooria"
 msgstr "Add product category"
 
-#: classes/applications/procurement_center/procurement_center.aw:3154
+#: classes/applications/procurement_center/procurement_center.aw:3151
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/applications/procurement_center/procurement_center.aw:3161
+#: classes/applications/procurement_center/procurement_center.aw:3158
 msgid "Lisa korvi"
 msgstr "Add into basket"
 
-#: classes/applications/procurement_center/procurement_center.aw:3169
+#: classes/applications/procurement_center/procurement_center.aw:3166
 msgid "Lisa v&otilde;rdlusesse"
 msgstr "Add into comparison"
 
-#: classes/applications/procurement_center/procurement_center.aw:3337
+#: classes/applications/procurement_center/procurement_center.aw:3334
 msgid "Hankija nimi"
 msgstr "Procurer's name"
 
+#: classes/applications/procurement_center/procurement_center.aw:3348
 #: classes/applications/procurement_center/procurement_center.aw:3351
-#: classes/applications/procurement_center/procurement_center.aw:3354
 msgid "Ajalugu"
 msgstr "History"
 
-#: classes/applications/procurement_center/procurement_center.aw:3396
+#: classes/applications/procurement_center/procurement_center.aw:3393
 msgid "Toote nimetus"
 msgstr "Products name"
 
-#: classes/applications/procurement_center/procurement_center.aw:3412
+#: classes/applications/procurement_center/procurement_center.aw:3409
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/procurement_center/procurement_center.aw:3413
+#: classes/applications/procurement_center/procurement_center.aw:3410
 msgid "Kogus"
 msgstr "Amount"
 
-#: classes/applications/procurement_center/procurement_center.aw:3414
+#: classes/applications/procurement_center/procurement_center.aw:3411
 msgid "&Uuml;hik"
 msgstr "Unit"
 
-#: classes/applications/procurement_center/procurement_center.aw:3415
+#: classes/applications/procurement_center/procurement_center.aw:3412
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/applications/procurement_center/procurement_center.aw:3540
+#: classes/applications/procurement_center/procurement_center.aw:3549
 msgid "%s pakkumiste keskkond"
 msgstr "% offerers center"
 
-#: classes/applications/procurement_center/procurement_center.aw:3571
+#: classes/applications/procurement_center/procurement_center.aw:3580
 msgid "pakkumine %s"
 msgstr "offer %s"
 
-#: classes/applications/procurement_center/procurement_center.aw:3586
-msgid "ost: "
-msgstr "buying: "
+#: classes/applications/procurement_center/procurement_center.aw:3595
+msgid "ost:"
+msgstr ""
+
+#~ msgid "ost: "
+#~ msgstr "buying: "
 
 #~ msgid "Grupi Puuvaates (offerers_tree) pealkiri"
 #~ msgstr "In treeview"

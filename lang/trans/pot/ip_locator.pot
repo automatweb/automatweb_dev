@@ -95,7 +95,7 @@ msgid "Grupi Otsing (search) help"
 msgstr ""
 
 #: classes/core/util/ip_locator/ip_locator.aw:59
-msgid "Faili viimati muudetud: "
+msgid "Faili viimati muudetud:"
 msgstr ""
 
 #: classes/core/util/ip_locator/ip_locator.aw:64

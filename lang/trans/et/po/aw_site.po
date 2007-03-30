@@ -377,23 +377,23 @@ msgid "L&otilde;i saidi andmebaasi"
 msgstr ""
 
 #: classes/install/aw_site.aw:893
-msgid "Saidi baaskataloog on juba olemas! (%s) "
+msgid "Saidi baaskataloog on juba olemas! (%s)"
 msgstr ""
 
 #: classes/install/aw_site.aw:900
-msgid "Saidi logide kataloog on juba olemas! (%s) "
+msgid "Saidi logide kataloog on juba olemas! (%s)"
 msgstr ""
 
 #: classes/install/aw_site.aw:907
-msgid "Saidi apache konfiguratsioon on juba olemas! (%s) "
+msgid "Saidi apache konfiguratsioon on juba olemas! (%s)"
 msgstr ""
 
 #: classes/install/aw_site.aw:916
-msgid "Saidid, kust templatesid kopeerida on valimata! "
+msgid "Saidid, kust templatesid kopeerida on valimata!"
 msgstr ""
 
 #: classes/install/aw_site.aw:922
-msgid "Kataloogid, kust templatesid kopeerida on valimata! "
+msgid "Kataloogid, kust templatesid kopeerida on valimata!"
 msgstr ""
 
 #: classes/install/aw_site.aw:933
@@ -409,11 +409,11 @@ msgid "Sait on liiga vana koodiversiooniga et selle p&otilde;hjal uut luua!"
 msgstr ""
 
 #: classes/install/aw_site.aw:983
-msgid "Saidi andmebaas on juba olemas! (%s) "
+msgid "Saidi andmebaas on juba olemas! (%s)"
 msgstr ""
 
 #: classes/install/aw_site.aw:996
-msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! (%s) "
+msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! (%s)"
 msgstr ""
 
 #: classes/install/aw_site.aw:1000

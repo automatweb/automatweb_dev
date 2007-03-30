@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/spa_bookings/spa_bookigs_entry.aw:class_1179_help
 msgid "Klassi SPA Reisib&uuml;roo liides help"
 msgstr ""
@@ -402,7 +401,9 @@ msgstr ""
 msgid "Lisasin kasutaja %s, isiku %s ja <a href='%s'>broneeringu</a> paketile %s algusega %s ja l&otilde;puga %s<br>"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:509 classes/applications/spa_bookings/spa_bookigs_entry.aw:1604 classes/applications/spa_bookings/spa_bookigs_entry.aw:1626
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:509
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1604
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1626
 msgid "--vali--"
 msgstr ""
 
@@ -438,7 +439,8 @@ msgstr ""
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_bookigs_entry.aw:771 classes/applications/spa_bookings/spa_bookigs_entry.aw:1058
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:771
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1058
 msgid "Seda toodet ei ole v&otilde;imalik broneerida &uuml;htegi ruumi!"
 msgstr ""
 
@@ -494,3 +496,6 @@ msgstr ""
 msgid "Reisib&uuml;roo nimi"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_bookigs_entry.aw:1675
+msgid "%s %s-%s"
+msgstr ""

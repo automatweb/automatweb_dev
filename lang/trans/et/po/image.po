@@ -434,23 +434,23 @@ msgstr ""
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:918
+#: classes/image.aw:921
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/image.aw:919
+#: classes/image.aw:922
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/image.aw:932
-msgid "Piltide automaatset suurendamist kontrollib objekt "
+#: classes/image.aw:935
+msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/image.aw:1532
+#: classes/image.aw:1535
 msgid "Lisa"
 msgstr ""
 
-#: classes/image.aw:2053
+#: classes/image.aw:2056
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 

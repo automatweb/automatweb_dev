@@ -782,8 +782,8 @@ msgid "Andmed"
 msgstr "Data"
 
 #: classes/contentmgmt/webform.aw:722
-msgid "Objekti t&uuml;&uuml;p "
-msgstr "Objects type"
+msgid "Objekti t&uuml;&uuml;p"
+msgstr ""
 
 #: classes/contentmgmt/webform.aw:839 classes/contentmgmt/webform.aw:860
 msgid "%caption peab olema t&auml;idetud"
@@ -996,25 +996,28 @@ msgstr "'%s' element style"
 msgid "-- Vali --"
 msgstr "-- Select --"
 
-#: classes/contentmgmt/webform.aw:1778
+#: classes/contentmgmt/webform.aw:1794
 msgid "Registreeru"
 msgstr "Register"
 
-#: classes/contentmgmt/webform.aw:1973
+#: classes/contentmgmt/webform.aw:1989
 msgid "Saada"
 msgstr "Send"
 
-#: classes/contentmgmt/webform.aw:2540
+#: classes/contentmgmt/webform.aw:2556
 msgid "Kinnita"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2545
+#: classes/contentmgmt/webform.aw:2561
 msgid "Tagasi"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2667
+#: classes/contentmgmt/webform.aw:2683
 msgid "Liigu edasi &raquo;"
 msgstr "Go on &raquo;"
+
+#~ msgid "Objekti t&uuml;&uuml;p "
+#~ msgstr "Objects type"
 
 #~ msgid "Järjekord (kasvav)"
 #~ msgstr "Order (increasing)"

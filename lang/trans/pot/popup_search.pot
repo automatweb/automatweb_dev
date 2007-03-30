@@ -34,6 +34,10 @@ msgstr ""
 msgid "Vali eemaldatavad objektid"
 msgstr ""
 
+#: classes/vcl/popup_search.aw:333 classes/vcl/popup_search.aw:599 classes/vcl/popup_search.aw:603
+msgid "Vali"
+msgstr ""
+
 #: classes/vcl/popup_search.aw:414
 msgid "Organisatsioon"
 msgstr ""
@@ -47,7 +51,7 @@ msgid "Objekti id"
 msgstr ""
 
 #: classes/vcl/popup_search.aw:542
-msgid ""
+msgid "&nbsp;"
 msgstr ""
 
 #: classes/vcl/popup_search.aw:568
@@ -64,14 +68,6 @@ msgstr ""
 
 #: classes/vcl/popup_search.aw:591
 msgid "Muudetud"
-msgstr ""
-
-#: classes/vcl/popup_search.aw:599
-msgid "Vali"
-msgstr ""
-
-#: classes/vcl/popup_search.aw:603
-msgid "<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\"sel\")'>Vali</a>"
 msgstr ""
 
 #: classes/vcl/popup_search.aw:665

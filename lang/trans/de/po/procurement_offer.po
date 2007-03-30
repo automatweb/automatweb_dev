@@ -73,28 +73,52 @@ msgstr ""
 msgid "Omaduse Hind (price) help"
 msgstr ""
 
+#: classes/applications/procurement_center/procurement_offer.aw:prop_currency
+msgid "Omaduse Valuuta (currency) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_currency_comment
+msgid "Omaduse Valuuta (currency) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_currency_help
+msgid "Omaduse Valuuta (currency) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_date
+msgid "Omaduse Pakkumise kuup&auml;ev (date) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_date_comment
+msgid "Omaduse Pakkumise kuup&auml;ev (date) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_date_help
+msgid "Omaduse Pakkumise kuup&auml;ev (date) help"
+msgstr ""
+
 #: classes/applications/procurement_center/procurement_offer.aw:prop_accept_date
-msgid "Omaduse Aktsepteerimistähtaeg (accept_date) caption"
+msgid "Omaduse Aktsepteerimist&auml;htaeg (accept_date) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_accept_date_comment
-msgid "Omaduse Aktsepteerimistähtaeg (accept_date) kommentaar"
+msgid "Omaduse Aktsepteerimist&auml;htaeg (accept_date) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_accept_date_help
-msgid "Omaduse Aktsepteerimistähtaeg (accept_date) help"
+msgid "Omaduse Aktsepteerimist&auml;htaeg (accept_date) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_shipment_date
-msgid "Omaduse Tarne tähtaeg (shipment_date) caption"
+msgid "Omaduse Tarne t&auml;htaeg (shipment_date) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_shipment_date_comment
-msgid "Omaduse Tarne tähtaeg (shipment_date) kommentaar"
+msgid "Omaduse Tarne t&auml;htaeg (shipment_date) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_shipment_date_help
-msgid "Omaduse Tarne tähtaeg (shipment_date) help"
+msgid "Omaduse Tarne t&auml;htaeg (shipment_date) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_completion_date
@@ -131,6 +155,42 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_products_help
 msgid "Omaduse  (products) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files_tb
+msgid "Omaduse  (files_tb) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files_tb_comment
+msgid "Omaduse  (files_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files_tb_help
+msgid "Omaduse  (files_tb) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files_table
+msgid "Omaduse  (files_table) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files_table_comment
+msgid "Omaduse  (files_table) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files_table_help
+msgid "Omaduse  (files_table) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files
+msgid "Omaduse Manused (files) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files_comment
+msgid "Omaduse Manused (files) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_files_help
+msgid "Omaduse Manused (files) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_p_tb
@@ -189,6 +249,14 @@ msgstr ""
 msgid "Grupi Tooted (products) help"
 msgstr ""
 
+#: classes/applications/procurement_center/procurement_offer.aw:group_files
+msgid "Grupi Failid (files) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:group_files_help
+msgid "Grupi Failid (files) help"
+msgstr ""
+
 #: classes/applications/procurement_center/procurement_offer.aw:group_r
 msgid "Grupi N&otilde;uded (r) pealkiri"
 msgstr ""
@@ -221,101 +289,176 @@ msgstr ""
 msgid "Seose Pakkuja (RELTYPE_OFFERER) tekst"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:88
+#: classes/applications/procurement_center/procurement_offer.aw:101
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:89
+#: classes/applications/procurement_center/procurement_offer.aw:102
 msgid "Avaldatud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:90
+#: classes/applications/procurement_center/procurement_offer.aw:103
 msgid "Tagasi l&uuml;katud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:91
+#: classes/applications/procurement_center/procurement_offer.aw:104
 msgid "Vastu v&otilde;etud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:95
+#: classes/applications/procurement_center/procurement_offer.aw:108
 msgid "Kohe olemas"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:96
+#: classes/applications/procurement_center/procurement_offer.aw:109
 msgid "Vajab seadistamist"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:97
+#: classes/applications/procurement_center/procurement_offer.aw:110
 msgid "Uus arendus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:203
-msgid "%s rida"
-msgstr ""
-
-#: classes/applications/procurement_center/procurement_offer.aw:281
-msgid "Lisa"
-msgstr ""
-
-#: classes/applications/procurement_center/procurement_offer.aw:297
-msgid "Salvesta"
-msgstr ""
-
-#: classes/applications/procurement_center/procurement_offer.aw:304
+#: classes/applications/procurement_center/procurement_offer.aw:164
+#: classes/applications/procurement_center/procurement_offer.aw:776
+#: classes/applications/procurement_center/procurement_offer.aw:1432
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:333
-#: classes/applications/procurement_center/procurement_offer.aw:466
+#: classes/applications/procurement_center/procurement_offer.aw:294
+#: classes/applications/procurement_center/procurement_offer.aw:336
+#: classes/applications/procurement_center/procurement_offer.aw:1348
+#: classes/applications/procurement_center/procurement_offer.aw:1489
+msgid "&nbsp;"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:302
+#: classes/applications/procurement_center/procurement_offer.aw:463
+#: classes/applications/procurement_center/procurement_offer.aw:805
+#: classes/applications/procurement_center/procurement_offer.aw:977
+#: classes/applications/procurement_center/procurement_offer.aw:1469
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:340
+#: classes/applications/procurement_center/procurement_offer.aw:309
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:316
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:326
+msgid "Muudetud"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:420
+msgid "%s failid"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:468
+#: classes/applications/procurement_center/procurement_offer.aw:1479
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:474
+#: classes/applications/procurement_center/procurement_offer.aw:1484
+msgid "Kataloog"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:554
+#: classes/applications/procurement_center/procurement_offer.aw:644
+msgid "%s rida"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:753
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:769
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:812
 msgid "Valmidus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:346
-#: classes/applications/procurement_center/procurement_offer.aw:513
+#: classes/applications/procurement_center/procurement_offer.aw:818
+#: classes/applications/procurement_center/procurement_offer.aw:1041
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:353
+#: classes/applications/procurement_center/procurement_offer.aw:825
 msgid "Seadistamise aeg"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:359
+#: classes/applications/procurement_center/procurement_offer.aw:831
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:365
+#: classes/applications/procurement_center/procurement_offer.aw:837
 msgid "Eelistatud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:493
+#: classes/applications/procurement_center/procurement_offer.aw:1015
 msgid "Id"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:499
+#: classes/applications/procurement_center/procurement_offer.aw:1021
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:504
+#: classes/applications/procurement_center/procurement_offer.aw:1026
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:509
+#: classes/applications/procurement_center/procurement_offer.aw:1031
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:517
+#: classes/applications/procurement_center/procurement_offer.aw:1036
+msgid "Min. kogus"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1046
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:521
+#: classes/applications/procurement_center/procurement_offer.aw:1050
+msgid "Kogusumma"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1057
 msgid "Tarneaeg"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:525
-#: classes/applications/procurement_center/procurement_offer.aw:531
+#: classes/applications/procurement_center/procurement_offer.aw:1062
+#: classes/applications/procurement_center/procurement_offer.aw:1068
 msgid "Aktsepteeritud"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1072
+msgid "Olemas"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1294
+msgid "<b>Summa:</b>"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1349
+msgid "Memo"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1350
+msgid "CRM Dokument"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1351
+msgid "Leping"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1352
+msgid "Pakkumine"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:1474
+msgid "Fail"
 msgstr ""

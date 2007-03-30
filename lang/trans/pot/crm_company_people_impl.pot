@@ -51,7 +51,7 @@ msgid "K&otilde;ik t&ouml;&ouml;tajad"
 msgstr ""
 
 #: classes/applications/crm/crm_company_people_impl.aw:160 classes/applications/crm/crm_company_people_impl.aw:166
-msgid ""
+msgid "&nbsp;"
 msgstr ""
 
 #: classes/applications/crm/crm_company_people_impl.aw:174 classes/applications/crm/crm_company_people_impl.aw:572
