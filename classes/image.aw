@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.194 2007/03/29 14:17:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.195 2007/03/30 07:11:08 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -401,8 +401,10 @@ class image extends class_base
 			);
 			$tmp = new aw_template;
 			lc_site_load("document", &$tmp);
-			$vars += $tmp->vars;
-
+			if (is_array($tmp->vars))
+			{
+				$vars += $tmp->vars;
+			}
 			if ($this->can("view", $idata["meta"]["big_flash"]))
 			{
 				$idata["big_url"] = " ";
