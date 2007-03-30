@@ -1,0 +1,1552 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/groupware/project.aw:class_239_help
+msgid "Klassi Projekt help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_priority
+msgid "Omaduse Prioriteet (priority) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_priority_comment
+msgid "Omaduse Prioriteet (priority) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_priority_help
+msgid "Omaduse Prioriteet (priority) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_archive_code
+msgid "Omaduse Arhiveerimistunnus (archive_code) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_archive_code_comment
+msgid "Omaduse Arhiveerimistunnus (archive_code) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_archive_code_help
+msgid "Omaduse Arhiveerimistunnus (archive_code) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_state
+msgid "Omaduse Staatus (state) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_state_comment
+msgid "Omaduse Staatus (state) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_state_help
+msgid "Omaduse Staatus (state) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_doc
+msgid "Omaduse Loe lähemalt (doc) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_doc_comment
+msgid "Omaduse Loe lähemalt (doc) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_doc_help
+msgid "Omaduse Loe lähemalt (doc) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_prepayment
+msgid "Omaduse Ettemaks (prepayment) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_prepayment_comment
+msgid "Omaduse Ettemaks (prepayment) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_prepayment_help
+msgid "Omaduse Ettemaks (prepayment) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_contact_person_orderer
+msgid "Omaduse Tellija kontaktisik (contact_person_orderer) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_contact_person_orderer_comment
+msgid "Omaduse Tellija kontaktisik (contact_person_orderer) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_contact_person_orderer_help
+msgid "Omaduse Tellija kontaktisik (contact_person_orderer) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_contact_person_implementor
+msgid "Omaduse Teostaja kontaktisik (contact_person_implementor) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_contact_person_implementor_comment
+msgid "Omaduse Teostaja kontaktisik (contact_person_implementor) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_contact_person_implementor_help
+msgid "Omaduse Teostaja kontaktisik (contact_person_implementor) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_orderer
+msgid "Omaduse Klient (orderer) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_orderer_comment
+msgid "Omaduse Klient (orderer) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_orderer_help
+msgid "Omaduse Klient (orderer) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_implementor
+msgid "Omaduse Teostajad (implementor) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_implementor_comment
+msgid "Omaduse Teostajad (implementor) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_implementor_help
+msgid "Omaduse Teostajad (implementor) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_start
+msgid "Omaduse Algus (start) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_start_comment
+msgid "Omaduse Algus (start) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_start_help
+msgid "Omaduse Algus (start) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_end
+msgid "Omaduse L&otilde;pp (end) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_end_comment
+msgid "Omaduse L&otilde;pp (end) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_end_help
+msgid "Omaduse L&otilde;pp (end) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_deadline
+msgid "Omaduse Deadline (deadline) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_deadline_comment
+msgid "Omaduse Deadline (deadline) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_deadline_help
+msgid "Omaduse Deadline (deadline) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_hrs_guess
+msgid "Omaduse  Prognoositav tundide arv (hrs_guess) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_hrs_guess_comment
+msgid "Omaduse  Prognoositav tundide arv (hrs_guess) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_hrs_guess_help
+msgid "Omaduse  Prognoositav tundide arv (hrs_guess) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_parts_tb
+msgid "Omaduse  (parts_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_parts_tb_comment
+msgid "Omaduse  (parts_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_parts_tb_help
+msgid "Omaduse  (parts_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_orderer_table
+msgid "Omaduse  (orderer_table) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_orderer_table_comment
+msgid "Omaduse  (orderer_table) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_orderer_table_help
+msgid "Omaduse  (orderer_table) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_part_table
+msgid "Omaduse  (part_table) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_part_table_comment
+msgid "Omaduse  (part_table) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_part_table_help
+msgid "Omaduse  (part_table) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_impl_table
+msgid "Omaduse  (impl_table) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_impl_table_comment
+msgid "Omaduse  (impl_table) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_impl_table_help
+msgid "Omaduse  (impl_table) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_participants
+msgid "Omaduse Osalejad (participants) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_participants_comment
+msgid "Omaduse Osalejad (participants) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_participants_help
+msgid "Omaduse Osalejad (participants) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_description
+msgid "Omaduse Kirjeldus (description) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_description_comment
+msgid "Omaduse Kirjeldus (description) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_description_help
+msgid "Omaduse Kirjeldus (description) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_proj_type
+msgid "Omaduse Liik (proj_type) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_proj_type_comment
+msgid "Omaduse Liik (proj_type) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_proj_type_help
+msgid "Omaduse Liik (proj_type) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_create_task
+msgid "Omaduse Moodusta &uuml;lesanne (create_task) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_create_task_comment
+msgid "Omaduse Moodusta &uuml;lesanne (create_task) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_create_task_help
+msgid "Omaduse Moodusta &uuml;lesanne (create_task) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_project_navigator
+msgid "Omaduse Näita projektide navigaatorit (project_navigator) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_project_navigator_comment
+msgid "Omaduse Näita projektide navigaatorit (project_navigator) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_project_navigator_help
+msgid "Omaduse Näita projektide navigaatorit (project_navigator) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_use_template
+msgid "Omaduse Välimus (use_template) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_use_template_comment
+msgid "Omaduse Välimus (use_template) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_use_template_help
+msgid "Omaduse Välimus (use_template) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_doc_id
+msgid "Omaduse Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse (doc_id) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_doc_id_comment
+msgid "Omaduse Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse (doc_id) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_doc_id_help
+msgid "Omaduse Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse (doc_id) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_skip_subproject_events
+msgid "Omaduse Ära näita alamprojektide sündmusi (skip_subproject_events) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_skip_subproject_events_comment
+msgid "Omaduse Ära näita alamprojektide sündmusi (skip_subproject_events) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_skip_subproject_events_help
+msgid "Omaduse Ära näita alamprojektide sündmusi (skip_subproject_events) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_prj_image
+msgid "Omaduse Pilt (prj_image) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_prj_image_comment
+msgid "Omaduse Pilt (prj_image) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_prj_image_help
+msgid "Omaduse Pilt (prj_image) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_event_toolbar
+msgid "Omaduse Sündmuste toolbar  (event_toolbar) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_event_toolbar_comment
+msgid "Omaduse Sündmuste toolbar  (event_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_event_toolbar_help
+msgid "Omaduse Sündmuste toolbar  (event_toolbar) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_event_list
+msgid "Omaduse Tegevused (event_list) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_event_list_comment
+msgid "Omaduse Tegevused (event_list) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_event_list_help
+msgid "Omaduse Tegevused (event_list) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_add_event
+msgid "Omaduse Lisa sündmus (add_event) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_add_event_comment
+msgid "Omaduse Lisa sündmus (add_event) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_add_event_help
+msgid "Omaduse Lisa sündmus (add_event) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_tb
+msgid "Omaduse  (files_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_tb_comment
+msgid "Omaduse  (files_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_tb_help
+msgid "Omaduse  (files_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_tree
+msgid "Omaduse  (files_tree) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_tree_comment
+msgid "Omaduse  (files_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_tree_help
+msgid "Omaduse  (files_tree) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_name
+msgid "Omaduse Nimi (files_find_name) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_name_comment
+msgid "Omaduse Nimi (files_find_name) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_name_help
+msgid "Omaduse Nimi (files_find_name) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_comment
+msgid "Omaduse Kirjeldus (files_find_comment) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_comment_comment
+msgid "Omaduse Kirjeldus (files_find_comment) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_comment_help
+msgid "Omaduse Kirjeldus (files_find_comment) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_type
+msgid "Omaduse T&uuml;&uuml;p (files_find_type) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_type_comment
+msgid "Omaduse T&uuml;&uuml;p (files_find_type) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_find_type_help
+msgid "Omaduse T&uuml;&uuml;p (files_find_type) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_search_sbt
+msgid "Omaduse Otsi	 (files_search_sbt) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_search_sbt_comment
+msgid "Omaduse Otsi	 (files_search_sbt) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_search_sbt_help
+msgid "Omaduse Otsi	 (files_search_sbt) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_table
+msgid "Omaduse  (files_table) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_table_comment
+msgid "Omaduse  (files_table) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_files_table_help
+msgid "Omaduse  (files_table) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_trans
+msgid "Omaduse Tõlkimine (trans) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_trans_comment
+msgid "Omaduse Tõlkimine (trans) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_trans_help
+msgid "Omaduse Tõlkimine (trans) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_tb
+msgid "Omaduse  (sides_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_tb_comment
+msgid "Omaduse  (sides_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_tb_help
+msgid "Omaduse  (sides_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides
+msgid "Omaduse  (sides) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_comment
+msgid "Omaduse  (sides) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_help
+msgid "Omaduse  (sides) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_st
+msgid "Omaduse Konfliktsed projektid (sides_st) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_st_comment
+msgid "Omaduse Konfliktsed projektid (sides_st) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_st_help
+msgid "Omaduse Konfliktsed projektid (sides_st) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_conflict
+msgid "Omaduse  (sides_conflict) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_conflict_comment
+msgid "Omaduse  (sides_conflict) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_sides_conflict_help
+msgid "Omaduse  (sides_conflict) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user1
+msgid "Omaduse User-defined textbox 1 (user1) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user1_comment
+msgid "Omaduse User-defined textbox 1 (user1) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user1_help
+msgid "Omaduse User-defined textbox 1 (user1) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user2
+msgid "Omaduse User-defined textbox 2 (user2) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user2_comment
+msgid "Omaduse User-defined textbox 2 (user2) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user2_help
+msgid "Omaduse User-defined textbox 2 (user2) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user3
+msgid "Omaduse User-defined textbox 3 (user3) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user3_comment
+msgid "Omaduse User-defined textbox 3 (user3) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user3_help
+msgid "Omaduse User-defined textbox 3 (user3) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user4
+msgid "Omaduse User-defined textbox 4 (user4) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user4_comment
+msgid "Omaduse User-defined textbox 4 (user4) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user4_help
+msgid "Omaduse User-defined textbox 4 (user4) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user5
+msgid "Omaduse User-defined textbox 5 (user5) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user5_comment
+msgid "Omaduse User-defined textbox 5 (user5) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_user5_help
+msgid "Omaduse User-defined textbox 5 (user5) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch1
+msgid "Omaduse User-defined checkbox 1 (userch1) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch1_comment
+msgid "Omaduse User-defined checkbox 1 (userch1) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch1_help
+msgid "Omaduse User-defined checkbox 1 (userch1) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch2
+msgid "Omaduse User-defined checkbox 2 (userch2) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch2_comment
+msgid "Omaduse User-defined checkbox 2 (userch2) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch2_help
+msgid "Omaduse User-defined checkbox 2 (userch2) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch3
+msgid "Omaduse User-defined checkbox 3 (userch3) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch3_comment
+msgid "Omaduse User-defined checkbox 3 (userch3) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch3_help
+msgid "Omaduse User-defined checkbox 3 (userch3) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch4
+msgid "Omaduse User-defined checkbox 4 (userch4) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch4_comment
+msgid "Omaduse User-defined checkbox 4 (userch4) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch4_help
+msgid "Omaduse User-defined checkbox 4 (userch4) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch5
+msgid "Omaduse User-defined checkbox 5 (userch5) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch5_comment
+msgid "Omaduse User-defined checkbox 5 (userch5) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userch5_help
+msgid "Omaduse User-defined checkbox 5 (userch5) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userclassif1
+msgid "Omaduse User-defined classificator 1 (userclassif1) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userclassif1_comment
+msgid "Omaduse User-defined classificator 1 (userclassif1) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_userclassif1_help
+msgid "Omaduse User-defined classificator 1 (userclassif1) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_controller_disp
+msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_controller_disp_comment
+msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_controller_disp_help
+msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_tb
+msgid "Omaduse  (team_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_tb_comment
+msgid "Omaduse  (team_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_tb_help
+msgid "Omaduse  (team_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_team_tree
+msgid "Omaduse  (team_team_tree) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_team_tree_comment
+msgid "Omaduse  (team_team_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_team_tree_help
+msgid "Omaduse  (team_team_tree) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_co
+msgid "Omaduse Firma (team_search_co) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_co_comment
+msgid "Omaduse Firma (team_search_co) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_co_help
+msgid "Omaduse Firma (team_search_co) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_person
+msgid "Omaduse Isik (team_search_person) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_person_comment
+msgid "Omaduse Isik (team_search_person) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_person_help
+msgid "Omaduse Isik (team_search_person) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_hidden_team
+msgid "Omaduse  (hidden_team) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_hidden_team_comment
+msgid "Omaduse  (hidden_team) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_hidden_team_help
+msgid "Omaduse  (hidden_team) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_sbt
+msgid "Omaduse Otsi (team_search_sbt) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_sbt_comment
+msgid "Omaduse Otsi (team_search_sbt) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_search_sbt_help
+msgid "Omaduse Otsi (team_search_sbt) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team
+msgid "Omaduse  (team) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_comment
+msgid "Omaduse  (team) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_team_help
+msgid "Omaduse  (team) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_tb
+msgid "Omaduse  (goal_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_tb_comment
+msgid "Omaduse  (goal_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_tb_help
+msgid "Omaduse  (goal_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_tree
+msgid "Omaduse  (goal_tree) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_tree_comment
+msgid "Omaduse  (goal_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_tree_help
+msgid "Omaduse  (goal_tree) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_table
+msgid "Omaduse  (goal_table) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_table_comment
+msgid "Omaduse  (goal_table) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goal_table_help
+msgid "Omaduse  (goal_table) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goals_gantt
+msgid "Omaduse  (goals_gantt) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goals_gantt_comment
+msgid "Omaduse  (goals_gantt) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_goals_gantt_help
+msgid "Omaduse  (goals_gantt) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_strat_tb
+msgid "Omaduse  (strat_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_strat_tb_comment
+msgid "Omaduse  (strat_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_strat_tb_help
+msgid "Omaduse  (strat_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_strat
+msgid "Omaduse  (strat) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_strat_comment
+msgid "Omaduse  (strat) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_strat_help
+msgid "Omaduse  (strat) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_risks_tb
+msgid "Omaduse  (risks_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_risks_tb_comment
+msgid "Omaduse  (risks_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_risks_tb_help
+msgid "Omaduse  (risks_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_risks
+msgid "Omaduse  (risks) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_risks_comment
+msgid "Omaduse  (risks) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_risks_help
+msgid "Omaduse  (risks) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tb
+msgid "Omaduse  (req_tb) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tb_comment
+msgid "Omaduse  (req_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tb_help
+msgid "Omaduse  (req_tb) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tree
+msgid "Omaduse  (req_tree) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tree_comment
+msgid "Omaduse  (req_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tree_help
+msgid "Omaduse  (req_tree) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tbl
+msgid "Omaduse  (req_tbl) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tbl_comment
+msgid "Omaduse  (req_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_req_tbl_help
+msgid "Omaduse  (req_tbl) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_proj_price
+msgid "Omaduse Projekti hind (proj_price) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_proj_price_comment
+msgid "Omaduse Projekti hind (proj_price) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_proj_price_help
+msgid "Omaduse Projekti hind (proj_price) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_stats
+msgid "Omaduse T&ouml;&ouml;tunnid (stats) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_stats_comment
+msgid "Omaduse T&ouml;&ouml;tunnid (stats) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_stats_help
+msgid "Omaduse T&ouml;&ouml;tunnid (stats) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_general2
+msgid "Grupi &Uuml;ldandmed (general2) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_general2_help
+msgid "Grupi &Uuml;ldandmed (general2) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_info_t
+msgid "Grupi Lisainfo (info_t) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_info_t_help
+msgid "Grupi Lisainfo (info_t) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_strat
+msgid "Grupi Eesm&auml;rgid (strat) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_strat_help
+msgid "Grupi Eesm&auml;rgid (strat) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_risks
+msgid "Grupi Riskid (risks) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_risks_help
+msgid "Grupi Riskid (risks) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_web_settings
+msgid "Grupi Veebiseadistused (web_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_web_settings_help
+msgid "Grupi Veebiseadistused (web_settings) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_sides
+msgid "Grupi Konfliktianal&uuml;&uuml;s (sides) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_sides_help
+msgid "Grupi Konfliktianal&uuml;&uuml;s (sides) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_userdefined
+msgid "Grupi Kasutaja defineeritud andmed (userdefined) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_userdefined_help
+msgid "Grupi Kasutaja defineeritud andmed (userdefined) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_participants
+msgid "Grupi Osalejad (participants) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_participants_help
+msgid "Grupi Osalejad (participants) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_event_list
+msgid "Grupi Tegevused (event_list) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_event_list_help
+msgid "Grupi Tegevused (event_list) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_goals_edit
+msgid "Grupi Muuda (goals_edit) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_goals_edit_help
+msgid "Grupi Muuda (goals_edit) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_goals_gantt
+msgid "Grupi Vaata (goals_gantt) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_goals_gantt_help
+msgid "Grupi Vaata (goals_gantt) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_event_list_cal
+msgid "Grupi Tegevused kalendaarselt (event_list_cal) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_event_list_cal_help
+msgid "Grupi Tegevused kalendaarselt (event_list_cal) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_event_list_premise
+msgid "Grupi Tegevused eeldustegevuste põhiselt (event_list_premise) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_event_list_premise_help
+msgid "Grupi Tegevused eeldustegevuste põhiselt (event_list_premise) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_info
+msgid "Grupi Projekti info (info) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_info_help
+msgid "Grupi Projekti info (info) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_valuation
+msgid "Grupi Hindamine (valuation) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_valuation_help
+msgid "Grupi Hindamine (valuation) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_strat_res
+msgid "Grupi Eesm&auml;rkide hindamise tulemused (strat_res) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_strat_res_help
+msgid "Grupi Eesm&auml;rkide hindamise tulemused (strat_res) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_add_event
+msgid "Grupi Muuda sündmust (add_event) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_add_event_help
+msgid "Grupi Muuda sündmust (add_event) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_files
+msgid "Grupi Dokumendid (files) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_files_help
+msgid "Grupi Dokumendid (files) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_trans
+msgid "Grupi Tõlkimine (trans) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_trans_help
+msgid "Grupi Tõlkimine (trans) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_team
+msgid "Grupi Meeskond (team) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_team_help
+msgid "Grupi Meeskond (team) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_req
+msgid "Grupi N&otilde;uded (req) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_req_help
+msgid "Grupi N&otilde;uded (req) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_req_process
+msgid "Grupi N&otilde;uded protsessidega (req_process) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_req_process_help
+msgid "Grupi N&otilde;uded protsessidega (req_process) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_stats
+msgid "Grupi Statistika (stats) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_stats_help
+msgid "Grupi Statistika (stats) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_SUBPROJECT
+msgid "Seose alamprojekt (RELTYPE_SUBPROJECT) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_PARTICIPANT
+msgid "Seose osaleja (RELTYPE_PARTICIPANT) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_EVENT
+msgid "Seose Sündmus (RELTYPE_PRJ_EVENT) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_FILE
+msgid "Seose Fail (RELTYPE_PRJ_FILE) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_TAX_CHAIN
+msgid "Seose Maksu pärg (RELTYPE_TAX_CHAIN) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_CFGFORM
+msgid "Seose Seadete vorm (RELTYPE_PRJ_CFGFORM) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_DOCUMENT
+msgid "Seose Kirjeldus (RELTYPE_PRJ_DOCUMENT) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_IMAGE
+msgid "Seose Pilt (RELTYPE_PRJ_IMAGE) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_ORDERER
+msgid "Seose tellija (RELTYPE_ORDERER) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_IMPLEMENTOR
+msgid "Seose teostaja (RELTYPE_IMPLEMENTOR) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_VIDEO
+msgid "Seose Video (RELTYPE_PRJ_VIDEO) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_TYPE
+msgid "Seose t&uuml;&uuml;p (RELTYPE_TYPE) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_CONTACT_PERSON
+msgid "Seose kontaktisik (RELTYPE_CONTACT_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_CLF1
+msgid "Seose klassifikaator 1 (RELTYPE_CLF1) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_SIDE
+msgid "Seose konkurent (RELTYPE_SIDE) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_PREPAYMENT_BILL
+msgid "Seose Arve (RELTYPE_PREPAYMENT_BILL) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_STRAT
+msgid "Seose Eesm&auml;rk (RELTYPE_STRAT) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_RISK
+msgid "Seose Risk (RELTYPE_RISK) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_STRAT_EVAL
+msgid "Seose Eesm&auml;rkide hindamislaud (RELTYPE_STRAT_EVAL) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_RISK_EVAL
+msgid "Seose Riskide hindamislaud (RELTYPE_RISK_EVAL) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_TEAM
+msgid "Seose Tiim (RELTYPE_TEAM) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_FILES_FLD
+msgid "Seose Failide kataloog (RELTYPE_FILES_FLD) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:rel_RELTYPE_ANALYSIS_WS
+msgid "Seose Anal&uuml;&uuml;si t&ouml;&ouml;laud (RELTYPE_ANALYSIS_WS) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_left_bit
+msgid "Kujundusosa Üldandmed (left_bit) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_project_time
+msgid "Kujundusosa Ajad (project_time) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_project_people
+msgid "Kujundusosa Osalejad (project_people) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_files_tree_lay
+msgid "Kujundusosa Projekti dokumendid (files_tree_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_files_find_lay
+msgid "Kujundusosa Dokumentide otsing (files_find_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_team_tree
+msgid "Kujundusosa Meeskond (team_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_team_search
+msgid "Kujundusosa Isikute otsing (team_search) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_goal_tree_lay
+msgid "Kujundusosa Eesmärgid (goal_tree_lay) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:layout_req_tree_l
+msgid "Kujundusosa Nõuded puu kujul (req_tree_l) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:450
+msgid "T&ouml;&ouml;s"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:451
+msgid "Valmis"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:604 classes/applications/groupware/project.aw:4158
+msgid "Fail"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:605 classes/applications/groupware/project.aw:4032
+msgid "Memo"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:606 classes/applications/groupware/project.aw:4033
+msgid "CRM Dokument"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:607 classes/applications/groupware/project.aw:4034
+msgid "Leping"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:608 classes/applications/groupware/project.aw:4035
+msgid "Pakkumine"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:609 classes/applications/groupware/project.aw:4564
+msgid "Eesm&auml;rkide hindamise t&ouml;&ouml;laud"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:610 classes/applications/groupware/project.aw:4583
+msgid "Riskide hindamise t&ouml;&ouml;laud"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:611
+msgid "Anal&uuml;&uuml;si t&ouml;&ouml;laud"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:648 classes/applications/groupware/project.aw:688 classes/applications/groupware/project.aw:822 classes/applications/groupware/project.aw:3540
+msgid "--Vali--"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:841
+msgid "Nädala vaade"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:878
+msgid "Loo arve"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:1995 classes/applications/groupware/project.aw:5053
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:2024
+msgid "Alamprojekt"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:2101 classes/applications/groupware/project.aw:2176 classes/applications/groupware/project.aw:2980
+msgid "Toimetus"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:2413
+msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:2474
+msgid "header"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:2950 classes/applications/groupware/project.aw:3554
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:2960
+msgid "Verstapost"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:2995
+msgid "K&otilde;ne"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3010
+msgid "Kohtumine"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3017 classes/applications/groupware/project.aw:3606 classes/applications/groupware/project.aw:4117 classes/applications/groupware/project.aw:4553 classes/applications/groupware/project.aw:4571 classes/applications/groupware/project.aw:4590 classes/applications/groupware/project.aw:4705
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3025
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3034
+msgid "Kleebi"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3099 classes/applications/groupware/project.aw:3665 classes/applications/groupware/project.aw:3712 classes/applications/groupware/project.aw:3849 classes/applications/groupware/project.aw:4153
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3106
+msgid "Algus"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3116
+msgid "L&otilde;pp"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "Jaanuar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "Veebruar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "M&auml;rts"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "Aprill"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "Mai"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "Juuni"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "Juuli"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "August"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "September"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "Oktoober"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "November"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3192
+msgid "Detsember"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3204
+msgid "N&auml;dal"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3355
+msgid "<< Eelmine"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3387 classes/applications/groupware/project.aw:3402
+msgid "P&auml;evad"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3408 classes/applications/groupware/project.aw:3423
+msgid "N&auml;dalad"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3429 classes/applications/groupware/project.aw:3444
+msgid "Kuud"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3462
+msgid "J&auml;rgmine >>"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3558 classes/applications/groupware/project.aw:3666 classes/applications/groupware/project.aw:5073 classes/applications/groupware/project.aw:5101 classes/applications/groupware/project.aw:5125
+msgid "Isik"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3571 classes/applications/groupware/project.aw:3666 classes/applications/groupware/project.aw:3856 classes/applications/groupware/project.aw:5064 classes/applications/groupware/project.aw:5092 classes/applications/groupware/project.aw:5116
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3599 classes/applications/groupware/project.aw:3685 classes/applications/groupware/project.aw:5156 classes/applications/groupware/project.aw:5169
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3614
+msgid "Vastaspool"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3666 classes/applications/groupware/project.aw:4163 classes/applications/groupware/project.aw:4663
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3691
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3833
+msgid "Rollid"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3863
+msgid "Ametinimetus"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3871 classes/applications/groupware/project.aw:4892 classes/applications/groupware/project.aw:4948 classes/applications/groupware/project.aw:5004
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:3879
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4031 classes/applications/groupware/project.aw:4173
+msgid ""
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4168
+msgid "Kataloog"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4348
+msgid "Arve nr %s"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4369
+msgid "%s ettemaks"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4415
+msgid "Hinnang projektile %s"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4435 classes/applications/groupware/project.aw:4599
+msgid "Hindamislaua nimi"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4441 classes/applications/groupware/project.aw:4605
+msgid "Hindamislaua looja nimi"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4447 classes/applications/groupware/project.aw:4496 classes/applications/groupware/project.aw:4611
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4484
+msgid "Eesm&auml;rgi nimi"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4490
+msgid "Eesm&auml;rgi esitaja nimi"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4505
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4546
+msgid "Editegur"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4648
+msgid "Riski nimi"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4653
+msgid "Omanik"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4658
+msgid "Kirjeldus"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4698
+msgid "Risk"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4886 classes/applications/groupware/project.aw:5059 classes/applications/groupware/project.aw:5168
+msgid "Tellija"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4898 classes/applications/groupware/project.aw:4954 classes/applications/groupware/project.aw:5010
+msgid "Kontaktisik"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4942 classes/applications/groupware/project.aw:5086 classes/applications/groupware/project.aw:5182
+msgid "Osaleja"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:4998 classes/applications/groupware/project.aw:5112 classes/applications/groupware/project.aw:5146 classes/applications/groupware/project.aw:5195
+msgid "Teostaja"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:5135
+msgid "Lisa isik organisatsiooni %s"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:5183
+msgid "Otsi1"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:5196
+msgid "Otsi2"
+msgstr ""
+
