@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.167 2007/03/20 14:12:45 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.168 2007/03/30 13:52:50 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1231,6 +1231,7 @@ class crm_person extends class_base
 					3 => t("Vallaline"),
 					1 => t("Abielus"),
 					2 => t("Lahutatud"),
+					4 => t("Vabaabielus"),
 				);
 				break;
 
