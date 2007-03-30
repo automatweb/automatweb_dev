@@ -18,4 +18,8 @@
 		<td>{VAR:date_to}</td>
 		<td>{VAR:to_button}</td>
 	</tr>
+	<tr>
+		<td>Ilma detailse infota:</td>
+		<td colspan="2"><input type="checkbox" value="1" name="no_det_info" {VAR:no_det_info}></td>
+	</tr>
 </table>

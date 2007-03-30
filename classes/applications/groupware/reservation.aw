@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.57 2007/03/30 11:53:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.58 2007/03/30 12:20:59 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1236,7 +1236,9 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 				$ph->set_class_id(CL_CRM_PHONE);
 			}
 			$ph->set_name($arr["prop"]["value"]);
+			aw_disable_acl();
 			$ph->save();
+			aw_restore_acl();
 			if (!$this->can("view", $cust->prop("phone")))
 			{
 				$cust->connect(array(
@@ -1274,7 +1276,9 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                         }
                         $ph->set_name($arr["prop"]["value"]);
 			$ph->set_prop("mail", $arr["prop"]["value"]);
+			aw_disable_acl();
                         $ph->save();
+			aw_restore_acl();
                         if (!$this->can("view", $cust->prop("email")))
                         {
                                 $cust->connect(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.41 2007/03/28 16:14:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.42 2007/03/30 12:20:59 kristo Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -144,6 +144,7 @@ class bank_payment extends class_base
 
 	/** 
 		@attrib api=1
+
  	**/
 	function bank_payment()
 	{
@@ -159,41 +160,14 @@ class bank_payment extends class_base
 
  	**/
 	function form_test_case($arr)
-	{/*
-		die('<form name="postform" id="postform" method="post" action=https://pos.estcard.ee/test-pos/servlet/iPAYServlet>
-			<input type="hidden" name=action value="gaf">
-			<input type="hidden" name=ver value="002">
-			<input type="hidden" name=id value="Reval">
-			<input type="hidden" name=ecuno value="112309">
-			<input type="hidden" name=eamount value="100000">
-			<input type="hidden" name=cur value="EEK">
-			<input type="hidden" name=datetime value="20070104165623">
-			<input type="hidden" name=mac value="RG8JJGd0QRIBFQW845eRjG2EyfNTQSleommHuldYQdtooZxIzHDhHJaLm+wYhVHI2E2LqV76faI0bro7iObPBR8C1wcTXqSRKNuTBobxb0SPfZ3/nnbdQ51svMXNdDBNQTqn9gawwxxcOz1PuoRunYA+v1n7cyxekqkS4ZIxkWQ=">
-			<input type="hidden" name=lang value="et">
-			<input type=submit value="maksa ilgelt pappi">
-			</form>
-		');
-		/*die('
+	{
+		die('
 			<form name="makse" id="makse" method="post" action="http://marko.dev.struktuur.ee/orb.aw?class=bank_payment&id=10580">
 			<br>
 			<input type="textbox" name="amount" value=3000000>
 			<input type=submit value="maksa ilgelt pappi">
 			</form>'
-		);*/
-		//veel üks teist imiteerimaks panka
-		die('<form name="postform2" id="postform2" method="post" action=http://www.revalhotels.com/automatweb/bank_return.aw>
-			<input type="hidden" name=VK_SERVICE value="1101">
-			<input type="hidden" name=VK_VERSION value="008">
-			<input type="hidden" name=VK_SND_ID value="EYP">
-			<input type="hidden" name=VK_REC_ID value="testvpos">
-			<input type="hidden" name=VK_STAMP value="10002050618003">
-			<input type="hidden" name=VK_T_NO value="23888">
-			<input type="hidden" name=VK_REF value="285906">
-			<input type="hidden" name=VK_MAC value="b0Msf4RJn97KeESEPMK4S+t7DTszxdPxfOBTGSWhn2b+o71hv6rzMQq97+uBt5HILxHNxBpHv1aoywXjRA4/4q9XRAjP28vZ9mPUo0W/pBaI/tC6eteb6Cp6w443+mMadf6emb2rAtSDaod6pdwSxnIEzkMD6OzSccFI1TiuzjU=">
-			<input type="hidden" name=lang value="et">
-			<input type=submit value="maksa ilgelt pappi">
-			</form>
-		');
+		);
 	}
 	
 	/** 
@@ -557,6 +531,7 @@ class bank_payment extends class_base
 			case "log":
 				$prop["value"] = $this->get_log($arr);
 				break;
+
 			case "template":
 				$tm = get_instance("templatemgr");
 				$prop["options"] = $tm->template_picker(array(
@@ -670,7 +645,7 @@ class bank_payment extends class_base
 		};
 	}
 	
-	//tekitab võimalike pankade ja propertyte nimekirja
+		//tekitab võimalike pankade ja propertyte nimekirja
 	function callback_bank($arr)
 	{
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
@@ -773,13 +748,9 @@ class bank_payment extends class_base
 				$arr = $this->check_args($arr);
 				return $this->seb($arr);
 				break;
-			case "hansapank_lv":
+			case "hansapank_vl":
 				$arr = $this->check_args($arr);
 				return $this->hansa_lv($arr);
-				break;
-			case "hansapank_lt":
-				$arr = $this->check_args($arr);
-				return $this->hansa_lt($arr);
 				break;
 			case "hansapank":
 				$arr = $this->check_args($arr);
@@ -797,10 +768,6 @@ class bank_payment extends class_base
 				$arr = $this->check_args($arr);
 				return $this->krediidi($arr);
 				break;
-			case "credit_card":
-				$arr = $this->check_cc_args($arr);
-				return $this->credit_card($arr);
-				break;
 		}
 	}
 	
@@ -808,9 +775,17 @@ class bank_payment extends class_base
 	{
 		if(is_oid($arr["payment_id"]))
 		{
-			$payment = obj($arr["payment_id"]);
-			$arr = $this->_add_object_data($payment , $arr);
+			$payment = obj($arr["payment"]);
+			$payment_data = $payment->meta("bank");
+			$arr["sender_id"] = $payment_data[$arr["bank_id"]]["sender_id"];
+			$arr["stamp"] = $payment_data[$arr["bank_id"]]["stamp"];
+			$arr["expl"] = $arr["expl"].$payment->prop("expl");
+			if($arr["units"])
+			{
+				$arr["amount"] = $arr["units"]*$payment->prop("default_unit_sum");
+			}
 		}
+		
 		if(!$arr["service"]) $arr["service"] = "1002";
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
@@ -923,47 +898,8 @@ class bank_payment extends class_base
 		$VK_MAC = base64_encode( $VK_signature);
 
 		$http = get_instance("protocols/file/http");
-		$link = $this->bank_link["hansapank_lv"];
 		$link = "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp";
-		$handler = $link;
-		$params = array(
-			"VK_SERVICE"	=> $service,	//"1002"
-			"VK_VERSION"	=> $version,	//"008"
-			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST"
-			"VK_STAMP"	=> $stamp,	//row["arvenr"]
-			"VK_AMOUNT"	=> $amount,	//$row["summa"];
-			"VK_CURR"	=> $curr,	//"EEK"
-			"VK_REF"	=> $reference_nr,
-			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
-			"VK_MAC" 	=> $VK_MAC,
-			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
-			"VK_LANG" 	=> $lang,	//"EST"
-		);
-		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
-	//	return $http->post_request($link, $handler, $params, $port = 80);
-	}
-
-	function hansa_lt($args) 
-	{
-		extract($args);
-		$VK_message = sprintf("%03d",strlen($service)).$service;
-		$VK_message.= sprintf("%03d",strlen($version)).$version;
-		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
-		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
-		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
-		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
-		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
-		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
-		$VK_signature = "";
-		$pkeyid = openssl_get_privatekey($priv_key);
-		openssl_sign($VK_message, $VK_signature, $pkeyid);
-		openssl_free_key($pkeyid);
-		$VK_MAC = base64_encode( $VK_signature);
-
-		$http = get_instance("protocols/file/http");
-		$link = $this->bank_link["hansapank_lt"];;
-		$handler = $link;
+		$handler = "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp";
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
@@ -1000,11 +936,7 @@ class bank_payment extends class_base
 		$VK_MAC = base64_encode($VK_signature);
 		$http = get_instance("protocols/file/http");
 		$link = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
-		if($test)
-		{
-			 $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
-			$sender_id = "testvpos";
-		}
+		if($test) $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
 		$handler = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
@@ -1099,85 +1031,6 @@ class bank_payment extends class_base
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}	
-
-	function check_cc_args($arr)
-	{
-		if(is_oid($arr["payment_id"]))
-		{
-			$payment = obj($arr["payment_id"]);
-			$arr = $this->_add_object_data($payment , $arr);
-		}
-		if(!$arr["curr"]) $arr["curr"] = "EEK";
-		if(!$arr["lang"]) $arr["lang"] = "et";
-		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
-		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
-		if(!$arr["priv_key"])
-		{
-			$file = "privkey.pem";
-			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
-			$arr["priv_key"] = fread($fp, 8192);
-			fclose($fp);
-		}
-		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
-		$arr["amount"] = $arr["amount"]*100; //sentides
-		$arr["datetime"] = date("YmdHis", time());
-		if(!$arr["service"]) $arr["service"] = "gaf";
-		if(!$arr["version"]) $arr["version"] = "002";
-		return($arr);
-	}
-	
-	function credit_card($args)
-	{
-		extract($args);
-		//test:
-		$action="$service";
-		$ver="$version";
-		$id="$sender_id";
-		$idnp = $id;
-		$ecuno='123456';
-		$eamount='1000';
-		$cur='EEK';
-		$datetime=date("YmdHis");
-		$lang='et';
-		$id=sprintf("%-10s", "$id");
-		$ecuno=sprintf("%012s", "$reference_nr");
-		$eamount=sprintf("%012s", "$amount");
-		$data = $ver . $id . $ecuno . $eamount . $cur . $datetime;
-		$signature=sha1($data);
-	//	echo "signatuur: <pre>$data</pre><br>";
-		$pkeyid = openssl_get_privatekey($priv_key);
-		openssl_sign($data, $signature, $pkeyid);
-		openssl_free_key($pkeyid);
-		$mac=bin2hex($signature);
-		//echo "https://pos.estcard.ee/webpos/servlet/iPAYServlet?action=$action&amp;ver=$ver&amp;id=$idnp&amp;ecuno=$ecuno&amp;eamount=$eamount&amp;cur=$cur&amp;datetime=$datetime&amp;mac=$mac&amp;lang=en";
-		//testi lõpp
-		$VK_message = $version;
-		$VK_message.= sprintf("%-10s", $sender_id);
-		$VK_message.= sprintf("%012s",$reference_nr);
-		$VK_message.= sprintf("%012s",$amount);
-		$VK_message.= $curr;
-		$VK_message.= $datetime;
-
-		$signature=sha1($VK_message);
-		$pkeyid = openssl_get_privatekey($priv_key);
-		openssl_sign($data, $VK_signature, $pkeyid);
-		openssl_free_key($pkeyid);
-		$VK_MAC = bin2hex($VK_signature);//base64_encode( $VK_signature);
-
-		$link = $this->bank_link["credit_card"];
-		$params = array(
-			"action"	=> $service,		//"gaf"
-			"ver"		=> $version,		//Protokolli versioon, Fikseeritud väärtus: 002
-			"id"		=> $sender_id,		//Kaupmehe kasutajanimi süsteemis
-			"ecuno"		=> $ecuno,	//Tehingu unikaalne number kaupmehe süsteemis,min. lubatud väärtus 100000
-			"eamount"	=> $eamount,		//Kaupmehe süsteemi poolt antav tehingu summa sentides.;
-			"cur"		=> $curr,		//Tehingu valuuta nimi . Fikseeritud: EEK
-			"datetime"	=> $datetime,		//AAAAKKPPTTmmss 	Tehingu kuupäev,kellaaeg
-			"mac" 		=> $VK_MAC,		//Sõnumi signatuur (MAC)*
-			"lang" 		=> $lang,		//et,en . Süsteemis kasutatav keel. et - Eesti, en - Inglise
-		);
-		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
-	}
 
 	function check_nordea_args($arr)
 	{
@@ -1366,12 +1219,6 @@ class bank_payment extends class_base
 	function check_response()
 	{
 		extract($_SESSION["bank_return"]["data"]);
-		
-		if($action == "afb")//selliselt tulevad krediitkaardimakse tagasipöördumised
-		{
-			return $this->check_cc_response();
-		}
-		
 		$data = substr("000".strlen($VK_SERVICE),-3).$VK_SERVICE
 		.substr("000".strlen($VK_VERSION),-3).$VK_VERSION
 		.substr("000".strlen($VK_SND_ID),-3).$VK_SND_ID

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.40 2007/03/14 11:33:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.41 2007/03/30 12:20:59 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -236,7 +236,8 @@ class spa_bookigs_entry extends class_base
 				)),
 				"password" => html::textbox(array(
 					"name" => "d[$i][pass]",
-					"size" => 10
+					"size" => 10,
+					"value" => generate_password(array("length" => 6, "chars" => "1234567890"))
 				)),
 			));
 		}

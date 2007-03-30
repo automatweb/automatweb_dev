@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.183 2007/03/29 12:05:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.184 2007/03/30 12:20:59 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -691,6 +691,8 @@ class room extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 		$arr["set_view_dates"] = " ";
+		$arr["set_oh"] = " ";
+		$arr["set_ps"] = " ";
 	}
 
 	////////////////////////////////////
@@ -1603,7 +1605,17 @@ class room extends class_base
 		$day_end = 86400;
 		if(is_array($this->openhours))
 		{
-			$gwo = $this->get_when_opens();
+			$tmp_start = $arr["request"]["start"];
+			if (!$tmp_start)
+			{
+				$tmp_start = mktime(0, 0, 0, date("n", time()), date("j", time()), date("Y", time()));
+			}
+			$tmp_end = $arr["request"]["end"];
+			if (!$tmp_end)
+			{
+				$tmp_end = $tmp_start + 24*3600*7;
+			}
+			$gwo = $this->get_when_opens($tmp_start, $tmp_end);
 			extract($gwo);
 		}
 		
@@ -1665,7 +1677,7 @@ class room extends class_base
 			//	$day_end -= (60*$gwo["start_minute"]);
 			}
 		}
-		if (date("I", $today_start) == 1)
+		if (date("I", time()) != 1 && date("I", $today_start) == 1)
 		{
 			$this->start -= 3600;
 			$today_start -= 3600;
@@ -2318,16 +2330,30 @@ class room extends class_base
 		return $rv;
 	}
 		
-	function get_when_opens()
+	function get_when_opens($start, $end)
 	{
 		if(!$this->open_inst)
 		{
 			$this->open_inst = get_instance(CL_OPENHOURS);
 		}
-		$start_hour = 0;
-		$start_minute = 0;
+		$start_hour = 24;
+		$start_minute = 60;
+		/*foreach($this->openhours as $oh)
+		{
+			if ($oh->prop("date_from") > 100 && $oh->prop("date_from") > $end)
+			{
+				continue;
+			}
+			if ($oh->prop("date_to") > 100 && $oh->prop("date_to") < $start)
+			{
+				continue;
+			}
+			$opens = $this->open_inst->get_opening_time($oh);
+			$start_hour = min($opens["hour"], $start_hour);
+			$start_minute = max($opens["minute"], $start_minute);
+		}*/
 		$opens = $this->open_inst->get_opening_time(reset($this->openhours));
-		return array("start_hour" => $opens["hour"], "start_minute" => $opens["minute"]);
+		return array("start_hour" => $opens["hour"] /*$start_hour*/, "start_minute" => $opens["minute"]/*$start_minute*/);
 	}
 
 	function is_paused($start, $end)
@@ -2387,7 +2413,6 @@ class room extends class_base
 		{
 			$end_this+=24*3600;
 		}
-
 		foreach($this->openhours as $oh)
 		{
 			if ($oh->prop("date_from") > 100 && $start < $oh->prop("date_from"))
@@ -2481,11 +2506,11 @@ class room extends class_base
 
 		foreach($this->openhours as $oh)
 		{
-			if ($oh->prop("date_from") > 100 && $start < $oh->prop("date_from"))
+			if ($oh->prop("date_from") > 100 && $time < $oh->prop("date_from"))
 			{
 				continue;
 			}
-			if ($oh->prop("date_to") > 100 && $start > $oh->prop("date_to"))
+			if ($oh->prop("date_to") > 100 && $time > $oh->prop("date_to"))
 			{
 				continue;
 			}
@@ -5111,6 +5136,29 @@ class room extends class_base
 			"text" => t("Paus"),
 			"link" => html::get_new_url(CL_OPENHOURS, $arr["obj_inst"]->id(), array("alias_to" => $arr["obj_inst"]->id(), "reltype" => 45, "return_url" => get_ru())),
 		));
+		$t->add_menu_button(array(
+			"name" => "search",
+			"img" => "search.gif"
+		));
+		$url = $this->mk_my_orb("do_search", array(
+			"pn" => "set_oh",
+			"clid" => CL_OPENHOURS
+		), "popup_search");
+		$t->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("Avamisaeg"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)"
+		));
+		$url = $this->mk_my_orb("do_search", array(
+                        "pn" => "set_ps",
+                        "clid" => CL_OPENHOURS
+                ), "popup_search");
+                $t->add_menu_item(array(
+                        "parent" => "search",
+                        "text" => t("Paus"),
+                        "link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)"
+                ));
+
 		$t->add_delete_button();
 	}
 
@@ -5178,12 +5226,23 @@ class room extends class_base
 		{
 			return $this->prod_data_for_room;
 		}
+		if (!is_object($room))
+		{
+			return;
+		}
 		if ($this->can("view", $room->prop("inherit_prods_from")))
 		{
 			$room = obj($room->prop("inherit_prods_from"));
 		}
 		$this->prod_data_for_room = $room->meta("prod_data");
 		return $room->meta("prod_data");
+	}		
+
+	function callback_post_save($arr)
+	{
+		$i = get_instance("vcl/popup_search");
+		$i->do_create_rels($arr["obj_inst"], $arr["request"]["set_oh"], 44);
+		$i->do_create_rels($arr["obj_inst"], $arr["request"]["set_ps"], 45);
 	}
 	
 	function get_people_for_oh($o)

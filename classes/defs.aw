@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.230 2007/03/28 10:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.231 2007/03/30 12:20:58 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -478,7 +478,10 @@ if (!defined("DEFS"))
 		{
 			$length = 8;
 		}
-		$chars = "1234567890-qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_";
+		if (empty($chars))
+		{
+			$chars = "1234567890-qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_";
+		}
 		$pwd = "";
 		for ($i = 0; $i < $length; $i++)
 		{

@@ -77,7 +77,6 @@ $sf->tpl_init("automatweb");
 
 
 //siit hakkab siis alles pangast tuleva infoga tegelemine
-
 $_SESSION["bank_return"]["data"] = null;
 foreach ($_POST as $key => $val)
 {
@@ -100,7 +99,6 @@ if($_SESSION["bank_return"]["data"]["VK_REF"])
 {
 	$id = substr($_SESSION["bank_return"]["data"]["VK_REF"] ,0 , -1 );
 }
-
 
 //logimine
 $log = date("d/m/Y H:i : ",time());
@@ -134,6 +132,7 @@ else
 {
 	$url = $_SESSION["bank_payment"]["cancel"];
 }
+
 /*
 if(!$url)
 {
@@ -142,7 +141,6 @@ if(!$url)
 	$inst->bank_return(array("id" => $obj->id()));
 }
 */
-
 header("Location:".$url);
 die();
 
