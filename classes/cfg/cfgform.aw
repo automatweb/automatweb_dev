@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.104 2007/03/31 12:55:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.105 2007/03/31 16:31:53 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -40,7 +40,10 @@
 	@property classinfo_disable_relationmgr type=checkbox ch_value=1 field=meta method=serialize
 	@caption &Auml;ra kasuta seostehaldurit
 
-	@property edit_groups type=callback callback=callback_edit_groups group=groupdata_a
+	// @property edit_groups type=callback callback=callback_edit_groups group=groupdata_a
+	// @caption Muuda tabe
+
+	@property edit_groups type=table group=groupdata_a no_caption=1
 	@caption Muuda tabe
 
 	@property group_movement type=table group=groupdata_b store=no no_caption=1
@@ -185,6 +188,10 @@ class cfgform extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "edit_groups":
+				$this->_edit_groups_tbl($arr);
+				break;
+
 			case "group_movement":
 				$this->_group_movement($arr);
 				break;
@@ -991,9 +998,9 @@ class cfgform extends class_base
 				if (!is_numeric($key))
 				{
 					$by_group[$key] = array();
-				};
-			};
-		};
+				}
+			}
+		}
 
 		if (is_array($this->prplist))
 		{
@@ -1011,12 +1018,11 @@ class cfgform extends class_base
 						{
 							//list(,$first) = each($property["group"]);
 							$by_group[$gkey][] = $property;
-						};
-					};
-
-				};
-			};
-		};
+						}
+					}
+				}
+			}
+		}
 
 		$c = "";
 		$cnt = 0;
@@ -1032,10 +1038,26 @@ class cfgform extends class_base
 			{
 				$cnt++;
 				$prpdata = $this->all_props[$property["name"]];
+
 				if (!$prpdata)
 				{
 					continue;
-				};
+				}
+
+				switch ($prpdata["type"])
+				{
+					case "textarea":
+						$this->vars(array(
+							"richtext_checked" => checked($property["richtext"] == 1),
+							"richtext" => $property["richtext"],
+						));
+						$property["cfgform_additional_options"] = $this->parse("textarea_options");
+						break;
+
+					default:
+						$property["cfgform_additional_options"] = "";
+				}
+
 				$used_props[$property["name"]] = 1;
 				$this->vars(array(
 					"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
@@ -1043,25 +1065,26 @@ class cfgform extends class_base
 					"prp_type" => $prpdata["type"],
 					"prp_key" => $prpdata["name"],
 					"prp_order" => $property["ord"],
+					"prp_options" => $property["cfgform_additional_options"] ,
 				));
 				$sc .= $this->parse("property");
-				if ($this->is_template($prpdata["type"]."_options"))
-				{
-					$this->vars(array(
-						"richtext_checked" => checked($property["richtext"] == 1),
-						"richtext" => $property["richtext"],
-					));
-					$sc .= $this->parse($prpdata["type"]."_options");
-				};
-			};
+			}
+
 			$this->vars(array(
 				"property" => $sc,
 			));
 			$c .= $this->parse("group");
-		};
+		}
 
 		$this->vars(array(
 			"group" => $c,
+			"capt_legend_tbl" => t("Tabi pealkiri (tabi_nimi)"),
+			"capt_prp_order" => t("Jrk."),
+			"capt_prp_key" => t("Nimi"),
+			"capt_prp_caption" => t("Pealkiri"),
+			"capt_prp_type" => t("Tüüp"),
+			"capt_prp_mark" => t("Vali"),
+			"capt_prp_options" => t("Lisavalikud"),
 		));
 
 		$item = $arr["prop"];
@@ -1430,7 +1453,6 @@ class cfgform extends class_base
 
 		foreach($grps_ as $key => $item)
 		{
-			$res = array();
 			$rv["grpcaption[$key]"] = array(
 				"name" => "grpcaption[".$key."]",
 				"type" => "textbox",
@@ -1442,7 +1464,7 @@ class cfgform extends class_base
 			$rv["grpord[$key]"] = array(
 				"name" => "grpord[".$key."]",
 				"type" => "textbox",
-				"size" => 5,
+				"size" => 2,
 				"caption" => t("J&auml;rjekord"),
 				"value" => $item["ord"],
 				"parent" => "b".$key,
@@ -1485,17 +1507,6 @@ class cfgform extends class_base
 				"rtype" => "hbox",
 				"caption" => $key,
 			);
-			/*
-			$items = array(
-				"type" => "text",
-				"name" => ,
-				"caption" => t("ab"),
-				"items" => $res,
-				"no_caption" => 1,
-			);
-
-			$rv["b".$key] = $items;
-			*/
 		}
 
 		return $rv;
@@ -1504,26 +1515,27 @@ class cfgform extends class_base
 	function update_groups($arr)
 	{
 		$grplist = $this->grplist;
+
 		if (is_array($arr["request"]["grpcaption"]))
 		{
 			foreach($arr["request"]["grpcaption"] as $key => $val)
 			{
 				//$grplist[$key] = array("caption" => $val);
 				$grplist[$key]["caption"] = $val;
-				$styl = $arr["request"]["grpstyle"][$key];
-				$view = $arr["request"]["grpview"][$key];
-				$ctl = $arr["request"]["grpctl"][$key];
-				$v_ctl = $arr["request"]["grp_d_ctl"][$key];
-				$grplist[$key]["grpview"] = $view;
-				$grplist[$key]["grpctl"] = $ctl;
-				$grplist[$key]["grp_d_ctl"] = $v_ctl;
+				$grplist[$key]["grpview"] = $arr["request"]["grpview"][$key];
+				$grplist[$key]["grphide"] = (int) !$arr["request"]["grphide"][$key];
+				$grplist[$key]["grpctl"] = $arr["request"]["grpctl"][$key];
+				$grplist[$key]["grp_d_ctl"] = $arr["request"]["grp_d_ctl"][$key];
 				$grplist[$key]["ord"] = $arr["request"]["grpord"][$key];
+
+				$styl = $arr["request"]["grpstyle"][$key];
 				if (!empty($styl))
 				{
 					$grplist[$key]["grpstyle"] = $styl;
-				};
-			};
-		};
+				}
+			}
+		}
+
 		$this->cfg_groups = $grplist;
 	}
 
@@ -2246,6 +2258,99 @@ class cfgform extends class_base
 		return $active;
 	}
 
+	function _init_edit_groups_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "grp",
+			"caption" => t("Tab"),
+		));
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Pealkiri"),
+		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("Jrk."),
+		));
+		$t->define_field(array(
+			"name" => "style",
+			"caption" => t("Stiil"),
+		));
+		$t->define_field(array(
+			"name" => "ctrl",
+			"caption" => t("Sisu kontroller"),
+		));
+		$t->define_field(array(
+			"name" => "view_ctrl",
+			"caption" => t("Näitamise kontroller"),
+		));
+		$t->define_field(array(
+			"name" => "opt_view",
+			"caption" => t("V"),
+			"tooltip" => t("Vaikimisi view vaade"),
+		));
+		$t->define_field(array(
+			"name" => "opt_show",
+			"caption" => t("N"),
+			"tooltip" => t("Näita tabi"),
+		));
+	}
+
+	function _edit_groups_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_edit_groups_tbl($t);
+		$grps = new aw_array($arr["obj_inst"]->meta("cfg_groups"));
+
+		$tps = array(
+			"" => t("vaikestiil"),
+			"stacked" => t("pealkiri yleval, sisu all"),
+		);
+		$ctr_list = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VIEWCONTROLLER")));
+
+		foreach($grps->get() as $gn => $gd)
+		{
+			$t->define_data(array(
+				"grp" => (empty($gd["parent"]) ? "" : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") . $gn,
+				"caption" => html::textbox(array(
+					"name" => "grpcaption[".$gn."]",
+					"size" => 30,
+					"value" => $gd["caption"],
+				)),
+				"ord" => html::textbox(array(
+					"name" => "grpord[".$gn."]",
+					"size" => 2,
+					"value" => $gd["ord"],
+				)),
+				"style" => html::select(array(
+					"name" => "grpstyle[$gn]",
+					"options" => $tps,
+					"selected" => $gd["grpstyle"],
+				)),
+				"ctrl" => html::select(array(
+					"name" => "grpctl[$gn]",
+					"value" => $gd["grpctl"],
+					"options" => array("" => t("--vali--")) + $ctr_list->names(),
+				)),
+				"view_ctrl" => html::select(array(
+					"name" => "grp_d_ctl[$gn]",
+					"value" => $gd["grp_d_ctl"],
+					"options" => array("" => t("--vali--")) + $ctr_list->names()
+				)),
+				"opt_view" => html::checkbox(array(
+					"name" => "grpview[$gn]",
+					"value" => 1,
+					"checked" => $gd["grpview"],
+				)),
+				"opt_show" => html::checkbox(array(
+					"name" => "grphide[$gn]",
+					"value" => 1,
+					"checked" => (int) !$gd["grphide"],
+				)),
+			));
+		}
+	}
+
 	function _init_group_movement_t(&$t)
 	{
 		$t->define_field(array(
@@ -2406,7 +2511,7 @@ class cfgform extends class_base
 				$grp_data = next($this->grplist);
 			}
 		}
-		while (is_array($grp_data) and $grp_data["parent"] != $parent_grp);
+		while (is_array($grp_data) and ($grp_data["parent"] != $parent_grp or $grp_data["grphide"]));
 
 		$this->make_menu_item_counter++;
 		$grp = key($this->grplist);

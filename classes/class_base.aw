@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.540 2007/03/31 12:55:37 voldemar Exp $
+// $Id: class_base.aw,v 2.541 2007/03/31 16:31:54 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2129,19 +2129,21 @@ class class_base extends aw_template
 				}
 			};
 			$val["type"] = "text";
-		};
+		}
+
 		if ($val["orig_type"] == "select" && $val["options"][$val["value"]] != "" && $this->view == 1)
 		{
 			$val["value"] = $val["options"][$val["value"]];
 		}
+
 		if($val["type"] == "layout")
 		{
 			$val["group"] = $this->use_group;
 			$val["type"] = $val["rtype"];
 			$this->layoutinfo[$val["name"]] = $val;
-
 			unset($val);
 		}
+
 		// XXX: move get_html calls out of here, they really do not belong
 		if (($val["type"] == "toolbar") && is_object($val["vcl_inst"]))
 		{
@@ -4406,16 +4408,17 @@ class class_base extends aw_template
 		if (!empty($arr["form"]))
 		{
 			$filter["form"] = $arr["form"];
-		};
+		}
+
 		if (!empty($arr["rel"]))
 		{
 			$filter["rel"] = 1;
-		};
+		}
 
 		if (empty($arr["clid"]) && !empty($this->clid))
 		{
 			$arr["clid"] = $this->clid;
-		};
+		}
 
 		$cls_id = aw_global_get("class");
 		// XXX: add some checks
@@ -4471,18 +4474,17 @@ class class_base extends aw_template
 				"class_id" => $cls_id
 			));
 		}
-		else
-		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
+		elseif (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
-
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
 			));
+			$cfg_form = obj($arr["cfgform_id"]);
 
 			if ($this->cfg_debug)
 			{
 				print "loading from " . $arr["cfgform_id"] . "<br>";
-			};
+			}
 			// if there is a bug in config form which caused the groupdata
 			// to be empty, then this is the place where we should fix it.
 		}
@@ -4497,6 +4499,7 @@ class class_base extends aw_template
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $def_cfgform,
 					));
+					$cfg_form = obj($def_cfgform);
 
 					if ($this->cfg_debug)
 					{
@@ -4552,15 +4555,14 @@ class class_base extends aw_template
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $found_form,
 					));
+					$cfg_form = obj($found_form);
 
 					if ($this->cfg_debug)
 					{
 						print "loading cfgform " . $found_form;
 						print "<br>";
-					};
-
-				};
-
+					}
+				}
 			}
 			else
 			{
@@ -4574,7 +4576,7 @@ class class_base extends aw_template
 				};
 
 			};
-		};
+		}
 		$this->_cfg_props = $cfg_props;
 
 		// I need group and caption from each one
@@ -4599,6 +4601,17 @@ class class_base extends aw_template
 					continue;
 				}
 			}
+
+			if (is_object($cfg_form))
+			{
+				$grp_cfg = $cfg_form->meta("cfg_groups");
+
+				if (!empty($grp_cfg[$gkey]["grphide"]))
+				{
+					continue;
+				}
+			}
+
 			// I need some kind of additional array, thats what I need!
 			$parent = 0;
 			if ($ginfo["parent"])
@@ -4753,7 +4766,7 @@ class class_base extends aw_template
 			$this->prop_by_group = $this->prop_by_group + array_flip($propgroups);
 
 			$property_groups[$key] = $propgroups;
-		};
+		}
 
 		foreach($cfg_props as $key => $val)
 		{
@@ -4821,12 +4834,10 @@ class class_base extends aw_template
 
 			// shouldn't I do some kind of overriding?
 			$tmp[$key] = $propdata;
-		};
+		}
+
 		$this->use_group = $use_group;
 		return $tmp;
-
-
-
 	}
 
 	////

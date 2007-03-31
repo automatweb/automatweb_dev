@@ -104,8 +104,9 @@
             <group>groupdata_a</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>callback_edit_groups</callback>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Muuda tabe</caption>
       </property>
       <property>
