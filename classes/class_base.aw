@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.539 2007/03/30 09:15:24 voldemar Exp $
+// $Id: class_base.aw,v 2.540 2007/03/31 12:55:37 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -747,6 +747,7 @@ class class_base extends aw_template
 			"cfgform" => empty($this->auto_cfgform) && isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
 			"return_url" => !empty($this->request["return_url"]) ? $this->request["return_url"] : "",
 			"subgroup" => $this->subgroup,
+			"awcb_display_mode" => $this->awcb_display_mode,
 		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
 
 		if(!empty($this->reltype))
@@ -1115,28 +1116,44 @@ class class_base extends aw_template
 			if (!empty($request["XUL"]))
 			{
 				$args["XUL"] = 1;
-			};
+			}
+
 			$args["return_url"] = $real_return_url;
+
 			if ($this->new && isset($_POST["cfgform"]))
 			{
 				$args["cfgform"] = $_POST["cfgform"];
-			};
+			}
+
 			//$retval = $this->mk_my_orb($action,$args,$orb_class);
 			$retval = $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
+
 			if (is_numeric($class))
 			{
 				$retval = aw_url_change_var("class",$class,$retval);
-			};
+			}
+
+			if ("cfg_embed" == $request["awcb_display_mode"])
+			{
+				$retval = aw_url_change_var(array(
+					"class" => NULL,
+					"action" => NULL,
+					"alias_to" => NULL,
+					"alias_to_prop" => NULL,
+				), false, $retval);
+			}
+
 			if ($request["return"] == "id")
 			{
 				$retval = $this->id;
-			};
+			}
+		}
 
-		};
 		if (!$save_ok)
 		{
 			return $this->abort_action($args);
-		};
+		}
+
 		return $retval;
 	}
 

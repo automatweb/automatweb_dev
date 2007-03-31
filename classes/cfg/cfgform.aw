@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.103 2007/03/30 09:15:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.104 2007/03/31 12:55:36 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -266,8 +266,8 @@ class cfgform extends class_base
 					"view" => t("Vaatamine (view)"),
 					"change" => t("Muutmine (change)"),
 					"new" => t("Lisamine (new)"),
-					"cfgview_change_add" => t("Muutmine (ka lisamine lubatud)"),
-					"cfgview_view_add" => t("Vaatamine (ka lisamine lubatud)"),
+					"cfgview_change_new" => t("Muutmine (ka lisamine lubatud)"),
+					"cfgview_view_new" => t("Vaatamine (ka lisamine lubatud)"),
 				);
 				break;
 
@@ -2333,28 +2333,20 @@ class cfgform extends class_base
 		$classes = aw_ini_get("classes");
 		$class = strtolower(substr($classes[$this_object->prop("ctype")]["def"], 3));
 		$action = $this_object->prop("cfgview_action") ? $this_object->prop("cfgview_action") : "view";
-		$vars["action"] = $action;
-		$vars["cfgform"] = $args["id"];
-		$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
-		$_GET["awcb_display_mode"] = $args["display_mode"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 
-		if ("cfgview_change_add" == $action or "cfgview_view_add" == $action)
+		if ("cfgview_change_new" == $action or "cfgview_view_new" == $action)
 		{
 			if (!is_oid($vars["id"]))
 			{
 				$action = "new";
 			}
-			elseif ("cfgview_change_add" == $action)
+			elseif ("cfgview_change_new" == $action)
 			{
 				$action = "change";
 			}
-			elseif ("cfgview_view_add" == $action)
+			elseif ("cfgview_view_new" == $action)
 			{
 				$action = "view";
-			}
-			else
-			{
-				return;
 			}
 		}
 		elseif (!is_oid($vars["id"]))
@@ -2362,41 +2354,24 @@ class cfgform extends class_base
 			return;
 		}
 
+		$vars["action"] = $action;
+		$vars["cfgform"] = $args["id"];
+		$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
+		$_GET["awcb_display_mode"] = $args["display_mode"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
+
 		classload("core/orb/orb");
 		$orb = new orb();
 		$orb->process_request(array(
 			"class" => $class,
 			"action" => $action,
 			"reforb" => $vars["reforb"],
-			// "user"	=> 1,//!!! whats that for?
+			"user"	=> 1,//!!! whats that for?
 			"vars" => $vars,
 			"silent" => false,
 		));
 		$content = $orb->get_data();
 
 		exit_function("cfg_form::get_class_cfgview");
-
-		// et kui orb_data on link, siis teeme ümbersuunamise
-		// see ei ole muidugi parem lahendus. In fact, see pole üleüldse
-		// mingi lahendus
-		if (substr($content,0,5) == "http:" || $vars["reforb"] == 1)
-		{
-			if (headers_sent())
-			{
-				print html::href(array(
-					"url" => $content,
-					"caption" => t("Kliki siia jätkamiseks"),
-				));
-			}
-			else
-			{
-				header("Location: $content");
-				print "\n\n";
-			}
-
-			exit;
-		}
-
 		return $content;
 	}
 
@@ -2453,7 +2428,10 @@ class cfgform extends class_base
 		{
 			return array(
 				"text" => $grp_data["caption"],
-				"link" => aw_url_change_var("group", $grp),
+				"link" => aw_url_change_var(array (
+					"group" => $grp,
+					"just_saved" => NULL,
+				)),
 				// "section" => $o_91_2->id(),
 				// "menu_edit" => $this->__helper_menu_edit($o_91_2),
 				// "parent_section" => is_object($o_91_1) ? $o_91_1->id() : $o_91_2->parent(),
