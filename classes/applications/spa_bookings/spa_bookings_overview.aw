@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.28 2007/03/29 12:28:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.29 2007/04/02 14:33:32 kristo Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -78,9 +78,37 @@
 		@property stats_r_list type=table store=no no_caption=1 parent=stats_r_split
 
 
+@default group=reports
+
+	@property rr_tb type=toolbar store=no no_caption=1
+
+	@layout rr_split type=hbox width=20%:80%
+
+		@layout rr_left type=vbox parent=rr_split
+
+			@layout rr_srch type=vbox closeable=1 area_caption=Otsing parent=rr_left
+			
+				@property r_rs_name type=textbox store=no captionside=top parent=rr_srch size=22
+				@caption Ruumi nimi
+
+				@property r_rs_booker_name type=textbox store=no captionside=top parent=rr_srch size=22
+				@caption Broneerija nimi
+
+				@property r_rs_booking_from type=date_select store=no captionside=top parent=rr_srch format=day_textbox,month_textbox,year_textbox
+				@caption Broneering alates
+			
+				@property r_rs_booking_to type=date_select store=no captionside=top parent=rr_srch format=day_textbox,month_textbox,year_textbox
+				@caption Broneering kuni
+
+				@property r_rs_btn type=submit store=no parent=rr_srch no_caption=1
+				@caption Otsi
+
+		@property r_r_list type=table store=no no_caption=1 parent=rr_split
+
 
 @groupinfo rooms caption=Ruumid
 @groupinfo stats caption=Statistika
+@groupinfo reports caption=Aruanded
 
 
 @reltype RF value=1 clid=CL_MENU
@@ -137,6 +165,11 @@ class spa_bookings_overview extends class_base
 		$arr["args"]["rs_booker_name"] = $arr["request"]["rs_booker_name"];
 		$arr["args"]["rs_booking_from"] = $arr["request"]["rs_booking_from"];
 		$arr["args"]["rs_booking_to"] = $arr["request"]["rs_booking_to"];
+
+		$arr["args"]["r_rs_name"] = $arr["request"]["r_rs_name"];
+		$arr["args"]["r_rs_booker_name"] = $arr["request"]["r_rs_booker_name"];
+		$arr["args"]["r_rs_booking_from"] = $arr["request"]["r_rs_booking_from"];
+		$arr["args"]["r_rs_booking_to"] = $arr["request"]["r_rs_booking_to"];
 
 		$arr["args"]["stats_rs_name"] = $arr["request"]["stats_rs_name"];
 		$arr["args"]["stats_rs_booker_name"] = $arr["request"]["stats_rs_booker_name"];
@@ -1180,6 +1213,321 @@ class spa_bookings_overview extends class_base
 			$t->define_data($r);
 		}
 		$t->set_sortable(false);
+	}
+
+	function _get_r_rs_name($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_r_rs_booker_name($arr)
+	{
+		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+	}
+
+	function _get_r_rs_booking_from($arr)
+	{
+		$v = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
+		if ($v < 1)
+		{
+			$v = mktime(0,0,0, date("m"), date("d")-1, date("Y"));
+		}
+		$arr["prop"]["value"] = $v;
+	}
+
+	function _get_r_rs_booking_to($arr)
+	{
+		$v = date_edit::get_timestamp($arr["request"][$arr["prop"]["name"]]);
+		if ($v < 1)
+		{
+			$v = mktime(0,0,0, date("m"), date("d")+7, date("Y"));
+		}
+		$arr["prop"]["value"] = $v;
+	}
+
+	function _init_r_r_list(&$t)
+	{
+		$t->define_field(array(
+			"name" => "room",
+			"caption" => t("Ruum"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y",
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Kellaajad"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "hrs",
+			"caption" => t("Tunde"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+	}
+
+	function _get_r_r_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$ol = new object_list();
+
+		$from = date_edit::get_timestamp($arr["request"]["r_rs_booking_from"]);
+		$to = date_edit::get_timestamp($arr["request"]["r_rs_booking_to"]);
+
+		$srch = !empty($arr["request"]["r_rs_name"]) || !empty($arr["request"]["r_rs_booker_name"]) || $from > 1 || $to > 1 ;	
+		$room2booking = array();
+		if ($srch)
+		{
+			$room2booking = array();
+			$f = array(
+				"class_id" => CL_ROOM,
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+			if (!empty($arr["request"]["r_rs_name"]))
+			{
+				$f["name"] = "%".$arr["request"]["r_rs_name"]."%";
+			}
+
+			if (!empty($arr["request"]["r_rs_booker_name"]) || $from > 1 || $to > 1)
+			{
+				// get all bookings for that person
+				$bf = array(
+					"class_id" => CL_RESERVATION,
+					"verified" => 1,			
+					"lang_id" => array(),
+					"site_id" => array(),
+				);
+				if (!empty($arr["request"]["r_rs_booker_name"]))
+				{
+					$bf["CL_RESERVATION.RELTYPE_CUSTOMER.name"] = "%".$arr["request"]["r_rs_booker_name"]."%";
+				}
+				if ($from > 1)
+				{
+					$bf["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $from);
+				}
+				else
+				{
+					$bf["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, 1);
+				}
+
+				if ($to > 1)
+				{
+					$bf["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $to);
+				}
+
+				$bookings = new object_list($bf);
+				$rooms = array();
+				foreach($bookings->arr() as $booking)
+				{
+					$rooms[$booking->prop("resource")] = $booking->prop("resource");
+					if (!empty($arr["request"]["r_rs_booker_name"]))
+					{
+						$room2booking[$booking->prop("resource")][] = $booking;
+					}
+				}
+				if (count($rooms))
+				{
+					$f["oid"] = $rooms;
+				}
+				else
+				{
+					$f["oid"] = -1;
+				}
+			}
+			$rf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_RF");
+			$flds = new object_tree(array("parent" => $rf->id(), "class_id" => CL_MENU, "lang_id" => array(), "site_id" => array()));
+			$f["parent"] = $this->make_keys($flds->ids());
+			$f["parent"][$rf->id()] = $rf->id();
+			
+			$f["sort_by"] = "objects.jrk";
+			$ol = new object_list($f);
+		}
+		else
+		{
+			return;
+		}
+
+		$persons_filter = array();
+		if ($arr["request"]["do_print"])
+		{
+			foreach(safe_array($arr["request"]["persons"]) as $p_id)
+			{
+				$po = obj($p_id);
+				$persons_filter[] = $po->name();
+			}
+		}
+
+		$ri = get_instance(CL_RESERVATION);
+		$price_sum = array();
+		if (count($room2booking))
+		{
+			$this->_init_r_r_list($t, false);
+			// group table by ppl and do several rows for one room if necessary
+			$ppl = array();
+			$ppl_all = array();
+			foreach($room2booking as $room_id => $books)
+			{
+				foreach($books as $booking)
+				{	
+					foreach($booking->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+					{
+						$_po = $c->to();
+						$ppl[$_po->brother_of()][] = $booking;
+					}
+				}
+			}
+
+			$tmp = array();
+			foreach($ppl as $cust_id => $bookings)
+			{
+				$cust_o = obj($cust_id);
+				if (isset($tmp[$cust_o->name()]))
+				{
+					foreach($bookings as $booking)
+					{
+						$tmp[$cust_o->name()]["bookings"][] = $booking;
+					}
+				}
+				else
+				{
+					$tmp[$cust_o->name()] = array(
+						"id" => $cust_id,
+						"bookings" => $bookings
+					);
+				}
+			}
+
+
+			foreach($tmp as $data) //$cust_id => $bookings)
+			{
+				$cust_id = $data["id"];
+				$bookings = $data["bookings"];
+				$rvs_ids = array();
+				foreach($bookings as $booking)
+				{
+					$rvs_ids[] = $booking->id();
+				}
+				$p_obj = obj($cust_id);
+				if ($arr["request"]["r_rs_booker_name"] != "" && strpos(strtolower($p_obj->name()), strtolower($arr["request"]["r_rs_booker_name"])) === false)
+				{
+					continue;
+				}
+
+				if (count($persons_filter))
+				{
+					$match = false;
+					foreach($persons_filter as $filt_p_name)
+					{
+						if ($filt_p_name == $p_obj->name())
+						{
+							$match = true;
+						}
+					}
+					if (!$match)
+					{
+						continue;
+					}
+				}
+				$ppl_links = array();
+				$p_str = "";
+
+				if ($arr["request"]["do_print"] != 1)
+				{
+					$p_str = html::checkbox(array(
+						"name" => "persons[]",
+						"value" => $p_obj->id()
+					));
+				}
+
+				$p_str .= html::obj_change_url($p_obj);
+
+				foreach($bookings as $booking)
+				{
+					$pr = $ri->get_reservation_price($booking);
+					$price_str = array();
+					foreach($pr as $cur_id => $cur_val)
+					{
+						$co = obj($cur_id);
+						$price_str[] = number_format($cur_val, 2)." ".$co->name();
+						$price_sum[$cur_id] += $cur_val;
+					}
+					$t->define_data(array(
+						"room" => html::get_change_url($booking->prop("resource"), array("return_url" => get_ru(), "group" => "calendar"), $booking->prop("resource.name")),
+						"oid" => $booking->prop("resource"),
+						"date" => $booking->prop("start1"),
+						"time" => sprintf("%s - %s", date("H:i", $booking->prop("start1")), date("H:i", $booking->prop("end"))),
+						"hrs" => number_format(($booking->prop("end") - $booking->prop("start1")) / 3600, 2),
+						"price" => join(" / ", $price_str),
+						"person" => $p_str
+					));
+					$hrs_sum += ($booking->prop("end") - $booking->prop("start1")) / 3600;
+				}
+			}
+			$t->sort_by(array(
+				"rgroupby" => array("person" => "person")
+			));
+		}
+		$t->set_sortable(false);
+
+		$price_str = array();
+		foreach($price_sum as $cur_id => $cur_val)
+		{
+			$co = obj($cur_id);
+			$price_str[] = number_format($cur_val, 2)." ".$co->name();
+		}
+
+		$t->define_data(array(
+			"room" => t("<b>Summa:</b>"),
+			"oid" => "",
+			"date" => "",
+			"time" => "",
+			"hrs" => number_format($hrs_sum, 2),
+			"price" => join(" / ", $price_str),
+			"person" => ""
+		));
+
+		if ($arr["request"]["do_print"])
+		{
+			$i = new aw_template();
+			$i->init("automatweb");
+			$i->read_template("index.tpl");
+			$i->vars(array(
+				"content" => $t->draw()
+			));
+			die($i->parse()."<script language=javascript>window.print();</script>");
+		}
+	}
+
+	function _get_rr_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "print",
+			"img" => "print.gif",
+			"link" => "#",
+			"onClick" => "ad='';f=document.changeform;for(i = 0; i < f.elements.length; i++) {el = f.elements[i];if (el.name.indexOf('persons') == 0 && el.checked) { ad += '&persons[]='+el.value; } }; aw_popup_scroll('".aw_url_change_var("do_print", 1)."'+ad, 'print', 500,500);"
+
+		));
 	}
 }
 ?>

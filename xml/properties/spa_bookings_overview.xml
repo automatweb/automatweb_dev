@@ -215,6 +215,92 @@
             <parent>stats_r_split</parent>
             <field>stats_r_list</field>
       </property>
+      <property>
+            <name>rr_tb</name>
+            <table>objects</table>
+            <group>reports</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>rr_tb</field>
+      </property>
+      <property>
+            <name>r_rs_name</name>
+            <table>objects</table>
+            <group>reports</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>rr_srch</parent>
+            <size>22</size>
+            <field>r_rs_name</field>
+            <caption>Ruumi nimi</caption>
+      </property>
+      <property>
+            <name>r_rs_booker_name</name>
+            <table>objects</table>
+            <group>reports</group>
+            <type>textbox</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>rr_srch</parent>
+            <size>22</size>
+            <field>r_rs_booker_name</field>
+            <caption>Broneerija nimi</caption>
+      </property>
+      <property>
+            <name>r_rs_booking_from</name>
+            <table>objects</table>
+            <group>reports</group>
+            <type>date_select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>rr_srch</parent>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>r_rs_booking_from</field>
+            <caption>Broneering alates</caption>
+      </property>
+      <property>
+            <name>r_rs_booking_to</name>
+            <table>objects</table>
+            <group>reports</group>
+            <type>date_select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>rr_srch</parent>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
+            <field>r_rs_booking_to</field>
+            <caption>Broneering kuni</caption>
+      </property>
+      <property>
+            <name>r_rs_btn</name>
+            <table>objects</table>
+            <group>reports</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>rr_srch</parent>
+            <no_caption>1</no_caption>
+            <field>r_rs_btn</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>r_r_list</name>
+            <table>objects</table>
+            <group>reports</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>rr_split</parent>
+            <field>r_r_list</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SPA_BOOKINGS_OVERVIEW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -228,6 +314,9 @@
             <stats>
                   <caption>Statistika</caption>
             </stats>
+            <reports>
+                  <caption>Aruanded</caption>
+            </reports>
       </groupinfo>
       <reltypes>
             <RF>
@@ -291,6 +380,23 @@
                   <parent>stats_r_left</parent>
                   <group>stats</group>
             </stats_r_srch>
+            <rr_split>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>reports</group>
+            </rr_split>
+            <rr_left>
+                  <type>vbox</type>
+                  <parent>rr_split</parent>
+                  <group>reports</group>
+            </rr_left>
+            <rr_srch>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Otsing</area_caption>
+                  <parent>rr_left</parent>
+                  <group>reports</group>
+            </rr_srch>
       </layout>
 </properties>
 
