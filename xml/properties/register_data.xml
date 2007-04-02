@@ -173,6 +173,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser1</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 1</caption>
       </property>
       <property>
@@ -181,6 +183,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser2</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 2</caption>
       </property>
       <property>
@@ -189,6 +193,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser3</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 3</caption>
       </property>
       <property>
@@ -197,6 +203,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser4</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 4</caption>
       </property>
       <property>
@@ -205,6 +213,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser5</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 5</caption>
       </property>
       <property>
@@ -213,6 +223,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser6</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 6</caption>
       </property>
       <property>
@@ -221,6 +233,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser7</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 7</caption>
       </property>
       <property>
@@ -229,6 +243,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser8</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 8</caption>
       </property>
       <property>
@@ -237,6 +253,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser9</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 9</caption>
       </property>
       <property>
@@ -245,6 +263,8 @@
             <table>aw_register_data</table>
             <type>textarea</type>
             <field>aw_tauser10</field>
+            <rows>20</rows>
+            <cols>50</cols>
             <caption>User-defined ta 10</caption>
       </property>
       <property>

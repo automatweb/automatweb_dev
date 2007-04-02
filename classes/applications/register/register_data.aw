@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.41 2006/06/16 11:23:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.42 2007/04/02 14:06:11 markop Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -75,34 +75,34 @@
 @property user20 type=textbox field=aw_user20
 @caption User-defined 20
 
-@property userta1 type=textarea field=aw_tauser1
+@property userta1 type=textarea field=aw_tauser1 rows=20 cols=50
 @caption User-defined ta 1
 
-@property userta2 type=textarea field=aw_tauser2
+@property userta2 type=textarea field=aw_tauser2 rows=20 cols=50
 @caption User-defined ta 2
 
-@property userta3 type=textarea field=aw_tauser3
+@property userta3 type=textarea field=aw_tauser3 rows=20 cols=50
 @caption User-defined ta 3
 
-@property userta4 type=textarea field=aw_tauser4
+@property userta4 type=textarea field=aw_tauser4 rows=20 cols=50
 @caption User-defined ta 4
 
-@property userta5 type=textarea field=aw_tauser5
+@property userta5 type=textarea field=aw_tauser5 rows=20 cols=50
 @caption User-defined ta 5
 
-@property userta6 type=textarea field=aw_tauser6
+@property userta6 type=textarea field=aw_tauser6 rows=20 cols=50
 @caption User-defined ta 6
 
-@property userta7 type=textarea field=aw_tauser7
+@property userta7 type=textarea field=aw_tauser7 rows=20 cols=50
 @caption User-defined ta 7
 
-@property userta8 type=textarea field=aw_tauser8
+@property userta8 type=textarea field=aw_tauser8 rows=20 cols=50
 @caption User-defined ta 8
 
-@property userta9 type=textarea field=aw_tauser9
+@property userta9 type=textarea field=aw_tauser9 rows=20 cols=50
 @caption User-defined ta 9
 
-@property userta10 type=textarea field=aw_tauser10
+@property userta10 type=textarea field=aw_tauser10 rows=20 cols=50
 @caption User-defined ta 10
 
 @property uservar1 type=classificator field=aw_varuser1 reltype=RELTYPE_VARUSER1 store=connect

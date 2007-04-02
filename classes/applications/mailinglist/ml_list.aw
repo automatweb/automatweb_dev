@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.98 2007/03/28 10:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.99 2007/04/02 14:08:55 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2884,11 +2884,19 @@ class ml_list extends class_base
 				foreach($c->get_property_list() as $key => $val)
 				{
 					$this->vars(array($key => $c->prop($key)));
+					if($c->prop($key))
+					{
+						$this->vars(array(strtoupper($key) => $this->parse(strtoupper($key))));
+					}
 					//arr($c->meta($key));arr($key);
 				}
 				foreach($ro->get_property_list() as $key => $val)
 				{
 					$this->vars(array($key => $ro->prop($key)));
+					if($ro->prop($key))
+					{
+						$this->vars(array(strtoupper($key) => $this->parse(strtoupper($key))));
+					}
 //					arr($ro->meta($key));arr($key);
 				}
 				$asd = 1;
