@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.96 2007/01/24 15:19:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.97 2007/04/02 12:09:03 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -845,7 +845,10 @@ class promo extends class_base
 	function on_save_document($arr)
 	{
 		$o = obj($arr["oid"]);
-		
+		if (aw_global_get("uid") == "struktuur")
+		{
+		echo "o = ".$o->name()." id = ".$o->id()." <br>";
+		}
 		// figure out if this document is to be shown in any promo in the system
 		// to do that
 		// make a list of all promo boxes
@@ -885,7 +888,7 @@ class promo extends class_base
 			if ($is_in_promo)
 			{
 				// check if it has ndocs > 0
-				if ($box->prop("ndocs"))
+				if ($box->prop("ndocs") || true)
 				{
 					// if so, check the sorting order and compare the current document to the current list
 					// if it belongs in the list, add it to the list
@@ -900,7 +903,7 @@ class promo extends class_base
 
 					$filt = array(
 						"oid" => $ids,
-						"limit" => $limit,
+						"limit" => $limit > 0 ? $limit : null,
 						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE),
 						new object_list_filter(array("non_filter_classes" => CL_DOCUMENT))
 					);
