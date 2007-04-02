@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.42 2007/04/02 09:37:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.43 2007/04/02 09:49:44 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -774,10 +774,12 @@ class spa_bookigs_entry extends class_base
 
 		$room_inst = get_instance(CL_ROOM);
 		$room2inst = array();
+		$room2settings = array();
 		foreach($p_rooms as $room_id => $room_obj)
 		{
 			$room2inst[$room_id] = new room;
 			$room2inst[$room_id]->generate_res_table($room_obj, $range_from, $range_to);
+			$room2settings[$room_id] = $room_inst->get_settings_for_room($room_obj);
 		}
 
 		$reserved_days = $this->get_reserved_days_for_pkt($arr["pkt"], $range_from, $range_to, $arr["booking"], $current_booking);
@@ -877,7 +879,10 @@ class spa_bookigs_entry extends class_base
 					}
 					if ($room2inst[$room->id()]->check_if_available(array("room" => $room->id(), "start" => $cur_step_start, "end" => $cur_step_end)) && !$room2inst[$room->id()]->is_buffer)
 					{
-						$avail = true;
+						if ($room2inst[$room->id()]->group_can_do_bron($room2settings[$room->id()], $cur_step_start))
+						{
+							$avail = true;
+						}
 					}
 				}
 
