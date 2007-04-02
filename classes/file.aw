@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.150 2007/03/30 10:36:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.151 2007/04/02 10:31:59 kristo Exp $
 /*
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
@@ -664,6 +664,7 @@ class file extends class_base
 
 	function generate_file_path($arr)
 	{
+		$mt = get_instance("core/aw_mime_types");
 		$site_basedir = $this->cfg["site_basedir"];
 		// find the extension for the file
 		list($major,$minor) = explode("/",$arr["type"]);
@@ -680,6 +681,7 @@ class file extends class_base
 			mkdir($site_basedir . "/files/" . $prefix,0705);
 		}
 
+		$minor = $mt->ext_for_type($arr["type"]);
 		$file = $site_basedir . "/files/" . $prefix . "/" . "$filename.$minor";
 		return $file;
 	}
