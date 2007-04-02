@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.43 2007/04/02 16:07:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.44 2007/04/02 16:24:31 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -295,6 +295,10 @@ class bank_payment extends class_base
 		$payment_data = $payment->meta("bank");
 		$data["sender_id"] = $payment_data[$data["bank_id"]]["sender_id"];
 		$data["stamp"] =  substr($payment_data[$data["bank_id"]]["stamp"], 0, 20);
+		if(!$data["stamp"])
+		{
+			$data["stamp"] = $data["reference_nr"];
+		}
 		if(strlen($payment_data[$data["bank_id"]]["stamp"]) > 5 && $payment_data[$data["bank_id"]]["rec_name"])
 		{
 			$data["service"] = "1001";
