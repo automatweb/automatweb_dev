@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.192 2007/03/30 09:15:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.193 2007/04/02 13:09:51 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -277,10 +277,10 @@
 
 		@property sss_tb type=toolbar store=no no_caption=1 group=docs_from
 
-		@property sss type=table store=no group=docs_from
+		@property sss type=table store=no group=docs_from no_caption=1
 		@caption Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse
 
-		@property sss_exclude type=table store=no group=docs_from
+		@property sss_exclude type=table store=no group=docs_from no_caption=1
 		@caption &Auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt
 
 	@groupinfo seealso_docs caption="Vaata lisaks dokumendid" parent=menus
@@ -1433,6 +1433,7 @@ class menu extends class_base
 
 		$ps = get_instance("vcl/popup_search");
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_sss"], 9 /* RELTYPE_DOCS_FROM_MENU */);
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_no_sss"], 24 /* RELTYPE_NO_DOCS_FROM_MENU */);
 	}
 
 	function callback_pre_save($arr)
@@ -1715,6 +1716,13 @@ class menu extends class_base
 			"width" => 80,
 			"align" => "center",
 		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+			"width" => "10"
+		));
+
+		$t->set_caption(t("Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse"));
 
 		$conns = $obj->connections_from(array(
 			"type" => "RELTYPE_DOCS_FROM_MENU",
@@ -1765,6 +1773,13 @@ class menu extends class_base
 			"width" => 80,
 			"align" => "center",
 		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+			"width" => "10"
+		));
+
+		$t->set_caption(t("&Auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt"));
 
 		$conns = $obj->connections_from(array(
 			"type" => "RELTYPE_NO_DOCS_FROM_MENU",
@@ -2060,13 +2075,31 @@ class menu extends class_base
 	function _get_sss_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$ps = get_instance("vcl/popup_search");
-		$tb->add_cdata($ps->get_popup_search_link(array("pn" => "_set_sss", "clid" => CL_MENU)));
+
+		$tb->add_menu_button(array(
+			"name" => "search",
+			"img" => "search.gif"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("V&otilde;ta viimaseid dokumente"),
+			"link" => "javascript:aw_popup_scroll('".$this->mk_my_orb("do_search", array("pn" => "_set_sss", "clid" => CL_MENU), "popup_search")."','".t("Otsi")."',550,500)",
+		));
+		$tb->add_menu_item(array(
+			"parent" => "search",
+			"text" => t("&Auml;ra v&otilde;ta viimaseid dokumente"),
+			"link" => "javascript:aw_popup_scroll('".$this->mk_my_orb("do_search", array("pn" => "_set_no_sss", "clid" => CL_MENU), "popup_search")."','".t("Otsi")."',550,500)",
+		));
+
+		$tb->add_delete_rels_button();
+
 	}
 
 	function callback_mod_reforb($arr)
 	{
 		$arr["_set_sss"] = "0";
+		$arr["_set_no_sss"] = "0";
 		$arr["link_pops"] = "0";
 	}
 
