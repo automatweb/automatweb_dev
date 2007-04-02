@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.167 2007/03/23 13:17:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.168 2007/04/02 11:25:34 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1500,14 +1500,16 @@ class task extends class_base
 	function _init_rows_t(&$t, $impl_filt = NULL)
 	{
 		$selected = "";
-		$seti = get_instance(CL_CRM_SETTINGS);
+		if(!$this->no_default_on_bill)
+		{
+			$seti = get_instance(CL_CRM_SETTINGS);
 			$sts = $seti->get_current_settings();
 			if ($sts && $sts->prop("default_task_rows_bills_filter"))
 			{
 				$settings_inst = get_instance("applications/crm/crm_settings");
 				$selected = $settings_inst->bills_filter_options[$sts->prop("default_task_rows_bills_filter")];
 			}
-		
+		}
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk"),
@@ -1690,6 +1692,18 @@ class task extends class_base
 
 	function _rows($arr)
 	{
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		if ($sts && $sts->prop("task_rows_controller"))
+		{
+			$i = get_instance(CL_FORM_CONTROLLER);
+			$res = $i->eval_controller($sts->prop("task_rows_controller"), $arr);
+			foreach($res as $key => $val)
+			{
+				$this->$key = $val;
+			}
+		}
+	
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$impls = $this->_get_possible_participants($arr["obj_inst"], true, $arr["obj_inst"]->prop("participants"));

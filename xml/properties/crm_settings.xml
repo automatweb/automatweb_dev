@@ -134,6 +134,15 @@
             <caption>Toimetuse ridades valitud Arve tulba vaikimisi filter</caption>
       </property>
       <property>
+            <name>task_rows_controller</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_CTR</reltype>
+	    <caption>Toimetuse ridade kontroller</caption>
+      </property>
+      <property>
             <name>tables_toolbar</name>
             <table>objects</table>
             <group>tables</group>

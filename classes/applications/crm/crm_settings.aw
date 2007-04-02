@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.17 2007/02/21 17:56:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.18 2007/04/02 11:27:01 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -53,6 +53,10 @@
 
 	@property default_task_rows_bills_filter type=select table=objects field=meta
 	@caption Toimetuse ridades valitud Arve tulba vaikimisi filter
+
+	@property task_rows_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
+  	@caption Toimetuse ridade kontroller
+	
 
 @default group=tables
 	@property tables_toolbar type=toolbar store=no no_caption=1
