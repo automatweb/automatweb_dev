@@ -374,13 +374,15 @@
             <caption>N&amp;amp;auml;itamise meetod</caption>
       </property>
       <property>
-            <name>cfgview_grp</name>
+            <name>cfgview_grps</name>
             <table>objects</table>
             <group>cfgview_settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>N&amp;amp;auml;idatav tab</caption>
+            <multiple>1</multiple>
+            <size>10</size>
+            <caption>N&amp;amp;auml;idatavad tabid</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>

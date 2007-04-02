@@ -1,9 +1,46 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.105 2007/03/31 16:31:53 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.106 2007/04/02 09:22:06 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
 /*
+	@classinfo relationmgr=yes syslog_type=ST_CFGFORM
+
+	@groupinfo groupdata caption=Tabid
+		@groupinfo groupdata_a caption=Tabid parent=groupdata
+		@groupinfo groupdata_b caption=Liikumine parent=groupdata
+
+	@groupinfo layout caption=Layout submit=no
+	@groupinfo avail caption="K&otilde;ik omadused" submit=no
+	@groupinfo controllers caption="Kontrollerid"
+
+	@groupinfo set_controllers caption=Salvestamine parent=controllers
+	@groupinfo get_controllers caption=N&auml;itamine parent=controllers
+
+	@groupinfo settings caption="Seaded"
+	@groupinfo defaults caption="Omaduste v&auml;&auml;rtused" parent=settings
+	@groupinfo system caption="Vormi seaded" parent=settings
+
+	// cfgview -- cfgform is embedded as alias and requested object is shown as configured in that cfgform
+	@groupinfo cfgview_settings caption="Klass aliasena" parent=settings
+
+	@groupinfo translate caption="T&otilde;lgi"
+		@groupinfo lang_1 caption="lang" parent=translate
+		@groupinfo lang_2 caption="lang" parent=translate
+		@groupinfo lang_3 caption="lang" parent=translate
+		@groupinfo lang_4 caption="lang" parent=translate
+		@groupinfo lang_5 caption="lang" parent=translate
+		@groupinfo lang_6 caption="lang" parent=translate
+		@groupinfo lang_7 caption="lang" parent=translate
+		@groupinfo lang_8 caption="lang" parent=translate
+		@groupinfo lang_9 caption="lang" parent=translate
+		@groupinfo lang_10 caption="lang" parent=translate
+		@groupinfo lang_11 caption="lang" parent=translate
+		@groupinfo lang_12 caption="lang" parent=translate
+	@groupinfo show_props caption="Omaduste maha keeramine"
+	@groupinfo transl caption="T&otilde;lgi nime"
+
+
 	@default table=objects
 	@default group=general
 
@@ -92,44 +129,12 @@
 
 	@property trans_tbl_grps type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
 
-	@groupinfo groupdata caption=Tabid
-		@groupinfo groupdata_a caption=Tabid parent=groupdata
-		@groupinfo groupdata_b caption=Liikumine parent=groupdata
+@default group=show_props
+@layout mlist type=hbox width=20%:80%
+	@property treeview type=treeview store=no parent=mlist no_caption=1
+	@property props_list type=table store=no parent=mlist no_caption=1
 
-	@groupinfo layout caption=Layout submit=no
-	@groupinfo avail caption="K&otilde;ik omadused" submit=no
-	@groupinfo controllers caption="Kontrollerid"
 
-	@groupinfo set_controllers caption=Salvestamine parent=controllers
-	@groupinfo get_controllers caption=N&auml;itamine parent=controllers
-
-	@groupinfo settings caption="Seaded"
-	@groupinfo defaults caption="Omaduste v&auml;&auml;rtused" parent=settings
-	@groupinfo system caption="Vormi seaded" parent=settings
-	@groupinfo cfgview_settings caption="Klass aliasena" parent=settings
-	@groupinfo translate caption="T&otilde;lgi"
-		@groupinfo lang_1 caption="lang" parent=translate
-		@groupinfo lang_2 caption="lang" parent=translate
-		@groupinfo lang_3 caption="lang" parent=translate
-		@groupinfo lang_4 caption="lang" parent=translate
-		@groupinfo lang_5 caption="lang" parent=translate
-		@groupinfo lang_6 caption="lang" parent=translate
-		@groupinfo lang_7 caption="lang" parent=translate
-		@groupinfo lang_8 caption="lang" parent=translate
-		@groupinfo lang_9 caption="lang" parent=translate
-		@groupinfo lang_10 caption="lang" parent=translate
-		@groupinfo lang_11 caption="lang" parent=translate
-		@groupinfo lang_12 caption="lang" parent=translate
-
-	@groupinfo show_props caption="Omaduste maha keeramine"
-	@default group=show_props
-	@layout mlist type=hbox width=20%:80%
-		@property treeview type=treeview store=no parent=mlist no_caption=1
-		@property props_list type=table store=no parent=mlist no_caption=1
-
-	@classinfo relationmgr=yes syslog_type=ST_CFGFORM
-
-@groupinfo transl caption="T&otilde;lgi nime"
 @default group=transl
 
 	@property transl type=callback callback=callback_get_transl
@@ -139,8 +144,8 @@
 	@property cfgview_action type=select field=meta method=serialize
 	@caption N&auml;itamise meetod
 
-	@property cfgview_grp type=select field=meta method=serialize
-	@caption N&auml;idatav tab
+	@property cfgview_grps type=select multiple=1 size=10 field=meta method=serialize
+	@caption N&auml;idatavad tabid
 
 
 // ---------- RELATIONS -------------
@@ -278,15 +283,22 @@ class cfgform extends class_base
 				);
 				break;
 
-			case "cfgview_grp":
-				$data["options"][0] = t("Peataseme tabid");
+			case "cfgview_grps":
+				$parent_grps = array();
 
 				foreach ($this->grplist as $grp_name => $grp_data)
 				{
-					if (empty($grp_data["parent"]))
+					$data["options"][$grp_name] = $grp_data["caption"] . " [" . $grp_name . "]";
+
+					if (!empty($grp_data["parent"]))
 					{
-						$data["options"][$grp_name] = $grp_data["caption"] . " [" . $grp_name . "]";
+						$parent_grps[] = $grp_data["parent"];
 					}
+				}
+
+				foreach ($parent_grps as $name)
+				{
+					unset($data["options"][$name]);
 				}
 				break;
 		}
@@ -335,6 +347,7 @@ class cfgform extends class_base
 		// hm .. now I also need to create an object_tree, eh?
 		//$arr["prop"]["value"] = $tree->finalize_tree();
 	}
+
 	function do_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -371,15 +384,14 @@ class cfgform extends class_base
 
 		if (is_array($this->grplist))
 		{
-			$this->sort_grplist();
 			foreach($this->grplist as $key => $val)
 			{
 				if (!is_numeric($key))
 				{
 					$by_group[$key] = array();
-				};
-			};
-		};
+				}
+			}
+		}
 
 		if (is_array($this->prplist))
 		{
@@ -888,7 +900,8 @@ class cfgform extends class_base
 		if (isset($arr["request"]["subclass"]))
 		{
 			$obj_inst->set_prop("subclass",$arr["request"]["subclass"]);
-		};
+		}
+
 		if (isset($this->cfg_proplist) && is_array($this->cfg_proplist))
 		{
 			$tmp = array();
@@ -920,11 +933,15 @@ class cfgform extends class_base
 				$this->cfg_proplist[$key] = $val;
 			};
 			$obj_inst->set_meta("cfg_proplist",$this->cfg_proplist);
-		};
+		}
+
 		if (isset($this->cfg_groups))
 		{
-			$obj_inst->set_meta("cfg_groups",$this->cfg_groups);
-		};
+			$this->_sort_groups();
+			$obj_inst->set_meta("cfg_groups", $this->cfg_groups);
+			$obj_inst->set_meta("cfg_groups_sorted", 1);
+		}
+
 		return true;
 	}
 
@@ -963,6 +980,7 @@ class cfgform extends class_base
 		return true;
 	}
 
+/* replaced by self::_sort_groups
 	function sort_grplist()
 	{
 		$order = array();
@@ -978,6 +996,100 @@ class cfgform extends class_base
 		}
 		$this->grplist = $grps;
 	}
+ */
+
+	// Sorts meta cfg_groups grplist by ord, retains original order where ord not defined.
+	// Places unordered subgroups after their parents
+	// Separately handles 2-level structure -- parent groups and subgroups.
+	function _sort_groups()
+	{
+		// separate unordered, parent and subgroups
+		$pg = $sg = $pgo = $sgo = array(); // (unordered parent groups, unordered subgroups, ordered parent groups, ordered subgroups)
+
+		foreach($this->cfg_groups as $grp_name => $grp_data)
+		{
+			$parent = empty($grp_data["parent"]) ? 0 : $grp_data["parent"];
+
+			if (empty($grp_data["ord"]))
+			{
+				if (0 === $parent)
+				{
+					$pg[] = $grp_name;
+				}
+				else
+				{
+					$sg[$parent][] = $grp_name;
+				}
+			}
+			else
+			{
+				if (0 === $parent)
+				{
+					$pgo[$grp_data["ord"]] = $grp_name;
+				}
+				else
+				{
+					$sgo[$parent][$grp_data["ord"]] = $grp_name;
+				}
+			}
+		}
+
+		// sort groups
+		ksort($pgo);
+
+		foreach ($sgo as $parent => $tmp)
+		{
+			ksort($sgo[$parent]);
+		}
+
+		// merge groups back together
+		$grplist_tmp_sorted = array();
+
+		foreach ($pg as $grp_name)
+		{
+			$grplist_tmp_sorted[$grp_name] = $this->cfg_groups[$grp_name];
+
+			if (count($sg[$grp_name]))
+			{
+				foreach ($sg[$grp_name] as $grp_name2)
+				{
+					$grplist_tmp_sorted[$grp_name2] = $this->cfg_groups[$grp_name2];
+				}
+			}
+
+			if (count($sgo[$grp_name]))
+			{
+				foreach ($sgo[$grp_name] as $grp_name2)
+				{
+					$grplist_tmp_sorted[$grp_name2] = $this->cfg_groups[$grp_name2];
+				}
+			}
+		}
+
+		foreach ($pgo as $grp_name)
+		{
+			$grplist_tmp_sorted[$grp_name] = $this->cfg_groups[$grp_name];
+
+			if (count($sg[$grp_name]))
+			{
+				foreach ($sg[$grp_name] as $grp_name2)
+				{
+					$grplist_tmp_sorted[$grp_name2] = $this->cfg_groups[$grp_name2];
+				}
+			}
+
+			if (count($sgo[$grp_name]))
+			{
+				foreach ($sgo[$grp_name] as $grp_name2)
+				{
+					$grplist_tmp_sorted[$grp_name2] = $this->cfg_groups[$grp_name2];
+				}
+			}
+		}
+
+		$this->cfg_groups = $grplist_tmp_sorted;
+	}
+
 	////
 	// !
 	function callback_gen_layout($arr = array())
@@ -987,7 +1099,6 @@ class cfgform extends class_base
 
 		if (is_array($this->grplist))
 		{
-			$this->sort_grplist();
 			foreach($this->grplist as $key => $val)
 			{
 				// we should not have numeric group id-s
@@ -1136,6 +1247,11 @@ class cfgform extends class_base
 			"name" => "mark",
 			"field" => "name",
 		));
+
+		if (empty($arr["request"]["sortby"]))
+		{
+			$t->set_sortable(false);
+		}
 
 		$used_props = array();
 
@@ -1951,11 +2067,14 @@ class cfgform extends class_base
 				$this->cfg_proplist[$key] = $val;
 			};
 			$o->set_meta("cfg_proplist",$this->cfg_proplist);
-		};
+		}
+
 		if (isset($this->cfg_groups))
 		{
-			$o->set_meta("cfg_groups",$this->cfg_groups);
-		};
+			$this->_sort_groups();
+			$o->set_meta("cfg_groups", $this->cfg_groups);
+			$o->set_meta("cfg_groups_sorted", 1);
+		}
 	}
 
 	/** Removes all properties from the given config form
@@ -2111,6 +2230,7 @@ class cfgform extends class_base
 		return $ret;
 	}
 
+/* replaced by self::_sort_groups()
 	function __grp_s($a, $b)
 	{
 		if ($a["ord"] == $b["ord"])
@@ -2119,6 +2239,7 @@ class cfgform extends class_base
 		}
 		return $a["ord"] > $b["ord"];
 	}
+ */
 
 	/** Returns the groups defined in the config form
 		@attrib api=1
@@ -2139,8 +2260,22 @@ class cfgform extends class_base
 	function get_cfg_groups($id)
 	{
 		$o = obj($id);
-		$ret = $o->meta("cfg_groups");
+		$this->cfg_groups = $o->meta("cfg_groups");
+		$this->cfgview_grps = safe_array($o->prop("cfgview_grps"));
 
+		// backward compatibility.
+		if (!$o->meta("cfg_groups_sorted"))
+		{
+			$this->_sort_groups();
+			$o->set_meta("cfg_groups", $this->cfg_groups);
+			$o->set_meta("cfg_groups_sorted", 1);
+			$o->save();
+		}
+		//
+
+		$ret = $this->cfg_groups;
+
+/* sorting is now done before saving meta.cfg_groups
 		$has = false;
 		foreach(safe_array($ret) as $k => $v)
 		{
@@ -2154,6 +2289,8 @@ class cfgform extends class_base
 		{
 			uasort($ret, array(&$this, "__grp_s"));
 		}
+ */
+
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("grp_translations");
 		$read_from_trans = true;
@@ -2199,14 +2336,24 @@ class cfgform extends class_base
 					unset($ret[$gn]);
 				}
 			}
-			else
-			if ($has_cb)
+			elseif ($has_cb)
 			{
 				if ($si->callback_get_group_display($o, $gn) == PROP_IGNORE)
 				{
 					unset($ret[$gn]);
 				}
 			}
+			elseif ("cfg_embed" === $_GET["awcb_display_mode"] and !in_array($gn, $this->cfgview_grps))
+			{
+				unset($ret[$gn]);
+			}
+		}
+
+		if ("cfg_embed" === $_GET["awcb_display_mode"])
+		{ // set first available grp as default for cfgview group selection
+			reset($ret);
+			$gn = key($ret);
+			$ret[$gn]["default"] = true;
 		}
 
 		foreach(safe_array($o->meta("buttons")) as $gn => $bts)
@@ -2263,55 +2410,65 @@ class cfgform extends class_base
 		$t->define_field(array(
 			"name" => "grp",
 			"caption" => t("Tab"),
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Pealkiri"),
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk."),
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "style",
 			"caption" => t("Stiil"),
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "ctrl",
 			"caption" => t("Sisu kontroller"),
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "view_ctrl",
 			"caption" => t("Näitamise kontroller"),
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "opt_view",
 			"caption" => t("V"),
 			"tooltip" => t("Vaikimisi view vaade"),
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "opt_show",
 			"caption" => t("N"),
 			"tooltip" => t("Näita tabi"),
+			"chgbgcolor" => "bg_colour",
 		));
 	}
 
 	function _edit_groups_tbl($arr)
 	{
+		$this_o = $arr["obj_inst"];
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_edit_groups_tbl($t);
-		$grps = new aw_array($arr["obj_inst"]->meta("cfg_groups"));
+		$grps = new aw_array($this_o->meta("cfg_groups"));
 
 		$tps = array(
 			"" => t("vaikestiil"),
 			"stacked" => t("pealkiri yleval, sisu all"),
 		);
-		$ctr_list = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VIEWCONTROLLER")));
+		$ctr_list = new object_list($this_o->connections_from(array("type" => "RELTYPE_VIEWCONTROLLER")));
 
 		foreach($grps->get() as $gn => $gd)
 		{
+			$bg_colour = empty($gd["parent"]) ? "silver" : false;
 			$t->define_data(array(
-				"grp" => (empty($gd["parent"]) ? "" : "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") . $gn,
+				"grp" => $gn,
 				"caption" => html::textbox(array(
 					"name" => "grpcaption[".$gn."]",
 					"size" => 30,
@@ -2347,8 +2504,11 @@ class cfgform extends class_base
 					"value" => 1,
 					"checked" => (int) !$gd["grphide"],
 				)),
+				"bg_colour" => $bg_colour,
 			));
 		}
+
+		$t->set_sortable(false);
 	}
 
 	function _init_group_movement_t(&$t)
@@ -2357,16 +2517,19 @@ class cfgform extends class_base
 			"name" => "grp",
 			"caption" => t("Tab"),
 			"align" => "left",
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "back_button",
 			"caption" => t("Tagasi nupp"),
 			"align" => "center",
+			"chgbgcolor" => "bg_colour",
 		));
 		$t->define_field(array(
 			"name" => "next_button",
 			"caption" => t("Edasi nupp"),
 			"align" => "center",
+			"chgbgcolor" => "bg_colour",
 		));
 	}
 
@@ -2387,6 +2550,7 @@ class cfgform extends class_base
 		$buttons = $arr["obj_inst"]->meta("buttons");
 		foreach($grps->get() as $gn => $gd)
 		{
+			$bg_colour = empty($gd["parent"]) ? "silver" : false;
 			$t->define_data(array(
 				"grp" => ($gd["parent"] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : "").$gd["caption"],
 				"back_button" => html::select(array(
@@ -2399,6 +2563,7 @@ class cfgform extends class_base
 					"options" => $sel,
 					"value" => $buttons[$gn]["next"]
 				)),
+				"bg_colour" => $bg_colour,
 			));
 		}
 		$t->set_sortable(false);
@@ -2416,7 +2581,7 @@ class cfgform extends class_base
 	function get_class_cfgview($args)
 	{
 		enter_function("cfg_form::get_class_cfgview");
-		$this_object = obj($args["id"]);
+		$this_o = obj($args["id"]);
 
 		if (!is_array($_GET) || (sizeof($_GET) == 0))
 		{
@@ -2436,8 +2601,8 @@ class cfgform extends class_base
 		$vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
 
 		$classes = aw_ini_get("classes");
-		$class = strtolower(substr($classes[$this_object->prop("ctype")]["def"], 3));
-		$action = $this_object->prop("cfgview_action") ? $this_object->prop("cfgview_action") : "view";
+		$class = strtolower(substr($classes[$this_o->prop("ctype")]["def"], 3));
+		$action = $this_o->prop("cfgview_action") ? $this_o->prop("cfgview_action") : "view";
 
 		if ("cfgview_change_new" == $action or "cfgview_view_new" == $action)
 		{
@@ -2481,7 +2646,7 @@ class cfgform extends class_base
 	}
 
 	/// submenus from object interface methods
-	function make_menu_item($this_object, $level, $parent_o, $site_show_i)
+	function make_menu_item($this_o, $level, $parent_o, $site_show_i)
 	{
 		// no groups for new object form
 		if (!is_oid($_GET["id"]))
@@ -2489,42 +2654,37 @@ class cfgform extends class_base
 			return false;
 		}
 
-		//
+		// init
 		if (!isset($this->grplist))
 		{
-			$this->_init_cfgform_data($this_object);
+			$this->_init_cfgform_data($this_o);
+			$this->cfgview_grps = safe_array($obj->prop("cfgview_grps"));
 		}
 
 		// get next group
-		$parent_grp = $this_object->prop("cfgview_grp");
-
 		do
 		{
 			if (!isset($this->make_menu_item_counter))
 			{
 				$this->make_menu_item_counter = 0;
-				reset($this->grplist);
-				$grp_data = current($this->grplist);
+				$grp_name = current($this->cfgview_grps);
 			}
 			else
 			{
-				$grp_data = next($this->grplist);
+				$grp_name = next($this->cfgview_grps);
 			}
 		}
-		while (is_array($grp_data) and ($grp_data["parent"] != $parent_grp or $grp_data["grphide"]));
+		while (!empty($this->grplist[$grp_name]["grphide"]));
 
 		$this->make_menu_item_counter++;
-		$grp = key($this->grplist);
-
-		//!!! todo. subgroups to submenus
 
 		// selected grp
-		if ($_GET["group"] == $grp)
+		if ($_GET["group"] == $grp_name)
 		{
 		}
 
 		//
-		if (false === $grp_data)
+		if (false === $grp_name)
 		{
 			$this->make_menu_item_counter = NULL;
 			return false;
@@ -2532,9 +2692,9 @@ class cfgform extends class_base
 		else
 		{
 			return array(
-				"text" => $grp_data["caption"],
+				"text" => $this->grplist[$grp_name]["caption"],
 				"link" => aw_url_change_var(array (
-					"group" => $grp,
+					"group" => $grp_name,
 					"just_saved" => NULL,
 				)),
 				// "section" => $o_91_2->id(),
