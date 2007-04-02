@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.45 2007/04/02 16:57:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.46 2007/04/02 17:24:56 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -764,9 +764,13 @@ class bank_payment extends class_base
 				$arr = $this->check_args($arr);
 				return $this->seb($arr);
 				break;
-			case "hansapank_vl":
+			case "hansapank_lv":
 				$arr = $this->check_args($arr);
 				return $this->hansa_lv($arr);
+				break;
+			case "hansapank_lt":
+				$arr = $this->check_args($arr);
+				return $this->hansa_lt($arr);
 				break;
 			case "hansapank":
 				$arr = $this->check_args($arr);
@@ -784,8 +788,13 @@ class bank_payment extends class_base
 				$arr = $this->check_args($arr);
 				return $this->krediidi($arr);
 				break;
+			case "credit_card":
+				$arr = $this->check_cc_args($arr);
+				return $this->credit_card($arr);
+				break;
 		}
 	}
+	
 	
 	function check_args($arr)
 	{
@@ -794,13 +803,6 @@ class bank_payment extends class_base
 			$payment = obj($arr["payment_id"]);
 			$arr = $this->_add_object_data($payment , $arr);
 			$payment_data = $payment->meta("bank");
-			$arr["sender_id"] = $payment_data[$arr["bank_id"]]["sender_id"];
-//			$arr["stamp"] = $payment_data[$arr["bank_id"]]["stamp"];
-//			$arr["expl"] = $arr["expl"].$payment->prop("expl");
-			if($arr["units"])
-			{
-				$arr["amount"] = $arr["units"]*$payment->prop("default_unit_sum");
-			}
 		}
 		
 		if(!$arr["service"]) $arr["service"] = "1002";
@@ -1032,7 +1034,11 @@ class bank_payment extends class_base
 		$VK_MAC = base64_encode($VK_signature);
 		$http = get_instance("protocols/file/http");
 		$link = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
-		if($test) $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
+		if($test)
+		{
+			 $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
+			$sender_id = "testvpos";
+		}
 		$handler = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
@@ -1180,6 +1186,85 @@ class bank_payment extends class_base
 			fclose($fp);
 		}
 		return($arr);
+	}
+
+	function check_cc_args($arr)
+	{
+		if(is_oid($arr["payment_id"]))
+		{
+			$payment = obj($arr["payment_id"]);
+			$arr = $this->_add_object_data($payment , $arr);
+		}
+		if(!$arr["curr"]) $arr["curr"] = "EEK";
+		if(!$arr["lang"]) $arr["lang"] = "et";
+		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["priv_key"])
+		{
+			$file = "privkey.pem";
+			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
+			$arr["priv_key"] = fread($fp, 8192);
+			fclose($fp);
+		}
+		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
+		$arr["amount"] = $arr["amount"]*100; //sentides
+		$arr["datetime"] = date("YmdHis", time());
+		if(!$arr["service"]) $arr["service"] = "gaf";
+		if(!$arr["version"]) $arr["version"] = "002";
+		return($arr);
+	}
+	
+	function credit_card($args)
+	{
+		extract($args);
+		//test:
+		$action="$service";
+		$ver="$version";
+		$id="$sender_id";
+		$idnp = $id;
+		$ecuno='123456';
+		$eamount='1000';
+		$cur='EEK';
+		$datetime=date("YmdHis");
+		$lang='et';
+		$id=sprintf("%-10s", "$id");
+		$ecuno=sprintf("%012s", "$reference_nr");
+		$eamount=sprintf("%012s", "$amount");
+		$data = $ver . $id . $ecuno . $eamount . $cur . $datetime;
+		$signature=sha1($data);
+	//	echo "signatuur: <pre>$data</pre><br>";
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($data, $signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$mac=bin2hex($signature);
+		//echo "https://pos.estcard.ee/webpos/servlet/iPAYServlet?action=$action&amp;ver=$ver&amp;id=$idnp&amp;ecuno=$ecuno&amp;eamount=$eamount&amp;cur=$cur&amp;datetime=$datetime&amp;mac=$mac&amp;lang=en";
+		//testi lõpp
+		$VK_message = $version;
+		$VK_message.= sprintf("%-10s", $sender_id);
+		$VK_message.= sprintf("%012s",$reference_nr);
+		$VK_message.= sprintf("%012s",$amount);
+		$VK_message.= $curr;
+		$VK_message.= $datetime;
+
+		$signature=sha1($VK_message);
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($data, $VK_signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$VK_MAC = bin2hex($VK_signature);//base64_encode( $VK_signature);
+
+		$link = $this->bank_link["credit_card"];
+		$params = array(
+			"action"	=> $service,		//"gaf"
+			"ver"		=> $version,		//Protokolli versioon, Fikseeritud väärtus: 002
+			"id"		=> $sender_id,		//Kaupmehe kasutajanimi süsteemis
+			"ecuno"		=> $ecuno,	//Tehingu unikaalne number kaupmehe süsteemis,min. lubatud väärtus 100000
+			"eamount"	=> $eamount,		//Kaupmehe süsteemi poolt antav tehingu summa sentides.;
+			"cur"		=> $curr,		//Tehingu valuuta nimi . Fikseeritud: EEK
+			"datetime"	=> $datetime,		//AAAAKKPPTTmmss 	Tehingu kuupäev,kellaaeg
+			"mac" 		=> $VK_MAC,		//Sõnumi signatuur (MAC)*
+			"lang" 		=> $lang,		//et,en . Süsteemis kasutatav keel. et - Eesti, en - Inglise
+		);
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	}
 
 	function nordea($args)
@@ -1343,6 +1428,10 @@ class bank_payment extends class_base
 	function check_response()
 	{
 		extract($_SESSION["bank_return"]["data"]);
+		if($action == "afb")//selliselt tulevad krediitkaardimakse tagasipöördumised
+		{
+			return $this->check_cc_response();
+		}
 		$data = substr("000".strlen($VK_SERVICE),-3).$VK_SERVICE
 		.substr("000".strlen($VK_VERSION),-3).$VK_VERSION
 		.substr("000".strlen($VK_SND_ID),-3).$VK_SND_ID
