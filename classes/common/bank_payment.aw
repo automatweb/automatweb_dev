@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.44 2007/04/02 16:24:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.45 2007/04/02 16:57:18 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -294,11 +294,8 @@ class bank_payment extends class_base
 		
 		$payment_data = $payment->meta("bank");
 		$data["sender_id"] = $payment_data[$data["bank_id"]]["sender_id"];
-		$data["stamp"] =  substr($payment_data[$data["bank_id"]]["stamp"], 0, 20);
-		if(!$data["stamp"])
-		{
-			$data["stamp"] = $data["reference_nr"];
-		}
+		$data["stamp"] =  substr(($data["reference_nr"].time()), 0, 20);
+//		$data["stamp"] =  substr($payment_data[$data["bank_id"]]["stamp"], 0, 20);
 		if(strlen($payment_data[$data["bank_id"]]["stamp"]) > 5 && $payment_data[$data["bank_id"]]["rec_name"])
 		{
 			$data["service"] = "1001";
@@ -794,11 +791,12 @@ class bank_payment extends class_base
 	{
 		if(is_oid($arr["payment_id"]))
 		{
-			$payment = obj($arr["payment"]);
+			$payment = obj($arr["payment_id"]);
+			$arr = $this->_add_object_data($payment , $arr);
 			$payment_data = $payment->meta("bank");
 			$arr["sender_id"] = $payment_data[$arr["bank_id"]]["sender_id"];
-			$arr["stamp"] = $payment_data[$arr["bank_id"]]["stamp"];
-			$arr["expl"] = $arr["expl"].$payment->prop("expl");
+//			$arr["stamp"] = $payment_data[$arr["bank_id"]]["stamp"];
+//			$arr["expl"] = $arr["expl"].$payment->prop("expl");
 			if($arr["units"])
 			{
 				$arr["amount"] = $arr["units"]*$payment->prop("default_unit_sum");
@@ -842,7 +840,7 @@ class bank_payment extends class_base
 			$return.= '<input type="hidden" name='.$key.' value="'.(string)$val.'">
 			';
 		};
-		//if(aw_global_get("uid") == "struktuur"){ arr($return); die();}
+//		if(aw_global_get("uid") == "struktuur"){ arr($return); die();}
 		if($form) return $return;
 		print $return.'<p class="text">'.t("Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage").'<a href="#" onClick="document.postform.submit();"> '.t("siia").'</a></p>
 		</form>
@@ -987,7 +985,6 @@ class bank_payment extends class_base
 		$http = get_instance("protocols/file/http");
 		$link = $this->bank_link["hansapank_lt"];
 		$handler = $link;
-		
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
