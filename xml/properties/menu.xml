@@ -695,6 +695,7 @@
             <type>table</type>
             <store>no</store>
             <group>docs_from</group>
+            <no_caption>1</no_caption>
             <field>sss</field>
             <caption>Men&amp;amp;uuml;&amp;amp;uuml;d, mille alt viimased dokumendid v&amp;amp;otilde;etakse</caption>
       </property>
@@ -704,6 +705,7 @@
             <type>table</type>
             <store>no</store>
             <group>docs_from</group>
+            <no_caption>1</no_caption>
             <field>sss_exclude</field>
             <caption>&amp;amp;Auml;ra v&amp;amp;otilde;ta dokumente men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
       </property>

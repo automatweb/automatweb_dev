@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.193 2007/04/02 13:09:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.194 2007/04/02 13:13:00 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2101,6 +2101,7 @@ class menu extends class_base
 		$arr["_set_sss"] = "0";
 		$arr["_set_no_sss"] = "0";
 		$arr["link_pops"] = "0";
+		$arr["post_ru"] = post_ru();
 	}
 
 	function _get_linker(&$p, $o)
