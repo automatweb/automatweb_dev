@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.541 2007/03/31 16:31:54 voldemar Exp $
+// $Id: class_base.aw,v 2.542 2007/04/02 09:27:09 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -323,7 +323,7 @@ class class_base extends aw_template
 
 		$defview = 0;
 
-		if(is_oid($this->cfgform_id) && $this->can("view", $this->cfgform_id) && $args["action"] != "view")
+		if($this->can("view", $this->cfgform_id) && $args["action"] != "view")
 		{
 			$f = obj($this->cfgform_id);
 			$grps = safe_array($f->meta("cfg_groups"));
@@ -1180,7 +1180,6 @@ class class_base extends aw_template
 		// else, this is the place to do it
 
 		$action = $args["args"]["action"];
-
 		$retval = "";
 		$cgid = false;
 
@@ -1554,13 +1553,13 @@ class class_base extends aw_template
 				else
 				{
 					$link = !empty($val["active"]) ? "#" : "";
-				};
-
+				}
 
 				if ($val["set_link"])
 				{
 					$link = $val["set_link"];
 				}
+
 				$tabinfo = array(
 					"link" => &$link,
 					"caption" => &$val["caption"],
@@ -1577,23 +1576,25 @@ class class_base extends aw_template
 				{
 					$tabinfo["target"] = $val["set_link_target"];
 				}
+
 				$res = true;
+
 				if ($tab_callback)
 				{
 					// mod_tab can block the display of a tab
 					$res = $this->inst->callback_mod_tab($tabinfo);
-				};
+				}
 
 				if (isset($this->action) && ($this->action == "search_aliases" || $this->action == "list_aliases"))
 				{
 					unset($val["active"]);
-				};
+				}
 
 				// XXX: temporary hack to hide general tab
 				if ($key == "general" && isset($this->hide_general))
 				{
 					$res = false;
-				};
+				}
 
 				if ($res !== false)
 				{
@@ -1602,7 +1603,7 @@ class class_base extends aw_template
 					if (isset($this->no_active_tab))
 					{
 						$active = false;
-					};
+					}
 
 					$this->cli->add_tab(array(
 						"id" => $tabinfo["id"],
@@ -1615,10 +1616,9 @@ class class_base extends aw_template
 						"tabgroup" => $val["tabgroup"],
 						"target" => $tabinfo["target"]
 					));
-				};
-			};
-
-		};
+				}
+			}
+		}
 
 		if (!empty($this->classinfo["disable_relationmgr"]))
 		{
@@ -4439,7 +4439,7 @@ class class_base extends aw_template
 
 		$tmp = array();
 
-		if (is_numeric($cls_id) && $this->can("view", $cls_id))
+		if ($this->can("view", $cls_id))
 		{
 			$cl_vis = get_instance("applications/class_designer/class_visualizer");
 			$this->groupinfo = $cl_vis->get_class_groups(array(
@@ -4474,12 +4474,11 @@ class class_base extends aw_template
 				"class_id" => $cls_id
 			));
 		}
-		elseif (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
+		elseif ($this->can("view", $arr["cfgform_id"]))
 		{
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
 			));
-			$cfg_form = obj($arr["cfgform_id"]);
 
 			if ($this->cfg_debug)
 			{
@@ -4494,31 +4493,31 @@ class class_base extends aw_template
 			if ($arr["clid"] == CL_DOCUMENT )
 			{
 				$def_cfgform = aw_ini_get("document.default_cfgform");
-				if (is_oid($def_cfgform) && $this->can("view",$def_cfgform))
+				if ($this->can("view",$def_cfgform))
 				{
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $def_cfgform,
 					));
-					$cfg_form = obj($def_cfgform);
 
 					if ($this->cfg_debug)
 					{
 						print "loading cfgform $def_cfgform specified by document.default_cfgform";
-					};
+					}
 				}
 				else
 				{
 					if ($this->cfg_debug)
 					{
 						print "loading the most basic document template";
-					};
+					}
 
 					list($cfg_props,$grplist) = $this->load_from_file();
+
 					if (empty($this->groupinfo) || !empty($grplist))
 					{
 						$this->groupinfo = $grplist;
-					};
-				};
+					}
+				}
 			}
 			elseif (is_oid($this->inst->cfgmanager))
 			{
@@ -4550,16 +4549,15 @@ class class_base extends aw_template
 				// gruppides ei muutu mitte midagi
 
 				// use it, if we found one, otherwise fall back to defaults
-				if (is_oid($found_form) && $this->can("view",$found_form))
+				if ($this->can("view",$found_form))
 				{
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $found_form,
 					));
-					$cfg_form = obj($found_form);
 
 					if ($this->cfg_debug)
 					{
-						print "loading cfgform " . $found_form;
+						print "loading default cfgform " . $found_form;
 						print "<br>";
 					}
 				}
@@ -4572,11 +4570,11 @@ class class_base extends aw_template
 					if (isset($val["user"]) && 1 == $val["user"])
 					{
 						unset($cfg_props[$key]);
-					};
-				};
-
-			};
+					}
+				}
+			}
 		}
+
 		$this->_cfg_props = $cfg_props;
 
 		// I need group and caption from each one
@@ -4590,10 +4588,17 @@ class class_base extends aw_template
 
 		$si = __get_site_instance();
 		$has_cb = method_exists($si, "callback_get_group_display");
+		$groupmap = $rgroupmap = array();
 
 		// now, how do I make sure what level a group has?
 		foreach($this->groupinfo as $gkey => $ginfo)
 		{
+			if (!empty($ginfo["parent"]))
+			{
+				$groupmap[$ginfo["parent"]][] = $gkey;
+				$rgroupmap[$gkey] = $ginfo["parent"];
+			}
+
 			if ($has_cb)
 			{
 				if ($si->callback_get_group_display($arr["clid"], $gkey, $ginfo) == PROP_IGNORE)
@@ -4602,56 +4607,24 @@ class class_base extends aw_template
 				}
 			}
 
-			if (is_object($cfg_form))
+			if (!empty($ginfo["grphide"]))
 			{
-				$grp_cfg = $cfg_form->meta("cfg_groups");
-
-				if (!empty($grp_cfg[$gkey]["grphide"]))
-				{
-					continue;
-				}
+				unset($this->groupinfo[$gkey]);
+				continue;
 			}
 
-			// I need some kind of additional array, thats what I need!
-			$parent = 0;
-			if ($ginfo["parent"])
-			{
-				$parent = $ginfo["parent"];
-			};
+			$parent = empty($ginfo["parent"]) ? 0 : $ginfo["parent"];
 
-			// how DO i calculate it?
-			if ($parent == 0 and sizeof($this->grpmap[0]) == 0)
-			{
-				// take the very first first level group
-				$default_group = $gkey;
-			};
-			if ($ginfo["default"])
+			if (
+				($parent === 0 and sizeof($this->grpmap[0]) == 0) or // take the very first first level group
+				($ginfo["default"]) // is predefined default grp
+			)
 			{
 				$default_group = $gkey;
-			};
+			}
 
 			$this->grpmap[$parent][$gkey] = $ginfo;
-		};
-
-		// what the fuck do I need first_subgrp for?
-		$first_subgrp = array();
-		$groupmap = $rgroupmap = array();
-
-		foreach($this->groupinfo as $gkey => $ginfo)
-		{
-			// so, if it is not empty and then some .. gees... what the fuck am I doing here?
-			if (!empty($ginfo["parent"]) && empty($first_subgrp[$ginfo["parent"]]))
-			{
-				$first_subgrp[$ginfo["parent"]] = $gkey;
-			};
-
-			if (!empty($ginfo["parent"]))
-			{
-				$groupmap[$ginfo["parent"]][] = $gkey;
-				$rgroupmap[$gkey] = $ginfo["parent"];
-			};
 		}
-
 
 		// the very default group comes from arr
 		// groupinfo contains a flat list of all groups
@@ -4674,17 +4647,23 @@ class class_base extends aw_template
 			{
 				$use_group = $default_group;
 			}
-		};
+		}
 
 		if (!$use_group)
 		{
 			$use_group = "general";
-		};
+		}
+
+		if (!empty($arr["group"]) and $arr["group"] != $use_group)
+		{ // unavailable or inexistent group requested
+			$url = aw_ini_get("baseurl") . aw_url_change_var("group", $use_group);
+			header("Location: $url"); //!!! kas siin v6ib tekkida redirectide suletud tsykkel?
+		}
 
 		if (!empty($this->use_group))
 		{
 			$use_group = $this->use_group;
-		};
+		}
 
 		$this->active_groups[] = $use_group;
 		// but .. if this is the case and the group is a first level group then I should
@@ -4697,7 +4676,7 @@ class class_base extends aw_template
 			reset($this->grpmap[$use_group]);
 			list($use_group,) = each($this->grpmap[$use_group]);
 			$this->active_groups[] = $use_group;
-		};
+		}
 
 		$grpinfo = $this->groupinfo[$use_group];
 		// and climb back down again, e.g. make sure we always have _all_ active groups
@@ -4709,7 +4688,7 @@ class class_base extends aw_template
 				$this->active_groups[] = $grpinfo["parent"];
 			};
 			$grpinfo = $this->groupinfo[$grpinfo["parent"]];
-		};
+		}
 
 		$this->use_group = $use_group;
 		$this->grp_path = array();
@@ -4955,25 +4934,27 @@ class class_base extends aw_template
 					};
 				};
 			};
-			$orig_groups = $this->groupinfo;
+
 			$tmp = array();
 			foreach($grps as $gkey => $gval)
 			{
 				// use the "submit" setting from the original group
-				if ($orig_groups[$gkey]["submit"])
+				if ($this->groupinfo[$gkey]["submit"])
 				{
-					$gval["submit"] = $orig_groups[$gkey]["submit"];
-				};
-				if ($orig_groups[$gkey]["tabgroup"])
+					$gval["submit"] = $this->groupinfo[$gkey]["submit"];
+				}
+
+				if ($this->groupinfo[$gkey]["tabgroup"])
 				{
-					$gval["tabgroup"] = $orig_groups[$gkey]["tabgroup"];
-				};
+					$gval["tabgroup"] = $this->groupinfo[$gkey]["tabgroup"];
+				}
+
 				$tmp[$gkey] = $gval;
-			};
+			}
+
 			$this->groupinfo = $tmp;
-			// if the class has a default config file, then load
-			// that as well
-		};
+		}
+
 		return $rv;
 	}
 
@@ -5088,8 +5069,7 @@ class class_base extends aw_template
 		foreach($this->grpmap[0] as $gkey => $gval)
 		{
 			$visible_groups[] = $gkey;
-		};
-
+		}
 
 		foreach($this->active_groups as $act_group)
 		{
@@ -5098,21 +5078,21 @@ class class_base extends aw_template
 				foreach($this->grpmap[$act_group] as $gkey => $gval)
 				{
 					$visible_groups[] = $gkey;
-				};
-			};
+				}
+			}
 		}
 
-		$rv = array();
 		foreach($visible_groups as $vgr)
 		{
+			$gval = $this->groupinfo[$vgr];
+
 			// remove groups with no properties. CL_RELATION is one of the big
 			// users of this
-			if (!isset($this->prop_by_group[$vgr]))
+			if (!isset($this->prop_by_group[$vgr]) or !empty($gval["grphide"]))
 			{
 				continue;
-			};
+			}
 
-			$gval = $this->groupinfo[$vgr];
 			if (empty($gval["parent"]))
 			{
 				$gval["level"] = 1;
@@ -5121,11 +5101,13 @@ class class_base extends aw_template
 			{
 				$par_count = 1;
 				$gdat = $this->groupinfo[$vgr];
+
 				while($gdat["parent"])
 				{
 					$par_count++;
 					$gdat = $this->groupinfo[$gdat["parent"]];
-				};
+				}
+
 				$gval["level"] = $par_count;
 
 			}
@@ -5133,10 +5115,10 @@ class class_base extends aw_template
 			if (in_array($vgr,$this->active_groups))
 			{
 				$gval["active"] = 1;
-			};
+			}
 
 			$rv[$vgr] = $gval;
-		};
+		}
 
 		return $rv;
 	}
