@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.42 2007/03/30 12:20:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.43 2007/04/02 16:07:09 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -95,6 +95,7 @@ class bank_payment extends class_base
 	var $bank_props = array(
 		"sender_id"	=> "Kaupmehe ID",
 		"stamp"		=> "Arvenumber",
+		"rec_name"	=> "Saaja nimi",
 	);
 
 	//erinevate pankade lingid
@@ -105,7 +106,7 @@ class bank_payment extends class_base
 		"krediidipank"		=> "https://i-pank.krediidipank.ee/teller/maksa",
 		"nordeapank"		=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
 		"hansapank_lv"		=> "https://www.hanzanet.lv/banklink/",
-		"hansapank_lt"		=> "https://www.hanzanet.lv/banklink/",
+		"hansapank_lt"		=> "https://www.hansa.lt/banklink",
 		"credit_card"		=> "https://pos.estcard.ee/webpos/servlet/iPAYServlet",
 	);
 
@@ -293,8 +294,14 @@ class bank_payment extends class_base
 		
 		$payment_data = $payment->meta("bank");
 		$data["sender_id"] = $payment_data[$data["bank_id"]]["sender_id"];
-		$data["stamp"] = $payment_data[$data["bank_id"]]["stamp"];
-
+		$data["stamp"] =  substr($payment_data[$data["bank_id"]]["stamp"], 0, 20);
+		if(strlen($payment_data[$data["bank_id"]]["stamp"]) > 5 && $payment_data[$data["bank_id"]]["rec_name"])
+		{
+			$data["service"] = "1001";
+			$data["acc"] = $payment_data[$data["bank_id"]]["stamp"];
+			$data["name"] = $payment_data[$data["bank_id"]]["rec_name"];
+		}
+		
 		if($data["units"])
 		{
 			$data["amount"] = $data["units"]*$payment->prop("default_unit_sum");
@@ -444,6 +451,7 @@ class bank_payment extends class_base
 					$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
 					$log_data[$val["timestamp"]]["sum"] = $val["VK_AMOUNT"];
 					$log_data[$val["timestamp"]]["bank"] = $bank_id;
+					$log_data[$val["timestamp"]]["acc"] = $val["VK_REC_ACC"];
 					if($val["eamount"])
 					{
 						$log_data[$val["timestamp"]]["sum"] = $val["eamount"]/100;
@@ -511,6 +519,7 @@ class bank_payment extends class_base
 				"payer" => $val["payer"],
 				"ok" =>  $val["ok"] ? t("&otilde;nnestus") : t("eba&otilde;nnestus"),
 				"good" => $val["good"] ? t("ok") : t(""),
+				"acc" => $val["acc"],
 			));
 		}
 		//see summa toimib hetkel vaid eeldusel , et valuuta on igal pool sama
@@ -597,6 +606,12 @@ class bank_payment extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "acc",
+			"caption" => t("Arve"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "ok",
 			"caption" => t("&Otilde;nnestus"),
 			"align" => "center"
@@ -615,7 +630,7 @@ class bank_payment extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
-					case "bank":
+			case "bank":
 				$this->submit_meta($arr);
 				break;
 				
@@ -823,6 +838,7 @@ class bank_payment extends class_base
 			$return.= '<input type="hidden" name='.$key.' value="'.(string)$val.'">
 			';
 		};
+		//if(aw_global_get("uid") == "struktuur"){ arr($return); die();}
 		if($form) return $return;
 		print $return.'<p class="text">'.t("Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage").'<a href="#" onClick="document.postform.submit();"> '.t("siia").'</a></p>
 		</form>
@@ -851,6 +867,11 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		if($service == 1001)
+		{
+			$VK_message.= sprintf("%03d",strlen($acc)).$acc;
+			$VK_message.= sprintf("%03d",strlen($name)).$name;
+		}
 		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
@@ -876,12 +897,19 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
+		if($service == 1001)
+		{
+			$params["VK_ACC"] = $acc;
+			$params["VK_NAME"] = $name;
+		
+		}
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
 	function hansa_lv($args) 
 	{
+		$args["lang"] = "ENG";
 		extract($args);
 		$VK_message = sprintf("%03d",strlen($service)).$service;
 		$VK_message.= sprintf("%03d",strlen($version)).$version;
@@ -889,6 +917,11 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		if($service == 1001)
+		{
+			$VK_message.= sprintf("%03d",strlen($acc)).$acc;
+			$VK_message.= sprintf("%03d",strlen($name)).$name;
+		}
 		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
@@ -898,8 +931,8 @@ class bank_payment extends class_base
 		$VK_MAC = base64_encode( $VK_signature);
 
 		$http = get_instance("protocols/file/http");
-		$link = "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp";
-		$handler = "https://www.hanzanet.lv/cgi-bin/hanza/pangalink.jsp";
+		$link = $this->bank_link["hansapank_lv"];
+		$handler = $link;
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
@@ -914,6 +947,63 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
+		if($service == 1001)
+		{
+			$params["VK_ACC"] = $acc;
+			$params["VK_NAME"] = $name;
+		
+		}
+		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
+	//	return $http->post_request($link, $handler, $params, $port = 80);
+		
+	}
+
+	function hansa_lt($args) 
+	{
+		extract($args);
+		$VK_message = sprintf("%03d",strlen($service)).$service;
+		$VK_message.= sprintf("%03d",strlen($version)).$version;
+		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
+		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
+		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
+		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		if($service == 1001)
+		{
+			$VK_message.= sprintf("%03d",strlen($acc)).$acc;
+			$VK_message.= sprintf("%03d",strlen($name)).$name;
+		}
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
+		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
+		$VK_signature = "";
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($VK_message, $VK_signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$VK_MAC = base64_encode( $VK_signature);
+
+		$http = get_instance("protocols/file/http");
+		$link = $this->bank_link["hansapank_lt"];
+		$handler = $link;
+		
+		$params = array(
+			"VK_SERVICE"	=> $service,	//"1002"
+			"VK_VERSION"	=> $version,	//"008"
+			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST"
+			"VK_STAMP"	=> $stamp,	//row["arvenr"]
+			"VK_AMOUNT"	=> $amount,	//$row["summa"];
+			"VK_CURR"	=> $curr,	//"EEK"
+			"VK_REF"	=> $reference_nr,
+			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
+			"VK_MAC" 	=> $VK_MAC,
+			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_LANG" 	=> $lang,	//"EST"
+		);
+		if($service == 1001)
+		{
+			$params["VK_ACC"] = $acc;
+			$params["VK_NAME"] = $name;
+		
+		}
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
@@ -927,6 +1017,11 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		if($service == 1001)
+		{
+			$VK_message.= sprintf("%03d",strlen($acc)).$acc;
+			$VK_message.= sprintf("%03d",strlen($name)).$name;
+		}
 		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
@@ -952,6 +1047,12 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
+		if($service == 1001)
+		{
+			$params["VK_ACC"] = $acc;
+			$params["VK_NAME"] = $name;
+		
+		}
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
@@ -965,6 +1066,11 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		if($service == 1001)
+		{
+			$VK_message.= sprintf("%03d",strlen($acc)).$acc;
+			$VK_message.= sprintf("%03d",strlen($name)).$name;
+		}
 		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
@@ -990,6 +1096,12 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
+		if($service == 1001)
+		{
+			$params["VK_ACC"] = $acc;
+			$params["VK_NAME"] = $name;
+		
+		}
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
@@ -1003,6 +1115,11 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		if($service == 1001)
+		{
+			$VK_message.= sprintf("%03d",strlen($acc)).$acc;
+			$VK_message.= sprintf("%03d",strlen($name)).$name;
+		}
 		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
@@ -1028,6 +1145,12 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
+		if($service == 1001)
+		{
+			$params["VK_ACC"] = $acc;
+			$params["VK_NAME"] = $name;
+		
+		}
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}	
