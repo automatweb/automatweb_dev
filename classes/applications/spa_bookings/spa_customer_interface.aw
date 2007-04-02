@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.11 2007/03/14 11:57:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.12 2007/04/02 09:37:41 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -70,6 +70,7 @@ class spa_customer_interface extends class_base
 
 	function _disp_bookings($id)
 	{
+		classload("core/date/date_calc");
 		$this->read_template("book_times.tpl");
 
 		$p = get_current_person();
@@ -91,6 +92,8 @@ class spa_customer_interface extends class_base
 
 		foreach($ol->arr() as $o)
 		{
+			$_min_date = null;
+			$_max_date = null;
 			// bookingul has package
 			// package has products
 			// rooms have products
@@ -147,11 +150,14 @@ class spa_customer_interface extends class_base
 				));
 			}
 
-			$booking_str .= " / ".html::href(array(
-				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
-				"caption" => t("Prindi"),
-				"target" => "_blank"
-			));
+			if ($confirmed && $has_times && $has_prods)
+			{
+				$booking_str .= " / ".html::href(array(
+					"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
+					"caption" => t("Prindi"),
+					"target" => "_blank"
+				));
+			}
 
 			$this->vars(array(
 				"booking" => $booking_str,
@@ -194,6 +200,19 @@ class spa_customer_interface extends class_base
 				));
 			}
 
+			if (!$confirmed || !$has_times || !$has_prods)
+			{
+				$this->vars(array(
+					"PRINT" => ""
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"PRINT" => $this->parse("PRINT")
+				));
+			}
+
 			$fd = array();
 			$has_unc = false;
 			$prod_list = array();
@@ -202,6 +221,7 @@ class spa_customer_interface extends class_base
 			{
 				$grp_list[] = "__ei|".$extra_item_entry["prod"];
 			}
+
 			foreach($grp_list as $prod_group)
 			{
 				// repeat group by the count of the first product in the group
@@ -222,13 +242,41 @@ class spa_customer_interface extends class_base
 					$rvs_obj = false;
 					$this->vars(array(
 						"HAS_BOOKING" => "",
-						"CLEAR" => ""
+						"CLEAR" => "",
+						"DEL_SERVICE" => ""
 					));
 					foreach($prods_in_group as $prod_id)
 					{
 						$prod = obj($prod_id);
 						foreach($dates as $_prod_id => $nums)
 						{
+							if ($nums[$i]["from"] > -1)
+							{
+								if ($_min_date == null)
+								{
+									$_min_date = $nums[$i]["from"];
+								}
+								if ($_max_date == null)
+								{
+									$_max_date = $nums[$i]["from"];
+								}
+								$_min_date = min($nums[$i]["from"],$_min_date);
+								$_max_date = max($nums[$i]["from"],$_max_date);
+							}
+							if ($nums[$i]["to"] > -1)
+							{
+								if ($_min_date == null)
+                                                                {
+                                                                        $_min_date = $nums[$i]["to"];
+                                                                }
+                                                                if ($_max_date == null)
+                                                                {
+                                                                        $_max_date = $nums[$i]["to"];
+                                                                }
+                                                                $_min_date = min($nums[$i]["from"],$_min_date);
+                                                                $_max_date = max($nums[$i]["from"],$_max_date);
+
+							}
 							if ($_prod_id == $prod_id && isset($nums[$i]) && $nums[$i]["from"] > 1)
 							{
 								$sets = $nums[$i];
@@ -248,9 +296,13 @@ class spa_customer_interface extends class_base
 								$date_booking_id = $sets["reservation_id"];
 								$selected_prod = $prod_id;
 							}
+							else
+							if ($_prod_id == $prod_id)
+							{
+								$date_booking_id = $sets["reservation_id"];
+							}
 						}
 					}
-
 
 					foreach($prods_in_group as $prod_id)
 					{
@@ -294,7 +346,7 @@ class spa_customer_interface extends class_base
 								)),
 							));
 							$this->vars(array(
-								"CLEAR" => $this->parse("CLEAR")
+								"CLEAR" => $this->parse("CLEAR"),
 							));
 						}
 					}
@@ -303,11 +355,33 @@ class spa_customer_interface extends class_base
 						$has_unc = true;
 					}
 
+                                        foreach($prods_in_group as $prod_id)
+                                        {
+                                                $prod = obj($prod_id);
+                                                foreach($dates as $_prod_id => $nums)
+                                                {
+                                                        if ($_prod_id == $prod_id)
+                                                        {
+								$this->vars(array(
+									"delete_url" => $ei->mk_my_orb("delete_booking", array(
+										"return_url" => get_ru(),
+										"booking" => $nums[0]["reservation_id"],
+										"spa_bron" => $o->id()
+									)),
+								));
+								$this->vars(array(
+									"DEL_SERVICE" => (!$confirmed ? $this->parse("DEL_SERVICE") : "")
+								));
+							}
+						}
+					}
+
 					$this->vars(array(
 						"booking_ln" => $booking_str,
 						"name" => join("<br>", $prod_str),
 						"when" => $date
 					));
+
 					$book_line .= $this->parse("BOOK_LINE");
 				}
 			}
@@ -319,13 +393,27 @@ class spa_customer_interface extends class_base
 					"disp_main" => $o->modified() > (time() - 300) ? "block" : "none",
 					"disp_short" => $o->modified() > (time() - 300) ? "none" : "block"
 				));
-				if ($bookings == "" && $f_booking == "" && $this->is_template("FIRST_BOOKING") && time() < $o_end)
+				if ($_min_time > time() || ($_min_time == null && $o->created() > get_day_start()))
 				{
-					$f_booking = $this->parse("FIRST_BOOKING");
+					if ($bookings == "" && $f_booking == "" && $this->is_template("FIRST_BOOKING") && time() < $o_end)
+					{
+						$cur_f_booking .= $this->parse("FIRST_BOOKING");
+					}
+					else
+					{
+						$cur_booking .= $this->parse("BOOKING");
+					}
 				}
 				else
 				{
-					$bookings .= $this->parse("BOOKING");
+					if ($bookings == "" && $f_booking == "" && $this->is_template("FIRST_BOOKING") && time() < $o_end)
+					{
+						$f_booking = $this->parse("FIRST_BOOKING");
+					}
+					else
+					{
+						$bookings .= $this->parse("BOOKING");
+					}
 				}
 			}
 			$book_line = "";
@@ -334,7 +422,9 @@ class spa_customer_interface extends class_base
 		$this->vars(array(
 			"FIRST_BOOKING" => $f_booking,
 			"BOOKING" => $bookings,
-			"add_pk_url" => $this->mk_my_orb("add_pkt", array("id" => $id, "r" => get_ru()))
+			"add_pk_url" => $this->mk_my_orb("add_pkt", array("id" => $id, "r" => get_ru())),
+			"cur_f_booking" => $cur_f_booking,
+			"cur_booking" => $cur_booking
 		));
 		return $this->parse();
 	}
@@ -498,14 +588,21 @@ class spa_customer_interface extends class_base
 			$p[$o->parent()][] = $o;
 		}
 
+		$bo = obj($arr["id"]);
 		$pts = "";
 		$this->read_template("add_pkt.tpl");
+		$sbe = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		foreach($p as $parent => $prods)
 		{
 			$po = obj($parent);
 			$p_list = array();
 			foreach($prods as $pr)
 			{
+				// this makes sure no prods that can't be booked are displayed
+				if (count(array_intersect(array_keys($sbe->get_rooms_for_product($pr->id())), safe_array($bo->prop("rooms")))) == 0)
+				{
+					continue;
+				}
 				$p_list[] = html::href(array(
 					"url" => $this->mk_my_orb("fin_add_prod_to_bron", array(
 						"prod" => $pr->id(), 

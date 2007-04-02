@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.41 2007/03/30 12:20:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.42 2007/04/02 09:37:41 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1284,6 +1284,12 @@ class spa_bookigs_entry extends class_base
 
 	function get_rooms_for_product($prod)
 	{
+		$po = obj($prod);
+		if ($po->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+		{
+			$prod_con = reset($po->connections_to(array("from.class_id" => CL_SHOP_PRODUCT)));
+//			$prod = $prod_con->prop("from");
+		}
 		// list all rooms and find the ones for this product
 		$p_rooms = array();
 		$rooms = new object_list(array(

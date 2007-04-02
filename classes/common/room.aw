@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.184 2007/03/30 12:20:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.185 2007/04/02 09:37:40 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3074,7 +3074,6 @@ class room extends class_base
 					"size" => 5
 				));
 			}
-			
 			$tb->define_data(array(
 				"active" =>  $prod_data[$o->id()]["active"],//html::checkbox(array(
 	//				"name" => "sel_imp[".$o->id()."]",
@@ -5222,9 +5221,9 @@ class room extends class_base
 	**/
 	function get_prod_data_for_room($room)
 	{
-		if($this->prod_data_for_room)
+		if($this->prod_data_for_room[$room])
 		{
-			return $this->prod_data_for_room;
+			return $this->prod_data_for_room[$room];
 		}
 		if (!is_object($room))
 		{
@@ -5234,7 +5233,7 @@ class room extends class_base
 		{
 			$room = obj($room->prop("inherit_prods_from"));
 		}
-		$this->prod_data_for_room = $room->meta("prod_data");
+		$this->prod_data_for_room[$room->id()] = $room->meta("prod_data");
 		return $room->meta("prod_data");
 	}		
 
