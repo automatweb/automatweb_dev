@@ -7,6 +7,7 @@
             <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
+            <multiple>1</multiple>
             <caption>Korvi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <classinfo>

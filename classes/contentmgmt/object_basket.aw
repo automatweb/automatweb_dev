@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.1 2007/04/03 11:20:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.2 2007/04/03 12:36:14 kristo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-	@property basket_type type=chooser field=meta method=serialize
+	@property basket_type type=chooser field=meta method=serialize multiple=1
 	@caption Korvi t&uuml;&uuml;p
 	
 
@@ -103,11 +103,15 @@ class object_basket extends class_base
 	**/
 	function get_basket_content($o)
 	{
-		if ($o->prop("basket_type") == OBJ_BASKET_SESSION)
+		$bt = $this->make_keys($o->prop("basket_type"));
+		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
+		{
+			return safe_array(aw_unserialize($this->get_cval("object_basket_".$o->id()."_".aw_global_get("uid"))));
+		}
+		if ($bt[OBJ_BASKET_SESSION])
 		{
 			return safe_array($_SESSION["object_basket"][$o->id()]["content"]);
 		}
-		return safe_array(aw_unserialize($this->get_cval("object_basket_".$o->id()."_".aw_global_get("uid"))));
 	}
 
 	/**
@@ -121,16 +125,17 @@ class object_basket extends class_base
 		$o = obj($arr["basket"]);
 		$ct = $this->get_basket_content($o);
 		$ct[$arr["oid"]]["oid"] = $arr["oid"];
-		if ($o->prop("basket_type") == OBJ_BASKET_SESSION)
-		{
-			$_SESSION["object_basket"][$o->id()]["content"] = $ct;
-		}
-		else
+		$bt = $this->make_keys($o->prop("basket_type"));
+		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
 		{
 			$this->set_cval(
 				"object_basket_".$o->id()."_".aw_global_get("uid"),
 				aw_serialize($ct)
 			);
+		}
+		else
+		{
+			$_SESSION["object_basket"][$o->id()]["content"] = $ct;
 		}
 		return $arr["ru"];
 	}
