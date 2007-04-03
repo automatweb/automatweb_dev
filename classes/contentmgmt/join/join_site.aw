@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.48 2007/03/16 15:23:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.49 2007/04/03 14:27:50 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -868,10 +868,15 @@ class join_site extends class_base
 							if ($tp[$pid]["type"] == "classificator")
 							{
 								$clf_inst = get_instance(CL_CLASSIFICATOR);
-								$tp[$pid]["options"] = $clf_inst->get_options_for(array(
+								/*$tp[$pid]["options"] = $clf_inst->get_options_for(array(
+									"name" => $pid,
+									"clid" => $clid
+								));*/
+								$opt_vals = $clf_inst->get_choices(array(
 									"name" => $pid,
 									"clid" => $clid
 								));
+								$tp[$pid]["options"] = $opt_vals[4]["list_names"];
 							}
 							$tp[$pid]["type"] = $el_types[$clid][$pid];
 						}
