@@ -23,7 +23,7 @@
             <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Numbri t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Numbri t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>country</name>

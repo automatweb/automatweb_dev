@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.39 2007/02/27 11:52:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.40 2007/04/03 12:31:56 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -75,9 +75,9 @@ property search_table type=table parent=org no_caption=1
 
 @layout ta type=hbox width=20%:80%
 	
-@property sector_tree type=treeview parent=ta no_caption=1
+	@property sector_tree type=treeview parent=ta no_caption=1
 	
-@property sector_table type=table parent=ta no_caption=1
+	@property sector_table type=table parent=ta no_caption=1
 
 ----------------------------------------------------------
 
@@ -299,6 +299,7 @@ class crm_db extends class_base
 						"group" => "firmad",
 						//"ft_page" => $arr["request"]["ft_page"],
 						"letter" => urlencode($val),
+						"return_url" => get_ru(),
 						"no_search" => 1,
 				), ($val == $letter ? "<b>".$val."</b>" : $val));
 			}
