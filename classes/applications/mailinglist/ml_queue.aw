@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.34 2007/03/28 10:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.35 2007/04/03 16:01:55 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -599,6 +599,31 @@ class ml_queue extends aw_template
 		return 0;
 	}
 
+	function check_final_stats($qid)
+	{
+		$qx = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = ".$qid." AND (mail_sent IS NULL OR mail_sent = 0)";
+		$this->db_query($qx);
+		$count = $this->db_next();
+		if(!$count["cnt"])
+		{
+			return 0;
+		}
+		else 
+		{
+			$qx = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = ".$qid." AND mail_sent = 1";
+			$this->db_query($qx);
+			$count_sent = $this->db_next();
+			
+			$qx = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = ".$qid;
+			$this->db_query($qx);
+			$count_all = $this->db_next();
+				
+			$qx = "UPDATE ml_queue SET position=".$count_sent["cnt"]." , total=".$count_all["cnt"]."  WHERE qid = ".$qid;
+			$this->db_query($qx);
+		}
+		return $count["cnt"];
+	}
+
 	////
 	//! Protsessib queue itemist 		echo $mailfrom;$r järgmise liikme
 	function do_queue_item($msg)
@@ -700,6 +725,12 @@ class ml_queue extends aw_template
 	function mark_queue_finished($qid)
 	{
 		$this->save_handle();
+		$status = $this->check_final_stats($qid);
+		echo "saata veel tegelt maile täpselt ".$status."<br>\n";
+		if(!($status == 0))
+		{
+			return;
+		}
 		$this->db_query("UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'");
 		$this->restore_handle();
 //		echo "UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'";

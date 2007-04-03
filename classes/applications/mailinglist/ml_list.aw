@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.99 2007/04/02 14:08:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.100 2007/04/03 16:01:55 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -172,8 +172,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property list_status_table type=table store=no no_caption=1
 @caption Listi staatus
 
-@property send_button type=button store=no no_caption=1 
+@layout status_bottom type=hbox
+
+@property send_button type=button store=no no_caption=1 parent=status_bottom
 @caption Saada kohe
+
+@property delete_old_button type=button store=no no_caption=1  parent=status_bottom
+@caption Kustuta vanad kirjad
+
+@property db_mail_count type=text store=no no_caption=1  parent=status_bottom
+@caption Vanu kirju andmebaasis
+
 ------------------------------------------------------------------------
 
 @groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
@@ -852,8 +861,27 @@ class ml_list extends class_base
 					'".$this->mk_my_orb("process_queue", array(), "ml_queue", false, true)."',
 					'',
 					'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600');";
-
 				break;
+				
+			case "delete_old_button":
+				$prop["value"] = t("Kustuta vanad kirjad!");
+				$prop["onclick"] = "javascript:window.open(
+					'".$this->mk_my_orb("delete_old", array("ml" => $arr["obj_inst"]->id()), "ml_list", false, true)."',
+					'',
+					'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600');";
+				break;
+			
+			case "db_mail_count":
+				$list_id = $arr["obj_inst"]->id();
+				$time = time()-3*30*3600;
+				$row = $this->db_fetch_row("SELECT count(*) as cnt FROM ml_sent_mails WHERE lid = '$list_id' AND mail_sent = 1 and tm < '$time'");
+				$prop["value"] = t("Vanu kirju andmebaasis").": ".$row["cnt"];
+				if($row["cnt"] == 0)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+				
 			/*
 			case "msg_folder":
 				if(empty($prop["value"]) && !$arr["new"])
@@ -1899,6 +1927,7 @@ class ml_list extends class_base
 			"time" => time()+120, // every 2 minutes
 		));
 		*/
+		$sched = get_instance("scheduler");
 		$mq = get_instance("applications/mailinglist/ml_queue");
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_gen_ls_table($t);
@@ -1907,6 +1936,7 @@ class ml_list extends class_base
 		while ($row = $this->db_next())
 		{
 			$mail_obj = new object($row["mid"]);
+			$status = $row["status"];
 			/*
 			if ($row["status"] != 2)
 			{
@@ -1945,10 +1975,51 @@ class ml_list extends class_base
 				"caption" => $status_str,
 			));
 			$row["protsent"] = $this->queue_ready_indicator($row["position"], $row["total"]);
+			if($status == 5)
+			{
+				$this->save_handle();
+				$row["protsent"].= $this->gen_ready_indicator($row);
+				$this->restore_handle();
+			
+				$is_in_ched = 0;
+				foreach($in_scheduler as $key=> $val)
+				{
+					if(substr_count($val["event"], $row["mid"]) > 0)
+					{
+						$is_in_ched = 1;
+						break;
+					}
+				}
+				if(!$is_in_ched)
+				{
+					$row["status"].="<br>\n".html::button(array(
+						"onclick" => "javascript:window.open(
+							'".$this->mk_my_orb("add_gen_sched", array("mid" => $row["mid"]), "ml_list", false, true)."',
+							'',
+							'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=400, width=600');",
+						"value" => t("Pane genereerima"),
+						"confirm" => t("bljaad"),
+					));
+				}
+			}
 			$row["perf"] = sprintf("%.2f", $row["total"] / ($row["last_sent"] - $row["start_at"]) * 60);
 			$t->define_data($row);
 		};
 		$t->sort_by();
+	}
+	
+	/**
+		@attrib name=add_gen_sched
+		@param mid required type=mail id
+	**/
+	function add_gen_sched($arr)
+	{
+		extract($arr);
+		$mlq = get_instance("applications/mailinglist/ml_mail_gen");
+		$mlq->bg_control(array("id" => $mid, "do" => "start",));
+		print "<script language='javascript'>window.opener.location.reload();;
+			window.close();
+		</script>";
 	}
 	
 	/** removes queue items 
@@ -2527,6 +2598,36 @@ class ml_list extends class_base
 		return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
 	}
 	
+	//! teeb genereerimise progressi bari
+	function gen_ready_indicator($p)
+	{
+		extract($p);
+		$q = "SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = '$qid'";
+		$this->db_query($q);
+		while($w = $this->db_next())
+		{
+			if (!$total)
+			{
+				$p = 100;
+			}
+			else
+			{
+				$p = (int)((int)$w["cnt"] * 100 / (int)$total);
+			}
+			$not_p = 100 - $p;
+			if ($p > $not_p)
+			{
+				$p1t = "<span Style='font-size:10px;font-face:verdana;'><font color='white'>".$p."%</font></span>";
+			}
+			else
+			{
+				$p2t = "<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
+			}
+			return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"green\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
+		}
+		return "";
+	}
+	
 	////
 	// !This will generate a raport for a single mail sent to a list.
 	// Ungh, shouldn't this be a separate class then?
@@ -2604,24 +2705,31 @@ class ml_list extends class_base
 		$mail_id = $arr["request"]["mail_id"];
 		
 		// how many members does this list have?
-		$row = $this->db_fetch_row("SELECT total,qid FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
+		$row = $this->db_fetch_row("SELECT total,qid,position,status FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
 		$member_count = $row["total"];
 		$qid = $row["qid"];
 		
 		// how many members have been served?
 		$served_count = 0;
 //		$served_count = $this->db_fetch_row("SELECT count(*) AS cnt FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id' AND qid = '$qid'");
-		$row2 = $this->db_fetch_row("SELECT position FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
-		$served_count = $row2["position"];
+//		$row2 = $this->db_fetch_row("SELECT position,status FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
+		$served_count = $row["position"];
 		$url = $_SERVER["REQUEST_URI"];
-		
+	
 		if (!headers_sent() && $served_count < $member_count)
 		{
 			$refresh_rate = 30;
 			header("Refresh: $refresh_rate; url=$url");
 			$str = ", v&auml;rskendan iga ${refresh_rate} sekundi j&auml;rel";
 		}
-		return sprintf(t("Liikmeid: %s, saadetud: %s %s"), $member_count, $served_count, $str);
+		$ret = sprintf(t("Liikmeid: %s, saadetud: %s %s"), $member_count, $served_count, $str);
+		if($row["status"] == 5)
+		{
+			$ret.= "<br>\n";
+			$row3 = $this->db_fetch_row("SELECT count(*) as cnt FROM ml_sent_mails WHERE qid = '$qid' ");
+			$ret.= t("Genereeritud")." : ".$row3["cnt"];
+		}
+		return $ret;
 	}
 
 	function callback_mod_tab($arr)
@@ -3153,6 +3261,22 @@ class ml_list extends class_base
 	function search_tb($arr)
 	{
 	
+	}
+		
+	/**
+		@attrib api=1 params=name name=delete_old
+		@param ml required type=oid
+		ml_list oid
+	**/
+	function delete_old($arr)
+	{
+		extract($arr);
+		$time = time()-3*30*3600;
+		$row = $this->db_fetch_row("DELETE FROM ml_sent_mails WHERE lid = '$ml' AND mail_sent = 1 and tm < '$time'");
+		print "<script language='javascript'>window.opener.location.reload();;
+			window.close();
+		</script>";
+		arr("kustutab saasta");
 	}
 	
 	/**

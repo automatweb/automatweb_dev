@@ -428,7 +428,32 @@
             <type>button</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>status_bottom</parent>
             <caption>Saada kohe</caption>
+      </property>
+      <property>
+            <name>delete_old_button</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>list_status</group>
+            <type>button</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>status_bottom</parent>
+            <caption>Kustuta vanad kirjad</caption>
+      </property>
+      <property>
+            <name>db_mail_count</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>list_status</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>status_bottom</parent>
+            <caption>Vanu kirju andmebaasis</caption>
       </property>
       <property>
             <name>unsent_tb</name>
@@ -750,5 +775,11 @@
                   <caption>Registri andmete seadete vorm</caption>
             </RELTYPE_RD_CONFIG>
       </reltypes>
+      <layout>
+            <status_bottom>
+                  <type>hbox</type>
+                  <group>list_status</group>
+            </status_bottom>
+      </layout>
 </properties>
 
