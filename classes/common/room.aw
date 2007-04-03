@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.185 2007/04/02 09:37:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.186 2007/04/03 12:45:38 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3461,6 +3461,7 @@ class room extends class_base
 	{
 		if(!$this->active_items)
 		{
+			$this->prod_data = $this->get_prod_data_for_room($o);
 			$ol = $this->get_active_items($o);
 			$this->active_items = $ol->ids();
 		}
@@ -3554,7 +3555,10 @@ class room extends class_base
 			$pk_ids = array();
 			foreach($conns as $c)
 			{
-				$pk_ids[] = $c["to"];
+				if($this->prod_data[$c["to"]]["active"]) 
+				{
+					$pk_ids[] = $c["to"];
+				}
 			}
 			$ol = new object_list(array(
 				"oid" => $pk_ids,
