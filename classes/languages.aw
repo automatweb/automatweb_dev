@@ -313,7 +313,6 @@ class languages extends aw_template
 		}
 		$init_done++;
 		
-		classload("vcl/date_edit");
 		$lang_id = aw_global_get("lang_id");
 
 		// if we explicitly request language change, we get that, except if the language is not active
