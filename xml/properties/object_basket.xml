@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>basket_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Korvi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_OBJECT_BASKET</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+</properties>
+
