@@ -45,6 +45,18 @@
             <caption>Tegevusala kood</caption>
       </property>
       <property>
+            <name>image</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pilt</caption>
+      </property>
+      <property>
             <name>transl</name>
             <table>objects</table>
             <group>transl</group>
@@ -69,5 +81,12 @@
                   <master_index>oid</master_index>
             </kliendibaas_tegevusala>
       </tableinfo>
+      <reltypes>
+            <IMAGE>
+                  <value>1</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Pilt</caption>
+            </IMAGE>
+      </reltypes>
 </properties>
 

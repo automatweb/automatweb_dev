@@ -21,6 +21,9 @@
 	@property kood type=textbox size=8 table=kliendibaas_tegevusala
 	@caption Tegevusala kood
 
+	@property image type=relpicker reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
+	@caption Pilt
+
 	@classinfo no_status=1 syslog_type=ST_CRM_SECTOR
 
 
@@ -30,6 +33,8 @@
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
+@reltype IMAGE value=1 clid=CL_IMAGE
+@caption Pilt
 */
 
 /*
@@ -103,6 +108,14 @@ class crm_sector extends class_base
 			return false;
 		}
 		return true;
+	}
+
+	function callback_pre_save($arr)
+	{
+		$imgs = array(
+			"0" => array("image_id" => $arr["obj_inst"]->prop("image"))
+		);
+		$arr["obj_inst"]->set_meta("menu_images", $imgs);
 	}
 }
 ?>
