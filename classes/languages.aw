@@ -430,6 +430,7 @@ class languages extends aw_template
 				$GLOBALS["cfg"]["user_interface"]["default_language"] = $_tmp;
 			}
 		}
+		classload("vcl/date_edit");
 	}
 
 	function on_site_init($dbi, $site, &$ini_opts, &$log)
