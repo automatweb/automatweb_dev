@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.82 2007/03/29 07:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.83 2007/04/04 14:59:27 markop Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -598,6 +598,45 @@ class site_search_content extends class_base
 		$this->read_template("search.tpl");
 		lc_site_load("search_conf", $this);
 
+
+		$sectors_list = new object_list();
+		$conns = $ob->connections_from(array(
+			"type" => "RELTYPE_SEARCH_GRP",
+		));
+
+		foreach($conns as $conn)
+		{
+			$cid = obj($conn->prop("to"));
+			if($cid->class_id() == CL_CRM_DB_SEARCH)
+			{
+				break;
+			}
+		}
+
+		$menu_tree = new object_tree(array(
+			"parent" => $cid->prop("dir_tegevusala"),
+			"class_id" => CL_CRM_SECTOR,
+			"sort_by" => "objects.jrk,objects.name",
+		));
+		$sectors_list = $menu_tree->to_list();
+		$sec_opt = "";
+		foreach($sectors_list->arr() as $sec)
+		{
+			$this->vars(array(
+				"sec_value" => $sec->id(),
+				"sec_name" => $sec->name(),
+			));
+			$sec_opt.= $this->parse("SEC_OPTION");
+		}
+		$keywords = explode("," , $cid->prop("keywords"));
+		$key_opt = "";
+		foreach($keywords as $key)
+		{
+			$this->vars(array(
+				"key_value" => trim($key),
+			));
+			$key_opt.= $this->parse("KEY_OPTION");
+		}
 		$this->_init_trans();
 
 		$gr = $this->get_groups($ob);
@@ -638,6 +677,8 @@ class site_search_content extends class_base
 			$sect = aw_global_get("ct_lang_lc")."/".$sect;
 		}
 		$this->vars(array(
+			"SEC_OPTION" => $sec_opt,
+			"KEY_OPTION" => $key_opt,
 			"GROUP" => $s_gr,
 			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1, "section" => $sect)),
 			"str" => htmlspecialchars((isset($str) ? $str : "")),
@@ -646,8 +687,11 @@ class site_search_content extends class_base
 			"date_to" => $de->gen_edit_form("s_date[to]", $date["to"], date("Y")-3, date("Y"), true),
 			"limit_opts" => $this->picker($opts["limit"], $this->limit_opts)
 		));
-
-		exit_function("site_search_content::show");
+/*	if(aw_global_get("uid") == "struktuur")
+	{
+	arr($this->vars);
+	}
+*/		exit_function("site_search_content::show");
 		return $this->parse();
 	}
 

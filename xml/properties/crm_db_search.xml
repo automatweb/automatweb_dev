@@ -30,6 +30,25 @@
             <ch_value>1</ch_value>
             <caption>Ainult aktiivsed</caption>
       </property>
+      <property>
+            <name>dir_tegevusala</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
+            <caption>Tegevusalade kaust</caption>
+      </property>
+      <property>
+            <name>keywords</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>V&amp;amp;ouml;tmes&amp;amp;ouml;nad (komadega eraldatult)</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_DB_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -42,6 +61,11 @@
                   <clid>CL_CRM_DB</clid>
                   <caption>Organisatsioonide andmebaas</caption>
             </CRM_DB>
+            <TEGEVUSALA_CAT>
+                  <value>8</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Tegevusalade kaust</caption>
+            </TEGEVUSALA_CAT>
       </reltypes>
 </properties>
 
