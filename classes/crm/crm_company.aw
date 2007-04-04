@@ -190,7 +190,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property field_manager type=releditor mode=manager reltype=RELTYPE_FIELD props=name,class_name table_fields=name,class_name direct_links=1
 	@caption Valdkonnad
 
-	@property correspond_address type=relpicker reltype=RELTYPE_CORRESPOND_ADDRESS
+	@property correspond_address type=relpicker reltype=RELTYPE_CORRESPOND_ADDRESS table=objects field=meta method=serialize
 	@caption Kirjavahetuse aadress
 
 	property classif1 type=classificator store=connect reltype=RELTYPE_METAMGR
@@ -5417,13 +5417,14 @@ class crm_company extends class_base
 			$ser = get_instance(CL_CRM_NUMBER_SERIES);
 			$n->set_prop("bill_no", $ser->find_series_and_get_next(CL_CRM_BILL));
 			$n->set_name(sprintf(t("Arve nr %s"), $n->prop("bill_no")));
-			$n->set_prop("bill_date", $b->prop("bill_date"));
+			$n->set_prop("bill_date", time());
 			$n->set_prop("comment", $b->prop("comment"));
 			$n->set_prop("time_spent_desc", $b->prop("time_spent_desc"));
 			$n->set_prop("bill_due_date_days", $b->prop("bill_due_date_days"));
-			$n->set_prop("bill_due_date", $b->prop("bill_due_date"));
-			$n->set_prop("bill_recieved", $b->prop("bill_recieved"));
-			$n->set_prop("state", $b->prop("state"));
+			$n->set_prop("bill_due_date", (time() + $b->prop("bill_due_date_days") * 86400));
+	//		$n->set_prop("bill_due_date", $b->prop("bill_due_date"));
+			$n->set_prop("bill_recieved", -1);
+	//		$n->set_prop("state", $b->prop("state"));
 			$n->set_prop("disc", $b->prop("disc"));
 			$n->set_prop("language", $b->prop("language"));
 			$n->set_prop("customer", $b->prop("customer"));
@@ -6757,6 +6758,7 @@ class crm_company extends class_base
 			"return_url" => $arr["post_ru"],
 		 	"mto" => $send_to,
 		 	"mfrom" => $mfrom,
+		 	"crm" => 1,
 		 ),CL_MESSAGE);
 	}
 
