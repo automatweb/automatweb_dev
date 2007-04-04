@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.542 2007/04/02 09:27:09 voldemar Exp $
+// $Id: class_base.aw,v 2.543 2007/04/04 12:59:09 voldemar Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1295,7 +1295,14 @@ class class_base extends aw_template
 		if (aw_ini_get("debug_mode") == 1 && !empty($_REQUEST["CFG_DEBUG"]))
 		{
 			$this->cfg_debug = true;
-		};
+		}
+
+		if (!empty($_GET["just_saved"]))
+		{
+			$this->just_saved = true;
+			aw_global_set("REQUEST_URI", aw_url_change_var("just_saved", null));
+			$_GET["just_saved"] = null;
+		}
 
 		// create an instance of the class servicing the object ($this->inst)
 		// set $this->clid and $this->clfile
@@ -1309,7 +1316,7 @@ class class_base extends aw_template
 		if (empty($orb_class) && is_string($this->orb_class))
 		{
 			$orb_class = $this->orb_class;
-		};
+		}
 
 		if (is_object($this->orb_class))
 		{
@@ -1675,7 +1682,7 @@ class class_base extends aw_template
 				"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
 				"content" => $args["content"],
 				"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"]),
-				"save_message" => $_GET["just_saved"] ? t("Andmed salvestatud!") : null
+				"save_message" => $this->just_saved ? t("Andmed salvestatud!") : null
 			));
 		//}
 		//else
