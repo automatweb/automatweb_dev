@@ -584,6 +584,16 @@
             <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
       </property>
       <property>
+            <name>currency</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CURRENCY</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
             <name>work_hrs</name>
             <table>objects</table>
             <group>work_hrs</group>
@@ -1752,6 +1762,11 @@
                   <clid>CL_CRM_PERSON_WORK_RELATION</clid>
                   <caption>Praegune t&amp;amp;ouml;&amp;amp;ouml;koht</caption>
             </CURRENT_JOB>
+            <CURRENCY>
+                  <value>68</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>valuuta</caption>
+            </CURRENCY>
       </reltypes>
       <layout>
             <ct_super>

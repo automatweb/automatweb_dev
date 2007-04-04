@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.168 2007/03/30 13:52:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.169 2007/04/04 12:43:40 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -239,6 +239,9 @@ caption Msn/yahoo/aol/icq
 
 @property bill_due_days type=textbox size=5  table=objects field=meta method=serialize
 @caption Makset&auml;htaeg (p&auml;evi)
+
+@property currency type=relpicker reltype=RELTYPE_CURRENCY table=objects field=meta method=serialize
+@caption Valuuta
 
 -----------------------
 @groupinfo work_hrs caption="T&ouml;&ouml;ajad" parent=general
@@ -711,7 +714,8 @@ caption S&otilde;bragrupid
 @reltype CURRENT_JOB value=67 clid=CL_CRM_PERSON_WORK_RELATION
 @caption Praegune t&ouml;&ouml;koht
 
-
+@reltype CURRENCY value=68 clid=CL_CURRENCY
+@caption valuuta
 */
 
 define("CRM_PERSON_USECASE_COWORKER", "coworker");
