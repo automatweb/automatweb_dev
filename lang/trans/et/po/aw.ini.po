@@ -2507,6 +2507,14 @@ msgstr ""
 msgid "Klassi SPA Kliendi liides (1198) nimi"
 msgstr ""
 
+#: aw.ini:class_1200
+msgid "Klassi Otsingu kasutajadefineeritud indekseerija (1200) nimi"
+msgstr ""
+
+#: aw.ini:class_1201
+msgid "Klassi Objektide korv (1201) nimi"
+msgstr ""
+
 # aw.ini:classfolder_29
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
@@ -4956,6 +4964,14 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1198
 msgid "syslog.type.ST_SPA_CUSTOMER_INTERFACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1200
+msgid "syslog.type.ST_SITE_SEARCH_CONTENT_GRP_DB"
+msgstr ""
+
+#: aw.ini:syslogtypes_1201
+msgid "syslog.type.ST_OBJECT_BASKET"
 msgstr ""
 
 #: aw.ini:syslogactions_1

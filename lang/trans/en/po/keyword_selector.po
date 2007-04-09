@@ -19,14 +19,14 @@ msgstr "Name"
 msgid "Vali"
 msgstr "Select"
 
-#: classes/vcl/keyword_selector.aw:213 classes/vcl/keyword_selector.aw:218
+#: classes/vcl/keyword_selector.aw:211 classes/vcl/keyword_selector.aw:216
 msgid "K&otilde;ik"
 msgstr "All"
 
-#: classes/vcl/keyword_selector.aw:224
+#: classes/vcl/keyword_selector.aw:222
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:231
+#: classes/vcl/keyword_selector.aw:229
 msgid "Valitud:"
 msgstr "Selected:"

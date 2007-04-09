@@ -181,6 +181,18 @@ msgstr ""
 msgid "Omaduse Toimetuse ridades valitud Arve tulba vaikimisi filter (default_task_rows_bills_filter) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_task_rows_controller
+msgid "Omaduse Toimetuse ridade kontroller (task_rows_controller) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_task_rows_controller_comment
+msgid "Omaduse Toimetuse ridade kontroller (task_rows_controller) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_task_rows_controller_help
+msgid "Omaduse Toimetuse ridade kontroller (task_rows_controller) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:prop_tables_toolbar
 msgid "Omaduse  (tables_toolbar) caption"
 msgstr ""
@@ -361,74 +373,74 @@ msgstr "Gallery configuration"
 msgid "Seose Kontroller (RELTYPE_CTR) tekst"
 msgstr "Controller"
 
-#: classes/applications/crm/crm_settings.aw:186
+#: classes/applications/crm/crm_settings.aw:190
 msgid "Jah"
 msgstr "Yes"
 
-#: classes/applications/crm/crm_settings.aw:187
+#: classes/applications/crm/crm_settings.aw:191
 msgid "Ei"
 msgstr "No"
 
-#: classes/applications/crm/crm_settings.aw:188
+#: classes/applications/crm/crm_settings.aw:192
 msgid "Arvel"
 msgstr "On invoice"
 
-#: classes/applications/crm/crm_settings.aw:189
+#: classes/applications/crm/crm_settings.aw:193
 msgid "Arveta"
 msgstr "No Invoice"
 
-#: classes/applications/crm/crm_settings.aw:202
+#: classes/applications/crm/crm_settings.aw:206
 msgid "Tabelvaade"
 msgstr "Table view"
 
-#: classes/applications/crm/crm_settings.aw:203
+#: classes/applications/crm/crm_settings.aw:207
 msgid "Kalendervaade"
 msgstr "Calendar view"
 
-#: classes/applications/crm/crm_settings.aw:223
+#: classes/applications/crm/crm_settings.aw:227
 msgid "Salvesta tabeli seaded"
 msgstr "Save table settings"
 
-#: classes/applications/crm/crm_settings.aw:244
+#: classes/applications/crm/crm_settings.aw:248
 msgid "Taasta algseaded"
 msgstr "Restore defaults"
 
-#: classes/applications/crm/crm_settings.aw:245
+#: classes/applications/crm/crm_settings.aw:249
 msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
 msgstr "Modified settings will be lost when You restore defaults, continue?"
 
-#: classes/applications/crm/crm_settings.aw:258
+#: classes/applications/crm/crm_settings.aw:262
 msgid "Minu t&ouml;&ouml;koht"
 msgstr "My workplace"
 
-#: classes/applications/crm/crm_settings.aw:265
+#: classes/applications/crm/crm_settings.aw:269
 msgid "Klient"
 msgstr "Client"
 
-#: classes/applications/crm/crm_settings.aw:272
+#: classes/applications/crm/crm_settings.aw:276
 msgid "Eraisikust klient"
 msgstr "Private person client"
 
-#: classes/applications/crm/crm_settings.aw:279
+#: classes/applications/crm/crm_settings.aw:283
 msgid "T&ouml;&ouml;kaaslane"
 msgstr "Workmate"
 
-#: classes/applications/crm/crm_settings.aw:286
+#: classes/applications/crm/crm_settings.aw:290
 msgid "Kliendi t&ouml;&ouml;taja"
 msgstr "Clients worker"
 
-#: classes/applications/crm/crm_settings.aw:336
+#: classes/applications/crm/crm_settings.aw:340
 msgid "Veeru nimi"
 msgstr "Column name"
 
-#: classes/applications/crm/crm_settings.aw:340
+#: classes/applications/crm/crm_settings.aw:344
 msgid "Järjekord"
 msgstr "Order"
 
-#: classes/applications/crm/crm_settings.aw:344
+#: classes/applications/crm/crm_settings.aw:348
 msgid "Kasutusel"
 msgstr "Used"
 
-#: classes/applications/crm/crm_settings.aw:348
+#: classes/applications/crm/crm_settings.aw:352
 msgid "Pealkiri"
 msgstr "Title"

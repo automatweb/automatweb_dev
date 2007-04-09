@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/image.aw:class_6_help
 msgid "Klassi Pilt help"
 msgstr ""
@@ -314,6 +313,18 @@ msgstr ""
 msgid "Omaduse Info (resize_warn) help"
 msgstr ""
 
+#: classes/image.aw:prop_grkeywords2
+msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) caption"
+msgstr ""
+
+#: classes/image.aw:prop_grkeywords2_comment
+msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_grkeywords2_help
+msgid "Omaduse AW M&auml;rks&otilde;nad (grkeywords2) help"
+msgstr ""
+
 #: classes/image.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -332,6 +343,14 @@ msgstr ""
 
 #: classes/image.aw:group_show_help
 msgid "Grupi N&auml;itamine (show) help"
+msgstr ""
+
+#: classes/image.aw:group_show_def
+msgid "Grupi N&auml;itamine (show_def) pealkiri"
+msgstr ""
+
+#: classes/image.aw:group_show_def_help
+msgid "Grupi N&auml;itamine (show_def) help"
 msgstr ""
 
 #: classes/image.aw:group_img2
@@ -358,6 +377,14 @@ msgstr ""
 msgid "Grupi Muuda suure pildi suurust (resize_big) help"
 msgstr ""
 
+#: classes/image.aw:group_keywords
+msgid "Grupi M&auml;rk&otilde;nad (keywords) pealkiri"
+msgstr ""
+
+#: classes/image.aw:group_keywords_help
+msgid "Grupi M&auml;rk&otilde;nad (keywords) help"
+msgstr ""
+
 #: classes/image.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
 msgstr ""
@@ -374,31 +401,34 @@ msgstr ""
 msgid "Seose Flash (RELTYPE_FLASH) tekst"
 msgstr ""
 
-#: classes/image.aw:320
+#: classes/image.aw:rel_RELTYPE_KEYWORD
+msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
+msgstr ""
+
+#: classes/image.aw:330
 msgid "kommentaar"
 msgstr ""
 
-#: classes/image.aw:320
+#: classes/image.aw:330
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:921
+#: classes/image.aw:933
 msgid "Uues aknas"
 msgstr ""
 
-#: classes/image.aw:922
+#: classes/image.aw:934
 msgid "&Auml;ra n&auml;ita print-vaates"
 msgstr ""
 
-#: classes/image.aw:935
+#: classes/image.aw:947
 msgid "Piltide automaatset suurendamist kontrollib objekt"
 msgstr ""
 
-#: classes/image.aw:1535
+#: classes/image.aw:1552
 msgid "Lisa"
 msgstr ""
 
-#: classes/image.aw:2056
+#: classes/image.aw:2078
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
-

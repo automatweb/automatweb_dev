@@ -113,6 +113,7 @@ $GLOBALS["TRANS"]["Preili"] = "Ms";
 $GLOBALS["TRANS"]["Vallaline"] = "Single";
 $GLOBALS["TRANS"]["Abielus"] = "Married";
 $GLOBALS["TRANS"]["Lahutatud"] = "Divorced";
+$GLOBALS["TRANS"]["Vabaabielus"] = "Free marriage";
 $GLOBALS["TRANS"]["Pilt, kontakt, artiklid"] = "Image, contact, articles";
 $GLOBALS["TRANS"]["kontakt"] = "contact";
 $GLOBALS["TRANS"]["mees"] = "man";

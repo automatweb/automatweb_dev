@@ -341,7 +341,7 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_db.aw:188 classes/crm/crm_db.aw:491
+#: classes/crm/crm_db.aw:188 classes/crm/crm_db.aw:492
 msgid "Kustuta"
 msgstr ""
 
@@ -385,42 +385,42 @@ msgstr ""
 msgid "Muudetud"
 msgstr ""
 
-#: classes/crm/crm_db.aw:421
+#: classes/crm/crm_db.aw:422
 msgid "(nimetu)"
 msgstr ""
 
-#: classes/crm/crm_db.aw:441
+#: classes/crm/crm_db.aw:442
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_db.aw:456
+#: classes/crm/crm_db.aw:457
 msgid "Lisa organisatsioon (%s)"
 msgstr ""
 
-#: classes/crm/crm_db.aw:465
+#: classes/crm/crm_db.aw:466
 msgid "Lisa tegevusala"
 msgstr ""
 
-#: classes/crm/crm_db.aw:477
+#: classes/crm/crm_db.aw:478
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_db.aw:485
+#: classes/crm/crm_db.aw:486
 msgid "Ava valim"
 msgstr ""
 
-#: classes/crm/crm_db.aw:493
+#: classes/crm/crm_db.aw:494
 msgid "Kustutada valitud organisatsioonid?"
 msgstr ""
 
-#: classes/crm/crm_db.aw:503
+#: classes/crm/crm_db.aw:504
 msgid "-- vali valim --"
 msgstr ""
 
-#: classes/crm/crm_db.aw:528
+#: classes/crm/crm_db.aw:529
 msgid "Lisa valitud valimisse"
 msgstr ""
 
-#: classes/crm/crm_db.aw:530
+#: classes/crm/crm_db.aw:531
 msgid "Paiguta valitud organisatsioonid sellesse valimisse?"
 msgstr ""

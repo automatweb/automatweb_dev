@@ -49,18 +49,46 @@ msgstr ""
 msgid "Omaduse Ainult aktiivsed (only_active) help"
 msgstr ""
 
+#: classes/applications/crm/crm_db_search.aw:prop_dir_tegevusala
+msgid "Omaduse Tegevusalade kaust (dir_tegevusala) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_dir_tegevusala_comment
+msgid "Omaduse Tegevusalade kaust (dir_tegevusala) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_dir_tegevusala_help
+msgid "Omaduse Tegevusalade kaust (dir_tegevusala) help"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_keywords
+msgid "Omaduse V&ouml;tmes&ouml;nad (komadega eraldatult) (keywords) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_keywords_comment
+msgid "Omaduse V&ouml;tmes&ouml;nad (komadega eraldatult) (keywords) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:prop_keywords_help
+msgid "Omaduse V&ouml;tmes&ouml;nad (komadega eraldatult) (keywords) help"
+msgstr ""
+
 #: classes/applications/crm/crm_db_search.aw:rel_RELTYPE_CRM_DB
 msgid "Seose Organisatsioonide andmebaas (RELTYPE_CRM_DB) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:125
-msgid "Otsisid '<b>%s</b>', "
+#: classes/applications/crm/crm_db_search.aw:rel_RELTYPE_TEGEVUSALA_CAT
+msgid "Seose Tegevusalade kaust (RELTYPE_TEGEVUSALA_CAT) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:127
+#: classes/applications/crm/crm_db_search.aw:134
+msgid "Otsisid '<b>%s</b>',"
+msgstr ""
+
+#: classes/applications/crm/crm_db_search.aw:136
 msgid "Leiti %s asutus."
 msgstr ""
 
-#: classes/applications/crm/crm_db_search.aw:127
+#: classes/applications/crm/crm_db_search.aw:136
 msgid "Leiti %s asutust."
 msgstr ""

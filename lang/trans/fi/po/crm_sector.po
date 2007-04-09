@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_sector.aw:class_131_help
 msgid "Klassi Tegevusala help"
 msgstr ""
@@ -74,6 +73,18 @@ msgstr ""
 msgid "Omaduse Tegevusala kood (kood) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_image
+msgid "Omaduse Pilt (image) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_image_comment
+msgid "Omaduse Pilt (image) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_image_help
+msgid "Omaduse Pilt (image) help"
+msgstr ""
+
 #: classes/crm/crm_sector.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -94,3 +105,6 @@ msgstr ""
 msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:rel_RELTYPE_IMAGE
+msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""

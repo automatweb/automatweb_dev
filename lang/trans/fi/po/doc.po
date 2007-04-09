@@ -1249,7 +1249,7 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:872 classes/doc.aw:1651
+#: classes/doc.aw:872 classes/doc.aw:1683
 msgid "Eelvaade"
 msgstr ""
 
@@ -1297,18 +1297,18 @@ msgstr ""
 msgid "Kustuta"
 msgstr ""
 
-#: classes/doc.aw:1600
+#: classes/doc.aw:1631
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/doc.aw:1626
+#: classes/doc.aw:1658
 msgid "<b>Pealkiri:</b>"
 msgstr ""
 
-#: classes/doc.aw:1627
+#: classes/doc.aw:1659
 msgid "<b>Lead:</b>"
 msgstr ""
 
-#: classes/doc.aw:1628
+#: classes/doc.aw:1660
 msgid "<b>Sisu:</b>"
 msgstr ""

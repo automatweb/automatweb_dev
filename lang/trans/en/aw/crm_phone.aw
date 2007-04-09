@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Number (name) caption"] = "Number";
-$GLOBALS["TRANS"]["Omaduse Numbri tüüp (type) caption"] = "Number type";
 $GLOBALS["TRANS"]["Omaduse Riik (country) caption"] = "Country";
 $GLOBALS["TRANS"]["Seose Numbriga seotud objekt (RELTYPE_BELONGTO) tekst"] = "Number belongs to";
 $GLOBALS["TRANS"]["Seose Riik (RELTYPE_COUNTRY) tekst"] = "Country";

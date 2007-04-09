@@ -87,6 +87,18 @@ msgstr ""
 msgid "Omaduse Tegevusala kood (kood) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_image
+msgid "Omaduse Pilt (image) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_image_comment
+msgid "Omaduse Pilt (image) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_image_help
+msgid "Omaduse Pilt (image) help"
+msgstr ""
+
 #: classes/crm/crm_sector.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
@@ -105,4 +117,8 @@ msgstr ""
 
 #: classes/crm/crm_sector.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:rel_RELTYPE_IMAGE
+msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
 msgstr ""

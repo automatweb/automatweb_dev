@@ -1050,8 +1050,8 @@ msgid "Virgin Islands (U.S.)"
 msgstr "Виргинские острова (США)"
 
 #: classes/crm/crm_address.aw:581
-msgid "VietNam"
-msgstr "Вьетнам"
+msgid "Viet Nam"
+msgstr ""
 
 #: classes/crm/crm_address.aw:582
 msgid "Vanuatu"
@@ -1092,3 +1092,6 @@ msgstr ""
 #: classes/crm/crm_address.aw:591
 msgid "Zimbabwe"
 msgstr "Зимбабве"
+
+#~ msgid "VietNam"
+#~ msgstr "Вьетнам"

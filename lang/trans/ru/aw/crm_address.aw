@@ -224,7 +224,6 @@ $GLOBALS["TRANS"]["Saint Vincent and the Grenadines"] = "Сент-Винсент и Гренадин
 $GLOBALS["TRANS"]["Venezuela"] = "Венесуэла";
 $GLOBALS["TRANS"]["Virgin Islands (British)"] = "Виргинские острова (Британия)";
 $GLOBALS["TRANS"]["Virgin Islands (U.S.)"] = "Виргинские острова (США)";
-$GLOBALS["TRANS"]["VietNam"] = "Вьетнам";
 $GLOBALS["TRANS"]["Vanuatu"] = "Вануату";
 $GLOBALS["TRANS"]["Wallis and Futuna Islands"] = "Уоллис и Футуна острова";
 $GLOBALS["TRANS"]["Samoa"] = "Самоа";

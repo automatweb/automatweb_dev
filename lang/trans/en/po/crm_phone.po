@@ -29,17 +29,16 @@ msgstr ""
 msgid "Omaduse Number (name) help"
 msgstr ""
 
-# classes/crm/crm_phone.aw:prop_type
 #: classes/crm/crm_phone.aw:prop_type
-msgid "Omaduse Numbri tüüp (type) caption"
-msgstr "Number type"
+msgid "Omaduse Numbri t&uuml;&uuml;p (type) caption"
+msgstr ""
 
 #: classes/crm/crm_phone.aw:prop_type_comment
-msgid "Omaduse Numbri tüüp (type) kommentaar"
+msgid "Omaduse Numbri t&uuml;&uuml;p (type) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_phone.aw:prop_type_help
-msgid "Omaduse Numbri tüüp (type) help"
+msgid "Omaduse Numbri t&uuml;&uuml;p (type) help"
 msgstr ""
 
 #: classes/crm/crm_phone.aw:prop_country
@@ -90,6 +89,10 @@ msgstr "skype"
 #: classes/crm/crm_phone.aw:48
 msgid "sisetelefon"
 msgstr "extension"
+
+# classes/crm/crm_phone.aw:prop_type
+#~ msgid "Omaduse Numbri tüüp (type) caption"
+#~ msgstr "Number type"
 
 #~ msgid "tööl"
 #~ msgstr "at work"

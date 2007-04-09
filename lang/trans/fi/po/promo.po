@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/promo.aw:class_22_help
 msgid "Klassi Konteiner help"
 msgstr ""
@@ -646,15 +645,18 @@ msgstr ""
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:358 classes/contentmgmt/promo.aw:407 classes/contentmgmt/promo.aw:454
+#: classes/contentmgmt/promo.aw:358 classes/contentmgmt/promo.aw:407
+#: classes/contentmgmt/promo.aw:454
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:366 classes/contentmgmt/promo.aw:415 classes/contentmgmt/promo.aw:463
+#: classes/contentmgmt/promo.aw:366 classes/contentmgmt/promo.aw:415
+#: classes/contentmgmt/promo.aw:463
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:371 classes/contentmgmt/promo.aw:420 classes/contentmgmt/promo.aw:477
+#: classes/contentmgmt/promo.aw:371 classes/contentmgmt/promo.aw:420
+#: classes/contentmgmt/promo.aw:477
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
@@ -662,15 +664,14 @@ msgstr ""
 msgid "Pane pealkirjaks"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1100
+#: classes/contentmgmt/promo.aw:1099
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1154
+#: classes/contentmgmt/promo.aw:1153
 msgid "Valitud objekt: %s /"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1156
-msgid " Otsi uus objekt: "
+#: classes/contentmgmt/promo.aw:1155
+msgid "Otsi uus objekt:"
 msgstr ""
-

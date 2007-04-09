@@ -230,63 +230,71 @@ msgstr ""
 msgid "Seose Privaatv&otilde;ti (RELTYPE_P_KEY) tekst"
 msgstr ""
 
-#: classes/common/bank_payment.aw:539
+#: classes/common/bank_payment.aw:521
 msgid "&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:539
+#: classes/common/bank_payment.aw:521
 msgid "eba&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:540
+#: classes/common/bank_payment.aw:522
 msgid "ok"
 msgstr ""
 
-#: classes/common/bank_payment.aw:540
+#: classes/common/bank_payment.aw:522
 msgid ""
 msgstr ""
 
-#: classes/common/bank_payment.aw:563
+#: classes/common/bank_payment.aw:529
+msgid "Kokku:"
+msgstr ""
+
+#: classes/common/bank_payment.aw:552
 msgid "\n"
 msgstr ""
 
-#: classes/common/bank_payment.aw:586
+#: classes/common/bank_payment.aw:575
 msgid "Aeg"
 msgstr ""
 
-#: classes/common/bank_payment.aw:592
+#: classes/common/bank_payment.aw:581
 msgid "Maksja"
 msgstr ""
 
-#: classes/common/bank_payment.aw:598
+#: classes/common/bank_payment.aw:587
 msgid "Viitenumber"
 msgstr ""
 
-#: classes/common/bank_payment.aw:604
+#: classes/common/bank_payment.aw:593
 msgid "Summa"
 msgstr ""
 
-#: classes/common/bank_payment.aw:610
+#: classes/common/bank_payment.aw:599
 msgid "Seletus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:616
+#: classes/common/bank_payment.aw:605
 msgid "Pank"
 msgstr ""
 
-#: classes/common/bank_payment.aw:622
+#: classes/common/bank_payment.aw:611
+msgid "Arve"
+msgstr ""
+
+#: classes/common/bank_payment.aw:617
 msgid "&Otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:627
+#: classes/common/bank_payment.aw:622
 msgid "SK"
 msgstr ""
 
-#: classes/common/bank_payment.aw:837
+#: classes/common/bank_payment.aw:847
 msgid "Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage"
 msgstr ""
 
-#: classes/common/bank_payment.aw:837
+#: classes/common/bank_payment.aw:847
 msgid "siia"
 msgstr ""
 

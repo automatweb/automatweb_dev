@@ -361,19 +361,19 @@ msgstr ""
 msgid "Paiguta dokumenti"
 msgstr ""
 
-#: classes/file.aw:725
+#: classes/file.aw:727
 msgid "Vale objekti id!"
 msgstr ""
 
-#: classes/file.aw:1294
+#: classes/file.aw:1308
 msgid "Need either id or parent"
 msgstr ""
 
-#: classes/file.aw:1404
+#: classes/file.aw:1418
 msgid "Salvesta ja indekseeri otsingusse"
 msgstr ""
 
-#: classes/file.aw:1412
+#: classes/file.aw:1426
 msgid "Salvesta ja paiguta dokumenti"
 msgstr ""
 
