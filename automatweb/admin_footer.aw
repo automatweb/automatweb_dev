@@ -118,7 +118,7 @@ if ($sf->prog_acl("view", "disp_co_edit"))
 		"SHOW_CUR_CO" => $sf->parse("SHOW_CUR_CO")
 	));
 }
-if ($sf->prog_acl("view", "disp_co_view"))
+if ($sf->prog_acl("view", "disp_co_view") && !$sf->prog_acl("view", "disp_co_edit"))
 {
 	$sf->vars(array(
 		"SHOW_CUR_CO_VIEW" => $sf->parse("SHOW_CUR_CO_VIEW")
