@@ -195,8 +195,20 @@ function canBron ()
 function isTimeBronned (strId)
 {
 	try {
-		if (document.getElementById(strId).childNodes[2].id)
-			return false
+		if (navigator.userAgent.indexOf("MSIE") > 0)
+		{
+			if (document.getElementById(strId).childNodes[1].id)
+				return false
+			else
+				return true;
+		}
+		else
+		{
+			if (document.getElementById(strId).childNodes[2].id)
+				return false;
+			else
+				return true;
+		}
 	}
 	catch (e) {return true;}
 }
