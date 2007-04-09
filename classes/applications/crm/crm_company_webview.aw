@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.22 2007/04/09 07:29:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.23 2007/04/09 07:47:50 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1211,6 +1211,8 @@ class crm_company_webview extends class_base
 						'url' => $url . $o->id() . '&l='.$arr['id'],
 						'caption' => $name))
 						: $name,
+				'company_name_url' => $url . $o->id() . '&l=' .$arr['id'],
+				'company_name_text' => $name,
 				'company_changeurl' => $this->can('edit', $o->id()) ? html::href(array(
 						'caption' => '('.t("Muuda").')',
 						'url' => $this->mk_my_orb('change',array(
