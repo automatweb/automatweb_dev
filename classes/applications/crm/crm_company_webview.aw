@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.21 2007/04/09 07:21:50 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.22 2007/04/09 07:29:42 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -845,6 +845,7 @@ class crm_company_webview extends class_base
 						{
 							$value = $o_item->name();
 							$this->vars(array("company_web_url" => $value));
+							$value = (substr($value, 0, 7) == "http://")?$value:"http://".$value;
 							$value = html::href(array(
 								'url' => $value,
 								'caption' => $value,
