@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.186 2007/04/03 12:45:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.187 2007/04/09 13:32:47 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -4703,7 +4703,7 @@ class room extends class_base
 		if(is_oid($room))
 		{
 			$prod_data = $this->get_prod_data_for_room($room);
-			if(isset($prod_data[$id]["ba"]))
+			if(isset($prod_data[$id]["ba"]) && !($prod_data[$id]["ba"] == ""))
 			{
 				$ba = $prod_data[$id]["ba"];
 			}
