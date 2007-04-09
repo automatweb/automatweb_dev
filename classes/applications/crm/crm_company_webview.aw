@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.20 2007/03/14 14:02:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.21 2007/04/09 07:21:50 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -293,6 +293,7 @@ class crm_company_webview extends class_base
 			'fax' => t("Faks"),
 			'openhours' => t("Avatud"),
 			'email' => t("E-post"),
+			'url' => t("Veebiaadress"),
 			'sectors' => t("Tegevusalad"),
 			'founded' => t("Asutatud"),
 			'specialoffers' => t("Eripakkumised"),
@@ -831,7 +832,7 @@ class crm_company_webview extends class_base
 					break;
 				default:
 					$oid = $c->prop($mapped);
-					if (is_oid($oid) && ($o_item = obj($oid)) && is_object($o_item) && is_numeric($o_item->id()) )
+					if ($this->can("view", $oid) && ($o_item = obj($oid)) && is_object($o_item) && is_numeric($o_item->id()) )
 					{
 						if ($item == 'email')
 						{
@@ -1178,7 +1179,12 @@ class crm_company_webview extends class_base
 			'email' => 'email_id',
 			'web' => 'url_id',
 			'images' => '',
-			'logo' => ''
+			'logo' => '',
+			'userta1' => '',
+			'userta2' => '',
+			'userta3' => '',
+			'userta4' => '',
+			'userta5' => '',
 		);
 
 		if (!empty($arr['url']))
@@ -1326,6 +1332,10 @@ class crm_company_webview extends class_base
 							}	
 						}
 						$value = join(', ', $value);
+					}
+					elseif(substr($item, 0, 6) == 'userta')
+					{
+						$value = $o->prop($item);
 					}
 					else
 					{
