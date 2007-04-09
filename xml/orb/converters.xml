@@ -44,13 +44,6 @@
 			</function>
 		</action>
 
-		<action name="convert_acl_to_classbase">
-			<function name="convert_acl_to_classbase">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="convert_fg_tables_deleted" nologin="1">
 			<function name="convert_fg_tables_deleted">
 				<arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.58 2007/03/30 12:20:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.59 2007/04/09 11:27:07 kristo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1967,6 +1967,24 @@ flush();
 				$bron->save();
 			}
 		}
+	}
+
+	/** Returns the total price of the reservation in all the currencies
+		@attrib api=1
+
+		@param reservation required type=object
+	**/
+	function get_reservation_price($reservation)
+	{
+		$room_instance = get_instance(CL_ROOM);
+		return $room_instance->cal_room_price(array(
+			"room" => $reservation->prop("resource"),
+			"start" => $reservation->prop("start1"),
+			"end" => $reservation->prop("end"),
+			"people" => $reservation->prop("people_count"),
+			"products" => $reservation->meta("amount"),
+			"bron" => $reservation,
+		));
 	}
 }
 ?>

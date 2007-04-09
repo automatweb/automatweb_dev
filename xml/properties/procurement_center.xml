@@ -76,7 +76,7 @@
             <no_caption>1</no_caption>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Laoseisu ei arvestata</caption>
+            <caption>Arvestab laoseisu</caption>
       </property>
       <property>
             <name>p_tb</name>

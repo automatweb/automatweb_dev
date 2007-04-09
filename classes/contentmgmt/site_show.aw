@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.225 2007/03/28 10:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.226 2007/04/09 11:27:07 kristo Exp $
 
 /*
 
@@ -2650,6 +2650,7 @@ echo dbg::dump($lar);
 		$arr["tpldir"] = $tpldir;
 		// right. now, do the template compiler bit
 		$awt->start("build-popups");
+
 		if (!($this->compiled_filename = $this->get_cached_compiled_filename($arr)))
 		{
 			$this->compiled_filename = $this->cache_compile_template($tpldir, $arr["template"]);
@@ -2709,7 +2710,6 @@ echo dbg::dump($lar);
 		$awt->stop("part6");
 
 		$rv = $this->parse();
-
 
 		$rv .= $this->build_popups();
 		return $rv;

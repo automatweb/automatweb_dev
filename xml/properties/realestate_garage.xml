@@ -134,6 +134,14 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;gihind</caption>
       </property>
       <property>
+            <name>price_per_m2</name>
+            <table>realestate_property</table>
+            <group>transaction_data</group>
+            <type>text</type>
+            <field>price_per_m2</field>
+            <caption>Ruutmeetri hind</caption>
+      </property>
+      <property>
             <name>transaction_rent</name>
             <table>objects</table>
             <group>transaction_data</group>

@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="realestate_property" folder="applications/realestate_management" extends="class_base">
+		<action name="remove_costumer">
+			<function name="remove_costumer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="set_customer">
 			<function name="set_customer">
 				<arguments>

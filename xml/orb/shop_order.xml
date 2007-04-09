@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="shop_order" folder="applications/shop" extends="class_base">
+		<action name="bank_return" nologin="1">
+			<function name="bank_return">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>

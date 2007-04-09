@@ -330,8 +330,6 @@ div.menu .menuItemTextSep {
 /*kalendri kuuvaate stiilid*/
 #calendar_month {
 	background-color: #e1e1e1;
-	margin-left: 10px;
-	margin-right: 10px;
 }
 #calendar_month a {
 	color: #0018af;

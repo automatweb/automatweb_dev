@@ -88,7 +88,7 @@
 	</div>
 
 	<!-- SUB: end -->
-	</div>
+<!--	</div> -->
 	<!-- END SUB: end -->
 
 	<!-- SUB: right_side -->

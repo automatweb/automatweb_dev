@@ -79,6 +79,7 @@
 		<action name="cal_product_reserved_time" nologin="1" all_args="1">
 			<function name="cal_product_reserved_time">
 				<arguments>
+					<required name="room" type="oid" />
 					<required name="oid" type="oid" />
 				</arguments>
 			</function>

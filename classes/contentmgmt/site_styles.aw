@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.10 2006/06/26 09:28:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.11 2007/04/09 11:27:07 kristo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 
@@ -321,7 +321,7 @@ class site_styles extends class_base
 	**/
 	function selected_style_ord($arr)
 	{
-		if (is_null($this->selected))
+		if (is_null($this->selected) && is_oid($arr["oid"]))
 		{
 			$o = obj($arr['oid']);
 			if(isset($_SESSION['style_'.$arr['oid']]))
@@ -378,7 +378,7 @@ class site_styles extends class_base
 		$sel = $this->selected_style_ord(array(
 			"oid" => key($ar),
 		));
-		foreach($vars as $varname => $values)
+		foreach(safe_array($vars) as $varname => $values)
 		{
 			$arr["inst"]->vars(array(
 				$varname => $values[$sel],

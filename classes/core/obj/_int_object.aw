@@ -1097,6 +1097,39 @@ class _int_object
 
 	function prop_str($param, $is_oid = NULL)
 	{
+		if (strpos($param, ".") !== false)
+		{
+			$o = $this;
+			$bits = explode(".", $param);
+			foreach($bits as $idx => $part)
+			{
+				$cur_v = $o->prop($part);
+				$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
+				// the true here is because if the user says that this thingie is an oid, then we trust him
+				// we check of course, but still. we trust him.
+				if (is_array($cur_v) && count($cur_v) == 1)
+				{
+					$cur_v = reset($cur_v);
+				}
+				$acl_tmp = $GLOBALS["cfg"]["acl"]["no_check"];
+				$GLOBALS["cfg"]["acl"]["no_check"] = 0;
+				if (!$GLOBALS["object_loader"]->ds->can("view", $cur_v))
+				{
+					$GLOBALS["cfg"]["acl"]["no_check"] = $acl_tmp;
+					if ($idx == (count($bits)-1))
+					{
+						return $o->prop_str($part);
+					}
+					return null;
+				}
+				$GLOBALS["cfg"]["acl"]["no_check"] = $acl_tmp;
+				if ($idx == (count($bits)-1))
+				{
+					return $o->prop_str($part);
+				}
+				$o = obj($cur_v);
+			}
+		}
 		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$param];
 		if (!$pd)
 		{

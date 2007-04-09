@@ -168,7 +168,7 @@ function hilight_event(el,tgt)
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
-	<td rowspan="1" valign="top" width="90%">
+	<td rowspan="1" valign="top" width="90%" style="padding-left: 10px; padding-right: 10px;">
 
 	{VAR:content}
 

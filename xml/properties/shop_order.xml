@@ -102,6 +102,15 @@
             <field>aw_sum</field>
             <caption>Summa</caption>
       </property>
+      <property>
+            <name>pickup</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>pickup</field>
+            <caption>Klient tuleb j&amp;amp;auml;rele</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER</syslog_type>
             <relationmgr>yes</relationmgr>

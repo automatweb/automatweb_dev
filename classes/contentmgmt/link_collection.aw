@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/link_collection.aw,v 1.2 2006/04/10 12:33:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/link_collection.aw,v 1.3 2007/04/09 11:27:07 kristo Exp $
 // link_collection.aw - Lingikogu 
 /*
 
@@ -231,7 +231,6 @@ class link_collection extends class_base
 			if ($sf[$c->prop("to")] == 1)
 			{
 				$ot = new object_tree(array(
-					"class_id" => CL_MENU,
 					"parent" => $c->prop("to")
 				));
 				foreach($ot->ids() as $id)
@@ -260,7 +259,7 @@ class link_collection extends class_base
 
 		$t->define_field(array(
 			"name" => "subf",
-			"caption" => t("K.A. alamkataloogid"),
+			"caption" => t("K.A. alamobjektid"),
 			"align" => "center"
 		));
 	}

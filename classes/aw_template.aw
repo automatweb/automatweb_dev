@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.79 2006/11/13 13:12:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.80 2007/04/09 11:27:07 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -75,7 +75,8 @@ class aw_template extends core
 			"status_msg" => aw_global_get("status_msg"),
 			"baseurl" => $this->cfg["baseurl"],
 			"baseurl_ssl" => str_replace("http", "https", $this->cfg["baseurl"]),
-			"cur_lang_id" => aw_global_get("lang_id")
+			"cur_lang_id" => aw_global_get("lang_id"),
+			"current_url" => get_ru()
 		);
 	}
 

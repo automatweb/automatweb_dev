@@ -30,6 +30,17 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>bug_feedback_p</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FEEDBACK_P</reltype>
+            <parent>settings_col1</parent>
+            <captionside>top</captionside>
+            <field>aw_bug_feedback_p</field>
+            <caption>Tagasiside kellelt</caption>
+      </property>
+      <property>
             <name>bug_priority</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -50,17 +61,6 @@
             <parent>settings_col1</parent>
             <captionside>top</captionside>
             <caption>Kellele</caption>
-      </property>
-      <property>
-            <name>bug_mail</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>textbox</type>
-            <parent>settings_col1</parent>
-            <captionside>top</captionside>
-            <size>15</size>
-            <field>bug_mail</field>
-            <caption>Bugmail CC</caption>
       </property>
       <property>
             <name>bug_type</name>
@@ -321,15 +321,15 @@
             <caption>Eeldusbugid</caption>
       </property>
       <property>
-            <name>bug_feedback_p</name>
+            <name>bug_mail</name>
             <group>general</group>
             <table>aw_bugs</table>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FEEDBACK_P</reltype>
+            <type>textbox</type>
             <parent>data_r_bot</parent>
             <captionside>top</captionside>
-            <field>aw_bug_feedback_p</field>
-            <caption>Tagasiside kellelt</caption>
+            <size>15</size>
+            <field>bug_mail</field>
+            <caption>Bugmail CC</caption>
       </property>
       <property>
             <name>team</name>

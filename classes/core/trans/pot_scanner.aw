@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.46 2007/03/20 14:13:16 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.47 2007/04/09 11:27:08 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -369,7 +369,6 @@ class pot_scanner extends core
 	function _make_aw_from_po($from_file, $to_file)
 	{
 		$a = $this->parse_po_file($from_file);
-
 		$f = array();
 		foreach($a as $line)
 		{
@@ -378,10 +377,14 @@ class pot_scanner extends core
 				$f[] = "\$GLOBALS[\"TRANS\"][\"".$this->_code_quote($line["msgid"])."\"] = \"".$this->_nl2br($this->_code_quote($line["msgstr"]))."\";\n";
 			}
 		}
-
 		if (count($f))
 		{
 			$fp = fopen($to_file, "w");
+			if (!$fp)
+			{
+				mkdir(dirname($to_file), 0777);
+				$fp = fopen($to_file, "w");
+			}
 			fwrite($fp, "<?php\n");
 			foreach($f as $e)
 			{

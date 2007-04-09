@@ -146,110 +146,87 @@ class site_search_content_grp_userdefined extends run_in_background
 		eval($o->prop("code_".__FUNCTION__));
 	}
 
-	function _store_content(&$page, $indexer_id)
-	{
-		$o = obj($indexer_id);
-
-		$h_id = md5($page->get_url());
-		$fc = $page->get_text_content($o);
-		$modified = $page->get_last_modified();
-		$title = $page->get_title($o);
-		$url = $page->get_url();
-		$ct = $page->get_content_type();
-
-		// rewrite entities in html
-		$fc = html_entity_decode($fc, ENT_COMPAT, "UTF-8");
-		$title = html_entity_decode($title, ENT_COMPAT, "UTF-8");
-
-		$fc = str_replace("\"", "", $fc);
-		$title = str_replace("\"", "", $title);
-
-		$fields = array(
-			"content" => $fc,
-			"modified" => $modified,
-			"title" => $title,
-			"last_modified" => time(),
-			"url" => $url,
-			"file_name" => $fn,
-			"id" => $h_id,
-			"created_by" => 'ss_fs',
-			"site_id" => $indexer_id,
-			"file_type" => $ct
-		);
-
-		if (get_class($page) == "ss_parser_html" && is_oid($o->prop("meta_ctr")) && $this->can("view", $o->prop("meta_ctr")))
+		function _store_content($arr, $indexer_id)
 		{
-			$m_ctr = obj($o->prop("meta_ctr"));
-			$ctr_i = $m_ctr->instance();
-			$res = $ctr_i->eval_controller_ref($m_ctr->id(), $h_id, $page, $page);
-			if ($res == false)
+			$o = obj($indexer_id);
+			extract($arr);
+
+
+			$h_id = md5($url);
+
+			// rewrite entities in html
+			$fc = html_entity_decode($text, ENT_COMPAT, "UTF-8");
+			$title = html_entity_decode($title, ENT_COMPAT, "UTF-8");
+
+			$fc = str_replace("\"", "", $fc);
+			$title = str_replace("\"", "", $title);
+
+			$fields = array(
+				"content" => $fc,
+				"modified" => $modified,
+				"title" => $title,
+				"last_modified" => time(),
+				"url" => $url,
+				"file_name" => $fn,
+				"id" => $h_id,
+				"created_by" => 'ss_ud',
+				"site_id" => $indexer_id,
+				"file_type" => $ct
+			);
+
+			$fields["content"] = iconv("UTF-8", "ISO-8859-4//IGNORE", $fields["content"]);
+			$fields["title"] = iconv("UTF-8", "ISO-8859-4//IGNORE", $fields["title"]);
+
+			$this->quote(&$fields["content"]);
+			$this->quote(&$fields["content_lower"]);
+			$this->quote(&$fields["title"]);
+			$h_id = md5($fields["url"]);
+
+			$this->size += strlen($fields["content"]);
+
+			// replace spaces
+			$fields["content"] = str_replace(chr(160), " ", $fields["content"]);
+			$fields["content"] = preg_replace("/\s+/", " ", $fields["content"]);
+			$fields["content_lower"] = mb_strtolower($fields["content"], "iso-8859-4");
+
+			$fields["content"] = str_replace("&#160;", " ", $fields["content"]);
+			$fields["content_lower"] = str_replace("&#160;", " ", $fields["content_lower"]);
+
+			$fields["content"] = str_replace(chr(167), "ggparagg", $fields["content"]);
+			$fields["content_lower"] = str_replace(chr(167), "ggparagg", $fields["content_lower"]);
+
+			$fields["content"] = str_replace(chr(185), "ggprimgg", $fields["content"]);
+			$fields["content_lower"] = str_replace(chr(185), "ggprimgg", $fields["content_lower"]);
+
+			$fields["content"] = str_replace(chr(178), "ggpripgg", $fields["content"]);
+			$fields["content_lower"] = str_replace(chr(178), "ggpripgg", $fields["content_lower"]);
+
+			$this->db_query("LOCK TABLE static_content_temp READ");
+			$this->db_query("LOCK TABLE static_content_temp WRITE");
+			// see if we already got this hash-indexer-site_id copy and if we do, update it
+			$cnt = $this->db_fetch_field("SELECT count(*) AS cnt FROM static_content_temp WHERE id = '$h_id'", "cnt");
+			if ($cnt > 0)
 			{
-				fwrite($this->f, date("d.m.Y H:i:s").": store content return false!\n");
-				return false;
+				$sets = join(",", map2("%s = '%s'", $fields));
+				$q = "
+				UPDATE static_content_temp SET 
+				$sets
+				WHERE
+				id = '$h_id' 
+				";
 			}
 			else
-			if (is_array($res))
 			{
-				foreach($res as $k => $v)
-				{
-					$fields[$k] = $v;
-				}
+				$flds = join(",", array_keys($fields));
+				$vals = join(",", map("'%s'", array_values($fields)));
+				$q = "
+				INSERT INTO static_content_temp($flds) 
+				VALUES($vals)
+				";
 			}
-		}
-
-		$fields["content"] = iconv("UTF-8", "ISO-8859-4//IGNORE", $fields["content"]);
-		$fields["title"] = iconv("UTF-8", "ISO-8859-4//IGNORE", $fields["title"]);
-
-		$this->quote(&$fields["content"]);
-		$this->quote(&$fields["content_lower"]);
-		$this->quote(&$fields["title"]);
-		$h_id = md5($fields["url"]);
-
-		$this->size += strlen($fields["content"]);
-
-		// replace spaces
-		$fields["content"] = str_replace(chr(160), " ", $fields["content"]);
-		$fields["content"] = preg_replace("/\s+/", " ", $fields["content"]);
-		$fields["content_lower"] = mb_strtolower($fields["content"], "iso-8859-4");
-
-		$fields["content"] = str_replace("&#160;", " ", $fields["content"]);
-		$fields["content_lower"] = str_replace("&#160;", " ", $fields["content_lower"]);
-
-		$fields["content"] = str_replace(chr(167), "ggparagg", $fields["content"]);
-		$fields["content_lower"] = str_replace(chr(167), "ggparagg", $fields["content_lower"]);
-
-		$fields["content"] = str_replace(chr(185), "ggprimgg", $fields["content"]);
-		$fields["content_lower"] = str_replace(chr(185), "ggprimgg", $fields["content_lower"]);
-
-		$fields["content"] = str_replace(chr(178), "ggpripgg", $fields["content"]);
-		$fields["content_lower"] = str_replace(chr(178), "ggpripgg", $fields["content_lower"]);
-
-		$this->db_query("LOCK TABLE static_content_temp READ");
-		$this->db_query("LOCK TABLE static_content_temp WRITE");
-		// see if we already got this hash-indexer-site_id copy and if we do, update it
-		$cnt = $this->db_fetch_field("SELECT count(*) AS cnt FROM static_content_temp WHERE id = '$h_id'", "cnt");
-		if ($cnt > 0)
-		{
-			$sets = join(",", map2("%s = '%s'", $fields));
-			$q = "
-			UPDATE static_content_temp SET 
-			$sets
-			WHERE
-			id = '$h_id' 
-			";
-		}
-		else
-		{
-			$flds = join(",", array_keys($fields));
-			$vals = join(",", map("'%s'", array_values($fields)));
-			$q = "
-			INSERT INTO static_content_temp($flds) 
-			VALUES($vals)
-			";
-		}
-		$this->db_query($q);
-		$this->db_query("UNLOCK TABLES");
-		return true;
-	}								
+			$this->db_query($q);
+			$this->db_query("UNLOCK TABLES");
+			return true;
+		}								
 }
 ?>
