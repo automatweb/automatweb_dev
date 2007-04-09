@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.59 2007/03/27 14:53:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.60 2007/04/09 16:16:51 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -69,6 +69,8 @@ class room_reservation extends class_base
 			"seb" => "Ühispank",
 			"sampopank" => "Sampopank",
 			"credit_card" => "Krediitkaart",
+			"hansapanklv" => "LV-Hansasabankas",
+			"hansapanklt" => "LT-Hansasabankas",
 		);
 	}
 
@@ -889,7 +891,7 @@ class room_reservation extends class_base
 		{
 			$data[$key."_value"] = $val;
 		}
-		$data["bank_value"] = $this->banks[$_SESSION["room_reservation"][$room->id()]["bank"]];
+		$data["bank_value"] = $this->banks[$_SESSION["room_reservation"][$room->id()]["bank"].$_SESSION["room_reservation"][$room->id()]["bank_country"]];
 		return $data;
 	}
 
@@ -1384,7 +1386,7 @@ class room_reservation extends class_base
 				"tpl" => $tpl,
 			));
 			$bron = obj($_SESSION["room_reservation"][$r->id()]["bron_id"]);
-			$bron->set_meta("bank_name",$this->banks[$_SESSION["room_reservation"][$r->id()]["bank"]]);
+			$bron->set_meta("bank_name",$this->banks[$_SESSION["room_reservation"][$r->id()]["bank"].$_SESSION["room_reservation"][$r->id()]["bank_country"]]);
 			$bron->set_meta("room_reservation_id",$arr["res"]);
 			$bron->save();
 //			$bron->set_meta("lang" , $lang);
@@ -1404,6 +1406,7 @@ class room_reservation extends class_base
 			}
 			$total_sum+= $sum;
 			$bank = $_SESSION["room_reservation"][$r->id()]["bank"];
+			$bank_country = $_SESSION["room_reservation"][$r->id()]["bank_country"];
 			$_SESSION["room_reservation"][$r->id()] = null;
 		}
 		if(!is_oid($r->prop("location")))
@@ -1414,7 +1417,7 @@ class room_reservation extends class_base
 		$loc = obj($r->prop("location"));
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $loc->prop("bank_payment");
-		//if(aw_global_get("uid") == "struktuur"){arr($this->mk_my_orb("bank_return", array("id" => reset($bron_ids)))); die();}
+		//if(aw_global_get("uid") == "struktuur"){arr($lang); die();}
 		$_SESSION["bank_payment"]["url"] = null;
 		
 		//$_SESSION["bank_payment"]["url"] = $this->mk_my_orb("bank_return", array("id" => reset($bron_ids)));
@@ -1424,6 +1427,7 @@ class room_reservation extends class_base
 			"reference_nr" => reset($bron_ids),
 			"payment_id" => $bank_payment,
 			"expl" => join(" ," , $bron_names),
+			"cntr" => $bank_country,
 		));
 	/*	if(aw_global_get("uid") == "struktuur"){arr($this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]))); die();}
 	*/	

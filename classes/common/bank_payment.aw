@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.46 2007/04/02 17:24:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.47 2007/04/09 16:16:51 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -396,6 +396,7 @@ class bank_payment extends class_base
 
 	function get_log_data($o)
 	{
+		classload("core/date/date_calc");
 		$filter = $o->meta("search_data");
 		$o->set_meta("search_data" , null);
 		$myFile = $GLOBALS["site_dir"]."/bank_log.txt";
@@ -724,6 +725,10 @@ class bank_payment extends class_base
 		If form is set, function returns html form, else returns to bank site.
 	@param test optional type=int
 		If test is set, the function uses the bank test site if it exists
+	@param cntr optional type=string
+		bank country code
+		if set and exists bank id named "bank_id + _ + cntr" , then uses it
+		
 	@returns bank web page, or string/html form
 	
 	@comment
@@ -749,14 +754,19 @@ class bank_payment extends class_base
 	function do_payment($arr)
 	{
 		//selle nõmeduse pidi siia ette panema, sest hiljem bank_id'd muutes peaks muidu siia funktsiooni tagasi pöörama
-		if(is_oid($arr["payment_id"]))
+		if(is_oid($arr["payment_id"]) && $arr["cntr"])
 		{
 			$payment = obj($arr["payment_id"]);
 			$bank_data = $payment->meta("bank");
-			if($bank_data[$arr["bank_id"]."_".$_SESSION["ct_lang_lc"]]["sender_id"])
+			if($bank_data[$arr["bank_id"]."_".$arr["cntr"]])
+			{
+				$arr["bank_id"] = $arr["bank_id"]."_".$arr["cntr"];
+			}
+/*			if($bank_data[$arr["bank_id"]."_".$_SESSION["ct_lang_lc"]]["sender_id"])
 			{
 				$arr["bank_id"] = $arr["bank_id"]."_".$_SESSION["ct_lang_lc"];
 			}
+*/		
 		}
 				
 		switch($arr["bank_id"]) {
@@ -1250,8 +1260,12 @@ class bank_payment extends class_base
 		$pkeyid = openssl_get_privatekey($priv_key);
 		openssl_sign($data, $VK_signature, $pkeyid);
 		openssl_free_key($pkeyid);
-		$VK_MAC = bin2hex($VK_signature);//base64_encode( $VK_signature);
-
+		$VK_MAC = bin2hex($VK_signature);//base64_encode( $VK_signature);/
+//		if(aw_global_get("uid") == "struktuur")
+//		{
+//			echo "https://pos.estcard.ee/webpos/servlet/iPAYServlet?action=$action&amp;ver=$version&amp;id=$sender_id&amp;ecuno=$reference_nr&amp;eamount=$amount&amp;cur=$curr&amp;datetime=$datetime&amp;mac=$VK_MAC&amp;lang=en";
+//			die();
+//		}
 		$link = $this->bank_link["credit_card"];
 		$params = array(
 			"action"	=> $service,		//"gaf"
@@ -1266,6 +1280,7 @@ class bank_payment extends class_base
 		);
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	}
+
 
 	function nordea($args)
 	{
