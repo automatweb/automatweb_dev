@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.151 2007/04/02 10:31:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.152 2007/04/09 14:35:51 kristo Exp $
 /*
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
@@ -105,6 +105,24 @@ class file extends class_base
 
 		$this->trans_props = array(
 			"comment"
+		);
+
+		
+		$this->type_whitelist = array(
+			"ez" , "hqx", "cpt", "doc", "bin", "dms", "lha", "lzh", "exe", "dll",
+			"oda", "pdf", "ai" , "eps", "ps" , "smi", "smil","mif", "xls", "ppt",
+			"wbxml", "wmlc", "wmlsc", "bcpio", "vcd", "pgn", "cpio", "dcr", "dir",
+			"dxr", "dvi", "spl", "gtar", "hdf", "js", "skp", "skd", "skt", "skm",
+			"latex", "nc", "cdf", "shar", "swf", "sit", "sv4cpio", "sv4crc", "tar",
+			"tcl", "tex", "texinfo", "texi", "roff", "man", "me", "ms", "ustar", 
+			"xhtml", "zip", "au", "snd", "mid", "midi", "kar", "mpga", "mp2", "mp3",
+			"aif", "aiff", "aifc", "m3u", "ram", "rm", "rpm", "ra", "wav", "pdb", "xyz",
+			"bmp", "gif", "ief", "jpeg", "jpg", "jpe", "png", "tiff", "tif", "djvu", 
+			"djv", "wbmp", "ras", "pnm", "pbm", "pgm", "ppm", "rgb", "xbm", "xpm",
+			"xwd", "igs", "iges", "msh", "mesh", "silo", "wrl", "vrml", "css", "html",
+			"htm", "asc", "txt", "rtx", "rtf", "sgml", "sgm", "tsv", "wml", "wmls", 
+			"etx", "xml", "xsl", "mpeg", "mpg", "mpe", "qt", "mov", "mxu", "avi", 
+			"movie", "ice", "sxw", "sxc"
 		);
 	}
 
@@ -232,17 +250,16 @@ class file extends class_base
 				}
 				classload("core/icons");
 
-				$fname = basename($arr["obj_inst"]->prop("file"));
+				$fname = $this->check_file_path($arr["obj_inst"]->prop("file"));
 
 				if ($fname == "" && $arr["obj_inst"]->prop("file_url") == "")
 				{
-					$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
 					$data["value"] = t("fail puudub");
 					return PROP_OK;
 				}
 				else
 				{
-					$file = $this->cfg["site_basedir"]."/files/".$fname{0}."/".$fname;
+					$file = $fname;
 				}
 
 				if (is_file($file))
@@ -395,6 +412,14 @@ class file extends class_base
 					$file_name = $_FILES["file"]["name"];
 					$file_type = $_FILES["file"]["type"];
 				};
+
+				// get extension and check whitelist
+				/*if ($file != "" && !$this->file_is_in_whitelist($file_name))
+				{
+					$data["error"] = t("Faili t&uuml;&uuml;p ei ole lubatud!");
+					return PROP_FATAL_ERROR;
+				}*/
+
 				if (is_uploaded_file($file))
 				{
 					if ($this->cfg["upload_virus_scan"])
@@ -417,6 +442,7 @@ class file extends class_base
 					
 					$final_name = $this->generate_file_path(array(
 						"type" => $file_type,
+						"file_name" => $file_name
 					));
 						
 					move_uploaded_file($file, $final_name);
@@ -424,12 +450,18 @@ class file extends class_base
 					$arr["obj_inst"]->set_name($file_name);
 					$arr["obj_inst"]->set_prop("type", $file_type);
 					$this->file_type = $file_type;
+	
+					if (file_exists($arr["obj_inst"]->prop("file")))
+					{
+						unlink($arr["obj_inst"]->prop("file"));
+					}
 				}
 				else
 				if (is_array($data["value"]) && $data["value"]["content"] != "")
 				{
 					$final_name = $this->generate_file_path(array(
 						"type" => "text/html",
+						"file_name" => $file_name
 					));
 					$fc = fopen($final_name, "w");
 					fwrite($fc, $data["value"]["content"]);
@@ -438,6 +470,10 @@ class file extends class_base
 					$arr["obj_inst"]->set_prop("type", $data["value"]["type"]?$data["value"]["type"]:"text/html");
 					$data["value"] = $final_name;
 					$this->file_type = "text/html";
+					if (file_exists($arr["obj_inst"]->prop("file")))
+					{
+						unlink($arr["obj_inst"]->prop("file"));
+					}
 				}
 				else
 				{
@@ -664,6 +700,26 @@ class file extends class_base
 
 	function generate_file_path($arr)
 	{
+		if (!empty($arr["file_name"]) && $this->file_is_in_whitelist($arr["file_name"]))
+		{
+			$file_name = basename($arr["file_name"]);
+			$i = 0;
+			while(1)
+			{
+				$fn = aw_ini_get("site_basedir")."/files/".$i."/".$file_name;
+				$dir = aw_ini_get("site_basedir")."/files/".$i;
+				if (!is_dir($dir))
+				{
+					mkdir($dir, 0777);
+				}
+				if (!file_exists($fn))
+				{
+					return $fn;
+				}
+				$i++;
+			}
+
+		}
 		$mt = get_instance("core/aw_mime_types");
 		$site_basedir = $this->cfg["site_basedir"];
 		// find the extension for the file
@@ -681,7 +737,7 @@ class file extends class_base
 			mkdir($site_basedir . "/files/" . $prefix,0705);
 		}
 
-		$minor = $mt->ext_for_type($arr["type"]);
+		//$minor = $mt->ext_for_type($arr["type"]);
 		$file = $site_basedir . "/files/" . $prefix . "/" . "$filename.$minor";
 		return $file;
 	}
@@ -962,7 +1018,7 @@ class file extends class_base
 				}
 				else
 				{
-					$file = $this->cfg["site_basedir"]."/files/".$ret["file"][0]."/".$ret["file"];
+					$file = $this->check_file_path($tmpo->prop("file"));
 					$tmp = $this->get_file(array("file" => $file));
 					if ($tmp !== false)
 					{
@@ -1016,11 +1072,17 @@ class file extends class_base
 		// if the user has access and imgbaseurl is set, then we can redirect the user to that
 		// and let apache do the serving the file, that can take quite some time, if the file is large
 		$fo = obj($id);
-		if (aw_ini_get("image.imgbaseurl") != "" && $fo->prop("file_url") == "" && !$fo->meta("force_path"))
+		if (aw_ini_get("image.imgbaseurl") != "" && $fo->prop("file_url") == "" && !$fo->meta("force_path") && $this->file_is_in_whitelist($fo->name()))
 		{
-			$fn = basename($fo->prop("file"));
-			$file_path = "/".$fn[0]."/".$fn;
-			header("Location: ".aw_ini_get("baseurl").aw_ini_get("image.imgbaseurl").$file_path);
+			$fname = $fo->prop("file");
+			$slash = strrpos($fname, "/");
+			$f1 = substr($fname, 0, $slash);
+
+			// get the last folder
+			$slash1 = strrpos($f1, "/");
+			$f2 = substr($f1, $slash1+1);
+
+			header("Location: ".aw_ini_get("baseurl").aw_ini_get("image.imgbaseurl")."/".$f2."/".substr($fname, $slash+1));
 			die();
 		}
 
@@ -1426,6 +1488,30 @@ class file extends class_base
 		nsbt = document.createElement('input');nsbt.name='save_and_doc';nsbt.type='submit';nsbt.id='button';nsbt.value='".t("Salvesta ja paiguta dokumenti")."'; el = document.getElementById('buttons');el.appendChild(nsbt);}";
 
 		return $rv;
+	}
+
+	function check_file_path($fname)
+	{
+		// get the file name
+		$slash = strrpos($fname, "/");
+		$f1 = substr($fname, 0, $slash);
+
+		// get the last folder
+		$slash1 = strrpos($f1, "/");
+		$f2 = substr($f1, $slash1+1);
+
+		// add site basedir
+		return aw_ini_get("site_basedir")."/files/".$f2."/".substr($fname, $slash+1);
+	}
+
+	function file_is_in_whitelist($fn)
+	{
+		$ext = substr($fn, strrpos($fn, ".")+1);
+		if (in_array($ext, $this->type_whitelist))
+		{
+			return true;
+		}
+		return false;
 	}
 };
 ?>

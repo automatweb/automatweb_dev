@@ -228,5 +228,12 @@
 			</function>
 		</action>
 
+		<action name="rename_file_names">
+			<function name="rename_file_names">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

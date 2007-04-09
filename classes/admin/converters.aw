@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.70 2007/03/13 15:02:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.71 2007/04/09 14:35:53 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1911,6 +1911,39 @@ echo "mod ".$con["to.name"]."<br>";
 				}
 				break;
 		}
+	}
+
+	/**
+		@attrib name=rename_file_names
+	**/
+	function rename_file_names($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_FILE,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$mt = get_instance("core/aw_mime_types");
+		$fi = get_instance(CL_FILE);
+		foreach($ol->arr() as $o)
+		{
+			$fn = $fi->generate_file_path(array(
+				"type" => $o->prop("type"),
+				"file_name" => $o->name()
+			));
+
+			$file = $o->prop("file");
+
+			rename($file, $fn);
+			echo "$file => $fn <br>\n";
+			$o->set_prop("file", $fn);
+			aw_disable_acl();
+			$o->save();
+			aw_restore_acl();
+			flush();
+		}
+		die("all done ");
+		
 	}
 };
 ?>

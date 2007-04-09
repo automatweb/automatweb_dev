@@ -56,6 +56,14 @@
 			</function>
 		</action>
 
+		<action name="add_gen_sched">
+			<function name="add_gen_sched">
+				<arguments>
+					<required name="mid" type="mail" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_queue_items">
 			<function name="delete_queue_items">
 				<arguments>
@@ -85,6 +93,14 @@
 			<function name="exp_to_file">
 				<arguments>
 					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_old">
+			<function name="delete_old">
+				<arguments>
+					<required name="ml" type="oid" />
 				</arguments>
 			</function>
 		</action>
