@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.100 2007/04/03 16:01:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.101 2007/04/09 15:36:46 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -45,6 +45,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property default_bounce type=textbox
 @caption Default bounce
+
+@property classinfo_allow_rte type=chooser field=meta method=serialize
+@caption RTE
 
 @groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
@@ -317,7 +320,7 @@ class ml_list extends class_base
 	{
 		if(($arr["group"] == "write_mail")&&(!$arr["obj_inst"]->prop("no_fck")))
 		{
-			$arr["classinfo"]["allow_rte"] = 2;
+			$arr["classinfo"]["allow_rte"] = $arr["obj_inst"]->prop("classinfo_allow_rte");
 		}
 	}
 
@@ -835,6 +838,16 @@ class ml_list extends class_base
 				}
 				$prop["value"] = $ret;
 				break;
+				
+			case "classinfo_allow_rte":
+				$prop["options"] = array(
+					0 => t("Ei kuva"),
+					1 => t("AW RTE"),
+					2 => t("FCKeditor"),
+				);
+				$prop["type"] = "select";
+				break;
+	
 			case "req_members":
 				if(!sizeof($arr["obj_inst"]->prop("def_user_folder")))
 				{
@@ -896,8 +909,12 @@ class ml_list extends class_base
 				break;
 			*/
 			case "no_fck":
+				if($arr["obj_inst"]->prop("classinfo_allow_rte") == 0)
+				{
+					return PROP_IGNORE;
+				}
 				if($prop["value"]) $this->set_classinfo(array("allow_rte" => 0));
-				else $this->set_classinfo(array("allow_rte" => 2));
+				else $this->set_classinfo(array("allow_rte" => $arr["obj_inst"]->prop("classinfo_allow_rte")));
 			
 			case "emb[mfrom]":
 				$objs = $arr["obj_inst"]->connections_from(array(
@@ -1124,7 +1141,7 @@ class ml_list extends class_base
 			*/
 			case "no_fck":
 				if($prop["value"]) $this->set_classinfo(array("allow_rte" => 0));
-				else $this->set_classinfo(array("allow_rte" => 2));
+				else $this->set_classinfo(array("allow_rte" => $arr["obj_inst"]->prop("classinfo_allow_rte")));
 			
 			case "import_textfile":
 				$imp = $_FILES["import_textfile"]["tmp_name"];
@@ -1248,7 +1265,7 @@ class ml_list extends class_base
 	{
 		$object = obj($arr["args"]["id"]);
 		if($object->prop["no_rtf"]) $this->set_classinfo(array("allow_rte" => 0));
-		else $this->set_classinfo(array("allow_rte" => 2));
+		else $this->set_classinfo(array("allow_rte" => $object->prop("classinfo_allow_rte")));
 
 		if (isset($this->do_export))
 		{
@@ -2922,7 +2939,7 @@ class ml_list extends class_base
 				"obj_inst" => $msg_obj,
 				"properties" => $filtered_props,
 				"name_prefix" => "emb",
-				"classinfo" => array("allow_rte" => 2),
+				"classinfo" => array("allow_rte" => $arr["obj_inst"]->prop("classinfo_allow_rte")),
 			));
 		}
 /*		if(is_oid($xprops["emb_mfrom"]["value"]))
