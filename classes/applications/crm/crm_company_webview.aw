@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.23 2007/04/09 07:47:50 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.24 2007/04/10 14:25:34 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1023,9 +1023,7 @@ class crm_company_webview extends class_base
 					$limit_sector[] = $con->prop('to');
 				}
 			}
-
 		
-
 			// Setup limit by location - county
 			$limit_city = $limit_county = null;
 			$county = $ob->prop('limit_county');
@@ -1051,6 +1049,27 @@ class crm_company_webview extends class_base
 			'parent' => $dir,
 			'lang_id' => array(),
 		);
+		
+		if(is_oid($arr["field"]))
+		{
+			if(!is_array($limit_sector))
+			{
+				$limit_sector = array($arr["field"]);
+			}
+			else
+			{
+				$limit_sector[] = $arr["field"];
+			}
+		}
+		if($arr["area"])
+		{
+			$filt["CL_CRM_COMPANY.RELTYPE_ADDRESS.name"] = "%".$arr["area"]."%";
+		}
+		if($arr["keyword"])
+		{
+			$filt["activity_keywords"] = "%".$arr["keyword"]."%";
+		}
+	
 		if ($arr["pohitegevus"])
 		{
 			$filt["pohitegevus"] = $arr["pohitegevus"];
@@ -1118,7 +1137,6 @@ class crm_company_webview extends class_base
 		{
 			$filt["sort_by"] = join(", ", $order);
 		}
-
 		$ol = new object_list($filt);
 		exit_function('crm_company_webview::list');
 		return $ol->arr();
@@ -1461,6 +1479,8 @@ class crm_company_webview extends class_base
 	**/
 	function show_sect($arr)
 	{
+		//see aitab otsingus jne võtta miski default väärtuse
+		$_SESSION["active_section"] = $arr["section"];
 		$this->sub_merge = 1;
 
 		$o = obj($arr['wv']);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.3 2007/04/04 14:59:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.4 2007/04/10 14:25:34 markop Exp $
 // crm_db_search.aw - Kliendibaasi otsingu grupp 
 /*
 
@@ -117,7 +117,10 @@ class crm_db_search extends class_base
 		$list = $wvinst->_list_companies(array(
 			'crm_db' => $o->prop('crm_db'),
 			'limit_plaintext' => $arr['str'],
-			"only_active" => $o->prop("only_active")
+			"only_active" => $o->prop("only_active"),
+			"field" => $arr["field"],
+			"keyword" => $arr["keyword"],
+			"area" => $arr["area"],
 		));
 		return $list;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.83 2007/04/04 14:59:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.84 2007/04/10 14:26:47 markop Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -587,6 +587,7 @@ class site_search_content extends class_base
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
+		//if(aw_global_get("uid") == "struktuur")arr($arr);
 		enter_function("site_search_content::show");
 		$arr["str"] = str_replace("'", "", $arr["str"]);
 		extract($arr);
@@ -603,37 +604,100 @@ class site_search_content extends class_base
 		$conns = $ob->connections_from(array(
 			"type" => "RELTYPE_SEARCH_GRP",
 		));
-
 		foreach($conns as $conn)
 		{
 			$cid = obj($conn->prop("to"));
 			if($cid->class_id() == CL_CRM_DB_SEARCH)
 			{
+
 				break;
 			}
 		}
-
+		
+		$sectors_list = new object_list(array(
+			"parent" => $cid->prop("dir_tegevusala"),
+			"sort_by" => "objects.jrk,objects.name",
+			"class_id" => CL_CRM_SECTOR,
+		));
+/*		
 		$menu_tree = new object_tree(array(
 			"parent" => $cid->prop("dir_tegevusala"),
 			"class_id" => CL_CRM_SECTOR,
 			"sort_by" => "objects.jrk,objects.name",
 		));
-		$sectors_list = $menu_tree->to_list();
+		
+		//if(aw_global_get("uid") == "struktuur")arr($sectors_list);
+		$sectors_list = $menu_tree->to_list();*/
 		$sec_opt = "";
+		$parent = 0;
+		
+		//paneb default väärtused
+		if(is_oid($arr["field"]))
+		{
+			$_SESSION["active_section"] = $arr["field"];
+		}
 		foreach($sectors_list->arr() as $sec)
 		{
+			$selected = "";
+			if($_SESSION["active_section"] == $sec->id())
+			{
+				$selected = "selected";
+			}
 			$this->vars(array(
 				"sec_value" => $sec->id(),
-				"sec_name" => $sec->name(),
+				"sec_name" => strtoupper($sec->name()),
+				"selected" => $selected,
 			));
 			$sec_opt.= $this->parse("SEC_OPTION");
+			
+			//vahepeal kataloogid ka ritta
+/*			if($sec->parent() != $parent)
+			{
+				$parent = $sec->parent();
+				$p_obj = obj($parent);
+				$this->vars(array(
+					"sec_value" => $p_obj->id(),
+					"sec_name" => strtoupper($p_obj->name()),
+				));
+				$sec_opt.= $this->parse("SEC_OPTION");
+			}
+			$this->vars(array(
+				"sec_value" => $sec->id(),
+				"sec_name" => "--".$sec->name(),
+			));
+			$sec_opt.= $this->parse("SEC_OPTION");*/
+			$child_list = new object_list(array(
+				"parent" => $sec->id(),
+				"sort_by" => "objects.jrk,objects.name",
+				"class_id" => CL_CRM_SECTOR,
+			));
+			foreach($child_list->arr() as $child)
+			{
+				$selected = "";
+				if($_SESSION["active_section"] == $child->id())
+				{
+					$selected = "selected";
+				}
+				$this->vars(array(
+					"sec_value" => $child->id(),
+					"sec_name" => "--".$child->name(),
+					"selected" => $selected,
+				));
+				$sec_opt.= $this->parse("SEC_OPTION");
+			}
 		}
 		$keywords = explode("," , $cid->prop("keywords"));
 		$key_opt = "";
 		foreach($keywords as $key)
 		{
+			$selected = "";
+			if($arr["keyword"] == trim($key))
+			{
+				$selected = "selected";
+			}
 			$this->vars(array(
 				"key_value" => trim($key),
+				"selected" => $selected,
 			));
 			$key_opt.= $this->parse("KEY_OPTION");
 		}
@@ -884,9 +948,10 @@ class site_search_content extends class_base
 	
 		$ret = array();
 
-		$ams = new aw_array($menus);	
+		$ams = new aw_array($menus);
 
 		$mod = $mod2 = "";
+		
 		if ($arr["date"]["from"] > 0)
 		{
 			$mod = "AND ((d.tm > 1 AND d.tm >= ".$arr["date"]["from"].") OR (d.tm < 1 AND o.modified >= ".$arr["date"]["from"]."))";
@@ -959,6 +1024,7 @@ class site_search_content extends class_base
 				) AND 
 				o.parent IN (".$ams->to_sql().") AND
 				$stat
+				$ids
 				o.lang_id = '".aw_global_get("lang_id")."' AND
 				d.no_search != 1 AND
 				o.class_id IN (".CL_DOCUMENT.",".CL_BROTHER_DOCUMENT.",".CL_PERIODIC_SECTION.") 
@@ -1164,7 +1230,10 @@ class site_search_content extends class_base
 				"menus" => $ms,
 				"str" => $str,
 				"opts" => $opts,
-				"date" => $date
+				"date" => $date,
+				"field" => $field,
+				"keyword" => $keyword,
+				"area" => $area,
 			));
 		}
 
@@ -1178,7 +1247,10 @@ class site_search_content extends class_base
 				"str" => $str,
 				"obj" => $arr["obj"],
 				"opts" => $opts,
-				"date" => $date
+				"date" => $date,
+				"field" => $field,
+				"keyword" => $keyword,
+				"area" => $area,
 			)));
 		}
 		// make sure we only get unique titles in results
@@ -1641,6 +1713,9 @@ class site_search_content extends class_base
 		@param sort_by optional
 		@param opts optional
 		@param s_date optional
+		@param field optional
+		@param area optional
+		@param keyword optional
 		
 		@returns
 		
@@ -1671,13 +1746,16 @@ class site_search_content extends class_base
 			"str" => $str,
 			"group" => $group,
 			"opts" => $opts,
-			"date" => $date
+			"date" => $date,
+			"field" => $field,
+			"keyword" => $keyword,
+			"area" => $area,
 		));
 
 		$results = array();
 
 		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust näitama
-		if ($str != "")
+		if ($str != "" || $area || $keyword || is_oid($field))
 		{
 			if (1 == $o->prop("multi_groups"))
 			{
@@ -1713,13 +1791,19 @@ class site_search_content extends class_base
 					else
 					if ($conn->prop("to.class_id") == CL_SITE_SEARCH_CONTENT_GRP)
 					{
-						$results = $this->fetch_search_results(array(
-							"obj" => $o,
-							"str" => $str,
-							"group" => $cid,
-							"opts" => $opts,
-							"date" => $date
-						));
+						if($str != "")
+						{
+							$results = $this->fetch_search_results(array(
+								"obj" => $o,
+								"str" => $str,
+								"group" => $cid,
+								"opts" => $opts,
+								"date" => $date,
+								"field" => $field,
+								"keyword" => $keyword,
+								"area" => $area,
+							));
+						}
 					}
 					else
 					{
@@ -1729,7 +1813,10 @@ class site_search_content extends class_base
 							"str" => $str,
 							"group" => $cid,
 							"opts" => $opts,
-							"date" => $date
+							"date" => $date,
+							"field" => $field,
+							"keyword" => $keyword,
+							"area" => $area,
 						));
 					}
 					$results_arr[$_idx] = $results;
@@ -1767,29 +1854,32 @@ class site_search_content extends class_base
 					}
 					else
 					{
-						$tmp = $this->display_results(array(
-							"groupname" => $grpcfg["caption"][$conn->prop("to")],
-							"results" => $results,
-							"obj" => $o, 
-							"str" => $str, 
-							"group" => reset($group),
-							"sort_by" => $grp_sort_by,
-							"str" => $str,
-							"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
-							"params" => array(
-								"id" => $id, 
+						if($str != "")
+						{
+							$tmp = $this->display_results(array(
+								"groupname" => $grpcfg["caption"][$conn->prop("to")],
+								"results" => $results,
+								"obj" => $o, 
 								"str" => $str, 
-								"sort_by" => $sort_by, 
-								"group" => reset($group), 
-								"section" => aw_global_get("section"),
-								"sdate" => $arr["s_date"],
-								"opts" => $arr["opts"],
-							),
-							"page" => is_array($page) ? $page[$conn->prop("to")] : $page,
-							"multigroups" => $has_res
-						));
-						$tmp = str_replace("page=", "page[".$conn->prop("to")."]=", $tmp);
-						$ret .= $tmp;
+								"group" => reset($group),
+								"sort_by" => $grp_sort_by,
+								"str" => $str,
+								"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
+								"params" => array(
+									"id" => $id, 
+									"str" => $str, 
+									"sort_by" => $sort_by, 
+									"group" => reset($group), 
+									"section" => aw_global_get("section"),
+									"sdate" => $arr["s_date"],
+									"opts" => $arr["opts"],
+								),
+								"page" => is_array($page) ? $page[$conn->prop("to")] : $page,
+								"multigroups" => $has_res
+							));
+							$tmp = str_replace("page=", "page[".$conn->prop("to")."]=", $tmp);
+							$ret .= $tmp;
+						}
 					}
 
 					$search = true;
@@ -1801,14 +1891,19 @@ class site_search_content extends class_base
 			}
 			else
 			{
-				$results = $this->fetch_search_results(array(
-					"obj" => $o,
-					"str" => $str,
-					"group" => $group,
- 					"opts" => $opts,
-					"date" => $date
-				));
-
+				if($str != "")
+				{
+					$results = $this->fetch_search_results(array(
+						"obj" => $o,
+						"str" => $str,
+						"group" => $group,
+						"opts" => $opts,
+						"date" => $date,
+						"field" => $field,
+						"keyword" => $keyword,
+						"area" => $area,
+					));
+				}
 				$grp_sort_by = $sort_by;
 				if (!empty($grpcfg["sorder"][$cid]))
 				{
