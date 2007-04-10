@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.62 2007/04/10 08:02:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.63 2007/04/10 15:01:35 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -142,32 +142,6 @@ class shop_order_cart extends class_base
 
 		aw_session_del("soc_err");
 
-
-		$bank_inst = get_instance(CL_BANK_PAYMENT);
-		$bank_payment = $oc->prop("bank_payment");
-		if(is_oid($bank_payment))
-		{
-			$payment = obj($bank_payment);
-			foreach($payment->meta("bank") as $key => $val)
-			{
-				if(!$val["sender_id"])
-				{
-					continue;
-				}
-				$checked=0;
-				if($soce_arr["bank"] == $key)
-				{
-					$checked = 1;
-				}
-				$data["bank_".$key] = html::radiobutton(array(
-					"value" => $key,
-					"checked" => $checked,
-					"name" => "bank",
-				));
-			}
-		}
-		$this->vars($data);
-		
 		if ($oc->prop("no_show_cart_contents"))
 		{
 			return $this->pre_finish_order($arr);
@@ -334,6 +308,38 @@ class shop_order_cart extends class_base
 			"not_logged" => $lln,
 		));
 
+		$bank_inst = get_instance(CL_BANK_PAYMENT);
+		$bank_payment = $oc->prop("bank_payment");
+		//et pank saaks alati valitud
+		if(!$soce_arr["bank"])
+		{
+			$soce_arr["bank"] = $_SESSION["cart"]["user_data"]["user9"];
+			if(!$soce_arr["bank"]) $need_to_choose_default_bank = 1;
+		}
+		if(is_oid($bank_payment))
+		{
+			$payment = obj($bank_payment);
+			foreach($payment->meta("bank") as $key => $val)
+			{
+				if(!$val["sender_id"])
+				{
+					continue;
+				}
+				$checked=0;
+				if($soce_arr["bank"] == $key || $need_to_choose_default_bank)
+				{
+					$data[$key."_checked"] = "checked";
+					$checked = 1;
+					$need_to_choose_default_bank = 0;
+				}
+				$data["bank_".$key] = html::radiobutton(array(
+					"value" => $key,
+					"checked" => $checked,
+					"name" => "bank",
+				));
+			}
+		}
+		$this->vars($data);
 		return $this->parse();
 	}
 
@@ -1293,16 +1299,28 @@ class shop_order_cart extends class_base
 		
 		// fake user data
 		$wh_o->set_meta("order_cur_ud", $cart["user_data"]);
+		$els = $swh->callback_get_order_current_form(array(
+			"obj_inst" => $wh_o
+		));
 
 		foreach(safe_array($cart["user_data"]) as $k => $v)
 		{
+			if ($els[$k]["type"] == "select" && $els[$k]["store"] == "connect")
+			{
+				if ($this->can("view", $v))
+				{
+					$tmp = obj($v);
+					$v = $tmp->name();
+				}
+				else
+				{
+					$v = "";
+				}
+			}
 			$this->vars(array(
 				"user_data_".$k => $v
 			));
 		}
-		$els = $swh->callback_get_order_current_form(array(
-			"obj_inst" => $wh_o
-		));
 
 		// if there are errors
 		$els = $this->do_insert_user_data_errors($els);
