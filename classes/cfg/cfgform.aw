@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.106 2007/04/02 09:22:06 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.107 2007/04/10 13:29:55 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -980,7 +980,7 @@ class cfgform extends class_base
 		return true;
 	}
 
-/* replaced by self::_sort_groups
+/* replaced by self::_sort_groups*/
 	function sort_grplist()
 	{
 		$order = array();
@@ -996,7 +996,7 @@ class cfgform extends class_base
 		}
 		$this->grplist = $grps;
 	}
- */
+ 
 
 	// Sorts meta cfg_groups grplist by ord, retains original order where ord not defined.
 	// Places unordered subgroups after their parents
