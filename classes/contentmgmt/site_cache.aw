@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.38 2007/02/21 10:16:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.39 2007/04/10 08:03:00 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -156,6 +156,13 @@ class site_cache extends aw_template
 			$cp[] = join(",", $_SESSION["menu_context"]);
 		}
 
+		foreach($_SESSION as $k => $v)
+		{
+			if (substr($k, 0, 6) == "style_")
+			{
+				$cp[] = $k."_".$v;
+			}
+		}
 		// here we sould add all the variables that are in the url to the cache parameter list
 		foreach($GLOBALS["HTTP_GET_VARS"] as $var => $val)
 		{

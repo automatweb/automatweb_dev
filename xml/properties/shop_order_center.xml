@@ -355,6 +355,16 @@
             <caption>Toodete grupeerimine</caption>
       </property>
       <property>
+            <name>disp_cart_in_web</name>
+            <group>appear</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuva korvi toodete all</caption>
+      </property>
+      <property>
             <name>psfieldmap</name>
             <group>psfieldmap</group>
             <table>objects</table>

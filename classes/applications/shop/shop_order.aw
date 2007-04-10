@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.52 2007/03/09 13:23:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.53 2007/04/10 08:02:59 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -738,7 +738,7 @@ class shop_order extends class_base
 				}
 			}
 
-			if (count($emails) > 0)
+			if (count($emails) > 0 || $this->order_center->prop("mails_sep_by_el"))
 			{
 				// if send mails by grp el is set, do this crap different
 				if ($this->order_center->prop("mails_sep_by_el"))
@@ -774,8 +774,15 @@ class shop_order extends class_base
 								"id" => $oi->id(),
 								"show_only_prods_with_val" => $eml
 							));
-							$eml_o = obj($eml);
-							$to_send[$eml_o->comment()] = array($_html, $eml);
+							if (is_email($eml))
+							{
+								$to_send[$eml] = array($_html, $eml);
+							}
+							else
+							{
+								$eml_o = obj($eml);
+								$to_send[$eml_o->comment()] = array($_html, $eml);
+							}
 						}
 					}
 

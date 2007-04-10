@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.50 2007/03/23 11:47:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.51 2007/04/10 08:02:59 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -139,6 +139,9 @@
 
 @property grouping type=select
 @caption Toodete grupeerimine
+
+@property disp_cart_in_web type=checkbox ch_value=1
+@caption Kuva korvi toodete all
 
 @groupinfo psfieldmap caption="Isukuandmete kaart"
 @default group=psfieldmap
@@ -708,6 +711,16 @@ class shop_order_center extends class_base
 			"pl" =>  $pl,
 			"soc" => $soc
 		));
+
+		if ($soc->prop("disp_cart_in_web"))
+		{
+			$cart = get_instance(CL_SHOP_ORDER_CART);
+			$html .= $cart->pre_finish_order(array(
+				"oc" => $soc->id(),
+				"section" => aw_global_get("section")
+			));
+		}
+
 		exit_function("shop_order_center::show_items");
 		return $html;
 	}

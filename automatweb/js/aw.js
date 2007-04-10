@@ -302,7 +302,7 @@ function aw_handle_xml_data()
 	if (req.readyState == 4)
 	{
 		// only if "OK"
-		if (req.status == 200) 
+		if (req.status == 200 && aw_xmlhttpr_cb) 
 		{
 			aw_xmlhttpr_cb();
 		}

@@ -462,3 +462,6 @@ div.menu .menuItemTextSep {
 	text-transform: uppercase;
 	background-color: #FFFFFF;
 }
+.clear {
+	clear: both
+}

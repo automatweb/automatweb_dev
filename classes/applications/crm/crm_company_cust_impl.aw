@@ -337,8 +337,11 @@ class crm_company_cust_impl extends class_base
 		}
 		foreach($iter as $r_p_id => $r_p_data)
 		{
-			$r_p_o = obj($r_p_id);
-			$roles[] = html::get_change_url($r_p_o->id(), array(), parse_obj_name($r_p_o->name())).": ".join(",", $r_p_data);
+			if ($this->can("view", $r_p_id))
+			{
+				$r_p_o = obj($r_p_id);
+				$roles[] = html::get_change_url($r_p_o->id(), array(), parse_obj_name($r_p_o->name())).": ".join(",", $r_p_data);
+			}
 		}
 		$roles = join("<br>", $roles);
 

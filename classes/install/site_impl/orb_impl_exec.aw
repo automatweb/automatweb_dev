@@ -53,7 +53,6 @@ if (isset($vars['fastcall']) && $vars["fastcall"] == 1)
 }
 include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
 register_shutdown_function("log_pv", $GLOBALS["awt"]->timers["__global"]["started"]);
-
 enter_function("orb_impl_exec::process_request");
 classload("core/orb/orb");
 $orb = new orb();

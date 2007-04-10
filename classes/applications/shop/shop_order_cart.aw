@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.61 2007/03/30 09:54:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.62 2007/04/10 08:02:59 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1732,6 +1732,37 @@ class shop_order_cart extends class_base
 			$cur_co->save();
 			aw_restore_acl();
 		}		
+	}
+	
+	/** 
+		@attrib name=add_prod_to_cart nologin="1"
+		@param oc required type=int acl=view
+		@param add_to_cart optional
+	**/		
+	function add_prod_to_cart($arr)
+	{
+		extract($arr);
+
+		$oc = obj($oc);
+		$cart = $this->get_cart($oc);
+		$awa = new aw_array($arr["add_to_cart"]);
+		foreach($awa->get() as $iid => $quantx)
+		{
+			if (!is_oid($iid) || !$this->can("view", $iid))
+			{
+				continue;
+			}
+			$quantx = new aw_array($quantx);
+			foreach($quantx->get() as $x => $quant)
+			{
+				$cart["items"][$iid][$x]["items"] = $quant;
+			}
+		}
+		$this->set_cart(array(
+			"oc" => $oc,
+			"cart" => $cart,
+		));
+		die();
 	}
 }
 ?>

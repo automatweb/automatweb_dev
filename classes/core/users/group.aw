@@ -458,6 +458,10 @@ class group extends class_base
 
 		foreach($dat as $row)
 		{
+			if (!$this->can("view", $row["oid"]))
+			{
+				continue;
+			}
 			$o = obj($row['oid']);
 			$row['obj_name'] = html::href(array(
 				'url' => $this->mk_my_orb('change',array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.226 2007/04/09 11:27:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.227 2007/04/10 08:03:00 kristo Exp $
 
 /*
 
@@ -1720,16 +1720,13 @@ class site_show extends class_base
 			));
 			return "";
 		}		
-if ($_GET["YO"] == 1)
-{
-echo dbg::dump($lar);
-}
 		foreach($lar as $row)
 		{
 			if (is_oid($row["oid"]) && !$this->can("view", $row["oid"]))
 			{
 				continue;
 			}
+
 			$num++;
 			$grp = $row["meta"]["lang_group"];
 			$grp_spec = $grp;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.98 2007/04/09 11:27:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.99 2007/04/10 08:03:00 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -844,6 +844,10 @@ class promo extends class_base
 
 	function on_save_document($arr)
 	{
+		if (aw_ini_get("promo.version") != 2)
+		{
+			return;
+		}
 		$o = obj($arr["oid"]);
 		// figure out if this document is to be shown in any promo in the system
 		// to do that

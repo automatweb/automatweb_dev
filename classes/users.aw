@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.176 2007/03/28 10:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.177 2007/04/10 08:02:58 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1212,6 +1212,7 @@ class users extends users_user
 
 			$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $ini_opts["groups.tree_root"]);
 			$this->set_cval("non_logged_in_users_group", $nlg);
+			$osi_vars["groups.not_logged"] = $this->get_oid_for_gid($nlg);
 
 			// deny access from aw_obj_priv
 			$o = obj($osi_vars["aw_obj_priv"]);
@@ -1239,6 +1240,7 @@ class users extends users_user
 			echo "Toimetajad <br>\n";
 			flush();
 			$osi_vars["groups.editors"] = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$editors'", "oid");
+
 
 			/*$this->addgroup(0,"Kliendid", GRP_REGULAR,0,2500,0,$ini_opts["groups.tree_root"]);
 			echo "Kliendid <br>\n";

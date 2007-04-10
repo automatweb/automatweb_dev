@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.95 2007/03/30 14:02:19 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.95 2007/03/30 14:02:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.96 2007/04/10 08:02:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.96 2007/04/10 08:02:58 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -3279,18 +3279,19 @@ echo "<hr>";
 	function disp_wh($arr)
 	{
 		classload("core/date/date_calc");
-		$tmp = mktime(0,0,0,1,29,2007);
+		$tmp = mktime(0,0,0,1,22,2007);
 		$coms = new object_list(array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start()/*-7*3600*24*/),
-			//"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $tmp/*-7*3600*24*/),
+			//"created" => new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start()/*-7*3600*24*/),
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $tmp/*-7*3600*24*/),
 			"sort_by" => "objects.createdby, objects.created"
 		));
 //		echo "com count = ".$coms->count()." <br>";
 echo "<div style='font-size: 10px;'>";
-		$i = array("marko" => "", "dragut" => "", "tarvo" => "", "sander" => "");
+		//$i = array("marko" => "", "dragut" => "", "tarvo" => "", "sander" => "");
+		$i = array("helle" => "", "sander" => "");
 		foreach($coms->arr() as $com)
 		{
 			if ($com->createdby() == "")
@@ -3340,7 +3341,7 @@ echo "<div style='font-size: 10px;'>";
 			foreach($bgs as $bg)
 			{
 				$o = obj($bg["p"]);
-				echo "bug ".$o->name()." - ".nl2br($bg["c"])." - time - ".date("d.m.Y", $bg["t"])."<hr>";
+				echo "bug ".$o->name()."(tunde hetkel:".$o->prop("num_hrs_real").") - ".nl2br($bg["c"])." - time - ".date("d.m.Y", $bg["t"])."<hr>";
 			}
 		}
 die();

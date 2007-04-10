@@ -1,73 +1,66 @@
 <!-- SUB: start -->
 <div id="toimingud">
-<!-- END SUB: start -->
 	<div class="v">
+<!-- END SUB: start -->
 		<!-- SUB: button -->
-		
 		{VAR:surround_start}
 		<div nowrap class="tb_but" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
 		<a href="{VAR:url}" onClick="{VAR:onClick}" target="{VAR:target}" {VAR:href_id}><img style="button" src="{VAR:img_url}" border="0"></a>
-
 		</div>
 		{VAR:surround_end}
-	
 		<!-- END SUB: button -->
 
 		<!-- SUB: button_disabled -->
-			<td nowrap class="aw04toolbarbutton">
-				<table border="0" cellpadding="0" cellspacing="0">
-					<tr>
-						<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:img_url}" border="0"><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
-					</tr>
-				</table>
-			</td>
+		<td nowrap class="aw04toolbarbutton">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:img_url}" border="0"><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
+				</tr>
+			</table>
+		</td>
 		<!-- END SUB: button_disabled -->
 
 		<!-- SUB: menu_button -->
-			<div nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
-				<table cellpadding=0 cellspacing=0>
-					<tr>
-						<td valign='bottom'>
-						<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" border="0"></a>
-						</td>
-						<td valign='bottom'>
-							<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
-						</a>
-					</tr>
-				</table>
-			</div>
+		<div nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+			<table cellpadding=0 cellspacing=0>
+				<tr>
+					<td valign='bottom'>
+					<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" border="0"></a>
+					</td>
+					<td valign='bottom'>
+						<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+					</a>
+				</tr>
+			</table>
+		</div>
 		<!-- END SUB: menu_button -->
 
-
 		<!-- SUB: menu_button_lod -->
-			<div id='tb_lod_{VAR:lod_name}' nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
-				<table cellpadding=0 cellspacing=0>
-					<tr>
-						<td valign='bottom'>
-						<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"></a>
-						</td>
-						<td valign='bottom'>
-							<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
-						</a>
-					</tr>
-				</table>
-			</div>
-			<script language=javascript>
-			function tb_tb_lod{VAR:tb_lod_num}()
-			{
-				el = document.getElementById("tb_lod_{VAR:lod_name}");
-				el.innerHTML=aw_get_url_contents("{VAR:load_on_demand_url}");
-				nhr=document.getElementById("href_{VAR:lod_name}");
-				if (document.createEvent) {evObj = document.createEvent("MouseEvents");evObj.initEvent( "click", true, true );nhr.dispatchEvent(evObj);} 
-				else { 
-					nhr.fireEvent("onclick");
-				}
+		<div id='tb_lod_{VAR:lod_name}' nowrap class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+			<table cellpadding=0 cellspacing=0>
+				<tr>
+					<td valign='bottom'>
+					<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:img_url}" border="0"></a>
+					</td>
+					<td valign='bottom'>
+						<a href="#" onClick="tb_tb_lod{VAR:tb_lod_num}()"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+					</a>
+				</tr>
+			</table>
+		</div>
+		<script language=javascript>
+		function tb_tb_lod{VAR:tb_lod_num}()
+		{
+			el = document.getElementById("tb_lod_{VAR:lod_name}");
+			el.innerHTML=aw_get_url_contents("{VAR:load_on_demand_url}");
+			nhr=document.getElementById("href_{VAR:lod_name}");
+			if (document.createEvent) {evObj = document.createEvent("MouseEvents");evObj.initEvent( "click", true, true );nhr.dispatchEvent(evObj);} 
+			else { 
+				nhr.fireEvent("onclick");
 			}
-			</script>
-
+		}
+		</script>
 		<!-- END SUB: menu_button_lod -->
-
-
 
 		<!-- SUB: text_button -->
 		 <div class="tb_but" valign="middle" onMouseOver="this.className='tb_but_ov'" onMouseOut="this.className='tb_but'" onMouseDown="this.className='tb_but_ov'" onMouseUp="this.className='tb_but'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none; white-space: nowrap;">{VAR:tooltip}</a></div>
@@ -94,9 +87,12 @@
 	<!-- SUB: right_side -->
 	<div class="p">
 		{VAR:right_side_content}
-	</div>
 	<!-- END SUB: right_side -->
-	<br class="clear" />
-<!-- SUB: real_end -->
-<!-- END SUB: real_end -->
+
+<!-- SUB: end -->
 </div>
+<!-- END SUB: end -->
+<!-- SUB: real_end -->
+</div>
+<br class="clear" />
+<!-- END SUB: real_end -->
