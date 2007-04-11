@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.6 2007/02/21 12:13:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.7 2007/04/11 15:07:12 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -11,71 +11,81 @@
 @default method=serialize
 
 	@property submitter type=text
-	@caption Submitter
+	@caption Ankeedi t&auml;itja
 
-	@property contact_preference type=text
-	@caption Contact preference
+	@property data_contact_preference type=text
+	@caption Kontakteerumise eelistus
 
 	@property country type=text
-	@caption Country
+	@caption Riik
 
-	@property organisation type=text
-	@caption Organisation
+	@property data_organisation type=text
+	@caption Organisatioon
 
-	@property function_name type=text
-	@caption Function name
+	@property data_function_name type=text
+	@caption &Uuml;rituse nimi
 
 	@property attendees_no type=text
-	@caption Number of attendees
+	@caption Osalejate arv
 
-	@property response_date type=text
-	@caption Response date
+	@property data_response_date type=text
+	@caption Tagasiside aeg
 
-	@property decision_date type=text
-	@caption Decision date
+	@property data_decision_date type=text
+	@caption Otsuse aeg
 
-	@property arrival_date type=text
-	@caption Arrival date
+	@property data_arrival_date type=text
+	@caption Saabumise aeg
 
-	@property departure_date type=text
-	@caption Departure date
+	@property data_departure_date type=text
+	@caption Lahkumise aeg
 
-	@property open_for_alternative_dates type=checkbox ch_value=1 default=0
-	@caption Open for alternative dates
+	@property data_open_for_alternative_dates type=checkbox ch_value=1 default=0
+	@caption N&ouml;us alternatiivsete kuup&auml;evadega
 
-	@property accommondation_requirements type=checkbox ch_value=1 default=0
-	@caption I have accomonndation requirements
+	@property data_accommondation_requirements type=checkbox ch_value=1 default=0
+	@caption Majutusvajadused
 
-	@property multi_day type=checkbox ch_value=1 default=0
-	@caption Multi-day main function
+	@property data_multi_day type=checkbox ch_value=1 default=0
+	@caption &Uuml;rituse kestus
 
 	@property needs_rooms type=checkbox ch_value=1 default=0
-	@caption Needs rooms
+	@caption Majutusvajadused
 
-	@property single_rooms type=text
-	@caption Single rooms
+	@property data_single_rooms type=text
+	@caption &Uuml;hekohalised toad
 
-	@property double_rooms type=text
-	@caption Double rooms
+	@property data_double_rooms type=text
+	@caption Kahekohalised toad
 
-	@property suites type=text
-	@caption Suites
+	@property data_suites type=text
+	@caption Sviidid
 
 	@property flexible_dates type=checkbox ch_value=1 default=0
-	@caption Dates are flexible
+	@caption Kuup&auml;evad on paindlikud
 
-	@property date_comments type=text
-	@caption Date comments
+	@property data_date_comments type=text
+	@caption Kuup&auml;evade kommentaar
+
+	@property data_city type=text
+	@caption Soovitud linn
+
+	@property data_hotel type=text
+	@caption Soovitud hotell
 
 	@property archived type=checkbox ch_value=1 default=0
-	@caption Archived
+	@caption Arhiveeritud
 
 	@property urgent type=checkbox ch_value=1 default=0
-	@caption Urgent
+	@caption Kiire
 
 	// this approach sucks bigtime, but i don't have any time to do better..
-	@property dates_are_flexible type=hidden
-	@property meeting_pattern type=hidden
+	@property data_dates_are_flexible type=hidden
+	@caption Kuup&auml;evad on paindlikud
+
+	@property data_meeting_pattern type=hidden
+	@caption Kuup&auml;evade muster
+
 	@property pattern_wday_from type=hidden
 	@property pattern_wday_to type=hidden
 	@property pattern_days type=hidden
@@ -94,9 +104,17 @@
 	@property end_time_raw type=hidden
 	@property end_date_raw type=hidden
 
-	@property additional_dates_raw type=hidden
+	@property data_alternative_dates type=hidden
+	@caption Alternatiivsed kuup&auml;evad
 	
-	@property additional_functions_raw type=hidden
+	@property data_additional_functions type=hidden
+	@caption Lisa&uuml;ritused
+
+	@property data_additional_functions_catering type=text
+	@caption Lisa&uuml;rituste toitlustus
+
+	@property data_package type=text
+	@caption Pakett
 	
 	@property all_search_results type=hidden
 	@property selected_search_result type=hidden
@@ -108,85 +126,88 @@
 @default group=add_dates
 
 	@property additional_dates type=text no_caption=1
-	@caption Additional_dates
+	@caption Alternatiivsed kuup&auml;evad
 
 // main function 
 
 @groupinfo main_fun caption="Main function"
 @default group=main_fun
 
-	@property main_function type=text no_caption=1
-	@caption Main function
+	@property data_main_function type=text no_caption=1
+	@caption Pea&uuml;ritus
 
-	@property event_type type=text
-	@caption Event type
+	@property data_event_type type=text
+	@caption &Uuml;rituse t&uuml;&uuml;p
 
-	@property delegates_no type=text
-	@caption Number of delegates
-
-	@property table_form type=text
-	@caption Table form
+	@property data_table_form type=text
+	@caption Laudade asetus
 
 	@property tech type=text
-	@caption Table form
+	@caption Tehniline varustus
+
+	@property data_additonal_tech type=text
+	@caption Tehnilise varustuse erisoov
+
+	@property data_breakout_rooms type=checkbox ch_value=1
+	@caption Puhkeruumide soov
 
 	@property door_sign type=text
-	@caption Door sign/group name
+	@caption Uksesilt
 
-	@property person_no type=text
-	@caption Number of persons
+	@property data_person_no type=text
+	@caption Osalejate arv
 
 	@property start_date type=text
-	@caption Start time
+	@caption Algusaeg
 
 	@property end_date type=text
-	@caption End time
+	@caption L&otilde;puaeg
 
 	@property 24h type=text
-	@caption 24h hold
+	@caption Hoia 24 tundi kinni
 
-	@property catering_for_main type=text
-	@caption Catering for main function
+	@property data_main_function_catering type=text
+	@caption Pea&uuml;rituse 
 
-@groupinfo add_fun caption="Additional functions"
+@groupinfo add_fun caption="Lisa&uuml;ritused"
 @default group=add_fun
 
 	@property additional_functions type=text no_caption=1
-	@caption Additional functions
+	@caption Lisa&uuml;ritused
 
 @groupinfo billing caption="Billing info"
 @default group=billing
-	@property billing_company type=text
-	@caption Company
+	@property data_billing_company type=text
+	@caption Organisatsioon
 
-	@property billing_contact type=text
-	@caption Contact
+	@property data_billing_contact type=text
+	@caption Kontaktisik
 
-	@property billing_street type=text
-	@caption Street
+	@property data_billing_street type=text
+	@caption T&auml;nav
 
-	@property billing_city type=text
-	@caption City
+	@property data_billing_city type=text
+	@caption Linn
 
-	@property billing_zip type=text
-	@caption Zip
+	@property data_billing_zip type=text
+	@caption Indeks
 
-	@property billing_country type=text
-	@caption Country
+	@property data_billing_country type=text
+	@caption Riik
 
-	@property billing_name type=text
-	@caption Name
+	@property data_billing_name type=text
+	@caption Nimi
 
-	@property billing_phone_number type=text
-	@caption Phone number
+	@property data_billing_phone type=text
+	@caption Telefoninumber
 
-	@property billing_email type=text
+	@property data_billing_email type=text
 	@caption E-mail
 
-@groupinfo search_res caption="Selected results"
+@groupinfo search_res caption="Valitud otsingutulemused"
 @default group=search_res
-	@property search_result type=text
-	@caption Search results
+	@property data_search_result type=text
+	@caption Otsingutulemused
 
 
 

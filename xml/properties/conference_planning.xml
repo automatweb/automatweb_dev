@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>jrk</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>jrk</field>
+            <caption>Jrk</caption>
+      </property>
+      <property>
             <name>single_count</name>
             <table>objects</table>
             <group>general</group>
@@ -108,6 +116,109 @@
             <caption>Hotelliteavituse e-maili teema</caption>
       </property>
       <property>
+            <name>help_views</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>help_props</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>views_tb</name>
+            <table>objects</table>
+            <group>webform_detail</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>views_tb</field>
+      </property>
+      <property>
+            <name>views_tree</name>
+            <table>objects</table>
+            <group>webform_detail</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>treeview</parent>
+            <store>no</store>
+            <field>views_tree</field>
+      </property>
+      <property>
+            <name>trans</name>
+            <table>objects</table>
+            <group>webform_detail</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>trans</parent>
+            <field>trans</field>
+      </property>
+      <property>
+            <name>element_wid</name>
+            <table>objects</table>
+            <group>webform_detail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <captionside>top</captionside>
+            <parent>controller</parent>
+            <store>no</store>
+            <caption>Elemendi ID veebis</caption>
+      </property>
+      <property>
+            <name>meta_chooser</name>
+            <table>objects</table>
+            <group>webform_detail</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>controller</parent>
+            <field>meta_chooser</field>
+            <caption>Valikud</caption>
+      </property>
+      <property>
+            <name>show_controller</name>
+            <table>objects</table>
+            <group>webform_detail</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_SHOW_CONTROLLER</reltype>
+            <method>serialize</method>
+            <captionside>top</captionside>
+            <parent>controller</parent>
+            <caption>N&amp;amp;auml;itamise kontroller</caption>
+      </property>
+      <property>
+            <name>save_controller</name>
+            <table>objects</table>
+            <group>webform_detail</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_SAVE_CONTROLLER</reltype>
+            <method>serialize</method>
+            <captionside>top</captionside>
+            <parent>controller</parent>
+            <caption>Salvestamise kontroller</caption>
+      </property>
+      <property>
+            <name>metamgr</name>
+            <table>objects</table>
+            <group>webform_sub</group>
+            <type>relpicker</type>
+            <reltype>METAMANAGER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Muutujate haldus</caption>
+      </property>
+      <property>
             <name>mails</name>
             <table>objects</table>
             <group>mails</group>
@@ -162,6 +273,17 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <webform>
+                  <caption>Veebivorm</caption>
+            </webform>
+            <webform_detail>
+                  <caption>Vaated</caption>
+                  <parent>webform</parent>
+            </webform_detail>
+            <webform_sub>
+                  <caption>Seaded</caption>
+                  <parent>webform</parent>
+            </webform_sub>
             <mails>
                   <caption>E-mailid</caption>
             </mails>
@@ -193,6 +315,54 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>E-Mail</caption>
             </EMAIL>
+            <SHOW_CONTROLLER>
+                  <value>5</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>N&amp;amp;auml;itamise kontroller</caption>
+            </SHOW_CONTROLLER>
+            <SAVE_CONTROLLER>
+                  <value>6</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Salvestamise kontroller</caption>
+            </SAVE_CONTROLLER>
+            <METAMANAGER>
+                  <value>7</value>
+                  <clid>CL_METAMGR</clid>
+                  <caption>Muutujate haldus</caption>
+            </METAMANAGER>
       </reltypes>
+      <layout>
+            <hsplit>
+                  <type>hbox</type>
+                  <width>15%:85%</width>
+                  <group>webform_detail</group>
+            </hsplit>
+            <treeview>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Vaated</area_caption>
+                  <parent>hsplit</parent>
+                  <group>webform_detail</group>
+            </treeview>
+            <rpane>
+                  <type>vbox</type>
+                  <parent>hsplit</parent>
+                  <group>webform_detail</group>
+            </rpane>
+            <trans>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>T&amp;otilde;lked</area_caption>
+                  <parent>rpane</parent>
+                  <group>webform_detail</group>
+            </trans>
+            <controller>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>Konfiguratsioon</area_caption>
+                  <parent>rpane</parent>
+                  <group>webform_detail</group>
+            </controller>
+      </layout>
 </properties>
 

@@ -7,16 +7,16 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Submitter</caption>
+            <caption>Ankeedi t&amp;amp;auml;itja</caption>
       </property>
       <property>
-            <name>contact_preference</name>
+            <name>data_contact_preference</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Contact preference</caption>
+            <caption>Kontakteerumise eelistus</caption>
       </property>
       <property>
             <name>country</name>
@@ -25,25 +25,25 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Country</caption>
+            <caption>Riik</caption>
       </property>
       <property>
-            <name>organisation</name>
+            <name>data_organisation</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Organisation</caption>
+            <caption>Organisatioon</caption>
       </property>
       <property>
-            <name>function_name</name>
+            <name>data_function_name</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Function name</caption>
+            <caption>&amp;amp;Uuml;rituse nimi</caption>
       </property>
       <property>
             <name>attendees_no</name>
@@ -52,73 +52,73 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Number of attendees</caption>
+            <caption>Osalejate arv</caption>
       </property>
       <property>
-            <name>response_date</name>
+            <name>data_response_date</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Response date</caption>
+            <caption>Tagasiside aeg</caption>
       </property>
       <property>
-            <name>decision_date</name>
+            <name>data_decision_date</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Decision date</caption>
+            <caption>Otsuse aeg</caption>
       </property>
       <property>
-            <name>arrival_date</name>
+            <name>data_arrival_date</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Arrival date</caption>
+            <caption>Saabumise aeg</caption>
       </property>
       <property>
-            <name>departure_date</name>
+            <name>data_departure_date</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Departure date</caption>
+            <caption>Lahkumise aeg</caption>
       </property>
       <property>
-            <name>open_for_alternative_dates</name>
+            <name>data_open_for_alternative_dates</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Open for alternative dates</caption>
+            <caption>N&amp;amp;ouml;us alternatiivsete kuup&amp;amp;auml;evadega</caption>
       </property>
       <property>
-            <name>accommondation_requirements</name>
+            <name>data_accommondation_requirements</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>I have accomonndation requirements</caption>
+            <caption>Majutusvajadused</caption>
       </property>
       <property>
-            <name>multi_day</name>
+            <name>data_multi_day</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Multi-day main function</caption>
+            <caption>&amp;amp;Uuml;rituse kestus</caption>
       </property>
       <property>
             <name>needs_rooms</name>
@@ -128,34 +128,34 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Needs rooms</caption>
+            <caption>Majutusvajadused</caption>
       </property>
       <property>
-            <name>single_rooms</name>
+            <name>data_single_rooms</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Single rooms</caption>
+            <caption>&amp;amp;Uuml;hekohalised toad</caption>
       </property>
       <property>
-            <name>double_rooms</name>
+            <name>data_double_rooms</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Double rooms</caption>
+            <caption>Kahekohalised toad</caption>
       </property>
       <property>
-            <name>suites</name>
+            <name>data_suites</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Suites</caption>
+            <caption>Sviidid</caption>
       </property>
       <property>
             <name>flexible_dates</name>
@@ -165,16 +165,34 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Dates are flexible</caption>
+            <caption>Kuup&amp;amp;auml;evad on paindlikud</caption>
       </property>
       <property>
-            <name>date_comments</name>
+            <name>data_date_comments</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Date comments</caption>
+            <caption>Kuup&amp;amp;auml;evade kommentaar</caption>
+      </property>
+      <property>
+            <name>data_city</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Soovitud linn</caption>
+      </property>
+      <property>
+            <name>data_hotel</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Soovitud hotell</caption>
       </property>
       <property>
             <name>archived</name>
@@ -184,7 +202,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Archived</caption>
+            <caption>Arhiveeritud</caption>
       </property>
       <property>
             <name>urgent</name>
@@ -194,23 +212,25 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Urgent</caption>
+            <caption>Kiire</caption>
       </property>
       <property>
-            <name>dates_are_flexible</name>
+            <name>data_dates_are_flexible</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
+            <caption>Kuup&amp;amp;auml;evad on paindlikud</caption>
       </property>
       <property>
-            <name>meeting_pattern</name>
+            <name>data_meeting_pattern</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
+            <caption>Kuup&amp;amp;auml;evade muster</caption>
       </property>
       <property>
             <name>pattern_wday_from</name>
@@ -325,20 +345,40 @@
             <type>hidden</type>
       </property>
       <property>
-            <name>additional_dates_raw</name>
+            <name>data_alternative_dates</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
+            <caption>Alternatiivsed kuup&amp;amp;auml;evad</caption>
       </property>
       <property>
-            <name>additional_functions_raw</name>
+            <name>data_additional_functions</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
+            <caption>Lisa&amp;amp;uuml;ritused</caption>
+      </property>
+      <property>
+            <name>data_additional_functions_catering</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Lisa&amp;amp;uuml;rituste toitlustus</caption>
+      </property>
+      <property>
+            <name>data_package</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Pakett</caption>
       </property>
       <property>
             <name>all_search_results</name>
@@ -364,44 +404,35 @@
             <method>serialize</method>
             <type>text</type>
             <no_caption>1</no_caption>
-            <caption>Additional_dates</caption>
+            <caption>Alternatiivsed kuup&amp;amp;auml;evad</caption>
       </property>
       <property>
-            <name>main_function</name>
+            <name>data_main_function</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <no_caption>1</no_caption>
-            <caption>Main function</caption>
+            <caption>Pea&amp;amp;uuml;ritus</caption>
       </property>
       <property>
-            <name>event_type</name>
+            <name>data_event_type</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Event type</caption>
+            <caption>&amp;amp;Uuml;rituse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>delegates_no</name>
+            <name>data_table_form</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Number of delegates</caption>
-      </property>
-      <property>
-            <name>table_form</name>
-            <table>objects</table>
-            <group>main_fun</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Table form</caption>
+            <caption>Laudade asetus</caption>
       </property>
       <property>
             <name>tech</name>
@@ -410,7 +441,26 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Table form</caption>
+            <caption>Tehniline varustus</caption>
+      </property>
+      <property>
+            <name>data_additonal_tech</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Tehnilise varustuse erisoov</caption>
+      </property>
+      <property>
+            <name>data_breakout_rooms</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Puhkeruumide soov</caption>
       </property>
       <property>
             <name>door_sign</name>
@@ -419,16 +469,16 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Door sign/group name</caption>
+            <caption>Uksesilt</caption>
       </property>
       <property>
-            <name>person_no</name>
+            <name>data_person_no</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Number of persons</caption>
+            <caption>Osalejate arv</caption>
       </property>
       <property>
             <name>start_date</name>
@@ -437,7 +487,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Start time</caption>
+            <caption>Algusaeg</caption>
       </property>
       <property>
             <name>end_date</name>
@@ -446,7 +496,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>End time</caption>
+            <caption>L&amp;amp;otilde;puaeg</caption>
       </property>
       <property>
             <name>24h</name>
@@ -455,16 +505,16 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>24h hold</caption>
+            <caption>Hoia 24 tundi kinni</caption>
       </property>
       <property>
-            <name>catering_for_main</name>
+            <name>data_main_function_catering</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Catering for main function</caption>
+            <caption>Pea&amp;amp;uuml;rituse </caption>
       </property>
       <property>
             <name>additional_functions</name>
@@ -474,82 +524,82 @@
             <method>serialize</method>
             <type>text</type>
             <no_caption>1</no_caption>
-            <caption>Additional functions</caption>
+            <caption>Lisa&amp;amp;uuml;ritused</caption>
       </property>
       <property>
-            <name>billing_company</name>
+            <name>data_billing_company</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Company</caption>
+            <caption>Organisatsioon</caption>
       </property>
       <property>
-            <name>billing_contact</name>
+            <name>data_billing_contact</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Contact</caption>
+            <caption>Kontaktisik</caption>
       </property>
       <property>
-            <name>billing_street</name>
+            <name>data_billing_street</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Street</caption>
+            <caption>T&amp;amp;auml;nav</caption>
       </property>
       <property>
-            <name>billing_city</name>
+            <name>data_billing_city</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>City</caption>
+            <caption>Linn</caption>
       </property>
       <property>
-            <name>billing_zip</name>
+            <name>data_billing_zip</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Zip</caption>
+            <caption>Indeks</caption>
       </property>
       <property>
-            <name>billing_country</name>
+            <name>data_billing_country</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Country</caption>
+            <caption>Riik</caption>
       </property>
       <property>
-            <name>billing_name</name>
+            <name>data_billing_name</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Name</caption>
+            <caption>Nimi</caption>
       </property>
       <property>
-            <name>billing_phone_number</name>
+            <name>data_billing_phone</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Phone number</caption>
+            <caption>Telefoninumber</caption>
       </property>
       <property>
-            <name>billing_email</name>
+            <name>data_billing_email</name>
             <table>objects</table>
             <group>billing</group>
             <field>meta</field>
@@ -558,13 +608,13 @@
             <caption>E-mail</caption>
       </property>
       <property>
-            <name>search_result</name>
+            <name>data_search_result</name>
             <table>objects</table>
             <group>search_res</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Search results</caption>
+            <caption>Otsingutulemused</caption>
       </property>
       <classinfo>
             <syslog_type>ST_RFP</syslog_type>
@@ -581,13 +631,13 @@
                   <caption>Main function</caption>
             </main_fun>
             <add_fun>
-                  <caption>Additional functions</caption>
+                  <caption>Lisa&amp;amp;uuml;ritused</caption>
             </add_fun>
             <billing>
                   <caption>Billing info</caption>
             </billing>
             <search_res>
-                  <caption>Selected results</caption>
+                  <caption>Valitud otsingutulemused</caption>
             </search_res>
       </groupinfo>
 </properties>

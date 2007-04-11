@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.65 2007/03/06 15:39:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.66 2007/04/11 15:07:12 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property jrk type=textbox field=jrk
+@caption Jrk
 
 @property single_count type=textbox field=meta method=serialize
 @caption &Uuml;hekohaliste tubade arv
@@ -40,6 +43,44 @@
 
 @property subject type=textbox field=meta method=serialize
 @caption Hotelliteavituse e-maili teema
+
+// metadata for views
+@property help_views type=hidden field=meta mehtod=serialize no_caption=1
+@property help_props type=hidden field=meta method=serialize no_caption=1
+
+@groupinfo webform caption="Veebivorm"
+@default group=webform
+
+	@groupinfo webform_detail caption="Vaated" parent=webform
+	@default group=webform_detail
+		@property views_tb type=toolbar no_caption=1
+		@layout hsplit type=hbox width=15%:85% 
+			@layout treeview type=vbox closeable=1 area_caption=Vaated parent=hsplit
+				@property views_tree type=treeview no_caption=1 parent=treeview
+
+			@layout rpane type=vbox parent=hsplit
+
+				@layout trans type=vbox closeable=1 area_caption=T&otilde;lked parent=rpane
+					@property trans type=text no_caption=1 parent=trans
+
+				@layout controller type=vbox closeable=1 area_caption=Konfiguratsioon parent=rpane
+					@property element_wid type=textbox field=meta method=serialize captionside=top parent=controller store=no
+					@caption Elemendi ID veebis
+
+					@property meta_chooser type=select store=no captionside=top parent=controller
+					@caption Valikud
+
+					@property show_controller type=relpicker field=meta reltype=RELTYPE_SHOW_CONTROLLER method=serialize captionside=top parent=controller
+					@caption N&auml;itamise kontroller
+
+					@property save_controller type=relpicker field=meta reltype=RELTYPE_SAVE_CONTROLLER method=serialize captionside=top parent=controller
+					@caption Salvestamise kontroller
+
+	@groupinfo webform_sub caption="Seaded" parent=webform
+	@default group=webform_sub
+		@property metamgr type=relpicker reltype=METAMANAGER field=meta method=serialize
+		@caption Muutujate haldus
+
 
 @groupinfo mails caption="E-mailid"
 @default group=mails
@@ -75,9 +116,23 @@
 
 @reltype EMAIL value=4 clid=CL_ML_MEMBER
 @caption E-Mail
+
+@reltype SHOW_CONTROLLER value=5 clid=CL_CFGCONTROLLER
+@caption N&auml;itamise kontroller
+
+@reltype SAVE_CONTROLLER value=6 clid=CL_CFGCONTROLLER
+@caption Salvestamise kontroller
+
+@reltype METAMANAGER value=7 clid=CL_METAMGR
+@caption Muutujate haldus
+
 */
 
 define(CONFIRM_ID, "confirm_submit_checkbox");
+define(TYPE_SEPARATOR, 1);
+define(TYPE_ELEMENT, 2);
+define(TYPE_TEXT, 3);
+
 class conference_planning extends class_base
 {
 	function conference_planning()
@@ -168,6 +223,169 @@ class conference_planning extends class_base
 		$this->trans_props = array(
 			"subject", "usr_subject", "usr_contents"
 		);
+
+
+		/* wheee, totally new conference planning
+			anyway, these here are diffent type of form types, most of them can be separately cofigured from admin
+		*/
+		$this->form_types = array(
+			"textbox",
+			"date_textbox",
+			"datetime_textbox",
+			"event_type",
+			"checkbox",
+			"textarea",
+			"radio_chooser",
+			"textarea",
+			"meeting_patten",
+			"select",
+			"table",
+			"technical_equipment",
+			"search_result",
+			"separator",
+		);
+
+	}
+
+	function get_form_elements_data($prop = false)
+	{
+		if(!$prop)
+		{
+			return false;
+		}
+		$prop = (substr($prop, 0, 5) == "data_")?substr($prop, 5):$prop;
+		switch($prop)
+		{
+			case "multi_day":
+				$ret = array(
+					"form" => "radio_chooser",
+					"options" => array(
+						0 => t("&Uuml;ks p&auml;ev"),
+						1 => t("Mitu p&auml;"),
+					),
+					"default" => 0,
+				);
+				break;
+
+			case "response_date":
+			case "decision_date":
+			case "arrival_date":
+			case "departure_date":
+				$ret = array(
+					"form" => "date_textbox",
+				);
+				break;
+
+			case "alternative_dates":
+				$ret = array(
+					"form" => "table",
+					"add_rows" => "manual",
+					"fields" => array(
+						"date_type" => array(
+						),
+						"arrival_date" => array(
+						),
+						"departure_date" => array(
+						),
+						"remove" => array(
+						),
+					),
+				);
+				break;
+
+			case "breakout_rooms":
+			case "open_for_alternative_dates":
+			case "accommondation_requirements":
+			case "dates_are_flexible":
+				$ret = array(
+					"form" => "checkbox",
+				);
+				break;
+
+			case "meeting_pattern":
+				$ret = array(
+					"form" => "meeting_pattern",
+				);
+				break;
+
+			case "additonal_tech":
+			case "date_comments":
+				$ret = array(
+					"form" => "textarea",
+				);
+				break;
+
+			case "main_function":
+			case "main_function_catering":
+			case "additional_functions":
+			case "additional_functions_catering":
+				$ret = array(
+					"form" => "mixed",
+				);
+				break;
+
+			case "search_result":
+				$ret = array(
+					"form" => "search_result",
+				);
+				break;
+
+
+			case "event_type":
+				$ret = array(
+					"form" => "event_type",
+				);
+				break;
+
+			case "billing_email":
+			case "billing_phone":
+			case "billing_name":
+			case "billing_zip":
+			case "billing_city":
+			case "billing_street":
+			case "billing_contact":
+			case "billing_company":
+			case "organisation":
+			case "function_name":
+			case "person_no":
+				$ret = array(
+					"form" => "textbox",
+				);
+				break;
+
+			case "single_rooms":
+			case "double_rooms":
+			case "suites":
+			case "billing_country":
+			case "contact_preference":
+			case "city":
+			case "hotel":
+			case "package":
+			case "table_form":
+				$ret = array(
+					"form" => "select",
+				);
+				break;
+
+			case "text":
+				$ret = array(
+					"form" => "text",
+					"no_store" => 1,
+				);
+				break;
+
+			case "separator":
+				$ret = array(
+					"form" => "separator",
+					"no_store" => 1,
+				);
+				break;
+
+			default:
+				$ret = false;
+				break;
+		}
+		return $ret;
 	}
 
 	/**
@@ -195,7 +413,324 @@ class conference_planning extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "meta_chooser":
+				if(strlen($view = $arr["request"]["view_no"]) && strlen($elem = $arr["request"]["element"]))
+				{
+					if($this->can("view",($mgr = $arr["obj_inst"]->prop("metamgr"))))
+					{
+						$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+						$prop["selected"] = $views[$view]["elements"][$elem]["choices"];
+						$list = new object_list(array(
+							"class_id" => CL_META,
+							"parent" => $mgr,
+						));
+						$prop["options"][0] = t("-- Vali --");
+						foreach($list->arr() as $obj)
+						{
+							$prop["options"][$obj->id()] = $obj->name();
+						}
+					}
+					else
+					{
+						return PROP_IGNORE;
+					}
+				}
 			//-- get_property --//
+			case "show_controller":
+			case "save_controller":
+				if(empty($arr["request"]["view_no"]) && empty($arr["request"]["element"]))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case "views_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "new",
+					"tooltip" => t("Vaade"),
+					"img" => "new.gif",
+					"action" => "add_view",
+				));
+				$tb->add_button(array(
+					"name" => "save",
+					"tooltip" => t("Salvesta"),
+					"img" => "save.gif",
+					"action" => "",
+				));
+				$prop["value"] = $tb->get_toolbar();
+				break;
+			case "trans":
+				$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+				if(strlen($view = $arr["request"]["view_no"]) && strlen($elem = $arr["request"]["element"]))
+				{
+					$trans = $views[$view]["elements"][$elem]["trans"];
+				}
+				elseif(strlen($view))
+				{
+					$trans = $views[$view]["trans"];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				$l = get_instance("languages");
+				$ll = $l->get_list(array(
+					//"ignore_status" => true,
+					"all_data" => true,
+				));
+				foreach($ll as $lid => $lang)
+				{
+
+					$html .= $lang["name"]." : ".html::textbox(array(
+						"name" => "trans[".$lang["acceptlang"]."]",
+						"value" => $trans[$lang["acceptlang"]],
+					))."<br/>";
+				}
+				$prop["value"] = $html;
+				break;
+			case "element_wid":
+				if(strlen($view = $arr["request"]["view_no"]) && strlen($element = $arr["request"]["element"]))
+				{
+					$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+					$prop["value"] = $views[$view]["elements"][$element]["wid"];
+				}
+				break;
+
+			case "views_tree":
+				$t = &$prop["vcl_inst"];
+				$t->start_tree(array(
+					"tree_id" => "views_tree",
+					"tree_type" => TREE_DHTML,
+				));
+				$popup = get_instance("vcl/popup_menu");
+				
+				$cfg = get_instance("cfg/cfgutils");
+				$list = $cfg->load_properties(array(
+					"clid" => CL_RFP
+				));
+				$list = array_filter($list, array($this, "__callback_filter_prplist"));
+				uasort($list, array($this, "__callback_sort_prplist"));
+				foreach(array_reverse(aw_unserialize($arr["obj_inst"]->prop("help_views")), TRUE) as $id => $view)
+				{
+					$popup->begin_menu("pm_view_".$id);
+					$popup->add_sub_menu(array(
+						"name" => "add_view_".$id,
+						"text" => t("Lisa uus element"),
+					));
+					foreach($list as $prp => $data)
+					{
+						$popup->add_item(array(
+							"parent" => "add_view_".$id,
+							"text" => ($data["caption"])?$data["caption"]:$prp,
+							"link" => $this->mk_my_orb("add_element_to_view", array(
+								"element" => $prp,
+								"view_no" => $id,
+								"planner" => $arr["obj_inst"]->id(),
+								"return_url" => get_ru(),
+							)),
+						));
+					}
+					// add separator submenu to popupmenu
+					$popup->add_sub_menu(array(
+						"name" => "add_sep_".$id,
+						"text" => t("Lisa uus eraldaja"),
+					));
+
+					foreach($view["elements"] as $el_id => $element)
+					{
+						$name = strlen($_t = $element["trans"][aw_global_get("ct_lang_lc")])?$_t:$list[$element["name"]]["caption"];
+						$name = ($element["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
+						$name = ($element["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
+						$popup->add_item(array(
+							"parent" => "add_sep_".$id,
+							"text" => $name,
+							"link" => $this->mk_my_orb("add_separator_to_view", array(
+								"element" => $el_id,
+								"view_no" => $id,
+								"planner" => $arr["obj_inst"]->id(),
+								"type" => TYPE_SEPARATOR,
+								"return_url" => get_ru(),
+							)),
+						));
+					}
+
+					// add text submenu to popupmenu
+					$popup->add_sub_menu(array(
+						"name" => "add_txt_".$id,
+						"text" => t("Lisa uus tekstieraldaja"),
+					));
+
+					foreach($view["elements"] as $el_id => $element)
+					{
+						$name = strlen($_t = $element["trans"][aw_global_get("ct_lang_lc")])?$_t:$list[$element["name"]]["caption"];
+						$name = ($element["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
+						$name = ($element["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
+						$popup->add_item(array(
+							"parent" => "add_txt_".$id,
+							"text" => $name,
+							"link" => $this->mk_my_orb("add_separator_to_view", array(
+								"element" => $el_id,
+								"view_no" => $id,
+								"planner" => $arr["obj_inst"]->id(),
+								"type" => TYPE_TEXT,
+								"return_url" => get_ru(),
+							)),
+						));
+					}
+					// add remove view to popup menu
+					$popup->add_item(array(
+						"text" => t("Kustuta vaade"),
+						"link" => $this->mk_my_orb("remove_view", array(
+								"view_no" => $id,
+								"planner" => $arr["obj_inst"]->id(),
+								"return_url" => get_ru(),						
+						)),
+					));
+
+					// add view node to tree
+					$request = $arr["request"];
+					unset($request["element"]);
+					$request["view_no"] = $id;
+					$name = ($arr["request"]["view_no"] == $id && empty($arr["request"]["element"]))?"<b>".$view["name"]."</b>":$view["name"];
+					$t->add_item(0, array(
+						"id" => "view_".$id,
+						"name" => $name."&nbsp;".$popup->get_menu(),
+						"url" => $this->mk_my_orb("change", $request),
+					));
+					// add element nodes to tree
+					foreach($view["elements"] as $el_id => $element)
+					{
+						$popup->begin_menu("pm_element_".$id."_".$el_id);
+						if($element != reset($view["elements"]))
+						{
+							$popup->add_item(array(
+								"text" => t("Liiguta &uuml;les"),
+								"link" => $this->mk_my_orb("move_element_in_view", array(
+									"element" => $el_id,
+									"view_no" => $id,
+									"planner" => $arr["obj_inst"]->id(),
+									"direction" => 1,
+									"return_url" => get_ru(),
+								)),
+							));
+						}
+						if($element != end($view["elements"]))
+						{
+							$popup->add_item(array(
+								"text" => t("Liiguta alla"),
+								"link" => $this->mk_my_orb("move_element_in_view", array(
+									"element" => $el_id,
+									"view_no" => $id,
+									"planner" => $arr["obj_inst"]->id(),
+									"return_url" => get_ru(),
+								)),
+							));
+						}
+						// liigutamine teatud elemendi juurde
+						$popup->add_sub_menu(array(
+							"name" => "move_element_to_".$id."_".$el_id,
+							"text" => t("Liiguta elemendi j&auml;rele"),
+						));
+						foreach($view["elements"] as $s1_eid => $s1_el)
+						{
+							$name = strlen($_t = $s1_el["trans"][aw_global_get("ct_lang_lc")])?$_t:$list[$element["name"]]["caption"];
+							$name = ($s1_el["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
+							$name = ($s1_el["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
+							$popup->add_item(array(
+								"parent" => "move_element_to_".$id."_".$el_id,
+								"text" => $name,
+								"link" => $this->mk_my_orb("move_element_in_view", array(
+									"element" => $el_id,
+									"move_to" => $s1_eid,
+									"view_no" => $id,
+									"planner" => $arr["obj_inst"]->id(),
+									"return_url" => get_ru(),
+								)),
+							));
+						}
+
+
+
+						$popup->add_item(array(
+							"text" => t("Kustuta element"),
+							"link" => $this->mk_my_orb("remove_element_from_view", array(
+								"element" => $el_id,
+								"view_no" => $id,
+								"planner" => $arr["obj_inst"]->id(),
+								"return_url" => get_ru(),
+							)),
+
+						));
+
+						$request = $arr["request"];
+						$request["view_no"] = $id;
+						$request["element"] = $el_id;
+
+						$data = $this->get_form_elements_data($element["name"]);
+						$name = $element["trans"][aw_global_get("ct_lang_lc")]?$element["trans"][aw_global_get("ct_lang_lc")]:($list[$element["name"]]?$list[$element["name"]]["caption"]:$data["caption"]);
+						$name = ($arr["request"]["view_no"] == $id && $arr["request"]["element"] == $el_id)?"<b>".$name."</b>":$name;
+						if($element["type"] == TYPE_SEPARATOR)
+						{
+							$iconurl = aw_ini_get("baseurl")."/automatweb/images/icons/rte_indent.gif";
+						}
+						else
+						{
+							$iconurl = aw_ini_get("baseurl")."/automatweb/images/icons/class_86.gif";
+						}
+						$t->add_item("view_".$id, array(
+							"id" => "view_".$id."_elem_".$el_id,
+							"name" => $name."&nbsp;".$popup->get_menu(),
+							"url" => $this->mk_my_orb("change", $request),
+							"iconurl" => $iconurl,
+						));
+					}
+				}
+				break;
+			case "views":
+				$t = &$prop["vcl_inst"];
+				$t->define_field(array(
+					"name" => "jrk",
+					"caption" => t("Jrk"),
+					"width" => 5,
+				));
+				$t->define_field(array(
+					"name" => "name",
+					"caption" => t("Nimi"),
+				));
+				$t->define_field(array(
+					"name" => "what",
+					"caption" => t("misiganes"),
+				));
+
+				$t->define_data(array(
+					"jrk" => html::textbox(array(
+						"name" => "new_view[jrk]",
+						"size" => 5,
+					)),
+					"name" => html::textbox(array(
+						"name" => "new_view[name]",
+					)),
+					"what" => "",
+				));
+				//$arr["obj_inst"]->set_prop("help_views", "");
+				//$arr["obj_inst"]->save();
+				foreach(aw_unserialize($arr["obj_inst"]->prop("help_views")) as $k => $data)
+				{
+					$t->define_data(array(
+						"jrk" => html::textbox(array(
+							"name" => "views[".$k."][jrk]",
+							"value" => $data["jrk"],
+							"size" => 5,
+						)),
+						"name" => html::textbox(array(
+							"name" => "views[".$k."][name]",
+							"value" => $data["name"],
+						)),
+					));
+				}
+
+
+				break;
 			case "mails":
 				classload("vcl/table");
 				$vcl = new vcl_table();
@@ -235,16 +770,277 @@ class conference_planning extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "meta_chooser":
+				if(strlen($view = $arr["request"]["view_no"]) && strlen($elem = $arr["request"]["element"]))
+				{
+					$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+					$views[$view]["elements"][$elem]["choices"] = $prop["value"];
+					$arr["obj_inst"]->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+					$arr["obj_inst"]->save();
+				}
+				break;
+			case "show_controller":
+			case "save_controller":
+				if(strlen($arr["request"]["view_no"]) && strlen($arr["request"]["element"]))
+				{
+					$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+					$views[$arr["request"]["view_no"]]["elements"][$arr["request"]["element"]][$prop["name"]] = $prop["value"];
+					$arr["obj_inst"]->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+					$arr["obj_inst"]->save();
+				}
+				$retval =  PROP_IGNORE;
+				break;
+			case "element_wid":
+				if(strlen($view = $arr["request"]["view_no"]) && strlen($element = $arr["request"]["element"]))
+				{
+					$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+					$views[$view]["elements"][$element]["wid"] = $prop["value"];
+					$arr["obj_inst"]->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+					$arr["obj_inst"]->save();
+				}
+				break;
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
+				break;
+			case "trans":
+				$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+				if(strlen($view = $arr["request"]["view_no"]) && strlen($elem = $arr["request"]["element"]))
+				{
+					$trans = &$views[$view]["elements"][$elem]["trans"];
+				}
+				elseif(strlen($view))
+				{
+					$trans = &$views[$view]["trans"];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				$trans = $prop["value"];
+				$arr["obj_inst"]->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+				$arr["obj_inst"]->save();
 				break;
 
 		}
 		return $retval;
 	}	
 
+
+	function __callback_sort($a, $b)
+	{
+		return $b["jrk"] - $a["jrk"];
+	}
+
+	function __callback_filter_prplist($a)
+	{
+		return substr($a["name"],0,5) == "data_";
+	}
+	
+	function __callback_sort_prplist($a, $b)
+	{
+		return strcasecmp($a["caption"],$b["caption"]);
+	}
+
+	/**
+		@attrib name=add_separator_to_view params=name
+		@param element required type=string
+		@param view_no required type=int
+		@param planner required type=int
+		@param type required type=int
+		@param return_url optional type=string
+	**/
+	function add_separator_to_view($arr)
+	{
+		if($this->can("view", $arr["planner"]))
+		{
+			$obj = obj($arr["planner"]);
+			$views = aw_unserialize($obj->prop("help_views"));
+			foreach($views[$arr["view_no"]]["elements"] as $el_id => $element)
+			{
+				if($arr["element"] == $el_id)
+				{
+					$new[] = array(
+						"name" => ($arr["type"] == TYPE_TEXT)?"text":"separator",
+						"trans" => array(
+							aw_global_get("ct_lang_lc") => ($arr["type"] == TYPE_TEXT)?t("Tekst"):t("Eraldaja"),
+						),
+						"type" => $arr["type"],
+					);
+				}
+				$new[] = $element;
+			}
+			$views[$arr["view_no"]]["elements"] = $new;
+
+			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+			$obj->save();
+		}
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib name=move_element_in_view params=name
+		@param element required type=string
+		@param view_no required type=int
+		@param planner required type=int
+		@param direction optional type=int
+		@param move_to optional type=int
+		@param return_url optional type=string
+	**/
+	function move_element_in_view($arr)
+	{
+		if($this->can("view", $arr["planner"]))
+		{
+			$obj = obj($arr["planner"]);
+			$views = aw_unserialize($obj->prop("help_views"));
+			$els = &$views[$arr["view_no"]]["elements"];
+			if(strlen($arr["move_to"]))
+			{
+				foreach($els as $elem_id => $elem)
+				{
+					if($elem_id != $arr["element"])
+					{
+						$new[] = $elem;
+					}
+					
+					if($elem_id == $arr["move_to"])
+					{
+						$new[] = $els[$arr["element"]];
+					}
+				}
+				$els = $new;
+			}
+			else
+			{
+				$a = &$els[$arr["element"]];
+				$switch = $arr["direction"]?--$arr["element"]:++$arr["element"];
+				$b = &$els[$switch];
+				$t = $a;
+				$a = $b;
+				$b = $t;
+			}
+			$els = array_values($els);
+			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+			$obj->save();
+		}
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib name=add_view
+	**/
+	function add_view($arr)
+	{
+		if($this->can("view", $arr["id"]))
+		{
+			$obj = obj($arr["id"]);
+			$views = aw_unserialize($obj->prop("help_views"));
+			$views[]["elements"] = array();
+			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+			$obj->save();
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=add_element_to_view params=name
+		@param element required type=string
+		@param view_no required type=int
+		@param planner required type=int
+		@param return_url optional type=string
+	**/
+	function add_element_to_view($arr)
+	{
+		if($this->can("view", $arr["planner"]))
+		{
+			$obj = obj($arr["planner"]);
+			$views = aw_unserialize($obj->prop("help_views"));
+			$views[$arr["view_no"]]["elements"][] = array(
+				"name" => $arr["element"],
+				"type" => TYPE_ELEMENT,
+			);
+			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+			$obj->save();
+		}
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib name=remove_element_from_view params=name
+		@param element required type=int
+		@param view_no required type=int
+		@param planner required type=int
+		@param return_url optional type=string
+	**/
+	function remove_element_form_view($arr)
+	{
+		if($this->can("view", $arr["planner"]))
+		{
+			$obj = obj($arr["planner"]);
+			$views = aw_unserialize($obj->prop("help_views"));
+			unset($views[$arr["view_no"]]["elements"][$arr["element"]]);
+			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+			$obj->save();
+		}
+		return $arr["return_url"];
+	}
+
+	/**
+		@attrib name=remove_view params=name
+		@param view_no required type=int
+		@param planner required type=int
+		@param return_url optional type=string
+	**/
+	function remove_view($arr)
+	{
+		if($this->can("view", $arr["planner"]))
+		{
+			$obj = obj($arr["planner"]);
+			$views = aw_unserialize($obj->prop("help_views"));
+			unset($views[$arr["view_no"]]);
+			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
+			$obj->save();
+		}
+		return $arr["return_url"];
+	}
+
+	function callback_pre_edit($arr)
+	{
+		// ugly hack for view element's controllers
+		$cntr = array("show_controller", "save_controller");
+		if(strlen($view = $arr["request"]["view_no"]) && strlen($element = $arr["request"]["element"]))
+		{
+			$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+			foreach($cntr as $c)
+			{
+				$arr["obj_inst"]->set_prop($c, $views[$view]["elements"][$element][$c]);
+			}
+			$arr["obj_inst"]->save();
+		}
+	}
+
 	function callback_pre_save($arr)
 	{
+		if(is_array($arr["request"]["views"]) && $arr["request"]["group"] == "webform_sub")
+		{
+			$cv = is_array($_t = aw_unserialize($arr["obj_inst"]->prop("help_views")))?$_t:array();
+			foreach($arr["request"]["views"] as $k => $view)
+			{
+				$cv[$k] = array_merge($cv[$k], $view);
+			}
+			uasort(&$cv, array($this, "__callback_sort"));
+			$arr["obj_inst"]->set_prop("help_views", aw_serialize($cv, SERIALIZE_NATIVE));
+			$arr["obj_inst"]->save();
+		}
+		if(strlen($arr["request"]["new_view"]["name"]) && substr($arr["request"]["group"], 0, 7) == "webform")
+		{
+			$cv = is_array($_t = aw_unserialize($arr["obj_inst"]->prop("help_views")))?$_t:array();
+			$key = (is_array($cv) && count($cv))?(max(array_keys($cv)) + 1):1;
+			$cv[$key] = $arr["request"]["new_view"];
+			uasort(&$cv, array($this, "__callback_sort"));
+			$arr["obj_inst"]->set_prop("help_views", aw_serialize($cv, SERIALIZE_NATIVE));
+			$arr["obj_inst"]->save();
+		}
+
 		if(is_array($arr["request"]["loc"]) && count($arr["request"]["loc"]))
 		{
 			foreach($arr["request"]["loc"] as $loc =>$email)
@@ -265,11 +1061,44 @@ class conference_planning extends class_base
 		}
 	}
 
+
+	function callback_mod_layout($arr)
+	{
+		if(!strlen($arr["request"]["element"]) && $arr["name"] == "controller")
+		{
+			return false;
+		}
+		if(!strlen($arr["request"]["view_no"]) && $arr["name"] == "trans")
+		{
+			return false;
+		}
+		return true;
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		if($GLOBALS["_GET"]["group"] == "webform_detail")
+		{
+			if(strlen($GLOBALS["_GET"]["view_no"]))
+			{
+				$arr["view_no"] = $GLOBALS["_GET"]["view_no"];
+			}
+			if(strlen($GLOBALS["_GET"]["element"]))
+			{
+				$arr["element"] = $GLOBALS["_GET"]["element"];
+			}
+		}
 	}
-
+	function callback_mod_retval($arr)
+	{
+		if($arr["request"]["group"] == "webform_detail")
+		{
+			$arr["args"]["view_no"] = $arr["request"]["view_no"];
+			$arr["args"]["element"] = $arr["request"]["element"];
+		}
+	}
+	
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
@@ -286,8 +1115,317 @@ class conference_planning extends class_base
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
 
+	// HANDLE CHANGEFORM DATA
+
+	function store_data($id, $data)
+	{
+		if(strlen($id))
+		{
+			$p_data = $this->get_stored_data($id);
+			$data = array_merge($p_data, $data);
+			aw_session_set("conference_planning_data_".$id, $data);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function get_stored_data($id)
+	{
+		return is_array($_t = aw_global_get("conference_planning_data_".$id))?$_t:array();
+	}
+
+	function handle_data($arr)
+	{		
+		$cp = obj($arr["conference_planning"]);
+		$views = aw_unserialize($cp->prop("help_views"));
+		$i = get_instance(CL_CFGCONTROLLER);
+		foreach($arr["elem"] as $view_id => $view)
+		{
+			foreach($view as $element_id => $element)
+			{
+				$data = $views[$view_id]["elements"][$element_id];
+				$controller = $this->can("view", $data["save_controller"])?$i->check_property($data["save_controller"], "", $views, &$arr["elem"], array(
+					"view" => $view_id,
+					"element" => $element_id
+				),""):array();
+				$element = is_array($element)?aw_serialize($element, SERIALIZE_NATIVE):$element;
+				$to_be_saved[$views[$view_id]["elements"][$element_id]["name"]] = $element;
+			}
+		}
+		return $this->store_data($cp->id(), $to_be_saved);
+	}
+
+	/**
+		@attrib name=forward all_args=1
+	**/
+	function forward($arr)
+	{
+		$this->handle_data($arr);
+		$obj = obj($arr["conference_planning"]);
+		$viewcount = count(aw_unserialize($obj->prop("help_views")));
+		return $this->gen_url($arr["doc"], (($arr["current_view"] < $viewcount)?++$arr["current_view"]:$arr["current_view"]));
+	}
+
+	/**
+		@attrib name=back all_args=1
+	**/
+	function back($arr)
+	{
+		$this->handle_data($arr);
+		return $this->gen_url($arr["doc"], ((--$arr["current_view"] > 0)?$arr["current_view"]:++$arr["current_view"]));
+	}
+
+	function gen_url($oid, $view)
+	{
+		return aw_global_get("baseurl")."/".$oid."?view_no=".$view;
+	}
+
+
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
+	{
+		$cp = obj($arr["conference_planner"]);
+		$active_view = $GLOBALS["_GET"]["view_no"];
+		$html["yah_bar"] = $this->parse_yah_bar($cp, $arr["id"], $active_view);
+		$html["active_view"] = $this->parse_active_view($cp, $arr["id"], $active_view);
+		$html["movement"] = $this->parse_movement_buttons($cp->id(), $active_view);
+		$html["reforb"] = $this->mk_reforb("forward", array(
+			"url" => get_ru(),
+			"conference_planning" => $arr["conference_planner"],
+			"current_view" => $active_view,
+			"doc" => $arr["oid"],
+		));
+		$html["script"] = $this->get_changeform($arr);
+		$html = join("", $html);
+		return html::form(array(
+			"action" => aw_ini_get("baseurl"),
+			"method" => "POST",
+			"content" => $html,
+			"name" => "changeform",
+		));
+	}
+
+	function get_changeform($arr)
+	{
+		$this->read_template("changeform.tpl");
+		return $this->parse();
+	}
+	
+	function parse_movement_buttons($cp, $view)
+	{
+		$this->read_template("move.tpl");
+		$obj = obj($cp);
+		$viewcount = count(aw_unserialize($obj->prop("help_views")));
+		$html = "";
+		$html .= ($view > 1)?$this->parse("BACK"):"";
+		$html .= ($view > 1 && $view < $viewcount)?$this->parse("SEPARATOR"):"";
+		$html .= ($view < $viewcount)?$this->parse("FORWARD"):"";
+		return $html;
+	}
+
+	function parse_form_element($el, $view_no, $element, $views, $value)
+	{
+		$prop = $this->get_form_elements_data($el["name"]);
+		if(!$prop)
+		{
+			return "";
+		}
+		$lang = aw_global_get("ct_lang_lc");
+		
+		// get options
+		if($this->can("view", ($ch = $el["choices"])))
+		{
+			$list = new object_list(array(
+				"class_id" => CL_META,
+				"parent" => $ch,
+				"sort_by" => "objects.jrk ASC",
+			));
+			foreach($list->arr() as $obj)
+			{
+				$el["options"][$obj->prop("comment")] = $obj->name();
+			}
+		}
+		// get controller contents
+		$i = get_instance(CL_CFGCONTROLLER);
+		$controller = $this->can("view", $el["show_controller"])?$i->check_property($el["show_controller"], "",$views,"","",""):array();
+		if($controller == PROP_IGNORE)
+		{
+			return "";
+		}
+		$el = array_merge($el, $controller);
+		switch($prop["form"])
+		{
+			case "separator":
+			case "textarea":
+			case "textbox":
+				$this->vars(array(
+					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"value" => $value,
+				));
+				break;
+			case "checkbox":
+				$this->vars(array(
+					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"checked" => checked($value),
+				));
+				break;
+			case "date_textbox":
+				$this->vars(array(
+					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"value" => $value,
+					"date_textbox_id" => $el["name"]."_id",
+					"date_textbox_link" => $el["name"]."_link",
+					"calendar_icon_url" => aw_global_get("baseurl")."/automatweb/images/ico_calendar.gif",
+				));
+				break;
+			case "select":
+				foreach($el["options"] as $key => $option)
+				{
+					$this->vars(array(
+						"value" => $key,
+						"caption" => $option,
+						"selected" => ($key == $value)?selected(true):"",
+					));
+					$opts .= $this->parse("OPTION");
+				}
+				$this->vars(array(
+					"OPTION" => $opts,
+					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+				));
+				break;
+			case "event_type":
+				$value = aw_unserialize($value);
+				foreach($el["options"] as $key => $option)
+				{
+					$this->vars(array(
+						"value" => $key,
+						"selected" => ($key == $value["select"])?selected(true):"",
+						"caption" => $option,
+
+					));
+					$opts .= $this->parse("EVENT_TYPE_OPTION");
+				}
+				$this->vars(array(
+					"text" => $value["text"],
+					"radio_".$value["radio"] => checked(true),
+					"EVENT_TYPE_OPTION" => $opts,
+					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+				));
+				break;
+			case "text":
+				$this->vars(array(
+					"caption" => $el["trans"][$lang],
+					"value" => $el["value"],
+				));
+				break;
+		}
+		$this->vars(array(
+			"wid" => $el["wid"],
+			"wid_out" => $el["wid"]."_out",
+			"onChange" => $el["onChange"],
+			"onClick" => $el["onClick"],
+			//"el_name" => $el["name"],
+			"view_no" => $view_no,
+			"element" => $element,
+		));
+		$ret = $this->parse(strtoupper($prop["form"]));
+		$ret .= $el["append"];
+		return $ret;
+	}
+
+	function parse_active_view($cp, $doc, $act)
+	{
+		$this->read_template("elements.tpl");
+
+		$views = aw_unserialize($cp->prop("help_views"));
+		$keys = array_keys(array_reverse($views, TRUE));
+		$act = $keys[($act-1)];
+		$view = &$views[$act];
+
+		$stored_data = $this->get_stored_data($cp->id());
+		
+		$ret = "<table class=\"curview\">";
+		foreach($view["elements"] as $elem_id => $el)
+		{
+			$ret .= $this->parse_form_element(&$view["elements"][$elem_id], $act, $elem_id, &$views, $stored_data[$view["elements"][$elem_id]["name"]]);
+		}
+		$ret .= "</table>";
+		return $ret;
+	}
+
+	function parse_yah_bar($cp, $doc, $no)
+	{
+		$this->read_template("views.tpl");
+
+		$views = array_reverse(aw_unserialize($cp->prop("help_views")), true);
+		$fid = reset(array_keys($views));
+		$lid = end(array_keys($views));
+		$keys = array_keys($views);
+		$no_i = array_search($no, $keys);
+
+		foreach($keys as $i => $key)
+		{
+			$i++;
+			$act = ($i == $no)?"ACT_":"";
+			$href = (strlen($no) &&  $i < $no)?"_HREF":"";
+			if($i == 1)
+			{
+				$this->vars(array(
+					"step_nr" => $i,
+					"caption" => $views[$key]["name"],
+					"url" => aw_ini_get("baseurl")."/".$doc."?view_no=".$i,
+				));
+				$yah[] = $this->parse($act."YAH_FIRST_BTN".$href);
+			}
+			elseif($i <= count($views) && $no_i != ($i-1))
+			{
+				unset($last);
+				if($i == count($views))
+				{
+					$last = "_LAST";
+				}
+				$this->vars(array(
+					"step_nr" => $i,
+					"caption" => $views[$key]["name"],
+					"url" => aw_ini_get("baseurl")."/".$doc."?view_no=".$i,
+				));
+				$yah[] = $this->parse($act."YAH".$last."_BTN".$href);
+			}
+			elseif($no_i == (count($views)))
+			{
+				$this->vars(array(
+					"step_nr" => $i,
+					"caption" => $views[$key]["name"],
+				));
+				$yah[] = $this->parse("YAH_LAST_BTN_AFTER");
+			}
+			elseif($no_i != ($i))
+			{
+				$this->vars(array(
+					"step_nr" => $i,
+					"caption" => strlen($act)?$views[$key]["name"]:"",
+				));
+				$yah[] = $this->parse($act."YAH_LAST_BTN".$href);
+			}
+			if(strlen($act) && $no_i != (count($views) - 1) && $i < count($views))
+			{
+				$this->vars(array(
+					"step_nr" => ($i+1),
+					"caption" => $views[$keys[$i+1]]["name"],
+				));
+				$yah[] = $this->parse("YAH_BTN_AFTER");
+			}
+		}
+		$this->vars(array(
+			"YAH_BAR" => join("", $yah),
+		));
+		return $this->parse();
+	}
+	
+	function __show($arr)
 	{
 		$_GET = $GLOBALS["_GET"];
 		if($_GET["action"])
