@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.26 2007/03/26 11:47:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.27 2007/04/11 15:05:33 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -695,7 +695,6 @@ class trademark_manager extends class_base
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.aadress")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.linn.name")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("phone.name").",".$appl->prop("fax.name")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("email.mail")."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL> </ADDRL>\n";
@@ -829,7 +828,8 @@ class trademark_manager extends class_base
 					foreach(safe_array($o->meta("products")) as $k => $v)
 					{
 						$xml .= "\t\t\t<GSGR NICCLAI=\"".$k."\">\n";
-							$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".strtolower(str_replace(", ", ",", $v))."]]></GSTERMEN>\n";
+						$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".strtolower(str_replace("\r" , "", str_replace("\n",", ",$v)))."]]></GSTERMEN>\n";
+//							$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".strtolower(str_replace(", ", ",", $v))."]]></GSTERMEN>\n";
 						$xml .= "\t\t\t</GSGR>\n";
 						/*if ($this->can("view", $k))
 						{

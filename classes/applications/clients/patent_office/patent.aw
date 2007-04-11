@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.74 2007/03/26 11:47:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.75 2007/04/11 15:05:33 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -617,10 +617,8 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		$p = "";
 		foreach($prods as $key => $product)
 		{
-			$product = strtolower(str_replace("\n",", ",$product));
-
+			$product = strtolower(str_replace("\r" , "", str_replace("\n",", ",$product)));
 			$this->vars(array("product" => $product, "class"=> $key));
-					
 			$p.=$this->parse("PRODUCTS");
 		}
 		$this->vars(array("PRODUCTS" => $p));
