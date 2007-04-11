@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.7 2007/03/07 14:57:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_booking.aw,v 1.8 2007/04/11 09:07:57 kristo Exp $
 // spa_booking.aw - SPA Reserveering 
 /*
 
@@ -39,6 +39,9 @@
 
 @reltype SELLER value=5 clid=CL_CRM_PERSON
 @caption M&uuml;&uuml;ja
+
+@reltype MAIN_PERSON value=6 clid=CL_CRM_PERSON
+@caption Perepea
 */
 
 class spa_booking extends class_base

@@ -84,6 +84,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
             </SELLER>
+            <MAIN_PERSON>
+                  <value>6</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Perepea</caption>
+            </MAIN_PERSON>
       </reltypes>
 </properties>
 

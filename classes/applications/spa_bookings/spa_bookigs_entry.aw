@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.45 2007/04/11 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.46 2007/04/11 09:07:57 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1904,8 +1904,8 @@ class spa_bookigs_entry extends class_base
 			$booking_inst->check_reservation_conns($booking);
 
 			$booking->connect(array(
-				"to" => $orig_booking->id(),
-				"type" => "RELTYPE_MAIN_BRON"
+				"to" => $orig_booking->prop("person"),
+				"type" => "RELTYPE_MAIN_PERSON"
 			));
 		}
 	}
