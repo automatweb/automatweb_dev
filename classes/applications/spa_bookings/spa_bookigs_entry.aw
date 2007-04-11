@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.44 2007/04/11 07:38:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.45 2007/04/11 08:48:48 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -246,6 +246,30 @@ class spa_bookigs_entry extends class_base
 
 	function _set_cust_entry($arr)
 	{
+		for($i = 0; $i < 5; $i++)
+		{
+			$d = $arr["request"]["d"][$i];
+			if ($d["fn"] != "" && $d["ln"] != "" && $d["pass"] != "")
+			{
+				$start = date_edit::get_timestamp($d["start"]);
+				$end = date_edit::get_timestamp($d["end"]);
+				if ($end < 100 && $this->can("view", $d["package"]))
+				{
+					$pko = obj($d["package"]);
+					list($len, $wd_start) = explode(";", $pko->comment());
+					$end = $start + 24*3600*$len;
+					if ($wd_start > 0)
+					{
+						if (convert_wday(date("w", $start)) != $wd_start)
+						{
+							$arr["prop"]["error"] = sprintf(t("Reserveering peab algama %s"), locale::get_lc_weekday($wd_start));
+							return PROP_FATAL_ERROR;
+						}
+					}
+				}
+			}
+		}
+
 		$feedback = "";
 		for($i = 0; $i < 5; $i++)
 		{
@@ -344,7 +368,7 @@ class spa_bookigs_entry extends class_base
 
 				// for this booking, create empty reservations for all products so we can search by them
 				$booking_inst = $booking->instance();
-	$booking_inst->check_reservation_conns($booking);
+				$booking_inst->check_reservation_conns($booking);
 
 				$po = obj($d["packet"]);
 				$feedback .= sprintf(t("Lisasin kasutaja %s, isiku %s ja <a href='%s'>broneeringu</a> paketile %s algusega %s ja l&otilde;puga %s<br>"), 
@@ -355,6 +379,12 @@ class spa_bookigs_entry extends class_base
 					date("d.m.Y H:i", $start), 
 					date("d.m.Y H:i", $end)
 				);
+
+				// if other ppl were entered, then create reservations for them and connect those to the same booking so that one user can view it
+				if (is_array($d["ppl"]) && count($d["ppl"]))
+				{
+					$feedback .= $this->_add_ppl_entry($d, $booking);
+				}
 
 				if ($arr["obj_inst"]->prop("b_send_mail_to_user"))
 				{
@@ -1836,6 +1866,48 @@ class spa_bookigs_entry extends class_base
 			}
 		}
 		return aw_ini_get("baseurl")."/automatweb/closewin.html";
+	}
+
+	function _add_ppl_entry($d, $orig_booking)
+	{
+		$orig_person = obj($orig_booking->prop("person"));
+		foreach($d["ppl"] as $ppl_entry)
+		{
+			$p = obj();
+			$p->set_class_id(CL_CRM_PERSON);
+			$p->set_parent($orig_person->parent());
+			$p->set_name(trim($ppl_entry["fn"])." ".trim($ppl_entry["ln"]));
+			$p->set_prop("firstname", trim($ppl_entry["fn"]));
+			$p->set_prop("lastname", trim($ppl_entry["ln"]));
+			$p->set_prop("birthday", sprintf("%04d-%02d-%02d", $ppl_entry["end"]["year"], $ppl_entry["end"]["month"], $ppl_entry["end"]["day"]));
+			$p->set_prop("gender", $ppl_entry["gender"]);
+			$p->save();
+
+			$booking = obj();
+			$booking->set_parent($orig_booking->parent());
+			$booking->set_name(
+				sprintf("Broneering %s %s - %s", 
+					$ppl_entry["fn"]." ".$ppl_entry["ln"], 
+					date("d.m.Y", $orig_booking->prop("start1")), 
+					date("d.m.Y", $orig_booking->prop("end"))
+				)
+			);
+			$booking->set_class_id(CL_SPA_BOOKING);
+			$booking->set_prop("person", $p->id());
+			$booking->set_prop("start", $orig_booking->prop("start1"));
+			$booking->set_prop("end", $orig_booking->prop("end"));
+			$booking->set_prop("package", $d["package"]);
+			$booking->save();
+
+			// for this booking, create empty reservations for all products so we can search by them
+			$booking_inst = $booking->instance();
+			$booking_inst->check_reservation_conns($booking);
+
+			$booking->connect(array(
+				"to" => $orig_booking->id(),
+				"type" => "RELTYPE_MAIN_BRON"
+			));
+		}
 	}
 }
 ?>
