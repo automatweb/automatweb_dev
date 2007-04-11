@@ -49,6 +49,15 @@
             <type>textbox</type>
             <caption>V&amp;amp;ouml;tmes&amp;amp;ouml;nad (komadega eraldatult)</caption>
       </property>
+      <property>
+            <name>keywords_in_row</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>V&amp;amp;ouml;tmes&amp;amp;ouml;nu &amp;amp;uuml;hel real</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_DB_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>

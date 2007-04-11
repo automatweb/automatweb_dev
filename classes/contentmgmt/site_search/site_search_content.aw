@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.84 2007/04/10 14:26:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.85 2007/04/11 13:40:36 markop Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -688,19 +688,63 @@ class site_search_content extends class_base
 		}
 		$keywords = explode("," , $cid->prop("keywords"));
 		$key_opt = "";
-		foreach($keywords as $key)
+		if($cid->prop("keywords_in_row"))
 		{
-			$selected = "";
-			if($arr["keyword"] == trim($key))
+			$in_row = $cid->prop("keywords_in_row");
+			$kw_cnt = 0;
+			$key_opt_row = "";
+			foreach($keywords as $key)
 			{
-				$selected = "selected";
+				$selected = "";
+				if($arr["keyword"][trim($key)])
+				{
+					$selected = "checked";
+				}
+				$this->vars(array(
+					"key_value" => trim($key),
+					"checked" => $selected,
+				));
+				$key_opt.= $this->parse("KEY_OPTION");
+				$kw_cnt++;
+				if($kw_cnt == $in_row)
+				{
+					$this->vars(array(
+						"KEY_OPTION" => $key_opt,
+					));
+					$key_opt_row.= $this->parse("KEY_OPTION_ROW");
+					$kw_cnt = 0;
+					$key_opt = "";
+				}
 			}
-			$this->vars(array(
-				"key_value" => trim($key),
-				"selected" => $selected,
-			));
-			$key_opt.= $this->parse("KEY_OPTION");
+			//see siis viimaste üksikute jaoks
+			if($kw_cnt > 0)
+			{
+				$this->vars(array(
+					"KEY_OPTION" => $key_opt,
+				));
+				$key_opt_row.= $this->parse("KEY_OPTION_ROW");
+				$kw_cnt = 0;
+				$key_opt = "";
+			}
 		}
+		else
+		{
+			foreach($keywords as $key)
+			{
+				$selected = "";
+				if($arr["keyword"][trim($key)])
+				{
+					$selected = "checked";
+				}
+				$this->vars(array(
+					"key_value" => trim($key),
+					"checked" => $selected,
+				));
+				$key_opt.= $this->parse("KEY_OPTION");
+			}
+		}
+		
+		
 		$this->_init_trans();
 
 		$gr = $this->get_groups($ob);
@@ -743,6 +787,7 @@ class site_search_content extends class_base
 		$this->vars(array(
 			"SEC_OPTION" => $sec_opt,
 			"KEY_OPTION" => $key_opt,
+			"KEY_OPTION_ROW" => $key_opt_row,
 			"GROUP" => $s_gr,
 			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1, "section" => $sect)),
 			"str" => htmlspecialchars((isset($str) ? $str : "")),
@@ -1755,7 +1800,7 @@ class site_search_content extends class_base
 		$results = array();
 
 		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust näitama
-		if ($str != "" || $area || $keyword || is_oid($field))
+		if ($str != "" || $area || (is_array($keyword) && sizeof($keyword)) || is_oid($field))
 		{
 			if (1 == $o->prop("multi_groups"))
 			{

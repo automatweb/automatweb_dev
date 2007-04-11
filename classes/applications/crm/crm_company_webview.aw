@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.24 2007/04/10 14:25:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.25 2007/04/11 13:37:15 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1065,9 +1065,15 @@ class crm_company_webview extends class_base
 		{
 			$filt["CL_CRM_COMPANY.RELTYPE_ADDRESS.name"] = "%".$arr["area"]."%";
 		}
-		if($arr["keyword"])
+		if(is_array($arr["keyword"]) && sizeof($arr["keyword"]))
 		{
-			$filt["activity_keywords"] = "%".$arr["keyword"]."%";
+			$keyword_array = array();
+			foreach($arr["keyword"] as $key => $val)
+			{
+				$keyword_array[] = "%".$key."%";
+			}
+			//$filt["activity_keywords"] = "%".$arr["keyword"]."%";
+			$filt["activity_keywords"] = $keyword_array;
 		}
 	
 		if ($arr["pohitegevus"])
