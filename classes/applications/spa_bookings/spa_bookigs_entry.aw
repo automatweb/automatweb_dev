@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.43 2007/04/02 09:49:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.44 2007/04/11 07:38:36 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -254,6 +254,12 @@ class spa_bookigs_entry extends class_base
 			{
 				$start = date_edit::get_timestamp($d["start"]);
 				$end = date_edit::get_timestamp($d["end"]);
+				if ($end < 100 && $this->can("view", $d["package"]))
+				{
+					$pko = obj($d["package"]);
+					list($len, $wd_start) = explode(";", $pko->comment());
+					$end = $start + 24*3600*$len;
+				}
 				//$bd = date_edit::get_timestamp($d["birthday"]);
 				// create person, user, booking
 
