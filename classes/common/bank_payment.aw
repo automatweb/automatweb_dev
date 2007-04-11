@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.47 2007/04/09 16:16:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.48 2007/04/11 11:08:28 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -106,7 +106,7 @@ class bank_payment extends class_base
 		"krediidipank"		=> "https://i-pank.krediidipank.ee/teller/maksa",
 		"nordeapank"		=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
 		"hansapank_lv"		=> "https://www.hanzanet.lv/banklink/",
-		"hansapank_lt"		=> "https://www.hansa.lt/banklink",
+		"hansapank_lt"		=> "https://lt.hanza.net/banklink/bl-lt/",
 		"credit_card"		=> "https://pos.estcard.ee/webpos/servlet/iPAYServlet",
 	);
 
@@ -974,6 +974,7 @@ class bank_payment extends class_base
 
 	function hansa_lt($args) 
 	{
+		$args["lang"] = "ENG";
 		extract($args);
 		$VK_message = sprintf("%03d",strlen($service)).$service;
 		$VK_message.= sprintf("%03d",strlen($version)).$version;
