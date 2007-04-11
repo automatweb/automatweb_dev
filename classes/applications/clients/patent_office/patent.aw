@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.75 2007/04/11 15:05:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.76 2007/04/11 16:44:03 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -523,6 +523,40 @@ class patent extends class_base
 			$data = $this->get_data_from_object($arr["id"]);
 			$prods = $ob->meta("products");
 			$_SESSION["patent"]["id"] = $arr["id"];
+		
+			//kui pole õigust näha
+			$uid = aw_global_get("uid");
+			$section = aw_global_get("section");
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			$code = $p->prop("personal_id");
+			$ol = new object_list(array(
+				"class_id" => CL_TRADEMARK_MANAGER,
+				"not_verified_menu" => $ob->parent(),
+				"lang_id" => array(),
+			));
+			if(!sizeof($ol->arr()))
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_TRADEMARK_MANAGER,
+					"verified_menu" => $ob->parent(),
+					"lang_id" => array(),
+				));
+			}
+			$manager = reset($ol->arr());
+			if(is_object($manager) && $this->can("view" , $manager->id()))
+			{
+				$admins = $manager->prop("admins");
+				if(sizeof(array_intersect($admins , array_keys(aw_global_get("gidlist_pri_oid")))))
+				{
+					$is_admin = 1;
+				}
+			}
+			
+			if(!(aw_global_get("uid") == $ob->createdby() || substr_count($ob->prop("authorized_codes"), $code) || $is_admin))
+			{
+				return "";
+			}
 		}
 		else
 		{
@@ -799,7 +833,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				$file = obj($o->prop($var));
 				if($var == "reproduction")
 				{
-					$data[$var."_value"] = $this->get_right_size_image($file->id());
+					$data[$var."_value"] = str_replace("https" , "http" , $this->get_right_size_image($file->id()));
 				}elseif($var == "warrant")
 				{
 			/*		$content = $this->get_ddoc($arr["oid"]);
@@ -1406,12 +1440,12 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		}
 		if($sz[0] > 200)
 		{
-			$sz[1] = $sz[1]/($sz[0]/200);
+			$sz[1] = ($sz[1]/($sz[0]/200)) % 201;
 			$sz[0] = 200;
 		}
 		if($sz[1] > 200)
 		{
-			$sz[0] = $sz[0]/($sz[1]/200);
+			$sz[0] = ($sz[0]/($sz[1]/200)) % 201;
 			$sz[1] = 200;
 		}
 		$ret =  $image_inst->make_img_tag_wl($oid, "", "" , array(
@@ -1767,13 +1801,17 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 	**/
 	function pdf($arr)
 	{
+		extract($arr);
 //		header("Content-type: application/pdf");
 		$conv = get_instance("core/converters/html2pdf");
-		extract($arr);
+		ob_start();
+		print $this->show(array(
+			"id" => $id,
+		));
+		$content = ob_get_contents();
+		ob_end_clean();
 		die($conv->gen_pdf(array(
-			"source" => $this->show (array (
-				"id" => $id,
-			)),
+			"source" => $content,
 			"filename" => "Kaubamärgitaotlus",
 		)));
 	}

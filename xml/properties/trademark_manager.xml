@@ -41,6 +41,17 @@
             <caption>Kaubam&amp;amp;auml;rgitaotluste lisamine</caption>
       </property>
       <property>
+            <name>admins</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADMIN</reltype>
+            <multiple>1</multiple>
+            <caption>Halduskeskkonna administraatorid</caption>
+      </property>
+      <property>
             <name>objects_tb</name>
             <table>objects</table>
             <group>applications</group>
@@ -189,6 +200,11 @@
                   <value>4</value>
                   <caption>Kaubam&amp;amp;auml;rgitaotluste lisamine</caption>
             </ADD>
+            <ADMIN>
+                  <clid>CL_GROUP</clid>
+                  <value>5</value>
+                  <caption>Adminn</caption>
+            </ADMIN>
       </reltypes>
       <layout>
             <objects_lay>

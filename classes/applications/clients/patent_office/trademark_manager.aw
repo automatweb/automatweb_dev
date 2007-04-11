@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.27 2007/04/11 15:05:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.28 2007/04/11 16:44:03 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -21,6 +21,9 @@
 
 	@property trademark_add type=relpicker reltype=RELTYPE_ADD
 	@caption Kaubam&auml;rgitaotluste lisamine
+
+	@property admins type=relpicker reltype=RELTYPE_ADMIN multiple=1
+	@caption Halduskeskkonna administraatorid
 
 
 #TAOTLUSED
@@ -76,6 +79,9 @@
 
 	@reltype ADD clid=CL_DOCUMENT value=4
 	@caption Kaubam&auml;rgitaotluste lisamine
+
+	@reltype ADMIN clid=CL_GROUP value=5
+	@caption Adminn
 
 */
 
