@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.76 2007/04/11 16:44:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.77 2007/04/12 22:42:48 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -2666,7 +2666,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			$address->set_prop("riik" , $address_inst->get_country_by_code($val["country_code"], $applicant->id()));
 			if($val["city"])
 			{
-				$citys = new object_list(array("lang_id" => 1, "class_id" => CL_CRM_CITY, "name" => $val["city"]));
+				$citys = new object_list(array("lang_id" => 1, "class_id" => CL_CRM_CITY, "name" => $val["city"] , "parent" => $applicant->id()));
 				if(!is_object($city = reset($citys->arr())))
 				{
 					$city = new object();
