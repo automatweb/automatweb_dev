@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.69 2007/04/12 11:17:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.70 2007/04/12 11:45:18 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1458,7 +1458,7 @@ class conference_planning extends class_base
 		$this->read_template("elements.tpl");
 
 		$views = aw_unserialize($cp->prop("help_views"));
-		$keys = array_keys(array_reverse($views, TRUE));
+		$keys = array_keys($views);
 		$act = $keys[($act-1)];
 		$view = &$views[$act];
 
@@ -1477,7 +1477,7 @@ class conference_planning extends class_base
 	{
 		$this->read_template("views.tpl");
 
-		$views = aw_unserialize($cp->prop("help_views"), true);
+		$views = aw_unserialize($cp->prop("help_views"));
 		$fid = reset(array_keys($views));
 		$lid = end(array_keys($views));
 		$keys = array_keys($views);
