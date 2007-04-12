@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.67 2007/04/12 07:20:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.68 2007/04/12 11:11:01 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -445,18 +445,313 @@ class conference_planning extends class_base
 				break;
 			case "views_tb":
 				$tb = &$prop["vcl_inst"];
-				$tb->add_button(array(
-					"name" => "new",
-					"tooltip" => t("Vaade"),
-					"img" => "new.gif",
+				$isv = strlen($view_no = $arr["request"]["view_no"]);
+				$ise = strlen($element = $arr["request"]["element"]);
+				$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+				
+				// start add submenu
+				$tb->add_menu_button(array(
+					"name" => "add",
+					"tooltip" => t("Lisa"),
+				));
+				// add view
+				$tb->add_menu_item(array(
+					"parent" => "add",
+					"text" => t("Vaade"),
 					"action" => "add_view",
 				));
+				
+				// add element to active view
+				if($isv) // a view is selected
+				{
+					$to_view = sprintf(t("Vaatesse '%s'"), "<b>".$views[$view_no]["trans"][aw_global_get("ct_lang_lc")]."</b>");
+					
+					// add element to view
+					$tb->add_sub_menu(array(
+						"parent" => "add",
+						"name" => "add_elem",
+						"text" => t("Element"),
+					));
+					$tb->add_menu_item(array(
+						"parent" => "add_elem",
+						"text" => $to_view,
+						"link" => "#",
+					));
+					$tb->add_menu_separator(array(
+						"parent" => "add_elem",
+					));
+
+					$cfg = get_instance("cfg/cfgutils");
+					$list = $cfg->load_properties(array(
+						"clid" => CL_RFP
+					));
+					$list = array_filter($list, array($this, "__callback_filter_prplist"));
+					uasort($list, array($this, "__callback_sort_prplist"));
+					
+					foreach($list as $prp => $data)
+					{
+						$tb->add_menu_item(array(
+							"parent" => "add_elem",
+							"text" => ($data["caption"])?$data["caption"]:$prp,
+							"link" => $this->mk_my_orb("add_element_to_view", array(
+								"element" => $prp,
+								"view_no" => $view_no,
+								"planner" => $arr["obj_inst"]->id(),
+								"return_url" => get_ru(),
+							)),
+						));
+					}
+
+					// add separator to view
+					$tb->add_sub_menu(array(
+						"parent" => "add",
+						"name" => "add_separator",
+						"text" => t("Eraldaja"),
+					));
+					$tb->add_menu_item(array(
+						"parent" => "add_separator",
+						"text" => $to_view,
+						"link" => "#",
+					));
+					$tb->add_menu_separator(array(
+						"parent" => "add_separator",
+					));
+
+					// add textrow to view
+					$tb->add_sub_menu(array(
+						"parent" => "add",
+						"name" => "add_textrow",
+						"text" => t("Tekstirida"),
+					));
+					$tb->add_menu_item(array(
+						"parent" => "add_textrow",
+						"text" => $to_view,
+						"link" => "#",
+					));
+					$tb->add_menu_separator(array(
+						"parent" => "add_textrow",
+					));
+
+					// loop over elements ad add those to separator & textrow submenus
+					foreach($views[$view_no]["elements"] as $el_id => $e)
+					{
+						$name = strlen($_t = $e["trans"][aw_global_get("ct_lang_lc")])?$_t:$list[$e["name"]]["caption"];
+						$name = ($e["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
+						$name = ($e["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
+						$tb->add_menu_item(array(
+							"parent" => "add_separator",
+							"text" => $name,
+							"link" => $this->mk_my_orb("add_separator_to_view", array(
+								"element" => $el_id,
+								"view_no" => $view_no,
+								"planner" => $arr["obj_inst"]->id(),
+								"type" => TYPE_SEPARATOR,
+								"return_url" => get_ru(),
+							)),
+						));
+						$tb->add_menu_item(array(
+							"parent" => "add_textrow",
+							"text" => $name,
+							"link" => $this->mk_my_orb("add_separator_to_view", array(
+								"element" => $el_id,
+								"view_no" => $view_no,
+								"planner" => $arr["obj_inst"]->id(),
+								"type" => TYPE_TEXT,
+								"return_url" => get_ru(),
+							)),
+						));
+					}
+				}
+				// add submenu ends
+
+				// save page
 				$tb->add_button(array(
 					"name" => "save",
 					"tooltip" => t("Salvesta"),
 					"img" => "save.gif",
 					"action" => "",
 				));
+
+
+
+				// start move submenu
+				if($isv)
+				{
+					$tb->add_menu_button(array(
+						"name" => "move",
+						"tooltip" => t("Liiguta"),
+						"img" => "refresh.gif",
+					));
+					// move view
+					$tb->add_sub_menu(array(
+						"parent" => "move",
+						"name" => "move_view",
+						"text" => sprintf(t("Vaade '%s'"), $views[$view_no]["trans"][aw_global_get("ct_lang_lc")]),
+					));
+					$tb->add_menu_item(array(
+						"parent" => "move_view",
+						"text" => "<b>".t("Vaate ette")."</b>",
+						"link" => "#",
+					));
+					$tb->add_menu_separator(array(
+						"parent" => "move_view",
+					));
+
+
+					foreach($views as $vid => $v)
+					{
+						$name = $v["trans"][aw_global_get("ct_lang_lc")];
+						if($vid == $view_no)
+						{
+							$name = "<u>".$name."</u>";
+							$link = "#";
+						}
+						else
+						{
+							$link = $this->mk_my_orb("move_view", array(
+								"view_no" => $view_no,
+								"planner" => $arr["obj_inst"]->id(),
+								"move_to" => $vid,
+								"return_url" => get_ru(),
+							));
+						}
+
+						$tb->add_menu_item(array(
+							"parent" => "move_view",
+							"text" => $name,
+							"url" => $link,
+						));
+					}
+					$tb->add_menu_separator(array(
+						"parent" => "move_view",
+					));
+					$tb->add_menu_item(array(
+						"parent" => "move_view",
+						"text" => "<b>".t("Viimaseks")."</b>",
+						"url" => $this->mk_my_orb("move_view", array(
+								"view_no" => $view_no,
+								"planner" => $arr["obj_inst"]->id(),
+								"move_to" => "-1",
+								"return_url" => get_ru(),
+							)),
+					));
+
+					// move element
+					if($ise)
+					{
+						$tb->add_sub_menu(array(
+							"parent" => "move",
+							"name" => "move_element",
+							"text" => sprintf(t("Element '%s'"), $views[$view_no]["elements"][$element]["trans"][aw_global_get("ct_lang_lc")]),
+						));
+						$tb->add_menu_item(array(
+							"parent" => "move_element",
+							"text" => "<b>".t("Elemendi ette")."</b>",
+							"link" => "#",
+						));
+						$tb->add_menu_separator(array(
+							"parent" => "move_element",
+						));
+						foreach($views[$view_no]["elements"] as $eid => $e)
+						{
+						
+							$self = ($eid == $element);
+							$name = $e["trans"][aw_global_get("ct_lang_lc")];
+							if($self)
+							{
+								$name = "<u>".$name."</u>";
+								$link = "#";
+							}
+							else
+							{
+								$link = $this->mk_my_orb("move_element_in_view", array(
+									"element" => $element,
+									"move_to" => $eid,
+									"view_no" => $view_no,
+									"planner" => $arr["obj_inst"]->id(),
+									"return_url" => get_ru(),
+								));
+							}
+							$tb->add_menu_item(array(
+								"parent" => "move_element",
+								"text" => $name,
+								"link" => $link,
+							));
+						}
+						$tb->add_menu_separator(array(
+							"parent" => "move_element",
+						));
+
+						$tb->add_menu_item(array(
+							"parent" => "move_element",
+							"text" => "<b>".t("Viimaseks")."</b>",
+							"link" => $this->mk_my_orb("move_element_in_view", array(
+								"element" => $element,
+								"move_to" => "-1",
+								"view_no" => $view_no,
+								"planner" => $arr["obj_inst"]->id(),
+								"return_url" => get_ru(),
+							)),
+						));
+					}
+				}
+				// move submenu ends
+
+				// start remove submenu
+				$tb->add_menu_button(array(
+					"name" => "remove",
+					"tooltip" => t("Kustuta"),
+					"img" => "delete.gif",
+				));
+				$tb->add_sub_menu(array(
+					"parent" => "remove",
+					"name" => "remove_view",
+					"text" => t("Vaade"),
+					"link" => "#",
+				));
+				foreach($views as $vid => $view)
+				{
+					$tb->add_menu_item(array(
+						"parent" => "remove_view",
+						"text" => $view["trans"][aw_global_get("ct_lang_lc")],
+						"link" => $this->mk_my_orb("remove_view", array(
+								"view_no" => $vid,
+								"planner" => $arr["obj_inst"]->id(),
+								"return_url" => get_ru(),						
+						)),
+					));
+				}
+				if($isv)
+				{
+					$tb->add_sub_menu(array(
+						"parent" => "remove",
+						"name" => "remove_element",
+						"text" => t("Element"),
+					));
+					$tb->add_menu_item(array(
+						"parent" => "remove_element",
+						"text" => sprintf(t("Vaatest '%s'"), "<b>".$views[$view_no]["trans"][aw_global_get("ct_lang_lc")]."</b>"),
+						"url" => "#",
+					));
+					$tb->add_menu_separator(array(
+						"parent" => "remove_element",
+					));
+					foreach($views[$view_no]["elements"] as $eid => $e)
+					{
+						$tb->add_menu_item(array(
+							"parent" => "remove_element",
+							"text" => $e["trans"][aw_global_get("ct_lang_lc")],
+							"link" => $this->mk_my_orb("remove_element_from_view", array(
+								"element" => $eid,
+								"view_no" => $view_no,
+								"planner" => $arr["obj_inst"]->id(),
+								"return_url" => get_ru(),
+							)),
+						));
+					}
+				}
+				// remove submenu ends
+
 				$prop["value"] = $tb->get_toolbar();
 				break;
 			case "trans":
@@ -502,7 +797,6 @@ class conference_planning extends class_base
 					"tree_id" => "views_tree",
 					"tree_type" => TREE_DHTML,
 				));
-				$popup = get_instance("vcl/popup_menu");
 				
 				$cfg = get_instance("cfg/cfgutils");
 				$list = $cfg->load_properties(array(
@@ -510,166 +804,30 @@ class conference_planning extends class_base
 				));
 				$list = array_filter($list, array($this, "__callback_filter_prplist"));
 				uasort($list, array($this, "__callback_sort_prplist"));
-				foreach(array_reverse(aw_unserialize($arr["obj_inst"]->prop("help_views")), TRUE) as $id => $view)
+				foreach(aw_unserialize($arr["obj_inst"]->prop("help_views")) as $id => $view)
 				{
-					$popup->begin_menu("pm_view_".$id);
-					$popup->add_sub_menu(array(
-						"name" => "add_view_".$id,
-						"text" => t("Lisa uus element"),
-					));
-					foreach($list as $prp => $data)
-					{
-						$popup->add_item(array(
-							"parent" => "add_view_".$id,
-							"text" => ($data["caption"])?$data["caption"]:$prp,
-							"link" => $this->mk_my_orb("add_element_to_view", array(
-								"element" => $prp,
-								"view_no" => $id,
-								"planner" => $arr["obj_inst"]->id(),
-								"return_url" => get_ru(),
-							)),
-						));
-					}
-					// add separator submenu to popupmenu
-					$popup->add_sub_menu(array(
-						"name" => "add_sep_".$id,
-						"text" => t("Lisa uus eraldaja"),
-					));
-
-					foreach($view["elements"] as $el_id => $element)
-					{
-						$name = strlen($_t = $element["trans"][aw_global_get("ct_lang_lc")])?$_t:$list[$element["name"]]["caption"];
-						$name = ($element["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
-						$name = ($element["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
-						$popup->add_item(array(
-							"parent" => "add_sep_".$id,
-							"text" => $name,
-							"link" => $this->mk_my_orb("add_separator_to_view", array(
-								"element" => $el_id,
-								"view_no" => $id,
-								"planner" => $arr["obj_inst"]->id(),
-								"type" => TYPE_SEPARATOR,
-								"return_url" => get_ru(),
-							)),
-						));
-					}
-
-					// add text submenu to popupmenu
-					$popup->add_sub_menu(array(
-						"name" => "add_txt_".$id,
-						"text" => t("Lisa uus tekstieraldaja"),
-					));
-
-					foreach($view["elements"] as $el_id => $element)
-					{
-						$name = strlen($_t = $element["trans"][aw_global_get("ct_lang_lc")])?$_t:$list[$element["name"]]["caption"];
-						$name = ($element["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
-						$name = ($element["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
-						$popup->add_item(array(
-							"parent" => "add_txt_".$id,
-							"text" => $name,
-							"link" => $this->mk_my_orb("add_separator_to_view", array(
-								"element" => $el_id,
-								"view_no" => $id,
-								"planner" => $arr["obj_inst"]->id(),
-								"type" => TYPE_TEXT,
-								"return_url" => get_ru(),
-							)),
-						));
-					}
-					// add remove view to popup menu
-					$popup->add_item(array(
-						"text" => t("Kustuta vaade"),
-						"link" => $this->mk_my_orb("remove_view", array(
-								"view_no" => $id,
-								"planner" => $arr["obj_inst"]->id(),
-								"return_url" => get_ru(),						
-						)),
-					));
 
 					// add view node to tree
 					$request = $arr["request"];
 					unset($request["element"]);
 					$request["view_no"] = $id;
 					$name = $view["trans"][aw_global_get("ct_lang_lc")];
-					$name = ($arr["request"]["view_no"] == $id && empty($arr["request"]["element"]))?"<b>".$name."</b>":$name;
+					$name = ($arr["request"]["view_no"] == $id && strlen($arr["request"]["view_no"]) && empty($arr["request"]["element"]))?"<b>".$name."</b>":$name;
 					$t->add_item(0, array(
 						"id" => "view_".$id,
-						"name" => $name."&nbsp;".$popup->get_menu(),
+						"name" => $name,
 						"url" => $this->mk_my_orb("change", $request),
 					));
 					// add element nodes to tree
 					foreach($view["elements"] as $el_id => $element)
 					{
-						$popup->begin_menu("pm_element_".$id."_".$el_id);
-						if($element != reset($view["elements"]))
-						{
-							$popup->add_item(array(
-								"text" => t("Liiguta &uuml;les"),
-								"link" => $this->mk_my_orb("move_element_in_view", array(
-									"element" => $el_id,
-									"view_no" => $id,
-									"planner" => $arr["obj_inst"]->id(),
-									"direction" => 1,
-									"return_url" => get_ru(),
-								)),
-							));
-						}
-						if($element != end($view["elements"]))
-						{
-							$popup->add_item(array(
-								"text" => t("Liiguta alla"),
-								"link" => $this->mk_my_orb("move_element_in_view", array(
-									"element" => $el_id,
-									"view_no" => $id,
-									"planner" => $arr["obj_inst"]->id(),
-									"return_url" => get_ru(),
-								)),
-							));
-						}
-						// liigutamine teatud elemendi juurde
-						$popup->add_sub_menu(array(
-							"name" => "move_element_to_".$id."_".$el_id,
-							"text" => t("Liiguta elemendi j&auml;rele"),
-						));
-						foreach($view["elements"] as $s1_eid => $s1_el)
-						{
-							$name = strlen($_t = $s1_el["trans"][aw_global_get("ct_lang_lc")])?$_t:$list[$element["name"]]["caption"];
-							$name = ($s1_el["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
-							$name = ($s1_el["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
-							$popup->add_item(array(
-								"parent" => "move_element_to_".$id."_".$el_id,
-								"text" => $name,
-								"link" => $this->mk_my_orb("move_element_in_view", array(
-									"element" => $el_id,
-									"move_to" => $s1_eid,
-									"view_no" => $id,
-									"planner" => $arr["obj_inst"]->id(),
-									"return_url" => get_ru(),
-								)),
-							));
-						}
-
-
-
-						$popup->add_item(array(
-							"text" => t("Kustuta element"),
-							"link" => $this->mk_my_orb("remove_element_from_view", array(
-								"element" => $el_id,
-								"view_no" => $id,
-								"planner" => $arr["obj_inst"]->id(),
-								"return_url" => get_ru(),
-							)),
-
-						));
-
 						$request = $arr["request"];
 						$request["view_no"] = $id;
 						$request["element"] = $el_id;
 
 						$data = $this->get_form_elements_data($element["name"]);
 						$name = $element["trans"][aw_global_get("ct_lang_lc")]?$element["trans"][aw_global_get("ct_lang_lc")]:($list[$element["name"]]?$list[$element["name"]]["caption"]:$data["caption"]);
-						$name = ($arr["request"]["view_no"] == $id && $arr["request"]["element"] == $el_id)?"<b>".$name."</b>":$name;
+						$name = ($arr["request"]["view_no"] == $id && strlen($arr["request"]["view_no"]) && $arr["request"]["element"] == $el_id && strlen($arr["request"]["element"]))?"<b>".$name."</b>":$name;
 						if($element["type"] == TYPE_SEPARATOR)
 						{
 							$iconurl = aw_ini_get("baseurl")."/automatweb/images/icons/rte_indent.gif";
@@ -680,58 +838,14 @@ class conference_planning extends class_base
 						}
 						$t->add_item("view_".$id, array(
 							"id" => "view_".$id."_elem_".$el_id,
-							"name" => $name."&nbsp;".$popup->get_menu(),
+							"name" => $name,
 							"url" => $this->mk_my_orb("change", $request),
 							"iconurl" => $iconurl,
 						));
 					}
 				}
 				break;
-			case "views":
-				$t = &$prop["vcl_inst"];
-				$t->define_field(array(
-					"name" => "jrk",
-					"caption" => t("Jrk"),
-					"width" => 5,
-				));
-				$t->define_field(array(
-					"name" => "name",
-					"caption" => t("Nimi"),
-				));
-				$t->define_field(array(
-					"name" => "what",
-					"caption" => t("misiganes"),
-				));
 
-				$t->define_data(array(
-					"jrk" => html::textbox(array(
-						"name" => "new_view[jrk]",
-						"size" => 5,
-					)),
-					"name" => html::textbox(array(
-						"name" => "new_view[name]",
-					)),
-					"what" => "",
-				));
-				//$arr["obj_inst"]->set_prop("help_views", "");
-				//$arr["obj_inst"]->save();
-				foreach(aw_unserialize($arr["obj_inst"]->prop("help_views")) as $k => $data)
-				{
-					$t->define_data(array(
-						"jrk" => html::textbox(array(
-							"name" => "views[".$k."][jrk]",
-							"value" => $data["jrk"],
-							"size" => 5,
-						)),
-						"name" => html::textbox(array(
-							"name" => "views[".$k."][name]",
-							"value" => $data["name"],
-						)),
-					));
-				}
-
-
-				break;
 			case "mails":
 				classload("vcl/table");
 				$vcl = new vcl_table();
@@ -826,12 +940,6 @@ class conference_planning extends class_base
 		return $retval;
 	}	
 
-
-	function __callback_sort($a, $b)
-	{
-		return $b["jrk"] - $a["jrk"];
-	}
-
 	function __callback_filter_prplist($a)
 	{
 		return substr($a["name"],0,5) == "data_";
@@ -883,8 +991,7 @@ class conference_planning extends class_base
 		@param element required type=string
 		@param view_no required type=int
 		@param planner required type=int
-		@param direction optional type=int
-		@param move_to optional type=int
+		@param move_to required type=int
 		@param return_url optional type=string
 	**/
 	function move_element_in_view($arr)
@@ -894,31 +1001,23 @@ class conference_planning extends class_base
 			$obj = obj($arr["planner"]);
 			$views = aw_unserialize($obj->prop("help_views"));
 			$els = &$views[$arr["view_no"]]["elements"];
-			if(strlen($arr["move_to"]))
+
+			foreach($els as $elem_id => $elem)
 			{
-				foreach($els as $elem_id => $elem)
+				if($arr["move_to"] > 0 && $elem_id == $arr["move_to"] )
 				{
-					if($elem_id != $arr["element"])
-					{
-						$new[] = $elem;
-					}
-					
-					if($elem_id == $arr["move_to"])
-					{
-						$new[] = $els[$arr["element"]];
-					}
+					$new[] = $els[$arr["element"]];
 				}
-				$els = $new;
+				if($elem_id != $arr["element"])
+				{
+					$new[] = $elem;
+				}
 			}
-			else
+			if($arr["move_to"] < 0)
 			{
-				$a = &$els[$arr["element"]];
-				$switch = $arr["direction"]?--$arr["element"]:++$arr["element"];
-				$b = &$els[$switch];
-				$t = $a;
-				$a = $b;
-				$b = $t;
+				$new[] = $els[$arr["element"]];
 			}
+			$els = $new;
 			$els = array_values($els);
 			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
 			$obj->save();
@@ -988,6 +1087,41 @@ class conference_planning extends class_base
 	}
 
 	/**
+		@attrib name=move_view params=name
+		@param view_no required type=int
+		@param move_to required type=int
+		@param planner required type=int
+		@param return_url optional type=string
+	**/
+	function move_view($arr)
+	{
+		if($this->can("view", $arr["planner"]))
+		{
+			$obj = obj($arr["planner"]);
+			$views = aw_unserialize($obj->prop("help_views"));
+			
+			foreach($views as $vid => $v)
+			{
+				if($arr["move_to"] >= 0 && $arr["move_to"] == $vid)
+				{
+					$new[] = $views[$arr["view_no"]];
+				}
+				if($arr["view_no"] != $vid)
+				{
+					$new[] = $v;
+				}
+			}
+			if($arr["move_to"] < 0)
+			{
+				$new[] = $views[$arr["view_no"]];
+			}
+			$obj->set_prop("help_views", aw_serialize($new, SERIALIZE_NATIVE));
+			$obj->save();
+		}
+		return $arr["return_url"];
+	}
+
+	/**
 		@attrib name=remove_view params=name
 		@param view_no required type=int
 		@param planner required type=int
@@ -1023,27 +1157,6 @@ class conference_planning extends class_base
 
 	function callback_pre_save($arr)
 	{
-		if(is_array($arr["request"]["views"]) && $arr["request"]["group"] == "webform_sub")
-		{
-			$cv = is_array($_t = aw_unserialize($arr["obj_inst"]->prop("help_views")))?$_t:array();
-			foreach($arr["request"]["views"] as $k => $view)
-			{
-				$cv[$k] = array_merge($cv[$k], $view);
-			}
-			uasort(&$cv, array($this, "__callback_sort"));
-			$arr["obj_inst"]->set_prop("help_views", aw_serialize($cv, SERIALIZE_NATIVE));
-			$arr["obj_inst"]->save();
-		}
-		if(strlen($arr["request"]["new_view"]["name"]) && substr($arr["request"]["group"], 0, 7) == "webform")
-		{
-			$cv = is_array($_t = aw_unserialize($arr["obj_inst"]->prop("help_views")))?$_t:array();
-			$key = (is_array($cv) && count($cv))?(max(array_keys($cv)) + 1):1;
-			$cv[$key] = $arr["request"]["new_view"];
-			uasort(&$cv, array($this, "__callback_sort"));
-			$arr["obj_inst"]->set_prop("help_views", aw_serialize($cv, SERIALIZE_NATIVE));
-			$arr["obj_inst"]->save();
-		}
-
 		if(is_array($arr["request"]["loc"]) && count($arr["request"]["loc"]))
 		{
 			foreach($arr["request"]["loc"] as $loc =>$email)
