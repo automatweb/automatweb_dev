@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.66 2007/04/11 15:07:12 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.67 2007/04/12 07:20:23 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -591,7 +591,8 @@ class conference_planning extends class_base
 					$request = $arr["request"];
 					unset($request["element"]);
 					$request["view_no"] = $id;
-					$name = ($arr["request"]["view_no"] == $id && empty($arr["request"]["element"]))?"<b>".$view["name"]."</b>":$view["name"];
+					$name = $view["trans"][aw_global_get("ct_lang_lc")];
+					$name = ($arr["request"]["view_no"] == $id && empty($arr["request"]["element"]))?"<b>".$name."</b>":$name;
 					$t->add_item(0, array(
 						"id" => "view_".$id,
 						"name" => $name."&nbsp;".$popup->get_menu(),
@@ -934,7 +935,9 @@ class conference_planning extends class_base
 		{
 			$obj = obj($arr["id"]);
 			$views = aw_unserialize($obj->prop("help_views"));
-			$views[]["elements"] = array();
+			$view = &$views[]; //$views[]["elements"] = array();
+			$view["elements"] = array();
+			$view["trans"][aw_global_get("ct_lang_lc")] = t("Nimetu vaade");
 			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
 			$obj->save();
 		}
@@ -1219,11 +1222,12 @@ class conference_planning extends class_base
 		$this->read_template("move.tpl");
 		$obj = obj($cp);
 		$viewcount = count(aw_unserialize($obj->prop("help_views")));
-		$html = "";
-		$html .= ($view > 1)?$this->parse("BACK"):"";
-		$html .= ($view > 1 && $view < $viewcount)?$this->parse("SEPARATOR"):"";
-		$html .= ($view < $viewcount)?$this->parse("FORWARD"):"";
-		return $html;
+		//$html .= ($view > 1 && $view < $viewcount)?$this->parse("SEPARATOR"):"";
+		$this->vars(array(
+			"BACK" => ($view > 1)?$this->parse("BACK"):"",
+			"FORWARD" => ($view < $viewcount)?$this->parse("FORWARD"):"",
+		));
+		return $this->parse();
 	}
 
 	function parse_form_element($el, $view_no, $element, $views, $value)
@@ -1347,7 +1351,7 @@ class conference_planning extends class_base
 
 		$stored_data = $this->get_stored_data($cp->id());
 		
-		$ret = "<table class=\"curview\">";
+		$ret = "<table class=\"form\">";
 		foreach($view["elements"] as $elem_id => $el)
 		{
 			$ret .= $this->parse_form_element(&$view["elements"][$elem_id], $act, $elem_id, &$views, $stored_data[$view["elements"][$elem_id]["name"]]);
@@ -1375,7 +1379,7 @@ class conference_planning extends class_base
 			{
 				$this->vars(array(
 					"step_nr" => $i,
-					"caption" => $views[$key]["name"],
+					"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
 					"url" => aw_ini_get("baseurl")."/".$doc."?view_no=".$i,
 				));
 				$yah[] = $this->parse($act."YAH_FIRST_BTN".$href);
@@ -1389,24 +1393,24 @@ class conference_planning extends class_base
 				}
 				$this->vars(array(
 					"step_nr" => $i,
-					"caption" => $views[$key]["name"],
+					"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
 					"url" => aw_ini_get("baseurl")."/".$doc."?view_no=".$i,
 				));
 				$yah[] = $this->parse($act."YAH".$last."_BTN".$href);
 			}
-			elseif($no_i == (count($views)))
+			elseif($no_i == (count($views) - 1))
 			{
 				$this->vars(array(
 					"step_nr" => $i,
-					"caption" => $views[$key]["name"],
+					"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
 				));
 				$yah[] = $this->parse("YAH_LAST_BTN_AFTER");
 			}
-			elseif($no_i != ($i))
+			elseif($no_i != ($i - 1))
 			{
 				$this->vars(array(
 					"step_nr" => $i,
-					"caption" => strlen($act)?$views[$key]["name"]:"",
+					"caption" => strlen($act)?$views[$key]["trans"][aw_global_get("ct_lang_lc")]:"",
 				));
 				$yah[] = $this->parse($act."YAH_LAST_BTN".$href);
 			}
@@ -1414,7 +1418,7 @@ class conference_planning extends class_base
 			{
 				$this->vars(array(
 					"step_nr" => ($i+1),
-					"caption" => $views[$keys[$i+1]]["name"],
+					"caption" => $views[$keys[$i+1]]["trans"][aw_global_get("ct_lang_lc")],
 				));
 				$yah[] = $this->parse("YAH_BTN_AFTER");
 			}
