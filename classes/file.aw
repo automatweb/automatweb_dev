@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.152 2007/04/09 14:35:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.153 2007/04/12 07:44:06 kristo Exp $
 /*
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
@@ -1440,7 +1440,7 @@ class file extends class_base
 		$o = obj($arr["id"]);
 		$i = $o->instance();
 		$s = $i->parse_alias(array("alias" => array("target" => $arr["id"])));
-		die($s);
+		die(str_replace(aw_ini_get("baseurl"), "", $s));
 	}
 
 	/**
