@@ -19,8 +19,7 @@
 					<required name="element" type="string" />
 					<required name="view_no" type="int" />
 					<required name="planner" type="int" />
-					<optional name="direction" type="int" />
-					<optional name="move_to" type="int" />
+					<required name="move_to" type="int" />
 					<optional name="return_url" type="string" />
 				</arguments>
 			</function>
@@ -49,6 +48,17 @@
 				<arguments>
 					<required name="element" type="int" />
 					<required name="view_no" type="int" />
+					<required name="planner" type="int" />
+					<optional name="return_url" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="move_view">
+			<function name="move_view">
+				<arguments>
+					<required name="view_no" type="int" />
+					<required name="move_to" type="int" />
 					<required name="planner" type="int" />
 					<optional name="return_url" type="string" />
 				</arguments>
