@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.27 2007/04/04 13:43:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.28 2007/04/13 10:33:26 markop Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -879,9 +879,11 @@ class crm_address extends class_base
 			Country code
 		@param parent optional type=oid
 			if set, makes a new country object if no results
+		@param use_ex optional type=bool
+			uses existing object with the same name
+		@comment return country object id with the given county code. If use_ex is set, searches everywhere
 	**/
-	
-	function get_country_by_code($code, $parent)
+	function get_country_by_code($code, $parent,$use_ex = null)
 	{
 		$countrys = $this->get_country_list();
 		$name = $countrys[$code];
@@ -889,7 +891,13 @@ class crm_address extends class_base
 		{
 			return null;
 		}
-		$o_l = new object_list(array("lang_id" => array(), "class_id" => CL_CRM_COUNTRY, "name" => $name));
+		
+		$filter = array("lang_id" => array(), "class_id" => CL_CRM_COUNTRY, "name" => $name);
+		if(!$use_ex)
+		{
+			$filter["parent"] = $parent;
+		}
+		$o_l = new object_list($filter);
 		if(!sizeof($o_l->arr()))
 		{
 			if(!is_oid($parent))
