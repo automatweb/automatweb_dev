@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.59 2007/04/09 11:27:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.60 2007/04/13 11:02:18 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1299,11 +1299,22 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 		$u = get_instance(CL_USER);
 		$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
 		$mp = $u->get_person_for_uid($arr["obj_inst"]->modifiedby());
+		if($this->can("view" , USER::get_company_for_person($p)))
+		{
+			$co = obj(USER::get_company_for_person($p));
+			if($co->name()) $c = "(".html::obj_change_url($co).")";
+		}
+		if($this->can("view" , USER::get_company_for_person($mp)))
+		{
+			$co = obj(USER::get_company_for_person($mp));
+			if($co->name()) $mc = "(".html::obj_change_url($co).")";
+		}
+
 		$arr["prop"]["value"] = sprintf(
-			t("Loomine: %s / %s.<br>Muutmine: %s / %s"),
-			html::obj_change_url($p),
+			t("Loomine: %s %s / %s.<br>Muutmine: %s %s / %s"),
+			html::obj_change_url($p),$c,
 			date("d.m.Y H:i", $arr["obj_inst"]->created()),
-			html::obj_change_url($mp),
+			html::obj_change_url($mp),$mc,
 			date("d.m.Y H:i", $arr["obj_inst"]->modified())
 		);
 	}
