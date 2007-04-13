@@ -84,6 +84,13 @@
 			</function>
 		</action>
 
+		<action name="add_project_popup" all_args="1">
+			<function name="add_project_popup">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_rels">
 			<function name="delete_rels">
 				<arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.168 2007/04/02 11:25:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.169 2007/04/13 14:11:08 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -3254,15 +3254,17 @@ class task extends class_base
 			"text" => t("Tellija"),
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
 		));
+		
 		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1), "popup_search");
-		$tb->add_menu_item(array(
+		$tb->add_sub_menu(array(
 			"parent" => "search",
 			"text" => t("Projekt"),
 			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+			"name" => "project_search",
 		));
+		
 		$cur = get_current_company();
 		$s = array("co" => array($cur->id() => $cur->id()));
-
 		if (is_oid($arr["obj_inst"]->id()))
 		{
 			foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
@@ -3282,6 +3284,51 @@ class task extends class_base
 			"img" => "delete.gif",
 			"action" => "delete_rels"
 		));
+	
+		$url = $this->mk_my_orb("do_search", array("pn" => "project_h", "clid" => CL_PROJECT, "multiple" => 1), "popup_search");
+		$tb->add_menu_item(array(
+			"parent" => "project_search",
+			"text" => t("Otsi"),
+			"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+		));
+		
+		$customers = array("1");
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		{
+			$customers[] = $c->prop("to");
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"lang_id" => array(),
+			"CL_PROJECT.RELTYPE_ORDERER.id" => $customers,
+			
+		));
+
+		foreach($ol->arr() as $project)
+		{
+			$url = $this->mk_my_orb("add_project_popup", array("project" => $project->id(), "task" => $arr["obj_inst"]->id()), "task");
+			$tb->add_menu_item(array(
+				"parent" => "project_search",
+				"text" => $project->name(),//t("Projekt"),
+				"link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)",
+			));
+		}
+	}
+	
+	/**
+		@attrib name=add_project_popup all_args=1
+	**/
+	function add_project_popup($arr)
+	{
+		extract($arr);
+		$task = obj($task);
+		$task->connect(array("to" => $project, "reltype" => 4));
+		die('<script type="text/javascript">
+			window.opener.location.reload();
+			window.close();
+			</script>'
+		);
+		//die($arr["error"]."\n<br>"."<input type=button value='OK' onClick='javascript:window.close();'>");
 	}
 
 	function _init_co_table(&$t)
