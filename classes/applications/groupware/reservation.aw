@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.60 2007/04/13 11:02:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.61 2007/04/13 13:45:14 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1299,12 +1299,12 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 		$u = get_instance(CL_USER);
 		$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
 		$mp = $u->get_person_for_uid($arr["obj_inst"]->modifiedby());
-		if($this->can("view" , USER::get_company_for_person($p)))
+		if(is_oid($p->id()) && $this->can("view" , USER::get_company_for_person($p)))
 		{
 			$co = obj(USER::get_company_for_person($p));
 			if($co->name()) $c = "(".html::obj_change_url($co).")";
 		}
-		if($this->can("view" , USER::get_company_for_person($mp)))
+		if(is_oid($mp->id()) && $this->can("view" , USER::get_company_for_person($mp)))
 		{
 			$co = obj(USER::get_company_for_person($mp));
 			if($co->name()) $mc = "(".html::obj_change_url($co).")";
