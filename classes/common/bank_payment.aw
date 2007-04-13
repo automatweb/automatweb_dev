@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.48 2007/04/11 11:08:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.49 2007/04/13 09:53:58 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -22,9 +22,6 @@
 	@property private_key type=relpicker reltype=RELTYPE_KEY
 	@caption Privaatv&otilde;ti
 	
-	@property private_c_key type=relpicker reltype=RELTYPE_P_KEY
-	@caption krediitkaardi privaatv&otilde;ti
-	
 	@property bank_return_url type=textbox
 	@caption Url, kuhu tagasi tulla eduka makse puhul
 	
@@ -40,6 +37,14 @@
 	@property bank type=callback callback=callback_bank store=no no_caption=1
 
 @groupinfo log caption="Logi"
+
+@groupinfo test caption="Test"
+@default group=test submit=no
+
+	@property test_priv_key type=relpicker reltype=RELTYPE_P_KEY
+	@caption test privaatv&otilde;ti
+
+	@property bank_test type=callback callback=callback_bank_test store=no no_caption=1
 
 @default group=log
 	@property find_date_start type=date_select store=no
@@ -261,20 +266,23 @@ class bank_payment extends class_base
 			$file = $file_inst->get_file_by_id($payment->prop("private_key"));
 			$data["priv_key"] = $file["content"];
 		}
-		if($payment->prop("private_c_key") && $data["bank_id"] == "credit_card" && $data["test"])
-		{
-			$file_inst = get_instance(CL_FILE);
-			$file = $file_inst->get_file_by_id($payment->prop("private_c_key"));
-			$data["priv_key"] = $file["content"];
-		}
 		if($data["test"] &&  $this->test_link[$data["bank_id"]])
 		{
-			$fp = fopen($this->cfg["site_basedir"]."/pank/".$data["bank_id"]."_test_priv.pem", "r");
-			$file_data = fread($fp, 8192);
-			fclose($fp);
-			if($file_data)
+			if($payment->prop("test_priv_key"))
 			{
-				$data["priv_key"] = $file_data;
+				$file_inst = get_instance(CL_FILE);
+				$file = $file_inst->get_file_by_id($payment->prop("test_priv_key"));
+				$data["priv_key"] = $file["content"];
+			}
+			else
+			{
+				$fp = fopen($this->cfg["site_basedir"]."/pank/".$data["bank_id"]."_test_priv.pem", "r");
+				$file_data = fread($fp, 8192);
+				fclose($fp);
+				if($file_data)
+				{
+					$data["priv_key"] = $file_data;
+				}
 			}
 		}
 		if(!$data["return_url"])
@@ -411,7 +419,7 @@ class bank_payment extends class_base
 		{
 			if(is_array(unserialize($log)))
 			{
-				$val = unserialize($log);
+				$val = unserialize($log);//arr($val);
 				if($val["VK_SND_ID"])
 				{
 					$bank_id = $this->merchant_id[$val["VK_SND_ID"]];
@@ -442,12 +450,13 @@ class bank_payment extends class_base
 					if(array_key_exists($val[$this->ref[$bank_id]] ,  $done)) continue;
 					$done[$val[$this->ref[$bank_id]]] = $val[$this->ref[$bank_id]];
 				}
-				if($val["timestamp"])
-				{
- /*					if(aw_global_get("uid") == "struktuur"){arr($val);
+/*				 if(aw_global_get("uid") == "struktuur"){//arr($val);
  					$_SESSION["bank_return"]["data"] = $val;
  					arr($val["good"] = $this->check_response($val));
- 					}*/
+ 					arr($val["VK_MSG"]);
+ 				}
+*/				if($val["timestamp"])
+				{
 					$log_data[$val["timestamp"]]["payer"] = $val["VK_SND_NAME"];
 					$log_data[$val["timestamp"]]["ref"] = $val["VK_REF"];
 					$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
@@ -563,7 +572,14 @@ class bank_payment extends class_base
 					$prop["value"] = $search_data[$prop["name"]];
 				}
 				break;
-				
+			case "test_priv_key":
+				if(!$arr["obj_inst"]->prop("test"))
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case "bank_test":
+				break;
 			//-- get_property --//
 		};
 		return $retval;
@@ -635,7 +651,11 @@ class bank_payment extends class_base
 			case "bank":
 				$this->submit_meta($arr);
 				break;
-				
+			case "bank_test":
+				arr($arr);
+				$arr["request"]["meta"][$arr["request"]["meta"]["new_bank"]] = $arr["request"]["meta"]["new"];
+				$this->submit_meta($arr);
+				break;
 			case "find_name":
 			case "find_date_start":
 			case "find_date_end":
@@ -662,7 +682,7 @@ class bank_payment extends class_base
 		};
 	}
 	
-		//tekitab võimalike pankade ja propertyte nimekirja
+	//tekitab võimalike pankade ja propertyte nimekirja
 	function callback_bank($arr)
 	{
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
@@ -688,6 +708,49 @@ class bank_payment extends class_base
 		}
 		return $ret;
 	}
+	
+	//tegelt seda pole ikka vaja.. a äkki miski hetk läheb
+/*	
+	function callback_bank_test($arr)
+	{
+		$bank_payment = get_instance(CL_BANK_PAYMENT);
+		$meta = $arr["obj_inst"]->meta("bank_test");arr($meta);
+		foreach($bank_payment->banks as $key => $val)
+		{
+			if($meta[$key] || $this->test_link[$key])
+			{
+				$ret[] = array(
+					"name" => "meta[".$key."][use]",
+					"type" => "chechbox" ,
+					"ch_value" => 1 ,
+					"value" => $meta["key"],
+					"caption" => $val,
+				);
+
+				$ret[] = array(
+					"name" => "meta[".$key."][url]",
+					"type" => "textbox",
+					"value" => ($meta[$key]["url"]) ? $meta[$key]["url"] :$this->test_link[$key],
+					"caption" => t("Url , kuhu suunata"),
+				);
+			}
+		}
+		$ret[] = array(
+			"name" => "meta[new][url]",
+			"type" => "textbox",
+			"value" => "",
+			"caption" => "",
+		);
+		$ret[] = array(
+			"name" => "meta[new_bank]",
+			"type" => "select",
+			"caption" => "",
+			"options" => $bank_payment->banks,
+		);
+		
+		return $ret;
+	}
+	*/
 	
 	/**
 	@attrib api=1 params=name
@@ -761,6 +824,12 @@ class bank_payment extends class_base
 			if($bank_data[$arr["bank_id"]."_".$arr["cntr"]])
 			{
 				$arr["bank_id"] = $arr["bank_id"]."_".$arr["cntr"];
+			}
+			if(is_oid($arr["reference_nr"]) && $this->can("view" , $arr["reference_nr"]))
+			{
+				$ref_object = obj($arr["reference_nr"]);
+				$ref_object->set_meta("bank_cntr" , $arr["cntr"]);
+				$ref_object->save();
 			}
 /*			if($bank_data[$arr["bank_id"]."_".$_SESSION["ct_lang_lc"]]["sender_id"])
 			{
@@ -1228,6 +1297,7 @@ class bank_payment extends class_base
 	function credit_card($args)
 	{
 		extract($args);
+		
 		//test:
 		$action="$service";
 		$ver="$version";
@@ -1268,6 +1338,14 @@ class bank_payment extends class_base
 //			die();
 //		}
 		$link = $this->bank_link["credit_card"];
+		if($test)
+		{
+			$link = $this->test_link["credit_card"];
+		}
+		
+		if(aw_global_get("uid") == "struktuur")
+		{//arr($link); arr($priv_key); arr($VK_MAC);die();
+		}
 		$params = array(
 			"action"	=> $service,		//"gaf"
 			"ver"		=> $version,		//Protokolli versioon, Fikseeritud väärtus: 002
@@ -1448,6 +1526,7 @@ class bank_payment extends class_base
 		{
 			return $this->check_cc_response();
 		}
+		
 		$data = substr("000".strlen($VK_SERVICE),-3).$VK_SERVICE
 		.substr("000".strlen($VK_VERSION),-3).$VK_VERSION
 		.substr("000".strlen($VK_SND_ID),-3).$VK_SND_ID
@@ -1466,7 +1545,19 @@ class bank_payment extends class_base
 
 		$signature = base64_decode($VK_MAC);
 
-		$fp = fopen($this->cfg["site_basedir"]."/pank/".$_SESSION["bank_return"]["data"]["VK_SND_ID"]."_pub.pem", "r");
+		//väike häkk siis teiste riikide samade pankade jaoks
+		$id = substr($VK_REF ,0 , -1 );
+		if(is_oid($id) && $this->can("view" , $id))
+		{
+			$ref_object = obj($id);
+			$cntr = $ref_object->meta("bank_cntr");
+			if($cntr)
+			{
+				$VK_SND_ID.= "_".$cntr;
+			}
+		}
+
+		$fp = fopen($this->cfg["site_basedir"]."/pank/".$VK_SND_ID."_pub.pem", "r");
 		$cert = fread($fp, 8192);
 		fclose($fp);
 		

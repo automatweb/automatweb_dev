@@ -38,16 +38,6 @@
             <caption>Privaatv&amp;amp;otilde;ti</caption>
       </property>
       <property>
-            <name>private_c_key</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_P_KEY</reltype>
-            <caption>krediitkaardi privaatv&amp;amp;otilde;ti</caption>
-      </property>
-      <property>
             <name>bank_return_url</name>
             <table>objects</table>
             <field>meta</field>
@@ -83,6 +73,29 @@
             <submit>no</submit>
             <type>callback</type>
             <callback>callback_bank</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>test_priv_key</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>test</group>
+            <submit>no</submit>
+            <type>relpicker</type>
+            <reltype>RELTYPE_P_KEY</reltype>
+            <caption>test privaatv&amp;amp;otilde;ti</caption>
+      </property>
+      <property>
+            <name>bank_test</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>test</group>
+            <submit>no</submit>
+            <type>callback</type>
+            <callback>callback_bank_test</callback>
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
@@ -178,6 +191,9 @@
             <log>
                   <caption>Logi</caption>
             </log>
+            <test>
+                  <caption>Test</caption>
+            </test>
       </groupinfo>
       <reltypes>
             <KEY>
