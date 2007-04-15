@@ -99,6 +99,17 @@
             <caption>&amp;amp;Auml;ra kasuta seostehaldurit</caption>
       </property>
       <property>
+            <name>edit_groups_tb</name>
+            <table>objects</table>
+            <group>groupdata_a</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Tabide toolbar</caption>
+      </property>
+      <property>
             <name>edit_groups</name>
             <table>objects</table>
             <group>groupdata_a</group>
@@ -108,6 +119,50 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Muuda tabe</caption>
+      </property>
+      <property>
+            <name>add_grp_return</name>
+            <table>objects</table>
+            <group>groupdata_a</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <parent>add_grp</parent>
+      </property>
+      <property>
+            <name>add_grp_name</name>
+            <table>objects</table>
+            <group>groupdata_a</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>add_grp</parent>
+            <comment>S&amp;uuml;steemne identifitseerija tabile. Ainult ladina t&amp;auml;hestiku t&amp;auml;hed ning alakriips ( _ ) lubatud. V&amp;auml;him pikkus 2.</comment>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>add_grp_caption</name>
+            <table>objects</table>
+            <group>groupdata_a</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>add_grp</parent>
+            <caption>Pealkiri</caption>
+      </property>
+      <property>
+            <name>add_grp_parent</name>
+            <table>objects</table>
+            <group>groupdata_a</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <parent>add_grp</parent>
+            <caption>Millise tabi alla</caption>
       </property>
       <property>
             <name>group_movement</name>
@@ -513,8 +568,18 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>V&amp;amp;auml;ljund</caption>
             </OUTPUT>
+            <VIEW_DFN_GRP>
+                  <value>6</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Kasutajagrupp omaduste lubamiseks/keelamiseks</caption>
+            </VIEW_DFN_GRP>
       </reltypes>
       <layout>
+            <add_grp>
+                  <type>vbox</type>
+                  <group>groupdata_a</group>
+                  <caption>Lisa uus tab</caption>
+            </add_grp>
             <mlist>
                   <type>hbox</type>
                   <width>20%:80%</width>
