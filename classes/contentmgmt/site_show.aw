@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.227 2007/04/10 08:03:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.228 2007/04/16 09:14:01 kristo Exp $
 
 /*
 
@@ -1621,7 +1621,8 @@ class site_show extends class_base
 				"ysection" => $ref->id()
 			));
 
-			if (($ref->prop("clickable") == 1 || $ref->class_id() == CL_SHOP_PRODUCT) && $show)
+			$show_always = false;
+			if ((($ref->class_id() == CL_MENU && $ref->prop("clickable") == 1) || $ref->class_id() != CL_DOCUMENT) && $show)
 			{
 				if ($this->is_template("YAH_LINK_BEGIN") && $ya == "")
 				{
