@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.25 2007/04/11 13:37:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.26 2007/04/16 08:59:07 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -897,9 +897,11 @@ class crm_company_webview extends class_base
 				'to.status' => STAT_ACTIVE,
 			));
 		}	
+		$ims = array();
 		foreach ($images_conns as $conn)
 		{
 			$image = $conn->to();
+			$ims[$image->id()] = $image->ord();
 			$tmp = $inst_img->parse_alias(array(
 				'alias' => array(
 					'target' => $image->id(),
@@ -908,6 +910,36 @@ class crm_company_webview extends class_base
 			$images[] = $tmp['replacement']; // No, replacement is not a logical name in this context. However, it works!
 		}
 		$images_html = join('<br><br>', $images);
+
+		asort($ims);
+		$f_im = reset(array_keys($ims));
+		$imi = get_instance(CL_IMAGE);
+		if ($f_im)
+		{
+			$this->vars(array(
+				"imgref" => $imi->get_url_by_id($f_im)
+			));
+			$this->vars(array(
+				"first_image" => $this->parse("first_image")
+			));
+		}
+		
+		$f = true;
+		foreach($ims as $im_id => $ord)
+		{
+			if ($f)
+			{
+				$f = false;
+				continue;
+			}
+			$this->vars(array(
+				"imgref" => $imi->get_url_by_id($im_id)
+			));
+			$imstr .= $this->parse("other_images");
+		}
+		$this->vars(array(
+			"other_images" => $imstr,
+		));
 	
 		// Rating, show results
 		$rate_inst = get_instance(CL_RATE);
