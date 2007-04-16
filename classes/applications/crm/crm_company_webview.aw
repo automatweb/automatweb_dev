@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.28 2007/04/16 09:40:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.29 2007/04/16 12:08:00 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -370,7 +370,7 @@ class crm_company_webview extends class_base
 			{
 				continue;
 			}
-			$key = $value = $reltype = "";
+			$key = $value = $reltype = $html_value = "";
 			switch ($item)
 			{
 				case 'logo':
@@ -830,28 +830,40 @@ class crm_company_webview extends class_base
 				case "userta1":
 					$value = $c->prop("userta1");
 					break;
+				case "email":
+					$rels = $c->connections_from(array(
+						"type" => "RELTYPE_EMAIL",
+					));
+					foreach($rels as $rel)
+					{
+						$_t = $rel->to();
+						$value[] = html::href(array(
+							"url" => "mailto:".$_t->prop("mail"),
+							"caption" => $_t->prop("mail"),
+						));
+					}
+					break;
+				case "url":
+					$rels = $c->connections_from(array(
+						"type" => "RELTYPE_URL",
+					));
+					foreach($rels as $rel)
+					{
+						$_t = $rel->to();
+						$val = $_t->name();
+						$val = (substr($val, 0, 7) == "http://")?$val:"http://".$val;
+						$value[] = html::href(array(
+							"url" => $val,
+							"caption" => $val,
+						));
+
+					}
+					break;
 				default:
 					$oid = $c->prop($mapped);
 					if ($this->can("view", $oid) && ($o_item = obj($oid)) && is_object($o_item) && is_numeric($o_item->id()) )
 					{
-						if ($item == 'email')
-						{
-							$value = html::href(array(
-								'url' => 'mailto:'.$o_item->prop('mail'),
-								'caption' => $o_item->prop('mail'),
-							));
-						} 
-						elseif ($item == 'url')
-						{
-							$value = $o_item->name();
-							$this->vars(array("company_web_url" => $value));
-							$value = (substr($value, 0, 7) == "http://")?$value:"http://".$value;
-							$value = html::href(array(
-								'url' => $value,
-								'caption' => $value,
-							));
-						}
-						elseif ($item == 'address')
+						if ($item == 'address')
 						{
 							$idx = $o_item->prop('postiindeks');
 							$value = $o_item->name();
