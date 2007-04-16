@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.2 2007/04/03 12:36:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.3 2007/04/16 09:40:21 kristo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -74,14 +74,21 @@ class object_basket extends class_base
 		$ls = "";
 		foreach($objs as $dat)
 		{
+			$v = array();
 			$o = obj($dat["oid"]);
 			foreach($mt[1] as $var_name)
 			{
-				$v = array();
 				list($clid, $prop) = explode(".", $var_name, 2);
 				if (constant($clid) == $o->class_id())
 				{
-					$v[$var_name] = $o->prop_str($prop);
+					if ($prop == "id")
+					{
+						$v[$var_name] = $o->id();
+					}
+					else
+					{
+						$v[$var_name] = is_array($o->prop($prop)) ? reset($o->prop($prop)) : $o->prop($prop);
+					}
 				}
 			}
 			$this->vars($v);
@@ -128,9 +135,11 @@ class object_basket extends class_base
 		$bt = $this->make_keys($o->prop("basket_type"));
 		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
 		{
+			$tz = aw_serialize($ct);
+			$this->quote(&$tz);
 			$this->set_cval(
 				"object_basket_".$o->id()."_".aw_global_get("uid"),
-				aw_serialize($ct)
+				$tz
 			);
 		}
 		else
