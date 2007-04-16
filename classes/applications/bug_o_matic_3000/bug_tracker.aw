@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.96 2007/04/10 08:02:58 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.96 2007/04/10 08:02:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.97 2007/04/16 07:32:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.97 2007/04/16 07:32:57 voldemar Exp $
 
-// bug_tracker.aw - BugTrack 
+// bug_tracker.aw - BugTrack
 
 define("MENU_ITEM_LENGTH", 20);
 define("BUG_STATUS_CLOSED", 5);
@@ -35,26 +35,26 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@layout bug_tree type=vbox parent=bug closeable=1 area_caption=Arendus&uuml;lesanded
 
-			@property bug_tree type=treeview parent=bug_tree no_caption=1 
+			@property bug_tree type=treeview parent=bug_tree no_caption=1
 
-		layout bug_table type=vbox parent=bug 
+		layout bug_table type=vbox parent=bug
 
 			@property bug_list type=text parent=bug no_caption=1 group=by_monitor,bugs,archive,by_default,by_project,by_who,by_class,by_cust
 
 
 @default group=unestimated_bugs
 
-	@property unset_p type=text store=no 
+	@property unset_p type=text store=no
 	@caption Kelle buge n&auml;idata
 
 	@property unset_table type=table store=no no_caption=1
 
 @default group=search
 
-	@property search_tb type=toolbar store=no no_caption=1 
+	@property search_tb type=toolbar store=no no_caption=1
 	@caption Otsingu toolbar
 
-@layout s_top_v type=hbox 
+@layout s_top_v type=hbox
 
 	@layout s_name_lay type=vbox closeable=1 area_caption=Sisu parent=s_top_v
 
@@ -108,7 +108,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@layout s_who_empty_l type=hbox parent=s_who_l
 
-			@property s_who type=textbox store=no parent=s_who_empty_l size=15 captionside=top 
+			@property s_who type=textbox store=no parent=s_who_empty_l size=15 captionside=top
 			@caption Kellele
 
 			@property s_who_empty type=checkbox ch_value=1 store=no parent=s_who_empty_l captionside=top no_caption=1
@@ -124,23 +124,23 @@ define("BUG_STATUS_CLOSED", 5);
 		@caption Looja
 
 
-	@property s_sbt type=submit store=no no_caption=1 
+	@property s_sbt type=submit store=no no_caption=1
 	@caption Otsi
-	
-	@property search_res type=table store=no no_caption=1 
+
+	@property search_res type=table store=no no_caption=1
 	@caption Otsingu tulemused
 
 @default group=search_list
 
 	@property saved_searches type=table store=no no_caption=1
-	
-	@property delete_saved type=submit 
+
+	@property delete_saved type=submit
 	@caption Kustuta
 
 @default group=charts
 @default group=gantt_chart
 
-	@property gantt_p type=text store=no 
+	@property gantt_p type=text store=no
 	@caption Kelle buge n&auml;idata
 
 	@property gantt type=text store=no no_caption=1
@@ -150,7 +150,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=my_bugs_stat
 
-	@property my_bugs_stat_p type=text store=no 
+	@property my_bugs_stat_p type=text store=no
 	@caption Kelle buge n&auml;idata
 
 	@property my_bugs_stat_table type=table no_caption=1
@@ -160,7 +160,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property sp_tb type=toolbar store=no no_caption=1
 
-	@property sp_table type=table store=no 
+	@property sp_table type=table store=no
 	@caption Valitud isikud
 
 	@property sp_p_name type=textbox store=no
@@ -172,7 +172,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@property sp_sbt type=submit
 	@caption Otsi
 
-	@property sp_s_res type=table store=no 
+	@property sp_s_res type=table store=no
 	@caption Otsingu tulemused
 
 @default group=settings_g
@@ -186,9 +186,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=reqs
 
-	@property reqs_tb type=toolbar store=no no_caption=1 
+	@property reqs_tb type=toolbar store=no no_caption=1
 
-	@layout reqs_tt type=hbox width=30%:70% 
+	@layout reqs_tt type=hbox width=30%:70%
 
 		@layout reqs_tree type=vbox parent=reqs_tt closeable=1 area_caption=N&otilde;uete&nbsp;kategooriad
 
@@ -198,7 +198,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=reqs_proj
 
-	@layout reqs_p_tt type=hbox width=30%:70% 
+	@layout reqs_p_tt type=hbox width=30%:70%
 
 		@layout reqs_p_tree type=vbox parent=reqs_p_tt closeable=1 area_caption=Projektid
 
@@ -208,9 +208,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=devo
 
-	@property dev_orders_tb type=toolbar store=no no_caption=1 
+	@property dev_orders_tb type=toolbar store=no no_caption=1
 
-	@layout dev_orders_h type=hbox width=30%:70% 
+	@layout dev_orders_h type=hbox width=30%:70%
 
 		@layout dev_orders_tree_v type=vbox parent=dev_orders_h closeable=1 area_caption=Arendustellimuste&nbsp;kategooriad
 
@@ -225,7 +225,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=reqs_cust
 
-	@layout reqs_c_tt type=hbox width=30%:70% 
+	@layout reqs_c_tt type=hbox width=30%:70%
 
 		@layout reqs_c_tree type=vbox parent=reqs_c_tt closeable=1 area_caption=Tellijad
 
@@ -235,7 +235,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=devo_proj
 
-	@layout devo_p_tt type=hbox width=30%:70% 
+	@layout devo_p_tt type=hbox width=30%:70%
 
 		@layout devo_p_tree type=vbox parent=devo_p_tt closeable=1 area_caption=Projektid
 
@@ -246,7 +246,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=devo_cust
 
-	@layout devo_c_tt type=hbox width=30%:70% 
+	@layout devo_c_tt type=hbox width=30%:70%
 
 		@layout devo_c_tree type=vbox parent=devo_c_tt closeable=1 area_caption=Tellijad
 
@@ -258,7 +258,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property pu_tb type=toolbar no_caption=1 store=no
 
-	@layout pu_h type=hbox width=30%:70% 
+	@layout pu_h type=hbox width=30%:70%
 
 		@layout pu_tree_b type=vbox parent=pu_h closeable=1 area_caption=Osakonnad
 
@@ -270,7 +270,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property pp_tb type=toolbar no_caption=1 store=no
 
-	@layout pp_h type=hbox width=30%:70% 
+	@layout pp_h type=hbox width=30%:70%
 
 		@layout pp_tree_b type=vbox parent=pp_h closeable=1 area_caption=Projektid
 
@@ -282,7 +282,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property pr_tb type=toolbar no_caption=1 store=no
 
-	@layout pr_h type=hbox width=30%:70% 
+	@layout pr_h type=hbox width=30%:70%
 
 		@layout pr_tree_b type=vbox parent=pr_h closeable=1 area_caption=N&otilde;uded
 
@@ -377,7 +377,7 @@ class bug_tracker extends class_base
 	}
 
 	function get_property($arr)
-	{		
+	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		if($arr["request"]["group"] == "bugs")
@@ -527,7 +527,7 @@ class bug_tracker extends class_base
 				break;
 
 			case "gantt_summary":
-				$prop["value"] = sprintf(t("T&ouml;id kokku: %s, tunde %s.<Br>Viimase t&ouml;&ouml; l&otilde;ppt&auml;htaeg %s."), 
+				$prop["value"] = sprintf(t("T&ouml;id kokku: %s, tunde %s.<Br>Viimase t&ouml;&ouml; l&otilde;ppt&auml;htaeg %s."),
 					$this->job_count,
 					$this->job_hrs / 3600,
 					date("d.m.Y H:i", $this->job_end)
@@ -541,10 +541,10 @@ class bug_tracker extends class_base
 				if (!$sp_i)
 				{
 					$sp_i = get_instance("applications/bug_o_matic_3000/bt_settings_people_impl");
-				}	
+				}
 				$fn = "_get_".$arr["prop"]["name"];
 				return $sp_i->$fn($arr);
-		
+
 			case "sp_p_name":
 			case "sp_p_co":
 				$prop["value"] = $arr["request"][$prop["name"]];
@@ -611,7 +611,7 @@ class bug_tracker extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function _get_my_bugs_stat_table($arr)
 	{
@@ -857,7 +857,7 @@ class bug_tracker extends class_base
 		@attrib name=get_node_cust all_args=1
 	**/
 	function get_node_cust($arr)
-	{	
+	{
 	    classload("core/icons");
 		$node_tree = get_instance("vcl/treeview");
 		$node_tree->start_tree (array (
@@ -885,7 +885,7 @@ class bug_tracker extends class_base
 		@attrib name=get_node_class all_args=1
 	**/
 	function get_node_class($arr)
-	{	
+	{
 	    classload("core/icons");
 		$node_tree = get_instance("vcl/treeview");
 		$node_tree->start_tree (array (
@@ -998,7 +998,7 @@ class bug_tracker extends class_base
 			"tree_id" => "bug_tree",
 			"branch" => 1,
 		));
-	    
+
 		$obj = new object($arr["parent"]);
 		if($obj->class_id() == CL_BUG_TRACKER)
 		{
@@ -1077,7 +1077,7 @@ class bug_tracker extends class_base
 			"tree_id" => "bug_tree",
 			"branch" => 1,
 		));
-	    
+
 		$obj = new object($arr["parent"]);
 		if($obj->class_id() == CL_BUG_TRACKER)
 		{
@@ -1114,7 +1114,7 @@ class bug_tracker extends class_base
 				}
 			}
 			$to_unique = array_unique($to);
-			
+
 			foreach($to_unique as $project)
 			{
 				$obj = new object($project);
@@ -1183,7 +1183,7 @@ class bug_tracker extends class_base
 			foreach($objects as $obj_id => $object)
 			{
 				$ol = new object_list(array(
-					"parent" => $obj_id, 
+					"parent" => $obj_id,
 					"class_id" => CL_BUG,
 					"lang_id" => array(),
 					"site_id" => array(),
@@ -1211,7 +1211,7 @@ class bug_tracker extends class_base
 		}
 		die($node_tree->finalize_tree());
 	}
-	
+
 	/**  to get subtree for default view
 		@attrib name=get_node all_args=1
 
@@ -1227,8 +1227,8 @@ class bug_tracker extends class_base
 		));
 
 		$ol = new object_list(array(
-			"parent" => $arr["parent"], 
-			"class_id" => array(CL_BUG, CL_MENU), 
+			"parent" => $arr["parent"],
+			"class_id" => array(CL_BUG, CL_MENU),
 			"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
 			"sort_by" => "objects.name"
 		));
@@ -1278,7 +1278,7 @@ class bug_tracker extends class_base
 		classload("core/icons");
 		$this->tree = get_instance("vcl/treeview");
 		$this->active_group = $arr["request"]["group"];
-		$this->sort_type = aw_global_get("bug_tree_sort");	
+		$this->sort_type = aw_global_get("bug_tree_sort");
 		$this->self_id = $arr["obj_inst"]->id();
 		$this->tree_root_name = "Bug-Tracker";
 		switch($this->sort_type["name"])
@@ -1312,8 +1312,8 @@ class bug_tracker extends class_base
 		}
 
 		$root_name = array(
-			"by_default" => t("Tavaline"), 
-			"by_project"=> t("Projektid"), 
+			"by_default" => t("Tavaline"),
+			"by_project"=> t("Projektid"),
 			"by_who" => t("Teostajad"),
 			"by_class" => t("Klassid"),
 			"by_cust" => t("Kliendid"),
@@ -1328,9 +1328,9 @@ class bug_tracker extends class_base
 			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
 			"root_url" => aw_url_change_var("b_id", null),
 			"get_branch_func" => $this->mk_my_orb($orb_function, array(
-				"type" => $this->sort_type["name"], 
-				"reltype" => $this->sort_type["reltype"], 
-				"clid"=> $this->sort_type["class"], 
+				"type" => $this->sort_type["name"],
+				"reltype" => $this->sort_type["reltype"],
+				"clid"=> $this->sort_type["class"],
 				"inst_id" => $this->self_id,
 				"active_group" => $this->active_group,
 				"b_id" => $arr["request"]["b_id"],
@@ -1343,14 +1343,14 @@ class bug_tracker extends class_base
 				"parent" => " ",
 			)),
 		));
- 
+
 		if($this->sort_type["name"] == "parent")
 		{
 			$this->generate_bug_tree(array(
 				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
 			));
 		}
-	
+
 		if($this->sort_type["name"] == "classes")
 		{
 			$this->generate_class_bug_tree(array(
@@ -1371,14 +1371,14 @@ class bug_tracker extends class_base
 				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
 			));
 		}
-	
+
 		if ($this->sort_type["name"] == "who")
 		{
 			$this->tree->add_item(0,array(
 				"id" => $this->self_id,
 				"name" => $this->tree_root_name,
-			));		
-		
+			));
+
 			$this->tree->add_item($this->self_id,array(
 				"id" => "allah",
 				"name" => "a",
@@ -1402,7 +1402,7 @@ class bug_tracker extends class_base
 		$this->tree->add_item(0,array(
 			"id" => $this->self_id,
 			"name" => $this->tree_root_name,
-		));		
+		));
 
 		$i = get_instance(CL_CRM_COMPANY);
 		$i->active_node = (int)$arr['request']['category'];
@@ -1418,7 +1418,7 @@ class bug_tracker extends class_base
 			'style' => 'nodetextbuttonlike',
 			"edit_mode" => 1
 		));
-		
+
 	/*	$f = aw_ini_get("classfolders");
 		foreach($f as $id => $dat)
 		{
@@ -1437,8 +1437,8 @@ class bug_tracker extends class_base
 		$this->tree->add_item(0,array(
 			"id" => $this->self_id,
 			"name" => $this->tree_root_name,
-		));		
-		
+		));
+
 		$f = aw_ini_get("classfolders");
 		foreach($f as $id => $dat)
 		{
@@ -1466,8 +1466,8 @@ class bug_tracker extends class_base
 		$this->tree->add_item(0,array(
 			"id" => $this->self_id,
 			"name" => $this->tree_root_name." (".count($projects).")",
-		));		
-		
+		));
+
 		foreach($projects as $project)
 		{
 			$obj = new object($project);
@@ -1493,7 +1493,7 @@ class bug_tracker extends class_base
 				"name" => $nm,
 				"url" => aw_url_change_var("b_id", null)
 		));
-		
+
 		foreach($objects as $obj_id => $object)
 		{
 			$nm = $object->name();
@@ -1508,7 +1508,7 @@ class bug_tracker extends class_base
 			));
 		}
 	}
-	
+
 	function name_cut($name)
 	{
 		$pre = substr($name, 0, MENU_ITEM_LENGTH);
@@ -1526,7 +1526,7 @@ class bug_tracker extends class_base
 		}
 		return $name;
 	}
-	
+
 	function show_priority($_param)
 	{
 		if ($_param["obj"]->class_id() == CL_MENU)
@@ -1564,7 +1564,7 @@ class bug_tracker extends class_base
 		$values = $this->bug_i->get_status_list();
 		return $values[$_val["bug_status"]];
 	}
-	
+
 	function show_status_no_edit($_val)
 	{
 		if ($_val["obj"]->class_id() == CL_MENU)
@@ -1574,7 +1574,7 @@ class bug_tracker extends class_base
 		$values = $this->bug_i->get_status_list();
 		return $values[$_val["bug_status"]];
 	}
-	
+
 	function comment_callback($arr)
 	{
 		if ($arr["obj"]->class_id() == CL_MENU)
@@ -1701,7 +1701,7 @@ class bug_tracker extends class_base
 			"caption" => t("Kellele"),
 			"sortable" => 1,
 		));
-		
+
 		$t->define_field(array(
 			"name" => "sort_priority",
 			"caption" => t("SP"),
@@ -1773,7 +1773,7 @@ class bug_tracker extends class_base
 		$this->_init_bug_list_tbl($t);
 
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
-		if(($this->can("view", $pt) || 
+		if(($this->can("view", $pt) ||
 			$arr["request"]["group"] == "by_class"
 		) && $arr["request"]["group"] != "by_who" && $arr["request"]["group"] != "by_project" && $arr["request"]["group"] != "by_cust" )
 		{
@@ -1830,7 +1830,7 @@ class bug_tracker extends class_base
 					unset($filt["parent"]);
 				}
 				else
-				if ($arr["request"]["p_cls_id"])	// class 
+				if ($arr["request"]["p_cls_id"])	// class
 				{
 					$filt["bug_class"] = $arr["request"]["p_cls_id"];
 					unset($filt["parent"]);
@@ -1891,7 +1891,7 @@ class bug_tracker extends class_base
 			$ol = new object_list();
 		}
 
-		$this->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));		
+		$this->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));
 		$t->sort_by();
 		$t->set_caption(t("Nimekiri arendus&uuml;lesannetest"));
 		$arr["prop"]["value"] = "<span id=\"bug_table\">".$t->get_html()."</table>";
@@ -2059,7 +2059,7 @@ class bug_tracker extends class_base
 	}
 
 	/**
-		@attrib name=assign_bugs 
+		@attrib name=assign_bugs
 		@param sel optional
 		@param post_ru optional
 		@param assign_to optional
@@ -2088,8 +2088,8 @@ class bug_tracker extends class_base
 		return $arr["post_ru"];
 	}
 
-	/** 
-		@attrib name=cut_b 
+	/**
+		@attrib name=cut_b
 		@param sel optional
 		@param post_ru optional
 	**/
@@ -2131,7 +2131,7 @@ class bug_tracker extends class_base
 		header("Content-type: text/xml");
 		$xml = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\" standalone=\"yes\"?>\n<response>\n";
 
-		$bt = obj($arr["id"]);	
+		$bt = obj($arr["id"]);
 		$pt = $this->get_bugs_parent($bt);
 
 		$ot = new object_tree(array(
@@ -2186,7 +2186,7 @@ class bug_tracker extends class_base
 			$ol->add(array_keys($bugs));
 		}
 		$this->populate_bug_list_table_from_list($t, $ol, array(
-			"path" => true, 
+			"path" => true,
 			"bt" => $arr["obj_inst"]
 		));
 	}
@@ -2236,7 +2236,7 @@ class bug_tracker extends class_base
 			$res["who"] = new obj_predicate_compare(OBJ_COMP_EQUAL, "");
 			unset($res["CL_BUG.who.name"]);
 		}
-	
+
 		if (trim($r["s_bug_content"]) != "")
 		{
 			$res[] = new object_list_filter(array(
@@ -2364,7 +2364,7 @@ class bug_tracker extends class_base
 				"onClick" => "document.changeform.assign_to.value=$p_oid;submit_changeform('assign_bugs')"
 			));
 		}
-	}	
+	}
 
 	/**
 		@attrib name=save_search all_args=1
@@ -2382,7 +2382,7 @@ class bug_tracker extends class_base
 
 		$o = obj($arr["id"]);
 		$ss = safe_array($o->meta("saved_searches"));
-		$ss[count($ss)+1] = array(
+		$ss[] = array(
 			"name" => $arr["save_search_name"],
 			"params" => $search_params,
 			"creator" => aw_global_get("uid")
@@ -2510,8 +2510,8 @@ class bug_tracker extends class_base
 		return "
 		var last_bold_node;
 		var last_bold_node_cont;
-		function do_bt_table_switch(bugid, that) 
-		{ 
+		function do_bt_table_switch(bugid, that)
+		{
 			url = '$url&b_id='+bugid;
 			el = document.getElementById('bug_table');
 			el.innerHTML=aw_get_url_contents(url);
@@ -2745,14 +2745,14 @@ class bug_tracker extends class_base
 		}
 
 		$arr["prop"]["value"] = $chart->draw_chart ();
-		
+
 	}
 
 	/**
 		@attrib name=add_s_res_to_p_list
 	**/
 	function add_s_res_to_p_list($arr)
-	{	
+	{
 		$o = obj($arr["id"]);
 		$persons = $o->meta("imp_p");
 		foreach(safe_array($arr["sel"]) as $p_id)
@@ -2768,7 +2768,7 @@ class bug_tracker extends class_base
 		@attrib name=remove_p_from_l_list
 	**/
 	function remove_p_from_l_list($arr)
-	{	
+	{
 		$o = obj($arr["id"]);
 		$persons = $o->meta("imp_p");
 		foreach(safe_array($arr["sel"]) as $p_id)
@@ -2842,14 +2842,14 @@ class bug_tracker extends class_base
 		$this->tree->add_item(0,array(
 			"id" => $this->self_id,
 			"name" => $this->tree_root_name,
-		));	
+		));
 
 		// list all monitors
 		$c = new connection();
 		$conns = $c->find(array(
 			"from.class_id" => CL_BUG,
 			"type" => "RELTYPE_MONITOR"
-		));	
+		));
 		foreach($conns as $con)
 		{
 			$this->tree->add_item($this->self_id, array(
@@ -2863,7 +2863,7 @@ class bug_tracker extends class_base
 		@attrib name=get_node_monitor all_args=1
 	**/
 	function get_node_monitor($arr)
-	{	
+	{
 	    classload("core/icons");
 		$node_tree = get_instance("vcl/treeview");
 		$node_tree->start_tree (array (
@@ -2908,7 +2908,7 @@ class bug_tracker extends class_base
 		$conns = $c->find(array(
 			"from.class_id" => CL_BUG,
 			"type" => "RELTYPE_MONITOR"
-		));	
+		));
 		$mons = array();
 		foreach($conns as $con)
 		{
@@ -2934,7 +2934,7 @@ class bug_tracker extends class_base
 			));
 
 			// add statuses under ppl
-			
+
 			foreach($bugi->get_status_list() as $sid => $sn)
 			{
 				if ($arr["b_stat"] == $sid && $_to == $arr["b_mon"])
@@ -3061,7 +3061,7 @@ class bug_tracker extends class_base
 			"class_id" => CL_BUG,
 			"parent" => $gt_list->ids(),
 			"lang_id" => array(),
-			"site_id" => array()	
+			"site_id" => array()
 		));
 
 		foreach($sub_bugs->arr() as $sub_bug)
@@ -3074,7 +3074,7 @@ class bug_tracker extends class_base
 			&$this, "__gantt_sort"
 		));
 
-		$rv = $gt_list->arr();		
+		$rv = $gt_list->arr();
 		foreach($rv as $idx => $bug)
 		{
 			if ($bug->prop("bug_predicates") != "")
@@ -3118,7 +3118,7 @@ class bug_tracker extends class_base
 			$users[$c["to"]] = $c["to"];
 		}
 
-		$us = array();		
+		$us = array();
 		foreach($users as $user)
 		{
 			// list&sort bugs for that user
@@ -3183,9 +3183,9 @@ echo "<hr>";
 				if (!$this->can("view", $u_oid))
 				{
 					continue;
-				}			
+				}
 				$uo = obj($u_oid);
-			
+
 				$eml = $uo->prop("email");
 			}
 
