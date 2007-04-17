@@ -177,7 +177,7 @@ class obj_xml_gen
 		}
 		if (is_array($v))
 		{
-			$v = serialize($v);
+			$v = aw_serialize($v,SERIALIZE_PHP_FILE);
 		}
 
 		if (is_string($v))
@@ -326,7 +326,7 @@ class obj_xml_gen
 				$o->set_prop($k, $v);
 			}
 		}
-		$md = unserialize($data["ot_flds"]["meta"]);
+		$md = aw_unserialize($data["ot_flds"]["meta"]);
 		if (is_array($md))
 		{
 			foreach($md as $k => $v)
