@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.543 2007/04/04 12:59:09 voldemar Exp $
+// $Id: class_base.aw,v 2.544 2007/04/17 11:41:59 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2126,6 +2126,19 @@ class class_base extends aw_template
 		{
 			if ($val["type"] == "date_select")
 			{
+				if ($val["save_format"] == "iso8601")
+				{
+					list($y, $m, $d) = explode("-", $val["value"]);
+					if ($y == 0)
+					{
+						$val["value"] = "";
+					}
+					else
+					{
+						$val["value"] = get_lc_date(mktime(0,0,0, $m, $d, $y));
+					}
+				}
+				else
 				if ($val["value"] == -1)
 				{
 					$val["value"] = "";
