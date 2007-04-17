@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.119 2007/03/28 10:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.120 2007/04/17 07:57:00 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2411,7 +2411,17 @@ class webform extends class_base
 					$o->set_prop($key, $val);
 				}
 			}
+			$name = "";
+			foreach(safe_array($obj_inst->prop("obj_name")) as $key => $val)
+			{
+				$name .= " ".$arr[$key];
+			}
+			$o->set_name(trim($name));
+			$o->set_prop("register_id", $register->id());
+			$o->save();
+
 			$body = "";
+			$attaches = array();
 			// lets translate this stuff to real things
 			foreach($arr as $key => $val)
 			{
@@ -2432,19 +2442,26 @@ class webform extends class_base
 						$arr[$key] = join(", ", $objs->names());
 					}
 				}
+				if (substr($key, 0, 8) == "userfile")
+				{
+					if ($_FILES[$key]["name"]["file"] != "")
+					{
+						$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).": ".$_FILES[$key]["name"]["file"]."\n";
+						$fo = $o->get_first_obj_by_reltype($relprops[$key]["reltype"]);
+						$attaches[] = array(
+							"content" => file_get_contents($fo->prop("file")),
+							"contenttype" => $_FILES[$key]["type"]["file"],
+							"name" => $_FILES[$key]["name"]["file"]
+						);
+					}
+				}
+				else
 				if(!in_array($prplist[$key]["type"], $this->no_trans) && !empty($arr[$key]))
 				{
-					$body .= $prplist[$key]["caption"].": ".$arr[$key]."\n";
+					$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).": ".$arr[$key]."\n";
 				}
 			}
-			$name = "";
-			foreach(safe_array($obj_inst->prop("obj_name")) as $key => $val)
-			{
-				$name .= " ".$arr[$key];
-			}
-			$o->set_name(trim($name));
-			$o->set_prop("register_id", $register->id());
-			$o->save();
+
 			foreach($obj_inst->connections_from(array("type" => "RELTYPE_AFTER_SAVE_CONTROLLER")) as $c)
 			{
 				$controller_obj = $c->to();
@@ -2477,6 +2494,10 @@ class webform extends class_base
 				);
 			}
 			$awm = get_instance("protocols/mail/aw_mail");
+			foreach($attaches as $att)
+			{
+				$awm->fattach($att);
+			}
 			foreach($emails as $eml)
 			{
 				$awm->create_message(array(
@@ -2484,6 +2505,9 @@ class webform extends class_base
 					"to" => $eml,
 					"body" => $body,
 				) + $prx);
+/*				$awm->htmlbodyattach(array(
+					"data" => str_replace("\n", "<br>", $body)
+				));*/
 				$awm->gen_mail();
 			}
 
