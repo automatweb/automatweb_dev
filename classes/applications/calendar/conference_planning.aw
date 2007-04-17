@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.70 2007/04/12 11:45:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.71 2007/04/17 14:03:20 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -278,7 +278,7 @@ class conference_planning extends class_base
 
 			case "alternative_dates":
 				$ret = array(
-					"form" => "table",
+					"form" => "mixed",
 					"add_rows" => "manual",
 					"fields" => array(
 						"date_type" => array(
@@ -291,6 +291,27 @@ class conference_planning extends class_base
 						),
 					),
 				);
+				break;
+			case "main_function":
+				$ret["fields"] = array(
+					"name" => t("&Uuml;rituse nimi"),
+					"type" => t("&Uuml;rituse t&uuml;&uuml;p"),
+					"persons" => t("Osalejate arv"),
+					"door_sign" => t("Uksesilt"),
+					"table_form" => t("Ruumi paigutus"),
+					"24h" => t("Hoia ruumi &ouml;&ouml;p&auml;ev"),
+				);
+			case "main_function_catering":
+				$ret["fields"] = array(
+					"data_main_function_catering_type" => t("&Uuml;rituse t&uuml;&uuml;p"),
+					"data_main_function_catering_start" => t("Algusaeg"),
+					"data_main_function_catering_end" => t("L&otilde;puaeg"),
+				);
+			case "additional_functions":
+			case "additional_functions_catering":
+				$ret["form"] = "table";
+				$ret["edit_link"] = true;
+				$ret["remove_link"] = true;
 				break;
 
 			case "breakout_rooms":
@@ -315,15 +336,6 @@ class conference_planning extends class_base
 				);
 				break;
 
-			case "main_function":
-			case "main_function_catering":
-			case "additional_functions":
-			case "additional_functions_catering":
-				$ret = array(
-					"form" => "mixed",
-				);
-				break;
-
 			case "search_result":
 				$ret = array(
 					"form" => "search_result",
@@ -331,12 +343,17 @@ class conference_planning extends class_base
 				break;
 
 
+			case "main_function_catering_type":
 			case "event_type":
 				$ret = array(
 					"form" => "event_type",
 				);
 				break;
 
+			case "main_function_catering_start":
+			case "main_function_catering_end":
+			
+			case "main_function_catering_person_no":
 			case "billing_email":
 			case "billing_phone":
 			case "billing_name":
@@ -1233,6 +1250,30 @@ class conference_planning extends class_base
 
 	// HANDLE CHANGEFORM DATA
 
+	function pre_store($type, $value)
+	{
+		switch($type)
+		{
+			case "table":
+			case "event_type":
+				$value = aw_serialize($value, SERIALIZE_NATIVE);
+			break;
+		}
+		return $value;
+	}
+
+	function pre_edit($type, $value)
+	{
+		switch($type)
+		{
+			case "table":
+			case "event_type":
+				$value = aw_unserialize($value);
+			break;
+		}
+		return $value;
+	}
+
 	function store_data($id, $data)
 	{
 		if(strlen($id))
@@ -1248,31 +1289,54 @@ class conference_planning extends class_base
 		}
 	}
 
-	function get_stored_data($id)
+	function get_stored_data($id, $convert = false)
 	{
-		return is_array($_t = aw_global_get("conference_planning_data_".$id))?$_t:array();
+		
+		$data =  is_array($_t = aw_global_get("conference_planning_data_".$id))?$_t:array();
+		if($convert)
+		{
+			foreach($data as $elem => $value)
+			{
+				$_t = $this->get_form_elements_data($elem);
+				$data[$elem] = $this->pre_edit($_t["form"], $value);
+			}
+		}
+		return $data;
 	}
 
 	function handle_data($arr)
-	{		
+	{
 		$cp = obj($arr["conference_planning"]);
 		$views = aw_unserialize($cp->prop("help_views"));
 		$i = get_instance(CL_CFGCONTROLLER);
-		foreach($arr["elem"] as $view_id => $view)
+		$view_id = --$arr["current_view"];
+		$elements = $arr["elem"];
+		unset($arr["elem"]);
+		$stored_data = $this->get_stored_data($cp->id(), true);
+		foreach($views[$view_id]["elements"] as $element_id => $data)
 		{
-			foreach($view as $element_id => $element)
+			$el_form_data = $this->get_form_elements_data($data["name"]);
+			$element = &$elements[$view_id][$element_id];
+			$prop = array(
+				"views" => &$views,
+				"elements" => &$elements,
+				"view" => $view_id,
+				"element" => $element_id,
+				"stored_data" => $stored_data,
+				"element_info" => $data,
+			);
+			$controller = $this->can("view", $data["save_controller"])?$i->check_property($data["save_controller"], "", $prop, &$arr, "" ,""):array();
+			if($controller == PROP_IGNORE)
 			{
-				$data = $views[$view_id]["elements"][$element_id];
-				$controller = $this->can("view", $data["save_controller"])?$i->check_property($data["save_controller"], "", $views, &$arr["elem"], array(
-					"view" => $view_id,
-					"element" => $element_id
-				),""):array();
-				$element = is_array($element)?aw_serialize($element, SERIALIZE_NATIVE):$element;
-				$to_be_saved[$views[$view_id]["elements"][$element_id]["name"]] = $element;
+				continue;
 			}
+			$element = $this->pre_store($el_form_data["form"], $element);
+			$to_be_saved[$views[$view_id]["elements"][$element_id]["name"]] = $element;
 		}
 		return $this->store_data($cp->id(), $to_be_saved);
 	}
+
+	
 
 	/**
 		@attrib name=forward all_args=1
@@ -1294,9 +1358,15 @@ class conference_planning extends class_base
 		return $this->gen_url($arr["doc"], ((--$arr["current_view"] > 0)?$arr["current_view"]:++$arr["current_view"]));
 	}
 
-	function gen_url($oid, $view)
+	function gen_url($oid, $view, $extra = array())
 	{
-		return aw_global_get("baseurl")."/".$oid."?view_no=".$view;
+		foreach($extra as $name => $val)
+		{
+			$ext[] = $name."=".$val;
+		}
+		$ext = join("&", $ext);
+		$ext = strlen($ext)?"&".$ext:"";
+		return aw_global_get("baseurl")."/".$oid."?view_no=".$view.$ext;
 	}
 
 
@@ -1308,12 +1378,13 @@ class conference_planning extends class_base
 		$html["yah_bar"] = $this->parse_yah_bar($cp, $arr["id"], $active_view);
 		$html["active_view"] = $this->parse_active_view($cp, $arr["id"], $active_view);
 		$html["movement"] = $this->parse_movement_buttons($cp->id(), $active_view);
-		$html["reforb"] = $this->mk_reforb("forward", array(
+		$reforb_arr = array(
 			"url" => get_ru(),
 			"conference_planning" => $arr["conference_planner"],
 			"current_view" => $active_view,
 			"doc" => $arr["oid"],
-		));
+		);
+		$html["reforb"] = $this->mk_reforb("forward", array_merge($GLOBALS["_GET"], $reforb_arr));
 		$html["script"] = $this->get_changeform($arr);
 		$html = join("", $html);
 		return html::form(array(
@@ -1343,7 +1414,7 @@ class conference_planning extends class_base
 		return $this->parse();
 	}
 
-	function parse_form_element($el, $view_no, $element, $views, $value)
+	function parse_form_element($el, $view_no, $element, $views, $value, $values, $doc)
 	{
 		$prop = $this->get_form_elements_data($el["name"]);
 		if(!$prop)
@@ -1367,7 +1438,13 @@ class conference_planning extends class_base
 		}
 		// get controller contents
 		$i = get_instance(CL_CFGCONTROLLER);
-		$controller = $this->can("view", $el["show_controller"])?$i->check_property($el["show_controller"], "",$views,"","",""):array();
+		$toprop = array(
+			"views" => &$views,
+			"values" => &$values,
+			"element" => &$el,
+			"prop" => &$prop,
+		);
+		$controller = $this->can("view", $el["show_controller"])?$i->check_property($el["show_controller"], "",&$toprop, "","",""):array();
 		if($controller == PROP_IGNORE)
 		{
 			return "";
@@ -1438,7 +1515,83 @@ class conference_planning extends class_base
 					"value" => $el["value"],
 				));
 				break;
+			case "table":
+				$value = aw_unserialize($value);
+
+
+				foreach($prop["fields"] as $field => $caption)
+				{
+					$this->vars(array(
+						"caption" => $caption,
+					));
+					$header .= $this->parse("HEADER_COL");
+				}
+				if(count($links_caption))
+				{
+					$this->vars(array(
+						"caption" => "",
+					));
+					$header .= $this->parse("HEADER_COL");
+				}
+
+				$this->vars(array(
+					"HEADER_COL" => $header,
+				));
+				
+				$header = $this->parse("HEADER");
+				foreach($value as $rowid => $row)
+				{
+					// edit remove links
+					unset($links_caption);
+					if($prop["edit_link"])
+					{
+						$links_caption[] = html::href(array(
+							"caption" => t("Muuda"),
+							"url" => $this->gen_url($doc, ($view_no + 1), array(
+								"edit" => $rowid,
+								"prop" => $el["name"],
+							)),
+						));
+					}
+					if($prop["remove_link"])
+					{
+						$links_caption[] = html::href(array(
+							"caption" => t("Kustuta"),
+							"url" => $this->gen_url($doc, ($view_no +1), array(
+								"remove" => $rowid,
+								"prop" => $el["name"],
+							)),
+						));
+					}
+
+
+					unset($cols);
+					foreach($prop["fields"] as $field => $caption)
+					{
+						$this->vars(array(
+							"caption" => $row[$field],
+						));
+						$cols .= $this->parse("ROW_COL");
+					}
+					if($prop["edit_link"] || $prop["remove_link"])
+					{
+						$this->vars(array(
+							"caption" => join("&nbsp;", $links_caption),
+						));
+						$cols .= $this->parse("ROW_COL");
+					}
+					$this->vars(array(
+						"ROW_COL" => $cols,
+					));
+					$rows .= $this->parse("ROW");
+				}
+				$this->vars(array(
+					"HEADER" => $header,
+					"ROW" => $rows
+				));
+				break;
 		}
+
 		$this->vars(array(
 			"wid" => $el["wid"],
 			"wid_out" => $el["wid"]."_out",
@@ -1448,7 +1601,7 @@ class conference_planning extends class_base
 			"view_no" => $view_no,
 			"element" => $element,
 		));
-		$ret = $this->parse(strtoupper($prop["form"]));
+		$ret = $el["prepend"].$this->parse(strtoupper($prop["form"]));
 		$ret .= $el["append"];
 		return $ret;
 	}
@@ -1467,7 +1620,7 @@ class conference_planning extends class_base
 		$ret = "<table class=\"form\">";
 		foreach($view["elements"] as $elem_id => $el)
 		{
-			$ret .= $this->parse_form_element(&$view["elements"][$elem_id], $act, $elem_id, &$views, $stored_data[$view["elements"][$elem_id]["name"]]);
+			$ret .= $this->parse_form_element(&$view["elements"][$elem_id], $act, $elem_id, &$views, &$stored_data[$view["elements"][$elem_id]["name"]], &$stored_data, $doc);
 		}
 		$ret .= "</table>";
 		return $ret;

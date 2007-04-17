@@ -517,6 +517,42 @@
             <caption>Pea&amp;amp;uuml;rituse </caption>
       </property>
       <property>
+            <name>data_main_function_catering_type</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Pea&amp;amp;uuml;rituse toitlustuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>data_main_function_catering_person_no</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Pea&amp;amp;uuml;rituse toitlustuse osalejate arv</caption>
+      </property>
+      <property>
+            <name>data_main_function_catering_start</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Pea&amp;amp;uuml;rituse toitlustuse algusaeg</caption>
+      </property>
+      <property>
+            <name>data_main_function_catering_end</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Pea&amp;amp;uuml;rituse toitlustuse l&amp;amp;otilde;puaeg</caption>
+      </property>
+      <property>
             <name>additional_functions</name>
             <table>objects</table>
             <group>add_fun</group>

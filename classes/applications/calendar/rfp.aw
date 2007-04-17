@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.7 2007/04/11 15:07:12 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.8 2007/04/17 14:03:21 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -166,8 +166,23 @@
 	@property 24h type=text
 	@caption Hoia 24 tundi kinni
 
+
+// main fun catering and helpers
+
 	@property data_main_function_catering type=text
 	@caption Pea&uuml;rituse 
+
+	@property data_main_function_catering_type type=text
+	@caption Pea&uuml;rituse toitlustuse t&uuml;&uuml;p
+
+	@property data_main_function_catering_person_no type=text
+	@caption Pea&uuml;rituse toitlustuse osalejate arv
+
+	@property data_main_function_catering_start type=text
+	@caption Pea&uuml;rituse toitlustuse algusaeg
+
+	@property data_main_function_catering_end type=text
+	@caption Pea&uuml;rituse toitlustuse l&otilde;puaeg
 
 @groupinfo add_fun caption="Lisa&uuml;ritused"
 @default group=add_fun
