@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.49 2007/04/03 14:27:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.50 2007/04/17 14:30:55 dragut Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -884,11 +884,17 @@ class join_site extends class_base
 						{
 						//	$tp[$pid]["type"] = "textbox";
 						}
+						if ($pid == "gender")
+						{
+							$tp[$pid]["options"] = array(
+								"1" => t("mees"),
+								"2" => t("naine"),
+							);
+						}
 						unset($tp[$pid]["size"]);
 					}
 				}
 			}
-		
 			$wn = "typo_".$clid;
 
 			$i = get_instance($clid);
@@ -896,7 +902,6 @@ class join_site extends class_base
 				"properties" => $tp,
 				"name_prefix" => $wn
 			));
-
 			$cf_sd = $sessd[$wn];
 			foreach($xp as $xprop)
 			{
