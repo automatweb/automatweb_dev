@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.88 2006/10/25 09:38:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.89 2007/04/17 14:34:31 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -194,7 +194,14 @@ class event_search extends class_base
 		));
 		
 		$t->define_data(array(
-
+			"type" => html::select(array(
+				'name' => 'start_date[type]',
+				'options' => array(
+					'select' => t('Valik'),
+					'one_textbox' => t('&Uuml;ks tekstikast'),
+				),
+				'selected' => $formconfig['start_date']['type']
+			)),
 			"name" => t("Alguskuup&auml;ev"),
 			"caption" => html::textbox(array(
 				"name" => "start_date[caption]",
@@ -209,6 +216,14 @@ class event_search extends class_base
 		));
 		
 		$t->define_data(array(
+			"type" => html::select(array(
+				'name' => 'end_date[type]',
+				'options' => array(
+					'select' => t('Valik'),
+					'one_textbox' => t('&Uuml;ks tekstikast'),
+				),
+				'selected' => $formconfig['end_date']['type']
+			)),
 			"name" => t("L&otilde;ppkuup&auml;ev"),
 			"caption" => html::textbox(array(
 				"name" => "end_date[caption]",
@@ -564,6 +579,28 @@ class event_search extends class_base
 		$formconfig = $ob->meta("formconfig");
 		$do_search = false;
 		$search = array();
+
+		// start_date and end_date from URL can be now in format day.month.year as well. --dragut
+		if (!is_array($arr['start_date']) && substr_count($arr['start_date'], '.') == 2)
+		{
+			$parts = explode('.', $arr['start_date']);
+			$arr['start_date'] = array(
+				'month' => $parts[1],
+				'year' => $parts[2],
+				'day' => $parts[0]
+			);
+		}
+		if (!is_array($arr['end_date']) && substr_count($arr['end_date'], '.') == 2)
+		{
+			$parts = explode('.', $arr['end_date']);
+			$arr['end_date'] = array(
+				'month' => $parts[1],
+				'year' => $parts[2],
+				'day' => $parts[0]
+			);
+		}
+
+
 		load_vcl("date_edit");
 		$dt = new date_edit();
 		$start_tm = $dt->get_timestamp($arr["start_date"]);
@@ -631,22 +668,45 @@ class event_search extends class_base
 		
 		if($formconfig["start_date"]["active"])
 		{
-			$htmlc->add_property(array(
-				"name" => "start_date",
-				"caption" => $formconfig["start_date"]["caption"],
-				"type" => "date_select",
-				"value" => $start_tm,
-			));
+			switch ($formconfig["start_date"]["type"])
+			{
+				case "one_textbox":
+					$htmlc->add_property(array(
+						"name" => "start_date",
+						"caption" => $formconfig["start_date"]["caption"],
+						"type" => "textbox",
+						"value" => date("d.m.Y", $start_tm),
+					));
+					break;
+				default:
+					$htmlc->add_property(array(
+						"name" => "start_date",
+						"caption" => $formconfig["start_date"]["caption"],
+						"type" => "date_select",
+						"value" => $start_tm,
+					));
+			}
 		}
-		
 		if($formconfig["end_date"]["active"])
 		{
-			$htmlc->add_property(array(
-				"name" => "end_date",
-				"caption" => $formconfig["end_date"]["caption"],
-				"type" => "date_select",
-				"value" => $end_tm,
-			));
+			switch ($formconfig["end_date"]["type"])
+			{
+				case "one_textbox":
+					$htmlc->add_property(array(
+						"name" => "end_date",
+						"caption" => $formconfig["end_date"]["caption"],
+						"type" => "textbox",
+						"value" => date("d.m.Y", $end_tm),
+					));
+					break;
+				default:
+					$htmlc->add_property(array(
+						"name" => "end_date",
+						"caption" => $formconfig["end_date"]["caption"],
+						"type" => "date_select",
+						"value" => $end_tm,
+					));
+			}
 		}
 		$search_p1 = false;
 		$search_p2 = false;
