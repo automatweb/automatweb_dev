@@ -7,7 +7,6 @@
 </tr>
 <!-- END SUB: TEXTBOX -->
 
-
 <!-- SUB: DATE_TEXTBOX -->
 <tr>
 	<th><label for="iField11">{VAR:caption}:</label></th>
@@ -92,6 +91,30 @@
 <!-- END SUB: EVENT_TYPE -->
 
 <!-- SUB: TABLE -->
+<tr>
+	<td colspan="2">
+		<table border="1">
+			<!-- SUB: HEADER -->
+			<tr>
+				<!-- SUB: HEADER_COL -->
+				<td>
+					{VAR:caption}
+				</td>
+				<!-- END SUB: HEADER_COL -->
+			</tr>
+			<!-- END SUB: HEADER -->
+			<!-- SUB: ROW -->
+			<tr>
+				<!-- SUB: ROW_COL -->
+				<td>
+					{VAR:caption}
+				</td>
+				<!-- END SUB: ROW_COL -->
+			</tr>
+			<!-- END SUB: ROW -->
+		</table>
+	</th>
+</tr>
 <!-- END SUB: TABLE -->
 
 
