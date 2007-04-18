@@ -82,8 +82,22 @@
 			</function>
 		</action>
 
+		<action name="stay" all_args="1">
+			<function name="stay">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="back" all_args="1">
 			<function name="back">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_table_row" all_args="1">
+			<function name="remove_table_row">
 				<arguments>
 				</arguments>
 			</function>

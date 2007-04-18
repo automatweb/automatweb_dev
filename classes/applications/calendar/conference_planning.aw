@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.71 2007/04/17 14:03:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.72 2007/04/18 11:48:27 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1319,11 +1319,12 @@ class conference_planning extends class_base
 			$element = &$elements[$view_id][$element_id];
 			$prop = array(
 				"views" => &$views,
-				"elements" => &$elements,
-				"view" => $view_id,
-				"element" => $element_id,
-				"stored_data" => $stored_data,
-				"element_info" => $data,
+				"values" => &$elements,
+				"current_view" => $view_id,
+				"current_element" => $element_id,
+				"pre_stored" => $stored_data,
+				"element" => $data,
+				"prop" => $el_form_data,
 			);
 			$controller = $this->can("view", $data["save_controller"])?$i->check_property($data["save_controller"], "", $prop, &$arr, "" ,""):array();
 			if($controller == PROP_IGNORE)
@@ -1339,7 +1340,7 @@ class conference_planning extends class_base
 	
 
 	/**
-		@attrib name=forward all_args=1
+		@attrib name=forward all_args=1 no_login=1
 	**/
 	function forward($arr)
 	{
@@ -1350,7 +1351,16 @@ class conference_planning extends class_base
 	}
 
 	/**
-		@attrib name=back all_args=1
+		@attrib name=stay all_args=1 no_login=1
+	**/
+	function stay($arr)
+	{
+		$this->handle_data($arr);
+		return $this->gen_url($arr["doc"], $arr["current_view"]);
+	}
+
+	/**
+		@attrib name=back all_args=1 no_login=1
 	**/
 	function back($arr)
 	{
@@ -1433,7 +1443,7 @@ class conference_planning extends class_base
 			));
 			foreach($list->arr() as $obj)
 			{
-				$el["options"][$obj->prop("comment")] = $obj->name();
+				$el["options"][$obj->id()] = $obj->name();
 			}
 		}
 		// get controller contents
@@ -1443,13 +1453,28 @@ class conference_planning extends class_base
 			"values" => &$values,
 			"element" => &$el,
 			"prop" => &$prop,
+			"current_view" => $view_no,
+			"current_element" => $element,
 		);
-		$controller = $this->can("view", $el["show_controller"])?$i->check_property($el["show_controller"], "",&$toprop, "","",""):array();
+		$controller = $this->can("view", $el["show_controller"])?$i->check_property($el["show_controller"], "",&$toprop, $GLOBALS["_GET"],"",""):array();
+
 		if($controller == PROP_IGNORE)
 		{
 			return "";
 		}
 		$el = array_merge($el, $controller);
+
+		// this here is for strange cases where data needs to be temporarily altered(in controller) to show on web, but can't be stored that way
+		// so, inside the switch statement use $value_to_use instead of $value
+		if(!empty($el["value"]))
+		{
+			$value_to_use = $el["value"];
+		}
+		else
+		{
+			$value_to_use = &$value;
+		}
+		
 		switch($prop["form"])
 		{
 			case "separator":
@@ -1457,19 +1482,19 @@ class conference_planning extends class_base
 			case "textbox":
 				$this->vars(array(
 					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
-					"value" => $value,
+					"value" => $value_to_use,
 				));
 				break;
 			case "checkbox":
 				$this->vars(array(
 					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
-					"checked" => checked($value),
+					"checked" => checked($value_to_use),
 				));
 				break;
 			case "date_textbox":
 				$this->vars(array(
 					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
-					"value" => $value,
+					"value" => $value_to_use,
 					"date_textbox_id" => $el["name"]."_id",
 					"date_textbox_link" => $el["name"]."_link",
 					"calendar_icon_url" => aw_global_get("baseurl")."/automatweb/images/ico_calendar.gif",
@@ -1481,7 +1506,7 @@ class conference_planning extends class_base
 					$this->vars(array(
 						"value" => $key,
 						"caption" => $option,
-						"selected" => ($key == $value)?selected(true):"",
+						"selected" => ($key == $value_to_use)?selected(true):"",
 					));
 					$opts .= $this->parse("OPTION");
 				}
@@ -1491,20 +1516,19 @@ class conference_planning extends class_base
 				));
 				break;
 			case "event_type":
-				$value = aw_unserialize($value);
 				foreach($el["options"] as $key => $option)
 				{
 					$this->vars(array(
 						"value" => $key,
-						"selected" => ($key == $value["select"])?selected(true):"",
+						"selected" => ($key == $value_to_use["select"])?selected(true):"",
 						"caption" => $option,
 
 					));
 					$opts .= $this->parse("EVENT_TYPE_OPTION");
 				}
 				$this->vars(array(
-					"text" => $value["text"],
-					"radio_".$value["radio"] => checked(true),
+					"text" => $value_to_use["text"],
+					"radio_".$value_to_use["radio"] => checked(true),
 					"EVENT_TYPE_OPTION" => $opts,
 					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
 				));
@@ -1516,9 +1540,6 @@ class conference_planning extends class_base
 				));
 				break;
 			case "table":
-				$value = aw_unserialize($value);
-
-
 				foreach($prop["fields"] as $field => $caption)
 				{
 					$this->vars(array(
@@ -1539,7 +1560,7 @@ class conference_planning extends class_base
 				));
 				
 				$header = $this->parse("HEADER");
-				foreach($value as $rowid => $row)
+				foreach($value_to_use as $rowid => $row)
 				{
 					// edit remove links
 					unset($links_caption);
@@ -1592,6 +1613,11 @@ class conference_planning extends class_base
 				break;
 		}
 
+		$value = $this->pre_store($prop["form"], $value);
+		if($el["store_data"] === true)
+		{
+			$this->store_data = true;
+		}
 		$this->vars(array(
 			"wid" => $el["wid"],
 			"wid_out" => $el["wid"]."_out",
@@ -1615,12 +1641,18 @@ class conference_planning extends class_base
 		$act = $keys[($act-1)];
 		$view = &$views[$act];
 
-		$stored_data = $this->get_stored_data($cp->id());
+		$stored_data = $this->get_stored_data($cp->id(), true);
 		
 		$ret = "<table class=\"form\">";
+		$this->store_data = false;
 		foreach($view["elements"] as $elem_id => $el)
 		{
 			$ret .= $this->parse_form_element(&$view["elements"][$elem_id], $act, $elem_id, &$views, &$stored_data[$view["elements"][$elem_id]["name"]], &$stored_data, $doc);
+		}
+		if($this->store_data)
+		{
+			$this->store_data($cp->id(), $stored_data);
+			$this->store_data = false;
 		}
 		$ret .= "</table>";
 		return $ret;
