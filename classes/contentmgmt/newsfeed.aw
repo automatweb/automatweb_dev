@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.19 2006/09/27 15:03:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.20 2007/04/18 12:39:59 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -28,6 +28,11 @@
 
 	@property days type=textbox size=2
 	@caption Mitme viimase päeva omad
+
+	@property sort_by type=select 
+	@caption Mille j&auml;rgi sorteeritakse
+
+	@property sort_ord type=select 
 
 	@property parse_embed type=checkbox ch_value=1 default=1
 	@caption Näita ka lisatud objekte
@@ -69,6 +74,25 @@ class newsfeed extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "sort_ord":
+				$prop['options'] = array(
+					'DESC' => t("Suurem (uuem) enne"),
+					'ASC' => t("V&auml;iksem (vanem) enne"),
+				);
+				break;
+
+			case "sort_by":
+				$prop['options'] = array(
+					'objects.jrk' => t("J&auml;rjekorra j&auml;rgi"),
+					'objects.created' => t("Loomise kuup&auml;eva j&auml;rgi"),
+					'objects.modified' => t("Muutmise kuup&auml;eva j&auml;rgi"),
+					'documents.modified' => t("Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"),
+					'objects.name' => t("Objekti nime j&auml;rgi"),
+					'planner.start' => t("Kalendris valitud aja j&auml;rgi"),
+					'RAND()' => t("Random"),
+				);
+				break;
+
 			case "kw":
 				$this->_kw($arr);
 				break;
@@ -267,14 +291,22 @@ class newsfeed extends class_base
 			{
 				$cond["oid"] = $docid;
 			}
+
+			$_ob = $feedobj->prop("sort_by")." ".$feedobj->prop("sort_ord");
+			if ($feedobj->prop("sort_by") == "documents.modified")
+			{
+				$_ob .= " ,objects.created DESC";
+			};
+
 			$ol_args = array(
 				"class_id" => $classes,
 				"status" => STAT_ACTIVE,
-				"sort_by" => "objects.modified DESC",
+				"sort_by" => $_ob,
 				new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => $cond
-				))
+				)),
+				new object_list_filter(array("non_filter_classes" => CL_DOCUMENT))
 			);
 			if ($limittype == "last")
 			{

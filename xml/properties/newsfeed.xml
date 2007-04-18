@@ -50,6 +50,23 @@
             <caption>Mitme viimase p&amp;auml;eva omad</caption>
       </property>
       <property>
+            <name>sort_by</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Mille j&amp;amp;auml;rgi sorteeritakse</caption>
+      </property>
+      <property>
+            <name>sort_ord</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+      </property>
+      <property>
             <name>parse_embed</name>
             <table>objects</table>
             <group>general</group>
