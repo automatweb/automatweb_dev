@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.75 2007/04/18 12:17:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.76 2007/04/18 12:27:28 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1627,6 +1627,8 @@ class conference_planning extends class_base
 			//"el_name" => $el["name"],
 			"view_no" => $view_no,
 			"element" => $element,
+			"pre_element_append" => $el["pre_element_append"],
+			"post_element_append" => $el["post_element_append"],
 		));
 		$ret = $el["pre_append"].$this->parse(strtoupper($prop["form"])).$el["post_append"];
 		return $ret;

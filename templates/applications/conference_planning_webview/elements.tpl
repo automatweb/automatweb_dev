@@ -66,11 +66,13 @@
 <tr id="{VAR:wid_out}">
 	<th><label>{VAR:caption}:</label></th>
 	<td>
+		{VAR:pre_element_append}
 		<select id="{VAR:wid}" name="elem[{VAR:view_no}][{VAR:element}]" onChange="{VAR:onChange}">
 			<!-- SUB: OPTION -->
 			<option value='{VAR:value}' {VAR:selected}>{VAR:caption}</option>
 			<!-- END SUB: OPTION -->
 		</select>
+		{VAR:post_element_append}
 	</td>
 </tr>
 <!-- END SUB: SELECT -->
