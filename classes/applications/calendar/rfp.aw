@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.8 2007/04/17 14:03:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.9 2007/04/18 14:17:36 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -147,6 +147,15 @@
 
 	@property data_additonal_tech type=text
 	@caption Tehnilise varustuse erisoov
+
+	@property data_additional_decorations type=text
+	@caption Dekoratsioonid
+
+	@property data_additional_entertainment type=text
+	@caption Meelelahutus
+
+	@property data_additional_catering type=text
+	@caption Erisoovid toitlustuse kohta
 
 	@property data_breakout_rooms type=checkbox ch_value=1
 	@caption Puhkeruumide soov

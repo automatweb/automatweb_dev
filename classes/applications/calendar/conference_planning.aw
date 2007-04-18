@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.76 2007/04/18 12:27:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.77 2007/04/18 14:17:36 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -330,6 +330,9 @@ class conference_planning extends class_base
 				);
 				break;
 
+			case "additional_catering":
+			case "additional_entertainment":
+			case "additional_decorations":
 			case "additonal_tech":
 			case "date_comments":
 				$ret = array(

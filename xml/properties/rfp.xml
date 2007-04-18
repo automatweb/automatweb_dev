@@ -453,6 +453,33 @@
             <caption>Tehnilise varustuse erisoov</caption>
       </property>
       <property>
+            <name>data_additional_decorations</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Dekoratsioonid</caption>
+      </property>
+      <property>
+            <name>data_additional_entertainment</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Meelelahutus</caption>
+      </property>
+      <property>
+            <name>data_additional_catering</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Erisoovid toitlustuse kohta</caption>
+      </property>
+      <property>
             <name>data_breakout_rooms</name>
             <table>objects</table>
             <group>main_fun</group>
