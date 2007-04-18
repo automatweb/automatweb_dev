@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.73 2007/04/18 12:06:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.74 2007/04/18 12:08:42 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1548,10 +1548,10 @@ class conference_planning extends class_base
 					));
 					$header .= $this->parse("HEADER_COL");
 				}
-				if(count($links_caption))
+				if($prop["edit_link"] || $prop["remove_link"])
 				{
 					$this->vars(array(
-						"caption" => "",
+						"caption" => "&nbsp;",
 					));
 					$header .= $this->parse("HEADER_COL");
 				}
