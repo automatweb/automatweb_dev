@@ -255,6 +255,25 @@
             <caption>Template n&amp;amp;auml;itamiseks</caption>
       </property>
       <property>
+            <name>tpl_lead_last</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>templates</group>
+            <caption>Template viimaste dokumentide n&amp;amp;auml;itamiseks</caption>
+      </property>
+      <property>
+            <name>tpl_lead_last_count</name>
+            <type>textbox</type>
+            <size>5</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>templates</group>
+            <caption>Viimane template alates dokumendist</caption>
+      </property>
+      <property>
             <name>use_fld_tpl</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>

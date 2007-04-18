@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.99 2007/04/10 08:03:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.100 2007/04/18 12:51:17 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -121,6 +121,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 		@property tpl_lead type=select table=menu group=templates
 		@caption Template n&auml;itamiseks
 
+		@property tpl_lead_last type=select table=objects field=meta method=serialize group=templates
+		@caption Template viimaste dokumentide n&auml;itamiseks
+
+		@property tpl_lead_last_count type=textbox size=5 table=objects field=meta method=serialize group=templates
+		@caption Viimane template alates dokumendist
 
 		@property use_fld_tpl type=checkbox ch_value=1 group=templates method=serialize table=objects field=meta
 		@caption Kasuta dokumendi asukoha templatet
@@ -234,6 +239,7 @@ class promo extends class_base
 				break;
 
 			case "tpl_lead":
+			case "tpl_lead_last":
 				// kysime infot lyhikeste templatede kohta
 				$tplmgr = get_instance("templatemgr");
 				$prop["options"] = $tplmgr->get_template_list(array(
