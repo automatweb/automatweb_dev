@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.41 2007/04/19 07:56:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.42 2007/04/19 14:21:41 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -436,7 +436,14 @@ class crm_db extends class_base
 				"changed" => date("j.m.Y H:i" , $com->modified()),
 			));
 		}
-		$t->sort_by();
+		if (!$_GET["sortby"])
+		{
+			$t->set_sortable(false);
+		}
+		else
+		{
+			$t->sort_by();
+		}
 	}
 
 	function org_toolbar(&$arr)
