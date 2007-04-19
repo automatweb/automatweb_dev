@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.85 2007/04/11 13:40:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.86 2007/04/19 15:03:06 markop Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -619,15 +619,7 @@ class site_search_content extends class_base
 			"sort_by" => "objects.jrk,objects.name",
 			"class_id" => CL_CRM_SECTOR,
 		));
-/*		
-		$menu_tree = new object_tree(array(
-			"parent" => $cid->prop("dir_tegevusala"),
-			"class_id" => CL_CRM_SECTOR,
-			"sort_by" => "objects.jrk,objects.name",
-		));
-		
-		//if(aw_global_get("uid") == "struktuur")arr($sectors_list);
-		$sectors_list = $menu_tree->to_list();*/
+
 		$sec_opt = "";
 		$parent = 0;
 		
@@ -696,12 +688,12 @@ class site_search_content extends class_base
 			foreach($keywords as $key)
 			{
 				$selected = "";
-				if($arr["keyword"][trim($key)])
+				if($arr["keyword"][strtolower(trim($key))])
 				{
 					$selected = "checked";
 				}
 				$this->vars(array(
-					"key_value" => trim($key),
+					"key_value" => trim(strtolower($key)),
 					"checked" => $selected,
 				));
 				$key_opt.= $this->parse("KEY_OPTION");
@@ -732,12 +724,12 @@ class site_search_content extends class_base
 			foreach($keywords as $key)
 			{
 				$selected = "";
-				if($arr["keyword"][trim($key)])
+				if($arr["keyword"][trim(strtolower($key))])
 				{
 					$selected = "checked";
 				}
 				$this->vars(array(
-					"key_value" => trim($key),
+					"key_value" => trim(strtolower($key)),
 					"checked" => $selected,
 				));
 				$key_opt.= $this->parse("KEY_OPTION");

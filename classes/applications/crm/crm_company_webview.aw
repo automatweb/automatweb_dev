@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.31 2007/04/19 10:21:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.32 2007/04/19 15:03:01 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1017,6 +1017,30 @@ class crm_company_webview extends class_base
 			));
 		}
 
+		$kw = "";
+		//võtmesõnad
+		foreach( explode("," , $c->prop("activity_keywords")) as $key_word)
+		{
+			$this->vars(array(
+				"keyname" => trim($key_word),
+				"keyurl" => $url = "/".aw_global_get('section')."?class=site_search_content&action=do_search&search_all=1no_reforb=1&keyword%5B".trim($key_word)."%5D=1",
+/*			$this->mk_my_orb('do_search',array(
+						"search_all" => 1,
+						"field" => 0,
+						"area" => 0,
+						"x" => 0,
+						"y" => 0,
+						"no_reforb" => 1,
+						"section" => aw_global_get("section"),
+					),
+					CL_SITE_SEARCH_CONTENT, true
+				),
+*/			));
+			$kw.=  $this->parse("keywords");
+		}
+		$this->vars(array(
+			"keywords" => $kw,
+		));
 		// Alrighty then, parse your arse away
 		return $this->parse('company_show');
 	}
