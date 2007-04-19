@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.9 2007/04/18 14:17:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.10 2007/04/19 09:49:56 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -10,233 +10,197 @@
 @default field=meta
 @default method=serialize
 
-	@property submitter type=text
-	@caption Ankeedi t&auml;itja
+	@groupinfo submitter_info caption="Ankeedi t&auml;itja"
+	@default group=submitter_info
+		@property data_subm_name type=text
+		@caption Ankeedi t&auml;itja
 
-	@property data_contact_preference type=text
-	@caption Kontakteerumise eelistus
+		@property data_subm_country type=text
+		@caption Ankeedi t&auml;itja asukoht
 
-	@property country type=text
-	@caption Riik
+		@property data_subm_organisation type=text
+		@caption Organisatioon
 
-	@property data_organisation type=text
-	@caption Organisatioon
+		@property data_subm_organizer type=text
+		@caption Oranisaator
+		
+		@property data_subm_contact_preference type=text
+		@caption Kontakteerumise eelistus
 
-	@property data_function_name type=text
-	@caption &Uuml;rituse nimi
+	@groupinfo general_function_info caption="&Uuml;ldine &uuml;rituse info"
+	@default group=general_function_info
 
-	@property attendees_no type=text
-	@caption Osalejate arv
+		@property data_gen_function_name type=text
+		@caption &Uuml;rituse nimi
 
-	@property data_response_date type=text
-	@caption Tagasiside aeg
+		@property data_gen_attendees_no type=text
+		@caption Osalejate arv kokku
 
-	@property data_decision_date type=text
-	@caption Otsuse aeg
+		@property data_gen_response_date type=text
+		@caption Tagasiside aeg
 
-	@property data_arrival_date type=text
-	@caption Saabumise aeg
+		@property data_gen_decision_date type=text
+		@caption Otsuse aeg
 
-	@property data_departure_date type=text
-	@caption Lahkumise aeg
+		@property data_gen_arrival_date type=text
+		@caption Saabumise aeg
 
-	@property data_open_for_alternative_dates type=checkbox ch_value=1 default=0
-	@caption N&ouml;us alternatiivsete kuup&auml;evadega
+		@property data_gen_departure_date type=text
+		@caption Lahkumise aeg
 
-	@property data_accommondation_requirements type=checkbox ch_value=1 default=0
-	@caption Majutusvajadused
+		@property data_gen_open_for_alternative_dates type=checkbox ch_value=1 default=0
+		@caption N&ouml;us alternatiivsete kuup&auml;evadega
 
-	@property data_multi_day type=checkbox ch_value=1 default=0
-	@caption &Uuml;rituse kestus
+		@property data_gen_accommondation_requirements type=checkbox ch_value=1 default=0
+		@caption Majutusvajadused
 
-	@property needs_rooms type=checkbox ch_value=1 default=0
-	@caption Majutusvajadused
+		@property data_gen_multi_day type=checkbox ch_value=1 default=0
+		@caption &Uuml;rituse kestus
 
-	@property data_single_rooms type=text
-	@caption &Uuml;hekohalised toad
+		@property data_gen_single_rooms type=text
+		@caption &Uuml;hekohalised toad
 
-	@property data_double_rooms type=text
-	@caption Kahekohalised toad
+		@property data_gen_double_rooms type=text
+		@caption Kahekohalised toad
 
-	@property data_suites type=text
-	@caption Sviidid
+		@property data_gen_suites type=text
+		@caption Sviidid
 
-	@property flexible_dates type=checkbox ch_value=1 default=0
-	@caption Kuup&auml;evad on paindlikud
+		@property data_gen_dates_are_flexible type=type=checkbox ch_value=1 default=0
+		@caption Kuup&auml;evad on paindlikud
+		
+		@property data_gen_meeting_pattern type=hidden
+		@caption Kuup&auml;evade muster
 
-	@property data_date_comments type=text
-	@caption Kuup&auml;evade kommentaar
+		@property data_gen_date_comments type=text
+		@caption Kuup&auml;evade kommentaar
 
-	@property data_city type=text
-	@caption Soovitud linn
+		@property data_gen_city type=text
+		@caption Soovitud linn
 
-	@property data_hotel type=text
-	@caption Soovitud hotell
+		@property data_gen_hotel type=text
+		@caption Soovitud hotell
 
-	@property archived type=checkbox ch_value=1 default=0
-	@caption Arhiveeritud
+		@property archived type=checkbox ch_value=1 default=0
+		@caption Arhiveeritud
 
-	@property urgent type=checkbox ch_value=1 default=0
-	@caption Kiire
+		@property urgent type=checkbox ch_value=1 default=0
+		@caption Kiire
 
-	// this approach sucks bigtime, but i don't have any time to do better..
-	@property data_dates_are_flexible type=hidden
-	@caption Kuup&auml;evad on paindlikud
+		@property data_gen_alternative_dates type=hidden
+		@caption Alternatiivsed kuup&auml;evad
 
-	@property data_meeting_pattern type=hidden
-	@caption Kuup&auml;evade muster
+		@property data_gen_package type=text
+		@caption Pakett
 
-	@property pattern_wday_from type=hidden
-	@property pattern_wday_to type=hidden
-	@property pattern_days type=hidden
+	@groupinfo main_fun caption="Main function"
+	@default group=main_fun
+
+		@property data_mf_table type=text no_caption=1
+		@caption Pea&uuml;ritus
+
+		@property data_mf_event_type type=text
+		@caption &Uuml;rituse t&uuml;&uuml;p
+
+		@property data_mf_table_form type=text
+		@caption Laudade asetus
+
+		@property data_mf_tech type=text
+		@caption Tehniline varustus
+
+		@property data_mf_additonal_tech type=text
+		@caption Tehnilise varustuse erisoov
+
+		@property data_mf_additional_decorations type=text
+		@caption Dekoratsioonid
+
+		@property data_mf_additional_entertainment type=text
+		@caption Meelelahutus
+
+		@property data_mf_additional_catering type=text
+		@caption Erisoovid toitlustuse kohta
+
+		@property data_mf_breakout_rooms type=checkbox ch_value=1 default=0
+		@caption Puhkeruumide soov
+
+		@property door_mf_door_sign type=text
+		@caption Uksesilt
+
+		@property data_mf_attendrees_no type=text
+		@caption Osalejate arv
+
+		@property data_mf_start_date type=text
+		@caption Algusaeg
+
+		@property data_mf_end_date type=text
+		@caption L&otilde;puaeg
+
+		@property data_mf_24h type=text
+		@caption Hoia 24 tundi kinni
+
+		@property data_mf_catering type=text
+		@caption Pea&uuml;rituse toitlustus
+		
+		@property data_mf_catering_type type=text
+		@caption Pea&uuml;rituse toitlustuse t&uuml;&uuml;p
+		
+		@property data_mf_catering_attendees_no type=text
+		@caption Pea&uuml;rituse toitlustuse osalejate arv
+
+		@property data_mf_catering_start type=text
+		@caption Pea&uuml;rituse toitlustuse algusaeg
+
+		@property data_mf_catering_end type=text
+		@caption Pea&uuml;rituse toitlustuse l&otilde;puaeg
 	
-	@property event_type_chooser type=hidden
-	@property event_type_select type=hidden
-	@property event_type_text type=hidden
-	@property tech_equip type=hidden
+	@groupinfo additional_functions caption="Lisa&uuml;ritused"
+	@default group=additional_functions
+		
+		@property data_af_table type=hidden
+		@caption Lisa&uuml;ritused
 
-	@property tech_equip_raw type=hidden
+		@property data_af_catering type=text
+		@caption Lisa&uuml;rituste toitlustus
 
-	@property main_catering type=hidden
-	@property table_form_raw type=hidden
-	@property start_time_raw type=hidden
-	@property start_date_raw type=hidden
-	@property end_time_raw type=hidden
-	@property end_date_raw type=hidden
-
-	@property data_alternative_dates type=hidden
-	@caption Alternatiivsed kuup&auml;evad
 	
-	@property data_additional_functions type=hidden
-	@caption Lisa&uuml;ritused
+	@groupinfo search_results caption="Otsingutulemused"
+	@default group=search_results
 
-	@property data_additional_functions_catering type=text
-	@caption Lisa&uuml;rituste toitlustus
+		@property data_search_results type=hidden
+		@caption Otsingutulemused
 
-	@property data_package type=text
-	@caption Pakett
-	
-	@property all_search_results type=hidden
-	@property selected_search_result type=hidden
+		@property data_search_selected type=hidden
+		@caption Valitud otsingutulemused
 
+	@groupinfo billing caption="Arve info"
+	@default group=billing
+		
+		@property data_billing_company type=text
+		@caption Organisatsioon
 
-// additional dates 
+		@property data_billing_contact type=text
+		@caption Kontaktisik
 
-@groupinfo add_dates caption="Additional dates"
-@default group=add_dates
+		@property data_billing_street type=text
+		@caption T&auml;nav
 
-	@property additional_dates type=text no_caption=1
-	@caption Alternatiivsed kuup&auml;evad
+		@property data_billing_city type=text
+		@caption Linn
 
-// main function 
+		@property data_billing_zip type=text
+		@caption Indeks
 
-@groupinfo main_fun caption="Main function"
-@default group=main_fun
+		@property data_billing_country type=text
+		@caption Riik
 
-	@property data_main_function type=text no_caption=1
-	@caption Pea&uuml;ritus
+		@property data_billing_name type=text
+		@caption Nimi
 
-	@property data_event_type type=text
-	@caption &Uuml;rituse t&uuml;&uuml;p
+		@property data_billing_phone type=text
+		@caption Telefoninumber
 
-	@property data_table_form type=text
-	@caption Laudade asetus
-
-	@property tech type=text
-	@caption Tehniline varustus
-
-	@property data_additonal_tech type=text
-	@caption Tehnilise varustuse erisoov
-
-	@property data_additional_decorations type=text
-	@caption Dekoratsioonid
-
-	@property data_additional_entertainment type=text
-	@caption Meelelahutus
-
-	@property data_additional_catering type=text
-	@caption Erisoovid toitlustuse kohta
-
-	@property data_breakout_rooms type=checkbox ch_value=1
-	@caption Puhkeruumide soov
-
-	@property door_sign type=text
-	@caption Uksesilt
-
-	@property data_person_no type=text
-	@caption Osalejate arv
-
-	@property start_date type=text
-	@caption Algusaeg
-
-	@property end_date type=text
-	@caption L&otilde;puaeg
-
-	@property 24h type=text
-	@caption Hoia 24 tundi kinni
-
-
-// main fun catering and helpers
-
-	@property data_main_function_catering type=text
-	@caption Pea&uuml;rituse 
-
-	@property data_main_function_catering_type type=text
-	@caption Pea&uuml;rituse toitlustuse t&uuml;&uuml;p
-
-	@property data_main_function_catering_person_no type=text
-	@caption Pea&uuml;rituse toitlustuse osalejate arv
-
-	@property data_main_function_catering_start type=text
-	@caption Pea&uuml;rituse toitlustuse algusaeg
-
-	@property data_main_function_catering_end type=text
-	@caption Pea&uuml;rituse toitlustuse l&otilde;puaeg
-
-@groupinfo add_fun caption="Lisa&uuml;ritused"
-@default group=add_fun
-
-	@property additional_functions type=text no_caption=1
-	@caption Lisa&uuml;ritused
-
-@groupinfo billing caption="Billing info"
-@default group=billing
-	@property data_billing_company type=text
-	@caption Organisatsioon
-
-	@property data_billing_contact type=text
-	@caption Kontaktisik
-
-	@property data_billing_street type=text
-	@caption T&auml;nav
-
-	@property data_billing_city type=text
-	@caption Linn
-
-	@property data_billing_zip type=text
-	@caption Indeks
-
-	@property data_billing_country type=text
-	@caption Riik
-
-	@property data_billing_name type=text
-	@caption Nimi
-
-	@property data_billing_phone type=text
-	@caption Telefoninumber
-
-	@property data_billing_email type=text
-	@caption E-mail
-
-@groupinfo search_res caption="Valitud otsingutulemused"
-@default group=search_res
-	@property data_search_result type=text
-	@caption Otsingutulemused
-
-
-
-
-
+		@property data_billing_email type=text
+		@caption E-mail
 
 */
 

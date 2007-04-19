@@ -1,99 +1,108 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>submitter</name>
+            <name>data_subm_name</name>
             <table>objects</table>
-            <group>general</group>
+            <group>submitter_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Ankeedi t&amp;amp;auml;itja</caption>
       </property>
       <property>
-            <name>data_contact_preference</name>
+            <name>data_subm_country</name>
             <table>objects</table>
-            <group>general</group>
+            <group>submitter_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Kontakteerumise eelistus</caption>
+            <caption>Ankeedi t&amp;amp;auml;itja asukoht</caption>
       </property>
       <property>
-            <name>country</name>
+            <name>data_subm_organisation</name>
             <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Riik</caption>
-      </property>
-      <property>
-            <name>data_organisation</name>
-            <table>objects</table>
-            <group>general</group>
+            <group>submitter_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Organisatioon</caption>
       </property>
       <property>
-            <name>data_function_name</name>
+            <name>data_subm_organizer</name>
             <table>objects</table>
-            <group>general</group>
+            <group>submitter_info</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Oranisaator</caption>
+      </property>
+      <property>
+            <name>data_subm_contact_preference</name>
+            <table>objects</table>
+            <group>submitter_info</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Kontakteerumise eelistus</caption>
+      </property>
+      <property>
+            <name>data_gen_function_name</name>
+            <table>objects</table>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>&amp;amp;Uuml;rituse nimi</caption>
       </property>
       <property>
-            <name>attendees_no</name>
+            <name>data_gen_attendees_no</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Osalejate arv</caption>
+            <caption>Osalejate arv kokku</caption>
       </property>
       <property>
-            <name>data_response_date</name>
+            <name>data_gen_response_date</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Tagasiside aeg</caption>
       </property>
       <property>
-            <name>data_decision_date</name>
+            <name>data_gen_decision_date</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Otsuse aeg</caption>
       </property>
       <property>
-            <name>data_arrival_date</name>
+            <name>data_gen_arrival_date</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Saabumise aeg</caption>
       </property>
       <property>
-            <name>data_departure_date</name>
+            <name>data_gen_departure_date</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Lahkumise aeg</caption>
       </property>
       <property>
-            <name>data_open_for_alternative_dates</name>
+            <name>data_gen_open_for_alternative_dates</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -101,9 +110,9 @@
             <caption>N&amp;amp;ouml;us alternatiivsete kuup&amp;amp;auml;evadega</caption>
       </property>
       <property>
-            <name>data_accommondation_requirements</name>
+            <name>data_gen_accommondation_requirements</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -111,9 +120,9 @@
             <caption>Majutusvajadused</caption>
       </property>
       <property>
-            <name>data_multi_day</name>
+            <name>data_gen_multi_day</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -121,74 +130,73 @@
             <caption>&amp;amp;Uuml;rituse kestus</caption>
       </property>
       <property>
-            <name>needs_rooms</name>
+            <name>data_gen_single_rooms</name>
             <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Majutusvajadused</caption>
-      </property>
-      <property>
-            <name>data_single_rooms</name>
-            <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>&amp;amp;Uuml;hekohalised toad</caption>
       </property>
       <property>
-            <name>data_double_rooms</name>
+            <name>data_gen_double_rooms</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Kahekohalised toad</caption>
       </property>
       <property>
-            <name>data_suites</name>
+            <name>data_gen_suites</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Sviidid</caption>
       </property>
       <property>
-            <name>flexible_dates</name>
+            <name>data_gen_dates_are_flexible</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
+            <type>type</type>
             <ch_value>1</ch_value>
             <caption>Kuup&amp;amp;auml;evad on paindlikud</caption>
       </property>
       <property>
-            <name>data_date_comments</name>
+            <name>data_gen_meeting_pattern</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <caption>Kuup&amp;amp;auml;evade muster</caption>
+      </property>
+      <property>
+            <name>data_gen_date_comments</name>
+            <table>objects</table>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Kuup&amp;amp;auml;evade kommentaar</caption>
       </property>
       <property>
-            <name>data_city</name>
+            <name>data_gen_city</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Soovitud linn</caption>
       </property>
       <property>
-            <name>data_hotel</name>
+            <name>data_gen_hotel</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -197,7 +205,7 @@
       <property>
             <name>archived</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -207,7 +215,7 @@
       <property>
             <name>urgent</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
@@ -215,199 +223,25 @@
             <caption>Kiire</caption>
       </property>
       <property>
-            <name>data_dates_are_flexible</name>
+            <name>data_gen_alternative_dates</name>
             <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Kuup&amp;amp;auml;evad on paindlikud</caption>
-      </property>
-      <property>
-            <name>data_meeting_pattern</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Kuup&amp;amp;auml;evade muster</caption>
-      </property>
-      <property>
-            <name>pattern_wday_from</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>pattern_wday_to</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>pattern_days</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>event_type_chooser</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>event_type_select</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>event_type_text</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>tech_equip</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>tech_equip_raw</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>main_catering</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>table_form_raw</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>start_time_raw</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>start_date_raw</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>end_time_raw</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>end_date_raw</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>data_alternative_dates</name>
-            <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
             <caption>Alternatiivsed kuup&amp;amp;auml;evad</caption>
       </property>
       <property>
-            <name>data_additional_functions</name>
+            <name>data_gen_package</name>
             <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <caption>Lisa&amp;amp;uuml;ritused</caption>
-      </property>
-      <property>
-            <name>data_additional_functions_catering</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Lisa&amp;amp;uuml;rituste toitlustus</caption>
-      </property>
-      <property>
-            <name>data_package</name>
-            <table>objects</table>
-            <group>general</group>
+            <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
             <caption>Pakett</caption>
       </property>
       <property>
-            <name>all_search_results</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>selected_search_result</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
-            <name>additional_dates</name>
-            <table>objects</table>
-            <group>add_dates</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <caption>Alternatiivsed kuup&amp;amp;auml;evad</caption>
-      </property>
-      <property>
-            <name>data_main_function</name>
+            <name>data_mf_table</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -417,7 +251,7 @@
             <caption>Pea&amp;amp;uuml;ritus</caption>
       </property>
       <property>
-            <name>data_event_type</name>
+            <name>data_mf_event_type</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -426,7 +260,7 @@
             <caption>&amp;amp;Uuml;rituse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>data_table_form</name>
+            <name>data_mf_table_form</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -435,7 +269,7 @@
             <caption>Laudade asetus</caption>
       </property>
       <property>
-            <name>tech</name>
+            <name>data_mf_tech</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -444,7 +278,7 @@
             <caption>Tehniline varustus</caption>
       </property>
       <property>
-            <name>data_additonal_tech</name>
+            <name>data_mf_additonal_tech</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -453,7 +287,7 @@
             <caption>Tehnilise varustuse erisoov</caption>
       </property>
       <property>
-            <name>data_additional_decorations</name>
+            <name>data_mf_additional_decorations</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -462,7 +296,7 @@
             <caption>Dekoratsioonid</caption>
       </property>
       <property>
-            <name>data_additional_entertainment</name>
+            <name>data_mf_additional_entertainment</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -471,7 +305,7 @@
             <caption>Meelelahutus</caption>
       </property>
       <property>
-            <name>data_additional_catering</name>
+            <name>data_mf_additional_catering</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -480,7 +314,7 @@
             <caption>Erisoovid toitlustuse kohta</caption>
       </property>
       <property>
-            <name>data_breakout_rooms</name>
+            <name>data_mf_breakout_rooms</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -490,7 +324,7 @@
             <caption>Puhkeruumide soov</caption>
       </property>
       <property>
-            <name>door_sign</name>
+            <name>door_mf_door_sign</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -499,7 +333,7 @@
             <caption>Uksesilt</caption>
       </property>
       <property>
-            <name>data_person_no</name>
+            <name>data_mf_attendrees_no</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -508,7 +342,7 @@
             <caption>Osalejate arv</caption>
       </property>
       <property>
-            <name>start_date</name>
+            <name>data_mf_start_date</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -517,7 +351,7 @@
             <caption>Algusaeg</caption>
       </property>
       <property>
-            <name>end_date</name>
+            <name>data_mf_end_date</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -526,7 +360,7 @@
             <caption>L&amp;amp;otilde;puaeg</caption>
       </property>
       <property>
-            <name>24h</name>
+            <name>data_mf_24h</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -535,16 +369,16 @@
             <caption>Hoia 24 tundi kinni</caption>
       </property>
       <property>
-            <name>data_main_function_catering</name>
+            <name>data_mf_catering</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>Pea&amp;amp;uuml;rituse </caption>
+            <caption>Pea&amp;amp;uuml;rituse toitlustus</caption>
       </property>
       <property>
-            <name>data_main_function_catering_type</name>
+            <name>data_mf_catering_type</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -553,7 +387,7 @@
             <caption>Pea&amp;amp;uuml;rituse toitlustuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>data_main_function_catering_person_no</name>
+            <name>data_mf_catering_attendees_no</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -562,7 +396,7 @@
             <caption>Pea&amp;amp;uuml;rituse toitlustuse osalejate arv</caption>
       </property>
       <property>
-            <name>data_main_function_catering_start</name>
+            <name>data_mf_catering_start</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -571,7 +405,7 @@
             <caption>Pea&amp;amp;uuml;rituse toitlustuse algusaeg</caption>
       </property>
       <property>
-            <name>data_main_function_catering_end</name>
+            <name>data_mf_catering_end</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
@@ -580,14 +414,40 @@
             <caption>Pea&amp;amp;uuml;rituse toitlustuse l&amp;amp;otilde;puaeg</caption>
       </property>
       <property>
-            <name>additional_functions</name>
+            <name>data_af_table</name>
             <table>objects</table>
-            <group>add_fun</group>
+            <group>additional_functions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <caption>Lisa&amp;amp;uuml;ritused</caption>
+      </property>
+      <property>
+            <name>data_af_catering</name>
+            <table>objects</table>
+            <group>additional_functions</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <no_caption>1</no_caption>
-            <caption>Lisa&amp;amp;uuml;ritused</caption>
+            <caption>Lisa&amp;amp;uuml;rituste toitlustus</caption>
+      </property>
+      <property>
+            <name>data_search_results</name>
+            <table>objects</table>
+            <group>search_results</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <caption>Otsingutulemused</caption>
+      </property>
+      <property>
+            <name>data_search_selected</name>
+            <table>objects</table>
+            <group>search_results</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <caption>Valitud otsingutulemused</caption>
       </property>
       <property>
             <name>data_billing_company</name>
@@ -670,15 +530,6 @@
             <type>text</type>
             <caption>E-mail</caption>
       </property>
-      <property>
-            <name>data_search_result</name>
-            <table>objects</table>
-            <group>search_res</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Otsingutulemused</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_RFP</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -687,21 +538,24 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <add_dates>
-                  <caption>Additional dates</caption>
-            </add_dates>
+            <submitter_info>
+                  <caption>Ankeedi t&amp;amp;auml;itja</caption>
+            </submitter_info>
+            <general_function_info>
+                  <caption>&amp;amp;Uuml;ldine &amp;amp;uuml;rituse info</caption>
+            </general_function_info>
             <main_fun>
                   <caption>Main function</caption>
             </main_fun>
-            <add_fun>
+            <additional_functions>
                   <caption>Lisa&amp;amp;uuml;ritused</caption>
-            </add_fun>
+            </additional_functions>
+            <search_results>
+                  <caption>Otsingutulemused</caption>
+            </search_results>
             <billing>
-                  <caption>Billing info</caption>
+                  <caption>Arve info</caption>
             </billing>
-            <search_res>
-                  <caption>Valitud otsingutulemused</caption>
-            </search_res>
       </groupinfo>
 </properties>
 

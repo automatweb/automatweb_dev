@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.77 2007/04/18 14:17:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.78 2007/04/19 09:49:56 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -256,27 +256,25 @@ class conference_planning extends class_base
 		$prop = (substr($prop, 0, 5) == "data_")?substr($prop, 5):$prop;
 		switch($prop)
 		{
-			case "multi_day":
+			case "gen_multi_day":
 				$ret = array(
 					"form" => "radio_chooser",
-					"options" => array(
-						0 => t("&Uuml;ks p&auml;ev"),
-						1 => t("Mitu p&auml;"),
-					),
-					"default" => 0,
 				);
 				break;
 
-			case "response_date":
-			case "decision_date":
-			case "arrival_date":
-			case "departure_date":
+			case "gen_response_date":
+			case "gen_decision_date":
+			case "gen_arrival_date":
+			case "gen_departure_date":
+
+			case "mf_start_date":
+			case "mf_end_date":
 				$ret = array(
 					"form" => "date_textbox",
 				);
 				break;
 
-			case "alternative_dates":
+			case "gen_alternative_dates":
 				$ret = array(
 					"form" => "mixed",
 					"add_rows" => "manual",
@@ -292,7 +290,7 @@ class conference_planning extends class_base
 					),
 				);
 				break;
-			case "main_function":
+			case "mf_table":
 				$ret["fields"] = array(
 					"name" => t("&Uuml;rituse nimi"),
 					"type" => t("&Uuml;rituse t&uuml;&uuml;p"),
@@ -301,40 +299,51 @@ class conference_planning extends class_base
 					"table_form" => t("Ruumi paigutus"),
 					"24h" => t("Hoia ruumi &ouml;&ouml;p&auml;ev"),
 				);
-			case "main_function_catering":
+			case "mf_catering":
 				$ret["fields"] = array(
 					"data_main_function_catering_type" => t("&Uuml;rituse t&uuml;&uuml;p"),
 					"data_main_function_catering_start" => t("Algusaeg"),
 					"data_main_function_catering_end" => t("L&otilde;puaeg"),
 					"data_main_function_catering_person_no" => t("Osalejate arv"),
 				);
-			case "additional_functions":
-			case "additional_functions_catering":
+			case "af_table":
+			case "af_catering":
+
+			case "search_results":
+			case "search_selected":
 				$ret["form"] = "table";
 				$ret["edit_link"] = true;
 				$ret["remove_link"] = true;
 				break;
 
-			case "breakout_rooms":
-			case "open_for_alternative_dates":
-			case "accommondation_requirements":
-			case "dates_are_flexible":
+			
+			case "gen_open_for_alternative_dates":
+			case "gen_accommondation_requirements":
+			case "gen_dates_are_flexible":
+			case "mf_breakout_rooms":
+			case "mf_24h":
 				$ret = array(
 					"form" => "checkbox",
 				);
 				break;
 
-			case "meeting_pattern":
+			case "mf_tech":
+				$ret = array(
+					"form" => "checkboxes", // not implemented
+				);
+				break;
+
+			case "gen_meeting_pattern":
 				$ret = array(
 					"form" => "meeting_pattern",
 				);
 				break;
 
-			case "additional_catering":
-			case "additional_entertainment":
-			case "additional_decorations":
-			case "additonal_tech":
-			case "date_comments":
+			case "mf_additional_catering":
+			case "mf_additional_entertainment":
+			case "mf_additional_decorations":
+			case "mf_additonal_tech":
+			case "gen_date_comments":
 				$ret = array(
 					"form" => "textarea",
 				);
@@ -347,17 +356,27 @@ class conference_planning extends class_base
 				break;
 
 
-			case "main_function_catering_type":
-			case "event_type":
+			case "mf_catering_type":
+			case "mf_event_type":
 				$ret = array(
 					"form" => "event_type",
 				);
 				break;
-
-			case "main_function_catering_start":
-			case "main_function_catering_end":
 			
-			case "main_function_catering_person_no":
+			case "subm_name":
+			case "subm_organisation":
+			case "subm_organizer":
+			case "subm_country":
+
+			case "gen_function_name":
+			case "gen_attendees_no":
+
+			case "mf_door_sign":
+			case "mf_attendees_no":
+			case "mf_catering_start":
+			case "mf_catering_end":
+			case "mf_catering_attendees_no":
+			
 			case "billing_email":
 			case "billing_phone":
 			case "billing_name":
@@ -366,23 +385,22 @@ class conference_planning extends class_base
 			case "billing_street":
 			case "billing_contact":
 			case "billing_company":
-			case "organisation":
-			case "function_name":
-			case "person_no":
 				$ret = array(
 					"form" => "textbox",
 				);
 				break;
 
-			case "single_rooms":
-			case "double_rooms":
-			case "suites":
+			case "subm_contact_preference":
+			
+			case "gen_single_rooms":
+			case "gen_double_rooms":
+			case "gen_suites":
+			case "gen_city":
+			case "gen_hotel":
+			case "gen_package":
+			
 			case "billing_country":
-			case "contact_preference":
-			case "city":
-			case "hotel":
-			case "package":
-			case "table_form":
+			case "mf_table_form":
 				$ret = array(
 					"form" => "select",
 				);
@@ -459,7 +477,7 @@ class conference_planning extends class_base
 			//-- get_property --//
 			case "show_controller":
 			case "save_controller":
-				if(empty($arr["request"]["view_no"]) && empty($arr["request"]["element"]))
+				if(!strlen($arr["request"]["view_no"]) && !strlen($arr["request"]["element"]))
 				{
 					return PROP_IGNORE;
 				}
@@ -506,19 +524,33 @@ class conference_planning extends class_base
 					$list = $cfg->load_properties(array(
 						"clid" => CL_RFP
 					));
+					$grinfo = $cfg->get_groupinfo();
 					$list = array_filter($list, array($this, "__callback_filter_prplist"));
 					uasort($list, array($this, "__callback_sort_prplist"));
+					foreach($list as $_data)
+					{
+						$groups[$_data["group"]] = $_data["group"];
+					}
+					foreach($groups as $group)
+					{
+						$tb->add_sub_menu(array(
+							"parent" => "add_elem",
+							"name" => "add_elem_".$group,
+							"text" => $grinfo[$group]["caption"],
+						));
+					}
 					
 					foreach($list as $prp => $data)
 					{
 						$tb->add_menu_item(array(
-							"parent" => "add_elem",
+							"parent" => "add_elem_".$data["group"],
 							"text" => ($data["caption"])?$data["caption"]:$prp,
 							"link" => $this->mk_my_orb("add_element_to_view", array(
 								"element" => $prp,
 								"view_no" => $view_no,
 								"planner" => $arr["obj_inst"]->id(),
 								"return_url" => get_ru(),
+								"caption" => $data["caption"]?$data["caption"]:$prp,
 							)),
 						));
 					}
@@ -825,6 +857,7 @@ class conference_planning extends class_base
 				));
 				$list = array_filter($list, array($this, "__callback_filter_prplist"));
 				uasort($list, array($this, "__callback_sort_prplist"));
+
 				foreach(aw_unserialize($arr["obj_inst"]->prop("help_views")) as $id => $view)
 				{
 
@@ -1069,6 +1102,7 @@ class conference_planning extends class_base
 		@param element required type=string
 		@param view_no required type=int
 		@param planner required type=int
+		@param caption optional type=string
 		@param return_url optional type=string
 	**/
 	function add_element_to_view($arr)
@@ -1080,6 +1114,9 @@ class conference_planning extends class_base
 			$views[$arr["view_no"]]["elements"][] = array(
 				"name" => $arr["element"],
 				"type" => TYPE_ELEMENT,
+				"trans" => array(
+					aw_global_get("ct_lang_lc") => $arr["caption"]?$arr["caption"]:t("Nimetu element"),
+				),
 			);
 			$obj->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
 			$obj->save();
