@@ -37,6 +37,24 @@
             <caption>Oranisaator</caption>
       </property>
       <property>
+            <name>data_subm_email</name>
+            <table>objects</table>
+            <group>submitter_info</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>E-mail</caption>
+      </property>
+      <property>
+            <name>data_subm_phone</name>
+            <table>objects</table>
+            <group>submitter_info</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Phone</caption>
+      </property>
+      <property>
             <name>data_subm_contact_preference</name>
             <table>objects</table>
             <group>submitter_info</group>

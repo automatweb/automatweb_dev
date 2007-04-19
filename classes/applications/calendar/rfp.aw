@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.10 2007/04/19 09:49:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.11 2007/04/19 09:59:33 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -24,6 +24,12 @@
 		@property data_subm_organizer type=text
 		@caption Oranisaator
 		
+		@property data_subm_email type=text
+		@caption E-mail
+		
+		@property data_subm_phone type=text
+		@caption Phone
+
 		@property data_subm_contact_preference type=text
 		@caption Kontakteerumise eelistus
 

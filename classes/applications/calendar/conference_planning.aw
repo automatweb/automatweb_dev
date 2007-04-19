@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.78 2007/04/19 09:49:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.79 2007/04/19 10:00:29 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -367,6 +367,8 @@ class conference_planning extends class_base
 			case "subm_organisation":
 			case "subm_organizer":
 			case "subm_country":
+			case "subm_email":
+			case "subm_phone":
 
 			case "gen_function_name":
 			case "gen_attendees_no":
