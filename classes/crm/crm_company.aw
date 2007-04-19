@@ -160,7 +160,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 @groupinfo keywords caption=M&auml;rks&otilde;nad" parent=general_sub submit=no 
 @default group=keywords
 	@property keywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
-	@caption AW M&auml;rks&otilde;nad
+	@caption AW V&otilde;tmes&otilde;na
+
 
 
 @default group=open_hrs
