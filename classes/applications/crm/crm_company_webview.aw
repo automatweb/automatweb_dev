@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.29 2007/04/16 12:08:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.30 2007/04/19 10:20:05 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1270,8 +1270,22 @@ class crm_company_webview extends class_base
 		$oh_inst = get_instance(CL_OPENHOURS);
 		$img_inst = get_instance(CL_IMAGE);
 		$ph_inst = get_instance(CL_CRM_PHONE);
+		$cnt = 0;
+		if(isset($_GET["page"]))
+		{
+			$page = $_GET["page"] - 1;
+		}
+		else
+		{
+			$page = 0;
+		}
 		foreach ($orgs as $o)
 		{
+			$cnt++;
+			if(isset($page) && (($cnt-1) >= ($page+1)*20 || ($cnt-1) < $page*20))
+			{
+				continue;
+			}
 			$address = $phone = $fax = $openhours = $email = $web = "";
 			$name = $o->name();
 			$this->vars(array(
@@ -1436,7 +1450,86 @@ class crm_company_webview extends class_base
 				"logged" => $this->parse("logged")
 			));
 		}
-
+		
+		//tulemuste vahemiku linkide tekitamine
+		if($cnt > 20)
+		{
+			if($cnt/20 > 3)
+			{
+				$bord = 1;
+			}
+			$n = 0;
+			$b_s = "";
+			$before_points = "";
+			$after_points = "";
+			if($bord && $page > 2)
+			{
+				$this->vars(array(
+					"from_to" => "<<",
+					"between_url" => aw_url_change_var('page', (int)($page) - 2),
+				));
+				$b_s.= $this->parse("between");
+			}
+			while(1)
+			{
+				if(!($n<$cnt/20))
+				{
+					break;
+				}
+				$to = (($n+1)*20);
+				if($to >= $cnt)
+				{
+					$to = $cnt;
+					if($after_points) $b_s.= $this->parse("points");
+				}
+				//see vaatab et oleks üle kolmanda lehekülje, ja selectitud oleks rohkem kui 1 lk tagasi
+				if(!($n == (int)($cnt/20)) && !($n < 3) && $bord && $page+1 < $n)
+				{
+					$after_points = 1;
+					$n++;
+					continue;
+				}
+				//vaatab et selectitud oleks rohkem kui 1 lk edasi
+				if(!($n == 0) && $bord && $page-1 > $n)
+				{
+					//see paneb punktiiri esimese valiku järele, kui vaja
+					if($n == 1) 
+					{
+						$b_s.= $this->parse("points");
+					}
+					
+					$before_points = 1;
+					$n++;
+					continue;
+				}
+				
+				
+				$this->vars(array(
+					"from_to" => ($n*20 + 1)." - ".$to,
+					"between_url" => aw_url_change_var('page', $n+1),
+				));
+				if($page == $n)
+				{
+					$b_s.= $this->parse("between_selected");
+				}
+				else
+				{
+					$b_s.= $this->parse("between");
+				}
+				$n++;
+			}
+			if($bord && $page+2 < (int)($cnt/20) && !($page == 0))
+			{
+				$this->vars(array(
+					"from_to" => ">>",
+					"between_url" => aw_url_change_var('page', (int)($page) + 4),
+				));
+				$b_s.= $this->parse("between");
+			}
+			$this->vars(array(
+				"between" => $b_s,
+			));
+		}
 		$this->parse('company_list');
 
 		return $this->parse();
