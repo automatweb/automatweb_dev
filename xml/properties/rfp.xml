@@ -351,7 +351,7 @@
             <caption>Puhkeruumide asetus</caption>
       </property>
       <property>
-            <name>data_mf_breakout_room_additinal_tech</name>
+            <name>data_mf_breakout_room_additional_tech</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>

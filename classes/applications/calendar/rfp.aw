@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.12 2007/04/19 10:34:51 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.13 2007/04/19 10:50:09 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -132,7 +132,7 @@
 		@property data_mf_breakout_room_setup type=text
 		@caption Puhkeruumide asetus
 
-		@property data_mf_breakout_room_additinal_tech type=text
+		@property data_mf_breakout_room_additional_tech type=text
 		@caption Puhkeruumide eri tehnikavajadused
 
 		@property door_mf_door_sign type=text
