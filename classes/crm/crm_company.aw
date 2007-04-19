@@ -40,7 +40,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 			@property comment type=textarea cols=40 rows=2 table=objects parent=co_top_left 
 			@caption Kommentaar
-
+			
 		@layout co_top_right type=vbox parent=co_top
 
 			@property code type=textbox table=kliendibaas_firma parent=co_top_right 
@@ -157,6 +157,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@property extern_id type=hidden table=kliendibaas_firma field=extern_id no_caption=1
 
+@groupinfo keywords caption=M&auml;rks&otilde;nad" parent=general_sub submit=no 
+@default group=keywords
+	@property keywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
+	@caption AW M&auml;rks&otilde;nad
 
 
 @default group=open_hrs
@@ -186,6 +190,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 ------ Yldine - Lisainfo grupp----------
 @default group=add_info
+
+
 
 	@property field_manager type=releditor mode=manager reltype=RELTYPE_FIELD props=name,class_name table_fields=name,class_name direct_links=1
 	@caption Valdkonnad
@@ -1259,6 +1265,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype CORRESPOND_ADDRESS value=65 clid=CL_CRM_ADDRESS
 @caption Aadressid
+
+@reltype KEYWORD value=66 clid=CL_KEYWORD
+@caption V&otilde;tmes&otilde;na
 
 */
 /*

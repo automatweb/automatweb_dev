@@ -409,6 +409,16 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>keywords2</name>
+            <table>objects</table>
+            <group>keywords</group>
+            <type>keyword_selector</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_KEYWORD</reltype>
+            <caption>AW M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
             <name>openhours</name>
             <table>objects</table>
             <group>open_hrs</group>
@@ -500,7 +510,8 @@
             <group>add_info</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CORRESPOND_ADDRESS</reltype>
-            <field>correspond_address</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Kirjavahetuse aadress</caption>
       </property>
       <property>
@@ -1004,6 +1015,7 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>phone_id</field>
+            <caption>Telefon</caption>
       </property>
       <property>
             <name>telefax_id</name>
@@ -1013,6 +1025,7 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>telefax_id</field>
+            <caption>Faks</caption>
       </property>
       <property>
             <name>url_id</name>
@@ -1022,6 +1035,7 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>url_id</field>
+            <caption>Veebiaadress</caption>
       </property>
       <property>
             <name>email_id</name>
@@ -1031,6 +1045,7 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>email_id</field>
+            <caption>E-mail</caption>
       </property>
       <property>
             <name>aw_bank_account</name>
@@ -1040,6 +1055,7 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>aw_bank_account</field>
+            <caption>Pangaarve</caption>
       </property>
       <property>
             <name>personal_offers_toolbar</name>
@@ -2672,6 +2688,15 @@
             <caption>Tulemused</caption>
       </property>
       <property>
+            <name>stats_s_group_by</name>
+            <table>objects</table>
+            <group>stats_s</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <field>stats_s_group_by</field>
+            <caption>Grupeeri tegevuse alusel</caption>
+      </property>
+      <property>
             <name>stats_s_group_by_client</name>
             <table>objects</table>
             <group>stats_s</group>
@@ -3622,6 +3647,11 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>Aadressid</caption>
             </CORRESPOND_ADDRESS>
+            <KEYWORD>
+                  <value>66</value>
+                  <clid>CL_KEYWORD</clid>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
+            </KEYWORD>
       </reltypes>
       <layout>
             <co_top>
