@@ -342,6 +342,24 @@
             <caption>Puhkeruumide soov</caption>
       </property>
       <property>
+            <name>data_mf_breakout_room_setup</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Puhkeruumide asetus</caption>
+      </property>
+      <property>
+            <name>data_mf_breakout_room_additinal_tech</name>
+            <table>objects</table>
+            <group>main_fun</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Puhkeruumide eri tehnikavajadused</caption>
+      </property>
+      <property>
             <name>door_mf_door_sign</name>
             <table>objects</table>
             <group>main_fun</group>
