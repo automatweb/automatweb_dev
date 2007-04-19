@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.13 2007/04/19 10:50:09 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.14 2007/04/19 11:25:00 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -114,7 +114,7 @@
 		@property data_mf_tech type=text
 		@caption Tehniline varustus
 
-		@property data_mf_additonal_tech type=text
+		@property data_mf_additional_tech type=text
 		@caption Tehnilise varustuse erisoov
 
 		@property data_mf_additional_decorations type=text

@@ -296,7 +296,7 @@
             <caption>Tehniline varustus</caption>
       </property>
       <property>
-            <name>data_mf_additonal_tech</name>
+            <name>data_mf_additional_tech</name>
             <table>objects</table>
             <group>main_fun</group>
             <field>meta</field>
