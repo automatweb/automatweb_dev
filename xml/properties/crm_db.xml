@@ -78,6 +78,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
+            <multiple>1</multiple>
             <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
             <caption>Tegevusalade kaust</caption>
       </property>

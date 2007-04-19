@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.40 2007/04/03 12:31:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.41 2007/04/19 07:56:07 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -30,7 +30,7 @@
 @property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT
 @caption Maakondade kaust
 
-@property dir_tegevusala type=relpicker reltype=RELTYPE_TEGEVUSALA_CAT
+@property dir_tegevusala type=relpicker multiple=1 reltype=RELTYPE_TEGEVUSALA_CAT
 @caption Tegevusalade kaust
 
 @property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT
@@ -164,12 +164,17 @@ class crm_db extends class_base
 	function sector_tree($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];		
-		$menu_tree = new object_tree(array(
-			"parent" => $arr["obj_inst"]->prop("dir_tegevusala"),
-			"class_id" => CL_CRM_SECTOR,
-			"sort_by" => "objects.jrk,objects.name",
-		));
-		$sectors_list = $menu_tree->to_list();
+		$sa = new aw_array($arr["obj_inst"]->prop("dir_tegevusala"));
+		$sectors_list = new object_list();
+		foreach($sa->get() as $parent)
+		{
+			$menu_tree = new object_tree(array(
+				"parent" => $parent,
+				"class_id" => CL_CRM_SECTOR,
+				"sort_by" => "objects.jrk,objects.name",
+			));
+			$sectors_list->add($menu_tree->to_list());
+		}
 		$ids = $this->make_keys($sectors_list->ids());
 		foreach($sectors_list->arr() as $oid => $sect)
 		{
@@ -288,7 +293,7 @@ class crm_db extends class_base
 		$vars = array(
 			"parent" => $arr["obj_inst"]->prop("dir_firma"),
 			"class_id" => CL_CRM_COMPANY,
-			"sort_by" => "objects.name",
+			"sort_by" => "objects.jrk,objects.name",
 		);
 		if($arr["request"]["group"] == "firmad")
 		{
@@ -458,14 +463,29 @@ class crm_db extends class_base
 				"url" => $this->mk_my_orb("new", array("parent" => $pt->id(),"return_url" => get_ru(), "sector" => $arr["request"]["teg_oid"]), CL_CRM_COMPANY),
 			));
 		}
-		if($arr["request"]["group"] == "tegevusalad")
+		if($arr["request"]["group"] == "tegevusalad" || $arr["request"]["group"] == "org")
 		{
-			$pt = $arr["request"]["teg_oid"] ?  $arr["request"]["teg_oid"] : $arr["obj_inst"]->prop("dir_tegevusala");
-			$tb->add_menu_item(array(
-				"parent" => "create_event",
-				"text" => t("Lisa tegevusala"),
-				"url" => $this->mk_my_orb("new", array("parent" => $pt,"return_url" => get_ru()), CL_CRM_SECTOR),
-			));
+			if ($arr["request"]["teg_oid"])
+			{
+				$tb->add_menu_item(array(
+					"parent" => "create_event",
+					"text" => t("Lisa tegevusala"),
+					"url" => $this->mk_my_orb("new", array("parent" => $arr["request"]["teg_oid"],"return_url" => get_ru()), CL_CRM_SECTOR),
+				));
+			}
+			else
+			{
+				$ar = new aw_array($arr["obj_inst"]->prop("dir_tegevusala"));
+				foreach($ar->get() as $pt)
+				{
+					$pto = obj($pt);
+					$tb->add_menu_item(array(
+						"parent" => "create_event",
+						"text" => sprintf(t("Lisa tegevusala %s"), $pto->name()),
+						"url" => $this->mk_my_orb("new", array("parent" => $pt,"return_url" => get_ru()), CL_CRM_SECTOR),
+					));
+				}
+			}
 		}
 		$pl = get_instance(CL_PLANNER);
 		$cal_id = $pl->get_calendar_for_user(array(
