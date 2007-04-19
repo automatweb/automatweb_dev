@@ -379,10 +379,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 
 	@property phone_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
+	@caption Telefon
+
 	@property telefax_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
+	@caption Faks
+
 	@property url_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
+	@caption Veebiaadress
+
 	@property email_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
+	@caption E-mail
+
 	@property aw_bank_account type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
+	@caption Pangaarve
 	
 
 @default group=personal_offers
@@ -2654,7 +2663,7 @@ class crm_company extends class_base
 
 			case "cust_contract_date":
 				// save to rel
-				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])) && $this->can("edit", $rel->id()))
 				{
 					$rel->set_prop($data["name"], date_edit::get_timestamp($data["value"]));
 					$rel->save();
@@ -2673,7 +2682,7 @@ class crm_company extends class_base
 			case "client_manager":
 			case "bill_due_days":
 				// save to rel
-				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])) && $this->can("edit", $rel->id()))
 				{
 					$rel->set_prop($data["name"] == "bill_due_days" ? "bill_due_date_days" : $data["name"], $data["value"]);
 					$rel->save();
@@ -7037,7 +7046,7 @@ class crm_company extends class_base
 		else
 		{
 			$crel = $this->get_cust_rel($arr["obj_inst"]);
-			if ($crel)
+			if ($crel && $this->can("delete", $crel->id()))
 			{
 				$crel->delete();
 			}
@@ -7064,7 +7073,7 @@ class crm_company extends class_base
 		else
 		{
 			$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-			if ($crel)
+			if ($crel && $this->can("delete", $crel->id()))
 			{
 				$crel->delete();
 			}

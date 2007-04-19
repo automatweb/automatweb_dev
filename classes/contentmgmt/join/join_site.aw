@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.50 2007/04/17 14:30:55 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.51 2007/04/19 12:06:11 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -209,7 +209,9 @@ class join_site extends class_base
 			"date_select" => 1,
 			"chooser" => 1,
 			"releditor" => 1,
-			"classificator" => 1
+			"classificator" => 1,
+			"textarea" => 1,
+			"popup_search" => 1
 		);
 	}
 
@@ -530,6 +532,12 @@ class join_site extends class_base
 
 		$clss = aw_ini_get("classes");
 
+		$allowed_props = array(
+			CL_CRM_COMPANY => array("phone_id", "telefax_id", "url_id", "email_id", "aw_bank_account"),
+			CL_CRM_PERSON => array("phone"),
+			CL_USER => array()
+		);
+
 		foreach($this->_get_clids($arr["obj_inst"]) as $clid)
 		{
 			$cln = basename($clss[$clid]["file"]);
@@ -549,7 +557,7 @@ class join_site extends class_base
 
 			foreach($props as $nprop)
 			{
-				if (!$this->prop_types[$nprop["type"]] && $nprop["name"]!="phone")
+				if (!$this->prop_types[$nprop["type"]] && $nprop["name"]!="phone" && !in_array($nprop["name"], $allowed_props[$clid]))
 				{
 					continue;
 				}
@@ -849,6 +857,39 @@ class join_site extends class_base
 							unset($tp["address"]);
 						}
 						else
+						if ($clid == CL_CRM_COMPANY && $pid == "contact")
+						{
+							// address has: * Street address: * City: * Zip code: * Country:	
+							$adr_inst = get_instance(CL_CRM_ADDRESS);
+							$tp["c_adr_ctry"] = array(
+								"name" => "c_adr_ctry",
+								"caption" => t("Maa"),
+								"type" => "select",
+								"options" => $adr_inst->get_country_list()
+							);
+							$tp["c_adr_zip"] = array(
+								"name" => "c_adr_zip",
+								"caption" => t("Postiindeks"),
+								"type" => "textbox",
+							);
+							$tp["c_adr_city"] = array(
+								"name" => "c_adr_city",
+								"caption" => t("Linn"),
+								"type" => "textbox",
+							);
+							$tp["c_adr_county"] = array(
+								"name" => "c_adr_county",
+								"caption" => t("Maakond"),
+								"type" => "textbox"
+							);
+							$tp["c_adr_str"] = array(
+								"name" => "c_adr_str",
+								"caption" => t("T&auml;nava nimi"),
+								"type" => "textbox",
+							);
+							unset($tp["contact"]);
+						}
+						else
 						if (!empty($el_types[$clid][$pid]))
 						{
 							if ($tp[$pid]["type"] == "chooser")
@@ -891,10 +932,31 @@ class join_site extends class_base
 								"2" => t("naine"),
 							);
 						}
+
 						unset($tp[$pid]["size"]);
+						if ($pid == "pohitegevus")
+						{
+							$cc = get_instance(CL_CRM_COMPANY);
+							$cc->_get_pohitegevus(array(
+								"prop" => &$tp[$pid]
+							));
+							$tp[$pid]["size"] = 5;
+						}
+						if ($pid == "ettevotlusvorm")
+						{
+							$ri = $cfgu->get_relinfo();
+							$rt = $ri[$tp[$pid]["reltype"]];
+							$ops_ol = new object_list(array(
+								"class_id" => $rt["clid"],
+								"lang_id" => array(),
+								"site_id" => array()
+							));
+							$tp[$pid]["options"] = $ops_ol->names();
+						}
 					}
 				}
 			}
+
 			$wn = "typo_".$clid;
 
 			$i = get_instance($clid);
@@ -902,6 +964,7 @@ class join_site extends class_base
 				"properties" => $tp,
 				"name_prefix" => $wn
 			));
+
 			$cf_sd = $sessd[$wn];
 			foreach($xp as $xprop)
 			{
@@ -1630,8 +1693,8 @@ class join_site extends class_base
 					$ttp[$pid] = $prop;
 				}
 			}
-
 			$adr = $ttp["address"];
+			$ctc = $ttp["contact"];
 			$class_inst = get_instance($clid);
 			$class_inst->init_class_base();
 			$ttp = $class_inst->parse_properties(array("properties" => $ttp, "obj_inst" => $data_o));
@@ -1639,6 +1702,11 @@ class join_site extends class_base
 			{
 				$ttp["address"] = $adr;
 			}
+			if ($ctc)
+			{
+				$ttp["contact"] = $ctc;
+			}
+
 			foreach($ttp as $pid => $prop)
 			{
 				$cpn = $prop["name"];
@@ -1684,6 +1752,46 @@ class join_site extends class_base
 							"caption" => t("T&auml;nava nimi"),
 							"type" => "textbox",
 							"value" => $data_o->prop("address.aadress")
+						);
+						unset($ttp[$pid]);
+						continue;
+					}
+
+					if ($clid == CL_CRM_COMPANY && $pid == "contact")
+					{
+						// address has: * Street address: * City: * Zip code: * Country:	
+						$adr_inst = get_instance(CL_CRM_ADDRESS);
+						$opts = $adr_inst->get_country_list();
+						$tp["c_adr_ctry"] = array(
+							"name" => "c_adr_ctry",
+							"caption" => t("Maa"),
+							"type" => "select",
+							"options" => $opts,
+							"value" => array_search($data_o->prop("contact.riik.name"), $opts)
+						);
+						$tp["c_adr_zip"] = array(
+							"name" => "c_adr_zip",
+							"caption" => t("Postiindeks"),
+							"type" => "textbox",
+							"value" => $data_o->prop("contact.postiindeks")
+						);
+						$tp["c_adr_city"] = array(
+							"name" => "c_adr_city",
+							"caption" => t("Linn"),
+							"type" => "textbox",
+							"value" => $data_o->prop("contact.linn.name")
+						);
+						$tp["c_adr_county"] = array(
+							"name" => "c_adr_county",
+							"caption" => t("Maakond"),
+							"type" => "textbox",
+							"value" => $data_o->prop("contact.maakond.name")
+						);
+						$tp["c_adr_str"] = array(
+							"name" => "c_adr_str",
+							"caption" => t("T&auml;nava nimi"),
+							"type" => "textbox",
+							"value" => $data_o->prop("contact.aadress")
 						);
 						unset($ttp[$pid]);
 						continue;
@@ -1867,6 +1975,11 @@ class join_site extends class_base
         	                                }
 	                                }
 
+					if ($oldn == "pohitegevus")
+					{
+						$prop["type"] = "select";
+						$prop["size"] = 5;
+					}
 					$tp[$pid] = $prop;
 				}
 			}
@@ -1903,7 +2016,31 @@ class join_site extends class_base
 				"value" => $params["err_return_url"]
 			);
 		}
-		
+
+		/*if ($tp["typo_129[pohitegevus]"])	// NOT a typo
+		{
+			$cc = get_instance(CL_CRM_COMPANY);
+			$cc->_get_pohitegevus(array(
+				"prop" => &$prop
+			));
+			$tp["typo_129[pohitegevus]"]["size"] = 5;
+			$tp["typo_129[pohitegevus]"]["type"] = "select";
+			unset($tp["typo_129[pohitegevus]"]["multiple"]);
+		}
+		if ($tp["typo_129[ettevotlusvorm]"])
+		{
+			$ri = $cfgu->get_relinfo();
+			$rt = $ri[$tp["typo_129[ettevotlusvorm]"]["reltype"]];
+			$ops_ol = new object_list(array(
+				"class_id" => $rt["clid"],
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$tp["typo_129[ettevotlusvorm]"]["options"] = $ops_ol->names();
+			$tp["typo_129[ettevotlusvorm]"]["type"] = "select";
+			$tp["typo_129[ettevotlusvorm]"]["multiple"] = 1;
+		}*/
+
 		aw_session_set("join_err", false);
 		return $tp;
 	}
@@ -2063,6 +2200,18 @@ class join_site extends class_base
 				{
 					$data_o->set_prop($pid, $cf_sd[$oldn]);
 				}
+				if ($oldn == "ettevotlusvorm")
+				{
+					$data_o->set_prop($pid, $cf_sd[$oldn]);
+					$submit_data[$pid] = $cf_sd[$oldn];
+				}
+				else
+				if ($oldn == "pohitegevus")
+				{
+					$data_o->set_prop($pid, $_POST["pohitegevus"]);
+					$submit_data[$pid] = $_POST["pohitegevus"];
+				}
+				else
 				if ($prop["type"] == "relmanager" || $prop["type"] == "releditor" || $prop["type"] == "relpicker")
 				{
 					//$submit_data["cb_emb"] = $data["cb_emb"][$wn];
@@ -2072,13 +2221,17 @@ class join_site extends class_base
 					// if not, create new 
 					// set the object's id as the submit value
 					$p_oid = $data_o->prop($prop["name"]);
-					if ($this->can("view", $p_oid) && ($prop["name"] == "address" || $data_o->prop($prop["name"].".name") == $cf_sd[$oldn]))
+					if ($this->can("view", $p_oid) && ($prop["name"] == "address" || $prop["name"] == "contact" || $data_o->prop($prop["name"].".name") == $cf_sd[$oldn]))
 					{
 						$p_obj = obj($p_oid);
 						// if this is the address thingamajig, then create the address from the separate props
 						if ($prop["name"] == "address")
 						{
 							$this->_update_address_from_req($p_obj, $_POST);
+						}
+						if ($prop["name"] == "contact")
+						{
+							$this->_update_co_address_from_req($p_obj, $_POST);
 						}
 						$p_obj->set_name($cf_sd[$oldn]);
 						aw_disable_acl();
@@ -2101,6 +2254,11 @@ class join_site extends class_base
 						if ($prop["name"] == "address")
 						{
 							$this->_update_address_from_req($p_obj, $_POST);
+							$p_obj->save();
+						}
+						if ($prop["name"] == "contact")
+						{
+							$this->_update_co_address_from_req($p_obj, $_POST);
 							$p_obj->save();
 						}
 
@@ -2196,6 +2354,35 @@ class join_site extends class_base
 			$a_prop = "address";
 		}
 
+		if (strpos($a_prop, "c_adr") !== false)
+		{
+			if ($a_prop == "c_adr_str")
+			{
+				$a_diff = -0.7+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "c_adr_zip")
+			{
+				$a_diff = -0.3+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "c_adr_city")
+			{
+				$a_diff = -0.5+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "c_adr_ctry")
+			{
+				$a_diff = -0.1+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "c_adr_county")
+			{
+				$a_diff = -0.4+($a_diff / 100);
+			}
+			$a_prop = "contact";
+		}
+
 		$b_clid = $b_mt[1];
 		$b_prop = $b_mt[2];
 		if (strpos($b_prop, "p_adr") !== false)
@@ -2226,6 +2413,36 @@ class join_site extends class_base
                         }
 
 			$b_prop = "address";
+		}
+
+		if (strpos($b_prop, "c_adr") !== false)
+		{
+                        if ($b_prop == "c_adr_str")
+                        {
+                                $b_diff = -0.7+($b_diff / 100);
+                        }
+                        else
+                        if ($b_prop == "c_adr_zip")
+                        {
+                                $b_diff = -0.3+($b_diff / 100);
+                        }
+                        else
+                        if ($b_prop == "c_adr_city")
+                        {
+                                $b_diff = -0.5+($b_diff / 100);
+                        }
+                        else
+                        if ($b_prop == "c_adr_ctry")
+                        {
+                                $b_diff = -0.1+($b_diff / 100);
+                        }
+                        else
+                        if ($b_prop == "c_adr_county")
+                        {
+                                $b_diff = -0.4+($b_diff / 100);
+                        }
+
+			$b_prop = "contact";
 		}
 
 
@@ -2477,6 +2694,18 @@ class join_site extends class_base
 		$adr_i = $o->instance();
 		$riiks = $adr_i->get_country_list();
 		$this->set_rel_by_val($o, "riik", $riiks[isset($r["typo_145"]["p_adr_ctry"]) ? $r["typo_145"]["p_adr_ctry"] : $r["p_adr_ctry"]]);
+		$o->set_name($adr_i->get_name_from_adr($o));
+	}
+
+	function _update_co_address_from_req($o, $r)
+	{
+		$o->set_prop("aadress", isset($r["typo_129"]["c_adr_str"]) ? $r["typo_129"]["c_adr_str"] : $r["c_adr_str"]);
+		$o->set_prop("postiindeks", isset($r["typo_129"]["c_adr_zip"]) ? $r["typo_129"]["c_adr_zip"] : $r["c_adr_zip"]);
+		$this->set_rel_by_val($o, "linn", isset($r["typo_129"]["c_adr_city"]) ? $r["typo_129"]["c_adr_city"] : $r["c_adr_city"]);
+		$this->set_rel_by_val($o, "maakond", isset($r["typo_129"]["c_adr_county"]) ? $r["typo_129"]["c_adr_county"] : $r["c_adr_county"]);
+		$adr_i = $o->instance();
+		$riiks = $adr_i->get_country_list();
+		$this->set_rel_by_val($o, "riik", $riiks[isset($r["typo_129"]["c_adr_ctry"]) ? $r["typo_129"]["c_adr_ctry"] : $r["c_adr_ctry"]]);
 		$o->set_name($adr_i->get_name_from_adr($o));
 	}
 
