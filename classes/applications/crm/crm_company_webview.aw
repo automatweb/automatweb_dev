@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.30 2007/04/19 10:20:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.31 2007/04/19 10:21:17 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1454,7 +1454,7 @@ class crm_company_webview extends class_base
 		//tulemuste vahemiku linkide tekitamine
 		if($cnt > 20)
 		{
-			if($cnt/20 > 3)
+			if($cnt/20 > 5)
 			{
 				$bord = 1;
 			}
