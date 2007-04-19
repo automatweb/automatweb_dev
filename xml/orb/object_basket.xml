@@ -11,5 +11,24 @@
 			</function>
 		</action>
 
+		<action name="remove_all" nologin="1">
+			<function name="remove_all">
+				<arguments>
+					<required name="basket" type="int" acl="view" />
+					<required name="ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_single" nologin="1">
+			<function name="remove_single">
+				<arguments>
+					<required name="basket" type="int" acl="view" />
+					<required name="item" type="int" acl="view" />
+					<required name="ru" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

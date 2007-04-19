@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.3 2007/04/16 09:40:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.4 2007/04/19 14:14:59 kristo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -71,32 +71,67 @@ class object_basket extends class_base
 		$sub_ct = $this->get_template_string("LINE");
 		preg_match_all("/\{VAR\:(.*)\}/imsU", $sub_ct, $mt, PREG_PATTERN_ORDER);
 
+		$per_page = 2;
+		$cur_page_from = $_GET["bm_page"] * $per_page;
+		$cur_page_to = ($_GET["bm_page"]+1) * $per_page;
+
 		$ls = "";
+		$counter = 0;
 		foreach($objs as $dat)
 		{
-			$v = array();
-			$o = obj($dat["oid"]);
-			foreach($mt[1] as $var_name)
+			if ($counter >= $cur_page_from && $counter <= $cur_page_to)
 			{
-				list($clid, $prop) = explode(".", $var_name, 2);
-				if (constant($clid) == $o->class_id())
+				$v = array(
+					"remove_single_url" => $this->mk_my_orb("remove_single", array("basket" => $basket->id(), "item" => $dat["oid"], "ru" => get_ru()))
+				);
+				$o = obj($dat["oid"]);
+				foreach($mt[1] as $var_name)
 				{
-					if ($prop == "id")
+					list($clid, $prop) = explode(".", $var_name, 2);
+					if (constant($clid) == $o->class_id())
 					{
-						$v[$var_name] = $o->id();
-					}
-					else
-					{
-						$v[$var_name] = is_array($o->prop($prop)) ? reset($o->prop($prop)) : $o->prop($prop);
+						if ($prop == "id")
+						{
+							$v[$var_name] = $o->id();
+						}
+						else
+						{
+							$v[$var_name] = is_array($o->prop($prop)) ? reset($o->prop($prop)) : $o->prop($prop);
+						}
 					}
 				}
+				$this->vars($v);
+				$ls .= $this->parse("LINE");
 			}
-			$this->vars($v);
-			$ls .= $this->parse("LINE");
+			$counter++;
+		}
+
+		$pgs = "";
+		$num_pages = count($objs) / $per_page;
+		for($i = 0; $i < $num_pages; $i++)
+		{
+			$this->vars(array(
+				"page_from" => ($i*$per_page),
+				"page_to" => min(($i+1)*$per_page, count($objs)),
+				"page_link" => aw_url_change_var("bm_page", $i)
+			));
+			if ($_GET["bm_page"] == $i)
+			{
+				$pgs .= $this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$pgs .= $this->parse("PAGE");
+			}
 		}
 
 		$this->vars(array(
-			"LINE" => $ls
+			"PAGE" => $pgs,
+			"SEL_PAGE" => "",
+			"LINE" => $ls,
+			"total_count" => count($objs),
+			"remove_all_url" => $this->mk_my_orb("remove_all", array("basket" => $basket->id(),"ru" => get_ru())),
+			"print_url" => aw_url_change_var("print", 1)
 		));
 		return $this->parse();
 	}
@@ -132,6 +167,61 @@ class object_basket extends class_base
 		$o = obj($arr["basket"]);
 		$ct = $this->get_basket_content($o);
 		$ct[$arr["oid"]]["oid"] = $arr["oid"];
+		$bt = $this->make_keys($o->prop("basket_type"));
+		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
+		{
+			$tz = aw_serialize($ct);
+			$this->quote(&$tz);
+			$this->set_cval(
+				"object_basket_".$o->id()."_".aw_global_get("uid"),
+				$tz
+			);
+		}
+		else
+		{
+			$_SESSION["object_basket"][$o->id()]["content"] = $ct;
+		}
+		return $arr["ru"];
+	}
+
+	/**
+		@attrib name=remove_all nologin="1"
+		@param basket required type=int acl=view
+		@param ru required 
+	**/
+	function remove_all($arr)
+	{
+		$o = obj($arr["basket"]);
+		$ct = $this->get_basket_content($o);
+		$ct = array();
+		$bt = $this->make_keys($o->prop("basket_type"));
+		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
+		{
+			$tz = aw_serialize($ct);
+			$this->quote(&$tz);
+			$this->set_cval(
+				"object_basket_".$o->id()."_".aw_global_get("uid"),
+				$tz
+			);
+		}
+		else
+		{
+			$_SESSION["object_basket"][$o->id()]["content"] = $ct;
+		}
+		return $arr["ru"];
+	}
+
+	/**
+		@attrib name=remove_single nologin="1"
+		@param basket required type=int acl=view
+		@param item required type=int acl=view
+		@param ru required 
+	**/
+	function remove_single($arr)
+	{
+		$o = obj($arr["basket"]);
+		$ct = $this->get_basket_content($o);
+		unset($ct[$arr["item"]]);
 		$bt = $this->make_keys($o->prop("basket_type"));
 		if ($bt[OBJ_BASKET_USER] && aw_global_get("uid") != "")
 		{
