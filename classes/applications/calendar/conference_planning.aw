@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.81 2007/04/19 10:47:07 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.82 2007/04/19 17:40:42 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -301,10 +301,10 @@ class conference_planning extends class_base
 				);
 			case "mf_catering":
 				$ret["fields"] = array(
-					"data_main_function_catering_type" => t("&Uuml;rituse t&uuml;&uuml;p"),
-					"data_main_function_catering_start" => t("Algusaeg"),
-					"data_main_function_catering_end" => t("L&otilde;puaeg"),
-					"data_main_function_catering_person_no" => t("Osalejate arv"),
+					"data_mf_catering_type" => t("&Uuml;rituse t&uuml;&uuml;p"),
+					"data_mf_catering_start" => t("Algusaeg"),
+					"data_mf_catering_end" => t("L&otilde;puaeg"),
+					"data_mf_catering_person_no" => t("Osalejate arv"),
 				);
 			case "af_table":
 			case "af_catering":
