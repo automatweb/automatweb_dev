@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.49 2007/04/13 09:53:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.50 2007/04/19 08:01:27 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -780,7 +780,7 @@ class bank_payment extends class_base
 		URL to which response is sent in performing the transaction. Max length=60. If it is not set, you must set $_SESSION["bank_payment"]["url"].
 	@param cancel_url optional type=string default=$return_url
 		URL to which response is sent when the transaction is unsuccessful. Max length=60
-	@param lang optional type=string default="EEK"
+	@param lang optional type=string default="EST"
 		Preferred language of communication. Length=3
 	@param priv_key optional type=string
 		Query compiler's private key (merchant's private key)
@@ -887,6 +887,14 @@ class bank_payment extends class_base
 		if(!$arr["service"]) $arr["service"] = "1002";
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
+		if($arr["lang"] == "et")
+		{
+			$arr["lang"] = "EST";
+		}
+		if($arr["lang"] == "en")
+		{
+			$arr["lang"] = "ENG";
+		}
 		if(!$arr["lang"]) $arr["lang"] = "EST";
 		if(!$arr["stamp"]) $arr["stamp"] = "666";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
@@ -1276,6 +1284,15 @@ class bank_payment extends class_base
 			$arr = $this->_add_object_data($payment , $arr);
 		}
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
+		if($arr["lang"] == "EST")
+		{
+			$arr["lang"] = "et";
+		}
+		if($arr["lang"] == "ENG")
+		{
+			$arr["lang"] = "en";
+		}
+		if(!$arr["lang"]) $arr["lang"] = "EST";
 		if(!$arr["lang"]) $arr["lang"] = "et";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
@@ -1307,7 +1324,7 @@ class bank_payment extends class_base
 		$eamount='1000';
 		$cur='EEK';
 		$datetime=date("YmdHis");
-		$lang='et';
+//		$lang='et';
 		$id=sprintf("%-10s", "$id");
 		$ecuno=sprintf("%012s", "$reference_nr");
 		$eamount=sprintf("%012s", "$amount");
@@ -1343,9 +1360,6 @@ class bank_payment extends class_base
 			$link = $this->test_link["credit_card"];
 		}
 		
-		if(aw_global_get("uid") == "struktuur")
-		{//arr($link); arr($priv_key); arr($VK_MAC);die();
-		}
 		$params = array(
 			"action"	=> $service,		//"gaf"
 			"ver"		=> $version,		//Protokolli versioon, Fikseeritud väärtus: 002
@@ -1356,7 +1370,9 @@ class bank_payment extends class_base
 			"datetime"	=> $datetime,		//AAAAKKPPTTmmss 	Tehingu kuupäev,kellaaeg
 			"mac" 		=> $VK_MAC,		//Sõnumi signatuur (MAC)*
 			"lang" 		=> $lang,		//et,en . Süsteemis kasutatav keel. et - Eesti, en - Inglise
-		);
+		);//		if(aw_global_get("uid") == "struktuur")
+		//{arr($params); die();
+		//}
 		return $this->submit_bank_info(array("params" => $params , "link" => $link , "form" => $form));
 	}
 

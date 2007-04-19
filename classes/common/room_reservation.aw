@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.60 2007/04/09 16:16:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.61 2007/04/19 08:01:27 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -1407,6 +1407,7 @@ class room_reservation extends class_base
 			$total_sum+= $sum;
 			$bank = $_SESSION["room_reservation"][$r->id()]["bank"];
 			$bank_country = $_SESSION["room_reservation"][$r->id()]["bank_country"];
+			$lang = $_SESSION["room_reservation"][$r->id()]["lang"];
 			$_SESSION["room_reservation"][$r->id()] = null;
 		}
 		if(!is_oid($r->prop("location")))
@@ -1428,6 +1429,7 @@ class room_reservation extends class_base
 			"payment_id" => $bank_payment,
 			"expl" => join(" ," , $bron_names),
 			"cntr" => $bank_country,
+			"lang" => $lang,
 		));
 	/*	if(aw_global_get("uid") == "struktuur"){arr($this->mk_my_orb("parse_alias", array("level" => 1, "preview" => 1, "id" => $arr["id"]))); die();}
 	*/	
