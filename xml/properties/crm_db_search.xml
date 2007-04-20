@@ -50,6 +50,17 @@
             <caption>V&amp;amp;ouml;tmes&amp;amp;ouml;nad (komadega eraldatult)</caption>
       </property>
       <property>
+            <name>keywords2</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_KEYWORD</reltype>
+            <caption>AW V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
             <name>keywords_in_row</name>
             <table>objects</table>
             <group>general</group>
@@ -75,6 +86,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Tegevusalade kaust</caption>
             </TEGEVUSALA_CAT>
+            <KEYWORD>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
+            </KEYWORD>
       </reltypes>
 </properties>
 

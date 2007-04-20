@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.5 2007/04/11 13:39:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_db_search.aw,v 1.6 2007/04/20 11:31:29 markop Exp $
 // crm_db_search.aw - Kliendibaasi otsingu grupp 
 /*
 
@@ -25,6 +25,10 @@
 @property keywords type=textbox field=meta method=serialize
 @caption V&ouml;tmes&ouml;nad (komadega eraldatult)
 
+@property keywords2 type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_KEYWORD
+@caption AW V&otilde;tmes&otilde;nad
+
+
 @property keywords_in_row type=textbox field=meta method=serialize
 @caption V&ouml;tmes&ouml;nu &uuml;hel real
 
@@ -33,6 +37,10 @@
 
 @reltype TEGEVUSALA_CAT value=8 clid=CL_MENU
 @caption Tegevusalade kaust
+
+@reltype KEYWORD value=2 clid=CL_MENU
+@caption V&otilde;tmes&otilde;na
+
 
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.33 2007/04/19 15:07:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.34 2007/04/20 11:31:29 markop Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1019,8 +1019,14 @@ class crm_company_webview extends class_base
 
 		$kw = "";
 		//võtmesõnad
-		foreach( explode("," , $c->prop("activity_keywords")) as $key_word)
+//		arr($c->prop("keywords2"));
+
+		foreach($c->connections_from(array("type" => "RELTYPE_KEYWORD")) as $conn)
+//		foreach(explode("," , $c->prop("activity_keywords")) as $key_word)
 		{
+			$key = $conn->to();
+			$key_word = $key->name();
+		
 			$this->vars(array(
 				"keyname" => trim($key_word),
 				"keyurl" => $url = "/".aw_global_get('section')."?class=site_search_content&action=do_search&search_all=1no_reforb=1&keyword%5B".trim(strtolower($key_word))."%5D=1",
@@ -1141,7 +1147,7 @@ class crm_company_webview extends class_base
 				$keyword_array[] = "%".$key."%";
 			}
 			//$filt["activity_keywords"] = "%".$arr["keyword"]."%";
-			$filt["activity_keywords"] = $keyword_array;
+			$filt["CL_CRM_COMPANY.RELTYPE_KEYWORD.name"] = $keyword_array;
 		}
 	
 		if ($arr["pohitegevus"])
