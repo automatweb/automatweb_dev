@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.85 2007/04/20 11:39:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.86 2007/04/20 13:37:29 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1320,7 +1320,7 @@ class conference_planning extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-		if($GLOBALS["_GET"]["group"] == "webform_detail")
+		if(substr($GLOBALS["_GET"]["group"], 0, 7) == "webform")
 		{
 			if(strlen($GLOBALS["_GET"]["view_no"]))
 			{
@@ -1334,7 +1334,7 @@ class conference_planning extends class_base
 	}
 	function callback_mod_retval($arr)
 	{
-		if($arr["request"]["group"] == "webform_detail")
+		if(substr($arr["request"]["group"], 0, 7) == "webform")
 		{
 			$arr["args"]["view_no"] = $arr["request"]["view_no"];
 			$arr["args"]["element"] = $arr["request"]["element"];
@@ -1457,13 +1457,14 @@ class conference_planning extends class_base
 			$prop = array(
 				"views" => &$views,
 				"values" => &$elements,
+				"value" => &$element,
 				"current_view" => $view_id,
 				"current_element" => $element_id,
 				"pre_stored" => $stored_data,
 				"element" => $data,
 				"prop" => $el_form_data,
 			);
-			$controller = $this->can("view", $data["save_controller"])?$i->check_property($data["save_controller"], "", $prop, &$arr, "" ,""):array();
+			$controller = $this->can("view", $data["save_controller"])?$i->check_property($data["save_controller"], "", &$prop, &$arr, "" ,""):array();
 			if($controller == PROP_IGNORE)
 			{
 				continue;
@@ -1563,6 +1564,7 @@ class conference_planning extends class_base
 
 	function parse_form_element($el, $view_no, $element, $views, $value, $values, $doc)
 	{
+		$this->_init_vars();
 		$prop = $this->get_form_elements_data($el["name"]);
 		if(!$prop)
 		{
@@ -1588,6 +1590,7 @@ class conference_planning extends class_base
 		$toprop = array(
 			"views" => &$views,
 			"values" => &$values,
+			"value" => &$value,
 			"element" => &$el,
 			"prop" => &$prop,
 			"current_view" => $view_no,
@@ -1759,6 +1762,7 @@ class conference_planning extends class_base
 		{
 			$this->store_data = true;
 		}
+		$this->vars($el["add_vars"]);
 		$this->vars(array(
 			"wid" => $el["wid"],
 			"wid_out" => $el["wid"]."_out",
