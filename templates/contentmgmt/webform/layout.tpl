@@ -140,6 +140,9 @@ function selall()
 		</td>
 	</tr>
 	<tr>
+		<td colspan="7">Vaikimisi t&auml;nane kuup&auml;ev: {VAR:default_value_today}</td>
+	</tr>
+	<tr>
 		<td colspan="7">Formaat: P&auml;ev: {VAR:day_format} / Kuu: {VAR:month_format} / Aasta: {VAR:year_format}</td>
 	</tr>
 	<tr bgcolor="{VAR:bgcolor}">

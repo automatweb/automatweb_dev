@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.120 2007/04/17 07:57:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.121 2007/04/20 11:06:22 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1448,23 +1448,11 @@ class webform extends class_base
 							"value" => 1,
 							"checked" => ( $property["buttons"] == 1 ) ? true : false
 						)),
-/*
-						"day_format" => html::checkbox(array(
-							"name" => "prp_opts[".$prpdata["name"]."][format][day_textbox]",
-							"value" => "day_textbox",
-							"checked" => ( $property["format"]["day_textbox"] ) ? true : false
+						"default_value_today" => html::checkbox(array(
+							"name" => "prp_opts[".$prpdata["name"]."][default_value_today]",
+							"value" => 1,
+							"checked" => ( $property["default_value_today"] == 1 ) ? true : false
 						)),
-						"month_format" => html::checkbox(array(
-							"name" => "prp_opts[".$prpdata["name"]."][format][month_textbox]",
-							"value" => "month_textbox",
-							"checked" => ( $property["format"]["month_textbox"] ) ? true : false
-						)),
-						"year_format" => html::checkbox(array(
-							"name" => "prp_opts[".$prpdata["name"]."][format][year_textbox]",
-							"value" => "year_textbox",
-							"checked" => ( $property["format"]["year_textbox"] ) ? true : false
-						))
-*/
 						"day_format" => html::select(array(
 							"name" => "prp_opts[".$prpdata["name"]."][format][day_format]",
 							"options" => array(
@@ -1860,7 +1848,8 @@ class webform extends class_base
 			"year_to" => "year_to", 
 			"mon_for" => "mon_for",
 			"buttons" => "buttons",
-			"format" => "format"
+			"format" => "format",
+			"default_value_today" => "default_value_today"
 		);
 		
 		$user_group_list = aw_global_get("gidlist_oid");//k&otilde;ik grupid kus kasutaja on
@@ -1937,7 +1926,6 @@ class webform extends class_base
 						$pd[$ke] = $all_props[$pn][$vad];
 					}
 				}
-
 			}
 			$num = 0;
 			if (isset($errs[$pn]))
@@ -2147,6 +2135,13 @@ class webform extends class_base
 							}
 						}
 					}
+				}
+			}
+			if ($val['type'] == 'date_select')
+			{
+				if ($val['default_value_today'] == 1)
+				{
+					$els[$key]['value'] = time();
 				}
 			}
 		}
