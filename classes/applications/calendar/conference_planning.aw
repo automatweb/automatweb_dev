@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.84 2007/04/20 10:19:19 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.85 2007/04/20 11:39:13 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -304,7 +304,7 @@ class conference_planning extends class_base
 					"data_mf_catering_type" => t("&Uuml;rituse t&uuml;&uuml;p"),
 					"data_mf_catering_start" => t("Algusaeg"),
 					"data_mf_catering_end" => t("L&otilde;puaeg"),
-					"data_mf_catering_person_no" => t("Osalejate arv"),
+					"data_mf_catering_attendees_no" => t("Osalejate arv"),
 				);
 			case "af_table":
 			case "af_catering":
@@ -931,7 +931,14 @@ class conference_planning extends class_base
 
 						$data = $this->get_form_elements_data($element["name"]);
 						$name = $element["trans"][aw_global_get("ct_lang_lc")]?$element["trans"][aw_global_get("ct_lang_lc")]:($list[$element["name"]]?$list[$element["name"]]["caption"]:$data["caption"]);
-						$name = ($arr["request"]["view_no"] == $id && strlen($arr["request"]["view_no"]) && $arr["request"]["element"] == $el_id && strlen($arr["request"]["element"]))?"<b>".$name."</b>":$name;
+						if(!strlen(trim($name)))
+						{
+							$name = "<font color=\"red\">".t("Nimetu")."</font>";
+						}
+						else
+						{
+							$name = ($arr["request"]["view_no"] == $id && strlen($arr["request"]["view_no"]) && $arr["request"]["element"] == $el_id && strlen($arr["request"]["element"]))?"<b>".$name."</b>":$name;
+						}
 						if($element["type"] == TYPE_SEPARATOR)
 						{
 							$iconurl = aw_ini_get("baseurl")."/automatweb/images/icons/rte_indent.gif";
@@ -1604,7 +1611,6 @@ class conference_planning extends class_base
 		{
 			$value_to_use = &$value;
 		}
-		
 		switch($prop["form"])
 		{
 			case "separator":
@@ -1664,6 +1670,11 @@ class conference_planning extends class_base
 				));
 				break;
 			case "text":
+				if($el["no_caption"] == true)
+				{
+					$prop["form"] = "TEXT_NO_CAPTION";
+				}
+				
 				$this->vars(array(
 					"caption" => $el["trans"][$lang],
 					"value" => $el["value"],

@@ -139,3 +139,9 @@
 	<td style="font-size:11px;font-family:verdana;color:black;">{VAR:value}</td>
 </tr>
 <!-- END SUB: TEXT -->
+
+<!-- SUB: TEXT_NO_CAPTION -->
+<tr id="{VAR:wid_out}">
+	<td colspan="2" style="font-size:11px;font-family:verdana;color:black;">{VAR:value}</td>
+</tr>
+<!-- END SUB: TEXT_NO_CAPTION -->
