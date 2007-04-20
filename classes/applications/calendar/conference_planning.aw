@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.83 2007/04/20 08:44:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.84 2007/04/20 10:19:19 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1417,7 +1417,35 @@ class conference_planning extends class_base
 		$stored_data = $this->get_stored_data($cp->id(), true);
 		foreach($views[$view_id]["elements"] as $element_id => $data)
 		{
+			/*
+				I need to check the show controller here, don't i? .. i mean, when it returns prop_ignore, then i have to ignore it here also, or else... ka-Boom, and things are messed up.
+				For example, there are two same-type elements, both have show controller, which lets one of the elements be shon at once. so, when saving, i've got to ignore the one what isn't show on the web, or otherwise this is saved.. or smth..
+				
+				Worst part is, i have to give same parameters to controller that i give in the parse_form_element function.. 
+				also, i can't pass them by reference, because they may alter the data, i we dont want that
+				God this sucks ..
+				Thing is, i really don't know if this thingie works 100% the way it should
+			*/
+			
 			$el_form_data = $this->get_form_elements_data($data["name"]);
+			if($this->can("view", $data["show_controller"]))
+			{
+				$i = get_instance(CL_CFGCONTROLLER);
+				$toprop = array(
+					"views" => $views,
+					"values" => $elements,
+					"element" => $data,
+					"prop" => $el_form_data,
+					"current_view" => $view_id,
+					"current_element" => $element_id,
+				);
+				$show_ctr = $this->can("view", $data["show_controller"])?$i->check_property($data["show_controller"], "",$toprop, $GLOBALS["_GET"],"",""):array();
+				if($show_ctr == PROP_IGNORE)
+				{
+					continue;
+				}
+			}
+
 			$element = &$elements[$view_id][$element_id];
 			$prop = array(
 				"views" => &$views,
