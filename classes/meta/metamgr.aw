@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.14 2006/06/15 12:19:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.15 2007/04/23 12:12:17 tarvo Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -239,7 +239,7 @@ class metamgr extends class_base
 				"id" => $id,
 				"name" => $var_name,
 				"value" => $o->comment(),
-				"ord" => $o->prop("ord"),
+				"ord" => $o->ord(),
 			);
 
 			$tr = $o->meta("tolge");
@@ -391,7 +391,7 @@ class metamgr extends class_base
 				$so = new object($skey);
 				$so->set_name($sval["name"]);
 				$so->set_comment($sval["value"]);
-				$so->set_prop("ord",$sval["ord"]);
+				$so->set_ord($sval["ord"]);
 				if($transyes) $so->set_meta("tolge", $sval["tolge"]);
 				$so->save();
 			};
