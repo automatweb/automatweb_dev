@@ -30,4 +30,10 @@ Vali lehek&uuml;lg:
 		<!-- END SUB: COL -->
 	</tr>
 <!-- END SUB: ROW -->
+
+<!-- SUB: FOLDER_CHANGE -->
+<tr>
+	<td colspan="100"><b>{VAR:folder_name}</b></td>
+</tr>
+<!-- END SUB: FOLDER_CHANGE -->
 </table>

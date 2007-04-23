@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.31 2007/04/23 10:29:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.32 2007/04/23 11:20:08 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -9,7 +9,7 @@
 
 @default group=general
 
-	@property folder type=relpicker reltype=RELTYPE_IMG_FOLDER field=meta method=serialize 
+	@property folder type=relpicker multiple=1 reltype=RELTYPE_IMG_FOLDER field=meta method=serialize 
 	@caption Piltide kataloog
 
 	@property cols type=textbox size=5 field=meta method=serialize default=2
@@ -128,15 +128,25 @@ class mini_gallery extends class_base
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
+		$s_id = $ob->prop("style");
+		if(is_oid($s_id) && $this->can("view", $s_id))
+		{
+			$style_i = get_instance(CL_STYLE);
+			active_page_data::add_site_css_style($s_id);
+			$use_style = $style_i->get_style_name($s_id);
+		}
+
 		$sby = "objects.jrk,objects.created desc";
 		if ($ob->prop("sorter") != "")
 		{
 			$sby = $ob->prop("sorter");
 		}
+
+
 		$images = new object_list(array(
 			"class_id" => CL_IMAGE,
 			"parent" => $ob->prop("folder"),
-			"sort_by" => $sby,
+			"sort_by" => "objects.parent,".$sby,
 			"lang_id" => array(),
 			"site_id" => array(),
 			new object_list_filter(array(
@@ -181,8 +191,6 @@ class mini_gallery extends class_base
 			}
 		}
 
-		$ii = get_instance(CL_IMAGE);
-
 		$tplar = array();
 		$f_tplar = array();
 		
@@ -209,16 +217,19 @@ class mini_gallery extends class_base
 			}
 		}
 
-		$s_id = $ob->prop("style");
-		if(is_oid($s_id) && $this->can("view", $s_id))
-		{
-			$style_i = get_instance(CL_STYLE);
-			active_page_data::add_site_css_style($s_id);
-			$use_style = $style_i->get_style_name($s_id);
-		}
-
 		$numbr = 1;
 		$str = "";
+		if ($img && is_array($ob->prop("folder")) && count($ob->prop("folder")))
+		{
+			$fo = obj($img->parent());
+			$this->vars(array(
+				"folder_name" => $fo->trans_get_val("name")
+			));
+			$str .= $this->parse("FOLDER_CHANGE");
+		}
+		$cur_folder = $img->parent();
+		$ii = get_instance(CL_IMAGE);
+
 		for ($r = 0; $r < $rows; $r++)
 		{
 			$l = "";
@@ -252,6 +263,24 @@ class mini_gallery extends class_base
 					));
 				}
 				$l .= $this->parse("COL");
+
+				if ($img && $cur_folder != $img->parent())
+				{
+					$r++;
+					$rows++;
+					$c = 0;
+					$this->vars(array(
+						"COL" => $l
+					));
+					$str .= $this->parse("ROW");
+					$l = "";
+					$fo = obj($img->parent());
+					$this->vars(array(
+						"folder_name" => $fo->trans_get_val("name")
+					));
+					$str .= $this->parse("FOLDER_CHANGE");
+					$cur_folder = $img->parent();
+				}
 				$numbr++;
 			}
 
