@@ -9,8 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/core/trans/pot_scanner.aw:795
-msgid "\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"
+#: classes/core/trans/pot_scanner.aw:798
+msgid ""
+"\n"
+"\n"
+"number of untranslated strings: %s\n"
+"number of strings: %s\n"
+"\n"
 msgstr ""
-

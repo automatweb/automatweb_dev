@@ -14,279 +14,303 @@ msgid "Klassi Pakkumise saamise palve help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_submitter
-msgid "Omaduse Submitter (submitter) caption"
+msgid "Omaduse Ankeedi t&auml;itja (submitter) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_submitter_comment
-msgid "Omaduse Submitter (submitter) kommentaar"
+msgid "Omaduse Ankeedi t&auml;itja (submitter) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_submitter_help
-msgid "Omaduse Submitter (submitter) help"
+msgid "Omaduse Ankeedi t&auml;itja (submitter) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_contact_preference
-msgid "Omaduse Contact preference (contact_preference) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_contact_preference
+msgid "Omaduse Kontakteerumise eelistus (data_contact_preference) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_contact_preference_comment
-msgid "Omaduse Contact preference (contact_preference) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_contact_preference_comment
+msgid "Omaduse Kontakteerumise eelistus (data_contact_preference) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_contact_preference_help
-msgid "Omaduse Contact preference (contact_preference) help"
+#: classes/applications/calendar/rfp.aw:prop_data_contact_preference_help
+msgid "Omaduse Kontakteerumise eelistus (data_contact_preference) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_country
-msgid "Omaduse Country (country) caption"
+msgid "Omaduse Riik (country) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_country_comment
-msgid "Omaduse Country (country) kommentaar"
+msgid "Omaduse Riik (country) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_country_help
-msgid "Omaduse Country (country) help"
+msgid "Omaduse Riik (country) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_organisation
-msgid "Omaduse Organisation (organisation) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_organisation
+msgid "Omaduse Organisatioon (data_organisation) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_organisation_comment
-msgid "Omaduse Organisation (organisation) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_organisation_comment
+msgid "Omaduse Organisatioon (data_organisation) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_organisation_help
-msgid "Omaduse Organisation (organisation) help"
+#: classes/applications/calendar/rfp.aw:prop_data_organisation_help
+msgid "Omaduse Organisatioon (data_organisation) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_function_name
-msgid "Omaduse Function name (function_name) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_function_name
+msgid "Omaduse &Uuml;rituse nimi (data_function_name) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_function_name_comment
-msgid "Omaduse Function name (function_name) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_function_name_comment
+msgid "Omaduse &Uuml;rituse nimi (data_function_name) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_function_name_help
-msgid "Omaduse Function name (function_name) help"
+#: classes/applications/calendar/rfp.aw:prop_data_function_name_help
+msgid "Omaduse &Uuml;rituse nimi (data_function_name) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_attendees_no
-msgid "Omaduse Number of attendees (attendees_no) caption"
+msgid "Omaduse Osalejate arv (attendees_no) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_attendees_no_comment
-msgid "Omaduse Number of attendees (attendees_no) kommentaar"
+msgid "Omaduse Osalejate arv (attendees_no) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_attendees_no_help
-msgid "Omaduse Number of attendees (attendees_no) help"
+msgid "Omaduse Osalejate arv (attendees_no) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_response_date
-msgid "Omaduse Response date (response_date) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_response_date
+msgid "Omaduse Tagasiside aeg (data_response_date) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_response_date_comment
-msgid "Omaduse Response date (response_date) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_response_date_comment
+msgid "Omaduse Tagasiside aeg (data_response_date) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_response_date_help
-msgid "Omaduse Response date (response_date) help"
+#: classes/applications/calendar/rfp.aw:prop_data_response_date_help
+msgid "Omaduse Tagasiside aeg (data_response_date) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_decision_date
-msgid "Omaduse Decision date (decision_date) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_decision_date
+msgid "Omaduse Otsuse aeg (data_decision_date) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_decision_date_comment
-msgid "Omaduse Decision date (decision_date) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_decision_date_comment
+msgid "Omaduse Otsuse aeg (data_decision_date) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_decision_date_help
-msgid "Omaduse Decision date (decision_date) help"
+#: classes/applications/calendar/rfp.aw:prop_data_decision_date_help
+msgid "Omaduse Otsuse aeg (data_decision_date) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_arrival_date
-msgid "Omaduse Arrival date (arrival_date) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_arrival_date
+msgid "Omaduse Saabumise aeg (data_arrival_date) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_arrival_date_comment
-msgid "Omaduse Arrival date (arrival_date) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_arrival_date_comment
+msgid "Omaduse Saabumise aeg (data_arrival_date) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_arrival_date_help
-msgid "Omaduse Arrival date (arrival_date) help"
+#: classes/applications/calendar/rfp.aw:prop_data_arrival_date_help
+msgid "Omaduse Saabumise aeg (data_arrival_date) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_departure_date
-msgid "Omaduse Departure date (departure_date) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_departure_date
+msgid "Omaduse Lahkumise aeg (data_departure_date) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_departure_date_comment
-msgid "Omaduse Departure date (departure_date) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_departure_date_comment
+msgid "Omaduse Lahkumise aeg (data_departure_date) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_departure_date_help
-msgid "Omaduse Departure date (departure_date) help"
+#: classes/applications/calendar/rfp.aw:prop_data_departure_date_help
+msgid "Omaduse Lahkumise aeg (data_departure_date) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_open_for_alternative_dates
-msgid "Omaduse Open for alternative dates (open_for_alternative_dates) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_open_for_alternative_dates
+msgid "Omaduse N&ouml;us alternatiivsete kuup&auml;evadega (data_open_for_alternative_dates) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_open_for_alternative_dates_comment
-msgid "Omaduse Open for alternative dates (open_for_alternative_dates) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_open_for_alternative_dates_comment
+msgid "Omaduse N&ouml;us alternatiivsete kuup&auml;evadega (data_open_for_alternative_dates) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_open_for_alternative_dates_help
-msgid "Omaduse Open for alternative dates (open_for_alternative_dates) help"
+#: classes/applications/calendar/rfp.aw:prop_data_open_for_alternative_dates_help
+msgid "Omaduse N&ouml;us alternatiivsete kuup&auml;evadega (data_open_for_alternative_dates) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_accommondation_requirements
-msgid "Omaduse I have accomonndation requirements (accommondation_requirements) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_accommondation_requirements
+msgid "Omaduse Majutusvajadused (data_accommondation_requirements) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_accommondation_requirements_comment
-msgid "Omaduse I have accomonndation requirements (accommondation_requirements) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_accommondation_requirements_comment
+msgid "Omaduse Majutusvajadused (data_accommondation_requirements) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_accommondation_requirements_help
-msgid "Omaduse I have accomonndation requirements (accommondation_requirements) help"
+#: classes/applications/calendar/rfp.aw:prop_data_accommondation_requirements_help
+msgid "Omaduse Majutusvajadused (data_accommondation_requirements) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_multi_day
-msgid "Omaduse Multi-day main function (multi_day) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_multi_day
+msgid "Omaduse &Uuml;rituse kestus (data_multi_day) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_multi_day_comment
-msgid "Omaduse Multi-day main function (multi_day) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_multi_day_comment
+msgid "Omaduse &Uuml;rituse kestus (data_multi_day) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_multi_day_help
-msgid "Omaduse Multi-day main function (multi_day) help"
+#: classes/applications/calendar/rfp.aw:prop_data_multi_day_help
+msgid "Omaduse &Uuml;rituse kestus (data_multi_day) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_needs_rooms
-msgid "Omaduse Needs rooms (needs_rooms) caption"
+msgid "Omaduse Majutusvajadused (needs_rooms) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_needs_rooms_comment
-msgid "Omaduse Needs rooms (needs_rooms) kommentaar"
+msgid "Omaduse Majutusvajadused (needs_rooms) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_needs_rooms_help
-msgid "Omaduse Needs rooms (needs_rooms) help"
+msgid "Omaduse Majutusvajadused (needs_rooms) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_single_rooms
-msgid "Omaduse Single rooms (single_rooms) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_single_rooms
+msgid "Omaduse &Uuml;hekohalised toad (data_single_rooms) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_single_rooms_comment
-msgid "Omaduse Single rooms (single_rooms) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_single_rooms_comment
+msgid "Omaduse &Uuml;hekohalised toad (data_single_rooms) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_single_rooms_help
-msgid "Omaduse Single rooms (single_rooms) help"
+#: classes/applications/calendar/rfp.aw:prop_data_single_rooms_help
+msgid "Omaduse &Uuml;hekohalised toad (data_single_rooms) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_double_rooms
-msgid "Omaduse Double rooms (double_rooms) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_double_rooms
+msgid "Omaduse Kahekohalised toad (data_double_rooms) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_double_rooms_comment
-msgid "Omaduse Double rooms (double_rooms) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_double_rooms_comment
+msgid "Omaduse Kahekohalised toad (data_double_rooms) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_double_rooms_help
-msgid "Omaduse Double rooms (double_rooms) help"
+#: classes/applications/calendar/rfp.aw:prop_data_double_rooms_help
+msgid "Omaduse Kahekohalised toad (data_double_rooms) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_suites
-msgid "Omaduse Suites (suites) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_suites
+msgid "Omaduse Sviidid (data_suites) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_suites_comment
-msgid "Omaduse Suites (suites) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_suites_comment
+msgid "Omaduse Sviidid (data_suites) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_suites_help
-msgid "Omaduse Suites (suites) help"
+#: classes/applications/calendar/rfp.aw:prop_data_suites_help
+msgid "Omaduse Sviidid (data_suites) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_flexible_dates
-msgid "Omaduse Dates are flexible (flexible_dates) caption"
+msgid "Omaduse Kuup&auml;evad on paindlikud (flexible_dates) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_flexible_dates_comment
-msgid "Omaduse Dates are flexible (flexible_dates) kommentaar"
+msgid "Omaduse Kuup&auml;evad on paindlikud (flexible_dates) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_flexible_dates_help
-msgid "Omaduse Dates are flexible (flexible_dates) help"
+msgid "Omaduse Kuup&auml;evad on paindlikud (flexible_dates) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_date_comments
-msgid "Omaduse Date comments (date_comments) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_date_comments
+msgid "Omaduse Kuup&auml;evade kommentaar (data_date_comments) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_date_comments_comment
-msgid "Omaduse Date comments (date_comments) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_date_comments_comment
+msgid "Omaduse Kuup&auml;evade kommentaar (data_date_comments) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_date_comments_help
-msgid "Omaduse Date comments (date_comments) help"
+#: classes/applications/calendar/rfp.aw:prop_data_date_comments_help
+msgid "Omaduse Kuup&auml;evade kommentaar (data_date_comments) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_city
+msgid "Omaduse Soovitud linn (data_city) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_city_comment
+msgid "Omaduse Soovitud linn (data_city) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_city_help
+msgid "Omaduse Soovitud linn (data_city) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_hotel
+msgid "Omaduse Soovitud hotell (data_hotel) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_hotel_comment
+msgid "Omaduse Soovitud hotell (data_hotel) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_hotel_help
+msgid "Omaduse Soovitud hotell (data_hotel) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_archived
-msgid "Omaduse Archived (archived) caption"
+msgid "Omaduse Arhiveeritud (archived) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_archived_comment
-msgid "Omaduse Archived (archived) kommentaar"
+msgid "Omaduse Arhiveeritud (archived) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_archived_help
-msgid "Omaduse Archived (archived) help"
+msgid "Omaduse Arhiveeritud (archived) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_urgent
-msgid "Omaduse Urgent (urgent) caption"
+msgid "Omaduse Kiire (urgent) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_urgent_comment
-msgid "Omaduse Urgent (urgent) kommentaar"
+msgid "Omaduse Kiire (urgent) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_urgent_help
-msgid "Omaduse Urgent (urgent) help"
+msgid "Omaduse Kiire (urgent) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_dates_are_flexible
-msgid "Omaduse  (dates_are_flexible) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_dates_are_flexible
+msgid "Omaduse Kuup&auml;evad on paindlikud (data_dates_are_flexible) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_dates_are_flexible_comment
-msgid "Omaduse  (dates_are_flexible) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_dates_are_flexible_comment
+msgid "Omaduse Kuup&auml;evad on paindlikud (data_dates_are_flexible) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_dates_are_flexible_help
-msgid "Omaduse  (dates_are_flexible) help"
+#: classes/applications/calendar/rfp.aw:prop_data_dates_are_flexible_help
+msgid "Omaduse Kuup&auml;evad on paindlikud (data_dates_are_flexible) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_meeting_pattern
-msgid "Omaduse  (meeting_pattern) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_meeting_pattern
+msgid "Omaduse Kuup&auml;evade muster (data_meeting_pattern) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_meeting_pattern_comment
-msgid "Omaduse  (meeting_pattern) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_meeting_pattern_comment
+msgid "Omaduse Kuup&auml;evade muster (data_meeting_pattern) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_meeting_pattern_help
-msgid "Omaduse  (meeting_pattern) help"
+#: classes/applications/calendar/rfp.aw:prop_data_meeting_pattern_help
+msgid "Omaduse Kuup&auml;evade muster (data_meeting_pattern) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_pattern_wday_from
@@ -457,28 +481,52 @@ msgstr ""
 msgid "Omaduse  (end_date_raw) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_additional_dates_raw
-msgid "Omaduse  (additional_dates_raw) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_alternative_dates
+msgid "Omaduse Alternatiivsed kuup&auml;evad (data_alternative_dates) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_additional_dates_raw_comment
-msgid "Omaduse  (additional_dates_raw) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_alternative_dates_comment
+msgid "Omaduse Alternatiivsed kuup&auml;evad (data_alternative_dates) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_additional_dates_raw_help
-msgid "Omaduse  (additional_dates_raw) help"
+#: classes/applications/calendar/rfp.aw:prop_data_alternative_dates_help
+msgid "Omaduse Alternatiivsed kuup&auml;evad (data_alternative_dates) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_additional_functions_raw
-msgid "Omaduse  (additional_functions_raw) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_additional_functions
+msgid "Omaduse Lisa&uuml;ritused (data_additional_functions) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_additional_functions_raw_comment
-msgid "Omaduse  (additional_functions_raw) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_additional_functions_comment
+msgid "Omaduse Lisa&uuml;ritused (data_additional_functions) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_additional_functions_raw_help
-msgid "Omaduse  (additional_functions_raw) help"
+#: classes/applications/calendar/rfp.aw:prop_data_additional_functions_help
+msgid "Omaduse Lisa&uuml;ritused (data_additional_functions) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_functions_catering
+msgid "Omaduse Lisa&uuml;rituste toitlustus (data_additional_functions_catering) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_functions_catering_comment
+msgid "Omaduse Lisa&uuml;rituste toitlustus (data_additional_functions_catering) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_functions_catering_help
+msgid "Omaduse Lisa&uuml;rituste toitlustus (data_additional_functions_catering) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_package
+msgid "Omaduse Pakett (data_package) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_package_comment
+msgid "Omaduse Pakett (data_package) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_package_help
+msgid "Omaduse Pakett (data_package) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_all_search_results
@@ -506,279 +554,375 @@ msgid "Omaduse  (selected_search_result) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_additional_dates
-msgid "Omaduse Additional_dates (additional_dates) caption"
+msgid "Omaduse Alternatiivsed kuup&auml;evad (additional_dates) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_additional_dates_comment
-msgid "Omaduse Additional_dates (additional_dates) kommentaar"
+msgid "Omaduse Alternatiivsed kuup&auml;evad (additional_dates) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_additional_dates_help
-msgid "Omaduse Additional_dates (additional_dates) help"
+msgid "Omaduse Alternatiivsed kuup&auml;evad (additional_dates) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_main_function
-msgid "Omaduse Main function (main_function) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_main_function
+msgid "Omaduse Pea&uuml;ritus (data_main_function) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_main_function_comment
-msgid "Omaduse Main function (main_function) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_comment
+msgid "Omaduse Pea&uuml;ritus (data_main_function) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_main_function_help
-msgid "Omaduse Main function (main_function) help"
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_help
+msgid "Omaduse Pea&uuml;ritus (data_main_function) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_event_type
-msgid "Omaduse Event type (event_type) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_event_type
+msgid "Omaduse &Uuml;rituse t&uuml;&uuml;p (data_event_type) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_event_type_comment
-msgid "Omaduse Event type (event_type) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_event_type_comment
+msgid "Omaduse &Uuml;rituse t&uuml;&uuml;p (data_event_type) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_event_type_help
-msgid "Omaduse Event type (event_type) help"
+#: classes/applications/calendar/rfp.aw:prop_data_event_type_help
+msgid "Omaduse &Uuml;rituse t&uuml;&uuml;p (data_event_type) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_delegates_no
-msgid "Omaduse Number of delegates (delegates_no) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_table_form
+msgid "Omaduse Laudade asetus (data_table_form) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_delegates_no_comment
-msgid "Omaduse Number of delegates (delegates_no) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_table_form_comment
+msgid "Omaduse Laudade asetus (data_table_form) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_delegates_no_help
-msgid "Omaduse Number of delegates (delegates_no) help"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_table_form
-msgid "Omaduse Table form (table_form) caption"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_table_form_comment
-msgid "Omaduse Table form (table_form) kommentaar"
-msgstr ""
-
-#: classes/applications/calendar/rfp.aw:prop_table_form_help
-msgid "Omaduse Table form (table_form) help"
+#: classes/applications/calendar/rfp.aw:prop_data_table_form_help
+msgid "Omaduse Laudade asetus (data_table_form) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_tech
-msgid "Omaduse Table form (tech) caption"
+msgid "Omaduse Tehniline varustus (tech) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_tech_comment
-msgid "Omaduse Table form (tech) kommentaar"
+msgid "Omaduse Tehniline varustus (tech) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_tech_help
-msgid "Omaduse Table form (tech) help"
+msgid "Omaduse Tehniline varustus (tech) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additonal_tech
+msgid "Omaduse Tehnilise varustuse erisoov (data_additonal_tech) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additonal_tech_comment
+msgid "Omaduse Tehnilise varustuse erisoov (data_additonal_tech) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additonal_tech_help
+msgid "Omaduse Tehnilise varustuse erisoov (data_additonal_tech) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_decorations
+msgid "Omaduse Dekoratsioonid (data_additional_decorations) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_decorations_comment
+msgid "Omaduse Dekoratsioonid (data_additional_decorations) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_decorations_help
+msgid "Omaduse Dekoratsioonid (data_additional_decorations) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_entertainment
+msgid "Omaduse Meelelahutus (data_additional_entertainment) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_entertainment_comment
+msgid "Omaduse Meelelahutus (data_additional_entertainment) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_entertainment_help
+msgid "Omaduse Meelelahutus (data_additional_entertainment) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_catering
+msgid "Omaduse Erisoovid toitlustuse kohta (data_additional_catering) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_catering_comment
+msgid "Omaduse Erisoovid toitlustuse kohta (data_additional_catering) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_additional_catering_help
+msgid "Omaduse Erisoovid toitlustuse kohta (data_additional_catering) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_breakout_rooms
+msgid "Omaduse Puhkeruumide soov (data_breakout_rooms) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_breakout_rooms_comment
+msgid "Omaduse Puhkeruumide soov (data_breakout_rooms) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_breakout_rooms_help
+msgid "Omaduse Puhkeruumide soov (data_breakout_rooms) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_door_sign
-msgid "Omaduse Door sign/group name (door_sign) caption"
+msgid "Omaduse Uksesilt (door_sign) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_door_sign_comment
-msgid "Omaduse Door sign/group name (door_sign) kommentaar"
+msgid "Omaduse Uksesilt (door_sign) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_door_sign_help
-msgid "Omaduse Door sign/group name (door_sign) help"
+msgid "Omaduse Uksesilt (door_sign) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_person_no
-msgid "Omaduse Number of persons (person_no) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_person_no
+msgid "Omaduse Osalejate arv (data_person_no) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_person_no_comment
-msgid "Omaduse Number of persons (person_no) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_person_no_comment
+msgid "Omaduse Osalejate arv (data_person_no) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_person_no_help
-msgid "Omaduse Number of persons (person_no) help"
+#: classes/applications/calendar/rfp.aw:prop_data_person_no_help
+msgid "Omaduse Osalejate arv (data_person_no) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_start_date
-msgid "Omaduse Start time (start_date) caption"
+msgid "Omaduse Algusaeg (start_date) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_start_date_comment
-msgid "Omaduse Start time (start_date) kommentaar"
+msgid "Omaduse Algusaeg (start_date) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_start_date_help
-msgid "Omaduse Start time (start_date) help"
+msgid "Omaduse Algusaeg (start_date) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_end_date
-msgid "Omaduse End time (end_date) caption"
+msgid "Omaduse L&otilde;puaeg (end_date) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_end_date_comment
-msgid "Omaduse End time (end_date) kommentaar"
+msgid "Omaduse L&otilde;puaeg (end_date) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_end_date_help
-msgid "Omaduse End time (end_date) help"
+msgid "Omaduse L&otilde;puaeg (end_date) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_24h
-msgid "Omaduse 24h hold (24h) caption"
+msgid "Omaduse Hoia 24 tundi kinni (24h) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_24h_comment
-msgid "Omaduse 24h hold (24h) kommentaar"
+msgid "Omaduse Hoia 24 tundi kinni (24h) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_24h_help
-msgid "Omaduse 24h hold (24h) help"
+msgid "Omaduse Hoia 24 tundi kinni (24h) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_catering_for_main
-msgid "Omaduse Catering for main function (catering_for_main) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering
+msgid "Omaduse Pea&uuml;rituse  (data_main_function_catering) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_catering_for_main_comment
-msgid "Omaduse Catering for main function (catering_for_main) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_comment
+msgid "Omaduse Pea&uuml;rituse  (data_main_function_catering) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_catering_for_main_help
-msgid "Omaduse Catering for main function (catering_for_main) help"
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_help
+msgid "Omaduse Pea&uuml;rituse  (data_main_function_catering) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_type
+msgid "Omaduse Pea&uuml;rituse toitlustuse t&uuml;&uuml;p (data_main_function_catering_type) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_type_comment
+msgid "Omaduse Pea&uuml;rituse toitlustuse t&uuml;&uuml;p (data_main_function_catering_type) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_type_help
+msgid "Omaduse Pea&uuml;rituse toitlustuse t&uuml;&uuml;p (data_main_function_catering_type) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_person_no
+msgid "Omaduse Pea&uuml;rituse toitlustuse osalejate arv (data_main_function_catering_person_no) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_person_no_comment
+msgid "Omaduse Pea&uuml;rituse toitlustuse osalejate arv (data_main_function_catering_person_no) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_person_no_help
+msgid "Omaduse Pea&uuml;rituse toitlustuse osalejate arv (data_main_function_catering_person_no) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_start
+msgid "Omaduse Pea&uuml;rituse toitlustuse algusaeg (data_main_function_catering_start) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_start_comment
+msgid "Omaduse Pea&uuml;rituse toitlustuse algusaeg (data_main_function_catering_start) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_start_help
+msgid "Omaduse Pea&uuml;rituse toitlustuse algusaeg (data_main_function_catering_start) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_end
+msgid "Omaduse Pea&uuml;rituse toitlustuse l&otilde;puaeg (data_main_function_catering_end) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_end_comment
+msgid "Omaduse Pea&uuml;rituse toitlustuse l&otilde;puaeg (data_main_function_catering_end) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_main_function_catering_end_help
+msgid "Omaduse Pea&uuml;rituse toitlustuse l&otilde;puaeg (data_main_function_catering_end) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_additional_functions
-msgid "Omaduse Additional functions (additional_functions) caption"
+msgid "Omaduse Lisa&uuml;ritused (additional_functions) caption"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_additional_functions_comment
-msgid "Omaduse Additional functions (additional_functions) kommentaar"
+msgid "Omaduse Lisa&uuml;ritused (additional_functions) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:prop_additional_functions_help
-msgid "Omaduse Additional functions (additional_functions) help"
+msgid "Omaduse Lisa&uuml;ritused (additional_functions) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_company
-msgid "Omaduse Company (billing_company) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_company
+msgid "Omaduse Organisatsioon (data_billing_company) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_company_comment
-msgid "Omaduse Company (billing_company) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_company_comment
+msgid "Omaduse Organisatsioon (data_billing_company) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_company_help
-msgid "Omaduse Company (billing_company) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_company_help
+msgid "Omaduse Organisatsioon (data_billing_company) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_contact
-msgid "Omaduse Contact (billing_contact) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_contact
+msgid "Omaduse Kontaktisik (data_billing_contact) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_contact_comment
-msgid "Omaduse Contact (billing_contact) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_contact_comment
+msgid "Omaduse Kontaktisik (data_billing_contact) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_contact_help
-msgid "Omaduse Contact (billing_contact) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_contact_help
+msgid "Omaduse Kontaktisik (data_billing_contact) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_street
-msgid "Omaduse Street (billing_street) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_street
+msgid "Omaduse T&auml;nav (data_billing_street) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_street_comment
-msgid "Omaduse Street (billing_street) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_street_comment
+msgid "Omaduse T&auml;nav (data_billing_street) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_street_help
-msgid "Omaduse Street (billing_street) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_street_help
+msgid "Omaduse T&auml;nav (data_billing_street) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_city
-msgid "Omaduse City (billing_city) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_city
+msgid "Omaduse Linn (data_billing_city) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_city_comment
-msgid "Omaduse City (billing_city) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_city_comment
+msgid "Omaduse Linn (data_billing_city) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_city_help
-msgid "Omaduse City (billing_city) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_city_help
+msgid "Omaduse Linn (data_billing_city) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_zip
-msgid "Omaduse Zip (billing_zip) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_zip
+msgid "Omaduse Indeks (data_billing_zip) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_zip_comment
-msgid "Omaduse Zip (billing_zip) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_zip_comment
+msgid "Omaduse Indeks (data_billing_zip) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_zip_help
-msgid "Omaduse Zip (billing_zip) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_zip_help
+msgid "Omaduse Indeks (data_billing_zip) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_country
-msgid "Omaduse Country (billing_country) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_country
+msgid "Omaduse Riik (data_billing_country) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_country_comment
-msgid "Omaduse Country (billing_country) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_country_comment
+msgid "Omaduse Riik (data_billing_country) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_country_help
-msgid "Omaduse Country (billing_country) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_country_help
+msgid "Omaduse Riik (data_billing_country) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_name
-msgid "Omaduse Name (billing_name) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_name
+msgid "Omaduse Nimi (data_billing_name) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_name_comment
-msgid "Omaduse Name (billing_name) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_name_comment
+msgid "Omaduse Nimi (data_billing_name) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_name_help
-msgid "Omaduse Name (billing_name) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_name_help
+msgid "Omaduse Nimi (data_billing_name) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_phone_number
-msgid "Omaduse Phone number (billing_phone_number) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_phone
+msgid "Omaduse Telefoninumber (data_billing_phone) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_phone_number_comment
-msgid "Omaduse Phone number (billing_phone_number) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_phone_comment
+msgid "Omaduse Telefoninumber (data_billing_phone) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_phone_number_help
-msgid "Omaduse Phone number (billing_phone_number) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_phone_help
+msgid "Omaduse Telefoninumber (data_billing_phone) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_email
-msgid "Omaduse E-mail (billing_email) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_email
+msgid "Omaduse E-mail (data_billing_email) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_email_comment
-msgid "Omaduse E-mail (billing_email) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_email_comment
+msgid "Omaduse E-mail (data_billing_email) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_billing_email_help
-msgid "Omaduse E-mail (billing_email) help"
+#: classes/applications/calendar/rfp.aw:prop_data_billing_email_help
+msgid "Omaduse E-mail (data_billing_email) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_search_result
-msgid "Omaduse Search results (search_result) caption"
+#: classes/applications/calendar/rfp.aw:prop_data_search_result
+msgid "Omaduse Otsingutulemused (data_search_result) caption"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_search_result_comment
-msgid "Omaduse Search results (search_result) kommentaar"
+#: classes/applications/calendar/rfp.aw:prop_data_search_result_comment
+msgid "Omaduse Otsingutulemused (data_search_result) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:prop_search_result_help
-msgid "Omaduse Search results (search_result) help"
+#: classes/applications/calendar/rfp.aw:prop_data_search_result_help
+msgid "Omaduse Otsingutulemused (data_search_result) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:group_add_dates
@@ -798,11 +942,11 @@ msgid "Grupi Main function (main_fun) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:group_add_fun
-msgid "Grupi Additional functions (add_fun) pealkiri"
+msgid "Grupi Lisa&uuml;ritused (add_fun) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:group_add_fun_help
-msgid "Grupi Additional functions (add_fun) help"
+msgid "Grupi Lisa&uuml;ritused (add_fun) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:group_billing
@@ -814,91 +958,91 @@ msgid "Grupi Billing info (billing) help"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:group_search_res
-msgid "Grupi Selected results (search_res) pealkiri"
+msgid "Grupi Valitud otsingutulemused (search_res) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/rfp.aw:group_search_res_help
-msgid "Grupi Selected results (search_res) help"
+msgid "Grupi Valitud otsingutulemused (search_res) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:234
-#: classes/applications/calendar/rfp.aw:415
+#: classes/applications/calendar/rfp.aw:279
+#: classes/applications/calendar/rfp.aw:460
 msgid "Yes"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:234
-#: classes/applications/calendar/rfp.aw:415
+#: classes/applications/calendar/rfp.aw:279
+#: classes/applications/calendar/rfp.aw:460
 msgid "No"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:248
-#: classes/applications/calendar/rfp.aw:325
-#: classes/applications/calendar/rfp.aw:348
+#: classes/applications/calendar/rfp.aw:293
+#: classes/applications/calendar/rfp.aw:370
+#: classes/applications/calendar/rfp.aw:393
 msgid "Type"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:252
+#: classes/applications/calendar/rfp.aw:297
 msgid "Start_time"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:256
+#: classes/applications/calendar/rfp.aw:301
 msgid "End time"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:260
+#: classes/applications/calendar/rfp.aw:305
 msgid "Number of attendees"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:329
-#: classes/applications/calendar/rfp.aw:376
+#: classes/applications/calendar/rfp.aw:374
+#: classes/applications/calendar/rfp.aw:421
 msgid "Arrival date"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:333
-#: classes/applications/calendar/rfp.aw:380
+#: classes/applications/calendar/rfp.aw:378
+#: classes/applications/calendar/rfp.aw:425
 msgid "Departure date"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:352
+#: classes/applications/calendar/rfp.aw:397
 msgid "No. of delegates"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:356
+#: classes/applications/calendar/rfp.aw:401
 msgid "Table form"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:360
+#: classes/applications/calendar/rfp.aw:405
 msgid "Tech. equipment"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:364
+#: classes/applications/calendar/rfp.aw:409
 msgid "Door sign"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:368
+#: classes/applications/calendar/rfp.aw:413
 msgid "No. of persons"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:372
+#: classes/applications/calendar/rfp.aw:417
 msgid "24h Hold"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:384
+#: classes/applications/calendar/rfp.aw:429
 msgid "Catering type"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:388
+#: classes/applications/calendar/rfp.aw:433
 msgid "Catering start"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:392
+#: classes/applications/calendar/rfp.aw:437
 msgid "Catering end"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:405
+#: classes/applications/calendar/rfp.aw:450
 msgid "Location"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:409
+#: classes/applications/calendar/rfp.aw:454
 msgid "Selected by user"
 msgstr ""

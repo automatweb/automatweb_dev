@@ -1074,7 +1074,7 @@ msgstr ""
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room.aw:937 classes/common/room.aw:984 classes/common/room.aw:3093 classes/common/room.aw:3176 classes/common/room.aw:3272 classes/common/room.aw:5069 classes/common/room.aw:5092 classes/common/room.aw:5113
+#: classes/common/room.aw:937 classes/common/room.aw:984 classes/common/room.aw:3093 classes/common/room.aw:3176 classes/common/room.aw:3272 classes/common/room.aw:5076 classes/common/room.aw:5099 classes/common/room.aw:5120
 msgid "Muuda"
 msgstr ""
 
@@ -1198,7 +1198,7 @@ msgstr ""
 msgid "Ressursside kataloog m&auml;&auml;ramata"
 msgstr ""
 
-#: classes/common/room.aw:2941 classes/common/room.aw:3143 classes/common/room.aw:3233 classes/common/room.aw:5278
+#: classes/common/room.aw:2941 classes/common/room.aw:3143 classes/common/room.aw:3233 classes/common/room.aw:5285
 msgid "Nimi"
 msgstr ""
 
@@ -1266,51 +1266,51 @@ msgstr ""
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/common/room.aw:4834
+#: classes/common/room.aw:4841
 msgid "Min hind toodetele veebis (%s)"
 msgstr ""
 
-#: classes/common/room.aw:4857
+#: classes/common/room.aw:4864
 msgid "valuuta"
 msgstr ""
 
-#: classes/common/room.aw:4876
+#: classes/common/room.aw:4883
 msgid ". lisainimesele"
 msgstr ""
 
-#: classes/common/room.aw:5041
+#: classes/common/room.aw:5048
 msgid "Kehtib alates"
 msgstr ""
 
-#: classes/common/room.aw:5049
+#: classes/common/room.aw:5056
 msgid "Kehtib kuni"
 msgstr ""
 
-#: classes/common/room.aw:5057
+#: classes/common/room.aw:5064
 msgid "Kehtib gruppidele"
 msgstr ""
 
-#: classes/common/room.aw:5063
+#: classes/common/room.aw:5070
 msgid "Avamisajad"
 msgstr ""
 
-#: classes/common/room.aw:5130 classes/common/room.aw:5148
+#: classes/common/room.aw:5137 classes/common/room.aw:5155
 msgid "Avamisaeg"
 msgstr ""
 
-#: classes/common/room.aw:5135 classes/common/room.aw:5157
+#: classes/common/room.aw:5142 classes/common/room.aw:5164
 msgid "Paus"
 msgstr ""
 
-#: classes/common/room.aw:5149 classes/common/room.aw:5158
+#: classes/common/room.aw:5156 classes/common/room.aw:5165
 msgid "Otsi"
 msgstr ""
 
-#: classes/common/room.aw:5318
+#: classes/common/room.aw:5325
 msgid "Eelmine"
 msgstr ""
 
-#: classes/common/room.aw:5321
+#: classes/common/room.aw:5328
 msgid "J&auml;rgmine"
 msgstr ""
 

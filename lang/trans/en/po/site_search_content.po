@@ -493,7 +493,7 @@ msgid "Vaikimisi sorteeritakse"
 msgstr "Default sort-by"
 
 #: classes/contentmgmt/site_search/site_search_content.aw:339
-#: classes/contentmgmt/site_search/site_search_content.aw:1965
+#: classes/contentmgmt/site_search/site_search_content.aw:2138
 msgid "Pealkiri"
 msgstr "Title"
 
@@ -509,40 +509,40 @@ msgstr "By date (newest first)"
 msgid "Kuupäeva järgi (vanem enne)"
 msgstr "By date (oldest first)"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:1945
-#: classes/contentmgmt/site_search/site_search_content.aw:1951
+#: classes/contentmgmt/site_search/site_search_content.aw:2118
+#: classes/contentmgmt/site_search/site_search_content.aw:2124
 msgid "&nbsp;"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:1957
+#: classes/contentmgmt/site_search/site_search_content.aw:2130
 msgid "Mitu korda sisaldab"
 msgstr "How many in results"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:1972
+#: classes/contentmgmt/site_search/site_search_content.aw:2145
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:1982
+#: classes/contentmgmt/site_search/site_search_content.aw:2155
 msgid "Sisu"
 msgstr "Content"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2126
+#: classes/contentmgmt/site_search/site_search_content.aw:2299
 msgid "t&auml;psuse"
 msgstr "by accuracy"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2127
+#: classes/contentmgmt/site_search/site_search_content.aw:2300
 msgid "kuup&auml;eva alusel"
 msgstr "by date"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2128
+#: classes/contentmgmt/site_search/site_search_content.aw:2301
 msgid "pealkirja alusel"
 msgstr "by title"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2424
+#: classes/contentmgmt/site_search/site_search_content.aw:2597
 msgid "Lihtne otsing"
 msgstr "Simple search"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2429
+#: classes/contentmgmt/site_search/site_search_content.aw:2602
 msgid "Detailotsing"
 msgstr "Advanced search"
 

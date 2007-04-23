@@ -179,6 +179,18 @@ msgstr ""
 msgid "Omaduse Summa (sum) help"
 msgstr ""
 
+#: classes/applications/shop/shop_order.aw:prop_pickup
+msgid "Omaduse Klient tuleb j&auml;rele (pickup) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order.aw:prop_pickup_comment
+msgid "Omaduse Klient tuleb j&auml;rele (pickup) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order.aw:prop_pickup_help
+msgid "Omaduse Klient tuleb j&auml;rele (pickup) help"
+msgstr ""
+
 # classes/applications/shop/shop_order.aw:group_items
 #: classes/applications/shop/shop_order.aw:group_items
 msgid "Grupi Tellimuse sisu (items) pealkiri"
@@ -285,12 +297,12 @@ msgid "Mitu"
 msgstr "Count"
 
 #: classes/applications/shop/shop_order.aw:291
-msgid "Pakend: "
-msgstr "Packaging: "
+msgid "Pakend:"
+msgstr ""
 
 #: classes/applications/shop/shop_order.aw:291
-msgid "Toode: "
-msgstr "Product: "
+msgid "Toode:"
+msgstr ""
 
 #: classes/applications/shop/shop_order.aw:397
 msgid "shop_order::do_confirm(): could not find parent folder for warehouse export!"
@@ -305,6 +317,12 @@ msgstr "Warehouse export based on order %s"
 msgid "Tellimus laost %s"
 msgstr "Order from warehouse %s"
 
-#: classes/applications/shop/shop_order.aw:952
-msgid "Tellimus laost "
+#: classes/applications/shop/shop_order.aw:959
+msgid "Tellimus laost"
 msgstr ""
+
+#~ msgid "Pakend: "
+#~ msgstr "Packaging: "
+
+#~ msgid "Toode: "
+#~ msgstr "Product: "

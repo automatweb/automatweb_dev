@@ -73,6 +73,30 @@ msgstr ""
 msgid "Omaduse Mitme viimase päeva omad (days) help"
 msgstr ""
 
+#: classes/contentmgmt/newsfeed.aw:prop_sort_by
+msgid "Omaduse Mille j&auml;rgi sorteeritakse (sort_by) caption"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_sort_by_comment
+msgid "Omaduse Mille j&auml;rgi sorteeritakse (sort_by) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_sort_by_help
+msgid "Omaduse Mille j&auml;rgi sorteeritakse (sort_by) help"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_sort_ord
+msgid "Omaduse  (sort_ord) caption"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_sort_ord_comment
+msgid "Omaduse  (sort_ord) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_sort_ord_help
+msgid "Omaduse  (sort_ord) help"
+msgstr ""
+
 #: classes/contentmgmt/newsfeed.aw:prop_parse_embed
 msgid "Omaduse Näita ka lisatud objekte (parse_embed) caption"
 msgstr ""
@@ -129,30 +153,66 @@ msgstr ""
 msgid "Seose Materjalide kaust (RELTYPE_FEED_SOURCE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:78
+#: classes/contentmgmt/newsfeed.aw:79
+msgid "Suurem (uuem) enne"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:80
+msgid "V&auml;iksem (vanem) enne"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:86
+msgid "J&auml;rjekorra j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:87
+msgid "Loomise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:88
+msgid "Muutmise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:89
+msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:90
+msgid "Objekti nime j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:91
+msgid "Kalendris valitud aja j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:92
+msgid "Random"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:102
 msgid "RSS 2.0"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:79
+#: classes/contentmgmt/newsfeed.aw:103
 msgid "Atom (implementeerimata)"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:104
+#: classes/contentmgmt/newsfeed.aw:128
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:108
+#: classes/contentmgmt/newsfeed.aw:132
 msgid "Name"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:112
+#: classes/contentmgmt/newsfeed.aw:136
 msgid "Võta alamkaustadest ka"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:421
+#: classes/contentmgmt/newsfeed.aw:453
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:427
+#: classes/contentmgmt/newsfeed.aw:459
 msgid "Vali"
 msgstr ""

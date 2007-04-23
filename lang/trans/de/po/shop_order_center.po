@@ -457,6 +457,18 @@ msgstr ""
 msgid "Omaduse Toodete grupeerimine (grouping) help"
 msgstr ""
 
+#: classes/applications/shop/shop_order_center.aw:prop_disp_cart_in_web
+msgid "Omaduse Kuva korvi toodete all (disp_cart_in_web) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_disp_cart_in_web_comment
+msgid "Omaduse Kuva korvi toodete all (disp_cart_in_web) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_disp_cart_in_web_help
+msgid "Omaduse Kuva korvi toodete all (disp_cart_in_web) help"
+msgstr ""
+
 #: classes/applications/shop/shop_order_center.aw:prop_psfieldmap
 msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele (psfieldmap) caption"
 msgstr ""
@@ -569,67 +581,67 @@ msgstr ""
 msgid "Seose Pangalingi objekt (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:199
+#: classes/applications/shop/shop_order_center.aw:202
 msgid "Sessionipõhine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:200
+#: classes/applications/shop/shop_order_center.aw:203
 msgid "Kasutajapõhine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:242
+#: classes/applications/shop/shop_order_center.aw:245
 msgid "Kaust"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:354
+#: classes/applications/shop/shop_order_center.aw:357
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:359
+#: classes/applications/shop/shop_order_center.aw:362
 msgid "Tabeli kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:365
+#: classes/applications/shop/shop_order_center.aw:368
 msgid "Paketi kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:371
+#: classes/applications/shop/shop_order_center.aw:374
 msgid "Paketi vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:377
+#: classes/applications/shop/shop_order_center.aw:380
 msgid "Paketi teise vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:397
-#: classes/applications/shop/shop_order_center.aw:1306
+#: classes/applications/shop/shop_order_center.aw:400
+#: classes/applications/shop/shop_order_center.aw:1319
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:473
+#: classes/applications/shop/shop_order_center.aw:476
 msgid "Sorditav v&auml;li"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:479
+#: classes/applications/shop/shop_order_center.aw:482
 msgid "Kasvav / kahanev"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:497
+#: classes/applications/shop/shop_order_center.aw:500
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1135
+#: classes/applications/shop/shop_order_center.aw:1148
 msgid "&nbsp"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1150
+#: classes/applications/shop/shop_order_center.aw:1163
 msgid "Vali t&uuml;hjaks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1253
+#: classes/applications/shop/shop_order_center.aw:1266
 msgid "Tellija andmete vorm valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1280
+#: classes/applications/shop/shop_order_center.aw:1293
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr ""

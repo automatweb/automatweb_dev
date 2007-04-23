@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/patent_office/trademark_status.aw:class_1195_help
 msgid "Klassi Trademark status help"
 msgstr ""
@@ -74,3 +73,14 @@ msgstr ""
 msgid "Omaduse Saatmise kuup&auml;ev (sent_date) help"
 msgstr ""
 
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_modified
+msgid "Omaduse  (modified) caption"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_modified_comment
+msgid "Omaduse  (modified) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/patent_office/trademark_status.aw:prop_modified_help
+msgid "Omaduse  (modified) help"
+msgstr ""

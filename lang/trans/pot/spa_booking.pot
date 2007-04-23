@@ -94,3 +94,7 @@ msgstr ""
 msgid "Seose M&uuml;&uuml;ja (RELTYPE_SELLER) tekst"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_booking.aw:rel_RELTYPE_MAIN_PERSON
+msgid "Seose Perepea (RELTYPE_MAIN_PERSON) tekst"
+msgstr ""
+

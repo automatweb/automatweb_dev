@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/spa_bookings/spa_customer_interface.aw:class_1198_help
 msgid "Klassi SPA Kliendi liides help"
 msgstr ""
@@ -38,6 +37,18 @@ msgstr ""
 msgid "Omaduse Ruumid (rooms) help"
 msgstr ""
 
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_bank_payment
+msgid "Omaduse Pangamakse objekt (bank_payment) caption"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_bank_payment_comment
+msgid "Omaduse Pangamakse objekt (bank_payment) kommentaar"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:prop_bank_payment_help
+msgid "Omaduse Pangamakse objekt (bank_payment) help"
+msgstr ""
+
 #: classes/applications/spa_bookings/spa_customer_interface.aw:rel_RELTYPE_FOLDER
 msgid "Seose Toodete kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
@@ -46,31 +57,38 @@ msgstr ""
 msgid "Seose Ruum (RELTYPE_ROOM) tekst"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:90
+#: classes/applications/spa_bookings/spa_customer_interface.aw:rel_RELTYPE_BANK_PAYMENT
+msgid "Seose Pangamakse (RELTYPE_BANK_PAYMENT) tekst"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:103
 msgid "Broneering %s / %s"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:124
+#: classes/applications/spa_bookings/spa_customer_interface.aw:137
 msgid "Lisa teenus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:132
+#: classes/applications/spa_bookings/spa_customer_interface.aw:148
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:138
+#: classes/applications/spa_bookings/spa_customer_interface.aw:149
+msgid "Maksa"
+msgstr ""
+
+#: classes/applications/spa_bookings/spa_customer_interface.aw:157
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:268
+#: classes/applications/spa_bookings/spa_customer_interface.aw:335
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:637
+#: classes/applications/spa_bookings/spa_customer_interface.aw:824
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:637
+#: classes/applications/spa_bookings/spa_customer_interface.aw:824
 msgid "Naine"
 msgstr ""
-

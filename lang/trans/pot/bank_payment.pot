@@ -62,18 +62,6 @@ msgstr ""
 msgid "Omaduse Privaatv&otilde;ti (private_key) help"
 msgstr ""
 
-#: classes/common/bank_payment.aw:prop_private_c_key
-msgid "Omaduse krediitkaardi privaatv&otilde;ti (private_c_key) caption"
-msgstr ""
-
-#: classes/common/bank_payment.aw:prop_private_c_key_comment
-msgid "Omaduse krediitkaardi privaatv&otilde;ti (private_c_key) kommentaar"
-msgstr ""
-
-#: classes/common/bank_payment.aw:prop_private_c_key_help
-msgid "Omaduse krediitkaardi privaatv&otilde;ti (private_c_key) help"
-msgstr ""
-
 #: classes/common/bank_payment.aw:prop_bank_return_url
 msgid "Omaduse Url, kuhu tagasi tulla eduka makse puhul (bank_return_url) caption"
 msgstr ""
@@ -120,6 +108,30 @@ msgstr ""
 
 #: classes/common/bank_payment.aw:prop_bank_help
 msgid "Omaduse  (bank) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_test_priv_key
+msgid "Omaduse test privaatv&otilde;ti (test_priv_key) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_test_priv_key_comment
+msgid "Omaduse test privaatv&otilde;ti (test_priv_key) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_test_priv_key_help
+msgid "Omaduse test privaatv&otilde;ti (test_priv_key) help"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank_test
+msgid "Omaduse  (bank_test) caption"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank_test_comment
+msgid "Omaduse  (bank_test) kommentaar"
+msgstr ""
+
+#: classes/common/bank_payment.aw:prop_bank_test_help
+msgid "Omaduse  (bank_test) help"
 msgstr ""
 
 #: classes/common/bank_payment.aw:prop_find_date_start
@@ -222,6 +234,14 @@ msgstr ""
 msgid "Grupi Logi (log) help"
 msgstr ""
 
+#: classes/common/bank_payment.aw:group_test
+msgid "Grupi Test (test) pealkiri"
+msgstr ""
+
+#: classes/common/bank_payment.aw:group_test_help
+msgid "Grupi Test (test) help"
+msgstr ""
+
 #: classes/common/bank_payment.aw:rel_RELTYPE_KEY
 msgid "Seose Privaatv&otilde;ti (RELTYPE_KEY) tekst"
 msgstr ""
@@ -230,71 +250,75 @@ msgstr ""
 msgid "Seose Privaatv&otilde;ti (RELTYPE_P_KEY) tekst"
 msgstr ""
 
-#: classes/common/bank_payment.aw:521
+#: classes/common/bank_payment.aw:531
 msgid "&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:521
+#: classes/common/bank_payment.aw:531
 msgid "eba&otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:522
+#: classes/common/bank_payment.aw:532
 msgid "ok"
 msgstr ""
 
-#: classes/common/bank_payment.aw:522
+#: classes/common/bank_payment.aw:532
 msgid ""
 msgstr ""
 
-#: classes/common/bank_payment.aw:529
+#: classes/common/bank_payment.aw:539
 msgid "Kokku:"
 msgstr ""
 
-#: classes/common/bank_payment.aw:552
+#: classes/common/bank_payment.aw:562
 msgid "\n"
 msgstr ""
 
-#: classes/common/bank_payment.aw:575
+#: classes/common/bank_payment.aw:592
 msgid "Aeg"
 msgstr ""
 
-#: classes/common/bank_payment.aw:581
+#: classes/common/bank_payment.aw:598
 msgid "Maksja"
 msgstr ""
 
-#: classes/common/bank_payment.aw:587
+#: classes/common/bank_payment.aw:604
 msgid "Viitenumber"
 msgstr ""
 
-#: classes/common/bank_payment.aw:593
+#: classes/common/bank_payment.aw:610
 msgid "Summa"
 msgstr ""
 
-#: classes/common/bank_payment.aw:599
+#: classes/common/bank_payment.aw:616
 msgid "Seletus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:605
+#: classes/common/bank_payment.aw:622
 msgid "Pank"
 msgstr ""
 
-#: classes/common/bank_payment.aw:611
+#: classes/common/bank_payment.aw:628
 msgid "Arve"
 msgstr ""
 
-#: classes/common/bank_payment.aw:617
+#: classes/common/bank_payment.aw:634
 msgid "&Otilde;nnestus"
 msgstr ""
 
-#: classes/common/bank_payment.aw:622
+#: classes/common/bank_payment.aw:639
 msgid "SK"
 msgstr ""
 
-#: classes/common/bank_payment.aw:847
+#: classes/common/bank_payment.aw:734
+msgid "Url , kuhu suunata"
+msgstr ""
+
+#: classes/common/bank_payment.aw:926
 msgid "Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage"
 msgstr ""
 
-#: classes/common/bank_payment.aw:847
+#: classes/common/bank_payment.aw:926
 msgid "siia"
 msgstr ""
 

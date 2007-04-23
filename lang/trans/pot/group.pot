@@ -503,63 +503,61 @@ msgid "D&uuml;naamiline"
 msgstr ""
 
 #: classes/core/users/group.aw:252
-msgid "
-					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
+msgid "Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
 					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
 					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\"http://www.gnu.org/software/tar/manual/html_node/tar_109.html\">siin</a> <br />
 					n&auml;ide: <br />
 					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
 					<br />
-					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
-				"
+					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />"
 msgstr ""
 
 #: classes/core/users/group.aw:308
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:462
+#: classes/core/users/group.aw:466
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:491
+#: classes/core/users/group.aw:495
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:500
+#: classes/core/users/group.aw:504
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:509
+#: classes/core/users/group.aw:513
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:518
+#: classes/core/users/group.aw:522
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:538
+#: classes/core/users/group.aw:542
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:601
+#: classes/core/users/group.aw:605
 msgid "--vali--"
 msgstr ""
 
-#: classes/core/users/group.aw:622
+#: classes/core/users/group.aw:626
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:648
+#: classes/core/users/group.aw:652
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:839
+#: classes/core/users/group.aw:843
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:885
+#: classes/core/users/group.aw:889
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 
