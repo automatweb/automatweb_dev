@@ -128,13 +128,11 @@ class keyword_selector extends class_base
 		{
 			$filt["name"] = $arr["request"]["kw_sel_filt"]."%";
 		}
-		$filt["sort_by"] = "objects.name";
+		$filt["sort_by"] = "objects.parent,objects.jrk,objects.name";
 		$ol = new object_list($filt);
 		$used_kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD")));
-		$used_kws->sort_by(array("prop" => "parent"));
 		$used_kws = $this->make_keys($used_kws->ids());
 		$data = array_values($ol->arr());
-
 		$num = 0;
 		foreach($ol->arr() as $kw)
 		{
@@ -158,7 +156,8 @@ class keyword_selector extends class_base
 				$po = obj($kw->parent());
 				$t->define_data($cur_row);
 				$cur_row = array(
-					"parent" => "<b>".parse_obj_name($po->name())."</b>"
+					"parent" => "<b>".parse_obj_name($po->name())."</b>",
+					"row_num" => ++$rn
 				);
 				$num = 1;
 			}
@@ -166,7 +165,7 @@ class keyword_selector extends class_base
 			$cur_row["name_".$num] = html::obj_change_url($kw)." ".html::checkbox(array(
 				"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw->id()."]",
 				"value" => 1,
-				"checked" => isset($used_kws[$kw->id()])
+				"checked" => isset($used_kws[$kw->id()]),
 			));
 			$prev_parent = $kw->parent();
 		}
@@ -178,7 +177,8 @@ class keyword_selector extends class_base
 
 		$t->set_header($this->_get_alpha_list($arr["request"]));
 		$t->sort_by(array(
-			"rgroupby" => array("parent" => "parent")
+			"rgroupby" => array("parent" => "parent"),
+			"field" => array("row_num" => "row_num")
 		));
 		return $t->draw();
 	}
