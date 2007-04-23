@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.30 2007/03/28 10:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.31 2007/04/23 10:29:37 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -184,30 +184,31 @@ class mini_gallery extends class_base
 		$ii = get_instance(CL_IMAGE);
 
 		$tplar = array();
-
-		if ($this->is_template("IMAGE"))
+		$f_tplar = array();
+		
+		$tpls = array(
+			"IMAGE" => "image",
+			"IMAGE_LINKED" => "image_linked",
+			"IMAGE_HAS_BIG" => "image_has_big",
+			"IMAGE_BIG_LINKED" => "image_big_linked"
+		);
+		foreach($tpls as $uc_name => $lc_name)
 		{
-			$imtpl = $this->get_template_string("IMAGE");
-			$tplar["image"] = $imtpl;
+			$f_uc_name = "FIRST_".$uc_name;
+				
+			if ($this->is_template($uc_name))
+			{
+				$imtpl = $this->get_template_string($uc_name);
+				$tplar[$lc_name] = $imtpl;
+				$f_tplar[$lc_name] = $imtpl;
+			}
+			if ($this->is_template($f_uc_name))
+			{
+				$imtpl = $this->get_template_string($f_uc_name);
+				$f_tplar[$lc_name] = $imtpl;
+			}
 		}
 
-		if ($this->is_template("IMAGE_LINKED"))
-		{
-			$imtpl = $this->get_template_string("IMAGE_LINKED");
-			$tplar["image_linked"] = $imtpl;
-		}
-
-		if ($this->is_template("IMAGE_HAS_BIG"))
-		{
-			$imtpl = $this->get_template_string("IMAGE_HAS_BIG");
-			$tplar["image_has_big"] = $imtpl;
-		}
-
-		if ($this->is_template("IMAGE_BIG_LINKED"))
-		{
-			$imtpl = $this->get_template_string("IMAGE_BIG_LINKED");
-			$tplar["image_big_linked"] = $imtpl;
-		}
 		$s_id = $ob->prop("style");
 		if(is_oid($s_id) && $this->can("view", $s_id))
 		{
@@ -216,6 +217,7 @@ class mini_gallery extends class_base
 			$use_style = $style_i->get_style_name($s_id);
 		}
 
+		$numbr = 1;
 		$str = "";
 		for ($r = 0; $r < $rows; $r++)
 		{
@@ -228,10 +230,13 @@ class mini_gallery extends class_base
 						"alias" => array(
 							"target" => $img->id()
 						),
-						"tpls" => $tplar,
+						"tpls" => $numbr == 1 ? $f_tplar : $tplar,
 						"use_style" => $use_style,
 						"force_comments" => $ob->prop("comments"),
 						"link_prefix" => empty($arr['link_prefix']) ? "" : $arr['link_prefix'],
+						"add_vars" => array(
+							"count" => $numbr
+						)
 					);
 					$tmp = $ii->parse_alias($args);
 					$this->vars(array(
@@ -247,6 +252,7 @@ class mini_gallery extends class_base
 					));
 				}
 				$l .= $this->parse("COL");
+				$numbr++;
 			}
 
 			$this->vars(array(
