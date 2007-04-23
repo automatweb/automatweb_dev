@@ -111,9 +111,8 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>T&amp;uuml;hista nupu tekst</caption>
+            <caption>T&amp;amp;uuml;hista nupu tekst</caption>
       </property>
-
       <property>
             <name>join_properties_pages</name>
             <table>objects</table>

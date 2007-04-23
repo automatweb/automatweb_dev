@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.34 2007/04/20 11:31:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.35 2007/04/23 10:13:15 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1559,6 +1559,7 @@ class crm_company_webview extends class_base
 			$this->vars(array(
 				"between" => $b_s,
 				"between_selected" => "",
+				"points" => "",
 			));
 		}
 		$this->parse('company_list');

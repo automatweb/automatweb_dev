@@ -204,6 +204,203 @@ a:hover {text-decoration: underline}
 	position: absolute
 }
 
+
+#pais2 {
+	background: #e2e2e2;
+	/*min-width: 550px;*/
+	height: 32px;
+	border-bottom: 1px solid #f1f8fc
+}
+#pais2_noheader {
+	background: #e2e2e2;
+	/*min-width: 550px;*/
+	height: 14px;
+	border-bottom: 1px solid #f1f8fc
+}
+#pais2 .logo { 
+	background: url('/automatweb/images/aw06/logo_t.gif') no-repeat;
+	width: 239px;
+	height: 57px;
+	overflow: hidden;
+	position: absolute;
+	z-index: 10;
+}
+#pais2 .logo img { 
+	margin:17px 0 0 15px
+}
+#pais2 .logo span {
+	color: #d50000;
+	width: 239px;
+	font-size: 10px;
+	text-transform: uppercase;
+	text-align: center;
+	display: block;
+	font-weight: bold;
+	top: 46px;
+	position: absolute;
+}
+#pais2 .top-left-menyy {
+	background: url('/automatweb/images/aw06/y_menyy_left_t.gif') no-repeat;
+	padding: 5px 0 5px 8px;
+	color: #545454;
+	font-size: 11px;
+	white-space: nowrap;
+	left: 239px;
+	height: 1%;
+	position: absolute
+}
+#pais2 .top-left-menyy a {
+	color: #545454;
+}
+#pais2 .top-right-menyy {
+	float: right;
+	background: url('/automatweb/images/aw06/y_menyy_right_t.gif') no-repeat;
+	font-size: 11px;
+	top: 0px;
+	/*position: relative*/
+}
+#pais2 .top-right-menyy a {
+	float: left;
+	color: #000;
+	border-left: 1px solid #fff;
+	border-right: 1px solid #fff;
+	padding: 5px 8px 5px 10px;
+	margin-right: -1px;
+	display: block
+}
+#pais2 .top-right-menyy a.akt {
+	border-top: 1px solid #05a6e9;
+	border-left: 1px solid #05a6e9;
+	border-right: 1px solid #05a6e9;
+	border-bottom: 1px solid #05a6e9;
+	margin: 0 0 0 1px;
+	padding: 4px 7px 4px 10px;
+}
+#pais2 .top-right-menyy a:hover {
+	color: #333;
+	text-decoration: none;
+}
+#pais2 .top-right-menyy a.logout {
+	background: url('/automatweb/images/aw06/ikoon_logout.gif') no-repeat 8px 5px;
+	padding: 5px 20px 5px 43px;
+	margin: 0;
+}
+#pais2 .top-right-menyy .nool {
+	top: -1px;
+	position: relative
+}
+
+#pais2 .olekuriba {
+	background: url('/automatweb/images/aw06/olek_t.gif') no-repeat;
+	color: #545454;
+	/*min-width: 400px;*/
+	font-size: 11px;
+	padding: 12px 0 0 8px;
+	top: 24px;
+	left: 239px;
+	position: absolute;
+	z-index: 0;
+	white-space: nowrap
+}
+#pais2 .olekuriba a {
+	color: #545454
+}
+#pais2 .tabs {
+	float: left;
+	padding-left: 30px;
+	top: 14px;
+	position: absolute;
+}
+#pais2 .tabs .norm, #pais2 .tabs .akt {
+	float: left;
+	background: url('/automatweb/images/aw06/pais_tab_norm_left.gif') no-repeat;
+	padding-left: 4px;
+	height: 18px;
+}
+#pais2 .tabs .norm .right, #pais2 .tabs .akt .right  {
+	float: left;
+	background: url('/automatweb/images/aw06/pais_tab_norm_right.gif') no-repeat right top;
+	padding-right: 3px;
+	height: 18px;
+}
+#pais2 .tabs .norm .right a, #pais2 .tabs .akt .right a{
+	float: left;
+	background: url('/automatweb/images/aw06/pais_tab_norm_center.gif') repeat-x;
+	font-size: 12px;
+	color: #000;
+	padding: 2px 5px 4px;
+	display: block
+}
+#pais2 .tabs .akt {
+	background: url('/automatweb/images/aw06/pais_tab_akt_left.gif') no-repeat;
+	height: 19px;
+	margin-bottom: -1px;
+	position: relative
+}
+#pais2 .tabs .akt .right {
+	background: url('/automatweb/images/aw06/pais_tab_akt_right.gif') no-repeat right top;
+	height: 19px;
+}
+#pais2 .tabs .akt .right a, #pais2 .tabs .akt .right a:hover {
+	background: url('/automatweb/images/aw06/pais_tab_akt_center.gif') repeat-x;
+	font-weight: bold;
+	color: #fff;
+	padding: 4px 5px 2px;
+	text-decoration: none
+}
+#pais2 .toiming {
+	float: right;
+	height: 60px;
+	/*position: relative;*/
+	z-index: 10;
+}
+#pais2 .toiming a.nupp {
+	float: left;
+	color: #000;
+	font-size: 11px;
+	padding: 2px 10px 3px 25px;
+	margin-right:5px;
+	margin-top: 33px;
+	border: 1px solid #fff
+}
+#pais2 .toiming a.menuButton {
+	float: left;
+	color: #000;
+	font-size: 11px;
+	padding: 2px 10px 3px 25px;
+	margin-right:5px;
+	margin-top: 33px;
+	border: 1px solid #fff
+}
+
+#pais2 .toiming .menuBar a.menuButton {
+	float: left;
+	color: #000;
+	font-size: 11px;
+	padding: 2px 10px 3px 25px;
+	margin-right:5px;
+	margin-top: 33px;
+	border: 1px solid #fff;
+}
+
+#pais2 .toiming a.akt, #pais2 .toiming a:hover {
+	border: 1px solid #05a6e9;
+	text-decoration: none
+}
+#pais2 .popup_item a.akt, #pais2 .popup_item a:hover { /*kalmer 22.09.2006*/
+	border-bottom: 0px solid #ffffff;
+	text-decoration: underline;
+}
+#pais2 .toiming a.nupp img.ikoon {
+	margin-left: -18px;
+	position: absolute
+}
+#pais2 .toiming a.menuButton img.ikoon {
+	margin-left: -18px;
+	position: absolute
+}
+
+
 /* teise astme menüü */
 #k_menyy {
 	clear: both;

@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.8 2006/07/07 11:09:37 tarvo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.9 2007/04/23 10:13:16 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -11,7 +11,7 @@
 
 /*
 
-@classinfo no_status=1 no_comment=1 relationmgr=yes syslog_type=ST_DOCGEN_VIEWER
+@classinfo no_status=1 no_comment=1 relationmgr=yes syslog_type=ST_DOCGEN_VIEWER prop_cb=1
 @default table=objects
 @default group=general 
 
@@ -27,6 +27,26 @@
 
 @property refresh_properties type=submit store=no value=Uuenda
 @caption Uuenda
+
+
+@default group=class_overview
+
+	@layout ver_split type=hbox width=30%:70%
+
+		@layout tree type=vbox closeable=1 area_caption=Klasside&nbsp;puu parent=ver_split 
+
+			@property class_tree type=text parent=tree store=no no_caption=1
+
+		@layout tbl type=hbox closeable=1 area_caption=Klassi&nbsp;info parent=ver_split 
+
+			@property class_inf type=text store=no no_caption=1 parent=tbl
+
+@groupinfo class_overview caption="Klasside &uuml;levaade" submit=no
+@groupinfo all_classes caption="K&otilde;ik klassid" submit=no
+@groupinfo api_classes caption="API Klassid" submit=no
+@groupinfo tutorials caption="Eraldi dokumentatsioon" submit=no
+@groupinfo cb_tags caption="Classbase tagid" submit=no
+@groupinfo forum caption="Foorum" submit=no
 
 @reltype FORUM value=1 clid=CL_FORUM_V2
 @caption foorum
@@ -59,6 +79,62 @@ class docgen_viewer extends class_base
 		return PROP_OK;
 	}
 
+	function _get_class_tree($arr)
+	{
+		$tv = get_instance(CL_TREEVIEW);
+		
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgclsss",
+			"persist_state" => true,
+			"root_name" => t("Classes"),
+			"url_target" => "list"
+		));
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "dcgclsss",
+			"persist_state" => true,
+			"root_name" => t("Classes"),
+		));
+
+		/* 	lihtsalt nii infi m6ttes - kui keegi hakkab seda puud siin feikima samasuguseks nagu on rohelise nupu puu
+			siis juhtub kaks asja: 
+				- see aptch reverditakse
+				- ta j22b cvs commit accessist ilma
+
+			kui tekib selline tahtmine, siis selleks tehke uus puu uude kohta. 
+
+			- terryf.
+		*/
+
+		$this->ic = get_instance("core/icons");
+		$this->_req_mk_clf_tree($tv, $this->cfg["classdir"]);
+
+		$arr["prop"]["value"] = $tv->finalize_tree(array(
+			"rootnode" => $this->cfg["classdir"],
+		));
+
+	}
+
+
+	function _get_class_inf($arr)
+	{
+		$analyzer = get_instance("core/aw_code_analyzer/aw_code_analyzer");
+
+		$data = $analyzer->analyze_file($arr["request"]["tf"]);
+die(dbg::dump($data));
+		foreach($data["classes"] as $class => $class_data)
+		{
+			if ($class != "")
+			{
+				$op .= $this->display_class($class_data, $file, array(
+					"api_only" => $api_only
+				));
+			}
+		}
+		$arr["prop"]["value"] = $op;
+	}
+
 	function get_property($arr)
 	{
 		$prop =& $arr["prop"];
@@ -69,6 +145,10 @@ class docgen_viewer extends class_base
 					"url" => $this->mk_my_orb("frames", array("id" => $arr["obj_inst"]->id())),
 					"caption" => t("Open DocGen")
 				));
+				break;
+
+			case "class_tree":
+				$this->_get_class_tree($arr);
 				break;
 		}
 		return PROP_OK;
@@ -208,10 +288,18 @@ class docgen_viewer extends class_base
 		foreach($fc as $file)
 		{
 			$fp = $path."/".$file;
+			if ($_GET["group"] != "")
+			{
+				$url = aw_url_change_var("tf", str_replace($this->cfg["classdir"], "", $fp));
+			}
+			else
+			{
+				$url = $this->mk_my_orb("class_info", array("file" => str_replace($this->cfg["classdir"], "", $fp)));
+			}
 			$tv->add_item($path, array(
 				"name" => $file,
 				"id" => $fp,
-				"url" => $this->mk_my_orb("class_info", array("file" => str_replace($this->cfg["classdir"], "", $fp))),
+				"url" => $url,
 				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
 				"target" => "classinfo"
 			));

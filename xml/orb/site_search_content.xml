@@ -26,6 +26,9 @@
 					<optional name="sort_by" />
 					<optional name="opts" />
 					<optional name="s_date" />
+					<optional name="field" />
+					<optional name="area" />
+					<optional name="keyword" />
 				</arguments>
 			</function>
 		</action>

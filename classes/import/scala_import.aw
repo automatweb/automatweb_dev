@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.19 2007/01/31 20:27:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/scala_import.aw,v 1.20 2007/04/23 10:13:15 kristo Exp $
 // scala_import.aw - Scala import 
 /*
 
@@ -847,7 +847,7 @@ class scala_import extends class_base
 
 				echo "## product exists: ".$product_data['name']." <br />\n";
 				$o = new object($product);
-				if ($o->name() != $product_data['name'])
+				if (trim($o->name()) != trim($product_data['name']))
 				{
 					$o->set_name($product_data['name']);
 					echo "\t#### changed name from ".$o->name()." to ".$product_data['name']."<br />\n";
@@ -863,9 +863,9 @@ class scala_import extends class_base
 				// the properties:
 				foreach ($properties as $property)
 				{
-					if ($o->prop($property) != $product_data[$property])
+					if (trim($o->prop($property)) != trim($product_data[$property]))
 					{
-						$o->set_prop($property, $product_data[$property]." ");
+						$o->set_prop($property, trim($product_data[$property])." ");
 						echo "\t#### changed property ".$property." value from ".$o->prop($property)." to ".$product_data[$property]."<br />\n";
 						$data_changed = true;
 					}

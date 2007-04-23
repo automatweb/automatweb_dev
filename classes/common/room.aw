@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.187 2007/04/09 13:32:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.188 2007/04/23 10:13:15 kristo Exp $
 // room.aw - Ruum 
 /*
 
@@ -3560,11 +3560,14 @@ class room extends class_base
 					$pk_ids[] = $c["to"];
 				}
 			}
-			$ol = new object_list(array(
-				"oid" => $pk_ids,
-				"lang_id" => array(),
-				"site_id" => array()
-			));
+			if (count($pk_ids))
+			{
+				$ol = new object_list(array(
+					"oid" => $pk_ids,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+			}
 			/*foreach($prods->arr() as $product)
 			{
 				$ol->add($this->get_package_list($product));

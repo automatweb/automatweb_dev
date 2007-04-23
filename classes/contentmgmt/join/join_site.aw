@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.51 2007/04/19 12:06:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.52 2007/04/23 10:13:15 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -587,6 +587,45 @@ class join_site extends class_base
 					)),
 					"required" => $req
 				));
+
+				if ($nprop["name"] == "contact")
+				{
+					$ct_props = array(
+						"aadress", "linn", "maakond", "postiindeks", "riik"
+					);
+					$tmp = obj();
+					$tmp->set_class_id(CL_CRM_ADDRESS);
+					$ad_pd = $tmp->get_property_list();
+					foreach($ct_props as $ct_prop)
+					{
+						$nprop = $ad_pd[$ct_prop];
+						$req = html::checkbox(array(
+							"name" => "required[$clid][".$nprop["name"]."]",
+							"value" => 1,
+							"checked" => ($required[$clid][$nprop["name"]] == 1)
+						));
+						if ($clid == CL_USER)
+						{
+							if ($nprop["name"] == "uid_entry" || $nprop["name"] == "passwd" || $nprop["name"] == "passwd_again")
+							{
+								$req = "Jah".html::hidden(array(
+									"name" => "required[$clid][".$nprop["name"]."]",
+									"value" => 1
+										));
+							}
+						}
+
+						$prop["vcl_inst"]->define_data(array(
+							"prop" => str_repeat("&nbsp;", 20).$nprop["caption"]." (".$nprop["name"].")",
+							"visible" => html::checkbox(array(
+								"name" => "visible[$clid][".$nprop["name"]."]",
+								"value" => 1,
+								"checked" => ($visible[$clid][$nprop["name"]] == 1)
+							)),
+							"required" => $req
+						));
+					}
+				}
 			}
 		}
 	}
