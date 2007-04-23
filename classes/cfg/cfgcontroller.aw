@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.10 2007/01/19 11:32:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.11 2007/04/23 12:10:34 tarvo Exp $
 // cfgcontroller.aw - Kontroller(Classbase) 
 /*
 
@@ -18,7 +18,7 @@
 @comment Kuvatakse, kui kontroller blokeerib sisestuse
 
 property show_error type=checkbox ch_value=1
-caption Kas näitamise kontroller näitab elemendi asemel veateadet? 
+caption Kas n&auml;itamise kontroller n&auml;itab elemendi asemel veateadet? 
 
 property only_warn type=checkbox ch_value=1
 caption Ainult hoiatus
