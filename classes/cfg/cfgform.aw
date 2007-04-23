@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.109 2007/04/20 09:28:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.110 2007/04/23 06:02:26 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1302,6 +1302,7 @@ class cfgform extends class_base
 						$this->vars(array(
 							"richtext_checked" => checked($property["richtext"] == 1),
 							"richtext" => $property["richtext"],
+							"prp_key" => $property["name"],
 						));
 						$property["cfgform_additional_options"] = $this->parse("textarea_options");
 						break;
