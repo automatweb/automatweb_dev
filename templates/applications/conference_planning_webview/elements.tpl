@@ -1,3 +1,11 @@
+<!-- SUB: ERROR -->
+<tr>
+	<td colspan="2">
+	{VAR:caption}
+	</td>
+</tr>
+<!-- END SUB: ERROR -->
+
 <!-- SUB: TEXTBOX -->
 <tr>
 	<th><label for="iField11">{VAR:caption}:</label></th>

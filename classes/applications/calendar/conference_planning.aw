@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.87 2007/04/23 11:14:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.88 2007/04/24 13:29:10 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -78,8 +78,12 @@
 
 	@groupinfo webform_sub caption="Seaded" parent=webform
 	@default group=webform_sub
-		@property metamgr type=relpicker reltype=METAMANAGER field=meta method=serialize
+		@property metamgr type=relpicker reltype=RELTYPE_METAMANAGER field=meta method=serialize
 		@caption Muutujate haldus
+
+		@property submit_controller type=relpicker reltype=RELTYPE_SUBMIT_CONTROLLER field=meta method=serialize
+		@caption Vormi l&otilde;petamise kontroller
+
 
 
 @groupinfo mails caption="E-mailid"
@@ -125,6 +129,9 @@
 
 @reltype METAMANAGER value=7 clid=CL_METAMGR
 @caption Muutujate haldus
+
+@reltype SUBMIT_CONTROLLER value=8 clid=CL_CFGCONTROLLER
+@caption Vormi l&otilde;petamise kontroller
 
 */
 
@@ -269,6 +276,8 @@ class conference_planning extends class_base
 
 			case "mf_start_date":
 			case "mf_end_date":
+			case "gen_acc_start":
+			case "gen_acc_end":
 				$ret = array(
 					"form" => "date_textbox",
 				);
@@ -1359,6 +1368,18 @@ class conference_planning extends class_base
 
 	// HANDLE CHANGEFORM DATA
 
+
+	/**
+		@attrib params=pos
+		@param type required type=string
+			the element type to be converted (for example: table, event_type, select .. etc)
+		@param value required type=string
+			the element value to be converted
+		@comment
+			converts element values to correct form before storing them(for example serializes array's)
+		@return
+			returns the converted value
+	**/
 	function pre_store($type, $value)
 	{
 		switch($type)
@@ -1371,6 +1392,17 @@ class conference_planning extends class_base
 		return $value;
 	}
 
+	/**
+		@attrib params=pos
+		@param type required type=string
+			the element type to be converted (for example: table, event_type, select .. etc)
+		@param value required type=string
+			the element value to be converted
+		@comment
+			converts element values to correct form before editing them(for example unserializes array's)
+		@return
+			returns the converted value
+	**/
 	function pre_edit($type, $value)
 	{
 		switch($type)
@@ -1383,6 +1415,18 @@ class conference_planning extends class_base
 		return $value;
 	}
 
+	/**
+		@attrib params=pos
+		@param id required type=oid
+			conference planning object id
+		@param data required type=array
+			form data to be saved.
+			array(
+				element_name => element_value
+			)
+		@comment
+			stores the form session data,
+	**/
 	function store_data($id, $data)
 	{
 		if(strlen($id))
@@ -1398,6 +1442,15 @@ class conference_planning extends class_base
 		}
 	}
 
+	/**
+		@attrib params=pos
+		@param id required type=oid
+			conference planning object id
+		@param convert optional type=bool
+			if set to true, element values are processed with conference_planning::pre_edit() before returning
+		@comment
+			Get's the session data for given conference planning object.
+	**/
 	function get_stored_data($id, $convert = false)
 	{
 		
@@ -1413,6 +1466,20 @@ class conference_planning extends class_base
 		return $data;
 	}
 
+	function get_errors($id)
+	{
+		return is_array($_t = aw_global_get("conference_planning_errors_".$id))?$_t:array();
+	}
+
+	function set_errors($id, $errors)
+	{
+		aw_session_set("conference_planning_errors_".$id, $errors);
+	}
+
+	/**
+		@comment
+			handles form data from conference_planning form (calls out corresponding controllers, saves data etc..)
+	**/
 	function handle_data($arr)
 	{
 		$cp = obj($arr["conference_planning"]);
@@ -1422,6 +1489,8 @@ class conference_planning extends class_base
 		$elements = $arr["elem"];
 		unset($arr["elem"]);
 		$stored_data = $this->get_stored_data($cp->id(), true);
+		
+		$view_errors = array();
 		foreach($views[$view_id]["elements"] as $element_id => $data)
 		{
 			/*
@@ -1435,12 +1504,13 @@ class conference_planning extends class_base
 			*/
 			
 			$el_form_data = $this->get_form_elements_data($data["name"]);
+			$element = &$elements[$view_id][$element_id];
 			if($this->can("view", $data["show_controller"]))
 			{
 				$i = get_instance(CL_CFGCONTROLLER);
 				$toprop = array(
 					"views" => $views,
-					"values" => $elements,
+					"values" => $stored_data,
 					"element" => $data,
 					"prop" => $el_form_data,
 					"current_view" => $view_id,
@@ -1453,7 +1523,6 @@ class conference_planning extends class_base
 				}
 			}
 
-			$element = &$elements[$view_id][$element_id];
 			$prop = array(
 				"views" => &$views,
 				"values" => &$elements,
@@ -1469,9 +1538,16 @@ class conference_planning extends class_base
 			{
 				continue;
 			}
+			elseif($controller == PROP_ERROR)
+			{
+				$view_errors[] = $data["save_controller"];
+			}
 			$element = $this->pre_store($el_form_data["form"], $element);
 			$to_be_saved[$views[$view_id]["elements"][$element_id]["name"]] = $element;
 		}
+		$errors = $this->get_errors($cp->id());
+		$errors[$view_id] = $view_errors;
+		$this->set_errors($cp->id(), $errors);
 		return $this->store_data($cp->id(), $to_be_saved);
 	}
 
@@ -1485,7 +1561,16 @@ class conference_planning extends class_base
 		$this->handle_data($arr);
 		$obj = obj($arr["conference_planning"]);
 		$viewcount = count(aw_unserialize($obj->prop("help_views")));
-		return $this->gen_url($arr["doc"], (($arr["current_view"] < $viewcount)?++$arr["current_view"]:$arr["current_view"]));
+		$err = $this->get_errors($obj->id());
+		if(count($err[($arr["current_view"] - 1)]) || ($arr["current_view"] + 1) > $viewcount)
+		{
+			$to_view = $arr["current_view"];
+		}
+		else
+		{
+			$to_view = ++$arr["current_view"];
+		}
+		return $this->gen_url($arr["doc"], $to_view);
 	}
 
 	/**
@@ -1506,6 +1591,97 @@ class conference_planning extends class_base
 		return $this->gen_url($arr["doc"], ((--$arr["current_view"] > 0)?$arr["current_view"]:++$arr["current_view"]));
 	}
 
+	/**
+		@attrib name=finalize all_args=1 no_login=1
+		@comment
+			This method just catches the last requests and does all the close-up thingies. the real save is done by _finalize()
+	**/
+	function finalize($arr)
+	{
+		/*
+			wheeh.. so, what do i need here?
+			* defenetly i need to run all the created data (form data also) thru the submit_controller, to gain some extra features.
+			* nothing more?
+		*/
+		$doc = $arr["doc"];
+		$cp = $arr["conference_planning"];
+		$ob = $this->can("view", $cp)?obj($cp):false;
+		$views = aw_unserialize($ob->prop("help_views"));
+		$data = $this->get_stored_data($cp);
+		// lets clean up the data
+		unset($data["separator"]);
+		unset($data["text"]);
+		foreach($data as $k => $v)
+		{
+			if(!strlen($v))
+			{
+				unset($data[$k]);
+			}
+		}
+		if($this->can("view", ($ctr = $ob->prop("submit_controller"))))
+		{
+			$i = get_instance(CL_CFGCONTROLLER);
+			$toprop = array(
+				"views" => &$views,
+				"values" => &$data,
+			);
+			$result = $this->can("view", $ctr)?$i->check_property($ctr, "",$toprop, $GLOBALS["_GET"],"",""):array();
+			if($result == PROP_IGNORE) // basically this should indicate that that submission is totally incorrect and goes to annulation
+			{
+				return aw_ini_get("baseurl");
+			}
+			elseif($result == PROP_ERROR) // this should indicate that something is wrong and can be modified(and submitted correctly after that)
+			{
+				return $arr["url"]; // this redirects back to the final page.. hmz.. some errors there would be nice in that case
+			}
+		}
+		$this->create_submit_object(array(
+			"clid" => CL_RFP,
+			"parent" => $ob->parent(),
+			"name" => "rfp submission",
+			"data" => $data,
+		));
+		$thank_you_so_very_much = $this->can("view", $ob->prop("redir_doc"))?"/".$ob->prop("redir_doc"):"";
+		return aw_ini_get("baseurl").$thank_you_so_very_much;
+	}
+
+	/**
+		@param clid required type=int
+		@param name required type=string
+		@param parent required type=oid
+		@param data required type=Array
+			array(
+				property_name => value
+			)
+		@comment
+			creates the real object from the data, from the webform.. finally.
+	**/
+	function create_submit_object($arr)
+	{
+		if(is_array($arr["data"]) && $this->can("view", $arr["parent"]) && strlen($arr["name"]) && strlen($arr["name"]))
+		{
+			$obj = new object();
+			$obj->set_name($arr["name"]);
+			$obj->set_parent($arr["parent"]);
+			$obj->set_class_id($arr["clid"]);
+			$obj->save();
+			// these are here just in case 
+			unset($data["name"]);
+			unset($data["parent"]);
+			unset($data["clid"]);
+			foreach($arr["data"] as $property => $value)
+			{
+				$obj->set_prop($property, $value);
+			}
+			$obj->save();
+			return $obj->id();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	function gen_url($oid, $view, $extra = array())
 	{
 		foreach($extra as $name => $val)
@@ -1514,7 +1690,7 @@ class conference_planning extends class_base
 		}
 		$ext = join("&", $ext);
 		$ext = strlen($ext)?"&".$ext:"";
-		return aw_global_get("baseurl")."/".$oid."?view_no=".$view.$ext;
+		return aw_ini_get("baseurl")."/".$oid."?view_no=".$view.$ext;
 	}
 
 
@@ -1523,9 +1699,12 @@ class conference_planning extends class_base
 	{
 		$cp = obj($arr["conference_planner"]);
 		$active_view = $GLOBALS["_GET"]["view_no"];
+		$active_view = (!strlen($active_view) || $active_view < 1)?1:$active_view;
+	
 		$html["yah_bar"] = $this->parse_yah_bar($cp, $arr["id"], $active_view);
 		$html["active_view"] = $this->parse_active_view($cp, $arr["id"], $active_view);
 		$html["movement"] = $this->parse_movement_buttons($cp->id(), $active_view);
+		$html["errors"] = $this->error_html;
 		$reforb_arr = array(
 			"url" => get_ru(),
 			"conference_planning" => $arr["conference_planner"],
@@ -1533,8 +1712,10 @@ class conference_planning extends class_base
 			"doc" => $arr["oid"],
 		);
 		$html["reforb"] = $this->mk_reforb("forward", array_merge($GLOBALS["_GET"], $reforb_arr));
-		$html["script"] = $this->get_changeform($arr);
-		$html = join("", $html);
+		
+		$this->read_template("webform.tpl");
+		$this->vars($html);
+		$html = $this->parse();
 		return html::form(array(
 			"action" => aw_ini_get("baseurl"),
 			"method" => "POST",
@@ -1543,12 +1724,6 @@ class conference_planning extends class_base
 		));
 	}
 
-	function get_changeform($arr)
-	{
-		$this->read_template("changeform.tpl");
-		return $this->parse();
-	}
-	
 	function parse_movement_buttons($cp, $view)
 	{
 		$this->read_template("move.tpl");
@@ -1558,6 +1733,7 @@ class conference_planning extends class_base
 		$this->vars(array(
 			"BACK" => ($view > 1)?$this->parse("BACK"):"",
 			"FORWARD" => ($view < $viewcount)?$this->parse("FORWARD"):"",
+			"SUBMIT" => ($view == $viewcount)?$this->parse("SUBMIT"):"",
 		));
 		return $this->parse();
 	}
@@ -1582,7 +1758,8 @@ class conference_planning extends class_base
 			));
 			foreach($list->arr() as $obj)
 			{
-				$el["options"][$obj->id()] = $obj->name();
+				$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $obj->name();
+				
 			}
 		}
 		// get controller contents
@@ -1756,7 +1933,7 @@ class conference_planning extends class_base
 				));
 				break;
 		}
-
+		
 		$value = $this->pre_store($prop["form"], $value);
 		if($el["store_data"] === true)
 		{
@@ -1791,10 +1968,22 @@ class conference_planning extends class_base
 		
 		$ret = "<table class=\"form\">";
 		$this->store_data = false;
+		$errors = $this->get_errors($cp->id());
+
 		foreach($view["elements"] as $elem_id => $el)
 		{
 			$ret .= $this->parse_form_element(&$view["elements"][$elem_id], $act, $elem_id, &$views, &$stored_data[$view["elements"][$elem_id]["name"]], &$stored_data, $doc);
 		}
+		// let's parse errors here as well
+		foreach($errors[$act] as $ctr)
+		{
+			$obj = obj($ctr);
+			$this->vars(array(
+				"caption" => $obj->trans_get_val("errmsg"),
+			));
+			$this->error_html .= $this->parse("ERROR");
+		}
+		
 		if($this->store_data)
 		{
 			$this->store_data($cp->id(), $stored_data);

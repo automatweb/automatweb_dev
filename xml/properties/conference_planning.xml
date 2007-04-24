@@ -213,10 +213,20 @@
             <table>objects</table>
             <group>webform_sub</group>
             <type>relpicker</type>
-            <reltype>METAMANAGER</reltype>
+            <reltype>RELTYPE_METAMANAGER</reltype>
             <field>meta</field>
             <method>serialize</method>
             <caption>Muutujate haldus</caption>
+      </property>
+      <property>
+            <name>submit_controller</name>
+            <table>objects</table>
+            <group>webform_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SUBMIT_CONTROLLER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vormi l&amp;amp;otilde;petamise kontroller</caption>
       </property>
       <property>
             <name>mails</name>
@@ -330,6 +340,11 @@
                   <clid>CL_METAMGR</clid>
                   <caption>Muutujate haldus</caption>
             </METAMANAGER>
+            <SUBMIT_CONTROLLER>
+                  <value>8</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Vormi l&amp;amp;otilde;petamise kontroller</caption>
+            </SUBMIT_CONTROLLER>
       </reltypes>
       <layout>
             <hsplit>

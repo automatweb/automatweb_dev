@@ -68,6 +68,7 @@
 
 <table class="yahbar">
 	<tr>
+	<td>asd</td>
 		<!-- SUB: YAH_BAR -->
 			<!-- SUB: YAH_FIRST_BTN -->
 					<td>{VAR:step_nr}. {VAR:caption}</td>
@@ -84,6 +85,7 @@
 			<!-- END SUB: YAH_BTN -->
 
 			<!-- SUB: YAH_BTN_AFTER -->
+					<td>d</td>
 			<!-- END SUB: YAH_BTN_AFTER -->
 			
 			<!-- SUB: YAH_BTN_HREF -->

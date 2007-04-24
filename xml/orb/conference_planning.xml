@@ -97,6 +97,13 @@
 			</function>
 		</action>
 
+		<action name="finalize" all_args="1">
+			<function name="finalize">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_back" nologin="1" all_args="1">
 			<function name="submit_back">
 				<arguments>

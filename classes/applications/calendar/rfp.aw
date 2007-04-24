@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.14 2007/04/19 11:25:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.15 2007/04/24 13:29:10 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -71,6 +71,12 @@
 
 		@property data_gen_suites type=text
 		@caption Sviidid
+
+		@property data_gen_acc_start type=text
+		@caption Majutuse algusaeg
+
+		@property data_gen_acc_end type=text
+		@caption Majutuse l&otilde;puaeg
 
 		@property data_gen_dates_are_flexible type=type=checkbox ch_value=1 default=0
 		@caption Kuup&auml;evad on paindlikud

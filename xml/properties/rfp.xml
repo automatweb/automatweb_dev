@@ -175,6 +175,24 @@
             <caption>Sviidid</caption>
       </property>
       <property>
+            <name>data_gen_acc_start</name>
+            <table>objects</table>
+            <group>general_function_info</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Majutuse algusaeg</caption>
+      </property>
+      <property>
+            <name>data_gen_acc_end</name>
+            <table>objects</table>
+            <group>general_function_info</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Majutuse l&amp;amp;otilde;puaeg</caption>
+      </property>
+      <property>
             <name>data_gen_dates_are_flexible</name>
             <table>objects</table>
             <group>general_function_info</group>
