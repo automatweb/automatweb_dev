@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.228 2007/04/16 09:14:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.229 2007/04/24 11:10:20 kristo Exp $
 
 /*
 
@@ -986,7 +986,7 @@ class site_show extends class_base
 			$tc = 0;
 			foreach($documents->arr() as $o)
 			{
-				if ($o->site_id() != $rsid && !$o->is_brother())
+				if ($o->site_id() != $rsid && !$o->is_brother() && !aw_ini_get("menuedit.objects_from_other_sites"))
 				{
 					continue;
 				}
@@ -2533,7 +2533,7 @@ class site_show extends class_base
 			}
 			else
 			{
-				if (($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
+				if (!$o->is_brother() && ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
 				{
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{
@@ -2579,8 +2579,33 @@ class site_show extends class_base
 				}
 				else
 				{
-					$oid = ($o->class_id() == 39 || aw_ini_get("menuedit.show_real_location")) ? $o->brother_of() : $o->id();
-					$link .= $oid;
+					if ($o->is_brother() || $this->brother_level_from)
+					{
+						// if there currently is no path, then just make it
+						if ($_GET["path"] == "")
+						{
+							$link .= "?section=".$o->id()."&path=".join(",",$this->path_ids).",".$o->id();
+						}
+						else
+						{
+							$new_path = array();
+							foreach($this->path_ids as $_path_id)
+							{
+								$new_path[] = $_path_id;
+								$pio = obj($_path_id);
+								if ($pio->brother_of() == $o->parent())
+								{
+									break;
+								}
+							}
+							$link .= "?section=".$o->id()."&path=".join(",",$new_path).",".$o->id();
+						}
+					}
+					else
+					{
+						$oid = ($o->class_id() == 39 || aw_ini_get("menuedit.show_real_location")) ? $o->brother_of() : $o->id();
+						$link .= $oid;
+					}
 				};
 			};
 		}
@@ -2809,6 +2834,19 @@ class site_show extends class_base
 		}
 
 		//if (is_object($this->section_obj))
+		if ($_GET["path"] != "")
+		{
+			$p_ids = explode(",", $_GET["path"]);
+			$this->path = array();
+			foreach($p_ids as $p_id)
+			{
+				if ($this->can("view", $p_id))
+				{
+					$this->path[] = obj($p_id);
+				}
+			}
+		}
+		else
 		if (is_oid($this->section_obj->id()))
 		{
 			$this->path = $this->section_obj->path();

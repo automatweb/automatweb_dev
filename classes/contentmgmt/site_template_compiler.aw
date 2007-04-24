@@ -1276,7 +1276,7 @@ class site_template_compiler extends aw_template
 
 		$ret  .= $this->_gi()."\$__list_filter = array(\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\"parent\" => \$parent_obj->".$this->id_func."(),\n";
+		$ret .= $this->_gi()."\"parent\" => \$parent_obj->".($this->id_func == "id" ? "brother_of" : $this->id_func)."(),\n";
 		$ret .= $this->_gi()."\"class_id\" => array(CL_MENU,CL_BROTHER),\n";
 		if (aw_ini_get("user_interface.full_content_trans"))
 		{
@@ -1390,6 +1390,23 @@ class site_template_compiler extends aw_template
 				$ret .= $this->_gi()."}\n";
 			}
 
+			$ret .= $this->_gi()."if (".$o_name."->is_brother() && !\$this->brother_level_from)\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+				$ret .= $this->_gi()."\$this->brother_level_from = ".$arr["level"].";\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."else\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+				$ret .= $this->_gi()."if (\$this->brother_level_from == ".$arr["level"].")\n";
+				$ret .= $this->_gi()."{\n";
+				$this->brace_level++;
+					$ret .= $this->_gi()."\$this->brother_level_from = null;\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."}\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
 			$ret .= $this->_gi()."if (".$this_is_from_obj_name."[".$o_name."->parent()])\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
