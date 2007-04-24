@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.52 2007/04/23 10:13:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.53 2007/04/24 13:55:50 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -900,33 +900,71 @@ class join_site extends class_base
 						{
 							// address has: * Street address: * City: * Zip code: * Country:	
 							$adr_inst = get_instance(CL_CRM_ADDRESS);
-							$tp["c_adr_ctry"] = array(
-								"name" => "c_adr_ctry",
-								"caption" => t("Maa"),
-								"type" => "select",
-								"options" => $adr_inst->get_country_list()
-							);
-							$tp["c_adr_zip"] = array(
-								"name" => "c_adr_zip",
-								"caption" => t("Postiindeks"),
-								"type" => "textbox",
-							);
-							$tp["c_adr_city"] = array(
-								"name" => "c_adr_city",
-								"caption" => t("Linn"),
-								"type" => "textbox",
-							);
-							$tp["c_adr_county"] = array(
-								"name" => "c_adr_county",
-								"caption" => t("Maakond"),
-								"type" => "textbox"
-							);
-							$tp["c_adr_str"] = array(
-								"name" => "c_adr_str",
-								"caption" => t("T&auml;nava nimi"),
-								"type" => "textbox",
-							);
+							if ($visible[$clid]["riik"])
+							{
+								$tp["c_adr_ctry"] = array(
+									"name" => "c_adr_ctry",
+									"caption" => t("Maa"),
+									"type" => "select",
+									"options" => $adr_inst->get_country_list()
+								);
+							}
+							if ($visible[$clid]["postiindeks"])
+							{
+								$tp["c_adr_zip"] = array(
+									"name" => "c_adr_zip",
+									"caption" => t("Postiindeks"),
+									"type" => "textbox",
+								);
+							}
+							if ($visible[$clid]["linn"])
+							{
+								$tp["c_adr_city"] = array(
+									"name" => "c_adr_city",
+									"caption" => t("Linn"),
+									"type" => "textbox",
+								);
+							}
+							if ($visible[$clid]["maakond"])
+							{
+								$tp["c_adr_county"] = array(
+									"name" => "c_adr_county",
+									"caption" => t("Maakond"),
+									"type" => "textbox"
+								);
+							}
+							if ($visible[$clid]["aadress"])
+							{
+								$tp["c_adr_str"] = array(
+									"name" => "c_adr_str",
+									"caption" => t("T&auml;nava nimi"),
+									"type" => "textbox",
+								);
+							}
 							unset($tp["contact"]);
+						}
+						else
+						if ($clid == CL_CRM_COMPANY && $pid == "images")
+						{
+							$tp["c_img_1"] = array(
+								"name" => "c_img_1",
+								"caption" => t("Pilt 1"),
+								"type" => "fileupload",
+								"value" => ""
+							);
+							$tp["c_img_2"] = array(
+								"name" => "c_img_2",
+								"caption" => t("Pilt 2"),
+								"type" => "fileupload",
+								"value" => ""
+							);
+							$tp["c_img_3"] = array(
+								"name" => "c_img_3",
+								"caption" => t("Pilt 3"),
+								"type" => "fileupload",
+								"value" => ""
+							);
+							unset($tp[$pid]);
 						}
 						else
 						if (!empty($el_types[$clid][$pid]))
@@ -971,7 +1009,6 @@ class join_site extends class_base
 								"2" => t("naine"),
 							);
 						}
-
 						unset($tp[$pid]["size"]);
 						if ($pid == "pohitegevus")
 						{
@@ -1064,6 +1101,7 @@ class join_site extends class_base
 					{
 						$xprop["caption"] = $propn[$clid][$oldn];
 					}
+					unset($xprop["no_caption"]);
 				}
 
 				if ($oldn == "comment" && $clid == CL_USER)
@@ -1734,6 +1772,7 @@ class join_site extends class_base
 			}
 			$adr = $ttp["address"];
 			$ctc = $ttp["contact"];
+			$img = $ttp["images"];
 			$class_inst = get_instance($clid);
 			$class_inst->init_class_base();
 			$ttp = $class_inst->parse_properties(array("properties" => $ttp, "obj_inst" => $data_o));
@@ -1745,6 +1784,10 @@ class join_site extends class_base
 			{
 				$ttp["contact"] = $ctc;
 			}
+			if ($img)
+			{
+				$ttp["images"] = $img;
+			}
 
 			foreach($ttp as $pid => $prop)
 			{
@@ -1753,6 +1796,7 @@ class join_site extends class_base
 				{
 					$cpn = substr($cpn, 0, strpos($cpn, "["));
 				}*/	
+
 				if ($visible[$clid][$cpn])
 				{
 					$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
@@ -1801,36 +1845,103 @@ class join_site extends class_base
 						// address has: * Street address: * City: * Zip code: * Country:	
 						$adr_inst = get_instance(CL_CRM_ADDRESS);
 						$opts = $adr_inst->get_country_list();
-						$tp["c_adr_ctry"] = array(
-							"name" => "c_adr_ctry",
-							"caption" => t("Maa"),
-							"type" => "select",
-							"options" => $opts,
-							"value" => array_search($data_o->prop("contact.riik.name"), $opts)
+						if ($visible[$clid]["riik"])
+						{
+							$tp["c_adr_ctry"] = array(
+								"name" => "c_adr_ctry",
+								"caption" => t("Maa"),
+								"type" => "select",
+								"options" => $opts,
+								"value" => array_search($data_o->prop("contact.riik.name"), $opts)
+							);
+						}
+						if ($visible[$clid]["postiindeks"])
+						{
+							$tp["c_adr_zip"] = array(
+								"name" => "c_adr_zip",
+								"caption" => t("Postiindeks"),
+								"type" => "textbox",
+								"value" => $data_o->prop("contact.postiindeks")
+							);
+						}
+						if ($visible[$clid]["linn"])
+						{
+							$tp["c_adr_city"] = array(
+								"name" => "c_adr_city",
+								"caption" => t("Linn"),
+								"type" => "textbox",
+								"value" => $data_o->prop("contact.linn.name")
+							);
+						}
+						if ($visible[$clid]["maakond"])
+						{
+							$tp["c_adr_county"] = array(
+								"name" => "c_adr_county",
+								"caption" => t("Maakond"),
+								"type" => "textbox",
+								"value" => $data_o->prop("contact.maakond.name")
+							);
+						}
+						if ($visible[$clid]["aadress"])
+						{
+							$tp["c_adr_str"] = array(
+								"name" => "c_adr_str",
+								"caption" => t("T&auml;nava nimi"),
+								"type" => "textbox",
+								"value" => $data_o->prop("contact.aadress")
+							);
+						}
+						unset($ttp[$pid]);
+						continue;
+					}
+
+					if ($clid == CL_CRM_COMPANY && $oldn == "images")
+					{
+						$imgs = array_values($data_o->connections_from(array("type" => "RELTYPE_IMAGE")));
+						$i = array();
+						$i[1] = $imgs[0];
+						$i[2] = $imgs[1];
+						$i[3] = $imgs[2];
+
+						$imgi = get_instance(CL_IMAGE);
+						if ($i[1])
+						{
+							$v1 = html::href(array(
+								"url" => $imgi->get_url_by_id($i[1]->prop("to")),
+								"caption" => $i[1]->prop("to.name")
+							));
+						}
+						$tp["c_img_1"] = array(
+							"name" => "c_img_1",
+							"caption" => t("Pilt 1"),
+							"type" => "fileupload",
+							"value" => $v1
 						);
-						$tp["c_adr_zip"] = array(
-							"name" => "c_adr_zip",
-							"caption" => t("Postiindeks"),
-							"type" => "textbox",
-							"value" => $data_o->prop("contact.postiindeks")
+						if ($i[2])
+						{
+							$v2 = html::href(array(
+								"url" => $imgi->get_url_by_id($i[2]->prop("to")),
+								"caption" => $i[2]->prop("to.name")
+							));
+						}
+						$tp["c_img_2"] = array(
+							"name" => "c_img_2",
+							"caption" => t("Pilt 2"),
+							"type" => "fileupload",
+							"value" => $v2
 						);
-						$tp["c_adr_city"] = array(
-							"name" => "c_adr_city",
-							"caption" => t("Linn"),
-							"type" => "textbox",
-							"value" => $data_o->prop("contact.linn.name")
-						);
-						$tp["c_adr_county"] = array(
-							"name" => "c_adr_county",
-							"caption" => t("Maakond"),
-							"type" => "textbox",
-							"value" => $data_o->prop("contact.maakond.name")
-						);
-						$tp["c_adr_str"] = array(
-							"name" => "c_adr_str",
-							"caption" => t("T&auml;nava nimi"),
-							"type" => "textbox",
-							"value" => $data_o->prop("contact.aadress")
+						if ($i[3])
+						{
+							$v3 = html::href(array(
+								"url" => $imgi->get_url_by_id($i[3]->prop("to")),
+								"caption" => $i[2]->prop("to.name")
+							));
+						}
+						$tp["c_img_3"] = array(
+							"name" => "c_img_3",
+							"caption" => t("Pilt 3"),
+							"type" => "fileupload",
+							"value" => $v3
 						);
 						unset($ttp[$pid]);
 						continue;
@@ -1937,6 +2048,16 @@ class join_site extends class_base
 							$prop["value"] = $tdata_o->prop("email.mail");
 						}
 					}
+					else
+					if ($oldn == "phone_id" || $oldn == "telefax_id" || $oldn == "url_id")
+					{
+						$prop["value"] = $data_o->prop($oldn.".name");
+					}
+					else
+					if ($oldn == "email_id")
+					{
+						$prop["value"] = $data_o->prop($oldn.".mail");
+					}
 
 					// set value in property
 					if ($data_o)
@@ -1946,7 +2067,7 @@ class join_site extends class_base
 							$prop["value"] = $data_o->name();
 						}
 						else
-						if ($oldn != "email" && $oldn != "phone" && $oldn != "fax" && $oldn != "rank")
+						if ($oldn != "email" && $oldn != "phone" && $oldn != "fax" && $oldn != "rank" && $oldn != "phone_id" && $oldn != "telefax_id" && $oldn != "url_id" && $oldn != "email_id")
 						{
 							if ($prop["store"] == "connect")
 							{
@@ -1991,6 +2112,7 @@ class join_site extends class_base
 						{
 							$prop["caption"] = $propn[$clid][$oldn];
 						}
+						unset($prop["no_caption"]);
 					}
 					$prop["comment"] = "";
 					if ($oldn == "comment" && $clid == CL_USER)
@@ -2023,6 +2145,7 @@ class join_site extends class_base
 				}
 			}
 		}
+
 		// add seprator props
 		$seps = new aw_array($ob->meta("join_seps"));
 		$lang_seps = safe_array($ob->meta("lang_seps"));
@@ -2055,30 +2178,6 @@ class join_site extends class_base
 				"value" => $params["err_return_url"]
 			);
 		}
-
-		/*if ($tp["typo_129[pohitegevus]"])	// NOT a typo
-		{
-			$cc = get_instance(CL_CRM_COMPANY);
-			$cc->_get_pohitegevus(array(
-				"prop" => &$prop
-			));
-			$tp["typo_129[pohitegevus]"]["size"] = 5;
-			$tp["typo_129[pohitegevus]"]["type"] = "select";
-			unset($tp["typo_129[pohitegevus]"]["multiple"]);
-		}
-		if ($tp["typo_129[ettevotlusvorm]"])
-		{
-			$ri = $cfgu->get_relinfo();
-			$rt = $ri[$tp["typo_129[ettevotlusvorm]"]["reltype"]];
-			$ops_ol = new object_list(array(
-				"class_id" => $rt["clid"],
-				"lang_id" => array(),
-				"site_id" => array()
-			));
-			$tp["typo_129[ettevotlusvorm]"]["options"] = $ops_ol->names();
-			$tp["typo_129[ettevotlusvorm]"]["type"] = "select";
-			$tp["typo_129[ettevotlusvorm]"]["multiple"] = 1;
-		}*/
 
 		aw_session_set("join_err", false);
 		return $tp;
@@ -2251,6 +2350,97 @@ class join_site extends class_base
 					$submit_data[$pid] = $_POST["pohitegevus"];
 				}
 				else
+				if ($oldn == "images")
+				{
+					$this->_handle_images_upload($data_o);
+				}
+				else
+				if ($oldn == "phone_id")
+				{
+					if ($this->can("view", $data_o->prop($oldn)))
+					{
+						$con_o = obj($data_o->prop($oldn));
+					}
+					else
+					{
+						$con_o = obj();
+						$con_o->set_parent($data_o->id());
+						$con_o->set_class_id(CL_CRM_PHONE);
+					}
+					$con_o->set_name($cf_sd[$oldn]);
+					$con_o->save();
+					$data_o->set_prop($oldn, $con_o->id());
+					$data_o->connect(array(
+						"to" => $con_o->id(),
+						"type" => "RELTYPE_PHONE"
+					));
+				}
+				else
+				if ($oldn == "telefax_id")
+				{
+					if ($this->can("view", $data_o->prop($oldn)))
+					{
+						$con_o = obj($data_o->prop($oldn));
+					}
+					else
+					{
+						$con_o = obj();
+						$con_o->set_parent($data_o->id());
+						$con_o->set_class_id(CL_CRM_PHONE);
+					}
+					$con_o->set_name($cf_sd[$oldn]);
+					$con_o->save();
+					$data_o->set_prop($oldn, $con_o->id());
+					$data_o->connect(array(
+						"to" => $con_o->id(),
+						"type" => "RELTYPE_TELEFAX"
+					));
+				}
+				else
+				if ($oldn == "url_id")
+				{
+					if ($this->can("view", $data_o->prop($oldn)))
+					{
+						$con_o = obj($data_o->prop($oldn));
+					}
+					else
+					{
+						$con_o = obj();
+						$con_o->set_parent($data_o->id());
+						$con_o->set_class_id(CL_EXTLINK);
+					}
+					$con_o->set_name($cf_sd[$oldn]);
+					$con_o->set_prop("url",$cf_sd[$oldn]);
+					$con_o->save();
+					$data_o->set_prop($oldn, $con_o->id());
+					$data_o->connect(array(
+						"to" => $con_o->id(),
+						"type" => "RELTYPE_URL"
+					));
+				}
+				else
+				if ($oldn == "email_id")
+				{
+					if ($this->can("view", $data_o->prop($oldn)))
+					{
+						$con_o = obj($data_o->prop($oldn));
+					}
+					else
+					{
+						$con_o = obj();
+						$con_o->set_parent($data_o->id());
+						$con_o->set_class_id(CL_ML_MEMBER);
+					}
+					$con_o->set_name($cf_sd[$oldn]);
+					$con_o->set_prop("mail", $cf_sd[$oldn]);
+					$con_o->save();
+					$data_o->set_prop($oldn, $con_o->id());
+					$data_o->connect(array(
+						"to" => $con_o->id(),
+						"type" => "RELTYPE_EMAIL"
+					));
+				}
+				else
 				if ($prop["type"] == "relmanager" || $prop["type"] == "releditor" || $prop["type"] == "relpicker")
 				{
 					//$submit_data["cb_emb"] = $data["cb_emb"][$wn];
@@ -2391,6 +2581,27 @@ class join_site extends class_base
 				$a_diff = -0.4+($a_diff / 100);
 			}
 			$a_prop = "address";
+			$a_clid = CL_CRM_PERSON;
+		}
+
+		if (strpos($a_prop, "c_img") !== false)
+		{
+			if ($a_prop == "c_img_1")
+			{
+				$a_diff = -0.7+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "c_img_2")
+			{
+				$a_diff = -0.5+($a_diff / 100);
+			}
+			else
+			if ($a_prop == "c_img_3")
+			{
+				$a_diff = -0.3+($a_diff / 100);
+			}
+			$a_prop = "images";
+			$a_clid = CL_CRM_COMPANY;
 		}
 
 		if (strpos($a_prop, "c_adr") !== false)
@@ -2420,6 +2631,7 @@ class join_site extends class_base
 				$a_diff = -0.4+($a_diff / 100);
 			}
 			$a_prop = "contact";
+			$a_clid = CL_CRM_COMPANY;
 		}
 
 		$b_clid = $b_mt[1];
@@ -2452,6 +2664,27 @@ class join_site extends class_base
                         }
 
 			$b_prop = "address";
+			$b_clid = CL_CRM_PERSON;
+		}
+
+		if (strpos($b_prop, "c_img") !== false)
+		{
+			if ($b_prop == "c_img_1")
+			{
+				$b_diff = -0.7+($b_diff / 100);
+			}
+			else
+			if ($b_prop == "c_img_2")
+			{
+				$b_diff = -0.5+($b_diff / 100);
+			}
+			else
+			if ($b_prop == "c_img_3")
+			{
+				$b_diff = -0.3+($b_diff / 100);
+			}
+			$b_prop = "images";
+			$b_clid = CL_CRM_COMPANY;
 		}
 
 		if (strpos($b_prop, "c_adr") !== false)
@@ -2482,10 +2715,10 @@ class join_site extends class_base
                         }
 
 			$b_prop = "contact";
+			$b_clid = CL_CRM_COMPANY;
 		}
 
 
-//echo "a _prop = $a_prop , a_diff = $a_diff , bprop = $p_prop , bdiff = $b_diff <br>";
 		if ($a_clid == "sep")
 		{
 			list(, $a_prop) = explode("_", $a_prop);
@@ -2508,6 +2741,7 @@ class join_site extends class_base
 
 		$a_ord += $a_diff;
 		$b_ord += $b_diff;
+
 		if ($a_ord == $b_ord)
 		{
 			return 0;
@@ -3033,6 +3267,30 @@ class join_site extends class_base
                         $t->define_data($d);
                 }
                 $t->set_caption(t("T&otilde;lgi vahepealkiri"));
+	}
+
+	function _handle_images_upload($data_o)
+	{
+		$imgs = array_values($data_o->connections_from(array("type" => "RELTYPE_IMAGE")));
+		$i = array();
+		$i[1] = $imgs[0];
+		$i[2] = $imgs[1];
+		$i[3] = $imgs[2];
+
+		for ($a = 1; $a < 4; $a++)
+		{
+			if (is_uploaded_file($_FILES["c_img_".$a]["tmp_name"]))
+			{
+				$img_id = null;
+				if ($i[$a])
+				{
+					$img_id = $i[$a]->prop("to");
+				}
+				$ii = get_instance(CL_IMAGE);
+				$rv = $ii->add_upload_image("c_img_".$a, $data_o->id(), $img_id);
+				$data_o->connect(array("to" => $rv["id"], "type" => "RELTYPE_IMAGE"));
+			}
+		}
 	}
 }
 ?>
