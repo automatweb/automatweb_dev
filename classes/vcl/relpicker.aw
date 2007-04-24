@@ -24,7 +24,6 @@ class relpicker extends  core
 		if (is_array($prop["options"]))
 		{
 			$val["type"] = "select";
-			$val["options"] = $prop["options"];
 		}
 		else
 		{
@@ -41,7 +40,7 @@ class relpicker extends  core
 						"lang_id" => array()
 					));
 					$names = $olist->names();
-					asort($names);            
+					asort($names);
 					$val["options"] = $options + $names;
 					/*if ($arr["id"])
 					{
@@ -64,15 +63,39 @@ class relpicker extends  core
 				if ($arr["id"])
 				{
 					$o = obj($arr["id"]);
-					$conn = $o->connections_from(array(
-						"type" => $reltype
-					));
+					$conn = array();
+
+					if (!empty($val["clid"]))
+					{
+						$clids = (array) $val["clid"];
+
+						foreach ($clids as $key => $clid)
+						{
+							$clids[$key] = ((strlen((int) $clid)) === strlen($clid)) ? (int) $clid : constant($clid);
+							$error = empty($clids[$key]) ? true : $error;
+						}
+
+						if (!$error)
+						{
+							$conn = $o->connections_from(array(
+								"to.class_id" => $clids,
+								"type" => $reltype
+							));
+						}
+					}
+					else
+					{
+						$conn = $o->connections_from(array(
+							"type" => $reltype
+						));
+					}
+
 					foreach($conn as $c)
 					{
 						$options[$c->prop("to")] = $c->prop("to.name");
 					}
 					$val["options"] = $options;
-				};
+				}
 			}
 		}
 		$val["type"] = ($val["display"] == "radio") ? "chooser" : "select";
@@ -86,7 +109,7 @@ class relpicker extends  core
 				"clid" => $clid,
 				"multiple" => $arr["property"]["multiple"]
 			), "popup_search");
-	
+
 			if (is_oid($this->obj->id()) && !$val["no_edit"])
 			{
 				$val["post_append_text"] .= " ".html::href(array(
@@ -97,7 +120,7 @@ class relpicker extends  core
 			}
 		}
 
-		if ( $val["type"] == "select" && is_object($this->obj) && ((is_oid($val["value"]) && $this->can("edit", $val["value"])) || 
+		if ( $val["type"] == "select" && is_object($this->obj) && ((is_oid($val["value"]) && $this->can("edit", $val["value"])) ||
 			(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"]))) ) && !$val["no_edit"])
 		{
 			$val["post_append_text"] .= " ".html::href(array(
@@ -121,10 +144,10 @@ class relpicker extends  core
 					$pm->add_item(array(
 						"text" => $clss[$_clid]["name"],
 						"link" => html::get_new_url(
-							$_clid, 
-							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(), 
+							$_clid,
+							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(),
 							array(
-								"alias_to" => $this->obj->id(), 
+								"alias_to" => $this->obj->id(),
 								"alias_to_prop" => $arr["prop"]["name"],
 								"reltype" => $rel_val,
 								"return_url" => get_ru()
@@ -143,14 +166,14 @@ class relpicker extends  core
 				{
 					$val["post_append_text"] .= " ".html::href(array(
 						"url" => html::get_new_url(
-							$_clid, 
-							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(), 
+							$_clid,
+							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(),
 							array(
 								"alias_to_prop" => $arr["prop"]["name"],
-								"alias_to" => $this->obj->id(), 
+								"alias_to" => $this->obj->id(),
 								"reltype" => $rel_val,
 								"return_url" => get_ru()
-							) 
+							)
 						),
 						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/new.gif' border=0>",
 						"title" => sprintf(t("Lisa uus %s"), $clss[$_clid]["name"])
