@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.63 2007/04/10 15:01:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.64 2007/04/24 18:04:28 markop Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1655,8 +1655,8 @@ class shop_order_cart extends class_base
 		$soc = get_instance(CL_SHOP_ORDER_CART);
 		$cart = $soc->get_cart(obj($oc));
 		$user_data = $cart["user_data"];
-		$bank = $user_data["user9"];
-		
+		$bank = $user_data["user9"];$bank_lang=$user_data["user10"];
+		//if(aw_global_get(uid) == "struktuur"){arr($_SESSION);arr($user_data);arr($GLOBALS);die();}
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $oc->prop("bank_payment");
 	
@@ -1681,7 +1681,7 @@ class shop_order_cart extends class_base
 			"amount" => $real_sum,
 			"reference_nr" => $order_id,
 			"payment_id" => $bank_payment,
-			"expl" => $order_id,
+			"expl" => $order_id,"lang"=>$bank_lang,
 		));
 		return $ret;
 	}
