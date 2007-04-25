@@ -314,11 +314,11 @@ msgstr ""
 msgid "Url , kuhu suunata"
 msgstr ""
 
-#: classes/common/bank_payment.aw:926
+#: classes/common/bank_payment.aw:934
 msgid "Kui suunamist mingil p&otilde;hjusel ei toimu, palun vajutage"
 msgstr ""
 
-#: classes/common/bank_payment.aw:926
+#: classes/common/bank_payment.aw:934
 msgid "siia"
 msgstr ""
 

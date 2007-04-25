@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/gallery/mini_gallery.aw:class_318_help
 msgid "Klassi Minigalerii help"
 msgstr ""
@@ -158,11 +157,13 @@ msgstr ""
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:65 classes/contentmgmt/gallery/mini_gallery.aw:467
+#: classes/contentmgmt/gallery/mini_gallery.aw:65
+#: classes/contentmgmt/gallery/mini_gallery.aw:502
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:66 classes/contentmgmt/gallery/mini_gallery.aw:473
+#: classes/contentmgmt/gallery/mini_gallery.aw:66
+#: classes/contentmgmt/gallery/mini_gallery.aw:508
 msgid "J&auml;rjekord"
 msgstr ""
 
@@ -190,39 +191,38 @@ msgstr ""
 msgid "Pildistamise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:269
+#: classes/contentmgmt/gallery/mini_gallery.aw:304
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:431
+#: classes/contentmgmt/gallery/mini_gallery.aw:466
 msgid "Galerii"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:431
+#: classes/contentmgmt/gallery/mini_gallery.aw:466
 msgid "pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:445
+#: classes/contentmgmt/gallery/mini_gallery.aw:480
 msgid "Lisa uus pilt"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:451
+#: classes/contentmgmt/gallery/mini_gallery.aw:486
 msgid "Salvesta pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:457
+#: classes/contentmgmt/gallery/mini_gallery.aw:492
 msgid "Kustuta valitud pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:459
+#: classes/contentmgmt/gallery/mini_gallery.aw:494
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:479
+#: classes/contentmgmt/gallery/mini_gallery.aw:514
 msgid "Muutja"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:485
+#: classes/contentmgmt/gallery/mini_gallery.aw:520
 msgid "Muudetud"
 msgstr ""
-

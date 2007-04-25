@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_class_id
 msgid "Omaduse Objekt (search_class_id) caption"
-msgstr "???
+msgstr "Объект"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_class_id_comment
 msgid "Omaduse Objekt (search_class_id) kommentaar"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_type
 msgid "Omaduse Tehingu tp (search_transaction_type) caption"
-msgstr "?????"
+msgstr "Тип сделки"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_type_comment
 msgid "Omaduse Tehingu tp (search_transaction_type) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_price_min
 msgid "Omaduse Hind min (search_transaction_price_min) caption"
-msgstr "Цена ??"
+msgstr "Цена"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_price_min_comment
 msgid "Omaduse Hind min (search_transaction_price_min) kommentaar"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_price_max
 msgid "Omaduse Hind max (search_transaction_price_max) caption"
-msgstr "M?? ??"
+msgstr "Цена"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_price_max_comment
 msgid "Omaduse Hind max (search_transaction_price_max) kommentaar"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_total_floor_area_min
 msgid "Omaduse &Uuml;ldpind min (search_total_floor_area_min) caption"
-msgstr "?? ???"
+msgstr "Общая площадь"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_total_floor_area_min
 msgid "Omaduse Kuulutusi lehe kohta (per_page) caption"
@@ -224,7 +224,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_number_of_rooms
 msgid "Omaduse Tubade arv (search_number_of_rooms) caption"
-msgstr "????? ???"
+msgstr "Число комнат"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_number_of_rooms_comment
 msgid "Omaduse Tubade arv (search_number_of_rooms) kommentaar"
@@ -536,11 +536,11 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:752
 msgid "Hind"
-msgstr "??"
+msgstr "Цена"
 
 #: classes/applications/realestate_management/realestate_search.aw:753 classes/applications/realestate_management/realestate_search.aw:783
 msgid " kuni "
-msgstr "?"
+msgstr "до"
 
 #: classes/applications/realestate_management/realestate_search.aw:782
 msgid "&Uuml;dpind"
@@ -572,7 +572,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:1243
 msgid "K&otilde;ik objektid"
-msgstr "??o???"
+msgstr "Все объекты"
 
 #: classes/applications/realestate_management/realestate_search.aw:1253
 msgid "K&otilde;ik tehingud"

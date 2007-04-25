@@ -348,4 +348,11 @@ $GLOBALS["TRANS"]["Leping"] = "Contract";
 $GLOBALS["TRANS"]["Kuup&auml;ev"] = "Date";
 $GLOBALS["TRANS"]["Tooted"] = "Products";
 $GLOBALS["TRANS"]["--Vali--"] = "--Select--";
+$GLOBALS["TRANS"]["Aadress:"] = "Address";
+$GLOBALS["TRANS"]["Aadress"] = "Address";
+$GLOBALS["TRANS"]["Telefon"] = "Phone";
+$GLOBALS["TRANS"]["Faks"] = "Fax";
+$GLOBALS["TRANS"]["E-mail"] = "E-mail";
+$GLOBALS["TRANS"]["WWW"] = "WWW";
+$GLOBALS["TRANS"]["Bank accounts"] = "Bank accounts";
 ?>

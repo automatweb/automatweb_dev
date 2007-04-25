@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 19:38+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 #: classes/applications/crm/crm_company_docs_impl.aw:10
 msgid "Kaust"
@@ -39,12 +39,12 @@ msgid "Pakkumine"
 msgstr "Offer"
 
 #: classes/applications/crm/crm_company_docs_impl.aw:28
-msgid " dokumendid"
-msgstr "Documents"
+msgid "dokumendid"
+msgstr "documents"
 
 #: classes/applications/crm/crm_company_docs_impl.aw:48
-msgid " uudised"
-msgstr "News"
+msgid "uudised"
+msgstr "news"
 
 #: classes/applications/crm/crm_company_docs_impl.aw:67
 msgid "Uus"
@@ -62,49 +62,91 @@ msgstr "Cut"
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:108
-msgid "Otsi"
-msgstr "Search"
-
-#: classes/applications/crm/crm_company_docs_impl.aw:162
-#: classes/applications/crm/crm_company_docs_impl.aw:386
+#: classes/applications/crm/crm_company_docs_impl.aw:172
+#: classes/applications/crm/crm_company_docs_impl.aw:483
+#: classes/applications/crm/crm_company_docs_impl.aw:607
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:171
+#: classes/applications/crm/crm_company_docs_impl.aw:181
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:179
-#: classes/applications/crm/crm_company_docs_impl.aw:400
+#: classes/applications/crm/crm_company_docs_impl.aw:189
+#: classes/applications/crm/crm_company_docs_impl.aw:497
 msgid "Looja"
 msgstr "Creator"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:186
-#: classes/applications/crm/crm_company_docs_impl.aw:407
+#: classes/applications/crm/crm_company_docs_impl.aw:196
+#: classes/applications/crm/crm_company_docs_impl.aw:504
 msgid "Loodud"
 msgstr "Created"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:198
-#: classes/applications/crm/crm_company_docs_impl.aw:417
+#: classes/applications/crm/crm_company_docs_impl.aw:208
+#: classes/applications/crm/crm_company_docs_impl.aw:514
+#: classes/applications/crm/crm_company_docs_impl.aw:628
 msgid "Muutja"
 msgstr "Modifier"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:206
-#: classes/applications/crm/crm_company_docs_impl.aw:424
+#: classes/applications/crm/crm_company_docs_impl.aw:216
+#: classes/applications/crm/crm_company_docs_impl.aw:521
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:376
+#: classes/applications/crm/crm_company_docs_impl.aw:245
+msgid "%s dokumendid"
+msgstr "%s documents"
+
+#: classes/applications/crm/crm_company_docs_impl.aw:246
+msgid ", kataloog: %s"
+msgstr ", folder: %s"
+
+#: classes/applications/crm/crm_company_docs_impl.aw:266
+msgid "Ava internetist"
+msgstr "Open from Internet"
+
+#: classes/applications/crm/crm_company_docs_impl.aw:270
+msgid "Ava serverist"
+msgstr "Open from server"
+
+#: classes/applications/crm/crm_company_docs_impl.aw:274
+msgid "Laadi uus versioon"
+msgstr "Upload new version"
+
+#: classes/applications/crm/crm_company_docs_impl.aw:473
 msgid "Lisa dokument"
 msgstr "Add document"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:393
+#: classes/applications/crm/crm_company_docs_impl.aw:490
 msgid "Lead"
 msgstr "Lead"
 
-#: classes/applications/crm/crm_company_docs_impl.aw:434
-#: classes/applications/crm/crm_company_docs_impl.aw:460
+#: classes/applications/crm/crm_company_docs_impl.aw:531
+#: classes/applications/crm/crm_company_docs_impl.aw:560
 msgid "Muuda"
 msgstr "Change"
 
+#: classes/applications/crm/crm_company_docs_impl.aw:542
+msgid "%s siseuudised"
+msgstr "%s news"
+
+#: classes/applications/crm/crm_company_docs_impl.aw:614
+msgid "Failid"
+msgstr "Files"
+
+#: classes/applications/crm/crm_company_docs_impl.aw:621
+msgid "Asukoht"
+msgstr "Location"
+
+#: classes/applications/crm/crm_company_docs_impl.aw:635
+msgid "Muutmisaeg"
+msgstr "Modified"
+
+#~ msgid " dokumendid"
+#~ msgstr "Documents"
+
+#~ msgid " uudised"
+#~ msgstr "News"
+
+#~ msgid "Otsi"
+#~ msgstr "Search"

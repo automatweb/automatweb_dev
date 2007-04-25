@@ -9,24 +9,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/vcl/keyword_selector.aw:79 classes/vcl/keyword_selector.aw:91 classes/vcl/keyword_selector.aw:103
+#: classes/vcl/keyword_selector.aw:79 classes/vcl/keyword_selector.aw:91
+#: classes/vcl/keyword_selector.aw:103
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:85 classes/vcl/keyword_selector.aw:97 classes/vcl/keyword_selector.aw:109
+#: classes/vcl/keyword_selector.aw:85 classes/vcl/keyword_selector.aw:97
+#: classes/vcl/keyword_selector.aw:109
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:213 classes/vcl/keyword_selector.aw:218
+#: classes/vcl/keyword_selector.aw:211 classes/vcl/keyword_selector.aw:216
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:224
+#: classes/vcl/keyword_selector.aw:222
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/vcl/keyword_selector.aw:231
+#: classes/vcl/keyword_selector.aw:229
 msgid "Valitud:"
 msgstr ""
-

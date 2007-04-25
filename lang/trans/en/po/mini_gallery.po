@@ -178,12 +178,12 @@ msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr "style"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:65
-#: classes/contentmgmt/gallery/mini_gallery.aw:467
+#: classes/contentmgmt/gallery/mini_gallery.aw:502
 msgid "Nimi"
 msgstr "Name"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:66
-#: classes/contentmgmt/gallery/mini_gallery.aw:473
+#: classes/contentmgmt/gallery/mini_gallery.aw:508
 msgid "J&auml;rjekord"
 msgstr "Order"
 
@@ -211,39 +211,39 @@ msgstr "Modification date newew first"
 msgid "Pildistamise kuup&auml;ev uuemad enne"
 msgstr "Photographing date newer first"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:269
+#: classes/contentmgmt/gallery/mini_gallery.aw:304
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr "No add access to the selected image folder"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:431
+#: classes/contentmgmt/gallery/mini_gallery.aw:466
 msgid "Galerii"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:431
+#: classes/contentmgmt/gallery/mini_gallery.aw:466
 msgid "pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:445
+#: classes/contentmgmt/gallery/mini_gallery.aw:480
 msgid "Lisa uus pilt"
 msgstr "Add new image"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:451
+#: classes/contentmgmt/gallery/mini_gallery.aw:486
 msgid "Salvesta pildid"
 msgstr "Save images"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:457
+#: classes/contentmgmt/gallery/mini_gallery.aw:492
 msgid "Kustuta valitud pildid"
 msgstr "Delete selected images"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:459
+#: classes/contentmgmt/gallery/mini_gallery.aw:494
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
 msgstr "Are you sure you want to delete selected images?"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:479
+#: classes/contentmgmt/gallery/mini_gallery.aw:514
 msgid "Muutja"
 msgstr "Modified by"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:485
+#: classes/contentmgmt/gallery/mini_gallery.aw:520
 msgid "Muudetud"
 msgstr "Modified"
 

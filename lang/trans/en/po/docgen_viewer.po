@@ -74,6 +74,30 @@ msgstr ""
 msgid "Omaduse Uuenda (refresh_properties) help"
 msgstr ""
 
+#: classes/applications/docgen/docgen_viewer.aw:prop_class_tree
+msgid "Omaduse  (class_tree) caption"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:prop_class_tree_comment
+msgid "Omaduse  (class_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:prop_class_tree_help
+msgid "Omaduse  (class_tree) help"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:prop_class_inf
+msgid "Omaduse  (class_inf) caption"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:prop_class_inf_comment
+msgid "Omaduse  (class_inf) kommentaar"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:prop_class_inf_help
+msgid "Omaduse  (class_inf) help"
+msgstr ""
+
 # classes/core/docgen/docgen_viewer.aw:group_more_options
 #: classes/applications/docgen/docgen_viewer.aw:group_more_options
 msgid "Grupi Seaded (more_options) pealkiri"
@@ -84,66 +108,121 @@ msgstr "Options"
 msgid "Grupi Seaded (more_options) help"
 msgstr ""
 
+#: classes/applications/docgen/docgen_viewer.aw:group_class_overview
+msgid "Grupi Klasside &uuml;levaade (class_overview) pealkiri"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_class_overview_help
+msgid "Grupi Klasside &uuml;levaade (class_overview) help"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_all_classes
+msgid "Grupi K&otilde;ik klassid (all_classes) pealkiri"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_all_classes_help
+msgid "Grupi K&otilde;ik klassid (all_classes) help"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_api_classes
+msgid "Grupi API Klassid (api_classes) pealkiri"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_api_classes_help
+msgid "Grupi API Klassid (api_classes) help"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_tutorials
+msgid "Grupi Eraldi dokumentatsioon (tutorials) pealkiri"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_tutorials_help
+msgid "Grupi Eraldi dokumentatsioon (tutorials) help"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_cb_tags
+msgid "Grupi Classbase tagid (cb_tags) pealkiri"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_cb_tags_help
+msgid "Grupi Classbase tagid (cb_tags) help"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_forum
+msgid "Grupi Foorum (forum) pealkiri"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:group_forum_help
+msgid "Grupi Foorum (forum) help"
+msgstr ""
+
 # classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
 #: classes/applications/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
 msgid "Seose foorum (RELTYPE_FORUM) tekst"
 msgstr "forum"
 
-#: classes/applications/docgen/docgen_viewer.aw:70
-msgid "Open DocGen"
-msgstr "Open DocGen"
+#: classes/applications/docgen/docgen_viewer.aw:layout_tree
+msgid "Kujundusosa Klasside puu (tree) pealkiri"
+msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:147
-#: classes/applications/docgen/docgen_viewer.aw:728
-#: classes/applications/docgen/docgen_viewer.aw:797
-#: classes/applications/docgen/docgen_viewer.aw:1075
-#: classes/applications/docgen/docgen_viewer.aw:1145
+#: classes/applications/docgen/docgen_viewer.aw:layout_tbl
+msgid "Kujundusosa Klassi info (tbl) pealkiri"
+msgstr ""
+
+#: classes/applications/docgen/docgen_viewer.aw:90
+#: classes/applications/docgen/docgen_viewer.aw:97
+#: classes/applications/docgen/docgen_viewer.aw:227
+#: classes/applications/docgen/docgen_viewer.aw:816
+#: classes/applications/docgen/docgen_viewer.aw:885
+#: classes/applications/docgen/docgen_viewer.aw:1163
+#: classes/applications/docgen/docgen_viewer.aw:1233
 msgid "Classes"
 msgstr "Classes"
 
-#: classes/applications/docgen/docgen_viewer.aw:311
+#: classes/applications/docgen/docgen_viewer.aw:146
+msgid "Open DocGen"
+msgstr "Open DocGen"
+
+#: classes/applications/docgen/docgen_viewer.aw:399
 msgid "nothing"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:312
-#: classes/applications/docgen/docgen_viewer.aw:314
+#: classes/applications/docgen/docgen_viewer.aw:400
+#: classes/applications/docgen/docgen_viewer.aw:402
 msgid "none"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:945
+#: classes/applications/docgen/docgen_viewer.aw:1033
 msgid "ALL DONE"
 msgstr "ALL DONE"
 
-#: classes/applications/docgen/docgen_viewer.aw:1007
-msgid "Klasside &amp;uuml;levaade"
+#: classes/applications/docgen/docgen_viewer.aw:1095
+msgid "Klasside &uuml;levaade"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1013
-msgid "K&amp;otilde;ik klassid"
-msgstr ""
+#: classes/applications/docgen/docgen_viewer.aw:1101
+msgid "K&otilde;ik klassid"
+msgstr "All classes"
 
-#: classes/applications/docgen/docgen_viewer.aw:1019
+#: classes/applications/docgen/docgen_viewer.aw:1107
 msgid "API klassid"
 msgstr "API classes"
 
-#: classes/applications/docgen/docgen_viewer.aw:1025
+#: classes/applications/docgen/docgen_viewer.aw:1113
 msgid "Eraldi dokumentatsioon"
 msgstr "Seprate documentation"
 
-#: classes/applications/docgen/docgen_viewer.aw:1032
+#: classes/applications/docgen/docgen_viewer.aw:1120
 msgid "Classbase tagid"
 msgstr "Classbase tags"
 
-#: classes/applications/docgen/docgen_viewer.aw:1038
+#: classes/applications/docgen/docgen_viewer.aw:1126
 msgid "Uuenda API andmebaas"
 msgstr "Renew API database"
 
-#: classes/applications/docgen/docgen_viewer.aw:1049
+#: classes/applications/docgen/docgen_viewer.aw:1137
 msgid "Foorum"
 msgstr "Forum"
-
-#~ msgid "K&otilde;ik klassid"
-#~ msgstr "All classes"
 
 #~ msgid "Dokumenteeritud klassid"
 #~ msgstr "Documented classes"

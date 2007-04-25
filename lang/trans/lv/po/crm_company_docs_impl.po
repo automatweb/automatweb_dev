@@ -62,6 +62,10 @@ msgstr ""
 msgid "Kleebi"
 msgstr ""
 
+#: classes/applications/crm/crm_company_docs_impl.aw:164 classes/applications/crm/crm_company_docs_impl.aw:226
+msgid ""
+msgstr ""
+
 #: classes/applications/crm/crm_company_docs_impl.aw:172 classes/applications/crm/crm_company_docs_impl.aw:483 classes/applications/crm/crm_company_docs_impl.aw:607
 msgid "Nimi"
 msgstr ""
@@ -88,10 +92,6 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_docs_impl.aw:245
 msgid "%s dokumendid"
-msgstr ""
-
-#: classes/applications/crm/crm_company_docs_impl.aw:246
-msgid ", kataloog: %s"
 msgstr ""
 
 #: classes/applications/crm/crm_company_docs_impl.aw:266

@@ -692,8 +692,8 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:425
 #: classes/contentmgmt/join/join_site.aw:444
-#: classes/contentmgmt/join/join_site.aw:2662
-#: classes/contentmgmt/join/join_site.aw:2782
+#: classes/contentmgmt/join/join_site.aw:2822
+#: classes/contentmgmt/join/join_site.aw:2942
 msgid "Omadus"
 msgstr ""
 
@@ -730,164 +730,179 @@ msgid "<b>Vahepealkirjad</b>"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:872
-#: classes/contentmgmt/join/join_site.aw:905
-#: classes/contentmgmt/join/join_site.aw:1766
-#: classes/contentmgmt/join/join_site.aw:1806
+#: classes/contentmgmt/join/join_site.aw:907
+#: classes/contentmgmt/join/join_site.aw:1810
+#: classes/contentmgmt/join/join_site.aw:1852
 msgid "Maa"
 msgstr "Страна"
 
 #: classes/contentmgmt/join/join_site.aw:878
-#: classes/contentmgmt/join/join_site.aw:911
-#: classes/contentmgmt/join/join_site.aw:1773
-#: classes/contentmgmt/join/join_site.aw:1813
+#: classes/contentmgmt/join/join_site.aw:916
+#: classes/contentmgmt/join/join_site.aw:1817
+#: classes/contentmgmt/join/join_site.aw:1862
 msgid "Postiindeks"
 msgstr "Индекс"
 
 #: classes/contentmgmt/join/join_site.aw:883
-#: classes/contentmgmt/join/join_site.aw:916
-#: classes/contentmgmt/join/join_site.aw:1779
-#: classes/contentmgmt/join/join_site.aw:1819
+#: classes/contentmgmt/join/join_site.aw:924
+#: classes/contentmgmt/join/join_site.aw:1823
+#: classes/contentmgmt/join/join_site.aw:1871
 msgid "Linn"
 msgstr "Город/населенный пункт"
 
 #: classes/contentmgmt/join/join_site.aw:888
-#: classes/contentmgmt/join/join_site.aw:921
-#: classes/contentmgmt/join/join_site.aw:1785
-#: classes/contentmgmt/join/join_site.aw:1825
+#: classes/contentmgmt/join/join_site.aw:932
+#: classes/contentmgmt/join/join_site.aw:1829
+#: classes/contentmgmt/join/join_site.aw:1880
 msgid "Maakond"
 msgstr "Уезд/регион"
 
 #: classes/contentmgmt/join/join_site.aw:893
-#: classes/contentmgmt/join/join_site.aw:926
-#: classes/contentmgmt/join/join_site.aw:1791
-#: classes/contentmgmt/join/join_site.aw:1831
+#: classes/contentmgmt/join/join_site.aw:940
+#: classes/contentmgmt/join/join_site.aw:1835
+#: classes/contentmgmt/join/join_site.aw:1889
 msgid "T&auml;nava nimi"
 msgstr "Улица/дом/квартира"
 
-#: classes/contentmgmt/join/join_site.aw:970
+#: classes/contentmgmt/join/join_site.aw:951
+#: classes/contentmgmt/join/join_site.aw:1916
+msgid "Pilt 1"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:957
+#: classes/contentmgmt/join/join_site.aw:1929
+msgid "Pilt 2"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:963
+#: classes/contentmgmt/join/join_site.aw:1942
+msgid "Pilt 3"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:1008
 msgid "mees"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:971
+#: classes/contentmgmt/join/join_site.aw:1009
 msgid "naine"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1160
+#: classes/contentmgmt/join/join_site.aw:1198
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1174
-#: classes/contentmgmt/join/join_site.aw:1227
+#: classes/contentmgmt/join/join_site.aw:1212
+#: classes/contentmgmt/join/join_site.aw:1265
 msgid "T&uuml;hista"
 msgstr "Аннулирую"
 
-#: classes/contentmgmt/join/join_site.aw:1213
+#: classes/contentmgmt/join/join_site.aw:1251
 msgid "Liitun"
 msgstr "Присоединяюсь"
 
-#: classes/contentmgmt/join/join_site.aw:2543
+#: classes/contentmgmt/join/join_site.aw:2703
 msgid "Liitumise meili from aadress (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2554
+#: classes/contentmgmt/join/join_site.aw:2714
 msgid "Liitumise meili subjekt (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2567
+#: classes/contentmgmt/join/join_site.aw:2727
 msgid "Liitumise meil (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2635
+#: classes/contentmgmt/join/join_site.aw:2795
 msgid "Sellise koodiga kasutajat pole olemas!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2667
+#: classes/contentmgmt/join/join_site.aw:2827
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2672
+#: classes/contentmgmt/join/join_site.aw:2832
 msgid "Reavahetus sisu vahel"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2685
-#: classes/contentmgmt/join/join_site.aw:2908
+#: classes/contentmgmt/join/join_site.aw:2845
+#: classes/contentmgmt/join/join_site.aw:3068
 msgid "--vali--"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2686
+#: classes/contentmgmt/join/join_site.aw:2846
 msgid "Tekstikast"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2687
+#: classes/contentmgmt/join/join_site.aw:2847
 msgid "Listbox"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2688
+#: classes/contentmgmt/join/join_site.aw:2848
 msgid "Raadionupp"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2689
+#: classes/contentmgmt/join/join_site.aw:2849
 msgid "Checkbox"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2843
+#: classes/contentmgmt/join/join_site.aw:3003
 msgid "Liitu nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2844
-#: classes/contentmgmt/join/join_site.aw:2863
-#: classes/contentmgmt/join/join_site.aw:2883
+#: classes/contentmgmt/join/join_site.aw:3004
+#: classes/contentmgmt/join/join_site.aw:3023
+#: classes/contentmgmt/join/join_site.aw:3043
 msgid "<b>Nuppude tekstid</b>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2862
+#: classes/contentmgmt/join/join_site.aw:3022
 msgid "Salvesta nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2882
+#: classes/contentmgmt/join/join_site.aw:3042
 msgid "T&uuml;hista nupu tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2903
+#: classes/contentmgmt/join/join_site.aw:3063
 msgid "T&otilde;lgi omaduste tekste"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2930
+#: classes/contentmgmt/join/join_site.aw:3090
 msgid "Veateade"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2955
+#: classes/contentmgmt/join/join_site.aw:3115
 msgid "J&auml;rgnev v&auml;li peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2956
+#: classes/contentmgmt/join/join_site.aw:3116
 msgid "Sellise kasutajanimega kasutaja on juba olemas!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2957
+#: classes/contentmgmt/join/join_site.aw:3117
 msgid "Sisestatud paroolid on erinevad!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2958
+#: classes/contentmgmt/join/join_site.aw:3118
 msgid "Parool tohib sisaldada ainult numbreid, t&auml;hti ja alakriipsu!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2959
+#: classes/contentmgmt/join/join_site.aw:3119
 msgid "Kasutajanimes peab olema v&auml;hemalt 3 t&auml;hte!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2960
+#: classes/contentmgmt/join/join_site.aw:3120
 msgid "Paroolis peab olema v&auml;hemalt 3 t&auml;hte!"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2978
+#: classes/contentmgmt/join/join_site.aw:3138
 msgid "T&otilde;lgi veateateid"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:2985
+#: classes/contentmgmt/join/join_site.aw:3145
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:3035
+#: classes/contentmgmt/join/join_site.aw:3195
 msgid "T&otilde;lgi vahepealkiri"
 msgstr ""

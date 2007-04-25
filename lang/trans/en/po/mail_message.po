@@ -256,7 +256,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/applications/messenger/mail_message.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:group_add
 msgid "Grupi Lisa (add) pealkiri"
-msgstr ""
+msgstr "Add"
 
 #: classes/applications/messenger/mail_message.aw:group_add_help
 msgid "Grupi Lisa (add) help"

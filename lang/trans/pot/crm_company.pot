@@ -459,15 +459,15 @@ msgid "Omaduse  (extern_id) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_keywords2
-msgid "Omaduse AW V&otilde;tmes&otilde;na (keywords2) caption"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords2) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_keywords2_comment
-msgid "Omaduse AW V&otilde;tmes&otilde;na (keywords2) kommentaar"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords2) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_keywords2_help
-msgid "Omaduse AW V&otilde;tmes&otilde;na (keywords2) help"
+msgid "Omaduse V&otilde;tmes&otilde;nad (keywords2) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_openhours
@@ -3050,6 +3050,14 @@ msgstr ""
 msgid "Omaduse  (sell_offers) help"
 msgstr ""
 
+#: classes/crm/crm_company.aw:group_keywords
+msgid "Grupi V&otilde;tmes&otilde;nad (keywords) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_company.aw:group_keywords_help
+msgid "Grupi V&otilde;tmes&otilde;nad (keywords) help"
+msgstr ""
+
 #: classes/crm/crm_company.aw:group_general_sub
 msgid "Grupi &Uuml;ldandmed (general_sub) pealkiri"
 msgstr ""
@@ -3480,14 +3488,6 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_user_settings_help
 msgid "Grupi Seaded (user_settings) help"
-msgstr ""
-
-#: classes/crm/crm_company.aw:group_keywords
-msgid "Grupi keywords (keywords) pealkiri"
-msgstr ""
-
-#: classes/crm/crm_company.aw:group_keywords_help
-msgid "Grupi keywords (keywords) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_ETTEVOTLUSVORM

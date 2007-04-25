@@ -226,11 +226,11 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1480
+#: classes/common/room_reservation.aw:1482
 msgid "Broneeringut ei &otilde;nnestunud kinnitada"
 msgstr ""
 
-#: classes/common/room_reservation.aw:1549 classes/common/room_reservation.aw:1598
+#: classes/common/room_reservation.aw:1551 classes/common/room_reservation.aw:1600
 msgid "Broneering: %s"
 msgstr ""
 
