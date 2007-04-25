@@ -416,7 +416,7 @@
             <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_KEYWORD</reltype>
-            <caption>AW V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
+            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
       </property>
       <property>
             <name>openhours</name>
@@ -3028,6 +3028,11 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <keywords>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
+                  <parent>general_sub</parent>
+                  <submit>no</submit>
+            </keywords>
             <general_sub>
                   <caption>&amp;amp;Uuml;ldandmed</caption>
                   <parent>general</parent>

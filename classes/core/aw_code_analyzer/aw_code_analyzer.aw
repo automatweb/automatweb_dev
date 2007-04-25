@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.4 2006/10/02 11:54:43 kristo Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.5 2007/04/25 07:58:42 kristo Exp $
 
 	@comment
 	analyses aw code
@@ -51,9 +51,17 @@ class aw_code_analyzer extends class_base
 		{
 			$fp = $file;
 		}
-
+ini_set("memory_limit", "500M");
+die(token_get_all(file_get_contents($fp)));
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+$f  = fopen($fp, "r");
+echo dbg::dump($f);
+$fc = fread($f, filesize($fp));
+fclose($f);
+die($fp);
 		$this->tokens = token_get_all(file_get_contents($fp));
-
+die(dbg::dump($fp));
 		$this->data = array();
 		$this->brace_level = 0;
 		$this->in_class = false;

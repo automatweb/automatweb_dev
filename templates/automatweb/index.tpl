@@ -10,7 +10,6 @@
 <link href="{VAR:baseurl}/automatweb/css/sisu.css" rel="stylesheet" type="text/css" />
 <link href="{VAR:baseurl}/automatweb/css/aw06.css" rel="stylesheet" type="text/css" />
 
-
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
@@ -18,6 +17,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/CalendarPopup.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/popup_menu.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/BronCalendar.js"></script>
+
 
 
 <script type="text/JavaScript">
@@ -132,7 +132,9 @@ window.onscroll = function ()
 		{VAR:site_title}
 	</div>
 		<!-- END SUB: YAH -->
+
 		<!-- SUB: NO_HEADER -->
+		<div id="pais2">
 		<!-- END SUB: NO_HEADER -->
 
 	{VAR:content}

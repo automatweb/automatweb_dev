@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.94 2007/02/12 13:43:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.95 2007/04/25 07:58:45 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -399,6 +399,7 @@ class releditor extends core
 			$parent = $arr['prop']['override_parent'];
 		}
 		else // Or the default, current objects parent.
+		if (is_object($arr["obj_inst"]))
 		{
 			$parent = $arr['obj_inst']->parent();
 		}

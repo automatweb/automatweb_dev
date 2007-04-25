@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.196 2007/03/30 07:25:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.197 2007/04/25 07:58:39 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -647,6 +647,7 @@ class image extends class_base
 				$img_id = $img_obj->id();
 			}
 			$img_obj = obj($img_id);
+			$img_obj->set_name($_FILES[$name]["name"]);
 
 			if (is_uploaded_file($_FILES[$name]['tmp_name']))
 			{

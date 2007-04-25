@@ -161,7 +161,7 @@ class crm_company_docs_impl extends class_base
 	function _init_docs_tbl(&$t, $r)
 	{
 		$t->define_field(array(
-			"caption" => t(""),
+			"caption" => "",
 			"name" => "icon",
 			"align" => "center",
 			"sortable" => 0,
@@ -223,7 +223,7 @@ class crm_company_docs_impl extends class_base
 		));
 
 		$t->define_field(array(
-			"caption" => t(""),
+			"caption" => "",
 			"name" => "pop",
 			"align" => "center"
 		));
@@ -243,7 +243,7 @@ class crm_company_docs_impl extends class_base
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$format = t("%s dokumendid");
-		$format = strlen($arr["request"]["tf"])?$format.", kataloog: %s":$format;
+		$format = strlen($arr["request"]["tf"])?$format.t(", kataloog: %s"):$format;
 		$o = obj($arr["request"]["tf"]);
 		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $o->name()));
 		$this->_init_docs_tbl($t, $arr["request"]);

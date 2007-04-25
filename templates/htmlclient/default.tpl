@@ -1,5 +1,5 @@
 <!-- SUB: SHOW_CHANGEFORM -->
-<form action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
+<form style="margin-top: 0px;" action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
 
 <!-- END SUB: SHOW_CHANGEFORM -->
