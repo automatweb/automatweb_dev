@@ -116,6 +116,16 @@
             <caption>Hotelliteavituse e-maili teema</caption>
       </property>
       <property>
+            <name>submission_dir</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_SUBMISSION_DIR</reltype>
+            <caption>RFP kataloog</caption>
+      </property>
+      <property>
             <name>help_views</name>
             <table>objects</table>
             <group>general</group>
@@ -345,6 +355,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Vormi l&amp;amp;otilde;petamise kontroller</caption>
             </SUBMIT_CONTROLLER>
+            <SUBMISSION_DIR>
+                  <value>9</value>
+                  <clid>CL_MENU</clid>
+                  <caption>RFP kataloog</caption>
+            </SUBMISSION_DIR>
       </reltypes>
       <layout>
             <hsplit>

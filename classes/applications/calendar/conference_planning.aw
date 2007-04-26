@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.88 2007/04/24 13:29:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.89 2007/04/26 12:18:25 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -43,6 +43,9 @@
 
 @property subject type=textbox field=meta method=serialize
 @caption Hotelliteavituse e-maili teema
+
+@property submission_dir type=relpicker field=meta method=serialize reltype=RELTYPE_SUBMISSION_DIR
+@caption RFP kataloog
 
 // metadata for views
 @property help_views type=hidden field=meta mehtod=serialize no_caption=1
@@ -132,6 +135,9 @@
 
 @reltype SUBMIT_CONTROLLER value=8 clid=CL_CFGCONTROLLER
 @caption Vormi l&otilde;petamise kontroller
+
+@reltype SUBMISSION_DIR value=9 clid=CL_MENU
+@caption RFP kataloog
 
 */
 
@@ -327,7 +333,7 @@ class conference_planning extends class_base
 
 			
 			case "gen_open_for_alternative_dates":
-			case "gen_accommondation_requirements":
+			case "gen_accommodation_requirements":
 			case "gen_dates_are_flexible":
 			case "mf_breakout_rooms":
 			case "mf_24h":
@@ -1005,6 +1011,9 @@ class conference_planning extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "help_views":
+				return PROP_IGNORE;
+				break;
 			case "meta_chooser":
 				if(strlen($view = $arr["request"]["view_no"]) && strlen($elem = $arr["request"]["element"]))
 				{
@@ -1635,10 +1644,11 @@ class conference_planning extends class_base
 				return $arr["url"]; // this redirects back to the final page.. hmz.. some errors there would be nice in that case
 			}
 		}
+		$parent = $this->can("view", $ob->prop("submission_dir"))?$ob->prop("submission_dir"):$ob->parent();
 		$this->create_submit_object(array(
 			"clid" => CL_RFP,
-			"parent" => $ob->parent(),
-			"name" => "rfp submission",
+			"parent" => $parent,
+			"name" => sprintf(t("RFP, %s"), date("d.m.Y H:i")),
 			"data" => $data,
 		));
 		$thank_you_so_very_much = $this->can("view", $ob->prop("redir_doc"))?"/".$ob->prop("redir_doc"):"";

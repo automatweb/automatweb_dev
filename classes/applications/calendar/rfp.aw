@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.15 2007/04/24 13:29:10 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp.aw,v 1.16 2007/04/26 12:18:25 tarvo Exp $
 // rfp.aw - Pakkumise saamise palve 
 /*
 
@@ -57,10 +57,10 @@
 		@property data_gen_open_for_alternative_dates type=checkbox ch_value=1 default=0
 		@caption N&ouml;us alternatiivsete kuup&auml;evadega
 
-		@property data_gen_accommondation_requirements type=checkbox ch_value=1 default=0
+		@property data_gen_accommodation_requirements type=checkbox ch_value=1 default=0
 		@caption Majutusvajadused
 
-		@property data_gen_multi_day type=checkbox ch_value=1 default=0
+		@property data_gen_multi_day type=text 
 		@caption &Uuml;rituse kestus
 
 		@property data_gen_single_rooms type=text
@@ -105,7 +105,7 @@
 		@property data_gen_package type=text
 		@caption Pakett
 
-	@groupinfo main_fun caption="Main function"
+	@groupinfo main_fun caption="P&otilde;hi&uuml;ritus"
 	@default group=main_fun
 
 		@property data_mf_table type=text no_caption=1
@@ -236,8 +236,78 @@ class rfp extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		$ignored_props = array(
+			// these are just numeric values, that can't be parsed as an oid
+			"data_gen_single_rooms",
+			"data_gen_double_rooms",
+			"data_gen_suites",
+			"data_gen_attendees_no",
+			
+			// these are props that need special handlig below..
+			"data_mf_event_type",
+			"data_mf_catering",
+			"data_gen_accommondation_requirements",
+		);
+		if(substr($prop["name"], 0, 5) == "data_" && !in_array($prop["name"], $ignored_props))
+		{
+			$prop["value"] = $this->_gen_prop_autom_value($prop["value"]);
+			if(trim($prop["value"]) == "")
+			{
+				return PROP_IGNORE;
+			}
+			return $retval;
+		}
+		
+		// this here deals with props with values to table
+		$prop["name"] = strstr($prop["name"], "ign_")?substr($prop["name"], 4):$prop["name"];
 		switch($prop["name"])
 		{
+			// totally new propnames.. gosh
+
+			case "data_gen_accommondation_requirements":
+				$prop["value"] = $prop["value"]?1:"";
+				break;
+
+			case "data_mf_event_type":
+				$prop["value"] = aw_unserialize($prop["value"]);
+			case "data_mf_catering_type":
+				$prop["value"] = ($prop["value"]["radio"] == 1)?$this->_gen_prop_autom_value($prop["value"]["select"]):$prop["value"]["text"];
+				break;
+
+			case "data_mf_catering":
+				$prop["value"] = aw_unserialize($prop["value"]);
+				$props = $arr["obj_inst"]->get_property_list();
+				classload("vcl/table");
+				$t = new aw_table();
+				$header = array_keys(reset($prop["value"]));
+				foreach($header as $field)
+				{
+					$t->define_field(array(
+						"name" => $field,
+						"caption" => $props[$field]["caption"],
+					));
+				}
+				$dummy_arr = $arr;
+				unset($dummy_arr["prop"]);
+				$dummy_arr["prop"] = $prop;
+				
+				foreach($prop["value"] as $data)
+				{
+					foreach($data as $propname => $value)
+					{
+						//$data[$propname] = ($value["radio"] == 1)?$this->_gen_prop_autom_value($prop["value"]["select"]):$prop["value"]["text"];
+						$dummy_arr["prop"] = array(
+							"name" => "ign_".$propname,
+							"value" => $value,
+						);
+						$this->get_property(&$dummy_arr);
+						$data[$propname] = $dummy_arr["prop"]["value"];
+					}
+					$t->define_data($data);
+				}
+				$prop["value"] = $t->draw();
+				break;
+			
 			//-- get_property --//
 			case "submitter":
 				if(!$prop["value"])
@@ -345,6 +415,22 @@ class rfp extends class_base
 
 //-- methods --//
 
+	function _gen_prop_autom_value($value)
+	{
+		if($this->can("view", $value))
+		{
+			$o = obj($value);
+			$value = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $value,
+					"return_url" => get_ru(),
+				), $o->class_id()),
+				"caption" => $o->name(),
+			));
+		}
+		return $value;
+	}
+	
 	function _gen_table_additional_dates($data, $t)
 	{
 		$t->define_field(array(

@@ -128,7 +128,7 @@
             <caption>N&amp;amp;ouml;us alternatiivsete kuup&amp;amp;auml;evadega</caption>
       </property>
       <property>
-            <name>data_gen_accommondation_requirements</name>
+            <name>data_gen_accommodation_requirements</name>
             <table>objects</table>
             <group>general_function_info</group>
             <field>meta</field>
@@ -143,8 +143,7 @@
             <group>general_function_info</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>text</type>
             <caption>&amp;amp;Uuml;rituse kestus</caption>
       </property>
       <property>
@@ -599,7 +598,7 @@
                   <caption>&amp;amp;Uuml;ldine &amp;amp;uuml;rituse info</caption>
             </general_function_info>
             <main_fun>
-                  <caption>Main function</caption>
+                  <caption>P&amp;amp;otilde;hi&amp;amp;uuml;ritus</caption>
             </main_fun>
             <additional_functions>
                   <caption>Lisa&amp;amp;uuml;ritused</caption>
