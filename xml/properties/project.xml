@@ -59,6 +59,17 @@
             <caption>Loe l&amp;auml;hemalt</caption>
       </property>
       <property>
+            <name>proj_price</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <parent>left_bit</parent>
+            <caption>Projekti hind</caption>
+      </property>
+      <property>
             <name>prepayment</name>
             <table>aw_projects</table>
             <group>general2</group>
@@ -67,6 +78,28 @@
             <size>5</size>
             <parent>left_bit</parent>
             <caption>Ettemaks</caption>
+      </property>
+      <property>
+            <name>outsourcing_expences</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <parent>left_bit</parent>
+            <caption>Kulud allhankijatele</caption>
+      </property>
+      <property>
+            <name>account_received</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <parent>left_bit</parent>
+            <caption>Tasu saadud</caption>
       </property>
       <property>
             <name>contact_person_orderer</name>
@@ -107,6 +140,19 @@
             <caption>Teostajad</caption>
       </property>
       <property>
+            <name>proj_mgr</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <clid>CL_CRM_PERSON</clid>
+            <reltype>RELTYPE_PARTICIPANT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>left_bit</parent>
+            <no_edit>1</no_edit>
+            <caption>Projekti juht</caption>
+      </property>
+      <property>
             <name>start</name>
             <table>aw_projects</table>
             <group>general2</group>
@@ -131,7 +177,7 @@
             <type>date_select</type>
             <field>aw_deadline</field>
             <parent>project_time</parent>
-            <caption>Deadline</caption>
+            <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>hrs_guess</name>
@@ -279,7 +325,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>event_toolbar</field>
-            <caption>S&amp;uuml;ndmuste toolbar </caption>
+            <caption>S&amp;uuml;ndmuste toolbar</caption>
       </property>
       <property>
             <name>event_list</name>
@@ -361,7 +407,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>files_search_sbt</field>
-            <caption>Otsi	</caption>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>files_table</name>
@@ -728,15 +774,6 @@
             <field>req_tbl</field>
       </property>
       <property>
-            <name>proj_price</name>
-            <table>objects</table>
-            <group>stats</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Projekti hind</caption>
-      </property>
-      <property>
             <name>stats</name>
             <table>objects</table>
             <group>stats</group>
@@ -804,6 +841,21 @@
                   <submit>no</submit>
                   <parent>event_list</parent>
             </event_list_cal>
+            <req>
+                  <caption>N&amp;amp;otilde;uded</caption>
+                  <submit>no</submit>
+                  <parent>event_list</parent>
+            </req>
+            <req_process>
+                  <caption>N&amp;amp;otilde;uded protsessidega</caption>
+                  <submit>no</submit>
+                  <parent>event_list</parent>
+            </req_process>
+            <stats>
+                  <caption>Statistika</caption>
+                  <submit>no</submit>
+                  <parent>event_list</parent>
+            </stats>
             <event_list_premise>
                   <caption>Tegevused eeldustegevuste p&amp;otilde;hiselt</caption>
                   <submit>no</submit>
@@ -835,21 +887,6 @@
                   <caption>Meeskond</caption>
                   <submit>no</submit>
             </team>
-            <req>
-                  <caption>N&amp;amp;otilde;uded</caption>
-                  <submit>no</submit>
-                  <parent>event_list</parent>
-            </req>
-            <req_process>
-                  <caption>N&amp;amp;otilde;uded protsessidega</caption>
-                  <submit>no</submit>
-                  <parent>event_list</parent>
-            </req_process>
-            <stats>
-                  <caption>Statistika</caption>
-                  <submit>no</submit>
-                  <parent>event_list</parent>
-            </stats>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

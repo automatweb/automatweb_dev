@@ -195,7 +195,7 @@ class crm_company_cust_impl extends class_base
 				"rc_by_co" => $rc_by_co,
 				"to_project" => $project_obj->id()
 			));
-		
+
 			if (is_oid($cpi = $project_obj->prop("contact_person_implementor")) && $this->can("view", $cpi))
 			{
 				$impl = html::get_change_url($cpi, array("return_url" => get_ru()), parse_obj_name($project_obj->prop_str("contact_person_implementor")));
@@ -223,6 +223,198 @@ class crm_company_cust_impl extends class_base
 			$table->define_data($row);
 		}
 		return PROP_OK;
+	}
+
+	function _get_impl_projects($arr)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+
+		// get applicable projects
+		$applicable_states = array(
+			PROJ_IN_PROGRESS
+		);
+
+		$projects = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"CL_PROJECT.RELTYPE_IMPLEMENTOR" => $arr["obj_inst"]->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"state" => $applicable_states,
+		));
+
+		$this->proj_count = $projects->count();
+		$this->get_impl_projects_header($table);
+
+		$table->set_default_sortby ("start");
+		$table->set_default_sorder ("desc");
+		$table->define_pageselector (array (
+			"type" => "text",
+			"d_row_cnt" => $this->proj_count,
+			"records_per_page" => 25,
+		));
+
+		$sum_expences = $sum_rec = $sum_due = $sum_budget = 0;
+		$users_data = array();
+		$cl_users = get_instance("users");
+		$cl_user = get_instance (CL_USER);
+
+		// populate table with data
+		foreach($projects->arr() as $project)
+		{
+			$sales_person_uid = $project->createdby();
+			$prj_mgr_oid = $project->prop("proj_mgr");
+
+			if (!isset ($users_data["by_uid"][$sales_person_uid]))
+			{
+				$oid = $cl_users->get_oid_for_uid ($sales_person_uid);
+				$user = obj ($oid);
+				$oid = $cl_user->get_person_for_user ($user);
+				$sales_person = obj ($oid);
+				$users_data["by_uid"][$sales_person_uid]["name"] = $sales_person->name();
+			}
+
+			if (!isset ($users_data["by_oid"][$prj_mgr_oid]))
+			{
+				$prj_mgr_o = obj($prj_mgr_oid);
+				$users_data["by_oid"][$prj_mgr_oid]["name"] = $prj_mgr_o->name();
+			}
+
+			$ol = new object_list($project->connections_from(array("type" => "RELTYPE_ORDERER")));
+			$orderers = array();
+
+			if ($ol->count())
+			{
+				foreach ($ol->arr() as $o)
+				{
+					$orderers[] = html::get_change_url ($o->id(), array("return_url" => get_ru()), $o->name());
+				}
+
+				$orderers =  implode(", ", $orderers);
+			}
+			else
+			{
+				$orderers = "";
+			}
+
+
+			$row = array(
+				"project" => html::get_change_url ($project->id (), array("return_url" => get_ru()), $project->name()),
+				"orderers" => $orderers,
+				"start" => $project->prop("start"),
+				"deadline" => $project->prop("deadline"),
+				"bgcolour_overdue" => ($project->prop("deadline") < time() ? "red" : NULL),
+				"phase" => $project->prop("state"),//!!! teha faasid
+				"manager" => $users_data["by_oid"][$prj_mgr_oid]["name"],
+				"sales_person" => $users_data["by_uid"][$sales_person_uid]["name"],//!!! ajutiselt created_by. aw myygitarkvara veel pole.
+				"budget" => $project->prop("proj_price"),
+				"outsourcing_expences" => $project->prop("outsourcing_expences"),
+				"account_received" => $project->prop("account_received"),
+				"account_due" => ($project->prop("proj_price") - $project->prop("account_received")),
+				"oid" => $project->id(),
+				"actions" => $actions_menu . html::hidden (array(
+					"name" => "crm_prjmgr_proj_id[" . $project->id() . "]",
+					"value" => $project->id(),
+				))
+			);
+			$row_added = $table->define_data($row);
+
+			if ($row_added)
+			{
+				$sum_budget += $project->prop ("proj_price");
+				$sum_expences += $project->prop ("outsourcing_expences");
+				$sum_rec += $project->prop ("account_received");
+			}
+		}
+
+		### statistics
+		$prefix = sprintf ("<b>%s</b><br />", t("Kokku:"));
+
+		if ($sum_budget)
+		{
+			$row = array(
+				"budget" => $prefix . number_format ($sum_budget, 2, ',', ' '),
+				"outsourcing_expences" => $prefix . number_format ($sum_expences, 2, ',', ' '),
+				"account_received" => $prefix . number_format ($sum_rec, 2, ',', ' '),
+				"account_due" => $prefix . number_format (($sum_budget - $sum_rec), 2, ',', ' ')
+			);
+			$table->define_data ($row);
+		}
+
+		return PROP_OK;
+	}
+
+	function get_impl_projects_header(&$table)
+	{
+		$table->define_field(array(
+			"name" => "project",
+			"caption" => t("Nimi"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "orderers",
+			"caption" => t("Tellija(d)"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "start",
+			"caption" => t("Algus"),
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y"
+		));
+		$table->define_field(array(
+			"name" => "deadline",
+			"caption" => t("Tähtaeg"),
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"chgbgcolor" => "bgcolour_overdue",
+			"format" => "d.m.Y"
+		));
+		$table->define_field(array(
+			"name" => "phase",
+			"caption" => t("Faas"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "manager",
+			"caption" => t("Projektijuht"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "sales_person",
+			"caption" => t("Müüja/looja"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "budget",
+			"caption" => t("Hind"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "outsourcing_expences",
+			"caption" => t("Välja"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "account_received",
+			"caption" => t("Saadud"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "account_due",
+			"caption" => t("Saada"),
+			"sortable" => 1
+		));
+		$table->define_field(array(
+			"name" => "actions",
+			"caption" => t(""),
+		));
+		$table->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
 	}
 
 	function _get_part_names($conns)
@@ -862,7 +1054,7 @@ class crm_company_cust_impl extends class_base
 		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
 		$my_co = obj($u->get_current_company());
-		
+
 		if ( isset($arr['request']['all_proj_search_part']) )
 		{
 			$format = t('%s projektide arhiiv');
@@ -1290,7 +1482,7 @@ class crm_company_cust_impl extends class_base
 			$current_person_name = $user_obj->name();
 			$format = t('%s raportid, milles on %s osaline');
 		}
-		
+
 		$t->set_caption(sprintf($format, $arr['obj_inst']->name(), $current_person_name));
 
 		foreach($reps->arr() as $r)
@@ -1550,7 +1742,7 @@ class crm_company_cust_impl extends class_base
 			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
 		}
 	}
-	
+
 	function _get_customer_listing_tree($arr)
 	{
 		$tree_inst = &$arr['prop']['vcl_inst'];

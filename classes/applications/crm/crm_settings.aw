@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.18 2007/04/02 11:27:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.19 2007/04/26 07:47:30 voldemar Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -56,7 +56,7 @@
 
 	@property task_rows_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
   	@caption Toimetuse ridade kontroller
-	
+
 
 @default group=tables
 	@property tables_toolbar type=toolbar store=no no_caption=1
@@ -162,6 +162,10 @@ class crm_settings extends class_base
 				),
 				// "projects_listing_table",
 				// "my_projects",
+				"impl_projects" => array(
+					"fields_class" => "applications/crm/crm_company_cust_impl",
+					"fields_method" => "get_impl_projects_header",
+				),
 				// "report_list",
 				// "docs_tbl",
 				// "dn_res",
@@ -184,7 +188,7 @@ class crm_settings extends class_base
 			"coworker" => CL_CRM_PERSON,
 			"customer_employer" => CL_CRM_PERSON,
 		);
-		
+
 		$this->bills_filter_options = array(
 					"" => "",
 					0 => t("Jah"),
@@ -207,7 +211,7 @@ class crm_settings extends class_base
 					1 => t("Kalendervaade"),
 				);
 				break;
-			
+
 			case "default_task_rows_bills_filter":
 				$prop["options"] = $this->bills_filter_options;
 				break;

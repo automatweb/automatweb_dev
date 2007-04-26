@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.117 2007/03/28 10:15:03 kristo Exp $
-// project.aw - Projekt 
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.118 2007/04/26 07:47:31 voldemar Exp $
+// project.aw - Projekt
 /*
 
 
@@ -10,97 +10,95 @@
 @default table=objects
 
 @default group=general2
-
-
 	@layout up_bit type=hbox width=50%:50%
-
 		@layout left_bit type=vbox parent=up_bit closeable=1 area_caption=&Uuml;ldandmed
-	
-		@property name type=textbox parent=left_bit
-		@caption Nimi
-	
-		@property code type=textbox table=aw_projects field=aw_code parent=left_bit
-		@caption Kood
+			@property name type=textbox parent=left_bit
+			@caption Nimi
 
-		@property priority type=textbox table=aw_projects field=aw_priority size=5 parent=left_bit
-		@caption Prioriteet
-	
-		@property archive_code type=textbox table=aw_projects field=aw_archive_code size=10 parent=left_bit
-		@caption Arhiveerimistunnus
-	
-		@property state type=select table=aw_projects field=aw_state default=1 parent=left_bit
-		@caption Staatus
+			@property code type=textbox table=aw_projects field=aw_code parent=left_bit
+			@caption Kood
 
-		@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc parent=left_bit
-		@caption Loe lähemalt
+			@property priority type=textbox table=aw_projects field=aw_priority size=5 parent=left_bit
+			@caption Prioriteet
+
+			@property archive_code type=textbox table=aw_projects field=aw_archive_code size=10 parent=left_bit
+			@caption Arhiveerimistunnus
+
+			@property state type=select table=aw_projects field=aw_state default=1 parent=left_bit
+			@caption Staatus
+
+			@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc parent=left_bit
+			@caption Loe lähemalt
+
+			@property proj_price type=textbox table=objects field=meta method=serialize size=5 parent=left_bit
+			@caption Projekti hind
+
+			@property prepayment type=textbox table=aw_projects field=aw_prepayment size=5 parent=left_bit
+			@caption Ettemaks
+
+			@property outsourcing_expences type=textbox table=objects field=meta method=serialize size=5 parent=left_bit
+			@caption Kulud allhankijatele
+
+			@property account_received type=textbox table=objects field=meta method=serialize size=5 parent=left_bit
+			@caption Tasu saadud
+
+			@property contact_person_orderer type=select table=aw_projects field=aw_contact_person parent=left_bit
+			@caption Tellija kontaktisik
+
+			@property contact_person_implementor type=select table=aw_projects field=aw_contact_person_impl parent=left_bit
+			@caption Teostaja kontaktisik
+
+			@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker parent=left_bit
+
+			@property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker parent=left_bit
+
+			@property proj_mgr type=relpicker clid=CL_CRM_PERSON reltype=RELTYPE_PARTICIPANT field=meta method=serialize parent=left_bit no_edit=1
+			@caption Projekti juht
 
 
-	@property prepayment type=textbox table=aw_projects field=aw_prepayment size=5 parent=left_bit
-	@caption Ettemaks
+		@layout center_bit type=vbox parent=up_bit no_padding=1
+			@layout project_time type=vbox parent=center_bit closeable=1 no_padding=1 area_caption=Ajad
 
-	@property contact_person_orderer type=select table=aw_projects field=aw_contact_person parent=left_bit
-	@caption Tellija kontaktisik
+			@property start type=date_select table=aw_projects field=aw_start parent=project_time
+			@caption Algus
 
-	@property contact_person_implementor type=select table=aw_projects field=aw_contact_person_impl parent=left_bit
-	@caption Teostaja kontaktisik
+			@property end type=date_select table=aw_projects field=aw_end parent=project_time
+			@caption L&otilde;pp
 
-@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
-caption Tellija
+			@property deadline type=date_select table=aw_projects field=aw_deadline parent=project_time
+			@caption T&auml;htaeg
 
-@property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize multiple=1 store=connect style=relpicker  parent=left_bit
-caption Teostajad
+			@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5 parent=project_time
+			@caption  Prognoositav tundide arv
 
-	@layout center_bit type=vbox parent=up_bit no_padding=1 
-
-		@layout project_time type=vbox parent=center_bit closeable=1 no_padding=1 area_caption=Ajad
-		@property start type=date_select table=aw_projects field=aw_start parent=project_time
-		@caption Algus
-	
-		@property end type=date_select table=aw_projects field=aw_end parent=project_time
-		@caption L&otilde;pp
-	
-		@property deadline type=date_select table=aw_projects field=aw_deadline parent=project_time
-		@caption Deadline
-
-		@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5 parent=project_time
-		@caption  Prognoositav tundide arv
-
-		@layout project_people type=vbox parent=center_bit closeable=1 no_padding=1  area_caption=Osalejad
-		@property parts_tb type=toolbar no_caption=1 store=no parent=project_people
-		@property orderer_table type=table no_caption=1 store=no parent=project_people
-		@property part_table type=table no_caption=1 store=no parent=project_people
-		@property impl_table type=table no_caption=1 store=no parent=project_people
+			@layout project_people type=vbox parent=center_bit closeable=1 no_padding=1  area_caption=Osalejad
+				@property parts_tb type=toolbar no_caption=1 store=no parent=project_people
+				@property orderer_table type=table no_caption=1 store=no parent=project_people
+				@property part_table type=table no_caption=1 store=no parent=project_people
+				@property impl_table type=table no_caption=1 store=no parent=project_people
 
 		@property implementor type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_IMPLEMENTOR
 		@caption Teostajad
 
 		@property orderer type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_ORDERER
 		@caption Klient
-			
+
 		@property participants type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_PARTICIPANT
 		@caption Osalejad
-		
-		
-		layout parts type=hbox width=20%:80%
-	caption Osalejad
 
-	property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1 table=objects field=meta method=serialize no_caption=1 parent=parts
-	caption Osalejad
 
 @default group=info_t
-
-	@property description type=textarea rows=10 cols=50 table=aw_projects field=aw_description 
+	@property description type=textarea rows=10 cols=50 table=aw_projects field=aw_description
 	@caption Kirjeldus
 
 	@property proj_type type=classificator table=aw_projects field=aw_type store=connect reltype=RELTYPE_TYPE multiple=1
 	@caption Liik
 
-	@property create_task type=checkbox ch_value=1 store=no 
+	@property create_task type=checkbox ch_value=1 store=no
 	@caption Moodusta &uuml;lesanne
 
 
 @default group=web_settings
-
 	@property project_navigator type=checkbox ch_value=1 table=aw_projects field=aw_project_navigator
 	@caption Näita projektide navigaatorit
 
@@ -116,49 +114,51 @@ caption Teostajad
 	@property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize
 	@caption Pilt
 
-@default group=event_list_cal
 
+@default group=event_list_cal
 	@property event_toolbar type=toolbar no_caption=1
-	@caption Sündmuste toolbar 
+	@caption Sündmuste toolbar
 
 	@property event_list type=calendar no_caption=1
 	@caption Tegevused
 
 
 @default group=add_event
-	
 	@property add_event callback=callback_get_add_event store=no
 	@caption Lisa sündmus
 
-@default group=files
 
+@default group=files
 	@property files_tb type=toolbar no_caption=1 store=no
 
 	@layout files_lay type=hbox width=20%:80%
-
 		@layout files_left_lay type=vbox parent=files_lay
+
 		@layout files_tree_lay closeable=1 type=vbox area_caption=Projekti&nbsp;dokumendid parent=files_left_lay
 			@property files_tree type=treeview store=no no_caption=1 parent=files_tree_lay
-		
+
 		@layout files_find_lay closeable=1 type=vbox area_caption=Dokumentide&nbsp;otsing parent=files_left_lay
 			@property files_find_name type=textbox parent=files_find_lay size=27 captionside=top
 			@caption Nimi
+
 			@property files_find_comment type=textbox parent=files_find_lay size=27 captionside=top
 			@caption Kirjeldus
+
 			@property files_find_type type=select parent=files_find_lay captionside=top
 			@caption T&uuml;&uuml;p
+
 			@property files_search_sbt type=submit captionside=top parent=files_find_lay no_caption=1
-			@caption Otsi	
-	
+			@caption Otsi
+
 		@property files_table type=table store=no no_caption=1 parent=files_lay
 
-@default group=trans
 
+@default group=trans
 	@property trans type=translator store=no props=name
 	@caption Tõlkimine
 
-@default group=sides
 
+@default group=sides
 	@property sides_tb type=toolbar no_caption=1
 
 	@property sides type=table store=no no_caption=1
@@ -168,8 +168,8 @@ caption Teostajad
 
 	@property sides_conflict type=table store=no no_caption=1
 
-@default group=userdefined
 
+@default group=userdefined
 	@property user1 type=textbox table=aw_projects field=aw_user1 user=1
 	@caption User-defined textbox 1
 
@@ -203,85 +203,61 @@ caption Teostajad
 	@property userclassif1 type=classificator reltype=RELTYPE_CLF1 table=aw_projects field=aw_userclf1 user=1
 	@caption User-defined classificator 1
 
-	@property controller_disp type=text store=no 
+	@property controller_disp type=text store=no
 	@caption Kontrolleri v&auml;ljund
 
-@default group=team
 
+@default group=team
 	@property team_tb type=toolbar no_caption=1 store=no
 
 	@layout team type=hbox width=20%:80%
-
-		@layout team_left parent=team type=vbox 
-	
+		@layout team_left parent=team type=vbox
 			@layout team_tree parent=team_left closeable=1 type=vbox area_caption=Meeskond
+
 			@property team_team_tree type=treeview store=no no_caption=1 parent=team_tree
-				
+
 			@layout team_search parent=team_left closeable=1 type=vbox area_caption=Isikute&nbsp;otsing
+
 			@property team_search_co type=textbox captionside=top parent=team_search size=22
 			@caption Firma
-	
+
 			@property team_search_person type=textbox captionside=top parent=team_search size=22
 			@caption Isik
-	
+
 			@property hidden_team type=hidden parent=team_search no_caption=1
-	
+
 			@property team_search_sbt type=submit captionside=top parent=team_search no_caption=1
 			@caption Otsi
 
 		@layout team_r parent=team type=vbox
-
-			property team_search_res type=table no_caption=1 parent=team_r
 			@property team type=table no_caption=1 store=no parent=team_r
 
-	property team_team_tb type=toolbar no_caption=1 store=no
-
-	layout team_team_l type=hbox width=20%:80%
-
-
-		property team_team_tbl type=table store=no no_caption=1 parent=team_team_l
 
 @default group=goals_edit
-
 	@property goal_tb type=toolbar no_caption=1
 
 	@layout goal_vb type=hbox width="20%:80%"
-
 		@layout goal_tree_lay type=vbox closeable=1 area_caption=Eesm&auml;rgid parent=goal_vb
-
 			@property goal_tree type=treeview parent=goal_vb no_caption=1 parent=goal_tree_lay
 
 		@property goal_table type=table parent=goal_vb no_caption=1
 
 
-@default group=goals_gantt 
-
+@default group=goals_gantt
 	@property goals_gantt type=text store=no no_caption=1
 
 @default group=transl
-	
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
 @default group=strat
-	
 	@property strat_tb type=toolbar store=no no_caption=1
 	@property strat type=table store=no no_caption=1
 
-@default group=strat_a
-
-	property strat_a_tb type=toolbar store=no no_caption=1
-	property strat_a type=table no_caption=1 store=no
-
 @default group=risks
-
 	@property risks_tb type=toolbar store=no no_caption=1
 	@property risks type=table store=no no_caption=1
 
-@default group=risks_eval
-
-	property risks_eval_tb type=toolbar no_caption=1 store=no
-	property risks_eval type=table no_caption=1 store=no
 
 @default group=req,req_process
 
@@ -291,23 +267,15 @@ caption Teostajad
 
 		@layout req_tree_l type=vbox parent=req_l closeable=1 no_padding=1 area_caption=N&otilde;uded&nbsp;puu&nbsp;kujul
 		@property req_tree type=treeview store=no no_caption=1 parent=req_tree_l
-		
+
 		@layout req_tbl_l type=vbox parent=req_l no_padding=1
 		@property req_tbl type=table store=no no_caption=1 parent=req_tbl_l
-	
-@default group=analysis
-
-	property analysis_tb type=toolbar no_caption=1 store=no
-	property analysis_table type=table no_caption=1 store=no
 
 
 @default group=stats
-
-	@property proj_price type=textbox table=objects field=meta method=serialize
-	@caption Projekti hind
-
 	@property stats type=text store=no
 	@caption T&ouml;&ouml;tunnid
+
 
 @groupinfo general2 parent=general caption="&Uuml;ldandmed"
 	@groupinfo info_t caption="Lisainfo" parent=general
@@ -316,50 +284,24 @@ caption Teostajad
 	@groupinfo web_settings parent=general caption="Veebiseadistused"
 	@groupinfo sides parent=general caption="Konfliktianal&uuml;&uuml;s" submit=no
 	@groupinfo userdefined caption="Kasutaja defineeritud andmed" parent=general
-
-
-
-	groupinfo prj_image parent=general caption="Pilt"
-	@groupinfo participants parent=general caption="Osalejad"
-
-
+@groupinfo participants parent=general caption="Osalejad"
 @groupinfo event_list caption="Tegevused" submit=no
-
 	@groupinfo goals_edit caption="Muuda" parent=event_list submit=no
 	@groupinfo goals_gantt caption="Vaata" parent=event_list submit=no
-
-groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no
-
-@groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no parent=event_list
+	@groupinfo event_list_cal caption="Tegevused kalendaarselt" submit=no parent=event_list
+	@groupinfo req caption="N&otilde;uded" submit=no parent=event_list
+	@groupinfo req_process caption="N&otilde;uded protsessidega" submit=no parent=event_list
+	@groupinfo stats caption="Statistika" submit=no parent=event_list
 @groupinfo event_list_premise caption="Tegevused eeldustegevuste põhiselt" submit=no
-
-	@groupinfo info caption="Projekti info"
-
-	
-
-
+@groupinfo info caption="Projekti info"
 @groupinfo valuation caption="Hindamine" submit=no
-	groupinfo strat_a caption="Eesm&auml;rkide hindamine" parent=valuation submit=no
 	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=valuation store=no submit=no
-	groupinfo analysis caption="Anal&uuml;&uuml;sid" parent=valuation store=no submit=no
-	groupinfo risks_eval caption="Riskide hindamine" parent=valuation submit=no
-	
 @groupinfo add_event caption="Muuda sündmust"
 @groupinfo files caption="Dokumendid" submit=no
 @groupinfo trans caption="Tõlkimine"
-
 @groupinfo team caption="Meeskond" submit=no
-
-	groupinfo team caption="Meeskond" parent=team
-	groupinfo team_team caption="Tiimid" parent=team submit=no
-	
-groupinfo risks_t caption="Riskid"
-
-@groupinfo req caption="N&otilde;uded" submit=no parent=event_list
-@groupinfo req_process caption="N&otilde;uded protsessidega" submit=no parent=event_list
-@groupinfo stats caption="Statistika" submit=no parent=event_list
-
 @groupinfo transl caption=T&otilde;lgi
+
 
 @reltype SUBPROJECT clid=CL_PROJECT value=1
 @caption alamprojekt
@@ -440,7 +382,7 @@ class project extends class_base
 			"clid" => CL_PROJECT,
 			"tpldir" => "applications/groupware/project",
 		));
-		
+
 		lc_site_load("project",&$this);
 
 		$this->event_entry_classes = array(CL_CALENDAR_EVENT, CL_STAGING, CL_CRM_MEETING, CL_TASK, CL_CRM_CALL, CL_PARTY, CL_COMICS);
@@ -478,7 +420,7 @@ class project extends class_base
 			case "impl_table":
 				$this->_impl_table($arr);
 				break;
-/*				
+/*
 			case "analysis_tb":
 			case "analysis_table":
 				static $ib;
@@ -665,7 +607,7 @@ class project extends class_base
 							}
 						}
 					}
-					
+
 				}
 				/*
 				$ord = $arr["obj_inst"]->prop("orderer");
@@ -705,7 +647,7 @@ class project extends class_base
 							}
 						}
 					}
-					
+
 				}
 				/*
 				$ord = $arr["obj_inst"]->prop("implementor");
@@ -911,18 +853,18 @@ class project extends class_base
 					$this->do_create_task = 1;
 				}
 				break;
-			
+
 			case "orderer":
 			case "implementor":
 			case "implementor_person":
 				if ($arr["request"]["connect_orderer"] && $prop["name"] == "orderer")
 				{
 					$prop["value"] = $arr["request"]["connect_orderer"];
-				}		
+				}
 				if ($arr["request"]["connect_impl"] && $prop["name"] == "implementor")
 				{
 					$prop["value"] = $arr["request"]["connect_impl"];
-				}		
+				}
 				if (count(explode(",", $prop["value"])) > 1)
 				{
 					$prop["value"] = $this->make_keys(explode(",", $prop["value"]));
@@ -1005,7 +947,7 @@ class project extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	////
 	// !Optionally this also needs to support date range ..
@@ -1041,7 +983,7 @@ class project extends class_base
 		};
 
 		$this->overview = array();
-		
+
 		$this->used = array();
 
 		$parents = array($o->id());
@@ -1062,7 +1004,7 @@ class project extends class_base
 				};
 			};
 		};
-		
+
 		// aga vaat siin on mingi jama ..
 		$ol = new object_list(array(
 //			"parent" => $parents,
@@ -1104,7 +1046,7 @@ class project extends class_base
 				$end = $o->prop("end");
 			}
 			$clid = $o->class_id();
-			
+
 			$clinf = $clss[$clid];
 
 			$link = $this->mk_my_orb("change",array("id" => $id,"return_url" => $req),$clid);
@@ -1145,7 +1087,7 @@ class project extends class_base
 						),
 					));
 				}
-			}			
+			}
 
 			if ($start > $range["overview_start"])
 			{
@@ -1291,7 +1233,7 @@ class project extends class_base
 			print "lang = " . $o->lang();
 			print "<br>";
 		};
-		
+
 		aw_disable_acl();
 		$ol = new object_list(array(
 			"brother_of" => 5602,
@@ -1323,7 +1265,7 @@ class project extends class_base
 		die();
 
 	}
-	
+
 	function get_event_sources($id)
 	{
 		$o = new object($id);
@@ -1430,7 +1372,7 @@ class project extends class_base
 		$active_lang_only = aw_ini_get("project.act_lang_only");
 
 		$q = "
-			SELECT 
+			SELECT
 				objects.oid AS id,
 				objects.parent,
 				objects.class_id,
@@ -1456,9 +1398,9 @@ class project extends class_base
 			{
 				$_start = mktime(23, 59, 59, 12, 12, 2020);
 			}
-			$_start = 
+			$_start =
 			$q = "
-			SELECT 
+			SELECT
 				objects.oid AS id,
 				objects.parent,
 				objects.class_id,
@@ -1512,15 +1454,15 @@ class project extends class_base
 
 				continue;
 			};
-			
+
 			$projects[$row["parent"]] = $row["parent"];
-			
+
 			$project_name = $pr_obj->name();
 
 			// koostan nimekirja asjadest, mida mul vaja on? ja edasi on vaja
 			// nimekirja piltidest
 
-		
+
 			$prid = $pr_obj->id();
 
 			// mida fakki .. miks see asi NII on?
@@ -1565,7 +1507,7 @@ class project extends class_base
 			$ids[$e_obj->brother_of()] = $e_obj->brother_of();
 
 			$by_parent[$event_parent][] = $event_brother;
-			
+
 
 			/*if (++$limit_counter >= $limit_num && $limit_num)
 			{
@@ -1576,7 +1518,7 @@ class project extends class_base
 
 		$pr_list = new object_list(array(
 			"class_id" => CL_PROJECT,
-		));	
+		));
 
 		$pr_data = $pr_list->names();
 
@@ -1659,7 +1601,7 @@ class project extends class_base
 			/*
 			if (aw_global_get("uid") == "meff")
 			{
-				// nii, aga mind huvitab see, et kas mul on seos olemas aktiivse keele jaoks 
+				// nii, aga mind huvitab see, et kas mul on seos olemas aktiivse keele jaoks
 
 				// ja mida ma teen, kui ei ole? Kuidas ma saan selle õige asja leida?
 				$o1 = new object($conn["from"]);
@@ -1693,10 +1635,10 @@ class project extends class_base
 				//$tmp = array_merge($tmp,$tmp["trans"][$lc]);
 				// video is always connected to the original project, but when showing
 				// the event, I need to show the translated caption and not the original
-				$project_videos[$conn["from"]][] = $tmp; 
+				$project_videos[$conn["from"]][] = $tmp;
 
 			};
-			
+
 			if (is_array($projects))
 			{
 				foreach($projects as $project_id)
@@ -1720,7 +1662,7 @@ class project extends class_base
 			));
 
 			$t_img = get_instance(CL_IMAGE);
-		
+
 
 			foreach($conns as $conn)
 			{
@@ -1777,7 +1719,7 @@ class project extends class_base
 				$events[$key]["project_weblink"] =  $baseurl . "/" . $web_page_id;
 				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
 			};
-			
+
 			if ($web_pages[$event["pr"]])
 			{
 				$web_page_id = $web_pages[$event["pr"]];
@@ -1785,7 +1727,7 @@ class project extends class_base
 				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
 				//$events[$key]["project_name_ucase"] = $pr_data[$event["pr"]];
 			};
-			
+
 			if ($project_images[$event["id"]])
 			{
 				$events[$key]["first_image"] = $project_images[$event["id"]];
@@ -1805,7 +1747,7 @@ class project extends class_base
 
 			};
 		};
-		
+
 		if (sizeof($events) > 0)
 		{
 			$mpr = $this->get_master_project($o,$level);
@@ -1814,13 +1756,13 @@ class project extends class_base
 			$this->prj_levels[$mpr->id()] = $this->prj_level;
 			$this->prj_level++;
 
-	
+
 			$this->used = array();
 			$prj_levels = $this->prj_levels;
 
 
 			$this->_recurse_projects2($mpr->id());
-			
+
 
 			// aaah, see on see bloody brother_list ju
 
@@ -1829,7 +1771,7 @@ class project extends class_base
 				"brother_of" => $ids,
 				"lang_id" => array(),
 			));
-		
+
 
 
 			// how does it work? Events will be assigned to multiple projects
@@ -1840,10 +1782,10 @@ class project extends class_base
 			// the path of from the root project is
 
 			// so I create a tree of all projects and assign a level number to
-			// each. 
+			// each.
 
 			// then a list of all brothers of an event is created, which will
-			// yield a list of project id's which is then matched against the 
+			// yield a list of project id's which is then matched against the
 			// project level numbers - and this gives us the desired result
 
 			enter_function("find-parent");
@@ -1878,7 +1820,7 @@ class project extends class_base
 	////
 	// !connects an event to a project
 	// id - id of the project
-	// event_id - id of the event 
+	// event_id - id of the event
 	function connect_event($arr)
 	{
 		$evt_obj = new object($arr["event_id"]);
@@ -1896,7 +1838,7 @@ class project extends class_base
 		#$evt_obj = new object($arr["event_id"]);
 		#$evt_obj->delete();
 		// deleting is broken now until I can figure out something
-		//$evt_obj 
+		//$evt_obj
 		/*
 		$prj_obj = new object($arr["id"]);
 		$prj_obj->disconnect(array(
@@ -2041,7 +1983,7 @@ class project extends class_base
 		{
 			$forms[$form_connection->prop("to")] = $form_connection->prop("to.name");
 		};
-					
+
 		$cl_inf = aw_ini_get("classes");
 		$adds = array(CL_STAGING, CL_TASK, CL_CRM_CALL, CL_CRM_MEETING);
 
@@ -2060,7 +2002,7 @@ class project extends class_base
 				{
 					$level++;
 					// if first level projects are configured with skip_subproject_events off
-					// then a brother of the added event is created under that first level 
+					// then a brother of the added event is created under that first level
 					// project
 					$use_parent = $parent == 0 ? "subprj" : $parent;
 					$pro = new object($prj_id);
@@ -2220,7 +2162,7 @@ class project extends class_base
 
 		/*
 			1. how do I access that information
-			2. 
+			2.
 
 
 
@@ -2280,7 +2222,7 @@ class project extends class_base
 			return false;
 		};
 		$this->done[$parent] = 1;
-			
+
 		$this->_ptree[$parent] = $this->level;
 		$this->level++;
 
@@ -2350,13 +2292,13 @@ class project extends class_base
 			$this->prj_level--;
 		}
 	}
-	
+
 	function callback_get_add_event($args = array())
 	{
 		// yuck, what a mess
 		$obj = $args["obj_inst"];
 		$meta = $obj->meta();
-		
+
 		$event_folder = $obj->id();
 
 		// use the config form specified in the request url OR the default one from the
@@ -2393,7 +2335,7 @@ class project extends class_base
 		};
 
 		$res_props = array();
-			
+
 		// nii - aga kuidas ma lahenda probleemi sündmuste panemisest teise kalendrisse?
 		// see peaks samamoodi planneri funktsionaalsus olema. wuhuhuuu
 
@@ -2415,7 +2357,7 @@ class project extends class_base
 			}
 			else
 			{
-				// 1 - get an instance of that class, for this I need to 
+				// 1 - get an instance of that class, for this I need to
 				aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 				$tmp = aw_ini_get("classes");
 				$clfile = $tmp[$clid]["file"];
@@ -2427,7 +2369,7 @@ class project extends class_base
 					$emb_group = $args["request"]["cb_group"];
 				};
 				$this->emb_group = $emb_group;
-			
+
 				$t->id = $this->event_id;
 
 				$all_props = $t->get_property_group(array(
@@ -2459,7 +2401,7 @@ class project extends class_base
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cfgform]","value" => $event_cfgform);
 				if ($this->event_id)
 				{
-					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);	
+					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);
 				};
 			};
 		}
@@ -2515,7 +2457,7 @@ class project extends class_base
 		{
 			if (empty($emb["id"]))
 			{
-				$emb["parent"] = $event_folder; 
+				$emb["parent"] = $event_folder;
 			};
 		};
 		if (isset($emb["group"]))
@@ -2760,7 +2702,7 @@ class project extends class_base
 			$DUKE = 1;
 		};
 		*/
-		
+
 		/*
 			[15:17] <terryf_home> ongi sihuke kood
 			[15:17] <terryf_home>   if ($arr["from"] && $arr["from.class_id"] && $arr["type"])
@@ -2772,7 +2714,7 @@ class project extends class_base
 			[15:18] <duke> oki, loen siis kõik seosed ja võtan ise need mis mul vaja on
 		*/
 
-		
+
 		$c = new connection();
 		$conns = $c->find(array(
 			"from" => $prj_obj->id(),
@@ -2813,7 +2755,7 @@ class project extends class_base
 				$first = false;
 			};
 		};
-		
+
 		$view_navigator = "";
 
 
@@ -2905,7 +2847,7 @@ class project extends class_base
 
 		return $tmp;
 	}
-	
+
 	function get_event_overview($arr)
 	{
 		// saan ette project id, alguse ja lõpu
@@ -2953,8 +2895,8 @@ class project extends class_base
 			"name" => "new_goal",
 			"parent" => "new",
 			"link" => html::get_new_url(
-				CL_PROJECT_GOAL, 
-				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				CL_PROJECT_GOAL,
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
 				array("return_url" => get_ru())
 			),
 			"text" => t("Verstapost"),
@@ -2968,8 +2910,8 @@ class project extends class_base
 			"name" => "new_event",
 			"parent" => "new",
 			"link" => html::get_new_url(
-				CL_TASK, 
-				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				CL_TASK,
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
 				array(
 					"return_url" => get_ru(),
 					"alias_to_org" => $ord,
@@ -2983,8 +2925,8 @@ class project extends class_base
 			"name" => "new_call",
 			"parent" => "new",
 			"link" => html::get_new_url(
-				CL_CRM_CALL, 
-				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				CL_CRM_CALL,
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
 				array(
 					"return_url" => get_ru(),
 					"alias_to_org" => $ord,
@@ -2998,8 +2940,8 @@ class project extends class_base
 			"name" => "new_meeting",
 			"parent" => "new",
 			"link" => html::get_new_url(
-				CL_CRM_MEETING, 
-				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				CL_CRM_MEETING,
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
 				array(
 					"return_url" => get_ru(),
 					"alias_to_org" => $ord,
@@ -3051,7 +2993,7 @@ class project extends class_base
 		// now make tree, based on predicate tasks
 		$tv =& $arr["prop"]["vcl_inst"];
 		$tv->start_tree(array(
-			"type" => TREE_DHTML, 
+			"type" => TREE_DHTML,
 			"persist_state" => true,
 			"tree_id" => "proj_goal_t",
 		));
@@ -3081,7 +3023,7 @@ class project extends class_base
 			}
 			if (!isset($ids[$pt]))
 			{
-				$pt = $arr["obj_inst"]->id();	
+				$pt = $arr["obj_inst"]->id();
 			}
 			$tv->add_item($pt, array(
 				"name" => $nm,
@@ -3133,14 +3075,14 @@ class project extends class_base
 		$this->_init_goal_table($t);
 
 		$parent = is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : new obj_predicate_compare(OBJ_COMP_NULL);
-		
+
 		$goals = new object_list(array(
 			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
 			"project" => $arr["obj_inst"]->id(),
 			"predicates" => $parent,
 			"brother_of" => new obj_predicate_prop("id")
 		));
-		
+
 		$goals = new object_list(array(
 			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
 //			"project" => $arr["obj_inst"]->id(),
@@ -3148,8 +3090,8 @@ class project extends class_base
 //			"predicates" => $parent,
 //			"brother_of" => new obj_predicate_prop("id")
 		));
-		
-		//kuna nüüd asi peaks toimuma nii et mis omab connectionit, on 
+
+		//kuna nüüd asi peaks toimuma nii et mis omab connectionit, on
 		foreach($arr["obj_inst"]->connections_to(array("type" => 4)) as $c)
 		{
 			$goals->add($c->prop("from"));
@@ -3186,7 +3128,7 @@ class project extends class_base
 		$subdivisions = ((int)6/$columns)*4;
 		$days = array ("P", "E", "T", "K", "N", "R", "L");
 		$column_length = 86400;
-		
+
 		if($arr["request"]["units"] == "months")
 		{
 			$days = array (t("Jaanuar"), t("Veebruar"), t("M&auml;rts"), t("Aprill"), t("Mai"), t("Juuni"), t("Juuli"), t("August"), t("September"), t("Oktoober"), t("November"), t("Detsember"));
@@ -3194,7 +3136,7 @@ class project extends class_base
 			$subdivisions = (int)(10/$columns)*3;
 			$column_length = 86400*30.5;
 		}
-		
+
 		if($arr["request"]["units"] == "weeks")
 		{
 			$days = array();
@@ -3207,7 +3149,7 @@ class project extends class_base
 			$subdivisions = (int)(4/$columns)*7;
 			$column_length = 86400*7;
 		}
-		
+
 		// get all goals/tasks
 		$ot = new object_tree(array(
 			"parent" => $arr["obj_inst"]->id(),
@@ -3234,7 +3176,7 @@ class project extends class_base
 				)
 			));
 		}
-		
+
 		foreach ($gt_list->arr() as $gt)
 		{
 			$start = $gt->prop ("start1");
@@ -3267,7 +3209,7 @@ class project extends class_base
 
 		### define columns
 		$i = 0;
-		
+
 		while ($i < $columns)
 		{
 			$day_start = ($range_start + ($i * 86400));
@@ -3292,7 +3234,7 @@ class project extends class_base
 			$uri = aw_url_change_var ("mrp_chart_length", 1);
 			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
 			$chart->define_column (array (
-				"title" => $title,	
+				"title" => $title,
 				"col" => ($i + 1),
 				"uri" => $uri,
 			));
@@ -3304,7 +3246,7 @@ class project extends class_base
 			"units" => $arr["request"]["units"],
 			"start" => $range_start,
 		));
-		
+
 		return $links.'<br>'.$chart->draw_chart ();
 	}
 
@@ -3402,7 +3344,7 @@ class project extends class_base
 				"caption" => t("P&auml;evad"),
 			));
 		}
-		
+
 		if($units == "weeks")
 		{
 			$links.= " <b>". t("N&auml;dalad")."</b>";
@@ -3423,7 +3365,7 @@ class project extends class_base
 				"caption" => t("N&auml;dalad"),
 			));
 		}
-		
+
 		if($units == "months")
 		{
 			$links.= " <b>". t("Kuud")."</b>";
@@ -3481,25 +3423,25 @@ class project extends class_base
 	{
 		$this->db_query("
 			create table aw_projects(
-				aw_oid int primary key, 
-				aw_state int, 
-				aw_start int, 
-				aw_end int, 
-				aw_deadline int, 
-				aw_doc int, 
+				aw_oid int primary key,
+				aw_state int,
+				aw_start int,
+				aw_end int,
+				aw_deadline int,
+				aw_doc int,
 				aw_skip_subproject_events int,
-				aw_project_navigator int, 
-				aw_use_template int, 
-				aw_doc_id int, 
-				aw_user1 varchar(255), 
+				aw_project_navigator int,
+				aw_use_template int,
+				aw_doc_id int,
+				aw_user1 varchar(255),
 				aw_user2 varchar(255),
 				aw_user3 varchar(255),
 				aw_user4 varchar(255),
 				aw_user5 varchar(255),
-				aw_userch1 int, 
-				aw_userch2 int, 
-				aw_userch3 int, 
-				aw_userch4 int, 
+				aw_userch1 int,
+				aw_userch2 int,
+				aw_userch3 int,
+				aw_userch4 int,
 				aw_userch5 int
 		)");
 		$q = "SELECT * FROM objects WHERE class_id = ".CL_PROJECT." AND status > 0";
@@ -3546,7 +3488,7 @@ class project extends class_base
 	function _sides_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		
+
 		// add, search, del
 		$tb->add_menu_button(array(
 			"name" => "add",
@@ -3557,8 +3499,8 @@ class project extends class_base
 			"parent" => "add",
 			"text" => t("Isik"),
 			"link" => html::get_new_url(
-				CL_CRM_PERSON, 
-				$arr["obj_inst"]->id(), 
+				CL_CRM_PERSON,
+				$arr["obj_inst"]->id(),
 				array(
 					"return_url" => get_ru(),
 					"alias_to" => $arr["obj_inst"]->id(),
@@ -3570,8 +3512,8 @@ class project extends class_base
 			"parent" => "add",
 			"text" => t("Organisatsioon"),
 			"link" => html::get_new_url(
-				CL_CRM_COMPANY, 
-				$arr["obj_inst"]->id(), 
+				CL_CRM_COMPANY,
+				$arr["obj_inst"]->id(),
 				array(
 					"return_url" => get_ru(),
 					"alias_to" => $arr["obj_inst"]->id(),
@@ -3691,12 +3633,12 @@ class project extends class_base
 			"value" => t("Vali")
 		));
 		$content .= $this->mk_reforb("save_pop_s_res", array("id" => $_GET["id"]));
-		
+
 
 		$html .= html::form(array(
 			"method" => "POST",
 			"action" => "orb.aw",
-			"content" => $content 
+			"content" => $content
 		));
 
 		return $html;
@@ -3803,17 +3745,17 @@ class project extends class_base
 				"to_org" => $to,
 				"to_project" => $arr["obj_inst"]->id()
 			), "crm_role_manager");
-	
+
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
 				"lang_id" => array(),
 				"site_id" => array(),
 				"company" => $from,
-				"client" => $to, 
+				"client" => $to,
 				"project" => $arr["obj_inst"]->id(),
 				"person" => $o->id()
 			));
-			
+
 
 			$rs = array();
 			foreach($ol->arr() as $role_entry)
@@ -3883,7 +3825,7 @@ class project extends class_base
 		));
 
 		$t->define_chooser(array(
-			"name" => "res_sel",	
+			"name" => "res_sel",
 			"field" => "oid"
 		));
 	}
@@ -3924,7 +3866,7 @@ class project extends class_base
 					"reltype" => "RELTYPE_TEAM_MEMBER"
 				));
 		}
-		
+
 		return aw_url_change_var("no_search",1,$arr["post_ru"]);
 		return $arr["post_ru"];
 	}
@@ -3978,7 +3920,7 @@ class project extends class_base
 		$o->set_prop("customer", $ord);
 		$o->set_prop("project", $arr["obj_inst"]->id());
 		$o->save();
-		
+
 		$arr["obj_inst"]->connect(array(
 			"to" => $o->id(),
 			"reltype" => "RELTYPE_PRJ_EVENT"
@@ -4148,7 +4090,7 @@ class project extends class_base
 		$t = new vcl_table(array(
 			"layout" => "generic",
 		));
-		
+
 		$t->define_field(array(
 			"caption" => t("Nimi"),
 			"name" => "name",
@@ -4230,7 +4172,7 @@ class project extends class_base
 					$o->set_class_id($entry["type"]);
 					$o->set_name($entry["tx_name"] != "" ? $entry["tx_name"] : $_FILES["fups_$num"]["name"]);
 
-			
+
 					$o->set_parent($fldo->id());
 					if ($entry["type"] != CL_FILE)
 					{
@@ -4270,8 +4212,8 @@ class project extends class_base
 
 	/**
 		@attrib name=del_file_rel
-		@param fid required 
-		@param return_url optional 
+		@param fid required
+		@param return_url optional
 	**/
 	function del_file_rel($arr)
 	{
@@ -4570,7 +4512,7 @@ class project extends class_base
 			"action" => "del_goals",
 			"tooltip" => t("Kustuta"),
 		));
-		
+
 	}
 
 	function _risks_eval_tb($arr)
@@ -4589,7 +4531,7 @@ class project extends class_base
 			"action" => "del_goals",
 			"tooltip" => t("Kustuta"),
 		));
-		
+
 	}
 
 	function _init_strat_a_t(&$t)
@@ -4746,7 +4688,7 @@ class project extends class_base
 				$go->save();
 			}
 		}
-		
+
 		unset($_SESSION["proj_cut_goals"]);
 		unset($_SESSION["proj_cut_from"]);
 		return $arr["post_ru"];
@@ -4828,7 +4770,7 @@ class project extends class_base
 			$project = obj($arr["id"]);
 			foreach(safe_array($arr["sel"]) as $mem_id)
 			{
-				$project->disconnect(array("from" => $mem_id));	
+				$project->disconnect(array("from" => $mem_id));
 			}
 		}
 		//kustutab meeskonnaliikmed meeskonnast
@@ -4851,12 +4793,12 @@ class project extends class_base
 		$_SESSION["proj_cut_files"] = $arr["sel"];
 		return $arr["post_ru"];
 	}
-	
+
 	/**
 		@attrib name=paste_files
 	**/
 	function paste_files($arr)
-	{	
+	{
 		$pt = $arr["tf"];
 		if (!$arr["tf"])
 		{
@@ -4874,7 +4816,7 @@ class project extends class_base
 		unset($_SESSION["proj_cut_files"]);
 		return $arr["post_ru"];
 	}
-		
+
 	function _init_orderer_table(&$t)
 	{
 		$t->define_chooser(array(
@@ -4920,7 +4862,7 @@ class project extends class_base
 				"phone" => html::obj_change_url($c->prop("phone")),
 				"contact" => html::obj_change_url($c)
 			));
-			
+
 			else
 			$t->define_data(array(
 				"oid" => $c->id(),
@@ -4968,7 +4910,7 @@ class project extends class_base
 		}
 		foreach($arr["obj_inst"]->connections_from(array("type" => 2)) as $c)
 		{
-			$c = $c->to();			
+			$c = $c->to();
 			if($c->class_id() == CL_CRM_PERSON)
 			$t->define_data(array(
 				"oid" => $c->id(),
@@ -4976,7 +4918,7 @@ class project extends class_base
 				"phone" => html::obj_change_url($c->prop("phone")),
 				"contact" => html::obj_change_url($c)
 			));
-			
+
 			else
 			$t->define_data(array(
 				"oid" => $c->id(),
@@ -5058,7 +5000,7 @@ class project extends class_base
 			"name" => "cust",
 			"text" => t("Tellija"),
 		));
-		
+
 		$tb->add_menu_item(array(
 			"parent" => "cust",
 			"text" => t("Organisatsioon"),
@@ -5093,7 +5035,7 @@ class project extends class_base
 			"link" => html::get_new_url(CL_CRM_COMPANY, $arr["obj_inst"]->parent(), array(
 				"return_url" => get_ru(),
 				"alias_to" => $arr["obj_inst"]->id(),
-				"reltype" => 2 
+				"reltype" => 2
 			)),
 		));
 		$tb->add_menu_item(array(
@@ -5110,14 +5052,14 @@ class project extends class_base
 			"parent" => "new",
 			"name" => "expl",
 			"text" => t("Teostaja"),
-		));	
+		));
 		$tb->add_menu_item(array(
 			"parent" => "expl",
 			"text" => t("Organisatsioon"),
 			"link" => html::get_new_url(CL_CRM_COMPANY, $arr["obj_inst"]->parent(), array(
 				"return_url" => get_ru(),
 				"alias_to" => $arr["obj_inst"]->id(),
-				"reltype" => 10 
+				"reltype" => 10
 			)),
 		));
 		$tb->add_menu_item(array(
@@ -5135,12 +5077,12 @@ class project extends class_base
 			"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cur_co->name()),
 			"parent" => "part",
 			"link" => html::get_new_url(CL_CRM_PERSON, $cur_co->id(), array(
-				"return_url" => get_ru(), 
+				"return_url" => get_ru(),
 				"add_to_task" => $arr["obj_inst"]->id(),
 				"add_to_co" => $cur_co->id()
 			))
 		));
-*/		
+*/
 /*		$tb->add_menu_item(array(
 			"parent" => "new",
 			"text" => t("Teostaja"),
@@ -5202,7 +5144,7 @@ class project extends class_base
 			"action" => "delete_rels"
 		));
 	}
-	
+
 	/**
 	@attrib name=delete_rels
 	**/
@@ -5283,10 +5225,10 @@ class project extends class_base
 
 		$hrs_price = $tot_h * 500;
 
-		$res .= "Projekti kasum: ".($o->prop("proj_price") - $hrs_price)." <br>";		
+		$res .= "Projekti kasum: ".($o->prop("proj_price") - $hrs_price)." <br>";
 
 		return $res;
-	}	
+	}
 
 	/**
 		@attrib name=export_req
@@ -5295,7 +5237,7 @@ class project extends class_base
 	{
 		$o = obj($arr["id"]);
 		if (!$arr["tf"] && !$arr["proc"])
-		{	
+		{
 			return;
 		}
 
