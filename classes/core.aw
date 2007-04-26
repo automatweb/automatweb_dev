@@ -59,7 +59,7 @@ class core extends acl_base
 		return $this->$key;
 	}
 
-	/** This function writes an entry to the aw syslog table. This is automatically called for most actions, via classbase, but if you perform any special actions in your class, that should be logged, then use this function to log the action. 
+	/** This function writes an entry to the aw syslog table. This is automatically called for most actions, via classbase, but if you perform any special actions in your class, that should be logged, then use this function to log the action.
 
 		@attrib api=1
 
@@ -70,21 +70,21 @@ class core extends acl_base
 			Log action type. The actions are defined in the ini file, in the syslog.actions array. The action specifies, what was done - for instance, change/add/delete. The prefix for syslog actions is SA_, for instance SA_ADD
 
 		@param text required type=string
-			the text of the log message. 
+			the text of the log message.
 
-		@param oid optional type=int 
-			defaults to 0 The object id of the object this action is about. 
+		@param oid optional type=int
+			defaults to 0 The object id of the object this action is about.
 
 		@param honor_ini optional type=bool
-			if set to true, the disable logging ini setting will be ignored. 
-	
+			if set to true, the disable logging ini setting will be ignored.
+
 		@comment
 			The logging can be disabled by the ini setting logging_disabled
 
 		@errors
 			none
 
-		@returns 
+		@returns
 			none
 
 		@examples
@@ -157,11 +157,11 @@ return; // TEMP
 		}
 	}
 
-	/** Converts the given timestamp to text format. 
+	/** Converts the given timestamp to text format.
 		@attrib api=1
 
 		@param timestamp required
-			The unix timestamp to convert to text format. 
+			The unix timestamp to convert to text format.
 
 		@param format optional
 			The date format string identifier, from the ini file. These are defined in config.date_formats
@@ -419,7 +419,7 @@ return; // TEMP
 				{
 					return;
 				};
-				// siia tuleb tekitada mingi if lause, mis 
+				// siia tuleb tekitada mingi if lause, mis
 				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja v&auml;lja
 				if (sizeof($parser["parserchain"] > 0))
 				{
@@ -491,23 +491,23 @@ return; // TEMP
 		};
 	}
 
-	/** Signals an error condition, displays it to the user if specified, sends an e-mail to the vead@struktuur.ee mailinglists and registers the error in the aw.struktuur.ee bugtrack. All relavant variables and a backtrace are displayed. If specified, also halts execution. 
+	/** Signals an error condition, displays it to the user if specified, sends an e-mail to the vead@struktuur.ee mailinglists and registers the error in the aw.struktuur.ee bugtrack. All relavant variables and a backtrace are displayed. If specified, also halts execution.
 		@attrib api=1
 
 		@param err_type required
-			The type of the error to throw. Error types are registered in the ini file, errors array. 
+			The type of the error to throw. Error types are registered in the ini file, errors array.
 
 		@param msg required
-			The error message. 
+			The error message.
 
 		@param fatal optional
-			If true, execution is halted after the error is displayed. Defaults to false. 
+			If true, execution is halted after the error is displayed. Defaults to false.
 
-		@param silent optional 
-			If true, error is not displayed to the user. It is still sent to the list and reported to the error server. Defaults to false. 
+		@param silent optional
+			If true, error is not displayed to the user. It is still sent to the list and reported to the error server. Defaults to false.
 
 		@param oid optional
-			If set, must contain the oid of the object that the error is about. 
+			If set, must contain the oid of the object that the error is about.
 
 	**/
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
@@ -808,7 +808,7 @@ return; // TEMP
 		@attrib api=1
 
 		@comment
-			This function is documented in the orb specification. 
+			This function is documented in the orb specification.
 
 			the idea is this that it determines itself whether we go through the site (index.aw)
 			or the orb (orb.aw) - for the admin interface
@@ -910,7 +910,7 @@ return; // TEMP
 		@attrib api=1
 
 		@comment
-			This function is documented in the orb specification. 
+			This function is documented in the orb specification.
 	**/
 	function mk_reforb($fun,$arr = array(),$cl_name = "")
 	{
@@ -984,10 +984,10 @@ return; // TEMP
 		return $this->mk_my_orb($fun,$arr,$cl_name);
 	}
 
-	/** Creates a link from the $args array and returns it. 
+	/** Creates a link from the $args array and returns it.
 
 		@param args optional type=array
-			An array of key => value pairs. These are inserted as key => value pairs in the result url. 
+			An array of key => value pairs. These are inserted as key => value pairs in the result url.
 
 		@param skip_empty optional type=bool
 			If true, empty values are not inserted into the result url.
@@ -1017,9 +1017,9 @@ return; // TEMP
 		// check if there is a default text
 		$gl = aw_global_get("gidlist_oid");
 		foreach($gl as $g_oid)
-		{	
+		{
 			$o = obj($g_oid);
-			
+
 			if ($o->prop("type") == 1 || $o->prop("type") == 3)
 			{
 				continue;
@@ -1064,10 +1064,19 @@ return; // TEMP
 				$chain = array(obj($admrm));
 			}
 
+			$set = false;
+
 			foreach($chain as $obj)
 			{
 				$name = $obj->name();
-				$name = !empty($name) ? $name : "(nimetu)";
+				$name = empty($name) ? t("(nimetu)") : $name;
+
+				if (!$set)
+				{
+					aw_global_set("site_title_path_obj_name", $name);
+					$set = true;
+				}
+
 				$path = html::href(array(
 					"url" => $this->mk_my_orb("right_frame",array(
 						"parent" => $obj->id(),
@@ -1075,7 +1084,7 @@ return; // TEMP
 					),"admin_menus"),
 					"caption" => strip_tags($name),
 				)) . " / " . $path;
-			};
+			}
 		}
 
 		if((aw_global_get("output_charset") != null) && (aw_global_get("charset") != aw_global_get("output_charset")))
@@ -1083,29 +1092,19 @@ return; // TEMP
 			$path = iconv(aw_global_get("charset"), aw_global_get("output_charset"), $path);
 			$text = iconv(aw_global_get("charset"), aw_global_get("output_charset"), $text);
 		}
-		$GLOBALS["site_title"] = $path.$text;
-		// find the bit after / in text
-		$sps = strrpos(strip_tags($text),"/");
-		if ($sps > 0)
-		{
-			$sps++;
-		}
 
-		$old = aw_global_get("title_action");
-		if (empty($old))
-		{
-			aw_global_set("title_action", substr(strip_tags($text),$sps));
-		};
+		$GLOBALS["site_title"] = $path.$text;
+
 		return $path;
 	}
 
-	/** Returns the contents of the given file. If file is not found, false is returned. 
+	/** Returns the contents of the given file. If file is not found, false is returned.
 		@attrib api=1
 
 		@param file required type=string
-			The full path of the file whose contents must be returned. 
+			The full path of the file whose contents must be returned.
 
-		@errors 
+		@errors
 			none
 
 		@examples
@@ -1138,19 +1137,19 @@ return; // TEMP
 		return $retval;
 	}
 
-	/** Writes a file. 
+	/** Writes a file.
 		@attrib api=1
 
 		@param file required type=string
-			The full path of the file to write to. 
+			The full path of the file to write to.
 
 		@param content requires type=string
-			The content of the file. 
+			The content of the file.
 
 		@errors
 			error is thrown if no file is given or file cannot be written to
 
-		@returns 
+		@returns
 			true if file was written
 
 		@examplex
@@ -1219,14 +1218,14 @@ return; // TEMP
 		@attrib api=1
 
 		@param str required type=string
-			The string to convert. 
+			The string to convert.
 
 		@errors
 			none
 
 		@returns
 			the given string, in hex character codes
-		
+
 		@examples
 			echo $this->binhex("abx"); // echos 616263
 			echo $this->hexbin($this->binhex("abc"));	// echos abc
@@ -1254,14 +1253,14 @@ return; // TEMP
 		@attrib api=1
 
 		@param str required type=string
-			The string to convert. 
+			The string to convert.
 
 		@errors
 			none
 
 		@returns
 			the given string, converted back to the original text
-		
+
 		@examples
 			echo $this->binhex("abx"); // echos 616263
 			echo $this->hexbin($this->binhex("abc"));	// echos abc
@@ -1421,7 +1420,7 @@ return; // TEMP
 	// (see on muiltiple select boxide jaoks abix)
 
 	// rootobj - mis objektist alustame
-	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1, $onlyact = -1, $make_path = true) 
+	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1, $onlyact = -1, $make_path = true)
 	{
 		enter_function("core::get_menu_list");
 
@@ -1487,10 +1486,10 @@ return; // TEMP
 			class for the action - default the current class
 
 		@param params optional type=array
-			params to the action 
+			params to the action
 
 		@param method optional type=string
-			the method to use when doing the function call - possible values: local / xmlrpc / (soap - not implemented yet) 
+			the method to use when doing the function call - possible values: local / xmlrpc / (soap - not implemented yet)
 
 		@param server optional type=string
 			if doing a rpc call, the server where to connect
@@ -1518,11 +1517,11 @@ return; // TEMP
 		@attrib api=1
 
 		@param arr required type=array
-			The array to convert. 
+			The array to convert.
 
 		@examples
 			$arr = array("a", "b", "c");
-			echo dbg::dump($arr);	
+			echo dbg::dump($arr);
 			// echos:
 			array(3) {
 			  [0]=>
@@ -1531,7 +1530,7 @@ return; // TEMP
 			  string(1) "b"
 			  [2]=>
 			  string(1) "c"
-			}	
+			}
 	**/
 	function make_keys($arr)
 	{

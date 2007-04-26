@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}" />
-<title>{VAR:title_action}{VAR:uid}@AutomatWeb</title>
+<title>{VAR:html_title} {VAR:title_action}</title>
 <link href="{VAR:baseurl}/automatweb/css/stiil.css" rel="stylesheet" type="text/css" />
 <!--[if lt IE 7]>
     <link rel="stylesheet" type="text/css" href="{VAR:baseurl}/automatweb/css/iefix.css" />
@@ -49,7 +49,7 @@ function generic_loader()
 {
 	// don't do anything. screw you.
 }
-	
+
 function check_generic_loader()
 {
 	if (generic_loader)
@@ -57,12 +57,12 @@ function check_generic_loader()
 		generic_loader();
 	}
 };
-		
+
 function generic_unloader()
 {
 	// don't do anything. screw you.
 }
-							
+
 function check_generic_unloader()
 {
 	if (generic_unloader)
@@ -106,16 +106,16 @@ window.onscroll = function ()
 	</div>
 	<div class="top-left-menyy">
 		<!-- SUB: SHOW_CUR_P -->
-		<a href="{VAR:cur_p_url}">{VAR:cur_p_name}</a> | 
+		<a href="{VAR:cur_p_url}">{VAR:cur_p_name}</a> |
 		<!-- END SUB: SHOW_CUR_P -->
 		<!-- SUB: SHOW_CUR_CO -->
-		<a href="{VAR:cur_co_url}">{VAR:cur_co_name}</a> | 
+		<a href="{VAR:cur_co_url}">{VAR:cur_co_name}</a> |
 		<!-- END SUB: SHOW_CUR_CO -->
 		<!-- SUB: SHOW_CUR_CO_VIEW -->
-		<a href="{VAR:cur_co_url_view}">{VAR:cur_co_name}</a> | 
+		<a href="{VAR:cur_co_url_view}">{VAR:cur_co_name}</a> |
 		<!-- END SUB: SHOW_CUR_CO_VIEW -->
 		<!-- SUB: SHOW_CUR_CLASS -->
-		{VAR:cur_class} | 
+		{VAR:cur_class} |
 		<!-- END SUB: SHOW_CUR_CLASS -->
 		<!-- SUB: SHOW_CUR_OBJ -->
 		<a href="{VAR:cur_obj_url}">{VAR:cur_obj_name}</a>

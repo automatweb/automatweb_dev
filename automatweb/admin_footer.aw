@@ -85,6 +85,12 @@ if ($pf_url == "")
 	$pf_url = aw_ini_get("baseurl")."/automatweb/";
 }
 
+$class_names = array(
+	"doc" => t("Dokument"),
+	"config" => t("Seaded"),
+);
+$cur_class = empty($clss[clid_for_name($_GET["class"])]["name"]) ? $class_names[$_GET["class"]] : $clss[clid_for_name($_GET["class"])]["name"];
+
 $sf->vars(array(
 	"prod_family" => $pf,
 	"prod_family_href" => $pf_url,
@@ -93,7 +99,7 @@ $sf->vars(array(
 	"cur_co_url" => html::get_change_url($co->id(), array('return_url' => get_ru())),
 	"cur_co_url_view" => $sf->mk_my_orb("view", array("id" => $co->id(), 'return_url' => get_ru()), CL_CRM_COMPANY),
 	"cur_co_name" => $co->name(),
-	"cur_class" => $clss[clid_for_name($_GET["class"])]["name"],
+	"cur_class" => $cur_class,
 	"cur_obj_name" => $cur_obj->name(),
 	"site_title" => $site_title,
 	"settings_pop" => $bmb->get_menu(array(
@@ -190,13 +196,27 @@ $output_charset = aw_global_get("output_charset");
 if (!empty($output_charset))
 {
 	$charset = $output_charset;
-};
+}
+
+// compose html title
+$html_title = aw_ini_get("stitle");
+$html_title_obj = (CL_ADMIN_IF == $cur_obj->class_id()) ? aw_global_get("site_title_path_obj_name") : $cur_obj->name();
+
+if (!empty($html_title))
+{
+	$html_title .= " - " . $cur_class;
+}
+
+if (!empty($html_title_obj))
+{
+	$html_title .=  ": " . $html_title_obj;
+}
 
 $sf->vars(array(
 	"content"	=> $content,
 	"charset" => $charset,
-	"uid" => aw_global_get("uid"),
 	"title_action" => $ta,
+	"html_title" => $html_title,
 ));
 
 
