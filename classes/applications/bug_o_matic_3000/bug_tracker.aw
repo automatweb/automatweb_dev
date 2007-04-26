@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.97 2007/04/16 07:32:57 voldemar Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.97 2007/04/16 07:32:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.98 2007/04/26 11:16:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.98 2007/04/26 11:16:49 voldemar Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -1584,6 +1584,11 @@ class bug_tracker extends class_base
 		return html::img(array("url" => aw_ini_get("baseurl")."/automatweb/images/forum_add_new.gif", "border" => 0))." ".html::get_change_url($arr["oid"] , array("group" => "comments" , "return_url" => get_ru()), $arr["comment_count"]);
 	}
 
+	function sp_callback($arr)
+	{
+		return number_format($arr["sort_priority"], 1, '.', '') . "...";
+	}
+
 	function _init_bug_list_tbl(&$t)
 	{
 		$t->define_field(array(
@@ -1705,7 +1710,11 @@ class bug_tracker extends class_base
 		$t->define_field(array(
 			"name" => "sort_priority",
 			"caption" => t("SP"),
+			"tooltip" => t("Kombineeritud prioriteet"),
 			"sortable" => 1,
+			"numeric" => 1,
+			"callback" => array(&$this,"sp_callback"),
+			"callb_pass_row" => 0
 		));
 
 		$t->define_field(array(
@@ -2372,6 +2381,7 @@ class bug_tracker extends class_base
 	function save_search($arr)
 	{
 		$search_params = array();
+
 		foreach($arr as $k => $v)
 		{
 			if ($k[0] == "s" && $k[1] == "_")
@@ -3344,7 +3354,9 @@ echo "<div style='font-size: 10px;'>";
 				echo "bug ".$o->name()."(tunde hetkel:".$o->prop("num_hrs_real").") - ".nl2br($bg["c"])." - time - ".date("d.m.Y", $bg["t"])."<hr>";
 			}
 		}
-die();
+
+		die();
+
 		// calc work hrs per p
 		foreach($com_by_p as $uid => $coms)
 		{
