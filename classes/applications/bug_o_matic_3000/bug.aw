@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.80 2007/03/30 14:02:19 kristo Exp $
-//  bug.aw - Bugi 
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.81 2007/04/26 11:18:20 voldemar Exp $
+//  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
 
@@ -50,7 +50,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property bug_property type=select parent=settings_col2 captionside=top field=aw_bug_property
 		@caption Klassi omadus
-	
+
 	@layout settings_col3 type=vbox parent=settings
 
 		@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 store=connect parent=settings_col3 captionside=top
@@ -83,10 +83,10 @@ define("BUG_STATUS_CLOSED", 5);
 			@layout data_time type=hbox parent=data width=40%:40%:20%
 
 				@property num_hrs_guess type=textbox size=5 parent=data_time captionside=top
-				@caption Prognoositav 
+				@caption Prognoositav
 
 				@property num_hrs_real type=textbox size=5 parent=data_time captionside=top
-				@caption Tegelik 
+				@caption Tegelik
 
 				@property num_hrs_to_cust type=textbox size=5 parent=data_time captionside=top
 				@caption Kliendile
@@ -125,10 +125,10 @@ define("BUG_STATUS_CLOSED", 5);
 			@property bug_component type=textbox parent=data_r_bot captionside=top
 			@caption Komponent
 
-	
+
 			@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb parent=data_r_bot captionside=top
 			@caption Fail
-	
+
 			@property bug_predicates type=textbox parent=data_r_bot captionside=top field=aw_bug_predicates
 			@caption Eeldusbugid
 
@@ -149,7 +149,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Vea sagedus
 
 	@property cust_responsible type=relpicker reltype=RELTYPE_CUST_RESPONSIBLE field=aw_cust_responsible
-	@caption Kliendipoolne vastutaja	
+	@caption Kliendipoolne vastutaja
 
 	@property cust_status type=select field=aw_cust_status
 	@caption Kliendipoolne staatus
@@ -159,16 +159,16 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@property cust_solution type=textarea rows=10 cols=50 field=aw_cust_solution
 	@caption Kliendipoolne lahendus
-	
+
 	@property cust_live_date type=date_select field=aw_cust_live_date
 	@caption Kasutusvalmis
-	
+
 	@property cust_crit type=textarea rows=10 cols=50 field=aw_cust_crit
 	@caption Vastuv&otilde;tu kriteeriumid
-	
+
 	@property cust_budget type=textbox field=aw_cust_budget size=5
 	@caption Eelarve
-	
+
 
 @default group=problems
 
@@ -321,7 +321,7 @@ class bug extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		if($arr["new"] && !empty($this->parent_data[$prop["name"]]))
-		{ 
+		{
 			$prop["value"] = $this->parent_data[$prop["name"]];
 		}
 		switch($prop["name"])
@@ -396,7 +396,7 @@ class bug extends class_base
 					$prop["options"] = $opts;
 				}
 				break;
-			
+
 			case "ocurrence":
 				$prop["options"] = $this->occurrences;
 				break;
@@ -444,7 +444,7 @@ class bug extends class_base
 					$r = obj($arr["request"]["from_problem"]);
 					$prop["value"] = $r->name();
 				}
-				
+
 				$link = html::href(array(
 					"caption" => t("Link"),
 					"url" => obj_link($arr["obj_inst"]->id())
@@ -470,7 +470,7 @@ class bug extends class_base
 				}
 				break;
 
-			case "bug_status":	
+			case "bug_status":
 				$prop["options"] = $this->bug_statuses;
 				break;
 
@@ -483,7 +483,7 @@ class bug extends class_base
 					$prop["value"] = (int)($r->prop("pri")/2);
 				}
 				break;
-				
+
 
 			case "bug_feedback_p":
 				if ($arr["obj_inst"]->prop("bug_status") != BUG_FEEDBACK)
@@ -632,7 +632,7 @@ class bug extends class_base
 							if (strlen($nm) > 15)
 							{
 								$nm = substr($nm, 0, 15)."...";
-							}	
+							}
 						}
 						$opts[$_co->id()] = $nm;
 					}
@@ -801,7 +801,7 @@ class bug extends class_base
 					$this->add_comments[] = $prop["value"];
 				}
 				break;
-				
+
 			case "bug_status":
 				$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
 				$this->_ac_new_state = $prop["value"];
@@ -913,7 +913,7 @@ class bug extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function notify_monitors($bug, $comment)
 	{
@@ -953,8 +953,8 @@ class bug extends class_base
 			{
 				continue;
 			}
-			$person_obj = obj($person); 
-			// don't send to the current user, cause, well, he knows he's just done it. 
+			$person_obj = obj($person);
+			// don't send to the current user, cause, well, he knows he's just done it.
 			if ($person == $u->get_current_person())
 			{
 				continue;
@@ -978,7 +978,7 @@ class bug extends class_base
 			if (is_email($addr))
 			{
 				$notify_addresses[] = $addr;
-			}; 
+			};
 		};
 
 		if (sizeof($notify_addresses) == 0)
@@ -1037,7 +1037,7 @@ class bug extends class_base
 		}
 
 
-		$rv += (double)1.0/((double)10000.0 - (double)$bug->id());		
+		$rv += (double)1.0/((double)10000.0 - (double)$bug->id());
 
 		return $rv;
 	}
@@ -1179,7 +1179,7 @@ class bug extends class_base
 	function callback_pre_save($arr)
 	{
 	}
-	
+
 	function callback_post_save($arr)
 	{
 		if (is_array($this->add_comments) && count($this->add_comments))
@@ -1204,7 +1204,7 @@ class bug extends class_base
 
 	function parse_commited_msg($msg)
 	{
-		
+
 		$row =  explode("\n" , $msg);
 		//arr($row);
 		$result = array("diff" => $row[0], "files" =>  str_replace("<br />" , "" ,$row[6]), "bug" => str_replace("<br />" , "" , $row[8]));
@@ -1213,13 +1213,13 @@ class bug extends class_base
 		{
 			$result["time"] = $time_arr[1];
 		}
-		
+
 		$by1 = strpos($row[1], 'by') + 3;//arr($by1);
 		$by2 = strpos($row[1], ' ', $by1+5);//arr($by2);
 		$result["by"] = substr($row[1], $by1, $by2-$by1 );
 	//	arr($row[1]);
 	//	arr($result);
-		
+
 		$msg = $result["bug"]." ".$result["diff"]."\n".t("Failid: ").$result["files"];
 		if($result["time"]) $msg.="\n".t("Aeg:").$result["time"];
 		return $msg;
@@ -1227,7 +1227,7 @@ class bug extends class_base
 
 	/**
 		@attrib name=handle_commit nologin=1
-		@param bugno required type=int 
+		@param bugno required type=int
 		@param msg optional
 		@param set_fixed optional
 		@param time_add optional
@@ -1237,11 +1237,11 @@ class bug extends class_base
 		aw_disable_acl();
 		$bug = obj($arr["bugno"]);
 		$msg = trim($this->hexbin($arr["msg"]));
-		
+
 		$orig_msg = $msg;
 		$msg = $this->parse_commited_msg($msg);
 
-		$com = false;		
+		$com = false;
 		$ostat = $nstat = $bug->prop("bug_status");
 		if ($arr["set_fixed"] == 1)
 		{
@@ -1326,11 +1326,15 @@ class bug extends class_base
 			case "aw_cust_live_date":
 			case "aw_bug_feedback_p":
 			case "project":
+			case "who":
+			case "deadline":
+			case "customer":
 			case "customer_unit":
 			case "customer_person":
 			case "orderer":
 			case "orderer_unit":
 			case "orderer_person":
+			case "fileupload":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",
@@ -1346,6 +1350,9 @@ class bug extends class_base
 				return true;
 
 			case "aw_cust_budget":
+			case "num_hrs_guess":
+			case "num_hrs_real":
+			case "num_hrs_to_cust":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "double",
@@ -1487,7 +1494,7 @@ class bug extends class_base
 			$b->set_prop("bug_property", $o->prop("bug_property"));
 			$b->save();
 			$num2bug[$pt] = $b->id();
-		} 
+		}
 	}
 
 	function _get_bt($o)
