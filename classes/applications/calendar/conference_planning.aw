@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.89 2007/04/26 12:18:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.90 2007/04/27 08:49:44 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1708,6 +1708,7 @@ class conference_planning extends class_base
 	function show($arr)
 	{
 		$cp = obj($arr["conference_planner"]);
+		$this->cp = $cp;
 		$active_view = $GLOBALS["_GET"]["view_no"];
 		$active_view = (!strlen($active_view) || $active_view < 1)?1:$active_view;
 	
@@ -1783,7 +1784,7 @@ class conference_planning extends class_base
 			"current_view" => $view_no,
 			"current_element" => $element,
 		);
-		$controller = $this->can("view", $el["show_controller"])?$i->check_property($el["show_controller"], "",&$toprop, $GLOBALS["_GET"],"",""):array();
+		$controller = $this->can("view", $el["show_controller"])?$i->check_property($el["show_controller"], $this->cp->id(),&$toprop, $GLOBALS["_GET"],"",""):array();
 
 		if($controller == PROP_IGNORE)
 		{
