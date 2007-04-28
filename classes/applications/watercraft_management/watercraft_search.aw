@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.12 2007/02/14 15:13:52 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.13 2007/04/28 12:47:48 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -14,6 +14,12 @@
 
 	@property max_results type=textbox table=watercraft_search
 	@caption Maksimaalne tulemuste arv
+	
+	@property search_result_template type=select table=watercraft_search
+	@caption Otsingu tulemuste templeit
+
+	@property search_form_template type=select table=watercraft_search
+	@caption Otsingu vormi templeit
 
 	@property no_search_form type=checkbox ch_value=1 table=watercraft_search
 	@caption &Auml;ra kuva otsinguvormi
@@ -166,6 +172,22 @@ class watercraft_search extends class_base
 				if ( $arr['new'] == 1 )
 				{
 					$prop['value'] = 500;
+				}
+				break;
+			case 'search_result_template':
+				$t = get_instance("templatemgr");
+				$prop["options"] = array("" => t("--vali--")) + $t->template_picker(array("folder" => "applications/watercraft_management/watercraft_search"));
+				if ( $arr['new'] == 1 )
+				{
+					$prop['selected'] = 'show.tpl';
+				}
+				break;
+			case 'search_form_template':
+				$t = get_instance("templatemgr");
+				$prop["options"] = array("" => t("--vali--")) + $t->template_picker(array("folder" => "applications/watercraft_management/watercraft_search"));
+				if ( $arr['new'] == 1 )
+				{
+					$prop['selected'] = 'search_form.tpl';
 				}
 				break;
 			case 'search_form_conf':
@@ -403,16 +425,24 @@ class watercraft_search extends class_base
 		$results_on_page = (int)$obj->prop('results_on_page');
 		$max_results = (int)$obj->prop('max_results');
 		$watercraft_id = (int)$_GET['watercraft_id'];
+			
+		$watercraft_inst = get_instance(CL_WATERCRAFT);
 		if ($this->can('view', $watercraft_id))
 		{
-			$watercraft_inst = get_instance(CL_WATERCRAFT);
 			return $watercraft_inst->show(array(
 				'id' => $watercraft_id,
 			));
 		}
 
-
-		$this->read_template("show.tpl");
+		$show_tpl = $obj->prop('search_result_template');
+		if (empty($show_tpl))
+		{
+			$this->read_template("show.tpl");
+		}
+		else
+		{
+			$this->read_template($show_tpl);
+		}
 
 		$do_search = false;
 		if ($_GET['do_search'] == 1)
@@ -465,30 +495,100 @@ class watercraft_search extends class_base
 			$items = $this->search(array(
 				'obj_inst' => $obj,
 				'request' => $search_params,
-				'limit' => ($active_page * $results_on_page).', '.$results_on_page
+				'limit' => ($active_page * $results_on_page).', '.$results_on_page,
+//				'sort_by' => "watercraft.".$_GET['sortby']." ".$_GET['order']
 			));
-
+			
 			$items_str = '';
+			$images = new object_list(array(
+				'class_id' => CL_IMAGE,
+				'parent' => $items->ids()
+			));
+			$images_lut = array();
+			foreach ($images->arr() as $image)
+			{
+				$images_lut[$image->parent()][] = $image->id();
+			}
+	//		$watercraft_property_list = array();
 			foreach ($items->arr() as $item_id => $item)
 			{
 				$properties = array();
 				foreach ($item->properties() as $name => $value)
 				{
-					$properties['watercraft_'.$name] = htmlentities($value);
+					if (!empty($watercraft_inst->$name))
+					{
+						$var = $watercraft_inst->$name;
+						//$properties['watercraft_'.$name] = htmlentities($var[$value]);
+						$properties['watercraft_'.$name] = $var[$value];
+					}
+					else
+					{
+						//$properties['watercraft_'.$name] = htmlentities($value);
+						$properties['watercraft_'.$name] = $value;
+					}
 				}
+
+				$image_inst = get_instance(CL_IMAGE);
+				$images_count = count($images_lut[$item_id]);
+				$image_str = '';
+				if ($images_count > 0)
+				{
+					$image_id = reset($images_lut[$item_id]);
+					$image_data = $image_inst->get_image_by_id($image_id);
+					$image_url = $image_inst->get_url_by_id($image_id);
+					$this->vars(array(
+						'watercraft_image_name' => $image_data['name'],
+						'watercraft_image_url' => $image_url,
+						'watercraft_image_tag' => $image_inst->make_img_tag_wl($image_id)
+					));
+					$image_str .= $this->parse('WATERCRAFT_IMAGE');
+
+				}
+				else
+				{
+					$image_str .= $this->parse('WATERCRAFT_NO_IMAGE');
+				}
+				
+				
+
+/*
+				if (empty($watercraft_property_list))
+				{
+					$watercraft_property_list = array_keys($properties);
+				}
+*/
 				$this->vars(array(
-				//	'watercraft_view_url' => aw_ini_get('site_baseurl').'/'.aw_global_get('section').'?watercraft_id='.$item_id.'&return_url='.get_ru()
 					'watercraft_view_url' => aw_url_change_var(array(
 						'section' => aw_global_get('section'),
 						'watercraft_id' => $item_id,
 						'return_url' => (!empty($_GET['return_url'])) ? $_GET['return_url'] : get_ru()
-					))
+					)),
+					'watercraft_images_count' => $images_count,
+					'WATERCRAFT_IMAGE' => $image_str
 					) + $properties
 				);
 				
 				$items_str .= $this->parse('SEARCH_RESULT_ITEM');
 			}
 
+/*
+			foreach ($watercraft_property_list as $watercraft_property)
+			{
+				$prop = str_replace('watercraft_', '', $watercraft_property);
+				if ($prop == $_GET['sortby'])
+				{
+					$order = ($_GET['order'] == 'asc') ? 'desc' : 'asc';
+				}
+				else
+				{
+					$order = 'asc';
+				}
+				$sorting_links[$watercraft_property.'_sort_url'] = aw_url_change_var(array(
+					'sortby' => $prop,
+					'order' => $order
+				));
+			}
+*/
 			$this->vars(array(
 				'SEARCH_RESULT_ITEM' => $items_str
 			));
@@ -557,13 +657,21 @@ class watercraft_search extends class_base
 		return $this->parse('PAGES');
 	}
 
+
 	function draw_search_form($arr)
 	{
 		$ob = $arr['ob'];
 		classload('cfg/htmlclient');
+
+		$form_tpl = $ob->prop('search_form_template');
+		if (empty($form_tpl))
+		{
+			$form_tpl = "search_form.tpl";
+		}
+
 		$htmlclient = new htmlclient(array(
 			'tpldir' => 'applications/watercraft_management/watercraft_search',
-			'template' => 'search_form.tpl'
+			'template' => $form_tpl
 		));
 		$htmlclient->start_output();
 		$watercraft_search_inst = $ob->instance();
@@ -622,7 +730,7 @@ class watercraft_search extends class_base
 				"do_search" => 1,
 			),
 			"method" => "get",
-			"form_handler" => aw_ini_get("baseurl")."/".aw_global_get("section"),
+			"form_handler" => aw_ini_get("baseurl")."/".aw_global_get("section")."#search",
 			"submit" => "no"
 		));
 
@@ -645,6 +753,11 @@ class watercraft_search extends class_base
 		if (!empty($arr['limit']))
 		{
 			$filter['limit'] = $arr['limit'];
+		}
+		
+		if (!empty($arr['sort_by']))
+		{
+			$filter['sort_by'] = $arr['sort_by'];
 		}
 
 		foreach ($this->search_form_elements as $name => $caption)
@@ -816,6 +929,8 @@ class watercraft_search extends class_base
 				));
                                 return true;
 			case 'additional_equipment':
+			case 'search_result_template':
+			case 'search_form_template':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'varchar(255)'

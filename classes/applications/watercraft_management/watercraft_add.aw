@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.5 2007/01/12 00:41:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.6 2007/04/28 12:47:48 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -84,6 +84,12 @@ class watercraft_add extends class_base
 			'align' => 'center'
 		));
 		$t->define_field(array(
+			'name' => 'is_numeric',
+			'caption' => t('Arv'),
+			'width' => '5%',
+			'align' => 'center'
+		));
+		$t->define_field(array(
 			'name' => 'name',
 			'caption' => t('Nimi')
 		));
@@ -115,9 +121,14 @@ class watercraft_add extends class_base
 
 			$t->define_data(array(
 				'required' => html::checkbox(array(
-					'name' => 'sel['.$prop_name.']',
+					'name' => 'sel['.$prop_name.'][required]',
 					'value' => $prop_name,
-					'checked' => (empty($saved[$prop_name])) ? '' : $prop_name
+					'checked' => (empty($saved[$prop_name]['required'])) ? '' : $prop_name
+				)),
+				'is_numeric' => html::checkbox(array(
+					'name' => 'sel['.$prop_name.'][is_numeric]',
+					'value' => $prop_name,
+					'checked' => (empty($saved[$prop_name]['is_numeric'])) ? '' : $prop_name
 				)),
 				'name' => $name_str,
 				'tpl_var' => '{VAR:'.$prop_name.'}',
@@ -229,6 +240,7 @@ class watercraft_add extends class_base
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
+
 		enter_function('watercraft_add::show');
 
 		/*
@@ -260,6 +272,15 @@ class watercraft_add extends class_base
 		if ($this->can('view', $_SESSION['watercraft_input_data']['watercraft_id']))
 		{
 			$watercraft_obj = new object($_SESSION['watercraft_input_data']['watercraft_id']);
+
+			// if the watercraft type in the session doesn't match the one which comes from the watercraft_add
+			// object, then we need to add all new watercraft object, so lets reset the watercraft data in session
+			if ($watercraft_obj->prop('watercraft_type') != $type)
+			{
+				$watercraft_obj = '';
+				$saved_pages = array();
+				$_SESSION['watercraft_input_data'] = array();
+			}
 		}
 		else
 		{
@@ -310,11 +331,21 @@ class watercraft_add extends class_base
 		}
 
 		// if there are any errors, then show them
+		$required_fields = $o->meta('required_fields');
 		if (!empty($_SESSION['watercraft_input_data']['errors']))
 		{
 			foreach ($_SESSION['watercraft_input_data']['errors'] as $key => $value)
 			{
-				$vars[$key.'_error'] = $this->parse('ERROR');
+				$vars[$key.'_error'] = '';
+				if (isset($required_fields[$key]['required']) && empty($value))
+				{
+					$vars[$key.'_error'] .= $this->parse('REQUIRED_ERROR');
+				}
+				if (isset($required_fields[$key]['is_numeric']) && !is_numeric($value))
+				{
+					$vars[$key.'_error'] .= $this->parse('NUMERIC_ERROR');
+				}
+				
 			}
 		}
 
@@ -326,9 +357,33 @@ class watercraft_add extends class_base
 			{
 				if (!empty($watercraft_obj))
 				{
-					$prop['value'] = $watercraft_obj->prop($name);
+					switch($name)
+					{
+						case "sail_table":
+							$prop["value"] = $watercraft_obj->meta($name);
+							//dbg::p1($prop);
+							break;
+						default:
+							$prop['value'] = $watercraft_obj->prop($name);
+							break;
+					}
 				}
+				// ugly quick hack for sail_table property by taiu
+				if($name == "sail_table")
+				{
+					$inst = get_instance(CL_WATERCRAFT);
+					classload("vcl/table");
+					$prop["vcl_inst"] = new aw_table();
+					$inst->_get_sail_table(array(
+						"obj_inst" => $watercraft_obj,
+						"prop" => &$prop,
+					));
+					$vars[$name] = $prop["vcl_inst"]->draw();
+				}
+				else
+				{
 				$vars[$name] = htmlclient::draw_element($prop);
+				}
 			}
 		}
 
@@ -361,16 +416,15 @@ class watercraft_add extends class_base
 		}
 
 
+		$vars['reforb'] = $this->mk_reforb('submit_data', array(
+			'section' => aw_global_get('section'),
+			'return_url' => post_ru(),
+			'id' => $arr['id'],
+			'page' => $page
+		));
+
 		$this->vars($vars);
 
-		$this->vars(array(
-			'reforb' => $this->mk_reforb('submit_data', array(
-				'section' => aw_global_get('section'),
-				'return_url' => post_ru(),
-				'id' => $arr['id'],
-				'page' => $page
-			))
-		));
 		exit_function('watercraft_add::show');
 		return $this->parse();
 	}
@@ -407,17 +461,24 @@ class watercraft_add extends class_base
 		$_SESSION['watercraft_input_data']['errors'] = array();
 		foreach ($arr as $key => $value)
 		{
-			if (empty($value) && isset($required_fields[$key]))
+			if (empty($value) && isset($required_fields[$key]['required']))
+			{
+				$_SESSION['watercraft_input_data']['errors'][$key] = $value;
+			}
+			if (isset($required_field[$key]['is_numeric']) && !is_numeric($value))
 			{
 				$_SESSION['watercraft_input_data']['errors'][$key] = $value;
 			}
 		}
 
 		// if we got any errors (required field is not filled) then redirect the user 
-		// back the page where errors occurred
+		// back to the page where errors occurred
 		if (!empty($_SESSION['watercraft_input_data']['errors']))
 		{
-			return $return_url;
+			//return $return_url;
+			// i made a change in here because, data needed to be saved wheater any errors occur or not
+			// i also added err_url to two places below: taiu
+			$err_url = $return_url;
 		}
 
 		$page = $arr['page'];
@@ -446,7 +507,7 @@ class watercraft_add extends class_base
 			$watercraft_management_oid = $o->prop('watercraft_management');
 			if (!$this->can('view', $watercraft_management_oid))
 			{
-				return $return_url;
+				return $err_url?$err_url:$return_url;
 			}
 			$watercraft_management_obj = new object($watercraft_management_oid);
 			$watercraft_obj = new object();
@@ -476,7 +537,12 @@ class watercraft_add extends class_base
 		// so, here i should have an watercraft_obj, so set the properties:
 		foreach ($arr as $prop_name => $prop_value)
 		{
-			if ($watercraft_obj->is_property($prop_name))
+			// another really ugly hack for sail_table property
+			if($prop_name == "sail_table")
+			{
+				$watercraft_obj->set_meta($prop_name, $prop_value);
+			}
+			elseif ($watercraft_obj->is_property($prop_name))
 			{
 				$watercraft_obj->set_prop($prop_name, $prop_value);
 			}
@@ -497,8 +563,7 @@ class watercraft_add extends class_base
 		{
 			$_SESSION['watercraft_input_data']['watercraft_id'] = $watercraft_obj->save();
 		}
-
-		return $return_url;
+		return $err_url?$err_url:$return_url;
 	}
 
 	// draw's pages and returns it as string
@@ -568,7 +633,7 @@ class watercraft_add extends class_base
 		}
 		return $elements;
 	}
-	/** Generate a list of realestate objects added by user 
+	/** Generate a list of watercraft objects added by user 
 		
 		@attrib name=my_watercraft_list is_public="1" caption="Minu vees&otilde;idukid"
 

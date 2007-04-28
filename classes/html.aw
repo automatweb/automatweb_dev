@@ -185,6 +185,7 @@ class html extends aw_template
 		$autocomplete = "";
 		$js_name = str_replace(array("[", "]", "-"), "_", $name);
 		$onchange = $onChange != "" ? "onChange=\"$onChange\"" : "";
+		$style = isset($style)?" style=\"".$style."\"":"";
 
 		### compose autocompletes source url
 		if (is_admin() && ($autocomplete_source or is_array($options) or $autocomplete_source_method))
@@ -273,7 +274,7 @@ class html extends aw_template
 				$value = $content;
 			}
 		}
-		return "<input type=\"text\" id=\"$id\" $ac_off name=\"$name\" $onchange size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti} />$post_append_text\n{$value_elem}{$autocomplete}";
+		return "<input $style type=\"text\" id=\"$id\" $ac_off name=\"$name\" $onchange size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti} />$post_append_text\n{$value_elem}{$autocomplete}";
 	}
 
 	/**
@@ -312,6 +313,7 @@ class html extends aw_template
 		$value = isset($value) ? $value : "";
 		$onFocus = isset($onFocus) ? ' onFocus="'.$onFocus.'"' : '';
 		$onBlur = isset($onBlur) ? ' onBlur="'.$onBlur.'"' : '';
+
 
 		if (strpos($value, "<") !== false)
 		{

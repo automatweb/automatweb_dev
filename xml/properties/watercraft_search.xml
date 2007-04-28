@@ -17,6 +17,22 @@
             <caption>Maksimaalne tulemuste arv</caption>
       </property>
       <property>
+            <name>search_result_template</name>
+            <table>watercraft_search</table>
+            <group>general</group>
+            <type>select</type>
+            <field>search_result_template</field>
+            <caption>Otsingu tulemuste templeit</caption>
+      </property>
+      <property>
+            <name>search_form_template</name>
+            <table>watercraft_search</table>
+            <group>general</group>
+            <type>select</type>
+            <field>search_form_template</field>
+            <caption>Otsingu vormi templeit</caption>
+      </property>
+      <property>
             <name>no_search_form</name>
             <table>watercraft_search</table>
             <group>general</group>

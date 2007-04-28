@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.11 2007/02/14 15:13:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.12 2007/04/28 12:47:48 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -22,6 +22,9 @@
 	@caption Varustus/tarvikud (hetkel ei salvestu)
 
 	@property manufacturer type=select table=watercraft
+	@caption Tootja 
+
+	@property manufacturer_other type=textbox table=watercraft
 	@caption Tootja 
 
 	@property brand type=textbox table=watercraft
@@ -500,15 +503,15 @@ class watercraft extends class_base
 		);
 
 		$this->watercraft_type = array(
-			WATERCRAFT_TYPE_MOTOR_BOAT => t('Mootorpaat'),
-			WATERCRAFT_TYPE_SAILING_SHIP => t('Purjekas'),
+			WATERCRAFT_TYPE_MOTOR_BOAT => t('Kaater'),
+			WATERCRAFT_TYPE_SAILING_SHIP => t('Jaht'),
 			WATERCRAFT_TYPE_DINGHY => t('Kummipaat'),
-			WATERCRAFT_TYPE_ROWING_BOAT => t('S&otilde;udepaat'),
+			WATERCRAFT_TYPE_ROWING_BOAT => t('Aerupaat'),
 			WATERCRAFT_TYPE_SCOOTER => t('Skuuter'),
-			WATERCRAFT_TYPE_SAILBOARD => t('Purilaud'),
+			WATERCRAFT_TYPE_SAILBOARD => t('Purjelaud'),
 			WATERCRAFT_TYPE_CANOE => t('Kanuu'),
 			WATERCRAFT_TYPE_FISHING_BOAT => t('Kalapaat'),
-			WATERCRAFT_TYPE_OTHER => t('Muu'),
+			WATERCRAFT_TYPE_OTHER => t('Muu alus'),
 			WATERCRAFT_TYPE_ACCESSORIES => t('Varustus/tarvikud')
 		);
 
@@ -776,19 +779,23 @@ class watercraft extends class_base
 
 		$t->define_field(array(
 			'name' => 'type',
-			'caption' => t('P&uuml;rje t&uuml;&uuml;p')
+			'caption' => t('P&uuml;rje t&uuml;&uuml;p'),
+			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'area',
-			'caption' => t('Pindala')
+			'caption' => t('Pindala'),
+			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'material',
-			'caption' => t('Purje materjal')
+			'caption' => t('Purje materjal'),
+			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'age_and_condition',
-			'caption' => t('Purje vanus ja seisukord')
+			'caption' => t('Purje vanus ja seisukord'),
+			'width' => '20px',
 		));
 
 		$rows = array(
@@ -804,6 +811,7 @@ class watercraft extends class_base
 		);
 	
 		$saved_sail_table = $arr['obj_inst']->meta('sail_table');
+		// these style = some amount of pixels, are here for marine24 webview.. it didn't fit any other way, and i didn't have any time to do nicer
 		foreach ( $rows as $key => $value )
 		{
 			$t->define_data(array(
@@ -811,17 +819,20 @@ class watercraft extends class_base
 				'area' => html::textbox(array(
 					'name' => 'sail_table['.$key.'][area]',
 					'value' => $saved_sail_table[$key]['area'],
-					'size' => 20
+					'style' => 'width:50px;',
+					'size' => 10
 				)),
 				'material' => html::textbox(array(
 					'name' => 'sail_table['.$key.'][material]',
 					'value' => $saved_sail_table[$key]['material'],
-					'size' => 20
+					'style' => 'width:100px;',
+					'size' => 10
 				)),
 				'age_and_condition' => html::textbox(array(
 					'name' => 'sail_table['.$key.'][age_and_condition]',
 					'value' => $saved_sail_table[$key]['age_and_condition'],
-					'size' => 20
+					'style' => 'width:100px;',
+					'size' => 10
 				)),
 
 			));
@@ -838,22 +849,26 @@ class watercraft extends class_base
 		$t->define_data(array(
 			'type' => html::textbox(array(
 				'name' => 'sail_table[other_sail][type]',
-				'size' => 10,
+				'size' => 20,
+				'style' => 'width:100px;',
 				'value' => $saved_sail_table['other_sail']['type']
 			)),
 			'area' => html::textbox(array(
 				'name' => 'sail_table[other_sail][area]',
 				'size' => 20,
+				'style' => 'width:50px;',
 				'value' => $saved_sail_table['other_sail']['area']
 			)),
 			'material' => html::textbox(array(
 				'name' => 'sail_table[other_sail][material]',
 				'size' => 20,
+				'style' => 'width:100px;',
 				'value' => $saved_sail_table['other_sail']['material']
 			)),
 			'age_and_condition' => html::textbox(array(
 				'name' => 'sail_table[other_sail][age_and_condition]',
 				'size' => 20,
+				'style' => 'width:100px;',
 				'value' => $saved_sail_table['other_sail']['age_and_condition']
 			)),
 		));
@@ -1030,11 +1045,11 @@ class watercraft extends class_base
 			if (is_array($this->$prop_name))
 			{
 				$prop_data = $this->$prop_name;
-				$vars['watercraft_'.$prop_name] = $prop_data[$prop_value];
+				$vars['watercraft_'.$prop_name] = ($prop_data[$prop_value])?$prop_data[$prop_value]:"-";
 			}
 			else
 			{
-				$vars['watercraft_'.$prop_name] = htmlentities($prop_value);
+				$vars['watercraft_'.$prop_name] = htmlentities($prop_value?$prop_value:"-");
 			}
 		}
 		
@@ -1306,6 +1321,7 @@ class watercraft extends class_base
 				));
                                 return true;
 			case 'watercraft_type_other':
+			case 'manufacturer_other':
 			case 'body_material_other':
 			case 'location_other':
 			case 'condition_info':

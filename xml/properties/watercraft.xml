@@ -44,6 +44,14 @@
             <caption>Tootja </caption>
       </property>
       <property>
+            <name>manufacturer_other</name>
+            <table>watercraft</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>manufacturer_other</field>
+            <caption>Tootja </caption>
+      </property>
+      <property>
             <name>brand</name>
             <table>watercraft</table>
             <group>general</group>
