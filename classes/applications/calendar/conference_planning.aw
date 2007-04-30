@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.90 2007/04/27 08:49:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.91 2007/04/30 13:37:26 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1492,6 +1492,7 @@ class conference_planning extends class_base
 	function handle_data($arr)
 	{
 		$cp = obj($arr["conference_planning"]);
+		$this->cp = $cp;
 		$views = aw_unserialize($cp->prop("help_views"));
 		$i = get_instance(CL_CFGCONTROLLER);
 		$view_id = --$arr["current_view"];
@@ -1525,7 +1526,7 @@ class conference_planning extends class_base
 					"current_view" => $view_id,
 					"current_element" => $element_id,
 				);
-				$show_ctr = $this->can("view", $data["show_controller"])?$i->check_property($data["show_controller"], "",$toprop, $GLOBALS["_GET"],"",""):array();
+				$show_ctr = $this->can("view", $data["show_controller"])?$i->check_property($data["show_controller"], $this->cp->id() ,$toprop, $GLOBALS["_GET"],"",""):array();
 				if($show_ctr == PROP_IGNORE)
 				{
 					continue;
@@ -1751,6 +1752,7 @@ class conference_planning extends class_base
 
 	function parse_form_element($el, $view_no, $element, $views, $value, $values, $doc)
 	{
+		
 		$this->_init_vars();
 		$prop = $this->get_form_elements_data($el["name"]);
 		if(!$prop)
