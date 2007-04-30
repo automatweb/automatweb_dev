@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.110 2007/04/23 06:02:26 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.111 2007/04/30 12:53:25 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -2828,7 +2828,7 @@ class cfgform extends class_base
 				$action = "view";
 			}
 		}
-		elseif (!is_oid($vars["id"]))
+		elseif ("new" !== $action and !is_oid($vars["id"]))
 		{
 			return;
 		}
