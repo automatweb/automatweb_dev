@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.51 2007/04/30 13:05:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.52 2007/04/30 15:10:30 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -21,6 +21,9 @@
 
 	@property private_key type=relpicker reltype=RELTYPE_KEY
 	@caption Privaatv&otilde;ti
+	
+	@property nordea_private_key type=textbox
+	@caption Nordea privaatv&otilde;ti
 	
 	@property bank_return_url type=textbox
 	@caption Url, kuhu tagasi tulla eduka makse puhul
@@ -1265,27 +1268,44 @@ class bank_payment extends class_base
 
 	function check_nordea_args($arr)
 	{
+		if(is_oid($arr["payment_id"]))
+		{
+			$payment = obj($arr["payment_id"]);
+			$arr = $this->_add_object_data($payment , $arr);
+			$arr["priv_key"] = $payment->prop("nordea_private_key");
+		}
+	
 		if(!$arr["service"]) $arr["service"] = "0002";
 		if(!$arr["version"]) $arr["version"] = "0001";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
 		if(!$arr["confirm"]) $arr["confirm"] = "NO";
-		if(!$arr["recieve_account"]) $arr["recieve_account"] = "";
-		if(!$arr["recieve_name"]) $arr["recieve_name"] = "";
+		if(!$arr["acc"]) $arr["acc"] = "";
+		if(!$arr["name"]) $arr["name"] = "";
 		if(!$arr["recieve_id"]) $arr["recieve_id"] = "10354213";
 		if(!$arr["date"]) $arr["date"] = 'EXPRESS';
-		if(!$arr["lang"]) $arr["lang"] = "4";
+		if(!$arr["lang"]) $arr["lang"] = "3";
 //		if(!$arr["priv_key"]) $arr["priv_key"] = "g94z7e7KgP6PM8av7kIF7bwX8YNZ7eFX";//suht halb mõte muidugi ... aga see on siin ajutiselt
-		
+//		$arr["priv_key"] = "e5JRSW6NLbaR2SvHnc8qNRSQdAzCe8dF";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
-		if(!$arr["priv_key"])
+
+		if($arr["lang"] == "et" || $arr["lang"] == "EST")
+		{
+			$arr["lang"] = 4;
+		}
+		if($arr["lang"] == "en" || $arr["lang"] == "ENG")
+		{
+			$arr["lang"] = 3;
+		}
+		
+/*		if(!$arr["priv_key"])
 		{
 			if($arr["test"] && $this->test_priv_keys[$arr["bank_id"]]) $file = $this->test_priv_keys[$arr["bank_id"]];
 			else $file = "privkey.pem";
 			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
 			$arr["priv_key"] = fread($fp, 8192);
 			fclose($fp);
-		}
+		}*/
 		return($arr);
 	}
 
@@ -1390,7 +1410,7 @@ class bank_payment extends class_base
 
 
 	function nordea($args)
-	{
+	{//arr($args); die();
 		extract($args);
 		$SOLOPMT_MAC      = '';
 		$VK_message       = $service.'&';
@@ -1410,8 +1430,8 @@ class bank_payment extends class_base
 			"SOLOPMT_VERSION"     => $service,// 1.    Payment Version   SOLOPMT_VERSION   "0002"   AN 4  M
 			"SOLOPMT_STAMP"       => $stamp,// 2.    Payment Specifier    SOLOPMT_STAMP  Code specifying the payment   N 20  M 
 			"SOLOPMT_RCV_ID"      => $sender_id, // 3.    Service Provider ID  SOLOPMT_RCV_ID    Customer ID (in Nordea's register)  AN 15    M 
-			"SOLOPMT_RCV_ACCOUNT" => $stamp,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
-			"SOLOPMT_RCV_NAME"    => $recieve_name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
+			"SOLOPMT_RCV_ACCOUNT" => $acc,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
+			"SOLOPMT_RCV_NAME"    => $name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
 			"SOLOPMT_LANGUAGE"    => $lang,// 6.    Payment Language  SOLOPMT_LANGUAGE  1 = Finnish 2 = Swedish 3 = English    N 1   O 
 			"SOLOPMT_AMOUNT"      => $amount,// 7.    Payment Amount    SOLOPMT_AMOUNT    E.g. 990.00    AN 19    M 
 			"SOLOPMT_REF"         => $reference_nr,// 8.    Payment Reference Number   SOLOPMT_REF    Standard reference number  AN 20    M 

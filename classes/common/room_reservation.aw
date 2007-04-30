@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.61 2007/04/19 08:01:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.62 2007/04/30 15:11:14 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -64,6 +64,7 @@ class room_reservation extends class_base
 			"tpldir" => "common/room",
 			"clid" => CL_ROOM_RESERVATION
 		));
+		$this->bank_inst = get_instance(CL_BANK_PAYMENT);
 		$this->banks = array(
 			"hansapank" => "Hansapank",
 			"seb" => "Ühispank",
@@ -72,6 +73,7 @@ class room_reservation extends class_base
 			"hansapanklv" => "LV-Hansasabankas",
 			"hansapanklt" => "LT-Hansasabankas",
 		);
+		$this->banks = $this->banks + $this->bank_inst->banks;
 	}
 
 	function get_property($arr)
@@ -1262,7 +1264,7 @@ class room_reservation extends class_base
 					$room = $id;//et siis nyyd juhul kui oli tegutsetud teise ruumiga... siis nyyd see k]ik muutud... paremuse poole kindlasti
 				}
 			}
-		}
+		}//if(aw_global_get("uid") == "struktuur"){arr($_SESSION["room_reservation"]);arr($arr);die();}
 		//tegelt teised ruumid 'ra nullida oleks vaja ... vist.... jätame selle tuleviku tarkadele otsustada
 		$_SESSION["room_reservation"]["room_id"] = $room;
 		
@@ -1654,6 +1656,7 @@ class room_reservation extends class_base
 			reservation oid
 		@param room required type=oid	
 			room oid
+		@param section optional
 	**/
 	function revoke_reservation($arr)
 	{
