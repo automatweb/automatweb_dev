@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.50 2007/04/19 08:01:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.51 2007/04/30 13:05:28 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -344,8 +344,9 @@ class bank_payment extends class_base
 					"priv_key" 	=> $data["priv_key"],
 					"cancel_url"	=> $data["cancel_url"],
 					"return_url"	=> $data["return_url"],
+					"payment_id" 	=> $payment->id(),
 				));
-				$link = $this->bank_link[$bank];
+				$link = $this->_get_link_url($bank, $payment->prop("test"));
 				$this->vars(array(
 					"data" => $bank_form,
 					"link" => $link,
@@ -356,6 +357,19 @@ class bank_payment extends class_base
 				));
 			}
 		}
+	}
+
+	function _get_link_url($bank, $test = 0)
+	{
+		$url = $this->bank_link[$bank];
+		if($test)
+		{
+			if($this->test_link[$bank])
+			{
+				return $this->test_link[$bank];
+			}
+		}
+		return $url;
 	}
 
 	function _get_payment_object($arr)
@@ -652,7 +666,6 @@ class bank_payment extends class_base
 				$this->submit_meta($arr);
 				break;
 			case "bank_test":
-				arr($arr);
 				$arr["request"]["meta"][$arr["request"]["meta"]["new_bank"]] = $arr["request"]["meta"]["new"];
 				$this->submit_meta($arr);
 				break;
@@ -1359,7 +1372,6 @@ class bank_payment extends class_base
 		{
 			$link = $this->test_link["credit_card"];
 		}
-		
 		$params = array(
 			"action"	=> $service,		//"gaf"
 			"ver"		=> $version,		//Protokolli versioon, Fikseeritud v‰‰rtus: 002
