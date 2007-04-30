@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.12 2007/04/02 09:37:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.13 2007/04/30 16:28:20 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -125,6 +125,10 @@ class spa_customer_interface extends class_base
 				$o_begin = min($o_begin, $bron->prop("start1"));
 			}
 
+			if (!$has_prods)
+			{
+				continue;
+			}
 
 			if (!$confirmed || !$has_prods)
 			{
@@ -132,7 +136,8 @@ class spa_customer_interface extends class_base
 					"url" => $this->mk_my_orb("add_prod_to_bron", array(
 						"bron" => $o->id(), 
 						"id" => $id,
-						"r" => get_ru()
+						"r" => get_ru(),
+						"section" => aw_global_get("section")
 					)),
 					"caption" => t("Lisa teenus"),
 				));
@@ -167,7 +172,8 @@ class spa_customer_interface extends class_base
 				"add_service_url" => $this->mk_my_orb("add_prod_to_bron", array(
 						"bron" => $o->id(), 
 						"id" => $id,
-						"r" => get_ru()
+						"r" => get_ru(),
+						"section" => aw_global_get("section")
 					)),
 				"confirm_url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
 				"pay_url" => $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment)),
@@ -220,6 +226,12 @@ class spa_customer_interface extends class_base
 			foreach(safe_array($o->meta("extra_prods")) as $extra_item_entry)
 			{
 				$grp_list[] = "__ei|".$extra_item_entry["prod"];
+			}
+
+
+			if (count($grp_list) == 0)
+			{
+				continue;
 			}
 
 			foreach($grp_list as $prod_group)
@@ -426,6 +438,12 @@ class spa_customer_interface extends class_base
 			"cur_f_booking" => $cur_f_booking,
 			"cur_booking" => $cur_booking
 		));
+		if ($bookings != "")
+		{
+			$this->vars(array(
+				"HAS_PREV_BOOKINGS" => $this->parse("HAS_PREV_BOOKINGS")
+			));
+		}
 		return $this->parse();
 	}
 
@@ -500,7 +518,7 @@ class spa_customer_interface extends class_base
 			foreach($prods as $pr)
 			{
 				$p_list[] = html::href(array(
-					"url" => $this->mk_my_orb("add_prod_to_new_pkt", array("prod" => $pr->id(), "id" => $arr["id"], "r" => $arr["r"])),
+					"url" => $this->mk_my_orb("add_prod_to_new_pkt", array("section" => aw_global_get("section"), "prod" => $pr->id(), "id" => $arr["id"], "r" => $arr["r"])),
 					"caption" => $pr->name()
 				));
 				$pop_url = $this->mk_my_orb("prepare_select_new_pkt_time", array(
@@ -509,8 +527,9 @@ class spa_customer_interface extends class_base
 					"r" => $arr["r"]
 				));
 				$this->vars(array(
+					"prod_id" => $pr->id(),
 					"prod_name" => $pr->trans_get_val("name"),
-					"prod_url" => $this->mk_my_orb("add_prod_to_new_pkt", array("prod" => $pr->id(), "id" => $arr["id"], "r" => $arr["r"])),
+					"prod_url" => $this->mk_my_orb("add_prod_to_new_pkt", array("section" => aw_global_get("section"), "prod" => $pr->id(), "id" => $arr["id"], "r" => $arr["r"])),
 					"select_time_pop" => "aw_popup_scroll('$pop_url','bronner',640,480)"
 				));
 				$pp = $pr->meta("cur_prices");
@@ -619,6 +638,7 @@ class spa_customer_interface extends class_base
 					"bron" => $arr["bron"]
 				));
 				$this->vars(array(
+					"prod_id" => $pr->id(),
 					"prod_name" => $pr->trans_get_val("name"),
 					"prod_url" => $prod_url,
 					"select_time_pop" => "aw_popup_scroll('$prod_url','bronner',640,480)"
@@ -701,6 +721,45 @@ class spa_customer_interface extends class_base
 		return $total_sum;
 	}
 
+	function get_extra_prods_sum($os)
+	{
+                $room_res_inst = get_instance(CL_ROOM_RESERVATION);
+                $total_sum = 0;
+                if(!is_array($os))
+                {
+                	$os = array($os);
+                }
+                foreach($os as $o)
+                {
+			if(!is_oid($o) || !$this->can("view" , $o))
+			{
+				return $total_sum;
+			}
+			$o = obj($o);
+			foreach(safe_array($o->meta("extra_prods")) as $extra_item_entry)
+			{
+				if(!$this->can("view" , $extra_item_entry["reservation"]))
+				{
+					continue;
+				}
+				$b = obj($extra_item_entry["reservation"]);
+				$sum = $room_res_inst->get_total_bron_price(array(
+					"bron" => $b,
+				));
+				foreach($sum as $curr => $val)
+				{
+					$c = obj($curr);
+					if($c->name() == "EEK")
+					{
+						$sum = $val;
+					}
+				}
+				$total_sum+= $sum;
+			}
+		}
+		return $total_sum;
+	}
+
 	/**
 		@attrib name=pay
 		@param id required type=int acl=view
@@ -710,17 +769,28 @@ class spa_customer_interface extends class_base
 	function pay($arr)
 	{
 		extract($arr);
+		if(is_array($id))
+		{
+			$id = reset($id);
+			$o = obj($id);
+			$o->set_meta("all_brons" , $arr["id"]);
+		}
+		else
+		{
+			$o = obj($arr["id"]);
+		
+		}
+		
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		if(is_oid($bank_payment))
 		{
 			$payment = obj($bank_payment);
 			$asd = $bank_inst->bank_forms(array(
 				"id" => $bank_payment,
-				"amount" =>  $this->get_reservations_sum($arr["id"]),
-				"reference_nr" => $arr["id"],
+				"amount" =>  $this->get_extra_prods_sum($arr["id"]),
+				"reference_nr" => $o->id(),
 			));
 		}
-		$o = obj($arr["id"]);
 		$o->set_meta("ru" , $r);
 		$o->save();
 		return $asd;
@@ -750,11 +820,23 @@ class spa_customer_interface extends class_base
 	function bank_return($arr)
 	{
 		$o = obj($arr["id"]);
-		foreach($o->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+		if(is_array($o->meta("all_brons")))
 		{
-			$b = $c->to();
-			$b->set_prop("verified", 1);
-			$b->save();
+			$brons = $o->meta("all_brons");
+		}
+		else
+		{
+			$brons = array($arr["id"]);
+		}
+		foreach($brons as $bron_id)
+		{
+			$bron = obj($bron_id);
+			foreach($bron->connections_from(array("type" => "RELTYPE_ROOM_BRON")) as $c)
+			{
+				$b = $c->to();
+				$b->set_prop("verified", 1);
+				$b->save();
+			}
 		}
 		if($o->meta("ru"))
 		{
@@ -896,6 +978,55 @@ class spa_customer_interface extends class_base
 			"rooms" => $rooms,
 			"retf" => $arr["r"]
 		));
+	}
+
+	/**
+		@attrib name=show_prod_info 
+		@param prod required
+	**/
+	function show_prod_info($arr)
+	{
+		$this->read_template("show_prod_info.tpl");
+		$po = obj($arr["prod"]);
+		foreach($po->get_property_list() as $k => $v)
+		{
+			$this->vars(array($k => $po->prop_str($k)));
+		}
+
+		$i = get_instance(CL_IMAGE);
+		$cnt = 1;
+		$imgc = $po->connections_from(array("type" => "RELTYPE_IMAGE"));
+		usort($imgc, create_function('$a,$b', 'return $a->prop("to.jrk") - $b->prop("to.jrk");'));
+		foreach($imgc as $c)
+		{
+			$u = $i->get_url_by_id($c->prop("to"));
+
+			$pid = $c->prop("to");
+			$image_obj = $c->to();
+			$this->vars_safe(array(
+				"image".$cnt => image::make_img_tag_wl($image_obj->id()),
+				"image_br".$cnt => "<br><br>".image::make_img_tag($u, $c->prop("to.name")),
+				"image".$cnt."_comment" => "<br>".$image_obj->prop('comment'),
+				//"name" => $prod->name(),
+				"image".$cnt."_url" => $u,
+				"image".$cnt."_onclick" => image::get_on_click_js($c->prop("to")),
+				"packaging_image".$cnt => "",
+				"packaging_image".$cnt."_url" => ""
+			));
+	
+			if ($image_obj->prop("file2") != "")
+			{
+				$this->vars_safe(array(
+					"IMAGE".$cnt."_HAS_BIG" => $this->parse("IMAGE".$cnt."_HAS_BIG")
+				));
+			}
+			$this->vars_safe(array(
+				"HAS_IMAGE".$cnt => $this->parse("HAS_IMAGE".$cnt)
+			));
+			$cnt++;
+		}
+		
+		return $this->parse();
 	}
 }
 ?>
