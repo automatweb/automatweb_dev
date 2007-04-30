@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.91 2007/04/30 13:37:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.92 2007/04/30 14:06:49 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1653,6 +1653,8 @@ class conference_planning extends class_base
 			"data" => $data,
 		));
 		$thank_you_so_very_much = $this->can("view", $ob->prop("redir_doc"))?"/".$ob->prop("redir_doc"):"";
+		// take the trash out...
+		aw_session_set("conference_planning_data_".$ob->id(), "");
 		return aw_ini_get("baseurl").$thank_you_so_very_much;
 	}
 
