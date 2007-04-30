@@ -457,11 +457,9 @@
             </groupdata_b>
             <layout>
                   <caption>Layout</caption>
-                  <submit>no</submit>
             </layout>
             <avail>
                   <caption>K&amp;amp;otilde;ik omadused</caption>
-                  <submit>no</submit>
             </avail>
             <controllers>
                   <caption>Kontrollerid</caption>

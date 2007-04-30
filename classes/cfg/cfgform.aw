@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.111 2007/04/30 12:53:25 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.112 2007/04/30 14:53:06 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -12,8 +12,8 @@
 		@groupinfo groupdata_a caption=Tabid parent=groupdata
 		@groupinfo groupdata_b caption=Liikumine parent=groupdata
 
-	@groupinfo layout caption=Layout submit=no
-	@groupinfo avail caption="K&otilde;ik omadused" submit=no
+	@groupinfo layout caption=Layout
+	@groupinfo avail caption="K&otilde;ik omadused"
 	@groupinfo controllers caption="Kontrollerid"
 
 	@groupinfo set_controllers caption=Salvestamine parent=controllers
@@ -1336,8 +1336,8 @@ class cfgform extends class_base
 			"capt_prp_key" => t("Nimi"),
 			"capt_prp_caption" => t("Pealkiri"),
 			"capt_prp_type" => t("Tüüp"),
-			"capt_prp_mark" => t("Vali"),
 			"capt_prp_options" => t("Lisavalikud"),
+			"capt_prp_mark" => t("Vali"),
 		));
 
 		$item = $arr["prop"];
@@ -1359,6 +1359,7 @@ class cfgform extends class_base
 	// !
 	function gen_avail_props($arr = array())
 	{
+		// init table
 		$t = &$arr["prop"]["vcl_inst"];
 
 		$t->define_field(array(
@@ -1383,6 +1384,14 @@ class cfgform extends class_base
 			"name" => "default_grp",
 			"sortable" => true,
 			"caption" => t("Vaikimisi tab"),
+			"filter" => "automatic"
+		));
+
+		$t->define_field(array(
+			"name" => "in_use",
+			"sortable" => true,
+			"caption" => t("K"),
+			"tooltip" => t("Kasutusel"),
 		));
 
 		$t->define_chooser(array(
@@ -1395,29 +1404,49 @@ class cfgform extends class_base
 			$t->set_sortable(false);
 		}
 
+		// get props in use
 		$used_props = array();
 
 		if (is_array($this->prplist))
 		{
 			foreach($this->prplist as $property)
 			{
-				$prpdata = $this->all_props[$property["name"]];
-				$used_props[$property["name"]] = 1;
+				if (!empty($property["group"]))
+				{
+					if (is_array($property["group"]))
+					{
+						$used_props[$property["name"]] = $property["group"];
+					}
+					else
+					{
+						$used_props[$property["name"]][] = $property["group"];
+					}
+				}
 			}
 		}
 
-		foreach($this->all_props as $key => $property)
+		foreach($this->all_props as $property)
 		{
-			// A single property might be located in multiple groups
-			//if (empty($used_props[$property["name"]]))
-			//{
-				$t->define_data(array(
-					"caption" => $property["caption"],
-					"type" => $property["type"],
-					"name" => $property["name"],
-					"default_grp" => $property["group"],
-				));
-			//};
+			if (count($used_props[$property["name"]]))
+			{
+				$groups = implode(", ", $used_props[$property["name"]]);
+			}
+			else
+			{
+				$groups = "";
+			}
+
+			$t->define_data(array(
+				"caption" => $property["caption"],
+				"type" => $property["type"],
+				"name" => $property["name"],
+				"default_grp" => $property["group"],
+				"in_use" => $groups ? html::img(array(
+					"url" => aw_ini_get("icons.server")."/check.gif",
+					"alt" => $groups,
+					"title" => $groups
+				)) : ""
+			));
 		}
 	}
 
@@ -2579,6 +2608,14 @@ class cfgform extends class_base
 			"tooltip" => t("Lisa tab"),
 		));
 
+		// save
+		$toolbar->add_button(array(
+			"name" => "save",
+			"url" => "javascript:submit_changeform()",
+			"img" => "save.gif",
+			"tooltip" => t("Salvesta"),
+		));
+
 		// delete for user defined groups
 		$user_dfn_grps = array();
 		$delete_url = $this->mk_my_orb("delete_userdfn_grp", array(
@@ -2677,10 +2714,10 @@ class cfgform extends class_base
 		{
 			$bg_colour = empty($gd["parent"]) ? "silver" : false;
 			$t->define_data(array(
-				"grp" => $gn,
+				"grp" => $gn . " <small>(" . $gd["caption"] . ")</small>",
 				"caption" => html::textbox(array(
 					"name" => "grpcaption[".$gn."]",
-					"size" => 30,
+					"size" => 25,
 					"value" => $gd["caption"],
 				)),
 				"ord" => html::textbox(array(
