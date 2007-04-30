@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.84 2007/03/23 08:34:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.85 2007/04/30 13:45:47 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -936,6 +936,7 @@ class crm_meeting extends class_base
 
 	function show2($arr)
 	{
+		$has_tpl = $this->read_template($_GET["date"] != "" ? "display_event.tpl" : "display_event_in_list.tpl", 1);
 		$ob = new object($arr["id"]);
 		$cform = $ob->meta("cfgform_id");
 		// feega hea .. nüüd on vaja veel nimed saad
@@ -954,6 +955,11 @@ class crm_meeting extends class_base
 		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
 		$htmlc->start_output();
 
+		$this->vars(array(
+			"oid" => $ob->id(),
+			"date" => date("d.m.Y", $ob->prop("start1"))
+		));
+
 		foreach($props as $propname => $propdata)
 		{
 		  	$value = $ob->prop($propname);
@@ -966,6 +972,17 @@ class crm_meeting extends class_base
 				$value = date("d-m-Y H:i", $value);
 			};
 
+			if ($has_tpl)
+			{
+				$this->vars(array(
+					$propname => nl2br($value),
+					$propname."_caption" => $propdata["caption"]
+				));
+				if ($_GET["EVT_DBG"])
+				{
+					echo "property $propname => ".nl2br($value)." <br>";
+				}
+			}
 			if (!empty($value))
 			{
 			   $htmlc->add_property(array(
@@ -974,7 +991,16 @@ class crm_meeting extends class_base
 			      "value" => nl2br($value),
 			      "type" => "text",
 			   ));
-			};
+			   $this->vars(array(
+			   	"HAS_".$propname => $this->parse("HAS_".$propname)
+			   ));
+			}
+			else
+			{
+				$this->vars(array(
+					"HAS_".$propname => ""
+				));
+			}
 		};
 		$htmlc->finish_output(array("submit" => "no"));
 
@@ -982,6 +1008,10 @@ class crm_meeting extends class_base
 			"form_only" => 1
 		));
 	
+		if ($has_tpl)
+		{
+			return $this->parse();
+		}
 		return $html;
 	}
 
