@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.63 2007/05/02 10:57:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.64 2007/05/02 11:14:46 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -30,7 +30,11 @@
 @property levels type=table no_caption=1 store=no
 @caption Tasemed
 
-
+@groupinfo trans caption=T&otilde;lgi
+@default group=transl
+	
+	@property trans type=callback callback=callback_get_trans store=no
+	@caption T&otilde;lgi
 
 @groupinfo order_email caption="Tellimusmeil"
 @default group=order_email
@@ -78,6 +82,10 @@ class room_reservation extends class_base
 			"hansapanklt" => "LT-Hansasabankas",
 		);
 		$this->banks = $this->banks + $this->bank_inst->banks;
+		
+		$this->trans_props = array(
+			"revoke_url"
+		);
 	}
 
 	function get_property($arr)
@@ -148,7 +156,10 @@ class room_reservation extends class_base
 			case "levels":
 				$this->submit_meta($arr);
 				break;
-		}
+			case "trans":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+			}
 		return $retval;
 	}	
 	function submit_meta($arr = array())
@@ -1687,11 +1698,16 @@ class room_reservation extends class_base
 			$ro = obj($room_res);
 			if($ro->prop("revoke_url"))
 			{
-				$section = $ro->prop("revoke_url");
+				$section = $ro->trans_get_val("revoke_url");
 			}
 		}
-		if(aw_global_get("uid") == "struktuur"){arr($section);}
 		return $section;
 	}
+	
+	function callback_get_trans($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
+	
 }
 ?>
