@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.62 2007/04/30 15:11:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.63 2007/05/02 10:57:00 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -24,8 +24,12 @@
 @property ver_mail_template type=select 
 @caption Kinnitusmaili template
 
+@property revoke_url type=textbox 
+@caption Broneerimise katkestamise url
+
 @property levels type=table no_caption=1 store=no
 @caption Tasemed
+
 
 
 @groupinfo order_email caption="Tellimusmeil"
@@ -385,7 +389,7 @@ class room_reservation extends class_base
 		
 		
 		$data = array("joga" => "jogajoga");
-		$data["revoke_url"] = $this->mk_my_orb("revoke_reservation", array("room" => $room->id()));
+		$data["revoke_url"] = $this->mk_my_orb("revoke_reservation", array("room" => $room->id() , "room_res" => $targ->id()));
 
 		//seda vaja, et toodete tabelis vana crapi ka näha oleks,....et vahepeal võib ruum muutunud olla
 		$this->set_cart_session($room);
@@ -1656,11 +1660,13 @@ class room_reservation extends class_base
 			reservation oid
 		@param room required type=oid	
 			room oid
+		@param room_res optional type=oid
+			room reservation object id
 		@param section optional
 	**/
 	function revoke_reservation($arr)
 	{
-		if( $_SESSION["room_reservation"]["room_id"])
+		if($_SESSION["room_reservation"]["room_id"])
 		{
 			$arr["room"] =  $_SESSION["room_reservation"]["room_id"];
 		}
@@ -1676,6 +1682,15 @@ class room_reservation extends class_base
 			$bron->delete();
 		}
 		$_SESSION["room_reservation"][$arr["room"]] = null;
+		if(is_oid($room_res) || $this->can("view" , $room_res))
+		{
+			$ro = obj($room_res);
+			if($ro->prop("revoke_url"))
+			{
+				$section = $ro->prop("revoke_url");
+			}
+		}
+		if(aw_global_get("uid") == "struktuur"){arr($section);}
 		return $section;
 	}
 }

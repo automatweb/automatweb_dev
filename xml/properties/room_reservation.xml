@@ -50,6 +50,15 @@
             <caption>Kinnitusmaili template</caption>
       </property>
       <property>
+            <name>revoke_url</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Broneerimise katkestamise url</caption>
+      </property>
+      <property>
             <name>levels</name>
             <table>objects</table>
             <group>general</group>

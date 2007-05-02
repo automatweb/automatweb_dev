@@ -92,6 +92,8 @@
 				<arguments>
 					<optional name="bron_id" type="array" />
 					<required name="room" type="oid" />
+					<optional name="room_res" type="oid" />
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
