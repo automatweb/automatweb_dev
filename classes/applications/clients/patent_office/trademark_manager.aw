@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.28 2007/04/11 16:44:03 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.29 2007/05/02 12:10:11 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -625,8 +625,10 @@ class trademark_manager extends class_base
 			{
 				$pri_name = $o->prop("exhibition_name");
 			}
-			$pri_co = ($o->prop("convention_country"))?$o->prop("convention_country"):$o->prop("exhibition_country");
-	
+			if($o->prop("convention_nr") || $o->prop("exhibition_name"))
+			{
+				$pri_co = ($o->prop("convention_country"))?$o->prop("convention_country"):$o->prop("exhibition_country");
+			}
 			$xml .= '	<BIRTH TRANTYP="ENN" INTREGN="'.sprintf("%08d", $status->prop("nr")).'" OOCD="EE" ORIGLAN="3" EXPDATE="'.date("Ymd", $status->prop("modified")).'" REGEDAT="'.date("Ymd", $status->prop("sent_date")).'" INTREGD="'.date("Ymd", $status->prop("modified")).'" DESUNDER="P">
 ';
 
