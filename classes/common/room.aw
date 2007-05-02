@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.188 2007/04/23 10:13:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.189 2007/05/02 15:17:50 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -83,10 +83,19 @@
 		@caption Luba mitu broneeringut ühele ajale
 		
 		@property group_product_menu type=checkbox parent=general_down no_caption=1
-		@caption Grupeeri tooted kaustadesse
-		
+		@caption Grupeeri tooted kaustadesse		
+
 		@property settings type=relpicker parent=general_down multiple=1 reltype=RELTYPE_SETTINGS
 		@caption Seaded
+		
+		layout concurrent type=hbox closeable=1 area_caption=Samaaegsed&nbsp;broneeringud: parent=general_down
+		
+			property concurrent_brons type=textbox size=5 parent=concurrent no_caption=1
+			caption Samaaegsed broneeringuid
+		
+			property concurrent_type type=chooser size=5 parent=concurrent no_caption=1
+			caption inimeste arv / broneeringute arv
+		
 		
 valdkonnanimi (link, mis avab popupi, kuhu saab lisada vastava valdkonnaga seonduva täiendava info selle valdkonna objektitüübi kaudu, nt konverentsid).
 - puhveraeg enne (mitu tundi enne reserveeringu algust lisaks bronnitakse ruumide ettevalmistamiseks)
@@ -425,6 +434,12 @@ class room extends class_base
 					3 => t("p&auml;evades"),
 				);
 				break;
+			case "concurrent_type":
+				$prop["options"] = array(
+					0 => t("inimeste arv"),
+					1 => t("broneeringute arv"),
+				);
+				break;
 			# TAB CALENDAR
 			case "calendar":
 				### update schedule
@@ -435,6 +450,9 @@ class room extends class_base
 				$prop["value"] = $this->_get_calendar_select($arr);
 				break;
 			
+			case "concurrent_brons":
+				$prop["value"] = ($prop["value"]) ? $prop["value"] : 1; 
+				break;
 			case "calendar_tbl":
 				$this->_get_calendar_tbl($arr);
 				break;	
@@ -1215,6 +1233,8 @@ class room extends class_base
 					if(strlen($phone))
 					{
 						$person->connect(array("to"=> $phone_obj->id(), "type" => "RELTYPE_PHONE"));
+						$person->set_prop("phone" , $phone_obj->id());
+						$person->save();
 					}
 				}
 				
@@ -1242,6 +1262,8 @@ class room extends class_base
 					if(strlen($phone))
 					{
 						$co->connect(array("to"=> $phone_obj->id(), "type" => "RELTYPE_PHONE"));
+						$co->set_prop("phone_id" , $phone_obj->id());
+						$co->save();
 					}
 				}
 				$bron->save();
@@ -1406,7 +1428,7 @@ class room extends class_base
 		$x=0;
 		$options = array();
 		$week = date("W" , time());
-		$weekstart = mktime(0,0,0,1,1,date("Y" , time())) + (date("z" , time()) - date("w" , time()) + 1)*86400;
+		$weekstart = get_week_start();
 		while($x<20)
 		{
 			$url = aw_url_change_var("start",$weekstart,get_ru());
@@ -1515,7 +1537,7 @@ class room extends class_base
                 $x=0;
                 $options = array();
                 $week = date("W" , time());
-                $weekstart = mktime(0,0,0,1,1,date("Y" , time())) + (date("z" , time()) - date("w" , time()) + 1)*86400;
+                $weekstart = get_week_start();
                 while($x<20)
                 {
                         $url = aw_url_change_var("end", null, aw_url_change_var("start",$weekstart,get_ru()));
@@ -1630,7 +1652,7 @@ class room extends class_base
 				//$day_end -= (3600*$gwo["start_hour"]);
  			}
  			if($gwo["start_minute"])
-	 		{	
+	 		{
  				$this->start = $this->start+60*$gwo["start_minute"];
  				$today_start = $today_start+60*$gwo["start_minute"];
 				//$day_end -= (60*$gwo["start_minute"]);
@@ -1677,6 +1699,7 @@ class room extends class_base
 			//	$day_end -= (60*$gwo["start_minute"]);
 			}
 		}
+		
 		if (date("I", time()) != 1 && date("I", $today_start) == 1)
 		{
 			$this->start -= 3600;
