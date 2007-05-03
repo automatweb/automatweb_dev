@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.53 2007/04/24 13:55:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.54 2007/05/03 13:56:15 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -72,6 +72,9 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 	@property username_element type=select field=meta method=serialize
 	@caption Kasutajanime element
+
+	@property auto_pwd type=checkbox ch_value=1 field=meta method=serialize
+	@caption Automaatne parool
 
 	@property prop_settings type=table store=no no_caption=1
 
@@ -1030,6 +1033,12 @@ class join_site extends class_base
 							$tp[$pid]["options"] = $ops_ol->names();
 						}
 					}
+					else
+					if ($ob->prop("auto_pwd"))
+					{
+						unset($tp[$pid]);
+						continue;
+					}
 				}
 			}
 
@@ -1330,6 +1339,11 @@ class join_site extends class_base
 			list($clid, $el) = explode("_", $obj->prop("username_element"), 2);
 			$arr["typo_".CL_USER]["uid_entry"] = $arr["typo_".$clid][$el];
 		} 
+
+		if ($obj->prop("auto_pwd"))
+		{
+			$arr["typo_".CL_USER]["passwd"] = $arr["typo_".CL_USER]["passwd_again"] = generate_password(array("length" => 8));
+		}
 
 		// update session data in sess[site_join_status]
 		$this->_update_sess_data($arr);
