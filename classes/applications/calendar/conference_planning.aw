@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.92 2007/04/30 14:06:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.93 2007/05/03 07:13:57 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1316,18 +1316,26 @@ class conference_planning extends class_base
 				}
 				$em = obj($loc->prop("email"));
 				$em->set_prop("mail", $email);
+				$em->set_name($email);
 				$em->save();
 			}
 		}
 	}
 
 
-	function callback_mod_layout($arr)
+	function callback_mod_layout(&$arr)
 	{
 		if(!strlen($arr["request"]["element"]) && $arr["name"] == "controller")
 		{
 			return false;
 		}
+		elseif($arr["name"] == "controller")
+		{
+			$views = aw_unserialize($arr["obj_inst"]->prop("help_views"));
+			$elname = $views[$arr["request"]["view_no"]]["elements"][$arr["request"]["element"]]["name"];
+			$arr["area_caption"] =  sprintf("Elemendi '%s' konfiguratsioon", $elname);
+		}
+		
 		if(!strlen($arr["request"]["view_no"]) && $arr["name"] == "trans")
 		{
 			return false;
@@ -1436,12 +1444,12 @@ class conference_planning extends class_base
 		@comment
 			stores the form session data,
 	**/
-	function store_data($id, $data)
+	function store_data($id, $data, $preserve = true)
 	{
 		if(strlen($id))
 		{
 			$p_data = $this->get_stored_data($id);
-			$data = array_merge($p_data, $data);
+			$data = $preserve?array_merge($p_data, $data):$data;
 			aw_session_set("conference_planning_data_".$id, $data);
 			return true;
 		}
@@ -1564,7 +1572,7 @@ class conference_planning extends class_base
 	
 
 	/**
-		@attrib name=forward all_args=1 no_login=1
+		@attrib name=forward all_args=1 nologin=1
 	**/
 	function forward($arr)
 	{
@@ -1584,7 +1592,7 @@ class conference_planning extends class_base
 	}
 
 	/**
-		@attrib name=stay all_args=1 no_login=1
+		@attrib name=stay all_args=1 nologin=1
 	**/
 	function stay($arr)
 	{
@@ -1593,7 +1601,7 @@ class conference_planning extends class_base
 	}
 
 	/**
-		@attrib name=back all_args=1 no_login=1
+		@attrib name=back all_args=1 nologin=1
 	**/
 	function back($arr)
 	{
@@ -1635,7 +1643,7 @@ class conference_planning extends class_base
 				"views" => &$views,
 				"values" => &$data,
 			);
-			$result = $this->can("view", $ctr)?$i->check_property($ctr, "",$toprop, $GLOBALS["_GET"],"",""):array();
+			$result = $this->can("view", $ctr)?$i->check_property($ctr, $ob->id(),$toprop, $GLOBALS["_GET"],"",""):array();
 			if($result == PROP_IGNORE) // basically this should indicate that that submission is totally incorrect and goes to annulation
 			{
 				return aw_ini_get("baseurl");
@@ -1654,7 +1662,7 @@ class conference_planning extends class_base
 		));
 		$thank_you_so_very_much = $this->can("view", $ob->prop("redir_doc"))?"/".$ob->prop("redir_doc"):"";
 		// take the trash out...
-		aw_session_set("conference_planning_data_".$ob->id(), "");
+		$this->store_data($ob->id(), array(), false);
 		return aw_ini_get("baseurl").$thank_you_so_very_much;
 	}
 

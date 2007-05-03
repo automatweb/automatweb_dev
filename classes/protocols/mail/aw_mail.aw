@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.11 2007/04/10 08:03:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.12 2007/05/03 07:13:55 tarvo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -427,16 +427,18 @@ class aw_mail {
 	@param body optional type=string
 	@return string/html
 	**/
-	function gen_htmlbody($body)
+	function gen_htmlbody($body, $heads = "")
 	{
 		return ((substr($body,0,6)=="<html>") || (strpos($body, "<!DOCTYPE") !== false))?$body:
-			"<html><head><title></title></head><body>$body</body></html>";
+			"<html><head><title></title>".$heads."</head><body>$body</body></html>";
 	}
 
 	/**
 	@attrib api=1 params=name
 	@param data required type=string
 		html data
+	@param heads optional type=string
+		stuff inside html <head> tag
 	@example ${gen_mail}
 	@comments
 		Defines an alternative html body
@@ -459,7 +461,7 @@ class aw_mail {
 
 		$data = str_replace("\\\"","\"",$data);
 		$atc.="Content-Type: text/html; charset=".CHARSET . CRLF;
-		$atc.="Content-Transfer-Encoding: 8bit".CRLF.CRLF.$this->gen_htmlbody($data).CRLF.CRLF;
+		$atc.="Content-Transfer-Encoding: 8bit".CRLF.CRLF.$this->gen_htmlbody($data, $heads).CRLF.CRLF;
 
 		$atc .= "--".$boundary."--".CRLF;
 		
@@ -713,7 +715,7 @@ class aw_mail {
 			$ll = get_instance("languages");
 			$this->set_header("Content-Type","text/plain; charset=\"".$ll->get_charset()."\"");
 		};
-
+//arr($this->headers);
 		unset($this->headers["To"]);
 		// why is this here? it will screw up sending to mailinglists - only the first mail will get the subject
 		// unset($this->headers["Subject"]);
@@ -735,8 +737,11 @@ class aw_mail {
 			};
 		};
 		$this->bodytext = $email;
-//echo "send $to $subject $headers $email <br>";
-		//send_mail($to,$subject,$email,$headers);
+		if ($this->dbg == 1)
+		{
+			echo "<pre>Send mail: to: $to\nsubj: $subject\nemail = $email\nheaders = $headers\n</pre>";
+		}
+		send_mail($to,$subject,$email,$headers);
 	}
 };
 ?>
