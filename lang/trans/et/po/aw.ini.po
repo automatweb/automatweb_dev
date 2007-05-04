@@ -2515,6 +2515,26 @@ msgstr ""
 msgid "Klassi Objektide korv (1201) nimi"
 msgstr ""
 
+#: aw.ini:class_1202
+msgid "Klassi Eelarvestamise konto (1202) nimi"
+msgstr ""
+
+#: aw.ini:class_1203
+msgid "Klassi Eelarvestamise &uuml;lekanne (1203) nimi"
+msgstr ""
+
+#: aw.ini:class_1204
+msgid "Klassi Eelarvestamise fond (1204) nimi"
+msgstr ""
+
+#: aw.ini:class_1205
+msgid "Klassi Eelarvestamise t&ouml;&ouml;laud (1205) nimi"
+msgstr ""
+
+#: aw.ini:class_1206
+msgid "Klassi Eelarvestamise maks (1206) nimi"
+msgstr ""
+
 # aw.ini:classfolder_29
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
@@ -2808,6 +2828,10 @@ msgstr ""
 
 #: aw.ini:classfolder_64
 msgid "Klassi kataloogi T&ouml;&ouml;aja planeerimine (64) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_65
+msgid "Klassi kataloogi Eelarvestamine (65) nimi"
 msgstr ""
 
 #: aw.ini:acl_can_edit
@@ -4972,6 +4996,26 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1201
 msgid "syslog.type.ST_OBJECT_BASKET"
+msgstr ""
+
+#: aw.ini:syslogtypes_1202
+msgid "syslog.type.ST_ROSTERING_ACCOUNT"
+msgstr ""
+
+#: aw.ini:syslogtypes_1203
+msgid "syslog.type.ST_BUDGETING_TRANSFER"
+msgstr ""
+
+#: aw.ini:syslogtypes_1204
+msgid "syslog.type.ST_BUDGETING_FUND"
+msgstr ""
+
+#: aw.ini:syslogtypes_1205
+msgid "syslog.type.ST_BUDGETING_WORKSPACE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1206
+msgid "syslog.type.ST_BUDGETING_TAX"
 msgstr ""
 
 #: aw.ini:syslogactions_1

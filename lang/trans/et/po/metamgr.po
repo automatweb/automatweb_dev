@@ -15,15 +15,15 @@ msgid "Klassi Muutujate haldus help"
 msgstr ""
 
 #: classes/meta/metamgr.aw:prop_transyes
-msgid "Omaduse Vajab t&amp;otilde;lget (transyes) caption"
+msgid "Omaduse Vajab t&otilde;lget (transyes) caption"
 msgstr ""
 
 #: classes/meta/metamgr.aw:prop_transyes_comment
-msgid "Omaduse Vajab t&amp;otilde;lget (transyes) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (transyes) kommentaar"
 msgstr ""
 
 #: classes/meta/metamgr.aw:prop_transyes_help
-msgid "Omaduse Vajab t&amp;otilde;lget (transyes) help"
+msgid "Omaduse Vajab t&otilde;lget (transyes) help"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_mgrtoolbar
@@ -120,7 +120,7 @@ msgid "Nimi"
 msgstr ""
 
 #: classes/meta/metamgr.aw:175
-msgid "V&amp;auml;&amp;auml;rtus"
+msgid "V&auml;&auml;rtus"
 msgstr ""
 
 #: classes/meta/metamgr.aw:182

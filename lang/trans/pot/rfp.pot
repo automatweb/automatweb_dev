@@ -242,6 +242,30 @@ msgstr ""
 msgid "Omaduse Sviidid (data_gen_suites) help"
 msgstr ""
 
+#: classes/applications/calendar/rfp.aw:prop_data_gen_acc_start
+msgid "Omaduse Majutuse algusaeg (data_gen_acc_start) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_gen_acc_start_comment
+msgid "Omaduse Majutuse algusaeg (data_gen_acc_start) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_gen_acc_start_help
+msgid "Omaduse Majutuse algusaeg (data_gen_acc_start) help"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_gen_acc_end
+msgid "Omaduse Majutuse l&otilde;puaeg (data_gen_acc_end) caption"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_gen_acc_end_comment
+msgid "Omaduse Majutuse l&otilde;puaeg (data_gen_acc_end) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/rfp.aw:prop_data_gen_acc_end_help
+msgid "Omaduse Majutuse l&otilde;puaeg (data_gen_acc_end) help"
+msgstr ""
+
 #: classes/applications/calendar/rfp.aw:prop_data_gen_dates_are_flexible
 msgid "Omaduse Kuup&auml;evad on paindlikud (data_gen_dates_are_flexible) caption"
 msgstr ""
@@ -806,79 +830,79 @@ msgstr ""
 msgid "Grupi Arve info (billing) help"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:255 classes/applications/calendar/rfp.aw:436
+#: classes/applications/calendar/rfp.aw:261 classes/applications/calendar/rfp.aw:442
 msgid "Yes"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:255 classes/applications/calendar/rfp.aw:436
+#: classes/applications/calendar/rfp.aw:261 classes/applications/calendar/rfp.aw:442
 msgid "No"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:269 classes/applications/calendar/rfp.aw:346 classes/applications/calendar/rfp.aw:369
+#: classes/applications/calendar/rfp.aw:275 classes/applications/calendar/rfp.aw:352 classes/applications/calendar/rfp.aw:375
 msgid "Type"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:273
+#: classes/applications/calendar/rfp.aw:279
 msgid "Start_time"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:277
+#: classes/applications/calendar/rfp.aw:283
 msgid "End time"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:281
+#: classes/applications/calendar/rfp.aw:287
 msgid "Number of attendees"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:350 classes/applications/calendar/rfp.aw:397
+#: classes/applications/calendar/rfp.aw:356 classes/applications/calendar/rfp.aw:403
 msgid "Arrival date"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:354 classes/applications/calendar/rfp.aw:401
+#: classes/applications/calendar/rfp.aw:360 classes/applications/calendar/rfp.aw:407
 msgid "Departure date"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:373
+#: classes/applications/calendar/rfp.aw:379
 msgid "No. of delegates"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:377
+#: classes/applications/calendar/rfp.aw:383
 msgid "Table form"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:381
+#: classes/applications/calendar/rfp.aw:387
 msgid "Tech. equipment"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:385
+#: classes/applications/calendar/rfp.aw:391
 msgid "Door sign"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:389
+#: classes/applications/calendar/rfp.aw:395
 msgid "No. of persons"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:393
+#: classes/applications/calendar/rfp.aw:399
 msgid "24h Hold"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:405
+#: classes/applications/calendar/rfp.aw:411
 msgid "Catering type"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:409
+#: classes/applications/calendar/rfp.aw:415
 msgid "Catering start"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:413
+#: classes/applications/calendar/rfp.aw:419
 msgid "Catering end"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:426
+#: classes/applications/calendar/rfp.aw:432
 msgid "Location"
 msgstr ""
 
-#: classes/applications/calendar/rfp.aw:430
+#: classes/applications/calendar/rfp.aw:436
 msgid "Selected by user"
 msgstr ""
 

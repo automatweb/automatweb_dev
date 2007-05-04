@@ -15,15 +15,15 @@ msgid "Klassi Muutujate haldus help"
 msgstr ""
 
 #: classes/meta/metamgr.aw:prop_transyes
-msgid "Omaduse Vajab t&amp;otilde;lget (transyes) caption"
-msgstr "Needs translation"
+msgid "Omaduse Vajab t&otilde;lget (transyes) caption"
+msgstr ""
 
 #: classes/meta/metamgr.aw:prop_transyes_comment
-msgid "Omaduse Vajab t&amp;otilde;lget (transyes) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (transyes) kommentaar"
 msgstr ""
 
 #: classes/meta/metamgr.aw:prop_transyes_help
-msgid "Omaduse Vajab t&amp;otilde;lget (transyes) help"
+msgid "Omaduse Vajab t&otilde;lget (transyes) help"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_mgrtoolbar
@@ -120,8 +120,8 @@ msgid "Nimi"
 msgstr "Name"
 
 #: classes/meta/metamgr.aw:175
-msgid "V&amp;auml;&amp;auml;rtus"
-msgstr "Value"
+msgid "V&auml;&auml;rtus"
+msgstr ""
 
 #: classes/meta/metamgr.aw:182
 msgid "Jrk"
@@ -154,6 +154,12 @@ msgstr "Delete selected variables"
 #: classes/meta/metamgr.aw:489
 msgid "Kustuta valitud muutujad?"
 msgstr "Delete selected variables?"
+
+#~ msgid "Omaduse Vajab t&amp;otilde;lget (transyes) caption"
+#~ msgstr "Needs translation"
+
+#~ msgid "V&amp;auml;&amp;auml;rtus"
+#~ msgstr "Value"
 
 # classes/meta/metamgr.aw:prop_manager
 #~ msgid "Omaduse Manager (manager) caption"
