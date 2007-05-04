@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.118 2007/04/26 07:47:31 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.119 2007/05/04 10:34:53 kristo Exp $
 // project.aw - Projekt
 /*
 
@@ -7,6 +7,7 @@
 @classinfo syslog_type=ST_PROJECT relationmgr=yes
 
 @tableinfo aw_projects index=aw_oid master_table=objects master_index=brother_of
+@tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 @default table=objects
 
 @default group=general2
@@ -14,6 +15,8 @@
 		@layout left_bit type=vbox parent=up_bit closeable=1 area_caption=&Uuml;ldandmed
 			@property name type=textbox parent=left_bit
 			@caption Nimi
+
+@property balance type=hidden table=aw_account_balances field=aw_balance
 
 			@property code type=textbox table=aw_projects field=aw_code parent=left_bit
 			@caption Kood
@@ -4324,6 +4327,11 @@ class project extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
+		if ("aw_account_balances" == $tbl)
+		{
+			$i = get_instance(CL_CRM_CATEGORY);
+			return $i->do_db_upgrade($tbl, $field);
+		}
 		switch($field)
 		{
 			case "aw_archive_code":

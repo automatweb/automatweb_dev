@@ -186,7 +186,7 @@
             <parent>data_time</parent>
             <captionside>top</captionside>
             <field>num_hrs_guess</field>
-            <caption>Prognoositav </caption>
+            <caption>Prognoositav</caption>
       </property>
       <property>
             <name>num_hrs_real</name>
@@ -197,7 +197,7 @@
             <parent>data_time</parent>
             <captionside>top</captionside>
             <field>num_hrs_real</field>
-            <caption>Tegelik </caption>
+            <caption>Tegelik</caption>
       </property>
       <property>
             <name>num_hrs_to_cust</name>
@@ -363,7 +363,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CUST_RESPONSIBLE</reltype>
             <field>aw_cust_responsible</field>
-            <caption>Kliendipoolne vastutaja	</caption>
+            <caption>Kliendipoolne vastutaja</caption>
       </property>
       <property>
             <name>cust_status</name>

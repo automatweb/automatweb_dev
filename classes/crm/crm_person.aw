@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.169 2007/04/04 12:43:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.170 2007/05/04 10:34:55 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -11,6 +11,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 @classinfo relationmgr=yes syslog_type=ST_CRM_PERSON no_status=1 confirm_save_data=1
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
+@tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
 @default table=objects
 ------------------------------------------------------------------
@@ -20,6 +21,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 @property name type=text
 @caption Nimi
+
+@property balance type=hidden table=aw_account_balances field=aw_balance
 
 @default table=kliendibaas_isik
 
@@ -3239,6 +3242,12 @@ class crm_person extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
+		if ("aw_account_balances" == $tbl)
+		{
+			$i = get_instance(CL_CRM_CATEGORY);
+			return $i->do_db_upgrade($t, $f);
+		}
+
 		switch($field)
 		{
 			case "aw_bd_up":

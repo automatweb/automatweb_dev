@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.169 2007/04/13 14:11:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.170 2007/05/04 10:34:53 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -17,6 +17,8 @@
 
 			@property name type=textbox table=objects field=name parent=top_2way_left
 			@caption Nimi
+
+@property balance type=hidden table=aw_account_balances field=aw_balance
 
 			@property comment type=textbox table=objects field=comment parent=top_2way_left
 			@caption Kommentaar
@@ -230,6 +232,7 @@ caption Osalejad
 @groupinfo predicates caption="Eeldused" parent=other_exp
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
+@tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
@@ -3293,6 +3296,10 @@ class task extends class_base
 		));
 		
 		$customers = array("1");
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 		{
 			$customers[] = $c->prop("to");
@@ -3893,6 +3900,15 @@ class task extends class_base
 			}
 		}
 		return 0;
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ("aw_account_balances" == $tbl)
+		{
+			$i = get_instance(CL_CRM_CATEGORY);
+			return $i->do_db_upgrade($t, $f);
+		}
 	}
 }
 ?>

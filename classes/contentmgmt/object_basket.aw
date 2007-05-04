@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.4 2007/04/19 14:14:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_basket.aw,v 1.5 2007/05/04 10:34:54 kristo Exp $
 // object_basket.aw - Objektide korv 
 /*
 
@@ -63,6 +63,7 @@ class object_basket extends class_base
 
 	function show($arr)
 	{
+		aw_global_set("no_cache", 1);
 		$basket = obj($arr["id"]);
 		$objs = $this->get_basket_content($basket);
 		$this->read_template("show_basket.tpl");

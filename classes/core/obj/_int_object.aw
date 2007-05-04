@@ -1362,11 +1362,25 @@ class _int_object
 		$retval = array();
 		if (is_array($this->obj["properties"]))
 		{
-			$retval = $this->obj["properties"];
+			foreach($this->obj["properties"] as $k => $v)
+			{
+				$retval[$k] = $this->trans_get_val($k);
+			}
 		};
 		if (is_array($this->obj))
 		{
-			$retval = array_merge($retval,$this->obj);
+			foreach($this->obj as $k => $v)
+			{
+				if ($k == "comment" || $k == "name")
+				{
+					$retval[$k] = $this->trans_get_val($k);
+				}
+				else
+				if (!isset($retval[$k]))
+				{
+					$retval[$k] = $v;
+				}
+			}
 		};
 		return $retval;
 	}

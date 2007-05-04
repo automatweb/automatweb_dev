@@ -12,12 +12,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 @classinfo syslog_type=ST_CRM_COMPANY no_status=1 confirm_save_data=1 versioned=1 prop_cb=1
 
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
+@tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
 @default table=objects
 
 
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
+	@property balance type=hidden table=aw_account_balances field=aw_balance
 	
 	@property jrk field=jrk type=textbox display=none group=general_sub
 	@caption Jrk
@@ -6264,6 +6266,11 @@ class crm_company extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
+		if ("aw_account_balances" == $tbl)
+		{
+			$i = get_instance(CL_CRM_CATEGORY);
+			return $i->do_db_upgrade($tbl, $field);
+		}
 		if ("kliendibaas_firma" == $tbl)
 		{
 			switch($field)

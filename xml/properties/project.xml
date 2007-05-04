@@ -10,6 +10,13 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>balance</name>
+            <table>aw_account_balances</table>
+            <group>general2</group>
+            <type>hidden</type>
+            <field>aw_balance</field>
+      </property>
+      <property>
             <name>code</name>
             <table>aw_projects</table>
             <group>general2</group>
@@ -897,6 +904,11 @@
                   <master_table>objects</master_table>
                   <master_index>brother_of</master_index>
             </aw_projects>
+            <aw_account_balances>
+                  <master_index>oid</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_account_balances>
       </tableinfo>
       <reltypes>
             <SUBPROJECT>

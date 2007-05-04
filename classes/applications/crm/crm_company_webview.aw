@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.35 2007/04/23 10:13:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.36 2007/05/04 10:34:52 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1712,7 +1712,8 @@ class crm_company_webview extends class_base
 		}
 		$this->read_template($tmpl);
 		$this->vars(array(
-			"company_id" => $arr["org"]
+			"company_id" => $arr["org"],
+			"print_link" => aw_url_change_var("print", 1)
 		));
 		$ret = $this->_get_company_show_html(array(
 			"company_id" => $arr["org"],

@@ -100,17 +100,17 @@ class relpicker extends  core
 		}
 		$val["type"] = ($val["display"] == "radio") ? "chooser" : "select";
 
-		if ($val["type"] == "select" && is_object($this->obj))
+		if ($val["type"] == "select" /*&& is_object($this->obj)*/)
 		{
 			$clid = (array)$arr["relinfo"][$reltype]["clid"];
 			$url = $this->mk_my_orb("do_search", array(
-				"id" => $arr["obj_inst"]->id(),
+				"id" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->id() : null,
 				"pn" => $arr["property"]["name"],
 				"clid" => $clid,
 				"multiple" => $arr["property"]["multiple"]
 			), "popup_search");
 
-			if (is_oid($this->obj->id()) && !$val["no_edit"])
+			if (/*is_oid($this->obj->id()) &&*/ !$val["no_edit"])
 			{
 				$val["post_append_text"] .= " ".html::href(array(
 					"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",

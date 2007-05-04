@@ -9,6 +9,13 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>balance</name>
+            <table>aw_account_balances</table>
+            <group>general2</group>
+            <type>hidden</type>
+            <field>aw_balance</field>
+      </property>
+      <property>
             <name>firstname</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -1543,6 +1550,11 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </kliendibaas_isik>
+            <aw_account_balances>
+                  <master_index>oid</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_account_balances>
       </tableinfo>
       <reltypes>
             <ADDRESS>

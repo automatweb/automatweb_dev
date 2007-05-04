@@ -140,7 +140,7 @@
             <type>relpicker</type>
             <field>meta</field>
             <reltype>RELTYPE_CTR</reltype>
-	    <caption>Toimetuse ridade kontroller</caption>
+            <caption>Toimetuse ridade kontroller</caption>
       </property>
       <property>
             <name>tables_toolbar</name>
