@@ -22,8 +22,8 @@ table.cfgform_layout_tbl
 		<td width="100">{VAR:capt_prp_key}</td>
 		<td width="150">{VAR:capt_prp_caption}</td>
 		<td width="100">{VAR:capt_prp_type}</td>
+		<td width="200">{VAR:capt_prp_options}</td>
 		<td width="30">{VAR:capt_prp_mark}</td>
-		<td width="200" align="right">{VAR:capt_prp_options}</td>
 	</tr>
 	</table>
 </fieldset>
@@ -38,10 +38,10 @@ table.cfgform_layout_tbl
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_key}</td>
 		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}"></td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
-		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"></td>
-		<td width="200" align="right" bgcolor="{VAR:bgcolor}">
+		<td width="200" bgcolor="{VAR:bgcolor}">
 {VAR:prp_options}
 		</td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"></td>
 	</tr>
 	<!-- END SUB: property -->
 	</table>
@@ -49,9 +49,14 @@ table.cfgform_layout_tbl
 <!-- END SUB: group -->
 
 <!-- SUB: textarea_options -->
-			RTE<input type="checkbox" name="prpconfig[{VAR:prp_key}][richtext]" value="1" {VAR:richtext_checked}>
+			{VAR:richtext_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][richtext]" value="1" {VAR:richtext_checked}>
 			<input type="hidden" name="xconfig[{VAR:prp_key}][richtext]" value="{VAR:richtext}">
 <!-- END SUB: textarea_options -->
+
+<!-- SUB: relpicker_options -->
+			{VAR:no_edit_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_edit]" value="1" {VAR:no_edit_checked}>
+			<input type="hidden" name="xconfig[{VAR:prp_key}][no_edit]" value="{VAR:no_edit}">
+<!-- END SUB: relpicker_options -->
 
 <!-- SUB: textarea_options_old -->
 <tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.112 2007/04/30 14:53:06 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.113 2007/05/06 11:19:40 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1300,11 +1300,22 @@ class cfgform extends class_base
 				{
 					case "textarea":
 						$this->vars(array(
+							"richtext_caption" => t("RTE"),
 							"richtext_checked" => checked($property["richtext"] == 1),
 							"richtext" => $property["richtext"],
 							"prp_key" => $property["name"],
 						));
 						$property["cfgform_additional_options"] = $this->parse("textarea_options");
+						break;
+
+					case "relpicker":
+						$this->vars(array(
+							"no_edit_caption" => t("Nuppudeta"),
+							"no_edit_checked" => checked($property["no_edit"] == 1),
+							"no_edit" => $property["no_edit"],
+							"prp_key" => $property["name"],
+						));
+						$property["cfgform_additional_options"] = $this->parse("relpicker_options");
 						break;
 
 					default:
@@ -2868,6 +2879,11 @@ class cfgform extends class_base
 		elseif ("new" !== $action and !is_oid($vars["id"]))
 		{
 			return;
+		}
+
+		if ("new" == $action and empty($vars["parent"]))
+		{
+			$vars["parent"] = $this_o->id();
 		}
 
 		$vars["action"] = $action;
