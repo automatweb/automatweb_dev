@@ -77,30 +77,30 @@ class doc_display extends aw_template
 
 		$orig = $doc->get_original();
 
-		$user1 = $doc->prop("user1");
+		$user1 = $doc->trans_get_val("user1");
 		$al->parse_oo_aliases($doc->id(), &$user1, array("templates" => $this->templates, "meta" => $mt));
-		$user2 = $doc->prop("user2");
+		$user2 = $doc->trans_get_val("user2");
 		$al->parse_oo_aliases($doc->id(), &$user2, array("templates" => $this->templates, "meta" => $mt));
-		$user3 = $doc->prop("user3");
+		$user3 = $doc->trans_get_val("user3");
 		$al->parse_oo_aliases($doc->id(), &$user3, array("templates" => $this->templates, "meta" => $mt));
-		$user4 = $doc->prop("user4");
+		$user4 = $doc->trans_get_val("user4");
 		$al->parse_oo_aliases($doc->id(), &$user4, array("templates" => $this->templates, "meta" => $mt));
-		$user5 = $doc->prop("user5");
+		$user5 = $doc->trans_get_val("user5");
 		$al->parse_oo_aliases($doc->id(), &$user5, array("templates" => $this->templates, "meta" => $mt));
-		$user6 = $doc->prop("user6");
+		$user6 = $doc->trans_get_val("user6");
 		$al->parse_oo_aliases($doc->id(), &$user6, array("templates" => $this->templates, "meta" => $mt));
 		
-		$userta1 = $orig->prop("userta1");
+		$userta1 = $orig->trans_get_val("userta1");
 		$al->parse_oo_aliases($doc->id(), &$userta1, array("templates" => $this->templates, "meta" => $mt));
-		$userta2 = $orig->prop("userta2");
+		$userta2 = $orig->trans_get_val("userta2");
 		$al->parse_oo_aliases($doc->id(), &$userta2, array("templates" => $this->templates, "meta" => $mt));
-		$userta3 = $orig->prop("userta3");
+		$userta3 = $orig->trans_get_val("userta3");
 		$al->parse_oo_aliases($doc->id(), &$userta3, array("templates" => $this->templates, "meta" => $mt));
-		$userta4 = $orig->prop("userta4");
+		$userta4 = $orig->trans_get_val("userta4");
 		$al->parse_oo_aliases($doc->id(), &$userta4, array("templates" => $this->templates, "meta" => $mt));
-		$userta5 = $orig->prop("userta5");
+		$userta5 = $orig->trans_get_val("userta5");
 		$al->parse_oo_aliases($doc->id(), &$userta5, array("templates" => $this->templates, "meta" => $mt));
-		$userta6 = $orig->prop("userta6");
+		$userta6 = $orig->trans_get_val("userta6");
 		$al->parse_oo_aliases($doc->id(), &$userta6, array("templates" => $this->templates, "meta" => $mt));
 		
 		$this->vars_safe(array(
