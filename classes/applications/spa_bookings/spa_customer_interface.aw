@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.13 2007/04/30 16:28:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.14 2007/05/07 15:19:11 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -145,7 +145,7 @@ class spa_customer_interface extends class_base
 
 			if (!$confirmed && $has_times && $has_prods)
 			{
-				$pay_url = $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment));
+				$pay_url = $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment,"section" => aw_global_get("section"),));
 
 				$booking_str .= " / ".html::href(array(
 					"url" => $pay_url,
@@ -176,7 +176,7 @@ class spa_customer_interface extends class_base
 						"section" => aw_global_get("section")
 					)),
 				"confirm_url" => $this->mk_my_orb("confirm_booking", array("id" => $o->id(), "r" => get_ru())),
-				"pay_url" => $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment)),
+				"pay_url" => $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment,"section" => aw_global_get("section"))),
 				"print_url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
 			));
 
@@ -765,6 +765,7 @@ class spa_customer_interface extends class_base
 		@param id required type=int acl=view
 		@param r optional
 		@param bank_payment required typoe=oid
+		@param section optional
 	**/
 	function pay($arr)
 	{
