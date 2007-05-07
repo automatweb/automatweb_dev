@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.14 2007/02/06 14:50:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.15 2007/05/07 12:03:38 kristo Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -23,6 +23,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_TIMING, init_scheduler)
 @property deactivate type=datetime_select year_from=2004 year_to=2010 field=meta method=serialize
 @caption Deaktiveerida
 
+@property apply_langs type=chooser multiple=1 field=meta method=serialize
+@caption Kehtib keeltele
 
 @property archive_time type=datetime_select year_from=2004 year_to=2010 field=meta method=serialize
 @caption Arhiveerimise aeg
@@ -119,6 +121,14 @@ class timing extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "apply_langs":
+				if (!aw_ini_get("user_interface.full_content_trans"))
+				{
+					return PROP_IGNORE;
+				}
+				$this->_apply_langs($arr);
+				break;
+
 			case "activate":
 				if($arr["new"])
 				{
@@ -363,10 +373,18 @@ class timing extends class_base
 						break;
 					case "activate":
 						$obj->set_status(STAT_ACTIVE);
+						foreach(safe_array($obj_inst->prop("apply_langs")) as $lid )
+						{
+							$obj->set_meta("trans_".$lid."_status", 1);
+						}
 						$obj->save();
 						break;
 					case "deactivate":
 						$obj->set_status(STAT_NOTACTIVE);
+						foreach(safe_array($obj_inst->prop("apply_langs")) as $lid )
+						{
+							$obj->set_meta("trans_".$lid."_status", 0);
+						}
 						$obj->save();
 						break;
 					case "archive":
@@ -440,6 +458,16 @@ class timing extends class_base
 				"to" => $o->id(),
 				"type" => "RELTYPE_TIMING"
 			));
+		}
+	}
+
+	function _apply_langs($arr)
+	{
+		$arr["prop"]["options"] = array();
+		$l = get_instance("languages");
+		foreach($l->get_list() as $k => $v)
+		{
+			$arr["prop"]["options"][$k] = $v;
 		}
 	}
 }

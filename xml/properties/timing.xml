@@ -23,6 +23,16 @@
             <caption>Deaktiveerida</caption>
       </property>
       <property>
+            <name>apply_langs</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kehtib keeltele</caption>
+      </property>
+      <property>
             <name>archive_time</name>
             <table>objects</table>
             <group>general</group>
