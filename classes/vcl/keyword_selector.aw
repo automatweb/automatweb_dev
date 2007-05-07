@@ -117,6 +117,11 @@ class keyword_selector extends class_base
 		$t = new aw_table();
 		$this->_init_kw_t($t);
 
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+
 		$filt = array(
 			"class_id" => CL_KEYWORD
 		);
@@ -225,6 +230,10 @@ class keyword_selector extends class_base
 
 	function _draw_existing_kws($arr)
 	{
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => $arr["prop"]["reltype"])));
 		return t("Valitud:")." ".html::obj_change_url($kws->arr());
 	}

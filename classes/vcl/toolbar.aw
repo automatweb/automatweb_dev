@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.22 2007/03/06 13:32:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.23 2007/05/07 11:49:27 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -496,6 +496,7 @@ class toolbar extends aw_template
 
 			$vcl_inst->add_cdata($sb, true);
 		}
+
 		$rv = array($name => $res);
 		return $rv;
 	}
