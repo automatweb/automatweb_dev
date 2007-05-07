@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.82 2006/11/25 12:20:04 tarvo Exp $
+// $Id: cfgutils.aw,v 1.83 2007/05/07 08:07:05 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -188,6 +188,9 @@ class cfgutils extends aw_template
 			$propdef = array();
 			$propkey = false;
 			$tagname = false;
+			$defvals = array(
+				"property" => array("store" => "", "method" => "", "table" => "", "field" => "")
+			);
 			// if only the XML file would have a bit saner structure, the following could be a lot easier
 			foreach($vals as $val)
 			{
@@ -206,6 +209,11 @@ class cfgutils extends aw_template
 					if ("name" == $val["tag"])
 					{
 						$propname = $val["value"];
+						// new property, init def
+						if (!isset($propdef[$propkey][$propname]) && isset($defvals[$propkey]))
+						{
+							$propdef[$propkey][$propname] = $defvals[$propkey];
+						}
 					};
 					// if this tags parent is a 'container' (containing multiple values),
 					// then add to that, otherwise just use the name of the tag
@@ -273,6 +281,7 @@ class cfgutils extends aw_template
 				};
 			};
 		}
+
 		$properties = $propdef["property"];
 		$classinfo = $this->tableinfo = $relinfo = $groupinfo = array();
 		if (is_array($propdef['layout']))
@@ -635,7 +644,7 @@ class cfgutils extends aw_template
 			}
 		}
 
-		$ts = filemtime(aw_ini_get("basedir")."/xml/properties/".$file.".xml");
+		$ts = is_readable(aw_ini_get("basedir")."/xml/properties/".$file.".xml") ? filemtime(aw_ini_get("basedir")."/xml/properties/".$file.".xml") : null;
 		$args["adm_ui_lc"] = $adm_ui_lc;
 		$key = md5(serialize($args));
 		$res = $this->cache->file_get_ts($key, max($ts, $tft));

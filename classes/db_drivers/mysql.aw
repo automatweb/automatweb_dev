@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.39 2006/09/27 15:03:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.40 2007/05/07 08:07:07 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -55,7 +55,7 @@ class mysql
 
 	function db_query($qtext,$errors = true)
 	{
-		if ($GLOBALS["QD"] == 1)
+		if (!empty($GLOBALS["QD"]))
 		{
 			die($qtext);
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.85 2007/03/28 10:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.86 2007/05/07 08:07:09 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -468,11 +468,6 @@ class vcalendar extends aw_template
 	function add_overview_item($arr)
 	{
 		$use_date = date("Ymd",$arr["timestamp"]);
-		if ($GLOBALS["SITT"])
-		{
-			var_dump(error_reporting(0));
-
-		};
 		$this->overview_items[$use_date] = true;
 		$this->overview_items_oids[$use_date][$arr['event_oid']] = $arr['event_oid'];
 		if (!empty($arr["url"]))

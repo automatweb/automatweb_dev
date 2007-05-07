@@ -1210,9 +1210,9 @@ class html extends aw_template
 			}
 			return "";
 		}
-		$obj = &obj($oid);
+		$obj = obj($oid);
 		$params["id"] = $obj->id();
-		if ($_GET["action"] != "view" && $inst->can("edit", $oid))
+		if (isset($_GET["action"]) && $_GET["action"] != "view" && $inst->can("edit", $oid))
 		{
 			$act = "change";
 		}

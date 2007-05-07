@@ -835,7 +835,7 @@ return; // TEMP
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
 		// tracked_vars comes from orb->process_request
-		$this->orb_values = $GLOBALS["tracked_vars"];
+		$this->orb_values = isset($GLOBALS["tracked_vars"]) ? $GLOBALS["tracked_vars"] : null;
 
 		if (!empty($arr["section"]))
 		{
@@ -1112,6 +1112,7 @@ return; // TEMP
 	**/
 	function get_file($arr)
 	{
+		$retval = "";
 		if (!$arr["file"])
 		{
 			$this->raise_error(ERR_CORE_NOFILE,LC_CORE_GET_FILE_NO_NAME,true);

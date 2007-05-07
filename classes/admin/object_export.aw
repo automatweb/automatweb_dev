@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.16 2007/02/08 12:50:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.17 2007/05/07 08:07:04 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -361,8 +361,6 @@ class object_export extends class_base
 				}
 			}
 		}*/
-		//ini_set("display_errors", "On");
-		//error_reporting(E_ALL^E_NOTICE);
 		foreach($d as $o)
 		{
 		//	if (++$cnt > 100)

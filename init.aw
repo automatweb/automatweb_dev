@@ -302,11 +302,18 @@ function init_config($arr)
 		// and here do the defs for classes
 		foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 		{
-			define($cld["def"], $clid);
-			$bnf = basename($cld["file"]);
-			if (!isset($GLOBALS["cfg"]["class_lut"][$bnf]))
+			if (!isset($cld["def"]))
 			{
-				$GLOBALS["cfg"]["class_lut"][$bnf] = $clid;
+				continue;
+			}
+			define($cld["def"], $clid);
+			if (isset($cld["file"]))
+			{
+				$bnf = basename($cld["file"]);
+				if (!isset($GLOBALS["cfg"]["class_lut"][$bnf]))
+				{
+					$GLOBALS["cfg"]["class_lut"][$bnf] = $clid;
+				}
 			}
 		}
 
@@ -396,11 +403,11 @@ function lc_init()
 			}
 			foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 			{
-				if (($_tmp = t2("Klassi ".$cld["name"]." ($clid) nimi")) != "")
+				if (isset($cld["name"]) && ($_tmp = t2("Klassi ".$cld["name"]." ($clid) nimi")) != "")
 				{
 					$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = $_tmp;
 				}
-				if(($_tmp = t2("Klassi tooteperekonna ".$cld["prod_family"]." ($clid) nimi")) != "")
+				if(isset($cld["prod_family"]) && ($_tmp = t2("Klassi tooteperekonna ".$cld["prod_family"]." ($clid) nimi")) != "")
 				{
 					$GLOBALS["cfg"]["__default"]["classes"][$clid]["prod_family"] = $_tmp;
 				}
@@ -425,7 +432,7 @@ function lc_init()
 
 			foreach($GLOBALS["cfg"]["syslog"]["types"] as $typid => $td)
 			{
-				if (($_tmp = t2("syslog.type.".$td["def"])) != "")
+				if (isset($td["def"]) && ($_tmp = t2("syslog.type.".$td["def"])) != "")
 				{
 					$GLOBALS["cfg"]["syslog"]["types"][$typid]["name"] = $_tmp;
 				}
@@ -608,7 +615,7 @@ function classload($args)
 
 function get_instance($class,$args = array(), $errors = true)
 {
-if ($GLOBALS["TRACE_INSTANCE"])
+if (!empty($GLOBALS["TRACE_INSTANCE"]))
 {
 	echo "get_instance $class from ".dbg::short_backtrace()." <br>";
 }
@@ -636,8 +643,6 @@ if ($GLOBALS["TRACE_INSTANCE"])
 		$designed = true;
 	};
 
-	$id = "instance::" . $class;
-//	$instance = aw_global_get($id);
 
 	$lib = basename($class);
 
@@ -646,7 +651,7 @@ if ($GLOBALS["TRACE_INSTANCE"])
 	if (isset($GLOBALS['cfg']['__default']['classes'][$clid]))
 	{
 		$clinf = $GLOBALS['cfg']['__default']['classes'][$clid];
-		$rs = $clinf["is_remoted"];
+		$rs = isset($clinf["is_remoted"]) ? $clinf["is_remoted"] : null;
 	};
 	// check if the class is remoted. if it is, then create proxy class instance, not real class instance
 	if ($rs != "")
@@ -661,8 +666,6 @@ if ($GLOBALS["TRACE_INSTANCE"])
 		}
 	}
 
-	if (!is_object($instance))
-	{
 		if ($site)
 		{
 			$classdir = $GLOBALS["cfg"]["__default"]["site_basedir"]."/classes";
@@ -697,7 +700,6 @@ if ($GLOBALS["TRACE_INSTANCE"])
 				print("Class $class does not exist. Also, class 'error' not loaded.");
 			}
 		}
-		error_reporting(E_PARSE | E_ERROR);
 		$_fn = $classdir."/".str_replace(".","", $class).".".$ext;
 		incl_f($_fn);
 		if (file_exists($_fn) && is_readable($_fn))
@@ -727,13 +729,12 @@ if ($GLOBALS["TRACE_INSTANCE"])
 			{
 				$instance = new $lib();
 			};
-			aw_global_set($id,$instance);
 		}
 		else
 		{
 			$instance = false;
 		};
-	};
+
 	// now register default members - we do this here, because they might have changed
 	// from the last time that the instance was created
 	$members = aw_cache_get("__aw_default_class_members", $lib);
@@ -952,24 +953,17 @@ function &__get_site_instance()
 	if (!is_object($__site_instance))
 	{
 		$fname = "site.".$GLOBALS["cfg"]["__default"]["ext"];
-		if (file_exists($fname_tmp_fix_for_some_wierd_shit))
+		$fname = aw_ini_get("site_basedir")."/public/".$fname;
+		if (file_exists($fname))
 		{
 			include($fname);
 		}
 		else
-		{
-			$fname = aw_ini_get("site_basedir")."/public/".$fname;
+		{	
+			$fname = aw_ini_get("site_basedir")."/htdocs/"."site.".$GLOBALS["cfg"]["__default"]["ext"];
 			if (file_exists($fname))
 			{
 				include($fname);
-			}
-			else
-			{	
-				$fname = aw_ini_get("site_basedir")."/htdocs/"."site.".$GLOBALS["cfg"]["__default"]["ext"];
-				if (file_exists($fname))
-				{
-					include($fname);
-				}
 			}
 		}
 		if (class_exists("site"))
@@ -1260,9 +1254,6 @@ function incl_f($lib)
 		}
 
 
-//error_reporting(E_ALL ^ E_NOTICE);
-//set_error_handler("__aw_error_handler");
-//error_reporting(E_ALL ^ E_NOTICE);
 
 function check_pagecache_folders()
 {

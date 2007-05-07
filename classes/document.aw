@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.365 2007/05/04 10:34:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.366 2007/05/07 08:07:04 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -356,7 +356,7 @@ class document extends aw_template
 			$doc_o = obj($doc["docid"]);
 		}
 
-		if ($params["no_link_if_not_act"] && $doc_o->status() == STAT_NOTACTIVE)
+		if (!empty($params["no_link_if_not_act"]) && $doc_o->status() == STAT_NOTACTIVE)
 		{
 			$doc["title_clickable"] = 0;
 		}
@@ -382,7 +382,7 @@ class document extends aw_template
 				return $fl["content"];
 			};
 		}
-		if (($params["tpl_auto"] || true) && !$params["tpl"])
+		if (!$params["tpl"])
 		{
 			// do template autodetect from parent
 			$tplmgr = get_instance("templatemgr");
@@ -421,7 +421,6 @@ class document extends aw_template
 				$doc["lead"] = "";
 				$doc["title"] = "";
 				$doc["meta"]["show_print"] = 1;
-				$mk_compat = false;
 				$this->vars(array("page_title" => strip_tags($fl["comment"])));
 				$pagetitle = strip_tags($fl["comment"]);
 			};
@@ -449,7 +448,7 @@ class document extends aw_template
 		$doc["tpl"] = $tpl;
 		$doc["leadonly"] = $leadonly;
 		$doc["tpldir"] = &$this->template_dir;
-		$doc["vars"] = $params["vars"];
+		$doc["vars"] = isset($params["vars"]) ? $params["vars"] : array();
 		if ($si)
 		{
 			// augh .. backwards compatiblity is a fucking bitch
@@ -474,7 +473,7 @@ class document extends aw_template
 
 
 		//$meta = $doc["meta"];
-		if ($meta["show_last_changed"])
+		if (!empty($meta["show_last_changed"]))
 		{
 			$doc["content"] .= "<p><font size=1><i>".t("Viimati muudetud:")."&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
 		};
@@ -618,12 +617,6 @@ class document extends aw_template
 		// $this->add_hit($docid);
 
 
-		if ($mk_compat)
-		{
-			$this->mk_ns4_compat(&$doc["lead"]);
-			$this->mk_ns4_compat(&$doc["content"]);
-		}
-
 		$doc["content"] = str_replace("#nool#", '<IMG SRC="{VAR:baseurl}/img/icon_nool.gif" WIDTH="21" HEIGHT="9" BORDER=0 ALT="">', $doc["content"]);
 		
 		# translate stuff between #code# and #/code#
@@ -695,7 +688,7 @@ class document extends aw_template
 		};
 
 		// vaatame kas vaja poolitada - kui urlis on show_all siis n2itame tervet, muidu n2itame kuni #edasi# linkini
-		if ($GLOBALS["show_all"])
+		if (!empty($GLOBALS["show_all"]))
 		{
 			$doc["content"] = str_replace("#edasi#", "",$doc["content"]);
 			if (!(($pp = strpos($doc["content"],"#edasi1#")) === false))
@@ -1111,12 +1104,14 @@ class document extends aw_template
 			};
 		};
 
+		$pts = "";
 		if ($this->is_template("RATE"))
 		{
 			$points = $doc["num_ratings"] == 0 ? 3 : $doc["rating"] / $doc["num_ratings"];
-			$pts = "";
 			for ($i=0; $i < $points; $i++)
+			{
 				$pts.=$this->parse("RATE");
+			}
 		};
 		
 
@@ -1264,7 +1259,7 @@ class document extends aw_template
 		};
 
 		$lc = "";
-		if ($doc["lead_comments"]==1)
+		if (!empty($doc["lead_comments"]))
 		{
 			$lc = $this->parse("lead_comments");
 		}
@@ -1323,7 +1318,7 @@ class document extends aw_template
 		if (!headers_sent())
 		{
 			header("X-AW-Last-Modified: ".$_date);
-			header("X-AW-Document-Title: ".($pagetitle != "" ? $pagetitle : strip_tags($title)));
+			header("X-AW-Document-Title: ".(!empty($pagetitle) ? $pagetitle : strip_tags($title)));
 		}
 
 		$sel_lang_img_url = "";
@@ -1339,7 +1334,7 @@ class document extends aw_template
 			));
 		}
 
-		if ($GLOBALS["DD"] == 1)
+		if (!empty($GLOBALS["DD"]))
 		{
 			echo "for doc $doc[docid] tm = ".$doc["tm"]."  den = $date_est_n odtm = $orig_doc_tm <br>";
 			
@@ -1373,7 +1368,7 @@ class document extends aw_template
 			"date_est" => $date_est,
 			"date_est_n" => $date_est_n,
 			"print_date_est" => $date_est_print,
-			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
+			"page_title" => !empty($pagetitle) ? $pagetitle : strip_tags($title),
 			"title"	=> $title,
 			"text"  => $doc["content"],
 			"secid" => isset($secID) ? $secID : 0,
@@ -1386,14 +1381,14 @@ class document extends aw_template
 			"section"  => $GLOBALS["section"],
 			"lead_comments" => $lc,
 			"locale_date" => locale::get_lc_date($doc["doc_modified"],6),
-			"copyright" => $doc["copyright"],
-			"long_title" => $doc["long_title"],
-			"link_text" => $doc["link_text"],
+			"copyright" => isset($doc["copyright"]) ? $doc["copyright"] : null,
+			"long_title" => isset($doc["long_title"]) ? $doc["long_title"] : null,
+			"link_text" => isset($doc["link_text"]) ? $doc["link_text"] : null,
 			"modified"	=> date("d.m.Y", $doc["modified"]),
 			"createdby" => $doc["createdby"],
 			"date2"	=> $this->time2date($doc["modified"],8),
 			"timestamp" => ($doc["modified"] > 1 ? $doc["modified"] : $doc["created"]),
-			"channel"		=> $doc["channel"],
+			"channel"		=> isset($doc["channel"]) ? $doc["channel"] : null,
 			"tm"				=> $doc["tm"],
 			"tm_only" => $orig_doc_tm,
 			"link_text"	=> $doc["link_text"],
@@ -1406,8 +1401,8 @@ class document extends aw_template
 			"SEL_LANG" => "",
 			"lead_br"	=> $doc["lead"] != "" ? "<br />" : "",
 			"doc_count" => $this->doc_count++,
-			"title_target" => $doc["newwindow"] ? "target=\"_blank\"" : "",
-			"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
+			"title_target" => !empty($doc["newwindow"]) ? "target=\"_blank\"" : "",
+			"title_link"  => (!empty($doc["link_text"]) ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
 			"site_title" => strip_tags($doc["title"]),
 			"link" => "",
 			"user1" => $doc["user1"],
@@ -1471,7 +1466,7 @@ class document extends aw_template
 		}
 
 		$nll = "";
-		if ($not_last_in_list)
+		if (!empty($not_last_in_list))
 		{
 			$nll = $this->parse("NOT_LAST_IN_LIST");
 		}
@@ -1484,7 +1479,7 @@ class document extends aw_template
 			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
 		}
 
-		if ($doc["channel"] != "")
+		if (!empty($doc["channel"]))
 		{
 			$this->vars(array("HAS_CHANNEL" => $this->parse("HAS_CHANNEL")));
 		}
@@ -1498,7 +1493,7 @@ class document extends aw_template
 			"SHOW_TITLE2" 	=> ($doc["show_title"] == 1 && $doc["title"] != "") ? $this->parse("SHOW_TITLE2") : "",
 			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
 			"SHOW_MODIFIED" => ($doc["show_modified"]) ? $this->parse("SHOW_MODIFIED") : "",
-			"COPYRIGHT"	=> ($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
+			"COPYRIGHT"	=> !empty($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
 			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : ""),
 		));
 
@@ -1560,7 +1555,7 @@ class document extends aw_template
 			$retval = str_replace("</A>", "", $retval);
 		}
 
-		if ($print || $GLOBALS["action"] == "print")
+		if ($print || (isset($GLOBALS["action"]) && $GLOBALS["action"] == "print"))
 		{
 			$apd = get_instance("layout/active_page_data");
 			$retval .= $apd->on_shutdown_get_styles();
@@ -2534,26 +2529,6 @@ class document extends aw_template
 
 	}
 	
-	////
-	// !Makes a slice of text NS4 compatible - e.g. makes it look ok.
-	// and yes, NS4 is a steaming pile of crap and should die. Mozilla is so much better
-	function mk_ns4_compat(&$text)
-	{
-		if ( (substr_count($text,"<p>") > 1) || (substr_count($text,"<p>") > 1) )
-		{
-			$text = str_replace("</p>","<br /><br />",$text);	
-			$text = str_replace("</p>","<br /><br />",$text);	
-		}
-		else
-		{
-			$text = str_replace("</p>","",$text);	
-			$text = str_replace("</p>","",$text);	
-		}
-		
-		$text = str_replace("<p>","",$text);
-		$text = str_replace("<p>","",$text);
-	}
-
 	////
 	// !Creates relative links inside the text
 	function create_relative_links(&$text)

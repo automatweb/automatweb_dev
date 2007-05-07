@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.15 2007/02/19 15:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.16 2007/05/07 08:07:04 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -1135,9 +1135,9 @@ class admin_if extends class_base
 	**/
 	function redir($arr)
 	{
-		if ($_SESSION["cur_admin_if"])
+		if (!empty($_SESSION["cur_admin_if"]))
 		{
-			return html::get_change_url($_SESSION["cur_admin_if"], array("group" => "o", "parent" => $arr["parent"]));
+			return html::get_change_url($_SESSION["cur_admin_if"], array("group" => "o", "parent" => isset($arr["parent"]) ? $arr["parent"] : ""));
 		}
 		$ol = new object_list(array(
 			"class_id" => CL_ADMIN_IF,

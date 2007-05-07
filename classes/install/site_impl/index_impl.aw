@@ -31,7 +31,7 @@ enter_function("index_impl::after_init");
 $si =&__get_site_instance();
 
 // if we are drawing the site's front page
-if ((!$section || $section == aw_ini_get("frontpage")) && !$class) 
+if ((!$section || $section == aw_ini_get("frontpage")) && empty($class)) 
 {
 	// then do the right callback
 	$content = $si->on_frontpage();

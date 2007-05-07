@@ -18,10 +18,13 @@ class _int_object_loader extends core
 	var $object_member_funcs;	// names of all object class member functions
 	var $cfgu;					// cfgutilities instance
 	var $cache;					// cache class instance
+	var $__aw_acl_cache;		// acl memory cache
 
 	function _int_object_loader()
 	{
 		$this->init();
+
+		$this->__aw_acl_cache = array();
 
 		$this->all_ot_flds = array_flip(array(
 			"parent", "name", "class_id",
@@ -426,7 +429,7 @@ class _int_object_loader extends core
 
 	function can($acl_name, $oid, $dbg = false)
 	{
-		if (!($max_acl = $this->__aw_acl_cache[$oid]))
+		if (!isset($this->__aw_acl_cache[$oid]) || !($max_acl = $this->__aw_acl_cache[$oid]))
 		{
 			$fn = "acl-".$oid."-uid-".$_SESSION["uid"];
 			$fn .= "-nliug-".$_SESSION["nliug"];

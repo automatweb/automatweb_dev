@@ -18,6 +18,7 @@ classload(
 $GLOBALS["properties"] = array();
 $GLOBALS["tableinfo"] = array();
 $GLOBALS["of2prop"] = array();
+$GLOBALS["__obj_sys_opts"] = array();
 
 
 
@@ -131,6 +132,7 @@ class object
 			unset($GLOBALS["objects"][$oid]);
 		}
 
+		$cnt = false;
 		if (!isset($GLOBALS["objects"][$oid]))
 		{
 			$cnt = true;
@@ -1972,7 +1974,7 @@ class object
 	}
 }
 
-function &obj($param = NULL)
+function obj($param = NULL)
 {
 	return new object($param);
 }

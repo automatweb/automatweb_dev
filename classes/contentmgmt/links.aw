@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.35 2007/03/28 10:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.36 2007/05/07 08:07:05 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -242,15 +242,8 @@ class links extends class_base
 		{
 			$url = aw_ini_get("baseurl").$url;
 		}
-		error_reporting(E_ALL);
-		ini_set("show_errors", "On");
 		header("Location: ".$url);
-		//header("Content-type: ");
-		//header("HTTP/1.0 301 Moved Permanently");
-		//header("Location: ".$url);
-	//	echo $url;
 		die();
-		//die("<script language=javascript>window.location='$url';</script>");
 	}
 	
 	function get_property($arr)

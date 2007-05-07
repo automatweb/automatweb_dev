@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.59 2007/04/25 07:58:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.60 2007/05/07 08:07:05 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -84,7 +84,7 @@ class object_list extends _int_obj_container_base
 	**/
 	function filter($param)
 	{
-		if ($GLOBALS["OBJ_TRACE"])
+		if (!empty($GLOBALS["OBJ_TRACE"]))
 		{
 			echo "object_list::filter(".join(",", map2('%s => %s', $param)).") <br>";
 		}
@@ -96,7 +96,7 @@ class object_list extends _int_obj_container_base
 			));
 		}
 
-		if (is_array($param["oid"]) && sizeof($param["oid"]) == 0)
+		if (isset($param["oid"]) && is_array($param["oid"]) && sizeof($param["oid"]) == 0)
 		{
 			error::raise(array(
 				"id" => ERR_PARAM,
@@ -379,6 +379,10 @@ class object_list extends _int_obj_container_base
 		$this->iter_lut = array_keys($this->list);
 		$this->iter_lut_count = count($this->iter_lut);
 
+		if (!isset($this->iter_lut[$this->iter_index]))
+		{
+			return null;
+		}
 		return $this->_int_get_at($this->iter_lut[$this->iter_index]);
 	}
 
@@ -405,6 +409,10 @@ class object_list extends _int_obj_container_base
 	function next()
 	{
 		$this->iter_index++;
+		if (!isset($this->iter_lut[$this->iter_index]))
+		{
+			return null;
+		}
 		return $this->_int_get_at($this->iter_lut[$this->iter_index]);
 	}
 
@@ -630,10 +638,10 @@ class object_list extends _int_obj_container_base
 	**/
 	function arr()
 	{
-		$o =& $this->begin();		
+		$o = $this->begin();
 		enter_function("object_list::arr::setup");
 		$ret = array();
-		for ($cnt = 0; !$this->end(); $o =& $this->next())
+		for ($cnt = 0; !$this->end(); $o = $this->next())
 		{
 			$ret[$o->id()] = $o;
 		}

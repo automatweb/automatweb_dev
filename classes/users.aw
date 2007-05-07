@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.177 2007/04/10 08:02:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.178 2007/05/07 08:07:04 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -948,7 +948,7 @@ class users extends users_user
 			}	
 		}
 
-		if ($_SESSION["nliug"] && !is_admin())
+		if (!empty($_SESSION["nliug"]) && !is_admin())
 		{
 			// get gid for oid
 			$nliug_o = obj($_SESSION["nliug"]);
@@ -966,7 +966,7 @@ class users extends users_user
 
 	function request_startup()
 	{
-		if ($this->can("view", $_GET["set_group"]))
+		if (isset($_GET["set_group"]) && $this->can("view", $_GET["set_group"]))
 		{
 			// fetch thegroup and check if non logged users can switch to it
 			$setg_o = obj($_GET["set_group"]);
@@ -976,16 +976,21 @@ class users extends users_user
 				$_COOKIE["nliug"] = $_GET["set_group"];
 			}
 		}
-		if ($_GET["clear_group"] == 1)
+		if (!empty($_GET["clear_group"]))
 		{
 			unset($_SESSION["nliug"]);
 			unset($_COOKIE["nliug"]);
 		}
-		if ($_COOKIE["nliug"] != $_SESSION["nliug"] && $_COOKIE["nliug"])
+		if ((!empty($_COOKIE["nliug"]) || !empty($_SESSION["nliug"])) && $_COOKIE["nliug"] != $_SESSION["nliug"] && $_COOKIE["nliug"])
 		{
 			$_SESSION["nliug"] = $_COOKIE["nliug"];
 		}
 
+
+		if (!isset($_SESSION["nliug"]))
+		{
+			$_SESSION["nliug"] = null;
+		}
 
 		if (($uid = aw_global_get("uid")) != "")
 		{
@@ -1126,7 +1131,7 @@ class users extends users_user
 			$gidlist_pri = array($nlg => $gd["priority"]);
 			$gidlist_oid = array($gd["oid"] => $gd["oid"]);
 			$gidlist_pri_oid[(int)$gd["oid"]] = (int)$gd["priority"];
-			if ($_SESSION["nliug"])
+			if (!empty($_SESSION["nliug"]))
 			{
 				// get gid for oid
 				$nliug_o = obj($_SESSION["nliug"]);

@@ -10,12 +10,12 @@ class old_search_model extends aw_template
 	function on_get_subtemplate_content($arr)
 	{
 		$id = $arr["inst"]->section_obj->id();
-		$def = $GLOBALS["HTTP_GET_VARS"]["parent"] ? $GLOBALS["HTTP_GET_VARS"]["parent"] : $id;
+		$def = isset($_GET["parent"]) ? $_GET["parent"] : $id;
 		$sl = $this->get_search_list(&$def);
 		$arr["inst"]->vars(array(
 			"search_sel" => $this->option_list($def,$sl),
 			"section" => $id,
-			"str" => htmlentities($GLOBALS["HTTP_GET_VARS"]["str"])
+			"str" => htmlentities(isset($_GET["str"]) ? $_GET["str"] : "")
 		));
 		$arr["inst"]->vars(array(
 			"SEARCH_SEL" => $arr["inst"]->parse("SEARCH_SEL")
@@ -43,7 +43,6 @@ class old_search_model extends aw_template
 				$ret[$grpid] = $gdata["name"];
 			}
 		}
-		$default = $def;
 		return $ret;
 	}
 

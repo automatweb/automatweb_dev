@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.26 2007/03/28 10:15:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.27 2007/05/07 08:07:03 kristo Exp $
 	function get_time() 
 	{
 		list($micro,$sec) = explode(" ",microtime());
@@ -57,7 +57,7 @@ if (array_key_exists("fastcall", $vars) && $vars["fastcall"] == 1)
 }
 include("admin_header.".aw_ini_get("ext"));
 
-if (is_array($_SESSION["auth_redir_post"]))
+if (isset($_SESSION["auth_redir_post"]) && is_array($_SESSION["auth_redir_post"]))
 {
 	$vars = $_SESSION["auth_redir_post"];
 	$_POST = $_SESSION["auth_redir_post"];

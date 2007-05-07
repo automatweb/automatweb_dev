@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.75 2007/03/28 10:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.76 2007/05/07 08:07:04 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -390,7 +390,6 @@ class sys extends aw_template
 	//	global $donor_struct;
 		$donor_struct = $_SESSION['donor_struct'];
 		$orig = $this->db_get_struct();
-	//	error_reporting(E_ALL);
 		extract($args);
 		if (is_array($check))
 		{

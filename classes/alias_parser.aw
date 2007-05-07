@@ -277,7 +277,7 @@ class alias_parser extends core
 	**/
 	function get_vars()
 	{
-		return (is_array($this->tmp_vars)) ? $this->tmp_vars : array();
+		return (isset($this->tmp_vars) && is_array($this->tmp_vars)) ? $this->tmp_vars : array();
 	}
 }
 ?>

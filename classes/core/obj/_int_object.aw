@@ -16,6 +16,7 @@ class _int_object
 
 	var $obj;			// actual object data
 	var $implicit_save; 
+	var $obj_sys_flags;
 	
 
 	///////////////////////////////////////////
@@ -289,7 +290,7 @@ class _int_object
 			}
 		}
 
-		if (!$filter["from.class_id"])
+		if (empty($filter["from.class_id"]))
 		{
 			$filter["from.class_id"] = $this->obj["class_id"];
 		}
@@ -312,15 +313,15 @@ class _int_object
 				$ret[$c_id] =& new connection($c_d);
 			}
 		}
-		if ($param["sort_by"] != "")
+		if (!empty($param["sort_by"]))
 		{
 			uasort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
 		}
-		if ($param["sort_by_num"] != "")
+		if (!empty($param["sort_by_num"]))
 		{
 			uasort($ret, create_function('$a,$b', 'return ($a->prop("'.$param["sort_by_num"].'") == $b->prop("'.$param["sort_by_num"].'") ? 0 : ($a->prop("'.$param["sort_by_num"].'") > $b->prop("'.$param["sort_by_num"].'") ? 1 : -1 ));'));
 		}
-		if($param['sort_dir'] == 'desc')
+		if(isset($param['sort_dir']) && $param['sort_dir'] == 'desc')
 		{
 			return array_reverse($ret);
 		}
@@ -2039,9 +2040,7 @@ class _int_object
 			{
 				$this->_int_set_prop_mod($pn, $this->obj["properties"][$pn], $this->obj[$ofname]);
 			}
-//			$this->obj["properties"][$pn] = isset($this->obj[$ofname]) ? $this->obj[$ofname] : null;
-			// For whatever reason, upper row breaks shit. And i mean shit, like, the whole AW.
-			$this->obj["properties"][$pn] = $this->obj[$ofname];
+			$this->obj["properties"][$pn] = isset($this->obj[$ofname]) ? $this->obj[$ofname] : "";
 		}
 	}
 
@@ -2346,6 +2345,7 @@ class _int_object
 			return $cur_v;
 		}
 
+		$pd = false;
 		if (isset($GLOBALS["properties"][$this->obj["class_id"]][$prop]))
 		{
 			$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
@@ -2355,7 +2355,7 @@ class _int_object
 			return isset($this->obj["meta"][$pd["name"]]) ? $this->obj["meta"][$pd["name"]] : null;
 		}
 
-		return $this->obj["properties"][$prop];
+		return isset($this->obj["properties"][$prop]) ? $this->obj["properties"][$prop] : null;
 	}
 
 	function _int_load_property_values()

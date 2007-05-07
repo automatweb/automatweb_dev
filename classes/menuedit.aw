@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.385 2007/05/03 12:03:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.386 2007/05/07 08:07:04 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -306,7 +306,7 @@ class menuedit extends aw_template
 		//}
 
 		$set_lang_id = false;
-		$set_ct_lang_id = $_GET["set_ct_lang_id"];
+		$set_ct_lang_id = isset($_GET["set_ct_lang_id"]) ? $_GET["set_ct_lang_id"] : null;
 		if (aw_ini_get("menuedit.language_in_url"))
 		{
 			if ($section[2] == "%")
@@ -322,7 +322,17 @@ class menuedit extends aw_template
 					$section = $section."/".aw_ini_get("frontpage");
 				}
 			}
-			list($lc, $section_a) = explode("/", $section, 2);
+			$tmp = explode("/", $section, 2);
+			if (isset($tmp[1]))
+			{
+				$lc = $tmp[0];
+				$section_a = $tmp[1];
+			}
+			else
+			{
+				$lc = $section;
+				$section_a = "";
+			}
 			if (strlen($lc) > 2)
 			{
 				$section_a = $section;

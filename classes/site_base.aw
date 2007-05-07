@@ -96,7 +96,7 @@ class site_base extends aw_template
 	function do_fp_menus_return($ret,$arr = array())
 	{
 		$m = get_instance("contentmgmt/site_cache");
-		if (is_array($arr["vars"]))
+		if (isset($arr["vars"]) && is_array($arr["vars"]))
 		{
 			$arr["vars"] += $this->on_page();
 		}
@@ -105,7 +105,7 @@ class site_base extends aw_template
 			$arr["vars"] = $this->on_page();
 		}
 		$arr["text"] = $ret;
-		if (is_array($arr["sub_callbacks"]))
+		if (isset($arr["sub_callbacks"]) && is_array($arr["sub_callbacks"]))
 		{
 			$arr["sub_callbacks"] += $this->get_sub_callbacks();
 		}

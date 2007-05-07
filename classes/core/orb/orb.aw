@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.18 2007/03/28 10:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.19 2007/05/07 08:07:06 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -283,7 +283,7 @@ class orb extends aw_template
 		$GLOBALS["tracked_vars"] = $tracked_vars;
 
 
-		if ($orb_defs[$class][$action]["xmlrpc"] == 1)
+		if (!empty($orb_defs[$class][$action]["xmlrpc"]))
 		{
 			$content = $this->do_orb_xmlrpc_call($orb_defs[$class][$action]["server"],$class,$action,$params);
 		}
@@ -645,7 +645,7 @@ class orb extends aw_template
 						{
 							$this->raise_error(ERR_ACL, "ORB:Teil puudub $aclid-&otilde;igus objektile id-ga $varvalue!",true, false);
 						}
-						if(is_array($act["class_ids"][$varname]))
+						if(isset($act["class_ids"][$varname]) && is_array($act["class_ids"][$varname]))
 						{
 							$true = false;
 							$obj = obj($varvalue);

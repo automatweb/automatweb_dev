@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.231 2007/03/30 12:20:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.232 2007/05/07 08:07:04 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -981,7 +981,7 @@ if (!defined("DEFS"))
 	// and yeah. we shouldn't need these before aw_startup() and we could init it in there.. - terryf
 
 	// .. and now they are. 
-	function &_aw_global_init()
+	function _aw_global_init()
 	{
 		// reset aw_global_* function globals
 		$GLOBALS["__aw_globals"] = array();
@@ -1012,7 +1012,7 @@ if (!defined("DEFS"))
 				aw_global_set($k,$v);
 			}
 		}
-		aw_global_set("uid", $_SESSION["uid"]);
+		aw_global_set("uid", isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
 
 		// server vars - these can be trusted pretty well, so we do these last
 		$server = array("SERVER_SOFTWARE", "SERVER_NAME", "GATEWAY_INTERFACE", "SERVER_PROTOCOL", "SERVER_PORT","REQUEST_METHOD",  "PATH_TRANSLATED","SCRIPT_NAME", "QUERY_STRING", "REMOTE_ADDR", "REMOTE_HOST", "HTTP_ACCEPT","HTTP_ACCEPT_CHARSET", "HTTP_ACCEPT_ENCODING", "HTTP_ACCEPT_LANGUAGE", "HTTP_CONNECTION", "HTTP_HOST", "HTTP_REFERER", "HTTP_USER_AGENT","REMOTE_PORT","SCRIPT_FILENAME", "SERVER_ADMIN", "SERVER_PORT", "SERVER_SIGNATURE", "PATH_TRANSLATED", "SCRIPT_NAME", "REQUEST_URI", "PHP_SELF", "DOCUMENT_ROOT", "PATH_INFO", "SERVER_ADDR", "HTTP_X_FORWARDED_FOR");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.135 2006/11/14 06:53:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.136 2007/05/07 08:07:08 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -551,7 +551,6 @@ class mrp_schedule extends class_base
 
 // /* timing */ timing ("insert inprogress jobs", "end");
 // /* timing */ timing ("sort jobs in projects", "start");
-// /* dbg */ error_reporting (E_ALL);
 
 		### sort jobs in all projects
 		foreach ($projects as $project_id => $project)
@@ -725,7 +724,6 @@ class mrp_schedule extends class_base
 
 // /* timing */ timing ("schedule jobs total", "end");
 // /* dbg */ echo "<hr>";
-// /* dbg */ error_reporting (0);
 
 		$this->save ();
 

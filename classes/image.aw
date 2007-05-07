@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.197 2007/04/25 07:58:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.198 2007/05/07 08:07:04 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -245,9 +245,9 @@ class image extends class_base
 	{
 		if ($url)
 		{
-			$imgbaseurl = $this->cfg["imgbaseurl"];
-			if (!empty($imgbaseurl))
+			if (!empty($this->cfg["imgbaseurl"]))
 			{
+				$imgbaseurl = $this->cfg["imgbaseurl"];
 				$first = substr(basename($url),0,1);
 				if (substr($imgbaseurl, 0, 4) == "http")
 				{
@@ -899,8 +899,8 @@ class image extends class_base
 	**/
 	function make_img_tag($url, $alt = "", $size = array())
 	{
-		$tag = $size["height"]?" height=\"".$size["height"]."\"":"";
-		$tag .= $size["width"]?" width=\"".$size["width"]."\"":"";
+		$tag = isset($size["height"]) ?" height=\"".$size["height"]."\"":"";
+		$tag .= isset($size["width"]) ?" width=\"".$size["width"]."\"":"";
 		if ($url == "")
 		{
 			return "<img border=\"0\" src=\"".aw_ini_get("baseurl")."/automatweb/images/trans.gif\" alt=\"$alt\" title=\"$alt\"".$tag.">";

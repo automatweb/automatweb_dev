@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.12 2005/12/13 21:16:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.13 2007/05/07 08:07:08 kristo Exp $
 class active_page_data extends class_base
 {
 	function active_page_data()
@@ -66,6 +66,7 @@ class active_page_data extends class_base
 
 	function on_shutdown_get_styles()
 	{
+		$ret = "";
 		$styles = new aw_array(aw_global_get("__aw_site_styles"));
 		if ($styles->count() > 0)
 		{

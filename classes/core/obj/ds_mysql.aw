@@ -134,7 +134,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objtblprops = array();
 		foreach($properties as $prop => $data)
 		{
-			if ($data["store"] == "no")
+			if (isset($data["store"]) && $data["store"] == "no")
 			{
 				continue;
 			}
@@ -147,10 +147,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($data["table"] != "objects")
 			{
 				$tables[$data["table"]] = $data["table"];
-				if ($data["store"] != "no")
-				{
-					$tbl2prop[$data["table"]][] = $data;
-				}
+				$tbl2prop[$data["table"]][] = $data;
 			}
 			else
 			{
@@ -163,24 +160,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// import object table properties in the props array
 		foreach($objtblprops as $prop)
 		{
-                                if ($prop["store"] == "connect")
-                                {
-                                        if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
-                                        {
-                                                $_co_reltype = $prop["reltype"];
-                                                $_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
+			if ($prop["store"] == "connect")
+			{
+				if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+				{
+					$_co_reltype = $prop["reltype"];
+					$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
 
-                                                if ($_co_reltype == "")
-                                                {
-                                                        error::raise(array(
-                                                                "id" => "ERR_NO_RT",
-                                                                "msg" => sprintf(t("ds_mysql::read_properties(): no reltype for prop %s (%s)"), $prop["name"], $prop["reltype"])
-                                                        ));
-                                                }
+					if ($_co_reltype == "")
+					{
+						error::raise(array(
+							"id" => "ERR_NO_RT",
+							"msg" => sprintf(t("ds_mysql::read_properties(): no reltype for prop %s (%s)"), $prop["name"], $prop["reltype"])
+						));
+					}
 
-                                                $conn_prop_fetch[$prop["name"]] = $_co_reltype;
-                                        }
-                                }
+					$conn_prop_fetch[$prop["name"]] = $_co_reltype;
+				}
+			}
 			else
 			if ($prop["method"] == "serialize")
 			{
@@ -194,7 +191,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			else
 			{
-				$ret[$prop["name"]] = $objdata[$prop["field"]];
+				$ret[$prop["name"]] = isset($objdata[$prop["field"]]) ? $objdata[$prop["field"]] : null;
 			}
 
 			if (isset($prop["datatype"]) && $prop["datatype"] == "int" && $ret[$prop["name"]] == "")
@@ -223,7 +220,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				if ($prop["method"] == "serialize" && $prop["store"] != "connect")
 				{
-					if (!$_got_fields[$prop["field"]])
+					if (empty($_got_fields[$prop["field"]]))
 					{
 						$fields[] = $table.".`".$prop["field"]."` AS `".$prop["field"]."`";
 						$_got_fields[$prop["field"]] = true;
@@ -285,10 +282,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$prop['field'] = "metadata";
 						}
 
-						//echo "unser for prop ".dbg::dump($prop)." <br>";
 						$unser = aw_unserialize($ret[$prop["field"]]);
-						//echo "unser = ".dbg::dump($unser)." <br>";
-						$ret[$prop["name"]] = $unser[$prop["name"]];
+						$ret[$prop["name"]] = isset($unser[$prop["name"]]) ? $unser[$prop["name"]] : null;
 					}
 
 					if (isset($prop["datatype"]) && $prop["datatype"] == "int" && $ret[$prop["name"]] == "")
@@ -311,7 +306,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (count($conn_prop_fetch))
 		{
-			$cpf_dat = array();
+			$cfp_dat = array();
 			if (isset($this->read_properties_data_cache_conn[$object_id]))
 			{
 				$cfp_dat = $this->read_properties_data_cache_conn[$object_id];
@@ -534,7 +529,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
-
+		$q2 = null;
 		if (count($conn_prop_fetch))
 		{
 			if (is_array($object_id))
@@ -1047,31 +1042,31 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$sql .= " AND source IN (".$awa->to_sql().") ";
 		}
 
-		if ($arr["to"])
+		if (!empty($arr["to"]))
 		{
 			$awa = new aw_array($arr["to"]);
 			$sql .= " AND target IN (".$awa->to_sql().") ";
 		}
 
-		if ($arr["type"])
+		if (!empty($arr["type"]))
 		{
 			$awa = new aw_array($arr["type"]);
 			$sql .= " AND reltype IN (".$awa->to_sql().") ";
 		}
 
-		if ($arr["class"])
+		if (!empty($arr["class"]))
 		{
 			$awa = new aw_array($arr["class"]);
 			$sql .= " AND type IN (".$awa->to_sql().") ";
 		}
 
-		if ($arr["relobj_id"])
+		if (!empty($arr["relobj_id"]))
 		{
 			$awa = new aw_array($arr["relobj_id"]);
 			$sql .= " AND relobj_id IN (".$awa->to_sql().") ";
 		}
 
-		if ($arr["idx"])
+		if (!empty($arr["idx"]))
 		{
 			$awa = new aw_array($arr["idx"]);
 			$sql .= " AND idx IN (".$awa->to_sql().") ";
@@ -1406,7 +1401,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			$tf = $tbl.".`".$fld."`";
 
-			if ($this->properties[$key]["store"] == "connect")
+			if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect")
 			{
 				// join aliases as many-many relation and filter by that
 				if ($tbl == "objects")
@@ -1423,7 +1418,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				);
 			}
 
-			if ($this->properties[$key]["store"] == "connect" && $fld == "meta")
+			if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect" && $fld == "meta")
 			{
 				// figure out the joined alias table name and search from that
 				$tbl = "aliases_".$key;
@@ -1431,12 +1426,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$tf = $tbl.".`".$fld."`";
 			}
 
-			if (($this->properties[$key]["method"] == "bitmask" || $key == "flags") && is_array($val))
+			if (is_array($val) && ((isset($this->properties[$key]["method"]) && $this->properties[$key]["method"] == "bitmask") || $key == "flags"))
 			{
 				$sql[] = $tf." & ".$val["mask"]." = ".((int)$val["flags"]);
 			}
 			else
-			if (($this->properties[$key]["method"] == "bitmask") && !is_array($val) && $this->properties[$key]["ch_value"] > 0)
+			if (!is_array($val) && isset($this->properties[$key]) && ($this->properties[$key]["method"] == "bitmask") && $this->properties[$key]["ch_value"] > 0)
 			{
 				if (is_object($val))
 				{
@@ -1758,7 +1753,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 
 					$this->quote(&$v);
-					if ($this->properties[$key]["store"] == "connect")
+					if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect")
 					{
 						$str[] = " aliases_".$key.".target = '$v' ";
 					}
@@ -1781,7 +1776,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			else
 			{
 				$this->quote(&$val);
-				if ($this->properties[$key]["store"] == "connect")
+				if (isset($this->properties[$key]["store"]) && $this->properties[$key]["store"] == "connect")
 				{
 					$sql[] = " aliases_".$key.".target = '$val' ";
 				}
@@ -1821,7 +1816,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if (!isset($GLOBALS["properties"][$clid]) || !isset($GLOBALS["tableinfo"][$clid]) || !isset($GLOBALS["relinfo"][$clid]))
 			{
 				list($GLOBALS["properties"][$clid], $GLOBALS["tableinfo"][$clid], $GLOBALS["relinfo"][$clid]) = $GLOBALS["object_loader"]->load_properties(array(
-					"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
+					"file" => ($clid == CL_DOCUMENT ? "doc" : basename($GLOBALS["cfg"]["__default"]["classes"][$clid]["file"])),
 					"clid" => $clid
 				));
 			}
@@ -2405,7 +2400,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (!is_array($to_fetch))
 		{
-			return array();
+			return array(0 => "", 1 => array(), 2 => array());
 		}
 		$ret = array();
 		$serialized_fields = array();

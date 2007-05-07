@@ -6,7 +6,7 @@ session_name("automatweb");
 session_start();
 unset($_SESSION["nliug"]);
 
-if (is_array($_SESSION["auth_redir_post"]))
+if (isset($_SESSION["auth_redir_post"]) && is_array($_SESSION["auth_redir_post"]))
 {
 	$_POST = $HTTP_POST_VARS = $_SESSION["auth_redir_post"];
 	extract($_POST);
@@ -14,7 +14,7 @@ if (is_array($_SESSION["auth_redir_post"]))
 }
 
 
-if ($_GET["set_ui_lang"] != "")
+if (!empty($_GET["set_ui_lang"]))
 {
 	$_SESSION["user_adm_ui_lc"] = $_GET["set_ui_lang"];
 }
@@ -40,7 +40,7 @@ $u->request_startup();
 $l = new languages;
 $l->request_startup();
 
-if ($set_ct_lang_id)
+if (!empty($set_ct_lang_id))
 {
 	$_SESSION["ct_lang_id"] = $set_ct_lang_id;
 	$l = get_instance("languages");

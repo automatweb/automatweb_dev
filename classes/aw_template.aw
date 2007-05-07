@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.81 2007/04/23 10:13:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.82 2007/05/07 08:07:03 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -7,6 +7,8 @@ classload("core");
 
 class aw_template extends core
 {
+	var $debug_mode;
+
 	function init($args = array())
 	{
 		parent::init($args);

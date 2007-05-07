@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.544 2007/04/17 11:41:59 kristo Exp $
+// $Id: class_base.aw,v 2.545 2007/05/07 08:07:03 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -87,6 +87,13 @@ define('RELTYPE_ORIGINAL',103);
 class class_base extends aw_template
 {
 	var $clid;
+	var $tmp_cfgform;
+	var $classinfo;
+	var $cfgmanager;
+	var $embedded;
+	var $changeform_target;
+	var $new;
+	var $no_buttons;
 
 	function class_base($args = array())
 	{
@@ -208,7 +215,7 @@ class class_base extends aw_template
 			}
 		}
 
-		$args["return_url"] = $_GET["return_url"];
+		$args["return_url"] = isset($_GET["return_url"]) ? $_GET["return_url"] : "";
 
 		$awt->start("cb-change");
 		$this->init_class_base();
@@ -233,7 +240,7 @@ class class_base extends aw_template
 			$args["action"] = "view";
 		}
 
-		if($args["no_buttons"])
+		if(!empty($args["no_buttons"]))
 		{
 			$this->no_buttons = true;
 		}
@@ -267,7 +274,7 @@ class class_base extends aw_template
 			$this->awcb_display_mode = "default";
 		}
 
-		if (is_oid($args["awcb_cfgform"]))
+		if (isset($args["awcb_cfgform"]) && is_oid($args["awcb_cfgform"]))
 		{
 			$cfgform_id = $args["awcb_cfgform"];
 		}
@@ -297,7 +304,7 @@ class class_base extends aw_template
 			"clfile" => $this->clfile,
 			"group" => $args["group"],
 			"cfgform_id" => $cfgform_id,
-			"cb_part" => $args["cb_part"],
+			"cb_part" => isset($args["cb_part"]) ? $args["cb_part"] : "",
 		);
 
 
@@ -312,7 +319,7 @@ class class_base extends aw_template
 		}
 
 		// XXX: temporary -- duke
-		if ($args["fxt"])
+		if (!empty($args["fxt"]))
 		{
 			$this->layout_mode = "fixed_toolbar";
 			$filter["layout_mode"] == "fixed_toolbar";
@@ -348,7 +355,7 @@ class class_base extends aw_template
 			$this->view = true;
 		}
 
-		$use_form = $args["form"];
+		$use_form = isset($args["form"]) ? $args["form"] : "";
 
 
 		$this->use_form = $use_form;
@@ -360,7 +367,7 @@ class class_base extends aw_template
 			));
 		}
 
-		if ($args["no_active_tab"])
+		if (!empty($args["no_active_tab"]))
 		{
 			$this->no_active_tab = 1;
 		}
@@ -374,7 +381,7 @@ class class_base extends aw_template
 
 
 		// XXX: temporary -- duke
-		if ($args["fxt"])
+		if (!empty($args["fxt"]))
 		{
 			$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
 		}
@@ -436,7 +443,7 @@ class class_base extends aw_template
 			$gdata["submit"] = "no";
 		}
 
-		if ($args["no_rte"] == 1)
+		if (!empty($args["no_rte"]))
 		{
 			$this->no_rte = 1;
 		}
@@ -470,12 +477,12 @@ class class_base extends aw_template
 		else
 		{
 			$template = $this->forminfo(array(
-				"form" => $args["form"],
+				"form" => isset($args["form"]) ? $args["form"] : "",
 				"attr" => "template",
 			));
 
 			$o_arr = array();
-			if($gdata["no_form"] == 1)
+			if(!empty($gdata["no_form"]))
 			{
 				$o_arr["no_form"] = true;
 			}
@@ -497,7 +504,7 @@ class class_base extends aw_template
 				$o_arr["embedded"] = true;
 			}
 
-			if ($args["cbcli"] == "debugclient")
+			if (isset($args["cbcli"]) && $args["cbcli"] == "debugclient")
 			{
 				$this->output_client = "debugclient";
 				$cbcli = "debugclient";
@@ -517,12 +524,12 @@ class class_base extends aw_template
 					$cli->set_form_target($this->changeform_target);
 			}
 
-			if ($o_arr["no_form"])
+			if (!empty($o_arr["no_form"]))
 			{
 				$cli->set_opt("no_form",1);
 			};
 
-			$use_layout = $this->classinfo["layout"];
+			$use_layout = isset($this->classinfo["layout"]) ? $this->classinfo["layout"] : "";
 			// XXX: cfgform seemingly overwrites classinfo
 			if ($use_layout == "boxed")
 			{
@@ -570,7 +577,7 @@ class class_base extends aw_template
 			),
 			"help"),
 
-			"translate_url" => in_array(aw_global_get("uid"), aw_ini_get("class_base.show_trans"))?$translate_url." | ":"",
+			"translate_url" => in_array(aw_global_get("uid"), safe_array(aw_ini_get("class_base.show_trans")))?$translate_url." | ":"",
 			"more_help_text" => t("Rohkem infot"),
 			"close_help_text" => t("Peida &auml;ra"),
 			"open_help_text" => t("Abiinfo"),
@@ -620,7 +627,7 @@ class class_base extends aw_template
 		};
 
 		// cb_parts is again used by fixed_toolbar mode
-		if ($args["cb_part"] == 1)
+		if (!empty($args["cb_part"]))
 		{
 			// tabs and YAH are in the upper frame, so we don't show them below
 			$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
@@ -1240,7 +1247,7 @@ class class_base extends aw_template
 
 
 		// If uses configform manager then use this.
-		if($this->tmp_cfgform)
+		if(!$this->tmp_cfgform)
 		{
 			return $this->tmp_cfgform;
 		}
@@ -2122,7 +2129,7 @@ class class_base extends aw_template
 		// so I can access this later
 		$val["orig_type"] = $val["type"];
 
-		if ($this->view == 1 && !$val["view_element"])
+		if ($this->view == 1 && empty($val["view_element"]))
 		{
 			if ($val["type"] == "date_select")
 			{
@@ -2379,7 +2386,7 @@ class class_base extends aw_template
 		{
 			return false;
 		};
-		if(is_array($args["classinfo"]))
+		if(isset($args["classinfo"]) && is_array($args["classinfo"]))
 		{
 			foreach($args["classinfo"] as $k => $val)
 			{
@@ -2388,7 +2395,7 @@ class class_base extends aw_template
 
 		}
 
-		if (is_object($args["obj_inst"]))
+		if (isset($args["obj_inst"]) && is_object($args["obj_inst"]))
 		{
 			$this->obj_inst = $args["obj_inst"];
 			$this->id = $this->obj_inst->id();
@@ -2425,7 +2432,7 @@ class class_base extends aw_template
 			"groupinfo" => &$this->groupinfo,
 			"new" => $this->new,
 			"view" => $this->view,
-			"name_prefix" => $args["name_prefix"],
+			"name_prefix" => isset($args["name_prefix"]) ? $args["name_prefix"] : null,
 		);
 
 		$this->cfgu = get_instance("cfg/cfgutils");
@@ -2489,7 +2496,7 @@ class class_base extends aw_template
 			{
 				continue;
 			}
-			if ($val["editonly"] == 1 && empty($this->id))
+			if (!empty($val["editonly"]) && empty($this->id))
 			{
 				continue;
 			};
@@ -2502,7 +2509,7 @@ class class_base extends aw_template
 
 			// eventually all VCL components will have to implement their
 			// own init_vcl_property method
-			if ($this->vcl_register[$val["type"]] && empty($val["_parsed"]) && !is_object($val["vcl_inst"]) && empty($this->vcl_delayed_init[$val["type"]]))
+			if (!empty($this->vcl_register[$val["type"]]) && empty($val["_parsed"]) && (!isset($val["vcl_inst"]) || !is_object($val["vcl_inst"])) && empty($this->vcl_delayed_init[$val["type"]]))
 			{
 				$reginst = $this->vcl_register[$val["type"]];
 				if ($val["type"] == "table")
@@ -2519,7 +2526,7 @@ class class_base extends aw_template
 					$res = $ot->init_vcl_property(array(
 						"prop" => &$val,
 						// this is deprecated
-						"object_type_id" => $args["object_type_id"],
+						"object_type_id" => isset($args["object_type_id"]) ? $args["object_type_id"] : null,
 						"new" => $this->new,
 						"request" => $this->request,
 						"property" => &$val,
@@ -2536,8 +2543,8 @@ class class_base extends aw_template
 						{
 							$this->convert_element(&$rval);
 							$resprops[$rkey] = $rval;
-							$resprops[$rkey]["capt_ord"] = $val["capt_ord"];
-							$resprops[$rkey]["wf_capt_ord"] = $val["wf_capt_ord"];
+							$resprops[$rkey]["capt_ord"] = isset($val["capt_ord"]) ? $val["capt_ord"] : "";
+							$resprops[$rkey]["wf_capt_ord"] = isset($val["wf_capt_ord"]) ? $val["wf_capt_ord"] : "";
 						};
 					};
 				};
@@ -4728,7 +4735,7 @@ class class_base extends aw_template
 				continue;
 			};
 
-			if ($val["display"] == "none")
+			if (isset($val["display"]) && $val["display"] == "none")
 			{
 				continue;
 			};
@@ -4755,7 +4762,7 @@ class class_base extends aw_template
 			// I'm just ignoring those for now
 			foreach($x_tmp as $pkey)
 			{
-				if ($rgroupmap[$pkey])
+				if (!empty($rgroupmap[$pkey]))
 				{
 					$propgroups[] = $rgroupmap[$pkey];
 				};
@@ -4775,7 +4782,7 @@ class class_base extends aw_template
 				continue;
 			};
 
-			if ($val["display"] == "none")
+			if (isset($val["display"]) && $val["display"] == "none")
 			{
 				continue;
 			};
@@ -4812,18 +4819,18 @@ class class_base extends aw_template
 				}
 			};
 
-			if (1 == $propdata["richtext"] && 0 == $this->classinfo["allow_rte"])
+			if (!empty($propdata["richtext"]) && 0 == $this->classinfo["allow_rte"])
 			{
 				unset($propdata["richtext"]);
 			};
 
-			if ($propdata["richtext"] == 1)
+			if (!empty($propdata["richtext"]))
 			{
 				$this->features["has_rte"] = true;
 			};
 
 			// return only toolbar, if this is a config form with fixed toolbar
-			if (empty($arr["ignore_layout"]) && 1 == $this->classinfo["fixed_toolbar"] && empty($arr["cb_part"]))
+			if (empty($arr["ignore_layout"]) && !empty($this->classinfo["fixed_toolbar"]) && empty($arr["cb_part"]))
 			{
 				if ($propdata["type"] != "toolbar")
 				{
@@ -5021,7 +5028,7 @@ class class_base extends aw_template
 				"caption" => t("Seostehaldur"),
 				"submit" => "no",
 			);
-			if($_REQUEST["srch"] == 1)
+			if(!empty($_REQUEST["srch"]))
 			{
 				$this->groupinfo["relationmgr"]["submit_method"] = "get";
 			}
@@ -5148,7 +5155,7 @@ class class_base extends aw_template
 	// attr - name of the attribute
 	function forminfo($arr = array())
 	{
-		return $this->forminfo[$arr["form"]][$arr["attr"]];
+		return isset($this->forminfo[$arr["form"]][$arr["attr"]]) ? $this->forminfo[$arr["form"]][$arr["attr"]] : null;
 	}
 
 	function has_feature($name)

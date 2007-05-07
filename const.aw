@@ -1,6 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.106 2006/05/22 10:26:46 kristo Exp $
-error_reporting(E_ALL ^ E_NOTICE);
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.107 2007/05/07 08:07:03 kristo Exp $
+if (false && $_SERVER["REMOTE_ADDR"] == "62.65.36.190")
+{
+	error_reporting(E_ALL | E_NOTICE);
+}
+else
+{
+	error_reporting(E_PARSE | E_ERROR);
+}
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
 if (!ini_get("safe_mode"))
