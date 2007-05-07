@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.46 2007/04/11 09:07:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.47 2007/05/07 15:25:20 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -246,6 +246,8 @@ class spa_bookigs_entry extends class_base
 
 	function _set_cust_entry($arr)
 	{
+//die(dbg::dump($arr["request"]));
+		classload("core/date/date_calc");
 		for($i = 0; $i < 5; $i++)
 		{
 			$d = $arr["request"]["d"][$i];
@@ -256,8 +258,8 @@ class spa_bookigs_entry extends class_base
 				if ($end < 100 && $this->can("view", $d["package"]))
 				{
 					$pko = obj($d["package"]);
-					list($len, $wd_start) = explode(";", $pko->comment());
-					$end = $start + 24*3600*$len;
+					list($len, $wd_start) = explode(";", $pko->comment());arr($len);
+					$end = $start + 24*3600*($len-1);
 					if ($wd_start > 0)
 					{
 						if (convert_wday(date("w", $start)) != $wd_start)
@@ -282,7 +284,7 @@ class spa_bookigs_entry extends class_base
 				{
 					$pko = obj($d["package"]);
 					list($len, $wd_start) = explode(";", $pko->comment());
-					$end = $start + 24*3600*$len;
+					$end = $start + 24*3600*($len-1);
 				}
 				//$bd = date_edit::get_timestamp($d["birthday"]);
 				// create person, user, booking
@@ -294,11 +296,13 @@ class spa_bookigs_entry extends class_base
 					"site_id" => array(),
 					"CL_CRM_PERSON.RELTYPE_EMAIL.mail" => $d["email"]
 				));
-				if ($ol->count())
+				$existing_user = false;
+				if ($d["email"] != "" && $ol->count())
 				{
 					$p = $ol->begin();
 					$p_i = $p->instance();
 					$user = $p_i->has_user($p);
+					$existing_user = true;
 				}
 				else
 				{
@@ -363,7 +367,7 @@ class spa_bookigs_entry extends class_base
 				$booking->set_prop("end", $end);
 				$booking->set_prop("package", $d["package"]);
 				$booking->save();
-
+//echo "booking = ".$booking->id()." <br>";
 				$this->created_booking = $booking->id();
 
 				// for this booking, create empty reservations for all products so we can search by them
@@ -371,14 +375,27 @@ class spa_bookigs_entry extends class_base
 				$booking_inst->check_reservation_conns($booking);
 
 				$po = obj($d["packet"]);
-				$feedback .= sprintf(t("Lisasin kasutaja %s, isiku %s ja <a href='%s'>broneeringu</a> paketile %s algusega %s ja l&otilde;puga %s<br>"), 
-					is_admin() ? html::obj_change_url($user->id()) : $user->name(),
-					is_admin() ? html::obj_change_url($p->id()) : $p->name(),
-					is_admin() ? html::get_change_url($booking->id(), array("return_url" => $arr["request"]["post_ru"])) : "#",
-					is_admin() ? html::obj_change_url($po->id()) : $po->name(),
-					date("d.m.Y H:i", $start), 
-					date("d.m.Y H:i", $end)
-				);
+				if (is_admin())
+				{
+					$feedback .= sprintf(t("Lisasin kasutaja %s, isiku %s ja <a href='%s'>broneeringu</a> paketile %s algusega %s ja l&otilde;puga %s<br>"), 
+						is_admin() ? html::obj_change_url($user->id()) : $user->name(),
+						is_admin() ? html::obj_change_url($p->id()) : $p->name(),
+						is_admin() ? html::get_change_url($booking->id(), array("return_url" => $arr["request"]["post_ru"])) : "#",
+						is_admin() ? html::obj_change_url($po->id()) : $po->name(),
+						date("d.m.Y", $start), 
+						date("d.m.Y", $end)
+					);
+				}
+				else
+				{
+					$feedback .= sprintf(t("Lisasin kasutaja %s, isiku %s ja broneeringu paketile %s algusega %s ja l&otilde;puga %s<br>"), 
+						$user->name(),
+						$p->name(),
+						$po->name(),
+						date("d.m.Y", $start), 
+						date("d.m.Y", $end)
+					);
+				}
 
 				// if other ppl were entered, then create reservations for them and connect those to the same booking so that one user can view it
 				if (is_array($d["ppl"]) && count($d["ppl"]))
@@ -386,7 +403,7 @@ class spa_bookigs_entry extends class_base
 					$feedback .= $this->_add_ppl_entry($d, $booking);
 				}
 
-				if ($arr["obj_inst"]->prop("b_send_mail_to_user"))
+				if ($arr["obj_inst"]->prop("b_send_mail_to_user") && !$existing_user)
 				{
 					send_mail(
 						$d["email"], 
@@ -574,12 +591,24 @@ class spa_bookigs_entry extends class_base
 		$p = get_current_person();
 		if ($arr["request"]["group"] == "my_bookings")
 		{
+/*			obj_set_opt("no_cache", 1);
+			$GLOBALS["DUKE"] = 1;*/
 			$ol = new object_list(array(
 				"class_id" => CL_SPA_BOOKING,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"person" => $p->id()
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"person" => $p->id(),
+						"CL_SPA_BOOKING.RELTYPE_MAIN_PERSON" => $p->id()
+					)
+				))
 			));
+/*echo dbg::dump($ol->names());
+                        obj_set_opt("no_cache", 0);
+                        $GLOBALS["DUKE"] = 0;*/
+
 		}
 		else
 		if ($arr["request"]["group"] == "cust" || $arr["request"]["group"] == "all_bookings")
@@ -598,8 +627,9 @@ class spa_bookigs_entry extends class_base
 				"createdby" => aw_global_get("uid"),
 				"start" => new obj_predicate_compare(OBJ_COMP_GREATER, time())
 			));
-			
 		}
+		$payment_info = "";
+		$total_payment_amt = 0;
 		foreach($ol->arr() as $o)
 		{
 			// bookingul has package
@@ -614,28 +644,76 @@ class spa_bookigs_entry extends class_base
 			$pk = $package->instance();
 			$dates = $this->get_booking_data_from_booking($o);
 
-			$booking_str = sprintf(t("Broneering %s, %s - %s, pakett %s"), html::href(array(
+			$booking_str = sprintf(t("Broneering %s, %s - %s, pakett %s"), is_admin() ? html::href(array(
 					"url" => "mailto:".$o->prop("person.email.mail"),
 					"caption" => $o->prop("person.name")
-				)),
+				)) : $o->prop("person.name"),
 				date("d.m.Y", $o->prop("start")),
 				date("d.m.Y", $o->prop("end")),
-				$o->prop("package.name")
+				$package->trans_get_val("name")
 			);
-			$booking_str .= " ".html::popup(array(
-				"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
-				"caption" => t("Lisa teenus"),
-				"width" => 600,
-				"height" => 400,
-				"scrollbars" => 1,
-				"resizable" => 1
-			));
+			if (is_admin())
+			{
+				$booking_str .= " ".html::popup(array(
+					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
+					"caption" => t("Lisa teenus"),
+					"width" => 600,
+					"height" => 400,
+					"scrollbars" => 1,
+					"resizable" => 1
+				));
+			}
+			else
+			{
+				$booking_str .= " ".html::href(array(
+					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "id" => 11150, "r" => get_ru()), "spa_customer_interface"), 
+//					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
+					"caption" => t("Lisa teenus"),
+/*					"width" => 600,
+					"height" => 400,
+					"scrollbars" => 1,
+					"resizable" => 1*/
+				));
+			}
 
 			$booking_str .= " / ".html::href(array(
 				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 				"caption" => t("Prindi"),
 				"target" => "_blank"
 			));
+
+			if (!is_admin())
+			{
+				$has_times = count($o->meta("extra_prods")) > 0;
+				foreach(safe_array($o->meta("extra_prods")) as $extra_item_entry)
+				{
+					$rb = obj($extra_item_entry["reservation"]);
+					if ($rb->prop("start1") < 100)
+					{
+						$has_times = false;
+					}
+				}
+
+				if ($has_times)
+				{
+					$booking_str .= " / ".html::href(array(
+						"caption" => t("Maksa"),
+						"url" => $this->mk_my_orb("pay", array(
+							"id" => $o->id(),
+							"r" => get_ru(),
+							"bank_payment" => 13574,
+							"section" => aw_global_get("section"),
+						), "spa_customer_interface")
+					));
+					$sci = get_instance(CL_SPA_CUSTOMER_INTERFACE);
+					$tmp_sum = $sci->get_extra_prods_sum($o->id());
+					$total_payment_amt += $tmp_sum;
+					$payment_info .= "<br>".sprintf(t("%s lisateenused %s EEK"),
+						$o->prop("person.name"),
+						$tmp_sum
+					);
+				}
+			}
 			if ($arr["request"]["group"] == "cust")
 			{
 				$booking_str .= " ".html::get_change_url($o->id(), array("return_url" => get_ru()), t("Muuda"));
@@ -691,7 +769,7 @@ class spa_bookigs_entry extends class_base
 						{
 							$prod_str[] = html::popup(array(
 								"url" => $this->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "pkt" => $package->id())),
-								"caption" => $prod->name(),
+								"caption" => $prod->trans_get_val("name"),
 								"height" => 500,
 								"width" => 750,
 								"scrollbars" => 1,
@@ -700,7 +778,7 @@ class spa_bookigs_entry extends class_base
 						}
 						else
 						{
-							$prod_str[] = $prod->name();
+							$prod_str[] = $prod->trans_get_val("name");
 						}
 					}
 
@@ -721,6 +799,15 @@ class spa_bookigs_entry extends class_base
 						$has_unc = true;
 					}
 
+					if (substr($prod_group, 0, 5) == "__ei|")
+					{
+						$fd[] = array(
+							"booking" => $booking_str,
+							"name" => t("----Lisateenused"),
+							"when" => ""
+						);
+					}
+
 					$fd[] = (array(
 						"booking" => $booking_str,
 						"name" => join("<br>", $prod_str),
@@ -735,12 +822,27 @@ class spa_bookigs_entry extends class_base
 			}
 			foreach($fd as $row)
 			{
+				$row["_int_index"] = ++$_int_index;
 				$t->define_data($row);
 			}
 		}
 
 		$t->set_rgroupby(array("booking" => "booking"));
-		$t->set_default_sortby("name");
+		$t->set_default_sortby(array("_int_index"));
+
+		if (!is_admin() && $total_payment_amt > 0)
+		{
+			$payment_info .= "<br>".sprintf(t("Kokku: %s EEK"), $total_payment_amt)." ".html::href(array(
+				"url" => $this->mk_my_orb("pay", array(
+                                                        "id" => $ol->ids(),
+                                                        "r" => get_ru(),
+                                                        "bank_payment" => 13574,
+                                                        "section" => aw_global_get("section"),
+                                                ), "spa_customer_interface"),
+				"caption" => t("Maksma")
+			));
+			$t->set_caption($payment_info);
+		}
 	}
 
 	/**
@@ -815,6 +917,7 @@ class spa_bookigs_entry extends class_base
 		{
 			$room2inst[$room_id] = new room;
 			$room2inst[$room_id]->generate_res_table($room_obj, $range_from, $range_to);
+			$room2inst[$room_id]->pauses = $room2inst[$room_id]->get_current_pauses_for_room($room_obj);
 			$room2settings[$room_id] = $room_inst->get_settings_for_room($room_obj);
 		}
 
@@ -917,7 +1020,10 @@ class spa_bookigs_entry extends class_base
 					{
 						if ($room2inst[$room->id()]->group_can_do_bron($room2settings[$room->id()], $cur_step_start))
 						{
-							$avail = true;
+							if (!$room2inst[$room->id()]->is_paused($cur_step_start, $cur_step_end))
+							{
+								$avail = true;
+							}
 						}
 					}
 				}
@@ -1873,6 +1979,10 @@ class spa_bookigs_entry extends class_base
 		$orig_person = obj($orig_booking->prop("person"));
 		foreach($d["ppl"] as $ppl_entry)
 		{
+			if ($ppl_entry["fn"] == "" && $ppl_entry["ln"] == "")
+			{
+				continue;
+			}
 			$p = obj();
 			$p->set_class_id(CL_CRM_PERSON);
 			$p->set_parent($orig_person->parent());
@@ -1888,17 +1998,17 @@ class spa_bookigs_entry extends class_base
 			$booking->set_name(
 				sprintf("Broneering %s %s - %s", 
 					$ppl_entry["fn"]." ".$ppl_entry["ln"], 
-					date("d.m.Y", $orig_booking->prop("start1")), 
+					date("d.m.Y", $orig_booking->prop("start")), 
 					date("d.m.Y", $orig_booking->prop("end"))
 				)
 			);
 			$booking->set_class_id(CL_SPA_BOOKING);
 			$booking->set_prop("person", $p->id());
-			$booking->set_prop("start", $orig_booking->prop("start1"));
+			$booking->set_prop("start", $orig_booking->prop("start"));
 			$booking->set_prop("end", $orig_booking->prop("end"));
 			$booking->set_prop("package", $d["package"]);
 			$booking->save();
-
+//echo "b2 ".$booking->id()." <Br>";
 			// for this booking, create empty reservations for all products so we can search by them
 			$booking_inst = $booking->instance();
 			$booking_inst->check_reservation_conns($booking);
