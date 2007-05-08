@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.36 2007/05/04 10:34:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.37 2007/05/08 06:35:19 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -283,7 +283,12 @@ class crm_company_webview extends class_base
 			'type' => '',
 			'moreinfo_link' => '',
 			'userta1' => '',
+			'userta2' => '',
+			'userta3' => '',
+			'userta4' => '',
+			'userta5' => '',
 			'logo' => 'logo'
+
 		);
 		
 		// Name is not obligatory - will go to template as {VAR:key}
@@ -828,7 +833,11 @@ class crm_company_webview extends class_base
 					}
 				break;
 				case "userta1":
-					$value = $c->prop("userta1");
+				case "userta2":
+				case "userta3":
+				case "userta4":
+				case "userta5":
+					$value = $c->prop($item);
 					break;
 				case "email":
 					$rels = $c->connections_from(array(
