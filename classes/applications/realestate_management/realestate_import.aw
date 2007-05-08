@@ -1039,14 +1039,11 @@ class realestate_import extends class_base
 
 					if ($list->count ())
 					{
-						$client = $list->begin ();
-
 						if ($list->count () > 1)
 						{
 							$property_status = REALESTATE_IMPORT_ERR10;
-							$list = $list->arr ();
 
-							foreach ($list as $o)
+							foreach ($list->arr() as $o)
 							{
 								$client_edit_url = html::href(array(
 									"url" => $this->mk_my_orb ("change", array (
@@ -1066,13 +1063,19 @@ class realestate_import extends class_base
 								$clients[] = REALESTATE_NEWLINE . $client_edit_url . " " . $client_connect_url;
 							}
 
-							$clients = implode (" ", $clients);
+							$clients = implode(" ", $clients);
 							$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui üks. Ei tea millist valida. AW oid: %s. Leitud kliendid: "), $city24_id, $property->id ()) . '<blockquote>' . $clients . '</blockquote>' . REALESTATE_NEWLINE . REALESTATE_NEWLINE;
 
 							if (1 != $arr["quiet"])
 							{
-								echo end ($status_messages);
+								echo end($status_messages);
 							}
+						}
+						else
+						{
+							$client = $list->begin();
+							$email = $client->get_first_obj_by_reltype("RELTYPE_EMAIL");
+							$phone = $client->get_first_obj_by_reltype("RELTYPE_PHONE");
 						}
 					}
 					else
@@ -1082,46 +1085,53 @@ class realestate_import extends class_base
 						$client->set_class_id (CL_CRM_PERSON);
 						$client->set_parent ($manager->prop ("clients_folder"));
 						$client->save ();
-
-						###### create seller email
-						$email = new object ();
-						$email->set_class_id (CL_ML_MEMBER);
-						$email->set_parent ($manager->prop ("clients_folder"));
-						$email->save ();
-						$client->connect (array (
-							"to" => $email,
-							"reltype" => "RELTYPE_EMAIL",
-						));
-
-						###### create seller phone
-						$phone = new object ();
-						$phone->set_class_id (CL_CRM_PHONE);
-						$phone->set_parent ($manager->prop ("clients_folder"));
-						$phone->save ();
-						$client->connect (array (
-							"to" => $phone,
-							"reltype" => "RELTYPE_PHONE",
-						));
 					}
 
-					##### save seller data
-					$client->set_prop ("firstname", $seller_firstname);
-					$client->set_prop ("lastname", $seller_lastname);
-					$client->set_name ($seller_firstname . " " . $seller_lastname);
+					if (REALESTATE_IMPORT_ERR10 !== $property_status)
+					{
+						if (!is_object($email))
+						{
+							###### create seller email
+							$email = new object ();
+							$email->set_class_id (CL_ML_MEMBER);
+							$email->set_parent ($manager->prop ("clients_folder"));
+							$email->save ();
+							$client->connect (array (
+								"to" => $email,
+								"reltype" => "RELTYPE_EMAIL",
+							));
+						}
 
-					$email = $client->get_first_obj_by_reltype ("RELTYPE_EMAIL");
-					$phone = $client->get_first_obj_by_reltype ("RELTYPE_PHONE");
-					$email->set_prop ("mail", $this->property_data["MYYJA_EMAIL"]);
-					$phone->set_name ($this->property_data["MYYJA_TELEFON"]);
+						if (!is_object($phone))
+						{
+							###### create seller phone
+							$phone = new object ();
+							$phone->set_class_id (CL_CRM_PHONE);
+							$phone->set_parent ($manager->prop ("clients_folder"));
+							$phone->save ();
+							$client->connect (array (
+								"to" => $phone,
+								"reltype" => "RELTYPE_PHONE",
+							));
+						}
 
-					$client->save ();
-					$email->save ();
-					$phone->save ();
+						##### save seller data
+						$client->set_prop ("firstname", $seller_firstname);
+						$client->set_prop ("lastname", $seller_lastname);
+						$client->set_name ($seller_firstname . " " . $seller_lastname);
 
-					$property->connect (array (
-						"to" => $client,
-						"reltype" => "RELTYPE_REALESTATE_SELLER",
-					));
+						$email->set_prop ("mail", $this->property_data["MYYJA_EMAIL"]);
+						$phone->set_name ($this->property_data["MYYJA_TELEFON"]);
+
+						$client->save ();
+						$email->save ();
+						$phone->save ();
+
+						$property->connect (array (
+							"to" => $client,
+							"reltype" => "RELTYPE_REALESTATE_SELLER",
+						));
+					}
 				}
 
 				#### priority
