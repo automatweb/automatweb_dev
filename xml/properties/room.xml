@@ -216,7 +216,7 @@
             <type>checkbox</type>
             <parent>general_down</parent>
             <no_caption>1</no_caption>
-            <caption>Grupeeri tooted kaustadesse</caption>
+            <caption>Grupeeri tooted kaustadesse		</caption>
       </property>
       <property>
             <name>settings</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.366 2007/05/07 08:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.367 2007/05/08 12:50:29 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -711,22 +711,22 @@ class document extends aw_template
 			}
 			if (!(($pp = strpos($doc["content"],"#edasi#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>$re</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".aw_url_change_var("show_all", 1)."'>$re</a></b></font>";
 			}
 
 			if (!(($pp = strpos($doc["content"],"#edasi1#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>$re</a></b></font>";
+				$doc["content"] = substr($doc["content"],0,$pp)."<br /><B><a href='".aw_url_change_var("show_all", 1)."'>$re</a></b></font>";
 			}
 
 			if (!(($pp = strpos($doc["lead"],"#edasi#")) === false))
 			{
-				$doc["lead"] = substr($doc["lead"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>$re</a></b></font>";
+				$doc["lead"] = substr($doc["lead"],0,$pp)."<br /><B><a href='".aw_url_change_var("show_all", 1)."'>$re</a></b></font>";
 			}
 
 			if (!(($pp = strpos($doc["lead"],"#edasi1#")) === false))
 			{
-				$doc["lead"] = substr($doc["lead"],0,$pp)."<br /><B><a href='".$baseurl."/index.".$ext."/section=$docid/show_all=1'>$re</a></b></font>";
+				$doc["lead"] = substr($doc["lead"],0,$pp)."<br /><B><a href='".aw_url_change_var("show_all", 1)."'>$re</a></b></font>";
 			}
 		}
 

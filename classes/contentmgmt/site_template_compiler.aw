@@ -1295,7 +1295,7 @@ class site_template_compiler extends aw_template
 
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"lang_id\" => aw_global_get(\"lang_id\"),\n";
-		$ret .= $this->_gi()."\"type\" => MN_CLIENT\n";
+		$ret .= $this->_gi()."\"type\" => array(MN_CLIENT,MN_PMETHOD)\n";
 		$this->brace_level--;
 
 		$ret .= $this->_gi().")\n";

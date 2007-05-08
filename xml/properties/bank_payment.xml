@@ -38,6 +38,15 @@
             <caption>Privaatv&amp;amp;otilde;ti</caption>
       </property>
       <property>
+            <name>nordea_private_key</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>Nordea privaatv&amp;amp;otilde;ti</caption>
+      </property>
+      <property>
             <name>bank_return_url</name>
             <table>objects</table>
             <field>meta</field>
