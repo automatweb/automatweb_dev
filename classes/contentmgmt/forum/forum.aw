@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.10 2007/03/28 10:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.11 2007/05/08 10:20:16 dragut Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1380,6 +1380,7 @@ topic");
 
 		$_mx = aw_ini_get("forum.comments_mailto");
 		$mx = explode(",", $_mx);
+/*
 		if (is_array($mx))
 		{
 			foreach($mx as $val)
@@ -1390,6 +1391,7 @@ topic");
 					"From: $name <$email>");
 			}
 		};
+*/
 
 		$tmp = obj($forum_obj->parent());
 		$nflist = $tmp->meta("notifylist");
