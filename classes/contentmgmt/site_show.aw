@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.229 2007/04/24 11:10:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.230 2007/05/08 14:57:44 markop Exp $
 
 /*
 
@@ -2144,6 +2144,9 @@ class site_show extends class_base
 			$adt_o = obj($this->active_doc);
 			$adt = $adt_o->name();
 		}
+		
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
 
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
@@ -2151,6 +2154,7 @@ class site_show extends class_base
 			"ss3" => gen_uniq_id(),
 			"link" => "",
 			"uid" => aw_global_get("uid"),
+			"user" => $p->name(),
 			"date" => $this->time2date(time(), 2),
 			"date2" => $this->time2date(time(), 8),
 			"date_timestamp" => time(),
