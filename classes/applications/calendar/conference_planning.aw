@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.93 2007/05/03 07:13:57 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.94 2007/05/08 08:29:00 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -141,6 +141,7 @@
 
 */
 
+define(CP_DEFAULT_LANG, "en");
 define(CONFIRM_ID, "confirm_submit_checkbox");
 define(TYPE_SEPARATOR, 1);
 define(TYPE_ELEMENT, 2);
@@ -1610,7 +1611,7 @@ class conference_planning extends class_base
 	}
 
 	/**
-		@attrib name=finalize all_args=1 no_login=1
+		@attrib name=finalize all_args=1 nologin=1
 		@comment
 			This method just catches the last requests and does all the close-up thingies. the real save is done by _finalize()
 	**/
@@ -1685,7 +1686,6 @@ class conference_planning extends class_base
 			$obj->set_name($arr["name"]);
 			$obj->set_parent($arr["parent"]);
 			$obj->set_class_id($arr["clid"]);
-			$obj->save();
 			// these are here just in case 
 			unset($data["name"]);
 			unset($data["parent"]);
@@ -1814,25 +1814,30 @@ class conference_planning extends class_base
 		{
 			$value_to_use = &$value;
 		}
+		// here we set the caption to angliski if the current lang translation is unset
+		$caption = $el["trans"][$lang]?$el["trans"][$lang]:$el["trans"][CP_DEFAULT_LANG];
 		switch($prop["form"])
 		{
 			case "separator":
 			case "textarea":
 			case "textbox":
 				$this->vars(array(
-					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					//"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"caption" => $caption,
 					"value" => $value_to_use,
 				));
 				break;
 			case "checkbox":
 				$this->vars(array(
-					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					//"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"caption" => $caption,
 					"checked" => checked($value_to_use),
 				));
 				break;
 			case "date_textbox":
 				$this->vars(array(
-					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					//"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"caption" => $caption,
 					"value" => $value_to_use,
 					"date_textbox_id" => $el["name"]."_id",
 					"date_textbox_link" => $el["name"]."_link",
@@ -1851,7 +1856,8 @@ class conference_planning extends class_base
 				}
 				$this->vars(array(
 					"OPTION" => $opts,
-					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"caption" => $caption,
+					//"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
 				));
 				break;
 			case "event_type":
@@ -1869,7 +1875,8 @@ class conference_planning extends class_base
 					"text" => $value_to_use["text"],
 					"radio_".$value_to_use["radio"] => checked(true),
 					"EVENT_TYPE_OPTION" => $opts,
-					"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"caption" => $caption,
+					//"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
 				));
 				break;
 			case "text":
@@ -1879,7 +1886,8 @@ class conference_planning extends class_base
 				}
 				
 				$this->vars(array(
-					"caption" => $el["trans"][$lang],
+					"caption" => $caption,
+					//"caption" => $el["trans"][$lang],
 					"value" => $el["value"],
 				));
 				break;
@@ -2031,11 +2039,14 @@ class conference_planning extends class_base
 			$i++;
 			$act = ($i == $no)?"ACT_":"";
 			$href = (strlen($no) &&  $i < $no)?"_HREF":"";
+			$caption = $views[$key]["trans"][aw_global_get("ct_lang_lc")]?$views[$key]["trans"][aw_global_get("ct_lang_lc")]:$views[$key]["trans"][CP_DEFAULT_LANG];
+			$caption_i_plus_one = $views[$keys[$i+1]]["trans"][aw_global_get("ct_lang_lc")]?$views[$keys[$i+1]]["trans"][aw_global_get("ct_lang_lc")]:$views[$keys[$i+1]]["trans"][CP_DEFAULT_LANG];
 			if($i == 1)
 			{
 				$this->vars(array(
 					"step_nr" => $i,
-					"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					//"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					"caption" => $caption,
 					"url" => aw_ini_get("baseurl")."/".$doc."?view_no=".$i,
 				));
 				$yah[] = $this->parse($act."YAH_FIRST_BTN".$href);
@@ -2049,7 +2060,8 @@ class conference_planning extends class_base
 				}
 				$this->vars(array(
 					"step_nr" => $i,
-					"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					//"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					"caption" => $caption,
 					"url" => aw_ini_get("baseurl")."/".$doc."?view_no=".$i,
 				));
 				$yah[] = $this->parse($act."YAH".$last."_BTN".$href);
@@ -2058,7 +2070,8 @@ class conference_planning extends class_base
 			{
 				$this->vars(array(
 					"step_nr" => $i,
-					"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					//"caption" => $views[$key]["trans"][aw_global_get("ct_lang_lc")],
+					"caption" => $caption,
 				));
 				$yah[] = $this->parse("YAH_LAST_BTN_AFTER");
 			}
@@ -2066,7 +2079,8 @@ class conference_planning extends class_base
 			{
 				$this->vars(array(
 					"step_nr" => $i,
-					"caption" => strlen($act)?$views[$key]["trans"][aw_global_get("ct_lang_lc")]:"",
+					//"caption" => strlen($act)?$views[$key]["trans"][aw_global_get("ct_lang_lc")]:"",
+					"caption" => $caption,
 				));
 				$yah[] = $this->parse($act."YAH_LAST_BTN".$href);
 			}
@@ -2074,7 +2088,8 @@ class conference_planning extends class_base
 			{
 				$this->vars(array(
 					"step_nr" => ($i+1),
-					"caption" => $views[$keys[$i+1]]["trans"][aw_global_get("ct_lang_lc")],
+					//"caption" => $views[$keys[$i+1]]["trans"][aw_global_get("ct_lang_lc")],
+					"caption" => $caption_i_plus_one,
 				));
 				$yah[] = $this->parse("YAH_BTN_AFTER");
 			}
