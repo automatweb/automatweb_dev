@@ -197,6 +197,15 @@
             <caption>Hiljuti muudetud reserveeringud</caption>
       </property>
       <property>
+            <name>comment_pos</name>
+            <table>objects</table>
+            <group>settings_gen</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kuva kommentaar</caption>
+      </property>
+      <property>
             <name>buffer_time_string</name>
             <table>objects</table>
             <group>settings_gen</group>
@@ -263,6 +272,17 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Kliendi saabumise kinnitust pole vaja k&amp;amp;uuml;sida</caption>
+      </property>
+      <property>
+            <name>use_existing_person</name>
+            <table>objects</table>
+            <group>settings_gen</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <caption>Samanimeliste isikute puhul v&amp;amp;otilde;etakse aluseks olemasolev isikuobjekt</caption>
       </property>
       <property>
             <name>bron_required_fields</name>

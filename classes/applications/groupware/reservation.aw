@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.61 2007/04/13 13:45:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.62 2007/05/08 10:52:33 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -1151,20 +1151,41 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
                 }
         }
 	
+	function get_room_prop($room, $prop)
+	{
+		if(is_oid($room) && $this->can("view" , $room))
+		{
+			$room = obj($room);
+		}
+		if(is_object($room))
+		{
+			$room_inst = get_instance(CL_ROOM);
+			$settings = $room_inst->get_settings_for_room($room);
+			return $settings->prop($prop);
+		}
+		return null;
+	}
+	
 	function _set_cp_fn($arr)
 	{
-	
                 if (!$this->can("view", $arr["obj_inst"]->prop("customer")) && $arr["prop"]["value"] != "")
                 {
 			list($fn, $ln) = explode(" ", $arr["request"]["new"]["name"]);
 
-			$ol = new object_list(array(
-				"class_id" => CL_CRM_PERSON,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"firstname" => trim($arr["request"]["cp_fn"]),
-				"lastname" => trim($arr["request"]["cp_ln"])
-			));
+			if($this->get_room_prop($arr["request"]["resource"], "use_existing_person"))
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"firstname" => trim($arr["request"]["cp_fn"]),
+					"lastname" => trim($arr["request"]["cp_ln"])
+				));
+			}
+			else
+			{
+				$ol = new object_list();
+			}
 			if ($ol->count())
 			{
 				$cust = $ol->begin();

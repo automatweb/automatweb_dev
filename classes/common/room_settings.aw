@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.22 2007/03/12 15:33:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.23 2007/05/08 10:52:36 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -78,6 +78,9 @@
 	
 @default group=settings_gen
 
+	@property comment_pos type=select
+	@caption Kuva kommentaar
+
 	@property buffer_time_string type=textbox 
 	@caption Puhveraja string
 
@@ -98,6 +101,9 @@
 
 	@property no_cust_arrived_pop type=checkbox ch_value=1
 	@caption Kliendi saabumise kinnitust pole vaja k&uuml;sida
+	
+	@property use_existing_person type=checkbox ch_value=1 default=1
+	@caption Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt
 
 	@property bron_required_fields type=table store=no
 	@caption Broneeringuobjekti kohustuslikud v&auml;ljad
@@ -241,6 +247,9 @@ class room_settings extends class_base
 				break;
 			case "order_mail_legend":
 				$prop["value"] = t("sisu tuleb common/room/preview.tpl failist");
+				break;
+			case "comment_pos":
+				$prop["options"] = array("Alt tekstina" , "Broneerija nime j&auml;rele");
 				break;
 			//-- get_property --//
 		};
