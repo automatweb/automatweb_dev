@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.170 2007/05/04 10:34:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.171 2007/05/08 10:50:21 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3245,7 +3245,7 @@ class crm_person extends class_base
 		if ("aw_account_balances" == $tbl)
 		{
 			$i = get_instance(CL_CRM_CATEGORY);
-			return $i->do_db_upgrade($t, $f);
+			return $i->do_db_upgrade($tbl, $field);
 		}
 
 		switch($field)
