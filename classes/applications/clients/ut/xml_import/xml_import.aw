@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.8 2007/03/28 10:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.9 2007/05/08 10:08:03 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -401,6 +401,11 @@ echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</
 				$tootajad_view = array();
 				$amt_data = array();
 				$ruum_data = array();
+				$pcode = $t_attr["isikukood"];
+				$born_year = "19".$pcode[1].$pcode[2];
+				$born_month = $pcode[3].$pcode[4];
+				$born_day = $pcode[5].$pcode[6];
+//echo "byear = $born_year , bm = $born_month , bd = $born_day <br>";
 			}
 
 			if ( ($token["tag"] == "amet") && ($token["type"] == "complete") )
@@ -512,8 +517,8 @@ echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</
 				if (!$row)
 				{
 					$this->quote(&$realkraad);
-					$q = "INSERT INTO $tootajad_table (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad) 
-						VALUES ('$tid','$enimi','$pnimi','$email','$veeb','$ruum','$markus','$mobiil','$sisetel','$pritel','$realkraad')";
+					$q = "INSERT INTO $tootajad_table (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad,born_year, born_month, born_day) 
+						VALUES ('$tid','$enimi','$pnimi','$email','$veeb','$ruum','$markus','$mobiil','$sisetel','$pritel','$realkraad','$born_year', '$born_month', '$born_day')";
 					print $q;
 					print "<br />";
 					$this->db_query($q);
