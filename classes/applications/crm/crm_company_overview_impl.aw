@@ -1241,33 +1241,96 @@ class crm_company_overview_impl extends class_base
 		switch($arr["request"]["group"])
 		{
 			case "my_tasks":
-				$tasks = $i->get_my_tasks(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
 				$clid = array(CL_TASK);
+				if ($co == $arr["obj_inst"]->id())
+				{
+					$tasks = $i->get_my_tasks(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
+					
+				}
+				else
+				{
+					$ol = new object_list($arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_TASK"
+					)));
+
+					$ol2 = new object_list(array(
+						"class_id" => $clid,
+						"customer" => $arr["obj_inst"]->id()
+					));
+					$ol->add($ol2);
+					$tasks = $this->make_keys($ol->ids());
+					if (!count($tasks))
+					{
+						$tasks = array(-1);
+					}
+				}
 				break;
 			case "meetings":
-				$tasksi = $i->get_my_meetings();
+				
 				$clid = CL_CRM_MEETING;
-				$tasks = array();
-				foreach($tasksi as $t_id)
+				if ($co == $arr["obj_inst"]->id())
 				{
-					$o = obj($t_id);
-					if (!($o->flags() & OBJ_IS_DONE))
+					$tasksi = $i->get_my_meetings();
+					$tasks = array();
+					foreach($tasksi as $t_id)
 					{
-						$tasks[$o->id()] = $o->id();
+						$o = obj($t_id);
+						if (!($o->flags() & OBJ_IS_DONE))
+						{
+							$tasks[$o->id()] = $o->id();
+						}
+					}
+				}
+				else
+				{
+					$ol = new object_list($arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_KOHTUMINE"
+					)));
+
+					$ol2 = new object_list(array(
+						"class_id" => $clid,
+						"customer" => $arr["obj_inst"]->id()
+					));
+					$ol->add($ol2);
+					$tasks = $this->make_keys($ol->ids());
+					if (!count($tasks))
+					{
+						$tasks = array(-1);
 					}
 				}
 				break;
 
 			case "calls":
-				$tasksi = $i->get_my_calls();
+				
 				$clid = CL_CRM_CALL;
-				$tasks = array();
-				foreach($tasksi as $t_id)
+				if ($co == $arr["obj_inst"]->id())
 				{
-					$o = obj($t_id);
-					if (!($o->flags() & OBJ_IS_DONE))
+					$tasksi = $i->get_my_calls();
+					$tasks = array();
+					foreach($tasksi as $t_id)
 					{
-						$tasks[$o->id()] = $o->id();
+						$o = obj($t_id);
+						if (!($o->flags() & OBJ_IS_DONE))
+						{
+							$tasks[$o->id()] = $o->id();
+						}
+					}
+				}
+				else
+				{
+					$ol = new object_list($arr["obj_inst"]->connections_from(array(
+						"type" => "CL_CRM_CALL"
+					)));
+
+					$ol2 = new object_list(array(
+						"class_id" => $clid,
+						"customer" => $arr["obj_inst"]->id()
+					));
+					$ol->add($ol2);
+					$tasks = $this->make_keys($ol->ids());
+					if (!count($tasks))
+					{
+						$tasks = array(-1);
 					}
 				}
 				break;
@@ -1292,21 +1355,41 @@ class crm_company_overview_impl extends class_base
 				break;
 
 			case "ovrv_offers":
-				/// this tab got turned into docmanagement. whoo
-				$clid = CL_CRM_DOCUMENT_ACTION;
-				// now, find all thingies that I am part of
-				$filt = array(
-					"class_id" => CL_CRM_DOCUMENT_ACTION,
-					"site_id" => array(),
-					"lang_id" => array(),
-					"actor" => $u->get_current_person(),
-				);
-			//	if (!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1))
-			//	{
-			//		$filt["is_done"] = new obj_predicate_not(1);
-			//	}
-				$ol = new object_list($filt);
-				$tasks = $this->make_keys($ol->ids());
+				if ($co == $arr["obj_inst"]->id())
+				{
+					/// this tab got turned into docmanagement. whoo
+					$clid = CL_CRM_DOCUMENT_ACTION;
+					// now, find all thingies that I am part of
+					$filt = array(
+						"class_id" => CL_CRM_DOCUMENT_ACTION,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"actor" => $u->get_current_person(),
+					);
+				//	if (!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1))
+				//	{
+				//		$filt["is_done"] = new obj_predicate_not(1);
+				//	}
+				}
+				else
+				{
+					$clid = CL_CRM_DOCUMENT_ACTION;
+					
+					$offers = new object_list(array("class_id" => CL_CRM_OFFER,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"orderer" => $arr["obj_inst"]->id(),
+					));
+					
+					$filt = array(
+						"class_id" => CL_CRM_DOCUMENT_ACTION,
+						"site_id" => array(),
+						"lang_id" => array(),
+						"CL_CRM_DOCUMENT_ACTION.RELTYPE_DOC" => $offers->ids(),
+					);
+				}
+					$ol = new object_list($filt);
+					$tasks = $this->make_keys($ol->ids());
 				break;
 
 			default:
@@ -1412,7 +1495,7 @@ class crm_company_overview_impl extends class_base
 				if ($has)
 				{
 					$res->add($o);
-				}		
+				}
 			}
 			$ol = $res;
 		}
