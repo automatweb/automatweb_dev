@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.171 2007/05/08 10:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.172 2007/05/09 10:40:00 tarvo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3784,9 +3784,9 @@ class crm_person extends class_base
 		$img_inst = get_instance(CL_IMAGE);
 		$bd = split("-", $ob->prop("birthday"));
 		$bd = mktime(0,0,0,$bd[1],$bd[2], $bd[0]);
-		$tio = time() - $cur_job->prop("start");
-		$m = round(((($tio/60)/60)/24)/30, 0);
-		$y = floor((((($tio/60)/60)/24)/30)/12);
+		$tio = $cur_job?(time() - $cur_job->prop("start")):false;
+		$m = $tio?round(((($tio/60)/60)/24)/30, 0):0;
+		$y = $tio?floor((((($tio/60)/60)/24)/30)/12):0;
 		$time = $y?sprintf(t("%s %s, %s %s"), $y, $m,(($y==1)?t("year"):t("years")), (($m == 1)?t("month"):t("months"))):sprintf("%s %s", $m ,(($m == 1)?t("month"):t("months")));
 		$this->vars(array(
 			"COMP_SKILL" => $ck,
