@@ -1384,6 +1384,22 @@ class crm_company extends class_base
 			'sort_dir' => 'asc',
 		));
 
+		$to_oids = array();
+		foreach($conns as $key=>$conn)
+		{
+			$to_oids[] = $conn->prop("to");
+		}
+
+		if (count($to_oids))
+		{
+			$ol = new object_list(array(
+				"oid" => $to_oids,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$ol->arr();
+		}
+
 		//parent nodes'id actually
 		$this_level_id = $node_id;
 		foreach($conns as $key=>$conn)
@@ -1448,8 +1464,7 @@ class crm_company extends class_base
 			//i just don't know yet, how to refactor it nicely, until then
 			//i'll be just adding the bloat
 			//get all the company for the current leaf
-			$blah = $conn->to();
-			$conns_tmp = $blah->connections_from(array(
+			$conns_tmp = $tmp_obj->connections_from(array(
 				"type" => "RELTYPE_CUSTOMER",
 			));
 			$oids = array();
