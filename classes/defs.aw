@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.232 2007/05/07 08:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.233 2007/05/09 09:51:39 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -661,7 +661,7 @@ if (!defined("DEFS"))
 	{
 		$sets = array(
 			'password' => array(
-				'content' => '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM',
+				'content' => '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM@',
 				'min' => aw_ini_get("users.min_password_length"),
 				'max' => 32),
 			'url' => array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.8 2006/12/06 15:55:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/customer_satisfaction_center/obj_quick_add.aw,v 1.9 2007/05/09 09:51:39 kristo Exp $
 // obj_quick_add.aw - Kiirlisamine 
 /*
 
@@ -400,11 +400,13 @@ class obj_quick_add extends class_base
 			$o->set_class_id(CL_OBJ_QUICK_ADD);
 			$o->set_parent(aw_ini_get("amenustart"));
 			$o->set_name(sprintf(t("%s kiirlisamine"), $p->name()));
+			aw_disable_acl();
 			$o->save();
 			$o->connect(array(
 				"to" => $p->id(),
 				"type" => "RELTYPE_PERSON"
 			));
+			aw_restore_acl();
 			return $o;
 		}
 		else

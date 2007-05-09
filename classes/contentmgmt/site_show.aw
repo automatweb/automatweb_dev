@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.230 2007/05/08 14:57:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.231 2007/05/09 09:51:40 kristo Exp $
 
 /*
 
@@ -2147,7 +2147,6 @@ class site_show extends class_base
 		
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
-
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
 			"ss2" => gen_uniq_id(),
@@ -2493,7 +2492,7 @@ class site_show extends class_base
 			};
 		}
 		else 
-		if ($link_str != "")
+		if (!$this->brother_level_from && $link_str != "")
 		{
 			$link = $link_str;
 			if (is_numeric($link)) // link is without preceding / 
@@ -2537,7 +2536,7 @@ class site_show extends class_base
 			}
 			else
 			{
-				if (!$o->is_brother() && ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
+				if (!$this->brother_level_from && !$o->is_brother() && ($use_trans ? $o->trans_get_val("alias") : $o->alias()) != "")
 				{
 					if (aw_ini_get("menuedit.long_menu_aliases"))
 					{

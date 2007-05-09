@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.18 2007/03/02 13:53:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.19 2007/05/09 09:51:39 kristo Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -220,29 +220,44 @@ class calendar_event extends class_base
 		$props = $t->get_props_from_cfgform(array("id" => $cform));
 		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
 		$htmlc->start_output();
-
+		$aliasmgr = get_instance("aliasmgr");
 		foreach($props as $propname => $propdata)
 		{
 		  	$value = $ob->prop($propname);
 			if ($propdata["type"] == "datetime_select")
 			{
-				if ($value == -1)
+				if($value == -1)
 				{
 					continue;
-				};
-				$value = date("d-m-Y H:i",$value);	
+				}
+				$_v = $value;
+				$value = date("Hi", $_v);
+				if($value == "0000")
+				{
+					$value = date("d-m-Y", $_v);
+				}
+				else
+				{
+					$value = date("d-m-Y H:i", $_v);
+				}
+				//$value = date("d-m-Y H:i",$value);
 			};
 
 			if (!empty($value))
 			{
-			   $htmlc->add_property(array(
-			      "name" => $propname,
-			      "caption" => $propdata["caption"],
-			      "value" => nl2br($value),
-			      "type" => "text",
-			   ));
-			};
-		};
+				$value = nl2br(create_links($value));
+				if(strpos($value, "#") !== false)
+				{
+					$aliasmgr->parse_oo_aliases($arr["id"], $value);
+				}
+				$htmlc->add_property(array(
+					"name" => $propname,
+					"caption" => $propdata["caption"],
+					"value" => $value,
+					"type" => "text",
+				));
+			}
+		}
 		$htmlc->finish_output(array("submit" => "no"));
 
 		$html = $htmlc->get_result(array(

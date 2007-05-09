@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.89 2007/04/17 14:34:31 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.90 2007/05/09 09:51:39 kristo Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -409,7 +409,7 @@ class event_search extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sepa",
-			"caption" => t("Eraldaja p&auml;rast"),
+			"caption" => t("Eraldaja pärast"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -566,6 +566,66 @@ class event_search extends class_base
 		$t->set_sortable(false);
 	}
 	
+	function get_search_results($arr)
+	{
+		// 1. pane kokku object list
+		$ob = new object($arr["id"]);
+		$formconfig = $ob->meta("formconfig");
+		$ft_fields = $ob->prop("ftsearch_fields");
+		$all_projects1 = new object_list(array(
+			"parent" => array($formconfig["project1"]["rootnode"]),
+			"class_id" => array(CL_PROJECT, CL_PLANNER),
+		));
+		$all_projects2 = new object_list(array(
+			"parent" => array($formconfig["project2"]["rootnode"]),
+			"class_id" => array(CL_PROJECT, CL_PLANNER),
+		));
+		$par1 = $all_projects1->ids();
+		$par2 = $all_projects2->ids();
+
+		$search = array();
+		$search["parent"] = array_merge($par1,$par2);
+			
+	       $ft_fields = $ob->meta("ftsearch_fields");
+	       $or_parts = array("name" => "%" . $arr["str"] . "%");
+	       foreach($ft_fields as $ft_field)
+	       {
+		       $or_parts[$ft_field] = "%" . $arr["str"] . "%";
+
+	       };
+	       $search[] = new object_list_filter(array(
+		       "logic" => "OR",
+		       "conditions" => $or_parts,
+	       ));
+		$search["sort_by"] = "planner.start";
+		$search["class_id"] = array(CL_CRM_MEETING, CL_CALENDAR_EVENT);
+		$start_tm = strtotime("today 0:00");
+		$end_tm = strtotime("+30 days", $start_tm);
+		$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, $end_tm);
+		$ol = new object_list($search);
+		$ret = array();
+		$baseurl = aw_ini_get("baseurl");
+		foreach($ol->arr() as $o)
+		{
+			$orig = $o->get_original();
+			$oid = $orig->id();
+			$ret[$oid] = array(
+				"url" => $baseurl . "/" . $oid,
+				"title" => $orig->name(),
+				"modified" => $orig->prop("start1"),
+			);
+		};
+
+		return $ret;
+
+
+		// 2. tagasta tulemused
+
+	}
+	
+
+	////
+	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	/**
 		@attrib name=search nologin="1" all_args="1"
 	**/
@@ -607,7 +667,7 @@ class event_search extends class_base
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 
                 // if date is set in the url, then try to use that to specify our range.
-		// last condition in this if statement is probably temporary --dragut
+		// last condition in this if is probably temporary --dragut
                 if (isset($arr["date"]) && substr_count($arr["date"],"-") == 2 && empty($arr['sbt']) )
                 {
                         list($_d,$_m,$_y) = explode("-",$arr["date"]);
@@ -616,6 +676,10 @@ class event_search extends class_base
 			$arr["start_date"] = array("day" => $_d, "month" => $_m, "year" => $_y);
 
                 };
+
+
+
+
 
 		$cur_days = cal_days_in_month(CAL_GREGORIAN, date("m"), date("Y"));
 		$show_type = $ob->prop("show_type");
@@ -727,6 +791,7 @@ class event_search extends class_base
 			}
 		}
 		// dragut stops hacking
+
 		$p_rn1 = is_array($p_rn1) ? $p_rn1 : array($p_rn1);
 		$p_rn2 = is_array($p_rn2) ? $p_rn2 : array($p_rn2);
 		foreach($p_rn1 as $pkey => $pval)
@@ -876,14 +941,14 @@ class event_search extends class_base
 			);
 			if(count($prj_ch1) > 1)
 			{
-				$vars["options"] = array(0 => t("k&otilde;ik")) + $prj_ch1;
+				$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
 				$vars["optgnames"] = $optgnames1;
 				$vars["optgroup"] = $prj_ch1;
 			}
 			else
 			{
-				$vars["options"] = array(0 => t("k&otilde;ik")) + reset($prj_ch1);
-				//$vars["options"] = array(0 => t("k&otilde;ik")) + $prj_ch1;
+				$vars["options"] = array(0 => t("kõik")) + reset($prj_ch1);
+				//$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
 			}
 			$htmlc->add_property($vars);
 		}
@@ -899,13 +964,13 @@ class event_search extends class_base
 			);
 			if(count($prj_ch2) > 1)
 			{
-				$vars["options"] = array(0 => t("k&otilde;ik"));
+				$vars["options"] = array(0 => t("kõik"));
 				$vars["optgnames"] = $optgnames2;
 				$vars["optgroup"] = $prj_ch2;
 			}
 			else
 			{
-				$vars["options"] = array(0 => t("k&otilde;ik")) + reset($prj_ch2);
+				$vars["options"] = array(0 => t("kõik")) + reset($prj_ch2);
 			}
 			$htmlc->add_property($vars);
 		}
@@ -920,7 +985,7 @@ class event_search extends class_base
 		{
 			$search["parent"] = $parx2 = array();
 			$search["sort_by"] = "planner.start";
-			$search["class_id"] = array(CL_STAGING, CL_CALENDAR_EVENT, CL_CRM_MEETING, CL_TASK);
+			$search["class_id"] = array(CL_STAGING,CL_CALENDAR_EVENT, CL_CRM_MEETING, CL_TASK);
 			$par1 = array();
 			$par2 = array();
 			if($search_p1 || $search_p2)
@@ -928,13 +993,11 @@ class event_search extends class_base
 				$all_projects1 = new object_list(array(
 					"parent" => $p_rn1,
 					"class_id" => array(CL_PROJECT, CL_PLANNER),
-					'lang_id' => array() // get the projects from all languages --dragut
 				));
 				$par1 = $all_projects1->ids();
 				$all_projects2 = new object_list(array(
 					"parent" => $p_rn2,
 					"class_id" => array(CL_PROJECT, CL_PLANNER),
-					'lang_id' => array() // get the projects from all languages --dragut
 				));
 				$par2 = $all_projects2->ids();
 				if (is_oid($arr["project1"]))
@@ -1072,7 +1135,7 @@ class event_search extends class_base
 					{
 						$ol = new object_list(array(
 							"oid" => $ids,
-							"class_id" => array(CL_STAGING, CL_CRM_MEETING, CL_CALENDAR_EVENT, CL_TASK),
+							"class_id" => array(CL_STAGING,CL_CRM_MEETING, CL_CALENDAR_EVENT, CL_TASK),
 							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
 							"sort_by" => "planner.start",
 							"lang_id" => array(),
@@ -1095,14 +1158,7 @@ class event_search extends class_base
 						"project_selector" => "n/a",
 						"date" => date("d-m-Y", $res->prop("start1")),
 					);
-			//		$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
-				// get the translations from objects, if they are there --dragut
-					foreach ($res->properties() as $property_name => $property_value)
-					{
-						$edata[$orig_id][$property_name] = $this->trans_get_val($res, $property_name);
-					}
-
-
+					$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
 					$ecount[$orig_id]++;
 				}
 				$this->read_template(($search["oid"] ? "show_event.tpl" : "search_results.tpl"));
@@ -1221,7 +1277,7 @@ class event_search extends class_base
 			}
 			exit_function("event_search::search_speed");
 			$res = "";
-			$aliasmrg = get_instance("alias_parser");
+			$aliasmrg = get_instance("aliasmgr");
 			foreach($groups as $gkey => $edata)
 			{
 				if(count($groups) > 1)
@@ -1375,6 +1431,7 @@ class event_search extends class_base
 								}
 							}
 							$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
+							
 						}
 						$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
 						$this->vars(array(
@@ -1505,10 +1562,7 @@ class event_search extends class_base
 					$start_day = $end_day + 1;
 					$end_day = $end_day + 7;
 					$start_month = $s_date["month"];
-					$end_month = $s_date["month"];
 					$start_year = $s_date["year"];
-					$end_year = $s_date["year"];
-
 				}
 				$week_args = array(
 					"section" => aw_global_get("section"),
@@ -1583,15 +1637,8 @@ class event_search extends class_base
 			"parent" => $parent,
 			"class_id" => array(CL_PROJECT, CL_PLANNER),
 			"sort_by" => "objects.jrk",
-			'lang_id' => array() // get the projects from all languages --dragut
 		));
-		
-		$ret_val = array();
-		foreach ($ol->arr() as $o)
-		{
-			$ret_val[$o->id()] = $this->trans_get_val($o, 'name');
-		}
-		return $ret_val;
+		return $ol->names();
 
 	}
 
@@ -1612,7 +1659,7 @@ class event_search extends class_base
 		}
 	}
 
-    function get_search_results($arr)
+    /*function get_search_results($arr)
         {
                 // 1. pane kokku object list
                 $ob = new object($arr["id"]);
@@ -1663,7 +1710,7 @@ class event_search extends class_base
                 };
 		return $ret;
 	}
-
+*/
 	/**
 		@attrib name=convert_evx
 	**/

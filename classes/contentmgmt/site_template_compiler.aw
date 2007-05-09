@@ -1390,7 +1390,7 @@ class site_template_compiler extends aw_template
 				$ret .= $this->_gi()."}\n";
 			}
 
-			$ret .= $this->_gi()."if (".$o_name."->is_brother() && !\$this->brother_level_from)\n";
+			$ret .= $this->_gi()."if (".$o_name."->is_brother() && (!\$this->brother_level_from || \$this->brother_level_from == ".$arr["level"]."))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 				$ret .= $this->_gi()."\$this->brother_level_from = ".$arr["level"].";\n";

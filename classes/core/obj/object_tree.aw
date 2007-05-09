@@ -594,7 +594,6 @@ class object_tree extends _int_obj_container_base
 				$GLOBALS["__obj_sys_acl_memc"][$a_oid] = $a_dat;
 			}
 		}
-
 		$awt->stop("ds_search");
 		$acl_oids = array();
 		foreach($oids as $oid => $oname)
@@ -623,13 +622,13 @@ class object_tree extends _int_obj_container_base
 					if ($add)
 					{
 						$this->tree[$o->parent()][$o->id()] = $o;
-						$acl_oids[] = $oid;
+						$acl_oids[] = $objdata[$oid]["class_id"] == 1 ? $objdata[$oid]["brother_of"] : $oid;
 					}
 				}
 				else
 				{
 					$this->tree[$parentdata[$oid]][$oid] = $oid;
-					$acl_oids[] = $oid;
+					$acl_oids[] = $objdata[$oid]["class_id"] == 1 ? $objdata[$oid]["brother_of"] : $oid;
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.367 2007/05/08 12:50:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.368 2007/05/09 09:51:39 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1361,6 +1361,23 @@ class document extends aw_template
 				$document_link = aw_ini_get("baseurl")."/".$doc_o->alias();
 			}
 		}
+
+		if ($_GET["path"] != "")
+		{
+	                $new_path = array();
+			$path_ids = explode(",", $_GET["path"]);
+                        foreach($path_ids as $_path_id)
+                        {
+        	                $new_path[] = $_path_id;
+                	        $pio = obj($_path_id);
+                        	if ($pio->brother_of() == $doc_o->parent())
+                                {
+                                	break;
+                                }
+                        }
+                        $document_link = aw_ini_get("baseurl")."/?section=".$doc_o->id()."&path=".join(",",$new_path).",".$doc_o->id();
+		}
+
 		$this->vars(array(
 			"sel_lang_img_url" => $sel_lang_img_url,
 			"doc_modified" => $_date,

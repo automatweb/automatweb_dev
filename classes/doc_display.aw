@@ -136,6 +136,7 @@ class doc_display extends aw_template
 			"date" => $_date,
 			"edit_doc" => $em,
 			"doc_link" => $doc_link,
+			"document_link" => $doc_link,
 			"print_link" => aw_url_change_var("print", 1),
 			"trans_lc" => aw_global_get("ct_lang_lc")
 		));
@@ -475,6 +476,23 @@ class doc_display extends aw_template
 			}
 			$doc_link = $ss_i->make_menu_link($doc, $lc);
 		}
+
+                if ($_GET["path"] != "")
+                {
+                        $new_path = array();
+                        $path_ids = explode(",", $_GET["path"]);
+                        foreach($path_ids as $_path_id)
+                        {
+                                $new_path[] = $_path_id;
+                                $pio = obj($_path_id);
+                                if ($pio->brother_of() == $doc->parent())
+                                {
+                                        break;
+                                }
+                        }
+                        $doc_link = aw_ini_get("baseurl")."/?section=".$doc->id()."&path=".join(",",$new_path).",".$doc->id();
+                }
+
 		return $doc_link;
 	}
 }

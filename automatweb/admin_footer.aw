@@ -54,8 +54,10 @@ while (!empty($ru))
 	$ru = $vals["return_url"];
 }
 
+aw_disable_acl();
 $p = get_current_person();
 $co = get_current_company();
+aw_restore_acl();
 $clss = aw_ini_get("classes");
 $cur_obj = obj();
 if ($sf->can("view", $_GET["id"]))

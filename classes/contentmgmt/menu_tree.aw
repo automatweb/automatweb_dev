@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.17 2007/03/13 15:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.18 2007/05/09 09:51:40 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -105,13 +105,21 @@ class menu_tree extends class_base
 				"oid" => $menus,
 				"sort_by" => "objects.jrk",
 				"class_id" => CL_MENU,
+				"site_id" => array(),
 				new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
 						"lang_id" => aw_global_get("lang_id"),
 						"type" => MN_CLIENT
 					)
-				))
+				)),
+/*				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"site_id" => aw_ini_get("site_id"),
+						"brother_of" => new obj_predicate_prop("id")
+					)
+				))*/
 			));
 		}
 		$menus = $ol->ids();
@@ -253,7 +261,8 @@ class menu_tree extends class_base
 					"type" => MN_CLIENT
 				)
 			)),
-			"sort_by" => "objects.jrk"
+			"sort_by" => "objects.jrk",
+			"site_id" => array()
 		);
 
 		if ($this->mt_obj->prop("no_unclickable") == 1)

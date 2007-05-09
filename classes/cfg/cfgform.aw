@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.113 2007/05/06 11:19:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.114 2007/05/09 09:51:39 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -2420,7 +2420,9 @@ class cfgform extends class_base
 			$this->_sort_groups();
 			$o->set_meta("cfg_groups", $this->cfg_groups);
 			$o->set_meta("cfg_groups_sorted", 1);
+			aw_disable_acl();
 			$o->save();
+			aw_restore_acl();
 		}
 		//
 
