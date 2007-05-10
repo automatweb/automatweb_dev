@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.545 2007/05/07 08:07:03 kristo Exp $
+// $Id: class_base.aw,v 2.546 2007/05/10 09:46:11 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1247,7 +1247,7 @@ class class_base extends aw_template
 
 
 		// If uses configform manager then use this.
-		if(!$this->tmp_cfgform)
+		if(!empty($this->tmp_cfgform))
 		{
 			return $this->tmp_cfgform;
 		}
@@ -1257,7 +1257,6 @@ class class_base extends aw_template
 		{
 			return false;
 		};
-
 
 		$ol = new object_list(array(
 			"class_id" => CL_CFGFORM,
