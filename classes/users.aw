@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.178 2007/05/07 08:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.179 2007/05/10 12:57:03 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1449,10 +1449,15 @@ class users extends users_user
 		{
 			return aw_ini_get("baseurl");
 		}
-		// here should be user's certification OSCP check
 
-
-		
+		// well.. this is a nice ocsp check. this checks wheater the user's certificate is valid at current point or not
+		// when this feature is turned off(ocsp service is provided as a priced service(in id-card situation at least)), the function returs 'all okay'
+		$ocsp = get_instance(CL_OCSP);
+		$ocsp_retval = $ocsp->OCSP_check($_SERVER["_SSL_CLIENT_CERT"], $_SERVER["SSL_CLIENT_I_DN_CN"]);
+		if($ocsp_retval !== 1)
+		{
+			return aw_ini_get("baseurl");
+		}
 
 		classload("core/users/id_config");
 		$act_inst = get_instance(CL_ID_CONFIG);
