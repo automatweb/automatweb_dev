@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.194 2007/04/02 13:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.195 2007/05/10 12:56:45 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2106,7 +2106,7 @@ class menu extends class_base
 
 	function _get_linker(&$p, $o)
 	{
-		$ps = get_instance("vcl/popup_search");
+		$ps = get_instance("contentmgmt/ct_linked_obj_search");
 		if ($this->can("view", $o->meta("linked_obj")))
 		{
 			$p["post_append_text"] = sprintf(t("Valitud objekt: %s /"), html::obj_change_url($o->meta("linked_obj")));

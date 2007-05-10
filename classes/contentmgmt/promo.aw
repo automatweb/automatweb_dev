@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.100 2007/04/18 12:51:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.101 2007/05/10 12:56:43 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -1157,7 +1157,7 @@ class promo extends class_base
 
 	function _get_linker(&$p, $o)
 	{
-		$ps = get_instance("vcl/popup_search");
+		$ps = get_instance("contentmgmt/ct_linked_obj_search");
 		if ($this->can("view", $o->meta("linked_obj")))
 		{
 			$p["post_append_text"] = sprintf(t("Valitud objekt: %s /"), html::obj_change_url($o->meta("linked_obj")));
