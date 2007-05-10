@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.12 2007/04/28 12:47:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.13 2007/05/10 10:46:54 dragut Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -565,6 +565,24 @@ class watercraft extends class_base
 			MAST_MATERIAL_PLASTIC => t('Plastik'),
 			MAST_MATERIAL_OTHER => t('Muu materjal'),
 		);
+
+		$this->sail_types = array(
+			'groot' => t('Groot/suurpuri'),
+			'foka_1' => t('Foka 1'),
+			'foka_2' => t('Foka 2'),
+			'foka_3' => t('Foka 3'),
+			'genoa_1' => t('Genoa 1'),
+			'genoa_2' => t('Genoa 2'),
+			'genoa_3' => t('Genoa 3'),
+			'spinnaker' => t('Spinnaker'),
+			'stormfoka' => t('Tormifoka'),
+		);
+		$this->sail_table_fields = array(
+			'type' => t('Purje t&uuml;&uuml;p'),
+			'area' => t('Pindala'),
+			'material' => t('Purje materjal'),
+			'age_and_condition' => t('Purje vanus ja seisukord'),
+		);
 	}
 
 
@@ -779,36 +797,27 @@ class watercraft extends class_base
 
 		$t->define_field(array(
 			'name' => 'type',
-			'caption' => t('P&uuml;rje t&uuml;&uuml;p'),
+			'caption' => $this->sail_table_fields['type'],
 			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'area',
-			'caption' => t('Pindala'),
+			'caption' => $this->sail_table_fields['area'],
 			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'material',
-			'caption' => t('Purje materjal'),
+			'caption' => $this->sail_table_fields['material'],
 			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'age_and_condition',
-			'caption' => t('Purje vanus ja seisukord'),
+			'caption' => $this->sail_table_fields['age_and_condition'],
 			'width' => '20px',
 		));
 
-		$rows = array(
-			'groot' => t('Groot/suurpuri'),
-			'foka_1' => t('Foka 1'),
-			'foka_2' => t('Foka 2'),
-			'foka_3' => t('Foka 3'),
-			'genoa_1' => t('Genoa 1'),
-			'genoa_2' => t('Genoa 2'),
-			'genoa_3' => t('Genoa 3'),
-			'spinnaker' => t('Spinnaker'),
-			'stormfoka' => t('Tormifoka'),
-		);
+		$rows = $this->sail_types;
+
 	
 		$saved_sail_table = $arr['obj_inst']->meta('sail_table');
 		// these style = some amount of pixels, are here for marine24 webview.. it didn't fit any other way, and i didn't have any time to do nicer
@@ -1010,7 +1019,7 @@ class watercraft extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-
+		$objs = array("manufacturer", "location");
 		$templates = array(
 			WATERCRAFT_TYPE_MOTOR_BOAT => 'motor_boat.tpl',
 			WATERCRAFT_TYPE_SAILING_SHIP => 'sailing_ship.tpl',
@@ -1042,13 +1051,60 @@ class watercraft extends class_base
 		$props = $ob->properties();
 		foreach ($props as $prop_name => $prop_value)
 		{
-			if (is_array($this->$prop_name))
+			if($prop_name == "sail_table")
+			{
+				// parse table header
+				foreach($this->sail_table_fields as $caption)
+				{
+					$this->vars(array(
+						"caption" => $caption,
+					));
+					$th .= $this->parse("SAIL_TABLE_TH");
+				}
+				$this->vars(array(
+					"SAIL_TABLE_TH" => $th,
+				));
+				$header_row = $this->parse("SAIL_TABLE_HTR");
+
+				// parse sails
+				$prop_value = $ob->meta($prop_name);
+				// we loop over sail types
+				foreach($this->sail_types as $var => $caption)
+				{
+					unset($row);
+					// a little exception for type column, and then let's parse values
+					$prop_value[$var]['type'] = $this->sail_types[$var];
+					foreach($this->sail_table_fields as $field_var => $field_caption)
+					{
+						$this->vars(array(
+							"caption" => $prop_value[$var][$field_var]?$prop_value[$var][$field_var]:"-",
+						));
+						$row .= $this->parse("SAIL_TABLE_TD");
+					}
+					$this->vars(array(
+						"SAIL_TABLE_TD" => $row,
+					));
+					$sail_rows .= $this->parse("SAIL_TABLE_TR");
+				}
+				$this->vars(array(
+					"SAIL_TABLE_TR" => $sail_rows,
+					"SAIL_TABLE_HTR" => $header_row,
+				));
+				$vars["WATERCRAFT_SAIL_TABLE"] = $this->parse("WATERCRAFT_SAIL_TABLE");
+			}
+			elseif (is_array($this->$prop_name))
 			{
 				$prop_data = $this->$prop_name;
 				$vars['watercraft_'.$prop_name] = ($prop_data[$prop_value])?$prop_data[$prop_value]:"-";
 			}
 			else
 			{
+				// this hack sucks bigtime .. doesn't it?:)
+				if(in_array($prop_name, $objs))
+				{
+					$prop_obj = obj($prop_value);
+					$prop_value = $prop_obj->name();
+				}
 				$vars['watercraft_'.$prop_name] = htmlentities($prop_value?$prop_value:"-");
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.6 2007/04/28 12:47:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.7 2007/05/10 10:46:54 dragut Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -165,6 +165,11 @@ class watercraft_add extends class_base
 			'align' => 'center'
 		));
 		$t->define_field(array(
+			'name' => 'overview',
+			'caption' => t('&Uuml;levaade'),
+			'align' => 'center',
+		));
+		$t->define_field(array(
 			'name' => 'template',
 			'caption' => t('Templeit'),
 			'align' => 'center'
@@ -179,6 +184,10 @@ class watercraft_add extends class_base
 				'title' => html::textbox(array(
 					'name' => 'pages['.$count.'][title]',
 					'value' => $saved[$count]['title']
+				)),
+				'overview' => html::checkbox(array(
+					'name' => 'pages['.$count.'][overview]',
+					'checked' => $saved[$count]['overview']?true:false,
 				)),
 				'template' => html::textbox(array(
 					'name' => 'pages['.$count.'][template]',
@@ -349,8 +358,21 @@ class watercraft_add extends class_base
 			}
 		}
 
+		if($pages[$page]["overview"] && $watercraft_obj)
+		{
+			$inst = get_instance(CL_WATERCRAFT);
+			$inst->init(array(
+				"tpldir" => "applications/watercraft_management/watercraft_add",
+				"clid" => CL_WATERCRAFT
+			));
+			$vars["page"] = $inst->show(array(
+				"id" => $watercraft_obj->id(),
+			));
+		}
+
 		// draw elements:
 		classload('cfg/htmlclient');
+		$wc_inst = get_instance(CL_WATERCRAFT);
 		foreach ($elements as $name => $prop)
 		{
 			if ($this->template_has_var($name))
@@ -361,7 +383,6 @@ class watercraft_add extends class_base
 					{
 						case "sail_table":
 							$prop["value"] = $watercraft_obj->meta($name);
-							//dbg::p1($prop);
 							break;
 						default:
 							$prop['value'] = $watercraft_obj->prop($name);
@@ -382,7 +403,7 @@ class watercraft_add extends class_base
 				}
 				else
 				{
-				$vars[$name] = htmlclient::draw_element($prop);
+					$vars[$name] = htmlclient::draw_element($prop);
 				}
 			}
 		}
@@ -534,6 +555,13 @@ class watercraft_add extends class_base
 			}
 		}
 
+		// here i set the visible checkbox to zero if it isn't selected. the thing is, that html doesn't return info about checkbox when it isn't checked. so, one can not uncheck it .. cool
+		// actually, maybe better approach here would be this: take object properties, take values from $arr and set new values.. or smth. this would also eliminate the possibility of wrong propname
+		// taiu
+		if(empty($arr["visible"]))
+		{
+			$arr["visible"] = 0;
+		}
 		// so, here i should have an watercraft_obj, so set the properties:
 		foreach ($arr as $prop_name => $prop_value)
 		{
