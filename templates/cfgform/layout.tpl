@@ -51,7 +51,13 @@ table.cfgform_layout_tbl
 <!-- SUB: textarea_options -->
 			{VAR:richtext_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][richtext]" value="1" {VAR:richtext_checked}>
 			<input type="hidden" name="xconfig[{VAR:prp_key}][richtext]" value="{VAR:richtext}">
+			{VAR:rows_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][rows]" value="{VAR:rows}">
+			{VAR:cols_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][cols]" value="{VAR:cols}">
 <!-- END SUB: textarea_options -->
+
+<!-- SUB: textbox_options -->
+			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}">
+<!-- END SUB: textbox_options -->
 
 <!-- SUB: relpicker_options -->
 			{VAR:no_edit_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_edit]" value="1" {VAR:no_edit_checked}>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.114 2007/05/09 09:51:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.115 2007/05/10 14:03:24 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -163,6 +163,18 @@
 @default group=cfgview_settings
 	@property cfgview_action type=select field=meta method=serialize
 	@caption N&auml;itamise meetod
+
+	@property cfgview_view_params type=textbox field=meta method=serialize
+	@caption Parameetrid vaatamisele (view)
+	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
+
+	@property cfgview_change_params type=textbox field=meta method=serialize
+	@caption Parameetrid muutmisele (change)
+	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
+
+	@property cfgview_new_params type=textbox field=meta method=serialize
+	@caption Parameetrid lisamisele (new)
+	@comment Lisatakse iga kord p&auml;ringu url-ile. Formaat: param_nimi=param_v&auml;&auml;rtus&...
 
 	@property cfgview_grps type=select multiple=1 size=10 field=meta method=serialize
 	@caption N&auml;idatavad tabid
@@ -343,6 +355,30 @@ class cfgform extends class_base
 					"cfgview_change_new" => t("Muutmine (ka lisamine lubatud)"),
 					"cfgview_view_new" => t("Vaatamine (ka lisamine lubatud)"),
 				);
+				break;
+
+			case "cfgview_view_params":
+				$applicable_methods = array("view", "cfgview_view_new");
+				if (!in_array($arr["obj_inst"]->prop("cfgview_action"), $applicable_methods))
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+
+			case "cfgview_change_params":
+				$applicable_methods = array("change", "cfgview_change_new");
+				if (!in_array($arr["obj_inst"]->prop("cfgview_action"), $applicable_methods))
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+
+			case "cfgview_new_params":
+				$applicable_methods = array("new", "cfgview_view_new", "cfgview_change_new");
+				if (!in_array($arr["obj_inst"]->prop("cfgview_action"), $applicable_methods))
+				{
+					$retval = PROP_IGNORE;
+				}
 				break;
 
 			case "cfgview_grps":
@@ -1303,9 +1339,22 @@ class cfgform extends class_base
 							"richtext_caption" => t("RTE"),
 							"richtext_checked" => checked($property["richtext"] == 1),
 							"richtext" => $property["richtext"],
+							"rows_caption" => t("Kõrgus"),
+							"rows" => $property["rows"],
+							"cols_caption" => t("Laius"),
+							"cols" => $property["rows"],
 							"prp_key" => $property["name"],
 						));
 						$property["cfgform_additional_options"] = $this->parse("textarea_options");
+						break;
+
+					case "textbox":
+						$this->vars(array(
+							"size_caption" => t("Laius"),
+							"size" => $property["size"],
+							"prp_key" => $property["name"],
+						));
+						$property["cfgform_additional_options"] = $this->parse("textbox_options");
 						break;
 
 					case "relpicker":
@@ -2893,6 +2942,17 @@ class cfgform extends class_base
 		$_GET["awcb_cfgform"] = $args["id"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 		$_GET["awcb_display_mode"] = $args["display_mode"];// sest $vars-i ei kasutata tegelikult orbis miskip2rast
 
+		// additional params
+		$params = explode("&", $this_o->prop("cfgview_" . $action . "_params"));
+
+		foreach ($params as $param)
+		{
+			$param = explode("=", $param, 2);
+			$vars[$param[0]] = $param[1];
+			$_GET[$param[0]] = $param[1];
+		}
+
+		// make request
 		classload("core/orb/orb");
 		$orb = new orb();
 		$orb->process_request(array(

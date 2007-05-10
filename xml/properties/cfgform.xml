@@ -429,6 +429,36 @@
             <caption>N&amp;amp;auml;itamise meetod</caption>
       </property>
       <property>
+            <name>cfgview_view_params</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Parameetrid vaatamisele (view)</caption>
+            <comment>Lisatakse iga kord p&amp;amp;auml;ringu url-ile. Formaat: param_nimi=param_v&amp;amp;auml;&amp;amp;auml;rtus&amp;amp;...</comment>
+      </property>
+      <property>
+            <name>cfgview_change_params</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Parameetrid muutmisele (change)</caption>
+            <comment>Lisatakse iga kord p&amp;amp;auml;ringu url-ile. Formaat: param_nimi=param_v&amp;amp;auml;&amp;amp;auml;rtus&amp;amp;...</comment>
+      </property>
+      <property>
+            <name>cfgview_new_params</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Parameetrid lisamisele (new)</caption>
+            <comment>Lisatakse iga kord p&amp;amp;auml;ringu url-ile. Formaat: param_nimi=param_v&amp;amp;auml;&amp;amp;auml;rtus&amp;amp;...</comment>
+      </property>
+      <property>
             <name>cfgview_grps</name>
             <table>objects</table>
             <group>cfgview_settings</group>
