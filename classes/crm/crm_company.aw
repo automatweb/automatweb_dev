@@ -12,14 +12,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 @classinfo syslog_type=ST_CRM_COMPANY no_status=1 confirm_save_data=1 versioned=1 prop_cb=1
 
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
-@tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
 @default table=objects
 
 
 @default group=general_sub
 	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
-	@property balance type=hidden table=aw_account_balances field=aw_balance
 	
 	@property jrk field=jrk type=textbox display=none group=general_sub
 	@caption Jrk
@@ -42,7 +40,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 			@property comment type=textarea cols=40 rows=2 table=objects parent=co_top_left 
 			@caption Kommentaar
-			
+
 		@layout co_top_right type=vbox parent=co_top
 
 			@property code type=textbox table=kliendibaas_firma parent=co_top_right 
@@ -159,11 +157,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@property extern_id type=hidden table=kliendibaas_firma field=extern_id no_caption=1
 
-@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=general_sub submit=no 
-@default group=keywords
-	@property keywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
-	@caption V&otilde;tmes&otilde;nad
-
 
 
 @default group=open_hrs
@@ -193,8 +186,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 ------ Yldine - Lisainfo grupp----------
 @default group=add_info
-
-
 
 	@property field_manager type=releditor mode=manager reltype=RELTYPE_FIELD props=name,class_name table_fields=name,class_name direct_links=1
 	@caption Valdkonnad
@@ -388,19 +379,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 
 	@property phone_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
-	@caption Telefon
-
 	@property telefax_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
-	@caption Faks
-
 	@property url_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
-	@caption Veebiaadress
-
 	@property email_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
-	@caption E-mail
-
 	@property aw_bank_account type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
-	@caption Pangaarve
 	
 
 @default group=personal_offers
@@ -1268,9 +1250,6 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype CORRESPOND_ADDRESS value=65 clid=CL_CRM_ADDRESS
 @caption Aadressid
-
-@reltype KEYWORD value=66 clid=CL_KEYWORD
-@caption V&otilde;tmes&otilde;na
 
 */
 /*
@@ -2690,7 +2669,7 @@ class crm_company extends class_base
 
 			case "cust_contract_date":
 				// save to rel
-				if (($rel = $this->get_cust_rel($arr["obj_inst"])) && $this->can("edit", $rel->id()))
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
 				{
 					$rel->set_prop($data["name"], date_edit::get_timestamp($data["value"]));
 					$rel->save();
@@ -2709,7 +2688,7 @@ class crm_company extends class_base
 			case "client_manager":
 			case "bill_due_days":
 				// save to rel
-				if (($rel = $this->get_cust_rel($arr["obj_inst"])) && $this->can("edit", $rel->id()))
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
 				{
 					$rel->set_prop($data["name"] == "bill_due_days" ? "bill_due_date_days" : $data["name"], $data["value"]);
 					$rel->save();
@@ -5311,6 +5290,13 @@ class crm_company extends class_base
 			$u = get_instance(CL_USER);
 			$co = obj($u->get_current_company());
 		}
+
+		static $cache;
+		if (isset($cache[$co->id()][$add_empty][$important_only]))
+		{
+			return $cache[$co->id()][$add_empty][$important_only];
+		}
+
 		if ($add_empty)
 		{
 			$res = array("" => t("--vali--"));
@@ -5322,6 +5308,7 @@ class crm_company extends class_base
 		$this->get_all_workers_for_company($co, $res);
 		if (!count($res))
 		{
+			$cache[$co->id()][$add_empty][$important_only] = $res;
 			return $res;
 		}
 
@@ -5352,6 +5339,7 @@ class crm_company extends class_base
 		}
 		$res = ($add_empty ? array("" => t("--vali--")) : array()) +  $ol->names();
 		uasort($res, array(&$this, "__person_name_sorter"));
+		$cache[$co->id()][$add_empty][$important_only] = $res;
 		return $res;
 	}
 
@@ -6281,11 +6269,6 @@ class crm_company extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
-		if ("aw_account_balances" == $tbl)
-		{
-			$i = get_instance(CL_CRM_CATEGORY);
-			return $i->do_db_upgrade($tbl, $field);
-		}
 		if ("kliendibaas_firma" == $tbl)
 		{
 			switch($field)
@@ -7078,7 +7061,7 @@ class crm_company extends class_base
 		else
 		{
 			$crel = $this->get_cust_rel($arr["obj_inst"]);
-			if ($crel && $this->can("delete", $crel->id()))
+			if ($crel)
 			{
 				$crel->delete();
 			}
@@ -7105,7 +7088,7 @@ class crm_company extends class_base
 		else
 		{
 			$crel = $this->get_cust_rel($cur, false, $arr["obj_inst"]);
-			if ($crel && $this->can("delete", $crel->id()))
+			if ($crel)
 			{
 				$crel->delete();
 			}
