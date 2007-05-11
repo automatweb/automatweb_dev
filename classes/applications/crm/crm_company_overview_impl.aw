@@ -455,11 +455,11 @@ class crm_company_overview_impl extends class_base
 			return PROP_IGNORE;
 		}
 		classload("core/icons");
-
 		$ol = $this->_get_task_list($arr);
-
-		$ol->sort_by_cb(array(&$this, "__task_sorter"));
-
+		if($arr["request"]["group"] != "ovrv_mails")
+		{
+			$ol->sort_by_cb(array(&$this, "__task_sorter"));
+		}
 		if ($arr["request"]["group"] == "ovrv_offers")
 		{
 			return $this->_get_ovrv_offers($arr, $ol);
@@ -1395,9 +1395,8 @@ class crm_company_overview_impl extends class_base
 						"class_id" => CL_CRM_EMAIL,
 						"lang_id" => array(),
 						"site_id" => array(),
-						"customer" => $arr["obj_inst"]->id()
+						"customer" => $arr["obj_inst"]->id(),
 					));
-			
 					$tasks = $this->make_keys($ol->ids());
 				}
 				$clid = CL_CRM_EMAIL;
