@@ -2373,6 +2373,46 @@
             <caption>Tegevuse sisu</caption>
       </property>
       <property>
+            <name>act_s_mail_name</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
+            </group>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>act_s_dl_layout_top</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_mail_name</field>
+            <caption>Maili subjekt</caption>
+      </property>
+      <property>
+            <name>act_s_mail_content</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
+                  <num_6>documents_all_manage</num_6>
+            </group>
+            <type>textbox</type>
+            <size>18</size>
+            <parent>act_s_dl_layout_top</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_mail_content</field>
+            <caption>Maili sisu</caption>
+      </property>
+      <property>
             <name>act_s_code</name>
             <table>objects</table>
             <group>

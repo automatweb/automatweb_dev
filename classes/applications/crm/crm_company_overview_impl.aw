@@ -970,6 +970,17 @@ class crm_company_overview_impl extends class_base
 				));
 			}
 		}
+		if ($r["act_s_mail_content"] != "")
+		{
+			$str_filt = $this->_get_string_filt($r["act_s_mail_content"]);
+			$res["content"] = $str_filt;
+		}
+		
+		if ($r["act_s_mail_name"] != "")
+		{
+			$str_filt = $this->_get_string_filt($r["act_s_mail_name"]);
+			$res["name"] = $str_filt; //"%".$r["act_s_task_name"]."%";
+		}
 		if ($r["act_s_code"] != "")
 		{
 			$str_filt = $this->_get_string_filt($r["act_s_code"]);
@@ -1145,6 +1156,61 @@ class crm_company_overview_impl extends class_base
 				'action' => 'tasks_switch_to_table_view',
 			));
 		}
+		if($arr["request"]["group"] == "ovrv_mails")
+		{
+			$mail_mgr = get_instance("applications/crm/crm_email_mgr");
+			$tb->add_button(array(
+				"name" => "user_calendar",
+				"tooltip" => t("Impordi mailid"),
+				"url" => $mail_mgr->mk_my_orb('upd_mails', array()),
+				"onClick" => "",
+				"img" => "mail_reply.gif",
+			));
+			
+			$tb->add_menu_button(array(
+				'name'=>'set_project',
+				'tooltip'=> t('M&auml;&auml;ra projekt')
+			));
+			
+			$ol = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"CL_PROJECT.RELTYPE_ORDERER.id" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			$u = get_instance(CL_USER);
+			$cur_co = $u->get_current_company();
+			foreach($ol->arr() as $o)
+			{
+				$url = $this->mk_my_orb("set_project_to_mail", array('proj' => $o->id()));
+				
+				$tb->add_menu_item(array(
+					'parent'=>'set_project',
+					'text' => $o->name(),
+					"url" => "#",
+					"onClick" => "document.changeform.proj.value='".$o->id()."';
+						document.changeform.action.value='set_project_to_mail';
+						document.changeform.submit()"
+				));
+			}
+		}
+	}
+	
+	/** 
+		@attrib name=set_project_to_mail nologin=1 is_public=1 all_args=1
+ 	**/
+	function set_project_to_mail($arr)
+	{
+		foreach($arr["sel"] as $id)
+		{
+			if(is_oid($id) && $this->can("view" , $id))
+			{
+				$o = obj($id);
+				arr($o);
+			}
+		}
+		arr($arr);
+		return $arr["post_ru"];
 	}
 
 	function _get_act_s_part($arr)
@@ -1346,7 +1412,7 @@ class crm_company_overview_impl extends class_base
 						"class_id" => CL_CRM_EMAIL,
 						"lang_id" => array(),
 						"site_id" => array(),
-						"customer" => $arr["obj_inst"]->id()
+//						"customer" => $arr["obj_inst"]->id()
 					));
 			
 					$tasks = $this->make_keys($ol->ids());
@@ -1848,5 +1914,5 @@ class crm_company_overview_impl extends class_base
 		
 		die(iconv(aw_global_get("charset"), "utf-8", $t->draw()));
 	}
-}
+	}
 ?>

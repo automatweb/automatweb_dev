@@ -789,6 +789,12 @@ default group=org_objects
 
 			@property act_s_task_content type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Tegevuse sisu
+			
+			@property act_s_mail_name type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top
+			@caption Maili subjekt
+
+			@property act_s_mail_content type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top
+			@caption Maili sisu
 
 			@property act_s_code type=textbox size=18 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,documents_all_manage
 			@caption Toimetuse kood
@@ -2192,13 +2198,14 @@ class crm_company extends class_base
 				break;
 
 			case "act_s_status":
+			if($arr["request"]["group"] == "ovrv_mails") return PROP_IGNORE;
 				$data["options"] = array(1 => t("T&ouml;&ouml;s"), 2 => t("Tehtud"), "3" => t("K&otilde;ik"));
 				$data['value'] = $arr['request'][$data["name"]];
 				break;
 
 			case "act_s_task_content":
 			case "act_s_code":
-				if ($arr["request"]["group"] == "ovrv_offers" || $arr["request"]["group"] == "documents_all_manage")
+				if ($arr["request"]["group"] == "ovrv_offers" || $arr["request"]["group"] == "documents_all_manage" || $arr["request"]["group"] == "ovrv_mails")
 				{
 					return PROP_IGNORE;
 				}
@@ -2206,12 +2213,18 @@ class crm_company extends class_base
 			case "act_s_cust":
 			case "act_s_task_name":
 			case "act_s_proj_name":
+				if($arr["request"]["group"] == "ovrv_mails") return PROP_IGNORE;
 			case "act_s_sbt":
 				$s = $arr['request'][$data["name"]];
 				$this->dequote(&$s);
 				$data['value'] = $s;
 				break;
-
+			case "act_s_mail_name":
+			case "act_s_mail_content":
+				if($arr["request"]["group"] != "ovrv_mails")
+				{
+					return PROP_IGNORE;
+				}
 			case "act_s_print_view":
 				$data['value'] = $arr['request'][$data["name"]];
 				$data["onclick"] = "document.changeform.target=\"_blank\"";
@@ -3537,6 +3550,10 @@ class crm_company extends class_base
 			$arr["args"]["act_s_print_view"] = $arr["request"]["act_s_print_view"];
 			$arr["args"]["act_s_sbt"] = $arr["request"]["act_s_sbt"];
 			$arr["args"]["act_s_is_is"] = 1;
+				
+			$arr["args"]["act_s_mail_content"] = $arr["request"]["act_s_mail_content"];
+			$arr["args"]["act_s_mail_name"] = $arr["request"]["act_s_mail_name"];
+		
 		}
 		if ($arr["request"]["bill_s_search"] != "")
 		{
@@ -7777,6 +7794,25 @@ Bank accounts: üksteise all
 			));
 		}
 		return $t->draw();
+	}
+
+	/** 
+		@attrib name=set_project_to_mail nologin=1 is_public=1 all_args=1
+ 	**/
+	function set_project_to_mail($arr)
+	{
+		foreach($arr["sel"] as $id)
+		{
+			if(is_oid($id) && $this->can("view" , $id))
+			{
+				$o = obj($id);
+				$o->set_prop("project" , $arr["proj"]);
+				$o->save();
+				arr($o);
+			}
+		}
+		arr($arr);
+		return $arr["post_ru"];
 	}
 
 }
