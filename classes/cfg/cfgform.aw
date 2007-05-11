@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.115 2007/05/10 14:03:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.116 2007/05/11 06:17:24 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1371,6 +1371,20 @@ class cfgform extends class_base
 						$property["cfgform_additional_options"] = "";
 				}
 
+				if (!empty($property["cfgform_additional_options"]))
+				{
+					$this->vars(array(
+						"prp_options" => $property["cfgform_additional_options"] ,
+						"prp_opts_caption" => t("Lisavalikud"),
+						"tmp_id" => $cnt,
+					));
+					$options = $this->parse("options");
+				}
+				else
+				{
+					$options = "";
+				}
+
 				$used_props[$property["name"]] = 1;
 				$this->vars(array(
 					"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
@@ -1378,7 +1392,7 @@ class cfgform extends class_base
 					"prp_type" => $prpdata["type"],
 					"prp_key" => $prpdata["name"],
 					"prp_order" => $property["ord"],
-					"prp_options" => $property["cfgform_additional_options"] ,
+					"options" => $options,
 				));
 				$sc .= $this->parse("property");
 			}

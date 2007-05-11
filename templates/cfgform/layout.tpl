@@ -6,6 +6,11 @@ table.cfgform_layout_tbl
 	border-color: #CCC;
 }
 
+.cfgform_layout_tbl td
+{
+	vertical-align: top;
+}
+
 .cfgform_layout_tbl td input
 {
 	border: 1px solid #CCC;
@@ -13,6 +18,25 @@ table.cfgform_layout_tbl
 	background-color: #FCFCEC;
 }
 </style>
+
+<script type="text/javascript">
+function cfgformToggleOpts(id)
+{
+	el = document.getElementById("cfgformPrpOpts" + id);
+	im = document.getElementById("cfgformOptsBtn" + id);
+
+	if (el.style.display=="none")
+	{
+		el.style.display="block";
+		im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif";
+	}
+	else
+	{
+		el.style.display="none";
+		im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif";
+	}
+}
+</script>
 
 <fieldset style="border: 1px solid blue; -moz-border-radius: 0.5em;">
 	<legend>{VAR:capt_legend_tbl}</legend>
@@ -39,7 +63,12 @@ table.cfgform_layout_tbl
 		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}"></td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
 		<td width="200" bgcolor="{VAR:bgcolor}">
+		<!-- SUB: options -->
+			<div class="closer">{VAR:prp_opts_caption} <a href="#" onclick="javascript:cfgformToggleOpts({VAR:tmp_id})"><img src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif" id="cfgformOptsBtn{VAR:tmp_id}" width="20" height="15" border="0"></a></div>
+			<div id="cfgformPrpOpts{VAR:tmp_id}" style="display: none;">
 {VAR:prp_options}
+			</div>
+		<!-- END SUB: options -->
 		</td>
 		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" name="mark[{VAR:prp_key}]" value="1" style="border: 3px solid blue;"></td>
 	</tr>
@@ -50,26 +79,16 @@ table.cfgform_layout_tbl
 
 <!-- SUB: textarea_options -->
 			{VAR:richtext_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][richtext]" value="1" {VAR:richtext_checked}>
-			<input type="hidden" name="xconfig[{VAR:prp_key}][richtext]" value="{VAR:richtext}">
-			{VAR:rows_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][rows]" value="{VAR:rows}">
-			{VAR:cols_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][cols]" value="{VAR:cols}">
+			<input type="hidden" name="xconfig[{VAR:prp_key}][richtext]" value="{VAR:richtext}"><br />
+			{VAR:rows_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][rows]" value="{VAR:rows}"><br />
+			{VAR:cols_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][cols]" value="{VAR:cols}"><br />
 <!-- END SUB: textarea_options -->
 
 <!-- SUB: textbox_options -->
-			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}">
+			{VAR:size_caption} <input type="text" size="2" name="prpconfig[{VAR:prp_key}][size]" value="{VAR:size}"><br />
 <!-- END SUB: textbox_options -->
 
 <!-- SUB: relpicker_options -->
 			{VAR:no_edit_caption}<input type="checkbox" name="prpconfig[{VAR:prp_key}][no_edit]" value="1" {VAR:no_edit_checked}>
-			<input type="hidden" name="xconfig[{VAR:prp_key}][no_edit]" value="{VAR:no_edit}">
+			<input type="hidden" name="xconfig[{VAR:prp_key}][no_edit]" value="{VAR:no_edit}"><br />
 <!-- END SUB: relpicker_options -->
-
-<!-- SUB: textarea_options_old -->
-<tr>
-	<td colspan="5" bgcolor="{VAR:bgcolor}">
-		<input type="checkbox" name="prpconfig[{VAR:prp_key}][richtext]" value="1" {VAR:richtext_checked}> RTE
-		<input type="hidden" name="xconfig[{VAR:prp_key}][richtext]" value="{VAR:richtext}">
-	</td>
-</tr>
-<!-- END SUB: textarea_options_old -->
-
