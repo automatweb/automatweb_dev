@@ -1196,23 +1196,6 @@ class crm_company_overview_impl extends class_base
 		}
 	}
 	
-	/** 
-		@attrib name=set_project_to_mail nologin=1 is_public=1 all_args=1
- 	**/
-	function set_project_to_mail($arr)
-	{
-		foreach($arr["sel"] as $id)
-		{
-			if(is_oid($id) && $this->can("view" , $id))
-			{
-				$o = obj($id);
-				arr($o);
-			}
-		}
-		arr($arr);
-		return $arr["post_ru"];
-	}
-
 	function _get_act_s_part($arr)
 	{
 		if ($arr["request"]["act_s_sbt"] == "" && $arr["request"]["act_s_is_is"] != 1)

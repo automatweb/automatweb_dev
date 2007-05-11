@@ -7810,6 +7810,7 @@ Bank accounts: üksteise all
 				$o->save();
 			}
 		}
+		arr($arr);
 		return $arr["post_ru"];
 	}
 
