@@ -7808,10 +7808,8 @@ Bank accounts: üksteise all
 				$o = obj($id);
 				$o->set_prop("project" , $arr["proj"]);
 				$o->save();
-				arr($o);
 			}
 		}
-		arr($arr);
 		return $arr["post_ru"];
 	}
 

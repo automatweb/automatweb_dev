@@ -1412,7 +1412,7 @@ class crm_company_overview_impl extends class_base
 						"class_id" => CL_CRM_EMAIL,
 						"lang_id" => array(),
 						"site_id" => array(),
-//						"customer" => $arr["obj_inst"]->id()
+						"customer" => $arr["obj_inst"]->id()
 					));
 			
 					$tasks = $this->make_keys($ol->ids());
