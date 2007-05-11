@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.190 2007/05/08 10:52:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.191 2007/05/11 10:33:14 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -3919,7 +3919,7 @@ class room extends class_base
 		}
 		
 		$rv["room_price"] = $sum;
-		$rv["room_bargain_value"] = $this->bargain_value;
+		
 		
 		$warehouse = $room->prop("warehouse");
 		$u = get_instance(CL_USER);
@@ -3945,7 +3945,7 @@ class room extends class_base
 		{
 			 $prod_discount = $arr["bron"]->meta("prod_discount");
 		}
-	//if(aw_global_get("uid") == "struktuur") arr($arr["bron"]->prop("special_discount"));
+
 		$rv["prod_discount"] = $prod_discount;
 		foreach($room->prop("currency") as $currency)
 		{
@@ -3960,6 +3960,7 @@ class room extends class_base
 			if($people > $room->prop("normal_capacity"))
 			{
 				$sum[$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency , "start" => $start, "end" => $end));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many"); 
+				$this->bargain_value[$currency] = $this->cal_people_price_discount(array("room" => $room, "people" => $people, "cur" => $currency , "start" => $start, "end" => $end));
 				$rv["room_price"][$currency] += $this->cal_people_price(array("room" => $room, "people" => $people, "cur" => $currency, "start" => $start, "end" => $end));//($people-$room->prop("normal_capacity")) * $room->prop("price_per_face_if_too_many");
 			}
 //			if(is_array($products) && sizeof($products))
@@ -3981,6 +3982,8 @@ class room extends class_base
 				$rv["prod_discount_value"][$currency] = ((100.0 * $tmp) / $adv) - $tmp;
 			}
 		}
+		
+		$rv["room_bargain_value"] = $this->bargain_value;
 		if ($arr["detailed_info"])
 		{
 			return $rv;
@@ -4113,6 +4116,39 @@ class room extends class_base
 		return $ret;
 	}
 	
+	function cal_people_price_discount($arr)
+	{
+		$discount = $this->get_rnd_discount_in_time($arr);
+		extract($arr);
+		if(is_oid($room) && $this->can("view" ,$room))
+		{
+			$room = obj($room);
+		}
+		if(!is_object($room))
+		{
+			return 0;
+		}
+		$sum = 0;
+		$prices = $room->meta("people_prices");
+		$price_nt = 1;
+		$t_people = $people-$room->prop("normal_capacity");
+		$n = 1;
+		while($n <= $t_people)
+		{
+			if($prices[$price_nt] || $prices[$price_nt] == "0")
+			{
+				$sum+=$prices[$price_nt][$cur];
+				$price_nt++;
+			}
+			else
+			{
+				$sum+=$prices[$price_nt-1][$cur];
+			}
+			$n++;
+		}
+		return (($discount * 0.01)*$sum);
+	}
+	
 	function cal_people_price($arr)
 	{
 		//if(aw_global_get("uid"))arr($arr);
@@ -4144,7 +4180,7 @@ class room extends class_base
 			}
 			$n++;
 		}
-
+		$this->people_price_discount = (($discount * 0.01)*$sum);
 		return $sum - (($discount * 0.01)*$sum);
 	//array("room" => $room, "people" => $people, "cur" => $currency));	
 	}
