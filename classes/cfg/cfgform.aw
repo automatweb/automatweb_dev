@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.116 2007/05/11 06:17:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.117 2007/05/11 06:57:02 voldemar Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1748,15 +1748,6 @@ class cfgform extends class_base
 				// well, save the names then
 				//$grplist = $this->grplist;
 				$prplist = $this->prplist;
-				/*
-				if (is_array($arr["form_data"]["grpnames"]))
-				{
-					foreach($arr["form_data"]["grpnames"] as $key => $val)
-					{
-						$grplist[$key]["caption"] = $val;
-					};
-				};
-				*/
 
 				if (is_array($arr["request"]["prpnames"]))
 				{
@@ -1764,8 +1755,8 @@ class cfgform extends class_base
 					{
 						$prplist[$key]["caption"] = $val;
 						$prplist[$key]["ord"] = $arr["request"]["prop_ord"][$key];
-					};
-				};
+					}
+				}
 
 				if (is_array($arr["request"]["prpconfig"]))
 				{
@@ -1776,10 +1767,21 @@ class cfgform extends class_base
 							if ($val2 != $arr["request"]["prpconfig"][$key][$key2])
 							{
 								$prplist[$key][$key2] = $arr["request"]["prpconfig"][$key][$key2];
-							};
-						};
-					};
-				};
+							}
+						}
+					}
+
+					foreach ($arr["request"]["prpconfig"] as $name => $cfg)
+					{
+						foreach ($cfg as $opt => $val)
+						{
+							if (!isset($arr["request"]["xconfig"][$name][$opt]))
+							{
+								$prplist[$name][$opt] = $val;
+							}
+						}
+					}
+				}
 
 				// if there's any additional properties concerning object, then save them too just in case..
 
