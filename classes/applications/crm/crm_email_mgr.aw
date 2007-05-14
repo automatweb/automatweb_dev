@@ -19,6 +19,7 @@ class crm_email_mgr extends aw_template
 			"site_id" => array(),
 			"CL_MESSENGER_V2.RELTYPE_MESSENGER_OWNERSHIP.name" => "%"
 		));
+		
 		foreach($messenger_list->arr() as $messenger)
 		{
 			$owner = $messenger->get_first_obj_by_reltype("RELTYPE_MESSENGER_OWNERSHIP");
@@ -39,7 +40,6 @@ class crm_email_mgr extends aw_template
 	function update_mails_from_imap($imap, $owner)
 	{
 		$p = $owner->get_first_obj_by_reltype("RELTYPE_PERSON");
-
 		$imap_i = $imap->instance();
 		$imap_i->connect_server(array(
 			"obj_inst" => $imap
@@ -54,6 +54,7 @@ class crm_email_mgr extends aw_template
 		$fld_c = $imap_i->get_folder_contents(array("from" => 0, "to" => 100000));
 echo "got cont <br>\n";
 flush();
+
 		// make a list of all customer e-mail addresses
 		$cust_mails = $this->_get_customer_email_list();
 echo "got email list <br>\n";
@@ -69,16 +70,22 @@ flush();
 		{
 			if (isset($cust_mails[$message["froma"]]) && !isset($existing_messages[$id]))
 			{
+				$imap_i->msg_content = null;
+				//$imap_i = get_instance("protocols/mail/imap");//$imap->instance();
 				$cust_id = $cust_mails[$message["froma"]];
-
+				$cust_obj = obj($cust_id);
+				$co_object = $cust_obj->get_first_obj_by_reltype("RELTYPE_WORK");
+				if(is_object($co_object))
+				{
+					$cust_id = $co_object->id();
+				}
 				echo "import message ".$message["subject"]." to cust $cust_id <br>";
-
+				
 				$ms = $imap_i->fetch_message(array("msgid" => $id));
-
 				$m = obj();
 				$m->set_class_id(CL_CRM_EMAIL);
 				$m->set_parent($cust_id);
-			
+
 				$m->set_name($message["subject"]);
 				$m->set_prop("customer", $cust_id);
 				$m->set_prop("from", $message["from"]);
