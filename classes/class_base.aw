@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.546 2007/05/10 09:46:11 kristo Exp $
+// $Id: class_base.aw,v 2.547 2007/05/14 08:40:28 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -325,7 +325,7 @@ class class_base extends aw_template
 			$filter["layout_mode"] == "fixed_toolbar";
 		}
 		$properties = $this->get_property_group($filter);
-
+		
 		/////////////////////
 
 		$defview = 0;
@@ -4445,7 +4445,7 @@ class class_base extends aw_template
 		{
 			$arr["clid"] = $this->clid;
 		}
-
+		
 		$cls_id = aw_global_get("class");
 		// XXX: add some checks
 		$all_properties = $this->load_defaults(array(
@@ -4453,7 +4453,7 @@ class class_base extends aw_template
 			"clfile" => $arr["clfile"],
 			"filter" => $filter,
 		));
-
+		
 		// nii .. ja kuidas ma n&uuml;&uuml;d saan teada k&otilde;ik omadused, mis mind huvitavad?
 
 		// I could use a different approach here ... for example, if I'm saving then
@@ -4505,7 +4505,6 @@ class class_base extends aw_template
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
 			));
-
 			if ($this->cfg_debug)
 			{
 				print "loading from " . $arr["cfgform_id"] . "<br>";
@@ -4928,7 +4927,7 @@ class class_base extends aw_template
 
 			$ci = $cfgform_obj->instance();
 			$prps = $ci->get_cfg_proplist($cfgform_obj->id());
-
+			
 			$rv = $prps;
 			$grps = $ci->get_cfg_groups($cfgform_obj->id());
 			foreach($cfg_flags as $key => $val)

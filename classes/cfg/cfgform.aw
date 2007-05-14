@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.117 2007/05/11 06:57:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.118 2007/05/14 08:40:29 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1342,7 +1342,7 @@ class cfgform extends class_base
 							"rows_caption" => t("Kõrgus"),
 							"rows" => $property["rows"],
 							"cols_caption" => t("Laius"),
-							"cols" => $property["rows"],
+							"cols" => $property["cols"],
 							"prp_key" => $property["name"],
 						));
 						$property["cfgform_additional_options"] = $this->parse("textarea_options");
@@ -1748,7 +1748,7 @@ class cfgform extends class_base
 				// well, save the names then
 				//$grplist = $this->grplist;
 				$prplist = $this->prplist;
-
+				
 				if (is_array($arr["request"]["prpnames"]))
 				{
 					foreach($arr["request"]["prpnames"] as $key => $val)
@@ -1760,28 +1760,17 @@ class cfgform extends class_base
 
 				if (is_array($arr["request"]["prpconfig"]))
 				{
-					foreach($arr["request"]["xconfig"] as $key => $val)
+					foreach($arr["request"]["prpconfig"] as $key => $val)
 					{
 						foreach($val as $key2 => $val2)
 						{
-							if ($val2 != $arr["request"]["prpconfig"][$key][$key2])
+							if (true || $val2 != $arr["request"]["prpconfig"][$key][$key2])
 							{
-								$prplist[$key][$key2] = $arr["request"]["prpconfig"][$key][$key2];
-							}
-						}
-					}
-
-					foreach ($arr["request"]["prpconfig"] as $name => $cfg)
-					{
-						foreach ($cfg as $opt => $val)
-						{
-							if (!isset($arr["request"]["xconfig"][$name][$opt]))
-							{
-								$prplist[$name][$opt] = $val;
-							}
-						}
-					}
-				}
+								$prplist[$key][$key2] = $val2;
+							};
+						};
+					};
+				};
 
 				// if there's any additional properties concerning object, then save them too just in case..
 
@@ -2403,7 +2392,7 @@ class cfgform extends class_base
 				// so we just copy the captions
 				if (isset($ret[$pn]))
 				{
-					$ret[$pn]["caption"] = $pd["caption"];
+					//$ret[$pn]["caption"] = $pd["caption"];
 				}
 			}
 		}
@@ -2925,7 +2914,7 @@ class cfgform extends class_base
 		$vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
 
 		$classes = aw_ini_get("classes");
-		$class = strtolower(substr($classes[$this_o->prop("ctype")]["def"], 3));
+		$class = strtolower(substr($classes[$this_o->prop("subclass")]["def"], 3));
 		$action = $this_o->prop("cfgview_action") ? $this_o->prop("cfgview_action") : "view";
 
 		if ("cfgview_change_new" == $action or "cfgview_view_new" == $action)
