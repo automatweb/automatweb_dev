@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.32 2007/04/23 11:20:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.33 2007/05/14 09:33:06 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -299,7 +299,12 @@ class mini_gallery extends class_base
 
 	function _do_zip_import($o, $zip)
 	{
-		if (!$this->can("add", $o->prop("folder")))
+		$fld = $o->prop("folder");
+		if (is_array($fld))
+		{
+			$fld = reset($fld);
+		}
+		if (!$this->can("add", $fld))
 		{
 			die(t("Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"));
 		}
@@ -360,7 +365,7 @@ class mini_gallery extends class_base
 				$ol = new object_list(array(
 					"class_id" => CL_IMAGE,
 					"name" => $file,
-					"parent" => $o->prop("folder"),
+					"parent" => $fld,
 					"lang_id" => array(),
 					"site_id" => array()
 				));
@@ -378,7 +383,7 @@ class mini_gallery extends class_base
 				$img = obj();
 			}
 			$img->set_class_id(CL_IMAGE);
-			$img->set_parent($o->prop("folder"));
+			$img->set_parent($fld);
 			$img->set_status(STAT_ACTIVE);
 			$img->set_name($file);
 			
