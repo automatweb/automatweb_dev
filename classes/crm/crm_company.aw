@@ -985,8 +985,14 @@ default group=org_objects
 
 	@property versions type=version_manager store=no no_caption=1
 
-@default group=sell_offers
+groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
+@groupinfo sell_offers_grp_offers caption="M&uuml;&uuml;gipakkumised pakkumiste kaupa" parent=documents_all submit=no save=no
+@groupinfo sell_offers_grp_products caption="M&uuml;&uuml;gipakkumised toodete kaupa" parent=documents_all submit=no save=no
+
+@default group=sell_offers_grp_offers
 	@property sell_offers type=table store=no no_caption=1
+@default group=sell_offers_grp_products
+	@property sell_offers_prods type=table store=no no_caption=1
 
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldandmed" parent=general
@@ -2552,6 +2558,9 @@ class crm_company extends class_base
 // 				}
 				$this->_sell_offers_table($arr);
 				break;
+			case "sell_offers_prods":
+				$this->_sell_offers_prod_table($arr);
+				break;	
 		};
 		return $retval;
 	}
@@ -6811,7 +6820,7 @@ class crm_company extends class_base
 		 	"crm" => 1,
 		 ),CL_MESSAGE);
 	}
-
+/*
 	function _sell_offers_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -7011,19 +7020,217 @@ class crm_company extends class_base
 					));
 				}
 			}
-*/		}
+		}
 	}
+*/
+	
+	function _sell_offers_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_offers_tbl($t);
+		if(is_array($arr["request"]["products"]))
+		{
+			$products = new object_list();
+			$products->add($arr["request"]["products"]);
+			$prod_names = $products->names();
+		}
+		$purchase_inst = get_instance(CL_PURCHASE);
+		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
+		
+		$offerer = $arr["obj_inst"]->id();
 
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		if($co == $offerer)
+		{
+			$offerer = null;
+		}
+		
+		$filter = array(
+			"class_id" => array(CL_PURCHASE),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"buyer" => $arr["request"]["buyer"],
+			"offerer" => $offerer,
+		);
+		$ol = new object_list($filter);
+		$filter2 = array(
+			"class_id" => array(CL_PROCUREMENT_OFFER),
+			"lang_id" => array(),
+			"site_id" => array(),
+//			"buyer" => $arr["request"]["buyer"],
+			"offerer" => $offerer,
+		);
+		$ol2 = new object_list($filter2);
+		$ol->add($ol2);
+		
+		//arr($filter);   
+// 		obj_set_opt("no_cache", 1);
+// 				$GLOBALS["DUKE"] =1;
+// 		arr($ol);
+		foreach($ol->arr() as $o)
+		{
+		
+			//teeb toodete tabelid ka
+			$lister = "<span id='row".$o->id()."' style='display: none;'>";
+			$table = new vcl_table;
+			$table->name = "rows".$o->id();
+			$this->_get_procurement_rows_table(array("proc" => $o, "t" => &$table));
+		
+		
+			$deal_no = $o->prop("deal_no");
+			$prod_inf = $alt = "";	
+			$offers = $o->connections_from(array(
+				'type' => "RELTYPE_OFFER",
+			));
+
+			$prod_table = new vcl_table();
+			$prod_table->define_field(array("name" => "name", "caption" => t("Nimetus")));
+			$prod_table->define_field(array("name" => "price", "caption" => t("Hind")));
+			$prod_table->define_field(array("name" => "amount", "caption" => t("Kogus")));
+			$alt = t("Hange:");
+			
+			if($o->class_id() == CL_PURCHASE)
+			{
+				$type = t("Ost");
+				$deal = $o->prop("deal_no");
+				$date = $o->prop("date");
+				
+				
+				$offers = $o->connections_from(array(
+					'type' => "RELTYPE_OFFER",
+				));
+				$alt = t("Hange:");
+				foreach($offers as $offer_conn)
+				{
+					$offer_obj = obj($offer_conn->prop("to"));
+					if($this->can("view" , $offer_obj->prop("procurement")))
+					{
+						$procurement = obj($offer_obj->prop("procurement"));
+						$alt.= $procurement->name();
+						
+						
+						$conns = $offer_obj->connections_to(array(
+							'reltype' => 1,
+							'class' => CL_PROCUREMENT_OFFER_ROW,
+						));
+						if(!sizeof($conns)) continue;
+						foreach($conns as $conn)
+						{
+							if(is_oid($conn->prop("from")))
+							{
+								$row = obj($conn->prop("from"));
+							}
+							else continue;
+							if(!$row->prop("accept"))
+							{
+								continue;
+							}
+							if(!is_array($prod_names) || in_array($row->prop("product") , $prod_names))
+							{
+								$curr = obj($row->prop("currency"));
+								$prod_inf.= $row->prop("product")." (".$row->prop("b_price").$curr->name().")\n";
+								$prod_table->define_data(array(
+									"name" => $row->prop("product"),
+									"price" => $row->prop("b_price").$curr->name(),
+									"amount" => $row->prop("b_amount"),
+								));
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				$type = t("Pakkumine");
+				$deal = "";
+				$date = $o->prop("accept_date");
+				if($this->can("view" , $o->prop("procurement")))
+				{
+					$procurement = obj($o->prop("procurement"));
+					$alt = t("Hange:")." ".$procurement->name();
+					
+					$conns = $o->connections_to(array(
+						'reltype' => 1,
+						'class' => CL_PROCUREMENT_OFFER_ROW,
+					));
+					if(!sizeof($conns)) continue;
+					foreach($conns as $conn)
+					{
+						if(is_oid($conn->prop("from")))
+						{
+							$row = obj($conn->prop("from"));
+						}	
+						else continue;
+						if(!is_array($prod_names) || in_array($row->prop("product") , $prod_names))
+						{
+							if(!$this->can("view" , $row->prop("currency"))) continue;
+							$curr = obj($row->prop("currency"));
+							$prod_inf.= $row->prop("product")." (".$row->prop("price").$curr->name().")\n";
+							$table->define_data(array(
+								"name" => $row->prop("product"),
+								"price" => ($row->prop("b_price")) ? $row->prop("b_price"):$row->prop("price").$curr->name(),
+								"amount" => ($row->prop("b_amount")) ? $row->prop("b_amount"):$row->prop("amount"),
+							));
+						}
+					}
+				}
+			}
+			
+			
+
+			$lister .= $table->draw();
+			$lister .= "</span>";
+			
+			$proc_str = html::href(array(
+				"url" => "#", //aw_url_change_var("proj", $p),
+				"onClick" => "el=document.getElementById(\"row".$o->id()."\"); if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){if (el.style.display == \"block\") { d = \"none\";} else { d = \"block\";} } else { if (el.style.display == \"table-row\") {  d = \"none\"; } else {d = \"table-row\";} }  el.style.display=d;",
+				"caption" => $procurement->name()
+			));
+			
+			$t->define_data(array(
+				"deal" => $deal_no,
+				"products"	=> $prod_table->draw(),//$prod_inf,
+				"procurement" 	=> $proc_str.$lister,
+//				"amount"	=> $row->prop("b_amount"),
+//				'price'		=> $row->prop("b_price"),
+				'date'		=> date("d.m.Y", $date),
+				"name" 		=> html::href(array(
+						"url" => html::get_change_url(
+							$o->id(),
+							array("return_url" => get_ru())),
+						"caption" => $o->name(),
+						"title" => $alt,
+						)),
+				'oid'		=> $o->id(),
+				"type" 		=> $type,
+			));
+		}
+	}
+	
+	function _get_procurement_rows_table($arr)
+	{
+		$t =& $arr["t"]; 
+		$t->define_field(array("name" => "name", "caption" => t("Nimetus")));
+		$t->define_field(array("name" => "price", "caption" => t("Hind")));
+		$t->define_field(array("name" => "amount", "caption" => t("Kogus")));
+	}
+	
 	function _init_offers_tbl(&$t)
 	{
 		//pakkumine või ost
-		$t->define_field(array(
+	/*	$t->define_field(array(
 			"name" => "type",
 			"caption" => t("Liik"),
 			"align" => "center",
 			"sortable" => 1
 		));
-		
+	*/	$t->define_field(array(
+			"name" => "procurement",
+			"caption" => t("Hange"),
+			"align" => "center",
+			"sortable" => 1
+		));
 		//klikitav, lingi alt tekst on Hange: hanke nimi, millele pakkumine vastab)
 		$t->define_field(array(
 			"name" => "name",
@@ -7048,12 +7255,309 @@ class crm_company extends class_base
 		));
 		
 		//(nimekiri reavahega eraldatult nendest toodetest, mis olid võrdlusvaates ja on selles pakkumises/ostus, toote taga on sulgudes hind koos valuutaga)
-		$t->define_field(array(
+	/*	$t->define_field(array(
 			"name" => "products",
 			"caption" => t("Tooted"),
 			"align" => "center",
 			"sortable" => 1
 		));
+		
+	*/	
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _sell_offers_prod_table($arr)
+	{
+		$offered_products = array();
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->define_field(array("name" => "name", "caption" => t("Nimetus")));
+		if(is_array($arr["request"]["products"]))
+		{
+			$products = new object_list();
+			$products->add($arr["request"]["products"]);
+			$prod_names = $products->names();
+		}
+		$purchase_inst = get_instance(CL_PURCHASE);
+		$offer_inst = get_instance(CL_PROCUREMENT_OFFER);
+		
+		$offerer = $arr["obj_inst"]->id();
+
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		if($co == $offerer)
+		{
+			$offerer = null;
+		}
+		
+		$filter = array(
+			"class_id" => array(CL_PURCHASE),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"buyer" => $arr["request"]["buyer"],
+			"offerer" => $offerer,
+		);
+		$ol = new object_list($filter);
+		$filter2 = array(
+			"class_id" => array(CL_PROCUREMENT_OFFER),
+			"lang_id" => array(),
+			"site_id" => array(),
+//			"buyer" => $arr["request"]["buyer"],
+			"offerer" => $offerer,
+		);
+		$ol2 = new object_list($filter2);
+		$ol->add($ol2);
+		
+		foreach($ol->arr() as $o)
+		{
+			$offers = $o->connections_from(array(
+				'type' => "RELTYPE_OFFER",
+			));
+
+			if($o->class_id() == CL_PURCHASE)
+			{
+				$offers = $o->connections_from(array(
+					'type' => "RELTYPE_OFFER",
+				));
+				foreach($offers as $offer_conn)
+				{
+					$offer_obj = obj($offer_conn->prop("to"));
+					if($this->can("view" , $offer_obj->prop("procurement")))
+					{
+						$procurement = obj($offer_obj->prop("procurement"));
+						$alt.= $procurement->name();
+						
+						
+						$conns = $offer_obj->connections_to(array(
+							'reltype' => 1,
+							'class' => CL_PROCUREMENT_OFFER_ROW,
+						));
+						if(!sizeof($conns)) continue;
+						foreach($conns as $conn)
+						{
+							if(is_oid($conn->prop("from")))
+							{
+								$row = obj($conn->prop("from"));
+							}
+							else continue;
+							if(!$row->prop("accept"))
+							{
+								continue;
+							}
+							if(!is_array($prod_names) || in_array($row->prop("product") , $prod_names))
+							{
+								$offered_products[$row->prop("product")][] = $o->id();
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				if($this->can("view" , $o->prop("procurement")))
+				{
+					$procurement = obj($o->prop("procurement"));
+					$alt = t("Hange:")." ".$procurement->name();
+					
+					$conns = $o->connections_to(array(
+						'reltype' => 1,
+						'class' => CL_PROCUREMENT_OFFER_ROW,
+					));
+					if(!sizeof($conns)) continue;
+					foreach($conns as $conn)
+					{
+						if(is_oid($conn->prop("from")))
+						{
+							$row = obj($conn->prop("from"));
+						}	
+						else continue;
+						if(!is_array($prod_names) || in_array($row->prop("product") , $prod_names))
+						{
+							$offered_products[$row->prop("product")][] = $o->id();
+						}
+					}
+				}
+			}
+		}
+
+		foreach ($offered_products as $id => $offers)
+		{
+			$prod = obj($id);
+			$lister = "<span id='row".$prod->id()."' style='display: none;'>";
+			$table = new vcl_table;
+			$table->name = "rows".$prod->id();	
+			
+			$this->_make_product_table_offers(&$table, $offers,$id);
+
+			
+			$lister .= $table->draw();
+			$lister .= "</span>";
+			
+			$proc_str = html::href(array(
+				"url" => "#", //aw_url_change_var("proj", $p),
+				"onClick" => "el=document.getElementById(\"row".$prod->id()."\"); if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){if (el.style.display == \"block\") { d = \"none\";} else { d = \"block\";} } else { if (el.style.display == \"table-row\") {  d = \"none\"; } else {d = \"table-row\";} }  el.style.display=d;",
+				"caption" => $prod->name()
+			));			
+			$t->define_data(array(
+				"name" => $proc_str.$lister,
+			));
+		}
+	}
+	
+	function _make_product_table_offers(&$t , $offers , $product)
+	{
+		$this->_init_product_table_offers_tbl(&$t);
+		foreach($offers as $offer_id)
+		{
+			$o = obj($offer_id);
+			$deal_no = $o->prop("deal_no");
+			$prod_inf = $alt = "";	
+			$offers = $o->connections_from(array(
+				'type' => "RELTYPE_OFFER",
+			));
+			$alt = t("Hange:");
+			$product_row = null;
+			if($o->class_id() == CL_PURCHASE)
+			{
+				$type = t("Ost");
+				$deal = $o->prop("deal_no");
+				$date = $o->prop("date");
+				$offers = $o->connections_from(array(
+					'type' => "RELTYPE_OFFER",
+				));
+				$alt = t("Hange:");
+				foreach($offers as $offer_conn)
+				{
+					$offer_obj = obj($offer_conn->prop("to"));
+					if($this->can("view" , $offer_obj->prop("procurement")))
+					{
+						$procurement = obj($offer_obj->prop("procurement"));
+						$alt.= $procurement->name();
+						
+						
+						$conns = $offer_obj->connections_to(array(
+							'reltype' => 1,
+							'class' => CL_PROCUREMENT_OFFER_ROW,
+						));
+						foreach($conns as $conn)
+						{
+							if(is_oid($conn->prop("from")))
+							{
+								$row = obj($conn->prop("from"));
+							}
+							else continue;
+							if(!$row->prop("accept"))
+							{
+								continue;
+							}
+							if($row->prop("product") == $product)
+							{
+								$product_row = $product;
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				$type = t("Pakkumine");
+				$deal = "";
+				$date = $o->prop("accept_date");
+				if($this->can("view" , $o->prop("procurement")))
+				{
+					$procurement = obj($o->prop("procurement"));
+					$alt = t("Hange:")." ".$procurement->name();
+					
+					$conns = $o->connections_to(array(
+						'reltype' => 1,
+						'class' => CL_PROCUREMENT_OFFER_ROW,
+					));
+					if(!sizeof($conns)) continue;
+					foreach($conns as $conn)
+					{
+						if(is_oid($conn->prop("from")))
+						{
+							$row = obj($conn->prop("from"));
+						}	
+						else continue;
+						if($row->prop("product") == $product)
+						{
+							$product_row = $row;
+						}
+					}
+				}
+			}
+			
+			$curr = obj($product_row->prop("currency"));
+			$t->define_data(array(
+				"deal" => $deal_no,
+				"procurement" 	=> $proc_str.$lister,
+				"amount"	=> ($product_row->prop("b_amount")) ? $product_row->prop("b_amount"):$product_row->prop("amount"),
+				'price'		=> ($product_row->prop("b_price")) ? $product_row->prop("b_price"):$product_row->prop("price").$curr->name(),
+				'date'		=> date("d.m.Y", $date),
+				"name" 		=> html::href(array(
+						"url" => html::get_change_url(
+							$o->id(),
+							array("return_url" => get_ru())),
+						"caption" => $o->name(),
+						"title" => $alt,
+						)),
+				'oid'		=> $o->id(),
+				"type" 		=> $type,
+			));
+		}
+	}
+	
+	function _init_product_table_offers_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Liik"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		//klikitav, lingi alt tekst on Hange: hanke nimi, millele pakkumine vastab)
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Pakkumise/ostu nimetus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		//Lepingu nr (see mis on märgitud ostu juurde, mitte ID)
+		$t->define_field(array(
+			"name" => "deal",
+			"caption" => t("Leping"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		//Kuupäev
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
+		//Hind
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
+		//Kogus
+		$t->define_field(array(
+			"name" => "amount",
+			"caption" => t("Kogus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"

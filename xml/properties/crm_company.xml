@@ -11,13 +11,6 @@
             <field>navtoolbar</field>
       </property>
       <property>
-            <name>balance</name>
-            <table>aw_account_balances</table>
-            <group>general_sub</group>
-            <type>hidden</type>
-            <field>aw_balance</field>
-      </property>
-      <property>
             <name>jrk</name>
             <table>objects</table>
             <group>general_sub</group>
@@ -414,16 +407,6 @@
             <type>hidden</type>
             <field>extern_id</field>
             <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>keywords2</name>
-            <table>objects</table>
-            <group>keywords</group>
-            <type>keyword_selector</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_KEYWORD</reltype>
-            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
       </property>
       <property>
             <name>openhours</name>
@@ -1022,7 +1005,6 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>phone_id</field>
-            <caption>Telefon</caption>
       </property>
       <property>
             <name>telefax_id</name>
@@ -1032,7 +1014,6 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>telefax_id</field>
-            <caption>Faks</caption>
       </property>
       <property>
             <name>url_id</name>
@@ -1042,7 +1023,6 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>url_id</field>
-            <caption>Veebiaadress</caption>
       </property>
       <property>
             <name>email_id</name>
@@ -1052,7 +1032,6 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>email_id</field>
-            <caption>E-mail</caption>
       </property>
       <property>
             <name>aw_bank_account</name>
@@ -1062,7 +1041,6 @@
             <parent>cedit_layout_other</parent>
             <no_caption>1</no_caption>
             <field>aw_bank_account</field>
-            <caption>Pangaarve</caption>
       </property>
       <property>
             <name>personal_offers_toolbar</name>
@@ -3061,11 +3039,20 @@
       <property>
             <name>sell_offers</name>
             <table>objects</table>
-            <group>sell_offers</group>
+            <group>sell_offers_grp_offers</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>sell_offers</field>
+      </property>
+      <property>
+            <name>sell_offers_prods</name>
+            <table>objects</table>
+            <group>sell_offers_grp_products</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>sell_offers_prods</field>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
@@ -3075,11 +3062,18 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <keywords>
-                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
-                  <parent>general_sub</parent>
+            <sell_offers_grp_offers>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gipakkumised pakkumiste kaupa</caption>
+                  <parent>documents_all</parent>
                   <submit>no</submit>
-            </keywords>
+                  <save>no</save>
+            </sell_offers_grp_offers>
+            <sell_offers_grp_products>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gipakkumised toodete kaupa</caption>
+                  <parent>documents_all</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </sell_offers_grp_products>
             <general_sub>
                   <caption>&amp;amp;Uuml;ldandmed</caption>
                   <parent>general</parent>
@@ -3374,11 +3368,6 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </kliendibaas_firma>
-            <aw_account_balances>
-                  <master_index>oid</master_index>
-                  <master_table>objects</master_table>
-                  <index>aw_oid</index>
-            </aw_account_balances>
       </tableinfo>
       <reltypes>
             <ETTEVOTLUSVORM>
@@ -3704,11 +3693,6 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>Aadressid</caption>
             </CORRESPOND_ADDRESS>
-            <KEYWORD>
-                  <value>66</value>
-                  <clid>CL_KEYWORD</clid>
-                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
-            </KEYWORD>
       </reltypes>
       <layout>
             <co_top>
