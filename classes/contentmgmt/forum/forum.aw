@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.11 2007/05/08 10:20:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.12 2007/05/14 13:29:41 dragut Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1380,18 +1380,6 @@ topic");
 
 		$_mx = aw_ini_get("forum.comments_mailto");
 		$mx = explode(",", $_mx);
-/*
-		if (is_array($mx))
-		{
-			foreach($mx as $val)
-			{
-				send_mail($val,
-					"Uus sissekanne teemal: " . $forum_obj->name(),
-					"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: ".aw_ini_get("baseurl")."/?class=forum&action=show_threaded&board=$board",
-					"From: $name <$email>");
-			}
-		};
-*/
 
 		$tmp = obj($forum_obj->parent());
 		$nflist = $tmp->meta("notifylist");
@@ -1420,7 +1408,7 @@ topic");
 			{
 				foreach($mx as $key => $val)
 				{
-					send_mail($val["name"] . "<" . $val["address"] . ">",
+					send_mail($val,
 						"Uus sissekanne teemal: " . $forum_obj->name(),
 						"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: http://sylvester.struktuur.ee/?class=forum&action=show_threaded&board=$board",
 						"From: $name <$email>");
