@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.26 2007/03/20 14:27:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.27 2007/05/15 15:53:57 markop Exp $
 // procurement_offer.aw - Pakkumine hankele
 /*
 
@@ -78,6 +78,9 @@
 
 @reltype OFFERER value=2 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Pakkuja
+
+@reltype ROW value=3 clid=CL_PROCUREMENT_OFFER_ROW
+@caption Pakkumise rida
 */
 
 
@@ -121,6 +124,7 @@ class procurement_offer extends class_base
 		{
 			$off_obj = obj($offer);
 			$this_obj->disconnect(array("from" => $offer));
+			$off_obj->disconnect(array("from" => $arr["id"]));
 		}
 		return $arr["post_ru"];
 	}
@@ -443,6 +447,80 @@ class procurement_offer extends class_base
 		return $parents;
 	}
 
+	//kuna ühendus on mõlemapoolne, siis paluks seda funktsiooni kasutada
+	/** Connects row with offer
+		@attrib name=connect_offer_and_row params=name api=1
+		@param offer required type=id/object
+			offer id or object
+		@param row optional type=id/object
+			row id or object
+		@returns false if bad row or offer
+		@example
+			$offer = get_instance(CL_PROCUREMENT_OFFER);
+			$offer->connect_offer_and_row()
+	**/
+	function connect_offer_and_row($arr)
+	{
+		extract($arr);
+		if(is_oid($offer) && $this->can("view" , $offer))
+		{
+			$offer = obj($offer);
+		}
+		if(is_oid($row) && $this->can("view" , $row))
+		{
+			$row = obj($row);
+		}
+		if(!is_object($row) || !is_object($offer))
+		{
+			return false;
+		}
+		$row->connect(array(
+			"to" => $offer->id(),
+			"type" => "RELTYPE_OFFER",
+		));
+		$offer->connect(array(
+			"to" => $row->id(),
+			"type" => "RELTYPE_ROW"
+		));
+		return true;
+	}
+	
+	/** Disconnects row and offer
+		@attrib name=disconnect_offer_and_row params=name api=1
+		@param offer required type=id/object
+			offer
+		@param row optional type=id/object
+			If this is set, then no new phone number object is created, but this one is added to the organisation instead
+		@returns false if bad row or offer
+		@example
+			$offer = get_instance(CL_PROCUREMENT_OFFER);
+			$offer->connect_offer_and_row()
+	**/
+	function disconnect_offer_and_row($arr)
+	{
+		extract($arr);
+		if(is_oid($offer) && $this->can("view" , $offer))
+		{
+			$offer = obj($offer);
+		}
+		if(is_oid($row) && $this->can("view" , $row))
+		{
+			$row = obj($row);
+		}
+		if(!is_object($row) || !is_object($offer))
+		{
+			return false;
+		}
+		$row->disconnect(array(
+			"from" => $offer->id(),
+		));
+		$offer->disconnect(array(
+			"from" => $row->id(),
+		));
+		return true;
+	}
+	
+
 	/**
 		@attrib name=set_type
 	**/
@@ -553,9 +631,9 @@ class procurement_offer extends class_base
 						$o->set_parent($this_object->id());
 						$o->set_name(sprintf(t("%s rida"), $this_object->name()));
 						$o->save();
-						$o->connect(array(
-							"to" => $this_object->id(),
-							"type" => "RELTYPE_OFFER",
+						$this->connect_offer_and_row(array(
+							"offer" => $this_object->id(),
+							"row" => $o->id()
 						));
 					}
 					else continue;
@@ -629,8 +707,9 @@ class procurement_offer extends class_base
 					$o = obj($product["row_id"]);
 					if($product["product"] == "")
 					{
-						$o->disconnect(array(
-							"from" => $this_object->id(),
+						$this->disconnect_offer_and_row(array(
+							"offer" => $this_object->id(),
+							"row" => $o->id(),
 						));
 					}
 				}
@@ -644,9 +723,9 @@ class procurement_offer extends class_base
 						$o->set_name(sprintf(t("%s rida"), $this_object->name()));
 						$o->set_prop("shipment", $this_object->prop("shipment_date"));
 						$o->save();
-						$o->connect(array(
-							"to" => $this_object->id(),
-							"type" => "RELTYPE_OFFER",
+						$this->connect_offer_and_row(array(
+							"offer" => $this_object->id(),
+							"row" => $o->id(),
 						));
 					}
 					else continue;
@@ -1167,7 +1246,7 @@ class procurement_offer extends class_base
 							"name" => "products[".$x."][product]",
 							"size" => "40",
 							"value" => $product,
-							"autocomplete_source" => $procurement_inst->mk_my_orb ("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
+							"autocomplete_source" => $procurement_inst->mk_my_orb("product_autocomplete_source", array("buyer" =>$co->id()), CL_PROCUREMENT, false, true),
 							"autocomplete_params" => "products[".$x."][product]",
 							"tabindex" => $x,
 							))

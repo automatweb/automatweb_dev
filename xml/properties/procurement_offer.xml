@@ -217,6 +217,11 @@
                   </clid>
                   <caption>Pakkuja</caption>
             </OFFERER>
+            <ROW>
+                  <value>3</value>
+                  <clid>CL_PROCUREMENT_OFFER_ROW</clid>
+                  <caption>Pakkumise rida</caption>
+            </ROW>
       </reltypes>
       <layout>
             <p_l>
