@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.19 2007/05/07 08:07:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.20 2007/05/15 12:36:56 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -69,7 +69,7 @@ class orb extends aw_template
 		$orb_defs = $this->try_load_class($class);
 
 		$this->orb_defs = $orb_defs;
-
+		
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
 		$this->check_login(array("class" => $class,"action" => $action));
@@ -203,6 +203,10 @@ class orb extends aw_template
 			$required = $orb_defs[$class][$action]["required"];
 			// first check, whether all required arguments are set
 			$_params = $_GET;
+			foreach(safe_array($vars) as $k => $v)
+			{
+				$_params[$k] = $v;
+			}
 			foreach($required as $key => $val)
 			{
 				if (!isset($_params[$key]))
@@ -281,7 +285,6 @@ class orb extends aw_template
 		};
 
 		$GLOBALS["tracked_vars"] = $tracked_vars;
-
 
 		if (!empty($orb_defs[$class][$action]["xmlrpc"]))
 		{
