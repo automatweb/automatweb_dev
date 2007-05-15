@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.57 2007/01/26 08:18:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.58 2007/05/15 10:47:06 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -577,6 +577,12 @@ class otv_ds_obj extends class_base
 				{
 					$filter["group"] = "";
 				}
+
+				if (strpos($filter["value"], "<?php") !== false)
+				{
+					eval(str_replace("<?php", "", $filter["value"]));
+					$filter["value"] = $ret;
+				}
 				$filt_by_grp[$filter["group"]][] = $filter;
 			}
 
@@ -672,7 +678,6 @@ class otv_ds_obj extends class_base
 			$_ft["site_id"] = array();
 		}
 		exit_function("otv_ds_obj::get_objects::make_filter");
-
 		enter_function("otv_ds_obj::get_objects::list");
 		$ol = new object_list($_ft);
 		//$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
