@@ -598,7 +598,8 @@ class object_tree extends _int_obj_container_base
 		$acl_oids = array();
 		foreach($oids as $oid => $oname)
 		{
-			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
+			// in ut, one folder was brothered benath itself - this made the tree go in an infinite loop
+			if ($GLOBALS["object_loader"]->ds->can("view", $oid) && $parentdata[$oid] != $objdata[$oid]["brother_of"])
 			{
 				$this->tree_objdata[$parentdata[$oid]][$oid] = $objdata[$oid];
 				if (count($meta_filter) > 0)
