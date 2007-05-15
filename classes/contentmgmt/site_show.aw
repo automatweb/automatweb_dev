@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.231 2007/05/09 09:51:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.232 2007/05/15 08:46:38 kristo Exp $
 
 /*
 
@@ -1865,7 +1865,7 @@ class site_show extends class_base
 
 	function _helper_is_in_path($oid)
 	{
-		return array_search($oid, $this->path_ids);
+		return array_search($oid, $this->path_ids) !== false;
 	}
 
 	////
@@ -2146,7 +2146,9 @@ class site_show extends class_base
 		}
 		
 		$u = get_instance(CL_USER);
+		aw_disable_acl();
 		$p = obj($u->get_current_person());
+		aw_restore_acl();
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
 			"ss2" => gen_uniq_id(),
@@ -2584,25 +2586,34 @@ class site_show extends class_base
 				{
 					if ($o->is_brother() || $this->brother_level_from)
 					{
-						// if there currently is no path, then just make it
-						if ($_GET["path"] == "")
+						/*if ($_GET["path"] == "")
 						{
 							$link .= "?section=".$o->id()."&path=".join(",",$this->path_ids).",".$o->id();
 						}
 						else
 						{
 							$new_path = array();
+							$found = false;
 							foreach($this->path_ids as $_path_id)
 							{
 								$new_path[] = $_path_id;
 								$pio = obj($_path_id);
 								if ($pio->brother_of() == $o->parent())
 								{
+									$found = true;
 									break;
 								}
 							}
-							$link .= "?section=".$o->id()."&path=".join(",",$new_path).",".$o->id();
-						}
+							if (!$found)
+							{
+								$link .= "?section=".$o->id()."&path=".join(",",$this->path_ids).",".$o->id();
+							}
+							else
+							{
+								$link .= "?section=".$o->id()."&path=".join(",",$new_path).",".$o->id();
+							}
+						}*/
+						$link .= "?section=".$o->id()."&path=".join(",", $this->_cur_menu_path);
 					}
 					else
 					{

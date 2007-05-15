@@ -1036,7 +1036,25 @@ class site_template_compiler extends aw_template
 		$inst_name = $dat["inst_name"];
 		$fun_name = $dat["fun_name"];
 
-		$ret = $this->_gi()."if (\"make_menu_item\" != " . $fun_name . ")\n";
+                        $ret .= $this->_gi()."if (".$o_name."->is_brother() && (!\$this->brother_level_from || \$this->brother_level_from == ".$arr["level"]."))\n";
+                        $ret .= $this->_gi()."{\n";
+                        $this->brace_level++;
+                                $ret .= $this->_gi()."\$this->brother_level_from = ".$arr["level"].";\n";
+                        $this->brace_level--;
+                        $ret .= $this->_gi()."}\n";
+                        $ret .= $this->_gi()."else\n";
+                        $ret .= $this->_gi()."{\n";
+                        $this->brace_level++;
+                                $ret .= $this->_gi()."if (\$this->brother_level_from >= ".$arr["level"].")\n";
+                                $ret .= $this->_gi()."{\n";
+                                $this->brace_level++;
+                                        $ret .= $this->_gi()."\$this->brother_level_from = null;\n";
+                                $this->brace_level--;
+                                $ret .= $this->_gi()."}\n";
+                        $this->brace_level--;
+                        $ret .= $this->_gi()."}\n";
+
+		$ret .= $this->_gi()."if (\"make_menu_item\" != " . $fun_name . ")\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 
@@ -1366,6 +1384,9 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."for(\n((\"make_menu_item\" == " . $fun_name . ") ? (\$mmi_cnt = 1) : (".$o_name." =& ".$list_name."->begin())), ((\"make_menu_item\" == " . $fun_name . ") ? (\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this))  : (".$loop_counter_name." = 0)), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (\$prev_obj = NULL));\n ((\"make_menu_item\" == " . $fun_name . ") ? is_array(\$tmp_vars_array) : (!".$list_name."->end()));\n ((\"make_menu_item\" == " . $fun_name . ") ? (\$tmp_vars_array = " . $inst_name . "->make_menu_item(\$tmp,".$arr["level"].",\$parent_obj, \$this)) : (\$prev_obj = ".$o_name.")), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$o_name." =& ".$list_name."->next())), ((\"make_menu_item\" == " . $fun_name . ") ? \$mmi_cnt : (".$loop_counter_name."++))\n)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
+
+			$ret .= $this->_gi()."\$this->_cur_menu_path[] = ".$o_name."->id();\n";
+
 			$ret .= $this->_gi()."if (empty(\$mmi_cnt))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
@@ -1501,8 +1522,10 @@ class site_template_compiler extends aw_template
 		$content_name = $dat["content_name"];
 		$this->last_list_dat = $dat;
 
+		$ret = $this->_gi()."array_pop(\$this->_cur_menu_path);\n";
+
 		$this->brace_level--;
-		$ret  = $this->_gi()."}\n";
+		$ret .= $this->_gi()."}\n";
 		$ret .= $this->_gi()."\$this->vars_safe(array(\"".$arr["tpl"]."\" => ".$content_name."));\n";
 		return $ret;
 	}
