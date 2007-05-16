@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="events_manager" folder="applications/events_manager" extends="class_base">
+	</class>
+</orb>
+		
