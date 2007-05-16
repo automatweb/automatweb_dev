@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.101 2007/04/09 15:36:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.102 2007/05/16 11:51:19 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -3009,20 +3009,26 @@ class ml_list extends class_base
 				foreach($c->get_property_list() as $key => $val)
 				{
 					$this->vars(array($key => $c->prop($key)));
-					if($c->prop($key))
-					{
-						$this->vars(array(strtoupper($key) => $this->parse(strtoupper($key))));
-					}
 					//arr($c->meta($key));arr($key);
 				}
 				foreach($ro->get_property_list() as $key => $val)
 				{
 					$this->vars(array($key => $ro->prop($key)));
+//					arr($ro->meta($key));arr($key);
+				}
+				foreach($c->get_property_list() as $key => $val)
+				{
+					if($c->prop($key))
+					{
+						$this->vars(array(strtoupper($key) => $this->parse(strtoupper($key))));
+					}
+				}
+				foreach($ro->get_property_list() as $key => $val)
+				{
 					if($ro->prop($key))
 					{
 						$this->vars(array(strtoupper($key) => $this->parse(strtoupper($key))));
 					}
-//					arr($ro->meta($key));arr($key);
 				}
 				$asd = 1;
 				while($asd < 6)
