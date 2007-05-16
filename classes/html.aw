@@ -20,7 +20,7 @@ class html extends aw_template
 		font size . examples: "10px", "0.7em", "smaller"
 	@param tabindex optional type=string
 		tab inde
-			
+
 	@returns string / html select
 
 	@comment creates html select
@@ -118,9 +118,9 @@ class html extends aw_template
 	@param onkeypress optional type=string
 		If set, then onkeypress=$onkeypress. Not allowed if autocomplete used.
 	@param onFocus optional type=string
-		If set, then onFocus=$onFocus. 
+		If set, then onFocus=$onFocus.
 	@param onBlur optional type=string
-		If set, then onBlur=$onBlur. 
+		If set, then onBlur=$onBlur.
 
 	@param autocomplete_source optional type=string
 		Relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) http URL that refers to source of autocomplete options. Response expected in JSON format (http://www.json.org/)(classes/protocols/data/aw_json). Response is an array:
@@ -154,6 +154,9 @@ class html extends aw_template
 
 	@param content optional type=string
 		Text visible to user when $option_is_tuple is set to TRUE.
+
+	@param selected optional type=array
+		Initially selected option (or options when multiple part autocomplete) if $option_is_tuple is set to TRUE. Array($selected_key => $value, $selected_key2 => ...);
 
 	@param option_is_tuple optional type=bool
 		Indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. If set to TRUE then the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered. Note that user may type an option without selecting it from autocomplete list in which case posted value will not be $key.
@@ -260,20 +263,45 @@ class html extends aw_template
 		}
 
 		$value_elem = "";
-
 		$ac_off = "";
+
 		if ($autocomplete)
 		{
 			$onkeypress = "";
 			$ac_off = "autocomplete=\"off\"";
+
 			if ($option_is_tuple)
 			{
-				$value_elem = "<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n";
+				$hidden_value = "";
+
+				if (is_array($selected))
+				{
+					$content = "";
+
+					if (is_array($autocomplete_delimiters))
+					{
+						$delimiter = reset($autocomplete_delimiters);
+
+						foreach ($selected as $k => $v)
+						{
+							$content .= $delimiter . $v;
+							$hidden_value .= $delimiter . $k;
+						}
+					}
+					else
+					{
+						$content = reset($selected);
+						$hidden_value = key($selected);
+					}
+				}
+
+				$value_elem = "<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$hidden_value\">\n";
 				$id .= "AWAutoCompleteTextbox";
 				$name .= "_awAutoCompleteTextbox";
 				$value = $content;
 			}
 		}
+
 		return "<input $style type=\"text\" id=\"$id\" $ac_off name=\"$name\" $onchange size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$onFocus}{$onBlur}{$disabled}{$textsize}{$ti} />$post_append_text\n{$value_elem}{$autocomplete}";
 	}
 
@@ -778,7 +806,7 @@ class html extends aw_template
 	@param name optional type=string
 		Date selector name
 	@param format optional type=array
-		Via this you can configure, which parts of dateselect will be shown and how it is drawed 
+		Via this you can configure, which parts of dateselect will be shown and how it is drawed
 		Possible array elements are:
 			day, month, year, hour, minute (displayed as selects)
 			day_textbox, month_textbox, year_textbox, hour_textbox, minute_textbox (displayed as textbox)
@@ -800,7 +828,7 @@ class html extends aw_template
 	@param textsize optional type=string
 		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled
 	@param buttons optional type=bool
-		Enables the "popup calendar" and "clear date select" buttons to the end of the select. 
+		Enables the "popup calendar" and "clear date select" buttons to the end of the select.
 
 	@returns string/html date selector
 
@@ -1173,7 +1201,7 @@ class html extends aw_template
 		return html::get_change_url($o->id(), array("action" => "view", "return_url" => get_ru()), $caption === null ? parse_obj_name($o->name()) : $caption);
 	}
 
-	
+
 	/**
 	@attrib api=1 params=pos
 
