@@ -281,12 +281,8 @@ class html extends aw_template
 					if (is_array($autocomplete_delimiters))
 					{
 						$delimiter = reset($autocomplete_delimiters);
-
-						foreach ($selected as $k => $v)
-						{
-							$content .= $delimiter . $v;
-							$hidden_value .= $delimiter . $k;
-						}
+						$content = implode($delimiter, $selected);
+						$hidden_value = implode($delimiter, array_keys($selected));
 					}
 					else
 					{
