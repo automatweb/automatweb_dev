@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.20 2007/05/15 12:36:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.21 2007/05/16 14:02:49 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -239,7 +239,7 @@ class orb extends aw_template
 				};
 
 				$this->validate_value(array(
-					"type" => $orb_defs[$class][$action]["types"][$key],
+					"type" => isset($orb_defs[$class][$action]["types"][$key]) ? $orb_defs[$class][$action]["types"][$key] : null,
 					"name" => $key,
 					"value" => $vars[$key],
 				));
@@ -254,7 +254,7 @@ class orb extends aw_template
 				if (isset($vars[$key]))
 				{
 					$this->validate_value(array(
-						"type" => $orb_defs[$class][$action]["types"][$key],
+						"type" => isset($orb_defs[$class][$action]["types"][$key]) ? $orb_defs[$class][$action]["types"][$key] : null,
 						"name" => $key,
 						"value" => $vars[$key],
 					));
@@ -585,7 +585,7 @@ class orb extends aw_template
 		{
 			$extname = $ret[$class]["_extends"][0];
 			$tmp = $this->load_xml_orb_def($extname);
-			$ret[$class] = array_merge(safe_array($tmp[$extname]),safe_array($ret[$class]));
+			$ret[$class] = array_merge(safe_array(isset($tmp[$extname]) ? $tmp[$extname] : null ),safe_array($ret[$class]));
 			
 			//$ret = array_merge($tmp[$extname],$ret);
 		};

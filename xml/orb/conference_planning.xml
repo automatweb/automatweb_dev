@@ -76,28 +76,28 @@
 			</function>
 		</action>
 
-		<action name="forward" all_args="1">
+		<action name="forward" nologin="1" all_args="1">
 			<function name="forward">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="stay" all_args="1">
+		<action name="stay" nologin="1" all_args="1">
 			<function name="stay">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="back" all_args="1">
+		<action name="back" nologin="1" all_args="1">
 			<function name="back">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="finalize" all_args="1">
+		<action name="finalize" nologin="1" all_args="1">
 			<function name="finalize">
 				<arguments>
 				</arguments>

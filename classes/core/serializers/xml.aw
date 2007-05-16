@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/serializers/xml.aw,v 1.2 2006/02/22 15:18:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/serializers/xml.aw,v 1.3 2007/05/16 14:02:51 kristo Exp $
 // xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml 
@@ -23,7 +23,7 @@ class xml
 			$this->enumerate = $args["enumerate"];
 		};
 
-		if (is_array($args["child_id"]))
+		if (isset($args["child_id"]) && is_array($args["child_id"]))
 		{
 			foreach($args["child_id"] as $key => $val)
 			{

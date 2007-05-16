@@ -99,7 +99,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		// unserialize acldata
-		$ret["acldata"] = aw_unserialize($ret["acldata"]);
+		$ret["acldata"] = aw_unserialize(isset($ret["acldata"]) ? $ret["acldata"] : null);
 
 		// filter it for all current groups 
 
@@ -1011,7 +1011,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_t.parent as `to.parent`,
 				o_s.parent as `from.parent`,
 				o_t.comment as `to.comment`,
-				o_s.comment as `from.comment`
+				o_s.comment as `from.comment`,
+				o_t.acldata as `to.acldata`,
+				o_s.acldata as `from.acldata`
 		";
 
 		if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
@@ -1036,7 +1038,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_t.status != 0
 		";
 
-		if ($arr["from"])
+		if (!empty($arr["from"]))
 		{
 			$awa = new aw_array($arr["from"]);
 			$sql .= " AND source IN (".$awa->to_sql().") ";
@@ -1183,6 +1185,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$ret = array();
 		if ($where != "")
 		{
+			$acld = "";
 			if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 			{
 				$acld = ", objects.acldata as acldata, objects.parent as parent";

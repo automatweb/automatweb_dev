@@ -47,6 +47,7 @@
 					<required name="id" type="int" acl="view" />
 					<optional name="r" />
 					<required name="bank_payment" />
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
@@ -83,6 +84,14 @@
 					<required name="prod" type="int" acl="view" />
 					<required name="id" type="int" acl="view" />
 					<optional name="r" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_prod_info">
+			<function name="show_prod_info">
+				<arguments>
+					<required name="prod" />
 				</arguments>
 			</function>
 		</action>

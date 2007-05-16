@@ -52,7 +52,7 @@ class popup_menu extends aw_template
 	**/
 	function add_item($arr)
 	{
-		if ($arr["parent"] == "")
+		if (empty($arr["parent"]))
 		{
 			$arr["parent"] = $this->menu_id;
 		}
@@ -62,7 +62,12 @@ class popup_menu extends aw_template
 		if (!empty($arr["onClick"]))
 		{
 			$arr["onClick"] = " onClick=\"". $arr["onClick"] . "\"";
-		};
+		}
+		else
+		{
+			$arr["onClick"] = "";
+		}
+
 		if (!empty($arr["oncl"]))
 		{
 			$arr["onClick"] = $arr["oncl"];
@@ -84,6 +89,7 @@ class popup_menu extends aw_template
 			$id = "id='$arr[href_id]'";
 		}
 
+		$target = "";
 		if (!empty($arr["target"]))
 		{
 			$target = " target=\"_blank\" ";
@@ -98,6 +104,10 @@ class popup_menu extends aw_template
 			$rv = '<a '.$id.' class="menuItem" '.$target.' href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
 		}
 
+		if (!isset($this->menus[$arr["parent"]]))
+		{
+			$this->menus[$arr["parent"]] = "";
+		}
 		$this->menus[$arr["parent"]] .= $rv;
 	}
 

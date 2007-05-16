@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.16 2007/03/28 12:32:26 markop Exp $
+
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.17 2007/05/16 14:02:39 kristo Exp $
 // procurement.aw - Hange
 /*
 
@@ -29,11 +30,11 @@
 
 
 @default group=d
-	
+
 	@property d_tb type=toolbar no_caption=1 store=no
-	
+
 	@layout d_l type=hbox width=30%:70%
-		
+
 		@property d_tr type=treeview no_caption=1 store=no parent=d_l
 
 		@property d_tbl type=table no_caption=1 store=no parent=d_l
@@ -42,11 +43,11 @@
 		@property products type=table no_caption=1 table=objects field=meta method=serialize
 
 @default group=o
-	
+
 	@property o_tb type=toolbar no_caption=1 store=no
-	
+
 	@layout o_l type=hbox width=30%:70%
-		
+
 		@property o_tr type=treeview no_caption=1 store=no parent=o_l
 
 		@property o_tbl type=table no_caption=1 store=no parent=o_l
@@ -215,7 +216,7 @@ class procurement extends class_base
 			case "offerers":
 				$prop["value"] = $this->make_keys(array_keys($prop["options"]));
 				break;
-			
+
 			case "products":
 				$prop["value"] = $this->products_table(&$arr["prop"]["vcl_inst"],$arr["obj_inst"]);
 				break;
@@ -227,13 +228,13 @@ class procurement extends class_base
 					$prop["options"] = array($orderer->id() => $orderer->name());
 				}
 				break;
-		}; 
+		};
 		return $retval;
 	}
 
 	function products_table(&$t , $this_obj)
 	{
-		//see esimene vaid sorteerimiseks 
+		//see esimene vaid sorteerimiseks
 //		$t->define_field(array(
 //			"name" => "jrk",
 //			"caption" => t("Jrk"),
@@ -257,7 +258,7 @@ class procurement extends class_base
 		$unit_list = new object_list(array(
 			"class_id" => CL_UNIT
 		));
-		
+
 		$unit_opts = array();
 		foreach($unit_list->arr() as $unit)
 		{
@@ -291,7 +292,7 @@ class procurement extends class_base
 			));
 			$x++;
 		}
-	
+
 		//lisaread
 		$enough = $x +10;
 		$u = get_instance(CL_USER);
@@ -346,7 +347,7 @@ class procurement extends class_base
 	{
 		$ac = get_instance("vcl/autocomplete");
 		$arr = $ac->get_ac_params($arr);
-		
+
 		$ol = new object_list();
 		if(is_oid($_GET["buyer"]))
 		{
@@ -393,9 +394,9 @@ class procurement extends class_base
 				break;
 		}
 		return $retval;
-	}	
-	
-	
+	}
+
+
 	function _get_sub_folder_objects($obj)
 	{
 		$parents = array();
@@ -411,7 +412,7 @@ class procurement extends class_base
 		}
 		return $parents;
 	}
-	
+
 	/**
 		@attrib name=set_type
 	**/
@@ -436,41 +437,41 @@ class procurement extends class_base
 			"sortable" => 1,
 			"caption" => t("T&uuml;&uuml;p")
 		));
-		
+
 		$t->define_field(array(
 			"name" => "menu",
 			"sortable" => 1,
 			"caption" => t("Kataloog")
 		));
 		$t->set_default_sortby("name");
-		
-		
+
+
 		$co = obj($this_object->prop("orderer"));
 		$warehouse = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
-		
+
 		if(is_object($warehouse))
 		{
 			$warehouse->config = obj($warehouse->prop("conf"));
 			$parent = $warehouse->config->prop("prod_fld");
-		}	
+		}
 		else $parent = $_GET["id"];
-		
-		$types = new object_list(array(		
+
+		$types = new object_list(array(
 				"class_id" => array(CL_SHOP_PRODUCT_TYPE),
 				"lang_id" => array(),
 				"site_id" => array(),
 		));
 		$options = $types->names();
-		
+
 		$menu_opt = $this->_get_sub_folder_objects(obj($parent));
 		foreach($menu_opt as $opt)
 		{
-			$menu_options[$opt->id()] = $opt->name(); 
+			$menu_options[$opt->id()] = $opt->name();
 		}
 
 		asort($menu_options);
 		asort($options);
-		
+
 		if($_POST["types"])
 		{
 			foreach($_SESSION["procurement"]["val"] as $key=>$product)
@@ -519,7 +520,7 @@ class procurement extends class_base
 			window.close();
 			</script>");
 		}
-		
+
 		$new_products = 0;
 		foreach($_SESSION["procurement"]["val"] as $product)
 		{
@@ -541,7 +542,7 @@ class procurement extends class_base
 				if(strlen($product["product"]) > 0) $t->define_data($dat);
 			}
 		}
-		
+
 		if(!$new_products)
 		{
 			if(is_array($_SESSION["procurement"]["val"]))
@@ -603,7 +604,7 @@ class procurement extends class_base
 		classload("core/icons");
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
-				"type" => TREE_DHTML, 
+				"type" => TREE_DHTML,
 				"persist_state" => true,
 				"tree_id" => "procurement_center",
 			),
@@ -701,7 +702,7 @@ class procurement extends class_base
 				return true;
 		}
 	}
-	
+
 	/**
 		@attrib name=delete_procurements
 	**/
@@ -932,7 +933,7 @@ class procurement extends class_base
 	}
 
 	function _team($arr)
-	{	
+	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_team_t($t);
 
@@ -1091,18 +1092,17 @@ class procurement extends class_base
 			"action" => "delete_procurements"
 		));
 	}
-	
-	
+
+
 	function callback_generate_scripts($arr)
 	{
-		
 		$meta = $arr["obj_inst"]->meta("products"); $size = sizeof($meta);
 		$ret = "
 		function aw_submit_handler() {".
 		"".
 		// fetch list of companies with that name and ask user if count > 0
 		"var url = '".$this->mk_my_orb("check_existing")."';";
-		
+
 		$x = 0;
 		if($size>25)
 		{
@@ -1114,7 +1114,7 @@ class procurement extends class_base
 				";
 			$x++;
 		}
-		
+
 		$ret.= "num= aw_get_url_contents(url);".
 		"if (num != \"\")
 		{
@@ -1129,7 +1129,7 @@ class procurement extends class_base
 		";
 		return $ret;
 	}
-	
+
 	/**
 		@attrib name=check_existing
 		@param p optional type=array
@@ -1137,7 +1137,7 @@ class procurement extends class_base
 	function check_existing($arr)
 	{
 		foreach($arr["p"] as $product)
-		{	
+		{
 			if(!(strlen($product) > 1)) continue;
 			if (mb_detect_encoding($arr["p"],"UTF-8,ISO-8859-1") == "UTF-8")
 			{
@@ -1157,6 +1157,6 @@ class procurement extends class_base
 		}
 		die(iconv(aw_global_get("charset"), "UTF-8", $ret));
 	}
-	
+
 }
 ?>

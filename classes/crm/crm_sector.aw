@@ -8,6 +8,9 @@
 	@property tegevusala type=textbox size=55 table=kliendibaas_tegevusala
 	@caption Tegevusala nimetus
 
+	@property alias type=textbox size=55 table=objects field=alias
+	@caption Alias
+
 	@property ord type=textbox size=5 table=objects field=jrk
 	@caption J&auml;rjekord
 
@@ -116,6 +119,21 @@ class crm_sector extends class_base
 			"0" => array("image_id" => $arr["obj_inst"]->prop("image"))
 		);
 		$arr["obj_inst"]->set_meta("menu_images", $imgs);
+	}
+
+	function request_execute($o)
+	{
+		static $done;
+		if ($done)
+		{
+			return "";
+		}
+		$done = 1;
+		$ccw = get_instance(CL_CRM_COMPANY_WEBVIEW);
+		return $ccw->show_sect(array(
+			"section" => $o->id(),
+			"wv" => 26371
+		));
 	}
 }
 ?>

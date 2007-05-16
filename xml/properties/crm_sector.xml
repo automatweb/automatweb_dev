@@ -10,6 +10,15 @@
             <caption>Tegevusala nimetus</caption>
       </property>
       <property>
+            <name>alias</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>55</size>
+            <field>alias</field>
+            <caption>Alias</caption>
+      </property>
+      <property>
             <name>ord</name>
             <table>objects</table>
             <group>general</group>

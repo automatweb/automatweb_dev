@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.137 2007/03/28 10:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.138 2007/05/16 14:02:35 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -39,8 +39,8 @@ class users_user extends aw_template
 	{
 		global $uid;
 		extract($params);
-		$ip	= $params["remote_ip"];
-		$host	= $params["remote_host"];
+		$ip	= isset($params["remote_ip"]) ? $params["remote_ip"] : null;
+		$host	= isset($params["remote_host"]) ? $params["remote_host"] : null;
 		$t = time();
 		$msg = "";
 		
@@ -68,7 +68,7 @@ class users_user extends aw_template
 				"password" => $password
 			));
 		}
-		if ($server != "")
+		if (!empty($server))
 		{
 			$uid .= ".".$server;
 		}
@@ -139,7 +139,7 @@ class users_user extends aw_template
 				"msg" => sprintf(t("oid for uid is empty uid = '%s'!"), $uid)
 			));
 		}
-		$user_obj = &obj($u_oid);
+		$user_obj = obj($u_oid);
 		if (!$user_obj->is_property("logins"))
 		{
 			error::raise(array(
@@ -185,12 +185,12 @@ class users_user extends aw_template
 		// notify listeners
 		post_message("MSG_USER_LOGIN", array("uid" => $uid));
 
-		if ($params["remote_auth"] == 1)
+		if (!empty($params["remote_auth"]))
 		{
 			die(t("1"));
 		}	
 
-		if (is_array($_SESSION["auth_redir_post"]))
+		if (isset($_SESSION["auth_redir_post"]) && is_array($_SESSION["auth_redir_post"]))
 		{
 			header("Location: ".aw_ini_get("baseurl")."/automatweb/orb.aw");
 			die();
@@ -230,7 +230,7 @@ class users_user extends aw_template
 		{
 			$this->url = $user_obj->prop("after_login_redir");
 		}
-		$this->url = (strlen($this->url) > 0) ? $this->url : ($return != "" ? $return : $this->cfg["baseurl"]);
+		$this->url = (strlen($this->url) > 0) ? $this->url : (!empty($return) ? $return : $this->cfg["baseurl"]);
 		$this->login_successful = true;
 		if ($this->url[0] == "/")
 		{
@@ -256,7 +256,7 @@ class users_user extends aw_template
 	{
 		$user_inst = get_instance(CL_USER);
 		$gid_obj = $user_inst->get_highest_pri_grp_for_user($uid);
-		if(is_object($gid) && $gid_obj->prop("require_change_pass"))
+		if(is_object($gid_obj) && $gid_obj->prop("require_change_pass"))
 		{
 			return true;
 		}

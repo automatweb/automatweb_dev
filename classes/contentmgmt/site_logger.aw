@@ -41,7 +41,7 @@ class site_logger extends core
 
 		// now also, if we are in some fg incremental search, 
 		// log the "address" of that as well.
-		if ($GLOBALS["tbl_sk"] != "")
+		if (!empty($GLOBALS["tbl_sk"]))
 		{
 			$names = array();
 			$tbld = aw_global_get("fg_table_sessions");
@@ -83,7 +83,8 @@ class site_logger extends core
 				$msg = $ml_user["name"]." (".$ml_user["mail"].") vaatas lehte $path_str";
 			}
 		}
-		elseif($_REQUEST["t"])
+		else
+		if(!empty($_REQUEST["t"]))
 		{
 			$q = "UPDATE ml_sent_mails SET vars = '1' WHERE vars = '".$_REQUEST["t"]."'";
 			$this->db_query($q);

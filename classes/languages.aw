@@ -417,7 +417,7 @@ class languages extends aw_template
 		if (!is_admin())
 		{
 			// read the language from active lang
-			if ($GLOBALS["cfg"]["user_interface"]["use_site_lang"] == 1)
+			if (!empty($GLOBALS["cfg"]["user_interface"]["use_site_lang"]))
 			{
 				if (aw_ini_get("user_interface.full_content_trans"))
 				{

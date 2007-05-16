@@ -168,7 +168,7 @@ class doc_display extends aw_template
 
 
 		$ps = "";
-		if (( ($doc->prop("show_print")) && (!$_GET["print"]) && $arr["leadonly"] != 1))
+		if (( ($doc->prop("show_print")) && empty($_GET["print"]) && $arr["leadonly"] != 1))
 		{
 			$ps = $this->parse("PRINTANDSEND");
 		}
@@ -370,7 +370,7 @@ class doc_display extends aw_template
 	
 	function _get_edit_menu($menu)
 	{
-		if (!$this->prog_acl() || $_SESSION["no_display_site_editing"])
+		if (!$this->prog_acl() || !empty($_SESSION["no_display_site_editing"]))
 		{
 			return;
 		}
@@ -396,7 +396,7 @@ class doc_display extends aw_template
 			"text" => t("L&otilde;ika"),
 			"link" => $this->mk_my_orb("cut_doc", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
 		));
-		if ($this->can("view", $_SESSION["site_admin"]["cut_doc"]))
+		if (isset($_SESSION["site_admin"]["cut_doc"]) && $this->can("view", $_SESSION["site_admin"]["cut_doc"]))
 		{
 			$pm->add_item(array(
 				"text" => t("Kleebi"),
@@ -477,7 +477,7 @@ class doc_display extends aw_template
 			$doc_link = $ss_i->make_menu_link($doc, $lc);
 		}
 
-                if ($_GET["path"] != "")
+                if (!empty($_GET["path"]))
                 {
                         $new_path = array();
                         $path_ids = explode(",", $_GET["path"]);

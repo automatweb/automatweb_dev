@@ -24,7 +24,7 @@ class procurements_model extends class_base
 			"lang_id" => array(),
 			"site_id" => array(),
 			"offerers" => $co,
-			"state" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, PROCUREMENT_PUBLIC)
+		//	"state" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, PROCUREMENT_PUBLIC)
 		));
 	}
 

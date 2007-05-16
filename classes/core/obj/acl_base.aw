@@ -301,7 +301,7 @@ class acl_base extends db_connector
 		$g_pris = aw_global_get("gidlist_pri");	// this gets made in users::request_startup
 
 		$max_pri = 0;
-		$max_row = array();
+		$max_row = array("priority" => null);
 		$q = "
 			SELECT 
 				acl.id as acl_rel_id, 
@@ -394,7 +394,7 @@ class acl_base extends db_connector
 				}
 			}
 
-			$skip = ($oid == $orig_oid && $tacl["can_subs"] == 1);
+			$skip = ($oid == $orig_oid && !empty($tacl["can_subs"]));
 			if ($tacl["priority"] > $max_priority && !$skip)
 			{
 				$max_priority = $tacl["priority"];
@@ -457,7 +457,8 @@ class acl_base extends db_connector
 		$this->save_handle();
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
-			$fn = "acl-".$oid."-uid-".$_SESSION["uid"];
+			$_uid = isset($_SESSION["uid"]) ? $_SESSION["uid"] : "";
+			$fn = "acl-".$oid."-uid-".$_uid;
 			if (($str_max_acl = $acl_cache->file_get_pt_oid("acl", $oid, $fn)) == false)
 			{
 				$max_acl = $this->can_aw($access,$oid);
@@ -471,13 +472,9 @@ class acl_base extends db_connector
 			}
 		}
 
-		if ($GLOBALS["acl_dbg"] == 1)
-		{
-			echo "final final acl, asked for $access $oid = ".dbg::dump($max_acl)." <br>";
-		}
 		$access="can_".$access;
 		$this->restore_handle();
-		return $max_acl[$access];
+		return isset($max_acl[$access]) ? $max_acl[$access] : null;
 	}
 
 	function create_obj_access($oid,$uuid = "")

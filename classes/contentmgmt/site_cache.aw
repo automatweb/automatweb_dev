@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.40 2007/05/07 08:07:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.41 2007/05/16 14:02:42 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -103,10 +103,6 @@ class site_cache extends aw_template
 		
 		$cache = get_instance("cache");
 		$tmp = $cache->get(aw_global_get("raw_section"), $cp, aw_global_get("section"));
-		if ($GLOBALS["INTENSE_CACHE"] == 1)
-		{
-			echo "look for pagecache ".aw_global_get("raw_section")." cp = ".dbg::dump($cp)." <br>";
-		}
 		return $tmp;
 	}
 
@@ -149,9 +145,9 @@ class site_cache extends aw_template
 		$cp[] = aw_global_get("act_per_id");
 		$cp[] = aw_global_get("lang_id");
 		$cp[] = aw_global_get("ct_lang_id");
-		$cp[] = $_SESSION["doc_content_type"];
-		$cp[] = $_SESSION["nliug"];
-		if (is_array($_SESSION["menu_context"]))
+		$cp[] = isset($_SESSION["doc_content_type"]) ? $_SESSION["doc_content_type"] : null;
+		$cp[] = isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : null;
+		if (isset($_SESSION["menu_context"]) && is_array($_SESSION["menu_context"]))
 		{
 			$cp[] = join(",", $_SESSION["menu_context"]);
 		}

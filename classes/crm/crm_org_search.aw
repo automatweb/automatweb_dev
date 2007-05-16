@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.15 2007/02/26 21:35:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.16 2007/05/16 14:02:55 kristo Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -322,7 +322,7 @@ class crm_org_search extends class_base
 			};
 				
 			
-			if (is_oid($o->prop("url_id")))
+			if ($this->can("view", $o->prop("url_id")))
 			{
 				$url_obj = new object($o->prop("url_id"));
 				$url = $url_obj->prop("url");
@@ -333,7 +333,7 @@ class crm_org_search extends class_base
 				};
 			};
 
-			if (is_oid($o->prop("email_id")))
+			if ($this->can("view", $o->prop("email_id")))
 			{
 				$mail_obj = new object($o->prop("email_id"));
 				$mail = html::href(array(

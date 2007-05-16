@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.83 2007/05/07 08:07:05 kristo Exp $
+// $Id: cfgutils.aw,v 1.84 2007/05/16 14:02:41 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -376,7 +376,7 @@ class cfgutils extends aw_template
 					$properties[$k]["caption"]["text"] = $tmp;
 				}
 
-				$properties[$k]["orig_caption"] = $properties[$k]["caption"];
+				$properties[$k]["orig_caption"] = isset($properties[$k]["caption"]) ? $properties[$k]["caption"] : "";
 				
 				$t_str = "Omaduse ".$d["caption"]." (".$d["name"].") caption";
 				$tmp = t2($t_str);
@@ -634,7 +634,8 @@ class cfgutils extends aw_template
 			if ($clid == 7) $file = "doc";
 		}
 		$tft = 0;
-		if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+		$adm_ui_lc = null;
+		if (isset($GLOBALS['cfg']['user_interface']["default_language"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
 			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($file).".aw";
 			if (file_exists($trans_fn))

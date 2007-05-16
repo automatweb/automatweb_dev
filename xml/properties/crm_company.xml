@@ -3248,12 +3248,6 @@
                   <submit>no</submit>
                   <save>no</save>
             </documents_all_manage>
-            <sell_offers>
-                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gipakkumised</caption>
-                  <parent>documents_all</parent>
-                  <submit>no</submit>
-                  <save>no</save>
-            </sell_offers>
             <documents_news>
                   <caption>Siseuudised</caption>
                   <submit>no</submit>

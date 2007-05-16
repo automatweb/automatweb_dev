@@ -18,7 +18,7 @@ class msg_dispatch extends class_base
 	function post_message($arr)
 	{
 		error::raise_if(!isset($arr["msg"]), array(
-			"id" => ERR_NO_MSG, 
+			"id" => "ERR_NO_MSG", 
 			"msg" => t("msg_dispatch::post_message - no message posted!")
 		));
 
@@ -53,12 +53,12 @@ class msg_dispatch extends class_base
 	function post_message_with_param($arr)
 	{
 		error::raise_if(!isset($arr["msg"]), array(
-			"id" => ERR_NO_MSG, 
+			"id" => "ERR_NO_MSG", 
 			"msg" => t("msg_dispatch::post_message - no message posted!")
 		));
 
 		error::raise_if(!isset($arr["param"]), array(
-			"id" => ERR_NO_MSG, 
+			"id" => "ERR_NO_MSG", 
 			"msg" => t("msg_dispatch::post_message - no parameter for message posted!")
 		));
 
@@ -96,7 +96,7 @@ class msg_dispatch extends class_base
 		
 		$fc = $this->get_file(array("file" => $file));
 		error::raise_if($fc === false, array(
-			"id" => ERR_NO_SUCH_MESSAGE,
+			"id" => "ERR_NO_SUCH_MESSAGE",
 			"msg" => sprintf(t("msg_dispatch::post_message - no such message (%s) defined!"), $msg)
 		));
 

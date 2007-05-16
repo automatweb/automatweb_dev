@@ -362,7 +362,7 @@ class _int_object
 				{
 					// it is "RELTYPE_FOO"
 					// resolve it to numeric
-					if (!is_array($GLOBALS["relinfo"][$param["from.class_id"]]))
+					if (!isset($GLOBALS["relinfo"][$param["from.class_id"]]) || !is_array($GLOBALS["relinfo"][$param["from.class_id"]]))
 					{
 						// load class def
 						_int_object::_int_load_properties($param["from.class_id"]);
@@ -426,16 +426,16 @@ class _int_object
 			}
 		}
 
-		if ($param["sort_by"] != "")
+		if (!empty($param["sort_by"]))
 		{
 			usort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
 		}
-		if ($param["sort_by_num"] != "")
+		if (!empty($param["sort_by_num"]))
 		{
 			uasort($ret, create_function('$a,$b', 'return ($a->prop("'.$param["sort_by_num"].'") == $b->prop("'.$param["sort_by_num"].'") ? 0 : ($a->prop("'.$param["sort_by_num"].'") > $b->prop("'.$param["sort_by_num"].'") ? 1 : -1 ));'));
 		}
 
-		if($param['sort_dir'] == 'desc')
+		if(isset($param['sort_dir']) && $param['sort_dir'] == 'desc')
 		{
 			return array_reverse($ret);
 		}
@@ -1243,7 +1243,7 @@ class _int_object
 			 $propi["type"] == "relmanager" || 
 			($propi["type"] == "classificator" && $propi["store"] == "connect") ||
 			($propi["type"] == "popup_search" && $propi["reltype"] != "") ||
-			($propi["type"] == "chooser" && $propi["store"] == "connect" || $propi["reltype"] != "")
+			($propi["type"] == "chooser" && $propi["store"] == "connect" || !empty($propi["reltype"]))
 			))
 		{
 			$_rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"];
@@ -1553,12 +1553,12 @@ class _int_object
 		}
 		$trans = false;
 		$cur_lid = false;
-		if ($GLOBALS["cfg"]["user_interface"]["content_trans"] == 1 && ($cur_lid = aw_global_get("lang_id")) != $this->lang_id())
+		if (!empty($GLOBALS["cfg"]["user_interface"]["content_trans"]) && ($cur_lid = aw_global_get("lang_id")) != $this->lang_id())
 		{
 			$trans = true;
 		}
 
-		if ($GLOBALS["cfg"]["user_interface"]["full_content_trans"] == 1 && ($cl = aw_global_get("ct_lang_id")) != $this->lang_id())
+		if (!empty($GLOBALS["cfg"]["user_interface"]["full_content_trans"]) && ($cl = aw_global_get("ct_lang_id")) != $this->lang_id())
 		{
 			$trans = true;
 			$cur_lid = $cl;

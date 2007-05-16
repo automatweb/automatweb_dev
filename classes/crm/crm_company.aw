@@ -1043,7 +1043,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 		@groupinfo documents_all_browse caption="Dokumendid" parent=documents_all submit=no save=no
 		@groupinfo documents_all_manage caption="Haldus" parent=documents_all submit=no save=no
 
-@groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
+groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
 
 	@groupinfo documents_news caption="Siseuudised" submit=no parent=general submit_method=get save=no
 	@groupinfo documents_forum caption="Foorum" submit=no parent=people

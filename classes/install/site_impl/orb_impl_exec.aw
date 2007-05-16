@@ -59,7 +59,7 @@ $orb = new orb();
 $orb->process_request(array(
 	"class" => $class,
 	"action" => $action,
-	"reforb" => $vars["reforb"],
+	"reforb" => isset($vars["reforb"]) ? $vars["reforb"] : null,
 	"user"	=> 1,
 	"vars" => $vars,
 	"silent" => false,

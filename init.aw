@@ -391,7 +391,7 @@ function lc_init()
 	}
 
 	// translate class names if it is so said
-	if (isset($GLOBALS["cfg"]["user_interface"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+	if (isset($GLOBALS["cfg"]["user_interface"]["default_language"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 	{
 		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/aw.ini.aw";
 		if (file_exists($trans_fn))
@@ -579,7 +579,7 @@ function classload($args)
 			{
 				$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
 
-				if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+				if (isset($GLOBALS['cfg']['user_interface']["default_language"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 				{
 					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib);
 					if (file_exists($trans_fn))
@@ -708,7 +708,7 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 		}
 
 		// also load translations
-		if (isset($GLOBALS["cfg"]["user_interface"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+		if (isset($GLOBALS["cfg"]["user_interface"]["default_language"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
 			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
 //echo "get_instance: tf = $trans_fn <br>";
@@ -734,7 +734,6 @@ if (!empty($GLOBALS["TRACE_INSTANCE"]))
 		{
 			$instance = false;
 		};
-
 	// now register default members - we do this here, because they might have changed
 	// from the last time that the instance was created
 	$members = aw_cache_get("__aw_default_class_members", $lib);
@@ -908,7 +907,7 @@ function aw_shutdown()
 
 
 	global $awt;
-	if (is_object($awt) && $GLOBALS["cfg"]["debug"]["profile"] == 1)
+	if (is_object($awt) && !empty($GLOBALS["cfg"]["debug"]["profile"]))
 	{
 		$sums = $awt->summaries();
 
@@ -980,7 +979,7 @@ function &__get_site_instance()
 
 function enter_function($name,$args = array())
 {
-	if ($GLOBALS["cfg"]["debug"]["profile"] != 1)
+	if (!empty($GLOBALS["cfg"]["debug"]["profile"]))
 	{
 		return;
 	}
@@ -999,7 +998,7 @@ function enter_function($name,$args = array())
 
 function exit_function($name,$ret = "")
 {
-	if ($GLOBALS["cfg"]["debug"]["profile"] != 1)
+	if (!empty($GLOBALS["cfg"]["debug"]["profile"]))
 	{
 		return;
 	}

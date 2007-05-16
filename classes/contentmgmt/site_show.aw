@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.232 2007/05/15 08:46:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.233 2007/05/16 14:02:43 kristo Exp $
 
 /*
 
@@ -25,6 +25,7 @@ class site_show extends class_base
 	var $right_pane;		// whether to show RIGHT_PANE sub
 	var $active_doc;		// if only a single document is shownm this will contain the docid
 	var $site_title;		// the title for the site should be put in here
+	var $brother_level_from;
 
 	var $cache;				// cache class instance
 
@@ -59,11 +60,11 @@ class site_show extends class_base
 			return $this->_show_type($arr);
 		}
 
-		if ($_GET["set_doc_content_type"])
+		if (!empty($_GET["set_doc_content_type"]))
 		{
 			$_SESSION["doc_content_type"] = $_GET["set_doc_content_type"];
 		}
-		if ($_GET["clear_doc_content_type"])
+		if (!empty($_GET["clear_doc_content_type"]))
 		{
 			unset($_SESSION["doc_content_type"]);
 		}
@@ -508,6 +509,7 @@ class site_show extends class_base
 
 	function get_default_document($arr = array())
 	{
+		$docid = null;
 		if (isset($arr["docid"]) && $arr["docid"])
 		{
 			return $arr["docid"];
@@ -538,7 +540,7 @@ class site_show extends class_base
 		}
 
 		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
-		if ($obj->class_id() != CL_PROMO && ($obj->meta("has_kwd_rels") || $_GET["set_kw"]))
+		if ($obj->class_id() != CL_PROMO && ($obj->meta("has_kwd_rels") || !empty($_GET["set_kw"])))
 		{
 			// list all documents that have the same kwywords as this menu.
 			// so first, get this menus keywords
@@ -756,7 +758,7 @@ class site_show extends class_base
 					"type" => array("RELTYPE_DOCS_FROM_MENU","RELTYPE_NO_DOCS_FROM_MENU")
 				));
 
-				if ($_SESSION["doc_content_type"])
+				if (!empty($_SESSION["doc_content_type"]))
 				{
 					$filter["doc_content_type"] = $_SESSION["doc_content_type"]; 
 				}
@@ -818,7 +820,7 @@ class site_show extends class_base
 
 			$has_rand = false;
 
-			if (is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
+			if (isset($section) && is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
 			{
 				$nol = true;
 				$filter["parent"] = $sections;
@@ -842,7 +844,7 @@ class site_show extends class_base
 
 			$docid = array();
 			$cnt = 0;
-			if ($ordby == "")
+			if (empty($ordby))
 			{
 				if ($obj->meta("sort_by") != "")
 				{
@@ -944,7 +946,7 @@ class site_show extends class_base
 				}
 			}
 
-			if ($arr["all_langs"])
+			if (!empty($arr["all_langs"]))
 			{
 				$filter["lang_id"] = array();
 			}
@@ -1239,7 +1241,7 @@ class site_show extends class_base
 
 	function do_show_documents(&$arr)
 	{
-		$disp = ($GLOBALS["real_no_menus"] == 1) || ($_REQUEST["only_document_content"]) || ($this->sel_section_obj->prop("no_menus") == 1 || $GLOBALS["print"] || 1 == $arr["content_only"]);
+		$disp = !empty($GLOBALS["real_no_menus"]) || !empty($_REQUEST["only_document_content"]) || ($this->sel_section_obj->prop("no_menus") == 1 || !empty($GLOBALS["print"]) || !empty($arr["content_only"]));
 
 		if (!$disp)
 		{
@@ -1266,12 +1268,12 @@ class site_show extends class_base
 			$docc = $arr["text"];
 		}
 
-		if ($GLOBALS["real_no_menus"] == 1)
+		if (!empty($GLOBALS["real_no_menus"]))
 		{
 			die($docc);
 		}
 
-		if ($_REQUEST["only_document_content"])
+		if (!empty($_REQUEST["only_document_content"]))
 		{
 			$this->read_template("main_only_document_content.tpl");
 			$this->vars(array(
@@ -1281,7 +1283,7 @@ class site_show extends class_base
 			return $this->parse();
 		}
 
-		if ($this->sel_section_obj->prop("no_menus") == 1 || $GLOBALS["print"] || 1 == $arr["content_only"])
+		if ($this->sel_section_obj->prop("no_menus") == 1 || !empty($GLOBALS["print"]) || !empty($arr["content_only"]))
 		{
 			if (aw_ini_get("menuedit.print_template"))
 			{
@@ -1325,6 +1327,9 @@ class site_show extends class_base
 		$imgs = false;
 		$smi = "";
 		$sel_image = "";
+		$sel_image_url = "";
+		$sel_image_link = "";
+		$sel_menu_o_img_url = "";
 
 
 		$cnt = count($this->path);
@@ -1455,7 +1460,7 @@ class site_show extends class_base
 		}
 		for($i = 0; $i < aw_ini_get("menuedit.num_menu_images"); $i++)
 		{
-			if ($sius[$i] != "")
+			if (!empty($sius[$i]))
 			{
 				$this->vars(array(
 					"HAS_SEL_MENU_IMAGE_URL_".($i) => $this->parse("HAS_SEL_MENU_IMAGE_URL_".($i))
@@ -1469,7 +1474,7 @@ class site_show extends class_base
 			}
 		}
 
-		$has_smu = $no_smu;
+		$has_smu = $no_smu = "";
 		if ($sel_image_url != "")
 		{
 			$has_smu = $this->parse("HAS_SEL_MENU_IMAGE_URL");
@@ -1658,7 +1663,7 @@ class site_show extends class_base
 		// all shown tables (and yeah, I know it is gonna be friggin huge.
 		// and no, I can't remove the old ones, cause the user might have other windows open
 		// and if I remove all the other ones from the array, he will lose the yah link in other windows
-		if ($GLOBALS["tbl_sk"] != "")
+		if (!empty($GLOBALS["tbl_sk"]))
 		{
 			$tbld = aw_global_get("fg_table_sessions");
 			$ar = new aw_array($tbld[$GLOBALS["tbl_sk"]]);
@@ -1721,6 +1726,7 @@ class site_show extends class_base
 			));
 			return "";
 		}		
+		$num = 0;
 		foreach($lar as $row)
 		{
 			if (is_oid($row["oid"]) && !$this->can("view", $row["oid"]))
@@ -1776,6 +1782,10 @@ class site_show extends class_base
 				"img_url" => $img_url,
 				"sel_img_url" => $sel_img_url
 			));
+			if (!isset($l[$grp]))
+			{
+				$l[$grp] = "";
+			}
 			if ($row["id"] == $lang_id)
 			{
 				if ($num == count($lar) && $this->is_template("SEL_LANG".$grp_spec."_END"))
@@ -2008,7 +2018,7 @@ class site_show extends class_base
 		$tmp = aw_ini_get("classes");
 		foreach($tmp as $clid => $cldef)
 		{
-			if ($cldef["subtpl_handler"] != "")
+			if (!empty($cldef["subtpl_handler"]))
 			{
 				$handler_for = explode(",", $cldef["subtpl_handler"]);
 				$ask_content = array();
@@ -2811,7 +2821,7 @@ class site_show extends class_base
 
 		$clss = aw_ini_get("classes");
 
-		if ($this->section_obj->class_id() && isset($clss[$this->section_obj->class_id()]) && !$_GET["class"])
+		if ($this->section_obj->class_id() && isset($clss[$this->section_obj->class_id()]) && empty($_GET["class"]))
 		{
 			if ($this->section_obj->class_id() != CL_MENU) // menu is a large class and this is what it is 99% of the time and it has no handler. so don't load
 			{
@@ -2848,7 +2858,7 @@ class site_show extends class_base
 		}
 
 		//if (is_object($this->section_obj))
-		if ($_GET["path"] != "")
+		if (!empty($_GET["path"]))
 		{
 			$p_ids = explode(",", $_GET["path"]);
 			$this->path = array();
@@ -2967,7 +2977,7 @@ class site_show extends class_base
 		}
 	}
 
-	function __helper_menu_edit($menu, $area, $level)
+	function __helper_menu_edit($menu)
 	{
 		if (!$this->prog_acl() || $_SESSION["no_display_site_editing"])
 		{

@@ -1944,7 +1944,7 @@ class user extends class_base
 			$cache[$uid][$no_user_grp] = $rv;
 			return $rv;
 		}
-		$groups = &$this->get_groups_for_user($uid);
+		$groups = $this->get_groups_for_user($uid);
 		if(!$groups)
 		{
 			$cache[$uid][$no_user_grp] = false;
@@ -1954,10 +1954,10 @@ class user extends class_base
 			"prop" => "priority",
 			"order" => "desc"
 		));
-		if (!no_user_grp)
+		if ($no_user_grp)
 		{
 			$tmp = $groups->begin();
-			$rv = $tmp->next();
+			$rv = $groups->next();
 			$cache[$uid][$no_user_grp] = $rv;
 			return $rv;
 		}
