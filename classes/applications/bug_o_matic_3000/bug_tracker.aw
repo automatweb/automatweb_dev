@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.98 2007/04/26 11:16:49 voldemar Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.98 2007/04/26 11:16:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.99 2007/05/16 09:02:31 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.99 2007/05/16 09:02:31 voldemar Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -1730,18 +1730,13 @@ class bug_tracker extends class_base
 				t("5"),
 			),
 		));
+
 		$t->define_field(array(
-			"name" => "bug_severity",
-			"caption" => t("T&otilde;sidus"),
+			"name" => "num_hrs_guess",
+			"caption" => t("P"),
+			"tooltip" => t("Prognoositud tunde"),
 			"sortable" => 1,
 			"numeric" => 1,
-			"filter" => array(
-				t("1"),
-				t("2"),
-				t("3"),
-				t("4"),
-				t("5"),
-			),
 		));
 
 		$t->define_field(array(
