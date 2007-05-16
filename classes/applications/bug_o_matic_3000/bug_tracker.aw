@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.99 2007/05/16 09:02:31 voldemar Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.99 2007/05/16 09:02:31 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.100 2007/05/16 09:04:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.100 2007/05/16 09:04:46 voldemar Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -2015,6 +2015,7 @@ class bug_tracker extends class_base
 				"createdby" => $p->name(),
 				"created" => $bug->created(),
 				"deadline" => $bug->prop("deadline"),
+				"num_hrs_guess" => $bug->prop("num_hrs_guess"),
 				"id" => $bug->id(),
 				"oid" => $bug->id(),
 				"sort_priority" => $bug_i->get_sort_priority($bug),
