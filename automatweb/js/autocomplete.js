@@ -633,6 +633,7 @@ function awActb(obj, valueObj)
 		{
 			var words = new Array(actb_curr.value);
 			var newSplits = null;
+			var delimiter = null;
 			var value = new Array();
 
 			for (i in actb_self.actb_delimiter)
@@ -645,6 +646,7 @@ function awActb(obj, valueObj)
 				}
 
 				words = newSplits;
+				delimiter = actb_self.actb_delimiter[i];
 			}
 
 			for (i in words)
@@ -659,7 +661,7 @@ function awActb(obj, valueObj)
 				}
 			}
 
-			value = value.join(actb_self.actb_delimiter);
+			value = value.join(delimiter);
 		}
 		else
 		{
