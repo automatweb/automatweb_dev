@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.47 2007/05/16 11:14:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.46 2007/05/16 11:11:50 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -1045,10 +1045,6 @@ class calendar_view extends class_base
 				{
 					$data = $event;
 					$evt_obj = new object($event["id"]);
-					if ($this->obj_inst->prop("actives_only") && $evt_obj->status() != STAT_ACTIVE)
-					{
-						continue;
-					}
 					$data = $evt_obj->properties() + $data;
 					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
