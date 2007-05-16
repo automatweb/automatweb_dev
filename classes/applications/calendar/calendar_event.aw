@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.20 2007/05/16 11:11:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.21 2007/05/16 14:17:38 markop Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -17,6 +17,8 @@
 @property end type=datetime_select field=end 
 @caption Lõpeb
 
+@property level type=select field=level
+@caption Tase
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -132,6 +134,10 @@
 
 @reltype UTEXTVAR10 value=4 clid=CL_META
 @caption RELTYPE_UTEXTVAR10
+
+@reltype SECTION value=4 clid=CL_CRM_SECTION
+@caption Tegevusala
+
 */
 
 class calendar_event extends class_base
@@ -142,8 +148,26 @@ class calendar_event extends class_base
 			"tpldir" => "applications/calendar/calendar_event",
 			"clid" => CL_CALENDAR_EVENT
 		));
+		
+		$this->level_options = array("V&auml;lismaal toimuv", "&uuml;leriikliku t&auml;htsusega", "kohaliku t&auml;htsusega");
+
 	}
 
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		if ("planner" == $tbl)
+		{
+			switch($field)
+			{
+				case "level":
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => "int",
+					));
+					return true;
+			}
+		}
+	}
 
 	function set_property($arr = array())
 	{
@@ -168,6 +192,12 @@ class calendar_event extends class_base
 	{
 		$retval = PROP_OK;
 		$prop = &$arr["prop"];
+		switch($prop["name"])
+		{
+			case "level":
+				$prop["options"] = $this->level_options;
+				break;
+		}
 		if ($arr["obj_inst"])
 		{
 			$meta = $arr["obj_inst"]->meta();
