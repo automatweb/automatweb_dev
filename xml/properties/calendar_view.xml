@@ -265,6 +265,11 @@
                   <clid>CL_EVENT_SEARCH</clid>
                   <caption>Otsing</caption>
             </SEARCH>
+		<EVENT_VALIDATOR>
+			<value>5</value>
+			<clid>CL_FORM_CONTROLLER</clid>
+			<caption>S&amp;uuml;ndmuste n&amp;auml;itamise kontroller</caption>
+		</EVENT_VALIDATOR>
       </reltypes>
 </properties>
 

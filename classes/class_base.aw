@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.547 2007/05/14 08:40:28 kristo Exp $
+// $Id: class_base.aw,v 2.548 2007/05/16 11:11:51 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -140,7 +140,6 @@ class class_base extends aw_template
 	function init_storage_object($arr)
 	{
 		$this->use_mode = "new";
-
 		$this->parent = $arr["parent"];
 		$this->id = "";
 		$this->new = 1;
@@ -244,7 +243,6 @@ class class_base extends aw_template
 		{
 			$this->no_buttons = true;
 		}
-
 		if ($args["action"] == "new")
 		{
 			$this->init_storage_object($args);
@@ -740,7 +738,7 @@ class class_base extends aw_template
 		{
 			$orb_class = $cls_id;
 		};
-
+		
 		$argblock = array(
 			"id" => $this->id,
 			// this should refer to the active group
@@ -1156,11 +1154,20 @@ class class_base extends aw_template
 			}
 		}
 
+
 		if (!$save_ok)
 		{
 			return $this->abort_action($args);
 		}
 
+		if ($this->can("view", $request["cfgform"]))
+		{
+			$co = obj($request["cfgform"]);
+			if ($co->prop("cfgview_ru") != "")
+			{
+				return $co->prop("cfgview_ru");
+			}
+		}
 		return $retval;
 	}
 

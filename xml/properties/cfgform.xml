@@ -469,6 +469,16 @@
             <size>10</size>
             <caption>N&amp;amp;auml;idatavad tabid</caption>
       </property>
+      <property>
+            <name>cfgview_ru</name>
+            <table>objects</table>
+            <group>cfgview_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Aadress kuhu suunata</caption>
+      </property>
+
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>

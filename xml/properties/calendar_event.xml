@@ -245,6 +245,9 @@
             <type>classificator</type>
             <field>utextvar10</field>
             <caption></caption>
+		<store>connect</store>
+		<reltype>RELTYPE_UTEXTVAR10</reltype>
+		<multiple>1</multiple>
       </property>
       <property>
             <name>aliasmgr</name>
@@ -333,6 +336,11 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
+		<UTEXTVAR10>
+			<value>4</value>
+			<clid>CL_META</clid>
+			<caption>UTEXTVAR10</caption>
+		</UTEXTVAR10>
       </reltypes>
 </properties>
 

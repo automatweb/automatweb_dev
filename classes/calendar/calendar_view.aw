@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.45 2007/03/28 10:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.47 2007/05/16 11:14:55 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -101,6 +101,8 @@
 @reltype SEARCH value=4 clid=CL_EVENT_SEARCH
 @caption Otsing
 
+@reltype EVENT_VALIDATOR value=5 clid=CL_FORM_CONTROLLER
+@caption S&uuml;ndmuste n&auml;itamise kontroller
 */
 
 
@@ -475,6 +477,9 @@ class calendar_view extends class_base
 			$cal_inst = &$arr["cal_inst"];
 			$first_image = $cal_inst->has_feature("first_image");
 			$project_media = $cal_inst->has_feature("project_media");
+
+			$event_validator = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EVENT_VALIDATOR");
+
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
@@ -503,6 +508,14 @@ class calendar_view extends class_base
 						$varx["item_end"] = $event["end"];
 					}
 
+					if ($event_validator)
+					{
+						$i = $event_validator->instance();
+						if (!$i->eval_controller($event_validator->id(), $evt_obj))
+						{
+							continue;
+						}
+					}
 					$arr["cal_inst"]->add_item($varx);
 				};
 
@@ -1016,6 +1029,7 @@ class calendar_view extends class_base
 				"caption" => t("&gt;&gt;"),
 			));
 
+			$event_validator = $this->obj_inst->get_first_obj_by_reltype("RELTYPE_EVENT_VALIDATOR");
 			$rv .= "<br>";
 			foreach ($conns as $conn)
 			{
@@ -1031,9 +1045,22 @@ class calendar_view extends class_base
 				{
 					$data = $event;
 					$evt_obj = new object($event["id"]);
+					if ($this->obj_inst->prop("actives_only") && $evt_obj->status() != STAT_ACTIVE)
+					{
+						continue;
+					}
 					$data = $evt_obj->properties() + $data;
 					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
+					if ($event_validator)
+                                        {
+                                                $i = $event_validator->instance();
+                                                if (!$i->eval_controller($event_validator->id(), $evt_obj))
+                                                {
+                                                        continue;
+                                                }
+                                        }
+
 					$vcal->add_item(array(
 						"item_start" => $event["start"],
 						"item_end" => $event["end"],

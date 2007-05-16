@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.118 2007/05/14 08:40:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.119 2007/05/16 11:11:52 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -179,6 +179,8 @@
 	@property cfgview_grps type=select multiple=1 size=10 field=meta method=serialize
 	@caption N&auml;idatavad tabid
 
+	@property cfgview_ru type=textbox field=meta method=serialize
+	@caption Aadress kuhu suunata
 
 // ---------- RELATIONS -------------
 
@@ -2960,6 +2962,7 @@ class cfgform extends class_base
 		// make request
 		classload("core/orb/orb");
 		$orb = new orb();
+		$vars["action"] = $action;
 		$orb->process_request(array(
 			"class" => $class,
 			"action" => $action,

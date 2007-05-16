@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.19 2007/05/09 09:51:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.20 2007/05/16 11:11:49 kristo Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -96,7 +96,7 @@
 @property utextvar9 type=classificator
 @caption 
 
-@property utextvar10 type=classificator
+@property utextvar10 type=classificator store=connect reltype=RELTYPE_UTEXTVAR10
 @caption 
 
 @property aliasmgr type=aliasmgr no_caption=1 store=no
@@ -130,6 +130,8 @@
 @reltype RECURRENCE value=3 clid=CL_RECURRENCE
 @caption Kordus
 
+@reltype UTEXTVAR10 value=4 clid=CL_META
+@caption RELTYPE_UTEXTVAR10
 */
 
 class calendar_event extends class_base
