@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.77 2007/04/12 22:42:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.78 2007/05/16 10:41:48 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -65,6 +65,9 @@
 	
 	property email type=textbox
 	caption E-mail
+	
+	property created type=hidden
+	
 
 #TRADEMARK
 @groupinfo name=trademark caption=Kaubam&auml;rk
@@ -209,7 +212,7 @@ default group=web
 @caption Garantiip&otilde;hikiri
 
 @reltype PAYMENT_ORDER value=14 clid=CL_FILE
-@caption Volikiri
+@caption Maksekorraldus
 
 @reltype TRADEMARK_STATUS value=15 clid=CL_TRADEMARK_STATUS
 @caption Staatus
@@ -851,10 +854,18 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 						), CL_PATENT),
 					));
 				}
-				else
+/*				elseif($var == "payment_order")
 				{
 					$data[$var."_value"] = html::href(array(
-						"url" => $file_inst->get_url($file->id(), $file->name()),
+						"url" => $this->mk_my_orb("show_payment_order", array("id" => $file->id())),
+						"caption" => $file->name(),
+						"target" => "New window",
+					));
+				}
+*/				else
+				{
+					$data[$var."_value"] = html::href(array(
+						"url" => str_replace("https" , "http" , $file_inst->get_url($file->id(), $file->name())),
 						"caption" => $file->name(),
 						"target" => "New window",
 					));
@@ -864,6 +875,29 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 		$data["procurator_text"] = $o->prop_str("procurator");
 		$data["signatures"] = $this->get_signatures($id);
 		return $data;
+	}
+
+	/**
+		@attrib name=show_payment_ordermake  params=name all_args=1 api=1
+	**/
+	function show_payment_order($arr)
+	{
+		
+		
+		$file_inst = get_instance(CL_FILE);
+		$mm_type="application/octet-stream";
+		$fc = $file_inst->get_file_by_id($arr["id"]);
+		header("Cache-Control: public, must-revalidate");
+		header("Pragma: hack");
+		header("Content-Type: " . $mm_type);
+		header("Content-Length: " .(string)(filesize($url)) );
+		header('Content-Disposition: attachment; filename="'.$fc["name"].'"');
+		header("Content-Transfer-Encoding: binary\n");
+		$fp = fopen($fc["properties"]["file"], 'rb');
+		$buffer = fread($fp, filesize($fc["properties"]["file"]));
+		fclose ($fp);
+		header("Content-Length: " .(string)(filesize($fc["properties"]["file"])) );
+		print $buffer;
 	}
 
 	/**
@@ -2666,7 +2700,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			$address->set_prop("riik" , $address_inst->get_country_by_code($val["country_code"], $applicant->id()));
 			if($val["city"])
 			{
-				$citys = new object_list(array("lang_id" => 1, "class_id" => CL_CRM_CITY, "name" => $val["city"] , "parent" => $applicant->id()));
+				$citys = new object_list(array("lang_id" => 1, "class_id" => CL_CRM_CITY, "name" => $val["city"]));
 				if(!is_object($city = reset($citys->arr())))
 				{
 					$city = new object();
