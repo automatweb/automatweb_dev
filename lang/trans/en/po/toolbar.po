@@ -55,18 +55,18 @@ msgstr "Are You sure You want to go on this site?"
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/vcl/toolbar.aw:538 classes/vcl/toolbar.aw:546
+#: classes/vcl/toolbar.aw:539 classes/vcl/toolbar.aw:547
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/vcl/toolbar.aw:569
+#: classes/vcl/toolbar.aw:570
 msgid "Kustuta valitud objektid"
 msgstr "Delete selected objects"
 
-#: classes/vcl/toolbar.aw:583
+#: classes/vcl/toolbar.aw:584
 msgid "Kustuta valitud seosed"
 msgstr ""
 
-#: classes/vcl/toolbar.aw:596
+#: classes/vcl/toolbar.aw:597
 msgid "Salvesta"
 msgstr ""

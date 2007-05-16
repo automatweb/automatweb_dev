@@ -79,67 +79,67 @@ msgstr ""
 msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
-#: classes/class_base.aw:551
+#: classes/class_base.aw:558
 msgid "T&otilde;lgi"
 msgstr ""
 
-#: classes/class_base.aw:574
+#: classes/class_base.aw:581
 msgid "Rohkem infot"
 msgstr ""
 
-#: classes/class_base.aw:575
+#: classes/class_base.aw:582
 msgid "Peida &auml;ra"
 msgstr ""
 
-#: classes/class_base.aw:576
+#: classes/class_base.aw:583
 msgid "Abiinfo"
 msgstr ""
 
-#: classes/class_base.aw:640
+#: classes/class_base.aw:647
 msgid "tab panel"
 msgstr ""
 
-#: classes/class_base.aw:871
+#: classes/class_base.aw:878
 msgid "Lisainfo grupi kohta puudub"
 msgstr ""
 
-#: classes/class_base.aw:1419
+#: classes/class_base.aw:1425
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1427
+#: classes/class_base.aw:1433
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1464
+#: classes/class_base.aw:1470
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1671 classes/class_base.aw:5021
-#: classes/class_base.aw:5032
+#: classes/class_base.aw:1677 classes/class_base.aw:5027
+#: classes/class_base.aw:5038
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:1685
+#: classes/class_base.aw:1691
 msgid "Andmed salvestatud!"
 msgstr ""
 
-#: classes/class_base.aw:3524
+#: classes/class_base.aw:3530
 msgid "See v&auml;li ei tohi olla t&uuml;hi!"
 msgstr ""
 
-#: classes/class_base.aw:3533
+#: classes/class_base.aw:3539
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4918
+#: classes/class_base.aw:4924
 msgid "%s is not a valid configuration form!"
 msgstr ""
 
-#: classes/class_base.aw:5334
+#: classes/class_base.aw:5340
 msgid "T&otilde;lge aktiivne"
 msgstr ""
 
-#: classes/class_base.aw:5342
+#: classes/class_base.aw:5348
 msgid "Salvesta"
 msgstr ""

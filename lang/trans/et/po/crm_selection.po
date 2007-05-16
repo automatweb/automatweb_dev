@@ -136,11 +136,11 @@ msgid "kommentaar"
 msgstr ""
 
 #: classes/crm/crm_selection.aw:278
-msgid "Objektide kopeerimine valimisse "
+msgid "Objektide kopeerimine valimisse"
 msgstr ""
 
 #: classes/crm/crm_selection.aw:308
-msgid "Objektide liigutamine valimisse "
+msgid "Objektide liigutamine valimisse"
 msgstr ""
 
 #: classes/crm/crm_selection.aw:442
@@ -172,5 +172,5 @@ msgid "templiit määramata"
 msgstr ""
 
 #: classes/crm/crm_selection.aw:598
-msgid " valim tühi, või objekte pole aktiivseks tehtud"
+msgid "valim tühi, või objekte pole aktiivseks tehtud"
 msgstr ""

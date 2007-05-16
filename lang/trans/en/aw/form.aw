@@ -1,5 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Sessioonist lugemise formi pole valitud v&auml;ljundile %s "] = "No session reading form is set for output %s";
 $GLOBALS["TRANS"]["No table selected for showing search results for form %s!"] = "No table selected for showing search results for form %s!";
 $GLOBALS["TRANS"]["form->search(%s): no forms selected as search targets!"] = "form->search(%s): no forms selected as search targets!";
 $GLOBALS["TRANS"]["No forms selected as search targets!"] = "No forms selected as search targets!";

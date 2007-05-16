@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/expp/expp_va.aw:class_989_help
-msgid "Klassi Expp väljaanne help"
+msgid "Klassi Expp v&auml;ljaanne help"
 msgstr ""
 
 #: classes/expp/expp_va.aw:828

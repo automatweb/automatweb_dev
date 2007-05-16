@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/room_settings.aw:class_1188_help
 msgid "Klassi Ruumi seaded help"
 msgstr ""
@@ -242,6 +241,18 @@ msgstr ""
 msgid "Omaduse Hiljuti muudetud reserveeringud (col_recent) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_comment_pos
+msgid "Omaduse Kuva kommentaar (comment_pos) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_comment_pos_comment
+msgid "Omaduse Kuva kommentaar (comment_pos) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_comment_pos_help
+msgid "Omaduse Kuva kommentaar (comment_pos) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:prop_buffer_time_string
 msgid "Omaduse Puhveraja string (buffer_time_string) caption"
 msgstr ""
@@ -324,6 +335,18 @@ msgstr ""
 
 #: classes/common/room_settings.aw:prop_no_cust_arrived_pop_help
 msgid "Omaduse Kliendi saabumise kinnitust pole vaja k&uuml;sida (no_cust_arrived_pop) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_use_existing_person
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_use_existing_person_comment
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_use_existing_person_help
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_bron_required_fields
@@ -690,71 +713,70 @@ msgstr ""
 msgid "Seose Grupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:228
+#: classes/common/room_settings.aw:234
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:231
+#: classes/common/room_settings.aw:237
 msgid "#ord# - tellimuse sisu<br>#reason# - kinnituse eemaldamise p&ouml;hjus"
 msgstr ""
 
-#: classes/common/room_settings.aw:243
+#: classes/common/room_settings.aw:249
 msgid "sisu tuleb common/room/preview.tpl failist"
 msgstr ""
 
-#: classes/common/room_settings.aw:496
+#: classes/common/room_settings.aw:505
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:502
+#: classes/common/room_settings.aw:511
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:540
+#: classes/common/room_settings.aw:549
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:545
+#: classes/common/room_settings.aw:554
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:551
+#: classes/common/room_settings.aw:560
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:557 classes/common/room_settings.aw:569
+#: classes/common/room_settings.aw:566 classes/common/room_settings.aw:578
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:563
+#: classes/common/room_settings.aw:572
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:576
+#: classes/common/room_settings.aw:585
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:582
+#: classes/common/room_settings.aw:591
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:588
+#: classes/common/room_settings.aw:597
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:599
+#: classes/common/room_settings.aw:608
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:600
+#: classes/common/room_settings.aw:609
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:601
+#: classes/common/room_settings.aw:610
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:641
+#: classes/common/room_settings.aw:650
 msgid "Vali"
 msgstr ""
-

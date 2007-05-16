@@ -85,6 +85,18 @@ msgstr ""
 msgid "Omaduse Tootepildi j&auml;rjekorranumber, mida kuvada (cal_show_prod_img_ord) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_cal_refresh_time
+msgid "Omaduse Mitme minuti tagant kalendrit refreshida (cal_refresh_time) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_refresh_time_comment
+msgid "Omaduse Mitme minuti tagant kalendrit refreshida (cal_refresh_time) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_cal_refresh_time_help
+msgid "Omaduse Mitme minuti tagant kalendrit refreshida (cal_refresh_time) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:prop_disp_bron_len
 msgid "Omaduse &Auml;ra kuva aja pikkust kalendris (disp_bron_len) caption"
 msgstr ""
@@ -229,6 +241,18 @@ msgstr ""
 msgid "Omaduse Hiljuti muudetud reserveeringud (col_recent) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:prop_comment_pos
+msgid "Omaduse Kuva kommentaar (comment_pos) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_comment_pos_comment
+msgid "Omaduse Kuva kommentaar (comment_pos) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_comment_pos_help
+msgid "Omaduse Kuva kommentaar (comment_pos) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:prop_buffer_time_string
 msgid "Omaduse Puhveraja string (buffer_time_string) caption"
 msgstr ""
@@ -311,6 +335,18 @@ msgstr ""
 
 #: classes/common/room_settings.aw:prop_no_cust_arrived_pop_help
 msgid "Omaduse Kliendi saabumise kinnitust pole vaja k&uuml;sida (no_cust_arrived_pop) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_use_existing_person
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_use_existing_person_comment
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_use_existing_person_help
+msgid "Omaduse Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt (use_existing_person) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_bron_required_fields
@@ -407,6 +443,90 @@ msgstr ""
 
 #: classes/common/room_settings.aw:prop_del_mail_ct_help
 msgid "Omaduse Meili sisu (del_mail_ct) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_send_uv_mail
+msgid "Omaduse Saada kinnituse kustutamise kohta meil (send_uv_mail) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_send_uv_mail_comment
+msgid "Omaduse Saada kinnituse kustutamise kohta meil (send_uv_mail) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_send_uv_mail_help
+msgid "Omaduse Saada kinnituse kustutamise kohta meil (send_uv_mail) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_to
+msgid "Omaduse Kellele kustutamise kohta meil saata (uv_mail_to) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_to_comment
+msgid "Omaduse Kellele kustutamise kohta meil saata (uv_mail_to) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_to_help
+msgid "Omaduse Kellele kustutamise kohta meil saata (uv_mail_to) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_from
+msgid "Omaduse Meili from aadress (uv_mail_from) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_from_comment
+msgid "Omaduse Meili from aadress (uv_mail_from) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_from_help
+msgid "Omaduse Meili from aadress (uv_mail_from) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_from_name
+msgid "Omaduse Meili from nimi (uv_mail_from_name) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_from_name_comment
+msgid "Omaduse Meili from nimi (uv_mail_from_name) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_from_name_help
+msgid "Omaduse Meili from nimi (uv_mail_from_name) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_subj
+msgid "Omaduse Meili subjekt (uv_mail_subj) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_subj_comment
+msgid "Omaduse Meili subjekt (uv_mail_subj) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_subj_help
+msgid "Omaduse Meili subjekt (uv_mail_subj) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_legend
+msgid "Omaduse Meili sisu legend (uv_mail_legend) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_legend_comment
+msgid "Omaduse Meili sisu legend (uv_mail_legend) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_legend_help
+msgid "Omaduse Meili sisu legend (uv_mail_legend) help"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_ct
+msgid "Omaduse Meili sisu (uv_mail_ct) caption"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_ct_comment
+msgid "Omaduse Meili sisu (uv_mail_ct) kommentaar"
+msgstr ""
+
+#: classes/common/room_settings.aw:prop_uv_mail_ct_help
+msgid "Omaduse Meili sisu (uv_mail_ct) help"
 msgstr ""
 
 #: classes/common/room_settings.aw:prop_order_mail_from
@@ -541,6 +661,14 @@ msgstr ""
 msgid "Grupi Kustutamine (delete_email) help"
 msgstr ""
 
+#: classes/common/room_settings.aw:group_uv_email
+msgid "Grupi Kinnituse eemaldamine (uv_email) pealkiri"
+msgstr ""
+
+#: classes/common/room_settings.aw:group_uv_email_help
+msgid "Grupi Kinnituse eemaldamine (uv_email) help"
+msgstr ""
+
 #: classes/common/room_settings.aw:group_order_email
 msgid "Grupi Tellimusmeil (order_email) pealkiri"
 msgstr ""
@@ -585,66 +713,70 @@ msgstr ""
 msgid "Seose Grupp (RELTYPE_GROUP) tekst"
 msgstr ""
 
-#: classes/common/room_settings.aw:197
+#: classes/common/room_settings.aw:234
 msgid "#ord# - tellimuse sisu"
 msgstr ""
 
-#: classes/common/room_settings.aw:209
+#: classes/common/room_settings.aw:237
+msgid "#ord# - tellimuse sisu<br>#reason# - kinnituse eemaldamise p&ouml;hjus"
+msgstr ""
+
+#: classes/common/room_settings.aw:249
 msgid "sisu tuleb common/room/preview.tpl failist"
 msgstr ""
 
-#: classes/common/room_settings.aw:377
+#: classes/common/room_settings.aw:505
 msgid "Omadus"
 msgstr ""
 
-#: classes/common/room_settings.aw:383
+#: classes/common/room_settings.aw:511
 msgid "N&otilde;utud"
 msgstr ""
 
-#: classes/common/room_settings.aw:421
+#: classes/common/room_settings.aw:549
 msgid "Grupp"
 msgstr ""
 
-#: classes/common/room_settings.aw:426
+#: classes/common/room_settings.aw:554
 msgid "Broneerimisaegade seaded"
 msgstr ""
 
-#: classes/common/room_settings.aw:432
+#: classes/common/room_settings.aw:560
 msgid "Alates"
 msgstr ""
 
-#: classes/common/room_settings.aw:438 classes/common/room_settings.aw:450
+#: classes/common/room_settings.aw:566 classes/common/room_settings.aw:578
 msgid "Aja&uuml;hik"
 msgstr ""
 
-#: classes/common/room_settings.aw:444
+#: classes/common/room_settings.aw:572
 msgid "Kuni"
 msgstr ""
 
-#: classes/common/room_settings.aw:457
+#: classes/common/room_settings.aw:585
 msgid "Broneeringu tegijate gruppide v&auml;rvid"
 msgstr ""
 
-#: classes/common/room_settings.aw:463
+#: classes/common/room_settings.aw:591
 msgid "K&uuml;sida kliendi saabumise kinnitust"
 msgstr ""
 
-#: classes/common/room_settings.aw:469
+#: classes/common/room_settings.aw:597
 msgid "Broneeringud vaikimisi kinnitatud"
 msgstr ""
 
-#: classes/common/room_settings.aw:480
+#: classes/common/room_settings.aw:608
 msgid "Minut"
 msgstr ""
 
-#: classes/common/room_settings.aw:481
+#: classes/common/room_settings.aw:609
 msgid "Tund"
 msgstr ""
 
-#: classes/common/room_settings.aw:482
+#: classes/common/room_settings.aw:610
 msgid "P&auml;ev"
 msgstr ""
 
-#: classes/common/room_settings.aw:522
+#: classes/common/room_settings.aw:650
 msgid "Vali"
 msgstr ""

@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/formgen/form.aw:2281
-msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s "
+msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s"
 msgstr ""
 
 #: classes/formgen/form.aw:3055
@@ -37,4 +36,3 @@ msgstr ""
 #: classes/formgen/form.aw:4753
 msgid "form->metainfo(): weird error!"
 msgstr ""
-

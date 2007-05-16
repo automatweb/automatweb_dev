@@ -23,7 +23,6 @@ $GLOBALS["TRANS"]["Korter"] = "Apartment";
 $GLOBALS["TRANS"]["&Auml;ripind"] = "Commercial premises";
 $GLOBALS["TRANS"]["Garaaz"] = "Garage";
 $GLOBALS["TRANS"]["Maat&uuml;kk"] = "Plot of land";
-$GLOBALS["TRANS"][" kuni "] = "up to";
 $GLOBALS["TRANS"]["&Uuml;ldpind"] = "Total area";
 $GLOBALS["TRANS"]["K&otilde;ik linnad"] = "All the towns";
 $GLOBALS["TRANS"]["K&otilde;ik linnaosad"] = "All the city districts";

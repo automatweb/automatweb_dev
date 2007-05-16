@@ -33,6 +33,6 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/core/obj/object.aw:125
+#: classes/core/obj/object.aw:126
 msgid "object loader is not object!!"
 msgstr "object loader is not object!!"

@@ -332,7 +332,7 @@ msgid "Eraldaja enne"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:412
-msgid "Eraldaja p&auml;rast"
+msgid "Eraldaja pärast"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:417
@@ -355,14 +355,14 @@ msgstr ""
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:879
-#: classes/applications/calendar/event_search.aw:885
-#: classes/applications/calendar/event_search.aw:886
-#: classes/applications/calendar/event_search.aw:902
-#: classes/applications/calendar/event_search.aw:908
-msgid "k&otilde;ik"
+#: classes/applications/calendar/event_search.aw:944
+#: classes/applications/calendar/event_search.aw:950
+#: classes/applications/calendar/event_search.aw:951
+#: classes/applications/calendar/event_search.aw:967
+#: classes/applications/calendar/event_search.aw:973
+msgid "kõik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:915
+#: classes/applications/calendar/event_search.aw:980
 msgid "Otsi"
 msgstr ""

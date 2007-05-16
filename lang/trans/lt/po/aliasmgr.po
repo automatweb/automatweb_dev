@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/aliasmgr.aw:155
+msgid "Lihtsam otsing"
+msgstr ""
+
+#: classes/aliasmgr.aw:162
+msgid "Klass"
+msgstr ""
+
+#: classes/aliasmgr.aw:189
+msgid "T&auml;psem otsing"
+msgstr ""
+
+#: classes/aliasmgr.aw:306
+msgid "Nimi"
+msgstr ""
+
+#: classes/aliasmgr.aw:312
+msgid "Keel"
+msgstr ""
+
+#: classes/aliasmgr.aw:319
+msgid "Asukoht"
+msgstr ""
+
+#: classes/aliasmgr.aw:325
+msgid "Alias"
+msgstr ""
+
+#: classes/aliasmgr.aw:333
+msgid "Link"
+msgstr ""
+
+#: classes/aliasmgr.aw:342
+msgid "Muutja"
+msgstr ""
+
+#: classes/aliasmgr.aw:350
+msgid "Muudetud"
+msgstr ""
+
+#: classes/aliasmgr.aw:361
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/aliasmgr.aw:369 classes/aliasmgr.aw:954
+msgid "Seose t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/aliasmgr.aw:484
+msgid "&otilde;igus"
+msgstr ""
+
+#: classes/aliasmgr.aw:855
+msgid "Too vend"
+msgstr ""
+
+#: classes/aliasmgr.aw:865
+msgid "&Otilde;igus"
+msgstr ""
+
+#: classes/aliasmgr.aw:927 classes/aliasmgr.aw:940
+msgid "Objekti t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/aliasmgr.aw:971
+msgid "Lisa uus objekt"
+msgstr ""
+
+#: classes/aliasmgr.aw:981 classes/aliasmgr.aw:990
+msgid "Otsi"
+msgstr ""
+
+#: classes/aliasmgr.aw:1005
+msgid "Reload"
+msgstr ""
+
+#: classes/aliasmgr.aw:1016
+msgid "Loo seos(ed)"
+msgstr ""
+
+#: classes/aliasmgr.aw:1026
+msgid "Salvesta"
+msgstr ""
+
+#: classes/aliasmgr.aw:1033
+msgid "Kustuta valitud seos(ed)"
+msgstr ""
+

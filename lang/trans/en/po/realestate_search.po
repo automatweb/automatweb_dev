@@ -30,8 +30,7 @@ msgid "Omaduse Otsingutulemuste n&auml;itamise formaat (result_format) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_result_format_comment
-msgid ""
-"Omaduse Otsingutulemuste n&auml;itamise formaat (result_format) kommentaar"
+msgid "Omaduse Otsingutulemuste n&auml;itamise formaat (result_format) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_result_format_help
@@ -67,8 +66,7 @@ msgid "Omaduse Tabeli navigatsiooni asukoht (result_pageselector_pos) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_result_pageselector_pos_comment
-msgid ""
-"Omaduse Tabeli navigatsiooni asukoht (result_pageselector_pos) kommentaar"
+msgid "Omaduse Tabeli navigatsiooni asukoht (result_pageselector_pos) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_result_pageselector_pos_help
@@ -76,19 +74,15 @@ msgid "Omaduse Tabeli navigatsiooni asukoht (result_pageselector_pos) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchform_select_size
-msgid ""
-"Omaduse Otsinguvormi valikuelementide suurus (searchform_select_size) caption"
+msgid "Omaduse Otsinguvormi valikuelementide suurus (searchform_select_size) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchform_select_size_comment
-msgid ""
-"Omaduse Otsinguvormi valikuelementide suurus (searchform_select_size) "
-"kommentaar"
+msgid "Omaduse Otsinguvormi valikuelementide suurus (searchform_select_size) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchform_select_size_help
-msgid ""
-"Omaduse Otsinguvormi valikuelementide suurus (searchform_select_size) help"
+msgid "Omaduse Otsinguvormi valikuelementide suurus (searchform_select_size) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchform_columns
@@ -152,20 +146,15 @@ msgid "Omaduse Default j&auml;rjestus (default_searchparam_sort_by) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_order
-msgid ""
-"Omaduse Default j&auml;rjestuse suund (default_searchparam_sort_order) "
-"caption"
+msgid "Omaduse Default j&auml;rjestuse suund (default_searchparam_sort_order) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_order_comment
-msgid ""
-"Omaduse Default j&auml;rjestuse suund (default_searchparam_sort_order) "
-"kommentaar"
+msgid "Omaduse Default j&auml;rjestuse suund (default_searchparam_sort_order) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_order_help
-msgid ""
-"Omaduse Default j&auml;rjestuse suund (default_searchparam_sort_order) help"
+msgid "Omaduse Default j&auml;rjestuse suund (default_searchparam_sort_order) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_default_per_page
@@ -433,13 +422,11 @@ msgid "Omaduse Eristaatus (search_special_status) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_is_middle_floor
-msgid ""
-"Omaduse Pole esimene ega viimane korrus (search_is_middle_floor) caption"
+msgid "Omaduse Pole esimene ega viimane korrus (search_is_middle_floor) caption"
 msgstr "Not the first nor the last floor"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_is_middle_floor_comment
-msgid ""
-"Omaduse Pole esimene ega viimane korrus (search_is_middle_floor) kommentaar"
+msgid "Omaduse Pole esimene ega viimane korrus (search_is_middle_floor) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_is_middle_floor_help
@@ -447,21 +434,15 @@ msgid "Omaduse Pole esimene ega viimane korrus (search_is_middle_floor) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_onlywithpictures
-msgid ""
-"Omaduse N&auml;ita ainult pildiga kuulutusi (searchparam_onlywithpictures) "
-"caption"
+msgid "Omaduse N&auml;ita ainult pildiga kuulutusi (searchparam_onlywithpictures) caption"
 msgstr "Show only the advertisements with photos"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_onlywithpictures_comment
-msgid ""
-"Omaduse N&auml;ita ainult pildiga kuulutusi (searchparam_onlywithpictures) "
-"kommentaar"
+msgid "Omaduse N&auml;ita ainult pildiga kuulutusi (searchparam_onlywithpictures) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_onlywithpictures_help
-msgid ""
-"Omaduse N&auml;ita ainult pildiga kuulutusi (searchparam_onlywithpictures) "
-"help"
+msgid "Omaduse N&auml;ita ainult pildiga kuulutusi (searchparam_onlywithpictures) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_sort_by
@@ -685,8 +666,8 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:866
 #: classes/applications/realestate_management/realestate_search.aw:896
-msgid " kuni "
-msgstr "up to"
+msgid "kuni"
+msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:895
 msgid "&Uuml;ldpind"
@@ -731,8 +712,7 @@ msgid "Kinnisvarahalduskeskkond otsinguobjektil defineerimata."
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:1558
-msgid ""
-"Haldusjaotus otsinguobjektil ja kinnisvarahalduskeskkonnas defineerimata."
+msgid "Haldusjaotus otsinguobjektil ja kinnisvarahalduskeskkonnas defineerimata."
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:1576
@@ -822,6 +802,9 @@ msgstr ""
 #: classes/applications/realestate_management/realestate_search.aw:2578
 msgid "Arhi&shy;veeri&shy;tud"
 msgstr ""
+
+#~ msgid " kuni "
+#~ msgstr "up to"
 
 #~ msgid "Omaduse &Auml;ripinna t&uuml;&uuml;p (search_usage_purpose) caption"
 #~ msgstr "Type of commerical premices"

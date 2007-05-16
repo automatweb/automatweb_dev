@@ -64,9 +64,6 @@ $GLOBALS["TRANS"]["Omaduse Otsingutulemused (contacts_search_results) caption"] 
 $GLOBALS["TRANS"]["Omaduse Vaikimisi aadress (contact) caption"] = "Default address";
 $GLOBALS["TRANS"]["Omaduse Telefoni v&otilde;tab vastu (receptionist_name) caption"] = "Receptionist's name";
 $GLOBALS["TRANS"]["Omaduse Valuuta (currency) caption"] = "Currency";
-$GLOBALS["TRANS"]["Omaduse Telefon (phone_id) caption"] = "Phone";
-$GLOBALS["TRANS"]["Omaduse Faks (telefax_id) caption"] = "Fax";
-$GLOBALS["TRANS"]["Omaduse Veebiaadress (url_id) caption"] = "Website";
 $GLOBALS["TRANS"]["Omaduse  (personal_offers_toolbar) caption"] = "Personal offers";
 $GLOBALS["TRANS"]["Omaduse  (unit_listing_tree_personal) caption"] = "Treeview of organisation";
 $GLOBALS["TRANS"]["Omaduse \"Klientide toolbar\" (my_customers_toolbar) caption"] = "Customer toolbar";

@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/crm/crm_section_webside.aw:class_832_help
 #: classes/crm/crm_section_webside.aw:class_832_help
-msgid "Klassi Üksus veebis help"
+msgid "Klassi &Uuml;ksus veebis help"
 msgstr ""
 
 # classes/crm/crm_section_webside.aw:prop_section_picker

@@ -9,59 +9,59 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/contentmgmt/site_show.aw:1957
+#: classes/contentmgmt/site_show.aw:1967
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr "site_show::do_draw_menus(): no compiled filename set!"
 
-#: classes/contentmgmt/site_show.aw:2038
+#: classes/contentmgmt/site_show.aw:2048
 msgid "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 msgstr "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 
-#: classes/contentmgmt/site_show.aw:2230
+#: classes/contentmgmt/site_show.aw:2243
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr "site_show::make_final_vars(): need JOIN_FORM sub back!"
 
-#: classes/contentmgmt/site_show.aw:2743
+#: classes/contentmgmt/site_show.aw:2756
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress:"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2779
+#: classes/contentmgmt/site_show.aw:2792
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 
-#: classes/contentmgmt/site_show.aw:2784
+#: classes/contentmgmt/site_show.aw:2797
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr "No ACL error messages defined! no can_view access for object %s"
 
-#: classes/contentmgmt/site_show.aw:2975
+#: classes/contentmgmt/site_show.aw:2988
 msgid "Lisa uus k&otilde;rvale"
 msgstr "Add new on same level"
 
-#: classes/contentmgmt/site_show.aw:2985
+#: classes/contentmgmt/site_show.aw:2998
 msgid "Lisa uus alamkaust"
 msgstr "Add new subfolder"
 
-#: classes/contentmgmt/site_show.aw:2995
+#: classes/contentmgmt/site_show.aw:3008
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/contentmgmt/site_show.aw:3005
+#: classes/contentmgmt/site_show.aw:3018
 msgid "Muuda &otilde;igusi"
 msgstr "Change rights"
 
-#: classes/contentmgmt/site_show.aw:3014
+#: classes/contentmgmt/site_show.aw:3027
 msgid "Peida"
 msgstr "Hide"
 
-#: classes/contentmgmt/site_show.aw:3018
+#: classes/contentmgmt/site_show.aw:3031
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/contentmgmt/site_show.aw:3026 classes/contentmgmt/site_show.aw:3058
+#: classes/contentmgmt/site_show.aw:3039 classes/contentmgmt/site_show.aw:3071
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/contentmgmt/site_show.aw:3046
+#: classes/contentmgmt/site_show.aw:3059
 msgid "Lisa uus"
 msgstr "Add new"
 

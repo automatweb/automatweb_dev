@@ -336,31 +336,31 @@ msgid "Arhiveeritud"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:171
-msgid "Uut tööd saab luua vaid ressursihalduskeskkonnas. "
+msgid "Uut tööd saab luua vaid ressursihalduskeskkonnas."
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:187
-msgid "Tööl puudub ressurss, projekt või ressursihalduskeskkond. "
+msgid "Tööl puudub ressurss, projekt või ressursihalduskeskkond."
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:194
-msgid "Tööl puudub ressurss. "
+msgid "Tööl puudub ressurss."
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:198
-msgid "Tööl puudub projekt. "
+msgid "Tööl puudub projekt."
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:202
-msgid "Tööl puudub ressurss ja projekt. "
+msgid "Tööl puudub ressurss ja projekt."
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:209
-msgid "Viga! "
+msgid "Viga!"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:264
-msgid "Esinenud tõrked: "
+msgid "Esinenud tõrked:"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:286

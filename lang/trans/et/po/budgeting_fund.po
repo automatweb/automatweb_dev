@@ -9,8 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/budgeting/budgeting_fund.aw:class_1204_help
 msgid "Klassi Eelarvestamise fond help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_fund.aw:prop_balance
+msgid "Omaduse Saldo (balance) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_fund.aw:prop_balance_comment
+msgid "Omaduse Saldo (balance) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_fund.aw:prop_balance_help
+msgid "Omaduse Saldo (balance) help"
+msgstr ""

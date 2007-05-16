@@ -10,15 +10,15 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/aw_template.aw:259
+#: classes/aw_template.aw:261
 msgid "Template '%s/%s' not found"
 msgstr ""
 
-#: classes/aw_template.aw:332 classes/aw_template.aw:378
+#: classes/aw_template.aw:334 classes/aw_template.aw:380
 msgid "Template '%s' not found"
 msgstr ""
 
-#: classes/aw_template.aw:430
+#: classes/aw_template.aw:432
 msgid "Template '%s' not found in admin or site folder"
 msgstr ""
 

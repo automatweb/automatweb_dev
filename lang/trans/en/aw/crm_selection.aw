@@ -11,8 +11,6 @@ $GLOBALS["TRANS"]["nimi"] = "name";
 $GLOBALS["TRANS"]["jrk"] = "ord";
 $GLOBALS["TRANS"]["tüüp"] = "type";
 $GLOBALS["TRANS"]["kommentaar"] = "comment";
-$GLOBALS["TRANS"]["Objektide kopeerimine valimisse "] = "Copy objects to selection";
-$GLOBALS["TRANS"]["Objektide liigutamine valimisse "] = "Move objects to selection";
 $GLOBALS["TRANS"]["Liiguta"] = "Move";
 $GLOBALS["TRANS"]["Kopeeri"] = "Copy";
 $GLOBALS["TRANS"]["aktiveeri"] = "activate";
@@ -20,5 +18,4 @@ $GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Kustuta valitud objektid valimist"] = "Delete selected objects from selection";
 $GLOBALS["TRANS"]["Kustutada valitud objektid sellest valimist?"] = "Delete selected objects from selection?";
 $GLOBALS["TRANS"]["templiit määramata"] = "no template set";
-$GLOBALS["TRANS"][" valim tühi, või objekte pole aktiivseks tehtud"] = " selection empty or objects have not been activated";
 ?>

@@ -908,11 +908,11 @@ msgid "Lisa"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:2408
-msgid " teemade kaust"
+msgid "teemade kaust"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:2415
-msgid " aadresside kaust"
+msgid "aadresside kaust"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_comment

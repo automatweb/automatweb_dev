@@ -14,3 +14,91 @@ msgstr ""
 msgid "Klassi Eelarvestamise maks help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place
+msgid "Omaduse Kust (from_place) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place_comment
+msgid "Omaduse Kust (from_place) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_from_place_help
+msgid "Omaduse Kust (from_place) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_to_acct
+msgid "Omaduse Kontole (to_acct) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_to_acct_comment
+msgid "Omaduse Kontole (to_acct) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_to_acct_help
+msgid "Omaduse Kontole (to_acct) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_amount
+msgid "Omaduse Summa (amount) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_amount_comment
+msgid "Omaduse Summa (amount) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_amount_help
+msgid "Omaduse Summa (amount) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_when_type
+msgid "Omaduse Aja t&uuml;&uuml;p (when_type) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_when_type_comment
+msgid "Omaduse Aja t&uuml;&uuml;p (when_type) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_when_type_help
+msgid "Omaduse Aja t&uuml;&uuml;p (when_type) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_when_date
+msgid "Omaduse Millal (when_date) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_when_date_comment
+msgid "Omaduse Millal (when_date) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_when_date_help
+msgid "Omaduse Millal (when_date) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_penalty_pct
+msgid "Omaduse Viivis (%) (penalty_pct) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_penalty_pct_comment
+msgid "Omaduse Viivis (%) (penalty_pct) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_penalty_pct_help
+msgid "Omaduse Viivis (%) (penalty_pct) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:rel_RELTYPE_FROM_ACCT
+msgid "Seose Kontolt (RELTYPE_FROM_ACCT) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:rel_RELTYPE_TO_ACCT
+msgid "Seose Kontole (RELTYPE_TO_ACCT) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:107
+msgid "&Uuml;hekordne"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:108
+msgid "Korduv"
+msgstr ""
+

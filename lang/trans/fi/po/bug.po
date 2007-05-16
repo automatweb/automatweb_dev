@@ -206,27 +206,27 @@ msgid "Omaduse Lisa kommentaar (bug_content_comm) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_num_hrs_guess
-msgid "Omaduse Prognoositav  (num_hrs_guess) caption"
+msgid "Omaduse Prognoositav (num_hrs_guess) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_num_hrs_guess_comment
-msgid "Omaduse Prognoositav  (num_hrs_guess) kommentaar"
+msgid "Omaduse Prognoositav (num_hrs_guess) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_num_hrs_guess_help
-msgid "Omaduse Prognoositav  (num_hrs_guess) help"
+msgid "Omaduse Prognoositav (num_hrs_guess) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_num_hrs_real
-msgid "Omaduse Tegelik  (num_hrs_real) caption"
+msgid "Omaduse Tegelik (num_hrs_real) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_num_hrs_real_comment
-msgid "Omaduse Tegelik  (num_hrs_real) kommentaar"
+msgid "Omaduse Tegelik (num_hrs_real) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_num_hrs_real_help
-msgid "Omaduse Tegelik  (num_hrs_real) help"
+msgid "Omaduse Tegelik (num_hrs_real) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_num_hrs_to_cust
@@ -410,15 +410,15 @@ msgid "Omaduse Vea sagedus (density) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_responsible
-msgid "Omaduse Kliendipoolne vastutaja\t (cust_responsible) caption"
+msgid "Omaduse Kliendipoolne vastutaja (cust_responsible) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_responsible_comment
-msgid "Omaduse Kliendipoolne vastutaja\t (cust_responsible) kommentaar"
+msgid "Omaduse Kliendipoolne vastutaja (cust_responsible) kommentaar"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_responsible_help
-msgid "Omaduse Kliendipoolne vastutaja\t (cust_responsible) help"
+msgid "Omaduse Kliendipoolne vastutaja (cust_responsible) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_cust_status
@@ -700,10 +700,10 @@ msgstr ""
 #: classes/applications/bug_o_matic_3000/bug.aw:587
 #: classes/applications/bug_o_matic_3000/bug.aw:620
 #: classes/applications/bug_o_matic_3000/bug.aw:639
-#: classes/applications/bug_o_matic_3000/bug.aw:1527
-#: classes/applications/bug_o_matic_3000/bug.aw:1555
-#: classes/applications/bug_o_matic_3000/bug.aw:1578
-#: classes/applications/bug_o_matic_3000/bug.aw:1621
+#: classes/applications/bug_o_matic_3000/bug.aw:1534
+#: classes/applications/bug_o_matic_3000/bug.aw:1562
+#: classes/applications/bug_o_matic_3000/bug.aw:1585
+#: classes/applications/bug_o_matic_3000/bug.aw:1628
 msgid "--vali--"
 msgstr ""
 
@@ -807,18 +807,18 @@ msgstr ""
 msgid "Added comment to bug %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1393
+#: classes/applications/bug_o_matic_3000/bug.aw:1400
 msgid "Uus arendus&uuml;lesanne"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1398
+#: classes/applications/bug_o_matic_3000/bug.aw:1405
 msgid "Samale tasemele"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1404
+#: classes/applications/bug_o_matic_3000/bug.aw:1411
 msgid "Sisse"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:1646
+#: classes/applications/bug_o_matic_3000/bug.aw:1653
 msgid "Puuduvad õigused bugi sulgeda!"
 msgstr ""

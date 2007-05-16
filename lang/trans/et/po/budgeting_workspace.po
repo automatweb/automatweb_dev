@@ -9,8 +9,303 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/budgeting/budgeting_workspace.aw:class_1205_help
 msgid "Klassi Eelarvestamise t&ouml;&ouml;laud help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_tb
+msgid "Omaduse  (acct_tb) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_tb_comment
+msgid "Omaduse  (acct_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_tb_help
+msgid "Omaduse  (acct_tb) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_tree
+msgid "Omaduse  (acct_tree) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_tree_comment
+msgid "Omaduse  (acct_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_tree_help
+msgid "Omaduse  (acct_tree) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_table
+msgid "Omaduse  (acct_table) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_table_comment
+msgid "Omaduse  (acct_table) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_acct_table_help
+msgid "Omaduse  (acct_table) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_tb
+msgid "Omaduse  (tax_tb) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_tb_comment
+msgid "Omaduse  (tax_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_tb_help
+msgid "Omaduse  (tax_tb) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_tree
+msgid "Omaduse  (tax_tree) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_tree_comment
+msgid "Omaduse  (tax_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_tree_help
+msgid "Omaduse  (tax_tree) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_table
+msgid "Omaduse  (tax_table) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_table_comment
+msgid "Omaduse  (tax_table) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_table_help
+msgid "Omaduse  (tax_table) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_tb
+msgid "Omaduse  (fund_tb) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_tb_comment
+msgid "Omaduse  (fund_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_tb_help
+msgid "Omaduse  (fund_tb) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_tree
+msgid "Omaduse  (fund_tree) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_tree_comment
+msgid "Omaduse  (fund_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_tree_help
+msgid "Omaduse  (fund_tree) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_table
+msgid "Omaduse  (fund_table) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_table_comment
+msgid "Omaduse  (fund_table) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_fund_table_help
+msgid "Omaduse  (fund_table) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_transfer_tb
+msgid "Omaduse  (transfer_tb) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_transfer_tb_comment
+msgid "Omaduse  (transfer_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_transfer_tb_help
+msgid "Omaduse  (transfer_tb) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_from_acct
+msgid "Omaduse Kontolt (tax_s_from_acct) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_from_acct_comment
+msgid "Omaduse Kontolt (tax_s_from_acct) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_from_acct_help
+msgid "Omaduse Kontolt (tax_s_from_acct) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_to_acct
+msgid "Omaduse Kontole (tax_s_to_acct) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_to_acct_comment
+msgid "Omaduse Kontole (tax_s_to_acct) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_to_acct_help
+msgid "Omaduse Kontole (tax_s_to_acct) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_date_from
+msgid "Omaduse Alates (tax_s_date_from) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_date_from_comment
+msgid "Omaduse Alates (tax_s_date_from) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_date_from_help
+msgid "Omaduse Alates (tax_s_date_from) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_date_to
+msgid "Omaduse Kuni (tax_s_date_to) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_date_to_comment
+msgid "Omaduse Kuni (tax_s_date_to) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_date_to_help
+msgid "Omaduse Kuni (tax_s_date_to) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_sbt
+msgid "Omaduse Otsi (tax_s_sbt) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_sbt_comment
+msgid "Omaduse Otsi (tax_s_sbt) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_tax_s_sbt_help
+msgid "Omaduse Otsi (tax_s_sbt) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_transfer_table
+msgid "Omaduse  (transfer_table) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_transfer_table_comment
+msgid "Omaduse  (transfer_table) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_transfer_table_help
+msgid "Omaduse  (transfer_table) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_accounts
+msgid "Grupi Kontod (accounts) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_accounts_help
+msgid "Grupi Kontod (accounts) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_taxes
+msgid "Grupi Maksud (taxes) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_taxes_help
+msgid "Grupi Maksud (taxes) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_funds
+msgid "Grupi Fondid (funds) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_funds_help
+msgid "Grupi Fondid (funds) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_transfers
+msgid "Grupi &Uuml;lekanded (transfers) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_transfers_help
+msgid "Grupi &Uuml;lekanded (transfers) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:rel_RELTYPE_ACCT_TREE_PARENT
+msgid "Seose Kontode juurkaust (RELTYPE_ACCT_TREE_PARENT) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:rel_RELTYPE_TAX_TREE_PARENT
+msgid "Seose Maksude juurkaust (RELTYPE_TAX_TREE_PARENT) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:rel_RELTYPE_FUND_TREE_PARENT
+msgid "Seose Dondide juurkaust (RELTYPE_FUND_TREE_PARENT) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:layout_acct_tree
+msgid "Kujundusosa Kontode puu (acct_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:layout_tax_tree
+msgid "Kujundusosa Maksude puu (tax_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:layout_fund_tree
+msgid "Kujundusosa Fondide puu (fund_tree) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:layout_transfer_search
+msgid "Kujundusosa Otsi ülekandeid (transfer_search) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:179
+msgid "%s kontode kataloog"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:213
+msgid "&Uuml;ldine"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:219
+#: classes/applications/budgeting/budgeting_workspace.aw:381
+msgid "Valdkonnad"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:250
+msgid "%s maksude kataloog"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:345
+msgid "%s fondide kataloog"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:389
+msgid "Fondid"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:398
+msgid "Tegija"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:407
+msgid "Teenuse liik"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:416
+msgid "Tooteperekonnad"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:425
+msgid "Kontod"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:480
+msgid "Projektid"
+msgstr ""

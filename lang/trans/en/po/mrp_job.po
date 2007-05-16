@@ -337,32 +337,32 @@ msgid "Arhiveeritud"
 msgstr "Archived"
 
 #: classes/mrp/mrp_job.aw:171
-msgid "Uut tööd saab luua vaid ressursihalduskeskkonnas. "
-msgstr "New job can only be created via the manager"
+msgid "Uut tööd saab luua vaid ressursihalduskeskkonnas."
+msgstr ""
 
 #: classes/mrp/mrp_job.aw:187
-msgid "Tööl puudub ressurss, projekt või ressursihalduskeskkond. "
-msgstr "Job has no resource, case or manager"
+msgid "Tööl puudub ressurss, projekt või ressursihalduskeskkond."
+msgstr ""
 
 #: classes/mrp/mrp_job.aw:194
-msgid "Tööl puudub ressurss. "
+msgid "Tööl puudub ressurss."
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:198
-msgid "Tööl puudub projekt. "
+msgid "Tööl puudub projekt."
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:202
-msgid "Tööl puudub ressurss ja projekt. "
+msgid "Tööl puudub ressurss ja projekt."
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:209
-msgid "Viga! "
-msgstr "Error! "
+msgid "Viga!"
+msgstr ""
 
 #: classes/mrp/mrp_job.aw:264
-msgid "Esinenud tõrked: "
-msgstr "Problems:"
+msgid "Esinenud tõrked:"
+msgstr ""
 
 #: classes/mrp/mrp_job.aw:286
 msgid "Määramata"
@@ -492,6 +492,18 @@ msgstr "Job is not aborted"
 #: classes/mrp/mrp_job.aw:1473
 msgid "Lisas kommentaari"
 msgstr "Added comment"
+
+#~ msgid "Uut tööd saab luua vaid ressursihalduskeskkonnas. "
+#~ msgstr "New job can only be created via the manager"
+
+#~ msgid "Tööl puudub ressurss, projekt või ressursihalduskeskkond. "
+#~ msgstr "Job has no resource, case or manager"
+
+#~ msgid "Viga! "
+#~ msgstr "Error! "
+
+#~ msgid "Esinenud tõrked: "
+#~ msgstr "Problems:"
 
 #~ msgid "Tööl puudub ressurss või projekt. "
 #~ msgstr "Job has no case or resource"

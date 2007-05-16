@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/obj/object_list.aw:95
 msgid "object_list::filter(): parameter must be an array!"
 msgstr ""
@@ -38,35 +37,34 @@ msgstr ""
 msgid "object_list::sort_by_cb(%s): no function %s exists!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:483
+#: classes/core/obj/object_list.aw:491
 msgid "object_list::foreach_o(): parameter must be an array"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:505
+#: classes/core/obj/object_list.aw:513
 msgid "object_list::foreach_o(): %s is not a member function of the object class!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:567
+#: classes/core/obj/object_list.aw:575
 msgid "object_list::foreach_cb(): parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:577
+#: classes/core/obj/object_list.aw:585
 msgid "object_list::foreach_cb(): callback method %s does not exist in class %s!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:586
+#: classes/core/obj/object_list.aw:594
 msgid "object_list::foreach_cb(): callback function %s does not exist!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:669
+#: classes/core/obj/object_list.aw:677
 msgid "object_list::from_arr(): parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:839
+#: classes/core/obj/object_list.aw:847
 msgid "object_list::filter(%s => %s): can not complex searches on metadata fields!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:846
+#: classes/core/obj/object_list.aw:854
 msgid "object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
 msgstr ""
-

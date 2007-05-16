@@ -174,15 +174,15 @@ msgstr ""
 msgid "Sisestatud kontrollkood on vale"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2419
+#: classes/contentmgmt/forum/forum.aw:2421
 msgid "Näita"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2427
+#: classes/contentmgmt/forum/forum.aw:2429
 msgid "Ekspordi XML"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2433
+#: classes/contentmgmt/forum/forum.aw:2435
 msgid "E-posti aadressid"
 msgstr ""
 

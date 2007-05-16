@@ -137,12 +137,12 @@ msgid "kommentaar"
 msgstr "comment"
 
 #: classes/crm/crm_selection.aw:278
-msgid "Objektide kopeerimine valimisse "
-msgstr "Copy objects to selection"
+msgid "Objektide kopeerimine valimisse"
+msgstr ""
 
 #: classes/crm/crm_selection.aw:308
-msgid "Objektide liigutamine valimisse "
-msgstr "Move objects to selection"
+msgid "Objektide liigutamine valimisse"
+msgstr ""
 
 #: classes/crm/crm_selection.aw:442
 msgid "Liiguta"
@@ -173,8 +173,17 @@ msgid "templiit määramata"
 msgstr "no template set"
 
 #: classes/crm/crm_selection.aw:598
-msgid " valim tühi, või objekte pole aktiivseks tehtud"
-msgstr " selection empty or objects have not been activated"
+msgid "valim tühi, või objekte pole aktiivseks tehtud"
+msgstr ""
+
+#~ msgid "Objektide kopeerimine valimisse "
+#~ msgstr "Copy objects to selection"
+
+#~ msgid "Objektide liigutamine valimisse "
+#~ msgstr "Move objects to selection"
+
+#~ msgid " valim tühi, või objekte pole aktiivseks tehtud"
+#~ msgstr " selection empty or objects have not been activated"
 
 #~ msgid "Grupi Üldine (general) pealkiri"
 #~ msgstr "General"

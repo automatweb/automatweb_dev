@@ -383,8 +383,8 @@ msgid "Eraldaja enne"
 msgstr "Seprator before"
 
 #: classes/applications/calendar/event_search.aw:412
-msgid "Eraldaja p&auml;rast"
-msgstr ""
+msgid "Eraldaja pärast"
+msgstr "Separator after"
 
 #: classes/applications/calendar/event_search.aw:417
 msgid "Jrk"
@@ -406,20 +406,14 @@ msgstr "Additional fields"
 msgid "V&auml;ljundvorm on valimata"
 msgstr "Output form not selected"
 
-#: classes/applications/calendar/event_search.aw:879
-#: classes/applications/calendar/event_search.aw:885
-#: classes/applications/calendar/event_search.aw:886
-#: classes/applications/calendar/event_search.aw:902
-#: classes/applications/calendar/event_search.aw:908
-msgid "k&otilde;ik"
-msgstr ""
+#: classes/applications/calendar/event_search.aw:944
+#: classes/applications/calendar/event_search.aw:950
+#: classes/applications/calendar/event_search.aw:951
+#: classes/applications/calendar/event_search.aw:967
+#: classes/applications/calendar/event_search.aw:973
+msgid "kõik"
+msgstr "all"
 
-#: classes/applications/calendar/event_search.aw:915
+#: classes/applications/calendar/event_search.aw:980
 msgid "Otsi"
 msgstr "Search"
-
-#~ msgid "Eraldaja pärast"
-#~ msgstr "Separator after"
-
-#~ msgid "kõik"
-#~ msgstr "all"

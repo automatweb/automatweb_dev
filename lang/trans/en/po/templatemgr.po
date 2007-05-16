@@ -9,8 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/templatemgr.aw:66
-msgid "Vaikimisi: "
-msgstr "By default: "
+msgid "Vaikimisi:"
+msgstr ""
 
+#~ msgid "Vaikimisi: "
+#~ msgstr "By default: "

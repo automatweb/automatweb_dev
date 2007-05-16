@@ -29,6 +29,18 @@ msgstr ""
 msgid "Omaduse Tegevusala nimetus (tegevusala) help"
 msgstr ""
 
+#: classes/crm/crm_sector.aw:prop_alias
+msgid "Omaduse Alias (alias) caption"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_alias_comment
+msgid "Omaduse Alias (alias) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_sector.aw:prop_alias_help
+msgid "Omaduse Alias (alias) help"
+msgstr ""
+
 #: classes/crm/crm_sector.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
 msgstr ""

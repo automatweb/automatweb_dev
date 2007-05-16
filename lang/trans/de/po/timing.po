@@ -37,6 +37,18 @@ msgstr ""
 msgid "Omaduse Deaktiveerida (deactivate) help"
 msgstr ""
 
+#: classes/contentmgmt/timing.aw:prop_apply_langs
+msgid "Omaduse Kehtib keeltele (apply_langs) caption"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_apply_langs_comment
+msgid "Omaduse Kehtib keeltele (apply_langs) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_apply_langs_help
+msgid "Omaduse Kehtib keeltele (apply_langs) help"
+msgstr ""
+
 #: classes/contentmgmt/timing.aw:prop_archive_time
 msgid "Omaduse Arhiveerimise aeg (archive_time) caption"
 msgstr ""
@@ -109,26 +121,26 @@ msgstr ""
 msgid "Seose Seotud objekt (RELTYPE_TIMING_OBJECT) tekst"
 msgstr ""
 
-#: classes/contentmgmt/timing.aw:268
+#: classes/contentmgmt/timing.aw:278
 msgid "Eemalda valitud objektid"
 msgstr ""
 
-#: classes/contentmgmt/timing.aw:270
+#: classes/contentmgmt/timing.aw:280
 msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
 msgstr ""
 
-#: classes/contentmgmt/timing.aw:280
+#: classes/contentmgmt/timing.aw:290
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/timing.aw:281
+#: classes/contentmgmt/timing.aw:291
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/timing.aw:282
+#: classes/contentmgmt/timing.aw:292
 msgid "Tüüp"
 msgstr ""
 
-#: classes/contentmgmt/timing.aw:419 classes/contentmgmt/timing.aw:434
+#: classes/contentmgmt/timing.aw:437 classes/contentmgmt/timing.aw:452
 msgid "%s ajaline aktiivsus"
 msgstr ""

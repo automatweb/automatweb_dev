@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_settings.aw:class_1036_help
 msgid "Klassi Kliendibaasi seaded help"
 msgstr ""
@@ -374,75 +373,74 @@ msgstr ""
 msgid "Seose Kontroller (RELTYPE_CTR) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:190
+#: classes/applications/crm/crm_settings.aw:194
 msgid "Jah"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:191
+#: classes/applications/crm/crm_settings.aw:195
 msgid "Ei"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:192
+#: classes/applications/crm/crm_settings.aw:196
 msgid "Arvel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:193
+#: classes/applications/crm/crm_settings.aw:197
 msgid "Arveta"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:206
+#: classes/applications/crm/crm_settings.aw:210
 msgid "Tabelvaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:207
+#: classes/applications/crm/crm_settings.aw:211
 msgid "Kalendervaade"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:227
+#: classes/applications/crm/crm_settings.aw:231
 msgid "Salvesta tabeli seaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:248
+#: classes/applications/crm/crm_settings.aw:252
 msgid "Taasta algseaded"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:249
+#: classes/applications/crm/crm_settings.aw:253
 msgid "Muudetud seaded kaovad kui algseaded taastada, kas jätkata?"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:262
+#: classes/applications/crm/crm_settings.aw:266
 msgid "Minu t&ouml;&ouml;koht"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:269
+#: classes/applications/crm/crm_settings.aw:273
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:276
+#: classes/applications/crm/crm_settings.aw:280
 msgid "Eraisikust klient"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:283
+#: classes/applications/crm/crm_settings.aw:287
 msgid "T&ouml;&ouml;kaaslane"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:290
+#: classes/applications/crm/crm_settings.aw:294
 msgid "Kliendi t&ouml;&ouml;taja"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:340
+#: classes/applications/crm/crm_settings.aw:344
 msgid "Veeru nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:344
+#: classes/applications/crm/crm_settings.aw:348
 msgid "Järjekord"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:348
+#: classes/applications/crm/crm_settings.aw:352
 msgid "Kasutusel"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:352
+#: classes/applications/crm/crm_settings.aw:356
 msgid "Pealkiri"
 msgstr ""
-

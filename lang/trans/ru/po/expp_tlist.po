@@ -9,8 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/expp/expp_tlist.aw:class_1012_help
-msgid "Klassi Tüübilist help"
+msgid "Klassi T&uuml;&uuml;bilist help"
 msgstr ""
-

@@ -18,6 +18,10 @@ msgstr ""
 msgid "Tagasi"
 msgstr ""
 
+#: classes/core.aw:1072
+msgid "(nimetu)"
+msgstr ""
+
 #: classes/core.aw:1179
 msgid "Couldn't open file '%s' for writing"
 msgstr ""

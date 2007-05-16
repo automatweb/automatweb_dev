@@ -65,30 +65,30 @@ msgstr ""
 msgid "Broneering %s / %s"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:137
+#: classes/applications/spa_bookings/spa_customer_interface.aw:142
 msgid "Lisa teenus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:148
+#: classes/applications/spa_bookings/spa_customer_interface.aw:153
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:149
+#: classes/applications/spa_bookings/spa_customer_interface.aw:154
 msgid "Maksa"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:157
+#: classes/applications/spa_bookings/spa_customer_interface.aw:162
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:335
+#: classes/applications/spa_bookings/spa_customer_interface.aw:347
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:824
+#: classes/applications/spa_bookings/spa_customer_interface.aw:907
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:824
+#: classes/applications/spa_bookings/spa_customer_interface.aw:907
 msgid "Naine"
 msgstr ""

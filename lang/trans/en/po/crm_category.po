@@ -57,6 +57,18 @@ msgstr ""
 msgid "Omaduse  (extern_id) help"
 msgstr ""
 
+#: classes/crm/crm_category.aw:prop_balance
+msgid "Omaduse  (balance) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_balance_comment
+msgid "Omaduse  (balance) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_balance_help
+msgid "Omaduse  (balance) help"
+msgstr ""
+
 # classes/crm/crm_category.aw:rel_RELTYPE_IMAGE
 #: classes/crm/crm_category.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"

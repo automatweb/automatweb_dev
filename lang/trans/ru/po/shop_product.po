@@ -13,6 +13,18 @@ msgstr ""
 msgid "Klassi Lao toode help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_balance
+msgid "Omaduse  (balance) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_balance_comment
+msgid "Omaduse  (balance) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_balance_help
+msgid "Omaduse  (balance) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:prop_price_cur
 msgid "Omaduse Hinnad valuutades (price_cur) caption"
 msgstr ""
@@ -1113,22 +1125,22 @@ msgstr ""
 msgid "Seose Maksum&auml;&auml;r (RELTYPE_TAX_RATE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:414
+#: classes/applications/shop/shop_product.aw:417
 msgid "Minutit"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:415
+#: classes/applications/shop/shop_product.aw:418
 msgid "Tundi"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:455
+#: classes/applications/shop/shop_product.aw:458
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:460
+#: classes/applications/shop/shop_product.aw:463
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:617
+#: classes/applications/shop/shop_product.aw:620
 msgid "shop_product::draw(): no layout set!"
 msgstr ""

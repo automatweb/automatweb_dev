@@ -23,5 +23,4 @@ $GLOBALS["TRANS"]["Code branch"] = "Code branch";
 $GLOBALS["TRANS"]["Basedir"] = "Basedir";
 $GLOBALS["TRANS"]["Updater"] = "Updater";
 $GLOBALS["TRANS"]["Last update"] = "Last update";
-$GLOBALS["TRANS"][" / Muuda serverit "] = " / Change server";
 ?>

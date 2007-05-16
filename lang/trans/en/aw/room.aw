@@ -50,4 +50,8 @@ $GLOBALS["TRANS"]["Muuda"] = "Change";
 $GLOBALS["TRANS"]["Jah"] = "Yes";
 $GLOBALS["TRANS"]["Ei"] = "No";
 $GLOBALS["TRANS"]["Broneering"] = "Reservation";
+$GLOBALS["TRANS"]["VABA"] = "FREE";
+$GLOBALS["TRANS"]["Broneeri"] = "Reserve";
+$GLOBALS["TRANS"]["BRON"] = "BRON";
+$GLOBALS["TRANS"]["Saata arve"] = "Send invoice";
 ?>

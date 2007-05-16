@@ -907,12 +907,18 @@ msgid "Lisa"
 msgstr "Add"
 
 #: classes/contentmgmt/forum/forum_v2.aw:2408
-msgid " teemade kaust"
-msgstr " topic folder"
+msgid "teemade kaust"
+msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:2415
-msgid " aadresside kaust"
-msgstr " address folder"
+msgid "aadresside kaust"
+msgstr ""
+
+#~ msgid " teemade kaust"
+#~ msgstr " topic folder"
+
+#~ msgid " aadresside kaust"
+#~ msgstr " address folder"
 
 #~ msgid "Sisestatud kontrollkood on vale! <br />"
 #~ msgstr "Entered verification-code is wront"

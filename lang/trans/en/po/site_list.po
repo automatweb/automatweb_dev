@@ -118,5 +118,8 @@ msgid "Last update"
 msgstr "Last update"
 
 #: classes/install/site_list.aw:650
-msgid " / Muuda serverit "
-msgstr " / Change server"
+msgid "/ Muuda serverit"
+msgstr ""
+
+#~ msgid " / Muuda serverit "
+#~ msgstr " / Change server"
