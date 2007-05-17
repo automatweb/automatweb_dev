@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.1 2007/05/17 14:25:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.2 2007/05/17 15:23:04 markop Exp $
 // crm_conference_value_days.aw - Konverentsi kalendrivaade 
 /*
 
@@ -51,17 +51,111 @@ class crm_conference_value_days extends class_base
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
 
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
+
+	/** Change the realestate object info.
+		
+		@attrib name=parse_alias is_public="1" caption="Change"
+	
+	**/
+	function parse_alias($arr)
 	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
+		enter_function("value_days::parse_alias");
+//		$tpl = "kolm.tpl";
+//		$this->read_template($tpl);
+//		lc_site_load("room", &$this);
+		
+//		$data = array("joga" => "jogajoga");
+//		$this->vars($data);
+		//property väärtuse saatmine kujul "property_nimi"_value
+		$html = "";
+		$months = 3;
+		$n = 0;
+		while($n < $months)
+		{
+			$month_start = mktime(0, 0, 0, date("n",(time() + $n*30*24*3600)), 1, date("Y",(time() + $n*30*24*3600)));
+			$month_end = mktime(0, 0, 0, date("n",(time() + ($n + 1)*30*24*3600)), 1, date("Y",(time() + $n*30*24*3600)));
+
+			$day_of_the_week = date("w",($month_start));
+			if($day_of_the_week == 0) $day_of_the_week = 7;
+			
+			$html.='<table class="type4">
+				<tr class="subheading">	
+					<th colspan="7">'.date("F Y",(time() + $n*30*24*3600)).'</th>
+				</tr>
+				<tr>
+					<th>M</th>
+					<th>T</th>
+					<th>W</th>
+					<th>T</th>
+					<th>F</th>
+					<th>S</th>
+					<th>S</th>
+				</tr>';
+			$day_start = $month_start - 3600*24*($day_of_the_week - 1);
+			
+			
+			$w = 0;
+			while($w < 6)
+			{
+				$d = 0;
+				$html.='<tr>';
+				while($d < 7)
+				{
+					$html.='<td class="disabled"><a href="#">';
+					if($day_start >= $month_end  || $day_start < $month_start)
+					{
+						$html.='<font color="white">';
+					}
+					elseif($day_start < time())
+					{
+						$html.='<font color="grey">';
+					}
+					else
+					{
+						$html.='<font color="black">';
+					}
+					$html.=date("d",$day_start);
+					$html.='</font">';
+					$html.='</a></td>';
+					$d++;
+					$day_start = $day_start + 3600*24;
+				}
+				$html.='</tr>';
+				$w++;
+				if($w == 5 && date("d",$day_start) < 10) $w++;
+			}
+			$html.='</table>';
+			$n++;
+		}
+		
+		return $html;
+		exit_function("value_days::parse_alias");
 		return $this->parse();
 	}
 
+	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
+	function show($arr)
+	{
+		return $this->parse_alias($arr);
+		
+		
+		
+		
+		$ob = new object($arr["id"]);
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"name" => $this->parse_alias($arr),
+		));
+		
+		return $this->parse();
+	}
+
+	function request_execute ($this_object)
+	{
+		return $this->show (array (
+			"id" => $this_object->id(),
+		));
+	}
 //-- methods --//
 }
 ?>
