@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.33 2007/05/14 09:33:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.34 2007/05/17 07:55:26 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -127,6 +127,8 @@ class mini_gallery extends class_base
 	{
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
+
+		lc_site_load("mini_gallery", &$this);
 
 		$s_id = $ob->prop("style");
 		if(is_oid($s_id) && $this->can("view", $s_id))
