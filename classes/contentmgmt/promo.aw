@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.101 2007/05/10 12:56:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.102 2007/05/17 07:41:12 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -1184,7 +1184,8 @@ class promo extends class_base
 			$linked_obj = obj($o->meta("linked_obj"));
 			if ($linked_obj->class_id() == CL_MENU)
 			{
-				$link_str = $this->make_menu_link($linked_obj);
+				$ss = get_instance("contentmgmt/site_show");
+				$link_str = $ss->make_menu_link($linked_obj);
 			}
 			else
 			{
