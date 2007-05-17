@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.21 2007/05/16 14:17:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.22 2007/05/17 08:59:39 kristo Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -250,12 +250,38 @@ class calendar_event extends class_base
 		};
 		$t = get_instance(CL_CFGFORM);
 		$props = $t->get_props_from_cfgform(array("id" => $cform));
+
+		// also get view controllers from cfgform and apply those
+		$cform_o = obj($cform);
+		$ctrs = safe_array($cform_o->meta("view_controllers"));
+
 		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
 		$htmlc->start_output();
 		$aliasmgr = get_instance("aliasmgr");
+		$prop_list = $ob->get_property_list();
 		foreach($props as $propname => $propdata)
 		{
-		  	$value = $ob->prop($propname);
+			$ok = true;
+			if (is_array($ctrs[$propname]))
+			{
+				foreach($ctrs[$propname] as $v_ctr_oid)
+				{
+					if ($this->can("view", $v_ctr_oid))
+					{
+						$vco = obj($v_ctr_oid);
+						$vci = $vco->instance();
+						$prop_list[$propname]["value"] = $ob->prop($propname);
+						$ok &= ($vci->check_property($prop_list[$propname], $v_ctr_oid, array("obj" => $ob)) == PROP_OK);
+					}
+				}
+			}
+
+			if (!$ok)
+			{
+				continue;
+			}
+
+		  	$value = $ob->prop_str($propname);
 			if ($propdata["type"] == "datetime_select")
 			{
 				if($value == -1)
