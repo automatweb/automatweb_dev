@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.45 2006/09/01 11:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.46 2007/05/17 13:18:20 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1403,7 +1403,8 @@ exit_function("jigaboo");
 			}
 		}
 		else {
-			$result = t("Otsinguparameetritele vastavaid kuulutusi ei leitud!");
+			// ma olen kahes kohas siin l2hema paarisaja rea jooksul poole aasta sees taolist asja v2lja kommenteerind, sest veebis n2eb topelt. miks neid juurde tehakse pidevalt?
+			$result = ""; //t("Otsinguparameetritele vastavaid kuulutusi ei leitud!");
 		}
 		exit_function("re_search::show - process searchresults");
 		enter_function("re_search::show - parse");
@@ -1585,10 +1586,10 @@ exit_function("jigaboo");
 		foreach ($options_tt->arr() as $key=> $val)
 		{
 			$trans = $val->meta("tolge");
-			if($trans[$lang_id]) $this->options_tt[$key] = $trans[$lang_id];
+			if($trans[$lang_id]) $this->options_tt[$key] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
+//			if($trans[$lang_id]) $this->options_tt[$key] = $trans[$lang_id];
 			else $this->options_tt[$key] = $val->name();
 		}
-
 		natcasesort ($this->options_tt);
 		$this->options_tt = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik tehingud")) + $this->options_tt;
 
@@ -1708,7 +1709,8 @@ exit_function("jigaboo");
 		foreach ($options_c->arr() as $key=> $val)
 		{
 			$trans = $val->meta("tolge");
-			if($trans[$lang_id]) $this->options_c[$key] = $trans[$lang_id];
+			if($trans[$lang_id]) $this->options_c[$key] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
+	//		if($trans[$lang_id]) $this->options_c[$key] = $trans[$lang_id];
 			else $this->options_c[$key] = $val->name();
 		}
 		natcasesort ($this->options_c);
@@ -1724,7 +1726,8 @@ exit_function("jigaboo");
 		foreach ($options_up->arr() as $key=> $val)
 		{
 			$trans = $val->meta("tolge");
-			if($trans[$lang_id]) $this->options_up[$key] = $trans[$lang_id];
+			if($trans[$lang_id]) $this->options_up[$key] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
+			//if($trans[$lang_id]) $this->options_up[$key] = $trans[$lang_id];
 			else $this->options_up[$key] = $val->name();
 		}
 		$this->options_up = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik t&uuml;&uuml;bid")) + $this->options_up;
@@ -1738,6 +1741,7 @@ exit_function("jigaboo");
 		foreach ($options_ss->arr() as $key=> $val)
 		{
 			$trans = $val->meta("tolge");
+			if($trans[$lang_id]) $this->options_ss[$key] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
 			if($trans[$lang_id]) $this->options_ss[$key] = $trans[$lang_id];
 			else $this->options_ss[$key] = $val->name();
 		}
