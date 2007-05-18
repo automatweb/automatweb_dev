@@ -136,6 +136,11 @@ class languages extends aw_template
 		{
 			return false;
 		}
+		if (is_oid($l["oid"]) && !$this->can("view", $l["oid"]))
+		{
+			return false;
+		}
+
 		$this->quote(&$id);
 		$id = (int)$id;
 		$q = "SELECT acceptlang FROM languages WHERE id = '$id'";
