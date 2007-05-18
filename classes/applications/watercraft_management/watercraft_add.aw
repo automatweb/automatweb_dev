@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.7 2007/05/10 10:46:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.8 2007/05/18 07:43:35 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -301,6 +301,14 @@ class watercraft_add extends class_base
 				$saved_pages = array_keys($pages);
 				$_SESSION['watercraft_input_data']['saved_pages'] = $saved_pages;
 			}
+		}
+
+		// temp hack for seller
+		$u = get_instance(CL_USER);
+		if($watercraft_obj && !$watercraft_obj->prop("seller") && $u->get_current_person())
+		{
+			$watercraft_obj->set_prop("seller", $u->get_current_person());
+			$watercraft_obj->save();
 		}
 
 		// add 10 imageupload fields also
@@ -672,11 +680,12 @@ class watercraft_add extends class_base
 
 		$uid = aw_global_get('uid');
 
-		$ol = new object_list(array(
+		$items = new object_list(array(
 			'class_id' => CL_WATERCRAFT,
 			'createdby' => $uid,
 		));
-		foreach ($ol->arr() as $o)
+		/*
+		foreach ($list->arr() as $o)
 		{
 			$watercraft_name = $o->name();
 			$this->vars(array(
@@ -689,6 +698,93 @@ class watercraft_add extends class_base
 
 		$this->vars(array(
 			'ITEM' => $result
+		));
+		*/
+		
+		//$inst = get_instance(CL_WATERCRAFT_SEARCH);
+		//$arr["prepared_list"] = $ol;
+		//return $inst->show($arr);
+
+		$items_str = '';
+		$images = new object_list(array(
+			'class_id' => CL_IMAGE,
+			'parent' => $items->ids()
+		));
+		$images_lut = array();
+		foreach ($images->arr() as $image)
+		{
+			$images_lut[$image->parent()][] = $image->id();
+		}
+//		$watercraft_property_list = array();
+		$watercraft_inst = get_instance(CL_WATERCRAFT);
+		foreach ($items->arr() as $item_id => $item)
+		{
+			$properties = array();
+			foreach ($item->properties() as $name => $value)
+			{
+				if (!empty($watercraft_inst->$name))
+				{
+					$var = $watercraft_inst->$name;
+					//$properties['watercraft_'.$name] = htmlentities($var[$value]);
+					$properties['watercraft_'.$name] = $var[$value];
+				}
+				else
+				{
+					//$properties['watercraft_'.$name] = htmlentities($value);
+					$properties['watercraft_'.$name] = $value;
+				}
+			}
+
+			$image_inst = get_instance(CL_IMAGE);
+			$images_count = count($images_lut[$item_id]);
+			$image_str = '';
+			if ($images_count > 0)
+			{
+				$image_id = reset($images_lut[$item_id]);
+				$image_data = $image_inst->get_image_by_id($image_id);
+				$image_url = $image_inst->get_url_by_id($image_id);
+				$this->vars(array(
+					'watercraft_image_name' => $image_data['name'],
+					'watercraft_image_url' => $image_url,
+					'watercraft_image_tag' => $image_inst->make_img_tag_wl($image_id)
+				));
+				$image_str .= $this->parse('WATERCRAFT_IMAGE');
+
+			}
+			else
+			{
+				$image_str .= $this->parse('WATERCRAFT_NO_IMAGE');
+			}
+			
+
+			$this->vars(array(
+				/*
+				'watercraft_view_url' => aw_url_change_var(array(
+					'section' => "",
+					'class' => "",
+					'action' => "",
+					'watercraft_id' => $item_id,
+					'return_url' => (!empty($_GET['return_url'])) ? $_GET['return_url'] : get_ru()
+				)),
+				*/
+				'watercraft_edit_url' => aw_ini_get('baseurl').'/'.$item->meta('added_from_section').'?watercraft_id='.$item->id(),
+				'watercraft_images_count' => $images_count,
+				'WATERCRAFT_IMAGE' => $image_str
+				) + $properties
+			);
+			
+			$items_str .= $this->parse('SEARCH_RESULT_ITEM');
+		}
+
+		$this->vars(array(
+			'SEARCH_RESULT_ITEM' => $items_str
+		));
+
+		$search_results = $this->parse('SEARCH_RESULTS');
+
+		$this->vars(array(
+			'SEARCH_FORM_BOX' => $search_form_str,
+			'SEARCH_RESULTS' => $search_results,
 		));
 
 		return $this->parse();

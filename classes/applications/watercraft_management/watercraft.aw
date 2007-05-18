@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.13 2007/05/10 10:46:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.14 2007/05/18 07:43:35 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -1100,7 +1100,7 @@ class watercraft extends class_base
 			else
 			{
 				// this hack sucks bigtime .. doesn't it?:)
-				if(in_array($prop_name, $objs))
+				if(in_array($prop_name, $objs) && $this->can("view", $prop_value))
 				{
 					$prop_obj = obj($prop_value);
 					$prop_value = $prop_obj->name();
@@ -1140,7 +1140,7 @@ class watercraft extends class_base
 			$images_count++;
 		}
 
-		if (empty($images_str))
+		if (empty($images_str) && empty($first_image_str))
 		{
 			$images_str = $this->parse('WATERCRAFT_NO_IMAGE');
 			$first_image_str = $this->parse('WATERCRAFT_NO_FIRST_IMAGE');
@@ -1151,6 +1151,22 @@ class watercraft extends class_base
 		$vars['images_count'] = $images_count;
 		$vars['name'] = $ob->prop('name');
 		$vars['return_url'] = aw_url_change_var(array('watercraft_id' => NULL, 'return_url' => NULL), false, get_ru());
+		if($this->can("view", $ob->prop("seller")))
+		{
+			$seller_obj = obj($ob->prop("seller"));
+			$vars["name"] = ($_t = $seller_obj->name())?$_t:"-";
+			if($seller_obj->class_id() == CL_CRM_PERSON)
+			{
+				$vars["email"] = ($_t = $seller_obj->prop("email.mail"))?$_t:"-";
+				// well, this user1 prop isn't really the brightest idea. But hey, site_join does that, so i'll use it.
+				$vars["phone"] = ($_t = $seller_obj->prop("user1"))?$_t:"-";
+			}
+			elseif($seller_obj->class_id() == CL_CRM_COMPANY)
+			{
+				$vars["email"] = $seller_obj->prop("email.mail");
+				$vars["phone"] = $seller_obj->prop("phone.name");
+			}
+		}
 
 		$this->vars($vars);
 		return $this->parse();

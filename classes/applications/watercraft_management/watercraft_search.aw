@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.13 2007/04/28 12:47:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.14 2007/05/18 07:43:35 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -483,21 +483,28 @@ class watercraft_search extends class_base
 			$search_params = $_GET;
 		}
 
-		if ($do_search === true)
+		if ($do_search === true || $arr["prepared_list"])
 		{
-			$items_ol = $this->search(array(
-				'obj_inst' => $obj,
-				'request' => $search_params,
-				'limit' => $max_results
-			));
-			$items_count = $items_ol->count();
+			if($arr["prepared_list"])
+			{
+				$items = $arr["prepared_list"];
+			}
+			else
+			{
+				$items_ol = $this->search(array(
+					'obj_inst' => $obj,
+					'request' => $search_params,
+					'limit' => $max_results
+				));
+				$items_count = $items_ol->count();
 
-			$items = $this->search(array(
-				'obj_inst' => $obj,
-				'request' => $search_params,
-				'limit' => ($active_page * $results_on_page).', '.$results_on_page,
-//				'sort_by' => "watercraft.".$_GET['sortby']." ".$_GET['order']
-			));
+				$items = $this->search(array(
+					'obj_inst' => $obj,
+					'request' => $search_params,
+					'limit' => ($active_page * $results_on_page).', '.$results_on_page,
+	//				'sort_by' => "watercraft.".$_GET['sortby']." ".$_GET['order']
+				));
+			}
 			
 			$items_str = '';
 			$images = new object_list(array(
