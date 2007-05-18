@@ -468,5 +468,19 @@ class languages extends aw_template
 	{
 		die($_SESSION["user_adm_ui_lc"] != "" ? $_SESSION["user_adm_ui_lc"] : "et");
 	}
-};
+
+	function do_db_upgrade($table, $field, $query, $error)
+	{
+		switch ($field)
+		{
+			case 'oid':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'int'
+				));
+                                return true;
+		}
+		return false;
+	}
+}
 ?>
