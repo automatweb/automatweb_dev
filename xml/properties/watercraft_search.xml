@@ -51,6 +51,14 @@
             <caption>Salvestatud otsing</caption>
       </property>
       <property>
+            <name>section_id</name>
+            <table>watercraft_search</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>section_id</field>
+            <caption>M&amp;amp;auml;&amp;amp;auml;ratud sektsiooni id</caption>
+      </property>
+      <property>
             <name>search_form_conf</name>
             <table>objects</table>
             <group>parameters</group>

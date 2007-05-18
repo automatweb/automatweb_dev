@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.14 2007/05/18 07:43:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.15 2007/05/18 08:06:39 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -26,6 +26,9 @@
 
 	@property saved_search type=checkbox ch_value=1 table=watercraft_search
 	@caption Salvestatud otsing
+	
+	@property section_id type=textbox table=watercraft_search
+	@caption M&auml;&auml;ratud sektsiooni id
 
 @groupinfo parameters caption="Parameetrid"
 @default group=parameters
@@ -566,7 +569,7 @@ class watercraft_search extends class_base
 */
 				$this->vars(array(
 					'watercraft_view_url' => aw_url_change_var(array(
-						'section' => aw_global_get('section'),
+						'section' => $obj->prop('section_id')?$obj->prop('section_id'):aw_global_get('section'),
 						'watercraft_id' => $item_id,
 						'return_url' => (!empty($_GET['return_url'])) ? $_GET['return_url'] : get_ru()
 					)),
@@ -887,7 +890,8 @@ class watercraft_search extends class_base
 				passanger_count_to int,
 				seller int,
 				price_from int,
-				price_to int
+				price_to int,
+				section_id int,
 
 				additional_equipment varchar(255),
 
@@ -930,6 +934,7 @@ class watercraft_search extends class_base
 			case 'price':
 			case 'price_from':
 			case 'price_to':
+			case 'section_id':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
