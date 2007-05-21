@@ -19,6 +19,15 @@
             <ch_value>1</ch_value>
             <caption>N&amp;amp;auml;ita koode</caption>
       </property>
+      <property>
+            <name>template</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kalendrivaate templeit</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_CONFERENCE_VALUE_DAYS</syslog_type>
             <relationmgr>yes</relationmgr>

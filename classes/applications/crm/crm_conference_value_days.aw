@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.3 2007/05/21 11:09:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.4 2007/05/21 13:50:58 markop Exp $
 // crm_conference_value_days.aw - Konverentsi kalendrivaade 
 /*
 
@@ -16,6 +16,9 @@
 	
 	@property show_codes type=checkbox ch_value=1
 	@caption N&auml;ita koode
+	
+	@property template type=select
+	@caption Kalendrivaate templeit
 	
 */
 
@@ -35,6 +38,17 @@ class crm_conference_value_days extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "applications/crm/crm_conference_value_days"
+				));
+				unset($prop["options"][""]);
+				if(!sizeof($prop["options"]))
+				{
+					$prop["caption"] .= t("\n".$this->site_template_dir."");
+				}
+				break;
 			//-- get_property --//
 		};
 		return $retval;
@@ -61,28 +75,37 @@ class crm_conference_value_days extends class_base
 	////////////////////////////////////
 
 
-	/** Change the realestate object info.
-		
-		@attrib name=parse_alias is_public="1" caption="Change"
-	
+	/**
+		@attrib name=parse_alias is_public="1" caption="Change" nologin=1
 	**/
 	function parse_alias($arr)
 	{
 		enter_function("value_days::parse_alias");
-//		$tpl = "kolm.tpl";
-//		$this->read_template($tpl);
-//		lc_site_load("room", &$this);
-		
+
 //		$data = array("joga" => "jogajoga");
 //		$this->vars($data);
 		//property väärtuse saatmine kujul "property_nimi"_value
 		$html = "";
 		$months = 3;
+		
+		if(is_oid($arr["alias"]["to"]))
+		{
+			$calendar_object = obj($arr["alias"]["to"]);
+		}
+		else
+		{
+			$calendar_object = obj($arr["id"]);
+		}
+		$calendar_month = $_GET["calendar_month"];
+		
+		$tpl = $calendar_object->prop("template");
+		$this->read_template($tpl);
+		lc_site_load("conference_calendar", &$this);
+		$comment = $GLOBALS["lc_conference_calendar"]["LC_COMMENT"];
+	
 		$n = 0;
-		$calendar_object = obj($arr["id"]);
-
+		$n = $n + $calendar_month;
                 include_once(aw_ini_get("site_basedir")."/code/soapclient.aw");
-
                 $revalBookingServiceURL = "https://195.250.171.36/RevalORSService/RRCServices.asmx";
                 $revalBookingServiceNamespace = "http://revalhotels.com/ORS/webservices/";
 	        $urlData = parse_url($revalBookingServiceURL);
@@ -99,6 +122,7 @@ class crm_conference_value_days extends class_base
          	$codes = array();
 		$bg_colors = array();
 		$colors = array("H" => "red" , "M" => "yellow" , "L" => "lime");
+		$comments = array("H" => t("red") , "M" => t("yellow") , "L" => t("lime"));
 		foreach($return["GetConferenceDayTypesResult"]["ConferenceDayTypeClass"] as $data)
 		{
 			$codes[$data["Resort"]] = $data["Resort"];
@@ -108,30 +132,28 @@ class crm_conference_value_days extends class_base
 			}
 		}
 		
-		while($n < $months)
+		while($n < $months+$calendar_month)
 		{
 			$month_start = mktime(0, 0, 0, date("n",(time() + $n*30*24*3600)), 1, date("Y",(time() + $n*30*24*3600)));
-			$month_end = mktime(0, 0, 0, date("n",(time() + ($n + 1)*30*24*3600)), 1, date("Y",(time() + $n*30*24*3600)));
+			$month_end = mktime(0, 0, 0, date("n",(time() + ($n)*30*24*3600))+1, 1, date("Y",(time() + $n*30*24*3600)));
 
 			$day_of_the_week = date("w",($month_start));
 			if($day_of_the_week == 0) $day_of_the_week = 7;
 			
 			$html.='<table class="type4">
 				<tr class="subheading">	
-					<th colspan="7">'.date("F Y",(time() + $n*30*24*3600)).'</th>
+					<th colspan="7">'.locale::get_lc_month(date("m",(time() + $n*30*24*3600)))." ".date("Y",(time() + $n*30*24*3600)).'</th>
 				</tr>
 				<tr>
-					<th>M</th>
-					<th>T</th>
-					<th>W</th>
-					<th>T</th>
-					<th>F</th>
-					<th>S</th>
-					<th>S</th>
+					<th>'.locale::get_lc_weekday(1,true).'</th>
+					<th>'.locale::get_lc_weekday(2,true).'</th>
+					<th>'.locale::get_lc_weekday(3,true).'</th>
+					<th>'.locale::get_lc_weekday(4,true).'</th>
+					<th>'.locale::get_lc_weekday(5,true).'</th>
+					<th>'.locale::get_lc_weekday(6,true).'</th>
+					<th>'.locale::get_lc_weekday(0,true).'</th>
 				</tr>';
 			$day_start = $month_start - 3600*24*($day_of_the_week - 1);
-			
-			
 			$w = 0;
 			while($w < 6)
 			{
@@ -147,11 +169,11 @@ class crm_conference_value_days extends class_base
 					}
 					elseif($day_start < time())
 					{
-						$html.='<a href="#"><font color="grey">';
+						$html.='<a href="#" title="'.$comment[$bg_colors[date("Y-m-d" ,$day_start)]].'"><font color="grey">';
 					}
 					else
 					{
-						$html.='<a href="#"><font color="black">';
+						$html.='<a href="#" title="'.$comment[$bg_colors[date("Y-m-d" ,$day_start)]].'"><font color="black">';
 					}
 					$html.=date("d",$day_start);
 					$html.='</font">';
@@ -167,13 +189,26 @@ class crm_conference_value_days extends class_base
 			$n++;
 		}
 		
+		$next_url = aw_url_change_var("calendar_month" , $calendar_month + 3);
+		$prev_url = aw_url_change_var("calendar_month" , $calendar_month - 3);
+		
+		$next_link = html::href(array("caption" => (t("Next 3 months")." >>") , "url" => $next_url));
+		$prev_link = html::href(array("caption" => ("<< ".t("Previous 3 months")) , "url" => $prev_url));
 		if($calendar_object->prop("show_codes"))
 		{
 			$html.= "<br>Hotellide koodid: <br>";
 			$html.= join(", " , $codes);
 		}
 		
-		return $html;
+	//	return $html;
+		
+		$this->vars(array(
+			"CALENDAR" => $html,
+			"last_link" => $prev_link,
+			"next_link" => $next_link,
+			"last_url" => $prev_url,
+			"next_url" => $next_url,
+		));
 		exit_function("value_days::parse_alias");
 		return $this->parse();
 	}
