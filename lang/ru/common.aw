@@ -1,18 +1,18 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/ru/common.aw,v 1.4 2006/04/19 11:41:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/ru/common.aw,v 1.5 2007/05/21 14:08:12 kristo Exp $
 // kuude nimed
-define("LC_M1","&#1103;&#1085;&#1074;&#1072;&#1088;&#1100;");
-define("LC_M2","&#1092;&#1077;&#1074;&#1088;&#1072;&#1083;&#1100;");
-define("LC_M3","&#1084;&#1072;&#1088;&#1090;");
-define("LC_M4","&#1072;&#1087;&#1088;&#1077;&#1083;&#1100;");
-define("LC_M5","&#1084;&#1072;&#1081;");
-define("LC_M6","&#1080;&#1102;&#1085;&#1100;");
-define("LC_M7","&#1080;&#1102;&#1083;&#1100;");
-define("LC_M8","&#1072;&#1074;&#1075;&#1091;&#1089;&#1090;");
-define("LC_M9","&#1089;&#1077;&#1085;&#1090;&#1103;&#1073;&#1088;&#1100;");
-define("LC_M10","&#1086;&#1082;&#1090;&#1103;&#1073;&#1088;&#1100;");
-define("LC_M11","&#1085;&#1086;&#1103;&#1073;&#1088;&#1100;");
-define("LC_M12","&#1076;&#1077;&#1082;&#1072;&#1073;&#1088;&#1100;");
+define("LC_M1","ßíâàðü");
+define("LC_M2","Ôåâðàëü");
+define("LC_M3","Ìàðò");
+define("LC_M4","Àïðåëü");
+define("LC_M5","Ìàé");
+define("LC_M6","Èþíü;");
+define("LC_M7","Èþëü");
+define("LC_M8","Àâãóñò");
+define("LC_M9","Ñåíòÿáðü");
+define("LC_M10","Îêòÿáðü");
+define("LC_M11","Íîÿáðü");
+define("LC_M12","Äåêàáðü");
 
 define("LC_MONTH","|jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
 define("LC_WEEKDAY","|esmaspäev|teisipäev|kolmapäev|neljapäev|reede|laupäev|pühapäev");
