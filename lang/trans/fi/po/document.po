@@ -9,48 +9,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/document.aw:478
+#: classes/document.aw:483
 msgid "Viimati muudetud:"
 msgstr ""
 
-#: classes/document.aw:680
+#: classes/document.aw:685
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr ""
 
-#: classes/document.aw:710
+#: classes/document.aw:715
 msgid "Loe edasi"
 msgstr ""
 
-#: classes/document.aw:1126 classes/document.aw:1175
+#: classes/document.aw:1131 classes/document.aw:1180
 msgid "Vaata lisaks:"
 msgstr ""
 
-#: classes/document.aw:1131 classes/document.aw:1180
+#: classes/document.aw:1136 classes/document.aw:1185
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2382
+#: classes/document.aw:2387
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2389
+#: classes/document.aw:2394
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2397
+#: classes/document.aw:2402
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:2907
+#: classes/document.aw:2912
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!<br /><br />\n"
 "\n"
 msgstr ""
 
-#: classes/document.aw:2937
+#: classes/document.aw:2942
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:2939
+#: classes/document.aw:2944
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""

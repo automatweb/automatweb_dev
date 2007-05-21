@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/calendar/calendar_event.aw:class_819_help
 msgid "Klassi Kalendri s&uuml;ndmus help"
 msgstr ""
@@ -458,3 +457,6 @@ msgstr ""
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_UTEXTVAR10
+msgid "Seose UTEXTVAR10 (RELTYPE_UTEXTVAR10) tekst"
+msgstr ""

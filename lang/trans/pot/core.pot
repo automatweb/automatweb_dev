@@ -14,15 +14,15 @@ msgstr ""
 msgid "ACL error saidil %s: CAN_%s denied for oid %s"
 msgstr ""
 
-#: classes/core.aw:1040
+#: classes/core.aw:1041
 msgid "Tagasi"
 msgstr ""
 
-#: classes/core.aw:1072
+#: classes/core.aw:1073
 msgid "(nimetu)"
 msgstr ""
 
-#: classes/core.aw:1179
+#: classes/core.aw:1180
 msgid "Couldn't open file '%s' for writing"
 msgstr ""
 

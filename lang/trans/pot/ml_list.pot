@@ -1070,11 +1070,11 @@ msgstr ""
 msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1496 classes/applications/mailinglist/ml_list.aw:1670 classes/applications/mailinglist/ml_list.aw:3332
+#: classes/applications/mailinglist/ml_list.aw:1496 classes/applications/mailinglist/ml_list.aw:1670 classes/applications/mailinglist/ml_list.aw:3338
 msgid "ID"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1500 classes/applications/mailinglist/ml_list.aw:1675 classes/applications/mailinglist/ml_list.aw:3337
+#: classes/applications/mailinglist/ml_list.aw:1500 classes/applications/mailinglist/ml_list.aw:1675 classes/applications/mailinglist/ml_list.aw:3343
 msgid "Nimi"
 msgstr ""
 
@@ -1094,23 +1094,23 @@ msgstr ""
 msgid "Kustutada need liikmed?"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1680 classes/applications/mailinglist/ml_list.aw:3342
+#: classes/applications/mailinglist/ml_list.aw:1680 classes/applications/mailinglist/ml_list.aw:3348
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1686 classes/applications/mailinglist/ml_list.aw:3348
+#: classes/applications/mailinglist/ml_list.aw:1686 classes/applications/mailinglist/ml_list.aw:3354
 msgid "Allikas"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1692 classes/applications/mailinglist/ml_list.aw:3354
+#: classes/applications/mailinglist/ml_list.aw:1692 classes/applications/mailinglist/ml_list.aw:3360
 msgid "Liitunud"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1735 classes/applications/mailinglist/ml_list.aw:3402
+#: classes/applications/mailinglist/ml_list.aw:1735 classes/applications/mailinglist/ml_list.aw:3408
 msgid "Liitumisinfo"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1772 classes/applications/mailinglist/ml_list.aw:3445
+#: classes/applications/mailinglist/ml_list.aw:1772 classes/applications/mailinglist/ml_list.aw:3451
 msgid "Vaata"
 msgstr ""
 
@@ -1248,11 +1248,11 @@ msgstr ""
 msgid "Salvesta uue kirjana"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3264
+#: classes/applications/mailinglist/ml_list.aw:3270
 msgid "all done"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:3304
+#: classes/applications/mailinglist/ml_list.aw:3310
 msgid "kirjade registri andmed"
 msgstr ""
 

@@ -2257,6 +2257,10 @@ msgstr ""
 msgid "Klassi Eelarvestamise maks (1206) nimi"
 msgstr ""
 
+#: aw.ini:class_1207
+msgid "Klassi OCSP p&auml;ring (1207) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""
@@ -4691,6 +4695,10 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1206
 msgid "syslog.type.ST_BUDGETING_TAX"
+msgstr ""
+
+#: aw.ini:syslogtypes_1207
+msgid "syslog.type.ST_OCSP"
 msgstr ""
 
 #: aw.ini:syslogactions_1

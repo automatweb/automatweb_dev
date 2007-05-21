@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/watercraft_management/watercraft_add.aw:class_1168_help
 msgid "Klassi Vees&otilde;iduki lisamine help"
 msgstr ""
@@ -107,10 +106,13 @@ msgid "Pealkiri"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_add.aw:169
+msgid "&Uuml;levaade"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_add.aw:174
 msgid "Templeit"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:655
+#: classes/applications/watercraft_management/watercraft_add.aw:683
 msgid "(Nimetu)"
 msgstr ""
-

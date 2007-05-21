@@ -1,12 +1,12 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse T&auml;nav/K&uuml;la (aadress) caption"] = "Gatvës pavadinimas";
 $GLOBALS["TRANS"]["Omaduse Postiindeks (postiindeks) caption"] = "Paðto indeksas";
-$GLOBALS["TRANS"]["Omaduse Maakond (maakond) caption"] = "Valstybë (regionas)";
-$GLOBALS["TRANS"]["Omaduse Piirkond (piirkond) caption"] = "Valstybë (regionas)";
-$GLOBALS["TRANS"]["Omaduse Riik (riik) caption"] = "Ðalis";
-$GLOBALS["TRANS"]["Seose Riik (RELTYPE_RIIK) tekst"] = "Ðalis";
-$GLOBALS["TRANS"]["Seose Maakond (RELTYPE_MAAKOND) tekst"] = "Valstybë (regionas)";
-$GLOBALS["TRANS"]["Seose Piirkond (RELTYPE_PIIRKOND) tekst"] = "Valstybë (regionas)";
+$GLOBALS["TRANS"]["Omaduse Maakond (maakond) caption"] = "Valstija";
+$GLOBALS["TRANS"]["Omaduse Piirkond (piirkond) caption"] = "Regionas";
+$GLOBALS["TRANS"]["Omaduse Riik (riik) caption"] = "Valstybë";
+$GLOBALS["TRANS"]["Seose Riik (RELTYPE_RIIK) tekst"] = "Valstybë";
+$GLOBALS["TRANS"]["Seose Maakond (RELTYPE_MAAKOND) tekst"] = "Valstija";
+$GLOBALS["TRANS"]["Seose Piirkond (RELTYPE_PIIRKOND) tekst"] = "Regionas";
 $GLOBALS["TRANS"]["tel:"] = "telefono:";
 $GLOBALS["TRANS"]["Andorra"] = "Andora";
 $GLOBALS["TRANS"]["United Arab Emirates"] = "JAE";

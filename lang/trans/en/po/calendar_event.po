@@ -561,3 +561,7 @@ msgstr "See also"
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr "Recurrence"
+
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_UTEXTVAR10
+msgid "Seose UTEXTVAR10 (RELTYPE_UTEXTVAR10) tekst"
+msgstr ""

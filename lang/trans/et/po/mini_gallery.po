@@ -178,12 +178,12 @@ msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:65
-#: classes/contentmgmt/gallery/mini_gallery.aw:502
+#: classes/contentmgmt/gallery/mini_gallery.aw:513
 msgid "Nimi"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:66
-#: classes/contentmgmt/gallery/mini_gallery.aw:508
+#: classes/contentmgmt/gallery/mini_gallery.aw:519
 msgid "J&auml;rjekord"
 msgstr ""
 
@@ -211,38 +211,38 @@ msgstr ""
 msgid "Pildistamise kuup&auml;ev uuemad enne"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:304
+#: classes/contentmgmt/gallery/mini_gallery.aw:313
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:466
+#: classes/contentmgmt/gallery/mini_gallery.aw:477
 msgid "Galerii"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:466
+#: classes/contentmgmt/gallery/mini_gallery.aw:477
 msgid "pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:480
+#: classes/contentmgmt/gallery/mini_gallery.aw:491
 msgid "Lisa uus pilt"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:486
+#: classes/contentmgmt/gallery/mini_gallery.aw:497
 msgid "Salvesta pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:492
+#: classes/contentmgmt/gallery/mini_gallery.aw:503
 msgid "Kustuta valitud pildid"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:494
+#: classes/contentmgmt/gallery/mini_gallery.aw:505
 msgid "Kas oled kindel et soovid valitud pildid kustudada?"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:514
+#: classes/contentmgmt/gallery/mini_gallery.aw:525
 msgid "Muutja"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:520
+#: classes/contentmgmt/gallery/mini_gallery.aw:531
 msgid "Muudetud"
 msgstr ""

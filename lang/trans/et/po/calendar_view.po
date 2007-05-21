@@ -392,86 +392,90 @@ msgstr ""
 msgid "Seose Otsing (RELTYPE_SEARCH) tekst"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:127
-msgid "Kuuvaade & nädala sündmused"
-msgstr ""
-
-#: classes/calendar/calendar_view.aw:128
-msgid "Kuukalender"
+#: classes/calendar/calendar_view.aw:rel_RELTYPE_EVENT_VALIDATOR
+msgid "Seose Sündmuste näitamise kontroller (RELTYPE_EVENT_VALIDATOR) tekst"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:129
-msgid "Algavad sündmused"
+msgid "Kuuvaade & nädala sündmused"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:130
-msgid "Nädala vaade"
+msgid "Kuukalender"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:131
-msgid "Järgmised sündmused"
+msgid "Algavad sündmused"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:132
+msgid "Nädala vaade"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:133
+msgid "Järgmised sündmused"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:134
 msgid "Grupeeri allika järgi"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:133 classes/calendar/calendar_view.aw:148
+#: classes/calendar/calendar_view.aw:135 classes/calendar/calendar_view.aw:150
 msgid "Ülevaade"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:144
+#: classes/calendar/calendar_view.aw:146
 msgid "päev"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:145
+#: classes/calendar/calendar_view.aw:147
 msgid "nädal"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:146
+#: classes/calendar/calendar_view.aw:148
 msgid "kuu"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:147
+#: classes/calendar/calendar_view.aw:149
 msgid "Järgmised"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:187
+#: classes/calendar/calendar_view.aw:189
 msgid "Nimi"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:192
+#: classes/calendar/calendar_view.aw:194
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:197
+#: classes/calendar/calendar_view.aw:199
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:203
+#: classes/calendar/calendar_view.aw:205
 msgid "Jrk"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:208
+#: classes/calendar/calendar_view.aw:210
 msgid "Seaded"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:213
+#: classes/calendar/calendar_view.aw:215
 msgid "Väljade eraldaja"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:218
+#: classes/calendar/calendar_view.aw:220
 msgid "Lisaväljad"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:234
+#: classes/calendar/calendar_view.aw:236
 msgid "Väljundvorm on valimata"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1009
+#: classes/calendar/calendar_view.aw:1022
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1016
+#: classes/calendar/calendar_view.aw:1029
 msgid "&gt;&gt;"
 msgstr ""

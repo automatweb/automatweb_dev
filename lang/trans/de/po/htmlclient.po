@@ -9,82 +9,82 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/cfg/htmlclient.aw:256
+#: classes/cfg/htmlclient.aw:261
 msgid "Viga sisendandmetes"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:279
+#: classes/cfg/htmlclient.aw:284
 msgid "Jah"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:280
+#: classes/cfg/htmlclient.aw:285
 msgid "Ei"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:306
+#: classes/cfg/htmlclient.aw:311
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:307
+#: classes/cfg/htmlclient.aw:312
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:308
+#: classes/cfg/htmlclient.aw:313
 msgid "Deaktiivne"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:342
+#: classes/cfg/htmlclient.aw:347
 msgid "Vali"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:429 classes/cfg/htmlclient.aw:571
+#: classes/cfg/htmlclient.aw:434 classes/cfg/htmlclient.aw:564
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:586
+#: classes/cfg/htmlclient.aw:579
 msgid "&lt;&lt;&lt; Tagasi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:587
+#: classes/cfg/htmlclient.aw:580
 msgid "submit_and_back"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:597
+#: classes/cfg/htmlclient.aw:590
 msgid "Edasi &gt;&gt;&gt;"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:598
+#: classes/cfg/htmlclient.aw:591
 msgid "submit_and_forward"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:756
+#: classes/cfg/htmlclient.aw:749
 msgid "Andmed on salvestamata, kas soovite andmed enne lahkumist salvestada?"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:832
+#: classes/cfg/htmlclient.aw:825
 msgid "Tagasiside"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:834
+#: classes/cfg/htmlclient.aw:827
 msgid "Kasutajatugi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:835
+#: classes/cfg/htmlclient.aw:828
 msgid "Abi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:836
+#: classes/cfg/htmlclient.aw:829
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:839
+#: classes/cfg/htmlclient.aw:832
 msgid "J&auml;rjehoidja"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:843
+#: classes/cfg/htmlclient.aw:836
 msgid "Ajalugu"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:847
+#: classes/cfg/htmlclient.aw:840
 msgid "Lisa kiiresti"
 msgstr ""

@@ -13,6 +13,6 @@ msgstr ""
 msgid "cache::file_set_pt(%s, %s, %s): could not open file %s for writing!"
 msgstr ""
 
-#: classes/cache.aw:796
+#: classes/cache.aw:800
 msgid "cache::file_clear_pt_sub(%s, %s): could not rename %s to %s!"
 msgstr ""

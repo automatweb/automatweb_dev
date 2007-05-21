@@ -2182,7 +2182,7 @@ msgstr "By rows"
 
 #: classes/crm/crm_person.aw:1230
 msgid "H&auml;rra"
-msgstr ""
+msgstr "Mr"
 
 #: classes/crm/crm_person.aw:1231
 msgid "Proua"

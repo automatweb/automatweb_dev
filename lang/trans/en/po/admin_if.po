@@ -59,116 +59,116 @@ msgstr "This view is for editing content objects. To edit folders, You have to s
 
 #: classes/admin/admin_if.aw:layout_o_bot_left
 msgid "Kujundusosa Kataloogid (o_bot_left) pealkiri"
-msgstr ""
+msgstr "Layout folders"
 
-#: classes/admin/admin_if.aw:86
+#: classes/admin/admin_if.aw:89
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/admin/admin_if.aw:93
+#: classes/admin/admin_if.aw:96
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/admin/admin_if.aw:102 classes/admin/admin_if.aw:868
+#: classes/admin/admin_if.aw:105 classes/admin/admin_if.aw:883
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/admin/admin_if.aw:109 classes/admin/admin_if.aw:874
+#: classes/admin/admin_if.aw:112 classes/admin/admin_if.aw:889
 msgid "Kopeeri"
 msgstr "Copy"
 
-#: classes/admin/admin_if.aw:118
+#: classes/admin/admin_if.aw:121
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/admin/admin_if.aw:126 classes/admin/admin_if.aw:884
+#: classes/admin/admin_if.aw:129 classes/admin/admin_if.aw:899
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/admin/admin_if.aw:127 classes/admin/admin_if.aw:880
+#: classes/admin/admin_if.aw:130 classes/admin/admin_if.aw:895
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects, are You sure?"
 
-#: classes/admin/admin_if.aw:135
+#: classes/admin/admin_if.aw:138
 msgid "Uuenda"
 msgstr "Refresh"
 
-#: classes/admin/admin_if.aw:142
+#: classes/admin/admin_if.aw:145
 msgid "Impordi"
 msgstr "Import"
 
-#: classes/admin/admin_if.aw:149
+#: classes/admin/admin_if.aw:152
 msgid "Eelvaade"
 msgstr "Preview"
 
-#: classes/admin/admin_if.aw:192
+#: classes/admin/admin_if.aw:195
 msgid "<b>AutomatWeb</b>"
 msgstr ""
 
-#: classes/admin/admin_if.aw:495
+#: classes/admin/admin_if.aw:503
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/admin/admin_if.aw:504
+#: classes/admin/admin_if.aw:512
 msgid "Jrk"
 msgstr "Order"
 
-#: classes/admin/admin_if.aw:510 classes/admin/admin_if.aw:782
+#: classes/admin/admin_if.aw:518 classes/admin/admin_if.aw:796
 msgid "Aktiivne"
 msgstr "Active"
 
-#: classes/admin/admin_if.aw:519
+#: classes/admin/admin_if.aw:527
 msgid "Muutja"
 msgstr "Modifier"
 
-#: classes/admin/admin_if.aw:529
+#: classes/admin/admin_if.aw:537
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/admin/admin_if.aw:542
+#: classes/admin/admin_if.aw:550
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/admin/admin_if.aw:552
+#: classes/admin/admin_if.aw:560
 msgid "Tegevus"
 msgstr "Action"
 
-#: classes/admin/admin_if.aw:561
+#: classes/admin/admin_if.aw:569
 msgid "Vali"
 msgstr "Select"
 
-#: classes/admin/admin_if.aw:782
+#: classes/admin/admin_if.aw:796
 msgid "Mitteaktiivne"
 msgstr "Non-active"
 
-#: classes/admin/admin_if.aw:838
+#: classes/admin/admin_if.aw:852
 msgid "Ava"
 msgstr "Open"
 
-#: classes/admin/admin_if.aw:857
+#: classes/admin/admin_if.aw:872
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/admin/admin_if.aw:1156
+#: classes/admin/admin_if.aw:1171
 msgid "Administreerimisliides"
 msgstr "Administrative interface"
 
-#: classes/admin/admin_if.aw:1178
+#: classes/admin/admin_if.aw:1193
 msgid "Logi v&auml;lja"
 msgstr "Log out"
 
-#: classes/admin/admin_if.aw:1179
+#: classes/admin/admin_if.aw:1194
 msgid "Asukoht:"
 msgstr "You are here:"
 
-#: classes/admin/admin_if.aw:1180
+#: classes/admin/admin_if.aw:1195
 msgid "AutomatWeb&reg; on Struktuur Meedia registreeritud kaubam&auml;rk. K&otilde;ik &otilde;igused kaitstud, &copy; 1999-2006."
 msgstr "AutomatWeb&reg; is the registered trademark of Struktuur Meedia. All rights reserved, &copy; 1999-2006."
 
-#: classes/admin/admin_if.aw:1181
+#: classes/admin/admin_if.aw:1196
 msgid "Palun k&uuml;lasta meie kodulehek&uuml;lgi:"
 msgstr "Please visit our websites"
 
-#: classes/admin/admin_if.aw:1182
+#: classes/admin/admin_if.aw:1197
 msgid "Seaded"
 msgstr "Settings"

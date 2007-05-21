@@ -106,9 +106,13 @@ msgid "Pealkiri"
 msgstr ""
 
 #: classes/applications/watercraft_management/watercraft_add.aw:169
+msgid "&Uuml;levaade"
+msgstr ""
+
+#: classes/applications/watercraft_management/watercraft_add.aw:174
 msgid "Templeit"
 msgstr ""
 
-#: classes/applications/watercraft_management/watercraft_add.aw:655
+#: classes/applications/watercraft_management/watercraft_add.aw:683
 msgid "(Nimetu)"
 msgstr ""

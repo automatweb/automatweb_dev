@@ -108,6 +108,7 @@ $GLOBALS["TRANS"]["Jooksev kuu"] = "This month";
 $GLOBALS["TRANS"]["Eelmine kuu"] = "Last month";
 $GLOBALS["TRANS"]["Kokkuv&otilde;te"] = "Summary";
 $GLOBALS["TRANS"]["Ridade kaupa"] = "By rows";
+$GLOBALS["TRANS"]["H&auml;rra"] = "Mr";
 $GLOBALS["TRANS"]["Proua"] = "Mrs";
 $GLOBALS["TRANS"]["Preili"] = "Ms";
 $GLOBALS["TRANS"]["Vallaline"] = "Single";

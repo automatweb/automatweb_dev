@@ -4,7 +4,6 @@ $GLOBALS["TRANS"]["Omaduse Omanik (owner) caption"] = "Owner";
 $GLOBALS["TRANS"]["Omaduse Pakkujate kataloog (offerers_folder) caption"] = "Folder of offerers";
 $GLOBALS["TRANS"]["Omaduse default kuup&auml;ev otsungus tagasi (search_date_subtract) caption"] = "default date back in search";
 $GLOBALS["TRANS"]["Omaduse default kuup&auml;ev otsungus edasi (search_date_add) caption"] = "default date forward in search";
-$GLOBALS["TRANS"]["Omaduse Laoseisu ei arvestata (no_warehouse) caption"] = "Don't include warehause state";
 $GLOBALS["TRANS"]["Omaduse Nimi (procurements_find_name) caption"] = "Name";
 $GLOBALS["TRANS"]["Omaduse Staatus (procurements_find_status) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Pakkuja (procurements_find_offerer) caption"] = "Offerer";

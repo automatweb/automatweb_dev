@@ -51,7 +51,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_maakond
 msgid "Omaduse Maakond (maakond) caption"
-msgstr "Valstybë (regionas)"
+msgstr "Valstija"
 
 #: classes/crm/crm_address.aw:prop_maakond_comment
 msgid "Omaduse Maakond (maakond) kommentaar"
@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_piirkond
 msgid "Omaduse Piirkond (piirkond) caption"
-msgstr "Valstybë (regionas)"
+msgstr "Regionas"
 
 #: classes/crm/crm_address.aw:prop_piirkond_comment
 msgid "Omaduse Piirkond (piirkond) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_riik
 msgid "Omaduse Riik (riik) caption"
-msgstr "Ðalis"
+msgstr "Valstybë"
 
 #: classes/crm/crm_address.aw:prop_riik_comment
 msgid "Omaduse Riik (riik) kommentaar"
@@ -99,15 +99,15 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:rel_RELTYPE_RIIK
 msgid "Seose Riik (RELTYPE_RIIK) tekst"
-msgstr "Ðalis"
+msgstr "Valstybë"
 
 #: classes/crm/crm_address.aw:rel_RELTYPE_MAAKOND
 msgid "Seose Maakond (RELTYPE_MAAKOND) tekst"
-msgstr "Valstybë (regionas)"
+msgstr "Valstija"
 
 #: classes/crm/crm_address.aw:rel_RELTYPE_PIIRKOND
 msgid "Seose Piirkond (RELTYPE_PIIRKOND) tekst"
-msgstr "Valstybë (regionas)"
+msgstr "Regionas"
 
 #: classes/crm/crm_address.aw:rel_RELTYPE_BELONGTO
 msgid "Seose Seosobjekt (RELTYPE_BELONGTO) tekst"
