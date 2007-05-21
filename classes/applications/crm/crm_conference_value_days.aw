@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.2 2007/05/17 15:23:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.3 2007/05/21 11:09:26 markop Exp $
 // crm_conference_value_days.aw - Konverentsi kalendrivaade 
 /*
 
@@ -7,7 +7,16 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
+#GENERAL
+	@property hotel_code type=textbox
+	@caption Hotelli kood
+	
+	@property show_codes type=checkbox ch_value=1
+	@caption N&auml;ita koode
+	
 */
 
 class crm_conference_value_days extends class_base
@@ -70,6 +79,35 @@ class crm_conference_value_days extends class_base
 		$html = "";
 		$months = 3;
 		$n = 0;
+		$calendar_object = obj($arr["id"]);
+
+                include_once(aw_ini_get("site_basedir")."/code/soapclient.aw");
+
+                $revalBookingServiceURL = "https://195.250.171.36/RevalORSService/RRCServices.asmx";
+                $revalBookingServiceNamespace = "http://revalhotels.com/ORS/webservices/";
+	        $urlData = parse_url($revalBookingServiceURL);
+                $soapclient = new C_SoapClient($revalBookingServiceURL);
+                $soapclient->namespace = $revalBookingServiceNamespace;
+                $soapclient->debug = 0;
+                $soapclient->ns_end = "/";
+                $parameters = array();
+			
+		$parameters["Resort"] = '';
+         	$parameters["FirstDate"] = '2007-05-21T00:00:00.0000000+03:00';
+		$parameters["LastDate"] =  '2007-05-24T00:00:00.0000000+03:00';
+         	$return = $soapclient->call("GetConferenceDayTypes" , $parameters);
+         	$codes = array();
+		$bg_colors = array();
+		$colors = array("H" => "red" , "M" => "yellow" , "L" => "lime");
+		foreach($return["GetConferenceDayTypesResult"]["ConferenceDayTypeClass"] as $data)
+		{
+			$codes[$data["Resort"]] = $data["Resort"];
+			if($data["Resort"] == $calendar_object->prop("hotel_code"))
+			{
+				$bg_colors[substr($data["DayTypeDate"], 0, 10)] = $data["ConferenceDayType"];
+			}
+		}
+		
 		while($n < $months)
 		{
 			$month_start = mktime(0, 0, 0, date("n",(time() + $n*30*24*3600)), 1, date("Y",(time() + $n*30*24*3600)));
@@ -101,18 +139,19 @@ class crm_conference_value_days extends class_base
 				$html.='<tr>';
 				while($d < 7)
 				{
-					$html.='<td class="disabled"><a href="#">';
+					$html.='<td class="disabled" bgcolor="'.$colors[$bg_colors[date("Y-m-d" ,$day_start)]].'">';
+
 					if($day_start >= $month_end  || $day_start < $month_start)
 					{
 						$html.='<font color="white">';
 					}
 					elseif($day_start < time())
 					{
-						$html.='<font color="grey">';
+						$html.='<a href="#"><font color="grey">';
 					}
 					else
 					{
-						$html.='<font color="black">';
+						$html.='<a href="#"><font color="black">';
 					}
 					$html.=date("d",$day_start);
 					$html.='</font">';
@@ -126,6 +165,12 @@ class crm_conference_value_days extends class_base
 			}
 			$html.='</table>';
 			$n++;
+		}
+		
+		if($calendar_object->prop("show_codes"))
+		{
+			$html.= "<br>Hotellide koodid: <br>";
+			$html.= join(", " , $codes);
 		}
 		
 		return $html;
