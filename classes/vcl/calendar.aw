@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.86 2007/05/07 08:07:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.87 2007/05/21 09:10:31 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -401,7 +401,10 @@ class vcalendar extends aw_template
 		// besides the first one
 		if (isset($arr["item_end"]))
 		{
-			$arr["item_start"]+= 86400;
+			// this is a tricky one - we should not add a whole day to the start time, 
+			// because this will not make it work for events that start one day at 18:00 and end the next day
+			// at 16:00  - we must only make sure we are just behind 00:00
+			$arr["item_start"] = get_day_start($arr["item_start"]) + 86400;
 			//$arr["item_end"]+= 85399;
 			//$arr["item_start"] += 86400;
 			// okey .. first day needs to end at the specified time
@@ -939,7 +942,6 @@ class vcalendar extends aw_template
 		$now = date("Ymd");
 
 		$calendar_blocks = array();
-
 		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$realstart));
 		for ($j = $realstart; $j <= $realend; $j = $j + (7*86400))
 		{
