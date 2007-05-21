@@ -3062,18 +3062,6 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
-            <sell_offers_grp_offers>
-                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gipakkumised pakkumiste kaupa</caption>
-                  <parent>documents_all</parent>
-                  <submit>no</submit>
-                  <save>no</save>
-            </sell_offers_grp_offers>
-            <sell_offers_grp_products>
-                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gipakkumised toodete kaupa</caption>
-                  <parent>documents_all</parent>
-                  <submit>no</submit>
-                  <save>no</save>
-            </sell_offers_grp_products>
             <general_sub>
                   <caption>&amp;amp;Uuml;ldandmed</caption>
                   <parent>general</parent>
@@ -3248,6 +3236,18 @@
                   <submit>no</submit>
                   <save>no</save>
             </documents_all_manage>
+            <sell_offers_grp_offers>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gipakkumised pakkumiste kaupa</caption>
+                  <parent>documents_all</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </sell_offers_grp_offers>
+            <sell_offers_grp_products>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gipakkumised toodete kaupa</caption>
+                  <parent>documents_all</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </sell_offers_grp_products>
             <documents_news>
                   <caption>Siseuudised</caption>
                   <submit>no</submit>

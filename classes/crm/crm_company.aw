@@ -986,13 +986,6 @@ default group=org_objects
 	@property versions type=version_manager store=no no_caption=1
 
 groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
-@groupinfo sell_offers_grp_offers caption="M&uuml;&uuml;gipakkumised pakkumiste kaupa" parent=documents_all submit=no save=no
-@groupinfo sell_offers_grp_products caption="M&uuml;&uuml;gipakkumised toodete kaupa" parent=documents_all submit=no save=no
-
-@default group=sell_offers_grp_offers
-	@property sell_offers type=table store=no no_caption=1
-@default group=sell_offers_grp_products
-	@property sell_offers_prods type=table store=no no_caption=1
 
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldandmed" parent=general
@@ -1042,6 +1035,14 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	@groupinfo documents_all caption="Dokumendid" submit=no save=no
 		@groupinfo documents_all_browse caption="Dokumendid" parent=documents_all submit=no save=no
 		@groupinfo documents_all_manage caption="Haldus" parent=documents_all submit=no save=no
+
+@groupinfo sell_offers_grp_offers caption="M&uuml;&uuml;gipakkumised pakkumiste kaupa" parent=documents_all submit=no save=no
+@groupinfo sell_offers_grp_products caption="M&uuml;&uuml;gipakkumised toodete kaupa" parent=documents_all submit=no save=no
+
+@default group=sell_offers_grp_offers
+	@property sell_offers type=table store=no no_caption=1
+@default group=sell_offers_grp_products
+	@property sell_offers_prods type=table store=no no_caption=1
 
 groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
 
@@ -6293,6 +6294,11 @@ class crm_company extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
+		if ($tbl == "aw_account_balances")
+		{
+			$i = get_instance(CL_CRM_CATEGORY);
+                        return $i->do_db_upgrade($tbl, $field);
+		}
 		if ("kliendibaas_firma" == $tbl)
 		{
 			switch($field)
