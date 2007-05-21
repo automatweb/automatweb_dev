@@ -63,6 +63,16 @@
             <caption>Arhiivist, Uute hulgast</caption>
       </property>
       <property>
+            <name>event_search_button</name>
+            <table>objects</table>
+            <group>events</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>event_table</name>
             <table>objects</table>
             <group>events</group>
@@ -152,6 +162,28 @@
       <property>
             <name>sections_tb</name>
             <table>objects</table>
+            <group>sections</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption> toolbar</caption>
+      </property>
+      <property>
+            <name>sections_table</name>
+            <table>objects</table>
+            <group>sections</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Valdkondade tabel</caption>
+      </property>
+      <property>
+            <name>editor_tb</name>
+            <table>objects</table>
             <group>editors</group>
             <field>meta</field>
             <method>serialize</method>
@@ -161,6 +193,16 @@
             <caption>Toimetajad toolbar</caption>
       </property>
       <property>
+            <name>editors_table</name>
+            <table>objects</table>
+            <group>editors</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>event_menu</name>
             <table>objects</table>
             <group>settings</group>
@@ -168,7 +210,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT_MENU</reltype>
-            <caption>Valdkondade kataloog</caption>
+            <caption>S&amp;amp;uuml;ndmuste kataloog</caption>
       </property>
       <property>
             <name>places_menu</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.2 2007/05/16 14:17:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.3 2007/05/21 17:08:22 markop Exp $
 // events_manager.aw - Kuhu minna moodul 
 /*
 
@@ -42,6 +42,9 @@
 			@caption Arhiivist, Uute hulgast
 			# valikud: Arhiivist, Uute hulgast
 			
+			@property event_search_button type=submit store=no
+			@caption Otsi
+			
 		@layout events_top_right type=vbox parent=events_top
 	
 		#Tabel paremal:
@@ -78,7 +81,6 @@
 @default group=organiser
 	@property organiser_tb type=toolbar no_caption=1
 	@caption Korraldajate toolbar
-	  #nupud: Lisa uus
 	
 	@property organiser_table type=table no_caption=1
 	@caption Korraldajate tabel
@@ -88,14 +90,18 @@
 @default group=sections
 	@property sections_tb type=toolbar no_caption=1
 	@caption  toolbar
+	
+	@property sections_table type=table no_caption=1
+	@caption Valdkondade tabel
 	  #nupud: Lisa uus
 			
 @groupinfo editors caption="Toimetajad" submit=no
 @default group=editors
 
-	@property sections_tb type=toolbar no_caption=1
+	@property editor_tb type=toolbar no_caption=1
 	@caption Toimetajad toolbar
-	  #nupud: Lisa uus
+			
+	@property editors_table type=table no_caption=1
 			
 @groupinfo settings caption="seaded"
 @default group=settings
@@ -108,9 +114,6 @@
 
 	@property organiser_menu type=relpicker reltype=RELTYPE_ORGANISER_MENU
 	@caption Korraldajate kataloog
-
-	@property event_menu type=relpicker reltype=RELTYPE_EVENT_MENU
-	@caption Valdkondade kataloog
 
 	@property section_menu type=relpicker reltype=RELTYPE_SECTION_MENU
 	@caption Valdkondade kataloog
@@ -171,37 +174,7 @@ class events_manager extends class_base
 		switch($prop["name"])
 		{
 			case "events_tb":
-				$arr["prop"]["vcl_inst"]->add_button(array(
-					"name" => "new",
-					"img" => "new.gif",
-					"tooltip" => t("Lisa uus"),
-					"action" => "add_new_event"
-				));
-				$arr["prop"]["vcl_inst"]->add_button(array(
-					"name" => "delete",
-					"img" => "delete.gif",
-					"tooltip" => t("Kustuta m&auml;rgistatud s&uuml;ndmused"),
-					"action" => "delete_events",
-					"confirm" => t("Olete kindel, et soovite kustudada kõik valitud s&uuml;ndmused?"),
-				));
-				$arr["prop"]["vcl_inst"]->add_button(array(
-					"name" => "print",
-					"img" => "new.gif",
-					"action" => "print_events",
-					"tooltip" => t("S&uuml;ndmuste v&auml;ljatr&uuml;kk"),
-				));
-				$arr["prop"]["vcl_inst"]->add_button(array(
-					"name" => "archive",
-					"img" => "new.gif",
-					"action" => "show_archived",
-					"tooltip" => t("Arhiiv"),
-				));
-				$arr["prop"]["vcl_inst"]->add_button(array(
-					"name" => "sort",
-					"img" => "new.gif",
-					"action" => "sort_by_time",
-					"tooltip" => t("J&auml;rjesta laekumise j&auml;rgi"),
-				));
+				$this->_get_events_tb($arr);
 				break;
 			case "e_find_sections":
 				$section_list = new object_list();
@@ -222,6 +195,19 @@ class events_manager extends class_base
 			case "event_table":
 				$this->_get_event_table($arr);
 				break;
+				
+			case "places_table":
+				$this->_get_places_table($arr);
+				break;
+				
+			case "days_from_today":
+				if($_SESSION["events_manager"]["dft"])
+				{
+					$prop["options"]["value"] = $_SESSION["events_manager"]["dft"];
+				}
+				$prop["options"] = array(1,7,15,30,60,90,180,365);
+				$prop["onchange"] = "javascript:document.changeform.submit();";
+				break;
 		
 			//-- get_property --//
 		};
@@ -234,23 +220,219 @@ class events_manager extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "e_find_news":
+				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
+				break;
+			case "days_from_today":
+				$_SESSION["events_manager"]["dft"] = $arr["request"]["days_from_today"];
+				break;
 			//-- set_property --//
 		}
 		return $retval;
 	}	
 
+	function _get_places_table($arr)
+	{
+		if(!$arr["obj_inst"]->prop("places_menu"))
+		{
+			print t("Toimumiskohtade kataloog m&auml;&auml;ramata");
+			return;
+		}
+		$ol = new object_list(array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $arr["obj_inst"]->prop("places_menu"),
+		));
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_places_table($t);
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o->id()),
+				"address" => $o->prop("address.name"),
+			));
+		}
+	}
+	
+	function _get_organiser_table($arr)
+	{
+		if(!$arr["obj_inst"]->prop("organiser_menu"))
+		{
+			print t("Korraldajate kataloog m&auml;&auml;ramata");
+			return;
+		}
+		$ol = new object_list(array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $arr["obj_inst"]->prop("organiser_menu"),
+		));
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_places_table($t);
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o->id()),
+				"address" => $o->prop("contact.name"),
+			));
+		}
+	}
+	
+	function _get_sections_table($arr)
+	{
+		if(!$arr["obj_inst"]->prop("section_menu"))
+		{
+			print t("Valdkondade kataloog m&auml;&auml;ramata");
+			return;
+		}
+		$ol = new object_list(array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"parent" => $arr["obj_inst"]->prop("section_menu"),
+		));
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_sections_table($t);
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o->id()),
+				//"address" => $o->prop("contact.name"),
+			));
+		}
+	}
+	
+	function _get_editors_table($arr)
+	{
+	//kasutaja vaja 
+		$ol = new object_list(array(
+			"site_id" => array(),
+			"lang_id" => array(),
+			"class_id" => CL_CRM_PERSON,
+			"parent" => $arr["obj_inst"]->id(),
+		));
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_editors_table($t);
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o->id()),
+				"user" => "",
+			));
+		}
+	}
+	
+
+	function _get_places_tb($arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus"),
+			"action" => "add_new_place",
+		));
+	}
+	
+	function _get_sections_tb($arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus"),
+			"action" => "add_new_section",
+		));
+	}
+	
+	function _get_organiser_tb($arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus"),
+			"action" => "add_new_organiser",
+		));
+	}
+	
+	function _get_editor_tb($arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus"),
+			"action" => "add_new_editor",
+		));
+	}
+
+	function _get_event_list(&$arr)
+	{
+		$filter = array(
+			"class_id" => array(CL_CALENDAR_EVENT),
+			"site_id" => array(),
+			"lang_id" => array(),
+		);
+		
+		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
+		{
+			$search_data = $arr["obj_inst"]->meta("search_data");
+			if(is_array($search_data["e_find_sections"]) && sizeof($search_data["e_find_sections"]))
+			{
+				$filter["CL_CALENDAR_EVENT.RELTYPE_SECTION.id"] = $search_data["e_find_sections"];
+			}
+			if($search_data["e_find_editor"])
+			{
+				//möh?
+			}
+			if($search_data["e_find_text"])
+			{
+				$filter["name"] = "%".$search_data["e_find_text"]."%";
+				//kui kalendrisündmuseobjektiasjadkorda saab , siis lisab juurde
+			}
+			if($search_data["e_find_news"])
+			{
+				$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+			}
+			else
+			{
+				$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS, time());
+			}
+			
+			$arr["obj_inst"]->set_meta("search_data", null);
+			$arr["obj_inst"]->save();
+		}
+		
+		if($arr["dft"])
+		{
+			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, time()- 24*3600*$arr["dft"] , time());
+		}
+		
+		if($arr["request"]["archived"] == 1)
+		{
+			$filter["end"] = new obj_predicate_compare(OBJ_COMP_LESS, time());
+		}
+		if($arr["request"]["archived"] == -1)
+		{
+			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+		}
+
+		return new object_list($filter); 
+	}
+
 	function _get_event_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_event_table($t);
+		
+		$this->_init_event_table($t,$arr);
 		$cal_event = get_instance(CL_CALENDAR_EVENT);
 		
-		$ol = new object_list(array(
-			"class_id" => array(CL_CALENDAR_EVENT,CL_TASK),
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
+		$ol = $this->_get_event_list($arr);
 		
+		if($arr["request"]["sort_by_created"] == 1)
+		{
+			$ol->sort_by(array(
+				"prop" => "created",
+				"order" => "desc"
+			));
+		}
+
+		$t->set_sortable(false);
 		foreach($ol->arr() as $o)
 		{
 			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTION");
@@ -258,27 +440,134 @@ class events_manager extends class_base
 			$change_url = html::obj_change_url($o , t("Muuda"));
 			
 			$t->define_data(array(
-				"name" => $o->name(),
+				"name" => html::obj_change_url($o->id()),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
 				"section" => (is_object($sec))?$sec->name():"",
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"tasks" => $publish . " " . $change_url,
+				"oid" => $o->id(),
 			));
 		}
+	}
+
+	function _get_similar_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_event_table($t,$arr);
+		$cal_event = get_instance(CL_CALENDAR_EVENT);
+		$arr["dft"] = ($_SESSION["events_manager"]["dft"]) ? $_SESSION["events_manager"]["dft"] : 1;
+		$ol = $this->_get_event_list($arr);
 		
+		$t->set_sortable(false);
+		foreach($ol->arr() as $o)
+		{
+			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTION");
+			$publish = html::href(array("url" => "#" , "title" => t("Avalda") , "caption" => t("Avalda")));
+			$change_url = html::obj_change_url($o , t("Muuda"));
+			
+			$t->define_data(array(
+				"name" => html::obj_change_url($o->id()),
+				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
+				"section" => (is_object($sec))?$sec->name():"",
+				"level" => $cal_event->level_options[$o->prop("level")],
+				"oid" => $o->id(),
+			));
+		}
+	}
+
+	function _get_events_tb(&$arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus"),
+			"action" => "add_new_event"
+		));
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta m&auml;rgistatud s&uuml;ndmused"),
+			"action" => "delete_events",
+			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud s&uuml;ndmused?"),
+		));
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "print",
+			"img" => "print.gif",
+			"action" => "print_events",
+			"tooltip" => t("S&uuml;ndmuste v&auml;ljatr&uuml;kk"),
+		));
+
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "archive",
+			"img" => "archive.gif",
+			"url" => aw_url_change_var("archived",($arr["request"]["archived"] == 1 ? -1 : 1)),
+			"tooltip" => $arr["request"]["archived"] == 1 ? t("Uued"):t("Arhiiv"),
+		));
 		
-		/*Pealkiri		calendar_event::name
-Aeg		calendar_event::Toimumisaeg sortable
-Valdkond		calendar_event::Valdkonnad (esimene seos)
-Tase		calendar_event::Tase
-Regioon		calendar_event::Toimumiskoht::Aadress::Maakond (+Linn kui on m22ratud)
-Tegevused		avalda (paneb rea syndmusel Avaldatud=1), muuda (viib syndmuse muutmisvormile), klooni??
-Valik		checkboxid
-*/
+		//kui uuest vajutada mis juhtub?
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "sort",
+			"img" => "down_r_arr.png",
+			"url" => aw_url_change_var("sort_by_created",($arr["request"]["sort_by_created"] == 1 ? 1 : 1)),
+			"tooltip" => ($arr["request"]["sort_by_created"] == 1 ? t("J&auml;rjesta laekumise j&auml;rgi") : t("J&auml;rjesta laekumise j&auml;rgi")),
+		));
+	}
+
+	function _get_similar_tb(&$arr)
+	{
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta m&auml;rgistatud s&uuml;ndmused"),
+			"action" => "delete_events",
+			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud s&uuml;ndmused?"),
+		));
 
 	}
 
-	function _init_event_table(&$t)
+	function _init_places_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "address",
+			"caption" => t("Aadress"),
+			"align" => "center"
+		));
+	}
+	
+	function _init_sections_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+// 		$t->define_field(array(
+// 			"name" => "address",
+// 			"caption" => t("Aadress"),
+// 			"align" => "center"
+// 		));
+	}
+	
+	function _init_editors_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "user",
+			"caption" => t("Kasutajanimi"),
+			"align" => "center"
+		));
+	}
+	
+	function _init_event_table(&$t,$arr)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -306,11 +595,14 @@ Valik		checkboxid
 			"caption" => t("Regioon"),
 			"align" => "center"
 		));
-		$t->define_field(array(
-			"name" => "tasks",
-			"caption" => t("Tegevused"),
-			"align" => "center"
-		));
+		if($arr["request"]["group"] != "similar_find")
+		{
+			$t->define_field(array(
+				"name" => "tasks",
+				"caption" => t("Tegevused"),
+				"align" => "center"
+			));
+		}
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -336,7 +628,95 @@ Valik		checkboxid
 		));
 		return $this->parse();
 	}
+	
+	/**
+		@attrib name=delete_events is_public="1" caption="Change"
+	**/
+	function delete_events($arr)
+	{
+		object_list::iterate_list($arr["sel"], "delete");
+                return $arr["post_ru"];
+	}
 
+	/**
+		@attrib name=add_new_event is_public="1" caption="Change"
+	**/
+	function add_new_event($arr)
+	{
+		$event = new object();
+		$event->set_class_id(CL_CALENDAR_EVENT);
+		$event->set_parent($arr["id"]);
+		$event->set_prop("start1" , time());
+		$event->set_prop("end" , time());
+		$event->save();
+		return html::get_change_url($event->id(),array("return_url" => $arr["post_ru"]));
+	}
+
+	/**
+		@attrib name=add_new_place is_public="1" caption="Change"
+	**/
+	function add_new_place($arr)
+	{
+		$o = obj($arr["id"]);
+		if(!$o->prop("places_menu"))
+		{
+			print t("Toimumiskohtade kataloog m&auml;&auml;ramata");
+			return $arr["post_ru"];
+		}
+		$event = new object();
+		$event->set_class_id(CL_SCM_LOCATION);
+		$event->set_parent($o->prop("places_menu"));
+		$event->save();
+		return html::get_change_url($event->id(),array("return_url" => $arr["post_ru"]));
+	}
+
+	/**
+		@attrib name=add_new_organiser is_public="1" caption="Change"
+	**/
+	function add_new_organiser($arr)
+	{
+		$o = obj($arr["id"]);
+		if(!$o->prop("organiser_menu"))
+		{
+			print t("Toimumiskohtade kataloog m&auml;&auml;ramata");
+			return $arr["post_ru"];
+		}
+		$organiser = new object();
+		$organiser->set_class_id(CL_CRM_COMPANY);
+		$organiser->set_parent($o->prop("organiser_menu"));
+		$organiser->save();
+		return html::get_change_url($organiser->id(),array("return_url" => $arr["post_ru"]));
+	}
+	
+	/**
+		@attrib name=add_new_section is_public="1" caption="Change"
+	**/
+	function add_new_section($arr)
+	{
+		$o = obj($arr["id"]);
+		if(!$o->prop("section_menu"))
+		{
+			print t("Valdkondade kataloog m&auml;&auml;ramata");
+			return $arr["post_ru"];
+		}
+		$section = new object();
+		$section->set_class_id(CL_CRM_SECTION);
+		$section->set_parent($o->prop("section_menu"));
+		$section->save();
+		return html::get_change_url($section->id(),array("return_url" => $arr["post_ru"]));
+	}
+
+	/**
+		@attrib name=add_new_editor is_public="1" caption="Change"
+	**/
+	function add_new_editor($arr)
+	{
+		$editor = new object();
+		$editor->set_class_id(CL_CRM_PERSON);
+		$editor->set_parent($arr["id"]);
+		$editor->save();
+		return html::get_change_url($editor->id(),array("return_url" => $arr["post_ru"]));
+	}
 //-- methods --//
 }
 ?>

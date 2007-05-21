@@ -243,11 +243,10 @@
             <group>general</group>
             <table>planner</table>
             <type>classificator</type>
+            <store>connect</store>
+            <reltype>RELTYPE_UTEXTVAR10</reltype>
             <field>utextvar10</field>
             <caption></caption>
-		<store>connect</store>
-		<reltype>RELTYPE_UTEXTVAR10</reltype>
-		<multiple>1</multiple>
       </property>
       <property>
             <name>aliasmgr</name>
@@ -336,11 +335,16 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
-		<UTEXTVAR10>
-			<value>4</value>
-			<clid>CL_META</clid>
-			<caption>UTEXTVAR10</caption>
-		</UTEXTVAR10>
+            <UTEXTVAR10>
+                  <value>4</value>
+                  <clid>CL_META</clid>
+                  <caption>RELTYPE_UTEXTVAR10</caption>
+            </UTEXTVAR10>
+            <SECTION>
+                  <value>5</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Tegevusala</caption>
+            </SECTION>
       </reltypes>
 </properties>
 

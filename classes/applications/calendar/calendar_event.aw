@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.22 2007/05/17 08:59:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.23 2007/05/21 17:08:24 markop Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -17,8 +17,8 @@
 @property end type=datetime_select field=end 
 @caption Lõpeb
 
-@property level type=select field=level
-@caption Tase
+property level type=select field=level
+caption Tase
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -135,7 +135,7 @@
 @reltype UTEXTVAR10 value=4 clid=CL_META
 @caption RELTYPE_UTEXTVAR10
 
-@reltype SECTION value=4 clid=CL_CRM_SECTION
+@reltype SECTION value=5 clid=CL_CRM_SECTION
 @caption Tegevusala
 
 */
