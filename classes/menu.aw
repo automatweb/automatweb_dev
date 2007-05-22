@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.196 2007/05/22 11:17:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.197 2007/05/22 11:43:56 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1833,7 +1833,7 @@ class menu extends class_base
 
 		if ($o->prop("link") != "")
 		{
-			$link = $o->prop("link");
+			$link = $o->trans_get_val("link");
 		}
 		else
 		{
@@ -1848,11 +1848,11 @@ class menu extends class_base
 
 		if (aw_global_get("section") == $target["to"])
 		{
-			$ret = sprintf("<a $ltarget class=\"sisutekst-sel\" href='$link'>%s</a>",$target["name"]);
+			$ret = sprintf("<a $ltarget class=\"sisutekst-sel\" href='$link'>%s</a>",$o->trans_get_val("name"));
 		}
 		else
 		{
-			$ret = sprintf("<a $ltarget class=\"sisutekst\" href='$link'>%s</a>",$target["name"]);
+			$ret = sprintf("<a $ltarget class=\"sisutekst\" href='$link'>%s</a>",$o->trans_get_val("name"));
 		}
 		return $ret;
 	}
