@@ -99,6 +99,10 @@ if($_SESSION["bank_return"]["data"]["VK_REF"])
 {
 	$id = substr($_SESSION["bank_return"]["data"]["VK_REF"] ,0 , -1 );
 }
+if($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"])
+{
+	$id = substr($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-REF"] ,0 , -1 );
+}
 
 //logimine
 $log = date("d/m/Y H:i : ",time());
@@ -118,7 +122,9 @@ fclose($fh);
 
 
 //esimene on hansapanga, EYP, sampo ja krediidipanga positiivne vastus, teine krediitkaardikeskuse
-	if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1101  || $_POST["VK_SERVICE"] == 1101 || ($_GET["action"] == "afb" && $_GET["respcode"] == "000"))
+	if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1101  || $_POST["VK_SERVICE"] == 1101 || $_GET["SOLOPMT-RETURN-VERSION"] == "0002"||  ($_GET["action"] == "afb" && $_GET["respcode"] == "000")
+	|| ($_SESSION["bank_return"]["data"]["action"] == "afb" && $_SESSION["bank_return"]["data"]["respcode"] == "000")
+	)
 {
 	$url = $_SESSION["bank_payment"]["url"];
 	if(!$url)

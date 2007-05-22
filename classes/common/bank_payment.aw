@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.52 2007/04/30 15:10:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.53 2007/05/22 16:34:51 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -123,6 +123,7 @@ class bank_payment extends class_base
 		"HP" => "hansapank",
 		"afb" => "credit_card",
 		"SAMPOPANK" => "sampopank",
+		"0002" => "nordeapank",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
@@ -149,6 +150,7 @@ class bank_payment extends class_base
 		"hansapank" => "VK_REF",
 		"sampopank" => "VK_REF",
 		"credit_card" => "ecuno",
+		"nordeapank" => "SOLOPMT-RETURN-REF",
 	);
 
 	/** 
@@ -294,8 +296,13 @@ class bank_payment extends class_base
 		}
 		if(!$data["cancel_url"])
 		{
-			$data["cancel_url"] = $payment->prop("cancel_url");
-			$_SESSION["bank_payment"]["cancel"] = $payment->prop("cancel_url");
+			$c = $payment->prop("cancel_url");
+			if(is_oid($c))
+			{
+				$c = aw_ini_get("baseurl")."/".$c;
+			}
+			$data["cancel_url"] = $c;
+			$_SESSION["bank_payment"]["cancel"] = $c;
 		}
 		
 		if(!$data["amount"] && $data["units"] && $payment->prop("default_unit_sum"))
@@ -436,14 +443,18 @@ class bank_payment extends class_base
 		{
 			if(is_array(unserialize($log)))
 			{
-				$val = unserialize($log);//arr($val);
+				$val = unserialize($log);
 				if($val["VK_SND_ID"])
 				{
 					$bank_id = $this->merchant_id[$val["VK_SND_ID"]];
 				}
-				else
+				elseif($val["action"])
 				{
 					$bank_id = $this->merchant_id[$val["action"]];
+				}
+				else
+				{
+					$bank_id = $this->merchant_id[$val["SOLOPMT-RETURN-VERSION"]];
 				}
 				if(date_edit::get_timestamp($filter["find_date_start"]) > 1 && !(date_edit::get_timestamp($filter["find_date_start"]) == date_edit::get_timestamp($filter["find_date_end"])) && date_edit::get_timestamp($filter["find_date_start"]) > $val["timestamp"])
 				{
@@ -475,7 +486,7 @@ class bank_payment extends class_base
 */				if($val["timestamp"])
 				{
 					$log_data[$val["timestamp"]]["payer"] = $val["VK_SND_NAME"];
-					$log_data[$val["timestamp"]]["ref"] = $val["VK_REF"];
+					$log_data[$val["timestamp"]]["ref"] = $val[$this->ref[$bank_id]];
 					$log_data[$val["timestamp"]]["msg"] = $val["VK_MSG"];
 					$log_data[$val["timestamp"]]["sum"] = $val["VK_AMOUNT"];
 					$log_data[$val["timestamp"]]["bank"] = $bank_id;
@@ -493,7 +504,7 @@ class bank_payment extends class_base
 					{
 						$log_data[$val["timestamp"]]["payer"] = $val["msgdata"];
 					}
-					if($val["VK_SERVICE"] == 1101 || $val["respcode"] == "000")
+					if($val["VK_SERVICE"] == 1101 || $val["respcode"] == "000" || $val["SOLOPMT-RETURN-REF"])
 					{
 						$log_data[$val["timestamp"]]["ok"] = 1;
 					}
@@ -1278,7 +1289,7 @@ class bank_payment extends class_base
 		if(!$arr["service"]) $arr["service"] = "0002";
 		if(!$arr["version"]) $arr["version"] = "0001";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
-		if(!$arr["confirm"]) $arr["confirm"] = "NO";
+		if(!$arr["confirm"]) $arr["confirm"] = "YES";
 		if(!$arr["acc"]) $arr["acc"] = "";
 		if(!$arr["name"]) $arr["name"] = "";
 		if(!$arr["recieve_id"]) $arr["recieve_id"] = "10354213";
@@ -1288,7 +1299,7 @@ class bank_payment extends class_base
 //		$arr["priv_key"] = "e5JRSW6NLbaR2SvHnc8qNRSQdAzCe8dF";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
-
+		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
 		if($arr["lang"] == "et" || $arr["lang"] == "EST")
 		{
 			$arr["lang"] = 4;
@@ -1297,7 +1308,7 @@ class bank_payment extends class_base
 		{
 			$arr["lang"] = 3;
 		}
-		
+		if(!$arr["lang"] > 0) $arr["lang"] = "3";
 /*		if(!$arr["priv_key"])
 		{
 			if($arr["test"] && $this->test_priv_keys[$arr["bank_id"]]) $file = $this->test_priv_keys[$arr["bank_id"]];
@@ -1325,7 +1336,6 @@ class bank_payment extends class_base
 		{
 			$arr["lang"] = "en";
 		}
-		if(!$arr["lang"]) $arr["lang"] = "EST";
 		if(!$arr["lang"]) $arr["lang"] = "et";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
@@ -1420,7 +1430,9 @@ class bank_payment extends class_base
 		$VK_message       .= $reference_nr.'&';
 		$VK_message       .= $date.'&';
 		$VK_message       .= $curr.'&';
-		$VK_message       .= ''.'&';
+		$VK_message       .= $priv_key.'&';
+		//arr($VK_message);die();
+		//$VK_message = "0003&1998052212254471&12345678&570,00&55&EXPRESS&EUR&LEHTI&";
 		$SOLOPMT_MAC      = strtoupper(md5( $VK_message ));
 		
 		$http = get_instance("protocols/file/http");
@@ -1430,9 +1442,9 @@ class bank_payment extends class_base
 			"SOLOPMT_VERSION"     => $service,// 1.    Payment Version   SOLOPMT_VERSION   "0002"   AN 4  M
 			"SOLOPMT_STAMP"       => $stamp,// 2.    Payment Specifier    SOLOPMT_STAMP  Code specifying the payment   N 20  M 
 			"SOLOPMT_RCV_ID"      => $sender_id, // 3.    Service Provider ID  SOLOPMT_RCV_ID    Customer ID (in Nordea's register)  AN 15    M 
-			"SOLOPMT_RCV_ACCOUNT" => $acc,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
-			"SOLOPMT_RCV_NAME"    => $name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
-			"SOLOPMT_LANGUAGE"    => $lang,// 6.    Payment Language  SOLOPMT_LANGUAGE  1 = Finnish 2 = Swedish 3 = English    N 1   O 
+//			"SOLOPMT_RCV_ACCOUNT" => $acc,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
+//			"SOLOPMT_RCV_NAME"    => $name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
+			"SOLOPMT_LANGUAGE"    => 3,//$lang,// 6.    Payment Language  SOLOPMT_LANGUAGE  1 = Finnish 2 = Swedish 3 = English    N 1   O 
 			"SOLOPMT_AMOUNT"      => $amount,// 7.    Payment Amount    SOLOPMT_AMOUNT    E.g. 990.00    AN 19    M 
 			"SOLOPMT_REF"         => $reference_nr,// 8.    Payment Reference Number   SOLOPMT_REF    Standard reference number  AN 20    M 
 			"SOLOPMT_DATE"        => $date,// 9.    Payment Due Date  SOLOPMT_DATE   "EXPRESS" or "DD.MM.YYYY"  AN 10    M 
@@ -1574,6 +1586,10 @@ class bank_payment extends class_base
 		{
 			return $this->check_cc_response();
 		}
+		if($_SESSION["bank_return"]["data"]["SOLOPMT-RETURN-VERSION"] == "0002")//selliselt tulevad Nordeapangamaksed
+		{
+			return $this->check_nordea_response();
+		}
 		
 		$data = substr("000".strlen($VK_SERVICE),-3).$VK_SERVICE
 		.substr("000".strlen($VK_VERSION),-3).$VK_VERSION
@@ -1647,6 +1663,18 @@ class bank_payment extends class_base
 		$pubkeyid = openssl_get_publickey($cert);
 		$ok = openssl_verify($data, $mac, $pubkeyid);
 		openssl_free_key($pubkeyid);
+		return $ok;
+	}
+
+	function check_nordea_response()
+	{
+		extract($_SESSION["bank_return"]);
+		$fp = fopen($this->cfg["site_basedir"]."/pank/nordea.mac", "r");
+		$cert = fread($fp, 8192);
+		fclose($fp);
+		$str = $data["SOLOPMT-RETURN-VERSION"]."&".$data["SOLOPMT-RETURN-STAMP"]."&".$data["SOLOPMT-RETURN-REF"]."&".$data["SOLOPMT-RETURN-PAID"]."&".$cert."&";
+		//miski võrdlus.... $data["SOLOPMT-RETURN-MAC"] == strtoupper(md5($str)); ... vist
+		//a seniks returnime ok, nagu oleks kõik hästi
 		return $ok;
 	}
 }
