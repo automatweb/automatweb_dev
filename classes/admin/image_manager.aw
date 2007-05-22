@@ -43,7 +43,8 @@ class image_manager extends aw_template
 		}
 		else
 		{
-			$parent = aw_ini_get("image.default_folder");
+			$am = get_instance("aliasmgr");
+			$parent = $am->get_def_img_folder_from_path(obj($doc->parent()));
 			if (!$parent)
 			{
 				$parent = $doc->parent();

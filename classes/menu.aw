@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.195 2007/05/10 12:56:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.196 2007/05/22 11:17:51 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -51,6 +51,12 @@
 
 		@property cfgmanager type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize group=advanced_settings
 		@caption Konfiguratsioonivorm
+
+		@property default_image_folder type=relpicker reltype=RELTYPE_DEFAULT_IMAGE_FOLDER field=meta method=serialize group=advanced_settings
+		@caption Vaikimisi piltide kataloog
+
+		@property default_image_folder_is_inherited type=checkbox ch_value=1 field=meta method=serialize group=advanced_settings
+		@caption Vaikimisi piltide kataloog p&auml;ritav
 
 		@property change_time type=select field=meta method=serialize group=advanced_settings
 		@caption Sisu uuendamise sagedus
@@ -437,6 +443,9 @@
 
 	@reltype NO_DOCS_FROM_MENU value=24 clid=CL_MENU
 	@caption &auml;ra v&otilde;ta dokumente men&uuml;&uuml; alt
+
+	@reltype DEFAULT_IMAGE_FOLDER value=25 clid=CL_MENU
+	@caption Vaikimisi piltide kataloog
 */
 
 define("IP_ALLOWED", 1);

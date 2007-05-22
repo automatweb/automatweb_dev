@@ -116,6 +116,26 @@
             <caption>Konfiguratsioonivorm</caption>
       </property>
       <property>
+            <name>default_image_folder</name>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEFAULT_IMAGE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced_settings</group>
+            <caption>Vaikimisi piltide kataloog</caption>
+      </property>
+      <property>
+            <name>default_image_folder_is_inherited</name>
+            <table>objects</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced_settings</group>
+            <caption>Vaikimisi piltide kataloog p&amp;amp;auml;ritav</caption>
+      </property>
+      <property>
             <name>change_time</name>
             <table>objects</table>
             <type>select</type>
@@ -1126,6 +1146,11 @@
                   <clid>CL_MENU</clid>
                   <caption>&amp;amp;auml;ra v&amp;amp;otilde;ta dokumente men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
             </NO_DOCS_FROM_MENU>
+            <DEFAULT_IMAGE_FOLDER>
+                  <value>25</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Vaikimisi piltide kataloog</caption>
+            </DEFAULT_IMAGE_FOLDER>
       </reltypes>
 </properties>
 

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.211 2006/10/20 11:15:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.212 2007/05/22 11:17:51 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -605,6 +605,10 @@ class aliasmgr extends aw_template
 		foreach($defcs as $def_clid => $def_ini)
 		{
 			$def_val = aw_ini_get($def_ini);
+			if ($def_clid == CL_IMAGE)
+			{
+				$def_val = $this->get_def_img_folder_from_path($obj);
+			}
 			if (is_oid($def_val) && $this->can("view", $def_val) && $this->can("add", $def_val))
 			{
 				$this->vars(array(
@@ -1113,5 +1117,18 @@ HTM;
 		}
 	}
 
+	function get_def_img_folder_from_path($o)
+	{
+		$ret = aw_ini_get("image.default_folder");
+		$pt = $o->path();
+		foreach($pt as $path_item)
+		{
+			if ($this->can("view", $path_item->prop("default_image_folder")) && ($path_item->prop("default_image_folder_is_inherited") || $path_item->id() == $o->id()))
+			{
+				$ret = $path_item->prop("default_image_folder");
+			}
+		}
+		return $ret;
+	}
 }
 ?>
