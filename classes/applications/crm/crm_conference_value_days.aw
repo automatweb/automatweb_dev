@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.4 2007/05/21 13:50:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.5 2007/05/22 10:57:28 markop Exp $
 // crm_conference_value_days.aw - Konverentsi kalendrivaade 
 /*
 
@@ -13,6 +13,9 @@
 #GENERAL
 	@property hotel_code type=textbox
 	@caption Hotelli kood
+	
+	@property months type=select
+	@caption Mitu kuud
 	
 	@property show_codes type=checkbox ch_value=1
 	@caption N&auml;ita koode
@@ -49,6 +52,8 @@ class crm_conference_value_days extends class_base
 					$prop["caption"] .= t("\n".$this->site_template_dir."");
 				}
 				break;
+			case "months":
+				$prop["options"] = array("",1,2,3,4,5,6,7,8,9,10,11,12);
 			//-- get_property --//
 		};
 		return $retval;
@@ -96,6 +101,11 @@ class crm_conference_value_days extends class_base
 		{
 			$calendar_object = obj($arr["id"]);
 		}
+		if($calendar_object->prop("months"))
+		{
+			$months = $calendar_object->prop("months");
+		}
+		
 		$calendar_month = $_GET["calendar_month"];
 		
 		$tpl = $calendar_object->prop("template");
@@ -115,9 +125,13 @@ class crm_conference_value_days extends class_base
                 $soapclient->ns_end = "/";
                 $parameters = array();
 			
-		$parameters["Resort"] = '';
-         	$parameters["FirstDate"] = '2007-05-21T00:00:00.0000000+03:00';
-		$parameters["LastDate"] =  '2007-05-24T00:00:00.0000000+03:00';
+			
+		$q_start = mktime(0, 0, 0, date("n",(time() + $n*30*24*3600)), 1, date("Y",(time() + $n*30*24*3600)));
+		$q_end = $q_start + 32*24*3600*$months;
+			
+		$parameters["Resort"] = $calendar_object->prop("hotel_code");
+         	$parameters["FirstDate"] = date("Y",$q_start).'-'.date("m",$q_start).'-01T00:00:00.0000000+03:00';
+		$parameters["LastDate"] =  date("Y",$q_end).'-'.date("m",$q_end).'-01T00:00:00.0000000+03:00';
          	$return = $soapclient->call("GetConferenceDayTypes" , $parameters);
          	$codes = array();
 		$bg_colors = array();
@@ -145,13 +159,13 @@ class crm_conference_value_days extends class_base
 					<th colspan="7">'.locale::get_lc_month(date("m",(time() + $n*30*24*3600)))." ".date("Y",(time() + $n*30*24*3600)).'</th>
 				</tr>
 				<tr>
-					<th>'.locale::get_lc_weekday(1,true).'</th>
-					<th>'.locale::get_lc_weekday(2,true).'</th>
-					<th>'.locale::get_lc_weekday(3,true).'</th>
-					<th>'.locale::get_lc_weekday(4,true).'</th>
-					<th>'.locale::get_lc_weekday(5,true).'</th>
-					<th>'.locale::get_lc_weekday(6,true).'</th>
-					<th>'.locale::get_lc_weekday(0,true).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(1,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(2,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(3,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(4,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(5,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(6,true), 0, 1)).'</th>
+					<th>'.strtoupper(substr(locale::get_lc_weekday(7,true), 0, 1)).'</th>
 				</tr>';
 			$day_start = $month_start - 3600*24*($day_of_the_week - 1);
 			$w = 0;
@@ -189,11 +203,11 @@ class crm_conference_value_days extends class_base
 			$n++;
 		}
 		
-		$next_url = aw_url_change_var("calendar_month" , $calendar_month + 3);
-		$prev_url = aw_url_change_var("calendar_month" , $calendar_month - 3);
+		$next_url = aw_url_change_var("calendar_month" , $calendar_month + $months);
+		$prev_url = aw_url_change_var("calendar_month" , $calendar_month - $months);
 		
-		$next_link = html::href(array("caption" => (t("Next 3 months")." >>") , "url" => $next_url));
-		$prev_link = html::href(array("caption" => ("<< ".t("Previous 3 months")) , "url" => $prev_url));
+		$next_link = html::href(array("caption" => (t("Next")." ".$months." ".("months")." >>") , "url" => $next_url));
+		$prev_link = html::href(array("caption" => ("<< ".t("Previous")." ".$months." ".("months")) , "url" => $prev_url));
 		if($calendar_object->prop("show_codes"))
 		{
 			$html.= "<br>Hotellide koodid: <br>";

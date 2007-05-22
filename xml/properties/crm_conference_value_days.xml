@@ -10,6 +10,15 @@
             <caption>Hotelli kood</caption>
       </property>
       <property>
+            <name>months</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Mitu kuud</caption>
+      </property>
+      <property>
             <name>show_codes</name>
             <table>objects</table>
             <group>general</group>
