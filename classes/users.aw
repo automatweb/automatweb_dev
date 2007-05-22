@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.179 2007/05/10 12:57:03 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.180 2007/05/22 10:07:57 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -670,6 +670,7 @@ class users extends users_user
 
 		$this->read_template("send_hash.tpl");
 
+		lc_site_load("users", &$this);
 		$this->vars(array(
 			"webmaster" => $this->cfg["webmaster_mail"],
 			"reforb" => $this->mk_reforb("submit_send_hash",array("section" => aw_global_get("section"))),
@@ -695,12 +696,12 @@ class users extends users_user
 		extract($_POST);
 		if (($type == "uid") && not(is_valid("uid",$uid)))
 		{
-			aw_session_set("status_msg","Vigane kasutajanimi");
+			aw_session_set("status_msg",t("Vigane kasutajanimi"));
 			return $this->mk_my_orb("send_hash",array());
 		};
 		if (($type == "email") && not(is_email($email)))
 		{
-			aw_session_set("status_msg","Vigane e-posti aadress");
+			aw_session_set("status_msg",t("Vigane e-posti aadress"));
 			return $this->mk_my_orb("send_hash",array());
 		};
 		if ($type == "uid")
@@ -720,12 +721,13 @@ class users extends users_user
 			};
 			if (not(is_email($row["email"])))
 			{
-				$status_msg .= "Kasutajal $uid puudub korrektne e-posti aadress. Palun p&ouml;&ouml;rduge veebisaidi haldaja poole";
+				$status_msg .= t("Kasutajal $uid puudub korrektne e-posti aadress. Palun p&ouml;&ouml;rduge veebisaidi haldaja poole");
 				aw_session_set("status_msg", $status_msg);
 				return $this->mk_my_orb("send_hash",array());
 			};
 
 			$this->read_template("hash_send.tpl");
+			lc_site_load("users", &$this);
 			$this->vars(array(
 				"churl" => $this->get_change_pwd_hash_link($uid),
 				"email" => $this->cfg["webmaster_mail"],
@@ -735,8 +737,13 @@ class users extends users_user
 			));
 			$msg = $this->parse();
 			$from = sprintf("%s <%s>", $this->cfg["webmaster_name"], $this->cfg["webmaster_mail"]);
-			send_mail($row["email"], "Paroolivahetus saidil ".aw_global_get("HTTP_HOST"), $msg, "From: $from");
-			aw_session_set("status_msg", "Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br />T&auml;name!<br />");
+			send_mail(
+				$row["email"], 
+				sprintf(t("Paroolivahetus saidil %s"), aw_global_get("HTTP_HOST")), $msg, "From: $from");
+			aw_session_set(
+				"status_msg", 
+				sprintf(t("Parooli muutmise link saadeti  aadressile <b>%s</b>. Vaata oma postkasti<br />T&auml;name!<br />"), $row["email"])
+			);
 		};
 		return $this->mk_my_orb("send_hash",array("section" => $args["section"]));
 	}
