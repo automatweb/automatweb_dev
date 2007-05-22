@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.191 2007/05/11 10:33:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.192 2007/05/22 14:12:34 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -2261,8 +2261,6 @@ class room extends class_base
 				$h = 400;
 			}
 
-
-
 			$func = ($immediate? "doBronExec" : "doBron");
 			$oncl = $func.'(
 				\''.$m_oid.'_\'+current_timestamp ,
@@ -2579,9 +2577,7 @@ class room extends class_base
 			"width" => $pct."%",
 			"chgbgcolor" => "time_col"
 		));
-
 		
-
 		for($i = 0; $i < $len; $i++)
 		{
 			$tm = $time+$i*24*3600;
@@ -2735,29 +2731,32 @@ class room extends class_base
 		return $rv;
 	}
 	
-	/**
-		@attrib name=make_reservation params=name all_args=1
+	/** makes a new reservation for room, or changes existing one
+		@attrib name=make_reservation params=name all_args=1 api=1
 		@param id required oid
 			room id
 		@param res_id optional oid
-			reservationid
+			reservationid, if set, changes reservation
 		@param data required array
 			propertys and stuff 
 			products - array(product_id=> amount)
-			start - reservation starts
-			end - reservation ends
-			comment
-			people - number of people
-			name - contact persons name
-			email - contact persons email
-			phone - contact persons phone
-			customer - If the person object already exists, then connect the booking to this person, if given 
-			verified - if true, reservation is marked as verified
+			start - int , reservation starts , timestamp
+			end - int , reservation ends , timestamp
+			comment - string
+			people - int , number of people 
+			name - string , contact persons name
+			email - string , contact persons email
+			phone - string, contact persons phone
+			customer - boolean , If the person object already exists, then connect the booking to this person, if given 
+			verified - boolean , if true, reservation is marked as verified
 		@param not_verified optional type=int
 		@param meta optional type=array
 			Any key=>value paris given here, will be written to the objects metadata
 		@param tpl optional type=string
 			verification mail template
+		
+		@returns Reservation object id , if success
+			else ""
 	**/
 	function make_reservation($arr)
 	{
@@ -3552,6 +3551,15 @@ class room extends class_base
 	}
 
 	//annab vastavalt ruumile siis kas pakendite või toodete object listi, mis on aktiivsed
+	/** gets active room products or packagings
+		@attrib params=pos api=1
+		@param o required type=object/oid
+			room object
+		@returns Object list
+		@example
+			$room_inst = get_instance(CL_ROOM);
+			$product_list = $room_inst->get_active_items($room_object->id());
+	**/
 	function get_active_items($o)
 	{
 		$ol = new object_list();
@@ -3559,7 +3567,7 @@ class room extends class_base
 		{
 			$o = obj($o);
 		}
-		if(!is_object($o) || !$o->class_id() == CL_ROOM)
+		if(!is_object($o) || !$o->class_id() == CL_ROOM || !is_oid($o->prop("warehouse")) || !$this->can("view" , $o->prop("warehouse")))
 		{
 			return $ol;
 		}
@@ -3697,8 +3705,9 @@ class room extends class_base
 	{
 		return $this->prod_data[$b->id()]["ord"] - $this->prod_data[$a->id()]["ord"];
 	}
+	
 	/**
-		@attrib params=pos
+		@attrib params=pos api=1
 		@param prod_list required type=Array
 			array of product id's and amount of them
 			array(
@@ -3710,7 +3719,14 @@ class room extends class_base
 		@param time optional type=int
 			the time, when this order needs to be in order :) .. basically this is needed to cover cross-day reservations and different orders for each day..
 			If not set, reservation start time is set instead.
-
+		@returns boolean
+			true if success
+		@example
+			$prod_list = array(
+				$product => $amount,
+			);
+			$inst = get_instance(CL_ROOM);
+			$inst->order_products($prod_list, $reservation->id(), $day);
 	**/
 	function order_products($prod_list, $reservation, $time)
 	{
@@ -3781,8 +3797,8 @@ class room extends class_base
 		return $this->parse();
 	}
 	
-	/**
-		@attrib params=name
+	/** calculates room price
+		@attrib params=name api=1
 		@param room required type=oid
 			room id
 		@param people optional type=int
@@ -3791,10 +3807,23 @@ class room extends class_base
 			whenever that stuff , you need room for, starts
 		@param end required type=int
 			when the event, you need room for, ends
+		@param bron optional type=oid
+			reservation object id
 		@param products optional type=array, -1
 			products you want to order with room , -1 if room price without products
 		@param detailed_info type=bool default=false
 			if set to true, data is returned in detail, separate entries for products and everything
+		@returns array
+			if detailed_info is not set, returns array(currency1 => sum , currency2 => sum2 ...)
+			else array("info_1" => array(currency1 => sum , currency2 => sum2 ...) , "info2" => array(currency1 => sum , currency2 => sum2 ...) , ...)
+		@example 
+			$room_instance = get_instance(CL_ROOM);
+			return $room_instance->cal_room_price(array(
+				"room" => $room_object->id(),
+				"start" => $reservation->prop("start1"),
+				"end" => $reservation->prop("end"),
+				"people" => 5,
+			));
 	**/
 	function cal_room_price($arr)
 	{
@@ -4382,9 +4411,10 @@ class room extends class_base
 		@param room required type=oid
 			products and their amounts
 		@param oid required type=oid
-			products and their amounts
+			product
 		@return int
 			min time to reserve
+			0 if product not set or product reservation time is not set
 	**/
 	function cal_product_reserved_time($arr)
 	{
@@ -4398,6 +4428,16 @@ class room extends class_base
 		return 0;
 	}
 	
+	function get_company_currency($room)
+	{
+		if(!is_oid($room) || !$this->can("view" , $room))
+		{
+			return null;
+		}
+		$room_object = obj($room);
+		return $room_object->prop("owner.currency");
+	}
+	
 	/**
 		@attrib params=name
 		@param products required type=array
@@ -4408,11 +4448,21 @@ class room extends class_base
 		@param room optional type=object
 			room object
 		@param start optional type=int
-			reservation starts
+			timestamp , reservation starts (needed for product discounts)
 		@param end optional type=int
-			reservation ends
+			timestamp , reservation ends (needed for product discounts)
 		@return int
 			price of all products
+		@example
+			$room_inst = get_instance(CL_ROOM);
+			$currency = $room_inst->get_company_currency($room->id());
+			$products = array(10121 => 1, 10124 => 3);
+			$tmp = $room_inst->cal_products_price(array(
+				"products" => $products,
+				"currency" => $currency,
+				"prod_discount" => 10,
+				"room" => $room,
+			));
 	**/
 	function cal_products_price($arr)
 	{
@@ -4615,8 +4665,8 @@ class room extends class_base
 		}
 	}
 
-	/**
-		@attrib params=name
+	/** checks if the room is available 
+		@attrib params=name api=1
 		@param room required type=oid
 			room id
 		@param start required type=int
@@ -4624,6 +4674,8 @@ class room extends class_base
 		@param ignore_booking optional type=int
 			If given, the booking with this id will be ignored in the checking - this can be used for changing booking times for instance
 		@return boolean
+			true if available
+			false if not available
 	**/
 	function check_if_available($arr)
 	{
@@ -4711,6 +4763,7 @@ class room extends class_base
 			The reservation object
 		@param $time optional type=string
 			if "before" , calculates before buffer times, if "after", calculates after buffer times, if not set, calculates both, if set to "both" , returns array (before,after)
+		@returns Int/Array
 	**/
 	function get_products_buffer($arr)
 	{
@@ -4810,6 +4863,7 @@ class room extends class_base
 			The room object
 		@param $start required type=int
 			last reservation before that timestamp
+		@returns object
 	**/
 	function get_last_bron($arr)
 	{
@@ -4833,13 +4887,13 @@ class room extends class_base
 		return $ret;
 	}
 	
-	
 	/** returns object (first reservation object after end time)
 		@attrib api=1 params=name
 		@param $room required type=object
 			The room object
 		@param $end required type=int
 			first reservation object after that timestamp
+		@returns Object
 	**/
 	function get_next_bron($arr)
 	{
@@ -4998,7 +5052,20 @@ class room extends class_base
 	}
 
 	/** checks if the group bron time settings allow the bron to be changed/created in that time
-		@attrib api=1
+		@attrib api=1 params=pos name=group_can_do_bron
+		@param s required type=object
+			room settings object
+		@param tm required type=int
+			timestamp
+		@returns boolean
+		@example 
+			$room_inst = get_instance(CL_ROOM);
+			$settings = $room_inst->get_settings_for_room($room_object);
+			$start_step = time();
+			if (!$room_inst->group_can_do_bron($settings, $start_step))
+			{
+				print("cannotdo...!");
+			}
 	**/
 	function group_can_do_bron($s, $tm)
 	{
@@ -5230,13 +5297,13 @@ class room extends class_base
                         "text" => t("Paus"),
                         "link" => "javascript:aw_popup_scroll('$url','".t("Otsi")."',550,500)"
                 ));
-
 		$t->add_delete_button();
 	}
 
 	/** Returns the openhours object for the current user, or null if none applies
 		@attrib api=1
 		@param room required type=object
+		@returns Array
 	**/
 	function get_current_openhours_for_room($room)
 	{
@@ -5264,6 +5331,7 @@ class room extends class_base
 	/** Returns the openhours object for the current user, or null if none applies, for pauses in the room's schedule
 		@attrib api=1
 		@param room required type=object
+		@returns Array
 	**/
 	function get_current_pauses_for_room($room)
 	{
@@ -5289,8 +5357,9 @@ class room extends class_base
 	}
 
 	/** returns data about products for room
-		@attrib api=1
+		@attrib name=get_prod_data_for_room api=1 params=pos
 		@param room required type=object
+		@returns array
 	**/
 	function get_prod_data_for_room($room)
 	{
@@ -5312,10 +5381,78 @@ class room extends class_base
 
 	function callback_post_save($arr)
 	{
+		//natuke default asju, et saaks kohe ruumi kastuama hakata
+		if(!empty($arr['new']))
+		{
+			$arr["obj_inst"]->set_prop("time_unit" , 2);
+			$arr["obj_inst"]->set_prop("time_from" , 2);
+			$arr["obj_inst"]->set_prop("time_to" , 5);	
+			$arr["obj_inst"]->set_prop("time_step" , 1);
+			$arr["obj_inst"]->set_prop("price" , array(2 => 2));
+			
+			$curr_object_list = new object_list(array(
+				"class_id" => CL_CURRENCY,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));
+			$arr["obj_inst"]->set_prop("currency" , $curr_object_list->ids());
+			$arr["obj_inst"]->set_prop("prod_discount_loc" , 0);
+		
+			$u = get_instance(CL_USER);
+			$arr["obj_inst"]->set_prop("owner" , $u->get_current_company());
+			$arr["obj_inst"]->set_prop("max_capacity" , 15);
+			$this->_add_price_object(array(
+				"room" => $arr["obj_inst"]->id(),
+			));
+			$this->_add_oh_object(array(
+				"room" => $arr["obj_inst"]->id(),
+			));
+			$arr["obj_inst"]->save();
+		}
 		$i = get_instance("vcl/popup_search");
 		$i->do_create_rels($arr["obj_inst"], $arr["request"]["set_oh"], 44);
 		$i->do_create_rels($arr["obj_inst"], $arr["request"]["set_ps"], 45);
 	}
+	
+	function _add_price_object($arr)
+	{
+		extract($arr);
+		$room_obj = obj($room);
+		$o = new object();
+		$o->set_class_id(CL_OPENHOURS);
+		$o->set_parent($room);
+		$o->set_prop("date_from" , 100);
+		$o->set_prop("date_to" , time()+(366*24*3600*10));
+		$o->set_prop("openhours" , array(array("day1" => 1,"day2" => 7, "h1" => 6, "m1" => 0, "h2" => 22, "m2" => 0)));
+		$o->save();
+		$room_obj->connect(array(
+			"to" => $o->id(),
+			"reltype" => 44,
+		));
+	}
+	
+	function _add_oh_object($arr)
+	{
+		extract($arr);
+		$room_obj = obj($room);
+		$o = new object();
+		$o->set_class_id(CL_ROOM_PRICE);
+		$o->set_parent($room);
+		$o->set_prop("type" , 1);
+		$o->set_prop("active" , 1);
+		$o->set_prop("date_from" , 100);
+		$o->set_prop("date_to" , time()+(366*24*3600*10));
+		$o->set_prop("weekdays" , Array(1,1,1,1,1,1,1,1));
+		$o->set_prop("nr" , 1);
+		$o->set_prop("time_to" , array("hour" => 23 , "minute" => 59));
+		$o->set_prop("time_from" , array("hour" => 0 , "minute" => 0));
+		$o->set_prop("time" , 1);
+		$o->save();
+		$room_obj->connect(array(
+			"to" => $o->id(),
+			"reltype" => 9,
+		));
+	}	
 	
 	function get_people_for_oh($o)
 	{
@@ -5396,11 +5533,16 @@ class room extends class_base
 		return $ret;
 	}
 	
-	/**
+	/** returns workers
+		@attrib name=get_day_workers params=pos api=1
 		@param o required type=object
-			oh object
+			room object
 		@param time required type=int
 			day timestamp
+		@returns Object list
+		@example
+			$room_inst = get_instance(CL_ROOM);
+			$worker_list = $room_inst->get_day_workers($room_object,$time());
 	**/
 	function get_day_workers($o , $time)
 	{
