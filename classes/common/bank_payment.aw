@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.53 2007/05/22 16:34:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.54 2007/05/22 16:54:48 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -473,7 +473,7 @@ class bank_payment extends class_base
 					continue;
 				}
 	
-				if($filter["find_one"]  && ($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000"))
+				if($filter["find_one"]  && ($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000" || $val["SOLOPMT-RETURN-VERSION"]))
 				{
 					if(array_key_exists($val[$this->ref[$bank_id]] ,  $done)) continue;
 					$done[$val[$this->ref[$bank_id]]] = $val[$this->ref[$bank_id]];
@@ -482,8 +482,8 @@ class bank_payment extends class_base
  					$_SESSION["bank_return"]["data"] = $val;
  					arr($val["good"] = $this->check_response($val));
  					arr($val["VK_MSG"]);
- 				}
-*/				if($val["timestamp"])
+ 				}*/
+				if($val["timestamp"])
 				{
 					$log_data[$val["timestamp"]]["payer"] = $val["VK_SND_NAME"];
 					$log_data[$val["timestamp"]]["ref"] = $val[$this->ref[$bank_id]];
@@ -1673,7 +1673,8 @@ class bank_payment extends class_base
 		$cert = fread($fp, 8192);
 		fclose($fp);
 		$str = $data["SOLOPMT-RETURN-VERSION"]."&".$data["SOLOPMT-RETURN-STAMP"]."&".$data["SOLOPMT-RETURN-REF"]."&".$data["SOLOPMT-RETURN-PAID"]."&".$cert."&";
-		//miski võrdlus.... $data["SOLOPMT-RETURN-MAC"] == strtoupper(md5($str)); ... vist
+		if($data["SOLOPMT-RETURN-MAC"] == strtoupper(md5($str))) $ok = 1;
+		else $ok = 0;
 		//a seniks returnime ok, nagu oleks kõik hästi
 		return $ok;
 	}
