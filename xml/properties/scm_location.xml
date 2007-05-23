@@ -1,6 +1,23 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>comment</field>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>loc_path</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Kohale saab</caption>
+      </property>
+      <property>
             <name>address</name>
             <table>objects</table>
             <group>general</group>
@@ -11,6 +28,15 @@
             <caption>Aadress</caption>
       </property>
       <property>
+            <name>map_url</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kaart</caption>
+      </property>
+      <property>
             <name>map</name>
             <table>objects</table>
             <group>general</group>
@@ -18,7 +44,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_MAP</reltype>
-            <caption>Asukohakaart</caption>
+            <caption>Kaardi pilt</caption>
       </property>
       <property>
             <name>photo</name>
@@ -30,10 +56,19 @@
             <reltype>RELTYPE_PHOTO</reltype>
             <caption>Foto kohast</caption>
       </property>
+      <property>
+            <name>make_copy</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>choose</type>
+            <multiple>1</multiple>
+            <caption>Tee koopia</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SCM_LOCATION</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>

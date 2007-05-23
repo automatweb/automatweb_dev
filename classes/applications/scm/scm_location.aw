@@ -1,23 +1,37 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.3 2006/07/18 06:05:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.4 2007/05/23 16:41:59 markop Exp $
 // scm_location.aw - Toimumiskoht 
 /*
 
-@classinfo syslog_type=ST_SCM_LOCATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_SCM_LOCATION relationmgr=yes no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
+
+@property comment type=textarea
+@caption Kirjeldus
+
 @default field=meta
 @default method=serialize
+
+@property loc_path type=textarea
+@caption Kohale saab
 
 @property address type=relpicker reltype=RELTYPE_ADDRESS
 @caption Aadress
 
+@property map_url type=textbox
+@caption Kaart
+
+//seda peab veel palju muutma
 @property map type=relpicker reltype=RELTYPE_MAP
-@caption Asukohakaart
+@caption Kaardi pilt
 
 @property photo type=relpicker reltype=RELTYPE_PHOTO
 @caption Foto kohast
+
+@property make_copy type=choose multiple=1
+@caption Tee koopia
 
 @reltype MAP value=1 clid=CL_IMAGE
 @caption Kaart

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.3 2007/05/21 17:08:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.4 2007/05/23 16:41:57 markop Exp $
 // events_manager.aw - Kuhu minna moodul 
 /*
 
@@ -44,6 +44,9 @@
 			
 			@property event_search_button type=submit store=no
 			@caption Otsi
+			
+			@property see_all type=text store=no no_caption=1
+			@caption N&auml;ita k&otilde;iki s&uuml;ndmusi
 			
 		@layout events_top_right type=vbox parent=events_top
 	
@@ -118,7 +121,7 @@
 	@property section_menu type=relpicker reltype=RELTYPE_SECTION_MENU
 	@caption Valdkondade kataloog
 
-	@property section type=relpicker multiple=1 reltype=RELTYPE_SECTION
+	@property section type=relpicker multiple=1 reltype=RELTYPE_SECTION field=meta method=serialize table=objects
 	@caption Valdkonnad
 
 	@property owner type=relpicker reltype=RELTYPE_OWNER
@@ -126,7 +129,6 @@
 	
 	@property languages type=relpicker multiple=1 reltype=RELTYPE_LANGUAGE
 	@caption Sinu keeled
-	  #valikus k6ik aktiivsed keeled. multiple.
 	
 	@property mapserver_url type=textbox
 	@caption Kaardiserveri url
@@ -199,7 +201,12 @@ class events_manager extends class_base
 			case "places_table":
 				$this->_get_places_table($arr);
 				break;
-				
+			case "see_all":
+				$prop["value"] = html::href(array(
+					"caption" => t("N&auml;ita k&otilde;iki!"),
+					"url" => $this->mk_my_orb("change" , array("group" => "events" , "id" => $arr["obj_inst"]->id(), "see_all" => 1)),
+				));
+				break;
 			case "days_from_today":
 				if($_SESSION["events_manager"]["dft"])
 				{
@@ -249,7 +256,8 @@ class events_manager extends class_base
 		{
 			$t->define_data(array(
 				"name" => html::obj_change_url($o->id()),
-				"address" => $o->prop("address.name"),
+				"comment" => $o->prop("comment"),
+				"oid" => $o->id(),
 			));
 		}
 	}
@@ -267,12 +275,13 @@ class events_manager extends class_base
 			"parent" => $arr["obj_inst"]->prop("organiser_menu"),
 		));
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_places_table($t);
+		$this->_init_organiser_table($t);
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
 				"name" => html::obj_change_url($o->id()),
 				"address" => $o->prop("contact.name"),
+				"oid" => $o->id(),
 			));
 		}
 	}
@@ -313,9 +322,15 @@ class events_manager extends class_base
 		$this->_init_editors_table($t);
 		foreach($ol->arr() as $o)
 		{
+			$user_list = new object_list(array("class_id" => CL_USER, "lang_id" => array(), "CL_USER.RELTYPE_PERSON.id"=>$o->id()));
+			if(sizeof($user_list->arr()))
+			{
+				$user = reset($user_list->arr());
+			}
 			$t->define_data(array(
 				"name" => html::obj_change_url($o->id()),
-				"user" => "",
+				"user" => is_object($user)?$user->prop("uid"):"",
+				"oid" => $o->id(),
 			));
 		}
 	}
@@ -328,6 +343,13 @@ class events_manager extends class_base
 			"img" => "new.gif",
 			"tooltip" => t("Lisa uus"),
 			"action" => "add_new_place",
+		));
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta m&auml;rgistatud s&uuml;ndmused"),
+			"action" => "delete_events",
+			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud toimumiskohad?"),
 		));
 	}
 	
@@ -349,6 +371,13 @@ class events_manager extends class_base
 			"tooltip" => t("Lisa uus"),
 			"action" => "add_new_organiser",
 		));
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta m&auml;rgistatud korraldajad"),
+			"action" => "delete_events",
+			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud korraldajad?"),
+		));
 	}
 	
 	function _get_editor_tb($arr)
@@ -358,6 +387,13 @@ class events_manager extends class_base
 			"img" => "new.gif",
 			"tooltip" => t("Lisa uus"),
 			"action" => "add_new_editor",
+		));
+		$arr["prop"]["vcl_inst"]->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta m&auml;rgistatud toimetajad"),
+			"action" => "delete_events",
+			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud toimetajad?"),
 		));
 	}
 
@@ -382,7 +418,15 @@ class events_manager extends class_base
 			}
 			if($search_data["e_find_text"])
 			{
-				$filter["name"] = "%".$search_data["e_find_text"]."%";
+				$filter[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"name" => "%".$search_data["e_find_text"]."%",
+						"title" => "%".$search_data["e_find_text"]."%",
+						"description" => "%".$search_data["e_find_text"]."%",
+					)
+				));
+//				$filter["name"] = "%".$search_data["e_find_text"]."%";
 				//kui kalendrisündmuseobjektiasjadkorda saab , siis lisab juurde
 			}
 			if($search_data["e_find_news"])
@@ -396,8 +440,19 @@ class events_manager extends class_base
 			
 			$arr["obj_inst"]->set_meta("search_data", null);
 			$arr["obj_inst"]->save();
+		}//siia peaks jõudma kui midagi pole valitud
+		elseif(!$arr["request"]["archived"] && $arr["request"]["action"] != "similar_find" && !$arr["dft"])
+		{
+			if(!$arr["obj_inst"]->prop("event_menu"))
+			{
+				return new object_list();
+			}
+			if(!$arr["request"]["see_all"])
+			{
+				$filter["end"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
+			}
+			$filter["parent"] = $arr["obj_inst"]->prop("event_menu");
 		}
-		
 		if($arr["dft"])
 		{
 			$filter["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, time()- 24*3600*$arr["dft"] , time());
@@ -411,7 +466,6 @@ class events_manager extends class_base
 		{
 			$filter["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER, time());
 		}
-
 		return new object_list($filter); 
 	}
 
@@ -435,8 +489,16 @@ class events_manager extends class_base
 		$t->set_sortable(false);
 		foreach($ol->arr() as $o)
 		{
+			$publish = "";
 			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTION");
-			$publish = html::href(array("url" => "#" , "title" => t("Avalda") , "caption" => t("Avalda")));
+			if(!$o->prop("published"))
+			{
+				$publish = html::href(array(
+					"url" => $this->mk_my_orb("publish" , array("id" => $o->id(),"post_ru" => post_ru())),
+					"title" => t("Avalda"),
+					"caption" => t("Avalda"),
+				));
+			}
 			$change_url = html::obj_change_url($o , t("Muuda"));
 			
 			$t->define_data(array(
@@ -446,6 +508,7 @@ class events_manager extends class_base
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"tasks" => $publish . " " . $change_url,
 				"oid" => $o->id(),
+				"region" => $o->prop("location.address.maakond.name") ." ".$o->prop("location.address.linn.name"),
 			));
 		}
 	}
@@ -522,7 +585,6 @@ class events_manager extends class_base
 			"action" => "delete_events",
 			"confirm" => t("Olete kindel, et soovite kustudada kõik valitud s&uuml;ndmused?"),
 		));
-
 	}
 
 	function _init_places_table(&$t)
@@ -533,9 +595,31 @@ class events_manager extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kirjeldus"),
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+	
+	function _init_organiser_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "address",
 			"caption" => t("Aadress"),
 			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
 		));
 	}
 	
@@ -564,6 +648,10 @@ class events_manager extends class_base
 			"name" => "user",
 			"caption" => t("Kasutajanimi"),
 			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
 		));
 	}
 	
@@ -645,7 +733,15 @@ class events_manager extends class_base
 	{
 		$event = new object();
 		$event->set_class_id(CL_CALENDAR_EVENT);
-		$event->set_parent($arr["id"]);
+		$manager_obj = obj($arr["id"]);
+		if($this->can("add" , $manager_obj->prop("event_menu")))
+		{
+			$event->set_parent($manager_obj->prop("event_menu"));
+		}
+		else
+		{
+			$event->set_parent($arr["id"]);
+		}
 		$event->set_prop("start1" , time());
 		$event->set_prop("end" , time());
 		$event->save();
@@ -717,6 +813,17 @@ class events_manager extends class_base
 		$editor->save();
 		return html::get_change_url($editor->id(),array("return_url" => $arr["post_ru"]));
 	}
-//-- methods --//
+
+	/**
+		@attrib name=publish is_public="1" all_args=1
+	**/
+	function publish($arr)
+	{
+		$event = obj($arr["id"]);
+		$event->set_prop("published" , 1);
+		$event->save();
+		return $arr["post_ru"];
+	}
+
 }
 ?>

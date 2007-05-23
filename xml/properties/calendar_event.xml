@@ -125,16 +125,6 @@
             <caption></caption>
       </property>
       <property>
-            <name>utextarea1</name>
-            <group>general</group>
-            <table>planner</table>
-            <type>textarea</type>
-            <cols>80</cols>
-            <rows>40</rows>
-            <field>utextarea1</field>
-            <caption></caption>
-      </property>
-      <property>
             <name>utextarea2</name>
             <group>general</group>
             <table>planner</table>
@@ -249,6 +239,98 @@
             <caption></caption>
       </property>
       <property>
+            <name>title</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>textarea</type>
+            <field>title</field>
+            <caption>Sissejuhatus</caption>
+      </property>
+      <property>
+            <name>short_description</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>textarea</type>
+            <allow_rte>2</allow_rte>
+            <field>user1</field>
+            <caption>L&amp;amp;uuml;hikirjeldus</caption>
+      </property>
+      <property>
+            <name>description</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>textarea</type>
+            <allow_rte>2</allow_rte>
+            <field>user2</field>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>section</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_SECTION</reltype>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Valdkonnad</caption>
+      </property>
+      <property>
+            <name>location</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LOCATION</reltype>
+            <field>ucheck5</field>
+            <caption>Toimumiskoht</caption>
+      </property>
+      <property>
+            <name>organizer</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>popup_search</type>
+            <d>aw_customer</d>
+            <reltype>RELTYPE_ORGANIZER</reltype>
+            <clid>CL_CRM_COMPANY</clid>
+            <style>autocomplete</style>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Korraldaja</caption>
+      </property>
+      <property>
+            <name>make_copy</name>
+            <group>general</group>
+            <table>planner</table>
+            <store>no</store>
+            <type>choose</type>
+            <field>make_copy</field>
+            <caption>Tee koopia</caption>
+      </property>
+      <property>
+            <name>level</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>select</type>
+            <field>ucheck4</field>
+            <caption>Tase</caption>
+      </property>
+      <property>
+            <name>published</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>checkbox</type>
+            <field>ucheck2</field>
+            <caption>Avaldatud</caption>
+      </property>
+      <property>
+            <name>front_event</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>checkbox</type>
+            <field>ucheck3</field>
+            <caption>Esilehe s&amp;amp;uuml;ndmus</caption>
+      </property>
+      <property>
             <name>aliasmgr</name>
             <group>general</group>
             <table>planner</table>
@@ -345,6 +427,21 @@
                   <clid>CL_CRM_SECTION</clid>
                   <caption>Tegevusala</caption>
             </SECTION>
+            <ORGANIZER>
+                  <value>6</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Korraldaja</caption>
+            </ORGANIZER>
+            <URL>
+                  <value>7</value>
+                  <clid>CL_URL</clid>
+                  <caption>Korraldaja</caption>
+            </URL>
+            <LOCATION>
+                  <value>8</value>
+                  <clid>CL_SCM_LOCATION</clid>
+                  <caption>Toimumiskoht</caption>
+            </LOCATION>
       </reltypes>
 </properties>
 

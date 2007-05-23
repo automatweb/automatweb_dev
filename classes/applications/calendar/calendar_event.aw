@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.23 2007/05/21 17:08:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.24 2007/05/23 16:42:00 markop Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
-
 @classinfo syslog_type=ST_CALENDAR_EVENT relationmgr=yes
 
 @default group=general
@@ -16,9 +15,6 @@
 
 @property end type=datetime_select field=end 
 @caption Lõpeb
-
-property level type=select field=level
-caption Tase
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -54,9 +50,6 @@ caption Tase
 @caption 
 
 @property utextbox10 type=textbox
-@caption 
-
-@property utextarea1 type=textarea cols=80 rows=40
 @caption 
 
 @property utextarea2 type=textarea
@@ -101,6 +94,43 @@ caption Tase
 @property utextvar10 type=classificator store=connect reltype=RELTYPE_UTEXTVAR10
 @caption 
 
+
+@property title type=textarea field=title
+@caption Sissejuhatus
+
+
+
+@property short_description type=textarea allow_rte=2 field=user1
+@caption L&uuml;hikirjeldus
+
+@property description type=textarea allow_rte=2 field=user2
+@caption Kirjeldus
+
+property url type=releditor table=objects field=meta method=serialize reltype=RELTYPE_URL use_form=emb rel_id=first
+caption S&uuml;ndmuse kodulehek&uuml;lg
+
+@property section type=relpicker multiple=1 reltype=RELTYPE_SECTION method=serialize field=meta table=objects
+@caption Valdkonnad
+
+@property location type=relpicker reltype=RELTYPE_LOCATION field=ucheck5
+@caption Toimumiskoht
+
+@property organizer type=popup_search d=aw_customer reltype=RELTYPE_ORGANIZER clid=CL_CRM_COMPANY style=autocomplete method=serialize field=meta table=objects 
+@caption Korraldaja
+
+@property make_copy store=no type=choose
+@caption Tee koopia
+
+@property level type=select field=level field=ucheck4
+@caption Tase
+
+@property published type=checkbox field=ucheck2
+@caption Avaldatud
+
+@property front_event type=checkbox field=ucheck3
+@caption Esilehe s&uuml;ndmus
+
+
 @property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
 
@@ -137,6 +167,16 @@ caption Tase
 
 @reltype SECTION value=5 clid=CL_CRM_SECTION
 @caption Tegevusala
+
+@reltype ORGANIZER value=6 clid=CL_CRM_COMPANY
+@caption Korraldaja
+
+@reltype URL value=7 clid=CL_URL
+@caption Korraldaja
+
+@reltype LOCATION value=8 clid=CL_SCM_LOCATION
+@caption Toimumiskoht
+
 
 */
 

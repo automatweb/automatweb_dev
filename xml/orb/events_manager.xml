@@ -43,5 +43,12 @@
 			</function>
 		</action>
 
+		<action name="publish" is_public="1" all_args="1">
+			<function name="publish">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
