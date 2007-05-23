@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.12 2007/04/03 12:31:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.13 2007/05/23 08:02:59 kristo Exp $
 // phone.aw - Telefon
 /*
 
@@ -19,6 +19,9 @@
 
 @property country type=relpicker reltype=RELTYPE_COUNTRY field=meta method=serialize automatic=1
 @caption Riik
+
+@property is_public type=checkbox ch_value=1 field=meta method=serialize 
+@caption Avalik
 
 @classinfo no_status=1
 */

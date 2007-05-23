@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.172 2007/05/09 10:40:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.173 2007/05/23 08:02:59 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1454,7 +1454,8 @@ class crm_person extends class_base
 				$t = &$data["vcl_inst"];
 				$fields = array(
 					"number" => t("Telefoninumber"),
-					"type" => t("Telefoninumbri t&uuml;&uuml;p"),
+					"type" => t("T&uuml;&uuml;p"),
+					"is_public" => t("Avalik"),
 				);
 				$i->init_cedit_tables(&$t, $fields);
 				$i->_get_phone_tbl($t, $arr);

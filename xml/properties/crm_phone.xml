@@ -36,6 +36,16 @@
             <automatic>1</automatic>
             <caption>Riik</caption>
       </property>
+      <property>
+            <name>is_public</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Avalik</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_PHONE</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -49,6 +49,11 @@ class crm_company_cedit_impl extends core
 						"value" => $obj->name(),
 						"size" => 15
 					)),
+					"is_public" => html::checkbox(array(
+						"name" => "cedit_phone[".$obj->id()."][is_public]",
+						"checked" => $obj->prop("is_public"),
+						"value" => 1
+					)),
 					"type" => html::select(array(
 						"name" => "cedit_phone[-1][type]",
 						"options" => $ptypes
@@ -65,6 +70,7 @@ class crm_company_cedit_impl extends core
 					"sel" => $obj->id(),
 					"choose" => $chooser,
 					"number" => $obj->name(),
+					"is_public" => $obj->prop("is_public") == 1 ? t("Jah") : t("Ei"),
 					"type" => $ptypes[$obj->prop("type")],
 					"change" => html::href(array(
 						"caption" => t("Muuda"),
@@ -95,6 +101,11 @@ class crm_company_cedit_impl extends core
 					"name" => "cedit_phone[-1][name]",
 					"value" => "",
 					"size" => 15
+				)),
+				"is_public" => html::checkbox(array(
+					"name" => "cedit_phone[-1][is_public]",
+					"checked" => true,
+					"value" => 1
 				)),
 				"type" => html::select(array(
 					"name" => "cedit_phone[-1][type]",
