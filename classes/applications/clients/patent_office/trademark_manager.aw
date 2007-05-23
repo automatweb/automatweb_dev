@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.29 2007/05/02 12:10:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.30 2007/05/23 11:23:20 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -690,7 +690,7 @@ class trademark_manager extends class_base
 				$xml .= '		<HOLGR>
 ';
 					$xml .= "\t\t\t<NAME>\n";
-						$xml .= "\t\t\t\t<NAMEL>".$applicant->name()."</NAMEL>\n";
+						$xml .= "\t\t\t\t<NAMEL>".$this->rere($applicant->name())."</NAMEL>\n";
 					$xml .= "\t\t\t</NAME>\n";
 
 					if ($this->can("view", $applicant->id()))
@@ -700,37 +700,37 @@ class trademark_manager extends class_base
 					$adr_i = get_instance(CL_CRM_ADDRESS);
 						if ($appl->class_id() == CL_CRM_PERSON)
 						{
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.aadress")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.linn.name")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("address.postiindeks")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("phone.name").",".$appl->prop("fax.name")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("email.mail")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("address.aadress"))."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("address.linn.name"))."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("address.postiindeks"))."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("phone.name")).",".$appl->prop("fax.name")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("email.mail"))."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL> </ADDRL>\n";
 //echo "aadres ".$appl->prop("address")." <br>";
 //echo "riik = ".$appl->prop("address.riik")." <br>";
 							if ($this->can("view", $appl->prop("address.riik")))
 							{
-								$xml .= "\t\t\t\t<COUNTRY>".$adr_i->get_country_code(obj($appl->prop("address.riik")))."</COUNTRY>\n";
+								$xml .= "\t\t\t\t<COUNTRY>".$this->rere($adr_i->get_country_code(obj($appl->prop("address.riik"))))."</COUNTRY>\n";
 //echo "country code from ".$appl->prop("address.riik.name")." => ".$adr_i->get_country_code(obj($appl->prop("address.riik")))." <br>";
 							}
 						}
 						else
 						{
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.aadress")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.linn.name")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("contact.postiindeks")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("phone_id.name").",".$appl->prop("telefax_id.name")."</ADDRL>\n";
-							$xml .= "\t\t\t\t<ADDRL>".$appl->prop("email_id.mail")."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("contact.aadress"))."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("contact.linn.name"))."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("contact.postiindeks"))."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("phone_id.name")).",".$this->rere($appl->prop("telefax_id.name"))."</ADDRL>\n";
+							$xml .= "\t\t\t\t<ADDRL>".$this->rere($appl->prop("email_id.mail"))."</ADDRL>\n";
 							$xml .= "\t\t\t\t<ADDRL></ADDRL>\n";
 							if ($this->can("view", $appl->prop("contact.riik")))
 							{
-								$xml .= "\t\t\t\t<COUNTRY>".$adr_i->get_country_code(obj($appl->prop("contact.riik")))."</COUNTRY>\n";
+								$xml .= "\t\t\t\t<COUNTRY>".$this->rere($adr_i->get_country_code(obj($appl->prop("contact.riik"))))."</COUNTRY>\n";
 							}
 						}
 					$xml .= "\t\t\t</ADDRESS>\n";
 
 					$xml .= "\t\t\t<LEGNATU>\n";
-						$xml .= "\t\t\t\t<LEGNATT>".$appl->prop("ettevotlusvorm.name")."</LEGNATT>\n";
+						$xml .= "\t\t\t\t<LEGNATT>".$this->rere($appl->prop("ettevotlusvorm.name"))."</LEGNATT>\n";
 					$xml .= "\t\t\t</LEGNATU>\n";
 					}
 					/*if (!$this->can("view", $o->prop(""))
@@ -778,11 +778,11 @@ class trademark_manager extends class_base
 				fwrite($f, $imd["content"]);
 				fclose($f);
 				}//tõstsin seda ettepoole, et ilma reproduktsioonita tahetakse ka tegelikult sõnalist osa näha
-				$xml .= "\t\t<IMAGE NAME=\"".sprintf("%08d", $status->prop("nr"))."\" TEXT=\"".$o->prop("word_mark")."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$type."\"/>\n";
+				$xml .= "\t\t<IMAGE NAME=\"".sprintf("%08d", $status->prop("nr"))."\" TEXT=\"".$this->rere($o->prop("word_mark"))."\" COLOUR=\"".($o->prop("colors") != "" ? "Y" : "N")."\" TYPE=\"".$this->rere($type)."\"/>\n";
 				
 
 				$xml .= "\t\t<MARTRGR>\n";
-					$xml .= "\t\t\t<MARTREN>".$o->prop("element_translation")."</MARTREN>\n";
+					$xml .= "\t\t\t<MARTREN>".$this->rere($o->prop("element_translation"))."</MARTREN>\n";
 				$xml .= "\t\t</MARTRGR>\n";
 				$typm = $o->prop("trademark_type");
 //echo "typm = ".dbg::dump($typm)."  = <TYPMARI>".($typm["1"] == "1" ? "G" : "").($typm["0"] === "0" ? "C" : "")." <br>";
@@ -835,7 +835,7 @@ class trademark_manager extends class_base
 //echo dbg::dump($o->meta("products"));
 					foreach(safe_array($o->meta("products")) as $k => $v)
 					{
-						$xml .= "\t\t\t<GSGR NICCLAI=\"".$k."\">\n";
+						$xml .= "\t\t\t<GSGR NICCLAI=\"".$this->rere($k)."\">\n";
 						$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".strtolower(str_replace("\r" , "", str_replace("\n",", ",$v)))."]]></GSTERMEN>\n";
 //							$xml .= "\t\t\t\t<GSTERMEN><![CDATA[".strtolower(str_replace(", ", ",", $v))."]]></GSTERMEN>\n";
 						$xml .= "\t\t\t</GSGR>\n";
@@ -870,7 +870,7 @@ class trademark_manager extends class_base
 					{
 						$xml .= "\t\t\t<PRIAPPD>".$pri_date."</PRIAPPD>\n";
 					}
-					$xml .= "\t\t\t<PRIAPPN>".$pri_name."</PRIAPPN>\n";
+					$xml .= "\t\t\t<PRIAPPN>".$this->rere($pri_name)."</PRIAPPN>\n";
 				
 				$xml .= "\t\t</PRIGR>\n";
 
@@ -897,6 +897,18 @@ class trademark_manager extends class_base
 		fwrite($f, $xml);
 		fclose($f);
 		die("wrote $fn");
+	}
+
+	//replace reserved characters
+	function rere($string)
+	{
+		$string = str_replace("&" , "&amp;" , $string);
+		$string = str_replace("<" , "&lt;" , $string);
+		$string = str_replace(">" , "&gt;" , $string);
+		$string = str_replace("%" , "&#37;" , $string);
+		$string = str_replace('"' , " &quot;" , $string);
+		$string = str_replace("'" , "&apos;" , $string);
+		return $string;
 	}
 }
 ?>
