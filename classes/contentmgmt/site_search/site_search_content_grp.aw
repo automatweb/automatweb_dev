@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.25 2007/02/27 12:41:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.26 2007/05/24 12:29:44 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -171,7 +171,7 @@ class site_search_content_grp extends class_base
 		$o = obj($arr["id"]);
 		if ($o->meta("version") == 2)
 		{
-			return safe_array($o->meta("grp_menus"));
+		//	return safe_array($o->meta("grp_menus"));
 		}
 		return $this->_get_menus($arr);
 	}
@@ -196,7 +196,6 @@ class site_search_content_grp extends class_base
 		// and possibly other objects as well. HOW?
 
 		$ret = array();
-
 		foreach($se as $m)
 		{
 			if ($sub[$m])
@@ -230,7 +229,6 @@ class site_search_content_grp extends class_base
 				$ret[$m] = $m;
 			}
 		}
-
 		$gidlist = aw_global_get("gidlist");
 		if (count($ret))
 		{

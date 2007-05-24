@@ -16,16 +16,40 @@ class ss_parser_html extends ss_parser_base
 
 		$ret = array();
 
-		$base = $this->url_parsed["scheme"]."://".$this->url_parsed["host"];
+		$base = trim($this->url);
+		// split off from ? to complete base
+		$qpos = strpos($base, "?");
+		if ($qpos)
+		{
+			$base = substr($base, 0, $qpos);
+		}
+		if (substr($base, "-1") != "/")
+		{
+			$base = dirname($base); //$this->url_parsed["scheme"]."://".$this->url_parsed["host"];
+		}
 
 		// I guess we need to figure out all <a tags
 		preg_match_all("/<a(.*)>/imsU", $this->content, $mt, PREG_PATTERN_ORDER);
+		// also, frames
+		preg_match_all("/<frame(.*)>/imsU", $this->content, $mt_fr, PREG_PATTERN_ORDER);
+		if (is_array($mt_fr))
+		{
+			if (!is_array($mt))
+			{
+				$mt = array(1 => array());
+			}
+			foreach($mt_fr[1] as $item)
+			{
+				$mt[1][] = $item;
+			}
+		}
 		if (is_array($mt))
 		{
 			foreach($mt[1] as $match)
 			{
 				// $match should contain "target="foo" href="bla" ..."
-				if (preg_match("/href=(.*)/", $match, $mt2))
+				$match = str_replace("href = ", "href=", $match);
+				if (preg_match("/href=(.*)/i", str_replace("src=", "href=", $match), $mt2))
 				{
 					// it might still contain trailing crap and we can not rely on there being an end terminator
 					// so manually parse this thang here
@@ -54,9 +78,8 @@ class ss_parser_html extends ss_parser_base
 					{
 						continue;
 					}
-
+//echo "str = $str base = $base  <br>";
 					// now, if baseurl is not included, add that
-					
 					if ($str[0] == "/")
 					{
 						$str = $base.$str;
@@ -73,16 +96,21 @@ class ss_parser_html extends ss_parser_base
 					{
 						$str = substr($str, 0, $pos);
 					}
-
+//echo "str = $str base = $base <br>";
 					// now, if the final url is just a filename, then get the dir from the current url and prepend that
 					$pu = parse_url($str);
 					if (!$pu["scheme"])
 					{
-						$str = dirname($this->url)."/".$str;
+						if (substr($this->url, -1) == "/")
+						{
+							$str = $this->url.$str;
+						}
+						else
+						{
+							$str = $base."/".$str;
+						}
 					}
-					
 					$str = $this->resolve_path($str);
-					
 					$ret[$str] = $str;
 					//echo "found url ".$mt2[1]." , turned into $str <br>";
 				}

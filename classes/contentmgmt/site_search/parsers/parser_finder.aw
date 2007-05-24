@@ -11,6 +11,7 @@ classload("contentmgmt/site_search/parsers/ss_parser_sxw");
 classload("contentmgmt/site_search/parsers/ss_parser_sxc");
 classload("contentmgmt/site_search/parsers/ss_parser_txt");
 classload("contentmgmt/site_search/parsers/ss_parser_xml");
+classload("contentmgmt/site_search/parsers/ss_parser_rtf");
 classload("contentmgmt/site_search/parsers/ss_parser_file_list");
 class parser_finder
 {
@@ -55,6 +56,15 @@ class parser_finder
 					$ext = substr($parts["path"], $pos+1);
 				}
 			}
+		}
+
+		if ($ext == "htm")
+		{
+			$ext = "html";
+		}
+		if ($ext == "php")
+		{
+			$ext = "html";
 		}
 
 		if (!in_array($ext, $known_exts))

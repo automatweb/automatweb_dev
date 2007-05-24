@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.87 2007/04/20 11:31:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.88 2007/05/24 12:29:44 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -826,7 +826,9 @@ class site_search_content extends class_base
 	function generate_static($arr)
 	{
 		extract($arr);
-
+		$log = fopen("/export/aw/automatweb/new/files/sexp_log.txt", "a");
+		fwrite($log, "export started at ".date("d.m.Y H:i:s")." \n");
+		
 		// if we have a scheduler for this thing, then add the next time to the scheduler
 		$o = obj($id);
 		$rep = $o->get_first_obj_by_reltype("RELTYPE_REPEATER");
@@ -846,7 +848,9 @@ class site_search_content extends class_base
 				)),
 				"time" => $stamp,
 			));
+			fwrite($log, "add event ad time ".date("d.m.Y H:i", $stamp)."\n");
 		}
+		fclose($log);
 		// these funcs must write data to a db table (static_content), with structure like this:
 		// id, content, url, title, modified, section, lang_id, created_by
 		// optional fields - url, section, lang_id, set to NULL if not available
@@ -877,7 +881,7 @@ class site_search_content extends class_base
 		enter_function("site_search_content::fetch_static_search_results");
 		// rewrite fucked-up letters
 		// IE
-		$arr["str"] = str_replace(chr(0x9a), "&#0352;", $arr["str"]);
+		/*$arr["str"] = str_replace(chr(0x9a), "&#0352;", $arr["str"]);
 		$arr["str"] = str_replace(chr(0x8a), "&#0352;", $arr["str"]);
 		$arr["str"] = str_replace("%9A", "&#0352;", $arr["str"]);
 		$arr["str"] = str_replace("%8A", "&#0352;", $arr["str"]);
@@ -887,7 +891,11 @@ class site_search_content extends class_base
 		$arr["str"] = str_replace("%A8", "&#0352;", $arr["str"]);
 		$arr["str"] = str_replace(chr(0xa6), "&#0352;", $arr["str"]);
 		$arr["str"] = str_replace("%A6", "&#0352;", $arr["str"]);
-		
+		*/
+		$arr["str"] = mb_strtolower($arr["str"], "iso-8859-15");
+		$arr["str"] = str_replace(chr(166), chr(168), $arr["str"]);
+		$str2 = mb_strtoupper($arr["str"], "iso-8859-15");
+		$this->quote(&$str2);
 		extract($arr);
 	
 		$ret = array();
@@ -912,6 +920,7 @@ class site_search_content extends class_base
 		$fulltext = "";
 		if (aw_ini_get("site_search_content.has_fulltext_index") == 1)
 		{
+			$this->quote(&$str);
 			$fts = "MATCH(title,content) AGAINST('\"$str\"')";
 			$fulltext = ", ".$fts;
 			$ob = " ORDER BY $fts DESC ";
@@ -947,10 +956,12 @@ class site_search_content extends class_base
 		$this->quote($str);
 		
 		$content_s = $this->_get_sstring($str, $opts["str"], "content",true,$arr["s_seatch_word_part"]);
+		$content_s2 = $this->_get_sstring($str2, $opts["str"], "content",true,$arr["s_seatch_word_part"]);
 		if ($content_s == "" && $title_s == "" && $sections == "" && $lang_id == "" && $date_s == "" && $site_id == "")
 		{
 			return array();
 		}
+		$content_s = " ($content_s OR $content_s2) ";
 		$sql = "
 			SELECT 
 				url, 
@@ -979,6 +990,29 @@ class site_search_content extends class_base
 				"match" => $row[$fts],
 				"site_id" => $row["site_id"]
 			);
+		}
+
+		// go over results and unique by title, but sorting the ones by the latest date
+		$tmp = array();
+		foreach($ret as $entry)
+		{
+			$tmp[$entry["title"]][] = $entry;
+		}
+		$res = array();
+		foreach($tmp as $title => $dat)
+		{
+			usort($dat, create_function('$a,$b', 'return $a["modified"] == $b["modified"] ? 0 : ($a["modified"] > $b["modified"] ? 1 : -1);'));
+			$res[] = $dat[0];
+		}
+
+		// go over res and throw out things that do not contain the search string
+		$ret = array(); //$res;
+		foreach($res as $i)
+		{
+			if (strpos(mb_strtolower($i["content"], "iso-8859-15"), mb_strtolower($str, "iso-8859-15")) !== false)
+			{
+				$ret[] = $i;
+			}
 		}
 		exit_function("site_search_content::fetch_static_search_results::q_results");
 		exit_function("site_search_content::fetch_static_search_results");
@@ -1024,6 +1058,7 @@ class site_search_content extends class_base
 			$stat = " o.status > 0 AND ";
 		}
 
+		$opts["str"] = mb_strtolower($opts["str"], "iso-8859-15");
 		$this->quote($str);
 		$joiner = "LEFT JOIN documents d ON o.brother_of = d.docid";
 		if (aw_ini_get("user_interface.full_content_trans") &&
@@ -1047,7 +1082,6 @@ class site_search_content extends class_base
 			}
 			$kw_limiter  = " AND o.oid IN (".$lm_dids->to_sql().") ";
 		}
-									       
 		$sql = "
 			SELECT 
 				o.oid as docid, 
@@ -1093,7 +1127,7 @@ class site_search_content extends class_base
 			$ret[] = array(
 				"url" => $this->get_doc_url($row),
 				"title" => $row["title"],
-				"modified" => $row["modified"],
+				"modified" => $row["doc_modified"],
 				"content" => $row["content"],
 				"lead" => $row["lead"],
 				"tm" => $row["tm"],
@@ -1104,7 +1138,6 @@ class site_search_content extends class_base
 				"target" => ($row["site_id"] != $this->site_id ? "target=\"_blank\"" : "")
 			);
 		}
-			
 		if($arr["obj"]->prop("do_keyword_search"))
 		{
 			$keyresults = $this->search_keywords($str, $menus, $arr["obj"], $date);
@@ -1265,9 +1298,7 @@ class site_search_content extends class_base
 		enter_function("site_search_content::fetch_search_results");
 		extract($arr);
 		$g = get_instance(CL_SITE_SEARCH_CONTENT_GRP);
-
 		// sealt tulevad ainult menüüd .. aga ma pean diilima ka teiste asjadega
-
 		// see koostab nimekirja parentitest ehk asjadest, KUST ma otsima pean
 		// aga mul on vaja mingeid callbacke, et saaks otsida ka mujalt
 		$ms = $g->get_menus(array("id" => $group));
@@ -1286,7 +1317,6 @@ class site_search_content extends class_base
 				"area" => $area,
 			));
 		}
-
 		if (1 == $obj->prop("search_live"))
 		{
 			$go = obj($group);
@@ -1609,7 +1639,7 @@ class site_search_content extends class_base
 			$doc_text = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc_text);
 			$this->vars(array(
 				"link" => $results[$i]["url"],
-				"title" => $results[$i]["title"],
+				"title" => parse_obj_name($results[$i]["title"]),
 				"title_high" => $this->_get_content_high($results[$i]["title"], $_GET["str"]),
 				"modified" => $md,
 				"content" => $this->_get_content($results[$i]["content"]),
@@ -1801,7 +1831,7 @@ class site_search_content extends class_base
 			"keyword" => $keyword,
 			"area" => $area,
 		));
-
+		
 		$results = array();
 
 		// seda peab siis kuidagi filtreerima ka .. et ta ei hakkas mul igasugu ikaldust näitama
@@ -1809,7 +1839,6 @@ class site_search_content extends class_base
 		{
 			if (1 == $o->prop("multi_groups"))
 			{
-
 				$conns = $o->connections_from(array(
 					"type" => "RELTYPE_SEARCH_GRP",
 				));

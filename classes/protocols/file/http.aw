@@ -22,6 +22,7 @@ class http
 	**/
 	function get($url, $sess = null)
 	{
+//echo "enter get $url <br>";
 		enter_function("http::get");
 		$data = parse_url($url);
 
@@ -60,6 +61,39 @@ class http
 		list($headers,$data) = explode("\r\n\r\n",$ipd,2);
 		$this->last_request_headers = $headers;
 		//echo htmlentities($headers)."<br>".htmlentities($data);
+//echo "send req <pre>$req</pre> <br>headers = <pre>$headers</pre> <br>";
+		// check if this was a redirect and follow it
+		if (strpos($headers, "HTTP/1.1 302 Found") !== false)
+		{
+			if (preg_match("/Location: (.*)$/imsU", $headers, $mt))
+			{
+				$loc = trim($mt[1]);
+				// make full url from location
+                                if ($loc[0] == "/")
+                                {
+	                                $loc = "http://".$host.$loc;
+                                }
+                                else
+                                if ($loc[0] == "?")
+                                {
+         	                       $loc = $url.$loc;
+                                }
+                                $pu = parse_url($loc);
+                                if (!$pu["scheme"])
+                                {
+					if (substr($url, -1) == "/")
+					{
+						$loc = $url.$loc;
+					}
+					else
+					{
+                        	        	$loc = dirname($url)."/".$loc;
+					}
+                                }
+echo "redirect to $loc <br>";
+				return $this->get($loc);
+			}
+		}
 
 		exit_function("http::get");
 		return $data;

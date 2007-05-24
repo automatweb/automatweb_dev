@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.6 2007/02/20 13:06:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.7 2007/05/24 12:29:44 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -160,11 +160,11 @@ echo "baseurl = ".$this->baseurl." <br>";
 	function bg_run_step($o)
 	{
 		$url = $this->queue->get();
+echo "url = $url <br>";
 		if (isset($this->pages[$url]))
 		{
 			return $this->queue->has_more() ? BG_OK : BG_DONE;
 		}
-
 		$cont = true;
 		foreach($this->ignore_pages as $ign_url)
 		{
@@ -188,7 +188,6 @@ echo "baseurl = ".$this->baseurl." <br>";
 		$page =& $this->pages[$url]["o"];
 
 		$this->_store_content($page, $o->id());
-
 		$urls = $page->get_links();
 		foreach($urls as $url)
 		{
@@ -309,6 +308,8 @@ echo "baseurl = ".$this->baseurl." <br>";
 		}
 
 		$this->size += strlen($fc);
+
+		$this->quote(&$fields["url"]);
 
 		// see if we already got this hash-indexer-site_id copy and if we do, update it
 		$cnt = $this->db_fetch_field("SELECT count(*) AS cnt FROM static_content WHERE id = '$h_id' AND created_by = 'ss_fs' AND site_id = '$indexer_id'", "cnt");
