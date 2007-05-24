@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.48 2007/05/24 14:18:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.49 2007/05/24 14:43:42 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -424,8 +424,8 @@ class calendar_view extends class_base
 				$rv[$event["start"]] = $item;
 				if ($event["end"] > $event["start"] && date("dmY", $event["start"]) != date("dmY", $event["end"]))
 				{
-					$item["start"] = get_day_start($item["start"]) + 86400;
-					for ($i = $item["start"]; $i <= $item["end"]; $i = $i + 86400)
+					$item["timestamp"] = get_day_start($item["timestamp"]) + 86400;
+					for ($i = $item["timestamp"]; $i <= $event["end"]; $i = $i + 86400)
 					{
 						$tmp = $item;
 						$tmp["start"] = $tmp["timestamp"] = $i;
