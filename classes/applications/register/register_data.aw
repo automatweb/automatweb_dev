@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.42 2007/04/02 14:06:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.43 2007/05/24 08:12:39 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -149,6 +149,36 @@
 
 @property userdate5 type=date_select field=aw_userdate5 year_from=1970 year_to=2020
 @caption User-defined date select 5
+
+@property userdate6 type=date_select field=aw_userdate6 year_from=1970 year_to=2020
+@caption User-defined date select 6
+
+@property userdate7 type=date_select field=aw_userdate7 year_from=1970 year_to=2020
+@caption User-defined date select 7
+
+@property userdate8 type=date_select field=aw_userdate8 year_from=1970 year_to=2020
+@caption User-defined date select 8
+
+@property userdate9 type=date_select field=aw_userdate9 year_from=1970 year_to=2020
+@caption User-defined date select 9
+
+@property userdate10 type=date_select field=aw_userdate10 year_from=1970 year_to=2020
+@caption User-defined date select 10
+
+@property userdate11 type=date_select field=aw_userdate11 year_from=1970 year_to=2020
+@caption User-defined date select 11
+
+@property userdate12 type=date_select field=aw_userdate12 year_from=1970 year_to=2020
+@caption User-defined date select 12
+
+@property userdate13 type=date_select field=aw_userdate13 year_from=1970 year_to=2020
+@caption User-defined date select 13
+
+@property userdate14 type=date_select field=aw_userdate14 year_from=1970 year_to=2020
+@caption User-defined date select 14
+
+@property userdate15 type=date_select field=aw_userdate15 year_from=1970 year_to=2020
+@caption User-defined date select 15
 
 @property userch1 type=checkbox field=aw_userch1 ch_value=1 datatype=int
 @caption User-defined checkbox 1
@@ -1523,6 +1553,28 @@ class register_data extends class_base
 	function view($arr)
 	{
 		return parent::view($arr);
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "aw_userdate6":
+			case "aw_userdate7":
+			case "aw_userdate8":
+			case "aw_userdate9":
+			case "aw_userdate10":
+			case "aw_userdate11":
+			case "aw_userdate12":
+			case "aw_userdate13":
+			case "aw_userdate14":
+			case "aw_userdate15":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+		}
 	}
 }
 ?>

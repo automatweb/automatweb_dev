@@ -418,6 +418,106 @@
             <caption>User-defined date select 5</caption>
       </property>
       <property>
+            <name>userdate6</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate6</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 6</caption>
+      </property>
+      <property>
+            <name>userdate7</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate7</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 7</caption>
+      </property>
+      <property>
+            <name>userdate8</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate8</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 8</caption>
+      </property>
+      <property>
+            <name>userdate9</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate9</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 9</caption>
+      </property>
+      <property>
+            <name>userdate10</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate10</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 10</caption>
+      </property>
+      <property>
+            <name>userdate11</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate11</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 11</caption>
+      </property>
+      <property>
+            <name>userdate12</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate12</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 12</caption>
+      </property>
+      <property>
+            <name>userdate13</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate13</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 13</caption>
+      </property>
+      <property>
+            <name>userdate14</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate14</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 14</caption>
+      </property>
+      <property>
+            <name>userdate15</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate15</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 15</caption>
+      </property>
+      <property>
             <name>userch1</name>
             <group>data</group>
             <table>aw_register_data</table>
