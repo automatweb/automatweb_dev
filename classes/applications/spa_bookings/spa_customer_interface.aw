@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.14 2007/05/07 15:19:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.15 2007/05/24 08:57:31 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -44,8 +44,20 @@ class spa_customer_interface extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "prod_folders":
+				uksort($prop["options"], array(&$this, "sort_menus"));
+				break;
 		};
 		return $retval;
+	}
+
+	function sort_menus($a,$b)
+	{
+		if(!$this->can("view" , $a)) return -1;
+		if(!$this->can("view" , $b)) return 1;
+		$a_obj = obj($a);
+		$b_obj = obj($b);
+		return ($b_obj->ord() > $a_obj->ord()) ? -1 : 1;
 	}
 
 	function set_property($arr = array())
@@ -465,7 +477,9 @@ class spa_customer_interface extends class_base
 			return $rv;
 		}
 		$rv = array();
-		foreach(safe_array($o->prop("prod_folders")) as $pf)
+		$menu_arr = safe_array($o->prop("prod_folders"));
+	
+		foreach($menu_arr as $pf)
 		{
 			$rv[] = $pf;
 			$ot = new object_tree(array(
@@ -476,6 +490,22 @@ class spa_customer_interface extends class_base
 			foreach($ot->ids() as $id)
 			{
 				$rv[] = $id;
+			}
+		}
+		return $rv;
+	}
+
+	function _get_room_products($oid)
+	{
+		$o = obj($oid);
+		$room_inst = get_instance(CL_ROOM);
+		$rv = array();
+		foreach(safe_array($o->prop("rooms")) as $pf)
+		{
+			$ot = $room_inst->get_active_items($pf);;
+			foreach($ot->ids() as $id)
+			{
+				$rv[$id] = $id;
 			}
 		}
 		return $rv;
@@ -495,10 +525,15 @@ class spa_customer_interface extends class_base
 			"site_id" => array(),
 			"parent" => $this->_get_prod_parents($arr["id"])
 		));
+
+		$room_products = $this->_get_room_products($arr["id"]);
 		$p = array();
 		foreach($ol->arr() as $o)
 		{
-			$p[$o->parent()][] = $o;
+			if(!sizeof($room_products) || array_key_exists($o->id() , $room_products))
+			{
+				$p[$o->parent()][] = $o;
+			}
 		}
 
 		$ol = new object_list(array(
@@ -510,6 +545,7 @@ class spa_customer_interface extends class_base
 
 		$pts = "";
 		$this->read_template("add_pkt.tpl");
+		uksort($p, array(&$this, "sort_menus"));
 		foreach($p as $parent => $prods)
 		{
 			$po = obj($parent);
@@ -753,6 +789,10 @@ class spa_customer_interface extends class_base
 					{
 						$sum = $val;
 					}
+				}
+				if(is_array($sum))
+				{
+					$sum = 0;
 				}
 				$total_sum+= $sum;
 			}
