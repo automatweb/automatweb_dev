@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.121 2007/04/20 11:06:22 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.122 2007/05/24 08:37:32 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2286,9 +2286,9 @@ class webform extends class_base
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$cfgform = $obj_inst->get_first_obj_by_reltype("RELTYPE_CFGFORM");
 		$register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER");
-		$prplist = safe_array($cfgform->meta("cfg_proplist"));
-		//$cf = $cfgform->instance();
-		//$props = $cf->get_props_from_cfgform(array("id" => $cfgform->id()));
+		//$prplist = safe_array($cfgform->meta("cfg_proplist"));
+		$cf = $cfgform->instance();
+		$prplist = $cf->get_cfg_proplist($cfgform->id());
 		$register_data_i = get_instance(CL_REGISTER_DATA);
 		$register_data_i->init_class_base();
 		if (is_array($_FILES))
@@ -2434,7 +2434,12 @@ class webform extends class_base
 					if (is_array($val) && count($val))
 					{
 						$objs = new object_list(array("oid" => $val, "lang_id" => array(), "site_id" => array()));
-						$arr[$key] = join(", ", $objs->names());
+						$nsa = array();
+						foreach($objs->arr() as $tmp_o)
+						{
+							$nsa[] = $tmp_o->trans_get_val("name");
+						}
+						$arr[$key] = join(", ", $nsa);
 					}
 				}
 				if (substr($key, 0, 8) == "userfile")
@@ -2456,7 +2461,6 @@ class webform extends class_base
 					$body .= html_entity_decode($prplist[$key]["caption"], ENT_COMPAT, aw_global_get("charset")).": ".$arr[$key]."\n";
 				}
 			}
-
 			foreach($obj_inst->connections_from(array("type" => "RELTYPE_AFTER_SAVE_CONTROLLER")) as $c)
 			{
 				$controller_obj = $c->to();
@@ -2474,6 +2478,10 @@ class webform extends class_base
 			}
 			$emls = safe_array(aw_global_get("recievers_name"));
 			$emails = $emails + $emls;
+			/*if (aw_global_get("uid") == "struktuur")
+			{
+				die(dbg::dump($emails));
+			}*/
 			$nm = aw_global_get("global_name");
 			if(!empty($nm))
 			{
@@ -2488,6 +2496,7 @@ class webform extends class_base
 					"froma" => $obj_inst->prop("def_mail"),
 				);
 			}
+			
 			$awm = get_instance("protocols/mail/aw_mail");
 			foreach($attaches as $att)
 			{
@@ -2496,7 +2505,7 @@ class webform extends class_base
 			foreach($emails as $eml)
 			{
 				$awm->create_message(array(
-					"subject" => $obj_inst->name(),
+					"subject" => aw_global_get("email_subject") != "" ? aw_global_get("email_subject") : $obj_inst->name(),
 					"to" => $eml,
 					"body" => $body,
 				) + $prx);
