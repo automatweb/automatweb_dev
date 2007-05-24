@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.46 2007/05/16 11:11:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.48 2007/05/24 14:18:57 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -422,6 +422,16 @@ class calendar_view extends class_base
 					$item["url"] = aw_url_change_var("date",date("d-m-Y",$event["start"]),$item["url"]);
 				};
 				$rv[$event["start"]] = $item;
+				if ($event["end"] > $event["start"] && date("dmY", $event["start"]) != date("dmY", $event["end"]))
+				{
+					$item["start"] = get_day_start($item["start"]) + 86400;
+					for ($i = $item["start"]; $i <= $item["end"]; $i = $i + 86400)
+					{
+						$tmp = $item;
+						$tmp["start"] = $tmp["timestamp"] = $i;
+						$rv[$i] = $tmp; 
+					}
+				}
 			};
 		};
 		// now, I need a document which will carry the news articles
@@ -659,7 +669,7 @@ class calendar_view extends class_base
 		// figure out correct tpldir
 		$tpldir = "calendar/calendar_view";
 		$use_template = isset($arr["use_template"]) ? $arr["use_template"] : $this->obj_inst->prop("use_template");
-
+		
 		$use2dir = array(
 			"month" => "calendar/calendar_view/month",
 			"weekview" => "calendar/calendar_view/week",
@@ -1045,6 +1055,10 @@ class calendar_view extends class_base
 				{
 					$data = $event;
 					$evt_obj = new object($event["id"]);
+					if ($this->obj_inst->prop("actives_only") && $evt_obj->status() != STAT_ACTIVE)
+					{
+						continue;
+					}
 					$data = $evt_obj->properties() + $data;
 					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
