@@ -186,6 +186,18 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>doc</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>doc</group>
+            <submit>no</submit>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Dokumentatsioon</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BANK_PAYMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -203,6 +215,10 @@
             <test>
                   <caption>Test</caption>
             </test>
+            <doc>
+                  <caption>Teadmiseks</caption>
+                  <submit>no</submit>
+            </doc>
       </groupinfo>
       <reltypes>
             <KEY>

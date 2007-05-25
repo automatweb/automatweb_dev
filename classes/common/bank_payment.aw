@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.54 2007/05/22 16:54:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.55 2007/05/25 13:20:42 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -70,6 +70,11 @@
 	
 	@property log type=text store=no no_caption=1
 
+@groupinfo doc caption="Teadmiseks" submit=no
+@default group=doc
+	
+	@property doc type=text store=no no_caption=1
+	@caption Dokumentatsioon
 
 #RELTYPES
 
@@ -89,7 +94,7 @@ class bank_payment extends class_base
 		"nordeapank"		=> "Nordea Pank",
 		"krediidipank"		=> "Krediidipank",
 		"sampopank"		=> "Sampo Pank",
-		"hansapank_lv"		=> "L&Auml;ti Hansapank",
+		"hansapank_lv"		=> "L&auml;ti Hansapank",
 		"hansapank_lt"		=> "Leedu Hansapank",
 		"credit_card"		=> "Kaardikeskus (krediitkaart)",
 	);
@@ -124,6 +129,22 @@ class bank_payment extends class_base
 		"afb" => "credit_card",
 		"SAMPOPANK" => "sampopank",
 		"0002" => "nordeapank",
+	);
+	
+	var $public_key_files = array(
+		"seb" => "EYP_pub.pem",
+		"hansapank" => "HP_pub.pem",
+		"credit_card" => "credit_card.crt",
+		"sampopank" => "SAMPOPANK_pub.pem",
+		"hansapank_lv" => "HP_lv_pub.pem",
+		"hansapank_lt" => "HP_lt_pub.pem",
+	);
+	
+	var $default_banks = array(
+		"hansapank",
+		"seb",
+		"sampopank",
+		"krediidipank",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
@@ -608,6 +629,9 @@ class bank_payment extends class_base
 				break;
 			case "bank_test":
 				break;
+			case "doc":
+				$prop["value"] = $this->_get_documentation();
+				break;
 			//-- get_property --//
 		};
 		return $retval;
@@ -852,10 +876,14 @@ class bank_payment extends class_base
 			{
 				$arr["bank_id"] = $arr["bank_id"]."_".$arr["cntr"];
 			}
+			
+			//siia paneb kräpi mida peaks makselt tagasi tulles kuskilt kätte saama... parim on ikka see objekt mida maksma minnakse
 			if(is_oid($arr["reference_nr"]) && $this->can("view" , $arr["reference_nr"]))
 			{
 				$ref_object = obj($arr["reference_nr"]);
 				$ref_object->set_meta("bank_cntr" , $arr["cntr"]);
+				$ref_object->set_meta("bank_payment_id" , $arr["payment_id"]);//hiljem saaks logis kasutada
+				$ref_object->set_meta("bank_is_test" , $payment->meta("test"));//selle järgi võiks testimise sertifikaadikontrolli tööle panna
 				$ref_object->save();
 			}
 /*			if($bank_data[$arr["bank_id"]."_".$_SESSION["ct_lang_lc"]]["sender_id"])
@@ -1285,7 +1313,13 @@ class bank_payment extends class_base
 			$arr = $this->_add_object_data($payment , $arr);
 			$arr["priv_key"] = $payment->prop("nordea_private_key");
 		}
-	
+		if(!$arr["priv_key"])
+		{
+			$fp = fopen($this->cfg["site_basedir"]."/pank/nordea.mac", "r");
+			$arr["priv_key"] = fread($fp, 8192);
+			fclose($fp);
+		}
+
 		if(!$arr["service"]) $arr["service"] = "0002";
 		if(!$arr["version"]) $arr["version"] = "0001";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
@@ -1294,12 +1328,11 @@ class bank_payment extends class_base
 		if(!$arr["name"]) $arr["name"] = "";
 		if(!$arr["recieve_id"]) $arr["recieve_id"] = "10354213";
 		if(!$arr["date"]) $arr["date"] = 'EXPRESS';
-		if(!$arr["lang"]) $arr["lang"] = "3";
-//		if(!$arr["priv_key"]) $arr["priv_key"] = "g94z7e7KgP6PM8av7kIF7bwX8YNZ7eFX";//suht halb mõte muidugi ... aga see on siin ajutiselt
-//		$arr["priv_key"] = "e5JRSW6NLbaR2SvHnc8qNRSQdAzCe8dF";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		
 		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
+		
 		if($arr["lang"] == "et" || $arr["lang"] == "EST")
 		{
 			$arr["lang"] = 4;
@@ -1308,15 +1341,8 @@ class bank_payment extends class_base
 		{
 			$arr["lang"] = 3;
 		}
-		if(!$arr["lang"] > 0) $arr["lang"] = "3";
-/*		if(!$arr["priv_key"])
-		{
-			if($arr["test"] && $this->test_priv_keys[$arr["bank_id"]]) $file = $this->test_priv_keys[$arr["bank_id"]];
-			else $file = "privkey.pem";
-			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
-			$arr["priv_key"] = fread($fp, 8192);
-			fclose($fp);
-		}*/
+		if(!($arr["lang"] > 0)) $arr["lang"] = "3";
+		
 		return($arr);
 	}
 
@@ -1677,6 +1703,88 @@ class bank_payment extends class_base
 		else $ok = 0;
 		//a seniks returnime ok, nagu oleks kõik hästi
 		return $ok;
+	}
+
+	function _get_documentation()
+	{
+		$t = "";
+		$t.= t("Veidi olulisemat infot");
+		$t.= "\n<br>\n<br>";
+		$t.= t("Alustamiseks:");
+		$t.= "\n<br>";
+		
+		$t.= "1.";
+		$t.= t("Vaja s&otilde;lmida pangalingi leping pankadega - ilma ei juhtu midagi...");
+		$t.= "\n<br>\n<br>";
+		
+		$t.= "2.";
+		$t.= t("Vaja tekitada kaupmehele privaatv&otilde;ti ja sertifikaadi p&auml;ring");
+		$t.= "\n<br>openssl req -newkey 1024 -nodes -out ./cert_req.pem\n<br>\n<br>";
+		
+		$t.= "3.";
+		$t.= t("privkey.pem on tekkinud privaatv&otulde;ti mis peab saama asukohaks");
+		$t.= " ".$this->cfg["site_basedir"]."/pank/privkey.pem\n<br>\n<br>";
+		
+		$t.= "4.";
+		$t.= t("cert_req.pem on tekkinud sertifikaadip&auml;ring mis tuleb saata pankadele");
+		$banks = array();
+		foreach($this->default_banks as $b){$banks[]=$this->banks[$b];}
+		$banks[] = $this->banks["credit_card"];
+		$t.= ":\n<br>".join(", " , $banks);
+		$t.= "\n<br>\n<br>";
+		
+		$t.= "5.";
+		$t.= t("Vastu saadakse avalikud võtmed, mis peavad jõudma kataloogi");
+		$t.= " ".$this->cfg["site_basedir"]."/pank/\n<br>";
+		$banks = array();
+		foreach($this->public_key_files as $b=> $fn){$banks[] = $this->banks[$b]. " - ".$fn;}
+		$t.= t("failide nimed peaksid olema vastavalt pankadele:");
+		$t.= ":\n<br>".join("\n<br>" , $banks);
+		$t.= "\n<br>\n<br>";
+
+		$t.= "6.";
+		$t.= t("Tab'i \"Pankade info\" alla pangalt saadud kaupmehe ID, \n<br>kui kindlale arvele vaja raha saata, siis oleks vaja m&auml;rkida ka arve number ja saaja nimi (toimib pankadel millel on ka selline v&otilde;imalus olemas)");
+		$t.= "\n<br>\n<br>";
+	
+		$t.= "7.";
+		$t.= t("Kontrolli , et kataloogis ").$this->cfg["site_basedir"].t(" oleks olemas ja kirjutamis&otilde;igustega fail nimega bank_log.txt");
+		$t.= "\n<br>\n<br>";
+	
+		$t.= "8.";
+		$t.= t("Lihtsamal juhul peaks n&uuml;&uuml;d maksmine toimima, keerulisemal on vaja templeitides v&ouml;i koodis mudida");
+		$t.= "\n<br>\n<br>";
+	
+		$t.= "Nordea. ";
+		$t.= t("Kasutab lihtsalt üht MAC v&otilde;tit, mis peaks asuma v&otilde;tmete kataloogis nimega nordea.mac");
+		$t.= "\n<br>\n<br>";
+	
+		$t.= "Kaardikeskus. ";
+		$t.= t("Vaja teha veel testv&otilde;ti ja sertifikaadi p&auml;ring testimiseks(seal tuleb enne katsetada testkeskkonnas ja vastavad tegelased (Kaardikeskusest) peaks saama &uuml;le vaadata kas k&otilde;ik on nagu peab)");
+		$t.= "\n<br>\n<br>";
+	
+		$t.= "Test. ";
+		$t.= t("Toimib vaid Krediitkaardi , SEB &uuml;hispanga ja Nordea'ga")."\n<br>";
+		$t.= t("Nordea puhul peab pangast saama testkasutaja andmed &uuml;hekordsete testmaksete jaoks (k&otilde;ik toimib nagu p&auml;riselt, lihtsalt raha ei tule arvele)\n<br>");
+		$t.= t("Krediitkaardi puhul peab lisama testprivaatv&ouml;tme Tab'i test alla")."\n<br>";
+		$t.= t("SEB puhul peab lisama testprivaatv&ouml;tmeks SEB testkaupmehe privaatv&otilde;tme")."\n<br>";
+		$t.= t("Nii krediitkaardi kui ka SEB puhul on eraldi testkeskkond, kus saab tegutseda pangalt saadud testkasutajaga.. et suunamine sinna toimuks, vaja m&auml;rkida testrezhiim linnuke");
+		$t.= "\n<br>\n<br>";
+	
+		$t.= t("Kaupluse avaleht")."\n<br>";
+		$t.= t("Kauluse avalehel tahavad pangad n&auml;ha viidet selle kohta, et saidil saab maksta nende pangalingiga.. selleks peaks olema avalehel vastav ikoon. Neid saab :")."\n<br>";
+		$t.= aw_ini_get("baseurl").'/automatweb/images/pank/"'.t("panga kood").'".gif'." v&ouml;i panga kodulehelt\n<br>";
+		$t.= t("Maksmisele minnes tuleks &uuml;ldjuhul kasutada ka pankade poolt antud ikoone. Neid saab :")."\n<br>";
+		$t.= aw_ini_get("baseurl").'/automatweb/images/pank/"'.t("panga kood").'"_pay.gif v&ouml;i panga kodulehelt';
+		$t.= "\n<br>\n<br>";
+	
+		$t.= t("Panga koodid").":\n<br>";
+		$t.= t("(Neid l&auml;heb vaja templeitide valmistamisel m&otilde;nel juhul)");
+		$banks = array();
+		foreach($this->banks as $b => $fn){$banks[] = $fn. " - ".$b;}
+		$t.= "\n<br>".join("\n<br>" , $banks);
+		$t.= "\n<br>\n<br>";
+	
+		return $t;
 	}
 }
 
