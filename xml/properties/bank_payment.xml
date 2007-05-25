@@ -80,10 +80,9 @@
             <method>serialize</method>
             <group>bank</group>
             <submit>no</submit>
-            <type>callback</type>
-            <callback>callback_bank</callback>
-            <store>no</store>
+            <type>table</type>
             <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>test_priv_key</name>

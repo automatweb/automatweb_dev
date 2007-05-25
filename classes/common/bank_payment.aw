@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.55 2007/05/25 13:20:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.56 2007/05/25 14:26:25 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -37,7 +37,7 @@
 @groupinfo bank caption="Pankade info"
 
 @default group=bank submit=no
-	@property bank type=callback callback=callback_bank store=no no_caption=1
+	@property bank type=table no_caption=1
 
 @groupinfo log caption="Logi"
 
@@ -733,6 +733,49 @@ class bank_payment extends class_base
 		};
 	}
 	
+	function _get_bank($arr)
+	{
+	//	$props = $this->callback_bank($arr);
+		$meta = $arr["obj_inst"]->meta("bank");
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Pank"),
+		));
+		foreach($this->bank_props as $prop => $caption)
+		{
+			$t->define_field(array(
+				"name" => $prop,
+				"caption" => $caption,
+			));
+		}
+			
+		foreach($this->banks as $key => $val)
+		{
+			$data = array();
+			$data["use"] = array(
+				"name" => "meta[".$key."][use]",
+				"type" => "chechbox" ,
+				"ch_value" => 1 ,
+				"value" => $meta["key"],
+				"caption" => $val,
+			);
+			$data["name"] = $val;
+			foreach($this->bank_props as $prop => $caption)
+			{
+				$data[$prop] = html::textbox(array(
+					"name" => "meta[".$key."][".$prop."]",
+//					"type" => "textbox",
+					"value" => $meta[$key][$prop],
+					"size" => 35,
+//					"caption" => $caption
+				));
+			}
+			$t->define_data($data);
+		}
+	}
+/*	
 	//tekitab võimalike pankade ja propertyte nimekirja
 	function callback_bank($arr)
 	{
@@ -759,7 +802,7 @@ class bank_payment extends class_base
 		}
 		return $ret;
 	}
-	
+*/	
 	//tegelt seda pole ikka vaja.. a äkki miski hetk läheb
 /*	
 	function callback_bank_test($arr)
@@ -806,7 +849,7 @@ class bank_payment extends class_base
 	/**
 	@attrib api=1 params=name
 	@param bank_id required type=string
-		bank id. possible choices: "seb", "hansapank" , "sampopank", "nordeapank" , "krediidipank" 
+		bank id. possible choices: "seb", "hansapank" , "sampopank", "nordeapank" , "krediidipank" , credit_card
 	@param amount optional type=int
 		Amount to be paid. Max length=17
 	@param units optional type=int
@@ -846,22 +889,21 @@ class bank_payment extends class_base
 	@returns bank web page, or string/html form
 	
 	@comment
-		calculates the reference number and digital signature VK_MAC
-		Returns the bank payment site or correct form.
-		sender_id, stamp, amount, reference_nr, stamp , amount and msg must be set and have to have private key for correct form.
-		Have to set $_SESSION["bank_payment"]["url"] if you want to get response from the bank, return_url is only for url with no parameters.
+		Calculates the reference number and digital signature VK_MAC
+		Directs to the bank payment site or returns correct form.
+		amount, reference_nr must be set.
+		payment_id or (expl , sender_id) must be set
+		Have to set $_SESSION["bank_payment"]["url"] if you want to get response from the bank to unusual url (aw_ini_get("baseurl")."/automatweb/bank_return.aw" is default), return_url is only for url with no parameters.
 	
 	@example
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
-		$_SESSION["bank_payment"]["url"] = post_ru();
+		$oc = obj($o->parent())
 		return $bank_payment->do_payment(array(
-			"test"		=> 1,
+			"payment_id" 	=> $oc->prop("bank_payment")
 			"bank_id"	=> "seb",
-			"sender_id"	=> "EXPRPOST",
-			"stamp"		=> row["arvenr"],
-			"amount"	=> $data["amount"],
-			"reference_nr"	=> 123456,
-			"expl"		=> "Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
+			"amount"	=> 500,
+			"reference_nr"	=> $o->id(),
+			"expl"		=> $o->name(),
 		));
 
 	**/	
@@ -1393,7 +1435,6 @@ class bank_payment extends class_base
 		$eamount='1000';
 		$cur='EEK';
 		$datetime=date("YmdHis");
-//		$lang='et';
 		$id=sprintf("%-10s", "$id");
 		$ecuno=sprintf("%012s", "$reference_nr");
 		$eamount=sprintf("%012s", "$amount");
