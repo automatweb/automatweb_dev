@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.15 2007/05/24 08:57:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.16 2007/05/25 11:02:17 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -1021,6 +1021,25 @@ class spa_customer_interface extends class_base
 		));
 	}
 
+	function _add_prod_vars($id)
+	{
+		if(!$this->can("view" , $id))
+		{
+			return;
+		}
+		$o = obj($id);
+		$prod = reset($o->connections_to(array("from.class_id" => CL_SHOP_PRODUCT, "type" => "RELTYPE_PACKAGING")));
+		if(!is_object($prod))
+		{
+			return;
+		}
+		$prod = $prod->from();
+		foreach($prod->get_property_list() as $k => $v)
+		{
+			$this->vars(array("product_".$k => $prod->trans_get_val($k)));
+		}
+	}
+
 	/**
 		@attrib name=show_prod_info 
 		@param prod required
@@ -1033,7 +1052,10 @@ class spa_customer_interface extends class_base
 		{
 			$this->vars(array($k => $po->prop_str($k)));
 		}
-
+		if($po->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+		{
+			$this->_add_prod_vars($po->id());
+		}
 		$i = get_instance(CL_IMAGE);
 		$cnt = 1;
 		$imgc = $po->connections_from(array("type" => "RELTYPE_IMAGE"));
@@ -1053,6 +1075,7 @@ class spa_customer_interface extends class_base
 				"image".$cnt."_onclick" => image::get_on_click_js($c->prop("to")),
 				"packaging_image".$cnt => "",
 				"packaging_image".$cnt."_url" => ""
+			
 			));
 	
 			if ($image_obj->prop("file2") != "")
