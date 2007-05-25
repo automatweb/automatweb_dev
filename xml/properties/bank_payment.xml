@@ -1,22 +1,35 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <field>name</field>
+            <method>none</method>
+            <group>general</group>
+            <type>textbox</type>
+            <parent>general_left</parent>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>cancel_url</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <parent>general_left</parent>
+            <caption>Url, kuhu tagasi tulla eba&amp;amp;otilde;nnestunud makse puhul</caption>
+      </property>
+      <property>
             <name>default_unit_sum</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <type>textbox</type>
+            <parent>general_right</parent>
+            <size>6</size>
             <caption>Vaikimisi &amp;amp;uuml;hiku summa</caption>
-      </property>
-      <property>
-            <name>expl</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>textbox</type>
-            <caption>Selgitus</caption>
       </property>
       <property>
             <name>template</name>
@@ -25,7 +38,8 @@
             <method>serialize</method>
             <group>general</group>
             <type>select</type>
-            <caption>Pangaformide template</caption>
+            <parent>general_right</parent>
+            <caption>Pangavormide template</caption>
       </property>
       <property>
             <name>private_key</name>
@@ -35,6 +49,7 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_KEY</reltype>
+            <parent>general_right</parent>
             <caption>Privaatv&amp;amp;otilde;ti</caption>
       </property>
       <property>
@@ -44,6 +59,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>textbox</type>
+            <parent>general_right</parent>
             <caption>Nordea privaatv&amp;amp;otilde;ti</caption>
       </property>
       <property>
@@ -53,16 +69,18 @@
             <method>serialize</method>
             <group>general</group>
             <type>textbox</type>
+            <parent>general_right</parent>
             <caption>Url, kuhu tagasi tulla eduka makse puhul</caption>
       </property>
       <property>
-            <name>cancel_url</name>
+            <name>expl</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <type>textbox</type>
-            <caption>Url, kuhu tagasi tulla eba&amp;amp;otilde;nnestunud makse puhul</caption>
+            <parent>general_right</parent>
+            <caption>Selgitus</caption>
       </property>
       <property>
             <name>test</name>
@@ -71,6 +89,8 @@
             <method>serialize</method>
             <group>general</group>
             <type>checkbox</type>
+            <parent>general_right</parent>
+            <no_caption>1</no_caption>
             <caption>testre&amp;amp;#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)</caption>
       </property>
       <property>
@@ -231,5 +251,26 @@
                   <caption>Privaatv&amp;amp;otilde;ti</caption>
             </P_KEY>
       </reltypes>
+      <layout>
+            <general_l>
+                  <type>hbox</type>
+                  <width>40%:60%</width>
+                  <group>general</group>
+            </general_l>
+            <general_left>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>N&amp;otilde;utavad</area_caption>
+                  <parent>general_l</parent>
+                  <group>general</group>
+            </general_left>
+            <general_right>
+                  <type>vbox</type>
+                  <closeable>1</closeable>
+                  <area_caption>&amp;nbsp;</area_caption>
+                  <parent>general_l</parent>
+                  <group>general</group>
+            </general_right>
+      </layout>
 </properties>
 

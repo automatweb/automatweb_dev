@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.56 2007/05/25 14:26:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.57 2007/05/25 15:00:04 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -10,29 +10,38 @@
 @default method=serialize
 
 @default group=general
-	@property default_unit_sum type=textbox
-	@caption Vaikimisi &uuml;hiku summa
 	
-	@property expl type=textbox
-	@caption Selgitus
+	@layout general_l type=hbox width=40%:60%
+	@layout general_left type=vbox closeable=1 area_caption=N&otilde;utavad v&nbsp;&auml;&auml;rtused parent=general_l
 
-	@property template type=select
-	@caption Pangaformide template
+		@property name type=textbox field=name method=none parent=general_left
+		@caption Nimi
+	
+		@property cancel_url type=textbox parent=general_left
+		@caption Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul
+	
+	@layout general_right type=vbox closeable=1 area_caption=&nbsp; parent=general_l
+		
+		@property default_unit_sum type=textbox parent=general_right size=6
+		@caption Vaikimisi &uuml;hiku summa
+	
+		@property template type=select parent=general_right
+		@caption Pangavormide template
 
-	@property private_key type=relpicker reltype=RELTYPE_KEY
-	@caption Privaatv&otilde;ti
+		@property private_key type=relpicker reltype=RELTYPE_KEY parent=general_right
+		@caption Privaatv&otilde;ti
 	
-	@property nordea_private_key type=textbox
-	@caption Nordea privaatv&otilde;ti
+		@property nordea_private_key type=textbox parent=general_right
+		@caption Nordea privaatv&otilde;ti
 	
-	@property bank_return_url type=textbox
-	@caption Url, kuhu tagasi tulla eduka makse puhul
-	
-	@property cancel_url type=textbox
-	@caption Url, kuhu tagasi tulla eba&otilde;nnestunud makse puhul
+		@property bank_return_url type=textbox parent=general_right
+		@caption Url, kuhu tagasi tulla eduka makse puhul
 
-	@property test type=checkbox
-	@caption testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)
+		@property expl type=textbox parent=general_right
+		@caption Selgitus
+
+		@property test type=checkbox parent=general_right no_caption=1
+		@caption testre&#382;iim (toimib ainult nende pankadega , millel on olemas testkeskkond)
 
 @groupinfo bank caption="Pankade info"
 
@@ -606,9 +615,11 @@ class bank_payment extends class_base
 				$prop["options"] = $tm->template_picker(array(
 					"folder" => "common/bank_payment"
 				));
+				unset($prop["options"][""]);
 				if(!sizeof($prop["options"]))
 				{
-					$prop["caption"] .= t("\n".$this->site_template_dir."");
+					$prop["value"] = t("Hetkel pole kataloogis"). " ".$this->site_template_dir." ".t("&uuml;htegi temleidi faili");
+					$prop["type"] =  "text";
 				}
 				break;
 			case "find_name":
@@ -739,6 +750,7 @@ class bank_payment extends class_base
 		$meta = $arr["obj_inst"]->meta("bank");
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->set_sortable(false);
+		$t->set_caption("Oluline info pangamaksete teostamiseks (\"Kaupmehe ID\" n&otilde;utav, teised juhuks kui raha peaks laekuma kindlale arvele)");
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Pank"),
@@ -1763,7 +1775,7 @@ class bank_payment extends class_base
 		$t.= "\n<br>openssl req -newkey 1024 -nodes -out ./cert_req.pem\n<br>\n<br>";
 		
 		$t.= "3.";
-		$t.= t("privkey.pem on tekkinud privaatv&otulde;ti mis peab saama asukohaks");
+		$t.= t("privkey.pem on tekkinud privaatv&otilde;ti mis peab saama asukohaks");
 		$t.= " ".$this->cfg["site_basedir"]."/pank/privkey.pem\n<br>\n<br>";
 		
 		$t.= "4.";
@@ -1800,6 +1812,8 @@ class bank_payment extends class_base
 		$t.= "\n<br>\n<br>";
 	
 		$t.= "Kaardikeskus. ";
+		$t.= t("Neile vaja saata tagasiside url, milleks on");
+		$t.= ":\n<br>".aw_ini_get("baseurl")."/automatweb/bank_return.aw\n<br>";
 		$t.= t("Vaja teha veel testv&otilde;ti ja sertifikaadi p&auml;ring testimiseks(seal tuleb enne katsetada testkeskkonnas ja vastavad tegelased (Kaardikeskusest) peaks saama &uuml;le vaadata kas k&otilde;ik on nagu peab)");
 		$t.= "\n<br>\n<br>";
 	
