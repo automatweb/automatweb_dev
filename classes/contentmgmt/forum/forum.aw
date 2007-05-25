@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.13 2007/05/15 08:31:06 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.14 2007/05/25 12:05:43 dragut Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -871,7 +871,7 @@ topic");
 		$author = $this->get_author($board);
 		if (empty($author))
 		{
-			$author = ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"];
+			$author = ($board_obj->prop("last")) ? $board_obj->prop("last") : $board_obj->createdby();
 		};
 
 
@@ -879,10 +879,10 @@ topic");
 			"TABS" => $tabs,
 			"message" => $this->content,
 			"reforb" => $this->mk_reforb("submit_messages",array("board" => $board,"section" => $this->section,"act" => "show_threaded")),
-			"topic" => $board_obj["name"],
+			"topic" => $board_obj->name(),
 			"from" => $author,
-			"email" => $board_obj["meta"]["author_email"],
-			"created" => $this->time2date($board_obj["created"],2),
+			"email" => $board_obj->meta("author_email"),
+			"created" => $this->time2date($board_obj->created() ,2),
 			"topic" => $board_obj->name(),
 			"from" => ($board_obj->last() != "") ? $board_obj->last() : $board_obj->createdby(),
 			"email" => $board_obj->meta("author_email"),
@@ -2453,9 +2453,10 @@ topic");
 	function get_author($board_obj)
 	{
 		$b_obj = new object($board_obj);
-		if ($b_obj["class_id"] == CL_PERIODIC_SECTION || $b_obj["class_id"] == CL_DOCUMENT)
+		$class_id = $b_obj->class_id();
+		if ($class_id == CL_PERIODIC_SECTION || $class_id == CL_DOCUMENT)
 		{
-			$docid = $b_obj["brother_of"];
+			$docid = $b_obj->brother_of();
 			$q = "SELECT author FROM documents WHERE docid = '$docid'";
 			$this->db_query($q);
 			$row = $this->db_next();
