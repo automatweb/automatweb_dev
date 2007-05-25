@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.117 2007/01/19 15:26:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.118 2007/05/25 06:40:41 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -2492,6 +2492,10 @@ class forum_v2 extends class_base
 		}
 		$user_inst = get_instance(CL_USER);
 		$post_creator_groups = $user_inst->get_groups_for_user($username);
+		if (!$post_creator_groups)
+		{
+			return false;
+		}
 		$post_creator_groups->sort_by(array(
 			"prop" => "priority",
 			"order" => "desc"
