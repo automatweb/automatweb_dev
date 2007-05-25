@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.57 2007/05/25 15:00:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.58 2007/05/25 15:18:16 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -596,7 +596,22 @@ class bank_payment extends class_base
 			"sum" => $sum,
 			"payer" => t("Kokku:"),
 		));
-		return $t->draw();
+		
+		return $this->get_fs_string().$t->draw();
+	}
+
+	function get_fs_string()
+	{
+		$fs = filesize($GLOBALS["site_dir"]."/bank_log.txt");
+		if($fs)
+		{
+			$fs_string = t("Logifaili suurus on hetkel") . " " . $fs . " " .t("baiti") . "\n<br>" ;
+		}
+		if($fs = FALSE)
+		{
+			$fs_string = t("Mingine jama on failiga"). " " . $GLOBALS["site_dir"]."/bank_log.txt" . " " . t("Kas pole &otilde;igusi, v&otilde; faili");
+		}
+		return $fs_string; 
 	}
 
 	function get_property($arr)
