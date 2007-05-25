@@ -14,7 +14,7 @@ function _file_get_contents($name)
 	return $fc;
 }
 
-function file_put_contents($name, $fc)
+function _file_put_contents($name, $fc)
 {
 	$f = @fopen($name, "w");
 	if (!$f)
@@ -253,7 +253,7 @@ foreach($syslines as $sl)
 	$new_sysini[] = $sl;
 }
 
-file_put_contents('config/ini/syslog.ini',join("\n",$new_sysini)); 
+_file_put_contents('config/ini/syslog.ini',join("\n",$new_sysini)); 
 
 echo "\n";
 
@@ -289,12 +289,12 @@ $fc = str_replace("__classdef", $class['def'], _file_get_contents("install/class
 $fc = str_replace("__tplfolder", $tpnf, $fc);
 $fc = str_replace("__syslog_type", $class['syslog.type'], $fc);
 $fc = str_replace("__name", $class['name'], $fc);
-file_put_contents("classes/$clnf",str_replace("__classname", $class['file'], $fc));
+_file_put_contents("classes/$clnf",str_replace("__classname", $class['file'], $fc));
 echo "created classes/$clnf...\n";
 
 $folder = $class['folder'] != "" ? "folder=\"".$class['folder']."\"" : "";
 $fc = str_replace("__classname", $class['file'], _file_get_contents("install/class_template/xml/orb/base.xml"));
-file_put_contents("xml/orb/".$class['file'].".xml",str_replace("__classfolder", $folder, $fc));
+_file_put_contents("xml/orb/".$class['file'].".xml",str_replace("__classfolder", $folder, $fc));
 echo "created xml/orb/".$class['file'].".xml...\n";
 
 
