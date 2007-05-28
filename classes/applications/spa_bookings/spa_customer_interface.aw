@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.16 2007/05/25 11:02:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.17 2007/05/28 10:55:01 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -1050,7 +1050,7 @@ class spa_customer_interface extends class_base
 		$po = obj($arr["prod"]);
 		foreach($po->get_property_list() as $k => $v)
 		{
-			$this->vars(array($k => $po->prop_str($k)));
+			$this->vars(array($k => $po->trans_get_val($k)));
 		}
 		if($po->class_id() == CL_SHOP_PRODUCT_PACKAGING)
 		{
