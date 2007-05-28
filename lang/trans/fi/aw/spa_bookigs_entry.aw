@@ -20,4 +20,5 @@ $GLOBALS["TRANS"]["T&uuml;hista"] = "Poista";
 $GLOBALS["TRANS"]["Broneeritud"] = "Varattu";
 $GLOBALS["TRANS"]["Mees"] = "Mies";
 $GLOBALS["TRANS"]["Naine"] = "Nainen";
+$GLOBALS["TRANS"]["Reserveering peab algama %s"] = "Laittaa pakettin oikea alku p&auml;iv&auml;m&auml;&auml;r&auml;";
 ?>
