@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.48 2007/05/28 12:41:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.49 2007/05/28 12:46:13 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -406,27 +406,24 @@ class spa_bookigs_entry extends class_base
 					$feedback .= $this->_add_ppl_entry($d, $booking);
 				}
 
-				if ($arr["obj_inst"]->prop("b_send_mail_to_user"))
+				if ($arr["obj_inst"]->prop("b_send_mail_to_user") && !$existing_user)
 				{
-					if(!$existing_user)
-					{
-						send_mail(
-							$d["email"], 
-							$arr["obj_inst"]->prop("b_mail_subject"), 
-							str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_mail_content")),
-							"From: ".$this->_get_from_addr($arr["obj_inst"])
-						);
-					}
-					else
-					{
-						$us = get_instance("users");
-						send_mail(
-							$d["email"],
-							$arr["obj_inst"]->prop("b_mail_subject"), 
-							str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_ex_mail_content")),
-							"From: ".$this->_get_from_addr($arr["obj_inst"])
-						);
-					}
+					send_mail(
+						$d["email"], 
+						$arr["obj_inst"]->prop("b_mail_subject"), 
+						str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_mail_content")),
+						"From: ".$this->_get_from_addr($arr["obj_inst"])
+					);
+				}
+				if($arr["obj_inst"]->prop("b_ex_mail_content") && $existing_user)
+				{
+					$us = get_instance("users");
+					send_mail(
+						$d["email"],
+						$arr["obj_inst"]->prop("b_mail_subject"), 
+						str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_ex_mail_content")),
+						"From: ".$this->_get_from_addr($arr["obj_inst"])
+					);
 				}
 			}
 		}
