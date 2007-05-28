@@ -8,8 +8,8 @@
 	<div id="border">
 		<div id="toolbar">
 			<div class="links">
-				<A href="http://terryf.dev.struktuur.ee/automatweb/orb.aw?class=image&amp;action=new&amp;parent=4" target=image>Uus pilt</A>
-				<A href="http://terryf.dev.struktuur.ee/automatweb/orb.aw?class=image_manager&amp;action=manager&amp;docid=1316" target=image>Vali olemasolev pilt</A>
+				<A href="{VAR:img_new}" target=image>Uus pilt</A>
+				<A href="{VAR:img_mgr}" target=image>Vali olemasolev pilt</A>
 			</div>
 		</div>
 	</div>

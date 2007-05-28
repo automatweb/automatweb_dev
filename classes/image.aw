@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.198 2007/05/07 08:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.199 2007/05/28 10:13:39 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1407,16 +1407,17 @@ class image extends class_base
 		}
 
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
-
 		if ($arr["request"]["save_and_doc"] != "")
 		{
 			$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
+
 			$image_url = $this->get_url_by_id($arr["obj_inst"]->id());
 			$this->gen_image_alias_for_doc(array(
 				"img_id" => $arr["obj_inst"]->id(),
-				"doc_id" => $arr["request"]["docid"],
+				"doc_id" => $arr["request"]["docid"] ? $arr["request"]["docid"] : $arr["request"]["id"],
 				"no_die" => 1
 			));
+
 			die("
 				<script type=\"text/javascript\" src=\"".aw_ini_get("baseurl")."/automatweb/js/aw.js\"></script>
 				<script language='javascript'>
