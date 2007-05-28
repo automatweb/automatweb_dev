@@ -1943,9 +1943,20 @@ class realestate_import extends class_base
 		### set is_visible to false for objects not found in city24 xml
 		if (count($imported_properties))
 		{
-			$oid_constraint = new obj_predicate_not ($imported_properties);
+			$company_id = $this_object->prop("company");
+			$all_persons = array();
+
+			if(is_oid($company_id))
+			{
+				$company = obj($company_id);
+				$i = get_instance(CL_CRM_COMPANY);
+				$i->get_all_workers_for_company($company, $all_persons);
+			}
+
+			// $all_persons = array_keys($all_persons);
+
 			$realestate_objects = new object_list (array (
-				"oid" => $oid_constraint,
+				"oid" => new obj_predicate_not ($imported_properties),
 				"class_id" => $realestate_classes,
 				"parent" => $realestate_folders,
 				// "modified" => new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $last_import),
@@ -1954,19 +1965,14 @@ class realestate_import extends class_base
 				"site_id" => array (),
 				"lang_id" => array (),
 			));
-			$company_id = $this_object->prop("company");
-			$all_persons = array();
-			if(is_oid($company_id))
-			{
-				$company = obj($company_id);
-				$i = get_instance(CL_CRM_COMPANY);
-				$i->get_all_workers_for_company($company, $all_persons);
-			}
+
 			foreach($realestate_objects->arr() as $realestate_object)// et siis muudaks nähtamatuks vaid need objektid, mille maaklerid töötavad selles ettevõttes, mis on impordiobjekti juurde seostatud
 			{
+				if(!is_oid($realestate_object->prop("realestate_agent1")) and !is_oid($realestate_object->prop("realestate_agent2"))) $realestate_object->set_prop ("is_visible", 0);
 				if(array_key_exists($realestate_object->prop("realestate_agent1") , $all_persons)) $realestate_object->set_prop ("is_visible", 0);
 				if(array_key_exists($realestate_object->prop("realestate_agent2") , $all_persons)) $realestate_object->set_prop ("is_visible", 0);
 			}
+
 		//	$realestate_objects->set_prop ("is_visible", 0);
 			$realestate_objects->save ();
 		}
