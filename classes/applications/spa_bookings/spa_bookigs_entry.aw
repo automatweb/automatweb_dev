@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.47 2007/05/07 15:25:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.48 2007/05/28 12:41:13 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -43,6 +43,9 @@
 	@property b_mail_content type=textarea rows=10 cols=50 field=meta method=serialize
 	@caption Meili sisu
 
+	@property b_ex_mail_content type=textarea rows=10 cols=50 field=meta method=serialize
+	@caption Meili sisu olemasolevale kasutajale
+	
 	@property b_mail_legend type=text store=no 
 	@caption Meili sisu legend
 
@@ -258,7 +261,7 @@ class spa_bookigs_entry extends class_base
 				if ($end < 100 && $this->can("view", $d["package"]))
 				{
 					$pko = obj($d["package"]);
-					list($len, $wd_start) = explode(";", $pko->comment());arr($len);
+					list($len, $wd_start) = explode(";", $pko->comment());
 					$end = $start + 24*3600*($len-1);
 					if ($wd_start > 0)
 					{
@@ -284,8 +287,9 @@ class spa_bookigs_entry extends class_base
 				{
 					$pko = obj($d["package"]);
 					list($len, $wd_start) = explode(";", $pko->comment());
-					$end = $start + 24*3600*($len-1);
+					$end = ($start + 24*3600*($len-1));
 				}
+//die("start = ".date("d.m.Y H:i", $start)." end = ".date("d.m.Y H:i", $end)." len = $len <br>");
 				//$bd = date_edit::get_timestamp($d["birthday"]);
 				// create person, user, booking
 
@@ -357,7 +361,6 @@ class spa_bookigs_entry extends class_base
 					}
 				}
 
-
 				$booking = obj();
 				$booking->set_parent($arr["obj_inst"]->prop("persons_folder"));
 				$booking->set_name(sprintf("Broneering %s %s - %s", $d["fn"]." ".$d["ln"], date("d.m.Y", $start), date("d.m.Y", $end)));
@@ -403,14 +406,27 @@ class spa_bookigs_entry extends class_base
 					$feedback .= $this->_add_ppl_entry($d, $booking);
 				}
 
-				if ($arr["obj_inst"]->prop("b_send_mail_to_user") && !$existing_user)
+				if ($arr["obj_inst"]->prop("b_send_mail_to_user"))
 				{
-					send_mail(
-						$d["email"], 
-						$arr["obj_inst"]->prop("b_mail_subject"), 
-						str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_mail_content")),
-						"From: ".$this->_get_from_addr($arr["obj_inst"])
-					);
+					if(!$existing_user)
+					{
+						send_mail(
+							$d["email"], 
+							$arr["obj_inst"]->prop("b_mail_subject"), 
+							str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_mail_content")),
+							"From: ".$this->_get_from_addr($arr["obj_inst"])
+						);
+					}
+					else
+					{
+						$us = get_instance("users");
+						send_mail(
+							$d["email"],
+							$arr["obj_inst"]->prop("b_mail_subject"), 
+							str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_ex_mail_content")),
+							"From: ".$this->_get_from_addr($arr["obj_inst"])
+						);
+					}
 				}
 			}
 		}
@@ -1377,7 +1393,7 @@ class spa_bookigs_entry extends class_base
 
 	function _get_b_mail_legend($arr)
 	{
-		$arr["prop"]["value"] = t("Meili sisus kasutatavad muutujad:<br>#uid# - kasutajanimi<br>#pwd# - parool<br>#login_url# - sisse logimise aadress<br>");
+		$arr["prop"]["value"] = t("Meili sisus kasutatavad muutujad:<br>#uid# - kasutajanimi<br>#pwd# - parool<br>#pwd_hash_link# - parooli vahetamise link<br> #login_url# - sisse logimise aadress<br>");
 	}
 
 	function _get_from_addr($o)

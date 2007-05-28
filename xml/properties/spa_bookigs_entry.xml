@@ -108,6 +108,17 @@
             <caption>Meili sisu</caption>
       </property>
       <property>
+            <name>b_ex_mail_content</name>
+            <table>objects</table>
+            <group>settings_mail</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili sisu olemasolevale kasutajale</caption>
+      </property>
+      <property>
             <name>b_mail_legend</name>
             <table>objects</table>
             <group>settings_mail</group>
