@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.54 2007/05/03 13:56:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.55 2007/05/29 10:58:09 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -75,6 +75,9 @@ EMIT_MESSAGE(MSG_USER_JOINED)
 
 	@property auto_pwd type=checkbox ch_value=1 field=meta method=serialize
 	@caption Automaatne parool
+
+	@property default_ctry type=select field=meta method=serialize
+	@caption Vaikimisi maa
 
 	@property prop_settings type=table store=no no_caption=1
 
@@ -224,6 +227,12 @@ class join_site extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "default_ctry":
+				$ai = get_instance(CL_CRM_ADDRESS);
+				$data["options"][""] = "";
+				$data["options"] += $ai->get_country_list();
+				break;
+
 			case "prop_settings":
 				$this->_get_prop_settings($arr);
 				break;
@@ -874,7 +883,8 @@ class join_site extends class_base
 								"name" => "p_adr_ctry",
 								"caption" => t("Maa"),
 								"type" => "select",
-								"options" => $adr_inst->get_country_list()
+								"options" => $adr_inst->get_country_list(),
+								"value" => $ob->prop("default_ctry")
 							);
 							$tp["p_adr_zip"] = array(
 								"name" => "p_adr_zip",
@@ -909,7 +919,8 @@ class join_site extends class_base
 									"name" => "c_adr_ctry",
 									"caption" => t("Maa"),
 									"type" => "select",
-									"options" => $adr_inst->get_country_list()
+									"options" => $adr_inst->get_country_list(),
+									"value" => $ob->prop("default_ctry")
 								);
 							}
 							if ($visible[$clid]["postiindeks"])

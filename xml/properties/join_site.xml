@@ -160,6 +160,15 @@
             <caption>Automaatne parool</caption>
       </property>
       <property>
+            <name>default_ctry</name>
+            <table>objects</table>
+            <group>prop_settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi maa</caption>
+      </property>
+      <property>
             <name>prop_settings</name>
             <table>objects</table>
             <group>prop_settings</group>
