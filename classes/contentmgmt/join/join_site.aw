@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.55 2007/05/29 10:58:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.56 2007/05/29 11:14:31 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -2380,7 +2380,7 @@ class join_site extends class_base
 					$this->_handle_images_upload($data_o);
 				}
 				else
-				if ($oldn == "phone_id")
+				if ($oldn == "phone_id" || $oldn == "phone")
 				{
 					if ($this->can("view", $data_o->prop($oldn)))
 					{
@@ -2538,7 +2538,9 @@ class join_site extends class_base
 		}
 		if ($clid == CL_USER)
 		{
+			aw_disable_acl();
 			$data_o->save();
+			aw_restore_acl();
 			$data_o_inst = $data_o->instance();
 			$data_o_inst->callback_post_save(array("obj_inst" => $data_o));
 		}
