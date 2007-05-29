@@ -1,12 +1,26 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>customer</name>
+            <table>aw_crm_deal</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <clid>
+                  <num_0>CL_CRM_COMPANY</num_0>
+                  <num_1>CL_CRM_PERSON</num_1>
+            </clid>
+            <field>aw_customer</field>
+            <style>autocomplete</style>
+            <caption>Klient</caption>
+      </property>
+      <property>
             <name>project</name>
             <table>aw_crm_deal</table>
             <group>general</group>
             <type>popup_search</type>
             <clid>CL_PROJECT</clid>
             <field>aw_project</field>
+            <style>autocomplete</style>
             <caption>Projekt</caption>
       </property>
       <property>
@@ -16,16 +30,8 @@
             <type>popup_search</type>
             <clid>CL_TASK</clid>
             <field>aw_task</field>
+            <style>autocomplete</style>
             <caption>&amp;amp;Uuml;lesanne</caption>
-      </property>
-      <property>
-            <name>customer</name>
-            <table>aw_crm_deal</table>
-            <group>general</group>
-            <type>popup_search</type>
-            <clid>CL_CRM_COMPANY</clid>
-            <field>aw_customer</field>
-            <caption>Klient</caption>
       </property>
       <property>
             <name>creator</name>
@@ -76,23 +82,22 @@
             <caption>Osapooled</caption>
       </property>
       <property>
+            <name>files_tb</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>files_tb</field>
+            <caption>Failid</caption>
+      </property>
+      <property>
             <name>files</name>
             <table>objects</table>
             <group>files</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>file</num_1>
-                  <num_2>type</num_2>
-                  <num_3>comment</num_3>
-                  <num_4>file_url</num_4>
-                  <num_5>newwindow</num_5>
-            </props>
-            <table_fields>name</table_fields>
+            <type>table</type>
+            <store>no</store>
+            <field>files</field>
             <caption>Failid</caption>
       </property>
       <property>
