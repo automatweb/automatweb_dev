@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.17 2007/05/29 09:35:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.18 2007/05/29 09:58:13 markop Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -137,7 +137,7 @@ class crm_deal extends class_base
  					{
  						$prop["value"] = $arr["request"]["customer_awAutoCompleteTextbox"];
  					}
- 					else
+ 					elseif($arr["request"]["customer_awAutoCompleteTextbox"])
  					{
  						$ol = new object_list(array(
  							"name" => $arr["request"]["customer_awAutoCompleteTextbox"],
@@ -175,7 +175,7 @@ class crm_deal extends class_base
  					{
  						$prop["value"] = $arr["request"]["project_awAutoCompleteTextbox"];
  					}
- 					else
+ 					elseif($arr["request"]["project_awAutoCompleteTextbox"])
  					{
  						$ol = new object_list(array(
  							"name" => $arr["request"]["project_awAutoCompleteTextbox"],
@@ -195,7 +195,7 @@ class crm_deal extends class_base
  					{
  						$prop["value"] = $arr["request"]["task_awAutoCompleteTextbox"];
  					}
- 					else
+ 					elseif($arr["request"]["task_awAutoCompleteTextbox"])
  					{
  						$ol = new object_list(array(
  							"name" => $arr["request"]["task_awAutoCompleteTextbox"],
