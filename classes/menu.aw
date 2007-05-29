@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.197 2007/05/22 11:43:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.198 2007/05/29 13:20:25 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -31,17 +31,17 @@
 		@property jrk type=textbox size=4 group=general_sub
 		@caption Jrk
 
-		@property pmethod_properties type=callback callback=callback_get_pmethod_options group=general_sub store=no
-		@caption Avaliku meetodi seaded
-
-		@property admin_feature type=select group=general_sub table=menu field=admin_feature
-		@caption Vali programm
-
 
 	@groupinfo advanced_settings caption="S&uuml;vaseaded" parent=general
 
 		@property type type=select group=advanced_settings table=menu field=type
 		@caption Men&uuml;&uuml; t&uuml;&uuml;p
+
+		@property pmethod_properties type=callback callback=callback_get_pmethod_options group=advanced_settings store=no
+		@caption Avaliku meetodi seaded
+
+		@property admin_feature type=select group=advanced_settings table=menu field=admin_feature
+		@caption Vali programm
 
 		@property objtbl_conf type=relpicker reltype=RELTYPE_OBJ_TABLE_CONF field=meta method=serialize group=advanced_settings
 		@caption Objektitabeli konf
@@ -1137,6 +1137,13 @@ class menu extends class_base
 			"ch_value" => $arr["obj_inst"]->meta("pm_url_menus"),
 		);
 
+		$nodes[] = array(
+			"type" => "textbox",
+			"name" => "pm_extra_params",
+			"value" => $arr["obj_inst"]->meta("pm_extra_params"),
+			"caption" => t("Meetodi lisaparameetrid"),
+		);
+
 		return $nodes;
 	}
 
@@ -1241,6 +1248,7 @@ class menu extends class_base
 					$ob->set_meta("pgroup", "");
 					$ob->set_meta("pm_url_admin","");
 					$ob->set_meta("pm_url_menus","");
+					$ob->set_meta("pm_extra_params","");
 				};
 				break;
 
@@ -1287,6 +1295,7 @@ class menu extends class_base
 				$ob->set_meta("pgroup", $request["pgroup"]);
 				$ob->set_meta("pm_url_menus", $request["pm_url_menus"]);
 				$ob->set_meta("pm_url_admin",$request["pm_url_admin"]);
+				$ob->set_meta("pm_extra_params",$request["pm_extra_params"]);
 				break;
 
 			case "ip":

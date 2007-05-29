@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.233 2007/05/16 14:02:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.234 2007/05/29 13:20:26 kristo Exp $
 
 /*
 
@@ -26,6 +26,8 @@ class site_show extends class_base
 	var $active_doc;		// if only a single document is shownm this will contain the docid
 	var $site_title;		// the title for the site should be put in here
 	var $brother_level_from;
+	var $current_login_menu_id;
+	var $title_yah_arr;
 
 	var $cache;				// cache class instance
 
@@ -1384,7 +1386,7 @@ class site_show extends class_base
 					$dat["url"] = $this->image->get_url_by_id($dat["image_id"]);
 				}
 
-				if ($dat["url"] == "")
+				if (empty($dat["url"]))
 				{
 					continue;
 				}
@@ -2146,7 +2148,7 @@ class site_show extends class_base
 		// site_title_rev - shows two levels in reverse order
 		$pcnt = count($this->title_yah_arr);
 		$site_title_rev = ($pcnt > 0 ? strip_tags($this->title_yah_arr[$pcnt-1])." / " : "").($pcnt > 1 ? strip_tags($this->title_yah_arr[$pcnt-2])." / " : "");
-		$site_title_yah = " / ".join(" / ", $this->title_yah_arr);
+		$site_title_yah = " / ".join(" / ", safe_array($this->title_yah_arr));
 
 		$adt = "";
 		if (is_oid($this->active_doc) && $this->can("view", $this->active_doc))
@@ -2208,7 +2210,7 @@ class site_show extends class_base
 			));
 		}
 
-		$isfp = $section == $frontpage && !$_GET["class"];
+		$isfp = $section == $frontpage && empty($_GET["class"]);
 		$this->vars_safe(array(
 			"IS_FRONTPAGE" => ($isfp ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($isfp ? $this->parse("IS_FRONTPAGE2") : ""),
@@ -2246,6 +2248,7 @@ class site_show extends class_base
 				));
 			}
 
+			$cd = $cd2 = "";
 			if ($this->can("edit",$section) && $this->active_doc)
 			{
 				$cd = $this->parse("CHANGEDOCUMENT");
@@ -2346,7 +2349,7 @@ class site_show extends class_base
 	// builds HTML popups
 	function build_popups()
 	{
-		if ($_GET["print"] == 1 || true)
+		if (true || $_GET["print"] == 1)
 		{
 			return;
 		}
@@ -2497,6 +2500,14 @@ class site_show extends class_base
 				{
 					$this->skip = true;
 				};
+
+				if ($o->meta("pm_extra_params") != "")
+				{
+					ob_start();
+					eval("?>".$o->meta("pm_extra_params"));
+					$link .= ob_get_contents();
+					ob_end_clean();
+				}
 			}
 			else
 			{
@@ -2979,7 +2990,7 @@ class site_show extends class_base
 
 	function __helper_menu_edit($menu)
 	{
-		if (!$this->prog_acl() || $_SESSION["no_display_site_editing"])
+		if (!$this->prog_acl() || !empty($_SESSION["no_display_site_editing"]))
 		{
 			return;
 		}
@@ -3044,7 +3055,7 @@ class site_show extends class_base
 			));
 		}
 
-		if ($this->can("view", $_SESSION["site_admin"]["cut_menu"]))
+		if (isset($_SESSION["site_admin"]["cut_menu"]) && $this->can("view", $_SESSION["site_admin"]["cut_menu"]))
 		{
 			$pm->add_item(array(
 				"text" => t("Kleebi"),
@@ -3056,7 +3067,7 @@ class site_show extends class_base
 
 	function _get_empty_doc_menu()
 	{
-		if (!$this->prog_acl() || !aw_ini_get("config.site_editing") || $_SESSION["no_display_site_editing"])
+		if (!$this->prog_acl() || !aw_ini_get("config.site_editing") || !empty($_SESSION["no_display_site_editing"]))
 		{
 			return;
 		}
@@ -3076,7 +3087,7 @@ class site_show extends class_base
 		{
 			return;
 		}
-		if ($this->can("view", $_SESSION["site_admin"]["cut_doc"]))
+		if (isset($_SESSION["site_admin"]["cut_doc"]) && $this->can("view", $_SESSION["site_admin"]["cut_doc"]))
 		{
 			$pm->add_item(array(
 				"text" => t("Kleebi"),
