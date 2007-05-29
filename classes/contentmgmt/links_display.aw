@@ -20,13 +20,16 @@ class links_display
 		{
 			$caption = $this->img;
 		};
+		$alt = $this->cur_link->trans_get_val("alt");
 		$url = str_replace("'", "\"", $url);
 		$vars = array(
 			"url" => $url,
 			"caption" => $caption,
 			"target" => $target,
 			"img" => $this->img,
-			"real_link" => $this->real_link
+			"real_link" => $this->real_link,
+			"alt" => $alt,
+			"comment" => $this->cur_link->comment()
 		);
 		if (isset($tpls["link"]))
 		{
@@ -36,7 +39,6 @@ class links_display
 		{
 			if ($this->img)
 			{
-				$alt = $this->cur_link->trans_get_val("alt");
 
 				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$alt,$alt,$this->img,$alt);
 			}
