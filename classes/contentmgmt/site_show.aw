@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.234 2007/05/29 13:20:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.235 2007/05/29 13:22:33 kristo Exp $
 
 /*
 
@@ -80,7 +80,6 @@ class site_show extends class_base
 		//flush();
 
 		$this->_init_path_vars($arr);
-
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
 		$this->sel_section_real = $this->sel_section;
@@ -988,8 +987,14 @@ class site_show extends class_base
 			$rsid = aw_ini_get("site_id");
 			
 			$tc = 0;
+			$done_oids = array();
 			foreach($documents->arr() as $o)
 			{
+				if ($done_oids[$o->brother_of()])
+				{
+					continue;
+				}
+				$done_oids[$o->brother_of()] = 1;
 				if ($o->site_id() != $rsid && !$o->is_brother() && !aw_ini_get("menuedit.objects_from_other_sites"))
 				{
 					continue;
@@ -1099,7 +1104,6 @@ class site_show extends class_base
 		if (is_array($docid)) 
 		{
 			$template = $tplmgr->get_lead_template($section_id);
-			
 			// I need to  know that for the public method menus
 			// christ, this sucks ass, we really should put that somewhere else! - terryf
 			$d->set_opt("cnt_documents",sizeof($docid));
@@ -1109,16 +1113,18 @@ class site_show extends class_base
 			$template2 = file_exists($this->cfg["tpldir"]."/automatweb/documents/".$template."2") ? $template."2" : $template;
 
 			$this->vars(array("DOCUMENT_LIST" => $this->parse("DOCUMENT_LIST")));
+			$this->_is_in_document_list = 1;
+			
 
 			$_numdocs = count($docid);
 			$_curdoc = 1;
 			$no_strip_lead = aw_global_get("document.no_strip_lead");
+
 			foreach($docid as $dk => $did)
 			{
 				// resets the template
 				$d->_init_vars();
 				aw_global_set("shown_document", $did);
-
 				$ct .= $d->gen_preview(array(
 					"docid" => $did,
 					"tpl" => ($dk & 1 ? $template2 : $template),
@@ -1135,7 +1141,15 @@ class site_show extends class_base
 		else 
 		{
 			$awt->start("get-long");
-			$template = $tplmgr->get_long_template($section_id);
+
+			if ($_GET["only_document_content"] && $_GET["templ"] != "")
+                        {
+                                $template = $_GET["templ"];
+                        }
+                        else
+			{
+				$template = $tplmgr->get_long_template($section_id);
+			}
 			$awt->stop("get-long");
 
 			if ($docid)
@@ -1232,7 +1246,6 @@ class site_show extends class_base
 		{
 			$docid = $arr["docid"];
 		}
-
 		$si = __get_site_instance();
 		if (method_exists($si, "handle_default_document_list"))
 		{
@@ -2186,6 +2199,12 @@ class site_show extends class_base
 			"trans_lc" => aw_global_get("ct_lang_lc")
 		));
 
+		if ($this->_is_in_document_list)
+		{
+			$this->vars(array("DOCUMENT_LIST2" => $this->parse("DOCUMENT_LIST2")));
+			$this->vars(array("DOCUMENT_LIST3" => $this->parse("DOCUMENT_LIST3")));
+		}
+
 		if ($this->is_parent_tpl("logged", "IS_NOT_FRONTPAGE"))
 		{
 			if (aw_global_get("uid") != "")
@@ -2720,7 +2739,6 @@ class site_show extends class_base
 
 		// import language constants
 		lc_site_load("menuedit",$this);
-
 		enter_function("do_sub_callbacks");
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
 		exit_function("do_sub_callbacks");
