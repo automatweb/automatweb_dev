@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.14 2007/03/02 12:47:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/rfp_manager.aw,v 1.15 2007/05/29 10:19:43 tarvo Exp $
 // rfp_manager.aw - RFP Haldus 
 /*
 
@@ -214,6 +214,7 @@ class rfp_manager extends class_base
 		}
 	}
 
+
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -226,25 +227,14 @@ class rfp_manager extends class_base
 		$rfps = $this->get_rfps(true, true);
 		foreach($rfps as $oid => $obj)
 		{
-			$sr = aw_unserialize($obj->prop("search_result"));
-			unset($hotels);
-			foreach($sr as $loc_data)
-			{
-				if($loc_data["selected"] == 1)
-				{
-					$this->vars(array(
-						"hotel" => $loc_data["location"],
-					));
-					$hotels[] = $this->parse("HOTEL");
-				}
-			}
-			$hotel = join($this->parse("HOTEL_SEP") , $hotels);
+			$hotel = $obj->prop("data_gen_hotel");
 			$this->vars(array(
-				"name" => $obj->name(),
-				"time" => $obj->prop("arrival_date")." - ".$obj->prop("departure_date"),
-				"attendees" => $obj->prop("delegates_no"),
-				"HOTEL" => $hotel,
-				"copy_url" => $this->mk_my_orb("reload_rfp", array(
+				"name" => ($_t = $obj->prop("data_gen_function_name"))?$_t:$obj->name(),
+				"time" => $obj->prop("data_gen_arrival_date")." - ".$obj->prop("data_gen_departure_date"),
+				"attendees" => $obj->prop("data_gen_attendees_no"),
+				"hotel" => $hotel,
+				//"copy_url" => $this->mk_my_orb("reload_rfp", array(
+				"copy_url" => $this->mk_my_orb("rfp_reload", array(
 					"rfp" => $obj->id(),
 					"oid" => $arr["id"],
 					"return_url" => aw_ini_get("baseurl"),
@@ -468,6 +458,32 @@ class rfp_manager extends class_base
 		}
 
 		return $rfps;
+	}
+
+	/**
+		@attrib params=name name=rfp_reload all_args=1
+	**/
+	function rfp_reload($arr)
+	{
+		$obj = obj($arr["rfp"]);
+		$inst = get_instance(CL_CONFERENCE_PLANNING);
+		$cfg = get_instance("cfg/cfgutils");
+		$list = $cfg->load_properties(array(
+			"clid" => CL_RFP
+		));
+		$grinfo = $cfg->get_groupinfo();
+		$list = array_filter($list, array($inst, "__callback_filter_prplist"));
+		foreach($list as $prp => $t)
+		{
+			if($obj->prop($prp))
+			{
+				$data[$prp] = $obj->prop($prp);
+			}
+		}
+		$inst->store_data($obj->prop("conference_planner"), $data, false);
+		$o = $this->can("view", $obj->prop("conference_planner"))?obj($obj->prop("conference_planner")):false;
+
+		return aw_ini_get("baseurl")."/".$o->prop("document");
 	}
 
 	/**

@@ -30,6 +30,13 @@
 			</function>
 		</action>
 
+		<action name="rfp_reload" all_args="1">
+			<function name="rfp_reload">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="reload_rfp" all_args="1">
 			<function name="reload_rfp">
 				<arguments>

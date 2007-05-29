@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.94 2007/05/08 08:29:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.95 2007/05/29 10:19:43 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -46,6 +46,9 @@
 
 @property submission_dir type=relpicker field=meta method=serialize reltype=RELTYPE_SUBMISSION_DIR
 @caption RFP kataloog
+
+@property document type=relpicker reltype=RELTYPE_WEBSHOW_DOCUMENT field=meta method=serialize
+@caption Konverentsiplaneerija dokument
 
 // metadata for views
 @property help_views type=hidden field=meta mehtod=serialize no_caption=1
@@ -138,6 +141,9 @@
 
 @reltype SUBMISSION_DIR value=9 clid=CL_MENU
 @caption RFP kataloog
+
+@reltype WEBSHOW_DOCUMENT value=10 clid=CL_DOCUMENT
+@caption Konverentsiplaneerija dokument
 
 */
 
@@ -1660,6 +1666,7 @@ class conference_planning extends class_base
 			"parent" => $parent,
 			"name" => sprintf(t("RFP, %s"), date("d.m.Y H:i")),
 			"data" => $data,
+			"conference_planner" => $ob->id(),
 		));
 		$thank_you_so_very_much = $this->can("view", $ob->prop("redir_doc"))?"/".$ob->prop("redir_doc"):"";
 		// take the trash out...
@@ -1671,6 +1678,7 @@ class conference_planning extends class_base
 		@param clid required type=int
 		@param name required type=string
 		@param parent required type=oid
+		@param conference_planner required type=oid 
 		@param data required type=Array
 			array(
 				property_name => value
@@ -1680,13 +1688,15 @@ class conference_planning extends class_base
 	**/
 	function create_submit_object($arr)
 	{
-		if(is_array($arr["data"]) && $this->can("view", $arr["parent"]) && strlen($arr["name"]) && strlen($arr["name"]))
+		if(is_array($arr["data"]) && $this->can("view", $arr["parent"]) && strlen($arr["name"]) && strlen($arr["name"]) && $this->can("view", $arr["conference_planner"]))
 		{
 			$obj = new object();
 			$obj->set_name($arr["name"]);
 			$obj->set_parent($arr["parent"]);
 			$obj->set_class_id($arr["clid"]);
+			$obj->set_prop("conference_planner", $arr["conference_planner"]);
 			// these are here just in case 
+			unset($data["conference_planner"]);
 			unset($data["name"]);
 			unset($data["parent"]);
 			unset($data["clid"]);
@@ -1713,7 +1723,6 @@ class conference_planning extends class_base
 		$ext = strlen($ext)?"&".$ext:"";
 		return aw_ini_get("baseurl")."/".$oid."?view_no=".$view.$ext;
 	}
-
 
 	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)

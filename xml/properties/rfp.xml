@@ -1,6 +1,106 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>conference_planner</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WEBFORM</reltype>
+            <caption>Tellimuse vorm</caption>
+      </property>
+      <property>
+            <name>final_rooms</name>
+            <table>objects</table>
+            <group>final_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_ROOM</reltype>
+            <caption>Ruumid</caption>
+            <comment>Konverentsi jaoks kasutatavad ruumid</comment>
+      </property>
+      <property>
+            <name>final_theme</name>
+            <table>objects</table>
+            <group>final_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Teema</caption>
+            <comment>Konverentsi valdkond(&amp;amp;uml;ldteema)</comment>
+      </property>
+      <property>
+            <name>final_international</name>
+            <table>objects</table>
+            <group>final_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Rahvusvaheline</caption>
+            <comment>Kas &amp;amp;uuml;ritus on rahvusvaheline</comment>
+      </property>
+      <property>
+            <name>final_native_guests</name>
+            <table>objects</table>
+            <group>final_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kohalike k&amp;amp;uuml;laliste arv</caption>
+            <comment>Konverentsil viibivate kohalike k&amp;amp;uuml;laliste arv</comment>
+      </property>
+      <property>
+            <name>final_foreign_guests</name>
+            <table>objects</table>
+            <group>final_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>V&amp;amp;auml;lisk&amp;amp;uuml;laliste arv</caption>
+            <comment>Konverentsil viibivate v&amp;amp;auml;lisk&amp;amp;uuml;aliste arv</comment>
+      </property>
+      <property>
+            <name>products_tbl</name>
+            <table>objects</table>
+            <group>final_catering</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>resources_tbl</name>
+            <table>objects</table>
+            <group>final_resource</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>tmp4</name>
+            <table>objects</table>
+            <group>final_prices</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+      </property>
+      <property>
+            <name>tmp5</name>
+            <table>objects</table>
+            <group>final_submission</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>data_subm_name</name>
             <table>objects</table>
             <group>submitter_info</group>
@@ -591,24 +691,68 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <final_info>
+                  <caption>Tellimuskirjeldus</caption>
+            </final_info>
+            <final_general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>final_info</parent>
+            </final_general>
+            <final_catering>
+                  <caption>Toitlustus</caption>
+                  <parent>final_info</parent>
+            </final_catering>
+            <final_resource>
+                  <caption>Ressursid</caption>
+                  <parent>final_info</parent>
+            </final_resource>
+            <final_prices>
+                  <caption>Hinnad</caption>
+                  <parent>final_info</parent>
+            </final_prices>
+            <final_submission>
+                  <caption>Kinnitamine</caption>
+                  <parent>final_info</parent>
+            </final_submission>
+            <data>
+                  <caption>Andmed</caption>
+            </data>
             <submitter_info>
                   <caption>Ankeedi t&amp;amp;auml;itja</caption>
+                  <parent>data</parent>
             </submitter_info>
             <general_function_info>
                   <caption>&amp;amp;Uuml;ldine &amp;amp;uuml;rituse info</caption>
+                  <parent>data</parent>
             </general_function_info>
             <main_fun>
                   <caption>P&amp;amp;otilde;hi&amp;amp;uuml;ritus</caption>
+                  <parent>data</parent>
             </main_fun>
             <additional_functions>
                   <caption>Lisa&amp;amp;uuml;ritused</caption>
+                  <parent>data</parent>
             </additional_functions>
             <search_results>
                   <caption>Otsingutulemused</caption>
+                  <parent>data</parent>
             </search_results>
             <billing>
                   <caption>Arve info</caption>
+                  <parent>data</parent>
             </billing>
       </groupinfo>
+      <reltypes>
+            <ROOM>
+                  <clid>CL_ROOM</clid>
+                  <value>1</value>
+                  <caption>Konverentsi toimumiskoht</caption>
+            </ROOM>
+            <WEBFORM>
+                  <clid>CL_CONFERENCE_PLANNING</clid>
+                  <value>2</value>
+                  <caption>Tellimuse vorm</caption>
+            </WEBFORM>
+      </reltypes>
 </properties>
 

@@ -126,6 +126,16 @@
             <caption>RFP kataloog</caption>
       </property>
       <property>
+            <name>document</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WEBSHOW_DOCUMENT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Konverentsiplaneerija dokument</caption>
+      </property>
+      <property>
             <name>help_views</name>
             <table>objects</table>
             <group>general</group>
@@ -360,6 +370,11 @@
                   <clid>CL_MENU</clid>
                   <caption>RFP kataloog</caption>
             </SUBMISSION_DIR>
+            <WEBSHOW_DOCUMENT>
+                  <value>10</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Konverentsiplaneerija dokument</caption>
+            </WEBSHOW_DOCUMENT>
       </reltypes>
       <layout>
             <hsplit>
