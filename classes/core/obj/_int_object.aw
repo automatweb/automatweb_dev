@@ -1439,10 +1439,7 @@ class _int_object
 	{
 		if (!$this->obj["oid"])
 		{
-			error::raise(array(
-				"id" => ERR_CORE_OID,
-				"msg" => sprintf(t("object::create_brother(%s): no object loaded!"), $parent)
-			));
+			$this->obj["_create_brothers"][] = $parent;
 			return;
 		}
 
@@ -1944,6 +1941,13 @@ class _int_object
 				}
 			};
 		};
+		if (is_array($this->obj["_create_brothers"]))
+		{
+			foreach($this->obj["_create_brothers"] as $bro_args)
+			{
+				$this->create_brother($bro_args);
+			}
+		}
 
 		// obj inherit props impl
 		$this->_int_do_obj_inherit_props();
