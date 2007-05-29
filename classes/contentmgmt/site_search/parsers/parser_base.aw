@@ -54,7 +54,7 @@ class ss_parser_base
 			list($usec, $sec) = explode(" ", microtime());
 			$tm_e = ((float)$usec + (float)$sec);
 
-			echo "fetch ".$this->url.", took ".($tm_e-$tm_s)." seconds <br>\n";
+			echo "fetch ".htmlentities($this->url).", took ".($tm_e-$tm_s)." seconds <br>\n";
 			flush();
 
 			return;
@@ -76,7 +76,7 @@ class ss_parser_base
 		list($usec, $sec) = explode(" ", microtime());
 		$tm_e = ((float)$usec + (float)$sec);
 
-		echo "fetch ".$this->url.", took ".($tm_e-$tm_s)." seconds <br>\n";
+		echo "fetch ".htmlentities($this->url).", took ".($tm_e-$tm_s)." seconds <br>\n";
 		flush();
 
 		//echo "content for ".$this->url." = ".$this->content." <br>";

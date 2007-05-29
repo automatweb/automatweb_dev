@@ -76,7 +76,13 @@ class http
                                 else
                                 if ($loc[0] == "?")
                                 {
-         	                       $loc = $url.$loc;
+					$tmp = $url;
+					$qpos = strpos($url, "?");
+					if ($qpos)
+					{
+						$tmp = substr($tmp, 0, $qpos);
+					}
+					$loc = $tmp.$loc;
                                 }
                                 $pu = parse_url($loc);
                                 if (!$pu["scheme"])

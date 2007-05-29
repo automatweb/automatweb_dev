@@ -49,6 +49,7 @@ class ss_parser_html extends ss_parser_base
 			{
 				// $match should contain "target="foo" href="bla" ..."
 				$match = str_replace("href = ", "href=", $match);
+				$match = str_replace("SRC=", "href=", $match);
 				if (preg_match("/href=(.*)/i", str_replace("src=", "href=", $match), $mt2))
 				{
 					// it might still contain trailing crap and we can not rely on there being an end terminator

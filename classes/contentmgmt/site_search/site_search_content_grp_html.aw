@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.7 2007/05/24 12:29:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.8 2007/05/29 08:52:09 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -160,7 +160,7 @@ echo "baseurl = ".$this->baseurl." <br>";
 	function bg_run_step($o)
 	{
 		$url = $this->queue->get();
-echo "url = $url <br>";
+echo "url = ".htmlentities($url)." <br>";
 		if (isset($this->pages[$url]))
 		{
 			return $this->queue->has_more() ? BG_OK : BG_DONE;
