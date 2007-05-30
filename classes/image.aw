@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.199 2007/05/28 10:13:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.200 2007/05/30 06:10:21 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -629,7 +629,7 @@ class image extends class_base
 		@examples
 			none
 	**/
-	function add_upload_image($name,$parent,$img_id = 0)
+	function add_upload_image($name,$parent,$img_id = 0, $file = true, $file2 = false)
 	{
 		$img_id = (int)$img_id;
 
@@ -653,14 +653,28 @@ class image extends class_base
 			{
 				$sz = getimagesize($_FILES[$name]['tmp_name']);
 
-				$fl = $_fi->_put_fs(array(
-					"type" => $_FILES[$name]['type'],
-					"content" => $this->get_file(array(
-						"file" => $_FILES[$name]['tmp_name'],
-					)),
-				));
+				if($file)
+				{
+					$fl = $_fi->_put_fs(array(
+						"type" => $_FILES[$name]['type'],
+						"content" => $this->get_file(array(
+							"file" => $_FILES[$name]['tmp_name'],
+						)),
+					));
 
-				$img_obj->set_prop("file", $fl);
+					$img_obj->set_prop("file", $fl);
+				}
+				if($file2)
+				{
+					$f2 = $_fi->_put_fs(array(
+						"type" => $_FILES[$name]['type'],
+						"content" => $this->get_file(array(
+							"file" => $_FILES[$name]['tmp_name'],
+						)),
+					));
+
+					$img_obj->set_prop("file2", $f2);
+				}
 				$img_obj->save();
 			}
 		}
