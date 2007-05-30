@@ -42,6 +42,15 @@
             <caption>&amp;amp;Auml;ra kuva otsinguvormi</caption>
       </property>
       <property>
+            <name>result_order</name>
+            <table>watercraft_search</table>
+            <group>general</group>
+            <type>chooser</type>
+            <default>1</default>
+            <field>result_order</field>
+            <caption>Otsingutulemuste sorteerimine </caption>
+      </property>
+      <property>
             <name>saved_search</name>
             <table>watercraft_search</table>
             <group>general</group>

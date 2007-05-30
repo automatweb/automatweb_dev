@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.8 2007/05/18 07:43:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.9 2007/05/30 07:56:01 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -430,9 +430,12 @@ class watercraft_add extends class_base
 				$images_str = '';
 				foreach ($images->arr() as $image_oid => $image_obj)
 				{
+					$d = $image_inst->get_image_by_id($image_oid);
+					
 					$this->vars(array(
-						'image_url' => $image_inst->get_url_by_id($image_oid),
-						'image_name' => $image_obj->name()
+						'image_url' => $d["url"],
+						'image_name' => $image_obj->name(),
+						'image_big_url' => $d["big_url"],
 					));
 					$images_str .= $this->parse('UPLOADED_IMAGE');
 				}
@@ -558,7 +561,13 @@ class watercraft_add extends class_base
 			{
 				if ($image_data['error'] == 0)
 				{
-					$image = $image_inst->add_upload_image($field_name, $watercraft_obj->id());
+					$image = $image_inst->add_upload_image($field_name, $watercraft_obj->id(), 0, true, true);
+					$tmp = array(
+						"id" => $image["id"],
+						"file" => "file",
+						"width" => 120,
+					);
+					$image_inst->resize_picture($tmp);
 				}
 			}
 		}
@@ -738,6 +747,7 @@ class watercraft_add extends class_base
 			$image_inst = get_instance(CL_IMAGE);
 			$images_count = count($images_lut[$item_id]);
 			$image_str = '';
+
 			if ($images_count > 0)
 			{
 				$image_id = reset($images_lut[$item_id]);

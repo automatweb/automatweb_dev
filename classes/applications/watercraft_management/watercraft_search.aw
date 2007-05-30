@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.15 2007/05/18 08:06:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.16 2007/05/30 07:56:01 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -23,6 +23,9 @@
 
 	@property no_search_form type=checkbox ch_value=1 table=watercraft_search
 	@caption &Auml;ra kuva otsinguvormi
+	
+	@property result_order type=chooser default=1 table=watercraft_search
+	@caption Otsingutulemuste sorteerimine 
 
 	@property saved_search type=checkbox ch_value=1 table=watercraft_search
 	@caption Salvestatud otsing
@@ -165,6 +168,14 @@ class watercraft_search extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case 'result_order':
+				$prop["options"] = array(
+					1 => t("Uuemad ees"),
+					2 => t("Odavamad ees"),
+					3 => t("Suurem jrk ees"),
+					4 => t("V&auml;iksem jrk ees"),
+				);
+				break;
 			case 'results_on_page':
 				if ( $arr['new'] == 1 )
 				{
@@ -505,7 +516,7 @@ class watercraft_search extends class_base
 					'obj_inst' => $obj,
 					'request' => $search_params,
 					'limit' => ($active_page * $results_on_page).', '.$results_on_page,
-	//				'sort_by' => "watercraft.".$_GET['sortby']." ".$_GET['order']
+					'sort_by' => ($_GET["sortby"] && $_GET["order"])?"watercraft.".$_GET['sortby']." ".$_GET['order']:"",
 				));
 			}
 			
@@ -581,7 +592,7 @@ class watercraft_search extends class_base
 				$items_str .= $this->parse('SEARCH_RESULT_ITEM');
 			}
 
-/*
+			$watercraft_property_list = array("price", "creation_year");
 			foreach ($watercraft_property_list as $watercraft_property)
 			{
 				$prop = str_replace('watercraft_', '', $watercraft_property);
@@ -598,10 +609,10 @@ class watercraft_search extends class_base
 					'order' => $order
 				));
 			}
-*/
 			$this->vars(array(
 				'SEARCH_RESULT_ITEM' => $items_str
 			));
+			$this->vars($sorting_links);
 
 			$search_results = $this->parse('SEARCH_RESULTS');
 
@@ -765,11 +776,38 @@ class watercraft_search extends class_base
 			$filter['limit'] = $arr['limit'];
 		}
 		
+		// this here is .. a temperory line. really, i do have a plan to make it better one day!! 
+		$filter["price"] = new obj_predicate_not("struudel");
 		if (!empty($arr['sort_by']))
 		{
 			$filter['sort_by'] = $arr['sort_by'];
 		}
-
+		else
+		{
+			if($arr["obj_inst"]->prop("result_order"))
+			{
+				switch($arr["obj_inst"]->prop("result_order"))
+				{
+					case 1:
+						$order = "objects.created ASC";
+						break;
+					case 2:
+						$order = "watercraft.price ASC";
+						break;
+					case 3:
+						$order = "objects.jrk DESC";
+						break;
+					case 4:
+						$order = "objects.jrk ASC";
+						break;
+				}
+				if($order)
+				{
+					$filter["sort_by"] = $order;
+				}
+			}
+		}
+		
 		foreach ($this->search_form_elements as $name => $caption)
 		{
 			// if it is range:
@@ -877,6 +915,7 @@ class watercraft_search extends class_base
 				length_from int,
 				length_to int,
 				width_from int,
+				result_order int,
 				width_to int,
 				height_from int,
 				height_to int,
@@ -935,6 +974,7 @@ class watercraft_search extends class_base
 			case 'price_from':
 			case 'price_to':
 			case 'section_id':
+			case 'result_order':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'

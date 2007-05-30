@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.14 2007/05/18 07:43:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.15 2007/05/30 07:56:01 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -436,8 +436,8 @@ define('WATERCRAFT_TYPE_DINGHY', 3);
 define('WATERCRAFT_TYPE_ROWING_BOAT', 4);
 define('WATERCRAFT_TYPE_SCOOTER', 5);
 define('WATERCRAFT_TYPE_SAILBOARD', 6);
-define('WATERCRAFT_TYPE_CANOE', 7);
-define('WATERCRAFT_TYPE_FISHING_BOAT', 8);
+//define('WATERCRAFT_TYPE_CANOE', 7); // deprecated
+//define('WATERCRAFT_TYPE_FISHING_BOAT', 8); // deprecated
 define('WATERCRAFT_TYPE_OTHER', 9);
 define('WATERCRAFT_TYPE_ACCESSORIES', 10);
 
@@ -509,8 +509,6 @@ class watercraft extends class_base
 			WATERCRAFT_TYPE_ROWING_BOAT => t('Aerupaat'),
 			WATERCRAFT_TYPE_SCOOTER => t('Skuuter'),
 			WATERCRAFT_TYPE_SAILBOARD => t('Purjelaud'),
-			WATERCRAFT_TYPE_CANOE => t('Kanuu'),
-			WATERCRAFT_TYPE_FISHING_BOAT => t('Kalapaat'),
 			WATERCRAFT_TYPE_OTHER => t('Muu alus'),
 			WATERCRAFT_TYPE_ACCESSORIES => t('Varustus/tarvikud')
 		);
@@ -798,7 +796,6 @@ class watercraft extends class_base
 		$t->define_field(array(
 			'name' => 'type',
 			'caption' => $this->sail_table_fields['type'],
-			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'area',
@@ -1049,6 +1046,7 @@ class watercraft extends class_base
 
 		// properties
 		$props = $ob->properties();
+		$proplist = $ob->get_property_list();
 		foreach ($props as $prop_name => $prop_value)
 		{
 			if($prop_name == "sail_table")
@@ -1099,6 +1097,24 @@ class watercraft extends class_base
 			}
 			else
 			{
+				if($proplist[$prop_name]["group"] == "additional_equipment")
+				{
+					if(substr($prop_name, -4) == "_sel" && $prop_value)
+					{
+						$prp = substr($prop_name, 0, -4);
+						$add_equip[$prp]["sel"] = $prop_value;
+					}
+					else if(substr($prop_name, -5) == "_info" && strlen($prop_value))
+					{
+						$prp = substr($prop_name, 0, -5);
+						$add_equip[$prp]["info"] = $prop_value;
+					}
+					else if(substr($prop_name, -7) == "_amount" && strlen($prop_value))
+					{
+						$prp = substr($prop_name, 0, -7);
+						$add_equip[$prp]["amount"] = $prop_value;
+					}
+				}
 				// this hack sucks bigtime .. doesn't it?:)
 				if(in_array($prop_name, $objs) && $this->can("view", $prop_value))
 				{
@@ -1108,6 +1124,20 @@ class watercraft extends class_base
 				$vars['watercraft_'.$prop_name] = htmlentities($prop_value?$prop_value:"-");
 			}
 		}
+		$cf = get_instance("cfg/cfgutils");
+		$cf->load_properties(array(
+			"clid" => CL_WATERCRAFT,
+		));
+		$li = $cf->get_layoutinfo();
+		foreach($add_equip as $prp => $vals)
+		{
+			$_t = ($vals["amount"]?sprintf("(%s)", $vals["amount"]):"").($vals["info"]?sprintf("-%s",$vals["info"]):""); 
+			if($_t)
+			{
+				$joins[] = $li[$prp."_row"]["caption"]." ".$_t;
+			}
+		}
+		$vars["watercraft_comma_separated_additional_equipment"] = join(", ", $joins);
 		
 		// images
 		$image_inst = get_instance(CL_IMAGE);
@@ -1124,7 +1154,8 @@ class watercraft extends class_base
 			$image_data = $image_inst->get_image_by_id($image_id);
 			$image_url = $image_inst->get_url_by_id($image_id);
 			$this->vars(array(
-				'watercraft_image_url' => $image_inst->get_url_by_id($image_id),
+				'watercraft_image_url' => $image_data["url"],
+				'watercraft_big_image_url' => $image_data["big_url"],
 				'watercraft_image_name' => $image_data['name'],
 				'watercraft_image_tag' => $image_inst->make_img_tag_wl($image_id), 
 			));
@@ -1140,10 +1171,13 @@ class watercraft extends class_base
 			$images_count++;
 		}
 
-		if (empty($images_str) && empty($first_image_str))
+		if(empty($first_image_str))
+		{
+			$first_image_str = $this->parse('WATERCRAFT_NO_FIRST_IMAGE');
+		}
+		if (empty($images_str))
 		{
 			$images_str = $this->parse('WATERCRAFT_NO_IMAGE');
-			$first_image_str = $this->parse('WATERCRAFT_NO_FIRST_IMAGE');
 		}
 
 		$vars['WATERCRAFT_IMAGE'] = $images_str;
@@ -1282,7 +1316,7 @@ class watercraft extends class_base
 				draught double,
 				fuel_tank double,
 				engine_power double,
-				price double,
+				price int,
 
 				watercraft_type_other varchar(255),
 				body_material_other varchar(255),
@@ -1373,6 +1407,7 @@ class watercraft extends class_base
 			case 'tv_video_sel':
 			case 'fuel_sel':
 			case 'water_tank_sel':
+			case 'price':
 			case 'life_boat_sel':
 				$this->db_add_col($table, array(
 					'name' => $field,
@@ -1386,7 +1421,6 @@ class watercraft extends class_base
 			case 'draught':
 			case 'fuel_tank':
 			case 'engine_power':
-			case 'price':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'double'
