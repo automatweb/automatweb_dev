@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.16 2007/05/30 08:17:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.17 2007/05/30 11:52:48 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -1132,7 +1132,7 @@ class watercraft extends class_base
 		foreach($add_equip as $prp => $vals)
 		{
 			$_t = ($vals["amount"]?sprintf("(%s)", $vals["amount"]):"").($vals["info"]?sprintf("-%s",$vals["info"]):""); 
-			if($_t)
+			if($vals["sel"])
 			{
 				$joins[] = $li[$prp."_row"]["caption"]." ".$_t;
 			}
@@ -1182,6 +1182,7 @@ class watercraft extends class_base
 
 		$vars['WATERCRAFT_IMAGE'] = $images_str;
 		$vars['WATERCRAFT_FIRST_IMAGE'] = $first_image_str;
+		$vars["watercraft_id"] = $ob->id();
 		$vars['images_count'] = $images_count;
 		$vars['name'] = $ob->prop('name');
 		$vars['return_url'] = aw_url_change_var(array('watercraft_id' => NULL, 'return_url' => NULL), false, get_ru());

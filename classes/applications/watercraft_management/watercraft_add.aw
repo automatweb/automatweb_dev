@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.10 2007/05/30 08:17:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.11 2007/05/30 11:52:48 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -436,6 +436,8 @@ class watercraft_add extends class_base
 						'image_url' => $d["url"],
 						'image_name' => $image_obj->name(),
 						'image_big_url' => $d["big_url"]?$d["big_url"]:$d["url"],
+						'image_id' => $image_oid,
+						'delete_element_name' => "remove_img[".$image_oid."]",
 					));
 					$images_str .= $this->parse('UPLOADED_IMAGE');
 				}
@@ -447,7 +449,7 @@ class watercraft_add extends class_base
 			}
 		}
 
-
+		$vars['watercraft_id'] = $watercraft_obj->id();
 		$vars['reforb'] = $this->mk_reforb('submit_data', array(
 			'section' => aw_global_get('section'),
 			'return_url' => post_ru(),
@@ -488,6 +490,20 @@ class watercraft_add extends class_base
 
 		$return_url = $arr['return_url'];
 		unset($arr['return_url']);
+
+		$remove_imgs = $arr["remove_img"];
+		unset($arr["remove_img"]);
+		foreach($remove_imgs as $img => $flag)
+		{
+			if($this->can("view", $img))
+			{
+				$o = obj($img);
+				if($o->class_id() == CL_IMAGE)
+				{
+					$o->delete();
+				}
+			}
+		}
 
 		// check for errors
 		$_SESSION['watercraft_input_data']['errors'] = array();
@@ -567,6 +583,9 @@ class watercraft_add extends class_base
 						"file" => "file",
 						"width" => 120,
 					);
+					$image_inst->resize_picture($tmp);
+					$tmp["file"] = "file2";
+					$tmp["width"] = "800";
 					$image_inst->resize_picture($tmp);
 				}
 			}
