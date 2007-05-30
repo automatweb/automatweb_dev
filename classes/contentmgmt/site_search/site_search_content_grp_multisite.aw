@@ -1,0 +1,54 @@
+<?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.1 2007/05/30 11:29:07 kristo Exp $
+// site_search_content_grp_multisite.aw - Saidi sisu otsingu grupp mitu saiti 
+/*
+
+@classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_MULTISITE relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+
+@default table=objects
+@default group=general
+
+	@property sel_grps type=relpicker multiple=1 reltype=RELTYPE_GRP field=meta method=serialize
+	@caption Otsingu grupid
+
+@reltype GRP value=1 clid=CL_SITE_SEARCH_CONTENT_GRP_HTML
+@caption Otsingu grupp
+
+*/
+
+class site_search_content_grp_multisite extends class_base
+{
+	function site_search_content_grp_multisite()
+	{
+		$this->init(array(
+			"tpldir" => "contentmgmt/site_search/site_search_content_grp_multisite",
+			"clid" => CL_SITE_SEARCH_CONTENT_GRP_MULTISITE
+		));
+	}
+
+	function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+		};
+		return $retval;
+	}
+
+	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+		}
+		return $retval;
+	}	
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+}
+?>
