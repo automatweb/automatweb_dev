@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.235 2007/05/29 13:22:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.236 2007/05/30 09:38:35 kristo Exp $
 
 /*
 
@@ -821,7 +821,7 @@ class site_show extends class_base
 
 			$has_rand = false;
 
-			if (isset($section) && is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
+			if (isset($sections) && is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
 			{
 				$nol = true;
 				$filter["parent"] = $sections;
