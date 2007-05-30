@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.95 2007/05/29 10:19:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.96 2007/05/30 10:55:06 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -161,6 +161,8 @@ class conference_planning extends class_base
 			"tpldir" => "applications/conference_planning_webview",
 			"clid" => CL_CONFERENCE_PLANNING
 		));
+
+		lc_site_load("conference_planning_new", &$this);
 		
 		$this->wd = array(
 			0 => t("Monday"),
@@ -1773,6 +1775,7 @@ class conference_planning extends class_base
 	{
 		
 		$this->_init_vars();
+		lc_site_load("conference_planning_new", &$this);
 		$prop = $this->get_form_elements_data($el["name"]);
 		if(!$prop)
 		{
@@ -1790,7 +1793,10 @@ class conference_planning extends class_base
 			));
 			foreach($list->arr() as $obj)
 			{
-				$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $obj->name();
+				$trans = $obj->meta("tolge");
+				//$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $obj->name();
+				// oh my god this metamgr trans thingi is stupidly done 
+				$el["options"][(strlen(trim($obj->prop("comment")))?$obj->prop("comment"):$obj->id())] = $trans[aw_global_get("ct_lang_id")]?iconv("UTF-8", aw_global_get("charset"), $trans[aw_global_get("ct_lang_id")]):$obj->name();
 				
 			}
 		}
@@ -1848,9 +1854,20 @@ class conference_planning extends class_base
 					//"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
 					"caption" => $caption,
 					"value" => $value_to_use,
-					"date_textbox_id" => $el["name"]."_id",
-					"date_textbox_link" => $el["name"]."_link",
+					$prop["form"]."_id" => $el["name"]."_id",
+					$prop["form"]."_link" => $el["name"]."_link",
 					"calendar_icon_url" => aw_global_get("baseurl")."/automatweb/images/ico_calendar.gif",
+				));
+				break;
+			case "datetime_textboxes":
+				$this->vars(array(
+					//"caption" => $el["trans"][$lang]?$el["trans"][$lang]:$prop["caption"],
+					"caption" => $caption,
+					$prop["form"]."_id" => $el["name"]."_id",
+					$prop["form"]."_link" => $el["name"]."_link",
+					"calendar_icon_url" => aw_global_get("baseurl")."/automatweb/images/ico_calendar.gif",
+					"date_value" => $value_to_use["date"],
+					"time_value" => $value_to_use["time"],
 				));
 				break;
 			case "select":
