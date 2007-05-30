@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.64 2007/05/02 11:14:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.65 2007/05/30 14:16:31 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -318,7 +318,7 @@ class room_reservation extends class_base
 
 //-- methods --//
 
-	/** Change the realestate object info.
+	/**
 		@attrib name=parse_alias is_public="1" caption="Change" nologin=1
 	
 	**/
@@ -833,7 +833,7 @@ class room_reservation extends class_base
 				$data["sum_wb"][$curr] = ((double)$sum[$curr] + (double)$room_inst->bargain_value[$curr])." ".$currency->name();
 			}
 		}
-	
+	//if(aw_global_get("uid") == "struktuur"){arr($room_inst->bargain_value);arr($sum);}
 		$min_prod_prices = $room->meta("web_min_prod_prices");
 		$min_prices = $room->meta("web_room_min_price");
 		foreach ($show_curr as $curr)
@@ -1292,7 +1292,6 @@ class room_reservation extends class_base
 			"data" => $_SESSION["room_reservation"][$room],
 			"tpl" => $tpl,
 		));
-		
 		$ret.= '<script language="javascript">
 			window.opener.document.getElementById("stay").value=1;
 			window.opener.document.getElementById("changeform").submit();
@@ -1390,6 +1389,12 @@ class room_reservation extends class_base
 		foreach($room as $r)
 		{
 			$r = obj($r);
+			//miski imevalemiga on keegi oma reserveeringut üle kirjutama pääsenud.... järgnev vast aitab selle vastu.... point tegelikult et ei oleks maksmisele mindud ja siis peale seda sama bronni id'ga make_reservation funktsiooni mindud... see tuleb välistada
+			if(!(is_array($_SESSION["room_reservation"][$r->id()]) && (sizeof($_SESSION["room_reservation"][$r->id()]))))
+			{
+				continue;
+			}
+			
 			$bron_id;
 			if(!$bron_id)
 			{
