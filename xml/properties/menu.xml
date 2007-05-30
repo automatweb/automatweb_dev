@@ -730,6 +730,16 @@
             <caption>&amp;amp;Auml;ra v&amp;amp;otilde;ta dokumente men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
       </property>
       <property>
+            <name>seealso_docs_tb</name>
+            <table>objects</table>
+            <type>toolbar</type>
+            <group>seealso_docs</group>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>seealso_docs_tb</field>
+            <caption>Vaatalisaks dokumendid toolbar</caption>
+      </property>
+      <property>
             <name>seealso_docs_t</name>
             <table>menu</table>
             <type>table</type>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.199 2007/05/29 13:22:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.200 2007/05/30 12:48:32 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -291,6 +291,9 @@
 
 	@groupinfo seealso_docs caption="Vaata lisaks dokumendid" parent=menus
 
+		@property seealso_docs_tb type=toolbar group=seealso_docs no_caption=1 store=no
+		@caption Vaatalisaks dokumendid toolbar
+
 		@property seealso_docs_t type=table group=seealso_docs no_caption=1 table=menu
 		@caption Vaatalisaks dokumendid
 
@@ -517,6 +520,10 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "seealso_docs_tb":
+				$this->_seealso_docs_tb($arr);
+				break;
+
 			case "stats_disp":
 				$m = get_instance("applications/stats/stats_model");
 				$data["value"] = $m->get_simple_count_for_obj($arr["obj_inst"]->id(), $arr["obj_inst"]->prop("stats_from"), $arr["obj_inst"]->prop("stats_to"));
@@ -1452,6 +1459,7 @@ class menu extends class_base
 		$ps = get_instance("vcl/popup_search");
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_sss"], 9 /* RELTYPE_DOCS_FROM_MENU */);
 		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["_set_no_sss"], 24 /* RELTYPE_NO_DOCS_FROM_MENU */);
+		$ps->do_create_rels($arr["obj_inst"], $arr["request"]["sad_s"], 18 /* RELTYPE_SEEALSO_DOCUMENT */);
 	}
 
 	function callback_pre_save($arr)
@@ -1969,6 +1977,11 @@ class menu extends class_base
 			"caption" => t("Vali asukoht"),
 			"align" => "center"
 		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
 	}
 
 	function _do_seealso_docs_t($arr)
@@ -1993,7 +2006,8 @@ class menu extends class_base
 					"name" => "sad_opts[".$cto."][tpl]",
 					"options" => $tpls,
 					"selected" => $sad_opts[$cto]["tpl"]
-				))
+				)),
+				"oid" => $cto
 			));
 		}
 	}
@@ -2118,6 +2132,7 @@ class menu extends class_base
 	{
 		$arr["_set_sss"] = "0";
 		$arr["_set_no_sss"] = "0";
+		$arr["sad_s"] = "0";
 		$arr["link_pops"] = "0";
 		$arr["post_ru"] = post_ru();
 	}
@@ -2229,6 +2244,17 @@ class menu extends class_base
 					VALUES(".$o->id().", $lid, '$nv')");
 			}
 		}
+	}
+
+	function _seealso_docs_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_DOCUMENT), $arr["obj_inst"]->id(), 18 /* RELTYPE_SEEALSO_DOCUMENT */);
+		$tb->add_search_button(array(
+			"pn" => "sad_s",
+			"clid" => CL_DOCUMENT
+		));
+		$tb->add_delete_rels_button();
 	}
 };
 ?>
