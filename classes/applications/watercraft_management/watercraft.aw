@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.15 2007/05/30 07:56:01 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.16 2007/05/30 08:17:56 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -1155,7 +1155,7 @@ class watercraft extends class_base
 			$image_url = $image_inst->get_url_by_id($image_id);
 			$this->vars(array(
 				'watercraft_image_url' => $image_data["url"],
-				'watercraft_big_image_url' => $image_data["big_url"],
+				'watercraft_big_image_url' => ($image_data["big_url"])?$image_data["big_url"]:$image_data["url"],
 				'watercraft_image_name' => $image_data['name'],
 				'watercraft_image_tag' => $image_inst->make_img_tag_wl($image_id), 
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.9 2007/05/30 07:56:01 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.10 2007/05/30 08:17:56 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -435,7 +435,7 @@ class watercraft_add extends class_base
 					$this->vars(array(
 						'image_url' => $d["url"],
 						'image_name' => $image_obj->name(),
-						'image_big_url' => $d["big_url"],
+						'image_big_url' => $d["big_url"]?$d["big_url"]:$d["url"],
 					));
 					$images_str .= $this->parse('UPLOADED_IMAGE');
 				}
