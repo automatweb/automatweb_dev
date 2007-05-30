@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.8 2007/05/29 08:52:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.9 2007/05/30 11:47:14 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -335,6 +335,17 @@ echo "url = ".htmlentities($url)." <br>";
 		$this->db_query($q);
 		
 		return true;
+	}
+
+	function scs_get_search_results($r)
+	{
+		$i = get_instance(CL_SITE_SEARCH_CONTENT);
+//$GLOBALS["INTENSE_DUKE"] = 1;
+		return $i->fetch_static_search_results(array(
+			"str" => $r["str"],
+			"no_lang_id" => true,
+			"site_id" => $r["group"]
+		));
 	}
 }
 ?>

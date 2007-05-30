@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.88 2007/05/24 12:29:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.89 2007/05/30 11:47:14 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -116,7 +116,7 @@
 @reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
 
-@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP_FS,CL_CRM_DB_SEARCH
+@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP_FS,CL_CRM_DB_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_MULTISITE
 @caption otsingu grupp
 
 @reltype CPLX_EL_CTR value=3 clid=CL_FORM_CONTROLLER
@@ -914,7 +914,8 @@ class site_search_content extends class_base
 
 		if ($arr["site_id"])
 		{
-			$site_id = " AND site_id = '$arr[site_id]'";
+			$sit_awa = new aw_array($arr["site_id"]);
+			$site_id = " AND site_id IN (".$sit_awa->to_sql().")";
 		}
 
 		$fulltext = "";

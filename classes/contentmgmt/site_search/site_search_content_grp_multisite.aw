@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.1 2007/05/30 11:29:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_multisite.aw,v 1.2 2007/05/30 11:47:14 kristo Exp $
 // site_search_content_grp_multisite.aw - Saidi sisu otsingu grupp mitu saiti 
 /*
 
@@ -50,5 +50,17 @@ class site_search_content_grp_multisite extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
+
+        function scs_get_search_results($r)
+        {
+		$go = obj($r["group"]);
+                $i = get_instance(CL_SITE_SEARCH_CONTENT);
+                return $i->fetch_static_search_results(array(
+                        "str" => $r["str"],
+                        "no_lang_id" => true,
+                        "site_id" => $go->prop("sel_grps")
+                ));
+        }
+	
 }
 ?>
