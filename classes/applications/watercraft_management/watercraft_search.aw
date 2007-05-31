@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.16 2007/05/30 07:56:01 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.17 2007/05/31 11:35:55 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -24,7 +24,7 @@
 	@property no_search_form type=checkbox ch_value=1 table=watercraft_search
 	@caption &Auml;ra kuva otsinguvormi
 	
-	@property result_order type=chooser default=1 table=watercraft_search
+	@property result_order type=table
 	@caption Otsingutulemuste sorteerimine 
 
 	@property saved_search type=checkbox ch_value=1 table=watercraft_search
@@ -84,6 +84,9 @@
 	@property price type=range table=watercraft_search
 	@caption Hind
 
+	@property ad_id type=textbox size=15 table=watercraft_search
+	@caption Kuulutuse id
+
 	@property watercraft_search_submit type=submit no_caption=1
 	@caption Otsi
 
@@ -124,7 +127,8 @@ class watercraft_search extends class_base
 			'passanger_count' => t('Reisijaid'),
 			'additional_equipment' => t('Lisavarustus'),
 			'seller' => t('M&uuml;&uuml;ja'),
-			'price' => t('Hind')
+			'price' => t('Hind'),
+			'ad_id' => t('Kuulutuse ID'),
 		);
 	
 		$this->additional_equipment_elements = array(
@@ -159,6 +163,13 @@ class watercraft_search extends class_base
 			SELLER_TYPE_COMPANY => t('Firma')
 		);
 
+		$this->sortable_props = array(
+			"jrk" => t("J&auml;rjekorranumber"),
+			"price" => t("Hind"),
+			"creation_year" => t("Valmistamisaasta"),
+			"created" => t("Lisatud"),
+		);
+
 		$this->watercraft_inst = get_instance(CL_WATERCRAFT);
 	}
 
@@ -169,12 +180,50 @@ class watercraft_search extends class_base
 		switch($prop["name"])
 		{
 			case 'result_order':
-				$prop["options"] = array(
-					1 => t("Uuemad ees"),
-					2 => t("Odavamad ees"),
-					3 => t("Suurem jrk ees"),
-					4 => t("V&auml;iksem jrk ees"),
-				);
+				$t = &$prop["vcl_inst"];
+				$t->define_field(array(
+					"name" => "sort_type",
+					"caption" => t("Sorteeritav omadus"),
+				));
+				$t->define_field(array(
+					"name" => "sort_direction",
+					"caption" => t("Sorteerimise suund"),
+				));
+
+
+				$t->define_data(array(
+					"sort_type" => html::select(array(
+						"name" => "sortable_fields[new][type]",
+						"options" => array(0 => t("-- Valige omadus --")) + $this->sortable_props,
+					)),
+					"sort_direction" => html::select(array(
+						"name" => "sortable_fields[new][dir]",
+						"options" => array(
+							"0" => t("-- Valige suund --"),
+							"asc" => t("V&auml;iksemad (vanemad) ennem"),
+							"desc" => t("Suuremad (uuemad) ennem"),
+						),
+					)),
+				)); 
+				$fafa = array_reverse($arr["obj_inst"]->meta("result_order"));
+				foreach($fafa as $key => $row)
+				{
+					$t->define_data(array(
+						"sort_type" => html::select(array(
+							"name" => "sortable_fields[".$key."][type]",
+							"options" => $this->sortable_props,
+							"selected" => $row["type"],
+						)),
+						"sort_direction" => html::select(array(
+							"name" => "sortable_fields[".$key."][dir]",
+							"options" => array(
+								"asc" => t("V&auml;iksemad (vanemad) ennem"),
+								"desc" => t("Suuremad (uuemad) ennem"),
+							),
+							"selected" => $row["dir"],
+						)),
+					));
+				}
 				break;
 			case 'results_on_page':
 				if ( $arr['new'] == 1 )
@@ -256,7 +305,8 @@ class watercraft_search extends class_base
 				
 				break;
 			case 'additional_equipment':
-				$prop['value'] = $arr['request']['additional_equipment'];
+			case 'ad_id':
+				$prop['value'] = $arr['request'][$prop["name"]];
 				break;
 			case 'seller':
 				$prop['options'] = array(t('K&otilde;ik')) + $this->seller_type;
@@ -283,6 +333,18 @@ class watercraft_search extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "result_order":
+				$fields = $arr["request"]["sortable_fields"];
+				$new = $fields["new"];
+				unset($fields["new"]);
+				$cur = $arr["obj_inst"]->meta("result_order");
+				if($new["type"] && $new["dir"])
+				{
+					$fields[] = $new;
+				}
+				$arr["obj_inst"]->set_meta("result_order", $fields);
+				$arr["obj_inst"]->save();
+				break;
 		}
 		return $retval;
 	}	
@@ -297,6 +359,10 @@ class watercraft_search extends class_base
 		$t->define_chooser(array(
 			'name' => 'selected_ids',
 			'field' => 'select'
+		));
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("Kuulutuse ID"),
 		));
 		$t->define_field(array(
 			'name' => 'name',
@@ -403,6 +469,7 @@ class watercraft_search extends class_base
 			}
 			$t->define_data(array(
 				'select' => $id,
+				"ad_id" => $id,
 				'name' => $name_str,
 				'type' => $this->item_inst->item_type[$item->prop('item_type')],
 				'manufacturer' => $manufacturer_str,
@@ -784,26 +851,20 @@ class watercraft_search extends class_base
 		}
 		else
 		{
-			if($arr["obj_inst"]->prop("result_order"))
+			$ro = $arr["obj_inst"]->meta("result_order");
+			if(is_array($ro) && count($ro))
 			{
-				switch($arr["obj_inst"]->prop("result_order"))
+				$objects_table = array(
+					"jrk", "created"
+				);
+				foreach($ro as $k)
 				{
-					case 1:
-						$order = "objects.created ASC";
-						break;
-					case 2:
-						$order = "watercraft.price ASC";
-						break;
-					case 3:
-						$order = "objects.jrk DESC";
-						break;
-					case 4:
-						$order = "objects.jrk ASC";
-						break;
+					$table = (in_array($k["type"], $objects_table))?"objects":"watercraft";
+					$order[] = $table.".".$k["type"]." ".$k["dir"];
 				}
-				if($order)
+				if(count($order))
 				{
-					$filter["sort_by"] = $order;
+					$filter["sort_by"] = join(",", $order);
 				}
 			}
 		}
@@ -882,6 +943,9 @@ class watercraft_search extends class_base
 							}
 
 							break;
+						case 'ad_id':
+							$filter["oid"] = (int)($arr["request"][$name]);
+							break;
 						default:
 							$filter[$name] = $arr['request'][$name];
 					}
@@ -915,7 +979,6 @@ class watercraft_search extends class_base
 				length_from int,
 				length_to int,
 				width_from int,
-				result_order int,
 				width_to int,
 				height_from int,
 				height_to int,
@@ -931,6 +994,7 @@ class watercraft_search extends class_base
 				price_from int,
 				price_to int,
 				section_id int,
+				ad_id int,
 
 				additional_equipment varchar(255),
 
@@ -971,10 +1035,10 @@ class watercraft_search extends class_base
 			case 'passanger_count_to':
 			case 'seller':
 			case 'price':
+			case 'ad_id':
 			case 'price_from':
 			case 'price_to':
 			case 'section_id':
-			case 'result_order':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'

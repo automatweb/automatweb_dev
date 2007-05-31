@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.11 2007/05/30 11:52:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.12 2007/05/31 11:35:55 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -449,7 +449,7 @@ class watercraft_add extends class_base
 			}
 		}
 
-		$vars['watercraft_id'] = $watercraft_obj->id();
+		$vars['watercraft_id'] = $watercraft_obj?$watercraft_obj->id():0;
 		$vars['reforb'] = $this->mk_reforb('submit_data', array(
 			'section' => aw_global_get('section'),
 			'return_url' => post_ru(),

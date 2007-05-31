@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.17 2007/05/30 11:52:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.18 2007/05/31 11:35:55 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -799,7 +799,7 @@ class watercraft extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'area',
-			'caption' => $this->sail_table_fields['area'],
+			'caption' => $this->sail_table_fields['area']." m<sup>2</sup>",
 			'width' => '20px',
 		));
 		$t->define_field(array(
@@ -923,7 +923,7 @@ class watercraft extends class_base
 			'navigation_lights' => array( 'caption' => t('Navigatsioonituled'), 'amount' => null ),
 			'trailer' => array( 'caption' => t('Treiler'), 'amount' => null ),
 			'toilet' => array( 'caption' => t('Tualett'), 'amount' => null ),
-			'shower' => array( 'caption' => t('Dush'), 'amount' => null ),
+			's(hower' => array( 'caption' => t('Dush'), 'amount' => null ),
 			'lifejacket' => array( 'caption' => t('P&auml;&auml;stevest'), 'amount' => t('tk') ),
 			'swimming_ladder' => array( 'caption' => t('Ujumisredel'), 'amount' => null ),
 			'awning' => array( 'caption' => t('Varikatus'), 'amount' => null ),
@@ -1067,18 +1067,30 @@ class watercraft extends class_base
 				// parse sails
 				$prop_value = $ob->meta($prop_name);
 				// we loop over sail types
-				foreach($this->sail_types as $var => $caption)
+				$has_rows = false;
+				foreach($this->sail_types + array("other_sail" => $prop_value["other_sail"]["type"]) as $var => $caption)
 				{
 					unset($row);
 					// a little exception for type column, and then let's parse values
-					$prop_value[$var]['type'] = $this->sail_types[$var];
+					$prop_value[$var]['type'] = $this->sail_types[$var]?$this->sail_types[$var]:$prop_value[$var]["type"];
+					$val_exists = false;
 					foreach($this->sail_table_fields as $field_var => $field_caption)
 					{
+
+						$value = $prop_value[$var][$field_var]?$prop_value[$var][$field_var]:"-";
+						$value .= ($field_var == 'area')?" m<sup>2</sup>":"";
+						$value = ($field_var == "type")?"<b>".$value."</b>":$value;
 						$this->vars(array(
-							"caption" => $prop_value[$var][$field_var]?$prop_value[$var][$field_var]:"-",
+							"caption" => $value,
 						));
+						$val_exists = ($prop_value[$var][$field_var] && $field_var != "type")?true:$val_exists;
 						$row .= $this->parse("SAIL_TABLE_TD");
 					}
+					if(!$val_exists)
+					{
+						continue;
+					}
+					$has_rows = true;
 					$this->vars(array(
 						"SAIL_TABLE_TD" => $row,
 					));
@@ -1088,7 +1100,7 @@ class watercraft extends class_base
 					"SAIL_TABLE_TR" => $sail_rows,
 					"SAIL_TABLE_HTR" => $header_row,
 				));
-				$vars["WATERCRAFT_SAIL_TABLE"] = $this->parse("WATERCRAFT_SAIL_TABLE");
+				$vars["WATERCRAFT_SAIL_TABLE"] = $has_rows?$this->parse("WATERCRAFT_SAIL_TABLE"):"";
 			}
 			elseif (is_array($this->$prop_name))
 			{
@@ -1131,13 +1143,13 @@ class watercraft extends class_base
 		$li = $cf->get_layoutinfo();
 		foreach($add_equip as $prp => $vals)
 		{
-			$_t = ($vals["amount"]?sprintf("(%s)", $vals["amount"]):"").($vals["info"]?sprintf("-%s",$vals["info"]):""); 
+			$_t = ($vals["amount"]?sprintf("(%s tk)", $vals["amount"]):"").($vals["info"]?sprintf("- %s",$vals["info"]):""); 
 			if($vals["sel"])
 			{
 				$joins[] = $li[$prp."_row"]["caption"]." ".$_t;
 			}
 		}
-		$vars["watercraft_comma_separated_additional_equipment"] = join(", ", $joins);
+		$vars["watercraft_comma_separated_additional_equipment"] = ($_t = join(", ", $joins))?$_t:"-";
 		
 		// images
 		$image_inst = get_instance(CL_IMAGE);
@@ -1189,17 +1201,17 @@ class watercraft extends class_base
 		if($this->can("view", $ob->prop("seller")))
 		{
 			$seller_obj = obj($ob->prop("seller"));
-			$vars["name"] = ($_t = $seller_obj->name())?$_t:"-";
+			$vars["seller_name"] = ($_t = $seller_obj->name())?$_t:"-";
 			if($seller_obj->class_id() == CL_CRM_PERSON)
 			{
-				$vars["email"] = ($_t = $seller_obj->prop("email.mail"))?$_t:"-";
+				$vars["seller_email"] = ($_t = $seller_obj->prop("email.mail"))?$_t:"-";
 				// well, this user1 prop isn't really the brightest idea. But hey, site_join does that, so i'll use it.
-				$vars["phone"] = ($_t = $seller_obj->prop("user1"))?$_t:"-";
+				$vars["seller_phone"] = ($_t = $seller_obj->prop("user1"))?$_t:"-";
 			}
 			elseif($seller_obj->class_id() == CL_CRM_COMPANY)
 			{
-				$vars["email"] = $seller_obj->prop("email.mail");
-				$vars["phone"] = $seller_obj->prop("phone.name");
+				$vars["seller_email"] = $seller_obj->prop("email.mail");
+				$vars["seller_phone"] = $seller_obj->prop("phone.name");
 			}
 		}
 
