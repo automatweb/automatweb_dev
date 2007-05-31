@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.17 2007/05/28 10:55:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.18 2007/05/31 13:25:19 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -85,6 +85,7 @@ class spa_customer_interface extends class_base
 		classload("core/date/date_calc");
 		$this->read_template("book_times.tpl");
 
+		lc_site_load("spa_customer_interface", &$this);
 		$p = get_current_person();
 		$ol = new object_list(array(
 			"class_id" => CL_SPA_BOOKING,
@@ -579,7 +580,7 @@ class spa_customer_interface extends class_base
 			}
 			$this->vars(array(
 				"prods" => join(", ", $p_list),
-				"parent" => $po->name(),
+				"parent" => $po->trans_get_val("name"),//$po->name(),
 				"PRODUCT" => $p_str
 			));
 			$pts .= $this->parse("PARENT");
