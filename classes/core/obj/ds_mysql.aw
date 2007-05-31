@@ -768,7 +768,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$ot_sets[] = " $_field = '".$objdata[$_field]."' ";
 		}
-
 		$ot_sets = join(" , ", $ot_sets);
 
 		$q = "UPDATE objects SET
@@ -817,7 +816,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			$tbls = $tmp;
 		}
-
 		// now save all props to tables.
 		foreach($tbls as $tbl => $tbld)
 		{
@@ -828,7 +826,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			if ($tbl == "objects")
 			{
-				continue;
+				if ($objdata["oid"] == $objdata["brother_of"])
+				{
+					continue; // no double save. but if this is brother, then meta need to be saved
+				}
 				$tableinfo[$tbl]["index"] = "oid";
 				$serfs["metadata"] = $objdata["meta"];
 			}
