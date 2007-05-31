@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.49 2007/05/28 12:46:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.50 2007/05/31 12:42:42 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -2031,6 +2031,102 @@ class spa_bookigs_entry extends class_base
 				"type" => "RELTYPE_MAIN_PERSON"
 			));
 		}
+	}
+	
+	/** meetod selleks et Soomest saaks neid va pakette lisada
+		@attrib name=add_package_service nologin=1 is_public=1 all_args=1
+		@param firstname optional type=string
+		@param lastname optional type=string
+		@param gender optional type=string
+			M/W
+		@param birthday optional type=int
+			dd.mm.YYYY
+		@param email optional type=string
+		@param start optional type=int
+			timestamp
+		@param packet_id optional type=int
+		@param agency_id optional type=int
+			user oid
+		@param send_email optional type=boolean
+	**/
+	function add_package_service($arr)
+	{
+		extract($_POST);
+		$ret = array();
+		if(!is_email($email))
+		{
+			$ret["error"].= t("No valid email")."\n";
+		}
+		if(!(strlen($firstname) > 1))
+		{
+			$ret["error"].= t("No valid firstname")."\n";
+		}
+		if(!(strlen($lastname) > 1))
+		{
+			$ret["error"].= t("No valid lastname")."\n";
+		}
+		if(!($gender == "M" || $gender == "W"))
+		{
+			$ret["error"].= t("Gender must be 'M' or 'N'")."\n";
+		}
+		
+		if(!($birthday))
+		{
+			$ret["error"].= t("Birthday needed")."\n";
+		}
+
+		if(!($start))
+		{
+			$ret["error"].= t("Start time needed")."\n";
+		}
+		
+		if(!($packet_id))
+		{
+			$ret["error"].= t("Packet needed")."\n";
+		}
+
+		if(!($agency_id))
+		{
+			$ret["error"].= t("Travel agency / user oid needed")."\n";
+		}
+		
+		if(!$ret["error"])
+		{
+			$ret["reservation_id"] = 4234;
+			$ret["user"] = "Client.User";
+			$ret["password"] = "p0wjJks4";
+		}
+	
+		return $ret;
+	}
+	
+	/** meetod selleks et Soomest saaks neid va pakette lisada
+		@attrib name=add_package_service_example nologin=1 is_public=1 all_args=1
+	**/
+	function add_package_service_example($arr)
+	{
+		if(!(is_array($_POST) && sizeof($_POST)))
+		{
+		die('<form name="postform" id="postform" method="post" action=http://kalevspa.struktuur.ee/orb.aw?class=spa_bookigs_entry&action=add_package_service_example>
+			<br>First name <input type="textbox" name=firstname value="Firstname">
+			<br>Lat name <input type="textbox" name=lastname value="Lastname">
+			<br>Gender <input type="textbox" name=gender value="M">
+			<br>Birthday <input type="textbox" name=birthday value="112309">
+			<br>E-mail <input type="textbox" name=email value="isik@dot.com">
+			<br>Reservation start time <input type="textbox" name=start value="123123">
+			<br>Packet id <input type="textbox" name=packet_id value="1234">
+			<br>Agency id <input type="textbox" name=agency_id value="444">
+			<br><input type=submit value="do stuff">
+			</form>
+		');
+		}
+		print "returns";
+		$ret = $this->do_orb_method_call(array(
+  			"action" => "add_package_service",
+    		     	"class" => "spa_bookigs_entry",
+     		    	"params" => $_POST,
+ 		));
+ 		arr($ret);
 	}
 }
 ?>
