@@ -1,4 +1,5 @@
 <?php
-$GLOBALS["TRANS"]["Next 3 months"] = "Следующие три месяца";
-$GLOBALS["TRANS"]["Previous 3 months"] = "Предыдущие три месяца";
+$GLOBALS["TRANS"]["Next"] = "Следующие";
+$GLOBALS["TRANS"]["months"] = "месяца";
+$GLOBALS["TRANS"]["Previous"] = "Предыдущие";
 ?>
