@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.5 2007/05/22 10:57:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_conference_value_days.aw,v 1.6 2007/06/01 11:22:22 kristo Exp $
 // crm_conference_value_days.aw - Konverentsi kalendrivaade 
 /*
 
@@ -179,19 +179,24 @@ class crm_conference_value_days extends class_base
 
 					if($day_start >= $month_end  || $day_start < $month_start)
 					{
-						$html.='<font color="white">';
+						$html.='<font color="black">';
 					}
 					elseif($day_start < time())
 					{
-						$html.='<a href="#" title="'.$comment[$bg_colors[date("Y-m-d" ,$day_start)]].'"><font color="grey">';
+				//$html.='<a href="#" title="'.$comment[$bg_colors[date("Y-m-d" 
+//,$day_start)]].'"><font color="grey">';
+$html.='<font color="black">';
 					}
 					else
 					{
-						$html.='<a href="#" title="'.$comment[$bg_colors[date("Y-m-d" ,$day_start)]].'"><font color="black">';
+						//$html.='<a href="#" title="'.$comment[$bg_colors[date("Y-m-d" 
+//,$day_start)]].'"><font color="black">';
+$html.='<font color="black">';
 					}
 					$html.=date("d",$day_start);
 					$html.='</font">';
-					$html.='</a></td>';
+	//				$html.='</a></td>';
+  $html.='</td>';
 					$d++;
 					$day_start = $day_start + 3600*24;
 				}
@@ -206,8 +211,8 @@ class crm_conference_value_days extends class_base
 		$next_url = aw_url_change_var("calendar_month" , $calendar_month + $months);
 		$prev_url = aw_url_change_var("calendar_month" , $calendar_month - $months);
 		
-		$next_link = html::href(array("caption" => (t("Next")." ".$months." ".("months")." >>") , "url" => $next_url));
-		$prev_link = html::href(array("caption" => ("<< ".t("Previous")." ".$months." ".("months")) , "url" => $prev_url));
+		$next_link = html::href(array("caption" => (t("Next")." ".$months." ".t("months")." >>") , "url" => $next_url));
+		$prev_link = html::href(array("caption" => ("<< ".t("Previous")." ".$months." ".t("months")) , "url" => $prev_url));
 		if($calendar_object->prop("show_codes"))
 		{
 			$html.= "<br>Hotellide koodid: <br>";
