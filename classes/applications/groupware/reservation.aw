@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.62 2007/05/08 10:52:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.63 2007/06/01 11:47:58 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -102,6 +102,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property special_discount type=textbox size=5 table=aw_room_reservations field=aw_special_discount
 	@caption Spetsiaal allahindlus
 
+	@property special_sum type=textbox size=5 table=aw_room_reservations field=aw_special_sum
+	@caption Spetsiaal hind
+	
 	property code type=hidden size=5 table=planner field=code
 	caption Kood
 
@@ -1550,6 +1553,7 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 				aw_client_arrived int,
 				aw_people int,
 				aw_sum text
+				aw_special_sum double,
 			)");
 			echo "table <br>\n";
 		flush();
@@ -1586,6 +1590,18 @@ flush();
 echo "all done <br>\n";
 flush();
 			return true;
+		}
+		else
+		{
+			switch($field)
+			{
+				case "aw_special_sum":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "double"
+					));
+					return true;
+			}
 		}
 	}
 	
@@ -2003,7 +2019,6 @@ flush();
 
 	/** Returns the total price of the reservation in all the currencies
 		@attrib api=1
-
 		@param reservation required type=object
 	**/
 	function get_reservation_price($reservation)
@@ -2018,5 +2033,203 @@ flush();
 			"bron" => $reservation,
 		));
 	}
+	
+
+	//need ükski ei tööta veel nagu näha on :)
+	// - andmed hinna/koguse/sooduse kohta
+	/** Returns resources data
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function get_resources_data($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function set_resources_data($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	//annab kogusumma(kui on)
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function get_resources_price($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	// - määrab kogusumma
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function set_resources_price($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	// - annab kogusumma sooduse (kui on)
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function get_resources_discount($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	// - määrab kogusumma sooduse
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function set_resources_discount($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+// edasi toodete kräpp
+	/** Returns products data
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function get_products_data($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function set_products_data($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	//annab kogusumma(kui on)
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function get_products_price($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	// - määrab kogusumma
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function set_products_price($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	// - annab kogusumma sooduse (kui on)
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function get_products_discount($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+	
+	// - määrab kogusumma sooduse
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function set_products_discount($arr)
+	{
+		extract($arr);
+		return 0;
+	}
+
+
+//totaalse hinna ja allahindluse teema
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function get_total_price($arr)
+	{
+		extract($arr);
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		
+		return 0;
+	}
+	
+	// - määrab kogusumma
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+	**/
+	function set_total_price($arr)
+	{
+		extract($arr);
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+
+		return 0;
+	}
+	
+	// - annab kogusumma sooduse (kui on)
+	/**
+		@attrib api=1 params=pos
+		@param reservation required type=object/oid
+	**/
+	function get_total_discount($reservation)
+	{
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		return $reservation->prop("special_discount");
+	}
+	
+	// - määrab kogusumma sooduse
+	/**
+		@attrib api=1 params=pos
+		@param reservation required type=object/oid
+		@param discount required type=double
+		@returns 1 - success , 0 - unsuccess
+	**/
+	function set_total_discount($reservation , $discount)
+	{
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		$reservation->set_prop("special_discount" , $discount);
+		$reservation->save();
+		return 1;
+	}
+	
 }
 ?>
