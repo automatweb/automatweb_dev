@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.4 2007/02/21 10:13:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/site_template_trans.aw,v 1.5 2007/06/01 09:31:28 kristo Exp $
 // site_template_trans.aw - Saidi templatede t&otilde;lkimine 
 /*
 
@@ -152,6 +152,10 @@ class site_template_trans extends class_base
 			"caption" => t("T&otilde;lge"),
 			"align" => "center"
 		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "const",
+		));
 	}
 
 	function _get_bm_table($arr)
@@ -181,6 +185,19 @@ class site_template_trans extends class_base
 				))
 			));
 		}
+		$t->define_data(array(
+			"const" => html::textbox(array(
+				"name" => "new[const]",
+				"size" => 20
+			)),
+			"expl" => "" /*html::textbox(array(
+				"name" => "new[expl]",
+				"size" => 20
+			))*/,
+			"tr" => html::textbox(array(
+				"name" => "new[value]",
+			))
+		));
 		$t->set_sortable(false);
 	}
 
@@ -242,6 +259,19 @@ class site_template_trans extends class_base
 
 		list($file, $lang) = explode("aw_", $arr["request"]["tfl"]);
 		$fp = aw_ini_get("site_basedir")."/lang/".$lang."/".str_replace("..", "", str_replace("/", "", $file))."aw";
+		if (!empty($arr["request"]["new"]["const"]))
+		{
+			$arr["request"]["tr"][$arr["request"]["new"]["const"]] = $arr["request"]["new"]["value"];
+		}
+
+		if (is_array($arr["request"]["sel"]))
+		{
+			foreach($arr["request"]["sel"] as $item)
+			{
+				unset($arr["request"]["tr"][$item]);
+			}
+		}
+
 		$this->write_trans_file($fp, $arr["request"]["tr"]);
 	}
 
