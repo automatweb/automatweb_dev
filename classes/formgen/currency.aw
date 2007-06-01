@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.10 2006/08/25 10:06:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.11 2007/06/01 11:12:06 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -275,5 +275,106 @@ class currency extends class_base
 		$_t = aw_global_get("currency_cache");
 		return $_t[$id];
 	}
+	
+	/** converts sum from one currency to another
+	@attrib params=name api=1
+	@param sum required type=int
+		sum to convert
+	@param from optional type=oid
+		currency object id , default company currency
+	@param to optional type=oid
+		currency object id , default company currency
+	@param date optional type=int
+		timestamp... if you want to use old rates
+	@returns int , converted sum
+	**/
+	function convert($args)
+	{
+		extract($args);
+		if($sum)
+		{
+			return 0;
+		}
+		if(!$date)
+		{
+			$date = time();
+		}
+		if(!$from)
+		{
+			$from = $this->get_company_currency();
+		}
+		if(!$to)
+		{
+			$to = $this->get_company_currency();
+		}
+		if($from == $to)
+		{
+			return $sum;
+		}
+		if(!($this->can("view" , $to) && $this->can("view" , $from)))
+		{
+			return;
+		}
+		$to_obj = obj($to);
+		$from_obj = obj($from);
+		if(!($this->can("view" , $to) && $this->can("view" , $from)))
+		{
+			error::raise(array(
+				"id" => ERR_FATAL,
+				"msg" => sprintf(t("currency::convert - kas %s või %s pole valuutadaobjektide id'd"), $to, $from),
+			));
+		}
+		
+		foreach($to_obj->meta("rates") as $rate)
+		{
+			if($rate["currency"] == $from && $rate["rate"] && $this->_check_curr_date($date, $rate["start_date"],$rate["end_date"]))
+			{
+				$sum = $sum * $rate["rate"];
+				$changed = 1;
+				continue;
+			}
+		}
+		if(!$changed)//et kui ei saanud vahetuskurssi tulemuse valuuta juurest, siis vaatab teisest
+		{
+			foreach($curr_obj->meta("rates") as $rate)
+			{
+				if($rate["currency"] == $to && $rate["rate"] && $this->_check_curr_date($date, $rate["start_date"],$rate["end_date"]))
+				{
+					$sum = $sum/$rate["rate"];
+					$changed = 1;
+					continue;
+				}
+			}
+		}
+		return $sum;
+	}
+	
+	/** returns company currency
+		@attrib api=1
+	**/
+	function get_company_currency()
+	{
+		if($this->co_currency)
+		{
+			return $this->co_currency;
+		}
+		$u = get_instance(CL_USER);
+		$company = obj($u->get_current_company());
+		$this->co_currency = $company->prop("currency");
+		return $company->prop("currency");
+	}
+	
+	function _check_curr_date($date , $start , $end)
+	{
+		extract($date);
+		$start = (mktime(0, 0, 0, $start["month"], $start["day"], $start["year"]));
+		$end = (mktime(0, 0, 0, $end["month"], $end["day"], $end["year"]));
+		if($date > $start && $date < $end)
+		{
+			return true;
+		}
+		else return false;	
+	}
+	
 }
 ?>
