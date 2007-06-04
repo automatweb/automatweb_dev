@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.18 2007/05/29 09:58:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.19 2007/06/04 13:29:23 markop Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -100,8 +100,11 @@ class crm_deal extends class_base
 				$this->_get_files_tb($arr);
 				break;	
 				
-/*			case "customer":
-				$i = get_instance(CL_CRM_COMPANY);
+			case "customer":
+		 		$prop["autocomplete_source"] = $this->mk_my_orb("customer_autocomplete_source");
+				$prop["autocomplete_params"] = array("customer_awAutoCompleteTextbox");
+				
+/*				$i = get_instance(CL_CRM_COMPANY);
 				$p_i = get_instance(CL_CRM_PERSON);
 				$cust = $i->get_my_customers();
 				if (count($cust))
@@ -114,11 +117,86 @@ class crm_deal extends class_base
 						$prop["options"][$prop["value"]] = $tmp->name();
 					}
 				}
-				asort($prop["options"]);
-				break;*/
-			
+				asort($prop["options"]);*/
+				break;
+			case "project":
+		 		$prop["autocomplete_source"] = $this->mk_my_orb("project_autocomplete_source");
+				$prop["autocomplete_params"] = array("customer_awAutoCompleteTextbox", "project_awAutoCompleteTextbox");
+				break;
+			case "task":
+		 		$prop["autocomplete_source"] = $this->mk_my_orb("task_autocomplete_source");
+				$prop["autocomplete_params"] = array("customer_awAutoCompleteTextbox", "project_awAutoCompleteTextbox", "task_awAutoCompleteTextbox");
+				break;
 		};
 		return $retval;
+	}
+
+	/**
+		@attrib name=customer_autocomplete_source
+		@param customer_awAutoCompleteTextbox optional
+	**/
+	function customer_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+		$ol = new object_list();
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
+			"name" => $arr["customer_awAutoCompleteTextbox"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 50,
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
+	/**
+		@attrib name=project_autocomplete_source
+		@param customer_awAutoCompleteTextbox optional
+		@param project_awAutoCompleteTextbox optional
+	**/
+	function project_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+		$ol = new object_list();
+		$ol = new object_list(array(
+			"class_id" => array(CL_PROJECT),
+			"name" => $arr["project_awAutoCompleteTextbox"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_PROJECT.RELTYPE_ORDERER.name" => $arr["customer_awAutoCompleteTextbox"]."%",
+			"limit" => 50,
+		));
+		return $ac->finish_ac($ol->names());
+	}
+	
+	/**
+		@attrib name=task_autocomplete_source
+		@param customer_awAutoCompleteTextbox optional
+		@param project_awAutoCompleteTextbox optional
+		@param task_awAutoCompleteTextbox optional
+	**/
+	function task_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+		$ol = new object_list();
+		$ol = new object_list(array(
+			"class_id" => array(CL_TASK),
+			"name" => $arr["ctask_awAutoCompleteTextbox"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 50,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_TASK.RELTYPE_CUSTOMER.name" => $arr["customer_awAutoCompleteTextbox"]."%",
+					"CL_TASK.RELTYPE_PROJECT.name" => $arr["project_awAutoCompleteTextbox"]."%",
+				)
+			))
+		));
+		return $ac->finish_ac($ol->names());
 	}
 
 	function set_property($arr = array())
@@ -131,6 +209,7 @@ class crm_deal extends class_base
 		{
 		 	case "customer":
 				// check if the 
+
 		 		if(!is_oid($prop["value"]))
  				{
  					if(is_oid($arr["request"]["customer_awAutoCompleteTextbox"]) && $this->can("view" , $arr["request"]["customer_awAutoCompleteTextbox"]))

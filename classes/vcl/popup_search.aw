@@ -110,7 +110,6 @@ class popup_search extends aw_template
 			$sel =  $arr["obj_inst"]->prop($arr["property"]["name"]);
 		}
 
-		
 		if ($arr["property"]["style"] == "autocomplete")
 		{
 			$selstr = "";
@@ -119,7 +118,14 @@ class popup_search extends aw_template
 				$selstr = obj($sel);
 				$selstr = $selstr->name();
 			}
-			$as = $this->mk_my_orb("autocomplete_source", array("pn" => $arr["property"]["name"], "clid" => $clid));
+			if($arr["property"]["autocomplete_source"])
+			{
+				$as = $arr["property"]["autocomplete_source"];
+			}
+			else
+			{
+				$as = $this->mk_my_orb("autocomplete_source", array("pn" => $arr["property"]["name"], "clid" => $clid));
+			}
 			$as = parse_url ($as);
 			$as = $as["path"] . "?" . $as["query"];
 			$tmp["value"] = html::textbox(array(
@@ -127,7 +133,7 @@ class popup_search extends aw_template
 				"content" => $selstr,
 				"value" => $sel,
 				"autocomplete_source" => $as,
-				//"autocomplete_params" => array($arr["property"]["name"]),
+				"autocomplete_params" => ($arr["property"]["autocomplete_params"]) ? $arr["property"]["autocomplete_params"] : null,
 				"option_is_tuple" => true
 			));
 		}
@@ -140,7 +146,6 @@ class popup_search extends aw_template
 				"multiple" => $arr["property"]["multiple"]
 			));
 		}
-
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		{
 			$tmp["value"] .= html::href(array(
