@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.11 2007/06/01 11:12:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.12 2007/06/04 16:02:17 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -364,6 +364,33 @@ class currency extends class_base
 		return $company->prop("currency");
 	}
 	
+	/** returns default currency
+		@attrib api=1
+	**/
+	function get_default_currency()
+	{
+		if($this->default_currency)
+		{
+			return $this->default_currency;
+		}
+		if(get_company_currency())
+		{
+			$curr = get_company_currency();
+		}
+		else
+		{
+			$cs = new object_list(array(
+				"lang_id" => array(),
+				"class_id" => CL_CURRENCY,
+				"site_id" => array(),
+			));
+			$c = reset($cs->arr());
+			$curr = $c->id();
+		}
+		$this->default_currency = $curr;
+		return $curr;
+	}
+	
 	function _check_curr_date($date , $start , $end)
 	{
 		extract($date);
@@ -375,6 +402,5 @@ class currency extends class_base
 		}
 		else return false;	
 	}
-	
 }
 ?>

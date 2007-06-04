@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.63 2007/06/01 11:47:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.64 2007/06/04 16:02:16 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -102,7 +102,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 	@property special_discount type=textbox size=5 table=aw_room_reservations field=aw_special_discount
 	@caption Spetsiaal allahindlus
 
-	@property special_sum type=textbox size=5 table=aw_room_reservations field=aw_special_sum
+	@property special_sum type=textbox size=5
 	@caption Spetsiaal hind
 	
 	property code type=hidden size=5 table=planner field=code
@@ -2166,11 +2166,13 @@ flush();
 		return 0;
 	}
 
-
+//siit alumised juba võiks töötada	
 //totaalse hinna ja allahindluse teema
 	/**
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
+		@param curr optional type=oid
+			currency object id	
 	**/
 	function get_total_price($arr)
 	{
@@ -2179,14 +2181,51 @@ flush();
 		{
 			$reservation = obj($reservation);
 		}
-		
+		if(!is_object($reservation))
+		{
+			return 0;
+		}
+		$sum = $reservation->prop("special_sum");
+		if(is_array($sum))
+		{
+			if($curr)
+			{
+				return $sum[$curr];
+			}
+			else
+			{
+				return $sum[$this->get_default_currency];
+			}
+		}
+		else
+		{
+			if(!$curr)
+			{
+				return $sum;
+			}
+			else
+			{
+				$c_inst = get_instance(CL_CURRENCY);
+				return $c_inst->convert(array(
+					"from" => $this->get_default_currency,
+					"to" => $curr,
+					"sum" => $sum,
+				));
+			}
+		}
 		return 0;
 	}
-	
+
 	// - määrab kogusumma
 	/**
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
+			reservation object
+		@param sum required type=int
+			reservation total sum
+		@param curr optional type=oid
+			currency object id
+		@returns 1 - success , 0 - unsuccess
 	**/
 	function set_total_price($arr)
 	{
@@ -2195,8 +2234,28 @@ flush();
 		{
 			$reservation = obj($reservation);
 		}
-
-		return 0;
+		if(!is_object($reservation))
+		{
+			return 0;
+		}
+		
+		//kui määratakse kindla valuutaga summa, kui mitte, siis võib arvestada default valuutana
+		if(!$curr)
+		{
+			$reservation->set_prop("special_sum" , $sum);
+		}
+		else
+		{
+			$sum_array = $reservation->prop("special_sum");
+			if(!is_array($sum_array))
+			{
+				$sum_array = array($this->get_default_currency => $sum_array);
+			}
+			$sum_array[$curr] = $sum;
+			$reservation->set_prop("special_sum" , $sum_array);
+		}
+		$reservation->save();
+		return 1;
 	}
 	
 	// - annab kogusumma sooduse (kui on)
@@ -2209,6 +2268,10 @@ flush();
 		if(is_oid($reservation) && $this->can("view" , $reservation))
 		{
 			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
 		}
 		return $reservation->prop("special_discount");
 	}
@@ -2226,10 +2289,30 @@ flush();
 		{
 			$reservation = obj($reservation);
 		}
+		if(!is_object($reservation))
+		{
+			return 0;
+		}
 		$reservation->set_prop("special_discount" , $discount);
 		$reservation->save();
 		return 1;
 	}
 	
+	//leiab default valuuta broneeringu jaoks
+	//objekti annab kaasa selleks, et miskeid muid tingimusi äkki broneeringul oleks kust valuuta võtta
+	/**
+		@attrib api=1 params=pos
+		@param reservation required type=object/oid
+	**/
+	function get_default_currency($reservation)
+	{
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+
+		$curr_inst = get_instance(CL_CURRENCY);
+		return $curr_inst->get_default_currency();
+	}
 }
 ?>
