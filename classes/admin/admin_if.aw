@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.16 2007/05/07 08:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.17 2007/06/04 11:16:12 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -601,18 +601,20 @@ class admin_if extends class_base
 
 		$current_period = aw_global_get("current_period");
 
-		if ($period)
+		if (!$menu_obj->prop("all_pers"))
 		{
-			$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_MENU." AND objects.periodic = 1)) ";
+			if ($period)
+			{
+				$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_MENU." AND objects.periodic = 1)) ";
+			}
+			// if no period is set in the url, BUT the menu is periodic, then only show objects from the current period
+			// this fucks shit up. basically, a periodic menu can have non-periodic submenus
+			// in that case there really is no way of seeing them 
+			else
+			{
+				$ps = " AND (period = 0 OR period IS NULL OR class_id IN (".CL_USER."))";
+			};
 		}
-		// if no period is set in the url, BUT the menu is periodic, then only show objects from the current period
-		// this fucks shit up. basically, a periodic menu can have non-periodic submenus
-		// in that case there really is no way of seeing them 
-		else
-		{
-			$ps = " AND (period = 0 OR period IS NULL OR class_id IN (".CL_USER."))";
-		};
-
 
 		// do not show relation objects in the list. hm, I wonder whether
 		// I'll burn in hell for this --duke
@@ -670,7 +672,6 @@ class admin_if extends class_base
 		die();*/
 
 		// make pageselector.
-
 		// total count
 		$q = "SELECT count(*) as cnt $query";
 		$t->d_row_cnt = $this->db_fetch_field($q, "cnt");
