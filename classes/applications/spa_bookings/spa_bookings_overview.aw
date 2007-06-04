@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.29 2007/04/02 14:33:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.30 2007/06/04 14:19:13 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -407,12 +407,18 @@ class spa_bookings_overview extends class_base
 
 	function _get_rs_name($arr)
 	{
-		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		if(!$arr["request"]["tf"])
+		{
+			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		}
 	}
 
 	function _get_rs_booker_name($arr)
 	{
-		$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		if(!$arr["request"]["tf"])
+		{
+			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		}
 	}
 
 	function _get_rs_booking_from($arr)
@@ -422,7 +428,10 @@ class spa_bookings_overview extends class_base
 		{
 			$v = mktime(0,0,0, date("m"), date("d")-1, date("Y"));
 		}
-		$arr["prop"]["value"] = $v;
+		if(!$arr["request"]["tf"])
+		{
+			$arr["prop"]["value"] = $v;
+		}
 	}
 
 	function _get_rs_booking_to($arr)
@@ -432,7 +441,7 @@ class spa_bookings_overview extends class_base
 		{
 			$v = mktime(0,0,0, date("m"), date("d")+7, date("Y"));
 		}
-		$arr["prop"]["value"] = $v;
+		if(!$arr["request"]["tf"])$arr["prop"]["value"] = $v;
 	}
 
 	function _get_r_tb($arr)
