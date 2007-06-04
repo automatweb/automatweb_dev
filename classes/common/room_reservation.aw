@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.65 2007/05/30 14:16:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_reservation.aw,v 1.66 2007/06/04 10:49:29 markop Exp $
 // room_reservation.aw - Ruumi broneerimine 
 /*
 @default table=objects
@@ -728,8 +728,14 @@ class room_reservation extends class_base
 		$loc = obj($room->prop("location"));
 		$bank_inst = get_instance(CL_BANK_PAYMENT);
 		$bank_payment = $loc->prop("bank_payment");
+		
 		if(is_oid($bank_payment))
 		{
+		
+			if(!$_SESSION["room_reservation"][$room->id()]["bank"])
+			{
+				$need_to_choose_default_bank = 1;
+			}
 			$payment = obj($bank_payment);
 			foreach($payment->meta("bank") as $key => $val)
 			{
@@ -738,9 +744,10 @@ class room_reservation extends class_base
 					continue;
 				}
 				$checked=0;
-				if($_SESSION["room_reservation"][$room->id()]["bank"] == $key)
+				if($_SESSION["room_reservation"][$room->id()]["bank"] == $key || $need_to_choose_default_bank)
 				{
 					$checked = 1;
+					$need_to_choose_default_bank = 0;
 				}
 				$data["bank_".$key] = html::radiobutton(array(
 					"value" => $key,
