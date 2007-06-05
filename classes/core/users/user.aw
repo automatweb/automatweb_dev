@@ -1473,7 +1473,7 @@ class user extends class_base
 	{
 		$u = get_instance("users");
 		$oid = $u->get_oid_for_uid($uid);
-		if (!$oid)
+		if (!$oid || !$this->can("view", $oid))
 		{
 			return obj();
 		}
