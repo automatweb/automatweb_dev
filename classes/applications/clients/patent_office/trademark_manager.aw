@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.30 2007/05/23 11:23:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/trademark_manager.aw,v 1.31 2007/06/05 12:53:44 markop Exp $
 // patent_manager.aw - Kaubam&auml;rgitaotluse keskkond 
 /*
 
@@ -588,6 +588,21 @@ class trademark_manager extends class_base
 
 //-- methods --//
 
+	function __application_sorter($a, $b)
+	{
+		$tm = get_instance(CL_PATENT);
+		$as = $a->get_first_obj_by_reltype("RELTYPE_TRADEMARK_STATUS");
+		$bs = $b->get_first_obj_by_reltype("RELTYPE_TRADEMARK_STATUS");
+		if(is_object($as) && is_object($bs))
+		{
+			return  $as->prop("nr") - $bs->prop("nr");
+		}
+		else
+		{
+			return  $a->id() - $b->id();
+		}
+	}
+
 	/** 
 		@attrib name=nightly_export nologin="1"
 	**/
@@ -602,6 +617,7 @@ class trademark_manager extends class_base
 			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.verified" => 1,
 			"CL_PATENT.RELTYPE_TRADEMARK_STATUS.modified" => new obj_predicate_compare(OBJ_COMP_BETWEEN,(get_day_start()-(24*3600)) ,  get_day_start()),
 		));
+		$ol->sort_by_cb(array(&$this, "__application_sorter"));
 		
 		$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
 		$xml .= '<ENOTIF BIRTHCOUNT="'.$ol->count().'" CPCD="EE" WEEKNO="'.date("W").'" NOTDATE="'.date("Ymd").'">
