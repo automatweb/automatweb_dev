@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.12 2007/05/31 11:35:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.13 2007/06/05 17:02:13 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -432,12 +432,38 @@ class watercraft_add extends class_base
 				{
 					$d = $image_inst->get_image_by_id($image_oid);
 					
+					$fl = $image_obj->prop("file");
+					if(!empty($fl))
+					{
+						// rewrite $fl to be correct if site moved
+						$fl = basename($fl);
+						$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+						$sz = @getimagesize($fl);
+						$sm_w = $sz[0];
+						$sm_h = $sz[1];
+					}
+					
+					$fl = $image_obj->prop("file2");
+					if(!empty($fl))
+					{
+						// rewrite $fl to be correct if site moved
+						$fl = basename($fl);
+						$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+						$sz = @getimagesize($fl);
+						$bg_w = $sz[0];
+						$bg_h = $sz[1];
+					}
+						
 					$this->vars(array(
 						'image_url' => $d["url"],
 						'image_name' => $image_obj->name(),
 						'image_big_url' => $d["big_url"]?$d["big_url"]:$d["url"],
 						'image_id' => $image_oid,
 						'delete_element_name' => "remove_img[".$image_oid."]",
+						'image_width' => $sm_w,
+						'image_height' => $sm_h,
+						'big_image_width' => $d["big_url"]?$bg_w:$sm_w,
+						'big_image_height' => $d["big_url"]?$bg_h:$sm_h,
 					));
 					$images_str .= $this->parse('UPLOADED_IMAGE');
 				}

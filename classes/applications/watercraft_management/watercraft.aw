@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.18 2007/05/31 11:35:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.19 2007/06/05 17:02:13 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -1055,7 +1055,7 @@ class watercraft extends class_base
 				foreach($this->sail_table_fields as $caption)
 				{
 					$this->vars(array(
-						"caption" => $caption,
+						"caption" => "<b>".$caption."</b>",
 					));
 					$th .= $this->parse("SAIL_TABLE_TH");
 				}
@@ -1165,11 +1165,38 @@ class watercraft extends class_base
 		{
 			$image_data = $image_inst->get_image_by_id($image_id);
 			$image_url = $image_inst->get_url_by_id($image_id);
+			
+			$fl = $image->prop("file");
+			if(!empty($fl))
+			{
+				// rewrite $fl to be correct if site moved
+				$fl = basename($fl);
+				$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+				$sz = @getimagesize($fl);
+				$sm_w = $sz[0];
+				$sm_h = $sz[1];
+			}
+			
+			$fl = $image->prop("file2");
+			if(!empty($fl))
+			{
+				// rewrite $fl to be correct if site moved
+				$fl = basename($fl);
+				$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+				$sz = @getimagesize($fl);
+				$bg_w = $sz[0];
+				$bg_h = $sz[1];
+			}
+
 			$this->vars(array(
 				'watercraft_image_url' => $image_data["url"],
 				'watercraft_big_image_url' => ($image_data["big_url"])?$image_data["big_url"]:$image_data["url"],
 				'watercraft_image_name' => $image_data['name'],
 				'watercraft_image_tag' => $image_inst->make_img_tag_wl($image_id), 
+				'watercraft_image_width' => $sm_w,
+				'watercraft_image_height' => $sm_h,
+				'watercraft_big_image_width' => $image_data["big_url"]?$bg_w:$sm_w,
+				'watercraft_big_image_height' => $image_data["big_url"]?$bg_h:$sm_h,
 			));
 			if ($first_image)
 			{

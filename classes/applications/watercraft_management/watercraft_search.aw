@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.17 2007/05/31 11:35:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.18 2007/06/05 17:02:13 tarvo Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
@@ -601,7 +601,8 @@ class watercraft_search extends class_base
 			foreach ($items->arr() as $item_id => $item)
 			{
 				$properties = array();
-				foreach ($item->properties() as $name => $value)
+				$proplist = $item->properties();
+				foreach ($proplist as $name => $value)
 				{
 					if (!empty($watercraft_inst->$name))
 					{
@@ -615,6 +616,17 @@ class watercraft_search extends class_base
 						$properties['watercraft_'.$name] = $value;
 					}
 				}
+				$properties["watercraft_location"] = array();
+				if($this->can("view", $proplist["location"]))
+				{
+					$o = obj($proplist["location"]);
+					$properties["watercraft_location"][] = $o->name();
+				}
+				if(strlen($proplist["location_other"]))
+				{
+					$properties["watercraft_location"][] = $proplist["location_other"];
+				}
+				$properties["watercraft_location"] = ($_t = join(", ", $properties["watercraft_location"]))?$_t:"-";
 
 				$image_inst = get_instance(CL_IMAGE);
 				$images_count = count($images_lut[$item_id]);
@@ -844,7 +856,6 @@ class watercraft_search extends class_base
 		}
 		
 		// this here is .. a temperory line. really, i do have a plan to make it better one day!! 
-		$filter["price"] = new obj_predicate_not("struudel");
 		if (!empty($arr['sort_by']))
 		{
 			$filter['sort_by'] = $arr['sort_by'];
@@ -867,6 +878,10 @@ class watercraft_search extends class_base
 					$filter["sort_by"] = join(",", $order);
 				}
 			}
+		}
+		if($filter["sort_by"])
+		{
+			$filter["price"] = new obj_predicate_not("struudel");
 		}
 		
 		foreach ($this->search_form_elements as $name => $caption)
