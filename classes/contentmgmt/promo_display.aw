@@ -493,7 +493,8 @@ class promo_display
 			$linked_obj = obj($o->meta("linked_obj"));
 			if ($linked_obj->class_id() == CL_MENU)
 			{
-				$link_str = $this->make_menu_link($linked_obj);
+				$ss = get_instance("contentmgmt/site_show");
+				$link_str = $ss->make_menu_link($linked_obj);
 			}
 			else
 			{
