@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.120 2007/06/05 09:41:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.121 2007/06/05 14:20:34 markop Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1957,6 +1957,10 @@ class cfgform extends class_base
 			{
 				$dat[$pn] = $ret[$pn];
 				$dat[$pn]["caption"] = $pd["caption"];
+				if($pd["richtext"])
+				{
+					$dat[$pn]["richtext"] = $pd["richtext"];
+				}
 			}
 		}
 
