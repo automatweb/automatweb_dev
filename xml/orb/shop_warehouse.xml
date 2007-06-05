@@ -55,6 +55,20 @@
 			</function>
 		</action>
 
+		<action name="cut_products" all_args="1">
+			<function name="cut_products">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_products" all_args="1">
+			<function name="paste_products">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="send_cur_order">
 			<function name="sent_cur_order">
 				<arguments>

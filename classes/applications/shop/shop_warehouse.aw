@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.47 2007/03/01 11:10:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.48 2007/06/05 15:31:34 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -689,6 +689,24 @@ class shop_warehouse extends class_base
 			"img" => "save.gif",
 			"tooltip" => t("Lisa korvi"),
 			"action" => "add_to_cart"
+		));
+		
+		$tb->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"tooltip" => t("L&otilde;ika"),
+			"action" => "cut_products"
+		));
+	
+		$tb->add_button(array(
+			"name" => "paste",
+			"img" => "paste.gif",
+			"tooltip" => t("Kleebi"),
+			"url" => $this->mk_my_orb("paste_products", array(
+				"parent" => $this->prod_tree_root,
+				"return_url" => get_ru(),
+			))
+			//"action" => "paste_products"
 		));
 	}
 	
@@ -2676,6 +2694,33 @@ class shop_warehouse extends class_base
 			"tree_filter" => $arr["tree_filter"],
 			"group" => $arr["group"]
 		));
+	}
+
+	/** cuts the selected items
+		@attrib name=cut_products params=name all_args=1
+	**/
+	function cut_products($arr)
+	{
+		$_SESSION["shop_warehouse"]["cut_products"] = $arr["sel"];
+		return $_SESSION["aw_session_track"]["server"]["ru"];
+	}
+
+	/** pastes items to menu
+		@attrib name=paste_products params=name all_args=1
+	**/
+	function paste_products($arr)
+	{
+		if(is_oid($arr["parent"]) && $this->can("add" , $arr["parent"]))
+		{
+			foreach($_SESSION["shop_warehouse"]["cut_products"] as $id)
+			{
+				$o = obj($id);
+				$o->set_parent($arr["parent"]);
+				$o->save();
+			}
+		}
+		$_SESSION["shop_warehouse"]["cut_products"] = null;
+		return $arr["return_url"];
 	}
 
 	/** checks if the company $id is a manager company for  warehouse $wh
