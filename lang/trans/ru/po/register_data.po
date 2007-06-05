@@ -565,6 +565,126 @@ msgstr ""
 msgid "Omaduse User-defined date select 5 (userdate5) help"
 msgstr ""
 
+#: classes/applications/register/register_data.aw:prop_userdate6
+msgid "Omaduse User-defined date select 6 (userdate6) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate6_comment
+msgid "Omaduse User-defined date select 6 (userdate6) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate6_help
+msgid "Omaduse User-defined date select 6 (userdate6) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate7
+msgid "Omaduse User-defined date select 7 (userdate7) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate7_comment
+msgid "Omaduse User-defined date select 7 (userdate7) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate7_help
+msgid "Omaduse User-defined date select 7 (userdate7) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate8
+msgid "Omaduse User-defined date select 8 (userdate8) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate8_comment
+msgid "Omaduse User-defined date select 8 (userdate8) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate8_help
+msgid "Omaduse User-defined date select 8 (userdate8) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate9
+msgid "Omaduse User-defined date select 9 (userdate9) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate9_comment
+msgid "Omaduse User-defined date select 9 (userdate9) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate9_help
+msgid "Omaduse User-defined date select 9 (userdate9) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate10
+msgid "Omaduse User-defined date select 10 (userdate10) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate10_comment
+msgid "Omaduse User-defined date select 10 (userdate10) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate10_help
+msgid "Omaduse User-defined date select 10 (userdate10) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate11
+msgid "Omaduse User-defined date select 11 (userdate11) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate11_comment
+msgid "Omaduse User-defined date select 11 (userdate11) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate11_help
+msgid "Omaduse User-defined date select 11 (userdate11) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate12
+msgid "Omaduse User-defined date select 12 (userdate12) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate12_comment
+msgid "Omaduse User-defined date select 12 (userdate12) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate12_help
+msgid "Omaduse User-defined date select 12 (userdate12) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate13
+msgid "Omaduse User-defined date select 13 (userdate13) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate13_comment
+msgid "Omaduse User-defined date select 13 (userdate13) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate13_help
+msgid "Omaduse User-defined date select 13 (userdate13) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate14
+msgid "Omaduse User-defined date select 14 (userdate14) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate14_comment
+msgid "Omaduse User-defined date select 14 (userdate14) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate14_help
+msgid "Omaduse User-defined date select 14 (userdate14) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate15
+msgid "Omaduse User-defined date select 15 (userdate15) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate15_comment
+msgid "Omaduse User-defined date select 15 (userdate15) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userdate15_help
+msgid "Omaduse User-defined date select 15 (userdate15) help"
+msgstr ""
+
 #: classes/applications/register/register_data.aw:prop_userch1
 msgid "Omaduse User-defined checkbox 1 (userch1) caption"
 msgstr ""

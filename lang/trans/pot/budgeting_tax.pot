@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Summa (amount) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_tax.aw:prop_pri
+msgid "Omaduse Prioriteet (pri) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_pri_comment
+msgid "Omaduse Prioriteet (pri) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_tax.aw:prop_pri_help
+msgid "Omaduse Prioriteet (pri) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_tax.aw:prop_when_type
 msgid "Omaduse Aja t&uuml;&uuml;p (when_type) caption"
 msgstr ""
@@ -94,11 +106,11 @@ msgstr ""
 msgid "Seose Kontole (RELTYPE_TO_ACCT) tekst"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:107
+#: classes/applications/budgeting/budgeting_tax.aw:117
 msgid "&Uuml;hekordne"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_tax.aw:108
+#: classes/applications/budgeting/budgeting_tax.aw:118
 msgid "Korduv"
 msgstr ""
 

@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/budgeting/budget.aw:class_1213_help
+msgid "Klassi Eelarve help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_project
+msgid "Omaduse Project (project) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_project_comment
+msgid "Omaduse Project (project) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_project_help
+msgid "Omaduse Project (project) help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_total
+msgid "Omaduse Kogusumma (total) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_total_comment
+msgid "Omaduse Kogusumma (total) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:prop_total_help
+msgid "Omaduse Kogusumma (total) help"
+msgstr ""
+
+#: classes/applications/budgeting/budget.aw:rel_RELTYPE_PROJECT
+msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
+msgstr ""
+

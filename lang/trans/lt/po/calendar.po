@@ -9,30 +9,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/calendar.aw:680
+#: classes/vcl/calendar.aw:683
 msgid "Täna"
 msgstr ""
 
-#: classes/vcl/calendar.aw:681
+#: classes/vcl/calendar.aw:684
 msgid "Päev"
 msgstr ""
 
-#: classes/vcl/calendar.aw:682
+#: classes/vcl/calendar.aw:685
 msgid "Nädal"
 msgstr ""
 
-#: classes/vcl/calendar.aw:683
+#: classes/vcl/calendar.aw:686
 msgid "Kuu"
 msgstr ""
 
-#: classes/vcl/calendar.aw:684
+#: classes/vcl/calendar.aw:687
 msgid "Ülevaade"
 msgstr ""
 
-#: classes/vcl/calendar.aw:745
+#: classes/vcl/calendar.aw:748
 msgid "Toimetused"
 msgstr ""
 
-#: classes/vcl/calendar.aw:1734
+#: classes/vcl/calendar.aw:1736
 msgid "Lisas [%s] %s /  Muutis [%s] %s"
 msgstr ""

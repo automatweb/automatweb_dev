@@ -54,7 +54,7 @@ msgstr ""
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/aliasmgr.aw:369 classes/aliasmgr.aw:954
+#: classes/aliasmgr.aw:369 classes/aliasmgr.aw:958
 msgid "Seose t&uuml;&uuml;p"
 msgstr ""
 
@@ -62,39 +62,39 @@ msgstr ""
 msgid "&otilde;igus"
 msgstr ""
 
-#: classes/aliasmgr.aw:855
+#: classes/aliasmgr.aw:859
 msgid "Too vend"
 msgstr ""
 
-#: classes/aliasmgr.aw:865
+#: classes/aliasmgr.aw:869
 msgid "&Otilde;igus"
 msgstr ""
 
-#: classes/aliasmgr.aw:927 classes/aliasmgr.aw:940
+#: classes/aliasmgr.aw:931 classes/aliasmgr.aw:944
 msgid "Objekti t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/aliasmgr.aw:971
+#: classes/aliasmgr.aw:975
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: classes/aliasmgr.aw:981 classes/aliasmgr.aw:990
+#: classes/aliasmgr.aw:985 classes/aliasmgr.aw:994
 msgid "Otsi"
 msgstr ""
 
-#: classes/aliasmgr.aw:1005
+#: classes/aliasmgr.aw:1009
 msgid "Reload"
 msgstr ""
 
-#: classes/aliasmgr.aw:1016
+#: classes/aliasmgr.aw:1020
 msgid "Loo seos(ed)"
 msgstr ""
 
-#: classes/aliasmgr.aw:1026
+#: classes/aliasmgr.aw:1030
 msgid "Salvesta"
 msgstr ""
 
-#: classes/aliasmgr.aw:1033
+#: classes/aliasmgr.aw:1037
 msgid "Kustuta valitud seos(ed)"
 msgstr ""
 

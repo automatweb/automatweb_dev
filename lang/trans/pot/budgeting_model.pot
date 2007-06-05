@@ -10,15 +10,15 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/budgeting/budgeting_model.aw:33
+#: classes/applications/budgeting/budgeting_model.aw:35
 msgid "Kontol %s ei ole piisavalt raha! Vaja on %s, kontol on %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:45
+#: classes/applications/budgeting/budgeting_model.aw:47
 msgid "Transaktsioonis esines viga %s"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_model.aw:54
+#: classes/applications/budgeting/budgeting_model.aw:56
 msgid "Kanne kontolt %s kontole %s %s"
 msgstr ""
 

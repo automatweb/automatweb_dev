@@ -25,18 +25,6 @@ msgstr ""
 msgid "Omaduse Hotelli kood (hotel_code) help"
 msgstr ""
 
-#: classes/applications/crm/crm_conference_value_days.aw:prop_months
-msgid "Omaduse Mitu kuud (months) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_conference_value_days.aw:prop_months_comment
-msgid "Omaduse Mitu kuud (months) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_conference_value_days.aw:prop_months_help
-msgid "Omaduse Mitu kuud (months) help"
-msgstr ""
-
 #: classes/applications/crm/crm_conference_value_days.aw:prop_show_codes
 msgid "Omaduse N&auml;ita koode (show_codes) caption"
 msgstr ""
@@ -77,15 +65,21 @@ msgstr ""
 msgid "lime"
 msgstr ""
 
-#: classes/applications/crm/crm_conference_value_days.aw:209
+#: classes/applications/crm/crm_conference_value_days.aw:214
 msgid "Next"
-msgstr ""
+msgstr "Nâkoðie"
 
-#: classes/applications/crm/crm_conference_value_days.aw:209
-#: classes/applications/crm/crm_conference_value_days.aw:210
+#: classes/applications/crm/crm_conference_value_days.aw:214
+#: classes/applications/crm/crm_conference_value_days.aw:215
 msgid "months"
-msgstr ""
+msgstr "mçneði"
 
-#: classes/applications/crm/crm_conference_value_days.aw:210
+#: classes/applications/crm/crm_conference_value_days.aw:215
 msgid "Previous"
-msgstr ""
+msgstr "Iepriekðçjie"
+
+#~ msgid "Next 3 months"
+#~ msgstr "Nâkoðie 3 mçneði"
+
+#~ msgid "Previous 3 months"
+#~ msgstr "Iepriekðçjie 3 mçneði"

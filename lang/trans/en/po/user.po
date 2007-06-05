@@ -583,7 +583,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_rd_hd
 msgid "Omaduse Suunamine (rd_hd) caption"
-msgstr ""
+msgstr "Redirection"
 
 #: classes/core/users/user.aw:prop_rd_hd_comment
 msgid "Omaduse Suunamine (rd_hd) kommentaar"
@@ -595,7 +595,7 @@ msgstr ""
 
 #: classes/core/users/user.aw:prop_after_login_redir
 msgid "Omaduse P&auml;rast sisse logimist suunamine (after_login_redir) caption"
-msgstr ""
+msgstr "Redirection after log in"
 
 #: classes/core/users/user.aw:prop_after_login_redir_comment
 msgid "Omaduse P&auml;rast sisse logimist suunamine (after_login_redir) kommentaar"

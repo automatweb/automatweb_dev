@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_conference_value_days.aw:class__help
-msgid "Klassi  help"
+#: classes/applications/crm/crm_conference_value_days.aw:class_1210_help
+msgid "Klassi Konverentsi kalendrivaade help"
 msgstr ""
 
 #: classes/applications/crm/crm_conference_value_days.aw:prop_hotel_code
@@ -24,18 +23,6 @@ msgstr ""
 
 #: classes/applications/crm/crm_conference_value_days.aw:prop_hotel_code_help
 msgid "Omaduse Hotelli kood (hotel_code) help"
-msgstr ""
-
-#: classes/applications/crm/crm_conference_value_days.aw:prop_months
-msgid "Omaduse Mitu kuud (months) caption"
-msgstr ""
-
-#: classes/applications/crm/crm_conference_value_days.aw:prop_months_comment
-msgid "Omaduse Mitu kuud (months) kommentaar"
-msgstr ""
-
-#: classes/applications/crm/crm_conference_value_days.aw:prop_months_help
-msgid "Omaduse Mitu kuud (months) help"
 msgstr ""
 
 #: classes/applications/crm/crm_conference_value_days.aw:prop_show_codes
@@ -78,11 +65,15 @@ msgstr ""
 msgid "lime"
 msgstr ""
 
-#: classes/applications/crm/crm_conference_value_days.aw:209
+#: classes/applications/crm/crm_conference_value_days.aw:214
 msgid "Next"
-msgstr "sadsadsad"
+msgstr ""
 
-#: classes/applications/crm/crm_conference_value_days.aw:210
+#: classes/applications/crm/crm_conference_value_days.aw:214
+#: classes/applications/crm/crm_conference_value_days.aw:215
+msgid "months"
+msgstr ""
+
+#: classes/applications/crm/crm_conference_value_days.aw:215
 msgid "Previous"
-msgstr "sadsa"
-
+msgstr ""

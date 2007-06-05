@@ -563,5 +563,9 @@ msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr "Recurrence"
 
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_UTEXTVAR10
-msgid "Seose UTEXTVAR10 (RELTYPE_UTEXTVAR10) tekst"
+msgid "Seose RELTYPE_UTEXTVAR10 (RELTYPE_UTEXTVAR10) tekst"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_SECTION
+msgid "Seose Tegevusala (RELTYPE_SECTION) tekst"
 msgstr ""

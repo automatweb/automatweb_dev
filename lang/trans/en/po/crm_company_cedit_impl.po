@@ -9,26 +9,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:57
-#: classes/applications/crm/crm_company_cedit_impl.aw:70
-#: classes/applications/crm/crm_company_cedit_impl.aw:143
-#: classes/applications/crm/crm_company_cedit_impl.aw:155
-#: classes/applications/crm/crm_company_cedit_impl.aw:321
-#: classes/applications/crm/crm_company_cedit_impl.aw:333
-#: classes/applications/crm/crm_company_cedit_impl.aw:443
-#: classes/applications/crm/crm_company_cedit_impl.aw:455
-#: classes/applications/crm/crm_company_cedit_impl.aw:582
-#: classes/applications/crm/crm_company_cedit_impl.aw:597
-#: classes/applications/crm/crm_company_cedit_impl.aw:714
-#: classes/applications/crm/crm_company_cedit_impl.aw:792
-#: classes/applications/crm/crm_company_cedit_impl.aw:809
+#: classes/applications/crm/crm_company_cedit_impl.aw:62
+#: classes/applications/crm/crm_company_cedit_impl.aw:76
+#: classes/applications/crm/crm_company_cedit_impl.aw:154
+#: classes/applications/crm/crm_company_cedit_impl.aw:166
+#: classes/applications/crm/crm_company_cedit_impl.aw:332
+#: classes/applications/crm/crm_company_cedit_impl.aw:344
+#: classes/applications/crm/crm_company_cedit_impl.aw:454
+#: classes/applications/crm/crm_company_cedit_impl.aw:466
+#: classes/applications/crm/crm_company_cedit_impl.aw:593
+#: classes/applications/crm/crm_company_cedit_impl.aw:608
+#: classes/applications/crm/crm_company_cedit_impl.aw:725
+#: classes/applications/crm/crm_company_cedit_impl.aw:803
+#: classes/applications/crm/crm_company_cedit_impl.aw:820
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:545
+#: classes/applications/crm/crm_company_cedit_impl.aw:73
+msgid "Jah"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:73
+msgid "Ei"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cedit_impl.aw:556
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/applications/crm/crm_company_cedit_impl.aw:720
+#: classes/applications/crm/crm_company_cedit_impl.aw:731
 msgid "Vali &uuml;ks"
 msgstr "Pick one"

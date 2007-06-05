@@ -9,8 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/core/icons.aw:98 classes/core/icons.aw:99
+#: classes/core/icons.aw:102 classes/core/icons.aw:103
 msgid "Objekti id on %s"
 msgstr ""
-

@@ -10,43 +10,43 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/admin/image_manager.aw:80
+#: classes/admin/image_manager.aw:81
 msgid "Uus pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:81
+#: classes/admin/image_manager.aw:82
 msgid "Vali olemasolev pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:90
+#: classes/admin/image_manager.aw:91
 msgid "Pilt"
 msgstr ""
 
-#: classes/admin/image_manager.aw:95
+#: classes/admin/image_manager.aw:96
 msgid "Asukoht"
 msgstr ""
 
-#: classes/admin/image_manager.aw:100
+#: classes/admin/image_manager.aw:101
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/image_manager.aw:153
+#: classes/admin/image_manager.aw:154
 msgid "Vali see"
 msgstr ""
 
-#: classes/admin/image_manager.aw:192
+#: classes/admin/image_manager.aw:193
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/image_manager.aw:199
+#: classes/admin/image_manager.aw:200
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/image_manager.aw:205
+#: classes/admin/image_manager.aw:206
 msgid "Minu lisatud"
 msgstr ""
 
-#: classes/admin/image_manager.aw:212
+#: classes/admin/image_manager.aw:213
 msgid "Viimased 30"
 msgstr ""
 

@@ -206,6 +206,30 @@ msgstr ""
 msgid "Omaduse  (transfer_table) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_budgets_tb
+msgid "Omaduse  (budgets_tb) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_budgets_tb_comment
+msgid "Omaduse  (budgets_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_budgets_tb_help
+msgid "Omaduse  (budgets_tb) help"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_budgets_tbl
+msgid "Omaduse  (budgets_tbl) caption"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_budgets_tbl_comment
+msgid "Omaduse  (budgets_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:prop_budgets_tbl_help
+msgid "Omaduse  (budgets_tbl) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_workspace.aw:group_accounts
 msgid "Grupi Kontod (accounts) pealkiri"
 msgstr ""
@@ -238,6 +262,14 @@ msgstr ""
 msgid "Grupi &Uuml;lekanded (transfers) help"
 msgstr ""
 
+#: classes/applications/budgeting/budgeting_workspace.aw:group_budgets
+msgid "Grupi Eelarved (budgets) pealkiri"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:group_budgets_help
+msgid "Grupi Eelarved (budgets) help"
+msgstr ""
+
 #: classes/applications/budgeting/budgeting_workspace.aw:rel_RELTYPE_ACCT_TREE_PARENT
 msgid "Seose Kontode juurkaust (RELTYPE_ACCT_TREE_PARENT) tekst"
 msgstr ""
@@ -247,7 +279,11 @@ msgid "Seose Maksude juurkaust (RELTYPE_TAX_TREE_PARENT) tekst"
 msgstr ""
 
 #: classes/applications/budgeting/budgeting_workspace.aw:rel_RELTYPE_FUND_TREE_PARENT
-msgid "Seose Dondide juurkaust (RELTYPE_FUND_TREE_PARENT) tekst"
+msgid "Seose Fondide juurkaust (RELTYPE_FUND_TREE_PARENT) tekst"
+msgstr ""
+
+#: classes/applications/budgeting/budgeting_workspace.aw:rel_RELTYPE_BUDGET
+msgid "Seose Eelarve (RELTYPE_BUDGET) tekst"
 msgstr ""
 
 #: classes/applications/budgeting/budgeting_workspace.aw:layout_acct_tree
@@ -266,47 +302,47 @@ msgstr ""
 msgid "Kujundusosa Otsi ülekandeid (transfer_search) pealkiri"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:179
+#: classes/applications/budgeting/budgeting_workspace.aw:189
 msgid "%s kontode kataloog"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:213
+#: classes/applications/budgeting/budgeting_workspace.aw:223
 msgid "&Uuml;ldine"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:219 classes/applications/budgeting/budgeting_workspace.aw:381
+#: classes/applications/budgeting/budgeting_workspace.aw:229 classes/applications/budgeting/budgeting_workspace.aw:391
 msgid "Valdkonnad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:250
+#: classes/applications/budgeting/budgeting_workspace.aw:260
 msgid "%s maksude kataloog"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:345
+#: classes/applications/budgeting/budgeting_workspace.aw:355
 msgid "%s fondide kataloog"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:389
+#: classes/applications/budgeting/budgeting_workspace.aw:399
 msgid "Fondid"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:398
+#: classes/applications/budgeting/budgeting_workspace.aw:408
 msgid "Tegija"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:407
+#: classes/applications/budgeting/budgeting_workspace.aw:417
 msgid "Teenuse liik"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:416
+#: classes/applications/budgeting/budgeting_workspace.aw:426
 msgid "Tooteperekonnad"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:425
+#: classes/applications/budgeting/budgeting_workspace.aw:435
 msgid "Kontod"
 msgstr ""
 
-#: classes/applications/budgeting/budgeting_workspace.aw:480
+#: classes/applications/budgeting/budgeting_workspace.aw:490
 msgid "Projektid"
 msgstr ""
 

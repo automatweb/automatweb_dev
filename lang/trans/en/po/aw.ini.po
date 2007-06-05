@@ -2584,6 +2584,154 @@ msgstr ""
 msgid "Klassi OCSP p&auml;ring (1207) nimi"
 msgstr ""
 
+#: aw.ini:class_1209
+msgid "Klassi Kuhu minna moodul (1209) nimi"
+msgstr ""
+
+#: aw.ini:class_1210
+msgid "Klassi Konverentsi kalendrivaade (1210) nimi"
+msgstr ""
+
+#: aw.ini:class_1211
+msgid "Klassi Veebiaadress (1211) nimi"
+msgstr ""
+
+#: aw.ini:class_1212
+msgid "Klassi CRM Teenuse liik (1212) nimi"
+msgstr ""
+
+#: aw.ini:class_1213
+msgid "Klassi Eelarve (1213) nimi"
+msgstr ""
+
+#: aw.ini:class_1214
+msgid "Klassi Sisselogimiskast (1214) nimi"
+msgstr ""
+
+#: aw.ini:class_1215
+msgid "Klassi  (1215) nimi"
+msgstr ""
+
+#: aw.ini:class_1216
+msgid "Klassi  (1216) nimi"
+msgstr ""
+
+#: aw.ini:class_1217
+msgid "Klassi  (1217) nimi"
+msgstr ""
+
+#: aw.ini:class_1218
+msgid "Klassi  (1218) nimi"
+msgstr ""
+
+#: aw.ini:class_1219
+msgid "Klassi  (1219) nimi"
+msgstr ""
+
+#: aw.ini:class_1220
+msgid "Klassi Andmeklass (1220) nimi"
+msgstr ""
+
+#: aw.ini:class_1221
+msgid "Klassi  (1221) nimi"
+msgstr ""
+
+#: aw.ini:class_1222
+msgid "Klassi  (1222) nimi"
+msgstr ""
+
+#: aw.ini:class_1223
+msgid "Klassi Vaade (1223) nimi"
+msgstr ""
+
+#: aw.ini:class_1224
+msgid "Klassi  (1224) nimi"
+msgstr ""
+
+#: aw.ini:class_1225
+msgid "Klassi  (1225) nimi"
+msgstr ""
+
+#: aw.ini:class_1226
+msgid "Klassi  (1226) nimi"
+msgstr ""
+
+#: aw.ini:class_1227
+msgid "Klassi  (1227) nimi"
+msgstr ""
+
+#: aw.ini:class_1228
+msgid "Klassi  (1228) nimi"
+msgstr ""
+
+#: aw.ini:class_1229
+msgid "Klassi  (1229) nimi"
+msgstr ""
+
+#: aw.ini:class_1230
+msgid "Klassi  (1230) nimi"
+msgstr ""
+
+#: aw.ini:class_1231
+msgid "Klassi  (1231) nimi"
+msgstr ""
+
+#: aw.ini:class_1232
+msgid "Klassi  (1232) nimi"
+msgstr ""
+
+#: aw.ini:class_1233
+msgid "Klassi  (1233) nimi"
+msgstr ""
+
+#: aw.ini:class_1234
+msgid "Klassi  (1234) nimi"
+msgstr ""
+
+#: aw.ini:class_1235
+msgid "Klassi  (1235) nimi"
+msgstr ""
+
+#: aw.ini:class_1236
+msgid "Klassi  (1236) nimi"
+msgstr ""
+
+#: aw.ini:class_1237
+msgid "Klassi  (1237) nimi"
+msgstr ""
+
+#: aw.ini:class_1238
+msgid "Klassi  (1238) nimi"
+msgstr ""
+
+#: aw.ini:class_1239
+msgid "Klassi  (1239) nimi"
+msgstr ""
+
+#: aw.ini:class_1240
+msgid "Klassi  (1240) nimi"
+msgstr ""
+
+#: aw.ini:class_1241
+msgid "Klassi  (1241) nimi"
+msgstr ""
+
+#: aw.ini:class_1242
+msgid "Klassi  (1242) nimi"
+msgstr ""
+
+#: aw.ini:class_1243
+msgid "Klassi  (1243) nimi"
+msgstr ""
+
+#: aw.ini:class_1244
+msgid "Klassi  (1244) nimi"
+msgstr ""
+
+#: aw.ini:class_1245
+msgid "Klassi Saidi sisu otsingu grupp mitu saiti (1245) nimi"
+msgstr ""
+
 # aw.ini:classfolder_29
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
@@ -5080,6 +5228,22 @@ msgstr ""
 
 #: aw.ini:syslogtypes_1207
 msgid "syslog.type.ST_OCSP"
+msgstr ""
+
+#: aw.ini:syslogtypes_1212
+msgid "syslog.type.ST_CRM_SERVICE_TYPE"
+msgstr ""
+
+#: aw.ini:syslogtypes_1213
+msgid "syslog.type.ST_BUDGET"
+msgstr ""
+
+#: aw.ini:syslogtypes_1214
+msgid "syslog.type.ST_LOGIN_BOX"
+msgstr ""
+
+#: aw.ini:syslogtypes_1215
+msgid "syslog.type.ST_SITE_SEARCH_CONTENT_GRP_MULTISITE"
 msgstr ""
 
 #: aw.ini:syslogactions_1

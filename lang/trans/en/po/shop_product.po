@@ -1,15 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-<<<<<<< shop_product.po
-<<<<<<< shop_product.po
-"POT-Creation-Date: Thu, 31 Mar 2005 14:41:30 +0300\n"
-=======
-"POT-Creation-Date: Mon,  4 Apr 2005 14:20:36 +0300\n"
->>>>>>> 1.3
-=======
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:24 +0300\n"
->>>>>>> 1.4
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +9,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/applications/shop/shop_product.aw:class_295_help
+msgid "Klassi Lao toode help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_balance
+msgid "Omaduse  (balance) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_balance_comment
+msgid "Omaduse  (balance) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_balance_help
+msgid "Omaduse  (balance) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_price_cur
+msgid "Omaduse Hinnad valuutades (price_cur) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_price_cur_comment
+msgid "Omaduse Hinnad valuutades (price_cur) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_price_cur_help
+msgid "Omaduse Hinnad valuutades (price_cur) help"
+msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_item_count
 msgid "Omaduse Mitu laos (item_count) caption"
@@ -54,6 +73,78 @@ msgstr ""
 msgid "Omaduse Hind (price) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_purchase_price
+msgid "Omaduse Ostu hind (purchase_price) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_purchase_price_comment
+msgid "Omaduse Ostu hind (purchase_price) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_purchase_price_help
+msgid "Omaduse Ostu hind (purchase_price) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time
+msgid "Omaduse Broneeritav aeg (reservation_time) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_comment
+msgid "Omaduse Broneeritav aeg (reservation_time) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_help
+msgid "Omaduse Broneeritav aeg (reservation_time) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_unit
+msgid "Omaduse  (reservation_time_unit) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_unit_comment
+msgid "Omaduse  (reservation_time_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_reservation_time_unit_help
+msgid "Omaduse  (reservation_time_unit) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_before
+msgid "Omaduse Puhveraeg enne (buffer_time_before) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_before_comment
+msgid "Omaduse Puhveraeg enne (buffer_time_before) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_before_help
+msgid "Omaduse Puhveraeg enne (buffer_time_before) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_after
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_after_comment
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_after_help
+msgid "Omaduse Puhveraeg p&auml;rast (buffer_time_after) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_unit
+msgid "Omaduse  (buffer_time_unit) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_unit_comment
+msgid "Omaduse  (buffer_time_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_buffer_time_unit_help
+msgid "Omaduse  (buffer_time_unit) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:prop_must_order_num
 msgid "Omaduse Mitu peab korraga tellima (must_order_num) caption"
 msgstr "Amount must be divisible by this"
@@ -64,6 +155,54 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_must_order_num_help
 msgid "Omaduse Mitu peab korraga tellima (must_order_num) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_price_settings
+msgid "Omaduse Hinnakujundus (price_settings) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_price_settings_comment
+msgid "Omaduse Hinnakujundus (price_settings) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_price_settings_help
+msgid "Omaduse Hinnakujundus (price_settings) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_tax_rate
+msgid "Omaduse Maksum&auml;&auml;r (tax_rate) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_tax_rate_comment
+msgid "Omaduse Maksum&auml;&auml;r (tax_rate) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_tax_rate_help
+msgid "Omaduse Maksum&auml;&auml;r (tax_rate) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_barcode
+msgid "Omaduse Ribakood (barcode) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_barcode_comment
+msgid "Omaduse Ribakood (barcode) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_barcode_help
+msgid "Omaduse Ribakood (barcode) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_userch1
@@ -124,6 +263,66 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_userch5_help
 msgid "Omaduse User-defined checkbox 5 (userch5) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch6
+msgid "Omaduse User-defined checkbox 6 (userch6) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch6_comment
+msgid "Omaduse User-defined checkbox 6 (userch6) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch6_help
+msgid "Omaduse User-defined checkbox 6 (userch6) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch7
+msgid "Omaduse User-defined checkbox 7 (userch7) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch7_comment
+msgid "Omaduse User-defined checkbox 7 (userch7) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch7_help
+msgid "Omaduse User-defined checkbox 7 (userch7) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch8
+msgid "Omaduse User-defined checkbox 8 (userch8) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch8_comment
+msgid "Omaduse User-defined checkbox 8 (userch8) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch8_help
+msgid "Omaduse User-defined checkbox 8 (userch8) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch9
+msgid "Omaduse User-defined checkbox 9 (userch9) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch9_comment
+msgid "Omaduse User-defined checkbox 9 (userch9) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch9_help
+msgid "Omaduse User-defined checkbox 9 (userch9) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch10
+msgid "Omaduse User-defined checkbox 10 (userch10) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch10_comment
+msgid "Omaduse User-defined checkbox 10 (userch10) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch10_help
+msgid "Omaduse User-defined checkbox 10 (userch10) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_user1
@@ -666,6 +865,66 @@ msgstr ""
 msgid "Omaduse User-defined var (multiple) 5 (uservarm5) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_uservarm6
+msgid "Omaduse User-defined var (multiple) 6 (uservarm6) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm6_comment
+msgid "Omaduse User-defined var (multiple) 6 (uservarm6) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm6_help
+msgid "Omaduse User-defined var (multiple) 6 (uservarm6) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm7
+msgid "Omaduse User-defined var (multiple) 7 (uservarm7) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm7_comment
+msgid "Omaduse User-defined var (multiple) 7 (uservarm7) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm7_help
+msgid "Omaduse User-defined var (multiple) 7 (uservarm7) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm8
+msgid "Omaduse User-defined var (multiple) 8 (uservarm8) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm8_comment
+msgid "Omaduse User-defined var (multiple) 8 (uservarm8) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm8_help
+msgid "Omaduse User-defined var (multiple) 8 (uservarm8) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm9
+msgid "Omaduse User-defined var (multiple) 9 (uservarm9) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm9_comment
+msgid "Omaduse User-defined var (multiple) 9 (uservarm9) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm9_help
+msgid "Omaduse User-defined var (multiple) 9 (uservarm9) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm10
+msgid "Omaduse User-defined var (multiple) 10 (uservarm10) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm10_comment
+msgid "Omaduse User-defined var (multiple) 10 (uservarm10) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm10_help
+msgid "Omaduse User-defined var (multiple) 10 (uservarm10) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:prop_packaging
 msgid "Omaduse Pakendid (packaging) caption"
 msgstr "Packaging"
@@ -726,29 +985,73 @@ msgstr ""
 msgid "Omaduse Lingid (lnk) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:group_data
 msgid "Grupi Toote info (data) pealkiri"
 msgstr "Product info"
+
+#: classes/applications/shop/shop_product.aw:group_data_help
+msgid "Grupi Toote info (data) help"
+msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_packaging
 msgid "Grupi Pakendid (packaging) pealkiri"
 msgstr "Packaging"
 
+#: classes/applications/shop/shop_product.aw:group_packaging_help
+msgid "Grupi Pakendid (packaging) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:group_img
 msgid "Grupi Pildid (img) pealkiri"
 msgstr "Images"
+
+#: classes/applications/shop/shop_product.aw:group_img_help
+msgid "Grupi Pildid (img) help"
+msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_fls
 msgid "Grupi Failid (fls) pealkiri"
 msgstr "Files"
 
+#: classes/applications/shop/shop_product.aw:group_fls_help
+msgid "Grupi Failid (fls) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:group_doc
 msgid "Grupi Dokumendid (doc) pealkiri"
 msgstr "Documents"
 
+#: classes/applications/shop/shop_product.aw:group_doc_help
+msgid "Grupi Dokumendid (doc) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:group_lnk
 msgid "Grupi Lingid (lnk) pealkiri"
 msgstr "Links"
+
+#: classes/applications/shop/shop_product.aw:group_lnk_help
+msgid "Grupi Lingid (lnk) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
@@ -790,7 +1093,54 @@ msgstr "document"
 msgid "Seose link (RELTYPE_LNK) tekst"
 msgstr "link"
 
-#: classes/applications/shop/shop_product.aw:459
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_KW
+msgid "Seose v&otilde;tmes&otilde;na (RELTYPE_KW) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM6
+msgid "Seose kasutajadefineeritud muutuja 6 (RELTYPE_VARUSERM6) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM7
+msgid "Seose kasutajadefineeritud muutuja 7 (RELTYPE_VARUSERM7) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM8
+msgid "Seose kasutajadefineeritud muutuja 8 (RELTYPE_VARUSERM8) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_PRICE_SETTINGS
+msgid "Seose hinnakujundus (RELTYPE_PRICE_SETTINGS) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM9
+msgid "Seose kasutajadefineeritud muutuja 9 (RELTYPE_VARUSERM9) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM10
+msgid "Seose kasutajadefineeritud muutuja 10 (RELTYPE_VARUSERM10) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_TAX_RATE
+msgid "Seose Maksum&auml;&auml;r (RELTYPE_TAX_RATE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:417
+msgid "Minutit"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:418
+msgid "Tundi"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:458
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:463
+msgid "Valuuta"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:620
 msgid "shop_product::draw(): no layout set!"
 msgstr "shop_product::draw(): no layout set!"
-

@@ -62,35 +62,35 @@ msgstr ""
 msgid "Seose Pangamakse (RELTYPE_BANK_PAYMENT) tekst"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:103
+#: classes/applications/spa_bookings/spa_customer_interface.aw:116
 msgid "Broneering %s / %s"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:142
+#: classes/applications/spa_bookings/spa_customer_interface.aw:156
 msgid "Lisa teenus"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:153
+#: classes/applications/spa_bookings/spa_customer_interface.aw:167
 msgid "Kinnita"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:154
+#: classes/applications/spa_bookings/spa_customer_interface.aw:168
 msgid "Maksa"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:162
+#: classes/applications/spa_bookings/spa_customer_interface.aw:176
 msgid "Prindi"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:347
+#: classes/applications/spa_bookings/spa_customer_interface.aw:360
 msgid "T&uuml;hista"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:907
+#: classes/applications/spa_bookings/spa_customer_interface.aw:952
 msgid "Mees"
 msgstr ""
 
-#: classes/applications/spa_bookings/spa_customer_interface.aw:907
+#: classes/applications/spa_bookings/spa_customer_interface.aw:952
 msgid "Naine"
 msgstr ""
 
