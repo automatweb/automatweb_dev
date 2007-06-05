@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.90 2007/05/09 09:51:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.91 2007/06/05 10:13:27 kristo Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1277,6 +1277,9 @@ class event_search extends class_base
 			}
 			exit_function("event_search::search_speed");
 			$res = "";
+			$si = __get_site_instance();
+			$has_proc = method_exists($si, "handle_parse_event_field");
+
 			$aliasmrg = get_instance("aliasmgr");
 			foreach($groups as $gkey => $edata)
 			{
@@ -1322,7 +1325,10 @@ class event_search extends class_base
 								continue;
 							}
 							$v = create_links($eval[$nms]);
-								
+							if ($has_proc)
+							{
+								$v = $si->handle_parse_event_field($nms, $v);
+							}
 							$value = $tabledef[$nms]["props"];
 							// if there is something in the controller field set, then lets see what it is
 							if (!empty($value))
@@ -1489,7 +1495,6 @@ class event_search extends class_base
 					$res .= $this->parse("EVENT");
 				}
 			}
-			
 			//Navigation bar
 			$arr = $arr + array("section" => aw_global_get("section"));
 			$next_month_args = $arr;

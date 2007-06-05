@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.85 2007/04/30 13:45:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.86 2007/06/05 10:13:28 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -96,6 +96,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property udefch1 type=checkbox ch_value=1 user=1 field=meta method=serialize
 @caption User-defined checkbox 1
+
+@property udeflb1 type=classificator reltype=RELTYPE_UDEFLB1 store=connect
+@caption Kasutajdefineeritud muutuja 1
 
 @property udeftb1 type=textbox user=1 field=meta method=serialize
 @caption User-defined textbox 1
@@ -235,6 +238,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @reltype RESOURCE value=5 clid=CL_MRP_RESOURCE
 @caption ressurss
+
+@reltype UDEFLB1 value=65 clid=CL_META
+@caption Kasutajadefineritud muutuja 1
 
 @reltype PREDICATE value=9 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING
 @caption Eeldustegevus

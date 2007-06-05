@@ -695,7 +695,6 @@ flush();
 	function bg_is_running($o)
 
 	{
-
 		$fn = $this->lock_file.".".$o->id();
 
 		if (file_exists($fn))

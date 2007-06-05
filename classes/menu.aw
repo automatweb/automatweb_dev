@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.200 2007/05/30 12:48:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.201 2007/06/05 10:13:26 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2134,7 +2134,14 @@ class menu extends class_base
 		$arr["_set_no_sss"] = "0";
 		$arr["sad_s"] = "0";
 		$arr["link_pops"] = "0";
-		$arr["post_ru"] = post_ru();
+		if ($_GET["group"] == "relationmgr")
+		{
+			$arr["return_url"] = $_GET["return_url"];
+		}
+		else
+		{
+			$arr["post_ru"] = post_ru();
+		}
 	}
 
 	function _get_linker(&$p, $o)

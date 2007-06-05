@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.236 2007/05/30 09:38:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.237 2007/06/05 10:13:27 kristo Exp $
 
 /*
 
@@ -1617,7 +1617,14 @@ class site_show extends class_base
 			{
 				$sfo_o = obj($sfo);
 				$sfo_i = $sfo_o->instance();
-				$link = $sfo_i->make_menu_link($ref, $sfo_o);
+				if (method_exists($sfo_i, "make_menu_link"))
+				{
+					$link = $sfo_i->make_menu_link($ref, $sfo_o);
+				}
+				else
+				{
+					$link = $this->make_menu_link($ref, $sfo_o);
+				}
 			}
 
 			if (is_oid($ref->prop("submenus_from_obj")) && $this->can("view", $ref->prop("submenus_from_obj")))

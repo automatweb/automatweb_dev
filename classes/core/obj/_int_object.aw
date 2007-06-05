@@ -2286,10 +2286,15 @@ class _int_object
 
 	function _int_create_brother($parent)
 	{
-		return $GLOBALS["object_loader"]->ds->create_brother(array(
+		$rv =  $GLOBALS["object_loader"]->ds->create_brother(array(
 			"objdata" => $this->obj,
 			"parent" => $parent
 		));
+		// this here makes sure that the site_id setting is correct for the brother
+		$o = obj($rv);
+		$o->set_parent($o->parent());
+		$o->save();
+		return $rv;
 	}
 
 	function _int_set_prop($prop, $val)

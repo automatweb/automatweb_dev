@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.58 2007/05/15 10:47:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.59 2007/06/05 10:13:28 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -704,6 +704,7 @@ class otv_ds_obj extends class_base
 			$url = $target = $fileSizeBytes = $fileSizeKBytes = $fileSizeMBytes = "";
 			$caption = $t->trans_get_val("name");
 			$clid = $t->class_id();
+			$proplist = $t->get_property_list();
 			if ($clid == CL_EXTLINK)
 			{
 				$li = get_instance("contentmgmt/links_display");
@@ -794,11 +795,11 @@ class otv_ds_obj extends class_base
 							{
 								if ($params['edit_columns'][$ff_n] == 1)
 								{
-									$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+									$ret[$t->id()][$ff_n] = nl2br($t->prop($ff_n));
 								}
 								else
 								{
-									$ret[$t->id()][$ff_n] = $t->trans_get_val_str($ff_n); //$this->trans_get_val_str($t, $ff_n); //$t->prop_str($ff_n);
+									$ret[$t->id()][$ff_n] = nl2br($t->trans_get_val_str($ff_n)); 
 								}
 							}
 						}
@@ -806,12 +807,16 @@ class otv_ds_obj extends class_base
 						{
 							if ($params['edit_columns'][$ff_n] == 1)
 							{
-								$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+								$ret[$t->id()][$ff_n] = nl2br($t->prop($ff_n));
 							}
 							else
 							{
 	
-								$ret[$t->id()][$ff_n] = $t->trans_get_val_str($ff_n); //$this->trans_get_val_str($t, $ff_n);//$t->prop_str($ff_n);
+								$ret[$t->id()][$ff_n] = $t->trans_get_val_str($ff_n); 
+								if ($proplist[$ff_n]["type"] == "textarea")
+								{
+									$ret[$t->id()][$ff_n] = nl2br($ret[$t->id()][$ff_n]);
+								}
 							}
 						}
 					}

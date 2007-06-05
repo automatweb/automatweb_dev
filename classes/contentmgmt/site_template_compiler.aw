@@ -703,8 +703,10 @@ class site_template_compiler extends aw_template
 			);
 		}
 
+		$cc = false;
 		if ($this->req_level == 1  && aw_ini_get("template_compiler.no_menu_area_cache") != 1 && !$this->no_use_ma_cache)
 		{
+			$cc = true;
 			$this->ops[] = array(
 				"op" => OP_AREA_CACHE_SET,
 				"params" => array(
@@ -724,7 +726,8 @@ class site_template_compiler extends aw_template
 					"level" => $level,
 					"a_name" => $area,
 					"grp_cnt" => $adat["grps"][$level],
-					"tpl" => $cur_tpl_fqn
+					"tpl" => $cur_tpl_fqn,
+					//"stack_pop" => 1
 				)
 			);
 		}
@@ -733,7 +736,8 @@ class site_template_compiler extends aw_template
 			$this->ops[] = array(
 				"op" => OP_LOOP_LIST_END,
 				"params" => array(
-					"tpl" => $cur_tpl
+					"tpl" => $cur_tpl,
+					"no_pop" => $cc
 				)
 			);
 		}
@@ -1526,7 +1530,10 @@ class site_template_compiler extends aw_template
 		$content_name = $dat["content_name"];
 		$this->last_list_dat = $dat;
 
-		$ret = $this->_gi()."array_pop(\$this->_cur_menu_path);\n";
+		if (!$arr["no_pop"])
+		{
+			$ret = $this->_gi()."array_pop(\$this->_cur_menu_path);\n";
+		}
 
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
@@ -1722,6 +1729,8 @@ class site_template_compiler extends aw_template
 		{
 			$lang_var = "ct_lang_id";
 		}
+
+		$res .= $this->_gi()."array_pop(\$this->_cur_menu_path);\n";
 
 		$res .= $this->_gi()."if (".$cache_name.")\n";
 		$res .= $this->_gi()."{\n";
@@ -2034,12 +2043,11 @@ class site_template_compiler extends aw_template
 		$o_name = $dat["o_name"];
 
 		$ret = "";
-
 		$ret .= $this->_gi()."\$has_lugu = \"\";\n";
 		$ret .= $this->_gi()."if (".$o_name."->meta(\"show_lead\") && (!aw_ini_get(\"menuedit.show_lead_in_menu_only_active\") || \$this->_helper_is_in_path(".$o_name."->".$this->id_func."())))\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\$xdat = new object_list(array(\n";
+	$ret .= $this->_gi()."\$xfilt = array(\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\"parent\" => ".$o_name."->".$this->id_func."(),\n";
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
@@ -2048,7 +2056,14 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"sort_by\" => \"objects.jrk\",\n";
 		$ret .= $this->_gi()."\"limit\" => (int)aw_ini_get(\"menuedit.show_lead_in_menu_count\")\n";
 		$this->brace_level--;
-		$ret .= $this->_gi()."));\n";
+		$ret .= $this->_gi().");\n";
+		$ret .= $this->_gi()."if (".$o_name."->prop(\"all_pers\"))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."unset(\$xfilt[\"period\"]);\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$ret .= $this->_gi()."\$xdat = new object_list(\$xfilt);\n";
 		$ret .= $this->_gi()."for(\$o = \$xdat->begin(); !\$xdat->end(); \$o = \$xdat->next())\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
@@ -2131,8 +2146,13 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."else\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
+		$ret .= $this->_gi()."if (\$this->can(\"view\", \$parent_obj->prop(\"submenus_from_obj\")))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
 		$ret .= $this->_gi()."\$tmp = obj(\$parent_obj->prop(\"submenus_from_obj\"));\n";
 		$ret .= $this->_gi().$parent_is_from_obj_start_level." = ".$arr["level"].";\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 		$ret .= $this->_gi().$this_is_from_obj_name." = \$tmp;\n";
@@ -2250,6 +2270,10 @@ class site_template_compiler extends aw_template
 		// parse grp tpl
 
 		// insert the same thing that op_loop_list_end does, but for groups
+
+                if ($arr["stack_pop"])                                                                                                      {
+                        $res .= $this->_gi()."array_pop(\$this->_cur_menu_path);\n";
+                }
 
 		// pop one item off the list name stack
 		if (!$arr["no_pop"])

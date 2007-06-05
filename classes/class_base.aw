@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.549 2007/06/05 09:41:22 kristo Exp $
+// $Id: class_base.aw,v 2.550 2007/06/05 10:13:26 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3042,7 +3042,6 @@ class class_base extends aw_template
 			$this->process_view_controllers(&$resprops, $controllers, $argblock);
 		}
 
-
 		// if name_prefix given, prefixes all element names with the value
 		// e.g. if name_prefix => "emb" and there is a property named comment,
 		// then the result will be name => emb[comment], this simplifies
@@ -4081,7 +4080,7 @@ class class_base extends aw_template
 					}
 				}
 				else
-				if ($type != "releditor")	// cause it submits CRAP
+				if ($type != "releditor" && $this->obj_inst->is_property($name))	// cause it submits CRAP
 				{
 					$this->obj_inst->set_prop($name,$property["value"]);
 				};

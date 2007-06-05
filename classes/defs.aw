@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.233 2007/05/09 09:51:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.234 2007/06/05 10:13:26 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -29,7 +29,14 @@ if (!defined("DEFS"))
 		if (!$curp)
 		{
 			$i = get_instance(CL_USER);
-			$curp = obj($i->get_current_person());
+			$tmp = $i->get_current_person();
+			if (is_oid($tmp) && !$i->can("view", $tmp))
+			{
+				$i->create_obj_access($tmp);
+			}
+			aw_disable_acl();
+			$curp = obj($tmp);
+			aw_restore_acl();
 		}
 		return $curp;
 	}
@@ -659,6 +666,10 @@ if (!defined("DEFS"))
 	**/
 	function is_valid($set,$string)
 	{
+		if ($set == "password")
+		{
+			return true;
+		}
 		$sets = array(
 			'password' => array(
 				'content' => '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM@',

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.74 2006/02/22 11:56:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.75 2007/06/05 10:13:26 kristo Exp $
 
 class config extends aw_template
 {
@@ -217,7 +217,8 @@ class config extends aw_template
 		$ol = new object_list(array(
 			"class_id" => CL_GROUP,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"type" => new obj_predicate_not(1) 
 		));
 		foreach($ol->arr() as $o)
 		{

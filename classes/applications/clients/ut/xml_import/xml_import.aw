@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.9 2007/05/08 10:08:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.10 2007/06/05 10:13:27 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -397,6 +397,7 @@ echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</
 				$markus = $this->convert_charset($t_attr["markus"]);
 				$mobiil = $t_attr["mobiil"];
 				$sisetel = $t_attr["sisetel"];
+				$sisetel_nospaces = str_replace(" ", "", $sisetel);
 				$pritel = $t_attr["pritel"];
 				$tootajad_view = array();
 				$amt_data = array();
@@ -517,8 +518,8 @@ echo "ds = ".$obj->prop("datasource")." src = <pre>".htmlentities($src_data)."</
 				if (!$row)
 				{
 					$this->quote(&$realkraad);
-					$q = "INSERT INTO $tootajad_table (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad,born_year, born_month, born_day) 
-						VALUES ('$tid','$enimi','$pnimi','$email','$veeb','$ruum','$markus','$mobiil','$sisetel','$pritel','$realkraad','$born_year', '$born_month', '$born_day')";
+					$q = "INSERT INTO $tootajad_table (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad,born_year, born_month, born_day, sisetel_nospaces) 
+						VALUES ('$tid','$enimi','$pnimi','$email','$veeb','$ruum','$markus','$mobiil','$sisetel','$pritel','$realkraad','$born_year', '$born_month', '$born_day', '$sisetel_nospaces')";
 					print $q;
 					print "<br />";
 					$this->db_query($q);

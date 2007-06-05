@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.10 2005/10/28 11:16:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.11 2007/06/05 10:13:27 kristo Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -122,7 +122,7 @@ class project_selector extends core
 		// 2) remove those that were not explicitly checked in the form
 		// 3) create new connections which did not exist before
 		$orig = $arr["obj_inst"]->get_original();
-
+		
 		// figure out all current brothers
 		$olist = new object_list(array(
 			"brother_of" => $orig->id(),

@@ -359,7 +359,6 @@ class planner_model extends core
 		}
 
 		// now, I need another clue string .. perhaps even in that big fat ass query?
-
 		enter_function("get_event_list::query");
 		$this->db_query($q);
 		while($row = $this->db_next())
