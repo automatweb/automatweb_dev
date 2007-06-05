@@ -1746,7 +1746,8 @@ class object
 	**/
 	function &instance()
 	{
-		return $GLOBALS["objects"][$this->oid]->instance();
+		$tmp = $GLOBALS["objects"][$this->oid]->instance();
+		return $tmp;
 	}
 
 	/** creates a brother to the current object

@@ -55,7 +55,7 @@ class languages extends aw_template
 		$use_key = isset($key) ? $key : "id";
 		foreach($dat as $ldat)
 		{
-			if ($set_for_user)
+			if (!empty($set_for_user))
 			{
 				$uo = obj(aw_global_get("uid_oid"));
 				$tr_ls = $uo->prop("target_lang");
@@ -170,7 +170,7 @@ class languages extends aw_template
 		if (!is_admin())
 		{
 			// read the language from active lang
-			if ($GLOBALS["cfg"]["user_interface"]["use_site_lang"] == 1)
+			if (!empty($GLOBALS["cfg"]["user_interface"]["use_site_lang"]))
 			{
 				if (aw_ini_get("user_interface.full_content_trans"))
 				{
@@ -198,7 +198,7 @@ class languages extends aw_template
 		{
 			foreach($la as $row)
 			{
-				if ($row["status"] == 2)
+				if ($row["status"] == 2 && (!is_oid($row["oid"]) || $this->can("view", $row["oid"])))
 				{
 					$langs[$row["acceptlang"]] = $row["id"];
 					if (!$def)
@@ -389,7 +389,7 @@ class languages extends aw_template
 			{
 				// if a language is active, we must check if perhaps someone kas de-activated it in the mean time
 				$la = $this->fetch($lang_id, true);
-				if (!($la["status"] == 2 || ($la["status"] == 1 && aw_global_get("uid") != "")))
+				if (!($la["status"] == 2 || ($la["status"] == 1 && aw_global_get("uid") != "")) || (is_oid($la["oid"]) && !$this->can("view", $la["oid"])))
 				{
 					// if so, try to come up with a better one.
 					$lang_id = $this->find_best();

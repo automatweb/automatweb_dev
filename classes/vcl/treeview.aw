@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.68 2006/09/20 13:45:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.69 2007/06/05 09:41:36 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -50,6 +50,8 @@ define("DATA_IN_PLACE",3);
 class treeview extends class_base
 {
 	var $only_one_level_opened = 0;
+	var $level;
+	var $selected_item;
 
 	function treeview($args = array())
 	{
@@ -79,7 +81,7 @@ class treeview extends class_base
                         "type" => TREE_DHTML,
                         "tree_id" => $pr["name"], // what if there are multiple trees
                         "persist_state" => 1,
-						"item_name_length" => $pr["item_name_length"],
+			"item_name_length" => isset($pr["item_name_length"]) ? $pr["item_name_length"] : null,
                 ));
 		$pr["vcl_inst"] = $this;
 		return array($pr["name"] => $pr);
@@ -341,7 +343,7 @@ class treeview extends class_base
 	**/
 	function start_tree($arr)
 	{
-		$this->auto_open = ( is_array( $arr["open_path"] ) && count( $arr["open_path"] ) ) ? $arr["open_path"] : false;
+		$this->auto_open = ( isset($arr["open_path"]) && is_array( $arr["open_path"] ) && count( $arr["open_path"] ) ) ? $arr["open_path"] : false;
 		$this->items = array();
 		$this->tree_type = empty($arr["type"]) ? TREE_DHTML : $arr["type"];
 		$this->tree_dat = $arr;
@@ -350,8 +352,8 @@ class treeview extends class_base
 		$this->tree_id = empty($arr["tree_id"]) ? false : $arr["tree_id"];
 		$this->get_branch_func = empty($arr["get_branch_func"]) ? false : $arr["get_branch_func"];
 		$this->branch = empty($arr["branch"]) ? false : true;
-		$this->root_id = trim($arr["root_id"]);
-		if(($this->tree_type == TREE_DHTML) && !empty($this->get_branch_func) && $arr["data_in_place"]== "1")
+		$this->root_id = isset($arr["root_id"]) ? trim($arr["root_id"]) : null;
+		if(($this->tree_type == TREE_DHTML) && !empty($this->get_branch_func) && !empty($arr["data_in_place"]))
 		{
 			$this->set_feature(DATA_IN_PLACE);
 		}
@@ -638,10 +640,11 @@ class treeview extends class_base
 		};
 		$t = get_instance("languages");
 
-		$level = $_REQUEST["called_by_js"]?$_COOKIE[$this->tree_id."_level"]:1;
+		$level = !empty($_REQUEST["called_by_js"]) ? $_COOKIE[$this->tree_id."_level"] : 1;
 		if(!strlen($this->auto_open))
 		{
-			$this->auto_open = is_array(explode("^",$_COOKIE[$this->tree_id])) ? join(",",map("'%s'",explode("^",$_COOKIE[$this->tree_id]))) : "";
+			$tri = isset($_COOKIE[$this->tree_id]) ? $_COOKIE[$this->tree_id] : null;
+			$this->auto_open = is_array(explode("^",$tri)) ? join(",",map("'%s'",explode("^",$tri))) : "";
 		}
 		else
 		{
@@ -653,7 +656,7 @@ class treeview extends class_base
 		}
 
 		$this->vars(array(
-			"target" => $this->tree_dat["url_target"],
+			"target" => isset($this->tree_dat["url_target"]) ? $this->tree_dat["url_target"] : null,
 			"open_nodes" => $this->auto_open,
 			"level" => !strlen($level)?1:$level,
 			"load_auto" => isset($_REQUEST["load_auto"])?$_REQUEST["load_auto"]:"true",
@@ -669,7 +672,7 @@ class treeview extends class_base
 			$this->vars(array(
 				"rootname" => $this->tree_dat["root_name"],
 				"rooturl" => $this->tree_dat["root_url"],
-				"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
+				"icon_root" => !empty($this->tree_dat["root_icon"]) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
 			));
 
 			if ($this->get_branch_func)
@@ -867,7 +870,7 @@ class treeview extends class_base
 
 	function draw_dhtml_tree ($parent)
 	{
-		$data = $this->items[$parent];
+		$data = isset($this->items[$parent]) ? $this->items[$parent] : null;
 
 		if (!is_array($data))
 		{
@@ -906,7 +909,7 @@ class treeview extends class_base
 				$name = "<strong>$name</strong>";
 			};
 
-			$url_target = !isset($item["url_target"]) ? $this->tree_dat["url_target"] : $item["url_target"];
+			$url_target = !isset($item["url_target"]) ? (isset($this->tree_dat["url_target"]) ? $this->tree_dat["url_target"] : null) : $item["url_target"];
 			
 			$has_data = "0";
 			if($this->has_feature(DATA_IN_PLACE) == 1)
@@ -915,7 +918,7 @@ class treeview extends class_base
 			}
 
 			$oncl = "";
-			if ($item["onClick"] != "")
+			if (!empty($item["onClick"]))
 			{
 				 $oncl="onClick=\"".$item["onClick"]."\"";
 			}
@@ -931,7 +934,7 @@ class treeview extends class_base
 				"spacer" => str_repeat("    ",$this->level),
 				"menu_level" => $this->level,
 				"target" => $url_target,
-				"alt" => $item["alt"]
+				"alt" => isset($item["alt"]) ? $item["alt"] : null
 			));
 
 			if (empty($subres))

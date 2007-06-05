@@ -36,7 +36,7 @@ if (!empty($_GET["class"]))
 		$pf_url = aw_global_get("REQUEST_URI");
 	}
 }
-$ru = $_GET["return_url"];
+$ru = isset($_GET["return_url"]) ? $_GET["return_url"] : null;
 while (!empty($ru))
 {
 	$url_bits = parse_url($ru);
@@ -146,7 +146,7 @@ if ($sf->prog_acl("view", "disp_object_link"))
 }
 $shwy =  (empty($site_title) || aw_global_get("hide_yah")) && $_GET["class"] != "admin_if";
 
-if ($_GET["in_popup"])
+if (!empty($_GET["in_popup"]))
 {
 	$sf->vars(array(
 		"NO_HEADER" => $sf->parse("NO_HEADER")
@@ -252,7 +252,7 @@ if (function_exists("get_time"))
 {
 	$GLOBALS["__END_DISP"] = get_time();
 }
-if ($GLOBALS["__aw_op_handler"])
+if (!empty($GLOBALS["__aw_op_handler"]))
 {
 	$f = $GLOBALS["__aw_op_handler"][1];
 	$GLOBALS["__aw_op_handler"][0]->$f($str);

@@ -8,6 +8,24 @@
 			</function>
 		</action>
 
+		<action name="connect_offer_and_row">
+			<function name="connect_offer_and_row">
+				<arguments>
+					<required name="offer" type="id/object" />
+					<optional name="row" type="id/object" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="disconnect_offer_and_row">
+			<function name="disconnect_offer_and_row">
+				<arguments>
+					<required name="offer" type="id/object" />
+					<optional name="row" type="id/object" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="set_type">
 			<function name="set_type">
 				<arguments>

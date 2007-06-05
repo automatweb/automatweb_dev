@@ -207,7 +207,7 @@ class popup_menu extends aw_template
 			"ss" => $is,
 			"menu_id" => $this->menu_id,
 			"menu_icon" => $icon,
-			"alt" => $param["alt"]
+			"alt" => isset($param["alt"]) ? $param["alt"] : null
 		));
 
 		if (!empty($param["text"]))
@@ -226,7 +226,7 @@ class popup_menu extends aw_template
 			));
 		}
 
-		if ($param["is_toolbar"])
+		if (!empty($param["is_toolbar"]))
 		{
 			$this->vars(array(
 				"IS_TOOLBAR" => $this->parse("IS_TOOLBAR")

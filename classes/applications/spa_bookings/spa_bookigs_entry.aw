@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.50 2007/05/31 12:42:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.51 2007/06/05 09:41:24 kristo Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -22,6 +22,9 @@
 
 	@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE field=meta method=serialize
 	@caption Ladu
+
+	@property products_folder_list type=select multiple=1 field=meta method=serialize
+	@caption Toodete kaustad
 
 	@property print_view_ctr type=relpicker reltype=RELTYPE_PRINT_CTR field=meta method=serialize
 	@caption Printvaate andmdete valideerimise kontroller
@@ -94,6 +97,7 @@
 
 	@property my_bookings type=table store=no no_caption=1
 
+
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo settings_mail caption="Meiliseaded" parent=general
 
@@ -102,6 +106,13 @@
 @groupinfo my_bookings caption="Minu broneeringud" 
 @groupinfo my_bookings_agent caption="Klientide broneeringud" 
 @groupinfo all_bookings caption="K&otilde;ik" 
+
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
 
 @reltype PFL_FOLDER value=1 clid=CL_MENU
 @caption Tootepakettide kaust
@@ -128,6 +139,9 @@ class spa_bookigs_entry extends class_base
 			"tpldir" => "applications/spa_bookings/spa_bookings_entry",
 			"clid" => CL_SPA_BOOKIGS_ENTRY
 		));
+		$this->trans_props = array(
+			"b_mail_content" , "b_ex_mail_content", "b_mail_subject"
+		);
 	}
 
 	function get_property($arr)
@@ -251,7 +265,7 @@ class spa_bookigs_entry extends class_base
 	{
 //die(dbg::dump($arr["request"]));
 		classload("core/date/date_calc");
-		for($i = 0; $i < 5; $i++)
+		for($i = 0; $i < 15; $i++)
 		{
 			$d = $arr["request"]["d"][$i];
 			if ($d["fn"] != "" && $d["ln"] != "" && $d["pass"] != "")
@@ -274,9 +288,33 @@ class spa_bookigs_entry extends class_base
 				}
 			}
 		}
+//arr($arr["request"]);
+		//uuendus, et siis need mis erineva mailiaadressiga, need läheks omaette broneeringuks
+		for($i = 0; $i < 15; $i++)
+		{
+			$d = $arr["request"]["d"][$i];
+			foreach($d["ppl"] as $key=> $s)
+			{
+				if($s["email"] && $s["email"] != $d["email"])
+				{
+					$arr["request"]["d"][] = array(
+						"fn" => $s["fn"],
+                        "ln" => $s["ln"],
+                        "email" => $s["email"],
+						"gender" => $s["gender"],
+						"birthday" => $s["end"],
 
+						"pass" => $d["pass"],
+						"start" => $d["start"],
+						"package" =>  $d["package"],
+					);
+					unset($arr["request"]["d"][$i]["ppl"][$key]);
+				}
+			}
+		}
+//arr($arr["request"]);
 		$feedback = "";
-		for($i = 0; $i < 5; $i++)
+		for($i = 0; $i < 15; $i++)
 		{
 			$d = $arr["request"]["d"][$i];
 			if ($d["fn"] != "" && $d["ln"] != "" && $d["pass"] != "")
@@ -410,8 +448,8 @@ class spa_bookigs_entry extends class_base
 				{
 					send_mail(
 						$d["email"], 
-						$arr["obj_inst"]->prop("b_mail_subject"), 
-						str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_mail_content")),
+						$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
+						str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_mail_content")),
 						"From: ".$this->_get_from_addr($arr["obj_inst"])
 					);
 				}
@@ -420,8 +458,8 @@ class spa_bookigs_entry extends class_base
 					$us = get_instance("users");
 					send_mail(
 						$d["email"],
-						$arr["obj_inst"]->prop("b_mail_subject"), 
-						str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->prop("b_ex_mail_content")),
+						$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
+						str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_ex_mail_content")),
 						"From: ".$this->_get_from_addr($arr["obj_inst"])
 					);
 				}
@@ -668,6 +706,7 @@ class spa_bookigs_entry extends class_base
 			if (is_admin())
 			{
 				$booking_str .= " ".html::popup(array(
+				//	"url" => $this->mk_my_orb("add_pkt", array("id" => $o->id(), "r" => get_ru())),
 					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 					"caption" => t("Lisa teenus"),
 					"width" => 600,
@@ -679,6 +718,7 @@ class spa_bookigs_entry extends class_base
 			else
 			{
 				$booking_str .= " ".html::href(array(
+		//			"url" => $this->mk_my_orb("add_pkt", array("id" => $o->id(), "r" => get_ru())),
 					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "id" => 11150, "r" => get_ru()), "spa_customer_interface"), 
 //					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 					"caption" => t("Lisa teenus"),
@@ -688,13 +728,12 @@ class spa_bookigs_entry extends class_base
 					"resizable" => 1*/
 				));
 			}
-
+arr();
 			$booking_str .= " / ".html::href(array(
 				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 				"caption" => t("Prindi"),
 				"target" => "_blank"
 			));
-
 			if (!is_admin())
 			{
 				$has_times = count($o->meta("extra_prods")) > 0;
@@ -1292,6 +1331,122 @@ class spa_bookigs_entry extends class_base
 			}
 		}
 		die(t("Vahepeal on valitud aeg broneeritud!"));
+	}
+
+	/**
+		@attrib name=proforma
+		@param id required
+		@param wb required
+	**/
+	function proforma($arr)
+	{
+		$b = obj($arr["id"]);
+		$ol = new object_list(array("class_id" => CL_SPA_BOOKING , "parent" => $arr["id"]));
+		$sum = 0;
+		$wb = obj($arr["wb"]);
+		$this->read_site_template("booking_proforma.tpl");
+		lc_site_load("spa_bookigs_entry", &$this);
+
+		list($y, $m, $d) = explode("-", $b->prop("person.birthday"));
+		$this->vars(array(
+			"bureau" => $b->createdby(),
+			"person" => $b->trans_get_val_str("person"),
+			"package" => $b->trans_get_val_str("package"),
+			"from" => date("d.m.Y", $b->prop("start")),
+			"to" => date("d.m.Y", $b->prop("end")),
+			"person_comment" => $b->prop("person.comment"),
+			"person_name" => $b->prop("person.name"),
+			"person_birthday" => $y > 0 ? sprintf("%02d.%02d.%04d", $d, $m, $y) : "",
+			"person_ext_id" => $b->prop("person.ext_id_alphanumeric"),
+			"person_gender" => $b->prop("person.gender") == 1 ? t("Mees") : ($b->prop("person.gender") === "2" ? t("Naine") : "")
+		));
+
+		// now, list all bookings for rooms 
+		$items = array();
+		foreach ($ol->arr() as $o)
+		{
+			$dates = $this->get_booking_data_from_booking($o);
+			$books = "";
+			
+			foreach($dates as $prod => $entries)
+			{
+				foreach($entries as $entry)
+				{
+					$items[] = $entry;
+				}
+			}
+		}
+
+		$all_items = "";
+		$packet_services = "";
+		$additional_services = "";
+		usort($items, create_function('$a,$b', 'return $a["from"] - $b["from"];'));
+		$sum = array();
+		foreach($items as $entry)
+		{
+			if (!$entry["is_extra"])
+			{
+				continue;
+			}
+			$ro = obj($entry["room"]);
+			$rvs = obj($entry["reservation_id"]);
+			$prod_obj = obj($rvs->meta("product_for_bron"));
+			$this->vars(array(
+				"r_from" => date("d.m.Y H:i", $entry["from"]),
+				"r_to" =>  date("d.m.Y H:i", $entry["to"]),
+				"r_room" => $ro->trans_get_val("name"),
+				"r_prod" => $prod_obj->trans_get_val("name"),
+				"start_time" => $entry["from"],
+				"end_time" => $entry["to"],
+				"price" => join (" / " , $prod_obj->meta("cur_prices")),//$prod_obj->prop("price")
+			));
+			$books .= $this->parse("BOOKING");
+
+			$all_items .= $this->parse("ALL_ITEMS");
+			if ($entry["is_extra"] == 1)
+			{
+				$additional_services .= $this->parse("ADDITIONAL_SERVICES");
+			}
+			else
+			{
+				$packet_services .= $this->parse("PACKET_SERVICES");
+			}//if(aw_global_get("uid") == "struktuur")arr($prod_obj->meta());
+			//$sum = $sum + $prod_obj->prop("price");
+			foreach($prod_obj->meta("cur_prices") as $cur => $price)
+			{
+				$sum[$cur] = $sum[$cur] + $price;
+			}
+		}
+
+		$currencys = array();
+		foreach($sum as $key => $val)
+		{
+			if(is_oid($key) && $this->can("view" , $key))
+			{
+				$c_o = obj($key);
+				$currencys[] = $c_o->name();
+			}
+		}
+
+		$this->vars(array(
+			"BOOKING" => $books,
+			"ADDITIONAL_SERVICES" => $additional_services,
+			"PACKET_SERVICES" => $packet_services,
+			"ALL_ITEMS" => $all_items,
+			"SUM" => join (" / " , $sum),
+			"currencys" => join (" / " ,$currencys),
+		));
+		$this->vars(array(
+			"HAS_PACKET_SERVICES" => $packet_services != "" ? $this->parse("HAS_PACKET_SERVICES") : "",
+			"HAS_ADDITIONAL_SERVICES" => $packet_services != "" ? $this->parse("HAS_ADDITIONAL_SERVICES") : "",
+		));
+
+		if ($this->can("view", $wb->prop("print_view_ctr")))
+		{
+			$fc = get_instance(CL_FORM_CONTROLLER);
+			$fc->eval_controller($wb->prop("print_view_ctr"), $arr);
+		}
+		die($this->parse());
 	}
 
 	/**
@@ -2031,102 +2186,6 @@ class spa_bookigs_entry extends class_base
 				"type" => "RELTYPE_MAIN_PERSON"
 			));
 		}
-	}
-	
-	/** meetod selleks et Soomest saaks neid va pakette lisada
-		@attrib name=add_package_service nologin=1 is_public=1 all_args=1
-		@param firstname optional type=string
-		@param lastname optional type=string
-		@param gender optional type=string
-			M/W
-		@param birthday optional type=int
-			dd.mm.YYYY
-		@param email optional type=string
-		@param start optional type=int
-			timestamp
-		@param packet_id optional type=int
-		@param agency_id optional type=int
-			user oid
-		@param send_email optional type=boolean
-	**/
-	function add_package_service($arr)
-	{
-		extract($_POST);
-		$ret = array();
-		if(!is_email($email))
-		{
-			$ret["error"].= t("No valid email")."\n";
-		}
-		if(!(strlen($firstname) > 1))
-		{
-			$ret["error"].= t("No valid firstname")."\n";
-		}
-		if(!(strlen($lastname) > 1))
-		{
-			$ret["error"].= t("No valid lastname")."\n";
-		}
-		if(!($gender == "M" || $gender == "W"))
-		{
-			$ret["error"].= t("Gender must be 'M' or 'N'")."\n";
-		}
-		
-		if(!($birthday))
-		{
-			$ret["error"].= t("Birthday needed")."\n";
-		}
-
-		if(!($start))
-		{
-			$ret["error"].= t("Start time needed")."\n";
-		}
-		
-		if(!($packet_id))
-		{
-			$ret["error"].= t("Packet needed")."\n";
-		}
-
-		if(!($agency_id))
-		{
-			$ret["error"].= t("Travel agency / user oid needed")."\n";
-		}
-		
-		if(!$ret["error"])
-		{
-			$ret["reservation_id"] = 4234;
-			$ret["user"] = "Client.User";
-			$ret["password"] = "p0wjJks4";
-		}
-	
-		return $ret;
-	}
-	
-	/** meetod selleks et Soomest saaks neid va pakette lisada
-		@attrib name=add_package_service_example nologin=1 is_public=1 all_args=1
-	**/
-	function add_package_service_example($arr)
-	{
-		if(!(is_array($_POST) && sizeof($_POST)))
-		{
-		die('<form name="postform" id="postform" method="post" action=http://kalevspa.struktuur.ee/orb.aw?class=spa_bookigs_entry&action=add_package_service_example>
-			<br>First name <input type="textbox" name=firstname value="Firstname">
-			<br>Lat name <input type="textbox" name=lastname value="Lastname">
-			<br>Gender <input type="textbox" name=gender value="M">
-			<br>Birthday <input type="textbox" name=birthday value="112309">
-			<br>E-mail <input type="textbox" name=email value="isik@dot.com">
-			<br>Reservation start time <input type="textbox" name=start value="123123">
-			<br>Packet id <input type="textbox" name=packet_id value="1234">
-			<br>Agency id <input type="textbox" name=agency_id value="444">
-			<br><input type=submit value="do stuff">
-			</form>
-		');
-		}
-		print "returns";
-		$ret = $this->do_orb_method_call(array(
-  			"action" => "add_package_service",
-    		     	"class" => "spa_bookigs_entry",
-     		    	"params" => $_POST,
- 		));
- 		arr($ret);
 	}
 }
 ?>

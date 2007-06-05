@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.548 2007/05/16 11:11:51 kristo Exp $
+// $Id: class_base.aw,v 2.549 2007/06/05 09:41:22 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -94,6 +94,14 @@ class class_base extends aw_template
 	var $changeform_target;
 	var $new;
 	var $no_buttons;
+	var $view;
+	var $no_rte;
+	var $cb_values;
+	var $layout_mode;
+	var $leftout_layouts;
+	var $_do_call_vcl_mod_reforbs;
+	var $no_mod_view;
+	var $just_saved;
 
 	function class_base($args = array())
 	{
@@ -348,7 +356,7 @@ class class_base extends aw_template
 			//return $this->mk_my_orb("change", $args, $args["class"]);
 		}
 
-		if (1 == $args["view"])
+		if (!empty($args["view"]))
 		{
 			$this->view = true;
 		}
@@ -714,7 +722,7 @@ class class_base extends aw_template
 
 		foreach($resprops as $_k => $val)
 		{
-			if(!in_array($val["parent"], $this->leftout_layouts))
+			if(!in_array(isset($val["parent"]) ? $val["parent"] : null, safe_array($this->leftout_layouts)))
 			{
 				$cli->add_property($val);
 			}
@@ -762,7 +770,7 @@ class class_base extends aw_template
 
 		// class_base should not rely on storage, because this seriosly
 		// limits it's functionality!
-		if (is_oid($this->request["object_type"]) && $this->can("view",$this->request["object_type"]))
+		if (isset($this->request["object_type"]) && is_oid($this->request["object_type"]) && $this->can("view",$this->request["object_type"]))
 		{
 			$ot_obj = new object($this->request["object_type"]);
 			if ($ot_obj->class_id() == CL_OBJECT_TYPE)
@@ -771,17 +779,17 @@ class class_base extends aw_template
 			};
 		};
 
-		if ($args["no_rte"])
+		if (!empty($args["no_rte"]))
 		{
 			$argblock["no_rte"] = 1;
 		};
 
-		if ($args["is_sa"] == 1)
+		if (!empty($args["is_sa"]))
 		{
 			$argblock["is_sa"] = 1;
 		}
 
-		if ($_GET["pseh"] != "")
+		if (!empty($_GET["pseh"]))
 		{
 			$argblock["pseh"] = $_GET["pseh"];
 		}
@@ -843,6 +851,7 @@ class class_base extends aw_template
 			$cli->set_form_target(aw_global_get("changeform_target"));
 		}
 
+		$scripts = "";
 		if (method_exists($this, "callback_generate_scripts"))
 		{
 			$scripts = $this->callback_generate_scripts(array(
@@ -859,7 +868,7 @@ class class_base extends aw_template
 		$cls = aw_ini_get("classes");
 		foreach($cls as $clid => $cl)
 		{
-			if(basename($cl["file"]) == $argblock["orb_class"])
+			if(isset($cl["file"]) && basename($cl["file"]) == $argblock["orb_class"])
 			{
 				$current_clid = $clid;
 				break;
@@ -881,15 +890,15 @@ class class_base extends aw_template
 			"action" => $submit_action,
 			// hm, dat is weird!
 			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
-			"back_button" => $gdata["back_button"],
-			"forward_button" => $gdata["forward_button"],
+			"back_button" => isset($gdata["back_button"]) ? $gdata["back_button"] : null,
+			"forward_button" => isset($gdata["forward_button"]) ? $gdata["forward_button"] : null,
 			"data" => $argblock,
 			// focus contains the name of the property that
 			// should be focused by the output client
-			"focus" => $gdata["focus"],
+			"focus" => isset($gdata["focus"]) ? $gdata["focus"] : null,
 			"help" => $help,
 			"scripts" => $scripts,
-			"is_sa_changed" => $this->request["is_sa_changed"]
+			"is_sa_changed" => isset($this->request["is_sa_changed"]) ? $this->request["is_sa_changed"] : null
 		));
 
 		extract($args);
@@ -915,7 +924,8 @@ class class_base extends aw_template
 		{
 			$orb_action = "change";
 		}
-		elseif($this->no_mod_view == 1)
+		else
+		if($this->no_mod_view == 1)
 		{
 			$orb_action = "change";
 		}
@@ -1575,7 +1585,7 @@ class class_base extends aw_template
 					$link = !empty($val["active"]) ? "#" : "";
 				}
 
-				if ($val["set_link"])
+				if (!empty($val["set_link"]))
 				{
 					$link = $val["set_link"];
 				}
@@ -1592,7 +1602,7 @@ class class_base extends aw_template
 					"classinfo" => &$this->classinfo,
 				);
 
-				if ($val["set_link_target"])
+				if (!empty($val["set_link_target"]))
 				{
 					$tabinfo["target"] = $val["set_link_target"];
 				}
@@ -1627,14 +1637,14 @@ class class_base extends aw_template
 
 					$this->cli->add_tab(array(
 						"id" => $tabinfo["id"],
-						"encoding" => $val["encoding"],
+						"encoding" => isset($val["encoding"]) ? $val["encoding"] : null,
 						"level" => $val["level"],
 						"parent" => isset($val["parent"]) ? $val["parent"] : false,
 						"link" => $tabinfo["link"],
 						"caption" => $tabinfo["caption"],
 						"active" => $active,
 						"tabgroup" => $val["tabgroup"],
-						"target" => $tabinfo["target"]
+						"target" => isset($tabinfo["target"]) ? $tabinfo["target"] : null
 					));
 				}
 			}
@@ -2328,12 +2338,11 @@ class class_base extends aw_template
 			};
 		}
 		else
-		if ( 	/*($property["trans"] == 0) &&*/
+		if ( 	
 			empty($property["emb"]) &&
 			is_object($this->obj_inst) &&
-			$property["store"] != "no" &&
+			(!isset($property["store"]) || $property["store"] != "no") &&
 			empty($property["value"]) &&
-			/*$this->obj_inst->is_property($property["name"]) && */
 			$this->obj_inst->prop($property["name"]) != NULL )
 		{
 			// I need to implement this in storage .. so that $obj->prop('blag')
@@ -2348,7 +2357,7 @@ class class_base extends aw_template
 			}
 		}
 
-		if ($property["method"] == "bitmask")
+		if (isset($property["method"]) && $property["method"] == "bitmask")
 		{
 			$property["value"] = $property["value"] & $property["ch_value"];
 		};
@@ -2661,19 +2670,19 @@ class class_base extends aw_template
 				continue;
 			};
 
-			if ($val["name"] == "name" && $this->classinfo["no_name"] == 1)
+			if ($val["name"] == "name" && !empty($this->classinfo["no_name"]))
 			{
 				continue;
 			};
 
 
 			// XXX: need to get rid of that "text" index
-			if ($val["name"] == "status" && $this->classinfo["no_status"] == 1)
+			if ($val["name"] == "status" && !empty($this->classinfo["no_status"]))
 			{
 				continue;
 			};
 
-			if ($val["name"] == "comment" && $this->classinfo["no_comment"] == 1)
+			if ($val["name"] == "comment" && !empty($this->classinfo["no_comment"]))
 			{
 				continue;
 			};
@@ -2777,7 +2786,7 @@ class class_base extends aw_template
 
 			$pname = $val["name"];
 			$getter = "_get_" . $pname;
-			if ( ($this->classinfo['prop_cb'] == 1) && in_array($getter,$class_methods))
+			if ( !empty($this->classinfo['prop_cb']) && in_array($getter,$class_methods))
 			{
 				$awt->start("getter $getter");
 				$status = $this->inst->$getter($argblock);
@@ -2817,7 +2826,7 @@ class class_base extends aw_template
 			}
 			else
 			{
-				if ($this->vcl_register[$val["type"]] && isset($this->vcl_delayed_init[$val["type"]]))
+				if (!empty($this->vcl_register[$val["type"]]) && isset($this->vcl_delayed_init[$val["type"]]))
 				{
 					$reginst = $this->vcl_register[$val["type"]];
 					$ot = get_instance($reginst);
@@ -2866,7 +2875,7 @@ class class_base extends aw_template
 				};
 
 
-				if ($this->vcl_register[$val["orig_type"]] && isset($this->vcl_has_getter[$val["orig_type"]]))
+				if (!empty($this->vcl_register[$val["orig_type"]]) && isset($this->vcl_has_getter[$val["orig_type"]]))
 				{
 					$reginst = $this->vcl_register[$val["orig_type"]];
 					$ot = get_instance($reginst);
@@ -3002,7 +3011,7 @@ class class_base extends aw_template
 				};
 
 				// this deals with subitems .. what a sucky approach
-				if (is_array($val["items"]) && sizeof($val["items"]) > 0)
+				if (isset($val["items"]) && is_array($val["items"]) && sizeof($val["items"]) > 0)
 				{
 					$tmp = array();
 					foreach($val["items"] as $item)
@@ -3038,7 +3047,7 @@ class class_base extends aw_template
 		// e.g. if name_prefix => "emb" and there is a property named comment,
 		// then the result will be name => emb[comment], this simplifies
 		// processing of embedded config forms
-		if ($args["name_prefix"])
+		if (!empty($args["name_prefix"]))
 		{
 			$tmp = $resprops;
 			$resprops = array();
@@ -4648,8 +4657,8 @@ class class_base extends aw_template
 			$parent = empty($ginfo["parent"]) ? 0 : $ginfo["parent"];
 
 			if (
-				($parent === 0 and sizeof($this->grpmap[0]) == 0) or // take the very first first level group
-				($ginfo["default"]) // is predefined default grp
+				($parent === 0 and empty($this->grpmap[0])) or // take the very first first level group
+				isset($ginfo["default"]) // is predefined default grp
 			)
 			{
 				$default_group = $gkey;

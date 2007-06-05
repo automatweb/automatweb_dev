@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.14 2005/05/20 08:15:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.15 2007/06/05 09:41:23 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -293,7 +293,7 @@ class config_login_menus extends class_base
 
 		foreach($gids as $gid)
 		{
-			if (($data[$gid]["pri"] > $cur_pri) && ($data[$gid]["menu"]))
+			if (isset($data[$gid]) && ($data[$gid]["pri"] > $cur_pri) && ($data[$gid]["menu"]))
 			{
 				$cur_pri = $data[$gid]["pri"];
 				$cur_menu = $data[$gid]["menu"];

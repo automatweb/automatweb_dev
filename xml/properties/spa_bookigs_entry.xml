@@ -50,6 +50,16 @@
             <caption>Ladu</caption>
       </property>
       <property>
+            <name>products_folder_list</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toodete kaustad</caption>
+      </property>
+      <property>
             <name>print_view_ctr</name>
             <table>objects</table>
             <group>general_sub</group>
@@ -297,6 +307,16 @@
             <no_caption>1</no_caption>
             <field>my_bookings</field>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SPA_BOOKIGS_ENTRY</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -329,6 +349,9 @@
             <all_bookings>
                   <caption>K&amp;amp;otilde;ik</caption>
             </all_bookings>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <PFL_FOLDER>

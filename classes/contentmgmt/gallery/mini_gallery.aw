@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.34 2007/05/17 07:55:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.35 2007/06/05 09:41:28 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -131,6 +131,7 @@ class mini_gallery extends class_base
 		lc_site_load("mini_gallery", &$this);
 
 		$s_id = $ob->prop("style");
+		$use_style = null;
 		if(is_oid($s_id) && $this->can("view", $s_id))
 		{
 			$style_i = get_instance(CL_STYLE);
@@ -184,7 +185,7 @@ class mini_gallery extends class_base
 			$this->_do_pageselector($ob, $img_c, $rows, $cols);
 		}
 
-		if ($_GET["mg_pg"])
+		if (!empty($_GET["mg_pg"]))
 		{
 			for($i = 0; $i < ($_GET["mg_pg"] * $rows * $cols); $i++)
 			{
@@ -232,6 +233,7 @@ class mini_gallery extends class_base
 		$cur_folder = $img->parent();
 		$ii = get_instance(CL_IMAGE);
 
+		$imgc = 0;
 		for ($r = 0; $r < $rows; $r++)
 		{
 			$l = "";
@@ -422,6 +424,8 @@ class mini_gallery extends class_base
 			return;
 		}
 
+		$mg_pg = isset($_GET["mg_pg"]) ? $_GET["mg_pg"] : 0;
+
 		$prev_page = $next_page = "";
 		$num_pgs = $img_c / ($rows * $cols);
 		for($i = 0; $i < $num_pgs; $i++)
@@ -431,7 +435,7 @@ class mini_gallery extends class_base
 				"page_nr" => $i+1
 			));
 
-			if ($_GET["mg_pg"] == $i)
+			if ($mg_pg == $i)
 			{
 				$pgs[] = $this->parse("PAGE_SEL");
 			}
@@ -440,11 +444,11 @@ class mini_gallery extends class_base
 				$pgs[] = $this->parse("PAGE");
 			}
 
-			if ($i+1 == $_GET["mg_pg"])
+			if ($i+1 == $mg_pg)
 			{
 				$prev_page = $this->parse("PREV_PAGE");
 			}
-			if ($i-1 == $_GET["mg_pg"])
+			if ($i-1 == $mg_pg)
 			{
 				$next_page = $this->parse("NEXT_PAGE");
 			}

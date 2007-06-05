@@ -3,4 +3,3 @@
 	<class name="site_search_content_grp_multisite" folder="contentmgmt/site_search" extends="class_base">
 	</class>
 </orb>
-		

@@ -12,6 +12,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 @classinfo syslog_type=ST_CRM_COMPANY no_status=1 confirm_save_data=1 versioned=1 prop_cb=1
 
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
+@tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
 
 @default table=objects
 
@@ -383,6 +384,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property url_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
 	@property email_id type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
 	@property aw_bank_account type=hidden table=kliendibaas_firma parent=cedit_layout_other no_caption=1
+
+@property balance type=hidden table=aw_account_balances field=aw_balance
 	
 
 @default group=personal_offers
@@ -952,6 +955,11 @@ default group=org_objects
 	@property polls_tb type=toolbar store=no no_caption=1
 	@property polls_tbl type=table store=no no_caption=1
 
+@default group=service_types
+
+	@property stypes_tb type=toolbar store=no no_caption=1
+	@property stypes_tbl type=table store=no no_caption=1
+
 @default group=my_view
 
 	@property my_view type=text store=no no_caption=1
@@ -1051,6 +1059,7 @@ groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all s
 	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	save=no
 	@groupinfo ext_sys caption="Siduss&uuml;steemid" parent=general
 	@groupinfo documents_polls caption="Kiirk&uuml;sitlused" submit=no parent=general
+	@groupinfo service_types caption="Teenuse liigid" submit=no parent=general
 
 @groupinfo bills caption="Arved" submit=no save=no
 
@@ -1263,6 +1272,9 @@ groupinfo qv caption="Vaata"  submit=no save=no
 
 @reltype CORRESPOND_ADDRESS value=65 clid=CL_CRM_ADDRESS
 @caption Aadressid
+
+@reltype SERVICE_TYPE value=66 clid=CL_CRM_SERVICE_TYPE
+@caption Teenuse liik
 
 */
 /*
@@ -1552,6 +1564,16 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+			case "stypes_tb":
+			case "stypes_tbl":
+				static $st_impl;
+				if (!$st_impl)
+				{
+					$st_impl = get_instance("applications/crm/crm_company_objects_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $st_impl->$fn($arr);
+
 			// CEDIT tab
 			case "cedit_toolbar":
 				$this->gen_cedit_tb(&$arr);

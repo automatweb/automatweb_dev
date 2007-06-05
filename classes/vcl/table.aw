@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.106 2007/02/28 12:48:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.107 2007/06/05 09:41:36 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -16,6 +16,15 @@ class aw_table extends aw_template
 
 	var $table_caption = ''; 
 	var $parsed_pageselector = '';
+	var $no_recount;
+	var $rgroupby;
+	var $titlebar_under_groups;
+	var $_gml;
+	var $_max_gml;
+	var $_sh_req_level;
+	var $records_per_page;
+	var $final_enum;
+	var $titlebar_repeat_bottom;
 
 	function aw_table($data = array())
 	{
@@ -66,7 +75,7 @@ class aw_table extends aw_template
 		{
 			$this->filter_name = md5($_GET["id"].$_GET["group"]);
 		}
-		$this->filter_name.= ++$GLOBALS["__aw_table_count_on_page"];
+		$this->filter_name.= isset($GLOBALS["__aw_table_count_on_page"]) ? ++$GLOBALS["__aw_table_count_on_page"] : 1;
 		$this->sortable = true;
 		$this->rowdefs_ordered = false;
 
@@ -846,7 +855,7 @@ class aw_table extends aw_template
 		));
 
 		$this->read_template("scripts.tpl");
-		if ($this->use_chooser && !$arr["no_chooser_script"])
+		if ($this->use_chooser && empty($arr["no_chooser_script"]))
 		{
 			$tbl .= $this->parse("selallscript");
 			if ($this->chooser_hilight)
@@ -943,7 +952,7 @@ class aw_table extends aw_template
 
 		if (!isset($act_page))
 		{
-			$act_page = $GLOBALS["ft_page"];
+			$act_page = isset($GLOBALS["ft_page"]) ? $GLOBALS["ft_page"] : null;
 		}
 
 		if ($act_page*$this->records_per_page > count($this->data))
@@ -959,7 +968,7 @@ class aw_table extends aw_template
 			$p_counter = 0;
 			foreach($this->data as $k => $v)
 			{
-				$enum[$k] = $v["id"];
+				$enum[$k] = isset($v["id"]) ? $v["id"] : null;
 				$counter++;
 				$p_counter++;
 				// if this is not on the active page, don't show the damn thing
@@ -973,7 +982,7 @@ class aw_table extends aw_template
 				}
 
 				$row_style = $counter % 2 == 0 ? $this->tr_style2 : $this->tr_style1;
-				if ($v["_active"])
+				if (!empty($v["_active"]))
 				{
 					$row_style = $this->tr_active;
 				};
@@ -1010,13 +1019,14 @@ class aw_table extends aw_template
 						{
 							$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
 						}
+						$width = "";
 						if(!empty($this->chooser_config["width"]))
 						{
 							$width = " width=\"".$this->chooser_config["width"]."\"";
 						}
 						if($chooser_value)
 						{
-							$tbl .= "<td align='center' ".$stl.$width."><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".($v[$this->chooser_config["name"]] ? "checked" : "")."></td>";
+							$tbl .= "<td align='center' ".$stl.$width."><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick} ".(!empty($v[$this->chooser_config["name"]]) ? "checked" : "")."></td>";
 						}
 						else
 						{
@@ -1105,12 +1115,13 @@ class aw_table extends aw_template
 					// moodustame celli
 					$rowspan = isset($this->actionrows) ? $this->actionrows : $rowspan;
 					//järgnev peaks suutma tulpi kokku liita ja järgmised vastavald ära blokeerima
-					if($this->rowspans[$v1["name"]]>1)
+					if(isset($this->rowspans[$v1["name"]]) && $this->rowspans[$v1["name"]]>1)
 					{
 						$this->rowspans[$v1["name"]]--;
 						continue;
 					}
-					elseif(isset($v[$v1["rowspan"]]))
+					else
+					if(isset($v1["rowspan"]) && isset($v[$v1["rowspan"]]))
 					{
 						$rowspan = $v[$v1["rowspan"]];
 						$this->rowspans[$v1["name"]] = $v[$v1["rowspan"]];
@@ -1120,15 +1131,15 @@ class aw_table extends aw_template
 						"classid" => $style,
 						"width" => isset($v1["width"]) ? $v1["width"] : "",
 						"rowspan" => ($rowspan > 1) ? $rowspan : 0,
-						"colspan" => $v[$v1["colspan"]] ? $v[$v1["colspan"]] : 1,						
+						"colspan" => isset($v1["colspan"]) && $v[$v1["colspan"]] ? $v[$v1["colspan"]] : 1,
 						"style" => ((!empty($v1["chgbgcolor"]) && !empty($v[$v1["chgbgcolor"]])) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
 						"align" => isset($v1["align"]) ? $v1["align"] : "",
 						"valign" => isset($v1["valign"]) ? $v1["valign"] : "",
 						"nowrap" => isset($v1["nowrap"]) ? 1 : "",
 						"bgcolor" => isset($v["bgcolor"]) ? $v["bgcolor"] : $bgcolor,
-						"domid" => isset($v[$v1["id"]]) ? $v[$v1["id"]] : "",
-						"onclick" => isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
-	//					"onclick" => isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
+						"domid" => isset($v1["id"]) && isset($v[$v1["id"]]) ? $v[$v1["id"]] : "",
+						"onclick" => isset($v1["onclick"]) && isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
+	//					"onclick" => isset($v1["onclick"]) && isset($v[$v1["onclick"]]) ? $v[$v1["onclick"]] : "",
 					));
 
 					if ($v1["name"] == "rec")
@@ -1692,7 +1703,7 @@ class aw_table extends aw_template
 			### set/clear new selected filters
 			$request = aw_global_get ("request");
 
-			if ($selected_filter = $request[$this->filter_name])
+			if (isset($request[$this->filter_name]) && $selected_filter = $request[$this->filter_name])
 			{
 				list ($filter_key, $filter_selection, $filter_txtvalue) = explode (",", $selected_filter);
 
@@ -1712,8 +1723,12 @@ class aw_table extends aw_template
 			aw_session_set ($this->filter_name . "Saved", aw_serialize ($this->selected_filters));
 			$this->filters_updated = true;
 		}
-		$this->filter_comparators[$args["name"]] = $args["filter_compare"];
+		$this->filter_comparators[$args["name"]] = isset($args["filter_compare"]) ? $args["filter_compare"] : null;
 		$this->rowdefs_key_index[$args["name"]] = count($this->rowdefs);
+		if (!isset($args["parent"]))
+		{
+			$args["parent"] = null;
+		}
 		$this->rowdefs[] = $args;
 		$this->rowdefs_ordered = isset($args["order"]);
 
@@ -2252,7 +2267,7 @@ class aw_table extends aw_template
 				"classid" => $this->header_normal,
 				"rowspan" => $this->max_sh_count
 			);
-			if(($tmp = $this->chooser_config["width"]))
+			if(isset($this->chooser_config["width"]) && ($tmp = $this->chooser_config["width"]))
 			{
 				$opentag["width"] = $tmp;
 			}
@@ -2296,7 +2311,7 @@ class aw_table extends aw_template
 			$sh_cnt = $this->sh_counts_by_parent[$v["name"]];
 			$tbl.=$this->opentag(array(
 				"name" => "td",
-				"title" => $v["tooltip"],
+				"title" => isset($v["tooltip"]) ? $v["tooltip"] : null,
 				"classid"=> $style,
 				"align" => isset($v["talign"]) ? $v["talign"] : "center",
 				"valign" => isset($v["tvalign"]) ? $v["tvalign"] : "",
@@ -2322,7 +2337,7 @@ class aw_table extends aw_template
 					$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
 				}
 				else
-				if ($_GET["sort_order"] && $_GET["sortby"] == $v["name"])
+				if (!empty($_GET["sort_order"]) && $_GET["sortby"] == $v["name"])
 				{
 					$sufix = $_GET["sort_order"] == "desc" ? $this->up_arr : $this->dn_arr;
 					$so = $_GET["sort_order"] == "desc" ? "asc" : "desc";
@@ -2346,7 +2361,7 @@ class aw_table extends aw_template
 			}
 			else
 			{
-				$tbl .= $v["caption"];
+				$tbl .= isset($v["caption"]) ? $v["caption"] : null;
 			};
 
 			// ### add filter if defined for current column
@@ -2560,10 +2575,10 @@ class vcl_table extends aw_table
 	{
 		// I need access to class information!
 		$pr = &$arr["property"];
-		if (!is_object($pr["vcl_inst"]))
+		if (!isset($pr["vcl_inst"]) || !is_object($pr["vcl_inst"]))
 		{
 			$this->set_layout("generic");
-			if (is_array($arr["columns"]) && sizeof($arr["columns"]) > 0)
+			if (isset($arr["columns"]) && is_array($arr["columns"]) && sizeof($arr["columns"]) > 0)
 			{
 				foreach($arr["columns"] as $ckey => $cval)
 				{

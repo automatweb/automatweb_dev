@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.38 2007/05/16 14:02:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.39 2007/06/05 09:41:23 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1133,7 +1133,7 @@ class crm_company_webview extends class_base
 			'lang_id' => array(),
 		);
 		
-		if(is_oid($arr["field"]))
+		if(!empty($arr["field"]) && is_oid($arr["field"]))
 		{
 			if(!is_array($limit_sector))
 			{
@@ -1144,11 +1144,11 @@ class crm_company_webview extends class_base
 				$limit_sector[] = $arr["field"];
 			}
 		}
-		if($arr["area"])
+		if(!empty($arr["area"]))
 		{
 			$filt["CL_CRM_COMPANY.RELTYPE_ADDRESS.name"] = "%".$arr["area"]."%";
 		}
-		if(is_array($arr["keyword"]) && sizeof($arr["keyword"]))
+		if(isset($arr["keyword"]) && is_array($arr["keyword"]) && sizeof($arr["keyword"]))
 		{
 			$keyword_array = array();
 			foreach($arr["keyword"] as $key => $val)
@@ -1186,7 +1186,7 @@ class crm_company_webview extends class_base
 		}
 
 
-		if (($ob && $ob->prop("only_active")) || $arr["only_active"] == 1)
+		if (($ob && $ob->prop("only_active")) || !empty($arr["only_active"]))
 		{
 			$filt["status"] = STAT_ACTIVE;
 		}

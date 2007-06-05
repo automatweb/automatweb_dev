@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.82 2007/05/07 08:07:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.83 2007/06/05 09:41:22 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -894,7 +894,7 @@ class aw_template extends core
 				if ($this->use_eval)
 				{
 					$xsrc = str_replace("\"","\\\"",$cur_src);
-					$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".\$vars[\$1].\"",$xsrc);
+					$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".(isset(\$vars['\$1']) ? \$vars['\$1'] : null).\"",$xsrc);
 				};
 
 				$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(
@@ -913,7 +913,7 @@ class aw_template extends core
 		if ($this->use_eval)
 		{
 			$xsrc = str_replace("\"","\\\"",$cur_src);
-			$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".\$vars[\$1].\"",$xsrc);
+			$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".(isset(\$vars['\$1']) ? \$vars['\$1'] : null).\"",$xsrc);
 		};
 
 		$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(

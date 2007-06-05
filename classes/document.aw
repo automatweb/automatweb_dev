@@ -1,9 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.368 2007/05/09 09:51:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.369 2007/06/05 09:41:22 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
 {
+	var $blocks;
+	var $title;
+	var $no_left_pane;
+	var $no_right_pane;
+
 	function document($period = 0)
 	{
 		$this->init("automatweb/documents");
@@ -534,17 +539,17 @@ class document extends aw_template
 
 		lc_site_load("document", &$this);
 
-		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
+		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && empty($is_printing))
 		{
 			// another wonderful way of showing a link
 			$link2 = aw_ini_get("baseurl").aw_url_change_var(array(
 				"class" => "document",
 				"action" => "print",
 				"print" => 1,
-				"tv_sel" => $_GET["tv_sel"],
+				"tv_sel" => isset($_GET["tv_sel"]) ? $_GET["tv_sel"] : "",
 				"section" => $docid
 			));
-			if ($this->cfg["print_cap"] != "")
+			if (!empty($this->cfg["print_cap"]))
 			{
 				$pc = localparse($this->cfg["print_cap"],array(
 					"link2" => $link2,
@@ -583,7 +588,7 @@ class document extends aw_template
 				$this->vars(array(
 					"docid" => $docid,
 					"printlink" => $link,
-					"tv_sel" => $GLOBALS["tv_sel"],
+					"tv_sel" => isset($GLOBALS["tv_sel"]) ? $GLOBALS["tv_sel"] : "",
 					"printlink2" => $link2,
 				));
 				#aw_global_set("no_menus",1);
@@ -1362,7 +1367,7 @@ class document extends aw_template
 			}
 		}
 
-		if ($_GET["path"] != "")
+		if (!empty($_GET["path"]))
 		{
 	                $new_path = array();
 			$path_ids = explode(",", $_GET["path"]);

@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.84 2007/05/16 14:02:41 kristo Exp $
+// $Id: cfgutils.aw,v 1.85 2007/06/05 09:41:25 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -142,6 +142,7 @@ class cfgutils extends aw_template
 			$file = $this->clist[$clid];
 		};
 		$system = isset($args["system"]) ? 1 : 0;
+		$layout = null;
 
 		// if system is set, then no captions/translations/etc will be loaded,
 		// since storage really doesn't care. so why should property loader?
@@ -169,7 +170,7 @@ class cfgutils extends aw_template
 		}
 		else
 		{
-			if ($args['source'])
+			if (!empty($args['source']))
 			{
 				$source = $args['source'];
 			}
@@ -284,11 +285,11 @@ class cfgutils extends aw_template
 
 		$properties = $propdef["property"];
 		$classinfo = $this->tableinfo = $relinfo = $groupinfo = array();
-		if (is_array($propdef['layout']))
+		if (isset($propdef["layout"]) && is_array($propdef['layout']))
 		{
 			foreach ($propdef['layout'] as $k => $d)
 			{
-				$propdef['layout'][$k]['caption'] = html_entity_decode($d['caption']);
+				$propdef['layout'][$k]['caption'] = html_entity_decode(isset($d['caption']) ? $d['caption'] : "");
 			}
 		
 		}
@@ -355,9 +356,9 @@ class cfgutils extends aw_template
 		}
 
 		// new
-		foreach($layout as $k => $dat)
+		foreach(safe_array($layout) as $k => $dat)
 		{
-			$layout[$k]["area_caption"] = html_entity_decode(str_replace("&nbsp;"," ", $dat["area_caption"]));
+			$layout[$k]["area_caption"] = html_entity_decode(str_replace("&nbsp;"," ", isset($dat["area_caption"]) ? $dat["area_caption"] : null));
 		}
 		// translate
 
@@ -368,6 +369,10 @@ class cfgutils extends aw_template
 				if (!isset($d['caption']))
 				{
 					$d['caption']['text'] = "";
+				}
+				if (!isset($d['name']))
+				{
+					$d['name']['text'] = "";
 				}
 				$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
 				$tmp = t2($t_str);
@@ -626,7 +631,7 @@ class cfgutils extends aw_template
 	function load_properties($args = array())
 	{
 		$clid = $args["clid"];
-		$file = $args["file"];
+		$file = isset($args["file"]) ? $args["file"] : null;
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
 		if (empty($file))
 		{
@@ -649,6 +654,7 @@ class cfgutils extends aw_template
 		$args["adm_ui_lc"] = $adm_ui_lc;
 		$key = md5(serialize($args));
 		$res = $this->cache->file_get_ts($key, max($ts, $tft));
+		$cache_d = null;
 		if ($res)
 		{
 			$cache_d = aw_unserialize($res);

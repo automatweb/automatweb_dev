@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.119 2007/05/16 11:11:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.120 2007/06/05 09:41:25 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -2981,7 +2981,7 @@ class cfgform extends class_base
 	function make_menu_item($this_o, $level, $parent_o, $site_show_i)
 	{
 		// no groups for new object form
-		if (!is_oid($_GET["id"]))
+		if (empty($_GET["id"]) || !is_oid($_GET["id"]))
 		{
 			return false;
 		}

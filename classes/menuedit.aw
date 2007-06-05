@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.386 2007/05/07 08:07:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.387 2007/06/05 09:41:22 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -360,7 +360,8 @@ class menuedit extends aw_template
 			if ($_obj->class_id() == CL_MENU && $_obj->prop("link") != "")
 			{
 				if (strpos($_obj->trans_get_val("link"), $_obj->id()) === false &&
-					!($realsect == aw_ini_get("frontpage") 	&& $_obj->trans_get_val("link") == "/")
+					!($realsect == aw_ini_get("frontpage") 	&& $_obj->trans_get_val("link") == "/") 
+					&& !$_GET["class"]
 				)
 				{
 					$ls = $_obj->trans_get_val("link");

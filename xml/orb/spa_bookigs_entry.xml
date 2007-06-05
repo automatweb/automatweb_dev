@@ -29,6 +29,15 @@
 			</function>
 		</action>
 
+		<action name="proforma">
+			<function name="proforma">
+				<arguments>
+					<required name="id" />
+					<required name="wb" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="print_booking">
 			<function name="print_booking">
 				<arguments>
@@ -87,29 +96,6 @@
 
 		<action name="save_cust_data_pop" all_args="1">
 			<function name="save_cust_data_pop">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_package_service" nologin="1" is_public="1" all_args="1">
-			<function name="add_package_service">
-				<arguments>
-					<optional name="firstname" type="string" />
-					<optional name="lastname" type="string" />
-					<optional name="gender" type="string" />
-					<optional name="birthday" type="int" />
-					<optional name="email" type="string" />
-					<optional name="start" type="int" />
-					<optional name="packet_id" type="int" />
-					<optional name="agency_id" type="int" />
-					<optional name="send_email" type="boolean" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_package_service_example" nologin="1" is_public="1" all_args="1">
-			<function name="add_package_service_example">
 				<arguments>
 				</arguments>
 			</function>

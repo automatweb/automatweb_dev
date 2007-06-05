@@ -3,4 +3,3 @@
 	<class name="login_box" folder="contentmgmt" extends="class_base">
 	</class>
 </orb>
-		

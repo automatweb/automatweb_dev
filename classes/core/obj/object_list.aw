@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.60 2007/05/07 08:07:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.61 2007/06/05 09:41:34 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -316,7 +316,7 @@ class object_list extends _int_obj_container_base
 				"msg" => t("object_list::sort_by(): prop argument must be present!")
 			));
 		}
-		$this->_int_sort_list($param["prop"], (($param["order"] == "asc" || !$param["order"]) ? "asc" : "desc"));
+		$this->_int_sort_list($param["prop"], ((empty($param["order"]) || $param["order"] == "asc") ? "asc" : "desc"));
 	}
 
 	function sort_by_cb($cb)

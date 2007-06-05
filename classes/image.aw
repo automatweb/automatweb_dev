@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.200 2007/05/30 06:10:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.201 2007/06/05 09:41:22 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -196,8 +196,13 @@ class image extends class_base
 					$row["url"] = str_replace(aw_ini_get("baseurl"), $sl->get_url_for_site($row["site_id"]), $row["url"]);
 				}
 				$row["meta"] = aw_unserialize($row["metadata"]);
+				if (!isset($row["meta"]["big_flash"]))
+				{
+					$row["meta"]["big_flash"] = null;
+				}
 				$row["can_comment"] = $row["flags"] & FL_IMAGE_CAN_COMMENT;
-				if ($row["meta"]["file2"] != "")
+				$row["big_url"] = null;
+				if (!empty($row["meta"]["file2"]))
 				{
 					$row["big_url"] = $this->get_url($row["meta"]["file2"]);
 					$_tmp = basename($row["meta"]["file2"]);
@@ -280,7 +285,10 @@ class image extends class_base
 		$force_comments = false;
 		extract($args);
 		$f = $alias;
-		
+		if (!isset($matches))
+		{
+			$matches = array(4=>null);
+		}
 		if (!$f["target"])
 		{
 			// now try and list images by the old way
@@ -298,12 +306,12 @@ class image extends class_base
 		// show commentlist and popup to if set in property or forced
 		$do_comments = (!empty($idata["can_comment"]) || $force_comments);
 
-		if (($GLOBALS["print"] == 1 || ($GLOBALS["class"] == "document" && $GLOBALS["action"] == "print"))  && $idata["meta"]["no_print"] == 1)
+		if ((!empty($GLOBALS["print"]) || (isset($GLOBALS["class"]) && isset($GLOBALS["action"]) && $GLOBALS["class"] == "document" && $GLOBALS["action"] == "print"))  && $idata["meta"]["no_print"] == 1)
 		{
 			return "";
 		}
 
-		if ($alias["aliaslink"] == 1)
+		if (!empty($alias["aliaslink"]))
 		{
 			return html::href(array(
 				"url" => $idata["url"],
@@ -332,11 +340,12 @@ class image extends class_base
 		
 			$alt = $idata["meta"]["alt"];
 
-			if ($idata["meta"]["file2"] != "")
+			$size = array(0 => null, 1 => null);
+			if (!empty($idata["meta"]["file2"]))
 			{
 				$size = @getimagesize($idata["meta"]["file2"]);
 			};
-			if ($this->can("view", $idata["meta"]["big_flash"]))
+			if (isset($idata["meta"]["big_flash"]) && $this->can("view", $idata["meta"]["big_flash"]))
 			{
 				$flo = obj($idata["meta"]["big_flash"]);
 				$size = array($flo->prop("width"), $flo->prop("height"));
@@ -381,7 +390,7 @@ class image extends class_base
 				"height" => $i_size[1],
 				"imgref" => $idata["url"],
 				"imgcaption" => $idata["comment"],
-				"align" => $align[$matches[4]],
+				"align" => isset($align[$matches[4]]) ? $align[$matches[4]] : null,
 				"alignstr" => $alstr[$matches[4]],
 				"plink" => $idata["link"],
 				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : ""),
@@ -395,7 +404,7 @@ class image extends class_base
 				"bi_show_link" => $bi_show_link,
 				"bi_link" => $bi_link,
 				"author" => $idata["meta"]["author"],
-				"docid" => $args["oid"],
+				"docid" => isset($args["oid"]) ? $args["oid"] : null,
 				"comments" => $num_comments,
 
 			);
@@ -467,7 +476,7 @@ class image extends class_base
 			}
 			else
 			{
-				if ($tpls["image_inplace"] && !$this->image_inplace_used)
+				if (!empty($tpls["image_inplace"]) && !$this->image_inplace_used)
 				{
 					$tpl = "image_inplace";
 					$inplace = $tpl;
@@ -1589,6 +1598,7 @@ class image extends class_base
 
 		if ($this->is_template("NEXT_LINK"))
 		{
+			$set_next = null;
 			$images = new object_list(array(
 				"class_id" => CL_IMAGE,
 				"parent" => $im["parent"],

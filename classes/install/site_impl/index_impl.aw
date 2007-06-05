@@ -43,10 +43,10 @@ if (!aw_global_get("no_menus"))
 	$m = get_instance("contentmgmt/site_cache");
 	$content = $m->show(array(
 		"vars" => $si->on_page(),
-		"text" => $content,
-		"docid" => $docid,
+		"text" => isset($content) ? $content : null,
+		"docid" => isset($docid) ? $docid : null,
 		"sub_callbacks" => $si->get_sub_callbacks(),
-		"type" => $type,
+		"type" => isset($type) ? $type : null,
 		"template" => $si->get_page_template()
 	));
 }

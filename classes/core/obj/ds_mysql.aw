@@ -344,7 +344,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 
 				$prop = $properties[$prop_name];
-				if ($prop["multiple"] == 1)
+				if (!empty($prop["multiple"]))
 				{
 					$ret[$prop_name][$row["target"]] = $row["target"];
 				}

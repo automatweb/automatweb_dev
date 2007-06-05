@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.1 2007/05/04 10:33:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.2 2007/06/05 09:41:23 kristo Exp $
 // budgeting_tax.aw - Eelarvestamise maks 
 /*
 
@@ -19,6 +19,9 @@
 	@property amount type=textbox size=5 field=aw_amt
 	@caption Summa
 	@comment Kui l&otilde;peb % m&auml;rgiga, siis protsentides
+
+	@property pri type=textbox size=5 field=aw_pri
+	@caption Prioriteet
 
 	@property when_type type=chooser field=aw_when_type
 	@caption Aja t&uuml;&uuml;p
@@ -91,6 +94,13 @@ class budgeting_tax extends class_base
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "varchar(255)"
+				));
+				return true;
+
+			case "aw_pri":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
 				));
 				return true;
 		}

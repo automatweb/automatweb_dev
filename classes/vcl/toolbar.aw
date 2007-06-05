@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.23 2007/05/07 11:49:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.24 2007/06/05 09:41:36 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -270,7 +270,7 @@ class toolbar extends aw_template
 		};
 		if (isset($args["confirm"]))
 		{
-			$args["onClick"] = "if(!confirm('$args[confirm]')) { return false; };".$args["onClick"];
+			$args["onClick"] = "if(!confirm('$args[confirm]')) { return false; };".(isset($args["onClick"]) ? $args["onClick"] : "");
 		};
 		if (isset($args["href_id"]))
 		{
@@ -372,9 +372,9 @@ class toolbar extends aw_template
 					{
 						$val["name"] .= $args["id"];
 					};
-					if (!$args["no_target"])
+					if (empty($args["no_target"]))
 					{
-						$val["target"] = isset($args["target"]) ? $args["target"] : $val["target"];
+						$val["target"] = isset($args["target"]) ? $args["target"] : (isset($val["target"]) ? $val["target"] : null);
 					}
 					if (empty($val["onClick"]))
 					{
@@ -390,7 +390,7 @@ class toolbar extends aw_template
 					$disabled = !empty($val["disabled"]) ? "_disabled" : "";
 					$val["img_url"] = substr($val["img"], 0, 4) == "http" ? $val["img"] : $this->imgbase."/".$val["img"];
 
-					if ($val["load_on_demand_url"] != "")
+					if (!empty($val["load_on_demand_url"]))
 					{
 						static $tb_lod_num;
 						$tb_lod_num++;
@@ -401,11 +401,11 @@ class toolbar extends aw_template
 					$this->vars($val);
 					$tpl = $val["type"] . $disabled;
 
-					if ($val["ismenu"])
+					if (!empty($val["ismenu"]))
 					{
 						$tpl = "menu_button";
 					}
-					if ($val["load_on_demand_url"] != "")
+					if (!empty($val["load_on_demand_url"]))
 					{
 						$tpl = "menu_button_lod";
 					}
@@ -478,7 +478,7 @@ class toolbar extends aw_template
 			// for backwards compatibility
 		$res["toolbar"] = &$vcl_inst;
 		// if quicksearch is set, add that
-		if ($arr["property"]["quicksearch"])
+		if (!empty($arr["property"]["quicksearch"]))
 		{
 			$clss = aw_ini_get("classes");
 			$clp = array();

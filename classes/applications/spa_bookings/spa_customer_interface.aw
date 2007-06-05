@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.18 2007/05/31 13:25:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.19 2007/06/05 09:41:24 kristo Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -146,6 +146,7 @@ class spa_customer_interface extends class_base
 			if (!$confirmed || !$has_prods)
 			{
 				$booking_str .= " ".html::href(array(
+				
 					"url" => $this->mk_my_orb("add_prod_to_bron", array(
 						"bron" => $o->id(), 
 						"id" => $id,
@@ -192,7 +193,6 @@ class spa_customer_interface extends class_base
 				"pay_url" => $this->mk_my_orb("pay", array("id" => $o->id(), "r" => get_ru() , "bank_payment" => $bank_payment,"section" => aw_global_get("section"))),
 				"print_url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => 231)),
 			));
-
 			if (!$confirmed || !$has_prods)
 			{
 				$this->vars(array(
@@ -336,7 +336,7 @@ class spa_customer_interface extends class_base
 						{
 							$prod_str[] = html::popup(array(
 								"url" => $ei->mk_my_orb("select_room_booking", array("booking" => $o->id(), "prod" => $prod_id, "prod_num" => "".$i, "section" => "3169", "not_verified" => 1, "rooms" => $rooms)),
-								"caption" => $prod->name(),
+								"caption" => $prod->trans_get_val("name"),
 								"height" => 500,
 								"width" => 750,
 								"scrollbars" => 1,
@@ -346,7 +346,7 @@ class spa_customer_interface extends class_base
 						}
 						else
 						{
-							$prod_str[] = $selected_prod == $prod->id() ? "<u>".$prod->name()."</u>" : $prod->name();
+							$prod_str[] = $selected_prod == $prod->id() ? "<u>".$prod->trans_get_val("name")."</u>" : $prod->trans_get_val("name");
 						}
 					}
 					if ($date != "")
@@ -516,6 +516,7 @@ class spa_customer_interface extends class_base
 		@attrib name=add_pkt
 		@param id required type=int acl=view
 		@param r required 
+		@param test optional
 	**/
 	function add_pkt($arr)
 	{
@@ -546,6 +547,7 @@ class spa_customer_interface extends class_base
 
 		$pts = "";
 		$this->read_template("add_pkt.tpl");
+		lc_site_load("spa_customer_interface", &$this);
 		uksort($p, array(&$this, "sort_menus"));
 		foreach($p as $parent => $prods)
 		{
@@ -561,7 +563,8 @@ class spa_customer_interface extends class_base
 				$pop_url = $this->mk_my_orb("prepare_select_new_pkt_time", array(
 					"prod" => $pr->id(),
 					"id" => $arr["id"],
-					"r" => $arr["r"]
+					"r" => $arr["r"],
+					"test" => $arr["test"],
 				));
 				$this->vars(array(
 					"prod_id" => $pr->id(),
@@ -652,6 +655,7 @@ class spa_customer_interface extends class_base
 		{
 			$po = obj($parent);
 			$p_list = array();
+			$p_str = "";
 			foreach($prods as $pr)
 			{
 				// this makes sure no prods that can't be booked are displayed
@@ -692,7 +696,7 @@ class spa_customer_interface extends class_base
 			$this->vars(array(
 				"prods" => join(", ", $p_list),
 				"PRODUCT" => $p_str,
-				"parent" => $po->name()
+				"parent" => $po->trans_get_val("name")
 			));
 			$pts .= $this->parse("PARENT");
 		}

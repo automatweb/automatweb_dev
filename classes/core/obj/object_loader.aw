@@ -431,8 +431,8 @@ class _int_object_loader extends core
 	{
 		if (!isset($this->__aw_acl_cache[$oid]) || !($max_acl = $this->__aw_acl_cache[$oid]))
 		{
-			$fn = "acl-".$oid."-uid-".$_SESSION["uid"];
-			$fn .= "-nliug-".$_SESSION["nliug"];
+			$fn = "acl-".$oid."-uid-".(isset($_SESSION["uid"]) ? $_SESSION["uid"] : "");
+			$fn .= "-nliug-".(isset($_SESSION["nliug"]) ? $_SESSION["nliug"] : "");
 			if (($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) == false)
 			{
 				$max_acl = $this->_calc_max_acl($oid);
@@ -612,7 +612,7 @@ class _int_object_loader extends core
 	{
 		// it is "RELTYPE_FOO"
 		// resolve it to numeric
-		if (!$GLOBALS["relinfo"][$class_id][$type]["value"])
+		if (empty($GLOBALS["relinfo"][$class_id][$type]["value"]))
 		{
 			return -1; // won't match anything
 		}

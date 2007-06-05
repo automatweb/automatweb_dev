@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.166 2007/03/30 09:15:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.167 2007/06/05 09:41:25 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -9,9 +9,14 @@
 
 class htmlclient extends aw_template
 {
+	var $embedded;
+	var $tabpanel;
+	var $error;
+	var $view_mode;
+
 	function htmlclient($arr = array())
 	{
-		if($arr["no_form"])
+		if(!empty($arr["no_form"]))
 		{
 			$this->no_form = true;
 		}
@@ -20,9 +25,9 @@ class htmlclient extends aw_template
 		$this->res = "";
 		$this->layout_mode = "default";
 		$this->form_target = "";
-		$this->tpl_vars = $arr["tpl_vars"] ? $arr["tpl_vars"] : array();
-		$this->styles = $arr["styles"] ? $arr["styles"] : array();
-		$this->tabs = ($arr["tabs"] === false) ? false : true;
+		$this->tpl_vars = !empty($arr["tpl_vars"]) ? $arr["tpl_vars"] : array();
+		$this->styles = !empty($arr["styles"]) ? $arr["styles"] : array();
+		$this->tabs = (isset($arr["tabs"]) && $arr["tabs"] === false) ? false : true;
 		if (!empty($arr["embedded"]))
 		{
 			$this->embedded = true;
@@ -139,7 +144,7 @@ class htmlclient extends aw_template
 		}
 		$script = aw_global_get("SCRIPT_NAME");
 		// siia vaja kirjutada see embedded case
-		if (!$args["handler"])
+		if (empty($args["handler"]))
 		{
 			$handler = empty($script) ? "index" : "orb";
 		}
@@ -198,7 +203,7 @@ class htmlclient extends aw_template
 		{
 			$this->orb_vars[$args["name"]] = $args["value"];
 		}
-		if ($args["layout"])
+		if (!empty($args["layout"]))
 		{
 			$lf = $this->layoutinfo[$args["layout"]];
 		}
@@ -207,7 +212,7 @@ class htmlclient extends aw_template
 			$lf = array();
 		};
 
-		if ($args["parent"] && !empty($this->layoutinfo[$args["parent"]]))
+		if (!empty($args["parent"]) && !empty($this->layoutinfo[$args["parent"]]))
 		{
 			//$this->layoutinfo[$args["parent"]]["items"][] = $args["html"];
 			$this->proplist[$args["name"]] = $args;
@@ -283,7 +288,7 @@ class htmlclient extends aw_template
 
 		if (empty($args["value"]) && is_callable(array($args["vcl_inst"], "get_html")))
 		{
-			$args["value"] = $args["vcl_inst"]->get_html($this->layoutinfo[$args["parent"]]["closeable"] == 1);
+			$args["value"] = $args["vcl_inst"]->get_html(!empty($this->layoutinfo[$args["parent"]]["closeable"]));
 		}
 		if($args["type"] == "reset" || $args["type"] == "button")
 		{
@@ -498,18 +503,6 @@ class htmlclient extends aw_template
 	// !Finished the output
 	function finish_output($arr = array())
 	{
-		// returns the property names for template debugging
-		if(aw_ini_get("debug_mode") != 0 && $GLOBALS["AHTI"] == 1)
-		{
-			if(is_array($this->proplist))
-			{
-				foreach($this->proplist as $key => $val)
-				{
-					echo "$key<br />";
-				}
-			}
-		}
-
 		extract($arr);
 		$sbt = "";
 
@@ -719,7 +712,7 @@ class htmlclient extends aw_template
 			//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
 		));
 
-		if ($no_insert_reforb)
+		if (!empty($no_insert_reforb))
 		{
 			$ds = array();
 			foreach($data as $k => $v)
@@ -819,7 +812,7 @@ class htmlclient extends aw_template
 				"help" => $this->vars["help"],
 				"help_url" => $this->config["help_url"],
 				"translate_url" => $this->config["translate_url"],
-				"translate_text" => $this->config["translate_text"],
+				"translate_text" => isset($this->config["translate_text"]) ? $this->config["translate_text"] : null,
 				"more_help_text" => $this->config["more_help_text"],
 				"close_help_text" => $this->config["close_help_text"],
 				"open_help_text" => $this->config["open_help_text"],
@@ -856,7 +849,7 @@ class htmlclient extends aw_template
 					"HAS_SEARCH" => $tp->parse("HAS_SEARCH")
 				));
 			}
-			if (!$_GET["in_popup"])
+			if (empty($_GET["in_popup"]))
 			{
 				$tp->vars(array(
 					"NOT_POPUP" => $tp->parse("NOT_POPUP")
@@ -1190,7 +1183,7 @@ class htmlclient extends aw_template
 	{
 		$layout_items = array();
 		$sub_layouts = array();
-		foreach(safe_array($this->layout_by_parent[$layout_name]) as $lkey => $lval)
+		foreach(safe_array(isset($this->layout_by_parent[$layout_name]) ? $this->layout_by_parent[$layout_name] : null) as $lkey => $lval)
 		{
 			$html = $this->parse_layouts($lkey);
 
@@ -1218,7 +1211,7 @@ class htmlclient extends aw_template
 					{
 						$gx = $this->lp_chain[$gx];
 					}
-					if ($sub_layouts[$gx])
+					if (!empty($sub_layouts[$gx]))
 					{
 						$this->proplist[$pkey]["value"] = $sub_layouts[$gx];
 						$this->proplist[$pkey]["type"] = "text";
@@ -1238,7 +1231,8 @@ class htmlclient extends aw_template
 						unset($sub_layouts[$gx]);
 					}
 					// this deals with lp_chain thingie .. I need to fix that too
-					elseif ($sub_layouts[$pval["parent"]])
+					else
+					if (!empty($sub_layouts[$pval["parent"]]))
 					{
 						$gx = $pval["parent"];
 						$this->proplist[$pkey]["value"] = $sub_layouts[$gx];
@@ -1259,7 +1253,7 @@ class htmlclient extends aw_template
 		else
 		{
 			// this deals with  deepers levels
-			foreach(safe_array($this->properties_by_parent[$layout_name]) as $pkey => $pval)
+			foreach(safe_array(isset($this->properties_by_parent[$layout_name]) ? $this->properties_by_parent[$layout_name] : null) as $pkey => $pval)
 			{
 				$layout_items[] = $this->put_griditem($this->proplist[$pkey]);
 				$this->proplist[$pkey]["__ignore"] = 1;
@@ -1286,7 +1280,7 @@ class htmlclient extends aw_template
 			};
 
 			$ghc = $gce = "";
-			if ($ldata["closeable"] == 1)
+			if (!empty($ldata["closeable"]))
 			{
 				$u = get_instance(CL_USER);
 				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
@@ -1327,7 +1321,7 @@ class htmlclient extends aw_template
 				$this->vars(array(
 					"item" => $layout_item,
 				));
-				$content .= $this->parse($ldata["closeable"] ? "GRID_VBOX_ITEM" : "GRID_VBOX_SUBITEM");
+				$content .= $this->parse(!empty($ldata["closeable"]) ? "GRID_VBOX_ITEM" : "GRID_VBOX_SUBITEM");
 			};
 
 			$this->vars(array(
@@ -1335,7 +1329,7 @@ class htmlclient extends aw_template
 			));
 
 			$ghc = $gce = "";
-			if ($ldata["closeable"] == 1)
+			if (!empty($ldata["closeable"]))
 			{
 				$u = get_instance(CL_USER);
 				$state = $u->get_layer_state(array("u_class" => $_GET["class"], "u_group" => $_GET["group"], "u_layout" => $layout_name));
@@ -1354,8 +1348,8 @@ class htmlclient extends aw_template
 					), "user"),
 					"display" => $state ? "block" : "none",
 					"closer_state" => $state ? "up" : "down",
-					"VGRID_HAS_PADDING" => $ldata["no_padding"] ? "" : $this->parse("VGRID_HAS_PADDING"),
-					"VGRID_NO_PADDING" => $ldata["no_padding"] ? $this->parse("VGRID_NO_PADDING") : "",
+					"VGRID_HAS_PADDING" => !empty($ldata["no_padding"]) ? "" : $this->parse("VGRID_HAS_PADDING"),
+					"VGRID_NO_PADDING" => !empty($ldata["no_padding"]) ? $this->parse("VGRID_NO_PADDING") : "",
 				));
 				$ghc = $this->parse("VGRID_HAS_CLOSER");
 				$gce = $this->parse("VGRID_CLOSER_END");
@@ -1377,7 +1371,7 @@ class htmlclient extends aw_template
 		$captionside = "left";
 		// support TOP and LEFT for now only
 		$sufix = "";
-		if ($arr["captionside"] == "top")
+		if (isset($arr["captionside"]) && $arr["captionside"] == "top")
 		{
 			$captionside = $arr["captionside"];
 		};
@@ -1387,11 +1381,11 @@ class htmlclient extends aw_template
 
 		// reset all captions
 		$this->vars(array(
-			"caption" => $arr["caption"],
+			"caption" => isset($arr["caption"]) ? $arr["caption"] : null,
 			"CAPTION_LEFT" => "",
 			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
-			"err_msg" => $arr["error"],
+			"err_msg" => isset($arr["error"]) ? $arr["error"] : null,
 			"GRID_ERR_MSG" => ""
 		));
 		if (!empty($arr["error"]))

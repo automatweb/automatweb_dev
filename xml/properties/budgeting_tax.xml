@@ -28,6 +28,15 @@
             <comment>Kui l&amp;amp;otilde;peb % m&amp;amp;auml;rgiga, siis protsentides</comment>
       </property>
       <property>
+            <name>pri</name>
+            <table>aw_budgeting_tax</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_pri</field>
+            <caption>Prioriteet</caption>
+      </property>
+      <property>
             <name>when_type</name>
             <table>aw_budgeting_tax</table>
             <group>general</group>

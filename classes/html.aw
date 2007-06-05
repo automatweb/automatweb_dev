@@ -454,7 +454,7 @@ class html extends aw_template
 	**/
 	function text($args = array())
 	{
-		if ($args["textsize"])
+		if (!empty($args["textsize"]))
 		{
 			$element = '<span style="font-size: ' . $args["textsize"] . ';">' . $args["value"] . '</span>';
 		}
@@ -1218,7 +1218,7 @@ class html extends aw_template
 	**/
 	function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
 	{
-		if (!$this)
+		if (empty($this))
 		{
 			$inst = get_instance(CL_FILE);
 		}

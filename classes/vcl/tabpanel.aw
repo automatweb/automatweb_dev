@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.20 2007/01/17 14:45:26 kristo Exp $
+// $Id: tabpanel.aw,v 1.21 2007/06/05 09:41:36 kristo Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -265,7 +265,7 @@ class tabpanel extends aw_template
 					$prefix . "tabs_L" . $lnr => $this->parse($prefix . "tabs_L" . $lnr),
 				));
 
-				if ($args["panels_only"])
+				if (!empty($args["panels_only"]))
 				{
 					$r_prefix = str_replace("_","",$prefix);
 					$panels[$r_prefix][] = $this->parse($prefix . "tabs_L" . $lnr);
@@ -273,7 +273,7 @@ class tabpanel extends aw_template
 			};
 		};
 
-		if ($args["panels_only"])
+		if (!empty($args["panels_only"]))
 		{
 			return $panels;
 		};

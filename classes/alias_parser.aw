@@ -65,7 +65,7 @@ class alias_parser extends core
 		$tmp = aw_ini_get("classes");
 		foreach($tmp as $clid => $cldat)
 		{
-			if (isset($cldat["alias"]) || isset($cldat["old_alias"]))
+			if (isset($cldat["alias"]))
 			{
 				$li = explode(",", $cldat["alias"]);
 				foreach($li as $lv)
@@ -80,7 +80,10 @@ class alias_parser extends core
 					}
 					$by_alias[$lv]["class_id"] = $clid;
 				}
-
+			}
+		
+			if (isset($cldat["old_alias"]))
+			{
 				$li = explode(",", $cldat["old_alias"]);
 				foreach($li as $lv)
 				{
@@ -90,7 +93,7 @@ class alias_parser extends core
 					}
 					else
 					{
-						$by_alias[$lv]["file"] = $cldat["file"];
+						$by_alias[$lv]["file"] = !empty($cldat["file"]) ? $cldat["file"] : null;
 					}
 					$by_alias[$lv]["class_id"] = $clid;
 				}
@@ -102,6 +105,7 @@ class alias_parser extends core
 		// try to find aliases until we no longer find any. 
 		// why is this? well, to enable the user to add aliases bloody anywhere. like in files that are to be shown right away
 		enter_function("aliasmgr::parse_oo_aliases::loop");
+		$_cnt = 0;
 		while (1)
 		{
 
@@ -143,7 +147,7 @@ class alias_parser extends core
 				{
 					$emb_obj_name = "emb" . $clid;
 					$cldat = $classlist[$clid];
-					$class_name = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
+					$class_name = !empty($cldat["alias_class"]) ? $cldat["alias_class"] : $cldat["file"];
 
 					if ($class_name)
 					{
@@ -238,7 +242,7 @@ class alias_parser extends core
 		foreach($obj->connections_from() as $c)
 		{
 			$tp = $c->prop();
-			$tp["aliaslink"] = $als[$c->prop("to")];
+			$tp["aliaslink"] = isset($als[$c->prop("to")]) ? $als[$c->prop("to")] : null;
 			$tp["source"] = $tp["from"];
 			$to = $c->to();
 

@@ -185,5 +185,22 @@ class crm_company_objects_impl extends class_base
 		$this->do_object_table_header($table);
 		$this->define_object_table_data($arr);
 	}
+
+	function _get_stypes_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_CRM_SERVICE_TYPE), $arr["obj_inst"]->id(), 66);
+		$tb->add_delete_button();
+	}
+
+	function _get_stypes_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SERVICE_TYPE"))),
+			array("name", "hr_price"),
+			CL_CRM_SERVICE_TYPE
+		);
+	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.1 2007/05/04 10:33:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.2 2007/06/05 09:41:23 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -77,10 +77,16 @@
 
 			@property transfer_table type=table parent=transfer_table store=no no_caption=1
 
+@default group=budgets
+
+	@property budgets_tb type=toolbar store=no no_caption=1
+	@property budgets_tbl type=table store=no no_caption=1
+
 @groupinfo accounts caption="Kontod" submit=no save=no
 @groupinfo taxes caption="Maksud" submit=no save=no
 @groupinfo funds caption="Fondid" submit=no save=no
 @groupinfo transfers caption="&Uuml;lekanded" submit=no save=no submit_method=get
+@groupinfo budgets caption="Eelarved" submit=no save=no 
 
 @reltype ACCT_TREE_PARENT value=1 clid=CL_MENU
 @caption Kontode juurkaust
@@ -89,7 +95,11 @@
 @caption Maksude juurkaust
 
 @reltype FUND_TREE_PARENT value=3 clid=CL_MENU
-@caption Dondide juurkaust
+@caption Fondide juurkaust
+
+@reltype BUDGET value=4 clid=CL_BUDGET
+@caption Eelarve
+
 */
 
 class budgeting_workspace extends class_base
@@ -234,7 +244,7 @@ class budgeting_workspace extends class_base
 				"lang_id" => array(),
 				"site_id" => array()
 			)),
-			array("name", "comment"),
+			array("name", "comment", "pri"),
 			CL_BUDGETING_TAX
 		);
 	}
@@ -535,6 +545,23 @@ class budgeting_workspace extends class_base
 			}
 		}
 		die($tv->finalize_tree());
+	}
+
+	function _get_budgets_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_BUDGET), $arr["obj_inst"]->id(), 4 /* RELTYPE_BUDGET */);
+		$tb->add_delete_button();
+	}
+
+	function _get_budgets_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BUDGET"))),
+			array("name"),
+			CL_BUDGET
+		);
 	}
 }
 ?>

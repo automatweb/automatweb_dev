@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.138 2007/05/16 14:02:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.139 2007/06/05 09:41:22 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -210,6 +210,10 @@ class users_user extends aw_template
 		// wow. is this graceful degradation or what!
 		$this->url = aw_global_get("request_uri_before_auth");
 
+		if ($params["return"] != "")
+		{
+			$this->url = $params["return"];
+		}
 
 		if (!$this->url)
 		{

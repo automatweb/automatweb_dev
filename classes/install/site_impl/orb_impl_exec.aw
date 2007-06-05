@@ -70,7 +70,7 @@ exit_function("orb_impl_exec::process_request");
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus
-if (substr($content,0,5) == "http:" || $vars["reforb"] == 1 || substr($content,0,6) == "https:")
+if (substr($content,0,5) == "http:" || !empty($vars["reforb"]) || substr($content,0,6) == "https:")
 {
 	if (headers_sent())
         {

@@ -2,6 +2,9 @@
 
 class doc_display extends aw_template
 {
+	var $no_left_pane;
+	var $no_right_pane;
+
 	function doc_display()
 	{
 		$this->init();
@@ -20,6 +23,7 @@ class doc_display extends aw_template
 	**/
 	function gen_preview($arr)
 	{
+		$arr["leadonly"] = isset($arr["leadonly"]) ? $arr["leadonly"] : null;
 		$doc = obj($arr["docid"]);
 		if (aw_ini_get("config.object_versioning") == 1 && $_GET["docversion"] != "")
 		{
@@ -153,7 +157,7 @@ class doc_display extends aw_template
 		}
 
 		$nll = "";
-		if ($arr["not_last_in_list"])
+		if (!empty($arr["not_last_in_list"]))
 		{
 			$nll = $this->parse("NOT_LAST_IN_LIST");
 		}

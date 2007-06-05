@@ -1043,6 +1043,13 @@
             <field>aw_bank_account</field>
       </property>
       <property>
+            <name>balance</name>
+            <table>aw_account_balances</table>
+            <group>cedit</group>
+            <type>hidden</type>
+            <field>aw_balance</field>
+      </property>
+      <property>
             <name>personal_offers_toolbar</name>
             <table>objects</table>
             <group>personal_offers</group>
@@ -2947,6 +2954,24 @@
             <field>polls_tbl</field>
       </property>
       <property>
+            <name>stypes_tb</name>
+            <table>objects</table>
+            <group>service_types</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stypes_tb</field>
+      </property>
+      <property>
+            <name>stypes_tbl</name>
+            <table>objects</table>
+            <group>service_types</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stypes_tbl</field>
+      </property>
+      <property>
             <name>my_view</name>
             <table>objects</table>
             <group>my_view</group>
@@ -3274,6 +3299,11 @@
                   <submit>no</submit>
                   <parent>general</parent>
             </documents_polls>
+            <service_types>
+                  <caption>Teenuse liigid</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </service_types>
             <bills>
                   <caption>Arved</caption>
                   <submit>no</submit>
@@ -3362,6 +3392,11 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </kliendibaas_firma>
+            <aw_account_balances>
+                  <master_index>oid</master_index>
+                  <master_table>objects</master_table>
+                  <index>aw_oid</index>
+            </aw_account_balances>
       </tableinfo>
       <reltypes>
             <ETTEVOTLUSVORM>
@@ -3687,6 +3722,11 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>Aadressid</caption>
             </CORRESPOND_ADDRESS>
+            <SERVICE_TYPE>
+                  <value>66</value>
+                  <clid>CL_CRM_SERVICE_TYPE</clid>
+                  <caption>Teenuse liik</caption>
+            </SERVICE_TYPE>
       </reltypes>
       <layout>
             <co_top>

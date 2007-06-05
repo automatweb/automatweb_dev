@@ -1013,9 +1013,11 @@ return; // TEMP
 	// !creates a list of menus above $parent and appends $text and assigns it to the correct variable
 	function mk_path($oid,$text = "",$period = 0)
 	{
+		$path = "";
 		$nt = true;
 		// check if there is a default text
 		$gl = aw_global_get("gidlist_oid");
+		$can_adm_max = -100000000;
 		foreach($gl as $g_oid)
 		{
 			$o = obj($g_oid);

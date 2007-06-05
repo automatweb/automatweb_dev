@@ -18,7 +18,9 @@ class budgeting_model extends core
 		{
 			echo "from account ".$transfer->prop("to_acct.name")." to ".$tf_data["to_acct"]." amt = ".$tf_data["amount"]." <br>\n";
 			flush();
-			$to = $this->create_money_transfer(obj($transfer->prop("to_acct")), obj($tf_data["to_acct"]), $tf_data["amount"]);
+			$to = $this->create_money_transfer(obj($transfer->prop("to_acct")), obj($tf_data["to_acct"]), $tf_data["amount"], array(
+				"in_project" => $transfer->prop("in_project")
+			));
 			$this->apply_taxes_on_money_transfer($to);
 		}
 	}
@@ -36,8 +38,8 @@ class budgeting_model extends core
 		$this->start_transaction();
 		$this->set_account_balance($to_acct, $to_balance+$amt);
 		$this->set_account_balance($from_acct, $from_balance-$amt);
-echo "set account balance $to_acct => ".($to_balance+$amt)." <br>";
-echo "set account balance $from_acct => ".($from_balance-$amt)." <br>";
+echo "set account balance ".$to_acct->name()." (".$to_acct->id().") => ".($to_balance+$amt)." <br>";
+echo "set account balance ".$from_acct->name()." (".$from_acct->id().") => ".($from_balance-$amt)." <br>";
 		if (!$this->end_transaction())
 		{
 			error::raise(array(
@@ -56,6 +58,7 @@ echo "set account balance $from_acct => ".($from_balance-$amt)." <br>";
 		$to->set_prop("to_acct", $to_acct->id());
 		$to->set_prop("amount", $amt);
 		$to->set_prop("when", time());
+		$to->set_prop("in_project", $data["in_project"]);
 		$to->save();
 echo "created transaction ".$to->id()." <br>";
 		return $to;
@@ -117,62 +120,51 @@ echo "created transaction ".$to->id()." <br>";
 				$from_place = array("area_".$acct_id);
 				if ($this->can("view", $transfer->prop("in_project")))
 				{
-					$po = obj($transfer->prop("in_project"));
-					$impl = $po->get_first_obj_by_reltype("RELTYPE_ORDERER");
-					if ($impl)
+					$pt = $this->get_transfer_path_from_proj(obj($transfer->prop("in_project")));
+					// now, go through the transfer path until we hit this category and then return the next in list
+					foreach($pt as $idx => $pt_item)
 					{
-						// now get category for customer
-						$conns = $impl->connections_to(array(
-							"from.class_id" => CL_CRM_CATEGORY,
-							"type" => "RELTYPE_CUSTOMER"
-						));
-						if (count($conns))
+						if ($pt_item->id() == $acct_o->id())
 						{
-							$c = reset($conns);
-							$cat = $c->from();
-							$cats = array();
-							while($cat->class_id() != CL_CRM_COMPANY && count($conns))
+							$next_cat = $pt[$idx-1];
+							if ($next_cat->class_id() == CL_CRM_CATEGORY)
 							{
-								$cats[] = $cat->id();
-								$conns = $cat->connections_to(array(
-									"from.class_id" => CL_CRM_CATEGORY,
-									"type" => "RELTYPE_CATEGORY"
-								));
-								$c = reset($conns);
-								if ($c)
-								{
-									$cat = $c->from();
-								}
+								$from_place[] = "area_".$next_cat->id();
 							}
-
-							if (!$cats[0])
+							else
 							{
-								$cats[0] = $cat->id();
+								$from_place[] = "cust_".$next_cat->id();
 							}
-							if ($cats[0])
-							{
-								$from_place[] = "area_".$cats[0];
-								$rv[] = array(
-									"to_acct" => $cats[0],
-									"amount" => $transfer->prop("amount")
-								);
-							}
+							$rv[] = array(
+								"to_acct" => $next_cat->id(),
+								"amount" => $transfer->prop("amount")
+							);
 						}
 					}
 				}
 				break;
 
 			case CL_CRM_COMPANY:
-				$from_place = array("cust_".$acct_id, "projects_".$acct_id);
-				if ($this->can("view", $transfer->prop("in_project")))
+				$cur = get_current_company();
+				if ($cur->id() == $acct_id)
 				{
-					$po = obj($transfer->prop("in_project"));
-					$impl = $po->get_first_obj_by_reltype("RELTYPE_ORDERER");
-					if ($impl)
+					$pt = $this->get_transfer_path_from_proj(obj($transfer->prop("in_project")));
+					$o = $pt[count($pt)-2];
+					$from_place[] = "area_".$o->id();
+					$rv[] = array(
+						"to_acct" => $o->id(),
+						"amount" => $transfer->prop("amount")
+					);
+				}
+				else
+				{
+					$from_place = array("cust_".$acct_id, "projects_".$acct_id);
+					if ($this->can("view", $transfer->prop("in_project")))
 					{
-						$from_place[] = "cust_".$impl->id();
+						$po = obj($transfer->prop("in_project"));
+						$from_place[] = "proj_".$po->id();
 						$rv[] = array(
-							"to_acct" => $impl->id(),
+							"to_acct" => $po->id(),
 							"amount" => $transfer->prop("amount")
 						);
 					}
@@ -181,26 +173,43 @@ echo "created transaction ".$to->id()." <br>";
 
 			case CL_PROJECT:
 				$from_place = array("proj_".$acct_id);
+				// distribute evenly over project tasks. 
+				$ol = new object_list(array(
+					"class_id" => array(CL_TASK),
+					"lang_id" => array(),
+					"site_id" => array(),
+					"CL_TASK.RELTYPE_PROJECT" => $proj_id
+				));
+
+				if ($ol->count())
+				{
+					$tk = $ol->begin();
+					$from_place[] = "task_".$tk->id();
+					$rv[] = array(
+						"to_acct" => $tk->id(),
+						"amount" => $transfer->prop("amount")
+					);
+				}
 				break;
 
 			case CL_TASK:
-				$from_place = array("task_".$acct_id);
+				//$from_place = array("task_".$acct_id);
 				break;
 
 			case CL_CRM_PERSON:
-				$from_place = array("person_".$acct_id);
+				//$from_place = array("person_".$acct_id);
 				break;
 
 			case CL_BUDGETING_FUND:
-				$from_place = array("fund_".$acct_id);
+		//		$from_place = array("fund_".$acct_id);
 				break;
 
 			case CL_SHOP_PRODUCT:
-				$from_place = array("prod_".$acct_id);
+//				$from_place = array("prod_".$acct_id);
 				break;
 
 			case CL_BUDGETING_ACCOUNT:
-				$from_place = array("acct_".$acct_id);
+				//$from_place = array("acct_".$acct_id);
 				break;
 
 		}
@@ -222,7 +231,6 @@ echo "created transaction ".$to->id()." <br>";
 				);
 			}
 		}
-
 		return $rv;
 	}
 
@@ -233,6 +241,44 @@ echo "created transaction ".$to->id()." <br>";
 			return $this->get_account_balance($from_acct_o->id()) * ((double)$tax->prop("amount") / 100.0); 
 		}
 		return $tax->prop("amount");
+	}
+
+	function get_transfer_path_from_proj($p)
+	{
+		$ret = array();
+		$ret[] = $p;
+		$impl = $p->get_first_obj_by_reltype("RELTYPE_ORDERER");
+		if (!$impl)
+		{
+			return $ret;
+		}
+		$ret[] = $impl;
+
+		// now get category for customer
+		$conns = $impl->connections_to(array(
+			"from.class_id" => CL_CRM_CATEGORY,
+			"type" => "RELTYPE_CUSTOMER"
+		));
+		if (count($conns))
+		{
+			$c = reset($conns);
+			$cat = $c->from();
+			while($cat->class_id() != CL_CRM_COMPANY && count($conns))
+			{
+				$ret[] = $cat;
+				$conns = $cat->connections_to(array(
+					"from.class_id" => CL_CRM_CATEGORY,
+					"type" => "RELTYPE_CATEGORY"
+				));
+				$c = reset($conns);
+				if ($c)
+				{
+					$cat = $c->from();
+				}
+			}
+			$ret[] = get_current_company();
+		}
+		return $ret;
 	}
 }
 

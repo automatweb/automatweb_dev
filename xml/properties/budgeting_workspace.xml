@@ -175,6 +175,24 @@
             <no_caption>1</no_caption>
             <field>transfer_table</field>
       </property>
+      <property>
+            <name>budgets_tb</name>
+            <table>objects</table>
+            <group>budgets</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>budgets_tb</field>
+      </property>
+      <property>
+            <name>budgets_tbl</name>
+            <table>objects</table>
+            <group>budgets</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>budgets_tbl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_BUDGETING_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -204,6 +222,11 @@
                   <save>no</save>
                   <submit_method>get</submit_method>
             </transfers>
+            <budgets>
+                  <caption>Eelarved</caption>
+                  <submit>no</submit>
+                  <save>no</save>
+            </budgets>
       </groupinfo>
       <reltypes>
             <ACCT_TREE_PARENT>
@@ -219,8 +242,13 @@
             <FUND_TREE_PARENT>
                   <value>3</value>
                   <clid>CL_MENU</clid>
-                  <caption>Dondide juurkaust</caption>
+                  <caption>Fondide juurkaust</caption>
             </FUND_TREE_PARENT>
+            <BUDGET>
+                  <value>4</value>
+                  <clid>CL_BUDGET</clid>
+                  <caption>Eelarve</caption>
+            </BUDGET>
       </reltypes>
       <layout>
             <acct_split>

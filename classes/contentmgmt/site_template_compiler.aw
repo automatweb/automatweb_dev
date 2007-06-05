@@ -134,7 +134,7 @@ class site_template_compiler extends aw_template
 			}
 		}
 
-		if ($_GET["TPLC_DBG"] == 1)
+		if (!empty($_GET["TPLC_DBG"]))
 		{
 			echo "tpls = ".dbg::dump($tpls)." <br>";
 		}
@@ -256,6 +256,10 @@ class site_template_compiler extends aw_template
 					}
 				}
 
+				if (!isset($this->menu_areas[$area]["levels"][$level]["inside_parent_menu_tpl"]))
+				{
+					$this->menu_areas[$area]["levels"][$level]["inside_parent_menu_tpl"] = null;
+				}
 				$this->menu_areas[$area]["levels"][$level]["inside_parent_menu_tpl"] |= $is_in_parent;
 
 				if ($parent_tpl == "logged")
@@ -1884,7 +1888,7 @@ class site_template_compiler extends aw_template
 		$add = "";
 		if ($arr["level"] > 0)
 		{
-			$add = " || (".$p_v_name.")";
+			$add = " || !empty(".$p_v_name.")";
 		}
 
 		$ret .= $this->_gi()."else\n";
@@ -2100,7 +2104,7 @@ class site_template_compiler extends aw_template
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 
-		$ret .= $this->_gi()."if (\$parent_obj->prop(\"submenus_from_obj\") || ".$parent_is_from_obj_name."[\$parent_obj->id()])\n";
+		$ret .= $this->_gi()."if (\$parent_obj->prop(\"submenus_from_obj\") || !empty(".$parent_is_from_obj_name."[\$parent_obj->id()]))\n";
 
 		return $ret;
 	}
@@ -2118,7 +2122,7 @@ class site_template_compiler extends aw_template
 		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
 		$parent_is_from_obj_start_level = $dat["parent_is_from_obj_start_level"];
 
-		$ret .= $this->_gi()."if (".$parent_is_from_obj_name."[\$parent_obj->id()])\n";
+		$ret .= $this->_gi()."if (!empty(".$parent_is_from_obj_name."[\$parent_obj->id()]))\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\$tmp = ".$parent_is_from_obj_name."[\$parent_obj->id()];\n";

@@ -478,7 +478,6 @@
             <type>textbox</type>
             <caption>Aadress kuhu suunata</caption>
       </property>
-
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.17 2007/06/04 11:16:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.18 2007/06/05 09:41:22 kristo Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -26,6 +26,9 @@
 
 class admin_if extends class_base
 {
+	var $use_parent;
+	var $force_0_parent;
+
 	function admin_if()
 	{
 		$this->init(array(
@@ -176,14 +179,14 @@ class admin_if extends class_base
 		classload("core/icons");
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
 
-		$this->period = $arr["request"]["period"];
+		$this->period = isset($arr["request"]["period"]) ? $arr["request"]["period"] : null;
 		$admrm = $this->cfg["admin_rootmenu2"];
 		if (is_array($admrm))
 		{
 			$admrm = reset($admrm);
 		}
-		$this->curl = $arr["request"]["curl"] ? $arr["request"]["curl"] : get_ru();
-		$this->selp = $arr["request"]["selp"] ? $arr["request"]["selp"] : $arr["request"]["parent"];
+		$this->curl = isset($arr["request"]["curl"]) ? $arr["request"]["curl"] : get_ru();
+		$this->selp = isset($arr["request"]["selp"]) ? $arr["request"]["selp"] : $arr["request"]["parent"];
 		$tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"has_root" => $this->use_parent ? 0 : 1,
@@ -298,6 +301,10 @@ class admin_if extends class_base
 			$this->mk_admin_tree_new();
 		};
 
+		if (!isset($set_by_p))
+		{
+			$set_by_p = null;
+		}
 		$tree->set_rootnode($this->force_0_parent || (empty($this->use_parent) && $set_by_p) ? 0 : $rn);
 	}
 
@@ -334,6 +341,7 @@ class admin_if extends class_base
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
+		$iconurl = "";
 		if ($m->class_id() == CL_PROMO)
 		{
 			$iconurl = icons::get_icon_url("promo_box","");
@@ -586,6 +594,11 @@ class admin_if extends class_base
 		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
 		$menu_obj = new object($parent);
 
+		if (!isset($period))
+		{
+			$period = null;
+		}
+
 		if ($menu_obj->is_brother())
 		{
 			$menu_obj = $menu_obj->get_original();
@@ -603,7 +616,7 @@ class admin_if extends class_base
 
 		if (!$menu_obj->prop("all_pers"))
 		{
-			if ($period)
+			if (!empty($period))
 			{
 				$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_MENU." AND objects.periodic = 1)) ";
 			}
@@ -627,7 +640,8 @@ class admin_if extends class_base
 		// by the way, mk_my_orb is pretty expensive and all those calls to it
 		// here take up to 10% of the time used to create the page -- duke
 
-		if ($_GET["sortby"] != "")
+		$sby = "";
+		if (!empty($_GET["sortby"]))
 		{
 			if ($_GET["sortby"] == "hidden_jrk")
 			{
@@ -641,7 +655,7 @@ class admin_if extends class_base
 
 		$per_page = 100;
 
-		$ft_page = $GLOBALS["ft_page"];
+		$ft_page = isset($GLOBALS["ft_page"]) ? $GLOBALS["ft_page"] : null;
 		$lim = "LIMIT ".($ft_page * $per_page).",".$per_page;
 
 		$where = "objects.parent = '$parent' AND
@@ -799,17 +813,17 @@ class admin_if extends class_base
 
 		}
 
-		if (!$sortby)
+		if (empty($sortby))
 		{
 			$sortby = "hidden_jrk";
 		};
 
-		if ($sortby == "jrk")
+		if (isset($sortby) && $sortby == "jrk")
 		{
 			$sortby = "hidden_jrk";
 		};
 
-		if (!$GLOBALS["sort_order"])
+		if (empty($GLOBALS["sort_order"]))
 		{
 			$GLOBALS["sort_order"] = "asc";
 		};
@@ -840,6 +854,7 @@ class admin_if extends class_base
 			"link" => aw_url_change_var("parent", $id)
 		));
 
+		$grp = null;
 		if (aw_ini_get("user_interface.full_content_trans")  && aw_global_get("ct_lang_id") != $obj->lang_id())
 		{
 			$grp = "transl";
@@ -1161,7 +1176,7 @@ class admin_if extends class_base
 		}
 
 		$_SESSION["cur_admin_if"] = $o->id();
-		return  html::get_change_url($o->id(), array("group" => "o", "parent" => $arr["parent"]));
+		return  html::get_change_url($o->id(), array("group" => "o", "parent" => isset($arr["parent"]) ? $arr["parent"] : null));
 	}
 
 	function callback_mod_tab($arr)

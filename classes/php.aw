@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.19 2005/04/21 08:32:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.20 2007/06/05 09:41:22 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
 	var $no_index = false;
+	var $arr_name;
 
 	function php_serialize($arr)
 	{
@@ -54,7 +55,7 @@ class php_serializer
 	function php_unserialize($str)
 	{
 		@eval($str);
-		if (!is_array($arr))
+		if (!isset($arr) || !is_array($arr))
 		{
 			@eval(stripslashes($str));
 		}

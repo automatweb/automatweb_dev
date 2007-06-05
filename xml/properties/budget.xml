@@ -1,0 +1,42 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>project</name>
+            <table>aw_budgets</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <field>aw_project</field>
+            <caption>Project</caption>
+      </property>
+      <property>
+            <name>total</name>
+            <table>aw_budgets</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>total</field>
+            <caption>Kogusumma</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_BUDGET</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <tableinfo>
+            <aw_budgets>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_budgets>
+      </tableinfo>
+      <reltypes>
+            <PROJECT>
+                  <value>1</value>
+                  <caption>Projekt</caption>
+            </PROJECT>
+      </reltypes>
+</properties>
+

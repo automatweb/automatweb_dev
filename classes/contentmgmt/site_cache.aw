@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.41 2007/05/16 14:02:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.42 2007/06/05 09:41:26 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -92,7 +92,7 @@ class site_cache extends aw_template
 		// don't cache pages with generated content, they usually change for each request
 		if ($arr["text"] != "")
 		{
-			if ($arr["force_cache"] != true)
+			if (!isset($arr["force_cache"]) || $arr["force_cache"] != true)
 			{
 				return false;
 			}
