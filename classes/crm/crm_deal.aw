@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.19 2007/06/04 13:29:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.20 2007/06/05 16:22:56 markop Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -19,7 +19,7 @@
 	@property project type=popup_search clid=CL_PROJECT table=aw_crm_deal field=aw_project style=autocomplete
 	@caption Projekt
 
-	@property task type=popup_search clid=CL_TASK table=aw_crm_deal field=aw_task style=autocomplete
+	@property task type=popup_search clid=CL_TASK,CL_CRM_MEETING,CL_BUG,CL_CRM_CALL table=aw_crm_deal field=aw_task style=autocomplete
 	@caption &Uuml;lesanne
 
 	@property creator type=relpicker reltype=RELTYPE_CREATOR table=aw_crm_deal field=aw_creator
@@ -183,19 +183,55 @@ class crm_deal extends class_base
 		$arr = $ac->get_ac_params($arr);
 		$ol = new object_list();
 		$ol = new object_list(array(
-			"class_id" => array(CL_TASK),
-			"name" => $arr["ctask_awAutoCompleteTextbox"]."%",
+			"class_id" => array(CL_TASK,CL_CRM_MEETING,CL_BUG,CL_CRM_CALL),
+			"name" => $arr["task_awAutoCompleteTextbox"]."%",
 			"lang_id" => array(),
 			"site_id" => array(),
 			"limit" => 50,
-			new object_list_filter(array(
+/*´			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					"CL_TASK.RELTYPE_CUSTOMER.name" => $arr["customer_awAutoCompleteTextbox"]."%",
-					"CL_TASK.RELTYPE_PROJECT.name" => $arr["project_awAutoCompleteTextbox"]."%",
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							new object_list_filter(array(
+								"logic" => "OR",
+								"conditions" => array(
+									"CL_TASK.RELTYPE_CUSTOMER.name" => $arr["customer_awAutoCompleteTextbox"]."%",
+									"CL_TASK.RELTYPE_PROJECT.name" => $arr["project_awAutoCompleteTextbox"]."%",
+								)
+							)),
+							new object_list_filter(array(
+								"logic" => "OR",
+								"conditions" => array(
+									"CL_BUG.RELTYPE_CUSTOMER.name" => $arr["customer_awAutoCompleteTextbox"]."%",
+									"CL_BUG.RELTYPE_PROJECT.name" => $arr["project_awAutoCompleteTextbox"]."%",
+								)
+							)),
+						)
+					)),
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							new object_list_filter(array(
+								"logic" => "OR",
+								"conditions" => array(
+									"CL_CRM_MEETING.RELTYPE_CUSTOMER.name" => $arr["customer_awAutoCompleteTextbox"]."%",
+									"CL_CRM_MEETING.RELTYPE_PROJECT.name" => $arr["project_awAutoCompleteTextbox"]."%",
+								)
+							)),
+							new object_list_filter(array(
+								"logic" => "OR",
+								"conditions" => array(
+									"CL_CRM_CALL.RELTYPE_CUSTOMER.name" => $arr["customer_awAutoCompleteTextbox"]."%",
+									"CL_CRM_CALL.RELTYPE_PROJECT.name" => $arr["project_awAutoCompleteTextbox"]."%",
+								),
+							))
+						)
+					)),
 				)
-			))
-		));
+			)),
+*/		));
 		return $ac->finish_ac($ol->names());
 	}
 
@@ -278,7 +314,7 @@ class crm_deal extends class_base
  					{
  						$ol = new object_list(array(
  							"name" => $arr["request"]["task_awAutoCompleteTextbox"],
- 							"class_id" => array(CL_TASK),
+ 							"class_id" => array(CL_TASK,CL_CRM_MEETING,CL_BUG,CL_CRM_CALL),
  							"lang_id" => array(),
  						));
  						$cust_obj = $ol->begin();
@@ -368,9 +404,11 @@ class crm_deal extends class_base
 			$name = basename($fu);
 			$fname = $file_inst->check_file_path($f->prop("file"));
 			$t->define_data(array(
-				"name" => html::textbox(array("size" => 70,"value" => html::href(array(
-					"url" => $file_inst->get_url($f->id(), $f->name()),
-					"caption" => $f->name(),)))),//$f->name(),
+				"name" => html::textbox(array("size" => 70,"value" => //html::href(array(
+					//"url" => 
+					$file_inst->get_url($f->id(), $f->name()),
+				//	"caption" => $f->name(),))
+				)),//$f->name(),
 				"oid" => $f->id(),
 				"change" => html::obj_change_url($f->id(),t("Muuda")),
 				"changed" => date("d.m.Y h:i" , $f->prop("modified")),

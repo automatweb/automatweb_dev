@@ -28,7 +28,12 @@
             <table>aw_crm_deal</table>
             <group>general</group>
             <type>popup_search</type>
-            <clid>CL_TASK</clid>
+            <clid>
+                  <num_0>CL_TASK</num_0>
+                  <num_1>CL_CRM_MEETING</num_1>
+                  <num_2>CL_BUG</num_2>
+                  <num_3>CL_CRM_CALL</num_3>
+            </clid>
             <field>aw_task</field>
             <style>autocomplete</style>
             <caption>&amp;amp;Uuml;lesanne</caption>
