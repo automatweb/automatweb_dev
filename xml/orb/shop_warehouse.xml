@@ -62,6 +62,13 @@
 			</function>
 		</action>
 
+		<action name="copy_products" all_args="1">
+			<function name="copy_products">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="paste_products" all_args="1">
 			<function name="paste_products">
 				<arguments>

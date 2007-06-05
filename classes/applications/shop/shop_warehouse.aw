@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.48 2007/06/05 15:31:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.49 2007/06/05 15:49:15 markop Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -689,6 +689,13 @@ class shop_warehouse extends class_base
 			"img" => "save.gif",
 			"tooltip" => t("Lisa korvi"),
 			"action" => "add_to_cart"
+		));
+		
+		$tb->add_button(array(
+			"name" => "copy",
+			"img" => "copy.gif",
+			"tooltip" => t("Kopeeri"),
+			"action" => "copy_products"
 		));
 		
 		$tb->add_button(array(
@@ -2701,7 +2708,18 @@ class shop_warehouse extends class_base
 	**/
 	function cut_products($arr)
 	{
+		$_SESSION["shop_warehouse"]["copy_products"] = null;
 		$_SESSION["shop_warehouse"]["cut_products"] = $arr["sel"];
+		return $_SESSION["aw_session_track"]["server"]["ru"];
+	}
+	
+	/** copys the selected items
+		@attrib name=copy_products params=name all_args=1
+	**/
+	function copy_products($arr)
+	{
+		$_SESSION["shop_warehouse"]["cut_products"] = null;
+		$_SESSION["shop_warehouse"]["copy_products"] = $arr["sel"];
 		return $_SESSION["aw_session_track"]["server"]["ru"];
 	}
 
@@ -2718,7 +2736,21 @@ class shop_warehouse extends class_base
 				$o->set_parent($arr["parent"]);
 				$o->save();
 			}
+			foreach($_SESSION["shop_warehouse"]["copy_products"] as $id)
+			{
+				$o = obj($id);
+				$new_o = new object();
+				$new_o->set_class_id($o->class_id());
+				foreach($o->get_property_list() as $prop => $val)
+				{
+					$new_o->set_prop($prop , $o->prop($prop));
+				}
+				$new_o->set_name($o->name());
+				$new_o->set_parent($arr["parent"]);
+				$new_o->save();
+			}
 		}
+		$_SESSION["shop_warehouse"]["copy_products"] = null;
 		$_SESSION["shop_warehouse"]["cut_products"] = null;
 		return $arr["return_url"];
 	}
