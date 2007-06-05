@@ -102,6 +102,8 @@ class doc_display extends aw_template
 		$al->parse_oo_aliases($doc->id(), &$userta5, array("templates" => $this->templates, "meta" => $mt));
 		$userta6 = $orig->trans_get_val("userta6");
 		$al->parse_oo_aliases($doc->id(), &$userta6, array("templates" => $this->templates, "meta" => $mt));
+		$uinst = get_instance(CL_USER);
+		$mb_person = $uinst->get_person_for_uid($doc->prop("modifiedby"));
 		
 		$this->vars_safe(array(
 			"date_est_docmod" => $docmod > 1 ? locale::get_lc_date($_date, LC_DATE_FORMAT_LONG) : "",
@@ -111,6 +113,7 @@ class doc_display extends aw_template
 			"author" => $doc->prop("author"),
 			"channel" => $doc->prop("channel"),
 			"docid" => $doc->id(),
+			"modified_by" => $mb_person->name(),
 			"date_est" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG),
 			"date_est_fullyear" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG_FULLYEAR),
 			"print_date_est" => locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
