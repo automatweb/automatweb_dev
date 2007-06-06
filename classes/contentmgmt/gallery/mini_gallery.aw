@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.37 2007/06/06 09:39:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.38 2007/06/06 10:28:54 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -483,7 +483,7 @@ class mini_gallery extends class_base
 			}
 
 			$fl = $fi->_put_fs(array(
-				"type" => substr($file, strrpos(".", $file)),
+				"type" => substr($file, strrpos($file, ".")),
 				"content" => $this->get_file(array("file" => $fp))
 			));
 			$img->set_prop("file", $fl);

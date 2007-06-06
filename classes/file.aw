@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.153 2007/04/12 07:44:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.154 2007/06/06 10:28:56 kristo Exp $
 /*
 
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
@@ -723,10 +723,17 @@ class file extends class_base
 		$mt = get_instance("core/aw_mime_types");
 		$site_basedir = $this->cfg["site_basedir"];
 		// find the extension for the file
-		list($major,$minor) = explode("/",$arr["type"]);
-		if ($minor == "pjpeg" || $minor == "jpeg")
+		if (strpos($arr["type"], "/") !== false)
 		{
-			$minor = "jpg";
+			list($major,$minor) = explode("/",$arr["type"]);
+			if ($minor == "pjpeg" || $minor == "jpeg")
+			{
+				$minor = "jpg";
+			}
+		}
+		else
+		{
+			$minor = $arr["type"];
 		}
 
 		// first, we need to find a path to put the file
