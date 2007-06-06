@@ -55,7 +55,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 	@property mcreatedby type=text store=no editonly=1
 	@caption Kes l&otilde;i
 
-	@property type type=select 
+	@property type type=select warning=0
 	@caption T&uuml;&uuml;p
 
 	@property search_form type=relpicker reltype=RELTYPE_SEARCHFORM

@@ -96,6 +96,16 @@
             <caption>Uuest mailist teavitamine</caption>
       </property>
       <property>
+            <name>warning_notification</name>
+            <table>users</table>
+            <group>general</group>
+            <field>warning_notification</field>
+            <type>textbox</type>
+            <default>5</default>
+            <caption>Hoiatuste kuvamise tase</caption>
+            <comment>Kasutajale kuvatavate hoiatuste tase. V&amp;amp;auml;iksem number t&amp;amp;auml;hendab v&amp;amp;auml;hemt&amp;amp;otilde;sist hoiatust</comment>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>
@@ -402,6 +412,15 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>P&amp;amp;auml;rast sisse logimist suunamine</caption>
+      </property>
+      <property>
+            <name>stoppers</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <no_caption>1</no_caption>
       </property>
       <classinfo>
             <syslog_type>ST_USERS</syslog_type>

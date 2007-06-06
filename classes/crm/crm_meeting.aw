@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.86 2007/06/05 10:13:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.87 2007/06/06 12:34:39 tarvo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -91,8 +91,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property is_personal type=checkbox ch_value=1 field=meta method=serialize 
 @caption Isiklik
 
+@property start1 type=datetime_select field=start table=planner 
+@caption Algab 
+
+@property end type=datetime_select table=planner 
+@caption L&otilde;peb
+
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
-@caption Kestab terve päeva
+@caption Kestab terve p&auml;eva
 
 @property udefch1 type=checkbox ch_value=1 user=1 field=meta method=serialize
 @caption User-defined checkbox 1
@@ -159,6 +165,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property hr_price type=textbox size=5 field=meta method=serialize 
 @caption Tunni hind
+
+@property summary type=textarea cols=80 rows=30 table=planner field=description
+@caption Kokkuv&otilde;te
 
 @property controller_disp type=text store=no 
 @caption Kontrolleri v&auml;ljund
@@ -945,7 +954,7 @@ class crm_meeting extends class_base
 		$has_tpl = $this->read_template($_GET["date"] != "" ? "display_event.tpl" : "display_event_in_list.tpl", 1);
 		$ob = new object($arr["id"]);
 		$cform = $ob->meta("cfgform_id");
-		// feega hea .. nüüd on vaja veel nimed saad
+		// feega hea .. n&uuml;&uuml;d on vaja veel nimed saad
 		$cform_obj = new object($cform);
 		$output_form = $cform_obj->prop("use_output");
 		if (is_oid($output_form))
@@ -1302,5 +1311,161 @@ class crm_meeting extends class_base
 		}
 		return $arr["post_ru"];
 	}
+
+	
+// stopper crap
+
+	function handle_stopper_stop($arr)
+	{
+		if(!$this->can("view", $arr["oid"]))
+		{
+			if(!strlen($arr["data"]["name"]["value"]) || !strlen($arr["data"]["part"]["value"]) || !strlen($arr["data"]["project"]["value"]))
+			{
+				return t("Nimi, osaleja ja projekt peavad olema täidetud!");
+			}
+		}
+		if(!$this->can("view", $arr["data"]["project"]["value"]))
+		{
+			$cc = get_current_company();
+			$np = new object();
+			$np->set_class_id(CL_PROJECT);
+			$np->set_parent($cc->id());
+			$np->set_name($arr["data"]["project"]["value"]);
+			$np->save();
+			$arr["data"]["project"]["value"] = $np->id();
+		}
+		if(!$this->can("view", $arr["data"]["part"]["value"]))
+		{
+			$cc = get_current_company();
+			$np = new object();
+			$np->set_class_id(CL_CRM_PERSON);
+			$np->set_parent($cc->id());
+			$np->set_name($arr["data"]["part"]["value"]);
+			$np->save();
+			$arr["data"]["part"]["value"] = $np->id();
+		}
+
+		if(!$this->can("view", $arr["oid"]))
+		{
+			$o = new object();
+			$o->set_parent($arr["data"]["project"]["value"]);
+			$o->set_name($arr["data"]["name"]["value"]);
+			$o->set_class_id(CL_CRM_MEETING);
+			$o->set_prop("start1", $arr["first_start"]);
+			$o->save();
+			$person = obj($arr["data"]["part"]["value"]);
+			$person->connect(array(
+				"to" => $o->id(),
+				"type" => "RELTYPE_PERSON_MEETING",
+			));
+			$o->connect(array(
+				"to" => $arr["data"]["project"]["value"],
+				"type" => "RELTYPE_PROJECT",
+			));
+			
+			$arr["oid"] = $o->id();
+		}
+		$o = obj($arr["oid"]);
+		$o->set_prop("time_real", $o->prop("time_real") + $arr["hours"]);
+		$o->set_prop("time_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
+		$o->set_prop("is_done", $arr["data"]["isdone"]["value"]?1:0);
+		$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
+		$o->set_prop("content", $arr["data"]["desc"]["value"]);
+		$o->set_prop("end", time());
+		$o->save();
+		return false;
+	}
+
+	function stopper_autocomplete($requester, $params)
+	{
+		switch($requester)
+		{
+			case "part":
+				$l = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+				));
+				foreach($l->arr() as $obj)
+				{
+					$ret[$obj->id()] = $obj->name();
+				}
+			break;
+			case "project":
+
+				if(strlen($params["part"]))
+				{
+					$parts = split(",", $params["part"]);
+					
+					$c = new connection();
+					$conns = $c->find(array(
+						"from.class_id" => CL_PROJECT,
+						"to" => $parts,
+					));
+					foreach($conns as $conn)
+					{
+						$p = obj($conn["from"]);
+						$ret[$p->id()] = $p->name();
+					}
+				}
+				else
+				{
+					$l = new object_list(array(
+						"class_id" => CL_PROJECT,
+					));
+					foreach($l->arr() as $obj)
+					{
+						$ret[$obj->id()] = $obj->name();
+					}
+
+				}
+			break;
+			default:
+				$ret = array();
+				break;
+		}
+		return $ret;
+	}
+
+	function gen_stopper_addon($arr)
+	{
+		
+		$props = array(
+			array(
+				"name" => "name",
+				"type" => "textbox",
+				"caption" => "Nimi",
+			),
+			array(
+				"name" => "part",
+				"type" => "textbox",
+				"caption" => "Osaleja",
+				"autocomplete" => true,
+			),
+			array(
+				"name" => "project",
+				"type" => "textbox",
+				"caption" => "Projekt",
+				"autocomplete" => true,
+			),
+			array(
+				"name" => "isdone",
+				"type" => "checkbox",
+				"caption" => t("Tehtud"),
+				"ch_value" => 1,
+				"value" => 1,
+			),
+			array(
+				"name" => "tobill",
+				"type" => "checkbox",
+				"caption" => t("Arvele"),
+			),
+			array(
+				"name" => "desc",
+				"type" => "textarea",
+				"caption" => "Kirjeldus",
+			),
+		);
+		return $props;
+	}
+
 }
 ?>

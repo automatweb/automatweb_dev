@@ -17,6 +17,29 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/CalendarPopup.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/popup_menu.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/BronCalendar.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/url.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/shortcuts.js"></script>
+
+<script language="JavaScript">
+<!--
+shortcut("Ctrl+Shift+A",function() {
+	desc = prompt("Kirjeldus", "nimetu");
+	if(desc){
+		aw_popup_scroll("{VAR:stop_pop_url_add}&name=" + desc, "quick_task_entry", 800,600);
+	}
+});
+
+shortcut("Ctrl+Shift+Q",function() {
+	aw_popup_scroll("{VAR:stop_pop_url_quick_add}", "quick_task_entry", 800,600);
+});
+
+shortcut("Ctrl+Shift+E", function() {
+	aw_popup_scroll("{VAR:stop_pop_url_qw}", "quick_task_entry", 800,600);
+});
+
+}
+// -->
+</script>
 
 
 

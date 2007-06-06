@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.61 2007/03/23 08:34:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.62 2007/06/06 12:34:39 tarvo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -82,6 +82,12 @@
 
 @property is_personal type=checkbox ch_value=1 field=meta method=serialize table=objects
 @caption Isiklik
+
+@property start1 type=datetime_select field=start 
+@caption Algus
+
+@property end type=datetime_select field=end 
+@caption L&otilde;pp
 
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
 @caption Saata arve
@@ -627,6 +633,157 @@ class crm_call extends class_base
 
 	}
 
+
+	function stopper_autocomplete($requester, $params)
+	{
+		switch($requester)
+		{
+			case "part":
+				$l = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+				));
+				foreach($l->arr() as $obj)
+				{
+					$ret[$obj->id()] = $obj->name();
+				}
+			break;
+			case "project":
+
+				if(strlen($params["part"]))
+				{
+					$parts = split(",", $params["part"]);
+					
+					$c = new connection();
+					$conns = $c->find(array(
+						"from.class_id" => CL_PROJECT,
+						"to" => $parts,
+					));
+					foreach($conns as $conn)
+					{
+						$p = obj($conn["from"]);
+						$ret[$p->id()] = $p->name();
+					}
+				}
+				else
+				{
+					$l = new object_list(array(
+						"class_id" => CL_PROJECT,
+					));
+					foreach($l->arr() as $obj)
+					{
+						$ret[$obj->id()] = $obj->name();
+					}
+
+				}
+			break;
+			default:
+				$ret = array();
+				break;
+		}
+		return $ret;
+	}
+
+	function handle_stopper_stop($arr)
+	{
+		if(!$this->can("view", $arr["oid"]))
+		{
+			if(!strlen($arr["data"]["name"]["value"]) || !strlen($arr["data"]["part"]["value"]) || !strlen($arr["data"]["project"]["value"]))
+			{
+				return t("Nimi, osaleja ja projekt peavad olema täidetud!");
+			}
+		}
+		if(!$this->can("view", $arr["data"]["project"]["value"]))
+		{
+			$cc = get_current_company();
+			$np = new object();
+			$np->set_class_id(CL_PROJECT);
+			$np->set_parent($cc->id());
+			$np->set_name($arr["data"]["project"]["value"]);
+			$np->save();
+			$arr["data"]["project"]["value"] = $np->id();
+		}
+		if(!$this->can("view", $arr["data"]["part"]["value"]))
+		{
+			$cc = get_current_company();
+			$np = new object();
+			$np->set_class_id(CL_CRM_PERSON);
+			$np->set_parent($cc->id());
+			$np->set_name($arr["data"]["part"]["value"]);
+			$np->save();
+			$arr["data"]["part"]["value"] = $np->id();
+		}
+
+		if(!$this->can("view", $arr["oid"]))
+		{
+			$o = new object();
+			$o->set_parent($arr["data"]["project"]["value"]);
+			$o->set_name($arr["data"]["name"]["value"]);
+			$o->set_class_id(CL_CRM_CALL);
+			$o->set_prop("start1", $arr["first_start"]);
+			$o->save();
+			$person = obj($arr["data"]["part"]["value"]);
+			$person->connect(array(
+				"to" => $o->id(),
+				"type" => "RELTYPE_PERSON_CALL",
+			));
+			$o->connect(array(
+				"to" => $arr["data"]["project"]["value"],
+				"type" => "RELTYPE_PROJECT",
+			));
+			
+			$arr["oid"] = $o->id();
+		}
+		$o = obj($arr["oid"]);
+		$o->set_prop("time_real", $o->prop("time_real") + $arr["hours"]);
+		$o->set_prop("time_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
+		$o->set_prop("is_done", $arr["data"]["isdone"]["value"]?1:0);
+		$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
+		$o->set_prop("content", $arr["data"]["desc"]["value"]);
+		$o->set_prop("end", time());
+		$o->save();
+	}
+
+	function gen_stopper_addon($arr)
+	{
+		
+		$props = array(
+			array(
+				"name" => "name",
+				"type" => "textbox",
+				"caption" => "Nimi",
+			),
+			array(
+				"name" => "part",
+				"type" => "textbox",
+				"caption" => "Osaleja",
+				"autocomplete" => true,
+			),
+			array(
+				"name" => "project",
+				"type" => "textbox",
+				"caption" => "Projekt",
+				"autocomplete" => true,
+			),
+			array(
+				"name" => "isdone",
+				"type" => "checkbox",
+				"caption" => t("Tehtud"),
+				"ch_value" => 1,
+				"value" => 1,
+			),
+			array(
+				"name" => "tobill",
+				"type" => "checkbox",
+				"caption" => t("Arvele"),
+			),
+			array(
+				"name" => "desc",
+				"type" => "textarea",
+				"caption" => "Kirjeldus",
+			),
+		);
+		return $props;
+	}
 
 	function add_participant($task, $person)
 	{

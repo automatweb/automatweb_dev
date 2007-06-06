@@ -66,6 +66,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 	@property notify field=notify type=checkbox ch_value=1
 	@caption Uuest mailist teavitamine
 
+	@property warning_notification field=warning_notification type=textbox default=5
+	@caption Hoiatuste kuvamise tase
+	@comment Kasutajale kuvatavate hoiatuste tase. V&auml;iksem number t&auml;hendab v&auml;hemt&otilde;sist hoiatust
+
 	@property comment type=textarea rows=5 cols=30 table=objects field=comment
 	@caption Kommentaar
 
@@ -167,6 +171,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 	@property after_login_redir type=textbox field=meta method=serialize table=objects 
 	@caption P&auml;rast sisse logimist suunamine
+
+	
+	@property stoppers type=hidden table=objects field=meta method=serialize no_caption=1
 
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
@@ -2157,6 +2164,12 @@ class user extends class_base
 				));
 				return true;
 			break;
+			case "warning_notification":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int",
+				));
+				break;
 		}
 		return false;
 	}

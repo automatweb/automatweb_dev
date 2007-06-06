@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.81 2007/04/26 11:18:20 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.82 2007/06/06 12:34:32 tarvo Exp $
 //  bug.aw - Bugi
 
 define("BUG_STATUS_CLOSED", 5);
@@ -21,7 +21,6 @@ define("BUG_STATUS_CLOSED", 5);
 
 @layout settings_wrap type=vbox closeable=1 area_caption=M&auml;&auml;rangud
 @layout settings type=hbox parent=settings_wrap
-
 
 	@layout settings_col1 type=vbox parent=settings
 		@property bug_status type=select parent=settings_col1 captionside=top
@@ -180,7 +179,7 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo problems caption="Probleemid"
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
-@caption Jälgija
+@caption J&auml;lgija
 
 @reltype FILE value=2 clid=CL_FILE
 @caption Fail
@@ -676,10 +675,11 @@ class bug extends class_base
 				$url = $this->mk_my_orb("stopper_pop", array(
 					"id" => $arr["obj_inst"]->id(),
 					"s_action" => "start",
-					"type" => t("Bug"),
+					"type" => $this->clid,
+					"source_id" => $arr["obj_inst"]->id(),
 					"name" => $arr["obj_inst"]->name()
 				), CL_TASK);
-				$prop["post_append_text"] = " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+				$prop["post_append_text"] = " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",800,600)'>".t("Stopper")."</a>";
 				break;
 
 			case "bug_url":
@@ -760,7 +760,7 @@ class bug extends class_base
 					}
 				}
 
-				if (count($n_ovr) && false) // && false on temp lahendus, eks terryf vaatab üle kui puhkuselt tuleb
+				if (count($n_ovr) && false) // && false on temp lahendus, eks terryf vaatab &uuml;le kui puhkuselt tuleb
 				{
 					$nms = array();
 					foreach($n_ovr as $item)
@@ -1042,11 +1042,175 @@ class bug extends class_base
 		return $rv;
 	}
 
-	function handle_stopper_stop($bug, $inf)
+	/**
+		@attrib params=name name=handle_bug_change_status
+		@param bug required type=oid
+		@param status required type=int
+	**/
+	function hadle_bug_change_status($arr)
 	{
-		$inf["desc"] .= sprintf(t("\nTegelik tundide arv muudeti %s => %s"), $bug->prop("num_hrs_real"), $bug->prop("num_hrs_real")+$inf["hours"]);
+		$o = obj($arr["bug"]);
+		$o->set_prop("bug_status", $arr["status"]);
+		die();
+	}
+	
+	/**
+		@attrib name=get_autocomplete
+		@comment
+			bug name autokompliit
+	**/
+	function get_autocomplete()
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
 
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+		));
+		foreach($ol->arr() as $oid => $el)
+		{
+			$obj = new object($oid);
+			$autocomplete_options[$obj->name()] = $obj->name();
+		}
+
+		exit($cl_json->encode($option_data));
+	}
+
+	function stopper_autocomplete($requester, $arr)
+	{
+		switch($requester)
+		{
+			case "parent":
+				$ol = new object_list(array(
+					"class_id" => CL_BUG,
+				));
+				foreach($ol->arr() as $oid => $obj)
+				{
+					$ret[$oid] = $obj->name();
+				}
+				break;
+		}
+		return $ret;
+	}
+
+	function gen_stopper_addon($arr)
+	{
+		
+		$props = array(
+			array(
+				"name" => "name",
+				"type" => "textbox",
+				"caption" => t("Nimi"),
+			),
+			array(
+				"name" => "status",
+				"type" => "select",
+				"options" => $this->bug_statuses,
+				"caption" => t("Staatus"),
+			),
+			array(
+				"name" => "contents",
+				"type" => "textarea",
+				"caption" => t("Sisu"),
+			),
+			array(
+				"name" => "parent",
+				"type" => "textbox",
+				"caption" => t("Vanem-bugi"),
+				"autocomplete" => true,
+			),
+			array(
+				"name" => "deadline",
+				"type" => "date_select",
+				"caption" => t("T&auml;htaeg"),
+			),
+		);
+		return $props;
+	}
+	function gen_existing_stopper_addon($arr)
+	{
+		$o = obj($arr["oid"]);
+		$props = array(
+			array(
+				"name" => "contents",
+				"type" => "textarea",
+				"caption" => t("Kommentaar"),
+			),
+			array(
+				"name" => "status",
+				"type" => "select",
+				"options" => $this->bug_statuses,
+				"caption" => t("Staatus"),
+				"selected" => $o->prop("bug_status"),
+			),
+		);
+		return $props;
+	}
+
+	function handle_stopper_stop($inf)
+	{
+		/*
+			props to take from parent bug
+			customer_unit,
+			customer_person,
+			orderer,
+			orderer_unit,
+			orderer_person,
+			monitors, ??
+			project,
+			customer,
+			
+			bug_class, ?????
+		*/
+		if(!$this->can("view", $inf["oid"]))
+		{
+			if(!strlen($inf["data"]["name"]["value"]) || !$this->can("view", $inf["data"]["parent"]["value"]) || $inf["data"]["deadline"]["value"] == -1)
+			{
+				return t("Nimi, vanem-bugi ja t&auml;htaeg peavad olema seatud!");
+			}
+		}
+		if(!$this->can("view", $inf["oid"]))
+		{
+			$parent = obj($inf["data"]["parent"]["value"]);
+			// props from parent
+			$pfp = array("bug_priority", "who", "bug_severity", "monitors", "bug_class", "customer", "customer", "customer_unit", "customer_person", "orderer", "orderer_unit", "orderer_person");
+
+			$o = new object();
+			$o->set_parent($inf["data"]["parent"]["value"]);
+			$o->set_name($inf["data"]["name"]["value"]);
+			$o->set_class_id(CL_BUG);
+			$o->set_prop("bug_content", $inf["data"]["contents"]["value"]);
+			$o->set_prop("deadline", $arr["data"]["deadline"]["value"]);
+
+			foreach($pfp as $pprop)
+			{
+				$o->set_prop($pprop, $parent->prop($pprop));
+			}
+			$o->save();
+			$inf["oid"] = $o->id();
+			unset($inf["data"]["contents"]["value"]);
+		}
+
+		$bug = obj($inf["oid"]);
+
+		$inf["desc"] = $inf["data"]["contents"]["value"];
+		$inf["desc"] .= sprintf(t("\nTegelik tundide arv muudeti %s => %s"), $bug->prop("num_hrs_real"), $bug->prop("num_hrs_real")+$inf["hours"]);
 		$bug->set_prop("num_hrs_real", $bug->prop("num_hrs_real") + $inf["hours"]);
+		if(array_key_exists($inf["data"]["status"]["value"], $this->bug_statuses))
+		{
+			$bug->set_prop("bug_status", $inf["data"]["status"]["value"]);
+		}
 		$bug->save();
 
 		if (trim($inf["desc"]) != "")

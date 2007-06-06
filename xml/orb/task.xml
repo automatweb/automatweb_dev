@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="task" folder="applications/groupware" extends="class_base">
-		<action name="stopper_pop">
+		<action name="stopper_pop" all_args="1">
 			<function name="stopper_pop">
 				<arguments>
 					<optional name="id" />
@@ -9,6 +9,16 @@
 					<optional name="type" />
 					<optional name="name" />
 					<optional name="desc" />
+					<optional name="source" />
+					<optional name="ident" />
+					<optional name="null_stos" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="provide_addon_data" all_args="1">
+			<function name="provide_addon_data">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
@@ -43,6 +53,15 @@
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<required name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_stop_type">
+			<function name="change_stop_type">
+				<arguments>
+					<optional name="ident" type="int" />
+					<optional name="type" type="int" />
 				</arguments>
 			</function>
 		</action>

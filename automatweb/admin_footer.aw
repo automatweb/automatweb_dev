@@ -104,6 +104,20 @@ $sf->vars(array(
 	"cur_class" => $cur_class,
 	"cur_obj_name" => $cur_obj->name(),
 	"site_title" => $site_title,
+	"stop_pop_url_add" => $sf->mk_my_orb("stopper_pop", array(
+		"s_action" => "start",
+		"new" => 1,
+	), CL_TASK),
+	"stop_pop_url_quick_add" => $sf->mk_my_orb("stopper_pop", array(
+		"source" => $_GET["class"],
+		"source_id" => $_GET["id"],
+		"s_action" => "start",
+		"new" => 1,
+	), CL_TASK),
+	"stop_pop_url_qw" => $sf->mk_my_orb("stopper_pop", array(), CL_TASK),
+/*	"ui_lang" => $pm->get_menu(array(
+		"text" => t("[Liidese keel]")
+	)),*/
 	"settings_pop" => $bmb->get_menu(array(
 		"load_on_demand_url" => $sf->mk_my_orb("settings_lod", array("url" => get_ru()), "user"),
 		"text" => '<img src="/automatweb/images/aw06/ikoon_seaded.gif" alt="seaded" width="17" height="17" border="0" align="left" style="margin: -1px 5px -3px -2px" />'.t("Seaded").' <img src="/automatweb/images/aw06/ikoon_nool_alla.gif" alt="#" width="5" height="3" border="0" class="nool" />'

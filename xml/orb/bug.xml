@@ -1,6 +1,22 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="bug" folder="applications/bug_o_matic_3000" extends="class_base">
+		<action name="handle_bug_change_status">
+			<function name="hadle_bug_change_status">
+				<arguments>
+					<required name="bug" type="oid" />
+					<required name="status" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_autocomplete">
+			<function name="get_autocomplete">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="handle_commit" nologin="1">
 			<function name="handle_commit">
 				<arguments>

@@ -56,15 +56,13 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>start</field>
-            <parent>top_2way_right</parent>
-            <caption>Algus</caption>
+            <caption>Algab </caption>
       </property>
       <property>
             <name>end</name>
             <table>planner</table>
             <group>general</group>
             <type>datetime_select</type>
-            <parent>top_2way_right</parent>
             <field>end</field>
             <caption>L&amp;amp;otilde;peb</caption>
       </property>
@@ -189,9 +187,7 @@
             <cols>80</cols>
             <rows>30</rows>
             <field>description</field>
-            <no_caption>1</no_caption>
-            <parent>center_bit_bottom</parent>
-            <caption>Kokkuv&amp;otilde;te</caption>
+            <caption>Kokkuv&amp;amp;otilde;te</caption>
       </property>
       <property>
             <name>is_done</name>
@@ -221,7 +217,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kestab terve p&amp;auml;eva</caption>
+            <caption>Kestab terve p&amp;amp;auml;eva</caption>
       </property>
       <property>
             <name>udefch1</name>
@@ -233,6 +229,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
+            <name>udeflb1</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_UDEFLB1</reltype>
+            <store>connect</store>
+            <field>udeflb1</field>
+            <caption>Kasutajdefineeritud muutuja 1</caption>
       </property>
       <property>
             <name>udeftb1</name>
@@ -680,6 +686,11 @@
                   <clid>CL_MRP_RESOURCE</clid>
                   <caption>ressurss</caption>
             </RESOURCE>
+            <UDEFLB1>
+                  <value>65</value>
+                  <clid>CL_META</clid>
+                  <caption>Kasutajadefineritud muutuja 1</caption>
+            </UDEFLB1>
             <PREDICATE>
                   <value>9</value>
                   <clid>

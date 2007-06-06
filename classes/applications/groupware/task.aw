@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.170 2007/05/04 10:34:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.171 2007/06/06 12:34:31 tarvo Exp $
 // task.aw - TODO item
 /*
 
@@ -265,6 +265,10 @@ caption Osalejad
 @caption Muu kulu
 */
 
+
+define("STOPPER_PAUSED", 1);
+define("STOPPER_RUNNING", 2);
+
 class task extends class_base
 {
 	function task()
@@ -273,27 +277,52 @@ class task extends class_base
 			"tpldir" => "groupware/task",
 			"clid" => CL_TASK,
 		));
+
+		$this->default_stoppers = array(
+			CL_TASK,
+			CL_CRM_CALL,
+			CL_CRM_MEETING,
+			CL_BUG,
+			CL_TASK_ROW,
+		);
+
+		$this->stopper_states = array(
+			STOPPER_PAUSED => t("Seisab"),
+			STOPPER_RUNNING => t("Stopper k&auml;ib"),
+		);
 	}
 
 	/**
-		@attrib name=stopper_pop
+		@attrib name=stopper_pop all_args=1
 		@param id optional
 		@param s_action optional
 		@param type optional
 		@param name optional
 		@param desc optional
+		@param source optional
+		@param ident optional
+		@param null_stos optional
 	**/
 	function stopper_pop($arr)
 	{
 		$this->read_template("stopper_pop.tpl");
-		if ($this->_proc_stop_act($arr) == 1)
+		
+		$ui = get_instance(CL_USER);
+		$u = obj($ui->get_current_user());
+		$stos = $this->get_stos($u);
+		$ret = $this->_proc_stop_act($arr, $stos);
+		$stos = ($arr["null_stos"] == 1)?array():$stos; /// for developing time only!!
+		$u->set_prop("stoppers", aw_serialize($stos, SERIALIZE_NATIVE));
+		$u->save();
+		if ($ret)
 		{
+			header("Location:". $ret);
 			$post = "<script language='javascript'>window.opener.reload();</script>";
 		}
 
 		$s = "";
 		$num = 0;
-		if (count(safe_array($_SESSION["crm_stoppers"])) < 1)
+		if (count($stos) < 1)
 		{
 			if ($post != "")
 			{
@@ -305,20 +334,140 @@ class task extends class_base
 			}
 			die();
 		}
-		$this->vars(array(
-			"stop_str" => t("Stopperid"),
-			"start_str" => t("Algus"),
-			"el_str" => t("kulunud"),
-			"p_str" => t("Paus"),
-			"s_str" => t("K&auml;ivita"),
-			"e_str" => t("L&otilde;peta"),
-			"d_str" => t("Kustuta"),
-		));
 
-		foreach(safe_array($_SESSION["crm_stoppers"]) as $_id => $stopper)
+		$html = $this->draw_alternative_stoppers($stos, $arr);
+		return $html;
+	}
+	
+	
+	function stopper_autocomplete($requester, $params)
+	{
+		switch($requester)
 		{
-			
-			if ($stopper["state"] == "running")
+			case "part":
+				$l = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+				));
+				foreach($l->arr() as $obj)
+				{
+					$ret[$obj->id()] = $obj->name();
+				}
+			break;
+			case "project":
+
+				if(strlen($params["part"]))
+				{
+					$parts = split(",", $params["part"]);
+					
+					$c = new connection();
+					$conns = $c->find(array(
+						"from.class_id" => CL_PROJECT,
+						"to" => $parts,
+					));
+					foreach($conns as $conn)
+					{
+						$p = obj($conn["from"]);
+						$ret[$p->id()] = $p->name();
+					}
+				}
+				else
+				{
+					$l = new object_list(array(
+						"class_id" => CL_PROJECT,
+					));
+					foreach($l->arr() as $obj)
+					{
+						$ret[$obj->id()] = $obj->name();
+					}
+
+				}
+			break;
+			default:
+				$ret = array();
+				break;
+		}
+		return $ret;
+	}
+
+	function gen_stopper_addon($fafa)
+	{		
+		$props = array(
+			array(
+				"name" => "name",
+				"type" => "textbox",
+				"caption" => "Nimi",
+			),
+			array(
+				"name" => "part",
+				"type" => "textbox",
+				"caption" => "Osaleja",
+				"autocomplete" => true,
+			),
+			array(
+				"name" => "project",
+				"type" => "textbox",
+				"caption" => "Projekt",
+				"autocomplete" => true,
+			),
+			array(
+				"name" => "isdone",
+				"type" => "checkbox",
+				"caption" => t("Tehtud"),
+				"ch_value" => 1,
+				"value" => 1,
+			),
+			array(
+				"name" => "tobill",
+				"type" => "checkbox",
+				"caption" => t("Arvele"),
+			),
+			array(
+				"name" => "desc",
+				"type" => "textarea",
+				"caption" => "Kirjeldus",
+			),
+		);
+		return $props;
+	}
+
+
+	function gen_existing_stopper_addon($fafa)
+	{
+		$inst = get_instance(CL_TASK_ROW);
+		$fu = $inst->gen_stopper_addon($fafa);
+		foreach($fu as $k => $v)
+		{
+			if($v["name"] == "task")
+			{
+				unset($fu[$k]);
+			}
+		}
+		return $fu;
+	}
+
+	function draw_alternative_stoppers($stoppers, $arr)
+	{
+		$htmlclient = get_instance("cfg/htmlclient");
+		$htmlclient->start_output(array(
+			"template" => "default"
+		));
+		$layoutinfo = array(
+			"main_layout" => array(
+				"type" => "vbox",
+				"no_caption" => 1,
+			)
+		);
+		// this upper_layout is here for a reason, so dont you even try to remove this.. 
+		$layoutinfo["upper_layout"] = array(
+			"type" => "vbox",
+			"no_caption" => 1,
+			"parent" => "main_layout",
+		);
+
+		$cls = aw_ini_get("classes");
+		foreach($stoppers as $ident => $stopper)
+		{
+			if ($stopper["state"] == STOPPER_RUNNING)
 			{
 				$el = (time() - $stopper["start"]) + $stopper["base"];
 			}
@@ -329,81 +478,345 @@ class task extends class_base
 			$elapsed_hr = (int)($el / 3600);
 			$elapsed_min = (int)(($el - $elapsed_hr * 3600) / 60);
 			$elapsed_sec = (int)($el - ($elapsed_hr * 3600 + $elapsed_min * 60));
-			$this->vars(array(
-				"task_type" => $stopper["type"],
-				"task_name" => $stopper["name"],
-				"task_name_esc" => str_replace("\"", "\\\"", trim($stopper["name"])),
-				"time" => date("d.m.Y H:i:s", $stopper["start"]),
-				"elapsed" => sprintf("%02d:%02d:%02d",$elapsed_hr,$elapsed_min, $elapsed_sec),
-				"number" => $num++,
-				"start" => $stopper["start"],
-				"el_hr" => $elapsed_hr,
-				"el_min" => $elapsed_min,
-				"el_sec" => $elapsed_sec,
-				"pause_url" => $this->mk_my_orb("stopper_pop", array(
-					"id" => $_id,
-					"s_action" => "pause"
-				)),
-				"start_url" => $this->mk_my_orb("stopper_pop", array(
-					"id" => $_id,
-					"s_action" => "start"
-				)),
-				"stop_url" => $this->mk_my_orb("stopper_pop", array(
-					"id" => $_id,
-					"s_action" => "stop"
-				)),
-				"del_url" => $this->mk_my_orb("stopper_pop", array(
-					"id" => $_id,
-					"s_action" => "del"
-				)),
-			));
 
-			if ($stopper["state"] == "running")
+			$layoutinfo["sto_".$ident."_area"] = array(
+				"type" => "vbox",
+				"closeable" => 1,
+				"area_caption" => sprintf(t("Stopper '%s'"), $stopper["name"]),
+				"parent" => "main_layout",
+			);
+			if($this->stop_error[$ident])
 			{
-				$this->vars(array(
-					"PAUSE" => $this->parse("PAUSE"),
-					"RUNNER" => $this->parse("RUNNER"),
-					"PAUSER" => "",
-					"START" => ""
+				$htmlclient->add_property(array(
+					"name" => "error",
+					"parent" => "sto_".$ident."_area",
+					"type" => "text",
+					"no_caption" => 1,
+					"value" => "<div style=\"border:1px solid red;padding:3px;\">".$this->stop_error[$ident]."</div>",
+				));
+				unset($this->stop_error[$ident]);
+			}
+			$layoutinfo["sto_".$ident."_hbox"] = array(
+				"type" => "hbox",
+				"parent" => "sto_".$ident."_area",
+			);
+			$layoutinfo["sto_".$ident."_left"] = array(
+				"type" => "vbox",
+				"parent" => "sto_".$ident."_hbox",
+			);
+			$layoutinfo["sto_".$ident."_right"] = array(
+				"type" => "vbox",
+				"parent" => "sto_".$ident."_hbox",
+			);
+			$htmlclient->add_property(array(
+				"name" => "stop_".$ident."_name",
+				"caption" => t("Nimi"),
+				"type" => "text",
+				"value" => $stopper["name"],
+				"parent" => "sto_".$ident."_left",
+			));
+			if($stopper["type"])
+			{
+				$htmlclient->add_property(array(
+					"name" => "stop_".$ident."_type",
+					"caption" => t("T&uuml;&uuml;p"),
+					"type" => "text",
+					"value" => $cls[$stopper["type"]]["name"],
+					"parent" => "sto_".$ident."_left",
 				));
 			}
 			else
 			{
-				$this->vars(array(
-					"PAUSE" => "",
-					"START" => $this->parse("START"),
-					"RUNNER" => "",
-					"PAUSER" => $this->parse("PAUSER"),
+				unset($opts);
+				$opts[0] = t("-- Vali t&uuml;&uuml;p --");
+				foreach($this->default_stoppers as $clid)
+				{
+					$opts[$clid] = $cls[$clid]["name"];
+				}
+				$url = $this->mk_my_orb("change_stop_type", array(
+					"ident" => $ident,
 				));
-			}
-			// extra info depending on class
-			if(call_user_func(array(($bug = obj($_id)),"class_id")) == CL_BUG)
-			{
-				$inst = get_instance(CL_BUG);
-				$bug_status_url = $this->mk_my_orb("handle_bug_change_status", array(
-					"bug" => $_id,
-					"status" => 'ehh',
-				), CL_BUG);
-				$this->vars(array(
-					"extra_info" => html::select(array(
-						"name" => "bug_status",
-						"options" => $inst->bug_statuses,
-						"selected" => $bug->prop("bug_status"),
-						"id" => "bug_status_".$_id,
-						//"onChange" => "current_status = 'juhuu';"
-					))."<br>",
-					"extra_javascript_on_stop" => sprintf("aw_get_url_contents(\"%s\"); ", $bug_status_url),
+				$htmlclient->add_property(array(
+					"name" => "stop_".$ident."_type",
+					"caption" => t("T&uuml;&uuml;p"),
+					"type" => "select",
+					"options" => $opts,
+					"parent" => "sto_".$ident."_left",
+					"onchange" => "javascript:aw_get_url_contents('".$url."&type=' + document.getElementById('stop_".$ident."_type').value); document.location.reload();"
 				));
 			}
 
-			$s .= $this->parse("STOPPER");
+			if($stopper["type"] && !$this->can("view", $stopper["oid"]))
+			{
+				$search_butt = get_instance($this->vcl_register["popup_search"]);
+				$sb = $search_butt->get_popup_search_link(array(
+					"pn" => "searched_oid[".$ident."]",
+					"multiple" => false,
+					"clid" => $stopper["type"],
+				));
+				$htmlclient->add_property(array(
+					"parent" => "sto_".$ident."_left",
+					"name" => "search_butt",
+					"type" => "text",
+					"caption" => t("Otsi olemasolev objekt"),
+					"value" => $sb,
+				));
+				$htmlclient->add_property(array(
+					"parent" => "sto_".$ident."_left",
+					"name" => "searched_oid[".$ident."]",
+					"type" => "hidden",
+					"no_caption" => 1,
+				));
+			}
+
+			$htmlclient->add_property(array(
+				"name" => "stop_".$ident."_time",
+				"caption" => t("Aeg"),
+				"type" => "text",
+				"value" => "<div id=\"stopdiv_".$ident."_time\">".sprintf("%02d:%02d:%02d",$elapsed_hr,$elapsed_min, $elapsed_sec)."</div>",
+				"parent" => "sto_".$ident."_left",
+			));
+			// top secret property for js stops array
+			if($stopper["state"] == STOPPER_RUNNING)
+			{
+				$js = '<script language="javascript">
+			stops['.$ident.'] = new Array('.$elapsed_hr.','.$elapsed_min.','.$elapsed_sec.');
+			</script>';
+				$htmlclient->add_property(array(
+					"name" => "stop_".$ident."_js_time",
+					"no_caption" => 1,
+					"type" => "text",
+					"value" => $js,
+					"parent" => "sto_".$ident."_left",
+				));
+			}
+			$htmlclient->add_property(array(
+				"name" => "stop_".$ident."_state",
+				"caption" => t("Staatus"),
+				"type" => "text",
+				"value" => $this->stopper_states[$stopper["state"]],
+				"parent" => "sto_".$ident."_left",
+			));
+			unset($actions);
+
+			if($stopper["state"] == STOPPER_RUNNING)
+			{
+				$actions[] = html::href(array(
+					"caption" => t("Paus"),
+					"url" => "javascript:document.changeform.ident.value = \"".$ident."\";document.changeform.s_action.value = \"pause\"; submit_changeform(\"stopper_pop\");",
+				));
+			}
+			else
+			{
+				$actions[] = html::href(array(
+					"caption" => t("Start"),
+					"url" => "javascript:document.changeform.ident.value = \"".$ident."\";document.changeform.s_action.value = \"start\"; submit_changeform(\"stopper_pop\");",
+				));
+			}
+			$actions[] = html::href(array(
+				"caption" => t("L&otilde;peta"),
+				"url" => "javascript:document.changeform.ident.value = \"".$ident."\";document.changeform.s_action.value = \"stop\"; submit_changeform(\"stopper_pop\");",
+			));
+			$actions[] = html::href(array(
+				"caption" => t("Kustuta"),
+				"url" => $this->mk_my_orb("stopper_pop", array(
+					"ident" => $ident,
+					"s_action" => "del",
+				)),
+			));
+
+			$htmlclient->add_property(array(
+				"type" => "hidden",
+				"no_caption" => 1,
+				"name" => "ident",
+			));
+			$htmlclient->add_property(array(
+				"type" => "hidden",
+				"no_caption" => 1,
+				"name" => "s_action",
+			));
+
+			$htmlclient->add_property(array(
+				"name" => "stop_".$ident."_actions",
+				"caption" => t("Tegevused"),
+				"type" => "text",
+				"parent" => "sto_".$ident."_left",
+				"value" => join(" | ", $actions),
+			));
+			if($stopper["type"])
+			{
+
+				$i = get_instance($stopper["type"]);
+				$method = $this->can("view", $stopper["oid"])?"gen_existing_stopper_addon":"gen_stopper_addon";
+				$props = method_exists($i, $method)?$i->$method($stopper):array();
+				unset($params);
+				foreach($props as $prop)
+				{
+					$params[] = "stopdata_".$ident."_".$prop["name"];
+				}
+				foreach($props as $prop)
+				{
+					$prop_orig_name = $prop["name"];
+					$prop["name"] = "stopdata_".$ident."_".$prop["name"];
+					
+					if($prop["autocomplete"] || isset($prop["autocomplete_delimiters"]))
+					{
+						$prop["autocomplete_params"] = $params;
+						$prop["option_is_tuple"] = true;
+						$prop["autocomplete_source"] = $this->mk_my_orb("provide_addon_data", array(
+							"class" => "task",
+							"requester_class" => $stopper["type"],
+						));
+						
+						//$prop["content"] = $stopper["data"][$prop_orig_name]["caption"]?$stopper["data"][$prop_orig_name]["caption"]:$stopper["data"][$prop_orig_name]["value"];
+						if(strlen($stopper["data"][$prop_orig_name]["caption"]))
+						{
+							$val = split(",", $stopper["data"][$prop_orig_name]["value"]);
+							$cap = split(",", $stopper["data"][$prop_orig_name]["caption"]);
+							foreach($val as $k => $val)
+							{
+								$prop["selected"][$val] = $cap[$k];
+							}
+						}
+					}
+					if($prop["type"] == "checkbox")
+					{
+						// this little thingie here helps dha checkbox phenomen
+						$prop["pre_append_text"] = html::hidden(array(
+							"name" => $prop["name"],
+							"value" => 0,
+						));
+					}
+					$prop["value"] = strlen($prop["value"])?$prop["value"]:$stopper["data"][$prop_orig_name]["value"];				
+					$prop["selected"] = strlen($prop["selected"])?$prop["selected"]:$stopper["data"][$prop_orig_name]["value"];
+					$prop["parent"] = "sto_".$ident."_right";
+					/*
+					if($prop["value"])
+					{
+						$correct_prop_hidden = $prop;
+						$correct_prop_hidden["type"] = "hidden";
+						$correct_prop_hidden["no_caption"] = 1;
+						$htmlclient->add_property($correct_prop_hidden);
+
+						$prop["name"] = $prop["name"]."_fake";
+						$prop["disabled"] = 1;
+						
+						//$prop["type"] = "hidden";
+						//$prop["no_caption"] = 1;
+					}
+					*/
+					$htmlclient->add_property($prop);
+				}
+			}
+
+		}
+		$htmlclient->add_property(array(
+			"name" => "general_javascript_beginning",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => "<script>var stops = new Array(); </script>",
+			"parent" => "upper_layout",
+		));
+		$htmlclient->add_property(array(
+			"name" => "general_javascript",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $this->gimmi_stopper_js(),
+		));
+		$htmlclient->set_layout($layoutinfo);
+		$htmlclient->finish_output(array(
+			"action" => "stopper_pop",
+			"method" => "GET",
+			"data" => array(
+				"class" => "task",
+			),
+		));
+		return $htmlclient->get_result(array(
+			"form_only" => 1,
+		));
+	}
+
+	function gimmi_stopper_js()
+	{
+
+		return '<script language="javascript">
+	function update_stoppers()
+	{
+		for(stopKey in stops)
+		{
+			el = document.getElementById(\'stopdiv_\'+stopKey+\'_time\');
+			if(!el)
+			{
+				continue;
+			}
+			tm = stops[stopKey];
+			// add a sec
+			tm[2]++;
+			if (tm[2] > 60)
+			{
+				tm[2] = 0;
+				tm[1]++;
+			}
+			if (tm[1] > 60)
+			{
+				tm[1] = 0;
+				tm[0]++;
+			}
+			hr = tm[0];
+			if (hr < 10)
+			{
+				hr = "0" + hr;
+			}
+			mn = tm[1];
+			if (mn < 10)
+			{
+				mn = "0" + mn;
+			}
+			sc = tm[2];
+			if (sc < 10)
+			{
+				sc = "0" + sc;
+			}
+			el.innerHTML = hr+":"+mn+":"+sc;
+		}
+		setTimeout("update_stoppers()", 990);
+	}
+
+	setTimeout("update_stoppers()", 990);
+	</script>';
+	}
+
+
+	/**
+		@attrib name=provide_addon_data all_args=1
+	**/
+	function provide_addon_data($arr)
+	{
+		$spl = split("_", $arr["requester"]);
+		$requester_stop = $spl[1];
+		$requester_prop = $spl[2];
+		foreach($arr as $k => $v)
+		{
+			$spl = split("_", $k);
+			if($spl[0] == "stopdata" && $spl[1] == $requester_stop)
+			{
+				$params[$spl[2]] = $v;
+			}
+
+			$fa[++$i] = $k."=>".$v;
+		}
+		$inst = get_instance($arr["requester_class"]);
+		$opt = $inst->stopper_autocomplete($requester_prop, $params);
+		foreach($opt as $k => $v)
+		{
+			$opt[$k] = str_replace(";", ",", $v);
 		}
 
-		$this->vars(array(
-			"STOPPER" => $s
-		));
-
-		return $this->parse().$post;
+		$ret = array(
+			"options" => $opt,
+		);
+		$json = get_instance("protocols/data/json");
+		die($json->encode($ret));
 	}
 	
 	function callback_get_default_group($arr)
@@ -682,13 +1095,14 @@ class task extends class_base
 					$url = $this->mk_my_orb("stopper_pop", array(
 						"id" => $arr["obj_inst"]->id(),
 						"s_action" => "start",
-						"type" => t("Toimetus"),
-						"name" => $data["value"]
+						"type" => CL_TASK,
+
+						"source_id" => $arr["obj_inst"]->id(),
 					));
-					$data["post_append_text"] = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+					$data["post_append_text"] = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\", 800,600)'>".t("Stopper")."</a>";
 					if ($arr["request"]["stop_pop"] == 1)
 					{
-						$data["post_append_text"] .= "<script language='javascript'>aw_popup_scroll(\"$url\",\"aw_timers\",320,400)</script>";
+						$data["post_append_text"] .= "<script language='javascript'>aw_popup_scroll(\"$url\",\"aw_timers\", 800, 600)</script>";
 					}
 				}
 				break;
@@ -1879,22 +2293,21 @@ class task extends class_base
 			if ($idx > 0)
 			{
 				$url = $this->mk_my_orb("stopper_pop", array(
-					"id" => $idx,
 					"s_action" => "start",
-					"type" => t("Toimetus"),
-					"name" => $data["value"]
+					"type" => CL_TASK_ROW,
+					"name" => $data["value"],
+					"source_id" => $idx,
 				));
-				$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+				$stopper = " <a href='javascript:void();' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",800,600)'>".t("Stopper")."</a>";
 			}
 			else
 			{
 				$url = $this->mk_my_orb("stopper_pop", array(
-					"id" => $arr["obj_inst"]->id(),
 					"s_action" => "start",
-					"type" => t("Toimetus"),
+					"type" => CL_TASK_ROW,
 					"name" => $arr["obj_inst"]->name()
 				));
-				$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+				$stopper = " <a href='javascript:void();' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
 			}
 
 			$onbill = "";
@@ -2540,35 +2953,114 @@ class task extends class_base
 		return parent::new_change($arr);
 	}
 
+
+	function get_stos($u = false)
+	{
+		$ui = get_instance(CL_USER);
+		$u = $u?$u:obj($ui->get_current_user());
+		return aw_unserialize($u->prop("stoppers"));
+	}
+
+	// seda peaks timmima veidi, crm_company_overview_impl'is ~600 rea juures kysitakse l2bi selle fun'i objekti id'ga, mitte alustusaja j2rgi nagu nyyd o
 	function stopper_is_running($task_id)
 	{
-		return $_SESSION["crm_stoppers"][$task_id]["state"] == "running";
+		$stos = $this->get_stos();
+		return $stos[$task_id]["state"] == STOPPER_RUNNING;
 	}
 
 	function get_stopper_time($task_id)
 	{
-		$elapsed = time() - $_SESSION["crm_stoppers"][$task_id]["start"];
-		return $_SESSION["crm_stoppers"][$task_id]["base"] + $elapsed;
+		$stos = $this->get_stos();
+		$elapsed = time() - $stos[$task_id]["start"];
+		return $stos[$task_id]["base"] + $elapsed;
 	}
 
-	function _proc_stop_act($arr)
+	/**
+		@attrib name=change_stop_type
+		@param ident optional type=int
+		@param type optional type=int
+	**/
+	function change_stop_type($arr)
 	{
+		$ui = get_instance(CL_USER);
+		$u = obj($ui->get_current_user());
+		$stos = $this->get_stos($u);
+		$stos[$arr["ident"]]["type"] = $arr["type"];
+		$u->set_prop("stoppers", aw_serialize($stos, SERIALIZE_NATIVE));
+		$u->save();
+		header("Location:".$this->mk_my_orb("stopper_pop", array(
+			"new" => 1,
+		), CL_TASK));
+	}
+
+	function _proc_stop_act($arr, &$stos)
+	{
+		// lets store stoppers data
+		$ac_postfix = "_awAutoCompleteTextbox";
+		foreach($arr as $k => $v)
+		{
+			// god-mother-fukin-damn .. uhh. well, i have to ignore those double elements from ac
+			if(substr($k, (0-strlen($ac_postfix))) == $ac_postfix)
+			{
+				continue;
+			}
+
+			$spl = split("_", $k);
+			// well, here we filter out the stoppers data
+			if($spl[0] == "stopdata")
+			{
+				// here we find such elements which use autocomplete.. hopefully
+				if(array_key_exists($k.$ac_postfix, $arr))
+				{
+					// we have to store the real value and the caption in case autocomplete is used 
+					if($v != $arr[$k.$ac_postfix])
+					{
+						$stos[$spl[1]]["data"][$spl[2]]["value"] = $v;
+						$stos[$spl[1]]["data"][$spl[2]]["caption"] = $arr[$k.$ac_postfix];
+					}
+					else
+					{
+						$stos[$spl[1]]["data"][$spl[2]]["value"] = $v;
+						$stos[$spl[1]]["data"][$spl[2]]["caption"] = "";
+					}
+				}
+				else
+				{
+					$stos[$spl[1]]["data"][$spl[2]]["value"] = $v;
+					$stos[$spl[1]]["data"][$spl[2]]["caption"] = "";
+				}
+			}
+		}
+
+		// searched_oids
+		foreach($arr["searched_oid"] as $sto_ident => $oid)
+		{
+			if($this->can("view", $oid) && !$this->can("view", $stos[$sto_ident]))
+			{
+				$o = obj($oid);
+				$stos[$sto_ident]["oid"] = $oid;
+				$stos[$sto_ident]["name"] = $o->name();
+				$url = $this->mk_my_orb("stopper_pop",array(), CL_TASK);
+			}
+		}
+		
 		if ($arr["s_action"] == "del")
 		{
-			unset($_SESSION["crm_stoppers"][$arr["id"]]);
+			unset($stos[$arr["ident"]]);
 		}
 		else
 		if ($arr["s_action"] == "pause")
 		{
-			$elapsed = time() - $_SESSION["crm_stoppers"][$arr["id"]]["start"];
-			$_SESSION["crm_stoppers"][$arr["id"]]["base"] += $elapsed;
-			$_SESSION["crm_stoppers"][$arr["id"]]["state"] = "paused";
+			$elapsed = time() - $stos[$arr["ident"]]["start"];
+			$stos[$arr["ident"]]["base"] += $elapsed;
+			$stos[$arr["ident"]]["state"] = STOPPER_PAUSED;
 		}
 		else
 		if ($arr["s_action"] == "stop")
 		{
 			// stop timer and write row to task
-			$stopper = $_SESSION["crm_stoppers"][$arr["id"]];
+			$stopper = $stos[$arr["ident"]];
+			
 			$elapsed = (time() - $stopper["start"]) + $stopper["base"];
 			$el_hr = (int)($elapsed / 3600);
 			$el_min = (int)(($elapsed - $el_hr * 3600) / 60);
@@ -2586,46 +3078,89 @@ class task extends class_base
 			{
 				$el_hr += 0.75;
 			}
-			$o = obj($arr["id"]);
-			$i = $o->instance();
-			$rv = $i->handle_stopper_stop($o, array(
-				"desc" => $arr["desc"],
-				"start" => $stopper["start"],
-				"hours" => $el_hr
-			));
-			unset($_SESSION["crm_stoppers"][$arr["id"]]);
+
+			$i = get_instance($stopper["type"]);
+			$stopper["hours"] = $el_hr;
+			$stopper["first_start"] = $arr["ident"];
+			$rv = false;
+			if(method_exists($i, "handle_stopper_stop"))
+			{
+				$rv = $i->handle_stopper_stop($stopper);
+
+			}
+			if(!$rv)
+			{
+				unset($stos[$arr["ident"]]);
+			}
+			else
+			{
+				$this->stop_error[$arr["ident"]] = $rv;
+				// do something !!
+			}
+		
 		}
 		else
 		if ($arr["s_action"] == "start")
 		{
 			// pause all running timers
-			foreach((array)$_SESSION["crm_stoppers"] as $k => $stopper)
+			foreach((array)$stos as $k => $stopper)
 			{
-				if ($stopper["state"] == "running" && $k != $arr["id"])
+				if ($stopper["state"] == STOPPER_RUNNING && $k != $arr["ident"])
 				{
 					$elapsed = time() - $stopper["start"];
-					$_SESSION["crm_stoppers"][$k]["base"] += $elapsed;
-					$_SESSION["crm_stoppers"][$k]["state"] = "paused";
+					$stos[$k]["base"] += $elapsed;
+					$stos[$k]["state"] = STOPPER_PAUSED;
 				}
 			}
-
-			$k = $arr["id"];
-			if ($_SESSION["crm_stoppers"][$k]["state"] != "running")
+			if($arr["id"])
 			{
-				$_SESSION["crm_stoppers"][$k]["start"] = time();
+				foreach($stos as $k => $stopper)
+				{
+					if($stopper["id"] == $arr["id"])
+					{
+						$arr["ident"] = $k;
+						break;
+					}
+				}
 			}
-
+			$new_stop = $stos[$arr["ident"]];
+			if ($stos[$arr["ident"]]["state"] != STOPPER_RUNNING)
+			{
+				$new_stop["start"] = time();
+			}
+			
+			if($this->can("view", $arr["source_id"]))
+			{
+				$o = obj($arr["source_id"]);
+				if(in_array($o->class_id(), $this->default_stoppers))
+				{
+					$new_stop["type"] = $arr["type"] = $o->class_id();
+					$new_stop["oid"] = $arr["oid"] = $o->id();
+					$arr["name"] = $o->name();
+					//$this->change_stop_type(array($arr["ident"]));
+				}
+			}
+			
 			if (isset($arr["type"]))
 			{
-				$_SESSION["crm_stoppers"][$k]["type"] = $arr["type"];
+				$new_stop["type"] = $arr["type"];
 			}
+
 			if (isset($arr["name"]))
 			{
-				$_SESSION["crm_stoppers"][$k]["name"] = $arr["name"];
+				$new_stop["name"] = $arr["name"];
 			}
-			$_SESSION["crm_stoppers"][$k]["state"] = "running";
+			else
+			{
+				$arr["name"] = $new_stop["name"] = "Nimetu stopper";
+			}
+			$ident = $arr["ident"]?$arr["ident"]:$new_stop["start"];
+			$new_stop["state"] = STOPPER_RUNNING;
+			$new_stop["data"]["name"]["value"] = $arr["name"];
+			$stos[$ident] = $new_stop;
+			$url = $this->mk_my_orb("stopper_pop",array(), CL_TASK);
 		}
-		return $rv;
+		return $url;
 	}
 
 	/**
@@ -2987,20 +3522,61 @@ class task extends class_base
 		return $arr["post_ru"];
 	}
 
-	function handle_stopper_stop($o, $inf)
+	
+	function handle_stopper_stop($arr)
 	{
-		$u = get_instance(CL_USER);
-		$cp = obj($u->get_current_person());
+		if(!$this->can("view", $arr["oid"]))
+		{
+			if($arr["data"]["name"]["value"] && $this->can("view", $arr["data"]["part"]["value"]) && $this->can("view", $arr["data"]["project"]["value"]))
+			{
+				$o = new object();
+				$o->set_parent($arr["data"]["project"]["value"]);
+				$o->set_name($arr["data"]["name"]["value"]);
+				$o->set_class_id(CL_TASK);
+				$o->set_prop("start1", $arr["first_start"]);
+				
+				$o->set_prop("is_done", $arr["data"]["isdone"]["value"]?1:0);
+				$o->set_prop("send_bill", $arr["data"]["tobill"]["value"]?1:0);
+				$o->set_prop("content", $arr["data"]["desc"]["value"]);
+				
+				$o->save();
+				$person = obj($arr["data"]["part"]["value"]);
+				$person->connect(array(
+					"to" => $o->id(),
+					"type" => "RELTYPE_PERSON_CALL",
+				));
+				$o->connect(array(
+					"to" => $arr["data"]["project"]["value"],
+					"type" => "RELTYPE_PROJECT",
+				));
+				
+				$arr["oid"] = $o->id();
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		$o = obj($arr["oid"]);
+		$o->set_prop("num_hrs_real", $o->prop("nuh_hrs_real") + $arr["hours"]);
+		$o->set_prop("num_hrs_to_cust", $o->prop("time_to_cust") + $arr["hours"]);
+		$o->set_prop("end", time());
+		
+		$cp = get_current_person();
 
 		$row = obj();
 		$row->set_parent($o->id());
 		$row->set_class_id(CL_TASK_ROW);
-		$row->set_prop("content", $inf["desc"]);
-		$row->set_prop("date", $inf["start"]);
+		$row->set_prop("content", $arr["data"]["desc"]["value"]);
+		$row->set_prop("date", $arr["start"]);
 		$row->set_prop("impl", array($cp->id() => $cp->id()));
-		$row->set_prop("time_real", $inf["hours"]);
-		$row->set_prop("time_to_cust", $inf["hours"]);
-		$row->set_prop("done", 1);
+		
+		$row->set_prop("time_guess", strlen($arr["data"]["timeguess"]["value"])?$arr["data"]["timeguess"]["value"]:$arr["hours"]);
+		$row->set_prop("time_real", strlen($arr["data"]["timereal"]["value"])?$arr["data"]["timereal"]["value"]:$arr["hours"]);
+		$row->set_prop("time_to_cust", strlen($arr["data"]["timetocust"]["value"])?$arr["data"]["timetocust"]["value"]:$arr["hours"]);
+		$row->set_prop("done", $arr["data"]["isdone"]["value"]?1:0);
+		$row->set_prop("on_bill", $arr["data"]["tobill"]["value"]?1:0);
 		$row->save();
 		$o->connect(array(
 			"to" => $row->id(),

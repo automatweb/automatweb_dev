@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.8 2006/10/24 08:49:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.9 2007/06/06 12:34:31 tarvo Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -96,6 +96,7 @@ class task_row extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	/*
 	function handle_stopper_stop($o, $data)
 	{
 		$o->set_prop("time_real", $o->prop("time_real") + $data["hours"]);
@@ -107,6 +108,7 @@ class task_row extends class_base
 
 		return 1;
 	}
+	*/
 
 	function do_db_upgrade($t, $f)
 	{
@@ -221,5 +223,134 @@ class task_row extends class_base
 		}
 		return 0;
 	}
+
+	function stopper_autocomplete($requester, $params)
+	{
+		switch($requester)
+		{
+			case "task":
+				$l = new object_list(array(
+					"class_id" => CL_TASK,
+				));
+				foreach($l->arr() as $obj)
+				{
+					$ret[$obj->id()] = $obj->name();
+				}
+			break;
+			default:
+				$ret = array();
+				break;
+		}
+		return $ret;
+	}
+
+
+	function gen_stopper_addon($fafa)
+	{		
+		$props = array(
+			array(
+				"name" => "task",
+				"type" => "textbox",
+				"autocomplete" => true,
+				"caption" => t("Toimetus"),
+			),
+			array(
+				"name" => "desc",
+				"type" => "textbox",
+				"caption" => t("Tegevus"),
+			),
+			array(
+				"name" => "isdone",
+				"type" => "checkbox",
+				"caption" => t("Tehtud"),
+				"ch_value" => 1,
+				"value" => 1,
+			),
+			array(
+				"name" => "tobill",
+				"type" => "checkbox",
+				"caption" => t("Arvele"),
+			),
+			array(
+				"name" => "explanation",
+				"type" => "text",
+				"no_caption" => 1,
+				"value" => "<b>".t("Aegade puhul t&auml;hendab t&uuml;hi lahter stopperi aega.")."</b>",
+			),
+			array(
+				"name" => "timeguess",
+				"type" => "textbox",
+				"value" => "0",
+				"caption" => t("Prognoositud tunde"),
+			),
+			array(
+				"name" => "timereal",
+				"type" => "textbox",
+				"caption" => t("Kulunud tunde"),
+			),
+			array(
+				"name" => "timetocust",
+				"type" => "textbox",
+				"caption" => t("Tunde kliendile"),
+			),
+		);
+		return $props;
+	}
+
+	function gen_existing_stopper_addon($fafa)
+	{
+		$props = array(
+			array(
+				"name" => "isdone",
+				"type" => "checkbox",
+				"caption" => t("Tehtud"),
+				"ch_value" => 1,
+				"value" => 1,
+			),
+			array(
+				"name" => "tobill",
+				"type" => "checkbox",
+				"caption" => t("Arvele"),
+			),
+		);
+		return $props;
+	}
+	
+	function handle_stopper_stop($arr)
+	{
+		if(!$this->can("view", $arr["oid"]))
+		{
+			if(!$this->can("view", $arr["data"]["task"]["value"]) || !strlen($arr["data"]["desc"]["value"]))
+			{
+				return t("Toimetus ja tegevus peavad m&auml;&auml;ratud olema");
+			}
+			$o = obj($arr["data"]["task"]["value"]);
+			$cp = get_current_person();
+
+			$row = obj();
+			$row->set_parent($o->id());
+			$row->set_class_id(CL_TASK_ROW);
+			$row->set_prop("content", $arr["data"]["desc"]["value"]);
+			$row->set_prop("date", $arr["start"]);
+			$row->set_prop("impl", array($cp->id() => $cp->id()));
+			$row->save();
+			$arr["oid"] = $row->id();
+			$o->connect(array(
+				"to" => $row->id(),
+				"type" => "RELTYPE_ROW"
+			));
+		}
+
+		$row = obj($arr["oid"]);
+		
+		$row->set_prop("time_guess", strlen($arr["data"]["timeguess"]["value"])?$arr["data"]["timeguess"]["value"]:($row->prop("time_guess")+$arr["hours"]));
+		$row->set_prop("time_real", strlen($arr["data"]["timereal"]["value"])?$arr["data"]["timereal"]["value"]:($row->prop("time_real") + $arr["hours"]));
+		$row->set_prop("time_to_cust", strlen($arr["data"]["timetocust"]["value"])?$arr["data"]["timetocust"]["value"]:($row->prop("time_to_cust") + $arr["hours"]));
+		
+		$row->set_prop("done", $arr["data"]["isdone"]["value"]?1:0);
+		$row->set_prop("on_bill", $arr["data"]["tobill"]["value"]?1:0);
+		$row->save();
+	}
+
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.202 2007/06/06 10:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.203 2007/06/06 12:34:41 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -40,7 +40,7 @@
 		@property pmethod_properties type=callback callback=callback_get_pmethod_options group=advanced_settings store=no
 		@caption Avaliku meetodi seaded
 
-		@property admin_feature type=select group=advanced_settings table=menu field=admin_feature
+		@property admin_feature warning=0 type=select group=advanced_settings table=menu field=admin_feature
 		@caption Vali programm
 
 		@property objtbl_conf type=relpicker reltype=RELTYPE_OBJ_TABLE_CONF field=meta method=serialize group=advanced_settings
