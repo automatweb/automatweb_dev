@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.167 2007/06/05 09:41:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.168 2007/06/06 12:19:04 tarvo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -532,7 +532,7 @@ class htmlclient extends aw_template
 			$val["name"] = $key;
 			$this->layout_by_parent[$lparent][$key] = $val;
 			$this->lp_chain[$key] = $lparent;
-			// mul on iga layoudi kohta vaja teada tema kõige esimest layouti
+			// mul on iga layoudi kohta vaja teada tema k&otilde;ige esimest layouti
 		};
 
 		$this->properties_by_parent = array();
@@ -816,6 +816,7 @@ class htmlclient extends aw_template
 				"more_help_text" => $this->config["more_help_text"],
 				"close_help_text" => $this->config["close_help_text"],
 				"open_help_text" => $this->config["open_help_text"],
+				"warn" => $this->config["warn"],
 				"feedback_link" => $this->mk_my_orb("redir_new_feedback", array(
 					"d_class" => $_GET["class"],
 					"d_obj" => $_GET["id"],
@@ -1047,14 +1048,19 @@ class htmlclient extends aw_template
 				break;
 
 			case "checkbox":
+				$arr["checked"] = ($arr["value"] && ( (isset($arr["ch_value"]) && $arr["value"] == $arr["ch_value"]) || !isset($arr["ch_value"]) ) );
+				$arr["value"] = isset($arr["ch_value"]) ? $arr["ch_value"] : "";
+				$retval = html::checkbox($arr);
+				/*
 				$retval = html::checkbox(array(
 					"label" => isset($arr["label"]) ? $arr["label"] : "",
 					"name" => $arr["name"],
 					"value" => isset($arr["ch_value"]) ? $arr["ch_value"] : "",
 					"caption" => isset($arr["caption"]) ? $arr["caption"] : "",
 					"checked" => ($arr["value"] && ( (isset($arr["ch_value"]) && $arr["value"] == $arr["ch_value"]) || !isset($arr["ch_value"]) ) ),
-					"onclick" => $arr["onclick"]
+					"onclick" => $arr["onclick"],
 				));
+				*/
 				break;
 
 				// will probably be deprecated, after all what good is a
@@ -1186,7 +1192,10 @@ class htmlclient extends aw_template
 		foreach(safe_array(isset($this->layout_by_parent[$layout_name]) ? $this->layout_by_parent[$layout_name] : null) as $lkey => $lval)
 		{
 			$html = $this->parse_layouts($lkey);
-
+			if($this->view_layout && $this->view_layout == $lkey)
+			{
+				die(mb_convert_encoding($html, "UTF-8", "ISO-8859-1"));
+			}
 			$sub_layouts[$lkey] = $html;
 
 			if (!empty($html))
@@ -1303,6 +1312,17 @@ class htmlclient extends aw_template
 				$ghc = $this->parse("GRID_HAS_CLOSER");
 				$gce = $this->parse("GRID_CLOSER_END");
 			}
+			/*
+			else
+			{
+				$this->vars(array(
+					"grid_name" => $layout_name,
+				));
+				$this->vars(array(
+					"GRID_NO_CLOSER" => $this->parse("GRID_NO_CLOSER"),
+					"GRID_NO_CLOSER_END" => $this->parse("GRID_NO_CLOSER_END"),
+				));
+			}*/
 
 			$this->vars(array(
 				"GRID_HBOX_ITEM" => $content,
@@ -1310,8 +1330,20 @@ class htmlclient extends aw_template
 				"GRID_CLOSER_END" => $gce
 			));
 
-			$html .= $this->parse("GRID_HBOX");
-
+			//$html .= $this->parse("GRID_HBOX");
+			$_t = $this->parse("GRID_HBOX");
+			if($this->view_layout && $this->view_layout == $layout_name && !$this->view_outer)
+			{
+				$html .= $_t;
+			}
+			else
+			{			
+				$this->vars(array(
+					"GRID_HBOX" => $_t,
+					"grid_outer_name" => $layout_name."_outer",
+				));
+				$html .= $this->parse("GRID_HBOX_OUTER");
+			}
 		}
 		elseif ("vbox" == $ldata["type"])
 		{
@@ -1354,13 +1386,37 @@ class htmlclient extends aw_template
 				$ghc = $this->parse("VGRID_HAS_CLOSER");
 				$gce = $this->parse("VGRID_CLOSER_END");
 			}
-
+			/*
+			else
+			{
+				$this->vars(array(
+					"grid_name" => $layout_name,
+				));
+				$this->vars(array(
+					"VGRID_NO_CLOSER" => $this->parse("VGRID_NO_CLOSER"),
+					"VGRID_NO_CLOSER_END" => $this->parse("VGRID_NO_CLOSER_END"),
+				));
+			}
+			*/
 			$this->vars(array(
 				"VGRID_HAS_CLOSER" => $ghc,
 				"VGRID_CLOSER_END" => $gce
 			));
-
-			$html .= $this->parse("GRID_VBOX");
+			
+			//$html .= $this->parse("GRID_HBOX");
+			$_t = $this->parse("GRID_VBOX");
+			if($this->view_layout && $this->view_layout == $layout_name && !$this->view_outer)
+			{
+				$html .= $_t;
+			}
+			else
+			{
+				$this->vars(array(
+					"GRID_VBOX" => $_t,
+					"grid_outer_name" => $layout_name."_outer",
+				));
+				$html .= $this->parse("GRID_VBOX_OUTER");
+			}
 		};
 
 		return $html;
