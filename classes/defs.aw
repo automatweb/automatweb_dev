@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.234 2007/06/05 10:13:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.235 2007/06/06 13:10:00 tarvo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -804,6 +804,11 @@ if (!defined("DEFS"))
 		return $arr;
 	}
 
+	function d($arg)
+	{
+		arr($arg);
+	}
+
 	////
 	// !järgmine funktsioon on inspireeritud perlist ;)
 	// kasutusnäide:
@@ -1328,6 +1333,28 @@ if (!defined("DEFS"))
 			return $cb();
 		}
 		return "";
+	}
+
+	function warning_prop($level = false, $oid = false, $prop = false)
+	{
+		static $prop_warnings;
+		if(!$level && !$oid && !$prop)
+		{
+			return $prop_warnings;
+		}
+		//$GLOBALS["prop_warnings"][$oid][$prop] = $level;
+		$prop_warnings[$oid][$prop] = $level;
+	}
+
+	function warning($msg = false, $level = 1)
+	{
+		static $gen_warnings;
+		if(!$msg)
+		{
+			return $gen_warnings;
+		}
+		//$GLOBALS["general_warnings"][$level][] = $msg;
+		$gen_warnings[$level][] = $msg;
 	}
 
 	////
