@@ -32,5 +32,14 @@
 			</function>
 		</action>
 
+		<action name="remove_linked">
+			<function name="remove_linked">
+				<arguments>
+					<required name="id" type="int" />
+					<required name="ru" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

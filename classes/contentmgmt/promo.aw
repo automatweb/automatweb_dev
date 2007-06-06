@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.102 2007/05/17 07:41:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.103 2007/06/06 10:04:45 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -1161,6 +1161,10 @@ class promo extends class_base
 		if ($this->can("view", $o->meta("linked_obj")))
 		{
 			$p["post_append_text"] = sprintf(t("Valitud objekt: %s /"), html::obj_change_url($o->meta("linked_obj")));
+			$p["post_append_text"] .= " ".html::href(array(
+				"url" => $this->mk_my_orb("remove_linked", array("id" => $o->id(), "ru" => get_ru()), "menu"),
+				"caption" => html::img(array("url" => aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif", "border" => 0))
+			))." / ";
 		}
 		$p["post_append_text"] .= t(" Otsi uus objekt: ").$ps->get_popup_search_link(array(
 			"pn" => "link_pops",

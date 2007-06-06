@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.201 2007/06/05 10:13:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.202 2007/06/06 10:04:42 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -2150,6 +2150,10 @@ class menu extends class_base
 		if ($this->can("view", $o->meta("linked_obj")))
 		{
 			$p["post_append_text"] = sprintf(t("Valitud objekt: %s /"), html::obj_change_url($o->meta("linked_obj")));
+			$p["post_append_text"] .= " ".html::href(array(
+				"url" => $this->mk_my_orb("remove_linked", array("id" => $o->id(), "ru" => get_ru())),
+				"caption" => html::img(array("url" => aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif", "border" => 0))
+			))." / ";
 		}
 		$p["post_append_text"] .= t(" Otsi uus objekt: ").$ps->get_popup_search_link(array(
 			"pn" => "link_pops",
@@ -2262,6 +2266,19 @@ class menu extends class_base
 			"clid" => CL_DOCUMENT
 		));
 		$tb->add_delete_rels_button();
+	}
+
+	/**
+		@attrib name=remove_linked
+		@param id required type=int
+		@param ru required
+	**/
+	function remove_linked($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->set_meta("linked_obj", null);
+		$o->save();
+		return $arr["ru"];
 	}
 };
 ?>
