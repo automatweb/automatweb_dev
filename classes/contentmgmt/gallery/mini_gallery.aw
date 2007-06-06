@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.36 2007/06/06 08:58:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.37 2007/06/06 09:39:09 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -48,7 +48,7 @@
 @groupinfo import caption="Import"
 @groupinfo manage caption="Halda" submit=no
 	@groupinfo manage_img caption="Halda pilte" submit=no parent=manage
-	@groupinfo manage_fld caption="Halda kaustu" submit=no parent=manage
+	@groupinfo manage_fld caption="Halda kaustu" parent=manage
 
 
 @reltype IMG_FOLDER value=1 clid=CL_MENU
@@ -85,6 +85,10 @@ class mini_gallery extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "mg_fld_table":
+				$this->_get_mg_fld_table($arr);
+				break;
+				
 			case "sorter":
 				$prop["options"] = array("" => "") + $this->sorts;
 				break;
@@ -112,6 +116,10 @@ class mini_gallery extends class_base
 					$this->_do_zip_import($arr["obj_inst"], $_FILES["zip_file"]["tmp_name"]);
 				}
 				break;
+
+			case "mg_fld_table":
+				$this->_set_mg_fld_table($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -129,9 +137,75 @@ class mini_gallery extends class_base
 		return $res;
 	}
 
+	function __sort_imgs($a, $b)
+	{
+		if ($a->parent() == $b->parent())
+		{
+			// hard case, sort by the sort order defined in gallery
+			$sby = $this->ob->prop("sorter");
+
+			switch($sby)
+			{
+				case "objects.name":
+					return strcmp($a->name(), $b->name());
+
+				case "objects.jrk":
+					return $a->ord() - $b->ord();
+
+				case "objects.created":
+					return $a->created() - $b->created();
+
+				case "objects.modified":
+					return $a->modified() - $b->modified();
+
+				case "images.aw_date_taken":
+					return $a->prop("date_taken") - $b->prop("date_taken");
+
+				case "objects.created desc":
+					return $b->created() - $a->created();
+
+				case "objects.modified desc":
+					return $b->modified() - $a->modified();
+				
+				case "images.aw_date_taken desc":
+					return $b->prop("date_taken") - $a->prop("date_taken");
+
+				default:
+					$rv = $a->ord() - $b->ord();
+					if ($rv == 0)
+					{
+						return $a->created() - $b->created();
+					}
+					return $rv;
+			}
+		}
+		// easy case, sort by either the folder order set or folder's order
+		if (isset($this->fld_orders[$a->parent()]))
+		{
+			$a_val = $this->fld_orders[$a->parent()];
+		}
+		else
+		{
+			$tmp = obj($a->parent());
+			$a_val = $tmp->ord();
+		}
+
+		if (isset($this->fld_orders[$b->parent()]))
+		{
+			$b_val = $this->fld_orders[$b->parent()];
+		}
+		else
+		{
+			$tmp = obj($b->parent());
+			$b_val = $tmp->ord();
+		}
+
+		return $a_val - $b_val;
+	}
+
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
+		$ob = $this->ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
 		lc_site_load("mini_gallery", &$this);
@@ -166,6 +240,9 @@ class mini_gallery extends class_base
 		{
 			return;
 		}
+
+		$this->fld_orders = $ob->meta("fld_order");
+		$images->sort_by_cb(array(&$this, "__sort_imgs"));
 
 		$img_c = $images->count();
 		if ($ob->prop("cols") == 0)
@@ -615,5 +692,42 @@ class mini_gallery extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function _init_mg_flt_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Kausta nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+	}
+
+	function _get_mg_fld_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_mg_flt_t($t);
+
+		$d = $arr["obj_inst"]->meta("fld_order");
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMG_FOLDER")) as $c)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($c->prop("to")),
+				"ord" => html::textbox(array(
+					"name" => "f[".$c->prop("to")."]",
+					"size" => 5,
+					"value" => $d[$c->prop("to")]
+				))
+			));
+		}
+	}
+
+	function _set_mg_fld_table($arr)
+	{
+		$arr["obj_inst"]->set_meta("fld_order", $arr["request"]["f"]);
+	}
 }
 ?>

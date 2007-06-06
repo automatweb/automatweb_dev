@@ -127,7 +127,6 @@
             </manage_img>
             <manage_fld>
                   <caption>Halda kaustu</caption>
-                  <submit>no</submit>
                   <parent>manage</parent>
             </manage_fld>
       </groupinfo>
