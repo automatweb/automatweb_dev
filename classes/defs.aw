@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.235 2007/06/06 13:10:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.236 2007/06/06 13:13:06 dragut Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1470,7 +1470,7 @@ if (!defined("DEFS"))
 		{
 			if ($_COOKIE["debug1"])
 			{
-				echo $msg."<br />\n";
+				arr($msg);
 			}
 		}
 
