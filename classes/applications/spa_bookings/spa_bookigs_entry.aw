@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.51 2007/06/05 09:41:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.52 2007/06/06 08:10:18 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -150,6 +150,31 @@ class spa_bookigs_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "products_folder_list":
+				if(!is_oid($arr["obj_inst"]->prop("warehouse")))
+				{
+					return PROP_IGNORE;
+				}
+				$sw = get_instance(CL_SHOP_WAREHOUSE);
+				$w = obj($arr["obj_inst"]->prop("warehouse"));
+				$conf = obj($w->prop("conf"));
+				$tmp = $conf->prop("prod_fld");
+				
+				$ot = new object_tree(array(
+					"parent" => $tmp,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"class_id" => CL_MENU,
+				));
+					
+				//$rv = array($o->prop("prod_folders"));
+				foreach($ot->ids() as $id)
+				{
+					$o = obj($id);
+					$prop["options"][$id] = $o->name();
+				}
+				
+			break;
 		};
 		return $retval;
 	}
@@ -1363,9 +1388,9 @@ arr();
 
 		// now, list all bookings for rooms 
 		$items = array();
-		foreach ($ol->arr() as $o)
-		{
-			$dates = $this->get_booking_data_from_booking($o);
+//		foreach ($ol->arr() as $o)
+//		{
+			$dates = $this->get_booking_data_from_booking($b);
 			$books = "";
 			
 			foreach($dates as $prod => $entries)
@@ -1375,7 +1400,7 @@ arr();
 					$items[] = $entry;
 				}
 			}
-		}
+//		}
 
 		$all_items = "";
 		$packet_services = "";
@@ -1400,6 +1425,13 @@ arr();
 				"end_time" => $entry["to"],
 				"price" => join (" / " , $prod_obj->meta("cur_prices")),//$prod_obj->prop("price")
 			));
+			foreach($prod_obj->meta("cur_prices") as $cur => $price)
+			{
+				$sum[$cur] = $sum[$cur] + $price;
+				$this->vars(array("sum_".$cur => $price));
+			}
+			
+			
 			$books .= $this->parse("BOOKING");
 
 			$all_items .= $this->parse("ALL_ITEMS");
@@ -1412,10 +1444,6 @@ arr();
 				$packet_services .= $this->parse("PACKET_SERVICES");
 			}//if(aw_global_get("uid") == "struktuur")arr($prod_obj->meta());
 			//$sum = $sum + $prod_obj->prop("price");
-			foreach($prod_obj->meta("cur_prices") as $cur => $price)
-			{
-				$sum[$cur] = $sum[$cur] + $price;
-			}
 		}
 
 		$currencys = array();
@@ -1426,6 +1454,7 @@ arr();
 				$c_o = obj($key);
 				$currencys[] = $c_o->name();
 			}
+			$this->vars(array("curr_".$key => $val));
 		}
 
 		$this->vars(array(
