@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.35 2007/06/05 09:41:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.36 2007/06/06 08:58:28 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -35,14 +35,20 @@
 	@property refresh type=checkbox ch_value=1 store=no
 	@caption V&auml;rskenda
 
-@default group=manage
+@default group=manage_img
 
 	@property mg_tb type=toolbar no_caption=1 store=no
 
 	@property mg_table type=table no_caption=1 store=no
 
+@default group=manage_fld
+
+	@property mg_fld_table type=table no_caption=1 store=no
+
 @groupinfo import caption="Import"
-@groupinfo manage caption="Halda pilte" submit=no
+@groupinfo manage caption="Halda" submit=no
+	@groupinfo manage_img caption="Halda pilte" submit=no parent=manage
+	@groupinfo manage_fld caption="Halda kaustu" submit=no parent=manage
 
 
 @reltype IMG_FOLDER value=1 clid=CL_MENU

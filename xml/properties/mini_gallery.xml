@@ -83,7 +83,7 @@
       <property>
             <name>mg_tb</name>
             <table>objects</table>
-            <group>manage</group>
+            <group>manage_img</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -92,11 +92,20 @@
       <property>
             <name>mg_table</name>
             <table>objects</table>
-            <group>manage</group>
+            <group>manage_img</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>mg_table</field>
+      </property>
+      <property>
+            <name>mg_fld_table</name>
+            <table>objects</table>
+            <group>manage_fld</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mg_fld_table</field>
       </property>
       <classinfo>
             <syslog_type>ST_MINI_GALLERY</syslog_type>
@@ -108,9 +117,19 @@
                   <caption>Import</caption>
             </import>
             <manage>
-                  <caption>Halda pilte</caption>
+                  <caption>Halda</caption>
                   <submit>no</submit>
             </manage>
+            <manage_img>
+                  <caption>Halda pilte</caption>
+                  <submit>no</submit>
+                  <parent>manage</parent>
+            </manage_img>
+            <manage_fld>
+                  <caption>Halda kaustu</caption>
+                  <submit>no</submit>
+                  <parent>manage</parent>
+            </manage_fld>
       </groupinfo>
       <reltypes>
             <IMG_FOLDER>
