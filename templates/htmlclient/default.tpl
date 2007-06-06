@@ -111,61 +111,80 @@ this.disabled=true;self.disabled=true;
 		<!-- SUB: GRIDITEM_NO_CAPTION -->
 		<div class="aw04gridcell_no_caption">{VAR:element}</div>
 		<!-- END SUB: GRIDITEM_NO_CAPTION -->
-
-		<!-- SUB: GRID_HBOX -->
-			<!-- SUB: GRID_HAS_CLOSER -->
-		<div id="vbox">
-			<div class="pais">
-				<div class="caption">{VAR:area_caption}</div>
-				<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" alt="Kinni" width="20" height="15" border="0" class="btn" id="{VAR:grid_name}_closer_img"/></a></div>
+	
+		<!-- SUB: GRID_HBOX_OUTER -->
+		<div id="{VAR:grid_outer_name}">
+			<!-- SUB: GRID_HBOX -->
+				<!-- SUB: GRID_NO_CLOSER -->
+			<div id="{VAR:grid_name}">
+				<!-- END SUB: GRID_NO_CLOSER -->
+				<!-- SUB: GRID_HAS_CLOSER -->
+			<div id="vbox">
+				<div class="pais">
+					<div class="caption">{VAR:area_caption}</div>
+					<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" alt="Kinni" width="20" height="15" border="0" class="btn" id="{VAR:grid_name}_closer_img"/></a></div>
+				</div>
+				<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
+				<!-- END SUB: GRID_HAS_CLOSER -->
+				
+				<table border=0 cellspacing=0 cellpadding=0 width='100%'>
+					<tr>
+						<!-- SUB: GRID_HBOX_ITEM -->
+						<td valign='top' {VAR:item_width} style='padding-left: 0px;'>{VAR:item}</td>
+						<!-- END SUB: GRID_HBOX_ITEM -->
+					</tr>
+				</table>
+				<!-- SUB: GRID_CLOSER_END -->
+				</div></div>
+				<!-- END SUB: GRID_CLOSER_END -->
+				<!-- SUB: GRID_NO_CLOSER_END -->
 			</div>
-			<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
-			<!-- END SUB: GRID_HAS_CLOSER -->
-			
-			<table border=0 cellspacing=0 cellpadding=0 width='100%'>
-				<tr>
-					<!-- SUB: GRID_HBOX_ITEM -->
-					<td valign='top' {VAR:item_width} style='padding-left: 0px;'>{VAR:item}</td>
-					<!-- END SUB: GRID_HBOX_ITEM -->
-				</tr>
-			</table>
-			<!-- SUB: GRID_CLOSER_END -->
-			</div></div>
-			<!-- END SUB: GRID_CLOSER_END -->
-		<!-- END SUB: GRID_HBOX -->
-		
-		<!-- SUB: GRID_VBOX -->
-		<!-- SUB: VGRID_HAS_CLOSER -->
-		<div id="vbox">
-			<div class="pais">
-				<div class="caption">{VAR:area_caption}</div>
-				<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" alt="Kinni" width="20" height="15" border="0" class="btn"  id="{VAR:grid_name}_closer_img"/></a></div>
-			</div>
-			<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
-			<!-- SUB: VGRID_HAS_PADDING -->
-			<div class="sisu2">
-			<!-- END SUB: VGRID_HAS_PADDING -->
-
-			<!-- SUB: VGRID_NO_PADDING -->
-			<div class="sisu2nop">
-			<!-- END SUB: VGRID_NO_PADDING -->
-		<!-- END SUB: VGRID_HAS_CLOSER -->
-
-			<!-- SUB: GRID_VBOX_ITEM -->
-			    <div class="sisu3">{VAR:item}</div>
-
-			<!-- END SUB: GRID_VBOX_ITEM -->
-
-				<!-- SUB: GRID_VBOX_SUBITEM -->
-				<div class="sisu3">{VAR:item}</div>
-				<!-- END SUB: GRID_VBOX_SUBITEM -->
-
-			<!-- SUB: VGRID_CLOSER_END -->
-			</div>
-			</div>
+				<!-- END SUB: GRID_NO_CLOSER_END -->
+			<!-- END SUB: GRID_HBOX -->
 		</div>
-			<!-- END SUB: VGRID_CLOSER_END -->
-		<!-- END SUB: GRID_VBOX -->
+		<!-- END SUB: GRID_HBOX_OUTER -->
+		<!-- SUB: GRID_VBOX_OUTER -->
+		<div id="{VAR:grid_outer_name}">
+			<!-- SUB: GRID_VBOX -->
+			<!-- SUB: VGRID_NO_CLOSER -->
+			<div id="{VAR:grid_name}">
+			<!-- END SUB: VGRID_NO_CLOSER -->
+			<!-- SUB: VGRID_HAS_CLOSER -->
+			<div id="vbox">
+				<div class="pais">
+					<div class="caption">{VAR:area_caption}</div>
+					<div class="closer"><a href="#" onClick='el=document.getElementById("{VAR:grid_name}");im=document.getElementById("{VAR:grid_name}_closer_img");if (el.style.display=="none") { el.style.display="block";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_up.gif"; aw_get_url_contents("{VAR:open_layer_url}");} else { el.style.display="none";im.src="{VAR:baseurl}/automatweb/images/aw06/closer_down.gif"; aw_get_url_contents("{VAR:close_layer_url}");}'><img src="{VAR:baseurl}/automatweb/images/aw06/closer_{VAR:closer_state}.gif" alt="Kinni" width="20" height="15" border="0" class="btn"  id="{VAR:grid_name}_closer_img"/></a></div>
+				</div>
+				<div class="sisu" id="{VAR:grid_name}" style="display: {VAR:display}">
+				<!-- SUB: VGRID_HAS_PADDING -->
+				<div class="sisu2">
+				<!-- END SUB: VGRID_HAS_PADDING -->
+
+				<!-- SUB: VGRID_NO_PADDING -->
+				<div class="sisu2nop">
+				<!-- END SUB: VGRID_NO_PADDING -->
+			<!-- END SUB: VGRID_HAS_CLOSER -->
+
+				<!-- SUB: GRID_VBOX_ITEM -->
+					<div class="sisu3">{VAR:item}</div>
+
+				<!-- END SUB: GRID_VBOX_ITEM -->
+
+					<!-- SUB: GRID_VBOX_SUBITEM -->
+					<div class="sisu3">{VAR:item}</div>
+					<!-- END SUB: GRID_VBOX_SUBITEM -->
+
+				<!-- SUB: VGRID_CLOSER_END -->
+				</div>
+				</div>
+			</div>
+				<!-- END SUB: VGRID_CLOSER_END -->
+				<!-- SUB: VGRID_NO_CLOSER_END -->
+				</div>
+				<!-- END SUB: VGRID_NO_CLOSER_END -->
+			<!-- END SUB: GRID_VBOX -->
+		</div>
+		<!-- END SUB: GRID_VBOX_OUTER -->
 
 		<!-- SUB: GRID_TABLEBOX -->
 		<div id="tablebox">
