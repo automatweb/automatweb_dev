@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.52 2007/06/06 08:10:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.53 2007/06/06 13:45:27 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -10,6 +10,9 @@
 
 	@property name type=textbox field=name
 	@caption Nimi
+
+	@property owner type=relpicker field=meta method=serialize reltype=RELTYPE_OWNER
+	@caption Omanik kasutaja
 
 	@property packet_folder_list type=relpicker reltype=RELTYPE_PFL_FOLDER multiple=1 field=meta method=serialize
 	@caption Tootepakettide kaustad
@@ -128,6 +131,9 @@
 
 @reltype PRINT_CTR value=5 clid=CL_FORM_CONTROLLER
 @caption Kontroller
+
+@reltype OWNER value=6 clid=CL_USER
+@caption Omanik
 
 */
 
@@ -288,6 +294,8 @@ class spa_bookigs_entry extends class_base
 
 	function _set_cust_entry($arr)
 	{
+		//xml_rpc teenuse jaoks
+		$_SESSION["add_package_service"] = array();
 //die(dbg::dump($arr["request"]));
 		classload("core/date/date_calc");
 		for($i = 0; $i < 15; $i++)
@@ -406,7 +414,6 @@ class spa_bookigs_entry extends class_base
 						"real_name" => $d["fn"]." ".$d["ln"]
 					));
 
-
 					$user->connect(array(
 						"to" => $p->id(),
 						"type" => "RELTYPE_PERSON"
@@ -462,31 +469,35 @@ class spa_bookigs_entry extends class_base
 						date("d.m.Y", $end)
 					);
 				}
-
+				$_SESSION["add_package_service"]["user"] = $user->prop("uid");
+				$_SESSION["add_package_service"]["password"] =  $d["pass"];
+				$_SESSION["add_package_service"]["reservation_id"] = $booking->id();
 				// if other ppl were entered, then create reservations for them and connect those to the same booking so that one user can view it
 				if (is_array($d["ppl"]) && count($d["ppl"]))
 				{
 					$feedback .= $this->_add_ppl_entry($d, $booking);
 				}
-
-				if ($arr["obj_inst"]->prop("b_send_mail_to_user") && !$existing_user)
+				if(!$not_send_email)
 				{
-					send_mail(
-						$d["email"], 
-						$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
-						str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_mail_content")),
-						"From: ".$this->_get_from_addr($arr["obj_inst"])
-					);
-				}
-				if($arr["obj_inst"]->prop("b_ex_mail_content") && $existing_user)
-				{
-					$us = get_instance("users");
-					send_mail(
-						$d["email"],
-						$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
-						str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_ex_mail_content")),
-						"From: ".$this->_get_from_addr($arr["obj_inst"])
-					);
+					if ($arr["obj_inst"]->prop("b_send_mail_to_user") && !$existing_user)
+					{
+						send_mail(
+							$d["email"], 
+							$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
+							str_replace(array("#uid#", "#pwd#", "#login_url#"), array($user->prop("uid"), $d["pass"], aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_mail_content")),
+							"From: ".$this->_get_from_addr($arr["obj_inst"])
+						);
+					}
+					if($arr["obj_inst"]->prop("b_ex_mail_content") && $existing_user)
+					{
+						$us = get_instance("users");
+						send_mail(
+							$d["email"],
+							$arr["obj_inst"]->trans_get_val("b_mail_subject"), 
+							str_replace(array("#uid#", "#pwd_hash_link#", "#login_url#"), array($user->prop("uid"),$us->get_change_pwd_hash_link($user->prop("uid")), aw_ini_get("baseurl")."/login.aw"), $arr["obj_inst"]->trans_get_val("b_ex_mail_content")),
+							"From: ".$this->_get_from_addr($arr["obj_inst"])
+						);
+					}
 				}
 			}
 		}
@@ -2215,6 +2226,168 @@ arr();
 				"type" => "RELTYPE_MAIN_PERSON"
 			));
 		}
+	}
+	
+	
+/*	firstname required type=string
+lastname required type=string
+gender required type=string // M/W
+birthday required type=int dd.mm.YYYY
+email required type=string
+start required type=int
+start time - timestamp // unix
+packet_id required type=int // Identificator for a package in Kalev SPA, for example: 1394 = Health packet 8 days (Su-Su)
+agency_id required type=int // Identificator for agency, not same as username
+send_email optional type=boolean // if set, sends username and password with e-mail to final customer
+send_email_agency optional type=boolean // if set, sends username and password with e-mail to agency
+pass - password, string
+
+returns:
+error type=string // if there are errors
+reservation_id type=int // reservation object id
+user type=string // username
+password type=string
+*/
+
+	/**
+		@attrib name=add_package_service all_args=1 public=1 nologin=1
+	**/
+	function add_package_service($arr)
+	{
+		extract($arr);
+		$errors = "";
+		if(!$firstname) $errors.= t("Eesnimi puudu")."\n<br>";
+		if(!$lastname) $errors.= t("Perenimi puudu")."\n<br>";
+		if(!$gender) $errors.= t("Sugu määramata")."\n<br>";
+		if(!$birthday) $errors.= t("Sünniaeg puudu")."\n<br>";
+		if(!$email) $errors.= t("E-post puudu")."\n<br>";
+		if(!$start) $errors.= t("Algus puudu")."\n<br>";
+		if(!$packet_id) $errors.= t("Paketi id puudu")."\n<br>";
+		if(!$agency_id) $errors.= t("Büroo puudu")."\n<br>";
+		//if(!$firstname) $errors.= t("Eesnimi puudu")."\n<br>";
+		
+		//arr($arr);
+		
+		$ol = new object_list(array(
+			"class_id" => CL_SPA_BOOKIGS_ENTRY,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"CL_SPA_BOOKIGS_ENTRY.RELTYPE_OWNER.id" => $agency_id,
+		));
+		
+		if(!(is_oid($agency_id) && $this->can("view" , $agency_id)))
+		{
+			if(!$agency_id) $errors.= t("Büroo puudu")."\n<br>";
+		}
+		
+		$u = obj($agency_id);
+		
+		
+		$auth = get_instance(CL_AUTH_CONFIG);
+		if ($do_auth && ($auth_id = $auth->has_config()))
+		{
+			list($success, $msg) = $auth->check_auth($auth_id, array(
+				"uid" => $u->prop("uid"),
+				"password" => $password,
+				"server" => $server
+			));
+		}
+		else
+		{
+			$auth = get_instance(CL_AUTH_SERVER_LOCAL);
+			list($success, $msg) = $auth->check_auth(NULL, array(
+				"uid" => $u->prop("uid"),
+				"password" => $password
+			));
+		}
+		if (!empty($server))
+		{
+			$uid .= ".".$server;
+		}
+
+		if(!$success)
+		{
+			if(!$msg) $msg = t("Kasutaja ja parool ei klapi");
+			$errors.= $msg."\n<br>";
+		}
+		if($errors) return array("error" => $errors);
+		
+		$entry = reset($ol->arr());
+
+		$bd = explode("." , $birthday);
+		$password = generate_password();
+		$this->_set_cust_entry(array("obj_inst" => $entry,"request" => array("d" => array("0" => array(
+			"fn" => $firstname,
+			"ln" => $lastname,
+			"email" => $email,
+			"birthday" => array
+			(
+				"day" => $bd[0],"month" => $bd[1],"year" => $bd[2],
+			),
+			"gender" => ($gender == "W")?2:1,
+			"start" => array
+			(
+				"day" => date("d" , $start),"month" => date("m" , $start),"year" => date("Y" , $start),
+			),
+			"package" => $packet_id,
+			"pass" => $password,
+			"not_send_email" => !$send_email,
+		),),),));
+		return $_SESSION["add_package_service"];
+	}
+	
+	/**
+		@attrib name=packet_list_service all_args=1 public=1 nologin=1
+	**/
+	function packet_list_service($arr)
+	{
+		$ol = new object_list(array(
+			"class_id"=> CL_SHOP_PACKET,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		if($_POST["show"])
+		{
+			arr($ol->names());
+		}
+		return $ol->names();
+	}
+	
+	/**
+		@attrib name=add_package_service_example all_args=1 public=1 nologin=1
+	**/
+	function add_package_service_example($arr)
+	{
+		if($_POST)
+		{
+			$result = $this->do_orb_method_call(array(
+				"action" => "add_package_service",
+				"class" => "spa_bookigs_entry",
+				"params" => $_POST,
+				"method" => "xmlrpc",
+				"server" => "kalevspa.struktuur.ee"
+			));
+			arr($result);
+		}
+		
+		die('<form name="postform2" id="postform2" method="post" action=http://kalevspa.struktuur.ee/orb.aw?class=spa_bookigs_entry&action=add_package_service_example>
+			Eesnimi : <input type="textbox" name=firstname value="Eesnimega"><br>
+			Perenimi : <input type="textbox" name=lastname value="Inimene"><br>
+			Sugu : <input type="textbox" name=gender value="M"><br>
+			Sünnipäev : <input type="textbox" name=birthday value="11.11.1980"><br>
+			E-mail : <input type="textbox" name=email value="email"><br>
+			Start <input type="textbox" name=start value="23888"><br>
+			paketi id <input type="textbox" name=packet_id value="1394"><br>
+			Parool : <input type="password" name=password value="spauto"><br>
+			Büroo : <input type="textbox" name=agency_id value="63"><br>
+			
+			Saada mail ? <input type="checkbox" name=send_email value="1"><br>
+			<input type=submit value="tee pakett"><br>
+			</form>
+			<form name="postform3" id="postform3" method="post" action=http://kalevspa.struktuur.ee/orb.aw?class=spa_bookigs_entry&action=packet_list_service>
+			<input type="hidden" name=show value="1"><br>
+			<input type=submit value="list"><br>
+		');
 	}
 }
 ?>
