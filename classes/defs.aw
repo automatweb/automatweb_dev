@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.236 2007/06/06 13:13:06 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.237 2007/06/07 13:54:32 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1550,7 +1550,7 @@ if (!defined("DEFS"))
 				$msg .= $fnm2." with arguments ";
 
 				$awa = new aw_array($bt[$i]["args"]);
-				$msg .= "<font size=\"-1\">(".join(",", $awa->get()).") file = ".$bt[$i]["file"]."</font>";
+				$msg .= "<font size=\"-1\">(".htmlentities(join(",", $awa->get())).") file = ".$bt[$i]["file"]."</font>";
 			
 				$msg .= " <br><br>\n\n";
 			}

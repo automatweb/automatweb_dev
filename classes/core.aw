@@ -526,7 +526,7 @@ return; // TEMP
 		}
 
 		$GLOBALS["aw_is_error"] = 1;
-
+		$msg = htmlentities($msg);
 		if (aw_global_get("__from_raise_error") > 0)
 		{
 			return false;
