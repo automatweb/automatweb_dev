@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.19 2007/06/05 17:02:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.20 2007/06/07 08:37:46 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -45,6 +45,9 @@
 	@property location_other type=textbox table=watercraft
 	@caption Muu asukoht
 
+	@property location_precise type=textbox table=watercraft
+	@caption T&auml;psem asukoht
+
 	@property condition type=select table=watercraft
 	@caption Seisukord
 
@@ -53,6 +56,18 @@
 
 	@property seller type=relpicker reltype=RELTYPE_SELLER table=watercraft
 	@caption M&uuml;&uuml;ja
+
+	@property contact_name type=textbox table=watercraft
+	@caption Kontaktisiku nimi
+	@comment Kontaktisiku nimi, juhuks kui kuulutuse kontaktisik on m&uuml;&uuml;jast erinev.
+	
+	@property contact_email type=textbox table=watercraft
+	@caption Kontaktisiku e-mail
+	@comment Kontaktisiku e-mail, juhuks kui kuulutuse kontaktisik on m&uuml;&uuml;jast erinev.
+	
+	@property contact_phone type=textbox table=watercraft
+	@caption Kontaktisiku telefoninumber
+	@comment Kontaktisiku telefoninumber, juhuks kui kuulutuse kontaktisik on m&uuml;&uuml;jast erinev.
 
 	@property price type=textbox table=watercraft
 	@caption Hind
@@ -796,6 +811,7 @@ class watercraft extends class_base
 		$t->define_field(array(
 			'name' => 'type',
 			'caption' => $this->sail_table_fields['type'],
+			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'area',
@@ -826,19 +842,16 @@ class watercraft extends class_base
 					'name' => 'sail_table['.$key.'][area]',
 					'value' => $saved_sail_table[$key]['area'],
 					'style' => 'width:50px;',
-					'size' => 10
 				)),
 				'material' => html::textbox(array(
 					'name' => 'sail_table['.$key.'][material]',
 					'value' => $saved_sail_table[$key]['material'],
 					'style' => 'width:100px;',
-					'size' => 10
 				)),
 				'age_and_condition' => html::textbox(array(
 					'name' => 'sail_table['.$key.'][age_and_condition]',
 					'value' => $saved_sail_table[$key]['age_and_condition'],
 					'style' => 'width:100px;',
-					'size' => 10
 				)),
 
 			));
@@ -1190,7 +1203,8 @@ class watercraft extends class_base
 
 			$this->vars(array(
 				'watercraft_image_url' => $image_data["url"],
-				'watercraft_big_image_url' => ($image_data["big_url"])?$image_data["big_url"]:$image_data["url"],
+				//'watercraft_big_image_url' => ($image_data["big_url"])?$image_data["big_url"]:$image_data["url"],
+				'watercraft_big_image_url' => $this->mk_my_orb("show_big", array( "id" => $image_id), CL_IMAGE),
 				'watercraft_image_name' => $image_data['name'],
 				'watercraft_image_tag' => $image_inst->make_img_tag_wl($image_id), 
 				'watercraft_image_width' => $sm_w,
@@ -1225,22 +1239,29 @@ class watercraft extends class_base
 		$vars['images_count'] = $images_count;
 		$vars['name'] = $ob->prop('name');
 		$vars['return_url'] = aw_url_change_var(array('watercraft_id' => NULL, 'return_url' => NULL), false, get_ru());
-		if($this->can("view", $ob->prop("seller")))
+
+		$vars["seller_name"] = $ob->prop("contact_name");
+		$vars["seller_email"] = $ob->prop("contact_email");
+		$vars["seller_phone"] = $ob->prop("contact_phone");
+		if((!$c_name || !$c_email || !$c_phone) && $this->can("view", $ob->prop("seller")))
 		{
 			$seller_obj = obj($ob->prop("seller"));
-			$vars["seller_name"] = ($_t = $seller_obj->name())?$_t:"-";
+			$vars["seller_name"] = !$vars["seller_name"]?(($_t = $seller_obj->name())?$_t:""):$vars["seller_name"];
 			if($seller_obj->class_id() == CL_CRM_PERSON)
 			{
-				$vars["seller_email"] = ($_t = $seller_obj->prop("email.mail"))?$_t:"-";
+				$vars["seller_email"] = !$vars["seller_email"]?(($_t = $seller_obj->prop("email.mail"))?$_t:""):$vars["seller_email"];
 				// well, this user1 prop isn't really the brightest idea. But hey, site_join does that, so i'll use it.
-				$vars["seller_phone"] = ($_t = $seller_obj->prop("user1"))?$_t:"-";
+				$vars["seller_phone"] = !$vars["seller_phone"]?(($_t = $seller_obj->prop("user1"))?$_t:""):$vars["seller_phone"];
 			}
 			elseif($seller_obj->class_id() == CL_CRM_COMPANY)
 			{
-				$vars["seller_email"] = $seller_obj->prop("email.mail");
-				$vars["seller_phone"] = $seller_obj->prop("phone.name");
+				$vars["seller_email"] = !$vars["seller_email"]?$seller_obj->prop("email.mail"):$vars["seller_email"];
+				$vars["seller_phone"] = !$vars["seller_phone"]?$seller_obj->prop("phone.name"):$vars["seller_phone"];
 			}
 		}
+		$vars["seller_name"] = $vars["seller_name"]?$vars["seller_name"]:"-";
+		$vars["seller_email"] = $vars["seller_email"]?$vars["seller_email"]:"-";
+		$vars["seller_phone"] = $vars["seller_phone"]?$vars["seller_phone"]:"-";
 
 		$this->vars($vars);
 		return $this->parse();
@@ -1358,6 +1379,10 @@ class watercraft extends class_base
 				engine_power double,
 				price int,
 
+				location_precise varchar(255),
+				contact_name varchar(255),
+				contact_email varchar(255),
+				contact_phone varchar(255),
 				watercraft_type_other varchar(255),
 				body_material_other varchar(255),
 				location_other varchar(255),
@@ -1505,6 +1530,10 @@ class watercraft extends class_base
 			case 'water_tank_amount':
 			case 'life_boat_info':
 			case 'life_boat_amount':
+			case 'location_precise':
+			case 'contact_name':
+			case 'contact_email':
+			case 'contact_phone':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'varchar(255)'

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.13 2007/06/05 17:02:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.14 2007/06/07 08:37:46 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -393,7 +393,7 @@ class watercraft_add extends class_base
 							$prop["value"] = $watercraft_obj->meta($name);
 							break;
 						default:
-							$prop['value'] = $watercraft_obj->prop($name);
+							$prop['value'] = $prop['selected'] = $watercraft_obj->prop($name);
 							break;
 					}
 				}
@@ -457,7 +457,8 @@ class watercraft_add extends class_base
 					$this->vars(array(
 						'image_url' => $d["url"],
 						'image_name' => $image_obj->name(),
-						'image_big_url' => $d["big_url"]?$d["big_url"]:$d["url"],
+						//'image_big_url' => $d["big_url"]?$d["big_url"]:$d["url"],
+						'image_big_url' => $this->mk_my_orb("show_big", array("id" => $image_oid), CL_IMAGE),
 						'image_id' => $image_oid,
 						'delete_element_name' => "remove_img[".$image_oid."]",
 						'image_width' => $sm_w,
@@ -624,6 +625,13 @@ class watercraft_add extends class_base
 		{
 			$arr["visible"] = 0;
 		}
+		$comma_replace = array(
+			"length",
+			"width",
+			"height",
+			"weight",
+			"draught",
+		);
 		// so, here i should have an watercraft_obj, so set the properties:
 		foreach ($arr as $prop_name => $prop_value)
 		{
@@ -634,6 +642,7 @@ class watercraft_add extends class_base
 			}
 			elseif ($watercraft_obj->is_property($prop_name))
 			{
+				$prop_value = in_array($prop_name, $comma_replace)?str_replace(",", ".", $prop_value):$prop_value;
 				$watercraft_obj->set_prop($prop_name, $prop_value);
 			}
 		}
