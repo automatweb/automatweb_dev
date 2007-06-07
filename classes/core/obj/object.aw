@@ -1,13 +1,13 @@
 <?php
 classload(
 	"core/obj/ds_decorator_base",
-	"core/obj/_int_obj_container_base", 
-	"core/obj/_int_object", 
+	"core/obj/_int_obj_container_base",
+	"core/obj/_int_object",
 	"core/obj/ds_base",
 	"core/obj/connection",
-	"core/obj/object_loader", 
-	"core/obj/object_list", 
-	"core/obj/object_data_list", 
+	"core/obj/object_loader",
+	"core/obj/object_list",
+	"core/obj/object_data_list",
 	"core/obj/object_tree",
 	"core/obj/object_list_filter",
 	"core/obj/obj_predicate_not",
@@ -23,20 +23,20 @@ $GLOBALS["__obj_sys_opts"] = array();
 
 
 // god damn, this is a fucking great idea!
-// how to get around the php copy-object problem. 
+// how to get around the php copy-object problem.
 // basically, make the object class contain only object id, store the real objects in a global hash
-// and access them through that only, so object data is in memory only once, but there can be several oid pointers to it. 
+// and access them through that only, so object data is in memory only once, but there can be several oid pointers to it.
 // the dummy object class just forwards all calls to the global table.
 // voila - instant object cache!
 
 
-// rules for datasources: 
-// if you create a new wrapper datasource, then it must not derive from anything, be in this folder 
-// the file name must be ds_[name], the class name must be _int_obj_ds_[name] 
+// rules for datasources:
+// if you create a new wrapper datasource, then it must not derive from anything, be in this folder
+// the file name must be ds_[name], the class name must be _int_obj_ds_[name]
 // the constructor must take one parameter - the contained ds instance
 // it must implement all functions in ds_base, even if that just means passing everything to the contained ds
 // this way we minimize the number of connections and duplicate data, therefore save memory
-// if you create a new db-specific datasource (the last one in the chain), the file naming convention still applies, 
+// if you create a new db-specific datasource (the last one in the chain), the file naming convention still applies,
 // but it should derive from ds_base and call $this->init() from the constructor, that takes no parameters
 
 
@@ -77,9 +77,9 @@ class object
 			$o = obj(666);	  // loads object with id 666
 
 			// finds object that has alias osakonnad/majandus and loads it
-			$o = obj("osakonnad/majandus");		
+			$o = obj("osakonnad/majandus");
 			$o = new object(array(
-			   "name" => $name, 
+			   "name" => $name,
 			   "parent" => $parent,
 			   "class_id" => CL_FOO
 			));
@@ -96,13 +96,25 @@ class object
 		}
 	}
 
+	function __call($method, $args)
+	{
+		if (method_exists($GLOBALS["objects"][$this->oid], $method))
+		{
+			return call_user_func_array(array($GLOBALS["objects"][$this->oid], $method), $args);
+		}
+		else
+		{
+			throw new awex_invalid_arg("Call to undefined method.");
+		}
+	}
+
 	/** loads an object
 		@attrib api=1
 
 		@comment
 			Parameters are the same as the constructor's, objects can be loaded based on:
 
-				object id 
+				object id
 				alias
 				object instance
 
@@ -248,7 +260,7 @@ class object
 		return $GLOBALS["objects"][$this->oid]->get_implicit_save();
 	}
 
-	/** returns the currently loaded object as an array 
+	/** returns the currently loaded object as an array
 		@attrib api=1
 
 		@errors
@@ -295,12 +307,12 @@ class object
 		return $GLOBALS["objects"][$this->oid]->delete($full_delete);
 	}
 
-	/** connects the object to another (creates an alias). 
+	/** connects the object to another (creates an alias).
 		@attrib api=1
 
 		@param to required type=oid
 			the object id or object to connect to, required.
-			type: can be either integer, string, object instance or object list instance 
+			type: can be either integer, string, object instance or object list instance
 
 		@param type optional
 		 	the type of the relation, optional.
@@ -380,7 +392,7 @@ class object
 
 		@param param optional type=array
 			- array of filter parameters, optional
-			possible array members, all of the filter members can be arrays of the given types as well: 
+			possible array members, all of the filter members can be arrays of the given types as well:
 				filter members:
 					type - connection type, string or numeric
 					class - connected object's class_id
@@ -416,7 +428,7 @@ class object
 
 		@param param optional type=array
 			- array of filter parameters, optional
-			possible array members, all of the filter members can be arrays of the given types as well: 
+			possible array members, all of the filter members can be arrays of the given types as well:
 			filter members:
 				type - connection type: numeric or can be string if from.class_id is also given
 				class - connected object's class_id
@@ -448,7 +460,7 @@ class object
 	/** Returns the first connection of type specified by parameter.
 		@attrib api=1
 
-		@param type optional 
+		@param type optional
 			 connection type - string or integer
 
 		@errors
@@ -457,7 +469,7 @@ class object
 		@returns
 			connection object instance when connection of specified type exists, FALSE otherwise
 
-		@comment 
+		@comment
 			If connection of that type doesn't exist, returns FALSE.
 			If type not specified, returns first of all connections regardless of reltype.
 
@@ -565,7 +577,7 @@ class object
 		@param start_at optional type=int
 			the object to start the path from, optional
 
-		@param path_only optional type=bool 
+		@param path_only optional type=bool
 			if true, only the objects that are before the current object are in the returned path, not the object itself, optional, defaults to false
 
 		@errors
@@ -623,7 +635,7 @@ class object
 
 	/** returns the access the current user has to the current object
 		@attrib api=1
-	
+
 		@param param required type=string
 			- access name that is returned. values: (add/edit/admin/delete/view)
 
@@ -807,7 +819,7 @@ class object
 
 		@param param required type=int
 			the new status, one of STAT_DELETED, STAT_NOTACTIVE, STAT_ACTIVE
-	
+
 		@errors
 			- error is thrown if new status is not in the list of status codes
 
@@ -815,7 +827,7 @@ class object
 			the old status of the object
 
 		@examples
-			$o = obj(666);	
+			$o = obj(666);
 			$o->set_implicit_save(true);
 			$o->set_status(STAT_ACTIVE);
 	**/
@@ -845,7 +857,7 @@ class object
 	/** returns the language id of the language of the object
 		@attrib api=1
 
-		@errors 
+		@errors
 			none
 
 		@returns
@@ -940,7 +952,7 @@ class object
 			$o = obj(666);
 			$o->set_implicit_save(true);
 			$o->set_comment("cool comment string");
-	**/	
+	**/
 	function set_comment($param)
 	{
 		return $GLOBALS["objects"][$this->oid]->set_comment($param);
@@ -1205,7 +1217,7 @@ class object
 
 	/** returns the site id that the current object has
 		@attrib api=1
-		
+
 		@errors
 			none
 
@@ -1298,7 +1310,7 @@ class object
 		@examples
 			$o = obj(666);
 			$sc = $o->subclass();
-	**/	
+	**/
 	function subclass()
 	{
 		return $GLOBALS["objects"][$this->oid]->subclass();
@@ -1355,7 +1367,7 @@ class object
 
 		@param param required type=int
 			flags that contains all the flags
-	
+
 		@errors
 			none, if implicit save is off
 
@@ -1432,7 +1444,7 @@ class object
 			none
 
 		@returns
-			value of the metadata element, NULL if no element by that name is found, NULL 
+			value of the metadata element, NULL if no element by that name is found, NULL
 			if no current object exists
 
 		@examples
@@ -1475,21 +1487,21 @@ class object
 			none
 
 		@param param required type=string
-			the name of the property whose value is to be returned. 
+			the name of the property whose value is to be returned.
 			 the property name might also be a chain of property names, for instance
 			  if the object is of type CL_TASK, then you could give the argument
 			  customer.contact.linn.name and get the name of the city of the address of the customer that is in the customer property of the task object
 			  if any of the properties is empty or contains a deleted object, null is returned
 
 		@returns
-			the value of the specified proerty, NULL if no such property exists, 
+			the value of the specified proerty, NULL if no such property exists,
 			NULL if no current object is loaded
 
 		@examples
 			$o = obj(56);
 			$val = $o->prop("fish");
 
-			$o = obj(1405); 
+			$o = obj(1405);
 			echo $o->prop("customer.contact.linn.name");
 	**/
 	function prop($param)
@@ -1502,12 +1514,12 @@ class object
 
 		@param param required type=string
 			the name of the property whose value is to be returned
-		
+
 		@errors
 			none
 
 		@returns
-			the value of the specified proerty, NULL if no such property exists, 
+			the value of the specified proerty, NULL if no such property exists,
 			NULL if no current object is loaded. If the property contains an oid
 			and is of a supported type, then the oid will be resolved to the objects' name.
 			Useful if you want to display property values to the user.
@@ -1644,7 +1656,7 @@ class object
 		@attrib api=1
 
 		@errors
-			- error is thrown if no object is loaded 
+			- error is thrown if no object is loaded
 
 		@returns
 			array of properties, proprty names are keys, property values are values
@@ -1671,7 +1683,7 @@ class object
 			none
 
 		@returns
-			boolean value, true if the object's cache is dirty, false if the cache is valid, 
+			boolean value, true if the object's cache is dirty, false if the cache is valid,
 			NULL if no current object exists
 
 		@examples
@@ -1757,9 +1769,9 @@ class object
 			the parent of the brother
 
 		@comment
-			there can only be one brother per parent, so that when you try to create 
+			there can only be one brother per parent, so that when you try to create
 			another under the same parent, the old one is returned instead
-		
+
 		@errors
 			- if no object is loaded, error is thrown
 			- if parent argument is not a valid oid, error is thrown
@@ -1779,12 +1791,12 @@ class object
 	/** checks if the current object has connections to other objects
 		@attrib api=1
 
-		@comment 
+		@comment
 			has all the same parameters, that connections_from has
 
 		@returns
 			true if there are any connections that match the given parameters
-			false, if not. 
+			false, if not.
 
 		@examples
 
@@ -1806,11 +1818,11 @@ class object
 
 		@param group required type=object
 			The object of the user group for which to set acl
-		
+
 		@param acl required type=array
 			An array of acls to set to the given group for this object
 
-		@returns 
+		@returns
 			none
 
 		@errors
@@ -1841,7 +1853,7 @@ class object
 	/** returns a list of all the current acl connections for this object
 		@attrib api=1
 
-		@returns 
+		@returns
 			array of group_id => array of acls
 			for each acl relation that this object has
 
@@ -1853,7 +1865,7 @@ class object
 			foreach($o->acl_get() as $gid => $acl)
 			{
 				echo "group $gid  has acls ".dbg::dump($acl);
-			}	
+			}
 	**/
 	function acl_get()
 	{
@@ -1882,6 +1894,9 @@ class object
 		@param new_rels optional type=bool
 			If true, connections from the objects are copied, and the objects they point to, are also copied
 
+		@param no_header optional type=bool
+			If true, returned xml string will not have xml header. Default false.
+
 		@errors
 			none
 
@@ -1906,7 +1921,7 @@ class object
 	/** creates objects from the xml string given
 		@attrib api=1
 
-		@param xml required type=string 
+		@param xml required type=string
 			The xml data returned from get_xml
 
 		@param parent required type=oid
@@ -1926,7 +1941,7 @@ class object
 			));
 
 			$new_obj = object::from_xml($xml, 6); // copies all objects and their relations from object 1 to object 6
-	**/			
+	**/
 	function from_xml($xml, $parent)
 	{
 		$i = get_instance("core/obj/obj_xml_gen");
@@ -1980,7 +1995,7 @@ function obj($param = NULL)
 	return new object($param);
 }
 
-/** sets an object system property 
+/** sets an object system property
 
 @comment
 currently possible options:

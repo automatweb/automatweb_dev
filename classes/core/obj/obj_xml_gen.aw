@@ -11,6 +11,7 @@ class obj_xml_gen
 			copy_subdocs
 			copy_rels
 			new_rels
+			no_header
 	**/
 	function gen($oid, $options)
 	{
@@ -18,8 +19,8 @@ class obj_xml_gen
 
 		$obj_list = $this->_gather_objects($o, $options);
 
-		$xml = "<?xml version='1.0'?>\n";
-		$xml .= "<obj>\n<start_object>$oid</start_object>\n";
+		$xml = $options["no_header"] ? "<obj id=\"{$oid}\">\n" : "<?xml version='1.0'?>\n<obj id=\"{$oid}\">\n";
+		$xml .= "<start_object>$oid</start_object>\n";
 		$xml .= "<objects>\n";
 		list($obj_xml, $id_map) = $this->_ser_objects($o, $obj_list);
 		$xml .= $obj_xml;
@@ -326,6 +327,7 @@ class obj_xml_gen
 				$o->set_prop($k, $v);
 			}
 		}
+
 		$md = aw_unserialize($data["ot_flds"]["meta"]);
 		if (is_array($md))
 		{
