@@ -37,7 +37,6 @@ shortcut("Ctrl+Shift+E", function() {
 	aw_popup_scroll("{VAR:stop_pop_url_qw}", "quick_task_entry", 800,600);
 });
 
-}
 // -->
 </script>
 
