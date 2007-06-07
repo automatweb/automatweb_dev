@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.53 2007/06/06 13:45:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.54 2007/06/07 11:46:26 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -662,18 +662,18 @@ class spa_bookigs_entry extends class_base
 			"caption" => t("Toode"),
 			"align" => "right"
 		));
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "when",
 			"caption" => t("Millal"),
 			"align" => "center"
 		));
-	}
+*/	}
 
 	function _get_my_bookings($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_my_bookings($t);
-
+$t->set_sortable(false);
 		// get bookings for my person
 		$p = get_current_person();
 		if ($arr["request"]["group"] == "my_bookings")
@@ -719,6 +719,20 @@ class spa_bookigs_entry extends class_base
 		$total_payment_amt = 0;
 		foreach($ol->arr() as $o)
 		{
+			classload("vcl/table");
+			$ot = new aw_table(array(
+				"layout" => "generic"
+			));
+			$ot->define_field(array(
+				"name" => "name",
+	//			"caption" => t("Toode"),
+				"align" => "right"
+			));
+			$ot->define_field(array(
+				"name" => "when",
+	//			"caption" => t("Millal"),
+				"align" => "center"
+			));
 			// bookingul has package
 			// package has products
 			// rooms have products
@@ -727,7 +741,7 @@ class spa_bookigs_entry extends class_base
 			{
 				continue;
 			}
-			$package = obj($o->prop("package"));
+			$package = obj($o->prop("package"));//if(aw_global_get("uid") == "test.test")arr($o->name());
 			$pk = $package->instance();
 			$dates = $this->get_booking_data_from_booking($o);
 
@@ -739,9 +753,30 @@ class spa_bookigs_entry extends class_base
 				date("d.m.Y", $o->prop("end")),
 				$package->trans_get_val("name")
 			);
+			
+			$booking_str2 = html::href(array(
+				"caption" => $booking_str,
+				"url" => "javascript:void(0)",
+				"onclick" => 'el=document.getElementById("bk'.$o->id().'");
+					el.style.display == "none" ? el.style.display = "block" : el.style.display = "none";
+					el=document.getElementById("bka'.$o->id().'");
+					el.style.display == "none" ? el.style.display = "block" : el.style.display = "none";
+				',
+			));
+			
+			$booking_str = html::href(array(
+				"caption" => $booking_str,
+				"url" => "javascript:void(0)",
+				"onclick" => 'el=document.getElementById("bk'.$o->id().'");
+					el.style.display == "none" ? el.style.display = "block" : el.style.display = "none";
+					el=document.getElementById("bka'.$o->id().'");
+					el.style.display == "none" ? el.style.display = "block" : el.style.display = "none";
+				',
+			));
+			
 			if (is_admin())
 			{
-				$booking_str .= " ".html::popup(array(
+				$booking_str .= " / "." ".html::popup(array(
 				//	"url" => $this->mk_my_orb("add_pkt", array("id" => $o->id(), "r" => get_ru())),
 					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 					"caption" => t("Lisa teenus"),
@@ -753,7 +788,7 @@ class spa_bookigs_entry extends class_base
 			}
 			else
 			{
-				$booking_str .= " ".html::href(array(
+				$booking_str .= " / "." ".html::href(array(
 		//			"url" => $this->mk_my_orb("add_pkt", array("id" => $o->id(), "r" => get_ru())),
 					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "id" => 11150, "r" => get_ru()), "spa_customer_interface"), 
 //					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
@@ -764,12 +799,13 @@ class spa_bookigs_entry extends class_base
 					"resizable" => 1*/
 				));
 			}
-arr();
+
 			$booking_str .= " / ".html::href(array(
 				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 				"caption" => t("Prindi"),
 				"target" => "_blank"
 			));
+		
 			if (!is_admin())
 			{
 				$has_times = count($o->meta("extra_prods")) > 0;
@@ -849,7 +885,6 @@ arr();
 						}
 					}
 
-
 					foreach($prods_in_group as $prod_id)
 					{
 						$prod = obj($prod_id);
@@ -901,18 +936,41 @@ arr();
 						"name" => join("<br>", $prod_str),
 						"when" => $date
 					));
+					
+					$ot->define_data(array("name" => '<table  width="100%" style="padding-bottom: 10px; padding-top: 10px; border-bottom: 1px dotted black; line-height: 25px;"><tr><td>'.join("<br>", $prod_str).'</td></tr></table>',
+						"when" => $date));
 				}
 			}
-
 			if ($arr["request"]["s_date_not_set"] && !$has_unc)
 			{
 				continue;
 			}
-			foreach($fd as $row)
-			{
-				$row["_int_index"] = ++$_int_index;
-				$t->define_data($row);
-			}
+
+//			foreach($fd as $row)
+//			{
+//				$row["_int_index"] = ++$_int_index;
+//				$t->define_data($row);
+//			}
+ 			$t->define_data(array(
+// 				"booking" => $booking_str,
+ //				"when" => $when,
+ 				"name" => 
+ 					"
+					<div  id='bka".$o->id()."' style='display: block'>".
+						$booking_str.
+					"</div>
+
+					<div  id='bk".$o->id()."' style='display: none'>".
+						'<table border="1" width="100%">
+						<tr>
+							<td width="100%" height="26" align="center" style="background-image:url(http://www.kalevspa.ee/img/taust_pealkiri.gif)" class="bronpealingid">
+							'.$booking_str.'
+							</td>
+						</tr>
+						<tr><td>'.$ot->draw().'</td></tr>
+						</table>'
+					."</div>",	
+			));
 		}
 
 		$t->set_rgroupby(array("booking" => "booking"));
