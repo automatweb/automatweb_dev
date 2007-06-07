@@ -9,6 +9,7 @@
                   <num_0>grp_case_schedule</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
+                  <num_3>grp_case_data</num_3>
             </group>
             <editonly>1</editonly>
             <field>workflow_toolbar</field>
@@ -22,6 +23,7 @@
                   <num_0>grp_case_schedule</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
+                  <num_3>grp_case_data</num_3>
             </group>
             <field>workflow_errors</field>
       </property>
@@ -82,6 +84,7 @@
                   <num_0>grp_case_schedule</num_0>
                   <num_1>grp_general</num_1>
                   <num_2>grp_case_workflow</num_2>
+                  <num_3>grp_case_data</num_3>
             </group>
             <table>mrp_case</table>
             <type>text</type>

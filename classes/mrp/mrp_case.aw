@@ -21,8 +21,8 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
 
 
-	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow editonly=1
-	@property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow
+	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
+	@property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data
 
 
 @default group=grp_general
@@ -44,7 +44,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
 
-	@property state type=text group=grp_case_schedule,grp_general,grp_case_workflow editonly=1
+	@property state type=text group=grp_case_schedule,grp_general,grp_case_workflow,grp_case_data editonly=1
 	@caption Staatus
 
 	@property customer type=popup_search reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY
