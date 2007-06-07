@@ -3,7 +3,7 @@ class date
 {
 	function date()
 	{
-		$this->month = array("Jaanuar", "Veebruar", "M&auml;rts", "Aprill", "Mai", "Juuni", "Juuli", "August", "September", "Oktoober", "November", "Detsember");
+		$this->month = array("jaanuar", "veebruar", "m&auml;rts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember");
 	}
 
 	function get_lc_date($timestamp, $format)
