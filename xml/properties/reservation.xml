@@ -259,6 +259,26 @@
             <caption>Spetsiaal allahindlus</caption>
       </property>
       <property>
+            <name>special_sum</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <field>special_sum</field>
+            <caption>Spetsiaal hind</caption>
+      </property>
+      <property>
+            <name>products_discount</name>
+            <table>objects</table>
+            <group>general</group>
+            <parent>general_down</parent>
+            <type>textbox</type>
+            <size>5</size>
+            <field>products_discount</field>
+            <caption>Toodete allahindlus</caption>
+      </property>
+      <property>
             <name>client_arrived</name>
             <table>aw_room_reservations</table>
             <group>general</group>

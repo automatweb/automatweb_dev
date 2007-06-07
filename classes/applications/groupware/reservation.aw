@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.64 2007/06/04 16:02:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.65 2007/06/07 15:18:47 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -104,6 +104,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservat
 
 	@property special_sum type=textbox size=5
 	@caption Spetsiaal hind
+	
+	@property products_discount type=textbox size=5
+	@caption Toodete allahindlus
 	
 	property code type=hidden size=5 table=planner field=code
 	caption Kood
@@ -2034,8 +2037,6 @@ flush();
 		));
 	}
 	
-
-	//need ükski ei tööta veel nagu näha on :)
 	// - andmed hinna/koguse/sooduse kohta
 	/** Returns resources data
 		@attrib api=1 params=name
@@ -2068,47 +2069,125 @@ flush();
 		return 0;
 	}
 	
-	// - määrab kogusumma
-	/**
+	/** sets resources price for bron
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
+			reservation object
+		@param resources optional type=array
+			products array([oid] => sum)
+		@param resource optional type=int
+			product oid (if there is only one product)
+		@param sum optiopal type=int
+			product price sum (if there is only one product)
+		@param curr optional type=oid
+			currency object id
+		@returns 1 - success , 0 - unsuccess
 	**/
 	function set_resources_price($arr)
 	{
 		extract($arr);
-		return 0;
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
+		}
+		$resource_info = $reservation->meta("resources_price");
+
+		if($sum && $resource)
+		{
+			$resources = array($resource => $sum);
+		}
+		
+		foreach($resources as $resource => $sum)
+		{
+			//kui määratakse kindla valuutaga summa, kui mitte, siis võib arvestada default valuutana
+			if(!$curr)
+			{
+				$resource_info[$resource] = $sum;
+			}
+			else
+			{
+				$resource_info[$resource][$curr] = $sum;
+			}
+		}
+		
+		$reservation->set_meta("resources_price" , $sum);
+		$reservation->save();
+		return 1;
 	}
 	
-	// - annab kogusumma sooduse (kui on)
-	/**
+	/** gets reservation resources discount
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
 	**/
 	function get_resources_discount($arr)
 	{
 		extract($arr);
-		return 0;
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
+		}
+		return $reservation->prop("resources_discount");
 	}
 	
-	// - määrab kogusumma sooduse
-	/**
+	
+	/** sets reservation resources discount
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
+		@param discount required type=double
+		@returns 1 - success , 0 - unsuccess
 	**/
 	function set_resources_discount($arr)
 	{
 		extract($arr);
-		return 0;
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return 0;
+		}
+		$reservation->set_prop("resources_discount" , $discount);
+		return 1;
 	}
 	
 // edasi toodete kräpp
 	/** Returns products data
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
+		@param products required type=array
+			products array(oid1, oid2)
+		@param curr optional type=oid
+			currency object id
+		@returns array
+			array(prod1 => array("sum" => .. , "amount" => .. ) , ...)
 	**/
 	function get_products_data($arr)
 	{
 		extract($arr);
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation) || !is_array($products))
+		{
+			return false;
+		}
+	
+		$products = $reservation->meta("amount");
+		foreach($products as $product => $amount)
+		{
+			$products[$product]["amount"] = $amount;
+			$products[$product]["sum"] = $this->get_products_price(array("reservation" => $reservation, "curr" => $curr));
+		}
 		return 0;
 	}
 	
@@ -2119,10 +2198,10 @@ flush();
 	function set_products_data($arr)
 	{
 		extract($arr);
-		return 0;
+
+		
 	}
 	
-	//annab kogusumma(kui on)
 	/**
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
@@ -2130,40 +2209,96 @@ flush();
 	function get_products_price($arr)
 	{
 		extract($arr);
-		return 0;
 	}
 	
-	// - määrab kogusumma
-	/**
+	
+	/** sets products price for bron
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
+			reservation object
+		@param products optional type=array
+			products array([oid] => sum)
+		@param product optional type=int
+			product oid (if there is only one product)
+		@param sum optiopal type=int
+			product price sum (if there is only one product)
+		@param curr optional type=oid
+			currency object id
+		@returns 1 - success , 0 - unsuccess
 	**/
 	function set_products_price($arr)
 	{
 		extract($arr);
-		return 0;
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
+		}
+		$prod_info = $reservation->meta("products_price");
+
+		if($sum && $product)
+		{
+			$products = array($product => $sum);
+		}
+		
+		foreach($products as $product => $sum)
+		{
+			//kui määratakse kindla valuutaga summa, kui mitte, siis võib arvestada default valuutana
+			if(!$curr)
+			{
+				$prod_info[$product] = $sum;
+			}
+			else
+			{
+				$prod_info[$product][$curr] = $sum;
+			}
+		}
+		
+		$reservation->set_meta("products_price" , $sum);
+		$reservation->save();
+		return 1;
 	}
 	
-	// - annab kogusumma sooduse (kui on)
-	/**
+	/** gets reservation products discount
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
 	**/
 	function get_products_discount($arr)
 	{
 		extract($arr);
-		return 0;
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
+		}
+		return $reservation->prop("products_discount");
 	}
 	
-	// - määrab kogusumma sooduse
-	/**
+	/** sets reservation products discount
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
+		@param discount required type=double
+		@returns 1 - success , 0 - unsuccess
 	**/
 	function set_products_discount($arr)
 	{
 		extract($arr);
-		return 0;
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return 0;
+		}
+		$reservation->set_prop("products_discount" , $discount);
+		return 1;
 	}
 
 //siit alumised juba võiks töötada	
@@ -2273,7 +2408,7 @@ flush();
 		{
 			return false;
 		}
-		return $reservation->prop("special_discount");
+		return $reservation->meta("special_discount");
 	}
 	
 	// - määrab kogusumma sooduse
@@ -2293,7 +2428,7 @@ flush();
 		{
 			return 0;
 		}
-		$reservation->set_prop("special_discount" , $discount);
+		$reservation->set_meta("special_discount" , $discount);
 		$reservation->save();
 		return 1;
 	}
