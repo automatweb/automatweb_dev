@@ -104,7 +104,11 @@ class object
 		}
 		else
 		{
-			throw new awex_invalid_arg("Call to undefined method.");
+			error::raise(array(
+				"id" => "ERR_OBJ_METHOD",
+				"msg" => sprintf(t("Call to undefined method '%s'."), $method)
+			));
+			// throw new awex_invalid_arg("Call to undefined method.");
 		}
 	}
 
