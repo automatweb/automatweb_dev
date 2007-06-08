@@ -28,6 +28,15 @@
             <comment>Kui l&amp;amp;otilde;peb % m&amp;amp;auml;rgiga, siis protsentides</comment>
       </property>
       <property>
+            <name>max_deviation</name>
+            <table>aw_budgeting_tax</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_max_deviation</field>
+            <caption>Maksimaalne projektip&amp;amp;otilde;hine muudatus</caption>
+      </property>
+      <property>
             <name>pri</name>
             <table>aw_budgeting_tax</table>
             <group>general</group>
@@ -62,6 +71,16 @@
             <field>aw_penalty_pct</field>
             <caption>Viivis (%)</caption>
       </property>
+      <property>
+            <name>tax_grp</name>
+            <table>aw_budgeting_tax</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_tax_grp</field>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_TAX_GRP</reltype>
+            <caption>Maksugrupp</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUDGETING_TAX</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -94,6 +113,11 @@
                   </clid>
                   <caption>Kontole</caption>
             </TO_ACCT>
+            <TAX_GRP>
+                  <value>3</value>
+                  <clid>CL_BUDGETING_TAX_GROUP</clid>
+                  <caption>Maksugrupp</caption>
+            </TAX_GRP>
       </reltypes>
 </properties>
 

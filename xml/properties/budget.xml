@@ -12,11 +12,29 @@
       <property>
             <name>total</name>
             <table>aw_budgets</table>
-            <group>general</group>
+            <group>m</group>
             <type>textbox</type>
             <size>5</size>
             <field>total</field>
             <caption>Kogusumma</caption>
+      </property>
+      <property>
+            <name>m</name>
+            <table>aw_budgets</table>
+            <group>m</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>m</field>
+      </property>
+      <property>
+            <name>desc</name>
+            <table>aw_budgets</table>
+            <group>m</group>
+            <type>text</type>
+            <store>no</store>
+            <field>desc</field>
+            <caption>Hetkel projekti kasum</caption>
       </property>
       <classinfo>
             <syslog_type>ST_BUDGET</syslog_type>
@@ -25,6 +43,11 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <m>
+                  <caption>Raha</caption>
+            </m>
+      </groupinfo>
       <tableinfo>
             <aw_budgets>
                   <index>aw_oid</index>
@@ -35,6 +58,7 @@
       <reltypes>
             <PROJECT>
                   <value>1</value>
+                  <clid>CL_PROJECT</clid>
                   <caption>Projekt</caption>
             </PROJECT>
       </reltypes>
