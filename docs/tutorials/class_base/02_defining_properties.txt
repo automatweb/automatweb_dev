@@ -12,7 +12,7 @@ of the file.
 </pre>
 </p><p>
 <div class="cmdsynopsis" id="id2747670"><a name="id2747670"></a><b><tt>@property</tt></b>  {name} {type=<i><tt>typestring</tt></i>} [group=<i><tt>groupid</tt></i>] [parent=<i><tt>propname</tt></i>] 
-[default=<i><tt>value</tt></i>] [rel=1] [trans=1] [table=<i><tt>tablename</tt></i>] [field=<i><tt>fieldname</tt></i>] [method= [serialize | bitmask]] [no_caption=1] [store=no] [editonly=1] [newonly=1]</div>
+[default=<i><tt>value</tt></i>] [rel=1] [trans=1] [table=<i><tt>tablename</tt></i>] [field=<i><tt>fieldname</tt></i>] [method= [serialize | bitmask]] [no_caption=1] [store=no] [editonly=1] [newonly=1] [warning=<i><tt>warninglevel</tt></i>]</div>
 
 This is the single most important tag, it's used to define all the different properties. Additionaly to the attributes described here some properties have their own attributes.
 </p><div class="variablelist"><dl><dt><a name="id2797041"></a><span class="term">type</span></dt><dd><p><a name="id2797048"></a>type of the property</p></dd><dt><a name="id2797057"></a><span class="term">group</span></dt><dd><p><a name="id2797064"></a>id of the group (or groups) this property belongs to
@@ -30,6 +30,7 @@ This is the single most important tag, it's used to define all the different pro
 </p></dd><dt><a name="id2797210"></a><span class="term">store</span></dt><dd><p><a name="id2797218"></a>If set to "no", this property will neither be read or written to/from the database. An attempt to read (select) a non-existant property will result in an SQL error. <a href="ch04s02.html" title="get_property">get_property</a> / <a href="ch05.html#set_property" title="set_property">set_property</a> will still be invoked for this kind of property.
 </p></dd><dt><a name="id2797366"></a><span class="term">editonly</span></dt><dd><p><a name="id2797373"></a>If set to 1, the property will be shown only if an existing object is being edited (it's ignored for when an object is created)
 </p></dd><dt><a name="id2797385"></a><span class="term">newonly</span></dt><dd><p><a name="id2797392"></a>If set to 1, the property will be shown only if a new object is being created (is ignored when editing an object).
+</p></dd><dt><a name="id2797383"></a><span class="term">warning</span></dt><dd><p><a name="id2797393"></a>If set to 0, warnings will be ignored for this prop, any other integer set's the props warning level to corresponding number.
 </p></dd></dl></div><p>
 <div class="cmdsynopsis" id="id2797408"><a name="id2797408"></a><b><tt>@caption</tt></b>  {string}</div>
 
