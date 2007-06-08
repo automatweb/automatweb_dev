@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.2 2007/06/05 09:41:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_tax.aw,v 1.3 2007/06/08 12:35:54 kristo Exp $
 // budgeting_tax.aw - Eelarvestamise maks 
 /*
 
@@ -20,6 +20,9 @@
 	@caption Summa
 	@comment Kui l&otilde;peb % m&auml;rgiga, siis protsentides
 
+	@property max_deviation type=textbox size=5 field=aw_max_deviation
+	@caption Maksimaalne projektip&otilde;hine muudatus
+
 	@property pri type=textbox size=5 field=aw_pri
 	@caption Prioriteet
 
@@ -32,11 +35,17 @@
 	@property penalty_pct type=textbox size=5 field=aw_penalty_pct
 	@caption Viivis (%)
 
+	@property tax_grp type=relpicker  field=aw_tax_grp automatic=1 reltype=RELTYPE_TAX_GRP
+	@caption Maksugrupp
+
 @reltype FROM_ACCT value=1 clid=CL_BUDGETING_ACCOUNT
 @caption Kontolt
 
 @reltype TO_ACCT value=2 clid=CL_BUDGETING_ACCOUNT,CL_CRM_PERSON,CL_CRM_COMPANY,CL_CRM_SECTOR,CL_PROJECT,CL_BUDGETING_FUND
 @caption Kontole
+
+@reltype TAX_GRP value=3 clid=CL_BUDGETING_TAX_GROUP
+@caption Maksugrupp
 */
 
 class budgeting_tax extends class_base
@@ -98,9 +107,17 @@ class budgeting_tax extends class_base
 				return true;
 
 			case "aw_pri":
+			case "aw_tax_grp":
 				$this->db_add_col($t, array(
 					"name" => $f,
 					"type" => "int"
+				));
+				return true;
+
+			case "aw_max_deviation":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "double"
 				));
 				return true;
 		}

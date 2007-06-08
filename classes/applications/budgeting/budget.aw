@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.1 2007/06/05 09:41:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budget.aw,v 1.2 2007/06/08 12:35:54 kristo Exp $
 // budget.aw - Eelarve 
 /*
 
@@ -13,11 +13,20 @@
 	@property project type=relpicker reltype=RELTYPE_PROJECT field=aw_project
 	@caption Project
 
+@default group=m
+
 	@property total type=textbox size=5
 	@caption Kogusumma
 
+	@property m type=table store=no no_caption=1
 
-@reltype PROJECT value=1 CL_PROJECT
+	@property desc type=text store=no 
+	@caption Hetkel projekti kasum
+
+@groupinfo m caption="Raha"
+
+
+@reltype PROJECT value=1 clid=CL_PROJECT
 @caption Projekt
 
 */
@@ -75,6 +84,138 @@ class budget extends class_base
 				return true;
 				break;
 		}
+	}
+
+	function _set_m($arr)
+	{
+		$arr["obj_inst"]->set_meta("mod_tax_pct", $arr["request"]["p"]);
+	}
+
+	function _init_m_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "tax_grp",
+			"caption" => t("Maksugrupp"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "tax",
+			"caption" => t("Maks"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "tax_pct",
+			"caption" => t("Maksu protsent"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "mod_tax_pct",
+			"caption" => t("Muuda protsenti"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "tot_amt",
+			"caption" => t("Maksu summa"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "forward",
+			"caption" => t("Edasi kandub"),
+			"align" => "center"
+		));
+	}
+
+	function _get_m($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_m_t($t);
+		$t->set_sortable(false);
+
+		// get all taxes that go away above the project
+		// then all tasks in the project
+		// then let the user play with numbers
+		$m = get_instance("applications/budgeting/budgeting_model");
+		$above = $m->get_all_taxes_above_project(obj($arr["obj_inst"]->prop("project")));
+		$amt = $arr["obj_inst"]->prop("total");
+		$p = $arr["obj_inst"]->meta("mod_tax_pct");
+		foreach($above as $tax)
+		{
+			$t_pct = $tax->prop("amount");
+			if (!empty($p[$tax->id()]))
+			{
+				$t_pct = $p[$tax->id()];
+			}
+			$tax_amt = ($t_pct / 100.0) * $amt;
+			$amt -= $tax_amt;
+			$add = "";
+			if ($tax->prop("max_deviation") > 0)
+			{
+				$add .= sprintf(t("<br>(Maksimaalne erinevus %s)"), $tax->prop("max_deviation"));
+			}
+			$t->define_data(array(
+				"tax_grp" => $tax->prop("tax_grp.name"),
+				"tax" => html::obj_change_url($tax),
+				"tax_pct" => $tax->prop("amount"),
+				"tot_amt" => number_format($tax_amt, 2),
+				"forward" => number_format($amt, 2),
+				"mod_tax_pct" => html::textbox(array(
+					"name" => "p[".$tax->id()."]",
+					"value" => $p[$tax->id()],
+					"size" => 5
+				)).$add
+			));
+		}
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_TASK),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_TASK.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		// divide the rest of the money between tasks until it runs uut
+		foreach($ol->arr() as $task)
+		{
+			$tax_amt = $task->prop("num_hrs_guess") * $task->prop("hr_price");
+			$amt -= $tax_amt;
+			$t->define_data(array(
+				"tax" => html::obj_change_url($task),
+				"tax_pct" => "",
+				"tot_amt" => number_format($tax_amt, 2),
+				"forward" => number_format($amt, 2)
+			));
+		}
+	}
+
+	function _get_desc($arr)
+	{
+		$m = get_instance("applications/budgeting/budgeting_model");
+		$above = $m->get_all_taxes_above_project(obj($arr["obj_inst"]->prop("project")));
+		$amt = $arr["obj_inst"]->prop("total");
+		$p = $arr["obj_inst"]->meta("mod_tax_pct");
+		foreach($above as $tax)
+		{
+			$t_pct = $tax->prop("amount");
+			if (!empty($p[$tax->id()]))
+			{
+				$t_pct = $p[$tax->id()];
+			}
+			$tax_amt = ($t_pct / 100.0) * $amt;
+			$amt -= $tax_amt;
+		}
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_TASK),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"CL_TASK.RELTYPE_PROJECT" => $arr["obj_inst"]->prop("project")
+		));
+		// divide the rest of the money between tasks until it runs uut
+		foreach($ol->arr() as $task)
+		{
+			$tax_amt = $task->prop("num_hrs_guess") * $task->prop("hr_price");
+			$amt -= $tax_amt;
+		}
+		$arr["prop"]["value"] = number_format($amt, 2);
 	}
 }
 ?>

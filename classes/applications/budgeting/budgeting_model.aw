@@ -280,6 +280,60 @@ echo "created transaction ".$to->id()." <br>";
 		}
 		return $ret;
 	}
+
+	function get_all_taxes_above_project($p)
+	{
+		$path = $this->get_transfer_path_from_proj($p);
+		$rv = array();
+		$ids = array();
+		foreach($path as $p_item)
+		{
+			$ids[] = $this->_get_cat_id_from_obj($p_item);
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_BUDGETING_TAX,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		return $ol->arr();
+	}
+
+	function _get_cat_id_from_obj($o)
+	{
+		switch($o->class_id())
+		{
+			case CL_CRM_CATEGORY:
+				return "area_".$o->id();
+
+			case CL_CRM_COMPANY:
+				$cur = get_current_company();
+				if ($o->id() == $cur->id())
+				{
+					return "area_".$o->id();
+				}
+				return "cust_".$o->id();
+
+			case CL_PROJECT:
+				return "proj_".$o->id();
+
+			case CL_TASK:
+				return "task_".$o->id();
+
+			case CL_CRM_PERSON:
+				return "person_".$o->id();
+
+			case CL_BUDGETING_FUND:
+				return "fund_".$o->id();
+
+			case CL_SHOP_PRODUCT:
+				return "prod_".$o->id();
+
+			case CL_BUDGETING_ACCOUNT:
+				return "acct_".$o->id();
+		}
+		return $o->id();
+	}
 }
 
 ?>

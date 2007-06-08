@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.2 2007/06/05 09:41:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/budgeting/budgeting_workspace.aw,v 1.3 2007/06/08 12:35:54 kristo Exp $
 // budgeting_workspace.aw - Eelarvestamise t&ouml;&ouml;laud 
 /*
 
@@ -35,6 +35,12 @@
 		@layout tax_table parent=tax_split type=vbox
 
 			@property tax_table type=table parent=tax_table store=no no_caption=1
+
+@default group=taxes_grps
+
+	@property tax_grp_tb type=toolbar no_caption=1 store=no
+
+	@property tax_grp_table type=table store=no no_caption=1
 
 @default group=funds
 
@@ -83,7 +89,10 @@
 	@property budgets_tbl type=table store=no no_caption=1
 
 @groupinfo accounts caption="Kontod" submit=no save=no
-@groupinfo taxes caption="Maksud" submit=no save=no
+@groupinfo taxes_main caption="Maksud" submit=no save=no
+	@groupinfo taxes caption="Maksud" submit=no save=no parent=taxes_main
+	@groupinfo taxes_grps caption="Maksugrupid " submit=no save=no parent=taxes_main
+
 @groupinfo funds caption="Fondid" submit=no save=no
 @groupinfo transfers caption="&Uuml;lekanded" submit=no save=no submit_method=get
 @groupinfo budgets caption="Eelarved" submit=no save=no 
@@ -99,6 +108,9 @@
 
 @reltype BUDGET value=4 clid=CL_BUDGET
 @caption Eelarve
+
+@reltype TAX_GROUP value=5 clid=CL_BUDGETING_TAX_GROUP
+@caption Maksugrupp
 
 */
 
@@ -561,6 +573,23 @@ class budgeting_workspace extends class_base
 			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BUDGET"))),
 			array("name"),
 			CL_BUDGET
+		);
+	}
+
+	function _get_tax_grp_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_new_button(array(CL_BUDGETING_TAX_GROUP), $arr["obj_inst"]->id(), 5 /* RELTYPE_TAX_GROUP */);
+		$tb->add_delete_button();
+	}
+
+	function _get_tax_grp_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$t->table_from_ol(
+			new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TAX_GROUP"))),
+			array("name", "comment"),
+			CL_BUDGETING_TAX_GROUP
 		);
 	}
 }
