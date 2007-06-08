@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.550 2007/06/05 10:13:26 kristo Exp $
+// $Id: class_base.aw,v 2.551 2007/06/08 06:34:29 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -566,7 +566,7 @@ class class_base extends aw_template
 				"clid" => $this->clid,
 				"group" => $args["group"],
 			),
-			"cb_translate")."\",\"awtrans\",\"width=600,height=400,resizable=1,scrollbars=1\");",
+			"cb_translate")."\",\"awtrans\",\"width=1200,height=900,resizable=1,scrollbars=1\");",
 		));
 
 		$add_txt = "";
@@ -884,7 +884,8 @@ class class_base extends aw_template
 		$msgid = "Grupi ".$groups[$argblock["group"]]["caption"]." (".$argblock["group"].") comment";
 		$help = strlen(t2($msgid))?"<div>".t($msgid)."</div>":t("Lisainfo grupi kohta puudub");
 		//
-
+		$cli->view_layout = $args["view_layout"]?$args["view_layout"]:false;
+		$cli->view_outer = true;//$args["view_outer"]?$args["view_layout"]:false;
 		$cli->finish_output(array(
 			"method" => $method,
 			"action" => $submit_action,
@@ -939,6 +940,58 @@ class class_base extends aw_template
 			$orb_action = "view";
 		}
 
+		// LETS ROCK
+		$u = get_instance(CL_USER);
+		$u = $u->get_obj_for_uid(aw_global_get("uid"));
+		$ulev = !strlen($_t = ($u->prop("warning_notification")))?0:$_t;
+		if($ulev)
+		{
+			foreach(warning_prop() as $oid => $properties)
+			{
+				if(!$this->can("view", $oid))
+				{
+					continue;
+				}
+				$o = obj($oid);
+				$prplist = $o->get_property_list();
+				unset($wprops);
+				$maxlevel = 0;
+				foreach($properties as $prop => $level)
+				{
+					// level check
+					if($level < $ulev)
+					{
+						continue;
+					}
+					if($_t = trim($prplist[$prop]["caption"]))
+					{
+						$wprops[] = $_t;
+						$maxlevel = ($maxlevel < $level)?$level:$maxlevel;
+					}
+
+				}
+				if(count($wprops))
+				{
+					$url = $this->mk_my_orb("change", array(
+						"id" => $o->id(),
+						"return_url" => get_ru(),
+					), $o->class_id());
+					$warn = "Objektis <b><a href=\"".$url."\">".$o->name()."</a></b> on m&auml;&auml;ramata v&auml;&auml;rtused: '".join("', '", $wprops)."'";
+					warning($warn, $maxlevel);
+				}
+			}
+
+			foreach(warning() as $level => $warns)
+			{
+				if($level < $ulev)
+				{
+					continue;
+				}
+				$final_warns[] = join("<br/>", $warns);
+			}
+			// LETS STOP ROKKIN'
+			$this->cli->config = $this->cli->config + array( "warn" => join("<br/>", $final_warns));
+		}
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
@@ -5319,11 +5372,11 @@ class class_base extends aw_template
 		{
 			if ($lid == $o->lang_id())
 			{
-				continue;
+				//continue;
 			}
 			if (is_array($uo) && count($uo) && !isset($uo[$lid]))
 			{
-				continue;
+				//continue;
 			}
 
 			$nm = "sep_$lid";
