@@ -64,6 +64,9 @@
 		</div>
 		<!-- END SUB: tabs_L2 -->
 		<div class="p">
+			<!-- SUB: HAS_WARNING -->
+			<a href="javascript:showhide_help('warn_layer');">Hoiatus</a>
+			<!-- END SUB: HAS_WARNING -->
 			<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_tagasiside.gif" name="ico1" alt="tagasiside" width="19" height="16" vspace="2" /><a href="{VAR:feedback_link}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ico1','','{VAR:baseurl}/automatweb/images/aw06/ikoon_tagasiside_ov.gif',1)">{VAR:feedback_text}</a>
 			
 			<img src="{VAR:baseurl}/automatweb/images/aw06/ikoon_kasutajatugi.gif" name="ico2" alt="kasutajatugi" width="16" height="16" /><a href="{VAR:feedback_m_link}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('ico2','','{VAR:baseurl}/automatweb/images/aw06/ikoon_kasutajatugi_ov.gif',1)">{VAR:feedback_m_text}</a>
@@ -78,10 +81,15 @@
 </div>
 <!-- END SUB: NO_TABS -->
 
-<div id="help_layer" style="background-color: #F7F7F7; border: 1px solid #91DA52; display: none; padding: 5px;">
-<div id="helptext_layer" style="font-family: verdana, sans-serif; font-size: 11px; font-weight: normal; color: #000000; height: 28px; background-color: #F7F7F7; ">
-{VAR:help}
+<!-- SUB: WARNING_LAYER -->
+<div id="warn_layer" style="background-color: #F7F7F7; border: 1px solid #91DA52; display: none; padding: 5px;font-family: verdana, sans-serif; font-size: 11px; font-weight: normal; color: #000000;">
+	{VAR:warn}
 </div>
+<!-- END SUB: WARNING_LAYER -->
+<div id="help_layer" style="background-color: #F7F7F7; border: 1px solid #91DA52; display: none; padding: 5px;">
+	<div id="helptext_layer" style="font-family: verdana, sans-serif; font-size: 11px; font-weight: normal; color: #000000; height: 28px; background-color: #F7F7F7; ">
+	{VAR:help}
+	</div>
 <div style="text-align: right; width: 100%; font-family: verdana, sans-serif; font-size: 11px; font-weight: normal; color: #000000;">
 {VAR:translate_url}
 <a href="javascript:void(0);" onclick="window.open('{VAR:help_url}','awhelp','width=750,height=550,resizable=1,scrollbars=1');">{VAR:more_help_text}</a> | <a href="javascript:close_help();">{VAR:close_help_text}</a>
@@ -90,28 +98,31 @@
 
 
 <script type="text/javascript">
-function showhide_help()
+function showhide_help(layer)
 {
-        help_layerv = document.getElementById('help_layer');
+	if(!layer){
+		layer = 'help_layer';
+	}
+        help_layerv = document.getElementById(layer);
         if (help_layerv.style.display == 'none')
         {
-                show_help();
+                show_help(layer);
         }
         else
         {
-                close_help();
+                close_help(layer);
         };
 }
 
-function show_help()
+function show_help(layer)
 {
-        help_layerv = document.getElementById('help_layer');
+        help_layerv = document.getElementById(layer);
         help_layerv.style.display = 'block';
 }
 
-function close_help()
+function close_help(layer)
 {
-        help_layerv = document.getElementById('help_layer');
+        help_layerv = document.getElementById(layer);
         help_layerv.style.display = 'none';
 }
 

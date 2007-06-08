@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.168 2007/06/06 12:19:04 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.169 2007/06/08 07:20:50 tarvo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -808,6 +808,10 @@ class htmlclient extends aw_template
 			$bmb->begin_menu("settings_pop");
 			$bm_h = get_instance("vcl/popup_menu");
 			$bm_h->begin_menu("history_pop");
+
+			$tp->vars(array(
+				"warn" => $this->config["warn"],
+			));
 			$tp->vars(array(
 				"help" => $this->vars["help"],
 				"help_url" => $this->config["help_url"],
@@ -816,7 +820,8 @@ class htmlclient extends aw_template
 				"more_help_text" => $this->config["more_help_text"],
 				"close_help_text" => $this->config["close_help_text"],
 				"open_help_text" => $this->config["open_help_text"],
-				"warn" => $this->config["warn"],
+				"WARNING_LAYER" => $this->config["warn"]?$tp->parse("WARNING_LAYER"):"",
+				"HAS_WARNING" => $this->config["warn"]?$tp->parse("HAS_WARNING"):"",
 				"feedback_link" => $this->mk_my_orb("redir_new_feedback", array(
 					"d_class" => $_GET["class"],
 					"d_obj" => $_GET["id"],

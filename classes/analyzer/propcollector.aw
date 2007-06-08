@@ -227,7 +227,7 @@ class propcollector extends aw_template
 		foreach($_x->get() as $field)
 		{
 			list($fname,$fvalue) = explode("=",$field);
-			if ($fname && $fvalue)
+			if ($fname && strlen($fvalue))
 			{
 				// try to split fvalue
 				$_split = explode(",",$fvalue);

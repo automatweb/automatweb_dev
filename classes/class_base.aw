@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.551 2007/06/08 06:34:29 tarvo Exp $
+// $Id: class_base.aw,v 2.552 2007/06/08 07:20:50 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -981,6 +981,7 @@ class class_base extends aw_template
 				}
 			}
 
+			$final_warns = array();
 			foreach(warning() as $level => $warns)
 			{
 				if($level < $ulev)
@@ -990,7 +991,7 @@ class class_base extends aw_template
 				$final_warns[] = join("<br/>", $warns);
 			}
 			// LETS STOP ROKKIN'
-			$this->cli->config = $this->cli->config + array( "warn" => join("<br/>", $final_warns));
+			$this->cli->config = count($final_warns)?($this->cli->config + array( "warn" => join("<br/>", $final_warns))):false;
 		}
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,

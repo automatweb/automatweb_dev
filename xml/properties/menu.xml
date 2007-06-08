@@ -80,6 +80,7 @@
       <property>
             <name>admin_feature</name>
             <table>menu</table>
+            <warning>0</warning>
             <type>select</type>
             <group>advanced_settings</group>
             <field>admin_feature</field>

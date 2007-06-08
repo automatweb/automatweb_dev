@@ -2361,10 +2361,43 @@ class _int_object
 		}
 		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects")
 		{
+			$this->_scan_warning_possibility($this->obj["meta"][$pd["name"]], $pd);
 			return isset($this->obj["meta"][$pd["name"]]) ? $this->obj["meta"][$pd["name"]] : null;
 		}
-
+		$this->_scan_warning_possibility($this->obj["properties"][$prop], $pd);
 		return isset($this->obj["properties"][$prop]) ? $this->obj["properties"][$prop] : null;
+	}
+
+	function _scan_warning_possibility($value, $prop = false)
+	{
+		if(!$prop || !is_array($prop) || !$prop["type"])
+		{
+			return false;
+		}
+		$_1 = array("checkbox", "chooser");
+		$_2 = array("date_select", "time_select");
+		$level_0 = array("checkbox", "text", "releditor", "status", "href", "hidden", "callback");
+		
+		if(in_array($prop["type"], $_1) || in_array($prop["type"], $level_0) || $prop["store"] == "no")
+		{
+			return false;
+		}
+		if(in_array($prop["type"], $_2) && $value != -1)
+		{
+			return false;
+		}
+		if(!empty($value))
+		{
+			return false;
+		}
+		if(!strlen($prop["warning"]))
+		{
+			$prop["warning"] = ($prop["type"] == "relpicker")?2:1;
+		}
+		//arr($this->obj["oid"]);
+		//arr($prop);
+		$prop["warning"]?warning_prop($prop["warning"], $this->obj["oid"], $prop["name"]):"";
+		return false;
 	}
 
 	function _int_load_property_values()
