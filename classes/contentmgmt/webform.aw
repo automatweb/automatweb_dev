@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.122 2007/05/24 08:37:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.123 2007/06/11 08:30:40 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -856,7 +856,7 @@ class webform extends class_base
 			),
 			array(
 				"name" => t("*elemendinimi* peab olema t&auml;idetud"),
-				"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
+				"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;} if (isset($_FILES[$prop["name"]]) && $_FILES[$prop["name"]]["error"]["file"] != UPLOAD_ERR_OK) { $retval = PROP_ERROR; }',
 //				"errmsg" => t("%caption peab olema t&auml;idetud"),
 				"errmsg" => $error_messages['element_has_to_be_filled'],
 			),
