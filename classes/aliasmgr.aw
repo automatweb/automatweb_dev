@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.212 2007/05/22 11:17:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.213 2007/06/11 06:58:28 tarvo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -294,8 +294,7 @@ class aliasmgr extends aw_template
 		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$this->t->define_field(array(
 			"name" => "icon",
-			"caption" =>
-				 "",
+			"caption" => t("&nbsp;"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",

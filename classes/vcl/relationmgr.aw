@@ -291,7 +291,7 @@ class relationmgr extends aw_template
 		));
 		$t->define_field(array(
 			"name" => "icon",
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -764,7 +764,7 @@ class relationmgr extends aw_template
 		
 		$tbl->define_field(array(
 			"name" => "icon",
-			"caption" => t(""),
+			"caption" => t("&nbsp;"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
