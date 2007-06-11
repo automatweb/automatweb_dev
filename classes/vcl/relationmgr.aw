@@ -524,14 +524,14 @@ class relationmgr extends aw_template
 			$single_select = "capt_new_object";
 			$sele = NULL;
 			$vals = $this->true_rel_classes[$k];
-			$vals = str_replace("&auml;", "&auml;", $vals);
-			$vals = str_replace("&Auml;", "&Auml;", $vals);
-			$vals = str_replace("&ouml;", "&ouml;", $vals);
-			$vals = str_replace("&Ouml;", "&Ouml;", $vals);
-			$vals = str_replace("&uuml;", "&uuml;", $vals);
-			$vals = str_replace("&Uuml;", "&Uuml;", $vals);
-			$vals = str_replace("&otilde;", "&otilde;", $vals);
-			$vals = str_replace("&Otilde;", "&Otilde;", $vals);
+			$vals = str_replace("&auml;", "ä", $vals);
+			$vals = str_replace("&Auml;", "Ä", $vals);
+			$vals = str_replace("&ouml;", "ö", $vals);
+			$vals = str_replace("&Ouml;", "Ö;", $vals);
+			$vals = str_replace("&uuml;", "ü", $vals);
+			$vals = str_replace("&Uuml;", "Ü", $vals);
+			$vals = str_replace("&otilde;", "õ", $vals);
+			$vals = str_replace("&Otilde;", "Õ", $vals);
 			$vals = $this->mk_kstring($vals);
 			if (isset($this->true_rel_classes[$k][$objtype]))
 			{
@@ -587,7 +587,7 @@ class relationmgr extends aw_template
 				"name" => "search",
 				"img" => "search.gif",
 				"tooltip" => t("Otsi"),
-				"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seoset&uuml;&uuml;p!')",
+				"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seosetüüp!')",
 			));
 		}
 		else
