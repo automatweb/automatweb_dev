@@ -43,9 +43,9 @@ class relationmgr extends aw_template
 		$this->clids[CL_SHOP_PACKET] = basename($classes[CL_SHOP_PACKET]["file"]);
 		$this->clids[CL_SHOP_PRODUCT_PACKAGING] = basename($classes[CL_SHOP_PRODUCT_PACKAGING]["file"]);
 		$this->clids[CL_GROUP] = basename($class[CL_GROUP]["file"]);
-		$this->reltypes[0] = "Alias";
-		$this->reltypes[RELTYPE_BROTHER] = "Too vend";
-		$this->reltypes[RELTYPE_ACL] = "&Otilde;igus";
+		$this->reltypes[0] = t("Alias");
+		$this->reltypes[RELTYPE_BROTHER] = t("Too vend");
+		$this->reltypes[RELTYPE_ACL] = t("&Otilde;igus");
 		$tmp = array();
 		foreach($classes as $key => $class)
 		{
@@ -186,7 +186,7 @@ class relationmgr extends aw_template
 			"value" => $arr["request"]["comment"],
 		); 
 //@property class_id type=select multiple=1 size=10 group=search,advsearch
-//@caption Tüüp
+//@caption T&uuml;&uuml;p
 		$rval["oid"] = array(
 			"name" => "oid",
 			"type" => "textbox",
@@ -216,7 +216,7 @@ class relationmgr extends aw_template
 			"type" => "chooser",
 			"caption" => t("Staatus"),
 			"options" => array(
-				"3" => t("Kõik"),
+				"3" => t("K&otilde;ik"),
 				"2" => t("Aktiivsed"),
 				"1" => t("Deaktiivsed"),
 			),
@@ -307,7 +307,7 @@ class relationmgr extends aw_template
 		));
 		$t->define_field(array(
 			"name" => "class_id",
-			"caption" => t("Tüüp"),
+			"caption" => t("T&uuml;&uuml;p"),
 			"sortable" => 1,
 		));
 		$t->define_field(array(
@@ -524,14 +524,14 @@ class relationmgr extends aw_template
 			$single_select = "capt_new_object";
 			$sele = NULL;
 			$vals = $this->true_rel_classes[$k];
-			$vals = str_replace("&auml;", "ä", $vals);
-			$vals = str_replace("&Auml;", "Ä", $vals);
-			$vals = str_replace("&ouml;", "ö", $vals);
-			$vals = str_replace("&Ouml;", "Ö", $vals);
-			$vals = str_replace("&uuml;", "ü", $vals);
-			$vals = str_replace("&Uuml;", "Ü", $vals);
-			$vals = str_replace("&otilde;", "õ", $vals);
-			$vals = str_replace("&Otilde;", "Õ", $vals);
+			$vals = str_replace("&auml;", "&auml;", $vals);
+			$vals = str_replace("&Auml;", "&Auml;", $vals);
+			$vals = str_replace("&ouml;", "&ouml;", $vals);
+			$vals = str_replace("&Ouml;", "&Ouml;", $vals);
+			$vals = str_replace("&uuml;", "&uuml;", $vals);
+			$vals = str_replace("&Uuml;", "&Uuml;", $vals);
+			$vals = str_replace("&otilde;", "&otilde;", $vals);
+			$vals = str_replace("&Otilde;", "&Otilde;", $vals);
 			$vals = $this->mk_kstring($vals);
 			if (isset($this->true_rel_classes[$k][$objtype]))
 			{
@@ -568,7 +568,7 @@ class relationmgr extends aw_template
 
 		$tb->add_cdata(
 			html::select(array(
-				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => 'Seose tüüp') + $this->reltypes),
+				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => 'Seose t&uuml;&uuml;p') + $this->reltypes),
 				"name" => "reltype",
 				"selected" => $this->reltype,
 				'onchange' => "listB.populate();",
@@ -587,7 +587,7 @@ class relationmgr extends aw_template
 				"name" => "search",
 				"img" => "search.gif",
 				"tooltip" => t("Otsi"),
-				"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seosetüüp!')",
+				"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seoset&uuml;&uuml;p!')",
 			));
 		}
 		else
@@ -836,7 +836,7 @@ class relationmgr extends aw_template
 		));
 		$tbl->define_field(array(
 			"name" => "title",
-			"caption" => t("Tüüp"),
+			"caption" => t("T&uuml;&uuml;p"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -844,7 +844,7 @@ class relationmgr extends aw_template
 		));
 		$tbl->define_field(array(
 			"name" => "reltype",
-			"caption" => t("Seose tüüp"),
+			"caption" => t("Seose t&uuml;&uuml;p"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
