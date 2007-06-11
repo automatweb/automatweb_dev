@@ -568,7 +568,7 @@ class relationmgr extends aw_template
 
 		$tb->add_cdata(
 			html::select(array(
-				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => 'Seose t&uuml;&uuml;p') + $this->reltypes),
+				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => t('Seose t&uuml;&uuml;p')) + $this->reltypes),
 				"name" => "reltype",
 				"selected" => $this->reltype,
 				'onchange' => "listB.populate();",
