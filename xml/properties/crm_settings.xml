@@ -143,6 +143,15 @@
             <caption>Toimetuse ridade kontroller</caption>
       </property>
       <property>
+            <name>task_save_controller</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <reltype>RELTYPE_CTR</reltype>
+            <caption>Toimetuse salvestamise kontroller</caption>
+      </property>
+      <property>
             <name>tables_toolbar</name>
             <table>objects</table>
             <group>tables</group>

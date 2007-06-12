@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.171 2007/06/06 12:34:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.172 2007/06/12 12:41:30 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1382,6 +1382,14 @@ class task extends class_base
 
 	function set_property($arr)
 	{
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		if ($sts && $sts->prop("task_save_controller"))
+		{
+			$i = get_instance(CL_FORM_CONTROLLER);
+			$arr = $i->eval_controller($sts->prop("task_save_controller"), $arr);
+		}
+		
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])

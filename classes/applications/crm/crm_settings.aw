@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.19 2007/04/26 07:47:30 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.20 2007/06/12 12:41:37 markop Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -56,6 +56,9 @@
 
 	@property task_rows_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
   	@caption Toimetuse ridade kontroller
+  	
+  	@property task_save_controller type=relpicker table=objects field=meta reltype=RELTYPE_CTR
+	@caption Toimetuse salvestamise kontroller
 
 
 @default group=tables
@@ -560,7 +563,7 @@ class crm_settings extends class_base
 		{
 			return false;
 		}
-		return $settings->prop("task_proj");
+		return $settings->prop("controller_task");
 	}
 
 	function get_meeting_controller($settings)
@@ -569,7 +572,7 @@ class crm_settings extends class_base
 		{
 			return false;
 		}
-		return $settings->prop("meeting_proj");
+		return $settings->prop("controller_meeting");
 	}
 
 	function get_current_settings()
