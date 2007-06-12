@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.20 2007/06/07 08:37:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.21 2007/06/12 08:48:21 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -811,21 +811,25 @@ class watercraft extends class_base
 		$t->define_field(array(
 			'name' => 'type',
 			'caption' => $this->sail_table_fields['type'],
+			'talign' => 'left',
 			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'area',
 			'caption' => $this->sail_table_fields['area']." m<sup>2</sup>",
+			'talign' => 'left',
 			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'material',
+			'talign' => 'left',
 			'caption' => $this->sail_table_fields['material'],
 			'width' => '20px',
 		));
 		$t->define_field(array(
 			'name' => 'age_and_condition',
 			'caption' => $this->sail_table_fields['age_and_condition'],
+			'talign' => 'left',
 			'width' => '20px',
 		));
 
