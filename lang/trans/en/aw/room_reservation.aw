@@ -5,4 +5,5 @@ $GLOBALS["TRANS"]["Template fail peab asuma kataloogis :"] = "Template file shou
 $GLOBALS["TRANS"]["Tase"] = "Level";
 $GLOBALS["TRANS"]["Etapi nimi"] = "Stage name";
 $GLOBALS["TRANS"]["Template"] = "Template";
+$GLOBALS["TRANS"]["Vali enne jätkamist sobiv aeg!"] = "Before continuing, please select suitable time";
 ?>

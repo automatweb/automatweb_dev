@@ -235,13 +235,9 @@ msgstr "Stage name"
 msgid "Template"
 msgstr "Template"
 
-#: classes/common/room_reservation.aw:444
-msgid "Vali enne jätkamist sobiv aeg!"
-msgstr ""
-
-#: classes/common/room_reservation.aw:445
+#: classes/common/room_reservation.aw:425
 msgid "Vali enne j&auml;tkamist sobiv aeg!"
-msgstr ""
+msgstr "Before continuing, please select suitable time"
 
 #: classes/common/room_reservation.aw:649
 msgid "Kinnitatud"
