@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.119 2007/05/04 10:34:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.120 2007/06/12 09:43:19 markop Exp $
 // project.aw - Projekt
 /*
 
@@ -4284,7 +4284,7 @@ class project extends class_base
 		$bill->save();
 
 		$ser = get_instance(CL_CRM_NUMBER_SERIES);
-		$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
+		$bno = $ser->find_series_and_get_next(CL_CRM_BILL,0,time());
 		if (!$bno)
 		{
 			$bno = $bill->id();

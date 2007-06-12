@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.6 2007/01/04 16:46:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.7 2007/06/12 09:43:18 markop Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -163,16 +163,18 @@ class crm_number_series extends class_base
 
 		@param series - series object 
 		@param class - class to return number for
+		@param time - time for series
 	**/
-	function get_next_in_series($series, $class)
+	function get_next_in_series($series, $class, $time)
 	{
 		// get all series
 		$ser = safe_array($series->meta("series"));
 		$nums = safe_array($series->meta("ser_vals"));
 		// filter by class and time
+		$nr = 0;
 		foreach($ser as $idx => $row)
 		{
-			if ($row["class"] == $class )
+			if($row["class"] == $class && (!$time || ($time > $row["from"] && $time < $row["to"])))
 			{
 				$num = $nums[$idx];
 				if ($num > $row["end"])
@@ -193,28 +195,84 @@ class crm_number_series extends class_base
 				$series->save();
 
 				// actually, just list all bills and get max number+1 for bills
-				$ol = new object_list(array(					
-					"class_id" => CL_CRM_BILL,					
+				$filter = array(					
+					"class_id" => $class,					
 					"lang_id" => array(),					
 					"site_id" => array(),					
-					"sort_by" => "CAST(aw_crm_bill.aw_bill_no as signed) DESC",					
-					"limit" => 1, 
-					"bill_no" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)				
-				));
+					"sort_by" => "CAST(aw_crm_bill.aw_bill_no as signed) DESC",	
+					"limit" => 1,
+				);
+				if($time)
+				{
+					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $row["start"] , $row["end"]);
+				}
+				else
+				{
+					$filter["bill_no"] = new obj_predicate_compare(OBJ_COMP_GREATER, 0);
+				}
+				$ol = new object_list($filter);
 				if ($ol->count())
 				{
 					$o = $ol->begin();
-					return $o->prop("bill_no") + 1;
+					$num = $o->prop("bill_no") + 1;
+				}
+				
+				//siia teeb nüüd eriti räige kirvemeetodi
+				//kui mingil x põhjusel peaks tahtma olemasolevat numbrit anda, siis tsükkel käib või maailmalõpuni... või vähemalt niikaua kuni leiab numbri mis pole kasutuses või tuleb miski muu piirang peale ja on niisama p...
+				
+				while(true)
+				{
+					$ol2 = new object_list(array(
+						"class_id" => $class,
+						"bill_no" => $num,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));//if(aw_global_get("uid") == "Teddi.Rull") {arr($nums[$idx]);arr($ser);}
+					if (!$ol2->count())
+					{
+						return $num;
+					}
 				}
 				return $num;
 			}
 		}
-
+		
+		// actually, just list all bills and get max number+1 for bills
+		$ol = new object_list(array(
+			"class_id" => $class,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "CAST(aw_crm_bill.aw_bill_no as signed) DESC",
+			"limit" => 1,
+			"bill_no" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)
+		));
+		if ($ol->count())
+		{
+			$o = $ol->begin();
+			$num = $o->prop("bill_no") + 1;
+		}
+			
+		//siia teeb nüüd eriti räige kirvemeetodi
+		//kui mingil x põhjusel peaks tahtma olemasolevat numbrit anda, siis tsükkel käib või maailmalõpuni... või vähemalt niikaua kuni leiab numbri mis pole kasutuses või tuleb miski muu piirang peale ja on niisama p...
+		while(true)
+		{
+			$ol2 = new object_list(array(
+				"class_id" => $class,
+				"bill_no" => $num,
+				"lang_id" => array(),
+				"site_id" => array(),
+			));//if(aw_global_get("uid") == "Teddi.Rull") {arr($nums[$idx]);arr($ser);}
+			if (!$ol2->count())
+			{
+				return $num;
+			}
+		}
+		return $num;
 		return NULL;
 	}
 
 	/** finds the current company and from that the series	and returns next number in series**/
-	function find_series_and_get_next($class,$n)
+	function find_series_and_get_next($class, $n, $time)
 	{
 		if(is_oid($n) && $this->can("view" , $n))
 		{
@@ -231,7 +289,7 @@ class crm_number_series extends class_base
 			return NULL;
 		}
 
-		return $this->get_next_in_series($ser, $class);
+		return $this->get_next_in_series($ser, $class, $time);
 	}
 
 	function number_is_in_series($class, $num)

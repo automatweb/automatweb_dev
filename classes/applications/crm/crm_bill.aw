@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.111 2007/02/27 13:07:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.112 2007/06/12 09:43:18 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -189,8 +189,10 @@ class crm_bill extends class_base
 			case "bill_no":
 				if ($prop["value"] == "")
 				{
+					$time = $arr["obj_inst"]->prop("bill_date");
+					if(!$time) $time = time();
 					$i = get_instance(CL_CRM_NUMBER_SERIES);
-					$prop["value"] = $i->find_series_and_get_next(CL_CRM_BILL);
+					$prop["value"] = $i->find_series_and_get_next(CL_CRM_BILL, 0 , $time);
 				}
 				break;
 
@@ -315,7 +317,7 @@ class crm_bill extends class_base
 					if ($ol->count())
 					{
 						$prop["error"] = t("Sellise numberiga arve on juba olemas!");
-					//	return PROP_ERROR;
+						return PROP_ERROR;
 					}
 
 					$ser = get_instance(CL_CRM_NUMBER_SERIES);
