@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.65 2007/06/07 15:18:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.66 2007/06/12 13:18:07 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -357,8 +357,7 @@ class reservation extends class_base
 				return $this->$fn($arr);
 				break;
 			case "products_tbl":
-				$arr["obj_inst"]->set_meta("amount", $arr["request"]["amount"]);
-				$arr["obj_inst"]->set_meta("prod_discount", $arr["request"]["discount"]);
+				$this->set_products_info($arr["obj_inst"]->id(), $arr["request"]);
 				break;
 
 			case "time_closed":
@@ -720,6 +719,19 @@ class reservation extends class_base
 		return 0;
 	}
 	
+	function set_products_info($oid, $arr)
+	{
+		if($this->can("view", $oid))
+		{
+			$o = obj($oid);
+			$o->set_meta("amount", $arr["amount"]);
+			$o->set_meta("prod_discount", $arr["discount"]);
+			$o->save();
+			return true;
+		}
+		return false;
+	}
+
 	function _get_products_tbl($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
