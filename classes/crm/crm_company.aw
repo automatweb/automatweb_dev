@@ -4704,7 +4704,7 @@ class crm_company extends class_base
 			$bill->save();
 	
 			$ser = get_instance(CL_CRM_NUMBER_SERIES);
-			$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
+			$bno = $ser->find_series_and_get_next(CL_CRM_BILL,0,time());
 			if (!$bno)
 			{
 				$bno = $bill->id();
@@ -5495,7 +5495,7 @@ class crm_company extends class_base
 			$n->set_parent($b->parent());
 			$n->save();
 			$ser = get_instance(CL_CRM_NUMBER_SERIES);
-			$n->set_prop("bill_no", $ser->find_series_and_get_next(CL_CRM_BILL));
+			$n->set_prop("bill_no", $ser->find_series_and_get_next(CL_CRM_BILL,0,time()));
 			$n->set_name(sprintf(t("Arve nr %s"), $n->prop("bill_no")));
 			$n->set_prop("bill_date", time());
 			$n->set_prop("comment", $b->prop("comment"));
