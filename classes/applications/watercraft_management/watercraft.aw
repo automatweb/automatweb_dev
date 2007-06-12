@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.21 2007/06/12 08:48:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft.aw,v 1.22 2007/06/12 11:52:32 tarvo Exp $
 // watercraft.aw - Veesõiduk 
 /*
 
@@ -1063,6 +1063,39 @@ class watercraft extends class_base
 
 		// properties
 		$props = $ob->properties();
+		
+		// location
+		$loc = array();
+		if($this->can("view", $props["location"]))
+		{
+			$o = obj($props["location"]); 
+			$loc[] = $o->name();
+		}
+		
+		if($props["location_precise"])
+		{
+			$loc[] = $props["location_precise"];			
+		}
+		$this->vars(array(
+			"watercraft_final_location" => count($loc)?join(", ", $loc):t("-"),
+		));
+
+		//  manufacturer
+		$man = array();
+		if($this->can("view", $props["manufacturer"]))
+		{
+			$o = obj($props["manufacturer"]); 
+			$man[] = $o->name();
+		}
+		
+		if($props["manufacturer_other"])
+		{
+			$man[] = $props["manufacturer_other"];			
+		}
+		$this->vars(array(
+			"watercraft_manufacturer_together" => count($man)?join(" ", $man):t("-"),
+		));
+
 		$proplist = $ob->get_property_list();
 		foreach ($props as $prop_name => $prop_value)
 		{
@@ -1247,7 +1280,7 @@ class watercraft extends class_base
 		$vars["seller_name"] = $ob->prop("contact_name");
 		$vars["seller_email"] = $ob->prop("contact_email");
 		$vars["seller_phone"] = $ob->prop("contact_phone");
-		if((!$c_name || !$c_email || !$c_phone) && $this->can("view", $ob->prop("seller")))
+		if((!$vars["seller_name"] || !$vars["seller_email"] || !$vars["seller_phone"]) && $this->can("view", $ob->prop("seller")))
 		{
 			$seller_obj = obj($ob->prop("seller"));
 			$vars["seller_name"] = !$vars["seller_name"]?(($_t = $seller_obj->name())?$_t:""):$vars["seller_name"];
@@ -1255,7 +1288,7 @@ class watercraft extends class_base
 			{
 				$vars["seller_email"] = !$vars["seller_email"]?(($_t = $seller_obj->prop("email.mail"))?$_t:""):$vars["seller_email"];
 				// well, this user1 prop isn't really the brightest idea. But hey, site_join does that, so i'll use it.
-				$vars["seller_phone"] = !$vars["seller_phone"]?(($_t = $seller_obj->prop("user1"))?$_t:""):$vars["seller_phone"];
+				$vars["seller_phone"] = !$vars["seller_phone"]?(($_t = $seller_obj->prop("phone.name"))?$_t:""):$vars["seller_phone"];
 			}
 			elseif($seller_obj->class_id() == CL_CRM_COMPANY)
 			{

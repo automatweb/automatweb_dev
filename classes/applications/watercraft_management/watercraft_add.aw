@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.14 2007/06/07 08:37:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_add.aw,v 1.15 2007/06/12 11:52:32 tarvo Exp $
 // watercraft_add.aw - Vees&otilde;iduki lisamine 
 /*
 
@@ -411,6 +411,26 @@ class watercraft_add extends class_base
 				}
 				else
 				{
+					if($watercraft_obj && $this->can("view", $watercraft_obj->prop("seller")))
+					{
+						$p = obj($watercraft_obj->prop("seller"));
+					}
+					else
+					{
+						$p = get_current_person();
+					}
+					if($name == "contact_name" && !strlen($prop["value"]))
+					{
+						$prop["value"] = $p->name();
+					}
+					if($name == "contact_phone" && !strlen($prop["value"]))
+					{
+						$prop["value"] = $p->prop("phone.name");
+					}
+					if($name == "contact_email" && !strlen($prop["value"]))
+					{
+						$prop["value"] = $p->prop("email.mail");
+					}
 					$vars[$name] = htmlclient::draw_element($prop);
 				}
 			}
