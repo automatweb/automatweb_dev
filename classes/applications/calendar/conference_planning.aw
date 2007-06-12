@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.96 2007/05/30 10:55:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.97 2007/06/12 08:22:24 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -267,6 +267,21 @@ class conference_planning extends class_base
 			"separator",
 		);
 
+		$this->gen_langs();
+	}
+
+	function gen_langs()
+	{
+
+		$l = get_instance("languages");
+		$ll = $l->get_list(array(
+			//"ignore_status" => true,
+			"all_data" => true,
+		));
+		foreach($ll as $data)
+		{
+			$this->lang_charset[$data["acceptlang"]] = $data["charset"];
+		}
 	}
 
 	function get_form_elements_data($prop = false)
@@ -531,8 +546,8 @@ class conference_planning extends class_base
 				// add element to active view
 				if($isv) // a view is selected
 				{
-					$to_view = sprintf(t("Vaatesse '%s', elemendi ette"), "<b>".$views[$view_no]["trans"][aw_global_get("ct_lang_lc")]."</b>");
-					$add_elem_to_view = sprintf(t("Vaatesse '%s'"), "<b>".$views[$view_no]["trans"][aw_global_get("ct_lang_lc")]."</b>");
+					$to_view = sprintf(t("Vaatesse '%s', elemendi ette"), "<b>".$this->show_cs($views[$view_no]["trans"][aw_global_get("ct_lang_lc")])."</b>");
+					$add_elem_to_view = sprintf(t("Vaatesse '%s'"), "<b>".$this->show_cs($views[$view_no]["trans"][aw_global_get("ct_lang_lc")])."</b>");
 					
 					// add element to view
 					$tb->add_sub_menu(array(
@@ -565,7 +580,7 @@ class conference_planning extends class_base
 						$tb->add_sub_menu(array(
 							"parent" => "add_elem",
 							"name" => "add_elem_".$group,
-							"text" => $grinfo[$group]["caption"],
+							"text" => $this->show_cs($grinfo[$group]["caption"]),
 						));
 					}
 					
@@ -573,7 +588,7 @@ class conference_planning extends class_base
 					{
 						$tb->add_menu_item(array(
 							"parent" => "add_elem_".$data["group"],
-							"text" => ($data["caption"])?$data["caption"]:$prp,
+							"text" => ($data["caption"])?$this->show_cs($data["caption"]):$prp,
 							"link" => $this->mk_my_orb("add_element_to_view", array(
 								"element" => $prp,
 								"view_no" => $view_no,
@@ -617,7 +632,7 @@ class conference_planning extends class_base
 					// loop over elements ad add those to separator & textrow submenus
 					foreach($views[$view_no]["elements"] as $el_id => $e)
 					{
-						$name = strlen($_t = $e["trans"][aw_global_get("ct_lang_lc")])?$_t:$list[$e["name"]]["caption"];
+						$name = strlen($_t = $e["trans"][aw_global_get("ct_lang_lc")])?$this->show_cs($_t):$list[$e["name"]]["caption"];
 						$name = ($e["type"] == TYPE_SEPARATOR)?"<b>".$name."</b>":$name;
 						$name = ($e["type"] == TYPE_TEXT)?"<i>".$name."</i>":$name;
 						$tb->add_menu_item(array(
@@ -696,7 +711,7 @@ class conference_planning extends class_base
 					$tb->add_sub_menu(array(
 						"parent" => "move",
 						"name" => "move_view",
-						"text" => sprintf(t("Vaade '%s'"), $views[$view_no]["trans"][aw_global_get("ct_lang_lc")]),
+						"text" => sprintf(t("Vaade '%s'"), $this->show_cs($views[$view_no]["trans"][aw_global_get("ct_lang_lc")])),
 					));
 					$tb->add_menu_item(array(
 						"parent" => "move_view",
@@ -710,7 +725,7 @@ class conference_planning extends class_base
 
 					foreach($views as $vid => $v)
 					{
-						$name = $v["trans"][aw_global_get("ct_lang_lc")];
+						$name = $this->show_cs($v["trans"][aw_global_get("ct_lang_lc")]);
 						if($vid == $view_no)
 						{
 							$name = "<u>".$name."</u>";
@@ -752,7 +767,7 @@ class conference_planning extends class_base
 						$tb->add_sub_menu(array(
 							"parent" => "move",
 							"name" => "move_element",
-							"text" => sprintf(t("Element '%s'"), $views[$view_no]["elements"][$element]["trans"][aw_global_get("ct_lang_lc")]),
+							"text" => sprintf(t("Element '%s'"), $this->show_cs($views[$view_no]["elements"][$element]["trans"][aw_global_get("ct_lang_lc")])),
 						));
 						$tb->add_menu_item(array(
 							"parent" => "move_element",
@@ -766,7 +781,7 @@ class conference_planning extends class_base
 						{
 						
 							$self = ($eid == $element);
-							$name = $e["trans"][aw_global_get("ct_lang_lc")];
+							$name = $this->show_cs($e["trans"][aw_global_get("ct_lang_lc")]);
 							if($self)
 							{
 								$name = "<u>".$name."</u>";
@@ -831,7 +846,7 @@ class conference_planning extends class_base
 				{
 					$tb->add_menu_item(array(
 						"parent" => "remove_view",
-						"text" => $view["trans"][aw_global_get("ct_lang_lc")],
+						"text" => $this->show_cs($view["trans"][aw_global_get("ct_lang_lc")]),
 						"link" => $this->mk_my_orb("remove_view", array(
 								"view_no" => $vid,
 								"planner" => $arr["obj_inst"]->id(),
@@ -848,7 +863,7 @@ class conference_planning extends class_base
 					));
 					$tb->add_menu_item(array(
 						"parent" => "remove_element",
-						"text" => sprintf(t("Vaatest '%s'"), "<b>".$views[$view_no]["trans"][aw_global_get("ct_lang_lc")]."</b>"),
+						"text" => sprintf(t("Vaatest '%s'"), "<b>".$this->show_cs($views[$view_no]["trans"][aw_global_get("ct_lang_lc")])."</b>"),
 						"url" => "#",
 					));
 					$tb->add_menu_separator(array(
@@ -856,7 +871,7 @@ class conference_planning extends class_base
 					));
 					foreach($views[$view_no]["elements"] as $eid => $e)
 					{
-						$name = $e["trans"][aw_global_get("ct_lang_lc")];
+						$name = $this->show_cs($e["trans"][aw_global_get("ct_lang_lc")]);
 						if($e["type"] == TYPE_SEPARATOR)
 						{
 							$name = "<b>".$name."</b>";
@@ -905,7 +920,7 @@ class conference_planning extends class_base
 
 					$html .= $lang["name"]." : ".html::textbox(array(
 						"name" => "trans[".$lang["acceptlang"]."]",
-						"value" => $trans[$lang["acceptlang"]],
+						"value" => $this->show_cs($trans[$lang["acceptlang"]], $lang["acceptlang"]),
 					))."<br/>";
 				}
 				$prop["value"] = $html;
@@ -939,7 +954,7 @@ class conference_planning extends class_base
 					$request = $arr["request"];
 					unset($request["element"]);
 					$request["view_no"] = $id;
-					$name = $view["trans"][aw_global_get("ct_lang_lc")];
+					$name = $this->show_cs($view["trans"][aw_global_get("ct_lang_lc")]);
 					$name = ($arr["request"]["view_no"] == $id && strlen($arr["request"]["view_no"]) && empty($arr["request"]["element"]))?"<b>".$name."</b>":$name;
 					$t->add_item(0, array(
 						"id" => "view_".$id,
@@ -954,7 +969,8 @@ class conference_planning extends class_base
 						$request["element"] = $el_id;
 
 						$data = $this->get_form_elements_data($element["name"]);
-						$name = $element["trans"][aw_global_get("ct_lang_lc")]?$element["trans"][aw_global_get("ct_lang_lc")]:($list[$element["name"]]?$list[$element["name"]]["caption"]:$data["caption"]);
+						$name = $element["trans"][aw_global_get("ct_lang_lc")]?$this->show_cs($element["trans"][aw_global_get("ct_lang_lc")]):($list[$element["name"]]?$list[$element["name"]]["caption"]:$data["caption"]);
+
 						if(!strlen(trim($name)))
 						{
 							$name = "<font color=\"red\">".t("Nimetu")."</font>";
@@ -1011,6 +1027,18 @@ class conference_planning extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function show_cs($str, $lang_from = false)
+	{
+		$charset_from = $lang_from?$this->lang_charset[$lang_from]:$this->lang_charset[aw_global_get("ct_lang_lc")];
+		return strlen($_t = iconv($charset_from, "UTF-8", $str))?$_t:t("Nimetu");
+	}
+
+	function save_cs($str, $lang_to = false)
+	{
+		$charset_to = $lang_to?$this->lang_charset[$lang_to]:$this->lang_charset[aw_global_get("ct_lang_lc")];
+		return strlen($_t = iconv("UTF-8", $charset_to, $str))?$_t:t("Nimetu");
 	}
 
 	function set_property($arr = array())
@@ -1070,6 +1098,10 @@ class conference_planning extends class_base
 					return PROP_IGNORE;
 				}
 				$trans = $prop["value"];
+				foreach($trans as $lang => $str)
+				{
+					$trans[$lang] = $this->save_cs($str, $lang);
+				}
 				$arr["obj_inst"]->set_prop("help_views", aw_serialize($views, SERIALIZE_NATIVE));
 				$arr["obj_inst"]->save();
 				break;
@@ -1305,6 +1337,10 @@ class conference_planning extends class_base
 				$arr["obj_inst"]->set_prop($c, $views[$view]["elements"][$element][$c]);
 			}
 			$arr["obj_inst"]->save();
+		}
+		if($arr["request"]["group"] == "webform_detail" || $arr["request"]["group"] == "webform")
+		{
+			aw_global_set("output_charset", "UTF-8");
 		}
 	}
 
