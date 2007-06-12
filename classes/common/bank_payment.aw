@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.58 2007/05/25 15:18:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.59 2007/06/12 09:29:55 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -72,9 +72,9 @@
 	@caption viide
 
 	@property find_one type=checkbox store=no
-	@caption Ei n&auml;ita korduvaid
+	@caption 1 rida makse kohta
 
-	@property do_find type=submit store=no no_caption=1
+	@property do_find type=submit no_caption=1
 	@caption Otsi
 	
 	@property log type=text store=no no_caption=1
@@ -96,7 +96,7 @@
 */
 
 class bank_payment extends class_base
-{	//olemasolevad panga
+{	//olemasolevad pangad
 	var $banks = array (
 		"hansapank"		=> "Hansapank",
 		"seb"			=> "SEB Eesti &Uuml;hispank",
@@ -502,8 +502,7 @@ class bank_payment extends class_base
 				{
 					continue;
 				}
-	
-				if($filter["find_one"]  && ($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000" || $val["SOLOPMT-RETURN-VERSION"]))
+				if(!array_key_exists("find_one" , $_SESSION["bank_payment"]) || ($filter["find_one"]  && ($val["VK_SERVICE"] == 1101 || $val["Respcode"] == "000" || $val["SOLOPMT-RETURN-VERSION"])))
 				{
 					if(array_key_exists($val[$this->ref[$bank_id]] ,  $done)) continue;
 					$done[$val[$this->ref[$bank_id]]] = $val[$this->ref[$bank_id]];
@@ -637,11 +636,13 @@ class bank_payment extends class_base
 					$prop["type"] =  "text";
 				}
 				break;
+			case "find_one":
+				$prop["value"] = 1;
+				break;
 			case "find_name":
 			case "find_date_start":
 			case "find_date_end":
 			case "find_ref":
-			case "find_one":
 				if($search_data[$prop["name"]])
 				{
 					$prop["value"] = $search_data[$prop["name"]];
@@ -733,11 +734,8 @@ class bank_payment extends class_base
 				$arr["request"]["meta"][$arr["request"]["meta"]["new_bank"]] = $arr["request"]["meta"]["new"];
 				$this->submit_meta($arr);
 				break;
-			case "find_name":
-			case "find_date_start":
-			case "find_date_end":
-			case "find_ref":
-			case "find_one":
+			case "log":
+				$_SESSION["bank_payment"]["find_one"] = $arr["request"]["find_one"];
 				$arr["obj_inst"]->set_meta("search_data" , $arr["request"]);
 				break;
 		}

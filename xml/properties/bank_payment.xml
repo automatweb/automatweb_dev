@@ -180,7 +180,7 @@
             <submit>no</submit>
             <type>checkbox</type>
             <store>no</store>
-            <caption>Ei n&amp;amp;auml;ita korduvaid</caption>
+	    <caption>1 rida makse kohta</caption>
       </property>
       <property>
             <name>do_find</name>
@@ -190,7 +190,6 @@
             <group>log</group>
             <submit>no</submit>
             <type>submit</type>
-            <store>no</store>
             <no_caption>1</no_caption>
             <caption>Otsi</caption>
       </property>
