@@ -745,6 +745,35 @@
             <field>stat_hrs_detail</field>
       </property>
       <property>
+            <name>stat_hrs_start</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>stat_hrs_range</parent>
+            <field>stat_hrs_start</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>stat_hrs_end</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>stat_hrs_range</parent>
+            <field>stat_hrs_end</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>stat_hrs_submit</name>
+            <table>objects</table>
+            <group>stat_hrs_overview</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>stat_hrs_submit</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>stat_proj_detail</name>
             <table>objects</table>
             <group>stat_proj_overview</group>
@@ -1138,6 +1167,10 @@
                   <area_caption>N&amp;otilde;uded</area_caption>
                   <group>problems_req</group>
             </pr_tree_b>
+            <stat_hrs_range>
+                  <type>hbox</type>
+                  <group>stat_hrs_overview</group>
+            </stat_hrs_range>
       </layout>
 </properties>
 

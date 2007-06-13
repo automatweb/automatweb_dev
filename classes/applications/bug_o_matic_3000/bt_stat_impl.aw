@@ -15,7 +15,7 @@ class bt_stat_impl extends core
 			"align" => "center",
 			"sortable" => 1
 		));
-		for($i = 1; $i < 13; $i++)
+		for($i = 1; $i <= 12; $i++)
 		{
 			$t->define_field(array(
 				"name" => "m".sprintf("%02d", $i),
@@ -37,26 +37,39 @@ class bt_stat_impl extends core
 	{
 		// table year is group, month is col
 		// row is person
+		$req_start = mktime(0, 0, 0, $arr["request"]["stat_hrs_start"]["month"], $arr["request"]["stat_hrs_start"]["day"], $arr["request"]["stat_hrs_start"]["year"], 1);
+		$req_end = mktime(0, 0, 0, $arr["request"]["stat_hrs_end"]["month"], $arr["request"]["stat_hrs_end"]["day"], $arr["request"]["stat_hrs_end"]["year"], 1);
+		$time_constraint = null;
+
+		if (2 < $req_start and $req_start < $req_end)
+		{
+			$time_constraint = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $req_start, $req_end);
+		}
+
 		$ol = new object_list(array(
 			"class_id" => CL_BUG_COMMENT,
 			"lang_id" => array(),
 			"site_id" => array(),
+			"add_wh" => new obj_predicate_compare(OBJ_COMP_GREATER, 0),
+			"created" => $time_constraint
 		));
 		$stat_hrs = array();
+
 		foreach($ol->arr() as $o)
 		{
-			$tm = $o->created();
 			$stat_hrs[$o->createdby()][] = $o;
 		}
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_stat_hrs_ov_t($t);
+
 		foreach($stat_hrs as $uid => $coms)
 		{
 			$u = get_instance(CL_USER);
 			$p = $u->get_person_for_uid($uid);
 
 			$dmz = array();
+
 			foreach($coms as $com)
 			{
 				$dmz[date("Y", $com->created())]["m".date("m", $com->created())] += $com->prop("add_wh");
@@ -65,6 +78,7 @@ class bt_stat_impl extends core
 			foreach($dmz as $year => $mons)
 			{
 				$row_sum = 0;
+
 				foreach($mons as $mon => $wh)
 				{
 					$mons[$mon] = html::href(array(
@@ -77,8 +91,10 @@ class bt_stat_impl extends core
 					));
 					$row_sum += $wh;
 				}
+
 				$mons["p"] = html::obj_change_url($p);
 				$mons["year"] = $year;
+
 				if ($wh>0)
 				{
 					$mons["sum"] = number_format($row_sum, 2, ".", " ");
@@ -86,6 +102,7 @@ class bt_stat_impl extends core
 				}
 			}
 		}
+
 		$t->set_rgroupby(array("year" => "year"));
 		$t->set_caption(t("T&ouml;&ouml;tundide statistika aastate ja kuude kaupa"));
 		$t->set_default_sortby("sum");
@@ -122,8 +139,8 @@ class bt_stat_impl extends core
 			"lang_id" => array(),
 			"site_id" => array(),
 			"created" => new obj_predicate_compare(
-				OBJ_COMP_BETWEEN_INCLUDING, 
-				mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"]), 
+				OBJ_COMP_BETWEEN_INCLUDING,
+				mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"]),
 				mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"])
 			),
 			"createdby" => $arr["request"]["det_uid"]
@@ -149,7 +166,7 @@ class bt_stat_impl extends core
 		$u = get_instance(CL_USER);
 		$p = $u->get_person_for_uid($arr["request"]["det_uid"]);
 
-		$t->set_caption(sprintf(t("%s t&ouml;&ouml;tunnid ajavahemikul %s - %s"), 
+		$t->set_caption(sprintf(t("%s t&ouml;&ouml;tunnid ajavahemikul %s - %s"),
 			$p->name(),
 			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"], 1, $arr["request"]["det_year"])),
 			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, $arr["request"]["det_year"]))
@@ -202,7 +219,7 @@ class bt_stat_impl extends core
 						"conditions" => array(
 							"add_wh" => new obj_predicate_compare(OBJ_COMP_GREATER, 10)
 						)
-					))	
+					))
 				)
 			))
 		));
@@ -350,8 +367,8 @@ class bt_stat_impl extends core
 			"lang_id" => array(),
 			"site_id" => array(),
 			"created" => new obj_predicate_compare(
-				OBJ_COMP_BETWEEN_INCLUDING, 
-				mktime(0,0,0, $arr["request"]["det_mon"], 1, date("Y")), 
+				OBJ_COMP_BETWEEN_INCLUDING,
+				mktime(0,0,0, $arr["request"]["det_mon"], 1, date("Y")),
 				mktime(0,0,0, $arr["request"]["det_mon"]+1, 0, date("Y"))
 			),
 			"createdby" => $arr["request"]["det_uid"]
@@ -382,7 +399,7 @@ class bt_stat_impl extends core
 		$p = $u->get_person_for_uid($arr["request"]["det_uid"]);
 		$proj = obj($arr["request"]["det_proj"]);
 
-		$t->set_caption(sprintf(t("%s t&ouml;&ouml;tunnid projektis %s ajavahemikul %s - %s"), 
+		$t->set_caption(sprintf(t("%s t&ouml;&ouml;tunnid projektis %s ajavahemikul %s - %s"),
 			$p->name(),
 			$proj->name(),
 			date("d.m.Y", mktime(0,0,0, $arr["request"]["det_mon"], 1, date("Y"))),

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.100 2007/05/16 09:04:46 voldemar Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.100 2007/05/16 09:04:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.101 2007/06/13 07:04:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.101 2007/06/13 07:04:48 voldemar Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -296,6 +296,17 @@ define("BUG_STATUS_CLOSED", 5);
 	@property stat_hrs_overview type=table store=no no_caption=1
 	@property stat_hrs_detail type=table store=no no_caption=1
 
+	@layout stat_hrs_range type=hbox
+		@property stat_hrs_start type=date_select store=no parent=stat_hrs_range
+		@caption Alates
+
+		@property stat_hrs_end type=date_select store=no parent=stat_hrs_range
+		@caption Kuni
+
+	@property stat_hrs_submit type=submit store=no
+	@caption Otsi
+
+
 @default group=stat_proj_overview
 
 	@property stat_proj_detail type=table store=no no_caption=1
@@ -564,9 +575,18 @@ class bug_tracker extends class_base
 				}
 				$fn = "_get_".$prop["name"];
 				return $st_i->$fn($arr);
-		};
+
+			case "stat_hrs_start":
+				$prop["value"] = empty($arr["request"]["stat_hrs_start"]) ? mktime(0, 0, 0, date("n"), 1, date("Y"), 1) : $arr["request"]["stat_hrs_start"];
+				break;
+
+			case "stat_hrs_end":
+				$prop["value"] = empty($arr["request"]["stat_hrs_end"]) ? time() + 86400 : $arr["request"]["stat_hrs_end"];
+				break;
+		}
 		return $retval;
 	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -2052,6 +2072,13 @@ class bug_tracker extends class_base
 	{
 		$arr["args"]["sp_p_name"] = $arr["request"]["sp_p_name"];
 		$arr["args"]["sp_p_co"] = $arr["request"]["sp_p_co"];
+		$arr["args"]["stat_hrs_start"] = $arr["request"]["stat_hrs_start"];
+		$arr["args"]["stat_hrs_end"] = $arr["request"]["stat_hrs_end"];
+
+		if ("stat_hrs_overview" === $arr["args"]["group"])
+		{
+			$arr["args"]["just_saved"] = null;
+		}
 	}
 
 	function callback_mod_reforb($arr)
