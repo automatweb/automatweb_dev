@@ -734,7 +734,7 @@ class realestate_property extends class_base
 			$prop["value"].= ', '.
 			html::href(array(
 				"url" => html::get_change_url($costumer->id(), array("return_url" => get_ru())),
-				"caption" => "Muuda",
+				"caption" => t("Muuda"),
 				"title" => t("Muuda"),
 			)).', '.
 			html::href(array(
@@ -744,7 +744,7 @@ class realestate_property extends class_base
 					"return_url" => get_ru (),
 					"type" => $arr["type"],
 					)),
-				"caption" => "Eemalda",
+				"caption" => t("Eemalda"),
 				"title" => t("Eemalda"),
 
 //					"url" => $this->mk_my_orb(
