@@ -94,6 +94,7 @@ define ("REALESTATE_IMPORT_ERR13", 15);
 define ("REALESTATE_IMPORT_ERR14", 16);
 define ("REALESTATE_IMPORT_ERR15", 17);
 define ("REALESTATE_IMPORT_ERR16", 18);
+define ("REALESTATE_IMPORT_ERR17", 19);
 
 define ("REALESTATE_NEWLINE", "<br />");
 
@@ -661,7 +662,7 @@ class realestate_import extends class_base
 				if ("PILT" == substr ($data["tag"], 0, 4))
 				{
 					$pic_nr = (int) substr ($data["tag"], 4);
-					$this->property_data["PILT"][$pic_nr] = $data["value"];
+					$this->property_data["PILT"][$pic_nr] = trim($data["value"]);
 				}
 			}
 
@@ -1247,27 +1248,57 @@ class realestate_import extends class_base
 				{
 					if (!array_key_exists($picture_id, $existing_pictures))
 					{ # add new
-						$image_url = "http://www.city24.ee/MEDIA/PICTURE/PICTURE_{$picture_id}.jpeg";
-						$imagedata = file_get_contents ($image_url);
-						$file = $cl_file->_put_fs(array(
-							"type" => "image/jpeg",
-							"content" => $imagedata,
-						));
+						$fp = fopen($picture_id, "r");
+						$imagedata = fread($fp, 2);
 
-						$image =& new object ();
-						$image->set_class_id (CL_IMAGE);
-						$image->set_parent ($property->id ());
-						$image->set_status(STAT_ACTIVE);
-						$image->set_ord ($key);
-						$image->set_name ($property->id () . "_" . t(" pilt ") . $key);
-						$image->set_prop("file", $file);
-						$image->set_meta("picture_city24_id", $picture_id);
-						$image->save ();
-						$property->connect (array (
-							"to" => $image,
-							"reltype" => "RELTYPE_REALESTATE_PICTURE",
-						));
+						if ("\xFF\xD8" === $imagedata) // JPEG signature
+						{
+							$imagedata = fread($fp);
 
+							if (false !== $imagedata)
+							{
+								$file = $cl_file->_put_fs(array(
+									"type" => "image/jpeg",
+									"content" => $imagedata,
+								));
+
+								$image =& new object ();
+								$image->set_class_id (CL_IMAGE);
+								$image->set_parent ($property->id ());
+								$image->set_status(STAT_ACTIVE);
+								$image->set_ord ($key);
+								$image->set_name ($property->id () . "_" . t(" pilt ") . $key);
+								$image->set_prop("file", $file);
+								$image->set_meta("picture_city24_id", $picture_id);
+								$image->save ();
+								$property->connect (array (
+									"to" => $image,
+									"reltype" => "RELTYPE_REALESTATE_PICTURE",
+								));
+							}
+							else
+							{
+								$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. JPEG pildi (nr. %s, id %s) lugemine eba6nnestus."), $key, $picture_id) . REALESTATE_NEWLINE;
+								$property_status = REALESTATE_IMPORT_ERR17;
+							}
+						}
+						elseif (false === $imagedata)
+						{
+							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Pildi (nr. %s, id %s) lugemine eba6nnestus."), $key, $picture_id) . REALESTATE_NEWLINE;
+							$property_status = REALESTATE_IMPORT_ERR17;
+						}
+						else
+						{
+							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Pilt (nr. %s, id %s) pole JPEG fail."), $key, $picture_id) . REALESTATE_NEWLINE;
+							$property_status = REALESTATE_IMPORT_ERR17;
+						}
+
+						if (REALESTATE_IMPORT_ERR17 === $property_status and 1 != $arr["quiet"])
+						{
+							echo end ($status_messages);
+						}
+
+						fclose($fp);
 						// unset ($imagedata);
 						// unset ($image);
 						$imagedata = NULL;
