@@ -37,8 +37,8 @@ class bt_stat_impl extends core
 	{
 		// table year is group, month is col
 		// row is person
-		$req_start = mktime(0, 0, 0, $arr["request"]["stat_hrs_start"]["month"], $arr["request"]["stat_hrs_start"]["day"], $arr["request"]["stat_hrs_start"]["year"], 1);
-		$req_end = mktime(0, 0, 0, $arr["request"]["stat_hrs_end"]["month"], $arr["request"]["stat_hrs_end"]["day"], $arr["request"]["stat_hrs_end"]["year"], 1);
+		$req_start = empty($arr["request"]["stat_hrs_start"]) ? mktime(0, 0, 0, date("n"), 1, date("Y"), 1) : mktime(0, 0, 0, $arr["request"]["stat_hrs_start"]["month"], $arr["request"]["stat_hrs_start"]["day"], $arr["request"]["stat_hrs_start"]["year"], 1);
+		$req_end = empty($arr["request"]["stat_hrs_end"]) ? time() + 86400 : mktime(0, 0, 0, $arr["request"]["stat_hrs_end"]["month"], $arr["request"]["stat_hrs_end"]["day"], $arr["request"]["stat_hrs_end"]["year"], 1);
 		$time_constraint = null;
 
 		if (2 < $req_start and $req_start < $req_end)

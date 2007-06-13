@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.101 2007/06/13 07:04:48 voldemar Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.101 2007/06/13 07:04:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.102 2007/06/13 07:25:42 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.102 2007/06/13 07:25:42 voldemar Exp $
 
 // bug_tracker.aw - BugTrack
 
@@ -577,11 +577,21 @@ class bug_tracker extends class_base
 				return $st_i->$fn($arr);
 
 			case "stat_hrs_start":
-				$prop["value"] = empty($arr["request"]["stat_hrs_start"]) ? mktime(0, 0, 0, date("n"), 1, date("Y"), 1) : $arr["request"]["stat_hrs_start"];
+				if (empty($arr["request"]["stat_hrs_start"]))
+				{
+					$arr["request"]["stat_hrs_start"] = mktime(0, 0, 0, date("n"), 1, date("Y"), 1);
+				}
+
+				$prop["value"] = $arr["request"]["stat_hrs_start"];
 				break;
 
 			case "stat_hrs_end":
-				$prop["value"] = empty($arr["request"]["stat_hrs_end"]) ? time() + 86400 : $arr["request"]["stat_hrs_end"];
+				if (empty($arr["request"]["stat_hrs_end"]))
+				{
+					$arr["request"]["stat_hrs_end"] = time() + 86400;
+				}
+
+				$prop["value"] = $arr["request"]["stat_hrs_end"];
 				break;
 		}
 		return $retval;
