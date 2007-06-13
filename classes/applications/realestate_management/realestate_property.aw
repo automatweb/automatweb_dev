@@ -2453,7 +2453,7 @@ class realestate_property extends class_base
 			);
 
 			$name = "agent_rank";
-			$value = $this->realestate_agents_data[$agent2_oid]["rank"];
+			$value = $this->realestate_agents_data[$agent1_oid]["rank"];
 			$properties[$name] = array (
 				"name" => $name,
 				"type" => "text",
