@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.139 2007/06/05 09:41:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.140 2007/06/14 10:16:39 markop Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1112,6 +1112,20 @@ $t = time();
 			{
 				$retval[(int)$row["gid"]] = (int)$row["gid"];
 			}
+		};
+
+		return $retval;
+	}
+
+	function get_oids_by_uid($uid)
+	{
+		$q = "SELECT groupmembers.gid AS gid, groups.priority as priority,groups.oid as oid,groups.type as type,groups.name as name FROM groupmembers
+			LEFT JOIN groups ON (groupmembers.gid = groups.gid) WHERE uid = '$uid'";
+		$this->db_query($q);
+		$retval = array();
+		while($row = $this->db_next())
+		{
+			$retval[(int)$row["gid"]] = (int)$row["oid"];
 		};
 
 		return $retval;

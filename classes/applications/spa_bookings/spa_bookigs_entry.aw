@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.56 2007/06/14 09:38:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.57 2007/06/14 10:16:37 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -374,16 +374,23 @@ class spa_bookigs_entry extends class_base
 				$existing_user = false;
 				if ($d["email"] != "" && $ol->count())
 				{
-					$p = $ol->begin();
+					$u = get_instance("users");
+					foreach($ol->arr() as $p)
+					{
+						$p_i = $p->instance();
+						$user = $p_i->has_user($p);
+						if(is_object($user) && in_array($arr["obj_inst"]->prop("user_group") ,
+						 $u->get_oids_by_uid($user->prop("uid"))))
+						{
+							$existing_user = true;
+							break;
+						}
+					}
+/*					$p = $ol->begin();
 					$p_i = $p->instance();
 					$user = $p_i->has_user($p);
 					$existing_user = true;
-					
-					$u = get_instance("users");
-					if(!in_array($arr["obj_inst"]->prop("user_group") , $u->getgroupsforuser($user->prop("uid"))))
-					{
-						$existing_user = false;
-					}
+*/
 				}
 				
 				if (!$existing_user)
