@@ -337,6 +337,26 @@
             <field>resources_tbl</field>
       </property>
       <property>
+            <name>resources_price</name>
+            <table>aw_room_reservations</table>
+            <group>reserved_resources</group>
+            <parent>general_down</parent>
+            <type>hidden</type>
+            <field>resources_price</field>
+            <no_caption>1</no_caption>
+            <caption>Ressursside eraldi m&amp;amp;auml;&amp;amp;auml;ratud hind</caption>
+      </property>
+      <property>
+            <name>resources_discount</name>
+            <table>aw_room_reservations</table>
+            <group>reserved_resources</group>
+            <parent>general_down</parent>
+            <type>hidden</type>
+            <field>resources_discount</field>
+            <no_caption>1</no_caption>
+            <caption>Ressursside eraldi m&amp;amp;auml;&amp;amp;auml;ratud soodus</caption>
+      </property>
+      <property>
             <name>products_tbl</name>
             <table>objects</table>
             <group>products</group>

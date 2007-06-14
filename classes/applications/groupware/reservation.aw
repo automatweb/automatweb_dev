@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.66 2007/06/12 13:18:07 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.67 2007/06/14 12:50:41 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -132,6 +132,12 @@ caption Kokkuvõte
 @default group=reserved_resources
 	
 	@property resources_tbl type=table no_caption=1
+
+	@property resources_price type=hidden table=aw_room_reservations field=resources_price no_caption=1
+	@caption Ressursside eraldi m&auml;&auml;ratud hind
+
+	@property resources_discount type=hidden table=aw_room_reservations field=resources_discount no_caption=1
+	@caption Ressursside eraldi m&auml;&auml;ratud soodus
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -349,6 +355,10 @@ class reservation extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "resources_price":
+			case "resources_discount":
+				$retval =  PROP_IGNORE;
+				break;
 			case "cp_ln":
 			case "cp_fn":
 			case "cp_phone":
@@ -623,38 +633,136 @@ class reservation extends class_base
 
 	function _get_resources_tbl($arr)
 	{
+		$room = $arr["obj_inst"]->prop("resource");
+		$room = $this->can("view", $room)?obj($room):false;
+		$currency = $room?$room->prop("currency"):array();
+
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
+			"chgbgcolor" => "split",
 		));
+		$t->define_field(array(
+			"name" => "price",
+			"align" => "center",
+			"caption" => t("Ressursi &uuml;hiku hind"),
+		));
+
+		foreach($currency as $cur)
+		{
+			if($this->can("view", $cur))
+			{
+				$cur = obj($cur);
+				$t->define_field(array(
+					"name" => "price_".$cur->id(),
+					"parent" => "price",
+					"caption" => $cur->name(),
+					"align" => "center",
+					"chgbgcolor" => "split",
+				));
+			}
+		}
 		$t->define_field(array(
 			"name" => "amount",
 			"caption" => t("Kogus"),
+			"align" => "center",
+			"chgbgcolor" => "split",
 		));
+		$t->define_field(array(
+			"name" => "discount",
+			"caption" => t("Soodus"),
+			"align" => "center",
+			"chgbgcolor" => "split",
+		));
+
+		// so, so lets set the total price/discount thingies
+		$res_discount = $this->get_resources_discount($arr["obj_inst"]->id());
+		$t->define_data(array(
+			"name" => t("Kogusoodus (%)"),
+			"discount" => html::textbox(array(
+				"name" => "resources_total_discount",
+				"value" => $res_discount,
+				"size" => 5,
+			)),
+		));
+		$sum_data = array(
+			"name" => t("Kogusumma"),
+		);
+
+		$res_price_data = $this->get_resources_price($arr["obj_inst"]->id());
+		foreach($currency as $cur)
+		{
+			if(!$this->can("view", $cur))
+			{
+				continue;
+			}
+			$sum_data["price_".$cur] = html::textbox(array(
+				"name" => "resources_total_price[".$cur."]",
+				"value" => $res_price_data[$cur],
+				"size" => 5,
+			));
+		}
+		$t->define_data($sum_data);
+		$t->define_data(array(
+			"split" => "#CCCCCC",
+		));
+
 		$room = obj($arr["obj_inst"]->prop("resource"));
 		$room_inst = $room->instance();
+		$rdata = $this->get_resources_data($arr["obj_inst"]->id());
 		$rss = $room_inst->get_room_resources($room->id());
-		$resinfo = $this->resource_info($arr["obj_inst"]->id());
 		foreach($rss as $res_obj)
 		{
 			$res = $res_obj->id();
-			$count = $resinfo[$res];
-			$o = obj($res);
-			$t->define_data(array(
-				"name" => $o->name(),
+			$data = array();
+			$data = array(
+				"name" => $res_obj->name(),
 				"amount" => html::textbox(array(
-					"name" => "cnt[$res]",
-					"value" => (int)$count,
-					"size" => 5
-				))
-			));
+					//"name" => "cnt[".$res."]",
+					"name" => "resources_info[".$res."][count]",
+					"value" => $rdata[$res]["count"],
+					"size" => 5,
+				)),
+				"discount" => html::textbox(array(
+					//"name" => "discount[".$res."]",
+					"name" => "resources_info[".$res."][discount]",
+					"value" => $rdata[$res]["discount"],
+					"size" => 5,
+				)),
+			);
+			foreach($currency as $cur)
+			{
+				if($this->can("view", $cur))
+				{
+					$data["price_".$cur] = html::textbox(array(
+						"name" => "resources_info[".$res."][prices][".$cur."]",
+						"value" => $rdata[$res]["prices"][$cur],
+						"size" => 5,
+					));
+				}
+			}
+			$t->define_data($data);
 		}
 	}
 
+
 	function _set_resources_tbl($arr)
 	{
-		$this->set_resource_info($arr["obj_inst"]->id(), $arr["request"]["cnt"]);
+		// new
+		$this->set_resources_data($arr["request"]["id"], $arr["request"]["resources_info"]);
+		$this->set_resources_price(array(
+			"reservation" => $arr["request"]["id"],
+			"prices" => $arr["request"]["resources_total_price"]
+		));
+		$this->set_resources_discount(array(
+			"reservation" => $arr["request"]["id"],
+			"discount" => $arr["request"]["resources_total_discount"],
+		));
+		
+		// old
+		// well, this old function should point to new as well.. or smth
+		//$this->set_resource_info($arr["obj_inst"]->id(), $arr["request"]["cnt"]);
 	}
 
 	function get_room_products($room)
@@ -1569,6 +1677,8 @@ if (!$this->can("view", $arr["obj_inst"]->prop("customer")))
 				aw_people int,
 				aw_sum text
 				aw_special_sum double,
+				resource_price varchar(13),
+				resource_discount varchar(13),
 			)");
 			echo "table <br>\n";
 		flush();
@@ -1608,16 +1718,30 @@ flush();
 		}
 		else
 		{
-			switch($field)
+			switch($f)
 			{
+				case "resources_price":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "text"
+					));
+					break;
+				case "resources_discount":
+					$this->db_add_col($t, array(
+						"name" => $f,
+						"type" => "varchar(13)"
+					));
+					break;
 				case "aw_special_sum":
-					$this->db_add_col($table, array(
-						"name" => $field,
+					$this->db_add_col($t, array(
+						"name" => $f,
 						"type" => "double"
 					));
-					return true;
+					break;
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	function bank_return($arr)
@@ -2049,53 +2173,98 @@ flush();
 		));
 	}
 	
-	// - andmed hinna/koguse/sooduse kohta
-	/** Returns resources data
-		@attrib api=1 params=name
-		@param reservation required type=object/oid
-	**/
-	function get_resources_data($arr)
-	{
-		extract($arr);
-		return 0;
-	}
-	
 	/**
-		@attrib api=1 params=name
-		@param reservation required type=object/oid
+		@attrib params=pos api=1
+		@param id required type=oid
+			Reservation object id
+			
+		@comment
+			Fetches information about this reservation resources
+		@returns 
+			array of information about resources
+			array(
+				RESOURCE_OID => array(
+					count => 'amount of resources',
+					discount => 'discount percent for resource',
+					price => array(
+						CURRENCY_OID => 'price in given currency'
+					),
+				)
+			)
 	**/
-	function set_resources_data($arr)
+	function get_resources_data($oid)
 	{
-		extract($arr);
-		return 0;
+		if(!$this->can("view", $oid))
+		{
+			return false;
+		}
+		$o = obj($oid);
+		return $o->meta("resources_info");
+	}
+
+	/**
+		@attrib params=pos api=1
+		@param id required type=oid
+			Reservation object id
+		@param data required type=array
+			information about resources in array:
+			array(
+				RESOURCE_OID => array(
+					cnt => 'amount of resources',
+					discount => 'discount percent for resource',
+					price => array(
+						CURRENCY_OID => 'price in given currency'
+					),
+				)
+			)
+		@comment
+			Set's information about this reservation resources
+	**/
+	function set_resources_data($oid, $arr)
+	{
+		if(!$this->can("view", $oid))
+		{
+			return false;
+		}
+		$obj = obj($oid);
+		$obj->set_meta("resources_info", $arr);
+		$obj->save();
+		return true;
 	}
 	
 	//annab kogusumma(kui on)
 	/**
-		@attrib api=1 params=name
-		@param reservation required type=object/oid
+		@attrib api=1 params=pos
+		@param reservation required type=oid
+			Reservation object oid
+		@returns 
+			resources special prices in array
+			array(
+				CURRENCY_OBJECT_OID => price,
+			)
 	**/
-	function get_resources_price($arr)
+	function get_resources_price($oid)
 	{
-		extract($arr);
-		return 0;
+		if(!$this->can("view", $oid))
+		{
+			return false;
+		}
+		$o = obj($oid);
+		return aw_unserialize($o->prop("resources_price"));
 	}
 	
 	/** sets resources price for bron
 		@attrib api=1 params=name
-		@param reservation required type=object/oid
-			reservation object
-		@param resources optional type=array
-			products array([oid] => sum)
-		@param resource optional type=int
-			product oid (if there is only one product)
-		@param sum optiopal type=int
-			product price sum (if there is only one product)
-		@param curr optional type=oid
-			currency object id
-		@returns 1 - success , 0 - unsuccess
+		@param reservation required type=oid
+			reservation object oid
+		@param prices optional type=array
+			prices array(
+				CURRENCY_OBJECT_OID => price,
+			)
+		@returns
+			true on success, false otherwise
 	**/
-	function set_resources_price($arr)
+	function set_resources_price( $arr)
 	{
 		extract($arr);
 		if(is_oid($reservation) && $this->can("view" , $reservation))
@@ -2106,38 +2275,22 @@ flush();
 		{
 			return false;
 		}
-		$resource_info = $reservation->meta("resources_price");
-
-		if($sum && $resource)
-		{
-			$resources = array($resource => $sum);
-		}
-		
-		foreach($resources as $resource => $sum)
-		{
-			//kui määratakse kindla valuutaga summa, kui mitte, siis võib arvestada default valuutana
-			if(!$curr)
-			{
-				$resource_info[$resource] = $sum;
-			}
-			else
-			{
-				$resource_info[$resource][$curr] = $sum;
-			}
-		}
-		
-		$reservation->set_meta("resources_price" , $sum);
+		$reservation->set_prop("resources_price" , aw_serialize($prices, SERIALIZE_NATIVE));
 		$reservation->save();
-		return 1;
+		return true;
 	}
 	
 	/** gets reservation resources discount
-		@attrib api=1 params=name
-		@param reservation required type=object/oid
+		@attrib api=1 params=pos
+		@param reservation required type=oid
+			reservation objekt oid
+		@comment
+			Gets reservation resources discount.
+		@returns
+			resources discount.
 	**/
-	function get_resources_discount($arr)
+	function get_resources_discount($reservation)
 	{
-		extract($arr);
 		if(is_oid($reservation) && $this->can("view" , $reservation))
 		{
 			$reservation = obj($reservation);
@@ -2152,9 +2305,12 @@ flush();
 	
 	/** sets reservation resources discount
 		@attrib api=1 params=name
-		@param reservation required type=object/oid
+		@param reservation required type=oid
+			Reservation object oid
 		@param discount required type=double
-		@returns 1 - success , 0 - unsuccess
+			Resources special discount
+		@returns
+			true on success, false otherwise
 	**/
 	function set_resources_discount($arr)
 	{
@@ -2165,10 +2321,11 @@ flush();
 		}
 		if(!is_object($reservation))
 		{
-			return 0;
+			return false;
 		}
 		$reservation->set_prop("resources_discount" , $discount);
-		return 1;
+		$reservation->save();
+		return true;
 	}
 	
 // edasi toodete kräpp
