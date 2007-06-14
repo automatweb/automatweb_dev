@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.54 2007/06/07 11:46:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.55 2007/06/14 09:07:23 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -776,7 +776,7 @@ $t->set_sortable(false);
 			
 			if (is_admin())
 			{
-				$booking_str .= " / "." ".html::popup(array(
+				$booking_str .= " / ".html::popup(array(
 				//	"url" => $this->mk_my_orb("add_pkt", array("id" => $o->id(), "r" => get_ru())),
 					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 					"caption" => t("Lisa teenus"),
@@ -788,7 +788,7 @@ $t->set_sortable(false);
 			}
 			else
 			{
-				$booking_str .= " / "." ".html::href(array(
+				$booking_str .= " / ".html::href(array(
 		//			"url" => $this->mk_my_orb("add_pkt", array("id" => $o->id(), "r" => get_ru())),
 					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "id" => 11150, "r" => get_ru()), "spa_customer_interface"), 
 //					"url" => $this->mk_my_orb("add_prod_to_bron", array("bron" => $o->id(), "wb" => $arr["obj_inst"]->id())),
@@ -997,7 +997,7 @@ $t->set_sortable(false);
 		@param prod required type=int
 		@param prod_num required type=int
 		@param pkt optional type=int
-		@param not_verified optional type=int
+		@param not_verified optional
 		@param rooms optional 
 		@param retf optional 
 	**/
@@ -1452,7 +1452,8 @@ $t->set_sortable(false);
 			"person_name" => $b->prop("person.name"),
 			"person_birthday" => $y > 0 ? sprintf("%02d.%02d.%04d", $d, $m, $y) : "",
 			"person_ext_id" => $b->prop("person.ext_id_alphanumeric"),
-			"person_gender" => $b->prop("person.gender") == 1 ? t("Mees") : ($b->prop("person.gender") === "2" ? t("Naine") : "")
+			"person_gender" => $b->prop("person.gender") == 1 ? t("Mees") : ($b->prop("person.gender") === "2" ? t("Naine") : ""),
+			"proforma_id" => $b->id(),
 		));
 
 		// now, list all bookings for rooms 
@@ -2337,7 +2338,10 @@ password type=string
 		{
 			if(!$agency_id) $errors.= t("Büroo puudu")."\n<br>";
 		}
-		
+		if(!(sizeof($ol->arr())))
+		{
+			$errors.= t("Reisib&uuml;roo pole &uuml;hegi SPA reisib&uuml;roo liidese omanik")."\n<br>";
+		}
 		$u = obj($agency_id);
 		
 		
