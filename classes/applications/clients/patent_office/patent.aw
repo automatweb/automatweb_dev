@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.78 2007/05/16 10:41:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/patent_office/patent.aw,v 1.79 2007/06/14 08:29:48 markop Exp $
 // patent.aw - Patent 
 /*
 
@@ -1180,7 +1180,7 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 			{
 				$js.='document.getElementById("reproduction_row").style.display = "none";';
 				$js.='document.getElementById("color_row").style.display = "none";';
-        $js.='document.getElementById("wordmark_row").style.display = "";';
+      				$js.='document.getElementById("wordmark_row").style.display = "";';
 				$js.='document.getElementById("wordmark_caption").innerHTML = "* Kaubam&auml;rk";';
 				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
 			}
@@ -1190,24 +1190,21 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				$js.='document.getElementById("foreignlangelements_row").style.display = "none";';
 				$js.='document.getElementById("reproduction_row").style.display = "";';
 				$js.='document.getElementById("color_row").style.display = "";';
-				$js.='document.getElementById("wordmark_caption").innerHTML = "* S&otilde;naline osa";';
 			}
-      if($_SESSION["patent"]["type"] == 2)
+      			if($_SESSION["patent"]["type"] == 2)
 			{
-        $js.='document.getElementById("wordmark_row").style.display = "";';
+				$js.='document.getElementById("wordmark_row").style.display = "none";';
 				$js.='document.getElementById("color_row").style.display = "";';
 				$js.='document.getElementById("reproduction_row").style.display = "";';
-        $js.='document.getElementById("wordmark_caption").innerHTML = "* S&otilde;naline osa";';
 				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
-      }
-      if($_SESSION["patent"]["type"] == 3)
-      {
-        $js.='document.getElementById("wordmark_row").style.display = "";';
+     			}
+			if($_SESSION["patent"]["type"] == 3)
+			{
+				$js.='document.getElementById("wordmark_row").style.display = "none";';
 				$js.='document.getElementById("color_row").style.display = "";';
 				$js.='document.getElementById("reproduction_row").style.display = "";';
-				$js.='document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";';
 				$js.='document.getElementById("foreignlangelements_row").style.display = "";';
-      }
+			}
 			if(!$_SESSION["patent"]["guaranty_trademark"])
 			{
 				$js.='document.getElementById("g_statues_row").style.display = "none";';
@@ -1635,29 +1632,28 @@ $data["send_date"] = $stat_obj->prop("sent_date");
 				"value" => 1,
 		 		"checked" => ($_SESSION["patent"]["type"] == 1) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = ""; 
+				"onclick" => '
 				document.getElementById("wordmark_row").style.display = "none";
 				document.getElementById("foreignlangelements_row").style.display = "none";
 				document.getElementById("reproduction_row").style.display = "";
-				document.getElementById("color_row").style.display = "";
-				document.getElementById("wordmark_caption").innerHTML = "* S&otilde;naline osa"; ',
+				document.getElementById("color_row").style.display = "";'
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Kombineeritud m&auml;rk ").html::radiobutton(array(
 				"value" => 2,
 				"checked" => ($_SESSION["patent"]["type"] == 2) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
+				"onclick" => '
 				document.getElementById("color_row").style.display = "";
 				document.getElementById("reproduction_row").style.display = "";
-        document.getElementById("wordmark_caption").innerHTML = "* S&otilde;naline osa";
+      				document.getElementById("wordmark_row").style.display = "none";
 				document.getElementById("foreignlangelements_row").style.display = "";',
 			)).t("&nbsp;&nbsp;&nbsp;&nbsp; Ruumiline m&auml;rk ").html::radiobutton(array(
 				"value" => 3,
 				"checked" => ($_SESSION["patent"]["type"] == 3) ? 1 : 0,
 				"name" => "type",
-				"onclick" => 'document.getElementById("wordmark_row").style.display = "";
+				"onclick" => '
 				document.getElementById("color_row").style.display = "";
 				document.getElementById("reproduction_row").style.display = "";
-				document.getElementById("wordmark_caption").innerHTML = "S&otilde;naline osa";
+				document.getElementById("wordmark_row").style.display = "none";
 				document.getElementById("foreignlangelements_row").style.display = "";',
 			));
 		
