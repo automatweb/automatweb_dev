@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.552 2007/06/08 07:20:50 tarvo Exp $
+// $Id: class_base.aw,v 2.553 2007/06/14 12:43:51 dragut Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -943,7 +943,11 @@ class class_base extends aw_template
 		// LETS ROCK
 		$u = get_instance(CL_USER);
 		$u = $u->get_obj_for_uid(aw_global_get("uid"));
-		$ulev = !strlen($_t = ($u->prop("warning_notification")))?0:$_t;
+		if (!empty($u))
+		{
+			$ulev = !strlen($_t = ($u->prop("warning_notification")))?0:$_t;
+		}
+
 		if($ulev)
 		{
 			foreach(warning_prop() as $oid => $properties)
