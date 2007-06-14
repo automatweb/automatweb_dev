@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.67 2007/06/14 12:50:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.68 2007/06/14 15:04:52 markop Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -915,7 +915,7 @@ class reservation extends class_base
 				));
 			}
 			if($sell_products)
-			{			
+			{
 				$t->define_data(array(
 					"picture" => $image,
 					"name" => "<b>".$prod->name()."<b> <i>".$prod->comment()."</i>",
@@ -925,8 +925,17 @@ class reservation extends class_base
 						"size" => 5,
 						"onChange" => "el=document.getElementById('pr".$prod->id()."');el.innerHTML=this.value*".$prod->prop("price").";els=document.getElementsByTagName('span');tots = 0;for(i=0; i < els.length; i++) { el=els[i]; if (el.id.indexOf('pr') == 0) { tots += parseInt(el.innerHTML);}} te=document.getElementById('total');te.innerHTML=tots;disc=parseInt(document.changeform.discount.value);disc_el=document.getElementById('disc_val');if(disc>0){disc_el.innerHTML=(tots*(disc/100));} sum_val = document.getElementById('sum_val');if (disc > 0) {sum_val.innerHTML=(tots-(tots*(disc/100)));} else { sum_val.innerHTML=tots; } "
 					)),
+
 					"price" => number_format($prod->prop("price"), 2),
 					"sum" => "<span id='pr".$prod->id()."'>".number_format($prod->prop("price") * $amount[$prod->id()], 2)."</span>",
+					//ei julge praegu külge panna
+/*					"sum" =>  html::textbox(array(
+						"name"=>'price['.$prod->id().']',
+						"value" => number_format((!$arr["web"])? $this->get_product_price(array("product" => $prod->id(), "reservation" => $arr["obj_inst"])): $prod->prop("price"), 2),
+						"size" => 5,
+	//					"onChange" => "el=document.getElementById('pr".$prod->id()."');el.innerHTML=this.value*".$prod->prop("price").";els=document.getElementsByTagName('span');tots = 0;for(i=0; i < els.length; i++) { el=els[i]; if (el.id.indexOf('pr') == 0) { tots += parseInt(el.innerHTML);}} te=document.getElementById('total');te.innerHTML=tots;disc=parseInt(document.changeform.discount.value);disc_el=document.getElementById('disc_val');if(disc>0){disc_el.innerHTML=(tots*(disc/100));} sum_val = document.getElementById('sum_val');if (disc > 0) {sum_val.innerHTML=(tots-(tots*(disc/100)));} else { sum_val.innerHTML=tots; } "
+					)),
+*/					
 					"parent" => $po->name()
 				));
 				$sum += $prod->prop("price") * $amount[$prod->id()];
@@ -2363,12 +2372,33 @@ flush();
 	/**
 		@attrib api=1 params=name
 		@param reservation required type=object/oid
+		@param data required type=array
+			products data (id => array(amount => .. , sum => .., ))
+		@returns true, if success... false if not
 	**/
 	function set_products_data($arr)
 	{
 		extract($arr);
-
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
+		}
 		
+		foreach($data as $prod => $val)
+		{
+			$amount[$prod] = $val["amount"];
+			$price[$prod] = $val["sum"];
+		}
+		
+		$amount = $reservation->meta("amount");
+		$price = $reservation->meta("products_price");
+		$reservation->set_meta("amount", $amount);
+		$reservation->set_meta("products_price", $price);
+		return true;
 	}
 	
 	/**
@@ -2378,6 +2408,15 @@ flush();
 	function get_products_price($arr)
 	{
 		extract($arr);
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
+		}
+		return $reservation->meta("product_price");
 	}
 	
 	
@@ -2553,7 +2592,7 @@ flush();
 			$sum_array = $reservation->prop("special_sum");
 			if(!is_array($sum_array))
 			{
-				$sum_array = array($this->get_default_currency => $sum_array);
+				$sum_array = array($this->get_default_currency($reservation) => $sum_array);
 			}
 			$sum_array[$curr] = $sum;
 			$reservation->set_prop("special_sum" , $sum_array);
@@ -2613,10 +2652,146 @@ flush();
 		if(is_oid($reservation) && $this->can("view" , $reservation))
 		{
 			$reservation = obj($reservation);
+			$curr = $reservation->prop("resource.location.owner.currency.id");
+			if($curr)
+			{
+				return $curr;
+			}
 		}
-
 		$curr_inst = get_instance(CL_CURRENCY);
 		return $curr_inst->get_default_currency();
+	}
+	
+	/**
+		@attrib api=1 params=name
+		@param reservation required type=object/oid
+			reservation object
+		@param product required type=oid
+			product id
+		@param curr optional type=oid
+			price currency
+	**/
+	function get_product_price($arr)
+	{
+		extract($arr);
+		if(is_oid($reservation) && $this->can("view" , $reservation))
+		{
+			$reservation = obj($reservation);
+		}
+		if(!is_object($reservation))
+		{
+			return false;
+		}
+		$this->c_inst = get_instance(CL_CURRENCY);
+		//otsib siis kõigepealt broneeringu metast, siis vaatab edasi... a noh, et kui on valuuta määratud, siis proovib seda valuutat leida, või siis kui miski teine teema on ,siis häkib ümber
+		if($sum = $this->_get_product_price_from_meta(array(
+			"product" => $product,
+			"reservation" => $reservation,
+			"curr" => $curr,
+		)))
+		{
+			return $sum;
+		}
+
+		//lõpuks siis produkti enda juurest
+		if(is_oid($product) && $this->can("view" , $product))
+		{
+			$amount = $reservation->meta("amount");
+			return $amount[$product] * $this->_get_product_price_from_product($product , $reservation->id(), $curr);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function _get_product_price_from_product($product, $r, $curr)
+	{
+		$p = obj($product);
+		$prices = $p->meta("cur_prices");
+		if(!$curr)
+		{
+			if($p->prop("price"))
+			{
+				return $p->prop("price");
+			}
+			if(array_key_exists($this->get_default_currency($r) , $prices))
+			{
+				return $prices[$this->get_default_currency($r)];
+			}
+			else return false;	
+		}
+		else
+		{
+			if(array_key_exists($curr , $prices))
+			{
+				return $prices[$curr];
+			}
+			if(array_key_exists($this->get_default_currency($r) , $prices))
+			{
+				return $this->c_inst->convert(array(
+					"from" => $this->get_default_currency($r),
+					"to" => $curr,
+					"sum" => $prices[$this->get_default_currency($r)],
+				));
+			}
+			if($p->prop("price"))
+			{
+				return $this->c_inst->convert(array(
+					"from" => $this->get_default_currency($r),
+					"to" => $curr,
+					"sum" => $p->prop("price"),
+				));
+			}
+		}
+		return false;
+	}
+	
+	function _get_product_price_from_meta($arr)
+	{
+		extract($arr);
+		$prices = $reservation->meta("product_price");
+		if($prices[$product])
+		{
+			if(is_oid($curr))
+			{
+				if(is_array($prices[$product]))
+				{
+					if(array_key_exists($curr , $prices[$product]))
+					{
+						return $prices[$product][$curr];
+					}
+					if(array_key_exists($this->get_default_currency($reservation->id()) , $prices[$product]))
+					{
+						return $this->c_inst->convert(array(
+							"from" => $this->get_default_currency($reservation->id()),
+							"to" => $curr,
+							"sum" => $prices[$product][$reservation->id()],
+						));
+					}
+				}
+				else
+				{
+					return $this->c_inst->convert(array(
+						"from" => $this->get_default_currency($reservation->id()),
+						"to" => $curr,
+						"sum" => $prices[$product],
+					));
+				}
+			}
+			else
+			{
+				if(is_array($prices[$product]))
+				{
+					return $prices[$product][$this->get_default_currency($reservation->id())];
+				}
+				else
+				{
+					return $prices[$product];
+				}
+			}
+		}
+		else return false;
 	}
 }
 ?>

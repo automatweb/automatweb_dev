@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.12 2007/06/04 16:02:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.13 2007/06/14 15:05:02 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -373,7 +373,7 @@ class currency extends class_base
 		{
 			return $this->default_currency;
 		}
-		if(get_company_currency())
+		if($this->get_company_currency())
 		{
 			$curr = get_company_currency();
 		}
