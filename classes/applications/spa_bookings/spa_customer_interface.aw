@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.19 2007/06/05 09:41:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_customer_interface.aw,v 1.20 2007/06/14 09:38:53 markop Exp $
 // spa_customer_interface.aw - SPA Kliendi liides 
 /*
 
@@ -512,6 +512,17 @@ class spa_customer_interface extends class_base
 		return $rv;
 	}
 
+        function _get_default_prod_parents()
+        {
+                $def_wb = aw_ini_get("spa_bookings_entry.default");
+                if (!$this->can("view", $def_wb))
+                {
+                        return false;
+                }
+                $o = obj($def_wb);
+                return $o->prop("products_folder_list");
+        }
+
 	/**
 		@attrib name=add_pkt
 		@param id required type=int acl=view
@@ -521,11 +532,21 @@ class spa_customer_interface extends class_base
 	function add_pkt($arr)
 	{
 		// list prods and let the user select one
+                $tmp = obj($arr["id"]);
+                if ($tmp->class_id() != CL_ROOM)
+                {
+                        $pp = $this->_get_default_prod_parents();
+                }
+                else
+                {
+                        $pp = $this->_get_prod_parents($arr["id"]);
+                }
+
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT_PACKAGING,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"parent" => $this->_get_prod_parents($arr["id"])
+			"parent" => $pp
 		));
 
 		$room_products = $this->_get_room_products($arr["id"]);
@@ -611,7 +632,16 @@ class spa_customer_interface extends class_base
 
 		$p = get_current_person();
 		$b->set_prop("person", $p->id());	
-
+		if($this->can("view" ,$arr["id"]))
+		{
+			$parent = obj($arr["id"]);
+			if($parent->prop("start"))
+			{
+				$b->set_prop("start", $parent->prop("start"));
+				$b->set_prop("end", $parent->prop("end"));
+			}
+		}
+		
 		$b->save();
 		$this->last_bron = $b->id();
 
@@ -650,6 +680,7 @@ class spa_customer_interface extends class_base
 		$bo = obj($arr["id"]);
 		$pts = "";
 		$this->read_template("add_pkt.tpl");
+		lc_site_load("spa_customer_interface", &$this);
 		$sbe = get_instance(CL_SPA_BOOKIGS_ENTRY);
 		foreach($p as $parent => $prods)
 		{
@@ -685,7 +716,7 @@ class spa_customer_interface extends class_base
 					"select_time_pop" => "aw_popup_scroll('$prod_url','bronner',640,480)"
 				));
 				$pp = $pr->meta("cur_prices");
-				foreach($curs as $_id => $_nm)
+				foreach($pp as $_id => $_nm)
 				{
 					$this->vars(array(
 						"price_".$_id => $pp[$_id]
@@ -807,7 +838,7 @@ class spa_customer_interface extends class_base
 
 	/**
 		@attrib name=pay
-		@param id required type=int acl=view
+		@param id required acl=view
 		@param r optional
 		@param bank_payment required typoe=oid
 		@param section optional
