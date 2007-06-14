@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.57 2007/06/14 10:16:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.58 2007/06/14 11:49:37 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -705,7 +705,8 @@ $t->set_sortable(false);
 						"person" => $p->id(),
 						"CL_SPA_BOOKING.RELTYPE_MAIN_PERSON" => $p->id()
 					)
-				))
+				)),
+				"sort_by" => "objects.oid DESC",
 			));
 /*echo dbg::dump($ol->names());
                         obj_set_opt("no_cache", 0);
@@ -727,7 +728,8 @@ $t->set_sortable(false);
 				"lang_id" => array(),
 				"site_id" => array(),
 				"createdby" => aw_global_get("uid"),
-				"start" => new obj_predicate_compare(OBJ_COMP_GREATER, time())
+				"start" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+				"sort_by" => "objects.oid DESC",
 			));
 		}
 		$payment_info = "";
@@ -814,7 +816,6 @@ $t->set_sortable(false);
 					"resizable" => 1*/
 				));
 			}
-
 			$booking_str .= " / ".html::href(array(
 				"url" => $this->mk_my_orb("print_booking", array("id" => $o->id(), "wb" => $arr["obj_inst"]->id())),
 				"caption" => t("Prindi"),
@@ -966,16 +967,28 @@ $t->set_sortable(false);
 //				$row["_int_index"] = ++$_int_index;
 //				$t->define_data($row);
 //			}
+
+
+/*			if (!$_GET["notimes"] || $has_dates)
+			{
+				$tpl->vars(array(
+					"BOOK_LINE" => $book_line,
+					"disp_main" => $o->modified() > (time() - 300) ? "block" : "none",
+					"disp_short" => $o->modified() > (time() - 300) ? "none" : "block"
+				));
+				$bookings .= $tpl->parse("BOOKING");
+			}
+*/
  			$t->define_data(array(
 // 				"booking" => $booking_str,
  //				"when" => $when,
  				"name" => 
  					"
-					<div  id='bka".$o->id()."' style='display: block'>".
+					<div  id='bka".$o->id()."' style='display: ".($o->modified() > (time() - 300) ? "none" : "")."block'>".
 						$booking_str.
 					"</div>
 
-					<div  id='bk".$o->id()."' style='display: none'>".
+					<div  id='bk".$o->id()."' style='display: ".($o->modified() > (time() - 300) ? "block" : "none")."'>".
 						'<table border="1" width="100%">
 						<tr>
 							<td width="100%" height="26" align="center" style="background-image:url(http://www.kalevspa.ee/img/taust_pealkiri.gif)" class="bronpealingid">
@@ -987,9 +1000,9 @@ $t->set_sortable(false);
 					."</div>",	
 			));
 		}
-
+		$t->set_sortable(false);
 		$t->set_rgroupby(array("booking" => "booking"));
-		$t->set_default_sortby(array("_int_index"));
+//		$t->set_default_sortby(array("_int_index"));
 
 		if (!is_admin() && $total_payment_amt > 0)
 		{
