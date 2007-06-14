@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.192 2007/05/22 14:12:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.193 2007/06/14 06:18:31 tarvo Exp $
 // room.aw - Ruum 
 /*
 
@@ -1282,7 +1282,6 @@ class room extends class_base
 			$product_obj = obj($product);
 			$end = $start1 + $product_obj->prop("reservation_time")*$product_obj->prop("reservation_time_unit");
 		}
-
 		
 		classload("vcl/table");
 		$t = new vcl_table(array(
@@ -1379,6 +1378,106 @@ class room extends class_base
 		));
 		die($err.html::form(array("method" => "POST", "content" => $t->draw())));
 	}
+	
+	function admin_add_bron_popup_table($arr)
+	{
+		extract($arr);
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));
+		
+		$t->define_field(array(
+			"name" => "caption",
+		));
+		$t->define_field(array(
+			"name" => "value",
+		));
+
+		$t->define_data(array(
+			"caption" => t("Algusaeg"),
+			"value" => html::datetime_select(array(
+				"name" => "bron[start1]",
+				"value" => $start1,
+			)),
+		));
+		$t->define_data(array(
+			"caption" => t("L&otilde;ppaeg"),
+			"value" => html::datetime_select(array(
+				"name" => "bron[end]",
+				"value" => $end,
+			)),
+		));
+			
+		$t->define_data(array(
+			"caption" => t("Eesnimi"),
+			"value" => html::textbox(array(
+				"name" => "bron[firstname]",
+				"size" => 40,
+				"value" => $firstname,
+			)),
+		));
+			
+		$t->define_data(array(
+			"caption" => t("Perenimi"),
+			"value" => html::textbox(array(
+				"name" => "bron[lastname]",
+				"size" => 40,
+				"value" => $lastname,
+			)),
+		));
+			
+		$t->define_data(array(
+			"caption" => t("Organisatsioon"),
+			"value" => html::textbox(array(
+				"name" => "bron[company]",
+				"size" => 40,
+				"value" => $company,
+			)),
+		));
+		
+		$t->define_data(array(
+			"caption" => t("Telefon"),
+			"value" => html::textbox(array(
+				"name" => "bron[phone]",
+				"size" => 40,
+				"value" => $phone,
+			)),
+		));
+			
+		$t->define_data(array(
+			"caption" => t("Märkused"),
+			"value" => html::textarea(array(
+				"name" => "bron[comment]",
+				"size" => 40,
+				"value" => $comment,
+			)),
+		));	
+			
+		$t->define_data(array(
+			"caption" => t("Meie esindaja"),
+			"value" => html::select(array(
+				"name" => "bron[people]",
+				"value" => $people,
+				"options" => $people_opts,
+			)),
+		));	
+		
+		$t->define_data(array(
+			"value" => html::submit(array(
+				"value" => t("Salvesta"),
+			)),
+		));	
+		
+		$t->define_data(array(
+			"value" => html::hidden(array(
+				"name" => "bron[id]",
+				"value" => $id,
+			)),
+		));
+		return $t->draw();
+	}
+	
 	
 /*	
 	function create_room_calendar ($arr)
