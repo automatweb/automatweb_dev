@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.98 2007/06/14 13:51:41 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/conference_planning.aw,v 1.99 2007/06/15 10:16:26 tarvo Exp $
 // conference_planning.aw - Konverentsi planeerimine 
 /*
 
@@ -1787,7 +1787,7 @@ class conference_planning extends class_base
 	
 		$html["yah_bar"] = $this->parse_yah_bar($cp, $arr["id"], $active_view);
 		$html["active_view"] = $this->parse_active_view($cp, $arr["id"], $active_view);
-		$html["movement"] = $this->parse_movement_buttons($cp->id(), $active_view);
+		//$html["movement"] = $this->parse_movement_buttons($cp->id(), $active_view);
 		$html["errors"] = $this->error_html;
 		$reforb_arr = array(
 			"url" => get_ru(),
