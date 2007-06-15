@@ -303,32 +303,6 @@ class realestate_import extends class_base
 		$cl_file = get_instance(CL_FILE);
 		$cl_image = get_instance(CL_IMAGE);
 
-		//!!!vaja?
-		if ($this->changed_visible_to)
-		{
-			#### visible_to
-			$prop_args = array (
-				"clid" => CL_REALESTATE_PROPERTY,
-				"name" => "visible_to",
-			);
-			list ($options, $NULL, $NULL) = $cl_classificator->get_choices($prop_args);
-			$visible_tos = $options->names();
-			$this->changed_visible_to = false;
-		}
-
-		if ($this->changed_special_statuses)
-		{
-			#### special_statuses
-			$prop_args = array (
-				"clid" => CL_REALESTATE_PROPERTY,
-				"name" => "special_status",
-			);
-			list ($options, $NULL, $NULL) = $cl_classificator->get_choices($prop_args);
-			$special_statuses = $options->names();//!!! teha . kui puudub view 6igus klassifikaatorile siis tagastatakse false.
-			$this->changed_special_statuses = false;
-		}
-		//!!! END vaja?
-
 		### variables
 		$this->property_data = NULL;
 		$this->end_property_import = false;
@@ -338,9 +312,7 @@ class realestate_import extends class_base
 		$this->changed_stove_types = true;
 		$this->changed_usage_purposes = true;
 		$this->changed_transaction_constraints = true;
-		$this->changed_visible_to = true;
 		$this->changed_priorities = true;
-		$this->changed_special_statuses = true;
 		$this->changed_legal_statuses = true;
 		$this->changed_roof_types = true;
 		$this->changed_land_uses = true;
@@ -1249,11 +1221,11 @@ class realestate_import extends class_base
 					if (!array_key_exists($picture_id, $existing_pictures))
 					{ # add new
 						$fp = fopen($picture_id, "r");
-						$imagedata = fread($fp, 2);
+						$signature = fread($fp, 2);
 
-						if ("\xFF\xD8" === $imagedata) // JPEG signature
+						if ("\xFF\xD8" === $signature) // JPEG signature
 						{
-							$imagedata = fread($fp);
+							$imagedata = $signature . fread($fp);
 
 							if (false !== $imagedata)
 							{
@@ -1282,7 +1254,7 @@ class realestate_import extends class_base
 								$property_status = REALESTATE_IMPORT_ERR17;
 							}
 						}
-						elseif (false === $imagedata)
+						elseif (false === $signature)
 						{
 							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Pildi (nr. %s, id %s) lugemine eba6nnestus."), $key, $picture_id) . REALESTATE_NEWLINE;
 							$property_status = REALESTATE_IMPORT_ERR17;
