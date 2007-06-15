@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.39 2007/06/05 09:41:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.40 2007/06/15 10:17:08 tarvo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -265,6 +265,7 @@ class crm_company_webview extends class_base
 		$datafields = array(
 			'sectors' => '',
 			'address' => 'contact',
+			'address_separated' => 'contact',
 			'phone' => 'phone_id',
 			'openhours' => '',
 			'fax' => 'telefax_id',
@@ -294,6 +295,7 @@ class crm_company_webview extends class_base
 		// Name is not obligatory - will go to template as {VAR:key}
 		$fieldnames = array(
 			'address' => t("Aadress"),
+			'address_separated' => t("Aadress"),
 			'phone' => t("Tel"),
 			'fax' => t("Faks"),
 			'openhours' => t("Avatud"),
@@ -370,6 +372,8 @@ class crm_company_webview extends class_base
 
 		foreach ($datafields as $item => $mapped)
 		{
+
+			$value_array_into_separate_vars = false;
 			// Skip parsing for values which are not used anyway
 			if (!isset($used_fields['line_'.$item]))
 			{
@@ -874,16 +878,41 @@ class crm_company_webview extends class_base
 					{
 						if ($item == 'address')
 						{
+							$props = array("aadress", "postiindeks");
+							$objs = array("linn", "maakond", "piirkond", "riik");
+							foreach(array_merge($props, $objs) as $prop)
+							{
+								if(strlen($val = $o_item->prop((in_array($prop,$objs)?$prop.".name":$prop))))
+								{
+									$value[] = $val;
+								}
+							}
+							
+							/*
 							$idx = $o_item->prop('postiindeks');
 							$value = $o_item->name();
 							if (strlen($idx) && strpos($value, $idx) === FALSE)
 							{
 								$value .= ", $idx";
 							}
+							*/
 							
 							// the proper, templateroaming version:
 							//$inst = $o_item->instance();
 							//$value = $inst->request_execute($o_item);
+						}
+						elseif($item == 'address_separated')
+						{
+							$props = array("aadress", "postiindeks");
+							$objs = array("linn", "maakond", "piirkond", "riik");
+							foreach(array_merge($props, $objs) as $prop)
+							{
+								if(strlen($val = $o_item->prop((in_array($prop,$objs)?$prop.".name":$prop))))
+								{
+									$value[$prop] = $val;
+									$value_array_into_separate_vars = true;
+								}
+							}
 						}
 						else
 						{
@@ -895,10 +924,15 @@ class crm_company_webview extends class_base
 			}
 			
 			$key = ifset($fieldnames, $item);
-			if (is_array($value))
+			if (is_array($value) && !$value_array_into_separate_vars)
 			{
 				$value = join(', ', $value);
 			}
+			elseif(is_array($value) && $value_array_into_separate_vars)
+			{
+				$this->vars($value);
+			}
+
 			if (!empty($value))
 			{
 				$this->vars(array(
@@ -1281,6 +1315,7 @@ class crm_company_webview extends class_base
 		}
 		$datalist = array(
 			'address' => 'contact',
+			'address_separated' => 'contact',
 			'phone' => '',
 			'openhours' => '',
 			'fax' => '',
