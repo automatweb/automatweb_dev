@@ -9,15 +9,15 @@ EMIT_MESSAGE(MSG_STORAGE_DELETE)
 */
 
 
-class _int_object 
+class _int_object
 {
 	///////////////////////////////////////////
 	// private variables
 
 	var $obj;			// actual object data
-	var $implicit_save; 
+	var $implicit_save;
 	var $obj_sys_flags;
-	
+
 
 	///////////////////////////////////////////
 	// public functions
@@ -93,7 +93,7 @@ class _int_object
 			));
 			return;
 		}
-		
+
 		if (!$this->can("delete"))
 		{
 			error::raise(array(
@@ -145,7 +145,7 @@ class _int_object
 				}
 				$cprms["type"] = $param["reltype"];
 			}
-			
+
 			// use a different code path for not saved objects
 			if (!is_oid($this->obj["oid"]))
 			{
@@ -164,7 +164,7 @@ class _int_object
 				}
 				obj_set_opt("no_cache", $tmp);
 
-				if ($GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]) && 
+				if ($GLOBALS["object_loader"]->ds->can("view", $this->obj["brother_of"]) &&
 					$GLOBALS["object_loader"]->ds->can("view", $oid))
 				{
 					$c = new connection();
@@ -419,7 +419,7 @@ class _int_object
 			$GLOBALS["__obj_sys_acl_memc"][$c_d["to"]] = array(
 				"acldata" => $c_d["to.acldata"],
 				"parent" => $c_d["to.parent"]
-			);	
+			);
 			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["from"]))
 			{
 				$ret[] =& new connection($c_d);
@@ -681,11 +681,11 @@ class _int_object
 				return $this->delete();
 				break;
 
-			case STAT_ACTIVE: 
+			case STAT_ACTIVE:
 				$this->_int_set_of_value("status", STAT_ACTIVE);
 				break;
 
-			case STAT_NOTACTIVE: 
+			case STAT_NOTACTIVE:
 				$this->_int_set_of_value("status", STAT_NOTACTIVE);
 				break;
 
@@ -773,7 +773,7 @@ class _int_object
 	function set_ord($param)
 	{
 		$prev = $this->obj["jrk"];
-		
+
 		if (!is_numeric($param) && $param != "")
 		{
 			error::raise(array(
@@ -1070,7 +1070,7 @@ class _int_object
 		$inf = $GLOBALS["object_loader"]->load_properties(array(
 			"file" => ($clid == CL_DOCUMENT ? "doc" : basename($classes[$clid]["file"])),
 			"clid" => $clid
-		
+
 		));
 		return $inf[4];
 	}
@@ -1146,16 +1146,16 @@ class _int_object
 		$val = $this->_int_get_prop($param);
 		switch($type)
 		{
-			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables 
+			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables
 			case "relmanager":
-			case "relpicker": 
+			case "relpicker":
 			case "classificator":
 			case "popup_search":
 			case "crm_participant_search":
 			case "releditor":
 				if ($pd["store"] == "connect")
 				{
-					// we need to list the connections and fetch their names. 
+					// we need to list the connections and fetch their names.
 					// UNLESS we already got them from wherever. like fetch_full_list conn prop fetch
 					if (is_array($GLOBALS["read_properties_data_cache_conn"][$this->obj["oid"]]))
 					{
@@ -1238,9 +1238,9 @@ class _int_object
 		$this->_int_set_prop($key, $val);
 		// if this is a relpicker property, create the relation as well
 		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
-		if ((($propi["type"] == "relpicker" ) || 
+		if ((($propi["type"] == "relpicker" ) ||
 			($propi["type"] == "releditor" && ($propi["store"] == "connect" || $propi["choose_default"] == 1)) ||
-			 $propi["type"] == "relmanager" || 
+			 $propi["type"] == "relmanager" ||
 			($propi["type"] == "classificator" && $propi["store"] == "connect") ||
 			($propi["type"] == "popup_search" && $propi["reltype"] != "") ||
 			($propi["type"] == "chooser" && $propi["store"] == "connect" || !empty($propi["reltype"]))
@@ -1460,7 +1460,7 @@ class _int_object
 		}
 
 		// check if a brother already exists for this object under
-		// the $parent menu. 
+		// the $parent menu.
 		$noc = obj_set_opt("no_cache", 1);
 		$ol = new object_list(array(
 			"parent" => $parent,
@@ -1544,7 +1544,7 @@ class _int_object
 			case "alias":
 				$val = $this->$prop();
 				break;
-	
+
 			default:
 				$val = $this->prop($prop);
 		}
@@ -1572,7 +1572,7 @@ class _int_object
 				$val = $trs[$cur_lid][$prop];
 			}
 		}
-		return $val;	
+		return $val;
 	}
 
 	function prop_is_translated($prop)
@@ -1625,9 +1625,9 @@ class _int_object
 		$val = $this->trans_get_val($param);
 		switch($type)
 		{
-			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables 
+			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables
 			case "relmanager":
-			case "relpicker": 
+			case "relpicker":
 			case "classificator":
 			case "popup_search":
 			case "crm_participant_search":
@@ -1690,11 +1690,11 @@ class _int_object
 			$val = "";
 		}
 		return $val;
-	}	
+	}
 
 	/////////////////////////////////////////////////////////////////
 	// private functions
-	
+
 	function _init_empty()
 	{
 		$this->obj = array();
@@ -1818,14 +1818,14 @@ class _int_object
 		}
 		else
 		{
-			$file = empty($GLOBALS["cfg"]["classes"][$cl_id]["file"]) ? null : $GLOBALS["cfg"]["classes"][$cl_id]["file"];
+			$file = empty($GLOBALS["cfg"]["classes"][$cl_id]["file"]) ? null : basename($GLOBALS["cfg"]["classes"][$cl_id]["file"]);
 		}
 		list(
-				$GLOBALS["properties"][$cl_id], 
-				$GLOBALS["tableinfo"][$cl_id], 
+				$GLOBALS["properties"][$cl_id],
+				$GLOBALS["tableinfo"][$cl_id],
 				$GLOBALS["relinfo"][$cl_id],
 				$GLOBALS["classinfo"][$cl_id],
-			) = 
+			) =
 			$GLOBALS["object_loader"]->load_properties(array(
 				"file" => $file,
 				"clid" => $cl_id
@@ -1841,7 +1841,7 @@ class _int_object
 			$GLOBALS["tableinfo"][$cl_id] = "";
 		}
 
-		// also make list of properties that belong to object, so we can keep them 
+		// also make list of properties that belong to object, so we can keep them
 		// in sync in $this->obj and properties
 
 		// things in this array can be accessed later with $objref->prop("keyname")
@@ -1867,7 +1867,7 @@ class _int_object
 	function _int_do_save()
 	{
 		// first, update modifier fields
-		
+
 		if (!$this->no_modify)
 		{
 			$this->_int_set_of_value("modified", time());
@@ -1993,7 +1993,7 @@ class _int_object
 						}
 					}
 				}
-			}		
+			}
 		}
 	}
 
@@ -2005,7 +2005,7 @@ class _int_object
 			foreach($tmp as $ihd)
 			{
 				$propv = $this->obj["properties"][$ihd["from_prop"]];
-			
+
 				// find all object os correct type
 				$filt = array(
 					"class_id" => $ihd["to_class"],
@@ -2064,7 +2064,7 @@ class _int_object
 			$rootmenu = array($GLOBALS["cfg"]["__default"]["rootmenu"]);
 			$add = true;
 		}
-		
+
 		while ($parent && !in_array($parent, $rootmenu))
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent))
@@ -2084,7 +2084,7 @@ class _int_object
 			else
 			{
 				// we break here, because if we don't have view access to an object in the path
-				// we can't find it's parent and then we're fucked anyway. 
+				// we can't find it's parent and then we're fucked anyway.
 				$parent = 0;
 				break;
 			}
@@ -2094,7 +2094,7 @@ class _int_object
 			if ($cnt > 100)
 			{
 				error::raise(array(
-					"id" => ERR_HIER, 
+					"id" => ERR_HIER,
 					"msg" => sprintf(t("object::path(%s): error in object hierarchy, infinite loop!"), $this->id())
 				));
 				return;
@@ -2129,7 +2129,7 @@ class _int_object
 		{
 			$this->obj["parent"] = $this->obj["parent"]["oid"];
 		}
-	
+
 		// required params - parent and class_id
 		if ($this->obj["parent"] > 0 && $this->obj["class_id"] > 0)
 		{
@@ -2138,7 +2138,7 @@ class _int_object
 			{
 				if ($this->_int_can("edit"))
 				{
-					return true;	
+					return true;
 				}
 				else
 				{
@@ -2153,7 +2153,7 @@ class _int_object
 			{
 				if ($GLOBALS["object_loader"]->ds->can("add", $this->obj["parent"]))
 				{
-					return true;	
+					return true;
 				}
 				else
 				{
@@ -2165,7 +2165,7 @@ class _int_object
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -2209,7 +2209,7 @@ class _int_object
 		// load the object to see of its brother status
 		$obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
 
-		$todelete = array();		
+		$todelete = array();
 
 		// if this object is a brother to another object, just delete it.
 		if ($obj["brother_of"] != $oid)
@@ -2219,7 +2219,7 @@ class _int_object
 		// else, if this is an original object
 		else
 		{
-			// find all of its brothers and delete all of them. 
+			// find all of its brothers and delete all of them.
 			list($tmp) = $GLOBALS["object_loader"]->ds->search(array(
 				"brother_of" => $oid,
 				"lang_id" => array(),
@@ -2232,7 +2232,7 @@ class _int_object
 //		$todelete = $this->
 
 		foreach($todelete as $oid)
-		{			
+		{
 			if (!$GLOBALS["object_loader"]->ds->can("delete", $oid))
 			{
 				continue;
@@ -2377,7 +2377,7 @@ class _int_object
 		$_1 = array("checkbox", "chooser");
 		$_2 = array("date_select", "time_select");
 		$level_0 = array("checkbox", "text", "releditor", "status", "href", "hidden", "callback");
-		
+
 		if(in_array($prop["type"], $_1) || in_array($prop["type"], $level_0) || $prop["store"] == "no")
 		{
 			return false;
