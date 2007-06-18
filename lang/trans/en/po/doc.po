@@ -1267,7 +1267,7 @@ msgstr ""
 
 #: classes/doc.aw:group_versions
 msgid "Grupi Versioonid (versions) pealkiri"
-msgstr ""
+msgstr "Versions"
 
 #: classes/doc.aw:group_versions_help
 msgid "Grupi Versioonid (versions) help"
@@ -1279,7 +1279,7 @@ msgstr ""
 
 #: classes/doc.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"
-msgstr ""
+msgstr "Translate"
 
 # classes/doc.aw:group_relationmgr
 #: classes/doc.aw:group_relationmgr
@@ -1363,39 +1363,39 @@ msgstr "Active"
 
 #: classes/doc.aw:1327
 msgid "Versioon"
-msgstr ""
+msgstr "Version"
 
 #: classes/doc.aw:1333 classes/doc.aw:1393 classes/doc.aw:1421
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/doc.aw:1339
 msgid "Hinne"
-msgstr ""
+msgstr "Ranking"
 
 #: classes/doc.aw:1345
 msgid "Hinda"
-msgstr ""
+msgstr "Vote"
 
 #: classes/doc.aw:1351
 msgid "M&auml;&auml;ra aktiivseks"
-msgstr ""
+msgstr "Set active"
 
 #: classes/doc.aw:1357
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
 #: classes/doc.aw:1388 classes/doc.aw:1416
 msgid "--Vali--"
-msgstr ""
+msgstr "--Select--"
 
 #: classes/doc.aw:1513
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/doc.aw:1550
 msgid "M&auml;rks&otilde;na"
-msgstr ""
+msgstr "Keyword"
 
 # classes/doc.aw:prop_needs_translation
 #~ msgid "Omaduse Vajab tõlget (needs_translation) caption"
