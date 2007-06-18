@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.18 2007/06/05 09:41:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.19 2007/06/18 14:43:05 markop Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -651,6 +651,8 @@ class admin_if extends class_base
 			{
 				$sby = " ORDER BY ".$_GET["sortby"]." ".$_GET["sort_order"];
 			}
+			$sortby = $_GET["sortby"];
+			$GLOBALS["sort_order"] = $_GET["sort_order"];
 		}
 
 		$per_page = 100;
@@ -828,12 +830,13 @@ class admin_if extends class_base
 			$GLOBALS["sort_order"] = "asc";
 		};
 
-		$t->set_default_sortby("name");
+		$t->set_default_sortby(array("is_menu", $sortby, "name"));
+		$t->set_default_sorder("desc");
+		
 		$t->set_numeric_field("hidden_jrk");
-
 		$t->sort_by(array(
-			"field" => array("is_menu", $sortby, "name"),
-			"sorder" => array("is_menu" => "desc", $sortby => $GLOBALS["sort_order"], "name" => "asc")
+			"field" => array("is_menu", $sortby),
+			"sorder" => array("is_menu" => "desc", $sortby => $GLOBALS["sort_order"])
 		));
 		$t->set_sortable(false);
 	}
