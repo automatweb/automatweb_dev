@@ -237,6 +237,11 @@ class doc_display extends aw_template
 	function _get_text($arr, $doc)
 	{
 		$lead = $doc->trans_get_val("lead");
+		if (!$arr["no_strip_lead"])
+		{
+			$lead = preg_replace("/#pict(\d+?)(v|k|p|)#/i","",$lead);
+			$lead = preg_replace("/#p(\d+?)(v|k|p|)#/i","",$lead);
+		}
 		$content = $doc->trans_get_val("content");
 		$sps = $doc->meta("setps");
 		if ($sps["lead"])
