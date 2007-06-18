@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.68 2007/06/14 15:04:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/reservation.aw,v 1.69 2007/06/18 08:05:27 tarvo Exp $
 // reservation.aw - Broneering 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_RESERVATION, on_delete_reservation)
@@ -750,7 +750,10 @@ class reservation extends class_base
 	function _set_resources_tbl($arr)
 	{
 		// new
-		$this->set_resources_data($arr["request"]["id"], $arr["request"]["resources_info"]);
+		$this->set_resources_data(array(
+			"reservation" => $arr["request"]["id"],
+			"resources_info" => $arr["request"]["resources_info"],
+		));
 		$this->set_resources_price(array(
 			"reservation" => $arr["request"]["id"],
 			"prices" => $arr["request"]["resources_total_price"]
@@ -2212,10 +2215,10 @@ flush();
 	}
 
 	/**
-		@attrib params=pos api=1
-		@param id required type=oid
+		@attrib params=name api=1
+		@param reservation required type=oid
 			Reservation object id
-		@param data required type=array
+		@param resources_info required type=array
 			information about resources in array:
 			array(
 				RESOURCE_OID => array(
@@ -2229,14 +2232,14 @@ flush();
 		@comment
 			Set's information about this reservation resources
 	**/
-	function set_resources_data($oid, $arr)
+	function set_resources_data($arr)
 	{
-		if(!$this->can("view", $oid))
+		if(!$this->can("view", $arr["reservation"]))
 		{
 			return false;
 		}
-		$obj = obj($oid);
-		$obj->set_meta("resources_info", $arr);
+		$obj = obj($arr["reservation"]);
+		$obj->set_meta("resources_info", $arr["resources_info"]);
 		$obj->save();
 		return true;
 	}
