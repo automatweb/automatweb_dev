@@ -6,7 +6,7 @@
 				<arguments>
 					<required name="id" type="int" />
 					<required name="company" type="int" />
-					<optional name="import_check_city24id_in_aw" type="int" />
+					<optional name="import_all" type="int" />
 					<optional name="import_city24id" type="int" />
 					<optional name="charset_from" />
 					<optional name="charset_to" />
