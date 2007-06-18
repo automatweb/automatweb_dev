@@ -1597,7 +1597,7 @@ if ("house" != $this->property_type and "apartment" != $this->property_type)
 						case "apartment":
 							#### show_apartment_number
 							$value = isset($this->property_data["NAITAKORTERINR"]) ? (int) ("Y" === $this->property_data["NAITAKORTERINR"]) : 0;
-							$property->set_prop ("show_apartment_no", $value);
+							$property->set_prop ("show_apartment_number", $value);
 
 							#### is_middle_floor
 							$value = 0;

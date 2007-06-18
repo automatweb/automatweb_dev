@@ -12,7 +12,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @default table=objects
 
 @default group=advertisement_data
-	@property show_apartment_no type=checkbox ch_value=1 field=meta method=serialize
+	@property show_apartment_number type=checkbox ch_value=1 field=meta method=serialize
 	@caption Näita korteri numbrit
 
 	@layout box1 type=vbox
