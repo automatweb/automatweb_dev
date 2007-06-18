@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create_customer)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
-@classinfo syslog_type=ST_CRM_COMPANY no_status=1 confirm_save_data=1 versioned=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_COMPANY confirm_save_data=1 versioned=1 prop_cb=1
 
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
 @tableinfo aw_account_balances master_index=oid master_table=objects index=aw_oid
@@ -22,6 +22,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	
 	@property jrk field=jrk type=textbox display=none group=general_sub
 	@caption Jrk
+
+	@property status field=status type=checkbox display=none default=2 group=general_sub
+	@caption Staatus
 
 	@layout co_top type=hbox closeable=1 area_caption=&Uuml;ldandmed width=50%:50%
 
