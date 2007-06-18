@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.173 2007/05/23 08:02:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.174 2007/06/18 14:02:54 voldemar Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -109,7 +109,7 @@ caption Msn/yahoo/aol/icq
 
 @property ct_rel_tb type=toolbar no_caption=1 store=no
 
-	
+
 	@layout ct_super type=vbox  closeable=1 area_caption=Kontaktid
 
 		@layout contact_l type=hbox parent=ct_super width=30%:30%:30%
@@ -136,7 +136,7 @@ caption Msn/yahoo/aol/icq
 
 			@property comment type=textarea cols=40 rows=3 table=objects field=comment parent=work captionside=top
 			@caption Kontakt
-		
+
 		@layout work_down type=hbox parent=work_super width=20%:80%
 
 			@property work_contact_start parent=work_down captionside=top type=releditor reltype=RELTYPE_CURRENT_JOB rel_id=first props=start store=no
@@ -336,7 +336,7 @@ Arvutioskus: Programm	Valik v&otilde;i tekstikast / Tase	Valik
 ------------------------------------------------------------------
 
 @groupinfo work_projects caption="Projektid" parent=work
-	
+
 	@property work_projects group=work_projects type=table store=no no_caption=1
 	@caption Projektid
 
@@ -414,19 +414,19 @@ Arvutioskus: Programm	Valik v&otilde;i tekstikast / Tase	Valik
 @property udef_ch3 type=chooser multiple=1
 @caption Kasutajadefineeritud CH3
 
-@property user1 type=textbox 
+@property user1 type=textbox
 @caption Kasutajadefineeritud tekstikast 1
 
-@property user2 type=textbox 
+@property user2 type=textbox
 @caption Kasutajadefineeritud tekstikast 2
 
-@property user3 type=textbox 
+@property user3 type=textbox
 @caption Kasutajadefineeritud tekstikast 3
 
-@property user4 type=textbox 
+@property user4 type=textbox
 @caption Kasutajadefineeritud tekstikast 4
 
-@property user5 type=textbox 
+@property user5 type=textbox
 @caption Kasutajadefineeritud tekstikast 5
 
 @property udef_ta1 type=textarea rows=5 cols=50
@@ -2338,7 +2338,7 @@ class crm_person extends class_base
 
 
 	function on_disconnect_section_from_person($arr)
-	{arr($arr);
+	{
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
 		if ($target_obj->class_id() == CL_CRM_PERSON)
@@ -2521,7 +2521,7 @@ class crm_person extends class_base
 					));
 			}
 			$table->define_data(array(
-				"asutus" => $prevjob->prop_str("org")?$url:t("-"), 
+				"asutus" => $prevjob->prop_str("org")?$url:t("-"),
 				"alates" => get_lc_date($prevjob->prop("start")),
 				"ametikoht" => $prevjob->prop("profession")?$prevjob->prop_str("profession"):t("-"),
 				"kuni" => get_lc_date($prevjob->prop("end")),
@@ -2615,7 +2615,7 @@ class crm_person extends class_base
 			if ($arr["request"]["group"] == "general2")
 			{
 				if ($arr["request"]["is_important"] == 1)
-				{	
+				{
 					$p->connect(array(
 						"to" => $arr["obj_inst"]->id(),
 						"type" => "RELTYPE_IMPORTANT_PERSON"
@@ -3565,7 +3565,7 @@ class crm_person extends class_base
 			))
 		)));
 	}
-	
+
 	function get_cv_tpl()
 	{
 		$dir = aw_ini_get("basedir")."/crm/person/cv/";
@@ -3756,7 +3756,7 @@ class crm_person extends class_base
 			$ed .= $this->parse("ED");
 		}
 		$cur_comp = get_current_company();
-		
+
 		$logo = $cur_comp->prop("logo");
 		foreach($this->get_work_project_tasks($ob->id()) as $project => $data)
 		{
@@ -3894,7 +3894,7 @@ class crm_person extends class_base
 			"class_id" => CL_EXTERNAL_SYSTEM,
 			"lang_id" => array(),
 			"site_id" => array()
-		));	
+		));
 		$data = array();
 		foreach($crel->connections_from(array("type" => "RELTYPE_EXT_SYS_ENTRY")) as $c)
 		{
@@ -3925,7 +3925,7 @@ class crm_person extends class_base
 				$ent->set_prop("value", $arr["request"]["ext"][$o->id()]);
 				$ent->save();
 			}
-		}	
+		}
 	}
 
 	/** returns a line of info about the person - name, company, section, email, phone
@@ -4060,7 +4060,7 @@ class crm_person extends class_base
 			"name" => "bill_nr",
 			"caption" => t("Arve nr."),
 			"align" => "center",
-		));		
+		));
 		$t->define_field(array(
 			"name" => "bill_state",
 			"caption" => t("Arve staatus"),
@@ -4146,9 +4146,9 @@ class crm_person extends class_base
 		$bill_inst = get_instance(CL_CRM_BILL);
 		$company_curr = $stat_inst->get_company_currency();
 		$bi = get_instance(CL_BUG);
-		
+
 		$l_cus_s = 0;
-		
+
 		foreach($ol->arr() as $o)
 		{
 			$impl = $check = $bs = $bn = "";
@@ -4156,7 +4156,7 @@ class crm_person extends class_base
 			if ($this->can("view", $o->prop("bill_id")))
 			{
 				$b = obj($o->prop("bill_id"));
-				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
+				//$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no"));
 				$bn = $b->prop("bill_no");
 				$bs = $bill_inst->states[$b->prop("state")];
 				$agreement = $b->meta("agreement_price");
@@ -4174,7 +4174,7 @@ class crm_person extends class_base
 			{
 				$bs = t("Arve puudub");
 			}
-			
+
 			$task = obj($row2task[$o->id()]);
 			if (!is_oid($task->id()))
 			{
@@ -4183,20 +4183,20 @@ class crm_person extends class_base
 
 			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
 			$sum *= str_replace(",", ".", $task->prop("hr_price"));
-			
+
 			//kui on kokkuleppehind kas arvel, või kui arvet ei ole, siis toimetusel... tuleb vähe arvutada
 			if((is_object($b) && sizeof($agreement) && ($agreement[0]["price"] > 0)) || (!is_object($b) && $task->prop("deal_price")))
 			{
 				$sum = $row_inst->get_row_ageement_price($o);
 			}
-			
+
 			//õigesse valuutasse
 			$sum = $stat_inst->convert_to_company_currency(array(
 				"sum"=>$sum,
 				"o"=>$task,
 				"company_curr" => $company_curr,
 			));
-			
+
 			$t->define_data(array(
 				"date" => $o->prop("date"),
 				"cust" => html::obj_change_url($task->prop("customer")),
@@ -4239,7 +4239,7 @@ class crm_person extends class_base
 
 	/**
 		@attrib name=submit_delete_docs
-		@param sel optional 
+		@param sel optional
 		@param post_ru optional
 	**/
 	function submit_delete_docs($arr)
@@ -4261,7 +4261,7 @@ class crm_person extends class_base
 			"name" => "new",
 			"img" => "new.gif",
 			"url" => html::get_new_url(CL_PERSON_HAS_SKILL, $arr["obj_inst"]->id(), array(
-				"return_url" => get_ru(), 
+				"return_url" => get_ru(),
 				"alias_to" => $arr["obj_inst"]->id(),
 				"reltype" => 53
 			)),
@@ -4317,7 +4317,7 @@ class crm_person extends class_base
 	function _atwork_table($arr)
 	{
 		classload("core/date/date_calc");
-		$m = get_instance("applications/rostering/rostering_model");		
+		$m = get_instance("applications/rostering/rostering_model");
 		$start = get_week_start();
 		$end = get_week_start()+24*7*3600;
 		$work_times = $m->get_schedule_for_person($arr["obj_inst"], $start, $end);
@@ -4378,7 +4378,7 @@ class crm_person extends class_base
 			));
 			$i++;
 		}
-		
+
 		$arr["prop"]["value"] = $chart->draw_chart();
 	}
 

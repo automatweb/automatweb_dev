@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.8 2006/08/18 12:23:29 markop Exp $
-// crm_company_customer_data.aw - Kliendi andmed 
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.9 2007/06/18 14:02:53 voldemar Exp $
+// crm_company_customer_data.aw - Kliendi andmed
 /*
 
 @classinfo syslog_type=ST_CRM_COMPANY_CUSTOMER_DATA relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -37,7 +37,7 @@ default method=serialize
 
 	@property buyer_contact_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_buyer_contact_person3
 	@caption Ostja kontaktisik 3
-	
+
 	@property buyer_priority type=textbox table=aw_crm_customer_data field=aw_buyer_priority
 	@caption Ostja Prioriteet
 
@@ -59,7 +59,7 @@ default method=serialize
 
 	@property contact_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_contact_person3
 	@caption Kliendi kontaktisik 3
-	
+
 	@property priority type=textbox table=aw_crm_customer_data field=aw_priority
 	@caption Kliendi Prioriteet
 
@@ -68,7 +68,7 @@ default method=serialize
 
 	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=aw_crm_customer_data field=aw_client_manager
 	@caption Kliendihaldur
-	
+
 	@property bill_due_date_days type=textbox size=5  table=aw_crm_customer_data field=aw_bill_due_date_days
 	@caption Makset&auml;htaeg (p&auml;evi)
 
@@ -161,7 +161,7 @@ class crm_company_customer_data extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -196,7 +196,6 @@ class crm_company_customer_data extends class_base
 			case "aw_buyer_contact_person2":
 			case "aw_buyer_contact_person3":
 			case "aw_buyer_priority":
-				arr($fld);
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"
