@@ -419,6 +419,16 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>keywords2</name>
+            <table>objects</table>
+            <group>keywords</group>
+            <type>keyword_selector</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_KEYWORD</reltype>
+            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
             <name>openhours</name>
             <table>objects</table>
             <group>open_hrs</group>
@@ -3096,6 +3106,11 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <keywords>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
+                  <parent>general_sub</parent>
+                  <submit>no</submit>
+            </keywords>
             <general_sub>
                   <caption>&amp;amp;Uuml;ldandmed</caption>
                   <parent>general</parent>
@@ -3731,8 +3746,13 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>Aadressid</caption>
             </CORRESPOND_ADDRESS>
-            <SERVICE_TYPE>
+            <KEYWORD>
                   <value>66</value>
+                  <clid>CL_KEYWORD</clid>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
+            </KEYWORD>
+            <SERVICE_TYPE>
+                  <value>67</value>
                   <clid>CL_CRM_SERVICE_TYPE</clid>
                   <caption>Teenuse liik</caption>
             </SERVICE_TYPE>

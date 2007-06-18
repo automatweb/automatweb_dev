@@ -161,6 +161,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@property extern_id type=hidden table=kliendibaas_firma field=extern_id no_caption=1
 
+@groupinfo keywords caption="V&otilde;tmes&otilde;nad" parent=general_sub submit=no 
+@default group=keywords
+	@property keywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
+	@caption V&otilde;tmes&otilde;nad
+
 
 
 @default group=open_hrs
@@ -1276,9 +1281,11 @@ groupinfo qv caption="Vaata"  submit=no save=no
 @reltype CORRESPOND_ADDRESS value=65 clid=CL_CRM_ADDRESS
 @caption Aadressid
 
-@reltype SERVICE_TYPE value=66 clid=CL_CRM_SERVICE_TYPE
-@caption Teenuse liik
+@reltype KEYWORD value=66 clid=CL_KEYWORD
+@caption V&otilde;tmes&otilde;na
 
+@reltype SERVICE_TYPE value=67 clid=CL_CRM_SERVICE_TYPE
+@caption Teenuse liik
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
