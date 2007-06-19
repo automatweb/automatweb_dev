@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.58 2007/06/14 11:49:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.59 2007/06/19 09:40:29 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -322,6 +322,13 @@ class spa_bookigs_entry extends class_base
 			}
 		}
 //arr($arr["request"]);
+
+		//selline asi et saaks juhul kui teise tulba päis pole täidetud, siis teises tulbas oleva info esimesse
+		if(!$arr["request"]["d"][1]["start"]["day"]){arr("aasd");
+			$arr["request"]["d"][0]["ppl"] =  array_merge($arr["request"]["d"][0]["ppl"], $arr["request"]["d"][1]["ppl"]);
+			unset($arr["request"]["d"][1]["ppl"]);
+		}
+
 		//uuendus, et siis need mis erineva mailiaadressiga, need läheks omaette broneeringuks
 		for($i = 0; $i < 15; $i++)
 		{
@@ -347,6 +354,35 @@ class spa_bookigs_entry extends class_base
 		}
 //arr($arr["request"]);
 		$feedback = "";
+		
+		//if(aw_global_get("uid") == "reiskar"){arr($arr);}
+		
+		//see nüüd selleks, et kui esimeses tulbas on infot ja teises mitte
+	/*	$default_data = array();
+		
+		if($d["start"]["day"])
+		{
+			$default_data = array(
+				"start" => $d["start"],
+				"end" => $d["end"],
+				"package" => $d["package"],
+				"email" => $d["email"],
+				"fn" => $d["fn"],
+				"ln" => $d["ln"],
+				"birthday" => $d["birthday"],
+				"gender" => $d["gender"],
+				"pass" => $d["pass"],
+			);
+		}
+		else
+		{
+			foreach($default_data as $key => $val)
+			{
+				$d[$key] = $val;
+			}
+		}
+	*/	
+		
 		for($i = 0; $i < 15; $i++)
 		{
 			$d = $arr["request"]["d"][$i];
