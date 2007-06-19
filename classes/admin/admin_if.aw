@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.20 2007/06/18 14:50:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/admin_if.aw,v 1.21 2007/06/19 10:46:48 markop Exp $
 // admin_if.aw - Administreerimisliides 
 /*
 
@@ -510,7 +510,8 @@ class admin_if extends class_base
 			"talign" => "center",
 			"chgbgcolor" => "cutcopied",
 			"caption" => t("Jrk"),
-			"numeric" => "yea"
+			"numeric" => "yea",
+			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
@@ -520,6 +521,7 @@ class admin_if extends class_base
 			"align" => "center",
 			"talign" => "center",
 			"chgbgcolor" => "cutcopied",
+			"sortable" => 1,
 		));
 		
 		$t->define_field(array(
@@ -790,6 +792,8 @@ class admin_if extends class_base
 				$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
 			}
 
+			$row["status_val"] = $row["status"];
+
 			if ($can_change)
 			{
 				$row["status"] = "<input type=\"hidden\" name=\"old[status][".$row["oid"]."]\" value=\"".$row["status"]."\"><input type=\"checkbox\" name=\"new[status][".$row["oid"]."]\" value=\"2\" ".checked($row["status"] == 2).">";
@@ -814,7 +818,12 @@ class admin_if extends class_base
 			$num_records++;
 
 		}
-
+		
+		if($sortby == "status")
+		{
+			$sortby = "status_val";	
+		}
+		
 		if (empty($sortby))
 		{
 			$sortby = "hidden_jrk";
