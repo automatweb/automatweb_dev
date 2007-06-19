@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.59 2007/06/12 09:29:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.60 2007/06/19 09:41:20 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -275,10 +275,14 @@ class bank_payment extends class_base
 		{
 			return "";	
 		}
+		
+		lc_site_load("bank_payment", &$this);
+		
+		//tegelt neid 2 j'rgmist pole vaja, sest iga panga puhul tulevad need va lisamised paratamatult uuesti
 		//võtab objekti seest mõningad puuduvad väärtused
-		$data = $this->_add_object_data($payment,$data);
+//		$data = $this->_add_object_data($payment,$data);
 		//lisab puuduvad default väärtused
-		$data = $this->_add_default_data($data);
+//		$data = $this->_add_default_data($data);
 		//paneb panga crapi templatesse
 		$this->_init_banks($payment,$data);
 
@@ -293,7 +297,7 @@ class bank_payment extends class_base
 		}
 		if($payment->prop("expl") && (strlen($payment->prop("expl")) + strlen($data["expl"])  < 70))
 		{
-			$data["expl"] = $payment->prop("expl")." ".$data["expl"];
+			$data["expl"] = trim($payment->prop("expl")." ".$data["expl"]);
 		}
 		if(!$data["priv_key"] && $payment->prop("private_key"))
 		{
