@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.30 2007/06/04 14:19:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookings_overview.aw,v 1.31 2007/06/19 10:36:02 markop Exp $
 // spa_bookings_overview.aw - Reserveeringute &uuml;levaade 
 /*
 
@@ -575,7 +575,21 @@ class spa_bookings_overview extends class_base
 			$ro = obj($rv2r[$b_oid]);
 			//$prod_obj = obj($rvs->meta("product_for_bron"));
 			$prods = safe_array($rvs->meta("amount"));
-			$prod_obj = obj(reset(array_keys($prods)));
+			
+			foreach($prods as $key => $val)
+			{
+				if($val)
+				{
+					$prod_obj = obj($key);
+					break;
+				}
+			}
+			
+			if(!is_object($prod_obj))
+			{
+				$prod_obj = obj(reset(array_keys($prods)));
+			}
+			
 			$this->vars(array(
 				"r_from" => date("d.m.Y H:i", $rvs->prop("start1")),
 				"r_to" =>  date("d.m.Y H:i", $rvs->prop("end")),
