@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.23 2007/05/08 10:52:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room_settings.aw,v 1.24 2007/06/19 10:57:16 markop Exp $
 // room_settings.aw - Ruumi seaded 
 /*
 
@@ -28,7 +28,10 @@
 
 	@property cal_refresh_time type=textbox size=5 field=meta method=serialize 
 	@caption Mitme minuti tagant kalendrit refreshida
-
+	
+	@property customer_menu type=relpicker field=meta method=serialize reltype=RELTYPE_MENU
+	@caption Kataloog kuhu kliendid salvestada
+	
 @property disp_bron_len type=checkbox ch_value=1 field=meta method=serialize
 @caption &Auml;ra kuva aja pikkust kalendris
 
@@ -102,7 +105,7 @@
 	@property no_cust_arrived_pop type=checkbox ch_value=1
 	@caption Kliendi saabumise kinnitust pole vaja k&uuml;sida
 	
-	@property use_existing_person type=checkbox ch_value=1 default=1
+	@property use_existing_person type=checkbox ch_value=1
 	@caption Samanimeliste isikute puhul v&otilde;etakse aluseks olemasolev isikuobjekt
 
 	@property bron_required_fields type=table store=no
@@ -210,6 +213,9 @@ Meili sisu peab saama tõlkida, ilmselt seadetele Tõlgi vaade teha lisaks.
 @caption Seotud ruumide kaust
 
 @reltype GROUP value=8 clid=CL_GROUP
+@caption Grupp
+
+@reltype MENU value=9 clid=CL_MENU
 @caption Grupp
 
 */

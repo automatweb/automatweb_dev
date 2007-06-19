@@ -70,6 +70,16 @@
             <caption>Mitme minuti tagant kalendrit refreshida</caption>
       </property>
       <property>
+            <name>customer_menu</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_MENU</reltype>
+            <caption>Kataloog kuhu kliendid salvestada</caption>
+      </property>
+      <property>
             <name>disp_bron_len</name>
             <table>objects</table>
             <group>general</group>
@@ -281,7 +291,6 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <default>1</default>
             <caption>Samanimeliste isikute puhul v&amp;amp;otilde;etakse aluseks olemasolev isikuobjekt</caption>
       </property>
       <property>
@@ -567,6 +576,11 @@
                   <clid>CL_GROUP</clid>
                   <caption>Grupp</caption>
             </GROUP>
+            <MENU>
+                  <value>9</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Grupp</caption>
+            </MENU>
       </reltypes>
 </properties>
 
