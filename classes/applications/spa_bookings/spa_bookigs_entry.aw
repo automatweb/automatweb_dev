@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.59 2007/06/19 09:40:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.60 2007/06/19 09:50:31 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -1020,7 +1020,7 @@ $t->set_sortable(false);
  //				"when" => $when,
  				"name" => 
  					"
-					<div  id='bka".$o->id()."' style='display: ".($o->modified() > (time() - 300) ? "none" : "")."block'>".
+					<div  id='bka".$o->id()."' style='display: ".($o->modified() > (time() - 300) ? "none" : "block")."'>".
 						$booking_str.
 					"</div>
 
