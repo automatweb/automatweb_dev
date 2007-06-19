@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.193 2007/06/14 06:18:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/room.aw,v 1.194 2007/06/19 12:46:37 markop Exp $
 // room.aw - Ruum 
 /*
 
@@ -1174,6 +1174,7 @@ class room extends class_base
 					}
 				}
 				$si = get_instance(CL_ROOM_SETTINGS);
+				$sts = $this->get_settings_for_room(obj($resource));
 				$bron->set_prop("start1", $start1);
 				$bron->set_prop("end" ,$end);
 				$bron->set_prop("content" , $comment);
@@ -1218,7 +1219,14 @@ class room extends class_base
 					{
 						$person = new object();
 						$person->set_class_id(CL_CRM_PERSON);
-						$person->set_parent($parent);
+						if(is_oid($sts->id()) && $sts->prop("customer_menu") && $this-> can("add" , $sts->prop("customer_menu")))
+						{
+							$person->set_parent($sts->prop("customer_menu"));
+						}
+						else
+						{
+							$person->set_parent($parent);
+						}
 						$person->set_name(trim($firstname)." ".trim($lastname));
 						$person->set_prop("firstname" , trim($firstname));
 						$person->set_prop("lastname" , trim($lastname));
@@ -1249,7 +1257,14 @@ class room extends class_base
 					{
 						$co = new object();
 						$co->set_class_id(CL_CRM_COMPANY);
-						$co->set_parent($parent);
+						if(is_oid($sts->id()) && $sts->prop("customer_menu") && $this-> can("add" , $sts->prop("customer_menu")))
+						{
+							$co->set_parent($sts->prop("customer_menu"));
+						}
+						else
+						{
+							$co->set_parent($parent);
+						}
 						$co->set_name($company);
 						$co->save();
 					}
@@ -2940,7 +2955,16 @@ class room extends class_base
 			list($fn , $ln) = explode(" ", $data["name"]);
 			$customer->set_prop("firstname", trim($fn));
 			$customer->set_prop("lastname", trim($ln));
-			$customer->set_parent($parent);
+			
+			$sts = $this->get_settings_for_room($room);
+			if(is_oid($sts->id()) && $sts->prop("customer_menu") && $this-> can("add" , $sts->prop("customer_menu")))
+			{
+				$customer->set_parent($sts->prop("customer_menu"));
+			}
+			else
+			{
+				$customer->set_parent($parent);
+			}
 		//	$customer->save();
 			if($data["phone"])
 			{
