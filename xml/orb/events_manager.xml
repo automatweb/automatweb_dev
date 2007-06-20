@@ -29,8 +29,8 @@
 			</function>
 		</action>
 
-		<action name="add_new_section" is_public="1" caption="Change">
-			<function name="add_new_section">
+		<action name="add_new_sector" is_public="1" caption="Change">
+			<function name="add_new_sector">
 				<arguments>
 				</arguments>
 			</function>

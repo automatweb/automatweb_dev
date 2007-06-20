@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.4 2007/05/23 16:41:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/events_manager/events_manager.aw,v 1.5 2007/06/20 13:10:55 markop Exp $
 // events_manager.aw - Kuhu minna moodul 
 /*
 
@@ -20,17 +20,17 @@
 	@property events_tb type=toolbar store=no no_caption=1
 	@caption P&otilde;hitoolbar
 	
-		@layout events_top type=hbox closeable=1 area_caption=&Uuml;ldandmed width=30%:70%
+		@layout events_top type=hbox closeable=1 width=30%:70%
 
 		@layout events_top_left type=vbox parent=events_top closeable=1 area_caption=S&uuml;ndmuste&nbsp;Otsing
 		#nupud: Lisa uus, Kustuta märgistatud sündmused (confirmation "Olete kindel, et soovite kustudada kõik valitud sündmused?"), Sündmuste väljatrükk (sisu selgub hiljem), Arhiiv (toggle. n2itab tabelis syndmusi mis toimund. nupu nimi muutub: "Uued"), Järjesta laekumise järgi (järjestab syndmused created j2rgi kahanevalt)
 		#	Otsinguvorm vasakul (otsingutulemused tabelis):		
 			
-			@property e_find_sections type=select multiple=1 parent=events_top_left
+			@property e_find_sectors type=select multiple=1 parent=events_top_left
 			@caption Valdkonnad
 			# seostatud valdkonnaobjektid
 		
-			@property e_find_editor type=select  parent=events_top_left
+			@property e_find_editor type=select multiple=1 parent=events_top_left
 			@caption Toimetaja
 			#	valikud: Toimetajad + Veebikasutaja
 		 
@@ -89,12 +89,12 @@
 	@caption Korraldajate tabel
 	  #objektid vastava kataloogi alt
 			
-@groupinfo sections caption="Valdkonnad" submit=no
-@default group=sections
-	@property sections_tb type=toolbar no_caption=1
+@groupinfo sectors caption="Valdkonnad" submit=no
+@default group=sectors
+	@property sectors_tb type=toolbar no_caption=1
 	@caption  toolbar
 	
-	@property sections_table type=table no_caption=1
+	@property sectors_table type=table no_caption=1
 	@caption Valdkondade tabel
 	  #nupud: Lisa uus
 			
@@ -118,24 +118,24 @@
 	@property organiser_menu type=relpicker reltype=RELTYPE_ORGANISER_MENU
 	@caption Korraldajate kataloog
 
-	@property section_menu type=relpicker reltype=RELTYPE_SECTION_MENU
+	@property sector_menu type=relpicker reltype=RELTYPE_SECTOR_MENU
 	@caption Valdkondade kataloog
 
-	@property section type=relpicker multiple=1 reltype=RELTYPE_SECTION field=meta method=serialize table=objects
+	@property sector type=relpicker multiple=1 reltype=RELTYPE_SECTOR field=meta method=serialize table=objects
 	@caption Valdkonnad
 
 	@property owner type=relpicker reltype=RELTYPE_OWNER
 	@caption Omanik
 	
 	@property languages type=relpicker multiple=1 reltype=RELTYPE_LANGUAGE
-	@caption Sinu keeled
+	@caption Sisu keeled
 	
 	@property mapserver_url type=textbox
 	@caption Kaardiserveri url
 
 #RELTYPES
 
-@reltype SECTION value=1 clid=CL_CRM_SECTION
+@reltype SECTOR value=1 clid=CL_CRM_SECTOR
 @caption Valdkond
 
 @reltype EVENT_MENU value=2 clid=CL_MENU
@@ -147,7 +147,7 @@
 @reltype ORGANISER_MENU value=4 clid=CL_MENU
 @caption Korraldajate kataloog
 
-@reltype SECTION_MENU value=5 clid=CL_MENU
+@reltype SECTOR_MENU value=5 clid=CL_MENU
 @caption Valdkondade kataloog
 
 @reltype OWNER value=6 clid=CL_CRM_COMPANY
@@ -178,17 +178,24 @@ class events_manager extends class_base
 			case "events_tb":
 				$this->_get_events_tb($arr);
 				break;
-			case "e_find_sections":
-				$section_list = new object_list();
-				if(is_array($arr["obj_inst"]->prop("section")) || is_oid($arr["obj_inst"]->prop("section")))
+			case "e_find_sectors":
+				$sector_list = new object_list();
+				if(is_array($arr["obj_inst"]->prop("sector")) || is_oid($arr["obj_inst"]->prop("sector")))
 				{
-					$section_list->add($arr["obj_inst"]->prop("section"));
-					$prop["options"] = $section_list->names();
+					$sector_list->add($arr["obj_inst"]->prop("sector"));
+					$prop["options"] = $sector_list->names();
 				}
 				break;
 		
 			case "e_find_editor":
-				$prop["options"] = array(t("Toimetajad"),t("Veebikasutaja"));
+				$groups_list = new object_list(array(
+					"class_id" => CL_GROUP,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"type" => new obj_predicate_not(1),
+				));
+				$prop["options"] = $groups_list->names();
+//				$prop["options"] = array(t("Toimetajad"),t("Veebikasutaja"));
 				break;
 					
 			case "e_find_news":
@@ -202,6 +209,7 @@ class events_manager extends class_base
 				$this->_get_places_table($arr);
 				break;
 			case "see_all":
+				return PROP_IGNORE;
 				$prop["value"] = html::href(array(
 					"caption" => t("N&auml;ita k&otilde;iki!"),
 					"url" => $this->mk_my_orb("change" , array("group" => "events" , "id" => $arr["obj_inst"]->id(), "see_all" => 1)),
@@ -286,9 +294,9 @@ class events_manager extends class_base
 		}
 	}
 	
-	function _get_sections_table($arr)
+	function _get_sectors_table($arr)
 	{
-		if(!$arr["obj_inst"]->prop("section_menu"))
+		if(!$arr["obj_inst"]->prop("sector_menu"))
 		{
 			print t("Valdkondade kataloog m&auml;&auml;ramata");
 			return;
@@ -296,10 +304,10 @@ class events_manager extends class_base
 		$ol = new object_list(array(
 			"site_id" => array(),
 			"lang_id" => array(),
-			"parent" => $arr["obj_inst"]->prop("section_menu"),
+			"parent" => $arr["obj_inst"]->prop("sector_menu"),
 		));
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_sections_table($t);
+		$this->_init_sectors_table($t);
 		foreach($ol->arr() as $o)
 		{
 			$t->define_data(array(
@@ -353,13 +361,13 @@ class events_manager extends class_base
 		));
 	}
 	
-	function _get_sections_tb($arr)
+	function _get_sectors_tb($arr)
 	{
 		$arr["prop"]["vcl_inst"]->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
 			"tooltip" => t("Lisa uus"),
-			"action" => "add_new_section",
+			"action" => "add_new_sector",
 		));
 	}
 	
@@ -408,9 +416,9 @@ class events_manager extends class_base
 		if(sizeof($arr["obj_inst"]->meta("search_data")) > 1)
 		{
 			$search_data = $arr["obj_inst"]->meta("search_data");
-			if(is_array($search_data["e_find_sections"]) && sizeof($search_data["e_find_sections"]))
+			if(is_array($search_data["e_find_sectors"]) && sizeof($search_data["e_find_sectors"]))
 			{
-				$filter["CL_CALENDAR_EVENT.RELTYPE_SECTION.id"] = $search_data["e_find_sections"];
+				$filter["CL_CALENDAR_EVENT.RELTYPE_SECTOR.id"] = $search_data["e_find_sectors"];
 			}
 			if($search_data["e_find_editor"])
 			{
@@ -476,8 +484,21 @@ class events_manager extends class_base
 		$this->_init_event_table($t,$arr);
 		$cal_event = get_instance(CL_CALENDAR_EVENT);
 		
+		//selle va gruppide otsingu pärast peab peale listi tegemist asju välja pookima hakkama
+		$sd = $arr["obj_inst"]->meta("search_data");
+		if(is_array($sd["e_find_editor"]) && sizeof($sd["e_find_editor"]))
+		{
+			$users = new object_list(array(
+				"class_id" => CL_USER,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"status" => array(),
+			//	"CL_USER.RELTYPE_GRP" => $sd["e_find_editor"],
+			));
+			$ua = $users->names();
+		}
 		$ol = $this->_get_event_list($arr);
-		
+
 		if($arr["request"]["sort_by_created"] == 1)
 		{
 			$ol->sort_by(array(
@@ -489,8 +510,13 @@ class events_manager extends class_base
 		$t->set_sortable(false);
 		foreach($ol->arr() as $o)
 		{
+			if(is_array($ua) && !in_array($o->createdby() , $ua))
+			{
+				continue;
+			}
+			
 			$publish = "";
-			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTION");
+			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTOR");
 			if(!$o->prop("published"))
 			{
 				$publish = html::href(array(
@@ -504,7 +530,7 @@ class events_manager extends class_base
 			$t->define_data(array(
 				"name" => html::obj_change_url($o->id()),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
-				"section" => (is_object($sec))?$sec->name():"",
+				"sector" => (is_object($sec))?$sec->name():"",
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"tasks" => $publish . " " . $change_url,
 				"oid" => $o->id(),
@@ -524,14 +550,14 @@ class events_manager extends class_base
 		$t->set_sortable(false);
 		foreach($ol->arr() as $o)
 		{
-			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTION");
+			$sec = $o->get_first_obj_by_reltype("RELTYPE_SECTOR");
 			$publish = html::href(array("url" => "#" , "title" => t("Avalda") , "caption" => t("Avalda")));
 			$change_url = html::obj_change_url($o , t("Muuda"));
 			
 			$t->define_data(array(
 				"name" => html::obj_change_url($o->id()),
 				"time" => date("d.m.Y" , $o->prop("start1")). "-" .date("d.m.Y" , $o->prop("end")),
-				"section" => (is_object($sec))?$sec->name():"",
+				"sector" => (is_object($sec))?$sec->name():"",
 				"level" => $cal_event->level_options[$o->prop("level")],
 				"oid" => $o->id(),
 			));
@@ -574,6 +600,15 @@ class events_manager extends class_base
 			"url" => aw_url_change_var("sort_by_created",($arr["request"]["sort_by_created"] == 1 ? 1 : 1)),
 			"tooltip" => ($arr["request"]["sort_by_created"] == 1 ? t("J&auml;rjesta laekumise j&auml;rgi") : t("J&auml;rjesta laekumise j&auml;rgi")),
 		));
+		if(!$arr["request"]["see_all"] && $arr["request"]["just_saved"])
+		{
+			$arr["prop"]["vcl_inst"]->add_button(array(
+				"name" => "see_all",
+				"img" => "class_31.gif",
+				"url" => $this->mk_my_orb("change" , array("group" => "events" , "id" => $arr["obj_inst"]->id(), "see_all" => 1)),
+				"tooltip" => "Algseis (kestvad ja tulekul s&uuml;ndmused)",
+			));
+		}
 	}
 
 	function _get_similar_tb(&$arr)
@@ -623,7 +658,7 @@ class events_manager extends class_base
 		));
 	}
 	
-	function _init_sections_table(&$t)
+	function _init_sectors_table(&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -669,7 +704,7 @@ class events_manager extends class_base
 			"sortable" => 1,
 		));
 		$t->define_field(array(
-			"name" => "section",
+			"name" => "sector",
 			"caption" => t("Valdkond"),
 			"align" => "center"
 		));
@@ -785,19 +820,19 @@ class events_manager extends class_base
 	}
 	
 	/**
-		@attrib name=add_new_section is_public="1" caption="Change"
+		@attrib name=add_new_sector is_public="1" caption="Change"
 	**/
-	function add_new_section($arr)
+	function add_new_sector($arr)
 	{
 		$o = obj($arr["id"]);
-		if(!$o->prop("section_menu"))
+		if(!$o->prop("sector_menu"))
 		{
 			print t("Valdkondade kataloog m&auml;&auml;ramata");
 			return $arr["post_ru"];
 		}
 		$section = new object();
-		$section->set_class_id(CL_CRM_SECTION);
-		$section->set_parent($o->prop("section_menu"));
+		$section->set_class_id(CL_CRM_SECTOR);
+		$section->set_parent($o->prop("sector_menu"));
 		$section->save();
 		return html::get_change_url($section->id(),array("return_url" => $arr["post_ru"]));
 	}

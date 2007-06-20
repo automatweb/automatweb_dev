@@ -20,7 +20,7 @@
             <caption>P&amp;amp;otilde;hitoolbar</caption>
       </property>
       <property>
-            <name>e_find_sections</name>
+            <name>e_find_sectors</name>
             <table>objects</table>
             <group>events</group>
             <field>meta</field>
@@ -37,6 +37,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <multiple>1</multiple>
             <parent>events_top_left</parent>
             <caption>Toimetaja</caption>
       </property>
@@ -171,9 +172,9 @@
             <caption>Korraldajate tabel</caption>
       </property>
       <property>
-            <name>sections_tb</name>
+            <name>sectors_tb</name>
             <table>objects</table>
-            <group>sections</group>
+            <group>sectors</group>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
@@ -182,9 +183,9 @@
             <caption> toolbar</caption>
       </property>
       <property>
-            <name>sections_table</name>
+            <name>sectors_table</name>
             <table>objects</table>
-            <group>sections</group>
+            <group>sectors</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -244,24 +245,24 @@
             <caption>Korraldajate kataloog</caption>
       </property>
       <property>
-            <name>section_menu</name>
+            <name>sector_menu</name>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_SECTION_MENU</reltype>
+            <reltype>RELTYPE_SECTOR_MENU</reltype>
             <caption>Valdkondade kataloog</caption>
       </property>
       <property>
-            <name>section</name>
+            <name>sector</name>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
             <multiple>1</multiple>
-            <reltype>RELTYPE_SECTION</reltype>
+            <reltype>RELTYPE_SECTOR</reltype>
             <caption>Valdkonnad</caption>
       </property>
       <property>
@@ -283,7 +284,7 @@
             <type>relpicker</type>
             <multiple>1</multiple>
             <reltype>RELTYPE_LANGUAGE</reltype>
-            <caption>Sinu keeled</caption>
+            <caption>Sisu keeled</caption>
       </property>
       <property>
             <name>mapserver_url</name>
@@ -318,10 +319,10 @@
                   <caption>Korraldajad</caption>
                   <submit>no</submit>
             </organiser>
-            <sections>
+            <sectors>
                   <caption>Valdkonnad</caption>
                   <submit>no</submit>
-            </sections>
+            </sectors>
             <editors>
                   <caption>Toimetajad</caption>
                   <submit>no</submit>
@@ -331,11 +332,11 @@
             </settings>
       </groupinfo>
       <reltypes>
-            <SECTION>
+            <SECTOR>
                   <value>1</value>
-                  <clid>CL_CRM_SECTION</clid>
+                  <clid>CL_CRM_SECTOR</clid>
                   <caption>Valdkond</caption>
-            </SECTION>
+            </SECTOR>
             <EVENT_MENU>
                   <value>2</value>
                   <clid>CL_MENU</clid>
@@ -351,11 +352,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Korraldajate kataloog</caption>
             </ORGANISER_MENU>
-            <SECTION_MENU>
+            <SECTOR_MENU>
                   <value>5</value>
                   <clid>CL_MENU</clid>
                   <caption>Valdkondade kataloog</caption>
-            </SECTION_MENU>
+            </SECTOR_MENU>
             <OWNER>
                   <value>6</value>
                   <clid>CL_CRM_COMPANY</clid>
@@ -371,7 +372,6 @@
             <events_top>
                   <type>hbox</type>
                   <closeable>1</closeable>
-                  <area_caption>&amp;Uuml;ldandmed</area_caption>
                   <width>30%:70%</width>
                   <group>events</group>
             </events_top>
