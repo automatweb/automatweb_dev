@@ -2228,9 +2228,6 @@ class _int_object
 			$todelete = array_keys($tmp);
 		}
 
-		// now we need to fetch all objects from the db that are below the objects on $todelete and set them as deleted as well
-//		$todelete = $this->
-
 		foreach($todelete as $oid)
 		{
 			if (!$GLOBALS["object_loader"]->ds->can("delete", $oid))
@@ -2272,6 +2269,13 @@ class _int_object
 				$GLOBALS["object_loader"]->ds->delete_object($oid);
 				$GLOBALS["object_loader"]->cache->_log($type, SA_DELETE, $nm, $oid, false);
 			}
+		}
+
+		// now we need to fetch all objects from the db that are below the objects on $todelete and set them as deleted as well
+		$belows = $this->_fetch_to_delete_objects($oid);
+		if (count($belows))
+		{
+			$GLOBALS["object_loader"]->ds->delete_multiple_objects($belows);
 		}
 
 		// must clear acl cache for all objects below it
@@ -2425,6 +2429,27 @@ class _int_object
 			}
 		}
 		$this->props_loaded = true;
+	}
+
+	function _fetch_to_delete_objects($pt)
+	{
+		$parents = array($pt);
+		$ret = array();
+		while (count($parents) > 0)
+		{
+			list($tmp) = $GLOBALS["object_loader"]->ds->search(array(
+				"parent" => $parents,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$parents = array();
+			foreach($tmp as $idx => $d)
+			{
+				$ret[] = $idx;
+				$parents[] = $idx;
+			}
+		}
+		return $ret;
 	}
 }
 

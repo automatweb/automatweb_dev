@@ -115,6 +115,11 @@ class _int_obj_ds_decorator
 		return $this->contained->delete_object($oid);
 	}
 
+	function delete_multiple_objects($oid_list)
+	{
+		return $this->contained->delete_multiple_objects($oid_list);
+	}
+
 	function dequote(&$dat)
 	{
 		$this->contained->dequote($dat);

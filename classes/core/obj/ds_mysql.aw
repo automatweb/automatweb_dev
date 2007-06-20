@@ -1285,6 +1285,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->cache->file_clear_pt("html");
 	}
 
+	function delete_multiple_objects($oid_list)
+	{
+		$awa = new aw_array($oid_list);
+		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid IN(".$awa->to_sql().")");
+		$this->cache->file_clear_pt("html");
+	}
+
 	function final_delete_object($oid)
 	{
 		$clid = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '$oid'", "class_id");
