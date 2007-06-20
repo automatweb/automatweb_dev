@@ -239,7 +239,7 @@ function menuItemMouseover(event, menuId) {
 
   if (item.subMenu == null) {
     item.subMenu = document.getElementById(menuId);
-    if (item.subMenu.isInitialized == null)
+    if (item.subMenu && item.subMenu.isInitialized == null)
       menuInit(item.subMenu);
   }
 
