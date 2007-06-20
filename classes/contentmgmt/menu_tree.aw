@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.18 2007/05/09 09:51:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.19 2007/06/20 14:41:27 markop Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -170,7 +170,7 @@ class menu_tree extends class_base
 
 			foreach($menus as $val)
 			{
-				$folder_list = array_merge($folder_list,$this->gen_rec_list(array(
+				$folder_list = array_merge($folder_list,(array)$this->gen_rec_list(array(
 						"start_from" => $val,
 				)));
 				$this->level = 0;
