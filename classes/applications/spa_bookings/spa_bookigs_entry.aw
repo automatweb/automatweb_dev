@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.60 2007/06/19 09:50:31 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/spa_bookings/spa_bookigs_entry.aw,v 1.61 2007/06/20 10:15:10 markop Exp $
 // spa_bookigs_entry.aw - SPA Reisib&uuml;roo liides 
 /*
 
@@ -860,16 +860,15 @@ $t->set_sortable(false);
 		
 			if (!is_admin())
 			{
-				$has_times = count($o->meta("extra_prods")) > 0;
+				$has_times = count($o->meta("extra_prods"));
 				foreach(safe_array($o->meta("extra_prods")) as $extra_item_entry)
 				{
 					$rb = obj($extra_item_entry["reservation"]);
 					if ($rb->prop("start1") < 100)
 					{
-						$has_times = false;
+						$has_times = $has_times - 1;
 					}
 				}
-
 				if ($has_times)
 				{
 					$booking_str .= " / ".html::href(array(
