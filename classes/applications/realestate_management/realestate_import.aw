@@ -94,6 +94,7 @@ define ("REALESTATE_IMPORT_ERR14", 16);
 define ("REALESTATE_IMPORT_ERR15", 17);
 define ("REALESTATE_IMPORT_ERR16", 18);
 define ("REALESTATE_IMPORT_ERR17", 19);
+define ("REALESTATE_IMPORT_ERR18", 20);
 
 define ("REALESTATE_NEWLINE", "<br />");
 
@@ -577,8 +578,6 @@ class realestate_import extends class_base
 								$city24_modified >= $property->meta("city24_last_import")
 							)
 							{
-								$property = null;
-								$GLOBALS["objects"][$imported_object_ids[$city24_id]] = null;
 								$this->property_data = null;
 								$this->end_property_import = true;
 							}
