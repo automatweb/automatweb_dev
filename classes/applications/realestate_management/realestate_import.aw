@@ -274,6 +274,7 @@ class realestate_import extends class_base
 
 		if (1 < $last_import and REALESTATE_MIN_REQUEST_INTERVAL > ($import_time - $last_import))
 		{ // just in case. to avoid closely sequent requests
+			if (1 != $quiet) { echo t("Viimasest impordist v2hem kui " . REALESTATE_MIN_REQUEST_INTERVAL . "s. Katkestatud.") . REALESTATE_NEWLINE; }
 			return;
 		}
 
@@ -508,28 +509,35 @@ class realestate_import extends class_base
 			{ ### finish last processed property import
 				if (is_object ($property))
 				{
-					if (1 != $quiet) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; flush();
-					}
+					if (1 != $quiet) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s."), $this->property_data["ID"], $property->id ()) . REALESTATE_NEWLINE; flush(); }
 
 					// if ($property_status === REALESTATE_IMPORT_OK)
 					// {
-						$imported_properties[] = $property->id ();
+						$property_id = $property->id ();
+						$imported_properties[] = $property_id;
 					// }
 
 					// unset ($property);
 					$property = NULL; // v2idetavalt on m2lukasutus unsetiga v6rreldes nii efektiivsem
+					$GLOBALS["objects"][$property_id] = null;
 				}
 				else
 				{
-					if (1 != $quiet) { echo sprintf (t("Viga objekti city24 id-ga %s impordil. Veastaatus: %s"), $this->property_data["ID"], $property_status) . REALESTATE_NEWLINE; flush(); }
+					$property_id = t("puudub");
+					$property_status = REALESTATE_IMPORT_ERR18;
+					$msg = sprintf (t("Viga objekti city24 id-ga %s impordil. AW objekti ei loodud."), $this->property_data["ID"]) . REALESTATE_NEWLINE;
+					if (1 != $quiet) { echo $msg; }
+					$status_messages[] = $msg;
 				}
 
 				if ($property_status)
 				{
+					if (1 != $quiet) { echo sprintf (t("Objekti city24 id-ga %s import osaliselt v6i t2ielikult eba6nnestunud. AW id %. Veastaatus: %s."), $this->property_data["ID"], $property_id, $property_status) . REALESTATE_NEWLINE; flush(); }
 					$status = REALESTATE_IMPORT_ERR9;
 					$import_log[] = $status_messages;
 				}
 
+				$property_status = REALESTATE_IMPORT_OK;
 				$status_messages = array ();
 				$this->end_property_import = false;
 				flush ();
@@ -537,7 +545,6 @@ class realestate_import extends class_base
 			elseif (("ROW" === $data["tag"]) and ("open" === $data["type"]))
 			{
 				### start property import
-				// unset ($this->property_data);
 				$this->property_data = array ();
 				$this->property_data["PILT"] = array ();
 			}
@@ -556,6 +563,12 @@ class realestate_import extends class_base
 							$property = obj ($imported_object_ids[$city24_id]);
 							$city24_modified = mktime ($hour, $min, $sec, $month, $day, $year);
 
+							if (!$property->prop("is_visible"))
+							{
+								$property->set_prop("is_visible", 1);
+								$property->save();
+							}
+
 							if (
 								empty($arr["import_all"])  and
 								1 < $last_import and
@@ -564,6 +577,8 @@ class realestate_import extends class_base
 								$city24_modified >= $property->meta("city24_last_import")
 							)
 							{
+								$property = null;
+								$GLOBALS["objects"][$imported_object_ids[$city24_id]] = null;
 								$this->property_data = null;
 								$this->end_property_import = true;
 							}
@@ -667,7 +682,14 @@ class realestate_import extends class_base
 				elseif (("ROW" === $data["tag"]) and ("close" === $data["type"]))
 				{ ### import property to aw
 					$property_status = REALESTATE_IMPORT_OK;
-					$property = NULL;
+
+					if (is_object($property))
+					{
+						$property_id = $property->id ();
+						$property = NULL;
+						$GLOBALS["objects"][$property_id] = null;
+					}
+
 					$new_property = true;
 					$this->end_property_import = true;
 					$city24_id = (int) $this->property_data["ID"];
@@ -963,6 +985,10 @@ class realestate_import extends class_base
 						$property->set_name ($name);//!!! nime panemine yhte funktsiooni!
 					}
 
+					$tmp = $address->id ();
+					$address = null;
+					$GLOBALS["objects"][$tmp] = null;
+
 					#### transaction_type
 					if ($this->changed_transaction_types)
 					{
@@ -1237,7 +1263,9 @@ class realestate_import extends class_base
 						// unset ($imagedata);
 						// unset ($image);
 						$imagedata = NULL;
-						$image = NULL;
+						$tmp = $image->id ();
+						$image = null;
+						$GLOBALS["objects"][$tmp] = null;
 					}
 
 					#### pictures
@@ -1308,7 +1336,9 @@ class realestate_import extends class_base
 							// unset ($imagedata);
 							// unset ($image);
 							$imagedata = NULL;
-							$image = NULL;
+							$tmp = $image->id ();
+							$image = null;
+							$GLOBALS["objects"][$tmp] = null;
 						}
 						elseif ($key != $existing_pictures[$picture_url]->ord())
 						{ # change order
@@ -1764,11 +1794,14 @@ class realestate_import extends class_base
 					}
 
 					$property->set_prop ("is_visible", 1);
-					$property->set_meta("city24_last_import", $import_time);
 
 					if (REALESTATE_IMPORT_OK !== $property_status)
 					{
 						$property->set_meta("city24_last_import", 0);
+					}
+					else
+					{
+						$property->set_meta("city24_last_import", $import_time);
 					}
 
 					$property->save ();
