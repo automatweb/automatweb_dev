@@ -130,7 +130,6 @@
             <caption>Grupid, kes saavad m&amp;amp;auml;&amp;amp;auml;ranguid muuta</caption>
       </property>
       <classinfo>
-            <no_yah>1</no_yah>
             <syslog_type>ST_RECYCLE_BIN</syslog_type>
       </classinfo>
       <groupinfo>

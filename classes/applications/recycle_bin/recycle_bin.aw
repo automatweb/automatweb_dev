@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.23 2006/12/06 11:37:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.24 2007/06/21 12:17:10 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
 @default table=objects
 
-@classinfo no_yah=1 syslog_type=ST_RECYCLE_BIN
+@classinfo syslog_type=ST_RECYCLE_BIN
 
 @default group=recycle_list
 	@property toolbar type=toolbar store=no no_caption=1 group=recycle_list,recycle_search
