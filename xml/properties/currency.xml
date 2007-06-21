@@ -36,6 +36,16 @@
             <caption>Peenraha&amp;amp;uuml;hiku nimetus</caption>
       </property>
       <property>
+            <name>symbol</name>
+            <group>general</group>
+            <type>textbox</type>
+            <size>2</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>S&amp;amp;uuml;mbol</caption>
+      </property>
+      <property>
             <name>rates</name>
             <group>rates</group>
             <type>callback</type>

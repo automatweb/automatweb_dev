@@ -1056,8 +1056,11 @@ groupinfo org_objects_main caption="Objektid" submit=no
 @groupinfo sell_offers_grp_products caption="M&uuml;&uuml;gipakkumised toodete kaupa" parent=documents_all submit=no save=no
 
 @default group=sell_offers_grp_offers
+	@property see_all_link type=text no_caption=1
 	@property sell_offers type=table store=no no_caption=1
+
 @default group=sell_offers_grp_products
+	@property see_all_link2 type=text no_caption=1
 	@property sell_offers_prods type=table store=no no_caption=1
 
 groupinfo sell_offers caption="M&uuml;&uuml;gipakkumised" parent=documents_all submit=no save=no
@@ -2592,6 +2595,11 @@ class crm_company extends class_base
 				$procurement_center = get_instance(CL_PROCUREMENT_CENTER);
 				$procurement_center->_sell_offers_prod_table($arr);
 				break;	
+			case "see_all_link":
+			case "see_all_link2":
+				$procurement_center = get_instance(CL_PROCUREMENT_CENTER);
+				$data["value"] = $procurement_center->_see_all_link($arr);
+				break;
 		};
 		return $retval;
 	}

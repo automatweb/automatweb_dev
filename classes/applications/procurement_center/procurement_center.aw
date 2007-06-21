@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.36 2007/05/15 15:53:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.37 2007/06/21 12:41:03 markop Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -1521,6 +1521,7 @@ class procurement_center extends class_base
 		{
 //			$offerer_name = html::obj_change_url($o);
 			$offerer_area = "";
+			$offerer_discount = "";
 			if(is_oid($o->prop("offerer")) && $this->can("view" , $o->prop("offerer")))
 			{
 				$offerer = obj($o->prop("offerer"));
@@ -1537,7 +1538,7 @@ class procurement_center extends class_base
 					}
 				}
 			}
-			
+			$offerer_discount = 10;
 			$files = "";
 			$file_ol = new object_list($o->connections_from(array()));
 			$file_inst = get_instance(CL_FILE);
@@ -1583,6 +1584,7 @@ class procurement_center extends class_base
 				"date" => $date,//$o->prop("accept_date")),
 				"offerer_name" => $offerer_name,
 				"area" => $offerer_area,
+				"discount" => $offerer_discount,
 				"status" => $statuses[$o->prop("state")],
 				"sum" => number_format($offer_inst->calculate_price($o), 2),
 				"files" => $files,
@@ -3375,6 +3377,7 @@ class procurement_center extends class_base
 			$prod_ids[] = $product->id();
 		}
 
+		//manab k]ikide tegevuse ajaloo lingid
 		$data = array("product" => t("Ajalugu"));
 		foreach($offerers->arr() as $offerer)
 		{
@@ -3382,18 +3385,19 @@ class procurement_center extends class_base
 		}
 		$t_offerer->define_data($data);
 
+		//manab k]ikidetegevuse piirkonnad
 		$data = array("product" => t("Piirkond"));
 		foreach($offerers->arr() as $offerer)
 		{
 			if($offerer->class_id() == CL_CRM_COMPANY)
 			{
-				$address = $offerer->prop("contact");
+				$data["offerer".$offerer->id()] = $offerer->prop("contact.piirkond.name");
 			}
 			else
 			{
-				$address = $offerer->prop("address");
+				$data["offerer".$offerer->id()] = $offerer->prop("address.piirkond.name");
 			}
-			if(is_oid($address) && $this->can("view" , $address))
+/*			if(is_oid($address) && $this->can("view" , $address))
 			{
 				$address_object = obj($address);
 			}
@@ -3402,9 +3406,18 @@ class procurement_center extends class_base
 				$area = obj($address_object->prop("piirkond"));
 				$data["offerer".$offerer->id()] = $area->name();
 			}
-		}
+*/		}
 		$t_offerer->define_data($data);
 
+		//manab k]ikide soodustused
+/*		$data = array("product" => t("Discount"));
+		foreach($offerers->arr() as $offerer)
+		{
+				$data["offerer".$offerer->id()] = "10%";
+		}
+
+		$t_offerer->define_data($data);
+*/
 		$data = array("product" => $this->get_names_table(array("products" => $products, "category" => $category)));
 		foreach($offerers->arr() as $offerer)
 		{
@@ -3436,8 +3449,10 @@ class procurement_center extends class_base
 		extract($arr);
 		$t_products = new vcl_table;
 //		$this->_init_compare_t($t_offerer);
-		$t_products->define_field(array("name" => "price","caption" => t("Hind") , "chgbgcolor" => "cutcopied"));
-		$t_products->define_field(array("name" => "amount","caption" => t("Kogus") ,"chgbgcolor" => "cutcopied"));
+		$t_products->define_field(array("nowrap" => 1,"align" => "right","name" => "price","caption" => t("Hind") , "chgbgcolor" => "cutcopied"));
+		$t_products->define_field(array("align" => "right","name" => "discount","caption" => t("Discount") , "chgbgcolor" => "cutcopied"));
+		$t_products->define_field(array("nowrap" => 1,"align" => "right","name" => "project","caption" => t("Project") , "chgbgcolor" => "cutcopied"));
+		$t_products->define_field(array("align" => "right","name" => "amount","caption" => t("Kogus") ,"chgbgcolor" => "cutcopied"));
 		$t_products->define_field(array("name" => "unit","caption" => t("&Uuml;hik") ,"chgbgcolor" => "cutcopied"));
 		$t_products->define_field(array("name" => "date","caption" => t("Kuup&auml;ev") ,"chgbgcolor" => "cutcopied"));
 		$file_inst = get_instance(CL_FILE);
@@ -3445,7 +3460,7 @@ class procurement_center extends class_base
 		{
 			if($product->prop("item_type") == $category)
 			{
-				$date=$amount=$unit=$price=$cutcopied="";
+				$date=$amount=$unit=$price=$cutcopied=$project="";
 				$offers_list = new object_list(array(
 					"class_id" => CL_PROCUREMENT_OFFER,
 					"lang_id" => array(),
@@ -3453,9 +3468,18 @@ class procurement_center extends class_base
 					"offerer" => $offerer->id(),
 				));
 				
-				$cutcopied = "";
 				foreach($offers_list->arr() as $offer)
 				{
+					$project =  $offer->prop("procurement.procurement_nr");
+					if(!$project) $project = t("No number");
+					$project = html::href(array(
+							"caption" => $project,
+							"title" =>  $offer->prop("procurement.name"),
+							"url" => html::get_change_url($offer->prop("procurement")),
+						));
+					$discount = $offer->prop("discount");
+					if($discount) $discount = $discount . " %";
+
 					$row_list = new object_list(array(
 						"class_id" => CL_PROCUREMENT_OFFER_ROW,
 						"lang_id" => array(),
@@ -3508,6 +3532,16 @@ class procurement_center extends class_base
 						$amount = $row->prop("amount");
 						$price = $row->prop("price");
 						
+						$price =  number_format($price, 2);
+
+						if($row->prop("currency.symbol"))
+						{
+								$price = $row->prop("currency.symbol")." ".$price;
+						}
+						else
+						{
+							$price = $price. "" .$row->prop("currency.name");
+						}
 						$unit_obj = obj($row->prop("unit"));
 						$unit = $unit_obj->prop("unit_code");
 						$time = $offer->prop("date");
@@ -3556,6 +3590,8 @@ class procurement_center extends class_base
 					"unit" => $unit,
 					"date" => $date,
 					"cutcopied" => $cutcopied,
+					"project" => $project,
+					"discount" => $discount,
 				));
 			}
 		}
@@ -3711,7 +3747,7 @@ class procurement_center extends class_base
 	
 	function _sell_offers_prod_table($arr)
 	{
-		$arr["request"]["products"] = $this->_get_prod_filter($arr["request"]["products"]);
+		$arr["request"]["products"] = $this->_get_prod_filter($arr["request"]);
 		$offered_products = array();
 		$t =& $arr["prop"]["vcl_inst"];
 		$t->define_field(array("name" => "name", "caption" => t("Nimetus")));
@@ -3963,6 +3999,7 @@ class procurement_center extends class_base
 						)),
 				'oid'		=> $o->id(),
 				"type" 		=> $type,
+				"unit"		=> $product_row->prop("unit.name"),
 			));
 		}
 	}
@@ -4014,6 +4051,9 @@ class procurement_center extends class_base
 			"align" => "center",
 			"sortable" => 1
 		));
+
+		$t->define_field(array("name" => "unit", "caption" => t("Unit")));
+
 		/*
 		$t->define_chooser(array(
 			"field" => "oid",
@@ -4021,7 +4061,7 @@ class procurement_center extends class_base
 		));*/
 	}
 		
-		/*
+	/*	
 	function _sell_offers_table($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -4260,7 +4300,12 @@ class procurement_center extends class_base
 	
 	function _get_prod_filter($req)
 	{
-		if(isset($req))
+		if($req["reset_products"])
+		{
+			$_SESSION["procurement_centre"]["product_filter"] = null;
+			return null;
+		}
+		if(isset($req["products"]))
 		{
 			$_SESSION["procurement_centre"]["product_filter"] = $req;
 		}
@@ -4268,12 +4313,12 @@ class procurement_center extends class_base
 		{
 			$req = $_SESSION["procurement_centre"]["product_filter"];
 		}
-		return $req;
+		return $req["products"];
 	}
-	
+			
 	function _sell_offers_table($arr)
 	{
-		$arr["request"]["products"] = $this->_get_prod_filter($arr["request"]["products"]);
+		$arr["request"]["products"] = $this->_get_prod_filter($arr["request"]);
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sell_offers_tbl($t);
 		$show_this_offer = 1;
@@ -4338,6 +4383,7 @@ class procurement_center extends class_base
 			$prod_table->define_field(array("name" => "name", "caption" => t("Nimetus")));
 			$prod_table->define_field(array("name" => "price", "caption" => t("Hind")));
 			$prod_table->define_field(array("name" => "amount", "caption" => t("Kogus")));
+			$prod_table->define_field(array("name" => "unit", "caption" => t("Unit")));
 			$alt = t("Hange:");
 			
 			if($o->class_id() == CL_PURCHASE)
@@ -4385,6 +4431,7 @@ class procurement_center extends class_base
 									"name" => $row->prop("product"),
 									"price" => $row->prop("b_price")." ".$row->prop("currency.name"),
 									"amount" => $row->prop("b_amount"),
+									"unit" => $row->prop("unit.name"),
 								));
 							}
 						}
@@ -4418,10 +4465,12 @@ class procurement_center extends class_base
 							if(!$this->can("view" , $row->prop("currency"))) continue;
 							$show_this_offer = 1;
 							$prod_inf.= $row->prop("product")." (".$row->prop("price").$row->prop("currency.name").")\n";
+
 							$table->define_data(array(
 								"name" => $row->prop("product"),
 								"price" => (($row->prop("b_price")) ? $row->prop("b_price"):$row->prop("price"))." ".$row->prop("currency.name"),
 								"amount" => ($row->prop("b_amount")) ? $row->prop("b_amount"):$row->prop("amount"),
+								"unit" => $row->prop("unit.name"),
 							));
 						}
 					}
@@ -4457,6 +4506,7 @@ class procurement_center extends class_base
 						)),
 				'oid'		=> $o->id(),
 				"type" 		=> $type,
+				"unit"	=> $unit,
 			));
 		}
 	}
@@ -4467,7 +4517,16 @@ class procurement_center extends class_base
 		$t->define_field(array("name" => "name", "caption" => t("Nimetus")));
 		$t->define_field(array("name" => "price", "caption" => t("Hind")));
 		$t->define_field(array("name" => "amount", "caption" => t("Kogus")));
+		$t->define_field(array("name" => "unit", "caption" => t("Unit")));
 	}
-	
+
+	function _see_all_link($arr)
+	{
+		return html::href(array(
+			"caption" => t("Show all"),
+			"url" =>html::get_change_url($arr["request"]["id"] , array("group" => $arr["request"]["group"] , "buyer" => $arr["request"]["buyer"], "reset_products" => 1)),
+		));
+	}
+
 }
 ?>

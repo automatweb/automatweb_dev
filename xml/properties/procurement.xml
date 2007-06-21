@@ -46,6 +46,15 @@
             <caption>Projekt</caption>
       </property>
       <property>
+            <name>procurement_nr</name>
+            <table>aw_procurements</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_nr</field>
+            <size>20</size>
+            <caption>Hanke kood</caption>
+      </property>
+      <property>
             <name>d_tb</name>
             <table>objects</table>
             <group>d</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.13 2007/06/14 15:05:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.14 2007/06/21 12:41:27 markop Exp $
 // currency.aw - Currency management
 
 /*
@@ -19,6 +19,9 @@
 
 @property small_unit_name type=textbox table=objects field=meta method=serialize
 @caption Peenraha&uuml;hiku nimetus
+
+@property symbol type=textbox size=2 table=objects field=meta method=serialize
+@caption S&uuml;mbol
 
 @groupinfo rates caption=Kursid
 @default group=rates

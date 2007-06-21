@@ -3082,6 +3082,14 @@
             <field>versions</field>
       </property>
       <property>
+            <name>see_all_link</name>
+            <table>objects</table>
+            <group>sell_offers_grp_offers</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <field>see_all_link</field>
+      </property>
+      <property>
             <name>sell_offers</name>
             <table>objects</table>
             <group>sell_offers_grp_offers</group>
@@ -3089,6 +3097,14 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>sell_offers</field>
+      </property>
+      <property>
+            <name>see_all_link2</name>
+            <table>objects</table>
+            <group>sell_offers_grp_products</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <field>see_all_link2</field>
       </property>
       <property>
             <name>sell_offers_prods</name>

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.17 2007/05/16 14:02:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.18 2007/06/21 12:41:03 markop Exp $
 // procurement.aw - Hange
 /*
 
@@ -27,7 +27,8 @@
 	@property proj type=text table=aw_procurements field=aw_proj
 	@caption Projekt
 
-
+	@property procurement_nr type=textbox table=aw_procurements field=aw_nr size=20
+	@caption Hanke kood
 
 @default group=d
 
@@ -689,6 +690,9 @@ class procurement extends class_base
 
 		switch($f)
 		{
+			case "aw_nr":
+				$this->db_add_col($t, array("name" => $f, "type" => "varchar(20)"));
+				return true;
 			case "aw_orderer":
 			case "aw_state":
 			case "aw_winning_offer":

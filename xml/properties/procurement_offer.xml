@@ -54,6 +54,15 @@
             <caption>Valuuta</caption>
       </property>
       <property>
+            <name>discount</name>
+            <table>aw_procurement_offers</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <field>aw_discount</field>
+            <caption>Discount</caption>
+      </property>
+      <property>
             <name>date</name>
             <table>aw_procurement_offers</table>
             <group>general</group>
