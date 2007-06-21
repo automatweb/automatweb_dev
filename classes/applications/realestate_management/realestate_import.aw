@@ -647,6 +647,7 @@ class realestate_import extends class_base
 					"KIRJELDUS_TSENTKANAL" === $data["tag"] or
 					"KIRJELDUS_WC" === $data["tag"] or
 					"KOMMU_KANALISATSIOON" === $data["tag"] or
+					"KOMMU_INTERNET" === $data["tag"] or
 					"LINN_LINNAOSA" === $data["tag"] or
 					"MUU_KAUGUSTLN" === $data["tag"] or
 					"MUU_OTSTARBEMUUT" === $data["tag"] or
@@ -665,14 +666,6 @@ class realestate_import extends class_base
 				}
 				elseif (("ROW" === $data["tag"]) and ("close" === $data["type"]))
 				{ ### import property to aw
-
-//////////////// !!! tmp
-if ("house" != $this->property_type and "apartment" != $this->property_type)
-{
-	$aaaaasdf["caption"] = "asd";
-	continue;
-}
-
 					$property_status = REALESTATE_IMPORT_OK;
 					$property = NULL;
 					$new_property = true;
@@ -924,7 +917,7 @@ if ("house" != $this->property_type and "apartment" != $this->property_type)
 					$address_text = $address->prop ("address_array");
 					$address_text[ADDRESS_COUNTRY_TYPE] = null;
 
-					if ($address_text != $address_city24 and $maja_nr !== $address->prop("street_address") and $korteri_nr !== $address->prop("apartment"))
+					if ($address_text != $address_city24 and $maja_nr !== $address->prop("street_address") and $korteri_nr !== $address->prop("apartment") and $current_user === $maakler_user)
 					{
 						##### set address
 						$address->set_prop ("unit_name", array (
@@ -1274,7 +1267,7 @@ if ("house" != $this->property_type and "apartment" != $this->property_type)
 					foreach ($this->property_data["PILT"] as $key => $picture_url)
 					{
 						if (!array_key_exists($picture_url, $existing_pictures))
-					{ # add new
+						{ # add new
 							$imagedata = file_get_contents($picture_url);
 
 							if (false !== $imagedata)
@@ -1696,8 +1689,8 @@ if ("house" != $this->property_type and "apartment" != $this->property_type)
 							$property->set_prop ("has_kitchen", $value);
 
 							#### has_internet
-							$value = isset($this->property_data["XXXXXXX"]) ? (int) ("Y" === $this->property_data["XXXXXXX"]) : 0;
-							// $property->set_prop ("has_internet", $value);//!!! puudub?
+							$value = isset($this->property_data["KOMMU_INTERNET"]) ? (int) ("Y" === $this->property_data["KOMMU_INTERNET"]) : 0;
+							$property->set_prop ("has_internet", $value);
 
 							#### has_isdn
 							$value = isset($this->property_data["KOMMU_ISDN"]) ? (int) ("Y" === $this->property_data["KOMMU_ISDN"]) : 0;
@@ -2061,14 +2054,6 @@ if ("house" != $this->property_type and "apartment" != $this->property_type)
 
 		ini_set ("ignore_user_abort", $ignore_user_abort_prev_val);
 		ini_set ("max_execution_time", $max_execution_time_prev_val);
-
-
-
-		exit;////////////////////////////////////////////!!!
-
-
-
-
 
 		return $status;
 	}
